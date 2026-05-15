@@ -1,0 +1,8 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.flashType": "JTAG",
+  "idf.portWin": "COM29",
+  "idf.openOcdConfigs": [
+    "board/esp32p4-builtin.cfg"
+  ]
+}

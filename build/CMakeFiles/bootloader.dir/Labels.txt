@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+G:/w222/w222/build/CMakeFiles/bootloader
+G:/w222/w222/build/CMakeFiles/bootloader.rule
+G:/w222/w222/build/CMakeFiles/bootloader-complete.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+G:/w222/w222/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

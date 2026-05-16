@@ -1,9 +1,3 @@
-/*
- * SPDX-FileCopyrightText: 2015-2024 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #pragma once
 
 #include <sys/cdefs.h>
@@ -22,12 +16,25 @@ extern "C" {
 #define CODEC_DEFAULT_SAMPLE_RATE           (44100)
 #define CODEC_DEFAULT_BIT_WIDTH             (16)
 #define CODEC_DEFAULT_ADC_VOLUME            (24.0)
-#define CODEC_DEFAULT_CHANNEL               (2)
-#define CODEC_DEFAULT_VOLUME                (60)
+#define CODEC_DEFAULT_CHANNEL               (I2S_SLOT_MODE_STEREO)
+#define CODEC_DEFAULT_VOLUME                (50)
 
 #define BSP_LCD_BACKLIGHT_BRIGHTNESS_MAX    (95)
 #define BSP_LCD_BACKLIGHT_BRIGHTNESS_MIN    (0)
 #define LCD_LEDC_CH                         (CONFIG_BSP_DISPLAY_BRIGHTNESS_LEDC_CH)
+
+typedef enum {
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_TAP = 0,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_BOOT,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_MESSAGE_SENT,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_MESSAGE_RECEIVED,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_ALARM_CLOCK,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_UPDATE_AVAILABLE,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_UPDATE_SUCCESS,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_SHUTTING_DOWN,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_REBOOTING,
+	BSP_EXTRA_AUDIO_SYSTEM_SOUND_ERROR,
+} bsp_extra_audio_system_sound_t;
 
 /**************************************************************************************************
  * BSP Extra interface
@@ -55,6 +62,87 @@ esp_err_t bsp_extra_codec_mute_set(bool enable);
  *    - Others: Fail
  */
 esp_err_t bsp_extra_codec_volume_set(int volume, int *volume_set);
+
+/**
+ * @brief Set media playback volume used by file and stream playback.
+ *
+ * @param volume: volume set
+ *
+ * @return
+ *    - ESP_OK: Success
+ *    - Others: Fail
+ */
+esp_err_t bsp_extra_audio_media_volume_set(int volume);
+
+/**
+ * @brief Get media playback volume.
+ *
+ * @return
+ *   - volume: media playback volume
+ */
+int bsp_extra_audio_media_volume_get(void);
+
+/**
+ * @brief Set system sound volume used for notification overlays.
+ *
+ * @param volume: volume set
+ *
+ * @return
+ *    - ESP_OK: Success
+ *    - Others: Fail
+ */
+esp_err_t bsp_extra_audio_system_volume_set(int volume);
+
+/**
+ * @brief Get system sound volume.
+ *
+ * @return
+ *   - volume: system sound volume
+ */
+int bsp_extra_audio_system_volume_get(void);
+
+/**
+ * @brief Set microphone gain level used by the recorder input path.
+ *
+ * The level is a user-facing scale from 1 to 10 and is mapped onto the
+ * codec-specific input gain range.
+ *
+ * @param level microphone gain level on a 1..10 scale
+ * @return
+ *    - ESP_OK: Success
+ *    - Others: Fail while applying to an active input path
+ */
+esp_err_t bsp_extra_audio_mic_gain_set_level(int level);
+
+/**
+ * @brief Get the current microphone gain level on the shared 1..10 scale.
+ *
+ * @return configured microphone gain level
+ */
+int bsp_extra_audio_mic_gain_get_level(void);
+
+/**
+ * @brief Play a short system notification tone on the shared output path.
+ *
+ * If media playback is active, the notification is mixed into the PCM stream.
+ * Otherwise the tone is written directly to the codec path.
+ *
+ * @return
+ *    - ESP_OK: Success
+ *    - Others: Fail
+ */
+esp_err_t bsp_extra_audio_play_system_sound(bsp_extra_audio_system_sound_t sound);
+
+/**
+ * @brief Play the default short system tap/notification tone.
+ *
+ * This is kept as a compatibility wrapper around the generic system sound API.
+ *
+ * @return
+ *    - ESP_OK: Success
+ *    - Others: Fail
+ */
+esp_err_t bsp_extra_audio_play_system_notification(void);
 
 /** 
  * @brief Player get volume.
@@ -97,6 +185,16 @@ esp_err_t bsp_extra_codec_set_fs(uint32_t rate, uint32_t bits_cfg, i2s_slot_mode
 esp_err_t bsp_extra_codec_set_fs_play(uint32_t rate, uint32_t bits_cfg, i2s_slot_mode_t ch);
 
 /**
+ * @brief Set codec input (microphone) gain.
+ *
+ * @param gain: gain value to set (codec-specific)
+ * @return
+ *    - ESP_OK: Success
+ *    - Others: Fail
+ */
+esp_err_t bsp_extra_codec_in_gain_set(int gain);
+
+/**
  * @brief Read data from recoder.
  *
  * @param audio_buffer: The pointer of receiving data buffer
@@ -135,6 +233,15 @@ esp_err_t bsp_extra_i2s_write(void *audio_buffer, size_t len, size_t *bytes_writ
 esp_err_t bsp_extra_codec_init();
 
 /**
+ * @brief Fully deinitialize codec and underlying audio transport resources.
+ *
+ * @return
+ *      - ESP_OK: Success
+ *      - Others: Fail
+ */
+esp_err_t bsp_extra_codec_deinit();
+
+/**
  * @brief Initialize audio player task.
  *
  * @param path file path
@@ -153,6 +260,20 @@ esp_err_t bsp_extra_player_init(void);
  *      - Others: Fail
  */
 esp_err_t bsp_extra_player_del(void);
+
+/**
+ * @brief Check whether the Wi-Fi station interface currently has an IPv4 address.
+ *
+ * @return true when the station netif has a non-zero IPv4 address assigned.
+ */
+bool bsp_extra_network_has_ip(void);
+
+/**
+ * @brief Check whether the Wi-Fi station interface has at least one DNS server configured.
+ *
+ * @return true when the station netif has a usable DNS server entry.
+ */
+bool bsp_extra_network_has_dns(void);
 
 /**
  * @brief Initialize a file iterator instance
@@ -214,6 +335,55 @@ bool bsp_extra_player_is_playing_by_path(const char *file_path);
  *     - false: The audio file at the specified index is not currently playing.
  */
 bool bsp_extra_player_is_playing_by_index(file_iterator_instance_t *instance, int index);
+
+/**
+ * @brief Initialize display idle management.
+ *
+ * Starts the background task that watches LVGL inactivity time and applies
+ * configured adaptive dimming and screen-off behavior.
+ *
+ * @return
+ *     - ESP_OK on success
+ *     - ESP_ERR_NO_MEM if the task cannot be created
+ */
+esp_err_t bsp_extra_display_idle_init(void);
+
+/**
+ * @brief Update the configured user brightness level.
+ *
+ * @param brightness_percent User-selected brightness in percent.
+ */
+void bsp_extra_display_idle_set_base_brightness(int brightness_percent);
+
+/**
+ * @brief Configure display idle behavior.
+ *
+ * @param adaptive_brightness_enabled Enable dim-to-50% behavior after inactivity.
+ * @param screensaver_enabled Reserved for future screensaver behavior.
+ * @param screen_off_timeout_sec Screen-off timeout in seconds. 0 disables timeout.
+ * @param sleep_timeout_sec Deep-sleep timeout in seconds. 0 disables deep sleep.
+ */
+void bsp_extra_display_idle_configure(bool adaptive_brightness_enabled, bool screensaver_enabled,
+									  uint32_t screen_off_timeout_sec, uint32_t sleep_timeout_sec);
+
+/**
+ * @brief Temporarily suppress screen-off timeout handling.
+ *
+ * This keeps the configured display timeoff from blanking the panel while a
+ * foreground runtime needs the screen to remain visible. Adaptive dimming and
+ * deep-sleep timeout behavior are unchanged.
+ *
+ * @param suppressed True to suppress the screen-off timeout.
+ */
+void bsp_extra_display_idle_set_screen_off_suppressed(bool suppressed);
+
+/**
+ * @brief Notify the display idle service about non-touch user activity.
+ *
+ * This resets LVGL inactivity tracking so controller or other external input
+ * can keep display idle behavior in sync with actual user activity.
+ */
+void bsp_extra_display_idle_notify_activity(void);
 
 #ifdef __cplusplus
 }

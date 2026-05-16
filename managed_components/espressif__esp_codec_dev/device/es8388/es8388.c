@@ -156,9 +156,12 @@ static int es8388_config_fmt(audio_codec_es8388_t *codec, esp_codec_dec_work_mod
 
 static int es8388_set_mic_gain(audio_codec_es8388_t *codec, float db)
 {
-    int gain = db > 0 ? (int) (db / 3) : 0;
-    gain = (gain << 4) + gain;
-    return es8388_write_reg(codec, ES8388_ADCCONTROL1, gain); // MIC PGA
+    es_mic_gain_t gain = db > 0 ? (int) (db / 3) + MIC_GAIN_0DB : MIC_GAIN_0DB;
+    int res, gain_n;
+    gain_n = (int) gain / 3;
+    gain_n = (gain_n << 4) + gain_n;
+    res = es8388_write_reg(codec, ES8388_ADCCONTROL1, gain_n); // MIC PGA
+    return res;
 }
 
 static es_bits_length_t get_bits_enum(uint8_t bits)
@@ -221,8 +224,6 @@ static int es8388_open(const audio_codec_if_t *h, void *cfg, int cfg_size)
     codec->pa_reverted = codec_cfg->pa_reverted;
     codec->codec_mode = codec_cfg->codec_mode;
 
-    es8388_pa_power(codec, false);
-
     // 0x04 mute/0x00 unmute&ramp;
     res |= es8388_write_reg(codec, ES8388_DACCONTROL3, 0x04);
     /* Chip Control and Power Management */
@@ -238,7 +239,7 @@ static int es8388_open(const audio_codec_if_t *h, void *cfg, int cfg_size)
 
     /* dac */
     res |= es8388_write_reg(codec, ES8388_DACPOWER, 0xC0); // disable DAC and disable Lout/Rout/1/2
-    res |= es8388_write_reg(codec, ES8388_CONTROL1, 0x12);  // Enfr=0,Play&Record Mode,(0x17-both of mic&play)
+    res |= es8388_write_reg(codec, ES8388_CONTROL1, 0x12); // Enfr=0,Play&Record Mode,(0x17-both of mic&paly)
     //    res |= es8388_write_reg(codec, ES8388_CONTROL2, 0);  //LPVrefBuf=0,Pdn_ana=0
     res |= es8388_write_reg(codec, ES8388_DACCONTROL1, 0x18);  // 1a 0x18:16bit iis , 0x00:24
     res |= es8388_write_reg(codec, ES8388_DACCONTROL2, 0x02);  // DACFsMode,SINGLE SPEED; DACFsRatio,256
@@ -267,7 +268,7 @@ static int es8388_open(const audio_codec_if_t *h, void *cfg, int cfg_size)
     res |= es8388_write_reg(codec, ES8388_ADCCONTROL2, ADC_INPUT_LINPUT1_RINPUT1);
     res |= es8388_write_reg(codec, ES8388_ADCCONTROL3, 0x02);
     res |= es8388_write_reg(codec, ES8388_ADCCONTROL4, 0x0c); // 16 Bits length and I2S serial audio data format
-    res |= es8388_write_reg(codec, ES8388_ADCCONTROL5, 0x02);  // ADCFsMode, single SPEED, RATIO=256
+    res |= es8388_write_reg(codec, ES8388_ADCCONTROL5, 0x02); // ADCFsMode,singel SPEED,RATIO=256
     // ALC for Microphone
     res |= es8388_set_adc_dac_volume(codec, ESP_CODEC_DEV_WORK_MODE_ADC, 0, 0); // 0db
     res |= es8388_write_reg(codec, ES8388_ADCPOWER, 0x09); // Power on ADC

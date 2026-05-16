@@ -4,5 +4,10 @@
   "idf.portWin": "COM29",
   "idf.openOcdConfigs": [
     "board/esp32p4-builtin.cfg"
-  ]
+  ],
+
+
+  
+  "idf.customExtraVars": {},
+  "idf.currentSetup": "D:/Espressif5/frameworks/esp-idf-v5.4.4/"
 }

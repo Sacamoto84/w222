@@ -7,7 +7,7 @@ set(includes
     "include"
 )
 
-set(requires "")
+set(requires "driver" "esp_driver_i2s")
 
 if(CONFIG_AUDIO_PLAYER_ENABLE_MP3)
     list(APPEND srcs "audio_mp3.cpp")
@@ -23,5 +23,4 @@ endif()
 idf_component_register(SRCS "${srcs}"
                        REQUIRES "${requires}"
                        INCLUDE_DIRS "${includes}"
-                       REQUIRES driver esp_driver_i2s
 )

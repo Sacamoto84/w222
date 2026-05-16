@@ -1,24 +1,5 @@
 # Changelog
 
-## 1.3.6
-
-### Features
-
-- Supported IDF6.0
-- Supported ESP32-S31
-
-### Fixes
-
-- Fixed excessive internal buffer allocation in the decoder
-
-## 1.3.5~1
-- Fixed missing headers inclusion in h264_nal.c
-
-## 1.3.5
-
-### Fixes
-- Fixed hardware encoder (P4) encoding failure when flash encryption is enabled and accessing PSRAM
-
 ## 1.3.0
 
 ### Fixes

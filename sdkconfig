@@ -3121,7 +3121,7 @@ CONFIG_BSP_I2S_NUM=1
 # end of Board Support Package
 
 #
-# Board Support Package(ESP32-P4)
+# Board Support Package (ESP32-P4)
 #
 CONFIG_BSP_ERROR_CHECK=y
 
@@ -3162,10 +3162,13 @@ CONFIG_BSP_LCD_DPI_BUFFER_NUMS=1
 CONFIG_BSP_DISPLAY_BRIGHTNESS_LEDC_CH=1
 CONFIG_BSP_LCD_COLOR_FORMAT_RGB565=y
 # CONFIG_BSP_LCD_COLOR_FORMAT_RGB888 is not set
+# default:
+CONFIG_BSP_LCD_USE_DMA2D=y
 CONFIG_BSP_LCD_TYPE_1024_600=y
 # CONFIG_BSP_LCD_TYPE_1280_800 is not set
+# CONFIG_BSP_LCD_TYPE_HDMI is not set
 # end of Display
-# end of Board Support Package(ESP32-P4)
+# end of Board Support Package (ESP32-P4)
 
 #
 # Audio playback
@@ -3216,6 +3219,106 @@ CONFIG_DSP_MAX_FFT_SIZE=4096
 # end of DSP Library
 
 #
+# Espressif Camera Sensors Configurations
+#
+
+#
+# Camera Sensor Configuration
+#
+
+#
+# Select and Set Camera Sensor
+#
+# default:
+# CONFIG_CAMERA_BF3901 is not set
+# default:
+# CONFIG_CAMERA_BF3925 is not set
+# default:
+# CONFIG_CAMERA_BF3A03 is not set
+# default:
+# CONFIG_CAMERA_BF20A6 is not set
+# default:
+# CONFIG_CAMERA_BF3045 is not set
+# default:
+# CONFIG_CAMERA_GC0308 is not set
+# default:
+# CONFIG_CAMERA_GC2145 is not set
+# default:
+# CONFIG_CAMERA_LT6911 is not set
+# default:
+# CONFIG_CAMERA_MIRA220 is not set
+# default:
+# CONFIG_CAMERA_MT9D111 is not set
+# default:
+# CONFIG_CAMERA_OS02N10 is not set
+# default:
+# CONFIG_CAMERA_OS04C10 is not set
+# default:
+# CONFIG_CAMERA_OV2640 is not set
+# default:
+# CONFIG_CAMERA_OV2710 is not set
+# default:
+# CONFIG_CAMERA_OV3660 is not set
+# default:
+# CONFIG_CAMERA_OV5640 is not set
+# default:
+# CONFIG_CAMERA_OV5645 is not set
+# default:
+# CONFIG_CAMERA_OV5647 is not set
+# default:
+# CONFIG_CAMERA_OV9281 is not set
+# default:
+# CONFIG_CAMERA_PIVARIETY is not set
+# default:
+# CONFIG_CAMERA_SC030IOT is not set
+# default:
+# CONFIG_CAMERA_SC035HGS is not set
+# default:
+# CONFIG_CAMERA_SC101IOT is not set
+# default:
+# CONFIG_CAMERA_SC202CS is not set
+# default:
+# CONFIG_CAMERA_SC2336 is not set
+# default:
+# CONFIG_CAMERA_SP0A39 is not set
+# default:
+# CONFIG_CAMERA_STI2250 is not set
+# end of Select and Set Camera Sensor
+# end of Camera Sensor Configuration
+
+#
+# Camera XCLK Generator Configuration
+#
+# default:
+# CONFIG_CAMERA_XCLK_USE_LEDC is not set
+# default:
+CONFIG_CAMERA_XCLK_USE_ESP_CLOCK_ROUTER=y
+# end of Camera XCLK Generator Configuration
+
+#
+# Camera Motor Control Configuration
+#
+# default:
+# CONFIG_CAM_MOTOR_DW9714 is not set
+# end of Camera Motor Control Configuration
+
+# default:
+CONFIG_CAM_CTRL_SPI_ENABLE=y
+# default:
+CONFIG_CAM_CTLR_SPI_ISR_CACHE_SAFE=y
+# default:
+# CONFIG_CAM_CTLR_SPI_DISABLE_BACKUP_BUFFER is not set
+# default:
+# CONFIG_CAM_CTLR_SPI_DISABLE_AUTO_DECODE is not set
+# default:
+CONFIG_CAM_CTLR_SPI_DECODE_TASK_STACK_SIZE=4096
+# default:
+CONFIG_CAM_CTLR_SPI_DECODE_TASK_PRIORITY=10
+# default:
+# CONFIG_CAM_CTLR_SPI_ENABLE_PARLIO is not set
+# end of Espressif Camera Sensors Configurations
+
+#
 # Audio Codec Device Configuration
 #
 # default:
@@ -3250,6 +3353,31 @@ CONFIG_ESP_H264_DECODER_IRAM=y
 # end of ESP H264 Configuration
 
 #
+# Espressif Image Process Algorithm Configuration
+#
+# default:
+CONFIG_ESP_IPA_CONFIG_PARAM_VERSION=1
+# default:
+CONFIG_ESP_IPA_IAN_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_ADN_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_AWB_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_ACC_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_AGC_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_AEN_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_AF_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_ATC_ALGORITHM=y
+# default:
+CONFIG_ESP_IPA_EXT_CONFIG=y
+# end of Espressif Image Process Algorithm Configuration
+
+#
 # ESP LCD TOUCH
 #
 CONFIG_ESP_LCD_TOUCH_MAX_POINTS=5
@@ -3261,6 +3389,63 @@ CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS=1
 #
 CONFIG_LVGL_PORT_ENABLE_PPA=y
 # end of ESP LVGL PORT
+
+#
+# Espressif SCCB Configurations
+#
+# default:
+CONFIG_ESP_SCCB_TRANS_TIMEOUT_DEFAULT=500
+# end of Espressif SCCB Configurations
+
+#
+# Espressif Video Configuration
+#
+# default:
+CONFIG_ESP_VIDEO_ENABLE_ISP=y
+# default:
+CONFIG_ESP_VIDEO_ENABLE_DATA_PREPROCESSING=y
+# default:
+CONFIG_ESP_VIDEO_CHECK_PARAMETERS=y
+# default:
+CONFIG_ESP_VIDEO_ENABLE_MIPI_CSI_VIDEO_DEVICE=y
+# default:
+CONFIG_ESP_VIDEO_DISABLE_MIPI_CSI_DRIVER_BACKUP_BUFFER=y
+# default:
+CONFIG_ESP_VIDEO_ENABLE_DVP_VIDEO_DEVICE=y
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_SPI_VIDEO_DEVICE is not set
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_USB_UVC_VIDEO_DEVICE is not set
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_HW_H264_VIDEO_DEVICE is not set
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_HW_JPEG_VIDEO_DEVICE is not set
+# default:
+CONFIG_ESP_VIDEO_ENABLE_ISP_VIDEO_DEVICE=y
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_ISP_PIPELINE_CONTROLLER is not set
+
+#
+# Video Data Preprocessing
+#
+# default:
+CONFIG_ESP_VIDEO_ENABLE_SWAP_SHORT=y
+# default:
+CONFIG_ESP_VIDEO_ENABLE_SWAP_SHORT_RISCV=y
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_SWAP_SHORT_PIE is not set
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_SWAP_SHORT_BITSCRAMBLER is not set
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_SWAP_SHORT_PERF_LOG is not set
+# default:
+CONFIG_ESP_VIDEO_ENABLE_SWAP_BYTE=y
+# default:
+CONFIG_ESP_VIDEO_ENABLE_SWAP_BYTE_RISCV=y
+# default:
+# CONFIG_ESP_VIDEO_ENABLE_SWAP_BYTE_BITSCRAMBLER is not set
+# end of Video Data Preprocessing
+# end of Espressif Video Configuration
 
 #
 # USB-OTG
@@ -3298,6 +3483,17 @@ CONFIG_USB_HOST_SUSPEND_ENTRY_MS=20
 # default:
 CONFIG_USB_OTG_SUPPORTED=y
 # end of USB-OTG
+
+#
+# USB HOST UVC
+#
+# default:
+# CONFIG_UVC_PRINTF_CONFIGURATION_DESCRIPTOR is not set
+# default:
+CONFIG_UVC_INTERVAL_ARRAY_SIZE=3
+# default:
+CONFIG_UVC_CHECK_PAYLOAD_HEADER_EOH=y
+# end of USB HOST UVC
 
 #
 # LVGL configuration

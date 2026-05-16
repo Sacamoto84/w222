@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#define ESP_H264_VERSION "1.3.6"
+#define ESP_H264_VERSION "1.2.0"
 
 /**
  *  Features:
@@ -52,12 +52,6 @@ extern "C" {
  *     - Added support for ESP32P4 V3 hardware versions
  *     v1.3.0:
  *     - Corrected pixel format name from BGR565_BE to RGB565_LE in documentation comments and public header files
- *     v1.3.5:
- *     - Fixed hardware encoder (P4) encoding failure when flash encryption is enabled and accessing PSRAM
- *     v1.3.6:
- *     - Supported IDF6.0
- *     - Supported ESP32-S31
- *     - Fixed excessive internal buffer allocation in the decoder
  */
 
 /**

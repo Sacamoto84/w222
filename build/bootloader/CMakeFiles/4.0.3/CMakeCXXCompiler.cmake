@@ -28,7 +28,7 @@ set(CMAKE_COMPILER_SYSROOT "C:/Users/Ivan/.espressif/tools/riscv32-esp-elf/esp-1
 
 set(CMAKE_AR "C:/Users/Ivan/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/bin/riscv32-esp-elf-ar.exe")
 set(CMAKE_CXX_COMPILER_AR "C:/Users/Ivan/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/bin/riscv32-esp-elf-gcc-ar.exe")
-set(CMAKE_RANLIB ":")
+set(CMAKE_RANLIB "C:/Users/Ivan/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/bin/riscv32-esp-elf-ranlib.exe")
 set(CMAKE_CXX_COMPILER_RANLIB "C:/Users/Ivan/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/bin/riscv32-esp-elf-gcc-ranlib.exe")
 set(CMAKE_LINKER "C:/Users/Ivan/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/bin/riscv32-esp-elf-ld.exe")
 set(CMAKE_LINKER_LINK "")

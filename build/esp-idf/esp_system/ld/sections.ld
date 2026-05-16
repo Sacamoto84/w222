@@ -1224,6 +1224,15 @@ ASSERT(((_iram_end - ORIGIN(iram_text_seg)) <= LENGTH(iram_text_seg)),
   {
     _flash_rodata_start = ABSOLUTE(.);
     
+ __esp_cam_motor_detect_fn_array_start = ABSOLUTE(.);
+ KEEP(*(.esp_cam_motor_detect_fn .esp_cam_motor_detect_fn.*))
+ __esp_cam_motor_detect_fn_array_end = ABSOLUTE(.);
+ __esp_cam_sensor_detect_fn_array_start = ABSOLUTE(.);
+ KEEP(*(.esp_cam_sensor_detect_fn .esp_cam_sensor_detect_fn.*))
+ __esp_cam_sensor_detect_fn_array_end = ABSOLUTE(.);
+ __esp_ipa_detect_array_start = ABSOLUTE(.);
+ KEEP(*(.esp_ipa_detect .esp_ipa_detect.*))
+ __esp_ipa_detect_array_end = ABSOLUTE(.);
  _esp_trace_encoder_array_start = ABSOLUTE(.);
  KEEP(*(SORT_BY_NAME(.esp_trace_encoder_desc)))
  _esp_trace_encoder_array_end = ABSOLUTE(.);

@@ -141,12 +141,12 @@ dependencies:
       type: idf
     version: 5.4.4
   lvgl/lvgl:
-    component_hash: 096c69af22eaf8a2b721e3913da91918c5e6bf1a762a113ec01f401aa61337a0
+    component_hash: 184e532558c1c45fefed631f3e235423d22582aafb4630f3e8885c35281a49ae
     dependencies: []
     source:
       registry_url: https://components.espressif.com/
       type: service
-    version: 9.2.2
+    version: 9.5.0
 direct_dependencies:
 - chmorgan/esp-audio-player
 - chmorgan/esp-file-iterator
@@ -162,6 +162,6 @@ direct_dependencies:
 - espressif/esp_lvgl_port
 - idf
 - lvgl/lvgl
-manifest_hash: 9d87c35506a8fb3bdff4db45e57ada93ddedcd195121b1d2f294b3f4f795cd2f
+manifest_hash: 4b0e4b6888954026447aab7ddf1c6b2e2c4b91bbd8b7d82108dd45fc3b3d971a
 target: esp32p4
 version: 2.0.0

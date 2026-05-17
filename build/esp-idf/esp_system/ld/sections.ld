@@ -973,6 +973,15 @@ SECTIONS
     . = ORIGIN(ext_ram_seg) + (_rodata_reserved_end - _flash_rodata_dummy_start);
     . = ALIGN (0x10000);
   } > ext_ram_seg
+  /* This section holds .ext_ram.bss data, and will be put in PSRAM */
+  .ext_ram.bss (NOLOAD) :
+  {
+    _ext_ram_bss_start = ABSOLUTE(.);
+    *(.ext_ram.bss .ext_ram.bss.*)
+    
+ . = ALIGN(4); 
+ _ext_ram_bss_end = ABSOLUTE(.);
+  } > ext_ram_seg
   .dram0.bss (NOLOAD) :
   {
     
@@ -987,7 +996,6 @@ SECTIONS
      */
     *(.bss .bss.*)
     *(.dynbss .dynsbss .gnu.linkonce.b .gnu.linkonce.b.* .gnu.linkonce.sb .gnu.linkonce.sb.* .gnu.linkonce.sb2 .gnu.linkonce.sb2.* .sbss .sbss.* .sbss2 .sbss2.* .scommon .share.mem)
-    *(.ext_ram.bss .ext_ram.bss.*)
     *(COMMON)
     
  . = ALIGN(4); 
@@ -1007,7 +1015,6 @@ SECTIONS
      */
     *(.bss .bss.*)
     *(.dynbss .dynsbss .gnu.linkonce.b .gnu.linkonce.b.* .gnu.linkonce.sb .gnu.linkonce.sb.* .gnu.linkonce.sb2 .gnu.linkonce.sb2.* .sbss .sbss.* .sbss2 .sbss2.* .scommon .share.mem)
-    *(.ext_ram.bss .ext_ram.bss.*)
     *(COMMON)
     
  . = ALIGN(4); 

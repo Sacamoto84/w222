@@ -543,6 +543,16 @@ SECTIONS
     . = ORIGIN(ext_ram_seg) + (_rodata_reserved_end - _flash_rodata_dummy_start);
     . = ALIGN (0x10000);
   } > ext_ram_seg
+  /* This section holds .ext_ram.bss data, and will be put in PSRAM */
+  .ext_ram.bss (NOLOAD) :
+  {
+    _ext_ram_bss_start = ABSOLUTE(.);
+    arrays[extern_ram]
+    mapping[extern_ram]
+    
+ . = ALIGN(4); 
+ _ext_ram_bss_end = ABSOLUTE(.);
+  } > ext_ram_seg
   .dram0.bss (NOLOAD) :
   {
     

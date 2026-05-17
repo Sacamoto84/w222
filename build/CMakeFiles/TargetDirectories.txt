@@ -654,7 +654,6 @@ G:/w222/w222/build/esp-idf/esp_driver_touch_sens/CMakeFiles/list_install_compone
 G:/w222/w222/build/esp-idf/esp_driver_touch_sens/CMakeFiles/install.dir
 G:/w222/w222/build/esp-idf/esp_driver_touch_sens/CMakeFiles/install/local.dir
 G:/w222/w222/build/esp-idf/esp_driver_touch_sens/CMakeFiles/install/strip.dir
-G:/w222/w222/build/esp-idf/esp_eth/CMakeFiles/__idf_esp_eth.dir
 G:/w222/w222/build/esp-idf/esp_eth/CMakeFiles/edit_cache.dir
 G:/w222/w222/build/esp-idf/esp_eth/CMakeFiles/rebuild_cache.dir
 G:/w222/w222/build/esp-idf/esp_eth/CMakeFiles/list_install_components.dir

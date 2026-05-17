@@ -10,6 +10,8 @@
 #include "esp_check.h"
 #include "esp_event.h"
 #include "esp_system.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "driver/uart.h"
 #include "esp_memory_utils.h"
 //#include "esp_dsp.h"
@@ -21,6 +23,10 @@
 #include "ui/ui.h"
 
 #include "demos/lv_demos.h"
+
+#include "examples/event/lv_example_event.h"
+
+
 
 extern void ui_init(void);
 
@@ -53,17 +59,10 @@ void app_main(void)
     bsp_display_cfg_t cfg = {
         .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
         .buffer_size =  BSP_LCD_H_RES * 100,
-        .double_buffer = BSP_LCD_DRAW_BUFF_DOUBLE,
-        // .hw_cfg = {
-        //     .hdmi_resolution = BSP_HDMI_RES_NONE,
-        //     .dsi_bus = {
-        //         .phy_clk_src = 0,
-        //         .lane_bit_rate_mbps = BSP_LCD_MIPI_DSI_LANE_BITRATE_MBPS,
-        //     },
-        // },
+        .double_buffer = false,
         .flags = {
-            .buff_dma = false,
-            .buff_spiram = true,
+            .buff_dma = true,
+            .buff_spiram = false,
         }
     };
     lv_display_t *display = bsp_display_start_with_config(&cfg);
@@ -79,11 +78,13 @@ void app_main(void)
     }
     //show_startup_screen();
     
-    ui_init();
+    //ui_init();
     
     //lv_demo_benchmark(); 
 
     //lv_demo_stress(); 
+
+    lv_example_event_draw();
 
     lv_refr_now(display);
     bsp_display_unlock();

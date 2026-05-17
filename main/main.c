@@ -20,6 +20,8 @@
 
 #include "ui/ui.h"
 
+#include "demos/lv_demos.h"
+
 extern void ui_init(void);
 
 static const char *TAG = "app";
@@ -50,7 +52,7 @@ void app_main(void)
 
     bsp_display_cfg_t cfg = {
         .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
-        .buffer_size = BSP_LCD_H_RES * 100,
+        .buffer_size =  BSP_LCD_H_RES * 100,
         .double_buffer = BSP_LCD_DRAW_BUFF_DOUBLE,
         // .hw_cfg = {
         //     .hdmi_resolution = BSP_HDMI_RES_NONE,
@@ -67,7 +69,7 @@ void app_main(void)
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);
     ESP_ERROR_CHECK(bsp_display_backlight_on());
-    ESP_ERROR_CHECK(bsp_display_brightness_set(100));
+    ESP_ERROR_CHECK(bsp_display_brightness_set(60));
 
     ESP_LOGI(TAG, "Display initialized: %dx%d", BSP_LCD_H_RES, BSP_LCD_V_RES);
 
@@ -76,7 +78,13 @@ void app_main(void)
         return;
     }
     //show_startup_screen();
+    
     ui_init();
+    
+    //lv_demo_benchmark(); 
+
+    //lv_demo_stress(); 
+
     lv_refr_now(display);
     bsp_display_unlock();
 }

@@ -28,7 +28,12 @@ extern lv_obj_t * ui_Label_Celsius;
 extern lv_obj_t * ui_Label_Slider;
 extern void ui_event_Fan_Speed_Control(lv_event_t * e);
 extern lv_obj_t * ui_Fan_Speed_Control;
+extern lv_obj_t * ui_Dropdown1;
+extern void ui_event_Button2(lv_event_t * e);
+extern lv_obj_t * ui_Button2;
 // CUSTOM VARIABLES
+extern lv_obj_t * uic_Arc_Group;
+extern lv_obj_t * uic_Dropdown1;
 
 #ifdef __cplusplus
 } /*extern "C"*/

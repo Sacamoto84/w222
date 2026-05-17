@@ -5,6 +5,8 @@
 
 #include "../ui.h"
 
+lv_obj_t * uic_Dropdown1;
+lv_obj_t * uic_Arc_Group;
 lv_obj_t * ui_Screen1 = NULL;
 lv_obj_t * ui_Header = NULL;
 lv_obj_t * ui_Header_Date = NULL;
@@ -18,6 +20,8 @@ lv_obj_t * ui_Temp_Num_Bg = NULL;
 lv_obj_t * ui_Label_Celsius = NULL;
 lv_obj_t * ui_Label_Slider = NULL;
 lv_obj_t * ui_Fan_Speed_Control = NULL;
+lv_obj_t * ui_Dropdown1 = NULL;
+lv_obj_t * ui_Button2 = NULL;
 // event funtions
 void ui_event_Arc1(lv_event_t * e)
 {
@@ -38,6 +42,15 @@ void ui_event_Fan_Speed_Control(lv_event_t * e)
     }
 }
 
+void ui_event_Button2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Screen2, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 200, 0, &ui_Screen2_screen_init);
+    }
+}
+
 // build funtions
 
 void ui_Screen1_screen_init(void)
@@ -51,6 +64,8 @@ void ui_Screen1_screen_init(void)
     ui_Header = lv_obj_create(ui_Screen1);
     lv_obj_set_height(ui_Header, 50);
     lv_obj_set_width(ui_Header, lv_pct(100));
+    lv_obj_set_x(ui_Header, 3);
+    lv_obj_set_y(ui_Header, -2);
     lv_obj_set_align(ui_Header, LV_ALIGN_TOP_MID);
     lv_obj_remove_flag(ui_Header, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_Header, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -61,6 +76,8 @@ void ui_Screen1_screen_init(void)
     ui_Header_Date = lv_label_create(ui_Header);
     lv_obj_set_width(ui_Header_Date, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Header_Date, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Header_Date, 243);
+    lv_obj_set_y(ui_Header_Date, -3);
     lv_obj_set_align(ui_Header_Date, LV_ALIGN_LEFT_MID);
     lv_label_set_text(ui_Header_Date, "Friday, March 11, 2022");
     lv_obj_set_style_text_color(ui_Header_Date, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -69,7 +86,9 @@ void ui_Screen1_screen_init(void)
     ui_Header_Time = lv_label_create(ui_Header);
     lv_obj_set_width(ui_Header_Time, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Header_Time, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_Header_Time, LV_ALIGN_RIGHT_MID);
+    lv_obj_set_x(ui_Header_Time, -163);
+    lv_obj_set_y(ui_Header_Time, 4);
+    lv_obj_set_align(ui_Header_Time, LV_ALIGN_TOP_MID);
     lv_label_set_text(ui_Header_Time, "AM 7:45");
     lv_obj_set_style_text_color(ui_Header_Time, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Header_Time, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -98,10 +117,11 @@ void ui_Screen1_screen_init(void)
 
     ui_Arc_Group = lv_obj_create(ui_Screen1);
     lv_obj_set_width(ui_Arc_Group, 400);
-    lv_obj_set_height(ui_Arc_Group, 497);
-    lv_obj_set_x(ui_Arc_Group, 54);
-    lv_obj_set_y(ui_Arc_Group, 114);
+    lv_obj_set_height(ui_Arc_Group, 374);
+    lv_obj_set_x(ui_Arc_Group, 5);
+    lv_obj_set_y(ui_Arc_Group, 158);
     lv_obj_set_align(ui_Arc_Group, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Arc_Group, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_remove_flag(ui_Arc_Group, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_Arc_Group, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Arc_Group, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -110,8 +130,8 @@ void ui_Screen1_screen_init(void)
     ui_Arc1 = lv_arc_create(ui_Arc_Group);
     lv_obj_set_width(ui_Arc1, 350);
     lv_obj_set_height(ui_Arc1, 350);
-    lv_obj_set_x(ui_Arc1, -7);
-    lv_obj_set_y(ui_Arc1, -5);
+    lv_obj_set_x(ui_Arc1, 3);
+    lv_obj_set_y(ui_Arc1, -6);
     lv_obj_set_align(ui_Arc1, LV_ALIGN_CENTER);
     lv_arc_set_range(ui_Arc1, 15, 35);
     lv_arc_set_value(ui_Arc1, 23);
@@ -136,13 +156,14 @@ void ui_Screen1_screen_init(void)
     ui_Temp_Bg = lv_obj_create(ui_Arc_Group);
     lv_obj_set_width(ui_Temp_Bg, 280);
     lv_obj_set_height(ui_Temp_Bg, 280);
+    lv_obj_set_x(ui_Temp_Bg, -16);
+    lv_obj_set_y(ui_Temp_Bg, -22);
     lv_obj_set_align(ui_Temp_Bg, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_Temp_Bg, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_Temp_Bg, 280, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Temp_Bg, lv_color_hex(0x646464), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Temp_Bg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_color(ui_Temp_Bg, lv_color_hex(0x3C414B), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_dir(ui_Temp_Bg, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_Temp_Bg, lv_color_hex(0x2D323C), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_Temp_Bg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_Temp_Bg, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -156,7 +177,10 @@ void ui_Screen1_screen_init(void)
     ui_Temp_Num_Bg = lv_obj_create(ui_Temp_Bg);
     lv_obj_set_width(ui_Temp_Num_Bg, 200);
     lv_obj_set_height(ui_Temp_Num_Bg, 200);
+    lv_obj_set_x(ui_Temp_Num_Bg, 0);
+    lv_obj_set_y(ui_Temp_Num_Bg, 2);
     lv_obj_set_align(ui_Temp_Num_Bg, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Temp_Num_Bg, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_remove_flag(ui_Temp_Num_Bg, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_Temp_Num_Bg, 200, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Temp_Num_Bg, lv_color_hex(0x0C191E), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -171,6 +195,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_height(ui_Label_Celsius, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_Label_Celsius, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label_Celsius, "23°");
+    lv_obj_add_flag(ui_Label_Celsius, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_text_color(ui_Label_Celsius, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Label_Celsius, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Label_Celsius, &ui_font_Number, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -178,14 +203,20 @@ void ui_Screen1_screen_init(void)
     ui_Label_Slider = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_Label_Slider, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label_Slider, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label_Slider, -127);
-    lv_obj_set_y(ui_Label_Slider, -84);
+    lv_obj_set_x(ui_Label_Slider, -126);
+    lv_obj_set_y(ui_Label_Slider, -437);
     lv_obj_set_align(ui_Label_Slider, LV_ALIGN_BOTTOM_MID);
     lv_label_set_text(ui_Label_Slider, "Fan Speed Control");
+    lv_obj_add_flag(ui_Label_Slider, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_text_color(ui_Label_Slider, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Label_Slider, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_Label_Slider, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_Label_Slider, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_Label_Slider, lv_color_hex(0xAF3A3A), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Label_Slider, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_Label_Slider, &ui_img_q1_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_transform_rotation(ui_Label_Slider, 45, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_transform_scale(ui_Label_Slider, 300, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Fan_Speed_Control = lv_slider_create(ui_Screen1);
     lv_slider_set_value(ui_Fan_Speed_Control, 50, LV_ANIM_OFF);
@@ -196,6 +227,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_Fan_Speed_Control, -46);
     lv_obj_set_y(ui_Fan_Speed_Control, -34);
     lv_obj_set_align(ui_Fan_Speed_Control, LV_ALIGN_BOTTOM_MID);
+    lv_obj_add_flag(ui_Fan_Speed_Control, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_bg_color(ui_Fan_Speed_Control, lv_color_hex(0x0F1215), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Fan_Speed_Control, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_outline_color(ui_Fan_Speed_Control, lv_color_hex(0x1E242D), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -231,8 +263,29 @@ void ui_Screen1_screen_init(void)
     //Compensating for LVGL9.1 draw crash with bar/slider max value when top-padding is nonzero and right-padding is 0
     if(lv_obj_get_style_pad_top(ui_Fan_Speed_Control, LV_PART_MAIN) > 0) lv_obj_set_style_pad_right(ui_Fan_Speed_Control,
                                                                                                         lv_obj_get_style_pad_right(ui_Fan_Speed_Control, LV_PART_MAIN) + 1, LV_PART_MAIN);
+    ui_Dropdown1 = lv_dropdown_create(ui_Screen1);
+    lv_dropdown_set_options(ui_Dropdown1, "Option 1\nOption 2\nOption 3");
+    lv_obj_set_width(ui_Dropdown1, 314);
+    lv_obj_set_height(ui_Dropdown1, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Dropdown1, 69);
+    lv_obj_set_y(ui_Dropdown1, 360);
+    lv_obj_set_align(ui_Dropdown1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Dropdown1, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+
+    ui_Button2 = lv_button_create(ui_Screen1);
+    lv_obj_set_width(ui_Button2, 165);
+    lv_obj_set_height(ui_Button2, 89);
+    lv_obj_set_x(ui_Button2, 132);
+    lv_obj_set_y(ui_Button2, -12);
+    lv_obj_set_align(ui_Button2, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Button2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_remove_flag(ui_Button2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
     lv_obj_add_event_cb(ui_Arc1, ui_event_Arc1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Fan_Speed_Control, ui_event_Fan_Speed_Control, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button2, ui_event_Button2, LV_EVENT_ALL, NULL);
+    uic_Arc_Group = ui_Arc_Group;
+    uic_Dropdown1 = ui_Dropdown1;
 
 }
 
@@ -247,6 +300,7 @@ void ui_Screen1_screen_destroy(void)
     ui_Header_Time = NULL;
     ui_Label2 = NULL;
     ui_Image1 = NULL;
+    uic_Arc_Group = NULL;
     ui_Arc_Group = NULL;
     ui_Arc1 = NULL;
     ui_Temp_Bg = NULL;
@@ -254,5 +308,8 @@ void ui_Screen1_screen_destroy(void)
     ui_Label_Celsius = NULL;
     ui_Label_Slider = NULL;
     ui_Fan_Speed_Control = NULL;
+    uic_Dropdown1 = NULL;
+    ui_Dropdown1 = NULL;
+    ui_Button2 = NULL;
 
 }

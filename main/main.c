@@ -18,6 +18,10 @@
 #include "bsp/display.h"
 #include "bsp_board_extra.h"
 
+#include "ui/ui.h"
+
+extern void ui_init(void);
+
 static const char *TAG = "app";
 
 static void show_startup_screen(void)
@@ -71,7 +75,8 @@ void app_main(void)
         ESP_LOGE(TAG, "LVGL lock timeout");
         return;
     }
-    show_startup_screen();
+    //show_startup_screen();
+    ui_init();
     lv_refr_now(display);
     bsp_display_unlock();
 }

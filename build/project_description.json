@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "w222",
-    "project_version":    "d754b3f-dirty",
+    "project_version":    "5ce46ff-dirty",
     "project_path":       "G:/w222/w222",
     "idf_path":           "D:/Espressif5/frameworks/esp-idf-v5.4.4",
     "build_dir":          "G:/w222/w222/build",
@@ -1435,8 +1435,8 @@
             "managed_reqs": [ "lvgl__lvgl" ],
             "managed_priv_reqs": [],
             "file": "G:/w222/w222/build/esp-idf/main/libmain.a",
-            "sources": [ "G:/w222/w222/main/main.c" ],
-            "include_dirs": [ "." ]
+            "sources": [ "G:/w222/w222/main/main.c", "G:/w222/w222/main/ui/components/ui_comp.c", "G:/w222/w222/main/ui/components/ui_comp_dropdown.c", "G:/w222/w222/main/ui/components/ui_comp_hook.c", "G:/w222/w222/main/ui/components/ui_comp_roller.c", "G:/w222/w222/main/ui/fonts/ui_font_Big.c", "G:/w222/w222/main/ui/fonts/ui_font_Medium.c", "G:/w222/w222/main/ui/fonts/ui_font_Number.c", "G:/w222/w222/main/ui/fonts/ui_font_Small.c", "G:/w222/w222/main/ui/images/ui_img_battery_bg_png.c", "G:/w222/w222/main/ui/images/ui_img_ebike_bg_png.c", "G:/w222/w222/main/ui/images/ui_img_gps_bg_png.c", "G:/w222/w222/main/ui/images/ui_img_gps_knob_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_battery_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_bike_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_charge_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_flash_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_map_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_ok_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_settings_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_x2_png.c", "G:/w222/w222/main/ui/images/ui_img_icn_x_png.c", "G:/w222/w222/main/ui/images/ui_img_map_png.c", "G:/w222/w222/main/ui/images/ui_img_menu_line_png.c", "G:/w222/w222/main/ui/images/ui_img_menu_on_png.c", "G:/w222/w222/main/ui/images/ui_img_particle_1_png.c", "G:/w222/w222/main/ui/images/ui_img_particle_2_png.c", "G:/w222/w222/main/ui/images/ui_img_particle_3_png.c", "G:/w222/w222/main/ui/images/ui_img_pin_line_png.c", "G:/w222/w222/main/ui/images/ui_img_pin_on_png.c", "G:/w222/w222/main/ui/images/ui_img_right_png.c", "G:/w222/w222/main/ui/images/ui_img_settings_bg_png.c", "G:/w222/w222/main/ui/images/ui_img_settings_corner_png.c", "G:/w222/w222/main/ui/images/ui_img_slider_battery_png.c", "G:/w222/w222/main/ui/images/ui_img_speed_slider_png.c", "G:/w222/w222/main/ui/images/ui_img_volume_off_png.c", "G:/w222/w222/main/ui/images/ui_img_volume_on_png.c", "G:/w222/w222/main/ui/images/ui_img_water_1_png.c", "G:/w222/w222/main/ui/images/ui_img_water_2_png.c", "G:/w222/w222/main/ui/screens/ui_Home.c", "G:/w222/w222/main/ui/screens/ui_Settings.c", "G:/w222/w222/main/ui/ui.c", "G:/w222/w222/main/ui/ui_helpers.c" ],
+            "include_dirs": [ ".", "ui" ]
         },
         "mbedtls": {
             "alias": "idf::mbedtls",
@@ -3082,7 +3082,7 @@
             "priv_reqs": [],
             "managed_reqs": [ "lvgl__lvgl" ],
             "managed_priv_reqs": [],
-            "include_dirs": [ "." ]
+            "include_dirs": [ ".", "ui" ]
         },
         "bsp_extra": {
             "alias": "idf::bsp_extra",

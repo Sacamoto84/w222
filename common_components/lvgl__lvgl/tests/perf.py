@@ -90,11 +90,11 @@ def main() -> bool:
     else:
         options = perf_test_options.keys()
 
-    # Since test suites are run inside a virtual space, debugging them is tricky
-    # because every test suite will be loaded into memory at the same virtual address
-    # this means that when you try to set a breakpoint (e.g: in `main`), gdb will actually
-    # hit that breakpoint for EACH test_suite that runs, which can be very confusing
-    # Instead, only allow debugging if a test_suite is selected as we won't encounter that problem
+    # Поскольку наборы тестов запускаются внутри виртуального пространства, их отладка затруднена.
+    # потому что каждый набор тестов будет загружен в память по одному и тому же виртуальному адресу
+    # это означает, что когда вы пытаетесь установить точку остановки (например: в `main`), gdb фактически
+    # нажмите точку этой остановки дляEACHtest_suite , который работает, что может сбить с толку
+    # Вместо этого разрешите отладку только в том случае, если выбранtest_suite, поскольку мы не сталкиваемся с этой проблемой.
     if args.debug and not args.test_suite:
         print("Please provide the test suite you want to debug")
         exit(1)
@@ -326,13 +326,13 @@ def generate_unity_cmakelists(path: str) -> None:
 
     print(f"Generating {path}")
     content_lines = [
-        # Create a static library
+        # Создать статическую библиотеку
         "add_library(unity STATIC unity.c)",
-        # Add the necessary compile definitions in order to build the library correctly
-        # Setting these to PUBLIC allows other apps that link with this library to use the same compile definitions
-        # Here we enable LV_BUILD_TEST and LV_BUILD_TEST_PERF so we enable the file contents
-        # UNITY_INCLUDE_DOUBLE enables macros like `TEST_ASSERT_LESS_OR_EQUAL_DOUBLE`
-        # UNITY_OUTPUT_COLOR enables coloring the `OK` and the `FAIL` output of the tests
+        # Добавьте необходимые определения компиляции, чтобы правильно собрать библиотеку.
+        # Установка для них значения PUBLIC позволяет другим приложениям, которые связаны с этой библиотекой, использовать те же определения компиляции.
+        # Здесь мы включаем LV_BUILD_TEST и LV_BUILD_TEST_PERF, чтобы включить содержимое файла.
+        # UNITY_INCLUDE_DOUBLE включает такие макросы, как `TEST_ASSERT_LESS_OR_EQUAL_DOUBLE`.
+        # UNITY_OUTPUT_COLOR позволяет раскрашивать выходные данные тестов `OK` и `FAIL`.
         "target_compile_definitions(unity PUBLIC LV_BUILD_TEST LV_BUILD_TEST_PERF UNITY_INCLUDE_DOUBLE UNITY_OUTPUT_COLOR)",
     ]
 
@@ -378,8 +378,8 @@ def generate_test_runners(
         lvgl_test_dir, "unity", "generate_test_runner.rb"
     )
 
-    # Get the necessary files in order to generate the runners
-    # This includes the test cases and the unity config
+    # Получите необходимые файлы для генерации бегунов.
+    # Сюда входят тестовые образцы и структуры Unity.
     test_cases = find_c_files(os.path.join(lvgl_test_dir, "src", "test_cases_perf"))
     unity_config_path = os.path.join(lvgl_test_dir, "config.yml")
 
@@ -410,9 +410,9 @@ def generate_test_runners(
             ]
         )
 
-        # Copy the original test case as still need them in the build process
+        # Скопируйте исходный тестовый пример, поскольку они все еще нужны в процессе сборки.
         shutil.copy(src_test_case_path, test_case_path)
-        # Store a tuple of runner - test case so we can generate the cmakelists later
+        # Сохраните кортеж бега — тестовый пример, который мы могли бы позже сгенерировать назначенный cmakelist.
         runners.append((runner_file_name, test_case_file_name))
 
     return runners
@@ -443,12 +443,12 @@ def generate_files(options_name, test_suite):
 
     runners = generate_test_runners(generated_test_src_dir, test_suite)
 
-    # Copy lvgl common test files
+    # Копирование общих тестовых файлов lvgl
     copy_lvgl_test_files(generated_test_src_dir)
-    # Copy Unity framework
+    # Копировать фреймворк Unity
     copy_unity(generated_unity_dir)
 
-    # Generate necessary cmakelists
+    # Создание исходных списков cmakelist
     generate_unity_cmakelists(os.path.join(generated_unity_dir, "CMakeLists.txt"))
     generate_perf_test_cmakelists(
         runners, os.path.join(generated_test_src_dir, "CMakeLists.txt")
@@ -527,25 +527,25 @@ def run_tests(
     docker_image_name = perf_test_options[options_name]["image_name"]
 
     volumes = [
-        # This is necessary in order to create a loop device
-        # It is also the reason we only support linux for now.
+        # Это необходимо для того, чтобы создать шлейфовое устройство.
+        # Это также причина, по которой мы пока применяем только Linux.
         volume("/dev", "/dev"),
-        # Replace container's lvgl source and lv_conf
+        # Замените источник контейнера lvgl на lv_conf.
         volume(lvgl_src_dir, so3_usr_lib("lvgl/src")),
         volume(lv_conf_path, so3_usr_lib("lv_conf.h")),
         volume(lvgl_h_path, so3_usr_lib("lvgl/lvgl.h")),
         volume(lvgl_private_h_path, so3_usr_lib("lvgl/lvgl_private.h")),
-        # We also need to add the current "lvgl.h" and mount it in the correct path
-        # As there's a `#include "../../lvgl.h"` in the `unity_support.h` file
+        # Нам также необходимо добавить текущий «lvgl.h» и смонтировать его по правильному пути.
+        # поскольку в файле`unity_support.h`есть `#include "../../lvgl.h"`
         volume(lvgl_h_path, "/so3/usr/lvgl.h"),
-        # Mount the test sources (test cases and runners)
+        # Смонтируйте источники тестов (тестовые случаи и бегуны)
         volume(test_src_dir, so3_usr_src("test_src")),
-        # Mount the test framework
+        # Монтируем тестовую среду
         volume(unity_dir, so3_usr_src("unity")),
-        # Modify the default so3 CMakeLists and commands.ini
+        # Замените стандартные файлы CMakeLists и команды so3.ini.
         volume(main_cmakelists, so3_usr_src("CMakeLists.txt")),
         volume(commands_ini_path, so3_usr_out("commands.ini")),
-        # Cache build and disk folders so we don't regenerate everything in consecutive runs
+        # Кэшируйте папки сборки и дисков, чтобы не создавать заново все при последовательных запусках.
         volume(get_build_cache_volume(options_name), so3_usr_build),
         volume(get_disk_cache_volume(options_name), persistence_dir),
     ]
@@ -584,8 +584,8 @@ def run_tests(
         return False
     success = check_for_success(container_name)
 
-    # We can't use the `docker run --rm` syntax because we need access to the docker container
-    # after it exits in order to check for the success status of the run
+    # Мы не можем использовать синтаксис `docker run --rm`, поскольку нам нужен доступ к докер-контейнеру.
+    # после его выхода, чтобы проверить статус успеха запуска
     subprocess.check_call(["docker", "rm", "-f", container_name])
     return success
 

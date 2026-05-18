@@ -31,8 +31,8 @@ extern "C" {
  **********************/
 
 struct _lv_draw_sw_blend_dsc_t {
-    const lv_area_t * blend_area;   /**< The area with absolute coordinates to draw on `layer->buf`
-                                     *   will be clipped to `layer->clip_area` */
+    const lv_area_t * blend_area;   /**< Область с абсолютными координатами для рисования на `layer->buf`
+                                     *   будет обрезан до `layer->clip_area` */
     const void * src_buf;           /**< Pointer to an image to blend. If set `fill_color` is ignored */
     uint32_t src_stride;
     lv_color_format_t src_color_format;
@@ -86,7 +86,7 @@ struct _lv_draw_sw_blend_image_dsc_t {
 #endif /* LV_USE_DRAW_SW */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_PRIVATE_H*/

@@ -34,7 +34,7 @@ extern "C" {
 #include "../../../display/lv_display_private.h"
 #include "../../../misc/lv_area_private.h"
 
-/* The ppa driver depends heavily on the esp-idf headers*/
+/* Драйвер ppa сильно зависит от заголовков esp-idf.*/
 #include "sdkconfig.h"
 
 #if (CONFIG_LV_DRAW_BUF_ALIGN != CONFIG_CACHE_L2_CACHE_LINE_SIZE)
@@ -171,7 +171,7 @@ static inline ppa_srm_color_mode_t lv_color_format_to_ppa_srm(lv_color_format_t 
 #endif /* LV_USE_PPA */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_DRAW_PPA_PRIVATE_H */

@@ -101,7 +101,7 @@
     #endif
 
     ///
-    /// Minimum values for the signed UEFI Data Types
+    /// Минимальные значения для подписанных типов данных UEFI
     ///
     #ifndef INT8_MIN
         #define INT8_MIN   ((  -127) - 1)

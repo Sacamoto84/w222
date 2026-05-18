@@ -44,11 +44,11 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
         status = lv_mutex_lock(unit->pd2Mutex);
         LV_ASSERT(LV_RESULT_OK == status);
 #endif
-        /* Labels use their own render buffer, select it first. */
+        /* Метки используют собственный буфер рендеринга, сначала выберите его. */
         d2_selectrenderbuffer(unit->d2_handle, unit->label_renderbuffer);
 
         //
-        // Generate render operations
+        // Генерация операций рендеринга
         //
 
         d2_framebuffer_from_layer(unit->d2_handle, t->target_layer);
@@ -61,13 +61,13 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
         switch(glyph_draw_dsc->format) {
             case LV_FONT_GLYPH_FORMAT_NONE: {
 #if LV_USE_FONT_PLACEHOLDER
-                    /* Draw a placeholder rectangle*/
+                    /* Нарисуйте прямоугольник-заполнитель*/
                     lv_draw_border_dsc_t border_draw_dsc;
                     lv_draw_border_dsc_init(&border_draw_dsc);
                     border_draw_dsc.opa = glyph_draw_dsc->opa;
                     border_draw_dsc.color = glyph_draw_dsc->color;
                     border_draw_dsc.width = 1;
-                    //lv_draw_sw_border(u, &border_draw_dsc, glyph_draw_dsc->bg_coords);
+                    //lv_draw_sw_border (u, & border_draw_dsc , glyph_draw_dsc -> bg_coords );
                     lv_draw_dave2d_border(t, &border_draw_dsc, glyph_draw_dsc->bg_coords);
 #endif
                 }
@@ -76,15 +76,15 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
                     glyph_draw_dsc->glyph_data = lv_font_get_glyph_bitmap(glyph_draw_dsc->g, glyph_draw_dsc->_draw_buf);
                     lv_area_t mask_area = letter_coords;
                     mask_area.x2 = mask_area.x1 + lv_draw_buf_width_to_stride(lv_area_get_width(&mask_area), LV_COLOR_FORMAT_A8) - 1;
-                    //            lv_draw_sw_blend_dsc_t blend_dsc;
-                    //            lv_memzero(&blend_dsc, sizeof(blend_dsc));
-                    //            blend_dsc.color = glyph_draw_dsc->color;
-                    //            blend_dsc.opa = glyph_draw_dsc->opa;
-                    //            blend_dsc.mask_buf = glyph_draw_dsc->glyph_data;
-                    //            blend_dsc.mask_area = &mask_area;
-                    //            blend_dsc.blend_area = glyph_draw_dsc->letter_coords;
-                    //            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;
-                    //lv_draw_sw_blend(u, &blend_dsc);
+                    //            lv_draw_sw_blend_dsc_t blend_dsc ;
+                    //            lv_memzero (& blend_dsc, sizeof( blend_dsc ));
+                    //            blend_dsc .color = glyph_draw_dsc ->цвет;
+                    //            blend_dsc .opa = glyph_draw_dsc ->opa;
+                    //            blend_dsc . mask_buf = glyph_draw_dsc -> glyph_data ;
+                    //            blend_dsc . mask_area = & mask_area ;
+                    //            blend_dsc . blend_area = glyph_draw_dsc -> letter_coords ;
+                    //            blend_dsc . mask_res = LV_DRAW_SW_MASK_RES_CHANGED ;
+                    //lv_draw_sw_blend (u, & blend_dsc );
 
                     const lv_draw_buf_t * draw_buf = glyph_draw_dsc->glyph_data;
 
@@ -128,7 +128,7 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
                     img_dsc.scale_y = LV_SCALE_NONE;
                     img_dsc.opa = glyph_draw_dsc->opa;
                     img_dsc.src = glyph_draw_dsc->glyph_data;
-                    //lv_draw_sw_image(t, &img_dsc, glyph_draw_dsc->letter_coords);
+                    //lv_draw_sw_image (t, & img_dsc , glyph_draw_dsc -> letter_coords );
 #endif
                 }
                 break;
@@ -136,12 +136,12 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
                 break;
         }
 
-        /* Drawing labels is a special case, because its draw buffer is shared
-         * between all the glyphs, then using the global render bufeer to defer
-         * its drawing later with other shapes, will corrupt the text drawn,
-         * instead, pushes all the glyph commands and its dedicated draw buffer
-         * to a specific render buffer, and draw it immediately while the contents
-         * are valid.
+        /* Метки рисования являются особым случаем, поскольку их буфер рисования является общим.
+         * между всеми глифами, а затем с помощью глобального буфера рендеринга отложить
+         * его рисование позже с другими фигурами испортит нарисованный текст,
+         * вместо этого он отправляет все команды глифа и его выделенный буфер отрисовки.
+         * в определенный буфер рендеринга и сразу же рисуем его, пока содержимое
+         * действительны.
          */
         d2_executerenderbuffer(unit->d2_handle, unit->label_renderbuffer, 0);
         d2_flushframe(unit->d2_handle);

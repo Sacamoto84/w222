@@ -81,11 +81,11 @@ void lv_lottie_set_buffer(lv_obj_t * obj, int32_t w, int32_t h, void * buf)
     lv_canvas_set_buffer(obj, buf, w, h, LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED);
     tvg_picture_set_size(lottie->tvg_paint, w, h);
 
-    /* Rendered output images are premultiplied */
+    /* Отрисованные выходные изображения предварительно умножаются. */
     lv_draw_buf_t * draw_buf = lv_canvas_get_draw_buf(obj);
     lv_draw_buf_set_flag(draw_buf, LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-    /*Force updating when the buffer changes*/
+    /*Принудительное обновление при изменении буфера*/
     float f_current;
     tvg_animation_get_frame(lottie->tvg_anim, &f_current);
     anim_exec_cb(obj, (int32_t) f_current);
@@ -105,10 +105,10 @@ void lv_lottie_set_draw_buf(lv_obj_t * obj, lv_draw_buf_t * draw_buf)
     lv_canvas_set_draw_buf(obj, draw_buf);
     tvg_picture_set_size(lottie->tvg_paint, draw_buf->header.w, draw_buf->header.h);
 
-    /* Rendered output images are premultiplied */
+    /* Отрисованные выходные изображения предварительно умножаются. */
     lv_draw_buf_set_flag(draw_buf, LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-    /*Force updating when the buffer changes*/
+    /*Принудительное обновление при изменении буфера*/
     float f_current;
     tvg_animation_get_frame(lottie->tvg_anim, &f_current);
     anim_exec_cb(obj, (int32_t) f_current);
@@ -129,7 +129,7 @@ void lv_lottie_set_src_data(lv_obj_t * obj, const void * src, size_t src_size)
     lottie->anim->act_time = 0;
     lottie->anim->end_value = (int32_t)f_total;
     lottie->anim->reverse_play_in_progress = false;
-    lottie_update(lottie, 0);   /*Render immediately*/
+    lottie_update(lottie, 0);   /*Рендеринг немедленно*/
 }
 
 void lv_lottie_set_src_file(lv_obj_t * obj, const char * src)
@@ -147,7 +147,7 @@ void lv_lottie_set_src_file(lv_obj_t * obj, const char * src)
     lottie->anim->act_time = 0;
     lottie->anim->end_value = (int32_t)f_total;
     lottie->anim->reverse_play_in_progress = false;
-    lottie_update(lottie, 0);   /*Render immediately*/
+    lottie_update(lottie, 0);   /*Рендеринг немедленно*/
 }
 
 
@@ -199,7 +199,7 @@ static void anim_exec_cb(void * var, int32_t v)
 {
     lv_lottie_t * lottie = var;
 
-    /*Do not render not visible animations.*/
+    /*Не отображать невидимую анимацию.*/
     if(lv_obj_is_visible(var)) {
         lottie_update(lottie, v);
         if(lottie->anim) {
@@ -207,8 +207,8 @@ static void anim_exec_cb(void * var, int32_t v)
         }
     }
     else {
-        /*Artificially keep the animation on the last rendered frame's time
-         *To avoid a jump when the widget becomes visible*/
+        /*Искусственно сохранять анимацию во время последнего визуализированного кадра.
+         *Чтобы избежать прыжка, когда виджет становится видимым*/
         if(lottie->anim) {
             lottie->anim->act_time = lottie->last_rendered_time;
         }
@@ -223,7 +223,7 @@ static void lottie_update(lv_lottie_t * lottie, int32_t v)
     if(draw_buf) {
         lv_draw_buf_clear(draw_buf, NULL);
 
-        /*Drop old cached image*/
+        /*Удалить старое кэшированное изображение*/
         lv_image_cache_drop(lv_image_get_src(obj));
     }
 

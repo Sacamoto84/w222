@@ -123,16 +123,16 @@ def test_event():
 
 @test_func_wrapper
 def create_ui():
-    # Create a colors
+    # Создайте цвета
     c1 = lv.color_hex(0xff0000)
     c2 = lv.palette_darken(lv.PALETTE.BLUE, 2)
     c3 = c1.mix(c2, lv.OPA._60)
 
-    # Create a style
+    # Создайте стиль
     style_big_font = lv.style_t()
     style_big_font.init()
 
-    # Try to load as built in font and if not load it using tiny TTF
+    # Попробуйте загрузить встроенный шрифт, а если нет, загрузите его с помощью крошечного TTF.
     try:
         font_montserrat_24 = lv.font_montserrat_24
     except AttributeError:
@@ -140,10 +140,10 @@ def create_ui():
 
     style_big_font.set_text_font(font_montserrat_24)
 
-    # Get the active screen
+    # Получить активный экран
     scr = lv.screen_active()
 
-    # Declare static array of integers, and test grid setting options
+    # Объявите статический массив целых чисел и проверьте параметры настройки сетки.
     gird_cols = [300, GRID_FR(3), GRID_FR(2), lv.GRID_TEMPLATE_LAST]
     gird_rows = [100, GRID_FR(1), lv.GRID_CONTENT, lv.GRID_TEMPLATE_LAST]
     scr.set_grid_dsc_array(gird_cols, gird_rows)
@@ -151,13 +151,13 @@ def create_ui():
     chart_type_subject = lv.subject_t()
     chart_type_subject.init_int(0)
 
-    # Create a widget
+    # Создать виджет
     dropdown = lv.dropdown(scr)
 
-    # Pass a string as argument
+    # Передать строку в качестве аргумента
     dropdown.set_options("Lines\nBars")
 
-    # Use grid align options
+    # Используйте параметры выравнивания по сетке
     dropdown.set_grid_cell(
         lv.GRID_ALIGN.CENTER,
         0,
@@ -167,10 +167,10 @@ def create_ui():
         1
     )
 
-    # Bind to a subject
+    # Привязка к теме
     dropdown.bind_value(chart_type_subject)
 
-    # Create a chart with an external array of points
+    # Создание диаграммы с внешним массивом точек
     chart = lv.chart(lv.screen_active())
     chart.set_grid_cell(lv.GRID_ALIGN.STRETCH, 0, 1, lv.GRID_ALIGN.CENTER, 1, 1)
 
@@ -180,26 +180,26 @@ def create_ui():
 
     chart.set_series_ext_y_array(series, chart_y_array)
 
-    # Add custom observer callback
+    # Добавить пользовательский обратный вызов наблюдателя
     chart_type_subject.add_observer_obj(
         lambda _, __: chart_type_observer_cb(chart, chart_type_subject),
         chart,
         None
         )
 
-    # Manually set the subject's value
+    # Вручную установите значение темы
     chart_type_subject.set_int(1)
 
     label = lv.label(scr)
     label.set_grid_cell(lv.GRID_ALIGN.START, 1, 1, lv.GRID_ALIGN.CENTER, 0, 1)
 
-    # Apply styles on main part and default state
+    # Применить стили к основной детали и состоянию по умолчанию
     label.set_style_bg_opa(lv.OPA._70, 0)
     label.set_style_bg_color(c1, 0)
     label.set_style_text_color(c2, 0)
     label.add_style(style_big_font, 0)
 
-    # Declare an array of strings
+    # Объявить массив строк
     btnmatrix_options = ["First", "Second", "\n", "Third", ""]
 
     btnmatrix_ctrl = [lv.buttonmatrix.CTRL.DISABLED,
@@ -214,10 +214,10 @@ def create_ui():
         1,
         1
         )
-    # Pass string and enum arrays
+    # Передача массивов строк и перечислений
     btnmatrix.set_map(btnmatrix_options)
     btnmatrix.set_ctrl_map(btnmatrix_ctrl)
-    # Add style to non main part and non default state
+    # Добавить стиль не к основной части и не к состоянию по умолчанию
     btnmatrix.add_style(style_big_font, lv.PART.ITEMS | lv.STATE.CHECKED)
 
     btnmatrix.set_selected_button(1)
@@ -228,12 +228,12 @@ def create_ui():
         )
     btnmatrix.send_event(lv.EVENT.VALUE_CHANGED, None)
 
-    # Create a base object
+    # Создать базовый объект
     cont = lv.obj(scr)
-    # Span 2 rows
+    # Охватить 2 ряда
     cont.set_grid_cell(lv.GRID_ALIGN.STRETCH, 2, 1, lv.GRID_ALIGN.STRETCH, 0, 2)
 
-    # Apply flex layout
+    # Применить гибкий макет
     cont.set_flex_flow(lv.FLEX_FLOW.COLUMN)
 
     btn1 = list_button_create(cont)
@@ -272,16 +272,16 @@ def create_ui():
     a.set_repeat_count(lv.ANIM_REPEAT_INFINITE)
     a.start()
 
-    # Wait and delete the button with the animation
+    # Подождите и удалите кнопку с анимацией
 
     cont.get_child(3).delete()
-    # Large byte array
+    # Большой массив байтов
 
     canvas_buf = bytearray(CANVAS_BUF_SIZE(400, 100, 16, 1))
 
     canvas = lv.canvas(scr)
     canvas.set_grid_cell(lv.GRID_ALIGN.START, 0, 2, lv.GRID_ALIGN.START, 2, 1)
-    # Test RGB565 rendering
+    # Тестовый рендеринг RGB565
     canvas.set_buffer(
         lv.draw_buf_align(canvas_buf, lv.COLOR_FORMAT.RGB565),
         400,
@@ -336,14 +336,14 @@ def create_ui():
 @test_func_wrapper
 def chart_type_observer_cb(chart, subject):
     v = subject.get_int()
-    # chart = observer.get_target()
+    # диаграмма = наблюдатель. get_target ()
     chart.set_type(lv.chart.TYPE.LINE if v == 0 else lv.chart.TYPE.BAR)
 
 
 @test_func_wrapper
 def buttonmatrix_event_cb(buttonmatrix, label):
-    # label = e.get_user_data()
-    # buttonmatrix = e.get_target()
+    # метка = е. get_user_data ()
+    # кнопкаматрица = e. get_target ()
     idx = buttonmatrix.get_selected_button()
     text = buttonmatrix.get_button_text(idx)
     label.set_text(text)
@@ -354,10 +354,10 @@ def list_button_create(parent):
     btn = lv.button(parent)
     btn.set_size(lv.pct(100), lv.SIZE_CONTENT)
 
-    # Get an integer
+    # Получить целое число
     idx = btn.get_index()
 
-    # Formatted string for label
+    # Форматированная строка для метки
     label = lv.label(btn)
     label.set_text(lv.SYMBOL.FILE + " Item %d" % idx)
 
@@ -377,7 +377,7 @@ def draw_to_canvas(canvas):
     layer = lv.layer_t()
     canvas.init_layer(layer)
 
-    # Use draw descriptors
+    # Используйте дескрипторы отрисовки
 
     test_img_lvgl_logo_png_data = (
         b'\x89\x50\x4E\x47\x0D\x0A\x1A\x0A\x00\x00\x00\x0D\x49\x48\x44\x52\x00\x00\x00\x69\x00\x00\x00\x28\x08\x06\x00\x00\x00\xFD\x86\xD4\xF3\x00\x00\x00\x04\x67\x41\x4D\x41\x00\x00\xB1\x8F\x0B\xFC\x61\x05\x00\x00\x0A\x49\x69\x43\x43\x50\x73\x52\x47\x42\x20\x49\x45\x43\x36\x31\x39\x36\x36\x2D\x32\x2E\x31\x00\x00\x48\x89\x9D\x53\x77\x58\x93\xF7\x16\x3E\xDF\xF7\x65\x0F\x56\x42\xD8\xF0\xB1\x97\x6C\x81\x00\x22\x23\xAC\x08\xC8\x10\x59\xA2\x10\x92\x00\x61\x84\x10\x12\x40\xC5\x85\x88\x0A\x56\x14\x15\x11\x9C\x48\x55\xC4\x82\xD5\x0A\x48\x9D\x88\xE2\xA0\x28\xB8\x67\x41\x8A\x88\x5A\x8B\x55\x5C\x38\xEE\x1F\xDC\xA7\xB5\x7D\x7A\xEF\xED\xED\xFB\xD7\xFB\xBC'
@@ -448,7 +448,7 @@ def draw_to_canvas(canvas):
         )
     lv.draw_image(layer, image_draw_dsc, coords)
 
-    # Reuse the draw descriptor
+    # Повторное использование дескриптора отрисовки
     coords.move(40, 40)
     image_draw_dsc.opa = lv.OPA._50
     lv.draw_image(layer, image_draw_dsc, coords)
@@ -481,4 +481,4 @@ def main():
 test_event()
 create_ui()
 main()
-# end
+# конец

@@ -15,7 +15,7 @@ static void float_button_event_cb(lv_event_t * e)
         lv_obj_t * list_btn = lv_list_add_button(list, LV_SYMBOL_AUDIO, buf);
         btn_cnt++;
 
-        /* Move the button to the foreground*/
+        /* Переместить кнопку на передний план*/
         lv_obj_move_to_index(float_btn, -1);
 
         lv_obj_scroll_to_view(list_btn, LV_ANIM_ON);
@@ -23,7 +23,7 @@ static void float_button_event_cb(lv_event_t * e)
 }
 
 /**
- * Create a list with a floating button
+ * Создайте список с плавающей кнопкой
  */
 void lv_example_scroll_3(void)
 {

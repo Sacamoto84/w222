@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_ENCODEDSTREAM_H_
 #define RAPIDJSON_ENCODEDSTREAM_H_
@@ -30,10 +30,10 @@ RAPIDJSON_DIAG_OFF(padded)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Input byte stream wrapper with a statically bound encoding.
+//! Оболочка входного потока байтов со статически связанной кодировкой.
 /*!
-    \tparam Encoding The interpretation of encoding of the stream. Either UTF8, UTF16LE, UTF16BE, UTF32LE, UTF32BE.
-    \tparam InputByteStream Type of input byte stream. For example, FileReadStream.
+    \tparam Кодирование Интерпретация кодирования потока. Либо UTF8, UTF16LE, UTF16BE, UTF32LE, UTF32BE.
+    \tparam InputByteStream Тип входного потока байтов. Например, FileReadStream.
 */
 template <typename Encoding, typename InputByteStream>
 class EncodedInputStream {
@@ -49,7 +49,7 @@ public:
     Ch Take() { Ch c = current_; current_ = Encoding::Take(is_); return c; }
     size_t Tell() const { return is_.Tell(); }
 
-    // Not implemented
+    // Не реализовано
     void Put(Ch) { RAPIDJSON_ASSERT(false); }
     void Flush() { RAPIDJSON_ASSERT(false); }
     Ch* PutBegin() { RAPIDJSON_ASSERT(false); return 0; }
@@ -63,7 +63,7 @@ private:
     Ch current_;
 };
 
-//! Specialized for UTF8 MemoryStream.
+//! Специально для UTF8 MemoryStream.
 template <>
 class EncodedInputStream<UTF8<>, MemoryStream> {
 public:
@@ -78,7 +78,7 @@ public:
     Ch Take() { return is_.Take(); }
     size_t Tell() const { return is_.Tell(); }
 
-    // Not implemented
+    // Не реализовано
     void Put(Ch) {}
     void Flush() {}
     Ch* PutBegin() { return 0; }
@@ -91,10 +91,10 @@ private:
     EncodedInputStream& operator=(const EncodedInputStream&);
 };
 
-//! Output byte stream wrapper with statically bound encoding.
+//! Оболочка выходного потока байтов со статически связанной кодировкой.
 /*!
-    \tparam Encoding The interpretation of encoding of the stream. Either UTF8, UTF16LE, UTF16BE, UTF32LE, UTF32BE.
-    \tparam OutputByteStream Type of input byte stream. For example, FileWriteStream.
+    \tparam Кодирование Интерпретация кодирования потока. Либо UTF8, UTF16LE, UTF16BE, UTF32LE, UTF32BE.
+    \tparam OutputByteStream Тип входного потока байтов. Например, FileWriteStream.
 */
 template <typename Encoding, typename OutputByteStream>
 class EncodedOutputStream {
@@ -110,7 +110,7 @@ public:
     void Put(Ch c) { Encoding::Put(os_, c);  }
     void Flush() { os_.Flush(); }
 
-    // Not implemented
+    // Не реализовано
     Ch Peek() const { RAPIDJSON_ASSERT(false); return 0;}
     Ch Take() { RAPIDJSON_ASSERT(false); return 0;}
     size_t Tell() const { RAPIDJSON_ASSERT(false);  return 0; }
@@ -126,10 +126,10 @@ private:
 
 #define RAPIDJSON_ENCODINGS_FUNC(x) UTF8<Ch>::x, UTF16LE<Ch>::x, UTF16BE<Ch>::x, UTF32LE<Ch>::x, UTF32BE<Ch>::x
 
-//! Input stream wrapper with dynamically bound encoding and automatic encoding detection.
+//! Оболочка входного потока с динамически привязанной кодировкой и автоматическим определением кодировки.
 /*!
-    \tparam CharType Type of character for reading.
-    \tparam InputByteStream type of input byte stream to be wrapped.
+    \tparam CharType Тип символа для чтения.
+    \tparam InputByteStream тип входного потока байтов, который необходимо обернуть.
 */
 template <typename CharType, typename InputByteStream>
 class AutoUTFInputStream {
@@ -137,10 +137,10 @@ class AutoUTFInputStream {
 public:
     typedef CharType Ch;
 
-    //! Constructor.
+    //! Конструктор.
     /*!
-        \param is input stream to be wrapped.
-        \param type UTF encoding type if it is not detected from the stream.
+        \param — входной поток, который нужно обернуть.
+        \param type Тип кодировки UTF, если он не обнаружен в потоке.
     */
     AutoUTFInputStream(InputByteStream& is, UTFType type = kUTF8) : is_(&is), type_(type), hasBOM_(false) {
         RAPIDJSON_ASSERT(type >= kUTF8 && type <= kUTF32BE);
@@ -157,7 +157,7 @@ public:
     Ch Take() { Ch c = current_; current_ = takeFunc_(*is_); return c; }
     size_t Tell() const { return is_->Tell(); }
 
-    // Not implemented
+    // Не реализовано
     void Put(Ch) { RAPIDJSON_ASSERT(false); }
     void Flush() { RAPIDJSON_ASSERT(false); }
     Ch* PutBegin() { RAPIDJSON_ASSERT(false); return 0; }
@@ -167,9 +167,9 @@ private:
     AutoUTFInputStream(const AutoUTFInputStream&);
     AutoUTFInputStream& operator=(const AutoUTFInputStream&);
 
-    // Detect encoding type with BOM or RFC 4627
+    // Определите тип кодировки с помощью BOM или RFC 4627.
     void DetectType() {
-        // BOM (Byte Order Mark):
+        // BOM (метка порядка байтов):
         // 00 00 FE FF  UTF-32BE
         // FF FE 00 00  UTF-32LE
         // FE FF        UTF-16BE
@@ -188,11 +188,11 @@ private:
         else if ((bom & 0xFFFF) == 0xFEFF)      { type_ = kUTF16LE; hasBOM_ = true; is_->Take(); is_->Take();                           }
         else if ((bom & 0xFFFFFF) == 0xBFBBEF)  { type_ = kUTF8;    hasBOM_ = true; is_->Take(); is_->Take(); is_->Take();              }
 
-        // RFC 4627: Section 3
-        // "Since the first two characters of a JSON text will always be ASCII
-        // characters [RFC0020], it is possible to determine whether an octet
-        // stream is UTF-8, UTF-16 (BE or LE), or UTF-32 (BE or LE) by looking
-        // at the pattern of nulls in the first four octets."
+        // RFC 4627: Раздел 3
+        // «Поскольку первые два символа текста JSON всегда будут ASCII
+        // символов [ RFC0020 ], можно определить, является ли октет
+        // поток: UTF -8, UTF -16 ( BE или LE ) или UTF -32 ( BE или LE ), посмотрев
+        // по шаблону нулей в первых четырех октетах».
         // 00 00 00 xx  UTF-32BE
         // 00 xx 00 xx  UTF-16BE
         // xx 00 00 00  UTF-32LE
@@ -207,11 +207,11 @@ private:
             case 0x01: type_ = kUTF32LE; break;
             case 0x05: type_ = kUTF16LE; break;
             case 0x0F: type_ = kUTF8;    break;
-            default: break; // Use type defined by user.
+            default: break; // Тип использования, определенный пользователем.
             }
         }
 
-        // Runtime check whether the size of character type is sufficient. It only perform checks with assertion.
+        // Во время выполнения проверьте, достаточен ли размер символьного типа. Он выполняет только проверки с утверждением.
         if (type_ == kUTF16LE || type_ == kUTF16BE) RAPIDJSON_ASSERT(sizeof(Ch) >= 2);
         if (type_ == kUTF32LE || type_ == kUTF32BE) RAPIDJSON_ASSERT(sizeof(Ch) >= 4);
     }
@@ -224,10 +224,10 @@ private:
     bool hasBOM_;
 };
 
-//! Output stream wrapper with dynamically bound encoding and automatic encoding detection.
+//! Оболочка выходного потока с динамически привязанной кодировкой и автоматическим обнаружением кодировки.
 /*!
-    \tparam CharType Type of character for writing.
-    \tparam OutputByteStream type of output byte stream to be wrapped.
+    \tparam CharType Тип символа для записи.
+    \tparam OutputByteStream тип выходного потока байтов, который необходимо обернуть.
 */
 template <typename CharType, typename OutputByteStream>
 class AutoUTFOutputStream {
@@ -235,16 +235,16 @@ class AutoUTFOutputStream {
 public:
     typedef CharType Ch;
 
-    //! Constructor.
+    //! Конструктор.
     /*!
-        \param os output stream to be wrapped.
-        \param type UTF encoding type.
-        \param putBOM Whether to write BOM at the beginning of the stream.
+        \param os выходной поток, который нужно обернуть.
+        \param type Тип кодировки UTF.
+        \param putBOM Записывать ли BOM в начале потока.
     */
     AutoUTFOutputStream(OutputByteStream& os, UTFType type, bool putBOM) : os_(&os), type_(type) {
         RAPIDJSON_ASSERT(type >= kUTF8 && type <= kUTF32BE);
 
-        // Runtime check whether the size of character type is sufficient. It only perform checks with assertion.
+        // Во время выполнения проверьте, достаточен ли размер символьного типа. Он выполняет только проверки с утверждением.
         if (type_ == kUTF16LE || type_ == kUTF16BE) RAPIDJSON_ASSERT(sizeof(Ch) >= 2);
         if (type_ == kUTF32LE || type_ == kUTF32BE) RAPIDJSON_ASSERT(sizeof(Ch) >= 4);
 
@@ -260,7 +260,7 @@ public:
     void Put(Ch c) { putFunc_(*os_, c); }
     void Flush() { os_->Flush(); }
 
-    // Not implemented
+    // Не реализовано
     Ch Peek() const { RAPIDJSON_ASSERT(false); return 0;}
     Ch Take() { RAPIDJSON_ASSERT(false); return 0;}
     size_t Tell() const { RAPIDJSON_ASSERT(false); return 0; }

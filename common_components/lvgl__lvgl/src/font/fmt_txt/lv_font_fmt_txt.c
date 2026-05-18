@@ -130,9 +130,9 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
                         bitmap_in++;
                     }
                 }
-                /*Handle stride*/
+                /*Ручка шага*/
                 if(stride_in) {
-                    i = 0;  /*If there is a stride start from the next byte in the next line*/
+                    i = 0;  /*Если есть шаг, начните со следующего байта в следующей строке.*/
                     bitmap_in += line_rem;
                 }
                 bitmap_out_tmp += stride_out;
@@ -153,9 +153,9 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
                     }
                 }
 
-                /*Handle stride*/
+                /*Ручка шага*/
                 if(stride_in) {
-                    i = 0;  /*If there is a stride start from the next byte in the next line*/
+                    i = 0;  /*Если есть шаг, начните со следующего байта в следующей строке.*/
                     bitmap_in += line_rem;
                 }
                 bitmap_out_tmp += stride_out;
@@ -177,9 +177,9 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
                     }
                 }
 
-                /*Handle stride*/
+                /*Ручка шага*/
                 if(stride_in) {
-                    i = 0;  /*If there is a stride start from the next byte in the next line*/
+                    i = 0;  /*Если есть шаг, начните со следующего байта в следующей строке.*/
                     bitmap_in += line_rem;
                 }
                 bitmap_out_tmp += stride_out;
@@ -201,7 +201,7 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
         lv_draw_buf_flush_cache(draw_buf, NULL);
         return draw_buf;
     }
-    /*Handle compressed bitmap*/
+    /*Обработка сжатого растрового изображения*/
     else {
 #if LV_USE_FONT_COMPRESSED
         bool prefilter = fdsc->bitmap_format == LV_FONT_FMT_TXT_COMPRESSED;
@@ -215,14 +215,14 @@ const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf
 #endif
     }
 
-    /*If not returned earlier then the letter is not found in this font*/
+    /*Если не вернули раньше, значит буква не найдена в этом шрифте*/
     return NULL;
 }
 
 bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t * dsc_out, uint32_t unicode_letter,
                                    uint32_t unicode_letter_next)
 {
-    /*It fixes a strange compiler optimization issue: https://github.com/lvgl/lvgl/issues/4370*/
+    /*Он исправляет странную проблему оптимизации компилятора: https://github.com/lvgl/lvgl/issues/4370.*/
     bool is_tab = unicode_letter == '\t';
     if(is_tab) {
         unicode_letter = ' ';
@@ -239,7 +239,7 @@ bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t *
         }
     }
 
-    /*Put together a glyph dsc*/
+    /*Соберите глиф dsc*/
     const lv_font_fmt_txt_glyph_dsc_t * gdsc = &fdsc->glyph_dsc[gid];
 
     int32_t kv = ((int32_t)((int32_t)kvalue * fdsc->kern_scale) >> 4);
@@ -258,12 +258,12 @@ bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t *
 
     if(fdsc->stride == 0) dsc_out->stride = 0;
     else {
-        /*E.g. w = 5, bpp = 2, means 2 bytes/line*/
+        /*например w = 5, bpp = 2, означает 2 байта/строку*/
         uint32_t bit_count = dsc_out->box_w * fdsc->bpp;
-        uint32_t width_in_bytes = (bit_count + 7) >> 3; /*No division round up*/
+        uint32_t width_in_bytes = (bit_count + 7) >> 3; /*Без округления делений*/
 
-        /*E.g. font_dsc stride == 4 means align to 4 byte boundary.
-         *In glyph_dsc store the actual line length in bytes*/
+        /*например  font_dsc шаг == 4 означает выравнивание по границе 4 байта.
+         *В glyph_dsc сохраните фактическую длину строки в байтах.*/
         dsc_out->stride = LV_ROUND_UP(width_in_bytes, fdsc->stride);
     }
 
@@ -289,7 +289,7 @@ static uint32_t get_glyph_dsc_id(const lv_font_t * font, uint32_t letter)
     uint16_t i;
     for(i = 0; i < fdsc->cmap_num; i++) {
 
-        /*Relative code point*/
+        /*Относительная кодовая точка*/
         uint32_t rcp = letter - fdsc->cmaps[i].range_start;
         if(rcp >= fdsc->cmaps[i].range_length) continue;
         uint32_t glyph_id = 0;
@@ -298,9 +298,9 @@ static uint32_t get_glyph_dsc_id(const lv_font_t * font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL) {
             const uint8_t * gid_ofs_8 = fdsc->cmaps[i].glyph_id_ofs_list;
-            /* The first character is always valid and should have offset = 0
-             * However if a character is missing it also has offset=0.
-             * So if there is a 0 not on the first position then it's a missing character */
+            /* Первый символ всегда действителен и должен иметь смещение = 0.
+             * Однако если символ отсутствует, он также имеет смещение = 0.
+             * То есть, если 0 находится не на первой позиции, то это пропущенный символ. */
             if(gid_ofs_8[rcp] == 0 && letter != fdsc->cmaps[i].range_start) continue;
             glyph_id = fdsc->cmaps[i].glyph_id_start + gid_ofs_8[rcp];
         }
@@ -340,29 +340,29 @@ static int8_t get_kern_value(const lv_font_t * font, uint32_t gid_left, uint32_t
     int8_t value = 0;
 
     if(fdsc->kern_classes == 0) {
-        /*Kern pairs*/
+        /*Керновские пары*/
         const lv_font_fmt_txt_kern_pair_t * kdsc = fdsc->kern_dsc;
         if(kdsc->glyph_ids_size == 0) {
-            /*Use binary search to find the kern value.
-             *The pairs are ordered left_id first, then right_id secondly.*/
+            /*Используйте двоичный поиск, чтобы найти значение керна.
+             *Сначала пары располагаются в порядке left_id, затем right_id.*/
             const uint16_t * g_ids = kdsc->glyph_ids;
             kern_pair_ref_t g_id_both = {gid_left, gid_right};
             uint16_t * kid_p = lv_utils_bsearch(&g_id_both, g_ids, kdsc->pair_cnt, 2, kern_pair_8_compare);
 
-            /*If the `g_id_both` were found get its index from the pointer*/
+            /*Если `g_id_both` был найден, получите его индекс из указателя.*/
             if(kid_p) {
                 lv_uintptr_t ofs = kid_p - g_ids;
                 value = kdsc->values[ofs];
             }
         }
         else if(kdsc->glyph_ids_size == 1) {
-            /*Use binary search to find the kern value.
-             *The pairs are ordered left_id first, then right_id secondly.*/
+            /*Используйте двоичный поиск, чтобы найти значение керна.
+             *Сначала пары располагаются в порядке left_id, затем right_id.*/
             const uint32_t * g_ids = kdsc->glyph_ids;
             kern_pair_ref_t g_id_both = {gid_left, gid_right};
             uint32_t * kid_p = lv_utils_bsearch(&g_id_both, g_ids, kdsc->pair_cnt, 4, kern_pair_16_compare);
 
-            /*If the `g_id_both` were found get its index from the pointer*/
+            /*Если `g_id_both` был найден, получите его индекс из указателя.*/
             if(kid_p) {
                 lv_uintptr_t ofs = kid_p - g_ids;
                 value = kdsc->values[ofs];
@@ -370,17 +370,17 @@ static int8_t get_kern_value(const lv_font_t * font, uint32_t gid_left, uint32_t
 
         }
         else {
-            /*Invalid value*/
+            /*Недопустимое значение*/
         }
     }
     else {
-        /*Kern classes*/
+        /*Классы Керна*/
         const lv_font_fmt_txt_kern_classes_t * kdsc = fdsc->kern_dsc;
         uint8_t left_class = kdsc->left_class_mapping[gid_left];
         uint8_t right_class = kdsc->right_class_mapping[gid_right];
 
-        /*If class = 0, kerning not exist for that glyph
-         *else got the value form `class_pair_values` 2D array*/
+        /*Если класс = 0, для этого глифа не существует кернинга.
+         *иначе получено значение в форме 2D-массива `class_pair_values`.*/
         if(left_class > 0 && right_class > 0) {
             value = kdsc->class_pair_values[(left_class - 1) * kdsc->right_class_cnt + (right_class - 1)];
         }
@@ -394,7 +394,7 @@ static int kern_pair_8_compare(const void * ref, const void * element)
     const kern_pair_ref_t * ref8_p = ref;
     const uint8_t * element8_p = element;
 
-    /*If the MSB is different it will matter. If not return the diff. of the LSB*/
+    /*Если MSB другой, это будет иметь значение. Если нет, верните разницу. из LSB*/
     if(ref8_p->gid_left != element8_p[0]) return ref8_p->gid_left - element8_p[0];
     else return ref8_p->gid_right - element8_p[1];
 }
@@ -404,7 +404,7 @@ static int kern_pair_16_compare(const void * ref, const void * element)
     const kern_pair_ref_t * ref16_p = ref;
     const uint16_t * element16_p = element;
 
-    /*If the MSB is different it will matter. If not return the diff. of the LSB*/
+    /*Если MSB другой, это будет иметь значение. Если нет, верните разницу. из LSB*/
     if(ref16_p->gid_left != element16_p[0]) return ref16_p->gid_left - element16_p[0];
     else return ref16_p->gid_right - element16_p[1];
 }
@@ -412,7 +412,7 @@ static int kern_pair_16_compare(const void * ref, const void * element)
 #if LV_USE_FONT_COMPRESSED
 
 /**
- * The compress a glyph's bitmap
+ * Сжать растровое изображение глифа
  * @param in the compressed bitmap
  * @param out buffer to store the result
  * @param px_num number of pixels in the glyph (width * height)
@@ -482,7 +482,7 @@ static void decompress(const uint8_t * in, uint8_t * out, int32_t w, int32_t h, 
 }
 
 /**
- * Decompress one line. Store one pixel per byte
+ * Распакуйте одну строку. Храните один пиксель на байт
  * @param out output buffer
  * @param w width of the line in pixel count
  */
@@ -495,7 +495,7 @@ static inline void decompress_line(uint8_t * out, int32_t w)
 }
 
 /**
- * Read bits from an input buffer. The read can cross byte boundary.
+ * Считайте биты из входного буфера. Чтение может пересекать границу байта.
  * @param in the input buffer to read from.
  * @param bit_pos index of the first bit to read.
  * @param len number of bits to read (must be <= 8).
@@ -606,12 +606,12 @@ static inline uint8_t rle_next(void)
 }
 #endif /*LV_USE_FONT_COMPRESSED*/
 
-/** Code Comparator.
+/** Компаратор кода.
  *
- *  Compares the value of both input arguments.
+ *  Сравнивает значения обоих входных аргументов.
  *
- *  @param[in]  pRef        Pointer to the reference.
- *  @param[in]  pElement    Pointer to the element to compare.
+ *  @param [in] pRef Указатель на ссылку.
+ *  @param [in] pElement Указатель на элемент для сравнения.
  *
  *  @return Result of comparison.
  *  @retval < 0   Reference is less than element.
@@ -629,8 +629,8 @@ static lv_font_t * builtin_font_create_cb(const lv_font_info_t * info, const voi
     const lv_builtin_font_src_t * font_src = src;
 
     /**
-     * If a crash occurs here, please check whether the last font in
-     * the lv_builtin_font_src array is set to NULL as required to mark the end of the array.
+     * Если здесь произошел сбой, проверьте, используется ли последний шрифт в
+     * массиву lv_builtin_font_src присвоено значение NULL, что необходимо для обозначения конца массива.
      */
     while(font_src->font_p) {
         if(info->size == font_src->size) {
@@ -645,7 +645,7 @@ static lv_font_t * builtin_font_create_cb(const lv_font_info_t * info, const voi
 
 static void builtin_font_delete_cb(lv_font_t * font)
 {
-    /*Nothing to delete*/
+    /*Ничего удалять*/
     LV_UNUSED(font);
 }
 
@@ -654,11 +654,11 @@ static void * builtin_font_dup_src_cb(const void * src)
     const lv_builtin_font_src_t * font_src = src;
     uint32_t len = 0;
 
-    /*Measure the size of the source data*/
+    /*Измерьте размер исходных данных*/
 
     /**
-     * If a crash occurs here, please check whether the last font in
-     * the lv_builtin_font_src array is set to NULL as required to mark the end of the array.
+     * Если здесь произошел сбой, проверьте, используется ли последний шрифт в
+     * массиву lv_builtin_font_src присвоено значение NULL, что необходимо для обозначения конца массива.
      */
     while(font_src->font_p) {
         len++;

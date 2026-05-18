@@ -10,7 +10,7 @@ class LVCacheEntry(Value):
     def __init__(
         self, entry: Union[Value, gdb.Value, int], datatype: Union[gdb.Type, str]
     ):
-        # Convert to Value first if needed
+        # Если необходимо, сначала преобразуйте в значение.
         if isinstance(entry, int):
             entry = Value(entry).cast("lv_cache_entry_t", ptr=True)
             if entry is None:
@@ -51,7 +51,7 @@ class LVCacheEntry(Value):
         print(f"  Invalid: {self.is_invalid()}")
         print(f"  Disable Delete: {self.is_disabled_delete()}")
 
-        # Try to get cache info if available
+        # Попробуйте получить информацию о кэше, если она доступна.
         try:
             cache = self.cache
             if cache:

@@ -1,10 +1,10 @@
-# Kconfig file for LVGL v9.5.0
+# Файл Kconfig дляLVGLv9.5.0
 
 menu "LVGL configuration"
 
-	# Define CONFIG_LV_CONF_SKIP so we can use LVGL
-	# without lv_conf.h file, the lv_conf_internal.h and
-	# lv_conf_kconfig.h files are used instead.
+	# Определите CONFIG_LV_CONF_SKIP, чтобы мы могли использовать LVGL.
+	# без файлаlv_conf.h,lv_conf_internal.hи
+	# Вместо этого использовались файлы lv_conf_kconfig.h.
 	config LV_CONF_SKIP
 		bool "Check this to not use custom lv_conf.h"
 		default y

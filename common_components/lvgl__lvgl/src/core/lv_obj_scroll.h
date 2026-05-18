@@ -25,9 +25,9 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Can't include lv_obj.h because it includes this header file*/
+/*Невозможно включитьlv_obj.h, так как он включает этот заголовочный файл.*/
 
-/** Scrollbar modes: shows when should the scrollbars be visible*/
+/** Режимы полосы прокрутки: показывает, когда полосы прокрутки должны быть видны.*/
 typedef enum {
     LV_SCROLLBAR_MODE_OFF,      /**< Never show scrollbars*/
     LV_SCROLLBAR_MODE_ON,       /**< Always show scrollbars*/
@@ -35,7 +35,7 @@ typedef enum {
     LV_SCROLLBAR_MODE_AUTO,     /**< Show scroll bars when the content is large enough to be scrolled*/
 } lv_scrollbar_mode_t;
 
-/** Scroll span align options. Tells where to align the snappable children when scroll stops.*/
+/** Параметры выравнивания диапазона прокрутки. Сообщает, где выровнять привязываемые дочерние элементы при остановке прокрутки.*/
 typedef enum {
     LV_SCROLL_SNAP_NONE,    /**< Do not align, leave where it is*/
     LV_SCROLL_SNAP_START,   /**< Align to the left/top*/
@@ -48,245 +48,245 @@ typedef enum {
  **********************/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set how the scrollbars should behave.
- * @param obj       pointer to Widget
- * @param mode      LV_SCROLL_MODE_ON/OFF/AUTO/ACTIVE
+ * Установите, как должны вести себя полосы прокрутки.
+ * @param obj       указатель на виджет
+ * Режим @param LV_SCROLL_MODE_ON / OFF / AUTO / ACTIVE
  */
 void lv_obj_set_scrollbar_mode(lv_obj_t * obj, lv_scrollbar_mode_t mode);
 
 /**
- * Set direction Widget can be scrolled
- * @param obj       pointer to Widget
- * @param dir       one or more bit-wise OR-ed values of `lv_dir_t` enumeration
+ * Установить направление. Виджет можно прокручивать.
+ * @param obj       указатель на виджет
+ * @param dir       одно или несколько побитовых значенийORперечисления `lv_dir_t`
  */
 void lv_obj_set_scroll_dir(lv_obj_t * obj, lv_dir_t dir);
 
 /**
- * Set where to snap the children when scrolling ends horizontally
- * @param obj       pointer to Widget
- * @param align     value from `lv_scroll_snap_t` enumeration
+ * Установите, где привязывать детей, когда прокрутка заканчивается по горизонтали.
+ * @param obj       указатель на виджет
+ * @param align     значение из перечисления `lv_scroll_snap_t`
  */
 void lv_obj_set_scroll_snap_x(lv_obj_t * obj, lv_scroll_snap_t align);
 
 /**
- * Set where to snap the children when scrolling ends vertically
- * @param obj       pointer to Widget
- * @param align     value from `lv_scroll_snap_t` enumeration
+ * Установите, где привязывать детей, когда прокрутка заканчивается вертикально.
+ * @param obj       указатель на виджет
+ * @param align     значение из перечисления `lv_scroll_snap_t`
  */
 void lv_obj_set_scroll_snap_y(lv_obj_t * obj, lv_scroll_snap_t align);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the current scroll mode (when to hide the scrollbars)
- * @param obj       pointer to Widget
- * @return          the current scroll mode from `lv_scrollbar_mode_t`
+ * Получить текущий режим прокрутки (когда скрывать полосы прокрутки)
+ * @param obj       указатель на виджет
+ * @return          текущий режим прокрутки из `lv_scrollbar_mode_t`
  */
 lv_scrollbar_mode_t lv_obj_get_scrollbar_mode(const lv_obj_t * obj);
 
 /**
- * Get directions Widget can be scrolled (set with `lv_obj_set_scroll_dir()`)
- * @param obj       pointer to Widget
- * @return          current scroll direction bit(s)
+ * Проложить маршрут Виджет можно прокручивать (устанавливается с помощью`lv_obj_set_scroll_dir()`)
+ * @param obj       указатель на виджет
+ * @return          текущий бит(ы) направления прокрутки
  */
 lv_dir_t lv_obj_get_scroll_dir(const lv_obj_t * obj);
 
 /**
- * Get where to snap child Widgets when horizontal scrolling ends.
- * @param obj       pointer to Widget
- * @return          current snap value from `lv_scroll_snap_t`
+ * Узнайте, куда прикрепить дочерние виджеты, когда горизонтальная прокрутка заканчивается.
+ * @param obj       указатель на виджет
+ * @return          текущее значение привязки из `lv_scroll_snap_t`
  */
 lv_scroll_snap_t lv_obj_get_scroll_snap_x(const lv_obj_t * obj);
 
 /**
- * Get where to snap child Widgets when vertical scrolling ends.
- * @param  obj      pointer to Widget
- * @return          current snap value from `lv_scroll_snap_t`
+ * Узнайте, куда прикрепить дочерние виджеты, когда вертикальная прокрутка заканчивается.
+ * @param  obj      указатель на виджет
+ * @return          текущее значение привязки из `lv_scroll_snap_t`
  */
 lv_scroll_snap_t lv_obj_get_scroll_snap_y(const lv_obj_t * obj);
 
 /**
- * Get current X scroll position.  Identical to `lv_obj_get_scroll_left()`.
- * @param obj       pointer to scrollable container Widget
- * @return          current scroll position from left edge
- *                      - If Widget is not scrolled return 0.
- *                      - If scrolled return > 0.
- *                      - If scrolled inside (elastic scroll) return < 0.
+ * Получить текущую позицию прокрутки X. Идентичен`lv_obj_get_scroll_left()`.
+ * @param obj       указатель на прокручиваемый виджет контейнера
+ * @return          текущая позиция прокрутки от левого края
+ *                      - Если виджет не прокручивается, верните 0.
+ *                      - При прокрутке вернитесь > 0.
+ *                      - При прокрутке внутрь (эластичная прокрутка) верните <0.
  */
 int32_t lv_obj_get_scroll_x(const lv_obj_t * obj);
 
 /**
- * Get current Y scroll position.  Identical to `lv_obj_get_scroll_top()`.
- * @param obj       pointer to scrollable container Widget
- * @return          current scroll position from top edge
- *                      - If Widget is not scrolled return 0.
- *                      - If scrolled return > 0.
- *                      - If scrolled inside (elastic scroll) return < 0.
+ * Получить текущую позицию прокрутки Y. Идентичен`lv_obj_get_scroll_top()`.
+ * @param obj       указатель на прокручиваемый виджет контейнера
+ * @return          текущая позиция прокрутки от верхнего края
+ *                      - Если виджет не прокручивается, верните 0.
+ *                      - При прокрутке вернитесь > 0.
+ *                      - При прокрутке внутрь (эластичная прокрутка) верните <0.
  */
 int32_t lv_obj_get_scroll_y(const lv_obj_t * obj);
 
 /**
- * Number of pixels a scrollable container Widget can be scrolled down
- * before its top edge appears.  When LV_OBJ_FLAG_SCROLL_ELASTIC flag
- * is set in Widget, this value can go negative while Widget is being
- * dragged below its normal top-edge boundary.
- * @param obj       pointer to scrollable container Widget
- * @return          pixels Widget can be scrolled down before its top edge appears
+ * Количество пикселей, на которое можно прокручивать контейнер с возможностью прокрутки. Виджет может быть прокручен вниз.
+ * до появления его верхнего края.  Когда флаг LV_OBJ_FLAG_SCROLL_ELASTIC
+ * установлено в виджете, это значение может быть отрицательным во время работы виджета.
+ * перетянуто ниже нормальной границы верхнего края.
+ * @param obj       указатель на прокручиваемый виджет контейнера
+ * @return          Пиксели Виджет можно прокручивать вниз до появления его верхнего края.
  */
 int32_t lv_obj_get_scroll_top(const lv_obj_t * obj);
 
 /**
- * Number of pixels a scrollable container Widget can be scrolled up
- * before its bottom edge appears.  When LV_OBJ_FLAG_SCROLL_ELASTIC flag
- * is set in Widget, this value can go negative while Widget is being
- * dragged above its normal bottom-edge boundary.
- * @param obj       pointer to scrollable container Widget
- * @return          pixels Widget can be scrolled up before its bottom edge appears
+ * Количество пикселей, на которое можно прокручивать контейнер с возможностью прокрутки. Виджет
+ * до появления его нижнего края.  Когда флаг LV_OBJ_FLAG_SCROLL_ELASTIC
+ * установлено в виджете, это значение может быть отрицательным во время работы виджета.
+ * перетянуто выше нормальной границы нижнего края.
+ * @param obj       указатель на прокручиваемый виджет контейнера
+ * @return          Виджет пикселей можно прокручивать вверх до появления его нижнего края.
  */
 int32_t lv_obj_get_scroll_bottom(const lv_obj_t * obj);
 
 /**
- * Number of pixels a scrollable container Widget can be scrolled right
- * before its left edge appears.  When LV_OBJ_FLAG_SCROLL_ELASTIC flag
- * is set in Widget, this value can go negative while Widget is being
- * dragged farther right than its normal left-edge boundary.
- * @param obj       pointer to scrollable container Widget
- * @return          pixels Widget can be scrolled right before its left edge appears
+ * Количество пикселей в прокручиваемом контейнере. Виджет можно прокручивать вправо.
+ * до появления его левого края.  Когда флаг LV_OBJ_FLAG_SCROLL_ELASTIC
+ * установлено в виджете, это значение может быть отрицательным во время работы виджета.
+ * перетащен дальше вправо, чем его обычная левая граница.
+ * @param obj       указатель на прокручиваемый виджет контейнера
+ * @return          Виджет пикселей можно прокручивать прямо до появления его левого края.
  */
 int32_t lv_obj_get_scroll_left(const lv_obj_t * obj);
 
 /**
- * Number of pixels a scrollable container Widget can be scrolled left
- * before its right edge appears.  When LV_OBJ_FLAG_SCROLL_ELASTIC flag
- * is set in Widget, this value can go negative while Widget is being
- * dragged farther left than its normal right-edge boundary.
- * @param obj       pointer to scrollable container Widget
- * @return          pixels Widget can be scrolled left before its right edge appears
+ * Количество пикселей, на которое контейнер с возможностью прокрутки. Виджет можно прокручивать влево.
+ * до появления его правого края.  Когда флаг LV_OBJ_FLAG_SCROLL_ELASTIC
+ * установлено в виджете, это значение может быть отрицательным во время работы виджета.
+ * перетащен дальше влево, чем его обычная правая граница.
+ * @param obj       указатель на прокручиваемый виджет контейнера
+ * @return          Пиксели Виджет можно прокручивать влево до появления его правого края.
  */
 int32_t lv_obj_get_scroll_right(const lv_obj_t * obj);
 
 /**
- * Get the X and Y coordinates where the scrolling will end for Widget if a scrolling animation is in progress.
- * If no scrolling animation, give the current `x` or `y` scroll position.
- * @param obj       pointer to scrollable Widget
- * @param end       pointer to `lv_point_t` object in which to store result
+ * Получите координаты X и Y, где прокрутка закончится для виджета, если выполняется анимация прокрутки.
+ * Если нет анимации прокрутки, укажите текущую позицию прокрутки `x` или `y`.
+ * @param obj       указатель на прокручиваемый виджет
+ * @param end       указатель на объект `lv_point_t`, в котором сохраняется результат
  */
 void lv_obj_get_scroll_end(lv_obj_t * obj, lv_point_t * end);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**
- * Scroll by given amount of pixels.
- * @param obj       pointer to scrollable Widget to scroll
- * @param dx        pixels to scroll horizontally
- * @param dy        pixels to scroll vertically
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
- * @note            > 0 value means scroll right/bottom (show the more content on the right/bottom)
- * @note            e.g. dy = -20 means scroll down 20 px
+ * Прокрутка на заданное количество пикселей.
+ * @param obj       указатель на прокручиваемый виджет для прокрутки
+ * @param dx        пикселей для горизонтальной прокрутки
+ * @param dy        пикселей для вертикальной прокрутки
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
+ * @note            Значение > 0 означает прокрутку вправо/вниз (показывать больше контента справа/внизу)
+ * @note            например dy = -20 означает прокрутку вниз на 20 пикселей.
  */
 void lv_obj_scroll_by(lv_obj_t * obj, int32_t dx, int32_t dy, lv_anim_enable_t anim_en);
 
 /**
- * Scroll by given amount of pixels.
- * `dx` and `dy` will be limited internally to allow scrolling only on the content area.
- * @param obj       pointer to scrollable Widget to scroll
- * @param dx        pixels to scroll horizontally
- * @param dy        pixels to scroll vertically
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
- * @note            e.g. dy = -20 means scroll down 20 px
+ * Прокрутка на заданное количество пикселей.
+ * `dx` и `dy` будут иметь внутренние ограничения, позволяющие прокручивать только область содержимого.
+ * @param obj       указатель на прокручиваемый виджет для прокрутки
+ * @param dx        пикселей для горизонтальной прокрутки
+ * @param dy        пикселей для вертикальной прокрутки
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
+ * @note            например dy = -20 означает прокрутку вниз на 20 пикселей.
  */
 void lv_obj_scroll_by_bounded(lv_obj_t * obj, int32_t dx, int32_t dy, lv_anim_enable_t anim_en);
 
 /**
- * Scroll to given coordinate on Widget.
- * `x` and `y` will be limited internally to allow scrolling only on the content area.
- * @param obj       pointer to scrollable Widget to scroll
- * @param x         pixels to scroll horizontally
- * @param y         pixels to scroll vertically
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
+ * Прокрутите до указанной координаты в виджете.
+ * `x` и `y` будут иметь внутренние ограничения, позволяющие прокручивать только область содержимого.
+ * @param obj       указатель на прокручиваемый виджет для прокрутки
+ * @param x         пикселей для горизонтальной прокрутки
+ * @param y         пикселей для вертикальной прокрутки
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
  */
 void lv_obj_scroll_to(lv_obj_t * obj, int32_t x, int32_t y, lv_anim_enable_t anim_en);
 
 /**
- * Scroll to X coordinate on Widget.
- * `x` will be limited internally to allow scrolling only on the content area.
- * @param obj       pointer to scrollable Widget to scroll
- * @param x         pixels to scroll horizontally
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
+ * Прокрутите до координаты X на виджете.
+ * `x` будет иметь внутренние ограничения, позволяющие прокручивать только область содержимого.
+ * @param obj       указатель на прокручиваемый виджет для прокрутки
+ * @param x         пикселей для горизонтальной прокрутки
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
  */
 void lv_obj_scroll_to_x(lv_obj_t * obj, int32_t x, lv_anim_enable_t anim_en);
 
 /**
- * Scroll to Y coordinate on Widget.
- * `y` will be limited internally to allow scrolling only on the content area.
- * @param obj       pointer to scrollable Widget to scroll
- * @param y         pixels to scroll vertically
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
+ * Прокрутите до координаты Y в виджете.
+ * `y` будет иметь внутренние ограничения, позволяющие прокручивать только область содержимого.
+ * @param obj       указатель на прокручиваемый виджет для прокрутки
+ * @param y         пикселей для вертикальной прокрутки
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
  */
 void lv_obj_scroll_to_y(lv_obj_t * obj, int32_t y, lv_anim_enable_t anim_en);
 
 /**
- * Scroll `obj`'s parent Widget until `obj` becomes visible.
- * @param obj       pointer to Widget to scroll into view
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
+ * Прокрутите родительский виджет`obj`до тех пор, пока`obj`не станет видимым.
+ * @param obj       указатель на виджет для прокрутки в поле зрения
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
  */
 void lv_obj_scroll_to_view(lv_obj_t * obj, lv_anim_enable_t anim_en);
 
 /**
- * Scroll `obj`'s parent Widgets recursively until `obj` becomes visible.
- * Widget will be scrolled into view even it has nested scrollable parents.
- * @param obj       pointer to Widget to scroll into view
- * @param anim_en   LV_ANIM_ON: scroll with animation; LV_ANIM_OFF: scroll immediately
+ * Рекурсивно прокручивайте родительские виджеты`obj`, пока`obj`не станет видимым.
+ * Виджет будет прокручиваться в поле зрения, даже если у него есть вложенные прокручиваемые родительские элементы.
+ * @param obj       указатель на виджет для прокрутки в поле зрения
+ * @param anim_en   LV_ANIM_ON: прокрутка с анимацией; LV_ANIM_OFF: прокрутить немедленно
  */
 void lv_obj_scroll_to_view_recursive(lv_obj_t * obj, lv_anim_enable_t anim_en);
 
 /**
- * Tell whether Widget is being scrolled or not at this moment
- * @param obj   pointer to Widget
- * @return      true: `obj` is being scrolled
+ * Сообщить, прокручивается ли Виджет в данный момент или нет
+ * @param obj   указатель на виджет
+ * @return      true:`obj`прокручивается
  */
 bool lv_obj_is_scrolling(const lv_obj_t * obj);
 
 /**
- * Stop scrolling the current object
+ * Остановить прокрутку текущего объекта
  *
- * @param obj The object being scrolled
+ * @param obj Объект, который прокручивается
  */
 void lv_obj_stop_scroll_anim(const lv_obj_t * obj);
 
 /**
- * Check children of `obj` and scroll `obj` to fulfill scroll_snap settings.
- * @param obj       Widget whose children need to be checked and snapped
- * @param anim_en   LV_ANIM_ON/OFF
+ * Проверьте дочерние элементы`obj`и прокрутите `obj`, чтобы настроить настройку scroll_snap.
+ * @param obj       Виджет, дочерние элементы которого необходимо проверить и привязать
+ * @param anim_en LV_ANIM_ON / OFF
  */
 void lv_obj_update_snap(lv_obj_t * obj, lv_anim_enable_t anim_en);
 
 /**
- * Get the area of the scrollbars
- * @param obj   pointer to Widget
- * @param hor   pointer to store the area of the horizontal scrollbar
- * @param ver   pointer to store the area of the vertical  scrollbar
+ * Получить площадь полос прокрутки
+ * @param obj   указатель на виджет
+ * @param hor   указатель для хранения области горизонтальной полосы прокрутки
+ * @param ver   указатель для хранения области вертикальной полосы прокрутки
  */
 void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor, lv_area_t * ver);
 
 /**
- * Invalidate the area of the scrollbars
- * @param obj       pointer to Widget
+ * Сделать недействительной область полос прокрутки
+ * @param obj       указатель на виджет
  */
 void lv_obj_scrollbar_invalidate(lv_obj_t * obj);
 
 /**
- * Checks if the content is scrolled "in" and adjusts it to a normal position.
- * @param obj       pointer to Widget
- * @param anim_en   LV_ANIM_ON/OFF
+ * Проверяет, прокручивается ли содержимое, и приводит его в нормальное положение.
+ * @param obj       указатель на виджет
+ * @param anim_en LV_ANIM_ON / OFF
  */
 void lv_obj_readjust_scroll(lv_obj_t * obj, lv_anim_enable_t anim_en);
 
@@ -295,7 +295,7 @@ void lv_obj_readjust_scroll(lv_obj_t * obj, lv_anim_enable_t anim_en);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_SCROLL_H*/

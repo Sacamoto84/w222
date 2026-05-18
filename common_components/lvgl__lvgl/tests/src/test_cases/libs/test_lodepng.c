@@ -7,12 +7,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void create_image_item(lv_obj_t * parent, const void * src, const char * text)
@@ -37,23 +37,23 @@ static void create_images(void)
     lv_obj_set_flex_flow(screen, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(screen, LV_FLEX_ALIGN_SPACE_AROUND, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
-    /* PNG array */
+    /* Массив PNG */
     LV_IMAGE_DECLARE(test_img_lvgl_logo_png);
     create_image_item(screen, &test_img_lvgl_logo_png, "Array");
 
-    /* 32 bit PNG file */
+    /* 32-битный файл PNG */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo.png", "File (32 bit)");
 
-    /* No extension PNG file */
+    /* Файл без расширения PNG */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo_png_no_ext", "File (32 bit) No Extension");
 
-    /* 8 bit palette PNG file */
+    /* Файл 8-битной палитры PNG */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo_8bit_palette.png", "File (8 bit palette)");
 }
 
 void test_lodepng_1(void)
 {
-    /* Temporarily remove libpng decoder */
+    /* Временно удалите декодер libpng */
     lv_libpng_deinit();
 
     create_images();
@@ -72,7 +72,7 @@ void test_lodepng_1(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 112);
 
-    /* Re-add libpng decoder */
+    /* Повторно добавить декодер libpng */
     lv_libpng_init();
 }
 

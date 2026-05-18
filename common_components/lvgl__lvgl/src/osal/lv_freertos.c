@@ -98,7 +98,7 @@ lv_result_t lv_thread_init(lv_thread_t * pxThread,  const char * const name,
                                        tskIDLE_PRIORITY + xSchedPriority,
                                        &pxThread->xTaskHandle);
 
-    /* Ensure that the FreeRTOS task was successfully created. */
+    /* Убедитесь, что задача FreeRTOS успешно установлена. */
     if(xTaskCreateStatus != pdPASS) {
         LV_LOG_ERROR("xTaskCreate failed!");
         return LV_RESULT_INVALID;
@@ -116,7 +116,7 @@ lv_result_t lv_thread_delete(lv_thread_t * pxThread)
 
 lv_result_t lv_mutex_init(lv_mutex_t * pxMutex)
 {
-    /* If mutex in uninitialized, perform initialization. */
+    /* Если мьютекс не инициализирован, выполните инициализацию. */
     prvCheckMutexInit(pxMutex);
 
     return LV_RESULT_OK;
@@ -124,7 +124,7 @@ lv_result_t lv_mutex_init(lv_mutex_t * pxMutex)
 
 lv_result_t lv_mutex_lock(lv_mutex_t * pxMutex)
 {
-    /* If mutex in uninitialized, perform initialization. */
+    /* Если мьютекс не инициализирован, выполните инициализацию. */
     prvCheckMutexInit(pxMutex);
 
     BaseType_t xMutexTakeStatus = xSemaphoreTakeRecursive(pxMutex->xMutex, portMAX_DELAY);
@@ -138,7 +138,7 @@ lv_result_t lv_mutex_lock(lv_mutex_t * pxMutex)
 
 lv_result_t lv_mutex_lock_isr(lv_mutex_t * pxMutex)
 {
-    /* If mutex in uninitialized, perform initialization. */
+    /* Если мьютекс не инициализирован, выполните инициализацию. */
     prvCheckMutexInit(pxMutex);
 
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -149,10 +149,10 @@ lv_result_t lv_mutex_lock_isr(lv_mutex_t * pxMutex)
         return LV_RESULT_INVALID;
     }
 
-    /* If xHigherPriorityTaskWoken is now set to pdTRUE then a context switch
-    should be performed to ensure the interrupt returns directly to the highest
-    priority task.  The macro used for this purpose is dependent on the port in
-    use and may be called portEND_SWITCHING_ISR(). */
+    /* Если для xHigherPriorityTaskWoken теперь установлено значение pdTRUE, произойдет переключение контекста.
+    должно быть выполнено, чтобы гарантировать возврат прерывания непосредственно к самому высокому значению.
+    приоритетная задача.  Макрос, используемый для этой цели, зависит от порта в
+    использовать и может называться portEND_SWITCHING_ISR(). */
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
     return LV_RESULT_OK;
@@ -160,7 +160,7 @@ lv_result_t lv_mutex_lock_isr(lv_mutex_t * pxMutex)
 
 lv_result_t lv_mutex_unlock(lv_mutex_t * pxMutex)
 {
-    /* If mutex in uninitialized, perform initialization. */
+    /* Если мьютекс не инициализирован, выполните инициализацию. */
     prvCheckMutexInit(pxMutex);
 
     BaseType_t xMutexGiveStatus = xSemaphoreGiveRecursive(pxMutex->xMutex);
@@ -184,7 +184,7 @@ lv_result_t lv_mutex_delete(lv_mutex_t * pxMutex)
 
 lv_result_t lv_thread_sync_init(lv_thread_sync_t * pxCond)
 {
-    /* If the cond is uninitialized, perform initialization. */
+    /* Если cond не инициализирован, осуществите принципизацию. */
     prvCheckCondInit(pxCond);
 
     return LV_RESULT_OK;
@@ -194,7 +194,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
 {
     lv_result_t lvRes = LV_RESULT_OK;
 
-    /* If the cond is uninitialized, perform initialization. */
+    /* Если cond не инициализирован, осуществите принципизацию. */
     prvCheckCondInit(pxCond);
 
 #if LV_USE_FREERTOS_TASK_NOTIFY
@@ -204,50 +204,50 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
     BaseType_t xSyncSygnal = pxCond->xSyncSignal;
     pxCond->xSyncSignal = pdFALSE;
     if(xSyncSygnal == pdFALSE) {
-        /* The signal hasn't been sent yet. Tell the sender to notify this task */
+        /* Сигнал еще не отправлен. Попросите отправителя уведомить об этой задаче */
         pxCond->xTaskToNotify = xCurrentTaskHandle;
     }
-    /* If we have a signal from the other task, we should not ask to be notified */
+    /* Если у нас есть сигнал от другой задачи, нам не следует запрашивать уведомление. */
     _exit_critical();
 
     if(xSyncSygnal == pdFALSE) {
-        /* Wait for other task to notify this task. */
+        /* Подождите, пока другая задача уведомит эту задачу. */
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     }
-    /* If the signal was received, no wait needs to be done */
+    /* Если сигнал был получен, ждать не нужно. */
 #else
     uint32_t ulLocalWaitingThreads;
 
-    /* Acquire the mutex. */
+    /* Получите мьютекс. */
     xSemaphoreTake(pxCond->xSyncMutex, portMAX_DELAY);
 
     while(!pxCond->xSyncSignal) {
-        /* Increase the counter of threads blocking on condition variable, then
-         * release the mutex. */
+        /* Увеличьте счетчик блокировки потоков по условной переменной, затем
+         * освободить мьютекс. */
 
-        /* Atomically increments thread waiting by 1, and
-         * stores number of threads waiting before increment. */
+        /* Атомарно увеличивает ожидание потока на 1 и
+         * хранит количество потоков, ожидающих перед приращением. */
         ulLocalWaitingThreads = Atomic_Increment_u32(&pxCond->ulWaitingThreads);
 
         BaseType_t xMutexStatus = xSemaphoreGive(pxCond->xSyncMutex);
 
-        /* Wait on the condition variable. */
+        /* Дождитесь условной переменной. */
         if(xMutexStatus == pdTRUE) {
             BaseType_t xCondWaitStatus = xSemaphoreTake(
                                              pxCond->xCondWaitSemaphore,
                                              portMAX_DELAY);
 
-            /* Relock the mutex. */
+            /* Повторно заблокируйте мьютекс. */
             xSemaphoreTake(pxCond->xSyncMutex, portMAX_DELAY);
 
             if(xCondWaitStatus != pdTRUE) {
                 LV_LOG_ERROR("xSemaphoreTake(xCondWaitSemaphore) failed!");
                 lvRes = LV_RESULT_INVALID;
 
-                /* Atomically decrements thread waiting by 1.
-                 * If iLocalWaitingThreads is updated by other thread(s) in between,
-                 * this implementation guarantees to decrement by 1 based on the
-                 * value currently in pxCond->ulWaitingThreads. */
+                /* Атомарно уменьшает ожидание потока на 1.
+                 * Если iLocalWaitingThreads обновляется другими потоками между ними,
+                 * эта реализация гарантирует уменьшение на 1 на основе
+                 * текущее значение в pxCond->ulWaitingThreads. */
                 prvTestAndDecrement(pxCond, ulLocalWaitingThreads + 1);
             }
         }
@@ -255,17 +255,17 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
             LV_LOG_ERROR("xSemaphoreGive(xSyncMutex) failed!");
             lvRes = LV_RESULT_INVALID;
 
-            /* Atomically decrements thread waiting by 1.
-             * If iLocalWaitingThreads is updated by other thread(s) in between,
-             * this implementation guarantees to decrement by 1 based on the
-             * value currently in pxCond->ulWaitingThreads. */
+            /* Атомарно уменьшает ожидание потока на 1.
+             * Если iLocalWaitingThreads обновляется другими потоками между ними,
+             * эта реализация гарантирует уменьшение на 1 на основе
+             * текущее значение в pxCond->ulWaitingThreads. */
             prvTestAndDecrement(pxCond, ulLocalWaitingThreads + 1);
         }
     }
 
     pxCond->xSyncSignal = pdFALSE;
 
-    /* Release the mutex. */
+    /* Освободите мьютекс. */
     xSemaphoreGive(pxCond->xSyncMutex);
 #endif
 
@@ -274,7 +274,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
 
 lv_result_t lv_thread_sync_signal(lv_thread_sync_t * pxCond)
 {
-    /* If the cond is uninitialized, perform initialization. */
+    /* Если cond не инициализирован, осуществите принципизацию. */
     prvCheckCondInit(pxCond);
 
 #if LV_USE_FREERTOS_TASK_NOTIFY
@@ -282,35 +282,35 @@ lv_result_t lv_thread_sync_signal(lv_thread_sync_t * pxCond)
     TaskHandle_t xTaskToNotify = pxCond->xTaskToNotify;
     pxCond->xTaskToNotify = NULL;
     if(xTaskToNotify == NULL) {
-        /* No task waiting to be notified. Send this signal for later */
+        /* Нет задач, ожидающих уведомления. Отправьте этот сигнал позже */
         pxCond->xSyncSignal = pdTRUE;
     }
-    /* If a task is already waiting, there is no need to set the sync signal */
+    /* Если задача уже ожидает, нет необходимости устанавливать сигнал синхронизации. */
     _exit_critical();
 
     if(xTaskToNotify != NULL) {
-        /* There is a task waiting. Send a notification to it */
+        /* Есть задача, ожидающая. Отправьте ему уведомление */
         xTaskNotifyGive(xTaskToNotify);
     }
-    /* If there was no task waiting to be notified, we sent a signal for it to see later. */
+    /* Если не было задачи, ожидающей уведомления, мы отправляли сигнал, чтобы ее можно было увидеть позже. */
 #else
-    /* Acquire the mutex. */
+    /* Получите мьютекс. */
     xSemaphoreTake(pxCond->xSyncMutex, portMAX_DELAY);
 
     pxCond->xSyncSignal = pdTRUE;
 
-    /* Local copy of number of threads waiting. */
+    /* Локальная копия количества ожидающих потоков. */
     uint32_t ulLocalWaitingThreads = pxCond->ulWaitingThreads;
 
-    /* Test local copy of threads waiting is larger than zero. */
+    /* Тестовая локальная копия ожидающих потоков больше нуля. */
     while(ulLocalWaitingThreads > 0) {
-        /* Atomically check whether the copy in memory has changed.
-         * If not, set the copy of threads waiting in memory to zero. */
+        /* Атомарно проверьте, изменилась ли копия в памяти.
+         * Если нет, установите копию потоков, ожидающих в памяти, на ноль. */
         if(ATOMIC_COMPARE_AND_SWAP_SUCCESS == Atomic_CompareAndSwap_u32(
                &pxCond->ulWaitingThreads,
                0,
                ulLocalWaitingThreads)) {
-            /* Unblock all. */
+            /* Разблокировать все. */
             for(uint32_t i = 0; i < ulLocalWaitingThreads; i++) {
                 xSemaphoreGive(pxCond->xCondWaitSemaphore);
             }
@@ -318,11 +318,11 @@ lv_result_t lv_thread_sync_signal(lv_thread_sync_t * pxCond)
             break;
         }
 
-        /* Local copy is out dated. Reload from memory and retry. */
+        /* Локальная копия устарела. Перезагрузите из памяти и повторите попытку. */
         ulLocalWaitingThreads = pxCond->ulWaitingThreads;
     }
 
-    /* Release the mutex. */
+    /* Освободите мьютекс. */
     xSemaphoreGive(pxCond->xSyncMutex);
 #endif
 
@@ -332,7 +332,7 @@ lv_result_t lv_thread_sync_signal(lv_thread_sync_t * pxCond)
 lv_result_t lv_thread_sync_delete(lv_thread_sync_t * pxCond)
 {
 #if !LV_USE_FREERTOS_TASK_NOTIFY
-    /* Cleanup all resources used by the cond. */
+    /* Очистите все ресурсы, используйте их в условиях. */
     vSemaphoreDelete(pxCond->xCondWaitSemaphore);
     vSemaphoreDelete(pxCond->xSyncMutex);
     pxCond->ulWaitingThreads = 0;
@@ -347,7 +347,7 @@ lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * pxCond)
 {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-    /* If the cond is uninitialized, perform initialization. */
+    /* Если cond не инициализирован, осуществите принципизацию. */
     prvCheckCondInitIsr(pxCond);
 
 #if LV_USE_FREERTOS_TASK_NOTIFY
@@ -355,26 +355,26 @@ lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * pxCond)
     TaskHandle_t xTaskToNotify = pxCond->xTaskToNotify;
     pxCond->xTaskToNotify = NULL;
     if(xTaskToNotify == NULL) {
-        /* No task waiting to be notified. Send this signal for later */
+        /* Нет задач, ожидающих уведомления. Отправьте этот сигнал позже */
         pxCond->xSyncSignal = pdTRUE;
     }
-    /* If a task is already waiting, there is no need to set the sync signal */
+    /* Если задача уже ожидает, нет необходимости устанавливать сигнал синхронизации. */
     _exit_critical_isr(mask);
 
     if(xTaskToNotify != NULL) {
-        /* There is a task waiting. Send a notification to it */
+        /* Есть задача, ожидающая. Отправьте ему уведомление */
         vTaskNotifyGiveFromISR(xTaskToNotify, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
-    /* If there was no task waiting to be notified, we sent a signal for it to see later. */
+    /* Если не было задачи, ожидающей уведомления, мы отправляли сигнал, чтобы ее можно было увидеть позже. */
 #else
-    /* Enter critical section to prevent preemption. */
+    /* Войдите в критический раздел, чтобы предотвратить вытеснение. */
     uint32_t mask = _enter_critical_isr();
 
     pxCond->xSyncSignal = pdTRUE;
     BaseType_t xAnyHigherPriorityTaskWoken = pdFALSE;
 
-    /* Unblock all. */
+    /* Разблокировать все. */
     for(uint32_t i = 0; i < pxCond->ulWaitingThreads; i++) {
         xSemaphoreGiveFromISR(pxCond->xCondWaitSemaphore, &xAnyHigherPriorityTaskWoken);
         xHigherPriorityTaskWoken |= xAnyHigherPriorityTaskWoken;
@@ -432,7 +432,7 @@ static void prvRunThread(void * pxArg)
 {
     lv_thread_t * pxThread = (lv_thread_t *)pxArg;
 
-    /* Run the thread routine. */
+    /* Запустите процедуру потока. */
     pxThread->pvStartRoutine((void *)pxThread->pTaskArg);
 
     vTaskDelete(NULL);
@@ -442,32 +442,32 @@ static void prvMutexInit(lv_mutex_t * pxMutex)
 {
     pxMutex->xMutex = xSemaphoreCreateRecursiveMutex();
 
-    /* Ensure that the FreeRTOS mutex was successfully created. */
+    /* Убедитесь, что мьютекс FreeRTOS успешно создан. */
     if(pxMutex->xMutex == NULL) {
         LV_LOG_ERROR("xSemaphoreCreateMutex failed!");
         return;
     }
 
-    /* Mutex successfully created. */
+    /* Мьютекс успешно создан. */
     pxMutex->xIsInitialized = pdTRUE;
 }
 
 static void prvCheckMutexInit(lv_mutex_t * pxMutex)
 {
-    /* Check if the mutex needs to be initialized. */
+    /* Проверьте, нужно ли инициализировать мьютекс. */
     if(pxMutex->xIsInitialized == pdFALSE) {
-        /* Mutex initialization must be in a critical section to prevent two threads
-         * from initializing it at the same time. */
+        /* Инициализация мьютекса должна находиться в критическом разделе, чтобы предотвратить два потока.
+         * от его одновременной инициализации. */
         _enter_critical();
 
-        /* Check again that the mutex is still uninitialized, i.e. it wasn't
-         * initialized while this function was waiting to enter the critical
-         * section. */
+        /* Еще раз проверьте, что мьютекс все еще не инициализирован, т. е. он не был
+         * инициализируется, пока эта функция ожидает входа в критический режим
+         * раздел. */
         if(pxMutex->xIsInitialized == pdFALSE) {
             prvMutexInit(pxMutex);
         }
 
-        /* Exit the critical section. */
+        /* Выход из критического раздела. */
         _exit_critical();
     }
 }
@@ -482,7 +482,7 @@ static void prvCondInit(lv_thread_sync_t * pxCond)
 #else
     pxCond->xCondWaitSemaphore = xSemaphoreCreateCounting(ulMAX_COUNT, 0U);
 
-    /* Ensure that the FreeRTOS semaphore was successfully created. */
+    /* Убедитесь, что семафор FreeRTOS был успешно создан. */
     if(pxCond->xCondWaitSemaphore == NULL) {
         LV_LOG_ERROR("xSemaphoreCreateCounting failed!");
         return;
@@ -490,55 +490,55 @@ static void prvCondInit(lv_thread_sync_t * pxCond)
 
     pxCond->xSyncMutex = xSemaphoreCreateMutex();
 
-    /* Ensure that the FreeRTOS mutex was successfully created. */
+    /* Убедитесь, что мьютекс FreeRTOS успешно создан. */
     if(pxCond->xSyncMutex == NULL) {
         LV_LOG_ERROR("xSemaphoreCreateMutex failed!");
-        /* Cleanup. */
+        /* Уборка. */
         vSemaphoreDelete(pxCond->xCondWaitSemaphore);
         return;
     }
 
-    /* Condition variable successfully created. */
+    /* Условная переменная успешно создана. */
     pxCond->ulWaitingThreads = 0;
 #endif
 }
 
 static void prvCheckCondInit(lv_thread_sync_t * pxCond)
 {
-    /* Check if the condition variable needs to be initialized. */
+    /* Проверьте, нужно ли инициализировать переменную условия. */
     if(pxCond->xIsInitialized == pdFALSE) {
-        /* Cond initialization must be in a critical section to prevent two
-         * threads from initializing it at the same time. */
+        /* Инициализация Cond должна находиться в критической секции, чтобы предотвратить два
+         * потоки от его одновременной инициализации. */
         _enter_critical();
 
-        /* Check again that the condition is still uninitialized, i.e. it wasn't
-         * initialized while this function was waiting to enter the critical
-         * section. */
+        /* Еще раз проверьте, что условие все еще не инициализировано, т. е. оно не было
+         * инициализируется, пока эта функция ожидает входа в критический режим
+         * раздел. */
         if(pxCond->xIsInitialized == pdFALSE) {
             prvCondInit(pxCond);
         }
 
-        /* Exit the critical section. */
+        /* Выход из критического раздела. */
         _exit_critical();
     }
 }
 
 static void prvCheckCondInitIsr(lv_thread_sync_t * pxCond)
 {
-    /* Check if the condition variable needs to be initialized. */
+    /* Проверьте, нужно ли инициализировать переменную условия. */
     if(pxCond->xIsInitialized == pdFALSE) {
-        /* Cond initialization must be in a critical section to prevent two
-         * threads from initializing it at the same time. */
+        /* Инициализация Cond должна находиться в критической секции, чтобы предотвратить два
+         * потоки от его одновременной инициализации. */
         uint32_t mask = _enter_critical_isr();
 
-        /* Check again that the condition is still uninitialized, i.e. it wasn't
-         * initialized while this function was waiting to enter the critical
-         * section. */
+        /* Еще раз проверьте, что условие все еще не инициализировано, т. е. оно не было
+         * инициализируется, пока эта функция ожидает входа в критический режим
+         * раздел. */
         if(pxCond->xIsInitialized == pdFALSE) {
             prvCondInit(pxCond);
         }
 
-        /* Exit the critical section. */
+        /* Выход из критического раздела. */
         _exit_critical_isr(mask);
     }
 }
@@ -547,19 +547,19 @@ static void prvCheckCondInitIsr(lv_thread_sync_t * pxCond)
 static void prvTestAndDecrement(lv_thread_sync_t * pxCond,
                                 uint32_t ulLocalWaitingThreads)
 {
-    /* Test local copy of threads waiting is larger than zero. */
+    /* Тестовая локальная копия ожидающих потоков больше нуля. */
     while(ulLocalWaitingThreads > 0) {
-        /* Atomically check whether the copy in memory has changed.
-         * If not, decrease the copy of threads waiting in memory. */
+        /* Атомарно проверьте, изменилась ли копия в памяти.
+         * Если нет, уменьшите количество копий потоков, ожидающих в памяти. */
         if(ATOMIC_COMPARE_AND_SWAP_SUCCESS == Atomic_CompareAndSwap_u32(
                &pxCond->ulWaitingThreads,
                ulLocalWaitingThreads - 1,
                ulLocalWaitingThreads)) {
-            /* Signal one succeeded. Break. */
+            /* Сигнал один удался. Перерыв. */
             break;
         }
 
-        /* Local copy may be out dated. Reload from memory and retry. */
+        /* Локальная копия может быть устаревшей. Перезагрузите из памяти и повторите попытку. */
         ulLocalWaitingThreads = pxCond->ulWaitingThreads;
     }
 }

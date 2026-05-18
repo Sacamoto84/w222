@@ -77,9 +77,9 @@ static lv_result_t init_display(lv_display_t * display)
     }
     lv_sdl_backend_set_display_data(display, ddata);
 
-    /*It will render directly to default Texture, so the buffer is not used, so just set something*/
+    /*Он будет отображаться непосредственно в текстуре по умолчанию, поэтому буфер не используется, поэтому просто установите что-нибудь*/
     static lv_draw_buf_t draw_buf;
-    static uint8_t dummy_buf; /*It won't be used as it will render to the SDL textures directly*/
+    static uint8_t dummy_buf; /*Он не будет использоваться, поскольку будет напрямую отображаться в текстурах SDL.*/
     lv_draw_buf_init(&draw_buf, 4096, 4096, LV_COLOR_FORMAT_ARGB8888, 4096 * 4, &dummy_buf, 4096 * 4096 * 4);
 
     lv_display_set_draw_buffers(display, &draw_buf, NULL);

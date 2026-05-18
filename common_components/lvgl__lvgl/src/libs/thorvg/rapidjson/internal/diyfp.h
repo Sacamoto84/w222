@@ -1,20 +1,20 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
-// This is a C++ header-only implementation of Grisu2 algorithm from the publication:
-// Loitsch, Florian. "Printing floating-point numbers quickly and accurately with
-// integers." ACM Sigplan Notices 45.6 (2010): 233-243.
+// Это реализация алгоритма Grisu2 на C++ из публикации:
+// Лойч, Флориан. «Быстрая и точная печать чисел с плавающей запятой с помощью
+// целые числа».  ACM Уведомления Sigplan 45.6 (2010 г.): 233–243.
 
 #ifndef RAPIDJSON_DIYFP_H_
 #define RAPIDJSON_DIYFP_H_
@@ -76,7 +76,7 @@ struct DiyFp {
 #if defined(_MSC_VER) && defined(_M_AMD64)
         uint64_t h;
         uint64_t l = _umul128(f, rhs.f, &h);
-        if (l & (uint64_t(1) << 63)) // rounding
+        if (l & (uint64_t(1) << 63)) // округление
             h++;
         return DiyFp(h, e + rhs.e + 64);
 #elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__x86_64__)
@@ -84,7 +84,7 @@ struct DiyFp {
         uint128 p = static_cast<uint128>(f) * static_cast<uint128>(rhs.f);
         uint64_t h = static_cast<uint64_t>(p >> 64);
         uint64_t l = static_cast<uint64_t>(p);
-        if (l & (uint64_t(1) << 63)) // rounding
+        if (l & (uint64_t(1) << 63)) // округление
             h++;
         return DiyFp(h, e + rhs.e + 64);
 #else
@@ -135,11 +135,11 @@ struct DiyFp {
         }u;
         RAPIDJSON_ASSERT(f <= kDpHiddenBit + kDpSignificandMask);
         if (e < kDpDenormalExponent) {
-            // Underflow.
+            // Подлив.
             return 0.0;
         }
         if (e >= kDpMaxExponent) {
-            // Overflow.
+            // Переполнение.
             return std::numeric_limits<double>::infinity();
         }
         const uint64_t be = (e == kDpDenormalExponent && (f & kDpHiddenBit) == 0) ? 0 :
@@ -227,14 +227,14 @@ inline DiyFp GetCachedPowerByIndex(size_t index) {
 
 inline DiyFp GetCachedPower(int e, int* K) {
 
-    //int k = static_cast<int>(ceil((-61 - e) * 0.30102999566398114)) + 374;
-    double dk = (-61 - e) * 0.30102999566398114 + 347;  // dk must be positive, so can do ceiling in positive
+    //int k = static_cast <int>(ceil((-61 - e) * 0,30102999566398114)) + 374;
+    double dk = (-61 - e) * 0.30102999566398114 + 347;  // dk должно быть положительным, поэтому потолок может быть положительным
     int k = static_cast<int>(dk);
     if (dk - k > 0.0)
         k++;
 
     unsigned index = static_cast<unsigned>((k >> 3) + 1);
-    *K = -(-348 + static_cast<int>(index << 3));    // decimal exponent no need lookup table
+    *K = -(-348 + static_cast<int>(index << 3));    // десятичная экспонента, таблица поиска не требуется
 
     return GetCachedPowerByIndex(index);
 }
@@ -255,7 +255,7 @@ RAPIDJSON_DIAG_POP
 RAPIDJSON_DIAG_OFF(padded)
 #endif
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #endif // RAPIDJSON_DIYFP_H_

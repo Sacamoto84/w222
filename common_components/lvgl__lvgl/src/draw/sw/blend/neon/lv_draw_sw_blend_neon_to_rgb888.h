@@ -39,7 +39,7 @@ extern "C" {
 #define LV_DRAW_SW_COLOR_BLEND_TO_RGB888_MIX_MASK_OPA(dsc, dest_px_size) lv_draw_sw_blend_neon_color_to_rgb888_with_opa_mask(dsc, dest_px_size)
 #endif
 
-#ifdef __aarch64__ /* This function uses a special intrinsic only available for arm64 */
+#ifdef __aarch64__ /* Эта функция использует специальную встроенную функцию, доступную только для Arm64. */
 #ifndef LV_DRAW_SW_L8_BLEND_NORMAL_TO_RGB888
 #define LV_DRAW_SW_L8_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size) lv_draw_sw_blend_neon_l8_to_rgb888(dsc, dest_px_size)
 #endif
@@ -77,7 +77,7 @@ extern "C" {
 #define LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_RGB888_MIX_MASK_OPA(dsc, dest_px_size, src_px_size) lv_draw_sw_blend_neon_rgb888_to_rgb888_with_opa_mask(dsc, dest_px_size, src_px_size)
 #endif
 
-#if 0 /* These seem to produce worse results than sw rendering, also RGB888 is not implemented, only XRGB8888. So they are disabled for now*/
+#if 0 /* Похоже, что они дают худшие результаты, чем программный рендеринг, а также RGB888 не реализован, только XRGB8888 . Так что они пока отключены*/
 #ifndef LV_DRAW_SW_ARGB8888_BLEND_NORMAL_TO_RGB888
 #define LV_DRAW_SW_ARGB8888_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size) lv_draw_sw_blend_neon_argb888_to_rgb888(dsc, dest_px_size)
 #endif
@@ -152,7 +152,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb888_with_opa_mask(lv_draw_sw_ble
 #endif /* LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_NEON */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_NEON_TO_RGB888_H*/

@@ -27,7 +27,7 @@
  **********************/
 
 const uint32_t LV_RND_UNICODE_ALPHANUM_AND_CJK_TABLE[] = {
-    0x4e00, 0x9fa5, // CJK Unified Ideographs
+    0x4e00, 0x9fa5, // CJK унифицированные иероглифы
     'A', 'Z',
     'a', 'z',
     '0', '9',

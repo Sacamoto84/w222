@@ -100,8 +100,8 @@ void test_animimg_set_repeat_count_infinite(void)
 
 void test_animimg_start(void)
 {
-    // for lv_animimg_start() to actually work,
-    // we need to properly setup the widget beforehand
+    // чтобы lv_animimg_start() действительно работал,
+    // нам нужно заранее правильно настроить виджет
     lv_animimg_set_src(animimg, (const void **) anim_imgs, 3);
     lv_animimg_set_duration(animimg, 1000);
     lv_animimg_set_repeat_count(animimg, LV_ANIM_REPEAT_INFINITE);

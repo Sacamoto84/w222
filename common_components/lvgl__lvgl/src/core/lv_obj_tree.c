@@ -68,20 +68,20 @@ void lv_obj_delete(lv_obj_t * obj)
     bool act_screen_del = false;
     if(par == NULL) {
         disp = lv_obj_get_display(obj);
-        if(!disp) return;   /*Shouldn't happen*/
+        if(!disp) return;   /*Не должно случиться*/
         if(disp->act_scr == obj) act_screen_del = true;
     }
 
     obj_delete_core(obj);
 
-    /*Call the ancestor's event handler to the parent to notify it about the child delete*/
+    /*Вызовите обработчик событий предка родительскому элементу, чтобы уведомить его об удалении дочернего элемента.*/
     if(par && !par->is_deleting) {
         lv_obj_scrollbar_invalidate(par);
         lv_obj_send_event(par, LV_EVENT_CHILD_CHANGED, NULL);
         lv_obj_send_event(par, LV_EVENT_CHILD_DELETED, NULL);
     }
 
-    /*Handle if the active screen was deleted*/
+    /*Обработать, если активный экран был удален*/
     if(act_screen_del) {
         LV_LOG_WARN("the active screen was deleted");
         disp->act_scr = NULL;
@@ -104,7 +104,7 @@ void lv_obj_clean(lv_obj_t * obj)
         obj_delete_core(child);
         child = lv_obj_get_first_not_deleting_child(obj);
     }
-    /*Just to remove scroll animations if any*/
+    /*Просто чтобы удалить анимацию прокрутки, если она есть.*/
     lv_obj_scroll_to(obj, 0, 0, LV_ANIM_OFF);
     if(obj->spec_attr) {
         obj->spec_attr->scroll.x = 0;
@@ -168,7 +168,7 @@ void lv_obj_set_parent(lv_obj_t * obj, lv_obj_t * parent)
     lv_obj_allocate_spec_attr(parent);
 
     lv_obj_t * old_parent = obj->parent;
-    /*Remove the object from the old parent's child list*/
+    /*Удалить объект из дочернего списка старого родителя*/
     int32_t i;
     for(i = lv_obj_get_index(obj); i <= (int32_t)lv_obj_get_child_count(old_parent) - 2; i++) {
         old_parent->spec_attr->children[i] = old_parent->spec_attr->children[i + 1];
@@ -183,7 +183,7 @@ void lv_obj_set_parent(lv_obj_t * obj, lv_obj_t * parent)
         old_parent->spec_attr->children = NULL;
     }
 
-    /*Add the child to the new parent as the last (newest child)*/
+    /*Добавьте дочерний элемент к новому родителю как последний (самый новый дочерний элемент)*/
     parent->spec_attr->child_cnt++;
     parent->spec_attr->children = lv_realloc(parent->spec_attr->children,
                                              parent->spec_attr->child_cnt * (sizeof(lv_obj_t *)));
@@ -191,12 +191,12 @@ void lv_obj_set_parent(lv_obj_t * obj, lv_obj_t * parent)
 
     obj->parent = parent;
 
-    /*Notify the original parent because one of its children is lost*/
+    /*Уведомить исходного родителя, поскольку один из его дочерних элементов потерян.*/
     lv_obj_scrollbar_invalidate(old_parent);
     lv_obj_send_event(old_parent, LV_EVENT_CHILD_CHANGED, obj);
     lv_obj_send_event(old_parent, LV_EVENT_CHILD_DELETED, NULL);
 
-    /*Notify the new parent about the child*/
+    /*Уведомить нового родителя о ребенке*/
     lv_obj_send_event(parent, LV_EVENT_CHILD_CHANGED, obj);
     lv_obj_send_event(parent, LV_EVENT_CHILD_CREATED, NULL);
 
@@ -209,7 +209,7 @@ void lv_obj_move_to_index(lv_obj_t * obj, int32_t index)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    /* Check parent validity */
+    /* Проверить родительскую действительность */
     lv_obj_t * parent = lv_obj_get_parent(obj);
     if(!parent) {
         LV_LOG_WARN("parent is NULL");
@@ -217,7 +217,7 @@ void lv_obj_move_to_index(lv_obj_t * obj, int32_t index)
     }
 
     const uint32_t parent_child_count = lv_obj_get_child_count(parent);
-    /* old_index only can be 0 or greater, this point cannot be reached if the parent is not null */
+    /* old_index может иметь значение только 0 или больше, эта точка не может быть достигнута, если родительский элемент не включает ошибку. */
     const int32_t old_index = lv_obj_get_index(obj);
     LV_ASSERT(0 <= old_index);
 
@@ -225,11 +225,11 @@ void lv_obj_move_to_index(lv_obj_t * obj, int32_t index)
         index += parent_child_count;
     }
 
-    /* Index was negative and the absolute value is greater than parent child count */
+    /* Индекс был отрицательным, и его абсолютное значение превышает количество родительских детей. */
     if((index < 0)
-       /* Index is same or bigger than parent child count */
+       /* Индекс такой же или больше, чем количество родительских дочерних элементов */
        || (index >= (int32_t) parent_child_count)
-       /* If both previous and new index are the same */
+       /* Если предыдущий и новый индекс одинаковы */
        || (index == old_index)) {
 
         return;
@@ -308,8 +308,8 @@ lv_display_t * lv_obj_get_display(const lv_obj_t * obj)
 
     const lv_obj_t * scr;
 
-    if(obj->parent == NULL) scr = obj;  /*`obj` is a screen*/
-    else scr = lv_obj_get_screen(obj);  /*get the screen of `obj`*/
+    if(obj->parent == NULL) scr = obj;  /*`obj` — это экран*/
+    else scr = lv_obj_get_screen(obj);  /*получить скрин `obj`*/
 
     lv_display_t * d;
     lv_ll_t * disp_head = disp_ll_p;
@@ -369,7 +369,7 @@ lv_obj_t * lv_obj_get_child_by_type(const lv_obj_t * obj, int32_t idx, const lv_
         }
     }
     else {
-        idx++;   /*-1 means the first child*/
+        idx++;   /*-1 означает первого ребенка*/
         for(i = cnt - 1; i >= 0; i--) {
             if(obj->spec_attr->children[i]->class_p == class_p) {
                 if(idx == 0) return obj->spec_attr->children[i];
@@ -465,7 +465,7 @@ void lv_obj_get_name_resolved(const lv_obj_t * obj, char buf[], size_t buf_size)
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
     const char * name = lv_obj_get_name(obj);
-    /*Use a default name which auto-indexing*/
+    /*Используйте имя по умолчанию, которое будет автоматически индексироваться.*/
     char name_buf[LV_OBJ_NAME_MAX_LEN];
     if(name == NULL) {
         lv_snprintf(name_buf, sizeof(name_buf), "%s_#", obj->class_p->name);
@@ -475,43 +475,43 @@ void lv_obj_get_name_resolved(const lv_obj_t * obj, char buf[], size_t buf_size)
     size_t name_len = lv_strlen(name);
     lv_obj_t * parent = lv_obj_get_parent(obj);
 
-    /*If the last character is # automatically index the children with the same name start*/
+    /*Если последним символом является #, автоматически индексируются дочерние элементы с таким же именем.*/
     if(parent && name_len > 0 && name[name_len - 1] == '#') {
         uint32_t child_cnt = lv_obj_get_child_count(parent);
         uint32_t cnt = 0;
         uint32_t i;
         for(i = 0; i < child_cnt; i++) {
             lv_obj_t * child = lv_obj_get_child(parent, i);
-            /*All siblings older siblings are checked, craft the name of this widget*/
+            /*Все братья и сестры, старшие братья и сестры проверены, создайте имя этого виджета.*/
             if(child == obj) {
                 char num_buf[8];
                 size_t num_len;
                 num_len = lv_snprintf(num_buf, sizeof(num_buf), "%d", cnt);
                 /*Is there enough space for the name and the index?*/
                 if(buf_size > name_len + num_len) {
-                    /*E.g. buf = "some_name_", so trim the # from the end*/
+                    /*например buf = "some_name_", поэтому обрежьте # с конца*/
                     lv_strncpy(buf, name, name_len - 1);
                     lv_strcpy(&buf[name_len - 1], num_buf);
                 }
                 else {
-                    /*Use the name as it is as a fallback*/
+                    /*Используйте имя как есть в качестве запасного варианта.*/
                     lv_strlcpy(buf, obj->spec_attr->name, buf_size);
                 }
                 break;
             }
-            /*Check the older siblings. IF they start with the same name count them*/
+            /*Проверьте старших братьев и сестер.  IF они начинаются с одного и того же имени, посчитай их*/
             else {
                 const char * child_name = lv_obj_get_name(child);
                 if(child_name == NULL) {
-                    /*If the name we are looking for start with the child's class name
-                     *increment the index. E.g. <class_name>_#*/
+                    /*Если имя, которое мы ищем, начинается с названия класса ребенка
+                     *увеличить индекс. Например. <class_name>_#*/
                     size_t class_name_len = lv_strlen(child->class_p->name);
                     if(name_len > 3 && class_name_len == name_len - 2 &&
                        lv_strncmp(child->class_p->name, name, class_name_len) == 0) {
                         cnt++;
                     }
                 }
-                /*The name is set, check if it's e.g. <some_name>#*/
+                /*Имя установлено, проверьте, например. <some_name>#*/
                 else {
                     if(lv_strcmp(child->spec_attr->name, name) == 0) {
                         cnt++;
@@ -521,7 +521,7 @@ void lv_obj_get_name_resolved(const lv_obj_t * obj, char buf[], size_t buf_size)
         }
     }
     else {
-        /*Just use the set name*/
+        /*Просто используйте имя набора*/
         lv_strlcpy(buf, obj->spec_attr->name, buf_size);
     }
 }
@@ -536,19 +536,19 @@ lv_obj_t * lv_obj_get_child_by_name(const lv_obj_t * parent, const char * path)
         const char * segment = path;
         uint32_t len = 0;
 
-        /* Calculate the length of the current segment */
+        /* Вычислить длину текущего сегмента */
         while(path[len] && path[len] != '/')
             len++;
 
-        /* Look for a child whose resolved name exactly matches the segment */
+        /* Найдите дочернего элемента, чье разрешенное имя точно соответствует сегменту. */
         lv_obj_t * child = find_by_name_direct(parent, segment, len);
-        if(!child) return NULL; /*Segment not found*/
+        if(!child) return NULL; /*Сегмент не найден*/
 
-        /* Advance to the next segment */
+        /* Переход к следующему сегменту */
         path += len;
-        if(*path == '/') path++; /* Skip the '/' */
+        if(*path == '/') path++; /* Пропустить '/' */
 
-        /* If there is no further segment, we've found the target child */
+        /* Если дальнейшего сегмента нет, мы нашли целевой дочерний элемент. */
         if(*path == '\0') return child;
 
         parent = child;
@@ -566,7 +566,7 @@ lv_obj_t * lv_obj_find_by_name(const lv_obj_t * parent, const char * name)
     lv_obj_t * child = find_by_name_direct(parent, name, UINT16_MAX);
     if(child) return child;
 
-    /*Search children recursively*/
+    /*Рекурсивный поиск детей*/
     uint32_t child_cnt = lv_obj_get_child_count(parent);
     uint32_t i;
     for(i = 0; i < child_cnt; i++) {
@@ -592,7 +592,7 @@ int32_t lv_obj_get_index(const lv_obj_t * obj)
         if(parent->spec_attr->children[i] == obj) return i;
     }
 
-    /*Shouldn't reach this point*/
+    /*Не следует доходить до этой точки*/
     LV_ASSERT(0);
     return -1;
 }
@@ -614,7 +614,7 @@ int32_t lv_obj_get_index_by_type(const lv_obj_t * obj, const lv_obj_class_t * cl
         }
     }
 
-    /*Can happen if there was no children with the given type*/
+    /*Может произойти, если не было детей с данным типом*/
     return -1;
 }
 
@@ -653,15 +653,15 @@ static void lv_obj_delete_async_cb(void * obj)
 
 static void obj_indev_reset(lv_indev_t * indev, lv_obj_t * obj)
 {
-    /* If the input device is already in the release state,
-     * there is no need to wait for the input device to be released
+    /* Если устройство ввода уже находится в разблокированном состоянии,
+     * нет необходимости ждать освобождения устройства ввода
      */
     if(lv_indev_get_state(indev) != LV_INDEV_STATE_RELEASED) {
-        /*Wait for release to avoid accidentally triggering other obj to be clicked*/
+        /*Подождите, пока вы отпустите, чтобы случайно не вызвать нажатие другого объекта.*/
         lv_indev_wait_release(indev);
     }
 
-    /*Reset the input device*/
+    /*Сброс устройства ввода*/
     lv_indev_reset(indev, obj);
 }
 
@@ -672,17 +672,17 @@ static void obj_delete_core(lv_obj_t * obj)
 
     obj->is_deleting = true;
 
-    /*Let the user free the resources used in `LV_EVENT_DELETE`*/
+    /*Разрешить пользователю освободить ресурсы, используемые в `LV_EVENT_DELETE`.*/
     lv_result_t res = lv_obj_send_event(obj, LV_EVENT_DELETE, NULL);
     if(res == LV_RESULT_INVALID) {
         obj->is_deleting = false;
         return;
     }
 
-    /*Clean registered event_cb*/
+    /*Очистить зарегистрированный event_cb*/
     if(obj->spec_attr) lv_event_remove_all(&(obj->spec_attr->event_list));
 
-    /*Recursively delete the children*/
+    /*Рекурсивно удалить детей*/
     lv_obj_t * child = lv_obj_get_child(obj, 0);
     while(child) {
         obj_delete_core(child);
@@ -691,7 +691,7 @@ static void obj_delete_core(lv_obj_t * obj)
 
     lv_group_t * group = lv_obj_get_group(obj);
 
-    /*Reset all input devices if the object to delete is used*/
+    /*Сбросьте все устройства ввода, если используется удаляемый объект.*/
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         lv_indev_type_t indev_type = lv_indev_get_type(indev);
@@ -713,20 +713,20 @@ static void obj_delete_core(lv_obj_t * obj)
         indev = lv_indev_get_next(indev);
     }
 
-    /*Delete all pending async del-s*/
+    /*Удалить все ожидающие асинхронные задержки*/
     lv_result_t async_cancel_res = LV_RESULT_OK;
     while(async_cancel_res == LV_RESULT_OK) {
         async_cancel_res = lv_async_call_cancel(lv_obj_delete_async_cb, obj);
     }
 
-    /*All children deleted. Now clean up the object specific data*/
+    /*Все дети удалены. Теперь очистите данные, специфичные для объекта.*/
     lv_obj_destruct(obj);
 
-    /*Remove the screen for the screen list*/
+    /*Удалить экран для списка экранов*/
     if(obj->parent == NULL) {
         lv_display_t * disp = lv_obj_get_display(obj);
         uint32_t i;
-        /*Find the screen in the list*/
+        /*Найдите экран в списке*/
         for(i = 0; i < disp->screen_cnt; i++) {
             if(disp->screens[i] == obj) break;
         }
@@ -738,7 +738,7 @@ static void obj_delete_core(lv_obj_t * obj)
         disp->screen_cnt--;
         disp->screens = lv_realloc(disp->screens, disp->screen_cnt * sizeof(lv_obj_t *));
     }
-    /*Remove the object from the child list of its parent*/
+    /*Удалить объект из дочернего списка его родителя*/
     else {
         int32_t id = lv_obj_get_index(obj);
         uint16_t i;
@@ -750,7 +750,7 @@ static void obj_delete_core(lv_obj_t * obj)
                                                       obj->parent->spec_attr->child_cnt * sizeof(lv_obj_t *));
     }
 
-    /*Free the object itself*/
+    /*Освободите сам объект*/
     lv_free(obj);
 }
 
@@ -767,7 +767,7 @@ static lv_obj_tree_walk_res_t walk_core(lv_obj_t * obj, lv_obj_tree_walk_cb_t cb
             }
             disp = lv_display_get_next(disp);
         }
-        return LV_OBJ_TREE_WALK_END;    /*The value doesn't matter as it wasn't called recursively*/
+        return LV_OBJ_TREE_WALK_END;    /*Значение не имеет значения, поскольку оно не вызывалось рекурсивно.*/
     }
 
     res = cb(obj, user_data);
@@ -797,7 +797,7 @@ static void dump_tree_core(lv_obj_t * obj, int32_t depth)
     id = "obj0";
 #endif
 
-    /*id of `obj0` is an invalid id for builtin id*/
+    /*идентификатор`obj0`не является допустимым идентификатором для встроенного идентификатора*/
     LV_LOG_USER("%*sobj:%p, id:%s;", (int)(2 * depth), "", (void *)obj, id);
 #endif /*LV_USE_LOG*/
 

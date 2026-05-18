@@ -295,7 +295,7 @@ void test_spangroup_newlines(void)
     lv_span_set_text(lv_spangroup_add_span(spangroup), "");
     lv_span_set_text(lv_spangroup_add_span(spangroup), "\nsit");
 
-    /* carriage return is treated as equivalent to line feed */
+    /* возврат каретки рассматривается как эквивалент перевода строки */
     lv_span_set_text(lv_spangroup_add_span(spangroup), "\r");
 
     lv_span_set_text(lv_spangroup_add_span(spangroup), "amet,\n consectetur");
@@ -378,21 +378,21 @@ void test_spangroup_style_text_letter_space(void)
 #if LV_FONT_MONTSERRAT_24 && LV_FONT_MONTSERRAT_20
 void test_spangroup_get_span_coords(void)
 {
-    /* Initialize the active screen and create a new span group */
+    /* Инициализируйте активный экран и создайте новую группу диапазона. */
     active_screen = lv_screen_active();
     spangroup = lv_spangroup_create(active_screen);
 
     lv_span_t * spans[5];
     const uint32_t span_count = sizeof(spans) / sizeof(spans[0]);
 
-    /* Set styles and properties for the span group */
+    /* Установите стили и свойства для группы диапазона. */
     lv_obj_set_style_outline_width(spangroup, 1, 0);
     lv_spangroup_set_indent(spangroup, 20);
     lv_spangroup_set_mode(spangroup, LV_SPAN_MODE_BREAK);
     lv_obj_set_width(spangroup, 300);
     lv_obj_set_style_pad_all(spangroup, 20, LV_PART_MAIN);
 
-    /* Create spans and set their properties */
+    /* Создавайте промежутки и устанавливайте их свойства */
     spans[0] = lv_spangroup_add_span(spangroup);
     lv_span_set_text(spans[0], "China is a beautiful country.");
     lv_style_set_text_color(lv_span_get_style(spans[0]), lv_palette_main(LV_PALETTE_RED));
@@ -418,11 +418,11 @@ void test_spangroup_get_span_coords(void)
     lv_span_set_text(spans[4], "I have a dream that hope to come true.");
     lv_style_set_text_decor(lv_span_get_style(spans[4]), LV_TEXT_DECOR_STRIKETHROUGH);
 
-    /* Refresh the span group mode and update layout */
+    /* Обновите режим группы пролетов и обновите макет. */
     lv_spangroup_refresh(spangroup);
     lv_obj_update_layout(spangroup);
 
-    /* Define expected coordinates for testing */
+    /* Определите ожидаемые координаты для тестирования */
     const lv_span_coords_t test_coords[] = {
         {.heading = {.x1 = 40, .y1 = 20, .x2 = 280, .y2 = 20}, .middle = {.x1 = 40, .y1 = 20, .x2 = 241, .y2 = 36}, .trailing = {.x1 = 0, .y1 = 0, .x2 = 0, .y2 = 0}},
         {.heading = {.x1 = 241, .y1 = 20, .x2 = 280, .y2 = 36}, .middle = {.x1 = 20, .y1 = 36, .x2 = 280, .y2 = 63}, .trailing = {.x1 = 20, .y1 = 63, .x2 = 155, .y2 = 90}},
@@ -431,7 +431,7 @@ void test_spangroup_get_span_coords(void)
         {.heading = {.x1 = 116, .y1 = 112, .x2 = 280, .y2 = 134}, .middle = {.x1 = 20, .y1 = 134, .x2 = 280, .y2 = 134}, .trailing = {.x1 = 20, .y1 = 134, .x2 = 160, .y2 = 150}}
     };
 
-    /* Define colors for visual testing */
+    /* Определите цвета для визуального тестирования */
     const lv_color_t colors[] = {
         lv_palette_main(LV_PALETTE_RED), lv_palette_main(LV_PALETTE_GREEN), lv_palette_main(LV_PALETTE_BLUE),
         lv_palette_main(LV_PALETTE_YELLOW), lv_palette_main(LV_PALETTE_PURPLE), lv_palette_main(LV_PALETTE_ORANGE),
@@ -441,15 +441,15 @@ void test_spangroup_get_span_coords(void)
     const uint32_t color_count = sizeof(colors) / sizeof(colors[0]);
     const lv_area_t area = spangroup->coords;
 
-    /* Iterate through spans and validate coordinates */
+    /* Перебирать промежутки и проверять координаты */
     for(uint32_t i = 0; i < span_count; i++) {
         lv_span_coords_t coords = lv_spangroup_get_span_coords(spangroup, spans[i]);
         TEST_ASSERT_EQUAL_MEMORY(&coords.heading, &test_coords[i].heading, sizeof(lv_span_coords_t));
 
-        /* Visual testing */
+        /* Визуальное тестирование */
         const lv_color_t color = colors[i % color_count];
 
-        /* Create and style heading object */
+        /* Создание и оформление объекта заголовка */
         lv_obj_t * obj_head = lv_obj_create(active_screen);
         lv_obj_remove_style_all(obj_head);
         lv_obj_set_pos(obj_head, coords.heading.x1 + area.x1, coords.heading.y1 + area.y1);
@@ -457,7 +457,7 @@ void test_spangroup_get_span_coords(void)
         lv_obj_set_style_bg_color(obj_head, color, LV_PART_MAIN);
         lv_obj_set_style_bg_opa(obj_head, LV_OPA_50, LV_PART_MAIN);
 
-        /* Create and style middle object */
+        /* Создать и стилизовать средний объект */
         lv_obj_t * obj_middle = lv_obj_create(active_screen);
         lv_obj_remove_style_all(obj_middle);
         lv_obj_set_pos(obj_middle, coords.middle.x1 + area.x1, coords.middle.y1 + area.y1);
@@ -465,7 +465,7 @@ void test_spangroup_get_span_coords(void)
         lv_obj_set_style_bg_color(obj_middle, color, LV_PART_MAIN);
         lv_obj_set_style_bg_opa(obj_middle, LV_OPA_50, LV_PART_MAIN);
 
-        /* Create and style trailing object */
+        /* Создать и стилизовать конечный объект */
         lv_obj_t * obj_trailing = lv_obj_create(active_screen);
         lv_obj_remove_style_all(obj_trailing);
         lv_obj_set_pos(obj_trailing, coords.trailing.x1 + area.x1, coords.trailing.y1 + area.y1);
@@ -474,7 +474,7 @@ void test_spangroup_get_span_coords(void)
         lv_obj_set_style_bg_opa(obj_trailing, LV_OPA_50, LV_PART_MAIN);
     }
 
-    /* Validate the final screenshot */
+    /* Подтвердите окончательный скриншот */
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/span_09.png");
 }
 #endif
@@ -610,31 +610,31 @@ void test_span_properties(void)
 
     lv_property_t prop = { };
 
-    /* Test ALIGN property */
+    /* Тестирование свойства ALIGN */
     prop.id = LV_PROPERTY_SPAN_ALIGN;
     prop.num = LV_TEXT_ALIGN_CENTER;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_TEXT_ALIGN_CENTER, lv_obj_get_property(obj, LV_PROPERTY_SPAN_ALIGN).num);
 
-    /* Test OVERFLOW property */
+    /* Тестирование свойства OVERFLOW */
     prop.id = LV_PROPERTY_SPAN_OVERFLOW;
     prop.num = LV_SPAN_OVERFLOW_ELLIPSIS;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_SPAN_OVERFLOW_ELLIPSIS, lv_obj_get_property(obj, LV_PROPERTY_SPAN_OVERFLOW).num);
 
-    /* Test INDENT property */
+    /* Тестирование свойства INDENT */
     prop.id = LV_PROPERTY_SPAN_INDENT;
     prop.num = 20;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(20, lv_obj_get_property(obj, LV_PROPERTY_SPAN_INDENT).num);
 
-    /* Test MODE property */
+    /* Тестирование свойства MODE */
     prop.id = LV_PROPERTY_SPAN_MODE;
     prop.num = LV_SPAN_MODE_BREAK;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_SPAN_MODE_BREAK, lv_obj_get_property(obj, LV_PROPERTY_SPAN_MODE).num);
 
-    /* Test MAX_LINES property */
+    /* Тестирование свойства MAX_LINES */
     prop.id = LV_PROPERTY_SPAN_MAX_LINES;
     prop.num = 3;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);

@@ -15,13 +15,13 @@ static uint32_t anim2_completed_called;
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     anim_timeline = NULL;
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     if(anim_timeline) lv_anim_timeline_delete(anim_timeline);
     lv_obj_clean(lv_screen_active());
 }
@@ -108,7 +108,7 @@ void test_anim_timeline_progress_2(void)
      *   |------X------|
      *          |------Y------|
      *   0     500    1000   1500 ms
-     *   0     21845  43690  65535 progress
+     *   0 21845 43690 65535 прогресс
      */
 
     anim_timeline = lv_anim_timeline_create();
@@ -180,14 +180,14 @@ void test_anim_timeline_start(void)
     lv_anim_set_duration(&a1, 1000);
     lv_anim_timeline_add(anim_timeline, 1500, &a1);
 
-    /*Overlap with the previous*/
+    /*Перекрытие с предыдущим*/
     lv_anim_set_values(&a1, 400, 700);
     lv_anim_set_duration(&a1, 1500);
     lv_anim_timeline_add(anim_timeline, 2000, &a1);
 
     lv_anim_timeline_start(anim_timeline);
 
-    /*As doesn't start at the beginning keep the original value*/
+    /*Поскольку не начинается с начала, сохраните исходное значение*/
     lv_refr_now(NULL);
     TEST_ASSERT_EQUAL(70, lv_obj_get_x(obj));
 
@@ -203,11 +203,11 @@ void test_anim_timeline_start(void)
     lv_test_wait(400);  /*1000*/
     TEST_ASSERT_EQUAL(100, lv_obj_get_x(obj));
 
-    /*There is a gap*/
+    /*Существует пробел*/
     lv_test_wait(100);  /*1100*/
     TEST_ASSERT_EQUAL(100, lv_obj_get_x(obj));
 
-    /*Should change it*/
+    /*Следует изменить это*/
     lv_obj_set_x(obj, 10);
 
     lv_test_wait(100);  /*1200*/
@@ -234,7 +234,7 @@ void test_anim_timeline_start(void)
     lv_test_wait(500);    /*3500*/
     TEST_ASSERT_EQUAL(700, lv_obj_get_x(obj));
 
-    /*Nothing should change it*/
+    /*Ничто не должно это изменить*/
     lv_obj_set_x(obj, 20);
 
     lv_test_wait(100);    /*3600*/
@@ -248,7 +248,7 @@ void test_anim_timeline_reverse(void)
 
     lv_obj_set_pos(obj, 70, 70);
 
-    /* Reverse this:
+    /* Переверните это:
      *       |------1------|
      *                             |-----Y-----|
      *                                   |--------Z--------|
@@ -272,7 +272,7 @@ void test_anim_timeline_reverse(void)
     lv_anim_set_duration(&a1, 1000);
     lv_anim_timeline_add(anim_timeline, 1500, &a1);
 
-    /*Overlap with the previous*/
+    /*Перекрытие с предыдущим*/
     lv_anim_set_values(&a1, 400, 700);
     lv_anim_set_duration(&a1, 1500);
     lv_anim_timeline_add(anim_timeline, 2000, &a1);
@@ -295,11 +295,11 @@ void test_anim_timeline_reverse(void)
     lv_test_wait(500);                    /*2000 (1500)*/
     TEST_ASSERT_EQUAL(200, lv_obj_get_x(obj));
 
-    /*There is a gap*/
+    /*Существует пробел*/
     lv_test_wait(100);                    /*2100 (1400)*/
     TEST_ASSERT_EQUAL(100, lv_obj_get_x(obj));
 
-    /*Should change it*/
+    /*Следует изменить это*/
     lv_obj_set_x(obj, 10);
 
     lv_test_wait(100);                    /*2200 (1300)*/
@@ -314,11 +314,11 @@ void test_anim_timeline_reverse(void)
     lv_test_wait(400);                    /*3300 (200)*/
     TEST_ASSERT_EQUAL(50, lv_obj_get_x(obj));
 
-    /*There is a gap*/
+    /*Существует пробел*/
     lv_test_wait(100);                    /*3400 (100)*/
     TEST_ASSERT_EQUAL(50, lv_obj_get_x(obj));
 
-    /*Nothing should change it*/
+    /*Ничто не должно это изменить*/
     lv_obj_set_x(obj, 20);
     lv_test_wait(100);
     TEST_ASSERT_EQUAL(20, lv_obj_get_x(obj));
@@ -502,38 +502,38 @@ void test_anim_timeline_with_anim_start_cb_and_completed_cb(void)
 
     lv_refr_now(NULL);
 
-    /*                              |----- Reverse ------|
-     *   |-----anim1-----|                 |--anim1 rvs--|
-     *           |----anim2----|    |--anim2 rvs--|
+    /*                              |----- Обратный ------|
+     *   |-----аним1-----|                 |--anim1 rvs--|
+     *           |----аним2----|    |--anim2 rvs--|
      *
      *   0       200   300    500   600    800  900     1100
      */
 
-    lv_test_wait(20); /*Wait 20 ms*/
+    lv_test_wait(20); /*Подождите 20 мс.*/
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
     TEST_ASSERT_EQUAL(0, anim2_start_called);
     TEST_ASSERT_EQUAL(0, anim2_completed_called);
 
-    lv_test_wait(200); /*Now we are at 220ms */
+    lv_test_wait(200); /*Сейчас мы на 220 мс */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
     TEST_ASSERT_EQUAL(0, anim2_completed_called);
 
-    lv_test_wait(100); /*Now we are at 320ms */
+    lv_test_wait(100); /*Сейчас мы на 320 мс */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(1, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
     TEST_ASSERT_EQUAL(0, anim2_completed_called);
 
-    lv_test_wait(200); /*Now we are at 520ms */
+    lv_test_wait(200); /*Сейчас мы находимся на 520 мс. */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(1, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
     TEST_ASSERT_EQUAL(1, anim2_completed_called);
 
-    lv_test_wait(80); /*Now we are at 600ms */
+    lv_test_wait(80); /*Теперь мы на 600 мс */
     anim1_start_called = 0;
     anim1_completed_called = 0;
     anim2_start_called = 0;
@@ -543,25 +543,25 @@ void test_anim_timeline_with_anim_start_cb_and_completed_cb(void)
     lv_anim_timeline_set_progress(anim_timeline, LV_ANIM_TIMELINE_PROGRESS_MAX);
     lv_anim_timeline_start(anim_timeline);
 
-    lv_test_wait(20); /*Now we are at 620ms */
+    lv_test_wait(20); /*Сейчас мы на 620 мс */
     TEST_ASSERT_EQUAL(0, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
     TEST_ASSERT_EQUAL(0, anim2_completed_called);
 
-    lv_test_wait(200); /*Now we are at 820ms */
+    lv_test_wait(200); /*Сейчас мы находимся на 820 мс. */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
     TEST_ASSERT_EQUAL(0, anim2_completed_called);
 
-    lv_test_wait(100); /*Now we are at 920ms */
+    lv_test_wait(100); /*Сейчас мы находимся на 920 мс. */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
     TEST_ASSERT_EQUAL(1, anim2_completed_called);
 
-    lv_test_wait(200); /*Now we are at 1120ms */
+    lv_test_wait(200); /*Сейчас мы на 1120 мс. */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(1, anim1_completed_called);
     TEST_ASSERT_EQUAL(1, anim2_start_called);
@@ -590,28 +590,28 @@ void test_anim_timeline_without_exec_cb_but_anim_start_cb_and_completed_cb(void)
     lv_refr_now(NULL);
 
     /*
-     *           |----anim1----|
+     *           |----аним1----|
      *
      *   0       200   300    500
      */
 
-    lv_test_wait(20); /*Wait 20 ms*/
+    lv_test_wait(20); /*Подождите 20 мс.*/
     TEST_ASSERT_EQUAL(0, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
 
-    lv_test_wait(200); /*Now we are at 220ms */
+    lv_test_wait(200); /*Сейчас мы на 220 мс */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(0, anim1_completed_called);
 
-    lv_test_wait(300); /*Now we are at 520ms */
+    lv_test_wait(300); /*Сейчас мы находимся на 520 мс. */
     TEST_ASSERT_EQUAL(1, anim1_start_called);
     TEST_ASSERT_EQUAL(1, anim1_completed_called);
 
-    lv_test_wait(200); /*Now we are at 720ms */
+    lv_test_wait(200); /*Сейчас мы находимся на 720 мс. */
     TEST_ASSERT_EQUAL(2, anim1_start_called);
     TEST_ASSERT_EQUAL(1, anim1_completed_called);
 
-    lv_test_wait(300); /*Now we are at 1020ms */
+    lv_test_wait(300); /*Сейчас мы находимся на частоте 1020 мс. */
     TEST_ASSERT_EQUAL(2, anim1_start_called);
     TEST_ASSERT_EQUAL(2, anim1_completed_called);
 }

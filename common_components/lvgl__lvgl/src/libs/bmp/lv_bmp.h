@@ -37,7 +37,7 @@ void lv_bmp_deinit(void);
 #endif /*LV_USE_BMP*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_BMP_H*/

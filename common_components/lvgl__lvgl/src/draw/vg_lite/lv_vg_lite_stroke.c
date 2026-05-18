@@ -25,11 +25,11 @@
 
 
 /**
- * Since the key-value data structure of lv_cache is integrated, the kv data structure
- * will be saved at the same time when the cache is successfully created.
- * In order to pursue efficiency during the matching process, the primary key (lv) used for matching
- * will not dup the dash_pattern secondary pointer, so when the creation is successful, dash_pattern needs
- * to be dup to the child key (vg), so type is added here to distinguish where the real data of dash_pattern exists.
+ * Поскольку структура данных «ключ-значение» lv_cache интегрирована, структура данных kv
+ * будут сохранены одновременно с успешным созданием кэша.
+ * Чтобы обеспечить эффективность процесса сопоставления, первичный ключ (lv), используемый для сопоставления,
+ * не будет дублировать вторичный указатель dash_pattern, поэтому в случае успешного создания dash_pattern необходимо
+ * для дублирования дочернего ключа (vg), поэтому сюда добавляется тип, чтобы определить, где находятся реальные данные dash_pattern.
  */
 typedef enum {
     DASH_PATTERN_TYPE_LV,
@@ -40,10 +40,10 @@ typedef struct {
     dash_pattern_type_t dash_pattern_type;
 
     struct {
-        /* path data */
+        /* данные пути */
         lv_vg_lite_path_t * path;
 
-        /* stroke parameters */
+        /* параметры хода */
         float width;
         lv_vector_stroke_cap_t cap;
         lv_vector_stroke_join_t join;
@@ -52,10 +52,10 @@ typedef struct {
     } lv;
 
     struct {
-        /* stroke path */
+        /* путь инсульта */
         lv_vg_lite_path_t * path;
 
-        /* dash pattern, for comparison only */
+        /* образец штриха, только для сравнения */
         lv_array_t dash_pattern;
     } vg;
 } stroke_item_t;
@@ -145,7 +145,7 @@ lv_cache_entry_t * lv_vg_lite_stroke_get(struct _lv_draw_vg_lite_unit_t * unit,
         return NULL;
     }
 
-    /* prepare search key */
+    /* подготовить ключ поиска */
     stroke_item_t search_key;
     lv_memzero(&search_key, sizeof(search_key));
     search_key.lv.cap = dsc->cap;
@@ -153,7 +153,7 @@ lv_cache_entry_t * lv_vg_lite_stroke_get(struct _lv_draw_vg_lite_unit_t * unit,
     search_key.lv.width = dsc->width;
     search_key.lv.miter_limit = dsc->miter_limit;
 
-    /* A one-time read-only array that only copies the pointer but not the content */
+    /* Одноразовый массив, доступный только для чтения, который копирует только указатель, но не содержимое. */
     search_key.lv.dash_pattern = dsc->dash_pattern;
     search_key.lv.path = path;
 
@@ -179,7 +179,7 @@ struct _lv_vg_lite_path_t * lv_vg_lite_stroke_get_path(lv_cache_entry_t * cache_
     LV_ASSERT_NULL(stroke_item);
 
     if(lv_array_size(&stroke_item->vg.dash_pattern)) {
-        /* check if dash pattern must be duped */
+        /* проверьте, нужно ли дублировать образец штриха */
         LV_ASSERT(stroke_item->dash_pattern_type == DASH_PATTERN_TYPE_VG);
     }
 
@@ -203,35 +203,35 @@ static bool stroke_create_cb(stroke_item_t * item, void * user_data)
     LV_UNUSED(user_data);
     LV_ASSERT_NULL(item);
 
-    /* Check if stroke width is valid */
+    /* Проверьте, действительна ли ширина штриха */
     if(item->lv.width <= 0) {
         LV_LOG_WARN("stroke width error: %f", item->lv.width);
         return false;
     }
 
-    /* Reset the dash pattern type */
+    /* Сбросить тип штрихового узора */
     item->dash_pattern_type = DASH_PATTERN_TYPE_LV;
 
-    /* dup the path */
+    /* дублировать путь */
     item->vg.path = lv_vg_lite_path_create(VG_LITE_FP32);
     lv_vg_lite_path_append_path(item->vg.path, item->lv.path);
 
-    /* dup the dash pattern */
+    /* скопировать образец штриха */
     vg_lite_float_t * vg_dash_pattern = NULL;
     const uint32_t size = lv_array_size(&item->lv.dash_pattern);
     if(size) {
-        /* Only support float dash pattern */
+        /* Поддерживается только шаблон плавающего тире */
         LV_ASSERT(item->lv.dash_pattern.element_size == sizeof(float));
         lv_array_init(&item->vg.dash_pattern, size, sizeof(float));
         lv_array_copy(&item->vg.dash_pattern, &item->lv.dash_pattern);
 
-        /* mark dash pattern has been duped */
+        /* Шаблон маркировки тире был обманут */
         item->dash_pattern_type = DASH_PATTERN_TYPE_VG;
         vg_dash_pattern = lv_array_front(&item->vg.dash_pattern);
         LV_ASSERT_NULL(vg_dash_pattern);
     }
 
-    /* update parameters */
+    /* обновить параметры */
     vg_lite_path_t * vg_path = lv_vg_lite_path_get_path(item->vg.path);
     LV_VG_LITE_CHECK_ERROR(vg_lite_set_path_type(vg_path, VG_LITE_DRAW_STROKE_PATH), {});
 
@@ -247,7 +247,7 @@ static bool stroke_create_cb(stroke_item_t * item, void * user_data)
                   size,
                   item->lv.width / 2,
                   0),
-        /* Dump parameters */
+        /* Параметры дампа */
     {
         lv_vg_lite_path_dump_info(vg_path);
         LV_LOG_USER("Cap: 0x%X", (int)lv_stroke_cap_to_vg(item->lv.cap));
@@ -276,7 +276,7 @@ static bool stroke_create_cb(stroke_item_t * item, void * user_data)
     });
     LV_PROFILER_DRAW_END_TAG("vg_lite_update_stroke");
 
-    /* check if path is changed */
+    /* проверьте, изменился ли путь */
     LV_ASSERT_MSG(vg_path->path_length == ori_path_length, "vg_path->path_length should not change");
     LV_ASSERT_MSG(vg_path->path == ori_path, "vg_path->path should not change");
 
@@ -306,7 +306,7 @@ static void stroke_free_cb(stroke_item_t * item, void * user_data)
 
 static lv_cache_compare_res_t dash_pattern_compare(const stroke_item_t * lhs, const stroke_item_t * rhs)
 {
-    /* Select the dash pattern to compare */
+    /* Выберите образец штриха для сравнения */
     const lv_array_t * lhs_dash_pattern = lhs->dash_pattern_type == DASH_PATTERN_TYPE_LV ?
                                           &lhs->lv.dash_pattern :
                                           &lhs->vg.dash_pattern;
@@ -325,11 +325,11 @@ static lv_cache_compare_res_t dash_pattern_compare(const stroke_item_t * lhs, co
         return 0;
     }
 
-    /* Both dash pattern has the same size, compare them */
+    /* Оба штриховых рисунка имеют одинаковый размер, сравните их. */
     LV_ASSERT(lhs_dash_pattern->element_size == sizeof(float));
     LV_ASSERT(rhs_dash_pattern->element_size == sizeof(float));
 
-    /* compare dash pattern data */
+    /* сравнить данные шаблона штриха */
     int cmp_res = lv_memcmp(
                       lv_array_front(lhs_dash_pattern),
                       lv_array_front(rhs_dash_pattern),
@@ -344,7 +344,7 @@ static lv_cache_compare_res_t dash_pattern_compare(const stroke_item_t * lhs, co
 
 static lv_cache_compare_res_t path_compare(const stroke_item_t * lhs, const stroke_item_t * rhs)
 {
-    /* Give priority to using dup vg.path */
+    /* Отдайте приоритет использованию dup vg.path */
     const vg_lite_path_t * lhs_path = lhs->vg.path ?
                                       lv_vg_lite_path_get_path(lhs->vg.path) :
                                       lv_vg_lite_path_get_path(lhs->lv.path);

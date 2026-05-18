@@ -12,7 +12,7 @@ port_src = Glob('*.c')
 port_inc = [cwd]
 group = group + DefineGroup('LVGL-port', port_src, depend = ['PKG_USING_LVGL'], CPPPATH = port_inc)
 
-# check if .h or .hpp files exists
+# проверьте, существуют ли файлы .h или .hpp
 def check_h_hpp_exists(path):
     file_dirs = os.listdir(path)
     for file_dir in file_dirs:

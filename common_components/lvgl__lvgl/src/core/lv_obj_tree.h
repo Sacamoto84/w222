@@ -38,157 +38,157 @@ typedef lv_obj_tree_walk_res_t (*lv_obj_tree_walk_cb_t)(lv_obj_t *, void *);
  **********************/
 
 /**
- * Delete an object and all of its children.
- * Also remove the objects from their group and remove all animations (if any).
- * Send `LV_EVENT_DELETE` to deleted objects.
- * @param obj       pointer to an object
+ * Удалить объект и все его дочерние элементы.
+ * Также удалите объекты из их группы и удалите всю анимацию (если есть).
+ * Отправьте `LV_EVENT_DELETE` удаленным объектам.
+ * @param obj       указатель на объект
  */
 void lv_obj_delete(lv_obj_t * obj);
 
 /**
- * Delete all children of an object.
- * Also remove the objects from their group and remove all animations (if any).
- * Send `LV_EVENT_DELETE` to deleted objects.
- * @param obj       pointer to an object
+ * Удалить всех дочерних элементов объекта.
+ * Также удалите объекты из их группы и удалите всю анимацию (если есть).
+ * Отправьте `LV_EVENT_DELETE` удаленным объектам.
+ * @param obj       указатель на объект
  */
 void lv_obj_clean(lv_obj_t * obj);
 
 /**
- * Delete an object after some delay
- * @param obj       pointer to an object
- * @param delay_ms  time to wait before delete in milliseconds
+ * Удалить объект после некоторой задержки
+ * @param obj       указатель на объект
+ * @param delay_ms  время ожидания перед удалением в миллисекундах
  */
 void lv_obj_delete_delayed(lv_obj_t * obj, uint32_t delay_ms);
 
 /**
- * A function to be easily used in animation ready callback to delete an object when the animation is ready
- * @param a         pointer to the animation
+ * Функция, которую можно легко использовать в обратном вызове готовности анимации для удаления объекта, когда анимация готова.
+ * @param a         указатель на анимацию
  */
 void lv_obj_delete_anim_completed_cb(lv_anim_t * a);
 
 /**
- * Helper function for asynchronously deleting objects.
- * Useful for cases where you can't delete an object directly in an `LV_EVENT_DELETE` handler (i.e. parent).
- * @param obj       object to delete
+ * Вспомогательная функция для асинхронного удаления объектов.
+ * Полезно в случаях, когда вы не можете удалить объект непосредственно в обработчике `LV_EVENT_DELETE` (т. е. родительском).
+ * @param obj       объект для удаления
  * @see lv_async_call
  */
 void lv_obj_delete_async(lv_obj_t * obj);
 
 /**
- * Move the parent of an object. The relative coordinates will be kept.
+ * Переместить родителя объекта. Относительные координаты будут сохранены.
  *
- * @param obj       pointer to an object whose parent needs to be changed
- * @param parent pointer to the new parent
+ * @param obj       указатель на объект, родительский элемент которого необходимо изменить
+ * @param parent указатель на нового родителя
  */
 void lv_obj_set_parent(lv_obj_t * obj, lv_obj_t * parent);
 
 /**
- * Swap the positions of two objects.
- * When used in listboxes, it can be used to sort the listbox items.
- * @param obj1  pointer to the first object
- * @param obj2  pointer to the second object
+ * Поменяйте местами два объекта.
+ * При использовании в списках его можно использовать для сортировки элементов списка.
+ * @param obj1  указатель на первый объект
+ * @param obj2  указатель на второй объект
  */
 void lv_obj_swap(lv_obj_t * obj1, lv_obj_t * obj2);
 
 /**
- * moves the object to the given index in its parent.
- * When used in listboxes, it can be used to sort the listbox items.
- * @param obj  pointer to the object to be moved.
- * @param index  new index in parent. -1 to count from the back
- * @note to move to the background: lv_obj_move_to_index(obj, 0)
- * @note to move forward (up): lv_obj_move_to_index(obj, lv_obj_get_index(obj) - 1)
+ * перемещает объект по заданному индексу в его родителе.
+ * При использовании в списках его можно использовать для сортировки элементов списка.
+ * @param obj  указатель на объект, который нужно переместить.
+ * @param index  новый индекс в родительском файле. -1, чтобы считать сзади
+ * @note чтобы перейти на задний план:lv_obj_move_to_index(obj, 0)
+ * @note для перемещения вперед (вверх):lv_obj_move_to_index(obj,lv_obj_get_index(obj) - 1)
  */
 void lv_obj_move_to_index(lv_obj_t * obj, int32_t index);
 
 /**
- * Get the screen of an object
- * @param obj       pointer to an object
- * @return          pointer to the object's screen
+ * Получить экран объекта
+ * @param obj       указатель на объект
+ * @return          указатель на экран объекта
  */
 lv_obj_t * lv_obj_get_screen(const lv_obj_t * obj);
 
 /**
- * Get the display of the object
- * @param obj       pointer to an object
- * @return          pointer to the object's display
+ * Получить отображение объекта
+ * @param obj       указатель на объект
+ * @return          указатель на отображение объекта
  */
 lv_display_t * lv_obj_get_display(const lv_obj_t * obj);
 
 /**
- * Get the parent of an object
- * @param obj       pointer to an object
- * @return          the parent of the object. (NULL if `obj` was a screen)
+ * Получить родителя объекта
+ * @param obj       указатель на объект
+ * @return          родитель объекта. ( NULL, если`obj`был экраном)
  */
 lv_obj_t * lv_obj_get_parent(const lv_obj_t * obj);
 
 /**
- * Get the child of an object by the child's index.
- * @param obj       pointer to an object whose child should be get
- * @param idx       the index of the child.
- *                  0: the oldest (firstly created) child
- *                  1: the second oldest
- *                  child count-1: the youngest
- *                  -1: the youngest
- *                  -2: the second youngest
- * @return          pointer to the child or NULL if the index was invalid
+ * Получите дочерний объект по индексу дочернего объекта.
+ * @param obj       указатель на объект, дочерний элемент которого должен быть получен
+ * @param idx       индекс ребенка.
+ *                  0: самый старший (первый созданный) ребенок
+ *                  1: второй по возрасту
+ *                  количество детей-1: самый младший
+ *                  -1: самый младший
+ *                  -2: второй младший
+ * @return          указатель на дочерний элемент или NULL, если индекс недействителен
  */
 lv_obj_t * lv_obj_get_child(const lv_obj_t * obj, int32_t idx);
 
 /**
- * Get the child of an object by the child's index. Consider the children only with a given type.
- * @param obj       pointer to an object whose child should be get
- * @param idx       the index of the child.
- *                  0: the oldest (firstly created) child
- *                  1: the second oldest
- *                  child count-1: the youngest
- *                  -1: the youngest
- *                  -2: the second youngest
- * @param class_p   the type of the children to check
- * @return          pointer to the child or NULL if the index was invalid
+ * Получите дочерний объект по индексу дочернего объекта. Рассмотрим детей только с данным типом.
+ * @param obj       указатель на объект, дочерний элемент которого должен быть получен
+ * @param idx       индекс ребенка.
+ *                  0: самый старший (первый созданный) ребенок
+ *                  1: второй по возрасту
+ *                  количество детей-1: самый младший
+ *                  -1: самый младший
+ *                  -2: второй младший
+ * @param class_p   тип детей, которых нужно проверить
+ * @return          указатель на дочерний элемент или NULL, если индекс недействителен
  */
 lv_obj_t * lv_obj_get_child_by_type(const lv_obj_t * obj, int32_t idx,
                                     const lv_obj_class_t * class_p);
 
 /**
- * Return a sibling of an object
- * @param obj       pointer to an object whose sibling should be get
- * @param idx       0: `obj` itself
- *                  -1: the first older sibling
- *                  -2: the next older sibling
- *                  1: the first younger sibling
- *                  2: the next younger sibling
- *                  etc
- * @return          pointer to the requested sibling  or NULL if there is no such sibling
+ * Вернуть родственного объекта
+ * @param obj       указатель на объект, чей брат должен быть получен
+ * @param idx       0: сам `obj`
+ *                  -1: первый старший брат
+ *                  -2: следующий старший брат
+ *                  1: первый младший брат
+ *                  2: следующий младший брат
+ *                  и т. д.
+ * @return          указатель на запрошенного брата или NULL, если такого брата нет
  */
 lv_obj_t * lv_obj_get_sibling(const lv_obj_t * obj, int32_t idx);
 
 /**
- * Return a sibling of an object. Consider the siblings only with a given type.
- * @param obj       pointer to an object whose sibling should be get
- * @param idx       0: `obj` itself
- *                  -1: the first older sibling
- *                  -2: the next older sibling
- *                  1: the first younger sibling
- *                  2: the next younger sibling
- *                  etc
- * @param class_p   the type of the children to check
- * @return          pointer to the requested sibling  or NULL if there is no such sibling
+ * Вернуть родственного объекта. Рассмотрим братьев и сестер только данного типа.
+ * @param obj       указатель на объект, чей брат должен быть получен
+ * @param idx       0: сам `obj`
+ *                  -1: первый старший брат
+ *                  -2: следующий старший брат
+ *                  1: первый младший брат
+ *                  2: следующий младший брат
+ *                  и т. д.
+ * @param class_p   тип детей, которых нужно проверить
+ * @return          указатель на запрошенного брата или NULL, если такого брата нет
  */
 lv_obj_t * lv_obj_get_sibling_by_type(const lv_obj_t * obj, int32_t idx,
                                       const lv_obj_class_t * class_p);
 
 /**
- * Get the number of children
- * @param obj       pointer to an object
- * @return          the number of children
+ * Получить количество детей
+ * @param obj       указатель на объект
+ * @return          количество детей
  */
 uint32_t lv_obj_get_child_count(const lv_obj_t * obj);
 
 /**
- * Get the number of children having a given type.
- * @param obj       pointer to an object
- * @param class_p   the type of the children to check
- * @return          the number of children
+ * Получите количество детей, имеющих данный тип.
+ * @param obj       указатель на объект
+ * @param class_p   тип детей, которых нужно проверить
+ * @return          количество детей
  */
 
 uint32_t lv_obj_get_child_count_by_type(const lv_obj_t * obj, const lv_obj_class_t * class_p);
@@ -196,117 +196,117 @@ uint32_t lv_obj_get_child_count_by_type(const lv_obj_t * obj, const lv_obj_class
 #if LV_USE_OBJ_NAME
 
 /**
- * Set a name for a widget. The name will be allocated and freed when the
- * widget is deleted or a new name is set.
- * @param obj       pointer to an object
- * @param name      the name to set. If set to `NULL` the default "<widget_type>_#"
- *                  name will be used.
- * @note If the name ends with a `#`, older siblings with the same name
- * will be counted, and the `#` will be replaced by the index of the
- * given widget. For example, creating multiple widgets with the name
- * "mybtn_#" will result in resolved names like "mybtn_0", "mybtn_1",
- * "mybtn_2", etc.  The name is resolved when `lv_obj_get_name_resolved`
- * is called, so the result reflects the currently existing widgets at
- * that time.
+ * Задайте имя виджету. Имя будет выделено и освобождено, когда
+ * виджет удален или задано новое имя.
+ * @param obj       указатель на объект
+ * @param name      имя, которое нужно установить. Если установлено значение `NULL`, по умолчанию используется «<widget_type>_#».
+ *                  будет использоваться имя.
+ * @note Если имя заканчивается на `#`, старшие братья и сестры с таким же именем
+ * будет учитываться, а `#` будет заменен индексом
+ * данный виджет. Например, создание нескольких виджетов с именем
+ * «mybtn_#» связана с разрешенными именами, например «mybtn_0», «mybtn_1»,
+ * «mybtn_2» и т. д. д. Имя разрешено, когда `lv_obj_get_name_resolved`
+ * вызывается, поэтому результат отражает существующие в данный момент виджеты по адресу
+ * в тот раз.
  */
 void lv_obj_set_name(lv_obj_t * obj, const char * name);
 
 /**
- * Set a name for a widget. Only a pointer will be saved.
- * @param obj       pointer to an object
- * @param name      the name to set. If set to `NULL` the default "<widget_type>_#"
- *                  name will be used.
- * @note If the name ends with a `#`, older siblings with the same name
- * will be counted, and the `#` will be replaced by the index of the
- * given widget. For example, creating multiple widgets with the name
- * "mybtn_#" will result in resolved names like "mybtn_0", "mybtn_1",
- * "mybtn_2", etc.  The name is resolved when `lv_obj_get_name_resolved`
- * is called, so the result reflects the currently existing widgets at
- * that time.
+ * Задайте имя виджету. Сохранится только указатель.
+ * @param obj       указатель на объект
+ * @param name      имя, которое нужно установить. Если установлено значение `NULL`, по умолчанию используется «<widget_type>_#».
+ *                  будет использоваться имя.
+ * @note Если имя заканчивается на `#`, старшие братья и сестры с таким же именем
+ * будет учитываться, а `#` будет заменен индексом
+ * данный виджет. Например, создание нескольких виджетов с именем
+ * «mybtn_#» связана с разрешенными именами, например «mybtn_0», «mybtn_1»,
+ * «mybtn_2» и т. д. д. Имя разрешено, когда `lv_obj_get_name_resolved`
+ * вызывается, поэтому результат отражает существующие в данный момент виджеты по адресу
+ * в тот раз.
  */
 void lv_obj_set_name_static(lv_obj_t * obj, const char * name);
 
 /**
- * Get the set name as it was set.
- * @param obj       pointer to an object
- * @return          get the set name or NULL if it wasn't set yet
+ * Получите имя набора в том виде, в каком оно было установлено.
+ * @param obj       указатель на объект
+ * @return          получите имя набора или NULL, если оно еще не установлено
  */
 const char * lv_obj_get_name(const lv_obj_t * obj);
 
 /**
- * Get the set name or craft a name automatically.
- * @param obj       pointer to an object
- * @param buf       buffer to store the name
- * @param buf_size  the size of the buffer in bytes
- * @note If the name ends with a `#`, older siblings with the same name
- * will be counted, and the `#` will be replaced by the index of the
- * given widget. For example, creating multiple widgets with the name
- * "mybtn_#" will result in resolved names like "mybtn_0", "mybtn_1",
- * "mybtn_2", etc.  The name is resolved when `lv_obj_get_name_resolved`
- * is called, so the result reflects the currently existing widgets at
- * that time.
+ * Получите имя набора или создайте имя автоматически.
+ * @param obj       указатель на объект
+ * @param buf       буфер для хранения имени
+ * @param buf_size  размер буфера в байтах
+ * @note Если имя заканчивается на `#`, старшие братья и сестры с таким же именем
+ * будет учитываться, а `#` будет заменен индексом
+ * данный виджет. Например, создание нескольких виджетов с именем
+ * «mybtn_#» связана с разрешенными именами, например «mybtn_0», «mybtn_1»,
+ * «mybtn_2» и т. д. д. Имя разрешено, когда `lv_obj_get_name_resolved`
+ * вызывается, поэтому результат отражает существующие в данный момент виджеты по адресу
+ * в тот раз.
  */
 void lv_obj_get_name_resolved(const lv_obj_t * obj, char buf[], size_t buf_size);
 
 /**
- * Find a child with a given name on a parent. This child doesn't have to be the
- * direct child of the parent. First direct children of the parent will be checked,
- * and the direct children of the first child, etc. (Breadth-first search).
+ * Найдите ребенка с заданным именем у родителя. Этот ребенок не обязательно должен быть
+ * прямой ребенок родителя. Сначала будут проверены прямые дочерние элементы родителя,
+ * и прямые дочерние элементы первого дочернего элемента и т. д. (поиск в ширину).
  *
- * If the name of a widget was not set a name like "lv_button_1" will
- * be created for it using `lv_obj_get_name_resolved`.
+ * Если имя виджета не было установлено, будет указано имя типа «lv_button_1».
+ * быть создан для него с помощью `lv_obj_get_name_resolved`.
  *
- * @param parent        the widget where the search should start
- * @return              the found widget or NULL if not found.
+ * @param parent        виджет, с которого должен начаться поиск
+ * @return              найденный виджет или NULL, если не найден.
  */
 lv_obj_t * lv_obj_find_by_name(const lv_obj_t * parent, const char * name);
 
 /**
- * Get an object by name. The name can be a path too, for example
- * "main_container/lv_button_1/label".
- * In this case the first part of the name-path should be the direct child of the parent,
- * the second part, should the direct child of first one, etc.
+ * Получить объект по имени. Имя также может быть путем, например
+ * «main_container /lv_button_1/метка».
+ * В этом случае первая часть пути имени должна быть прямым дочерним элементом родительского элемента.
+ * вторая часть должна быть прямым дочерним элементом первой и т. д.
  *
- * If the name of a widget was not set a name like "lv_button_1" will
- * be created for it using `lv_obj_get_name_resolved`.
+ * Если имя виджета не было установлено, будет указано имя типа «lv_button_1».
+ * быть создан для него с помощью `lv_obj_get_name_resolved`.
  *
- * @param parent        the widget where the search should start
- * @return              the found widget or NULL if not found.
+ * @param parent        виджет, с которого должен начаться поиск
+ * @return              найденный виджет или NULL, если не найден.
  */
 lv_obj_t * lv_obj_get_child_by_name(const lv_obj_t * parent, const char * name_path);
 
 #endif /*LV_USE_OBJ_NAME*/
 
 /**
- * Get the index of a child.
- * @param obj       pointer to an object
- * @return          the child index of the object.
- *                  E.g. 0: the oldest (firstly created child).
- *                  (-1 if child could not be found or no parent exists)
+ * Получите индекс ребенка.
+ * @param obj       указатель на объект
+ * @return          дочерний индекс объекта.
+ *                  например 0: самый старый (первый созданный дочерний элемент).
+ *                  (-1, если дочерний элемент не найден или родительский элемент не существует)
  */
 int32_t lv_obj_get_index(const lv_obj_t * obj);
 
 /**
- * Get the index of a child. Consider the children only with a given type.
- * @param obj       pointer to an object
- * @param class_p   the type of the children to check
- * @return          the child index of the object.
- *                  E.g. 0: the oldest (firstly created child with the given class).
- *                  (-1 if child could not be found or no parent exists)
+ * Получите индекс ребенка. Рассмотрим детей только с данным типом.
+ * @param obj       указатель на объект
+ * @param class_p   тип детей, которых нужно проверить
+ * @return          дочерний индекс объекта.
+ *                  например 0: самый старый (первый созданный дочерний элемент данного класса).
+ *                  (-1, если дочерний элемент не найден или родительский элемент не существует)
  */
 int32_t lv_obj_get_index_by_type(const lv_obj_t * obj, const lv_obj_class_t * class_p);
 
 /**
- * Iterate through all children of any object.
- * @param start_obj     start integrating from this object
- * @param cb            call this callback on the objects
- * @param user_data     pointer to any user related data (will be passed to `cb`)
+ * Перебрать всех дочерних элементов любого объекта.
+ * @param start_obj     начать интеграцию с этого объекта
+ * @param cb            вызовите этот обратный вызов для объектов
+ * @param user_data     указатель на любые данные, связанные с пользователем (будет передан`cb`)
  */
 void lv_obj_tree_walk(lv_obj_t * start_obj, lv_obj_tree_walk_cb_t cb, void * user_data);
 
 /**
- * Iterate through all children of any object and print their ID.
- * @param start_obj     start integrating from this object
+ * Переберите все дочерние элементы любого объекта и выведите их ID.
+ * @param start_obj     начать интеграцию с этого объекта
  */
 void lv_obj_dump_tree(lv_obj_t * start_obj);
 
@@ -315,7 +315,7 @@ void lv_obj_dump_tree(lv_obj_t * start_obj);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_TREE_H*/

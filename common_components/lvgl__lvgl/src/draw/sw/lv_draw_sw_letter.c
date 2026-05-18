@@ -39,8 +39,8 @@
 #if LV_USE_FREETYPE && LV_USE_VECTOR_GRAPHIC && LV_USE_THORVG
 
 typedef struct {
-    lv_vector_path_t * inside_path;     /*The regular glyph*/
-    lv_vector_path_t * outside_path;    /*A bigger glyph that goes in the background for the letter outline*/
+    lv_vector_path_t * inside_path;     /*Обычный глиф*/
+    lv_vector_path_t * outside_path;    /*Более крупный глиф, идущий на заднем плане для контура буквы.*/
     lv_vector_path_t * cur_path;
 } lv_draw_sw_letter_outlines_t;
 
@@ -134,7 +134,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_letter_cb(lv_draw_task_t * t, lv_draw_gly
             case LV_FONT_GLYPH_FORMAT_NONE: {
 #if LV_USE_FONT_PLACEHOLDER
                     if(glyph_draw_dsc->bg_coords == NULL) break;
-                    /* Draw a placeholder rectangle*/
+                    /* Нарисуйте прямоугольник-заполнитель*/
                     lv_draw_border_dsc_t border_draw_dsc;
                     lv_draw_border_dsc_init(&border_draw_dsc);
                     border_draw_dsc.opa = glyph_draw_dsc->opa;
@@ -227,8 +227,8 @@ static void LV_ATTRIBUTE_FAST_MEM draw_letter_cb(lv_draw_task_t * t, lv_draw_gly
 #if LV_USE_FREETYPE && LV_USE_VECTOR_GRAPHIC && LV_USE_THORVG
 
 /*
- * Renders the vectors paths representing a glyph with ThorVG
- * the result is then blended into the draw buffer
+ * Рендерит векторные пути, представляющие глиф, с помощью ThorVG.
+ * результат затем смешивается с буфером отрисовки
  */
 static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_dsc)
 {
@@ -282,13 +282,13 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
     offset_x = (int32_t)((float) glyph_dsc->g->ofs_x - glyph_dsc->outline_stroke_width * scale);
     offset_y = (int32_t)((float) glyph_dsc->g->ofs_y - glyph_dsc->outline_stroke_width * scale);
 
-    /*Invert Y-Axis - Freetype's origin point is in the bottom left corner*/
+    /*Инвертировать ось Y — исходная точка Freetype находится в левом нижнем углу.*/
     lv_matrix_scale(&matrix, 1, -1);
     lv_matrix_translate(&matrix, -offset_x, -h - offset_y);
     lv_matrix_scale(&matrix, scale, scale);
     lv_draw_vector_dsc_set_transform(vector_dsc, &matrix);
 
-    /*Set attributes color, line width etc*/
+    /*Установите цвет атрибутов, толщину линии и т. д.*/
     if(cf == LV_COLOR_FORMAT_ARGB8888) {
 
         if(glyph_dsc->outline_stroke_width > 0) {
@@ -309,14 +309,14 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
     lv_area_t old_area;
     lv_area_t letter_coords;
 
-    /*Render vector path(s) - set the clip area so that it matches
-     *the size of the temporary buffer used to render the glyph path(s)*/
+    /*Векторные пути рендеринга — установите область обрезки так, чтобы она совпадала
+     *размер временного буфера, используемого для рендеринга пути(ов) глифа*/
     lv_memcpy(&old_area, &t->clip_area, sizeof(lv_area_t));
     lv_memcpy(&t->clip_area, &buf_area, sizeof(lv_area_t));
 
-    /*Can't call lv_draw_vector() as it would create a new draw task while
-     *the main thread also can create draw tasks. So create a dummy draw task
-     *manually to draw the outline*/
+    /*Невозможно вызвать lv_draw_vector(), так как при этом будет создана новая задача рисования.
+     *основной поток также может создавать задачи рисования. Итак, создайте фиктивную задачу рисования.
+     *вручную, чтобы нарисовать контур*/
     if(vector_dsc->task_list) {
         vector_dsc->base.layer = vector_dsc->base.layer;
         lv_draw_task_t dummy_t;
@@ -330,7 +330,7 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
         lv_draw_sw_vector(&dummy_t, dummy_t.draw_dsc);
     }
 
-    /*Restore previous draw area of the entire text label*/
+    /*Восстановить предыдущую область рисования всей текстовой метки*/
     lv_memcpy(&t->clip_area, &old_area, sizeof(lv_area_t));
 
     lv_memcpy(&letter_coords, glyph_dsc->letter_coords, sizeof(lv_area_t));
@@ -352,8 +352,8 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
 
 }
 
-/* Build the inside and outside vector paths for a glyph based
- * on the received outline events emitted by lv_freetype_outline.c */
+/* Постройте внутренние и внешние векторные пути для глифа.
+ * о полученных событиях структуры, излучаемых lv_freetype_outline.c */
 static void freetype_outline_event_cb(lv_event_t * e)
 {
 
@@ -398,7 +398,7 @@ static void freetype_outline_event_cb(lv_event_t * e)
     }
     else if(outline_event->type == LV_FREETYPE_OUTLINE_BORDER_START) {
 
-        /* Inside path is done - create the border path */
+        /* Внутренний путь готов — создайте граничный путь. */
         lv_vector_path_close(glyph_paths->cur_path);
         glyph_paths->cur_path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_HIGH);
         glyph_paths->outside_path = glyph_paths->cur_path;
@@ -432,8 +432,8 @@ static void freetype_outline_event_cb(lv_event_t * e)
             break;
         case LV_FREETYPE_OUTLINE_END:
         case LV_FREETYPE_OUTLINE_BORDER_START:
-            /* It's not necessary to close the path and
-             * border start is handled above
+            /* Не обязательно закрывать путь и
+             * начало границы обрабатывается выше
              */
             break;
     }

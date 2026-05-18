@@ -26,13 +26,13 @@
  **********************/
 
 typedef struct _x11_inp_data {
-    /* LVGL related information */
+    /* Информация, связанная с LVGL */
     lv_group_t * inp_group;      /**< input group for X input elements */
     lv_indev_t * keyboard;       /**< keyboard input device object */
     lv_indev_t * mousepointer;   /**< mouse input device object */
     lv_indev_t * mousewheel;     /**< encoder input device object */
     lv_timer_t * timer;          /**< timer object for @ref x11_event_handler */
-    /* user input related information */
+    /* информация, связанная с пользовательским вводом */
     char         kb_buffer[32];   /**< keyboard buffer for X keyboard inputs */
     lv_point_t   mouse_pos;       /**< current reported mouse position */
     bool         left_mouse_btn;  /**< current state of left mouse button */
@@ -54,7 +54,7 @@ typedef struct _x11_inp_data {
  **********************/
 
 /**
- * X11 input event handler, predicated to fetch and handle only input related events
+ * Обработчик событий ввода X11, предназначенный для извлечения и обработки только событий, связанных с вводом.
  * (MotionNotify, ButtonPress/Release, KeyPress/Release)
  */
 static int is_inp_event(Display * disp, XEvent * event, XPointer arg)
@@ -62,7 +62,7 @@ static int is_inp_event(Display * disp, XEvent * event, XPointer arg)
     LV_UNUSED(disp);
     LV_UNUSED(arg);
     return !(event->type == Expose
-             || (event->type >= DestroyNotify && event->type <= CirculateNotify) /* events from StructureNotifyMask */
+             || (event->type >= DestroyNotify && event->type <= CirculateNotify) /* события из StructureNotifyMask */
              ||  event->type == ClientMessage);
 }
 static void x11_inp_event_handler(lv_timer_t * t)
@@ -71,7 +71,7 @@ static void x11_inp_event_handler(lv_timer_t * t)
     _x11_user_hdr_t * disp_hdr = lv_display_get_driver_data(disp);
     x11_inp_data_t * xd = disp_hdr->inp_data;
 
-    /* handle all outstanding X events */
+    /* обрабатывать все невыполненные события X */
     XEvent event;
     while(XCheckIfEvent(disp_hdr->display, &event, is_inp_event, NULL)) {
         LV_LOG_TRACE("Input Event %d", event.type);
@@ -91,10 +91,10 @@ static void x11_inp_event_handler(lv_timer_t * t)
                     case Button3:
                         xd->right_mouse_btn = true;
                         break;
-                    case Button4: /* Scrolled up */
+                    case Button4: /* Прокрутил вверх */
                         xd->wheel_cnt--;
                         break;
-                    case Button5: /* Scrolled down */
+                    case Button5: /* Прокрутил вниз */
                         xd->wheel_cnt++;
                         break;
                     default:
@@ -116,7 +116,7 @@ static void x11_inp_event_handler(lv_timer_t * t)
                 break;
             case KeyPress: {
                     size_t len = strlen(xd->kb_buffer);
-                    if(len < (sizeof(xd->kb_buffer) - 2 /* space for 1 char + '\0' */)) {
+                    if(len < (sizeof(xd->kb_buffer) - 2 /* место для 1 символа + '\0' */)) {
                         KeySym key;
                         int n = XLookupString(&event.xkey, &xd->kb_buffer[len], sizeof(xd->kb_buffer) - (len + 1), &key, NULL);
                         n += !!key;
@@ -180,8 +180,8 @@ static void x11_inp_event_handler(lv_timer_t * t)
 }
 
 /**
- * event called by lvgl display if display has been closed (@ref lv_display_delete has been called)
- * @param[in] e  event data, containing lv_display_t object
+ * событие, вызываемое lvgl display, если дисплей был закрыт (был вызван @ref lv_display_delete)
+ * @param [in] данные события, содержащие объект lv_display_t
  */
 static void x11_inp_delete_evt_cb(lv_event_t * e)
 {
@@ -192,9 +192,9 @@ static void x11_inp_delete_evt_cb(lv_event_t * e)
 }
 
 /**
- * create the local data/timers for the X11 input functionality.
- * extracts the user data information from lv_display_t object and initializes the input user object on 1st use.
- * @param[in] disp   the created X11 display object from @lv_x11_window_create
+ * создайте локальные данные/таймеры для функции ввода X11.
+ * извлекает информацию о пользовательских данных из объекта lv_display_t и инициализирует входной пользовательский объект при первом использовании.
+ * @param [in] отображает созданный экранный объект X11 из @lv_x 11_window_create
  * @return           pointer to the local user data object @x11_inp_data_t
  */
 static x11_inp_data_t * x11_input_get_user_data(lv_display_t * disp)
@@ -203,12 +203,12 @@ static x11_inp_data_t * x11_input_get_user_data(lv_display_t * disp)
     LV_ASSERT_NULL(disp_hdr);
     x11_inp_data_t ** inp_data = &disp_hdr->inp_data;
 
-    /* create input data set if initial call */
+    /* создать набор входных данных при первоначальном вызове */
     if(NULL == *inp_data) {
         *inp_data = lv_malloc_zeroed(sizeof(x11_inp_data_t));
         LV_ASSERT_MALLOC(*inp_data);
         if(NULL != *inp_data) {
-            /* initialize timer callback for X11 kb/mouse input event reading */
+            /* инициализировать обратный вызов таймера для чтения событий ввода КБ/мыши X11 */
             (*inp_data)->timer = lv_timer_create(x11_inp_event_handler, 1, disp);
             lv_display_add_event_cb(disp, x11_inp_delete_evt_cb, LV_EVENT_DELETE, *inp_data);
         }
@@ -278,7 +278,7 @@ static lv_indev_t * lv_x11_mouse_create(lv_display_t * disp, lv_image_dsc_t cons
         lv_indev_set_read_cb(indev, x11_mouse_read_cb);
         lv_indev_set_driver_data(indev, disp);
 
-        /* optional mouse cursor symbol */
+        /* дополнительный символ курсора мыши */
         if(NULL != symb) {
             lv_obj_t * mouse_cursor = lv_image_create(lv_screen_active());
             lv_image_set_src(mouse_cursor, symb);

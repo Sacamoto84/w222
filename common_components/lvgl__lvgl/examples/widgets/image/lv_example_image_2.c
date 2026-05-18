@@ -8,11 +8,11 @@ static lv_obj_t * red_slider, * green_slider, * blue_slider, * intense_slider;
 static lv_obj_t * img1;
 
 /**
- * Demonstrate runtime image re-coloring
+ * Демонстрация перекраски изображения во время выполнения
  */
 void lv_example_image_2(void)
 {
-    /*Create 4 sliders to adjust RGB color and re-color intensity*/
+    /*Создайте 4 ползунка для настройки цвета RGB и интенсивности изменения цвета.*/
     red_slider = create_slider(lv_palette_main(LV_PALETTE_RED));
     green_slider = create_slider(lv_palette_main(LV_PALETTE_GREEN));
     blue_slider = create_slider(lv_palette_main(LV_PALETTE_BLUE));
@@ -28,7 +28,7 @@ void lv_example_image_2(void)
     lv_obj_align_to(blue_slider, green_slider, LV_ALIGN_OUT_RIGHT_MID, 25, 0);
     lv_obj_align_to(intense_slider, blue_slider, LV_ALIGN_OUT_RIGHT_MID, 25, 0);
 
-    /*Now create the actual image*/
+    /*Теперь создайте фактическое изображение*/
     LV_IMAGE_DECLARE(img_cogwheel_argb);
     img1 = lv_image_create(lv_screen_active());
     lv_image_set_src(img1, &img_cogwheel_argb);
@@ -41,7 +41,7 @@ static void slider_event_cb(lv_event_t * e)
 {
     LV_UNUSED(e);
 
-    /*Recolor the image based on the sliders' values*/
+    /*Перекрасьте изображение на основе значений ползунков*/
     lv_color_t color  = lv_color_make((uint8_t)lv_slider_get_value(red_slider),
                                       (uint8_t)lv_slider_get_value(green_slider),
                                       (uint8_t)lv_slider_get_value(blue_slider));

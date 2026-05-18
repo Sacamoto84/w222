@@ -40,19 +40,19 @@ void tearDown(void)
     lv_obj_clean(active_screen);
 }
 
-/* See issue #3559 for more info */
+/* Дополнительную информацию см. в выпуске № 3559. */
 void test_spinbox_decrement_when_min_range_is_negative(void)
 {
-    /* Current spinbox value is 2 */
+    /* Текущее значение счетчика равно 2. */
     const int32_t expected_value = -11;
     lv_spinbox_set_value(spinbox_negative_min_range, 2);
 
-    /* Change cursor position of spinbox to 10 */
+    /* Измените положение курсора счетчика на 10. */
     lv_spinbox_set_cursor_pos(spinbox_negative_min_range, SPINBOX_DECIMAL_POSITION);
     lv_spinbox_decrement(spinbox_negative_min_range);
     lv_spinbox_decrement(spinbox_negative_min_range);
 
-    /* We expect value now being -11 */
+    /* Мы ожидаем, что значение теперь будет -11. */
     int32_t actual_value = lv_spinbox_get_value(spinbox_negative_min_range);
 
     TEST_ASSERT_EQUAL_INT32(expected_value, actual_value);
@@ -60,16 +60,16 @@ void test_spinbox_decrement_when_min_range_is_negative(void)
 
 void test_spinbox_decrement_when_min_range_is_zero(void)
 {
-    /* Current spinbox value is 2 */
+    /* Текущее значение счетчика равно 2. */
     const int32_t expected_value = 0;
     lv_spinbox_set_value(spinbox_zero_min_range, 2);
 
-    /* Change cursor position of spinbox to 10 */
+    /* Измените положение курсора счетчика на 10. */
     lv_spinbox_set_cursor_pos(spinbox_zero_min_range, SPINBOX_DECIMAL_POSITION);
     lv_spinbox_decrement(spinbox_zero_min_range);
     lv_spinbox_decrement(spinbox_zero_min_range);
 
-    /* We expect value now being 0 */
+    /* Мы ожидаем, что значение теперь равно 0 */
     int32_t actual_value = lv_spinbox_get_value(spinbox_zero_min_range);
 
     TEST_ASSERT_EQUAL_INT32(expected_value, actual_value);
@@ -77,15 +77,15 @@ void test_spinbox_decrement_when_min_range_is_zero(void)
 
 void test_spinbox_position_selection(void)
 {
-    /* Assert step is 1 when selecting the lowest possible position */
+    /* Шаг подтверждения равен 1 при выборе минимально возможной позиции. */
     lv_spinbox_set_cursor_pos(spinbox_zero_min_range, 0);
     TEST_ASSERT_EQUAL(1, lv_spinbox_get_step(spinbox_zero_min_range));
 
-    /* The other branch in the if */
+    /* Другая ветвь в if */
     lv_spinbox_set_cursor_pos(spinbox_zero_min_range, 1);
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(spinbox_zero_min_range));
 
-    /* When not possible to select the indicated position */
+    /* Когда невозможно выбрать указанную позицию */
     lv_obj_t * tmp;
     tmp = lv_spinbox_create(active_screen);
     lv_spinbox_set_range(tmp, 0, 10);
@@ -104,12 +104,12 @@ void test_spinbox_set_range(void)
     lv_spinbox_set_range(tmp, 0, 100);
     lv_spinbox_set_value(tmp, 50);
 
-    /* Validate value gets updated when range_max is smaller */
+    /* Значение проверки обновляется, когда range_max меньше. */
     lv_spinbox_set_range(tmp, 0, range_max);
 
     TEST_ASSERT_EQUAL(range_max, lv_spinbox_get_value(tmp));
 
-    /* Validate value gets updated when range_min is bigger */
+    /* Значение проверки обновляется, когда range_min больше. */
     lv_spinbox_set_value(tmp, 5);
     lv_spinbox_set_range(tmp, range_min, range_max);
 
@@ -122,19 +122,19 @@ void test_spinbox_step_prev(void)
 {
     lv_obj_t * tmp = lv_spinbox_create(active_screen);
 
-    /* When next step is bigger than biggest range */
+    /* Когда следующий шаг превышает самый большой диапазон */
     lv_spinbox_set_range(tmp, 0, 5);
     lv_spinbox_step_prev(tmp);
     TEST_ASSERT_EQUAL(1, lv_spinbox_get_step(tmp));
 
     lv_spinbox_step_next(tmp);
-    /* When next step is smaller than range_max */
+    /* Когда следующий шаг меньше range_max */
     lv_spinbox_set_range(tmp, 0, 20);
     lv_spinbox_step_prev(tmp);
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(tmp));
 
     lv_spinbox_step_next(tmp);
-    /* When next step is smaller than abs(range_min) */
+    /* Когда следующий шаг меньше абс ( range_min ) */
     lv_spinbox_set_range(tmp, -25, 5);
     lv_spinbox_step_prev(tmp);
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(tmp));
@@ -157,27 +157,27 @@ void test_spinbox_rollover(void)
 
 void test_spinbox_event_key(void)
 {
-    /* Spinbox should increment it's value by one after receiving the LV_KEY_UP event */
+    /* Spinbox должен увеличить свое значение на единицу после получения события LV_KEY_UP. */
     lv_spinbox_set_value(spinbox_events, 0);
     uint32_t key = LV_KEY_UP;
     lv_obj_send_event(spinbox_events, LV_EVENT_KEY, (void *) &key);
 
     TEST_ASSERT_EQUAL(1, lv_spinbox_get_value(spinbox_events));
 
-    /* Spinbox should decrement it's value by one after receiving the LV_KEY_DOWN event */
+    /* Spinbox должен уменьшить свое значение на единицу после получения события LV_KEY_DOWN. */
     key = LV_KEY_DOWN;
     lv_obj_send_event(spinbox_events, LV_EVENT_KEY, (void *) &key);
 
     TEST_ASSERT_EQUAL(0, lv_spinbox_get_value(spinbox_events));
 
-    /* Spinbox should multiply it's step vale by 10 after receiving the LV_KEY_LEFT event */
+    /* Spinbox должен умножить значение шага на 10 после получения события LV_KEY_LEFT. */
     int32_t step = lv_spinbox_get_step(spinbox_events);
     key = LV_KEY_LEFT;
     lv_obj_send_event(spinbox_events, LV_EVENT_KEY, (void *) &key);
 
     TEST_ASSERT_EQUAL(step * 10, lv_spinbox_get_step(spinbox_events));
 
-    /* Spinbox should divide it's step vale by 10 after receiving the LV_KEY_RIGHT event */
+    /* Spinbox должен разделить значение шага на 10 после получения события LV_KEY_RIGHT. */
     step = lv_spinbox_get_step(spinbox_events);
     key = LV_KEY_RIGHT;
     lv_obj_send_event(spinbox_events, LV_EVENT_KEY, (void *) &key);
@@ -187,10 +187,10 @@ void test_spinbox_event_key(void)
 
 void test_spinbox_event_key_encoder_indev_turn_right(void)
 {
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, spinbox_events);
 
-    /* Spinbox should increment it's value by one step after receiving the LV_KEY_UP event */
+    /* Spinbox должен увеличить свое значение на один шаг после получения события LV_KEY_UP. */
     lv_spinbox_set_value(spinbox_events, 0);
 
     lv_test_encoder_click();
@@ -202,10 +202,10 @@ void test_spinbox_event_key_encoder_indev_turn_right(void)
 void test_spinbox_event_key_encoder_indev_turn_left(void)
 {
     int32_t value = 10;
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, spinbox_events);
 
-    /* Spinbox should decrement it's value by one step after receiving the LV_KEY_UP event */
+    /* Spinbox должен уменьшить свое значение на один шаг после получения события LV_KEY_UP. */
     lv_spinbox_set_value(spinbox_events, value);
     lv_spinbox_set_cursor_pos(spinbox_events, 0);
 
@@ -217,7 +217,7 @@ void test_spinbox_event_key_encoder_indev_turn_left(void)
 void test_spinbox_event_key_encoder_indev_editing_group(void)
 {
     int32_t value = 10;
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_spinbox_set_range(spinbox_events, 0, 20);
     lv_group_add_obj(g, spinbox_events);
     lv_group_set_editing(g, true);
@@ -228,24 +228,24 @@ void test_spinbox_event_key_encoder_indev_editing_group(void)
     lv_test_encoder_click();
     lv_test_encoder_turn(-1);
     TEST_ASSERT_EQUAL(0, lv_spinbox_get_value(spinbox_events));
-    /* digit_count is 5, so we expect to be in the position of the MSB digit */
+    /* digit_count равен 5, поэтому мы ожидаем, что он будет находиться в позиции цифры MSB. */
     TEST_ASSERT_EQUAL(1000, lv_spinbox_get_step(spinbox_events));
 
-    /* Test with digit_count == 1 */
+    /* Тест с digit_count == 1 */
     lv_spinbox_set_digit_format(spinbox_events, 1, 2);
     lv_spinbox_set_cursor_pos(spinbox_events, 0);
 
     lv_test_encoder_click();
     lv_test_encoder_turn(-1);
     TEST_ASSERT_EQUAL(0, lv_spinbox_get_value(spinbox_events));
-    /* digit_count is 1, so we expect to be in the same position */
+    /* digit_count равен 1, поэтому мы ожидаем, что окажемся в той же позиции. */
     TEST_ASSERT_EQUAL(1, lv_spinbox_get_step(spinbox_events));
 }
 
 void test_spinbox_event_key_encoder_indev_editing_group_left_step_direction(void)
 {
     int32_t value = 10;
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_spinbox_set_digit_step_direction(spinbox_events, LV_DIR_LEFT);
     lv_spinbox_set_range(spinbox_events, 0, 20);
     lv_group_add_obj(g, spinbox_events);
@@ -257,17 +257,17 @@ void test_spinbox_event_key_encoder_indev_editing_group_left_step_direction(void
     lv_test_encoder_click();
     lv_test_encoder_turn(-1);
     TEST_ASSERT_EQUAL(0, lv_spinbox_get_value(spinbox_events));
-    /* digit_count is 5, we expect to be in the position next to the left */
+    /* digit_count равен 5, мы ожидаем, что окажемся в позиции слева */
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(spinbox_events));
 
-    /* Test with digit_count == 1 */
+    /* Тест с digit_count == 1 */
     lv_spinbox_set_digit_format(spinbox_events, 2, 2);
     lv_spinbox_set_cursor_pos(spinbox_events, 1);
 
     lv_test_encoder_click();
     lv_test_encoder_turn(-1);
     TEST_ASSERT_EQUAL(0, lv_spinbox_get_value(spinbox_events));
-    /* digit_count is 1, so we expect to be in the same position */
+    /* digit_count равен 1, поэтому мы ожидаем, что окажемся в той же позиции. */
     TEST_ASSERT_EQUAL(1, lv_spinbox_get_step(spinbox_events));
 }
 
@@ -276,7 +276,7 @@ void test_spinbox_event_release(void)
     lv_spinbox_set_value(spinbox_events, 0);
     lv_spinbox_set_digit_format(spinbox_events, 5, 2);
 
-    /* Set cursor in least significant decimal digit */
+    /* Установить курсор в наименее значащую десятичную цифру */
     lv_spinbox_set_cursor_pos(spinbox_events, 0);
     lv_obj_send_event(spinbox_events, LV_EVENT_RELEASED, NULL);
 
@@ -286,7 +286,7 @@ void test_spinbox_event_release(void)
 void test_spinbox_zero_crossing(void)
 {
     int32_t value = -13;
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_spinbox_set_digit_step_direction(spinbox_events, LV_DIR_LEFT);
     lv_spinbox_set_range(spinbox_events, -20, 20);
     lv_group_add_obj(g, spinbox_events);
@@ -353,7 +353,7 @@ void test_spinbox_properties(void)
     prop.id = LV_PROPERTY_SPINBOX_DIGIT_STEP_DIRECTION;
     TEST_ASSERT_EQUAL_INT(LV_DIR_LEFT, lv_obj_get_property(spinbox, prop.id).num);
 
-    /* Test setter */
+    /* Наладчик тестов */
     prop.id = LV_PROPERTY_SPINBOX_VALUE;
     prop.num = 75;
     TEST_ASSERT_TRUE(lv_obj_set_property(spinbox, &prop) == LV_RESULT_OK);

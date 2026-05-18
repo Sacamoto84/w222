@@ -10,8 +10,8 @@
 
 #if LV_USE_SPINNER
 /**
- * Spinner widget property names, name must be in order.
- * Generated code from properties.py
+ * Имена свойств виджета Spinner, имя должно быть в порядке.
+ * Сгенерированный код из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_spinner_property_names[2] = {

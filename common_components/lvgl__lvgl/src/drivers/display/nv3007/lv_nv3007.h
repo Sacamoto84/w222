@@ -1,7 +1,7 @@
 /**
  * @file lv_nv3007.h
  *
- * This driver is just a wrapper around the generic MIPI compatible LCD controller driver
+ * Этот драйвер представляет собой всего лишь оболочку универсального драйвера контроллера LCD, совместимого с MIPI.
  *
  */
 
@@ -36,7 +36,7 @@ typedef lv_lcd_send_color_cb_t lv_nv3007_send_color_cb_t;
  **********************/
 
 /**
- * Create an LCD display with NV3007 driver
+ * Создайте дисплей LCD с помощью драйвера NV3007.
  * @param hor_res       horizontal resolution
  * @param ver_res       vertical resolution
  * @param flags         default configuration settings (mirror, RGB ordering, etc.)
@@ -48,7 +48,7 @@ lv_display_t * lv_nv3007_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_
                                 lv_nv3007_send_cmd_cb_t send_cmd_cb, lv_nv3007_send_color_cb_t send_color_cb);
 
 /**
- * Set gap, i.e., the offset of the (0,0) pixel in the VRAM
+ * Установите зазор, то есть смещение пикселя (0,0) в VRAM.
  * @param disp          display object
  * @param x             x offset
  * @param y             y offset
@@ -56,21 +56,21 @@ lv_display_t * lv_nv3007_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_
 void lv_nv3007_set_gap(lv_display_t * disp, uint16_t x, uint16_t y);
 
 /**
- * Set color inversion
+ * Установить инверсию цвета
  * @param disp          display object
  * @param invert        false: normal, true: invert
  */
 void lv_nv3007_set_invert(lv_display_t * disp, bool invert);
 
 /**
- * Set gamma curve
+ * Установить гамма-кривую
  * @param disp          display object
  * @param gamma         gamma curve
  */
 void lv_nv3007_set_gamma_curve(lv_display_t * disp, uint8_t gamma);
 
 /**
- * Send list of commands.
+ * Отправить список команд.
  * @param disp          display object
  * @param cmd_list      controller and panel-specific commands
  */
@@ -88,7 +88,7 @@ void lv_nv3007_send_cmd_list(lv_display_t * disp, const uint8_t * cmd_list);
 #endif /*LV_USE_NV3007*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_NV3007_H*/

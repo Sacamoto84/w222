@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -34,7 +34,7 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static bool _buildComposition(LottieComposition* comp, LottieLayer* parent);
@@ -128,8 +128,8 @@ static bool _updateTransform(LottieTransform* transform, float frameNo, bool aut
 
     auto skewAngle = transform->skewAngle(frameNo, exps);
     if (skewAngle != 0.0f) {
-        // For angles where tangent explodes, the shape degenerates into an infinitely thin line.
-        // This is handled by zeroing out the matrix due to finite numerical precision.
+        // Для углов, в которых касательная разрывается, форма вырождается в бесконечно тонкую линию.
+        // Это решается путем обнуления матрицы из-за конечной числовой точности.
         skewAngle = fmod(skewAngle, 180.0f);
         if (fabsf(skewAngle - 90.0f) < 0.01f || fabsf(skewAngle + 90.0f) < 0.01f) return false;
         _skew(&matrix, skewAngle, transform->skewAxis(frameNo, exps));
@@ -138,11 +138,11 @@ static bool _updateTransform(LottieTransform* transform, float frameNo, bool aut
     auto scale = transform->scale(frameNo, exps);
     scaleR(&matrix, scale.x * 0.01f, scale.y * 0.01f);
 
-    //Lottie specific anchor transform.
+    //Специфическое якорное преобразование Лотти.
     auto anchor = transform->anchor(frameNo, exps);
     translateR(&matrix, -anchor.x, -anchor.y);
 
-    //invisible just in case.
+    //невидимка на всякий случай.
     if (scale.x == 0.0f || scale.y == 0.0f) opacity = 0;
     else opacity = transform->opacity(frameNo, exps);
 
@@ -211,11 +211,11 @@ void LottieBuilder::updateGroup(LottieGroup* parent, LottieObject** child, float
 
     if (!group->visible) return;
 
-    //Prepare render data
+    //Подготовьте данные рендеринга
     group->scene = parent->scene;
     group->reqFragment |= ctx->reqFragment;
 
-    //generate a merging shape to consolidate partial shapes into a single entity
+    //создать объединяющуюся фигуру для объединения частичных фигур в единый объект
     if (group->mergeable()) _draw(parent, nullptr, ctx);
 
     Inlist<RenderContext> contexts;
@@ -369,7 +369,7 @@ static void _repeat(LottieGroup* parent, Shape* path, RenderContext* ctx)
         propagators.clear();
         propagators.reserve(shapes.count);
 
-        //push repeat shapes in order.
+        //нажимайте повторяющиеся фигуры по порядку.
         if (repeater->inorder) {
             for (auto shape = shapes.begin(); shape < shapes.end(); ++shape) {
                 parent->scene->push(cast(*shape));
@@ -388,7 +388,7 @@ static void _repeat(LottieGroup* parent, Shape* path, RenderContext* ctx)
 
 static void _appendRect(Shape* shape, float x, float y, float w, float h, float r, const LottieOffsetModifier* offsetPath, Matrix* transform, bool clockwise)
 {
-    //sharp rect
+    //острый прямой
     if (tvg::zero(r)) {
         PathCommand commands[] = {
             PathCommand::MoveTo, PathCommand::LineTo, PathCommand::LineTo,
@@ -415,7 +415,7 @@ static void _appendRect(Shape* shape, float x, float y, float w, float h, float 
 
         if (offsetPath) offsetPath->modifyRect(commands, 5, points, 4, P(shape)->rs.path.cmds, P(shape)->rs.path.pts);
         else shape->appendPath(commands, 5, points, 4);
-    //round rect
+    //круглый прямоугольник
     } else {
         constexpr int cmdCnt = 10;
         PathCommand commands[cmdCnt];
@@ -435,30 +435,30 @@ static void _appendRect(Shape* shape, float x, float y, float w, float h, float 
             commands[6] = PathCommand::CubicTo; commands[7] = PathCommand::LineTo; commands[8] = PathCommand::CubicTo;
             commands[9] = PathCommand::Close;
 
-            points[0] = {x + w, y + ry}; //moveTo
-            points[1] = {x + w, y + h - ry}; //lineTo
-            points[2] = {x + w, y + h - ry + hry}; points[3] = {x + w - rx + hrx, y + h}; points[4] = {x + w - rx, y + h}; //cubicTo
-            points[5] = {x + rx, y + h}, //lineTo
-            points[6] = {x + rx - hrx, y + h}; points[7] = {x, y + h - ry + hry}; points[8] = {x, y + h - ry}; //cubicTo
-            points[9] = {x, y + ry}, //lineTo
-            points[10] = {x, y + ry - hry}; points[11] = {x + rx - hrx, y}; points[12] = {x + rx, y}; //cubicTo
-            points[13] = {x + w - rx, y}; //lineTo
-            points[14] = {x + w - rx + hrx, y}; points[15] = {x + w, y + ry - hry}; points[16] = {x + w, y + ry}; //cubicTo
+            points[0] = {x + w, y + ry}; //переместитьTo
+            points[1] = {x + w, y + h - ry}; //линияTo
+            points[2] = {x + w, y + h - ry + hry}; points[3] = {x + w - rx + hrx, y + h}; points[4] = {x + w - rx, y + h}; //кубическийTo
+            points[5] = {x + rx, y + h}, //линияTo
+            points[6] = {x + rx - hrx, y + h}; points[7] = {x, y + h - ry + hry}; points[8] = {x, y + h - ry}; //кубическийTo
+            points[9] = {x, y + ry}, //линияTo
+            points[10] = {x, y + ry - hry}; points[11] = {x + rx - hrx, y}; points[12] = {x + rx, y}; //кубическийTo
+            points[13] = {x + w - rx, y}; //линияTo
+            points[14] = {x + w - rx + hrx, y}; points[15] = {x + w, y + ry - hry}; points[16] = {x + w, y + ry}; //кубическийTo
         } else {
             commands[0] = PathCommand::MoveTo; commands[1] = PathCommand::CubicTo; commands[2] = PathCommand::LineTo;
             commands[3] = PathCommand::CubicTo; commands[4] = PathCommand::LineTo; commands[5] = PathCommand::CubicTo;
             commands[6] = PathCommand::LineTo; commands[7] = PathCommand::CubicTo; commands[8] = PathCommand::LineTo;
             commands[9] = PathCommand::Close;
 
-            points[0] = {x + w, y + ry}; //moveTo
-            points[1] = {x + w, y + ry - hry}; points[2] = {x + w - rx + hrx, y}; points[3] = {x + w - rx, y}; //cubicTo
-            points[4] = {x + rx, y}, //lineTo
-            points[5] = {x + rx - hrx, y}; points[6] = {x, y + ry - hry}; points[7] = {x, y + ry}; //cubicTo
-            points[8] = {x, y + h - ry}; //lineTo
-            points[9] = {x, y + h - ry + hry}; points[10] = {x + rx - hrx, y + h}; points[11] = {x + rx, y + h}; //cubicTo
-            points[12] = {x + w - rx, y + h}; //lineTo
-            points[13] = {x + w - rx + hrx, y + h}; points[14] = {x + w, y + h - ry + hry}; points[15] = {x + w, y + h - ry}; //cubicTo
-            points[16] = {x + w, y + ry}; //lineTo
+            points[0] = {x + w, y + ry}; //переместитьTo
+            points[1] = {x + w, y + ry - hry}; points[2] = {x + w - rx + hrx, y}; points[3] = {x + w - rx, y}; //кубическийTo
+            points[4] = {x + rx, y}, //линияTo
+            points[5] = {x + rx - hrx, y}; points[6] = {x, y + ry - hry}; points[7] = {x, y + ry}; //кубическийTo
+            points[8] = {x, y + h - ry}; //линияTo
+            points[9] = {x, y + h - ry + hry}; points[10] = {x + rx - hrx, y + h}; points[11] = {x + rx, y + h}; //кубическийTo
+            points[12] = {x + w - rx, y + h}; //линияTo
+            points[13] = {x + w - rx + hrx, y + h}; points[14] = {x + w, y + h - ry + hry}; points[15] = {x + w, y + h - ry}; //кубическийTo
+            points[16] = {x + w, y + ry}; //линияTo
         }
         if (transform) {
             for (int i = 0; i < ptsCnt; i++) {
@@ -516,17 +516,17 @@ static void _appendCircle(Shape* shape, float cx, float cy, float rx, float ry, 
     Point points[ptsCnt];
 
     if (clockwise) {
-        points[0] = {cx, cy - ry}; //moveTo
-        points[1] = {cx + rxKappa, cy - ry}; points[2] = {cx + rx, cy - ryKappa}; points[3] = {cx + rx, cy}; //cubicTo
-        points[4] = {cx + rx, cy + ryKappa}; points[5] = {cx + rxKappa, cy + ry}; points[6] = {cx, cy + ry}; //cubicTo
-        points[7] = {cx - rxKappa, cy + ry}; points[8] = {cx - rx, cy + ryKappa}; points[9] = {cx - rx, cy}; //cubicTo
-        points[10] = {cx - rx, cy - ryKappa}; points[11] = {cx - rxKappa, cy - ry}; points[12] = {cx, cy - ry}; //cubicTo
+        points[0] = {cx, cy - ry}; //переместитьTo
+        points[1] = {cx + rxKappa, cy - ry}; points[2] = {cx + rx, cy - ryKappa}; points[3] = {cx + rx, cy}; //кубическийTo
+        points[4] = {cx + rx, cy + ryKappa}; points[5] = {cx + rxKappa, cy + ry}; points[6] = {cx, cy + ry}; //кубическийTo
+        points[7] = {cx - rxKappa, cy + ry}; points[8] = {cx - rx, cy + ryKappa}; points[9] = {cx - rx, cy}; //кубическийTo
+        points[10] = {cx - rx, cy - ryKappa}; points[11] = {cx - rxKappa, cy - ry}; points[12] = {cx, cy - ry}; //кубическийTo
     } else {
-        points[0] = {cx, cy - ry}; //moveTo
-        points[1] = {cx - rxKappa, cy - ry}; points[2] = {cx - rx, cy - ryKappa}; points[3] = {cx - rx, cy}; //cubicTo
-        points[4] = {cx - rx, cy + ryKappa}; points[5] = {cx - rxKappa, cy + ry}; points[6] = {cx, cy + ry}; //cubicTo
-        points[7] = {cx + rxKappa, cy + ry}; points[8] = {cx + rx, cy + ryKappa}; points[9] = {cx + rx, cy}; //cubicTo
-        points[10] = {cx + rx, cy - ryKappa}; points[11] = {cx + rxKappa, cy - ry}; points[12] = {cx, cy - ry}; //cubicTo
+        points[0] = {cx, cy - ry}; //переместитьTo
+        points[1] = {cx - rxKappa, cy - ry}; points[2] = {cx - rx, cy - ryKappa}; points[3] = {cx - rx, cy}; //кубическийTo
+        points[4] = {cx - rx, cy + ryKappa}; points[5] = {cx - rxKappa, cy + ry}; points[6] = {cx, cy + ry}; //кубическийTo
+        points[7] = {cx + rxKappa, cy + ry}; points[8] = {cx + rx, cy + ryKappa}; points[9] = {cx + rx, cy}; //кубическийTo
+        points[10] = {cx + rx, cy - ryKappa}; points[11] = {cx + rxKappa, cy - ry}; points[12] = {cx, cy - ry}; //кубическийTo
     }
 
     if (transform) {
@@ -888,7 +888,7 @@ void LottieBuilder::updateChildren(LottieGroup* parent, float frameNo, Inlist<Re
         auto ctx = contexts.front();
         ctx->reqFragment = parent->reqFragment;
         for (auto child = ctx->begin; child >= parent->children.data; --child) {
-            //Here switch-case statements are more performant than virtual methods.
+            //Здесь операторы переключения регистров более производительны, чем виртуальные методы.
             switch ((*child)->type) {
                 case LottieObject::Group: {
                     updateGroup(parent, child, frameNo, contexts, ctx);
@@ -966,7 +966,7 @@ void LottieBuilder::updatePrecomp(LottieComposition* comp, LottieLayer* precomp,
         if (!child->matteSrc) updateLayer(comp, precomp->scene, child, frameNo);
     }
 
-    //clip the layer viewport
+    //обрезать область просмотра слоя
     auto clipper = precomp->statical.pooling(true);
     clipper->transform(precomp->cache.matrix);
     precomp->scene->clip(cast(clipper));
@@ -1004,21 +1004,21 @@ void LottieBuilder::updateText(LottieLayer* layer, float frameNo)
     auto lineSpacing = 0.0f;
     auto totalLineSpacing = 0.0f;
 
-    //text string
+    //текстовая строка
     int idx = 0;
     auto totalChars = strlen(p);
     while (true) {
         //TODO: remove nested scenes.
-        //end of text, new line of the cursor position
+        //конец текста, новая строка позиции курсора
         if (*p == 13 || *p == 3 || *p == '\0') {
-            //text layout position
+            //положение макета текста
             auto ascent = text->font->ascent * scale;
             if (ascent > doc.bbox.size.y) ascent = doc.bbox.size.y;
             Point layout = {doc.bbox.pos.x, doc.bbox.pos.y + ascent - doc.shift};
 
-            //adjust the layout
-            if (doc.justify == 1) layout.x += doc.bbox.size.x - (cursor.x * scale);  //right aligned
-            else if (doc.justify == 2) layout.x += (doc.bbox.size.x * 0.5f) - (cursor.x * 0.5f * scale);  //center aligned
+            //настроить макет
+            if (doc.justify == 1) layout.x += doc.bbox.size.x - (cursor.x * scale);  //выравнивание по правому краю
+            else if (doc.justify == 2) layout.x += (doc.bbox.size.x * 0.5f) - (cursor.x * 0.5f * scale);  //по центру
 
             scene->translate(layout.x, layout.y);
             scene->scale(scale);
@@ -1031,7 +1031,7 @@ void LottieBuilder::updateText(LottieLayer* layer, float frameNo)
             totalLineSpacing += lineSpacing;
             lineSpacing = 0.0f;
 
-            //new text group, single scene for each line
+            //новая текстовая группа, одна сцена для каждой строки
             scene = Scene::gen();
             cursor.x = 0.0f;
             cursor.y = (++line * doc.height + totalLineSpacing) / scale;
@@ -1040,11 +1040,11 @@ void LottieBuilder::updateText(LottieLayer* layer, float frameNo)
 
         if (*p == ' ') ++space;
 
-        //find the glyph
+        //найди глиф
         bool found = false;
         for (auto g = text->font->chars.begin(); g < text->font->chars.end(); ++g) {
             auto glyph = *g;
-            //draw matched glyphs
+            //нарисовать совпадающие глифы
             if (!strncmp(glyph->code, p, glyph->len)) {
                 auto shape = text->pooling();
                 shape->reset();
@@ -1071,7 +1071,7 @@ void LottieBuilder::updateText(LottieLayer* layer, float frameNo)
                     auto rotation = 0.0f;
                     Point translation = {0.0f, 0.0f};
 
-                    //text range process
+                    //процесс текстового диапазона
                     for (auto s = text->ranges.begin(); s < text->ranges.end(); ++s) {
                         float start, end;
                         (*s)->range(frameNo, float(totalChars), start, end);
@@ -1117,7 +1117,7 @@ void LottieBuilder::updateText(LottieLayer* layer, float frameNo)
                 p += glyph->len;
                 idx += glyph->len;
 
-                //advance the cursor position horizontally
+                //переместить позицию курсора по горизонтали
                 cursor.x += glyph->width + doc.tracking;
 
                 found = true;
@@ -1137,7 +1137,7 @@ void LottieBuilder::updateMaskings(LottieLayer* layer, float frameNo)
 {
     if (layer->masks.count == 0) return;
 
-    //Apply the base mask
+    //Нанесите базовую маску
     auto pMask = static_cast<LottieMask*>(layer->masks[0]);
     auto pMethod = pMask->method;
     auto opacity = pMask->opacity(frameNo);
@@ -1148,7 +1148,7 @@ void LottieBuilder::updateMaskings(LottieLayer* layer, float frameNo)
     pShape->fill(255, 255, 255, opacity);
     pShape->transform(layer->cache.matrix);
 
-    //Apply Masking Expansion (Offset)
+    //Применить расширение маскировки (смещение)
     if (expand == 0.0f) {
         pMask->pathset(frameNo, P(pShape)->rs.path.cmds, P(pShape)->rs.path.pts, nullptr, nullptr, nullptr, exps);
     } else {
@@ -1159,13 +1159,13 @@ void LottieBuilder::updateMaskings(LottieLayer* layer, float frameNo)
 
     auto compMethod = (pMethod == CompositeMethod::SubtractMask || pMethod == CompositeMethod::InvAlphaMask) ? CompositeMethod::InvAlphaMask : CompositeMethod::AlphaMask;
 
-    //Cheaper. Replace the masking with a clipper
+    //Дешевле. Замените маскировку ножницами
     if (layer->masks.count == 1 && compMethod == CompositeMethod::AlphaMask && opacity == 255) {
         layer->scene->clip(tvg::cast(pShape));
         return;
     }
 
-    //Introduce an intermediate scene for embracing the matte + masking
+    //Добавьте промежуточную сцену для применения матового слоя и маскировки.
     if (layer->matteTarget) {
         auto scene = Scene::gen().release();
         scene->push(cast(layer->scene));
@@ -1174,16 +1174,16 @@ void LottieBuilder::updateMaskings(LottieLayer* layer, float frameNo)
 
     layer->scene->composite(tvg::cast(pShape), compMethod);
 
-    //Apply the subsquent masks
+    //Примените последующие маски
     for (auto m = layer->masks.begin() + 1; m < layer->masks.end(); ++m) {
         auto mask = static_cast<LottieMask*>(*m);
         auto method = mask->method;
         if (method == CompositeMethod::None) continue;
 
-        //Append the mask shape
+        //Добавьте форму маски
         if (pMethod == method && (method == CompositeMethod::SubtractMask || method == CompositeMethod::DifferenceMask)) {
             mask->pathset(frameNo, P(pShape)->rs.path.cmds, P(pShape)->rs.path.pts, nullptr, nullptr, nullptr, exps);
-        //Chain composition
+        //Цепной состав
         } else {
             auto shape = layer->pooling();
             shape->reset();
@@ -1208,7 +1208,7 @@ bool LottieBuilder::updateMatte(LottieComposition* comp, float frameNo, Scene* s
     if (target->scene) {
         layer->scene->composite(cast(target->scene), layer->matteType);
     } else if (layer->matteType == CompositeMethod::AlphaMask || layer->matteType == CompositeMethod::LumaMask) {
-        //matte target is not exist. alpha blending definitely bring an invisible result
+        //матовая цель не существует. альфа-смешение определенно дает невидимый результат
         delete(layer->scene);
         layer->scene = nullptr;
         return false;
@@ -1239,15 +1239,15 @@ void LottieBuilder::updateLayer(LottieComposition* comp, Scene* scene, LottieLay
 {
     layer->scene = nullptr;
 
-    //visibility
+    //видимость
     if (frameNo < layer->inFrame || frameNo >= layer->outFrame) return;
 
     updateTransform(layer, frameNo);
 
-    //full transparent scene. no need to perform
+    //полная прозрачная сцена. нет необходимости выполнять
     if (layer->type != LottieLayer::Null && layer->cache.opacity == 0) return;
 
-    //Prepare render data
+    //Подготовьте данные рендеринга
     layer->scene = Scene::gen().release();
     layer->scene->id = layer->id;
 
@@ -1292,7 +1292,7 @@ void LottieBuilder::updateLayer(LottieComposition* comp, Scene* scene, LottieLay
 
     updateEffect(layer, frameNo);
 
-    //the given matte source was composited by the target earlier.
+    //данный источник мата был ранее скомпонован с помощью цели.
     if (!layer->matteSrc) scene->push(cast(layer->scene));
 }
 
@@ -1368,28 +1368,28 @@ static bool _buildComposition(LottieComposition* comp, LottieLayer* parent)
     for (auto c = parent->children.begin(); c < parent->children.end(); ++c) {
         auto child = static_cast<LottieLayer*>(*c);
 
-        //attach the precomp layer.
+        //прикрепите слой предварительной компоновки.
         if (child->rid) _buildReference(comp, child);
 
         if (child->matteType != CompositeMethod::None) {
-            //no index of the matte layer is provided: the layer above is used as the matte source
+            //индекс слоя подложки не указан: слой выше используется в качестве источника подложки
             if (child->mid == -1) {
                 if (c > parent->children.begin()) {
                     child->matteTarget = static_cast<LottieLayer*>(*(c - 1));
                 }
-            //matte layer is specified by an index.
+            //Слой подложки задается индексом.
             } else child->matteTarget = parent->layerByIdx(child->mid);
         }
 
         if (child->matteTarget) {
-            //parenting
+            //воспитание детей
             _buildHierarchy(parent, child->matteTarget);
-            //precomp referencing
+            //предварительная ссылка
             if (child->matteTarget->rid) _buildReference(comp, child->matteTarget);
         }
         _buildHierarchy(parent, child);
 
-        //attach the necessary font data
+        //прикрепите необходимые данные шрифта
         if (child->type == LottieLayer::Text) _attachFont(comp, child);
     }
     return true;
@@ -1397,7 +1397,7 @@ static bool _buildComposition(LottieComposition* comp, LottieLayer* parent)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 bool LottieBuilder::update(LottieComposition* comp, float frameNo)
@@ -1408,7 +1408,7 @@ bool LottieBuilder::update(LottieComposition* comp, float frameNo)
     if (frameNo <comp->root->inFrame) frameNo = comp->root->inFrame;
     if (frameNo >= comp->root->outFrame) frameNo = (comp->root->outFrame - 1);
 
-    //update children layers
+    //обновить дочерние слои
     auto root = comp->root;
     root->scene->clear();
 
@@ -1433,7 +1433,7 @@ void LottieBuilder::build(LottieComposition* comp)
 
     if (!update(comp, 0)) return;
 
-    //viewport clip
+    //клип в области просмотра
     auto clip = Shape::gen();
     clip->appendRect(0, 0, comp->w, comp->h);
     comp->root->scene->clip(std::move(clip));

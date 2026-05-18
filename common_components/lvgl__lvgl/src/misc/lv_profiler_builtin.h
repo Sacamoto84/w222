@@ -38,37 +38,37 @@ extern "C" {
  **********************/
 
 /**
- * @brief Initialize the configuration of the built-in profiler
- * @param config Pointer to the configuration structure of the built-in profiler
+ * @brief Инициализировать настройку встроенного профилировщика
+ * @param config Указатель на структуру конфигурации встроенного профилировщика
  */
 void lv_profiler_builtin_config_init(lv_profiler_builtin_config_t * config);
 
 /**
- * @brief Initialize the built-in profiler with the given configuration
- * @param config Pointer to the configuration structure of the built-in profiler
+ * @brief Инициализируйте встроенный профилировщик с заданной конфигурацией.
+ * @param config Указатель на структуру конфигурации встроенного профилировщика
  */
 void lv_profiler_builtin_init(const lv_profiler_builtin_config_t * config);
 
 /**
- * @brief Uninitialize the built-in profiler
+ * @brief Деинициализировать встроенный профилировщик
  */
 void lv_profiler_builtin_uninit(void);
 
 /**
- * @brief Enable or disable the built-in profiler
- * @param enable true to enable the built-in profiler, false to disable
+ * @brief Включить или отключить встроенный профилировщик
+ * @param enable true, чтобы включить встроенный профилировщик, false, чтобы отключить
  */
 void lv_profiler_builtin_set_enable(bool enable);
 
 /**
- * @brief Flush the profiling data to the console
+ * @brief Сбросить данные профилирования на консоль
  */
 void lv_profiler_builtin_flush(void);
 
 /**
- * @brief Write the profiling data for a function with the given tag
- * @param func Name of the function being profiled
- * @param tag Tag to associate with the profiling data for the function
+ * @brief Запишите данные профилирования для функции с данным тегом.
+ * @param func Имя профилируемой функции
+ * @param tag Тег для связи с данными профилирования функции.
  */
 void lv_profiler_builtin_write(const char * func, char tag);
 
@@ -79,7 +79,7 @@ void lv_profiler_builtin_write(const char * func, char tag);
 #endif /*LV_USE_PROFILER_BUILTIN*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PROFILER_BUILTIN_H*/

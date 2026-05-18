@@ -8,7 +8,7 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
@@ -45,7 +45,7 @@ static void create_images(void)
 
 void test_ffmpeg_image_decoder_1(void)
 {
-    /* Temporarily remove other decoder */
+    /* Временно удалите другой декодер */
 #if LV_USE_LODEPNG
     lv_lodepng_deinit();
 #endif
@@ -56,7 +56,7 @@ void test_ffmpeg_image_decoder_1(void)
 
     create_images();
 
-    /* Should decode images consistently with other PNG decoders  */
+    /* Должны декодировать изображения согласованно с другими декодерами PNG.  */
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/ffmpeg_1.png");
 
     size_t mem_before = lv_test_get_free_mem();
@@ -71,7 +71,7 @@ void test_ffmpeg_image_decoder_1(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 32);
 
-    /* Re-add other decoder */
+    /* Повторно добавить другой декодер */
 #if LV_USE_LODEPNG
     lv_lodepng_init();
 #endif
@@ -96,7 +96,7 @@ void test_ffmpeg_player_1(void)
     /* Video: test_video_birds.mp4 Update frame rate 25FPS */
     lv_ffmpeg_player_set_src(player, "A:src/test_assets/test_video_birds.mp4");
 
-    /* Not started, it should be in the black screen  */
+    /* Не запускается, должен быть черный экран  */
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/ffmpeg_player_frame_0.png");
 
     lv_ffmpeg_player_set_cmd(player, LV_FFMPEG_PLAYER_CMD_START);
@@ -113,7 +113,7 @@ void test_ffmpeg_player_1(void)
 
     lv_test_wait(400);
 
-    /* Paused, it should be in the same frame  */
+    /* Приостановлено, оно должно быть в том же кадре  */
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/ffmpeg_player_frame_2.png");
 
     lv_ffmpeg_player_set_cmd(player, LV_FFMPEG_PLAYER_CMD_RESUME);

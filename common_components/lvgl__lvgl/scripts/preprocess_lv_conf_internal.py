@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 #
-# Preprocess the lv_conf_internal.h to generate a header file
-# containing the evaluated definitions. This output will be used to
-# generate the cmake variables
+# Предварительная обработкаlv_conf_internal.hдля создания заголовка файла.
+# содержащий оцененные определения. Этот вывод будет использоваться для
+# сгенерировать переменные cmake
 #
-# Author: David TRUAN (david.truan@edgemtech.ch)
-# Author: Erik Tagirov (erik.tagirov@edgemtech.ch)
+# Автор: ДэвидTRUAN(david.truan@edgemtech.ch)
+# Автор: Эрик Тагиров (erik.tagiros@edgemtech.ch)
 #
 
 import sys
@@ -61,7 +61,7 @@ def preprocess_file(pcpp_exe, input_file, tmp_file, output_file, include_dirs, d
         exit(1)
 
 
-# Read the temporary files and return an array of lines
+# Прочитайте временные файлы и верните массив строк.
 def read_lines(tmp_file):
 
     try:
@@ -81,7 +81,7 @@ def remove_indentation(lines):
         for line in lines:
             stripped = line.lstrip()
 
-            # Remove extra spaces after #
+            # Удалить лишние пробелы после #
             if stripped.startswith("#"):
                 stripped = re.sub(r"^#\s+", "#", stripped)
 
@@ -94,8 +94,8 @@ def remove_indentation(lines):
 
     return clean_lines
 
-# This is required - to avoid include errors when Kconfig is used and
-# LVGL is installed on the system -  i.e when lvgl.h is used as a system include
+# Это необходимо — чтобы избежать ошибок включения при использовании Kconfig и
+# LVGL установлен в системе - т.е. когдаlvgl.hиспользуется как системный включаемый
 def add_include_guards(lines):
 
     lines.insert(0, "#define LV_CONF_H\n\n")
@@ -112,10 +112,10 @@ def init_venv(venv_path):
     """
     try:
         if os.path.exists(venv_path) == False:
-            # Create venv
+            # Создать венв
             subprocess.check_call([sys.executable, "-m", "venv", venv_path])
 
-        # Enter venv
+        # Введите венв
         venv_path = os.path.join(venv_path, ".venv")
         subprocess.check_call([sys.executable, "-m", "venv", venv_path])
 
@@ -139,7 +139,7 @@ def install_pcpp_in_venv(venv_path):
         venv_pcpp = os.path.join(venv_path, "bin", "pcpp")
 
     if os.path.exists(venv_pcpp) == False:
-        # Install pcpp
+        # Установить ПКПП
         try:
             subprocess.check_call([venv_pip, "install", "pcpp"])
 
@@ -156,9 +156,9 @@ def main():
 
     args = get_args()
 
-    # Check if PCPP is already present on the system
-    # if it's not - create a python venv inside the workfolder directory
-    # and install it there
+    # Проверьте, присутствует ли PCPP в системе.
+    # Если это не так, создайте каталог venv Python внутри рабочих папок.
+    # и установи его туда
     pcpp_path = shutil.which("pcpp")
 
     if pcpp_path:
@@ -177,7 +177,7 @@ def main():
     lines = remove_indentation(lines)
     lines = add_include_guards(lines)
 
-    # Write the resulting output header file with include guards and no indentation
+    # Запишите полученный выходной заголовочный файл с защитой включения и без отступов.
     try:
         with open(args.output, "w") as f:
             f.writelines(lines)

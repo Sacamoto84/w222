@@ -21,7 +21,7 @@ extern "C" {
 
 #include "../../../../lv_conf_internal.h"
 
-/* detect whether helium is available based on arm compilers' standard */
+/* определить, доступен ли гелий, на основе стандарта составителей оружия */
 #if defined(__ARM_FEATURE_MVE) && __ARM_FEATURE_MVE
 
 #ifdef LV_DRAW_SW_HELIUM_CUSTOM_INCLUDE
@@ -36,7 +36,7 @@ extern "C" {
 #define LVGL_HIDDEN
 #endif
 
-/* Use arm2d functions if present */
+/* Используйте функции Arm2d, если они есть. */
 #include "../arm2d/lv_blend_arm2d.h"
 
 /*********************
@@ -1306,14 +1306,14 @@ static inline lv_result_t lv_argb8888_blend_normal_to_argb8888_mix_mask_opa_heli
 
 #endif /* !defined(__ASSEMBLY__) */
 
-#endif /* defined(__ARM_FEATURE_MVE) && __ARM_FEATURE_MVE */
+#endif /* определено( __ARM_FEATURE_MVE ) && __ARM_FEATURE_MVE */
 
 /**********************
  *      MACROS
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BLEND_HELIUM_H*/

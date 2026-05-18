@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2025
+ * Изменено NXP в 2025 г.
  */
 
 #ifndef LV_ANIMIMAGE_H
@@ -22,7 +22,7 @@ extern "C" {
 
 #if LV_USE_ANIMIMG != 0
 
-/*Testing of dependencies*/
+/*Тестирование зависимостей*/
 #if LV_USE_IMAGE == 0
 #error "lv_animimg: lv_img is required. Enable it in lv_conf.h (LV_USE_IMAGE 1)"
 #endif
@@ -47,7 +47,7 @@ enum _lv_property_animimage_id_t {
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_animimg_class;
 
-/** Image parts */
+/** Части изображения */
 typedef enum {
     LV_ANIM_IMAGE_PART_MAIN,
 } lv_animimg_part_t;
@@ -57,18 +57,18 @@ typedef enum {
  **********************/
 
 /**
- * Create an animation image objects
+ * Создание объектов анимационного изображения
  * @param parent pointer to an object, it will be the parent of the new button
  * @return pointer to the created animation image object
  */
 lv_obj_t * lv_animimg_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set the image animation images source.
+ * Установите источник изображений анимации изображения.
  * @param obj       pointer to an animation image object
  * @param dsc       pointer to a series images
  * @param num       images' number
@@ -76,7 +76,7 @@ lv_obj_t * lv_animimg_create(lv_obj_t * parent);
 void lv_animimg_set_src(lv_obj_t * obj, const void * dsc[], size_t num);
 
 /**
- *  Set the images source for flip playback of animation image.
+ *  Установите источник изображений для перевернутого воспроизведения анимационного изображения.
  * @param obj       pointer to an animation image object
  * @param dsc       pointer to a series images
  * @param num       images' number
@@ -84,93 +84,93 @@ void lv_animimg_set_src(lv_obj_t * obj, const void * dsc[], size_t num);
 void lv_animimg_set_src_reverse(lv_obj_t * obj, const void * dsc[], size_t num);
 
 /**
- * Startup the image animation.
+ * Запустите анимацию изображения.
  * @param obj   pointer to an animation image object
  */
 void lv_animimg_start(lv_obj_t * obj);
 
 /**
- * Delete the image animation.
+ * Удалите анимацию изображения.
  * @param obj   pointer to an animation image object
  */
 bool lv_animimg_delete(lv_obj_t * obj);
 
 /**
- * Set the image animation duration time. unit:ms
+ * Установите продолжительность анимации изображения. единица измерения: мс
  * @param obj       pointer to an animation image object
  * @param duration  the duration in milliseconds
  */
 void lv_animimg_set_duration(lv_obj_t * obj, uint32_t duration);
 
 /**
- * Set the image animation repeatedly play times.
+ * Установите время повторного воспроизведения анимации изображения.
  * @param obj       pointer to an animation image object
  * @param count     the number of times to repeat the animation
  */
 void lv_animimg_set_repeat_count(lv_obj_t * obj, uint32_t count);
 
 /**
- * Make the image animation to play back to when the forward direction is ready.
+ * Создайте анимацию изображения, которая будет воспроизводиться, когда будет готово направление вперед.
  * @param obj   pointer to an animation image object
  * @param duration   the duration of the playback image animation in milliseconds. 0: disable playback
  */
 void lv_animimg_set_reverse_duration(lv_obj_t * obj, uint32_t duration);
 
 /**
- * Make the image animation to play back to when the forward direction is ready.
+ * Создайте анимацию изображения, которая будет воспроизводиться, когда будет готово направление вперед.
  * @param obj   pointer to an animation image object
  * @param duration   delay in milliseconds before starting the playback image animation.
  */
 void lv_animimg_set_reverse_delay(lv_obj_t * obj, uint32_t duration);
 
 /**
- * Set a function call when the animation image really starts (considering `delay`)
+ * Установите вызов функции, когда анимационное изображение действительно запускается (учитывая `delay` )
  * @param obj   pointer to an animation image object
  * @param start_cb   a function call when the animation is start
  */
 void lv_animimg_set_start_cb(lv_obj_t * obj, lv_anim_start_cb_t start_cb);
 
 /**
- * Set a function call when the animation is completed
+ * Установите вызов функции после завершения анимации
  * @param obj pointer to an animation image object
  * @param completed_cb  a function call when the animation is completed
  */
 void lv_animimg_set_completed_cb(lv_obj_t * obj, lv_anim_completed_cb_t completed_cb);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the image animation images source.
+ * Получите источник изображений анимации изображения.
  * @param obj   pointer to an animation image object
  * @return a     pointer that will point to a series images
  */
 const void ** lv_animimg_get_src(lv_obj_t * obj);
 
 /**
- * Get the image animation images source.
+ * Получите источник изображений анимации изображения.
  * @param obj   pointer to an animation image object
  * @return      the number of source images
  */
 uint8_t lv_animimg_get_src_count(lv_obj_t * obj);
 
 /**
- * Get the image animation duration time. unit:ms
+ * Получите время продолжительности анимации изображения. единица измерения: мс
  * @param obj   pointer to an animation image object
  * @return      the animation duration time
  */
 uint32_t lv_animimg_get_duration(lv_obj_t * obj);
 
 /**
- * Get the image animation repeat play times.
+ * Получите время повторения анимации изображения.
  * @param obj   pointer to an animation image object
  * @return      the repeat count
  */
 uint32_t lv_animimg_get_repeat_count(lv_obj_t * obj);
 
 /**
- * Get the image animation underlying animation.
+ * Получите анимацию изображения, лежащую в основе анимации.
  * @param obj   pointer to an animation image object
  * @return      the animation reference
  */
@@ -179,7 +179,7 @@ lv_anim_t * lv_animimg_get_anim(lv_obj_t * obj);
 #endif /*LV_USE_ANIMIMG*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_ANIMIMAGE_H*/

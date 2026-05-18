@@ -1,7 +1,7 @@
 /* ==========================================
-    Unity Project - A Test Framework for C
+    Проект Unity — тестовая среда для C
     Copyright (c) 2007-21 Mike Karlesky, Mark VanderVoord, Greg Williams
-    [Released under MIT License. Please refer to license.txt for details]
+    [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
 ========================================== */
 #if LV_BUILD_TEST || LV_BUILD_TEST_PERF
 #define UNITY_INCLUDE_PRINT_FORMATTED 1
@@ -23,41 +23,41 @@ extern "C"
 #include "unity_internals.h"
 
 /*-------------------------------------------------------
- * Test Setup / Teardown
+ * Тестовая установка/демонтаж
  *-------------------------------------------------------*/
 
-/* These functions are intended to be called before and after each test.
- * If using unity directly, these will need to be provided for each test
- * executable built. If you are using the test runner generator and/or
- * Ceedling, these are optional. */
+/* Эти функции предназначены для вызова до и после каждого теста.
+ * Если вы используете Unity напрямую, их необходимо будет предоставить для каждого теста.
+ * исполняемый файл построен. Если вы используете генератор тестового запуска и/или
+ * Конечно, это необязательно. */
 void setUp(void);
 void tearDown(void);
 
-/* These functions are intended to be called at the beginning and end of an
- * entire test suite.  suiteTearDown() is passed the number of tests that
- * failed, and its return value becomes the exit code of main(). If using
- * Unity directly, you're in charge of calling these if they are desired.
- * If using Ceedling or the test runner generator, these will be called
- * automatically if they exist. */
+/* Эти функции предназначены для вызова в начале и конце
+ * весь набор тестов.   suiteTearDown() пройдено количество тестов, которые
+ * не удалось, и его возвращаемое значение становится кодом завершения main(). Если вы используете
+ * Непосредственно Unity, вы отвечаете за их вызов, если они желательны.
+ * Если вы используете Ceedling или генератор тестового запуска, они будут называться
+ * автоматически, если они существуют. */
 void suiteSetUp(void);
 int suiteTearDown(int num_failures);
 
 /*-------------------------------------------------------
- * Test Reset and Verify
+ * Тестовый сброс и проверка
  *-------------------------------------------------------*/
 
-/* These functions are intended to be called before during tests in order
- * to support complex test loops, etc. Both are NOT built into Unity. Instead
- * the test runner generator will create them. resetTest will run teardown and
- * setup again, verifying any end-of-test needs between. verifyTest will only
- * run the verification. */
+/* Эти функции предназначены для вызова до начала тестов, чтобы
+ * для поддержки сложных тестовых циклов и т. д. Оба NOT встроены в Unity. Вместо этого
+ * генератор тестового запуска создаст их. resetTest запустит демонтаж и
+ * повторите настройку, проверив между ними любые потребности в конце теста. verifyTest будет только
+ * запустите проверку. */
 void resetTest(void);
 void verifyTest(void);
 
 /*-------------------------------------------------------
- * Configuration Options
+ * Параметры конфигурации
  *-------------------------------------------------------
- * All options described below should be passed as a compiler flag to all files using Unity. If you must add #defines, place them BEFORE the #include above.
+ * Все параметры, описанные ниже, следует передавать в качестве флага компилятора всем файлам, использующим Unity. Если вам необходимо добавить #defines , поместите их BEFORE в #include выше.
 
  * Integers/longs/pointers
  *     - Unity attempts to automatically discover your integer sizes
@@ -69,7 +69,7 @@ void verifyTest(void);
  *       - set UNITY_LONG_WIDTH
  *       - set UNITY_POINTER_WIDTH
 
- * Floats
+ * Плавает
  *     - define UNITY_EXCLUDE_FLOAT to disallow floating point comparisons
  *     - define UNITY_FLOAT_PRECISION to specify the precision to use when doing TEST_ASSERT_EQUAL_FLOAT
  *     - define UNITY_FLOAT_TYPE to specify doubles instead of single precision floats
@@ -79,25 +79,25 @@ void verifyTest(void);
  *     - define UNITY_DOUBLE_TYPE to specify something other than double
  *     - define UNITY_EXCLUDE_FLOAT_PRINT to trim binary size, won't print floating point values in errors
 
- * Output
+ * Выход
  *     - by default, Unity prints to standard out with putchar.  define UNITY_OUTPUT_CHAR(a) with a different function if desired
  *     - define UNITY_DIFFERENTIATE_FINAL_FAIL to print FAILED (vs. FAIL) at test end summary - for automated search for failure
 
- * Optimization
+ * Оптимизация
  *     - by default, line numbers are stored in unsigned shorts.  Define UNITY_LINE_TYPE with a different type if your files are huge
  *     - by default, test and failure counters are unsigned shorts.  Define UNITY_COUNTER_TYPE with a different type if you want to save space or have more than 65535 Tests.
 
- * Test Cases
+ * Тестовые случаи
  *     - define UNITY_SUPPORT_TEST_CASES to include the TEST_CASE macro, though really it's mostly about the runner generator script
 
- * Parameterized Tests
+ * Параметризованные тесты
  *     - you'll want to create a define of TEST_CASE(...), TEST_RANGE(...) and/or TEST_MATRIX(...) which basically evaluates to nothing
 
- * Tests with Arguments
+ * Тесты с аргументами
  *     - you'll want to define UNITY_USE_COMMAND_LINE_ARGS if you have the test runner passing arguments to Unity
 
  *-------------------------------------------------------
- * Basic Fail and Ignore
+ * Базовый отказ и игнорирование
  *-------------------------------------------------------*/
 
 #define TEST_FAIL_MESSAGE(message)                                                                 UNITY_TEST_FAIL(__LINE__, (message))
@@ -110,30 +110,30 @@ void verifyTest(void);
 #define TEST_PRINTF(message, ...)                                                                  UnityPrintF(__LINE__, (message), ##__VA_ARGS__)
 #endif
 
-/* It is not necessary for you to call PASS. A PASS condition is assumed if nothing fails.
- * This method allows you to abort a test immediately with a PASS state, ignoring the remainder of the test. */
+/* Вам не обязательно вызывать PASS. Условие PASS предполагается, если ничего не произошло.
+ * Этот метод позволяет немедленно прервать тест в состоянии PASS, игнорируя оставшуюся часть теста. */
 #define TEST_PASS()                                                                                TEST_ABORT()
 #define TEST_PASS_MESSAGE(message)                                                                 do { UnityMessage((message), __LINE__); TEST_ABORT(); } while (0)
 
 /*-------------------------------------------------------
- * Build Directives
+ * Директивы сборки
  *-------------------------------------------------------
 
- * These macros do nothing, but they are useful for additional build context.
- * Tools (like Ceedling) can scan for these directives and make use of them for
- * per-test-executable #include search paths and linking. */
+ * Эти макросы ничего не делают, но они полезны для дополнительного контекста сборки.
+ * Инструменты (например, Ceedling) могут сканировать эти директивы и использовать их для
+ * Пути поиска и связывание для каждого исполняемого файла #include. */
 
-/* Add source files to a test executable's compilation and linking. Ex: TEST_SOURCE_FILE("sandwiches.c") */
+/* Добавьте исходные файлы в компиляцию и компоновку тестового исполняемого файла. Пример: TEST_SOURCE_FILE («sandwiches.c») */
 #define TEST_SOURCE_FILE(a)
 
-/* Customize #include search paths for a test executable's compilation. Ex: TEST_INCLUDE_PATH("src/module_a/inc") */
+/* Настройте пути поиска #include для компиляции тестового исполняемого файла. Пример: TEST_INCLUDE_PATH («источник/module_a /inc») */
 #define TEST_INCLUDE_PATH(a)
 
 /*-------------------------------------------------------
- * Test Asserts (simple)
+ * Тестовые утверждения (простые)
  *-------------------------------------------------------*/
 
-/* Boolean */
+/* логическое значение */
 #define TEST_ASSERT(condition)                                                                     UNITY_TEST_ASSERT(       (condition), __LINE__, " Expression Evaluated To FALSE")
 #define TEST_ASSERT_TRUE(condition)                                                                UNITY_TEST_ASSERT(       (condition), __LINE__, " Expected TRUE Was FALSE")
 #define TEST_ASSERT_UNLESS(condition)                                                              UNITY_TEST_ASSERT(      !(condition), __LINE__, " Expression Evaluated To TRUE")
@@ -143,7 +143,7 @@ void verifyTest(void);
 #define TEST_ASSERT_EMPTY(pointer)                                                                 UNITY_TEST_ASSERT_EMPTY(    (pointer), __LINE__, " Expected Empty")
 #define TEST_ASSERT_NOT_EMPTY(pointer)                                                             UNITY_TEST_ASSERT_NOT_EMPTY((pointer), __LINE__, " Expected Non-Empty")
 
-/* Integers (of all sizes) */
+/* Целые числа (всех размеров) */
 #define TEST_ASSERT_EQUAL_INT(expected, actual)                                                    UNITY_TEST_ASSERT_EQUAL_INT((expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_INT8(expected, actual)                                                   UNITY_TEST_ASSERT_EQUAL_INT8((expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_INT16(expected, actual)                                                  UNITY_TEST_ASSERT_EQUAL_INT16((expected), (actual), __LINE__, NULL)
@@ -167,7 +167,7 @@ void verifyTest(void);
 #define TEST_ASSERT_BIT_HIGH(bit, actual)                                                          UNITY_TEST_ASSERT_BITS(((UNITY_UINT)1 << (bit)), (UNITY_UINT)(-1), (actual), __LINE__, NULL)
 #define TEST_ASSERT_BIT_LOW(bit, actual)                                                           UNITY_TEST_ASSERT_BITS(((UNITY_UINT)1 << (bit)), (UNITY_UINT)(0), (actual), __LINE__, NULL)
 
-/* Integer Not Equal To (of all sizes) */
+/* Целое число не равно (всех размеров) */
 #define TEST_ASSERT_NOT_EQUAL_INT(threshold, actual)                                               UNITY_TEST_ASSERT_NOT_EQUAL_INT((threshold), (actual), __LINE__, NULL)
 #define TEST_ASSERT_NOT_EQUAL_INT8(threshold, actual)                                              UNITY_TEST_ASSERT_NOT_EQUAL_INT8((threshold), (actual), __LINE__, NULL)
 #define TEST_ASSERT_NOT_EQUAL_INT16(threshold, actual)                                             UNITY_TEST_ASSERT_NOT_EQUAL_INT16((threshold), (actual), __LINE__, NULL)
@@ -185,7 +185,7 @@ void verifyTest(void);
 #define TEST_ASSERT_NOT_EQUAL_HEX64(threshold, actual)                                             UNITY_TEST_ASSERT_NOT_EQUAL_HEX64((threshold), (actual), __LINE__, NULL)
 #define TEST_ASSERT_NOT_EQUAL_CHAR(threshold, actual)                                              UNITY_TEST_ASSERT_NOT_EQUAL_CHAR((threshold), (actual), __LINE__, NULL)
 
-/* Integer Greater Than/ Less Than (of all sizes) */
+/* Целое число больше/меньше (всех размеров) */
 #define TEST_ASSERT_GREATER_THAN(threshold, actual)                                                UNITY_TEST_ASSERT_GREATER_THAN_INT((threshold), (actual), __LINE__, NULL)
 #define TEST_ASSERT_GREATER_THAN_INT(threshold, actual)                                            UNITY_TEST_ASSERT_GREATER_THAN_INT((threshold), (actual), __LINE__, NULL)
 #define TEST_ASSERT_GREATER_THAN_INT8(threshold, actual)                                           UNITY_TEST_ASSERT_GREATER_THAN_INT8((threshold), (actual), __LINE__, NULL)
@@ -258,7 +258,7 @@ void verifyTest(void);
 #define TEST_ASSERT_LESS_OR_EQUAL_HEX64(threshold, actual)                                         UNITY_TEST_ASSERT_SMALLER_OR_EQUAL_HEX64((threshold), (actual), __LINE__, NULL)
 #define TEST_ASSERT_LESS_OR_EQUAL_CHAR(threshold, actual)                                          UNITY_TEST_ASSERT_SMALLER_OR_EQUAL_CHAR((threshold), (actual), __LINE__, NULL)
 
-/* Integer Ranges (of all sizes) */
+/* Целочисленные диапазоны (всех размеров) */
 #define TEST_ASSERT_INT_WITHIN(delta, expected, actual)                                            UNITY_TEST_ASSERT_INT_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_INT8_WITHIN(delta, expected, actual)                                           UNITY_TEST_ASSERT_INT8_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_INT16_WITHIN(delta, expected, actual)                                          UNITY_TEST_ASSERT_INT16_WITHIN((delta), (expected), (actual), __LINE__, NULL)
@@ -277,7 +277,7 @@ void verifyTest(void);
 #define TEST_ASSERT_HEX64_WITHIN(delta, expected, actual)                                          UNITY_TEST_ASSERT_HEX64_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_CHAR_WITHIN(delta, expected, actual)                                           UNITY_TEST_ASSERT_CHAR_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 
-/* Integer Array Ranges (of all sizes) */
+/* Диапазоны целочисленных массивов (всех размеров) */
 #define TEST_ASSERT_INT_ARRAY_WITHIN(delta, expected, actual, num_elements)                        UNITY_TEST_ASSERT_INT_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, NULL)
 #define TEST_ASSERT_INT8_ARRAY_WITHIN(delta, expected, actual, num_elements)                       UNITY_TEST_ASSERT_INT8_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, NULL)
 #define TEST_ASSERT_INT16_ARRAY_WITHIN(delta, expected, actual, num_elements)                      UNITY_TEST_ASSERT_INT16_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, NULL)
@@ -297,13 +297,13 @@ void verifyTest(void);
 #define TEST_ASSERT_CHAR_ARRAY_WITHIN(delta, expected, actual, num_elements)                       UNITY_TEST_ASSERT_CHAR_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, NULL)
 
 
-/* Structs and Strings */
+/* Структуры и строки */
 #define TEST_ASSERT_EQUAL_PTR(expected, actual)                                                    UNITY_TEST_ASSERT_EQUAL_PTR((expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_STRING(expected, actual)                                                 UNITY_TEST_ASSERT_EQUAL_STRING((expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_STRING_LEN(expected, actual, len)                                        UNITY_TEST_ASSERT_EQUAL_STRING_LEN((expected), (actual), (len), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_MEMORY(expected, actual, len)                                            UNITY_TEST_ASSERT_EQUAL_MEMORY((expected), (actual), (len), __LINE__, NULL)
 
-/* Arrays */
+/* Массивы */
 #define TEST_ASSERT_EQUAL_INT_ARRAY(expected, actual, num_elements)                                UNITY_TEST_ASSERT_EQUAL_INT_ARRAY((expected), (actual), (num_elements), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_INT8_ARRAY(expected, actual, num_elements)                               UNITY_TEST_ASSERT_EQUAL_INT8_ARRAY((expected), (actual), (num_elements), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_INT16_ARRAY(expected, actual, num_elements)                              UNITY_TEST_ASSERT_EQUAL_INT16_ARRAY((expected), (actual), (num_elements), __LINE__, NULL)
@@ -325,7 +325,7 @@ void verifyTest(void);
 #define TEST_ASSERT_EQUAL_MEMORY_ARRAY(expected, actual, len, num_elements)                        UNITY_TEST_ASSERT_EQUAL_MEMORY_ARRAY((expected), (actual), (len), (num_elements), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_CHAR_ARRAY(expected, actual, num_elements)                               UNITY_TEST_ASSERT_EQUAL_CHAR_ARRAY((expected), (actual), (num_elements), __LINE__, NULL)
 
-/* Arrays Compared To Single Value */
+/* Массивы по сравнению с одним значением */
 #define TEST_ASSERT_EACH_EQUAL_INT(expected, actual, num_elements)                                 UNITY_TEST_ASSERT_EACH_EQUAL_INT((expected), (actual), (num_elements), __LINE__, NULL)
 #define TEST_ASSERT_EACH_EQUAL_INT8(expected, actual, num_elements)                                UNITY_TEST_ASSERT_EACH_EQUAL_INT8((expected), (actual), (num_elements), __LINE__, NULL)
 #define TEST_ASSERT_EACH_EQUAL_INT16(expected, actual, num_elements)                               UNITY_TEST_ASSERT_EACH_EQUAL_INT16((expected), (actual), (num_elements), __LINE__, NULL)
@@ -347,7 +347,7 @@ void verifyTest(void);
 #define TEST_ASSERT_EACH_EQUAL_MEMORY(expected, actual, len, num_elements)                         UNITY_TEST_ASSERT_EACH_EQUAL_MEMORY((expected), (actual), (len), (num_elements), __LINE__, NULL)
 #define TEST_ASSERT_EACH_EQUAL_CHAR(expected, actual, num_elements)                                UNITY_TEST_ASSERT_EACH_EQUAL_CHAR((expected), (actual), (num_elements), __LINE__, NULL)
 
-/* Floating Point (If Enabled) */
+/* Плавающая точка (если включено) */
 #define TEST_ASSERT_FLOAT_WITHIN(delta, expected, actual)                                          UNITY_TEST_ASSERT_FLOAT_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_FLOAT_NOT_WITHIN(delta, expected, actual)                                      UNITY_TEST_ASSERT_FLOAT_NOT_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_FLOAT(expected, actual)                                                  UNITY_TEST_ASSERT_EQUAL_FLOAT((expected), (actual), __LINE__, NULL)
@@ -368,7 +368,7 @@ void verifyTest(void);
 #define TEST_ASSERT_FLOAT_IS_NOT_NAN(actual)                                                       UNITY_TEST_ASSERT_FLOAT_IS_NOT_NAN((actual), __LINE__, NULL)
 #define TEST_ASSERT_FLOAT_IS_NOT_DETERMINATE(actual)                                               UNITY_TEST_ASSERT_FLOAT_IS_NOT_DETERMINATE((actual), __LINE__, NULL)
 
-/* Double (If Enabled) */
+/* Двойной (если включено) */
 #define TEST_ASSERT_DOUBLE_WITHIN(delta, expected, actual)                                         UNITY_TEST_ASSERT_DOUBLE_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_DOUBLE_NOT_WITHIN(delta, expected, actual)                                     UNITY_TEST_ASSERT_DOUBLE_NOT_WITHIN((delta), (expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_EQUAL_DOUBLE(expected, actual)                                                 UNITY_TEST_ASSERT_EQUAL_DOUBLE((expected), (actual), __LINE__, NULL)
@@ -389,7 +389,7 @@ void verifyTest(void);
 #define TEST_ASSERT_DOUBLE_IS_NOT_NAN(actual)                                                      UNITY_TEST_ASSERT_DOUBLE_IS_NOT_NAN((actual), __LINE__, NULL)
 #define TEST_ASSERT_DOUBLE_IS_NOT_DETERMINATE(actual)                                              UNITY_TEST_ASSERT_DOUBLE_IS_NOT_DETERMINATE((actual), __LINE__, NULL)
 
-/* Shorthand */
+/* стенография */
 #ifdef UNITY_SHORTHAND_AS_OLD
 #define TEST_ASSERT_EQUAL(expected, actual)                                                        UNITY_TEST_ASSERT_EQUAL_INT((expected), (actual), __LINE__, NULL)
 #define TEST_ASSERT_NOT_EQUAL(expected, actual)                                                    UNITY_TEST_ASSERT(((expected) != (actual)), __LINE__, " Expected Not-Equal")
@@ -412,10 +412,10 @@ void verifyTest(void);
 #endif
 
 /*-------------------------------------------------------
- * Test Asserts (with additional messages)
+ * Тестовые утверждения (с дополнительными сообщениями)
  *-------------------------------------------------------*/
 
-/* Boolean */
+/* логическое значение */
 #define TEST_ASSERT_MESSAGE(condition, message)                                                    UNITY_TEST_ASSERT(       (condition), __LINE__, (message))
 #define TEST_ASSERT_TRUE_MESSAGE(condition, message)                                               UNITY_TEST_ASSERT(       (condition), __LINE__, (message))
 #define TEST_ASSERT_UNLESS_MESSAGE(condition, message)                                             UNITY_TEST_ASSERT(      !(condition), __LINE__, (message))
@@ -425,7 +425,7 @@ void verifyTest(void);
 #define TEST_ASSERT_EMPTY_MESSAGE(pointer, message)                                                UNITY_TEST_ASSERT_EMPTY(    (pointer), __LINE__, (message))
 #define TEST_ASSERT_NOT_EMPTY_MESSAGE(pointer, message)                                            UNITY_TEST_ASSERT_NOT_EMPTY((pointer), __LINE__, (message))
 
-/* Integers (of all sizes) */
+/* Целые числа (всех размеров) */
 #define TEST_ASSERT_EQUAL_INT_MESSAGE(expected, actual, message)                                   UNITY_TEST_ASSERT_EQUAL_INT((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_INT8_MESSAGE(expected, actual, message)                                  UNITY_TEST_ASSERT_EQUAL_INT8((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_INT16_MESSAGE(expected, actual, message)                                 UNITY_TEST_ASSERT_EQUAL_INT16((expected), (actual), __LINE__, (message))
@@ -449,7 +449,7 @@ void verifyTest(void);
 #define TEST_ASSERT_BIT_LOW_MESSAGE(bit, actual, message)                                          UNITY_TEST_ASSERT_BITS(((UNITY_UINT32)1 << (bit)), (UNITY_UINT32)(0), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_CHAR_MESSAGE(expected, actual, message)                                  UNITY_TEST_ASSERT_EQUAL_CHAR((expected), (actual), __LINE__, (message))
 
-/* Integer Not Equal To (of all sizes) */
+/* Целое число не равно (всех размеров) */
 #define TEST_ASSERT_NOT_EQUAL_INT_MESSAGE(threshold, actual, message)                              UNITY_TEST_ASSERT_NOT_EQUAL_INT((threshold), (actual), __LINE__, (message))
 #define TEST_ASSERT_NOT_EQUAL_INT8_MESSAGE(threshold, actual, message)                             UNITY_TEST_ASSERT_NOT_EQUAL_INT8((threshold), (actual), __LINE__, (message))
 #define TEST_ASSERT_NOT_EQUAL_INT16_MESSAGE(threshold, actual, message)                            UNITY_TEST_ASSERT_NOT_EQUAL_INT16((threshold), (actual), __LINE__, (message))
@@ -468,7 +468,7 @@ void verifyTest(void);
 #define TEST_ASSERT_NOT_EQUAL_CHAR_MESSAGE(threshold, actual, message)                             UNITY_TEST_ASSERT_NOT_EQUAL_CHAR((threshold), (actual), __LINE__, (message))
 
 
-/* Integer Greater Than/ Less Than (of all sizes) */
+/* Целое число больше/меньше (всех размеров) */
 #define TEST_ASSERT_GREATER_THAN_MESSAGE(threshold, actual, message)                               UNITY_TEST_ASSERT_GREATER_THAN_INT((threshold), (actual), __LINE__, (message))
 #define TEST_ASSERT_GREATER_THAN_INT_MESSAGE(threshold, actual, message)                           UNITY_TEST_ASSERT_GREATER_THAN_INT((threshold), (actual), __LINE__, (message))
 #define TEST_ASSERT_GREATER_THAN_INT8_MESSAGE(threshold, actual, message)                          UNITY_TEST_ASSERT_GREATER_THAN_INT8((threshold), (actual), __LINE__, (message))
@@ -541,7 +541,7 @@ void verifyTest(void);
 #define TEST_ASSERT_LESS_OR_EQUAL_HEX64_MESSAGE(threshold, actual, message)                        UNITY_TEST_ASSERT_SMALLER_OR_EQUAL_HEX64((threshold), (actual), __LINE__, (message))
 #define TEST_ASSERT_LESS_OR_EQUAL_CHAR_MESSAGE(threshold, actual, message)                         UNITY_TEST_ASSERT_SMALLER_OR_EQUAL_CHAR((threshold), (actual), __LINE__, (message))
 
-/* Integer Ranges (of all sizes) */
+/* Целочисленные диапазоны (всех размеров) */
 #define TEST_ASSERT_INT_WITHIN_MESSAGE(delta, expected, actual, message)                           UNITY_TEST_ASSERT_INT_WITHIN((delta), (expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_INT8_WITHIN_MESSAGE(delta, expected, actual, message)                          UNITY_TEST_ASSERT_INT8_WITHIN((delta), (expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_INT16_WITHIN_MESSAGE(delta, expected, actual, message)                         UNITY_TEST_ASSERT_INT16_WITHIN((delta), (expected), (actual), __LINE__, (message))
@@ -560,7 +560,7 @@ void verifyTest(void);
 #define TEST_ASSERT_HEX64_WITHIN_MESSAGE(delta, expected, actual, message)                         UNITY_TEST_ASSERT_HEX64_WITHIN((delta), (expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_CHAR_WITHIN_MESSAGE(delta, expected, actual, message)                          UNITY_TEST_ASSERT_CHAR_WITHIN((delta), (expected), (actual), __LINE__, (message))
 
-/* Integer Array Ranges (of all sizes) */
+/* Диапазоны целочисленных массивов (всех размеров) */
 #define TEST_ASSERT_INT_ARRAY_WITHIN_MESSAGE(delta, expected, actual, num_elements, message)       UNITY_TEST_ASSERT_INT_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, (message))
 #define TEST_ASSERT_INT8_ARRAY_WITHIN_MESSAGE(delta, expected, actual, num_elements, message)      UNITY_TEST_ASSERT_INT8_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, (message))
 #define TEST_ASSERT_INT16_ARRAY_WITHIN_MESSAGE(delta, expected, actual, num_elements, message)     UNITY_TEST_ASSERT_INT16_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, (message))
@@ -580,13 +580,13 @@ void verifyTest(void);
 #define TEST_ASSERT_CHAR_ARRAY_WITHIN_MESSAGE(delta, expected, actual, num_elements, message)      UNITY_TEST_ASSERT_CHAR_ARRAY_WITHIN((delta), (expected), (actual), num_elements, __LINE__, (message))
 
 
-/* Structs and Strings */
+/* Структуры и строки */
 #define TEST_ASSERT_EQUAL_PTR_MESSAGE(expected, actual, message)                                   UNITY_TEST_ASSERT_EQUAL_PTR((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_STRING_MESSAGE(expected, actual, message)                                UNITY_TEST_ASSERT_EQUAL_STRING((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_STRING_LEN_MESSAGE(expected, actual, len, message)                       UNITY_TEST_ASSERT_EQUAL_STRING_LEN((expected), (actual), (len), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_MEMORY_MESSAGE(expected, actual, len, message)                           UNITY_TEST_ASSERT_EQUAL_MEMORY((expected), (actual), (len), __LINE__, (message))
 
-/* Arrays */
+/* Массивы */
 #define TEST_ASSERT_EQUAL_INT_ARRAY_MESSAGE(expected, actual, num_elements, message)               UNITY_TEST_ASSERT_EQUAL_INT_ARRAY((expected), (actual), (num_elements), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_INT8_ARRAY_MESSAGE(expected, actual, num_elements, message)              UNITY_TEST_ASSERT_EQUAL_INT8_ARRAY((expected), (actual), (num_elements), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_INT16_ARRAY_MESSAGE(expected, actual, num_elements, message)             UNITY_TEST_ASSERT_EQUAL_INT16_ARRAY((expected), (actual), (num_elements), __LINE__, (message))
@@ -608,7 +608,7 @@ void verifyTest(void);
 #define TEST_ASSERT_EQUAL_MEMORY_ARRAY_MESSAGE(expected, actual, len, num_elements, message)       UNITY_TEST_ASSERT_EQUAL_MEMORY_ARRAY((expected), (actual), (len), (num_elements), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_CHAR_ARRAY_MESSAGE(expected, actual, num_elements, message)              UNITY_TEST_ASSERT_EQUAL_CHAR_ARRAY((expected), (actual), (num_elements), __LINE__, (message))
 
-/* Arrays Compared To Single Value*/
+/* Массивы по сравнению с одним значением*/
 #define TEST_ASSERT_EACH_EQUAL_INT_MESSAGE(expected, actual, num_elements, message)                UNITY_TEST_ASSERT_EACH_EQUAL_INT((expected), (actual), (num_elements), __LINE__, (message))
 #define TEST_ASSERT_EACH_EQUAL_INT8_MESSAGE(expected, actual, num_elements, message)               UNITY_TEST_ASSERT_EACH_EQUAL_INT8((expected), (actual), (num_elements), __LINE__, (message))
 #define TEST_ASSERT_EACH_EQUAL_INT16_MESSAGE(expected, actual, num_elements, message)              UNITY_TEST_ASSERT_EACH_EQUAL_INT16((expected), (actual), (num_elements), __LINE__, (message))
@@ -630,7 +630,7 @@ void verifyTest(void);
 #define TEST_ASSERT_EACH_EQUAL_MEMORY_MESSAGE(expected, actual, len, num_elements, message)        UNITY_TEST_ASSERT_EACH_EQUAL_MEMORY((expected), (actual), (len), (num_elements), __LINE__, (message))
 #define TEST_ASSERT_EACH_EQUAL_CHAR_MESSAGE(expected, actual, num_elements, message)               UNITY_TEST_ASSERT_EACH_EQUAL_CHAR((expected), (actual), (num_elements), __LINE__, (message))
 
-/* Floating Point (If Enabled) */
+/* Плавающая точка (если включено) */
 #define TEST_ASSERT_FLOAT_WITHIN_MESSAGE(delta, expected, actual, message)                         UNITY_TEST_ASSERT_FLOAT_WITHIN((delta), (expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_FLOAT_MESSAGE(expected, actual, message)                                 UNITY_TEST_ASSERT_EQUAL_FLOAT((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_NOT_EQUAL_FLOAT_MESSAGE(expected, actual, message)                             UNITY_TEST_ASSERT_NOT_EQUAL_FLOAT((expected), (actual), __LINE__, (message))
@@ -650,7 +650,7 @@ void verifyTest(void);
 #define TEST_ASSERT_FLOAT_IS_NOT_NAN_MESSAGE(actual, message)                                      UNITY_TEST_ASSERT_FLOAT_IS_NOT_NAN((actual), __LINE__, (message))
 #define TEST_ASSERT_FLOAT_IS_NOT_DETERMINATE_MESSAGE(actual, message)                              UNITY_TEST_ASSERT_FLOAT_IS_NOT_DETERMINATE((actual), __LINE__, (message))
 
-/* Double (If Enabled) */
+/* Двойной (если включено) */
 #define TEST_ASSERT_DOUBLE_WITHIN_MESSAGE(delta, expected, actual, message)                        UNITY_TEST_ASSERT_DOUBLE_WITHIN((delta), (expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_EQUAL_DOUBLE_MESSAGE(expected, actual, message)                                UNITY_TEST_ASSERT_EQUAL_DOUBLE((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_NOT_EQUAL_DOUBLE_MESSAGE(expected, actual, message)                            UNITY_TEST_ASSERT_NOT_EQUAL_DOUBLE((expected), (actual), __LINE__, (message))
@@ -670,7 +670,7 @@ void verifyTest(void);
 #define TEST_ASSERT_DOUBLE_IS_NOT_NAN_MESSAGE(actual, message)                                     UNITY_TEST_ASSERT_DOUBLE_IS_NOT_NAN((actual), __LINE__, (message))
 #define TEST_ASSERT_DOUBLE_IS_NOT_DETERMINATE_MESSAGE(actual, message)                             UNITY_TEST_ASSERT_DOUBLE_IS_NOT_DETERMINATE((actual), __LINE__, (message))
 
-/* Shorthand */
+/* стенография */
 #ifdef UNITY_SHORTHAND_AS_OLD
 #define TEST_ASSERT_EQUAL_MESSAGE(expected, actual, message)                                       UNITY_TEST_ASSERT_EQUAL_INT((expected), (actual), __LINE__, (message))
 #define TEST_ASSERT_NOT_EQUAL_MESSAGE(expected, actual, message)                                   UNITY_TEST_ASSERT(((expected) != (actual)), __LINE__, (message))
@@ -692,7 +692,7 @@ void verifyTest(void);
 #define TEST_ASSERT_NOT_EQUAL_MESSAGE(expected, actual, message)                                   UNITY_TEST_FAIL(__LINE__, UnityStrErrShorthand)
 #endif
 
-/* end of UNITY_FRAMEWORK_H */
+/* конец UNITY_FRAMEWORK_H */
 #ifdef __cplusplus
 }
 #endif

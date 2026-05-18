@@ -36,15 +36,15 @@
  **********************/
 
 /**
- * Data format for compressed image data.
+ * Формат данных для сжатых данных изображения.
  */
 
 typedef struct _lv_image_compressed_t {
-    uint32_t method: 4; /*Compression method, see `lv_image_compress_t`*/
-    uint32_t reserved : 28;  /*Reserved to be used later*/
-    uint32_t compressed_size;  /*Compressed data size in byte*/
-    uint32_t decompressed_size;  /*Decompressed data size in byte*/
-    const uint8_t * data; /*Compressed data*/
+    uint32_t method: 4; /*Метод сжатия см. `lv_image_compress_t`.*/
+    uint32_t reserved : 28;  /*Зарезервировано для использования позже*/
+    uint32_t compressed_size;  /*Размер сжатых данных в байтах*/
+    uint32_t decompressed_size;  /*Размер распакованных данных в байтах*/
+    const uint8_t * data; /*Сжатые данные*/
 } lv_image_compressed_t;
 
 typedef struct {
@@ -52,10 +52,10 @@ typedef struct {
     lv_color32_t * palette;
     lv_opa_t * opa;
     lv_image_compressed_t compressed;
-    lv_draw_buf_t * decoded;            /*A draw buf to store decoded image*/
-    lv_draw_buf_t * decompressed;       /*Decompressed data could be used directly, thus must also be draw buf*/
-    lv_draw_buf_t c_array;              /*An C-array image that need to be converted to a draw buf*/
-    lv_draw_buf_t * decoded_partial;    /*A draw buf for decoded image via get_area_cb*/
+    lv_draw_buf_t * decoded;            /*Буфер рисования для хранения декодированного изображения*/
+    lv_draw_buf_t * decompressed;       /*Распакованные данные можно использовать напрямую, поэтому их также необходимо отрисовывать.*/
+    lv_draw_buf_t c_array;              /*Изображение C-массива, которое необходимо преобразовать в буфер рисования.*/
+    lv_draw_buf_t * decoded_partial;    /*Буфер отрисовки декодированного изображения через get_area_cb*/
 } decoder_data_t;
 
 /**********************
@@ -90,7 +90,7 @@ static lv_result_t decompress_image(lv_image_decoder_dsc_t * dsc, const lv_image
  **********************/
 
 /**
- * Initialize the lvgl binary image decoder module
+ * Инициализируйте модуль декодера двоичных изображений lvgl.
  */
 void lv_bin_decoder_init(void)
 {
@@ -113,7 +113,7 @@ void lv_bin_decoder_init(void)
 
 lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     const void * src = dsc->src;
     lv_image_src_t src_type = dsc->src_type;
@@ -123,7 +123,7 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         lv_memcpy(header, &image->header, sizeof(lv_image_header_t));
     }
     else if(src_type == LV_IMAGE_SRC_FILE) {
-        /*Support only "*.bin" files*/
+        /*Поддержка только файлов «*.bin».*/
         if(lv_strcmp(lv_fs_get_ext(src), "bin")) return LV_RESULT_INVALID;
 
         lv_fs_res_t res;
@@ -137,8 +137,8 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
         /**
          * @todo
-         * This is a temp backward compatibility solution after adding
-         * magic in image header.
+         * Это временное решение обратной совместимости после добавления
+         * магия в заголовке изображения.
          */
         if(header->magic != LV_IMAGE_HEADER_MAGIC) {
             LV_LOG_WARN("Legacy bin image detected: %s", (char *)src);
@@ -146,16 +146,16 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             header->magic = LV_IMAGE_HEADER_MAGIC;
         }
 
-        /*File is always read to buf, thus data can be modified.*/
+        /*Файл всегда читается в buf, поэтому данные могут быть изменены.*/
         header->flags |= LV_IMAGE_FLAGS_MODIFIABLE;
     }
     else if(src_type == LV_IMAGE_SRC_SYMBOL) {
-        /*The size depend on the font but it is unknown here. It should be handled outside of the
-         *function*/
+        /*Размер зависит от шрифта, но здесь он неизвестен. Его следует обрабатывать вне
+         *функция*/
         header->w = 1;
         header->h = 1;
-        /*Symbols always have transparent parts. Important because of cover check in the draw
-         *function. The actual value doesn't matter because lv_draw_label will draw it*/
+        /*Символы всегда имеют прозрачные части. Важно, так как в розыгрыше проверяется обложка.
+         *функция. Фактическое значение не имеет значения, потому что lv_draw_label нарисует его.*/
         header->cf = LV_COLOR_FORMAT_A8;
     }
     else {
@@ -168,7 +168,7 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_INVALID;
     }
 
-    /*For backward compatibility, all images are not premultiplied for now.*/
+    /*В целях обратной совместимости все изображения на данный момент не умножаются предварительно.*/
     if(header->magic != LV_IMAGE_HEADER_MAGIC) {
         header->flags &= ~LV_IMAGE_FLAGS_PREMULTIPLIED;
     }
@@ -177,7 +177,7 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 }
 
 /**
- * Decode an image from a binary file
+ * Декодировать изображение из двоичного файла
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -188,14 +188,14 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
     lv_result_t res = LV_RESULT_INVALID;
     lv_fs_res_t fs_res = LV_FS_RES_UNKNOWN;
-    bool use_directly = false; /*If the image is already decoded and can be used directly*/
+    bool use_directly = false; /*Если изображение уже декодировано и его можно использовать напрямую*/
 
-    /*Open the file if it's a file*/
+    /*Откройте файл, если это файл*/
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
-        /*Support only "*.bin" files*/
+        /*Поддержка только файлов «*.bin».*/
         if(lv_strcmp(lv_fs_get_ext(dsc->src), "bin")) return LV_RESULT_INVALID;
 
-        /*If the file was open successfully save the file descriptor*/
+        /*Если файл был успешно открыт, сохраните дескриптор файла.*/
         decoder_data_t * decoder_data = get_decoder_data(dsc);
         if(decoder_data == NULL) {
             return LV_RESULT_INVALID;
@@ -216,7 +216,7 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_INVALID;
         }
 
-        decoder_data->f = f;    /*Now free_decoder_data will take care of the file*/
+        decoder_data->f = f;    /*Теперь free_decoder_data позаботится о файле.*/
 
         lv_color_format_t cf = dsc->header.cf;
 
@@ -225,7 +225,7 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         }
         else if(LV_COLOR_FORMAT_IS_INDEXED(cf)) {
             if(dsc->args.use_indexed) {
-                /*Palette for indexed image and whole image of A8 image are always loaded to RAM for simplicity*/
+                /*Палитра индексированного изображения и все изображение изображения A8 для простоты всегда загружаются в RAM.*/
                 res = load_indexed(decoder, dsc);
             }
             else {
@@ -247,14 +247,14 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         }
 #else
         else {
-            /* decode them in get_area_cb */
+            /* декодируйте их в get_area_cb */
             res = LV_RESULT_OK;
         }
 #endif
     }
 
     else if(dsc->src_type == LV_IMAGE_SRC_VARIABLE) {
-        /*The variables should have valid data*/
+        /*Переменные должны иметь действительные данные*/
         lv_image_dsc_t * image = (lv_image_dsc_t *)dsc->src;
         if(image->data == NULL) {
             return LV_RESULT_INVALID;
@@ -265,23 +265,23 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             res = decode_compressed(decoder, dsc);
         }
         else if(LV_COLOR_FORMAT_IS_INDEXED(cf)) {
-            /*Need decoder data to store converted image*/
+            /*Нужны данные декодера для хранения преобразованного изображения*/
             decoder_data_t * decoder_data = get_decoder_data(dsc);
             if(decoder_data == NULL) {
                 return LV_RESULT_INVALID;
             }
 
             if(dsc->args.use_indexed) {
-                /*Palette for indexed image and whole image of A8 image are always loaded to RAM for simplicity*/
+                /*Палитра индексированного изображения и все изображение изображения A8 для простоты всегда загружаются в RAM.*/
                 res = load_indexed(decoder, dsc);
-                use_directly = true; /*If draw unit supports indexed image, it can be used directly.*/
+                use_directly = true; /*Если модуль рисования поддерживает индексированное изображение, его можно использовать напрямую.*/
             }
             else {
                 res = decode_indexed(decoder, dsc);
             }
         }
         else if(LV_COLOR_FORMAT_IS_ALPHA_ONLY(cf) && cf != LV_COLOR_FORMAT_A8) {
-            /*Alpha only image will need decoder data to store pointer to decoded image, to free it when decoder closes*/
+            /*Только альфа-изображению потребуются данные декодера для хранения указателя на декодированное изображение, чтобы освободить его при закрытии декодера.*/
             decoder_data_t * decoder_data = get_decoder_data(dsc);
             if(decoder_data == NULL) {
                 return LV_RESULT_INVALID;
@@ -290,8 +290,8 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             res = decode_alpha_only(decoder, dsc);
         }
         else {
-            /*In case of uncompressed formats the image stored in the ROM/RAM.
-             *So simply give its pointer*/
+            /*В случае несжатых форматов изображение сохраняется в ROM/RAM.
+             *Поэтому просто дайте его указатель*/
 
             decoder_data_t * decoder_data = get_decoder_data(dsc);
             lv_draw_buf_t * decoded;
@@ -302,7 +302,7 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             else {
                 decoded = &decoder_data->c_array;
                 if(image->header.stride == 0) {
-                    /*If image doesn't have stride, treat it as lvgl v8 legacy image format*/
+                    /*Если изображение не имеет четкости, рассматривайте его как устаревший формат изображения lvgl v8.*/
                     lv_image_dsc_t tmp = *image;
                     tmp.header.stride = (tmp.header.w * lv_color_format_get_bpp(cf) + 7) >> 3;
                     res = lv_draw_buf_from_image(decoded, &tmp);
@@ -315,11 +315,11 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
                 dsc->decoded = decoded;
 
                 if(decoded->header.stride == 0) {
-                    /*Use the auto calculated value from decoder_info callback*/
+                    /*Используйте автоматически рассчитанное значение из обратного вызова decoder_info.*/
                     decoded->header.stride = dsc->header.stride;
                 }
 
-                use_directly = true; /*A variable image that can be used directly.*/
+                use_directly = true; /*Переменное изображение, которое можно использовать напрямую.*/
             }
         }
     }
@@ -329,7 +329,7 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return res;
     }
 
-    if(dsc->decoded == NULL) return LV_RESULT_OK; /*Need to read via get_area_cb*/
+    if(dsc->decoded == NULL) return LV_RESULT_OK; /*Нужно читать через get_area_cb*/
 
     lv_draw_buf_t * decoded = (lv_draw_buf_t *)dsc->decoded;
     if(dsc->header.flags & LV_IMAGE_FLAGS_PREMULTIPLIED) {
@@ -342,21 +342,21 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_INVALID;
     }
 
-    /*The adjusted draw buffer is newly allocated.*/
+    /*Скорректированный буфер отрисовки выделяется заново.*/
     if(adjusted != decoded) {
-        use_directly = false; /*Cannot use original image directly*/
+        use_directly = false; /*Невозможно использовать исходное изображение напрямую*/
         free_decoder_data(dsc);
         decoder_data_t * decoder_data = get_decoder_data(dsc);
-        decoder_data->decoded = adjusted; /*Now this new buffer need to be free'd on decoder close*/
+        decoder_data->decoded = adjusted; /*Теперь этот новый буфер должен быть освобожден при закрытии декодера.*/
     }
     dsc->decoded = adjusted;
 
-    /* Copy user flags to the decoded image */
+    /* Скопируйте пользовательские флаги в декодированное изображение */
     if(dsc->header.flags & LV_IMAGE_FLAGS_USER_MASK) {
         lv_draw_buf_set_flag((lv_draw_buf_t *)dsc->decoded, dsc->header.flags & LV_IMAGE_FLAGS_USER_MASK);
     }
 
-    /*Do not put image to cache if it can be used directly.*/
+    /*Не помещайте изображение в кеш, если его можно использовать напрямую.*/
     if(use_directly || dsc->args.no_cache) {
         if(dsc->args.flush_cache && use_directly) {
             dsc->args.flush_cache = false;
@@ -364,10 +364,10 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_OK;
     }
 
-    /*If the image cache is disabled, just return the decoded image*/
+    /*Если кэш изображений отключен, просто верните декодированное изображение.*/
     if(!lv_image_cache_is_enabled()) return LV_RESULT_OK;
 
-    /*Add it to cache*/
+    /*Добавьте его в кеш*/
     lv_image_cache_data_t search_key;
     search_key.src_type = dsc->src_type;
     search_key.src = dsc->src;
@@ -380,14 +380,14 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
     }
     dsc->cache_entry = cache_entry;
     decoder_data_t * decoder_data = get_decoder_data(dsc);
-    decoder_data->decoded = NULL; /*Cache will take care of it*/
+    decoder_data->decoded = NULL; /*Кэш об этом позаботится*/
 
     return LV_RESULT_OK;
 }
 
 void lv_bin_decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     decoder_data_t * decoder_data = dsc->user_data;
     if(decoder_data && decoder_data->decoded_partial) {
@@ -401,10 +401,10 @@ void lv_bin_decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t *
 lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
                                     const lv_area_t * full_area, lv_area_t * decoded_area)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     lv_color_format_t cf = dsc->header.cf;
-    /*Check if cf is supported*/
+    /*Проверьте, поддерживается ли cf*/
 
     bool supported = LV_COLOR_FORMAT_IS_INDEXED(cf)
                      || cf == LV_COLOR_FORMAT_ARGB8888  \
@@ -431,11 +431,11 @@ lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
     int32_t w_px = lv_area_get_width(full_area);
     uint8_t * img_data = NULL;
     lv_draw_buf_t * decoded = NULL;
-    uint32_t offset = dsc->src_type == LV_IMAGE_SRC_FILE ? sizeof(lv_image_header_t) : 0;   /*Skip the image header*/
+    uint32_t offset = dsc->src_type == LV_IMAGE_SRC_FILE ? sizeof(lv_image_header_t) : 0;   /*Пропустить заголовок изображения*/
 
-    /*We only support read line by line for now*/
+    /*На данный момент мы поддерживаем только построчное чтение.*/
     if(decoded_area->y1 == LV_COORD_MIN) {
-        /*Indexed image is converted to ARGB888*/
+        /*Проиндексированное изображение конвертируется в ARGB888.*/
         lv_color_format_t cf_decoded = LV_COLOR_FORMAT_IS_INDEXED(cf) ? LV_COLOR_FORMAT_ARGB8888 : cf;
 
         decoded = lv_draw_buf_reshape(decoder_data->decoded_partial, cf_decoded, w_px, 1, LV_STRIDE_AUTO);
@@ -446,7 +446,7 @@ lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
             }
             decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, w_px, 1, cf_decoded, LV_STRIDE_AUTO);
             if(decoded == NULL) return LV_RESULT_INVALID;
-            decoder_data->decoded_partial = decoded; /*Free on decoder close*/
+            decoder_data->decoded_partial = decoded; /*Бесплатно на декодере закрыть*/
         }
         *decoded_area = *full_area;
         decoded_area->y2 = decoded_area->y1;
@@ -454,10 +454,10 @@ lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
     else {
         decoded_area->y1++;
         decoded_area->y2++;
-        decoded = decoder_data->decoded_partial; /*Already allocated*/
+        decoded = decoder_data->decoded_partial; /*Уже выделено*/
     }
 
-    img_data = decoded->data; /*Get the buffer to operate on*/
+    img_data = decoded->data; /*Получить буфер для работы*/
 
     if(decoded_area->y1 > full_area->y2) {
         return LV_RESULT_INVALID;
@@ -465,12 +465,12 @@ lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 
     if(LV_COLOR_FORMAT_IS_INDEXED(cf)) {
         int32_t x_fraction = decoded_area->x1 % (8 / bpp);
-        uint32_t len = (w_px * bpp + 7) / 8 + 1; /*10px for 1bpp may across 3bytes*/
+        uint32_t len = (w_px * bpp + 7) / 8 + 1; /*10 пикселей для 1 бит на пиксель может быть в 3 байта*/
         uint8_t * buf = NULL;
 
-        offset += dsc->palette_size * 4; /*Skip palette*/
+        offset += dsc->palette_size * 4; /*Пропустить палитру*/
         offset += decoded_area->y1 * dsc->header.stride;
-        offset += decoded_area->x1 * bpp / 8; /*Move to x1*/
+        offset += decoded_area->x1 * bpp / 8; /*Переместиться в x1*/
         if(dsc->src_type == LV_IMAGE_SRC_FILE) {
             buf = lv_malloc(len);
             LV_ASSERT_NULL(buf);
@@ -492,7 +492,7 @@ lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 
         if(dsc->src_type == LV_IMAGE_SRC_FILE) lv_free((void *)buf);
 
-        dsc->decoded = decoded; /*Return decoded image*/
+        dsc->decoded = decoded; /*Вернуть декодированное изображение*/
         return LV_RESULT_OK;
     }
 
@@ -500,37 +500,37 @@ lv_result_t lv_bin_decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
        || cf == LV_COLOR_FORMAT_RGB565 || cf == LV_COLOR_FORMAT_RGB565_SWAPPED || cf == LV_COLOR_FORMAT_ARGB8565) {
         uint32_t len = (w_px * bpp) / 8;
         offset += decoded_area->y1 * dsc->header.stride;
-        offset += decoded_area->x1 * bpp / 8; /*Move to x1*/
+        offset += decoded_area->x1 * bpp / 8; /*Переместиться в x1*/
         res = fs_read_file_at(f, offset, img_data, len, NULL);
         if(res != LV_FS_RES_OK) {
             return LV_RESULT_INVALID;
         }
 
-        dsc->decoded = decoded; /*Return decoded image*/
+        dsc->decoded = decoded; /*Вернуть декодированное изображение*/
         return LV_RESULT_OK;
     }
 
     if(cf == LV_COLOR_FORMAT_RGB565A8) {
-        bpp = 16; /* RGB565 + A8 mask*/
+        bpp = 16; /* Маска RGB565 + A8*/
         uint32_t len = decoded->header.stride;
-        offset += decoded_area->y1 * dsc->header.stride; /*Move to y1*/
-        offset += decoded_area->x1 * bpp / 8; /*Move to x1*/
+        offset += decoded_area->y1 * dsc->header.stride; /*Переехать в y1*/
+        offset += decoded_area->x1 * bpp / 8; /*Переместиться в x1*/
         res = fs_read_file_at(f, offset, img_data, len, NULL);
         if(res != LV_FS_RES_OK) {
             return LV_RESULT_INVALID;
         }
 
-        /*Now the A8 mask*/
+        /*Теперь маска A8*/
         offset = sizeof(lv_image_header_t);
-        offset += dsc->header.h * dsc->header.stride; /*Move to A8 map*/
-        offset += decoded_area->y1 * (dsc->header.stride / 2); /*Move to y1*/
-        offset += decoded_area->x1 * 1; /*Move to x1*/
+        offset += dsc->header.h * dsc->header.stride; /*Перейти на карту A8*/
+        offset += decoded_area->y1 * (dsc->header.stride / 2); /*Переехать в y1*/
+        offset += decoded_area->x1 * 1; /*Переместиться в x1*/
         res = fs_read_file_at(f, offset, img_data + len, w_px * 1, NULL);
         if(res != LV_FS_RES_OK) {
             return LV_RESULT_INVALID;
         }
 
-        dsc->decoded = decoded; /*Return decoded image*/
+        dsc->decoded = decoded; /*Вернуть декодированное изображение*/
         return LV_RESULT_OK;
     }
 
@@ -577,7 +577,7 @@ static void free_decoder_data(lv_image_decoder_dsc_t * dsc)
 
 static lv_result_t decode_indexed(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
     lv_fs_res_t res;
     uint32_t rn;
     decoder_data_t * decoder_data = dsc->user_data;
@@ -596,7 +596,7 @@ static lv_result_t decode_indexed(lv_image_decoder_t * decoder, lv_image_decoder
         indexed_data = data + palette_len;
     }
     else if(dsc->src_type == LV_IMAGE_SRC_FILE) {
-        /*read palette for indexed image*/
+        /*прочитать палитру для индексированного изображения*/
         palette = lv_malloc(palette_len);
         LV_ASSERT_MALLOC(palette);
         if(palette == NULL) {
@@ -611,7 +611,7 @@ static lv_result_t decode_indexed(lv_image_decoder_t * decoder, lv_image_decoder
             return LV_RESULT_INVALID;
         }
 
-        decoder_data->palette = (void *)palette; /*Need to free when decoder closes*/
+        decoder_data->palette = (void *)palette; /*Необходимо освободить, когда декодер закрывается*/
 
 #if LV_BIN_DECODER_RAM_LOAD
         draw_buf_indexed = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, dsc->header.w, dsc->header.h, cf,
@@ -652,7 +652,7 @@ static lv_result_t decode_indexed(lv_image_decoder_t * decoder, lv_image_decoder
     dsc->palette_size = LV_COLOR_INDEXED_PALETTE_SIZE(cf);
 
 #if LV_BIN_DECODER_RAM_LOAD
-    /*Convert to ARGB8888, since sw renderer cannot render it directly even it's in RAM*/
+    /*Конвертируйте в ARGB8888 , поскольку средство визуализации sw не может визуализировать его напрямую, даже если оно находится в RAM.*/
     lv_draw_buf_t * decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, dsc->header.w, dsc->header.h,
                                                     LV_COLOR_FORMAT_ARGB8888,
                                                     0);
@@ -673,9 +673,9 @@ static lv_result_t decode_indexed(lv_image_decoder_t * decoder, lv_image_decoder
     }
 
     dsc->decoded = decoded;
-    decoder_data->decoded = decoded; /*Free when decoder closes*/
+    decoder_data->decoded = decoded; /*Бесплатно при закрытии декодера*/
     if(dsc->src_type == LV_IMAGE_SRC_FILE && !is_compressed) {
-        decoder_data->palette = (void *)palette; /*Free decoder data on close*/
+        decoder_data->palette = (void *)palette; /*Бесплатные данные декодера при закрытии*/
         lv_draw_buf_destroy(draw_buf_indexed);
     }
 
@@ -692,7 +692,7 @@ exit_with_buf:
     LV_UNUSED(stride);
     LV_UNUSED(indexed_data);
     LV_UNUSED(draw_buf_indexed);
-    /*It needs to be read by get_area_cb later*/
+    /*get_area_cb должен прочитать его позже.*/
     return LV_RESULT_OK;
 #endif
 }
@@ -700,23 +700,23 @@ exit_with_buf:
 static lv_result_t load_indexed(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
 #if LV_BIN_DECODER_RAM_LOAD == 0
-    LV_UNUSED(decoder); /*Unused*/
-    LV_UNUSED(dsc); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
+    LV_UNUSED(dsc); /*Неиспользованный*/
     LV_LOG_ERROR("LV_BIN_DECODER_RAM_LOAD is disabled");
     return LV_RESULT_INVALID;
 #else
 
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     lv_fs_res_t res;
     uint32_t rn;
     decoder_data_t * decoder_data = dsc->user_data;
 
     if(dsc->header.flags & LV_IMAGE_FLAGS_COMPRESSED) {
-        /*The decompressed image is already loaded to RAM*/
+        /*Распакованный образ уже загружен в RAM.*/
         dsc->decoded = decoder_data->decompressed;
 
-        /*Transfer ownership to decoded pointer because it's the final data we use.*/
+        /*Передайте право собственности на декодированный указатель, потому что это конечные данные, которые мы используем.*/
         decoder_data->decoded = decoder_data->decompressed;
         decoder_data->decompressed = NULL;
         return LV_RESULT_OK;
@@ -739,7 +739,7 @@ static lv_result_t load_indexed(lv_image_decoder_t * decoder, lv_image_decoder_d
         dsc->decoded = decoded;
 
         if(decoded->header.stride == 0) {
-            /*Use the auto calculated value from decoder_info callback*/
+            /*Используйте автоматически рассчитанное значение из обратного вызова decoder_info.*/
             decoded->header.stride = dsc->header.stride;
         }
 
@@ -804,7 +804,7 @@ static lv_result_t decode_rgb(lv_image_decoder_t * decoder, lv_image_decoder_dsc
 
     uint32_t len = dsc->header.stride * dsc->header.h;
     if(cf == LV_COLOR_FORMAT_RGB565A8) {
-        len += (dsc->header.stride / 2) * dsc->header.h; /*A8 mask*/
+        len += (dsc->header.stride / 2) * dsc->header.h; /*Маска A8*/
     }
 
     lv_draw_buf_t * decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, dsc->header.w, dsc->header.h, cf,
@@ -825,13 +825,13 @@ static lv_result_t decode_rgb(lv_image_decoder_t * decoder, lv_image_decoder_dsc
     }
 
     dsc->decoded = decoded;
-    decoder_data->decoded = decoded; /*Free when decoder closes*/
+    decoder_data->decoded = decoded; /*Бесплатно при закрытии декодера*/
     return LV_RESULT_OK;
 }
 #endif
 
 /**
- * Extend A1/2/4 to A8 with interpolation to reduce rounding error.
+ * Расширьте A1 /2/4 до A8 с помощью интерполяции, чтобы уменьшить ошибку округления.
  */
 static inline uint8_t bit_extend(uint8_t value, uint8_t bpp)
 {
@@ -861,8 +861,8 @@ static lv_result_t decode_alpha_only(lv_image_decoder_t * decoder, lv_image_deco
     }
 
     uint32_t w = (dsc->header.stride * 8) / bpp;
-    uint32_t buf_stride = (w * 8 + 7) >> 3; /*stride for img_data*/
-    uint32_t buf_len = w * dsc->header.h; /*always decode to A8 format*/
+    uint32_t buf_stride = (w * 8 + 7) >> 3; /*шаг за img_data*/
+    uint32_t buf_len = w * dsc->header.h; /*всегда декодировать в формат A8*/
     lv_draw_buf_t * decoded;
     uint32_t file_len = (uint32_t)dsc->header.stride * dsc->header.h;
 
@@ -876,7 +876,7 @@ static lv_result_t decode_alpha_only(lv_image_decoder_t * decoder, lv_image_deco
     uint8_t * img_data = decoded->data;
 
     if(dsc->header.flags & LV_IMAGE_FLAGS_COMPRESSED) {
-        /*Copy from image data*/
+        /*Копировать данные изображения*/
         lv_memcpy(img_data, decoder_data->decompressed->data, file_len);
     }
     else if(dsc->src_type == LV_IMAGE_SRC_FILE) {
@@ -888,22 +888,22 @@ static lv_result_t decode_alpha_only(lv_image_decoder_t * decoder, lv_image_deco
         }
     }
     else if(dsc->src_type == LV_IMAGE_SRC_VARIABLE) {
-        /*Copy from image data*/
+        /*Копировать данные изображения*/
         lv_memcpy(img_data, ((lv_image_dsc_t *)dsc->src)->data, file_len);
     }
 
     if(dsc->header.cf != LV_COLOR_FORMAT_A8) {
-        /*Convert A1/2/4 to A8 from last pixel to first pixel*/
+        /*Преобразование A1/2/4 в A8 из последнего пикселя в первый пиксель.*/
         uint8_t * in = img_data + file_len - 1;
         uint8_t * out = img_data + buf_len - 1;
         uint8_t mask = (1 << bpp) - 1;
         uint8_t shift = 0;
         for(uint32_t i = 0; i < buf_len; i++) {
             /**
-             * Rounding error:
-             * Take bpp = 4 as example, alpha value of 0x0 to 0x0F should be
-             * mapped to 0x00 to 0xFF. Using below equation will give us 0x00 to 0xF0
-             * thus causes error. We can simply interpolate the value to fix it.
+             * Ошибка округления:
+             * Возьмем, к примеру, bpp = 4, альфа-значение от 0x0 до 0x0F должно быть
+             * сопоставлен с 0x00 до 0xFF. Используя приведенное ниже уравнение, мы получим от 0x00 до 0xF0.
+             * таким образом вызывает ошибку. Мы можем просто интерполировать значение, чтобы исправить это.
              *
              * Equation: *out = ((*in >> shift) & mask) << (8 - bpp);
              * Ideal: *out = ((*in >> shift) & mask) * 255 / ((1L << bpp) - 1)
@@ -950,7 +950,7 @@ static lv_result_t decode_compressed(lv_image_decoder_t * decoder, lv_image_deco
         compressed_len -= sizeof(lv_image_header_t);
         compressed_len -= 12;
 
-        /*Read compress header*/
+        /*Чтение заголовка сжатия*/
         len = 12;
         fs_res = fs_read_file_at(f, sizeof(lv_image_header_t), compressed, len, &rn);
         if(fs_res != LV_FS_RES_OK || rn != len) {
@@ -970,7 +970,7 @@ static lv_result_t decode_compressed(lv_image_decoder_t * decoder, lv_image_deco
 
         }
 
-        /*Continue to read the compressed data following compression header*/
+        /*Продолжайте читать сжатые данные после заголовка сжатия.*/
         fs_res = lv_fs_read(f, file_buf, compressed_len, &rn);
         if(fs_res != LV_FS_RES_OK || rn != compressed_len) {
             LV_LOG_WARN("Read compressed file failed: %d, with len: %" LV_PRIu32 ", expected: %" LV_PRIu32, fs_res, rn,
@@ -979,14 +979,14 @@ static lv_result_t decode_compressed(lv_image_decoder_t * decoder, lv_image_deco
             return LV_RESULT_INVALID;
         }
 
-        /*Decompress the image*/
+        /*Распаковать изображение*/
         compressed->data = file_buf;
     }
     else if(dsc->src_type == LV_IMAGE_SRC_VARIABLE) {
         lv_image_dsc_t * image = (lv_image_dsc_t *)dsc->src;
         compressed_len = image->data_size;
 
-        /*Read compress header*/
+        /*Чтение заголовка сжатия*/
         len = 12;
         compressed_len -= len;
         lv_memcpy(compressed, image->data, len);
@@ -1002,14 +1002,14 @@ static lv_result_t decode_compressed(lv_image_decoder_t * decoder, lv_image_deco
     }
 
     res = decompress_image(dsc, compressed);
-    compressed->data = NULL; /*No need to store the data any more*/
+    compressed->data = NULL; /*Больше не нужно хранить данные*/
     lv_free(file_buf);
     if(res != LV_RESULT_OK) {
         LV_LOG_WARN("Decompress failed");
         return LV_RESULT_INVALID;
     }
 
-    /*Depends on the cf, need to further decode image like an C-array image*/
+    /*Зависит от cf, необходимо дополнительно декодировать изображение, например изображение C-массива.*/
     lv_image_dsc_t * image = (lv_image_dsc_t *)dsc->src;
     if(dsc->src_type == LV_IMAGE_SRC_VARIABLE && image->data == NULL) {
         return LV_RESULT_INVALID;
@@ -1024,10 +1024,10 @@ static lv_result_t decode_compressed(lv_image_decoder_t * decoder, lv_image_deco
         res = decode_alpha_only(decoder, dsc);
     }
     else {
-        /*The decompressed data is the original image data.*/
+        /*Распакованные данные представляют собой исходные данные изображения.*/
         dsc->decoded = decoder_data->decompressed;
 
-        /*Transfer ownership of decompressed to `decoded` since it can be used directly*/
+        /*Перенесите право собственности на распакованный файл в `decoded`, поскольку его можно использовать напрямую.*/
         decoder_data->decoded = decoder_data->decompressed;
         decoder_data->decompressed = NULL;
         res = LV_RESULT_OK;
@@ -1053,17 +1053,17 @@ static lv_result_t decode_indexed_line(lv_color_format_t color_format, const lv_
     switch(color_format) {
         case LV_COLOR_FORMAT_I1:
             px_size = 1;
-            in += x / 8;                /*8pixel per byte*/
+            in += x / 8;                /*8 пикселей на байт*/
             shift = 7 - (x & 0x7);
             break;
         case LV_COLOR_FORMAT_I2:
             px_size = 2;
-            in += x / 4;                /*4pixel per byte*/
+            in += x / 4;                /*4 пикселя на байт*/
             shift = 6 - 2 * (x & 0x3);
             break;
         case LV_COLOR_FORMAT_I4:
             px_size = 4;
-            in += x / 2;                /*2pixel per byte*/
+            in += x / 2;                /*2 пикселя на байт*/
             shift = 4 - 4 * (x & 0x1);
             break;
         case LV_COLOR_FORMAT_I8:
@@ -1075,7 +1075,7 @@ static lv_result_t decode_indexed_line(lv_color_format_t color_format, const lv_
             return LV_RESULT_INVALID;
     }
 
-    mask   = (1 << px_size) - 1; /*E.g. px_size = 2; mask = 0x03*/
+    mask   = (1 << px_size) - 1; /*Например.  px_size = 2; маска = 0x03*/
 
     int32_t i;
     for(i = 0; i < w_px; i++) {
@@ -1111,9 +1111,9 @@ static lv_fs_res_t fs_read_file_at(lv_fs_file_t * f, uint32_t pos, void * buff, 
 
 static lv_result_t decompress_image(lv_image_decoder_dsc_t * dsc, const lv_image_compressed_t * compressed)
 {
-    /* At least one compression method must be enabled */
+    /* Должен быть включен хотя бы один метод сжатия. */
 #if (LV_USE_LZ4 || LV_USE_RLE)
-    /* Check if the decompression method is enabled and valid */
+    /* Проверьте, включен ли и действителен ли метод декомпрессии. */
     if(compressed->method == LV_IMAGE_COMPRESS_RLE) {
 #if !LV_USE_RLE
         LV_LOG_WARN("RLE decompression is not enabled");
@@ -1131,7 +1131,7 @@ static lv_result_t decompress_image(lv_image_decoder_dsc_t * dsc, const lv_image
         return LV_RESULT_INVALID;
     }
 
-    /*Need to store decompressed data to decoder to free on close*/
+    /*Необходимо сохранить распакованные данные в декодере, чтобы освободить их при закрытии.*/
     decoder_data_t * decoder_data = get_decoder_data(dsc);
     if(decoder_data == NULL) {
         return LV_RESULT_INVALID;
@@ -1160,7 +1160,7 @@ static lv_result_t decompress_image(lv_image_decoder_dsc_t * dsc, const lv_image
 
     if(compressed->method == LV_IMAGE_COMPRESS_RLE) {
 #if LV_USE_RLE
-        /*Compress always happen on byte*/
+        /*Сжатие всегда происходит побайтно*/
         uint32_t pixel_byte;
         if(dsc->header.cf == LV_COLOR_FORMAT_RGB565A8)
             pixel_byte = 2;
@@ -1180,7 +1180,7 @@ static lv_result_t decompress_image(lv_image_decoder_dsc_t * dsc, const lv_image
 
         int ret = LZ4_decompress_safe(input, output, (int)input_len, (int)out_len);
         if(ret >= 0) {
-            /* Cast is safe because of the above check */
+            /* Приведение безопасно из-за вышеуказанной проверки */
             len = (uint32_t)ret;
         }
 #endif /* LV_USE_LZ4 */
@@ -1192,7 +1192,7 @@ static lv_result_t decompress_image(lv_image_decoder_dsc_t * dsc, const lv_image
         return LV_RESULT_INVALID;
     }
 
-    decoder_data->decompressed = decompressed; /*Free on decoder close*/
+    decoder_data->decompressed = decompressed; /*Бесплатно на декодере закрыть*/
     return LV_RESULT_OK;
 #else
     LV_UNUSED(dsc);

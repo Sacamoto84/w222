@@ -102,7 +102,7 @@ lv_obj_t * lv_table_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_table_set_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col, const char * txt)
@@ -112,19 +112,19 @@ void lv_table_set_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col, const c
 
     lv_table_t * table = (lv_table_t *)obj;
 
-    /*Auto expand*/
+    /*Автоматическое расширение*/
     if(col >= table->col_cnt) lv_table_set_column_count(obj, col + 1);
     if(row >= table->row_cnt) lv_table_set_row_count(obj, row + 1);
 
     uint32_t cell = row * table->col_cnt + col;
     lv_table_cell_ctrl_t ctrl = 0;
 
-    /*Save the control byte*/
+    /*Сохраните управляющий байт*/
     if(table->cell_data[cell]) ctrl = table->cell_data[cell]->ctrl;
 
     void * user_data = NULL;
 
-    /*Save the user data*/
+    /*Сохраните пользовательские данные*/
     if(table->cell_data[cell]) user_data = table->cell_data[cell]->user_data;
 
     size_t to_allocate = get_cell_txt_len(txt);
@@ -150,7 +150,7 @@ void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint32_t row, uint32_t col, con
         lv_table_set_column_count(obj, col + 1);
     }
 
-    /*Auto expand*/
+    /*Автоматическое расширение*/
     if(row >= table->row_cnt) {
         lv_table_set_row_count(obj, row + 1);
     }
@@ -158,24 +158,24 @@ void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint32_t row, uint32_t col, con
     uint32_t cell = row * table->col_cnt + col;
     lv_table_cell_ctrl_t ctrl = 0;
 
-    /*Save the control byte*/
+    /*Сохраните управляющий байт*/
     if(table->cell_data[cell]) ctrl = table->cell_data[cell]->ctrl;
 
     void * user_data = NULL;
 
-    /*Save the user_data*/
+    /*Сохраните user_data.*/
     if(table->cell_data[cell]) user_data = table->cell_data[cell]->user_data;
 
     va_list ap, ap2;
     va_start(ap, fmt);
     va_copy(ap2, ap);
 
-    /*Allocate space for the new text by using trick from C99 standard section 7.19.6.12*/
+    /*Выделите место для нового текста, используя трюк из стандартного раздела C99 7.19.6.12.*/
     uint32_t len = lv_vsnprintf(NULL, 0, fmt, ap);
     va_end(ap);
 
 #if LV_USE_ARABIC_PERSIAN_CHARS
-    /*Put together the text according to the format string*/
+    /*Соберите текст в соответствии со строкой формата*/
     char * raw_txt = lv_malloc(len + 1);
     LV_ASSERT_MALLOC(raw_txt);
     if(raw_txt == NULL) {
@@ -185,7 +185,7 @@ void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint32_t row, uint32_t col, con
 
     lv_vsnprintf(raw_txt, len + 1, fmt, ap2);
 
-    /*Get the size of the Arabic text and process it*/
+    /*Получите размер арабского текста и обработайте его.*/
     size_t len_ap = lv_text_ap_calc_bytes_count(raw_txt);
     table->cell_data[cell] = lv_realloc(table->cell_data[cell], sizeof(lv_table_cell_t) + len_ap + 1);
     LV_ASSERT_MALLOC(table->cell_data[cell]);
@@ -198,14 +198,14 @@ void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint32_t row, uint32_t col, con
     lv_free(raw_txt);
 #else
     table->cell_data[cell] = lv_realloc(table->cell_data[cell],
-                                        sizeof(lv_table_cell_t) + len + 1); /*+1: trailing '\0; */
+                                        sizeof(lv_table_cell_t) + len + 1); /*+1: завершающий '\0; */
     LV_ASSERT_MALLOC(table->cell_data[cell]);
     if(table->cell_data[cell] == NULL) {
         va_end(ap2);
         return;
     }
 
-    table->cell_data[cell]->txt[len] = 0; /*Ensure NULL termination*/
+    table->cell_data[cell]->txt[len] = 0; /*Обеспечить завершение NULL*/
 
     lv_vsnprintf(table->cell_data[cell]->txt, len + 1, fmt, ap2);
 #endif
@@ -232,7 +232,7 @@ void lv_table_set_row_count(lv_obj_t * obj, uint32_t row_cnt)
     LV_ASSERT_MALLOC(table->row_h);
     if(table->row_h == NULL) return;
 
-    /*Free the unused cells*/
+    /*Освободите неиспользуемые ячейки*/
     if(old_row_cnt > row_cnt) {
         uint32_t old_cell_cnt = old_row_cnt * table->col_cnt;
         uint32_t new_cell_cnt = table->col_cnt * table->row_cnt;
@@ -246,7 +246,7 @@ void lv_table_set_row_count(lv_obj_t * obj, uint32_t row_cnt)
     LV_ASSERT_MALLOC(table->cell_data);
     if(table->cell_data == NULL) return;
 
-    /*Initialize the new fields*/
+    /*Инициализируйте новые поля*/
     if(old_row_cnt < row_cnt) {
         uint32_t old_cell_cnt = old_row_cnt * table->col_cnt;
         uint32_t new_cell_cnt = table->col_cnt * table->row_cnt;
@@ -274,7 +274,7 @@ void lv_table_set_column_count(lv_obj_t * obj, uint32_t col_cnt)
 
     lv_memzero(new_cell_data, new_cell_cnt * sizeof(table->cell_data[0]));
 
-    /*The new column(s) messes up the mapping of `cell_data`*/
+    /*Новые столбцы портят отображение `cell_data`.*/
     uint32_t old_col_start;
     uint32_t new_col_start;
     uint32_t min_col_cnt = LV_MIN(old_col_cnt, col_cnt);
@@ -286,7 +286,7 @@ void lv_table_set_column_count(lv_obj_t * obj, uint32_t col_cnt)
         lv_memcpy(&new_cell_data[new_col_start], &table->cell_data[old_col_start],
                   sizeof(new_cell_data[0]) * min_col_cnt);
 
-        /*Free the old cells (only if the table becomes smaller)*/
+        /*Освободите старые ячейки (только если таблица станет меньше)*/
         int32_t i;
         for(i = 0; i < (int32_t)old_col_cnt - (int32_t)col_cnt; i++) {
             uint32_t idx = old_col_start + min_col_cnt + i;
@@ -298,7 +298,7 @@ void lv_table_set_column_count(lv_obj_t * obj, uint32_t col_cnt)
     lv_free(table->cell_data);
     table->cell_data = new_cell_data;
 
-    /*Initialize the new column widths if any*/
+    /*Инициализируйте новую ширину столбца, если таковая имеется.*/
     table->col_w = lv_realloc(table->col_w, col_cnt * sizeof(table->col_w[0]));
     LV_ASSERT_MALLOC(table->col_w);
     if(table->col_w == NULL) return;
@@ -317,7 +317,7 @@ void lv_table_set_column_width(lv_obj_t * obj, uint32_t col_id, int32_t w)
 
     lv_table_t * table = (lv_table_t *)obj;
 
-    /*Auto expand*/
+    /*Автоматическое расширение*/
     if(col_id >= table->col_cnt) lv_table_set_column_count(obj, col_id + 1);
 
     table->col_w[col_id] = w;
@@ -330,14 +330,14 @@ void lv_table_set_cell_ctrl(lv_obj_t * obj, uint32_t row, uint32_t col, lv_table
 
     lv_table_t * table = (lv_table_t *)obj;
 
-    /*Auto expand*/
+    /*Автоматическое расширение*/
     if(col >= table->col_cnt) lv_table_set_column_count(obj, col + 1);
     if(row >= table->row_cnt) lv_table_set_row_count(obj, row + 1);
 
     uint32_t cell = row * table->col_cnt + col;
 
     if(is_cell_empty(table->cell_data[cell])) {
-        table->cell_data[cell]    = lv_malloc(sizeof(lv_table_cell_t) + 1); /*+1: trailing '\0 */
+        table->cell_data[cell]    = lv_malloc(sizeof(lv_table_cell_t) + 1); /*+1: завершающий '\0 */
         LV_ASSERT_MALLOC(table->cell_data[cell]);
         if(table->cell_data[cell] == NULL) return;
 
@@ -356,14 +356,14 @@ void lv_table_clear_cell_ctrl(lv_obj_t * obj, uint32_t row, uint32_t col, lv_tab
 
     lv_table_t * table = (lv_table_t *)obj;
 
-    /*Auto expand*/
+    /*Автоматическое расширение*/
     if(col >= table->col_cnt) lv_table_set_column_count(obj, col + 1);
     if(row >= table->row_cnt) lv_table_set_row_count(obj, row + 1);
 
     uint32_t cell = row * table->col_cnt + col;
 
     if(is_cell_empty(table->cell_data[cell])) {
-        table->cell_data[cell]    = lv_malloc(sizeof(lv_table_cell_t) + 1); /*+1: trailing '\0 */
+        table->cell_data[cell]    = lv_malloc(sizeof(lv_table_cell_t) + 1); /*+1: завершающий '\0 */
         LV_ASSERT_MALLOC(table->cell_data[cell]);
         if(table->cell_data[cell] == NULL) return;
 
@@ -381,14 +381,14 @@ void lv_table_set_cell_user_data(lv_obj_t * obj, uint16_t row, uint16_t col, voi
 
     lv_table_t * table = (lv_table_t *)obj;
 
-    /*Auto expand*/
+    /*Автоматическое расширение*/
     if(col >= table->col_cnt) lv_table_set_column_count(obj, col + 1);
     if(row >= table->row_cnt) lv_table_set_row_count(obj, row + 1);
 
     uint32_t cell = row * table->col_cnt + col;
 
     if(is_cell_empty(table->cell_data[cell])) {
-        table->cell_data[cell]    = lv_malloc(sizeof(lv_table_cell_t) + 1); /*+1: trailing '\0 */
+        table->cell_data[cell]    = lv_malloc(sizeof(lv_table_cell_t) + 1); /*+1: завершающий '\0 */
         LV_ASSERT_MALLOC(table->cell_data[cell]);
         if(table->cell_data[cell] == NULL) return;
 
@@ -421,7 +421,7 @@ void lv_table_set_selected_cell(lv_obj_t * obj, uint16_t row, uint16_t col)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const char * lv_table_get_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col)
@@ -537,7 +537,7 @@ static void lv_table_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 {
     LV_UNUSED(class_p);
     lv_table_t * table = (lv_table_t *)obj;
-    /*Free the cell texts*/
+    /*Освободите текстовые сообщения*/
     uint32_t i;
     for(i = 0; i < table->col_cnt * table->row_cnt; i++) {
         if(table->cell_data[i]) {
@@ -557,7 +557,7 @@ static void lv_table_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -696,13 +696,13 @@ static void draw_main(lv_event_t * e)
     obj->state = LV_STATE_DEFAULT;
     obj->skip_trans = 1;
     lv_draw_rect_dsc_t rect_dsc_def;
-    lv_draw_rect_dsc_t rect_dsc_act; /*Passed to the event to modify it*/
+    lv_draw_rect_dsc_t rect_dsc_act; /*Передано событию для его изменения*/
     lv_draw_rect_dsc_init(&rect_dsc_def);
     rect_dsc_def.base.layer = layer;
     lv_obj_init_draw_rect_dsc(obj, LV_PART_ITEMS, &rect_dsc_def);
 
     lv_draw_label_dsc_t label_dsc_def;
-    lv_draw_label_dsc_t label_dsc_act;  /*Passed to the event to modify it*/
+    lv_draw_label_dsc_t label_dsc_act;  /*Передано событию для его изменения*/
     lv_draw_label_dsc_init(&label_dsc_def);
     label_dsc_def.base.layer = layer;
     lv_obj_init_draw_label_dsc(obj, LV_PART_ITEMS, &label_dsc_def);
@@ -719,7 +719,7 @@ static void draw_main(lv_event_t * e)
     int32_t scroll_x = lv_obj_get_scroll_x(obj) ;
     bool rtl = lv_obj_get_style_base_dir(obj, LV_PART_MAIN) == LV_BASE_DIR_RTL;
 
-    /*Handle custom drawer*/
+    /*Ручка индивидуального ящика*/
     for(row = 0; row < table->row_cnt; row++) {
         int32_t h_row = table->row_h[row];
 
@@ -768,7 +768,7 @@ static void draw_main(lv_event_t * e)
                 continue;
             }
 
-            /*Expand the cell area with a half border to avoid drawing 2 borders next to each other*/
+            /*Расширьте область ячейки с помощью половины границы, чтобы не рисовать две границы рядом друг с другом.*/
             lv_area_t cell_area_border;
             lv_area_copy(&cell_area_border, &cell_area);
             if((rect_dsc_def.border_side & LV_BORDER_SIDE_LEFT) && cell_area_border.x1 > obj->coords.x1 + bg_left) {
@@ -793,12 +793,12 @@ static void draw_main(lv_event_t * e)
                 if(obj->state & LV_STATE_EDITED) cell_state |= LV_STATE_EDITED;
             }
 
-            /*Set up the draw descriptors*/
+            /*Настройка дескрипторов отрисовки*/
             if(cell_state == LV_STATE_DEFAULT) {
                 lv_memcpy(&rect_dsc_act, &rect_dsc_def, sizeof(lv_draw_rect_dsc_t));
                 lv_memcpy(&label_dsc_act, &label_dsc_def, sizeof(lv_draw_label_dsc_t));
             }
-            /*In other cases get the styles directly without caching them*/
+            /*В других случаях стили можно получить напрямую, не кэшируя их.*/
             else {
                 obj->state = cell_state;
                 obj->skip_trans = 1;
@@ -838,7 +838,7 @@ static void draw_main(lv_event_t * e)
 
                 attributes.max_width = lv_area_get_width(&txt_area);
 
-                /*Align the content to the middle if not cropped*/
+                /*Выровняйте содержимое по середине, если оно не обрезано*/
                 bool crop = ctrl & LV_TABLE_CELL_CTRL_TEXT_CROP;
                 if(crop) {
                     attributes.text_flags = LV_TEXT_FLAG_EXPAND;
@@ -847,7 +847,7 @@ static void draw_main(lv_event_t * e)
 
                 lv_text_get_size_attributes(&txt_size, table->cell_data[cell]->txt, label_dsc_def.font, &attributes);
 
-                /*Align the content to the middle if not cropped*/
+                /*Выровняйте содержимое по середине, если оно не обрезано*/
                 if(!crop) {
                     txt_area.y1 = cell_area.y1 + h_row / 2 - txt_size.y / 2;
                     txt_area.y2 = cell_area.y1 + h_row / 2 + txt_size.y / 2;
@@ -872,7 +872,7 @@ static void draw_main(lv_event_t * e)
     layer->_clip_area = clip_area_ori;
 }
 
-/* Refreshes size of the table starting from @start_row row */
+/* Обновляет размер таблицы, начиная со строки @start_row. */
 static void refr_size_form_row(lv_obj_t * obj, uint32_t start_row)
 {
     const int32_t cell_pad_left = lv_obj_get_style_pad_left(obj, LV_PART_ITEMS);
@@ -920,7 +920,7 @@ static void refr_cell_size(lv_obj_t * obj, uint32_t row, uint32_t col)
     int32_t prev_row_size = table->row_h[row];
     table->row_h[row] = LV_CLAMP(minh, calculated_height, maxh);
 
-    /*If the row height haven't changed invalidate only this cell*/
+    /*Если высота строки не изменилась, сделайте недействительной только эту ячейку.*/
     if(prev_row_size == table->row_h[row]) {
         lv_area_t cell_area;
         get_cell_area(obj, row, col, &cell_area);
@@ -940,7 +940,7 @@ static int32_t get_row_height(lv_obj_t * obj, uint32_t row_id, const lv_font_t *
     lv_table_t * table = (lv_table_t *)obj;
 
     int32_t h_max = lv_font_get_line_height(font) + cell_top + cell_bottom;
-    /* Calculate the cell_data index where to start */
+    /* Рассчитать индекс cell_data, с чего начать */
     uint32_t row_start = row_id * table->col_cnt;
 
     lv_text_attributes_t attributes = {0};
@@ -948,7 +948,7 @@ static int32_t get_row_height(lv_obj_t * obj, uint32_t row_id, const lv_font_t *
     attributes.line_space = line_space;
     attributes.text_flags = LV_TEXT_FLAG_NONE;
 
-    /* Traverse the cells in the row_id row */
+    /* Обход ячеек в строке row_id */
     uint32_t cell;
     uint32_t col;
     for(cell = row_start, col = 0; cell < row_start + table->col_cnt; cell++, col++) {
@@ -960,9 +960,9 @@ static int32_t get_row_height(lv_obj_t * obj, uint32_t row_id, const lv_font_t *
 
         attributes.max_width = table->col_w[col];
 
-        /* Traverse the current row from the first until the penultimate column.
-         * Increment the text width if the cell has the LV_TABLE_CELL_CTRL_MERGE_RIGHT control,
-         * exit the traversal when the current cell control is not LV_TABLE_CELL_CTRL_MERGE_RIGHT */
+        /* Перейдите текущую строку от первого до предпоследнего столбца.
+         * Увеличьте ширину текста, если ячейка имеет элемент управления LV_TABLE_CELL_CTRL_MERGE_RIGHT,
+         * выйти из обхода, если текущий элемент управления ячейкой не LV_TABLE_CELL_CTRL_MERGE_RIGHT */
         uint32_t col_merge = 0;
         for(col_merge = 0; col_merge + col < table->col_cnt - 1; col_merge++) {
             lv_table_cell_t * next_cell_data = table->cell_data[cell + col_merge];
@@ -980,12 +980,12 @@ static int32_t get_row_height(lv_obj_t * obj, uint32_t row_id, const lv_font_t *
 
         lv_table_cell_ctrl_t ctrl = (lv_table_cell_ctrl_t) cell_data->ctrl;
 
-        /*When cropping the text we can assume the row height is equal to the line height*/
+        /*При обрезке текста можно предположить, что высота строки равна высоте строки.*/
         if(ctrl & LV_TABLE_CELL_CTRL_TEXT_CROP) {
             h_max = LV_MAX(lv_font_get_line_height(font) + cell_top + cell_bottom,
                            h_max);
         }
-        /*Else we have to calculate the height of the cell text*/
+        /*В противном случае нам нужно вычислить высоту текста ячейки.*/
         else {
             lv_point_t txt_size;
             attributes.max_width -= cell_left + cell_right;
@@ -993,7 +993,7 @@ static int32_t get_row_height(lv_obj_t * obj, uint32_t row_id, const lv_font_t *
             lv_text_get_size_attributes(&txt_size, table->cell_data[cell]->txt, font, &attributes);
 
             h_max = LV_MAX(txt_size.y + cell_top + cell_bottom, h_max);
-            /*Skip until one element after the last merged column*/
+            /*Пропускать до одного элемента после последнего объединенного столбца.*/
             cell += col_merge;
             col += col_merge;
         }
@@ -1059,7 +1059,7 @@ static lv_result_t get_pressed_cell(lv_obj_t * obj, uint32_t * row, uint32_t * c
         }
     }
 
-    /* If the click was on valid column AND row then return valid result, return invalid otherwise */
+    /* Если щелчок был на действительной строке столбца AND, верните действительный результат, в противном случае верните недействительный. */
     lv_result_t result = LV_RESULT_INVALID;
     if((is_click_on_valid_column) && (is_click_on_valid_row)) {
         result = LV_RESULT_OK;
@@ -1068,7 +1068,7 @@ static lv_result_t get_pressed_cell(lv_obj_t * obj, uint32_t * row, uint32_t * c
     return result;
 }
 
-/* Returns number of bytes to allocate based on chars configuration */
+/* Возвращает количество байтов, которые нужно выделить на основе конфигурации символов. */
 static size_t get_cell_txt_len(const char * txt)
 {
     size_t retval = 0;
@@ -1082,7 +1082,7 @@ static size_t get_cell_txt_len(const char * txt)
     return retval;
 }
 
-/* Copy txt into dst skipping the format byte */
+/* Скопируйте txt в dst, пропуская байт формата. */
 static void copy_cell_txt(lv_table_cell_t * dst, const char * txt)
 {
 #if LV_USE_ARABIC_PERSIAN_CHARS
@@ -1101,9 +1101,9 @@ static void get_cell_area(lv_obj_t * obj, uint32_t row, uint32_t col, lv_area_t 
     for(c = 0; c < col; c++) {
         area->x1 += table->col_w[c];
     }
-    /* Traverse the current row from the first until the penultimate column.
-     * Increment the offset if the cell has the LV_TABLE_CELL_CTRL_MERGE_RIGHT control,
-     * exit the traversal when the current cell control is not LV_TABLE_CELL_CTRL_MERGE_RIGHT */
+    /* Перейдите текущую строку от первого до предпоследнего столбца.
+     * Увеличьте смещение, если ячейка имеет элемент управления LV_TABLE_CELL_CTRL_MERGE_RIGHT,
+     * выйти из обхода, если текущий элемент управления ячейкой не LV_TABLE_CELL_CTRL_MERGE_RIGHT */
     uint32_t col_merge = 0;
     int32_t offset = 0;
     for(col_merge = 0; col_merge + col < table->col_cnt - 1; col_merge++) {

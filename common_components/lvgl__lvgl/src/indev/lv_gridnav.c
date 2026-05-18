@@ -62,7 +62,7 @@ static int32_t get_y_center(lv_obj_t * obj);
 
 void lv_gridnav_add(lv_obj_t * obj, lv_gridnav_ctrl_t ctrl)
 {
-    lv_gridnav_remove(obj); /*Be sure to not add gridnav twice*/
+    lv_gridnav_remove(obj); /*Обязательно не добавляйте Gridnav дважды.*/
 
     lv_gridnav_dsc_t * dsc = lv_malloc(sizeof(lv_gridnav_dsc_t));
     LV_ASSERT_MALLOC(dsc);
@@ -241,7 +241,7 @@ static void gridnav_event_cb(lv_event_t * e)
         if(dsc->focused_obj == NULL)  dsc->focused_obj = find_first_focusable(obj);
         if(dsc->focused_obj) {
             lv_obj_add_state(dsc->focused_obj, (lv_state_t)(LV_STATE_FOCUSED | LV_STATE_FOCUS_KEY));
-            lv_obj_remove_state(dsc->focused_obj, LV_STATE_PRESSED); /*Be sure the focuses obj is not stuck in pressed state*/
+            lv_obj_remove_state(dsc->focused_obj, LV_STATE_PRESSED); /*Убедитесь, что объект фокуса не застрял в нажатом состоянии.*/
             lv_obj_scroll_to_view(dsc->focused_obj, LV_ANIM_OFF);
         }
     }
@@ -263,9 +263,9 @@ static void gridnav_event_cb(lv_event_t * e)
         }
     }
     else if(code == LV_EVENT_CHILD_DELETED) {
-        /*This event bubble, so be sure this object's child was deleted.
-         *As we don't know which object was deleted we can't make the next focused.
-         *So make the first object focused*/
+        /*Это пузырь событий, поэтому убедитесь, что дочерний объект этого объекта был удален.
+         *Поскольку мы не знаем, какой объект был удален, мы не можем сделать фокус на следующем.
+         *Итак, сделайте первый объект сфокусированным*/
         lv_obj_t * target = lv_event_get_target(e);
         if(target == obj) {
             dsc->focused_obj = find_first_focusable(obj);
@@ -278,7 +278,7 @@ static void gridnav_event_cb(lv_event_t * e)
             code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED || code == LV_EVENT_LONG_PRESSED_REPEAT ||
             code == LV_EVENT_CLICKED || code == LV_EVENT_RELEASED) {
         if(lv_group_get_focused(lv_obj_get_group(obj)) == obj) {
-            /*Forward press/release related event too*/
+            /*Переслать также событие, связанное с прессой/релизом*/
             lv_indev_type_t t = lv_indev_get_type(lv_indev_active());
             if(t == LV_INDEV_TYPE_ENCODER || t == LV_INDEV_TYPE_KEYPAD) {
                 lv_obj_send_event(dsc->focused_obj, code, lv_indev_active());
@@ -309,33 +309,33 @@ static lv_obj_t * find_chid(lv_obj_t * obj, lv_obj_t * start_child, find_mode_t 
             case FIND_LEFT:
                 x_err = get_x_center(child) - x_start;
                 y_err = get_y_center(child) - y_start;
-                if(x_err >= 0) continue;    /*It's on the right*/
-                if(LV_ABS(y_err) > h_half) continue;    /*Too far*/
+                if(x_err >= 0) continue;    /*Это справа*/
+                if(LV_ABS(y_err) > h_half) continue;    /*Слишком далеко*/
                 break;
             case FIND_RIGHT:
                 x_err = get_x_center(child) - x_start;
                 y_err = get_y_center(child) - y_start;
-                if(x_err <= 0) continue;    /*It's on the left*/
-                if(LV_ABS(y_err) > h_half) continue;    /*Too far*/
+                if(x_err <= 0) continue;    /*Это слева*/
+                if(LV_ABS(y_err) > h_half) continue;    /*Слишком далеко*/
                 break;
             case FIND_TOP:
                 x_err = get_x_center(child) - x_start;
                 y_err = get_y_center(child) - y_start;
-                if(y_err >= 0) continue;    /*It's on the bottom*/
+                if(y_err >= 0) continue;    /*Это внизу*/
                 break;
             case FIND_BOTTOM:
                 x_err = get_x_center(child) - x_start;
                 y_err = get_y_center(child) - y_start;
-                if(y_err <= 0) continue;    /*It's on the top*/
+                if(y_err <= 0) continue;    /*Это сверху*/
                 break;
             case FIND_NEXT_ROW_FIRST_ITEM:
                 y_err = get_y_center(child) - y_start;
-                if(y_err <= 0) continue;    /*It's on the top*/
+                if(y_err <= 0) continue;    /*Это сверху*/
                 x_err = lv_obj_get_x(child);
                 break;
             case FIND_PREV_ROW_LAST_ITEM:
                 y_err = get_y_center(child) - y_start;
-                if(y_err >= 0) continue;    /*It's on the bottom*/
+                if(y_err >= 0) continue;    /*Это внизу*/
                 x_err = obj->coords.x2 - child->coords.x2;
                 break;
             case FIND_FIRST_ROW:

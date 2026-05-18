@@ -71,7 +71,7 @@ void lv_theme_apply(lv_obj_t * obj)
 
     if(th == NULL) return;
 
-    apply_theme_recursion(th, obj);    /*Apply the theme including the base theme(s)*/
+    apply_theme_recursion(th, obj);    /*Примените тему, включая базовые темы.*/
 }
 
 void lv_theme_set_parent(lv_theme_t * theme, lv_theme_t * parent)
@@ -147,14 +147,14 @@ static void apply_theme_recursion(lv_theme_t * th, lv_obj_t * obj)
     const lv_obj_class_t * original_class_p = obj->class_p;
 
     if(obj->class_p->base_class && obj->class_p->theme_inheritable == LV_OBJ_CLASS_THEME_INHERITABLE_TRUE) {
-        /*Apply the base class theme in obj*/
+        /*Замените тему базового класса в obj*/
         obj->class_p = obj->class_p->base_class;
 
-        /*apply the base first*/
+        /*сначала нанеси базу*/
         apply_theme_recursion(th, obj);
     }
 
-    /*Restore the original class*/
+    /*Восстановить исходный класс*/
     obj->class_p = original_class_p;
 
     apply_theme(th, obj);

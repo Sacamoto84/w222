@@ -25,7 +25,7 @@ class LVDisplay(Value):
         for i in range(self.screen_cnt):
             yield LVObject(screens[i])
 
-    # Buffer-related properties
+    # Свойства, связанные с буфером
     @property
     def buf_1(self):
         """Get first draw buffer (may be None)"""

@@ -191,16 +191,16 @@ static void _simple_text_input_read_cb(lv_indev_t * indev, lv_indev_data_t * dat
     lv_uefi_simple_text_input_context_t * indev_ctx = (lv_uefi_simple_text_input_context_t *)lv_indev_get_user_data(indev);
     LV_ASSERT_NULL(indev_ctx);
 
-    /* Empty the buffer before reading new values */
+    /* Очистите буфер перед чтением новых значений. */
     if(lv_ll_is_empty(&indev_ctx->key_cache)) {
-        // Read from all registered devices
+        // Чтение со всех зарегистрированных устройств
         for(node = lv_ll_get_head(&indev_ctx->handles); node != NULL; node = lv_ll_get_next(&indev_ctx->handles, node)) {
             handle_ctx = (lv_uefi_simple_text_input_handle_context_t *) node;
             _simple_text_input_read(indev_ctx, handle_ctx);
         }
     }
 
-    /* Return the first value */
+    /* Вернуть первое значение */
     node = lv_ll_get_head(&indev_ctx->key_cache);
     if(node != NULL) {
         key_cache = (lv_uefi_simple_text_input_key_cache_t *)node;
@@ -210,7 +210,7 @@ static void _simple_text_input_read_cb(lv_indev_t * indev, lv_indev_data_t * dat
         lv_free(key_cache);
     }
 
-    /* Continue reading if there are more values in the buffer */
+    /* Продолжайте читать, если в буфере больше значений. */
     data->continue_reading = !lv_ll_is_empty(&indev_ctx->key_cache);
 }
 
@@ -259,13 +259,13 @@ static void _simple_text_input_read(lv_uefi_simple_text_input_context_t * indev_
 
     key = _key_from_uefi_key(&state);
 
-    /* insert the press */
+    /* вставьте пресс */
     cache = (lv_uefi_simple_text_input_key_cache_t *) lv_ll_ins_tail(&indev_ctx->key_cache);
     LV_ASSERT_MALLOC(cache);
     cache->key = key;
     cache->pressed = true;
 
-    /* insert the release */
+    /* вставьте релиз */
     cache = (lv_uefi_simple_text_input_key_cache_t *) lv_ll_ins_tail(&indev_ctx->key_cache);
     LV_ASSERT_MALLOC(cache);
     cache->key = key;
@@ -276,18 +276,18 @@ static uint32_t _utf8_from_unicode(UINT32 unicode)
 {
     uint8_t bytes[4] = {0, 0, 0, 0};
 
-    /* unicode < 128 -> 1 byte */
+    /* Юникод < 128 -> 1 байт */
     if(unicode < 128) {
         bytes[0] |= unicode;
     }
-    /* unicode < 2048 -> 2 byte */
+    /* Юникод <2048 -> 2 байта */
     else if(unicode < 2048) {
         bytes[0] = 0xC0;
         bytes[0] |= unicode >> 6;
         bytes[1] = 0x80;
         bytes[1] |= (unicode & 0x003F);
     }
-    /* unicode < 65536 -> 3 byte */
+    /* Юникод <65536 -> 3 байта */
     else if(unicode < 65536) {
         bytes[0] = 0xE0;
         bytes[0] |= unicode >> 12;
@@ -321,7 +321,7 @@ static uint32_t _key_from_uefi_key(const EFI_KEY_DATA * key)
             return LV_KEY_END;
         case 0x17:
             return LV_KEY_ESC;
-        /* ignore all other scan codes */
+        /* игнорировать все остальные скан-коды */
         default:
             break;
     }

@@ -26,7 +26,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Cover check results.*/
+/** Результаты проверки покрытия.*/
 typedef enum {
     LV_COVER_RES_COVER      = 0,
     LV_COVER_RES_NOT_COVER  = 1,
@@ -38,46 +38,46 @@ typedef enum {
  **********************/
 
 /**
- * Send an event to the object
- * @param obj           pointer to an object
- * @param event_code    the type of the event from `lv_event_t`
- * @param param         arbitrary data depending on the widget type and the event. (Usually `NULL`)
- * @return LV_RESULT_OK: `obj` was not deleted in the event; LV_RESULT_INVALID: `obj` was deleted in the event_code
+ * Отправить событие на объект
+ * @param obj           указатель на объект
+ * @param event_code    тип события из `lv_event_t`
+ * @param param         произвольные данные в зависимости от типа виджета и события. (Обычно `NULL`)
+ * @return LV_RESULT_OK :`obj`не был удален в событии;  LV_RESULT_INVALID:`obj`был удален в event_code.
  */
 lv_result_t lv_obj_send_event(lv_obj_t * obj, lv_event_code_t event_code, void * param);
 
 /**
- * Used by the widgets internally to call the ancestor widget types's event handler
- * @param class_p   pointer to the class of the widget (NOT the ancestor class)
- * @param e         pointer to the event descriptor
- * @return          LV_RESULT_OK: the target object was not deleted in the event; LV_RESULT_INVALID: it was deleted in the event_code
+ * Используется виджетами внутри для вызова обработчика событий родительских типов виджетов.
+ * @param class_p   указатель на класс виджета (NOTкласс-предок)
+ * @param e         указатель на дескриптор события
+ * @return          LV_RESULT_OK: целевой объект не был удален в событии;  LV_RESULT_INVALID: он был удален в event_code.
  */
 lv_result_t lv_obj_event_base(const lv_obj_class_t * class_p, lv_event_t * e);
 
 /**
- * Get the current target of the event. It's the object which event handler being called.
- * If the event is not bubbled it's the same as "original" target.
- * @param e     pointer to the event descriptor
- * @return      the target of the event_code
+ * Получите текущую цель события. Это объект, обработчик которого вызывается.
+ * Если событие не всплывает, оно совпадает с «исходной» целью.
+ * @param e     указатель на дескриптор события
+ * @return      цель event_code
  */
 lv_obj_t * lv_event_get_current_target_obj(lv_event_t * e);
 
 /**
- * Get the object originally targeted by the event. It's the same even if the event is bubbled.
- * @param e     pointer to the event descriptor
- * @return      pointer to the original target of the event_code
+ * Получите объект, на который изначально нацелено событие. То же самое, даже если событие всплывает.
+ * @param e     указатель на дескриптор события
+ * @return      указатель на исходную цель event_code
  */
 lv_obj_t * lv_event_get_target_obj(lv_event_t * e);
 
 /**
- * Add an event handler function for an object.
- * Used by the user to react on event which happens with the object.
- * An object can have multiple event handler. They will be called in the same order as they were added.
- * @param obj       pointer to an object
- * @param filter    an event code (e.g. `LV_EVENT_CLICKED`) on which the event should be called. `LV_EVENT_ALL` can be used to receive all the events.
- * @param event_cb  the new event function
- * @param           user_data custom data will be available in `event_cb`
- * @return          handler to the event. It can be used in `lv_obj_remove_event_dsc`.
+ * Добавьте функцию обработчика событий для объекта.
+ * Используется пользователем для реагирования на событие, происходящее с объектом.
+ * Объект может иметь несколько обработчиков событий. Они будут вызываться в том же порядке, в котором были добавлены.
+ * @param obj       указатель на объект
+ * @param filter    код события (например, `LV_EVENT_CLICKED`), для которого должно быть вызвано событие. `LV_EVENT_ALL`можно использовать для получения всех событий.
+ * @param event_cb  новая функция событий
+ * @param           user_data пользовательские данные будут доступны в `event_cb`
+ * @return          обработчик события. Его можно использовать в `lv_obj_remove_event_dsc`.
  */
 lv_event_dsc_t * lv_obj_add_event_cb(lv_obj_t * obj, lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
 
@@ -90,115 +90,115 @@ bool lv_obj_remove_event(lv_obj_t * obj, uint32_t index);
 bool lv_obj_remove_event_dsc(lv_obj_t * obj, lv_event_dsc_t * dsc);
 
 /**
- * Remove an event_cb from an object
- * @param obj           pointer to a obj
- * @param event_cb      the event_cb of the event to remove
- * @return              the count of the event removed
+ * Удалитьevent_cbиз объекта
+ * @param obj           указатель на объект
+ * @param event_cb      event_cb события, которое нужно удалить
+ * @return              количество событий удалено
  */
 uint32_t lv_obj_remove_event_cb(lv_obj_t * obj, lv_event_cb_t event_cb);
 
 /**
- * Remove an event_cb with user_data
- * @param obj           pointer to a obj
- * @param event_cb      the event_cb of the event to remove
- * @param user_data     user_data
- * @return              the count of the event removed
+ * Удалитеevent_cbс помощью user_data.
+ * @param obj           указатель на объект
+ * @param event_cb      event_cb события, которое нужно удалить
+ * @param user_data user_data
+ * @return              количество событий удалено
  */
 uint32_t lv_obj_remove_event_cb_with_user_data(lv_obj_t * obj, lv_event_cb_t event_cb, void * user_data);
 
 /**
- * Get the input device passed as parameter to indev related events.
- * @param e     pointer to an event
- * @return      the indev that triggered the event or NULL if called on a not indev related event
+ * Получите устройство ввода, переданное в качестве параметра для событий, связанных с разработкой.
+ * @param e     указатель на событие
+ * @return      индев, вызвавший событие, или NULL, если вызывается событие, не связанное с индевом
  */
 lv_indev_t * lv_event_get_indev(lv_event_t * e);
 
 /**
- * Get the draw context which should be the first parameter of the draw functions.
- * Namely: `LV_EVENT_DRAW_MAIN/POST`, `LV_EVENT_DRAW_MAIN/POST_BEGIN`, `LV_EVENT_DRAW_MAIN/POST_END`
- * @param e     pointer to an event
- * @return      pointer to a draw context or NULL if called on an unrelated event
+ * Получите контекст рисования, который должен быть первым параметром функций рисования.
+ * А именно: `LV_EVENT_DRAW_MAIN/POST`, `LV_EVENT_DRAW_MAIN/POST_BEGIN`, `LV_EVENT_DRAW_MAIN/POST_END`
+ * @param e     указатель на событие
+ * @return      указатель на контекст отрисовки или NULL, если вызывается несвязанное событие
  */
 lv_layer_t * lv_event_get_layer(lv_event_t * e);
 
 /**
- * Get the old area of the object before its size was changed. Can be used in `LV_EVENT_SIZE_CHANGED`
- * @param e     pointer to an event
- * @return      the old absolute area of the object or NULL if called on an unrelated event
+ * Получите старую площадь объекта до изменения его размера. Может использоваться в `LV_EVENT_SIZE_CHANGED`.
+ * @param e     указатель на событие
+ * @return      старая абсолютная площадь объекта или NULL, если вызывается несвязанное событие
  */
 const lv_area_t * lv_event_get_old_size(lv_event_t * e);
 
 /**
- * Get the key passed as parameter to an event. Can be used in `LV_EVENT_KEY`
- * @param e     pointer to an event
- * @return      the triggering key or NULL if called on an unrelated event
+ * Получите ключ, переданный в качестве параметра событию. Может использоваться в `LV_EVENT_KEY`.
+ * @param e     указатель на событие
+ * @return      триггерная клавиша или NULL, если вызывается несвязанное событие
  */
 uint32_t lv_event_get_key(lv_event_t * e);
 
 /**
- * Get the signed rotary encoder diff. passed as parameter to an event. Can be used in `LV_EVENT_ROTARY`
- * @param e     pointer to an event
- * @return      the triggering key or NULL if called on an unrelated event
+ * Получите подписанный дифф поворотного энкодера. передается в качестве параметра событию. Может использоваться в `LV_EVENT_ROTARY`.
+ * @param e     указатель на событие
+ * @return      триггерная клавиша или NULL, если вызывается несвязанное событие
  */
 int32_t lv_event_get_rotary_diff(lv_event_t * e);
 
 /**
- * Get the animation descriptor of a scrolling. Can be used in `LV_EVENT_SCROLL_BEGIN`
- * @param e     pointer to an event
- * @return      the animation that will scroll the object. (can be modified as required)
+ * Получите дескриптор анимации прокрутки. Может использоваться в `LV_EVENT_SCROLL_BEGIN`.
+ * @param e     указатель на событие
+ * @return      анимация, которая будет прокручивать объект. (можно изменить по желанию)
  */
 lv_anim_t * lv_event_get_scroll_anim(lv_event_t * e);
 
 /**
- * Set the new extra draw size. Can be used in `LV_EVENT_REFR_EXT_DRAW_SIZE`
- * @param e     pointer to an event
- * @param size  The new extra draw size
+ * Установите новый дополнительный размер рисунка. Может использоваться в `LV_EVENT_REFR_EXT_DRAW_SIZE`.
+ * @param e     указатель на событие
+ * @param size  Новый дополнительный размер розыгрыша
  */
 void lv_event_set_ext_draw_size(lv_event_t * e, int32_t size);
 
 /**
- * Get a pointer to an `lv_point_t` variable in which the self size should be saved (width in `point->x` and height `point->y`).
- * Can be used in `LV_EVENT_GET_SELF_SIZE`
- * @param e     pointer to an event
- * @return      pointer to `lv_point_t` or NULL if called on an unrelated event
+ * Получите указатель на переменную`lv_point_t`, в которой должна быть сохранена небольшая величина (ширина в`point->x`и высота`point->y`).
+ * Может использоваться в `LV_EVENT_GET_SELF_SIZE`.
+ * @param e     указатель на событие
+ * @return      указатель на`lv_point_t`или NULL, если вызывается несвязанное событие
  */
 lv_point_t * lv_event_get_self_size_info(lv_event_t * e);
 
 /**
- * Get a pointer to an `lv_hit_test_info_t` variable in which the hit test result should be saved. Can be used in `LV_EVENT_HIT_TEST`
- * @param e     pointer to an event
- * @return      pointer to `lv_hit_test_info_t` or NULL if called on an unrelated event
+ * Получите указатель на переменную`lv_hit_test_info_t`, в котором должен быть сохранен результат проверки проверки. Может использоваться в `LV_EVENT_HIT_TEST`.
+ * @param e     указатель на событие
+ * @return      указатель на`lv_hit_test_info_t`или NULL, если вызывается несвязанное событие
  */
 lv_hit_test_info_t * lv_event_get_hit_test_info(lv_event_t * e);
 
 /**
- * Get a pointer to an area which should be examined whether the object fully covers it or not.
- * Can be used in `LV_EVENT_HIT_TEST`
- * @param e     pointer to an event
- * @return      an area with absolute coordinates to check
+ * Получите указатель на область, которую необходимо проверить, полностью ее закрывает объект или нет.
+ * Может использоваться в `LV_EVENT_HIT_TEST`.
+ * @param e     указатель на событие
+ * @return      область с абсолютными координатами для проверки
  */
 const lv_area_t * lv_event_get_cover_area(lv_event_t * e);
 
 /**
- * Set the result of cover checking. Can be used in `LV_EVENT_COVER_CHECK`
- * @param e     pointer to an event
- * @param res   an element of ::lv_cover_check_info_t
+ * Установите результат проверки покрытия. Может использоваться в `LV_EVENT_COVER_CHECK`.
+ * @param e     указатель на событие
+ * @param res   элемент :: lv_cover_check_info_t
  */
 void lv_event_set_cover_res(lv_event_t * e, lv_cover_res_t res);
 
 /**
- * Get the draw task which was just added.
- * Can be used in `LV_EVENT_DRAW_TASK_ADDED event`
- * @param e     pointer to an event
- * @return      the added draw task
+ * Получите только что добавленную задачу рисования.
+ * Может использоваться в `LV_EVENT_DRAW_TASK_ADDED event`.
+ * @param e     указатель на событие
+ * @return      добавлено задание на рисование
  */
 lv_draw_task_t * lv_event_get_draw_task(lv_event_t * e);
 
 /**
- * Get the previous state before the state change.
- * Can be used in `LV_EVENT_STATE_CHANGED` event
- * @param e     pointer to an event
- * @return      the previous state
+ * Получите предыдущее состояние до изменения состояния.
+ * Может использоваться в событии `LV_EVENT_STATE_CHANGED`.
+ * @param e     указатель на событие
+ * @return      предыдущее состояние
  */
 lv_state_t lv_event_get_prev_state(lv_event_t * e);
 
@@ -207,7 +207,7 @@ lv_state_t lv_event_get_prev_state(lv_event_t * e);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_EVENT_H*/

@@ -42,8 +42,8 @@ void lv_demo_widgets(void);
 void lv_demo_widgets_start_slideshow(void);
 
 /**
- * Create the widgets demo with custom arguments.
- * @param args Pointer to demo arguments structure containing the parent widget and other options.
+ * Создайте демо-версию виджетов с настраиваемыми аргументами.
+ * @param args Указатель на структуру аргументов демонстрации, содержащую родительский виджет и другие параметры.
  */
 void lv_demo_widgets_with_args(const lv_demo_args_t * args);
 /**********************
@@ -53,7 +53,7 @@ void lv_demo_widgets_with_args(const lv_demo_args_t * args);
 #endif /*LV_USE_DEMO_WIDGETS*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_WIDGETS_H*/

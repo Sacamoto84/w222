@@ -28,7 +28,7 @@
  *      DEFINES
  *********************/
 
-/*Display being refreshed*/
+/*Дисплей обновляется*/
 #define disp_refr LV_GLOBAL_DEFAULT()->disp_refresh
 
 /**********************
@@ -74,7 +74,7 @@ static bool alpha_test_area_on_obj(lv_obj_t * obj, const lv_area_t * area);
  **********************/
 
 /**
- * Initialize the screen refresh subsystem
+ * Инициализировать подсистему обновления экрана
  */
 void lv_refr_init(void)
 {
@@ -107,11 +107,11 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
     lv_area_t clip_area_ori = layer->_clip_area;
     lv_area_t clip_coords_for_obj;
 
-    /*The widget will be rendered.
-     *So setters from now should use animations. */
+    /*Виджет будет отображен.
+     *Поэтому сеттеры теперь должны использовать анимацию. */
     obj->rendered = 1;
 
-    /*Truncate the clip area to `obj size + ext size` area*/
+    /*Обрезать область отсечения до области`obj size + ext size`.*/
     lv_area_t obj_coords_ext;
     lv_obj_get_coords(obj, &obj_coords_ext);
     int32_t ext_draw_size = lv_obj_get_ext_draw_size(obj);
@@ -121,7 +121,7 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
         LV_PROFILER_REFR_END;
         return;
     }
-    /*If the object is visible on the current clip area*/
+    /*Если объект виден в текущей области клипа*/
     layer->_clip_area = clip_coords_for_obj;
 
     lv_obj_send_event(obj, LV_EVENT_DRAW_MAIN_BEGIN, layer);
@@ -156,8 +156,8 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
         uint32_t i;
         uint32_t child_cnt = lv_obj_get_child_count(obj);
         if(child_cnt == 0) {
-            /*If the object was visible on the clip area call the post draw events too*/
-            /*If all the children are redrawn make 'post draw' draw*/
+            /*Если объект был виден в области клипа, также вызовите события пост-рисования.*/
+            /*Если все дочерние элементы перерисованы, сделайте отрисовку «после розыгрыша».*/
             lv_obj_send_event(obj, LV_EVENT_DRAW_POST_BEGIN, layer);
             lv_obj_send_event(obj, LV_EVENT_DRAW_POST, layer);
             lv_obj_send_event(obj, LV_EVENT_DRAW_POST_END, layer);
@@ -178,8 +178,8 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
                     lv_obj_refr(layer, child);
                 }
 
-                /*If the object was visible on the clip area call the post draw events too*/
-                /*If all the children are redrawn make 'post draw' draw*/
+                /*Если объект был виден в области клипа, также вызовите события пост-рисования.*/
+                /*Если все дочерние элементы перерисованы, сделайте отрисовку «после розыгрыша».*/
                 lv_obj_send_event(obj, LV_EVENT_DRAW_POST_BEGIN, layer);
                 lv_obj_send_event(obj, LV_EVENT_DRAW_POST, layer);
                 lv_obj_send_event(obj, LV_EVENT_DRAW_POST_END, layer);
@@ -207,7 +207,7 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
                         lv_obj_refr(layer_children, child);
                     }
 
-                    /*If all the children are redrawn send 'post draw' draw*/
+                    /*Если все дочерние элементы перерисованы, отправьте розыгрыш после розыгрыша.*/
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST_BEGIN, layer_children);
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST, layer_children);
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST_END, layer_children);
@@ -228,7 +228,7 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
                         lv_obj_refr(layer_children, child);
                     }
 
-                    /*If all the children are redrawn send 'post draw' draw*/
+                    /*Если все дочерние элементы перерисованы, отправьте розыгрыш после розыгрыша.*/
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST_BEGIN, layer_children);
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST, layer_children);
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST_END, layer_children);
@@ -250,7 +250,7 @@ void lv_obj_redraw(lv_layer_t * layer, lv_obj_t * obj)
                         lv_obj_refr(layer, child);
                     }
 
-                    /*If all the children are redrawn make 'post draw' draw*/
+                    /*Если все дочерние элементы перерисованы, сделайте отрисовку «после розыгрыша».*/
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST_BEGIN, layer);
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST, layer);
                     lv_obj_send_event(obj, LV_EVENT_DRAW_POST_END, layer);
@@ -273,19 +273,19 @@ lv_result_t lv_inv_area(lv_display_t * disp, const lv_area_t * area_p)
     if(!lv_display_is_invalidation_enabled(disp)) return LV_RESULT_INVALID;
 
     /**
-     * There are two reasons for this issue:
-     *  1.LVGL API is being used across threads, such as modifying widget properties in another thread
-     *    or within an interrupt handler during the main thread rendering process.
-     *  2.User-customized widget modify widget properties/styles again within the DRAW event.
+     * Есть две причины этой проблемы:
+     *  1. LVGL API используется в разных потоках, например, для изменения свойств виджета в другом потоке.
+     *    или внутри обработчика прерываний во время процесса рендеринга основного потока.
+     *  2. Виджет, настраиваемый пользователем, снова изменяет свойства/стили виджета в событии DRAW.
      *
-     * Therefore, ensure that LVGL is used in a single-threaded manner, or refer to
-     * documentation: https://docs.lvgl.io/master/porting/os.html for proper locking mechanisms.
-     * Additionally, ensure that only drawing-related tasks are performed within the DRAW event,
-     * and move widget property/style modifications to other events.
+     * Поэтому убедитесь, что LVGL используется в однопоточном режиме, или обратитесь к
+     * documentation: https://docs.lvgl.io/master/porting/os.html для правильных механизмов блокировки.
+     * Кроме того, убедитесь, что в рамках события DRAW выполняются только задачи, связанные с чертежами.
+     * и перенесите изменения свойств/стилей виджета в другие события.
      */
     LV_ASSERT_MSG(!disp->rendering_in_progress, "Invalidate area is not allowed during rendering.");
 
-    /*Clear the invalidate buffer if the parameter is NULL*/
+    /*Очистите буфер аннулирования, если параметр равен NULL.*/
     if(area_p == NULL) {
         disp->inv_p = 0;
         return LV_RESULT_OK;
@@ -301,16 +301,16 @@ lv_result_t lv_inv_area(lv_display_t * disp, const lv_area_t * area_p)
     bool suc;
 
     suc = lv_area_intersect(&com_area, area_p, &scr_area);
-    if(suc == false)  return LV_RESULT_INVALID; /*Out of the screen*/
+    if(suc == false)  return LV_RESULT_INVALID; /*За пределами экрана*/
 
     if(disp->color_format == LV_COLOR_FORMAT_I1) {
-        /*Make sure that the X coordinates start and end on byte boundary.
-         *E.g. convert 11;27 to 8;31*/
-        com_area.x1 &= ~0x7; /*Round down: Nx8*/
-        com_area.x2 |= 0x7;    /*Round up: Nx8 - 1*/
+        /*Убедитесь, что координаты X начинаются и заканчиваются на границе байта.
+         *например преобразовать 11;27 в 8;31*/
+        com_area.x1 &= ~0x7; /*Округление вниз: Nx8*/
+        com_area.x2 |= 0x7;    /*Округление вверх: Кx8 - 1*/
     }
 
-    /*If there were at least 1 invalid area in full refresh mode, redraw the whole screen*/
+    /*Если в режиме полного обновления была хотя бы одна недопустимая область, перерисуйте весь экран.*/
     if(disp->render_mode == LV_DISPLAY_RENDER_MODE_FULL) {
         disp->inv_areas[0] = scr_area;
         disp->inv_p = 1;
@@ -321,15 +321,15 @@ lv_result_t lv_inv_area(lv_display_t * disp, const lv_area_t * area_p)
     lv_result_t res = lv_display_send_event(disp, LV_EVENT_INVALIDATE_AREA, &com_area);
     if(res != LV_RESULT_OK) return LV_RESULT_INVALID;
 
-    /*Save only if this area is not in one of the saved areas*/
+    /*Сохранять только в том случае, если этой области нет ни в одной из сохраненных областей.*/
     uint16_t i;
     for(i = 0; i < disp->inv_p; i++) {
         if(lv_area_is_in(&com_area, &disp->inv_areas[i], 0) != false) return LV_RESULT_OK;
     }
 
-    /*Save the area*/
+    /*Сохранить территорию*/
     lv_area_t * tmp_area_p = &com_area;
-    if(disp->inv_p >= LV_INV_BUF_SIZE) { /*If no place for the area add the screen*/
+    if(disp->inv_p >= LV_INV_BUF_SIZE) { /*Если нет места для области добавьте ширму*/
         disp->inv_p = 0;
         tmp_area_p = &scr_area;
     }
@@ -342,8 +342,8 @@ lv_result_t lv_inv_area(lv_display_t * disp, const lv_area_t * area_p)
 }
 
 /**
- * Get the display which is being refreshed
- * @return the display being refreshed
+ * Получить дисплей, который обновляется
+ * @return дисплей обновляется
  */
 lv_display_t * lv_refr_get_disp_refreshing(void)
 {
@@ -351,8 +351,8 @@ lv_display_t * lv_refr_get_disp_refreshing(void)
 }
 
 /**
- * Get the display which is being refreshed
- * @return the display being refreshed
+ * Получить дисплей, который обновляется
+ * @return дисплей обновляется
  */
 void lv_refr_set_disp_refreshing(lv_display_t * disp)
 {
@@ -366,9 +366,9 @@ void lv_display_refr_timer(lv_timer_t * tmr)
 
     if(tmr) {
         disp_refr = tmr->user_data;
-        /* Ensure the timer does not run again automatically.
-         * This is done before refreshing in case refreshing invalidates something else.
-         * However if the performance monitor is enabled keep the timer running to count the FPS.*/
+        /* Убедитесь, что таймер не запускается снова автоматически.
+         * Это делается перед обновлением на случай, если обновление сделает что-то еще недействительным.
+         * Однако, если монитор производительности включен, оставьте таймер включенным для подсчета FPS .*/
 #if !LV_USE_PERF_MONITOR
         lv_timer_pause(tmr);
 #endif
@@ -397,7 +397,7 @@ void lv_display_refr_timer(lv_timer_t * tmr)
         return;
     }
 
-    /*Refresh the screen's layout if required*/
+    /*При необходимости обновите макет экрана.*/
     LV_PROFILER_LAYOUT_BEGIN_TAG("layout");
     lv_obj_update_layout(disp_refr->act_scr);
     if(disp_refr->prev_scr) lv_obj_update_layout(disp_refr->prev_scr);
@@ -407,7 +407,7 @@ void lv_display_refr_timer(lv_timer_t * tmr)
     lv_obj_update_layout(disp_refr->sys_layer);
     LV_PROFILER_LAYOUT_END_TAG("layout");
 
-    /*Do nothing if there is no active screen*/
+    /*Ничего не делайте, если нет активного экрана*/
     if(disp_refr->act_scr == NULL) {
         disp_refr->inv_p = 0;
         LV_LOG_WARN("there is no active screen");
@@ -419,8 +419,8 @@ void lv_display_refr_timer(lv_timer_t * tmr)
     refr_invalid_areas();
 
     if(disp_refr->inv_p == 0) goto refr_finish;
-    /*In double buffered direct mode save the updated areas.
-     *They will be used on the next call to synchronize the buffers.*/
+    /*В прямом режиме с двойной буферизацией сохраните обновленные области.
+     *Они будут использоваться при следующем вызове для синхронизации буферов.*/
     if(lv_display_is_double_buffered(disp_refr) && disp_refr->render_mode == LV_DISPLAY_RENDER_MODE_DIRECT) {
         uint32_t i;
         for(i = 0; i < disp_refr->inv_p; i++) {
@@ -449,9 +449,9 @@ refr_finish:
 }
 
 /**
- * Search the most top object which fully covers an area
- * @param area_p pointer to an area
- * @param obj the first object to start the searching (typically a screen)
+ * Найдите самый верхний объект, который полностью покрывает область.
+ * @param area_p указатель на область
+ * @param obj первый объект, с которого начинается поиск (обычно экран)
  * @return
  */
 lv_obj_t * lv_refr_get_top_obj(const lv_area_t * area_p, lv_obj_t * obj)
@@ -463,7 +463,7 @@ lv_obj_t * lv_refr_get_top_obj(const lv_area_t * area_p, lv_obj_t * obj)
     if(lv_obj_get_layer_type(obj) != LV_LAYER_TYPE_NONE) return NULL;
     if(lv_obj_get_style_opa(obj, LV_PART_MAIN) < LV_OPA_MAX) return NULL;
 
-    /*If this object is fully cover the draw area then check the children too*/
+    /*Если этот объект полностью закрывает область рисования, проверьте и детей.*/
     lv_cover_check_info_t info;
     info.res = LV_COVER_RES_COVER;
     info.area = area_p;
@@ -476,13 +476,13 @@ lv_obj_t * lv_refr_get_top_obj(const lv_area_t * area_p, lv_obj_t * obj)
         lv_obj_t * child = obj->spec_attr->children[i];
         found_p = lv_refr_get_top_obj(area_p, child);
 
-        /*If a children is ok then break*/
+        /*Если с детьми все в порядке, то перерыв*/
         if(found_p != NULL) {
             break;
         }
     }
 
-    /*If no better children use this object*/
+    /*Если никто из лучших детей не использует этот предмет*/
     if(found_p == NULL && info.res == LV_COVER_RES_COVER) {
         found_p = obj;
     }
@@ -497,14 +497,14 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
     LV_ASSERT_NULL(obj);
     if(lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN)) return;
 
-    /*If `opa_layered != LV_OPA_COVER` draw the widget on a new layer and blend that layer with the given opacity.*/
+    /*Если`opa_layered != LV_OPA_COVER`нарисуйте виджет нового слоя и включите этот слой с заданной непрозрачностью.*/
     const lv_opa_t opa_layered = lv_obj_get_style_opa_layered(obj, LV_PART_MAIN);
     if(opa_layered <= LV_OPA_MIN) return;
 
     const lv_opa_t layer_opa_ori = layer->opa;
     const lv_color32_t layer_recolor = layer->recolor;
 
-    /*Normal `opa` (not layered) will just scale down `bg_opa`, `text_opa`, etc, in the upcoming drawings.*/
+    /*Обычный`opa`(немногослойный) просто уменьшит`bg_opa`,`text_opa`и т. д. д. на следующих рисунках.*/
     const lv_opa_t opa_main = lv_obj_get_style_opa(obj, LV_PART_MAIN);
     if(opa_main < LV_OPA_MAX) {
         layer->opa = LV_OPA_MIX2(layer_opa_ori, opa_main);
@@ -517,7 +517,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
         lv_obj_redraw(layer, obj);
     }
 #if LV_DRAW_TRANSFORM_USE_MATRIX
-    /*If the layer opa is full then use the matrix transform*/
+    /*Если опа слоя заполнена, используйте матричное преобразование.*/
     else if(opa_layered >= LV_OPA_MAX && !refr_check_obj_clip_overflow(layer, obj)) {
         refr_obj_matrix(layer, obj);
     }
@@ -532,7 +532,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
             return;
         }
 
-        /*Simple layers can be subdivided into smaller layers*/
+        /*Простые слои можно разделить на более мелкие слои.*/
         uint32_t max_rgb_row_height = lv_area_get_height(&layer_area_full);
         uint32_t max_argb_row_height = lv_area_get_height(&layer_area_full);
         if(layer_type == LV_LAYER_TYPE_SIMPLE) {
@@ -549,8 +549,8 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
         layer_area_act.y2 = layer_area_full.y1;
 
         while(layer_area_act.y2 < layer_area_full.y2) {
-            /* Test with an RGB layer size (which is larger than the ARGB layer size)
-             * If it really doesn't need alpha use it. Else switch to the ARGB size*/
+            /* Тестирование с размером слоя RGB (который больше размера слоя ARGB)
+             * Если альфа действительно не нужна, используйте ее. В противном случае переключитесь на размер ARGB.*/
             layer_area_act.y2 = layer_area_act.y1 + max_rgb_row_height - 1;
             if(layer_area_act.y2 > layer_area_full.y2) layer_area_act.y2 = layer_area_full.y2;
 
@@ -603,7 +603,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
         }
     }
 
-    /* Restore the original layer opa and recolor */
+    /* Восстановите исходный опа слоя и перекрасьте его. */
     layer->opa = layer_opa_ori;
     layer->recolor = layer_recolor;
 }
@@ -613,7 +613,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
  **********************/
 
 /**
- * Join the areas which has got common parts
+ * Присоединяйтесь к областям, имеющим общие части
  */
 static void lv_refr_join_area(void)
 {
@@ -624,26 +624,26 @@ static void lv_refr_join_area(void)
     for(join_in = 0; join_in < disp_refr->inv_p; join_in++) {
         if(disp_refr->inv_area_joined[join_in] != 0) continue;
 
-        /*Check all areas to join them in 'join_in'*/
+        /*Проверьте все области, которые относятся к ним в «join_in».*/
         for(join_from = 0; join_from < disp_refr->inv_p; join_from++) {
-            /*Handle only unjoined areas and ignore itself*/
+            /*Обрабатывать только несвязанные области и игнорировать себя.*/
             if(disp_refr->inv_area_joined[join_from] != 0 || join_in == join_from) {
                 continue;
             }
 
-            /*Check if the areas are on each other*/
+            /*Проверьте, находятся ли области друг на друге*/
             if(lv_area_is_on(&disp_refr->inv_areas[join_in], &disp_refr->inv_areas[join_from]) == false) {
                 continue;
             }
 
             lv_area_join(&joined_area, &disp_refr->inv_areas[join_in], &disp_refr->inv_areas[join_from]);
 
-            /*Join two area only if the joined area size is smaller*/
+            /*Объединяйте две области только в том случае, если размер объединяемой области меньше.*/
             if(lv_area_get_size(&joined_area) < (lv_area_get_size(&disp_refr->inv_areas[join_in]) +
                                                  lv_area_get_size(&disp_refr->inv_areas[join_from]))) {
                 lv_area_copy(&disp_refr->inv_areas[join_in], &joined_area);
 
-                /*Mark 'join_form' is joined into 'join_in'*/
+                /*Маркировка «join_form» объединяется с «join_in».*/
                 disp_refr->inv_area_joined[join_from] = 1;
             }
         }
@@ -652,28 +652,28 @@ static void lv_refr_join_area(void)
 }
 
 /**
- * Refresh the sync areas
+ * Обновите области синхронизации.
  */
 static void refr_sync_areas(void)
 {
-    /*Do not sync if not direct or double buffered*/
+    /*Не синхронизировать, если не используется прямая или двойная буферизация.*/
     if(disp_refr->render_mode != LV_DISPLAY_RENDER_MODE_DIRECT) return;
 
-    /*Do not sync if not double buffered*/
+    /*Не синхронизировать, если нет двойной буферизации*/
     if(!lv_display_is_double_buffered(disp_refr)) return;
 
-    /*Do not sync if no sync areas*/
+    /*Не синхронизировать, если нет областей синхронизации*/
     if(lv_ll_is_empty(&disp_refr->sync_areas)) return;
 
     LV_PROFILER_REFR_BEGIN;
-    /*With double buffered direct mode synchronize the rendered areas to the other buffer*/
-    /*We need to wait for ready here to not mess up the active screen*/
+    /*В режиме прямой двойной буферизации синхронизируйте визуализированные области с другим буфером.*/
+    /*Здесь нужно дождаться готовности, чтобы не испортить активный экран*/
     wait_for_flushing(disp_refr);
 
-    /*The buffers are already swapped.
-     *So the active buffer is the off screen buffer where LVGL will render*/
+    /*Буферы уже поменяны местами.
+     *Таким образом, активный буфер — это внеэкранный буфер, в котором LVGL будет отображать*/
     lv_draw_buf_t * off_screen = disp_refr->buf_act;
-    /*Triple buffer sync buffer for off-screen2 updates.*/
+    /*Тройной буфер синхронизации для обновлений вне экрана2.*/
     lv_draw_buf_t * off_screen2;
     lv_draw_buf_t * on_screen;
 
@@ -693,28 +693,28 @@ static void refr_sync_areas(void)
     uint32_t hor_res = lv_display_get_horizontal_resolution(disp_refr);
     uint32_t ver_res = lv_display_get_vertical_resolution(disp_refr);
 
-    /*Iterate through invalidated areas to see if sync area should be copied*/
+    /*Переберите недействительные области, чтобы увидеть, следует ли копировать область синхронизации.*/
     uint16_t i;
     int8_t j;
     lv_area_t res[4] = {0};
     int8_t res_c;
     lv_area_t * sync_area, * new_area, * next_area;
     for(i = 0; i < disp_refr->inv_p; i++) {
-        /*Skip joined areas*/
+        /*Пропускать соединенные области*/
         if(disp_refr->inv_area_joined[i]) continue;
 
-        /*Iterate over sync areas*/
+        /*Перебирать области синхронизации*/
         sync_area = lv_ll_get_head(&disp_refr->sync_areas);
         while(sync_area != NULL) {
-            /*Get next sync area*/
+            /*Получить следующую область синхронизации*/
             next_area = lv_ll_get_next(&disp_refr->sync_areas, sync_area);
 
-            /*Remove intersect of redraw area from sync area and get remaining areas*/
+            /*Удалить пересечение области перерисовки из области синхронизации и получить оставшиеся области.*/
             res_c = lv_area_diff(res, sync_area, &disp_refr->inv_areas[i]);
 
-            /*New sub areas created after removing intersect*/
+            /*Новые подобласти, созданные после удаления пересечения*/
             if(res_c != -1) {
-                /*Replace old sync area with new areas*/
+                /*Заменить старую область синхронизации новыми областями*/
                 for(j = 0; j < res_c; j++) {
                     new_area = lv_ll_ins_prev(&disp_refr->sync_areas, sync_area);
                     *new_area = res[j];
@@ -723,17 +723,17 @@ static void refr_sync_areas(void)
                 lv_free(sync_area);
             }
 
-            /*Move on to next sync area*/
+            /*Перейти к следующей области синхронизации*/
             sync_area = next_area;
         }
     }
 
     lv_area_t disp_area = {0, 0, (int32_t)hor_res - 1, (int32_t)ver_res - 1};
-    /*Copy sync areas (if any remaining)*/
+    /*Скопировать области синхронизации (если они остались)*/
     for(sync_area = lv_ll_get_head(&disp_refr->sync_areas); sync_area != NULL;
         sync_area = lv_ll_get_next(&disp_refr->sync_areas, sync_area)) {
         /**
-         * @todo Resize SDL window will trigger crash because of sync_area is larger than disp_area
+         * @todo Изменение размера окнаSDLприческа к себе, посколькуsync_areaбольше, чем disp_area
          */
         if(!lv_area_intersect(sync_area, sync_area, &disp_area)) {
             continue;
@@ -748,23 +748,23 @@ static void refr_sync_areas(void)
             lv_draw_buf_copy(off_screen2, sync_area, on_screen, sync_area);
     }
 
-    /*Clear sync areas*/
+    /*Очистить области синхронизации*/
     lv_ll_clear(&disp_refr->sync_areas);
     LV_PROFILER_REFR_END;
 }
 
 /**
- * Refresh the joined areas
+ * Обновить соединенные области
  */
 static void refr_invalid_areas(void)
 {
     if(disp_refr->inv_p == 0) return;
     LV_PROFILER_REFR_BEGIN;
 
-    /*Notify the display driven rendering has started*/
+    /*Уведомить о начале рендеринга на основе дисплея*/
     lv_display_send_event(disp_refr, LV_EVENT_RENDER_START, NULL);
 
-    /*Find the last area which will be drawn*/
+    /*Найдите последнюю область, которая будет нарисована*/
     int32_t i;
     int32_t last_i = 0;
     for(i = disp_refr->inv_p - 1; i >= 0; i--) {
@@ -779,7 +779,7 @@ static void refr_invalid_areas(void)
     disp_refr->rendering_in_progress = true;
 
     for(i = 0; i < (int32_t)disp_refr->inv_p; i++) {
-        /*Refresh the unjoined areas*/
+        /*Обновить несвязанные области*/
         if(disp_refr->inv_area_joined[i]) continue;
 
         if(i == last_i) disp_refr->last_area = 1;
@@ -787,7 +787,7 @@ static void refr_invalid_areas(void)
 
         lv_area_t inv_a = disp_refr->inv_areas[i];
         if(disp_refr->render_mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
-            /*Calculate the max row num*/
+            /*Вычислить максимальное количество строк*/
             int32_t w = lv_area_get_width(&inv_a);
             int32_t h = lv_area_get_height(&inv_a);
 
@@ -800,7 +800,7 @@ static void refr_invalid_areas(void)
             sub_area.x2 = inv_a.x2;
             int32_t y_off = 0;
             for(row = inv_a.y1; row + max_row - 1 <= inv_a.y2; row += max_row) {
-                /*Calc. the next y coordinates of draw_buf*/
+                /*Вычисление следующих координат по draw_buf*/
                 sub_area.y1 = row;
                 sub_area.y2 = row + max_row - 1;
                 if(sub_area.y2 > inv_a.y2) sub_area.y2 = inv_a.y2;
@@ -811,9 +811,9 @@ static void refr_invalid_areas(void)
                 draw_buf_flush(disp_refr);
             }
 
-            /*If the last y coordinates are not handled yet ...*/
+            /*Если последние координаты y еще не обработаны...*/
             if(inv_a.y2 != row_last) {
-                /*Calc. the next y coordinates of draw_buf*/
+                /*Вычисление следующих координат по draw_buf*/
                 sub_area.y1 = row;
                 sub_area.y2 = inv_a.y2;
                 disp_refr->last_part = 1;
@@ -836,8 +836,8 @@ static void refr_invalid_areas(void)
 }
 
 /**
- * Reshape the draw buffer if required
- * @param layer  pointer to a layer which will be drawn
+ * При необходимости измените форму буфера прорисовки.
+ * @param layer  указатель на слой, который будет нарисован
  */
 static void layer_reshape_draw_buf(lv_layer_t * layer, uint32_t stride)
 {
@@ -852,8 +852,8 @@ static void layer_reshape_draw_buf(lv_layer_t * layer, uint32_t stride)
 }
 
 /**
- * Refresh an area if there is Virtual Display Buffer
- * @param area_p  pointer to an area to refresh
+ * Обновить область, если имеется буфер виртуального отображения.
+ * @param area_p  указатель на область для обновления
  */
 static void refr_area(const lv_area_t * area_p, int32_t y_offset)
 {
@@ -866,13 +866,13 @@ static void refr_area(const lv_area_t * area_p, int32_t y_offset)
     layer->all_tasks_added = false;
 
     if(disp_refr->render_mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
-        /*In partial mode render this area to the buffer*/
+        /*В частичном режиме визуализируйте эту область в буфер.*/
         layer->buf_area = *area_p;
         layer_reshape_draw_buf(layer, LV_STRIDE_AUTO);
     }
     else if(disp_refr->render_mode == LV_DISPLAY_RENDER_MODE_DIRECT ||
             disp_refr->render_mode == LV_DISPLAY_RENDER_MODE_FULL) {
-        /*In direct mode and full mode the buffer area is always the whole screen, not considering rotation*/
+        /*В прямом и полном режиме буферная область всегда занимает весь экран, без учета поворота.*/
         layer->buf_area.x1 = 0;
         layer->buf_area.y1 = 0;
         if(lv_display_get_matrix_rotation(disp_refr)) {
@@ -886,20 +886,20 @@ static void refr_area(const lv_area_t * area_p, int32_t y_offset)
         layer_reshape_draw_buf(layer, disp_refr->stride_is_auto ? LV_STRIDE_AUTO : layer->draw_buf->header.stride);
     }
 
-    /*Try to divide the area to smaller tiles*/
+    /*Попробуйте разделить площадь на более мелкие плитки.*/
     uint32_t tile_cnt = 1;
     int32_t tile_h = lv_area_get_height(area_p);
     if(LV_COLOR_FORMAT_IS_INDEXED(layer->color_format) == false) {
-        /* Assume that the buffer size (can be screen sized or smaller in case of partial mode)
-         * and max tile size are the optimal scenario. From this calculate the ideal tile size
-         * and set the tile count and tile height accordingly.
+        /* Предположим, что размер буфера (может быть размером с экран или меньше в случае частичного режима)
+         * и максимальный размер плитки являются оптимальным сценарием. Исходя из этого, рассчитайте идеальный размер плитки.
+         * и установите количество плиток и высоту плитки соответственно.
          */
         uint32_t max_tile_cnt = disp_refr->tile_cnt;
         uint32_t total_buf_size = layer->draw_buf->data_size;
         uint32_t ideal_tile_size = total_buf_size / max_tile_cnt;
         uint32_t area_buf_size = lv_area_get_size(area_p) * lv_color_format_get_size(layer->color_format);
 
-        tile_cnt = (area_buf_size + (ideal_tile_size - 1)) / ideal_tile_size; /*Round up*/
+        tile_cnt = (area_buf_size + (ideal_tile_size - 1)) / ideal_tile_size; /*Округлить вверх*/
         tile_h = lv_area_get_height(area_p) / tile_cnt;
     }
 
@@ -908,9 +908,9 @@ static void refr_area(const lv_area_t * area_p, int32_t y_offset)
         layer->all_tasks_added = true;
     }
     else {
-        /* Don't draw to the layers buffer of the display but create smaller dummy layers which are using the
-         * display's layer buffer. These will be the tiles. By using tiles it's more likely that there will
-         * be independent areas for each draw unit. */
+        /* Не рисуйте в буфере слоев дисплея, а создавайте фиктивные слои меньшего размера, которые используют
+         * буфер слоя дисплея. Это будут плитки. При использовании плиток более вероятно, что
+         * быть независимыми зонами для каждой вытяжной единицы. */
         lv_layer_t * tile_layers = lv_malloc(tile_cnt * sizeof(lv_layer_t));
         LV_ASSERT_MALLOC(tile_layers);
         if(tile_layers == NULL) {
@@ -930,14 +930,14 @@ static void refr_area(const lv_area_t * area_p, int32_t y_offset)
 
             lv_layer_t * tile_layer = &tile_layers[i];
             lv_draw_layer_init(tile_layer, NULL, layer->color_format, &tile_area);
-            tile_layer->buf_area = layer->buf_area; /*the buffer is still large*/
+            tile_layer->buf_area = layer->buf_area; /*буфер все еще большой*/
             tile_layer->draw_buf = layer->draw_buf;
             refr_configured_layer(tile_layer);
             tile_layer->all_tasks_added = true;
         }
 
 
-        /*Wait until all tiles are ready and destroy remove them*/
+        /*Подождите, пока все плитки будут готовы, и уничтожьте их.*/
         for(i = 0; i < tile_cnt; i++) {
             lv_layer_t * tile_layer = &tile_layers[i];
             while(tile_layer->draw_task_head) {
@@ -979,14 +979,14 @@ static void refr_configured_layer(lv_layer_t * layer)
             lv_display_rotate_area(disp_refr, &layer->phy_clip_area);
 
             /**
-             * The screen rotation direction defined by LVGL is opposite to the drawing angle.
-             * Use direct matrix assignment to reduce precision loss and improve efficiency.
+             * Направление вращения экрана, определенное LVGL, противоположно углу рисования.
+             * Используйте прямое присвоение матрицы, чтобы уменьшить потери точности и повысить эффективность.
              */
             switch(rotation) {
                 case LV_DISPLAY_ROTATION_90:
                     /**
-                     * lv_matrix_rotate(&layer->matrix, 270);
-                     * lv_matrix_translate(&layer->matrix, -disp_refr->ver_res, 0);
+                     * lv_matrix_rotate (&слой->матрица, 270);
+                     * lv_matrix_translate (&layer->матрица, -disp_refr->ver_res, 0);
                      */
                     layer->matrix.m[0][0] = 0;
                     layer->matrix.m[0][1] = 1;
@@ -998,8 +998,8 @@ static void refr_configured_layer(lv_layer_t * layer)
 
                 case LV_DISPLAY_ROTATION_180:
                     /**
-                     * lv_matrix_rotate(&layer->matrix, 180);
-                     * lv_matrix_translate(&layer->matrix, -disp_refr->hor_res, -disp_refr->ver_res);
+                     * lv_matrix_rotate (&слой->матрица, 180);
+                     * lv_matrix_translate (&layer->матрица, -disp_refr->hor_res, -disp_refr->ver_res);
                      */
                     layer->matrix.m[0][0] = -1;
                     layer->matrix.m[0][1] = 0;
@@ -1011,8 +1011,8 @@ static void refr_configured_layer(lv_layer_t * layer)
 
                 case LV_DISPLAY_ROTATION_270:
                     /**
-                     * lv_matrix_rotate(&layer->matrix, 90);
-                     * lv_matrix_translate(&layer->matrix, 0, -disp_refr->hor_res);
+                     * lv_matrix_rotate (&слой->матрица, 90);
+                     * lv_matrix_translate (&layer->matrix, 0, -disp_refr->hor_res);
                      */
                     layer->matrix.m[0][0] = 0;
                     layer->matrix.m[0][1] = -1;
@@ -1030,12 +1030,12 @@ static void refr_configured_layer(lv_layer_t * layer)
     }
 #endif /* LV_DRAW_TRANSFORM_USE_MATRIX */
 
-    /* In single buffered mode wait here until the buffer is freed.
-     * Else we would draw into the buffer while it's still being transferred to the display*/
+    /* В режиме с одной буферизацией подождите здесь, пока буфер не освободится.
+     * В противном случае мы бы рисовали в буфере, пока он еще передается на дисплей.*/
     if(!lv_display_is_double_buffered(disp_refr)) {
         wait_for_flushing(disp_refr);
     }
-    /*If the screen is transparent initialize it when the flushing is ready*/
+    /*Если экран прозрачный, инициализируйте его, когда промывка будет готова.*/
     if(lv_color_format_has_alpha(disp_refr->color_format)) {
         lv_area_t clear_area = layer->_clip_area;
         lv_area_move(&clear_area, -layer->buf_area.x1, -layer->buf_area.y1);
@@ -1045,13 +1045,13 @@ static void refr_configured_layer(lv_layer_t * layer)
     lv_obj_t * top_act_scr = NULL;
     lv_obj_t * top_prev_scr = NULL;
 
-    /*Get the most top object which is not covered by others*/
+    /*Получите самый верхний объект, который не закрыт другими*/
     top_act_scr = lv_refr_get_top_obj(&layer->_clip_area, lv_display_get_screen_active(disp_refr));
     if(disp_refr->prev_scr) {
         top_prev_scr = lv_refr_get_top_obj(&layer->_clip_area, disp_refr->prev_scr);
     }
 
-    /*Draw a bottom layer background if there is no top object*/
+    /*Нарисуйте фон нижнего слоя, если верхнего объекта нет.*/
     if(top_act_scr == NULL && top_prev_scr == NULL) {
         refr_obj_and_children(layer, lv_display_get_layer_bottom(disp_refr));
     }
@@ -1060,14 +1060,14 @@ static void refr_configured_layer(lv_layer_t * layer)
         if(top_act_scr == NULL) top_act_scr = disp_refr->act_scr;
         refr_obj_and_children(layer, top_act_scr);
 
-        /*Refresh the previous screen if any*/
+        /*Обновите предыдущий экран, если таковой имеется.*/
         if(disp_refr->prev_scr) {
             if(top_prev_scr == NULL) top_prev_scr = disp_refr->prev_scr;
             refr_obj_and_children(layer, top_prev_scr);
         }
     }
     else {
-        /*Refresh the previous screen if any*/
+        /*Обновите предыдущий экран, если таковой имеется.*/
         if(disp_refr->prev_scr) {
             if(top_prev_scr == NULL) top_prev_scr = disp_refr->prev_scr;
             refr_obj_and_children(layer, top_prev_scr);
@@ -1077,7 +1077,7 @@ static void refr_configured_layer(lv_layer_t * layer)
         refr_obj_and_children(layer, top_act_scr);
     }
 
-    /*Also refresh top and sys layer unconditionally*/
+    /*Также безоговорочно обновить верхний и системный слои.*/
     refr_obj_and_children(layer, lv_display_get_layer_top(disp_refr));
     refr_obj_and_children(layer, lv_display_get_layer_sys(disp_refr));
 
@@ -1085,34 +1085,34 @@ static void refr_configured_layer(lv_layer_t * layer)
 }
 
 /**
- * Make the refreshing from an object. Draw all its children and the youngers too.
- * @param top_p pointer to an objects. Start the drawing from it.
- * @param mask_p pointer to an area, the objects will be drawn only here
+ * Сделайте обновление с объекта. Нарисуйте всех его детей и младших тоже.
+ * @param top_p указатель на объекты. Начните рисунок с него.
+ * @param mask_p указатель на область, объекты будут рисоваться только здесь
  */
 static void refr_obj_and_children(lv_layer_t * layer, lv_obj_t * top_obj)
 {
-    /*Normally always will be a top_obj (at least the screen)
-     *but in special cases (e.g. if the screen has alpha) it won't.
-     *In this case use the screen directly*/
+    /*Обычно всегда будетtop_obj(по крайней мере, экран)
+     *но в особых случаях (например, если на экране есть альфа) этого не произойдет.
+     *В этом случае используйте экран напрямую*/
     if(top_obj == NULL) top_obj = lv_display_get_screen_active(disp_refr);
-    if(top_obj == NULL) return;  /*Shouldn't happen*/
+    if(top_obj == NULL) return;  /*Не должно случиться*/
 
     LV_PROFILER_REFR_BEGIN;
-    /*Draw the 'younger' sibling objects because they can be on top_obj*/
+    /*Нарисуйте «младшие» одноуровневые объекты, потому что они могут находиться на top_obj.*/
     lv_obj_t * parent;
     lv_obj_t * border_p = top_obj;
 
     parent = lv_obj_get_parent(top_obj);
 
-    /*Calculate the recolor before the parent*/
+    /*Вычислить перекрашивание перед родительским элементом*/
     if(parent) {
         layer->recolor = lv_obj_get_style_recolor_recursive(parent, LV_PART_MAIN);
     }
 
-    /*Refresh the top object and its children*/
+    /*Обновить верхний объект и его дочерние элементы.*/
     lv_obj_refr(layer, top_obj);
 
-    /*Do until not reach the screen*/
+    /*Делайте, пока не доберетесь до экрана*/
     while(parent != NULL) {
         bool go = false;
         uint32_t i;
@@ -1123,20 +1123,20 @@ static void refr_obj_and_children(lv_layer_t * layer, lv_obj_t * top_obj)
                 if(child == border_p) go = true;
             }
             else {
-                /*Refresh the objects*/
+                /*Обновить объекты*/
                 lv_obj_refr(layer, child);
             }
         }
 
-        /*Call the post draw function of the parents of the to object*/
+        /*Вызов функции пост розыгрыша родительского объекта.*/
         lv_obj_send_event(parent, LV_EVENT_DRAW_POST_BEGIN, (void *)layer);
         lv_obj_send_event(parent, LV_EVENT_DRAW_POST, (void *)layer);
         lv_obj_send_event(parent, LV_EVENT_DRAW_POST_END, (void *)layer);
 
-        /*The new border will be the last parents,
-         *so the 'younger' brothers of parent will be refreshed*/
+        /*На новой границе будут последние родители,
+         *так что «младшие» братья родителя будут обновлены*/
         border_p = parent;
-        /*Go a level deeper*/
+        /*Перейти на уровень глубже*/
         parent = lv_obj_get_parent(parent);
     }
     LV_PROFILER_REFR_END;
@@ -1150,8 +1150,8 @@ static lv_result_t layer_get_area(lv_layer_t * layer, lv_obj_t * obj, lv_layer_t
     lv_area_increase(obj_draw_size_out, ext_draw_size, ext_draw_size);
 
     if(layer_type == LV_LAYER_TYPE_TRANSFORM) {
-        /*Get the transformed area and clip it to the current clip area.
-         *This area needs to be updated on the screen.*/
+        /*Получите преобразованную область и прикрепите ее к текущей области обрезки.
+         *Эту область необходимо обновить на экране.*/
         lv_area_t clip_coords_for_obj;
         lv_area_t tranf_coords = *obj_draw_size_out;
         lv_obj_get_transformed_area(obj, &tranf_coords, LV_OBJ_POINT_TRANSFORM_FLAG_NONE);
@@ -1159,9 +1159,9 @@ static lv_result_t layer_get_area(lv_layer_t * layer, lv_obj_t * obj, lv_layer_t
             return LV_RESULT_INVALID;
         }
 
-        /*Transform back (inverse) the transformed area.
-         *It will tell which area of the non-transformed widget needs to be redrawn
-         *in order to cover transformed area after transformation.*/
+        /*Преобразуйте обратно (инвертируйте) преобразованную область.
+         *Он подскажет, какую область нетрансформированного виджета необходимо перерисовать.
+         *для того, чтобы охватить трансформированную территорию после трансформации.*/
         lv_area_t inverse_clip_coords_for_obj = clip_coords_for_obj;
         lv_obj_get_transformed_area(obj, &inverse_clip_coords_for_obj, LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE);
         if(!lv_area_intersect(&inverse_clip_coords_for_obj, &inverse_clip_coords_for_obj, obj_draw_size_out)) {
@@ -1169,7 +1169,7 @@ static lv_result_t layer_get_area(lv_layer_t * layer, lv_obj_t * obj, lv_layer_t
         }
 
         *layer_area_out = inverse_clip_coords_for_obj;
-        lv_area_increase(layer_area_out, 5, 5); /*To avoid rounding error*/
+        lv_area_increase(layer_area_out, 5, 5); /*Чтобы избежать ошибки округления*/
     }
     else if(layer_type == LV_LAYER_TYPE_SIMPLE) {
         lv_area_t clip_coords_for_obj;
@@ -1188,8 +1188,8 @@ static lv_result_t layer_get_area(lv_layer_t * layer, lv_obj_t * obj, lv_layer_t
 
 static bool alpha_test_area_on_obj(lv_obj_t * obj, const lv_area_t * area)
 {
-    /*Test for alpha by assuming there is no alpha. If it fails, fall back to rendering with alpha*/
-    /*If the layer area is not fully on the object, it can't fully cover it*/
+    /*Проверьте наличие альфа, предполагая, что альфа отсутствует. Если это не помогло, вернитесь к рендерингу с альфа-версией.*/
+    /*Если область слоя не полностью охватывает объект, она не сможет полностью покрыть его.*/
     if(!lv_area_is_on(area, &obj->coords)) return true;
 
     lv_cover_check_info_t info;
@@ -1229,11 +1229,11 @@ static bool obj_get_matrix(lv_obj_t * obj, lv_matrix_t * matrix)
     int32_t skew_y = lv_obj_get_style_transform_skew_y(obj, LV_PART_MAIN);
 
     if(scale_x <= 0 || scale_y <= 0) {
-        /* NOT draw if scale is negative or zero */
+        /* NOT рисует, если масштаб отрицательный или нулевой */
         return false;
     }
 
-    /* generate the obj matrix */
+    /* создать матрицу obj */
     lv_matrix_translate(matrix, pivot.x, pivot.y);
     if(rotation != 0) {
         lv_matrix_rotate(matrix, rotation * 0.1f);
@@ -1260,14 +1260,14 @@ static void refr_obj_matrix(lv_layer_t * layer, lv_obj_t * obj)
     LV_PROFILER_REFR_BEGIN;
     lv_matrix_t obj_matrix;
     if(!obj_get_matrix(obj, &obj_matrix)) {
-        /* NOT draw if obj matrix is not available */
+        /* NOT нарисовать, если матрица obj недоступна */
         LV_PROFILER_REFR_END;
         return;
     }
 
     lv_matrix_t matrix_inv;
     if(!lv_matrix_inverse(&matrix_inv, &obj_matrix)) {
-        /* NOT draw if matrix is not invertible */
+        /* NOT рисует, если матрица не обратима */
         LV_PROFILER_REFR_END;
         return;
     }
@@ -1278,12 +1278,12 @@ static void refr_obj_matrix(lv_layer_t * layer, lv_obj_t * obj)
     /* apply the obj matrix */
     lv_matrix_multiply(&layer->matrix, &obj_matrix);
 
-    /* calculate clip area without transform */
+    /* вычислить область отсечения без преобразования */
     lv_area_t clip_area = layer->_clip_area;
     lv_area_t clip_area_ori = layer->_clip_area;
     clip_area = lv_matrix_transform_area(&matrix_inv, &clip_area);
 
-    /* increase the clip area by 1 pixel to avoid rounding errors */
+    /* увеличьте область обрезки на 1 пиксель, чтобы избежать ошибок округления */
     if(!lv_matrix_is_identity_or_translation(&obj_matrix)) {
         lv_area_increase(&clip_area, 1, 1);
     }
@@ -1306,7 +1306,7 @@ static bool refr_check_obj_clip_overflow(lv_layer_t * layer, lv_obj_t * obj)
         return false;
     }
 
-    /*Truncate the area to the object*/
+    /*Усечь область до объекта*/
     lv_area_t obj_coords;
     int32_t ext_size = lv_obj_get_ext_draw_size(obj);
     lv_area_copy(&obj_coords, &obj->coords);
@@ -1340,7 +1340,7 @@ static uint32_t get_max_row(lv_display_t * disp, int32_t area_w, int32_t area_h)
 
     if(max_row > area_h) max_row = area_h;
 
-    /*Round down the lines of draw_buf if rounding is added*/
+    /*Округлите строкиdraw_buf, если добавлено округление.*/
     lv_area_t tmp;
     tmp.x1 = 0;
     tmp.x2 = 0;
@@ -1351,10 +1351,10 @@ static uint32_t get_max_row(lv_display_t * disp, int32_t area_w, int32_t area_h)
         tmp.y2 = h_tmp - 1;
         lv_display_send_event(disp_refr, LV_EVENT_INVALIDATE_AREA, &tmp);
 
-        /*If this height fits into `max_row` then fine*/
+        /*Если эта высота записана в `max_row`, то отлично*/
         if(lv_area_get_height(&tmp) <= max_row) break;
 
-        /*Decrement the height of the area until it fits into `max_row` after rounding*/
+        /*Уменьшите высоту области до тех пор, пока она не впишется в`max_row`после округления.*/
         h_tmp--;
     } while(h_tmp > 0);
 
@@ -1371,11 +1371,11 @@ static uint32_t get_max_row(lv_display_t * disp, int32_t area_w, int32_t area_h)
 }
 
 /**
- * Flush the content of the draw buffer
+ * Очистить содержимое буфера отрисовки
  */
 static void draw_buf_flush(lv_display_t * disp)
 {
-    /*Flush the rendered content to the display*/
+    /*Вывод визуализированного контента на дисплей*/
     lv_layer_t * layer = disp->layer_head;
 
     while(layer->draw_task_head) {
@@ -1383,10 +1383,10 @@ static void draw_buf_flush(lv_display_t * disp)
         lv_draw_dispatch();
     }
 
-    /* In double buffered mode wait until the other buffer is freed
-     * and driver is ready to receive the new buffer.
-     * If we need to wait here it means that the content of one buffer is being sent to display
-     * and other buffer already contains the new rendered image. */
+    /* В режиме двойной буферизации дождитесь освобождения другого буфера.
+     * и драйвер готов принять новый буфер.
+     * Если нам нужно здесь подождать, это означает, что содержимое одного буфера отправляется на отображение.
+     * а другой буфер уже содержит новое визуализированное изображение. */
     if(lv_display_is_double_buffered(disp)) {
         wait_for_flushing(disp_refr);
     }
@@ -1401,7 +1401,7 @@ static void draw_buf_flush(lv_display_t * disp)
     if(disp->flush_cb) {
         call_flush_cb(disp, &disp->refreshed_area, layer->draw_buf->data);
     }
-    /*If there are 2 buffers swap them. With direct mode swap only on the last area*/
+    /*Если есть 2 буфера, поменяйте их местами. При прямом переключении режима только на последней области*/
     if(lv_display_is_double_buffered(disp) && (disp->render_mode != LV_DISPLAY_RENDER_MODE_DIRECT || flushing_last)) {
         if(disp->buf_act == disp->buf_1) {
             disp->buf_act = disp->buf_2;
@@ -1430,7 +1430,7 @@ static void call_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t *
 
     lv_display_send_event(disp, LV_EVENT_FLUSH_START, &offset_area);
 
-    /*For backward compatibility support LV_COLOR_16_SWAP (from v8)*/
+    /*Для обратной совместимости поддержка LV_COLOR_16_SWAP (начиная с v8)*/
 #if defined(LV_COLOR_16_SWAP) && LV_COLOR_16_SWAP
     lv_draw_sw_rgb565_swap(px_map, lv_area_get_size(&offset_area));
 #endif

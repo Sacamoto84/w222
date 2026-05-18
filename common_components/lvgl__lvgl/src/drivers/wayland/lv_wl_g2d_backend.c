@@ -57,7 +57,7 @@ typedef struct {
 
 typedef struct {
     struct zwp_linux_dmabuf_v1 * handler;
-    /* XRBG888 and ARGB8888 are always supported*/
+    /* XRBG888 и ARGB8888 всегда поддерживаются.*/
     bool supports_rgb565;
 } lv_wl_g2d_ctx_t;
 
@@ -228,7 +228,7 @@ static void init_buffer(lv_wl_g2d_ctx_t * ctx, lv_wl_buffer_t * buffer, uint32_t
     buffer->offset = 0;
     buffer->busy = false;
 
-    /* Will be set on the dmabuf callback if the creation is successful*/
+    /* Будет установлен в обратном вызове dmabuf, если создание прошло успешно.*/
     buffer->wl_buffer = NULL;
 
     struct zwp_linux_buffer_params_v1 * params = zwp_linux_dmabuf_v1_create_params(ctx->handler);
@@ -344,7 +344,7 @@ static void * wl_g2d_init_display(void * backend_ctx, lv_display_t * display, in
 static uint32_t lv_cf_to_drm_cf(lv_color_format_t cf)
 {
     if(cf == LV_COLOR_FORMAT_UNKNOWN) {
-        return DRM_FORMAT_ARGB8888; /* Default to ARGB8888 */
+        return DRM_FORMAT_ARGB8888; /* По умолчанию ARGB8888 */
     }
 
     switch(cf) {
@@ -388,8 +388,8 @@ static void create_succeeded(void * data, struct zwp_linux_buffer_params_v1 * pa
     lv_wl_buffer_t * buffer = data;
     buffer->wl_buffer = new_buffer;
 
-    /* When not using explicit synchronization listen to wl_buffer.release
-     * for release notifications, otherwise we are going to use
+    /* Если не используется явная синхронизация, слушайте wl_buffer .release.
+     * для уведомлений о выпуске, в противном случае мы будем использовать
      * zwp_linux_buffer_release_v1. */
     wl_buffer_add_listener(buffer->wl_buffer, &buffer_listener, buffer);
 
@@ -443,7 +443,7 @@ static void dmabuf_format_table(void * data, struct zwp_linux_dmabuf_feedback_v1
         return;
     }
 
-    /* Map the format table file descriptor */
+    /* Сопоставить дескриптор файла таблицы форматов */
     void * table = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
     if(table == MAP_FAILED) {
         LV_LOG_ERROR("Failed to mmap format table: %s", strerror(errno));
@@ -453,19 +453,19 @@ static void dmabuf_format_table(void * data, struct zwp_linux_dmabuf_feedback_v1
 
     LV_LOG_TRACE("Received format table with fd %d and size %u", fd, size);
 
-    /* Parse the format table - each entry is 16 bytes: 4 bytes format + 4 bytes padding + 8 bytes modifier */
+    /* Разберите таблицу форматов — каждая запись имеет размер 16 байт: формат 4 байта + заполнение 4 байта + модификатор 8 байтов. */
     size_t num_formats = size / 16;
     uint32_t * formats = (uint32_t *)table;
 
     for(size_t i = 0; i < num_formats; i++) {
-        /* Each entry is 4 uint32_t words */
+        /* Каждая запись состоит из 4 слов uint32_t. */
         uint32_t format = formats[i * 4];
         if(format == DRM_FORMAT_RGB565) {
             ctx->supports_rgb565 = true;
         }
     }
 
-    /* Clean up */
+    /* Очистить */
     munmap(table, size);
     close(fd);
 }
@@ -479,9 +479,9 @@ static void dmabuf_done(void * data, struct zwp_linux_dmabuf_feedback_v1 * zwp_l
 
     LV_LOG_TRACE("DMABUF feedback done");
 
-    /* This event marks the end of a feedback round. The client has received
-     * all the format and modifier pairs from all tranches. This allows
-     * the client to proceed with buffer allocation. */
+    /* Это событие знаменует окончание раунда обратной связи. Клиент получил
+     * все пары форматов и модификаторов из всех траншей. Это позволяет
+     * клиент продолжить выделение буфера. */
 }
 
 static void dmabuf_main_device(void * data, struct zwp_linux_dmabuf_feedback_v1 * zwp_linux_dmabuf_feedback,
@@ -493,9 +493,9 @@ static void dmabuf_main_device(void * data, struct zwp_linux_dmabuf_feedback_v1 
 
     LV_LOG_TRACE("DMABUF main device received (size: %zu)", device->size);
 
-    /* This event advertises the main device that the server-side allocator
-     * will use for scanout. It should be used by clients as a hint for
-     * buffer allocation. */
+    /* Это событие объявляет основное устройство, которое серверный распределитель
+     * буду использовать для сканирования. Клиенты должны использовать его как подсказку для
+     * выделение буфера. */
 }
 
 static void dmabuf_tranche_done(void * data, struct zwp_linux_dmabuf_feedback_v1 * zwp_linux_dmabuf_feedback)
@@ -505,8 +505,8 @@ static void dmabuf_tranche_done(void * data, struct zwp_linux_dmabuf_feedback_v1
 
     LV_LOG_TRACE("DMABUF tranche done");
 
-    /* This event marks the end of a tranche. This allows the client to
-     * process the formats and modifiers it has received for this tranche. */
+    /* Это событие знаменует окончание транша. Это позволяет клиенту
+     * обработать форматы и модификаторы, полученные для этого транша. */
 }
 
 static void dmabuf_tranche_target_device(void * data, struct zwp_linux_dmabuf_feedback_v1 * zwp_linux_dmabuf_feedback,
@@ -518,8 +518,8 @@ static void dmabuf_tranche_target_device(void * data, struct zwp_linux_dmabuf_fe
 
     LV_LOG_TRACE("DMABUF tranche target device (size: %zu)", device->size);
 
-    /* This event advertises the target device that the following tranche
-     * will apply to. */
+    /* Это событие объявляет целевое устройство, на которое будет отправлен следующий транш.
+     * будет применяться к. */
 }
 
 static void dmabuf_tranche_formats(void * data, struct zwp_linux_dmabuf_feedback_v1 * zwp_linux_dmabuf_feedback,
@@ -530,14 +530,14 @@ static void dmabuf_tranche_formats(void * data, struct zwp_linux_dmabuf_feedback
 
     LV_LOG_TRACE("DMABUF tranche formats (count: %zu)", indices->size / sizeof(uint16_t));
 
-    /* This event advertises the format + modifier pairs that the compositor
-     * supports for the current tranche. The indices are offsets into the
-     * format table sent earlier. */
+    /* Это событие объявляет пары формат + модификатор, которые компоновщик
+     * поддержка текущего транша. Индексы представляют собой смещения в
+     * таблица формата, отправленная ранее. */
 
     if(indices->size > 0) {
-        /* If we don't have a format yet, we could parse the indices here
-         * to find a suitable format from the format table, but for now
-         * we rely on the format_table callback to set a format directly */
+        /* Если у нас еще нет формата, мы могли бы проанализировать индексы здесь.
+         * найти подходящий формат из таблицы форматов, а пока
+         * мы полагаемся на обратный вызов format_table для прямой установки формата */
         LV_LOG_TRACE("Format indices received");
     }
 }
@@ -551,8 +551,8 @@ static void dmabuf_tranche_flags(void * data, struct zwp_linux_dmabuf_feedback_v
 
     LV_LOG_TRACE("DMABUF tranche flags: 0x%x", flags);
 
-    /* This event advertises the flags for the current tranche.
-     * Flags can indicate special properties like scanout support. */
+    /* Это событие объявляет флаги текущего транша.
+     * Флаги могут обозначать специальные свойства, например поддержку сканирования. */
 }
 
 static void dmabuf_modifiers(void * data, struct zwp_linux_dmabuf_v1 * zwp_linux_dmabuf, uint32_t format,
@@ -577,7 +577,7 @@ static lv_wl_buffer_t * get_next_buffer(lv_wl_g2d_display_data_t * ddata)
 {
     lv_wl_buffer_t * ret =  &ddata->buffers[ddata->last_used];
     if(ret->busy) {
-        /* In theory this should never happen, log a warning in case it does */
+        /* Теоретически этого никогда не должно произойти, запишите предупреждение на случай, если это произойдет. */
         LV_LOG_WARN("Failed to acquire a non-busy buffer");
     }
     ddata->last_used = (ddata->last_used + 1) % (LV_WL_G2D_BUF_COUNT);
@@ -604,7 +604,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, unsigned char 
 #endif
 
     struct wl_surface * surface = lv_wayland_get_window_surface(disp);
-    /* Mark surface damage */
+    /* Отметьте повреждение поверхности */
     wl_surface_damage(surface, area->x1, area->y1, src_width, src_height);
 
     if(!lv_display_flush_is_last(disp)) {
@@ -620,7 +620,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, unsigned char 
     }
 
     lv_draw_buf_invalidate_cache(buf->lv_draw_buf, NULL);
-    /*Rerender the whole surface if we're using rotation*/
+    /*Перерисуйте всю поверхность, если мы используем вращение.*/
     if(rotation != LV_DISPLAY_ROTATION_0) {
         wl_surface_damage(surface, 0, 0,
                           lv_display_get_original_horizontal_resolution(disp),
@@ -634,7 +634,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, unsigned char 
                lv_display_get_rotation(disp),
                lv_display_get_color_format(disp));
 #endif
-    /* Finally, attach buffer and commit to surface */
+    /* Наконец, прикрепите буфер и зафиксируйте его на поверхности. */
     struct wl_callback * cb = wl_surface_frame(surface);
     wl_callback_add_listener(cb, &frame_listener, disp);
 

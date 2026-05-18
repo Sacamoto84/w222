@@ -13,15 +13,15 @@ static void draw_event_cb(lv_event_t * e)
 
     uint32_t cnt = lv_chart_get_point_count(obj);
 
-    /*Make older value more transparent*/
+    /*Сделать старое значение более прозрачным*/
     fill_draw_dsc->opa = (lv_opa_t)((LV_OPA_COVER * base_dsc->id2) / (cnt - 1));
 
-    /*Make smaller values blue, higher values red*/
+    /*Сделайте меньшие значения синими, более высокие значения красными.*/
     int32_t * x_array = lv_chart_get_series_x_array(obj, ser);
     int32_t * y_array = lv_chart_get_series_y_array(obj, ser);
-    /*dsc->id is the tells drawing order, but we need the ID of the point being drawn.*/
+    /*dsc->id — это порядок отрисовки подсказок, но нам нужнаIDрисуемой точки.*/
     uint32_t start_point = lv_chart_get_x_start_point(obj, ser);
-    uint32_t p_act = (start_point + base_dsc->id2) % cnt; /*Consider start point to get the index of the array*/
+    uint32_t p_act = (start_point + base_dsc->id2) % cnt; /*Рассмотрим начальную точку, чтобы получить индекс массива*/
     lv_opa_t x_opa = (lv_opa_t)((x_array[p_act] * LV_OPA_50) / 200);
     lv_opa_t y_opa = (lv_opa_t)((y_array[p_act] * LV_OPA_50) / 1000);
 
@@ -38,7 +38,7 @@ static void add_data(lv_timer_t * timer)
 }
 
 /**
- * A scatter chart
+ * Диаграмма рассеяния
  */
 void lv_example_chart_7(void)
 {
@@ -47,7 +47,7 @@ void lv_example_chart_7(void)
     lv_obj_align(chart, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_event_cb(chart, draw_event_cb, LV_EVENT_DRAW_TASK_ADDED, NULL);
     lv_obj_add_flag(chart, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
-    lv_obj_set_style_line_width(chart, 0, LV_PART_ITEMS);   /*Remove the lines*/
+    lv_obj_set_style_line_width(chart, 0, LV_PART_ITEMS);   /*Удалить строки*/
 
     lv_chart_set_type(chart, LV_CHART_TYPE_SCATTER);
 

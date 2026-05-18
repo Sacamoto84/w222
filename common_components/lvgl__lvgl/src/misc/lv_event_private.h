@@ -68,9 +68,9 @@ lv_result_t lv_event_push_and_send(lv_event_list_t * event_list, lv_event_code_t
                                    void * param);
 
 /**
- * Nested events can be called and one of them might belong to an object that is being deleted.
- * Mark this object's `event_temp_data` deleted to know that its `lv_obj_send_event` should return `LV_RESULT_INVALID`
- * @param target     pointer to an event target which was deleted
+ * Можно вызывать вложенные события, одно из которых может принадлежать удаляемому объекту.
+ * Согласно рекомендациям`event_temp_data`этого объекта как удаленного, чтобы знать, что его`lv_obj_send_event`должен вернуть`LV_RESULT_INVALID`.
+ * @param target     указатель на цель события, которая была удалена
  */
 void lv_event_mark_deleted(void * target);
 
@@ -79,7 +79,7 @@ void lv_event_mark_deleted(void * target);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EVENT_PRIVATE_H*/

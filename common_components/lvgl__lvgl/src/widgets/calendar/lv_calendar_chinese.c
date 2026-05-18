@@ -81,8 +81,8 @@ static const lv_calendar_festival_t festivals_base_chinese[] = {
     {"中秋节", 8, 15},
     {"重阳节", 9, 9},
     {"腊八节", 12, 8},
-    {"除夕", 12, 29},/* To determine whether it is 12.29 or 12.30. */
-    {"除夕", 12, 30},/* To determine whether it is 12.29 or 12.30. */
+    {"除夕", 12, 29},/* Чтобы определить, сейчас 12.29 или 12.30. */
+    {"除夕", 12, 30},/* Чтобы определить, сейчас 12.29 или 12.30. */
 };
 
 static const lv_calendar_festival_t festivals_base_gregorian[] = {
@@ -175,18 +175,18 @@ void lv_calendar_gregorian_to_chinese(lv_calendar_date_t * gregorian_time, lv_ca
     uint8_t month = gregorian_time->month;
     uint8_t day = gregorian_time->day;
 
-    /*Record the number of days between the Spring Festival
-    and the New Year's Day of that year.*/
+    /*Запишите количество дней между Праздником Весны.
+    и Новый год того же года.*/
     uint16_t by_spring;
 
-    /*Record the number of days from the gregorian calendar
-    to the New Year's Day of that year.*/
+    /*Запишите количество дней по григорианскому календарю.
+    к Новому году того же года.*/
     uint16_t by_gregorian;
 
-    /*Record the number of days in that month*/
+    /*Запишите количество дней в этом месяце*/
     uint8_t days_per_month;
 
-    /*Record from which month the calculation starts.*/
+    /*Запишите, с какого месяца начинается расчет.*/
     uint8_t index;
 
     bool leep_month;
@@ -209,7 +209,7 @@ void lv_calendar_gregorian_to_chinese(lv_calendar_date_t * gregorian_time, lv_ca
     if((!(year % 4)) && (month > 2))
         by_gregorian++;
 
-    if(by_gregorian >= by_spring) {/*Gregorian calendar days after the Spring Festival*/
+    if(by_gregorian >= by_spring) {/*Дни по григорианскому календарю после праздника Весны*/
         by_gregorian -= by_spring;
         month = 1;
         index = 1;
@@ -239,7 +239,7 @@ void lv_calendar_gregorian_to_chinese(lv_calendar_date_t * gregorian_time, lv_ca
         }
         day = by_gregorian + 1;
     }
-    else {/*Solar day before the Spring Festival*/
+    else {/*Солнечный день перед Праздником Весны*/
         by_spring -= by_gregorian;
         year--;
         month = 12;

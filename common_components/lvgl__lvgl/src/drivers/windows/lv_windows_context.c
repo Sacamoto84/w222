@@ -73,7 +73,7 @@ void lv_windows_platform_init(void)
         200,
         NULL);
 
-    // Try to ensure the default group exists.
+    // Попытайтесь убедиться, что группа по умолчанию существует.
     {
         lv_group_t * default_group = lv_group_get_default();
         if(!default_group) {
@@ -148,8 +148,8 @@ static void lv_windows_check_display_existence_timer_callback(
 {
     LV_UNUSED(timer);
     if(!lv_display_get_next(NULL)) {
-        // Don't use lv_deinit() due to it will cause exception when parallel
-        // rendering is enabled.
+        // Не используйте lv_deinit(), поскольку при параллельном выполнении это вызовет исключение.
+        // рендеринг включен.
         exit(0);
     }
 }
@@ -420,9 +420,9 @@ static BOOL lv_windows_register_touch_window(
 static BOOL lv_windows_enable_child_window_dpi_message(
     HWND WindowHandle)
 {
-    // The private Per-Monitor DPI Awareness support extension is Windows 10
-    // only. We don't need the private Per-Monitor DPI Awareness support
-    // extension if the Per-Monitor (V2) DPI Awareness exists.
+    // Расширение поддержки частного мониторинга DPI Awareness — Windows 10.
+    // только. Нам не нужна частная поддержка осведомленности DPI для каждого монитора.
+    // расширение, если существует информация для каждого монитора ( V2 ) DPI.
     OSVERSIONINFOEXW os_version_info_ex = { 0 };
     os_version_info_ex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     os_version_info_ex.dwMajorVersion = 10;
@@ -470,8 +470,8 @@ static bool lv_windows_window_message_callback_nolock(
     switch(uMsg) {
         case WM_CREATE: {
                 // Note: Return -1 directly because WM_DESTROY message will be sent
-                // when destroy the window automatically. We free the resource when
-                // processing the WM_DESTROY message of this window.
+                // при автоматическом уничтожении окна. Мы освобождаем ресурс, когда
+                // обработка сообщения WM_DESTROY этого окна.
 
                 lv_windows_create_display_data_t * data =
                     (lv_windows_create_display_data_t *)(
@@ -662,7 +662,7 @@ static bool lv_windows_window_message_callback_nolock(
                            wParam,
                            lParam,
                            plResult)) {
-                        // Handled
+                        // обработано
                         return true;
                     }
                     else if(context->keypad.indev &&
@@ -672,7 +672,7 @@ static bool lv_windows_window_message_callback_nolock(
                                 wParam,
                                 lParam,
                                 plResult)) {
-                        // Handled
+                        // обработано
                         return true;
                     }
                     else if(context->encoder.indev &&
@@ -682,17 +682,17 @@ static bool lv_windows_window_message_callback_nolock(
                                 wParam,
                                 lParam,
                                 plResult)) {
-                        // Handled
+                        // обработано
                         return true;
                     }
                 }
 
-                // Not Handled
+                // Не обработано
                 return false;
             }
     }
 
-    // Handled
+    // обработано
     *plResult = 0;
     return true;
 }

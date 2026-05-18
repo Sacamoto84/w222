@@ -2,31 +2,31 @@
 #if LV_BUILD_EXAMPLES && LV_USE_BUTTON
 
 /**
- * Create a style transition on a button to act like a gum when clicked
+ * Создайте переход стиля на кнопке, который будет действовать как жвачка при нажатии.
  */
 void lv_example_button_3(void)
 {
-    /*Properties to transition*/
+    /*Свойства для перехода*/
     static lv_style_prop_t props[] = {
         LV_STYLE_TRANSFORM_WIDTH, LV_STYLE_TRANSFORM_HEIGHT, LV_STYLE_TEXT_LETTER_SPACE, 0
     };
 
-    /*Transition descriptor when going back to the default state.
-     *Add some delay to be sure the press transition is visible even if the press was very short*/
+    /*Дескриптор перехода при возврате в состояние по умолчанию.
+     *Добавьте некоторую задержку, чтобы переход нажатия был виден, даже если нажатие было очень коротким.*/
     static lv_style_transition_dsc_t transition_dsc_def;
     lv_style_transition_dsc_init(&transition_dsc_def, props, lv_anim_path_overshoot, 250, 100, NULL);
 
-    /*Transition descriptor when going to pressed state.
-     *No delay, go to presses state immediately*/
+    /*Дескриптор перехода при переходе в нажатое состояние.
+     *Никаких задержек, немедленно переходите в режим печати.*/
     static lv_style_transition_dsc_t transition_dsc_pr;
     lv_style_transition_dsc_init(&transition_dsc_pr, props, lv_anim_path_ease_in_out, 250, 0, NULL);
 
-    /*Add only the new transition to he default state*/
+    /*Добавьте только новый переход в состояние по умолчанию.*/
     static lv_style_t style_def;
     lv_style_init(&style_def);
     lv_style_set_transition(&style_def, &transition_dsc_def);
 
-    /*Add the transition and some transformation to the presses state.*/
+    /*Добавьте переход и некоторые преобразования в состояние нажатия.*/
     static lv_style_t style_pr;
     lv_style_init(&style_pr);
     lv_style_set_transform_width(&style_pr, 10);

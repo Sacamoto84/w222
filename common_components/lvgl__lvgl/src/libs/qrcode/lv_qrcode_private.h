@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Data of qrcode*/
+/*Данные qrcode*/
 struct _lv_qrcode_t {
     lv_canvas_t canvas;
     lv_color_t dark_color;
@@ -47,7 +47,7 @@ struct _lv_qrcode_t {
 #endif /* LV_USE_QRCODE */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_QRCODE_PRIVATE_H*/

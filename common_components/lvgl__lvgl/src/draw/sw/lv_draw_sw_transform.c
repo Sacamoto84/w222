@@ -41,7 +41,7 @@ typedef struct {
  *  STATIC PROTOTYPES
  **********************/
 /**
- * Transform a point with 1/256 precision (the output coordinates are upscaled by 256)
+ * Преобразуйте точку с точностью 1/256 (выходные координаты масштабируются на 256).
  * @param t         pointer to n initialized `point_transform_dsc_t` structure
  * @param xin       X coordinate to rotate
  * @param yin       Y coordinate to rotate
@@ -171,23 +171,23 @@ void lv_draw_sw_transform(const lv_area_t * dest_area, const void * src_buf,
     int32_t xs_ups = 0, ys_ups = 0, ys_ups_start = 0, ys_step_256_original = 0;
     int32_t xs_step_256 = 0, ys_step_256 = 0;
 
-    /*When some of the color formats are disabled, these variables could be unused, avoid warning here*/
+    /*Если некоторые цветовые форматы отключены, эти переменные могут оказаться неиспользуемыми, не предупреждайте здесь.*/
     LV_UNUSED(aa);
     LV_UNUSED(xs_ups);
     LV_UNUSED(ys_ups);
     LV_UNUSED(xs_step_256);
     LV_UNUSED(ys_step_256);
 
-    /*If scaled only make some simplification to avoid rounding errors.
-     *For example if there is a 100x100 image zoomed to 300%
-     *The destination area in X will be x1=0; x2=299
-     *When the step is calculated below it will think that stepping
-     *1/3 pixels on the original image will result in 300% zoom.
-     *However this way the last pixel will be on the 99.67 coordinate.
-     *As it's larger than 99.5 LVGL will start to mix the next coordinate
-     *which is out of the image, so will make the pixel more transparent.
-     *To avoid it in case of scale only limit the coordinates to the 0..297 range,
-     *that is to 0..(src_w-1)*zoom */
+    /*При масштабировании необходимо внести лишь некоторые упрощения, чтобы избежать ошибок округления.
+     *Например, если есть изображение размером 100x100, увеличенное до 300%.
+     *Область назначения в X будет x1=0; х2=299
+     *Когда шаг рассчитывается ниже, он будет думать, что шаг
+     *1/3 пикселя исходного изображения приведет к увеличению на 300%.
+     *Однако в этом случае последний пиксель будет находиться на координате 99,67.
+     *Поскольку оно больше 99,5, LVGL начнет смешивать следующую координату.
+     *который находится за пределами изображения, поэтому пиксель станет более прозрачным.
+     *Чтобы избежать этого, в случае масштабирования ограничьте координаты только диапазоном 0..297,
+     *то есть до 0..( src_w -1)*zoom */
     if(is_rotated == false) {
         int32_t xs1_ups, ys1_ups, xs2_ups, ys2_ups;
 
@@ -344,14 +344,14 @@ static void transform_rgb888(const uint8_t * src, int32_t src_w, int32_t src_h, 
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             dest_c32[x].alpha = 0x00;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -410,7 +410,7 @@ static void transform_rgb888(const uint8_t * src, int32_t src_w, int32_t src_h, 
                 dest_c32[x] = lv_color_mix32(px_hor, dest_c32[x]);
             }
         }
-        /*Partially out of the image*/
+        /*Частично вне изображения*/
         else {
             lv_opa_t a = 0xff;
 
@@ -444,14 +444,14 @@ static void transform_argb8888(const uint8_t * src, int32_t src_w, int32_t src_h
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             ((uint32_t *)dest_buf)[x] = 0x00000000;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -505,7 +505,7 @@ static void transform_argb8888(const uint8_t * src, int32_t src_w, int32_t src_h
                 dest_c32[x] = lv_color_mix32(px_hor, dest_c32[x]);
             }
         }
-        /*Partially out of the image*/
+        /*Частично вне изображения*/
         else {
             if((xs_int == 0 && x_next < 0) || (xs_int == src_w - 1 && x_next > 0))  {
                 dest_c32[x].alpha = (dest_c32[x].alpha * (0x7F - xs_fract)) >> 7;
@@ -554,14 +554,14 @@ static void transform_argb8888_premultiplied(const uint8_t * src, int32_t src_w,
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             ((uint32_t *)dest_buf)[x] = 0x00000000;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -597,8 +597,8 @@ static void transform_argb8888_premultiplied(const uint8_t * src, int32_t src_w,
             lv_color32_t px_hor = src_c32[x_next];
             lv_color32_t px_ver = *(const lv_color32_t *)((uint8_t *)src_c32 + y_next * src_stride);
 
-            /*Have the non-premultiplied colors first, mix them as needed,
-             *and premultiply again*/
+            /*Сначала возьмите неумноженные цвета, смешайте их по мере необходимости.
+             *и снова предварительно умножить*/
             dest_c32[x] = unpremultiply(dest_c32[x]);
             px_hor = unpremultiply(px_hor);
             px_ver = unpremultiply(px_ver);
@@ -627,7 +627,7 @@ static void transform_argb8888_premultiplied(const uint8_t * src, int32_t src_w,
             dest_c32[x].blue = (dest_c32[x].blue * dest_c32[x].alpha) >> 8;
 
         }
-        /*Partially out of the image*/
+        /*Частично вне изображения*/
         else {
             if((xs_int == 0 && x_next < 0) || (xs_int == src_w - 1 && x_next > 0))  {
                 dest_c32[x] = unpremultiply(dest_c32[x]);
@@ -662,8 +662,8 @@ static void transform_rgb565a8(const uint8_t * src, int32_t src_w, int32_t src_h
 
     const lv_opa_t * src_alpha = src + src_stride * src_h;
 
-    /*Must be signed type, because we would use negative array index calculated from stride*/
-    int32_t alpha_stride = src_stride / 2; /*alpha map stride is always half of RGB map stride*/
+    /*Должен быть знаковый тип, потому что мы будем использовать отрицательный индекс массива, рассчитанный на основе шага.*/
+    int32_t alpha_stride = src_stride / 2; /*Шаг альфа-карты всегда равен половине шага карты RGB.*/
 
     int32_t x;
     for(x = 0; x < x_end; x++) {
@@ -673,14 +673,14 @@ static void transform_rgb565a8(const uint8_t * src, int32_t src_w, int32_t src_h
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             abuf[x] = 0x00;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -739,7 +739,7 @@ static void transform_rgb565a8(const uint8_t * src, int32_t src_w, int32_t src_h
                 cbuf[x] = lv_color_16_16_mix(h, v, LV_OPA_50);
             }
         }
-        /*Partially out of the image*/
+        /*Частично вне изображения*/
         else {
             lv_opa_t a;
             if(src_has_a8) {
@@ -777,8 +777,8 @@ static void transform_rgb565a8_swapped(const uint8_t * src, int32_t src_w, int32
 
     const lv_opa_t * src_alpha = src + src_stride * src_h;
 
-    /*Must be signed type, because we would use negative array index calculated from stride*/
-    int32_t alpha_stride = src_stride / 2; /*alpha map stride is always half of RGB map stride*/
+    /*Должен быть знаковый тип, потому что мы будем использовать отрицательный индекс массива, рассчитанный на основе шага.*/
+    int32_t alpha_stride = src_stride / 2; /*Шаг альфа-карты всегда равен половине шага карты RGB.*/
 
     int32_t x;
     for(x = 0; x < x_end; x++) {
@@ -788,14 +788,14 @@ static void transform_rgb565a8_swapped(const uint8_t * src, int32_t src_w, int32
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             abuf[x] = 0x00;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -819,7 +819,7 @@ static void transform_rgb565a8_swapped(const uint8_t * src, int32_t src_w, int32
         }
 
         const uint16_t * src_tmp_u16 = (const uint16_t *)(src + (ys_int * src_stride) + xs_int * 2);
-        cbuf[x] = lv_color_swap_16(src_tmp_u16[0]); /* swap the src pixels */
+        cbuf[x] = lv_color_swap_16(src_tmp_u16[0]); /* поменять местами пиксели src */
 
         if(aa &&
            xs_int + x_next >= 0 &&
@@ -827,7 +827,7 @@ static void transform_rgb565a8_swapped(const uint8_t * src, int32_t src_w, int32
            ys_int + y_next >= 0 &&
            ys_int + y_next <= src_h - 1) {
 
-            /* swap the src pixels */
+            /* поменять местами пиксели src */
             uint16_t px_hor = lv_color_swap_16(src_tmp_u16[x_next]);
             uint16_t px_ver = lv_color_swap_16(*(const uint16_t *)((uint8_t *)src_tmp_u16 + (y_next * src_stride)));
 
@@ -855,7 +855,7 @@ static void transform_rgb565a8_swapped(const uint8_t * src, int32_t src_w, int32
                 cbuf[x] =  lv_color_16_16_mix(h, v, LV_OPA_50);
             }
         }
-        /*Partially out of the image*/
+        /*Частично вне изображения*/
         else {
             lv_opa_t a;
             if(src_has_a8) {
@@ -899,14 +899,14 @@ static void transform_a8(const uint8_t * src, int32_t src_w, int32_t src_h, int3
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             abuf[x] = 0x00;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -947,7 +947,7 @@ static void transform_a8(const uint8_t * src, int32_t src_w, int32_t src_h, int3
             abuf[x] = (a_ver + a_hor) >> 1;
         }
         else {
-            /*Partially out of the image*/
+            /*Частично вне изображения*/
             if((xs_int == 0 && x_next < 0) || (xs_int == src_w - 1 && x_next > 0))  {
                 abuf[x] = (src_tmp[0] * (0xFF - xs_fract)) >> 8;
             }
@@ -977,15 +977,15 @@ static void transform_al88(const uint8_t * src, int32_t src_w, int32_t src_h, in
         int32_t xs_int = xs_ups >> 8;
         int32_t ys_int = ys_ups >> 8;
 
-        /*Fully out of the image*/
+        /*Полностью вне образа*/
         if(xs_int < 0 || xs_int >= src_w || ys_int < 0 || ys_int >= src_h) {
             cbuf[x] = 0x00;
             abuf[x] = 0x00;
             continue;
         }
 
-        /*Get the direction the hor and ver neighbor
-         *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
+        /*Получите направление к соседу Хор и Вер
+         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -1022,14 +1022,14 @@ static void transform_al88(const uint8_t * src, int32_t src_w, int32_t src_h, in
                 lv_color16a_t px_hor = src_tmp[x_next];
                 lv_color16a_t px_ver = *(const lv_color16a_t *)((uint8_t *)src_tmp + (y_next * src_stride));
 
-                /* Interpolate luminance */
+                /* Интерполировать яркость */
                 uint8_t l_ver = px_ver.lumi;
                 uint8_t l_hor = px_hor.lumi;
                 if(l_ver != cbuf[x]) l_ver = ((l_ver * ys_fract) + (cbuf[x] * (0x100 - ys_fract))) >> 8;
                 if(l_hor != cbuf[x]) l_hor = ((l_hor * xs_fract) + (cbuf[x] * (0x100 - xs_fract))) >> 8;
                 cbuf[x] = (l_ver + l_hor) >> 1;
 
-                /* Interpolate alpha */
+                /* Интерполировать альфа */
                 uint8_t a_ver = px_ver.alpha;
                 uint8_t a_hor = px_hor.alpha;
                 if(a_ver != abuf[x]) a_ver = ((a_ver * ys_fract) + (abuf[x] * (0x100 - ys_fract))) >> 8;
@@ -1037,7 +1037,7 @@ static void transform_al88(const uint8_t * src, int32_t src_w, int32_t src_h, in
                 abuf[x] = (a_ver + a_hor) >> 1;
             }
             else {
-                /*Partially out of the image*/
+                /*Частично вне изображения*/
                 if((xs_int == 0 && x_next < 0) || (xs_int == src_w - 1 && x_next > 0)) {
                     abuf[x] = (abuf[x] * (0xFF - xs_fract)) >> 8;
                 }
@@ -1047,7 +1047,7 @@ static void transform_al88(const uint8_t * src, int32_t src_w, int32_t src_h, in
             }
         }
         else {
-            /* L8 format: 1 byte per pixel, no separate alpha channel */
+            /* Формат L8: 1 байт на пиксель, без отдельного альфа-канала. */
             const uint8_t * src_tmp = src + ys_int * src_stride + xs_int;
             cbuf[x] = src_tmp[0];
             abuf[x] = 0xff;
@@ -1066,7 +1066,7 @@ static void transform_al88(const uint8_t * src, int32_t src_w, int32_t src_h, in
                 cbuf[x] = (l_ver + l_hor) >> 1;
             }
             else {
-                /*Partially out of the image - reduce alpha for edge pixels*/
+                /*Частично за пределами изображения — уменьшите альфу для краевых пикселей.*/
                 if((xs_int == 0 && x_next < 0) || (xs_int == src_w - 1 && x_next > 0)) {
                     abuf[x] = (0xff * (0xFF - xs_fract)) >> 8;
                 }

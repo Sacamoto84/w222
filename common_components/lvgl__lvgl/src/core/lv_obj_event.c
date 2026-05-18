@@ -65,10 +65,10 @@ lv_result_t lv_obj_send_event(lv_obj_t * obj, lv_event_code_t event_code, void *
 
     lv_event_push(&e);
 
-    /*Send the event*/
+    /*Отправить событие*/
     lv_result_t res = event_send_core(&e);
 
-    /*Remove this element from the list*/
+    /*Удалить этот элемент из списка*/
     lv_event_pop(&e);
 
     return res;
@@ -80,20 +80,20 @@ lv_result_t lv_obj_event_base(const lv_obj_class_t * class_p, lv_event_t * e)
     if(class_p == NULL) base = ((lv_obj_t *)e->current_target)->class_p;
     else base = class_p->base_class;
 
-    /*Find a base in which call the ancestor's event handler_cb if set*/
+    /*Найдите источники, в которых произошло событие предкаhandler_cb, если оно установлено*/
     while(base && base->event_cb == NULL) base = base->base_class;
 
     if(base == NULL) return LV_RESULT_OK;
     if(base->event_cb == NULL) return LV_RESULT_OK;
 
-    /*Call the actual event callback*/
+    /*Вызов фактического обратного вызова события*/
     e->user_data = NULL;
     LV_PROFILER_EVENT_BEGIN_TAG(lv_event_code_get_name(e->code));
     base->event_cb(base, e);
     LV_PROFILER_EVENT_END_TAG(lv_event_code_get_name(e->code));
 
     lv_result_t res = LV_RESULT_OK;
-    /*Stop if the object is deleted*/
+    /*Остановиться, если объект удален*/
     if(e->deleted) res = LV_RESULT_INVALID;
 
     return res;
@@ -330,7 +330,7 @@ void lv_event_set_cover_res(lv_event_t * e, lv_cover_res_t res)
 {
     if(e->code == LV_EVENT_COVER_CHECK) {
         lv_cover_check_info_t * p = lv_event_get_param(e);
-        if(res > p->res) p->res = res;  /*Save only "stronger" results*/
+        if(res > p->res) p->res = res;  /*Сохраняйте только «более сильные» результаты*/
     }
     else {
         LV_LOG_WARN("Not interpreted with this event code");
@@ -394,11 +394,11 @@ static lv_result_t event_send_core(lv_event_t * e)
     }
     if(res != LV_RESULT_OK) return res;
 
-    /*Trickle down to children if enabled*/
+    /*Передавать детям, если включено*/
     if(event_is_trickled(e)) {
         uint32_t child_count = lv_obj_get_child_count(target);
 
-        /* we don't want the event to bubble up again when trickling down */
+        /* мы не хотим, чтобы событие снова всплыло, когда оно просачивается вниз */
         e->stop_bubbling = 1;
 
         for(uint32_t i = 0; i < child_count && res == LV_RESULT_OK && !e->stop_processing; i++) {
@@ -421,7 +421,7 @@ static bool event_is_bubbled(lv_event_t * e)
 {
     if(e->stop_bubbling) return false;
 
-    /*Event codes that always bubble*/
+    /*Коды событий, которые всегда всплывают*/
     switch(e->code) {
         case LV_EVENT_CHILD_CREATED:
         case LV_EVENT_CHILD_DELETED:
@@ -430,7 +430,7 @@ static bool event_is_bubbled(lv_event_t * e)
             break;
     }
 
-    /*Check other codes only if bubbling is enabled*/
+    /*Другие коды проверяйте только в том случае, если включено всплывание.*/
     if(lv_obj_has_flag(e->current_target, LV_OBJ_FLAG_EVENT_BUBBLE) == false) return false;
 
     switch(e->code) {
@@ -462,7 +462,7 @@ static bool event_is_trickled(lv_event_t * e)
 {
     if(e->stop_trickling) return false;
 
-    /*Check other codes only if trickle is enabled*/
+    /*Другие коды проверяйте только в том случае, если включена функция струйки.*/
     if(lv_obj_has_flag(e->current_target, LV_OBJ_FLAG_EVENT_TRICKLE) == false) return false;
 
     switch(e->code) {

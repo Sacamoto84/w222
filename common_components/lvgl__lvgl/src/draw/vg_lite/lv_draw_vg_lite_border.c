@@ -54,7 +54,7 @@ void lv_draw_vg_lite_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc
 
     lv_area_t clip_area;
     if(!lv_area_intersect(&clip_area, coords, &t->clip_area)) {
-        /*Fully clipped, nothing to do*/
+        /*Полностью обрезан, делать нечего.*/
         return;
     }
 
@@ -72,13 +72,13 @@ void lv_draw_vg_lite_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc
     lv_vg_lite_path_set_quality(path, dsc->radius == 0 ? VG_LITE_LOW : VG_LITE_HIGH);
     lv_vg_lite_path_set_bounding_box_area(path, &clip_area);
 
-    /* outer rect */
+    /* внешний прямоугольник */
     lv_vg_lite_path_append_rect(path,
                                 coords->x1, coords->y1,
                                 w, h,
                                 r_out);
 
-    /* inner rect */
+    /* внутренний прямоугольник */
     vg_lite_fill_t fill_rule = path_append_inner_rect(path, dsc, coords->x1, coords->y1, w, h, r_out);
 
     lv_vg_lite_path_end(path);
@@ -113,7 +113,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
     const int32_t border_w = dsc->width;
     const float border_w_max = LV_MIN(half_w, half_h);
 
-    /* normal fill, no inner rect */
+    /* обычная заливка, без внутреннего прямоугольника */
     if(border_w >= border_w_max) {
         LV_PROFILER_DRAW_END;
         return VG_LITE_FILL_EVEN_ODD;
@@ -121,7 +121,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
 
     const float r_in = r - border_w;
 
-    /* full border, simple rect */
+    /* полная граница, простой прямоугольник */
     if(dsc->side == LV_BORDER_SIDE_FULL) {
         lv_vg_lite_path_append_rect(path,
                                     x + border_w, y + border_w,
@@ -131,7 +131,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
         return VG_LITE_FILL_EVEN_ODD;
     }
 
-    /* no-radius case, simple inner rect */
+    /* случай без радиуса, простой внутренний прямоугольник */
     if(dsc->radius <= 0) {
         int32_t x_offset = 0;
         int32_t y_offset = 0;
@@ -163,10 +163,10 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
         return VG_LITE_FILL_EVEN_ODD;
     }
 
-    /* reset outer rect path */
+    /* сбросить внешний прямой путь */
     lv_vg_lite_path_reset(path, VG_LITE_FP32);
 
-    /* coordinate reference map: https://github.com/lvgl/lvgl/pull/6796 */
+    /* справочная карта координат: https://github.com/lvgl/lvgl/pull/6796 */
     const float c1_x = x + r;
     const float c1_y = y + r;
     const float c2_x = x + w - r;
@@ -176,7 +176,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
     const float c4_x = c1_x;
     const float c4_y = c3_y;
 
-    /* When border_w > r, No need to calculate the intersection of the arc and the line */
+    /* Когда border_w > r, нет необходимости рассчитывать пересечение дуги и линии. */
     if(r_in <= 0) {
         const float p1_x = x;
         const float p1_y = y + border_w;
@@ -258,9 +258,9 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
         return VG_LITE_FILL_NON_ZERO;
     }
 
-    /* When border_w < r, Calculate the intersection of an arc and a line */
+    /* Когда border_w < r, вычислите пересечение дуги и линии. */
 
-    /* r^2 - r_in^2 = offset^2 */
+    /* r^2 - r_in ^2 = смещение^2 */
     const float offset = MATH_SQRTF((2 * r - border_w) * border_w);
     const float sweep_alpha = MATH_DEGREES(MATH_ACOSF(r_in / r));
     const float sweep_beta = 90 - sweep_alpha;
@@ -347,7 +347,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
         lv_vg_lite_path_close(path);
     }
 
-    /* Draw the rounded corners adjacent to the border */
+    /* Нарисуйте закругленные углы рядом с границей. */
 
     if(HAS_BORDER_SIDE(dsc->side, LV_BORDER_SIDE_TOP | LV_BORDER_SIDE_LEFT)) {
         lv_vg_lite_path_move_to(path, p2_x, p2_y);

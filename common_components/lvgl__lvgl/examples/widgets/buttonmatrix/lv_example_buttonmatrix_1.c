@@ -22,7 +22,7 @@ void lv_example_buttonmatrix_1(void)
 {
     lv_obj_t * btnm1 = lv_buttonmatrix_create(lv_screen_active());
     lv_buttonmatrix_set_map(btnm1, btnm_map);
-    lv_buttonmatrix_set_button_width(btnm1, 10, 2);        /*Make "Action1" twice as wide as "Action2"*/
+    lv_buttonmatrix_set_button_width(btnm1, 10, 2);        /*Сделайте «Действие1» в два раза шире «Действия2».*/
     lv_buttonmatrix_set_button_ctrl(btnm1, 10, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_buttonmatrix_set_button_ctrl(btnm1, 11, LV_BUTTONMATRIX_CTRL_CHECKED);
     lv_obj_align(btnm1, LV_ALIGN_CENTER, 0, 0);

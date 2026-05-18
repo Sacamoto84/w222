@@ -3,7 +3,7 @@
 
 void lv_example_monkey_1(void)
 {
-    /*Create pointer monkey test*/
+    /*Создать тест на обезьяну-указателя*/
     lv_monkey_config_t config;
     lv_monkey_config_init(&config);
     config.type = LV_INDEV_TYPE_POINTER;
@@ -11,7 +11,7 @@ void lv_example_monkey_1(void)
     config.period_range.max = 100;
     lv_monkey_t * monkey = lv_monkey_create(&config);
 
-    /*Start monkey test*/
+    /*Начать тест на обезьянах*/
     lv_monkey_set_enable(monkey, true);
 }
 

@@ -52,7 +52,7 @@ struct _lv_tileview_tile_t {
 #endif /* LV_USE_TILEVIEW */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TILEVIEW_PRIVATE_H*/

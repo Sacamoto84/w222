@@ -25,7 +25,7 @@ extern "C" {
  **********************/
 
 /**
- * Type for async callback.
+ * Введите асинхронный обратный вызов.
  */
 typedef void (*lv_async_cb_t)(void *);
 
@@ -34,19 +34,19 @@ typedef void (*lv_async_cb_t)(void *);
  **********************/
 
 /**
- * Call an asynchronous function the next time lv_timer_handler() is run. This function is likely to return
- * **before** the call actually happens!
- * @param async_xcb a callback which is the task itself.
- *                 (the 'x' in the argument name indicates that it's not a fully generic function because it not follows
- *                  the `func_name(object, callback, ...)` convention)
- * @param user_data custom parameter
+ * Вызовите асинхронную функцию при следующем запускеlv_timer_handler(). Эта функция, скорее всего, вернет
+ * **до того, как** действительно произойдет звонок!
+ * @param async_xcb обратный вызов, который является самой задачей.
+ *                 (знак «x» в имени аргумента указывает на то, что это не полностью универсальная функция, поскольку она не следует
+ *                  соглашение`func_name(object, callback, ...)`)
+ * @param user_data специальный параметр
  */
 lv_result_t lv_async_call(lv_async_cb_t async_xcb, void * user_data);
 
 /**
- * Cancel an asynchronous function call
- * @param async_xcb a callback which is the task itself.
- * @param user_data custom parameter
+ * Отменить вызов асинхронной функции
+ * @param async_xcb обратный вызов, который является самой задачей.
+ * @param user_data специальный параметр
  */
 lv_result_t lv_async_call_cancel(lv_async_cb_t async_xcb, void * user_data);
 
@@ -55,7 +55,7 @@ lv_result_t lv_async_call_cancel(lv_async_cb_t async_xcb, void * user_data);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ASYNC_H*/

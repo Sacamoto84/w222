@@ -63,18 +63,18 @@ enum __lv_property_menu_id_t {
  **********************/
 
 /**
- * Create a menu object
+ * Создать объект меню
  * @param parent    pointer to an object, it will be the parent of the new menu
  * @return          pointer to the created menu
  */
 lv_obj_t * lv_menu_create(lv_obj_t * parent);
 
 /**
- * Create a menu page object.
+ * Создайте объект страницы меню.
  *
- * This call inserts the new page under menu->storage as its parent, which is itself a
- * child of the menu, so the resulting object hierarchy is: menu => storage => new_page
- * where `storage` is a Base Widget.
+ * Этот вызов вставляет новую страницу в меню->хранилище в качестве ее родительской страницы, которая сама по себе является
+ * дочерний элемент меню, поэтому результирующая иерархия объектов следующая: меню => хранилище => new_page
+ * где `storage` — базовый виджет.
  * @param menu      pointer to menu object.
  * @param title     pointer to text for title in header (NULL to not display title)
  * @return          pointer to the created menu page
@@ -82,73 +82,73 @@ lv_obj_t * lv_menu_create(lv_obj_t * parent);
 lv_obj_t * lv_menu_page_create(lv_obj_t * menu, char const * const title);
 
 /**
- * Create a menu cont object
+ * Создайте объект продолжения меню
  * @param parent    pointer to a menu page or menu section object, it will be the parent of the new menu cont object
  * @return          pointer to the created menu cont
  */
 lv_obj_t * lv_menu_cont_create(lv_obj_t * parent);
 
 /**
- * Create a menu section object
+ * Создать объект раздела меню
  * @param parent    pointer to a menu page object, it will be the parent of the new menu section object
  * @return          pointer to the created menu section
  */
 lv_obj_t * lv_menu_section_create(lv_obj_t * parent);
 
 /**
- * Create a menu separator object
+ * Создайте объект-разделитель меню
  * @param parent    pointer to a menu page object, it will be the parent of the new menu separator object
  * @return          pointer to the created menu separator
  */
 lv_obj_t * lv_menu_separator_create(lv_obj_t * parent);
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 /**
- * Set menu page to display in main
+ * Установить страницу меню для отображения в главном
  * @param obj       pointer to the menu
  * @param page      pointer to the menu page to set (NULL to clear main and clear menu history)
  */
 void lv_menu_set_page(lv_obj_t * obj, lv_obj_t * page);
 
 /**
- * Set menu page title
+ * Установить заголовок страницы меню
  * @param page      pointer to the menu page
  * @param title     pointer to text for title in header (NULL to not display title)
  */
 void lv_menu_set_page_title(lv_obj_t * page, char const * const title);
 
 /**
- * Set menu page title with a static text. It will not be saved by the label so the 'text' variable
- * has to be 'alive' while the page exists.
+ * Установите заголовок страницы меню со статическим текстом. Он не будет сохранен с помощью метки, поэтому переменная text
+ * должен быть «живым», пока существует страница.
  * @param page      pointer to the menu page
  * @param title     pointer to text for title in header (NULL to not display title)
  */
 void lv_menu_set_page_title_static(lv_obj_t * page, char const * const title);
 
 /**
- * Set menu page to display in sidebar
+ * Установить страницу меню для отображения на боковой панели
  * @param obj       pointer to the menu
  * @param page      pointer to the menu page to set (NULL to clear sidebar)
  */
 void lv_menu_set_sidebar_page(lv_obj_t * obj, lv_obj_t * page);
 
 /**
- * Set the how the header should behave and its position
+ * Установите, как должен вести себя заголовок и его положение.
  * @param obj       pointer to a menu
  * @param mode      LV_MENU_HEADER_TOP_FIXED/TOP_UNFIXED/BOTTOM_FIXED
  */
 void lv_menu_set_mode_header(lv_obj_t * obj, lv_menu_mode_header_t mode);
 
 /**
- * Set whether back button should appear at root
+ * Установите, должна ли кнопка «Назад» отображаться в корне
  * @param obj       pointer to a menu
  * @param mode      LV_MENU_ROOT_BACK_BUTTON_DISABLED/ENABLED
  */
 void lv_menu_set_mode_root_back_button(lv_obj_t * obj, lv_menu_mode_root_back_button_t mode);
 
 /**
- * Add menu to the menu item
+ * Добавить меню к пункту меню
  * @param menu      pointer to the menu
  * @param obj       pointer to the obj
  * @param page      pointer to the page to load when obj is clicked
@@ -156,52 +156,52 @@ void lv_menu_set_mode_root_back_button(lv_obj_t * obj, lv_menu_mode_root_back_bu
 void lv_menu_set_load_page_event(lv_obj_t * menu, lv_obj_t * obj, lv_obj_t * page);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 /**
-* Get a pointer to menu page that is currently displayed in main
+* Получите указатель на страницу меню, которая в данный момент отображается в главном меню.
 * @param obj        pointer to the menu
 * @return           pointer to current page
 */
 lv_obj_t * lv_menu_get_cur_main_page(lv_obj_t * obj);
 
 /**
-* Get a pointer to menu page that is currently displayed in sidebar
+* Получите указатель на страницу меню, которая в данный момент отображается на боковой панели.
 * @param obj        pointer to the menu
 * @return           pointer to current page
 */
 lv_obj_t * lv_menu_get_cur_sidebar_page(lv_obj_t * obj);
 
 /**
-* Get a pointer to main header obj
+* Получить указатель на объект основного заголовка
 * @param obj        pointer to the menu
 * @return           pointer to main header obj
 */
 lv_obj_t * lv_menu_get_main_header(lv_obj_t * obj);
 
 /**
-* Get a pointer to main header back btn obj
+* Получить указатель на основной заголовок назад btn obj
 * @param obj        pointer to the menu
 * @return           pointer to main header back btn obj
 */
 lv_obj_t * lv_menu_get_main_header_back_button(lv_obj_t * obj);
 
 /**
-* Get a pointer to sidebar header obj
+* Получить указатель на объект заголовка боковой панели
 * @param obj        pointer to the menu
 * @return           pointer to sidebar header obj
 */
 lv_obj_t * lv_menu_get_sidebar_header(lv_obj_t * obj);
 
 /**
-* Get a pointer to sidebar header obj
+* Получить указатель на объект заголовка боковой панели
 * @param obj        pointer to the menu
 * @return           pointer to sidebar header back btn obj
 */
 lv_obj_t * lv_menu_get_sidebar_header_back_button(lv_obj_t * obj);
 
 /**
- * Check if an obj is a root back btn
+ * Проверьте, является ли объект корневым
  * @param menu      pointer to the menu
  * @param obj       pointer to the back button
  * @return          true if it is a root back btn
@@ -209,21 +209,21 @@ lv_obj_t * lv_menu_get_sidebar_header_back_button(lv_obj_t * obj);
 bool lv_menu_back_button_is_root(lv_obj_t * menu, lv_obj_t * obj);
 
 /**
- * Get the header mode of the menu
+ * Получить режим заголовка меню
  * @param obj       pointer to a menu
  * @return          LV_MENU_HEADER_TOP_FIXED/TOP_UNFIXED/BOTTOM_FIXED
  */
 lv_menu_mode_header_t lv_menu_get_mode_header(lv_obj_t * obj);
 
 /**
- * Get the root back button mode of the menu
+ * Получить режим кнопки возврата в меню
  * @param obj       pointer to a menu
  * @return          LV_MENU_ROOT_BACK_BUTTON_DISABLED/ENABLED
  */
 lv_menu_mode_root_back_button_t lv_menu_get_mode_root_back_button(lv_obj_t * obj);
 
 /**
- * Clear menu history
+ * Очистить историю меню
  * @param obj       pointer to the menu
  */
 void lv_menu_clear_history(lv_obj_t * obj);
@@ -235,7 +235,7 @@ void lv_menu_clear_history(lv_obj_t * obj);
 #endif /*LV_USE_MENU*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_MENU_H*/

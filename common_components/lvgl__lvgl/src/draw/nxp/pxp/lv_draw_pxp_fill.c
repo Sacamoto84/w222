@@ -68,7 +68,7 @@ void lv_draw_pxp_fill(lv_draw_task_t * t)
 
     lv_area_t blend_area;
     if(!lv_area_intersect(&blend_area, &rel_coords, &rel_clip_area))
-        return; /*Fully clipped, nothing to do*/
+        return; /*Полностью обрезан, делать нечего.*/
 
     _pxp_fill(draw_buf->data, &blend_area, draw_buf->header.stride, draw_buf->header.cf, dsc);
 }
@@ -87,7 +87,7 @@ static void _pxp_fill(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
 
     uint8_t px_size = lv_color_format_get_size(dest_cf);
 
-    /*OUT buffer configure*/
+    /*Настройка буфера OUT*/
     pxp_output_buffer_config_t outputConfig = {
         .pixelFormat = pxp_get_out_px_format(dest_cf),
         .interlacedMode = kPXP_OutputProgressive,
@@ -101,12 +101,12 @@ static void _pxp_fill(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
     PXP_SetOutputBufferConfig(PXP_ID, &outputConfig);
 
     if(dsc->opa >= (lv_opa_t)LV_OPA_MAX) {
-        /*Simple color fill without opacity - AS disabled*/
+        /*Простая заливка цветом без непрозрачности — AS отключен.*/
         PXP_SetAlphaSurfacePosition(PXP_ID, 0xFFFFU, 0xFFFFU, 0U, 0U);
 
     }
     else {
-        /*Fill with opacity - AS used as source (same as OUT)*/
+        /*Заливка непрозрачностью — в качестве источника используется AS (то же, что OUT)*/
         pxp_as_buffer_config_t asBufferConfig = {
             .pixelFormat = pxp_get_as_px_format(dest_cf),
             .bufferAddr = outputConfig.buffer0Addr,
@@ -117,16 +117,16 @@ static void _pxp_fill(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
         PXP_SetAlphaSurfacePosition(PXP_ID, 0U, 0U, dest_w - 1U, dest_h - 1U);
     }
 
-    /*Disable PS, use as color generator*/
+    /*Отключить PS, использовать в качестве генератора цвета.*/
     PXP_SetProcessSurfacePosition(PXP_ID, 0xFFFFU, 0xFFFFU, 0U, 0U);
     PXP_SetProcessSurfaceBackGroundColor(PXP_ID, lv_color_to_u32(dsc->color));
 
     /**
-     * Configure Porter-Duff blending - src settings are unused for fill without opacity (opa = 0xff).
+     * Настройте смешивание Портера-Даффа — настройки src не используются для заливки без непрозрачности (opa = 0xff).
      *
      * Note: srcFactorMode and dstFactorMode are inverted in fsl_pxp.h:
-     * srcFactorMode is actually applied on PS alpha value
-     * dstFactorMode is actually applied on AS alpha value
+     * srcFactorMode фактически применяется к альфа-значению PS.
+     * dstFactorMode фактически применяется к альфа-значению AS.
      */
     pxp_porter_duff_config_t pdConfig = {
         .enable = 1,
@@ -138,8 +138,8 @@ static void _pxp_fill(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
         .srcFactorMode = (dsc->opa >= (lv_opa_t)LV_OPA_MAX) ? kPXP_PorterDuffFactorStraight : kPXP_PorterDuffFactorInversed,
         .dstGlobalAlpha = dsc->opa,
         .srcGlobalAlpha = dsc->opa,
-        .dstAlphaMode = kPXP_PorterDuffAlphaStraight, /*don't care*/
-        .srcAlphaMode = kPXP_PorterDuffAlphaStraight  /*don't care*/
+        .dstAlphaMode = kPXP_PorterDuffAlphaStraight, /*плевать*/
+        .srcAlphaMode = kPXP_PorterDuffAlphaStraight  /*плевать*/
     };
 
     PXP_SetPorterDuffConfig(PXP_ID, &pdConfig);

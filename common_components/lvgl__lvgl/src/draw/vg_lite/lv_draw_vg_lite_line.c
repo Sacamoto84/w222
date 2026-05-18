@@ -63,7 +63,7 @@ void lv_draw_vg_lite_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
     rel_clip_area.y2 = (int32_t)(LV_MAX(p1_y, p2_y) + half_w);
 
     if(!lv_area_intersect(&rel_clip_area, &rel_clip_area, &t->clip_area)) {
-        return; /*Fully clipped, nothing to do*/
+        return; /*Полностью обрезан, делать нечего.*/
     }
 
     LV_PROFILER_DRAW_BEGIN;
@@ -88,45 +88,45 @@ void lv_draw_vg_lite_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
     lv_vg_lite_path_t * path = lv_vg_lite_path_get(u, VG_LITE_FP32);
     lv_vg_lite_path_set_bounding_box_area(path, &rel_clip_area);
 
-    /* head point */
+    /* головная точка */
     float head_start_x = p1_x + w2_dx;
     float head_start_y = p1_y - w2_dy;
     float head_end_x = p1_x - w2_dx;
     float head_end_y = p1_y + w2_dy;
 
-    /* tail point */
+    /* хвостовая точка */
     float tail_start_x = p2_x - w2_dx;
     float tail_start_y = p2_y + w2_dy;
     float tail_end_x = p2_x + w2_dx;
     float tail_end_y = p2_y - w2_dy;
 
     /*
-          head_start        tail_end
+          head_start tail_end
               *-----------------*
              /|                 |\
             / |                 | \
-    arc_c *(  *p1             p2*  )* arc_c
+    arc_c *( *p1 p2* )* arc_c
             \ |                 | /
              \|                 |/
               *-----------------*
-          head_end          tail_start
+          head_end tail_start
     */
 
-    /* move to start point */
+    /* перейти к начальной точке */
     lv_vg_lite_path_move_to(path, head_start_x, head_start_y);
 
-    /* draw line head */
+    /* нарисовать линию головы */
     if(dsc->round_start) {
         float arc_cx = p1_x - w2_dy;
         float arc_cy = p1_y - w2_dx;
 
-        /* start 90deg arc */
+        /* начать дугу 90 градусов */
         lv_vg_lite_path_append_arc_right_angle(path,
                                                head_start_x, head_start_y,
                                                p1_x, p1_y,
                                                arc_cx, arc_cy);
 
-        /* end 90deg arc */
+        /* конец дуги 90 градусов */
         lv_vg_lite_path_append_arc_right_angle(path,
                                                arc_cx, arc_cy,
                                                p1_x, p1_y,
@@ -136,10 +136,10 @@ void lv_draw_vg_lite_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
         lv_vg_lite_path_line_to(path, head_end_x, head_end_y);
     }
 
-    /* draw line body */
+    /* нарисовать тело линии */
     lv_vg_lite_path_line_to(path, tail_start_x, tail_start_y);
 
-    /* draw line tail */
+    /* нарисовать линию хвоста */
     if(dsc->round_end) {
         float arc_cx = p2_x + w2_dy;
         float arc_cy = p2_y + w2_dx;
@@ -156,7 +156,7 @@ void lv_draw_vg_lite_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
         lv_vg_lite_path_line_to(path, tail_end_x, tail_end_y);
     }
 
-    /* close draw line body */
+    /* закрыть тело линии рисования */
     lv_vg_lite_path_line_to(path, head_start_x, head_start_y);
 
     for(int32_t i = 0; i < ndash; i++) {

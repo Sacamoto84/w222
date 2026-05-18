@@ -39,11 +39,11 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 /**
- * On/Off features controlling the object's behavior.
- * OR-ed values are possible
+ * Функции включения/выключения, управляющие поведением объекта.
+ * Возможны значения OR -ed
  *
- * Note: update obj flags corresponding properties below
- * whenever add/remove flags or change bit definition of flags.
+ * Note: обновить флаги obj соответствующие свойства ниже
+ * всякий раз, когда добавляются/удаляются флаги или изменяются битовые определения флагов.
  */
 typedef enum {
     LV_OBJ_FLAG_HIDDEN          = (1u << 0),  /**< Make the object hidden. (Like it wasn't there at all)*/
@@ -87,7 +87,7 @@ typedef enum {
 
 #if LV_USE_OBJ_PROPERTY
 enum _lv_signed_prop_id_t {
-    /*OBJ flag properties */
+    /*Свойства флага OBJ */
     LV_PROPERTY_ID(OBJ, FLAG_START,                 LV_PROPERTY_TYPE_INT,       0),
     LV_PROPERTY_ID(OBJ, FLAG_HIDDEN,                LV_PROPERTY_TYPE_INT,       0),
     LV_PROPERTY_ID(OBJ, FLAG_CLICKABLE,             LV_PROPERTY_TYPE_INT,       1),
@@ -114,7 +114,7 @@ enum _lv_signed_prop_id_t {
     LV_PROPERTY_ID(OBJ, FLAG_STATE_TRICKLE,         LV_PROPERTY_TYPE_INT,       22),
     LV_PROPERTY_ID(OBJ, FLAG_LAYOUT_1,              LV_PROPERTY_TYPE_INT,       23),
     LV_PROPERTY_ID(OBJ, FLAG_LAYOUT_2,              LV_PROPERTY_TYPE_INT,       24),
-    LV_PROPERTY_ID(OBJ, FLAG_FLEX_IN_NEW_TRACK,     LV_PROPERTY_TYPE_INT,       23), /*Mapped to FLAG_LAYOUT_1*/
+    LV_PROPERTY_ID(OBJ, FLAG_FLEX_IN_NEW_TRACK,     LV_PROPERTY_TYPE_INT,       23), /*Сопоставлено с FLAG_LAYOUT_1*/
     LV_PROPERTY_ID(OBJ, FLAG_WIDGET_1,              LV_PROPERTY_TYPE_INT,       25),
     LV_PROPERTY_ID(OBJ, FLAG_WIDGET_2,              LV_PROPERTY_TYPE_INT,       26),
     LV_PROPERTY_ID(OBJ, FLAG_USER_1,                LV_PROPERTY_TYPE_INT,       27),
@@ -125,7 +125,7 @@ enum _lv_signed_prop_id_t {
 
     LV_PROPERTY_ID(OBJ, STATE_START,                LV_PROPERTY_TYPE_INT,       31),
     LV_PROPERTY_ID(OBJ, STATE_ALT,                  LV_PROPERTY_TYPE_INT,       31),
-    /*1 reserved*/
+    /*1 зарезервировано*/
     LV_PROPERTY_ID(OBJ, STATE_CHECKED,              LV_PROPERTY_TYPE_INT,       33),
     LV_PROPERTY_ID(OBJ, STATE_FOCUSED,              LV_PROPERTY_TYPE_INT,       34),
     LV_PROPERTY_ID(OBJ, STATE_FOCUS_KEY,            LV_PROPERTY_TYPE_INT,       35),
@@ -134,7 +134,7 @@ enum _lv_signed_prop_id_t {
     LV_PROPERTY_ID(OBJ, STATE_PRESSED,              LV_PROPERTY_TYPE_INT,       38),
     LV_PROPERTY_ID(OBJ, STATE_SCROLLED,             LV_PROPERTY_TYPE_INT,       39),
     LV_PROPERTY_ID(OBJ, STATE_DISABLED,             LV_PROPERTY_TYPE_INT,       40),
-    /*2 reserved*/
+    /*2 зарезервировано*/
     LV_PROPERTY_ID(OBJ, STATE_USER_1,               LV_PROPERTY_TYPE_INT,       43),
     LV_PROPERTY_ID(OBJ, STATE_USER_2,               LV_PROPERTY_TYPE_INT,       44),
     LV_PROPERTY_ID(OBJ, STATE_USER_3,               LV_PROPERTY_TYPE_INT,       45),
@@ -142,7 +142,7 @@ enum _lv_signed_prop_id_t {
     LV_PROPERTY_ID(OBJ, STATE_ANY,                  LV_PROPERTY_TYPE_INT,       47),
     LV_PROPERTY_ID(OBJ, STATE_END,                  LV_PROPERTY_TYPE_INT,       47),
 
-    /*OBJ normal properties*/
+    /*OBJ нормальные свойства*/
     LV_PROPERTY_ID(OBJ, PARENT,                     LV_PROPERTY_TYPE_OBJ,       48),
     LV_PROPERTY_ID(OBJ, X,                          LV_PROPERTY_TYPE_INT,       49),
     LV_PROPERTY_ID(OBJ, Y,                          LV_PROPERTY_TYPE_INT,       50),
@@ -175,7 +175,7 @@ enum _lv_signed_prop_id_t {
 #endif
 
 /**
- * Make the base object's class publicly available.
+ * Сделайте класс базового объекта общедоступным.
  */
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_obj_class;
 
@@ -184,289 +184,289 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_obj_class;
  **********************/
 
 /**
- * Create a base object (a rectangle)
- * @param parent    pointer to a parent object. If NULL then a screen will be created.
- * @return          pointer to the new object
+ * Создайте базовый объект (прямоугольник)
+ * @param parent    указатель на родительский объект. Если NULL, то будет создан экран.
+ * @return          указатель на новый объект
  */
 lv_obj_t * lv_obj_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set one or more flags
- * @param obj   pointer to an object
- * @param f     OR-ed values from `lv_obj_flag_t` to set.
+ * Установите один или несколько флагов
+ * @param obj   указатель на объект
+ * @param f     OR -ed значения из`lv_obj_flag_t`для установки.
  */
 void lv_obj_add_flag(lv_obj_t * obj, lv_obj_flag_t f);
 
 /**
- * Remove one or more flags
- * @param obj   pointer to an object
- * @param f     OR-ed values from `lv_obj_flag_t` to clear.
+ * Удалить один или несколько флагов
+ * @param obj   указатель на объект
+ * @param f     OR -ed значения из`lv_obj_flag_t`для очистки.
  */
 void lv_obj_remove_flag(lv_obj_t * obj, lv_obj_flag_t f);
 
 /**
- * Set add or remove one or more flags.
- * @param obj   pointer to an object
- * @param f     OR-ed values from `lv_obj_flag_t` to update.
- * @param v     true: add the flags; false: remove the flags
+ * Установите добавление или удаление одного или нескольких флагов.
+ * @param obj   указатель на объект
+ * @param f     OR -ed значения из`lv_obj_flag_t`для обновления.
+ * @param v     true: добавить флаги; false: удалить флаги
  */
 void lv_obj_set_flag(lv_obj_t * obj, lv_obj_flag_t f, bool v);
 
 /**
- * Add one or more states to the object. The other state bits will remain unchanged.
- * If specified in the styles, transition animation will be started from the previous state to the current.
- * @param obj       pointer to an object
- * @param state     the states to add. E.g `LV_STATE_PRESSED | LV_STATE_FOCUSED`
+ * Добавьте к объекту одно или несколько состояний. Остальные биты состояния останутся неизменными.
+ * Если указано в стилях, будет запущена анимация перехода из предыдущего состояния в текущее.
+ * @param obj       указатель на объект
+ * @param state     штаты, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
  */
 void lv_obj_add_state(lv_obj_t * obj, lv_state_t state);
 
 /**
- * Remove one or more states to the object. The other state bits will remain unchanged.
- * If specified in the styles, transition animation will be started from the previous state to the current.
- * @param obj       pointer to an object
- * @param state     the states to add. E.g `LV_STATE_PRESSED | LV_STATE_FOCUSED`
+ * Удалите одно или несколько состояний объекта. Остальные биты состояния останутся неизменными.
+ * Если указано в стилях, будет запущена анимация перехода из предыдущего состояния в текущее.
+ * @param obj       указатель на объект
+ * @param state     штаты, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
  */
 void lv_obj_remove_state(lv_obj_t * obj, lv_state_t state);
 
 /**
- * Add or remove one or more states to the object. The other state bits will remain unchanged.
- * @param obj       pointer to an object
- * @param state     the states to add. E.g `LV_STATE_PRESSED | LV_STATE_FOCUSED`
- * @param v         true: add the states; false: remove the states
+ * Добавьте или удалите одно или несколько состояний объекта. Остальные биты состояния останутся неизменными.
+ * @param obj       указатель на объект
+ * @param state     штаты, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
+ * @param v         true: добавить состояния; false: удалить состояния
  */
 void lv_obj_set_state(lv_obj_t * obj, lv_state_t state, bool v);
 
 /**
- * Set the user_data field of the object
- * @param obj   pointer to an object
- * @param user_data   pointer to the new user_data.
+ * Установите поле объекта user_data.
+ * @param obj   указатель на объект
+ * @param user_data   указатель на новый user_data.
  */
 void lv_obj_set_user_data(lv_obj_t * obj, void * user_data);
 
 
-/** Allow only one RADIO_BUTTON sibling to be checked
- * @param obj     pointer to a widget
- * @param en      enable or disable radio button behavior
+/** Разрешить проверку только одного родственного RADIO_BUTTON
+ * @param obj     указатель на виджет
+ * @param en      включить или отключить поведение переключателя
  */
 void lv_obj_set_radio_button(lv_obj_t * obj, bool en);
 
 /*=======================
- * Getter functions
+ * Геттерные функции
  *======================*/
 
 /**
- * Check if a given flag or all the given flags are set on an object.
- * @param obj   pointer to an object
- * @param f     the flag(s) to check (OR-ed values can be used)
- * @return      true: all flags are set; false: not all flags are set
+ * Проверьте, установлен ли данный флаг или все данные флаги на объекте.
+ * @param obj   указатель на объект
+ * @param f     флаг(а) для проверки (можно использовать значения OR)
+ * @return      true: все флаги установлены; false: не все флаги установлены
  */
 bool lv_obj_has_flag(const lv_obj_t * obj, lv_obj_flag_t f);
 
 /**
- * Check if a given flag or any of the flags are set on an object.
- * @param obj   pointer to an object
- * @param f     the flag(s) to check (OR-ed values can be used)
- * @return      true: at least one flag is set; false: none of the flags are set
+ * Проверьте, установлен ли данный флаг или какой-либо из флагов на объекте.
+ * @param obj   указатель на объект
+ * @param f     флаг(а) для проверки (можно использовать значения OR)
+ * @return      true: установлен хотя бы один флаг; false: ни один из флагов не установлен
  */
 bool lv_obj_has_flag_any(const lv_obj_t * obj, lv_obj_flag_t f);
 
 /**
- * Get the state of an object
- * @param obj   pointer to an object
- * @return      the state (OR-ed values from `lv_state_t`)
+ * Получить состояние объекта
+ * @param obj   указатель на объект
+ * @return      состояние (значенияORиз `lv_state_t`)
  */
 lv_state_t lv_obj_get_state(const lv_obj_t * obj);
 
 /**
- * Check if the object is in a given state or not.
- * @param obj       pointer to an object
- * @param state     a state or combination of states to check
- * @return          true: `obj` is in `state`; false: `obj` is not in `state`
+ * Проверьте, находится ли объект в заданном состоянии или нет.
+ * @param obj       указатель на объект
+ * @param state     состояние или комбинация состояний для проверки
+ * @return          true:`obj`находится в`state`; false:`obj`нет в `state`
  */
 bool lv_obj_has_state(const lv_obj_t * obj, lv_state_t state);
 
-/** Get whether the object is a radio button
- * @param obj     pointer to a widget
- * @return        true if radio button behavior is enabled
+/** Узнайте, является ли объект переключателем
+ * @param obj     указатель на виджет
+ * @return        true, если включено поведение переключателя
  */
 bool lv_obj_is_radio_button(const lv_obj_t * obj);
 
 /**
- * Get the group of the object
- * @param       obj pointer to an object
- * @return      the pointer to group of the object
+ * Получить группу объекта
+ * @param       obj указатель на объект
+ * @return      указатель на группу объекта
  */
 lv_group_t * lv_obj_get_group(const lv_obj_t * obj);
 
 /**
- * Get the user_data field of the object
- * @param obj   pointer to an object
- * @return      the pointer to the user_data of the object
+ * Получите полеuser_dataобъекта.
+ * @param obj   указатель на объект
+ * @return      указатель наuser_dataобъекта
  */
 void * lv_obj_get_user_data(lv_obj_t * obj);
 
 /*=======================
- * Other functions
+ * Другие функции
  *======================*/
 
 /**
- * Allocate special data for an object if not allocated yet.
- * @param obj   pointer to an object
+ * Выделите специальные данные для объекта, если они еще не выделены.
+ * @param obj   указатель на объект
  */
 void lv_obj_allocate_spec_attr(lv_obj_t * obj);
 
 /**
- * Check the type of obj.
- * @param obj       pointer to an object
- * @param class_p   a class to check (e.g. `lv_slider_class`)
- * @return          true: `class_p` is the `obj` class.
+ * Проверьте тип объекта.
+ * @param obj       указатель на объект
+ * @param class_p   класс для проверки (например,`lv_slider_class`)
+ * @return          true:`class_p`— это класс `obj`.
  */
 bool lv_obj_check_type(const lv_obj_t * obj, const lv_obj_class_t * class_p);
 
 /**
- * Check if any object has a given class (type).
- * It checks the ancestor classes too.
- * @param obj       pointer to an object
- * @param class_p   a class to check (e.g. `lv_slider_class`)
- * @return          true: `obj` has the given class
+ * Проверьте, имеет ли какой-либо объект заданный класс (тип).
+ * Он также проверяет классы-предки.
+ * @param obj       указатель на объект
+ * @param class_p   класс для проверки (например,`lv_slider_class`)
+ * @return          true:`obj`имеет заданный класс
  */
 bool lv_obj_has_class(const lv_obj_t * obj, const lv_obj_class_t * class_p);
 
 /**
- * Get the class (type) of the object
- * @param obj   pointer to an object
- * @return      the class (type) of the object
+ * Получить класс (тип) объекта
+ * @param obj   указатель на объект
+ * @return      класс (тип) объекта
  */
 const lv_obj_class_t * lv_obj_get_class(const lv_obj_t * obj);
 
 /**
- * Check if any object is still "alive".
- * @param obj       pointer to an object
- * @return          true: valid
+ * Проверьте, жив ли еще какой-либо объект.
+ * @param obj       указатель на объект
+ * @return          правда: действительный
  */
 bool lv_obj_is_valid(const lv_obj_t * obj);
 
 /**
- * Utility to set an object reference to NULL when it gets deleted.
- * The reference should be in a location that will not become invalid
- * during the object's lifetime, i.e. static or allocated.
- * @param obj_ptr   a pointer to a pointer to an object
+ * Утилита для установки ссылки на объект NULL при его удалении.
+ * Ссылка должна находиться в месте, которое не станет недействительным.
+ * во время жизни объекта, т. е. статический или выделенный.
+ * @param obj_ptr   указатель на указатель на объект
  */
 void lv_obj_null_on_delete(lv_obj_t ** obj_ptr);
 
 /**
- * Add an event handler to a widget that will load a screen on a trigger.
- * @param obj           pointer to widget which should load the screen
- * @param trigger       an event code, e.g. `LV_EVENT_CLICKED`
- * @param screen        the screen to load (must be a valid widget)
- * @param anim_type     element of `lv_screen_load_anim_t` the screen load animation
- * @param duration      duration of the animation in milliseconds
- * @param delay         delay before the screen load in milliseconds
+ * Добавьте в виджет обработчик событий, который будет загружать экран по триггеру.
+ * @param obj           указатель на виджет, который должен загрузить экран
+ * @param trigger       код события, например.  `LV_EVENT_CLICKED`
+ * @param screen        экран для загрузки (должен быть действительный виджет)
+ * @param anim_type     элемент`lv_screen_load_anim_t`анимация загрузки экрана
+ * @param duration      продолжительность анимации в миллисекундах
+ * @param delay         задержка перед загрузкой экрана в миллисекундах
  */
 void lv_obj_add_screen_load_event(lv_obj_t * obj, lv_event_code_t trigger, lv_obj_t * screen,
                                   lv_screen_load_anim_t anim_type, uint32_t duration, uint32_t delay);
 
 /**
- * Add an event handler to a widget that will create a screen on a trigger.
- * The created screen will be deleted when it's unloaded
- * @param obj               pointer to widget which should load the screen
- * @param trigger           an event code, e.g. `LV_EVENT_CLICKED`
- * @param screen_create_cb  a callback to create the screen, e.g. `lv_obj_t * myscreen_create(void)`
- * @param anim_type         element of `lv_screen_load_anim_t` the screen load animation
- * @param duration          duration of the animation in milliseconds
- * @param delay             delay before the screen load in milliseconds
+ * Добавьте в виджет обработчик событий, который будет создавать экран по триггеру.
+ * Созданный экран будет удален при выгрузке.
+ * @param obj               указатель на виджет, который должен загрузить экран
+ * @param trigger           код события, например.  `LV_EVENT_CLICKED`
+ * @param screen_create_cb  обратный вызов для создания экрана, например.  `lv_obj_t * myscreen_create(void)`
+ * @param anim_type         элемент`lv_screen_load_anim_t`анимация загрузки экрана
+ * @param duration          продолжительность анимации в миллисекундах
+ * @param delay             задержка перед загрузкой экрана в миллисекундах
  */
 void lv_obj_add_screen_create_event(lv_obj_t * obj, lv_event_code_t trigger, lv_screen_create_cb_t screen_create_cb,
                                     lv_screen_load_anim_t anim_type, uint32_t duration, uint32_t delay);
 
 
 /**
- * Play a timeline animation on a trigger
- * @param obj               pointer to widget which should trigger playing the animation
- * @param trigger           an event code, e.g. `LV_EVENT_CLICKED`
- * @param at                pointer to an animation timeline
- * @param delay             wait time before starting the animation
- * @param reverse           true: play in reverse
+ * Воспроизведение анимации временной шкалы по триггеру
+ * @param obj               указатель на виджет, который должен запускать воспроизведение анимации
+ * @param trigger           код события, например.  `LV_EVENT_CLICKED`
+ * @param at                указатель на временную шкалу анимации
+ * @param delay             время ожидания перед запуском анимации
+ * @param reverse           правда: играть наоборот
  */
 void lv_obj_add_play_timeline_event(lv_obj_t * obj, lv_event_code_t trigger, lv_anim_timeline_t * at, uint32_t delay,
                                     bool reverse);
 
 #if LV_USE_OBJ_ID
 /**
- * Set an id for an object.
- * @param obj   pointer to an object
- * @param id    the id of the object
+ * Установите идентификатор объекта.
+ * @param obj   указатель на объект
+ * @param id    идентификатор объекта
  */
 void lv_obj_set_id(lv_obj_t * obj, void * id);
 
 /**
- * Get the id of an object.
- * @param obj   pointer to an object
- * @return      the id of the object
+ * Получить идентификатор объекта.
+ * @param obj   указатель на объект
+ * @return      идентификатор объекта
  */
 void * lv_obj_get_id(const lv_obj_t * obj);
 
 /**
- * DEPRECATED IDs are used only to print the widget trees.
- * To find a widget use `lv_obj_find_by_name`
+ * Идентификаторы DEPRECATED используются только для печати деревьев виджетов.
+ * Чтобы найти виджет викор `lv_obj_find_by_name`
  *
- * Get the child object by its id.
- * It will check children and grandchildren recursively.
- * Function `lv_obj_id_compare` is used to matched obj id with given id.
+ * Получите дочерний объект по его идентификатору.
+ * Он будет рекурсивно проверять детей и внуков.
+ * Функция`lv_obj_id_compare`используется для объединения идентификатора объекта с заданным идентификатором.
  *
- * @param obj       pointer to an object
- * @param id        the id of the child object
- * @return          pointer to the child object or NULL if not found
+ * @param obj       указатель на объект
+ * @param id        идентификатор дочернего объекта
+ * @return          указатель на дочерний объект или NULL, если не найден
  */
 lv_obj_t * lv_obj_find_by_id(const lv_obj_t * obj, const void * id);
 
 /**
- * Assign id to object if not previously assigned.
- * This function gets called automatically when LV_OBJ_ID_AUTO_ASSIGN is enabled.
+ * Присвойте идентификатор объекту, если он не был назначен ранее.
+ * Эта функция вызывается автоматически, когда LV_OBJ_ID_AUTO_ASSIGN включен.
  *
- * Set `LV_USE_OBJ_ID_BUILTIN` to use the builtin method to generate object ID.
- * Otherwise, these functions including `lv_obj_[set|assign|free|stringify]_id` and
- * `lv_obj_id_compare`should be implemented externally.
+ * Установите `LV_USE_OBJ_ID_BUILTIN`, чтобы использовать встроенный метод для создания объекта ID.
+ * В противном случае эти функции, включая`lv_obj_[set|assign|free|stringify]_id`и
+ * `lv_obj_id_compare` должен быть реализован извне.
  *
- * @param class_p   the class this obj belongs to. Note obj->class_p is the class currently being constructed.
- * @param obj   pointer to an object
+ * @param class_p   класс, к которому принадлежит этот объект. Обратите внимание, что obj->class_p— это класс, который создается в данный момент.
+ * @param obj   указатель на объект
  */
 void lv_obj_assign_id(const lv_obj_class_t * class_p, lv_obj_t * obj);
 
 /**
- * Free resources allocated by `lv_obj_assign_id` or `lv_obj_set_id`.
- * This function is also called automatically when object is deleted.
- * @param obj   pointer to an object
+ * Бесплатные ресурсы, выделенные`lv_obj_assign_id`или`lv_obj_set_id`.
+ * Эта функция также вызывается автоматически при удалении объекта.
+ * @param obj   указатель на объект
  */
 void lv_obj_free_id(lv_obj_t * obj);
 
 /**
- * Compare two obj id, return 0 if they are equal.
+ * Сравните два идентификатора объекта и верните 0, если они равны.
  *
- * Set `LV_USE_OBJ_ID_BUILTIN` to use the builtin method for compare.
- * Otherwise, it must be implemented externally.
+ * Установите `LV_USE_OBJ_ID_BUILTIN`, чтобы использовать встроенный метод сравнения.
+ * В противном случае его необходимо реализовать извне.
  *
- * @param id1: the first id
- * @param id2: the second id
- * @return     0 if they are equal, non-zero otherwise.
+ * @param id1: первый идентификатор
+ * @param id2: идентификатор второго
+ * @return     0, если они равны, и ненулевое в противном случае.
  */
 int lv_obj_id_compare(const void * id1, const void * id2);
 
 /**
- * Format an object's id into a string.
- * @param obj   pointer to an object
- * @param buf   buffer to write the string into
- * @param len   length of the buffer
+ * Форматирует идентификатор объекта в строку.
+ * @param obj   указатель на объект
+ * @param buf   буфер для записи строки в
+ * @param len   длина буфера
  */
 const char * lv_obj_stringify_id(lv_obj_t * obj, char * buf, uint32_t len);
 
 #if LV_USE_OBJ_ID_BUILTIN
 /**
- * Free resources used by builtin ID generator.
+ * Бесплатные ресурсы, используемые встроенным генератором ID.
  */
 void lv_objid_builtin_destroy(void);
 #endif
@@ -495,7 +495,7 @@ void lv_objid_builtin_destroy(void);
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_H*/

@@ -4,15 +4,15 @@
 
 #define TEST_DRAW_BUF_SAVE_PATH(path) "A:src/test_files/draw_buf_save_" path
 
-/* Test setup and teardown */
+/* Тестовая установка и демонтаж */
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -30,7 +30,7 @@ static int compare_string(const void * ref_p, const void * pElement)
     return lv_strcmp(ref, element);
 }
 
-/* Test empty array case */
+/* Проверить случай пустого массива */
 void test_utils_bsearch_empty_array(void)
 {
     int * array = NULL;
@@ -39,24 +39,24 @@ void test_utils_bsearch_empty_array(void)
     TEST_ASSERT_NULL(result);
 }
 
-/* Test single element array */
+/* Тестирование одноэлементного массива */
 void test_utils_bsearch_single_element(void)
 {
     int array[] = {5};
 
-    /* Test existing element */
+    /* Проверить существующий элемент */
     int key1 = 5;
     int * result1 = (int *)lv_utils_bsearch(&key1, array, 1, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result1);
     TEST_ASSERT_EQUAL_INT(5, *result1);
 
-    /* Test non-existent element */
+    /* Проверить несуществующий элемент */
     int key2 = 1;
     int * result2 = (int *)lv_utils_bsearch(&key2, array, 1, sizeof(int), compare_int);
     TEST_ASSERT_NULL(result2);
 }
 
-/* Test finding middle element */
+/* Тест на поиск среднего элемента */
 void test_utils_bsearch_middle_element(void)
 {
     int array[] = {1, 3, 5, 7, 9};
@@ -66,7 +66,7 @@ void test_utils_bsearch_middle_element(void)
     TEST_ASSERT_EQUAL_INT(5, *result);
 }
 
-/* Test case when key is not found */
+/* Тестовый пример, когда ключ не найден */
 void test_utils_bsearch_not_found(void)
 {
     int array[] = {1, 3, 5, 7, 9};
@@ -75,7 +75,7 @@ void test_utils_bsearch_not_found(void)
     TEST_ASSERT_NULL(result);
 }
 
-/* Test finding first element */
+/* Тест на поиск первого элемента */
 void test_utils_bsearch_first_element(void)
 {
     int array[] = {1, 3, 5, 7, 9};
@@ -85,7 +85,7 @@ void test_utils_bsearch_first_element(void)
     TEST_ASSERT_EQUAL_INT(1, *result);
 }
 
-/* Test finding last element */
+/* Тест на поиск последнего элемента */
 void test_utils_bsearch_last_element(void)
 {
     int array[] = {1, 3, 5, 7, 9};
@@ -95,7 +95,7 @@ void test_utils_bsearch_last_element(void)
     TEST_ASSERT_EQUAL_INT(9, *result);
 }
 
-/* Test string array search */
+/* Тестовый поиск в массиве строк */
 void test_utils_bsearch_string_array(void)
 {
     const char * array[] = {"apple", "banana", "cherry", "date", "elderberry"};
@@ -105,7 +105,7 @@ void test_utils_bsearch_string_array(void)
     TEST_ASSERT_EQUAL_STRING("cherry", *result);
 }
 
-/* Test string not found case */
+/* Тестовая строка не найдена */
 void test_utils_bsearch_string_not_found(void)
 {
     const char * array[] = {"apple", "banana", "cherry", "date", "elderberry"};
@@ -114,7 +114,7 @@ void test_utils_bsearch_string_not_found(void)
     TEST_ASSERT_NULL(result);
 }
 
-/* Test searching with repeated keys */
+/* Тестовый поиск по повторяющимся ключам */
 void test_utils_bsearch_repeated_key(void)
 {
     const char * array[] = {"apple", "banana", "apple", "date", "elderberry"};
@@ -124,7 +124,7 @@ void test_utils_bsearch_repeated_key(void)
     TEST_ASSERT_EQUAL_STRING("apple", *result);
 }
 
-/* Test large array (1000 elements) */
+/* Тест большого массива (1000 элементов) */
 void test_utils_bsearch_large_array(void)
 {
 #define LARGE_ARRAY_SIZE 1000
@@ -133,75 +133,75 @@ void test_utils_bsearch_large_array(void)
         large_array[i] = i * 2;
     }
 
-    /* Test finding existing element */
+    /* Тестирование поиска существующего элемента */
     int key = 500;
     int * result = (int *)lv_utils_bsearch(&key, large_array, LARGE_ARRAY_SIZE, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_INT(500, *result);
 
-    /* Test non-existent element */
+    /* Проверить несуществующий элемент */
     key = 501;
     result = (int *)lv_utils_bsearch(&key, large_array, LARGE_ARRAY_SIZE, sizeof(int), compare_int);
     TEST_ASSERT_NULL(result);
 }
 
-/* Test n=2 boundary case - important for binary search algorithm */
+/* Тестовый граничный случай n=2 - важен для алгоритма двоичного поиска */
 void test_utils_bsearch_two_element_array(void)
 {
     int array[] = {1, 3};
 
-    /* Test finding first element */
+    /* Тест на поиск первого элемента */
     int key1 = 1;
     int * result1 = (int *)lv_utils_bsearch(&key1, array, 2, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result1);
     TEST_ASSERT_EQUAL_INT(1, *result1);
 
-    /* Test finding second element */
+    /* Тест на поиск второго элемента */
     int key2 = 3;
     int * result2 = (int *)lv_utils_bsearch(&key2, array, 2, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result2);
     TEST_ASSERT_EQUAL_INT(3, *result2);
 
-    /* Test element smaller than first */
+    /* Тестовый элемент меньше первого */
     int key3 = 0;
     int * result3 = (int *)lv_utils_bsearch(&key3, array, 2, sizeof(int), compare_int);
     TEST_ASSERT_NULL(result3);
 
-    /* Test element between first and second */
+    /* Тестовый элемент между первым и вторым */
     int key4 = 2;
     int * result4 = (int *)lv_utils_bsearch(&key4, array, 2, sizeof(int), compare_int);
     TEST_ASSERT_NULL(result4);
 
-    /* Test element larger than second */
+    /* Тестовый элемент больше второго */
     int key5 = 4;
     int * result5 = (int *)lv_utils_bsearch(&key5, array, 2, sizeof(int), compare_int);
     TEST_ASSERT_NULL(result5);
 }
 
-/* Test n=3 boundary case - odd number of elements */
+/* Тестовый граничный случай n=3 – нечетное количество элементов */
 void test_utils_bsearch_three_element_array(void)
 {
     int array[] = {1, 2, 3};
 
-    /* Test finding first element */
+    /* Тест на поиск первого элемента */
     int key1 = 1;
     int * result1 = (int *)lv_utils_bsearch(&key1, array, 3, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result1);
     TEST_ASSERT_EQUAL_INT(1, *result1);
 
-    /* Test finding second element */
+    /* Тест на поиск второго элемента */
     int key2 = 2;
     int * result2 = (int *)lv_utils_bsearch(&key2, array, 3, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result2);
     TEST_ASSERT_EQUAL_INT(2, *result2);
 
-    /* Test finding third element */
+    /* Тест на поиск третьего элемента */
     int key3 = 3;
     int * result3 = (int *)lv_utils_bsearch(&key3, array, 3, sizeof(int), compare_int);
     TEST_ASSERT_NOT_NULL(result3);
     TEST_ASSERT_EQUAL_INT(3, *result3);
 
-    /* Test element not found */
+    /* Тестовый элемент не найден */
     int key4 = 4;
     int * result4 = (int *)lv_utils_bsearch(&key4, array, 3, sizeof(int), compare_int);
     TEST_ASSERT_NULL(result4);
@@ -212,14 +212,14 @@ void test_draw_buf_save_to_file_open_fail(void)
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(10, 10, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Use invalid path to test open failure */
+    /* Используйте неверный путь для проверки ошибки открытия */
     lv_result_t res = lv_draw_buf_save_to_file(draw_buf, "Z:invalid/path/test.bin");
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res);
 
     lv_draw_buf_destroy(draw_buf);
 }
 
-/* Test RGB565 format save */
+/* Тестовое сохранение формата RGB565 */
 void test_draw_buf_save_to_file_rgb565_format(void)
 {
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(100, 100, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);
@@ -231,7 +231,7 @@ void test_draw_buf_save_to_file_rgb565_format(void)
     lv_draw_buf_destroy(draw_buf);
 }
 
-/* Test minimal size buffer save */
+/* Тестирование сохранения буфера минимального размера */
 void test_draw_buf_save_to_file_minimal_size(void)
 {
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(1, 1, LV_COLOR_FORMAT_A8, LV_STRIDE_AUTO);
@@ -243,12 +243,12 @@ void test_draw_buf_save_to_file_minimal_size(void)
     lv_draw_buf_destroy(draw_buf);
 }
 
-/* Test different file extensions */
+/* Проверьте различные расширения файлов */
 void test_draw_buf_save_to_file_different_extensions(void)
 {
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(10, 10, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);
 
-    /* Test with different file extensions using default file system */
+    /* Тестируйте файлы с различными расширениями, используя файловую систему по умолчанию. */
     lv_result_t res1 = lv_draw_buf_save_to_file(draw_buf, TEST_DRAW_BUF_SAVE_PATH("test.bin"));
     lv_result_t res2 = lv_draw_buf_save_to_file(draw_buf, TEST_DRAW_BUF_SAVE_PATH("test.raw"));
     lv_result_t res3 = lv_draw_buf_save_to_file(draw_buf, TEST_DRAW_BUF_SAVE_PATH("test.dat"));
@@ -260,7 +260,7 @@ void test_draw_buf_save_to_file_different_extensions(void)
     lv_draw_buf_destroy(draw_buf);
 }
 
-/* Test zero data size */
+/* Проверка нулевого размера данных */
 void test_draw_buf_save_to_file_zero_data_size(void)
 {
     lv_draw_buf_t draw_buf;
@@ -272,7 +272,7 @@ void test_draw_buf_save_to_file_zero_data_size(void)
     TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
 }
 
-/* Test indexed color format */
+/* Тестовый индексированный цветовой формат */
 void test_draw_buf_save_to_file_indexed_format(void)
 {
     lv_draw_buf_t draw_buf;

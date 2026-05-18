@@ -1,19 +1,19 @@
 /****************************************************************************
 *
 *    Copyright 2012 - 2023 Vivante Corporation, Santa Clara, California.
-*    All Rights Reserved.
+*    Все права защищены.
 *
-*    Permission is hereby granted, free of charge, to any person obtaining
-*    a copy of this software and associated documentation files (the
-*    'Software'), to deal in the Software without restriction, including
-*    without limitation the rights to use, copy, modify, merge, publish,
-*    distribute, sub license, and/or sell copies of the Software, and to
-*    permit persons to whom the Software is furnished to do so, subject
-*    to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации (файл
+*    «Программное обеспечение»), иметь дело с Программным обеспечением без ограничений, включая
+*    без ограничений права на использование, копирование, изменение, объединение, публикацию,
+*    распространять, сублицензировать и/или продавать копии Программного обеспечения, а также
+*    разрешать лицам, которым предоставлено Программное обеспечение, делать это при условии, что
+*    на следующие условия:
 *
-*    The above copyright notice and this permission notice (including the
-*    next paragraph) shall be included in all copies or substantial
-*    portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и данное уведомление о разрешении (включая
+*    следующий абзац) должны быть включены во все копии или существенные
+*    части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 *    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -51,7 +51,7 @@
 #define SWING_OUT                   1
 #define SWING_IN                    2
 
-/* Point curve type for generated stroke path. */
+/* Тип точечной кривой для созданного контура штриха. */
 #define CURVE_LINE                  0
 #define CURVE_QUAD_CONTROL          1
 #define CURVE_QUAD_ANCHOR           2
@@ -64,7 +64,7 @@
 #define FLOAT_PI_HALF               1.570796327f
 #define FLOAT_PI_QUARTER            0.7853981634f
 #define FLOAT_PI_EIGHTH             0.3926990817f
-/* cos(PI/8) */
+/* соз( PI /8) */
 #define FLOAT_COS_PI_EIGHTH         0.9238795325f
 
 #define FLOAT_DIFF_EPSILON          0.125f
@@ -74,7 +74,7 @@
 #define FLOAT_MIN_ARC_ANGLE         0.044f
 #define FLOAT_MIN_ARC_ANGLE_COS     0.999f
 
-/* Float constants. */
+/* Плавающие константы. */
 #define gcvMAX_POS_FLOAT            ((vg_lite_float_t)  3.4028235e+038)
 #define gcvMAX_NEG_FLOAT            ((vg_lite_float_t) -3.4028235e+038)
 
@@ -83,7 +83,7 @@
 
 #define FLOAT_FAT_LINE_WIDTH        2.5f
 
-/* Point flatten type for flattened line segments. */
+/* Тип сглаживания точки для сглаженных сегментов линии. */
 #define vgcFLATTEN_NO               0
 #define vgcFLATTEN_START            1
 #define vgcFLATTEN_MIDDLE           2
@@ -98,7 +98,7 @@ typedef struct vg_lite_control_coord {
     vg_lite_float_t                     controlY;
 } vg_lite_control_coord_t;
 
-/* Command size calculation shortcuts. */
+/* Ярлыки расчета размера команды. */
 #define COMMANDSIZE(CoordinateCount, CoordinateType) \
     ((1+CoordinateCount) * SIZEOF(CoordinateType))
 
@@ -167,7 +167,7 @@ static vg_lite_float_t _GetF_NS_NB(int8_t * Data)
     return x;
 }
 
-/* Special sqrt(1.0f + x) for quick calculation when 0 <= x <= 1. */
+/* Специальный sqrt(1.0f + x) для быстрого расчета, когда 0 <= x <= 1. */
 static vg_lite_float_t _Sqrt(
     vg_lite_float_t X
 )
@@ -298,7 +298,7 @@ static vg_lite_error_t _add_point_to_point_list_wdelta(
     point->y = Y;
     point->flatten_flag = flatten_flag;
 
-    /* Calculate tangent for last_point. */
+    /* Вычислить тангенс для last_point. */
     VG_LITE_ERROR_HANDLER(_set_point_tangent(last_point, DX, DY));
 
     last_point->next = point;
@@ -400,9 +400,9 @@ static vg_lite_error_t _add_point_to_point_list(
         vg_lite_float_t deltaX = (dX >= 0.0f ? dX : -dX);
         vg_lite_float_t deltaY = (dY >= 0.0f ? dY : -dY);
 
-        /* Check for degenerated line. */
+        /* Проверьте наличие вырожденной линии. */
         if(deltaX == 0.0f && deltaY == 0.0f) {
-            /* Skip degenerated line. */
+            /* Пропустить вырожденную строку. */
             status = VG_LITE_SUCCESS;
             goto ErrorHandler;
         }
@@ -430,7 +430,7 @@ static vg_lite_error_t _add_point_to_point_list(
                 if(ratioY < 0.0f) ratioY = -ratioY;
             }
             if(ratioX < 1.0e-6f && ratioY < 1.0e-6f) {
-                /* Skip degenerated line. */
+                /* Пропустить вырожденную строку. */
                 status = VG_LITE_SUCCESS;
                 goto ErrorHandler;
             }
@@ -569,7 +569,7 @@ void split_quad(float out1[6], float out2[6], float curve[6], float split)
         {v0[1], v1[1], v2[1]}
     };
 
-    /* First curve */
+    /* Первая кривая */
     {
         float C[2][3] = { {0} };
         float A[9] = {
@@ -594,7 +594,7 @@ void split_quad(float out1[6], float out2[6], float curve[6], float split)
         out1[5] = C[1][2];
     }
 
-    /* Second curve */
+    /* Вторая кривая */
     {
         float C[2][3] = { {0} };
         float A[9] = {
@@ -642,7 +642,7 @@ void split_cubic(float out1[8], float out2[8], float curve[8], float split)
         {v0[1], v1[1], v2[1], v3[1]}
     };
 
-    /* First curve */
+    /* Первая кривая */
     {
         float C[2][4] = { {0} };
         float A[16] = {
@@ -670,7 +670,7 @@ void split_cubic(float out1[8], float out2[8], float curve[8], float split)
         out1[7] = C[1][3];
     }
 
-    /* Second curve */
+    /* Вторая кривая */
     {
         float C[2][4] = { {0} };
         float A[16] = {
@@ -722,13 +722,13 @@ static vg_lite_error_t _flatten_quad_bezier(
     v2 = &curve[4];
 
     if(level == 0) {
-        /* Add extra P0 for incoming tangent. */
+        /* Добавьте дополнительный P0 для входящей касательной. */
         point0 = stroke_conversion->path_end;
-        /* First add P1 to calculate incoming tangent, which is saved in P0. */
+        /* Сначала добавьте P1 для расчета входящего тангенса, который сохраняется в P0. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v1[0], v1[1], vgcFLATTEN_START));
 
         point1 = stroke_conversion->path_end;
-        /* Change the point1's coordinates back to P0. */
+        /* Измените координаты точки point1 обратно на P0. */
         point1->x = v0[0];
         point1->y = v0[1];
         point0->length = 0.0f;
@@ -747,7 +747,7 @@ static vg_lite_error_t _flatten_quad_bezier(
         bound[3] = MAX(v0[1], v2[1]);
 
         if(!(v1[0] >= bound[0] && v1[0] <= bound[2] && v1[1] >= bound[1] && v1[1] <= bound[3])) {
-            /* Compute root. */
+            /* Вычислить корень. */
             float alignedCurve[6];
             float d, n, t, pt[2];
 
@@ -779,18 +779,18 @@ static vg_lite_error_t _flatten_quad_bezier(
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_MIDDLE));
         }
         if(level == 0) {
-            /* Add extra P2 for outgoing tangent. */
-            /* First change P2(point0)'s coordinates to P1. */
+            /* Добавьте дополнительный P2 для выходящей касательной. */
+            /* Сначала измените координаты P2 (point0) на P1. */
             point0 = stroke_conversion->path_end;
             point0->x = v1[0];
             point0->y = v1[1];
 
-            /* Add P2 to calculate outgoing tangent. */
+            /* Добавьте P2, чтобы вычислить исходящий тангенс. */
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_NO));
 
             point1 = stroke_conversion->path_end;
 
-            /* Change point0's coordinates back to P2. */
+            /* Измените координаты point0 обратно на P2. */
             point0->x = v2[0];
             point0->y = v2[1];
             point0->length = 0.0f;
@@ -802,21 +802,21 @@ static vg_lite_error_t _flatten_quad_bezier(
     VG_LITE_ERROR_HANDLER(_flatten_quad_bezier(stroke_conversion, rootCurve, subCurve1, level + 1));
     VG_LITE_ERROR_HANDLER(_flatten_quad_bezier(stroke_conversion, rootCurve, subCurve2, level + 1));
     if(level == 0) {
-        /* Add point 2 separately to avoid cumulative errors. */
+        /* Добавьте пункт 2 отдельно, чтобы избежать накопившихся ошибок. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_END));
 
-        /* Add extra P2 for outgoing tangent. */
-        /* First change P2(point0)'s coordinates to P1. */
+        /* Добавьте дополнительный P2 для выходящей касательной. */
+        /* Сначала измените координаты P2 (point0) на P1. */
         point0 = stroke_conversion->path_end;
         point0->x = v1[0];
         point0->y = v1[1];
 
-        /* Add P2 to calculate outgoing tangent. */
+        /* Добавьте P2, чтобы вычислить исходящий тангенс. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_NO));
 
         point1 = stroke_conversion->path_end;
 
-        /* Change point0's coordinates back to P2. */
+        /* Измените координаты point0 обратно на P2. */
         point0->x = v2[0];
         point0->y = v2[1];
         point0->length = 0.0f;
@@ -845,13 +845,13 @@ static vg_lite_error_t _flatten_quad_bezier_original(
     v2 = &curve[4];
 
     if(level == 0) {
-        /* Add extra P0 for incoming tangent. */
+        /* Добавьте дополнительный P0 для входящей касательной. */
         point0 = stroke_conversion->path_end;
-        /* First add P1 to calculate incoming tangent, which is saved in P0. */
+        /* Сначала добавьте P1 для расчета входящего тангенса, который сохраняется в P0. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v1[0], v1[1], vgcFLATTEN_NO));
 
         point1 = stroke_conversion->path_end;
-        /* Change the point1's coordinates back to P0. */
+        /* Измените координаты точки point1 обратно на P0. */
         point1->x = v0[0];
         point1->y = v0[1];
         point0->length = 0.0f;
@@ -870,7 +870,7 @@ static vg_lite_error_t _flatten_quad_bezier_original(
         bound[3] = MAX(v0[1], v2[1]);
 
         if(!(v1[0] >= bound[0] && v1[0] <= bound[2] && v1[1] >= bound[1] && v1[1] <= bound[3])) {
-            /* Compute root. */
+            /* Вычислить корень. */
             float alignedCurve[6];
             float d, n, t, pt[2];
 
@@ -894,21 +894,21 @@ static vg_lite_error_t _flatten_quad_bezier_original(
     VG_LITE_ERROR_HANDLER(_flatten_quad_bezier_original(stroke_conversion, subCurve1, level + 1));
     VG_LITE_ERROR_HANDLER(_flatten_quad_bezier_original(stroke_conversion, subCurve2, level + 1));
     if(level == 0) {
-        /* Add point 2 separately to avoid cumulative errors. */
+        /* Добавьте пункт 2 отдельно, чтобы избежать накопившихся ошибок. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_NO));
 
-        /* Add extra P2 for outgoing tangent. */
-        /* First change P2(point0)'s coordinates to P1. */
+        /* Добавьте дополнительный P2 для выходящей касательной. */
+        /* Сначала измените координаты P2 (point0) на P1. */
         point0 = stroke_conversion->path_end;
         point0->x = v1[0];
         point0->y = v1[1];
 
-        /* Add P2 to calculate outgoing tangent. */
+        /* Добавьте P2, чтобы вычислить исходящий тангенс. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_NO));
 
         point1 = stroke_conversion->path_end;
 
-        /* Change point0's coordinates back to P2. */
+        /* Измените координаты point0 обратно на P2. */
         point0->x = v2[0];
         point0->y = v2[1];
         point0->length = 0.0f;
@@ -943,9 +943,9 @@ static vg_lite_error_t _flatten_cubic_bezier(
     v3 = &curve[6];
 
     if(level == 0) {
-        /* Add extra P0 for incoming tangent. */
+        /* Добавьте дополнительный P0 для входящей касательной. */
         point0 = stroke_conversion->path_end;
-        /* First add P1/P2/P3 to calculate incoming tangent, which is saved in P0. */
+        /* Сначала добавьте P1/P2/P3 для расчета входящего тангенса, который сохраняется в P0. */
         if(v0[0] != v1[0] || v0[1] != v1[1]) {
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v1[0], v1[1], vgcFLATTEN_START));
         }
@@ -956,7 +956,7 @@ static vg_lite_error_t _flatten_cubic_bezier(
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_START));
         }
         point1 = stroke_conversion->path_end;
-        /* Change the point1's coordinates back to P0. */
+        /* Измените координаты точки point1 обратно на P0. */
         point1->x = v0[0];
         point1->y = v0[1];
         point0->length = 0.0f;
@@ -976,7 +976,7 @@ static vg_lite_error_t _flatten_cubic_bezier(
         bound[3] = MAX(v0[1], v3[1]);
         if(!(v1[0] >= bound[0] && v1[0] <= bound[2] && v1[1] >= bound[1] && v1[1] <= bound[3]) ||
            !(v2[0] >= bound[0] && v2[0] <= bound[2] && v2[1] >= bound[1] && v2[1] <= bound[3])) {
-            /* Compute root. */
+            /* Вычислить корень. */
             float alignedCurve[8];
             float a, b, c, b2ac, root[2], t, pt[2];
             uint8_t rootNum;
@@ -987,12 +987,12 @@ static vg_lite_error_t _flatten_cubic_bezier(
             b = 6.f * alignedCurve[0] - 12.f * alignedCurve[2] + 6.f * alignedCurve[4];
             c = -3.f * alignedCurve[0] + 3.f * alignedCurve[2];
             rootNum = 0;
-            if(fabs(a) < 1e-12f) {   // linear solution
+            if(fabs(a) < 1e-12f) {   // линейное решение
                 t = -c / b;
                 if(t > 1e-12f && t < 1.f - 1e-12f)
                     root[rootNum++] = t;
             }
-            else {   // quadtratic solution
+            else {   // квадратичное решение
                 b2ac = b * b - 4.f * a * c;
                 if(b2ac > 1e-12f) {
                     t = (-b + (float)sqrt(b2ac)) / (2.f * a);
@@ -1004,7 +1004,7 @@ static vg_lite_error_t _flatten_cubic_bezier(
                 }
             }
             if(rootNum == 2 && root[0] > root[1]) {
-                /* Exchange root. */
+                /* Корень обмена. */
                 float tmp;
                 tmp = root[0];
                 root[0] = root[1];
@@ -1087,8 +1087,8 @@ static vg_lite_error_t _flatten_cubic_bezier(
             }
         }
 
-        /* Add extra P3 for outgoing tangent. */
-        /* First change P3(point0)'s coordinates to P0/P1/P2. */
+        /* Добавьте дополнительный P3 для выходящей касательной. */
+        /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
         if(level == 0) {
             point0 = stroke_conversion->path_end;
             if(v3[0] != v2[0] || v3[1] != v2[1]) {
@@ -1104,12 +1104,12 @@ static vg_lite_error_t _flatten_cubic_bezier(
                 point0->y = v0[1];
             }
 
-            /* Add P3 to calculate outgoing tangent. */
+            /* Добавьте P3, чтобы вычислить исходящий тангенс. */
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_NO));
 
             point1 = stroke_conversion->path_end;
 
-            /* Change point0's coordinates back to P3. */
+            /* Измените координаты point0 обратно на P3. */
             point0->x = v3[0];
             point0->y = v3[1];
             point0->length = 0.0f;
@@ -1121,11 +1121,11 @@ static vg_lite_error_t _flatten_cubic_bezier(
     VG_LITE_ERROR_HANDLER(_flatten_cubic_bezier(stroke_conversion, rootCurve, subCurve1, level + 1));
     VG_LITE_ERROR_HANDLER(_flatten_cubic_bezier(stroke_conversion, rootCurve, subCurve2, level + 1));
     if(level == 0) {
-        /* Add point 3 separately to avoid cumulative errors. */
+        /* Добавьте пункт 3 отдельно, чтобы избежать накопившихся ошибок. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_END));
 
-        /* Add extra P3 for outgoing tangent. */
-        /* First change P3(point0)'s coordinates to P0/P1/P2. */
+        /* Добавьте дополнительный P3 для выходящей касательной. */
+        /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
         point0 = stroke_conversion->path_end;
         if(v3[0] != v2[0] || v3[1] != v2[1]) {
             point0->x = v2[0];
@@ -1140,12 +1140,12 @@ static vg_lite_error_t _flatten_cubic_bezier(
             point0->y = v0[1];
         }
 
-        /* Add P3 to calculate outgoing tangent. */
+        /* Добавьте P3, чтобы вычислить исходящий тангенс. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_NO));
 
         point1 = stroke_conversion->path_end;
 
-        /* Change point0's coordinates back to P3. */
+        /* Измените координаты point0 обратно на P3. */
         point0->x = v3[0];
         point0->y = v3[1];
         point0->length = 0.0f;
@@ -1175,9 +1175,9 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
     v3 = &curve[6];
 
     if(level == 0) {
-        /* Add extra P0 for incoming tangent. */
+        /* Добавьте дополнительный P0 для входящей касательной. */
         point0 = stroke_conversion->path_end;
-        /* First add P1/P2/P3 to calculate incoming tangent, which is saved in P0. */
+        /* Сначала добавьте P1/P2/P3 для расчета входящего тангенса, который сохраняется в P0. */
         if(v0[0] != v1[0] || v0[1] != v1[1]) {
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v1[0], v1[1], vgcFLATTEN_NO));
         }
@@ -1188,7 +1188,7 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
             VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_NO));
         }
         point1 = stroke_conversion->path_end;
-        /* Change the point1's coordinates back to P0. */
+        /* Измените координаты точки point1 обратно на P0. */
         point1->x = v0[0];
         point1->y = v0[1];
         point0->length = 0.0f;
@@ -1208,7 +1208,7 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
         bound[3] = MAX(v0[1], v3[1]);
         if(!(v1[0] >= bound[0] && v1[0] <= bound[2] && v1[1] >= bound[1] && v1[1] <= bound[3]) ||
            !(v2[0] >= bound[0] && v2[0] <= bound[2] && v2[1] >= bound[1] && v2[1] <= bound[3])) {
-            /* Compute root. */
+            /* Вычислить корень. */
             float alignedCurve[8];
             float a, b, c, b2ac, root[2], t, pt[2];
             uint8_t rootNum;
@@ -1219,12 +1219,12 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
             b = 6.f * alignedCurve[0] - 12.f * alignedCurve[2] + 6.f * alignedCurve[4];
             c = -3.f * alignedCurve[0] + 3.f * alignedCurve[2];
             rootNum = 0;
-            if(fabs(a) < 1e-12f) {   // linear solution
+            if(fabs(a) < 1e-12f) {   // линейное решение
                 t = -c / b;
                 if(t > 1e-12f && t < 1.f - 1e-12f)
                     root[rootNum++] = t;
             }
-            else {   // quadtratic solution
+            else {   // квадратичное решение
                 b2ac = b * b - 4.f * a * c;
                 if(b2ac > 1e-12f) {
                     t = (-b + (float)sqrt(b2ac)) / (2.f * a);
@@ -1237,7 +1237,7 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
             }
 
             if(rootNum == 2 && root[0] > root[1]) {
-                /* Exchange root. */
+                /* Корень обмена. */
                 float tmp;
                 tmp = root[0];
                 root[0] = root[1];
@@ -1257,11 +1257,11 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
     VG_LITE_ERROR_HANDLER(_flatten_cubic_bezier_original(stroke_conversion, subCurve1, level + 1));
     VG_LITE_ERROR_HANDLER(_flatten_cubic_bezier_original(stroke_conversion, subCurve2, level + 1));
     if(level == 0) {
-        /* Add point 3 separately to avoid cumulative errors. */
+        /* Добавьте пункт 3 отдельно, чтобы избежать накопившихся ошибок. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_NO));
 
-        /* Add extra P3 for outgoing tangent. */
-        /* First change P3(point0)'s coordinates to P0/P1/P2. */
+        /* Добавьте дополнительный P3 для выходящей касательной. */
+        /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
         point0 = stroke_conversion->path_end;
         if(v3[0] != v2[0] || v3[1] != v2[1]) {
             point0->x = v2[0];
@@ -1276,12 +1276,12 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
             point0->y = v0[1];
         }
 
-        /* Add P3 to calculate outgoing tangent. */
+        /* Добавьте P3, чтобы вычислить исходящий тангенс. */
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_NO));
 
         point1 = stroke_conversion->path_end;
 
-        /* Change point0's coordinates back to P3. */
+        /* Измените координаты point0 обратно на P3. */
         point0->x = v3[0];
         point0->y = v3[1];
         point0->length = 0.0f;
@@ -1312,7 +1312,7 @@ _flatten_quad_bezier(
     if(!stroke_conversion)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Formula.
+    /* Формула.
     * f(t) = (1 - t)^2 * p0 + 2 * t * (1 - t) * p1 + t^2 * p2
     *      = a0 + a1 * t + a2 * t^2
     *   a0 = p0
@@ -1326,25 +1326,25 @@ _flatten_quad_bezier(
     a2x = X0 - X1 - X1 + X2;
     a2y = Y0 - Y1 - Y1 + Y2;
 
-    /* Step 1: Calculate N. */
-    /* Lefan's method. */
-    /* dist(t) = ...
+    /* Шаг 1: Рассчитайте Н. */
+    /* Метод Лефана. */
+    /* расстояние(т) = ...
     * t2 = ...
     * if 0 <= t2 <= 1
     *    upper_bound = dist(t2)
-    * else
+    * еще
     *    upper_bound = max(dist(0), dist(1))
     * N = ceil(sqrt(upper_bound / epsilon / 8))
     */
-    /* Prepare dist(t). */
+    /* Подготовьте dist(t). */
     f1 = a1x * a2y - a2x * a1y;
     if(f1 != 0.0f) {
         if(f1 < 0.0f) f1 = -f1;
 
-        /* Calculate t2. */
+        /* Рассчитайте t2. */
         t1 = a2x * a2x + a2y * a2y;
         t2 = -(x * a2x + y * a2y) / t1;
-        /* Calculate upper_bound. */
+        /* Вычислите upper_bound . */
         if(t2 >= 0.0f && t2 <= 1.0f) {
             f2 = x + a2x * t2;
             f2 *= f2;
@@ -1361,7 +1361,7 @@ _flatten_quad_bezier(
             t1 = x * x + y * y;
             upper_bound = t1 < t2 ? t1 : t2;
         }
-        /* Calculate n. */
+        /* Вычислите н. */
         upper_bound = f1 / SQRTF(upper_bound);
         upper_bound = SQRTF(upper_bound);
         if(stroke_conversion->fattened) {
@@ -1378,13 +1378,13 @@ _flatten_quad_bezier(
         n = 256;
     }
 
-    /* Add extra P0 for incoming tangent. */
+    /* Добавьте дополнительный P0 для входящей касательной. */
     point0 = stroke_conversion->path_end;
-    /* First add P1 to calculate incoming tangent, which is saved in P0. */
+    /* Сначала добавьте P1 для расчета входящего тангенса, который сохраняется в P0. */
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X1, Y1, vgcFLATTEN_START));
 
     point1 = stroke_conversion->path_end;
-    /* Change the point1's coordinates back to P0. */
+    /* Измените координаты точки point1 обратно на P0. */
     point1->x = X0;
     point1->y = Y0;
     point0->length = 0.0f;
@@ -1394,7 +1394,7 @@ _flatten_quad_bezier(
         vg_lite_float_t ratioX, ratioY;
         uint32_t i;
 
-        /* Step 2: Calculate deltas. */
+        /* Шаг 2: Рассчитайте дельты. */
         /*   Df(t) = f(t + d) - f(t)
         *         = a1 * d + a2 * d^2 + 2 * a2 * d * t
         *  DDf(t) = Df(t + d) - Df(t)
@@ -1412,7 +1412,7 @@ _flatten_quad_bezier(
         ddx += ddx;
         ddy += ddy;
 
-        /* Step 3: Add points. */
+        /* Шаг 3: Добавьте баллы. */
         ratioX = dx / X0;
         if(ratioX < 0.0f) ratioX = -ratioX;
         ratioY = dy / Y0;
@@ -1424,7 +1424,7 @@ _flatten_quad_bezier(
                 x += dx;
                 y += dy;
 
-                /* Add a point to subpath. */
+                /* Добавьте точку в подпуть. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_point_list_wdelta(stroke_conversion, x, y, dx, dy, vgcFLATTEN_MIDDLE));
 
                 dx += ddx;
@@ -1443,27 +1443,27 @@ _flatten_quad_bezier(
                 x  = a0 * X0 + a1 * X1 + a2 * X2;
                 y  = a0 * Y0 + a1 * Y1 + a2 * Y2;
 
-                /* Add a point to subpath. */
+                /* Добавьте точку в подпуть. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, x, y, vgcFLATTEN_MIDDLE));
             }
         }
     }
 
-    /* Add point 2 separately to avoid cumulative errors. */
+    /* Добавьте пункт 2 отдельно, чтобы избежать накопившихся ошибок. */
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X2, Y2, vgcFLATTEN_END));
 
-    /* Add extra P2 for outgoing tangent. */
-    /* First change P2(point0)'s coordinates to P1. */
+    /* Добавьте дополнительный P2 для выходящей касательной. */
+    /* Сначала измените координаты P2 (point0) на P1. */
     point0 = stroke_conversion->path_end;
     point0->x = X1;
     point0->y = Y1;
 
-    /* Add P2 to calculate outgoing tangent. */
+    /* Добавьте P2, чтобы вычислить исходящий тангенс. */
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X2, Y2, vgcFLATTEN_NO));
 
     point1 = stroke_conversion->path_end;
 
-    /* Change point0's coordinates back to P2. */
+    /* Измените координаты point0 обратно на P2. */
     point0->x = X2;
     point0->y = Y2;
     point0->length = 0.0f;
@@ -1495,7 +1495,7 @@ _flatten_cubic_bezier(
     if(!stroke_conversion)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Formula.
+    /* Формула.
     * f(t) = (1 - t)^3 * p0 + 3 * t * (1 - t)^2 * p1 + 3 * t^2 * (1 - t) * p2 + t^3 * p3
     *      = a0 + a1 * t + a2 * t^2 + a3 * t^3
     */
@@ -1512,8 +1512,8 @@ _flatten_cubic_bezier(
     y = Y1 - Y2;
     a3y = y + y + y + Y3 - Y0;
 
-    /* Step 1: Calculate N. */
-    /* Lefan's method. */
+    /* Шаг 1: Рассчитайте Н. */
+    /* Метод Лефана. */
     /*  df(t)/dt  = a1 + 2 * a2 * t + 3 * a3 * t^2
     * d2f(t)/dt2 = 2 * a2 + 6 * a3 * t
     * N = ceil(sqrt(max(ddfx(0)^2 + ddfy(0)^2, ddfx(1)^2 + ddyf(1)^2) / epsilon / 8))
@@ -1536,9 +1536,9 @@ _flatten_cubic_bezier(
         n = 256;
     }
 
-    /* Add extra P0 for incoming tangent. */
+    /* Добавьте дополнительный P0 для входящей касательной. */
     point0 = stroke_conversion->path_end;
-    /* First add P1/P2/P3 to calculate incoming tangent, which is saved in P0. */
+    /* Сначала добавьте P1/P2/P3 для расчета входящего тангенса, который сохраняется в P0. */
     if(X0 != X1 || Y0 != Y1) {
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X1, Y1, vgcFLATTEN_START));
     }
@@ -1549,7 +1549,7 @@ _flatten_cubic_bezier(
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X3, Y3, vgcFLATTEN_START));
     }
     point1 = stroke_conversion->path_end;
-    /* Change the point1's coordinates back to P0. */
+    /* Измените координаты точки point1 обратно на P0. */
     point1->x = X0;
     point1->y = Y0;
     point0->length = 0.0f;
@@ -1559,7 +1559,7 @@ _flatten_cubic_bezier(
         vg_lite_float_t ratioX, ratioY;
         uint32_t i;
 
-        /* Step 2: Calculate deltas */
+        /* Шаг 2: Рассчитайте дельты */
         /*   Df(t) = f(t + d) - f(t)
         *  DDf(t) = Df(t + d) - Df(t)
         * DDDf(t) = DDf(t + d) - DDf(t)
@@ -1584,7 +1584,7 @@ _flatten_cubic_bezier(
         ddx  += dddx;
         ddy  += dddy;
 
-        /* Step 3: Add points. */
+        /* Шаг 3: Добавьте баллы. */
         ratioX = dx / X0;
         if(ratioX < 0.0f) ratioX = -ratioX;
         ratioY = dy / Y0;
@@ -1596,7 +1596,7 @@ _flatten_cubic_bezier(
                 x += dx;
                 y += dy;
 
-                /* Add a point to subpath. */
+                /* Добавьте точку в подпуть. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_point_list_wdelta(stroke_conversion, x, y, dx, dy, vgcFLATTEN_MIDDLE));
                 dx += ddx;
                 ddx += dddx;
@@ -1617,17 +1617,17 @@ _flatten_cubic_bezier(
                 x  = a0 * X0 + a1 * X1 + a2 * X2 + a3 * X3;
                 y  = a0 * Y0 + a1 * Y1 + a2 * Y2 + a3 * Y3;
 
-                /* Add a point to subpath. */
+                /* Добавьте точку в подпуть. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, x, y, vgcFLATTEN_MIDDLE));
             }
         }
     }
 
-    /* Add point 3 separately to avoid cumulative errors. */
+    /* Добавьте пункт 3 отдельно, чтобы избежать накопившихся ошибок. */
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X3, Y3, vgcFLATTEN_END));
 
-    /* Add extra P3 for outgoing tangent. */
-    /* First change P3(point0)'s coordinates to P0/P1/P2. */
+    /* Добавьте дополнительный P3 для выходящей касательной. */
+    /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
     point0 = stroke_conversion->path_end;
     if(X3 != X2 || Y3 != Y2) {
         point0->x = X2;
@@ -1642,12 +1642,12 @@ _flatten_cubic_bezier(
         point0->y = Y0;
     }
 
-    /* Add P3 to calculate outgoing tangent. */
+    /* Добавьте P3, чтобы вычислить исходящий тангенс. */
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X3, Y3, vgcFLATTEN_NO));
 
     point1 = stroke_conversion->path_end;
 
-    /* Change point0's coordinates back to P3. */
+    /* Измените координаты point0 обратно на P3. */
     point0->x = X3;
     point0->y = Y3;
     point0->length = 0.0f;
@@ -1661,9 +1661,9 @@ ErrorHandler:
     (datatype_size - (PTR2SIZE(pointer) & (datatype_size - 1)))
 
 #define SKIPTODATA(pointer, datatype_size, SIZE) \
-    /* Determine the increment value. */ \
+    /* Определите величину приращения. */ \
     increment = GETINCREMENT(pointer, datatype_size); \
-    /* Skip to the data. */ \
+    /* Перейти к данным. */ \
     pointer += increment; \
     SIZE -= increment
 
@@ -1706,7 +1706,7 @@ static vg_lite_error_t _flatten_path(
 
     prev_command = 0xFF;
 
-    /* Select the data picker. */
+    /* Выберите средство выбора данных. */
     switch(path->format) {
         case VG_LITE_S8:
             data_type_size = 1;
@@ -1735,7 +1735,7 @@ static vg_lite_error_t _flatten_path(
 
     if((path->path_type == VG_LITE_DRAW_FILL_PATH) || (path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH)) {
         if(path->path_length % (3 * data_type_size) == 0) {
-            /* add END_PATH if path_data have no END_PATH */
+            /* добавьте END_PATH, если у path_data нет END_PATH */
             stroke_conversion->add_end = 1;
             path->path_length = path->path_length + data_type_size;
             data_pointer_use = (int8_t *)vg_lite_os_malloc(path->path_length);
@@ -1755,37 +1755,37 @@ static vg_lite_error_t _flatten_path(
         }
     }
 
-    /* Determine the data size. */
+    /* Определите размер данных. */
     size = path->path_length;
 
-    /* Determine the beginning of the path data. */
+    /* Определите начало данных пути. */
     data_pointer = (int8_t *)path->path;
 
-    /* Add an extra gcvVGCMD_MOVE 0.0 0.0 to handle the case the first command is not gcvVGCMD_MOVE. */
+    /* Добавьте дополнительный gcvVGCMD_MOVE 0.0 0.0 для обработки случая, когда первая команда не gcvVGCMD_MOVE . */
     if((*data_pointer & 0xfe) != VLC_OP_MOVE) {
-        /* Add first point to subpath. */
+        /* Добавьте первую точку в подпуть. */
         VG_LITE_ERROR_HANDLER(_create_new_point_list(stroke_conversion, 0.f, 0.f, vgcFLATTEN_NO));
     }
 
     while(size > 0) {
-        /* Get the command. */
+        /* Получите команду. */
         path_command = *data_pointer & 0x1F;
 
-        /* Assume absolute. */
+        /* Предположим, абсолютное. */
         is_relative = VGL_FALSE;
 
         switch(path_command) {
             case VLC_OP_END:
-                /* Skip the command. */
+                /* Пропустить команду. */
                 size -= 1;
 
                 if(prev_command == VLC_OP_END) {
-                    /* Continuous gcvVGCMD_CLOSE - do nothing. */
+                    /* Непрерывный gcvVGCMD_CLOSE - ничего не делать. */
                     break;
                 }
 
                 if((prev_command & 0xfe) == VLC_OP_MOVE) {
-                    /* Delete the invalid path list. */
+                    /* Удалите список недопустимых путей. */
                     vg_lite_path_list_ptr path_list_divide = stroke_conversion->cur_list;
                     vg_lite_os_free(path_list_divide->path_points);
                     vg_lite_os_free(path_list_divide);
@@ -1807,13 +1807,13 @@ static vg_lite_error_t _flatten_path(
                 }
 
                 if(!stroke_conversion->add_end) {
-                    /* Check if subPath is already closed. */
+                    /* Проверьте, закрыт ли уже subPath. */
                     if(ox != sx || oy != sy) {
-                        /* Add a line from current point to the first point of current subpath. */
+                        /* Добавьте линию от текущей точки до первой точки текущего подпути. */
                         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, sx, sy, vgcFLATTEN_NO));
                     }
                     if(stroke_conversion->path_points != stroke_conversion->path_end) {
-                        /* Copy tangent data from first point to last_point. */
+                        /* Скопируйте данные касательной из первой точки в last_point. */
                         vg_lite_path_point_ptr first_point = stroke_conversion->path_points;
                         vg_lite_path_point_ptr last_point = stroke_conversion->path_end;
                         last_point->length = first_point->length;
@@ -1821,7 +1821,7 @@ static vg_lite_error_t _flatten_path(
                         last_point->tangentY = first_point->tangentY;
                     }
                     else {
-                        /* Single point path. */
+                        /* Одноточечный путь. */
                         vg_lite_path_point_ptr point = stroke_conversion->path_points;
                         point->tangentX = 0.0f;
                         point->tangentY = 0.0f;
@@ -1834,22 +1834,22 @@ static vg_lite_error_t _flatten_path(
                 break;
 
             case VLC_OP_CLOSE:
-                /* Skip the command. */
+                /* Пропустить команду. */
                 SKIPTODATA(data_pointer, data_type_size, size);
 
                 if(prev_command == VLC_OP_CLOSE) {
-                    /* Continuous gcvVGCMD_CLOSE - do nothing. */
+                    /* Непрерывный gcvVGCMD_CLOSE - ничего не делать. */
                     break;
                 }
 
-                /* Check if subPath is already closed. */
+                /* Проверьте, закрыт ли уже subPath. */
                 if(ox != sx || oy != sy) {
-                    /* Add a line from current point to the first point of current subpath. */
+                    /* Добавьте линию от текущей точки до первой точки текущего подпути. */
                     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, sx, sy, vgcFLATTEN_NO));
                 }
 
                 if(stroke_conversion->path_points != stroke_conversion->path_end) {
-                    /* Copy tangent data from first point to last_point. */
+                    /* Скопируйте данные касательной из первой точки в last_point. */
                     vg_lite_path_point_ptr first_point = stroke_conversion->path_points;
                     vg_lite_path_point_ptr last_point = stroke_conversion->path_end;
                     last_point->length = first_point->length;
@@ -1857,7 +1857,7 @@ static vg_lite_error_t _flatten_path(
                     last_point->tangentY = first_point->tangentY;
                 }
                 else {
-                    /* Single point path. */
+                    /* Одноточечный путь. */
                     vg_lite_path_point_ptr point = stroke_conversion->path_points;
                     point->tangentX = 0.0f;
                     point->tangentY = 0.0f;
@@ -1874,19 +1874,19 @@ static vg_lite_error_t _flatten_path(
             case VLC_OP_MOVE_REL:
                 is_relative = 1;
 
-            case VLC_OP_MOVE:        /* Indicate the beginning of a new sub-path. */
-                /* Skip to the data. */
+            case VLC_OP_MOVE:        /* Указывает начало нового подпути. */
+                /* Перейти к данным. */
                 SKIPTODATA(data_pointer, data_type_size, size);
                 VGSL_GETCOORDXY(x0, y0);
 
                 if((prev_command & 0xfe) == VLC_OP_MOVE) {
-                    /* Continuous gcvVGCMD_MOVE draw nothing */
+                    /* Непрерывный gcvVGCMD_MOVE ничего не рисует */
                     stroke_conversion->path_points->x = x0;
                     stroke_conversion->path_points->y = y0;
                 }
                 else {
-                    /* First command is gcvVGCMD_MOVE. */
-                    /* Add first point to subpath. */
+                    /* Первая команда — gcvVGCMD_MOVE. */
+                    /* Добавьте первую точку в подпуть. */
                     VG_LITE_ERROR_HANDLER(_create_new_point_list(stroke_conversion, x0, y0, vgcFLATTEN_NO));
                 }
 
@@ -1898,11 +1898,11 @@ static vg_lite_error_t _flatten_path(
                 is_relative = 1;
 
             case VLC_OP_LINE:
-                /* Skip to the data. */
+                /* Перейти к данным. */
                 SKIPTODATA(data_pointer, data_type_size, size);
                 VGSL_GETCOORDXY(x0, y0);
 
-                /* Add a point to subpath. */
+                /* Добавьте точку в подпуть. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, x0, y0, vgcFLATTEN_NO));
 
                 px = ox = x0;
@@ -1913,18 +1913,18 @@ static vg_lite_error_t _flatten_path(
                 is_relative = 1;
 
             case VLC_OP_QUAD:
-                /* Skip to the data. */
+                /* Перейти к данным. */
                 SKIPTODATA(data_pointer, data_type_size, size);
                 VGSL_GETCOORDXY(x0, y0);
                 VGSL_GETCOORDXY(x1, y1);
 
                 if((ox == x0 && oy == y0) && (ox == x1 && oy == y1)) {
-                    /* Degenerated Bezier curve.  Becomes a point. */
-                    /* Discard zero-length segments. */
+                    /* Вырожденная кривая Безье.  Становится точкой. */
+                    /* Отбросить сегменты нулевой длины. */
                 }
                 else if((ox == x0 && oy == y0) || (x0 == x1 && y0 == y1)) {
-                    /* Degenerated Bezier curve.  Becomes a line. */
-                    /* Add a point to subpath. */
+                    /* Вырожденная кривая Безье.  Становится линией. */
+                    /* Добавьте точку в подпуть. */
                     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, x1, y1, vgcFLATTEN_NO));
                 }
                 else {
@@ -1951,15 +1951,15 @@ static vg_lite_error_t _flatten_path(
                 is_relative = 1;
 
             case VLC_OP_CUBIC:
-                /* Skip to the data. */
+                /* Перейти к данным. */
                 SKIPTODATA(data_pointer, data_type_size, size);
                 VGSL_GETCOORDXY(x0, y0);
                 VGSL_GETCOORDXY(x1, y1);
                 VGSL_GETCOORDXY(x2, y2);
 
                 if((ox == x0 && oy == y0) && (ox == x1 && oy == y1) && (ox == x2 && oy == y2)) {
-                    /* Degenerated Bezier curve.  Becomes a point. */
-                    /* Discard zero-length segments. */
+                    /* Вырожденная кривая Безье.  Становится точкой. */
+                    /* Отбросить сегменты нулевой длины. */
                 }
                 else {
 #if gcFEATURE_VG_SIMPLYFIED_BEZIER
@@ -1991,7 +1991,7 @@ static vg_lite_error_t _flatten_path(
         stroke_conversion->cur_list->path_end->next = NULL;
         stroke_conversion->path_end->next = NULL;
         if(stroke_conversion->point_count == 1) {
-            /* Single point path. */
+            /* Одноточечный путь. */
             vg_lite_path_point_ptr point = stroke_conversion->path_points;
             point->tangentX = 0.0f;
             point->tangentY = 0.0f;
@@ -2113,7 +2113,7 @@ _add_zero_length_stroke_sub_path(
     half_width = stroke_conversion->half_width;
     Point = stroke_conversion->path_points;
     if(stroke_conversion->cap_style == VG_LITE_CAP_BUTT) {
-        /* No need to draw zero-length subPath for gcvCAP_BUTT. */
+        /* Нет необходимости рисовать subPath нулевой длины для gcvCAP_BUTT . */
         error = VG_LITE_SUCCESS;
         goto ErrorHandler;
     }
@@ -2121,7 +2121,7 @@ _add_zero_length_stroke_sub_path(
     VG_LITE_ERROR_HANDLER(_add_stroke_sub_path(stroke_conversion, &stroke_sub_path));
 
     if(stroke_conversion->cap_style == VG_LITE_CAP_SQUARE) {
-        /* Draw a square along the point's direction. */
+        /* Нарисуйте квадрат вдоль направления точки. */
         vg_lite_float_t dx, dy;
 
         if(Point->tangentX == 0.0f || Point->tangentY == 0.0f) {
@@ -2154,7 +2154,7 @@ _add_zero_length_stroke_sub_path(
                                                                          Point->x - dx + dy, Point->y - dx - dy));
     }
     else {
-        /* Draw a circle. */
+        /* Нарисуйте круг. */
         new_point = (vg_lite_path_point_ptr)vg_lite_os_malloc(sizeof(*new_point));
         if(!new_point)
             return VG_LITE_OUT_OF_RESOURCES;
@@ -2166,7 +2166,7 @@ _add_zero_length_stroke_sub_path(
         stroke_sub_path->point_list = stroke_conversion->right_point = new_point;
         stroke_sub_path->point_count = 1;
 
-        /* Add upper half circle. */
+        /* Добавьте верхний полукруг. */
         VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion,
                                                                          Point->x - half_width, Point->y));
 
@@ -2174,7 +2174,7 @@ _add_zero_length_stroke_sub_path(
         stroke_conversion->right_point->tangentX = Point->x;
         stroke_conversion->right_point->tangentY = Point->y;
 
-        /* Add lower half circle. */
+        /* Добавьте нижний полукруг. */
         VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion,
                                                                          Point->x + half_width, Point->y));
 
@@ -2190,7 +2190,7 @@ ErrorHandler:
     return error;
 }
 
-/* Special asin(x) for quick calculation when -sqrt(0.5) <= x <= sqrt(0.5). */
+/* Специальный asin(x) для быстрого расчета, когда -sqrt(0.5) <= x <= sqrt(0.5). */
 static vg_lite_float_t _Asin(
     vg_lite_float_t X
 )
@@ -2211,7 +2211,7 @@ static vg_lite_float_t _Asin(
     return s;
 }
 
-/* Special cos(x) for quick calculation when -PI <= x <= PI. */
+/* Специальный cos(x) для быстрого расчета, когда - PI <= x <= PI . */
 static vg_lite_float_t _Cos(
     vg_lite_float_t X
 )
@@ -2231,7 +2231,7 @@ static vg_lite_float_t _Cos(
     return s;
 }
 
-/* Special sin(x) for quick calculation when -PI <= x <= PI. */
+/* Специальный sin(x) для быстрого расчета, когда - PI <= x <= PI . */
 static vg_lite_float_t _Sine(
     vg_lite_float_t X
 )
@@ -2276,7 +2276,7 @@ _Angle(
     return angle;
 }
 
-/* The arc is always counter clockwise and less than half circle (small). */
+/* Дуга всегда направлена против часовой стрелки и меньше половины круга (маленькая). */
 static vg_lite_error_t
 _convert_circle_arc(
     vg_lite_stroke_t * stroke_conversion,
@@ -2292,20 +2292,20 @@ _convert_circle_arc(
 )
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
-    /*gceVGCMD segmentCommand;*/
+    /*gceVGCMD сегментКоманда;*/
     vg_lite_float_t theta1, theta_span;
     uint32_t segs;
     vg_lite_float_t theta, theta_half, theta2;
     vg_lite_float_t cos_theta_half;
     vg_lite_float_t control_ratio;
     vg_lite_float_t controlX, controlY, anchorX, anchorY;
-    /*gctFLOAT lastX, lastY;*/
+    /*gctFLOAT LastX, LastY;*/
     vg_lite_path_point_ptr point, start_point, last_point;
 
     if(!stroke_conversion || !point_list)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Converting. */
+    /* Преобразование. */
     theta1 = _Angle(StartX - CenterX, StartY - CenterY, Radius);
     if(Half_circle) {
         theta_span = FLOAT_PI;
@@ -2317,7 +2317,7 @@ _convert_circle_arc(
     else {
         theta_span = _Angle(EndX - CenterX, EndY - CenterY, Radius) - theta1;
         if(theta_span == 0.0f) {
-            /* Handle specail case for huge scaling. */
+            /* Специальный чехол с ручкой для масштабирования. */
             *point_list = NULL;
             error = VG_LITE_SUCCESS;
             return error;
@@ -2327,7 +2327,7 @@ _convert_circle_arc(
             theta_span += FLOAT_PI_TWO;
         }
 
-        /* Calculate the number of quadratic Bezier curves. */
+        /* Вычислите количество квадратичных кривых Безье. */
         /* Assumption: most of angles are small angles. */
         if(theta_span <= FLOAT_PI_QUARTER)         segs = 1;
         else if(theta_span <= FLOAT_PI_HALF)            segs = 2;
@@ -2339,10 +2339,10 @@ _convert_circle_arc(
         cos_theta_half = _Cos(theta_half);
     }
 
-    /* Determine the segment command. */
+    /* Определите команду сегмента. */
     /*egmentCommand = gcvVGCMD_ARC_QUAD;*/
 
-    /* Generate quadratic Bezier curves. */
+    /* Сгенерируйте квадратичные кривые Безье. */
     start_point = last_point = NULL;
     control_ratio = Radius / cos_theta_half;
     while(segs-- > 0) {
@@ -2359,12 +2359,12 @@ _convert_circle_arc(
         anchorY = CenterY + _Sine(theta2) * Radius;
 
         if(segs == 0) {
-            /* Use end point directly to avoid accumulated errors. */
+            /* Используйте конечную точку напрямую, чтобы избежать накопления ошибок. */
             anchorX = EndX;
             anchorY = EndY;
         }
 
-        /* Add control point. */
+        /* Добавьте контрольную точку. */
         point = (vg_lite_path_point_ptr)vg_lite_os_malloc(sizeof(*point));
         if(!point)
             return VG_LITE_OUT_OF_RESOURCES;
@@ -2382,7 +2382,7 @@ _convert_circle_arc(
             start_point = last_point = point;
         }
 
-        /* Add anchor point. */
+        /* Добавьте точку привязки. */
         point = (vg_lite_path_point_ptr)vg_lite_os_malloc(sizeof(*point));
         if(!point) {
             error = VG_LITE_OUT_OF_RESOURCES;
@@ -2406,7 +2406,7 @@ _convert_circle_arc(
     return error;
 
 ErrorHandler:
-    /* Return status. */
+    /* Статус возврата. */
     if(start_point) {
         vg_lite_os_free(start_point);
         start_point = last_point = NULL;
@@ -2465,20 +2465,20 @@ _start_new_stroke_sub_path(
     stroke_sub_path->point_count = 2;
 
     if(add_end_cap) {
-        /* Add end cap if the subPath is not closed. */
+        /* Добавьте заглушку, если подпуть не закрыт. */
         switch(stroke_conversion->cap_style) {
             case VG_LITE_CAP_BUTT:
-                /* No adjustment needed. */
+                /* Никакой регулировки не требуется. */
                 break;
             case VG_LITE_CAP_ROUND:
-                /* Add curve. */
-                /* Add the starting point again as arc. */
+                /* Добавьте кривую. */
+                /* Снова добавьте начальную точку в виде дуги. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion,
                                                                                  stroke_sub_path->point_list->x, stroke_sub_path->point_list->y));
                 stroke_conversion->right_point->curve_type = CURVE_ARC_SCCW_HALF;
                 stroke_conversion->right_point->tangentX = X;
                 stroke_conversion->right_point->tangentY = Y;
-                /* Change the starting point to end point. */
+                /* Измените начальную точку на конечную. */
                 stroke_sub_path->point_list->x = stroke_sub_path->end_point->x;
                 stroke_sub_path->point_list->y = stroke_sub_path->end_point->y;
                 break;
@@ -2548,8 +2548,8 @@ _draw_swing_pie_area(
 
         {
             if(end_at_prev_point) {
-                /* Detach the end point from leftStrokePoint. */
-                /* The end point will be added back later. */
+                /* Отсоедините конечную точку от leftStrokePoint. */
+                /* Конечная точка будет добавлена позже. */
                 real_end_point = stroke_conversion->left_point;
                 stroke_conversion->left_point = real_end_point->next;
                 stroke_conversion->left_point->prev = NULL;
@@ -2559,7 +2559,7 @@ _draw_swing_pie_area(
                                                                      center_point->x, center_point->y));
             end_point = stroke_conversion->left_point;
 
-            /* Reverse the point list from startPoint to endPoint. */
+            /* Переверните список точек с startPoint на endPoint. */
             for(point = start_point; point; point = prev_point) {
                 prev_point = point->prev;
                 point->prev = point->next;
@@ -2599,8 +2599,8 @@ _draw_swing_pie_area(
 
         {
             if(end_at_prev_point) {
-                /* Detach the end point from leftStrokePoint. */
-                /* The end point will be added back later. */
+                /* Отсоедините конечную точку от leftStrokePoint. */
+                /* Конечная точка будет добавлена позже. */
                 real_end_point = stroke_conversion->right_point;
                 stroke_conversion->right_point = real_end_point->prev;
                 stroke_conversion->right_point->next = NULL;
@@ -2610,7 +2610,7 @@ _draw_swing_pie_area(
                                                                              center_point->x, center_point->y));
             end_point = stroke_conversion->right_point;
 
-            /* Reverse the point list from startPoint to endPoint. */
+            /* Переверните список точек с startPoint на endPoint. */
             for(point = start_point; point; point = next_point) {
                 next_point = point->next;
                 point->next = point->prev;
@@ -2696,23 +2696,23 @@ _process_line_joint(
         goto ErrorHandler;
     }
 
-    /* For flattened curves/arcs, the join style is always round. */
+    /* Для сглаженных кривых/дуг стиль соединения всегда круглый. */
     if((Point->flatten_flag != vgcFLATTEN_NO) && fat_line) {
         join_style = VG_LITE_JOIN_ROUND;
     }
 
-    /* First, determine the turn is clockwise or counter-clockwise. */
+    /* Сначала определите, какой поворот — по часовой стрелке или против часовой стрелки. */
     cos_theta = Point->prev->tangentX * Point->tangentX + Point->prev->tangentY * Point->tangentY;
 
     if(cos_theta > FLOAT_ANGLE_EPSILON_COS) {
-        /* Straight line or semi-straight line--no need to handle join. */
+        /* Прямая линия или полупрямая линия — нет необходимости обрабатывать соединение. */
         if(stroke_conversion->swing_handling != SWING_NO) {
-            /* Begin to swing to the opposite direction. */
-            /* Draw the swing area (pie area). */
+            /* Начинайте качаться в противоположную сторону. */
+            /* Нарисуйте зону качелей (площадь круга). */
             VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, Point->prev, 1));
         }
 
-        /* Add the new stroke points. */
+        /* Добавьте новые точки обводки. */
         VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
         VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
         if(stroke_conversion->swing_handling != SWING_NO) {
@@ -2722,7 +2722,7 @@ _process_line_joint(
         goto endCheck;
     }
     else if(cos_theta < -FLOAT_ANGLE_EPSILON_COS) {
-        /* Almost 180 degree turn. */
+        /* Разворот почти на 180 градусов. */
         counter_clockwise = 1;
         ratio = FLOAT_MAX;
         min_length_square = FLOAT_MAX;
@@ -2736,78 +2736,78 @@ _process_line_joint(
 
     if(stroke_conversion->swing_handling != SWING_NO) {
         if(counter_clockwise != stroke_conversion->swing_ccw) {
-            /* Swing to the opposite direction. */
-            /* Draw the swing area (pie area). */
+            /* Качайтесь в противоположную сторону. */
+            /* Нарисуйте зону качелей (площадь круга). */
             VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, Point->prev, 1));
         }
     }
 
     if(counter_clockwise) {
         if(stroke_conversion->swing_handling != SWING_NO) {
-            vg_lite_path_point_ptr prev_point = stroke_conversion->left_point->next;   /* Skip the line segment movement. */
+            vg_lite_path_point_ptr prev_point = stroke_conversion->left_point->next;   /* Пропустить движение сегмента линии. */
             vg_lite_float_t deltaX = X2 - prev_point->x;
             vg_lite_float_t deltaY = Y2 - prev_point->y;
             if(_is_angle_span_acute(stroke_conversion->swing_deltax,
                                     stroke_conversion->swing_deltay,
                                     deltaX, deltaY)) {
-                /* Continue swinging. */
+                /* Продолжайте качаться. */
                 stroke_conversion->swing_deltax = deltaX;
                 stroke_conversion->swing_deltay = deltaY;
             }
             else {
-                /* Swing to the max. */
-                /* Draw the swing area (pie area). */
+                /* Качайтесь на максимум. */
+                /* Нарисуйте зону качелей (площадь круга). */
                 VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, Point->prev, 1));
             }
         }
 
-        /* Check if the miter length is too long for inner intersection. */
+        /* Проверьте, не слишком ли велика длина среза для внутреннего пересечения. */
         if(stroke_conversion->swing_handling == SWING_NO
            && ! handle_short_line
            && min_length_square <= Length * Length
            && min_length_square <= prev_length * prev_length) {
-            /* Adjust leftStrokePoint to the intersection point. */
+            /* Отрегулируйте leftStrokePoint до точки пересечения. */
             _adjust_joint_point(Point, stroke_conversion->left_point, X2, Y2, ratio);
         }
         else if(stroke_conversion->swing_handling == SWING_NO && Point->flatten_flag == vgcFLATTEN_NO) {
-            /* Add the point to avoid incorrect sharp angle. */
+            /* Добавьте точку, чтобы избежать неправильного острого угла. */
             VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, Point->x, Point->y));
-            /* Add the point to form a loop to avoid out-of-bound problem. */
+            /* Добавьте точку, чтобы сформировать цикл, чтобы избежать проблемы выхода за пределы. */
             VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
         }
         else if(stroke_conversion->swing_handling == SWING_NO && (! fat_line || Swing_handling == SWING_NO)) {
-            /* Flattened line segments should not have sharp angle. */
-            /* Add the point to form a loop to avoid out-of-bound problem. */
+            /* Сглаженные отрезки линий не должны иметь острых углов. */
+            /* Добавьте точку, чтобы сформировать цикл, чтобы избежать проблемы выхода за пределы. */
             VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
         }
         else {
             if(stroke_conversion->swing_handling == SWING_NO) {
                 vg_lite_path_point_ptr prev_point = stroke_conversion->left_point;
 
-                /* Start swing handling. */
+                /* Начать обработку качелей. */
                 stroke_conversion->swing_handling = Swing_handling;
                 stroke_conversion->swing_ccw = 1;
                 stroke_conversion->swing_start = Point;
                 stroke_conversion->swing_centlen = 0.0f;
                 stroke_conversion->swing_count = 0;
 
-                /* Save stroking path delta. */
+                /* Сохраните дельту пути обводки. */
                 stroke_conversion->swing_deltax = X2 - prev_point->x;
                 stroke_conversion->swing_deltay = Y2 - prev_point->y;
 
-                /* Add extra center point for swing out pie area. */
+                /* Добавьте дополнительную центральную точку для поворотной области круга. */
                 /* VIV: [todo] Should adjust prev_point, instead of adding new point? */
                 VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, Point->x, Point->y));
 
-                /* Add extra start stroke point for swing out pie area. */
+                /* Добавьте дополнительную начальную точку для поворотной области круговой диаграммы. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, prev_point->x, prev_point->y));
 
                 stroke_conversion->swing_stroke = stroke_conversion->left_point;
             }
 
-            /* Add curve. */
-            /* Note that the curve will be reversed, so the direction is CW. */
-            /* Then, left side is in reversed order, so the direction is CCW. */
+            /* Добавьте кривую. */
+            /* Обратите внимание, что кривая будет перевернута, поэтому направление будет CW. */
+            /* Затем левая сторона идет в обратном порядке, поэтому направление CCW. */
             VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
             stroke_conversion->left_point->curve_type = CURVE_ARC_SCCW;
             stroke_conversion->left_point->tangentX = Point->x;
@@ -2819,11 +2819,11 @@ _process_line_joint(
         switch(join_style) {
             case VG_LITE_JOIN_ROUND:
                 if(cos_theta > FLOAT_MIN_ARC_ANGLE_COS) {
-                    /* Add a point. */
+                    /* Добавьте точку. */
                     VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
                 }
                 else {
-                    /* Add curve. */
+                    /* Добавьте кривую. */
                     VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
                     stroke_conversion->right_point->curve_type = CURVE_ARC_SCCW;
                     stroke_conversion->right_point->tangentX = Point->x;
@@ -2832,11 +2832,11 @@ _process_line_joint(
                 break;
             case VG_LITE_JOIN_MITER:
                 if(ratio <= stroke_conversion->miter_square) {
-                    /* Adjust lastRightStrokePoint to the outer intersection point. */
+                    /* Настройте LastRightStrokePoint на внешнюю точку пересечения. */
                     _adjust_joint_point(Point, stroke_conversion->right_point, X1, Y1, ratio);
                     break;
                 }
-            /* Else use Bevel join style. */
+            /* В противном случае используйте стиль соединения Bevel. */
             case VG_LITE_JOIN_BEVEL:
                 VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
                 break;
@@ -2844,74 +2844,74 @@ _process_line_joint(
     }
     else {
         if(stroke_conversion->swing_handling != SWING_NO) {
-            vg_lite_path_point_ptr prev_point = stroke_conversion->right_point->prev;  /* Skip the line segment movement. */
+            vg_lite_path_point_ptr prev_point = stroke_conversion->right_point->prev;  /* Пропустить движение сегмента линии. */
             vg_lite_float_t deltaX = X1 - prev_point->x;
             vg_lite_float_t deltaY = Y1 - prev_point->y;
             if(_is_angle_span_acute(stroke_conversion->swing_deltax,
                                     stroke_conversion->swing_deltay,
                                     deltaX, deltaY)) {
-                /* Continue swinging. */
+                /* Продолжайте качаться. */
                 stroke_conversion->swing_deltax = deltaX;
                 stroke_conversion->swing_deltay = deltaY;
             }
             else {
-                /* Swing to the max. */
-                /* Draw the swing area (pie area). */
+                /* Качайтесь на максимум. */
+                /* Нарисуйте зону качелей (площадь круга). */
                 VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, Point->prev, 1));
             }
         }
 
-        /* Check if the miter length is too long for inner intersection. */
+        /* Проверьте, не слишком ли велика длина среза для внутреннего пересечения. */
         if(stroke_conversion->swing_handling == SWING_NO
            && ! handle_short_line
            && min_length_square <= Length * Length
            && min_length_square <= prev_length * prev_length) {
-            /* Adjust lastRightStrokePoint to the intersection point. */
+            /* Настройте LastRightStrokePoint на точку пересечения. */
             _adjust_joint_point(Point, stroke_conversion->right_point, X1, Y1, ratio);
         }
         else if(stroke_conversion->swing_handling == SWING_NO && Point->flatten_flag == vgcFLATTEN_NO) {
-            /* Add the point to avoid incorrect sharp angle. */
+            /* Добавьте точку, чтобы избежать неправильного острого угла. */
             VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, Point->x, Point->y));
-            /* Add the point to form a loop to avoid out-of-bound problem. */
+            /* Добавьте точку, чтобы сформировать цикл, чтобы избежать проблемы выхода за пределы. */
             VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
         }
         else if(stroke_conversion->swing_handling == SWING_NO && (! fat_line || Swing_handling == SWING_NO)) {
-            /* Flattened line segments should not have sharp angle. */
-            /* Add the point to form a loop to avoid out-of-bound problem. */
+            /* Сглаженные отрезки линий не должны иметь острых углов. */
+            /* Добавьте точку, чтобы сформировать цикл, чтобы избежать проблемы выхода за пределы. */
             VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
         }
         else {
             if(stroke_conversion->swing_handling == SWING_NO) {
                 vg_lite_path_point_ptr prev_point = stroke_conversion->right_point;
 
-                /* Start swing handling. */
+                /* Начать обработку качелей. */
                 stroke_conversion->swing_handling = Swing_handling;
                 stroke_conversion->swing_ccw = 0;
                 stroke_conversion->swing_start = Point;
                 stroke_conversion->swing_centlen = 0.0f;
                 stroke_conversion->swing_count = 0;
 
-                /* Save stroking path delta. */
+                /* Сохраните дельту пути обводки. */
                 stroke_conversion->swing_deltax = X1 - prev_point->x;
                 stroke_conversion->swing_deltay = Y1 - prev_point->y;
 
-                /* Add extra center point for swing out pie area. */
+                /* Добавьте дополнительную центральную точку для поворотной области круга. */
                 /* VIV: [todo] Should adjust prev_point, instead of adding new point? */
                 VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, Point->x, Point->y));
 
-                /* Add extra start stroke point for swing out pie area. */
+                /* Добавьте дополнительную начальную точку для поворотной области круговой диаграммы. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, prev_point->x, prev_point->y));
 
                 stroke_conversion->swing_stroke = stroke_conversion->right_point;
             }
 
             if(cos_theta > FLOAT_MIN_ARC_ANGLE_COS) {
-                /* Add a point. */
+                /* Добавьте точку. */
                 VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
             }
             else {
-                /* Add curve. */
-                /* Note that the curve will be reversed, so the direction is CCW. */
+                /* Добавьте кривую. */
+                /* Обратите внимание, что кривая будет перевернута, поэтому направление будет CCW. */
                 stroke_conversion->right_point->curve_type = CURVE_ARC_SCCW;
                 stroke_conversion->right_point->tangentX = Point->x;
                 stroke_conversion->right_point->tangentY = Point->y;
@@ -2923,11 +2923,11 @@ _process_line_joint(
         switch(join_style) {
             case VG_LITE_JOIN_ROUND:
                 if(cos_theta > FLOAT_MIN_ARC_ANGLE_COS) {
-                    /* Add a point. */
+                    /* Добавьте точку. */
                     VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
                 }
                 else {
-                    /* Add curve. */
+                    /* Добавьте кривую. */
                     stroke_conversion->left_point->curve_type = CURVE_ARC_SCCW;
                     stroke_conversion->left_point->tangentX = Point->x;
                     stroke_conversion->left_point->tangentY = Point->y;
@@ -2936,11 +2936,11 @@ _process_line_joint(
                 break;
             case VG_LITE_JOIN_MITER:
                 if(ratio <= stroke_conversion->miter_square) {
-                    /* Adjust leftStrokePoint to the outer intersection point. */
+                    /* Настройте leftStrokePoint на внешнюю точку пересечения. */
                     _adjust_joint_point(Point, stroke_conversion->left_point, X2, Y2, ratio);
                     break;
                 }
-            /* Else use Bevel join style. */
+            /* В противном случае используйте стиль соединения Bevel. */
             case VG_LITE_JOIN_BEVEL:
                 VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
                 break;
@@ -2955,14 +2955,14 @@ endCheck:
         if(Point->flatten_flag == vgcFLATTEN_END ||
            (stroke_conversion->swing_handling == SWING_OUT &&
             stroke_conversion->swing_length > half_width)) {
-            /* Draw the swing area (pie area). */
+            /* Нарисуйте зону качелей (площадь круга). */
             VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, Point, 0));
         }
         else {
-            /* Check if center line will move too far. */
+            /* Проверьте, не сдвинется ли центральная линия слишком далеко. */
             stroke_conversion->swing_centlen += Point->length;
             if(stroke_conversion->swing_centlen > FLOAT_SWING_CENTER_RANGE) {
-                /* Draw the swing area (pie area). */
+                /* Нарисуйте зону качелей (площадь круга). */
                 VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, Point, 0));
             }
         }
@@ -2987,7 +2987,7 @@ _close_stroke_sub_path(
     if(!stroke_conversion)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Handle line joint style for the first/last point in closed path. */
+    /* Обработка стиля соединения линий для первой/последней точки замкнутого пути. */
     VG_LITE_ERROR_HANDLER(_process_line_joint(
                               stroke_conversion, Point,
                               Length, prev_length, Swing_handling,
@@ -3002,17 +3002,17 @@ _close_stroke_sub_path(
         stroke_conversion->left_point->y = last_stroke_point->y;
     }
 
-    /* Adjust the two end ponts of the first point. */
+    /* Отрегулируйте две концевые точки первой точки. */
     first_stroke_point->x = stroke_conversion->right_point->x;
     first_stroke_point->y = stroke_conversion->right_point->y;
     last_stroke_point->x = stroke_conversion->left_point->x;
     last_stroke_point->y = stroke_conversion->left_point->y;
 
-    /* Concatnate right and left point lists. */
+    /* Объедините списки правых и левых точек. */
     stroke_conversion->right_point->next = stroke_conversion->left_point;
     stroke_conversion->left_point->prev = stroke_conversion->right_point;
 
-    /*gcmERROR_RETURN(_CheckStrokeSubPath(stroke_conversion->lastStrokeSubPath));*/
+    /*gcmERROR_RETURN (_CheckStrokeSubPath( stroke_conversion ->lastStrokeSubPath));*/
 
 ErrorHandler:
     return error;
@@ -3031,17 +3031,17 @@ static vg_lite_error_t _end_stroke_sub_path(
     if(!stroke_conversion)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Add points for end of line. */
+    /* Добавьте точки для конца строки. */
     VG_LITE_RETURN_ERROR(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X + Dx, Y + Dy));
     VG_LITE_RETURN_ERROR(_add_point_to_left_point_list_head(stroke_conversion, X - Dx, Y - Dy));
 
-    /* Add end cap if the subPath is not closed. */
+    /* Добавьте заглушку, если подпуть не закрыт. */
     switch(stroke_conversion->cap_style) {
         case VG_LITE_CAP_BUTT:
-            /* No adjustment needed. */
+            /* Никакой регулировки не требуется. */
             break;
         case VG_LITE_CAP_ROUND:
-            /* Add curve. */
+            /* Добавьте кривую. */
             stroke_conversion->left_point->curve_type = CURVE_ARC_SCCW_HALF;
             stroke_conversion->left_point->tangentX = X;
             stroke_conversion->left_point->tangentY = Y;
@@ -3054,11 +3054,11 @@ static vg_lite_error_t _end_stroke_sub_path(
             break;
     }
 
-    /* Concatnate right and left point lists. */
+    /* Объедините списки правых и левых точек. */
     stroke_conversion->right_point->next = stroke_conversion->left_point;
     stroke_conversion->left_point->prev = stroke_conversion->right_point;
 
-    /*gcmERROR_RETURN(_CheckStrokeSubPath(stroke_conversion->lastStrokeSubPath));*/
+    /*gcmERROR_RETURN (_CheckStrokeSubPath( stroke_conversion ->lastStrokeSubPath));*/
     return error;
 }
 
@@ -3096,7 +3096,7 @@ _create_stroke_path(
     uint32_t dash_index;
     uint8_t dashing;
     uint8_t add_end_cap;
-    uint8_t need_to_handle_swing = 1 /* (stroke_conversion->strokeCapStyle == gcvCAP_BUTT) */;
+    uint8_t need_to_handle_swing = 1 /* ( stroke_conversion ->strokeCapStyle == gcvCAP_BUTT ) */;
     vg_lite_uint8_t dash_phase_reset;
 
     vg_lite_path_point_ptr first_right_point = NULL;
@@ -3121,7 +3121,7 @@ _create_stroke_path(
     if(need_to_handle_swing) {
         uint8_t reallyneed_to_handle_swing = 0;
 
-        /* Calculate the total length. */
+        /* Рассчитайте общую длину. */
         for(point = stroke_conversion->path_points; point; point = point->next) {
             total_length += point->length;
 
@@ -3144,22 +3144,22 @@ _create_stroke_path(
     next_point = point->next;
     if(next_point == NULL) {
         if(!dashing || ((dash_index & 0x1) == 0)) {
-            /* Single point (zero-length) subpath. */
-            /* Note that one-MOVE_TO subpaths are removed during parsing. */
+            /* Одноточечный подпуть (нулевой длины). */
+            /* Обратите внимание, что подпути one-MOVE_TO удаляются во время анализа. */
             VG_LITE_ERROR_HANDLER(_add_zero_length_stroke_sub_path(stroke_conversion, &stroke_sub_path));
         }
         goto ErrorHandler;
     }
 
-    /* Adjust closed status for dashing. */
+    /* Отрегулируйте закрытый статус для рывка. */
     if(dashing && stroke_conversion->closed && ((dash_index & 0x1) == 1)) {
         stroke_conversion->closed = VGL_FALSE;
     }
 
-    /* Set add_end_cap. */
+    /* Установите add_end_cap. */
     add_end_cap = dashing ? 1 : (stroke_conversion->closed ? 0 : 1);
 
-    /* Process first line. */
+    /* Обработка первой линии. */
     first_length = point->length;
     ux = point->tangentX;
     uy = point->tangentY;
@@ -3172,7 +3172,7 @@ _create_stroke_path(
     if(dashing) {
         vg_lite_float_t delta_length;
 
-        /* Draw dashes. */
+        /* Рисуйте черточки. */
         x = point->x;
         y = point->y;
         do {
@@ -3197,7 +3197,7 @@ _create_stroke_path(
 
             delta_length = first_length - dash_length;
             if(delta_length >= FLOAT_EPSILON) {
-                /* Move (x, y) forward along the line by dash_length. */
+                /* Переместить (x, y) вперед по линии на dash_length. */
                 x += ux * dash_length;
                 y += uy * dash_length;
 
@@ -3247,12 +3247,12 @@ _create_stroke_path(
         add_end_cap = 1;
     }
 
-    /* Process the rest of lines. */
+    /* Обработайте остальные строки. */
     prev_length = first_length;
     for(point = next_point, next_point = point->next; next_point;
         point = next_point, next_point = point->next) {
         if(!dashing || ((dash_index & 0x1) == 0 && drawing)) {
-            /* Add points for end of line for line join process with next line. */
+            /* Добавьте точки для конца строки для процесса соединения линии со следующей линией. */
             VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion,
                                                                              point->x + dx, point->y + dy));
             VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion,
@@ -3279,7 +3279,7 @@ _create_stroke_path(
         }
 
         if(!dashing) {
-            /* Handle line joint style. */
+            /* Ручка линии совместного стиля. */
             VG_LITE_ERROR_HANDLER(_process_line_joint(
                                       stroke_conversion, point,
                                       length, prev_length, swing_handling,
@@ -3290,12 +3290,12 @@ _create_stroke_path(
         else {
             vg_lite_float_t delta_length;
 
-            /* Draw dashes. */
+            /* Рисуйте черточки. */
             x = point->x;
             y = point->y;
             if((dash_index & 0x1) == 0) {
                 if(drawing) {
-                    /* Handle line joint style. */
+                    /* Ручка линии совместного стиля. */
                     VG_LITE_ERROR_HANDLER(_process_line_joint(
                                               stroke_conversion, point,
                                               dash_length, prev_length, swing_handling,
@@ -3304,7 +3304,7 @@ _create_stroke_path(
                                           ));
                 }
                 else {
-                    /* Start a new sub path. */
+                    /* Начать новый подпуть. */
                     VG_LITE_ERROR_HANDLER(_start_new_stroke_sub_path(
                                               stroke_conversion,
                                               x, y,
@@ -3319,7 +3319,7 @@ _create_stroke_path(
             do {
                 delta_length = length - dash_length;
                 if(delta_length >= FLOAT_EPSILON) {
-                    /* Move (x, y) forward along the line by dash_length. */
+                    /* Переместить (x, y) вперед по линии на dash_length. */
                     x += ux * dash_length;
                     y += uy * dash_length;
 
@@ -3387,13 +3387,13 @@ _create_stroke_path(
     }
 
     if(stroke_conversion->swing_handling != SWING_NO) {
-        /* Draw the swing area (pie area). */
+        /* Нарисуйте зону качелей (площадь круга). */
         VG_LITE_ERROR_HANDLER(_draw_swing_pie_area(stroke_conversion, stroke_conversion->path_end, VGL_FALSE));
     }
 
     if(stroke_conversion->closed) {
         if(! dashing || drawing) {
-            /* Add points for end of line. */
+            /* Добавьте точки для конца строки. */
             VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion,
                                                                              point->x + dx, point->y + dy));
             VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion,
@@ -3401,7 +3401,7 @@ _create_stroke_path(
 
             if(! dashing) {
                 if(stroke_sub_path) {
-                    /* Handle line joint style for the first/last point in closed path. */
+                    /* Обработка стиля соединения линий для первой/последней точки замкнутого пути. */
                     VG_LITE_ERROR_HANDLER(_close_stroke_sub_path(
                                               stroke_conversion, point,
                                               first_length, prev_length, swing_handling,
@@ -3410,7 +3410,7 @@ _create_stroke_path(
                 }
             }
             else {
-                /* Handle line joint style for the first/last point in closed path. */
+                /* Обработка стиля соединения линий для первой/последней точки замкнутого пути. */
                 if(first_right_point && last_left_point) {
                     VG_LITE_ERROR_HANDLER(_close_stroke_sub_path(
                                               stroke_conversion, point,
@@ -3425,7 +3425,7 @@ _create_stroke_path(
             }
         }
         else if(stroke_conversion->cap_style != VG_LITE_CAP_BUTT) {
-            /* No closing join need.  Add end cap for the starting point. */
+            /* Нет необходимости в закрытии соединения.  Добавьте заглушку для начальной точки. */
 
             if(stroke_conversion->cap_style == VG_LITE_CAP_SQUARE) {
                 if(first_right_point && last_left_point) {
@@ -3444,8 +3444,8 @@ _create_stroke_path(
                 vg_lite_path_point_ptr start_point = last_stroke->point_list;
                 vg_lite_path_point_ptr extra_point;
 
-                /* Add curve. */
-                /* Add extra point to the beginning with end point's coordinates. */
+                /* Добавьте кривую. */
+                /* Добавьте дополнительную точку в начало с координатами конечной точки. */
                 extra_point = (vg_lite_path_point_ptr)vg_lite_os_malloc(sizeof(*extra_point));
                 if(!extra_point)
                     return VG_LITE_OUT_OF_RESOURCES;
@@ -3464,7 +3464,7 @@ _create_stroke_path(
     }
     else if(! dashing ||
             (((dash_index & 0x1) == 0) && (dash_length < stroke_conversion->dash_pattern[dash_index]))) {
-        /* Add end cap if the subPath is not closed. */
+        /* Добавьте заглушку, если подпуть не закрыт. */
         VG_LITE_ERROR_HANDLER(_end_stroke_sub_path(
                                   stroke_conversion,
                                   point->x, point->y,
@@ -3475,7 +3475,7 @@ _create_stroke_path(
     }
 
     if(!dash_phase_reset) {
-        /* Update dash index and length for next subpath. */
+        /* Обновить индекс и длину тире для следующего подпути. */
         if(dashing) {
             if(((dash_index & 0x1) == 1) &&
                (stroke_conversion->dash_pattern[dash_index] - dash_length < FLOAT_EPSILON)) {
@@ -3605,27 +3605,27 @@ static vg_lite_error_t _copy_stroke_path(
             if(point->curve_type == CURVE_LINE) {
                 if(point->x == prev_point->x && point->y == prev_point->y) {
                     path->stroke_size -= _commandSize_float[VLC_OP_LINE];
-                    /* Skip zero-length lines. */
+                    /* Пропускать строки нулевой длины. */
                     continue;
                 }
 
-                /* Add new command. */
+                /* Добавить новую команду. */
                 cpath = (char *)pfloat;
                 *cpath = VLC_OP_LINE;
                 pfloat++;
 
-                /* Set the coordinates. */
+                /* Установите координаты. */
                 *pfloat++ = point->x;
                 *pfloat++ = point->y;
                 real_size += _commandSize_float[VLC_OP_LINE];
             }
             else if(point->curve_type == CURVE_QUAD_CONTROL) {
-                /* Add new command. */
+                /* Добавить новую команду. */
                 cpath = (char *)pfloat;
                 *cpath = VLC_OP_QUAD;
                 pfloat++;
 
-                /* Set the coordinates. */
+                /* Установите координаты. */
                 prev_point = point, point = point->next;
                 *pfloat++ = prev_point->x;
                 *pfloat++ = prev_point->y;
@@ -3639,7 +3639,7 @@ static vg_lite_error_t _copy_stroke_path(
                 vg_lite_path_point_ptr p2;
 
                 if(point->curve_type == CURVE_ARC_SCCW) {
-                    /* Convert an arc to Bezier curves. */
+                    /* Преобразование дуги в кривые Безье. */
                     VG_LITE_ERROR_HANDLER(_convert_circle_arc(stroke_conversion, half_width,
                                                               point->tangentX, point->tangentY,
                                                               prev_point->x, prev_point->y,
@@ -3647,7 +3647,7 @@ static vg_lite_error_t _copy_stroke_path(
                                                               0, &point_list));
                 }
                 else {
-                    /* Convert a half circle to Bezier curves. */
+                    /* Преобразуйте полукруг в кривые Безье. */
                     VG_LITE_ERROR_HANDLER(_convert_circle_arc(stroke_conversion, half_width,
                                                               point->tangentX, point->tangentY,
                                                               prev_point->x, prev_point->y,
@@ -3658,12 +3658,12 @@ static vg_lite_error_t _copy_stroke_path(
 
                 if(point_list) {
                     for(p = point_list; p; p = nextP) {
-                        /* Add new command. */
+                        /* Добавить новую команду. */
                         cpath = (char *)pfloat;
                         *cpath = VLC_OP_QUAD;
                         pfloat++;
 
-                        /* Set the coordinates. */
+                        /* Установите координаты. */
                         p2 = p->next;
                         nextP = p2->next;
 
@@ -3677,13 +3677,13 @@ static vg_lite_error_t _copy_stroke_path(
                     }
                 }
                 else {
-                    /* Handle special case of huge scaling. */
-                    /* Add new command. */
+                    /* Обработка особого случая огромного масштабирования. */
+                    /* Добавить новую команду. */
                     cpath = (char *)pfloat;
                     *cpath = VLC_OP_LINE;
                     pfloat++;
 
-                    /* Set the coordinates. */
+                    /* Установите координаты. */
                     *pfloat++ = point->x;
                     *pfloat++ = point->y;
                     real_size += _commandSize_float[VLC_OP_LINE];
@@ -3691,7 +3691,7 @@ static vg_lite_error_t _copy_stroke_path(
             }
         }
 
-        /* Create a CLOSE_PATH command at the end. */
+        /* В конце создайте команду CLOSE_PATH. */
         cpath = (char *)pfloat;
         if(sub_path->next)
             *cpath = VLC_OP_CLOSE;
@@ -3708,11 +3708,11 @@ static vg_lite_error_t _copy_stroke_path(
     }
 
 #if (CHIPID==0x355)
-    /* Initialize command buffer postfix. */
+    /* Инициализировать постфикс командного буфера. */
     ((uint32_t *)buffer.memory)[(bytes >> 2) - 2] = VG_LITE_RETURN();
     ((uint32_t *)buffer.memory)[(bytes >> 2) - 1] = 0;
 
-    /* Mark stroke as uploaded. */
+    /* Отметить штрих как загруженный. */
     path->stroke->uploaded.handle = buffer.handle;
     path->stroke->uploaded.address = buffer.address;
     path->stroke->uploaded.memory = buffer.memory;
@@ -3748,7 +3748,7 @@ static vg_lite_error_t _initialize_stroke_dash_parameters(
 
     length = stroke_conversion->dash_phase;
 
-    /* The last pattern is ignored if the number is odd. */
+    /* Последний шаблон игнорируется, если число нечетное. */
     if(count & 0x1) count--;
 
     pattern = (vg_lite_float_t *)vg_lite_os_malloc(count * sizeof(vg_lite_float_t));
@@ -3842,10 +3842,10 @@ vg_lite_error_t vg_lite_update_stroke(
     }
 #endif
 
-    /* Free the existing stroke path. */
+    /* Освободите существующий путь штриха. */
     if(path->stroke_path) {
         vg_lite_os_free(path->stroke_path);
-        /* Reset the stroke. */
+        /* Сбросьте ход. */
         path->stroke_path = NULL;
     }
 
@@ -3876,7 +3876,7 @@ vg_lite_error_t vg_lite_update_stroke(
 
     VG_LITE_RETURN_ERROR(_copy_stroke_path(stroke_conversion, path));
 
-    /* add VLC_OP_END if stroke_path is empty. */
+    /* добавьте VLC_OP_END, если stroke_path пуст. */
     if(path->stroke_size == 0) {
         path->stroke_path = vg_lite_os_malloc(_commandSize_float[VLC_OP_END]);
         if(!path->stroke_path)
@@ -3967,7 +3967,7 @@ vg_lite_error_t vg_lite_set_stroke(
         path->stroke_size = 0;
     }
 
-    /* Clamp dash pattern and phase. */
+    /* Зафиксируйте рисунок штриха и фазу. */
     pattern_count &= 0xFFFFFFFE;
     float * dash_pattern_copy = NULL;
     if(pattern_count > 0) {
@@ -4090,7 +4090,7 @@ vg_lite_error_t _convert_hline(
     vg_lite_float_t * pfloat;
 
     /*******************************************************************
-    ** Converting.
+    ** Преобразование.
     */
     if(path_data == NULL || *path_data == NULL || offset == NULL || coords == NULL)
         return VG_LITE_INVALID_ARGUMENT;
@@ -4104,12 +4104,12 @@ vg_lite_error_t _convert_hline(
         endY = EndY;
     }
 
-    /* Determine the segment command. */
+    /* Определите команду сегмента. */
     segmentCommand = Relative
                      ? VLC_OP_LINE_REL
                      : VLC_OP_LINE;
 
-    /* Determine the size of the buffer required. */
+    /* Определите размер требуемого буфера. */
     bufferSize = (1 + 2) * SIZEOF(vg_lite_float_t) * segs;
 
     linePath = (char *)vg_lite_os_malloc(*offset + bufferSize + last_size);
@@ -4126,7 +4126,7 @@ vg_lite_error_t _convert_hline(
     pfloat = (vg_lite_float_t *)pchar;
 
     while(segs-- > 0) {
-        /* Adjust relative coordinates. */
+        /* Отрегулируйте относительные координаты. */
         pchar = (char *)pfloat;
         *pchar = segmentCommand;
         pfloat++;
@@ -4140,7 +4140,7 @@ vg_lite_error_t _convert_hline(
         }
         *offset += (1 + 2) * SIZEOF(vg_lite_float_t);
     }
-    /* Update the control coordinates. */
+    /* Обновите координаты управления. */
     coords->lastX = endX;
     coords->lastY = endY;
     coords->controlX = endX;
@@ -4166,7 +4166,7 @@ vg_lite_error_t _convert_vline(
     vg_lite_float_t * pfloat;
 
     /*******************************************************************
-    ** Converting.
+    ** Преобразование.
     */
     if(path_data == NULL || *path_data == NULL || offset == NULL || coords == NULL)
         return VG_LITE_INVALID_ARGUMENT;
@@ -4180,12 +4180,12 @@ vg_lite_error_t _convert_vline(
         endY = EndY;
     }
 
-    /* Determine the segment command. */
+    /* Определите команду сегмента. */
     segmentCommand = Relative
                      ? VLC_OP_LINE_REL
                      : VLC_OP_LINE;
 
-    /* Determine the size of the buffer required. */
+    /* Определите размер требуемого буфера. */
     bufferSize = (1 + 2) * SIZEOF(vg_lite_float_t) * segs;
 
     linePath = (char *)vg_lite_os_malloc(*offset + bufferSize + last_size);
@@ -4202,7 +4202,7 @@ vg_lite_error_t _convert_vline(
     pfloat = (vg_lite_float_t *)pchar;
 
     while(segs-- > 0) {
-        /* Adjust relative coordinates. */
+        /* Отрегулируйте относительные координаты. */
         pchar = (char *)pfloat;
         *pchar = segmentCommand;
         pfloat++;
@@ -4216,7 +4216,7 @@ vg_lite_error_t _convert_vline(
         }
         *offset += (1 + 2) * SIZEOF(vg_lite_float_t);
     }
-    /* Update the control coordinates. */
+    /* Обновите координаты управления. */
     coords->lastX = endX;
     coords->lastY = endY;
     coords->controlX = endX;
@@ -4245,7 +4245,7 @@ vg_lite_error_t _convert_scubic(
     vg_lite_float_t controlX;
     vg_lite_float_t controlY;
     /*******************************************************************
-    ** Converting.
+    ** Преобразование.
     */
     if(path_data == NULL || *path_data == NULL || offset == NULL || coords == NULL)
         return VG_LITE_INVALID_ARGUMENT;
@@ -4263,12 +4263,12 @@ vg_lite_error_t _convert_scubic(
         controlY = ControlY;
     }
 
-    /* Determine the segment command. */
+    /* Определите команду сегмента. */
     segmentCommand = Relative
                      ? VLC_OP_CUBIC_REL
                      : VLC_OP_CUBIC;
 
-    /* Determine the size of the buffer required. */
+    /* Определите размер требуемого буфера. */
     bufferSize = (1 + 6) * SIZEOF(vg_lite_float_t) * segs;
 
     cubicPath = (char *)vg_lite_os_malloc(*offset + bufferSize + last_size);
@@ -4285,12 +4285,12 @@ vg_lite_error_t _convert_scubic(
     pfloat = (vg_lite_float_t *)pchar;
 
     while(segs-- > 0) {
-        /* Adjust relative coordinates. */
+        /* Отрегулируйте относительные координаты. */
         pchar = (char *)pfloat;
         *pchar = segmentCommand;
         pfloat++;
         if(Relative) {
-            /* Calculate the first control point and convert to relative coordinates. */
+            /* Рассчитайте первую контрольную точку и преобразуйте ее в относительные координаты. */
             *pfloat++ = (2 * coords->lastX - coords->controlX) - coords->lastX;
             *pfloat++ = (2 * coords->lastY - coords->controlY) - coords->lastY;
             *pfloat++ = ControlX;
@@ -4309,7 +4309,7 @@ vg_lite_error_t _convert_scubic(
             *offset += (1 + 6) * SIZEOF(vg_lite_float_t);
         }
     }
-    /* Update the control coordinates. */
+    /* Обновите координаты управления. */
     coords->lastX = endX;
     coords->lastY = endY;
     coords->controlX = controlX;
@@ -4339,7 +4339,7 @@ vg_lite_error_t _convert_squad(
     vg_lite_float_t controlX;
     vg_lite_float_t controlY;
     /*******************************************************************
-    ** Converting.
+    ** Преобразование.
     */
     if(path_data == NULL || *path_data == NULL || offset == NULL || coords == NULL)
         return VG_LITE_INVALID_ARGUMENT;
@@ -4353,12 +4353,12 @@ vg_lite_error_t _convert_squad(
         endY = EndY;
     }
 
-    /* Determine the segment command. */
+    /* Определите команду сегмента. */
     segmentCommand = Relative
                      ? VLC_OP_QUAD_REL
                      : VLC_OP_QUAD;
 
-    /* Determine the size of the buffer required. */
+    /* Определите размер требуемого буфера. */
     bufferSize = (1 + 4) * SIZEOF(vg_lite_float_t) * segs;
 
     quadPath = (char *)vg_lite_os_malloc(*offset + bufferSize + last_size);
@@ -4375,7 +4375,7 @@ vg_lite_error_t _convert_squad(
     pfloat = (vg_lite_float_t *)pchar;
 
     while(segs-- > 0) {
-        /* Adjust relative coordinates. */
+        /* Отрегулируйте относительные координаты. */
         pchar = (char *)pfloat;
         *pchar = segmentCommand;
         pfloat++;
@@ -4396,7 +4396,7 @@ vg_lite_error_t _convert_squad(
             *offset += (1 + 4) * SIZEOF(vg_lite_float_t);
         }
     }
-    /* Update the control coordinates. */
+    /* Обновите координаты управления. */
     coords->startX = coords->lastX;
     coords->startY = coords->lastY;
     coords->lastX = endX;
@@ -4409,34 +4409,34 @@ vg_lite_error_t _convert_squad(
 
 /*!
     @discussion
-    Convert arc to multi-segment bezier curve.
-    @param HorRadius
-    Major axis radius.
-    @param VerRadius
-    minor axis radius.
-    @param RotAngle
-    Rotation angle.
+    Преобразование дуги в многосегментную кривую Безье.
+    @param Горрадиус
+    Радиус главной оси.
+    @param ВерРадиус
+    радиус малой оси.
+    @param РотАнгле
+    Угол поворота.
     @param EndX
-    End coordinate x.
+    Конечная координата х.
     @param EndX
-    End coordinate y.
-    @param CounterClockwise
-    If this is 0,anticlockwise rotation,if this is 1,clockwise rotation.
-    @param Large
-    1 means big arc,0 means little arc.
-    @param Relative
-    1 means absolute coordinates,0 means relative coordinates.
-    @param coords
-    Including the start point coordinates of the path,the control point of the last segment of the path,
-    and the end point of the last segment of the path.
+    Конечная координата y.
+    @param Против часовой стрелки
+    Если это 0, вращение против часовой стрелки, если это 1, вращение по часовой стрелке.
+    @param Большой
+    1 означает большую дугу, 0 означает маленькую дугу.
+    @param Относительный
+    1 означает абсолютные координаты, 0 означает относительные координаты.
+    Координаты @param
+    Включая координаты начальной точки пути, контрольную точку последнего сегмента пути,
+    и конечная точка последнего сегмента пути.
     @param path_data
-    Path data usr for internal conversion.
-    @param offset
-    The offset of path_data.
+    Данные пути используются для внутреннего преобразования.
+    Смещение @param
+    Смещение path_data .
     @param last_size
-    The remain unconverted size of the original path data.
+    Оставшийся непреобразованный размер исходных данных пути.
     @result
-    Error code. VG_LITE_INVALID_ARGUMENTS to indicate the parameters are wrong.
+    Код ошибки.  VG_LITE_INVALID_ARGUMENTS, чтобы указать, что параметры неверны.
 */
 vg_lite_error_t _convert_arc(
     vg_lite_float_t HorRadius,
@@ -4475,7 +4475,7 @@ vg_lite_error_t _convert_arc(
     vg_lite_float_t  * pfloat;
 
     /*******************************************************************
-    ** Converting.
+    ** Преобразование.
     */
     if(path_data == NULL || *path_data == NULL || offset == NULL || coords == NULL)
         return VG_LITE_INVALID_ARGUMENT;
@@ -4549,7 +4549,7 @@ vg_lite_error_t _convert_arc(
     thetaSpan = FMODF(thetaSpan, 2 * PI);
 
     /*******************************************************************
-    ** Drawing.
+    ** Рисование.
     */
     segs  = (int32_t)(CEILF(FABSF(thetaSpan) / (45.0f / 180.0f * PI)));
 
@@ -4560,12 +4560,12 @@ vg_lite_error_t _convert_arc(
     if(FABSF(HorRadius) != 0 &&
        FABSF(VerRadius) != 0 &&
        (endX != coords->lastX || endY != coords->lastY)) {
-        /* Determine the segment command. */
+        /* Определите команду сегмента. */
         segmentCommand = Relative
                          ? VLC_OP_QUAD_REL
                          : VLC_OP_QUAD;
 
-        /* Determine the size of the buffer required. */
+        /* Определите размер требуемого буфера. */
         bufferSize = (1 + 2 * 2) * SIZEOF(vg_lite_float_t) * segs;
 
         arcPath = (char *)vg_lite_os_malloc(*offset + bufferSize + last_size);
@@ -4582,7 +4582,7 @@ vg_lite_error_t _convert_arc(
         pchar = arcPath + *offset;
         pfloat = (vg_lite_float_t *)pchar;
 
-        /* Set initial last point. */
+        /* Установите начальную последнюю точку. */
         lastX = coords->lastX;
         lastY = coords->lastY;
 
@@ -4608,12 +4608,12 @@ vg_lite_error_t _convert_arc(
             }
 
             if(segs == 0) {
-                /* Use end point directly to avoid accumulated errors. */
+                /* Используйте конечную точку напрямую, чтобы избежать накопления ошибок. */
                 anchorX = endX;
                 anchorY = endY;
             }
 
-            /* Adjust relative coordinates. */
+            /* Отрегулируйте относительные координаты. */
             if(Relative) {
                 vg_lite_float_t nextLastX = anchorX;
                 vg_lite_float_t nextLastY = anchorY;
@@ -4638,12 +4638,12 @@ vg_lite_error_t _convert_arc(
         }
     }
     else {
-        /* Determine the segment command. */
+        /* Определите команду сегмента. */
         segmentCommand = Relative
                          ? VLC_OP_LINE_REL
                          : VLC_OP_LINE;
 
-        /* Determine the size of the buffer required. */
+        /* Определите размер требуемого буфера. */
         bufferSize = (1 + 2) * SIZEOF(vg_lite_float_t);
 
         arcPath = (char *)vg_lite_os_malloc(*offset + bufferSize + last_size);
@@ -4664,7 +4664,7 @@ vg_lite_error_t _convert_arc(
         *offset += (1 + 2) * SIZEOF(vg_lite_float_t);
 
     }
-    /* Update the control coordinates. */
+    /* Обновите координаты управления. */
     coords->lastX    = endX;
     coords->lastY    = endY;
     coords->controlX = endX;
@@ -4709,7 +4709,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
     if(path == NULL || path_data == NULL)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Path data cannot end with a CLOSE op. Replace CLOSE with END for path_data */
+    /* Данные пути не могут заканчиваться операцией CLOSE. Замените CLOSE на END для path_data. */
     data_size = get_data_size(data_format);
     num = path_length / data_size;
 
@@ -4742,10 +4742,10 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
             break;
     }
 
-    /* Convert path format into float. */
+    /* Преобразовать формат пути в плавающий. */
     switch(data_format) {
         case VG_LITE_S8:
-            /* src_s8, dst_fp32 */
+            /* src_s8 , dst_fp32 */
             bytes = path_length * 4;
             path_data_fp32 = vg_lite_os_malloc(bytes);
             if(path_data_fp32 == NULL)
@@ -4770,7 +4770,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
             break;
 
         case VG_LITE_S16:
-            /* src_s16, dst_fp32 */
+            /* src_s16 , dst_fp32 */
             bytes = path_length * 2;
             path_data_fp32 = vg_lite_os_malloc(bytes);
             if(path_data_fp32 == NULL)
@@ -4795,7 +4795,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
             break;
 
         case VG_LITE_S32:
-            /* src_s32, dst_fp32 */
+            /* src_s32 , dst_fp32 */
             bytes = path_length;
             path_data_fp32 = vg_lite_os_malloc(bytes);
             if(path_data_fp32 == NULL)
@@ -4819,7 +4819,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
             break;
 
         case VG_LITE_FP32: {
-                /* src_fp32, dst_fp32 */
+                /* src_fp32 , dst_fp32 */
                 bytes = path_length;
                 path_data_fp32 = vg_lite_os_malloc(bytes);
                 if(path_data_fp32 == NULL)
@@ -4889,7 +4889,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 i += _commandSize_float[VLC_OP_END];
                 break;
             case VLC_OP_CLOSE:
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = coords.startX;
                 coords.lastY = coords.startY;
                 coords.controlX = coords.startX;
@@ -4923,7 +4923,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 moveToY = *pfloat;
                 pfloat++;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.startX = moveToX;
                 coords.startY = moveToY;
                 coords.lastX = moveToX;
@@ -4959,11 +4959,11 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 offset += _commandSize_float[VLC_OP_MOVE_REL];
                 i += _commandSize_float[VLC_OP_MOVE_REL];
 
-                /* Determine the absolute coordinates. */
+                /* Определите абсолютные координаты. */
                 moveToX += coords.lastX;
                 moveToY += coords.lastY;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.startX = moveToX;
                 coords.startY = moveToY;
                 coords.lastX = moveToX;
@@ -4977,7 +4977,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 lineToY = *pfloat;
                 pfloat++;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = lineToX;
                 coords.lastY = lineToY;
                 coords.controlX = lineToX;
@@ -5011,11 +5011,11 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 offset += _commandSize_float[VLC_OP_LINE_REL];
                 i += _commandSize_float[VLC_OP_LINE_REL];
 
-                /* Determine the absolute coordinates. */
+                /* Определите абсолютные координаты. */
                 lineToX += coords.lastX;
                 lineToY += coords.lastY;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = lineToX;
                 coords.lastY = lineToY;
                 coords.controlX = lineToX;
@@ -5031,7 +5031,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 quadToY = *pfloat;
                 pfloat++;
                 compute_quadpathbounds(path, coords.lastX, coords.lastY, controlX, controlY, quadToX, quadToY);
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = quadToX;
                 coords.lastY = quadToY;
                 coords.controlX = controlX;
@@ -5058,7 +5058,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 quadToY = *pfloat;
                 pfloat++;
                 i += _commandSize_float[VLC_OP_SQUAD];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_squad(quadToX, quadToY, VGL_FALSE, &coords, (void *)&pathdata, &offset,
                                                      path_length - i));
                 compute_quadpathbounds(path, coords.startX, coords.startY, coords.controlX, coords.controlY, quadToX, quadToY);
@@ -5069,7 +5069,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 quadToY = *pfloat;
                 pfloat++;
                 i += _commandSize_float[VLC_OP_SQUAD_REL];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_squad(quadToX, quadToY, VGL_TRUE, &coords, (void *)&pathdata, &offset, path_length - i));
                 break;
             case VLC_OP_QUAD_REL:
@@ -5097,13 +5097,13 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 offset += _commandSize_float[VLC_OP_QUAD_REL];
                 i += _commandSize_float[VLC_OP_QUAD_REL];
 
-                /* Determine the absolute coordinates. */
+                /* Определите абсолютные координаты. */
                 controlX += coords.lastX;
                 controlY += coords.lastY;
                 quadToX += coords.lastX;
                 quadToY += coords.lastY;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = quadToX;
                 coords.lastY = quadToY;
                 coords.controlX = controlX;
@@ -5123,7 +5123,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 cubicToY = *pfloat;
                 pfloat++;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = cubicToX;
                 coords.lastY = cubicToY;
                 coords.controlX = controlX2;
@@ -5181,13 +5181,13 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 offset += _commandSize_float[VLC_OP_CUBIC_REL];
                 i += _commandSize_float[VLC_OP_CUBIC_REL];
 
-                /* Determine the absolute coordinates. */
+                /* Определите абсолютные координаты. */
                 controlX2 += coords.lastX;
                 controlY2 += coords.lastY;
                 cubicToX += coords.lastX;
                 cubicToY += coords.lastY;
 
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 coords.lastX = cubicToX;
                 coords.lastY = cubicToY;
                 coords.controlX = controlX2;
@@ -5203,7 +5203,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 cubicToY = *pfloat;
                 pfloat++;
                 i += _commandSize_float[VLC_OP_SCUBIC];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_scubic(cubicToX, cubicToY, controlX1, controlY1, VGL_FALSE, &coords, (void *)&pathdata,
                                                       &offset, path_length - i));
                 break;
@@ -5217,7 +5217,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 cubicToY = *pfloat;
                 pfloat++;
                 i += _commandSize_float[VLC_OP_SCUBIC_REL];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_scubic(cubicToX, cubicToY, controlX1, controlY1, VGL_TRUE, &coords, (void *)&pathdata,
                                                       &offset, path_length - i));
                 break;
@@ -5226,7 +5226,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 pfloat++;
                 lineToY = coords.lastY;
                 i += _commandSize_float[VLC_OP_HLINE];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_hline(lineToX, lineToY, VGL_FALSE, &coords, (void *)&pathdata, &offset,
                                                      path_length - i));
                 break;
@@ -5235,7 +5235,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 pfloat++;
                 lineToY = coords.lastY;
                 i += _commandSize_float[VLC_OP_HLINE_REL];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_hline(lineToX, lineToY, VGL_TRUE, &coords, (void *)&pathdata, &offset, path_length - i));
                 break;
             case VLC_OP_VLINE:
@@ -5243,7 +5243,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 lineToY = *pfloat;
                 pfloat++;
                 i += _commandSize_float[VLC_OP_VLINE];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_vline(lineToX, lineToY, VGL_FALSE, &coords, (void *)&pathdata, &offset,
                                                      path_length - i));
                 break;
@@ -5252,7 +5252,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                 lineToY = *pfloat;
                 pfloat++;
                 i += _commandSize_float[VLC_OP_VLINE_REL];
-                /* Update the control coordinates. */
+                /* Обновите координаты управления. */
                 VG_LITE_ERROR_HANDLER(_convert_vline(lineToX, lineToY, VGL_TRUE, &coords, (void *)&pathdata, &offset, path_length - i));
                 break;
             case VLC_OP_SCCWARC:

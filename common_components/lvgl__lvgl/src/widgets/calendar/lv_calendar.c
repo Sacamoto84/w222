@@ -77,7 +77,7 @@ lv_obj_t * lv_calendar_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_calendar_set_day_names(lv_obj_t * obj, const char * day_names[])
@@ -147,8 +147,8 @@ void lv_calendar_set_month_shown(lv_obj_t * obj, uint32_t year, uint32_t month)
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_calendar_t * calendar = (lv_calendar_t *)obj;
 
-    /*Don't return if the new value is the same, as this function is also
-     *used the update the calendar e.g. when switching to Chinese mode*/
+    /*Не возвращайте значение, если новое значение такое же, поскольку эта функция также
+     *использовал обновление календаря, например. при переключении в китайский режим*/
 
     calendar->showed_date.year   = year;
     calendar->showed_date.month  = month;
@@ -161,7 +161,7 @@ void lv_calendar_set_month_shown(lv_obj_t * obj, uint32_t year, uint32_t month)
 
     uint32_t i;
 
-    /*Remove the disabled state but revert it for day names*/
+    /*Удалите отключенное состояние, но верните его для названий дней.*/
     lv_buttonmatrix_clear_button_ctrl_all(calendar->btnm, LV_BUTTONMATRIX_CTRL_DISABLED);
     for(i = 0; i < 7; i++) {
         lv_buttonmatrix_set_button_ctrl(calendar->btnm, i, LV_BUTTONMATRIX_CTRL_DISABLED);
@@ -223,15 +223,15 @@ void lv_calendar_set_month_shown(lv_obj_t * obj, uint32_t year, uint32_t month)
 
     highlight_update(obj);
 
-    /*Reset the focused button if the days changes*/
+    /*Сбросить кнопку с фокусом, если дни меняются*/
     if(lv_buttonmatrix_get_selected_button(calendar->btnm) != LV_BUTTONMATRIX_BUTTON_NONE) {
         lv_buttonmatrix_set_selected_button(calendar->btnm, day_first + 7);
     }
 
     lv_obj_invalidate(obj);
 
-    /* The children of the calendar are probably headers.
-     * Notify them to let the headers updated to the new date*/
+    /* Дочерними элементами календаря, вероятно, являются заголовки.
+     * Сообщите им, чтобы заголовки были обновлены до новой даты.*/
     uint32_t child_cnt = lv_obj_get_child_count(obj);
     for(i = 0; i < child_cnt; i++) {
         lv_obj_t * child = lv_obj_get_child(obj, i);
@@ -256,7 +256,7 @@ void lv_calendar_set_shown_month(lv_obj_t * obj, uint32_t month)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_obj_t * lv_calendar_get_btnmatrix(const lv_obj_t * obj)
@@ -335,7 +335,7 @@ static void lv_calendar_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
     uint8_t i;
     uint8_t j = 0;
     for(i = 0; i < 8 * 7; i++) {
-        /*Every 8th string is "\n"*/
+        /*Каждая восьмая строка — это «\n»*/
         if(i != 0 && (i + 1) % 8 == 0) {
             calendar->map[i] = "\n";
         }
@@ -381,7 +381,7 @@ static void draw_task_added_event_cb(lv_event_t * e)
 
     int32_t id = ((lv_draw_dsc_base_t *)draw_task->draw_dsc)->id1;
 
-    /*Day name styles*/
+    /*Стили названий дней*/
     if(id < 7) {
         if(fill_draw_dsc) fill_draw_dsc->opa = LV_OPA_TRANSP;
         if(border_draw_dsc) border_draw_dsc->opa = LV_OPA_TRANSP;
@@ -408,30 +408,30 @@ static void draw_task_added_event_cb(lv_event_t * e)
 }
 
 /**
- * Get the number of days in a month
+ * Получить количество дней в месяце
  * @param year a year
  * @param month a month. The range is basically [1..12] but [-11..0] or [13..24] is also
- *              supported to handle next/prev. year
+ *              поддерживается обработка следующего/предыдущего. год
  * @return [28..31]
  */
 static uint8_t get_month_length(int32_t year, int32_t month)
 {
     month--;
     if(month < 0) {
-        year--;             /*Already in the previous year (won't be less than -12 to skip a whole year)*/
-        month = 12 + month; /*`month` is negative, the result will be < 12*/
+        year--;             /*Уже в прошлом году (не будет меньше -12, чтобы пропустить целый год)*/
+        month = 12 + month; /*`month` отрицательный, результат будет < 12*/
     }
     if(month >= 12) {
         year++;
         month -= 12;
     }
 
-    /*month == 1 is february*/
+    /*месяц == 1 февраль*/
     return (month == 1) ? (28 + is_leap_year(year)) : 31 - month % 7 % 2;
 }
 
 /**
- * Tells whether a year is leap year or not
+ * Сообщает, является ли год високосным или нет.
  * @param year a year
  * @return 0: not leap year; 1: leap year
  */
@@ -441,7 +441,7 @@ static uint8_t is_leap_year(uint32_t year)
 }
 
 /**
- * Get the day of the week
+ * Получить день недели
  * @param year a year
  * @param month a  month [1..12]
  * @param day a day [1..32]
@@ -466,7 +466,7 @@ static void highlight_update(lv_obj_t * obj)
     lv_calendar_t * calendar = (lv_calendar_t *)obj;
     uint32_t i;
 
-    /*Clear all kind of selection*/
+    /*Очистить все виды выбора*/
     lv_buttonmatrix_clear_button_ctrl_all(calendar->btnm, LV_CALENDAR_CTRL_TODAY | LV_CALENDAR_CTRL_HIGHLIGHT);
 
     uint8_t day_first = get_day_of_week(calendar->showed_date.year, calendar->showed_date.month, 1);

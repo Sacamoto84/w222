@@ -32,9 +32,9 @@ extern "C" {
  **********************/
 
 /**
- * Create a display that flushes to an OpenGL texture
- * If you already have a texture and want to bind it to the display,
- *    see `lv_opengles_texture_create_from_texture_id`
+ * Создайте дисплей, который сливается с текстурой OpenGL.
+ * Если у вас уже есть текстура и вы хотите привязать ее к дисплею,
+ *    см. `lv_opengles_texture_create_from_texture_id`
  * @param w    width in pixels of the texture
  * @param h    height in pixels of the texture
  * @return     the new display or NULL on failure
@@ -42,9 +42,9 @@ extern "C" {
 lv_display_t * lv_opengles_texture_create(int32_t w, int32_t h);
 
 /**
- * Create a display that flushes to the provided OpenGL texture
- * If you don't have a texture to bind it to the display,
- *    see `lv_opengles_texture_create`
+ * Создайте отображение, которое будет соответствовать предоставленной текстуре OpenGL.
+ * Если у вас нет текстуры для привязки ее к дисплею,
+ *    см. `lv_opengles_texture_create`
  * @param w         width in pixels of the texture
  * @param h         height in pixels of the texture
  * @param texture_id    the texture LVGL will render to
@@ -53,14 +53,14 @@ lv_display_t * lv_opengles_texture_create(int32_t w, int32_t h);
 lv_display_t * lv_opengles_texture_create_from_texture_id(int32_t w, int32_t h, unsigned int texture_id);
 
 /**
- * Get the OpenGL texture ID of the display
+ * Получите текстуру OpenGL ID дисплея.
  * @param disp    display
  * @return        texture ID
  */
 unsigned int lv_opengles_texture_get_texture_id(lv_display_t * disp);
 
 /**
- * Get the display of an OpenGL texture if it is associated with one
+ * Получить отображение текстуры OpenGL, если она связана с ней.
  * @param texture_id   OpenGL texture ID
  * @return             display or `NULL` if there no display with that texture ID
  */
@@ -73,7 +73,7 @@ lv_display_t * lv_opengles_texture_get_from_texture_id(unsigned int texture_id);
 #endif /* LV_USE_OPENGLES */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OPENGLES_TEXTURE_H*/

@@ -267,7 +267,7 @@ lv_draw_buf_t * lv_draw_buf_create_ex(const lv_draw_buf_handlers_t * handlers, u
     uint32_t size = _calculate_draw_buf_size(w, h, cf, stride);
 
     void * buf = draw_buf_malloc(handlers, size, cf);
-    /*Do not assert here as LVGL or the app might just want to try creating a draw_buf*/
+    /*Не утверждайте здесь, так же, как LVGL, иначе приложение может просто создать draw_buf.*/
     if(buf == NULL) {
         LV_LOG_WARN("No memory: %"LV_PRIu32"x%"LV_PRIu32", cf: %d, stride: %"LV_PRIu32", %"LV_PRIu32"Byte, ",
                     w, h, cf, stride, size);
@@ -307,10 +307,10 @@ lv_draw_buf_t * lv_draw_buf_dup_ex(const lv_draw_buf_handlers_t * handlers, cons
 
     lv_draw_buf_set_flag(new_buf, draw_buf->header.flags | LV_IMAGE_FLAGS_MODIFIABLE | LV_IMAGE_FLAGS_ALLOCATED);
 
-    /*Choose the smaller size to copy*/
+    /*Выберите меньший размер для копирования*/
     uint32_t size = LV_MIN(draw_buf->data_size, new_buf->data_size);
 
-    /*Copy image data*/
+    /*Копирование данных изображения*/
     lv_memcpy(new_buf->data, draw_buf->data, size);
     LV_PROFILER_DRAW_END;
     return new_buf;
@@ -322,7 +322,7 @@ lv_draw_buf_t * lv_draw_buf_reshape(lv_draw_buf_t * draw_buf, lv_color_format_t 
     if(draw_buf == NULL) return NULL;
     LV_PROFILER_DRAW_BEGIN;
 
-    /*If color format is unknown, keep using the original color format.*/
+    /*Если формат цвета неизвестен, продолжайте использовать исходный формат цвета.*/
     if(cf == LV_COLOR_FORMAT_UNKNOWN) cf = draw_buf->header.cf;
     if(stride == 0) stride = lv_draw_buf_width_to_stride(w, cf);
 
@@ -385,7 +385,7 @@ void * lv_draw_buf_goto_xy(const lv_draw_buf_t * buf, uint32_t x, uint32_t y)
 
     uint8_t * data = buf->data;
 
-    /*Skip palette*/
+    /*Пропустить палитру*/
     data += LV_COLOR_INDEXED_PALETTE_SIZE(buf->header.cf) * sizeof(lv_color32_t);
     data += buf->header.stride * y;
 
@@ -411,16 +411,16 @@ lv_result_t lv_draw_buf_adjust_stride(lv_draw_buf_t * src, uint32_t stride)
         return LV_RESULT_INVALID;
     }
 
-    /*Use global stride*/
+    /*Используйте глобальный шаг*/
     if(stride == 0) stride = lv_draw_buf_width_to_stride(w, header->cf);
 
-    /*Check if stride already match*/
+    /*Проверьте, соответствует ли шаг уже*/
     if(header->stride == stride) {
         LV_PROFILER_DRAW_END;
         return LV_RESULT_OK;
     }
 
-    /*Calculate the minimal stride allowed from bpp*/
+    /*Расскажите о разрешенном шаге по bpp*/
     uint32_t bpp = lv_color_format_get_bpp(header->cf);
     uint32_t min_stride = (w * bpp + 7) >> 3;
     if(stride < min_stride) {
@@ -429,7 +429,7 @@ lv_result_t lv_draw_buf_adjust_stride(lv_draw_buf_t * src, uint32_t stride)
         return LV_RESULT_INVALID;
     }
 
-    /*Check if buffer has enough space. */
+    /*Проверьте, достаточно ли места в буфере. */
     uint32_t new_size = _calculate_draw_buf_size(w, h, header->cf, stride);
     if(new_size > src->data_size) {
         LV_PROFILER_DRAW_END;
@@ -439,7 +439,7 @@ lv_result_t lv_draw_buf_adjust_stride(lv_draw_buf_t * src, uint32_t stride)
     uint32_t offset = LV_COLOR_INDEXED_PALETTE_SIZE(header->cf) * 4;
 
     if(stride > header->stride) {
-        /*Copy from the last line to the first*/
+        /*Копируем из последней строки в первую*/
         uint8_t * src_data = src->data + offset + header->stride * (h - 1);
         uint8_t * dst_data = src->data + offset + stride * (h - 1);
         for(uint32_t y = 0; y < h; y++) {
@@ -449,7 +449,7 @@ lv_result_t lv_draw_buf_adjust_stride(lv_draw_buf_t * src, uint32_t stride)
         }
     }
     else {
-        /*Copy from the first line to the last*/
+        /*Копировать от первой строки до последней*/
         uint8_t * src_data = src->data + offset;
         uint8_t * dst_data = src->data + offset;
         for(uint32_t y = 0; y < h; y++) {
@@ -484,8 +484,8 @@ lv_result_t lv_draw_buf_premultiply(lv_draw_buf_t * draw_buf)
         lv_area_t area = {0, 0, draw_buf->header.w - 1, draw_buf->header.h - 1};
         if(LV_COLOR_FORMAT_IS_INDEXED(draw_buf->header.cf)) {
             /**
-             * We only need to flush the palette table, so we set y2 equal to y1 to improve performance
-             * and reduce cache flush overhead.
+             * Нам нужно только очистить таблицу палитр, поэтому мы устанавливаем y2 равным y1 для повышения производительности.
+             * и уменьшить накладные расходы на очистку кэша.
              */
             area.y2 = 0;
         }
@@ -554,7 +554,7 @@ static void * buf_malloc(size_t size_bytes, lv_color_format_t color_format)
 {
     LV_UNUSED(color_format);
 
-    /*Allocate larger memory to be sure it can be aligned as needed*/
+    /*Выделите больший объем памяти, чтобы быть уверенным, что ее можно будет выровнять по мере необходимости.*/
     size_bytes += LV_DRAW_BUF_ALIGN - 1;
     return lv_malloc(size_bytes);
 }
@@ -572,21 +572,21 @@ static void buf_copy(lv_draw_buf_t * dest, const lv_area_t * dest_area,
     uint8_t * src_bufc;
     int32_t line_width;
 
-    /*Source and dest color format must be same. Color conversion is not supported yet.*/
+    /*Цветовой формат источника и назначения должен совпадать. Преобразование цветов пока не поддерживается.*/
     LV_ASSERT_FORMAT_MSG(dest->header.cf == src->header.cf, "Color format mismatch: %d != %d",
                          dest->header.cf, src->header.cf);
 
     if(dest_area == NULL) line_width = dest->header.w;
     else line_width = lv_area_get_width(dest_area);
 
-    /* For indexed image, copy the palette if we are copying full image area*/
+    /* Для индексированного изображения скопируйте палитру, если мы копируем всю область изображения.*/
     if(dest_area == NULL || src_area == NULL) {
         if(LV_COLOR_FORMAT_IS_INDEXED(dest->header.cf)) {
             lv_memcpy(dest->data, src->data, LV_COLOR_INDEXED_PALETTE_SIZE(dest->header.cf) * sizeof(lv_color32_t));
         }
     }
 
-    /*Check source and dest area have same width*/
+    /*Проверьте, что исходная и целевая области имеют одинаковую ширину.*/
     if((src_area == NULL && line_width != src->header.w) || \
        (src_area != NULL && line_width != lv_area_get_width(src_area))) {
         LV_ASSERT_MSG(0, "Source and destination areas have different width");
@@ -637,7 +637,7 @@ static uint32_t width_to_stride(uint32_t w, lv_color_format_t color_format)
 {
     uint32_t width_byte;
     width_byte = w * lv_color_format_get_bpp(color_format);
-    width_byte = (width_byte + 7) >> 3; /*Round up*/
+    width_byte = (width_byte + 7) >> 3; /*Округлить вверх*/
 
     return LV_ROUND_UP(width_byte, LV_DRAW_BUF_STRIDE_ALIGN);
 }
@@ -656,7 +656,7 @@ static void draw_buf_free(const lv_draw_buf_handlers_t * handlers, void * buf)
 }
 
 /**
- * For given width, height, color format, and stride, calculate the size needed for a new draw buffer.
+ * Для заданной ширины, высоты, цветового формата и шага рассчитайте размер, необходимый для нового буфера прорисовки.
  */
 static uint32_t _calculate_draw_buf_size(uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride)
 {
@@ -666,10 +666,10 @@ static uint32_t _calculate_draw_buf_size(uint32_t w, uint32_t h, lv_color_format
 
     size = stride * h;
     if(cf == LV_COLOR_FORMAT_RGB565A8) {
-        size += (stride / 2) * h; /*A8 mask*/
+        size += (stride / 2) * h; /*Маска A8*/
     }
     else if(LV_COLOR_FORMAT_IS_INDEXED(cf)) {
-        /*@todo we have to include palette right before image data*/
+        /*@todo нам нужно включить палитру прямо перед данными изображения.*/
         size += LV_COLOR_INDEXED_PALETTE_SIZE(cf) * 4;
     }
 

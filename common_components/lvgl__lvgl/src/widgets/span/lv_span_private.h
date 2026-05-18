@@ -36,7 +36,7 @@ struct _lv_span_t {
     int32_t trailing_height;
 };
 
-/** Data of label*/
+/** Данные этикетки*/
 struct _lv_spangroup_t {
     lv_obj_t obj;
     int32_t lines;
@@ -60,7 +60,7 @@ struct _lv_spangroup_t {
 #endif /* LV_USE_SPAN != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SPAN_PRIVATE_H*/

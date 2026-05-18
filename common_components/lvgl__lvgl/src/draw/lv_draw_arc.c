@@ -67,7 +67,7 @@ void lv_draw_arc(lv_layer_t * layer, const lv_draw_arc_dsc_t * dsc)
         lv_layer_t * ds_layer = lv_draw_layer_create_drop_shadow(layer, &dsc->base, &a);
         LV_ASSERT_NULL(ds_layer);
         lv_draw_arc_dsc_t ds_dsc = *dsc;
-        ds_dsc.base.drop_shadow_opa = 0; /*Disable drop shadow so rendering below will render plain arc*/
+        ds_dsc.base.drop_shadow_opa = 0; /*Отключите тень, чтобы при рендеринге ниже отображалась простая дуга.*/
         lv_draw_arc(ds_layer, &ds_dsc);
         lv_draw_layer_finish_drop_shadow(ds_layer, &dsc->base);
     }
@@ -89,7 +89,7 @@ void lv_draw_arc_get_area(int32_t x, int32_t y, uint16_t radius,  lv_value_preci
     int32_t start_angle_int = (int32_t) start_angle;
     int32_t end_angle_int = (int32_t) end_angle;
 
-    /*Special case: full arc invalidation */
+    /*Особый случай: полная аннулирование дуги */
     if(end_angle_int == start_angle_int + 360) {
         area->x1 = x - rout;
         area->y1 = y - rout;
@@ -106,7 +106,7 @@ void lv_draw_arc_get_area(int32_t x, int32_t y, uint16_t radius,  lv_value_preci
     uint8_t start_quarter = start_angle_int / 90;
     uint8_t end_quarter = end_angle_int / 90;
 
-    /*360 deg still counts as quarter 3 (360 / 90 would be 4)*/
+    /*360 градусов по-прежнему считается четвертью 3 (360/90 будет 4).*/
     if(start_quarter == 4) start_quarter = 3;
     if(end_quarter == 4) end_quarter = 3;
 

@@ -45,7 +45,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Demonstrate the usage of draw event
+ * Демонстрация использования событий розыгрыш
  */
 void lv_example_event_draw(void)
 {

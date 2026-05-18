@@ -27,11 +27,11 @@ extern "C" {
  **********************/
 
 /**
- * Stores the shape of the path as arrays of operations and points.
- * For example move to 10;20 then draw a line to 30;40 and draw an
- * arc with 30 radius and 70° sweep.
+ * Сохраняет форму пути в виде массивов операций и точек.
+ * Например, перейдите к 10;20, затем проведите линию к 30;40 и нарисуйте
+ * дуга радиусом 30 и стреловидностью 70°.
  *
- * `lv_vector_path_ctx_t` is also required to describe how to fill and stroke the path.
+ * `lv_vector_path_ctx_t` также необходим для описания того, как заполнять и обводить контур.
  */
 struct _lv_vector_path_t {
     lv_vector_path_quality_t quality;
@@ -78,7 +78,7 @@ struct _lv_vector_stroke_dsc_t {
 };
 
 /**
- * Stores how to fill, stroke, transform etc a given path
+ * Сохраняет, как заполнять, обводить, трансформировать и т. д. заданный путь.
  */
 struct _lv_vector_path_ctx_t {
     lv_vector_fill_dsc_t fill_dsc;
@@ -91,21 +91,21 @@ struct _lv_vector_path_ctx_t {
 struct _lv_draw_vector_dsc_t {
     lv_draw_dsc_base_t base;
 
-    /** The current colors, opacities, matrix, etc for the next task to be added
+    /** Текущие цвета, непрозрачность, матрица и т. д. для следующей задачи, которая будет добавлена.
      * by */
     lv_vector_path_ctx_t * ctx;
 
     /**
-     * Store path shapes and their attributes
-     * in a list as `lv_draw_vector_subtask_t`. */
+     * Сохраняйте формы путей и их атрибуты.
+     * в списке как`lv_draw_vector_subtask_t`. */
     lv_ll_t * task_list;
 };
 
 
 /**
- * Contains a path shape and its attributes together.
- * It's a task that will be passed to the vector rendering engine.
- * It's used in the `task_list` of `lv_draw_vector_dsc_t`.
+ * Содержит форму пути и ее атрибуты вместе.
+ * Эта задача будет передана в механизм векторного рендеринга.
+ * Он используется в`task_list``lv_draw_vector_dsc_t`.
  */
 typedef struct {
     lv_vector_path_t * path;
@@ -118,13 +118,13 @@ typedef struct {
  **********************/
 
 /**
- * This is the main function to draw the accumulated vector tasks by passing them
- * to a vector renderer callback.
- * When the callback returns the processed vector task will be destroyed.
- * @param task_list     pointer to the linked list in `lv_draw_vector_dsc_t` that stores
- *                      the path shapes and their attributes.
- * @param cb            the callback used to iterate through the task
- * @param user_data     a custom pointer that will be passed to the callback
+ * Это основная функция для отрисовки накопленных векторных задач путем их передачи
+ * к обратному вызову векторного рендеринга.
+ * При возврате обратного вызова обработанная векторная задача будет уничтожена.
+ * @param task_list     указатель на связанный список в `lv_draw_vector_dsc_t`, в котором хранятся
+ *                      формы пути и их атрибуты.
+ * @param cb            обратный вызов, используемый для итерации задачи
+ * @param user_data     пользовательский указатель, который будет передан в обратный вызов
  */
 void lv_vector_for_each_destroy_tasks(lv_ll_t * task_list, vector_draw_task_cb cb, void * used_data);
 
@@ -135,7 +135,7 @@ void lv_vector_for_each_destroy_tasks(lv_ll_t * task_list, vector_draw_task_cb c
 #endif /* LV_USE_VECTOR_GRAPHIC */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_VECTOR_PRIVATE_H*/

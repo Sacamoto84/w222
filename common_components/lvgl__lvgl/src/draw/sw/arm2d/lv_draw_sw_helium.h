@@ -18,7 +18,7 @@ extern "C" {
 
 #include "../../../lv_conf_internal.h"
 
-/* detect whether helium is available based on arm compilers' standard */
+/* определить, доступен ли гелий, на основе стандарта составителей оружия */
 #if defined(__ARM_FEATURE_MVE) && __ARM_FEATURE_MVE
 
 #ifdef LV_DRAW_SW_HELIUM_CUSTOM_INCLUDE
@@ -48,13 +48,13 @@ extern "C" {
 /*********************
  *   POST INCLUDES
  *********************/
-/* use arm-2d as the default helium acceleration */
+/* используйте руку-2d в качестве гелиевого ускорения по умолчанию */
 #include "lv_draw_sw_arm2d.h"
 
-#endif /* defined(__ARM_FEATURE_MVE) && __ARM_FEATURE_MVE */
+#endif /* определено( __ARM_FEATURE_MVE ) && __ARM_FEATURE_MVE */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_HELIUM_H*/

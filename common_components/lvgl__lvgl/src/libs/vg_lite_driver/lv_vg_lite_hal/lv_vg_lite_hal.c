@@ -23,7 +23,7 @@ static void sleep(uint32_t msec)
 
 static uint32_t registerMemBase = LV_VG_LITE_HAL_GPU_BASE_ADDRESS;
 
-/* If bit31 is activated this indicates a bus error */
+/* Если бит 31 активирован, это указывает на ошибку шины. */
 #define IS_AXI_BUS_ERR(x) ((x)&(1U << 31))
 #define HEAP_NODE_USED  0xABBAF00D
 
@@ -35,7 +35,7 @@ uint32_t gpuMemBase[VG_SYSTEM_RESERVE_COUNT] = {
     [0 ... VG_SYSTEM_RESERVE_COUNT - 1] = 0
 };
 
-/* Default heap size is 16MB. */
+/* Размер кучи по умолчанию составляет 16 МБ. */
 static uint32_t heap_size[VG_SYSTEM_RESERVE_COUNT] = {
     [0 ... VG_SYSTEM_RESERVE_COUNT - 1] = MAX_CONTIGUOUS_SIZE
 };
@@ -55,26 +55,26 @@ void vg_lite_init_mem(vg_module_parameters_t * param)
     }
 }
 
-/* Implementation of list. ****************************************/
+/* Реализация списка. *****************************************/
 #define INIT_LIST_HEAD(entry) \
     (entry)->next = (entry);\
     (entry)->prev = (entry);
 
-/* Add the list item in front of "head". */
+/* Добавьте элемент списка перед «головой». */
 static inline void add_list(list_head_t * to_add, list_head_t * head)
 {
-    /* Link the new item. */
+    /* Свяжите новый элемент. */
     to_add->next = head;
     to_add->prev = head->prev;
 
-    /* Modify the neighbor. */
+    /* Изменить соседа. */
     head->prev = to_add;
     if(to_add->prev != NULL) {
         to_add->prev->next = to_add;
     }
 }
 
-/* Remove an entry out of the list. */
+/* Удалить запись из списка. */
 static inline void delete_list(list_head_t * entry)
 {
     if(entry->prev != NULL) {
@@ -85,7 +85,7 @@ static inline void delete_list(list_head_t * entry)
     }
 }
 
-/* End of list implementation. ***********/
+/* Конец реализации списка. ***********/
 static inline void _memset(void * mem, unsigned char value, int size)
 {
     int i;
@@ -107,9 +107,9 @@ struct mapped_memory {
 };
 
 struct vg_lite_device {
-    /* void * gpu; */
-    uint32_t register_base;    /* Always use physical for register access in RTOS. */
-    /* struct page * pages; */
+    /* пустота * графический процессор; */
+    uint32_t register_base;    /* Всегда используйте физический доступ к регистру в RTOS. */
+    /* страница структуры * страницы; */
     volatile void * contiguous[VG_SYSTEM_RESERVE_COUNT];
     unsigned int order;
     unsigned int heap_size[VG_SYSTEM_RESERVE_COUNT];
@@ -119,7 +119,7 @@ struct vg_lite_device {
     struct memory_heap heap[VG_SYSTEM_RESERVE_COUNT];
     int irq_enabled;
     volatile uint32_t int_flags;
-    /* wait_queue_head_t int_queue; */
+    /* wait_queue_head_t int_queue ; */
     lv_thread_sync_t int_queue;
     void * device;
     int registered;
@@ -188,20 +188,20 @@ static int split_node(heap_node_t * node, unsigned long size)
 {
     heap_node_t * split;
 
-    /* Allocate a new node. */
+    /* Выделите новый узел. */
     vg_lite_hal_allocate(sizeof(heap_node_t), (void **)&split);
     if(split == NULL)
         return -1;
 
-    /* Fill in the data of this node of the remaning size. */
+    /* Заполните данные этого узла оставшегося размера. */
     split->offset = node->offset + size;
     split->size = node->size - size;
     split->status = 0;
 
-    /* Add the new node behind the current node. */
+    /* Добавьте новый узел позади текущего узла. */
     add_list(&split->list, &node->list);
 
-    /* Adjust the size of the current node. */
+    /* Отрегулируйте размер текущего узла. */
     node->size = size;
     return 0;
 }
@@ -272,38 +272,38 @@ vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidm
     unsigned long aligned_size;
     heap_node_t * pos;
 
-    /* Judge if it exceeds the range of pool */
+    /* Оцените, превышает ли он диапазон пула */
     if(pool >= VG_SYSTEM_RESERVE_COUNT)
         pool = VG_SYSTEM_RESERVE_COUNT - 1;
 
-    /* Align the size to 64 bytes. */
+    /* Выровняйте размер до 64 байт. */
     aligned_size = (size + 63) & ~63;
 
-    /* Check if there is enough free memory available. */
+    /* Проверьте, достаточно ли свободной памяти. */
     if(aligned_size > device->heap[pool].free) {
         return VG_LITE_OUT_OF_MEMORY;
     }
 
-    /* Walk the heap backwards. */
+    /* Пройдите по куче назад. */
     for(pos = (heap_node_t *)device->heap[pool].list.prev;
         &pos->list != &device->heap[pool].list;
         pos = (heap_node_t *) pos->list.prev) {
-        /* Check if the current node is free and is big enough. */
+        /* Проверьте, свободен ли текущий узел и достаточно ли он велик. */
         if(pos->status == 0 && pos->size >= aligned_size) {
-            /* See if we the current node is big enough to split. */
+            /* Посмотрите, достаточно ли велик текущий узел, чтобы его можно было разделить. */
             if(0 != split_node(pos, aligned_size)) {
                 return VG_LITE_OUT_OF_RESOURCES;
             }
-            /* Mark the current node as used. */
+            /* Отметьте текущий узел как используемый. */
             pos->status = 0xABBAF00D;
 
-            /*  Return the logical/physical address. */
+            /*  Верните логический/физический адрес. */
             /* *logical = (uint8_t *) private_data->contiguous_mapped + pos->offset; */
             *logical = (uint8_t *)device->virtual[pool] + pos->offset;
             *klogical = *logical;
-            *physical = gpuMemBase[pool] + (uint32_t)(*logical);/* device->physical + pos->offset; */
+            *physical = gpuMemBase[pool] + (uint32_t)(*logical);/* устройство->физическое + положение->смещение; */
 
-            /* Mark which pool the pos belong to */
+            /* Отметьте, к какому пулу принадлежит позиция */
             pos->pool = pool;
 
             device->heap[pool].free -= aligned_size;
@@ -313,7 +313,7 @@ vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidm
         }
     }
 
-    /* Out of memory. */
+    /* Из памяти. */
     return VG_LITE_OUT_OF_MEMORY;
 }
 
@@ -323,60 +323,60 @@ void vg_lite_hal_free_contiguous(void * memory_handle)
     heap_node_t * pos, * node;
     vg_lite_vidmem_pool_t pool;
 
-    /* Get pointer to node. */
+    /* Получить указатель на узел. */
     node = memory_handle;
 
     if(node->status != 0xABBAF00D) {
         return;
     }
 
-    /* Determine which pool the node belongs to */
+    /* Определите, к какому пулу принадлежит узел */
     pool = node->pool;
 
-    /* Mark node as free. */
+    /* Отметить узел как свободный. */
     node->status = 0;
 
-    /* Add node size to free count. */
+    /* Добавьте размер узла к свободному счетчику. */
     device->heap[pool].free += node->size;
 
-    /* Check if next node is free. */
+    /* Проверьте, свободен ли следующий узел. */
     pos = node;
     for(pos = (heap_node_t *)pos->list.next;
         &pos->list != &device->heap[pool].list;
         pos = (heap_node_t *)pos->list.next) {
         if(pos->status == 0) {
-            /* Merge the nodes. */
+            /* Объедините узлы. */
             node->size += pos->size;
             if(node->offset > pos->offset)
                 node->offset = pos->offset;
-            /* Delete the next node from the list. */
+            /* Удалить следующий узел из списка. */
             delete_list(&pos->list);
             vg_lite_hal_free(pos);
         }
         break;
     }
 
-    /* Check if the previous node is free. */
+    /* Проверьте, свободен ли предыдущий узел. */
     pos = node;
     for(pos = (heap_node_t *)pos->list.prev;
         &pos->list != &device->heap[pool].list;
         pos = (heap_node_t *)pos->list.prev) {
         if(pos->status == 0) {
-            /* Merge the nodes. */
+            /* Объедините узлы. */
             pos->size += node->size;
             if(pos->offset > node->offset)
                 pos->offset = node->offset;
-            /* Delete the current node from the list. */
+            /* Удалить текущий узел из списка. */
             delete_list(&node->list);
             vg_lite_hal_free(node);
         }
         break;
     }
 
-    /* when release command buffer node and ts buffer node to exit,release the linked list*/
+    /* при выпуске узла буфера команды и узла буфера ts для выхода освободите связанный список*/
     /* if(device->heap[pool].list.next == device->heap[pool].list.prev) {
-        delete_list(&pos->list);
-        vg_lite_hal_free(pos);
+        delete_list (&pos->список);
+        vg_lite_hal_free (поз.);
     }*/
 }
 
@@ -385,17 +385,17 @@ void vg_lite_hal_free_os_heap(void)
     struct heap_node * pos, * n;
     uint32_t i;
 
-    /* Check for valid device. */
+    /* Проверьте действительное устройство. */
     if(device != NULL) {
-        /* Process each node. */
+        /* Обрабатываем каждый узел. */
         for(i = 0; i < VG_SYSTEM_RESERVE_COUNT; i++) {
             for(pos = (heap_node_t *)device->heap[i].list.next,
                 n = (heap_node_t *)pos->list.next;
                 &pos->list != &device->heap[i].list;
                 pos = n, n = (heap_node_t *)n->list.next) {
-                /* Remove it from the linked list. */
+                /* Удалите его из связанного списка. */
                 delete_list(&pos->list);
-                /* Free up the memory. */
+                /* Освободите память. */
                 vg_lite_hal_free(pos);
             }
         }
@@ -405,14 +405,14 @@ void vg_lite_hal_free_os_heap(void)
 /* Portable: read register value. */
 uint32_t vg_lite_hal_peek(uint32_t address)
 {
-    /* Read data from the GPU register. */
+    /* Считайте данные из регистра GPU. */
     return (uint32_t)(*(volatile uint32_t *)(device->register_base + address));
 }
 
 /* Portable: write register. */
 void vg_lite_hal_poke(uint32_t address, uint32_t data)
 {
-    /* Write data to the GPU register. */
+    /* Запишите данные в регистр GPU. */
     uint32_t * LocalAddr = (uint32_t *)(device->register_base + address);
     *LocalAddr = data;
 }
@@ -441,9 +441,9 @@ vg_lite_error_t vg_lite_hal_unmap_memory(vg_lite_kernel_unmap_memory_t * node)
 void __attribute__((weak)) vg_lite_bus_error_handler()
 {
     /*
-     * Default implementation of the bus error handler does nothing. Application
-     * should override this handler if it requires to be notified when a bus
-     * error event occurs.
+     * Реализация обработчика ошибок шины по умолчанию ничего не делает. Приложение
+     * следует переопределить этот обработчик, если он требует уведомления, когда шина
+     * происходит событие ошибки.
      */
     return;
 }
@@ -453,10 +453,10 @@ void vg_lite_IRQHandler(void)
     uint32_t flags = vg_lite_hal_peek(VG_LITE_INTR_STATUS);
 
     if(flags) {
-        /* Combine with current interrupt flags. */
+        /* Объединить с текущими флагами прерываний. */
         device->int_flags |= flags;
 
-        /* Wake up any waiters. */
+        /* Разбудите официантов. */
         lv_thread_sync_signal_isr(&device->int_queue);
 
 #if gcdVG_RECORD_HARDWARE_RUNNING_TIME
@@ -521,25 +521,25 @@ static void vg_lite_exit(void)
     heap_node_t * n;
     uint32_t i;
 
-    /* Check for valid device. */
+    /* Проверьте действительное устройство. */
     if(device != NULL) {
         /* TODO: unmap register mem should be unnecessary. */
         device->register_base = 0;
 
         for(i = 0; i < VG_SYSTEM_RESERVE_COUNT; i++) {
-            /* Process each node. */
+            /* Обрабатываем каждый узел. */
             for(pos = (heap_node_t *)device->heap[i].list.next, n = (heap_node_t *)pos->list.next;
                 &pos->list != &device->heap[i].list;
                 pos = n, n = (heap_node_t *)n->list.next) {
-                /* Remove it from the linked list. */
+                /* Удалите его из связанного списка. */
                 delete_list(&pos->list);
 
-                /* Free up the memory. */
+                /* Освободите память. */
                 vg_lite_hal_free(pos);
             }
         }
 
-        /* Free up the device structure. */
+        /* Освободите структуру устройства. */
         vg_lite_hal_free(device);
     }
 }
@@ -553,25 +553,25 @@ static int vg_lite_init(void)
     if(NULL == device)
         return -1;
 
-    /* Zero out the enture structure. */
+    /* Обнулите всю структуру. */
     _memset(device, 0, sizeof(struct vg_lite_device));
 
-    /* Setup register memory. **********************************************/
+    /* Настройка регистровой памяти. ***********************************************/
     device->register_base = registerMemBase;
 
 
-    /* Initialize contiguous memory. ***************************************/
-    /* Allocate the contiguous memory. */
+    /* Инициализируйте непрерывную память. ***************************************/
+    /* Выделите непрерывную память. */
     for(i = 0; i < VG_SYSTEM_RESERVE_COUNT; i++) {
         device->heap_size[i] = heap_size[i];
         device->contiguous[i] = (volatile void *)contiguousMem[i];
-        /* Make 64byte aligned. */
+        /* Выровняйте 64 байта. */
         while((((uint32_t)device->contiguous[i]) & 63) != 0) {
             device->contiguous[i] = ((unsigned char *)device->contiguous[i]) + 4;
             device->heap_size[i] -= 4;
         }
 
-        /* Check if we allocated any contiguous memory or not. */
+        /* Проверьте, выделили ли мы какую-нибудь непрерывную память или нет. */
         if(device->contiguous[i] == NULL) {
             vg_lite_exit();
             return -1;
@@ -581,7 +581,7 @@ static int vg_lite_init(void)
         device->physical[i] = gpuMemBase[i] + (uint32_t)device->virtual[i];
         device->size[i] = device->heap_size[i];
 
-        /* Create the heap. */
+        /* Создайте кучу. */
         INIT_LIST_HEAD(&device->heap[i].list);
         device->heap[i].free = device->size[i];
 
@@ -599,7 +599,7 @@ static int vg_lite_init(void)
     lv_thread_sync_init(&device->int_queue);
     device->int_flags = 0;
 
-    /* Success. */
+    /* Успех. */
     return 0;
 }
 

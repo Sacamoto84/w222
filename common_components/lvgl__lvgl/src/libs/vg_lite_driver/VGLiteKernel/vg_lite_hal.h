@@ -1,18 +1,18 @@
 /****************************************************************************
 *
-*    The MIT License (MIT)
+*    Лицензия MIT ( MIT )
 *
 *    Copyright (c) 2014 - 2022 Vivante Corporation
 *
-*    Permission is hereby granted, free of charge, to any person obtaining a
-*    copy of this software and associated documentation files (the "Software"),
-*    to deal in the Software without restriction, including without limitation
-*    the rights to use, copy, modify, merge, publish, distribute, sublicense,
-*    and/or sell copies of the Software, and to permit persons to whom the
-*    Software is furnished to do so, subject to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации («Программное обеспечение»),
+*    иметь дело с Программным обеспечением без ограничений, включая, помимо прочего,
+*    права на использование, копирование, изменение, объединение, публикацию, распространение, сублицензирование,
+*    и/или продавать копии Программного обеспечения, а также разрешать лицам, которым
+*    Для этого предоставляется программное обеспечение при соблюдении следующих условий:
 *
-*    The above copyright notice and this permission notice shall be included in
-*    all copies or substantial portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+*    все копии или существенные части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 *    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,31 +24,31 @@
 *
 *****************************************************************************
 *
-*    The GPL License (GPL)
+*    Лицензия GPL ( GPL )
 *
 *    Copyright (C) 2014 - 2022 Vivante Corporation
 *
-*    This program is free software; you can redistribute it and/or
-*    modify it under the terms of the GNU General Public License
-*    as published by the Free Software Foundation; either version 2
-*    of the License, or (at your option) any later version.
+*    Эта программа является бесплатным программным обеспечением; вы можете распространять его и/или
+*    изменить его в соответствии с условиями Стандартной общественной лицензии GNU.
+*    как опубликовано Фондом свободного программного обеспечения; либо версия 2
+*    Лицензии или (по вашему выбору) любой более поздней версии.
 *
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
+*    Данная программа распространяется в надежде, что она будет полезна,
+*    но WITHOUT ANY WARRANTY ; даже без подразумеваемой гарантии
+*    MERCHANTABILITY или FITNESS FOR A PARTICULAR PURPOSE .  См.
+*    Стандартная общественная лицензия GNU для получения более подробной информации.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program; if not, write to the Free Software Foundation,
-*    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*    Вы должны были получить копию Стандартной общественной лицензии GNU.
+*    вместе с этой программой; если нет, напишите в Фонд свободного программного обеспечения,
+*    Inc., Франклин-стрит, 51, пятый этаж, Бостон, MA 02110-1301, USA.
 *
 *****************************************************************************
 *
 *    Note: This software is released under dual MIT and GPL licenses. A
-*    recipient may use this file under the terms of either the MIT license or
-*    GPL License. If you wish to use only one license not the other, you can
-*    indicate your decision by deleting one of the above license notices in your
-*    version of this file.
+*    получатель может использовать этот файл на условиях лицензии MIT или
+*    Лицензия GPL. Если вы хотите использовать только одну лицензию, а не другую, вы можете
+*    сообщите о своем решении, удалив одно из приведенных выше уведомлений о лицензии в своем
+*    версия этого файла.
 *
 *****************************************************************************/
 
@@ -69,11 +69,11 @@ extern "C" {
  @brief Wait a number of milliseconds.
 
  @discussion
- The VGLite hardware requires some waiting when changing clock frequencies or issuing a reset. This is the wrapper function
- for the delay function.
+ Аппаратное обеспечение VGLite требует некоторого ожидания при изменении тактовой частоты или выполнении сброса. Это функция-обертка
+ для функции задержки.
 
- @param milliseconds
- The number of milliseconds to wait.
+ @param миллисекунды
+ Количество миллисекунд ожидания.
  */
 void vg_lite_hal_delay(uint32_t milliseconds);
 
@@ -81,12 +81,12 @@ void vg_lite_hal_delay(uint32_t milliseconds);
  @brief Initialize the hardware.
 
  @discussion
- The VGLite kernel knows how to program its own hardware, but in any SOC there might be additional control required for
- turning on the power or initializing the clocks. This function gets called by the VGLite kernel before the VGLite graphics
- hardware gets initialized by the VGLite kernel itself and allows for SOC power management control.
+ Ядро VGLite знает, как программировать собственное оборудование, но в любом SOC может потребоваться дополнительный контроль для
+ включение питания или инициализация часов. Эта функция вызывается ядром VGLite перед графическим отображением VGLite.
+ оборудование инициализируется самим ядром VGLite и позволяет управлять питанием SOC.
 
- The implementer should make sure that on exit of this function the power and clock to the VGLite graphics hardware is
- turned on and stable.
+ Разработчик должен убедиться, что при выходе из этой функции питание и тактовая частота графического оборудования VGLite равны.
+ включился и работает стабильно.
  */
 void vg_lite_hal_initialize(void);
 
@@ -94,11 +94,11 @@ void vg_lite_hal_initialize(void);
  @brief Uninitialize the hardware.
 
  @discussion
- The VGLite kernel knows how to program its own hardware, but in any SOC there might be additional control required for
- turning off the power or uninitializing the clocks. This function gets called by the VGLite kernel after the VGLite
- graphics hardware gets uninitialized by the VGLite kernel itself and allows for SOC power management control.
+ Ядро VGLite знает, как программировать собственное оборудование, но в любом SOC может потребоваться дополнительный контроль для
+ выключение питания или деинициализация часов. Эта функция вызывается ядром VGLite после того, как VGLite
+ графическое оборудование не инициализируется самим ядром VGLite и позволяет управлять питанием SOC.
 
- On exit of this function it is okay to have the power and/or clock to the VGLite graphics hardware turned off.
+ При выходе из этой функции можно отключить питание и/или тактовую частоту графического оборудования VGLite.
  */
 void vg_lite_hal_deinitialize(void);
 
@@ -106,25 +106,25 @@ void vg_lite_hal_deinitialize(void);
  @brief Allocate contiguous video memory.
 
  @discussion
- Any memory the VGLite graphics hardware will see should be allocated as contiguous memory. Any allocated memory will be
- addressed through an opaque handle, usually a pointer to an opaque structure. The porting layer can put any information it
- needs inside this structure.
+ Любая память, которую видит графическое оборудование VGLite, должна быть выделена как непрерывная память. Любая выделенная память будет
+ адресуется через непрозрачный дескриптор, обычно указатель на непрозрачную структуру. Уровень переноса может поместить любую информацию.
+ потребности внутри этой структуры.
 
- @param size
- The number of bytes to allocate.
+ Размер @param
+ Количество байтов, которые необходимо выделить.
 
- @param pool
- select the reserved memory pool
+ Пул @param
+ выберите зарезервированный пул памяти
 
- @param logical
- A pointer to a variable that will receive the logical address of the allocated memory for the CPU.
+ @param логический
+ Указатель на переменную, которая получит логический адрес выделенной памяти для CPU.
 
- @param gpu
- A pointer to a variable that will receive the physical address of the allocated memory for the VGLite graphics hardware.
+ @param графический процессор
+ Указатель на переменную, которая получит физический адрес выделенной памяти для графического оборудования VGLite.
 
  @result
- A pointer to an opaque structure that will be used as the memory handle. NULL should be returned if there is not
- enough memory.
+ Указатель на непрозрачную структуру, которая будет использоваться в качестве дескриптора памяти.  NULL должен быть возвращен, если его нет.
+ достаточно памяти.
  */
 vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidmem_pool_t pool, void ** logical,
                                                 void ** klogical, uint32_t * physical, void ** node);
@@ -133,11 +133,11 @@ vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidm
  @brief Free contiguous video memory.
 
  @discussion
- Free the memory allocated by {@link vg_lite_hal_allocate_contiguous}. After this function returns, the associated memory
- handle is no longer a valid handle.
+ Освободите память, выделенную { @link vg_lite_hal_allocate_contiguous }. После возврата из этой функции соответствующая память
+ handle больше не является допустимым дескриптором.
 
  @param memory_handle
- A pointer to an opaque structure returned by {@link vg_lite_hal_allocate_contiguous}.
+ Указатель на непрозрачную структуру, возвращаемую { @link vg_lite_hal_allocate_contiguous }.
  */
 void vg_lite_hal_free_contiguous(void * memory_handle);
 
@@ -145,8 +145,8 @@ void vg_lite_hal_free_contiguous(void * memory_handle);
  @brief remove unfree node when continuously allocate buffer without free buffer.
 
  @discussion
- Free the node allocated by {@link kmalloc}. After this function returns, the associated memory
- handle is no longer a valid handle.
+ Освободите узел, выделенный { @link kmalloc}. После возврата из этой функции соответствующая память
+ handle больше не является допустимым дескриптором.
  */
 void vg_lite_hal_free_os_heap(void);
 
@@ -154,27 +154,27 @@ void vg_lite_hal_free_os_heap(void);
  @brief Map contiguous logical or physical memory into the VGLite graphics hardware space.
 
  @discussion
- Any memory, like a frame buffer or some pre-allocated image or path data, needs to be mapped into the VGLite graphics
- hardware address space and wrapped by a memory handle. This allows the VGLite graphics hardware access that memory
- directly.
+ Любая память, например буфер кадра или некоторые заранее выделенные изображения или данные пути, должна быть отображена в графику VGLite.
+ аппаратное адресное пространство и обернуто дескриптором памяти. Это позволяет графическому оборудованию VGLite получить доступ к этой памяти.
+ напрямую.
 
- Either a logical or a physical address should be passed in to map.
+ Для сопоставления необходимо передать логический или физический адрес.
 
- @param size
- The number of bytes to map.
+ Размер @param
+ Количество байтов для сопоставления.
 
- @param logical
- The logical address of the memory region to map or NULL if the logical address is not known.
+ @param логический
+ Логический адрес области памяти для сопоставления или NULL, если логический адрес неизвестен.
 
- @param physical
- The physical address of the memory region to map if logical is NULL.
+ @param физический
+ Физический адрес области памяти для сопоставления, если она логическая, — NULL.
 
- @param gpu
- A pointer to a variable that will receive the VGLite graphics hardware addressable address of the mapped region.
+ @param графический процессор
+ Указатель на переменную, которая получит адресный адрес графического оборудования VGLite отображаемой области.
 
  @result
- A pointer to an opaque structure that will be used as the memory handle. NULL should be returned if there is
- not enough system resources to map the region.
+ Указатель на непрозрачную структуру, которая будет использоваться в качестве дескриптора памяти.  NULL должен быть возвращен, если есть
+ недостаточно системных ресурсов для картирования региона.
  */
 void * vg_lite_hal_map(uint32_t flags, uint32_t bytes, void * logical, uint32_t physical, int32_t dma_buf_fd,
                        uint32_t * gpu);
@@ -183,11 +183,11 @@ void * vg_lite_hal_map(uint32_t flags, uint32_t bytes, void * logical, uint32_t 
  @brief Unmap a previously mapped region.
 
  @discussion
- If a mapped region by {@link vg_lite_hal_map} is no longer needed, it should be unmapped to free up any allocated system
- resources used when mapping the region.
+ Если сопоставленный регион с помощью { @link vg_lite_hal_map } больше не нужен, его следует отменить, чтобы освободить выделенную систему.
+ ресурсы, используемые при картографировании региона.
 
  @param memory_handle
- A pointer to an opaque structure returned by {@link vg_lite_hal_map}.
+ Указатель на непрозрачную структуру, возвращаемую { @link vg_lite_hal_map }.
  */
 void vg_lite_hal_unmap(void * memory_handle);
 
@@ -195,8 +195,8 @@ void vg_lite_hal_unmap(void * memory_handle);
  @brief Execute a memory barrier.
 
  @discussion
- Some systems require a a memory barrier to make sure all store operations in the CPU have been handled. This is the wrapper
- function for a memory barrier.
+ В некоторых системах требуется барьер памяти, чтобы гарантировать обработку всех операций сохранения в CPU. Это обертка
+ Функция барьера памяти.
  */
 void vg_lite_hal_barrier(void);
 
@@ -204,14 +204,14 @@ void vg_lite_hal_barrier(void);
  @brief Read data from a register from the VGLite graphics hardware.
 
  @discussion
- In order to communicate with the VGLite graphics hardware, the kernel needs to read and write to some hardware registers.
- In each SOC those registers could be allocated at a different space in the physical memory map.
+ Для связи с графическим оборудованием VGLite ядру необходимо выполнять чтение и запись в некоторые аппаратные регистры.
+ В каждом SOC эти регистры могут быть размещены в разных местах карты физической памяти.
 
- @param address
- The relative address of the VGLite graphics hardware register to read from.
+ @param адрес
+ Относительный адрес регистра графического оборудования VGLite для чтения.
 
  @result
- The 32-bit value returned from reading the register.
+ 32-битное значение, полученное после чтения регистра.
  */
 uint32_t vg_lite_hal_peek(uint32_t address);
 
@@ -219,41 +219,41 @@ uint32_t vg_lite_hal_peek(uint32_t address);
  @brief Write data to a register from the VGLite graphics hardware.
 
  @discussion
- In order to communicate with the VGLite graphics hardware, the kernel needs to read and write to some hardware registers.
- In each SOC those registers could be allocated at a different space in the physical memory map.
+ Для связи с графическим оборудованием VGLite ядру необходимо выполнять чтение и запись в некоторые аппаратные регистры.
+ В каждом SOC эти регистры могут быть размещены в разных местах карты физической памяти.
 
- @param address
- The relative address of the VGLite graphics hardware register to write to.
+ @param адрес
+ Относительный адрес регистра графического оборудования VGLite, в который осуществляется запись.
 
- @param data
- The data to write to the VGLite graphics hardware register.
+ Данные @param
+ Данные для записи в регистр графического оборудования VGLite.
  */
 void vg_lite_hal_poke(uint32_t address, uint32_t data);
 
 /*!
  @brief query the remaining allocate contiguous video memory.
 
- @param data
- The data to get the remaining allocate contiguous video memory bytes.
+ Данные @param
+ Для получения оставшихся данных выделяются смежные байты видеопамяти.
  */
 vg_lite_error_t vg_lite_hal_query_mem(vg_lite_kernel_mem_t * mem);
 
 /*!
  @brief Map contiguous physical memory into the user space.
 
- @param node
- This node have 3 attributes, bytes means the number of bytes to map.
- physical means the physical address of the memory region to map.logical means
- the return logical address of the memory region after map.
+ узел @param
+ Этот узел имеет 3 атрибута, байты означают количество байтов для сопоставления.
+ физическое означает физический адрес области памяти для отображения.логическое средство
+ обратный логический адрес области памяти после карты.
  */
 vg_lite_error_t vg_lite_hal_map_memory(vg_lite_kernel_map_memory_t * node);
 
 /*!
  @brief Unmap a previously mapped region.
 
- @param node
- This node have 2 attributes, bytes means the number of bytes to unmap.logical means
- the logical address of the memory region to unmap.
+ узел @param
+ Этот узел имеет 2 атрибута, байты означают количество байтов для unmap.логическое значение.
+ логический адрес области памяти, которую необходимо отменить.
  */
 vg_lite_error_t vg_lite_hal_unmap_memory(vg_lite_kernel_unmap_memory_t * node);
 
@@ -261,28 +261,28 @@ vg_lite_error_t vg_lite_hal_unmap_memory(vg_lite_kernel_unmap_memory_t * node);
  @brief Wait until an interrupt from the VGLite graphics hardware has been received.
 
  @discussion
- Currently, the VGLite API is synchronous. This means that after each call it will wait until the VGLite graphics hardware
- has completed. The VGLite graphics hardware will send an interrupt when it is finished, and this function will wait until
- that interrupt has been received by the operating system.
+ В настоящее время VGLite API является синхронным. Это означает, что после каждого вызова он будет ждать, пока графическое оборудование VGLite не
+ завершилось. Графическое оборудование VGLite отправит прерывание по завершении, и эта функция будет ждать, пока
+ это прерывание было получено операционной системой.
 
- A timeout value is specified in order if the kernel wants to wait for a specific number of milliseconds fir the interrupt to
- occur. If the interrupt does not occur in the specified timeout, a timeout error will be returned.
+ Значение тайм-аута указывается, если ядро хочет подождать определенное количество миллисекунд, прежде чем прерывание
+ произойти. Если прерывание не произойдет в течение указанного таймаута, будет возвращена ошибка таймаута.
 
- @param timeout
- The number of milliseconds to wait for the interrupt before returning a timeout error. If timeout = 0xFFFFFFFF
- then {@link vg_lite_hal_wait_interrupt} will wait forever for the interrupt.
+ Тайм-аут @param
+ Количество миллисекунд ожидания прерывания перед возвратом ошибки тайм-аута. Если тайм-аут = 0xFFFFFFFF
+ тогда { @link vg_lite_hal_wait_interrupt } будет вечно ждать прерывания.
 
- @param mask
- Irq event mask to wait for.
+ Маска @param
+ Маска события Irq, которого следует ожидать.
 
  @result
- A boolean value indicating whether the interrupt was received (1) or not (0).
+ Логическое значение, указывающее, было ли получено прерывание (1) или нет (0).
  */
 int32_t vg_lite_hal_wait_interrupt(uint32_t timeout, uint32_t mask, uint32_t * value);
 
 /*!
  @brief After call vg_lite_hal_map(), flush cpu cache according the direction
- spicified by parameter cache_op.
+ указывается параметром cache_op.
  */
 vg_lite_error_t vg_lite_hal_operation_cache(void * handle, vg_lite_cache_op_t cache_op);
 

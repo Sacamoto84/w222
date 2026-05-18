@@ -56,7 +56,7 @@ void lv_timer_core_init(void)
 {
     lv_ll_init(timer_ll_p, sizeof(lv_timer_t));
 
-    /*Initially enable the lv_timer handling*/
+    /*обработка обработки грузовlv_timer.*/
     lv_timer_enable(true);
 }
 
@@ -65,7 +65,7 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
     LV_TRACE_TIMER("begin");
 
     lv_timer_state_t * state_p = &state;
-    /*Avoid concurrent running of the timer handler*/
+    /*Избегайте одновременного запуска обработчика таймера*/
     if(state_p->already_running) {
         LV_TRACE_TIMER("already running, concurrent calls are not allow, returning");
         return 1;
@@ -73,7 +73,7 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
     state_p->already_running = true;
 
     if(state_p->lv_timer_run == false) {
-        state_p->already_running = false; /*Release mutex*/
+        state_p->already_running = false; /*Освободить мьютекс*/
         return 1;
     }
 
@@ -90,7 +90,7 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
         }
     }
 
-    /*Run all timer from the list*/
+    /*Запустить все таймеры из списка*/
     lv_timer_t * next;
     lv_timer_t * timer_active;
     lv_ll_t * timer_head = timer_ll_p;
@@ -100,19 +100,19 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
 
         timer_active = lv_ll_get_head(timer_head);
         while(timer_active) {
-            /*The timer might be deleted if it runs only once ('repeat_count = 1')
-             *So get next element until the current is surely valid*/
+            /*Таймер может быть удален, если он запускается только один раз ('repeat_count = 1').
+             *Итак, получайте следующий элемент, пока текущий не станет действительным.*/
             next = lv_ll_get_next(timer_head, timer_active);
 
             if(lv_timer_exec(timer_active)) {
-                /*If a timer was created or deleted then this or the next item might be corrupted*/
+                /*Если таймер был создан или удален, возможно, этот или следующий элемент поврежден.*/
                 if(state_p->timer_created || state_p->timer_deleted) {
                     LV_TRACE_TIMER("Start from the first timer again because a timer was created or deleted");
                     break;
                 }
             }
 
-            timer_active = next; /*Load the next timer*/
+            timer_active = next; /*Загрузите следующий таймер*/
         }
     } while(timer_active);
 
@@ -125,20 +125,20 @@ LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void)
                 time_until_next = delay;
         }
 
-        next = lv_ll_get_next(timer_head, next); /*Find the next timer*/
+        next = lv_ll_get_next(timer_head, next); /*Найти следующий таймер*/
     }
 
     state_p->busy_time += lv_tick_elaps(handler_start);
     uint32_t idle_period_time = lv_tick_elaps(state_p->idle_period_start);
     if(idle_period_time >= IDLE_MEAS_PERIOD) {
-        state_p->idle_last         = (state_p->busy_time * 100) / idle_period_time;  /*Calculate the busy percentage*/
-        state_p->idle_last         = state_p->idle_last > 100 ? 0 : 100 - state_p->idle_last; /*But we need idle time*/
+        state_p->idle_last         = (state_p->busy_time * 100) / idle_period_time;  /*Посчитайте процент занятости*/
+        state_p->idle_last         = state_p->idle_last > 100 ? 0 : 100 - state_p->idle_last; /*Но нам нужно время простоя*/
         state_p->busy_time         = 0;
         state_p->idle_period_start = lv_tick_get();
     }
 
     state_p->timer_time_until_next = time_until_next;
-    state_p->already_running = false; /*Release the mutex*/
+    state_p->already_running = false; /*Освободите мьютекс*/
 
     LV_TRACE_TIMER("finished (%" LV_PRIu32 " ms until the next timer call)", time_until_next);
     lv_unlock();
@@ -330,9 +330,9 @@ void lv_timer_set_external_data(lv_timer_t * timer, void * data, void (* free_cb
  **********************/
 
 /**
- * Execute timer if its remaining time is zero
- * @param timer pointer to lv_timer
- * @return true: execute, false: not executed
+ * Выполнить таймер, если его оставшееся время равно нулю
+ * @param timer указатель на lv_timer
+ * @return true: выполнить, false: не выполнить
  */
 static bool lv_timer_exec(lv_timer_t * timer)
 {
@@ -340,9 +340,9 @@ static bool lv_timer_exec(lv_timer_t * timer)
 
     bool exec = false;
     if(lv_timer_time_remaining(timer) == 0) {
-        /* Decrement the repeat count before executing the timer_cb.
-         * If any timer is deleted `if(timer->repeat_count == 0)` is not executed below
-         * but at least the repeat count is zero and the timer can be deleted in the next round*/
+        /* Уменьшите количество повторений перед выполнением timer_cb.
+         * Если какой-либо таймер удален,`if(timer->repeat_count == 0)`не достигнет результата ниже.
+         * но по крайней мере счетчик повторов равен нулю и таймер можно удалить в следующем раунде*/
         int32_t original_repeat_count = timer->repeat_count;
         if(timer->repeat_count > 0) timer->repeat_count--;
         timer->last_run = lv_tick_get();
@@ -365,8 +365,8 @@ static bool lv_timer_exec(lv_timer_t * timer)
         exec = true;
     }
 
-    if(state.timer_deleted == false) { /*The timer might be deleted by itself as well*/
-        if(timer->repeat_count == 0) { /*The repeat count is over, delete the timer*/
+    if(state.timer_deleted == false) { /*Таймер также может быть удален сам по себе.*/
+        if(timer->repeat_count == 0) { /*Счетчик повторений закончился, удалите таймер*/
             if(timer->auto_delete) {
                 LV_TRACE_TIMER("deleting timer with %p callback because the repeat count is over", *((void **)&timer->timer_cb));
                 lv_timer_delete(timer);
@@ -382,13 +382,13 @@ static bool lv_timer_exec(lv_timer_t * timer)
 }
 
 /**
- * Find out how much time remains before a timer must be run.
- * @param timer pointer to lv_timer
- * @return the time remaining, or 0 if it needs to be run again
+ * Узнайте, сколько времени осталось до запуска таймера.
+ * @param timer указатель на lv_timer
+ * @return оставшееся время или 0, если его нужно запустить снова
  */
 static uint32_t lv_timer_time_remaining(lv_timer_t * timer)
 {
-    /*Check if at least 'period' time elapsed*/
+    /*Проверьте, прошло ли хотя бы время «периода»*/
     uint32_t elp = lv_tick_elaps(timer->last_run);
     if(elp >= timer->period)
         return 0;
@@ -396,11 +396,11 @@ static uint32_t lv_timer_time_remaining(lv_timer_t * timer)
 }
 
 /**
- * Call the ready lv_timer
+ * Вызов готового lv_timer
  */
 static void lv_timer_handler_resume(void)
 {
-    /*If there is a timer which is ready to run then resume the timer loop*/
+    /*Если есть таймер, который готов к работе, возобновите цикл таймера.*/
     state.timer_time_until_next = 0;
     if(state.resume_cb) {
         state.resume_cb(state.resume_data);

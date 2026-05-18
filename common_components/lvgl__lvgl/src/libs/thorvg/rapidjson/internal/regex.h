@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_INTERNAL_REGEX_H_
 #define RAPIDJSON_INTERNAL_REGEX_H_
@@ -25,7 +25,7 @@ RAPIDJSON_DIAG_OFF(padded)
 RAPIDJSON_DIAG_OFF(switch-enum)
 #elif defined(_MSC_VER)
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(4512) // assignment operator could not be generated
+RAPIDJSON_DIAG_OFF(4512) // не удалось сгенерировать оператор присваивания
 #endif
 
 #ifdef __GNUC__
@@ -41,7 +41,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 namespace internal {
 
 ///////////////////////////////////////////////////////////////////////////////
-// DecodedStream
+// Декодированный поток
 
 template <typename SourceStream, typename Encoding>
 class DecodedStream {
@@ -50,7 +50,7 @@ public:
     unsigned Peek() { return codepoint_; }
     unsigned Take() {
         unsigned c = codepoint_;
-        if (c) // No further decoding when '\0'
+        if (c) // Никакого дальнейшего декодирования, когда '\0'
             Decode();
         return c;
     }
@@ -68,15 +68,15 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // GenericRegex
 
-static const SizeType kRegexInvalidState = ~SizeType(0);  //!< Represents an invalid index in GenericRegex::State::out, out1
+static const SizeType kRegexInvalidState = ~SizeType(0);  //!< Представляет недопустимый индекс в GenericRegex::State::out, out1.
 static const SizeType kRegexInvalidRange = ~SizeType(0);
 
 template <typename Encoding, typename Allocator>
 class GenericRegexSearch;
 
-//! Regular expression engine with subset of ECMAscript grammar.
+//! Механизм регулярных выражений с подмножеством грамматики ECMAscript.
 /*!
-    Supported regular expression syntax:
+    Поддерживаемый синтаксис регулярных выражений:
     - \c ab     Concatenation
     - \c a|b    Alternation
     - \c a?     Zero or one
@@ -102,8 +102,8 @@ class GenericRegexSearch;
     - \c \\t Tab (U+0009)
     - \c \\v Vertical tab (U+000B)
 
-    \note This is a Thompson NFA engine, implemented with reference to
-        Cox, Russ. "Regular Expression Matching Can Be Simple And Fast (but is slow in Java, Perl, PHP, Python, Ruby,...).",
+    \note Это движок Thompson NFA, реализованный со ссылкой на
+        Кокс, Расс. «Сопоставление регулярных выражений может быть простым и быстрым (но медленным в Java, Perl, PHP, Python, Ruby,...).»,
         https://swtch.com/~rsc/regexp/regexp1.html
 */
 template <typename Encoding, typename Allocator = CrtAllocator>
@@ -142,7 +142,7 @@ private:
         kLeftParenthesis
     };
 
-    static const unsigned kAnyCharacterClass = 0xFFFFFFFF;   //!< For '.'
+    static const unsigned kAnyCharacterClass = 0xFFFFFFFF;   //!< Для '.'
     static const unsigned kRangeCharacterClass = 0xFFFFFFFE;
     static const unsigned kRangeNegationFlag = 0x80000000;
 
@@ -153,8 +153,8 @@ private:
     };
 
     struct State {
-        SizeType out;     //!< Equals to kInvalid for matching state
-        SizeType out1;    //!< Equals to non-kInvalid for split
+        SizeType out;     //!< Равно kInvalid для соответствующего состояния
+        SizeType out1;    //!< Равно не-kInvalid для разделения
         SizeType rangeStart;
         unsigned codepoint;
     };
@@ -162,7 +162,7 @@ private:
     struct Frag {
         Frag(SizeType s, SizeType o, SizeType m) : start(s), out(o), minIndex(m) {}
         SizeType start;
-        SizeType out; //!< link-list of all output states
+        SizeType out; //!< список ссылок всех выходных состояний
         SizeType minIndex;
     };
 
@@ -188,9 +188,9 @@ private:
 
     template <typename InputStream>
     void Parse(DecodedStream<InputStream, Encoding>& ds) {
-        Stack<Allocator> operandStack(allocator_, 256);    // Frag
-        Stack<Allocator> operatorStack(allocator_, 256);   // Operator
-        Stack<Allocator> atomCountStack(allocator_, 256);  // unsigned (Atom per parenthesis)
+        Stack<Allocator> operandStack(allocator_, 256);    // Фраг
+        Stack<Allocator> operatorStack(allocator_, 256);   // Оператор
+        Stack<Allocator> atomCountStack(allocator_, 256);  // без знака (атом в скобках)
 
         *atomCountStack.template Push<unsigned>() = 0;
 
@@ -283,13 +283,13 @@ private:
                     ImplicitConcatenation(atomCountStack, operatorStack);
                     break;
 
-                case '\\': // Escape character
+                case '\\': // Побег персонаж
                     if (!CharacterEscape(ds, &codepoint))
-                        return; // Unsupported escape character
-                    // fall through to default
+                        return; // Неподдерживаемый escape-символ
+                    // перейти к умолчанию
                     RAPIDJSON_DELIBERATE_FALLTHROUGH;
 
-                default: // Pattern character
+                default: // Характер рисунка
                     PushOperand(operandStack, codepoint);
                     ImplicitConcatenation(atomCountStack, operatorStack);
             }
@@ -299,7 +299,7 @@ private:
             if (!Eval(operandStack, *operatorStack.template Pop<Operator>(1)))
                 return;
 
-        // Link the operand to matching state.
+        // Свяжите операнд с соответствующим состоянием.
         if (operandStack.GetSize() == sizeof(Frag)) {
             Frag* e = operandStack.template Pop<Frag>(1);
             Patch(e->out, NewState(kRegexInvalidState, kRegexInvalidState, 0));
@@ -403,7 +403,7 @@ private:
                 return false;
 
             default:
-                // syntax error (e.g. unclosed kLeftParenthesis)
+                // синтаксическая ошибка (например, незакрытый kLeftParentesis)
                 return false;
         }
     }
@@ -413,7 +413,7 @@ private:
         RAPIDJSON_ASSERT(operandStack.GetSize() >= sizeof(Frag));
 
         if (n == 0) {
-            if (m == 0)                             // a{0} not support
+            if (m == 0)                             // {0} не поддерживается
                 return false;
             else if (m == kInfinityQuantifier)
                 Eval(operandStack, kZeroOrMore);    // a{0,} -> a*
@@ -450,8 +450,8 @@ private:
     static SizeType Min(SizeType a, SizeType b) { return a < b ? a : b; }
 
     void CloneTopOperand(Stack<Allocator>& operandStack) {
-        const Frag src = *operandStack.template Top<Frag>(); // Copy constructor to prevent invalidation
-        SizeType count = stateCount_ - src.minIndex; // Assumes top operand contains states in [src->minIndex, stateCount_)
+        const Frag src = *operandStack.template Top<Frag>(); // Скопируйте конструктор, чтобы предотвратить аннулирование
+        SizeType count = stateCount_ - src.minIndex; // Предполагается, что верхний операнд содержит состояния в [src->minIndex, stateCount_ )
         State* s = states_.template Push<State>(count);
         memcpy(s, &GetState(src.minIndex), count * sizeof(State));
         for (SizeType j = 0; j < count; j++) {
@@ -471,7 +471,7 @@ private:
             return false;
         while (ds.Peek() >= '0' && ds.Peek() <= '9') {
             if (r >= 429496729 && ds.Peek() > '5') // 2^32 - 1 = 4294967295
-                return false; // overflow
+                return false; // переполнение
             r = r * 10 + (ds.Take() - '0');
         }
         *u = r;
@@ -499,7 +499,7 @@ private:
             case ']':
                 if (start == kRegexInvalidRange)
                     return false;   // Error: nothing inside []
-                if (step == 2) { // Add trailing '-'
+                if (step == 2) { // Добавьте завершающий '-'
                     SizeType r = NewRange('-');
                     RAPIDJSON_ASSERT(current != kRegexInvalidRange);
                     GetRange(current).next = r;
@@ -512,11 +512,11 @@ private:
             case '\\':
                 if (ds.Peek() == 'b') {
                     ds.Take();
-                    codepoint = 0x0008; // Escape backspace character
+                    codepoint = 0x0008; // Escape-символ Backspace
                 }
                 else if (!CharacterEscape(ds, &codepoint))
                     return false;
-                // fall through to default
+                // перейти к умолчанию
                 RAPIDJSON_DELIBERATE_FALLTHROUGH;
 
             default:
@@ -526,7 +526,7 @@ private:
                         step++;
                         break;
                     }
-                    // fall through to step 0 for other characters
+                    // перейти к шагу 0 для других персонажей
                     RAPIDJSON_DELIBERATE_FALLTHROUGH;
 
                 case 0:
@@ -583,7 +583,7 @@ private:
             case 't': *escapedCodepoint = 0x0009; return true;
             case 'v': *escapedCodepoint = 0x000B; return true;
             default:
-                return false; // Unsupported escape character
+                return false; // Неподдерживаемый escape-символ
         }
     }
 
@@ -597,7 +597,7 @@ private:
 
     static const unsigned kInfinityQuantifier = ~0u;
 
-    // For SearchWithAnchoring()
+    // Для SearchWithAnchoring()
     bool anchorBegin_;
     bool anchorEnd_;
 };
@@ -687,12 +687,12 @@ private:
         return (regex_.stateCount_ + 31) / 32 * 4;
     }
 
-    // Return whether the added states is a match state
+    // Возвращает, являются ли добавленные состояния совпадающими.
     bool AddState(Stack<Allocator>& l, SizeType index) {
         RAPIDJSON_ASSERT(index != kRegexInvalidState);
 
         const State& s = regex_.GetState(index);
-        if (s.out1 != kRegexInvalidState) { // Split
+        if (s.out1 != kRegexInvalidState) { // Сплит
             bool matched = AddState(l, s.out);
             return AddState(l, s.out1) || matched;
         }
@@ -700,7 +700,7 @@ private:
             stateSet_[index >> 5] |= (1u << (index & 31));
             *l.template PushUnsafe<SizeType>() = index;
         }
-        return s.out == kRegexInvalidState; // by using PushUnsafe() above, we can ensure s is not validated due to reallocation.
+        return s.out == kRegexInvalidState; // используя PushUnsafe() выше, мы можем гарантировать, что s не будет проверен из-за перераспределения.
     }
 
     bool MatchRange(SizeType rangeIndex, unsigned codepoint) const {
@@ -725,7 +725,7 @@ private:
 typedef GenericRegex<UTF8<> > Regex;
 typedef GenericRegexSearch<Regex> RegexSearch;
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #ifdef __GNUC__

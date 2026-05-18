@@ -148,15 +148,15 @@ lv_obj_t * lv_arc_create(lv_obj_t * parent)
 }
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*
- * New object specific "add" or "remove" functions come here
+ * Сюда входят новые функции «добавить» или «удалить», специфичные для объекта.
  */
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_arc_set_start_angle(lv_obj_t * obj, lv_value_precise_t start)
@@ -267,7 +267,7 @@ void lv_arc_set_rotation(lv_obj_t * obj, int32_t rotation)
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
 
-    /* ensure the angle is in the range [0, 360) */
+    /* убедитесь, что угол находится в диапазоне [0, 360) */
     while(rotation < 0) rotation += 360;
     while(rotation >= 360) rotation -= 360;
     arc->rotation = rotation;
@@ -283,7 +283,7 @@ void lv_arc_set_mode(lv_obj_t * obj, lv_arc_mode_t type)
     int32_t val = arc->value;
 
     arc->type = type;
-    arc->value = -1; /** Force set_value handling*/
+    arc->value = -1; /** Принудительная обработка set_value*/
 
     lv_value_precise_t bg_midpoint, bg_end = arc->bg_angle_end;
     if(arc->bg_angle_end < arc->bg_angle_start) bg_end = arc->bg_angle_end + 360;
@@ -338,7 +338,7 @@ void lv_arc_set_range(lv_obj_t * obj, int32_t min, int32_t max)
         arc->value = max;
     }
 
-    value_update(obj); /*value has changed relative to the new range*/
+    value_update(obj); /*значение изменилось относительно нового диапазона*/
 }
 
 void lv_arc_set_min_value(lv_obj_t * obj, int32_t min)
@@ -368,7 +368,7 @@ void lv_arc_set_knob_offset(lv_obj_t * obj, int32_t offset)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_value_precise_t lv_arc_get_angle_start(lv_obj_t * obj)
@@ -438,7 +438,7 @@ uint32_t lv_arc_get_change_rate(lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 #if LV_USE_OBSERVER
@@ -519,7 +519,7 @@ static void lv_arc_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 
     lv_arc_t * arc = (lv_arc_t *)obj;
 
-    /*Initialize the allocated 'ext'*/
+    /*Инициализировать выделенный «ext»*/
     arc->rotation = 0;
     arc->bg_angle_start = 135;
     arc->bg_angle_end   = 45;
@@ -549,7 +549,7 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -560,14 +560,14 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         lv_indev_t * indev = lv_indev_active();
         if(indev == NULL) return;
 
-        /*Handle only pointers here*/
+        /*Здесь обрабатываются только указатели*/
         lv_indev_type_t indev_type = lv_indev_get_type(indev);
         if(indev_type != LV_INDEV_TYPE_POINTER) return;
 
         lv_point_t p;
         lv_indev_get_point(indev, &p);
 
-        /*Make point relative to the arc's center*/
+        /*Установить точку относительно центра дуги*/
         lv_point_t center;
         int32_t r;
         get_center(obj, &center, &r);
@@ -575,12 +575,12 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         p.x -= center.x;
         p.y -= center.y;
 
-        /*Enter dragging mode if pressed out of the knob*/
+        /*Войдите в режим перетаскивания, если нажать на ручку*/
         if(arc->dragging == false) {
             int32_t indic_width = lv_obj_get_style_arc_width(obj, LV_PART_INDICATOR);
             r -= indic_width;
-            /*Add some more sensitive area if there is no advanced hit testing.
-             * (Advanced hit testing is more precise)*/
+            /*Добавьте еще одну чувствительную область, если нет расширенного тестирования попадания.
+             * (Расширенное тестирование попадания более точное)*/
             if(lv_obj_has_flag(obj, LV_OBJ_FLAG_ADV_HITTEST)) {
                 r -= indic_width;
             }
@@ -591,17 +591,17 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
             if(p.x * p.x + p.y * p.y > r * r) {
                 arc->dragging = true;
-                arc->last_tick = lv_tick_get(); /*Capture timestamp at dragging start*/
+                arc->last_tick = lv_tick_get(); /*Захватить временную метку в начале перетаскивания*/
             }
         }
 
-        /*It must be in "dragging" mode to turn the arc*/
+        /*Чтобы повернуть дугу, он должен находиться в режиме «перетаскивания».*/
         if(arc->dragging == false) return;
 
-        /*No angle can be determined if exactly the middle of the arc is being pressed*/
+        /*Ни один угол не может быть определен, если нажимается ровно середина дуги*/
         if(p.x == 0 && p.y == 0) return;
 
-        /*Calculate the angle of the pressed point*/
+        /*Вычислить угол нажатой точки*/
         lv_value_precise_t angle;
         lv_value_precise_t bg_end = arc->bg_angle_end;
         if(arc->bg_angle_end < arc->bg_angle_start) {
@@ -610,15 +610,15 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         angle = lv_atan2(p.y, p.x);
         angle -= arc->rotation;
-        angle -= arc->bg_angle_start;  /*Make the angle relative to the start angle*/
+        angle -= arc->bg_angle_start;  /*Сделайте угол относительно начального угла*/
 
 
-        /* ensure the angle is in the range [0, 360) */
+        /* убедитесь, что угол находится в диапазоне [0, 360) */
         while(angle < 0) angle += 360;
         while(angle >= 360) angle -= 360;
 
 
-        const uint32_t circumference = (uint32_t)((2U * r * 314U) / 100U);  /* Equivalent to: 2r * 3.14, avoiding floats */
+        const uint32_t circumference = (uint32_t)((2U * r * 314U) / 100U);  /* Эквивалентно: 2r * 3,14, без плавающих чисел. */
         const lv_value_precise_t tolerance_deg = (360 * lv_dpx(20U)) / circumference;
         const uint32_t min_close_prev = (uint32_t) arc->min_close;
 
@@ -631,22 +631,22 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         lv_value_precise_t last_angle_rel = arc->last_angle - arc->bg_angle_start;
         lv_value_precise_t delta_angle = angle - last_angle_rel;
 
-        /*Do not allow big jumps (jumps bigger than 280°).
-         *It's mainly to avoid jumping to the opposite end if the "dead" range between min. and max. is crossed.
-         *Check which end was closer on the last valid press (arc->min_close) and prefer that end*/
+        /*Не допускайте больших прыжков (прыжков на угол более 280°).
+         *В основном это делается для того, чтобы избежать прыжка на противоположный конец, если «мертвый» диапазон находится в пределах мин. и макс. пересекается.
+         *Проверьте, какой конец был ближе при последнем действительном нажатии (arc-> min_close) и отдайте предпочтение этому концу*/
         if(LV_ABS(delta_angle) > 280) {
             if(arc->min_close == CLICK_CLOSER_TO_MIN_END) angle = 0;
             else angle = deg_range;
         }
-        /* Check if click was outside the background arc start and end angles */
+        /* Проверьте, находился ли щелчок за пределами начального и конечного углов фоновой дуги. */
         else if(CLICK_OUTSIDE_BG_ANGLES == arc->in_out) {
             if(arc->min_close == CLICK_CLOSER_TO_MIN_END) angle = -deg_range;
             else angle = deg_range;
         }
-        else { /* Keep the angle value */ }
+        else { /* Сохраняйте значение угла */ }
 
-        /* Prevent big jumps when the click goes from start to end angle in the invisible
-         * part of the background arc without being released */
+        /* Предотвратите большие скачки, когда щелчок идет от начала до конца в невидимом углу.
+         * часть фоновой дуги, не отпуская */
         if(((min_close_prev == CLICK_CLOSER_TO_MIN_END) && (arc->min_close == CLICK_CLOSER_TO_MAX_END))
            && ((CLICK_OUTSIDE_BG_ANGLES == arc->in_out) && (LV_ABS(delta_angle) > 280))) {
             angle = 0;
@@ -657,13 +657,13 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
             angle = deg_range;
             arc->min_close = min_close_prev;
         }
-        else { /* Keep the angle value */ }
+        else { /* Сохраняйте значение угла */ }
 
-        /*Calculate the slew rate limited angle based on change rate (degrees/sec)*/
+        /*Рассчитайте угол ограничения скорости поворота на основе скорости изменения (градусов/сек).*/
         delta_angle = angle - last_angle_rel;
 
         uint32_t delta_tick = lv_tick_elaps(arc->last_tick);
-        /* delta_angle_max can never be signed. delta_tick is always signed, same for ch_rate */
+        /* delta_angle_max никогда не может быть подписан.  delta_tick всегда имеет знак, то же самое и для ch_rate. */
         const lv_value_precise_t delta_angle_max = (arc->chg_rate * delta_tick) / 1000;
 
         if(delta_angle > delta_angle_max) {
@@ -672,18 +672,18 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         else if(delta_angle < -delta_angle_max) {
             delta_angle = -delta_angle_max;
         }
-        else { /* Nothing to do */ }
+        else { /* Нечего делать */ }
 
-        angle = last_angle_rel + delta_angle; /*Apply the limited angle change*/
+        angle = last_angle_rel + delta_angle; /*Применить ограниченное изменение угла*/
 
-        /*Rounding for symmetry*/
+        /*Закругление для симметрии*/
         lv_value_precise_t round = ((bg_end - arc->bg_angle_start) * 8) / (arc->max_value - arc->min_value);
         round = (round + 4) / 16;
         angle += round;
 
-        angle += arc->bg_angle_start;  /*Make the angle absolute again*/
+        angle += arc->bg_angle_start;  /*Снова сделайте угол абсолютным.*/
 
-        /*Set the new value*/
+        /*Установите новое значение*/
         int32_t old_value = arc->value;
         int32_t new_value = lv_map((int32_t)angle, (int32_t)arc->bg_angle_start, (int32_t)bg_end, arc->min_value,
                                    arc->max_value);
@@ -692,23 +692,23 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         }
 
         if(new_value != lv_arc_get_value(obj)) {
-            arc->last_tick = lv_tick_get(); /*Cache timestamp for the next iteration*/
-            lv_arc_set_value(obj, new_value); /*set_value caches the last_angle for the next iteration*/
+            arc->last_tick = lv_tick_get(); /*Временная метка кэша для следующей итерации*/
+            lv_arc_set_value(obj, new_value); /*set_value кэширует last_angle для следующей итерации.*/
             if(new_value != old_value) {
                 res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
                 if(res != LV_RESULT_OK) return;
             }
         }
 
-        /*Don't let the elapsed time become too big while sitting on an end point*/
+        /*Не позволяйте прошедшему времени стать слишком большим, пока вы находитесь в конечной точке.*/
         if(new_value == arc->min_value || new_value == arc->max_value) {
-            arc->last_tick = lv_tick_get(); /*Cache timestamp for the next iteration*/
+            arc->last_tick = lv_tick_get(); /*Временная метка кэша для следующей итерации*/
         }
     }
     else if(code == LV_EVENT_RELEASED || code == LV_EVENT_PRESS_LOST) {
         arc->dragging = false;
 
-        /*Leave edit mode if released. (No need to wait for LONG_PRESS)*/
+        /*Выйдите из режима редактирования, если он отпущен. (Не нужно ждать LONG_PRESS )*/
         lv_group_t * g             = lv_obj_get_group(obj);
         bool editing               = lv_group_get_editing(g);
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
@@ -757,33 +757,33 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         r -= w + ext_click_area;
 
         lv_area_t a;
-        /*Invalid if clicked inside*/
+        /*Недействительно, если щелкнуть внутри*/
         lv_area_set(&a, p.x - r, p.y - r, p.x + r, p.y + r);
         if(lv_area_is_point_on(&a, info->point, LV_RADIUS_CIRCLE)) {
             info->res = false;
             return;
         }
 
-        /*Calculate the angle of the pressed point*/
+        /*Вычислить угол нажатой точки*/
         lv_value_precise_t angle = lv_atan2(info->point->y - p.y, info->point->x - p.x);
         angle -= arc->rotation;
-        angle -= arc->bg_angle_start;  /*Make the angle relative to the start angle*/
+        angle -= arc->bg_angle_start;  /*Сделайте угол относительно начального угла*/
 
-        /* ensure the angle is in the range [0, 360) */
+        /* убедитесь, что угол находится в диапазоне [0, 360) */
         while(angle < 0) angle += 360;
         while(angle >= 360) angle -= 360;
 
-        const uint32_t circumference = (uint32_t)((2U * r * 314U) / 100U);  /* Equivalent to: 2r * 3.14, avoiding floats */
+        const uint32_t circumference = (uint32_t)((2U * r * 314U) / 100U);  /* Эквивалентно: 2r * 3,14, без плавающих чисел. */
         const lv_value_precise_t tolerance_deg = (360 * lv_dpx(20U)) / circumference;
 
-        /* Check if the angle is outside the drawn background arc */
+        /* Проверьте, находится ли угол за пределами нарисованной фоновой дуги. */
         const bool is_angle_within_bg_bounds = lv_arc_angle_within_bg_bounds(obj, angle, tolerance_deg);
         if(!is_angle_within_bg_bounds) {
             info->res = false;
             return;
         }
 
-        /*Valid if no clicked outside*/
+        /*Действует, если не нажимать снаружи*/
         lv_area_increase(&a, w + ext_click_area * 2, w + ext_click_area * 2);
         info->res = lv_area_is_point_on(&a, info->point, LV_RADIUS_CIRCLE);
     }
@@ -824,7 +824,7 @@ static void lv_arc_draw(lv_event_t * e)
     int32_t arc_r;
     get_center(obj, &center, &arc_r);
 
-    /*Draw the background arc*/
+    /*Нарисуйте фоновую дугу*/
     lv_draw_arc_dsc_t arc_dsc;
     if(arc_r > 0) {
         lv_draw_arc_dsc_init(&arc_dsc);
@@ -837,7 +837,7 @@ static void lv_arc_draw(lv_event_t * e)
         lv_draw_arc(layer, &arc_dsc);
     }
 
-    /*Make the indicator arc smaller or larger according to its greatest padding value*/
+    /*Сделайте дугу индикатора меньше или больше в соответствии с ее наибольшим значением заполнения.*/
     int32_t indic_r = arc_r - get_indicator_max_pad(obj);
 
     if(indic_r > 0) {
@@ -867,7 +867,7 @@ static void inv_arc_area(lv_obj_t * obj, lv_value_precise_t start_angle, lv_valu
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    /*Skip this complicated invalidation if the arc is not visible*/
+    /*Пропустите эту сложную процедуру аннулирования, если дуга не видна.*/
     if(lv_obj_is_visible(obj) == false) return;
 
     lv_arc_t * arc = (lv_arc_t *)obj;
@@ -984,7 +984,7 @@ static void get_knob_area(lv_obj_t * obj, const lv_point_t * center, int32_t r, 
 }
 
 /**
- * Used internally to update arc angles after a value change
+ * Используется внутренне для обновления углов дуги после изменения значения.
  * @param arc pointer to an arc object
  */
 static void value_update(lv_obj_t * obj)
@@ -992,7 +992,7 @@ static void value_update(lv_obj_t * obj)
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
 
-    /*If the value is still not set to any value do not update*/
+    /*Если значение по-прежнему не установлено ни на какое значение, не обновляйте.*/
     if(arc->value == VALUE_UNSET) return;
 
     lv_value_precise_t bg_midpoint, bg_end = arc->bg_angle_end;
@@ -1029,7 +1029,7 @@ static void value_update(lv_obj_t * obj)
             LV_LOG_WARN("Invalid mode: %d", arc->type);
             return;
     }
-    arc->last_angle = angle; /*Cache angle for slew rate limiting*/
+    arc->last_angle = angle; /*Угол кэша для ограничения скорости нарастания*/
 }
 
 static int32_t knob_get_extra_size(lv_obj_t * obj)
@@ -1048,20 +1048,20 @@ static int32_t knob_get_extra_size(lv_obj_t * obj)
 }
 
 /**
- * Check if angle is within arc background bounds
+ * Проверьте, находится ли угол в пределах границ фона дуги.
  *
- * In order to avoid unexpected value update of the arc value when the user clicks
- * outside of the arc background we need to check if the angle (of the clicked point)
- * is within the bounds of the background.
+ * Чтобы избежать неожиданного обновления значения дуги, когда пользователь нажимает
+ * за пределами фона дуги нам нужно проверить, соответствует ли угол (точки щелчка)
+ * находится в пределах фона.
  *
- * A tolerance (extra room) also should be taken into consideration.
+ * Также следует учитывать допуск (дополнительное помещение).
  *
- * E.g. Arc with start angle of 0° and end angle of 90°, the background is only visible in
- * that range, from 90° to 360° the background is invisible. Click in 150° should not update
- * the arc value, click within the arc angle range should.
+ * например Дуга с начальным углом 0° и конечным углом 90°, фон виден только в
+ * В этом диапазоне от 90° до 360° фон невидим. Щелчок на 150° не должен обновляться.
+ * значение дуги, щелкните в пределах диапазона угла дуги.
  *
- * IMPORTANT NOTE: angle is always relative to bg_angle_start, e.g. if bg_angle_start is 30
- * and we click a bit to the left, angle is 10, not the expected 40.
+ * IMPORTANT NOTE : угол всегда относительно bg_angle_start , например. если bg_angle_start равно 30
+ * и нажимаем чуть левее, угол 10, а не ожидаемые 40.
  *
  * @param obj   Pointer to lv_arc
  * @param angle Angle to be checked. Is 0<=angle<=360 and relative to bg_angle_start
@@ -1076,16 +1076,16 @@ static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise
     lv_arc_t * arc = (lv_arc_t *)obj;
 
     lv_value_precise_t bounds_angle = arc->bg_angle_end - arc->bg_angle_start;
-    if(arc->bg_angle_end == arc->bg_angle_start) return false; /*The arc has 0 deg span*/
+    if(arc->bg_angle_end == arc->bg_angle_start) return false; /*Дуга имеет размах 0 градусов.*/
 
-    /* ensure the angle is in the range [0, 360) */
+    /* убедитесь, что угол находится в диапазоне [0, 360) */
     while(bounds_angle < 0) bounds_angle += 360;
     while(bounds_angle >= 360) bounds_angle -= 360;
 
-    /*Full circle*/
+    /*Полный круг*/
     if(bounds_angle == 0) bounds_angle = 360;
 
-    /* Angle is in the bounds */
+    /* Угол находится в пределах */
     if(angle <= bounds_angle) {
         if(angle < (bounds_angle / 2)) {
             arc->min_close = CLICK_CLOSER_TO_MIN_END;
@@ -1097,22 +1097,22 @@ static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise
         return true;
     }
 
-    /* Distance between background start and end angles is less than tolerance,
-     * consider the click inside the arc */
+    /* Расстояние между начальным и конечным углами фона меньше допуска,
+     * рассмотрим щелчок внутри дуги */
     if(360 - bounds_angle <= tolerance_deg) {
         arc->min_close = CLICK_CLOSER_TO_MIN_END;
         arc->in_out = CLICK_INSIDE_BG_ANGLES;
         return true;
     }
 
-    /* angle is within the tolerance of the min end */
+    /* угол находится в пределах допуска минимального конца */
     if(360 - angle <= tolerance_deg) {
         arc->min_close = CLICK_CLOSER_TO_MIN_END;
         arc->in_out = CLICK_OUTSIDE_BG_ANGLES;
         return true;
     }
 
-    /* angle is within the tolerance of the max end */
+    /* угол находится в пределах допуска максимального конца */
     if(angle <= bounds_angle + tolerance_deg) {
         arc->min_close = CLICK_CLOSER_TO_MAX_END;
         arc->in_out = CLICK_OUTSIDE_BG_ANGLES;

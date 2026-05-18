@@ -3,8 +3,8 @@
  *
  * Copyright 2002-2010 Guillaume Cottenceau.
  *
- * This software may be freely redistributed under the terms
- * of the X11 license.
+ * Это программное обеспечение может свободно распространяться на условиях
+ * лицензии X11.
  *
  */
 
@@ -92,7 +92,7 @@ lv_test_screenshot_result_t lv_test_screenshot_compare(const char * fn_ref)
  **********************/
 
 /**
- * Compare the content of the frame buffer with a reference image
+ * Сравните содержимое буфера кадра с эталонным изображением.
  * @param fn_ref    reference image path
  * @return          An element of lv_test_screenshot_result_t
  */
@@ -221,7 +221,7 @@ static void buf_to_xrgb8888(const lv_draw_buf_t * draw_buf, uint8_t * buf_out)
                 const lv_color16_t * c16 = (const lv_color16_t *)&buf_in[x * 2];
 
                 buf_out[x * 4 + 3] = 0xff;
-                buf_out[x * 4 + 2] = (c16->blue * 2106) >> 8;  /*To make it rounded*/
+                buf_out[x * 4 + 2] = (c16->blue * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                 buf_out[x * 4 + 1] = (c16->green * 1037) >> 8;
                 buf_out[x * 4 + 0] = (c16->red * 2106) >> 8;
             }
@@ -323,7 +323,7 @@ static void create_folders_if_needed(const char * path)
     }
 
     char * token = strtok_r(path_copy, "/", &ptr);
-    char current_path[1024] = {'\0'}; /* Adjust the size as needed */
+    char current_path[1024] = {'\0'}; /* Отрегулируйте размер по мере необходимости */
 
     while(token && ptr && *ptr != '\0') {
         lv_strcat(current_path, token);

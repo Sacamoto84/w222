@@ -36,38 +36,38 @@ enum _lv_property_checkbox_id_t {
  **********************/
 
 /**
- * Create a check box object
+ * Создайте объект флажка
  * @param parent    pointer to an object, it will be the parent of the new button
  * @return          pointer to the created check box
  */
 lv_obj_t * lv_checkbox_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set the text of a check box. `txt` will be copied and may be deallocated
- * after this function returns.
+ * Установите текст флажка.  `txt` будет скопирован и может быть освобожден.
+ * после того, как эта функция вернется.
  * @param obj   pointer to a check box
  * @param txt   the text of the check box. NULL to refresh with the current text.
  */
 void lv_checkbox_set_text(lv_obj_t * obj, const char * txt);
 
 /**
- * Set the text of a check box. `txt` must not be deallocated during the life
- * of this checkbox.
+ * Установите текст флажка.  `txt` не должен быть освобожден в течение жизни
+ * этого флажка.
  * @param obj   pointer to a check box
  * @param txt   the text of the check box.
  */
 void lv_checkbox_set_text_static(lv_obj_t * obj, const char * txt);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the text of a check box
+ * Получить текст флажка
  * @param obj   pointer to check box object
  * @return      pointer to the text of the check box
  */
@@ -80,7 +80,7 @@ const char * lv_checkbox_get_text(const lv_obj_t * obj);
 #endif /*LV_USE_CHECKBOX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CHECKBOX_H*/

@@ -7,8 +7,8 @@
 *                                *
 *  ┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ┓ *
 *       ┌ ─ ─ ─ ┐                *
-*  ┃      Cache   insert       ┃ *
-*       │Hitting│  head          *
+*  ┃ Вставка кэша ┃ *
+*       │Удар│ головой *
 *  ┃     ─ ─ ─ ─               ┃ *
 *        ┌─────┐                 *
 *  ┃     │  B  │               ┃ *
@@ -21,7 +21,7 @@
 *        ┌──┴──┐                 *
 *  ┃     │  A  │ ┌ ─ ─ ─ ─ ─ ┐ ┃ *
 *        └──▲──┘      LRU        *
-*  ┃        │    │   Cache   │ ┃ *
+*  ┃ │ │ Кэш │ ┃ *
 *        ┌──┴──┐  ─ ─ ─ ─ ─ ─    *
 *  ┃     │  D  │               ┃ *
 *        └──▲──┘                 *
@@ -34,8 +34,8 @@
 *  ┃   │ │  F  │ │             ┃ *
 *        └─────┘                 *
 *  ┃   └ ─ ─ ─ ─ ┘             ┃ *
-*        remove                  *
-*  ┃      tail                 ┃ *
+*        удалить *
+*  ┃ хвост ┃ *
 *   ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━  *
 *                                *
 \*********************************/
@@ -246,14 +246,14 @@ static lv_cache_entry_t * get_cb(lv_cache_t * cache, const void * key, void * us
         return NULL;
     }
 
-    /* Linear search */
+    /* Линейный поиск */
     void * node = NULL;
     LV_LL_READ(&lru->ll, node) {
         if(lru->cache.ops.compare_cb(node, key) == 0) {
             break;
         }
     }
-    /*cache hit*/
+    /*попадание в кэш*/
     if(node) {
         void * head = lv_ll_get_head(&lru->ll);
         lv_ll_move_before(&lru->ll, node, head);
@@ -344,7 +344,7 @@ static void drop_all_cb(lv_cache_t * cache, void * user_data)
     uint32_t used_cnt = 0;
     void * node;
     LV_LL_READ(&lru->ll, node) {
-        /*free user handled data and do other clean up*/
+        /*бесплатные данные, обрабатываемые пользователем, и другая очистка*/
         lv_cache_entry_t * entry = lv_cache_entry_get_entry(node, cache->node_size);
         if(lv_cache_entry_get_ref(entry) == 0) {
             lru->cache.ops.free_cb(node, user_data);

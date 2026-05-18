@@ -41,7 +41,7 @@ void lv_example_scroll_9(void)
     switch_create(panel, "Elastic scroll", LV_OBJ_FLAG_SCROLL_ELASTIC, true);
     switch_create(panel, "Add scroll momentum", LV_OBJ_FLAG_SCROLL_MOMENTUM, true);
 
-    /*Show the switches first*/
+    /*Сначала покажи переключатели*/
     lv_obj_move_to_index(list, -1);
 }
 

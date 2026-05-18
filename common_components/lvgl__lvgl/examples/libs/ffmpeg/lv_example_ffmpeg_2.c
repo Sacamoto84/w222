@@ -9,17 +9,17 @@
 #endif
 
 /**
- * Open a video from a file
+ * Открыть видео из файла
  */
 void lv_example_ffmpeg_2(void)
 {
-    /*birds.mp4 is downloaded from http://www.videezy.com (Free Stock Footage by Videezy!)
+    /*birds.mp4 загружается сhttp://www.videezy.com(бесплатный видеоролик от Videezy!)
      *https://www.videezy.com/abstract/44864-silhouettes-of-birds-over-the-sunset*/
-    /*It will use the LVGL filesystem abstraction (not the OS filesystem)
-     *if `LV_FFMPEG_PLAYER_USE_LV_FS` is set.*/
+    /*Он будет использовать абстракцию файловой системы LVGL (а не файловую систему OS).
+     *если установлен `LV_FFMPEG_PLAYER_USE_LV_FS`.*/
     lv_obj_t * player = lv_ffmpeg_player_create(lv_screen_active());
-    /*Note: "h264_v4l2m2m" is a Linux-specific hardware decoder example, available only on Linux systems with V4L2 support.
-     *In the absence of support, it will fall back to software decoding.*/
+    /*Note: «h264_v4l2m2m» — это пример аппаратного декодера, специфичный для Linux, доступный только в системах Linux с поддержкой V4L2.
+     *При отсутствии поддержки он вернется к программному декодированию.*/
     lv_ffmpeg_player_set_decoder(player, "h264_v4l2m2m");
     lv_ffmpeg_player_set_src(player, PATH_PREFIX "lvgl/examples/libs/ffmpeg/birds.mp4");
     lv_ffmpeg_player_set_auto_restart(player, true);
@@ -32,7 +32,7 @@ void lv_example_ffmpeg_2(void)
 void lv_example_ffmpeg_2(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "FFmpeg is not installed");

@@ -44,28 +44,28 @@
  **********************/
 
 /**
- * PXP interrupt initialization.
+ * PXP Инициализация прерывания.
  */
 static void _pxp_interrupt_init(void);
 
 /**
- * PXP interrupt de-initialization.
+ * PXP Деинициализация прерывания.
  */
 static void _pxp_interrupt_deinit(void);
 
 /**
- * Start the PXP job.
+ * Запустите задание PXP.
  */
 static void _pxp_run(void);
 
 /**
- * Wait for PXP completion.
+ * Дождитесь завершения PXP.
  */
 static void _pxp_wait(void);
 
 #if defined(__ZEPHYR__)
     /**
-    * Interrupt handler for Zephyr IRQ
+    * Обработчик прерываний для Zephyr IRQ
     */
     static void _pxp_zephyr_irq_handler(void *);
 #endif
@@ -158,7 +158,7 @@ static void _pxp_interrupt_deinit(void)
 }
 
 /**
- * Function to start PXP job.
+ * Функция для запуска задания PXP.
  */
 static void _pxp_run(void)
 {
@@ -169,7 +169,7 @@ static void _pxp_run(void)
 }
 
 /**
- * Function to wait for PXP completion.
+ * Функция ожидания завершения PXP.
  */
 static void _pxp_wait(void)
 {

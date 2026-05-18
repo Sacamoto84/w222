@@ -9,11 +9,11 @@
 #endif
 
 /**
- * Load a font with FreeType
+ * Загрузите шрифт с помощью FreeType
  */
 void lv_example_freetype_1(void)
 {
-    /*Create a font*/
+    /*Создать шрифт*/
     lv_font_t * font = lv_freetype_font_create(PATH_PREFIX "lvgl/examples/libs/freetype/Lato-Regular.ttf",
                                                LV_FREETYPE_FONT_RENDER_MODE_BITMAP,
                                                24,
@@ -24,13 +24,13 @@ void lv_example_freetype_1(void)
         return;
     }
 
-    /*Create style with the new font*/
+    /*Создайте стиль с помощью нового шрифта*/
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_text_font(&style, font);
     lv_style_set_text_align(&style, LV_TEXT_ALIGN_CENTER);
 
-    /*Create a label with the new style*/
+    /*Создайте этикетку с новым стилем*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_add_style(label, &style, 0);
     lv_label_set_text(label, "Hello world\nI'm a font created with FreeType");
@@ -41,7 +41,7 @@ void lv_example_freetype_1(void)
 void lv_example_freetype_1(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "FreeType is not installed");

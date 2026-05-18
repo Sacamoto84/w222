@@ -69,7 +69,7 @@ lv_obj_t * lv_imagebutton_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_imagebutton_set_src(lv_obj_t * obj, lv_imagebutton_state_t state, const void * src_left, const void * src_mid,
@@ -138,7 +138,7 @@ void lv_imagebutton_set_state(lv_obj_t * obj, lv_imagebutton_state_t state)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const void * lv_imagebutton_get_src_left(lv_obj_t * obj, lv_imagebutton_state_t state)
@@ -174,7 +174,7 @@ static void lv_imagebutton_constructor(const lv_obj_class_t * class_p, lv_obj_t 
 {
     LV_UNUSED(class_p);
     lv_imagebutton_t * imagebutton = (lv_imagebutton_t *)obj;
-    /*Initialize the allocated 'ext'*/
+    /*Инициализировать выделенный «ext»*/
 
     lv_memzero(&imagebutton->src_mid, sizeof(imagebutton->src_mid));
     lv_memzero(&imagebutton->src_left, sizeof(imagebutton->src_left));
@@ -218,10 +218,10 @@ static void draw_main(lv_event_t * e)
     lv_imagebutton_t * imagebutton = (lv_imagebutton_t *)obj;
     lv_layer_t * layer = lv_event_get_layer(e);
 
-    /*Just draw_main an image*/
+    /*Просто draw_main изображение*/
     lv_imagebutton_state_t state  = suggest_state(obj, get_state(obj));
 
-    /*Simply draw the middle src if no tiled*/
+    /*Просто нарисуйте средний источник, если он не выложен плиткой.*/
     lv_imagebutton_src_info_t * src_info = &imagebutton->src_left[state];
 
     int32_t tw = lv_obj_get_style_transform_width(obj, LV_PART_MAIN);
@@ -289,14 +289,14 @@ static void refr_image(lv_obj_t * obj)
     if(src == NULL) return;
 
     lv_obj_refresh_self_size(obj);
-    lv_obj_set_height(obj, imagebutton->src_mid[state].header.h); /*Keep the user defined width*/
+    lv_obj_set_height(obj, imagebutton->src_mid[state].header.h); /*Сохраняйте определенную пользователем ширину*/
 
     lv_obj_invalidate(obj);
 }
 
 /**
- * If `src` is not defined for the current state try to get a state which is related to the current but has `src`.
- * E.g. if the PRESSED src is not set but the RELEASED does, use the RELEASED.
+ * Если `src` не определен для текущего состояния, попытайтесь получить состояние, связанное с текущим, но имеющее `src`.
+ * например если источник PRESSED не установлен, а RELEASED установлен, используйте RELEASED .
  * @param imagebutton pointer to an image button
  * @param state the state to convert
  * @return the suggested state

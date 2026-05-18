@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of button matrix */
+/** Данные матрицы кнопок */
 struct _lv_buttonmatrix_t {
     lv_obj_t obj;
     const char * const * map_p;          /**< Pointer to the current map */
@@ -52,7 +52,7 @@ struct _lv_buttonmatrix_t {
 #endif /* LV_USE_BUTTONMATRIX != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BUTTONMATRIX_PRIVATE_H*/

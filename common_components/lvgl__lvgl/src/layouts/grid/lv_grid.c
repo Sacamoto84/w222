@@ -20,7 +20,7 @@
 #define layout_list_def LV_GLOBAL_DEFAULT()->layout_list
 
 /**
- * Some helper defines
+ * Какой-то помощник определяет
  */
 #define IS_FR(x)       (x >= LV_COORD_MAX - 100)
 #define IS_CONTENT(x)  (x == LV_COORD_MAX - 101)
@@ -197,8 +197,8 @@ static void grid_update(lv_obj_t * cont, void * user_data)
     item_repos_hint_t hint;
     lv_memzero(&hint, sizeof(hint));
 
-    /*Calculate the grids absolute x and y coordinates.
-     *It will be used as helper during item repositioning to avoid calculating this value for every children*/
+    /*Рассчитайте абсолютные координаты x и y сетки.
+     *Он будет использоваться в качестве вспомогательного средства при изменении положения элемента, чтобы избежать вычисления этого значения для каждого дочернего элемента.*/
     int32_t pad_left = lv_obj_get_style_space_left(cont, LV_PART_MAIN);
     int32_t pad_top = lv_obj_get_style_space_top(cont, LV_PART_MAIN);
     hint.grid_abs.x = pad_left + cont->coords.x1 - lv_obj_get_scroll_x(cont);
@@ -223,7 +223,7 @@ static void grid_update(lv_obj_t * cont, void * user_data)
 }
 
 /**
- * Calculate the grid cells coordinates
+ * Вычислить координаты ячеек сетки
  * @param cont an object that has a grid
  * @param calc store the calculated cells sizes here
  * @note `lv_grid_calc_free(calc_out)` needs to be called when `calc_out` is not needed anymore
@@ -236,11 +236,11 @@ static lv_result_t calc(lv_obj_t * cont, lv_grid_calc_t * calc_out)
     }
 
     if(calc_rows(cont, calc_out) == LV_RESULT_INVALID) {
-        /* Warning is already logged inside `calc_rows` */
+        /* Предупреждение уже зарегистрировано внутри `calc_rows`. */
         return LV_RESULT_INVALID;
     }
     if(calc_cols(cont, calc_out) == LV_RESULT_INVALID) {
-        /* Warning is already logged inside `calc_cols` */
+        /* Предупреждение уже зарегистрировано внутри `calc_cols`. */
         return LV_RESULT_INVALID;
     }
 
@@ -266,7 +266,7 @@ static lv_result_t calc(lv_obj_t * cont, lv_grid_calc_t * calc_out)
 }
 
 /**
- * Free the a grid calculation's data
+ * Освободите данные расчета сетки
  * @param calc pointer to the calculated grid cell coordinates
  */
 static void calc_free(lv_grid_calc_t * calc)
@@ -307,12 +307,12 @@ static lv_result_t calc_cols(lv_obj_t * cont, lv_grid_calc_t * c)
     c->x = lv_malloc(sizeof(int32_t) * c->col_num);
     c->w = lv_malloc(sizeof(int32_t) * c->col_num);
 
-    /*Set sizes for CONTENT cells*/
+    /*Установить размеры для ячеек CONTENT*/
     uint32_t i;
     for(i = 0; i < c->col_num; i++) {
         int32_t size = LV_COORD_MIN;
         if(IS_CONTENT(col_templ[i])) {
-            /*Check the size of children of this cell*/
+            /*Проверьте размер дочерних элементов этой ячейки*/
             uint32_t ci;
             for(ci = 0; ci < lv_obj_get_child_count(cont); ci++) {
                 lv_obj_t * item = lv_obj_get_child(cont, ci);
@@ -357,9 +357,9 @@ static lv_result_t calc_cols(lv_obj_t * cont, lv_grid_calc_t * c)
         if(IS_FR(x)) {
             int32_t f = GET_FR(x);
             c->w[i] = lv_div_round_closest(free_w * f, col_fr_cnt);
-            /*By updating remaining fr and width, we ensure f == col_fr_cnt
-             *in the last loop iteration. That means the last iteration will
-             *not have rounding errors and use all remaining space.*/
+            /*Обновляя оставшиеся fr и ширину, мы гарантируем f == col_fr_cnt
+             *в последней итерации цикла. Это означает, что последняя итерация будет
+             *не иметь ошибок округления и использовать все оставшееся пространство.*/
             col_fr_cnt -= f;
             free_w -= c->w[i];
         }
@@ -397,12 +397,12 @@ static lv_result_t calc_rows(lv_obj_t * cont, lv_grid_calc_t * c)
     c->row_num = count_tracks(row_templ);
     c->y = lv_malloc(sizeof(int32_t) * c->row_num);
     c->h = lv_malloc(sizeof(int32_t) * c->row_num);
-    /*Set sizes for CONTENT cells*/
+    /*Установить размеры для ячеек CONTENT*/
     uint32_t i;
     for(i = 0; i < c->row_num; i++) {
         int32_t size = LV_COORD_MIN;
         if(IS_CONTENT(row_templ[i])) {
-            /*Check the size of children of this cell*/
+            /*Проверьте размер дочерних элементов этой ячейки*/
             uint32_t ci;
             for(ci = 0; ci < lv_obj_get_child_count(cont); ci++) {
                 lv_obj_t * item = lv_obj_get_child(cont, ci);
@@ -447,9 +447,9 @@ static lv_result_t calc_rows(lv_obj_t * cont, lv_grid_calc_t * c)
         if(IS_FR(x)) {
             int32_t f = GET_FR(x);
             c->h[i] = lv_div_round_closest(free_h * f, row_fr_cnt);
-            /*By updating remaining fr and height, we ensure f == row_fr_cnt
-             *in the last loop iteration. That means the last iteration will
-             *not have rounding errors and use all remaining space.*/
+            /*Обновляя оставшиеся fr и высоту, мы гарантируем f == row_fr_cnt
+             *в последней итерации цикла. Это означает, что последняя итерация будет
+             *не иметь ошибок округления и использовать все оставшееся пространство.*/
             row_fr_cnt -= f;
             free_h -= c->h[i];
         }
@@ -462,7 +462,7 @@ static lv_result_t calc_rows(lv_obj_t * cont, lv_grid_calc_t * c)
 }
 
 /**
- * Reposition a grid item in its cell
+ * Перемещение элемента сетки в его ячейке
  * @param item a grid item to reposition
  * @param calc the calculated grid of `cont`
  * @param child_id_ext helper value if the ID of the child is know (order from the oldest) else -1
@@ -501,7 +501,7 @@ static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * 
     int32_t row_y2 = c->y[row_pos + row_span - 1] + c->h[row_pos + row_span - 1];
     int32_t row_h = row_y2 - row_y1;
 
-    /*If the item has RTL base dir switch start and end*/
+    /*Если элемент имеет базовый переключатель направления RTL, начало и конец*/
     if(lv_obj_get_style_base_dir(item, LV_PART_MAIN) == LV_BASE_DIR_RTL) {
         if(col_align == LV_GRID_ALIGN_START) col_align = LV_GRID_ALIGN_END;
         else if(col_align == LV_GRID_ALIGN_END) col_align = LV_GRID_ALIGN_START;
@@ -558,7 +558,7 @@ static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * 
             break;
     }
 
-    /*Set a new size if required*/
+    /*При необходимости установите новый размер*/
     if(lv_obj_get_width(item) != item_w || lv_obj_get_height(item) != item_h) {
         lv_area_t old_coords;
         lv_area_copy(&old_coords, &item->coords);
@@ -571,7 +571,7 @@ static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * 
 
     }
 
-    /*Handle percentage value of translate*/
+    /*Обработка процентного значения перевода*/
     int32_t tr_x = lv_obj_get_style_translate_x(item, LV_PART_MAIN);
     int32_t tr_y = lv_obj_get_style_translate_y(item, LV_PART_MAIN);
     int32_t w = lv_obj_get_width(item);
@@ -596,8 +596,8 @@ static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * 
 }
 
 /**
- * Place the grid track according to align methods. It keeps the track sizes but sets their position.
- * It can process both columns or rows according to the passed parameters.
+ * Разместите дорожку сетки в соответствии с методами выравнивания. Он сохраняет размеры дорожек, но устанавливает их положение.
+ * Он может обрабатывать как столбцы, так и строки в соответствии с переданными параметрами.
  * @param cont_size size of the containers content area (width/height)
  * @param auto_size true: the container has auto size in the current direction
  * @param align align method
@@ -618,19 +618,19 @@ static int32_t grid_align(int32_t cont_size,  bool auto_size, lv_grid_align_t al
         pos_array[0] = 0;
     }
     else {
-        /*With spaced alignment gap will be calculated from the remaining space*/
+        /*При разнесенном выравнивании зазор будет рассчитываться на основе оставшегося пространства.*/
         if(align == LV_GRID_ALIGN_SPACE_AROUND || align == LV_GRID_ALIGN_SPACE_BETWEEN || align == LV_GRID_ALIGN_SPACE_EVENLY) {
             gap = 0;
             if(track_num == 1) align = LV_GRID_ALIGN_CENTER;
         }
 
-        /*Get the full grid size with gap*/
+        /*Получить полный размер сетки с пробелом*/
         for(i = 0; i < track_num; i++) {
             grid_size += size_array[i] + gap;
         }
         grid_size -= gap;
 
-        /*Calculate the position of the first item and set gap is necessary*/
+        /*Рассчитайте положение первого элемента и установите зазор.*/
         switch(align) {
             case LV_GRID_ALIGN_START:
                 pos_array[0] = 0;
@@ -658,7 +658,7 @@ static int32_t grid_align(int32_t cont_size,  bool auto_size, lv_grid_align_t al
         }
     }
 
-    /*Set the position of all tracks from the start position, gaps and track sizes*/
+    /*Установите положение всех дорожек от начальной позиции, промежутков и размеров дорожек.*/
     for(i = 0; i < track_num - 1; i++) {
         pos_array[i + 1] = pos_array[i] + size_array[i] + gap;
     }
@@ -672,7 +672,7 @@ static int32_t grid_align(int32_t cont_size,  bool auto_size, lv_grid_align_t al
 
     }
 
-    /*Return the full size of the grid*/
+    /*Вернуть полный размер сетки*/
     return total_gird_size;
 }
 

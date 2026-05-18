@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of led */
+/** Данные светодиода */
 struct _lv_led_t {
     lv_obj_t obj;
     lv_color_t color;
@@ -46,7 +46,7 @@ struct _lv_led_t {
 #endif /* LV_USE_LED */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LED_PRIVATE_H*/

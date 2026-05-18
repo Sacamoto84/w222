@@ -28,13 +28,13 @@
 **********************/
 
 typedef struct {
-    /* context */
+    /* контекст */
     lv_draw_nanovg_unit_t * u;
 
-    /* key */
+    /* ключ */
     lv_font_glyph_dsc_t g_dsc;
 
-    /* value */
+    /* ценность */
     int image_handle;
 } letter_item_t;
 
@@ -206,11 +206,11 @@ static inline int letter_get_image_handle(lv_draw_nanovg_unit_t * u, lv_font_gly
     letter_item_t search_key = { 0 };
     search_key.u = u;
     search_key.g_dsc = *g_dsc;
-    search_key.g_dsc.entry = NULL; /* Exclude the cache entry from the key */
+    search_key.g_dsc.entry = NULL; /* Исключить запись кэша из ключа */
 
     lv_cache_entry_t * cache_node_entry = lv_cache_acquire(u->letter_cache, &search_key, NULL);
     if(cache_node_entry == NULL) {
-        /* check if the cache is full */
+        /* проверьте, заполнен ли кеш */
         size_t free_size = lv_cache_get_free_size(u->letter_cache, NULL);
         if(free_size == 0) {
             LV_LOG_INFO("letter cache is full, release all pending cache entries");
@@ -225,7 +225,7 @@ static inline int letter_get_image_handle(lv_draw_nanovg_unit_t * u, lv_font_gly
         }
     }
 
-    /* Add the new entry to the pending list */
+    /* Добавить новую запись в список ожидания */
     lv_pending_add(u->letter_pending, &cache_node_entry);
 
     letter_item_t * letter_item = lv_cache_entry_get_data(cache_node_entry);
@@ -343,7 +343,7 @@ static void draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_draw_
 #if LV_USE_FONT_PLACEHOLDER
             case LV_FONT_GLYPH_FORMAT_NONE: {
                     if(glyph_draw_dsc->bg_coords == NULL) break;
-                    /* Draw a placeholder rectangle*/
+                    /* Нарисуйте прямоугольник-заполнитель*/
                     lv_draw_border_dsc_t border_draw_dsc;
                     lv_draw_border_dsc_init(&border_draw_dsc);
                     border_draw_dsc.opa = glyph_draw_dsc->opa;

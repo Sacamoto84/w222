@@ -4,7 +4,7 @@
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
 
 /**
- * Using various gradients for button background
+ * Использование различных градиентов для фона кнопки
  */
 void lv_example_style_19(void)
 {
@@ -13,9 +13,9 @@ void lv_example_style_19(void)
         LV_COLOR_MAKE(0x31, 0x47, 0x55),
     };
 
-    /*Create a linear gradient going from the top left corner to the bottom at an angle, with reflected color map*/
+    /*Создайте линейный градиент, идущий от верхнего левого угла к нижнему под углом, с отраженной картой цветов.*/
     static lv_style_t style_with_linear_gradient_bg;
-    static lv_grad_dsc_t linear_gradient_dsc;     /*NOTE: the gradient descriptor must be static or global variable!*/
+    static lv_grad_dsc_t linear_gradient_dsc;     /*NOTE: дескриптор градиента должен быть статической или глобальной переменной!*/
 
     lv_style_init(&style_with_linear_gradient_bg);
     lv_grad_init_stops(&linear_gradient_dsc, grad_colors, NULL, NULL, sizeof(grad_colors) / sizeof(lv_color_t));
@@ -23,9 +23,9 @@ void lv_example_style_19(void)
     lv_style_set_bg_grad(&style_with_linear_gradient_bg, &linear_gradient_dsc);
     lv_style_set_bg_opa(&style_with_linear_gradient_bg, LV_OPA_COVER);
 
-    /*Create a radial gradient with the center in the top left 1/3rd of the object, extending to the bottom right corner, with reflected color map*/
+    /*Создайте радиальный градиент с центром в верхней левой 1/3 объекта, продолжающимся до нижнего правого угла, с отраженной картой цветов.*/
     static lv_style_t style_with_radial_gradient_bg;
-    static lv_grad_dsc_t radial_gradient_dsc;     /*NOTE: the gradient descriptor must be static or global variable!*/
+    static lv_grad_dsc_t radial_gradient_dsc;     /*NOTE: дескриптор градиента должен быть статической или глобальной переменной!*/
 
     lv_style_init(&style_with_radial_gradient_bg);
     lv_grad_init_stops(&radial_gradient_dsc, grad_colors, NULL, NULL, sizeof(grad_colors) / sizeof(lv_color_t));
@@ -33,12 +33,12 @@ void lv_example_style_19(void)
     lv_style_set_bg_grad(&style_with_radial_gradient_bg, &radial_gradient_dsc);
     lv_style_set_bg_opa(&style_with_radial_gradient_bg, LV_OPA_COVER);
 
-    /*Create buttons with different gradient styles*/
+    /*Создавайте кнопки с разными стилями градиента*/
 
     lv_obj_t * btn;
     lv_obj_t * label;
 
-    /*Simple horizontal gradient*/
+    /*Простой горизонтальный градиент*/
     btn = lv_button_create(lv_screen_active());
     lv_obj_set_style_bg_color(btn, grad_colors[0], 0);
     lv_obj_set_style_bg_grad_color(btn, grad_colors[1], 0);
@@ -50,7 +50,7 @@ void lv_example_style_19(void)
     lv_label_set_text(label, "Horizontal");
     lv_obj_center(label);
 
-    /*Simple vertical gradient*/
+    /*Простой вертикальный градиент*/
     btn = lv_button_create(lv_screen_active());
     lv_obj_set_style_bg_color(btn, grad_colors[0], 0);
     lv_obj_set_style_bg_grad_color(btn, grad_colors[1], 0);
@@ -62,7 +62,7 @@ void lv_example_style_19(void)
     lv_label_set_text(label, "Vertical");
     lv_obj_center(label);
 
-    /*Complex linear gradient*/
+    /*Сложный линейный градиент*/
     btn = lv_button_create(lv_screen_active());
     lv_obj_add_style(btn, &style_with_linear_gradient_bg, 0);
     lv_obj_set_size(btn, 150, 50);
@@ -72,7 +72,7 @@ void lv_example_style_19(void)
     lv_label_set_text(label, "Linear");
     lv_obj_center(label);
 
-    /*Complex radial gradient*/
+    /*Сложный радиальный градиент*/
     btn = lv_button_create(lv_screen_active());
     lv_obj_add_style(btn, &style_with_radial_gradient_bg, 0);
     lv_obj_set_size(btn, 150, 50);

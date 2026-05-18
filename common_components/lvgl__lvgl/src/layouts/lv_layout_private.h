@@ -44,8 +44,8 @@ void lv_layout_deinit(void);
 bool lv_layout_get_min_size(lv_obj_t * obj, int32_t * size, bool width);
 
 /**
- * Update the layout of a widget
- * @param obj   pointer to a widget
+ * Обновить макет виджета
+ * @param obj   указатель на виджет
  */
 void lv_layout_apply(lv_obj_t * obj);
 
@@ -54,7 +54,7 @@ void lv_layout_apply(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LAYOUT_PRIVATE_H*/

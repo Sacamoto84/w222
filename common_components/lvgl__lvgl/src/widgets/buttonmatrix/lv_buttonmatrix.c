@@ -112,7 +112,7 @@ lv_obj_t * lv_buttonmatrix_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_buttonmatrix_set_map(lv_obj_t * obj, const char * const map[])
@@ -124,7 +124,7 @@ void lv_buttonmatrix_set_map(lv_obj_t * obj, const char * const map[])
     if(btnm->auto_free_map) free_map(btnm);
     btnm->auto_free_map = 0;
 
-    /*Analyze the map and create the required number of buttons*/
+    /*Проанализируйте карту и создайте необходимое количество кнопок.*/
     allocate_button_areas_and_controls(obj, map);
     btnm->map_p = map;
 
@@ -231,12 +231,12 @@ void lv_buttonmatrix_set_one_checked(lv_obj_t * obj, bool en)
     lv_buttonmatrix_t * btnm = (lv_buttonmatrix_t *)obj;
     btnm->one_check     = en;
 
-    /*If more than one button is toggled only the first one should be*/
+    /*Если переключено более одной кнопки, должна быть активирована только первая.*/
     make_one_button_checked(obj, 0);
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const char * const * lv_buttonmatrix_get_map(const lv_obj_t * obj)
@@ -267,8 +267,8 @@ const char * lv_buttonmatrix_get_button_text(const lv_obj_t * obj, uint32_t btn_
     uint32_t txt_i = 0;
     uint32_t btn_i = 0;
 
-    /*Search the text of btnm->btn_pr the buttons text in the map
-     *Skip "\n"-s*/
+    /*Поиск по тексту btnm-> btn_pr по тексту кнопок на карте
+     *Пропустить "\n"-s*/
     while(btn_i != btn_id) {
         btn_i++;
         txt_i++;
@@ -342,7 +342,7 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -353,7 +353,7 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
 
     if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
         if(has_popovers_in_top_row(obj)) {
-            /*reserve one row worth of extra space to account for popovers in the top row*/
+            /*зарезервируйте одну строку дополнительного места для учета всплывающих окон в верхнем ряду*/
             int32_t s = btnm->row_cnt > 0 ? lv_obj_get_content_height(obj) / btnm->row_cnt : 0;
             lv_event_set_ext_draw_size(e, s);
         }
@@ -371,16 +371,16 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
         if(indev_type == LV_INDEV_TYPE_POINTER || indev_type == LV_INDEV_TYPE_BUTTON) {
             uint32_t btn_pr;
-            /*Search the pressed area*/
+            /*Найдите область нажатия*/
             lv_indev_get_point(indev, &p);
             btn_pr = get_button_from_point(obj, &p);
-            /*Handle the case where there is no button there*/
+            /*Обработать случай, когда там нет кнопки*/
             btnm->btn_id_sel = LV_BUTTONMATRIX_BUTTON_NONE;
             if(btn_pr != LV_BUTTONMATRIX_BUTTON_NONE) {
                 if(button_is_inactive(btnm->ctrl_bits[btn_pr]) == false &&
                    button_is_hidden(btnm->ctrl_bits[btn_pr]) == false) {
                     btnm->btn_id_sel = btn_pr;
-                    invalidate_button_area(obj, btnm->btn_id_sel); /*Invalidate the new area*/
+                    invalidate_button_area(obj, btnm->btn_id_sel); /*Недействительность новой области*/
                 }
             }
             else {
@@ -404,11 +404,11 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
             lv_indev_t * indev = lv_event_get_indev(e);
             lv_indev_type_t indev_type = lv_indev_get_type(indev);
             if(indev_type == LV_INDEV_TYPE_POINTER || indev_type == LV_INDEV_TYPE_BUTTON) {
-                /*If pointer device slid to a new button, discard the current button and don't press any buttons*/
+                /*Если указатель устройства переместился на новую кнопку, отмените текущую кнопку и не нажимайте никакие кнопки.*/
                 lv_indev_get_point(indev, &p);
                 uint32_t btn_pr = get_button_from_point(obj, &p);
                 if(btn_pr != btnm->btn_id_sel) {
-                    invalidate_button_area(obj, btnm->btn_id_sel); /*Invalidate the old area*/
+                    invalidate_button_area(obj, btnm->btn_id_sel); /*Аннулировать старую область*/
                     btnm->btn_id_sel = LV_BUTTONMATRIX_BUTTON_NONE;
                 }
             }
@@ -416,7 +416,7 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
     }
     else if(code == LV_EVENT_RELEASED) {
         if(btnm->btn_id_sel != LV_BUTTONMATRIX_BUTTON_NONE) {
-            /*Toggle the button if enabled*/
+            /*Переключить кнопку, если она включена*/
             if(button_is_checkable(btnm->ctrl_bits[btnm->btn_id_sel]) &&
                !button_is_inactive(btnm->ctrl_bits[btnm->btn_id_sel])) {
                 if(button_get_checked(btnm->ctrl_bits[btnm->btn_id_sel]) && !btnm->one_check) {
@@ -438,7 +438,7 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
             }
         }
 
-        /*Invalidate to old pressed area*/;
+        /*Недействителен для старой нажатой области*/;
         invalidate_button_area(obj, btnm->btn_id_sel);
 
     }
@@ -463,14 +463,14 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
         lv_indev_t * indev = lv_event_get_indev(e);
         lv_indev_type_t indev_type = lv_indev_get_type(indev);
 
-        /*If not focused by an input device assume the last input device*/
+        /*Если фокус не выполнен с помощью устройства ввода, предполагается, что используется последнее устройство ввода.*/
         if(indev == NULL) {
             indev = lv_indev_get_next(NULL);
             indev_type = lv_indev_get_type(indev);
         }
 
         bool editing = lv_group_get_editing(lv_obj_get_group(obj));
-        /*Focus the first button if there is not selected button*/
+        /*Фокусируйте первую кнопку, если кнопка не выбрана*/
         if(btnm->btn_id_sel == LV_BUTTONMATRIX_BUTTON_NONE) {
             if(indev_type == LV_INDEV_TYPE_KEYPAD || (indev_type == LV_INDEV_TYPE_ENCODER && editing)) {
                 uint32_t b = 0;
@@ -499,8 +499,8 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
     }
     else if(code == LV_EVENT_DEFOCUSED || code == LV_EVENT_LEAVE) {
         //        TODO
-        //        if(btnm->btn_id_sel != LV_BUTTONMATRIX_BUTTON_NONE) invalidate_button_area(obj, btnm->btn_id_sel);
-        //        btnm->btn_id_sel = LV_BUTTONMATRIX_BUTTON_NONE;
+        //        if(btnm-> btn_id_sel != LV_BUTTONMATRIX_BUTTON_NONE ) invalidate_button_area (obj, btnm-> btn_id_sel );
+        //        btnm-> btn_id_sel = LV_BUTTONMATRIX_BUTTON_NONE ;
     }
     else if(code == LV_EVENT_KEY) {
 
@@ -542,7 +542,7 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
         }
         else if(c == LV_KEY_DOWN) {
             int32_t col_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
-            /*Find the area below the current*/
+            /*Найдите область ниже текущего*/
             if(btnm->btn_id_sel == LV_BUTTONMATRIX_BUTTON_NONE) {
                 btnm->btn_id_sel = 0;
                 while(button_is_hidden(btnm->ctrl_bits[btnm->btn_id_sel]) || button_is_inactive(btnm->ctrl_bits[btnm->btn_id_sel])) {
@@ -573,7 +573,7 @@ static void lv_buttonmatrix_event(const lv_obj_class_t * class_p, lv_event_t * e
         }
         else if(c == LV_KEY_UP) {
             int32_t col_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
-            /*Find the area below the current*/
+            /*Найдите область ниже текущего*/
             if(btnm->btn_id_sel == LV_BUTTONMATRIX_BUTTON_NONE) {
                 btnm->btn_id_sel = 0;
                 while(button_is_hidden(btnm->ctrl_bits[btnm->btn_id_sel]) || button_is_inactive(btnm->ctrl_bits[btnm->btn_id_sel])) {
@@ -658,15 +658,15 @@ static void draw_main(lv_event_t * e)
 #endif
 
     for(btn_i = 0; btn_i < btnm->btn_cnt; btn_i++, txt_i++) {
-        /*Search the next valid text in the map*/
+        /*Найдите следующий допустимый текст на карте.*/
         while(lv_strcmp(btnm->map_p[txt_i], "\n") == 0) {
             txt_i++;
         }
 
-        /*Skip hidden buttons*/
+        /*Пропустить скрытые кнопки*/
         if(button_is_hidden(btnm->ctrl_bits[btn_i])) continue;
 
-        /*Get the state of the button*/
+        /*Получить состояние кнопки*/
         lv_state_t btn_state = LV_STATE_DEFAULT;
         if(button_get_checked(btnm->ctrl_bits[btn_i])) btn_state |= LV_STATE_CHECKED;
 
@@ -678,19 +678,19 @@ static void draw_main(lv_event_t * e)
             if(state_ori & LV_STATE_EDITED) btn_state |= LV_STATE_EDITED;
         }
 
-        /*Get the button's area*/
+        /*Получить площадь кнопки*/
         lv_area_copy(&btn_area, &btnm->button_areas[btn_i]);
         btn_area.x1 += area_obj.x1;
         btn_area.y1 += area_obj.y1;
         btn_area.x2 += area_obj.x1;
         btn_area.y2 += area_obj.y1;
 
-        /*Set up the draw descriptors*/
+        /*Настройка дескрипторов отрисовки*/
         if(btn_state == LV_STATE_DEFAULT) {
             lv_memcpy(&draw_rect_dsc_act, &draw_rect_dsc_def, sizeof(lv_draw_rect_dsc_t));
             lv_memcpy(&draw_label_dsc_act, &draw_label_dsc_def, sizeof(lv_draw_label_dsc_t));
         }
-        /*In other cases get the styles directly without caching them*/
+        /*В других случаях стили можно получить напрямую, не кэшируя их.*/
         else {
             obj->state = btn_state;
             obj->skip_trans = 1;
@@ -710,7 +710,7 @@ static void draw_main(lv_event_t * e)
 
         draw_rect_dsc_act.base.id1 = btn_i;
 
-        /*Remove borders on the edges if `LV_BORDER_SIDE_INTERNAL`*/
+        /*Удалить границы по краям, если `LV_BORDER_SIDE_INTERNAL`*/
         if(draw_rect_dsc_act.border_side & LV_BORDER_SIDE_INTERNAL) {
             draw_rect_dsc_act.border_side = LV_BORDER_SIDE_FULL;
             if(btn_area.x1 == obj->coords.x1 + pleft) draw_rect_dsc_act.border_side &= ~LV_BORDER_SIDE_LEFT;
@@ -722,21 +722,21 @@ static void draw_main(lv_event_t * e)
         int32_t btn_height = lv_area_get_height(&btn_area);
 
         if((btn_state & LV_STATE_PRESSED) && (btnm->ctrl_bits[btn_i] & LV_BUTTONMATRIX_CTRL_POPOVER)) {
-            /*Push up the upper boundary of the btn area to create the popover*/
+            /*Поднимите верхнюю границу области кнопок, чтобы создать всплывающее окно.*/
             btn_area.y1 -= btn_height;
         }
 
-        /*Draw the background*/
+        /*Нарисуйте фон*/
         lv_draw_rect(layer, &draw_rect_dsc_act, &btn_area);
 
-        /*Calculate the size of the text*/
+        /*Рассчитать размер текста*/
         const lv_font_t * font = draw_label_dsc_act.font;
         int32_t letter_space = draw_label_dsc_act.letter_space;
         int32_t line_space = draw_label_dsc_act.line_space;
         const char * txt = btnm->map_p[txt_i];
 
 #if LV_USE_ARABIC_PERSIAN_CHARS
-        /*Get the size of the Arabic text and process it*/
+        /*Получите размер арабского текста и обработайте его.*/
         size_t len_ap = lv_text_ap_calc_bytes_count(txt);
         if(len_ap < sizeof(txt_ap)) {
             lv_text_ap_proc(txt, txt_ap);
@@ -758,12 +758,12 @@ static void draw_main(lv_event_t * e)
         btn_area.y2 = btn_area.y1 + txt_size.y;
 
         if((btn_state & LV_STATE_PRESSED) && (btnm->ctrl_bits[btn_i] & LV_BUTTONMATRIX_CTRL_POPOVER)) {
-            /*Push up the button text into the popover*/
+            /*Вставьте текст кнопки во всплывающее окно.*/
             btn_area.y1 -= btn_height / 2;
             btn_area.y2 -= btn_height / 2;
         }
 
-        /*Draw the text*/
+        /*Нарисуйте текст*/
         draw_label_dsc_act.text = txt;
         draw_label_dsc_act.text_local = true;
         draw_label_dsc_act.base.id1 = btn_i;
@@ -773,7 +773,7 @@ static void draw_main(lv_event_t * e)
     obj->skip_trans = 0;
 }
 /**
- * Create the required number of buttons and control bytes according to a map
+ * Создайте необходимое количество кнопок и управляющих байтов согласно карте
  * @param obj pointer to button matrix object
  * @param map_p pointer to a string array
  */
@@ -781,11 +781,11 @@ static void allocate_button_areas_and_controls(const lv_obj_t * obj, const char 
 {
     lv_buttonmatrix_t * btnm = (lv_buttonmatrix_t *)obj;
     btnm->row_cnt = 1;
-    /*Count the buttons in the map*/
+    /*Посчитайте кнопки на карте*/
     uint32_t btn_cnt = 0;
     uint32_t i       = 0;
     while(map[i] && map[i][0] != '\0') {
-        if(lv_strcmp(map[i], "\n") != 0) { /*Do not count line breaks*/
+        if(lv_strcmp(map[i], "\n") != 0) { /*Не учитывать разрывы строк*/
             btn_cnt++;
         }
         else {
@@ -794,7 +794,7 @@ static void allocate_button_areas_and_controls(const lv_obj_t * obj, const char 
         i++;
     }
 
-    /*Do not allocate memory for the same amount of buttons*/
+    /*Не выделяйте память под одинаковое количество кнопок*/
     if(btn_cnt == btnm->btn_cnt) return;
 
     if(btnm->button_areas != NULL) {
@@ -818,7 +818,7 @@ static void allocate_button_areas_and_controls(const lv_obj_t * obj, const char 
 }
 
 /**
- * Get the width of a button in units (default is 1).
+ * Получите ширину кнопки в единицах (по умолчанию — 1).
  * @param ctrl_bits least significant 3 bits used (1..7 valid values)
  * @return the width of the button in units
  */
@@ -869,7 +869,7 @@ static bool button_get_checked(lv_buttonmatrix_ctrl_t ctrl_bits)
 }
 
 /**
- * Gives the button id of a button under a given point
+ * Дает идентификатор кнопки под заданной точкой
  * @param obj pointer to a button matrix object
  * @param p a point with absolute coordinates
  * @return the id of the button or LV_BUTTONMATRIX_BUTTON_NONE.
@@ -891,7 +891,7 @@ static uint32_t get_button_from_point(lv_obj_t * obj, lv_point_t * p)
     int32_t prow = lv_obj_get_style_pad_row(obj, LV_PART_MAIN);
     int32_t pcol = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
 
-    /*Get the half gap. Button look larger with this value. (+1 for rounding error)*/
+    /*Получите половину зазора. При этом значении кнопка выглядит больше. (+1 за ошибку округления)*/
     prow = (prow / 2) + 1 + (prow & 1);
     pcol = (pcol / 2) + 1 + (pcol & 1);
 
@@ -910,11 +910,11 @@ static uint32_t get_button_from_point(lv_obj_t * obj, lv_point_t * p)
         else btn_area.y1 += obj_cords.y1 - prow;
 
         if(btn_area.x2 >= w - pright - 2) btn_area.x2 += obj_cords.x1 + LV_MIN(pright,
-                                                                                   BTN_EXTRA_CLICK_AREA_MAX);  /*-2 for rounding error*/
+                                                                                   BTN_EXTRA_CLICK_AREA_MAX);  /*-2 за ошибку округления*/
         else btn_area.x2 += obj_cords.x1 + pcol;
 
         if(btn_area.y2 >= h - pbottom - 2) btn_area.y2 += obj_cords.y1 + LV_MIN(pbottom,
-                                                                                    BTN_EXTRA_CLICK_AREA_MAX); /*-2 for rounding error*/
+                                                                                    BTN_EXTRA_CLICK_AREA_MAX); /*-2 за ошибку округления*/
         else btn_area.y2 += obj_cords.y1 + prow;
 
         if(lv_area_is_point_on(&btn_area, p, 0) != false) {
@@ -940,24 +940,24 @@ static void invalidate_button_area(const lv_obj_t * obj, uint32_t btn_idx)
     lv_area_copy(&btn_area, &btnm->button_areas[btn_idx]);
     lv_obj_get_coords(obj, &obj_area);
 
-    /*The buttons might have outline and shadow so make the invalidation larger with the gaps between the buttons.
-     *It assumes that the outline or shadow is smaller than the gaps*/
+    /*Кнопки могут иметь контур и тень, поэтому увеличьте недействительность за счет промежутков между кнопками.
+     *Предполагается, что контур или тень меньше, чем пробелы.*/
     int32_t row_gap = lv_obj_get_style_pad_row(obj, LV_PART_MAIN);
     int32_t col_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
 
-    /*Be sure to have a minimal extra space if row/col_gap is small*/
+    /*Обязательно оставьте минимальное дополнительное пространство, если строка / col_gap мала.*/
     int32_t dpi = lv_display_get_dpi(lv_obj_get_display(obj));
     row_gap = LV_MAX(row_gap, dpi / 10);
     col_gap = LV_MAX(col_gap, dpi / 10);
 
-    /*Convert relative coordinates to absolute*/
+    /*Преобразовать относительные координаты в абсолютные*/
     btn_area.x1 += obj_area.x1 - row_gap;
     btn_area.y1 += obj_area.y1 - col_gap;
     btn_area.x2 += obj_area.x1 + row_gap;
     btn_area.y2 += obj_area.y1 + col_gap;
 
     if((btn_idx == btnm->btn_id_sel) && (btnm->ctrl_bits[btn_idx] & LV_BUTTONMATRIX_CTRL_POPOVER)) {
-        /*Push up the upper boundary of the btn area to also invalidate the popover*/
+        /*Поднимите верхнюю границу области кнопок, чтобы сделать всплывающее окно недействительным.*/
         btn_area.y1 -= lv_area_get_height(&btn_area);
     }
 
@@ -965,14 +965,14 @@ static void invalidate_button_area(const lv_obj_t * obj, uint32_t btn_idx)
 }
 
 /**
- * Enforces a single button being toggled on the button matrix.
- * It simply clears the toggle flag on other buttons.
+ * Обеспечивает переключение одной кнопки на матрице кнопок.
+ * Он просто очищает флаг переключения на других кнопках.
  * @param obj Button matrix object
  * @param btn_idx Button that should remain toggled
  */
 static void make_one_button_checked(lv_obj_t * obj, uint32_t btn_idx)
 {
-    /*Save whether the button was toggled*/
+    /*Сохранить, была ли кнопка переключена*/
     bool was_toggled = lv_buttonmatrix_has_button_ctrl(obj, btn_idx, LV_BUTTONMATRIX_CTRL_CHECKED);
 
     lv_buttonmatrix_clear_button_ctrl_all(obj, LV_BUTTONMATRIX_CTRL_CHECKED);
@@ -981,7 +981,7 @@ static void make_one_button_checked(lv_obj_t * obj, uint32_t btn_idx)
 }
 
 /**
- * Check if any of the buttons in the first row has the LV_BUTTONMATRIX_CTRL_POPOVER control flag set.
+ * Проверьте, установлен ли на какой-либо из кнопок в первом ряду флаг управления LV_BUTTONMATRIX_CTRL_POPOVER.
  * @param obj Button matrix object
  * @return true if at least one button has the flag, false otherwise
  */
@@ -1017,7 +1017,7 @@ static void update_map(lv_obj_t * obj)
 
     lv_base_dir_t base_dir = lv_obj_get_style_base_dir(obj, LV_PART_MAIN);
 
-    /*Set size and positions of the buttons*/
+    /*Установите размер и положение кнопок*/
     int32_t sleft = lv_obj_get_style_space_left(obj, LV_PART_MAIN);
     int32_t stop = lv_obj_get_style_space_top(obj, LV_PART_MAIN);
     int32_t prow = lv_obj_get_style_pad_row(obj, LV_PART_MAIN);
@@ -1026,40 +1026,40 @@ static void update_map(lv_obj_t * obj)
     int32_t max_w            = lv_obj_get_content_width(obj);
     int32_t max_h            = lv_obj_get_content_height(obj);
 
-    /*Calculate the position of each row*/
+    /*Вычислить положение каждой строки*/
     int32_t max_h_no_gap = max_h - (prow * (btnm->row_cnt - 1));
 
-    /*Count the units and the buttons in a line
-     *(A button can be 1,2,3... unit wide)*/
-    uint32_t txt_tot_i = 0; /*Act. index in the str map*/
-    uint32_t btn_tot_i = 0; /*Act. index of button areas*/
+    /*Подсчитайте единицы и кнопки в строке
+     *(Кнопка может иметь ширину 1,2,3... единицу)*/
+    uint32_t txt_tot_i = 0; /*Действуйте. индекс на карте str*/
+    uint32_t btn_tot_i = 0; /*Действуйте. индекс областей кнопок*/
     const char * const * map_row = btnm->map_p;
 
-    /*Count the units and the buttons in a line*/
+    /*Подсчитайте единицы и кнопки в строке*/
     uint32_t row;
     for(row = 0; row < btnm->row_cnt; row++) {
-        uint32_t unit_cnt = 0;           /*Number of units in a row*/
-        uint32_t btn_cnt = 0;            /*Number of buttons in a row*/
-        /*Count the buttons and units in this row*/
+        uint32_t unit_cnt = 0;           /*Количество единиц подряд*/
+        uint32_t btn_cnt = 0;            /*Количество кнопок в ряду*/
+        /*Посчитайте кнопки и блоки в этом ряду*/
         while(map_row[btn_cnt] && lv_strcmp(map_row[btn_cnt], "\n") != 0 && map_row[btn_cnt][0] != '\0') {
             unit_cnt += get_button_width(btnm->ctrl_bits[btn_tot_i + btn_cnt]);
             btn_cnt++;
         }
 
-        /*Only deal with the non empty lines*/
+        /*Имейте дело только с непустыми строками*/
         if(btn_cnt == 0) {
-            map_row = &map_row[btn_cnt + 1];       /*Set the map to the next row*/
+            map_row = &map_row[btn_cnt + 1];       /*Установить карту на следующую строку*/
             continue;
         }
 
         int32_t row_y1 = stop + (max_h_no_gap * row) / btnm->row_cnt + row * prow;
         int32_t row_y2 = stop + (max_h_no_gap * (row + 1)) / btnm->row_cnt + row * prow - 1;
 
-        /*Set the button size and positions*/
+        /*Установите размер и положение кнопок*/
         int32_t max_w_no_gap = max_w - (pcol * (btn_cnt - 1));
         if(max_w_no_gap < 0) max_w_no_gap = 0;
 
-        uint32_t row_unit_cnt = 0;  /*The current unit position in the row*/
+        uint32_t row_unit_cnt = 0;  /*Текущая позиция объекта в строке*/
         uint32_t btn;
         for(btn = 0; btn < btn_cnt; btn++, btn_tot_i++, txt_tot_i++) {
             uint32_t btn_u = get_button_width(btnm->ctrl_bits[btn_tot_i]);
@@ -1067,7 +1067,7 @@ static void update_map(lv_obj_t * obj)
             int32_t btn_x1 = (max_w_no_gap * row_unit_cnt) / unit_cnt + btn * pcol;
             int32_t btn_x2 = (max_w_no_gap * (row_unit_cnt + btn_u)) / unit_cnt + btn * pcol - 1;
 
-            /*If RTL start from the right*/
+            /*Если RTL начать справа*/
             if(base_dir == LV_BASE_DIR_RTL) {
                 int32_t tmp = btn_x1;
                 btn_x1 = btn_x2;
@@ -1085,11 +1085,11 @@ static void update_map(lv_obj_t * obj)
             row_unit_cnt += btn_u;
         }
 
-        map_row = &map_row[btn_cnt + 1];       /*Set the map to the next line*/
+        map_row = &map_row[btn_cnt + 1];       /*Установить карту на следующую строку*/
     }
 
-    /*Popovers in the top row will draw outside the widget and the extended draw size depends on
-     *the row height which may have changed when setting the new map*/
+    /*Поповеры в верхнем ряду будут отображаться за пределами виджета, а размер расширенного отображения зависит от
+     *высота строки, которая могла измениться при настройке новой карты*/
     lv_obj_refresh_ext_draw_size(obj);
 
     lv_obj_invalidate(obj);

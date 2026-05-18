@@ -37,10 +37,10 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/** PXP module instance to use*/
+/** Экземпляр модуля PXP для использования*/
 #define PXP_ID PXP
 
-/** PXP interrupt line ID*/
+/** PXP линия прерывания ID*/
 #define PXP_IRQ_ID PXP_IRQn
 
 /**********************
@@ -48,19 +48,19 @@ extern "C" {
  **********************/
 
 /**
- * NXP PXP device configuration.
+ * NXP PXP Конфигурация устройства.
  */
 typedef struct {
-    /** Callback for PXP interrupt initialization*/
+    /** Обратный вызов для инициализации прерывания PXP*/
     void (*pxp_interrupt_init)(void);
 
-    /** Callback for PXP interrupt de-initialization*/
+    /** Обратный вызов для деинициализации прерывания PXP*/
     void (*pxp_interrupt_deinit)(void);
 
-    /** Callback for PXP start*/
+    /** Обратный вызов для запуска PXP*/
     void (*pxp_run)(void);
 
-    /** Callback for waiting of PXP completion*/
+    /** Обратный вызов для ожидания завершения PXP*/
     void (*pxp_wait)(void);
 } pxp_cfg_t;
 
@@ -69,28 +69,28 @@ typedef struct {
  **********************/
 
 /**
- * Reset and initialize PXP device. This function should be called as a part
- * of display init sequence.
+ * Сбросьте и инициализируйте устройство PXP. Эту функцию следует вызывать как часть
+ * последовательности инициализации дисплея.
  */
 void lv_pxp_init(void);
 
 /**
- * Disable PXP device. Should be called during display deinit sequence.
+ * Отключите устройство PXP. Должен вызываться во время последовательности отображения deinit.
  */
 void lv_pxp_deinit(void);
 
 /**
- * Reset PXP device.
+ * Сбросьте устройство PXP.
  */
 void lv_pxp_reset(void);
 
 /**
- * Clear cache and start PXP.
+ * Очистите кеш и запустите PXP.
  */
 void lv_pxp_run(void);
 
 /**
- * Wait for PXP completion.
+ * Дождитесь завершения PXP.
  */
 void lv_pxp_wait(void);
 
@@ -102,7 +102,7 @@ void lv_pxp_wait(void);
 #endif /*LV_USE_PXP*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PXP_CFG_H*/

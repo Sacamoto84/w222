@@ -7,7 +7,7 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_SPACE_EVENLY);
 
@@ -15,7 +15,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void canvas_basic_render(uint8_t * canvas_buf, lv_color_format_t render_cf, const char * name_main,

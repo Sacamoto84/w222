@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -32,7 +32,7 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static inline bool _floatExact(float a, float b)
@@ -42,7 +42,7 @@ static inline bool _floatExact(float a, float b)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 namespace tvg {
@@ -50,14 +50,14 @@ namespace tvg {
 /*
  * https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strtof-strtof-l-wcstof-wcstof-l?view=msvc-160
  *
- * src should be one of the following form :
+ * src должен иметь одну из следующих форм:
  *
- * [whitespace] [sign] {digits [radix digits] | radix digits} [{e | E} [sign] digits]
- * [whitespace] [sign] {INF | INFINITY}
- * [whitespace] [sign] NAN [sequence]
+ * [пробел] [знак] {цифры [основание цифр] | системы счисления} [{e | E} [знак] цифры]
+ * [пробел] [знак] { INF |  INFINITY }
+ * [пробел] [знак] NAN [последовательность]
  *
- * No hexadecimal form supported
- * no sequence supported after NAN
+ * Шестнадцатеричная форма не поддерживается.
+ * последовательность после NAN не поддерживается
  */
 float strToFloat(const char *nPtr, char **endPtr)
 {
@@ -70,10 +70,10 @@ float strToFloat(const char *nPtr, char **endPtr)
     unsigned long long integerPart = 0;
     int minus = 1;
 
-    //ignore leading whitespaces
+    //игнорировать ведущие пробелы
     while (isspace(*iter)) iter++;
 
-    //signed or not
+    //подписано или нет
     if (*iter == '-') {
         minus = -1;
         iter++;
@@ -130,7 +130,7 @@ float strToFloat(const char *nPtr, char **endPtr)
                     pow10 *= 10ULL;
                 }
             }
-        } else if (isspace(*iter)) { //skip if there is a space after the dot.
+        } else if (isspace(*iter)) { //пропустить, если после точки есть пробел.
             a = iter;
             goto success;
         }
@@ -150,7 +150,7 @@ float strToFloat(const char *nPtr, char **endPtr)
             goto success;
         }
 
-        //signed or not
+        //подписано или нет
         int minus_e = 1;
 
         if (*iter == '-') {
@@ -174,9 +174,9 @@ float strToFloat(const char *nPtr, char **endPtr)
             goto success;
         }
 
-        //if ((_floatExact(val, 2.2250738585072011f)) && ((minus_e * static_cast<int>(exponentPart)) <= -308)) {
+        //if ((_floatExact(val, 2.2250738585072011f)) && (( minus_e * static_cast <int>(exponPart)) <= -308)) {
         if ((_floatExact(val, 1.175494351f)) && ((minus_e * static_cast<int>(exponentPart)) <= -38)) {
-            //val *= 1.0e-308f;
+            //вал *= 1.0e-308f;
             val *= 1.0e-38f;
             a = iter;
             goto success;
@@ -238,7 +238,7 @@ char* strDirname(const char* path)
 #ifdef _WIN32
     if (ptr) ptr = strrchr(ptr + 1, '\\');
 #endif
-    int len = int(ptr + 1 - path);  // +1 to include '/'
+    int len = int(ptr + 1 - path);  // +1, чтобы включить '/'
     return strDuplicate(path, len);
 }
 

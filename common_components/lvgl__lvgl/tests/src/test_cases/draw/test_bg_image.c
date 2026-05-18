@@ -5,12 +5,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -21,7 +21,7 @@ void test_func_1(void)
     LV_IMAGE_DECLARE(test_RGB565_RLE_align64);
     lv_obj_t * obj;
 
-    /*Larger bg image*/
+    /*Увеличенное фоновое изображение*/
     obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 60, 40);
     lv_obj_set_style_bg_image_src(obj, &test_RGB565_RLE_align64, 0);
@@ -32,7 +32,7 @@ void test_func_1(void)
     lv_obj_set_style_bg_image_src(obj, &test_RGB565_RLE_align64, 0);
     lv_obj_set_style_radius(obj, 20, 0);
 
-    /*Smaller bg image*/
+    /*Уменьшенное фоновое изображение*/
     obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 200, 100);
     lv_obj_set_style_bg_image_src(obj, &test_RGB565_RLE_align64, 0);
@@ -43,7 +43,7 @@ void test_func_1(void)
     lv_obj_set_style_bg_image_src(obj, &test_RGB565_RLE_align64, 0);
     lv_obj_set_style_radius(obj, 20, 0);
 
-    /*Smaller bg image tiled*/
+    /*Фоновое изображение меньшего размера, расположенное в виде мозаики*/
     obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 200, 100);
     lv_obj_set_style_bg_image_src(obj, &test_RGB565_RLE_align64, 0);
@@ -56,7 +56,7 @@ void test_func_1(void)
     lv_obj_set_style_radius(obj, 20, 0);
     lv_obj_set_style_bg_image_tiled(obj, true, 0);
 
-    /*Smaller bg image tiled and opacity*/
+    /*Меньшее фоновое изображение с мозаикой и непрозрачностью*/
     obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 200, 100);
     lv_obj_set_style_bg_image_src(obj, &test_RGB565_RLE_align64, 0);

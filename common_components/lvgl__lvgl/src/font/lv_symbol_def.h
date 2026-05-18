@@ -13,17 +13,17 @@ extern "C" {
 #include "../lv_conf_internal.h"
 
 /*-------------------------------
- * Symbols from "normal" font
+ * Символы из «нормального» шрифта
  *-----------------------------*/
 #if !defined LV_SYMBOL_BULLET
 #define LV_SYMBOL_BULLET          "\xE2\x80\xA2" /*20042, 0x2022*/
 #endif
 
 /*-------------------------------
- * Symbols from FontAwesome font
+ * Символы шрифта FontAwesome
  *-----------------------------*/
 
-/*In the font converter use this list as range:
+/*В конвертере шрифтов используйте этот список в качестве диапазона:
       61441, 61448, 61451, 61452, 61453, 61457, 61459, 61461, 61465, 61468,
       61473, 61478, 61479, 61480, 61502, 61507, 61512, 61515, 61516, 61517,
       61521, 61522, 61523, 61524, 61543, 61544, 61550, 61552, 61553, 61556,
@@ -32,8 +32,8 @@ extern "C" {
       62018, 62019, 62020, 62087, 62099, 62189, 62212, 62810, 63426, 63650
 */
 
-/* These symbols can be predefined in the lv_conf.h file.
- * If they are not predefined, they will use the following values
+/* Эти символы могут быть предварительно сохранены в файле lv_conf.h.
+ * Если они не определены заранее, они будут использовать следующие значения
  */
 
 #if !defined LV_SYMBOL_AUDIO
@@ -277,13 +277,13 @@ extern "C" {
 #endif
 
 #if !defined LV_SYMBOL_DUMMY
-/** Invalid symbol at (U+F8FF). If written before a string then `lv_img` will show it as a label*/
+/** Неверный символ (U+ F8FF). Если написано перед строкой,`lv_img`отобразит ее как метку.*/
 #define LV_SYMBOL_DUMMY           "\xEF\xA3\xBF"
 #endif
 
 /*
- * The following list is generated using
- * cat src/font/lv_symbol_def.h | sed -E -n 's/^#define\s+LV_(SYMBOL_\w+).*".*$/    LV_STR_\1,/p'
+ * Следующий список генерируется с использованием
+ * кот исходный код/шрифт/lv_symbol_def.h| sed -E -n 's/^#define\s+LV_(SYMBOL_\w+).*".*$/LV_STR_\1,/p'
  */
 enum _lv_str_symbol_id_t {
     LV_STR_SYMBOL_BULLET,
@@ -351,7 +351,7 @@ enum _lv_str_symbol_id_t {
 };
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SYMBOL_DEF_H*/

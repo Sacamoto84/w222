@@ -61,15 +61,15 @@ lv_color32_t lv_color_mix32(lv_color32_t fg, lv_color32_t bg)
 lv_color32_t lv_color_mix32_premultiplied(lv_color32_t fg, lv_color32_t bg)
 {
     if(fg.alpha >= LV_OPA_MAX) {
-        return fg;  /* Fully opaque foreground replaces background */
+        return fg;  /* Полностью непрозрачный передний план заменяет фон. */
     }
     if(fg.alpha <= LV_OPA_MIN) {
-        return bg;  /* Fully transparent foreground, return background */
+        return bg;  /* Полностью прозрачный передний план, возврат фона */
     }
 
     uint32_t inv_fg_alpha = LV_OPA_MAX - fg.alpha;
 
-    /* Premultiplied blending */
+    /* Предварительно умноженное смешивание */
     bg.red   = fg.red   + ((bg.red   * inv_fg_alpha) >> 8);
     bg.green = fg.green + ((bg.green * inv_fg_alpha) >> 8);
     bg.blue  = fg.blue  + ((bg.blue  * inv_fg_alpha) >> 8);

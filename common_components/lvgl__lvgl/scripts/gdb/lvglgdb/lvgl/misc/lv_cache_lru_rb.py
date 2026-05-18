@@ -17,12 +17,12 @@ class LVCacheLRURBIterator(LVCacheIteratorBase):
     def _collect_entries(self):
         """Collect entries from LRU RB cache by traversing the linked list"""
         try:
-            # Cast cache to lv_lru_rb_t_ to access internal structures
+            # Приготовьте кеш кlv_lru_rb_t_для доступа к внутренней структуре.
             lru_cache = self.cache.cast("lv_lru_rb_t_", ptr=True)
             if not lru_cache:
                 return
 
-            # Access the linked list
+            # Доступ к связанному списку
             rb = lru_cache.rb
             if not rb or not rb.root:
                 return
@@ -43,7 +43,7 @@ class LVCacheLRURB(LVCache):
     """LVGL LRU-based cache using red-black tree iterator"""
 
     def __init__(self, cache: Union[Value, gdb.Value, int]):
-        # Convert to Value first if needed
+        # Если необходимо, сначала преобразуйте в значение.
         if isinstance(cache, int):
             cache = Value(cache).cast("lv_cache_lru_rb_t", ptr=True)
             if cache is None:
@@ -59,12 +59,12 @@ class LVCacheLRURB(LVCache):
         """Dump LRU RB cache information"""
         print(f"LRU RB Cache Info:")
 
-        # Try to get cache class info
+        # Попробуйте получить информацию о классе кэша
         try:
             clz = self.clz
             if clz:
                 print(f"  Cache Class: {clz}")
-                # Check if it's LRU RB based
+                # Проверьте, основан ли он на LRU RB
                 if "lru_rb" in str(clz).lower():
                     print(f"  Type: LRU with Red-Black Tree")
         except:

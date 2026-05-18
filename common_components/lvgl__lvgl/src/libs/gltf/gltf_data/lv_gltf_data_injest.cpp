@@ -28,8 +28,8 @@
  *      DEFINES
  *********************/
 constexpr auto SUPPORTED_EXTENSIONS =
-    //fastgltf::Extensions::KHR_draco_mesh_compression |
-    //fastgltf::Extensions::EXT_meshopt_compression |
+    //fastgltf::Расширения:: KHR_draco_mesh_compression |
+    //fastgltf::Расширения:: EXT_meshopt_compression |
     fastgltf::Extensions::KHR_mesh_quantization | fastgltf::Extensions::KHR_texture_transform |
     fastgltf::Extensions::KHR_lights_punctual | fastgltf::Extensions::KHR_materials_anisotropy |
     fastgltf::Extensions::KHR_materials_clearcoat | fastgltf::Extensions::KHR_materials_dispersion |
@@ -38,11 +38,11 @@ constexpr auto SUPPORTED_EXTENSIONS =
     fastgltf::Extensions::KHR_materials_specular |
     fastgltf::Extensions::
     KHR_materials_pbrSpecularGlossiness
-    | // Depreciated, to enable support make sure to define FASTGLTF_ENABLE_DEPRECATED_EXT
+    | // Устарело, чтобы включить поддержку, обязательно определите FASTGLTF_ENABLE_DEPRECATED_EXT.
     fastgltf::Extensions::KHR_materials_transmission |
     fastgltf::Extensions::KHR_materials_volume | fastgltf::Extensions::KHR_materials_unlit |
     fastgltf::Extensions::EXT_texture_webp |
-    //fastgltf::Extensions::KHR_materials_diffuse_transmission |
+    //fastgltf::Расширения:: KHR_materials_diffuse_transmission |
     fastgltf::Extensions::KHR_materials_variants;
 
 constexpr auto GLTF_OPTIONS = fastgltf::Options::DontRequireValidAssetMember | fastgltf::Options::AllowDouble |
@@ -107,8 +107,8 @@ static inline GLsizei get_level_count(int32_t width, int32_t height)
 /**
  * @brief Allocate immutable texture storage with fallback for GLES2
  *
- * glTexStorage2D (GL_EXT_texture_storage) may not be available on all GLES2 drivers.
- * This function falls back to glTexImage2D when the extension is not available.
+ * glTexStorage2D ( GL_EXT_texture_storage ) может быть доступен не для всех драйверов GLES2.
+ * Эта функция возвращается к glTexImage2D, когда расширение недоступно.
  */
 static inline void tex_storage_2d_compat(GLenum target, GLsizei levels, GLenum internalformat,
                                          GLsizei width, GLsizei height)
@@ -173,9 +173,9 @@ lv_gltf_model_t * lv_gltf_data_load_internal(const void * data_source, size_t da
         return NULL;
     }
 
-    // Parse the visible node structure to get a world transform matrix for each mesh component
-    // instance per node, and apply that matrix to the min/max of the untransformed mesh, then
-    // grow a bounding volume to include those transformed points
+    // Проанализируйте видимую структуру узла, чтобы получить матрицу мирового преобразования для каждого компонента сетки.
+    // экземпляр для каждого узла и примените эту матрицу к минимуму/максиму непреобразованной сетки, затем
+    // увеличить ограничивающий объем, включив в него эти преобразованные точки
 
     int32_t scene_index = 0;
     bool first_visible_mesh = true;
@@ -193,9 +193,9 @@ lv_gltf_model_t * lv_gltf_data_load_internal(const void * data_source, size_t da
         first_visible_mesh = false;
     });
 
-    /* Reserve enough space for model nodes */
+    /* Зарезервируйте достаточно места для узлов модели. */
     lv_array_init(&model->nodes, model->asset.nodes.size(), sizeof(lv_gltf_model_node_t));
-    /*Virtually set size so that lv_array_assign will work*/
+    /*Виртуально установите размер, чтобы lv_array_assign работал.*/
     model->nodes.size = model->asset.nodes.size();
 
     fastgltf::namegen_iterate_scene_nodes(model->asset, scene_index,
@@ -205,8 +205,8 @@ lv_gltf_model_t * lv_gltf_data_load_internal(const void * data_source, size_t da
         lv_gltf_model_node_t model_node;
         lv_gltf_model_node_init(model, &model_node, &node, node_path.c_str(), node_num_path.c_str());
 
-        /* Store the nodes in the same order as fastgltf
-         * This is a workaround as we can't assign any type of user data to fastgltf's types*/
+        /* Сохраняйте узлы в том же порядке, что и в fastgltf.
+         * Это обходной путь, поскольку мы не можем назначить какой-либо тип пользовательских данных типам fastgltf.*/
         lv_array_assign(&model->nodes, node_index, & model_node);
     });
 
@@ -304,9 +304,9 @@ static lv_gltf_model_t * create_data_from_bytes(const uint8_t * bytes, size_t da
 static void make_small_magenta_texture(uint32_t new_magenta_tex)
 {
     GL_CALL(glBindTexture(GL_TEXTURE_2D, new_magenta_tex));
-    unsigned char clearBytes[4] = { 255, 0, 255, 255 }; // RGBA format
+    unsigned char clearBytes[4] = { 255, 0, 255, 255 }; // Формат RGBA
     GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, clearBytes));
-    // Set texture parameters (optional but recommended)
+    // Установите параметры текстуры (необязательно, но рекомендуется)
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
@@ -386,7 +386,7 @@ static bool injest_check_any_image_index_valid(fastgltf::Optional<fastgltf::Text
 static void injest_grow_bounds_to_include(lv_gltf_model_t * data, const fastgltf::math::fmat4x4 & matrix,
                                           const fastgltf::Mesh & mesh)
 {
-    /* Grow the bounds to include the specified mesh. */
+    /* Расширьте границы, чтобы включить указанную сетку. */
     fastgltf::math::fvec3 v_min{ data->vertex_min[0], data->vertex_min[1], data->vertex_min[2] };
 
     fastgltf::math::fvec3 v_max{
@@ -556,15 +556,15 @@ bool injest_image(lv_opengl_shader_manager_t * shader_manager, lv_gltf_model_t *
 static bool injest_image_from_buffer_view(lv_gltf_model_t * data, fastgltf::sources::BufferView & view,
                                           GLuint texture_id)
 {
-    /* Yes, we've already loaded every buffer into some GL buffer. However, with GL it's simpler
-       to just copy the buffer data again for the texture. Besides, this is just an example. */
+    /* Да, мы уже загрузили каждый буфер в некоторый буфер GL. Однако с GL все проще
+       чтобы просто скопировать данные буфера еще раз для текстуры. Кроме того, это всего лишь пример. */
     auto & buffer_view = data->asset.bufferViews[view.bufferViewIndex];
     auto & buffer = data->asset.buffers[buffer_view.bufferIndex];
     LV_LOG_INFO("Unpacking image bufferView: %s from %d bytes", image.name, bufferView.byteLenght);
     return std::visit(
     fastgltf::visitor{
-        // We only care about VectorWithMime here, because we specify LoadExternalBuffers, meaning
-        // all buffers are already loaded into a vector.
+        // Здесь нас интересует только VectorWithMime, потому что мы указываем LoadExternalBuffers, то есть
+        // все буферы уже загружены в вектор.
         [](auto & arg)
         {
             LV_UNUSED(arg);
@@ -628,7 +628,7 @@ static bool injest_image_from_buffer_view(lv_gltf_model_t * data, fastgltf::sour
 static void injest_light(lv_gltf_model_t * data, size_t light_index, fastgltf::Light & light, size_t scene_index)
 {
     fastgltf::math::fmat4x4 tmat;
-    // It would seem like we'd need this info but not really, just the index will do at the loading phase, the rest is pulled during frame updates.
+    // Казалось бы, нам нужна эта информация, но на самом деле это не так, на этапе загрузки подойдет только индекс, остальное извлекается во время обновления фрейма.
     LV_UNUSED(light);
 
     fastgltf::findlight_iterate_scene_nodes(data->asset, scene_index, &tmat,
@@ -647,7 +647,7 @@ static void injest_light(lv_gltf_model_t * data, size_t light_index, fastgltf::L
 
 static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
 {
-    /*const auto &asset = GET_ASSET(data);*/
+    /*const auto &asset = GET_ASSET (данные);*/
     const auto & outMesh = lv_gltf_get_new_meshdata(data);
     outMesh->primitives.resize(mesh.primitives.size());
 
@@ -656,15 +656,15 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
             LV_LOG_WARN("Unhandled draco compression");
         }
         auto * positionIt = it->findAttribute("POSITION");
-        // A mesh primitive is required to hold the POSITION attribute.
+        // Примитив сетки необходим для хранения атрибута POSITION.
         //
         assert(positionIt != it->attributes.end());
-        assert(it->indicesAccessor.has_value()); // We specify GenerateMeshIndices, so we should always have indices
+        assert(it->indicesAccessor.has_value()); // Мы указываем GenerateMeshIndices, поэтому у нас всегда должны быть индексы
 
         auto index = std::distance(mesh.primitives.begin(), it);
         auto & primitive = outMesh->primitives[index];
 
-        // Generate the VAO
+        // Создайте VAO
         GLuint vao;
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -672,7 +672,7 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
         primitive.vertexArray = vao;
 
         if(it->materialIndex.has_value()) {
-            // Adjust for default material
+            // Отрегулировать материал по умолчанию
             primitive.materialUniformsIndex = it->materialIndex.value() + 1;
             auto & material = data->asset.materials[it->materialIndex.value()];
             load_mesh_texture(data, material.pbrData.baseColorTexture, &primitive.albedoTexture,
@@ -719,7 +719,7 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
             continue;
         }
 
-        // Create the vertex buffer for this primitive, and use the accessor tools to copy directly into the mapped buffer.
+        // Создайте буфер вершин для этого примитива и используйте инструменты доступа для копирования непосредственно в сопоставленный буфер.
         GL_CALL(glGenBuffers(1, &primitive.vertexBuffer));
         GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, primitive.vertexBuffer));
 
@@ -778,7 +778,7 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
         glBindBuffer(GL_ARRAY_BUFFER, primitive.vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, positionAccessor.count * sizeof(vertex_t), vertices_vec.data(), GL_STATIC_DRAW);
 
-        // Generate the indirect draw command
+        // Создайте команду косвенного рисования
         auto & draw = primitive.draw;
         draw.instanceCount = 1;
         draw.baseInstance = 0;
@@ -790,7 +790,7 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
             return false;
         draw.count = static_cast<std::uint32_t>(indexAccessor.count);
 
-        // Create the index buffer and copy the indices into it.
+        // Создайте буфер индексов и скопируйте в него индексы.
         glGenBuffers(1, &primitive.indexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, primitive.indexBuffer);
         if(indexAccessor.componentType == fastgltf::ComponentType::UnsignedByte ||
@@ -805,7 +805,7 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
         }
         else {
             primitive.indexType = GL_UNSIGNED_INT;
-            //std::uint32_t tempIndices[indexAccessor.count];
+            //std:: uint32_t tempIndices[indexAccessor.count];
             std::uint32_t * tempIndices = new std::uint32_t[indexAccessor.count];
             fastgltf::copyFromAccessor<std::uint32_t>(data->asset, indexAccessor, tempIndices);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER,
@@ -831,13 +831,13 @@ static size_t injest_vec_attribute(uint8_t vec_size, int32_t current_attrib_inde
         if(accessor.bufferViewIndex.has_value()) {
             glBindBuffer(GL_ARRAY_BUFFER, primitive_vertex_buffer);
             fastgltf::iterateAccessorWithIndex<T>(asset, accessor, functor);
-            // Specify the layout of the vertex data
-            glVertexAttribPointer(current_attrib_index, // Attribute index
-                                  vec_size, // Number of components per vertex
-                                  GL_FLOAT, // Data type
-                                  GL_FALSE, // Normalized
-                                  sizeof(vertex_t), // Stride (size of one vertex)
-                                  (void *)offset); // Offset in the buffer
+            // Укажите расположение данных вершин
+            glVertexAttribPointer(current_attrib_index, // Индекс атрибута
+                                  vec_size, // Количество компонентов на вершину
+                                  GL_FLOAT, // Тип данных
+                                  GL_FALSE, // Нормализованный
+                                  sizeof(vertex_t), // Шаг (размер одной вершины)
+                                  (void *)offset); // Смещение в буфере
             glEnableVertexAttribArray(current_attrib_index);
         }
         else {

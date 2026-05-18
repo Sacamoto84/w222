@@ -7,7 +7,7 @@
  *      INCLUDES
  *********************/
 
-/* for aligned_alloc */
+/* для aligned_alloc */
 #ifndef __USE_ISOC11
     #define _ISOC11_SOURCE
 #endif
@@ -138,9 +138,9 @@ static lv_result_t init_display(lv_display_t * display)
 static lv_result_t resize_display(lv_display_t * display)
 {
     lv_color_format_t cf = lv_display_get_color_format(display);
-    /*In some cases SDL stride might be different than LVGL render stride, like in I1 format.
-    SDL still uses ARGB8888 as the color format, but LVGL renders in I1, thus causing a mismatch
-    This ensures correct stride for SDL buffers in this case.*/
+    /*В некоторых случаях шаг SDL может отличаться от шага рендеринга LVGL, например, в формате I1.
+    SDL по-прежнему использует ARGB8888 в качестве цветового формата, но LVGL рендерится в I1, что приводит к несоответствию.
+    В данном случае это обеспечивает правильный ход буферов SDL.*/
     if(cf == LV_COLOR_FORMAT_I1) {
         cf = LV_COLOR_FORMAT_ARGB8888;
     }
@@ -165,7 +165,7 @@ static lv_result_t resize_display(lv_display_t * display)
 
 #if LV_COLOR_DEPTH == 32 || LV_COLOR_DEPTH == 1
     SDL_PixelFormatEnum px_format =
-        SDL_PIXELFORMAT_RGB888; /*same as SDL_PIXELFORMAT_RGB888, but it's not supported in older versions*/
+        SDL_PIXELFORMAT_RGB888; /*то же, что SDL_PIXELFORMAT_RGB888, но не поддерживается в старых версиях.*/
 #elif LV_COLOR_DEPTH == 24
     SDL_PixelFormatEnum px_format = SDL_PIXELFORMAT_BGR24;
 #elif LV_COLOR_DEPTH == 16
@@ -230,9 +230,9 @@ static void * sdl_draw_buf_realloc_aligned(void * ptr, size_t new_size)
         sdl_draw_buf_free(ptr);
     }
 
-    /* No need copy for drawing buffer */
+    /* Нет необходимости копировать для буфера рисования */
 #ifndef _WIN32
-    /* Size must be multiple of align, See: https://en.cppreference.com/w/c/memory/aligned_alloc */
+    /* Размер должен быть кратен размеру выравнивания. См.: https://en.cppreference.com/w/c/memory/aligned_alloc. */
 #define BUF_ALIGN (LV_DRAW_BUF_ALIGN < sizeof(void *) ? sizeof(void *) : LV_DRAW_BUF_ALIGN)
     return aligned_alloc(BUF_ALIGN, LV_ALIGN_UP(new_size, BUF_ALIGN));
 #else
@@ -261,10 +261,10 @@ static void flush_cb(lv_display_t * display, const lv_area_t * area, uint8_t * p
             uint32_t height = lv_area_get_height(area);
             lv_draw_sw_rgb565_swap(px_map, width * height);
         }
-        /*Update values in a special OLED I1 --> ARGB8888 case
-          We render everything in I1, but display it in ARGB8888*/
+        /*Обновить значения в специальном случае OLED I1 --> ARGB8888.
+          Мы рендерим всё в I1, а отображаем в ARGB8888.*/
         if(cf == LV_COLOR_FORMAT_I1) {
-            /*I1 uses 1 bit wide pixels, ARGB8888 uses 4 byte wide pixels*/
+            /*I1 использует пиксели шириной 1 бит, ARGB8888 использует пиксели шириной 4 байта.*/
             cf = LV_COLOR_FORMAT_ARGB8888;
             uint32_t width = lv_area_get_width(area);
             uint32_t height = lv_area_get_height(area);
@@ -275,7 +275,7 @@ static void flush_cb(lv_display_t * display, const lv_area_t * area, uint8_t * p
                 lv_display_flush_ready(display);
                 return;
             }
-            /* skip the palette */
+            /* пропустить палитру */
             px_map += LV_COLOR_INDEXED_PALETTE_SIZE(LV_COLOR_FORMAT_I1) * 4;
             const uint32_t i1_stride = lv_draw_buf_width_to_stride(width, LV_COLOR_FORMAT_I1);
             const uint32_t argb8888_stride = lv_draw_buf_width_to_stride(width, LV_COLOR_FORMAT_ARGB8888);
@@ -333,7 +333,7 @@ static lv_result_t window_update(lv_display_t * display)
 
     SDL_RenderClear(ddata->renderer);
 
-    /*Update the renderer with the texture containing the rendered image*/
+    /*Обновите рендерер, добавив в него текстуру, содержащую визуализированное изображение.*/
     SDL_RenderCopy(ddata->renderer, ddata->texture, NULL, NULL);
     SDL_RenderPresent(ddata->renderer);
     return LV_RESULT_OK;

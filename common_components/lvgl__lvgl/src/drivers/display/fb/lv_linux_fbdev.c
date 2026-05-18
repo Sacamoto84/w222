@@ -135,7 +135,7 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
 
     if(dsc->fbfd > 0) close(dsc->fbfd);
 
-    /* Open the file for reading and writing*/
+    /* Откройте файл для чтения и записи.*/
     dsc->fbfd = open(dsc->devname, O_RDWR);
     if(dsc->fbfd == -1) {
         perror("Error: cannot open framebuffer device");
@@ -143,23 +143,23 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
     }
     LV_LOG_INFO("The framebuffer device was opened successfully");
 
-    /* Make sure that the display is on.*/
+    /* Убедитесь, что дисплей включен.*/
     if(ioctl(dsc->fbfd, FBIOBLANK, FB_BLANK_UNBLANK) != 0) {
         perror("ioctl(FBIOBLANK)");
-        /* Don't return. Some framebuffer drivers like efifb or simplefb don't implement FBIOBLANK.*/
+        /* Не возвращайся. Некоторые драйверы фреймбуфера, такие как efifb или simplefb, не реализуют FBIOBLANK.*/
     }
 
 #if LV_LINUX_FBDEV_BSD
     struct fbtype fb;
     unsigned line_length;
 
-    /*Get fb type*/
+    /*Получить тип ФБ*/
     if(ioctl(dsc->fbfd, FBIOGTYPE, &fb) != 0) {
         perror("ioctl(FBIOGTYPE)");
         return LV_RESULT_INVALID;
     }
 
-    /*Get screen width*/
+    /*Получить ширину экрана*/
     if(ioctl(dsc->fbfd, FBIO_GETLINEWIDTH, &line_length) != 0) {
         perror("ioctl(FBIO_GETLINEWIDTH)");
         return LV_RESULT_INVALID;
@@ -174,13 +174,13 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
     dsc->finfo.smem_len = dsc->finfo.line_length * dsc->vinfo.yres;
 #else /* LV_LINUX_FBDEV_BSD */
 
-    /* Get fixed screen information*/
+    /* Получить информацию о фиксированном экране*/
     if(ioctl(dsc->fbfd, FBIOGET_FSCREENINFO, &dsc->finfo) == -1) {
         perror("Error reading fixed information");
         return LV_RESULT_INVALID;
     }
 
-    /* Get variable screen information*/
+    /* Получить переменную информацию об экране*/
     if(ioctl(dsc->fbfd, FBIOGET_VSCREENINFO, &dsc->vinfo) == -1) {
         perror("Error reading variable information");
         return LV_RESULT_INVALID;
@@ -189,11 +189,11 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
 
     LV_LOG_INFO("%dx%d, %dbpp", dsc->vinfo.xres, dsc->vinfo.yres, dsc->vinfo.bits_per_pixel);
 
-    /* Figure out the size of the screen in bytes*/
-    dsc->screensize =  dsc->finfo.smem_len;/*finfo.line_length * vinfo.yres;*/
+    /* Вычислить размер экрана в байтах*/
+    dsc->screensize =  dsc->finfo.smem_len;/*финфо. line_length *винфо.yres;*/
 
 #if LV_LINUX_FBDEV_MMAP
-    /* Map the device to memory*/
+    /* Сопоставьте устройство с памятью*/
     dsc->fbp = (char *)mmap(0, dsc->screensize, PROT_READ | PROT_WRITE, MAP_SHARED, dsc->fbfd, 0);
     if((intptr_t)dsc->fbp == -1) {
         perror("Error: failed to map framebuffer device to memory");
@@ -201,8 +201,8 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
     }
 #endif
 
-    /* Don't initialise the memory to retain what's currently displayed / avoid clearing the screen.
-     * This is important for applications that only draw to a subsection of the full framebuffer.*/
+    /* Не инициализируйте память, чтобы сохранить то, что отображается в данный момент/избегайте очистки экрана.
+     * Это важно для приложений, которые используют только часть полного кадрового буфера.*/
 
     LV_LOG_INFO("The framebuffer device was mapped to memory successfully");
 
@@ -331,18 +331,18 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     lv_area_t rotated_area;
     const lv_display_rotation_t rotation = lv_display_get_rotation(disp);
 
-    /* Not all framebuffer kernel drivers support hardware rotation, so we need to handle it in software here */
+    /* Не все драйверы ядра фреймбуфера поддерживают аппаратную ротацию, поэтому здесь нам нужно решить эту проблему программно. */
     if(rotation != LV_DISPLAY_ROTATION_0) {
         int32_t src_w;
         int32_t src_h;
         uint32_t src_stride;
 
-        /* Direct render mode rotation only works if we rotate the whole screen at the same time
-         * To do that, we use the display's resolution and as the area
-         *  we also grab the current draw buffer so that we can rotate the whole display */
+        /* Вращение в режиме прямого рендеринга работает только в том случае, если мы одновременно поворачиваем весь экран.
+         * Для этого мы используем разрешение дисплея и площадь
+         *  мы также захватываем текущий буфер отрисовки, чтобы можно было повернуть весь дисплей */
         if(LV_LINUX_FBDEV_RENDER_MODE == LV_DISPLAY_RENDER_MODE_DIRECT) {
             if(!is_last_flush) {
-                /* We need to wait for the last flush when using direct render mode with rotation*/
+                /* Нам нужно дождаться последнего сброса при использовании режима прямого рендеринга с вращением.*/
                 lv_display_flush_ready(disp);
                 return;
             }
@@ -356,10 +356,10 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
             lv_area_set_height(&rotated_area, src_h);
         }
         else {
-            /* For partial and full render modes, we need to rotate the current area
-             * In Full mode we will rotate the whole display just like with direct render mode
-             * but we don't need to do anything special since the area is already the full area of the display
-             * For Partial mode we will rotate just the part we're currently displaying*/
+            /* Для режимов частичного и полного рендеринга нам нужно повернуть текущую область.
+             * В полном режиме мы будем вращать весь дисплей, как и в режиме прямого рендеринга.
+             * но нам не нужно ничего особенного делать, так как площадь уже равна всей площади дисплея
+             * В частичном режиме мы будем вращать только ту часть, которую показываем.*/
             src_w = lv_area_get_width(area);
             src_h = lv_area_get_height(area);
             src_stride = lv_draw_buf_width_to_stride(lv_area_get_width(area), cf);
@@ -382,10 +382,10 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     lv_area_t display_area;
     lv_area_set(&display_area, 0, 0, dsc->vinfo.xres - 1, dsc->vinfo.yres - 1);
 
-    /* Clip the area to the display bounds */
+    /* Обрезать область до границ дисплея */
     lv_area_t clipped_area;
     if(!lv_area_intersect(&clipped_area, area, &display_area)) {
-        /* No intersection at all, nothing to render */
+        /* Пересечения вообще нет, рендерить нечего */
         lv_display_flush_ready(disp);
         return;
     }
@@ -406,7 +406,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
         }
     }
     else {
-        /* Calculate offset into color_p buffer based on original area */
+        /* Вычислить смещение в буфере color_p на основе исходной площади. */
         const int32_t x_offset = clipped_area.x1 - area->x1;
         const int32_t y_offset = clipped_area.y1 - area->y1;
         const int32_t stride = lv_draw_buf_width_to_stride(lv_area_get_width(area), cf);

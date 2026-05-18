@@ -74,7 +74,7 @@ extern "C" {
 #endif /* LV_BUILD_TEST_PERF */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_UNITY_SUPPORT_H*/

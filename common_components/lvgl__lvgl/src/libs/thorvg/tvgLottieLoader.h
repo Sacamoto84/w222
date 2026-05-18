@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -36,9 +36,9 @@ struct LottieBuilder;
 class LottieLoader : public FrameModule, public Task
 {
 public:
-    const char* content = nullptr;      //lottie file data
-    uint32_t size = 0;                  //lottie data size
-    float frameNo = 0.0f;               //current frame number
+    const char* content = nullptr;      //данные файла лотереи
+    uint32_t size = 0;                  //размер данных лотереи
+    float frameNo = 0.0f;               //текущий номер кадра
     float frameCnt = 0.0f;
     float frameDuration = 0.0f;
     float frameRate = 0.0f;
@@ -47,10 +47,10 @@ public:
     LottieComposition* comp = nullptr;
 
     Key key;
-    char* dirName = nullptr;            //base resource directory
-    bool copy = false;                  //"content" is owned by this loader
-    bool overridden = false;             //overridden properties with slots
-    bool rebuild = false;               //require building the lottie scene
+    char* dirName = nullptr;            //базовый каталог ресурсов
+    bool copy = false;                  //«контент» принадлежит этому загрузчику
+    bool overridden = false;             //переопределенные свойства со слотами
+    bool rebuild = false;               //требуется построить сцену лотереи
 
     LottieLoader();
     ~LottieLoader();
@@ -62,14 +62,14 @@ public:
     Paint* paint() override;
     bool override(const char* slot);
 
-    //Frame Controls
+    //Элементы управления кадром
     bool frame(float no) override;
     float totalFrame() override;
     float curFrame() override;
     float duration() override;
     void sync() override;
 
-    //Marker Supports
+    //Маркерные опоры
     uint32_t markersCnt();
     const char* markers(uint32_t index);
     bool segment(const char* marker, float& begin, float& end);

@@ -33,7 +33,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_RECT_PRIVATE_H*/

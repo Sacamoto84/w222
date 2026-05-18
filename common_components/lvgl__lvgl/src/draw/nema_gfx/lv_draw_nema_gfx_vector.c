@@ -65,7 +65,7 @@ void lv_draw_nema_gfx_vector(lv_draw_task_t * t, const lv_draw_vector_dsc_t * ds
     lv_color_format_t dst_cf = layer->draw_buf->header.cf;
     uint32_t dst_nema_cf = lv_nemagfx_cf_to_nema(dst_cf);
 
-    /* the stride should be computed internally for NEMA_TSC images and images missing a stride value */
+    /* шаг должен рассчитываться внутренне для изображений NEMA_TSC и изображений, в которых отсутствует значение шага */
     int32_t stride = (dst_cf >= LV_COLOR_FORMAT_NEMA_TSC_START && dst_cf <= LV_COLOR_FORMAT_NEMA_TSC_END) ?
                      -1 : lv_area_get_width(&(layer->buf_area)) * lv_color_format_get_size(dst_cf);
 
@@ -98,7 +98,7 @@ static void task_draw_cb(void * ctx, const lv_vector_path_t * path, const lv_vec
     matrix.m[1][2] += c->rel_translate_y;
     nema_vg_path_set_matrix(c->u->path, (void *) &matrix);
 
-    /* the path ops array needs to be translated to nema's opcodes */
+    /* массив операций пути необходимо преобразовать в коды операций Nema */
     lv_vector_path_op_t * ops = lv_array_front(&path->ops);
     uint32_t op_count = lv_array_size(&path->ops);
     uint8_t * nema_ops = lv_malloc(op_count * sizeof(*nema_ops));
@@ -111,7 +111,7 @@ static void task_draw_cb(void * ctx, const lv_vector_path_t * path, const lv_vec
                       /*LV_VECTOR_PATH_OP_CLOSE*/            NEMA_VG_PRIM_CLOSE;
     }
 
-    /* the path points array is in the right format for nema to use as-is */
+    /* массив точек пути имеет правильный формат, чтобы Nema могла использовать его как есть. */
     uint32_t point_count = lv_array_size(&path->points);
     float * points = lv_array_front(&path->points);
 

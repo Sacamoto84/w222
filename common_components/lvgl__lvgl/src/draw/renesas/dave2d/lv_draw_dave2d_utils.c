@@ -42,7 +42,7 @@ d2_color  lv_draw_dave2d_lv_colour_to_d2_colour(lv_color_t color)
     red = color.red ;
     green = color.green ;
     blue = color.blue;
-    /*Color depth: 8 (A8), 16 (RGB565), 24 (RGB888), 32 (XRGB8888)*/
+    /*Глубина цвета: 8 ( A8 ), 16 ( RGB565 ), 24 ( RGB888 ), 32 ( XRGB8888 )*/
     switch(LV_COLOR_DEPTH) {
         case(8):
             LV_ASSERT(0);
@@ -100,7 +100,7 @@ d2_u32 lv_draw_dave2d_lv_colour_fmt_to_d2_fmt(lv_color_format_t colour_format)
             d2_lvgl_mode = d2_mode_argb8888;
             break;
 
-        case(LV_COLOR_FORMAT_RGB888): //LV_COLOR_FORMAT_RGB888 is a 3 byte format, d2_mode_rgb888 is a 4 byte format, not supported
+        case(LV_COLOR_FORMAT_RGB888): //LV_COLOR_FORMAT_RGB888 — 3-байтовый формат, d2_mode_rgb888 — 4-байтовый формат, не поддерживается.
         default:
             LV_ASSERT(0);
             break;

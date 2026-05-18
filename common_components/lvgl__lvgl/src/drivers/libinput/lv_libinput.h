@@ -48,26 +48,26 @@ struct libinput_device;
  **********************/
 
 /**
- * Determine the capabilities of a specific libinput device.
+ * Определите возможности конкретного устройства ввода lib.
  * @param device the libinput device to query
  * @return the supported input capabilities
  */
 lv_libinput_capability lv_libinput_query_capability(struct libinput_device * device);
 
 /**
- * Find connected input device with specific capabilities
+ * Найдите подключенное устройство ввода с конкретными возможностями
  * @param capabilities required device capabilities
  * @param force_rescan erase the device cache (if any) and rescan the file system for available devices
  * @return device node path (e.g. /dev/input/event0) for the first matching device or NULL if no device was found.
- *         The pointer is safe to use until the next forceful device search.
+ *         Указатель можно безопасно использовать до следующего принудительного поиска устройства.
  */
 char * lv_libinput_find_dev(lv_libinput_capability capabilities, bool force_rescan);
 
 /**
- * Find connected input devices with specific capabilities
+ * Найдите подключенные устройства ввода с конкретными возможностями
  * @param capabilities required device capabilities
  * @param devices pre-allocated array to store the found device node paths (e.g. /dev/input/event0). The pointers are
- *                safe to use until the next forceful device search.
+ *                безопасно использовать до следующего принудительного поиска устройства.
  * @param count maximum number of devices to find (the devices array should be at least this long)
  * @param force_rescan erase the device cache (if any) and rescan the file system for available devices
  * @return number of devices that were found
@@ -75,7 +75,7 @@ char * lv_libinput_find_dev(lv_libinput_capability capabilities, bool force_resc
 size_t lv_libinput_find_devs(lv_libinput_capability capabilities, char ** found, size_t count, bool force_rescan);
 
 /**
- * Create a new libinput input device
+ * Создайте новое устройство ввода libinput.
  * @param type LV_INDEV_TYPE_POINTER or LV_INDEV_TYPE_KEYPAD
  * @param dev_path device path, e.g. /dev/input/event0
  * @return pointer to input device or NULL if opening failed
@@ -83,7 +83,7 @@ size_t lv_libinput_find_devs(lv_libinput_capability capabilities, char ** found,
 lv_indev_t * lv_libinput_create(lv_indev_type_t indev_type, const char * dev_path);
 
 /**
- * Delete a libinput input device
+ * Удаление устройства ввода libinput
  * @param indev pointer to input device
  */
 void lv_libinput_delete(lv_indev_t * indev);
@@ -95,7 +95,7 @@ void lv_libinput_delete(lv_indev_t * indev);
 #endif /* LV_USE_LIBINPUT */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_LIBINPUT_H */

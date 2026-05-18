@@ -6,7 +6,7 @@
 *                                            *
 *  ┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ┓           *
 *                                            *
-*  ┃   Second Chance Cache       ┃           *
+*  ┃ Тайник второго шанса ┃ *
 *                                            *
 *  ┃  ┌───┬───┬───┬───┬───┐      ┃           *
 *     │ B │ E │ A │ D │ C │                  *
@@ -17,35 +17,35 @@
 *  ┃    ▲   ▲       ▲       ▲    ┃           *
 *       │   │       │       │                *
 *  ┃    │   │       │   ┌ ─ ┴ ┐  ┃           *
-*       │   │       │   │ add │              *
-*  ┃    │   │       │   │ new │  ┃           *
-*       │   │       │   │here │              *
+*       │ │ │ │ добавить │ *
+*  ┃ │ │ │ │ новый │ ┃ *
+*       │ │ │ │здесь │ *
 *  ┃    │   │       │   └ ─ ─ ┘  ┃           *
 *       │   │       │                        *
 *  ┃    │   │   ┌ ─ ┴ ─ ─ ─ ─ ┐  ┃           *
-*       │   │   │ recently    │              *
-*  ┃    │   │   │ used bit=1  │  ┃           *
-*       │   │   │ (accessed)  │              *
+*       │ │ │ недавно │ *
+*  ┃ │ │ │ использованный бит=1 │ ┃ *
+*       │ │ │ (доступ) │ *
 *  ┃    │   │   └ ─ ─ ─ ─ ─ ─ ┘  ┃           *
 *       │   │                                *
-*  ┃    │   └ ─ ─ victim bit=0   ┃           *
-*       │       (will be evicted)            *
-*  ┃    └ ─ ─ ─ ─ victim bit=1   ┃           *
-*         (gets second chance,               *
-*  ┃      bit reset to 0)        ┃           *
+*  ┃ │ └ ─ ─ бит жертвы=0 ┃ *
+*       │ (будет выселен) *
+*  ┃ └ ─ ─ ─ ─ бит жертвы=1 ┃ *
+*         (получает второй шанс, *
+*  ┃ бит сбрасывается в 0) ┃ *
 *                                            *
-*  ┃  Eviction Process:          ┃           *
+*  ┃ Процесс выселения: ┃ *
 *     1. Find first bit=0                    *
-*  ┃  2. If none, reset all to 0 ┃           *
+*  ┃ 2. Если нет, сбросить все на 0 ┃ *
 *     3. Replace first entry                 *
 *  ┃                             ┃           *
 *  ┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ┛           *
 *                                            *
 * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ *
-* ┃       Buffer Entry Structure           ┃ *
+* ┃ Структура записи буфера ┃ *
 * ┃  ┌────────────┬──────────────────────┐ ┃ *
 * ┃  │   DATA     │     ENTRY_DATA       │ ┃ *
-* ┃  │ (user type)│ (lv_cache_entry_t)   │ ┃ *
+* ┃ │ (тип пользователя)│ ( lv_cache_entry_t ) │ ┃ *
 * ┃  └────────────┴──────────────────────┘ ┃ *
 * ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ *
 \*********************************************/
@@ -221,7 +221,7 @@ static void * alloc_new_entry(lv_cache_sc_da_t * da, const void * key,
     lv_cache_entry_init(last_cache_entry, &da->cache, da->cache.node_size);
     lv_cache_entry_set_flag(last_cache_entry, LV_CACHE_ENTRY_FLAG_DISABLE_DELETE);
 
-    /*New entries start with their second chance set*/
+    /*Новые записи начинаются с набора второго шанса.*/
     set_second_chance(last_cache_entry, true);
     return last_cache_entry;
 }
@@ -272,7 +272,7 @@ static lv_cache_entry_t * get_cb(lv_cache_t * cache, const void * key,
         return NULL;
     }
 
-    /* Linear search */
+    /* Линейный поиск */
     lv_cache_entry_t * cache_entry = NULL;
     for(size_t i = 0; i < da->cache.size; ++i) {
         void * curr_da_entry;
@@ -281,7 +281,7 @@ static lv_cache_entry_t * get_cb(lv_cache_t * cache, const void * key,
 
         if(da->cache.ops.compare_cb(curr_da_entry, key) == 0) {
             cache_entry = curr_cache_entry;
-            /*When an entry is used, we set it's second chance to true again*/
+            /*Когда запись используется, мы снова устанавливаем для второго шанса значение true.*/
             set_second_chance(cache_entry, true);
             break;
         }
@@ -425,7 +425,7 @@ static lv_cache_entry_t * get_possible_victim(lv_cache_sc_da_t * da, size_t inde
         return NULL;
     }
 
-    /*Remove its second chance*/
+    /*Удалить второй шанс*/
     set_second_chance(cache_entry, false);
     return NULL;
 }
@@ -438,20 +438,20 @@ static lv_cache_entry_t * get_victim_cb(lv_cache_t * cache, void * user_data)
 
     LV_ASSERT_NULL(da);
     /*
-         * We iterate twice to handle the complexity introduced by reference counting
-         * in the second chance algorithm:
+         * Мы повторяем дважды, чтобы справиться со сложностями, возникающими при подсчете ссылок.
+         * в алгоритме второго шанса:
          *
-         * First iteration: Clear second chance bits and look for victims (entries with
-         * sec_chance=0 AND refs=0). Some entries may have sec_chance=0 but refs>0,
-         * making them unavailable for eviction despite being marked for removal.
+         * Первая итерация: Очистите биты второго шанса и найдите жертв (записи с
+         * sec_chance =0 AND refs=0). Некоторые записи могут иметь sec_chance =0, но ссылки>0,
+         * что делает их недоступными для выселения, несмотря на то, что они отмечены для удаления.
          *
-         * Second iteration: Now that all second chance bits are cleared from the first
-         * pass, we can find entries that are truly available for eviction (refs=0).
-         * We can't assume the first entry will be the victim after the first round
-         * because reference counts may prevent eviction of otherwise eligible entries.
+         * Вторая итерация: теперь, когда все биты второго шанса очищены от первого
+         * пройти, мы можем найти записи, которые действительно доступны для выселения (refs=0).
+         * Мы не можем предположить, что первая запись станет жертвой после первого раунда.
+         * поскольку подсчет ссылок может помешать исключению записей, подходящих по другим причинам.
          *
-         * This ensures we give all entries a proper second chance while respecting
-         * active references that prevent immediate eviction.
+         * Это гарантирует, что мы даем всем записям второй шанс, соблюдая при этом
+         * активные ссылки, предотвращающие немедленное выселение.
          */
     for(size_t i = 0; i < 2; ++i) {
         for(size_t j = 0; j < da->cache.size; ++j) {

@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void create_image_item(lv_obj_t * parent, const void * src, const char * text)
@@ -36,16 +36,16 @@ static void create_webp_images(void)
     lv_obj_set_flex_flow(screen, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(screen, LV_FLEX_ALIGN_SPACE_AROUND, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
-    /* Lossy WebP file */
+    /* Файл WebP с потерями */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo_lossy.webp", "Lossy WebP");
 
-    /* Lossless WebP file */
+    /* WebP-файл без потерь */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo_lossless.webp", "Lossless WebP");
 
-    /* Transparent WebP file */
+    /* Прозрачный файл WebP */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo_transparent.webp", "Transparent WebP");
 
-    /* Corrupted WebP file : "WEBP" -> "WEDP" */
+    /* Поврежденный файл WebP: «WEBP» -> «WEDP» */
     create_image_item(screen, "A:src/test_assets/test_img_lvgl_logo_corrupted.webp", "Corrupted WebP");
 }
 
@@ -53,10 +53,10 @@ void test_libwebp_1(void)
 {
     create_webp_images();
 
-    /* Verify initial rendering */
+    /* Проверьте первоначальный рендеринг */
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/webp_1.png");
 
-    /* Test memory stability */
+    /* Проверьте стабильность памяти */
     size_t mem_before = lv_test_get_free_mem();
     for(uint32_t i = 0; i < 50; i++) {
         create_webp_images();
@@ -65,10 +65,10 @@ void test_libwebp_1(void)
         lv_refr_now(NULL);
     }
 
-    /* Verify rendering after multiple refreshes */
+    /* Проверка рендеринга после нескольких обновлений */
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/webp_1.png");
 
-    /* Check for memory leaks */
+    /* Проверьте наличие утечек памяти */
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 128);
 }
 

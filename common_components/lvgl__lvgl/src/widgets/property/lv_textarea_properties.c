@@ -10,8 +10,8 @@
 
 #if LV_USE_TEXTAREA
 /**
- * Textarea widget property names, name must be in order.
- * Generated code from properties.py
+ * Имена свойств виджетов Textarea, имена должны быть в порядке.
+ * Сгенерированный код из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_textarea_property_names[14] = {

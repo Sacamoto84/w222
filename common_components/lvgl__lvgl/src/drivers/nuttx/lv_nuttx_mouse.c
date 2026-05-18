@@ -94,11 +94,11 @@ static void mouse_read(lv_indev_t * drv, lv_indev_data_t * data)
     lv_nuttx_mouse_t * mouse = drv->driver_data;
     struct mouse_report_s sample;
 
-    /* Read one sample */
+    /* Прочитайте один образец */
 
     int nbytes = read(mouse->fd, &sample, sizeof(struct mouse_report_s));
 
-    /* Handle unexpected return values */
+    /* Обработка неожиданных возвращаемых значений */
 
     if(nbytes == sizeof(struct mouse_report_s)) {
         lv_display_t * disp = lv_indev_get_display(drv);
@@ -196,7 +196,7 @@ static lv_indev_t * mouse_init(int fd)
     lv_indev_set_driver_data(indev, mouse);
     lv_indev_add_event_cb(indev, mouse_delete_cb, LV_EVENT_DELETE, indev);
 
-    /* Set cursor icon */
+    /* Установить значок курсора */
     mouse_set_cursor(indev);
     return indev;
 }

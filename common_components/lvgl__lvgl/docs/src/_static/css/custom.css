@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap");
 
 /*-------------------------------------------------------------------------
- * Connect FontAwesome file with FontAwesome family name.  Supplements
- * fontawesome.min.css.  Without this, the codes like `fa-github` don't
- # work in the Furo theme as they did with RTD theme.
+ * Соедините файл FontAwesome с названием компании FontAwesome.  Добавки
+ * Fontawesome.min.css.  Без этих кодов типа`fa-github`работать не будет.
+ # работать с темой Furo так же, как с темой RTD.
  *-------------------------------------------------------------------------*/
 @font-face {
   font-family: FontAwesome;
@@ -18,7 +18,7 @@
 }
 
 /*-------------------------------------------------------------------------
- * Custom CSS Variables
+ * Пользовательские переменные CSS
 /*------------------------------------------------------------------------ */
 
 * {
@@ -131,7 +131,7 @@ body[data-theme="dark"] {
 }
 
 /*-------------------------------------------------------------------------
- * Element Overrides
+ * Переопределения элементов
  *-------------------------------------------------------------------------*/
 
 body {
@@ -506,7 +506,7 @@ body:not([data-theme="light"]) .highlight {
 }
 
 /*-------------------------------------------------------------------------
- * TOC Level 1
+ * TOC Уровень 1
  *-------------------------------------------------------------------------*/
 
 #furo-main-content ul:has(> .toctree-l1) {
@@ -529,11 +529,11 @@ body:not([data-theme="light"]) .highlight {
   margin-top: 2rem;
 }
 
-/* Special Case:  1-level-deep TOCs.
- * Note:  `...:not(:has(.toctree-l2))` won't do it because it ALSO selects
- *        .toctree-l1 elements in more complex TOCs, some of which simply don't have
- *        .toctree-l2 children!  Instead, we want the special case where the TOC
- *        is limited by design to 1 level.  Example:  Widgets overview TOC.
+/* Особый случай: TOC глубиной 1 уровень.
+ * Note:  `...:not(:has(.toctree-l2))` не сделает этого, потому чтоALSOвыбирает
+ *        Элементы .toctree-l1 в более сложных оглавлениях, некоторые из которых просто не имеют
+ *        .toctree-l2 дети!  Вместо этого нам нужен особый случай, когда TOC
+ *        ограничен дизайном до 1 уровня.  Пример: Обзор виджетов TOC .
  */
 
 #furo-main-content .toctree-1-deep .toctree-l1 + .toctree-l1 {
@@ -541,7 +541,7 @@ body:not([data-theme="light"]) .highlight {
 }
 
 /*
- * Welcome to LVGL Docs (home page) table of contents
+ * Добро пожаловать в оглавлениеLVGLDocs (домашняя страница)
  *-------------------------------------------------------------------------
  */
 
@@ -569,7 +569,7 @@ body:not([data-theme="light"]) .highlight {
 }
 
 /*-------------------------------------------------------------------------
- * TOC Level 2
+ * TOC Уровень 2
  *-------------------------------------------------------------------------*/
 
 #furo-main-content ul:has(> .toctree-l2) {
@@ -592,7 +592,7 @@ body:not([data-theme="light"]) .highlight {
 }
 
 /*-------------------------------------------------------------------------
- * TOC Level 3
+ * TOC Уровень 3
  *-------------------------------------------------------------------------*/
 
 #furo-main-content .toctree-l3 > a {
@@ -690,8 +690,8 @@ table.docutils th p {
 }
 
 /*-------------------------------------------------------------------------
- * `home-card` class is (at this writing) exclusively used for the cards 
- * on the landing page. The rules below provide their hover behavior.
+ * Класс`home-card`(на момент написания статьи) используется исключительно для карт. 
+ * на целевой странице. Правила ниже описывают их поведение при наведении.
  *-------------------------------------------------------------------------
  */
 
@@ -748,7 +748,7 @@ table.docutils th p {
 }
 
 /*
- * Language selector (home page)
+ * Выбор языка (домашняя страница)
  *-------------------------------------------------------------------------
  */
 
@@ -783,7 +783,7 @@ table.docutils th p {
 }
 
 /*-------------------------------------------------------------------------
- * Version Dropdown Styling
+ * Оформление раскрывающегося списка версий
  *-------------------------------------------------------------------------*/
 .version-selector {
   background-color: var(--color-background-secondary);
@@ -828,54 +828,54 @@ body:not([data-theme="light"]) #version_dropdown {
 }
 
 /*-------------------------------------------------------------------------
- * `lv_example` Sections
+ * `lv_example` Разделы
  *-------------------------------------------------------------------------
- * The below contains a documented example to show the relationships of
- * the rules below to their selected elements within the example itself.
+ * Ниже приведен документированный пример, показывающий взаимосвязь между
+ * приведенные ниже правила к выбранным им элементам в самом примере.
  *-------------------------------------------------------------------------
- * `lv_example` sections are the output of `./docs/src/_ext/lv_example.py`
- * custom Sphinx extension.  These are generated when the `.rst` source
- * file contains a pattern like this:
+ * Разделы`lv_example`являются результатом `./docs/src/_ext/lv_example.py`.
+ * пользовательское расширение Sphinx.  Они генерируются, когда источник `.rst`
+ * файл содержит такой шаблон:
  *
- *     A very simple *hello world* label    // Sphinx+docutils (.rst parser) generates
- *     ---------------------------------    //   the <section> element and title from this.
+ *     Очень простая метка *hello world* // Sphinx+docutils (первый парсер) последовательно
+ *     ---------------------------------- // элемент <section> и заголовок из него.
  *
- *     .. lv_example:: get_started/lv_example_get_started_1  // `lv_example.py` generates the
- *       :language: c                                        //   rest of the <section> content
- *                                                           //   below from this.
+ *     ..lv_example::get_started/lv_example_get_started_1//`lv_example.py`поток
+ *       :language: c // остальная часть оценки <section>
+ *                                                           // ниже из этого.
  *-------------------------------------------------------------------------
- * Visible layout consists of a <section> element containing:
- * - <h3> element with title
- * - <div> element containing live running web-assembly example of LVGL UI
- * - <div> element containing [> Show C Code]  [G View on GitHub] buttons
- *     and the C code below them.
+ * Видимый макет элемента <раздел>, международный:
+ * - Элемент <h3> с заголовком
+ * - Элемент <div>, содержащий работающий пример веб-сборкиLVGLUI
+ * - Элемент <div>, содержащий кнопки [> Показать код C] [G View на GitHub]
+ *     и код C под ними.
  *
- * <section id="a-very-simple-hello-world-label">   // Contains whole example, buttons and code.
- *   <h3>A very simple <em>hello world</em> label...</h3>  // The title itself.
- *   <div class="lv-example-container">             // Container for running example.
+ * <section id="a-very-simple-hello-world-label"> // Содержит весь пример, кнопку и код.
+ *   <h3>Очень простая метка <em>hello world</em>...</h3> // Сам заголовок.
+ *   <div class="lv-example-container"> // Контейнер для запуска примера.
  *     <div class="lv-example" data-real-src="..." data-is-loaded="true">
- *       <iframe src="..."></iframe>                // Running web-assembly example.
+ *       <iframe src="..."></iframe> // Запуск сценария веб-сборки.
  *     </div>
- *     <div class="lv-example-description"></div>   // Whole area to the right of running example.
+ *     <div class="lv-example-description"></div> // Вся область справа от текущего примера.
  *   </div>
- *   <div class="toggle docutils container">        // Contains buttons + code;
- *     <div class="header docutils container" ...>  // Contains buttons + code; `open` class is added to this to element "open" the code <div> element.
- *       <p>C code &nbsp;</p>                       // [C code] "button"; JS code in `page.html` template arms this "button" with its events when `$(document).ready` event fires.
- *       <a class="lv-example-link-button" ...>     // [View on GitHub] "button"; provides hyperlink to the example code on GitHub.
- *         <i class="fa fa-github"></i>             // "GitHub Cat" icon
- *         &nbsp;View on GitHub                     // text of "button"
+ *   <div class="toggle docutilsContainer"> // Содержит кнопку + код;
+ *     <div class="header docutilsContainer" ...> // Содержит кнопку + код;  К этому элементу добавлен класс`open`, который «открывает» код элемента <div>.
+ *       <p>Код C </p> // [C-код] "кнопка";  КодJSв шаблоне`page.html`активирует эту «кнопку» своими событиями, когда происходит событие`$(document).ready`.
+ *       <a class="lv-example-link-button" ...> // [Просмотр на GitHub] "button"; Обеспечивает гиперссылку примера кода на GitHub.
+ *         <i class="fa fa-github"></i> // Значок «GitHub Cat»
+ *         Посмотреть на GitHub // текст «кнопки»
  *       </a>
  *     </div>
  *     <div class="highlight-c notranslate" ...>
  *       <div class="highlight">
- *         <pre>
- *           ...                                    // Highlighted C code
+ *         <предварительно>
+ *           ... // Выделенный код C
  *         </pre>
  *       </div>
  *     </div>
  *   </div>
  *   <hr>
- * </section>
+ * </раздел>
  */
 .toggle .header {
   display: block;
@@ -884,29 +884,29 @@ body:not([data-theme="light"]) #version_dropdown {
   font-weight: bold;
 }
 
-/* Selects <div class="header docutils container" ...> element.
- * Places "disclosure triangle" icon + non-breaking space to its left.*/
+/* Выбирает элемент <div class="header docutilsContainer" ...>.
+ * Помещает значок «треугольника раскрытия» + неразрывный пробел слева от него.*/
 .toggle .header:before {
   font-family: FontAwesome, "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
-  content: "\f0da \00a0 Show "; /* \f0da = "closed" disclosure triangle; \f00a0 = non-breaking space */
+  content: "\f0da \00a0 Show "; /* \f0da = «закрытый» треугольник раскрытия; \f00a0 = неразрывный пробел */
   display: inline-block;
   font-size: 1.1em;
 }
 
-/* Selects <div class="header docutils container" ...> element when it also contains
- * `open` class, which class is toggled by JS code in `page.html` template. */
+/* Выбирает элемент <div class="header docutilsContainer" ...>, если он также содержит
+ * Класс `open`, класс которого переключается с кодомJSв шаблоне `page.html`. */
 .toggle .header.open:before {
-  content: "\f0d7 \00a0 Hide "; /* \f0d7 = "open" disclosure triangle; \f00a0 = non-breaking space */
+  content: "\f0d7 \00a0 Hide "; /* \f0d7 = «открытый» треугольник раскрытия; \f00a0 = неразрывный пробел */
 }
 
-/* Selects the [> C code] "button". */
+/* Выбор «кнопки» [>C-код]. */
 .header p {
   display: inline-block;
   font-size: 1.1em;
   margin-bottom: 8px;
 }
 
-/* Selects web-assembly example <div> and child <iframe> elements. */
+/* Выбирает пример веб-сборки <div> и дочерние элементы <iframe>. */
 .lv-example,
 .lv-example > iframe {
   border: none;
@@ -919,27 +919,27 @@ body:not([data-theme="light"]) #version_dropdown {
   position: relative;
 }
 
-/* Selects only the <iframe> elements. */
+/* Выбирает только элементы <iframe>. */
 .lv-example > iframe {
   position: absolute;
   top: 0;
   left: 0;
 }
 
-/* Selects outer example <div> container elements. */
+/* Выбирает внешний пример элементов контейнера <div>. */
 .lv-example-container {
   display: flex;
   padding-bottom: 16px;
 }
 
-/* Selects <div class="lv-example-description"></div>
- * which is the whole area to the right of running example. */
+/* Выбирает <div class="lv-example-description"></div>
+ * это вся область справа от текущего примера. */
 .lv-example-description {
   flex: 1 1 auto;
   margin-left: 1rem;
 }
 
-/* Selects [View on GitHub] "button". */
+/* Выбирает «кнопку» [Просмотр на GitHub]. */
 #furo-main-content .lv-example-link-button {
   display: inline-block;
   padding: 4px 8px;
@@ -949,25 +949,25 @@ body:not([data-theme="light"]) #version_dropdown {
   margin: 0 4px;
 }
 
-/* Selects [View on GitHub] "button" when in `:hover` state. */
+/* Выбирает «кнопку» [Просмотр на GitHub] в состоянии`:hover`. */
 .lv-example-link-button:hover {
   color: white;
   filter: brightness(120%);
 }
 
-/* Selects [View on GitHub] "button" when in `:visited` state. */
+/* Выбирает «кнопку» [Просмотр на GitHub] в состоянии`:visited`. */
 .lv-example-link-button:visited {
   color: white;
 }
 
 /*-------------------------------------------------------------------------
- * API Pages
+ * Страницы API
  *-------------------------------------------------------------------------*/
 .lv-api-expansion-button {
   padding: 4px;
 }
 
-/* There are no elements that these select at this writing (29-Mar-2025). */
+/* На момент написания этой статьи (29 марта 2025 г.) нет элементов, которые они могли бы выбрать. */
 .lv-api-expansion-button::before {
   font-family: FontAwesome, "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
   display: inline-block;
@@ -975,7 +975,7 @@ body:not([data-theme="light"]) #version_dropdown {
   cursor: pointer;
 }
 
-/* There are no elements that these select at this writing (29-Mar-2025). */
+/* На момент написания этой статьи (29 марта 2025 г.) нет элементов, которые они могли бы выбрать. */
 .unexpanded .lv-api-expansion-button::before {
   content: "\f0da \00a0";
 }
@@ -984,22 +984,22 @@ body:not([data-theme="light"]) #version_dropdown {
   content: "\f0d7 \00a0";
 }
 
-/* This hides the <dd> elements that contain a code-element's documentation
- * when it has class "unexpanded".  "expanded" and "unexpanded" classes in the
- * <dl> elements are added and managed dynamically via code in `custom.js`. */
+/* Это скрывает элементы <dd>, содержащие документацию элемента кода.
+ * когда у него есть класс «нерасширенный».  «расширенные» и «нерасширенные» классы.
+ * Элементы <dl> включаются и управляются воздействием с помощью кода в `custom.js`. */
 dl.cpp.unexpanded dd {
   display: none;
 }
 
-/* Selects all <div> elements with "body" class.
- * There are no elements that this selects at this writing (29-Mar-2025). */
+/* Выбирает все элементы <div> с классом «body».
+ * На момент написания этой статьи (29 марта 2025 г.) нет элементов, которые можно было бы выбрать. */
 div.body {
   min-width: 360px;
   max-width: 1920px;
 }
 
-/* Selects CPP-expression content <span> elements generated from
- * :cpp:expr:`...` Interpreted-Text-Role expressions in the `.rst` source files. */
+/* Выбирает элементы <span> оценкиCPP, сгенерированные из
+ * :cpp:expr:`...`Выражения интерпретируемой текстовой роли в исходных файлах`.rst`. */
 .cpp-expr {
   font-family: var(--font-stack--monospace);
   font-weight: 500;
@@ -1008,27 +1008,27 @@ div.body {
 }
 
 /*-------------------------------------------------------------------------
- * Custom Banners...
+ * Пользовательские баннеры...
  *
- * ...are inserted between these two elements at the top of the page:
-<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+ * ... вставляются между этими двумя элементами вверху страницы:
+<a class="skip-to-content muted-link" href="#furo-main-content">Перейти к содержимому</a>
 
 <div class="lv-custom-banner-list">
-  <p class="lv-custom-banner highest-priority">
-     Highest-priority announcement!
+  <p class="lv-custom-banner важные приоритеты">
+     Объявление наивысшего приоритета!
   </p>
-  <p class="lv-custom-banner high-priority">
-     We are hiring a Front-End Developer in our Editor Team (Electron, React, Node.JS)!
+  <p class="lv-custom-banner высокий приоритет">
+     Мы нанимаем Front-End разработчика в нашей команде редакторов (Electron, React, Node. JS)!
   </p>
-  <a href="specified_url" class="lv-custom-banner normal-priority">
+  <a href="specified_url" class="lv-custom-banner нормальный-приоритет">
     <p>
-      Normal-priority announcement.
+      Объявление с обычным приоритетом.
     </p>
   </a>
 </div>
 
-<div class="page">
-  ...page content...
+<div класс="страница">
+  ...содержание страницы...
  *-------------------------------------------------------------------------*/
 .lv-custom-banner-list {
   display: flex;
@@ -1049,7 +1049,7 @@ div.body {
   color: rgba(var(--color-text-on-accent-rgb), 0.9);
 }
 
-/* Hyperlinks within banners (when banner label had a hyperlink in it) */
+/* Гиперссылки внутри баннеров (когда в метке баннера есть гиперссылка) */
 .lv-custom-banner-list a {
   color: rgba(var(--color-text-on-accent-rgb), 0.9);
   text-decoration: none;
@@ -1059,13 +1059,13 @@ div.body {
   color: rgba(var(--color-text-on-accent-rgb), 1);
 }
 
-/* Paragraphs within banner HTML (when Banners text contains <p> elements). */
+/* Абзацы внутри баннера HTML (когда текст баннера содержит элементы <p>). */
 .lv-custom-banner-list p {
   margin: 0;
 }
 
 /*-------------------------------------------------------------------------
- * Field Lists
+ * Списки полей
  *-------------------------------------------------------------------------*/
 .field-list ul {
   margin: 0;
@@ -1079,7 +1079,7 @@ div.body {
 dl.field-list {
   display: grid;
   grid-template-columns: auto minmax(70%, 95%);
-  margin-bottom: 1.5rem; /* Up from 16 */
+  margin-bottom: 1.5rem; /* с 16 лет */
 }
 
 dl.field-list > dt {
@@ -1097,7 +1097,7 @@ dl.field-list > dd {
 }
 
 /*-------------------------------------------------------------------------
- * Special Features for LVGL
+ * Специальные возможности для LVGL
  *-------------------------------------------------------------------------*/
 div .lvgl-figure-caption p {
   font-size: 0.8rem;
@@ -1109,27 +1109,27 @@ figure figcaption .caption-text {
   font-size: 0.8rem;
 }
 
-/* Whitespace below figures and images... */
+/* Пробелы под рисунками и изображениями... */
 article figure,
 article img {
   margin-bottom: 2rem;
 }
 
-/* ...except when the image is part of a figure. */
+/* ...кроме случаев, когда изображение является частью фигуры. */
 article figure img {
   margin-bottom: 0;
 }
 
 /*-------------------------------------------------------------------------
- * Code Highlighting
+ * Выделение кода
  *-------------------------------------------------------------------------*/
-/* Pygments .p = Punctuation */
+/* Пигменты .p = Пунктуация */
 body:not([data-theme="light"]) .highlight .p {
   color: #a883f3;
 }
 
 /*-------------------------------------------------------------------------
- * Glossary
+ * Глоссарий
  *-------------------------------------------------------------------------*/
 .glossary {
   display: flex;
@@ -1165,31 +1165,31 @@ body:not([data-theme="light"]) .highlight .p {
 }
 
 /*-------------------------------------------------------------------------
- * Combining Bold / Italic / Underlining
+ * Сочетание жирного, курсива и подчеркивания
  * -------------------------------------
- * These are things that reStructuredText cannot do by itself.
- * It uses custom_roles.txt to set up roles using these classes.
+ * Это то, что reStructuredText не может сделать сам по себе.
+ * Он используетcustom_roles.txtдля настройки ролей с использованием этих классов.
  *
- * To use them in `.rst` files:
+ * Чтобы использовать их в файлах `.rst`:
  * ----------------------------
- * 1.  .. include::  /include/custom_roles.txt
- * 2.  Use with custom roles like this:
- *         :bi:`text`
- *         :ib:`text`
- *         :u:`text`
- *         :ub:`text`
- *         :bu:`text`
- *         :ui:`text`
- *         :iu:`text`
- *         :ubi:`text`
- *         :uib:`text`
- *         :bui:`text`
- *         :iub:`text`
- *         :biu:`text`
- *         :ibu:`text`
+ * 1.  .. включить:: /include/ custom_roles.txt
+ * 2.  Используйте с такими пользовательскими ролями:
+ *         :би: `text`
+ *         :ib: `text`
+ *         :u: `text`
+ *         :ub: `text`
+ *         :bu: `text`
+ *         :ui: `text`
+ *         :iu: `text`
+ *         :ubi: `text`
+ *         :uib: `text`
+ *         :bui: `text`
+ *         :iub: `text`
+ *         :biu: `text`
+ *         :ibu: `text`
  *
- * The above combinations were done so you don't have to remember
- * whether 'i', 'b' or 'u' comes first when they are combined.
+ * Вышеуказанные комбинации были сделаны, чтобы вам не пришлось запоминать
+ * независимо от того, идет ли «i», «b» или «u» первым при их сочетании.
  *-------------------------------------------------------------------------*/
 span.bi {
   font-weight: bold;
@@ -1213,79 +1213,79 @@ span.ubi {
 }
 
 /*-------------------------------------------------------------------------
- * Tigher Tables
+ * Более высокие столы
  * -------------
- * Here, we introduce 7 levels of table "tightening" with increasingly reduced space
- * and size.  The large number of options here are merely for flexibility, giving the
- * author the possibility of getting his table "just right" for its context to make
- * the table maximally readable and usable.
+ * Здесь мы представляем 7 уровней «затягивания» стола со все более уменьшающимся пространством.
+ * и размер.  Большое количество опций здесь просто для гибкости, предоставляя
+ * автору возможность получить свою таблицу «правильно» для ее контекста, чтобы сделать
+ * таблица максимально читабельна и удобна.
  *
- * Furo normal table styling is for <p> elements inside <th> and <td> elements:
+ * Обычный стиль таблицы Furo предназначен для элементов <p> внутри элементов <th> и <td>:
  *
- * table.docutils td p,
+ * table.docutils тд п,
  * table.docutils th p {
- *     margin:.25rem
+ *     маржа: .25бэр
  * }
  *
- * Then custom.css overrides this with:
+ * Затем custom.css переопределяет это с помощью:
  *
- * table.docutils {
+ * таблица.docutils {
  *   ...
- *   font-size: 0.8125rem;
+ *   размер шрифта: 0,8125рем;
  *   ...
  * }
- * table.docutils td p,
+ * table.docutils тд п,
  * table.docutils th p {
- *   margin: 0.5rem 1.0rem;
+ *   margin: 0,5 бэр 1,0 бэр;
  * }
  *
- * We make more compact tables by reducing the margin for the first 6, and finally
- * reducing the font size for the 7th.  Note that these are used by putting the table
- * within a ``container`` directive like this:
+ * Делаем более компактные таблицы за счет уменьшения наценки для первых 6 и, наконец,
+ * уменьшение размера шрифта для 7-го.  Обратите внимание, что они используются путем помещения таблицы
+ * внутри директивы `` контейнера `` следующим образом:
  *
- *     .. container:: tighter-table-N
+ *     .. контейнер:: плотнее-таблица-N
  *
- *         table definition here
+ *         определение таблицы здесь
  *
- * where `N` is a digit 1-7, so that the table is wrapped in a
- * <div class="tighter-table-N"> element.  Note that the table has to be
- * indented past the leading `..` of the directive in order to accomplish
- * this, so that the table itself is "contained" by the directive.
+ * где `N` — цифры от 1 до 7, так что таблица заключена в
+ * Элемент <div class="tighter-table-N">.  Обратите внимание, что таблица должна быть
+ * с отступом после начального `..` директивы, чтобы выполнить
+ * это значит, что сама таблица «содержится» в директиве.
  *-------------------------------------------------------------------------*/
-/* Level 1 */
+/* Уровень 1 */
 #furo-main-content .tighter-table-1 table.docutils th p,
 #furo-main-content .tighter-table-1 table.docutils td p {
   margin: 0.4375rem 0.875rem;
 }
-/* Level 2 */
+/* Уровень 2 */
 #furo-main-content .tighter-table-2 table.docutils th p,
 #furo-main-content .tighter-table-2 table.docutils td p {
   margin: 0.375rem 0.75rem;
 }
-/* Level 3 */
+/* Уровень 3 */
 #furo-main-content .tighter-table-3 table.docutils th p,
 #furo-main-content .tighter-table-3 table.docutils td p {
   margin: 0.3125rem 0.625rem;
 }
-/* Level 4 */
+/* Уровень 4 */
 #furo-main-content .tighter-table-4 table.docutils th p,
 #furo-main-content .tighter-table-4 table.docutils td p {
   margin: 0.25rem 0.5rem;
 }
-/* Level 5 */
+/* Уровень 5 */
 #furo-main-content .tighter-table-5 table.docutils th p,
 #furo-main-content .tighter-table-5 table.docutils td p {
   margin: 0.1875rem 0.375rem;
 }
-/* Level 6 */
+/* Уровень 6 */
 #furo-main-content .tighter-table-6 table.docutils th p {
   margin: 0.125rem 0.25rem;
 }
 #furo-main-content .tighter-table-6 table.docutils td p {
   margin: 0.125rem 0.375rem;
-  /* left/right 0.375rem is intentional, larger than `th p` above. */
+  /* Левое/правое значение 0,375rem задано намеренно, больше, чем`th p`выше. */
 }
-/* Level 7 */
+/* Уровень 7 */
 #furo-main-content .tighter-table-7 table.docutils th p {
   font-size: 0.7rem;
   margin: 0.0625rem 0.125rem;

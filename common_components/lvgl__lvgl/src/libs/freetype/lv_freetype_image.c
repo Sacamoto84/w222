@@ -122,7 +122,7 @@ static void freetype_image_release_cb(const lv_font_t * font, lv_font_glyph_dsc_
 }
 
 /*-----------------
- * Cache Callbacks
+ * Кэшировать обратные вызовы
  *----------------*/
 
 static bool freetype_image_create_cb(lv_freetype_image_cache_data_t * data, void * user_data)
@@ -174,8 +174,8 @@ static bool freetype_image_create_cb(lv_freetype_image_cache_data_t * data, void
 
     FT_BitmapGlyph glyph_bitmap = (FT_BitmapGlyph)glyph;
 
-    uint16_t box_h = glyph_bitmap->bitmap.rows;         /*Height of the bitmap in [px]*/
-    uint16_t box_w = glyph_bitmap->bitmap.width;        /*Width of the bitmap in [px]*/
+    uint16_t box_h = glyph_bitmap->bitmap.rows;         /*Высота растрового изображения в [пикселях]*/
+    uint16_t box_w = glyph_bitmap->bitmap.width;        /*Ширина растрового изображения в [пикселях]*/
 
     lv_color_format_t col_format;
     if(glyph_bitmap->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {

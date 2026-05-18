@@ -75,7 +75,7 @@ void lv_nanovg_image_cache_drop(struct _lv_draw_nanovg_unit_t * u, const void * 
 #endif /*LV_USE_DRAW_NANOVG*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_NANOVG_IMAGE_CACHE_H*/

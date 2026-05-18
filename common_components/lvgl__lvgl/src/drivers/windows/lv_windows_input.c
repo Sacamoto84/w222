@@ -402,11 +402,11 @@ bool lv_windows_pointer_device_window_message_handler(
                 break;
             }
         default:
-            // Not Handled
+            // Не обработано
             return false;
     }
 
-    // Handled
+    // обработано
     *plResult = 0;
     return true;
 }
@@ -731,11 +731,11 @@ bool lv_windows_keypad_device_window_message_handler(
                 break;
             }
         default:
-            // Not Handled
+            // Не обработано
             return false;
     }
 
-    // Handled
+    // обработано
     *plResult = 0;
     return true;
 }
@@ -813,11 +813,11 @@ bool lv_windows_encoder_device_window_message_handler(
                 break;
             }
         default:
-            // Not Handled
+            // Не обработано
             return false;
     }
 
-    // Handled
+    // обработано
     *plResult = 0;
     return true;
 }

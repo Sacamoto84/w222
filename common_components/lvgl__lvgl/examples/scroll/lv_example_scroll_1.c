@@ -39,11 +39,11 @@ static void button_event_cb(lv_event_t * e)
 }
 
 /**
- * Demonstrate how scrolling appears automatically
+ * Продемонстрируйте, как прокрутка появляется автоматически
  */
 void lv_example_scroll_1(void)
 {
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * scr;
     scr = lv_screen_active();
     panel = lv_obj_create(scr);
@@ -78,13 +78,13 @@ void lv_example_scroll_1(void)
     lv_label_set_text(label, "Bottom");
     lv_obj_center(label);
 
-    /* When LV_OBJ_FLAG_SCROLL_ELASTIC is cleared, scrolling does not go past edge boundaries. */
-    /* lv_obj_remove_flag(panel, LV_OBJ_FLAG_SCROLL_ELASTIC); */
+    /* Когда LV_OBJ_FLAG_SCROLL_ELASTIC очищен, прокрутка не выходит за границы границ. */
+    /* lv_obj_remove_flag (панель,LV_OBJ_FLAG_SCROLL_ELASTIC); */
 
-    /* Call `scroll_update_cb` while panel is being scrolled. */
+    /* Вызовите`scroll_update_cb`во время прокрутки панели. */
     lv_obj_add_event_cb(panel, scroll_update_cb, LV_EVENT_SCROLL, NULL);
 
-    /* Set up buttons that save and restore scroll position. */
+    /* Настройте кнопки, которые сохраняют и восстанавливают положение прокрутки. */
     save_button = lv_button_create(scr);
     restore_button = lv_button_create(scr);
     lv_obj_t * lbl;

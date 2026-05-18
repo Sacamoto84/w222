@@ -155,7 +155,7 @@ uint16_t lv_font_get_glyph_width(const lv_font_t * font, uint32_t letter, uint32
 {
     lv_font_glyph_dsc_t g;
 
-    /*Return zero if letter is marker*/
+    /*Верните ноль, если буква является маркером*/
     if(lv_text_is_marker(letter)) return 0;
 
     lv_font_get_glyph_dsc(font, &g, letter, letter_next);

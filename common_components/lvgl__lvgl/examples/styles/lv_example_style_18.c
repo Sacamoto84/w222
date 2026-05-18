@@ -4,7 +4,7 @@
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
 
 /**
- * Using radial gradient as background
+ * Использование радиального градиента в качестве фона
  */
 void lv_example_style_18(void)
 {
@@ -19,18 +19,18 @@ void lv_example_style_18(void)
     static lv_style_t style;
     lv_style_init(&style);
 
-    /*First define a color gradient. In this example we use a purple to black color map.*/
+    /*Сначала определите цветовой градиент. В этом примере мы используем карту цветов от фиолетового до черного.*/
     static lv_grad_dsc_t grad;
 
     lv_grad_init_stops(&grad, grad_colors, NULL, NULL, sizeof(grad_colors) / sizeof(lv_color_t));
 
-    /*Make a radial gradient with the center in the middle of the object, extending to the farthest corner*/
+    /*Создайте радиальный градиент с центром в середине объекта, продолжая его до самого дальнего угла.*/
     lv_grad_radial_init(&grad, LV_GRAD_CENTER, LV_GRAD_CENTER, LV_GRAD_RIGHT, LV_GRAD_BOTTOM, LV_GRAD_EXTEND_PAD);
 
-    /*Set gradient as background*/
+    /*Установить градиент в качестве фона*/
     lv_style_set_bg_grad(&style, &grad);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
     lv_obj_set_size(obj, width, height);

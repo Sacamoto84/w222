@@ -23,7 +23,7 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/** Switch knob extra area correction factor */
+/** Поправочный коэффициент дополнительной площади ручки переключателя */
 #define LV_SWITCH_KNOB_EXT_AREA_CORRECTION 2
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_switch_class;
@@ -50,29 +50,29 @@ typedef enum {
  **********************/
 
 /**
- * Create a switch object
+ * Создайте объект переключателя
  * @param parent    pointer to an object, it will be the parent of the new switch
  * @return          pointer to the created switch
  */
 lv_obj_t * lv_switch_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set the orientation of switch.
+ * Установите ориентацию переключателя.
  * @param obj           pointer to switch object
  * @param orientation   switch orientation from `lv_switch_orientation_t`
  */
 void lv_switch_set_orientation(lv_obj_t * obj, lv_switch_orientation_t orientation);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the orientation of switch.
+ * Получите ориентацию переключателя.
  * @param obj       pointer to switch object
  * @return          switch orientation from ::lv_switch_orientation_t
  */
@@ -85,7 +85,7 @@ lv_switch_orientation_t lv_switch_get_orientation(lv_obj_t * obj);
 #endif /*LV_USE_SWITCH*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SWITCH_H*/

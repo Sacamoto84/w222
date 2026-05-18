@@ -4,12 +4,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -56,7 +56,7 @@ static void click_event_cb(lv_event_t * e)
 
 void test_click(void)
 {
-    /*Setup button that counts events.*/
+    /*Кнопка настройки, которая подсчитывает события.*/
     struct click_counts counts;
     lv_obj_t * btn = lv_button_create(lv_screen_active());
     lv_obj_set_size(btn, 100, 100);
@@ -67,7 +67,7 @@ void test_click(void)
     lv_obj_add_event_cb(btn, click_event_cb, LV_EVENT_TRIPLE_CLICKED, &counts);
     lv_obj_add_event_cb(btn, click_event_cb, LV_EVENT_LONG_PRESSED, &counts);
 
-    /*Simple click.*/
+    /*Простой щелчок.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_click_at(50, 50);
     TEST_ASSERT_EQUAL_UINT32(1, counts.num_clicked);
@@ -78,7 +78,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(1, counts.short_click_streak);
 
-    /*Second click nearby.*/
+    /*Второй щелчок рядом.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_click_at(47, 52);
     TEST_ASSERT_EQUAL_UINT32(1, counts.num_clicked);
@@ -89,7 +89,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(2, counts.short_click_streak);
 
-    /*Third click nearby.*/
+    /*Третий щелчок рядом.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_click_at(49, 55);
     TEST_ASSERT_EQUAL_UINT32(1, counts.num_clicked);
@@ -100,7 +100,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(3, counts.short_click_streak);
 
-    /*Fourth click nearby.*/
+    /*Четвертый щелчок рядом.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_click_at(50, 50);
     TEST_ASSERT_EQUAL_UINT32(1, counts.num_clicked);
@@ -111,7 +111,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(4, counts.short_click_streak);
 
-    /*Resetting the click streak due to distance.*/
+    /*Сброс серии щелчков из-за расстояния.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_click_at(10, 10);
     TEST_ASSERT_EQUAL_UINT32(1, counts.num_clicked);
@@ -122,7 +122,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(1, counts.short_click_streak);
 
-    /*Second click nearby.*/
+    /*Второй щелчок рядом.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_click_at(12, 14);
     TEST_ASSERT_EQUAL_UINT32(1, counts.num_clicked);
@@ -133,7 +133,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(2, counts.short_click_streak);
 
-    /*Resetting the click streak due to time.*/
+    /*Сброс серии щелчков по времени.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_wait(1000);
     lv_test_mouse_click_at(12, 14);
@@ -145,7 +145,7 @@ void test_click(void)
     TEST_ASSERT_EQUAL_UINT32(0, counts.num_long_pressed);
     TEST_ASSERT_EQUAL_UINT8(1, counts.short_click_streak);
 
-    /*Long press does not continue (or start) click streak.*/
+    /*Длительное нажатие не продолжает (или не запускает) серию щелчков.*/
     lv_memzero(&counts, sizeof(counts));
     lv_test_mouse_press();
     lv_test_wait(1000);

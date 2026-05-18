@@ -47,7 +47,7 @@ void lv_demo_stress(void)
 {
     LV_LOG_USER("Starting stress test. (< 100 bytes permanent memory leak is normal due to fragmentation)");
     lv_timer_t * t = lv_timer_create(obj_test_task_cb, LV_DEMO_STRESS_TIME_STEP, NULL);
-    lv_timer_ready(t); /*Prepare the test right now in first state change.*/
+    lv_timer_ready(t); /*Подготовьте тест прямо сейчас при первом изменении состояния.*/
 }
 
 bool lv_demo_stress_finished(void)
@@ -61,7 +61,7 @@ bool lv_demo_stress_finished(void)
 
 static void obj_test_task_cb(lv_timer_t * tmr)
 {
-    (void) tmr;    /*Unused*/
+    (void) tmr;    /*Неиспользованный*/
 
     lv_anim_t a;
     lv_obj_t * obj;
@@ -82,7 +82,7 @@ static void obj_test_task_cb(lv_timer_t * tmr)
             }
             break;
         case 0:
-            /* Holder for all object types */
+            /* Держатель для всех типов объектов */
             main_page = lv_obj_create(lv_screen_active());
             lv_obj_set_size(main_page, LV_HOR_RES / 2, LV_VER_RES);
             lv_obj_set_flex_flow(main_page, LV_FLEX_FLOW_COLUMN);
@@ -115,10 +115,10 @@ static void obj_test_task_cb(lv_timer_t * tmr)
             obj = lv_button_create(main_page);
             lv_obj_set_size(obj, 200, 70);
 
-            /*Move to disabled state very slowly*/
+            /*Очень медленно переходить в отключенное состояние*/
             lv_obj_add_state(obj, LV_STATE_DISABLED);
 
-            /*Add an infinite width change animation*/
+            /*Добавьте анимацию бесконечного изменения ширины.*/
             lv_anim_init(&a);
             lv_anim_set_var(&a, obj);
             lv_anim_set_duration(&a, LV_DEMO_STRESS_TIME_STEP * 2);
@@ -128,7 +128,7 @@ static void obj_test_task_cb(lv_timer_t * tmr)
             lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
             lv_anim_start(&a);
 
-            /*Delete the object a few sec later*/
+            /*Удалить объект через несколько секунд*/
             auto_delete(obj, LV_DEMO_STRESS_TIME_STEP * 10);
 
             obj = lv_label_create(obj);
@@ -146,7 +146,7 @@ static void obj_test_task_cb(lv_timer_t * tmr)
             obj = lv_button_create(main_page);
             lv_obj_set_size(obj, 100, 70);
             lv_obj_set_style_bg_image_src(obj, LV_SYMBOL_DUMMY"Text from\nstyle", 0);
-            lv_obj_delete_async(obj);  /*Delete on next call of `lv_timer_handler` (so not now)*/
+            lv_obj_delete_async(obj);  /*Удалить при следующем вызове`lv_timer_handler`(поэтому не сейчас)*/
             break;
 
         case 5:
@@ -166,7 +166,7 @@ static void obj_test_task_cb(lv_timer_t * tmr)
 
             obj = lv_slider_create(main_page);
             lv_obj_set_style_anim_duration(obj, LV_DEMO_STRESS_TIME_STEP * 8, 0);
-            lv_slider_set_value(obj, 5000, LV_ANIM_ON);    /*Animate to out of range value*/
+            lv_slider_set_value(obj, 5000, LV_ANIM_ON);    /*Анимация до значения, выходящего за пределы диапазона*/
             auto_delete(obj, LV_DEMO_STRESS_TIME_STEP * 5 + 22);
 
             obj = lv_switch_create(main_page);

@@ -37,7 +37,7 @@ void test_textarea_should_have_valid_documented_default_values(void)
     int32_t objw = lv_obj_get_width(slider);
     int32_t objh = lv_obj_get_height(slider);
 
-    /* Horizontal slider */
+    /* Горизонтальный ползунок */
     TEST_ASSERT_TRUE(objw >= objh);
     TEST_ASSERT_FALSE(lv_obj_has_flag(slider, LV_OBJ_FLAG_SCROLL_CHAIN));
     TEST_ASSERT_FALSE(lv_obj_has_flag(slider, LV_OBJ_FLAG_SCROLLABLE));
@@ -90,19 +90,19 @@ void test_slider_range_mode_should_leave_edit_mode_if_released(void)
 {
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
 
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, sliderNormalMode);
     lv_group_set_editing(g, true);
 
     lv_test_encoder_click();
 
-    /* Always executed when handling LV_EVENT_RELEASED or
+    /* Всегда выполняется при обработке LV_EVENT_RELEASED или
      * LV_EVENT_PRESS_LOST */
     TEST_ASSERT_FALSE(ptr->dragging);
     TEST_ASSERT_NULL(ptr->value_to_set);
     TEST_ASSERT_EQUAL(0U, ptr->left_knob_focus);
 
-    /* Group leaved edit mode */
+    /* Группа вышла из режима редактирования */
     TEST_ASSERT_FALSE(lv_group_get_editing(g));
 }
 
@@ -110,14 +110,14 @@ void test_slider_range_mode_should_not_leave_edit_mode_if_released_with_no_left_
 {
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
 
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, sliderRangeMode);
     lv_group_set_editing(g, true);
 
     lv_test_encoder_release();
     lv_test_wait(50);
 
-    /* Always executed when handling LV_EVENT_RELEASED or
+    /* Всегда выполняется при обработке LV_EVENT_RELEASED или
      * LV_EVENT_PRESS_LOST */
     TEST_ASSERT_FALSE(ptr->dragging);
     TEST_ASSERT_NULL(ptr->value_to_set);
@@ -130,19 +130,19 @@ void test_slider_normal_mode_should_leave_edit_mode_if_released(void)
     lv_slider_t * ptr = (lv_slider_t *) sliderNormalMode;
     ptr->left_knob_focus = 1;
 
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, sliderNormalMode);
     lv_group_set_editing(g, true);
 
     lv_test_encoder_click();
 
-    /* Always executed when handling LV_EVENT_RELEASED or
+    /* Всегда выполняется при обработке LV_EVENT_RELEASED или
      * LV_EVENT_PRESS_LOST */
     TEST_ASSERT_FALSE(ptr->dragging);
     TEST_ASSERT_NULL(ptr->value_to_set);
     TEST_ASSERT_EQUAL(0U, ptr->left_knob_focus);
 
-    /* Group leaved edit mode */
+    /* Группа вышла из режима редактирования */
     TEST_ASSERT_FALSE(lv_group_get_editing(g));
 }
 
@@ -151,22 +151,22 @@ void test_ranged_mode_adjust_with_encoder(void)
     lv_slider_set_value(sliderRangeMode, 90, LV_ANIM_OFF);
     lv_slider_set_start_value(sliderRangeMode, 10, LV_ANIM_OFF);
 
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, sliderRangeMode);
     lv_group_set_editing(g, false);
 
-    /*Go the edit mode*/
+    /*Перейти в режим редактирования*/
     lv_test_encoder_click();
 
-    /*Adjust the right knob*/
+    /*Отрегулируйте правую ручку*/
     lv_test_encoder_turn(-10);
     TEST_ASSERT_EQUAL(80, lv_slider_get_value(sliderRangeMode));  /*Updated?*/
     TEST_ASSERT_EQUAL(10, lv_slider_get_left_value(sliderRangeMode));     /*Maintained?*/
 
-    /*Focus the left knob*/
+    /*Фокусируйте левую ручку*/
     lv_test_encoder_click();
 
-    /*Adjust the left knob*/
+    /*Отрегулируйте левую ручку*/
     lv_test_encoder_turn(5);
     TEST_ASSERT_EQUAL(80, lv_slider_get_value(sliderRangeMode));  /*Maintained?*/
     TEST_ASSERT_EQUAL(15, lv_slider_get_left_value(sliderRangeMode));  /*Updated?*/
@@ -175,7 +175,7 @@ void test_ranged_mode_adjust_with_encoder(void)
 
 void test_normal_mode_slider_hit_test(void)
 {
-    /* Validate if point 0,0 can click in the slider */
+    /* Проверьте, можно ли щелкнуть точку 0,0 на ползунке. */
     lv_point_t point = {
         .x = 0,
         .y = 0
@@ -189,13 +189,13 @@ void test_normal_mode_slider_hit_test(void)
     lv_slider_set_value(sliderNormalMode, 100, LV_ANIM_OFF);
     lv_obj_send_event(sliderNormalMode, LV_EVENT_HIT_TEST, (void *) &info);
 
-    /* point can click slider */
+    /* точка может нажать ползунок */
     TEST_ASSERT(info.res);
 }
 
 void test_slider_range_event_hit_test(void)
 {
-    /* Validate if point 0,0 can click in the slider */
+    /* Проверьте, можно ли щелкнуть точку 0,0 на ползунке. */
     lv_point_t point = {
         .x = 0,
         .y = 0
@@ -207,7 +207,7 @@ void test_slider_range_event_hit_test(void)
     };
     lv_obj_send_event(sliderRangeMode, LV_EVENT_HIT_TEST, (void *) &info);
 
-    /* point can click slider in the left knob */
+    /* точка может нажать ползунок в левой ручке */
     TEST_ASSERT(info.res);
 }
 
@@ -286,18 +286,18 @@ void test_slider_range_mode_hit_test_left_knob(void)
     lv_obj_set_size(sliderRangeMode, 200, 20);
     lv_obj_center(sliderRangeMode);
 
-    /* Set values to ensure separation between knobs */
+    /* Установите значения, чтобы обеспечить разделение между ручками */
     lv_slider_set_value(sliderRangeMode, 90, LV_ANIM_OFF);
     lv_slider_set_start_value(sliderRangeMode, 10, LV_ANIM_OFF);
     lv_obj_update_layout(sliderRangeMode);
 
-    /* Force redraw to update knob areas */
+    /* Принудительно перерисовать, чтобы обновить области кнопок */
     lv_obj_invalidate(sliderRangeMode);
     lv_refr_now(NULL);
 
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
 
-    /* Point on the left knob */
+    /* Точка на левой ручке */
     lv_point_t point;
     point.x = (ptr->left_knob_area.x1 + ptr->left_knob_area.x2) / 2;
     point.y = (ptr->left_knob_area.y1 + ptr->left_knob_area.y2) / 2;
@@ -317,11 +317,11 @@ void test_slider_scroll_chain_horizontal(void)
     lv_obj_set_size(slider, 200, 20);
     lv_obj_update_layout(slider);
 
-    /* Simulate POINTER release */
+    /* Имитировать выпуск POINTER */
     lv_test_mouse_release();
     lv_obj_send_event(slider, LV_EVENT_RELEASED, NULL);
 
-    /* Horizontal ptr should allow vertical scroll chain */
+    /* Горизонтальный ptr должен позволять вертикальную цепочку прокрутки */
     TEST_ASSERT_TRUE(lv_obj_has_flag(slider, LV_OBJ_FLAG_SCROLL_CHAIN_VER));
 }
 
@@ -330,69 +330,69 @@ void test_slider_scroll_chain_vertical(void)
     lv_obj_set_size(slider, 20, 200);
     lv_obj_update_layout(slider);
 
-    /* Simulate POINTER release */
+    /* Имитировать выпуск POINTER */
     lv_test_mouse_release();
     lv_obj_send_event(slider, LV_EVENT_RELEASED, NULL);
 
-    /* Vertical ptr should allow horizontal scroll chain */
+    /* Вертикальный ptr должен позволять горизонтальную цепочку прокрутки */
     TEST_ASSERT_TRUE(lv_obj_has_flag(slider, LV_OBJ_FLAG_SCROLL_CHAIN_HOR));
 }
 
 void test_slider_range_mode_key_decrement_left_value(void)
 {
-    /* Set range mode and initial values */
+    /* Установите режим диапазона и начальные значения */
     lv_slider_set_mode(sliderRangeMode, LV_SLIDER_MODE_RANGE);
     lv_slider_set_value(sliderRangeMode, 80, LV_ANIM_OFF);
     lv_slider_set_start_value(sliderRangeMode, 20, LV_ANIM_OFF);
 
-    /* Focus the left knob */
+    /* Фокусируйте левую ручку */
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
     ptr->left_knob_focus = 1;
 
-    /* Simulate LEFT key press */
+    /* Имитировать нажатие клавиши LEFT */
     uint32_t key = LV_KEY_LEFT;
     lv_obj_send_event(sliderRangeMode, LV_EVENT_KEY, &key);
 
-    /* Left value should decrement by 1 */
+    /* Левое значение должно уменьшиться на 1. */
     TEST_ASSERT_EQUAL_INT32(19, lv_slider_get_left_value(sliderRangeMode));
 
-    /* Simulate DOWN key press */
+    /* Имитировать нажатие клавиши DOWN */
     key = LV_KEY_DOWN;
     lv_obj_send_event(sliderRangeMode, LV_EVENT_KEY, &key);
 
-    /* Left value should decrement by 1 again */
+    /* Левое значение должно снова уменьшиться на 1. */
     TEST_ASSERT_EQUAL_INT32(18, lv_slider_get_left_value(sliderRangeMode));
 }
 
 void test_slider_rotary_event_handling(void)
 {
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, sliderNormalMode);
     lv_group_set_editing(g, true);
 
-    /* Normal mode (right knob focus) */
+    /* Обычный режим (правая ручка фокусировки) */
     lv_slider_set_value(sliderNormalMode, 50, LV_ANIM_OFF);
 
-    /* Simulate rotary right (+1) */
+    /* Имитировать поворот вправо (+1) */
     lv_test_encoder_turn(1);
     TEST_ASSERT_EQUAL_INT32(51, lv_slider_get_value(sliderNormalMode));
 
-    /* Simulate rotary left (-1) */
+    /* Имитировать поворот влево (-1) */
     lv_test_encoder_turn(-1);
     TEST_ASSERT_EQUAL_INT32(50, lv_slider_get_value(sliderNormalMode));
 
-    /* Range mode (left knob focus) */
+    /* Режим диапазона (левая ручка фокусировки) */
     lv_slider_set_mode(sliderRangeMode, LV_SLIDER_MODE_RANGE);
     lv_group_add_obj(g, sliderRangeMode);
 
-    /* Manually focus left knob to hit the else branch */
+    /* Вручную сфокусируйте левую ручку, чтобы попасть в ветку else. */
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
     ptr->left_knob_focus = 1;
 
     lv_slider_set_value(sliderRangeMode, 80, LV_ANIM_OFF);
     lv_slider_set_start_value(sliderRangeMode, 20, LV_ANIM_OFF);
 
-    /* Simulate rotary event directly to ensure coverage of the specific branch */
+    /* Моделируйте ротацию напрямую, чтобы обеспечить охват конкретной отрасли. */
     int32_t diff = 1;
     lv_obj_send_event(sliderRangeMode, LV_EVENT_ROTARY, &diff);
     TEST_ASSERT_EQUAL_INT32(21, lv_slider_get_left_value(sliderRangeMode));
@@ -432,13 +432,13 @@ static void assert_symmetrical_slider_knob_drawn(bool is_hor, int32_t value)
 
 void test_slider_symmetrical_mode_knob_drawing(void)
 {
-    /* Horizontal Case (Negative) */
+    /* Горизонтальный корпус (отрицательный) */
     assert_symmetrical_slider_knob_drawn(true, -50);
 
-    /* Vertical Case (Negative) */
+    /* Вертикальный корпус (отрицательный) */
     assert_symmetrical_slider_knob_drawn(false, -50);
 
-    /* Vertical Case (Positive) */
+    /* Вертикальный корпус (положительный) */
     assert_symmetrical_slider_knob_drawn(false, 50);
 }
 
@@ -446,15 +446,15 @@ void test_slider_range_mode_encoder_exit_edit_with_left_knob_focus(void)
 {
     lv_slider_set_mode(sliderRangeMode, LV_SLIDER_MODE_RANGE);
 
-    /* Setup group and encoder indev */
+    /* Группа настройки и инкодер */
     lv_group_add_obj(g, sliderRangeMode);
     lv_group_set_editing(g, true);
 
-    /* Manually focus left knob */
+    /* Ручная фокусировка левой ручки */
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
     ptr->left_knob_focus = 1;
 
-    /* Simulate encoder click (Release event) */
+    /* Имитировать щелчок кодировщика (событие Release) */
     lv_test_encoder_click();
 
     TEST_ASSERT_EQUAL_UINT8(0, ptr->left_knob_focus);
@@ -471,7 +471,7 @@ static void assert_slider_drag_start_selection(lv_obj_t * obj, int32_t x, int32_
     lv_test_mouse_press();
     lv_test_wait(50);
 
-    /* Move slightly to trigger drag (exceed scroll_limit) */
+    /* Слегка переместите, чтобы вызвать перетаскивание (превышает scroll_limit ) */
     lv_test_mouse_move_by(10, 10);
     lv_test_wait(50);
 
@@ -490,11 +490,11 @@ void test_slider_range_mode_drag_start_value_selection(void)
     lv_obj_set_size(sliderRangeMode, 200, 20);
     lv_obj_center(sliderRangeMode);
     lv_slider_set_mode(sliderRangeMode, LV_SLIDER_MODE_RANGE);
-    lv_slider_set_value(sliderRangeMode, 80, LV_ANIM_OFF);      /* Right knob at ~80% */
-    lv_slider_set_start_value(sliderRangeMode, 20, LV_ANIM_OFF); /* Left knob at ~20% */
+    lv_slider_set_value(sliderRangeMode, 80, LV_ANIM_OFF);      /* Правая ручка на ~80% */
+    lv_slider_set_start_value(sliderRangeMode, 20, LV_ANIM_OFF); /* Левая ручка на ~20% */
     lv_obj_update_layout(sliderRangeMode);
 
-    /* Force redraw to update knob areas */
+    /* Принудительно перерисовать, чтобы обновить области кнопок */
     lv_obj_invalidate(sliderRangeMode);
     lv_refr_now(NULL);
 
@@ -502,22 +502,22 @@ void test_slider_range_mode_drag_start_value_selection(void)
     lv_area_t right_knob = ptr->right_knob_area;
     lv_area_t left_knob = ptr->left_knob_area;
 
-    /* Click to the right of the right knob (Horizontal) */
+    /* Нажмите справа от правой ручки (горизонтально). */
     assert_slider_drag_start_selection(sliderRangeMode,
                                        right_knob.x2 + 10, (right_knob.y1 + right_knob.y2) / 2,
                                        &ptr->bar.cur_value, -1);
 
-    /* Click to the left of the left knob (Horizontal) */
+    /* Нажмите слева от левой ручки (горизонтально). */
     assert_slider_drag_start_selection(sliderRangeMode,
                                        left_knob.x1 - 10, (left_knob.y1 + left_knob.y2) / 2,
                                        &ptr->bar.start_value, -1);
 
-    /* Click between knobs, closer to right knob (Horizontal) */
+    /* Щелкните между ручками, ближе к правой ручке (горизонтально). */
     assert_slider_drag_start_selection(sliderRangeMode,
                                        right_knob.x1 - 5, (right_knob.y1 + right_knob.y2) / 2,
                                        &ptr->bar.cur_value, 0);
 
-    /* Click between knobs, closer to left knob (Horizontal) */
+    /* Щелкните между ручками, ближе к левой ручке (горизонтально). */
     assert_slider_drag_start_selection(sliderRangeMode,
                                        left_knob.x2 + 5, (left_knob.y1 + left_knob.y2) / 2,
                                        &ptr->bar.start_value, 1);
@@ -533,7 +533,7 @@ void test_slider_vertical_range_mode_drag_start_value_selection(void)
     lv_slider_set_start_value(slider_ver, 20, LV_ANIM_OFF);
     lv_obj_update_layout(slider_ver);
 
-    /* Force redraw to update knob areas */
+    /* Принудительно перерисовать, чтобы обновить области кнопок */
     lv_obj_invalidate(slider_ver);
     lv_refr_now(NULL);
 
@@ -541,22 +541,22 @@ void test_slider_vertical_range_mode_drag_start_value_selection(void)
     lv_area_t top_knob = ptr_ver->right_knob_area;
     lv_area_t bottom_knob = ptr_ver->left_knob_area;
 
-    /* Click above the top knob (Vertical) */
+    /* Нажмите над верхней ручкой (вертикально). */
     assert_slider_drag_start_selection(slider_ver,
                                        (top_knob.x1 + top_knob.x2) / 2, top_knob.y1 - 10,
                                        &ptr_ver->bar.cur_value, -1);
 
-    /* Click below the bottom knob (Vertical) */
+    /* Нажмите под нижней ручкой (вертикально). */
     assert_slider_drag_start_selection(slider_ver,
                                        (bottom_knob.x1 + bottom_knob.x2) / 2, bottom_knob.y2 + 10,
                                        &ptr_ver->bar.start_value, -1);
 
-    /* Click between knobs, closer to top/right knob (Vertical) */
+    /* Щелкните между ручками, ближе к верхней/правой ручке (вертикально). */
     assert_slider_drag_start_selection(slider_ver,
                                        (top_knob.x1 + top_knob.x2) / 2, top_knob.y2 + 5,
                                        &ptr_ver->bar.cur_value, 0);
 
-    /* Click between knobs, closer to bottom/left knob (Vertical) */
+    /* Щелкните между ручками, ближе к нижней/левой ручке (вертикально). */
     assert_slider_drag_start_selection(slider_ver,
                                        (bottom_knob.x1 + bottom_knob.x2) / 2, bottom_knob.y1 - 5,
                                        &ptr_ver->bar.start_value, 1);
@@ -573,7 +573,7 @@ void test_slider_range_mode_horizontal_rtl_drag_start_value_selection(void)
     lv_slider_set_start_value(sliderRangeMode, 20, LV_ANIM_OFF);
     lv_obj_update_layout(sliderRangeMode);
 
-    /* Force redraw to update knob areas */
+    /* Принудительно перерисовать, чтобы обновить области кнопок */
     lv_obj_invalidate(sliderRangeMode);
     lv_refr_now(NULL);
 
@@ -597,14 +597,14 @@ void test_slider_range_mode_vertical_rtl_drag_start_value_selection(void)
     lv_slider_set_start_value(slider_ver, 20, LV_ANIM_OFF);
     lv_obj_update_layout(slider_ver);
 
-    /* Force redraw to update knob areas */
+    /* Принудительно перерисовать, чтобы обновить области кнопок */
     lv_obj_invalidate(slider_ver);
     lv_refr_now(NULL);
 
     lv_slider_t * ptr_ver = (lv_slider_t *) slider_ver;
     lv_area_t right_knob = ptr_ver->right_knob_area;
 
-    /* Click above the top/right knob */
+    /* Нажмите над верхней/правой ручкой. */
     assert_slider_drag_start_selection(slider_ver,
                                        (right_knob.x1 + right_knob.x2) / 2, right_knob.y1 - 20,
                                        &ptr_ver->bar.cur_value, -1);

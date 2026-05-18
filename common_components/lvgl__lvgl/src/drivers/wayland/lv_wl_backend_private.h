@@ -32,9 +32,9 @@ extern "C" {
  * @typedef lv_wayland_backend_init_t
  * @brief Initialize the backend context
  *
- * This function is called once when the Wayland driver is initialized to create
- * the global backend context. The returned pointer will be passed as backend_ctx
- * to all other backend operations.
+ * Эта функция вызывается один раз, когда драйвер Wayland инициализируется для создания
+ * глобальный внутренний контекст. Возвращенный указатель будет передан как backend_ctx.
+ * ко всем остальным серверным операциям.
  *
  * @return Pointer to backend-specific context data, or NULL on failure
  *
@@ -47,11 +47,11 @@ typedef void * (*lv_wayland_backend_init_t)(void);
  * @typedef lv_wayland_backend_deinit_t
  * @brief Deinitialize the backend context
  *
- * This function is called when the Wayland driver is deinitialized. It must
- * clean up all resources allocated in the init function and free the backend
- * context.
+ * Эта функция вызывается при деинициализации драйвера Wayland. Это должно
+ * очистите все ресурсы, выделенные в функции инициализации, и освободите серверную часть
+ * контекст.
  *
- * @param[in] backend_ctx Pointer to the backend context returned by init
+ * @param [in] backend_ctx Указатель на внутренний контекст, возвращаемый init
  *
  * @note This is called after all displays have been destroyed
  * @see lv_wayland_backend_init_t
@@ -62,19 +62,19 @@ typedef void (*lv_wayland_backend_deinit_t)(void * backend_ctx);
  * @typedef lv_wayland_backend_init_display_t
  * @brief Initialize a new display
  *
- * This function is called when creating a new LVGL display on Wayland. It should
- * allocate and initialize per-display resources needed for rendering.
+ * Эта функция вызывается при создании нового дисплея LVGL на Wayland. Это должно
+ * выделить и инициализировать ресурсы для каждого дисплея, необходимые для рендеринга.
  *
- * @param[in] backend_ctx Pointer to the backend context
- * @param[in] display Pointer to the LVGL display object
- * @param[in] width Initial width of the display in pixels
- * @param[in] height Initial height of the display in pixels
+ * @param [in] backend_ctx Указатель на внутренний контекст
+ * Дисплей @param [in] Указатель на экранный объект LVGL
+ * @param [in] ширина Начальная ширина дисплея в пикселях
+ * @param [дюймы] высота Начальная высота дисплея в пикселях
  * @return Pointer to display-specific data, or NULL on failure
  *
  * @note The returned pointer can be retrieved later using
- *       lv_wayland_get_backend_display_data()
+ *       lv_wayland_get_backend_display_data ()
  * @note It is expected that each display gets its own data structure in order for a backend
- *       to support multiple displays
+ *       для поддержки нескольких дисплеев
  */
 typedef void * (*lv_wayland_backend_init_display_t)(void * backend_ctx, lv_display_t * display, int32_t width,
                                                     int32_t height);
@@ -83,16 +83,16 @@ typedef void * (*lv_wayland_backend_init_display_t)(void * backend_ctx, lv_displ
  * @typedef lv_wayland_backend_resize_display_t
  * @brief Resize or reconfigure a display
  *
- * This function is called when a display needs to be resized or when its rotation
- * is modified. The backend should update its rendering resources accordingly.
+ * Эта функция вызывается, когда необходимо изменить размер дисплея или когда его поворот
+ * модифицирован. Серверная часть должна соответствующим образом обновить свои ресурсы рендеринга.
  *
- * @param[in] backend_ctx Pointer to the backend context
- * @param[in] display Pointer to the LVGL display object being resized
+ * @param [in] backend_ctx Указатель на внутренний контекст
+ * @param [in] display Указатель на экранный объект LVGL, размер которого изменяется.
  * @return Pointer to updated display-specific data, or NULL on failure
  *
  * @note This may be called multiple times during a display's lifetime
  * @note The returned pointer will replace the previous display data. It can be
- *       retrieved using lv_wayland_get_backend_display_data()
+ *       получено с помощью lv_wayland_get_backend_display_data ()
  * @warning The display data is overwritten with the return value of this function
  */
 typedef void * (*lv_wayland_backend_resize_display_t)(void * backend_ctx, lv_display_t * display);
@@ -101,12 +101,12 @@ typedef void * (*lv_wayland_backend_resize_display_t)(void * backend_ctx, lv_dis
  * @typedef lv_wayland_backend_destroy_display_t
  * @brief Destroy a display
  *
- * This function is called when an LVGL display is being destroyed. It must clean up
- * all per-display resources and free the display data that was allocated in
+ * Эта функция вызывается при уничтожении дисплея LVGL. Оно должно очиститься
+ * все ресурсы для каждого дисплея и освободить данные дисплея, которые были выделены в
  * init_display.
  *
- * @param[in] backend_ctx Pointer to the backend context
- * @param[in] display Pointer to the LVGL display object being destroyed
+ * @param [in] backend_ctx Указатель на внутренний контекст
+ * @param [in] display Указатель на уничтожаемый экранный объект LVGL
  *
  * @note The display data associated with this display must be freed
  */
@@ -116,15 +116,15 @@ typedef void (*lv_wayland_backend_destroy_display_t)(void * backend_ctx, lv_disp
  * @typedef lv_wayland_backend_global_handler_t
  * @brief Handle Wayland global objects
  *
- * This function is called for every global object advertised by the Wayland
- * compositor. The backend can use this to bind to Wayland protocols it requires
- * (e.g., wl_shm, EGL extensions, DMA-BUF protocols, etc.).
+ * Эта функция вызывается для каждого глобального объекта, рекламируемого Wayland.
+ * наборщик. Серверная часть может использовать это для привязки к протоколам Wayland, которые ему необходимы.
+ * (например, расширения wl_shm , EGL, протоколы DMA - BUF и т. д.).
  *
- * @param[in] backend_ctx Pointer to the backend context
- * @param[in] registry Wayland registry object
- * @param[in] name Numeric name of the global object
- * @param[in] interface String name of the interface (e.g., "wl_shm")
- * @param[in] version Version number of the interface
+ * @param [in] backend_ctx Указатель на внутренний контекст
+ * @param [in] реестр Объект реестра Wayland
+ * @param [in] name Числовое имя глобального объекта.
+ * @param [in] интерфейс Строковое имя интерфейса (например, " wl_shm ")
+ * @param [in] версия Номер версии интерфейса
  *
  * @note This is called during Wayland connection setup
  * @note The backend should use wl_registry_bind() to bind to needed protocols
@@ -136,10 +136,10 @@ typedef void (*lv_wayland_backend_global_handler_t)(void * backend_ctx, struct w
  * @struct lv_wayland_backend_ops_t
  * @brief Wayland backend operations structure
  *
- * This structure defines the complete set of operations that a Wayland backend
- * must implement. All function pointers must be non-NULL.
+ * Эта структура определяет полный набор операций, которые выполняет серверная часть Wayland.
+ * должен реализовать. Все указатели на функции не должны быть NULL.
  *
- * @par Lifecycle Order:
+ * @par Порядок жизненного цикла:
  * 1. init() - Initialize backend context
  * 2. global_handler() - Called for each Wayland global (may be called multiple times)
  * 3. init_display() - Create display (may be called multiple times for multiple displays)
@@ -160,42 +160,42 @@ extern const lv_wayland_backend_ops_t wl_backend_ops;
 
 /** @brief Get the backend-specific display data
  *
- * Retrieves the per-display data pointer that was returned by the backend's
- * init_display/resize_display functions. This allows the backend to access its own
- * display-specific state and resources.
+ * Получает указатель данных для каждого дисплея, который был возвращен серверной частью.
+ * Функции init_display/resize_display. Это позволяет серверной части получить доступ к своим собственным
+ * состояние и ресурсы, специфичные для дисплея.
  *
- * @param[in] display Pointer to the LVGL display object
+ * Дисплей @param [in] Указатель на экранный объект LVGL
  * @return Pointer to backend-specific display data
  *
  * @note This returns the value that was returned by lv_wayland_backend_init_display_t
- *       or lv_wayland_backend_resize_display_t
+ *       или lv_wayland_backend_resize_display_t
  * @see lv_wayland_backend_init_display_t
  */
 void * lv_wayland_get_backend_display_data(lv_display_t * display);
 
 /** @brief Set the backend-specific display data
  *
- * The backend display data is set automatically to the return type of the
- * init_display/resize_display, this function should only be used in special
- * cases where it needs to be overridden temporarily
+ * Для данных отображения серверной части автоматически устанавливается тип возвращаемого значения
+ * init_display/resize_display, эту функцию следует использовать только в особых случаях.
+ * случаи, когда его необходимо временно отменить
  *
- * @param[in] display Pointer to the LVGL display object
- * @param[in] data Pointer to backend-specific display data
+ * Дисплей @param [in] Указатель на экранный объект LVGL
+ * @param [in] data Указатель на отображаемые данные, специфичные для серверной части
  */
 void lv_wayland_set_backend_display_data(lv_display_t * display, void * data);
 
 /**
  * @brief Get the Wayland surface for rendering
  *
- * Retrieves the wl_surface object associated with the display window. This is the
- * surface that the backend must use for all rendering operations (attaching buffers,
- * committing frames, etc.).
+ * Извлекает объект wl_surface, связанный с окном отображения. Это
+ * поверхность, которую серверная часть должна использовать для всех операций рендеринга (присоединение буферов,
+ * фиксация кадров и т.д.).
  *
- * @param[in] display Pointer to the LVGL display object
+ * Дисплей @param [in] Указатель на экранный объект LVGL
  * @return Pointer to the Wayland surface for rendering, or NULL if not available
  *
  * @note This surface is managed by the Wayland driver and must not be destroyed
- *       by the backend
+ *       через серверную часть
  * @note All rendering output should be attached to this surface
  */
 struct wl_surface * lv_wayland_get_window_surface(lv_display_t * display);
@@ -211,7 +211,7 @@ struct wl_surface * lv_wayland_get_window_surface(lv_display_t * display);
 #endif /*LV_USE_WAYLAND*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WL_BACKEND_PRIVATE_H*/

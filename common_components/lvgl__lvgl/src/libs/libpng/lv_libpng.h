@@ -29,7 +29,7 @@ extern "C" {
  **********************/
 
 /**
- * Register the PNG decoder functions in LVGL
+ * Зарегистрируйте функции декодера PNG в LVGL.
  */
 void lv_libpng_init(void);
 
@@ -42,7 +42,7 @@ void lv_libpng_deinit(void);
 #endif /*LV_USE_LIBPNG*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_LIBPNG_H*/

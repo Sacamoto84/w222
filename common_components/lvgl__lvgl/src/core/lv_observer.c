@@ -19,7 +19,7 @@
  *********************/
 
 #ifndef FLT_MAX
-    #define FLT_MAX 3.402823466e+38F /* float max value */
+    #define FLT_MAX 3.402823466e+38F /* максимальное значение с плавающей запятой */
 #endif
 
 /**********************
@@ -401,10 +401,10 @@ void lv_subject_init_group(lv_subject_t * group_subject, lv_subject_t * list[], 
     lv_ll_init(&(group_subject->subs_ll), sizeof(lv_observer_t));
     group_subject->value.pointer = list;
 
-    /* Bind all list[] subjects to `group_subject`. */
+    /* Привяжите все предметы list[] к`group_subject`. */
     uint32_t i;
     for(i = 0; i < list_len; i++) {
-        /* If a subject in `list[]` changes, notify `group_subject`. */
+        /* Если тема в`list[]`меняется, сообщите об этом`group_subject`. */
         lv_subject_add_observer(list[i], group_notify_cb, group_subject);
     }
 }
@@ -463,12 +463,12 @@ lv_observer_t * lv_subject_add_observer_obj(lv_subject_t * subject, lv_observer_
     observer->user_data = user_data;
     observer->target = obj;
     observer->for_obj = 1;
-    /* subscribe to delete event of the object */
+    /* подписаться на удаление события объекта */
     if(obj != NULL) {
         lv_obj_add_event_cb(obj, unsubscribe_on_delete_cb, LV_EVENT_DELETE, observer);
     }
 
-    /* Update Observer immediately. */
+    /* Немедленно обновите Observer. */
     if(observer->cb) observer->cb(observer, subject);
 
     return observer;
@@ -493,7 +493,7 @@ lv_observer_t * lv_subject_add_observer_with_target(lv_subject_t * subject, lv_o
     observer->user_data = user_data;
     observer->target = target;
 
-    /* Update Observer immediately. */
+    /* Немедленно обновите Observer. */
     if(observer->cb) observer->cb(observer, subject);
 
     return observer;
@@ -530,11 +530,11 @@ void lv_obj_remove_from_subject(lv_obj_t * obj, lv_subject_t * subject)
 {
     LV_ASSERT_NULL(obj);
     /*
-     * Look for the `observer` that connects `obj` and `subject`
-     * Since the obj is associated with the subject,
-     *  the `obj` will have an LV_EVENT_REMOVE event with the `unsubscribe_on_delete_cb` callback
-     *  associated.
-     * From the event we can then find the observer in the event's `user_data` field
+     * Найдите `observer`, который соединяет`obj`и `subject`.
+     * Поскольку объект связан с субъектом,
+     *  `obj` будет иметь событиеLV_EVENT_REMOVEс обратным вызовом `unsubscribe_on_delete_cb`
+     *  связанный.
+     * Затем из событий мы можем найти наблюдателя в поле событий `user_data`.
      */
     int32_t i;
     int32_t event_cnt = (int32_t)(obj->spec_attr ? lv_event_get_count(&obj->spec_attr->event_list) : 0);
@@ -543,14 +543,14 @@ void lv_obj_remove_from_subject(lv_obj_t * obj, lv_subject_t * subject)
         if(event_dsc->cb == unsubscribe_on_delete_cb) {
             lv_observer_t * observer = event_dsc->user_data;
             if(subject == NULL || subject == observer->subject) {
-                /* lv_observer_remove handles the deletion of all possible event callbacks */
+                /* lv_observer_remove обрабатывает возможные удаления всех событий обратных вызовов. */
                 lv_observer_remove(observer);
             }
         }
     }
-    /* Gracefully de-couple `subject` from Widget by deleting any existing
-     * `LV_EVENT_VALUE_CHANGED` event associated with `subject` in case
-     * one of the `..._bind_value()` functions was used. */
+    /* Грамотно отделите`subject`от Widget, удаляйте все время
+     * Событие `LV_EVENT_VALUE_CHANGED`, связанное с `subject`, в случае
+     * использовалась одна из функций `..._bind_value()`. */
     lv_obj_remove_event_cb_with_user_data(obj, NULL, subject);
 
 }
@@ -898,7 +898,7 @@ static void subject_increment_cb(lv_event_t * e)
     lv_subject_increment_dsc_t * user_data = lv_event_get_user_data(e);
 
     if(user_data->subject->type == LV_SUBJECT_TYPE_INT) {
-        /*Use the smaller range*/
+        /*Используйте меньший диапазон*/
         int32_t max_value = LV_MIN(user_data->max_value, user_data->subject->max_value.num);
         int32_t min_value = LV_MAX(user_data->min_value, user_data->subject->min_value.num);
 
@@ -921,7 +921,7 @@ static void subject_increment_cb(lv_event_t * e)
     }
 #if LV_USE_FLOAT
     else if(user_data->subject->type == LV_SUBJECT_TYPE_FLOAT) {
-        /*Use the smaller range*/
+        /*Используйте меньший диапазон*/
         float max_value = LV_MIN((float)user_data->max_value, user_data->subject->max_value.float_v);
         float min_value = LV_MAX((float)user_data->min_value, user_data->subject->min_value.float_v);
 
@@ -991,7 +991,7 @@ static void obj_flag_observer_cb(lv_observer_t * observer, lv_subject_t * subjec
 {
     flag_and_cond_t * p = observer->user_data;
 
-    /* Initializing this keeps some compilers happy */
+    /* Инициализация этого делает некоторых компиляторов счастливыми. */
     bool res = false;
     switch(p->cond) {
         case FLAG_COND_EQ:
@@ -1018,7 +1018,7 @@ static void obj_state_observer_cb(lv_observer_t * observer, lv_subject_t * subje
 {
     flag_and_cond_t * p = observer->user_data;
 
-    /* Initializing this keeps some compilers happy */
+    /* Инициализация этого делает некоторых компиляторов счастливыми. */
     bool res = false;
     switch(p->cond) {
         case FLAG_COND_EQ:
@@ -1070,7 +1070,7 @@ static void lv_subject_notify_if_changed(lv_subject_t * subject)
 #endif
         case LV_SUBJECT_TYPE_GROUP :
         case LV_SUBJECT_TYPE_POINTER :
-            /* Always notify as we don't know how to compare this */
+            /* Всегда сообщайте, так как мы не знаем, с чем это сравнивать. */
             lv_subject_notify(subject);
             break;
         case LV_SUBJECT_TYPE_COLOR  :

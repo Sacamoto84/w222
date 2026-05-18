@@ -14,27 +14,27 @@
  *      DEFINES
  *********************/
 
-#define CMD_FRMCTR1     0xB1    /* Frame Rate Control (In Normal Mode/Full Colors) */
-#define CMD_FRMCTR2     0xB2    /* Frame Rate Control (In Idle Mode/8 colors) */
-#define CMD_FRMCTR3     0xB3    /* Frame Rate control (In Partial Mode/Full Colors) */
-#define CMD_INVCTR      0xB4    /* Display Inversion Control */
-#define CMD_DFUNCTR     0xB6    /* Display Function Control */
-#define CMD_PWCTR1      0xC0    /* Power Control 1 */
-#define CMD_PWCTR2      0xC1    /* Power Control 2 */
-#define CMD_VMCTR1      0xC5    /* VCOM Control 1 */
-#define CMD_VMCTR2      0xC7    /* VCOM Control 2 */
-#define CMD_PWCTRA      0xCB    /* Power Control A */
-#define CMD_PWCTRB      0xCF    /* Power Control B */
-#define CMD_GMCTRP1     0xE0    /* Positive Gamma Correction */
-#define CMD_GMCTRN1     0xE1    /* Negative Gamma Correction */
-#define CMD_DTCTRA      0xE8    /* Driver timing control A */
-#define CMD_DTCTRB      0xEA    /* Driver timing control B */
-#define CMD_PONSEQ      0xED    /* Power On Sequence */
+#define CMD_FRMCTR1     0xB1    /* Управление частотой кадров (в обычном режиме/полноцветах) */
+#define CMD_FRMCTR2     0xB2    /* Управление частотой кадров (в режиме ожидания/8 цветов) */
+#define CMD_FRMCTR3     0xB3    /* Управление частотой кадров (в частичном режиме/полноцветах) */
+#define CMD_INVCTR      0xB4    /* Управление инверсией дисплея */
+#define CMD_DFUNCTR     0xB6    /* Управление функциями дисплея */
+#define CMD_PWCTR1      0xC0    /* Контроль мощности 1 */
+#define CMD_PWCTR2      0xC1    /* Контроль мощности 2 */
+#define CMD_VMCTR1      0xC5    /* VCOM Управление 1 */
+#define CMD_VMCTR2      0xC7    /* VCOM Управление 2 */
+#define CMD_PWCTRA      0xCB    /* Регулятор мощности А */
+#define CMD_PWCTRB      0xCF    /* Регулятор мощности Б */
+#define CMD_GMCTRP1     0xE0    /* Положительная гамма-коррекция */
+#define CMD_GMCTRN1     0xE1    /* Отрицательная гамма-коррекция */
+#define CMD_DTCTRA      0xE8    /* Контроль времени водителя A */
+#define CMD_DTCTRB      0xEA    /* Контроль времени водителя B */
+#define CMD_PONSEQ      0xED    /* Последовательность включения питания */
 #define CMD_RDINDEX     0xD9    /* ili9341 */
-#define CMD_IDXRD       0xDD    /* ILI9341 only, indexed control register read */
-#define CMD_ENA3G       0xF2    /* Enable 3 Gamma control */
-#define CMD_IFCTR       0xF6    /* Interface Control */
-#define CMD_PRCTR       0xF7    /* Pump ratio control */
+#define CMD_IDXRD       0xDD    /* Только ILI9341, чтение индексного регистра управления */
+#define CMD_ENA3G       0xF2    /* Включить 3 управления гаммой */
+#define CMD_IFCTR       0xF6    /* Управление интерфейсом */
+#define CMD_PRCTR       0xF7    /* Контроль соотношения насосов */
 
 /**********************
  *      TYPEDEFS
@@ -48,7 +48,7 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* init commands based on LovyanGFX ILI9341 driver */
+/* команды инициализации на основе драйвера LovyanGFX ILI9341 */
 static const uint8_t init_cmd_list[] = {
     CMD_PWCTRB,     3,  0x00, 0xC1, 0x30,
     CMD_PONSEQ,     4,  0x64, 0x03, 0x12, 0x81,

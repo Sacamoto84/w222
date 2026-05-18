@@ -39,56 +39,56 @@ struct _lv_display_t {
     lv_ext_data_t ext_data;
 #endif
     /*---------------------
-     * Resolution
+     * Разрешение
      *--------------------*/
 
-    /** Horizontal resolution.*/
+    /** Горизонтальное разрешение.*/
     int32_t hor_res;
 
-    /** Vertical resolution.*/
+    /** Вертикальное разрешение.*/
     int32_t ver_res;
 
-    /** Horizontal resolution of the full / physical display. Set to -1 for fullscreen mode.*/
+    /** Горизонтальное разрешение полного/физического дисплея. Установите значение -1 для полноэкранного режима.*/
     int32_t physical_hor_res;
 
-    /** Vertical resolution of the full / physical display. Set to -1 for fullscreen mode.*/
+    /** Вертикальное разрешение полного/физического дисплея. Установите значение -1 для полноэкранного режима.*/
     int32_t physical_ver_res;
 
-    /** Horizontal offset from the full / physical display. Set to 0 for fullscreen mode.*/
+    /** Горизонтальное смещение от полного/физического дисплея. Установите значение 0 для полноэкранного режима.*/
     int32_t offset_x;
 
-    /** Vertical offset from the full / physical display. Set to 0 for fullscreen mode.*/
+    /** Вертикальное смещение от полного/физического дисплея. Установите значение 0 для полноэкранного режима.*/
     int32_t offset_y;
 
-    /** DPI (dot per inch) of the display. Default value is `LV_DPI_DEF`.*/
+    /** DPI (точек на дюйм) дисплея. Значение по умолчанию — `LV_DPI_DEF`.*/
     uint32_t dpi;
 
     /*---------------------
-     * Buffering
+     * Буферизация
      *--------------------*/
     lv_draw_buf_t * buf_1;
     lv_draw_buf_t * buf_2;
     lv_draw_buf_t * buf_3;
 
-    /** Internal, used by the library*/
+    /** Внутренний, используется библиотекой*/
     lv_draw_buf_t * buf_act;
 
-    /** MANDATORY: Write the internal buffer (draw_buf) to the display. 'lv_display_flush_ready()' has to be
-     * called when finished*/
+    /** MANDATORY: Запишите внутренний буфер (draw_buf) на дисплей. 'lv_display_flush_ready()' должно быть
+     * позвонил, когда закончил*/
     lv_display_flush_cb_t flush_cb;
 
     /**
-     * Used to wait while flushing is ready.
-     * It can do any complex logic to wait, including semaphores, mutexes, polling flags, etc.
-     * If not set `flushing` flag is used which can be cleared with `lv_display_flush_ready()` */
+     * Ожидание готовности промывки.
+     * Он может выполнять любую сложную логику ожидания, включая семафоры, мьютексы, флаги опроса и т. д.
+     * Если не установлен, используется флаг `flushing`, который можно сохранить с помощью `lv_display_flush_ready()`. */
     lv_display_flush_wait_cb_t flush_wait_cb;
 
-    /** 1: flushing is in progress. (It can't be a bit field because when it's cleared from IRQ
-     * Read-Modify-Write issue might occur) */
+    /** 1: идет промывка. (Это не может быть битовое поле, потому что при его очистке из IRQ
+     * Может возникнуть проблема чтения-изменения-записи) */
     volatile int flushing;
 
-    /** 1: It was the last chunk to flush. (It can't be a bit field because when it's cleared
-     * from IRQ Read-Modify-Write issue might occur) */
+    /** 1: Это был последний кусок, который нужно было смыть. (Это не может быть битовое поле, потому что, когда оно очищено
+     * из IRQ может возникнуть проблема чтения-изменения-записи) */
     volatile int flushing_last;
     volatile uint32_t last_area         : 1; /**< 1: last area is being rendered */
     volatile uint32_t last_part         : 1; /**< 1: last part of the current area is being rendered */
@@ -99,34 +99,34 @@ struct _lv_display_t {
     uint32_t stride_is_auto : 1;     /**< 1: The stride of the buffers was not set explicitly. */
 
 
-    /** 1: The current screen rendering is in progress*/
+    /** 1: выполняется текущий рендеринг экрана.*/
     uint32_t rendering_in_progress : 1;
 
     lv_color_format_t   color_format;
 
-    /** Invalidated (marked to redraw) areas*/
+    /** Недействительные (отмеченные для перерисовки) области*/
     lv_area_t inv_areas[LV_INV_BUF_SIZE];
     uint8_t inv_area_joined[LV_INV_BUF_SIZE];
     uint32_t inv_p;
     int32_t inv_en_cnt;
 
-    /** Double buffer sync areas (redrawn during last refresh) */
+    /** Области синхронизации с двойным буфером (перерисовываются во время последнего обновления) */
     lv_ll_t sync_areas;
 
     lv_draw_buf_t _static_buf1; /**< Used when user pass in a raw buffer as display draw buffer */
     lv_draw_buf_t _static_buf2;
     /*---------------------
-     * Layer
+     * Слой
      *--------------------*/
     lv_layer_t * layer_head;
     void (*layer_init)(lv_display_t * disp, lv_layer_t * layer);
     void (*layer_deinit)(lv_display_t * disp, lv_layer_t * layer);
 
     /*---------------------
-     * Screens
+     * Экраны
      *--------------------*/
 
-    /** Screens of the display*/
+    /** Экраны дисплея*/
     lv_obj_t ** screens;    /**< Array of screen objects.*/
     lv_obj_t * sys_layer;   /**< @see lv_display_get_layer_sys*/
     lv_obj_t * top_layer;   /**< @see lv_display_get_layer_top*/
@@ -135,11 +135,11 @@ struct _lv_display_t {
     lv_obj_t * prev_scr;    /**< Previous screen. Used during screen animations*/
     lv_obj_t * scr_to_load; /**< The screen prepared to load in lv_screen_load_anim*/
     uint32_t screen_cnt;
-    uint8_t draw_prev_over_act  : 1;/** 1: Draw previous screen over active screen*/
-    uint8_t del_prev  : 1;  /** 1: Automatically delete the previous screen when the screen load animation is ready*/
+    uint8_t draw_prev_over_act  : 1;/** 1: Нарисовать предыдущий экран поверх активного экрана.*/
+    uint8_t del_prev  : 1;  /** 1: Автоматически удалять предыдущий экран, когда анимация загрузки экрана готова.*/
 
     /*---------------------
-     * Others
+     * Другие
      *--------------------*/
 
     void * driver_data; /**< Custom user data*/
@@ -154,13 +154,13 @@ struct _lv_display_t {
 
     lv_theme_t * theme;     /**< The theme assigned to the screen*/
 
-    /** A timer which periodically checks the dirty areas and refreshes them*/
+    /** Таймер, который периодически проверяет загрязненные участки и обновляет их.*/
     lv_timer_t * refr_timer;
 
-    /*Miscellaneous data*/
+    /*Разные данные*/
     uint32_t last_activity_time;        /**< Last time when there was activity on this display*/
 
-    /** The area being refreshed*/
+    /** Обновляемая область*/
     lv_area_t refreshed_area;
     uint32_t vsync_count;
 
@@ -185,7 +185,7 @@ struct _lv_display_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DISPLAY_PRIVATE_H*/

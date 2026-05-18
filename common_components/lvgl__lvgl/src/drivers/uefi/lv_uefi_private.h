@@ -33,19 +33,19 @@ extern "C" {
  **********************/
 
 /**
- * Internal cache for the image handle (source: application entry point)
+ * Внутренний кеш для дескриптора изображения (источник: точка входа приложения)
  */
 extern EFI_HANDLE gLvEfiImageHandle;
 /**
- * Internal cache for the system table (source: application entry point)
+ * Внутренний кеш для системной таблицы (источник: точка входа приложения)
  */
 extern EFI_SYSTEM_TABLE * gLvEfiST;
 /**
- * Internal cache for the boot services table (source: gLvEfiST)
+ * Внутренний кеш для таблицы служб загрузки (источник: gLvEfiST)
  */
 extern EFI_BOOT_SERVICES * gLvEfiBS;
 /**
- * Internal cache for the boot runtime service table (source: gLvEfiST)
+ * Внутренний кеш для таблицы служб времени выполнения загрузки (источник: gLvEfiST)
  */
 extern EFI_RUNTIME_SERVICES * gLvEfiRT;
 
@@ -74,23 +74,23 @@ void lv_uefi_protocol_close(EFI_HANDLE handle, EFI_GUID * protocol);
 
 /**
  * @brief Convert an UCS-2 string to an ASCII string.
- * The string must contain only characters >= 0x20 and <= 0X7E.
+ * Строка должна содержать только символы >= 0x20 и <= 0X7E.
  * @param ucs2 The UCS-2 string.
  * @param ascii The buffer to store the ASCII string.
  * @param ascii_len The size of the buffer in ASCII characters.
  * @return The number of characters written to the buffer or 0 if
- * there was an error.
+ * произошла ошибка.
 */
 size_t lv_uefi_ucs2_to_ascii(const CHAR16 * ucs2, char * ascii, size_t ascii_len);
 
 /**
  * @brief Convert an ASCII string to an UCS-2 string.
- * The string must contain only characters >= 0x20 and <= 0X7E.
+ * Строка должна содержать только символы >= 0x20 и <= 0X7E.
  * @param ascii The ASCII string.
  * @param ucs2 The buffer to store the UCS-2 string.
  * @param ucs2_len The size of the buffer in UCS-2 characters.
  * @return The number of bytes written to the buffer or 0 if
- * there was an error.
+ * произошла ошибка.
 */
 size_t lv_uefi_ascii_to_ucs2(const char * ascii, CHAR16 * ucs2, size_t ucs2_len);
 

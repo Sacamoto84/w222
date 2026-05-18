@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 19 nov 2023
+/*  Создано: 19 ноября 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -173,20 +173,20 @@ static void grow_hash_table(lv_draw_eve_ramg_t * ramg)
 
 #if RAMG_DEBUG
 /*
-Print tables like this:
-    113 kB of RAM_G used
+Распечатайте такие таблицы:
+    Использовано 113 КБ RAM_G
     ================================-==-=====---=---===---=====-=-=-=-==--=======----=-==-==---=--===--=-=-=========================
     ========^$==========--=-==-=-=--=--=========---=----========-------===--=====----=======--=====--====--=====-=--=-=
 
-'-' unoccupied cells
-'=' occupied cells
-'^' where the hash pointed to in the table initially and linear probing started
-'$' where linear probing ended because a matching or unoccupied cell
-    was found. This symbol is not shown if the initial guess was correct.
+'-' незанятые ячейки
+'=' занятые ячейки
+'^', где изначально указан хэш в таблице и началось линейное зондирование
+'$', когда линейное зондирование завершилось из-за совпадения или незанятой ячейки.
+    был найден. Этот символ не отображается, если первоначальное предположение было правильным.
 
-This example has 244 cells. Each cell uses 8 bytes of local RAM, so just under 2 kB.
-Each cell represents an allocation in EVE RAM_G. The RAM_G allocation sizes are not
-represented in this table, except for the overall "113 kB of RAM_G used" message.
+В этом примере 244 ячейки. Каждая ячейка использует 8 байт локального RAM, то есть чуть меньше 2 КБ.
+Каждая ячейка представляет распределение в EVE RAM_G. Размеры распределения RAM_G не являются
+представлено в этой таблице, за исключением общего сообщения «Использовано 113 КБ RAM_G».
 */
 static void ramg_debug(lv_draw_eve_ramg_t * ramg, uint32_t key_hash, uint32_t table_index)
 {

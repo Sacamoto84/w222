@@ -70,7 +70,7 @@ float math_fast_inv_sqrtf(float number);
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_VG_LITE_MATH_H*/

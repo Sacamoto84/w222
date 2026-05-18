@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2024 EDGEMTech Ltd.
  *
- * Author: EDGEMTech Ltd, Erik Tagirov (erik.tagirov@edgemtech.ch)
+ * Author: ООО «ЭДГЕМТех», Эрик Тагиров (erik.tagiros@edgemtech.ch)
  *
  ******************************************************************/
 
@@ -30,7 +30,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 
-/* Example entry point */
+/* Пример точки входа */
 void lv_example_gestures(void);
 
 /**********************
@@ -38,7 +38,7 @@ void lv_example_gestures(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_GESTURES_H*/

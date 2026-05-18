@@ -63,7 +63,7 @@ void lv_draw_sw_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc, con
     int32_t short_side = LV_MIN(coords_w, coords_h);
     if(rout > short_side >> 1) rout = short_side >> 1;
 
-    /*Get the inner area*/
+    /*Получить внутреннюю область*/
     lv_area_t area_inner;
     lv_area_copy(&area_inner, coords);
     area_inner.x1 += ((dsc->side & LV_BORDER_SIDE_LEFT) ? dsc->width : - (dsc->width + rout));
@@ -91,8 +91,8 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
                          int32_t rout, int32_t rin, lv_color_t color, lv_opa_t opa)
 {
 #if LV_DRAW_SW_COMPLEX
-    /*Get clipped draw area which is the real draw area.
-     *It is always the same or inside `coords`*/
+    /*Получите обрезанную область прорисовки, которая является настоящей областью прорисовки.
+     *Всегда одно и то же или внутри `coords`*/
     lv_area_t draw_area;
     if(!lv_area_intersect(&draw_area, outer_area, &t->clip_area)) return;
     int32_t draw_area_w = lv_area_get_width(&draw_area);
@@ -104,12 +104,12 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
 
     void * mask_list[3] = {0};
 
-    /*Create mask for the inner mask*/
+    /*Создайте маску для внутренней маски*/
     lv_draw_sw_mask_radius_param_t mask_rin_param;
     lv_draw_sw_mask_radius_init(&mask_rin_param, inner_area, rin, true);
     mask_list[0] = &mask_rin_param;
 
-    /*Create mask for the outer area*/
+    /*Создайте маску для внешней области*/
     lv_draw_sw_mask_radius_param_t mask_rout_param;
     if(rout > 0) {
         lv_draw_sw_mask_radius_init(&mask_rout_param, outer_area, rout, false);
@@ -123,7 +123,7 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
     blend_dsc.color = color;
     blend_dsc.opa = opa;
 
-    /*Calculate the x and y coordinates where the straight parts area is*/
+    /*Вычислите координаты x и y, в которых находится площадь прямой детали.*/
     lv_area_t core_area;
     core_area.x1 = LV_MAX(outer_area->x1 + rout, inner_area->x1);
     core_area.x2 = LV_MIN(outer_area->x2 - rout, inner_area->x2);
@@ -134,7 +134,7 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
     bool top_side = outer_area->y1 <= inner_area->y1;
     bool bottom_side = outer_area->y2 >= inner_area->y2;
 
-    /*No masks*/
+    /*Без масок*/
     bool left_side = outer_area->x1 <= inner_area->x1;
     bool right_side = outer_area->x2 >= inner_area->x2;
 
@@ -145,7 +145,7 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
     }
 
     blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_FULL_COVER;
-    /*Draw the straight lines first if they are long enough*/
+    /*Сначала нарисуйте прямые линии, если они достаточно длинные.*/
     if(top_side && split_hor) {
         blend_area.x1 = core_area.x1;
         blend_area.x2 = core_area.x2;
@@ -162,7 +162,7 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
         lv_draw_sw_blend(t, &blend_dsc);
     }
 
-    /*If the border is very thick and the vertical sides overlap horizontally draw a single rectangle*/
+    /*Если граница очень толстая и вертикальные стороны перекрываются по горизонтали, нарисуйте один прямоугольник.*/
     if(inner_area->x1 >= inner_area->x2 && left_side && right_side) {
         blend_area.x1 = outer_area->x1;
         blend_area.x2 = outer_area->x2;
@@ -188,19 +188,19 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
         }
     }
 
-    /*Draw the corners*/
+    /*Нарисуйте углы*/
     int32_t blend_w;
 
-    /*Left and right corner together if they are close to each other*/
+    /*Левый и правый угол вместе, если они расположены близко друг к другу*/
     if(!split_hor) {
-        /*Calculate the top corner and mirror it to the bottom*/
+        /*Вычислите верхний угол и отразите его в нижней части.*/
         blend_area.x1 = draw_area.x1;
         blend_area.x2 = draw_area.x2;
         int32_t max_h = LV_MAX(rout, inner_area->y1 - outer_area->y1);
         for(h = 0; h < max_h; h++) {
             int32_t top_y = outer_area->y1 + h;
             int32_t bottom_y = outer_area->y2 - h;
-            if(top_y < draw_area.y1 && bottom_y > draw_area.y2) continue;   /*This line is clipped now*/
+            if(top_y < draw_area.y1 && bottom_y > draw_area.y2) continue;   /*Эта строка сейчас обрезана*/
 
             lv_memset(mask_buf, 0xff, draw_area_w);
             blend_dsc.mask_res = lv_draw_sw_mask_apply(mask_list, mask_buf, blend_area.x1, top_y, draw_area_w);
@@ -219,7 +219,7 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
         }
     }
     else {
-        /*Left corners*/
+        /*Левые углы*/
         blend_area.x1 = draw_area.x1;
         blend_area.x2 = LV_MIN(draw_area.x2, core_area.x1 - 1);
         blend_w = lv_area_get_width(&blend_area);
@@ -247,8 +247,8 @@ void draw_border_complex(lv_draw_task_t * t, const lv_area_t * outer_area, const
             }
         }
 
-        /*Right corners*/
-        blend_area.x1 = LV_MAX(draw_area.x1, blend_area.x2 + 1);    /*To not overlap with the left side*/
+        /*Правые углы*/
+        blend_area.x1 = LV_MAX(draw_area.x1, blend_area.x2 + 1);    /*Чтобы не пересекаться с левой стороной*/
         blend_area.x1 = LV_MAX(draw_area.x1, core_area.x2 + 1);
 
         blend_area.x2 = draw_area.x2;
@@ -308,7 +308,7 @@ static void draw_border_simple(lv_draw_task_t * t, const lv_area_t * outer_area,
     bool left_side = outer_area->x1 <= inner_area->x1;
     bool right_side = outer_area->x2 >= inner_area->x2;
 
-    /*Top*/
+    /*Топ*/
     a.x1 = outer_area->x1;
     a.x2 = outer_area->x2;
     a.y1 = outer_area->y1;
@@ -317,14 +317,14 @@ static void draw_border_simple(lv_draw_task_t * t, const lv_area_t * outer_area,
         lv_draw_sw_blend(t, &blend_dsc);
     }
 
-    /*Bottom*/
+    /*Внизу*/
     a.y1 = inner_area->y2 + 1;
     a.y2 = outer_area->y2;
     if(bottom_side) {
         lv_draw_sw_blend(t, &blend_dsc);
     }
 
-    /*Left*/
+    /*Левый*/
     a.x1 = outer_area->x1;
     a.x2 = inner_area->x1 - 1;
     a.y1 = (top_side) ? inner_area->y1 : outer_area->y1;
@@ -333,7 +333,7 @@ static void draw_border_simple(lv_draw_task_t * t, const lv_area_t * outer_area,
         lv_draw_sw_blend(t, &blend_dsc);
     }
 
-    /*Right*/
+    /*Правильно*/
     a.x1 = inner_area->x2 + 1;
     a.x2 = outer_area->x2;
     if(right_side) {

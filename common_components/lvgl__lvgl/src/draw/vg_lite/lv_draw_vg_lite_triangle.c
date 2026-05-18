@@ -82,7 +82,7 @@ void lv_draw_vg_lite_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t *
         LV_LOG_WARN("Gradient fill is not supported without VECTOR_GRAPHIC");
 #endif
     }
-    else { /* normal fill */
+    else { /* нормальная заливка */
         lv_vg_lite_draw(
             &u->target_buffer,
             lv_vg_lite_path_get_path(path),

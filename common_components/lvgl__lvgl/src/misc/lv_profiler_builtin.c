@@ -20,7 +20,7 @@
 #define profiler_ctx LV_GLOBAL_DEFAULT()->profiler_context
 
 #define LV_PROFILER_STR_MAX_LEN 128
-#define LV_PROFILER_TICK_PER_SEC_MAX 1000000000 /* Maximum accuracy: 1 nanosecond */
+#define LV_PROFILER_TICK_PER_SEC_MAX 1000000000 /* Максимальная точность: 1 наносекунда */
 
 #if LV_USE_OS
     #define LV_PROFILER_MULTEX_INIT   lv_mutex_init(&profiler_ctx->mutex)
@@ -39,7 +39,7 @@
  **********************/
 
 /**
- * @brief Structure representing a built-in profiler item in LVGL
+ * @brief Структура, представляющая встроенный элемент профилировщика в LVGL
  */
 typedef struct {
     uint64_t tick;     /**< The tick value of the profiler item */
@@ -52,7 +52,7 @@ typedef struct {
 } lv_profiler_builtin_item_t;
 
 /**
- * @brief Structure representing a context for the LVGL built-in profiler
+ * @brief Структура, представляющая контекст для встроенного профилировщика LVGL.
  */
 typedef struct _lv_profiler_builtin_ctx_t {
     lv_profiler_builtin_item_t * item_arr; /**< Pointer to an array of profiler items */
@@ -115,7 +115,7 @@ void lv_profiler_builtin_init(const lv_profiler_builtin_config_t * config)
         return;
     }
 
-    /*Free the old item_arr memory*/
+    /*Освободите старую память item_arr.*/
     if(profiler_ctx) {
         lv_profiler_builtin_uninit();
     }
@@ -137,7 +137,7 @@ void lv_profiler_builtin_init(const lv_profiler_builtin_config_t * config)
     profiler_ctx->config = *config;
 
     if(profiler_ctx->config.flush_cb) {
-        /* add profiler header for perfetto */
+        /* добавить заголовок профилировщика для perfetto */
         profiler_ctx->config.flush_cb("# tracer: nop\n");
         profiler_ctx->config.flush_cb("#\n");
     }

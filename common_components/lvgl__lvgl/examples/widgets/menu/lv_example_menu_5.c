@@ -35,7 +35,7 @@ void lv_example_menu_5(void)
     lv_obj_t * cont;
     lv_obj_t * section;
 
-    /*Create sub pages*/
+    /*Создание подстраниц*/
     lv_obj_t * sub_mechanics_page = lv_menu_page_create(menu, NULL);
     lv_obj_set_style_pad_hor(sub_mechanics_page, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), LV_PART_MAIN), 0);
     lv_menu_separator_create(sub_mechanics_page);
@@ -88,7 +88,7 @@ void lv_example_menu_5(void)
     cont = create_switch(section, LV_SYMBOL_AUDIO, "Sidebar enable", true);
     lv_obj_add_event_cb(lv_obj_get_child(cont, 2), switch_handler, LV_EVENT_VALUE_CHANGED, menu);
 
-    /*Create a root page*/
+    /*Создать корневую страницу*/
     root_page = lv_menu_page_create(menu, "Settings");
     lv_obj_set_style_pad_hor(root_page, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), LV_PART_MAIN), 0);
     section = lv_menu_section_create(root_page);
@@ -139,7 +139,7 @@ static void switch_handler(lv_event_t * e)
         }
         else {
             lv_menu_set_sidebar_page(menu, NULL);
-            lv_menu_clear_history(menu); /* Clear history because we will be showing the root page later */
+            lv_menu_clear_history(menu); /* Очистить историю, потому что корневую страницу мы покажем позже. */
             lv_menu_set_page(menu, root_page);
         }
     }

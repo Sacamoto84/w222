@@ -65,7 +65,7 @@ void lv_draw_g2d_img(lv_draw_task_t * t);
 #endif /*LV_USE_G2D*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_G2D_H*/

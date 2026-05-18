@@ -13,16 +13,16 @@ void test_obj_property_fail_on_invalid_id(void)
     prop.id = LV_PROPERTY_ID_INVALID;
     TEST_ASSERT_EQUAL_INT(LV_RESULT_INVALID, lv_obj_set_property(obj, &prop));
 
-    prop.id = LV_PROPERTY_ID_BUILTIN_LAST; /* No widget use this ID */
+    prop.id = LV_PROPERTY_ID_BUILTIN_LAST; /* Ни один виджет не использует этот ID */
     TEST_ASSERT_EQUAL_INT(LV_RESULT_INVALID, lv_obj_set_property(obj, &prop));
 
-    prop.id = LV_PROPERTY_OBJ_PARENT + 1; /* Not a valid ID for obj */
+    prop.id = LV_PROPERTY_OBJ_PARENT + 1; /* Недопустимый ID для объекта. */
     TEST_ASSERT_EQUAL_INT(LV_RESULT_INVALID, lv_obj_set_property(obj, &prop));
 
-    prop.id = LV_PROPERTY_IMAGE_OFFSET_X; /* Not an ID for obj but for image */
+    prop.id = LV_PROPERTY_IMAGE_OFFSET_X; /* Не ID для объекта, а для изображения */
     TEST_ASSERT_EQUAL_INT(LV_RESULT_INVALID, lv_obj_set_property(obj, &prop));
 
-    prop.id = LV_PROPERTY_OBJ_PARENT; /* Valid ID */
+    prop.id = LV_PROPERTY_OBJ_PARENT; /* Действителен ID */
     prop.ptr = lv_screen_active();
     TEST_ASSERT_EQUAL_INT(LV_RESULT_OK, lv_obj_set_property(obj, &prop));
 #endif
@@ -36,29 +36,29 @@ void test_obj_property_set_get_should_match(void)
     lv_property_t prop = { };
     lv_color_t color = {.red = 0x11, .green = 0x22, .blue = 0x33};
 
-    /* Style property should work */
-    /* int type */
+    /* Свойство Style должно работать */
+    /* тип int */
     prop.id = LV_PROPERTY_STYLE_X;
     prop.num = 0xaabb;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_UINT32(0xaabb, lv_obj_get_style_x(obj, LV_PART_MAIN));
     TEST_ASSERT_EQUAL_UINT32(0xaabb, lv_obj_get_property(obj, LV_PROPERTY_STYLE_X).num);
 
-    /* color type */
+    /* цветотип */
     prop.id = LV_PROPERTY_STYLE_BG_COLOR;
     prop.color = color;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_COLOR(color, lv_obj_get_style_bg_color(obj, LV_PART_MAIN));
     TEST_ASSERT_EQUAL_COLOR(color, lv_obj_get_property(obj, LV_PROPERTY_STYLE_BG_COLOR).color);
 
-    /* pointer type */
+    /* тип указателя */
     prop.id = LV_PROPERTY_STYLE_TEXT_FONT;
     prop.ptr = &lv_font_montserrat_26;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_PTR(&lv_font_montserrat_26, lv_obj_get_style_text_font(obj, LV_PART_MAIN));
     TEST_ASSERT_EQUAL_PTR(&lv_font_montserrat_26, lv_obj_get_property(obj, LV_PROPERTY_STYLE_TEXT_FONT).ptr);
 
-    /* Object flags */
+    /* Флаги объектов */
     prop.id = LV_PROPERTY_OBJ_FLAG_HIDDEN ;
     prop.num = 1;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
@@ -71,14 +71,14 @@ void test_obj_property_set_get_should_match(void)
     TEST_ASSERT_FALSE(lv_obj_has_flag(obj, LV_OBJ_FLAG_CLICKABLE));
     TEST_ASSERT_FALSE(lv_obj_get_property(obj, LV_PROPERTY_OBJ_FLAG_CLICKABLE).num);
 
-    /* Obj property */
+    /* Объект недвижимости */
     prop.id = LV_PROPERTY_OBJ_PARENT;
     prop.ptr = root;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_PTR(root, lv_obj_get_parent(obj));
     TEST_ASSERT_EQUAL_PTR(root, lv_obj_get_property(obj, LV_PROPERTY_OBJ_PARENT).ptr);
 
-    /* Derived widget could use same property */
+    /* Производный виджет может использовать то же свойство */
     lv_obj_t * img = lv_image_create(obj);
     prop.id = LV_PROPERTY_OBJ_PARENT;
     prop.ptr = root;
@@ -86,7 +86,7 @@ void test_obj_property_set_get_should_match(void)
     TEST_ASSERT_EQUAL_PTR(root, lv_obj_get_parent(img));
     TEST_ASSERT_EQUAL_PTR(root, lv_obj_get_property(img, LV_PROPERTY_OBJ_PARENT).ptr);
 
-    /* Image properties */
+    /* Свойства изображения */
     prop.id = LV_PROPERTY_IMAGE_OFFSET_X;
     prop.num = 0x1234;
     TEST_ASSERT_TRUE(lv_obj_set_property(img, &prop) == LV_RESULT_OK);
@@ -101,10 +101,10 @@ void test_obj_property_style_selector(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Style property with default selector(0) should work */
+    /* Свойство стиля с селектором по умолчанию (0) должно работать */
     prop.id = LV_PROPERTY_STYLE_X;
-    prop.num = 0xaabb;  /* `num` shares same memory with `prop.style.value.num` */
-    /* selector is initialed to zero when prop is defined. */
+    prop.num = 0xaabb;  /* `num` использует ту же память, что и `prop.style.value.num`. */
+    /* Селектор инициализируется нулем, когда свойство определено. */
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_UINT32(0xaabb, lv_obj_get_style_x(obj, LV_PART_MAIN));
     TEST_ASSERT_EQUAL_UINT32(0xaabb, lv_obj_get_style_property(obj, LV_PROPERTY_STYLE_X, 0).num);
@@ -255,19 +255,19 @@ void test_obj_property_name(void)
 #if LV_USE_OBJ_PROPERTY && LV_USE_OBJ_PROPERTY_NAME
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
 
-    /*Style name*/
-    /*If widget property name conflicts with style name, property name comes first.*/
+    /*Название стиля*/
+    /*Если имя свойства виджета конфликтует с именем стиля, имя свойства идет первым.*/
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_X, lv_obj_property_get_id(obj, "x"));
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_STYLE_OPA, lv_obj_property_get_id(obj, "opa"));
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_STYLE_BG_MAIN_STOP, lv_obj_property_get_id(obj, "bg_main_stop"));
 
-    /*Widget property*/
+    /*Свойство виджета*/
     obj = lv_image_create(lv_screen_active());
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_IMAGE_ANTIALIAS, lv_obj_property_get_id(obj, "antialias"));
-    /*Base class property*/
+    /*Свойство базового класса*/
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_PARENT, lv_obj_property_get_id(obj, "parent"));
 
-    /*OBJ flags*/
+    /*Флаги OBJ*/
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_FLAG_CLICKABLE, lv_obj_property_get_id(obj, "flag_clickable"));
 #endif
 }
@@ -275,15 +275,15 @@ void test_obj_property_name(void)
 void test_obj_class_property(void)
 {
 #if LV_USE_OBJ_PROPERTY && LV_USE_OBJ_PROPERTY_NAME
-    /* An image obj has align property */
+    /* Объект изображения имеет свойство выравнивания. */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_ALIGN, lv_obj_property_get_id(img, "align"));
 
-    /* obj class has align property but image doesn't. */
+    /* Класс obj имеет свойство align, а изображение — нет. */
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_ALIGN, lv_obj_class_property_get_id(&lv_obj_class, "align"));
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_ID_INVALID, lv_obj_class_property_get_id(&lv_image_class, "align"));
 
-    /* style can also have property name that conflicts with obj */
+    /* стиль также может иметь имя свойства, которое конфликтует с объектом */
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_STYLE_X, lv_style_property_get_id("x"));
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_X, lv_obj_property_get_id(img, "x"));
 #endif

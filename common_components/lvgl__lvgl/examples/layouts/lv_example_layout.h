@@ -33,7 +33,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_LAYOUT_H*/

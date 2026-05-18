@@ -57,7 +57,7 @@ void lv_draw_vg_lite_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t
     lv_vg_lite_path_t * path = lv_vg_lite_path_get(u, VG_LITE_FP32);
     lv_vg_lite_path_set_bounding_box_area(path, &t->clip_area);
 
-    /* Nesting cropping regions using rounded rectangles and normal rectangles */
+    /* Вложение областей обрезки с использованием прямоугольников со скругленными углами и обычных прямоугольников. */
     lv_vg_lite_path_append_rect(
         path,
         dsc->area.x1, dsc->area.y1,
@@ -72,7 +72,7 @@ void lv_draw_vg_lite_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t
 
     vg_lite_matrix_t matrix = u->global_matrix;
 
-    /* Use VG_LITE_BLEND_DST_IN (Sa * D) blending mode to make the corners transparent */
+    /* Используйте режим наложения VG_LITE_BLEND_DST_IN (Sa*D), чтобы сделать углы прозрачными. */
     lv_vg_lite_draw(
         &u->target_buffer,
         lv_vg_lite_path_get_path(path),

@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -33,329 +33,329 @@
 extern "C" {
 #endif
 
-//Linear
+//Линейный
 
-// Modeled after the line y = x
-/** \brief Linear easing, no acceleration
+// Смоделировано по линии y = x
+/** \brief Линейное замедление, без ускорения
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_linear(float p);
 
-//Quadratic
+//квадратичный
 
-// Modeled after the parabola y = x^2
-/** \brief Quadratic easing in, accelerate from zero
+// Смоделировано по образцу параболы y = x^2.
+/** \brief Квадратичное замедление, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quad_in(float p);
 
-// Modeled after the parabola y = -x^2 + 2x
-/** \brief Quadratic easing out, decelerate to zero velocity
+// Смоделировано по образцу параболы y = -x^2 + 2x.
+/** \brief Квадратичное замедление, замедление до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quad_out(float p);
 
-// Modeled after the piecewise quadratic
+// Смоделировано по образцу кусочно-квадратичного
 // y = (1/2)((2x)^2)             ; [0, 0.5)
 // y = -(1/2)((2x-1)*(2x-3) - 1) ; [0.5, 1]
-/** \brief Quadratic easing in and out, accelerate to halfway, then decelerate
+/** \brief Квадратичное замедление, ускорение до половины, затем замедление
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quad_in_out(float p);
 
-//Cubic
+//Кубический
 
-// Modeled after the cubic y = x^3
-/** \brief Cubic easing in, accelerate from zero
+// Смоделировано по образцу кубического y = x^3
+/** \brief Кубовое ослабление, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_cub_in(float p);
 
-// Modeled after the cubic y = (x - 1)^3 + 1
-/** \brief Cubic easing out, decelerate to zero velocity
+// Смоделировано по образцу кубики y = (x - 1)^3 + 1
+/** \brief Кубик ослабевает, замедляется до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_cub_out(float p);
 
-// Modeled after the piecewise cubic
+// Создан по образцу кусочно-кубической
 // y = (1/2)((2x)^3)       ; [0, 0.5)
 // y = (1/2)((2x-2)^3 + 2) ; [0.5, 1]
-/** \brief Cubic easing in and out, accelerate to halfway, then decelerate
+/** \brief Кубический плавный вход и выход, ускорение до половины, затем замедление
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_cub_in_out(float p);
 
-//Quartic
+//Квартик
 
-// Modeled after the quartic x^4
-/** \brief Quartic easing in, accelerate from zero
+// Смоделировано по образцу квартики x^4.
+/** \brief Quartic замедляется, ускоряемся с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quar_in(float p);
 
-// Modeled after the quartic y = 1 - (x - 1)^4
-/** \brief Quartic easing out, decelerate to zero velocity
+// Смоделировано по образцу квартики y = 1 - (x - 1)^4.
+/** \brief Квартик замедляется, замедляется до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quar_out(float p);
 
-// Modeled after the piecewise quartic
+// По образцу кусочной квартики
 // y = (1/2)((2x)^4)        ; [0, 0.5)
 // y = -(1/2)((2x-2)^4 - 2) ; [0.5, 1]
-/** \brief Quartic easing in and out, accelerate to halfway, then decelerate
+/** \brief Квартик плавно входит и выходит, ускоряется до половины, затем замедляется.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quar_in_out(float p);
 
-//Quintic
+//Квинтик
 
-// Modeled after the quintic y = x^5
-/** \brief Quintic easing in, accelerate from zero
+// По образцу квинтики y = x^5
+/** \brief Quintic замедляется, ускоряемся с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quin_in(float p);
 
-// Modeled after the quintic y = (x - 1)^5 + 1
-/** \brief Quintic easing out, decelerate to zero velocity
+// Смоделировано по образцу квинтики y = (x - 1)^5 + 1
+/** \brief Quintic замедляется, замедляется до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quin_out(float p);
 
-// Modeled after the piecewise quintic
+// По образцу кусочной квинтики
 // y = (1/2)((2x)^5)       ; [0, 0.5)
 // y = (1/2)((2x-2)^5 + 2) ; [0.5, 1]
-/** \brief Quintic easing in and out, accelerate to halfway, then decelerate
+/** \brief Quintic плавно возникает и возникает, нарушение происходит до половины, а затем замедляется.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_quin_in_out(float p);
 
-//Sin
+//Грех
 
-// Modeled after quarter-cycle of sine wave
-/** \brief Sinusoidal easing in, accelerate from zero
+// Смоделировано по четверти цикла синусоидальной волны.
+/** \brief Синусоидальное замедление, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_sin_in(float p);
 
-// Modeled after quarter-cycle of sine wave (different phase)
-/** \brief Sinusoidal easing out, decelerate to zero velocity
+// Смоделировано по четверти цикла синусоидальной волны (другая фаза)
+/** \brief Синусоидальное ослабление, замедление до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_sin_out(float p);
 
-// Modeled after half sine wave
-/** \brief Sinusoidal easing in and out, accelerate to halfway, then decelerate
+// Смоделировано по полусинусоидальной волне
+/** \brief Синусоидальное замедление, ускорение до половины, затем замедление
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_sin_in_out(float p);
 
-//Circular
+//Круговой
 
-// Modeled after shifted quadrant IV of unit circle
-/** \brief Circular easing in, accelerate from zero
+// Смоделировано на основе смещенного квадранта IV единичного круга.
+/** \brief Круговое замедление, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_circ_in(float p);
 
-// Modeled after shifted quadrant II of unit circle
-/** \brief Circular easing out, decelerate to zero velocity
+// Смоделировано на основе смещенного квадранта II единичного круга.
+/** \brief Круговое замедление, замедление до нулевой скорости.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_circ_out(float p);
 
-// Modeled after the piecewise circular function
-// y = (1/2)(1 - sqrt(1 - 4x^2))           ; [0, 0.5)
-// y = (1/2)(sqrt(-(2x - 3)*(2x - 1)) + 1) ; [0.5, 1]
-/** \brief Circular easing in and out, accelerate to halfway, then decelerate
+// Смоделировано по образцу кусочно-круговой функции.
+// y = (1/2)(1 - sqrt(1 - 4x^2)) ; [0, 0,5)
+// y = (1/2)(sqrt(-(2x - 3)*(2x - 1)) + 1) ; [0,5, 1]
+/** \brief Круговое замедление, ускорение до половины, затем замедление.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_circ_in_out(float p);
 
-//Exponential
+//Экспоненциальный
 
-// Modeled after the exponential function y = 2^(10(x - 1))
-/** \brief Exponential easing in, accelerate from zero
+// Смоделировано по показательной функции y = 2^(10(x - 1))
+/** \brief Экспоненциальное замедление, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_exp_in(float p);
 
-// Modeled after the exponential function y = -2^(-10x) + 1
-/** \brief Exponential easing out, decelerate to zero velocity
+// Смоделировано по показательной функции y = -2^(-10x) + 1
+/** \brief Экспоненциальное замедление, замедление до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_exp_out(float p);
 
-// Modeled after the piecewise exponential
+// Смоделировано по образцу кусочной экспоненты
 // y = (1/2)2^(10(2x - 1))         ; [0,0.5)
 // y = -(1/2)*2^(-10(2x - 1))) + 1 ; [0.5,1]
-/** \brief Exponential easing in and out, accelerate to halfway, then decelerate
+/** \brief Экспоненциальное замедление, ускорение до половины, затем замедление
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_exp_in_out(float p);
 
-//Elastic
-// Modeled after the damped sine wave y = sin(13pi/2*x)*pow(2, 10 * (x - 1))
+//Эластичный
+// Смоделировано по затухающей синусоидальной волне y = sin(13pi/2*x)*pow(2, 10 * (x - 1))
 
-/** \brief Elastic easing in, accelerate from zero
+/** \brief Эластическое замедление, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_elast_in(float p);
 
-// Modeled after the damped sine wave y = sin(-13pi/2*(x + 1))*pow(2, -10x) + 1
-/** \brief Elastic easing out, decelerate to zero velocity
+// Смоделировано по затухающей синусоидальной волне y = sin(-13pi/2*(x + 1))*pow(2, -10x) + 1
+/** \brief Упругое ослабление, замедление до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_elast_out(float p);
 
-// Modeled after the piecewise exponentially-damped sine wave:
-// y = (1/2)*sin(13pi/2*(2*x))*pow(2, 10 * ((2*x) - 1))      ; [0,0.5)
-// y = (1/2)*(sin(-13pi/2*((2x-1)+1))*pow(2,-10(2*x-1)) + 2) ; [0.5, 1]
-/** \brief Elastic easing in and out, accelerate to halfway, then decelerate
+// Смоделировано по образцу кусочно-экспоненциально затухающей синусоидальной волны:
+// y = (1/2)*sin(13pi/2*(2*x))*pow(2, 10 * ((2*x) - 1)) ; [0,0,5)
+// y = (1/2)*(sin(-13pi/2*((2x-1)+1))*pow(2,-10(2*x-1)) + 2) ; [0,5, 1]
+/** \brief Эластичное плавное движение вперед и назад, ускорение до половины, затем замедление.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_elast_in_out(float p);
 
-//Back
+//Назад
 
-// Modeled after the overshooting cubic y = x^3-x*sin(x*pi)
-/** \brief Overshooting easing in, accelerate from zero
+// Смоделировано по принципу кубического перелета y = x^3-x*sin(x*pi)
+/** \brief Промах, плавность, ускорение с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_back_in(float p);
 
-// Modeled after overshooting cubic y = 1-((1-x)^3-(1-x)*sin((1-x)*pi))
-/** \brief Overshooting easing out, decelerate to zero velocity
+// Смоделировано после превышения кубического y = 1-((1-x)^3-(1-x)*sin((1-x)*pi))
+/** \brief Пролет, ослабление, замедление до нулевой скорости
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_back_out(float p);
 
-// Modeled after the piecewise overshooting cubic function:
-// y = (1/2)*((2x)^3-(2x)*sin(2*x*pi))           ; [0, 0.5)
-// y = (1/2)*(1-((1-x)^3-(1-x)*sin((1-x)*pi))+1) ; [0.5, 1]
-/** \brief Overshooting easing in and out, accelerate to halfway, then decelerate
+// Смоделировано по образцу кусочно-вылетающей кубической функции:
+// y = (1/2)*((2x)^3-(2x)*sin(2*x*pi)) ; [0, 0,5)
+// y = (1/2)*(1-((1-x)^3-(1-x)*sin((1-x)*pi))+1) ; [0,5, 1]
+/** \brief Пролет, плавный вход и выход, разгонитесь до половины, затем замедлите ход.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_back_in_out(float p);
 
-//Bounce
+//Отказов
 
-/** \brief Bouncing easing in, accelerate from zero
+/** \brief Подпрыгивая, плавно скручиваясь с нуля
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_bounce_out(float p);
 
-/** \brief Bouncing easing out, decelerate to zero velocity
+/** \brief Отскок, ослабление, замедление до нулевой скорости.
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_bounce_in(float p);
 
-/** \brief Bouncing easing in and out, accelerate to halfway, then decelerate
+/** \brief Подпрыгивание, плавное движение вперед и назад, ускорение до половины, затем замедление
  *
- * \param p Input value, typically within the [0, 1] range
- * \return Eased value
+ * \param p Входное значение, обычно в составе [0, 1]
+ * \return Уменьшенное значение
  *
  */
 float nema_ez_bounce_in_out(float p);
 
 
-/** \brief Convenience function to perform easing between two values given number of steps, current step and easing function
+/** \brief Удобная функция для выполнения плавного перехода между двумя значениями с учетом количества шагов, текущего шага и функции замедления
  *
- * \param A         Initial value within range [0, 1]
- * \param B         Finale value within range [0, 1]
- * \param steps     Total number of steps
- * \param cur_step  Current Step
- * \param ez_func   pointer to the desired easing function
- * \return Eased value
+ * \param A Начальное значение в сущности [0, 1]
+ * \param B Конечное значение в отдельности [0, 1]
+ * \param шаги Общее количество шагов
+ * \paramcur_stepТекущий шаг
+ * \paramez_funcуказатель на нужную функцию плавности
+ * \return Уменьшенное значение
  *
  */
 

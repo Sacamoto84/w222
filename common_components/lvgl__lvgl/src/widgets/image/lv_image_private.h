@@ -28,7 +28,7 @@ extern "C" {
  **********************/
 
 /**
- * Data of image
+ * Данные изображения
  */
 struct _lv_image_t {
     lv_obj_t obj;
@@ -59,7 +59,7 @@ struct _lv_image_t {
 #endif /* LV_USE_IMAGE != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_IMAGE_PRIVATE_H*/

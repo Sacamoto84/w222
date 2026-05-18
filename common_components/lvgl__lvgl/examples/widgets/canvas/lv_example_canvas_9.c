@@ -6,15 +6,15 @@
 #define CANVAS_HEIGHT 150
 
 /**
- * Draw a triangle to the canvas
+ * Нарисуйте треугольник на холсте
  */
 void lv_example_canvas_9(void)
 {
-    /*Create a buffer for the canvas*/
+    /*Создайте буфер для холста*/
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_COLOR_FORMAT_ARGB8888);
     LV_DRAW_BUF_INIT_STATIC(draw_buf);
 
-    /*Create a canvas and initialize its palette*/
+    /*Создайте холст и инициализируйте его палитру.*/
     lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
     lv_canvas_set_draw_buf(canvas, &draw_buf);
     lv_canvas_fill_bg(canvas, lv_color_hex3(0xccc), LV_OPA_COVER);
@@ -35,13 +35,13 @@ void lv_example_canvas_9(void)
     tri_dsc.grad.stops_count = 2;
     tri_dsc.grad.dir = LV_GRAD_DIR_VER;
     tri_dsc.grad.stops[0].color = lv_color_hex(0xff0000);
-    tri_dsc.grad.stops[0].frac = 64;    /*Start at 25%*/
+    tri_dsc.grad.stops[0].frac = 64;    /*Начните с 25%*/
     tri_dsc.grad.stops[0].opa = LV_OPA_COVER;
     tri_dsc.grad.stops[1].color = lv_color_hex(0x0000ff);
     tri_dsc.grad.stops[1].opa = LV_OPA_TRANSP;
-    tri_dsc.grad.stops[1].frac = 3 * 64;    /*End at 75%*/
+    tri_dsc.grad.stops[1].frac = 3 * 64;    /*Конец на 75%*/
 
-    tri_dsc.opa = 128;  /*Set the overall opacity to 50%*/
+    tri_dsc.opa = 128;  /*Установите общую непрозрачность на 50%.*/
 
     lv_draw_triangle(&layer, &tri_dsc);
 

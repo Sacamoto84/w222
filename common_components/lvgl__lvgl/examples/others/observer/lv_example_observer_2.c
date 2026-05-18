@@ -1,15 +1,15 @@
 #include "../../lv_examples.h"
 #if LV_USE_OBSERVER && LV_USE_SLIDER && LV_USE_LABEL && LV_USE_KEYBOARD && LV_BUILD_EXAMPLES
 
-/*This the only interface between the UI and the application*/
+/*Это единственный интерфейс между UI и приложением.*/
 static lv_subject_t engine_subject;
 
 static void app_init(void);
 static void ui_init(void);
 
 /**
- * Simple PIN login screen to start an engine.
- * The only interface between the UI and the application is a single "subject".
+ * Простой экран входа в систему PIN для запуска двигателя.
+ * Единственный интерфейс между UI и приложением — это один «субъект».
  */
 void lv_example_observer_2(void)
 {
@@ -21,9 +21,9 @@ void lv_example_observer_2(void)
 /*--------------------------------------------------
  * APPLICATION
  *
- * This part contains a demo application logic.
- * It doesn't know anything about the internals of the UI
- * and uses any the `engine_subject` as an interface.
+ * Эта часть содержит логику демонстрационного приложения.
+ * Он ничего не знает о внутреннем устройстве UI.
+ * в качестве интерфейса использую любой `engine_subject`.
  * -------------------------------------------------*/
 static void engine_state_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {
@@ -31,7 +31,7 @@ static void engine_state_observer_cb(lv_observer_t * observer, lv_subject_t * su
 
     int32_t v = lv_subject_get_int(subject);
     LV_UNUSED(v);
-    /*In a real application set/clear a pin here*/
+    /*В реальном приложении установите/очистите пин-код здесь*/
     LV_LOG_USER("Engine state: %" LV_PRId32, v);
 }
 
@@ -43,9 +43,9 @@ static void app_init(void)
 /*--------------------------------------------------
  * USER INTERFACE
  *
- * This part contains only UI related code and data.
- * In a project it would a separate file and the
- * application couldn't see its internals
+ * Эта часть содержит только код и данные, связанные с UI.
+ * В проекте это будет отдельный файл и
+ * приложение не могло видеть свои внутренности
  * -------------------------------------------------*/
 
 typedef enum {
@@ -93,7 +93,7 @@ static void ui_init(void)
 {
     lv_subject_init_int(&auth_state_subject, LOGGED_OUT);
 
-    /*Create a slider in the center of the display*/
+    /*Создайте слайдер в центре дисплея.*/
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
     lv_obj_set_pos(ta, 10, 10);
     lv_obj_set_width(ta, 200);
@@ -109,7 +109,7 @@ static void ui_init(void)
     lv_obj_t * btn;
     lv_obj_t * label;
 
-    /*Create a log out button which will be active only when logged in*/
+    /*Создайте кнопку выхода из системы, которая будет активна только при входе в систему.*/
     btn = lv_button_create(lv_screen_active());
     lv_obj_set_pos(btn, 220, 10);
     lv_obj_add_event_cb(btn, log_out_click_event_cb, LV_EVENT_CLICKED, NULL);
@@ -118,12 +118,12 @@ static void ui_init(void)
     label = lv_label_create(btn);
     lv_label_set_text(label, "LOG OUT");
 
-    /*Create a label to show info*/
+    /*Создайте ярлык для отображения информации*/
     label = lv_label_create(lv_screen_active());
     lv_obj_set_pos(label, 10, 60);
     lv_subject_add_observer_obj(&auth_state_subject, info_label_observer_cb, label, NULL);
 
-    /*Create button which will be active only when logged in*/
+    /*Создать кнопку, которая будет активна только при входе в систему*/
     btn = lv_button_create(lv_screen_active());
     lv_obj_set_pos(btn, 10, 80);
     lv_obj_add_flag(btn, LV_OBJ_FLAG_CHECKABLE);

@@ -31,7 +31,7 @@ static void create_label(lv_font_kerning_t kerning, int32_t y_ofs, const char * 
 }
 
 /**
- * FreeType kerning example
+ * Пример кернинга FreeType
  */
 void lv_example_freetype_3(void)
 {
@@ -43,7 +43,7 @@ void lv_example_freetype_3(void)
 void lv_example_freetype_3(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "FreeType is not installed");

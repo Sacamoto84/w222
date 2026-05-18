@@ -58,10 +58,10 @@ typedef enum {
     LV_FREETYPE_OUTLINE_LINE_TO,
     LV_FREETYPE_OUTLINE_CUBIC_TO,
     LV_FREETYPE_OUTLINE_CONIC_TO,
-    LV_FREETYPE_OUTLINE_BORDER_START,     /* When line width > 0 the border glyph is drawn after the regular glyph */
+    LV_FREETYPE_OUTLINE_BORDER_START,     /* Если ширина линии > 0, глиф границы рисуется после обычного глифа. */
 } lv_freetype_outline_type_t;
 
-/* Only path string is required */
+/* Требуется только строка пути */
 typedef const char lv_freetype_font_src_t;
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_font_class_t lv_freetype_font_class;
@@ -71,31 +71,31 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_font_class_t lv_freetype_font_class;
  **********************/
 
 /**
- * Initialize the freetype library.
+ * Инициализируйте библиотеку свободных типов.
  * @return LV_RESULT_OK on success, otherwise LV_RESULT_INVALID.
  */
 lv_result_t lv_freetype_init(uint32_t max_glyph_cnt);
 
 /**
- * Uninitialize the freetype library
+ * Деинициализировать библиотеку свободных типов
  */
 void lv_freetype_uninit(void);
 
 /**
- * Initialize a font info structure.
+ * Инициализируйте информационную структуру шрифта.
  * @param font_info font info structure to be initialized.
  */
 void lv_freetype_init_font_info(lv_font_info_t * font_info);
 
 /**
- * Create a freetype font with a font info structure.
+ * Создайте шрифт произвольного типа со структурой информации о шрифте.
  * @param font_info font info structure.
  * @return Created font, or NULL on failure.
  */
 lv_font_t * lv_freetype_font_create_with_info(const lv_font_info_t * font_info);
 
 /**
- * Create a freetype font.
+ * Создайте произвольный шрифт.
  * @param pathname font file path.
  * @param render_mode font render mode(see @lv_freetype_font_render_mode_t for details).
  * @param size font size.
@@ -106,13 +106,13 @@ lv_font_t * lv_freetype_font_create(const char * pathname, lv_freetype_font_rend
                                     lv_freetype_font_style_t style);
 
 /**
- * Delete a freetype font.
+ * Удалить произвольный шрифт.
  * @param font freetype font to be deleted.
  */
 void lv_freetype_font_delete(lv_font_t * font);
 
 /**
- * Register a callback function to generate outlines for FreeType fonts.
+ * Зарегистрируйте функцию обратного вызова для создания контуров для шрифтов FreeType.
  *
  * @param cb The callback function to be registered.
  * @param user_data User data to be passed to the callback function.
@@ -121,7 +121,7 @@ void lv_freetype_font_delete(lv_font_t * font);
 void lv_freetype_outline_add_event(lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
 
 /**
- * Get the scale of a FreeType font.
+ * Получите масштаб шрифта FreeType.
  *
  * @param font The FreeType font to get the scale of.
  * @return The scale of the FreeType font.
@@ -129,7 +129,7 @@ void lv_freetype_outline_add_event(lv_event_cb_t event_cb, lv_event_code_t filte
 uint32_t lv_freetype_outline_get_scale(const lv_font_t * font);
 
 /**
- * Check if the font is an outline font.
+ * Проверьте, является ли шрифт контурным.
  *
  * @param font The FreeType font.
  * @return Is outline font on success, otherwise false.
@@ -143,7 +143,7 @@ bool lv_freetype_is_outline_font(const lv_font_t * font);
 #endif /*LV_USE_FREETYPE*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_FREETYPE_H */

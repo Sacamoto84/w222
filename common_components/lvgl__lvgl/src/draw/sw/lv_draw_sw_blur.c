@@ -69,10 +69,10 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
     uint32_t blur_radius = dsc->blur_radius;
 
-    /*On larger radius skip some pixels as the result is a blob anyways, so not all pixels matter
-     *This only every 2nd or 3rd px will be blurred, the result will be stored in the layers buffers,
-     *and finally the missing pixels are set to nearest blurred pixel. We loose precision but it looks ok
-     *and and it's very fast.
+    /*При большем радиусе пропустите некоторые пиксели, так как в любом случае в результате получится капля, поэтому не все пиксели имеют значение.
+     *При этом только каждый 2-й или 3-й пиксель будет размыт, результат будет сохранен в буферах слоев,
+     *и, наконец, недостающие пиксели устанавливаются в соответствии с ближайшим размытым пикселем. Мы теряем точность, но выглядит нормально
+     *и это очень быстро.
      */
     int32_t skip_cnt = 1;
     if(dsc->quality == LV_BLUR_QUALITY_AUTO) {
@@ -85,8 +85,8 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         else skip_cnt = 2;
     }
 
-    /*The blurring are must be multiples of skip_cnt so the blurring is all directions
-     * blur the same pixels if some pixels are skipped*/
+    /*Размытие должно быть кратно skip_cnt, чтобы размытие происходило во всех направлениях.
+     * размыть одни и те же пиксели, если некоторые пиксели пропущены*/
     clipped_coords.x1 = ((clipped_coords.x1 + (skip_cnt - 1)) / skip_cnt) * skip_cnt;
     clipped_coords.x2 = ((clipped_coords.x2 - (skip_cnt - 1)) / skip_cnt) * skip_cnt;
     clipped_coords.y1 = ((clipped_coords.y1 + (skip_cnt - 1)) / skip_cnt) * skip_cnt;
@@ -96,9 +96,9 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
     blur_radius = blur_radius / skip_cnt;
 
-    /*We will use an IIR low pass filer in all 4 direction:  top to bottom, bottom to top, left to right, right to left.
-     *Approximate the the filter coefficient from the radius.
-     *The filter is like: this_px = mix(prev_px, this_px, intensity)
+    /*Мы будем использовать фильтр нижних частот IIR во всех 4 направлениях: сверху вниз, снизу вверх, слева направо, справа налево.
+     *Аппроксимируйте коэффициент фильтра по радиусу.
+     *Фильтр выглядит так: this_px = mix( prev_px , this_px , интенсивность)
      */
     uint32_t intensity = (BLUR_INTENSITY_MAX * blur_radius) / (blur_radius + 4);
 
@@ -119,14 +119,14 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
     int32_t y;
     int32_t x;
 
-    /*Blur each column top to bottom and bottom to top.*/
+    /*Размытие каждого столбца сверху вниз и снизу вверх.*/
     for(x = clipped_coords.x1; x <= clipped_coords.x2; x += skip_cnt) {
         int32_t cir_y = get_rounded_edge_point(coords->x1, coords->x2, layer_x_ofs + x, radius);
         int32_t y_start = LV_CLAMP(clipped_coords.y1, coords->y1 - layer_y_ofs + cir_y, clipped_coords.y2);
         int32_t y_end = LV_CLAMP(clipped_coords.y1, coords->y2  - layer_y_ofs - cir_y, clipped_coords.y2);
 
-        /*Make sure that the width and height is a multiple of skip_cnt so that back and forth blurring
-         *surely affects the same pixels */
+        /*Убедитесь, что ширина и высота кратны skip_cnt, чтобы обеспечить размытие вперед и назад.
+         *наверняка влияет на те же пиксели */
         y_start = (y_start / skip_cnt) * skip_cnt;
         y_end = (y_end / skip_cnt) * skip_cnt;
         if(y_start > y_end) continue;
@@ -134,11 +134,11 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         uint32_t sample_len_limited = LV_MIN((y_end - y_start) / skip_cnt + 1, sample_len);
 
         if(px_size == 1) {
-            /*Compiler optimization might mishandle it, so add volatile*/
+            /*Оптимизация компилятора может с этим не справится, поэтому добавьте изменчивые*/
             uint8_t * buf_column_start = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x, y_start);
             blur_1_bytes_init(sum, buf_column_start, sample_len_limited, stride_byte * skip_cnt);
 
-            uint8_t buf_prev = buf_column_start[0] + 1; /*Make sure that it's not equal in the first round*/
+            uint8_t buf_prev = buf_column_start[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
             for(y = y_start; y <= y_end; y += skip_cnt) {
                 if(buf_prev != *buf_column_start) {
                     *buf_column_start = blur_1_bytes(sum, *buf_column_start, intensity);
@@ -149,7 +149,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
             uint8_t * buf_column_end = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x, y_end);
             blur_1_bytes_init(sum, buf_column_end, sample_len_limited, -stride_byte * skip_cnt);
-            buf_prev = buf_column_end[0] + 1; /*Make sure that it's not equal in the first round*/
+            buf_prev = buf_column_end[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
             for(y = y_start; y <= y_end; y += skip_cnt) {
                 if(buf_prev != *buf_column_end) {
                     *buf_column_end = blur_1_bytes(sum, *buf_column_end, intensity);
@@ -161,7 +161,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         else if(px_size == 2) {
             uint16_t * buf16_column_start = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x, y_start);
             blur_2_bytes_init(sum, (lv_color16_t *)buf16_column_start, sample_len_limited, stride_px * skip_cnt, swapped);
-            uint16_t buf16_prev = buf16_column_start[0] + 1; /*Make sure that it's not equal in the first round*/
+            uint16_t buf16_prev = buf16_column_start[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
 
             for(y = y_start; y <= y_end; y += skip_cnt) {
                 if(buf16_prev != *buf16_column_start) {
@@ -173,7 +173,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
             uint16_t * buf16_column_end = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x, y_end);
             blur_2_bytes_init(sum, (lv_color16_t *)buf16_column_end, sample_len_limited, -stride_px * skip_cnt, swapped);
-            buf16_prev = buf16_column_end[0] + 1; /*Make sure that it's not equal in the first round*/
+            buf16_prev = buf16_column_end[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
 
             for(y = y_start; y <= y_end; y += skip_cnt) {
                 if(buf16_prev != *buf16_column_end) {
@@ -184,7 +184,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
             }
         }
         else if(px_size >= 3) {
-            /*Compiler optimization might mishandle it, so add volatile*/
+            /*Оптимизация компилятора может с этим не справится, поэтому добавьте изменчивые*/
             volatile uint8_t * buf_column_start = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x, y_start);
             blur_3_bytes_init(sum, buf_column_start, sample_len_limited, stride_byte * skip_cnt);
 
@@ -202,15 +202,15 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         }
     }
 
-    /*Blur each line from left to right and right to left.
-     *Also fill the gap in each line because of skipped pixels*/
+    /*Размытие каждой линии слева направо и справа налево.
+     *Также заполните пробелы в каждой строке из-за пропущенных пикселей.*/
     for(y = clipped_coords.y1; y <= clipped_coords.y2; y += skip_cnt) {
         int32_t cir_x = get_rounded_edge_point(coords->y1, coords->y2, layer_y_ofs + y, radius);
         int32_t x_start = LV_CLAMP(clipped_coords.x1, coords->x1  - layer_x_ofs + cir_x, clipped_coords.x2);
         int32_t x_end = LV_CLAMP(clipped_coords.x1, coords->x2  - layer_x_ofs - cir_x, clipped_coords.x2);
 
-        /*Make sure that the width and height is a multiple of skip_cnt so that back and forth blurring
-         *surely affects the same pixels */
+        /*Убедитесь, что ширина и высота кратны skip_cnt, чтобы обеспечить размытие вперед и назад.
+         *наверняка влияет на те же пиксели */
         x_start = (x_start / skip_cnt) * skip_cnt;
         x_end = (x_end / skip_cnt) * skip_cnt;
 
@@ -220,12 +220,12 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
 
         if(px_size == 1) {
-            /*Compiler optimization might mishandle it, so add volatile*/
+            /*Оптимизация компилятора может с этим не справится, поэтому добавьте изменчивые*/
             uint8_t * buf_line_start = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_start, y);
 
             blur_1_bytes_init(sum, buf_line_start, sample_len_limited, px_size * skip_cnt);
 
-            uint8_t buf_prev = buf_line_start[0] + 1; /*Make sure that it's not equal in the first round*/
+            uint8_t buf_prev = buf_line_start[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
             for(x = x_start + skip_cnt; x <= x_end; x += skip_cnt) {
                 if(buf_prev != *buf_line_start) {
                     *buf_line_start = blur_1_bytes(sum, *buf_line_start, intensity);
@@ -236,7 +236,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
             uint8_t * buf_line_end = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_end, y);
             blur_1_bytes_init(sum, buf_line_end, sample_len_limited, -(int32_t)px_size * skip_cnt);
-            buf_prev = buf_line_end[0] + 1; /*Make sure that it's not equal in the first round*/
+            buf_prev = buf_line_end[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
 
             for(x = x_start; x <= x_end; x += skip_cnt) {
                 if(buf_prev != *buf_line_end) {
@@ -244,7 +244,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
                     buf_prev = *buf_line_end;
                 }
 
-                /*This is the final pixel, fill the gaps in the line by just repeating the pixel (simple upscale)*/
+                /*Это последний пиксель. Заполните пробелы в строке, просто повторив пиксель (простое увеличение масштаба).*/
                 if(skip_cnt == 2) {
                     buf_line_end[1] = buf_line_end[0];
                 }
@@ -253,7 +253,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
                     buf_line_end[2] = buf_line_end[0];
                 }
 
-                /*Fill the empty lines by duplicating a the finished filled lines to the gaps*/
+                /*Заполните пустые строки, дублируя готовые заполненные строки на пробелы.*/
                 if(skip_cnt > 1 && x + skip_cnt > x_end) {
                     uint8_t * buf_copy_from = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_start, y);
                     lv_memcpy(buf_copy_from + stride_byte, buf_copy_from, line_len_byte);
@@ -270,7 +270,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
             uint16_t * buf16_line_start = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_start, y);
             blur_2_bytes_init(sum, (lv_color16_t *)buf16_line_start, sample_len_limited,  skip_cnt, swapped);
 
-            uint16_t buf16_prev = buf16_line_start[0] + 1; /*Make sure that it's not equal in the first round*/
+            uint16_t buf16_prev = buf16_line_start[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
             for(x = x_start; x <= x_end; x += skip_cnt) {
 
                 if(buf16_prev != *buf16_line_start) {
@@ -282,7 +282,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
             uint16_t * buf16_line_end = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_end, y);
             blur_2_bytes_init(sum, (lv_color16_t *)buf16_line_end, sample_len_limited, - skip_cnt, swapped);
-            buf16_prev = buf16_line_end[0] + 1; /*Make sure that it's not equal in the first round*/
+            buf16_prev = buf16_line_end[0] + 1; /*Убедитесь, что в первом раунде они не равны.*/
 
             for(x = x_start; x <= x_end; x += skip_cnt) {
                 if(buf16_prev != *buf16_line_end) {
@@ -290,18 +290,18 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
                     buf16_prev = *buf16_line_end;
                 }
 
-                /*This is the final pixel, fill the gaps in the line by just repeating the pixel (simple upscale)*/
+                /*Это последний пиксель. Заполните пробелы в строке, просто повторив пиксель (простое увеличение масштаба).*/
                 if(skip_cnt == 2) {
-                    /*Fill the empty lines by duplicating a the finished filled lines to the gaps*/
+                    /*Заполните пустые строки, дублируя готовые заполненные строки на пробелы.*/
                     buf16_line_end[1] = buf16_line_end[0];
                 }
                 else if(skip_cnt == 3) {
-                    /*Fill the empty lines by duplicating a the finished filled lines to the gaps*/
+                    /*Заполните пустые строки, дублируя готовые заполненные строки на пробелы.*/
                     buf16_line_end[1] = buf16_line_end[0];
                     buf16_line_end[2] = buf16_line_end[0];
                 }
 
-                /*Fill the empty lines by duplicating a the finished filled lines to the gaps*/
+                /*Заполните пустые строки, дублируя готовые заполненные строки на пробелы.*/
                 if(skip_cnt > 1 && x + skip_cnt > x_end) {
                     uint8_t * buf_copy_from = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_start, y);
                     lv_memcpy(buf_copy_from + stride_byte, buf_copy_from, line_len_byte);
@@ -314,7 +314,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
             }
         }
         else if(px_size >= 3) {
-            /*Compiler optimization might mishandle it, so add volatile*/
+            /*Оптимизация компилятора может с этим не справится, поэтому добавьте изменчивые*/
             volatile uint8_t * buf_line_start = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_start, y);
 
             blur_3_bytes_init(sum, buf_line_start, sample_len_limited, px_size * skip_cnt);
@@ -329,7 +329,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
             for(x = x_start; x <= x_end; x += skip_cnt) {
                 blur_3_bytes(sum, buf_line_end, intensity);
 
-                /*This is the final pixel, fill the gaps in the line by just repeating the pixel (simple upscale)*/
+                /*Это последний пиксель. Заполните пробелы в строке, просто повторив пиксель (простое увеличение масштаба).*/
                 if(skip_cnt == 2) {
                     buf_line_end[px_size + 0] = buf_line_end[0];
                     buf_line_end[px_size + 1] = buf_line_end[1];
@@ -344,7 +344,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
                     buf_line_end[px_size * 2 + 2] = buf_line_end[2];
                 }
 
-                /*Fill the empty lines by duplicating a the finished filled lines to the gaps*/
+                /*Заполните пустые строки, дублируя готовые заполненные строки на пробелы.*/
                 if(skip_cnt > 1 && x + skip_cnt > x_end) {
                     uint8_t * buf_copy_from = lv_draw_buf_goto_xy(t->target_layer->draw_buf, x_start, y);
                     lv_memcpy(buf_copy_from + stride_byte, buf_copy_from, line_len_byte);
@@ -437,7 +437,7 @@ static inline uint16_t blur_2_bytes(uint32_t * sum, uint16_t px, uint32_t intens
 
     if(swapped) px = (px >> 8) | (px << 8);
 
-    /* unpack */
+    /* распаковать */
     uint32_t r =  px >> 11;
     uint32_t g = (px >> 5) & 0x3F;
     uint32_t b =  px        & 0x1F;
@@ -446,7 +446,7 @@ static inline uint16_t blur_2_bytes(uint32_t * sum, uint16_t px, uint32_t intens
     uint32_t s1 = sum[1];
     uint32_t s2 = sum[2];
 
-    /* fused multiply-accumulate pattern */
+    /* объединенная схема умножения-накопления */
     s0 = (s0 * intensity >> shift) + (r * inv);
     s1 = (s1 * intensity >> shift) + (g * inv);
     s2 = (s2 * intensity >> shift) + (b * inv);
@@ -455,7 +455,7 @@ static inline uint16_t blur_2_bytes(uint32_t * sum, uint16_t px, uint32_t intens
     sum[1] = s1;
     sum[2] = s2;
 
-    /* final */
+    /* финальный */
     r = (s0 + half) >> shift;
     g = (s1 + half) >> shift;
     b = (s2 + half) >> shift;
@@ -482,9 +482,9 @@ static inline void blur_3_bytes(uint32_t * sum, volatile uint8_t * buf, uint32_t
 }
 
 /**
- * Get the X or Y point for a rounded edge.
- * If the X coordinates are used Y will be returned and vice versa
- * Calculates the left or top edge
+ * Получите точку X или Y для закругленного края.
+ * Если используются координаты X, будет возвращен Y, и наоборот.
+ * Вычисляет левый или верхний край
  * @param p_start   the edge's X1 or Y1 coordinate
  * @param p_end     the edge's X2 or Y2 coordinate
  * @param p         the X or Y coordinate on the edge for which the related X or X should be returned

@@ -37,14 +37,14 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/* Map item definition. */
+/* Определение элемента карты. */
 typedef struct lv_map_item {
-    /* Virtual address buffer. */
+    /* Буфер виртуального адреса. */
     void * key;
     struct g2d_buf * value;
 } lv_map_item_t;
 
-/*Buf map definition. */
+/*Определение карты Буфа. */
 typedef struct lv_buf_map {
     lv_map_item_t ** items;
     lv_array_t ** overflow_list;
@@ -77,7 +77,7 @@ void g2d_print_table(void);
 #endif /*LV_USE_G2D*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_G2D_BUF_MAP_H */

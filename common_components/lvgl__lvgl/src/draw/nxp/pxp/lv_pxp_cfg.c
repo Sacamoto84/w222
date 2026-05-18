@@ -51,8 +51,8 @@ void lv_pxp_init(void)
 
     PXP_Init(PXP_ID);
 
-    PXP_EnableCsc1(PXP_ID, false); /*Disable CSC1, it is enabled by default.*/
-    PXP_SetProcessBlockSize(PXP_ID, kPXP_BlockSize16); /*Block size 16x16 for higher performance*/
+    PXP_EnableCsc1(PXP_ID, false); /*Отключите CSC1, он включен по умолчанию.*/
+    PXP_SetProcessBlockSize(PXP_ID, kPXP_BlockSize16); /*Размер блока 16x16 для более высокой производительности*/
 
     PXP_EnableInterrupts(PXP_ID, kPXP_CompleteInterruptEnable);
 
@@ -70,8 +70,8 @@ void lv_pxp_reset(void)
 {
     PXP_ResetControl(PXP_ID);
 
-    PXP_EnableCsc1(PXP_ID, false); /*Disable CSC1, it is enabled by default.*/
-    PXP_SetProcessBlockSize(PXP_ID, kPXP_BlockSize16); /*Block size 16x16 for higher performance*/
+    PXP_EnableCsc1(PXP_ID, false); /*Отключите CSC1, он включен по умолчанию.*/
+    PXP_SetProcessBlockSize(PXP_ID, kPXP_BlockSize16); /*Размер блока 16x16 для более высокой производительности*/
 }
 
 void lv_pxp_run(void)

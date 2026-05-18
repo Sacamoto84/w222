@@ -121,9 +121,9 @@ static inline void * /* LV_ATTRIBUTE_FAST_MEM */ drawbuf_next_row(const void * b
 /**
  * @brief Blend a solid color into an ARGB8888 premultiplied buffer.
  *
- * This function applies a solid color to the destination buffer with optional
- * opacity and masking. The input color is first converted to a premultiplied
- * alpha format before blending.
+ * Эта функция применяет сплошной цвет к буферу назначения с дополнительным
+ * непрозрачность и маскировка. Входной цвет сначала преобразуется в предварительно умноженный
+ * альфа-формат перед смешиванием.
  *
  * @param dsc Blending descriptor containing destination buffer, color, and opacity
  */
@@ -142,7 +142,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
     int32_t x;
     int32_t y;
 
-    /* Convert source color to premultiplied */
+    /* Преобразование исходного цвета в предварительно умноженный */
     if(opa >= LV_OPA_MAX) opa = 0xff;
     lv_color32_t color_argb = lv_color_to_32(dsc->color, opa);
     lv_color32_t color_argb_premul;
@@ -156,7 +156,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
         color_argb_premul.blue  = (color_argb.blue  * opa) >> 8;
     }
 
-    /* Simple fill */
+    /* Простая заливка */
     if(mask == NULL && opa >= LV_OPA_MAX) {
         uint32_t color32 = lv_color_to_u32(dsc->color);
         uint32_t * dest_buf = dsc->dest_buf;
@@ -168,7 +168,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
             dest_buf = drawbuf_next_row(dest_buf, dest_stride);
         }
     }
-    /* Opacity only */
+    /* Только непрозрачность */
     else if(mask == NULL && opa < LV_OPA_MAX) {
         lv_color32_t * dest_buf = dsc->dest_buf;
         for(y = 0; y < h; y++) {
@@ -178,7 +178,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
             dest_buf = drawbuf_next_row(dest_buf, dest_stride);
         }
     }
-    /* Masked fill */
+    /* Маскированная заливка */
     else if(mask && opa >= LV_OPA_MAX) {
         lv_color32_t * dest_buf = dsc->dest_buf;
         for(y = 0; y < h; y++) {
@@ -199,7 +199,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
             mask += mask_stride;
         }
     }
-    /* Masked with opacity */
+    /* Маскировано с непрозрачностью */
     else {
         lv_color32_t * dest_buf = dsc->dest_buf;
         for(y = 0; y < h; y++) {
@@ -226,8 +226,8 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
 /**
  * @brief Blend an image into an ARGB8888 premultiplied buffer.
  *
- * This function blends an image stored in ARGB8888 premultiplied format
- * into the destination buffer. It accounts for opacity and optional masking.
+ * Эта функция смешивает изображение, хранящееся в предварительно умноженном формате ARGB8888.
+ * в буфер назначения. Он учитывает непрозрачность и дополнительную маскировку.
  *
  * @param dsc Blending descriptor containing source and destination buffer information
  */
@@ -298,8 +298,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                             dest_buf_c32[x] = color_argb;
                         }
                         else if(color_argb.alpha > LV_OPA_MIN) {
-                            /*Premultiplication can cause loss of precision which can result slightly
-                             *darker color when blending the same color to the background.*/
+                            /*Предварительное умножение может привести к потере точности, что может привести к незначительному
+                             *более темный цвет при смешивании того же цвета с фоном.*/
                             if(dest_buf_c32[x].red != color_argb.red ||
                                dest_buf_c32[x].green != color_argb.green ||
                                dest_buf_c32[x].blue != color_argb.blue ||
@@ -323,7 +323,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                     for(x = 0; x < w; x++) {
                         color_argb = src_buf_c32[x];
 
-                        /* Apply global opacity */
+                        /* Применить глобальную непрозрачность */
                         lv_opa_t alpha = LV_OPA_MIX2(color_argb.alpha, opa);
 
                         if(alpha >= LV_OPA_MAX) {
@@ -331,8 +331,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                             dest_buf_c32[x] = color_argb;
                         }
                         else if(alpha > LV_OPA_MIN) {
-                            /*Premultiplication can cause loss of precision which can result slightly
-                             *darker color when blending the same color to the background.*/
+                            /*Предварительное умножение может привести к потере точности, что может привести к незначительному
+                             *более темный цвет при смешивании того же цвета с фоном.*/
                             if(dest_buf_c32[x].red != color_argb.red ||
                                dest_buf_c32[x].green != color_argb.green ||
                                dest_buf_c32[x].blue != color_argb.blue ||
@@ -356,7 +356,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                     for(x = 0; x < w; x++) {
                         color_argb = src_buf_c32[x];
 
-                        /* Apply mask opacity */
+                        /* Применить непрозрачность маски */
                         lv_opa_t alpha = LV_OPA_MIX2(color_argb.alpha, mask_buf[x]);
 
                         if(alpha >= LV_OPA_MAX) {
@@ -364,8 +364,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                             dest_buf_c32[x] = color_argb;
                         }
                         else if(alpha > LV_OPA_MIN) {
-                            /*Premultiplication can cause loss of precision which can result slightly
-                             *darker color when blending the same color to the background.*/
+                            /*Предварительное умножение может привести к потере точности, что может привести к незначительному
+                             *более темный цвет при смешивании того же цвета с фоном.*/
                             if(dest_buf_c32[x].red != color_argb.red ||
                                dest_buf_c32[x].green != color_argb.green ||
                                dest_buf_c32[x].blue != color_argb.blue ||
@@ -390,7 +390,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                     for(x = 0; x < w; x++) {
                         color_argb = src_buf_c32[x];
 
-                        /* Apply both mask and global opacity */
+                        /* Примените маску и глобальную непрозрачность */
                         lv_opa_t alpha = LV_OPA_MIX3(color_argb.alpha, opa, mask_buf[x]);
 
                         if(alpha >= LV_OPA_MAX) {
@@ -398,8 +398,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
                             dest_buf_c32[x] = color_argb;
                         }
                         else if(alpha > LV_OPA_MIN) {
-                            /*Premultiplication can cause loss of precision which can result slightly
-                             *darker color when blending the same color to the background.*/
+                            /*Предварительное умножение может привести к потере точности, что может привести к незначительному
+                             *более темный цвет при смешивании того же цвета с фоном.*/
                             if(dest_buf_c32[x].red != color_argb.red ||
                                dest_buf_c32[x].green != color_argb.green ||
                                dest_buf_c32[x].blue != color_argb.blue ||
@@ -424,13 +424,13 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
             for(x = 0; x < w; x++) {
                 color_argb = src_buf_c32[x];
 
-                /* Apply mask and/or opacity */
+                /* Примените маску и/или непрозрачность */
                 if(mask_buf == NULL)
                     color_argb.alpha = LV_OPA_MIX2(color_argb.alpha, opa);
                 else
                     color_argb.alpha = LV_OPA_MIX3(color_argb.alpha, mask_buf[x], opa);
 
-                /* Premultiply alpha */
+                /* Предварительно умножить альфа */
                 color_argb.red   = (color_argb.red   * color_argb.alpha) >> 8;
                 color_argb.green = (color_argb.green * color_argb.alpha) >> 8;
                 color_argb.blue  = (color_argb.blue  * color_argb.alpha) >> 8;
@@ -472,7 +472,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb888_image_blend(lv_draw_sw_blend_image_dsc_
     LV_UNUSED(color_argb);
 
     if(dsc->blend_mode == LV_BLEND_MODE_NORMAL) {
-        /*Special case*/
+        /*Особый случай*/
         if(mask_buf == NULL && opa >= LV_OPA_MAX) {
             if(LV_RESULT_INVALID == LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_ARGB8888_PREMULTIPLIED(dsc, src_px_size)) {
                 if(src_px_size == 4) {
@@ -604,7 +604,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                     for(x = 0; x < w; x++) {
                         color_argb = src_buf_c32[x];
 
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
                             color_argb.red = (color_argb.red * reciprocal_alpha) >> 8;
@@ -612,10 +612,10 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                             color_argb.blue = (color_argb.blue * reciprocal_alpha) >> 8;
                         }
 
-                        /* Apply global opacity */
+                        /* Применить глобальную непрозрачность */
                         color_argb.alpha = LV_OPA_MIX2(color_argb.alpha, opa);
 
-                        /* Premultiply alpha */
+                        /* Предварительно умножить альфа */
                         color_argb.red   = (color_argb.red   * color_argb.alpha) >> 8;
                         color_argb.green = (color_argb.green * color_argb.alpha) >> 8;
                         color_argb.blue  = (color_argb.blue  * color_argb.alpha) >> 8;
@@ -633,17 +633,17 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                     for(x = 0; x < w; x++) {
                         color_argb = src_buf_c32[x];
 
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
                             color_argb.red = (color_argb.red * reciprocal_alpha) >> 8;
                             color_argb.green = (color_argb.green * reciprocal_alpha) >> 8;
                             color_argb.blue = (color_argb.blue * reciprocal_alpha) >> 8;
                         }
-                        /* Adjust alpha using mask */
+                        /* Отрегулируйте альфу с помощью маски */
                         color_argb.alpha = LV_OPA_MIX2(color_argb.alpha, mask_buf[x]);
 
-                        /* Premultiply alpha */
+                        /* Предварительно умножить альфа */
                         color_argb.red   = (color_argb.red   * color_argb.alpha) >> 8;
                         color_argb.green = (color_argb.green * color_argb.alpha) >> 8;
                         color_argb.blue  = (color_argb.blue  * color_argb.alpha) >> 8;
@@ -662,7 +662,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                     for(x = 0; x < w; x++) {
                         color_argb = src_buf_c32[x];
 
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
                             color_argb.red = (color_argb.red * reciprocal_alpha) >> 8;
@@ -670,10 +670,10 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                             color_argb.blue = (color_argb.blue * reciprocal_alpha) >> 8;
                         }
 
-                        /* Adjust alpha using both mask and opacity */
+                        /* Отрегулируйте альфу, используя маску и непрозрачность. */
                         color_argb.alpha = LV_OPA_MIX3(color_argb.alpha, opa, mask_buf[x]);
 
-                        /* Premultiply alpha */
+                        /* Предварительно умножить альфа */
                         color_argb.red   = (color_argb.red   * color_argb.alpha) >> 8;
                         color_argb.green = (color_argb.green * color_argb.alpha) >> 8;
                         color_argb.blue  = (color_argb.blue  * color_argb.alpha) >> 8;
@@ -692,7 +692,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
             for(x = 0; x < w; x++) {
                 color_argb = src_buf_c32[x];
 
-                /* Unpremultiply the source color by using the reciprocal of the alpha */
+                /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                 if(color_argb.alpha != 0) {
                     uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
                     color_argb.red = (color_argb.red * reciprocal_alpha) >> 8;
@@ -700,13 +700,13 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                     color_argb.blue = (color_argb.blue * reciprocal_alpha) >> 8;
                 }
 
-                /* Adjust alpha if needed */
+                /* При необходимости отрегулируйте альфу */
                 if(mask_buf == NULL)
                     color_argb.alpha = LV_OPA_MIX2(color_argb.alpha, opa);
                 else
                     color_argb.alpha = LV_OPA_MIX3(color_argb.alpha, mask_buf[x], opa);
 
-                /* Premultiply alpha */
+                /* Предварительно умножить альфа */
                 color_argb.red   = (color_argb.red   * color_argb.alpha) >> 8;
                 color_argb.green = (color_argb.green * color_argb.alpha) >> 8;
                 color_argb.blue  = (color_argb.blue  * color_argb.alpha) >> 8;
@@ -723,8 +723,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
 /**
  * @brief Mix two ARGB8888 premultiplied colors.
  *
- * This function blends the foreground (`fg`) and background (`bg`) colors.
- * The foreground color is assumed to be premultiplied.
+ * Эта функция смешивает цвета переднего плана ( `fg` ) и фона ( `bg` ).
+ * Предполагается, что цвет переднего плана предварительно умножается.
  *
  * @param fg Foreground color (premultiplied alpha)
  * @param bg Background color
@@ -734,35 +734,35 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
 static inline lv_color32_t lv_color_32_32_mix_premul(lv_color32_t fg, lv_color32_t bg,
                                                      lv_color_mix_alpha_cache_t * cache)
 {
-    /*Pick the foreground if it's fully opaque or the background is fully transparent*/
+    /*Выберите передний план, если он полностью непрозрачен или фон полностью прозрачен.*/
     if(fg.alpha >= LV_OPA_MAX || bg.alpha <= LV_OPA_MIN) {
         return fg;
     }
-    /* Transparent foreground: use the background */
+    /* Прозрачный передний план: используйте фон */
     else if(fg.alpha <= LV_OPA_MIN) {
         return bg;
     }
-    /* Opaque background: use simple mix */
+    /* Непрозрачный фон: используйте простой микс */
     else if(bg.alpha == 255) {
         return lv_color_mix32_premultiplied(fg, bg);
     }
     else {
-        /* Check cache to avoid redundant calculations */
+        /* Проверьте кеш, чтобы избежать лишних вычислений */
         if(bg.alpha != cache->bg_saved.alpha || fg.alpha != cache->fg_saved.alpha) {
-            /* Compute final alpha value */
+            /* Вычислить окончательное значение альфа */
             cache->res_alpha_saved = 255 - LV_OPA_MIX2(255 - fg.alpha, 255 - bg.alpha);
             LV_ASSERT(cache->res_alpha_saved != 0);
 
-            /* Compute premultiplied blending ratio */
+            /* Вычислить предварительно умноженный коэффициент смешивания */
             cache->ratio_saved = (uint32_t)((uint32_t)fg.alpha * 255) / cache->res_alpha_saved;
         }
 
-        /* Check if color blending is already cached */
+        /* Проверьте, кэшировано ли уже смешивание цветов */
         if(!lv_color32_eq(bg, cache->bg_saved) || !lv_color32_eq(fg, cache->fg_saved)) {
             cache->fg_saved = fg;
             cache->bg_saved = bg;
 
-            /* Blend using premultiplied alpha */
+            /* Смешение с использованием предварительно умноженной альфа */
             uint32_t inv_fg_alpha = 255 - fg.alpha;
             cache->res_saved.red   = fg.red   + ((bg.red   * inv_fg_alpha) >> 8);
             cache->res_saved.green = fg.green + ((bg.green * inv_fg_alpha) >> 8);
@@ -794,26 +794,26 @@ static inline void LV_ATTRIBUTE_FAST_MEM blend_non_normal_pixel_premultiplied(
     lv_color32_t * dest, lv_color32_t src, lv_blend_mode_t mode, lv_color_mix_alpha_cache_t * cache)
 {
     lv_color32_t res;
-    uint8_t src_alpha = src.alpha;  /* Premultiplied alpha of source */
+    uint8_t src_alpha = src.alpha;  /* Предварительно умноженная альфа источника */
     uint8_t dest_alpha = dest->alpha;
 
     switch(mode) {
         case LV_BLEND_MODE_ADDITIVE:
-            /* Ensure RGB remains premultiplied */
+            /* Убедитесь, что RGB остается предварительно умноженным */
             res.red   = LV_MIN(dest->red + src.red, dest_alpha);
             res.green = LV_MIN(dest->green + src.green, dest_alpha);
             res.blue  = LV_MIN(dest->blue + src.blue, dest_alpha);
             break;
 
         case LV_BLEND_MODE_SUBTRACTIVE:
-            /* Ensure RGB remains non-negative and premultiplied */
+            /* Убедитесь, что RGB остается неотрицательным и имеет предварительное умножение. */
             res.red   = LV_MAX(dest->red - src.red, 0);
             res.green = LV_MAX(dest->green - src.green, 0);
             res.blue  = LV_MAX(dest->blue - src.blue, 0);
             break;
 
         case LV_BLEND_MODE_MULTIPLY:
-            /* Adjusted for premultiplied alpha: scale the result properly */
+            /* Скорректировано для предварительно умноженной альфа: правильно масштабируйте результат */
             res.red   = ((dest->red * src.red) / LV_MAX(src_alpha, 1));
             res.green = ((dest->green * src.green) / LV_MAX(src_alpha, 1));
             res.blue  = ((dest->blue * src.blue) / LV_MAX(src_alpha, 1));
@@ -830,7 +830,7 @@ static inline void LV_ATTRIBUTE_FAST_MEM blend_non_normal_pixel_premultiplied(
             return;
     }
 
-    res.alpha = src_alpha;  /* Keep the alpha from premultiplied source */
+    res.alpha = src_alpha;  /* Держите альфу из предварительно умноженного источника */
     *dest = lv_color_32_32_mix_premul(res, *dest, cache);
 }
 

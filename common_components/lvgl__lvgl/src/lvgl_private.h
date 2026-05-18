@@ -1,6 +1,6 @@
 /**
  * @file lvgl_private.h
- * This file exists only to be compatible with Arduino's library structure
+ * Этот файл существует только для совместимости со структурной библиотекой Arduino.
  */
 
 #ifndef LVGL_PRIVATE_SRC_H
@@ -32,7 +32,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LVGL_PRIVATE_SRC_H */

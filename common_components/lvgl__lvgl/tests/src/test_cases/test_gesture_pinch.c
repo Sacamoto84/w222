@@ -4,12 +4,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -27,7 +27,7 @@ static void gesture_event_cb(lv_event_t * e)
 
 void test_gesture_pinch(void)
 {
-    /*Setup button that counts events.*/
+    /*Кнопка настройки, которая подсчитывает события.*/
 
     click_counts_t counts;
     lv_memzero(&counts, sizeof(counts));
@@ -37,7 +37,7 @@ void test_gesture_pinch(void)
     lv_obj_set_size(label, 320, 320);
     lv_obj_add_event_cb(label, gesture_event_cb, LV_EVENT_GESTURE, &counts);
 
-    /*Simple multi-touch.*/
+    /*Простой мультитач.*/
 
     lv_point_t point_begin_0 = {120, 200};
     lv_point_t point_begin_1 = {200, 120};

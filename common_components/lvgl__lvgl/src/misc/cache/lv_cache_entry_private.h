@@ -28,8 +28,8 @@ struct _lv_cache_entry_t {
     const lv_cache_t * cache;
     int32_t ref_cnt;
     uint32_t node_size;
-#define LV_CACHE_ENTRY_FLAG_INVALID (1 << 0) /** Flag indicating if the entry is invalid and can be released */
-#define LV_CACHE_ENTRY_FLAG_DISABLE_DELETE (1 << 1) /** This flag should be set if the cache class is managing the memory of the entry itself*/
+#define LV_CACHE_ENTRY_FLAG_INVALID (1 << 0) /** Флаг, указывающий, является ли запись недействительной и ее можно удалить. */
+#define LV_CACHE_ENTRY_FLAG_DISABLE_DELETE (1 << 1) /** Этот флаг должен быть установлен, если класс кэша управляет памятью самой записи.*/
 #define LV_CACHE_ENTRY_FLAG_CLASS_CUSTOM (1 << 7) /**A custom flag that can be used by the different cache classes*/
     uint8_t flags;
 };
@@ -56,7 +56,7 @@ bool   lv_cache_entry_has_flag(lv_cache_entry_t * entry, uint8_t flags);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_CACHE_ENTRY_PRIVATE_H */

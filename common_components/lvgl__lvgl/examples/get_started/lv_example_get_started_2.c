@@ -9,24 +9,24 @@ static void btn_event_cb(lv_event_t * e)
         static uint8_t cnt = 0;
         cnt++;
 
-        /*Get the first child of the button which is the label and change its text*/
+        /*Получите первый дочерний элемент кнопки, которая является меткой, и измените ее текст.*/
         lv_obj_t * label = lv_obj_get_child(btn, 0);
         lv_label_set_text_fmt(label, "Button: %d", cnt);
     }
 }
 
 /**
- * Create a button with a label and react on click event.
+ * Создайте кнопку с меткой и реагируйте на событие нажатия.
  */
 void lv_example_get_started_2(void)
 {
-    lv_obj_t * btn = lv_button_create(lv_screen_active());     /*Add a button the current screen*/
-    lv_obj_set_pos(btn, 10, 10);                            /*Set its position*/
-    lv_obj_set_size(btn, 120, 50);                          /*Set its size*/
-    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_ALL, NULL);           /*Assign a callback to the button*/
+    lv_obj_t * btn = lv_button_create(lv_screen_active());     /*Добавить кнопку на текущий экран*/
+    lv_obj_set_pos(btn, 10, 10);                            /*Установите его положение*/
+    lv_obj_set_size(btn, 120, 50);                          /*Установите его размер*/
+    lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_ALL, NULL);           /*Назначьте обратный вызов кнопке*/
 
-    lv_obj_t * label = lv_label_create(btn);          /*Add a label to the button*/
-    lv_label_set_text(label, "Button");                     /*Set the labels text*/
+    lv_obj_t * label = lv_label_create(btn);          /*Добавьте метку к кнопке*/
+    lv_label_set_text(label, "Button");                     /*Установите текст меток*/
     lv_obj_center(label);
 }
 

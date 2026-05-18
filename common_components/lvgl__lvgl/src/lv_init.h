@@ -29,18 +29,18 @@ extern "C" {
  **********************/
 
 /**
- * Initialize LVGL library.
- * Should be called before any other LVGL related function.
+ * Инициализируйте библиотеку LVGL.
+ * Должен вызываться перед любой другой функцией, связанной с LVGL.
  */
 void lv_init(void);
 
 /**
- * Deinit the 'lv' library
+ * Деинитизировать библиотеку «lv»
  */
 void lv_deinit(void);
 
 /**
- * Returns whether the 'lv' library is currently initialized
+ * Возвращает, инициализирована ли библиотека «lv» в данный момент.
  */
 bool lv_is_initialized(void);
 
@@ -49,7 +49,7 @@ bool lv_is_initialized(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_INIT_H*/

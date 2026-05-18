@@ -129,14 +129,14 @@ static void rotate270_l8(const uint8_t * src, uint8_t * dst, int32_t src_width, 
 void lv_draw_sw_i1_to_argb8888(const void * buf_i1, void * buf_argb8888, uint32_t width, uint32_t height,
                                uint32_t buf_i1_stride, uint32_t buf_argb8888_stride, uint32_t index0_color, uint32_t index1_color)
 {
-    /*Extract the bits of I1 px_map and convert them to ARGB8888*/
+    /*Извлеките биты I1 px_map и преобразуйте их в ARGB8888.*/
     const uint8_t * src = buf_i1;
     uint32_t * dst = buf_argb8888;
     uint32_t i1_row_byte_count = width / 8;
     for(uint32_t row = 0; row < height; row++) {
         uint32_t * dst_p = dst;
         for(uint32_t i = 0; i < i1_row_byte_count; i++) {
-            /*From MSB to LSB (pixel 0 to pixel 7 in a byte)*/
+            /*От MSB до LSB (от 0 до пикселя 7 в байте)*/
             for(int32_t bit = 7; bit >= 0; bit--) {
                 *dst_p++ = ((src[i] >> bit) & 1) ? index1_color : index0_color;
             }
@@ -152,7 +152,7 @@ void lv_draw_sw_rgb565_swap(void * buf, uint32_t buf_size_px)
 
     uint16_t * buf16 = buf;
 
-    /*2 pixels will be processed later, so handle 1 pixel alignment*/
+    /*2 пикселя будут обработаны позже, поэтому обрабатывайте выравнивание по 1 пикселю.*/
     if((lv_uintptr_t)buf16 & 0x2) {
         buf16[0] = ((buf16[0] & 0xff00) >> 8) | ((buf16[0] & 0x00ff) << 8);
         buf16++;
@@ -181,7 +181,7 @@ void lv_draw_sw_rgb565_swap(void * buf, uint32_t buf_size_px)
         u32_cnt--;
     }
 
-    /*Process the last pixel if needed*/
+    /*При необходимости обработайте последний пиксель*/
     if(buf_size_px & 0x1) {
         uint32_t e = buf_size_px - 1;
         buf16[e] = ((buf16[e] & 0xff00) >> 8) | ((buf16[e] & 0x00ff) << 8);
@@ -196,7 +196,7 @@ void lv_draw_sw_i1_invert(void * buf, uint32_t buf_size)
     uint8_t * byte_buf = (uint8_t *)buf;
     uint32_t i;
 
-    /*Make the buffer aligned*/
+    /*Выровнять буфер*/
     while(((uintptr_t)(byte_buf) & (sizeof(int) - 1)) && buf_size > 0) {
         *byte_buf = ~(*byte_buf);
         byte_buf++;
@@ -426,9 +426,9 @@ static void rotate90_rgb888(const uint8_t * src, uint8_t * dst, int32_t src_widt
         for(int32_t y = 0; y < src_height; ++y) {
             int32_t srcIndex = y * src_stride + x * 3;
             int32_t dstIndex = (src_width - x - 1) * dst_stride + y * 3;
-            dst[dstIndex] = src[srcIndex];       /*Red*/
-            dst[dstIndex + 1] = src[srcIndex + 1]; /*Green*/
-            dst[dstIndex + 2] = src[srcIndex + 2]; /*Blue*/
+            dst[dstIndex] = src[srcIndex];       /*Красный*/
+            dst[dstIndex + 1] = src[srcIndex + 1]; /*Зеленый*/
+            dst[dstIndex + 2] = src[srcIndex + 2]; /*Синий*/
         }
     }
 }
@@ -462,9 +462,9 @@ static void rotate270_rgb888(const uint8_t * src, uint8_t * dst, int32_t width, 
         for(int32_t y = 0; y < height; ++y) {
             int32_t srcIndex = y * src_stride + x * 3;
             int32_t dstIndex = x * dst_stride + (height - y - 1) * 3;
-            dst[dstIndex] = src[srcIndex];       /*Red*/
-            dst[dstIndex + 1] = src[srcIndex + 1]; /*Green*/
-            dst[dstIndex + 2] = src[srcIndex + 2]; /*Blue*/
+            dst[dstIndex] = src[srcIndex];       /*Красный*/
+            dst[dstIndex + 1] = src[srcIndex + 1]; /*Зеленый*/
+            dst[dstIndex + 2] = src[srcIndex + 2]; /*Синий*/
         }
     }
 }

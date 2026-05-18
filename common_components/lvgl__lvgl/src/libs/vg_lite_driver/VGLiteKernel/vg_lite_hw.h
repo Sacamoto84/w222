@@ -1,18 +1,18 @@
 /****************************************************************************
 *
-*    The MIT License (MIT)
+*    Лицензия MIT ( MIT )
 *
 *    Copyright (c) 2014 - 2022 Vivante Corporation
 *
-*    Permission is hereby granted, free of charge, to any person obtaining a
-*    copy of this software and associated documentation files (the "Software"),
-*    to deal in the Software without restriction, including without limitation
-*    the rights to use, copy, modify, merge, publish, distribute, sublicense,
-*    and/or sell copies of the Software, and to permit persons to whom the
-*    Software is furnished to do so, subject to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации («Программное обеспечение»),
+*    иметь дело с Программным обеспечением без ограничений, включая, помимо прочего,
+*    права на использование, копирование, изменение, объединение, публикацию, распространение, сублицензирование,
+*    и/или продавать копии Программного обеспечения, а также разрешать лицам, которым
+*    Для этого предоставляется программное обеспечение при соблюдении следующих условий:
 *
-*    The above copyright notice and this permission notice shall be included in
-*    all copies or substantial portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+*    все копии или существенные части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 *    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,31 +24,31 @@
 *
 *****************************************************************************
 *
-*    The GPL License (GPL)
+*    Лицензия GPL ( GPL )
 *
 *    Copyright (C) 2014 - 2022 Vivante Corporation
 *
-*    This program is free software; you can redistribute it and/or
-*    modify it under the terms of the GNU General Public License
-*    as published by the Free Software Foundation; either version 2
-*    of the License, or (at your option) any later version.
+*    Эта программа является бесплатным программным обеспечением; вы можете распространять его и/или
+*    изменить его в соответствии с условиями Стандартной общественной лицензии GNU.
+*    как опубликовано Фондом свободного программного обеспечения; либо версия 2
+*    Лицензии или (по вашему выбору) любой более поздней версии.
 *
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
+*    Данная программа распространяется в надежде, что она будет полезна,
+*    но WITHOUT ANY WARRANTY ; даже без подразумеваемой гарантии
+*    MERCHANTABILITY или FITNESS FOR A PARTICULAR PURPOSE .  См.
+*    Стандартная общественная лицензия GNU для получения более подробной информации.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program; if not, write to the Free Software Foundation,
-*    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*    Вы должны были получить копию Стандартной общественной лицензии GNU.
+*    вместе с этой программой; если нет, напишите в Фонд свободного программного обеспечения,
+*    Inc., Франклин-стрит, 51, пятый этаж, Бостон, MA 02110-1301, USA.
 *
 *****************************************************************************
 *
 *    Note: This software is released under dual MIT and GPL licenses. A
-*    recipient may use this file under the terms of either the MIT license or
-*    GPL License. If you wish to use only one license not the other, you can
-*    indicate your decision by deleting one of the above license notices in your
-*    version of this file.
+*    получатель может использовать этот файл на условиях лицензии MIT или
+*    Лицензия GPL. Если вы хотите использовать только одну лицензию, а не другую, вы можете
+*    сообщите о своем решении, удалив одно из приведенных выше уведомлений о лицензии в своем
+*    версия этого файла.
 *
 *****************************************************************************/
 

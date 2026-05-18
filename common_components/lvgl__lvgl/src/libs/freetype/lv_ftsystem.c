@@ -22,15 +22,15 @@
  *      DEFINES
  *********************/
 
-/* The macro FT_COMPONENT is used in trace mode.  It is an implicit
- * parameter of the FT_TRACE() and FT_ERROR() macros, used to print/log
- * messages during execution.
+/* Макрос FT_COMPONENT используется в режиме трассировки.  Это неявное
+ * параметр макросов FT_TRACE() и FT_ERROR(), используемый для печати/логирования
+ * сообщения во время выполнения.
  */
 #undef  FT_COMPONENT
 #define FT_COMPONENT  io
 
-/* We use the macro STREAM_FILE for convenience to extract the       */
-/* system-specific stream handle from a given FreeType stream object */
+/* Для удобства используем макрос STREAM_FILE для извлечения       */
+/* специфичный для системы дескриптор потока из данного объекта потока FreeType */
 #define STREAM_FILE( stream )  ( (lv_fs_file_t*)stream->descriptor.pointer )
 
 /**********************
@@ -84,7 +84,7 @@ ft_free(FT_Memory  memory,
 
 #ifndef FT_CONFIG_OPTION_DISABLE_STREAM_SUPPORT
 
-/* documentation is in ftstream.h */
+/* документация находится в ftstream.h */
 
 FT_BASE_DEF(FT_Error)
 FT_Stream_Open(FT_Stream    stream,
@@ -148,7 +148,7 @@ FT_Stream_Open(FT_Stream    stream,
 
 #endif /* !FT_CONFIG_OPTION_DISABLE_STREAM_SUPPORT */
 
-/* documentation is in ftobjs.h */
+/* документация находится в ftobjs.h */
 
 FT_BASE_DEF(FT_Memory)
 FT_New_Memory(void)
@@ -169,7 +169,7 @@ FT_New_Memory(void)
     return memory;
 }
 
-/* documentation is in ftobjs.h */
+/* документация находится в ftobjs.h */
 
 FT_BASE_DEF(void)
 FT_Done_Memory(FT_Memory  memory)
@@ -185,7 +185,7 @@ FT_Done_Memory(FT_Memory  memory)
  **********************/
 
 /**
- * The memory allocation function.
+ * Функция распределения памяти.
  * @param memory A pointer to the memory object.
  * @param size The requested size in bytes.
  * @return The address of newly allocated block.
@@ -200,7 +200,7 @@ ft_alloc(FT_Memory  memory,
 }
 
 /**
- * The memory reallocation function.
+ * Функция перераспределения памяти.
  * @param memory A pointer to the memory object.
  * @param cur_size The current size of the allocated memory block.
  * @param new_size The newly requested size in bytes.
@@ -220,7 +220,7 @@ ft_realloc(FT_Memory  memory,
 }
 
 /**
- * The memory release function.
+ * Функция освобождения памяти.
  * @param memory A pointer to the memory object.
  * @param block The address of block in memory to be freed.
  */
@@ -236,7 +236,7 @@ ft_free(FT_Memory  memory,
 #ifndef FT_CONFIG_OPTION_DISABLE_STREAM_SUPPORT
 
 /**
- * The function to close a stream.
+ * Функция закрытия потока.
  * @param stream A pointer to the stream object.
  */
 FT_CALLBACK_DEF(void)
@@ -252,14 +252,14 @@ ft_lv_fs_stream_close(FT_Stream  stream)
 }
 
 /**
- * The function to open a stream.
+ * Функция открытия потока.
  * @param stream A pointer to the stream object.
  * @param offset The position in the data stream to start reading.
  * @param buffer The address of buffer to store the read data.
  * @param count The number of bytes to read from the stream.
  * @return The number of bytes actually read.  If `count' is zero (this is,
- *         the function is used for seeking), a non-zero return value
- *         indicates an error.
+ *         функция используется для поиска), ненулевое возвращаемое значение
+ *         указывает на ошибку.
  */
 FT_CALLBACK_DEF(unsigned long)
 ft_lv_fs_stream_io(FT_Stream       stream,

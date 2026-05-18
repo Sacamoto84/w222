@@ -47,7 +47,7 @@ struct _lv_button_t {
 #endif /* LV_USE_BUTTON != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BUTTON_PRIVATE_H*/

@@ -50,7 +50,7 @@ void lv_draw_vg_lite_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, co
 
     lv_area_t clip_area;
     if(!lv_area_intersect(&clip_area, coords, &t->clip_area)) {
-        /*Fully clipped, nothing to do*/
+        /*Полностью обрезан, делать нечего.*/
         return;
     }
 
@@ -58,7 +58,7 @@ void lv_draw_vg_lite_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, co
 
     vg_lite_matrix_t matrix = u->global_matrix;
 
-    /* Improve GPU rendering efficiency using simpler fill modes */
+    /* Повысьте эффективность рендеринга GPU, используя более простые режимы заливки. */
     if(dsc->radius == 0 && dsc->opa >= LV_OPA_MAX && dsc->grad.dir == LV_GRAD_DIR_NONE &&
        lv_matrix_is_identity((lv_matrix_t *)&matrix)) {
         lv_vg_lite_clear(&u->target_buffer, &clip_area, lv_vg_lite_color(dsc->color, LV_OPA_COVER, false));
@@ -91,7 +91,7 @@ void lv_draw_vg_lite_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, co
 #endif
     }
     else {
-        /* normal fill */
+        /* нормальная заливка */
         lv_vg_lite_draw(
             &u->target_buffer,
             lv_vg_lite_path_get_path(path),

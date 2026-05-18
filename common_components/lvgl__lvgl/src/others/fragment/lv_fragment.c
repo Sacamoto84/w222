@@ -47,7 +47,7 @@ void lv_fragment_delete(lv_fragment_t * fragment)
     if(fragment->obj) {
         lv_fragment_delete_obj(fragment);
     }
-    /* Objects will leak if this function called before objects deleted */
+    /* Объекты будут протекать, если эта функция будет вызвана до удаления объектов. */
     const lv_fragment_class_t * cls = fragment->cls;
     if(cls->destructor_cb) {
         cls->destructor_cb(fragment);

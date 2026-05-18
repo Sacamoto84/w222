@@ -26,8 +26,8 @@
     #error "Invalid drive letter"
 #endif
 
-/** The reason for 'fd + 1' is because open() may return a legal fd with a value of 0,
-  * preventing it from being judged as NULL when converted to a pointer type.
+/** Причина «fd + 1» заключается в том, что open() может возвращать допустимый fd со значением 0,
+  * предотвращая его оценку как NULL при преобразовании в тип указателя.
   */
 #define FILEP2FD(file_p) ((lv_uintptr_t)file_p - 1)
 #define FD2FILEP(fd) ((void *)(lv_uintptr_t)(fd + 1))
@@ -63,18 +63,18 @@ static lv_fs_res_t fs_errno_to_res(int errno_val);
  **********************/
 
 /**
- * Register a driver for the File system interface
+ * Зарегистрируйте драйвер для интерфейса файловой системы.
  */
 void lv_fs_posix_init(void)
 {
     /*---------------------------------------------------
-     * Register the file system interface in LVGL
+     * Зарегистрируйте интерфейс файловой системы в LVGL.
      *--------------------------------------------------*/
 
     lv_fs_drv_t * fs_drv_p = &(LV_GLOBAL_DEFAULT()->posix_fs_drv);
     lv_fs_drv_init(fs_drv_p);
 
-    /*Set up fields...*/
+    /*Настроить поля...*/
     fs_drv_p->letter = LV_FS_POSIX_LETTER;
     fs_drv_p->cache_size = LV_FS_POSIX_CACHE_SIZE;
 
@@ -97,7 +97,7 @@ void lv_fs_posix_init(void)
  **********************/
 
 /**
- * Open a file
+ * Открыть файл
  * @param drv   pointer to a driver where this function belongs
  * @param path  path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
  * @param mode  read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
@@ -112,7 +112,7 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
     else if(mode == LV_FS_MODE_RD) flags = O_RDONLY;
     else if(mode == (LV_FS_MODE_WR | LV_FS_MODE_RD)) flags = O_RDWR | O_CREAT;
 
-    /*Make the path relative to the current directory (the projects root folder)*/
+    /*Укажите путь относительно текущего каталога (корневой папки проекта)*/
     char buf[LV_FS_MAX_PATH_LEN];
     lv_snprintf(buf, sizeof(buf), LV_FS_POSIX_PATH "%s", path);
 
@@ -126,11 +126,11 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
 /**
- * Close an opened file
+ * Закрыть открытый файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    a file handle. (opened with fs_open)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 {
@@ -147,14 +147,14 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * Read data from an opened file
+ * Чтение данных из открытого файла
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    a file handle variable.
  * @param buf       pointer to a memory block where to store the read data
  * @param btr       number of Bytes To Read
  * @param br        the real number of read bytes (Byte Read)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
 {
@@ -172,7 +172,7 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * Write into a file
+ * Записать в файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    a file handle variable
  * @param buf       pointer to a buffer with the bytes to write
@@ -196,12 +196,12 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 }
 
 /**
- * Set the read write pointer. Also expand the file size if necessary.
+ * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    a file handle variable. (opened with fs_open )
  * @param pos       the new position of read write pointer
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
@@ -232,12 +232,12 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * Give the position of the read write pointer
+ * Укажите положение указателя чтения и записи.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    a file handle variable
  * @param pos_p     pointer to store the result
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 {
@@ -255,7 +255,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 }
 
 /**
- * Initialize a 'fs_read_dir_t' variable for directory reading
+ * Инициализируйте переменную fs_read_dir_t для чтения каталога.
  * @param drv   pointer to a driver where this function belongs
  * @param path  path to a directory
  * @return pointer to an initialized 'DIR' or 'HANDLE' variable
@@ -264,7 +264,7 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 {
     LV_UNUSED(drv);
 
-    /*Make the path relative to the current directory (the projects root folder)*/
+    /*Укажите путь относительно текущего каталога (корневой папки проекта)*/
     char buf[256];
     lv_snprintf(buf, sizeof(buf), LV_FS_POSIX_PATH "%s", path);
 
@@ -278,8 +278,8 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 }
 
 /**
- * Read the next filename from a directory.
- * The name of the directories will begin with '/'
+ * Прочитать следующее имя файла из каталога.
+ * Название каталогов начинается с '/'
  * @param drv       pointer to a driver where this function belongs
  * @param dir_p     pointer to an initialized 'DIR' or 'HANDLE' variable
  * @param fn        pointer to a buffer to store the filename
@@ -307,7 +307,7 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
 }
 
 /**
- * Close the directory reading
+ * Закройте чтение каталога
  * @param drv   pointer to a driver where this function belongs
  * @param dir_p pointer to an initialized 'DIR' or 'HANDLE' variable
  * @return LV_FS_RES_OK or any error from lv_fs_res_t enum
@@ -326,7 +326,7 @@ static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p)
 }
 
 /**
- * Convert an errno value to a lv_fs_res_t value
+ * Преобразуйте значение ошибки в значение lv_fs_res_t.
  * @param errno_val an errno value
  * @return a corresponding lv_fs_res_t value
  */
@@ -336,37 +336,37 @@ static lv_fs_res_t fs_errno_to_res(int errno_val)
         case 0:
             return LV_FS_RES_OK;
 
-        case EIO: /* I/O error */
+        case EIO: /* Ошибка ввода-вывода */
             return LV_FS_RES_HW_ERR;
 
-        case EFAULT: /* Bad address */
+        case EFAULT: /* Неверный адрес */
             return LV_FS_RES_FS_ERR;
 
-        case ENOENT: /* No such file or directory */
+        case ENOENT: /* Нет такого файла или каталога */
             return LV_FS_RES_NOT_EX;
 
-        case ENOSPC: /* No space left on device */
+        case ENOSPC: /* На устройстве не осталось места */
             return LV_FS_RES_FULL;
 
-        case EALREADY: /* Operation already in progress */
+        case EALREADY: /* Операция уже идет */
             return LV_FS_RES_LOCKED;
 
-        case EACCES: /* Permission denied */
+        case EACCES: /* Разрешение отклонено */
             return LV_FS_RES_DENIED;
 
-        case EBUSY: /* Device or resource busy */
+        case EBUSY: /* Устройство или ресурс заняты */
             return LV_FS_RES_BUSY;
 
-        case ETIMEDOUT: /* Connection timed out */
+        case ETIMEDOUT: /* Время подключения истекло */
             return LV_FS_RES_TOUT;
 
-        case ENOSYS: /* Invalid system call number */
+        case ENOSYS: /* Неверный номер системного вызова */
             return LV_FS_RES_NOT_IMP;
 
-        case ENOMEM: /* Out of memory */
+        case ENOMEM: /* Недостаточно памяти */
             return LV_FS_RES_OUT_OF_MEM;
 
-        case EINVAL: /* "Invalid argument" */
+        case EINVAL: /* «Неверный аргумент» */
             return LV_FS_RES_INV_PARAM;
 
         default:

@@ -19,7 +19,7 @@
  **********************/
 
 #define CUBIC_NEWTON_ITERATIONS     8
-#define CUBIC_PRECISION_BITS        10 /* 10 or 14 bits recommended, int64_t calculation is used for >14bit precision */
+#define CUBIC_PRECISION_BITS        10 /* примерно 10 или 14 бит, расчетint64_tиспользуется для точности > 14 бит. */
 
 #if CUBIC_PRECISION_BITS < 10 || CUBIC_PRECISION_BITS > 20
     #error "cubic precision bits should be in range of [10, 20] for 32bit/64bit calculations."
@@ -66,7 +66,7 @@ int32_t LV_ATTRIBUTE_FAST_MEM lv_trigo_sin(int16_t angle)
         angle = angle - 180;
         ret   = -sin0_90_table[angle];
     }
-    else {   /*angle >=270*/
+    else {   /*угол >=270*/
         angle = 360 - angle;
         ret   = -sin0_90_table[angle];
     }
@@ -77,24 +77,24 @@ int32_t LV_ATTRIBUTE_FAST_MEM lv_trigo_sin(int16_t angle)
 }
 
 /**
- * cubic-bezier Reference:
+ * кубическая Безье
  *
  * https://github.com/gre/bezier-easing
  * https://opensource.apple.com/source/WebCore/WebCore-955.66/platform/graphics/UnitBezier.h
  *
  * Copyright (c) 2014 Gaëtan Renaudeau
  *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу
+ * получение копии этого программного обеспечения и соответствующей документации
+ * файлы («Программное обеспечение») для работы с Программным обеспечением без
+ * ограничение, включая, помимо прочего, права на использование,
+ * копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым
+ * Для этого предоставляется программное обеспечение при условии соблюдения следующих условий:
+ * условия:
  *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть
+ * включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
@@ -126,17 +126,17 @@ static int32_t do_cubic_bezier(int32_t t, int32_t a, int32_t b, int32_t c)
 int32_t lv_cubic_bezier(int32_t x, int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
     int32_t ax, bx, cx, ay, by, cy;
-    int32_t tl, tr, t;  /*t in cubic-bezier function, used for bisection */
-    int32_t xs;  /*x sampled on curve */
+    int32_t tl, tr, t;  /*t в функции кубического Безье, используемой для деления пополам */
+    int32_t xs;  /*x выбрано на кривой */
 #if CUBIC_PRECISION_BITS > 14
-    int64_t d; /*slope value at specified t*/
+    int64_t d; /*значение наклона при указанном t*/
 #else
     int32_t d;
 #endif
 
     if(x == 0 || x == LV_BEZIER_VAL_MAX) return x;
 
-    /* input is always LV_BEZIER_VAL_SHIFT bit precision */
+    /* входные данные всегда имеют битовую точность LV_BEZIER_VAL_SHIFT. */
 
 #if CUBIC_PRECISION_BITS != LV_BEZIER_VAL_SHIFT
     x <<= CUBIC_PRECISION_BITS - LV_BEZIER_VAL_SHIFT;
@@ -154,15 +154,15 @@ int32_t lv_cubic_bezier(int32_t x, int32_t x1, int32_t y1, int32_t x2, int32_t y
     by = 3 * (y2 - y1) - cy;
     ay = (1L << CUBIC_PRECISION_BITS)  - cy - by;
 
-    /*Try Newton's method firstly */
-    t = x; /*Make a guess*/
+    /*Сначала попробуйте метод Ньютона */
+    t = x; /*Сделайте предположение*/
     for(int i = 0; i < CUBIC_NEWTON_ITERATIONS; i++) {
-        /*Check if x on curve at t matches input x*/
+        /*Проверьте, соответствует ли x на кривой в точке t входному x*/
         xs = do_cubic_bezier(t, ax, bx, cx) - x;
         if(LV_ABS(xs) <= 1) goto found;
 
-        /* get slop at t, d = 3 * ax * t^2 + 2 * bx + t + cx */
-        d = ax; /* use 64bit operation if needed. */
+        /* получить помои в момент t, d = 3 * ax * t^2 + 2 * bx + t + cx */
+        d = ax; /* при необходимости используйте 64-битную операцию. */
         d = (3 * d * t) >> CUBIC_PRECISION_BITS;
         d = ((d + 2 * bx) * t) >> CUBIC_PRECISION_BITS;
         d += cx;
@@ -170,11 +170,11 @@ int32_t lv_cubic_bezier(int32_t x, int32_t x1, int32_t y1, int32_t x2, int32_t y
         if(LV_ABS(d) <= 1) break;
 
         d = ((int64_t)xs * (1L << CUBIC_PRECISION_BITS)) / d;
-        if(d == 0) break;  /*Reached precision limits*/
+        if(d == 0) break;  /*Достигнуты пределы точности*/
         t -= d;
     }
 
-    /*Fallback to bisection method for reliability*/
+    /*Возврат к методу деления пополам для надежности*/
     tl = 0, tr = 1L << CUBIC_PRECISION_BITS, t = x;
 
     if(t < tl) {
@@ -195,9 +195,9 @@ int32_t lv_cubic_bezier(int32_t x, int32_t x1, int32_t y1, int32_t x2, int32_t y
         if(t == tl) break;
     }
 
-    /*Failed to find suitable t for given x, return a value anyway.*/
+    /*Не удалось найти подходящее t для данного x, все равно верните значение.*/
 found:
-    /*Return y at t*/
+    /*Вернуть y в t*/
 #if CUBIC_PRECISION_BITS != LV_BEZIER_VAL_SHIFT
     return do_cubic_bezier(t, ay, by, cy) >> (CUBIC_PRECISION_BITS - LV_BEZIER_VAL_SHIFT);
 #else
@@ -207,7 +207,7 @@ found:
 
 void LV_ATTRIBUTE_FAST_MEM lv_sqrt(uint32_t x, lv_sqrt_res_t * q, uint32_t mask)
 {
-    x = x << 8; /*To get 4 bit precision. (sqrt(256) = 16 = 4 bit)*/
+    x = x << 8; /*Чтобы получить 4-битную точность. (sqrt(256) = 16 = 4 бита)*/
 
     uint32_t root = 0;
     uint32_t trial;
@@ -223,11 +223,11 @@ void LV_ATTRIBUTE_FAST_MEM lv_sqrt(uint32_t x, lv_sqrt_res_t * q, uint32_t mask)
 }
 
 /*
-// Alternative Integer Square Root function
-// Contributors include Arne Steinarson for the basic approximation idea,
-// Dann Corbit and Mathew Hendry for the first cut at the algorithm,
-// Lawrence Kirby for the rearrangement, improvements and range optimization
-// and Paul Hsieh for the round-then-adjust idea.
+// Альтернативная функция целочисленного квадратного корня
+// В число авторов входят Арне Стейнарсон, автор базовой идеи аппроксимации,
+// Дэнну Корбиту и Мэтью Хендри за первую версию алгоритма.
+// Лоуренсу Кирби за перестановку, улучшения и оптимизацию ассортимента.
+// и Пол Шей за идею округления, а затем корректировки.
 */
 int32_t LV_ATTRIBUTE_FAST_MEM lv_sqrt32(uint32_t x)
 {
@@ -298,14 +298,14 @@ int32_t LV_ATTRIBUTE_FAST_MEM lv_sqrt32(uint32_t x)
     else
         return sqq_table[x] >> 4;
 
-    /* Run two iterations of the standard convergence formula */
+    /* Запустите две итерации стандартной формулы сходимости. */
 
     xn = (xn + 1 + x / xn) / 2;
 nr1:
     xn = (xn + 1 + x / xn) / 2;
 adj:
 
-    if(xn * xn > (int32_t)x)   /* Correct rounding if necessary */
+    if(xn * xn > (int32_t)x)   /* При необходимости исправьте округление. */
         xn--;
 
     return xn;
@@ -314,74 +314,74 @@ adj:
 uint16_t lv_atan2(int x, int y)
 {
     /**
-     * Fast XY vector to integer degree algorithm - Jan 2011 www.RomanBlack.com
-     * Converts any XY values including 0 to a degree value that should be
-     * within +/- 1 degree of the accurate value without needing
-     * large slow trig functions like ArcTan() or ArcCos().
-     * NOTE! at least one of the X or Y values must be non-zero!
-     * This is the full version, for all 4 quadrants and will generate
-     * the angle in integer degrees from 0-360.
-     * Any values of X and Y are usable including negative values provided
-     * they are between -1456 and 1456 so the 16bit multiply does not overflow.
+     * Быстрый алгоритм преобразования вектораXYв целочисленную степень - январь 2011 г.  www.RomanBlack.com
+     * Преобразует любые значения XY, включая 0, в значение градуса, которое должно быть
+     * в пределах +/- 1 градуса от точного значения без необходимости
+     * большие замедленные триггерные функции, такие какArcTan()или ArcCos().
+     * NOTE ! хотя бы одно из значений X или Y должно быть ненулевым!
+     * Это полная версия для всех 4 квадрантов, которая будет генерировать
+     * угол в целых градусах от 0 до 360.
+     * Можно использовать любые значения X и Y, включая предоставленные отрицательные значения.
+     * они находятся между -1456 и 1456, поэтому 16-битное умножение не переполняется.
      */
     unsigned char negflag;
     unsigned char tempdegree;
     unsigned char comp;
-    unsigned int degree;     /*this will hold the result*/
+    unsigned int degree;     /*это сохранит результат*/
     unsigned int ux;
     unsigned int uy;
 
-    /*Save the sign flags then remove signs and get XY as unsigned ints*/
+    /*Сохраните флаги знаков, затем удалите знаки и получите XY как беззнаковые целые числа.*/
     negflag = 0;
     if(x < 0) {
-        negflag += 0x01;    /*x flag bit*/
-        x = (0 - x);        /*is now +*/
+        negflag += 0x01;    /*бит флага x*/
+        x = (0 - x);        /*сейчас +*/
     }
-    ux = x;                /*copy to unsigned var before multiply*/
+    ux = x;                /*скопировать в беззнаковую переменную перед умножением*/
     if(y < 0) {
-        negflag += 0x02;    /*y flag bit*/
-        y = (0 - y);        /*is now +*/
+        negflag += 0x02;    /*бит флага y*/
+        y = (0 - y);        /*сейчас +*/
     }
-    uy = y;                /*copy to unsigned var before multiply*/
+    uy = y;                /*скопировать в беззнаковую переменную перед умножением*/
 
-    /*1. Calc the scaled "degrees"*/
+    /*1. Рассчитайте масштабированные «градусы»*/
     if(ux > uy) {
-        degree = (uy * 45) / ux;   /*degree result will be 0-45 range*/
-        negflag += 0x10;    /*octant flag bit*/
+        degree = (uy * 45) / ux;   /*Результат градусов будет в диапазоне 0-45*/
+        negflag += 0x10;    /*бит флага октанта*/
     }
     else {
-        degree = (ux * 45) / uy;   /*degree result will be 0-45 range*/
+        degree = (ux * 45) / uy;   /*Результат градусов будет в диапазоне 0-45*/
     }
 
-    /*2. Compensate for the 4 degree error curve*/
+    /*2. Компенсация кривой ошибки в 4 градуса*/
     comp = 0;
-    tempdegree = degree;    /*use an unsigned char for speed!*/
-    if(tempdegree > 22) {    /*if top half of range*/
+    tempdegree = degree;    /*используйте беззнаковый символ для скорости!*/
+    if(tempdegree > 22) {    /*если верхняя половина диапазона*/
         if(tempdegree <= 44) comp++;
         if(tempdegree <= 41) comp++;
         if(tempdegree <= 37) comp++;
-        if(tempdegree <= 32) comp++;  /*max is 4 degrees compensated*/
+        if(tempdegree <= 32) comp++;  /*максимум 4 градуса с компенсацией*/
     }
-    else {   /*else is lower half of range*/
+    else {   /*остальное — нижняя половина диапазона*/
         if(tempdegree >= 2) comp++;
         if(tempdegree >= 6) comp++;
         if(tempdegree >= 10) comp++;
-        if(tempdegree >= 15) comp++;  /*max is 4 degrees compensated*/
+        if(tempdegree >= 15) comp++;  /*максимум 4 градуса с компенсацией*/
     }
-    degree += comp;   /*degree is now accurate to +/- 1 degree!*/
+    degree += comp;   /*градус теперь имеет точность +/- 1 градус!*/
 
-    /*Invert degree if it was X>Y octant, makes 0-45 into 90-45*/
+    /*Инвертируйте степень, если это был октант X>Y, превращает 0-45 в 90-45.*/
     if(negflag & 0x10) degree = (90 - degree);
 
-    /*3. Degree is now 0-90 range for this quadrant,*/
-    /*need to invert it for whichever quadrant it was in*/
+    /*3. Градус для этого квадранта теперь находится в диапазоне 0–90.*/
+    /*нужно инвертировать его для того квадранта, в котором он находился*/
     if(negflag & 0x02) { /*if -Y*/
         if(negflag & 0x01)   /*if -Y -X*/
             degree = (180 + degree);
-        else        /*else is -Y +X*/
+        else        /*иначе -Y +X*/
             degree = (180 - degree);
     }
-    else {   /*else is +Y*/
+    else {   /*иначе +Y*/
         if(negflag & 0x01)   /*if +Y -X*/
             degree = (360 - degree);
     }
@@ -392,13 +392,13 @@ int64_t lv_pow(int64_t base, int8_t exp)
 {
     int64_t result = 1;
 
-    /* Handle negative exponent: base^(-exp) = 1/(base^exp) */
-    /* In integer arithmetic, this is 0 for base > 1 */
+    /* Обработка отрицательного показателя: base^(-exp) = 1/(base^exp) */
+    /* В целочисленной арифметике это 0 для базы > 1. */
     if(exp < 0) {
-        if(base == 0) return 0;  /* 0^(-n) is undefined, return 0 */
+        if(base == 0) return 0;  /* 0^(-n) не определено, верните 0 */
         if(base == 1) return 1;  /* 1^(-n) = 1 */
-        if(base == -1) return (exp & 1) ? -1 : 1;  /* (-1)^(-n) alternates */
-        return 0;  /* For all other cases, result is < 1, so 0 */
+        if(base == -1) return (exp & 1) ? -1 : 1;  /* (-1)^(-n) альтернативы */
+        return 0;  /* Во всех остальных случаях результат < 1, поэтому 0. */
     }
 
     while(exp) {
@@ -413,7 +413,7 @@ int64_t lv_pow(int64_t base, int8_t exp)
 
 int32_t lv_map(int32_t x, int32_t min_in, int32_t max_in, int32_t min_out, int32_t max_out)
 {
-    if(max_in == min_in) return min_out; /*Avoid division by zero later*/
+    if(max_in == min_in) return min_out; /*Избегайте деления на ноль позже*/
 
     if(max_in >= min_in && x >= max_in) return max_out;
     if(max_in >= min_in && x <= min_in) return min_out;
@@ -422,10 +422,10 @@ int32_t lv_map(int32_t x, int32_t min_in, int32_t max_in, int32_t min_out, int32
     if(max_in <= min_in && x >= min_in) return min_out;
 
     /**
-     * The equation should be:
-     *   ((x - min_in) * delta_out) / delta in) + min_out
-     * To avoid rounding error reorder the operations:
-     *   (x - min_in) * (delta_out / delta_min) + min_out
+     * Уравнение должно быть:
+     *   ((x -min_in) *delta_out) / дельта входа) + min_out
+     * Чтобы избежать ошибки округления, измените порядок операций:
+     *   (x - min_in) * (delta_out/delta_min) + min_out
      */
 
     int32_t delta_in = max_in - min_in;
@@ -441,7 +441,7 @@ void lv_rand_set_seed(uint32_t seed)
 
 uint32_t lv_rand(uint32_t min, uint32_t max)
 {
-    /*Algorithm "xor" from p. 4 of Marsaglia, "Xorshift RNGs"*/
+    /*Алгоритм «xor» из п. 4 Марсали, «Ксоршифт ГСЧ»*/
     uint32_t x = rand_seed;
     x ^= x << 13;
     x ^= x >> 17;

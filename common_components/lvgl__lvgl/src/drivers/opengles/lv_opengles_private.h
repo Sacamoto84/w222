@@ -40,8 +40,8 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* In desktop GL (<Gl/gl.h>) these symbols are defined but for EGL
- * they are defined as extensions with the _EXT suffix */
+/* В настольном GL (<Gl/ gl.h >) эти символы определены, но для EGL
+ * они определяются как расширения с суффиксом _EXT */
 #ifndef GL_BGRA
 #define GL_BGRA GL_BGRA_EXT
 #endif /*GL_BGRA*/
@@ -85,7 +85,7 @@ extern "C" {
 #define GL_RGBA8 0x8058
 #endif
 
-/* In Desktop GL GL_RGB565 is not supported. Use RGB instead */
+/* В Desktop GL GL_RGB565 не поддерживается. Вместо этого используйте RGB */
 #if !LV_USE_EGL
 #define GL_RGB565 GL_RGB
 #endif
@@ -99,13 +99,13 @@ extern "C" {
 #define LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT24
 #else
 /*
- * This will not run correctly yet, it compiles fine but fails to render on RPi3B.  Work in progress.
+ * Это пока не работает правильно, компилируется нормально, но не отображается на RPi3B.  Работа продолжается.
  *
 #ifdef GL_DEPTH_COMPONENT24_OES
-#define LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT24_OES
-#else
-#define LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT16
-#endif
+#определить LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT24_OES
+#еще
+#определить LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT16
+#конец
 */
 #define LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT16
 #endif
@@ -134,19 +134,19 @@ typedef struct {
  **********************/
 
 /**
- * Initialize the render parameters with default values
+ * Инициализируйте параметры рендеринга значениями по умолчанию.
  * @param params pointer to an initialized `lv_opengles_render_params_t` struct
  */
 void lv_opengles_render_params_init(lv_opengles_render_params_t * params);
 
 /**
- * Render the content of the window/framebuffer using OpenGL
+ * Отобразите содержимое окна/фреймбуфера с помощью OpenGL.
  * @param params pointer to an initialized `lv_opengles_render_params_t` struct
  */
 void lv_opengles_render(const lv_opengles_render_params_t * params);
 
 /**
- * Render a texture using alternate blending mode, with red and blue channels flipped in the shader.
+ * Отрисуйте текстуру, используя альтернативный режим наложения, с красным и синим каналами, перевернутыми в шейдере.
  * @param texture        OpenGL texture ID
  * @param texture_area   the area in the window to render the texture in
  * @param opa            opacity to blend the texture with existing contents
@@ -160,7 +160,7 @@ void lv_opengles_render_texture_rbswap(unsigned int texture, const lv_area_t * t
                                        bool h_flip, bool v_flip);
 
 /**
- * Set the OpenGL viewport, with vertical co-ordinate conversion
+ * Установите область просмотра OpenGL с преобразованием вертикальных координат.
  * @param x        x position of the viewport
  * @param y        y position of the viewport
  * @param w        width of the viewport
@@ -177,7 +177,7 @@ void lv_opengles_render_display(lv_display_t * display, const lv_opengles_render
 #endif /*LV_USE_OPENGLES*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OPENGLES_PRIVATE_H*/

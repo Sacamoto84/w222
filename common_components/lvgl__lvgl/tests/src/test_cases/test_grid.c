@@ -6,13 +6,13 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_obj_clean(lv_screen_active());
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void button_create(lv_obj_t * parent, const char * text, int32_t x, int32_t x_span, int32_t y, int32_t y_span)

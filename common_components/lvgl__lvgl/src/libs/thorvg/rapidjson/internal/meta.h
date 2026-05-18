@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_INTERNAL_META_H_
 #define RAPIDJSON_INTERNAL_META_H_
@@ -35,11 +35,11 @@ RAPIDJSON_DIAG_OFF(6334)
 RAPIDJSON_NAMESPACE_BEGIN
 namespace internal {
 
-// Helper to wrap/convert arbitrary types to void, useful for arbitrary type matching
+// Помощник для переноса/преобразования произвольных типов в void, полезен для сопоставления произвольных типов.
 template <typename T> struct Void { typedef void Type; };
 
 ///////////////////////////////////////////////////////////////////////////////
-// BoolType, TrueType, FalseType
+// БулТип, Истинный Тип, Ложный Тип
 //
 template <bool Cond> struct BoolType {
     static const bool Value = Cond;
@@ -70,7 +70,7 @@ template <typename C1, typename C2> struct OrExpr  : OrExprCond<C1::Value, C2::V
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// AddConst, MaybeAddConst, RemoveConst
+// Аддконст, возможно, аддконст, удалениеконст
 template <typename T> struct AddConst { typedef const T Type; };
 template <bool Constify, typename T> struct MaybeAddConst : SelectIfCond<Constify, const T, T> {};
 template <typename T> struct RemoveConst { typedef T Type; };
@@ -102,7 +102,7 @@ template <typename T> struct IsPointer<T*> : TrueType {};
 template <typename B, typename D> struct IsBaseOf
     : BoolType< ::std::is_base_of<B,D>::value> {};
 
-#else // simplified version adopted from Boost
+#else // упрощенная версия, заимствованная из Boost
 
 template<typename B, typename D> struct IsBaseOfImpl {
     RAPIDJSON_STATIC_ASSERT(sizeof(B) != 0);
@@ -130,13 +130,13 @@ template <typename B, typename D> struct IsBaseOf
 
 
 //////////////////////////////////////////////////////////////////////////
-// EnableIf / DisableIf
+// ВключитьЕсли/ВыключитьЕсли
 //
 template <bool Condition, typename T = void> struct EnableIfCond  { typedef T Type; };
-template <typename T> struct EnableIfCond<false, T> { /* empty */ };
+template <typename T> struct EnableIfCond<false, T> { /* пустой */ };
 
 template <bool Condition, typename T = void> struct DisableIfCond { typedef T Type; };
-template <typename T> struct DisableIfCond<true, T> { /* empty */ };
+template <typename T> struct DisableIfCond<true, T> { /* пустой */ };
 
 template <typename Condition, typename T = void>
 struct EnableIf : EnableIfCond<Condition::Value, T> {};
@@ -144,7 +144,7 @@ struct EnableIf : EnableIfCond<Condition::Value, T> {};
 template <typename Condition, typename T = void>
 struct DisableIf : DisableIfCond<Condition::Value, T> {};
 
-// SFINAE helpers
+// SFINAE помощники
 struct SfinaeTag {};
 template <typename T> struct RemoveSfinaeTag;
 template <typename T> struct RemoveSfinaeTag<SfinaeTag&(*)(T)> { typedef T Type; };
@@ -171,7 +171,7 @@ template <typename T> struct RemoveSfinaeTag<SfinaeTag&(*)(T)> { typedef T Type;
         <RAPIDJSON_REMOVEFPTR_(cond), \
          RAPIDJSON_REMOVEFPTR_(returntype)>::Type
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 //@endcond
 

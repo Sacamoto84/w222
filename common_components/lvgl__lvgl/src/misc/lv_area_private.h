@@ -29,78 +29,78 @@ extern "C" {
  **********************/
 
 /**
- * Set the position of an area (width and height will be kept)
- * @param area_p pointer to an area
- * @param x the new x coordinate of the area
- * @param y the new y coordinate of the area
+ * Установите положение области (ширина и высота будут сохранены)
+ * @param area_p указатель на область
+ * @param x новая координата x области
+ * @param y новая координата y области
  */
 void lv_area_set_pos(lv_area_t * area_p, int32_t x, int32_t y);
 
 /**
- * Get the common parts of two areas
- * @param res_p pointer to an area, the result will be stored her
- * @param a1_p pointer to the first area
- * @param a2_p pointer to the second area
- * @return false: the two area has NO common parts, res_p is invalid
+ * Получить общие части двух областей
+ * @param res_p указатель на область, результат будет сохранен в ней
+ * @param a1_p указатель на первую область
+ * @param a2_p указатель на вторую область
+ * @return false: две области имеют общие части NO,res_pнедействителен.
  */
 bool lv_area_intersect(lv_area_t * res_p, const lv_area_t * a1_p, const lv_area_t * a2_p);
 
 /**
- * Get resulting sub areas after removing the common parts of two areas from the first area
- * @param res_p pointer to an array of areas with a count of 4, the resulting areas will be stored here
- * @param a1_p pointer to the first area
- * @param a2_p pointer to the second area
- * @return number of results (max 4) or -1 if no intersect
+ * Получите результирующие подобласти после удаления общих частей двух областей из первой области.
+ * @param res_p указатель на массив областей со счетчиком 4, здесь будут храниться полученные области
+ * @param a1_p указатель на первую область
+ * @param a2_p указатель на вторую область
+ * @return количество результатов (максимум 4) или -1, если нет пересечений
  */
 int8_t lv_area_diff(lv_area_t res_p[], const lv_area_t * a1_p, const lv_area_t * a2_p);
 
 /**
- * Join two areas into a third which involves the other two
- * @param a_res_p pointer to an area, the result will be stored here
- * @param a1_p pointer to the first area
- * @param a2_p pointer to the second area
+ * Объедините две области в третью, которая включает в себя две другие.
+ * @param a_res_p указатель на область, здесь будет сохранен результат
+ * @param a1_p указатель на первую область
+ * @param a2_p указатель на вторую область
  */
 void lv_area_join(lv_area_t * a_res_p, const lv_area_t * a1_p, const lv_area_t * a2_p);
 
 /**
- * Check if a point is on an area
- * @param a_p pointer to an area
- * @param p_p pointer to a point
- * @param radius radius of area (e.g. for rounded rectangle)
- * @return false:the point is out of the area
+ * Проверьте, находится ли точка на площади
+ * @param a_p указатель на область
+ * @param p_p указатель на точку
+ * @param radius радиус площади (например, для прямоугольника со скругленными углами)
+ * @return false: точка находится за пределами области
  */
 bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t radius);
 
 /**
- * Check if two area has common parts
- * @param a1_p pointer to an area.
- * @param a2_p pointer to another area
- * @return false: a1_p and a2_p has no common parts
+ * Проверьте, есть ли у двух областей общие части
+ * @param a1_p указатель на область.
+ * @param a2_p указатель на другую область
+ * @return false:a1_pиa2_pне имеют общих частей.
  */
 bool lv_area_is_on(const lv_area_t * a1_p, const lv_area_t * a2_p);
 
 /**
- * Check if an area is fully on another
- * @param ain_p pointer to an area which could be in 'aholder_p'
- * @param aholder_p pointer to an area which could involve 'ain_p'
- * @param radius radius of `aholder_p` (e.g. for rounded rectangle)
- * @return true: `ain_p` is fully inside `aholder_p`
+ * Проверьте, полностью ли область находится на другой
+ * @param ain_p указатель на область, которая может находиться в 'aholder_p'
+ * @param aholder_p указатель на область, которая может включать «ain_p»
+ * @param radius радиус`aholder_p`(например, для закругленного прямоугольника)
+ * @return правда:`ain_p`полностью находится внутри `aholder_p`
  */
 bool lv_area_is_in(const lv_area_t * ain_p, const lv_area_t * aholder_p, int32_t radius);
 
 /**
- * Check if an area is fully out of another
- * @param aout_p pointer to an area which could be in 'aholder_p'
- * @param aholder_p pointer to an area which could involve 'ain_p'
- * @param radius radius of `aholder_p` (e.g. for rounded rectangle)
- * @return true: `aout_p` is fully outside `aholder_p`
+ * Проверьте, полностью ли одна область выходит за пределы другой
+ * @param aout_p указатель на область, которая может находиться в 'aholder_p'
+ * @param aholder_p указатель на область, которая может включать «ain_p»
+ * @param radius радиус`aholder_p`(например, для закругленного прямоугольника)
+ * @return true:`aout_p`полностью находится за пределами `aholder_p`
  */
 bool lv_area_is_out(const lv_area_t * aout_p, const lv_area_t * aholder_p, int32_t radius);
 
 /**
- * Check if 2 area is the same
- * @param a pointer to an area
- * @param b pointer to another area
+ * Проверьте, совпадают ли 2 области
+ * @param a указатель на область
+ * @param b указатель на другую область
  */
 bool lv_area_is_equal(const lv_area_t * a, const lv_area_t * b);
 
@@ -109,7 +109,7 @@ bool lv_area_is_equal(const lv_area_t * a, const lv_area_t * b);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_AREA_PRIVATE_H*/

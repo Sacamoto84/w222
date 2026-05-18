@@ -63,7 +63,7 @@ class RepoFileVersionReplacer:
                 lines[i] = line_with_version
                 occurrences += 1
 
-        # not perfect, but will catch obvious pitfalls
+        # не идеально, но уловит очевидные подводные камни
         if occurrences != self.expected_occurrences:
             raise Exception(f"Bad lines in {self.path_relative}")
 
@@ -144,11 +144,11 @@ class KconfigReplacer(RepoFileVersionReplacer):
 
         return None
     def getPattern(self, key: str):
-        # Match the version fields in Kconfig file
+        # Сопоставьте поля версии в файле Kconfig.
         return rf'(^\s+default\s+)(\d+) # ({key})'
 
     def getReplacement(self, val: str):
-        # Replace the version value
+        # Заменить значение версии
         return r'\g<1>' + val + r' # \g<3>'
 
 

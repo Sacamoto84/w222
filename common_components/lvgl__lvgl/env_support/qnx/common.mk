@@ -118,7 +118,7 @@ PRE_TARGET=$(PROJECT_ROOT)/lv_conf.h
 
 include $(MKFILES_ROOT)/qtargets.mk
 
-# Generate the lv_conf.h file from the template
+# Создать файлlv_conf.hиз шаблона.
 $(PROJECT_ROOT)/lv_conf.h: $(PROJECT_ROOT)/../../lv_conf_template.h
 	cp $< $@
 	sed -i -e "s/#if 0/#if 1/" $@

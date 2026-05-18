@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 3 dic 2023
+/*  Создано: 3 декабря 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 #ifndef LV_DRAW_EVE_H
@@ -50,7 +50,7 @@ void lv_draw_eve_set_display_data(lv_display_t * disp, const lv_draw_eve_paramet
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 

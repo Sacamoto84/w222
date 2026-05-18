@@ -39,12 +39,12 @@ extern "C" {
  **********************/
 
 /**
- * PXP device interrupt handler. Used to check PXP task completion status.
+ * Обработчик прерываний устройства PXP. Используется для проверки статуса завершения задачи PXP.
  */
 void PXP_IRQHandler(void);
 
 /**
- * Get the PXP default configuration.
+ * Получите конфигурацию PXP по умолчанию.
  */
 pxp_cfg_t * pxp_get_default_cfg(void);
 
@@ -56,7 +56,7 @@ pxp_cfg_t * pxp_get_default_cfg(void);
 #endif /*LV_USE_PXP*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PXP_OSA_H*/

@@ -12,7 +12,7 @@ static void column_gap_anim(void * obj, int32_t v)
 }
 
 /**
- * Demonstrate the effect of column and row gap style properties
+ * Демонстрация эффекта свойств стиля пробелов в столбцах и строках.
  */
 void lv_example_flex_5(void)
 {

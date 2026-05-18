@@ -31,7 +31,7 @@ extern "C" {
  **********************/
 
 /**
- * Initialize NanoVG rendering
+ * Инициализировать рендеринг NanoVG
  */
 void lv_draw_nanovg_init(void);
 
@@ -42,7 +42,7 @@ void lv_draw_nanovg_init(void);
 #endif /*LV_USE_DRAW_NANOVG*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_NANOVG_H*/

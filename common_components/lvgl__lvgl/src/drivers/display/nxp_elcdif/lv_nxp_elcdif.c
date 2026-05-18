@@ -1,7 +1,7 @@
 /**
  * @file lv_nxp_elcdif.c
  *
- * Driver for NXP's ELCD
+ * Драйвер для ELCD NXP
  */
 
 #include "lv_nxp_elcdif.h"
@@ -75,7 +75,7 @@ lv_display_t * lv_nxp_display_elcdif_create_partial(LCDIF_Type * base, const elc
     LV_ASSERT(base);
     LV_ASSERT(config);
 
-    /* Create a direct mode display and then update the buffers to be set in partial mode */
+    /* Создайте отображение в прямом режиме, а затем обновите буферы для установки в частичном режиме. */
     lv_display_t * disp = lv_nxp_display_elcdif_create_direct(base, config, frame_buffer1, frame_buffer2, buf_size);
     ELCDIF_DisableInterrupts(base, kELCDIF_CurFrameDoneInterruptEnable);
     NVIC_DisableIRQ(eLCDIF_IRQn);
@@ -92,7 +92,7 @@ lv_display_t * lv_nxp_display_elcdif_create_partial(LCDIF_Type * base, const elc
 void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp)
 {
     if(disp == NULL) {
-        /* Just return since no valid display has been set yet */
+        /* Просто вернитесь, поскольку еще не установлено допустимое отображение. */
         return;
     }
 
@@ -102,9 +102,9 @@ void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp)
     ELCDIF_ClearInterruptStatus(base, intStatus);
 
     if(intStatus & kELCDIF_CurFrameDone) {
-        /* flush ready is ISR safe and atomic, so calling inside of the
-         * framebuffer interrupt is safe and makes the flush chain
-         * non blocking even in bare metal systems.
+        /* Flush Ready — это ISR безопасно и атомарно, поэтому вызов внутри
+         * Прерывание кадрового буфера безопасно и приводит к очистке цепочки
+         * неблокируется даже в голых металлических системах.
          */
         lv_disp_flush_ready((lv_display_t *)disp);
     }
@@ -155,7 +155,7 @@ static void flush_partial_cb(lv_display_t * disp, const lv_area_t * area, uint8_
 
 static lv_color_format_t lv_nxp_elcdif_to_lvgl_color_converter(elcdif_rgb_mode_config_t * config)
 {
-    /*Handle color format conversion*/
+    /*Обработка преобразования формата цвета*/
     lv_color_format_t color_format;
 
     switch(config->pixelFormat) {
@@ -172,8 +172,8 @@ static lv_color_format_t lv_nxp_elcdif_to_lvgl_color_converter(elcdif_rgb_mode_c
             color_format = LV_COLOR_FORMAT_RGB888;
             break;
         /*
-        There are some color formats in ELCDIF which LVGL does not support.
-        For these, use unknown format and drop a msg for the user
+        В ELCDIF есть некоторые цветовые форматы, которые LVGL не поддерживает.
+        Для этого используйте неизвестный формат и отправьте пользователю сообщение.
         */
         default :
             color_format = LV_COLOR_FORMAT_UNKNOWN;

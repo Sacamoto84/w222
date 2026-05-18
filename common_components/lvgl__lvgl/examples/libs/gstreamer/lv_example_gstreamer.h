@@ -33,7 +33,7 @@ void lv_example_gstreamer_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_GSTREAMER_H*/

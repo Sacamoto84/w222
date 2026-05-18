@@ -31,8 +31,8 @@ typedef struct {
     /**Color of the triangle*/
     lv_color_t color;
 
-    /**Opacity of the arc in 0...255 range.
-     * LV_OPA_TRANSP, LV_OPA_10, LV_OPA_20, .. LV_OPA_COVER can be used as well*/
+    /**Непрозрачность дуги в диапазоне 0...255.
+     * LV_OPA_TRANSP , LV_OPA_10 , LV_OPA_20 , .. LV_OPA_COVER также можно использовать*/
     lv_opa_t opa;
 
     /**Describe a gradient. If `grad.dir` is not `LV_GRAD_DIR_NONE` `color` will be ignored*/
@@ -45,22 +45,22 @@ typedef struct {
  **********************/
 
 /**
- * Initialize a triangle draw descriptor
- * @param draw_dsc  pointer to a draw descriptor
+ * Инициализировать дескриптор рисования треугольника
+ * @param draw_dsc  указатель на дескриптор отрисовки
  */
 void lv_draw_triangle_dsc_init(lv_draw_triangle_dsc_t * draw_dsc);
 
 /**
- * Try to get a triangle draw descriptor from a draw task.
- * @param task      draw task
- * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_TRIANGLE
+ * Попробуйте получить дескриптор рисования треугольника из задачи рисования.
+ * @param task      нарисовать задачу
+ * @return          дескриптор отрисовки задачи или NULL, если задача не относится к типу LV_DRAW_TASK_TYPE_TRIANGLE
  */
 lv_draw_triangle_dsc_t * lv_draw_task_get_triangle_dsc(lv_draw_task_t * task);
 
 /**
- * Create a triangle draw task
- * @param layer     pointer to a layer
- * @param draw_dsc  pointer to an initialized `lv_draw_triangle_dsc_t` object
+ * Создайте задачу рисования треугольника.
+ * @param layer     указатель на слой
+ * @param draw_dsc  указатель на инициализированный объект `lv_draw_triangle_dsc_t`
  */
 void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * draw_dsc);
 
@@ -69,7 +69,7 @@ void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * draw_ds
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_TRIANGLE_H*/

@@ -2,7 +2,7 @@
 #if LV_USE_GIF && LV_BUILD_EXAMPLES
 
 /**
- * Open a GIF image from a file and a variable
+ * Откройте изображение GIF из файла и переменной.
  */
 void lv_example_gif_1(void)
 {
@@ -16,8 +16,8 @@ void lv_example_gif_1(void)
 
     img = lv_gif_create(lv_screen_active());
     lv_gif_set_color_format(img, LV_COLOR_FORMAT_ARGB8888);
-    /* Assuming a File system is attached to letter 'A'
-     * E.g. set LV_USE_FS_STDIO 'A' in lv_conf.h */
+    /* Предполагая, что файловая система прикреплена к букве «А»,
+     * например, установитеLV_USE_FS_STDIO'A' в lv_conf.h */
     lv_gif_set_src(img, "A:lvgl/examples/libs/gif/bulb.gif");
     lv_obj_align(img, LV_ALIGN_RIGHT_MID, -20, 0);
 }

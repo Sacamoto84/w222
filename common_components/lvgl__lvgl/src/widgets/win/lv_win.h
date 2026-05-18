@@ -27,14 +27,14 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_win_class;
  **********************/
 
 /**
- * Create a window widget
+ * Создать виджет окна
  * @param parent    pointer to a parent widget
  * @return          the created window
  */
 lv_obj_t * lv_win_create(lv_obj_t * parent);
 
 /**
- * Add a title to the window
+ * Добавьте заголовок в окно
  * @param obj       pointer to a window widget
  * @param txt       the text of the title
  * @return          the widget where the content of the title can be created
@@ -42,7 +42,7 @@ lv_obj_t * lv_win_create(lv_obj_t * parent);
 lv_obj_t * lv_win_add_title(lv_obj_t * win, const char * txt);
 
 /**
- * Add a button to the window
+ * Добавляем кнопку в окно
  * @param obj       pointer to a window widget
  * @param icon      an icon to be displayed on the button
  * @param btn_w     width of the button
@@ -51,14 +51,14 @@ lv_obj_t * lv_win_add_title(lv_obj_t * win, const char * txt);
 lv_obj_t * lv_win_add_button(lv_obj_t * win, const void * icon, int32_t btn_w);
 
 /**
- * Get the header of the window
+ * Получить заголовок окна
  * @param win       pointer to a window widget
  * @return          the header of the window
  */
 lv_obj_t * lv_win_get_header(lv_obj_t * win);
 
 /**
- * Get the content of the window
+ * Получить содержимое окна
  * @param win       pointer to a window widget
  * @return          the content of the window
  */
@@ -68,7 +68,7 @@ lv_obj_t * lv_win_get_content(lv_obj_t * win);
  **********************/
 #endif /*LV_USE_WIN*/
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WIN_H*/

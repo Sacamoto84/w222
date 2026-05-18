@@ -34,7 +34,7 @@ void lv_example_tiny_ttf_3(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_TINY_TTF_H*/

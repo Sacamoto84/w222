@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Size: 14 px
- * Bpp: 8
- * Opts: --no-compress --no-prefilter --bpp 8 --stride 16 --align 16 --size 14 --font Montserrat-Medium.ttf -r 0x20-0x7F,0xB0,0x2022 --font FontAwesome5-Solid+Brands+Regular.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62189,62212,62810,63426,63650 --format lvgl -o lv_font_benchmark_montserrat_14_aligned.c --force-fast-kern-format
+ * Размер: 14 пикселей
+ * Бпп: 8
+ * Opts: --no-compress --no-prefilter --bpp 8 --stride 16 --align 16 --size 14 --font Montserrat-Medium.ttf -r0x20-0x7F,0xB0,0x2022--font FontAwesome5-Solid+Brands+Regular.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,6 1502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61 556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,617 24,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62189,62212,62810,63426,63650 --format lvgl -olv_font_benchmark_montserrat_14_aligned.c--force-fast-kern-format
  ******************************************************************************/
 
 #ifdef __has_include
@@ -32,7 +32,7 @@
  *    BITMAPS
  *----------------*/
 
-/*Store the image of the glyphs*/
+/*Сохраните изображение глифов*/
 static LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
 
@@ -2029,7 +2029,7 @@ static LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitma
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 60, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 60, .box_w = 3, .box_h = 10, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 160, .adv_w = 88, .box_w = 5, .box_h = 5, .ofs_x = 0, .ofs_y = 5},
@@ -2204,7 +2204,7 @@ static const uint16_t unicode_list_1[] = {
     0xf1e3, 0xf23d, 0xf254, 0xf4aa, 0xf712, 0xf7f2
 };
 
-/*Collect the unicode lists and glyph_id offsets*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
@@ -2221,7 +2221,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *----------------*/
 
 
-/*Map glyph_ids to kern left classes*/
+/*Сопоставьтеglyph_idsс левыми классами Керна*/
 static const uint8_t kern_left_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
@@ -2245,7 +2245,7 @@ static const uint8_t kern_left_class_mapping[] = {
     0, 0, 0, 0, 0, 0
 };
 
-/*Map glyph_ids to kern right classes*/
+/*Сопоставьтеglyph_idsс классами керна справа*/
 static const uint8_t kern_right_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
@@ -2269,7 +2269,7 @@ static const uint8_t kern_right_class_mapping[] = {
     0, 0, 0, 0, 0, 0
 };
 
-/*Kern values between classes*/
+/*Значения Керна между классами*/
 static const int8_t kern_class_values[] = {
     0, 1, 0, 0, 0, 0, 0, 0,
     0, 1, 0, 0, 2, 0, 0, 0,
@@ -2648,7 +2648,7 @@ static const int8_t kern_class_values[] = {
 };
 
 
-/*Collect the kern class' data in one place*/
+/*Соберите данные класса керна в одном месте*/
 static const lv_font_fmt_txt_kern_classes_t kern_classes = {
     .class_pair_values   = kern_class_values,
     .left_class_mapping  = kern_left_class_mapping,
@@ -2662,7 +2662,7 @@ static const lv_font_fmt_txt_kern_classes_t kern_classes = {
  *--------------------*/
 
 #if LVGL_VERSION_MAJOR == 8
-    /*Store all the custom data of the font*/
+    /*Храните все пользовательские данные шрифта*/
     static  lv_font_fmt_txt_glyph_cache_t cache;
 #endif
 
@@ -2692,16 +2692,16 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
  *  PUBLIC FONT
  *----------------*/
 
-/*Initialize a public general font descriptor*/
+/*Инициализировать общедоступный общий дескриптор шрифта*/
 #if LVGL_VERSION_MAJOR >= 8
 const lv_font_t lv_font_benchmark_montserrat_14_aligned = {
 #else
 lv_font_t lv_font_benchmark_montserrat_14_aligned = {
 #endif
-    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
-    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
-    .line_height = 16,          /*The maximum line height required by the font*/
-    .base_line = 3,             /*Baseline measured from the bottom of the line*/
+    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Указатель функции для получения данных глифа*/
+    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Указатель функции для получения растрового изображения глифа*/
+    .line_height = 16,          /*Максимальная высота строки, требуемая шрифтом*/
+    .base_line = 3,             /*Базовая линия измеряется от нижней части линии*/
 #if !(LVGL_VERSION_MAJOR == 6 && LVGL_VERSION_MINOR == 0)
     .subpx = LV_FONT_SUBPX_NONE,
 #endif
@@ -2711,10 +2711,10 @@ lv_font_t lv_font_benchmark_montserrat_14_aligned = {
 #endif
 
 #if LV_VERSION_CHECK(9, 3, 0)
-    .static_bitmap = 1,    /*Bitmaps are stored as const so they are always static if not compressed */
+    .static_bitmap = 1,    /*Растровые изображения хранятся как константы, поэтому они всегда статичны, если не сжаты. */
 #endif
 
-    .dsc = &font_dsc,          /*The custom font data. Will be accessed by `get_glyph_bitmap/dsc` */
+    .dsc = &font_dsc,          /*Данные пользовательского шрифта. Будет доступен `get_glyph_bitmap/dsc` */
 #if LV_VERSION_CHECK(8, 2, 0) || LVGL_VERSION_MAJOR >= 9
     .fallback = NULL,
 #endif

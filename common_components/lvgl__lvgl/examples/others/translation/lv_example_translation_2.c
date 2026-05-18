@@ -2,7 +2,7 @@
 
 #if LV_USE_TRANSLATION && LV_USE_DROPDOWN && LV_USE_LABEL && LV_BUILD_EXAMPLES
 
-/* Arrays are defined `const` to place them in program space instead of RAM. */
+/* Массы развивают`const`для размещения их в пространстве программы вместо RAM. */
 static const char * const tags[] = {"tiger", "lion", "rabbit", "elephant", NULL};
 static const char * const languages[] = {"English", "Deutsch", "Español", NULL};
 
@@ -22,7 +22,7 @@ static void on_language_change(lv_event_t * e)
 {
     lv_obj_t * label      = lv_event_get_target_obj(e);
     const char * tag      = (const char *) lv_event_get_user_data(e);
-    /* You can get the new language with `lv_event_get_param`*/
+    /* Вы можете получить новый язык с помощью `lv_event_get_param`.*/
     const char * language = (const char *) lv_event_get_param(e);
     LV_UNUSED(language);
 
@@ -39,7 +39,7 @@ static void language_change_cb(lv_event_t * e)
 }
 
 /**
- * Change label text when the translation language changes
+ * Изменение текста метки при изменении языка перевода
  */
 void lv_example_translation_2(void)
 {
@@ -50,7 +50,7 @@ void lv_example_translation_2(void)
     const size_t tag_count = sizeof(tags) / sizeof(tags[0]) - 1;
     const size_t lang_count = sizeof(languages) / sizeof(languages[0]) - 1;
 
-    /* Create a dropdown to be able to select the language */
+    /* Создайте раскрывающийся список, чтобы иметь возможность выбрать язык */
     lv_obj_t * language_dropdown = lv_dropdown_create(lv_screen_active());
     lv_dropdown_clear_options(language_dropdown);
 
@@ -60,11 +60,11 @@ void lv_example_translation_2(void)
 
     lv_obj_add_event_cb(language_dropdown, language_change_cb, LV_EVENT_VALUE_CHANGED, NULL);
 
-    /* Create a label for each tag */
+    /* Создайте метку для каждого тега */
     for(size_t i = 0; i < tag_count; ++i) {
         lv_obj_t * label = lv_label_create(lv_screen_active());
 
-        /* Bind to the language change event so that we can change the label when the language changes */
+        /* Привязка к событию смены языка, чтобы мы могли изменить метку при смене языка. */
         lv_obj_add_event_cb(label, on_language_change, LV_EVENT_TRANSLATION_LANGUAGE_CHANGED, (void *)tags[i]);
     }
 

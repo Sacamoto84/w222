@@ -7,7 +7,7 @@ static void ofs_y_anim(void * img, int32_t v)
 }
 
 /**
- * Image styling and offset
+ * Стилизация изображения и смещение
  */
 void lv_example_image_4(void)
 {

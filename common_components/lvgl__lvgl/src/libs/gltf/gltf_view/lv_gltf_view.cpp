@@ -496,17 +496,17 @@ lv_3dray_t lv_gltf_get_ray_from_2d_coordinate(lv_obj_t * obj, const lv_point_t *
 
     fastgltf::math::fmat4x4 proj_mat = fastgltf::math::inverse(fastgltf::math::fmat4x4(viewer->projection_matrix));
 
-    /* Convert mouse coordinates to NDC */
+    /* Преобразуйте координаты мыши в NDC. */
     float x = norm_mouse_x * 2.0f - 1.0f;
     float y = 1.0f - (norm_mouse_y * 2.0f);
-    float z = -1.0f; /* Clip space z */
+    float z = -1.0f; /* Вырезать пространство z */
 
     fastgltf::math::fvec4 clip_space_pos = fastgltf::math::fvec4(x, y, z, 1.f);
     auto ray_eye = (proj_mat) * clip_space_pos;
     ray_eye[2] = -1.0f;
     ray_eye[3] = 0.0f;
 
-    /* Calculate ray world direction */
+    /* Вычислить направление света лучей */
     fastgltf::math::fvec4 ray_world = fastgltf::math::inverse(viewer->view_matrix) * ray_eye;
     auto ray_direction = fastgltf::math::normalize(fastgltf::math::fvec3(ray_world[0], ray_world[1], ray_world[2]));
 
@@ -525,19 +525,19 @@ lv_result_t lv_intersect_ray_with_plane(const lv_3dray_t * ray, const lv_3dplane
     fastgltf::math::fvec3 ray_direction = fastgltf::math::fvec3(ray->direction.x, ray->direction.y, ray->direction.z);
 
     float denom = fastgltf::math::dot(plane_normal, ray_direction);
-    if(fabs(denom) > 1e-6) {  /* Check if the ray is not parallel to the plane */
+    if(fabs(denom) > 1e-6) {  /* Проверьте, не параллелен ли луч плоскости */
         fastgltf::math::fvec3 diff = plane_center - ray_start;
         float t = fastgltf::math::dot(diff, plane_normal) / denom;
 
-        if(t >= 0) {  /* Intersection occurs ahead of the ray origin */
-            /* Calculate the collision point */
+        if(t >= 0) {  /* Пересечение происходит перед началом луча */
+            /* Рассчитать точку столкновения */
             (*collision_point).x = ray_start[0] + t * ray_direction[0];
             (*collision_point).y = ray_start[1] + t * ray_direction[1];
             (*collision_point).z = ray_start[2] + t * ray_direction[2];
-            return LV_RESULT_OK; /* Collision point found */
+            return LV_RESULT_OK; /* Точка столкновения найдена */
         }
     }
-    return LV_RESULT_INVALID; /* No intersection */
+    return LV_RESULT_INVALID; /* Нет пересечения */
 }
 
 lv_3dplane_t lv_gltf_get_current_view_plane(lv_obj_t * obj, float distance)
@@ -547,11 +547,11 @@ lv_3dplane_t lv_gltf_get_current_view_plane(lv_obj_t * obj, float distance)
     lv_gltf_t * viewer = (lv_gltf_t *)obj;
     lv_3dplane_t outplane = {{0, 0, 0}, {0, 0, 0}};
 
-    /* Forward vector is the third column of the matrix */
+    /* Прямой вектор — это третий столбец матрицы. */
     auto forward = fastgltf::math::fvec3(viewer->view_matrix[0][2], viewer->view_matrix[1][2], viewer->view_matrix[2][2]);
     forward = fastgltf::math::normalize(forward);
 
-    /* Calculate the plane center */
+    /* Вычислить центр плоскости */
     const auto & camera_pos = viewer->camera_pos;
     auto plane_pos = fastgltf::math::fvec3(camera_pos[0], camera_pos[1], camera_pos[2]) - forward * distance;
     outplane.origin = {plane_pos[0], plane_pos[1], plane_pos[2]};
@@ -568,11 +568,11 @@ lv_result_t lv_gltf_world_to_screen(lv_obj_t * obj, const lv_3dpoint_t world_pos
     fastgltf::math::fvec4 world_position_h = fastgltf::math::fvec4(world_pos.x, world_pos.y, world_pos.z, 1.0f);
     fastgltf::math::fvec4 clip_space_pos = viewer->projection_matrix * viewer->view_matrix * world_position_h;
 
-    /* Check for perspective division (w must not be zero) */
+    /* Проверьте перспективное деление (w не должно быть нулем) */
     if(clip_space_pos[3] == 0.0f) {
         screen_pos->x = -1;
         screen_pos->y = -1;
-        return LV_RESULT_INVALID; /* Position is not valid for screen mapping */
+        return LV_RESULT_INVALID; /* Позиция недействительна для отображения экрана. */
     }
 
     clip_space_pos /= clip_space_pos[3];
@@ -664,7 +664,7 @@ static void lv_gltf_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) {
         return;
@@ -842,7 +842,7 @@ static void setup_background_environment(GLuint program, GLuint * vao, GLuint * 
 
     GLint positionAttributeLocation = glGetAttribLocation(program, "a_position");
 
-    // Specify the layout of the vertex data
+    // Укажите расположение данных вершин
     glVertexAttribPointer(positionAttributeLocation, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
     glEnableVertexAttribArray(positionAttributeLocation);
 

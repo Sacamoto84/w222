@@ -54,7 +54,7 @@ typedef struct {
 #endif /*LV_LOTTIE_H*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LOTTIE_PRIVATE_H*/

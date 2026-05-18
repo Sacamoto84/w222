@@ -2,7 +2,7 @@
 #if LV_BUILD_EXAMPLES && LV_USE_LINE
 
 /**
- * Using the drop shadow style properties
+ * Использование свойств стиля тени
  */
 void lv_example_style_10(void)
 {
@@ -15,7 +15,7 @@ void lv_example_style_10(void)
     lv_style_set_drop_shadow_offset_x(&style, 5);
     lv_style_set_drop_shadow_offset_y(&style, 10);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_arc_create(lv_screen_active());
     lv_obj_add_style(obj, &style, LV_PART_INDICATOR);
     lv_obj_center(obj);

@@ -34,7 +34,7 @@ LV_EXPORT_CONST_INT(LV_COLOR_DEPTH);
 #endif
 
 /**
- * Opacity percentages.
+ * Процент непрозрачности.
  */
 
 enum _lv_opacity_level_t {
@@ -57,10 +57,10 @@ enum _lv_opacity_level_t {
 #define LV_OPA_MAX 253  /**< Fully cover if opa >= LV_OPA_MAX */
 
 /**
- * Get the pixel size of a color format in bits, bpp
- * @param cf        a color format (`LV_COLOR_FORMAT_...`)
- * @return          the pixel size in bits
- * @sa              lv_color_format_get_bpp
+ * Получить размер пикселя цвета в битах, bpp.
+ * @param cf        цветовой формат (`LV_COLOR_FORMAT_...`)
+ * @return          размер пикселя в битах
+ * @sa lv_color_format_get_bpp
  */
 #define LV_COLOR_FORMAT_GET_BPP(cf) (       \
                                             (cf) == LV_COLOR_FORMAT_I1 ? 1 :        \
@@ -95,10 +95,10 @@ enum _lv_opacity_level_t {
                                     )
 
 /**
- * Get the pixel size of a color format in bytes
- * @param cf        a color format (`LV_COLOR_FORMAT_...`)
- * @return          the pixel size in bytes
- * @sa              lv_color_format_get_size
+ * Получить размер пикселя цветового формата в байтах.
+ * @param cf        цветовой формат (`LV_COLOR_FORMAT_...`)
+ * @return          размер пикселя в байтах
+ * @sa lv_color_format_get_size
  */
 #define LV_COLOR_FORMAT_GET_SIZE(cf) ((LV_COLOR_FORMAT_GET_BPP(cf) + 7) >> 3)
 
@@ -142,7 +142,7 @@ typedef enum {
     LV_COLOR_FORMAT_RAW               = 0x01,
     LV_COLOR_FORMAT_RAW_ALPHA         = 0x02,
 
-    /*<=1 byte (+alpha) formats*/
+    /*<=1-байтовые (+альфа) форматы*/
     LV_COLOR_FORMAT_L8                = 0x06,
     LV_COLOR_FORMAT_I1                = 0x07,
     LV_COLOR_FORMAT_I2                = 0x08,
@@ -150,20 +150,20 @@ typedef enum {
     LV_COLOR_FORMAT_I8                = 0x0A,
     LV_COLOR_FORMAT_A8                = 0x0E,
 
-    /*2 byte (+alpha) formats*/
+    /*2-байтовые (+альфа) форматы*/
     LV_COLOR_FORMAT_RGB565            = 0x12,
     LV_COLOR_FORMAT_ARGB8565          = 0x13,   /**< Not supported by sw renderer yet. */
     LV_COLOR_FORMAT_RGB565A8          = 0x14,   /**< Color array followed by Alpha array*/
     LV_COLOR_FORMAT_AL88              = 0x15,   /**< L8 with alpha >*/
     LV_COLOR_FORMAT_RGB565_SWAPPED    = 0x1B,
 
-    /*3 byte (+alpha) formats*/
+    /*3-байтовые (+альфа) форматы*/
     LV_COLOR_FORMAT_RGB888            = 0x0F,
     LV_COLOR_FORMAT_ARGB8888          = 0x10,
     LV_COLOR_FORMAT_XRGB8888          = 0x11,
     LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED          = 0x1A,
 
-    /*Formats not supported by software renderer but kept here so GPU can use it*/
+    /*Форматы не поддерживаются программным рендерером, но сохраняются здесь, чтобы GPU мог их использовать.*/
     LV_COLOR_FORMAT_A1                = 0x0B,
     LV_COLOR_FORMAT_A2                = 0x0C,
     LV_COLOR_FORMAT_A4                = 0x0D,
@@ -171,19 +171,19 @@ typedef enum {
     LV_COLOR_FORMAT_ARGB4444          = 0x17,
     LV_COLOR_FORMAT_ARGB2222          = 0X18,
 
-    /* reference to https://wiki.videolan.org/YUV/ */
-    /*YUV planar formats*/
+    /* ссылка на https://wiki.videolan.org/YUV/ */
+    /*YUV планарные форматы*/
     LV_COLOR_FORMAT_YUV_START         = 0x20,
-    LV_COLOR_FORMAT_I420              = LV_COLOR_FORMAT_YUV_START,  /*YUV420 planar(3 plane)*/
-    LV_COLOR_FORMAT_I422              = 0x21,  /*YUV422 planar(3 plane)*/
-    LV_COLOR_FORMAT_I444              = 0x22,  /*YUV444 planar(3 plane)*/
-    LV_COLOR_FORMAT_I400              = 0x23,  /*YUV400 no chroma channel*/
-    LV_COLOR_FORMAT_NV21              = 0x24,  /*YUV420 planar(2 plane), UV plane in 'V, U, V, U'*/
-    LV_COLOR_FORMAT_NV12              = 0x25,  /*YUV420 planar(2 plane), UV plane in 'U, V, U, V'*/
+    LV_COLOR_FORMAT_I420              = LV_COLOR_FORMAT_YUV_START,  /*YUV420 планарный (3 плоскости)*/
+    LV_COLOR_FORMAT_I422              = 0x21,  /*YUV422 планарный (3 плоскости)*/
+    LV_COLOR_FORMAT_I444              = 0x22,  /*YUV444 планарный (3 плоскости)*/
+    LV_COLOR_FORMAT_I400              = 0x23,  /*YUV400 нет канала цветности*/
+    LV_COLOR_FORMAT_NV21              = 0x24,  /*YUV420 плоский (плоскость 2), плоскость UV в 'V, U, V, U'*/
+    LV_COLOR_FORMAT_NV12              = 0x25,  /*YUV420 плоский (плоскость 2), плоскость UV в 'U, V, U, V'*/
 
-    /*YUV packed formats*/
-    LV_COLOR_FORMAT_YUY2              = 0x26,  /*YUV422 packed like 'Y U Y V'*/
-    LV_COLOR_FORMAT_UYVY              = 0x27,  /*YUV422 packed like 'U Y V Y'*/
+    /*YUV упакованные форматы*/
+    LV_COLOR_FORMAT_YUY2              = 0x26,  /*YUV422 упакован как «Y U Y V»*/
+    LV_COLOR_FORMAT_UYVY              = 0x27,  /*YUV422 упакован как «U Y V Y»*/
 
     LV_COLOR_FORMAT_YUV_END           = LV_COLOR_FORMAT_UYVY,
 
@@ -198,7 +198,7 @@ typedef enum {
     LV_COLOR_FORMAT_NEMA_TSC12A       = 0x35,
     LV_COLOR_FORMAT_NEMA_TSC_END      = LV_COLOR_FORMAT_NEMA_TSC12A,
 
-    /*Color formats in which LVGL can render*/
+    /*Цветовые форматы, в которых LVGL может отображать*/
 #if LV_COLOR_DEPTH == 1
     LV_COLOR_FORMAT_NATIVE            = LV_COLOR_FORMAT_I1,
     LV_COLOR_FORMAT_NATIVE_WITH_ALPHA = LV_COLOR_FORMAT_I1,
@@ -242,98 +242,98 @@ typedef enum {
  **********************/
 
 /**
- * Get the pixel size of a color format in bits, bpp
- * @param cf        a color format (`LV_COLOR_FORMAT_...`)
- * @return          the pixel size in bits
+ * Получить размер пикселя цвета в битах, bpp.
+ * @param cf        цветовой формат (`LV_COLOR_FORMAT_...`)
+ * @return          размер пикселя в битах
  * @sa              LV_COLOR_FORMAT_GET_BPP
  */
 uint8_t lv_color_format_get_bpp(lv_color_format_t cf);
 
 /**
- * Get the pixel size of a color format in bytes
- * @param cf        a color format (`LV_COLOR_FORMAT_...`)
- * @return          the pixel size in bytes
+ * Получить размер пикселя цветового формата в байтах.
+ * @param cf        цветовой формат (`LV_COLOR_FORMAT_...`)
+ * @return          размер пикселя в байтах
  * @sa              LV_COLOR_FORMAT_GET_SIZE
  */
 uint8_t lv_color_format_get_size(lv_color_format_t cf);
 
 /**
- * Check if a color format has alpha channel or not
- * @param src_cf    a color format (`LV_COLOR_FORMAT_...`)
- * @return          true: has alpha channel; false: doesn't have alpha channel
+ * Проверьте, имеет ли цветовой формат альфа-канал или нет.
+ * @param src_cf    цветовой формат (`LV_COLOR_FORMAT_...`)
+ * @return          true: есть альфа-канал; false: нет альфа-канала
  */
 bool lv_color_format_has_alpha(lv_color_format_t src_cf);
 
 /**
- * Create an ARGB8888 color from RGB888 + alpha
- * @param color     an RGB888 color
- * @param opa       the alpha value
- * @return          the ARGB8888 color
+ * Создайте цвет ARGB8888 из RGB888 + альфа.
+ * @param color     цвет RGB888
+ * @param opa       альфа-значение
+ * @return          цвет ARGB8888
  */
 lv_color32_t lv_color_to_32(lv_color_t color, lv_opa_t opa);
 
 /**
- * Convert an RGB888 color to an integer
- * @param c     an RGB888 color
- * @return      `c` as an integer
+ * Преобразование цвета RGB888 в целое число
+ * @param c     цвет RGB888
+ * @return      `c` как целое число
  */
 uint32_t lv_color_to_int(lv_color_t c);
 
 /**
- * Check if two RGB888 color are equal
- * @param c1    the first color
- * @param c2    the second color
- * @return      true: equal
+ * Проверьте, равны ли два цвета RGB888
+ * @param c1    первый цвет
+ * @param c2    второй цвет
+ * @return      правда: равно
  */
 bool lv_color_eq(lv_color_t c1, lv_color_t c2);
 
 /**
- * Check if two ARGB8888 color are equal
- * @param c1    the first color
- * @param c2    the second color
- * @return      true: equal
+ * Проверьте, равны ли два цвета ARGB8888
+ * @param c1    первый цвет
+ * @param c2    второй цвет
+ * @return      правда: равно
  */
 bool lv_color32_eq(lv_color32_t c1, lv_color32_t c2);
 
 /**
- * Create a color from 0x000000..0xffffff input
- * @param c     the hex input
- * @return      the color
+ * Создайте цвет ввода0x000000..0xffffff.
+ * @param c     шестнадцатеричный ввод
+ * @return      цвет
  */
 lv_color_t lv_color_hex(uint32_t c);
 
 /**
- * Create an RGB888 color
- * @param r     the red channel (0..255)
- * @param g     the green channel (0..255)
- * @param b     the blue channel (0..255)
- * @return      the color
+ * Создайте цвет RGB888.
+ * @param r     красный канал (0..255)
+ * @param g     зеленый канал (0..255)
+ * @param b     синий канал (0..255)
+ * @return      цвет
  */
 lv_color_t lv_color_make(uint8_t r, uint8_t g, uint8_t b);
 
 /**
- * Create an ARGB8888 color
- * @param r     the red channel (0..255)
- * @param g     the green channel (0..255)
- * @param b     the blue channel (0..255)
- * @param a     the alpha channel (0..255)
- * @return      the color
+ * Создайте цвет ARGB8888.
+ * @param r     красный канал (0..255)
+ * @param g     зеленый канал (0..255)
+ * @param b     синий канал (0..255)
+ * @param a     альфа-канал (0..255)
+ * @return      цвет
  */
 lv_color32_t lv_color32_make(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 /**
- * Create a color from 0x000..0xfff input
- * @param c     the hex input (e.g. 0x123 will be 0x112233)
- * @return      the color
+ * Создайте цвет ввода0x000..0xfff.
+ * @param c     шестнадцатеричный ввод (например,0x123будет0x112233)
+ * @return      цвет
  */
 lv_color_t lv_color_hex3(uint32_t c);
 
 /**
- * Check if a color with an RGB888 color is within the color range defined by l_color and h_color.
- * @param color   the color to check
- * @param l_color the lower bound color
- * @param h_color the upper bound color
- * @return        true: pixel is within the color range
+ * Проверьте, находится ли цвет с цветомRGB888в цвете, длинаl_colorиh_color.
+ * @param color   цвет, который нужно проверить
+ * @param l_color цвет нижней границы
+ * @param h_color цвет верхней границы
+ * @return        true: пиксель находится в цветовом диапазоне
  */
 static inline bool lv_color_is_in_range(lv_color_t color, lv_color_t l_color, lv_color_t h_color)
 {
@@ -346,9 +346,9 @@ static inline bool lv_color_is_in_range(lv_color_t color, lv_color_t l_color, lv
 }
 
 /**
- * Convert a RGB565 color to RGB888
- * @param c       a RGB565 color on lv_color16_t
- * @return        the color
+ * Преобразование цвета RGB565 в RGB888
+ * @param c       цветRGB565на lv_color16_t
+ * @return        цвет
  */
 static inline lv_color_t lv_color16_to_color(lv_color16_t c)
 {
@@ -356,82 +356,82 @@ static inline lv_color_t lv_color16_to_color(lv_color16_t c)
 }
 
 /**
- * Convert am RGB888 color to RGB565 stored in `uint16_t`
- * @param color     and RGB888 color
- * @return          `color` as RGB565 on `uin16_t`
+ * Преобразование цветаRGB888в RGB565, хранящегося в `uint16_t`.
+ * @param color     и цвет RGB888
+ * @return          `color` какRGB565на `uin16_t`
  */
 uint16_t lv_color_to_u16(lv_color_t color);
 
 /**
- * Convert am RGB888 color to XRGB8888 stored in `uint32_t`
- * @param color     and RGB888 color
- * @return          `color` as XRGB8888 on `uin32_t` (the alpha channel is always set to 0xFF)
+ * Преобразование цветаRGB888в XRGB8888, хранящегося в `uint32_t`.
+ * @param color     и цвет RGB888
+ * @return          `color` какXRGB8888на`uin32_t`(альфа-канал всегда установлен на 0xFF)
  */
 uint32_t lv_color_to_u32(lv_color_t color);
 
 /**
- * Mix two RGB565 colors
- * @param c1        the first color (typically the foreground color)
- * @param c2        the second color  (typically the background color)
- * @param mix       0..255, or LV_OPA_0/10/20...
- * @return          mix == 0: c2
- *                  mix == 255: c1
- *                  mix == 128: 0.5 x c1 + 0.5 x c2
+ * Смешайте два цвета RGB565
+ * @param c1        первый цвет (обычно цвет переднего плана)
+ * @param c2        второй цвет (обычно цвет фона)
+ * @param микс 0..255 или LV_OPA_0 /10/20...
+ * @return          микс == 0: c2
+ *                  микс == 255:с1
+ *                  смесь == 128: 0,5 х с1 + 0,5 х с2
  */
 uint16_t LV_ATTRIBUTE_FAST_MEM lv_color_16_16_mix(uint16_t c1, uint16_t c2, uint8_t mix);
 
 /**
- * Mix white to a color
- * @param c     the base color
- * @param lvl   the intensity of white (0: no change, 255: fully white)
- * @return      the mixed color
+ * Смешать белый цвет с цветом
+ * @param c     базовый цвет
+ * @param lvl   интенсивность белого (0: без изменений, 255: полностью белый)
+ * @return      смешанный цвет
  */
 lv_color_t lv_color_lighten(lv_color_t c, lv_opa_t lvl);
 
 /**
- * Mix black to a color
- * @param c     the base color
- * @param lvl   the intensity of black (0: no change, 255: fully black)
- * @return      the mixed color
+ * Смешать черный с цветом
+ * @param c     базовый цвет
+ * @param lvl   интенсивность черного цвета (0: без изменений, 255: полностью черный)
+ * @return      смешанный цвет
  */
 lv_color_t lv_color_darken(lv_color_t c, lv_opa_t lvl);
 
 /**
- * Convert a HSV color to RGB
- * @param h hue [0..359]
- * @param s saturation [0..100]
- * @param v value [0..100]
- * @return the given RGB color in RGB (with LV_COLOR_DEPTH depth)
+ * Преобразование цвета HSV в RGB
+ * @param h оттенок [0..359]
+ * @param s насыщенность [0..100]
+ * @param v значение [0..100]
+ * @return заданный цветRGBвRGB(с глубиной LV_COLOR_DEPTH)
  */
 lv_color_t lv_color_hsv_to_rgb(uint16_t h, uint8_t s, uint8_t v);
 
 /**
- * Convert a 32-bit RGB color to HSV
- * @param r8 8-bit red
- * @param g8 8-bit green
- * @param b8 8-bit blue
- * @return the given RGB color in HSV
+ * Преобразование 32-битного цвета RGB в HSV.
+ * @param r8 8-битный красный
+ * @param g8 8-битный зеленый
+ * @param b8 8-битный синий
+ * @return заданный цветRGBв HSV
  */
 lv_color_hsv_t lv_color_rgb_to_hsv(uint8_t r8, uint8_t g8, uint8_t b8);
 
 /**
- * Convert a color to HSV
- * @param color color
- * @return the given color in HSV
+ * Преобразовать цвет в HSV
+ * @param color цвет
+ * @return данный цвет в HSV
  */
 lv_color_hsv_t lv_color_to_hsv(lv_color_t color);
 
 /*Source: https://vuetifyjs.com/en/styles/colors/#material-colors*/
 
 /**
- * A helper for white color
- * @return      a white color
+ * Помощник для белого цвета
+ * @return      белый цвет
  */
 lv_color_t lv_color_white(void);
 
 /**
- * A helper for black color
- * @return      a black color
+ * Помощник для черного цвета
+ * @return      черный цвет
  */
 lv_color_t lv_color_black(void);
 
@@ -440,38 +440,38 @@ void lv_color_premultiply(lv_color32_t * c);
 void lv_color16_premultiply(lv_color16_t * c, lv_opa_t a);
 
 /**
- * Get the luminance of a color: luminance = 0.3 R + 0.59 G + 0.11 B
- * @param c a color
- * @return the brightness [0..255]
+ * Получите яркость цвета: яркость = 0,3 R + 0,59 G + 0,11 B.
+ * @param c цвет
+ * @return яркость [0..255]
  */
 uint8_t lv_color_luminance(lv_color_t c);
 
 /**
- * Get the luminance of a color16: luminance = 0.3 R + 0.59 G + 0.11 B
- * @param c a color
- * @return the brightness [0..255]
+ * Получите яркость цвета16: яркость = 0,3 R + 0,59 G + 0,11 B.
+ * @param c цвет
+ * @return яркость [0..255]
  */
 uint8_t lv_color16_luminance(const lv_color16_t c);
 
 /**
- * Get the luminance of a color24: luminance = 0.3 R + 0.59 G + 0.11 B
- * @param c a color
- * @return the brightness [0..255]
+ * Получите яркость цвета24: яркость = 0,3 R + 0,59 G + 0,11 B.
+ * @param c цвет
+ * @return яркость [0..255]
  */
 uint8_t lv_color24_luminance(const uint8_t * c);
 
 /**
- * Get the luminance of a color32: luminance = 0.3 R + 0.59 G + 0.11 B
- * @param c a color
- * @return the brightness [0..255]
+ * Получите яркость цвета32: яркость = 0,3 R + 0,59 G + 0,11 B.
+ * @param c цвет
+ * @return яркость [0..255]
  */
 uint8_t lv_color32_luminance(lv_color32_t c);
 
 
 /**
- * Swap the endianness of an rgb565 color
- * @param c a color
- * @return the swapped color
+ * Поменяйте порядок байтов цвета rgb565.
+ * @param c цвет
+ * @return замененный цвет
  */
 static inline uint16_t LV_ATTRIBUTE_FAST_MEM lv_color_swap_16(uint16_t c)
 {
@@ -488,7 +488,7 @@ static inline uint16_t LV_ATTRIBUTE_FAST_MEM lv_color_swap_16(uint16_t c)
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_color_filter_dsc_t lv_color_filter_shade;
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_COLOR_H*/

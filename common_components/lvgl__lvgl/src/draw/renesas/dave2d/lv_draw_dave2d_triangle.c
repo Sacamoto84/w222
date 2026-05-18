@@ -36,10 +36,10 @@ void lv_draw_dave2d_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * 
     p[1] = dsc->p[1];
     p[2] = dsc->p[2];
 
-    /*Order the points like this:
-     * [0]: top
-     * [1]: right bottom
-     * [2]: left bottom */
+    /*Расположите точки следующим образом:
+     * [0]: верх
+     * [1]: справа внизу
+     * [2]: слева внизу */
 
     if(dsc->p[0].y <= dsc->p[1].y && dsc->p[0].y <= dsc->p[2].y) {
         p[0] = dsc->p[0];
@@ -109,13 +109,13 @@ void lv_draw_dave2d_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * 
             y2 = LV_MAX3(p[0].y, p[1].y, p[2].y);
 
             if(a1 < a2) {
-                y0 = 0.0f;//silence the compiler warning
+                y0 = 0.0f;//отключить предупреждение компилятора
                 y3 = 0.0f;
 
             }
             else {
-                y0 = y2 - ((y2 - y1) / (a2 - a1) * (a2)); //point where alpha is 0
-                y3 = y1 + ((y2 - y1) / (a2 - a1) * (255 - a1)); //point where alpha is 255
+                y0 = y2 - ((y2 - y1) / (a2 - a1) * (a2)); //точка, где альфа равна 0
+                y3 = y1 + ((y2 - y1) / (a2 - a1) * (255 - a1)); //точка, где альфа равна 255
             }
 
             y0_i = (int16_t)y0;

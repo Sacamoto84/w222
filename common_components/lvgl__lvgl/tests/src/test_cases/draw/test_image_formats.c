@@ -223,7 +223,7 @@ static const void * c_array_images[sizeof(stride_align)][sizeof(compressions)][s
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_SPACE_EVENLY);
 
@@ -233,7 +233,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void img_create(const char * name, const void * img_src, bool rotate, bool recolor)
@@ -247,7 +247,7 @@ static void img_create(const char * name, const void * img_src, bool rotate, boo
 
     lv_obj_t * img = lv_image_create(cont);
     lv_image_set_src(img, img_src);
-    lv_obj_set_style_image_recolor(img, lv_palette_main(LV_PALETTE_RED), 0);   /*For A8*/
+    lv_obj_set_style_image_recolor(img, lv_palette_main(LV_PALETTE_RED), 0);   /*Для A8*/
     if(recolor) lv_obj_set_style_image_recolor_opa(img, LV_OPA_70, 0);
     if(rotate) lv_image_set_rotation(img, 450);
 
@@ -286,9 +286,9 @@ void test_image_formats(void)
             bool rotate = mode & 0x02;
             bool recolor = mode & 0x01;
 #if LV_BIN_DECODER_RAM_LOAD == 0
-            if(rotate) continue;  /* Transform relies on LV_BIN_DECODER_RAM_LOAD to be enabled */
+            if(rotate) continue;  /* Для включения Transform требуется LV_BIN_DECODER_RAM_LOAD. */
 #endif
-            /*Loop compressions array and do test.*/
+            /*Зациклите массив сжатий и выполните тестирование.*/
             for(unsigned i = 0; i < sizeof(compressions) / sizeof(compressions[0]); i++) {
                 char reference[256];
                 bin_image_create(rotate, recolor, align, i);

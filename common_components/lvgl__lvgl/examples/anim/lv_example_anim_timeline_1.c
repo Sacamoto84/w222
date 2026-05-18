@@ -44,18 +44,18 @@ static void slider_prg_event_handler(lv_event_t * e)
 }
 
 /**
- * Create an animation timeline
+ * Создайте временную шкалу анимации
  */
 void lv_example_anim_timeline_1(void)
 {
-    /* Create anim timeline */
+    /* Создать временную шкалу анимации */
     lv_anim_timeline_t * anim_timeline = lv_anim_timeline_create();
 
     lv_obj_t * par = lv_screen_active();
     lv_obj_set_flex_flow(par, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(par, LV_FLEX_ALIGN_SPACE_AROUND, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
-    /* create btn_start */
+    /* создать btn_start */
     lv_obj_t * btn_start = lv_button_create(par);
     lv_obj_add_event_cb(btn_start, btn_start_event_handler, LV_EVENT_VALUE_CHANGED, anim_timeline);
     lv_obj_add_flag(btn_start, LV_OBJ_FLAG_IGNORE_LAYOUT);
@@ -66,7 +66,7 @@ void lv_example_anim_timeline_1(void)
     lv_label_set_text(label_start, "Start");
     lv_obj_center(label_start);
 
-    /* create btn_pause */
+    /* создать btn_pause */
     lv_obj_t * btn_pause = lv_button_create(par);
     lv_obj_add_event_cb(btn_pause, btn_pause_event_handler, LV_EVENT_CLICKED, anim_timeline);
     lv_obj_add_flag(btn_pause, LV_OBJ_FLAG_IGNORE_LAYOUT);
@@ -76,14 +76,14 @@ void lv_example_anim_timeline_1(void)
     lv_label_set_text(label_pause, "Pause");
     lv_obj_center(label_pause);
 
-    /* create slider_prg */
+    /* создать slider_prg */
     lv_obj_t * slider_prg = lv_slider_create(par);
     lv_obj_add_event_cb(slider_prg, slider_prg_event_handler, LV_EVENT_VALUE_CHANGED, anim_timeline);
     lv_obj_add_flag(slider_prg, LV_OBJ_FLAG_IGNORE_LAYOUT);
     lv_obj_align(slider_prg, LV_ALIGN_BOTTOM_MID, 0, -20);
     lv_slider_set_range(slider_prg, 0, LV_ANIM_TIMELINE_PROGRESS_MAX);
 
-    /* create 3 objects */
+    /* создать 3 объекта */
     lv_obj_t * obj1 = lv_obj_create(par);
     lv_obj_set_size(obj1, obj_width, obj_height);
     lv_obj_set_scrollbar_mode(obj1, LV_SCROLLBAR_MODE_OFF);
@@ -96,7 +96,7 @@ void lv_example_anim_timeline_1(void)
     lv_obj_set_size(obj3, obj_width, obj_height);
     lv_obj_set_scrollbar_mode(obj3, LV_SCROLLBAR_MODE_OFF);
 
-    /* anim-slider */
+    /* аним-слайдер */
     lv_anim_t a_slider;
     lv_anim_init(&a_slider);
     lv_anim_set_var(&a_slider, slider_prg);
@@ -105,7 +105,7 @@ void lv_example_anim_timeline_1(void)
     lv_anim_set_path_cb(&a_slider, lv_anim_path_linear);
     lv_anim_set_duration(&a_slider, 700);
 
-    /* anim-obj1 */
+    /* аним-obj1 */
     lv_anim_t a1;
     lv_anim_init(&a1);
     lv_anim_set_var(&a1, obj1);
@@ -122,7 +122,7 @@ void lv_example_anim_timeline_1(void)
     lv_anim_set_path_cb(&a2, lv_anim_path_ease_out);
     lv_anim_set_duration(&a2, 300);
 
-    /* anim-obj2 */
+    /* аним-obj2 */
     lv_anim_t a3;
     lv_anim_init(&a3);
     lv_anim_set_var(&a3, obj2);
@@ -139,7 +139,7 @@ void lv_example_anim_timeline_1(void)
     lv_anim_set_path_cb(&a4, lv_anim_path_ease_out);
     lv_anim_set_duration(&a4, 300);
 
-    /* anim-obj3 */
+    /* аним-obj3 */
     lv_anim_t a5;
     lv_anim_init(&a5);
     lv_anim_set_var(&a5, obj3);
@@ -156,7 +156,7 @@ void lv_example_anim_timeline_1(void)
     lv_anim_set_path_cb(&a6, lv_anim_path_ease_out);
     lv_anim_set_duration(&a6, 300);
 
-    /* add animations to timeline */
+    /* добавить анимацию на временную шкалу */
     lv_anim_timeline_add(anim_timeline, 0, &a_slider);
     lv_anim_timeline_add(anim_timeline, 0, &a1);
     lv_anim_timeline_add(anim_timeline, 0, &a2);

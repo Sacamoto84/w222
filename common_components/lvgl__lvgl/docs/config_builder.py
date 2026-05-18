@@ -49,14 +49,14 @@ def run(output_cfg_path=None):
         else:
             match = disabled_option_re.search(line)
             if match:
-                # Except for these...
+                # Кроме этих...
                 if match[1] in leave_disabled_list:
                     continue
                 else:
-                    # ...replace '0' with '1' without altering any other part of line.
-                    # Set `j` to index where '0' was found.
+                    # ... замените «0» на «1», не изменяя какую-либо другую часть строки.
+                    # Установите `j` в индекс, где был найден «0».
                     j = match.regs[2][0]
-                    # Surgically insert '1' in place of '0'.  Strings are immutable.
+                    # Хирургическим путем вставьте «1» вместо «0».  Строки неизменяемы.
                     line = line[:j] + '1' + line[j + 1:]
                     lines[i] = line
 

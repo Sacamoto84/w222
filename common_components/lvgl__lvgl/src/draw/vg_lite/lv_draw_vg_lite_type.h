@@ -76,7 +76,7 @@ typedef struct _lv_draw_vg_lite_unit_t {
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_VG_LITE_TYPE_H*/

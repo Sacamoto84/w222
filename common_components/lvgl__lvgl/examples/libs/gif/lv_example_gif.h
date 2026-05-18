@@ -32,7 +32,7 @@ void lv_example_gif_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_GIF_H*/

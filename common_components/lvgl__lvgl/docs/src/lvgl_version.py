@@ -23,21 +23,21 @@ def lvgl_version(version_file):
             minor_re = re.compile(r'#\s*define\s+LVGL_VERSION_MINOR\s+(\d+)')
 
             for line in file.readlines():
-                # Skip if line not long enough to match.
+                # Пропустить, если длина строки недостаточна для соответствия.
                 if len(line) < 28:
                     continue
 
                 match = major_re.search(line)
                 if match is not None:
                     major = match[1]
-                    # Exit early if we have both values.
+                    # Выходим раньше, если у нас есть оба значения.
                     if len(major) > 0 and len(minor) > 0:
                         break
                 else:
                     match = minor_re.search(line)
                     if match is not None:
                         minor = match[1]
-                        # Exit early if we have both values.
+                        # Выходим раньше, если у нас есть оба значения.
                         if len(major) > 0 and len(minor) > 0:
                             break
 

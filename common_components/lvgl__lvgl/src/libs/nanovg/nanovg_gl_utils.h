@@ -1,18 +1,18 @@
 //
 // Copyright (c) 2009-2013 Mikko Mononen memon@inside.org
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
+// Данное программное обеспечение предоставляется «как есть», без каких-либо явных или подразумеваемых
+// гарантия.  Ни при каких обстоятельствах авторы не несут ответственности за какой-либо ущерб.
+// возникшие в результате использования данного программного обеспечения.
+// Разрешение предоставляется каждому на использование этого программного обеспечения для любых целей,
+// включая коммерческие приложения, а также изменять его и распространять
+// свободно, с соблюдением следующих ограничений:
 // 1. The origin of this software must not be misrepresented; you must not
-//    claim that you wrote the original software. If you use this software
-//    in a product, an acknowledgment in the product documentation would be
-//    appreciated but is not required.
+//    утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
+//    в продукте подтверждение в документации по продукту будет
+//    приветствуется, но не является обязательным.
 // 2. Altered source versions must be plainly marked as such, and must not be
-//    misrepresented as being the original software.
+//    ошибочно представлено как оригинальное программное обеспечение.
 // 3. This notice may not be removed or altered from any source distribution.
 //
 #ifndef NANOVG_GL_UTILS_H
@@ -36,7 +36,7 @@ struct NVGLUframebuffer {
 
 typedef struct NVGLUframebuffer NVGLUframebuffer;
 
-// Helper function to create GL frame buffer to render to.
+// Вспомогательная функция для создания буфера кадра GL для рендеринга.
 // format: see NVGtexture
 void nvgluBindFramebuffer(NVGLUframebuffer * fb);
 NVGLUframebuffer * nvgluCreateFramebuffer(NVGcontext * ctx, int w, int h, int imageFlags, int format);
@@ -47,10 +47,10 @@ void nvgluDeleteFramebuffer(NVGLUframebuffer * fb);
 #ifdef NANOVG_GL_IMPLEMENTATION
 
 #if defined(NANOVG_GL3) || defined(NANOVG_GLES2) || defined(NANOVG_GLES3)
-    // FBO is core in OpenGL 3>.
+    // FBO является ядром OpenGL 3>.
     #define NANOVG_FBO_VALID 1
 #elif defined(NANOVG_GL2)
-    // On OS X including glext defines FBO on GL2 too.
+    // В OS X, включая glext, определяет FBO и в GL2.
     #ifdef __APPLE__
         #include <OpenGL/glext.h>
         #define NANOVG_FBO_VALID 1
@@ -87,23 +87,23 @@ NVGLUframebuffer * nvgluCreateFramebuffer(NVGcontext * ctx, int w, int h, int im
 
     fb->ctx = ctx;
 
-    // frame buffer object
+    // объект кадрового буфера
     glGenFramebuffers(1, &fb->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fb->fbo);
 
-    // render buffer object
+    // рендеринг объекта буфера
     glGenRenderbuffers(1, &fb->rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, fb->rbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, w, h);
 
-    // combine all
+    // объединить все
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->texture, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, fb->rbo);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 #ifdef GL_DEPTH24_STENCIL8
-        // If GL_STENCIL_INDEX8 is not supported, try GL_DEPTH24_STENCIL8 as a fallback.
-        // Some graphics cards require a depth buffer along with a stencil.
+        // Если GL_STENCIL_INDEX8 не поддерживается, попробуйте GL_DEPTH24_STENCIL8 в качестве запасного варианта.
+        // Некоторым видеокартам вместе с трафаретом требуется буфер глубины.
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->texture, 0);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, fb->rbo);

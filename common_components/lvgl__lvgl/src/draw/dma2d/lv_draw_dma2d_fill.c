@@ -88,7 +88,7 @@ void lv_draw_dma2d_fill(lv_draw_task_t * t, void * first_pixel, int32_t w, int32
     lv_draw_dma2d_unit_t * u = (lv_draw_dma2d_unit_t *) t->draw_unit;
     lv_memcpy(&u->writing_area, &cache_area, sizeof(lv_draw_dma2d_cache_area_t));
 
-    /* make sure the background area DMA2D is blending is up-to-date in main memory */
+    /* убедитесь, что область фона, которую смешивает DMA2D, актуальна в основной памяти */
     lv_draw_dma2d_clean_cache(&cache_area);
 #endif
 
@@ -117,7 +117,7 @@ void lv_draw_dma2d_fill(lv_draw_task_t * t, void * first_pixel, int32_t w, int32
         .bg_cf = (lv_draw_dma2d_fgbg_cf_t) output_cf
     };
 
-    /* Background alpha channel should be treated as 0xFF if the cf is XRGB */
+    /* Фоновый альфа-канал следует рассматривать как 0xFF, если cf равен XRGB. */
     if(cf == LV_COLOR_FORMAT_XRGB8888) {
         conf.bg_alpha_mode = LV_DRAW_DMA2D_ALPHA_MODE_REPLACE_ALPHA_CHANNEL;
         conf.bg_alpha = 0xff;

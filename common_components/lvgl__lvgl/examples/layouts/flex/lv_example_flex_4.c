@@ -2,7 +2,7 @@
 #if LV_USE_FLEX && LV_BUILD_EXAMPLES
 
 /**
- * Reverse the order of flex items
+ * Обратный порядок гибких элементов
  */
 void lv_example_flex_4(void)
 {

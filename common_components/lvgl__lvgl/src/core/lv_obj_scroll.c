@@ -56,7 +56,7 @@ static void scroll_area_into_view(const lv_area_t * area, lv_obj_t * child, lv_p
  **********************/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_obj_set_scrollbar_mode(lv_obj_t * obj, lv_scrollbar_mode_t mode)
@@ -92,7 +92,7 @@ void lv_obj_set_scroll_snap_y(lv_obj_t * obj, lv_scroll_snap_t align)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_scrollbar_mode_t lv_obj_get_scrollbar_mode(const lv_obj_t * obj)
@@ -169,14 +169,14 @@ int32_t lv_obj_get_scroll_left(const lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    /*Normally can't scroll the object out on the left.
-     *So simply use the current scroll position as "left size"*/
+    /*Обычно не удается прокрутить объект слева.
+     *Поэтому просто используйте текущую позицию прокрутки как «левый размер».*/
     if(lv_obj_get_style_base_dir(obj, LV_PART_MAIN) != LV_BASE_DIR_RTL) {
         if(obj->spec_attr == NULL) return 0;
         return -obj->spec_attr->scroll.x;
     }
 
-    /*With RTL base direction scrolling the left is normal so find the left most coordinate*/
+    /*При базовом направлении RTL прокрутка влево является нормальной, поэтому найдите самую левую координату.*/
     int32_t space_right = lv_obj_get_style_space_right(obj, LV_PART_MAIN);
     int32_t space_left = lv_obj_get_style_space_left(obj, LV_PART_MAIN);
 
@@ -212,14 +212,14 @@ int32_t lv_obj_get_scroll_right(const lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    /*With RTL base dir can't scroll to the object out on the right.
-     *So simply use the current scroll position as "right size"*/
+    /*С помощью базового каталога RTL невозможно прокрутить до объекта справа.
+     *Поэтому просто используйте текущую позицию прокрутки как «правильный размер».*/
     if(lv_obj_get_style_base_dir(obj, LV_PART_MAIN) == LV_BASE_DIR_RTL) {
         if(obj->spec_attr == NULL) return 0;
         return obj->spec_attr->scroll.x;
     }
 
-    /*With other base direction (LTR) scrolling to the right is normal so find the right most coordinate*/
+    /*При другом базовом направлении ( LTR ) прокрутка вправо является нормальной, поэтому найдите самую правую координату.*/
     int32_t child_res = LV_COORD_MIN;
     uint32_t i;
     uint32_t child_cnt = lv_obj_get_child_count(obj);
@@ -256,17 +256,17 @@ void lv_obj_get_scroll_end(lv_obj_t * obj, lv_point_t * end)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_obj_scroll_by_bounded(lv_obj_t * obj, int32_t dx, int32_t dy, lv_anim_enable_t anim_en)
 {
     if(dx == 0 && dy == 0) return;
 
-    /*We need to know the final sizes for bound check*/
+    /*Нам нужно знать окончательные размеры для связанной проверки.*/
     lv_obj_update_layout(obj);
 
-    /*Don't let scroll more than naturally possible by the size of the content*/
+    /*Не позволяйте прокручивать больше, чем это естественно возможно из-за размера контента.*/
     int32_t x_current = -lv_obj_get_scroll_x(obj);
     int32_t x_bounded = x_current + dx;
 
@@ -289,7 +289,7 @@ void lv_obj_scroll_by_bounded(lv_obj_t * obj, int32_t dx, int32_t dy, lv_anim_en
         }
     }
 
-    /*Don't let scroll more than naturally possible by the size of the content*/
+    /*Не позволяйте прокручивать больше, чем это естественно возможно из-за размера контента.*/
     int32_t y_current = -lv_obj_get_scroll_y(obj);
     int32_t y_bounded = y_current + dy;
 
@@ -348,7 +348,7 @@ void lv_obj_scroll_by(lv_obj_t * obj, int32_t dx, int32_t dy, lv_anim_enable_t a
         }
     }
     else {
-        /*Remove pending animations*/
+        /*Удалить ожидающие анимации*/
         lv_anim_delete(obj, scroll_y_anim);
         lv_anim_delete(obj, scroll_x_anim);
 
@@ -392,7 +392,7 @@ void lv_obj_scroll_to_y(lv_obj_t * obj, int32_t y, lv_anim_enable_t anim_en)
 
 void lv_obj_scroll_to_view(lv_obj_t * obj, lv_anim_enable_t anim_en)
 {
-    /*Be sure the screens layout is correct*/
+    /*Убедитесь, что расположение экранов правильное.*/
     lv_obj_update_layout(obj);
 
     lv_point_t p = {0, 0};
@@ -401,7 +401,7 @@ void lv_obj_scroll_to_view(lv_obj_t * obj, lv_anim_enable_t anim_en)
 
 void lv_obj_scroll_to_view_recursive(lv_obj_t * obj, lv_anim_enable_t anim_en)
 {
-    /*Be sure the screens layout is correct*/
+    /*Убедитесь, что расположение экранов правильное.*/
     lv_obj_update_layout(obj);
 
     lv_point_t p = {0, 0};
@@ -472,7 +472,7 @@ void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor_area, lv_area_t *
     lv_scrollbar_mode_t sm = lv_obj_get_scrollbar_mode(obj);
     if(sm == LV_SCROLLBAR_MODE_OFF)  return;
 
-    /*If there is no indev scrolling this object but `mode==active` return*/
+    /*Если нет прокрутки этого объекта, но`mode==active`возвращает*/
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(sm == LV_SCROLLBAR_MODE_ACTIVE) {
         while(indev) {
@@ -519,7 +519,7 @@ void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor_area, lv_area_t *
     int32_t obj_h = lv_obj_get_height(obj);
     int32_t obj_w = lv_obj_get_width(obj);
 
-    /*Space required for the vertical and horizontal scrollbars*/
+    /*Пространство, необходимое для вертикальной и горизонтальной полос прокрутки*/
     int32_t ver_reg_space = ver_draw ? thickness : 0;
     int32_t hor_req_space = hor_draw ? thickness : 0;
     int32_t rem;
@@ -529,7 +529,7 @@ void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor_area, lv_area_t *
         return;
     }
 
-    /*Draw vertical scrollbar if the mode is ON or can be scrolled in this direction*/
+    /*Нарисуйте вертикальную полосу прокрутки, если режим ON или ее можно прокручивать в этом направлении.*/
     int32_t content_h = obj_h + st + sb;
     if(ver_draw && content_h) {
         ver_area->y1 = obj->coords.y1;
@@ -544,11 +544,11 @@ void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor_area, lv_area_t *
         }
 
         int32_t sb_h = ((obj_h - top_space - bottom_space - hor_req_space) * obj_h) / content_h;
-        sb_h = LV_MAX(length > 0 ? length : sb_h, SCROLLBAR_MIN_SIZE); /*Style-defined size, calculated size, or minimum size*/
-        sb_h = LV_MIN(sb_h, obj_h); /*Limit scrollbar length to parent height*/
+        sb_h = LV_MAX(length > 0 ? length : sb_h, SCROLLBAR_MIN_SIZE); /*Размер, определенный стилем, расчетный размер или минимальный размер*/
+        sb_h = LV_MIN(sb_h, obj_h); /*Ограничить длину полосы прокрутки высотой родителя*/
         rem = (obj_h - top_space - bottom_space - hor_req_space) -
-              sb_h;  /*Remaining size from the scrollbar track that is not the scrollbar itself*/
-        int32_t scroll_h = content_h - obj_h; /*The size of the content which can be really scrolled*/
+              sb_h;  /*Оставшийся размер дорожки полосы прокрутки, который не является самой полосой прокрутки*/
+        int32_t scroll_h = content_h - obj_h; /*Размер контента, который действительно можно прокручивать*/
         if(scroll_h <= 0) {
             ver_area->y1 = obj->coords.y1 + top_space;
             ver_area->y2 = obj->coords.y2 - bottom_space - hor_req_space - 1;
@@ -574,7 +574,7 @@ void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor_area, lv_area_t *
         }
     }
 
-    /*Draw horizontal scrollbar if the mode is ON or can be scrolled in this direction*/
+    /*Нарисуйте горизонтальную полосу прокрутки, если режим ON или ее можно прокручивать в этом направлении.*/
     int32_t content_w = obj_w + sl + sr;
     if(hor_draw && content_w) {
         hor_area->y2 = obj->coords.y2 - bottom_space;
@@ -583,11 +583,11 @@ void lv_obj_get_scrollbar_area(lv_obj_t * obj, lv_area_t * hor_area, lv_area_t *
         hor_area->x2 = obj->coords.x2;
 
         int32_t sb_w = ((obj_w - left_space - right_space - ver_reg_space) * obj_w) / content_w;
-        sb_w = LV_MAX(length > 0 ? length : sb_w, SCROLLBAR_MIN_SIZE); /*Style-defined size, calculated size, or minimum size*/
-        sb_w = LV_MIN(sb_w, obj_w); /*Limit scrollbar length to parent width*/
+        sb_w = LV_MAX(length > 0 ? length : sb_w, SCROLLBAR_MIN_SIZE); /*Размер, определенный стилем, расчетный размер или минимальный размер*/
+        sb_w = LV_MIN(sb_w, obj_w); /*Ограничить длину полосы прокрутки шириной родительского элемента*/
         rem = (obj_w - left_space - right_space - ver_reg_space) -
-              sb_w;  /*Remaining size from the scrollbar track that is not the scrollbar itself*/
-        int32_t scroll_w = content_w - obj_w; /*The size of the content which can be really scrolled*/
+              sb_w;  /*Оставшийся размер дорожки полосы прокрутки, который не является самой полосой прокрутки*/
+        int32_t scroll_w = content_w - obj_w; /*Размер контента, который действительно можно прокручивать*/
         if(scroll_w <= 0) {
             if(rtl) {
                 hor_area->x1 = obj->coords.x1 + left_space + ver_reg_space - 1;
@@ -652,8 +652,8 @@ void lv_obj_scrollbar_invalidate(lv_obj_t * obj)
 
 void lv_obj_readjust_scroll(lv_obj_t * obj, lv_anim_enable_t anim_en)
 {
-    /*Be sure the bottom side is not remains scrolled in*/
-    /*With snapping the content can't be scrolled in*/
+    /*Убедитесь, что нижняя сторона не остается прокрученной.*/
+    /*При привязке контент нельзя прокручивать*/
     if(lv_obj_get_scroll_snap_y(obj) == LV_SCROLL_SNAP_NONE) {
         int32_t st = lv_obj_get_scroll_top(obj);
         int32_t sb = lv_obj_get_scroll_bottom(obj);
@@ -667,14 +667,14 @@ void lv_obj_readjust_scroll(lv_obj_t * obj, lv_anim_enable_t anim_en)
         int32_t sl = lv_obj_get_scroll_left(obj);
         int32_t sr = lv_obj_get_scroll_right(obj);
         if(lv_obj_get_style_base_dir(obj, LV_PART_MAIN) != LV_BASE_DIR_RTL) {
-            /*Be sure the left side is not remains scrolled in*/
+            /*Убедитесь, что левая сторона не прокручена.*/
             if(sr < 0 && sl > 0) {
                 sr = LV_MIN(sl, -sr);
                 lv_obj_scroll_by(obj, sr, 0, anim_en);
             }
         }
         else {
-            /*Be sure the right side is not remains scrolled in*/
+            /*Убедитесь, что правая сторона не остается прокрученной.*/
             if(sl < 0 && sr > 0) {
                 sr = LV_MIN(sr, -sl);
                 lv_obj_scroll_by(obj, sl, 0, anim_en);
@@ -699,7 +699,7 @@ static void scroll_y_anim(void * obj, int32_t v)
 
 static void scroll_end_cb(lv_anim_t * a)
 {
-    /*Do not sent END event if there wasn't a BEGIN*/
+    /*Не отправлять событие END, если не было BEGIN.*/
     if(a->start_cb_called) lv_obj_send_event(a->var, LV_EVENT_SCROLL_END, NULL);
 }
 
@@ -727,13 +727,13 @@ static void scroll_area_into_view(const lv_area_t * area, lv_obj_t * child, lv_p
     if((top_diff >= 0 && bottom_diff >= 0)) y_scroll = 0;
     else if(top_diff > 0) {
         y_scroll = top_diff;
-        /*Do not let scrolling in*/
+        /*Не допускайте прокрутки*/
         int32_t st = lv_obj_get_scroll_top(parent);
         if(st - y_scroll < 0) y_scroll = 0;
     }
     else if(bottom_diff > 0) {
         y_scroll = -bottom_diff;
-        /*Do not let scrolling in*/
+        /*Не допускайте прокрутки*/
         int32_t sb = lv_obj_get_scroll_bottom(parent);
         if(sb + y_scroll < 0) y_scroll = 0;
     }
@@ -770,13 +770,13 @@ static void scroll_area_into_view(const lv_area_t * area, lv_obj_t * child, lv_p
     if((left_diff >= 0 && right_diff >= 0)) x_scroll = 0;
     else if(left_diff > 0) {
         x_scroll = left_diff;
-        /*Do not let scrolling in*/
+        /*Не допускайте прокрутки*/
         int32_t sl = lv_obj_get_scroll_left(parent);
         if(sl - x_scroll < 0) x_scroll = 0;
     }
     else if(right_diff > 0) {
         x_scroll = -right_diff;
-        /*Do not let scrolling in*/
+        /*Не допускайте прокрутки*/
         int32_t sr = lv_obj_get_scroll_right(parent);
         if(sr + x_scroll < 0) x_scroll = 0;
     }
@@ -802,7 +802,7 @@ static void scroll_area_into_view(const lv_area_t * area, lv_obj_t * child, lv_p
             break;
     }
 
-    /*Remove any pending scroll animations.*/
+    /*Удалите все ожидающие анимации прокрутки.*/
     lv_anim_delete(parent, scroll_y_anim);
     lv_anim_delete(parent, scroll_x_anim);
 

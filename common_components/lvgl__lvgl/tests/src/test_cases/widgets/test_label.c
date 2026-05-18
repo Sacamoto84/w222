@@ -45,11 +45,11 @@ void test_label_set_text(void)
 {
     const char * new_text = "Hello world";
 
-    /* Refresh with the current text. */
+    /* Обновить текущий текст. */
     lv_label_set_text(label, NULL);
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), LV_LABEL_DEFAULT_TEXT);
 
-    /* '\0' terminated character string to set new text. */
+    /* '\0' завершает строку символов для установки нового текста. */
     lv_label_set_text(label, new_text);
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), new_text);
 }
@@ -69,7 +69,7 @@ void test_label_get_letter_pos_align_left(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* индекс символов начинается с 0 */
 
     lv_label_get_letter_pos(label, first_letter_idx, &first_letter_point);
 
@@ -130,7 +130,7 @@ void test_label_long_text_multiline_get_letter_pos_align_left(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* индекс символов начинается с 0 */
     const uint32_t last_letter_after_new_line = strlen(lv_label_get_text(long_label_multiline));
 
     lv_label_get_letter_pos(long_label_multiline, first_letter_idx, &first_letter_point);
@@ -168,7 +168,7 @@ void test_label_long_text_get_letter_pos_align_left(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label)) - 1; /* индекс символов начинается с 0 */
 
     lv_label_get_letter_pos(long_label, first_letter_idx, &first_letter_point);
 
@@ -196,7 +196,7 @@ void test_label_get_letter_pos_align_right(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* индекс символов начинается с 0 */
 
     lv_label_get_letter_pos(label, first_letter_idx, &first_letter_point);
 
@@ -257,7 +257,7 @@ void test_label_long_text_multiline_get_letter_pos_align_right(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* индекс символов начинается с 0 */
     const uint32_t last_letter_after_new_line = strlen(lv_label_get_text(long_label_multiline));
 
     lv_label_get_letter_pos(long_label_multiline, first_letter_idx, &first_letter_point);
@@ -295,7 +295,7 @@ void test_label_long_text_get_letter_pos_align_right(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label)) - 1; /* индекс символов начинается с 0 */
 
     lv_label_get_letter_pos(long_label, first_letter_idx, &first_letter_point);
 
@@ -323,7 +323,7 @@ void test_label_get_letter_pos_align_center(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* индекс символов начинается с 0 */
 
     lv_label_get_letter_pos(label, first_letter_idx, &first_letter_point);
 
@@ -384,7 +384,7 @@ void test_label_long_text_multiline_get_letter_pos_align_center(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label_multiline)) - 1; /* индекс символов начинается с 0 */
     const uint32_t last_letter_after_new_line = strlen(lv_label_get_text(long_label_multiline));
 
     lv_label_get_letter_pos(long_label_multiline, first_letter_idx, &first_letter_point);
@@ -422,7 +422,7 @@ void test_label_long_text_get_letter_pos_align_center(void)
     };
 
     const uint32_t first_letter_idx = 0;
-    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label)) - 1; /* char index starts at 0 */
+    const uint32_t last_letter_idx = strlen(lv_label_get_text(long_label)) - 1; /* индекс символов начинается с 0 */
 
     lv_label_get_letter_pos(long_label, first_letter_idx, &first_letter_point);
 
@@ -442,15 +442,15 @@ void test_label_is_char_under_pos_align_left(void)
     bool result = false;
     lv_point_t last_letter_point;
 
-    /* Getting the last letter point */
+    /* Получение последней буквы */
     const uint32_t last_letter_idx = strlen(lv_label_get_text(label)) - 1;
     lv_label_get_letter_pos(label, last_letter_idx, &last_letter_point);
 
-    /* We should get true, since we know the last letter is in this coordinate */
+    /* Мы должны получить истину, так как мы знаем, что последняя буква находится в этой координате */
     result = lv_label_is_char_under_pos(label, &last_letter_point);
     TEST_ASSERT_EQUAL(expected_result, result);
 
-    /* If we test a move away from the last letter then we should get false */
+    /* Если мы проверим отход от последней буквы, мы должны получить false */
     expected_result = false;
     last_letter_point.x += 50;
 
@@ -465,15 +465,15 @@ void test_label_is_char_under_pos_align_right(void)
     bool result = false;
     lv_point_t last_letter_point;
 
-    /* Getting the last letter point */
+    /* Получение последней буквы */
     const uint32_t last_letter_idx = strlen(lv_label_get_text(label)) - 1;
     lv_label_get_letter_pos(label, last_letter_idx, &last_letter_point);
 
-    /* We should get true, since we know the last letter is in this coordinate */
+    /* Мы должны получить истину, так как мы знаем, что последняя буква находится в этой координате */
     result = lv_label_is_char_under_pos(label, &last_letter_point);
     TEST_ASSERT_EQUAL(expected_result, result);
 
-    /* If we test a move away from the last letter then we should get false */
+    /* Если мы проверим отход от последней буквы, мы должны получить false */
     expected_result = false;
     last_letter_point.x -= 50;
 
@@ -488,15 +488,15 @@ void test_label_is_char_under_pos_align_center(void)
     bool result = false;
     lv_point_t last_letter_point;
 
-    /* Getting the last letter point */
+    /* Получение последней буквы */
     const uint32_t last_letter_idx = strlen(lv_label_get_text(label)) - 1;
     lv_label_get_letter_pos(label, last_letter_idx, &last_letter_point);
 
-    /* We should get true, since we know the last letter is in this coordinate */
+    /* Мы должны получить истину, так как мы знаем, что последняя буква находится в этой координате */
     result = lv_label_is_char_under_pos(label, &last_letter_point);
     TEST_ASSERT_EQUAL(expected_result, result);
 
-    /* If we test a move away from the last letter then we should get false */
+    /* Если мы проверим отход от последней буквы, мы должны получить false */
     expected_result = false;
     last_letter_point.x -= 50;
 
@@ -507,7 +507,7 @@ void test_label_is_char_under_pos_align_center(void)
 void test_label_cut_text(void)
 {
     const char * expected_text = "Te";
-    /* label has the default text which is "Text", let's remove "xt" from it */
+    /* метка имеет текст по умолчанию «Текст», давайте удалим из нее «xt» */
     lv_label_cut_text(label, 2, 2);
 
     TEST_ASSERT_EQUAL_STRING(expected_text, lv_label_get_text(label));
@@ -646,7 +646,7 @@ void test_label_dots(void)
     lv_label_set_long_mode(label3, LV_LABEL_LONG_MODE_DOTS);
     lv_label_set_long_mode(label4, LV_LABEL_LONG_MODE_DOTS);
 
-    /* Setting the text with _fmt when long mode was dots would cause the incorrect text to be displayed */
+    /* Установка текста с помощью _fmt, когда в длинном режиме были точки, приведет к отображению неправильного текста. */
     lv_label_set_text(label2, long_text);
     lv_label_set_text_fmt(label4, "%.*s", (int)strlen(long_text), long_text);
 
@@ -668,43 +668,43 @@ void test_label_recolor_with_text_wrap(void)
 {
     lv_obj_clean(lv_screen_active());
 
-    /* Create a label with recolor enabled and text wrapping */
+    /* Создайте метку с включенным изменением цвета и переносом текста. */
     lv_obj_t * label_recolor_wrap = lv_label_create(lv_screen_active());
 
-    /* Configure the label similar to the bug report */
+    /* Настройте метку, аналогичную отчету об ошибке. */
     lv_obj_set_style_text_font(label_recolor_wrap, &lv_font_montserrat_22, 0);
     lv_obj_set_style_text_color(label_recolor_wrap, lv_color_hex(0x8199f7), 0);
-    lv_obj_set_width(label_recolor_wrap, 300); /* Fixed width to force wrapping */
+    lv_obj_set_width(label_recolor_wrap, 300); /* Фиксированная ширина для принудительного переноса */
     lv_obj_set_style_text_align(label_recolor_wrap, LV_TEXT_ALIGN_CENTER, 0);
     lv_label_set_long_mode(label_recolor_wrap, LV_LABEL_LONG_MODE_WRAP);
     lv_label_set_recolor(label_recolor_wrap, true);
 
-    /* Test text with recolor commands that should wrap across multiple lines */
+    /* Тестовый текст с командами перекрашивания, который должен переноситься на несколько строк. */
     const char * test_text_with_recolor =
         "Before color. #ff0000 This is a very long red colored text that should maintain its red color even when it wraps across multiple lines due to the label width being too narrow to contain the entire text on a single line# After color.";
 
     lv_label_set_text(label_recolor_wrap, test_text_with_recolor);
     lv_obj_align(label_recolor_wrap, LV_ALIGN_TOP_MID, 0, 20);
 
-    /* Create a reference label without recolor for comparison */
+    /* Создайте эталонную метку без перекрашивания для сравнения. */
     lv_obj_t * label_no_recolor = lv_label_create(lv_screen_active());
     lv_obj_set_style_text_font(label_no_recolor, &lv_font_montserrat_22, 0);
     lv_obj_set_style_text_color(label_no_recolor, lv_color_hex(0x8199f7), 0);
     lv_obj_set_width(label_no_recolor, 300);
     lv_obj_set_style_text_align(label_no_recolor, LV_TEXT_ALIGN_CENTER, 0);
     lv_label_set_long_mode(label_no_recolor, LV_LABEL_LONG_MODE_WRAP);
-    lv_label_set_recolor(label_no_recolor, false); /* Disabled for comparison */
+    lv_label_set_recolor(label_no_recolor, false); /* Отключено для сравнения */
 
-    /* Same text but without recolor commands */
+    /* Тот же текст, но без команд перекрашивания */
     const char * test_text_without_recolor =
         "Before color. This is a very long red colored text that should maintain its red color even when it wraps across multiple lines due to the label width being too narrow to contain the entire text on a single line After color.";
 
     lv_label_set_text(label_no_recolor, test_text_without_recolor);
     lv_obj_align(label_no_recolor, LV_ALIGN_BOTTOM_MID, 0, -20);
 
-    /* The bug would manifest as improper recolor handling when text wraps */
-    /* This test verifies that recolor commands work correctly with text wrapping */
-    /* No assertion needed - the test passes if no crashes occur during rendering */
+    /* Ошибка проявлялась в неправильной обработке перекраски при переносе текста. */
+    /* Этот тест проверяет, правильно ли работают команды перекрашивания с переносом текста. */
+    /* Утверждение не требуется — тест считается пройденным, если во время рендеринга не происходит сбоев. */
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/label_recolor_2.png");
 }
 
@@ -717,7 +717,7 @@ static void scroll_next_step(lv_obj_t * label1, lv_obj_t * label2, const char * 
     lv_snprintf(buf, sizeof(buf), "widgets/label_scroll_%d.png", idx);
     TEST_ASSERT_EQUAL_SCREENSHOT(buf);
 
-    lv_test_wait(783); /*Use an odd delay*/
+    lv_test_wait(783); /*Используйте нечетную задержку*/
 }
 
 void test_label_scroll_mid_update(void)
@@ -746,8 +746,8 @@ void test_label_scroll_mid_update(void)
 }
 
 /*
- * For the LONG_MODE_CLIP mode, just re-use the screenshot from the initial
- * screen of the long mode scroll
+ * Для режима LONG_MODE_CLIP просто повторно используйте снимок экрана из начального режима.
+ * экран длинной прокрутки режима
  */
 
 void test_label_long_mode_clip(void)
@@ -791,7 +791,7 @@ void test_label_wrap_mode_clip(void)
 }
 void test_label_translation_tag(void)
 {
-    /* Arrays are defined `const` to place them in program space instead of RAM. */
+    /* Массивы определяются `const` для размещения их в пространстве программы вместо RAM. */
     static const char * const tags[] = {"tiger", NULL};
     static const char * const languages[]    = {"en", "de", "es", NULL};
     static const char * const translations[] = { "The Tiger", "Der Tiger", "El Tigre" };
@@ -808,14 +808,14 @@ void test_label_translation_tag(void)
     lv_translation_set_language("es");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "El Tigre");
 
-    /* Unknown language translates to the tag */
+    /* Неизвестный язык переводится на тег */
     lv_translation_set_language("fr");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "tiger");
 }
 
 void test_label_setting_text_disables_translation(void)
 {
-    /* Arrays are defined `const` to place them in program space instead of RAM. */
+    /* Массивы определяются `const` для размещения их в пространстве программы вместо RAM. */
     static const char * const tags[] = {"tiger", NULL};
     static const char * const languages[]    = {"en", "de", "es", NULL};
     static const char * const translations[] = { "The Tiger", "Der Tiger", "El Tigre" };
@@ -829,7 +829,7 @@ void test_label_setting_text_disables_translation(void)
     lv_translation_set_language("de");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Der Tiger");
 
-    /* Using set text should unbind the translation tag*/
+    /* Использование заданного текста должно отменить привязку тега перевода.*/
     lv_label_set_text(label, "Hello world");
     lv_translation_set_language("de");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Hello world");
@@ -837,14 +837,14 @@ void test_label_setting_text_disables_translation(void)
     lv_label_set_translation_tag(label, "tiger");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Der Tiger");
 
-    /* Using set text static should unbind the translation tag*/
+    /* Использование set text static должно отменить привязку тега перевода.*/
     lv_label_set_text_static(label, "Hello world");
     lv_translation_set_language("en");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Hello world");
     lv_label_set_translation_tag(label, "tiger");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "The Tiger");
 
-    /* Using set text fmt should unbind the translation tag*/
+    /* Использование set text fmt должно отменить привязку тега перевода.*/
     lv_label_set_text_fmt(label, "Hello world %d", 1);
     lv_translation_set_language("de");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Hello world 1");
@@ -911,9 +911,9 @@ void test_label_invalidate_area(void)
 void test_label_no_leading_space_after_line_wrap(void)
 {
     /*
-     * Test for issue #9629: Leading space after line wrap in labels
-     * When text wraps at a space character, the next line should not
-     * start with that space.
+     * Тест на проблему № 9629: начальный пробел после переноса строки в метках.
+     * Когда текст переносится на пробел, следующая строка не должна
+     * начните с этого места.
      */
     lv_obj_clean(lv_screen_active());
 
@@ -929,8 +929,8 @@ void test_label_no_leading_space_after_line_wrap(void)
 void test_label_preserve_spaces_after_explicit_newline(void)
 {
     /*
-     * Spaces after explicit \n should be preserved as intentional indentation,
-     * while spaces after automatic word-wrap should still be removed.
+     * Пробелы после явного \n следует сохранять как преднамеренные отступы.
+     * в то время как пробелы после автоматического переноса слов все равно должны быть удалены.
      */
     lv_obj_clean(lv_screen_active());
 

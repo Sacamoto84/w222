@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2024
+ * Изменено NXP в 2024 г.
  */
 
 #ifndef LV_DRAW_PRIVATE_H
@@ -36,51 +36,51 @@ struct _lv_draw_task_t {
     lv_draw_task_type_t type;
 
     /**
-     * The area where to draw
+     * Область, где рисовать
      */
     lv_area_t area;
 
     /**
-     * The real draw area. E.g. for shadow, outline, or transformed images it's different from `area`
+     * Настоящая зона розыгрыша. Например. для теней, контуров или преобразованных изображений отличается от `area`
      */
     lv_area_t _real_area;
 
-    /** The original area which is updated*/
+    /** Исходная область, которая обновляется*/
     lv_area_t clip_area_original;
 
     /**
-     * The clip area of the layer is saved here when the draw task is created.
-     * As the clip area of the layer can be changed as new draw tasks are added its current value needs to be saved.
-     * Therefore during drawing the layer's clip area shouldn't be used as it might be already changed for other draw tasks.
+     * Область обрезки слоя сохраняется здесь при создании задачи рисования.
+     * Поскольку область обрезки слоя может быть изменена при добавлении новых задач рисования, ее текущее значение необходимо сохранить.
+     * Поэтому во время рисования не следует использовать область обрезки слоя, поскольку она может быть уже изменена для других задач рисования.
      */
     lv_area_t clip_area;
     lv_layer_t * target_layer;
 
 #if LV_DRAW_TRANSFORM_USE_MATRIX
-    /** Transform matrix to be applied when rendering the layer */
+    /** Матрица преобразования, которая будет применяться при рендеринге слоя */
     lv_matrix_t matrix;
 #endif
 
-    /* Reference to the draw unit for debug or draw context purposes */
+    /* Ссылка на блок рисования для целей отладки или контекста рисования. */
     lv_draw_unit_t * draw_unit;
 
-    volatile int state;              /** int instead of lv_draw_task_state_t to be sure its atomic */
+    volatile int state;              /** int вместо lv_draw_task_state_t, чтобы быть уверенным, что он атомарный */
 
     void * draw_dsc;
 
-    /** Opacity of the layer */
+    /** Непрозрачность слоя */
     lv_opa_t opa;
 
     /**
-     * The ID of the draw_unit which should take this task
+     * ID из draw_unit, который должен взять на себя эту задачу.
      */
     uint8_t preferred_draw_unit_id;
 
     /**
-     * Set to which extent `preferred_draw_unit_id` is good at this task.
-     * 80: means 20% better (faster) than software rendering
-     * 100: the default value
-     * 110: means 10% worse (slower) than software rendering
+     * Эта установка, как известно,`preferred_draw_unit_id`хорошо работает с блоком.
+     * 80: означает на 20% лучше (быстрее), чем программный рендеринг
+     * 100: значение по умолчанию
+     * 110: означает на 10% хуже (медленнее), чем программный рендеринг
      */
     uint8_t preference_score;
 
@@ -94,74 +94,74 @@ struct _lv_draw_unit_t {
     lv_draw_unit_t * next;
 
     /**
-     * Name and ID of the draw unit, for debugging purposes only.
+     * Имя и ID блока рисования, только для целей отладки.
      */
     const char * name;
     int32_t idx;
 
     /**
-     * Called to try to assign a draw task to itself.
-     * `lv_draw_get_next_available_task` can be used to get an independent draw task.
-     * A draw task should be assign only if the draw unit can draw it too
-     * @param draw_unit     pointer to the draw unit
-     * @param layer         pointer to a layer on which the draw task should be drawn
-     * @return              >=0:    The number of taken draw task:
-     *                                  0 means the task has not yet been completed.
-     *                                  1 means a new task has been accepted.
-     *                      -1:     The draw unit wanted to work on a task but couldn't do that
-     *                              due to some errors (e.g. out of memory).
-     *                              It signals that LVGL should call the dispatcher later again
-     *                              to let draw unit try to start the rendering again.
+     * Вызывается, чтобы попытаться назначить себе задачу рисования.
+     * `lv_draw_get_next_available_task` можно использовать для получения любых задач рисования.
+     * Задачу рисования следует назначать только в том случае, если блок рисования тоже может ее нарисовать.
+     * @param draw_unit     указатель на блок рисования
+     * @param layer         указатель на слой, на котором должна быть нарисована задача рисования
+     * @return              >=0: Количество выполненных задач по розыгрышу:
+     *                                  0 означает, что задача еще не завершена.
+     *                                  1 означает, что новая задача принята.
+     *                      -1: Блок рисования хотел поработать над задачей, но не смог этого сделать.
+     *                              из-за некоторых ошибок (например, нехватки памяти).
+     *                              Это сигнализирует о том, что LVGL должен позже снова позвонить диспетчеру.
+     *                              чтобы позволить блоку рисования попытаться снова начать рендеринг.
      */
     int32_t (*dispatch_cb)(lv_draw_unit_t * draw_unit, lv_layer_t * layer);
 
     /**
      *
      * @param draw_unit
-     * @param task
+     * Задача @param
      * @return
      */
     int32_t (*evaluate_cb)(lv_draw_unit_t * draw_unit, lv_draw_task_t * task);
 
     /**
-     * Called to signal the unit to complete all tasks in order to return their ready status.
-     * This callback can be implemented in case of asynchronous task processing.
-     * Below is an example to show the difference between synchronous and asynchronous:
+     * Вызывается для подачи сигнала устройству о необходимости выполнения всех задач и возврата статуса готовности.
+     * Этот обратный вызов может быть реализован в случае асинхронной обработки задачи.
+     * Ниже приведен пример, показывающий разницу между синхронным и асинхронным:
      *
-     * Synchronous:
-     * LVGL thread              DRAW thread                 HW
+     * Синхронный:
+     * LVGL резьба DRAW резьба HW
      *
-     * task1             -->    submit               -->    Receive task1
-     *                          wait_for_finish()
-     *                   <--    task1->state = READY <--    Complete task1
-     * task2             -->    submit               -->    Receive task2
-     *                          wait_for_finish()
-     *                          task2->state = READY <--    Complete task2
-     * task3             -->    submit               -->    Receive task3
-     *                          wait_for_finish()
-     *                   <--    task3->state = READY <--    Complete task3
-     * task4             -->    submit               -->    Receive task4
-     *                          wait_for_finish()
-     *                   <--    task4->state = READY <--    Complete task4
+     * задача1 --> отправить --> получить задачу1
+     *                          wait_for_finish ()
+     *                   <-- задача1->state =READY<-- Выполнить задачу1
+     * задача2 --> отправить --> получить задачу2
+     *                          wait_for_finish ()
+     *                          задача2->состояние = READY <-- Завершить задачу2
+     * задача3 --> отправить --> получить задачу3
+     *                          wait_for_finish ()
+     *                   <-- задача3->состояние = READY <-- Завершить задачу3
+     * задача 4 -> отправить -> получить задачу 4
+     *                          wait_for_finish ()
+     *                   <-- задача4->состояние = READY <-- Завершить задачу4
      * NO MORE TASKS
      *
      *
-     * Asynchronous:
-     * LVGL thread              DRAW thread                 HW
+     * Асинхронный:
+     * LVGL резьба DRAW резьба HW
      *                                                      is IDLE
-     * task1             -->    queue task1
-     *                          submit               -->    Receive task1
-     * task2             -->    queue task2                 is BUSY (with task1)
-     * task3             -->    queue task3                 still BUSY (with task1)
-     * task4             -->    queue task4                 becomes IDLE
-     *                   <--    task1->state = READY <--    Complete task1
-     *                          submit               -->    Receive task2, task3, task4
+     * задача1 --> очередь задача1
+     *                          отправить -> Получить задачу 1
+     * задача2 -> очередь задача2 — BUSY (с задачей1)
+     * задача3 --> очередь задача3 по-прежнему BUSY (с задачей1)
+     * задача 4 -> очередь задача 4 становится IDLE
+     *                   <-- задача1->state =READY<-- Выполнить задачу1
+     *                          отправить --> Получить задачу2, задачу3, задачу4
      * NO MORE TASKS
-     * wait_for_finish_cb()     wait_for_finish()
-     *                                               <--    Complete task2, task3, task4
-     *                   <--    task2->state = READY <--
-     *                   <--    task3->state = READY <--
-     *                   <--    task4->state = READY <--
+     * wait_for_finish_cb ()wait_for_finish()
+     *                                               <-- Выполнить задачу2, задачу3, задачу4
+     *                   <-- задача2->состояние = READY <--
+     *                   <-- задача3->состояние = READY <--
+     *                   <-- задача4->состояние = READY <--
      *
      * @param draw_unit
      * @return
@@ -169,15 +169,15 @@ struct _lv_draw_unit_t {
     int32_t (*wait_for_finish_cb)(lv_draw_unit_t * draw_unit);
 
     /**
-     * Called to delete draw unit.
+     * Вызывается для удаления единицы рисования.
      * @param draw_unit
      * @return
      */
     int32_t (*delete_cb)(lv_draw_unit_t * draw_unit);
 
     /**
-     * Called when an event is sent to the draw unit.
-     * @param event pointer to the event descriptor
+     * Вызывается, когда событие отправляется в блок рисования.
+     * @param event указатель на дескриптор события
      */
     void (*event_cb)(lv_event_t * event);
 };
@@ -185,7 +185,7 @@ struct _lv_draw_unit_t {
 typedef struct {
     lv_draw_unit_t * unit_head;
     uint32_t unit_cnt;
-    uint32_t used_memory_for_layers; /* measured as bytes */
+    uint32_t used_memory_for_layers; /* измеряется в байтах */
 #if LV_USE_OS
     lv_thread_sync_t sync;
 #else
@@ -204,7 +204,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_PRIVATE_H*/

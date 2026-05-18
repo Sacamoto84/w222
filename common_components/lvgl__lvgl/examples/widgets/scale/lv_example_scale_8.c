@@ -3,7 +3,7 @@
 
 
 /**
- * A simple round scale with label/tick translation
+ * Простая круглая шкала с переводом меток/тиков.
  */
 void lv_example_scale_8(void)
 {
@@ -15,14 +15,14 @@ void lv_example_scale_8(void)
     lv_obj_set_style_radius(scale_line, LV_RADIUS_CIRCLE, 0);
     lv_obj_align(scale_line, LV_ALIGN_LEFT_MID, LV_PCT(2), 0);
 
-    /*Set the texts' and major ticks' style (make the texts rotated)*/
+    /*Установить стиль текстов и основных тиков (повернуть тексты)*/
     lv_obj_set_style_transform_rotation(scale_line, LV_SCALE_LABEL_ROTATE_MATCH_TICKS | LV_SCALE_LABEL_ROTATE_KEEP_UPRIGHT,
                                         LV_PART_INDICATOR);
     lv_obj_set_style_translate_x(scale_line, 10, LV_PART_INDICATOR);
     lv_obj_set_style_length(scale_line, 15, LV_PART_INDICATOR);
     lv_obj_set_style_radial_offset(scale_line, 10, LV_PART_INDICATOR);
 
-    /*Set the style of the minor ticks*/
+    /*Установите стиль второстепенных тиков*/
     lv_obj_set_style_length(scale_line, 10, LV_PART_ITEMS);
     lv_obj_set_style_radial_offset(scale_line, 5, LV_PART_ITEMS);
     lv_obj_set_style_line_opa(scale_line, LV_OPA_50, LV_PART_ITEMS);

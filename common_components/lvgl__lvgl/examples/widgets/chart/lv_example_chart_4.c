@@ -23,11 +23,11 @@ static void draw_event_cb(lv_event_t * e)
 }
 
 /**
- * Recolor the bars of a chart based on their value
+ * Перекрасить столбцы диаграммы в зависимости от их значения
  */
 void lv_example_chart_4(void)
 {
-    /*Create a chart1*/
+    /*Создать диаграмму1*/
     lv_obj_t * chart = lv_chart_create(lv_screen_active());
     lv_chart_set_type(chart, LV_CHART_TYPE_BAR);
     lv_chart_set_point_count(chart, 24);

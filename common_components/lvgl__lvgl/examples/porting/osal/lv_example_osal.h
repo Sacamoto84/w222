@@ -32,7 +32,7 @@ void lv_example_osal(void);
  **********************/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_EXAMPLE_OSAL_H*/

@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-// Blending Factor Selector
+// Выбор коэффициента смешивания
 //-----------------------------------------------------------------------------------------------------------------------
 #define NEMA_BF_ZERO         (0x0U) /**< 0 */
 #define NEMA_BF_ONE          (0x1U) /**< 1 */
@@ -51,16 +51,16 @@ extern "C" {
 #define NEMA_BF_CONSTCOLOR   (0xaU) /**< Cc */
 #define NEMA_BF_CONSTALPHA   (0xbU) /**< Ca */
 
-    /*                  source factor         destination factor */
+    /*                  Фактор источника Фактор назначения */
 #define NEMA_BL_SIMPLE     (  (uint32_t)NEMA_BF_SRCALPHA      |   ((uint32_t)NEMA_BF_INVSRCALPHA  <<8)  )   /**< Sa * Sa + Da * (1 - Sa) */
-#define NEMA_BL_CLEAR      (  (uint32_t)NEMA_BF_ZERO        /*|   ((uint32_t)NEMA_BF_ZERO         <<8)*/)   /**< 0 */
-#define NEMA_BL_SRC        (  (uint32_t)NEMA_BF_ONE         /*|   ((uint32_t)NEMA_BF_ZERO         <<8)*/)   /**< Sa */
+#define NEMA_BL_CLEAR      (  (uint32_t)NEMA_BF_ZERO        /*|   ((uint32_t)NEMA_BF_ZERO<<8)*/)   /**< 0 */
+#define NEMA_BL_SRC        (  (uint32_t)NEMA_BF_ONE         /*|   ((uint32_t)NEMA_BF_ZERO<<8)*/)   /**< Sa */
 #define NEMA_BL_SRC_OVER   (  (uint32_t)NEMA_BF_ONE           |   ((uint32_t)NEMA_BF_INVSRCALPHA  <<8)  )   /**< Sa + Da * (1 - Sa) */
 #define NEMA_BL_DST_OVER   (  (uint32_t)NEMA_BF_INVDESTALPHA  |   ((uint32_t)NEMA_BF_ONE          <<8)  )   /**< Sa * (1 - Da) + Da */
-#define NEMA_BL_SRC_IN     (  (uint32_t)NEMA_BF_DESTALPHA   /*|   ((uint32_t)NEMA_BF_ZERO         <<8)*/)   /**< Sa * Da */
-#define NEMA_BL_DST_IN     (/*(uint32_t)NEMA_BF_ZERO          |*/ ((uint32_t)NEMA_BF_SRCALPHA     <<8)  )   /**< Da * Sa */
-#define NEMA_BL_SRC_OUT    (  (uint32_t)NEMA_BF_INVDESTALPHA/*|   ((uint32_t)NEMA_BF_ZERO         <<8)*/ )   /**< Sa * (1 - Da) */
-#define NEMA_BL_DST_OUT    (/*(uint32_t)NEMA_BF_ZERO          |*/ ((uint32_t)NEMA_BF_INVSRCALPHA  <<8)  )   /**< Da * (1 - Sa) */
+#define NEMA_BL_SRC_IN     (  (uint32_t)NEMA_BF_DESTALPHA   /*|   ((uint32_t)NEMA_BF_ZERO<<8)*/)   /**< Sa * Da */
+#define NEMA_BL_DST_IN     (/*(uint32_t)NEMA_BF_ZERO|*/ ((uint32_t)NEMA_BF_SRCALPHA     <<8)  )   /**< Da * Sa */
+#define NEMA_BL_SRC_OUT    (  (uint32_t)NEMA_BF_INVDESTALPHA/*|   ((uint32_t)NEMA_BF_ZERO<<8)*/ )   /**< Sa * (1 - Da) */
+#define NEMA_BL_DST_OUT    (/*(uint32_t)NEMA_BF_ZERO|*/ ((uint32_t)NEMA_BF_INVSRCALPHA  <<8)  )   /**< Da * (1 - Sa) */
 #define NEMA_BL_SRC_ATOP   (  (uint32_t)NEMA_BF_DESTALPHA     |   ((uint32_t)NEMA_BF_INVSRCALPHA  <<8)  )   /**< Sa * Da + Da * (1 - Sa) */
 #define NEMA_BL_DST_ATOP   (  (uint32_t)NEMA_BF_INVDESTALPHA  |   ((uint32_t)NEMA_BF_SRCALPHA     <<8)  )   /**< Sa * (1 - Da) + Da * Sa */
 #define NEMA_BL_ADD        (  (uint32_t)NEMA_BF_ONE           |   ((uint32_t)NEMA_BF_ONE          <<8)  )   /**< Sa + Da */
@@ -82,101 +82,101 @@ extern "C" {
 #define NEMA_BLOP_DST_CKEY     (0x80000000U)  /**< Apply Destination Color Keying - draw only when dst color matches colorkey */
 #define NEMA_BLOP_MASK         (0xfff00000U)
 
-/** \brief Return blending mode given source and destination blending factors and additional blending operations
+/** \brief Возвращаемый режим колебаний с учетом коэффициентов изменения источника и назначения и дополнительных операций переключения
  *
- * \param src Source Blending Factor
- * \param dst Destination Blending Factor
- * \param ops Additional Blending Operations
- * \return Final Blending Mode
+ * \param src Коэффициент переменного источника
+ * \param dst Коэффициент изменения назначения
+ * \param ops Дополнительные операции переключения
+ * \return Окончательный режим наложений
  *
  */
 static inline uint32_t nema_blending_mode(uint32_t src_bf, uint32_t dst_bf, uint32_t blops) {
     return ( (src_bf) | (dst_bf << 8) | (blops&NEMA_BLOP_MASK) );
 }
 
-/** \brief Set blending mode
+/** \brief Включить режим наложения
  *
- * \param blending_mode Blending mode to be set
- * \param dst_tex Destination Texture
- * \param fg_tex Foreground (source) Texture
- * \param bg_tex Background (source2) Texture
+ * \paramblending_modeРежим приложения, который необходимо установить
+ * \paramdst_texТекстура назначения
+ * \paramfg_texПередний план (исходник) Текстура
+ * \parambg_texФон (источник2) Текстура
  *
  */
 void nema_set_blend(uint32_t blending_mode, nema_tex_t dst_tex, nema_tex_t fg_tex, nema_tex_t bg_tex);
 
-/** \brief Set blending mode for filling
+/** \brief Включить режим наложения для заливки
  *
- * \param blending_mode Blending mode to be set
+ * \paramblending_modeРежим приложения, который необходимо установить
  *
  */
 static inline void nema_set_blend_fill(uint32_t blending_mode) {
     nema_set_blend(blending_mode, NEMA_TEX0, NEMA_NOTEX, NEMA_NOTEX);
 }
 
-/** \brief Set blending mode for filling with composing
+/** \brief Установить режим наложения для заливки композиции
  *
- * \param blending_mode Blending mode to be set
+ * \paramblending_modeРежим приложения, который необходимо установить
  *
  */
 static inline void nema_set_blend_fill_compose(uint32_t blending_mode) {
     nema_set_blend(blending_mode, NEMA_TEX0, NEMA_NOTEX, NEMA_TEX2);
 }
 
-/** \brief Set blending mode for blitting
+/** \brief Установка режима наложения для блитинга
  *
- * \param blending_mode Blending mode to be set
+ * \paramblending_modeРежим приложения, который необходимо установить
  *
  */
 static inline void nema_set_blend_blit(uint32_t blending_mode) {
     nema_set_blend(blending_mode, NEMA_TEX0, NEMA_TEX1, NEMA_NOTEX);
 }
 
-/** \brief Set blending mode for blitting with composing
+/** \brief Установите режим приложения для копирования с компоновкой
  *
- * \param blending_mode Blending mode to be set
+ * \paramblending_modeРежим приложения, который необходимо установить
  *
  */
 static inline void nema_set_blend_blit_compose(uint32_t blending_mode) {
     nema_set_blend(blending_mode, NEMA_TEX0, NEMA_TEX1, NEMA_TEX2);
 }
 
-/** \brief Set constant color
+/** \brief Поддержание постоянного цвета
  *
- * \param rgba RGBA color
- * \see nema_rgba()
+ * \param rgbaRGBAцвет
+ * \см. nema_rgba()
  *
  */
 void nema_set_const_color(uint32_t rgba);
 
 
-/** \brief Set recolor color. Overrides constant color
+/** \brief Установить цвет перекрашивания. Переопределяет постоянный цвет
  *
- * \param rgba RGBA color
- * \see nema_rgba(), nema_set_const_color()
+ * \param rgbaRGBAцвет
+ * \см. nema_rgba(),nema_set_const_color()
  *
  */
 void nema_set_recolor_color(uint32_t rgba);
 
-/** \brief Set source color key
+/** \brief Возврат исходного цветочного ключа
  *
- * \param rgba RGBA color key
- * \see nema_rgba()
+ * \param цветной ключ rgba RGBA
+ * \см. nema_rgba()
  *
  */
 void nema_set_src_color_key(uint32_t rgba);
 
-/** \brief Set destination color key
+/** \brief Установка цветов для назначения
  *
- * \param rgba RGBA color key
- * \see nema_rgba()
+ * \param цветной ключ rgba RGBA
+ * \см. nema_rgba()
  *
  */
 void nema_set_dst_color_key(uint32_t rgba);
 
 
-/** \brief Enable/disable ovedraw debugging. Disables gradient and texture, forces blending mode to NEMA_BL_ADD
+/** \brief Включение/выключение отладки overdraw. Отключает градиент и текстуру, устанавливает режим наложенияNEMA_BL_ADD.
  *
- * \param enable Enables overdraw debugging if non-zero
+ * \param Enable Включает отладку с перерисовкой, если ненулевое значение.
  *
  */
 void nema_debug_overdraws(uint32_t enable);

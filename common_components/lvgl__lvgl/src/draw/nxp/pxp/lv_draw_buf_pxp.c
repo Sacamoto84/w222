@@ -73,13 +73,13 @@ static void _invalidate_cache(const lv_draw_buf_t * draw_buf, const lv_area_t * 
     if(area->y1 == 0) {
         uint32_t size = stride * lv_area_get_height(area);
 
-        /* Invalidate full buffer. */
+        /* Недействительный полный буфер. */
         DEMO_CleanInvalidateCacheByAddr((void *)draw_buf->data, size);
         return;
     }
 
     const uint8_t * buf_u8 = draw_buf->data;
-    /*Cache management requires us to know the cache line size for proper alignment */
+    /*Управление кэшем требует от нас знания размера строки кэша для правильного выравнивания. */
     uint8_t align_bytes = __SCB_DCACHE_LINE_SIZE;
     uint8_t bits_per_pixel = lv_color_format_get_bpp(cf);
 
@@ -99,8 +99,8 @@ static void _invalidate_cache(const lv_draw_buf_t * draw_buf, const lv_area_t * 
         buf_u8 += shift_y * stride;
     }
 
-    /* Area to clear can start from a different offset in buffer.
-     * Invalidate the area line by line.
+    /* Область для очистки может начинаться с другого смещения в буфере.
+     * Сделайте область недействительной построчно.
      */
     uint16_t line_pixels = offset_x + lv_area_get_width(area);
     uint16_t line_size = (line_pixels * bits_per_pixel) / 8;

@@ -35,7 +35,7 @@
  *  STATIC PROTOTYPES
  **********************/
 
-/* Blit simple w/ opa and alpha channel */
+/* Простой Blit с opa и альфа-каналом */
 static void _g2d_fill(void * handle, struct g2d_surface * dst_surf);
 static void _g2d_fill_with_opa(void * handle, struct g2d_surface * dst_surf, struct g2d_surface * src_surf);
 
@@ -78,12 +78,12 @@ void lv_draw_g2d_fill(lv_draw_task_t * t)
 
     lv_area_t blend_area;
     if(!lv_area_intersect(&blend_area, &rel_coords, &rel_clip_area))
-        return; /*Fully clipped, nothing to do*/
+        return; /*Полностью обрезан, делать нечего.*/
 
-    /* G2D takes stride in pixels. */
+    /* G2D делает шаг вперед в пикселях. */
     int32_t stride = draw_buf->header.stride / (lv_color_format_get_bpp(draw_buf->header.cf) / 8);
 
-    /* Destination buffer */
+    /* Целевой буфер */
     struct g2d_buf * dst_buf = g2d_search_buf_map(draw_buf->data);
 
     bool has_opa = (dsc->opa < (lv_opa_t)LV_OPA_MAX);

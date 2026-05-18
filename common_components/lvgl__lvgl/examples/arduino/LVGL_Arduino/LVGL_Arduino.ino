@@ -1,5 +1,5 @@
-/*Using LVGL with Arduino requires some extra steps:
- *Be sure to read the docs here: https://docs.lvgl.io/master/integration/framework/arduino.html  */
+/*ИспользованиеLVGLс Arduino требует некоторых усовершенствований:
+ *Обязательно прочитайте документацию здесь: https://docs.lvgl.io/master/integration/framework/arduino.html..  */
 
 #include <lvgl.h>
 
@@ -7,20 +7,20 @@
 #include <TFT_eSPI.h>
 #endif
 
-/*To use the built-in examples and demos of LVGL uncomment the includes below respectively.
- *You also need to copy `lvgl/examples` to `lvgl/src/examples`. Similarly for the demos `lvgl/demos` to `lvgl/src/demos`.
- *Note that the `lv_examples` library is for LVGL v7 and you shouldn't install it for this version (since LVGL v8)
- *as the examples and demos are now part of the main LVGL library. */
+/*Чтобы использовать встроенные примеры и демо-версии LVGL, раскомментируйте включенные ниже файлы соответственно.
+ *Вам также необходимо скопировать`lvgl/examples`в `lvgl/src/examples`. Аналогично для демо-версий от`lvgl/demos`до `lvgl/src/demos`.
+ *Обратите внимание, что библиотека`lv_examples`создана дляLVGLv7, и вам не следует сохранять ее для этой версии (начиная сLVGLv8).
+ *поскольку примеры и демо теперь являются частью основной библиотеки LVGL. */
 
-//#include <examples/lv_examples.h>
-//#include <demos/lv_demos.h>
+//#include <примеры/lv_examples.h>
+//#include <демо/lv_demos.h>
 
-/*Set to your screen resolution and rotation*/
+/*Установите разрешение экрана и поворот.*/
 #define TFT_HOR_RES   320
 #define TFT_VER_RES   240
 #define TFT_ROTATION  LV_DISPLAY_ROTATION_0
 
-/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
+/*LVGL рисует в этот буфер, размер экрана 1/10 обычно работает хорошо. Размер указан в байтах*/
 #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_VER_RES / 10 * (LV_COLOR_DEPTH / 8))
 uint32_t draw_buf[DRAW_BUF_SIZE / 4];
 
@@ -33,42 +33,42 @@ void my_print( lv_log_level_t level, const char * buf )
 }
 #endif
 
-/* LVGL calls it when a rendered image needs to copied to the display*/
+/* LVGL вызывает его, когда визуализированное изображение необходимо скопировать на дисплей.*/
 void my_disp_flush( lv_display_t *disp, const lv_area_t *area, uint8_t * px_map)
 {
-    /*Copy `px map` to the `area`*/
+    /*Скопируйте`px map`в `area`.*/
 
-    /*For example ("my_..." functions needs to be implemented by you)
-    uint32_t w = lv_area_get_width(area);
-    uint32_t h = lv_area_get_height(area);
+    /*Например (функции my_... должны быть реализованы вами)
+    uint32_t w =lv_area_get_width(площадь);
+    uint32_t h =lv_area_get_height(площадь);
 
-    my_set_window(area->x1, area->y1, w, h);
-    my_draw_bitmaps(px_map, w * h);
+    my_set_window (площадь->x1, область->y1, ш, ч);
+    my_draw_bitmaps (px_map, ш*ч);
      */
 
-    /*Call it to tell LVGL you are ready*/
+    /*Позвоните и сообщите LVGL, что вы готовы.*/
     lv_display_flush_ready(disp);
 }
 
-/*Read the touchpad*/
+/*Чтение тачпада*/
 void my_touchpad_read( lv_indev_t * indev, lv_indev_data_t * data )
 {
-    /*For example  ("my_..." functions needs to be implemented by you)
-    int32_t x, y;
-    bool touched = my_get_touch( &x, &y );
+    /*Например (функции my_... должны быть реализованы вами)
+    int32_t х, у;
+    bool touched =my_get_touch( &x, &y );
 
-    if(!touched) {
-        data->state = LV_INDEV_STATE_RELEASED;
-    } else {
-        data->state = LV_INDEV_STATE_PRESSED;
+    если(!тронул) {
+        данные->состояние = LV_INDEV_STATE_RELEASED ;
+    } еще {
+        данные->состояние = LV_INDEV_STATE_PRESSED ;
 
-        data->point.x = x;
-        data->point.y = y;
+        данные->point.x = x;
+        данные->point.y = y;
     }
      */
 }
 
-/*use Arduinos millis() as tick source*/
+/*Arduinomillis()в качестве источника тиков*/
 static uint32_t my_tick(void)
 {
     return millis();
@@ -84,49 +84,49 @@ void setup()
 
     lv_init();
 
-    /*Set a tick source so that LVGL will know how much time elapsed. */
+    /*Установите источник тиков, чтобы LVGL знал, сколько времени прошло. */
     lv_tick_set_cb(my_tick);
 
-    /* register print function for debugging */
+    /* зарегистрировать функцию печати для отладки */
 #if LV_USE_LOG != 0
     lv_log_register_print_cb( my_print );
 #endif
 
     lv_display_t * disp;
 #if LV_USE_TFT_ESPI
-    /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
+    /*TFT_eSPI можно включитьlv_conf.hдля простого подключения дисплея.*/
     disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, draw_buf, sizeof(draw_buf));
     lv_display_set_rotation(disp, TFT_ROTATION);
 
 #else
-    /*Else create a display yourself*/
+    /*В противном случае создайте отображение самостоятельно*/
     disp = lv_display_create(TFT_HOR_RES, TFT_VER_RES);
     lv_display_set_flush_cb(disp, my_disp_flush);
     lv_display_set_buffers(disp, draw_buf, NULL, sizeof(draw_buf), LV_DISPLAY_RENDER_MODE_PARTIAL);
 #endif
 
-    /*Initialize the (dummy) input device driver*/
+    /*Инициализируйте (фиктивный) драйвер устройства ввода.*/
     lv_indev_t * indev = lv_indev_create();
-    lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER); /*Touchpad should have POINTER type*/
+    lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER); /*Тачпад должен иметь тип POINTER.*/
     lv_indev_set_read_cb(indev, my_touchpad_read);
 
-    /* Create a simple label
+    /* Создайте простую этикетку
      * ---------------------
-     lv_obj_t *label = lv_label_create( lv_screen_active() );
-     lv_label_set_text( label, "Hello Arduino, I'm LVGL!" );
-     lv_obj_align( label, LV_ALIGN_CENTER, 0, 0 );
+     lv_obj_t *label =lv_label_create(lv_screen_active());
+     lv_label_set_text (метка «Привет, Arduino, я LVGL!»);
+     lv_obj_align (метка,LV_ALIGN_CENTER, 0, 0);
 
-     * Try an example. See all the examples
-     *  - Online: https://docs.lvgl.io/master/examples.html
-     *  - Source codes: https://github.com/lvgl/lvgl/tree/master/examples
+     * Попробуйте пример. Посмотреть все примеры
+     *  - Онлайн: https://docs.lvgl.io/master/examples.html
+     *  - Исходные коды: https://github.com/lvgl/lvgl/tree/master/examples
      * ----------------------------------------------------------------
 
-     lv_example_btn_1();
+     lv_example_btn_1 ();
 
-     * Or try out a demo. Don't forget to enable the demos in lv_conf.h. E.g. LV_USE_DEMO_WIDGETS
+     * Или оформите демо-версию. Не забудьте включить демо-версию в lv_conf.h. Например.   LV_USE_DEMO_WIDGETS
      * -------------------------------------------------------------------------------------------
 
-     lv_demo_widgets();
+     lv_demo_widgets ();
      */
 
     lv_obj_t *label = lv_label_create( lv_screen_active() );
@@ -138,6 +138,6 @@ void setup()
 
 void loop()
 {
-    lv_timer_handler(); /* let the GUI do its work */
-    delay(5); /* let this time pass */
+    lv_timer_handler(); /* пусть GUI делает свою работу */
+    delay(5); /* пусть это время пройдет */
 }

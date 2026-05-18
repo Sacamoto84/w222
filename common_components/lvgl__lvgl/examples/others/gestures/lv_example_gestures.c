@@ -2,18 +2,18 @@
  *
  * @file lv_example_gestures.c
  *
- * This is a simple example program that demonstrates how to use
- * the gesture recognition API, please refer to lv_indev_gesture.h or the documentation
- * for more details
+ * Это простой пример программы, демонстрирующий, как использовать
+ * распознавание жестовAPI, обратитесь кlv_indev_gesture.hили документации
+ * для более подробной информации
  *
- * The application starts with a single rectangle. The user can then
- * - Pinch the rectangle to scale it
- * - Rotate the rectangle to rotate it
- * - Two fingers swipe the rectangle to see the direction and the distance of the swipe
+ * Приложение начинается с одного прямоугольника. Затем пользователь может
+ * - Сожмите прямоугольник, чтобы масштабировать его.
+ * - Поверните прямоугольник, чтобы повернуть его
+ * - Проведите двумя пальцами по прямоугольнику, чтобы увидеть направление и расстояние смахивания.
  *
  * Copyright (c) 2024 EDGEMTech Ltd
  *
- * Author: EDGEMTech Ltd, Erik Tagirov (erik.tagirov@edgemtech.ch)
+ * Author: ООО «ЭДГЕМТех», Эрик Тагиров (erik.tagiros@edgemtech.ch)
  *
  ******************************************************************/
 
@@ -69,8 +69,8 @@ static uint32_t label_y;
 
 
 /**
- * Entry point it creates the screen, and the label
- * Set event callbacks on the label
+ * Точка входа создает экран и метку
+ * Установите обратные вызовы событий на метке
  */
 void lv_example_gestures(void)
 {
@@ -112,8 +112,8 @@ void lv_example_gestures(void)
  **********************/
 
 /**
- * Called when a LV_EVENT_GESTURE event occurs - update the label if the gesture is a swipe
- * @param gesture_event             pointer to a LV_EVENT_GESTURE event
+ * Вызывается при возникновении события LV_EVENT_GESTURE — обновляет метку, если жест представляет собой пролистывание.
+ * @param gesture_event             указатель на событие LV_EVENT_GESTURE
  */
 static void label_swipe(lv_event_t * gesture_event)
 {
@@ -160,8 +160,8 @@ static void label_swipe(lv_event_t * gesture_event)
 }
 
 /**
- * Called when a LV_EVENT_GESTURE event occurs - scales the label if the gesture is a pinch
- * @param gesture_event pointer to a LV_EVENT_GESTURE event
+ * Вызывается при возникновении события LV_EVENT_GESTURE — масштабирует метку, если жест представляет собой сжатие.
+ * @param gesture_event указатель на событие LV_EVENT_GESTURE
  */
 static void label_scale(lv_event_t * gesture_event)
 {
@@ -175,7 +175,7 @@ static void label_scale(lv_event_t * gesture_event)
     float label_width_float;
     float label_height_float;
 
-    /* Ensure the gesture is a pinch */
+    /* Убедитесь, что жест является щипком */
     if(lv_event_get_gesture_type(gesture_event) != LV_INDEV_GESTURE_PINCH) {
         return;
     }
@@ -184,10 +184,10 @@ static void label_scale(lv_event_t * gesture_event)
 
     scale = base_scale * lv_event_get_pinch_scale(gesture_event);
 
-    /* Reset state when the gesture ended */
+    /* Сбросить состояние после завершения жеста */
     if(state == LV_INDEV_GESTURE_STATE_ENDED) {
 
-        /* Pinch gesture has ended - reset the width/height for the next pinch gesture*/
+        /* Жест сжатия завершился: сброс ширины/высоты для следующего жеста сжатия.*/
         initial_w = -1;
         initial_h = -1;
 
@@ -196,23 +196,23 @@ static void label_scale(lv_event_t * gesture_event)
         return;
     }
 
-    /* The first time the gesture is recognized, save its center */
+    /* При первом распознавании жеста сохраните его центр. */
     if(state == LV_INDEV_GESTURE_STATE_RECOGNIZED) {
 
         if((initial_h == -1 || initial_w == -1)) {
 
-            /* Pinch gesture has been recognized - this is the first event in a series of recognized events */
-            /* The scaling is applied relative to the original width/height of the rectangle */
+            /* Распознан щипковый жест - это первое событие из серии признанных событий. */
+            /* Масштабирование применяется относительно исходной ширины/высоты прямоугольника. */
             initial_w = label_width;
             initial_h = label_height;
             center_pnt.x = lv_obj_get_x(label) + label_width / 2;
             center_pnt.y = lv_obj_get_y(label) + label_height / 2;
         }
 
-        /* The gesture is recognized, we can now use the scale */
+        /* Жест распознан, теперь мы можем использовать шкалу */
 
-        /* Avoids a situation where the rectangle becomes too small or too big,
-        * adding limits */
+        /* Позволяет избежать ситуации, когда прямоугольник становится слишком маленьким или слишком большим,
+        * добавление ограничений */
         if(scale < 0.4f) {
             scale = 0.4f;
         }
@@ -226,7 +226,7 @@ static void label_scale(lv_event_t * gesture_event)
         label_width_float = (float)RECT_INIT_WIDTH * scale;
         label_height_float = (float)RECT_INIT_HEIGHT * scale;
 
-        /* Update position and size */
+        /* Обновить положение и размер */
         lv_style_set_width(&label_style, (int)label_width_float);
         lv_style_set_height(&label_style, (int)label_height_float);
         lv_style_set_x(&label_style, (int)label_x);
@@ -241,8 +241,8 @@ static void label_scale(lv_event_t * gesture_event)
 
 
 /**
- * Called when a LV_EVENT_GESTURE event occurs - rotate the label if the gesture is a rotation
- * @param gesture_event             pointer to a LV_EVENT_GESTURE event
+ * Вызывается при возникновении события LV_EVENT_GESTURE — поверните метку, если жест является вращением.
+ * @param gesture_event             указатель на событие LV_EVENT_GESTURE
  */
 static void label_rotate(lv_event_t * gesture_event)
 {
@@ -257,20 +257,20 @@ static void label_rotate(lv_event_t * gesture_event)
 
     state = lv_event_get_gesture_state(gesture_event, LV_INDEV_GESTURE_ROTATE);
 
-    /* Calculate new angle. The x10 is due to lv_obj_set_style_transform_rotation using x10 angle in parameter */
+    /* Вычислите новый угол. Значение x10 связано с тем, чтоlv_obj_set_style_transform_rotationиспользует угол x10 в параметре. */
     angle_degrees = start_angle + 10.0f * (lv_event_get_rotation(gesture_event) * 180.0f / M_PI);
 
-    /* Once the gesture ends, save the current angle to the start_angle */
+    /* Как только жестом закончится, сохраните текущий угол вstart_angle. */
     if(state == LV_INDEV_GESTURE_STATE_ENDED) {
 
         start_angle = angle_degrees;
     }
 
-    /* If the gesture is recognized, rotate the label */
+    /* Если жест распознан, поверните метку */
     if(state == LV_INDEV_GESTURE_STATE_RECOGNIZED) {
 
-        /* Need to set the pivot to the center of the widget to not rotate
-        around the top-left corner */
+        /* Необходимо установить ось в центр виджета, чтобы он не вращался.
+        вокруг верхнего левого угла */
         lv_obj_set_style_transform_pivot_x(label, lv_obj_get_width(label) / 2, 0);
         lv_obj_set_style_transform_pivot_y(label, lv_obj_get_height(label) / 2, 0);
 

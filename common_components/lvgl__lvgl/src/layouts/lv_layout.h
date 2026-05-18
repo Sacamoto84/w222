@@ -49,20 +49,20 @@ typedef enum {
 
 
 /**
- * Create a new layout
- * @param callbacks the layout callbacks
- * @param user_data custom data that will be passed when a callback is invoked
- * @return          the ID of the new layout
+ * Создать новый макет
+ * @param callbacks обратные вызовы макета
+ * @param user_data пользовательские данные, которые будут переданы при вызове обратного вызова
+ * @return          ID новой раскладки
  */
 uint32_t lv_layout_create(lv_layout_callbacks_t callbacks, void * user_data);
 
 /**
- * DEPRECATED: `lv_layout_register` is deprecated. `lv_layout_create` should be used instead.
+ * DEPRECATED: `lv_layout_register` устарел.  Вместо этого следует использовать `lv_layout_create`.
  *
- * Register a new layout
- * @param cb        the layout update callback
- * @param user_data custom data that will be passed to `cb`
- * @return          the ID of the new layout
+ * Зарегистрируйте новый макет
+ * @param cb        обратный вызов обновления макета
+ * @param user_data пользовательские данные, которые будут переданы в `cb`
+ * @return          ID новой раскладки
  */
 uint32_t lv_layout_register(lv_layout_update_cb_t cb, void * user_data);
 
@@ -79,7 +79,7 @@ uint32_t lv_layout_register(lv_layout_update_cb_t cb, void * user_data);
 #endif /* LV_USE_GRID */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LAYOUT_H*/

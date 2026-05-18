@@ -1,19 +1,19 @@
 /**
- * MIT License
+ * Лицензия MIT
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2008-24 Think Silicon Single Member PC
  * -----------------------------------------------------------------------------
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice (including the next paragraph)
- * shall be included in all copies or substantial portions of the Software.
+ * Приведенное выше уведомление об авторских правах и данное уведомление о разрешении (включая следующий абзац)
+ * должны быть включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
@@ -125,7 +125,7 @@ void lv_draw_nema_gfx_vector(lv_draw_task_t * t, const lv_draw_vector_dsc_t * ds
 #endif  /*LV_USE_NEMA_GFX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_NEMA_GFX_H*/

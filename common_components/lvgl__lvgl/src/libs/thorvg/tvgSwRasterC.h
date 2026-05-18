@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2021 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,7 +28,7 @@ static void inline cRasterPixels(PIXEL_T* dst, PIXEL_T val, uint32_t offset, int
 {
     dst += offset;
 
-    //fix the misaligned memory
+    //исправить несогласованную память
     auto alignOffset = (long long) dst % 8;
     if (alignOffset > 0) {
         if (sizeof(PIXEL_T) == 4) alignOffset /= 4;
@@ -40,7 +40,7 @@ static void inline cRasterPixels(PIXEL_T* dst, PIXEL_T val, uint32_t offset, int
         }
     }
 
-    //64bits faster clear
+    //64 бит быстрее, ясно
     if ((sizeof(PIXEL_T) == 4)) {
         auto val64 = (uint64_t(val) << 32) | uint64_t(val);
         while (len > 1) {
@@ -58,7 +58,7 @@ static void inline cRasterPixels(PIXEL_T* dst, PIXEL_T val, uint32_t offset, int
         }
     }
 
-    //leftovers
+    //остатки
     while (len--) *dst++ = val;
 }
 
@@ -67,7 +67,7 @@ static bool inline cRasterTranslucentRle(SwSurface* surface, const SwRle* rle, u
 {
     auto span = rle->spans;
 
-    //32bit channels
+    //32-битные каналы
     if (surface->channelSize == sizeof(uint32_t)) {
         auto color = surface->join(r, g, b, a);
         uint32_t src;
@@ -80,7 +80,7 @@ static bool inline cRasterTranslucentRle(SwSurface* surface, const SwRle* rle, u
                 *dst = src + ALPHA_BLEND(*dst, ialpha);
             }
         }
-    //8bit grayscale
+    //8-битный оттенок серого
     } else if (surface->channelSize == sizeof(uint8_t)) {
         uint8_t src;
         for (uint32_t i = 0; i < rle->size; ++i, ++span) {
@@ -102,7 +102,7 @@ static bool inline cRasterTranslucentRect(SwSurface* surface, const SwBBox& regi
     auto h = static_cast<uint32_t>(region.max.y - region.min.y);
     auto w = static_cast<uint32_t>(region.max.x - region.min.x);
 
-    //32bits channels
+    //32-битные каналы
     if (surface->channelSize == sizeof(uint32_t)) {
         auto color = surface->join(r, g, b, a);
         auto buffer = surface->buf32 + (region.min.y * surface->stride) + region.min.x;
@@ -113,7 +113,7 @@ static bool inline cRasterTranslucentRect(SwSurface* surface, const SwBBox& regi
                 *dst = color + ALPHA_BLEND(*dst, ialpha);
             }
         }
-    //8bit grayscale
+    //8-битный оттенок серого
     } else if (surface->channelSize == sizeof(uint8_t)) {
         auto buffer = surface->buf8 + (region.min.y * surface->stride) + region.min.x;
         auto ialpha = ~a;
@@ -132,25 +132,25 @@ static bool inline cRasterABGRtoARGB(RenderSurface* surface)
 {
     TVGLOG("SW_ENGINE", "Convert ColorSpace ABGR - ARGB [Size: %d x %d]", surface->w, surface->h);
 
-    //64bits faster converting
+    //64-битное более быстрое преобразование
     if (surface->w % 2 == 0) {
         auto buffer = reinterpret_cast<uint64_t*>(surface->buf32);
         for (uint32_t y = 0; y < surface->h; ++y, buffer += surface->stride / 2) {
             auto dst = buffer;
             for (uint32_t x = 0; x < surface->w / 2; ++x, ++dst) {
                 auto c = *dst;
-                //flip Blue, Red channels
+                //переключить синий, красный каналы
                 *dst = (c & 0xff000000ff000000) + ((c & 0x00ff000000ff0000) >> 16) + (c & 0x0000ff000000ff00) + ((c & 0x000000ff000000ff) << 16);
             }
         }
-    //default converting
+    //преобразование по умолчанию
     } else {
         auto buffer = surface->buf32;
         for (uint32_t y = 0; y < surface->h; ++y, buffer += surface->stride) {
             auto dst = buffer;
             for (uint32_t x = 0; x < surface->w; ++x, ++dst) {
                 auto c = *dst;
-                //flip Blue, Red channels
+                //переключить синий, красный каналы
                 *dst = (c & 0xff000000) + ((c & 0x00ff0000) >> 16) + (c & 0x0000ff00) + ((c & 0x000000ff) << 16);
             }
         }
@@ -161,7 +161,7 @@ static bool inline cRasterABGRtoARGB(RenderSurface* surface)
 
 static bool inline cRasterARGBtoABGR(RenderSurface* surface)
 {
-    //exactly same with ABGRtoARGB
+    //точно то же самое с ABGRtoARGB
     return cRasterABGRtoARGB(surface);
 }
 

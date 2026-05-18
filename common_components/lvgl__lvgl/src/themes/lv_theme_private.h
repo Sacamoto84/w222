@@ -51,7 +51,7 @@ struct _lv_theme_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_THEME_PRIVATE_H*/

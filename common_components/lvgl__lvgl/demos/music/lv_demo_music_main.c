@@ -109,8 +109,8 @@ static uint32_t bar_color3_stop = 0;
  *   GLOBAL FUNCTIONS
  **********************/
 /*
- * Callback adapter function to convert parameter types to avoid compile-time
- * warning.
+ * Функция адаптера обратного вызова для преобразования типов параметров во избежание времени компиляции.
+ * предупреждение.
  */
 static void _image_set_scale_anim_cb(void * obj, int32_t scale)
 {
@@ -118,8 +118,8 @@ static void _image_set_scale_anim_cb(void * obj, int32_t scale)
 }
 
 /*
- * Callback adapter function to convert parameter types to avoid compile-time
- * warning.
+ * Функция адаптера обратного вызова для преобразования типов параметров во избежание времени компиляции.
+ * предупреждение.
  */
 static void _obj_set_x_anim_cb(void * obj, int32_t x)
 {
@@ -159,7 +159,7 @@ lv_obj_t * lv_demo_music_main_create(lv_obj_t * parent)
 #endif
 #endif
 
-    /*Create the content of the music player*/
+    /*Создайте содержимое музыкального плеера*/
     lv_obj_t * cont = create_cont(parent);
 
     create_wave_images(cont);
@@ -173,19 +173,19 @@ lv_obj_t * lv_demo_music_main_create(lv_obj_t * parent)
     lv_obj_set_style_pad_hor(cont, music_width / 6, 0);
 #endif
 
-    /*Arrange the content into a grid*/
+    /*Расположите контент в сетке*/
 #if LV_DEMO_MUSIC_SQUARE || LV_DEMO_MUSIC_ROUND
     static const int32_t grid_cols[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    static int32_t grid_rows[] = {LV_DEMO_MUSIC_HANDLE_SIZE,     /*Spacing*/
-                                  0,   /*Spectrum obj, set later*/
-                                  LV_GRID_CONTENT, /*Title box*/
-                                  LV_GRID_FR(3),   /*Spacer*/
-                                  LV_GRID_CONTENT, /*Icon box*/
-                                  LV_GRID_FR(3),   /*Spacer*/
-                                  LV_GRID_CONTENT, /*Control box*/
-                                  LV_GRID_FR(3),   /*Spacer*/
-                                  LV_GRID_CONTENT, /*Handle box*/
-                                  LV_DEMO_MUSIC_HANDLE_SIZE,     /*Spacing*/
+    static int32_t grid_rows[] = {LV_DEMO_MUSIC_HANDLE_SIZE,     /*Расстояние*/
+                                  0,   /*Объект Spectrum, установлен позже*/
+                                  LV_GRID_CONTENT, /*Поле заголовка*/
+                                  LV_GRID_FR(3),   /*Проставка*/
+                                  LV_GRID_CONTENT, /*Коробка с иконками*/
+                                  LV_GRID_FR(3),   /*Проставка*/
+                                  LV_GRID_CONTENT, /*Блок управления*/
+                                  LV_GRID_FR(3),   /*Проставка*/
+                                  LV_GRID_CONTENT, /*Ручка коробки*/
+                                  LV_DEMO_MUSIC_HANDLE_SIZE,     /*Расстояние*/
                                   LV_GRID_TEMPLATE_LAST
                                  };
 
@@ -200,23 +200,23 @@ lv_obj_t * lv_demo_music_main_create(lv_obj_t * parent)
     lv_obj_set_grid_cell(handle_box, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 8, 1);
 #elif LV_DEMO_MUSIC_LANDSCAPE == 0
     static const int32_t grid_cols[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    static const int32_t grid_rows[] = {LV_DEMO_MUSIC_HANDLE_SIZE,     /*Spacing*/
-                                        LV_GRID_FR(1),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Title box*/
-                                        LV_GRID_FR(3),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Icon box*/
-                                        LV_GRID_FR(3),   /*Spacer*/
+    static const int32_t grid_rows[] = {LV_DEMO_MUSIC_HANDLE_SIZE,     /*Расстояние*/
+                                        LV_GRID_FR(1),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Поле заголовка*/
+                                        LV_GRID_FR(3),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Коробка с иконками*/
+                                        LV_GRID_FR(3),   /*Проставка*/
 # if LV_DEMO_MUSIC_LARGE == 0
-                                        250,    /*Spectrum obj*/
+                                        250,    /*Спектр объекта*/
 # else
-                                        480,   /*Spectrum obj*/
+                                        480,   /*Спектр объекта*/
 # endif
-                                        LV_GRID_FR(3),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Control box*/
-                                        LV_GRID_FR(3),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Handle box*/
-                                        LV_GRID_FR(1),   /*Spacer*/
-                                        LV_DEMO_MUSIC_HANDLE_SIZE,     /*Spacing*/
+                                        LV_GRID_FR(3),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Блок управления*/
+                                        LV_GRID_FR(3),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Ручка коробки*/
+                                        LV_GRID_FR(1),   /*Проставка*/
+                                        LV_DEMO_MUSIC_HANDLE_SIZE,     /*Расстояние*/
                                         LV_GRID_TEMPLATE_LAST
                                        };
 
@@ -228,19 +228,19 @@ lv_obj_t * lv_demo_music_main_create(lv_obj_t * parent)
     lv_obj_set_grid_cell(ctrl_box, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 8, 1);
     lv_obj_set_grid_cell(handle_box, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 10, 1);
 #else
-    /*Arrange the content into a grid*/
+    /*Расположите контент в сетке*/
     static const int32_t grid_cols[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    static const int32_t grid_rows[] = {LV_DEMO_MUSIC_HANDLE_SIZE,     /*Spacing*/
-                                        LV_GRID_FR(1),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Title box*/
-                                        LV_GRID_FR(1),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Icon box*/
-                                        LV_GRID_FR(3),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Control box*/
-                                        LV_GRID_FR(1),   /*Spacer*/
-                                        LV_GRID_CONTENT, /*Handle box*/
-                                        LV_GRID_FR(1),   /*Spacer*/
-                                        LV_DEMO_MUSIC_HANDLE_SIZE,     /*Spacing*/
+    static const int32_t grid_rows[] = {LV_DEMO_MUSIC_HANDLE_SIZE,     /*Расстояние*/
+                                        LV_GRID_FR(1),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Поле заголовка*/
+                                        LV_GRID_FR(1),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Коробка с иконками*/
+                                        LV_GRID_FR(3),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Блок управления*/
+                                        LV_GRID_FR(1),   /*Проставка*/
+                                        LV_GRID_CONTENT, /*Ручка коробки*/
+                                        LV_GRID_FR(1),   /*Проставка*/
+                                        LV_DEMO_MUSIC_HANDLE_SIZE,     /*Расстояние*/
                                         LV_GRID_TEMPLATE_LAST
                                        };
 
@@ -256,7 +256,7 @@ lv_obj_t * lv_demo_music_main_create(lv_obj_t * parent)
     sec_counter_timer = lv_timer_create(timer_cb, 1000, NULL);
     lv_timer_pause(sec_counter_timer);
 
-    /*Animate in the content after the intro time*/
+    /*Анимация контента после вступления*/
     lv_anim_t a;
 
     start_anim = true;
@@ -293,7 +293,7 @@ lv_obj_t * lv_demo_music_main_create(lv_obj_t * parent)
     lv_anim_set_completed_cb(&a, NULL);
     lv_anim_start(&a);
 
-    /* Create an intro from a logo + label */
+    /* Создать интро из логотипа + этикетки */
     LV_IMAGE_DECLARE(img_lv_demo_music_logo);
     lv_obj_t * logo = lv_image_create(parent);
     lv_image_set_src(logo, &img_lv_demo_music_logo);
@@ -394,15 +394,15 @@ void lv_demo_music_pause(void)
 
 static lv_obj_t * create_cont(lv_obj_t * parent)
 {
-    /*A transparent container in which the player section will be scrolled*/
+    /*Прозрачный контейнер, в котором будет прокручиваться раздел плеера*/
     main_cont = lv_obj_create(parent);
     lv_obj_remove_flag(main_cont, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_remove_flag(main_cont, LV_OBJ_FLAG_SCROLL_ELASTIC);
-    lv_obj_remove_style_all(main_cont);                            /*Make it transparent*/
+    lv_obj_remove_style_all(main_cont);                            /*Сделайте его прозрачным*/
     lv_obj_set_size(main_cont, lv_pct(100), lv_pct(100));
-    lv_obj_set_scroll_snap_y(main_cont, LV_SCROLL_SNAP_CENTER);    /*Snap the children to the center*/
+    lv_obj_set_scroll_snap_y(main_cont, LV_SCROLL_SNAP_CENTER);    /*Прикрепите детей к центру*/
 
-    /*Create a container for the player*/
+    /*Создать контейнер для плеера*/
     lv_obj_t * player = lv_obj_create(main_cont);
     lv_obj_set_y(player, - LV_DEMO_MUSIC_HANDLE_SIZE);
 #if LV_DEMO_MUSIC_SQUARE || LV_DEMO_MUSIC_ROUND
@@ -417,8 +417,8 @@ static lv_obj_t * create_cont(lv_obj_t * parent)
     lv_obj_set_style_pad_all(player, 0, 0);
     lv_obj_set_scroll_dir(player, LV_DIR_VER);
 
-    /* Transparent placeholders below the player container
-     * It is used only to snap it to center.*/
+    /* Прозрачные заполнители под контейнером проигрывателя
+     * Он используется только для привязки его к центру.*/
     lv_obj_t * placeholder1 = lv_obj_create(main_cont);
     lv_obj_remove_style_all(placeholder1);
     lv_obj_remove_flag(placeholder1, LV_OBJ_FLAG_CLICKABLE);
@@ -495,7 +495,7 @@ static void create_wave_images(lv_obj_t * parent)
 static lv_obj_t * create_title_box(lv_obj_t * parent)
 {
 
-    /*Create the titles*/
+    /*Создайте заголовки*/
     lv_obj_t * cont = lv_obj_create(parent);
     lv_obj_remove_style_all(cont);
     lv_obj_set_height(cont, LV_SIZE_CONTENT);
@@ -549,7 +549,7 @@ static lv_obj_t * create_icon_box(lv_obj_t * parent)
 
 static lv_obj_t * create_spectrum_obj(lv_obj_t * parent)
 {
-    /*Create the spectrum visualizer*/
+    /*Создайте визуализатор спектра*/
     lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
 #if LV_DEMO_MUSIC_LARGE
@@ -566,7 +566,7 @@ static lv_obj_t * create_spectrum_obj(lv_obj_t * parent)
 
 static lv_obj_t * create_ctrl_box(lv_obj_t * parent)
 {
-    /*Create the control box*/
+    /*Создайте блок управления*/
     lv_obj_t * cont = lv_obj_create(parent);
     lv_obj_remove_style_all(cont);
     lv_obj_set_height(cont, LV_SIZE_CONTENT);
@@ -621,7 +621,7 @@ static lv_obj_t * create_ctrl_box(lv_obj_t * parent)
     LV_IMAGE_DECLARE(img_lv_demo_music_slider_knob);
     slider_obj = lv_slider_create(cont);
     lv_obj_set_style_anim_duration(slider_obj, 100, 0);
-    lv_obj_add_flag(slider_obj, LV_OBJ_FLAG_CLICKABLE); /*No input from the slider*/
+    lv_obj_add_flag(slider_obj, LV_OBJ_FLAG_CLICKABLE); /*Нет ввода со слайдера*/
     lv_obj_remove_flag(slider_obj, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
 
 #if LV_DEMO_MUSIC_LARGE == 0
@@ -660,7 +660,7 @@ static lv_obj_t * create_handle(lv_obj_t * parent)
     lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_style_pad_row(cont, 8, 0);
 
-    /*A handle to scroll to the track list*/
+    /*Ручка для прокрутки списка треков*/
     lv_obj_t * handle_label = lv_label_create(cont);
     lv_label_set_text(handle_label, "ALL TRACKS");
     lv_obj_set_style_text_font(handle_label, font_small, 0);
@@ -826,7 +826,7 @@ static void spectrum_draw_event_cb(lv_event_t * e)
         uint32_t s;
         for(s = 0; s < 4; s++) {
             uint32_t f;
-            uint32_t band_w = 0;    /*Real number of bars in this band.*/
+            uint32_t band_w = 0;    /*Реальное количество баров в этой полосе.*/
             switch(s) {
                 case 0:
                     band_w = 20;
@@ -842,7 +842,7 @@ static void spectrum_draw_event_cb(lv_event_t * e)
                     break;
             }
 
-            /* Add "side bars" with cosine characteristic.*/
+            /* Добавьте «боковые полосы» с косинусной характеристикой.*/
             for(f = 0; f < band_w; f++) {
                 uint32_t ampl_main = spectrum[spectrum_i][s];
                 int32_t ampl_mod = get_cos(f * 360 / band_w + 180, 180) + 180;

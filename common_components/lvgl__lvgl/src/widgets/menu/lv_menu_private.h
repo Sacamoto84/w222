@@ -78,7 +78,7 @@ struct _lv_menu_page_t {
 #endif /* LV_USE_MENU */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_MENU_PRIVATE_H*/

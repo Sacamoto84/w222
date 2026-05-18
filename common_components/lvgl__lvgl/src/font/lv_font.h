@@ -29,10 +29,10 @@ extern "C" {
  **********************/
 
 /*------------------
- * General types
+ * Общие типы
  *-----------------*/
 
-/** The font format.*/
+/** Формат шрифта.*/
 typedef enum {
     LV_FONT_GLYPH_FORMAT_NONE   = 0, /**< Maybe not visible*/
 
@@ -51,7 +51,7 @@ typedef enum {
     LV_FONT_GLYPH_FORMAT_CUSTOM = 0xFF, /**< Custom format*/
 } lv_font_glyph_format_t;
 
-/** Describes the properties of a glyph.*/
+/** Описывает свойства глифа.*/
 typedef struct {
     const lv_font_t *
     resolved_font;  /**< Pointer to a font where the glyph was actually found after handling fallbacks*/
@@ -64,8 +64,8 @@ typedef struct {
     lv_font_glyph_format_t format;  /**< Font format of the glyph see lv_font_glyph_format_t */
     uint8_t is_placeholder: 1;      /**< Glyph is missing. But placeholder will still be displayed*/
 
-    /** 0: Get bitmap should return an A8 or ARGB8888 image.
-      * 1: return the bitmap as it is (Maybe A1/2/4 or any proprietary formats). */
+    /** 0: Функция Get bitmap должна возвращать изображениеA8или ARGB8888.
+      * 1: верните растровое изображение как оно есть (возможно, A1/2/4 или любые другие собственные форматы). */
     uint8_t req_raw_bitmap: 1;
 
     int32_t outline_stroke_width;   /**< used with freetype vector fonts - width of the letter border */
@@ -77,7 +77,7 @@ typedef struct {
     lv_cache_entry_t * entry; /**< The cache entry of the glyph draw data. Used by the font cache*/
 } lv_font_glyph_dsc_t;
 
-/** The bitmaps might be upscaled by 3 to achieve subpixel rendering.*/
+/** Растровые изображения могут быть увеличены на 3 для достижения субпиксельного рендеринга.*/
 typedef enum {
     LV_FONT_SUBPX_NONE,
     LV_FONT_SUBPX_HOR,
@@ -85,24 +85,24 @@ typedef enum {
     LV_FONT_SUBPX_BOTH,
 } lv_font_subpx_t;
 
-/** Adjust letter spacing for specific character pairs.*/
+/** Отрегулируйте расстояние между буквами для определенных пар символов.*/
 typedef enum {
     LV_FONT_KERNING_NORMAL,
     LV_FONT_KERNING_NONE,
 } lv_font_kerning_t;
 
-/** Describe the properties of a font*/
+/** Опишите свойства шрифта.*/
 struct _lv_font_t {
-    /** Get a glyph's descriptor from a font*/
+    /** Получить дескриптор глифа из шрифта*/
     bool (*get_glyph_dsc)(const lv_font_t *, lv_font_glyph_dsc_t *, uint32_t letter, uint32_t letter_next);
 
-    /** Get a glyph's bitmap from a font*/
+    /** Получить растровое изображение глифа из шрифта*/
     const void * (*get_glyph_bitmap)(lv_font_glyph_dsc_t *, lv_draw_buf_t *);
 
-    /** Release a glyph*/
+    /** Выпустить глиф*/
     void (*release_glyph)(const lv_font_t *, lv_font_glyph_dsc_t *);
 
-    /*Pointer to the font in a font pack (must have the same line height)*/
+    /*Указатель на шрифт в пакете шрифтов (должен иметь одинаковую высоту строки)*/
     int32_t line_height;         /**< The real line height where any text fits*/
     int32_t base_line;           /**< Base line measured from the bottom of the line_height*/
     uint8_t subpx   : 2;            /**< An element of `lv_font_subpx_t`*/
@@ -138,88 +138,88 @@ struct _lv_font_info_t {
  **********************/
 
 /**
- * Return with the bitmap of a font.
- * It always converts the normal fonts to A8 format in a draw_buf with
- * LV_DRAW_BUF_ALIGN and LV_DRAW_BUF_STRIDE_ALIGN
- * @note You must call lv_font_get_glyph_dsc() to get `g_dsc` (lv_font_glyph_dsc_t)
- *       before you can call this function.
- * @param g_dsc         the glyph descriptor including which font to use, which supply the glyph_index
- *                      and the format.
- * @param draw_buf      a draw buffer that can be used to store the bitmap of the glyph.
- * @return              pointer to the glyph's data.
- *                      It can be a draw buffer for bitmap fonts or an image source for imgfonts.
+ * Вернитесь с растровым изображением шрифта.
+ * Он всегда конвертирует обычные шрифты в форматA8вdraw_bufс
+ * LV_DRAW_BUF_ALIGN и LV_DRAW_BUF_STRIDE_ALIGN
+ * @note Вы должны вызвать lv_font_get_glyph_dsc(), чтобы получить`g_dsc`(lv_font_glyph_dsc_t)
+ *       прежде чем вы сможете вызвать эту функцию.
+ * @param g_dsc         дескриптор глифа, включая используемый шрифт, который предоставляет glyph_index
+ *                      и формат.
+ * @param draw_buf      буфер рисования, который можно использовать для хранения растрового изображения глифа.
+ * @return              указатель на данные глифа.
+ *                      Это может быть буфер отрисовки для растровых шрифтов или источник изображения для imgfonts.
  */
 const void * lv_font_get_glyph_bitmap(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t * draw_buf);
 
 
 /**
- * Return the bitmap as it is. It works only if the font stores the bitmap in
- * a non-volitile memory.
- * @param g_dsc         the glyph descriptor including which font to use, which supply the glyph_index
- *                      and the format.
- * @return              the bitmap as it is
+ * Верните растровое изображение как есть. Это работает, только если шрифт хранит растровое изображение в
+ * неизменяемая память.
+ * @param g_dsc         дескриптор глифа, включая используемый шрифт, который предоставляет glyph_index
+ *                      и формат.
+ * @return              растровое изображение как оно есть
  */
 const void * lv_font_get_glyph_static_bitmap(lv_font_glyph_dsc_t * g_dsc);
 
 /**
- * Get the descriptor of a glyph
- * @param font          pointer to font
- * @param dsc_out       store the result descriptor here
- * @param letter        a UNICODE letter code
- * @param letter_next   the next letter after `letter`. Used for kerning
- * @return true: descriptor is successfully loaded into `dsc_out`.
- *         false: the letter was not found, no data is loaded to `dsc_out`
+ * Получить дескриптор глифа
+ * @param font          указатель на шрифт
+ * @param dsc_out       сохраните дескриптор результата здесь
+ * @param letter        буквенный код UNICODE
+ * @param letter_next   следующая буква после `letter`. Используется для кернинга
+ * @return true: дескриптор успешно загружен в `dsc_out`.
+ *         false: письмо не найдено, в`dsc_out`данные не загружаются
  */
 bool lv_font_get_glyph_dsc(const lv_font_t * font, lv_font_glyph_dsc_t * dsc_out, uint32_t letter,
                            uint32_t letter_next);
 /**
- * Release the bitmap of a font.
- * @note You must call lv_font_get_glyph_dsc() to get `g_dsc` (lv_font_glyph_dsc_t) before you can call this function.
- * @param g_dsc         the glyph descriptor including which font to use, which supply the glyph_index and the format.
+ * Освободите растровое изображение шрифта.
+ * @note Прежде чем вы сможете вызвать эту функцию, вы должны вызвать lv_font_get_glyph_dsc(), чтобы получить`g_dsc`(lv_font_glyph_dsc_t).
+ * @param g_dsc         дескриптор глифа, включая используемый шрифт, который предоставляетglyph_indexи формат.
  */
 void lv_font_glyph_release_draw_data(lv_font_glyph_dsc_t * g_dsc);
 
 /**
- * Get the width of a glyph with kerning
- * @param font          pointer to a font
- * @param letter        a UNICODE letter
- * @param letter_next   the next letter after `letter`. Used for kerning
- * @return the width of the glyph
+ * Получить ширину глифа с помощью кернинга
+ * @param font          указатель на шрифт
+ * @param letter        письмо UNICODE
+ * @param letter_next   следующая буква после `letter`. Используется для кернинга
+ * @return ширина глифа
  */
 uint16_t lv_font_get_glyph_width(const lv_font_t * font, uint32_t letter, uint32_t letter_next);
 
 /**
- * Get the line height of a font. All characters fit into this height
- * @param font      pointer to a font
- * @return the height of a font
+ * Получите высоту строки шрифта. Все персонажи вписываются в этот рост
+ * @param font      указатель на шрифт
+ * @return высота шрифта
  */
 int32_t lv_font_get_line_height(const lv_font_t * font);
 
 /**
- * Configure the use of kerning information stored in a font
- * @param font    pointer to a font
- * @param kerning `LV_FONT_KERNING_NORMAL` (default) or `LV_FONT_KERNING_NONE`
+ * Настройка использования информации кернинга, хранящейся в шрифте.
+ * @param font    указатель на шрифт
+ * @param kerning `LV_FONT_KERNING_NORMAL` (по умолчанию) или `LV_FONT_KERNING_NONE`
  */
 void lv_font_set_kerning(lv_font_t * font, lv_font_kerning_t kerning);
 
 /**
- * Get the default font, defined by LV_FONT_DEFAULT
- * @return  return      pointer to the default font
+ * Получите шрифт по умолчанию, определенный LV_FONT_DEFAULT.
+ * @return  вернуть указатель на шрифт по умолчанию
  */
 const lv_font_t * lv_font_get_default(void);
 
 /**
- * Compare font information.
- * @param ft_info_1 font information 1.
- * @param ft_info_2 font information 2.
- * @return return true if the fonts are equal.
+ * Сравните информацию о шрифтах.
+ * @param ft_info_1 информация о шрифте 1.
+ * @param ft_info_2 информация о шрифте 2.
+ * @return верните true, если шрифты равны.
  */
 bool lv_font_info_is_equal(const lv_font_info_t * ft_info_1, const lv_font_info_t * ft_info_2);
 
 /**
- * Checks if a font has a static rendering bitmap.
- * @param font    pointer to a font
- * @return return true if the font has a bitmap generated for static rendering.
+ * Проверяет, имеет ли шрифт статическое растровое изображение рендеринга.
+ * @param font    указатель на шрифт
+ * @return верните true, если шрифт имеет растровое изображение, созданное для статического рендеринга.
  */
 bool lv_font_has_static_bitmap(const lv_font_t * font);
 
@@ -337,13 +337,13 @@ LV_FONT_DECLARE(lv_font_unscii_8)
 LV_FONT_DECLARE(lv_font_unscii_16)
 #endif
 
-/*Declare the custom (user defined) fonts*/
+/*Объявите пользовательские (определяемые пользователем) шрифты*/
 #ifdef LV_FONT_CUSTOM_DECLARE
 LV_FONT_CUSTOM_DECLARE
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FONT_H*/

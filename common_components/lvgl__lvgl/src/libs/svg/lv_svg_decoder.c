@@ -54,7 +54,7 @@ static struct _lv_draw_buf_handlers_t _svg_draw_buf_handler = {
  **********************/
 
 /**
- * Register the SVG decoder functions in LVGL
+ * Зарегистрируйте функции декодера SVG в LVGL.
  */
 void lv_svg_decoder_init(void)
 {
@@ -99,7 +99,7 @@ static lv_result_t svg_decoder_info(lv_image_decoder_t * decoder, lv_image_decod
         uint8_t * buf = NULL;
 
         if(src_type == LV_IMAGE_SRC_FILE) {
-            /*Support only "*.svg" files*/
+            /*Поддержка только файлов «*.svg».*/
             if(lv_strcmp(lv_fs_get_ext(src_data), "svg")) {
                 return LV_RESULT_INVALID;
             }
@@ -110,7 +110,7 @@ static lv_result_t svg_decoder_info(lv_image_decoder_t * decoder, lv_image_decod
             res = lv_fs_seek(&src->file, 0, LV_FS_SEEK_END);
             if(res == LV_FS_RES_OK) {
                 lv_fs_tell(&src->file, &file_size);
-                lv_fs_seek(&src->file, 0, LV_FS_SEEK_SET); /* Reset position to start */
+                lv_fs_seek(&src->file, 0, LV_FS_SEEK_SET); /* Сбросить позицию, чтобы начать */
             }
 #ifdef LV_USE_SVG_DEBUG
             LV_LOG_INFO("LVGL file_size = %d.", file_size);
@@ -121,7 +121,7 @@ static lv_result_t svg_decoder_info(lv_image_decoder_t * decoder, lv_image_decod
 
             buf = (uint8_t *)lv_zalloc(file_size);
             LV_ASSERT_NULL(buf);
-            /* read some bytes for searching svg header */
+            /* прочитайте несколько байтов для поиска заголовка SVG */
             res = lv_fs_read(&src->file, buf, file_size, &rn);
             if(res != LV_FS_RES_OK) {
                 LV_LOG_WARN("can't open %s", (char *)src_data);
@@ -206,7 +206,7 @@ static lv_result_t svg_decoder_open(lv_image_decoder_t * decoder, lv_image_decod
 
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = dsc->src;
-        if(lv_strcmp(lv_fs_get_ext(fn), "svg") == 0) {              /*Check the extension*/
+        if(lv_strcmp(lv_fs_get_ext(fn), "svg") == 0) {              /*Проверьте расширение*/
 
             svg_data = alloc_file(fn, &svg_data_size);
             if(svg_data == NULL) {
@@ -239,7 +239,7 @@ static lv_result_t svg_decoder_open(lv_image_decoder_t * decoder, lv_image_decod
     }
     lv_svg_node_delete(svg_doc);
 
-    /* create a fake draw_buf object */
+    /* создать поддельный объект draw_buf */
     lv_draw_buf_t * draw_buf = lv_zalloc(sizeof(lv_draw_buf_t));
 
     draw_buf->header.w = 1;
@@ -315,7 +315,7 @@ static uint8_t * alloc_file(const char * filename, uint32_t * size)
         goto failed;
     }
 
-    /*Read file to buffer*/
+    /*Чтение файла в буфер*/
     data = lv_malloc(data_size);
     if(data == NULL) {
         LV_LOG_WARN("malloc failed for data size %u", data_size);
@@ -354,7 +354,7 @@ static void svg_draw(lv_layer_t * layer, const lv_image_decoder_dsc_t * decoder_
 
     lv_draw_vector_dsc_t * dsc = lv_draw_vector_dsc_create(layer);
 
-    /*Save the widget so that `LV_EVENT_DRAW_TASK_ADDED` can be sent to it in `lv_draw_vector`*/
+    /*Сохраните виджет, чтобы на него можно было отправить `LV_EVENT_DRAW_TASK_ADDED` в `lv_draw_vector`.*/
     dsc->base.obj = image_dsc->base.obj;
 
     lv_matrix_t matrix;

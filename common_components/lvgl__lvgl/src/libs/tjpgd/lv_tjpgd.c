@@ -22,7 +22,7 @@
 
 #define DECODER_NAME    "TJPGD"
 
-#define TJPGD_WORKBUFF_SIZE             4096    //Recommended by TJPGD library
+#define TJPGD_WORKBUFF_SIZE             4096    //Рекомендовано библиотекой TJPGD
 
 /**********************
  *      TYPEDEFS
@@ -145,7 +145,7 @@ static size_t input_func(JDEC * jd, uint8_t * buff, size_t ndata)
 }
 
 /**
- * Decode a JPG image and return the decoded data.
+ * Декодируйте изображение JPG и верните декодированные данные.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -223,14 +223,14 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 
     uint32_t  mx, my;
     mx = jd->msx * 8;
-    my = jd->msy * 8;         /* Size of the MCU (pixel) */
+    my = jd->msy * 8;         /* Размер MCU (пиксель) */
     if(decoded_area->y1 == LV_COORD_MIN) {
         decoded_area->y1 = 0;
         decoded_area->y2 = my - 1;
         decoded_area->x1 = -((int32_t)mx);
         decoded_area->x2 = -1;
         jd->scale = 0;
-        jd->dcv[2] = jd->dcv[1] = jd->dcv[0] = 0;   /* Initialize DC values */
+        jd->dcv[2] = jd->dcv[1] = jd->dcv[0] = 0;   /* Инициализируйте значения DC */
         jd->rst = 0;
         jd->rsc = 0;
         if(decoded == NULL) {
@@ -264,7 +264,7 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
     decoded->header.stride = decoded->header.w * 3;
     decoded->data_size = decoded->header.stride * decoded->header.h;
 
-    /* Process restart interval if enabled */
+    /* Интервал перезапуска процесса, если включен */
     JRESULT rc;
     if(jd->nrst && jd->rst++ == jd->nrst) {
         rc = jd_restart(jd, jd->rsc++);
@@ -272,11 +272,11 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
         jd->rst = 1;
     }
 
-    /* Load an MCU (decompress huffman coded stream, dequantize and apply IDCT) */
+    /* Загрузите MCU (распакуйте закодированный поток Хаффмана, деквантуйте и примените IDCT ) */
     rc = jd_mcu_load(jd);
     if(rc != JDR_OK) return LV_RESULT_INVALID;
 
-    /* Output the MCU (YCbCr to RGB, scaling and output) */
+    /* Выведите MCU (от YCbCr до RGB, масштабирование и вывод) */
     rc = jd_mcu_output(jd, NULL, decoded_area->x1, decoded_area->y1);
     if(rc != JDR_OK) return LV_RESULT_INVALID;
 
@@ -284,7 +284,7 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 }
 
 /**
- * Free the allocated resources
+ * Освободите выделенные ресурсы
  * @param decoder pointer to the decoder where this function belongs
  * @param dsc pointer to a descriptor which describes this decoding session
  */

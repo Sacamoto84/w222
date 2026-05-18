@@ -35,7 +35,7 @@ void lv_nuttx_cache_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_NUTTX_CACHE_H*/

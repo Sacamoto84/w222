@@ -37,7 +37,7 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent);
 #endif /* LV_USE_DEMO_WIDGETS */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DEMO_WIDGETS_PROFILE_H*/

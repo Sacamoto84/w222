@@ -1,24 +1,24 @@
 /*
- * QR Code generator library (C)
+ * QR Библиотека генератора кода (C)
  *
  * Copyright (c) Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/qr-code-generator-library
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+ * данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+ * Программное обеспечение без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  * - The above copyright notice and this permission notice shall be included in
- *   all copies or substantial portions of the Software.
+ *   все копии или существенные части Программного обеспечения.
  * - The Software is provided "as is", without warranty of any kind, express or
- *   implied, including but not limited to the warranties of merchantability,
- *   fitness for a particular purpose and noninfringement. In no event shall the
- *   authors or copyright holders be liable for any claim, damages or other
- *   liability, whether in an action of contract, tort or otherwise, arising from,
- *   out of or in connection with the Software or the use or other dealings in the
- *   Software.
+ *   подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *   пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае
+ *   авторы или правообладатели несут ответственность за любые претензии, ущерб или другие
+ *   ответственность, будь то по договору, правонарушению или иным образом, вытекающая из:
+ *   вне или в связи с Программным обеспечением или использованием или другими сделками в
+ *   Программное обеспечение.
  */
 
 #include "qrcodegen.h"
@@ -30,29 +30,29 @@
 #include <string.h>
 
 #ifndef QRCODEGEN_TEST
-    #define testable static  // Keep functions private
+    #define testable static  // Сохраняйте функции конфиденциальными
 #else
-    #define testable  // Expose private functions
+    #define testable  // Раскрытие частных функций
 #endif
 
 
-/*---- Forward declarations for private functions ----*/
+/*---- Предварительные объявления для частных функций ----*/
 
-// Regarding all public and private functions defined in this source file:
+// Что касается всех общедоступных и частных функций, определенных в этом исходном файле:
 // - They require all pointer/array arguments to be not null unless the array length is zero.
 // - They only read input scalar/array arguments, write to output pointer/array
-//   arguments, and return scalar values; they are "pure" functions.
+//   аргументы и возвращаемые скалярные значения; это «чистые» функции.
 // - They don't read mutable global variables or write to any global variables.
 // - They don't perform I/O, read the clock, print to console, etc.
 // - They allocate a small and constant amount of stack memory.
 // - They don't allocate or free any memory on the heap.
 // - They don't recurse or mutually recurse. All the code
-//   could be inlined into the top-level public functions.
+//   может быть встроен в публичные функции верхнего уровня.
 // - They run in at most quadratic time with respect to input arguments.
-//   Most functions run in linear time, and some in constant time.
-//   There are no unbounded loops or non-obvious termination conditions.
+//   Большинство функций выполняются за линейное время, а некоторые — за постоянное.
+//   Здесь нет неограниченных циклов или неочевидных условий завершения.
 // - They are completely thread-safe if the caller does not give the
-//   same writable buffer to concurrent calls to these functions.
+//   тот же записываемый буфер для одновременных вызовов этих функций.
 
 testable void appendBitsToBuffer(unsigned int val, int numBits, uint8_t buffer[], int * bitLen);
 
@@ -88,35 +88,35 @@ static int numCharCountBits(enum qrcodegen_Mode mode, int version);
 
 
 
-/*---- Private tables of constants ----*/
+/*---- Частные таблицы констант ----*/
 
-// The set of all legal characters in alphanumeric mode, where each character
-// value maps to the index in the string. For checking text and encoding segments.
+// Набор всех допустимых символов в буквенно-цифровом режиме, где каждый символ
+// значение сопоставляется с индексом в строке. Для проверки текста и сегментов кодирования.
 static const char * ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:";
 
-// For generating error correction codes.
+// Для генерации кодов исправления ошибок.
 testable const int8_t ECC_CODEWORDS_PER_BLOCK[4][41] = {
     // Version: (note that index 0 is for padding, and is set to an illegal value)
-    //0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40    Error correction level
-    {-1,  7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // Low
-    {-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28},  // Medium
-    {-1, 13, 22, 18, 26, 18, 24, 18, 22, 20, 24, 28, 26, 24, 20, 30, 24, 28, 28, 26, 30, 28, 30, 30, 30, 30, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // Quartile
-    {-1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // High
+    //0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 Уровень коррекции ошибок
+    {-1,  7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // Низкий
+    {-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28},  // Средний
+    {-1, 13, 22, 18, 26, 18, 24, 18, 22, 20, 24, 28, 26, 24, 20, 30, 24, 28, 28, 26, 30, 28, 30, 30, 30, 30, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // Квартиль
+    {-1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // Высокий
 };
 
-#define qrcodegen_REED_SOLOMON_DEGREE_MAX 30  // Based on the table above
+#define qrcodegen_REED_SOLOMON_DEGREE_MAX 30  // На основе таблицы выше
 
-// For generating error correction codes.
+// Для генерации кодов исправления ошибок.
 testable const int8_t NUM_ERROR_CORRECTION_BLOCKS[4][41] = {
     // Version: (note that index 0 is for padding, and is set to an illegal value)
-    //0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40    Error correction level
-    {-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4,  4,  4,  4,  4,  6,  6,  6,  6,  7,  8,  8,  9,  9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25},  // Low
-    {-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5,  5,  8,  9,  9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49},  // Medium
-    {-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8,  8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 45, 48, 51, 53, 56, 59, 62, 65, 68},  // Quartile
-    {-1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81},  // High
+    //0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 Уровень коррекции ошибок
+    {-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4,  4,  4,  4,  4,  6,  6,  6,  6,  7,  8,  8,  9,  9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25},  // Низкий
+    {-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5,  5,  8,  9,  9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49},  // Средний
+    {-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8,  8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 45, 48, 51, 53, 56, 59, 62, 65, 68},  // Квартиль
+    {-1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81},  // Высокий
 };
 
-// For automatic mask pattern selection.
+// Для автоматического выбора шаблона маски.
 static const int PENALTY_N1 =  3;
 static const int PENALTY_N2 =  3;
 static const int PENALTY_N3 = 40;
@@ -124,9 +124,9 @@ static const int PENALTY_N4 = 10;
 
 
 
-/*---- High-level QR Code encoding functions ----*/
+/*---- Функции кодирования кода высокого уровня QR ----*/
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_encodeText(const char * text, uint8_t tempBuffer[], uint8_t qrcode[],
                           enum qrcodegen_Ecc ecl, int minVersion, int maxVersion, enum qrcodegen_Mask mask, bool boostEcl)
 {
@@ -162,12 +162,12 @@ bool qrcodegen_encodeText(const char * text, uint8_t tempBuffer[], uint8_t qrcod
     return qrcodegen_encodeSegmentsAdvanced(&seg, 1, ecl, minVersion, maxVersion, mask, boostEcl, tempBuffer, qrcode);
 
 fail:
-    qrcode[0] = 0;  // Set size to invalid value for safety
+    qrcode[0] = 0;  // Установите для размера недопустимое значение в целях безопасности.
     return false;
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_encodeBinary(uint8_t dataAndTemp[], size_t dataLen, uint8_t qrcode[],
                             enum qrcodegen_Ecc ecl, int minVersion, int maxVersion, enum qrcodegen_Mask mask, bool boostEcl)
 {
@@ -176,7 +176,7 @@ bool qrcodegen_encodeBinary(uint8_t dataAndTemp[], size_t dataLen, uint8_t qrcod
     seg.mode = qrcodegen_Mode_BYTE;
     seg.bitLength = calcSegmentBitLength(seg.mode, dataLen);
     if(seg.bitLength == -1) {
-        qrcode[0] = 0;  // Set size to invalid value for safety
+        qrcode[0] = 0;  // Установите для размера недопустимое значение в целях безопасности.
         return false;
     }
     seg.numChars = (int)dataLen;
@@ -185,8 +185,8 @@ bool qrcodegen_encodeBinary(uint8_t dataAndTemp[], size_t dataLen, uint8_t qrcod
 }
 
 
-// Appends the given number of low-order bits of the given value to the given byte-based
-// bit buffer, increasing the bit length. Requires 0 <= numBits <= 16 and val < 2^numBits.
+// Добавляет заданное количество младших бит заданного значения к заданному байтовому значению.
+// битовый буфер, увеличивающий длину бита. Требуется 0 <= numBits <= 16 и val < 2^numBits.
 testable void appendBitsToBuffer(unsigned int val, int numBits, uint8_t buffer[], int * bitLen)
 {
     LV_ASSERT(0 <= numBits && numBits <= 16 && (unsigned long)val >> numBits == 0);
@@ -196,9 +196,9 @@ testable void appendBitsToBuffer(unsigned int val, int numBits, uint8_t buffer[]
 
 
 
-/*---- Low-level QR Code encoding functions ----*/
+/*---- Функции кодирования низкоуровневого кода QR ----*/
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_encodeSegments(const struct qrcodegen_Segment segs[], size_t len,
                               enum qrcodegen_Ecc ecl, uint8_t tempBuffer[], uint8_t qrcode[])
 {
@@ -207,7 +207,7 @@ bool qrcodegen_encodeSegments(const struct qrcodegen_Segment segs[], size_t len,
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], size_t len, enum qrcodegen_Ecc ecl,
                                       int minVersion, int maxVersion, int mask, bool boostEcl, uint8_t tempBuffer[], uint8_t qrcode[])
 {
@@ -215,27 +215,27 @@ bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], siz
     LV_ASSERT(qrcodegen_VERSION_MIN <= minVersion && minVersion <= maxVersion && maxVersion <= qrcodegen_VERSION_MAX);
     LV_ASSERT(0 <= (int)ecl && (int)ecl <= 3 && -1 <= (int)mask && (int)mask <= 7);
 
-    // Find the minimal version number to use
+    // Найдите минимальный номер версии для использования
     int version, dataUsedBits;
     for(version = minVersion; ; version++) {
-        int dataCapacityBits = getNumDataCodewords(version, ecl) * 8;  // Number of data bits available
+        int dataCapacityBits = getNumDataCodewords(version, ecl) * 8;  // Количество доступных бит данных
         dataUsedBits = getTotalBits(segs, len, version);
         if(dataUsedBits != -1 && dataUsedBits <= dataCapacityBits)
-            break;  // This version number is found to be suitable
-        if(version >= maxVersion) {   // All versions in the range could not fit the given data
-            qrcode[0] = 0;  // Set size to invalid value for safety
+            break;  // Этот номер версии признан подходящим
+        if(version >= maxVersion) {   // Все версии в линейке не соответствуют заданным данным.
+            qrcode[0] = 0;  // Установите для размера недопустимое значение в целях безопасности.
             return false;
         }
     }
     LV_ASSERT(dataUsedBits != -1);
 
-    // Increase the error correction level while the data still fits in the current version number
-    for(int i = (int)qrcodegen_Ecc_MEDIUM; i <= (int)qrcodegen_Ecc_HIGH; i++) {   // From low to high
+    // Увеличьте уровень исправления ошибок, пока данные по-прежнему соответствуют текущему номеру версии.
+    for(int i = (int)qrcodegen_Ecc_MEDIUM; i <= (int)qrcodegen_Ecc_HIGH; i++) {   // От низкого к высокому
         if(boostEcl && dataUsedBits <= getNumDataCodewords(version, (enum qrcodegen_Ecc)i) * 8)
             ecl = (enum qrcodegen_Ecc)i;
     }
 
-    // Concatenate all segments to create the data bit string
+    // Объедините все сегменты для создания строки битов данных.
     memset(qrcode, 0, qrcodegen_BUFFER_LEN_FOR_VERSION(version) * sizeof(qrcode[0]));
     int bitLen = 0;
     for(size_t i = 0; i < len; i++) {
@@ -247,7 +247,7 @@ bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], siz
     }
     LV_ASSERT(bitLen == dataUsedBits);
 
-    // Add terminator and pad up to a byte if applicable
+    // Добавьте терминатор и дополните до байта, если это применимо.
     int dataCapacityBits = getNumDataCodewords(version, ecl) * 8;
     LV_ASSERT(bitLen <= dataCapacityBits);
     int terminatorBits = dataCapacityBits - bitLen;
@@ -257,19 +257,19 @@ bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], siz
     appendBitsToBuffer(0, (8 - bitLen % 8) % 8, qrcode, &bitLen);
     LV_ASSERT(bitLen % 8 == 0);
 
-    // Pad with alternating bytes until data capacity is reached
+    // Заполнение чередующимися байтами до тех пор, пока не будет достигнута емкость данных.
     for(uint8_t padByte = 0xEC; bitLen < dataCapacityBits; padByte ^= 0xEC ^ 0x11)
         appendBitsToBuffer(padByte, 8, qrcode, &bitLen);
 
-    // Draw function and data codeword modules
+    // Нарисуйте модули функций и кодовых слов данных
     addEccAndInterleave(qrcode, version, ecl, tempBuffer);
     initializeFunctionModules(version, qrcode);
     drawCodewords(tempBuffer, getNumRawDataModules(version) / 8, qrcode);
     drawWhiteFunctionModules(qrcode, version);
     initializeFunctionModules(version, tempBuffer);
 
-    // Handle masking
-    if(mask == qrcodegen_Mask_AUTO) {   // Automatically choose best mask
+    // Маскирование ручки
+    if(mask == qrcodegen_Mask_AUTO) {   // Автоматически выбирать лучшую маску
         long minPenalty = LONG_MAX;
         for(int i = 0; i < 8; i++) {
             enum qrcodegen_Mask msk = (enum qrcodegen_Mask)i;
@@ -280,7 +280,7 @@ bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], siz
                 mask = msk;
                 minPenalty = penalty;
             }
-            applyMask(tempBuffer, qrcode, msk);  // Undoes the mask due to XOR
+            applyMask(tempBuffer, qrcode, msk);  // Отменяет маску из-за XOR
         }
     }
     LV_ASSERT(0 <= (int)mask && (int)mask <= 7);
@@ -291,15 +291,15 @@ bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], siz
 
 
 
-/*---- Error correction code generation functions ----*/
+/*---- Функции генерации кода коррекции ошибок ----*/
 
-// Appends error correction bytes to each block of the given data array, then interleaves
-// bytes from the blocks and stores them in the result array. data[0 : dataLen] contains
-// the input data. data[dataLen : rawCodewords] is used as a temporary work area and will
-// be clobbered by this function. The final answer is stored in result[0 : rawCodewords].
+// Добавляет байты исправления ошибок к каждому блоку данного массива данных, затем чередует
+// байты из блоков и сохраняет их в массиве результатов. data[0 : dataLen] содержит
+// входные данные. data[dataLen : rawCodewords] используется как временная рабочая область и будет
+// быть забиты этой функцией. Окончательный ответ сохраняется в result[0 : rawCodewords].
 testable void addEccAndInterleave(uint8_t data[], int version, enum qrcodegen_Ecc ecl, uint8_t result[])
 {
-    // Calculate parameter numbers
+    // Рассчитать номера параметров
     LV_ASSERT(0 <= (int)ecl && (int)ecl < 4 && qrcodegen_VERSION_MIN <= version && version <= qrcodegen_VERSION_MAX);
     int numBlocks = NUM_ERROR_CORRECTION_BLOCKS[(int)ecl][version];
     int blockEccLen = ECC_CODEWORDS_PER_BLOCK  [(int)ecl][version];
@@ -308,29 +308,29 @@ testable void addEccAndInterleave(uint8_t data[], int version, enum qrcodegen_Ec
     int numShortBlocks = numBlocks - rawCodewords % numBlocks;
     int shortBlockDataLen = rawCodewords / numBlocks - blockEccLen;
 
-    // Split data into blocks, calculate ECC, and interleave
-    // (not concatenate) the bytes into a single sequence
+    // Разделите данные на блоки, вычислите ECC и чередуйте
+    // (не объединять) байты в одну последовательность
     uint8_t generator[qrcodegen_REED_SOLOMON_DEGREE_MAX];
     calcReedSolomonGenerator(blockEccLen, generator);
     const uint8_t * dat = data;
     for(int i = 0; i < numBlocks; i++) {
         int datLen = shortBlockDataLen + (i < numShortBlocks ? 0 : 1);
-        uint8_t * ecc = &data[dataLen]; // Temporary storage
+        uint8_t * ecc = &data[dataLen]; // Временное хранение
         calcReedSolomonRemainder(dat, datLen, generator, blockEccLen, ecc);
-        for(int j = 0, k = i; j < datLen; j++, k += numBlocks) {   // Copy data
+        for(int j = 0, k = i; j < datLen; j++, k += numBlocks) {   // Копировать данные
             if(j == shortBlockDataLen)
                 k -= numShortBlocks;
             result[k] = dat[j];
         }
-        for(int j = 0, k = dataLen + i; j < blockEccLen; j++, k += numBlocks)   // Copy ECC
+        for(int j = 0, k = dataLen + i; j < blockEccLen; j++, k += numBlocks)   // Копировать ECC
             result[k] = ecc[j];
         dat += datLen;
     }
 }
 
 
-// Returns the number of 8-bit codewords that can be used for storing data (not ECC),
-// for the given version number and error correction level. The result is in the range [9, 2956].
+// Возвращает количество 8-битных кодовых слов, которые можно использовать для хранения данных (не ECC ),
+// для данного номера версии и уровня исправления ошибок. Результат находится в пределах [9, 2956].
 testable int getNumDataCodewords(int version, enum qrcodegen_Ecc ecl)
 {
     int v = version, e = (int)ecl;
@@ -341,9 +341,9 @@ testable int getNumDataCodewords(int version, enum qrcodegen_Ecc ecl)
 }
 
 
-// Returns the number of data bits that can be stored in a QR Code of the given version number, after
-// all function modules are excluded. This includes remainder bits, so it might not be a multiple of 8.
-// The result is in the range [208, 29648]. This could be implemented as a 40-entry lookup table.
+// Возвращает количество битов данных, которые могут быть сохранены в коде QR заданного номера версии после
+// все функциональные модули исключены. Сюда входят биты остатка, поэтому оно может быть не кратно 8.
+// Результат находится в диапазоне [208, 29648]. Это можно реализовать в виде таблицы поиска из 40 записей.
 testable int getNumRawDataModules(int ver)
 {
     LV_ASSERT(qrcodegen_VERSION_MIN <= ver && ver <= qrcodegen_VERSION_MAX);
@@ -359,22 +359,22 @@ testable int getNumRawDataModules(int ver)
 
 
 
-/*---- Reed-Solomon ECC generator functions ----*/
+/*---- Функции генератора Рида-Соломона ECC ----*/
 
-// Calculates the Reed-Solomon generator polynomial of the given degree, storing in result[0 : degree].
+// Вычисляет полином генератора Рида-Соломона заданной степени, сохраняя в result[0 : степень].
 testable void calcReedSolomonGenerator(int degree, uint8_t result[])
 {
-    // Start with the monomial x^0
+    // Начните с монома x^0
     LV_ASSERT(1 <= degree && degree <= qrcodegen_REED_SOLOMON_DEGREE_MAX);
     memset(result, 0, degree * sizeof(result[0]));
     result[degree - 1] = 1;
 
-    // Compute the product polynomial (x - r^0) * (x - r^1) * (x - r^2) * ... * (x - r^{degree-1}),
-    // drop the highest term, and store the rest of the coefficients in order of descending powers.
-    // Note that r = 0x02, which is a generator element of this field GF(2^8/0x11D).
+    // Вычислите полином произведения (x - r^0) * (x - r^1) * (x - r^2) * ... * (x - r^{степень-1}),
+    // отбросьте старший член и сохраните остальные коэффициенты в порядке убывания степени.
+    // Обратите внимание, что r = 0x02, который является порождающим элементом этого поля GF (2^8/ 0x11D).
     uint8_t root = 1;
     for(int i = 0; i < degree; i++) {
-        // Multiply the current product by (x - r^i)
+        // Умножьте текущий продукт на (x - r^i)
         for(int j = 0; j < degree; j++) {
             result[j] = finiteFieldMultiply(result[j], root);
             if(j + 1 < degree)
@@ -385,13 +385,13 @@ testable void calcReedSolomonGenerator(int degree, uint8_t result[])
 }
 
 
-// Calculates the remainder of the polynomial data[0 : dataLen] when divided by the generator[0 : degree], where all
-// polynomials are in big endian and the generator has an implicit leading 1 term, storing the result in result[0 : degree].
+// Вычисляет остаток полинома data[0 : dataLen] при делении на генератор[0 : степень], где все
+// полиномы имеют обратный порядок байтов, а генератор имеет неявный ведущий член 1, сохраняющий результат в result[0 : степень].
 testable void calcReedSolomonRemainder(const uint8_t data[], int dataLen,
                                        const uint8_t generator[], int degree, uint8_t result[])
 {
 
-    // Perform polynomial division
+    // Выполнить полиномиальное деление
     LV_ASSERT(1 <= degree && degree <= qrcodegen_REED_SOLOMON_DEGREE_MAX);
     memset(result, 0, degree * sizeof(result[0]));
     for(int i = 0; i < dataLen; i++) {
@@ -406,11 +406,11 @@ testable void calcReedSolomonRemainder(const uint8_t data[], int dataLen,
 #undef qrcodegen_REED_SOLOMON_DEGREE_MAX
 
 
-// Returns the product of the two given field elements modulo GF(2^8/0x11D).
-// All inputs are valid. This could be implemented as a 256*256 lookup table.
+// Возвращает произведение двух заданных элементов поля по модулю GF (2^8/ 0x11D ).
+// Все входные данные действительны. Это можно реализовать как справочную таблицу размером 256*256.
 testable uint8_t finiteFieldMultiply(uint8_t x, uint8_t y)
 {
-    // Russian peasant multiplication
+    // Русское крестьянское умножение
     uint8_t z = 0;
     for(int i = 7; i >= 0; i--) {
         z = (z << 1) ^ ((z >> 7) * 0x11D);
@@ -421,38 +421,38 @@ testable uint8_t finiteFieldMultiply(uint8_t x, uint8_t y)
 
 
 
-/*---- Drawing function modules ----*/
+/*---- Функциональные модули рисования ----*/
 
-// Clears the given QR Code grid with white modules for the given
-// version's size, then marks every function module as black.
+// Очищает данную сетку кода QR с белыми модулями для заданных
+// размер версии, затем помечает каждый функциональный модуль черным цветом.
 testable void initializeFunctionModules(int version, uint8_t qrcode[])
 {
-    // Initialize QR Code
+    // Инициализируйте код QR
     int qrsize = version * 4 + 17;
     memset(qrcode, 0, ((qrsize * qrsize + 7) / 8 + 1) * sizeof(qrcode[0]));
     qrcode[0] = (uint8_t)qrsize;
 
-    // Fill horizontal and vertical timing patterns
+    // Заполните горизонтальные и вертикальные временные шаблоны
     fillRectangle(6, 0, 1, qrsize, qrcode);
     fillRectangle(0, 6, qrsize, 1, qrcode);
 
-    // Fill 3 finder patterns (all corners except bottom right) and format bits
+    // Заполните 3 шаблона поиска (все углы, кроме нижнего правого) и отформатируйте биты.
     fillRectangle(0, 0, 9, 9, qrcode);
     fillRectangle(qrsize - 8, 0, 8, 9, qrcode);
     fillRectangle(0, qrsize - 8, 9, 8, qrcode);
 
-    // Fill numerous alignment patterns
+    // Заполните многочисленные шаблоны выравнивания
     uint8_t alignPatPos[7];
     int numAlign = getAlignmentPatternPositions(version, alignPatPos);
     for(int i = 0; i < numAlign; i++) {
         for(int j = 0; j < numAlign; j++) {
-            // Don't draw on the three finder corners
+            // Не рисуйте по трем углам видоискателя
             if(!((i == 0 && j == 0) || (i == 0 && j == numAlign - 1) || (i == numAlign - 1 && j == 0)))
                 fillRectangle(alignPatPos[i] - 2, alignPatPos[j] - 2, 5, 5, qrcode);
         }
     }
 
-    // Fill version blocks
+    // Заполнить блоки версий
     if(version >= 7) {
         fillRectangle(qrsize - 11, 0, 3, 6, qrcode);
         fillRectangle(0, qrsize - 11, 6, 3, qrcode);
@@ -460,19 +460,19 @@ testable void initializeFunctionModules(int version, uint8_t qrcode[])
 }
 
 
-// Draws white function modules and possibly some black modules onto the given QR Code, without changing
-// non-function modules. This does not draw the format bits. This requires all function modules to be previously
-// marked black (namely by initializeFunctionModules()), because this may skip redrawing black function modules.
+// Рисует белые функциональные модули и, возможно, некоторые черные модули в заданном коде QR без изменений.
+// нефункциональные модули. Это не рисует биты формата. Для этого необходимо, чтобы все функциональные модули были предварительно
+// помечены черным (а именно initializeFunctionModules() ), поскольку при этом можно пропустить перерисовку черных функциональных модулей.
 static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
 {
-    // Draw horizontal and vertical timing patterns
+    // Нарисуйте горизонтальные и вертикальные временные шаблоны
     int qrsize = qrcodegen_getSize(qrcode);
     for(int i = 7; i < qrsize - 7; i += 2) {
         setModule(qrcode, 6, i, false);
         setModule(qrcode, i, 6, false);
     }
 
-    // Draw 3 finder patterns (all corners except bottom right; overwrites some timing modules)
+    // Нарисуйте 3 шаблона поиска (все углы, кроме правого нижнего; перезаписывает некоторые модули синхронизации)
     for(int dy = -4; dy <= 4; dy++) {
         for(int dx = -4; dx <= 4; dx++) {
             int dist = abs(dx);
@@ -486,13 +486,13 @@ static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
         }
     }
 
-    // Draw numerous alignment patterns
+    // Нарисуйте многочисленные шаблоны выравнивания
     uint8_t alignPatPos[7];
     int numAlign = getAlignmentPatternPositions(version, alignPatPos);
     for(int i = 0; i < numAlign; i++) {
         for(int j = 0; j < numAlign; j++) {
             if((i == 0 && j == 0) || (i == 0 && j == numAlign - 1) || (i == numAlign - 1 && j == 0))
-                continue;  // Don't draw on the three finder corners
+                continue;  // Не рисуйте по трем углам видоискателя
             for(int dy = -1; dy <= 1; dy++) {
                 for(int dx = -1; dx <= 1; dx++)
                     setModule(qrcode, alignPatPos[i] + dx, alignPatPos[j] + dy, dx == 0 && dy == 0);
@@ -500,16 +500,16 @@ static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
         }
     }
 
-    // Draw version blocks
+    // Нарисовать блоки версий
     if(version >= 7) {
-        // Calculate error correction code and pack bits
-        int rem = version;  // version is uint6, in the range [7, 40]
+        // Вычислить код исправления ошибок и упаковать биты
+        int rem = version;  // версия — uint6, в диапазоне [7, 40]
         for(int i = 0; i < 12; i++)
             rem = (rem << 1) ^ ((rem >> 11) * 0x1F25);
         long bits = (long)version << 12 | rem;  // uint18
         LV_ASSERT(bits >> 18 == 0);
 
-        // Draw two copies
+        // Нарисуйте две копии
         for(int i = 0; i < 6; i++) {
             for(int j = 0; j < 3; j++) {
                 int k = qrsize - 11 + j;
@@ -522,22 +522,22 @@ static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
 }
 
 
-// Draws two copies of the format bits (with its own error correction code) based
-// on the given mask and error correction level. This always draws all modules of
-// the format bits, unlike drawWhiteFunctionModules() which might skip black modules.
+// Рисует две копии битов формата (со своим собственным кодом исправления ошибок) на основе
+// по заданной маске и уровню коррекции ошибок. Это всегда рисует все модули
+// биты формата, в отличие от drawWhiteFunctionModules(), который может пропускать черные модули.
 static void drawFormatBits(enum qrcodegen_Ecc ecl, enum qrcodegen_Mask mask, uint8_t qrcode[])
 {
-    // Calculate error correction code and pack bits
+    // Вычислить код исправления ошибок и упаковать биты
     LV_ASSERT(0 <= (int)mask && (int)mask <= 7);
     static const int table[] = {1, 0, 3, 2};
-    int data = table[(int)ecl] << 3 | (int)mask;  // errCorrLvl is uint2, mask is uint3
+    int data = table[(int)ecl] << 3 | (int)mask;  // errCorrLvl — uint2, маска — uint3
     int rem = data;
     for(int i = 0; i < 10; i++)
         rem = (rem << 1) ^ ((rem >> 9) * 0x537);
     int bits = (data << 10 | rem) ^ 0x5412;  // uint15
     LV_ASSERT(bits >> 15 == 0);
 
-    // Draw first copy
+    // Нарисуйте первую копию
     for(int i = 0; i <= 5; i++)
         setModule(qrcode, 8, i, getBit(bits, i));
     setModule(qrcode, 8, 7, getBit(bits, 6));
@@ -546,20 +546,20 @@ static void drawFormatBits(enum qrcodegen_Ecc ecl, enum qrcodegen_Mask mask, uin
     for(int i = 9; i < 15; i++)
         setModule(qrcode, 14 - i, 8, getBit(bits, i));
 
-    // Draw second copy
+    // Нарисуйте вторую копию
     int qrsize = qrcodegen_getSize(qrcode);
     for(int i = 0; i < 8; i++)
         setModule(qrcode, qrsize - 1 - i, 8, getBit(bits, i));
     for(int i = 8; i < 15; i++)
         setModule(qrcode, 8, qrsize - 15 + i, getBit(bits, i));
-    setModule(qrcode, 8, qrsize - 8, true);  // Always black
+    setModule(qrcode, 8, qrsize - 8, true);  // Всегда черный
 }
 
 
-// Calculates and stores an ascending list of positions of alignment patterns
-// for this version number, returning the length of the list (in the range [0,7]).
-// Each position is in the range [0,177), and are used on both the x and y axes.
-// This could be implemented as lookup table of 40 variable-length lists of unsigned bytes.
+// Вычисляет и сохраняет возрастающий список позиций шаблонов выравнивания.
+// для этого номера версии, возвращая длину списка (в диапазоне [0,7]).
+// Каждая позиция находится в диапазоне [0,177) и используется как по осям x, так и по осям y.
+// Это можно реализовать в виде таблицы поиска из 40 списков беззнаковых байтов переменной длины.
 testable int getAlignmentPatternPositions(int version, uint8_t result[7])
 {
     if(version == 1)
@@ -574,7 +574,7 @@ testable int getAlignmentPatternPositions(int version, uint8_t result[7])
 }
 
 
-// Sets every pixel in the range [left : left + width] * [top : top + height] to black.
+// Устанавливает каждый пиксель в диапазоне [левый: левый + ширина] * [верхний: верх + высота] черным.
 static void fillRectangle(int left, int top, int width, int height, uint8_t qrcode[])
 {
     for(int dy = 0; dy < height; dy++) {
@@ -585,30 +585,30 @@ static void fillRectangle(int left, int top, int width, int height, uint8_t qrco
 
 
 
-/*---- Drawing data modules and masking ----*/
+/*---- Отрисовка модулей данных и маскировка ----*/
 
-// Draws the raw codewords (including data and ECC) onto the given QR Code. This requires the initial state of
-// the QR Code to be black at function modules and white at codeword modules (including unused remainder bits).
+// Рисует необработанные кодовые слова (включая данные и ECC ) в заданный код QR. Для этого необходимо исходное состояние
+// Код QR должен быть черным для функциональных модулей и белым для модулей кодовых слов (включая неиспользуемые биты остатка).
 static void drawCodewords(const uint8_t data[], int dataLen, uint8_t qrcode[])
 {
     int qrsize = qrcodegen_getSize(qrcode);
-    int i = 0;  // Bit index into the data
-    // Do the funny zigzag scan
-    for(int right = qrsize - 1; right >= 1; right -= 2) {   // Index of right column in each column pair
+    int i = 0;  // Битовый индекс в данных
+    // Сделайте забавное зигзагообразное сканирование.
+    for(int right = qrsize - 1; right >= 1; right -= 2) {   // Индекс правого столбца в каждой паре столбцов
         if(right == 6)
             right = 5;
-        for(int vert = 0; vert < qrsize; vert++) {   // Vertical counter
+        for(int vert = 0; vert < qrsize; vert++) {   // Вертикальный счетчик
             for(int j = 0; j < 2; j++) {
-                int x = right - j;  // Actual x coordinate
+                int x = right - j;  // Фактическая координата X
                 bool upward = ((right + 1) & 2) == 0;
-                int y = upward ? qrsize - 1 - vert : vert;  // Actual y coordinate
+                int y = upward ? qrsize - 1 - vert : vert;  // Фактическая координата Y
                 if(!getModule(qrcode, x, y) && i < dataLen * 8) {
                     bool black = getBit(data[i >> 3], 7 - (i & 7));
                     setModule(qrcode, x, y, black);
                     i++;
                 }
-                // If this QR Code has any remainder bits (0 to 7), they were assigned as
-                // 0/false/white by the constructor and are left unchanged by this method
+                // Если этот код QR имеет какие-либо оставшиеся биты (от 0 до 7), они были назначены как
+                // 0/false/white конструктором и этим методом не изменяется.
             }
         }
     }
@@ -616,14 +616,14 @@ static void drawCodewords(const uint8_t data[], int dataLen, uint8_t qrcode[])
 }
 
 
-// XORs the codeword modules in this QR Code with the given mask pattern.
-// The function modules must be marked and the codeword bits must be drawn
-// before masking. Due to the arithmetic of XOR, calling applyMask() with
-// the same mask value a second time will undo the mask. A final well-formed
-// QR Code needs exactly one (not zero, two, etc.) mask applied.
+// Выполняет XOR модулей кодовых слов в этом коде QR с заданным шаблоном маски.
+// Функциональные модули должны быть отмечены и биты кодового слова должны быть нарисованы.
+// перед маскировкой. Из-за арифметики XOR вызов applyMask() с помощью
+// то же значение маски во второй раз приведет к отмене маски. Окончательный хорошо сформированный
+// Для кода QR требуется применить ровно одну (а не ноль, две и т. д.) маску.
 static void applyMask(const uint8_t functionModules[], uint8_t qrcode[], enum qrcodegen_Mask mask)
 {
-    LV_ASSERT(0 <= (int)mask && (int)mask <= 7);  // Disallows qrcodegen_Mask_AUTO
+    LV_ASSERT(0 <= (int)mask && (int)mask <= 7);  // Запрещает qrcodegen_Mask_AUTO
     int qrsize = qrcodegen_getSize(qrcode);
     for(int y = 0; y < qrsize; y++) {
         for(int x = 0; x < qrsize; x++) {
@@ -666,14 +666,14 @@ static void applyMask(const uint8_t functionModules[], uint8_t qrcode[], enum qr
 }
 
 
-// Calculates and returns the penalty score based on state of the given QR Code's current modules.
-// This is used by the automatic mask choice algorithm to find the mask pattern that yields the lowest score.
+// Вычисляет и возвращает штрафной балл на основе состояния текущих модулей данного кода QR.
+// Это используется алгоритмом автоматического выбора маски для поиска шаблона маски, который дает наименьший балл.
 static long getPenaltyScore(const uint8_t qrcode[])
 {
     int qrsize = qrcodegen_getSize(qrcode);
     long result = 0;
 
-    // Adjacent modules in row having same color, and finder-like patterns
+    // Соседние модули в ряду имеют одинаковый цвет и узоры, похожие на искатель.
     for(int y = 0; y < qrsize; y++) {
         unsigned char runHistory[7] = {0};
         bool color = false;
@@ -696,11 +696,11 @@ static long getPenaltyScore(const uint8_t qrcode[])
         }
         addRunToHistory(runX, runHistory);
         if(color)
-            addRunToHistory(0, runHistory);  // Dummy run of white
+            addRunToHistory(0, runHistory);  // Пустышка белого цвета
         if(hasFinderLikePattern(runHistory))
             result += PENALTY_N3;
     }
-    // Adjacent modules in column having same color, and finder-like patterns
+    // Соседние модули в столбце имеют одинаковый цвет и узоры в виде искателя.
     for(int x = 0; x < qrsize; x++) {
         unsigned char runHistory[7] = {0};
         bool color = false;
@@ -723,12 +723,12 @@ static long getPenaltyScore(const uint8_t qrcode[])
         }
         addRunToHistory(runY, runHistory);
         if(color)
-            addRunToHistory(0, runHistory);  // Dummy run of white
+            addRunToHistory(0, runHistory);  // Пустышка белого цвета
         if(hasFinderLikePattern(runHistory))
             result += PENALTY_N3;
     }
 
-    // 2*2 blocks of modules having same color
+    // 2*2 блока модулей одного цвета
     for(int y = 0; y < qrsize - 1; y++) {
         for(int x = 0; x < qrsize - 1; x++) {
             bool  color = getModule(qrcode, x, y);
@@ -739,7 +739,7 @@ static long getPenaltyScore(const uint8_t qrcode[])
         }
     }
 
-    // Balance of black and white modules
+    // Баланс чёрных и белых модулей
     int black = 0;
     for(int y = 0; y < qrsize; y++) {
         for(int x = 0; x < qrsize; x++) {
@@ -747,16 +747,16 @@ static long getPenaltyScore(const uint8_t qrcode[])
                 black++;
         }
     }
-    int total = qrsize * qrsize;  // Note that size is odd, so black/total != 1/2
-    // Compute the smallest integer k >= 0 such that (45-5k)% <= black/total <= (55+5k)%
+    int total = qrsize * qrsize;  // Обратите внимание, что размер нечетный, поэтому черный/всего!= 1/2.
+    // Вычислите наименьшее целое число k >= 0 такое, что (45-5k)% <= black/total <= (55+5k)%
     int k = (int)((labs(black * 20L - total * 10L) + total - 1) / total) - 1;
     result += k * PENALTY_N4;
     return result;
 }
 
 
-// Inserts the given value to the front of the given array, which shifts over the
-// existing values and deletes the last value. A helper function for getPenaltyScore().
+// Вставляет заданное значение в начало данного массива, который смещается по
+// существующие значения и удаляет последнее значение. Вспомогательная функция для getPenaltyScore().
 static void addRunToHistory(unsigned char run, unsigned char history[7])
 {
     memmove(&history[1], &history[0], 6 * sizeof(history[0]));
@@ -764,23 +764,23 @@ static void addRunToHistory(unsigned char run, unsigned char history[7])
 }
 
 
-// Tests whether the given run history has the pattern of ratio 1:1:3:1:1 in the middle, and
-// surrounded by at least 4 on either or both ends. A helper function for getPenaltyScore().
-// Must only be called immediately after a run of white modules has ended.
+// Проверяет, имеет ли данная история выполнения шаблон соотношения 1:1:3:1:1 в середине, и
+// окружен как минимум 4 на одном или обоих концах. Вспомогательная функция для getPenaltyScore().
+// Должен вызываться только сразу после завершения выполнения белых модулей.
 static bool hasFinderLikePattern(const unsigned char runHistory[7])
 {
     unsigned char n = runHistory[1];
-    // The maximum QR Code size is 177, hence the run length n <= 177.
-    // Arithmetic is promoted to int, so n*4 will not overflow.
+    // Максимальный размер кода QR составляет 177, следовательно, длина серии n <= 177.
+    // Арифметика преобразуется в int, поэтому n*4 не будет переполняться.
     return n > 0 && runHistory[2] == n && runHistory[4] == n && runHistory[5] == n
            && runHistory[3] == n * 3 && (runHistory[0] >= n * 4 || runHistory[6] >= n * 4);
 }
 
 
 
-/*---- Basic QR Code information ----*/
+/*---- Базовая информация о коде QR ----*/
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 int qrcodegen_getSize(const uint8_t qrcode[])
 {
     LV_ASSERT(qrcode != NULL);
@@ -791,7 +791,7 @@ int qrcodegen_getSize(const uint8_t qrcode[])
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_getModule(const uint8_t qrcode[], int x, int y)
 {
     LV_ASSERT(qrcode != NULL);
@@ -800,7 +800,7 @@ bool qrcodegen_getModule(const uint8_t qrcode[], int x, int y)
 }
 
 
-// Gets the module at the given coordinates, which must be in bounds.
+// Получает модуль по заданным координатам, которые должны находиться в пределах.
 testable bool getModule(const uint8_t qrcode[], int x, int y)
 {
     int qrsize = qrcode[0];
@@ -810,7 +810,7 @@ testable bool getModule(const uint8_t qrcode[], int x, int y)
 }
 
 
-// Sets the module at the given coordinates, which must be in bounds.
+// Устанавливает модуль по заданным координатам, которые должны находиться в пределах.
 testable void setModule(uint8_t qrcode[], int x, int y, bool isBlack)
 {
     int qrsize = qrcode[0];
@@ -825,7 +825,7 @@ testable void setModule(uint8_t qrcode[], int x, int y, bool isBlack)
 }
 
 
-// Sets the module at the given coordinates, doing nothing if out of bounds.
+// Устанавливает модуль по заданным координатам, ничего не делая, если он выходит за пределы.
 testable void setModuleBounded(uint8_t qrcode[], int x, int y, bool isBlack)
 {
     int qrsize = qrcode[0];
@@ -834,7 +834,7 @@ testable void setModuleBounded(uint8_t qrcode[], int x, int y, bool isBlack)
 }
 
 
-// Returns true iff the i'th bit of x is set to 1. Requires x >= 0 and 0 <= i <= 14.
+// Возвращает true, если i-й бит x установлен в 1. Требуется x >= 0 и 0 <= i <= 14.
 static bool getBit(int x, int i)
 {
     return ((x >> i) & 1) != 0;
@@ -842,9 +842,9 @@ static bool getBit(int x, int i)
 
 
 
-/*---- Segment handling ----*/
+/*---- Обработка сегментов ----*/
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_isAlphanumeric(const char * text)
 {
     LV_ASSERT(text != NULL);
@@ -856,7 +856,7 @@ bool qrcodegen_isAlphanumeric(const char * text)
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 bool qrcodegen_isNumeric(const char * text)
 {
     LV_ASSERT(text != NULL);
@@ -868,7 +868,7 @@ bool qrcodegen_isNumeric(const char * text)
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 size_t qrcodegen_calcSegmentBufferSize(enum qrcodegen_Mode mode, size_t numChars)
 {
     int temp = calcSegmentBitLength(mode, numChars);
@@ -879,31 +879,31 @@ size_t qrcodegen_calcSegmentBufferSize(enum qrcodegen_Mode mode, size_t numChars
 }
 
 
-// Returns the number of data bits needed to represent a segment
-// containing the given number of characters using the given mode. Notes:
+// Возвращает количество битов данных, необходимых для представления сегмента.
+// содержащий заданное количество символов с использованием данного режима. Примечания:
 // - Returns -1 on failure, i.e. numChars > INT16_MAX or
-//   the number of needed bits exceeds INT16_MAX (i.e. 32767).
+//   количество необходимых бит превышает INT16_MAX (т.е. 32767).
 // - Otherwise, all valid results are in the range [0, INT16_MAX].
 // - For byte mode, numChars measures the number of bytes, not Unicode code points.
 // - For ECI mode, numChars must be 0, and the worst-case number of bits is returned.
-//   An actual ECI segment can have shorter data. For non-ECI modes, the result is exact.
+//   Фактический сегмент ECI может содержать более короткие данные. Для режимов, отличных от ECI, результат является точным.
 testable int calcSegmentBitLength(enum qrcodegen_Mode mode, size_t numChars)
 {
-    // All calculations are designed to avoid overflow on all platforms
+    // Все расчеты разработаны таким образом, чтобы избежать переполнения на всех платформах.
     if(numChars > (unsigned int)INT16_MAX)
         return -1;
     long result = (long)numChars;
     if(mode == qrcodegen_Mode_NUMERIC)
-        result = (result * 10 + 2) / 3;  // ceil(10/3 * n)
+        result = (result * 10 + 2) / 3;  // ячейка(10/3 * n)
     else if(mode == qrcodegen_Mode_ALPHANUMERIC)
-        result = (result * 11 + 1) / 2;  // ceil(11/2 * n)
+        result = (result * 11 + 1) / 2;  // ячейка(11/2 * n)
     else if(mode == qrcodegen_Mode_BYTE)
         result *= 8;
     else if(mode == qrcodegen_Mode_KANJI)
         result *= 13;
     else if(mode == qrcodegen_Mode_ECI && numChars == 0)
         result = 3 * 8;
-    else {  // Invalid argument
+    else {  // Неверный аргумент
         LV_ASSERT(false);
         return -1;
     }
@@ -914,7 +914,7 @@ testable int calcSegmentBitLength(enum qrcodegen_Mode mode, size_t numChars)
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 struct qrcodegen_Segment qrcodegen_makeBytes(const uint8_t data[], size_t len, uint8_t buf[])
 {
     LV_ASSERT(data != NULL || len == 0);
@@ -930,7 +930,7 @@ struct qrcodegen_Segment qrcodegen_makeBytes(const uint8_t data[], size_t len, u
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 struct qrcodegen_Segment qrcodegen_makeNumeric(const char * digits, uint8_t buf[])
 {
     LV_ASSERT(digits != NULL);
@@ -957,7 +957,7 @@ struct qrcodegen_Segment qrcodegen_makeNumeric(const char * digits, uint8_t buf[
             accumCount = 0;
         }
     }
-    if(accumCount > 0)   // 1 or 2 digits remaining
+    if(accumCount > 0)   // Осталась 1 или 2 цифры
         appendBitsToBuffer(accumData, accumCount * 3 + 1, buf, &result.bitLength);
     LV_ASSERT(result.bitLength == bitLen);
     result.data = buf;
@@ -965,7 +965,7 @@ struct qrcodegen_Segment qrcodegen_makeNumeric(const char * digits, uint8_t buf[
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 struct qrcodegen_Segment qrcodegen_makeAlphanumeric(const char * text, uint8_t buf[])
 {
     LV_ASSERT(text != NULL);
@@ -992,7 +992,7 @@ struct qrcodegen_Segment qrcodegen_makeAlphanumeric(const char * text, uint8_t b
             accumCount = 0;
         }
     }
-    if(accumCount > 0)   // 1 character remaining
+    if(accumCount > 0)   // остался 1 символ
         appendBitsToBuffer(accumData, 6, buf, &result.bitLength);
     LV_ASSERT(result.bitLength == bitLen);
     result.data = buf;
@@ -1000,7 +1000,7 @@ struct qrcodegen_Segment qrcodegen_makeAlphanumeric(const char * text, uint8_t b
 }
 
 
-// Public function - see documentation comment in header file.
+// Открытая функция — см. комментарий к документации в заголовочном файле.
 struct qrcodegen_Segment qrcodegen_makeEci(long assignVal, uint8_t buf[])
 {
     struct qrcodegen_Segment result;
@@ -1033,9 +1033,9 @@ struct qrcodegen_Segment qrcodegen_makeEci(long assignVal, uint8_t buf[])
 }
 
 
-// Calculates the number of bits needed to encode the given segments at the given version.
-// Returns a non-negative number if successful. Otherwise returns -1 if a segment has too
-// many characters to fit its length field, or the total bits exceeds INT16_MAX.
+// Вычисляет количество бит, необходимое для кодирования заданных сегментов в данной версии.
+// Возвращает неотрицательное число в случае успеха. В противном случае возвращается -1, если сегмент имеет слишком
+// много символов, соответствующих его полю длины, или общее количество бит превышает INT16_MAX .
 testable int getTotalBits(const struct qrcodegen_Segment segs[], size_t len, int version)
 {
     LV_ASSERT(segs != NULL || len == 0);
@@ -1048,18 +1048,18 @@ testable int getTotalBits(const struct qrcodegen_Segment segs[], size_t len, int
         int ccbits = numCharCountBits(segs[i].mode, version);
         LV_ASSERT(0 <= ccbits && ccbits <= 16);
         if(numChars >= (1L << ccbits))
-            return -1;  // The segment's length doesn't fit the field's bit width
+            return -1;  // Длина сегмента не соответствует разрядности поля.
         result += 4L + ccbits + bitLength;
         if(result > INT16_MAX)
-            return -1;  // The sum might overflow an int type
+            return -1;  // Сумма может переполнить тип int
     }
     LV_ASSERT(0 <= result && result <= INT16_MAX);
     return (int)result;
 }
 
 
-// Returns the bit width of the character count field for a segment in the given mode
-// in a QR Code at the given version number. The result is in the range [0, 16].
+// Возвращает разрядность поля количества символов для сегмента в заданном режиме.
+// в коде QR с заданным номером версии. Результат находится в диапазоне [0, 16].
 static int numCharCountBits(enum qrcodegen_Mode mode, int version)
 {
     LV_ASSERT(qrcodegen_VERSION_MIN <= version && version <= qrcodegen_VERSION_MAX);
@@ -1085,7 +1085,7 @@ static int numCharCountBits(enum qrcodegen_Mode mode, int version)
             return 0;
         default:
             LV_ASSERT(false);
-            return -1;  // Dummy value
+            return -1;  // Фиктивное значение
     }
 }
 
@@ -1097,7 +1097,7 @@ int qrcodegen_getMinFitVersion(enum qrcodegen_Ecc ecl, size_t dataLen)
     seg.numChars = (int)dataLen;
 
     for(int version = qrcodegen_VERSION_MIN; version <= qrcodegen_VERSION_MAX; version++) {
-        int dataCapacityBits = getNumDataCodewords(version, ecl) * 8;  // Number of data bits available
+        int dataCapacityBits = getNumDataCodewords(version, ecl) * 8;  // Количество доступных бит данных
         int dataUsedBits = getTotalBits(&seg, 1, version);
         if(dataUsedBits != -1 && dataUsedBits <= dataCapacityBits)
             return version;

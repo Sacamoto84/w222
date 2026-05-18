@@ -2,10 +2,10 @@
 #if LV_BUILD_EXAMPLES && LV_USE_SLIDER && LV_USE_CHART && LV_USE_BUTTON && LV_USE_GRID
 
 /**
- * the example show the use of cubic-bezier3 in animation.
- * the control point P1,P2 of cubic-bezier3 can be adjusted by slider.
- * and the chart shows the cubic-bezier3 in real time. you can click
- * run button see animation in current point of cubic-bezier3.
+ * пример показывает использование кубического Безье3 в анимации.
+ * контрольную точку P1 , P2 кубического Безье3 можно регулировать с помощью ползунка.
+ * и диаграмма показывает кубическую Безье3 в реальном времени. ты можешь нажать
+ * Кнопка запуска позволяет увидеть анимацию в текущей точке кубического Безье3.
  */
 
 #define CHART_POINTS_NUM 256
@@ -32,14 +32,14 @@ static void page_obj_init(lv_obj_t * par);
 static void anim_x_cb(void * var, int32_t v);
 
 /**
- * create an animation
+ * создать анимацию
  */
 void lv_example_anim_3(void)
 {
     static int32_t col_dsc[] = {LV_GRID_FR(1), 200, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     static int32_t row_dsc[] = {30, 10, 10, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 
-    /*Create a container with grid*/
+    /*Создать контейнер с сеткой*/
     lv_obj_t * cont = lv_obj_create(lv_screen_active());
     lv_obj_set_style_pad_all(cont, 2, LV_PART_MAIN);
     lv_obj_set_style_pad_column(cont, 10, LV_PART_MAIN);

@@ -2,7 +2,7 @@
 #if LV_BUILD_EXAMPLES && LV_USE_LABEL
 
 /**
- * Using the text style properties
+ * Использование свойств стиля текста
  */
 void lv_example_style_8(void)
 {
@@ -21,7 +21,7 @@ void lv_example_style_8(void)
     lv_style_set_text_line_space(&style, 20);
     lv_style_set_text_decor(&style, LV_TEXT_DECOR_UNDERLINE);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_label_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
     lv_label_set_text(obj, "Text of\n"

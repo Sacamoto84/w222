@@ -26,7 +26,7 @@ static void draw_event_cb(lv_event_t * e)
 static void canvas_draw_buf_reshape(lv_draw_buf_t * draw_buf)
 {
 #if LV_USE_DRAW_VG_LITE
-    /* VG-Lite requires automatic stride calculation */
+    /* VG -Lite требует автоматического расчета шага */
     lv_draw_buf_t * buf = lv_draw_buf_reshape(draw_buf,
                                               draw_buf->header.cf,
                                               draw_buf->header.w,
@@ -48,7 +48,7 @@ void test_canvas_functions_invalidate(void)
 
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf, 100, 100, LV_COLOR_FORMAT_NATIVE);
 
-    /* test uninitialized draw buffer, it should fail.*/
+    /* протестируйте неинициализированный буфер отрисовки, он должен завершиться неудачно.*/
     lv_canvas_set_draw_buf(canvas, &draw_buf);
     TEST_ASSERT_NULL(lv_canvas_get_draw_buf(canvas));
     TEST_ASSERT_NULL(lv_canvas_get_image(canvas));
@@ -363,17 +363,17 @@ void test_canvas_buffer_operations(void)
 {
     lv_obj_t * canvas = lv_canvas_create(g_screen_active);
 
-    /* Test uninitialized buffer */
+    /* Тестировать неинициализированный буфер */
     static LV_ATTRIBUTE_MEM_ALIGN uint8_t buf[LV_DRAW_BUF_SIZE(100, 50, LV_COLOR_FORMAT_RGB565)];
     lv_canvas_set_buffer(canvas, buf, 100, 50, LV_COLOR_FORMAT_RGB565);
     TEST_ASSERT_NOT_NULL(lv_canvas_get_draw_buf(canvas));
     TEST_ASSERT_NOT_NULL(lv_canvas_get_image(canvas));
     TEST_ASSERT_NOT_NULL(lv_canvas_get_buf(canvas));
 
-    /* Test lv_canvas_fill_bg to ensure no out-of-bounds access */
+    /* Протестируйте lv_canvas_fill_bg, чтобы убедиться в отсутствии внешнего доступа. */
     lv_canvas_fill_bg(canvas, lv_color_black(), LV_OPA_COVER);
 
-    /* Test draw buffer with handlers */
+    /* Тестовый буфер отрисовки с обработчиками */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf, 100, 50, LV_COLOR_FORMAT_RGB565);
     LV_DRAW_BUF_INIT_STATIC(draw_buf);
     canvas_draw_buf_reshape(&draw_buf);
@@ -393,25 +393,25 @@ void test_canvas_layer_operations(void)
     canvas_draw_buf_reshape(&draw_buf);
     lv_canvas_set_draw_buf(canvas, &draw_buf);
 
-    /* Test layer initialization */
+    /* Инициализация тестового слоя */
     lv_layer_t layer;
     lv_canvas_init_layer(canvas, &layer);
     TEST_ASSERT_EQUAL_PTR(&draw_buf, layer.draw_buf);
     TEST_ASSERT_EQUAL(LV_COLOR_FORMAT_RGB565, layer.color_format);
 
-    /* Test drawing on layer */
+    /* Тестовый рисунок на слое */
     lv_draw_rect_dsc_t rect_dsc;
     lv_draw_rect_dsc_init(&rect_dsc);
     rect_dsc.bg_color = lv_color_black();
     lv_area_t rect_area = {10, 10, 50, 50};
     lv_draw_rect(&layer, &rect_dsc, &rect_area);
 
-    /* Test layer finalization */
+    /* Завершение тестового слоя */
     lv_canvas_finish_layer(canvas, &layer);
     lv_refr_now(NULL);
     TEST_ASSERT_EQUAL_INT(1, draw_counter);
 
-    /* Test for secondary redrawing */
+    /* Тест на вторичную перерисовку */
     lv_canvas_finish_layer(canvas, &layer);
     lv_refr_now(NULL);
     TEST_ASSERT_EQUAL_INT(1, draw_counter);
@@ -426,13 +426,13 @@ void test_canvas_image_operations(void)
     canvas_draw_buf_reshape(&draw_buf);
     lv_canvas_set_draw_buf(canvas, &draw_buf);
 
-    /* Test get_image */
+    /* Тест get_image */
     lv_image_dsc_t * img = lv_canvas_get_image(canvas);
     TEST_ASSERT_NOT_NULL(img);
     TEST_ASSERT_EQUAL_UINT32(10, img->header.w);
     TEST_ASSERT_EQUAL_UINT32(10, img->header.h);
 
-    /* Test get_buf */
+    /* Тест get_buf */
     const void * buf = lv_canvas_get_buf(canvas);
     TEST_ASSERT_NOT_NULL(buf);
     TEST_ASSERT_EQUAL_PTR(draw_buf.unaligned_data, buf);
@@ -453,11 +453,11 @@ static void verify_canvas_px(lv_obj_t * canvas, lv_color_t expected_color, lv_op
 
 static lv_color_t canvas_convert_c16(lv_color_t color)
 {
-    /* Use the same color conversion algorithm as canvas to keep the results consistent */
+    /* Используйте тот же алгоритм преобразования цветов, что и на холсте, чтобы результаты были согласованными. */
     uint16_t px = lv_color_to_u16(color);
     lv_color16_t * c16 = (lv_color16_t *) &px;
     lv_color_t ret;
-    ret.red = (c16->red * 2106) >> 8;  /*To make it rounded*/
+    ret.red = (c16->red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
     ret.green = (c16->green * 1037) >> 8;
     ret.blue = (c16->blue * 2106) >> 8;
     return ret;
@@ -467,7 +467,7 @@ void test_canvas_fill_background_formats(void)
 {
     lv_obj_t * canvas = lv_canvas_create(g_screen_active);
 
-    /* Test ARGB8888 format */
+    /* Тестовый формат ARGB8888 */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_argb, 10, 10, LV_COLOR_FORMAT_ARGB8888);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_argb);
     canvas_draw_buf_reshape(&draw_buf_argb);
@@ -477,7 +477,7 @@ void test_canvas_fill_background_formats(void)
     lv_canvas_fill_bg(canvas, fill_color_argb, 0x80);
     verify_canvas_px(canvas, fill_color_argb, 0x80);
 
-    /* Test RGB565 format */
+    /* Тестовый формат RGB565 */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_rgb565, 10, 10, LV_COLOR_FORMAT_RGB565);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_rgb565);
     canvas_draw_buf_reshape(&draw_buf_rgb565);
@@ -487,7 +487,7 @@ void test_canvas_fill_background_formats(void)
     lv_canvas_fill_bg(canvas, fill_color_rgb565, LV_OPA_COVER);
     verify_canvas_px(canvas, canvas_convert_c16(fill_color_rgb565), LV_OPA_COVER);
 
-    /* Test A8 format */
+    /* Тестовый формат A8 */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_a8, 10, 10, LV_COLOR_FORMAT_A8);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_a8);
     canvas_draw_buf_reshape(&draw_buf_a8);
@@ -496,7 +496,7 @@ void test_canvas_fill_background_formats(void)
     lv_canvas_fill_bg(canvas, lv_color_black(), 0x80);
     verify_canvas_px(canvas, lv_obj_get_style_image_recolor(canvas, LV_PART_MAIN), 0x80);
 
-    /* Test RGB888 format */
+    /* Тестовый формат RGB888 */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_rgb888, 10, 10, LV_COLOR_FORMAT_RGB888);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_rgb888);
     canvas_draw_buf_reshape(&draw_buf_rgb888);
@@ -506,7 +506,7 @@ void test_canvas_fill_background_formats(void)
     lv_canvas_fill_bg(canvas, fill_color_rgb888, LV_OPA_COVER);
     verify_canvas_px(canvas, fill_color_rgb888, LV_OPA_COVER);
 
-    /* Test unsupported format (default case) */
+    /* Проверьте неподдерживаемый формат (случай по умолчанию) */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_unsupported, 10, 10, LV_COLOR_FORMAT_ARGB8565);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_unsupported);
     canvas_draw_buf_reshape(&draw_buf_unsupported);
@@ -525,11 +525,11 @@ void test_canvas_layer_complex_drawing(void)
     canvas_draw_buf_reshape(&draw_buf);
     lv_canvas_set_draw_buf(canvas, &draw_buf);
 
-    /* Initialize layer */
+    /* Инициализировать слой */
     lv_layer_t layer;
     lv_canvas_init_layer(canvas, &layer);
 
-    /* Draw multiple shapes */
+    /* Нарисуйте несколько фигур */
     lv_draw_rect_dsc_t rect_dsc;
     lv_draw_rect_dsc_init(&rect_dsc);
     rect_dsc.bg_color = lv_color_hex(0xFF0000);
@@ -541,17 +541,17 @@ void test_canvas_layer_complex_drawing(void)
     label_dsc.color = lv_color_white();
     lv_point_t label_pos = {20, 20};
     lv_area_t label_area = {label_pos.x, label_pos.y, label_pos.x + 100, label_pos.y + 50};
-    /* label_dsc already declared above, just initialize and use */
+    /* label_dsc уже объявлен выше, просто инициализируйте и используйте */
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.text = "Test";
     lv_draw_label(&layer, &label_dsc, &label_area);
 
-    /* Finish layer and verify */
+    /* Завершите слой и проверьте */
     lv_canvas_finish_layer(canvas, &layer);
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/canvas_layer_complex.png");
     TEST_ASSERT_EQUAL_INT(1, draw_counter);
 
-    /* Verify pixel content */
+    /* Проверьте содержимое пикселя */
     lv_color32_t px = lv_canvas_get_px(canvas, 30, 30);
     TEST_ASSERT_EQUAL_UINT8(0xFF, px.red);
     TEST_ASSERT_EQUAL_UINT8(0x00, px.green);
@@ -562,13 +562,13 @@ void test_canvas_pixel_operations(void)
 {
     lv_obj_t * canvas = lv_canvas_create(g_screen_active);
 
-    /* Test RGB565 format */
+    /* Тестовый формат RGB565 */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_rgb565, 10, 10, LV_COLOR_FORMAT_RGB565);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_rgb565);
     canvas_draw_buf_reshape(&draw_buf_rgb565);
     lv_canvas_set_draw_buf(canvas, &draw_buf_rgb565);
 
-    /* Test basic color conversion */
+    /* Тестирование базового преобразования цветов */
     lv_canvas_set_px(canvas, 0, 0, lv_color_hex(0x0000FF), 0);
     lv_color32_t px_blue = lv_canvas_get_px(canvas, 0, 0);
     TEST_ASSERT_EQUAL_UINT8(0xFF, px_blue.blue);
@@ -576,7 +576,7 @@ void test_canvas_pixel_operations(void)
     TEST_ASSERT_EQUAL_UINT8(0x00, px_blue.red);
     TEST_ASSERT_EQUAL_UINT8(0xFF, px_blue.alpha);
 
-    /* Test ARGB8888 format */
+    /* Тестовый формат ARGB8888 */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf_argb, 10, 10, LV_COLOR_FORMAT_ARGB8888);
     LV_DRAW_BUF_INIT_STATIC(draw_buf_argb);
     canvas_draw_buf_reshape(&draw_buf_argb);
@@ -629,7 +629,7 @@ void test_canvas_copy_buffer(void)
     lv_canvas_set_draw_buf(src_canvas, &src_buf);
     lv_canvas_set_draw_buf(dst_canvas, &dst_buf);
 
-    /* Fill source with pattern */
+    /* Заполнить исходный код шаблоном */
     for(int32_t y = 0; y < 10; y++) {
         for(int32_t x = 0; x < 10; x++) {
             lv_color_t c = lv_color_make(x * 25, y * 25, (x + y) * 12);
@@ -637,12 +637,12 @@ void test_canvas_copy_buffer(void)
         }
     }
 
-    /* Copy area */
+    /* Копировать область */
     lv_area_t dst_area = {2, 2, 7, 7};
     lv_area_t src_area = {0, 0, 5, 5};
     lv_canvas_copy_buf(dst_canvas, &dst_area, &src_buf, &src_area);
 
-    /* Verify copied pixels */
+    /* Проверка скопированных пикселей */
     for(int32_t y = 0; y < 6; y++) {
         for(int32_t x = 0; x < 6; x++) {
             lv_color32_t src_px = lv_canvas_get_px(src_canvas, x, y);
@@ -659,13 +659,13 @@ void test_canvas_palette_operations(void)
 {
     lv_obj_t * canvas = lv_canvas_create(g_screen_active);
 
-    /* Test with supported color formats */
+    /* Тестирование с поддерживаемыми цветовыми форматами */
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf, 10, 10, LV_COLOR_FORMAT_ARGB8888);
     LV_DRAW_BUF_INIT_STATIC(draw_buf);
     canvas_draw_buf_reshape(&draw_buf);
     lv_canvas_set_draw_buf(canvas, &draw_buf);
 
-    /* Test directly setting and getting pixel colors */
+    /* Протестируйте непосредственную настройку и получение цветов пикселей. */
     lv_color32_t test_color = {.red = 0x12, .green = 0x34, .blue = 0x56, .alpha = 0xFF};
     lv_canvas_set_px(canvas, 0, 0, lv_color_hex(0x123456), LV_OPA_COVER);
     lv_color32_t px = lv_canvas_get_px(canvas, 0, 0);
@@ -690,7 +690,7 @@ void test_canvas_copy_buffer_partial(void)
     lv_canvas_set_draw_buf(src_canvas, &src_buf);
     lv_canvas_set_draw_buf(dst_canvas, &dst_buf);
 
-    /* Fill source with pattern */
+    /* Заполнить исходный код шаблоном */
     for(int32_t y = 0; y < 20; y++) {
         for(int32_t x = 0; x < 20; x++) {
             lv_color_t c = lv_color_make(x * 12, y * 12, (x + y) * 6);
@@ -698,12 +698,12 @@ void test_canvas_copy_buffer_partial(void)
         }
     }
 
-    /* Copy partial area with offset */
+    /* Копировать часть области со смещением */
     lv_area_t src_area = {5, 5, 15, 15};
     lv_area_t dst_area = {0, 0, 10, 10};
     lv_canvas_copy_buf(src_canvas, &src_area, &dst_buf, &dst_area);
 
-    /* Verify copied pixels */
+    /* Проверка скопированных пикселей */
     for(int32_t y = 0; y < 11; y++) {
         for(int32_t x = 0; x < 11; x++) {
             lv_color32_t src_px = lv_canvas_get_px(src_canvas, x + 5, y + 5);
@@ -787,8 +787,8 @@ void test_line_bigger_than_display_resolution(void)
     lv_draw_line(&layer, &dsc);
     lv_canvas_finish_layer(canvas, &layer);
 
-    /* Test passes if no crash occurs when drawing a line with endpoint
-     * at (hor_res+1, ver_res+1) on a buffer of size (hor_res+1)x(ver_res+1)*/
+    /* Тест считается пройденным, если при рисовании линии с конечной точкой не происходит сбоя.
+     * at ( hor_res +1, ver_res +1) в буфере размера ( hor_res +1)x( ver_res +1)*/
 }
 
 #endif

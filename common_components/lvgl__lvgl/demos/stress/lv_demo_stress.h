@@ -31,7 +31,7 @@ extern "C" {
 void lv_demo_stress(void);
 
 /**
- * Check if stress demo has finished one round.
+ * Проверьте, завершился ли стресс-демо один раунд.
  */
 bool lv_demo_stress_finished(void);
 
@@ -40,7 +40,7 @@ bool lv_demo_stress_finished(void);
  **********************/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_STRESS_H*/

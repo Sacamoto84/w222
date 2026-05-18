@@ -62,7 +62,7 @@ lv_obj_t * lv_tileview_create(lv_obj_t * parent)
 }
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 lv_obj_t * lv_tileview_add_tile(lv_obj_t * tv, uint8_t col_id, uint8_t row_id, lv_dir_t dir)
@@ -144,7 +144,7 @@ static void lv_tileview_tile_constructor(const lv_obj_class_t * class_p, lv_obj_
 
     LV_UNUSED(class_p);
     lv_obj_set_size(obj, LV_PCT(100), LV_PCT(100));
-    lv_obj_update_layout(obj);  /*Be sure the size is correct*/
+    lv_obj_update_layout(obj);  /*Убедитесь, что размер правильный*/
 }
 
 static void tileview_event_cb(lv_event_t * e)

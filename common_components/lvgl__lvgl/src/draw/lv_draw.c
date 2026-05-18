@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2024
+ * Изменено NXP в 2024 г.
  */
 
 /*********************
@@ -116,7 +116,7 @@ lv_draw_task_t * lv_draw_add_task(lv_layer_t * layer, const lv_area_t * coords, 
     new_task->draw_dsc = (uint8_t *)new_task + LV_ALIGN_UP(sizeof(lv_draw_task_t), 8);
     new_task->state = LV_DRAW_TASK_STATE_WAITING;
 
-    /*Find the tail*/
+    /*Найдите хвост*/
     if(layer->draw_task_head == NULL) {
         layer->draw_task_head = new_task;
     }
@@ -139,10 +139,10 @@ void lv_draw_finalize_task_creation(lv_layer_t * layer, lv_draw_task_t * t)
 
     lv_draw_global_info_t * info = &_draw_info;
 
-    /*Send LV_EVENT_DRAW_TASK_ADDED and dispatch only on the "main" draw_task
-     *and not on the draw tasks added in the event.
-     *Sending LV_EVENT_DRAW_TASK_ADDED events might cause recursive event sends and besides
-     *dispatching might remove the "main" draw task while it's still being used in the event*/
+    /*ОтправляйтеLV_EVENT_DRAW_TASK_ADDEDи отправляйте только на «главный»draw_task.
+     *а не на добавленных в событии задачах розыгрыша.
+     *Отправка событий LV_EVENT_DRAW_TASK_ADDED может вызвать рекурсивную отправку событий и, кроме того,
+     *диспетчеризация может удалить «основную» задачу отрисовки, пока она все еще используется в событии.*/
 
     if(info->task_running == false) {
         if(base_dsc->obj && lv_obj_has_flag(base_dsc->obj, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS)) {
@@ -151,7 +151,7 @@ void lv_draw_finalize_task_creation(lv_layer_t * layer, lv_draw_task_t * t)
             info->task_running = false;
         }
 
-        /*Let the draw units set their preference score*/
+        /*Позвольте единицам розыгрыша установить свой рейтинг предпочтений.*/
         t->preference_score = 100;
         t->preferred_draw_unit_id = 0;
         lv_draw_unit_t * u = info->unit_head;
@@ -174,7 +174,7 @@ void lv_draw_finalize_task_creation(lv_layer_t * layer, lv_draw_task_t * t)
         }
     }
     else {
-        /*Let the draw units set their preference score*/
+        /*Позвольте единицам розыгрыша установить свой рейтинг предпочтений.*/
         t->preference_score = 100;
         t->preferred_draw_unit_id = 0;
         lv_draw_unit_t * u = info->unit_head;
@@ -234,7 +234,7 @@ void lv_draw_dispatch(void)
 bool lv_draw_dispatch_layer(lv_display_t * disp, lv_layer_t * layer)
 {
     LV_PROFILER_DRAW_BEGIN;
-    /*Remove the finished tasks first*/
+    /*Сначала удаляйте готовые задачи*/
     lv_draw_task_t * t_prev = NULL;
     lv_draw_task_t * t = layer->draw_task_head;
     lv_draw_task_t * t_next;
@@ -257,9 +257,9 @@ bool lv_draw_dispatch_layer(lv_display_t * disp, lv_layer_t * layer)
 
     bool task_dispatched = false;
 
-    /*This layer is ready, enable blending its buffer*/
+    /*Этот слой готов, включите смешивание его буфера.*/
     if(layer->parent && layer->all_tasks_added && layer->draw_task_head == NULL) {
-        /*Find a draw task with TYPE_LAYER in the layer where the src is this layer*/
+        /*Найдите задачу рисования с TYPE_LAYER на слое, где источником является этот слой.*/
         lv_draw_task_t * t_src = layer->parent->draw_task_head;
         while(t_src) {
             if(t_src->type == LV_DRAW_TASK_TYPE_LAYER && t_src->state == LV_DRAW_TASK_STATE_BLOCKED) {
@@ -273,10 +273,10 @@ bool lv_draw_dispatch_layer(lv_display_t * disp, lv_layer_t * layer)
             t_src = t_src->next;
         }
     }
-    /*Assign draw tasks to the draw_units*/
+    /*Назначьте задачи рисованияdraw_units.*/
     else if(remove_task || layer->draw_task_head) {
-        /*Find a draw unit which is not busy and can take at least one task*/
-        /*Let all draw units to pick draw tasks*/
+        /*Найдите блок рисования, который не занят и может выполнить хотя бы одну задачу.*/
+        /*Пусть все отряды рисования сами выбирают задачи рисования.*/
         lv_draw_unit_t * u = _draw_info.unit_head;
         while(u) {
             LV_PROFILER_DRAW_BEGIN_TAG("dispatch_cb");
@@ -335,7 +335,7 @@ lv_draw_task_t * lv_draw_get_next_available_task(lv_layer_t * layer, lv_draw_tas
 {
     LV_PROFILER_DRAW_BEGIN;
 
-    /*If the first task is screen sized, there cannot be independent areas*/
+    /*Если первая задача имеет размер экрана, независимых областей быть не может.*/
     if(layer->draw_task_head) {
         int32_t hor_res = lv_display_get_horizontal_resolution(lv_refr_get_disp_refreshing());
         int32_t ver_res = lv_display_get_vertical_resolution(lv_refr_get_disp_refreshing());
@@ -439,7 +439,7 @@ lv_layer_t * lv_draw_layer_create(lv_layer_t * parent_layer, lv_color_format_t c
 
     lv_draw_layer_init(new_layer, parent_layer, color_format, area);
 
-    /*Inherits transparency from parent*/
+    /*Наследует прозрачность от родителя*/
     if(parent_layer) {
         new_layer->opa = parent_layer->opa;
         new_layer->recolor = parent_layer->recolor;
@@ -480,20 +480,20 @@ void lv_draw_layer_init(lv_layer_t * layer, lv_layer_t * parent_layer, lv_color_
 void * lv_draw_layer_alloc_buf(lv_layer_t * layer)
 {
     LV_PROFILER_DRAW_BEGIN;
-    /*If the buffer of the layer is already allocated return it*/
+    /*Если буфер слоя уже выделен, верните его.*/
     if(layer->draw_buf != NULL) {
         LV_PROFILER_DRAW_END;
         return layer->draw_buf->data;
     }
 
-    /*If the buffer of the layer is not allocated yet, allocate it now*/
+    /*Если буфер слоя еще не выделен, выделите его сейчас.*/
     int32_t w = lv_area_get_width(&layer->buf_area);
     int32_t h = lv_area_get_height(&layer->buf_area);
     uint32_t layer_size_byte = h * lv_draw_buf_width_to_stride(w, layer->color_format);
 
 #if LV_DRAW_LAYER_MAX_MEMORY > 0
-    /* Do not allocate the layer if the sum of allocated layer sizes
-     * will exceed `LV_DRAW_LAYER_MAX_MEMORY` */
+    /* Не выделять слой, если сумма размеров выделенных слоев
+     * превысит `LV_DRAW_LAYER_MAX_MEMORY` */
     if((_draw_info.used_memory_for_layers + layer_size_byte) > LV_DRAW_LAYER_MAX_MEMORY) {
         LV_LOG_WARN("LV_DRAW_LAYER_MAX_MEMORY was reached when allocating the layer.");
         return NULL;
@@ -545,7 +545,7 @@ lv_layer_t * lv_draw_layer_create_drop_shadow(lv_layer_t * parent_layer, const l
     lv_area_t drop_shadow_area = *area;
     int32_t blur_radius = base->drop_shadow_blur_radius;
 
-    /* x2 to have some extra space for cleaner blurring */
+    /* x2, чтобы было дополнительное пространство для более чистого размытия */
     lv_area_increase(&drop_shadow_area, blur_radius * 2, blur_radius * 2);
 
     lv_layer_t * ds_layer = lv_draw_layer_create(parent_layer, LV_COLOR_FORMAT_A8, &drop_shadow_area);
@@ -579,21 +579,21 @@ void lv_draw_layer_finish_drop_shadow(lv_layer_t * drop_shadow_layer, const lv_d
  **********************/
 
 /**
- * Check if there are older draw task overlapping the area of `t_check`
- * @param layer         the draw ctx to search in
- * @param t_check       check this task if it overlaps with the older ones
- * @param draw_unit_id  draw unit ID for which the independence check is called
- * @return              true: `t_check` is not overlapping with older tasks so it's independent
+ * Проверьте, нет ли более старых задач рисования, перекрывающих область`t_check`.
+ * @param layer         Draw ctx для поиска
+ * @param t_check       проверьте это задание, если оно пересекается с предыдущими
+ * @param draw_unit_id  блок рисования ID, для которого вызывается проверка независимости
+ * @return              правда:`t_check`не пересекается со старыми задачами, поэтому он независим
  */
 static bool is_independent(lv_layer_t * layer, lv_draw_task_t * t_check, uint8_t draw_unit_id)
 {
     LV_PROFILER_DRAW_BEGIN;
     lv_draw_task_t * t = layer->draw_task_head;
 
-    /*If t_check is outside of the older tasks then it's independent*/
+    /*Еслиt_checkнаходится за пределами нашей задачи, то он независим.*/
     while(t && t != t_check) {
-        /*It's independent of finished draw tasks, and queued draw tasks of the same draw unit,
-         *so no need to check it*/
+        /*Он не зависит от завершенных задач рисования и поставленных в очередь задач рисования того же блока рисования.
+         *так что не надо это проверять*/
         if(t->state == LV_DRAW_TASK_STATE_FINISHED ||
            (t->state == LV_DRAW_TASK_STATE_QUEUED && t->preferred_draw_unit_id == draw_unit_id)) {
             t = t->next;
@@ -613,9 +613,9 @@ static bool is_independent(lv_layer_t * layer, lv_draw_task_t * t_check, uint8_t
 }
 
 /**
- * Get the size of the draw descriptor of a draw task
- * @param type      type of the draw task
- * @return          size of the draw descriptor in bytes
+ * Получить размер дескриптора отрисовки задачи рисования.
+ * @param type      тип задачи рисования
+ * @return          размер дескриптора отрисовки в байтах
  */
 static inline size_t get_draw_dsc_size(lv_draw_task_type_t type)
 {
@@ -647,7 +647,7 @@ static inline size_t get_draw_dsc_size(lv_draw_task_type_t type)
         case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
             return sizeof(lv_draw_mask_rect_dsc_t);
 
-        /* no struct match for LV_DRAW_TASK_TYPE_MASK_BITMAP, set it to zero now */
+        /* нет соответствия структуры для LV_DRAW_TASK_TYPE_MASK_BITMAP, установите ее сейчас на ноль */
         case LV_DRAW_TASK_TYPE_MASK_BITMAP:
             return 0;
 #if LV_USE_VECTOR_GRAPHIC
@@ -658,8 +658,8 @@ static inline size_t get_draw_dsc_size(lv_draw_task_type_t type)
         case LV_DRAW_TASK_TYPE_3D:
             return sizeof(lv_draw_3d_dsc_t);
 #endif
-            /* Note that default is not added here because when adding new draw task type,
-             * if forget to add case, the compiler will automatically report a warning.
+            /* Обратите внимание, что здесь не добавляется значение по умолчанию, поскольку при добавлении нового типа задачи рисования
+             * если вы забудете добавить регистр, компилятор автоматически выдаст предупреждение.
              */
     }
 
@@ -667,9 +667,9 @@ static inline size_t get_draw_dsc_size(lv_draw_task_type_t type)
 }
 
 /**
- * Clean-up resources allocated by a finished task
- * @param t         pointer to a draw task
- * @param disp      pointer to a display on which the task was drawn
+ * Очистка ресурсов, выделенных завершенной задачей
+ * @param t         указатель на задачу рисования
+ * @param disp      указатель на дисплей, на котором была нарисована задача
  */
 static void cleanup_task(lv_draw_task_t * t, lv_display_t * disp)
 {
@@ -681,7 +681,7 @@ static void cleanup_task(lv_draw_task_t * t, lv_display_t * disp)
             draw_line_dsc->points = NULL;
         }
     }
-    /*If it was layer drawing free the layer too*/
+    /*Если это был рисунок слоя, освободите и слой тоже*/
     else if(t->type == LV_DRAW_TASK_TYPE_LAYER) {
         lv_draw_image_dsc_t * draw_image_dsc = t->draw_dsc;
         lv_layer_t * layer_drawn = (lv_layer_t *)draw_image_dsc->src;
@@ -702,7 +702,7 @@ static void cleanup_task(lv_draw_task_t * t, lv_display_t * disp)
             layer_drawn->draw_buf = NULL;
         }
 
-        /*Remove the layer from  the display's*/
+        /*Удалить слой с дисплея*/
         if(disp) {
             lv_layer_t * l2 = disp->layer_head;
             while(l2) {
@@ -735,22 +735,22 @@ static void cleanup_task(lv_draw_task_t * t, lv_display_t * disp)
 static lv_draw_task_t * get_first_available_task(lv_layer_t * layer)
 {
     LV_PROFILER_DRAW_BEGIN;
-    /* If there is only 1 draw unit the task can be consumed linearly as
-     * they are added in the correct order. However, it can happen that
-     * there is a `LV_DRAW_TASK_TYPE_LAYER` which can be blended only when
-     * all its tasks are ready. As other areas might be on top of that
-     * layer-to-blend don't skip it. Instead stop there, so that the
-     * draw tasks of that layer can be consumed and can be finished.
-     * After that this layer-to-blenf will have `LV_DRAW_TASK_STATE_WAITING`
-     * so it can be blended normally.*/
+    /* Если имеется только одна единица рисования, задача может быть использована линейно как
+     * они добавляются в правильном порядке. Однако может случиться так, что
+     * существует `LV_DRAW_TASK_TYPE_LAYER`, который можно смешать только тогда, когда
+     * все его задачи готовы. Поскольку другие области могут быть на вершине этого
+     * не пропускайте это. Вместо этого остановитесь на этом, чтобы
+     * Задачи рисования этого слоя могут быть использованы и завершены.
+     * После этого этот слой будет иметь `LV_DRAW_TASK_STATE_WAITING`.
+     * поэтому его можно нормально смешивать.*/
     lv_draw_task_t * t = layer->draw_task_head;
     while(t) {
-        /*Not waiting to be rendered, leave this layer while the first task is ready (i.e. not blocked)*/
+        /*Не дожидаясь рендеринга, покиньте этот слой, пока первая задача готова (т.е. не заблокирована)*/
         if(t->state != LV_DRAW_TASK_STATE_WAITING) {
             t = NULL;
             break;
         }
-        /*Waiting to be rendered, use it*/
+        /*Ожидание рендеринга, используйте его*/
         else {
             break;
         }

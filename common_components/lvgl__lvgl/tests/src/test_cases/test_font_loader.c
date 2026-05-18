@@ -41,12 +41,12 @@ void test_font_loader_from_buffer(void);
  *   GLOBAL FUNCTIONS
  **********************/
 
-/* fonts converted to C structs using the LVGL Font Converter */
+/* шрифты, преобразованные в структуры C с помощью конвертера шрифтов LVGL. */
 extern lv_font_t test_font_1;
 extern lv_font_t test_font_2;
 extern lv_font_t test_font_3;
 
-/* font binaries converted to plain C arrays */
+/* двоичные файлы шрифтов, преобразованные в простые массивы C */
 extern uint8_t const test_font_1_buf[6876];
 extern uint8_t const test_font_2_buf[7252];
 extern uint8_t const test_font_3_buf[4892];
@@ -57,12 +57,12 @@ static lv_font_t * font_3_bin = NULL;
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 
 }
 
@@ -72,7 +72,7 @@ static void common(void)
     compare_fonts(&test_font_2, font_2_bin);
     compare_fonts(&test_font_3, font_3_bin);
 
-    /* create labels for testing */
+    /* создавать этикетки для тестирования */
     lv_obj_t * scr = lv_screen_active();
     lv_obj_t * label1 = lv_label_create(scr);
     lv_obj_t * label2 = lv_label_create(scr);
@@ -99,7 +99,7 @@ static void common(void)
 
 void test_font_loader_with_cache(void)
 {
-    /*Test with cache ('A' has cache)*/
+    /*Тест с кешем («А» имеет кеш)*/
 
     font_1_bin = lv_binfont_create("A:src/test_assets/test_font_1.fnt");
     TEST_ASSERT_NOT_NULL(font_1_bin);
@@ -115,7 +115,7 @@ void test_font_loader_with_cache(void)
 
 void test_font_loader_no_cache(void)
 {
-    /*Test without cache ('B' has NO cache)*/
+    /*Тест без кеша («B» имеет кеш NO)*/
 
     font_1_bin = lv_binfont_create("B:src/test_assets/test_font_1.fnt");
     TEST_ASSERT_NOT_NULL(font_1_bin);
@@ -131,7 +131,7 @@ void test_font_loader_no_cache(void)
 
 void test_font_loader_from_buffer(void)
 {
-    /*Test with memfs*/
+    /*Протестируйте с помощью memfs*/
 
     font_1_bin = lv_binfont_create_from_buffer((void *)&test_font_1_buf, sizeof(test_font_1_buf));
     TEST_ASSERT_NOT_NULL(font_1_bin);
@@ -147,7 +147,7 @@ void test_font_loader_from_buffer(void)
 
 void test_font_loader_reload(void)
 {
-    /*Reload a font which is being used by a label*/
+    /*Перезагрузите шрифт, который используется меткой.*/
     lv_obj_t * scr = lv_screen_active();
     lv_obj_t * label = lv_label_create(scr);
     lv_obj_center(label);
@@ -183,10 +183,10 @@ static int compare_fonts(lv_font_t * f1, lv_font_t * f2)
     TEST_ASSERT_NOT_NULL_MESSAGE(f1, "font not null");
     TEST_ASSERT_NOT_NULL_MESSAGE(f2, "font not null");
 
-    //    Skip these test because -Wpedantic tells
-    //    ISO C forbids passing argument 1 of ‘TEST_ASSERT_EQUAL_PTR_MESSAGE’ between function pointer and ‘void *’
-    //    TEST_ASSERT_EQUAL_PTR_MESSAGE(f1->get_glyph_dsc, f2->get_glyph_dsc, "glyph_dsc");
-    //    TEST_ASSERT_EQUAL_PTR_MESSAGE(f1->get_glyph_bitmap, f2->get_glyph_bitmap, "glyph_bitmap");
+    //    Пропустите этот тест, потому что - Wpedantic сообщает
+    //    ISO C запрещает передачу аргумента 1 из «TEST_ASSERT_EQUAL_PTR_MESSAGE» между указателем функции и «void *».
+    //    TEST_ASSERT_EQUAL_PTR_MESSAGE (f1->get_glyph_dsc, f2->get_glyph_dsc, "glyph_dsc");
+    //    TEST_ASSERT_EQUAL_PTR_MESSAGE (f1->get_glyph_bitmap, f2->get_glyph_bitmap, "glyph_bitmap");
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(f1->line_height, f2->line_height, "line_height");
     TEST_ASSERT_EQUAL_INT_MESSAGE(f1->base_line, f2->base_line, "base_line");

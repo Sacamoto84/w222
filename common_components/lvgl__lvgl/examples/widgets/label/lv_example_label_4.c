@@ -7,7 +7,7 @@
 
 static void generate_mask(lv_draw_buf_t * mask, int32_t w, int32_t h, const char * txt)
 {
-    /*Create a "8 bit alpha" canvas and clear it*/
+    /*Создайте холст «8 бит альфа» и очистите его.*/
     lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
     lv_canvas_set_draw_buf(canvas, mask);
     lv_canvas_fill_bg(canvas, lv_color_black(), LV_OPA_TRANSP);
@@ -15,7 +15,7 @@ static void generate_mask(lv_draw_buf_t * mask, int32_t w, int32_t h, const char
     lv_layer_t layer;
     lv_canvas_init_layer(canvas, &layer);
 
-    /*Draw a label to the canvas. The result "image" will be used as mask*/
+    /*Нарисуйте метку на холсте. Результат «изображение» будет использоваться в качестве маски.*/
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.color = lv_color_white();
@@ -31,18 +31,18 @@ static void generate_mask(lv_draw_buf_t * mask, int32_t w, int32_t h, const char
 }
 
 /**
- * Draw label with gradient color
+ * Нарисуйте этикетку градиентным цветом
  */
 void lv_example_label_4(void)
 {
-    /* Create the mask of a text by drawing it to a canvas*/
+    /* Создайте маску текста, нарисовав его на холсте.*/
     LV_DRAW_BUF_DEFINE_STATIC(mask, MASK_WIDTH, MASK_HEIGHT, LV_COLOR_FORMAT_L8);
     LV_DRAW_BUF_INIT_STATIC(mask);
 
     generate_mask(&mask, MASK_WIDTH, MASK_HEIGHT, "Text with gradient");
 
-    /* Create an object from where the text will be masked out.
-     * Now it's a rectangle with a gradient but it could be an image too*/
+    /* Создайте объект, из которого текст будет замаскирован.
+     * Теперь это прямоугольник с градиентом, но это может быть и изображение.*/
     lv_obj_t * grad = lv_obj_create(lv_screen_active());
     lv_obj_set_size(grad, MASK_WIDTH, MASK_HEIGHT);
     lv_obj_center(grad);

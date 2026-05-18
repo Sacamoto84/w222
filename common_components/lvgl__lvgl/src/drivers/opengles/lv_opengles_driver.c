@@ -122,7 +122,7 @@ void lv_opengles_init(void)
 
     lv_opengles_shader_bind();
 
-    /* unbind everything */
+    /* отвязать все */
     lv_opengles_vertex_array_unbind();
     lv_opengles_vertex_buffer_unbind();
     lv_opengles_index_buffer_unbind();
@@ -278,12 +278,12 @@ void lv_opengles_reinit_state(void)
 {
     LV_PROFILER_DRAW_BEGIN;
 
-    /* Rebind VAO, VBO, IBO to restore state after NanoVG or other external GL operations */
+    /* Перепривязываем VAO , VBO , IBO для восстановления состояния после NanoVG или других внешних операций GL. */
     lv_opengles_vertex_array_bind();
     lv_opengles_vertex_buffer_bind();
     lv_opengles_index_buffer_bind();
 
-    /* Re-setup vertex attributes since NanoVG may have modified them */
+    /* Перенастройте атрибуты вершин, поскольку NanoVG мог их изменить. */
     for(unsigned int i = 0; i < 2; i++) {
         GL_CALL(glEnableVertexAttribArray(i));
         GL_CALL(glVertexAttribPointer(i, 2, GL_FLOAT, GL_FALSE, 16, (const void *)(intptr_t)(i * 2 * 4)));
@@ -360,7 +360,7 @@ void lv_opengles_render(const lv_opengles_render_params_t * params)
 
     if(params->matrix) {
         if(is_turned) {
-            /* Display turned 90 or 270 */
+            /* Дисплей повернулся на 90 или 270 */
             if(params->matrix->m[0][1] < 0.f) hor_translate = -hor_translate;
             if(params->matrix->m[1][0] < 0.f) ver_translate = -ver_translate;
             hor_scale = -hor_scale;
@@ -376,7 +376,7 @@ void lv_opengles_render(const lv_opengles_render_params_t * params)
 
         }
         else {
-            /* Display turned 0 or 180 */
+            /* Дисплей повернулся на 0 или 180 */
             if(params->matrix->m[0][0] < -0.0001f) {
                 ver_scale = -ver_scale;
                 ver_translate = -ver_translate;
@@ -527,7 +527,7 @@ static unsigned int lv_opengles_shader_manager_init(void)
     for(lv_opengl_glsl_version_t version = LV_OPENGL_GLSL_VERSION_300ES; version < LV_OPENGL_GLSL_VERSION_LAST; ++version) {
         LV_LOG_INFO("Trying GLSL version %s", lv_opengles_glsl_version_to_string(version));
         {
-            /* Initialize the shader manager*/
+            /* Инициализируйте менеджер шейдеров*/
             lv_opengl_shader_portions_t portions;
             lv_opengles_shader_get_source(&portions, version);
             char * vertex_shader = lv_opengles_shader_get_vertex(version);
@@ -563,7 +563,7 @@ static lv_result_t lv_opengles_shader_init(void)
 static void lv_opengles_shader_deinit(void)
 {
     if(shader_id == 0) return;
-    /* The program is part of the manager and as such will be destroyed inside */
+    /* Программа является частью менеджера и поэтому будет уничтожена внутри. */
     lv_opengl_shader_manager_deinit(&shader_manager);
     shader_id = 0;
 }
@@ -613,8 +613,8 @@ static void lv_opengles_shader_set_uniformmatrix3fv(const char * name, int count
 {
     LV_PROFILER_DRAW_BEGIN;
     /*
-     * GLES2.0 doesn't support transposing the matrix via glUniformMatrix3fv so this is the transposed matrix
-     * https://registry.khronos.org/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf page 47
+     * GLES2 .0 не поддерживает транспонирование матрицы через glUniformMatrix3fv, так что это транспонированная матрица.
+     * https://registry.khronos.org/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf стр. 47
      */
     GL_CALL(glUniformMatrix3fv(lv_opengles_shader_get_uniform_location(name), count, GL_FALSE, values));
     LV_PROFILER_DRAW_END;
@@ -646,7 +646,7 @@ static void lv_opengles_render_draw(void)
 }
 
 /**
- * Copied from `lv_map` in lv_math.h to operate on floats
+ * Скопировано из `lv_map` в lv_math.h для работы с числами с плавающей запятой.
  */
 static float lv_opengles_map_float(float x, float min_in, float max_in, float min_out, float max_out)
 {
@@ -657,10 +657,10 @@ static float lv_opengles_map_float(float x, float min_in, float max_in, float mi
     if(max_in <= min_in && x >= min_in) return min_out;
 
     /**
-     * The equation should be:
-     *   ((x - min_in) * delta_out) / delta in) + min_out
-     * To avoid rounding error reorder the operations:
-     *   (x - min_in) * (delta_out / delta_min) + min_out
+     * Уравнение должно быть:
+     *   ((x - min_in ) * delta_out ) / дельта вход) + min_out
+     * Чтобы избежать ошибки округления, измените порядок операций:
+     *   (x - min_in) * ( delta_out / delta_min ) + min_out
      */
 
     float delta_in = max_in - min_in;

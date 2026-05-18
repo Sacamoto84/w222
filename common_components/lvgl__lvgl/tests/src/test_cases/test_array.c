@@ -23,7 +23,7 @@ void test_array_append_values(void)
     for(int32_t i = 0; i < new_size; i++) {
         lv_array_push_back(&array, &i);
     }
-    /*push back will automatically extent the array size.*/
+    /*push back автоматически увеличит размер массива.*/
     TEST_ASSERT_EQUAL_UINT32(new_size, lv_array_size(&array));
 }
 
@@ -118,7 +118,7 @@ void test_array_init_from_buf(void)
         lv_array_push_back(&a, &i);
     }
 
-    /* Test overflow handling, should fail */
+    /* Проверка обработки переполнения должна завершиться неудачей */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_push_back(&a, NULL));
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_concat(&a, &b));
 
@@ -148,14 +148,14 @@ void test_array_shrink(void)
     lv_array_shrink(&array);
     TEST_ASSERT_EQUAL_UINT32(10, lv_array_capacity(&array));
 
-    /* Double shrink should not shrink more */
+    /* Двойное сжатие не должно сжиматься больше */
     lv_array_shrink(&array);
     TEST_ASSERT_EQUAL_UINT32(10, lv_array_capacity(&array));
 }
 
 void test_array_remove(void)
 {
-    /* NULL array is handled properly */
+    /* Массив NULL обрабатывается правильно */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_remove(NULL, 0));
 
     for(int32_t i = 0; i < 5; i++) {
@@ -166,19 +166,19 @@ void test_array_remove(void)
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_remove(&array, 4));
     TEST_ASSERT_EQUAL_UINT32(4, lv_array_size(&array));
 
-    /* Test remove out of range, should fail */
+    /* Тест удаления за пределы диапазона должен завершиться неудачей */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_remove(&array, 4));
     TEST_ASSERT_EQUAL_UINT32(4, lv_array_size(&array));
 
-    /* remove the last element */
+    /* удалить последний элемент */
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_remove(&array, 3));
     TEST_ASSERT_EQUAL_UINT32(3, lv_array_size(&array));
 
-    /* remove the first element */
+    /* удалить первый элемент */
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_remove(&array, 0));
     TEST_ASSERT_EQUAL_UINT32(2, lv_array_size(&array));
 
-    /* verify the content */
+    /* проверить содержимое */
     for(int32_t i = 0; i < 2; i++) {
         int32_t * v = lv_array_at(&array, i);
         TEST_ASSERT_EQUAL_INT32(i + 1, *v);
@@ -187,7 +187,7 @@ void test_array_remove(void)
 
 void test_array_remove_unordered(void)
 {
-    /* NULL array is handled properly */
+    /* Массив NULL обрабатывается правильно */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_remove_unordered(NULL, 0));
 
     for(int32_t i = 0; i < 5; i++) {
@@ -198,30 +198,30 @@ void test_array_remove_unordered(void)
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_remove_unordered(&array, 4));
     TEST_ASSERT_EQUAL_UINT32(4, lv_array_size(&array));
 
-    /* Test remove out of range, should fail */
+    /* Тест удаления за пределы диапазона должен завершиться неудачей */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_remove_unordered(&array, 4));
     TEST_ASSERT_EQUAL_UINT32(4, lv_array_size(&array));
 
-    /* remove the last element */
+    /* удалить последний элемент */
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_remove_unordered(&array, 3));
     TEST_ASSERT_EQUAL_UINT32(3, lv_array_size(&array));
 
-    /* remove the first element */
+    /* удалить первый элемент */
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_remove_unordered(&array, 0));
     TEST_ASSERT_EQUAL_UINT32(2, lv_array_size(&array));
 
     int32_t * v0 = lv_array_at(&array, 0);
     int32_t * v1 = lv_array_at(&array, 1);
 
-    /* Removing the first element should have moved the last element
-     * to the first position*/
+    /* Удаление первого элемента должно было привести к перемещению последнего элемента.
+     * на первую позицию*/
     TEST_ASSERT_EQUAL_INT32(2, *v0);
     TEST_ASSERT_EQUAL_INT32(1, *v1);
 }
 
 void test_array_erase(void)
 {
-    /* Test overlapping memory regions */
+    /* Тестирование перекрывающихся областей памяти */
     for(int32_t i = 0; i < 5; i++) {
         lv_array_push_back(&array, &i);
     }
@@ -237,7 +237,7 @@ void test_array_erase(void)
         lv_array_push_back(&array, &i);
     }
 
-    /* Test erase from the middle */
+    /* Пробное стирание с середины */
     lv_array_clear(&array);
     for(int32_t i = 0; i < 10; i++) {
         lv_array_push_back(&array, &i);
@@ -256,13 +256,13 @@ void test_array_erase(void)
         }
     }
 
-    /* Test edge cases */
+    /* Тестирование крайних случаев */
     lv_array_clear(&array);
     for(int32_t i = 0; i < 10; i++) {
         lv_array_push_back(&array, &i);
     }
 
-    /* end > array->size */
+    /* конец > массив- > размер */
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_erase(&array, 3, 15));
     TEST_ASSERT_EQUAL_UINT32(3, lv_array_size(&array));
     for(int32_t i = 0; i < 3; i++) {
@@ -270,17 +270,17 @@ void test_array_erase(void)
         TEST_ASSERT_EQUAL_INT32(i, *v);
     }
 
-    /* Reset array */
+    /* Сбросить массив */
     lv_array_clear(&array);
     for(int32_t i = 0; i < 10; i++) {
         lv_array_push_back(&array, &i);
     }
 
-    /* start >= end */
+    /* начало >= конец */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_erase(&array, 5, 5));
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_erase(&array, 7, 6));
 
-    /* end == array->size */
+    /* конец == массив->размер */
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_array_erase(&array, 5, 10));
     TEST_ASSERT_EQUAL_UINT32(5, lv_array_size(&array));
     for(int32_t i = 0; i < 5; i++) {
@@ -301,7 +301,7 @@ void test_array_assign(void)
     int32_t * r = lv_array_at(&array, 2);
     TEST_ASSERT_EQUAL_INT32(100, *r);
 
-    /* Test out of range, should fail */
+    /* Тест вне допустимого диапазона, должен завершиться неудачей */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_array_assign(&array, 5, &v));
 }
 

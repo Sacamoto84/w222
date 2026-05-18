@@ -17,7 +17,7 @@ extern "C" {
 
 #if LV_USE_SLIDER != 0
 
-/*Testing of dependencies*/
+/*Тестирование зависимостей*/
 #if LV_USE_BAR == 0
 #error "lv_slider: lv_bar is required. Enable it in lv_conf.h (LV_USE_BAR 1)"
 #endif
@@ -61,18 +61,18 @@ enum _lv_property_slider_id_t {
  **********************/
 
 /**
- * Create a slider object
+ * Создайте объект слайдера
  * @param parent    pointer to an object, it will be the parent of the new slider.
  * @return          pointer to the created slider
  */
 lv_obj_t * lv_slider_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set a new value on the slider
+ * Установите новое значение на ползунке
  * @param obj       pointer to a slider object
  * @param value     the new value
  * @param anim      LV_ANIM_ON: set the value with an animation; LV_ANIM_OFF: change the value immediately
@@ -80,7 +80,7 @@ lv_obj_t * lv_slider_create(lv_obj_t * parent);
 void lv_slider_set_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim);
 
 /**
- * Set a new value for the left knob of a slider
+ * Установите новое значение для левой ручки ползунка
  * @param obj       pointer to a slider object
  * @param value     new value
  * @param anim      LV_ANIM_ON: set the value with an animation; LV_ANIM_OFF: change the value immediately
@@ -88,7 +88,7 @@ void lv_slider_set_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim);
 void lv_slider_set_start_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim);
 
 /**
- * Set the minimum and the maximum values of a bar
+ * Установите минимальное и максимальное значения бара
  * @param obj       pointer to the slider object
  * @param min       minimum value
  * @param max       maximum value
@@ -96,88 +96,88 @@ void lv_slider_set_start_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t a
 void lv_slider_set_range(lv_obj_t * obj, int32_t min, int32_t max);
 
 /**
- * Set the minimum values of a bar
+ * Установить минимальные значения бара
  * @param obj       pointer to the slider object
  * @param min       minimum value
  */
 void lv_slider_set_min_value(lv_obj_t * obj, int32_t min);
 
 /**
- * Set the maximum values of a bar
+ * Установить максимальные значения бара
  * @param obj       pointer to the slider object
  * @param max       maximum value
  */
 void lv_slider_set_max_value(lv_obj_t * obj, int32_t max);
 
 /**
- * Set the mode of slider.
+ * Установите режим слайдера.
  * @param obj       pointer to a slider object
  * @param mode      the mode of the slider. See `lv_slider_mode_t`
  */
 void lv_slider_set_mode(lv_obj_t * obj, lv_slider_mode_t mode);
 
 /**
- * Set the orientation of slider.
+ * Установите ориентацию слайдера.
  * @param obj           pointer to a slider object
  * @param orientation   slider  orientation from `lv_slider_orientation_t`
  */
 void lv_slider_set_orientation(lv_obj_t * obj, lv_slider_orientation_t orientation);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the value of the main knob of a slider
+ * Получить значение основной ручки ползунка
  * @param obj       pointer to a slider object
  * @return          the value of the main knob of the slider
  */
 int32_t lv_slider_get_value(const lv_obj_t * obj);
 
 /**
- * Get the value of the left knob of a slider
+ * Получить значение левой ручки ползунка
  * @param obj       pointer to a slider object
  * @return          the value of the left knob of the slider
  */
 int32_t lv_slider_get_left_value(const lv_obj_t * obj);
 
 /**
- * Get the minimum value of a slider
+ * Получить минимальное значение ползунка
  * @param obj       pointer to a slider object
  * @return          the minimum value of the slider
  */
 int32_t lv_slider_get_min_value(const lv_obj_t * obj);
 
 /**
- * Get the maximum value of a slider
+ * Получить максимальное значение ползунка
  * @param obj       pointer to a slider object
  * @return          the maximum value of the slider
  */
 int32_t lv_slider_get_max_value(const lv_obj_t * obj);
 
 /**
- * Give the slider is being dragged or not
+ * Подскажите ползунок перетаскивается или нет
  * @param obj       pointer to a slider object
  * @return          true: drag in progress false: not dragged
  */
 bool lv_slider_is_dragged(const lv_obj_t * obj);
 
 /**
- * Get the mode of the slider.
+ * Получите режим слайдера.
  * @param slider       pointer to a slider object
  * @return          see `lv_slider_mode_t`
  */
 lv_slider_mode_t lv_slider_get_mode(lv_obj_t * slider);
 
 /**
- * Get the orientation of slider.
+ * Получите ориентацию слайдера.
  * @param obj       pointer to a slider object
  * @return          slider orientation from `lv_slider_orientation_t`
  */
 lv_slider_orientation_t lv_slider_get_orientation(lv_obj_t * slider);
 
 /**
- * Give the slider is in symmetrical mode or not
+ * Подскажите находится ли слайдер в симметричном режиме или нет
  * @param obj       pointer to slider object
  * @return          true: in symmetrical mode false : not in
 */
@@ -186,7 +186,7 @@ bool lv_slider_is_symmetrical(lv_obj_t * obj);
 
 #if LV_USE_OBSERVER
 /**
- * Bind an integer or float Subject to a Slider's value.
+ * Привязка целого числа или числа с плавающей точкой к значению ползунка.
  * @param obj       pointer to Slider
  * @param subject   pointer to Subject
  * @return          pointer to newly-created Observer
@@ -201,7 +201,7 @@ lv_observer_t * lv_slider_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_SLIDER*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SLIDER_H*/

@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Canvas data */
+/** Данные холста */
 struct _lv_canvas_t {
     lv_image_t img;
     lv_draw_buf_t * draw_buf;
@@ -46,7 +46,7 @@ struct _lv_canvas_t {
 #endif /* LV_USE_CANVAS != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CANVAS_PRIVATE_H*/

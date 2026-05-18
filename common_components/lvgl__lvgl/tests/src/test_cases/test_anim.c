@@ -7,12 +7,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
     lv_anim_delete_all();
     lv_anim_enable_vsync_mode(false);
@@ -39,7 +39,7 @@ void test_anim_delete(void)
 {
     int32_t var;
 
-    /*Start an animation*/
+    /*Запустить анимацию*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, &var);
@@ -52,14 +52,14 @@ void test_anim_delete(void)
     TEST_ASSERT_EQUAL(19, var);
 
     bool deleted;
-    /*Wrong variable, nothing should happen*/
+    /*Неправильная переменная, ничего не должно произойти*/
     deleted = lv_anim_delete(&a, exec_cb);
     TEST_ASSERT_FALSE(deleted);
 
     lv_test_wait(20);
     TEST_ASSERT_EQUAL(39, var);
 
-    /*The value shouldn't change after delete*/
+    /*Значение не должно меняться после удаления*/
     deleted = lv_anim_delete(&var, exec_cb);
     TEST_ASSERT_TRUE(deleted);
 
@@ -71,7 +71,7 @@ void test_anim_delete_custom(void)
 {
     int32_t var;
 
-    /*Start an animation*/
+    /*Запустить анимацию*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, &var);
@@ -84,14 +84,14 @@ void test_anim_delete_custom(void)
     TEST_ASSERT_EQUAL(19, var);
 
     bool deleted;
-    /*Wrong callback, nothing should happen*/
+    /*Неправильный обратный вызов, ничего не должно произойти*/
     deleted = lv_anim_delete(&var, exec_cb);
     TEST_ASSERT_FALSE(deleted);
 
     lv_test_wait(20);
     TEST_ASSERT_EQUAL(39, var);
 
-    /*The value shouldn't change after delete*/
+    /*Значение не должно меняться после удаления*/
     deleted = lv_anim_delete(&var, NULL);
     TEST_ASSERT_TRUE(deleted);
 
@@ -102,7 +102,7 @@ void test_anim_pause(void)
 {
     int32_t var;
 
-    /*Start an animation*/
+    /*Запустить анимацию*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, &var);
@@ -132,7 +132,7 @@ void test_anim_pause_for(void)
 {
     int32_t var;
 
-    /*Start an animation*/
+    /*Запустить анимацию*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, &var);
@@ -153,7 +153,7 @@ void test_anim_pause_for(void)
 
     TEST_ASSERT_EQUAL(79, var);
 
-    /*Delete the animation to avoid accessing it after return*/
+    /*Удалите анимацию, чтобы избежать доступа к ней после возврата.*/
     lv_anim_delete(&var, exec_cb);
 }
 
@@ -161,7 +161,7 @@ void test_anim_pause_for_resume(void)
 {
     int32_t var;
 
-    /*Start an animation*/
+    /*Запустить анимацию*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, &var);
@@ -217,7 +217,7 @@ void test_anim_start_cb_is_called(void)
     lv_test_wait(100);
     TEST_ASSERT_EQUAL(2, start_cb_call_count);
     lv_test_wait(50);
-    /*Delete the animation to avoid accessing it after return*/
+    /*Удалите анимацию, чтобы избежать доступа к ней после возврата.*/
     lv_anim_delete(&var, exec_cb);
 }
 
@@ -225,12 +225,12 @@ void test_anim_vsync_mode(void)
 {
     lv_anim_enable_vsync_mode(true);
 
-    /* anim timer should be NULL when vsync mode is enabled */
+    /* таймер анимации должен быть NULL, когда включен режим vsync. */
     TEST_ASSERT_NULL(lv_anim_get_timer());
 
     int32_t var;
 
-    /*Start an animation*/
+    /*Запустить анимацию*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, &var);
@@ -239,7 +239,7 @@ void test_anim_vsync_mode(void)
     lv_anim_set_duration(&a, 1000);
     lv_anim_start(&a);
 
-    /*Use vsync events to notify anim updates*/
+    /*Используйте события vsync для уведомления об обновлениях анимации.*/
     lv_tick_inc(10);
     lv_display_send_vsync_event(NULL, NULL);
     TEST_ASSERT_EQUAL(9, var);
@@ -251,12 +251,12 @@ void test_anim_vsync_mode(void)
     lv_anim_enable_vsync_mode(false);
     TEST_ASSERT_NOT_NULL(lv_anim_get_timer());
 
-    /* Should not update the animation with vsync events when vsync mode is disabled */
+    /* Не следует обновлять анимацию с помощью событий vsync, когда режим vsync отключен. */
     lv_tick_inc(20);
     lv_display_send_vsync_event(NULL, NULL);
     TEST_ASSERT_EQUAL(19, var);
 
-    /* Test normal timer mode */
+    /* Проверьте нормальный режим таймера */
     lv_test_wait(20);
     TEST_ASSERT_EQUAL(59, var);
 

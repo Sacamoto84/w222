@@ -2,7 +2,7 @@
 #if LV_USE_FLEX && LV_BUILD_EXAMPLES
 
 /**
- * Demonstrate flex grow.
+ * Демонстрируйте гибкий рост.
  */
 void lv_example_flex_3(void)
 {
@@ -13,18 +13,18 @@ void lv_example_flex_3(void)
 
     lv_obj_t * obj;
     obj = lv_obj_create(cont);
-    lv_obj_set_size(obj, 40, 40);           /*Fix size*/
+    lv_obj_set_size(obj, 40, 40);           /*Исправить размер*/
 
     obj = lv_obj_create(cont);
     lv_obj_set_height(obj, 40);
-    lv_obj_set_flex_grow(obj, 1);           /*1 portion from the free space*/
+    lv_obj_set_flex_grow(obj, 1);           /*1 порция из свободного места*/
 
     obj = lv_obj_create(cont);
     lv_obj_set_height(obj, 40);
-    lv_obj_set_flex_grow(obj, 2);           /*2 portion from the free space*/
+    lv_obj_set_flex_grow(obj, 2);           /*2 порция из свободного места*/
 
     obj = lv_obj_create(cont);
-    lv_obj_set_size(obj, 40, 40);           /*Fix size. It is flushed to the right by the "grow" items*/
+    lv_obj_set_size(obj, 40, 40);           /*Исправить размер. Он сбрасывается вправо из-за «растущих» элементов.*/
 }
 
 #endif

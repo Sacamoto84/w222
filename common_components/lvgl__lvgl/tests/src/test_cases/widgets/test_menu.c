@@ -130,14 +130,14 @@ void test_menu_clear_history(void)
 
     lv_menu_clear_history(menu);
 
-    /* After clear history, back button click should not navigate back */
+    /* После очистки истории нажатие кнопки «Назад» не должно переходить назад. */
     lv_refr_now(NULL);
     lv_obj_t * back_btn = lv_menu_get_main_header_back_button(menu);
     lv_area_t coords;
     lv_obj_get_coords(back_btn, &coords);
     lv_test_mouse_click_at((coords.x1 + coords.x2) / 2, (coords.y1 + coords.y2) / 2);
 
-    /* Should still be on page3 since history was cleared */
+    /* Должно все еще быть на странице 3, поскольку история была очищена */
     TEST_ASSERT_EQUAL_PTR(page3, lv_menu_get_cur_main_page(menu));
 }
 
@@ -554,7 +554,7 @@ void test_menu_sidebar_header_mode_variations(void)
     lv_menu_set_sidebar_page(menu, sidebar_page);
     lv_menu_set_page(menu, main_page);
 
-    /* Start with BOTTOM_FIXED to ensure mode change triggers refresh */
+    /* Начните с BOTTOM_FIXED, чтобы обеспечить обновление триггеров изменения режима. */
     lv_menu_set_mode_header(menu, LV_MENU_HEADER_BOTTOM_FIXED);
     lv_refr_now(NULL);
 
@@ -619,7 +619,7 @@ void test_menu_group_focus(void)
     lv_obj_get_coords(cont, &coords);
     lv_test_mouse_click_at((coords.x1 + coords.x2) / 2, (coords.y1 + coords.y2) / 2);
 
-    /* Verify navigation occurred */
+    /* Убедитесь, что навигация произошла */
     TEST_ASSERT_EQUAL_PTR(page2, lv_menu_get_cur_main_page(menu));
 
     lv_group_set_default(NULL);

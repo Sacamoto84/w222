@@ -9,8 +9,8 @@
     && LV_USE_TINY_TTF && LV_TINY_TTF_FILE_SUPPORT
 
 /**
- * There are some differences between the rendering of FreeType in 64-bit and 32-bit,
- * so we compare them separately here.
+ * Существуют некоторые различия между рендерингом FreeType в 64-битной и 32-битной версиях.
+ * поэтому мы сравниваем их здесь отдельно.
  */
 #ifndef NON_AMD64_BUILD
     #define EXT_NAME ".lp64.png"
@@ -39,14 +39,14 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
     g_font_manager = lv_font_manager_create(2);
     TEST_ASSERT_NOT_NULL(g_font_manager);
 
-    /* Register built-in font sources */
+    /* Регистрация встроенных источников шрифтов */
     static lv_builtin_font_src_t builtin_font_src[3] = { 0 };
     builtin_font_src[0].font_p = &lv_font_montserrat_14;
     builtin_font_src[0].size = 14;
     builtin_font_src[1].font_p = &lv_font_montserrat_32;
     builtin_font_src[1].size = 32;
 
-    /* IMPORTANT! Marking the end of the array */
+    /* IMPORTANT ! Отмечаем конец массива */
     builtin_font_src[2].font_p = NULL;
     builtin_font_src[2].size = 0;
 
@@ -56,21 +56,21 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
                                      &lv_builtin_font_class);
     TEST_ASSERT_TRUE(add_src_result);
 
-    /* Try to add the same source again, should fail */
+    /* Попробуйте добавить тот же источник еще раз, должно получиться неудачно. */
     add_src_result = add_src_cb(g_font_manager,
                                 "Montserrat",
                                 builtin_font_src,
                                 &lv_builtin_font_class);
     TEST_ASSERT_FALSE(add_src_result);
 
-    /* Register FreeType font source */
+    /* Зарегистрировать источник шрифтов FreeType */
     add_src_result = add_src_cb(g_font_manager,
                                 "NotoSansSC-Regular",
                                 "./src/test_files/fonts/noto/NotoSansSC-Regular.ttf",
                                 &lv_freetype_font_class);
     TEST_ASSERT_TRUE(add_src_result);
 
-    /* Register TinyTTF font source */
+    /* Зарегистрировать источник шрифта TinyTTF */
     extern const uint8_t test_ubuntu_font[];
     extern size_t test_ubuntu_font_size;
     static lv_tiny_ttf_font_src_t tiny_ttf_font_data_src = { 0 };
@@ -92,7 +92,7 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
                                 &lv_tiny_ttf_font_class);
     TEST_ASSERT_TRUE(add_src_result);
 
-    /* Register binary font source */
+    /* Зарегистрировать источник бинарного шрифта */
     static const lv_binfont_font_src_t binfont_font_file_src = {
         .font_size = 20,
         .path = "A:src/test_assets/test_font_3.fnt",
@@ -118,9 +118,9 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
                                 &lv_binfont_font_class);
     TEST_ASSERT_TRUE(add_src_result);
 
-    /* Create font from font manager */
+    /* Создать шрифт из диспетчера шрифтов */
 
-    /* Try to create font with unknown name, should fail */
+    /* Попробуйте создать шрифт с неизвестным именем, должно получиться неудачно. */
     lv_font_t * font_unknown = lv_font_manager_create_font(g_font_manager,
                                                            "UNKNOWN_FONT_NAME",
                                                            0,
@@ -169,7 +169,7 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
                                                              LV_FONT_KERNING_NONE);
     TEST_ASSERT_NOT_NULL(font_file_20);
 
-    /* Create label with the font */
+    /* Создать этикетку со шрифтом */
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label,
                       "这是一段中文。\n"
@@ -186,19 +186,19 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
     lv_obj_set_style_text_font(label, font_40, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/font_manager_3" EXT_NAME);
 
-    /* Freetype fonts have not been tested, so there is no need to distinguish and process images */
+    /* Шрифты Freetype не тестировались, поэтому различать и обрабатывать изображения нет необходимости. */
     lv_obj_set_style_text_font(label, font_file_20, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/font_manager_4.png");
 
-    /* Rendered images should be the same */
+    /* Отрисованные изображения должны быть одинаковыми */
     lv_obj_set_style_text_font(label, font_buffer_20, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/font_manager_4.png");
 
-    /* Should not be deleted successfully, because it is used by the label */
+    /* Не следует успешно удалять, поскольку он используется меткой */
     bool delete_result = lv_font_manager_delete(g_font_manager);
     TEST_ASSERT_FALSE(delete_result);
 
-    /* Source should not be removed successfully, because it is used by the fonts */
+    /* Источник не должен быть успешно удален, поскольку он используется шрифтами. */
     delete_result = lv_font_manager_remove_src(g_font_manager, "Montserrat");
     TEST_ASSERT_FALSE(delete_result);
 
@@ -209,11 +209,11 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
     lv_font_manager_delete_font(g_font_manager, font_file_20);
     lv_font_manager_delete_font(g_font_manager, font_buffer_20);
 
-    /* Source should be removed successfully, now that it's not used by any fonts */
+    /* Источник должен быть успешно удален, поскольку теперь он не используется ни одним шрифтом. */
     delete_result = lv_font_manager_remove_src(g_font_manager, "Montserrat");
     TEST_ASSERT_TRUE(delete_result);
 
-    /* Trying to delete a font that was not created by the font manager, it needs to handle this situation */
+    /* При попытке удалить шрифт, который не был создан менеджером шрифтов, необходимо обработать эту ситуацию. */
     lv_font_manager_delete_font(g_font_manager, (lv_font_t *)LV_FONT_DEFAULT);
     lv_font_manager_delete_font(g_font_manager, (lv_font_t *)&lv_font_montserrat_32);
 

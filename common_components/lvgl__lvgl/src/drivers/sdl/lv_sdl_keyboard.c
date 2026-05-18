@@ -73,22 +73,22 @@ static void sdl_keyboard_read(lv_indev_t * indev, lv_indev_data_t * data)
 
     const size_t len = lv_strlen(dev->buf);
 
-    /*Send a release manually*/
+    /*Отправить релиз вручную*/
     if(dev->dummy_read) {
         dev->dummy_read = false;
         data->state = LV_INDEV_STATE_RELEASED;
     }
-    /*Send the pressed character*/
+    /*Отправить нажатый символ*/
     else if(len > 0) {
         dev->dummy_read = true;
         data->state = LV_INDEV_STATE_PRESSED;
         data->key = 0;
-        /*Copy the first UTF8 character from the buffer*/
+        /*Скопируйте первый символ UTF8 из буфера.*/
         uint32_t utf8_len = lv_text_encoded_size(dev->buf);
-        if(utf8_len == 0) utf8_len = 1; /*Make sure that at least 1 character is read*/
+        if(utf8_len == 0) utf8_len = 1; /*Убедитесь, что прочитан хотя бы 1 символ*/
         lv_memcpy(&data->key, dev->buf, utf8_len);
 
-        /*Drop the first character*/
+        /*Удалить первый символ*/
         lv_memmove(dev->buf, dev->buf + utf8_len, len - utf8_len + 1);
     }
 }
@@ -122,11 +122,11 @@ void lv_sdl_keyboard_handler(SDL_Event * event)
     lv_display_t * disp = lv_sdl_get_disp_from_win_id(win_id);
 
 
-    /*Find a suitable indev*/
+    /*Найдите подходящего разработчика*/
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         if(lv_indev_get_read_cb(indev) == sdl_keyboard_read) {
-            /*If disp is NULL for any reason use the first indev with the correct type*/
+            /*Если по какой-либо причине disp равен NULL, используйте первый indev правильного типа.*/
             if(disp == NULL || lv_indev_get_display(indev) == disp) break;
         }
         indev = lv_indev_get_next(indev);
@@ -134,9 +134,9 @@ void lv_sdl_keyboard_handler(SDL_Event * event)
     if(indev == NULL) return;
     lv_sdl_keyboard_t * dsc = lv_indev_get_driver_data(indev);
 
-    /* We only care about SDL_KEYDOWN and SDL_TEXTINPUT events */
+    /* Нас интересуют только события SDL_KEYDOWN и SDL_TEXTINPUT. */
     switch(event->type) {
-        case SDL_KEYDOWN: {                     /*Button press*/
+        case SDL_KEYDOWN: {                     /*Нажатие кнопки*/
                 const uint32_t ctrl_key = keycode_to_ctrl_key(event->key.keysym.sym);
                 if(ctrl_key == '\0')
                     return;
@@ -147,7 +147,7 @@ void lv_sdl_keyboard_handler(SDL_Event * event)
                 }
                 break;
             }
-        case SDL_TEXTINPUT: {                   /*Text input*/
+        case SDL_TEXTINPUT: {                   /*Ввод текста*/
                 const size_t len = lv_strlen(dsc->buf) + lv_strlen(event->text.text);
                 if(len < KEYBOARD_BUFFER_SIZE - 1)
                     lv_strcat(dsc->buf, event->text.text);
@@ -162,20 +162,20 @@ void lv_sdl_keyboard_handler(SDL_Event * event)
     while(len) {
         lv_indev_read(indev);
 
-        /*Call again to handle dummy read in `sdl_keyboard_read`*/
+        /*Вызовите еще раз, чтобы обработать фиктивное чтение в `sdl_keyboard_read`.*/
         lv_indev_read(indev);
         len--;
     }
 }
 
 /**
- * Convert a SDL key code to it's LV_KEY_* counterpart or return '\0' if it's not a control character.
+ * Преобразуйте код клавиши SDL в его аналог LV_KEY_ * или верните '\0', если это не управляющий символ.
  * @param sdl_key the key code
  * @return LV_KEY_* control character or '\0'
  */
 static uint32_t keycode_to_ctrl_key(SDL_Keycode sdl_key)
 {
-    /*Remap some key to LV_KEY_... to manage groups*/
+    /*Переназначить какой-то ключ на LV_KEY_... для управления группами*/
     switch(sdl_key) {
         case SDLK_RIGHT:
         case SDLK_KP_PLUS:

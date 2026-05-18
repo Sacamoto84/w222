@@ -29,38 +29,38 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 
-/** Searches base[0] to base[n - 1] for an item that matches *key.
+/** Ищет от base[0] до base[n - 1] элемента, соответствующего *key.
  *
- * @note The function cmp must return negative if it's first
- *  argument (the search key) is less that it's second (a table entry),
- *  zero if equal, and positive if greater.
+ * @note Функция cmp должна возвращать отрицательное значение, если она первая.
+ *  аргумент (ключ поиска) меньше второго (запись таблицы),
+ *  ноль, если они равны, и положительный, если больше.
  *
- * @note Items in the array must be in ascending order.
+ * @note Элементы массива должны располагаться в порядке возрастания.
  *
- * @param key    Pointer to item being searched for
- * @param base   Pointer to first element to search
- * @param n      Number of elements
- * @param size   Size of each element
- * @param cmp    Pointer to comparison function (see unicode_list_compare()
- *                 as a comparison function example)
+ * @param key    Указатель на искомый элемент
+ * @param base   Указатель на первый элемент для поиска
+ * @param n      Количество элементов
+ * @param size   Размер каждого элемента
+ * @param cmp    Указатель на функцию сравнения (см. unicode_list_compare()
+ *                 в качестве примера функции сравнения)
  *
- * @return a pointer to a matching item, or NULL if none exists.
+ * @return указатель на соответствующий элемент или NULL, если его не существует.
  */
 void * lv_utils_bsearch(const void * key, const void * base, size_t n, size_t size,
                         int (*cmp)(const void * pRef, const void * pElement));
 
 /**
- * Save a draw buf to a file
- * @param draw_buf  pointer to a draw buffer
- * @param path      path to the file to save
- * @return          LV_RESULT_OK: success; LV_RESULT_INVALID: error
+ * Сохраните рисунок в файл
+ * @param draw_buf  указатель на буфер рисования
+ * @param path      путь к файлу для сохранения
+ * @return          LV_RESULT_OK: успех;  LV_RESULT_INVALID: ошибка
  */
 lv_result_t lv_draw_buf_save_to_file(const lv_draw_buf_t * draw_buf, const char * path);
 
 /**
- * Reverse the order of the bytes in a 32-bit value.
- * @param x     a 32-bit value.
- * @return      the value `x` with reversed byte-order.
+ * Измените порядок байтов в 32-битном значении.
+ * @param x     32-битное значение.
+ * @return      значение`x`с обратным порядком байтов.
  */
 static inline uint32_t lv_swap_bytes_32(uint32_t x)
 {
@@ -71,9 +71,9 @@ static inline uint32_t lv_swap_bytes_32(uint32_t x)
 }
 
 /**
- * Reverse the order of the bytes in a 16-bit value.
- * @param x     a 16-bit value.
- * @return      the value `x` with reversed byte-order.
+ * Измените порядок байтов в 16-битном значении.
+ * @param x     16-битное значение.
+ * @return      значение`x`с обратным порядком байтов.
  */
 static inline uint16_t lv_swap_bytes_16(uint16_t x)
 {
@@ -85,7 +85,7 @@ static inline uint16_t lv_swap_bytes_16(uint16_t x)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif

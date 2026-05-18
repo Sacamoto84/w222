@@ -21,7 +21,7 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/*Possible log level. For compatibility declare it independently from `LV_USE_LOG`*/
+/*Возможный уровень журнала. Для совместимости объявите его независимо от `LV_USE_LOG`.*/
 
 #define LV_LOG_LEVEL_TRACE 0 /**< Log detailed information. */
 #define LV_LOG_LEVEL_INFO  1 /**< Log important events. */
@@ -55,7 +55,7 @@ typedef int8_t lv_log_level_t;
  **********************/
 
 /**
- * Log print function. Receives a string buffer to print".
+ * Функция печати журнала. Получает строковый буфер для печати".
  */
 typedef void (*lv_log_print_g_cb_t)(lv_log_level_t level, const char * buf);
 
@@ -64,29 +64,29 @@ typedef void (*lv_log_print_g_cb_t)(lv_log_level_t level, const char * buf);
  **********************/
 
 /**
- * Register custom print/write function to call when a log is added.
- * It can format its "File path", "Line number" and "Description" as required
- * and send the formatted log message to a console or serial port.
- * @param           print_cb a function pointer to print a log
+ * Зарегистрируйте пользовательскую функцию печати/записи для вызова при добавлении журнала.
+ * Он может форматировать «Путь к файлу», «Номер строки» и «Описание» по мере необходимости.
+ * и отправьте отформатированное сообщение журнала на консоль или последовательный порт.
+ * @param           print_cb указатель функции для печати журнала
  */
 void lv_log_register_print_cb(lv_log_print_g_cb_t print_cb);
 
 /**
- * Print a log message via `printf` if enabled with `LV_LOG_PRINTF` in `lv_conf.h`
- * and/or a print callback if registered with `lv_log_register_print_cb`
- * @param format    printf-like format string
- * @param ...       parameters for `format`
+ * Распечатать сообщение журнала через `printf`, если это разрешено с помощью`LV_LOG_PRINTF`в `lv_conf.h`.
+ * и/или обратный вызов печати, если он зарегистрирован в `lv_log_register_print_cb`
+ * @param format    строка формата в формате printf
+ * @param ... параметры для `format`
  */
 void lv_log(const char * format, ...) LV_FORMAT_ATTRIBUTE(1, 2);
 
 /**
- * Add a log
- * @param level     the level of log. (From `lv_log_level_t` enum)
- * @param file      name of the file when the log added
- * @param line      line number in the source code where the log added
- * @param func      name of the function when the log added
- * @param format    printf-like format string
- * @param ...       parameters for `format`
+ * Добавить журнал
+ * @param level     уровень журнала. (Из перечисления `lv_log_level_t`)
+ * @param file      имя файла при добавлении журнала
+ * @param line      номер строки в исходном коде, куда добавлен журнал
+ * @param func      имя функции при добавлении журнала
+ * @param format    строка формата в формате printf
+ * @param ... параметры для `format`
  */
 void lv_log_add(lv_log_level_t level, const char * file, int line,
                 const char * func, const char * format, ...) LV_FORMAT_ATTRIBUTE(5, 6);
@@ -144,7 +144,7 @@ void lv_log_add(lv_log_level_t level, const char * file, int line,
 
 #else /*LV_USE_LOG*/
 
-/*Do nothing if `LV_USE_LOG 0`*/
+/*Ничего не делайте, если `LV_USE_LOG 0`*/
 #define lv_log_add(level, file, line, ...)
 #define LV_LOG_TRACE(...) do {}while(0)
 #define LV_LOG_INFO(...) do {}while(0)
@@ -156,7 +156,7 @@ void lv_log_add(lv_log_level_t level, const char * file, int line,
 #endif /*LV_USE_LOG*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LOG_H*/

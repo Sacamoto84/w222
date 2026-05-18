@@ -2,35 +2,35 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 /**
  * @file
- * @brief NemaVG Context interface.
+ * @brief Контекстный интерфейс NemaVG.
  *
- * Contains NemaVG error codes, fill rules, rendering quality defines and functions for updating various rendering parameters.
- * The functions defined here can be used to access the context parameters. The Context is an internal (opaque) struct of NemaVG.
+ * Содержит коды ошибок NemaVG, правила определения, определения качества рендеринга и функции для обновления различных параметров рендеринга.
+ * Определенные здесь функции можно использовать для доступа к параметрам контекста. Контекст — это внутренняя (непрозрачная) структура NemaVG.
  */
 
 #ifndef __NEMA_VG_CONTEXT_H__
@@ -108,152 +108,152 @@ typedef float nema_vg_float_t; /**< Floating point data type (default is 'float'
 #define NEMA_VG_TSVG_DISABLE_JOINS         (0x00000002U) /**< Disable joins*/
 #define NEMA_VG_TSVG_DISABLE_DASHING       (0x00000003U) /**< Disable dashing*/
 
-/** \brief Set the global transformation matrix. Global matrix will be applied in all NemaVG rendering operations that will follow.
+/** \brief Установите глобальную матрицу преобразования. Глобальная матрица будет применяться во всех операциях рендеринга NemaVG.
  *
- * \param m transformation matrix
+ * \param m матрица конвертировать
  *
- * \return Error code
+ * \return Код ошибки
  */
 uint32_t nema_vg_set_global_matrix(nema_matrix3x3_t m);
 
 
-/** \brief Disable the global transformation matrix.
+/** \brief Отключить глобальную матрицу преобразования.
  *
  */
 void nema_vg_reset_global_matrix(void);
 
-/** \brief Set the fill rule that will be applied when rendering a path.
+/** \brief Установите правило заливки, которое будет применяться при отрисовке пути.
  *
- * \param fill_rule fill rule (NEMA_VG_STROKE, NEMA_VG_FILL_EVEN_ODD, NEMA_VG_FILL_NON_ZERO)
+ * \param Правило заполненияfill_rule(NEMA_VG_STROKE,NEMA_VG_FILL_EVEN_ODD,NEMA_VG_FILL_NON_ZERO)
  *
  */
 void nema_vg_set_fill_rule(uint8_t fill_rule);
 
-/** \brief Set the stroke width that will be applied when stroking a path.
+/** \brief Установите необходимые обводки, которые будут применяться к пути обводки.
  *
- * \param width Stroke width to be set
+ * \param width Устанавливаемая ширина обводки
  *
  */
 void nema_vg_stroke_set_width(float width);
 
- /** \brief Set stroke cap style
+ /** \brief Установить стиль обводки
  *
- * \param cap_style Cap style (NEMA_VG_CAP_BUTT | NEMA_VG_CAP_SQUARE | NEMA_VG_CAP_ROUND)
+ * \paramcap_styleСтиль шапки (NEMA_VG_CAP_BUTT|NEMA_VG_CAP_SQUARE|NEMA_VG_CAP_ROUND)
  *
  */
 void nema_vg_stroke_set_cap_style(uint8_t start_cap_style, uint8_t end_cap_style);
 
- /** \brief Set stroke join style
+ /** \краткий стиль Установить соединения штрихов
  *
- * \param join_style Join style (NEMA_VG_JOIN_BEVEL | NEMA_VG_JOIN_MITER | NEMA_VG_JOIN_ROUND)
+ * \paramjoin_styleСтиль соединения (NEMA_VG_JOIN_BEVEL|NEMA_VG_JOIN_MITER|NEMA_VG_JOIN_ROUND)
  *
  */
 void nema_vg_stroke_set_join_style(uint8_t join_style);
 
- /** \brief Set stroke miter limit
- * If miter join is chosen and miter length is bigger than the product
- * of miter limit and stroke width a bevel join will be added instead
+ /** \brief Установка ограничений по углу поворота
+ * Если выбрано соединение под углом и длина угла больше изделия
+ * вместо ограничения угла скоса и ширины штриха будет добавлено соединение фасок
  *
- * \param miter_limit miter join limit to be set
+ * \parammiter_limitпредел соединения под углом, который необходимо установить
  *
  */
 void nema_vg_stroke_set_miter_limit(float miter_limit);
 
-/** \brief Set dash patern.
- * Dashing is enabled when dash size array is bigger than zero.
- * Dash pattern consists of an array of floats that alternate the on and off phase of the dash segments.
- * The first value indicates the first on segment, the second value indicates the first off segment and each
- * subsequent pair indicates the next on-off pair. The dash array size should always be an even number.
- * If odd dash array size is provided, the last element is ignored by the library.
- * Segments of zero length are allowed and only the caps will be drawn on those segments if they are
- * either NEMA_VG_CAP_ROUND or NEMA_VG_CAP_SQUARE. If NEMA_VG_CAP_BUTT cap is selected nothing will be drawn
+/** \brief Установите образец шины.
+ * Штрих включен, когда размер массива штрихов больше нуля.
+ * Шаблон штриха состоит из массива плавающих элементов, которые чередуют фазы включения и выключения сегментов штриха.
+ * Первое значение указывает на первый включенный сегмент, второе значение указывает на первый выключенный сегмент и каждый
+ * последующая пара указывает следующую пару включения-выключения. Размер массива тире всегда должен быть четным числом.
+ * Если указан нечетный размер массива тире, последний элемент игнорируется библиотекой.
+ * Допускаются сегменты нулевой длины, и на этих сегментах будут нарисованы только заглушки, если они
+ * либо NEMA_VG_CAP_ROUND, либо NEMA_VG_CAP_SQUARE. Если выбран колпачок NEMA_VG_CAP_BUTT, ничего не будет нарисовано.
  *
- * \param dash_pattern pointer to dash pattern array
- * \param dash_pattern_size dash phase array size
+ * \paramdash_patternуказатель на массив штриховых шаблонов
+ * \paramdash_pattern_sizeРазмер фазовой решетки штриха
  *
  */
 void nema_vg_stroke_set_dash_pattern(const float* dash_pattern, size_t dash_pattern_size);
 
-/** \brief Set dash phase.
- * Indicates the length of the dash pattern that is discarded
- * the first time a subpath is processed. After the dash phase is reached the subsequent
- * path is stroked according to the dash pattern. A negative dash phase is equivalent to the positive
- * dash phase calculated by adding a suitable multiple of the dash pattern length.
+/** \brief Установите фазу шины.
+ * Указывает длину отбрасываемого штрихового образца.
+ * при первой обработке подпути. После достижения фазы рывка следующая
+ * путь обведен штрихом. Отрицательная фаза тире эквивалентна положительной
+ * Фаза штриха рассчитывается путем добавления подходящего кратного длины штриха.
  *
- * \param dash_phase dash phase
+ * \paramdash_phaseшина фазы
  *
  */
 void nema_vg_stroke_set_dash_phase(float dash_phase);
 
-/** \brief Enable/Disable dash phase reseting
+/** \brief Включить/отключить фазу сброса шины
  *
- * \param enable boolean parameter to enable/disable the resetting of the dash phase. When
- * this feature is enabled the dash phase specified is used at the beggining of each subpath of
- * the original path otherwise what is left of the dash phase at the end of the subpath is used for the
- * next subpath. Default value is false.
+ * \param Включить логический параметр, можно включить/отключить фазу шины. Когда
+ * эта функция включена, указанная фаза тире используется в начале каждого подпути
+ * исходный путь, в противном случае то, что осталось от фазы тире в конце подпути, используется для
+ * следующий подпуть. Значение по умолчанию — ложь.
  *
  */
 void nema_vg_stroke_reset_dash_phase(uint8_t enable);
 
-/** \brief Enable/Disable Masking.
+/** \brief Включение/отключение маскировки.
  *
- * \param masking 1 to enable, 0 to disable
+ * \param маскирование: 1 — включить, 0 — выключить.
  *
  */
 void nema_vg_masking(uint8_t masking);
 
-/** \brief Set the mask object (texture)
+/** \brief Установка объекта маски (текстуры)
  *
- * \param mask_obj Texture to be used as mask. Its format must be NEMA_A1, NEMA_A2, NEMA_A4 or Nema_A8, otherwise it will return an error.
- * \return Error code. If no error occurs, NEMA_VG_ERR_NO_ERROR otherwise NEMA_VG_ERR_INVALID_MASKING_FORMAT.
+ * \parammask_objТекстура, которая будет использоваться в качестве маски. Его формат должен бытьNEMA_A1,NEMA_A2,NEMA_A4илиNema_A8, иначе он вернет ошибку.
+ * \return Код ошибки. Если ошибки не возникают,NEMA_VG_ERR_NO_ERROR, иначеNEMA_VG_ERR_INVALID_MASKING_FORMAT.
  *
  */
 uint32_t nema_vg_set_mask(nema_img_obj_t *mask_obj);
 
-/** \brief Translate the mask object (texture) with respect to origin point (0, 0). Sets the position of the mask object.
+/** \brief Переместите объект маски (текстуру) относительно исходной точки (0, 0). Устанавливает положение маски.
  *
- * \param x Horizontal position to place the mask object
- * \param y Horizontal position to place the mask object
+ * \param x Горизонтальное положение для размещения зон видимости
+ * \param y Горизонтальное положение для размещения зон видимости
  *
  */
 void nema_vg_set_mask_translation(float x, float y);
 
-/** \brief Set the rendering quality
+/** \brief Настройка качества рендеринга
  *
- * \param quality level (NEMA_VG_QUALITY_BETTER, NEMA_VG_QUALITY_FASTER, NEMA_VG_QUALITY_MAXIMUM, NEMA_VG_QUALITY_NON_AA)
+ * уровень качества \param (NEMA_VG_QUALITY_BETTER,NEMA_VG_QUALITY_FASTER,NEMA_VG_QUALITY_MAXIMUM,NEMA_VG_QUALITY_NON_AA)
  *
  */
 void nema_vg_set_quality(uint8_t quality);
 
-/** \brief Set the blending mode for VG operations (see nema_blender.h documentation in NemaGFX API Manual)
- *  Additional Blending Operations: only NEMA_BLOP_SRC_PREMULT is supported
+/** \brief Настройка режима переключения для операцийVG(см. документациюnema_blender.hв руководстве NemaGFXAPI)
+ *  Дополнительные операции смешивания: поддерживается только NEMA_BLOP_SRC_PREMULT.
  *
- * \param blend Blending mode
- * \see nema_blending_mode()
+ * \param blend Режим наложения
+ * \см. nema_blending_mode()
  *
  */
 void nema_vg_set_blend(uint32_t blend);
 
-/** \brief Get the current error code. Clears the error afterwards.
+/** \brief Получен настоящий код ошибки. Сбрасывает ошибку потом.
  *
- * \return Error code. See NEMA_VG_ERR_* defines for all the possible error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющий все возможные коды ошибок.
  */
 uint32_t nema_vg_get_error(void);
 
-/** \brief Enable/disable large coordinates handling when rendering a TSVG, a path or a predefined shape
+/** \brief Включить/отключить обработку координат в большом рендерингеTSVG, пути или предопределенной формы.
  *
- * \param enable 0 to disable, 1 to enable
- * \param allow_internal_alloc 0 to not allow internal allocation, 1 to allow
+ * \param Включить 0 — отключить, 1 — включить
+ * \paramallow_internal_alloc0, чтобы запретить получение знаний, 1, чтобы разрешить
  *
  */
 void nema_vg_handle_large_coords(uint8_t enable, uint8_t allow_internal_alloc);
 
-/** \brief Bind segment and data buffers to be used for handling large coordinates
+/** \brief Свяжите сегменты и буферы данных, которые будут использоваться для обработки больших координат.
  *
- * \param segs Pointer to segment array(uint8_t) for large coordinates
- * \param segs_size Segment array size
- * \param data Pointer to data array(float) for large coordinates
- * \param data_size Data array size
+ * \param segs Указатель на сегменты массива (uint8_t) для больших координат
+ * \paramsegs_sizeРазмер сегментов массива
+ * \param data Указатель на массив данных (с плавающей запятой) для большой координаты
+ * \paramdata_sizeРазмер массива данных
  *
  */
 uint32_t nema_vg_bind_clip_coords_buffer(void *segs, uint32_t segs_size, void *data, uint32_t data_size);
@@ -262,7 +262,7 @@ uint32_t nema_vg_bind_clip_coords_buffer(void *segs, uint32_t segs_size, void *d
 uint32_t nema_vg_bind_clip_coords_buf(void *segs, uint32_t segs_size_bytes, void *data, uint32_t data_size_bytes) __attribute__ ((deprecated("This function is deprecated use nema_vg_bind_clip_coords_buffer instead.")));
 
 
-/** \brief Unbind segment and data buffers to be used for handling large coordinates
+/** \brief Отмените привязку сегмента и буферов данных, которые будут использоваться для обработки больших координат.
  *
  *
  */

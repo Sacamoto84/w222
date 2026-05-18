@@ -160,7 +160,7 @@ static inline void lv_cleanup_devices(lv_global_t * global)
     LV_ASSERT_NULL(global);
 
     if(global) {
-        /* cleanup indev and display */
+        /* очистка устройств и видеокарт */
         lv_ll_clear_custom(&(global->indev_ll), (void (*)(void *)) lv_indev_delete);
         lv_ll_clear_custom(&(global->disp_ll), (void (*)(void *)) lv_display_delete);
     }
@@ -178,12 +178,12 @@ bool lv_is_initialized(void)
 
 void lv_init(void)
 {
-    /*First initialize Garbage Collection if needed*/
+    /*Сначала инициализируйте сбор мусора, если необходимо.*/
 #ifdef LV_GC_INIT
     LV_GC_INIT();
 #endif
 
-    /*Do nothing if already initialized*/
+    /*Ничего не делать, если уже инициализировано*/
     if(lv_initialized) {
         LV_LOG_WARN("lv_init: already initialized");
         return;
@@ -191,7 +191,7 @@ void lv_init(void)
 
     LV_LOG_INFO("begin");
 
-    /*Initialize members of static variable lv_global */
+    /*Инициализировать члены статической переменной lv_global */
     LV_GLOBAL_INIT(LV_GLOBAL_DEFAULT());
 
     lv_mem_init();
@@ -225,8 +225,8 @@ void lv_init(void)
     lv_group_init();
 
 #if LV_USE_FREETYPE
-    /* Since the drawing unit needs to register the freetype event,
-     * initialize the freetype module first
+    /* Поскольку блоку рисования необходимо зарегистрировать событие произвольного типа,
+     * сначала создайте модуль freetype
      */
     lv_freetype_init(LV_FREETYPE_CACHE_FT_GLYPH_CNT);
 #endif
@@ -287,7 +287,7 @@ void lv_init(void)
 
     lv_obj_style_init();
 
-    /*Initialize the screen refresh system*/
+    /*Инициализировать систему обновления экрана*/
     lv_refr_init();
 
 #if LV_USE_SYSMON
@@ -295,13 +295,13 @@ void lv_init(void)
 #endif
 
     lv_image_decoder_init(LV_CACHE_DEF_SIZE, LV_IMAGE_HEADER_CACHE_DEF_CNT);
-    lv_bin_decoder_init();  /*LVGL built-in binary image decoder*/
+    lv_bin_decoder_init();  /*LVGL встроенный декодер двоичных изображений*/
 
 #if LV_USE_DRAW_VG_LITE
     lv_draw_vg_lite_init();
 #endif
 
-    /*Test if the IDE has UTF-8 encoding*/
+    /*Проверьте, имеет ли IDE кодировку UTF -8.*/
     const char * txt = "Á";
 
     uint8_t * txt_u8 = (uint8_t *)txt;
@@ -378,7 +378,7 @@ void lv_init(void)
     lv_fs_frogfs_init();
 #endif
 
-    /*Use the earlier initialized position of FFmpeg decoder as a fallback decoder*/
+    /*Используйте ранее предложенную позицию декодера FFmpeg в качестве резервного декодера.*/
 #if LV_USE_FFMPEG
     lv_ffmpeg_init();
 #endif
@@ -422,7 +422,7 @@ void lv_init(void)
 
 void lv_deinit(void)
 {
-    /*Do nothing if already deinit*/
+    /*Ничего не делайте, если уже деинит*/
     if(!lv_initialized) {
         LV_LOG_WARN("lv_deinit: already deinit!");
         return;

@@ -22,17 +22,17 @@
  **********************/
 
 struct _lv_iter_t {
-    /* Iterator state */
+    /* Состояние итератора */
     void  *  instance;        /**< Pointer to the object to iterate over */
     uint32_t elem_size;       /**< Size of one element in bytes */
     void  *  context;         /**< Custom context for the iteration */
     uint32_t context_size;    /**< Size of the custom context in bytes */
 
-    /* Peeking */
+    /* Подглядывание */
     lv_circle_buf_t * peek_buf;   /**< Circular buffer for peeking */
     uint32_t peek_offset;         /**< Offset in the peek buffer */
 
-    /* Callbacks */
+    /* Обратные вызовы */
     lv_iter_next_cb next_cb;  /**< Callback to get the next element */
 };
 

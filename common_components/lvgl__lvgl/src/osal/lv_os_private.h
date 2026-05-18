@@ -66,13 +66,13 @@ typedef enum {
  **********************/
 
 /**
- * Initialize the OS layer
+ * Инициализируйте слой OS
  */
 void lv_os_init(void);
 
 /**
- * Set it for `LV_SYSMON_GET_IDLE` to show the CPU usage
- * @return the idle percentage since the last call
+ * Установите его для `LV_SYSMON_GET_IDLE`, чтобы показать использование CPU.
+ * @return процент простоя с момента последнего звонка
  */
 uint32_t lv_os_get_idle_percent(void);
 
@@ -85,107 +85,107 @@ uint32_t lv_os_get_proc_idle_percent(void);
 #if LV_USE_OS != LV_OS_NONE
 
 /*----------------------------------------
- * These functions needs to be implemented
- * for specific operating systems
+ * Эти функции необходимо реализовать.
+ * для конкретных операционных систем
  *---------------------------------------*/
 
 /**
- * Create a new thread
- * @param thread        a variable in which the thread will be stored
- * @param name          the name of the thread
- * @param prio          priority of the thread
- * @param callback      function of the thread
- * @param stack_size    stack size in bytes
- * @param user_data     arbitrary data, will be available in the callback
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Создать новую тему
+ * @param thread        переменная, в которой будет храниться поток
+ * @param name          название темы
+ * @param prio          приоритет потока
+ * @param callback      функция нити
+ * @param stack_size    размер стека в байтах
+ * @param user_data     произвольные данные, будут доступны в обратном вызове
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_init(lv_thread_t * thread, const char * const name,
                            lv_thread_prio_t prio, void (*callback)(void *), size_t stack_size,
                            void * user_data);
 
 /**
- * Delete a thread
- * @param thread        the thread to delete
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Удалить тему
+ * @param thread        ветка, которую нужно удалить
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_delete(lv_thread_t * thread);
 
 /**
- * Create a mutex
- * @param mutex         a variable in which the thread will be stored
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Создать мьютекс
+ * @param mutex         переменная, в которой будет храниться поток
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_mutex_init(lv_mutex_t * mutex);
 
 /**
- * Lock a mutex
- * @param mutex         the mutex to lock
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Блокировка мьютекса
+ * @param mutex         мьютекс для блокировки
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_mutex_lock(lv_mutex_t * mutex);
 
 /**
- * Lock a mutex from interrupt
- * @param mutex         the mutex to lock
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Блокировка мьютекса от прерывания
+ * @param mutex         мьютекс для блокировки
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_mutex_lock_isr(lv_mutex_t * mutex);
 
 /**
- * Unlock a mutex
- * @param mutex         the mutex to unlock
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Разблокировать мьютекс
+ * @param mutex         мьютекс для разблокировки
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_mutex_unlock(lv_mutex_t * mutex);
 
 /**
- * Delete a mutex
- * @param mutex         the mutex to delete
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Удаление мьютекса
+ * @param mutex         мьютекс, который нужно удалить
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_mutex_delete(lv_mutex_t * mutex);
 
 /**
- * Create a thread synchronization object
- * @param sync          a variable in which the sync will be stored
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Создайте объект синхронизации потоков
+ * @param sync          переменная, в которой будет храниться синхронизация
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_sync_init(lv_thread_sync_t * sync);
 
 /**
- * Wait for a "signal" on a sync object
- * @param sync      a sync object
- * @return          LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Дождитесь «сигнала» на объекте синхронизации.
+ * @param sync      объект синхронизации
+ * @return          LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_sync_wait(lv_thread_sync_t * sync);
 
 /**
- * Send a wake-up signal to a sync object
- * @param sync      a sync object
- * @return          LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Отправить сигнал пробуждения объекту синхронизации
+ * @param sync      объект синхронизации
+ * @return          LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_sync_signal(lv_thread_sync_t * sync);
 
 /**
- * Send a wake-up signal to a sync object from interrupt
- * @param sync      a sync object
- * @return          LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Отправьте сигнал пробуждения объекту синхронизации из прерывания
+ * @param sync      объект синхронизации
+ * @return          LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * sync);
 
 /**
- * Delete a sync object
- * @param sync      a sync object to delete
- * @return          LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * Удаление объекта синхронизации
+ * @param sync      объект синхронизации для удаления
+ * @return          LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_thread_sync_delete(lv_thread_sync_t * sync);
 
 #else
 
-/* Since compilation does not necessarily optimize cross-file empty functions well
- * (-O3 optimization alone is not enough unless LTO optimization is enabled),
- * In the absence of an operating system, use inline functions to help compile
- * optimizations and avoid the call overhead of the OS API to ensure no performance penalty.
+/* Поскольку компиляция не обязательно хорошо оптимизирует пустые межфайловые функции.
+ * (- Одной оптимизации O3 недостаточно, если не включена оптимизация LTO),
+ * При отсутствии операционной системы используйте встроенные функции для облегчения компиляции.
+ * оптимизации и избежать накладных расходов на вызовы OS API, чтобы избежать снижения производительности.
  */
 
 static inline lv_result_t lv_thread_init(lv_thread_t * thread, const char * const name, lv_thread_prio_t prio,
@@ -273,7 +273,7 @@ static inline lv_result_t lv_thread_sync_delete(lv_thread_sync_t * sync)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OS_PRIVATE_H*/

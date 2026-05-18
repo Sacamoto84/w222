@@ -1,6 +1,6 @@
-/*  table exported by mirkes.de's tiny hexer
-    filename: D:\lvgl\test\lv_port_pc_visual_studio\LvglPlatform\lvgl\tests\src\test_assets\font_2.fnt
-    position 0, 7252 bytes   */
+/*  таблица, экспортированная крошечным шестнадцатеричным инструментом mirkes.de
+    имя файла: D:\lvgl\test\lv_port_pc_visual_studio\LvglPlatform\lvgl\tests\src\test_assets\font_2.fnt
+    позиция 0, 7252 байта   */
 #if LV_BUILD_TEST
 
 unsigned char const test_font_2_buf[7252] = {

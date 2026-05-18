@@ -242,7 +242,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb888(lv_draw_sw_blend_fil
     LV_UNUSED(mask_stride);
     LV_UNUSED(dest_stride);
 
-    /*Simple fill*/
+    /*Простая заливка*/
     if(mask == NULL && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB888(dsc, dest_px_size)) {
             if(dest_px_size == 3) {
@@ -297,7 +297,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb888(lv_draw_sw_blend_fil
             }
         }
     }
-    /*Opacity only*/
+    /*Только непрозрачность*/
     else if(mask == NULL && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB888_WITH_OPA(dsc, dest_px_size)) {
             uint32_t color32 = lv_color_to_u32(dsc->color);
@@ -312,7 +312,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb888(lv_draw_sw_blend_fil
             }
         }
     }
-    /*Masked with full opacity*/
+    /*Замаскировано с полной непрозрачностью*/
     else if(mask && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB888_WITH_MASK(dsc, dest_px_size)) {
             uint32_t color32 = lv_color_to_u32(dsc->color);
@@ -330,7 +330,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb888(lv_draw_sw_blend_fil
             }
         }
     }
-    /*Masked with opacity*/
+    /*Маскировано с непрозрачностью*/
     else {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB888_MIX_MASK_OPA(dsc, dest_px_size)) {
             uint32_t color32 = lv_color_to_u32(dsc->color);
@@ -686,7 +686,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
             if(LV_RESULT_INVALID == LV_DRAW_SW_RGB565_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size)) {
                 for(y = 0; y < h; y++) {
                     for(src_x = 0, dest_x = 0; src_x < w; dest_x += dest_px_size, src_x++) {
-                        dest_buf_u8[dest_x + 2] = (src_buf_c16[src_x].red * 2106) >> 8;  /*To make it rounded*/
+                        dest_buf_u8[dest_x + 2] = (src_buf_c16[src_x].red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         dest_buf_u8[dest_x + 1] = (src_buf_c16[src_x].green * 1037) >> 8;
                         dest_buf_u8[dest_x + 0] = (src_buf_c16[src_x].blue * 2106) >> 8;
                     }
@@ -700,7 +700,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                 uint8_t res[3];
                 for(y = 0; y < h; y++) {
                     for(src_x = 0, dest_x = 0; src_x < w; dest_x += dest_px_size, src_x++) {
-                        res[2] = (src_buf_c16[src_x].red * 2106) >> 8; /*To make it rounded*/
+                        res[2] = (src_buf_c16[src_x].red * 2106) >> 8; /*Чтобы сделать его закругленным*/
                         res[1] = (src_buf_c16[src_x].green * 1037) >> 8;
                         res[0] = (src_buf_c16[src_x].blue * 2106) >> 8;
                         lv_color_24_24_mix(res, &dest_buf_u8[dest_x], opa);
@@ -715,7 +715,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                 uint8_t res[3];
                 for(y = 0; y < h; y++) {
                     for(src_x = 0, dest_x = 0; src_x < w; dest_x += dest_px_size, src_x++) {
-                        res[2] = (src_buf_c16[src_x].red * 2106) >> 8;  /*To make it rounded*/
+                        res[2] = (src_buf_c16[src_x].red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         res[1] = (src_buf_c16[src_x].green * 1037) >> 8;
                         res[0] = (src_buf_c16[src_x].blue * 2106) >> 8;
                         lv_color_24_24_mix(res, &dest_buf_u8[dest_x], mask_buf[src_x]);
@@ -731,7 +731,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                 uint8_t res[3];
                 for(y = 0; y < h; y++) {
                     for(src_x = 0, dest_x = 0; src_x < w; dest_x += dest_px_size, src_x++) {
-                        res[2] = (src_buf_c16[src_x].red * 2106) >> 8;  /*To make it rounded*/
+                        res[2] = (src_buf_c16[src_x].red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         res[1] = (src_buf_c16[src_x].green * 1037) >> 8;
                         res[0] = (src_buf_c16[src_x].blue * 2106) >> 8;
                         lv_color_24_24_mix(res, &dest_buf_u8[dest_x], LV_OPA_MIX2(opa, mask_buf[src_x]));
@@ -781,7 +781,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb888_image_blend(lv_draw_sw_blend_image_dsc_
     int32_t y;
 
     if(dsc->blend_mode == LV_BLEND_MODE_NORMAL) {
-        /*Special case*/
+        /*Особый случай*/
         if(mask_buf == NULL && opa >= LV_OPA_MAX) {
             if(LV_RESULT_INVALID == LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size, src_px_size)) {
                 if(src_px_size == dest_px_size) {
@@ -989,8 +989,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
             if(LV_RESULT_INVALID == LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size)) {
                 for(y = 0; y < h; y++) {
                     for(dest_x = 0, src_x = 0; src_x < w; dest_x += dest_px_size, src_x++) {
-                        /*For the trivial case use the premultiplied image as it is.
-                         *For the other cases unpremultiply as another alpha also needs to be applied.*/
+                        /*В тривиальном случае используйте предварительно умноженное изображение как есть.
+                         *В других случаях также необходимо применять unpremultiply в качестве другой альфа.*/
                         lv_color_24_24_mix_premult((const uint8_t *)&src_buf_c32[src_x], &dest_buf[dest_x], src_buf_c32[src_x].alpha);
                     }
                     dest_buf += dest_stride;

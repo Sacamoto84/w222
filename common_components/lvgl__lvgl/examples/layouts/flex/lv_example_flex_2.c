@@ -2,7 +2,7 @@
 #if LV_USE_FLEX && LV_BUILD_EXAMPLES
 
 /**
- * Arrange items in rows with wrap and place the items to get even space around them.
+ * Располагайте предметы рядами, используя пленку, и размещайте их так, чтобы вокруг них было равномерное пространство.
  */
 void lv_example_flex_2(void)
 {

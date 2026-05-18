@@ -28,22 +28,22 @@
 #define JPEG_PIXEL_SIZE 3 /* RGB888 */
 #define JPEG_SIGNATURE 0xFFD8FF
 #define IS_JPEG_SIGNATURE(x) (((x) & 0x00FFFFFF) == JPEG_SIGNATURE)
-#define ORIENTATION_TAG 0x112 /* Exif tag for orientation */
-#define APP1_MARKER JPEG_APP0 + 1  /* APP1 Marker code https://www.media.mit.edu/pia/Research/deepview/exif.html */
-#define MARKER_DATA_LIMIT 0xFFFF /* APP1 Marker limit */
+#define ORIENTATION_TAG 0x112 /* Тег Exif для ориентации */
+#define APP1_MARKER JPEG_APP0 + 1  /* APP1 Код маркировки https://www.media.mit.edu/pia/Research/deepview/exif.html */
+#define MARKER_DATA_LIMIT 0xFFFF /* APP1 Предел маркера */
 
 /**********************
  *      TYPEDEFS
  **********************/
 /**
-* according to the Exif specification(http://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)
-* Relationship between image data and orientation on a display screen according to an orientation tag
+* согласно спецификации Exif( http://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)
+* Связь между данными изображения и ориентацией на экране дисплея в соответствии с тегом ориентации
 */
 typedef enum {
     /* Orientation = 0 is created when the image data in the Exif is not rotated */
     IMAGE_CLOCKWISE_NONE    = 0,
     /* Orientation = 1 is created when Oth row of the coded image data stored in the Exif image file
-     * and the visual top of the display screen, and Oth column and visual left, will each be matched for display
+     * и визуальная верхняя часть экрана дисплея, а также столбец «Другие» и визуальная левая часть будут совпадать для отображения.
      */
     IMAGE_CLOCKWISE_0       = 1,
     /* Orientation = 2 is equivalent to an arrangement that is reversed Orientation = 1 horizontally */
@@ -86,7 +86,7 @@ static void error_exit(j_common_ptr cinfo);
 /**********************
  *  STATIC VARIABLES
  **********************/
-const int JPEG_EXIF = 0x45786966; /* Exif data structure tag */
+const int JPEG_EXIF = 0x45786966; /* Тег структуры данных Exif */
 const int JPEG_BIG_ENDIAN_TAG = 0x4d4d;
 const int JPEG_LITTLE_ENDIAN_TAG = 0x4949;
 
@@ -104,7 +104,7 @@ const int JPEG_LITTLE_ENDIAN_TAG = 0x4949;
  **********************/
 
 /**
- * Register the JPEG decoder functions in LVGL
+ * Зарегистрируйте функции декодера JPEG в LVGL.
  */
 void lv_libjpeg_turbo_init(void)
 {
@@ -131,17 +131,17 @@ void lv_libjpeg_turbo_deinit(void)
  **********************/
 
 /**
- * Get info about a JPEG image
+ * Получить информацию об изображении JPEG
  * @param dsc image descriptor containing the source and type of the image and other info.
  * @param header store the info here
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
-    LV_UNUSED(decoder); /*Unused*/
-    lv_image_src_t src_type = dsc->src_type;          /*Get the source type*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
+    lv_image_src_t src_type = dsc->src_type;          /*Получить тип источника*/
 
-    /*If it's a JPEG file...*/
+    /*Если это файл JPEG...*/
     if(src_type == LV_IMAGE_SRC_FILE) {
         const char * src = dsc->src;
         uint32_t jpg_signature = 0;
@@ -171,7 +171,7 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_INVALID;
         }
 
-        /*Save the data in the header*/
+        /*Сохраняем данные в шапке*/
         header->cf = LV_COLOR_FORMAT_RGB888;
         header->w = width;
         header->h = height;
@@ -179,20 +179,20 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_OK;
     }
 
-    return LV_RESULT_INVALID;         /*If didn't succeeded earlier then it's an error*/
+    return LV_RESULT_INVALID;         /*Если раньше это не удалось, то это ошибка*/
 }
 
 /**
- * Open a JPEG image and return the decided image
+ * Откройте изображение JPEG и верните выбранное изображение.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
-    /*If it's a JPEG file...*/
+    /*Если это файл JPEG...*/
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = dsc->src;
         lv_draw_buf_t * decoded = decode_jpeg_file(fn);
@@ -205,10 +205,10 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
         if(dsc->args.no_cache) return LV_RESULT_OK;
 
-        /*If the image cache is disabled, just return the decoded image*/
+        /*Если кэш изображений отключен, просто верните декодированное изображение.*/
         if(!lv_image_cache_is_enabled()) return LV_RESULT_OK;
 
-        /*Add the decoded image to the cache*/
+        /*Добавьте декодированное изображение в кеш*/
         lv_image_cache_data_t search_key;
         search_key.src_type = dsc->src_type;
         search_key.src = dsc->src;
@@ -221,18 +221,18 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_INVALID;
         }
         dsc->cache_entry = entry;
-        return LV_RESULT_OK;    /*If not returned earlier then it failed*/
+        return LV_RESULT_OK;    /*Если не вернулся раньше, значит, это не удалось*/
     }
 
-    return LV_RESULT_INVALID;    /*If not returned earlier then it failed*/
+    return LV_RESULT_INVALID;    /*Если не вернулся раньше, значит, это не удалось*/
 }
 
 /**
- * Free the allocated resources
+ * Освободите выделенные ресурсы
  */
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     if(dsc->args.no_cache ||
        !lv_image_cache_is_enabled()) lv_draw_buf_destroy((lv_draw_buf_t *)dsc->decoded);
@@ -253,27 +253,27 @@ static void convert_size_with_orientation(image_orientation_t image_orientation,
 
 static lv_draw_buf_t * decode_jpeg_file(const char * filename)
 {
-    /* This struct contains the JPEG decompression parameters and pointers to
-     * working space (which is allocated as needed by the JPEG library).
+    /* Эта структура содержит параметры распаковки JPEG и указатели на
+     * рабочее пространство (которое выделяется по необходимости библиотекой JPEG).
      */
     struct jpeg_decompress_struct cinfo;
-    /* We use our private extension JPEG error handler.
-     * Note that this struct must live as long as the main JPEG parameter
-     * struct, to avoid dangling-pointer problems.
+    /* Мы используем наше частное расширение обработчика ошибок JPEG.
+     * Обратите внимание, что эта структура должна существовать до тех пор, пока основной параметр JPEG.
+     * struct, чтобы избежать проблем с висячими указателями.
      */
     error_mgr_t jerr;
 
-    /* More stuff */
-    JSAMPARRAY buffer;  /* Output row buffer */
+    /* Больше вещей */
+    JSAMPARRAY buffer;  /* Буфер выходной строки */
 
-    uint32_t row_stride;     /* physical row width in output buffer */
+    uint32_t row_stride;     /* физическая ширина строки в выходном буфере */
 
     lv_draw_buf_t * decoded = NULL;
 
-    /* In this example we want to open the input file before doing anything else,
-     * so that the setjmp() error recovery below can assume the file is open.
-     * VERY IMPORTANT: use "b" option to fopen() if you are on a machine that
-     * requires it in order to read binary files.
+    /* В этом примере мы хотим открыть входной файл, прежде чем делать что-либо еще.
+     * так что приведенное ниже восстановление ошибки setjmp() может предполагать, что файл открыт.
+     * VERY IMPORTANT: используйте опцию «b» для fopen(), если вы находитесь на машине, которая
+     * требуется это для чтения двоичных файлов.
      */
 
     uint32_t data_size;
@@ -283,45 +283,45 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
         return NULL;
     }
 
-    /* read jpeg exif orientation */
+    /* читать ориентацию jpeg exif */
     image_orientation_t image_orientation = get_jpeg_direction(data, data_size);
 
-    /* allocate and initialize JPEG decompression object */
+    /* выделить и инициализировать объект декомпрессии JPEG */
 
-    /* We set up the normal JPEG error routines, then override error_exit. */
+    /* Мы устанавливаем обычные процедуры обработки ошибок JPEG, а затем переопределяем error_exit. */
     cinfo.err = jpeg_std_error(&jerr.pub);
     jerr.pub.error_exit = error_exit;
-    /* Establish the setjmp return context for my_error_exit to use. */
+    /* Установите контекст возврата setjmp, который будет использовать my_error_exit. */
     if(setjmp(jerr.jb)) {
         LV_LOG_WARN("decoding error");
         if(decoded) {
             lv_draw_buf_destroy(decoded);
         }
 
-        /* If we get here, the JPEG code has signaled an error.
-        * We need to clean up the JPEG object, close the input file, and return.
+        /* Если мы доберемся сюда, код JPEG сигнализирует об ошибке.
+        * Нам нужно очистить объект JPEG, закрыть входной файл и вернуться.
         */
         jpeg_destroy_decompress(&cinfo);
         lv_free(data);
         return NULL;
     }
 
-    /* Now we can initialize the JPEG decompression object. */
+    /* Теперь мы можем инициализировать объект декомпрессии JPEG. */
     jpeg_create_decompress(&cinfo);
 
-    /* specify data source (eg, a file or buffer) */
+    /* указать источник данных (например, файл или буфер) */
     jpeg_mem_src(&cinfo, data, data_size);
 
-    /* read file parameters with jpeg_read_header() */
+    /* прочитать параметры файла с помощью jpeg_read_header () */
     jpeg_read_header(&cinfo, TRUE);
 
-    /* We can ignore the return value from jpeg_read_header since
-     *   (a) suspension is not possible with the stdio data source, and
-     *   (b) we passed TRUE to reject a tables-only JPEG file as an error.
-     * See libjpeg.doc for more info.
+    /* Мы можем игнорировать возвращаемое значение из jpeg_read_header, поскольку
+     *   (a) приостановка невозможна при использовании источника данных stdio, и
+     *   (б) мы передали TRUE, чтобы отклонить файл JPEG, содержащий только таблицы, как ошибку.
+     * Дополнительную информацию см. в libjpeg.doc.
      */
 
-    /* set parameters for decompression */
+    /* установить параметры для декомпрессии */
     if(cinfo.jpeg_color_space == JCS_CMYK || cinfo.jpeg_color_space == JCS_YCCK) {
         cinfo.out_color_space = JCS_CMYK;
     }
@@ -329,26 +329,26 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
         cinfo.out_color_space = JCS_EXT_BGR;
     }
 
-    /* In this example, we don't need to change any of the defaults set by
-     * jpeg_read_header(), so we do nothing here.
+    /* В этом примере нам не нужно менять какие-либо значения по умолчанию, установленные
+     * jpeg_read_header(), поэтому здесь ничего не делаем.
      */
 
-    /* Start decompressor */
+    /* Запустить декомпрессор */
     jpeg_start_decompress(&cinfo);
 
-    /* We can ignore the return value since suspension is not possible
-     * with the stdio data source.
+    /* Мы можем игнорировать возвращаемое значение, поскольку приостановка невозможна.
+     * с источником данных stdio.
      */
 
-    /* We may need to do some setup of our own at this point before reading
-     * the data.  After jpeg_start_decompress() we have the correct scaled
-     * output image dimensions available, as well as the output colormap
-     * if we asked for color quantization.
-     * In this example, we need to make an output work buffer of the right size.
+    /* Возможно, на этом этапе нам придется выполнить некоторые собственные настройки, прежде чем читать.
+     * данные.  После jpeg_start_decompress() имеем правильное масштабирование
+     * доступные размеры выходного изображения, а также выходная цветовая карта
+     * если бы мы запросили квантование цвета.
+     * В этом примере нам нужно создать выходной рабочий буфер нужного размера.
      */
-    /* JSAMPLEs per row in output buffer */
+    /* JSAMPLE на строку в выходном буфере */
     row_stride = cinfo.output_width * cinfo.output_components;
-    /* Make a one-row-high sample array that will go away when done with image */
+    /* Создайте массив образцов высотой в одну строку, который исчезнет после завершения работы с изображением. */
     buffer = (*cinfo.mem->alloc_sarray)
              ((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
 
@@ -366,20 +366,20 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
         fm = LV_COLOR_FORMAT_XRGB8888;
     }
 
-    /* Allocate the decoded draw buffer */
+    /* Выделить декодированный буфер отрисовки */
     decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, width, height, fm, LV_STRIDE_AUTO);
     if(decoded != NULL) {
         uint32_t line_index = 0;
-        /* while (scan lines remain to be read) */
-        /* jpeg_read_scanlines(...); */
+        /* while (строки сканирования еще предстоит прочитать) */
+        /* jpeg_read_scanlines (...); */
 
-        /* Here we use the library's state variable cinfo.output_scanline as the
-         * loop counter, so that we don't have to keep track ourselves.
+        /* Здесь мы используем переменную состояния библиотеки cinfo. output_scanline как
+         * счетчик циклов, чтобы нам не приходилось отслеживать их самостоятельно.
          */
         while(cinfo.output_scanline < cinfo.output_height) {
-            /* jpeg_read_scanlines expects an array of pointers to scanlines.
-             * Here the array is only one element long, but you could ask for
-             * more than one scanline at a time if that's more convenient.
+            /* jpeg_read_scanlines ожидает массив указателей на строки сканирования.
+             * Здесь массив состоит всего из одного элемента, но вы можете попросить
+             * более одной строки сканирования за раз, если это удобнее.
              */
             jpeg_read_scanlines(&cinfo, buffer, 1);
 
@@ -387,30 +387,30 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
                 jpeg_cmyk_to_bgrx(buffer[0], decoded->header.w);
             }
 
-            /* Assume put_scanline_someplace wants a pointer and sample count. */
+            /* Предположим, put_scanline_someplace хочет получить указатель и количество выборок. */
             process_buffer_orientation(image_orientation, decoded->data, &image_header, line_index, buffer[0],
                                        decoded->header.stride);
             line_index++;
         }
     }
 
-    /* Finish decompression */
+    /* Завершить декомпрессию */
 
     jpeg_finish_decompress(&cinfo);
 
-    /* We can ignore the return value since suspension is not possible
-     * with the stdio data source.
+    /* Мы можем игнорировать возвращаемое значение, поскольку приостановка невозможна.
+     * с источником данных stdio.
      */
 
-    /* Release JPEG decompression object */
+    /* Освободить объект распаковки JPEG */
 
-    /* This is an important step since it will release a good deal of memory. */
+    /* Это важный шаг, поскольку он освободит большой объем памяти. */
     jpeg_destroy_decompress(&cinfo);
 
-    /* After finish_decompress, we can close the input file.
-    * Here we postpone it until after no more JPEG errors are possible,
-    * so as to simplify the setjmp error logic above.  (Actually, I don't
-    * think that jpeg_destroy can do an error exit, but why assume anything...)
+    /* После finish_decompress мы можем закрыть входной файл.
+    * Здесь мы откладываем это до тех пор, пока ошибки JPEG больше не будут возможны,
+    * чтобы упростить приведенную выше логику ошибок setjmp.  (На самом деле я не
+    * думаю, что jpeg_destroy может выполнить выход из-за ошибки, но зачем что-то предполагать...)
     */
     lv_free(data);
 
@@ -466,7 +466,7 @@ static bool get_jpeg_size(uint8_t * data, uint32_t data_size, uint32_t * width, 
         return false;
     }
 
-    /* read file exif orientation */
+    /* прочитать ориентацию exif файла */
     image_orientation_t op = jpeg_markers_reader(&cinfo);
 
     *width = cinfo.image_width;
@@ -494,7 +494,7 @@ static image_orientation_t get_jpeg_direction(uint8_t * data, uint32_t data_size
     }
     /* jpeg_create_decompress */
     jpeg_decompress_prepare(&cinfo, data, data_size);
-    /* read file exif orientation */
+    /* прочитать ориентацию exif файла */
     res = jpeg_markers_reader(&cinfo);
 
     jpeg_destroy_decompress(&cinfo);
@@ -579,12 +579,12 @@ static image_orientation_t jpeg_markers_reader(struct jpeg_decompress_struct * c
                     return res;
                 }
                 bool is_big_endian = endian_tag == JPEG_BIG_ENDIAN_TAG;
-                /* first ifd offset addr : 4bytes(Exif) + 2bytes(0x00) + 2bytes(align) + 2bytes(tag mark) */
+                /* первый адрес смещения ifd: 4 байта (Exif) + 2 байта (0x00) + 2 байта (выравнивание) + 2 байта (метка тега) */
                 unsigned int offset = TRANS_32_VALUE(is_big_endian, app1_data + 8 + 2);
-                /* ifd base : 4bytes(Exif) + 2bytes(0x00) */
+                /* База ifd: 4 байта (Exif) + 2 байта (0x00) */
                 unsigned char * ifd = 0;
                 do {
-                    /* ifd start: 4bytes(Exif) + 2bytes(0x00) + offset value(2bytes(align) + 2bytes(tag mark) + 4bytes(offset size)) */
+                    /* начало ifd: 4 байта (Exif) + 2 байта ( 0x00 ) + значение смещения (2 байта (выравнивание) + 2 байта (метка тега) + 4 байта (размер смещения)) */
                     unsigned int entry_offset = 4 + 2 + offset + 2;
                     if(entry_offset >= marker->data_length) {
                         return res;
@@ -597,8 +597,8 @@ static image_orientation_t jpeg_markers_reader(struct jpeg_decompress_struct * c
                     for(int i = 0; i < num_entries; i++) {
                         unsigned short tag = TRANS_16_VALUE(is_big_endian, ifd);
                         if(tag == ORIENTATION_TAG) {
-                            /* ifd entry: 12bytes = 2bytes(tag number) + 2bytes(kind of data) + 4bytes(number of components) + 4bytes(data)
-                            * orientation kind(0x03) of data is unsigned short */
+                            /* запись ifd: 12 байт = 2 байта (номер тега) + 2 байта (вид данных) + 4 байта (количество компонентов) + 4 байта (данные)
+                            * вид ориентации ( 0x03 ) данных без знака, короткий */
                             uint32_t dirc = TRANS_16_VALUE(is_big_endian, ifd + 2 + 2 + 4);
                             res = (dirc >= IMAGE_CLOCKWISE_0 && dirc <= IMAGE_CLOCKWISE_270) ? (image_orientation_t)dirc : IMAGE_CLOCKWISE_NONE;
                         }

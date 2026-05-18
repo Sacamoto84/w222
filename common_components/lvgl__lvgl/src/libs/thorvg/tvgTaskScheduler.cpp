@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -33,7 +33,7 @@
 #endif
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 namespace tvg {
@@ -142,7 +142,7 @@ struct TaskSchedulerImpl
     {
         Task* task;
 
-        //Thread Loop
+        //Петля ниток
         while (true) {
             auto success = false;
             for (uint32_t x = 0; x < threads.count * 2; ++x) {
@@ -159,7 +159,7 @@ struct TaskSchedulerImpl
 
     void request(Task* task)
     {
-        //Async
+        //Асинхронный
         if (threads.count > 0 && _async) {
             task->prepare();
             auto i = idx++;
@@ -167,7 +167,7 @@ struct TaskSchedulerImpl
                 if (taskQueues[(i + n) % threads.count]->tryPush(task)) return;
             }
             taskQueues[i % threads.count]->push(task);
-        //Sync
+        //Синхронизировать
         } else {
             task->run(0);
         }
@@ -192,10 +192,10 @@ struct TaskSchedulerImpl
 
 #endif //THORVG_THREAD_SUPPORT
 
-} //namespace
+} //пространство имен
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 void TaskScheduler::init(uint32_t threads)
@@ -227,7 +227,7 @@ uint32_t TaskScheduler::threads()
 
 void TaskScheduler::async(bool on)
 {
-    //toggle async tasking for each thread on/off
+    //включить/выключить асинхронное выполнение задач для каждого потока
     _async = on;
 }
 

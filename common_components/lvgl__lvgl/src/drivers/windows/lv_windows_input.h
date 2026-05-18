@@ -42,31 +42,31 @@ HWND lv_windows_get_indev_window_handle(lv_indev_t * indev);
 
 /**
  * @brief Open a LVGL pointer input device object for the specific LVGL
- *        display object, or create it if the LVGL pointer input device
- *        object is not created or removed before.
+ *        отображаемый объект или создайте его, если устройство ввода указателя LVGL
+ *        объект не создавался и не удалялся ранее.
  * @param display The specific LVGL display object.
  * @return The LVGL pointer input device object for the specific LVGL
- *         display object.
+ *         объект отображения.
 */
 lv_indev_t * lv_windows_acquire_pointer_indev(lv_display_t * display);
 
 /**
  * @brief Open a LVGL keypad input device object for the specific LVGL
- *        display object, or create it if the LVGL keypad input device
- *        object is not created or removed before.
+ *        объект отображения или создайте его, если устройство ввода с клавиатуры LVGL
+ *        объект не создавался и не удалялся ранее.
  * @param display The specific LVGL display object.
  * @return The LVGL keypad input device object for the specific LVGL
- *         display object.
+ *         объект отображения.
 */
 lv_indev_t * lv_windows_acquire_keypad_indev(lv_display_t * display);
 
 /**
  * @brief Open a LVGL encoder input device object for the specific LVGL
- *        display object, or create it if the LVGL encoder input device
- *        object is not created or removed before.
+ *        отображаемый объект или создайте его, если устройство ввода кодировщика LVGL
+ *        объект не создавался и не удалялся ранее.
  * @param display The specific LVGL display object.
  * @return The LVGL encoder input device object for the specific LVGL
- *         display object.
+ *         объект отображения.
 */
 lv_indev_t * lv_windows_acquire_encoder_indev(lv_display_t * display);
 
@@ -77,7 +77,7 @@ lv_indev_t * lv_windows_acquire_encoder_indev(lv_display_t * display);
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WINDOWS_INPUT_H*/

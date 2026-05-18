@@ -8,16 +8,16 @@ static void set_angle(void * obj, int32_t v)
 }
 
 /**
- * Create an arc which acts as a loader.
+ * Создайте дугу, которая действует как загрузчик.
  */
 void lv_example_arc_2(void)
 {
-    /*Create an Arc*/
+    /*Создать дугу*/
     lv_obj_t * arc = lv_arc_create(lv_screen_active());
     lv_arc_set_rotation(arc, 270);
     lv_arc_set_bg_angles(arc, 0, 360);
-    lv_obj_remove_style(arc, NULL, LV_PART_KNOB);   /*Be sure the knob is not displayed*/
-    lv_obj_remove_flag(arc, LV_OBJ_FLAG_CLICKABLE);  /*To not allow adjusting by click*/
+    lv_obj_remove_style(arc, NULL, LV_PART_KNOB);   /*Убедитесь, что ручка не отображается*/
+    lv_obj_remove_flag(arc, LV_OBJ_FLAG_CLICKABLE);  /*Чтобы не разрешить настройку по клику*/
     lv_obj_center(arc);
 
     lv_anim_t a;
@@ -25,7 +25,7 @@ void lv_example_arc_2(void)
     lv_anim_set_var(&a, arc);
     lv_anim_set_exec_cb(&a, set_angle);
     lv_anim_set_duration(&a, 1000);
-    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);    /*Just for the demo*/
+    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);    /*Просто для демо*/
     lv_anim_set_repeat_delay(&a, 500);
     lv_anim_set_values(&a, 0, 100);
     lv_anim_start(&a);

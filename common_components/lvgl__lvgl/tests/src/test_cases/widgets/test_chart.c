@@ -227,7 +227,7 @@ void test_chart_scatter(void)
 void test_chart_curve(void)
 {
 #if LV_USE_VECTOR_GRAPHIC
-    /*Create a chart*/
+    /*Создать диаграмму*/
     lv_obj_set_size(chart, 400, 300);
     lv_obj_center(chart);
     lv_obj_set_style_bg_opa(chart, LV_OPA_50, LV_PART_INDICATOR);
@@ -280,31 +280,31 @@ void test_chart_properties(void)
 #if LV_USE_OBJ_PROPERTY
     lv_property_t prop;
 
-    /* Test TYPE property */
+    /* Тестирование свойства TYPE */
     prop.id = LV_PROPERTY_CHART_TYPE;
     prop.num = LV_CHART_TYPE_BAR;
     TEST_ASSERT_TRUE(lv_obj_set_property(chart, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_CHART_TYPE_BAR, lv_obj_get_property(chart, LV_PROPERTY_CHART_TYPE).num);
 
-    /* Test POINT_COUNT property */
+    /* Тестирование свойства POINT_COUNT */
     prop.id = LV_PROPERTY_CHART_POINT_COUNT;
     prop.num = 20;
     TEST_ASSERT_TRUE(lv_obj_set_property(chart, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(20, lv_obj_get_property(chart, LV_PROPERTY_CHART_POINT_COUNT).num);
 
-    /* Test UPDATE_MODE property */
+    /* Тестирование свойства UPDATE_MODE */
     prop.id = LV_PROPERTY_CHART_UPDATE_MODE;
     prop.num = LV_CHART_UPDATE_MODE_CIRCULAR;
     TEST_ASSERT_TRUE(lv_obj_set_property(chart, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_CHART_UPDATE_MODE_CIRCULAR, lv_obj_get_property(chart, LV_PROPERTY_CHART_UPDATE_MODE).num);
 
-    /* Test HOR_DIV_LINE_COUNT property */
+    /* Тестирование свойства HOR_DIV_LINE_COUNT */
     prop.id = LV_PROPERTY_CHART_HOR_DIV_LINE_COUNT;
     prop.num = 5;
     TEST_ASSERT_TRUE(lv_obj_set_property(chart, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(5, lv_obj_get_property(chart, LV_PROPERTY_CHART_HOR_DIV_LINE_COUNT).num);
 
-    /* Test VER_DIV_LINE_COUNT property */
+    /* Тестирование свойства VER_DIV_LINE_COUNT */
     prop.id = LV_PROPERTY_CHART_VER_DIV_LINE_COUNT;
     prop.num = 7;
     TEST_ASSERT_TRUE(lv_obj_set_property(chart, &prop) == LV_RESULT_OK);

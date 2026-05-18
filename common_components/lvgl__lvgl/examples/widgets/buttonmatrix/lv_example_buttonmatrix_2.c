@@ -6,14 +6,14 @@ static void event_cb(lv_event_t * e)
     lv_obj_t * obj = lv_event_get_target_obj(e);
     lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
     lv_draw_dsc_base_t * base_dsc = (lv_draw_dsc_base_t *)lv_draw_task_get_draw_dsc(draw_task);
-    /*When the button matrix draws the buttons...*/
+    /*Когда матрица кнопок рисует кнопки...*/
     if(base_dsc->part == LV_PART_ITEMS) {
         bool pressed = false;
         if(lv_buttonmatrix_get_selected_button(obj) == base_dsc->id1 && lv_obj_has_state(obj, LV_STATE_PRESSED)) {
             pressed = true;
         }
 
-        /*Change the draw descriptor of the 2nd button*/
+        /*Измените дескриптор отрисовки второй кнопки.*/
         if(base_dsc->id1 == 1) {
             lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
             if(fill_draw_dsc) {
@@ -33,7 +33,7 @@ static void event_cb(lv_event_t * e)
             }
 
         }
-        /*Change the draw descriptor of the 3rd button*/
+        /*Измените дескриптор отрисовки третьей кнопки.*/
         else if(base_dsc->id1 == 2) {
             lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
             if(fill_draw_dsc) {
@@ -81,7 +81,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Add custom drawer to the button matrix to customize buttons one by one
+ * Добавьте пользовательский ящик в матрицу кнопок, чтобы настраивать кнопки одну за другой.
  */
 void lv_example_buttonmatrix_2(void)
 {

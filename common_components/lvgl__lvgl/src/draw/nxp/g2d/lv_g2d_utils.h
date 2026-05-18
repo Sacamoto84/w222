@@ -77,7 +77,7 @@ void g2d_rotate(lv_draw_buf_t * buf1, lv_draw_buf_t * buf2, int32_t width, int32
 #endif /*LV_USE_G2D*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_G2D_UTILS_H*/

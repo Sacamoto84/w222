@@ -13,7 +13,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Add click event to a button
+ * Добавить событие клика на кнопку
  */
 void lv_example_event_click(void)
 {

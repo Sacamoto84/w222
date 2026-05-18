@@ -197,7 +197,7 @@ static void * malloc_cb(size_t size_bytes, lv_color_format_t color_format)
         if(defer_init() == false) return NULL;
     }
 
-    /*Allocate larger memory to be sure it can be aligned as needed*/
+    /*Выделите больший объем памяти, чтобы быть уверенным, что ее можно будет выровнять по мере необходимости.*/
     size_bytes += LV_DRAW_BUF_ALIGN - 1;
     uint32_t cache_max_size = lv_cache_get_max_size(img_cache_p, NULL);
 

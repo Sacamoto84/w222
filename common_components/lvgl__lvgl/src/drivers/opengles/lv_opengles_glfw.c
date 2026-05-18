@@ -50,9 +50,9 @@ struct _lv_opengles_window_t {
 
 struct _lv_opengles_window_texture_t {
     lv_opengles_window_t * window;
-    unsigned int texture_id; /* 0 if it's a window display */
-    lv_display_t * disp; /* non-NULL if it's a display texture or a window display */
-    uint8_t * fb; /* non-NULL if it's a window display and !DRAW_OPENGLES */
+    unsigned int texture_id; /* 0, если это окно */
+    lv_display_t * disp; /* не NULL, если это текстура дисплея или отображение окна */
+    uint8_t * fb; /* не NULL, если это окно и ! DRAW_OPENGLES */
     lv_area_t area;
     lv_opa_t opa;
     lv_indev_t * indev;
@@ -122,7 +122,7 @@ lv_opengles_window_t * lv_opengles_glfw_window_create_ex(int32_t hor_res, int32_
     }
     lv_memzero(window, sizeof(*window));
 
-    /* Create window with graphics context */
+    /* Создать окно с графическим контекстом */
     lv_opengles_window_t * existing_window = lv_ll_get_head(&glfw_window_ll);
     window->window = glfwCreateWindow(hor_res, ver_res, title, NULL,
                                       existing_window ? existing_window->window : NULL);
@@ -460,7 +460,7 @@ static void window_update_handler(lv_timer_t * t)
 
     glfwPollEvents();
 
-    /* delete windows that are ready to close */
+    /* удалить окна, которые готовы закрыться */
     window = lv_ll_get_head(&glfw_window_ll);
     while(window) {
         lv_opengles_window_t * window_to_delete = window->closing ? window : NULL;
@@ -471,7 +471,7 @@ static void window_update_handler(lv_timer_t * t)
         }
     }
 
-    /* render each window */
+    /* визуализировать каждое окно */
     LV_LL_READ(&glfw_window_ll, window) {
         glfwMakeContextCurrent(window->window);
         lv_opengles_viewport(0, 0, window->hor_res, window->ver_res);
@@ -481,8 +481,8 @@ static void window_update_handler(lv_timer_t * t)
         bool window_display_direct_render =
             !window->direct_render_invalidated
             && (textures_head = lv_ll_get_head(&window->textures))
-            && textures_head->texture_id == 0 /* it's a window display */
-            && lv_ll_get_next(&window->textures, textures_head) == NULL /* it's the only one */
+            && textures_head->texture_id == 0 /* это витрина */
+            && lv_ll_get_next(&window->textures, textures_head) == NULL /* это единственный */
             && textures_head->opa == LV_OPA_COVER
             && textures_head->area.x1 == 0
             && textures_head->area.y1 == 0
@@ -497,10 +497,10 @@ static void window_update_handler(lv_timer_t * t)
         lv_opengles_render_clear();
 #endif
 
-        /* render each texture in the window */
+        /* визуализировать каждую текстуру в окне */
         lv_opengles_window_texture_t * texture;
         LV_LL_READ(&window->textures, texture) {
-            if(texture->texture_id == 0) { /* it's a window display */
+            if(texture->texture_id == 0) { /* это витрина */
 #if LV_USE_DRAW_OPENGLES
                 lv_display_set_render_mode(texture->disp,
                                            window_display_direct_render ? LV_DISPLAY_RENDER_MODE_DIRECT : LV_DISPLAY_RENDER_MODE_FULL);
@@ -516,8 +516,8 @@ static void window_update_handler(lv_timer_t * t)
 
                 GL_CALL(glBindTexture(GL_TEXTURE_2D, window_display_texture));
 
-                /* set the dimensions and format to complete the texture */
-                /* Color depth: 8 (L8), 16 (RGB565), 24 (RGB888), 32 (XRGB8888) */
+                /* установите размеры и формат для завершения текстуры */
+                /* Глубина цвета: 8 ( L8 ), 16 ( RGB565 ), 24 ( RGB888 ), 32 ( XRGB8888 ) */
 #if LV_COLOR_DEPTH == 8
                 GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, lv_area_get_width(&texture->area), lv_area_get_height(&texture->area), 0,
                                      GL_RED, GL_UNSIGNED_BYTE, texture->fb));
@@ -545,7 +545,7 @@ static void window_update_handler(lv_timer_t * t)
 #endif
             }
             else {
-                /* if the added texture is an LVGL opengles texture display, refresh it before rendering it */
+                /* Если добавленная текстура представляет собой текстуру Opengles LVGL, обновите ее перед рендерингом. */
                 if(texture->disp != NULL) {
 #if LV_USE_DRAW_OPENGLES
                     lv_display_t * default_save = lv_display_get_default();
@@ -567,7 +567,7 @@ static void window_update_handler(lv_timer_t * t)
             }
         }
 
-        /* Swap front and back buffers */
+        /* Поменяйте местами передний и задний буфер */
         glfwSwapBuffers(window->window);
     }
 }
@@ -618,11 +618,11 @@ static void mouse_move_callback(GLFWwindow * window, double xpos, double ypos)
 
 static void proc_mouse(lv_opengles_window_t * window)
 {
-    /* mouse activity will affect the topmost LVGL display texture */
+    /* активность мыши повлияет на самую верхнюю текстуру дисплея LVGL */
     lv_opengles_window_texture_t * texture;
     LV_LL_READ_BACK(&window->textures, texture) {
         if(lv_area_is_point_on(&texture->area, &window->mouse_last_point, 0)) {
-            /* adjust the mouse pointer coordinates so that they are relative to the texture */
+            /* отрегулируйте координаты указателя мыши так, чтобы они были относительно текстуры */
             if(window->h_flip) {
                 texture->indev_last_point.x = texture->area.x2 - window->mouse_last_point.x;
             }

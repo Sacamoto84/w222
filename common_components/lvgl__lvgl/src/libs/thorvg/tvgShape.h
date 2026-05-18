@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -33,13 +33,13 @@
 
 struct Shape::Impl
 {
-    RenderShape rs;                     //shape data
-    RenderData rd = nullptr;            //engine data
+    RenderShape rs;                     //данные формы
+    RenderData rd = nullptr;            //данные двигателя
     Shape* shape;
     uint8_t flag = RenderUpdateFlag::None;
 
-    uint8_t opacity;                    //for composition
-    bool needComp = false;              //composite or not
+    uint8_t opacity;                    //для композиции
+    bool needComp = false;              //композитный или нет
 
     Impl(Shape* s) : shape(s)
     {
@@ -74,14 +74,14 @@ struct Shape::Impl
     {
         if (opacity == 0) return false;
 
-        //Shape composition is only necessary when stroking & fill are valid.
+        //Композиция фигуры необходима только в том случае, если допустимы обводка и заливка.
         if (!rs.stroke || rs.stroke->width < FLOAT_EPSILON || (!rs.stroke->fill && rs.stroke->color[3] == 0)) return false;
         if (!rs.fill && rs.color[3] == 0) return false;
 
-        //translucent fill & stroke
+        //полупрозрачная заливка и обводка
         if (opacity < 255) return true;
 
-        //Composition test
+        //Тест на состав
         const Paint* target;
         auto method = shape->composite(&target);
         if (!target || method == CompositeMethod::ClipPath) return false;
@@ -108,8 +108,8 @@ struct Shape::Impl
         if (static_cast<RenderUpdateFlag>(pFlag | flag) == RenderUpdateFlag::None) return rd;
 
         if ((needComp = needComposition(opacity))) {
-            /* Overriding opacity value. If this scene is half-translucent,
-               It must do intermediate composition with that opacity value. */
+            /* Переопределение значения непрозрачности. Если эта сцена полупрозрачна,
+               Он должен создать промежуточную композицию с этим значением непрозрачности. */
             this->opacity = opacity;
             opacity = 255;
         }
@@ -127,7 +127,7 @@ struct Shape::Impl
 
     bool bounds(float* x, float* y, float* w, float* h, bool stroking)
     {
-        //Path bounding size
+        //Размер ограничения пути
         if (rs.path.pts.count > 0 ) {
             auto pts = rs.path.pts.begin();
             Point min = { pts->x, pts->y };
@@ -146,7 +146,7 @@ struct Shape::Impl
             if (h) *h = max.y - min.y;
         }
 
-        //Stroke feathering
+        //Растушевка штрихов
         if (stroking && rs.stroke) {
             if (x) *x -= rs.stroke->width * 0.5f;
             if (y) *y -= rs.stroke->width * 0.5f;
@@ -202,7 +202,7 @@ struct Shape::Impl
 
     void close()
     {
-        //Don't close multiple times.
+        //Не закрывайте несколько раз.
         if (rs.path.cmds.count > 0 && rs.path.cmds.last() == PathCommand::Close) return;
 
         rs.path.cmds.push(PathCommand::Close);
@@ -308,7 +308,7 @@ struct Shape::Impl
             if (pattern[i] < FLOAT_EPSILON) return Result::InvalidArguments;
         }
 
-        //Reset dash
+        //Сбросить тире
         if (!pattern && cnt == 0) {
         	lv_free(rs.stroke->dashPattern);
             rs.stroke->dashPattern = nullptr;
@@ -361,18 +361,18 @@ struct Shape::Impl
         auto dup = shape->pImpl;
         delete(dup->rs.fill);
 
-        //Default Properties
+        //Свойства по умолчанию
         dup->flag = RenderUpdateFlag::All;
         dup->rs.rule = rs.rule;
 
-        //Color
+        //Цвет
         memcpy(dup->rs.color, rs.color, sizeof(rs.color));
 
-        //Path
+        //Путь
         dup->rs.path.cmds.push(rs.path.cmds);
         dup->rs.path.pts.push(rs.path.pts);
 
-        //Stroke
+        //Инсульт
         if (rs.stroke) {
             if (!dup->rs.stroke) dup->rs.stroke = new RenderStroke;
             *dup->rs.stroke = *rs.stroke;
@@ -381,7 +381,7 @@ struct Shape::Impl
             dup->rs.stroke = nullptr;
         }
 
-        //Fill
+        //Заполнить
         if (rs.fill) dup->rs.fill = rs.fill->duplicate();
         else dup->rs.fill = nullptr;
 

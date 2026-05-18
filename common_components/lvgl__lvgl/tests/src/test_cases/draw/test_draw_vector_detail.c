@@ -59,22 +59,22 @@ void test_draw_blend_modes_comparison(void)
     lv_draw_vector_dsc_t * ctx = lv_draw_vector_dsc_create(&layer);
     lv_vector_path_t * path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
 
-    /* Clear background */
+    /* Очистить фон */
     lv_area_t rect = {0, 0, 640, 480};
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_white());
     lv_draw_vector_dsc_clear_area(ctx, &rect);
 
-    /* Draw 14 blend mode examples in 4x4 grid within {0,0,640,480} area */
+    /* Нарисуйте 14 примеров режима наложения в сетке 4x4 в пределах области {0,0,640,480}. */
     const int unit_width = 70;
     const int unit_height = 70;
     const int cols = 4;
     const int rows = 4;
 
-    /* Calculate spacing between units */
+    /* Рассчитать расстояние между блоками */
     const int h_space = (640 - cols * unit_width * 3 / 2) / (cols + 1);
     const int v_space = (480 - rows * unit_height * 3 / 2) / (rows + 1);
 
-    /* Blend modes for each unit */
+    /* Режимы наложения для каждого юнита */
     const lv_vector_blend_t blend_modes[] = {
         LV_VECTOR_BLEND_SRC_OVER,
         LV_VECTOR_BLEND_SRC_IN,
@@ -87,15 +87,15 @@ void test_draw_blend_modes_comparison(void)
         LV_VECTOR_BLEND_SUBTRACTIVE,
     };
 
-    /* Draw blend mode examples */
+    /* Нарисуйте примеры режима наложения */
     for(size_t i = 0; i < sizeof(blend_modes) / sizeof(blend_modes[0]); i++) {
-        /* Calculate unit position */
+        /* Рассчитать положение объекта */
         int col = i % cols;
         int row = i / rows;
         int x = h_space + col * (unit_width * 3 / 2 + h_space);
         int y = v_space + row * (unit_height * 3 / 2 + v_space);
 
-        /* Draw blue rectangle (120x120 with 1/4 overlap) */
+        /* Нарисуйте синий прямоугольник (120x120 с перекрытием 1/4). */
         lv_vector_path_clear(path);
         lv_area_t blue_rect = {
             x + unit_width / 2,
@@ -104,16 +104,16 @@ void test_draw_blend_modes_comparison(void)
             y + unit_width * 3 / 2
         };
         lv_vector_path_append_rect(path, &blue_rect, 0, 0);
-        lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0x00, 0xff)); /* Blue */
+        lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0x00, 0xff)); /* Синий */
         lv_draw_vector_dsc_set_fill_opa(ctx, LV_OPA_COVER);
         lv_draw_vector_dsc_set_blend_mode(ctx, LV_VECTOR_BLEND_SRC_OVER);
         lv_draw_vector_dsc_add_path(ctx, path);
 
-        /* Draw green rectangle (full size) */
+        /* Нарисуйте зеленый прямоугольник (в полный размер) */
         lv_vector_path_clear(path);
         lv_area_t green_rect = { x, y, x + unit_width, y + unit_height };
         lv_vector_path_append_rect(path, &green_rect, 0, 0);
-        lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0xff, 0x00)); /* Green */
+        lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0xff, 0x00)); /* Зеленый */
         lv_draw_vector_dsc_set_fill_opa(ctx, LV_OPA_COVER);
         lv_draw_vector_dsc_set_stroke_opa(ctx, LV_OPA_TRANSP);
         lv_draw_vector_dsc_set_blend_mode(ctx, LV_VECTOR_BLEND_SRC_OVER);
@@ -121,7 +121,7 @@ void test_draw_blend_modes_comparison(void)
 
         lv_vector_path_clear(path);
         lv_vector_path_append_rect(path, &blue_rect, 0, 0);
-        lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0x00, 0xff)); /* Blue */
+        lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0x00, 0xff)); /* Синий */
         lv_draw_vector_dsc_set_fill_opa(ctx, LV_OPA_COVER);
         lv_draw_vector_dsc_set_blend_mode(ctx, blend_modes[i]);
         lv_draw_vector_dsc_add_path(ctx, path);
@@ -130,7 +130,7 @@ void test_draw_blend_modes_comparison(void)
     draw_vector(ctx);
     draw_snapshot(SNAPSHOT_NAME(blend_modes_comparison));
 
-    /* Cleanup */
+    /* Очистка */
     lv_vector_path_delete(path);
     lv_draw_vector_dsc_delete(ctx);
 }
@@ -163,7 +163,7 @@ void test_draw_copy_path(void)
     draw_vector(ctx);
     draw_snapshot(SNAPSHOT_NAME(copy_path));
 
-    /* Cleanup */
+    /* Очистка */
     lv_vector_path_delete(path);
     lv_draw_vector_dsc_delete(ctx);
 }
@@ -184,7 +184,7 @@ void test_draw_rect_path(void)
     draw_vector(ctx);
     draw_snapshot(SNAPSHOT_NAME(rect_path));
 
-    /* Cleanup */
+    /* Очистка */
     lv_vector_path_delete(path);
     lv_draw_vector_dsc_delete(ctx);
 }
@@ -219,7 +219,7 @@ void test_draw_append_path(void)
     draw_vector(ctx);
     draw_snapshot(SNAPSHOT_NAME(append_path));
 
-    /* Cleanup */
+    /* Очистка */
     lv_vector_path_delete(path);
     lv_vector_path_delete(path2);
     lv_draw_vector_dsc_delete(ctx);
@@ -230,7 +230,7 @@ void test_draw_arc_path(void)
     lv_draw_vector_dsc_t * ctx = lv_draw_vector_dsc_create(&layer);
     lv_vector_path_t * path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
 
-    lv_fpoint_t p1 = { 200, 200 }; /* Center */
+    lv_fpoint_t p1 = { 200, 200 }; /* Центр */
     lv_draw_vector_dsc_set_stroke_color(ctx, lv_color_make(0xFF, 0x0, 0x0));
     lv_draw_vector_dsc_set_stroke_opa(ctx, LV_OPA_COVER);
     lv_draw_vector_dsc_set_fill_opa(ctx, LV_OPA_0);
@@ -249,7 +249,7 @@ void test_draw_arc_path(void)
     draw_vector(ctx);
     draw_snapshot(SNAPSHOT_NAME(arc_path));
 
-    /* Cleanup */
+    /* Очистка */
     lv_vector_path_delete(path);
     lv_draw_vector_dsc_delete(ctx);
 }

@@ -43,7 +43,7 @@ LV_EXPORT_CONST_INT(LV_SCALE_LABEL_ENABLED_DEFAULT);
  **********************/
 
 /**
- * Scale mode
+ * Режим масштабирования
  */
 typedef enum {
     LV_SCALE_MODE_HORIZONTAL_TOP    = 0x00U,
@@ -85,50 +85,50 @@ enum _lv_property_scale_id_t {
  **********************/
 
 /**
- * Create an scale object
+ * Создайте масштабный объект
  * @param parent    pointer to an object, it will be the parent of the new scale
  * @return          pointer to created Scale Widget
  */
 lv_obj_t * lv_scale_create(lv_obj_t * parent);
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set scale mode. See lv_scale_mode_t.
+ * Установите режим масштабирования. См. lv_scale_mode_t.
  * @param obj       pointer to Scale Widget
  * @param mode      the new scale mode
  */
 void lv_scale_set_mode(lv_obj_t * obj, lv_scale_mode_t mode);
 
 /**
- * Set scale total tick count (including minor and major ticks).
+ * Установите общее количество тиков шкалы (включая второстепенные и основные тики).
  * @param obj       pointer to Scale Widget
  * @param total_tick_count    New total tick count
  */
 void lv_scale_set_total_tick_count(lv_obj_t * obj, uint32_t total_tick_count);
 
 /**
- * Sets how often major ticks are drawn.
+ * Устанавливает частоту рисования основных тиков.
  * @param obj                 pointer to Scale Widget
  * @param major_tick_every    the new count for major tick drawing
  */
 void lv_scale_set_major_tick_every(lv_obj_t * obj, uint32_t major_tick_every);
 
 /**
- * Sets label visibility.
+ * Устанавливает видимость метки.
  * @param obj           pointer to Scale Widget
  * @param show_label    true/false to enable tick label
  */
 void lv_scale_set_label_show(lv_obj_t * obj, bool show_label);
 
 /**
- * Set minimum and maximum values on Scale.
+ * Установите минимальные и максимальные значения на шкале.
  * @param obj       pointer to Scale Widget
  * @param min       minimum value of Scale
  * @param max       maximum value of Scale
@@ -136,35 +136,35 @@ void lv_scale_set_label_show(lv_obj_t * obj, bool show_label);
 void lv_scale_set_range(lv_obj_t * obj, int32_t min, int32_t max);
 
 /**
- * Set minimum values on Scale.
+ * Установите минимальные значения на шкале.
  * @param obj       pointer to Scale Widget
  * @param min       minimum value of Scale
  */
 void lv_scale_set_min_value(lv_obj_t * obj, int32_t min);
 
 /**
- * Set maximum values on Scale.
+ * Установите максимальные значения на шкале.
  * @param obj       pointer to Scale Widget
  * @param min       minimum value of Scale
  */
 void lv_scale_set_max_value(lv_obj_t * obj, int32_t max);
 
 /**
- * Set angle between the low end and the high end of the Scale.
- * (Applies only to round Scales.)
+ * Установите угол между нижним и верхним пределом шкалы.
+ * (Применимо только к круглым весам.)
  * @param obj         pointer to Scale Widget
  * @param max_angle   angle in degrees from Scale minimum where top end of Scale will be drawn
  */
 void lv_scale_set_angle_range(lv_obj_t * obj, uint32_t angle_range);
 
 /**
- * Set angular offset from the 3-o'clock position of the low end of the Scale.
- * (Applies only to round Scales.)
+ * Установите угловое смещение от 3-часового положения нижнего конца шкалы.
+ * (Применимо только к круглым весам.)
  * @param obj       pointer to Scale Widget
  * @param rotation  clockwise angular offset (in degrees) from the 3-o'clock position
- *                  of the low end of the scale; negative and >360 values are first normalized
- *                  to range [0..360].
- *                  Examples:
+ *                  нижнего предела шкалы; отрицательные значения и значения >360 сначала нормализуются
+ *                  в диапазоне [0..360].
+ *                  Примеры:
  *                      -   0 = 3 o'clock (right side)
  *                      -  30 = 4 o'clock
  *                      -  60 = 5 o'clock
@@ -180,11 +180,11 @@ void lv_scale_set_angle_range(lv_obj_t * obj, uint32_t angle_range);
 void lv_scale_set_rotation(lv_obj_t * obj, int32_t rotation);
 
 /**
- * Point line needle to specified value.
+ * Наведите иглу линии на указанное значение.
  * @param obj              pointer to Scale Widget
  * @param needle_line      needle_line of the Scale. The line points will be allocated and
- *                         managed by the Scale unless the line point array was previously set
- *                         using `lv_line_set_points_mutable`.
+ *                         управляется Масштабом, если ранее не был установлен массив точек линии
+ *                         используя `lv_line_set_points_mutable`.
  * @param needle_length    length of the needle
  *                         - needle_length>0: needle_length=needle_length;
  *                         - needle_length<0: needle_length=radius-|needle_length|;
@@ -194,8 +194,8 @@ void lv_scale_set_line_needle_value(lv_obj_t * obj, lv_obj_t * needle_line, int3
                                     int32_t value);
 
 /**
- * Point image needle to specified value;
-   image must point to the right. E.g. -O------>
+ * Наведите иглу изображения на указанное значение;
+   изображение должно указывать вправо. Например. -О------>
  * @param obj              pointer to Scale Widget
  * @param needle_img       pointer to needle's Image
  * @param value            Scale value needle will point to
@@ -203,38 +203,38 @@ void lv_scale_set_line_needle_value(lv_obj_t * obj, lv_obj_t * needle_line, int3
 void lv_scale_set_image_needle_value(lv_obj_t * obj, lv_obj_t * needle_img, int32_t value);
 
 /**
- * Set custom text source for major ticks labels.
+ * Установите собственный источник текста для основных меток галочек.
  * @param obj       pointer to Scale Widget
  * @param txt_src   pointer to an array of strings which will be display at major ticks;
- *                  last element must be a NULL pointer.
+ *                  последний элемент должен быть указателем NULL.
  */
 void lv_scale_set_text_src(lv_obj_t * obj, const char * txt_src[]);
 
 /**
- * Draw Scale after all its children are drawn.
+ * Нарисовать масштаб после того, как будут нарисованы все его дочерние элементы.
  * @param obj       pointer to Scale Widget
  * @param en        true: enable post draw
  */
 void lv_scale_set_post_draw(lv_obj_t * obj, bool en);
 
 /**
- * Draw Scale ticks on top of all other parts.
+ * Нарисуйте галочки Scale поверх всех остальных частей.
  * @param obj       pointer to Scale Widget
  * @param en        true: enable draw ticks on top of all parts
  */
 void lv_scale_set_draw_ticks_on_top(lv_obj_t * obj, bool en);
 
 /**
- * Add a Section to specified Scale.  Section will not be drawn until
- * a valid range is set for it using `lv_scale_set_section_range()`.
+ * Добавьте раздел к указанному масштабу.  Раздел не будет нарисован до тех пор, пока
+ * для него устанавливается допустимый диапазон с помощью `lv_scale_set_section_range()`.
  * @param obj       pointer to Scale Widget
  * @return          pointer to new Section
  */
 lv_scale_section_t * lv_scale_add_section(lv_obj_t * obj);
 
 /**
- * DEPRECATED, use lv_scale_set_section_range instead.
- * Set range for specified Scale Section
+ * DEPRECATED , вместо этого используйте lv_scale_set_section_range.
+ * Установить диапазон для указанного раздела шкалы
  * @param section       pointer to Section
  * @param range_min     Section new minimum value
  * @param range_max     Section new maximum value
@@ -242,7 +242,7 @@ lv_scale_section_t * lv_scale_add_section(lv_obj_t * obj);
 void lv_scale_section_set_range(lv_scale_section_t * section, int32_t min, int32_t max);
 
 /**
- * Set the range of a scale section
+ * Установить диапазон раздела шкалы
  * @param scale         pointer to scale
  * @param section       pointer to section
  * @param range_min     the section's new minimum value
@@ -251,7 +251,7 @@ void lv_scale_section_set_range(lv_scale_section_t * section, int32_t min, int32
 void lv_scale_set_section_range(lv_obj_t * scale, lv_scale_section_t * section, int32_t min, int32_t max);
 
 /**
- * Set the minimum value of a scale section
+ * Установить минимальное значение сечения шкалы
  * @param scale         pointer to scale
  * @param section       pointer to section
  * @param min           the section's new minimum value
@@ -259,7 +259,7 @@ void lv_scale_set_section_range(lv_obj_t * scale, lv_scale_section_t * section, 
 void lv_scale_set_section_min_value(lv_obj_t * scale, lv_scale_section_t * section, int32_t min);
 
 /**
- * Set the maximum value of a scale section
+ * Установить максимальное значение участка шкалы
  * @param scale         pointer to scale
  * @param section       pointer to section
  * @param max           the section's new maximum value
@@ -267,8 +267,8 @@ void lv_scale_set_section_min_value(lv_obj_t * scale, lv_scale_section_t * secti
 void lv_scale_set_section_max_value(lv_obj_t * scale, lv_scale_section_t * section, int32_t max);
 
 /**
- * DEPRECATED, use lv_scale_set_section_style_main/indicator/items instead.
- * Set style for specified part of Section.
+ * DEPRECATED , вместо этого используйте lv_scale_set_section_style_main /indicator/items.
+ * Установить стиль для указанной части раздела.
  * @param section             pointer to Section
  * @param part                the part of the Scale the style will apply to, e.g. LV_PART_INDICATOR
  * @param section_part_style  pointer to style to apply
@@ -276,7 +276,7 @@ void lv_scale_set_section_max_value(lv_obj_t * scale, lv_scale_section_t * secti
 void lv_scale_section_set_style(lv_scale_section_t * section, lv_part_t part, lv_style_t * section_part_style);
 
 /**
- * Set the style of the line on a section.
+ * Установите стиль линии на участке.
  * @param scale         pointer to scale
  * @param section       pointer to section
  * @param style         point to a style
@@ -284,7 +284,7 @@ void lv_scale_section_set_style(lv_scale_section_t * section, lv_part_t part, lv
 void lv_scale_set_section_style_main(lv_obj_t * scale, lv_scale_section_t * section, const lv_style_t * style);
 
 /**
- * Set the style of the major ticks and label on a section.
+ * Установите стиль основных отметок и меток раздела.
  * @param scale         pointer to scale
  * @param section       pointer to section
  * @param style         point to a style
@@ -292,7 +292,7 @@ void lv_scale_set_section_style_main(lv_obj_t * scale, lv_scale_section_t * sect
 void lv_scale_set_section_style_indicator(lv_obj_t * scale, lv_scale_section_t * section, const lv_style_t * style);
 
 /**
- * Set the style of the minor ticks on a section.
+ * Установите стиль второстепенных отметок раздела.
  * @param scale         pointer to scale
  * @param section       pointer to section
  * @param style         point to a style
@@ -300,73 +300,73 @@ void lv_scale_set_section_style_indicator(lv_obj_t * scale, lv_scale_section_t *
 void lv_scale_set_section_style_items(lv_obj_t * scale, lv_scale_section_t * section, const lv_style_t * style);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get scale mode. See lv_scale_mode_t
+ * Получить режим масштабирования. См. lv_scale_mode_t.
  * @param obj   pointer to Scale Widget
- * @return      Scale mode
+ * @return      Режим масштабирования
  */
 lv_scale_mode_t lv_scale_get_mode(lv_obj_t * obj);
 
 /**
- * Get scale total tick count (including minor and major ticks)
+ * Получить общее количество тиков шкалы (включая второстепенные и основные тики)
  * @param obj   pointer to Scale Widget
  * @return      Scale total tick count
  */
 int32_t lv_scale_get_total_tick_count(lv_obj_t * obj);
 
 /**
- * Get how often the major tick will be drawn
+ * Узнайте, как часто будет выпадать основной тик
  * @param obj   pointer to Scale Widget
  * @return      Scale major tick every count
  */
 int32_t lv_scale_get_major_tick_every(lv_obj_t * obj);
 
 /**
- * Get angular location of low end of Scale.
+ * Получите угловое расположение нижнего конца шкалы.
  * @param obj   pointer to Scale Widget
  * @return      Scale low end angular location
  */
 int32_t lv_scale_get_rotation(lv_obj_t * obj);
 
 /**
- * Gets label visibility
+ * Получает видимость метки
  * @param obj   pointer to Scale Widget
  * @return      true if tick label is enabled, false otherwise
  */
 bool lv_scale_get_label_show(lv_obj_t * obj);
 
 /**
- * Get Scale's range in degrees
+ * Получить диапазон шкалы в градусах
  * @param obj   pointer to Scale Widget
  * @return      Scale's angle_range
  */
 uint32_t lv_scale_get_angle_range(lv_obj_t * obj);
 
 /**
- * Get minimum value for Scale
+ * Получить минимальное значение для масштаба
  * @param obj   pointer to Scale Widget
  * @return      Scale's minimum value
  */
 int32_t lv_scale_get_range_min_value(lv_obj_t * obj);
 
 /**
- * Get maximum value for Scale
+ * Получите максимальное значение Scale
  * @param obj   pointer to Scale Widget
  * @return      Scale's maximum value
  */
 int32_t lv_scale_get_range_max_value(lv_obj_t * obj);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 #if LV_USE_OBSERVER
 
 /**
- * Bind an integer subject to a scales section minimum value
+ * Привязать целое число к минимальному значению раздела весов
  * @param obj       pointer to a Scale
  * @param section   pointer to a Scale section
  * @param subject   pointer to a Subject
@@ -375,7 +375,7 @@ int32_t lv_scale_get_range_max_value(lv_obj_t * obj);
 lv_observer_t * lv_scale_bind_section_min_value(lv_obj_t * obj, lv_scale_section_t * section, lv_subject_t * subject);
 
 /**
- * Bind an integer subject to a scales section maximum value
+ * Привязать целое число к максимальному значению раздела весов
  * @param obj       pointer to an Scale
  * @param section   pointer to a Scale section
  * @param subject   pointer to a Subject
@@ -392,7 +392,7 @@ lv_observer_t * lv_scale_bind_section_max_value(lv_obj_t * obj, lv_scale_section
 #endif /*LV_USE_SCALE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SCALE_H*/

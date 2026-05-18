@@ -72,9 +72,9 @@ int pika_lvgl_arc_get_mode(PikaObj *self){
     lv_obj_t* lv_obj = obj_getPtr(self, "lv_obj");
     return lv_arc_get_mode(lv_obj);
 }
-// int pika_lvgl_arc_get_rotation(PikaObj *self){
-//     lv_obj_t* lv_obj = obj_getPtr(self, "lv_obj");
-//     return lv_arc_get_rotation(lv_obj);
+// intpika_lvgl_arc_get_rotation(PikaObj *self){
+//     lv_obj_t * lv_obj = obj_getPtr (собственный, "lv_obj");
+//     вернуть lv_arc_get_rotation (lv_obj);
 // }
 int pika_lvgl_arc_get_value(PikaObj *self){
     lv_obj_t* lv_obj = obj_getPtr(self, "lv_obj");
@@ -212,9 +212,9 @@ int pika_lvgl_dropdown_get_dir(PikaObj *self){
     lv_obj_t* lv_obj = obj_getPtr(self, "lv_obj");
     return lv_dropdown_get_dir(lv_obj);
 }
-// PikaObj* pika_lvgl_dropdown_get_list(PikaObj *self){
-//     lv_obj_t* lv_obj = obj_getPtr(self, "lv_obj");
-//     return obj_getObj(lv_dropdown_get_list(lv_obj));
+// PikaObj*pika_lvgl_dropdown_get_list(PikaObj *self){
+//     lv_obj_t * lv_obj = obj_getPtr (собственный, "lv_obj");
+//     вернуть obj_getObj ( lv_dropdown_get_list ( lv_obj ));
 // }
 int pika_lvgl_dropdown_get_option_count(PikaObj *self){
     lv_obj_t* lv_obj = obj_getPtr(self, "lv_obj");

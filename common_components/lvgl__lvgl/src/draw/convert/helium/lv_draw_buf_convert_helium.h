@@ -38,20 +38,20 @@ extern "C" {
  **********************/
 
 /**
- * Convert indexed draw_buf to premultiplied format with helium specific optimizations
+ * Преобразование индексированного draw_buf в формат с предварительным умножением с оптимизацией, специфичной для гелия.
  * @param buf     pointer to a draw buf
  */
 lv_result_t _lv_draw_buf_convert_premultiply_indexed_helium(lv_draw_buf_t * buf);
 
 /**
- * Convert argb8888 draw_buf to premultiplied format with helium specific optimizations
+ * Преобразование argb8888 draw_buf в формат предварительного умножения с оптимизацией, специфичной для гелия.
  * @param buf     pointer to a draw buf
  */
 lv_result_t _lv_draw_buf_convert_premultiply_argb8888_helium(lv_draw_buf_t * buf);
 
 #endif /*LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_HELIUM*/
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_DRAW_BUF_CONVERT_HELIUM_H */

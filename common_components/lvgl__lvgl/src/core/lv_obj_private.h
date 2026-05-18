@@ -25,8 +25,8 @@ extern "C" {
  **********************/
 
 /**
- * Special, rarely used attributes.
- * They are allocated automatically if any elements is set.
+ * Особые, редко используемые атрибуты.
+ * Они выделяются автоматически, если установлены какие-либо элементы.
  */
 struct _lv_obj_spec_attr_t {
     lv_obj_t ** children;           /**< Store the pointer of the children in an array.*/
@@ -78,13 +78,13 @@ struct _lv_obj_t {
     uint16_t style_cnt  : 6;
     uint16_t h_layout   : 1;
     uint16_t w_layout   : 1;
-    uint16_t h_ignore_size : 1; /* ignore this obj when calculating content height of parent */
-    uint16_t w_ignore_size : 1; /* ignore this obj when calculating content width of parent */
+    uint16_t h_ignore_size : 1; /* игнорировать этот объект при вычислении высоты содержимого родительского элемента */
+    uint16_t w_ignore_size : 1; /* игнорировать этот объект при вычислении ширины содержимого родительского элемента */
     uint16_t is_deleting : 1;
     uint16_t radio_button : 1; /**< Allow only one RADIO_BUTTON sibling to be checked*/
 
-    /** The widget is rendered at least once already.
-     * It's used to skip initial animations and transitions. */
+    /** Виджет уже отображается как минимум один раз.
+     * Он используется для пропуска начальных анимаций и переходов. */
     uint16_t rendered : 1;
 };
 
@@ -97,7 +97,7 @@ struct _lv_obj_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_PRIVATE_H*/

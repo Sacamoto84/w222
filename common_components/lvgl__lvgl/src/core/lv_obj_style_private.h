@@ -48,41 +48,41 @@ struct _lv_obj_style_transition_dsc_t {
  **********************/
 
 /**
- * Initialize the object related style manager module.
- * Called by LVGL in `lv_init()`
+ * Инициализируйте модуль менеджера стилей, связанных с объектами.
+ * ВызываетсяLVGLв `lv_init()`
  */
 void lv_obj_style_init(void);
 
 /**
- * Deinitialize the object related style manager module.
- * Called by LVGL in `lv_deinit()`
+ * Деинициализируйте модуль менеджера стилей, связанных с объектами.
+ * ВызываетсяLVGLв `lv_deinit()`
  */
 void lv_obj_style_deinit(void);
 
 /**
- * Used internally to create a style transition
- * @param obj
- * @param part
+ * Используется внутри для создания перехода стиля.
+ * @param объект
+ * @param часть
  * @param prev_state
  * @param new_state
- * @param tr
+ * @param тр
  */
 void lv_obj_style_create_transition(lv_obj_t * obj, lv_part_t part, lv_state_t prev_state,
                                     lv_state_t new_state, const lv_obj_style_transition_dsc_t * tr);
 
 /**
- * Used internally to compare the appearance of an object in 2 states
- * @param obj
- * @param state1
- * @param state2
+ * Используется внутри компании для сравнения внешнего вида объекта в двух состояниях.
+ * @param объект
+ * @param состояние1
+ * @param состояние2
  * @return
  */
 lv_style_state_cmp_t lv_obj_style_state_compare(lv_obj_t * obj, lv_state_t state1, lv_state_t state2);
 
 /**
- * Update the layer type of a widget bayed on its current styles.
- * The result will be stored in `obj->spec_attr->layer_type`
- * @param obj       the object whose layer should be updated
+ * Обновите тип слоя виджета, привязанного к его текущим стилям.
+ * Результат будет сохранен в `obj->spec_attr->layer_type`.
+ * @param obj       объект, слой которого следует обновить
  */
 void lv_obj_update_layer_type(lv_obj_t * obj);
 
@@ -91,7 +91,7 @@ void lv_obj_update_layer_type(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_STYLE_PRIVATE_H*/

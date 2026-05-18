@@ -4,9 +4,9 @@
 
 #include "unity/unity.h"
 
-/* This function runs before each test */
+/* Эта функция запускается перед каждым тестом */
 void setUp(void);
-/* This function runs after every test */
+/* Эта функция запускается после каждого теста */
 void tearDown(void);
 
 void test_calendar_creation_successful(void);
@@ -44,7 +44,7 @@ void test_calendar_creation_successful(void)
 
 void test_calendar_set_today_date(void)
 {
-    /* Work with 2022-09-21 as today (start of spring in Southern hemisphere) */
+    /* Работайте с 21 сентября 2022 г. как сегодня (начало весны в южном полушарии) */
     lv_calendar_date_t today;
     today.year = 2022;
     today.month = 9;
@@ -61,7 +61,7 @@ void test_calendar_set_today_date(void)
 
 void test_calendar_set_today_date_gui(void)
 {
-    /* Work with 2022-09-21 as today (start of spring in Southern hemisphere) */
+    /* Работайте с 21 сентября 2022 г. как сегодня (начало весны в южном полушарии) */
     lv_calendar_date_t today;
     today.year = 2022;
     today.month = 9;
@@ -82,8 +82,8 @@ void test_calendar_set_showed_date_gui(void)
 
 void test_calendar_set_highlighted_dates(void)
 {
-    /*Highlight a few days*/
-    static lv_calendar_date_t highlighted_days[3];       /*Only its pointer will be saved so should be static*/
+    /*Выделите несколько дней*/
+    static lv_calendar_date_t highlighted_days[3];       /*Будет сохранен только его указатель, поэтому он должен быть статическим.*/
     highlighted_days[0].year = 2022;
     highlighted_days[0].month = 2;
     highlighted_days[0].day = 6;
@@ -109,8 +109,8 @@ void test_calendar_set_highlighted_dates(void)
 
 void test_calendar_set_highlighted_dates_gui(void)
 {
-    /*Highlight a few days*/
-    static lv_calendar_date_t highlighted_days[3];       /*Only its pointer will be saved so should be static*/
+    /*Выделите несколько дней*/
+    static lv_calendar_date_t highlighted_days[3];       /*Будет сохранен только его указатель, поэтому он должен быть статическим.*/
     highlighted_days[0].year = 2022;
     highlighted_days[0].month = 2;
     highlighted_days[0].day = 6;
@@ -143,8 +143,8 @@ void test_calendar_set_day_names_gui(void)
 
 void test_calendar_get_highlighted_dates_num(void)
 {
-    /*Highlight a few days*/
-    static lv_calendar_date_t highlighted_days[3];       /*Only its pointer will be saved so should be static*/
+    /*Выделите несколько дней*/
+    static lv_calendar_date_t highlighted_days[3];       /*Будет сохранен только его указатель, поэтому он должен быть статическим.*/
     highlighted_days[0].year = 2022;
     highlighted_days[0].month = 2;
     highlighted_days[0].day = 6;
@@ -196,7 +196,7 @@ void test_calendar_header_arrow_create_gui(void)
 {
     lv_calendar_add_header_arrow(g_calendar);
 
-    lv_calendar_set_month_shown(g_calendar, 2022, 10);    // Use October to avoid month name sliding
+    lv_calendar_set_month_shown(g_calendar, 2022, 10);    // Используйте октябрь, чтобы избежать смещения названия месяца.
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/calendar_06.png");
 }

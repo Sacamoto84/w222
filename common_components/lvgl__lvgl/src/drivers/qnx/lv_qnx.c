@@ -116,8 +116,8 @@ lv_display_t * lv_qnx_window_create(int32_t hor_res, int32_t ver_res)
         return NULL;
     }
 
-    /*Replace the default refresh timer handler, so that we can run it on
-     *demand instead of constantly.*/
+    /*Замените обработчик таймера обновления по умолчанию, чтобы мы могли запустить его
+     *требовать, а не постоянно.*/
     lv_timer_t * refr_timer = lv_display_get_refr_timer(disp);
     lv_timer_set_cb(refr_timer, refresh_cb);
 
@@ -128,7 +128,7 @@ void lv_qnx_window_set_title(lv_display_t * disp, const char * title)
 {
     lv_qnx_window_t * dsc = lv_display_get_driver_data(disp);
     if(!dsc->managed) {
-        /*Can't set title if there is no window manager*/
+        /*Невозможно установить заголовок, если нет оконного менеджера*/
         return;
     }
 
@@ -154,7 +154,7 @@ bool lv_qnx_add_pointer_device(lv_display_t * disp)
 {
     lv_qnx_window_t * dsc = lv_display_get_driver_data(disp);
     if(dsc->pointer != NULL) {
-        /*Only one pointer device per display*/
+        /*Только одно указательное устройство на дисплей*/
         return false;
     }
 
@@ -181,7 +181,7 @@ bool lv_qnx_add_keyboard_device(lv_display_t * disp)
 {
     lv_qnx_window_t * dsc = lv_display_get_driver_data(disp);
     if(dsc->keyboard != NULL) {
-        /*Only one keyboard device per display*/
+        /*Только одно клавиатурное устройство на дисплей*/
         return false;
     }
 
@@ -208,7 +208,7 @@ int lv_qnx_event_loop(lv_display_t * disp)
 {
     lv_refr_now(disp);
 
-    /*Run the event loop*/
+    /*Запуск цикла событий*/
     screen_event_t  event;
     if(screen_create_event(&event) != 0) {
         LV_LOG_ERROR("screen_create_event: %s", strerror(errno));
@@ -217,13 +217,13 @@ int lv_qnx_event_loop(lv_display_t * disp)
 
     uint64_t timeout_ns = 0;
     for(;;) {
-        /*Wait for an event, timing out after 16ms if animations are running*/
+        /*Ожидание события, тайм-аут через 16 мс, если анимация запущена.*/
         if(screen_get_event(context, event, timeout_ns) != 0) {
             LV_LOG_ERROR("screen_get_event: %s", strerror(errno));
             return EXIT_FAILURE;
         }
 
-        /*Get the event's type*/
+        /*Получить тип события*/
         int type;
         if(screen_get_event_property_iv(event, SCREEN_PROPERTY_TYPE, &type)
            != 0) {
@@ -242,11 +242,11 @@ int lv_qnx_event_loop(lv_display_t * disp)
             }
         }
         else if(type == SCREEN_EVENT_MANAGER) {
-            /*Only sub-type supported is closing the window*/
+            /*Поддерживается только подтип — закрытие окна*/
             break;
         }
 
-        /*Calculate the next timeout*/
+        /*Рассчитать следующий тайм-аут*/
         uint32_t timeout_ms = lv_timer_handler();
         if(timeout_ms == LV_NO_TIMER_READY) {
             timeout_ns = -1ULL;
@@ -286,14 +286,14 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
 
 static bool window_create(lv_display_t * disp)
 {
-    /*Create a window*/
+    /*Создать окно*/
     lv_qnx_window_t * dsc = lv_display_get_driver_data(disp);
     if(screen_create_window(&dsc->window, context) != 0) {
         LV_LOG_ERROR("screen_create_window: %s", strerror(errno));
         return false;
     }
 
-    /*Set window properties*/
+    /*Установить свойства окна*/
     int rect[] = { 0, 0, disp->hor_res, disp->ver_res };
     if(screen_set_window_property_iv(dsc->window, SCREEN_PROPERTY_POSITION,
                                      &rect[0]) != 0) {
@@ -327,7 +327,7 @@ static bool window_create(lv_display_t * disp)
         return NULL;
     }
 
-    /*Initialize window buffers*/
+    /*Инициализировать оконные буферы*/
     if(screen_create_window_buffers(dsc->window, LV_QNX_BUF_COUNT) != 0) {
         LV_LOG_ERROR("screen_create_window_buffers: %s", strerror(errno));
         return false;
@@ -339,7 +339,7 @@ static bool window_create(lv_display_t * disp)
         return false;
     }
 
-    /*Connect to the window manager. Can legitimately fail if one is not running*/
+    /*Подключитесь к оконному менеджеру. Может законно выйти из строя, если один из них не работает*/
     if(screen_manage_window(dsc->window, "Frame=Y") == 0) {
         dsc->managed = true;
     }
@@ -468,7 +468,7 @@ static bool handle_keyboard_event(lv_display_t * disp, screen_event_t event)
 
     lv_qnx_keyboard_t * kbd_dsc = lv_indev_get_driver_data(dsc->keyboard);
 
-    /*Get event data*/
+    /*Получить данные о событии*/
     if(screen_get_event_property_iv(event, SCREEN_PROPERTY_FLAGS,
                                     &kbd_dsc->flags)
        != 0) {
@@ -483,7 +483,7 @@ static bool handle_keyboard_event(lv_display_t * disp, screen_event_t event)
         return false;
     }
 
-    /*Translate special keys*/
+    /*Перевести специальные клавиши*/
     switch(kbd_dsc->key) {
         case KEYCODE_UP:
             kbd_dsc->key = LV_KEY_UP;
@@ -522,7 +522,7 @@ static bool handle_keyboard_event(lv_display_t * disp, screen_event_t event)
             break;
 
         default:
-            /*Ignore other non-ASCII keys, including modifiers*/
+            /*Игнорируйте другие ключи, отличные от ASCII, включая модификаторы.*/
             if(kbd_dsc->key > 0xff) return true;
     }
 
@@ -532,8 +532,8 @@ static bool handle_keyboard_event(lv_display_t * disp, screen_event_t event)
 
 static void refresh_cb(lv_timer_t * timer)
 {
-    /*Refresh the window on timeout, but disable the timer. Any callback can
-     *re-enable it.*/
+    /*Обновите окно по таймауту, но отключите таймер. Любой обратный вызов может
+     *снова включите его.*/
     lv_display_t * disp = timer->user_data;
     lv_refr_now(disp);
     lv_timer_pause(timer);

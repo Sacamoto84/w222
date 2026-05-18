@@ -13,7 +13,7 @@ It is the designer's intention that:
     in pairs like this:
 
     announce_start(__file__, 'something is running...')
-    # do something that takes a while here
+    # сделай что-нибудь, что займет некоторое время здесь
     announce_finish()
 
 3.  If this is used in a module that sometimes has a need to
@@ -56,7 +56,7 @@ def _announce(file: str, args: tuple, start: bool, box: bool, box_char: str):
     _args = []
 
     for arg in args:
-        # Avoid the single quotes `repr()` puts around strings.
+        # Избегайте одинарных кавычек, которые`repr()`помещаются в строки.
         if type(arg) is str:
             _args.append(arg)
         else:
@@ -65,7 +65,7 @@ def _announce(file: str, args: tuple, start: bool, box: bool, box_char: str):
     msg = f'{os.path.basename(file)}: ' + ' '.join(_args)
     msg_len = len(msg)
 
-    # `start` takes precedence over `box` argument.
+    # `start` имеет приоритет над аргументом`box`.
     if start:
         print(msg, end='', flush=True)
     else:
@@ -88,7 +88,7 @@ def announce_colored(file: str, clr: str, *args, box: bool = False, box_char: st
     global _announce_start_time
     _announce_start_time = None
     if len(args) > 0 and clr in _console_color_commands:
-        # Tuples are non-mutable so we have to build a new one -- can't insert new elements.
+        # Кортежи неизменяемы, поэтому нам нужно создать новый — мы не можем вставлять новые элементы.
         new_args_tuple = (_console_color_commands[clr],) + args + (_console_color_commands['default'],)
         _announce(file, new_args_tuple, False, box, box_char)
     else:
@@ -102,7 +102,7 @@ def announce_start(file: str, *args, box: bool = False, box_char: str = '*'):
 
 
 def announce_finish():
-    # Just output line ending to terminate output for `announce_start()`.
+    # Просто вы вводите окончание строк, чтобы завершить вывод для`announce_start()`.
     global _announce_start_time
     if _announce_start_time is not None:
         if not _announce_silent_mode:

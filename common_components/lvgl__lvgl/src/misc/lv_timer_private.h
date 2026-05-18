@@ -26,7 +26,7 @@ extern "C" {
  **********************/
 
 /**
- * Descriptor of a lv_timer
+ * Дескриптор lv_timer
  */
 struct _lv_timer_t {
 #if LV_USE_EXT_DATA
@@ -65,12 +65,12 @@ typedef struct {
  **********************/
 
 /**
- * Init the lv_timer module
+ * Инициализируемый модуль lv_timer
  */
 void lv_timer_core_init(void);
 
 /**
- * Deinit the lv_timer module
+ * Деинитизировать модуль lv_timer
  */
 void lv_timer_core_deinit(void);
 
@@ -79,7 +79,7 @@ void lv_timer_core_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TIMER_PRIVATE_H*/

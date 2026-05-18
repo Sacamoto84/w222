@@ -1,23 +1,23 @@
 /**
  * @file lv_conf.h
- * Configuration file for v9.5.0
+ * Конфигурационный файл для v9.5.0
  */
 
 /*
- * Copy this file as `lv_conf.h`
- * 1. simply next to `lvgl` folder
- * 2. or to any other place and
- *    - define `LV_CONF_INCLUDE_SIMPLE`;
- *    - add the path as an include path.
+ * Скопируйте этот файл как `lv_conf.h`
+ * 1. просто рядом с папкой `lvgl`
+ * 2. или в любое другое место и
+ *    - определить`LV_CONF_INCLUDE_SIMPLE`;
+ *    - добавьте путь как включаемый путь.
  */
 
 /* clang-format off */
-#if 0 /* Set this to "1" to enable content */
+#if 0 /* Установите значение «1», чтобы включить контент. */
 
 #ifndef LV_CONF_H
 #define LV_CONF_H
 
-/* If you need to include anything here, do it inside the `__ASSEMBLY__` guard */
+/* Если вам нужно что-то включить сюда, сделайте это внутри защиты `__ASSEMBLY__`. */
 #if  0 && defined(__ASSEMBLY__)
 #include "my_include.h"
 #endif
@@ -26,37 +26,37 @@
    COLOR SETTINGS
  *====================*/
 
-/** Color depth: 1 (I1), 8 (L8), 16 (RGB565), 24 (RGB888), 32 (XRGB8888) */
+/** Глубина цвета: 1 ( I1 ), 8 ( L8 ), 16 ( RGB565 ), 24 ( RGB888 ), 32 ( XRGB8888 ) */
 #define LV_COLOR_DEPTH 16
 
 /*=========================
    STDLIB WRAPPER SETTINGS
  *=========================*/
 
-/** Possible values
- * - LV_STDLIB_BUILTIN:     LVGL's built in implementation
- * - LV_STDLIB_CLIB:        Standard C functions, like malloc, strlen, etc
- * - LV_STDLIB_MICROPYTHON: MicroPython implementation
- * - LV_STDLIB_RTTHREAD:    RT-Thread implementation
- * - LV_STDLIB_CUSTOM:      Implement the functions externally
+/** Возможные значения
+ * - LV_STDLIB_BUILTIN: встроенная реализация LVGL.
+ * - LV_STDLIB_CLIB: стандартные функции C, такие как malloc, strlen и т. д.
+ * - LV_STDLIB_MICROPYTHON: реализация MicroPython.
+ * - LV_STDLIB_RTTHREAD :RT— реализация потока
+ * - LV_STDLIB_CUSTOM: внешняя реализация функций.
  */
 #define LV_USE_STDLIB_MALLOC    LV_STDLIB_BUILTIN
 
-/** Possible values
- * - LV_STDLIB_BUILTIN:     LVGL's built in implementation
- * - LV_STDLIB_CLIB:        Standard C functions, like malloc, strlen, etc
- * - LV_STDLIB_MICROPYTHON: MicroPython implementation
- * - LV_STDLIB_RTTHREAD:    RT-Thread implementation
- * - LV_STDLIB_CUSTOM:      Implement the functions externally
+/** Возможные значения
+ * - LV_STDLIB_BUILTIN: встроенная реализация LVGL.
+ * - LV_STDLIB_CLIB: стандартные функции C, такие как malloc, strlen и т. д.
+ * - LV_STDLIB_MICROPYTHON: реализация MicroPython.
+ * - LV_STDLIB_RTTHREAD :RT— реализация потока
+ * - LV_STDLIB_CUSTOM: внешняя реализация функций.
  */
 #define LV_USE_STDLIB_STRING    LV_STDLIB_BUILTIN
 
-/** Possible values
- * - LV_STDLIB_BUILTIN:     LVGL's built in implementation
- * - LV_STDLIB_CLIB:        Standard C functions, like malloc, strlen, etc
- * - LV_STDLIB_MICROPYTHON: MicroPython implementation
- * - LV_STDLIB_RTTHREAD:    RT-Thread implementation
- * - LV_STDLIB_CUSTOM:      Implement the functions externally
+/** Возможные значения
+ * - LV_STDLIB_BUILTIN: встроенная реализация LVGL.
+ * - LV_STDLIB_CLIB: стандартные функции C, такие как malloc, strlen и т. д.
+ * - LV_STDLIB_MICROPYTHON: реализация MicroPython.
+ * - LV_STDLIB_RTTHREAD :RT— реализация потока
+ * - LV_STDLIB_CUSTOM: внешняя реализация функций.
  */
 #define LV_USE_STDLIB_SPRINTF   LV_STDLIB_BUILTIN
 
@@ -68,15 +68,15 @@
 #define LV_STDARG_INCLUDE       <stdarg.h>
 
 #if LV_USE_STDLIB_MALLOC == LV_STDLIB_BUILTIN
-    /** Size of memory available for `lv_malloc()` in bytes (>= 2kB) */
+    /** Размер доступной для`lv_malloc()`памяти в байтах (>= 2 КБ) */
     #define LV_MEM_SIZE (64 * 1024U)          /**< [bytes] */
 
-    /** Size of the memory expand for `lv_malloc()` in bytes */
+    /** Размер расширения памяти для`lv_malloc()`в байтах */
     #define LV_MEM_POOL_EXPAND_SIZE 0
 
-    /** Set an address for the memory pool instead of allocating it as a normal array. Can be in external SRAM too. */
+    /** Установите адрес пула памяти вместо того, чтобы выделять его как обычный массив. Может быть и во внешнем SRAM. */
     #define LV_MEM_ADR 0     /**< 0: unused*/
-    /* Instead of an address give a memory allocator that will be called to get a memory pool for LVGL. E.g. my_malloc */
+    /* Вместо этого адрес определяет распределение памяти, которое будет включать получение пула памяти дляLVGL. Например.   my_malloc */
     #if LV_MEM_ADR == 0
         #undef LV_MEM_POOL_INCLUDE
         #undef LV_MEM_POOL_ALLOC
@@ -87,17 +87,17 @@
    HAL SETTINGS
  *====================*/
 
-/** Default display refresh, input device read and animation step period. */
+/** Обновление дисплея по умолчанию, чтение с устройства ввода и период шага анимации. */
 #define LV_DEF_REFR_PERIOD  33      /**< [ms] */
 
-/** Default Dots Per Inch. Used to initialize default sizes such as widgets sized, style paddings.
- * (Not so important, you can adjust it to modify default sizes and spaces.) */
+/** Точек на дюйм по умолчанию. Используется для инициализации размеров по умолчанию, таких как размер виджетов и отступы стиля.
+ * (Не так важно, вы можете настроить его, чтобы изменить размеры и пробелы по умолчанию.) */
 #define LV_DPI_DEF 130              /**< [px/inch] */
 
 /*=================
  * OPERATING SYSTEM
  *=================*/
-/** Select operating system to use. Possible options:
+/** Выберите операционную систему для использования. Возможные варианты:
  * - LV_OS_NONE
  * - LV_OS_PTHREAD
  * - LV_OS_FREERTOS
@@ -114,9 +114,9 @@
 #endif
 #if LV_USE_OS == LV_OS_FREERTOS
     /*
-     * Unblocking an RTOS task with a direct notification is 45% faster and uses less RAM
-     * than unblocking a task using an intermediary object such as a binary semaphore.
-     * RTOS task notifications can only be used when there is only one task that can be the recipient of the event.
+     * Разблокировка задачи RTOS с помощью прямого уведомления происходит на 45 % быстрее и требует меньше RAM.
+     * чем разблокировать задачу с помощью промежуточного объекта, такого как двоичный семафор.
+     * Уведомления о задачах RTOS можно использовать только в том случае, если существует только одна задача, которая может быть получателем события.
      */
     #define LV_USE_FREERTOS_TASK_NOTIFY 1
 #endif
@@ -125,53 +125,53 @@
  * RENDERING CONFIGURATION
  *========================*/
 
-/** Align stride of all layers and images to this bytes */
+/** Выровнять шаг всех слоев и изображений по этим байтам. */
 #define LV_DRAW_BUF_STRIDE_ALIGN                1
 
-/** Align start address of draw_buf addresses to this bytes*/
+/** Выровнять начальный адрес адресовdraw_bufпо этим байтам.*/
 #define LV_DRAW_BUF_ALIGN                       4
 
-/** Using matrix for transformations.
- * Requirements:
+/** Использование матрицы для преобразований.
+ * Требования:
  * - `LV_USE_MATRIX = 1`.
- * - Rendering engine needs to support 3x3 matrix transformations. */
+ * - Механизм рендеринга должен поддерживать матричные преобразования 3x3. */
 #define LV_DRAW_TRANSFORM_USE_MATRIX            0
 
-/* If a widget has `style_opa < 255` (not `bg_opa`, `text_opa` etc) or not NORMAL blend mode
- * it is buffered into a "simple" layer before rendering. The widget can be buffered in smaller chunks.
- * "Transformed layers" (if `transform_angle/zoom` are set) use larger buffers
- * and can't be drawn in chunks. */
+/* Если виджет имеет режим наложения`style_opa < 255`(не`bg_opa`,`text_opa`и т. д.) или не NORMAL
+ * перед рендерингом он буферизуется в «простой» слой. Виджет может быть буферизован небольшими частями.
+ * «Преобразованные слои» (если установлены`transform_angle/zoom`) используют буферы большего размера.
+ * и его нельзя рисовать частями. */
 
-/** The target buffer size for simple layer chunks. */
+/** Размер целевого буфера для простых фрагментов слоя. */
 #define LV_DRAW_LAYER_SIMPLE_BUF_SIZE    (24 * 1024)    /**< [bytes]*/
 
-/* Limit the max allocated memory for simple and transformed layers.
- * It should be at least `LV_DRAW_LAYER_SIMPLE_BUF_SIZE` sized but if transformed layers are also used
- * it should be enough to store the largest widget too (width x height x 4 area).
- * Set it to 0 to have no limit. */
+/* Ограничьте максимальный объем выделенной памяти для простых и преобразованных слоев.
+ * Его размер должен быть не менее `LV_DRAW_LAYER_SIMPLE_BUF_SIZE`, но если также используются преобразованные слои.
+ * этого должно быть достаточно для хранения самого большого виджета (ширина x высота x 4 площади).
+ * Установите значение 0, чтобы не иметь ограничений. */
 #define LV_DRAW_LAYER_MAX_MEMORY 0  /**< No limit by default [bytes]*/
 
-/** Stack size of drawing thread.
- * NOTE: If FreeType or ThorVG is enabled, it is recommended to set it to 32KB or more.
+/** Размер стопки ниток для рисования.
+ * NOTE: Если FreeType или ThorVG включены, рекомендуется установить значение 32 КБ или более.
  */
 #define LV_DRAW_THREAD_STACK_SIZE    (8 * 1024)         /**< [bytes]*/
 
-/** Thread priority of the drawing task.
- *  Higher values mean higher priority.
- *  Can use values from lv_thread_prio_t enum in lv_os.h: LV_THREAD_PRIO_LOWEST,
+/** Приоритет потока задачи рисования.
+ *  Более высокие значения означают более высокий приоритет.
+ *  Можно использовать значения из перечисленияlv_thread_prio_tвlv_os.h:LV_THREAD_PRIO_LOWEST,
  *  LV_THREAD_PRIO_LOW, LV_THREAD_PRIO_MID, LV_THREAD_PRIO_HIGH, LV_THREAD_PRIO_HIGHEST
- *  Make sure the priority value aligns with the OS-specific priority levels.
- *  On systems with limited priority levels (e.g., FreeRTOS), a higher value can improve
- *  rendering performance but might cause other tasks to starve. */
+ *  Убедитесь, что значение приоритета соответствует уровням приоритета, специфичным для OS.
+ *  Внимательность с приоритетом ограниченного уровня (например, FreeRTOS) более высокое значение может улучшиться
+ *  производительность рендеринга, но может привести к зависанию других задач. */
 #define LV_DRAW_THREAD_PRIO LV_THREAD_PRIO_HIGH
 
 #define LV_USE_DRAW_SW 1
 #if LV_USE_DRAW_SW == 1
     /*
-     * Selectively disable color format support in order to reduce code size.
-     * NOTE: some features use certain color formats internally, e.g.
-     * - gradients use RGB888
-     * - bitmaps with transparency may use ARGB8888
+     * Выборочно отключите поддержку цветового формата, чтобы уменьшить размер кода.
+     * NOTE: некоторые функции используют определенные цветовые форматы внутри, например.
+     * - градиенты используют RGB888
+     * - растровые изображения с прозрачностью могут использовать ARGB8888
      */
     #define LV_DRAW_SW_SUPPORT_RGB565       1
     #define LV_DRAW_SW_SUPPORT_RGB565_SWAPPED       1
@@ -185,36 +185,36 @@
     #define LV_DRAW_SW_SUPPORT_A8           1
     #define LV_DRAW_SW_SUPPORT_I1           1
 
-    /* The threshold of the luminance to consider a pixel as
-     * active in indexed color format */
+    /* Порог яркости, позволяющий считать пиксель
+     * активен в индексированном цветовом формате */
     #define LV_DRAW_SW_I1_LUM_THRESHOLD 127
 
-    /** Set number of draw units.
-     *  - > 1 requires operating system to be enabled in `LV_USE_OS`.
-     *  - > 1 means multiple threads will render the screen in parallel. */
+    /** Установите количество единиц рисования.
+     *  - > 1 требует, чтобы операционная система была включена в `LV_USE_OS`.
+     *  - > 1 означает, что несколько потоков будут отображать экран параллельно. */
     #define LV_DRAW_SW_DRAW_UNIT_CNT    1
 
-    /** Use Arm-2D to accelerate software (sw) rendering. */
+    /** Используйте Arm-2D для ускорения программного (программного) рендеринга. */
     #define LV_USE_DRAW_ARM2D_SYNC      0
 
-    /** Enable native helium assembly to be compiled. */
+    /** Включите компиляцию самостоятельной сборки Helium. */
     #define LV_USE_NATIVE_HELIUM_ASM    0
 
     /**
-     * - 0: Use a simple renderer capable of drawing only simple rectangles with gradient, images, text, and straight lines only.
-     * - 1: Use a complex renderer capable of drawing rounded corners, shadow, skew lines, and arcs too. */
+     * - 0: использовать простой рендерер, способный рисовать только простые прямоугольники с градиентом, изображениями, текстом и прямыми линиями.
+     * - 1. Используйте сложный рендерер, способный рисовать закругленные углы, тени, наклонные линии и дуги. */
     #define LV_DRAW_SW_COMPLEX          1
 
     #if LV_DRAW_SW_COMPLEX == 1
-        /** Allow buffering some shadow calculation.
-         *  LV_DRAW_SW_SHADOW_CACHE_SIZE is the maximum shadow size to buffer, where shadow size is
-         *  `shadow_width + radius`.  Caching has LV_DRAW_SW_SHADOW_CACHE_SIZE^2 RAM cost. */
+        /** Разрешить буферизацию некоторых вычислений теней.
+         *  LV_DRAW_SW_SHADOW_CACHE_SIZE — максимальный размер тени в буфере, где размер тени равен
+         *  `shadow_width + radius` .  Кэширование имеет стоимостьLV_DRAW_SW_SHADOW_CACHE_SIZE^2RAM. */
         #define LV_DRAW_SW_SHADOW_CACHE_SIZE 0
 
-        /** Set number of maximally-cached circle data.
-         *  The circumference of 1/4 circle are saved for anti-aliasing.
-         *  `radius * 4` bytes are used per circle (the most often used radiuses are saved).
-         *  - 0: disables caching */
+        /** Установите количество максимально кэшируемых данных круга.
+         *  Окружность 1/4 круга сохраняется для сглаживания.
+         *  По кругу используются байты`radius * 4`(наиболее часто используются радиусы направления).
+         *  - 0: отключает кэширование */
         #define LV_DRAW_SW_CIRCLE_CACHE_SIZE 4
     #endif
 
@@ -224,227 +224,227 @@
         #define  LV_DRAW_SW_ASM_CUSTOM_INCLUDE ""
     #endif
 
-    /** Enable drawing complex gradients in software: linear at an angle, radial or conical */
+    /** Включите возможность рисования в программе сложных градиентов: линейных под углом, радиальных или конических. */
     #define LV_USE_DRAW_SW_COMPLEX_GRADIENTS    0
 
 #endif
 
-/*Use TSi's aka (Think Silicon) NemaGFX */
+/*Используйте TSi, он же (Think Silicon) NemaGFX. */
 #define LV_USE_NEMA_GFX 0
 
 #if LV_USE_NEMA_GFX
-    /** Select which NemaGFX static library headers to use. Possible options:
-     * - LV_NEMA_LIB_NONE           an alias of LV_NEMA_LIB_M33_REVC
+    /** Выберите, какие заголовки используют статическую библиотеку NemaGFX. Возможные варианты:
+     * - LV_NEMA_LIB_NONE — псевдоним LV_NEMA_LIB_M33_REVC.
      * - LV_NEMA_LIB_M33_REVC
      * - LV_NEMA_LIB_M33_NEMAPVG
      * - LV_NEMA_LIB_M55
      * - LV_NEMA_LIB_M7
-     * You must also take care to link the correct corresponding static library
-     * in libs/nema_gfx/lib/core/
+     * Вы также должны позаботиться о том, чтобы связать правильную соответствующую статическую библиотеку.
+     * в библиотеках/nema_gfx /lib/core/
      */
     #define LV_USE_NEMA_LIB LV_NEMA_LIB_NONE
 
-    /** Select which NemaGFX HAL to use. Possible options:
+    /** Выберите, какой NemaGFXHALиспользовать. Возможные варианты:
      * - LV_NEMA_HAL_CUSTOM
      * - LV_NEMA_HAL_STM32 */
     #define LV_USE_NEMA_HAL LV_NEMA_HAL_CUSTOM
     #if LV_USE_NEMA_HAL == LV_NEMA_HAL_STM32
         #define LV_NEMA_STM32_HAL_INCLUDE <stm32u5xx_hal.h>
 
-        /** Set it to a value like __attribute__((section("Nemagfx_Memory_Pool_Buffer")))
-         * and define the section in the linker script if you need the GPU memory to
-         * be, e.g. in a region where accesses will not be cached.
+        /** Подберите для него значение типа__attribute__((section("Nemagfx_Memory_Pool_Buffer")))
+         * и определите раздел в скрипте компоновщика, если вам нужна память GPU для
+         * быть, например в регионе, где доступы не будут кэшироваться.
          */
         #define LV_NEMA_STM32_HAL_ATTRIBUTE_POOL_MEM
     #endif
 
-    /*Enable Vector Graphics Operations. Available only if NemaVG library is present*/
+    /*Включите операцию с векторной графикой. Доступно только в наличии библиотеки NemaVG.*/
     #define LV_USE_NEMA_VG 0
     #if LV_USE_NEMA_VG
-        /*Define application's resolution used for VG related buffer allocation */
+        /*Определите разрешение приложения, используемое для выделения буфера, связанного с VG. */
         #define LV_NEMA_GFX_MAX_RESX 800
         #define LV_NEMA_GFX_MAX_RESY 600
     #endif
 #endif
 
-/** Use NXP's PXP on iMX RTxxx platforms. */
+/** ИспользуйтеPXPNXP на платформах iMX RTxxx. */
 #define LV_USE_PXP 0
 
 #if LV_USE_PXP
-    /** Use PXP for drawing.*/
+    /** Используйте PXP для рисования.*/
     #define LV_USE_DRAW_PXP 1
 
-    /** Use PXP to rotate display.*/
+    /** Используйте PXP для поворота дисплея.*/
     #define LV_USE_ROTATE_PXP 0
 
     #if LV_USE_DRAW_PXP && LV_USE_OS
-        /** Use additional draw thread for PXP processing.*/
+        /** Используйте дополнительную нить для обработки PXP.*/
         #define LV_USE_PXP_DRAW_THREAD 1
     #endif
 
-    /** Enable PXP asserts. */
+    /** Включить утверждения PXP. */
     #define LV_USE_PXP_ASSERT 0
 #endif
 
-/** Use NXP's G2D on MPU platforms. */
+/** Используйте G2D NXP на платформах MPU. */
 #define LV_USE_G2D 0
 
 #if LV_USE_G2D
-    /** Use G2D for drawing. **/
+    /** Используйте G2D для рисования. **/
     #define LV_USE_DRAW_G2D 1
 
-    /** Use G2D to rotate display. **/
+    /** Используйте G2D для поворота дисплея. **/
     #define LV_USE_ROTATE_G2D 0
 
-    /** Maximum number of buffers that can be stored for G2D draw unit.
-     *  Includes the frame buffers and assets. */
+    /** Максимальное количество буферов, которые можно сохранить для блока рисования G2D.
+     *  Включает буферы кадров и ресурсы. */
     #define LV_G2D_HASH_TABLE_SIZE 50
 
     #if LV_USE_DRAW_G2D && LV_USE_OS
-        /** Use additional draw thread for G2D processing.*/
+        /** Используйте дополнительную нить для обработки G2D.*/
         #define LV_USE_G2D_DRAW_THREAD 1
     #endif
 
-    /** Enable G2D asserts. */
+    /** Включить утверждения G2D. */
     #define LV_USE_G2D_ASSERT 0
 #endif
 
-/** Use Renesas Dave2D on RA  platforms. */
+/** Используйте Renesas Dave2D на платформе RA. */
 #define LV_USE_DRAW_DAVE2D 0
 
-/** Draw using cached SDL textures*/
+/** Рисуйте, используя кэшированные текстуры SDL.*/
 #define LV_USE_DRAW_SDL 0
 
-/** Use VG-Lite GPU. */
+/** Используйте VG-Lite GPU. */
 #define LV_USE_DRAW_VG_LITE 0
 #if LV_USE_DRAW_VG_LITE
-    /** Enable VG-Lite custom external 'gpu_init()' function */
+    /** Включить пользовательскую внешнюю функциюVG-Lite «gpu_init()» */
     #define LV_VG_LITE_USE_GPU_INIT 0
 
-    /** Enable VG-Lite assert. */
+    /** Включите утверждениеVG-Lite. */
     #define LV_VG_LITE_USE_ASSERT 0
 
-    /** VG-Lite flush commit trigger threshold. GPU will try to batch these many draw tasks. */
+    /** VG - Порог срабатывания облегченного сброса.  GPU попытается группировать эти многочисленные задачи по рисованию. */
     #define LV_VG_LITE_FLUSH_MAX_COUNT 8
 
-    /** Enable border to simulate shadow.
-     *  NOTE: which usually improves performance,
-     *  but does not guarantee the same rendering quality as the software. */
+    /** Включите границу для имитации тени.
+     *  NOTE: что обычно повышает производительность,
+     *  но не гарантирует того же качества рендеринга, что и программное обеспечение. */
     #define LV_VG_LITE_USE_BOX_SHADOW 1
 
-    /** VG-Lite gradient maximum cache number.
-     *  @note  The memory usage of a single gradient image is 4K bytes. */
+    /** VG - Максимальный номер кэша облегченного градиента.
+     *  @note  Использование памяти одним градиентным изображением составляет 4 КБ. */
     #define LV_VG_LITE_GRAD_CACHE_CNT 32
 
-    /** VG-Lite stroke maximum cache number. */
+    /** VG - Максимальный номер кэша Lite. */
     #define LV_VG_LITE_STROKE_CACHE_CNT 32
 
-    /** VG-Lite unaligned bitmap font maximum cache number. */
+    /** VG - Максимальный номер кэша невыровненного растрового шрифта Lite. */
     #define LV_VG_LITE_BITMAP_FONT_CACHE_CNT 256
 
-    /** Remove VLC_OP_CLOSE path instruction (Workaround for NXP) **/
+    /** Удалить инструкцию пути VLC_OP_CLOSE (обходной путь для NXP) **/
     #define LV_VG_LITE_DISABLE_VLC_OP_CLOSE 0
 
-    /** Disable blit rectangular offset to resolve certain hardware errors. */
+    /** Отключите прямоугольное смещение, чтобы устранить аппаратные ошибки. */
     #define LV_VG_LITE_DISABLE_BLIT_RECT_OFFSET 0
 
-    /** Disable linear gradient extension for some older versions of drivers. */
+    /** Отключите расширение линейного градиента для некоторых старых версий драйверов. */
     #define LV_VG_LITE_DISABLE_LINEAR_GRADIENT_EXT 0
 
-    /** Maximum path dump print length (in points) */
+    /** Максимальная длина печати дампа пути (в пунктах) */
     #define LV_VG_LITE_PATH_DUMP_MAX_LEN 1000
 
-    /** Enable usage of the LVGL's built-in vg_lite driver */
+    /** Выключите использование встроенного драйвераvg_liteLVGL. */
     #define LV_USE_VG_LITE_DRIVER  0
     #if LV_USE_VG_LITE_DRIVER
-        /** Used to pick the correct GPU series folder valid options are gc255, gc355 and gc555*/
+        /** Используется для выбора правильной папки серии GPU. Допустимые параметры: gc255, gc355 и gc555.*/
         #define LV_VG_LITE_HAL_GPU_SERIES gc255
 
-        /** Used to pick the correct GPU revision header it depends on the vendor */
+        /** Используется для выбора правильного заголовка версии GPU, это зависит от поставщика. */
         #define LV_VG_LITE_HAL_GPU_REVISION 0x40
 
-        /** Base memory address of the GPU IP it depends on SoC,
-         *  default value is for NXP based devices */
+        /** Память базового адресаGPUIP зависит от SoC,
+         *  значение по умолчанию — для устройств на базе NXP. */
         #define LV_VG_LITE_HAL_GPU_BASE_ADDRESS 0x40240000
     #endif /*LV_USE_VG_LITE_DRIVER*/
 
-    /** Use ThorVG (a software vector library) as VG-Lite driver to allow testing VGLite on PC
-     *  Requires: LV_USE_THORVG_INTERNAL or LV_USE_THORVG_EXTERNAL */
+    /** Используйте ThorVG (программную векторную библиотеку) в качестве драйвераVG-Lite, чтобы можно было протестировать VGLite на PC.
+     *  Требуется: LV_USE_THORVG_INTERNAL или LV_USE_THORVG_EXTERNAL. */
     #define LV_USE_VG_LITE_THORVG   0
     #if LV_USE_VG_LITE_THORVG
-        /** Enable LVGL's blend mode support */
+        /** Включите поддержку режима наложения LVGL. */
         #define LV_VG_LITE_THORVG_LVGL_BLEND_SUPPORT 0
 
-        /** Enable YUV color format support */
+        /** Включить поддержку цветового формата YUV */
         #define LV_VG_LITE_THORVG_YUV_SUPPORT 0
 
-        /** Enable Linear gradient extension support */
+        /** Включить поддержку расширения линейного градиента */
         #define LV_VG_LITE_THORVG_LINEAR_GRADIENT_EXT_SUPPORT 0
 
-        /** Enable alignment on 16 pixels */
+        /** Включить выравнивание по 16 пикселям */
         #define LV_VG_LITE_THORVG_16PIXELS_ALIGN 1
 
-        /** Buffer address alignment */
+        /** Выравнивание адреса буфера */
         #define LV_VG_LITE_THORVG_BUF_ADDR_ALIGN 64
 
-        /** Enable multi-thread render */
+        /** Включить многопоточный рендеринг */
         #define LV_VG_LITE_THORVG_THREAD_RENDER 0
     #endif /*LV_USE_VG_LITE_THORVG*/
 #endif
 
-/** Accelerate blends, fills, etc. with STM32 DMA2D */
+/** Ускорьте смешивание, заливку и т. д. с помощью STM32 DMA2D. */
 #define LV_USE_DRAW_DMA2D 0
 #if LV_USE_DRAW_DMA2D
     #define LV_DRAW_DMA2D_HAL_INCLUDE "stm32h7xx_hal.h"
 
-    /* if enabled, the user is required to call `lv_draw_dma2d_transfer_complete_interrupt_handler`
-     * upon receiving the DMA2D global interrupt
+    /* если включено, пользователю необходимо вызвать `lv_draw_dma2d_transfer_complete_interrupt_handler`
+     * при получении глобального прерывания DMA2D
      */
     #define LV_USE_DRAW_DMA2D_INTERRUPT 0
 #endif
 
-/** Draw using cached OpenGLES textures. Requires LV_USE_OPENGLES */
+/** Рисуйте, используя кэшированные текстуры OpenGLES. Требуется LV_USE_OPENGLES */
 #define LV_USE_DRAW_OPENGLES 0
 #if LV_USE_DRAW_OPENGLES
     #define LV_DRAW_OPENGLES_TEXTURE_CACHE_COUNT 64
 #endif
 
-/** Draw using espressif PPA accelerator */
+/** Рисуйте с помощью ускорителя espressif PPA. */
 #define LV_USE_PPA  0
 #if LV_USE_PPA
     #define LV_USE_PPA_IMG      0
     #define LV_PPA_BURST_LENGTH    128
 #endif
 
-/* Use EVE FT81X GPU. */
+/* Используйте EVE FT81X GPU . */
 #define LV_USE_DRAW_EVE 0
 #if LV_USE_DRAW_EVE
-    /* EVE_GEN value: 2, 3, or 4 */
+    /* Значение EVE_GEN: 2, 3 или 4. */
     #define LV_DRAW_EVE_EVE_GENERATION 4
 
-    /* The maximum number of bytes to buffer before a single SPI transmission.
-     * Set it to 0 to disable write buffering.
+    /* Максимальное количество байтов для буферизации перед одной передачей SPI.
+     * Установите значение 0, чтобы отключить буферизацию записи.
      */
     #define LV_DRAW_EVE_WRITE_BUFFER_SIZE 2048
 #endif
 
-/** Use NanoVG Renderer
- * - Requires LV_USE_NANOVG, LV_USE_MATRIX.
+/** Используйте рендерер NanoVG
+ * - Требуется LV_USE_NANOVG, LV_USE_MATRIX.
  */
 #define LV_USE_DRAW_NANOVG 0
 #if LV_USE_DRAW_NANOVG
-    /** Select OpenGL backend for NanoVG:
-     * - LV_NANOVG_BACKEND_GL2:   OpenGL 2.0
-     * - LV_NANOVG_BACKEND_GL3:   OpenGL 3.0+
-     * - LV_NANOVG_BACKEND_GLES2: OpenGL ES 2.0
-     * - LV_NANOVG_BACKEND_GLES3: OpenGL ES 3.0+
+    /** Выберите серверную часть OpenGL для NanoVG:
+     * - LV_NANOVG_BACKEND_GL2: OpenGL 2.0
+     * - LV_NANOVG_BACKEND_GL3: OpenGL 3.0+
+     * - LV_NANOVG_BACKEND_GLES2 : OpenGLES2.0
+     * - LV_NANOVG_BACKEND_GLES3: OpenGLES3.0+
      */
     #define LV_NANOVG_BACKEND   LV_NANOVG_BACKEND_GLES2
 
-    /** Draw image texture cache count. */
+    /** Отрисовать счетчик текстур текстур изображения. */
     #define LV_NANOVG_IMAGE_CACHE_CNT 128
 
-    /** Draw letter texture cache count. */
+    /** Отрисовка счетчика текстур текстуры букв. */
     #define LV_NANOVG_LETTER_CACHE_CNT 512
 #endif
 
@@ -453,39 +453,39 @@
  *=======================*/
 
 /*-------------
- * Logging
+ * Ведение журнала
  *-----------*/
 
-/** Enable log module */
+/** Включить модуль журнала */
 #define LV_USE_LOG 0
 #if LV_USE_LOG
-    /** Set value to one of the following levels of logging detail:
-     *  - LV_LOG_LEVEL_TRACE    Log detailed information.
-     *  - LV_LOG_LEVEL_INFO     Log important events.
-     *  - LV_LOG_LEVEL_WARN     Log if something unwanted happened but didn't cause a problem.
-     *  - LV_LOG_LEVEL_ERROR    Log only critical issues, when system may fail.
-     *  - LV_LOG_LEVEL_USER     Log only custom log messages added by the user.
-     *  - LV_LOG_LEVEL_NONE     Do not log anything. */
+    /** Установите значение на один из следующих уровней детализации журнала:
+     *  - LV_LOG_LEVEL_TRACE Подробная информация журнала.
+     *  - LV_LOG_LEVEL_INFO Регистрируйте важные события.
+     *  - LV_LOG_LEVEL_WARN Зарегистрируйте, если произошло что-то нежелательное, но не вызвало проблемы.
+     *  - LV_LOG_LEVEL_ERROR Регистрируйте только критические проблемы, когда система может выйти из строя.
+     *  - LV_LOG_LEVEL_USER Регистрировать только пользовательские сообщения журнала, добавленные пользователем.
+     *  - LV_LOG_LEVEL_NONE Ничего не регистрируйте. */
     #define LV_LOG_LEVEL LV_LOG_LEVEL_WARN
 
-    /** - 1: Print log with 'printf';
-     *  - 0: User needs to register a callback with `lv_log_register_print_cb()`. */
+    /** - 1: Распечатать журнал с помощью «printf»;
+     *  - 0: пользователю необходимо зарегистрировать обратный вызов с помощью `lv_log_register_print_cb()`. */
     #define LV_LOG_PRINTF 0
 
-    /** Set callback to print logs.
-     *  E.g `my_print`. The prototype should be `void my_print(lv_log_level_t level, const char * buf)`.
-     *  Can be overwritten by `lv_log_register_print_cb`. */
+    /** Установите обратный вызов для печати журналов.
+     *  Например, `my_print`. Прототип должен быть `void my_print(lv_log_level_t level, const char * buf)`.
+     *  Может быть перезаписан`lv_log_register_print_cb`. */
     //#define LV_LOG_PRINT_CB
 
-    /** - 1: Enable printing timestamp;
-     *  - 0: Disable printing timestamp. */
+    /** - 1: включить печать временной метки;
+     *  - 0: отключить печать временной метки. */
     #define LV_LOG_USE_TIMESTAMP 1
 
-    /** - 1: Print file and line number of the log;
-     *  - 0: Do not print file and line number of the log. */
+    /** - 1: Распечатать файл и номер строки журнала;
+     *  - 0: Не печатать номер файла и строки журнала. */
     #define LV_LOG_USE_FILE_LINE 1
 
-    /* Enable/disable LV_LOG_TRACE in modules that produces a huge number of logs. */
+    /* Включить/выключить LV_LOG_TRACE в модулях, которые создают огромное количество логов. */
     #define LV_LOG_TRACE_MEM        1   /**< Enable/disable trace logs in memory operations. */
     #define LV_LOG_TRACE_TIMER      1   /**< Enable/disable trace logs in timer operations. */
     #define LV_LOG_TRACE_INDEV      1   /**< Enable/disable trace logs in input device operations. */
@@ -498,148 +498,148 @@
 #endif  /*LV_USE_LOG*/
 
 /*-------------
- * Asserts
+ * Утверждает
  *-----------*/
 
-/* Enable assertion failures if an operation fails or invalid data is found.
- * If LV_USE_LOG is enabled, an error message will be printed on failure. */
+/* Включите сбои утверждений, если операция завершается неудачно или обнаружены недопустимые данные.
+ * Если LV_USE_LOG включен, в случае сбоя будет напечатано сообщение об ошибке. */
 #define LV_USE_ASSERT_NULL          1   /**< Check if the parameter is NULL. (Very fast, recommended) */
 #define LV_USE_ASSERT_MALLOC        1   /**< Checks is the memory is successfully allocated or no. (Very fast, recommended) */
 #define LV_USE_ASSERT_STYLE         0   /**< Check if the styles are properly initialized. (Very fast, recommended) */
 #define LV_USE_ASSERT_MEM_INTEGRITY 0   /**< Check the integrity of `lv_mem` after critical operations. (Slow) */
 #define LV_USE_ASSERT_OBJ           0   /**< Check the object's type and existence (e.g. not deleted). (Slow) */
 
-/** Add a custom handler when assert happens e.g. to restart MCU. */
+/** Добавьте собственный обработчик, когда происходит утверждение, например. чтобы перезапустить MCU. */
 #define LV_ASSERT_HANDLER_INCLUDE <stdint.h>
 #define LV_ASSERT_HANDLER while(1);     /**< Halt by default */
 
 /*-------------
- * Debug
+ * Отладка
  *-----------*/
 
-/** 1: Draw random colored rectangles over the redrawn areas. */
+/** 1: Нарисуйте прямоугольники случайного цвета поверх перерисованных областей. */
 #define LV_USE_REFR_DEBUG 0
 
-/** 1: Draw a red overlay for ARGB layers and a green overlay for RGB layers*/
+/** 1: Нарисуйте красное наложение для слоев ARGB и зеленое наложение для слоев RGB.*/
 #define LV_USE_LAYER_DEBUG 0
 
-/** 1: Adds the following behaviors for debugging:
- *  - Draw overlays with different colors for each draw_unit's tasks.
- *  - Draw index number of draw unit on white background.
- *  - For layers, draws index number of draw unit on black background. */
+/** 1: Добавляет следующие варианты поведения для отладки:
+ *  - Нарисуйте наложения разных цветов для задач каждого draw_unit.
+ *  - Нарисуйте индексный номер блока рисования на белом фоне.
+ *  - Для слоев рисует порядковый номер единицы рисования на черном фоне. */
 #define LV_USE_PARALLEL_DRAW_DEBUG 0
 
 /*-------------
- * Others
+ * Другие
  *-----------*/
 
 #define LV_ENABLE_GLOBAL_CUSTOM 0
 #if LV_ENABLE_GLOBAL_CUSTOM
-    /** Header to include for custom 'lv_global' function" */
+    /** Заголовок для включения пользователем функции «lv_global» */
     #define LV_GLOBAL_CUSTOM_INCLUDE <stdint.h>
 #endif
 
-/** Default cache size in bytes.
- *  Used by image decoders such as `lv_lodepng` to keep the decoded image in memory.
- *  If size is not set to 0, the decoder will fail to decode when the cache is full.
- *  If size is 0, the cache function is not enabled and the decoded memory will be
- *  released immediately after use. */
+/** Размер кэша по умолчанию в байтах.
+ *  Используются декодеры изображений, такие как `lv_lodepng`, для хранения декодированного изображения в памяти.
+ *  Если для размера не установлено значение 0, декодер не сможет декодировать, когда кэш заполнен.
+ *  Если размер равен 0, функция кэширования не включена и декодированная память будет
+ *  высвобождается сразу после использования. */
 #define LV_CACHE_DEF_SIZE       0
 
-/** Default number of image header cache entries. The cache is used to store the headers of images
- *  The main logic is like `LV_CACHE_DEF_SIZE` but for image headers. */
+/** Число записей кэша заголовков изображений по умолчанию. Кэш используется для хранения заголовков изображений.
+ *  Основная логика аналогична `LV_CACHE_DEF_SIZE`, но для заголовков изображений. */
 #define LV_IMAGE_HEADER_CACHE_DEF_CNT 0
 
-/** Number of stops allowed per gradient. Increase this to allow more stops.
- *  This adds (sizeof(lv_color_t) + 1) bytes per additional stop. */
+/** Количество остановок, разрешенных для каждого уклона. Увеличьте это значение, чтобы разрешить больше остановок.
+ *  Это добавляется (sizeof(lv_color_t) + 1) байт на каждую дополнительную остановку. */
 #define LV_GRADIENT_MAX_STOPS   2
 
-/** Adjust color mix functions rounding. GPUs might calculate color mix (blending) differently.
- *  - 0:   round down,
- *  - 64:  round up from x.75,
- *  - 128: round up from half,
- *  - 192: round up from x.25,
- *  - 254: round up */
+/** Отрегулируйте округление функций смешивания цветов. Графические процессоры могут по-разному рассчитывать сочетание цветов (смешивание).
+ *  - 0: округлить вниз,
+ *  - 64: округлить в большую сторону от x.75,
+ *  - 128: округлить до половины,
+ *  - 192: округлить в большую сторону от x.25,
+ *  - 254: округлить вверх */
 #define LV_COLOR_MIX_ROUND_OFS  0
 
-/** Add 2 x 32-bit variables to each `lv_obj_t` to speed up getting style properties */
+/** Добавьте 2 32-битных переменных в каждый `lv_obj_t`, чтобы ускорить получение свойства стиля. */
 #define LV_OBJ_STYLE_CACHE      0
 
-/** Add `id` field to `lv_obj_t` */
+/** Добавьте поле`id`в`lv_obj_t`. */
 #define LV_USE_OBJ_ID           0
 
-/**  Enable support widget names*/
+/**  Включить названия виджетов поддержки*/
 #define LV_USE_OBJ_NAME         0
 
-/** Automatically assign an ID when obj is created */
+/** Автоматически назначать ID при создании объекта. */
 #define LV_OBJ_ID_AUTO_ASSIGN   LV_USE_OBJ_ID
 
-/** Use builtin obj ID handler functions:
-* - lv_obj_assign_id:       Called when a widget is created. Use a separate counter for each widget class as an ID.
-* - lv_obj_id_compare:      Compare the ID to decide if it matches with a requested value.
-* - lv_obj_stringify_id:    Return string-ified identifier, e.g. "button3".
-* - lv_obj_free_id:         Does nothing, as there is no memory allocation for the ID.
-* When disabled these functions needs to be implemented by the user.*/
+/** Используйте встроенные функции обработчика obj ID:
+* - lv_obj_assign_id: вызывается при создании виджета. Используйте отдельный счетчик для каждого класса виджета в виде ID.
+* - lv_obj_id_compare: Сравните ID, чтобы решить, соответствует ли он запрошенному значению.
+* - lv_obj_stringify_id : Возвращает строковый идентификатор, например. «кнопка3».
+* - lv_obj_free_id : Ничего не делает, поскольку дляIDне выделяется память.
+* При отключении эти функции должны быть реализованы пользователем.*/
 #define LV_USE_OBJ_ID_BUILTIN   1
 
-/** Use obj property set/get API. */
+/** Используйте набор свойств obj/получитеAPI. */
 #define LV_USE_OBJ_PROPERTY 0
 
-/** Enable property name support. */
+/** Включите поддержку имен свойств. */
 #define LV_USE_OBJ_PROPERTY_NAME 1
 
-/* Enable the multi-touch gesture recognition feature */
-/* Gesture recognition requires the use of floats */
+/* Включите функцию распознавания жестов несколькими касаниями. */
+/* Распознавание жестов требует использования поплавков. */
 #define LV_USE_GESTURE_RECOGNITION 0
 
 /*=====================
  *  COMPILER SETTINGS
  *====================*/
 
-/** For big endian systems set to 1 */
+/** Для систем с прямым порядком байтов установите значение 1. */
 #define LV_BIG_ENDIAN_SYSTEM 0
 
-/** Define a custom attribute for `lv_tick_inc` function */
+/** Определите пользовательские атрибуты для функции `lv_tick_inc`. */
 #define LV_ATTRIBUTE_TICK_INC
 
-/** Define a custom attribute for `lv_timer_handler` function */
+/** Определите пользовательские атрибуты для функции `lv_timer_handler`. */
 #define LV_ATTRIBUTE_TIMER_HANDLER
 
-/** Define a custom attribute for `lv_display_flush_ready` function */
+/** Определите пользовательские атрибуты для функции `lv_display_flush_ready`. */
 #define LV_ATTRIBUTE_FLUSH_READY
 
-/** Align VG_LITE buffers on this number of bytes.
- *  @note  vglite_src_buf_aligned() uses this value to validate alignment of passed buffer pointers. */
+/** Выровняйте буферы VG_LITE по этому количеству байт.
+ *  @note  vglite_src_buf_aligned() использует это значение для проверки выравнивания переданных указателей буфера. */
 #define LV_ATTRIBUTE_MEM_ALIGN_SIZE 1
 
-/** Will be added where memory needs to be aligned (with -Os data might not be aligned to boundary by default).
- *  E.g. __attribute__((aligned(4)))*/
+/** Будет добавлено там, где необходимо выровнять память (с -Os данные по умолчанию могут быть не выровнены по границе).
+ *  например__attribute__((выровнено(4)))*/
 #define LV_ATTRIBUTE_MEM_ALIGN
 
-/** Attribute to mark large constant arrays, for example for font bitmaps */
+/** Атрибут для обозначения больших массивов констант, например для растровых изображений шрифтов. */
 #define LV_ATTRIBUTE_LARGE_CONST
 
-/** Compiler prefix for a large array declaration in RAM */
+/** Префикс компилятора для объявления большого массива в RAM */
 #define LV_ATTRIBUTE_LARGE_RAM_ARRAY
 
-/** Place performance critical functions into a faster memory (e.g RAM) */
+/** Поместите важные для производительности функции в более быструю память (например, RAM). */
 #define LV_ATTRIBUTE_FAST_MEM
 
-/** Export integer constant to binding. This macro is used with constants in the form of LV_<CONST> that
- *  should also appear on LVGL binding API such as MicroPython. */
+/** Экспортировать целочисленную константу в привязку. Этот макрос используется с константами вида LV_ < CONST >, которые
+ *  Также должно появиться в привязкеLVGLAPI , например MicroPython. */
 #define LV_EXPORT_CONST_INT(int_value) struct _silence_gcc_warning  /**< The default value just prevents GCC warning */
 
-/** Prefix all global extern data with this */
+/** Префикс всех глобальных внешних данных с этим */
 #define LV_ATTRIBUTE_EXTERN_DATA
 
-/** Use `float` as `lv_value_precise_t` */
+/** Используйте`float`как `lv_value_precise_t` */
 #define LV_USE_FLOAT            0
 
-/** Enable matrix support
- *  - Requires `LV_USE_FLOAT = 1` */
+/** Включить поддержку матрицы
+ *  - Требуется `LV_USE_FLOAT = 1` */
 #define LV_USE_MATRIX           0
 
-/** Include `lvgl_private.h` in `lvgl.h` to access internal data and functions by default */
+/** Включите`lvgl_private.h`в`lvgl.h`для доступа к стандартным данным и функциям по умолчанию. */
 #ifndef LV_USE_PRIVATE_API
     #define LV_USE_PRIVATE_API  0
 #endif
@@ -648,7 +648,7 @@
  *   FONT USAGE
  *===================*/
 
-/* Montserrat fonts with ASCII range and some symbols using bpp = 4
+/* Шрифты Montserrat в диапазонеASCIIи некоторыми символами, использующими bpp = 4.
  * https://fonts.google.com/specimen/Montserrat */
 #define LV_FONT_MONTSERRAT_8  0
 #define LV_FONT_MONTSERRAT_10 0
@@ -672,39 +672,39 @@
 #define LV_FONT_MONTSERRAT_46 0
 #define LV_FONT_MONTSERRAT_48 0
 
-/* Demonstrate special features */
+/* Демонстрация особых возможностей */
 #define LV_FONT_MONTSERRAT_28_COMPRESSED    0  /**< bpp = 3 */
 #define LV_FONT_DEJAVU_16_PERSIAN_HEBREW    0  /**< Hebrew, Arabic, Persian letters and all their forms */
 #define LV_FONT_SOURCE_HAN_SANS_SC_14_CJK   0  /**< 1338 most common CJK radicals */
 #define LV_FONT_SOURCE_HAN_SANS_SC_16_CJK   0  /**< 1338 most common CJK radicals */
 
-/** Pixel perfect monospaced fonts */
+/** Пиксельные моноширинные шрифты */
 #define LV_FONT_UNSCII_8  0
 #define LV_FONT_UNSCII_16 0
 
-/** Optionally declare custom fonts here.
+/** При желании объявите здесь пользовательские шрифты.
  *
- *  You can use any of these fonts as the default font too and they will be available
- *  globally.  Example:
+ *  Вы также можете использовать любой из этих шрифтов в качестве шрифта по умолчанию, и они будут доступны.
+ *  глобально.  Пример:
  *
  *  @code
- *  #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)
+ *  #defineLV_FONT_CUSTOM_DECLARELV_FONT_DECLARE (my_font_1)LV_FONT_DECLARE(my_font_2)
  *  @endcode
  */
 #define LV_FONT_CUSTOM_DECLARE
 
-/** Always set a default font */
+/** Всегда устанавливать шрифт по умолчанию */
 #define LV_FONT_DEFAULT &lv_font_montserrat_14
 
-/** Enable handling large font and/or fonts with a lot of characters.
- *  The limit depends on the font size, font face and bpp.
- *  A compiler error will be triggered if a font needs it. */
+/** Включите обработку большого шрифта и/или шрифтов с большим количеством символов.
+ *  Ограничение зависит от размера шрифта, начертания шрифта и bpp.
+ *  Ошибка компилятора будет вызвана, если шрифту это понадобится. */
 #define LV_FONT_FMT_TXT_LARGE 0
 
-/** Enables/disables support for compressed fonts. */
+/** Включает/выключает поддержку сжатых шрифтов. */
 #define LV_USE_FONT_COMPRESSED 0
 
-/** Enable drawing placeholders when glyph dsc is not found. */
+/** Включите заливку для рисования, если глиф dsc не найден. */
 #define LV_USE_FONT_PLACEHOLDER 1
 
 /*=================
@@ -712,59 +712,59 @@
  *=================*/
 
 /**
- * Select a character encoding for strings.
- * Your IDE or editor should have the same character encoding.
+ * Выберите кодировку символов для строк.
+ * Ваш IDE или редактор должен иметь ту же кодировку символов.
  * - LV_TXT_ENC_UTF8
  * - LV_TXT_ENC_ASCII
  */
 #define LV_TXT_ENC LV_TXT_ENC_UTF8
 
-/** While rendering text strings, break (wrap) text on these chars. */
+/** При рендеринге текстовых строк разбивайте (переносите) текст на эти символы. */
 #define LV_TXT_BREAK_CHARS " ,.;:-_)]}"
 
-/** If a word is at least this long, will break wherever "prettiest".
- *  To disable, set to a value <= 0. */
+/** Если слово хотя бы такой длины, оно порвется там, где оно «самое красивое».
+ *  Чтобы отключить, установите значение <= 0. */
 #define LV_TXT_LINE_BREAK_LONG_LEN 0
 
-/** Minimum number of characters in a long word to put on a line before a break.
- *  Depends on LV_TXT_LINE_BREAK_LONG_LEN. */
+/** Минимальное количество символов в длинном слове, помещаемое в строку перед разрывом.
+ *  Зависит от LV_TXT_LINE_BREAK_LONG_LEN. */
 #define LV_TXT_LINE_BREAK_LONG_PRE_MIN_LEN 3
 
-/** Minimum number of characters in a long word to put on a line after a break.
- *  Depends on LV_TXT_LINE_BREAK_LONG_LEN. */
+/** Минимальное количество символов в длинном слове, помещаемое в строку после разрыва.
+ *  Зависит от LV_TXT_LINE_BREAK_LONG_LEN. */
 #define LV_TXT_LINE_BREAK_LONG_POST_MIN_LEN 3
 
-/** Support bidirectional text. Allows mixing Left-to-Right and Right-to-Left text.
- *  The direction will be processed according to the Unicode Bidirectional Algorithm:
+/** Поддержка двунаправленного текста. Позволяет смешивать текст с письмом слева направо и справа налево.
+ *  Направление будет обработано в соответствии с двунаправленным алгоритмом Unicode:
  *  https://www.w3.org/International/articles/inline-bidi-markup/uba-basics */
 #define LV_USE_BIDI 0
 #if LV_USE_BIDI
-    /*Set the default direction. Supported values:
-    *`LV_BASE_DIR_LTR` Left-to-Right
-    *`LV_BASE_DIR_RTL` Right-to-Left
-    *`LV_BASE_DIR_AUTO` detect text base direction*/
+    /*Установите направление по умолчанию. Поддерживаемые значения:
+    *`LV_BASE_DIR_LTR` Слева направо
+    *`LV_BASE_DIR_RTL` Справа налево
+    *`LV_BASE_DIR_AUTO` определяет направление текстовой основы*/
     #define LV_BIDI_BASE_DIR_DEF LV_BASE_DIR_AUTO
 #endif
 
-/** Enable Arabic/Persian processing
- *  In these languages characters should be replaced with another form based on their position in the text */
+/** Включить обработку на арабском/персидском языке
+ *  В этих языках символы следует заменять другой формой в зависимости от их положения в тексте. */
 #define LV_USE_ARABIC_PERSIAN_CHARS 0
 
-/*The control character to use for signaling text recoloring*/
+/*Управляющий символ, используемый для сигнализации об изменении цвета текста.*/
 #define LV_TXT_COLOR_CMD "#"
 
 /*==================
  * WIDGETS
  *================*/
-/* Documentation for widgets can be found here: https://docs.lvgl.io/master/widgets/index.html . */
+/* Документацию по виджетам можно найти здесь: https://docs.lvgl.io/master/widgets/index.html. */
 
-/** 1: Causes these widgets to be given default values at creation time.
- *  - lv_buttonmatrix_t:  Get default maps:  {"Btn1", "Btn2", "Btn3", "\n", "Btn4", "Btn5", ""}, else map not set.
- *  - lv_checkbox_t    :  String label set to "Check box", else set to empty string.
- *  - lv_dropdown_t    :  Options set to "Option 1", "Option 2", "Option 3", else no values are set.
- *  - lv_roller_t      :  Options set to "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", else no values are set.
- *  - lv_label_t       :  Text set to "Text", else empty string.
- *  - lv_arclabel_t   :  Text set to "Arced Text", else empty string.
+/** 1: Приводит к тому, что этим виджетам присваиваются значения по умолчанию во время создания.
+ *  - lv_buttonmatrix_t : Получить карты по умолчанию: {"Btn1", "Btn2", "Btn3", "\n", "Btn4", "Btn5", ""}, иначе карта не установлена.
+ *  - lv_checkbox_t: для метки строки установлено значение «Флажок», в противном случае — пустая строка.
+ *  - lv_dropdown_t: для параметров установлены значения «Вариант 1», «Вариант 2», «Вариант 3», иначе значения не заданы.
+ *  - lv_roller_t: для параметров установлены значения «Вариант 1», «Вариант 2», «Вариант 3», «Вариант 4», «Вариант 5», иначе значения не устанавливаются.
+ *  - lv_label_t: для текста установлено значение «Текст», иначе пустая строка.
+ *  - lv_arclabel_t: для текста установлено значение «Дужный текст», иначе пустая строка.
  * */
 #define LV_WIDGETS_HAS_DEFAULT_VALUE  1
 
@@ -836,7 +836,7 @@
 
 #define LV_USE_SPAN       1
 #if LV_USE_SPAN
-    /** A line of text can contain this maximum number of span descriptors. */
+    /** Строка текста может содержать это максимальное количество дескрипторов диапазона. */
     #define LV_SPAN_SNIPPET_STACK_SIZE 64
 #endif
 
@@ -864,51 +864,51 @@
 /*==================
  * THEMES
  *==================*/
-/* Documentation for themes can be found here: https://docs.lvgl.io/master/common-widget-features/styles/styles.html#themes . */
+/* Документацию по темам можно найти здесь: https://docs.lvgl.io/master/common-widget-features/styles/styles.html#themes. */
 
-/** A simple, impressive and very complete theme */
+/** Простая, впечатляющая и очень полная тема. */
 #define LV_USE_THEME_DEFAULT 1
 #if LV_USE_THEME_DEFAULT
-    /** 0: Light mode; 1: Dark mode */
+    /** 0: Светлый режим; 1: Темный режим */
     #define LV_THEME_DEFAULT_DARK 0
 
-    /** 1: Enable grow on press */
+    /** 1: Включить увеличение при нажатии */
     #define LV_THEME_DEFAULT_GROW 1
 
-    /** Default transition time in ms. */
+    /** Время перехода по умолчанию в мс. */
     #define LV_THEME_DEFAULT_TRANSITION_TIME 80
 #endif /*LV_USE_THEME_DEFAULT*/
 
-/** A very simple theme that is a good starting point for a custom theme */
+/** Очень простая тема, которая является хорошей отправной точкой для создания собственной темы. */
 #define LV_USE_THEME_SIMPLE 1
 
-/** A theme designed for monochrome displays */
+/** Тема, предназначенная для монохромных дисплеев. */
 #define LV_USE_THEME_MONO 1
 
 /*==================
  * LAYOUTS
  *==================*/
-/* Documentation for layouts can be found here: https://docs.lvgl.io/master/common-widget-features/layouts/index.html . */
+/* Документацию по макетам можно найти здесь: https://docs.lvgl.io/master/common-widget-features/layouts/index.html. */
 
-/** A layout similar to Flexbox in CSS. */
+/** Макет похож на Flexbox в CSS. */
 #define LV_USE_FLEX 1
 
-/** A layout similar to Grid in CSS. */
+/** Макет похож на Grid в CSS. */
 #define LV_USE_GRID 1
 
 /*====================
  * 3RD PARTS LIBRARIES
  *====================*/
-/* Documentation for libraries can be found here: https://docs.lvgl.io/master/libs/index.html . */
+/* Документацию по библиотекам можно найти здесь: https://docs.lvgl.io/master/libs/index.html. */
 
-/* File system interfaces for common APIs */
+/* Интерфейсы файловой системы для распространенных API */
 
-/** Setting a default driver letter allows skipping the driver prefix in filepaths.
- *  Documentation about how to use the below driver-identifier letters can be found at
+/** Установка буквы драйвера по умолчанию позволяет пропустить префикс драйвера в путях к файлам.
+ *  Документацию о том, как использовать указанные ниже буквы идентификатора драйвера, можно найти по адресу:
  *  https://docs.lvgl.io/master/main-modules/fs.html#lv-fs-identifier-letters . */
 #define LV_FS_DEFAULT_DRIVER_LETTER '\0'
 
-/** API for fopen, fread, etc. */
+/** API для fopen, fread и т. д. д. */
 #define LV_USE_FS_STDIO 0
 #if LV_USE_FS_STDIO
     #define LV_FS_STDIO_LETTER '\0'     /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
@@ -916,7 +916,7 @@
     #define LV_FS_STDIO_CACHE_SIZE 0    /**< >0 to cache this number of bytes in lv_fs_read() */
 #endif
 
-/** API for open, read, etc. */
+/** API для открытия, чтения и т. д. */
 #define LV_USE_FS_POSIX 0
 #if LV_USE_FS_POSIX
     #define LV_FS_POSIX_LETTER '\0'     /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
@@ -924,7 +924,7 @@
     #define LV_FS_POSIX_CACHE_SIZE 0    /**< >0 to cache this number of bytes in lv_fs_read() */
 #endif
 
-/** API for CreateFile, ReadFile, etc. */
+/** API для CreateFile, ReadFile и т. д. д. */
 #define LV_USE_FS_WIN32 0
 #if LV_USE_FS_WIN32
     #define LV_FS_WIN32_LETTER '\0'     /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
@@ -932,7 +932,7 @@
     #define LV_FS_WIN32_CACHE_SIZE 0    /**< >0 to cache this number of bytes in lv_fs_read() */
 #endif
 
-/** API for FATFS (needs to be added separately). Uses f_open, f_read, etc. */
+/** API дляFATFS(нужно добавлять отдельно). Используетf_open,f_readи т. д. д. */
 #define LV_USE_FS_FATFS 0
 #if LV_USE_FS_FATFS
     #define LV_FS_FATFS_LETTER '\0'     /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
@@ -940,34 +940,34 @@
     #define LV_FS_FATFS_CACHE_SIZE 0    /**< >0 to cache this number of bytes in lv_fs_read() */
 #endif
 
-/** API for memory-mapped file access. */
+/** API для доступа к файлам, отображенным в памяти. */
 #define LV_USE_FS_MEMFS 0
 #if LV_USE_FS_MEMFS
     #define LV_FS_MEMFS_LETTER '\0'     /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
 #endif
 
-/** API for LittleFs. */
+/** API для LittleFs. */
 #define LV_USE_FS_LITTLEFS 0
 #if LV_USE_FS_LITTLEFS
     #define LV_FS_LITTLEFS_LETTER '\0'  /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
     #define LV_FS_LITTLEFS_PATH ""      /**< Set the working directory. File/directory paths will be appended to it. */
 #endif
 
-/** API for Arduino LittleFs. */
+/** API для Arduino LittleFs. */
 #define LV_USE_FS_ARDUINO_ESP_LITTLEFS 0
 #if LV_USE_FS_ARDUINO_ESP_LITTLEFS
     #define LV_FS_ARDUINO_ESP_LITTLEFS_LETTER '\0'  /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
     #define LV_FS_ARDUINO_ESP_LITTLEFS_PATH ""      /**< Set the working directory. File/directory paths will be appended to it. */
 #endif
 
-/** API for Arduino Sd. */
+/** API для Arduino Sd. */
 #define LV_USE_FS_ARDUINO_SD 0
 #if LV_USE_FS_ARDUINO_SD
     #define LV_FS_ARDUINO_SD_LETTER '\0'  /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
     #define LV_FS_ARDUINO_SD_PATH ""      /**< Set the working directory. File/directory paths will be appended to it. */
 #endif
 
-/** API for UEFI */
+/** API для UEFI */
 #define LV_USE_FS_UEFI 0
 #if LV_USE_FS_UEFI
     #define LV_FS_UEFI_LETTER '\0'      /**< Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */
@@ -978,261 +978,261 @@
     #define LV_FS_FROGFS_LETTER '\0'
 #endif
 
-/** LODEPNG decoder library */
+/** Библиотека декодера LODEPNG */
 #define LV_USE_LODEPNG 0
 
-/** PNG decoder(libpng) library */
+/** Библиотека декодераPNG(libpng) */
 #define LV_USE_LIBPNG 0
 
-/** BMP decoder library */
+/** Библиотека декодера BMP */
 #define LV_USE_BMP 0
 
-/** JPG + split JPG decoder library.
- *  Split JPG is a custom format optimized for embedded systems. */
+/** JPG + разделенная библиотека декодера JPG.
+ *  SplitJPG— это специальный формат, безопасный для встроенных систем. */
 #define LV_USE_TJPGD 0
 
-/** libjpeg-turbo decoder library.
- *  - Supports complete JPEG specifications and high-performance JPEG decoding. */
+/** библиотека декодера libjpeg-turbo.
+ *  - Поддерживает полные спецификацииJPEGи высокопроизводительное декодирование JPEG. */
 #define LV_USE_LIBJPEG_TURBO 0
 
-/** WebP decoder library */
+/** Библиотека декодера WebP */
 #define LV_USE_LIBWEBP 0
 
-/** GIF decoder library */
+/** Библиотека декодера GIF */
 #define LV_USE_GIF 0
 #if LV_USE_GIF
-    /** GIF decoder accelerate */
+    /** Ускорение декодера GIF */
     #define LV_GIF_CACHE_DECODE_DATA 0
 #endif
 
-/** GStreamer library */
+/** библиотека GStreamer */
 #define LV_USE_GSTREAMER 0
 
-/** Decode bin images to RAM */
+/** Декодировать изображения бинов в RAM */
 #define LV_BIN_DECODER_RAM_LOAD 0
 
-/** RLE decompress library */
+/** RLE распаковать библиотеку */
 #define LV_USE_RLE 0
 
-/** QR code library */
+/** Библиотека кода QR */
 #define LV_USE_QRCODE 0
 
-/** Barcode code library */
+/** Библиотека штрих-кодов */
 #define LV_USE_BARCODE 0
 
-/** FreeType library */
+/** Библиотека FreeType */
 #define LV_USE_FREETYPE 0
 #if LV_USE_FREETYPE
-    /** Let FreeType use LVGL memory and file porting */
+    /** Разрешить FreeType использовать памятьLVGLи портировать файлы */
     #define LV_FREETYPE_USE_LVGL_PORT 0
 
-    /** Cache count of glyphs in FreeType, i.e. number of glyphs that can be cached.
-     *  The higher the value, the more memory will be used. */
+    /** Кэшируйте количество глифов во FreeType, то есть количество глифов, которые можно кэшировать.
+     *  Чем выше значение, тем больше памяти будет использоваться. */
     #define LV_FREETYPE_CACHE_FT_GLYPH_CNT 256
 #endif
 
-/** Built-in TTF decoder */
+/** Встроенный декодер TTF. */
 #define LV_USE_TINY_TTF 0
 #if LV_USE_TINY_TTF
-    /* Enable loading TTF data from files */
+    /* Включить загрузку данных TTF из файлов. */
     #define LV_TINY_TTF_FILE_SUPPORT 0
     #define LV_TINY_TTF_CACHE_GLYPH_CNT 128
     #define LV_TINY_TTF_CACHE_KERNING_CNT 256
 #endif
 
-/** Rlottie library */
+/** Библиотека Рлотти */
 #define LV_USE_RLOTTIE 0
 
-/** Requires `LV_USE_3DTEXTURE = 1` */
+/** Требуется `LV_USE_3DTEXTURE = 1` */
 #define LV_USE_GLTF  0
 
-/** Enable Vector Graphic APIs
- *  Requires `LV_USE_MATRIX = 1`
- *  and a rendering engine supporting vector graphics, e.g.
- *  (LV_USE_DRAW_SW and LV_USE_THORVG) or LV_USE_DRAW_VG_LITE or LV_USE_NEMA_VG. */
+/** Включить API векторной графики
+ *  Требуется `LV_USE_MATRIX = 1`
+ *  и механизм рендеринга, поддерживающий векторную графику, например.
+ *  ( LV_USE_DRAW_SW и LV_USE_THORVG ) или LV_USE_DRAW_VG_LITE или LV_USE_NEMA_VG . */
 #define LV_USE_VECTOR_GRAPHIC  0
 
-/** Enable ThorVG (vector graphics library) from the src/libs folder.
- *  Requires LV_USE_VECTOR_GRAPHIC */
+/** Включите ThorVG (библиотеку векторной графики) из папок src/libs.
+ *  Требуется LV_USE_VECTOR_GRAPHIC */
 #define LV_USE_THORVG_INTERNAL 0
 
-/** Enable ThorVG by assuming that its installed and linked to the project
- *  Requires LV_USE_VECTOR_GRAPHIC */
+/** Включите ThorVG, предположив, что он установлен и связан с проектом.
+ *  Требуется LV_USE_VECTOR_GRAPHIC */
 #define LV_USE_THORVG_EXTERNAL 0
 
-/** Enable NanoVG (vector graphics library) */
+/** Включить NanoVG (библиотека векторной графики) */
 #define LV_USE_NANOVG 0
 
-/** Use lvgl built-in LZ4 lib */
+/** Используйте встроенную функцию lvgl LZ4. */
 #define LV_USE_LZ4_INTERNAL  0
 
-/** Use external LZ4 library */
+/** Использовать внешнюю библиотеку LZ4. */
 #define LV_USE_LZ4_EXTERNAL  0
 
-/*SVG library
- *  - Requires `LV_USE_VECTOR_GRAPHIC = 1` */
+/*библиотека SVG
+ *  - Требуется `LV_USE_VECTOR_GRAPHIC = 1` */
 #define LV_USE_SVG 0
 #define LV_USE_SVG_ANIMATION 0
 #define LV_USE_SVG_DEBUG 0
 
-/** FFmpeg library for image decoding and playing videos.
- *  Supports all major image formats so do not enable other image decoder with it. */
+/** Библиотека FFmpeg для декодирования изображений и записи видео.
+ *  Поддерживает все основные форматы изображений, поэтому не включайте с его помощью другие декодеры изображений. */
 #define LV_USE_FFMPEG 0
 #if LV_USE_FFMPEG
-    /** Dump input information to stderr */
+    /** Выгрузить входную информацию в stderr */
     #define LV_FFMPEG_DUMP_FORMAT 0
-    /** Use lvgl file path in FFmpeg Player widget
-     *  You won't be able to open URLs after enabling this feature.
-     *  Note that FFmpeg image decoder will always use lvgl file system. */
+    /** Используйте путь к файлу lvgl в виджете FFmpeg Player
+     *  После включения этой функции вы не сможете открывать URL-адреса.
+     *  Обратите внимание, что декодер изображений FFmpeg всегда будет использовать файловую систему lvgl. */
     #define LV_FFMPEG_PLAYER_USE_LV_FS 0
 #endif
 
 /*==================
  * OTHERS
  *==================*/
-/* Documentation for several of the below items can be found here: https://docs.lvgl.io/master/auxiliary-modules/index.html . */
+/* Документацию по представителям Великобритании ниже элементы можно найти здесь: https://docs.lvgl.io/master/auxiliary-modules/index.html. */
 
-/** 1: Enable API to take snapshot for object */
+/** 1: Включить API для создания снимка объекта. */
 #define LV_USE_SNAPSHOT 0
 
-/** 1: Enable system monitor component */
+/** 1: Включить компонент системного монитора. */
 #define LV_USE_SYSMON   0
 #if LV_USE_SYSMON
-    /** Get the idle percentage. E.g. uint32_t my_get_idle(void); */
+    /** Получите процент простоя. Например.  uint32_tmy_get_idle (недействительно); */
     #define LV_SYSMON_GET_IDLE lv_os_get_idle_percent
-    /** 1: Enable usage of lv_os_get_proc_idle_percent.*/
+    /** 1: разрешить использование lv_os_get_proc_idle_percent.*/
     #define LV_SYSMON_PROC_IDLE_AVAILABLE 0
     #if LV_SYSMON_PROC_IDLE_AVAILABLE
-        /** Get the applications idle percentage.
-         * - Requires `LV_USE_OS == LV_OS_PTHREAD` */
+        /** Получите процент простоя приложений.
+         * - Требуется `LV_USE_OS == LV_OS_PTHREAD` */
         #define LV_SYSMON_GET_PROC_IDLE lv_os_get_proc_idle_percent
     #endif
 
-    /** 1: Show CPU usage and FPS count.
-     *  - Requires `LV_USE_SYSMON = 1` */
+    /** 1: Показать использованиеCPUи количество FPS.
+     *  - Требуется `LV_USE_SYSMON = 1` */
     #define LV_USE_PERF_MONITOR 0
     #if LV_USE_PERF_MONITOR
         #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 
-        /** 0: Displays performance data on the screen; 1: Prints performance data using log. */
+        /** 0: отображает данные о производительности на экране; 1: печатает данные о производительности с использованием журнала. */
         #define LV_USE_PERF_MONITOR_LOG_MODE 0
     #endif
 
-    /** 1: Show used memory and memory fragmentation.
-     *     - Requires `LV_USE_STDLIB_MALLOC = LV_STDLIB_BUILTIN`
-     *     - Requires `LV_USE_SYSMON = 1`*/
+    /** 1: Показать используемую память и фрагментацию памяти.
+     *     - Требуется `LV_USE_STDLIB_MALLOC = LV_STDLIB_BUILTIN`
+     *     - Требуется `LV_USE_SYSMON = 1`*/
     #define LV_USE_MEM_MONITOR 0
     #if LV_USE_MEM_MONITOR
         #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
     #endif
 #endif /*LV_USE_SYSMON*/
 
-/** 1: Enable runtime performance profiler */
+/** 1: Включить профилировщик производительности во время выполнения. */
 #define LV_USE_PROFILER 0
 #if LV_USE_PROFILER
-    /** 1: Enable the built-in profiler */
+    /** 1: Включить встроенный профилировщик */
     #define LV_USE_PROFILER_BUILTIN 1
     #if LV_USE_PROFILER_BUILTIN
-        /** Default profiler trace buffer size */
+        /** Размер буфера трассировки профилировщика по умолчанию */
         #define LV_PROFILER_BUILTIN_BUF_SIZE (16 * 1024)     /**< [bytes] */
         #define LV_PROFILER_BUILTIN_DEFAULT_ENABLE 1
         #define LV_USE_PROFILER_BUILTIN_POSIX 0 /**< Enable POSIX profiler port */
     #endif
 
-    /** Header to include for profiler */
+    /** Заголовок для профилировщика */
     #define LV_PROFILER_INCLUDE "lvgl/src/misc/lv_profiler_builtin.h"
 
-    /** Profiler start point function */
+    /** Функция начальной точки профилировщика */
     #define LV_PROFILER_BEGIN    LV_PROFILER_BUILTIN_BEGIN
 
-    /** Profiler end point function */
+    /** Функция конечной точки профилировщика */
     #define LV_PROFILER_END      LV_PROFILER_BUILTIN_END
 
-    /** Profiler start point function with custom tag */
+    /** Функция начальной точки профилировщика с пользовательским тегом */
     #define LV_PROFILER_BEGIN_TAG LV_PROFILER_BUILTIN_BEGIN_TAG
 
-    /** Profiler end point function with custom tag */
+    /** Функция конечной точки профилировщика с пользовательским тегом */
     #define LV_PROFILER_END_TAG   LV_PROFILER_BUILTIN_END_TAG
 
-    /*Enable layout profiler*/
+    /*Включить профилировщик макета*/
     #define LV_PROFILER_LAYOUT 1
 
-    /*Enable disp refr profiler*/
+    /*Включить профилировщик disp Refr*/
     #define LV_PROFILER_REFR 1
 
-    /*Enable draw profiler*/
+    /*Включить профилировщик отрисовки*/
     #define LV_PROFILER_DRAW 1
 
-    /*Enable indev profiler*/
+    /*Включить профилировщик разработки*/
     #define LV_PROFILER_INDEV 1
 
-    /*Enable decoder profiler*/
+    /*Включить профилировщик декодера*/
     #define LV_PROFILER_DECODER 1
 
-    /*Enable font profiler*/
+    /*Включить профилировщик шрифтов*/
     #define LV_PROFILER_FONT 1
 
-    /*Enable fs profiler*/
+    /*Включить профилировщик ФС*/
     #define LV_PROFILER_FS 1
 
-    /*Enable style profiler*/
+    /*Включить профилировщик стилей*/
     #define LV_PROFILER_STYLE 0
 
-    /*Enable timer profiler*/
+    /*Включить профилировщик таймера*/
     #define LV_PROFILER_TIMER 1
 
-    /*Enable cache profiler*/
+    /*Включить профилировщик кэша*/
     #define LV_PROFILER_CACHE 1
 
-    /*Enable event profiler*/
+    /*Включить профилировщик событий*/
     #define LV_PROFILER_EVENT 1
 #endif
 
-/** 1: Enable Monkey test */
+/** 1: Включить тест обезьяны */
 #define LV_USE_MONKEY 0
 
-/** 1: Enable grid navigation */
+/** 1: Включить навигацию по сетке */
 #define LV_USE_GRIDNAV 0
 
-/** 1: Enable `lv_obj` fragment logic */
+/** 1: Включить логику фрагмента `lv_obj`. */
 #define LV_USE_FRAGMENT 0
 
-/** 1: Support using images as font in label or span widgets */
+/** 1: Поддержка использования изображений в качестве шрифта в виджетах меток или интервалов. */
 #define LV_USE_IMGFONT 0
 
-/** 1: Enable an observer pattern implementation */
+/** 1. Включить реализацию шаблона наблюдателя. */
 #define LV_USE_OBSERVER 1
 
-/** 1: Enable Pinyin input method
- *  - Requires: lv_keyboard */
+/** 1: Включить метод ввода пиньинь
+ *  - Требуется: lv_keyboard */
 #define LV_USE_IME_PINYIN 0
 #if LV_USE_IME_PINYIN
-    /** 1: Use default thesaurus.
-     *  @note  If you do not use the default thesaurus, be sure to use `lv_ime_pinyin` after setting the thesaurus. */
+    /** 1: Используйте тезаурус по умолчанию.
+     *  @note  Если вы не используете тезаурус по умолчанию, обязательно используйте`lv_ime_pinyin`после настройки тезауруса. */
     #define LV_IME_PINYIN_USE_DEFAULT_DICT 1
-    /** Set maximum number of candidate panels that can be displayed.
-     *  @note  This needs to be adjusted according to size of screen. */
+    /** Установите максимальное количество панелей-кандидатов, которые можно отобразить.
+     *  @note  Это необходимо настроить в соответствии с размером экрана. */
     #define LV_IME_PINYIN_CAND_TEXT_NUM 6
 
-    /** Use 9-key input (k9). */
+    /** Используйте 9-клавишный ввод (k9). */
     #define LV_IME_PINYIN_USE_K9_MODE      1
     #if LV_IME_PINYIN_USE_K9_MODE == 1
         #define LV_IME_PINYIN_K9_CAND_TEXT_NUM 3
     #endif /*LV_IME_PINYIN_USE_K9_MODE*/
 #endif
 
-/** 1: Enable file explorer.
- *  - Requires: lv_table */
+/** 1: Включите файловый менеджер.
+ *  - Требуется: lv_table */
 #define LV_USE_FILE_EXPLORER                     0
 #if LV_USE_FILE_EXPLORER
-    /** Maximum length of path */
+    /** Максимальная длина пути */
     #define LV_FILE_EXPLORER_PATH_MAX_LEN        (128)
-    /** Quick access bar, 1:use, 0:do not use.
-     *  - Requires: lv_list */
+    /** Панель быстрого доступа, 1: использовать, 0: не использовать.
+     *  - Требуется: lv_list */
     #define LV_FILE_EXPLORER_QUICK_ACCESS        1
 #endif
 
-/** 1: Enable Font manager */
+/** 1: Включить диспетчер шрифтов. */
 #define LV_USE_FONT_MANAGER                     0
 #if LV_USE_FONT_MANAGER
 
@@ -1241,32 +1241,32 @@
 
 #endif
 
-/** Enable emulated input devices, time emulation, and screenshot compares. */
+/** Включите эмулируемые устройства ввода, эмуляцию времени и сравнение снимков экрана. */
 #define LV_USE_TEST 0
 #if LV_USE_TEST
 
-/** Enable `lv_test_screenshot_compare`.
- * Requires lodepng and a few MB of extra RAM. */
+/** Включите `lv_test_screenshot_compare`.
+ * Требуется lodepng и несколько дополнительных устройствMBRAM. */
 #define LV_USE_TEST_SCREENSHOT_COMPARE 0
 
 #if LV_USE_TEST_SCREENSHOT_COMPARE
-    /** 1: Automatically create missing reference images*/
+    /** 1. Автоматически создавать недостающие эталонные изображения.*/
     #define LV_TEST_SCREENSHOT_CREATE_REFERENCE_IMAGE 1
 #endif /*LV_USE_TEST_SCREENSHOT_COMPARE*/
 
 #endif /*LV_USE_TEST*/
 
-/** 1: Enable text translation support */
+/** 1. Включить поддержку перевода текста. */
 #define LV_USE_TRANSLATION 0
 
-/*1: Enable color filter style*/
+/*1: Включить стиль цветового фильтра*/
 #define LV_USE_COLOR_FILTER     0
 
 /*==================
  * DEVICES
  *==================*/
 
-/** Use SDL to open window on PC and handle mouse and keyboard. */
+/** Используйте SDL, чтобы открыть окно на PC и управлять мышью и клавиатурой. */
 #define LV_USE_SDL              0
 #if LV_USE_SDL
     #define LV_SDL_INCLUDE_PATH     <SDL2/SDL.h>
@@ -1278,24 +1278,24 @@
     #define LV_SDL_MOUSEWHEEL_MODE  LV_SDL_MOUSEWHEEL_MODE_ENCODER  /*LV_SDL_MOUSEWHEEL_MODE_ENCODER/CROWN*/
 #endif
 
-/** Use X11 to open window on Linux desktop and handle mouse and keyboard */
+/** Используйте X11, чтобы открыть окно на рабочем столе Linux и управлять мышью и клавиатурой. */
 #define LV_USE_X11              0
 #if LV_USE_X11
     #define LV_X11_DIRECT_EXIT         1  /**< Exit application when all X11 windows have been closed */
     #define LV_X11_DOUBLE_BUFFER       1  /**< Use double buffers for rendering */
-    /* Select only 1 of the following render modes (LV_X11_RENDER_MODE_PARTIAL preferred!). */
+    /* Выберите только 1 из следующих режимов рендеринга (предпочтительно LV_X11_RENDER_MODE_PARTIAL!). */
     #define LV_X11_RENDER_MODE_PARTIAL 1  /**< Partial render mode (preferred) */
     #define LV_X11_RENDER_MODE_DIRECT  0  /**< Direct render mode */
     #define LV_X11_RENDER_MODE_FULL    0  /**< Full render mode */
 #endif
 
-/** Use Wayland to open a window and handle input on Linux or BSD desktops */
+/** Используйте Wayland, чтобы открыть и закрыть окно на рабочих столах Linux или BSD. */
 #define LV_USE_WAYLAND          0
 #if LV_USE_WAYLAND
     #define LV_WAYLAND_DIRECT_EXIT          1     /**< 1: Exit the application when all Wayland windows are closed */
 #endif
 
-/** Driver for /dev/fb */
+/** Драйвер для /dev/fb */
 #define LV_USE_LINUX_FBDEV      0
 #if LV_USE_LINUX_FBDEV
     #define LV_LINUX_FBDEV_BSD           0
@@ -1305,40 +1305,40 @@
     #define LV_LINUX_FBDEV_MMAP          1
 #endif
 
-/** Use Nuttx to open window and handle touchscreen */
+/** Используйте Nuttx, чтобы открыть окно и управлять сенсорным дисплеем. */
 #define LV_USE_NUTTX    0
 
 #if LV_USE_NUTTX
     #define LV_USE_NUTTX_INDEPENDENT_IMAGE_HEAP 0
 
-    /** Use independent image heap for default draw buffer */
+    /** Использовать независимую кучу изображений для буфера прорисовки по умолчанию. */
     #define LV_NUTTX_DEFAULT_DRAW_BUF_USE_INDEPENDENT_IMAGE_HEAP    0
 
     #define LV_USE_NUTTX_LIBUV    0
 
-    /** Use Nuttx custom init API to open window and handle touchscreen */
+    /** Используйте идею реализации Nuttx API, чтобы открыть окно и обработать сенсорный экран. */
     #define LV_USE_NUTTX_CUSTOM_INIT    0
 
-    /** Driver for /dev/lcd */
+    /** Драйвер для /dev/lcd */
     #define LV_USE_NUTTX_LCD      0
     #if LV_USE_NUTTX_LCD
         #define LV_NUTTX_LCD_BUFFER_COUNT    0
         #define LV_NUTTX_LCD_BUFFER_SIZE     60
     #endif
 
-    /** Driver for /dev/input */
+    /** Драйвер для /dev/input */
     #define LV_USE_NUTTX_TOUCHSCREEN    0
 
-    /** Touchscreen cursor size in pixels(<=0: disable cursor) */
+    /** Размер курсора сенсорного экрана в пикселях (<=0: отключить курсор) */
     #define LV_NUTTX_TOUCHSCREEN_CURSOR_SIZE    0
 
-    /** Driver for /dev/mouse */
+    /** Драйвер для /dev/мыши */
     #define LV_USE_NUTTX_MOUSE    0
 
-    /** Mouse movement step (pixels) */
+    /** Шаг движения мыши (пиксели) */
     #define LV_USE_NUTTX_MOUSE_MOVE_STEP    1
 
-    /*NuttX trace file and its path*/
+    /*Файл трассировки NuttX и его путь*/
     #define LV_USE_NUTTX_TRACE_FILE 0
     #if LV_USE_NUTTX_TRACE_FILE
         #define LV_NUTTX_TRACE_FILE_PATH "/data/lvgl-trace.log"
@@ -1346,22 +1346,22 @@
 
 #endif
 
-/** Driver for /dev/dri/card */
+/** Драйвер для /dev/dri/card */
 #define LV_USE_LINUX_DRM        0
 
 #if LV_USE_LINUX_DRM
 
-    /* Use the MESA GBM library to allocate DMA buffers that can be
-     * shared across sub-systems and libraries using the Linux DMA-BUF API.
-     * The GBM library aims to provide a platform independent memory management system
-     * it supports the major GPU vendors - This option requires linking with libgbm */
+    /* Используйте библиотеку MESA GBM для выделения буферов DMA, которые можно
+     * Совместно используется подсистемами и библиотеками с использованием LinuxDMA—BUFAPI.
+     * Библиотека GBM призвана предоставить независимую от платформы систему управления памятью.
+     * он поддерживает основных поставщиков GPU. Этот параметр требует связи с libgbm. */
     #define LV_USE_LINUX_DRM_GBM_BUFFERS 0
 #endif
 
-/** Interface for TFT_eSPI */
+/** Интерфейс для TFT_eSPI */
 #define LV_USE_TFT_ESPI         0
 
-/** Interface for Lovyan_GFX */
+/** Интерфейс для Lovyan_GFX */
 #define LV_USE_LOVYAN_GFX         0
 
 #if LV_USE_LOVYAN_GFX
@@ -1369,24 +1369,24 @@
 
 #endif /*LV_USE_LOVYAN_GFX*/
 
-/** Driver for evdev input devices */
+/** Драйвер для устройств ввода evdev */
 #define LV_USE_EVDEV    0
 
-/** Driver for libinput input devices */
+/** Драйвер для устройств ввода libinput */
 #define LV_USE_LIBINPUT    0
 
 #if LV_USE_LIBINPUT
     #define LV_LIBINPUT_BSD    0
 
-    /** Full keyboard support */
+    /** Полная поддержка клавиатуры */
     #define LV_LIBINPUT_XKB             0
     #if LV_LIBINPUT_XKB
-        /** "setxkbmap -query" can help find the right values for your keyboard */
+        /** «setxkbmap -query» может помочь найти важные значения для вашей клавиатуры. */
         #define LV_LIBINPUT_XKB_KEY_MAP { .rules = NULL, .model = "pc101", .layout = "us", .variant = NULL, .options = NULL }
     #endif
 #endif
 
-/* Drivers for LCD devices connected via SPI/parallel port */
+/* Драйверы для устройств LCD, подключаемых через SPI/параллельный порт */
 #define LV_USE_ST7735        0
 #define LV_USE_ST7789        0
 #define LV_USE_ST7796        0
@@ -1400,58 +1400,58 @@
     #define LV_USE_GENERIC_MIPI 0
 #endif
 
-/** Driver for Renesas GLCD */
+/** Драйвер для Renesas GLCD */
 #define LV_USE_RENESAS_GLCDC    0
 
-/** Driver for ST LTDC */
+/** Драйвер для ST LTDC */
 #define LV_USE_ST_LTDC    0
 #if LV_USE_ST_LTDC
-    /* Only used for partial. */
+    /* Используется только частично. */
     #define LV_ST_LTDC_USE_DMA2D_FLUSH 0
 #endif
 
-/** Driver for NXP ELCDIF */
+/** Драйвер для NXP ELCDIF */
 #define LV_USE_NXP_ELCDIF   0
 
-/** LVGL Windows backend */
+/** LVGL Серверная часть Windows */
 #define LV_USE_WINDOWS    0
 
-/** LVGL UEFI backend */
+/** LVGL UEFI серверная часть */
 #define LV_USE_UEFI 0
 #if LV_USE_UEFI
     #define LV_USE_UEFI_INCLUDE "myefi.h"   /**< Header that hides the actual framework (EDK2, gnu-efi, ...) */
     #define LV_UEFI_USE_MEMORY_SERVICES 0   /**< Use the memory functions from the boot services table */
 #endif
 
-/** Use a generic OpenGL driver that can be used to embed in other applications or used with GLFW/EGL
- * - Requires LV_USE_MATRIX.
+/** Используйте универсальный драйвер OpenGL, который можно использовать для встраивания в другие приложения или использовать с GLFW/EGL.
+ * - Требуется LV_USE_MATRIX.
  */
 #define LV_USE_OPENGLES   0
 #if LV_USE_OPENGLES
     #define LV_USE_OPENGLES_DEBUG        1    /**< Enable or disable debug for opengles */
 #endif
 
-/** Use GLFW to open window on PC and handle mouse and keyboard. Requires*/
+/** Используйте GLFW, чтобы открыть окно на PC и управлять мышью и клавиатурой. Требуется*/
 #define LV_USE_GLFW   0
 
 
-/** QNX Screen display and input drivers */
+/** QNX Экран дисплея и драйверы ввода */
 #define LV_USE_QNX              0
 #if LV_USE_QNX
     #define LV_QNX_BUF_COUNT        1    /**< 1 or 2 */
 #endif
 
-/** Enable or disable for external data and destructor function */
+/** Включить или отключить функцию внешних данных и деструктора. */
 #define LV_USE_EXT_DATA   0
 
 /*=====================
 * BUILD OPTIONS
 *======================*/
 
-/** Enable examples to be built with the library. */
+/** Включите создание примеров с помощью библиотеки. */
 #define LV_BUILD_EXAMPLES 1
 
-/** Build the demos */
+/** Создание демоверсий */
 #define LV_BUILD_DEMOS 1
 
 /*===================
@@ -1459,28 +1459,28 @@
  ====================*/
 
 #if LV_BUILD_DEMOS
-    /** Show some widgets. This might be required to increase `LV_MEM_SIZE`. */
+    /** Покажите несколько виджетов. Это может потребоваться для увеличения `LV_MEM_SIZE`. */
     #define LV_USE_DEMO_WIDGETS 0
 
-    /** Demonstrate usage of encoder and keyboard. */
+    /** Продемонстрируйте использование кодировщика и клавиатуры. */
     #define LV_USE_DEMO_KEYPAD_AND_ENCODER 0
 
-    /** Benchmark your system */
+    /** Проверьте свою систему */
     #define LV_USE_DEMO_BENCHMARK 0
 
     #if LV_USE_DEMO_BENCHMARK
-        /** Use fonts where bitmaps are aligned 16 byte and has Nx16 byte stride */
+        /** Используйте шрифты, в которых растровые изображения выровнены по 16 байтам и имеют шаг Nx16 байт. */
         #define LV_DEMO_BENCHMARK_ALIGNED_FONTS 0
     #endif
 
-    /** Render test for each primitive.
-     *  - Requires at least 480x272 display. */
+    /** Тест рендеринга для каждого примитива.
+     *  - Требуется дисплей не менее 480x272. */
     #define LV_USE_DEMO_RENDER 0
 
-    /** Stress test for LVGL */
+    /** Стресс-тест для LVGL */
     #define LV_USE_DEMO_STRESS 0
 
-    /** Music player demo */
+    /** Демо-версия музыкального плеера */
     #define LV_USE_DEMO_MUSIC 0
     #if LV_USE_DEMO_MUSIC
         #define LV_DEMO_MUSIC_SQUARE    0
@@ -1490,32 +1490,32 @@
         #define LV_DEMO_MUSIC_AUTO_PLAY 0
     #endif
 
-    /** Vector graphic demo */
+    /** Векторная графическая демонстрация */
     #define LV_USE_DEMO_VECTOR_GRAPHIC  0
 
-    /** GLTF demo */
+    /** GLTF демо */
     #define LV_USE_DEMO_GLTF            0
 
     /*---------------------------
-     * Demos from lvgl/lv_demos
+     * Демо с lvgl/ lv_demos
       ---------------------------*/
 
-    /** Flex layout demo */
+    /** Демонстрация гибкого макета */
     #define LV_USE_DEMO_FLEX_LAYOUT     0
 
-    /** Smart-phone like multi-language demo */
+    /** Многоязычная демо-версия в стиле смартфона */
     #define LV_USE_DEMO_MULTILANG       0
 
-    /*E-bike demo with Lottie animations (if LV_USE_LOTTIE is enabled)*/
+    /*Демонстрация возможности велосипеда с анимацией Лотти (еслиLV_USE_LOTTIEвключен)*/
     #define LV_USE_DEMO_EBIKE           0
     #if LV_USE_DEMO_EBIKE
-        #define LV_DEMO_EBIKE_PORTRAIT  0    /*0: for 480x270..480x320, 1: for 480x800..720x1280*/
+        #define LV_DEMO_EBIKE_PORTRAIT  0    /*0: для 480x270..480x320, 1: для 480x800..720x1280*/
     #endif
 
-    /** High-resolution demo */
+    /** Демо в высоком разрешении */
     #define LV_USE_DEMO_HIGH_RES        0
 
-    /* Smart watch demo */
+    /* Демонстрация умных часов */
     #define LV_USE_DEMO_SMARTWATCH      0
 #endif /* LV_BUILD_DEMOS */
 
@@ -1523,4 +1523,4 @@
 
 #endif /*LV_CONF_H*/
 
-#endif /*End of "Content enable"*/
+#endif /*Конец «Включения контента»*/

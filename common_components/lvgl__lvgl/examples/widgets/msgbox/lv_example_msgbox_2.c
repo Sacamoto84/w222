@@ -12,16 +12,16 @@ void lv_example_msgbox_2(void)
     lv_obj_t * setting = lv_msgbox_create(lv_screen_active());
     lv_obj_set_style_clip_corner(setting, true, 0);
 
-    /* setting fixed size */
+    /* установка фиксированного размера */
     lv_obj_set_size(setting, 300, 200);
 
-    /* setting's titlebar/header */
+    /* заголовок/заголовок настройки */
     lv_msgbox_add_title(setting, "Setting");
     lv_obj_t * minimize_button = lv_msgbox_add_header_button(setting, LV_SYMBOL_MINUS);
     lv_obj_add_event_cb(minimize_button, minimize_button_event_cb, LV_EVENT_CLICKED, setting);
     lv_msgbox_add_close_button(setting);
 
-    /* setting's content*/
+    /* содержимое настройки*/
     lv_obj_t * content = lv_msgbox_get_content(setting);
     lv_obj_set_flex_flow(content, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(content, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
@@ -49,7 +49,7 @@ void lv_example_msgbox_2(void)
     lv_obj_set_width(slider_speed, lv_pct(100));
     lv_slider_set_value(slider_speed, 80, LV_ANIM_OFF);
 
-    /* footer */
+    /* нижний колонтитул */
     lv_obj_t * apply_button = lv_msgbox_add_footer_button(setting, "Apply");
     lv_obj_set_flex_grow(apply_button, 1);
 

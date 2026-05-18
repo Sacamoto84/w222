@@ -30,7 +30,7 @@ extern "C" {
 typedef void * lv_mem_pool_t;
 
 /**
- * Heap information structure.
+ * Информационная структура кучи.
  */
 typedef struct {
     size_t total_size;  /**< Total heap size */
@@ -48,12 +48,12 @@ typedef struct {
  **********************/
 
 /**
- * Initialize to use malloc/free/realloc etc
+ * Инициализируйте, чтобы использовать malloc/free/realloc и т. д. д.
  */
 void lv_mem_init(void);
 
 /**
- * Drop all dynamically allocated memory and reset the memory pools' state
+ * Удалите всю динамически выделенную память и сбросьте состояние пулов памяти.
  */
 void lv_mem_deinit(void);
 
@@ -62,96 +62,96 @@ lv_mem_pool_t lv_mem_add_pool(void * mem, size_t bytes);
 void lv_mem_remove_pool(lv_mem_pool_t pool);
 
 /**
- * Allocate memory dynamically
- * @param size requested size in bytes
- * @return pointer to allocated uninitialized memory, or NULL on failure
+ * Выделять память динамически
+ * @param size запрошенный размер в байтах
+ * @return указатель на выделенную неинициализированную память илиNULLв случае сбоя
  */
 void * lv_malloc(size_t size);
 
 /**
- * Allocate a block of zeroed memory dynamically
- * @param num requested number of element to be allocated.
- * @param size requested size of each element in bytes.
- * @return pointer to allocated zeroed memory, or NULL on failure
+ * Динамически выделять блок обнулённой памяти
+ * @param num запрошенное количество элементов, которые будут выделены.
+ * @param size запрашиваемый размер каждого элемента в байтах.
+ * @return указатель на выделенную обнуленную память илиNULLв случае сбоя
  */
 void * lv_calloc(size_t num, size_t size);
 
 /**
- * Allocate zeroed memory dynamically
- * @param size requested size in bytes
- * @return pointer to allocated zeroed memory, or NULL on failure
+ * Динамически выделять обнуленную память
+ * @param size запрошенный размер в байтах
+ * @return указатель на выделенную обнуленную память илиNULLв случае сбоя
  */
 void * lv_zalloc(size_t size);
 
 /**
- * Allocate zeroed memory dynamically
- * @param size requested size in bytes
- * @return pointer to allocated zeroed memory, or NULL on failure
+ * Динамически выделять обнуленную память
+ * @param size запрошенный размер в байтах
+ * @return указатель на выделенную обнуленную память илиNULLв случае сбоя
  */
 void * lv_malloc_zeroed(size_t size);
 
 /**
- * Free an allocated data
- * @param data pointer to an allocated memory
+ * Освободить выделенные данные
+ * @param data указатель на выделенную память
  */
 void lv_free(void * data);
 
 /**
- * Reallocate a memory with a new size. The old content will be kept.
- * @param data_p pointer to an allocated memory.
- *               Its content will be copied to the new memory block and freed
- * @param new_size the desired new size in byte
- * @return pointer to the new memory, NULL on failure
+ * Перераспределить память с новым размером. Старый контент сохранится.
+ * @param data_p указатель на выделенную память.
+ *               Его содержимое будет скопировано в новый блок памяти и освобождено.
+ * @param new_size желаемый новый размер в байтах
+ * @return указатель на новую память,NULLв случае сбоя
  */
 void * lv_realloc(void * data_p, size_t new_size);
 
 /**
- * Reallocate a memory with a new size. The old content will be kept.
- * In case of failure, the old pointer is free'd.
- * @param data_p pointer to an allocated memory.
- *               Its content will be copied to the new memory block and freed
- * @param new_size the desired new size in byte
- * @return pointer to the new memory, NULL on failure
+ * Перераспределить память с новым размером. Старый контент сохранится.
+ * В случае неудачи старый указатель освобождается.
+ * @param data_p указатель на выделенную память.
+ *               Его содержимое будет скопировано в новый блок памяти и освобождено.
+ * @param new_size желаемый новый размер в байтах
+ * @return указатель на новую память,NULLв случае сбоя
  */
 void * lv_reallocf(void * data_p, size_t new_size);
 
 /**
- * Used internally to execute a plain `malloc` operation
- * @param size      size in bytes to `malloc`
+ * Используется внутри для выполнения простой операции`malloc`.
+ * @param size      размер в байтах до `malloc`
  */
 void * lv_malloc_core(size_t size);
 
 /**
- * Used internally to execute a plain `free` operation
- * @param p      memory address to free
+ * Используется внутри для выполнения простой операции`free`.
+ * @param p      адрес памяти для освобождения
  */
 void lv_free_core(void * p);
 
 /**
- * Used internally to execute a plain realloc operation
- * @param p         memory address to realloc
- * @param new_size  size in bytes to realloc
+ * Используется внутри для выполнения простой операции перераспределения.
+ * @param p         адрес памяти для перераспределения
+ * @param new_size  размер в байтах для перераспределения
  */
 void * lv_realloc_core(void * p, size_t new_size);
 
 /**
- * Used internally by lv_mem_monitor() to gather LVGL heap state information.
- * @param mon_p      pointer to lv_mem_monitor_t object to be populated.
+ * Используется внутриlv_mem_monitor() для сбора информации о состоянии кучи LVGL.
+ * @param mon_p      указатель на объект lv_mem_monitor_t, который необходимо заполнить.
  */
 void lv_mem_monitor_core(lv_mem_monitor_t * mon_p);
 
 lv_result_t lv_mem_test_core(void);
 
 /**
- * @brief Tests the memory allocation system by allocating and freeing a block of memory.
- * @return LV_RESULT_OK if the memory allocation system is working properly, or LV_RESULT_INVALID if there is an error.
+ * @brief Тестирует систему распределения памяти, выделяя и освобождая блок памяти.
+ * @return LV_RESULT_OK, если система распределения памяти работает правильно, или LV_RESULT_INVALID, если возникла ошибка.
  */
 lv_result_t lv_mem_test(void);
 
 /**
- * Give information about the work memory of dynamic allocation
- * @param mon_p pointer to a lv_mem_monitor_t variable,
- *              the result of the analysis will be stored here
+ * Дайте информацию о рабочей памяти динамического распределения.
+ * @param mon_p указатель на переменную lv_mem_monitor_t,
+ *              результат анализа будет храниться здесь
  */
 void lv_mem_monitor(lv_mem_monitor_t * mon_p);
 
@@ -160,7 +160,7 @@ void lv_mem_monitor(lv_mem_monitor_t * mon_p);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_MEM_H*/

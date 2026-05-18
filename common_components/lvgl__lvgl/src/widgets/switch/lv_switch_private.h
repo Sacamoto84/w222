@@ -49,7 +49,7 @@ struct _lv_switch_t {
 #endif /* LV_USE_SWITCH != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SWITCH_PRIVATE_H*/

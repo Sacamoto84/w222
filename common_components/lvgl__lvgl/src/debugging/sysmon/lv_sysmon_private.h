@@ -40,7 +40,7 @@ struct _lv_sysmon_perf_info_t {
         uint32_t refr_elaps_sum;
         uint32_t refr_cnt;
         uint32_t render_start;
-        uint32_t render_elaps_sum; /*Contains the flush time too*/
+        uint32_t render_elaps_sum; /*Также содержит время промывки*/
         uint32_t render_cnt;
         uint32_t flush_in_render_start;
         uint32_t flush_in_render_elaps_sum;
@@ -54,7 +54,7 @@ struct _lv_sysmon_perf_info_t {
         uint32_t fps;
         uint32_t cpu;
 #if LV_SYSMON_PROC_IDLE_AVAILABLE
-        uint32_t cpu_proc;              /** The applications idle time percentage */
+        uint32_t cpu_proc;              /** Процент простоя приложений */
 #endif
         uint32_t refr_avg_time;
         uint32_t render_avg_time;       /**< Pure rendering time without flush time*/
@@ -72,12 +72,12 @@ struct _lv_sysmon_perf_info_t {
  **********************/
 
 /**
- * Initialize built-in system monitor, such as performance and memory monitor.
+ * Инициализируйте встроенный системный монитор, например монитор производительности и памяти.
  */
 void lv_sysmon_builtin_init(void);
 
 /**
- * DeInitialize built-in system monitor, such as performance and memory monitor.
+ * Деинициализировать встроенный системный монитор, например монитор производительности и памяти.
  */
 void lv_sysmon_builtin_deinit(void);
 
@@ -88,7 +88,7 @@ void lv_sysmon_builtin_deinit(void);
 #endif /* LV_USE_SYSMON */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SYSMON_PRIVATE_H*/

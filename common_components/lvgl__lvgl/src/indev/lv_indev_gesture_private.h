@@ -2,12 +2,12 @@
  *
  * @file lv_indev_gesture_private.h
  *
- * Contains declarations and definition that are internal
- * to the gesture detection logic
+ * Содержит объявления и определения, которые являются внутренними.
+ * к логике обнаружения жестов
  *
  * Copyright (c) 2024 EDGEMTech Ltd.
  *
- * Author EDGEMTech Ltd, (erik.tagirov@edgemtech.ch)
+ * Автор EDGEMTech Ltd, (erik.tagiros@edgemtech.ch)
  *
  ******************************************************************/
 
@@ -36,47 +36,47 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/* Represent the motion of a finger */
+/* Представлять движение пальца */
 struct lv_indev_gesture_motion {
-    int8_t finger;                      /* The ID of the tracked finger */
-    lv_point_t start_point;             /* The coordinates where the DOWN event occurred */
-    lv_point_t point;                   /* The current coordinates */
-    lv_indev_state_t state;             /* DEBUG: The state i.e PRESSED or RELEASED */
+    int8_t finger;                      /* ID отслеживаемого пальца */
+    lv_point_t start_point;             /* Координаты, где произошло событие DOWN */
+    lv_point_t point;                   /* Текущие координаты */
+    lv_indev_state_t state;             /* DEBUG: Состояние, т.е. PRESSED или RELEASED. */
 };
 
 typedef struct lv_indev_gesture_motion lv_indev_gesture_motion_t;
 
-/* General descriptor for a gesture, used by recognizer state machines to track
- * the scale, rotation, and translation NOTE: (this will likely become private) */
+/* Общий дескриптор жеста, используемый конечными автоматами распознавателя для отслеживания.
+ * масштаб, вращение и перевод NOTE : (вероятно, это станет конфиденциальным) */
 struct lv_indev_gesture {
 
-    /* Motion descriptor, stores the coordinates and velocity of a contact point */
+    /* Дескриптор движения, хранит координаты и скорость точки контакта. */
     lv_indev_gesture_motion_t motions[LV_GESTURE_MAX_POINTS];
 
-    lv_point_t center;                  /* Center point */
-    float scale;                        /* Scale factor & previous scale factor */
+    lv_point_t center;                  /* Центральная точка */
+    float scale;                        /* Масштабный коэффициент и предыдущий масштабный коэффициент */
     float p_scale;
-    float scale_factors_x[LV_GESTURE_MAX_POINTS];   /* Scale factor relative to center for each point */
+    float scale_factors_x[LV_GESTURE_MAX_POINTS];   /* Масштабный коэффициент относительно центра для каждой точки */
     float scale_factors_y[LV_GESTURE_MAX_POINTS];
 
-    float delta_x;                      /* Translation & previous translation */
+    float delta_x;                      /* Перевод и предыдущий перевод */
     float delta_y;
     float p_delta_x;
     float p_delta_y;
-    float rotation;                     /* Rotation & previous rotation*/
+    float rotation;                     /* Ротация и предыдущая ротация*/
     float p_rotation;
-    uint8_t finger_cnt;                 /* Current number of contact points */
+    uint8_t finger_cnt;                 /* Текущее количество контактных лиц */
 
 };
 
-/* Recognizer configuration. It stores the thresholds needed to detect the gestures and
- * consider them as recognized. Once recognized, indev start sending LV_GESTURE event
+/* Настройка распознавательного устройства. Он хранит пороговые значения, необходимые для обнаружения жестов и
+ * считать их признанными. После того как indev начинает отправлять событиеLV_GESTURE.
  */
 struct lv_indev_gesture_configuration {
 
-    float pinch_up_threshold;           /* Threshold for the pinch up gesture to be recognized - in pixels */
-    float pinch_down_threshold;         /* Threshold for the pinch down gesture to be recognized - in pixels */
-    float rotation_angle_rad_threshold; /* Threshold for the rotation gesture to be recognized - in radians */
+    float pinch_up_threshold;           /* Порог распознавания жеста сведения пальца вверх (в пикселях). */
+    float pinch_down_threshold;         /* Порог распознавания жеста сжатия вниз (в пикселях). */
+    float rotation_angle_rad_threshold; /* Порог распознавания жеста вращения (в радианах). */
 
 };
 
@@ -91,7 +91,7 @@ struct lv_indev_gesture_configuration {
 #endif /* END LV_USE_RECOGNITION */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_INDEV_GESTURE_PRIVATE_H */

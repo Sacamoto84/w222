@@ -9,7 +9,7 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_SPACE_EVENLY);
 
@@ -19,7 +19,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_image_colorkey(void)
@@ -49,7 +49,7 @@ void test_image_colorkey(void)
         "ARGB8888",
     };
     int count = sizeof(img_dscs) / sizeof(img_dscs[0]);
-    int item = 3; // colorkey, colorkey + recolor, colorkey + transform
+    int item = 3; // цветовая клавиша, цветовая клавиша + перекрасить, цветовая клавиша + преобразование
 
     for(int i = 0; i < count * item; i++) {
         lv_obj_t * cont =  lv_obj_create(lv_screen_active());

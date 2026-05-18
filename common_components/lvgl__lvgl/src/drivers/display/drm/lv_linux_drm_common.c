@@ -67,7 +67,7 @@ static char * find_by_class(void)
         if(lv_strcmp(ent->d_name, ".") == 0 || lv_strcmp(ent->d_name, "..") == 0) {
             continue;
         }
-        /* connector dirs look like card0-HDMI-A-1, card0-eDP-1, etc. */
+        /* Каталоги разъемов выглядят как card0- HDMI -A-1, card0-eDP-1 и т. д. */
         bool is_card = lv_strncmp(ent->d_name, "card", 4) == 0;
         bool is_connected = lv_strchr(ent->d_name, '-') != NULL;
 
@@ -78,7 +78,7 @@ static char * find_by_class(void)
         const size_t buf_size = lv_strlen(LV_DRM_CARD_PATH) + 3;
         char * card_path = lv_zalloc(buf_size);
         if(ent->d_name[5] != '-') {
-            /* Double digit card*/
+            /* Двузначная карта*/
             lv_snprintf(card_path, buf_size, LV_DRM_CARD_PATH "%c%c", ent->d_name[4], ent->d_name[5]);
         }
         else {

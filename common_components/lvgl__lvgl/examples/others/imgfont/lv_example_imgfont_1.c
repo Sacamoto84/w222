@@ -30,7 +30,7 @@ static const void * get_imgfont_path(const lv_font_t * font, uint32_t unicode, u
 }
 
 /**
- * draw img in label or span obj
+ * нарисовать img в метке или объявить объект
  */
 void lv_example_imgfont_1(void)
 {

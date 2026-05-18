@@ -10,7 +10,7 @@ static lv_obj_t * g_kb = NULL;
 static lv_obj_t * g_pinyin_ime = NULL;
 static lv_pinyin_dict_t * g_custom_dict = NULL;
 
-/* Helper function: Find and press a button by text */
+/* Вспомогательная функция: найдите и нажмите кнопку по тексту. */
 static bool press_button_by_text(lv_obj_t * kb, const char * text)
 {
     for(uint16_t i = 0; i < 50; i++) {
@@ -24,7 +24,7 @@ static bool press_button_by_text(lv_obj_t * kb, const char * text)
     return false;
 }
 
-/* Helper function: Press first non-empty K9 candidate button in range */
+/* Вспомогательная функция: нажмите первую непустую кнопку-кандидат K9 в диапазоне. */
 static bool press_k9_candidate_button(lv_obj_t * kb, uint16_t start, uint16_t end)
 {
     for(uint16_t i = start; i < end; i++) {
@@ -39,7 +39,7 @@ static bool press_k9_candidate_button(lv_obj_t * kb, uint16_t start, uint16_t en
     return false;
 }
 
-/* Helper function: Input a sequence of characters */
+/* Вспомогательная функция: введите последовательность символов. */
 static void input_text_sequence(lv_obj_t * kb, const char ** texts, uint8_t count)
 {
     for(uint8_t j = 0; j < count; j++) {
@@ -47,14 +47,14 @@ static void input_text_sequence(lv_obj_t * kb, const char ** texts, uint8_t coun
     }
 }
 
-/* Helper function: Setup IME with keyboard and mode */
+/* Вспомогательная функция: настройка IME с помощью клавиатуры и режима. */
 static void setup_ime_mode(lv_obj_t * ime, lv_obj_t * kb, lv_ime_pinyin_mode_t mode)
 {
     lv_ime_pinyin_set_keyboard(ime, kb);
     lv_ime_pinyin_set_mode(ime, mode);
 }
 
-/* Helper function: Create a local textarea for testing */
+/* Вспомогательная функция: создание локальной текстовой области для тестирования. */
 static lv_obj_t * create_test_textarea(lv_obj_t * kb)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -83,17 +83,17 @@ void tearDown(void)
     }
 }
 
-/* Test basic creation and initialization */
+/* Тестирование базового создания и инициализации */
 void test_ime_pinyin_creation(void)
 {
     TEST_ASSERT_NOT_NULL(g_pinyin_ime);
 
-    /* Default mode should be K26 (verified through internal structure) */
+    /* Режим по умолчанию должен быть K26 (проверено внутренней структурой). */
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K26, ime->mode);
 }
 
-/* Test setting keyboard */
+/* Тестовая настройка клавиатуры */
 void test_ime_pinyin_set_keyboard(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -102,7 +102,7 @@ void test_ime_pinyin_set_keyboard(void)
     TEST_ASSERT_EQUAL_PTR(g_kb, retrieved_kb);
 }
 
-/* Test getting candidate panel */
+/* Тестирование получения панели кандидатов */
 void test_ime_pinyin_get_cand_panel(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -111,29 +111,29 @@ void test_ime_pinyin_get_cand_panel(void)
     TEST_ASSERT_TRUE(lv_obj_has_flag(cand_panel, LV_OBJ_FLAG_HIDDEN));
 }
 
-/* Test mode switching */
+/* Переключение тестового режима */
 void test_ime_pinyin_set_mode(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Test K26 mode */
+    /* Тестовый режим K26 */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K26, ime->mode);
 
-    /* Test K9 mode */
+    /* Тестовый режим K9 */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9, ime->mode);
 
-    /* Test K9 number mode */
+    /* Тестовый режим номера K9 */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9_NUMBER);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 }
 
-/* Test setting custom dictionary */
+/* Тестовая настройка пользовательского словаря */
 void test_ime_pinyin_set_dict(void)
 {
-    /* Create a simple custom dictionary (non-const for API compatibility) */
+    /* Создайте простой собственный словарь (неконстантный для совместимости с API) */
     static lv_pinyin_dict_t local_dict[] = {
         {"ni", "你"},
         {"hao", "好"},
@@ -147,7 +147,7 @@ void test_ime_pinyin_set_dict(void)
     TEST_ASSERT_EQUAL_PTR(local_dict, retrieved_dict);
 }
 
-/* Test K26 input simulation */
+/* Тестирование моделирования входа K26 */
 void test_ime_pinyin_k26_input(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -155,39 +155,39 @@ void test_ime_pinyin_k26_input(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Manually set input char to simulate processing */
+    /* Вручную установите входной символ для имитации обработки. */
     ime->input_char[0] = 'n';
     ime->input_char[1] = 'i';
     ime->input_char[2] = '\0';
     ime->ta_count = 2;
 
-    /* Verify the input char is stored correctly */
+    /* Убедитесь, что входной символ сохранен правильно. */
     TEST_ASSERT_EQUAL_STRING("ni", ime->input_char);
     TEST_ASSERT_EQUAL(2, ime->ta_count);
 }
 
-/* Test keyboard event handling */
+/* Тестовая обработка событий клавиатуры */
 void test_ime_pinyin_kb_event(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Get the candidate panel */
+    /* Получить панель кандидатов */
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
     TEST_ASSERT_NOT_NULL(cand_panel);
 
-    /* Verify cand_panel is initially hidden */
+    /* Убедитесь, что cand_panel изначально скрыт. */
     TEST_ASSERT_TRUE(lv_obj_has_flag(cand_panel, LV_OBJ_FLAG_HIDDEN));
 
-    /* Simulate keyboard button click for 'n' */
-    lv_buttonmatrix_set_selected_button(g_kb, 26); /* 'n' key position */
+    /* Имитировать нажатие кнопки клавиатуры для 'n' */
+    lv_buttonmatrix_set_selected_button(g_kb, 26); /* 'n' ключевая позиция */
     lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
 
-    /* After input, cand_panel should be visible (if valid pinyin) */
+    /* После ввода должен быть виден cand_panel (если действует пиньинь) */
     /* Note: This tests the event handler is registered */
 }
 
-/* Test clearing data with backspace */
+/* Тестовая очистка данных с помощью Backspace */
 void test_ime_pinyin_clear_with_backspace(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -195,18 +195,18 @@ void test_ime_pinyin_clear_with_backspace(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate input state */
+    /* Имитировать состояние ввода */
     ime->input_char[0] = 'n';
     ime->input_char[1] = 'i';
     ime->input_char[2] = '\0';
     ime->ta_count = 2;
 
-    /* Verify state before clear */
+    /* Проверьте состояние перед очисткой */
     TEST_ASSERT_EQUAL(2, ime->ta_count);
     TEST_ASSERT_EQUAL_STRING("ni", ime->input_char);
 }
 
-/* Test enter key clears data */
+/* Тестовый ввод ключа очищает данные */
 void test_ime_pinyin_enter_key_clear(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -214,18 +214,18 @@ void test_ime_pinyin_enter_key_clear(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate input state */
+    /* Имитировать состояние ввода */
     ime->input_char[0] = 'n';
     ime->input_char[1] = 'i';
     ime->input_char[2] = '\0';
     ime->ta_count = 2;
 
-    /* After enter key, data should be cleared */
-    /* The event handler will handle this */
+    /* После ввода ключа данные должны быть очищены. */
+    /* Обработчик событий справится с этим */
     TEST_ASSERT_NOT_NULL(ime);
 }
 
-/* Test mode switch button */
+/* Кнопка переключения тестового режима */
 void test_ime_pinyin_mode_switch_btn(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -233,50 +233,50 @@ void test_ime_pinyin_mode_switch_btn(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate clicking keyboard mode switch button */
-    /* This would trigger mode change */
+    /* Имитировать нажатие кнопки переключения режима клавиатуры */
+    /* Это приведет к смене режима */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K26, ime->mode);
 
-    /* Switch to K9 mode */
+    /* Переключиться в режим K9 */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9, ime->mode);
 }
 
-/* Test number mode */
+/* Режим номера теста */
 void test_ime_pinyin_number_mode(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Set mode to K9 first (required for number mode) */
+    /* Сначала установите режим K9 (требуется для числового режима) */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9);
 
-    /* Switch to number mode */
+    /* Переключиться в цифровой режим */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9_NUMBER);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 
     /* Note: The keyboard mode change happens in the event handler */
-    /* when the "123" button is clicked, not in set_mode directly */
+    /* при нажатии кнопки «123», а не непосредственно в set_mode */
 }
 
-/* Test clearing data */
+/* Тестовые данные очистки */
 void test_ime_pinyin_clear_data(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Simulate some input */
+    /* Имитировать ввод данных */
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
     ime->input_char[0] = 'n';
     ime->input_char[1] = 'i';
     ime->input_char[2] = '\0';
     ime->ta_count = 2;
 
-    /* The clear happens internally, but we can verify the structure is correct */
+    /* Очистка происходит внутри, но мы можем проверить правильность структуры. */
     TEST_ASSERT_EQUAL(2, ime->ta_count);
 }
 
-/* Test candidate panel event */
+/* Мероприятие группы тестовых кандидатов */
 void test_ime_pinyin_cand_panel_event(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -284,44 +284,44 @@ void test_ime_pinyin_cand_panel_event(void)
 
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
 
-    /* Verify the cand_panel exists and can be interacted with */
+    /* Убедитесь, что cand_panel существует и с ним можно взаимодействовать. */
     TEST_ASSERT_NOT_NULL(cand_panel);
     TEST_ASSERT_EQUAL(lv_obj_get_class(cand_panel), &lv_buttonmatrix_class);
 }
 
-/* Test style change event */
+/* Событие изменения стиля теста */
 void test_ime_pinyin_style_change(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
 
-    /* Change font style */
+    /* Изменить стиль шрифта */
     const lv_font_t * font = &lv_font_montserrat_14;
     lv_obj_set_style_text_font(g_pinyin_ime, font, LV_PART_MAIN);
 
-    /* Verify the cand_panel font was updated */
+    /* Убедитесь, что шрифт cand_panel обновлен. */
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
     const lv_font_t * cand_font = lv_obj_get_style_text_font(cand_panel, LV_PART_MAIN);
     TEST_ASSERT_EQUAL_PTR(font, cand_font);
 }
 
-/* Test destructor cleanup */
+/* Очистка тестового деструктора */
 void test_ime_pinyin_destructor(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
 
-    /* Store references */
+    /* Ссылки на магазины */
     lv_obj_t * kb_ref = lv_ime_pinyin_get_kb(g_pinyin_ime);
     lv_obj_t * cand_ref = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
 
-    /* Delete the IME object */
+    /* Удалить объект IME */
     lv_obj_delete(g_pinyin_ime);
 
-    /* The keyboard and cand_panel should also be deleted */
+    /* Клавиатуру и cand_panel тоже следует удалить */
     TEST_ASSERT_FALSE(lv_obj_is_valid(kb_ref));
     TEST_ASSERT_FALSE(lv_obj_is_valid(cand_ref));
 }
 
-/* Test K9 mode with default dictionary */
+/* Тестирование режима K9 со словарем по умолчанию */
 void test_ime_pinyin_k9_mode(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -330,12 +330,12 @@ void test_ime_pinyin_k9_mode(void)
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9, ime->mode);
 
-    /* Verify the keyboard is in user mode */
+    /* Убедитесь, что клавиатура находится в пользовательском режиме */
     lv_keyboard_mode_t kb_mode = lv_keyboard_get_mode(g_kb);
     TEST_ASSERT_EQUAL(LV_KEYBOARD_MODE_USER_1, kb_mode);
 }
 
-/* Test with default dictionary */
+/* Тест со словарем по умолчанию */
 void test_ime_pinyin_default_dict(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -343,13 +343,13 @@ void test_ime_pinyin_default_dict(void)
     const lv_pinyin_dict_t * dict = lv_ime_pinyin_get_dict(g_pinyin_ime);
     TEST_ASSERT_NOT_NULL(dict);
 
-    /* Verify some default entries exist */
-    /* The default dict should have entries like "a", "ai", "an", etc. */
+    /* Убедитесь, что некоторые записи по умолчанию существуют. */
+    /* Дикт по умолчанию должен содержать такие записи, как «a», «ai», «an» и т. д. */
     TEST_ASSERT_NOT_NULL(dict[0].py);
     TEST_ASSERT_NOT_NULL(dict[0].py_mb);
 }
 
-/* Test multiple mode switches */
+/* Тестирование нескольких переключателей режимов */
 void test_ime_pinyin_multiple_mode_switches(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -365,7 +365,7 @@ void test_ime_pinyin_multiple_mode_switches(void)
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K26, ime->mode);
 }
 
-/* Test candidate panel visibility after keyboard events */
+/* Проверка видимости панели кандидатов после событий клавиатуры */
 void test_ime_pinyin_cand_panel_visibility(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -373,16 +373,16 @@ void test_ime_pinyin_cand_panel_visibility(void)
 
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
 
-    /* Initially hidden */
+    /* Изначально скрыто */
     TEST_ASSERT_TRUE(lv_obj_has_flag(cand_panel, LV_OBJ_FLAG_HIDDEN));
 
-    /* After entering some text, it should be visible (if valid pinyin) */
-    /* This is tested indirectly by verifying the structure */
+    /* После ввода текста он должен быть виден (если действует пиньинь) */
+    /* Это проверяется косвенно путем проверки структуры */
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
     TEST_ASSERT_NOT_NULL(ime);
 }
 
-/* Test keyboard object validity */
+/* Проверка достоверности объекта клавиатуры */
 void test_ime_pinyin_kb_validity(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -391,70 +391,70 @@ void test_ime_pinyin_kb_validity(void)
     TEST_ASSERT_TRUE(lv_obj_is_valid(retrieved));
 }
 
-/* Test cand_panel object validity */
+/* Проверка достоверности объекта cand_panel */
 void test_ime_pinyin_cand_panel_validity(void)
 {
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
     TEST_ASSERT_TRUE(lv_obj_is_valid(cand_panel));
 }
 
-/* Test getter functions */
+/* Тестовые функции получения */
 void test_ime_pinyin_getters(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Test get_kb */
+    /* Тест get_kb */
     lv_obj_t * retrieved_kb = lv_ime_pinyin_get_kb(g_pinyin_ime);
     TEST_ASSERT_EQUAL_PTR(g_kb, retrieved_kb);
 
-    /* Test get_cand_panel */
+    /* Тест get_cand_panel */
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
     TEST_ASSERT_NOT_NULL(cand_panel);
     TEST_ASSERT_TRUE(lv_obj_is_valid(cand_panel));
 
-    /* Test get_dict (should return default dict) */
+    /* Тест get_dict (должен вернуть значение по умолчанию) */
     const lv_pinyin_dict_t * dict = lv_ime_pinyin_get_dict(g_pinyin_ime);
     TEST_ASSERT_NOT_NULL(dict);
 }
 
-/* Test edge cases */
+/* Тестирование крайних случаев */
 void test_ime_pinyin_edge_cases(void)
 {
-    /* Test with valid keyboard first */
+    /* Сначала проверьте действующую клавиатуру */
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_obj_t * retrieved = lv_ime_pinyin_get_kb(g_pinyin_ime);
     TEST_ASSERT_EQUAL_PTR(g_kb, retrieved);
 
-    /* Verify cand_panel is valid */
+    /* Убедитесь, что cand_panel действителен. */
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
     TEST_ASSERT_TRUE(lv_obj_is_valid(cand_panel));
 }
 
-/* Test rendering with default dictionary */
+/* Тестовый рендеринг со словарем по умолчанию */
 void test_ime_pinyin_render_k26(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Position for consistent screenshot */
+    /* Позиция для последовательного снимка экрана */
     lv_obj_align(g_pinyin_ime, LV_ALIGN_CENTER, 0, 0);
     lv_obj_align(g_kb, LV_ALIGN_BOTTOM_MID, 0, 0);
 
-    /* Create a text area for input */
+    /* Создайте текстовую область для ввода */
     lv_textarea_set_placeholder_text(g_ta, "Type pinyin...");
     lv_obj_align(g_ta, LV_ALIGN_TOP_MID, 0, 10);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/ime_pinyin_k26.png");
 }
 
-/* Test rendering with K9 mode */
+/* Тестовый рендеринг в режиме K9 */
 void test_ime_pinyin_render_k9(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9);
 
-    /* Position for consistent screenshot */
+    /* Позиция для последовательного снимка экрана */
     lv_obj_align(g_pinyin_ime, LV_ALIGN_CENTER, 0, 0);
     lv_obj_align(g_kb, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_textarea_set_placeholder_text(g_ta, "Type with 9-key...");
@@ -463,7 +463,7 @@ void test_ime_pinyin_render_k9(void)
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/ime_pinyin_k9.png");
 }
 
-/* Test rendering with custom dictionary */
+/* Тестовый рендеринг с пользовательским словарем */
 void test_ime_pinyin_render_custom_dict(void)
 {
     static lv_pinyin_dict_t local_dict[] = {
@@ -477,7 +477,7 @@ void test_ime_pinyin_render_custom_dict(void)
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Position for consistent screenshot */
+    /* Позиция для последовательного снимка экрана */
     lv_obj_align(g_pinyin_ime, LV_ALIGN_CENTER, 0, 0);
     lv_obj_align(g_kb, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_textarea_set_placeholder_text(g_ta, "Custom dict test");
@@ -486,47 +486,47 @@ void test_ime_pinyin_render_custom_dict(void)
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/ime_pinyin_custom.png");
 }
 
-/* Test keyboard and mode setters */
+/* Тестирование клавиатуры и настроек режимов */
 void test_ime_pinyin_setters(void)
 {
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Test set_keyboard */
+    /* Тест set_keyboard */
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     TEST_ASSERT_EQUAL_PTR(g_kb, ime->kb);
 
-    /* Test set_mode */
+    /* Тест set_mode */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9, ime->mode);
 
-    /* Test set_mode to K26 */
+    /* Проверьте set_mode на K26 */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K26, ime->mode);
 }
 
-/* Test empty dictionary handling */
+/* Тестирование обработки пустого словаря */
 void test_ime_pinyin_empty_dict(void)
 {
-    /* Empty dictionary causes undefined behavior in LVGL, skip this test */
+    /* Пустой словарь вызывает неопределенное поведение в LVGL, пропустите этот тест. */
     TEST_PASS_MESSAGE("Skipping empty dict test - LVGL doesn't handle empty dicts properly");
 }
 
-/* Test invalid pinyin input */
+/* Проверить неверный ввод пиньинь */
 void test_ime_pinyin_invalid_input(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* These should be filtered out */
-    /* 'i', 'u', 'v', ' ' should not be processed */
+    /* Их следует отфильтровать */
+    /* 'i', 'u', 'v', ' ' не должны обрабатываться */
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Manually test the filtering logic */
-    /* This would be done through keyboard events in real usage */
+    /* Вручную проверьте логику фильтрации */
+    /* Это будет сделано с помощью событий клавиатуры в реальном использовании. */
     TEST_ASSERT_NOT_NULL(ime);
 }
 
-/* Test backspace with K26 mode */
+/* Тестирование возврата в режим K26 */
 void test_ime_pinyin_backspace_k26(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -534,22 +534,22 @@ void test_ime_pinyin_backspace_k26(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate having input */
+    /* Имитировать ввод данных */
     ime->input_char[0] = 'n';
     ime->input_char[1] = 'i';
     ime->input_char[2] = '\0';
     ime->ta_count = 2;
 
-    /* Simulate backspace action */
-    /* This would be handled by the keyboard event */
+    /* Имитировать действие Backspace */
+    /* Это будет обрабатываться событием клавиатуры */
     TEST_ASSERT_EQUAL(2, ime->ta_count);
 
-    /* After backspace, ta_count should decrease */
+    /* После возврата ta_count должно уменьшиться. */
     ime->ta_count--;
     TEST_ASSERT_EQUAL(1, ime->ta_count);
 }
 
-/* Test backspace with K9 mode */
+/* Тестирование возврата в режим K9 */
 void test_ime_pinyin_backspace_k9(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -557,21 +557,21 @@ void test_ime_pinyin_backspace_k9(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate K9 input */
-    ime->k9_input_str[0] = '2'; /* 'abc' key */
+    /* Имитировать ввод K9 */
+    ime->k9_input_str[0] = '2'; /* клавиша «abc» */
     ime->k9_input_str[1] = '\0';
     ime->k9_input_str_len = 1;
     ime->ta_count = 1;
 
-    /* Verify state */
+    /* Проверьте состояние */
     TEST_ASSERT_EQUAL(1, ime->k9_input_str_len);
 
-    /* After backspace */
+    /* После возврата */
     ime->k9_input_str_len--;
     TEST_ASSERT_EQUAL(0, ime->k9_input_str_len);
 }
 
-/* Test K9 candidate page navigation */
+/* Тестовая навигация по странице-кандидату K9 */
 void test_ime_pinyin_k9_cand_page(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -579,13 +579,13 @@ void test_ime_pinyin_k9_cand_page(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify K9 mode initialization */
+    /* Проверьте инициализацию режима K9. */
     TEST_ASSERT_EQUAL(0, ime->k9_py_ll_pos);
     TEST_ASSERT_EQUAL(0, ime->k9_legal_py_count);
     TEST_ASSERT_EQUAL(0, ime->k9_input_str_len);
 }
 
-/* Test K9 input with number keys */
+/* Проверка ввода K9 с помощью цифровых клавиш */
 void test_ime_pinyin_k9_number_input(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -593,11 +593,11 @@ void test_ime_pinyin_k9_number_input(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify we're in number mode */
+    /* Убедитесь, что мы находимся в цифровом режиме */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 }
 
-/* Test candidate panel button clicks */
+/* Нажатия кнопок на панели тестовых кандидатов */
 void test_ime_pinyin_cand_panel_buttons(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -605,23 +605,23 @@ void test_ime_pinyin_cand_panel_buttons(void)
 
     lv_obj_t * cand_panel = lv_ime_pinyin_get_cand_panel(g_pinyin_ime);
 
-    /* Verify the cand_panel is a buttonmatrix */
+    /* Убедитесь, что cand_panel является матрицей кнопок. */
     TEST_ASSERT_EQUAL(&lv_buttonmatrix_class, lv_obj_get_class(cand_panel));
 
-    /* Verify it has the correct size and position */
+    /* Убедитесь, что он имеет правильный размер и положение. */
     TEST_ASSERT_NOT_NULL(cand_panel);
 }
 
-/* Test pinyin search with default dict */
+/* Тестирование поиска пиньинь с помощью словаря по умолчанию */
 void test_ime_pinyin_search_default(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
 
-    /* Get the internal dict */
+    /* Получить внутренний dict */
     const lv_pinyin_dict_t * dict = lv_ime_pinyin_get_dict(g_pinyin_ime);
     TEST_ASSERT_NOT_NULL(dict);
 
-    /* Verify some expected entries */
+    /* Проверьте некоторые ожидаемые записи */
     bool found_a = false;
     bool found_ai = false;
 
@@ -634,7 +634,7 @@ void test_ime_pinyin_search_default(void)
     TEST_ASSERT_TRUE(found_ai);
 }
 
-/* Test multiple object instances */
+/* Тестирование нескольких экземпляров объекта */
 void test_ime_pinyin_multiple_instances(void)
 {
     lv_obj_t * ime2 = lv_ime_pinyin_create(g_active_screen);
@@ -643,32 +643,32 @@ void test_ime_pinyin_multiple_instances(void)
     lv_ime_pinyin_set_keyboard(ime2, kb2);
     lv_ime_pinyin_set_mode(ime2, LV_IME_PINYIN_MODE_K26);
 
-    /* Verify both instances are independent */
+    /* Убедитесь, что оба экземпляра независимы */
     TEST_ASSERT(g_pinyin_ime != ime2);
     TEST_ASSERT(g_kb != kb2);
 
-    /* Verify second instance properties */
+    /* Проверьте свойства второго экземпляра */
     TEST_ASSERT_EQUAL_PTR(kb2, lv_ime_pinyin_get_kb(ime2));
 
     lv_obj_delete(ime2);
 }
 
-/* Test object deletion order */
+/* Порядок удаления объекта тестирования */
 void test_ime_pinyin_deletion_order(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
 
-    /* Store references */
+    /* Ссылки на магазины */
     lv_obj_t * kb_ref = lv_ime_pinyin_get_kb(g_pinyin_ime);
 
-    /* Delete keyboard first */
+    /* Сначала удалите клавиатуру */
     lv_obj_delete(g_kb);
 
-    /* Verify g_kb reference is invalid */
+    /* Убедитесь, что ссылка g_kb недействительна. */
     TEST_ASSERT_FALSE(lv_obj_is_valid(kb_ref));
 }
 
-/* Test with empty input */
+/* Тест с пустым вводом */
 void test_ime_pinyin_empty_input(void)
 {
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
@@ -676,13 +676,13 @@ void test_ime_pinyin_empty_input(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify empty state */
+    /* Проверьте пустое состояние */
     TEST_ASSERT_EQUAL(0, ime->ta_count);
     TEST_ASSERT_EQUAL(0, ime->cand_num);
     TEST_ASSERT_NULL(ime->cand_str);
 }
 
-/* Test K9 full input scenario with keyboard button simulation */
+/* Протестируйте сценарий полного ввода K9 с имитацией кнопок клавиатуры. */
 void test_ime_pinyin_k9_event_input(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -691,19 +691,19 @@ void test_ime_pinyin_k9_event_input(void)
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9);
 
-    /* Simulate keyboard button press for K9 "abc" key (button id 4) */
+    /* Имитировать нажатие кнопки клавиатуры для клавиши K9 «abc» (идентификатор кнопки 4) */
     lv_buttonmatrix_set_selected_button(g_kb, 4);
     lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify K9 input processing occurred */
+    /* Убедитесь, что обработка ввода K9 произошла. */
     TEST_ASSERT_LESS_OR_EQUAL_UINT16(LV_IME_PINYIN_K9_MAX_INPUT, ime->k9_input_str_len);
 
     lv_obj_delete(ta);
 }
 
-/* Test keyboard event handling with button matrix simulation */
+/* Тестирование обработки событий клавиатуры с помощью матричного моделирования кнопок */
 void test_ime_pinyin_keyboard_events(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -712,17 +712,17 @@ void test_ime_pinyin_keyboard_events(void)
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Find button index for 'a' key (varies by keyboard layout) */
-    /* For K26 mode, it's typically at button index ~2-3 */
-    lv_buttonmatrix_set_selected_button(g_kb, 10);  /* simulate 'a' key press */
+    /* Найти индекс кнопки для клавиши «a» (зависит от раскладки клавиатуры) */
+    /* Для режима K26 это обычно номер кнопки ~2-3. */
+    lv_buttonmatrix_set_selected_button(g_kb, 10);  /* имитировать нажатие клавиши «а» */
     lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify input occurred */
+    /* Убедитесь, что ввод произошел */
     TEST_ASSERT_NOT_NULL(ime);
 
-    /* Test focus events */
+    /* Тестовые фокус-события */
     lv_obj_send_event(g_pinyin_ime, LV_EVENT_FOCUSED, NULL);
     lv_obj_send_event(g_pinyin_ime, LV_EVENT_DEFOCUSED, NULL);
 
@@ -730,7 +730,7 @@ void test_ime_pinyin_keyboard_events(void)
     TEST_PASS_MESSAGE("Keyboard event handling completed");
 }
 
-/* Test K9 candidate page navigation with button simulation */
+/* Тестирование навигации по страницам-кандидатам K9 с имитацией кнопок */
 void test_ime_pinyin_k9_page_nav_events(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -741,23 +741,23 @@ void test_ime_pinyin_k9_page_nav_events(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* First add some K9 input */
-    lv_buttonmatrix_set_selected_button(g_kb, 4);  /* "abc" button */
+    /* Сначала добавьте вход K9. */
+    lv_buttonmatrix_set_selected_button(g_kb, 4);  /* кнопка «абв» */
     lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
 
-    /* Now test page navigation if candidates exist */
+    /* Теперь проверьте навигацию по странице, если кандидаты существуют. */
     if(ime->k9_legal_py_count > 0) {
-        /* Try to find right arrow button */
+        /* Попробуйте найти кнопку со стрелкой вправо. */
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
     }
 
-    /* Verify state is valid */
+    /* Убедитесь, что состояние действительно */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test candidate selection through button matrix */
+/* Выбор тестового кандидата с помощью матрицы кнопок */
 void test_ime_pinyin_cand_selection(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -768,13 +768,13 @@ void test_ime_pinyin_cand_selection(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate typing 'a' to generate candidates */
+    /* Имитируйте ввод буквы «а» для генерации кандидатов */
     lv_buttonmatrix_set_selected_button(g_kb, 10);
     lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
 
-    /* If candidates exist, simulate selection */
+    /* Если кандидаты существуют, смоделируйте отбор */
     if(ime->cand_num > 0 && !lv_obj_has_flag(ime->cand_panel, LV_OBJ_FLAG_HIDDEN)) {
-        /* Select first candidate (button id 1, 0 is left arrow) */
+        /* Выберите первого кандидата (идентификатор кнопки 1, 0 — стрелка влево) */
         lv_buttonmatrix_set_selected_button(ime->cand_panel, 1);
         lv_obj_send_event(ime->cand_panel, LV_EVENT_VALUE_CHANGED, NULL);
     }
@@ -783,25 +783,25 @@ void test_ime_pinyin_cand_selection(void)
     TEST_PASS_MESSAGE("Candidate selection test completed");
 }
 
-/* Test K9 number mode with direct mode setting */
+/* Тестовый режим номера K9 с настройкой прямого режима */
 void test_ime_pinyin_k9_number_events(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
     lv_keyboard_set_textarea(g_kb, ta);
 
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
-    /* Directly set to K9_NUMBER mode */
+    /* Непосредственно установлен режим K9_NUMBER. */
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K9_NUMBER);
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify IME mode is set correctly */
+    /* Убедитесь, что режим IME установлен правильно. */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 
     lv_obj_delete(ta);
 }
 
-/* Test K26 letter key processing */
+/* Тестирование обработки буквенного ключа K26 */
 void test_ime_pinyin_k26_letter_keys(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -810,19 +810,19 @@ void test_ime_pinyin_k26_letter_keys(void)
     lv_ime_pinyin_set_keyboard(g_pinyin_ime, g_kb);
     lv_ime_pinyin_set_mode(g_pinyin_ime, LV_IME_PINYIN_MODE_K26);
 
-    /* Simulate pressing letter keys by directly calling the keyboard event */
-    /* Find and press 'n' key */
+    /* Имитация нажатия буквенных клавиш путем прямого вызова события клавиатуры. */
+    /* Найдите и нажмите клавишу «n». */
     press_button_by_text(g_kb, "n");
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Verify input was processed */
+    /* Убедитесь, что ввод был обработан */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 letter key processing with abc/def/ghi buttons */
+/* Тестирование обработки буквенных клавиш K9 с помощью кнопок abc/def/ghi */
 void test_ime_pinyin_k9_letter_keys(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -833,13 +833,13 @@ void test_ime_pinyin_k9_letter_keys(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate pressing K9 buttons by finding buttons with letter combinations */
+    /* Имитируйте нажатие кнопок K9, находя кнопки с комбинациями букв. */
     bool found_k9_key = press_button_by_text(g_kb, "abc");
     if(!found_k9_key) {
         found_k9_key = press_button_by_text(g_kb, "def");
     }
 
-    /* If we found and pressed a K9 key, verify processing */
+    /* Если мы нашли и нажали клавишу K9, проверьте обработку */
     if(found_k9_key) {
         TEST_ASSERT_LESS_OR_EQUAL_UINT16(LV_IME_PINYIN_K9_MAX_INPUT, ime->k9_input_str_len);
     }
@@ -847,7 +847,7 @@ void test_ime_pinyin_k9_letter_keys(void)
     lv_obj_delete(ta);
 }
 
-/* Test backspace key in K26 mode */
+/* Проверьте клавишу Backspace в режиме K26. */
 void test_ime_pinyin_k26_backspace_key(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -858,20 +858,20 @@ void test_ime_pinyin_k26_backspace_key(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Set up some input state */
+    /* Настройте некоторое состояние ввода */
     lv_strlcpy(ime->input_char, "ni", sizeof(ime->input_char));
     ime->ta_count = 2;
 
-    /* Find and press backspace key */
+    /* Найдите и нажмите клавишу Backspace. */
     press_button_by_text(g_kb, LV_SYMBOL_BACKSPACE);
 
-    /* Verify ta_count decreased or cleared */
+    /* Убедитесь, что ta_count уменьшен или очищен. */
     TEST_ASSERT_EQUAL_UINT16(1, ime->ta_count);
 
     lv_obj_delete(ta);
 }
 
-/* Test Enter key in K26 mode */
+/* Тестирование клавиши Enter в режиме K26 */
 void test_ime_pinyin_k26_enter_key(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -882,22 +882,22 @@ void test_ime_pinyin_k26_enter_key(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Set up some input state */
+    /* Настройте некоторое состояние ввода */
     lv_strlcpy(ime->input_char, "hao", sizeof(ime->input_char));
     ime->ta_count = 3;
 
-    /* Find and press Enter key */
+    /* Найдите и нажмите клавишу Enter. */
     if(!press_button_by_text(g_kb, "Enter")) {
         press_button_by_text(g_kb, LV_SYMBOL_NEW_LINE);
     }
 
-    /* Verify data was cleared */
+    /* Убедитесь, что данные удалены */
     TEST_ASSERT_EQUAL(0, ime->ta_count);
 
     lv_obj_delete(ta);
 }
 
-/* Test mode switch button (ABC/abc/123) */
+/* Кнопка переключения тестового режима ( ABC /abc/123) */
 void test_ime_pinyin_mode_switch_buttons(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -908,20 +908,20 @@ void test_ime_pinyin_mode_switch_buttons(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Find and press ABC button (mode switch) */
+    /* Найдите и нажмите кнопку ABC (переключатель режима) */
     if(!press_button_by_text(g_kb, "ABC")) {
         if(!press_button_by_text(g_kb, "abc")) {
             press_button_by_text(g_kb, "1#");
         }
     }
 
-    /* Verify data was cleared (mode switch clears input) */
+    /* Убедитесь, что данные были удалены (переключатель режима очищает ввод) */
     TEST_ASSERT_EQUAL(0, ime->ta_count);
 
     lv_obj_delete(ta);
 }
 
-/* Test keyboard mode switch button */
+/* Кнопка переключения режима тестовой клавиатуры */
 void test_ime_pinyin_keyboard_switch_button(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -932,16 +932,16 @@ void test_ime_pinyin_keyboard_switch_button(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Find and press keyboard switch button */
+    /* Найдите и нажмите кнопку переключения клавиатуры. */
     press_button_by_text(g_kb, LV_SYMBOL_KEYBOARD);
 
-    /* Verify mode is valid (K26 -> K9 or vice versa) */
+    /* Режим проверки действителен ( K26 -> K9 или наоборот) */
     TEST_ASSERT_LESS_OR_EQUAL_INT(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 
     lv_obj_delete(ta);
 }
 
-/* Test candidate panel page navigation buttons */
+/* Кнопки навигации по странице панели тестовых кандидатов */
 void test_ime_pinyin_cand_page_buttons(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -953,16 +953,16 @@ void test_ime_pinyin_cand_page_buttons(void)
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
     lv_obj_t * cand_panel = ime->cand_panel;
 
-    /* First trigger some input to potentially show candidates */
+    /* Сначала вызовите некоторый ввод, чтобы потенциально показать кандидатов. */
     press_button_by_text(g_kb, "n");
 
-    /* If candidate panel is visible, test navigation */
+    /* Если панель кандидатов видна, проверьте навигацию. */
     if(!lv_obj_has_flag(cand_panel, LV_OBJ_FLAG_HIDDEN) && ime->cand_num > 0) {
-        /* Try to click left/right buttons on candidate panel */
-        lv_buttonmatrix_set_selected_button(cand_panel, 0); /* Left button */
+        /* Попробуйте нажать левую/правую кнопки на панели кандидатов. */
+        lv_buttonmatrix_set_selected_button(cand_panel, 0); /* Левая кнопка */
         lv_obj_send_event(cand_panel, LV_EVENT_VALUE_CHANGED, NULL);
 
-        uint16_t last_btn = LV_IME_PINYIN_CAND_TEXT_NUM + 1; /* Right button */
+        uint16_t last_btn = LV_IME_PINYIN_CAND_TEXT_NUM + 1; /* Правая кнопка */
         lv_buttonmatrix_set_selected_button(cand_panel, last_btn);
         lv_obj_send_event(cand_panel, LV_EVENT_VALUE_CHANGED, NULL);
     }
@@ -972,7 +972,7 @@ void test_ime_pinyin_cand_page_buttons(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 candidate button selection */
+/* Тестирование выбора кнопки-кандидата K9 */
 void test_ime_pinyin_k9_candidate_button(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -983,12 +983,12 @@ void test_ime_pinyin_k9_candidate_button(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate K9 input by setting button text length */
+    /* Имитируйте ввод K9, установив длину текста кнопки */
     lv_strlcpy(ime->input_char, "abc", sizeof(ime->input_char));
     ime->ta_count = 3;
     ime->k9_input_str_len = 3;
 
-    /* Try to find and click K9 candidate buttons (index 16-21 typically) */
+    /* Попробуйте найти и нажать кнопки-кандидаты K9 (обычно индексы 16–21). */
     press_k9_candidate_button(g_kb, 16, 22);
 
     TEST_ASSERT_LESS_OR_EQUAL_UINT16(LV_IME_PINYIN_K9_MAX_INPUT, ime->k9_input_str_len);
@@ -996,7 +996,7 @@ void test_ime_pinyin_k9_candidate_button(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 backspace with multiple characters */
+/* Проверьте K9 Backspace с несколькими символами. */
 void test_ime_pinyin_k9_backspace_multi(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1007,22 +1007,22 @@ void test_ime_pinyin_k9_backspace_multi(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Set up K9 input state with multiple characters */
+    /* Настройка состояния ввода K9 с несколькими символами */
     lv_strlcpy(ime->k9_input_str, "234", sizeof(ime->k9_input_str));
     ime->k9_input_str_len = 3;
     ime->ta_count = 3;
     lv_strlcpy(ime->input_char, "abc", sizeof(ime->input_char));
 
-    /* Find and press backspace */
+    /* Найдите и нажмите Backspace */
     press_button_by_text(g_kb, LV_SYMBOL_BACKSPACE);
 
-    /* After backspace, ta_count should decrease */
+    /* После возврата ta_count должно уменьшиться. */
     TEST_ASSERT_LESS_THAN_UINT16(3, ime->ta_count);
 
     lv_obj_delete(ta);
 }
 
-/* Test ABC/abc/1# mode switch buttons */
+/* Тестирование кнопок переключения режимов ABC /abc/1# */
 void test_ime_pinyin_abc_buttons(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1033,18 +1033,18 @@ void test_ime_pinyin_abc_buttons(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Set up some input */
+    /* Настройте ввод */
     lv_strlcpy(ime->input_char, "test", sizeof(ime->input_char));
     ime->ta_count = 4;
 
-    /* ABC/abc/1# buttons should clear data when pressed
-       They are keyboard mode switch buttons that trigger clear_data */
+    /* Кнопки ABC /abc/1# должны очищать данные при нажатии
+       Это кнопки переключения режима клавиатуры, которые запускают clear_data. */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test 123 number mode button */
+/* Тест 123 кнопки цифрового режима */
 void test_ime_pinyin_123_button(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1055,16 +1055,16 @@ void test_ime_pinyin_123_button(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Find and press 123 button */
+    /* Найдите и нажмите кнопку 123. */
     press_button_by_text(g_kb, "123");
 
-    /* Should switch to K9_NUMBER mode */
+    /* Должен переключиться в режим K9_NUMBER */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 
     lv_obj_delete(ta);
 }
 
-/* Test keyboard switch from K9_NUMBER to K9 */
+/* Тестирование переключения клавиатуры с K9_NUMBER на K9 */
 void test_ime_pinyin_keyboard_switch_from_number(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1075,16 +1075,16 @@ void test_ime_pinyin_keyboard_switch_from_number(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Find and press keyboard switch button */
+    /* Найдите и нажмите кнопку переключения клавиатуры. */
     press_button_by_text(g_kb, LV_SYMBOL_KEYBOARD);
 
-    /* Should switch to K9 mode */
+    /* Должен переключиться в режим K9 */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9, ime->mode);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 candidate panel page navigation (next page) */
+/* Тестовая навигация по странице панели кандидатов K9 (следующая страница) */
 void test_ime_pinyin_k9_page_next(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1095,26 +1095,26 @@ void test_ime_pinyin_k9_page_next(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate multiple K9 inputs to generate many candidates */
+    /* Имитируйте несколько входных данных K9 для генерации множества кандидатов. */
     for(int i = 0; i < 5; i++) {
         press_button_by_text(g_kb, "abc");
     }
 
-    /* If we have many candidates, test next page */
+    /* Если у нас много кандидатов, протестируйте следующую страницу */
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
         uint16_t old_pos = ime->k9_py_ll_pos;
 
-        /* Find right arrow button on keyboard */
+        /* Найдите кнопку со стрелкой вправо на клавиатуре */
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
 
-        /* Position should change */
+        /* Позиция должна измениться */
         TEST_ASSERT_GREATER_OR_EQUAL_UINT16(old_pos, ime->k9_py_ll_pos);
     }
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 candidate panel page navigation (previous page) */
+/* Тестовая навигация по странице панели кандидатов K9 (предыдущая страница) */
 void test_ime_pinyin_k9_page_prev(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1125,29 +1125,29 @@ void test_ime_pinyin_k9_page_prev(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Simulate multiple K9 inputs */
+    /* Имитировать несколько входов K9 */
     for(int i = 0; i < 5; i++) {
         press_button_by_text(g_kb, "def");
     }
 
-    /* If we have many candidates, go to next page first then test previous */
+    /* Если у нас много кандидатов, сначала перейдите на следующую страницу, а затем проверьте предыдущую. */
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
-        /* Go to next page */
+        /* Перейти на следующую страницу */
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
 
         uint16_t old_pos = ime->k9_py_ll_pos;
 
-        /* Now test previous page */
+        /* Теперь проверьте предыдущую страницу */
         press_button_by_text(g_kb, LV_SYMBOL_LEFT);
 
-        /* Position should decrease or stay same */
+        /* Позиция должна уменьшиться или остаться прежней. */
         TEST_ASSERT_LESS_OR_EQUAL_UINT16(old_pos, ime->k9_py_ll_pos);
     }
 
     lv_obj_delete(ta);
 }
 
-/* Test selecting K9 candidate from button matrix */
+/* Тест выбора кандидата K9 из матрицы кнопок */
 void test_ime_pinyin_k9_select_candidate(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1158,23 +1158,23 @@ void test_ime_pinyin_k9_select_candidate(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input K9 text to generate candidates */
+    /* Введите текст K9 для генерации кандидатов. */
     press_button_by_text(g_kb, "abc");
 
-    /* Set input state for candidate selection */
+    /* Установить состояние ввода для выбора кандидата */
     lv_strlcpy(ime->input_char, "a", sizeof(ime->input_char));
     ime->ta_count = 1;
 
-    /* Try to select a K9 candidate button (16-21 range) */
+    /* Попробуйте выбрать кнопку-кандидат K9 (диапазон 16–21). */
     press_k9_candidate_button(g_kb, 16, 22);
 
-    /* Input should be processed */
+    /* Ввод должен быть обработан */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test pinyin search with single character */
+/* Тестирование поиска пиньинь по одному символу */
 void test_ime_pinyin_search_single_char(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1185,16 +1185,16 @@ void test_ime_pinyin_search_single_char(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Trigger input by pressing 'a' key */
+    /* Запустите ввод, нажав клавишу «a» */
     press_button_by_text(g_kb, "a");
 
-    /* verify valid state */
+    /* проверить действительное состояние */
     TEST_ASSERT_EQUAL_UINT16(1, ime->cand_num);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 candidate button selection (lines 634-646) */
+/* Тестирование выбора кнопки-кандидата K9 (строки 634–646) */
 void test_ime_pinyin_k9_cand_button_select(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1205,23 +1205,23 @@ void test_ime_pinyin_k9_cand_button_select(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input "2" (abc) to generate K9 candidates */
+    /* Введите «2» (abc), чтобы сгенерировать кандидатов K9. */
     press_button_by_text(g_kb, "2");
 
-    /* Verify K9 candidates state */
+    /* Проверьте состояние кандидатов K9 */
     TEST_ASSERT_NOT_NULL(ime);
 
-    /* If we have candidates, try to select one */
+    /* Если у нас есть кандидаты, попробуйте выбрать одного */
     if(ime->k9_legal_py_count > 0) {
-        /* Simulate clicking first non-empty candidate button (btn_id 16-18) */
-        /* This should trigger lines 634-646 */
+        /* Имитировать нажатие первой непустой кнопки-кандидата ( btn_id 16-18) */
+        /* Это должно вызвать строки 634-646. */
         press_k9_candidate_button(g_kb, 16, 19);
     }
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 pagination forward and backward (lines 1142-1196) */
+/* Проверьте нумерацию страниц K9 вперед и назад (строки 1142–1196). */
 void test_ime_pinyin_k9_pagination_full(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1232,31 +1232,31 @@ void test_ime_pinyin_k9_pagination_full(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input "4" which should generate many legal pinyin (h) */
+    /* Введите «4», который должен генерировать много допустимых пиньинь (h) */
     press_button_by_text(g_kb, "4");
 
-    /* Verify K9 candidates state */
+    /* Проверьте состояние кандидатов K9 */
     TEST_ASSERT_NOT_NULL(ime);
 
-    /* If we have enough candidates for pagination, try it */
+    /* Если у нас достаточно кандидатов на пагинацию, попробуйте */
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
-        /* Try next page */
+        /* Попробуйте следующую страницу */
         int old_pos = ime->k9_py_ll_pos;
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
-        /* Position should advance */
+        /* Позиция должна продвигаться */
         TEST_ASSERT_GREATER_OR_EQUAL_INT(old_pos, ime->k9_py_ll_pos);
 
-        /* Try previous page (lines 1184-1196) */
+        /* Попробуйте предыдущую страницу (строки 1184–1196). */
         old_pos = ime->k9_py_ll_pos;
         press_button_by_text(g_kb, LV_SYMBOL_LEFT);
-        /* Position should decrease or stay same */
+        /* Позиция должна уменьшиться или остаться прежней. */
         TEST_ASSERT_LESS_OR_EQUAL_INT(old_pos, ime->k9_py_ll_pos);
     }
 
     lv_obj_delete(ta);
 }
 
-/* Test empty candidate list branch (line 786) */
+/* Проверка пустой ветки списка кандидатов (строка 786) */
 void test_ime_pinyin_empty_candidates(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1267,18 +1267,18 @@ void test_ime_pinyin_empty_candidates(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input invalid pinyin sequence that won't match anything */
+    /* Введите недопустимую последовательность пиньинь, которая ничему не соответствует. */
     const char * invalid_inputs[] = {"q", "q", "q", "q", "q"};
     input_text_sequence(g_kb, invalid_inputs, 5);
 
-    /* Should have no or very few candidates */
-    /* The code should handle empty candidate list gracefully */
+    /* Кандидатов не должно быть или быть очень мало. */
+    /* Код должен корректно обрабатывать пустой список кандидатов. */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 input length boundary (line 1004) */
+/* Проверка границы входной длины K9 (строка 1004) */
 void test_ime_pinyin_k9_input_length_boundary(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1289,24 +1289,24 @@ void test_ime_pinyin_k9_input_length_boundary(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input exactly LV_IME_PINYIN_K9_MAX_INPUT-1 (6) characters */
+    /* Введите ровно LV_IME_PINYIN_K9_MAX_INPUT -1 (6) символов. */
     for(uint8_t j = 0; j < (LV_IME_PINYIN_K9_MAX_INPUT - 1); j++) {
         press_button_by_text(g_kb, "2");
     }
 
-    /* Verify input length does not exceed max */
+    /* Убедитесь, что длина ввода не превышает макс. */
     TEST_ASSERT_LESS_OR_EQUAL_SIZE_T(LV_IME_PINYIN_K9_MAX_INPUT, lv_strlen(ime->input_char));
 
-    /* Try adding one more (should be blocked) */
+    /* Попробуйте добавить еще один (должен быть заблокирован) */
     press_button_by_text(g_kb, "3");
 
-    /* Length should not exceed max */
+    /* Длина не должна превышать макс. */
     TEST_ASSERT_LESS_OR_EQUAL_SIZE_T(LV_IME_PINYIN_K9_MAX_INPUT, lv_strlen(ime->input_char));
 
     lv_obj_delete(ta);
 }
 
-/* Test pinyin page previous when at first page (line 817) */
+/* Проверка предыдущей страницы пиньинь при первой странице (строка 817) */
 void test_ime_pinyin_page_prev_at_start(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1317,23 +1317,23 @@ void test_ime_pinyin_page_prev_at_start(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input "ni" which should give many candidates */
+    /* Введите «ni», что должно дать много кандидатов. */
     const char * inputs[] = {"n", "i"};
     input_text_sequence(g_kb, inputs, 2);
 
-    /* Should be at page 0 */
+    /* Должно быть на странице 0 */
     TEST_ASSERT_EQUAL(0, ime->py_page);
 
-    /* Try to go to previous page (should stay at 0) */
+    /* Попробуйте перейти на предыдущую страницу (должно остаться на 0). */
     press_button_by_text(g_kb, LV_SYMBOL_LEFT);
 
-    /* Should still be at page 0 */
+    /* Должно быть на странице 0 */
     TEST_ASSERT_EQUAL(0, ime->py_page);
 
     lv_obj_delete(ta);
 }
 
-/* Test search with no match (line 930) */
+/* Тестовый поиск без совпадений (строка 930) */
 void test_ime_pinyin_search_no_match(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1344,19 +1344,19 @@ void test_ime_pinyin_search_no_match(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input pinyin sequence that has very few or no matches */
-    /* Use 'v' which is rare in pinyin */
+    /* Введите последовательность пиньинь, которая имеет очень мало совпадений или вообще не имеет совпадений. */
+    /* Используйте букву «v», которая редко встречается в пиньинь. */
     const char * rare_inputs[] = {"v", "v"};
     input_text_sequence(g_kb, rare_inputs, 2);
 
-    /* Should have very few or no candidates */
-    /* The function handles this gracefully */
+    /* Кандидатов должно быть очень мало или совсем не должно быть. */
+    /* Функция справляется с этим изящно */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 candidate list empty case (line 1115) */
+/* Тестовый список кандидатов K9 пустой регистр (строка 1115) */
 void test_ime_pinyin_k9_cand_empty(void)
 {
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
@@ -1367,20 +1367,20 @@ void test_ime_pinyin_k9_cand_empty(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Clear any existing input first */
-    /* Press Del multiple times */
+    /* Сначала очистите любой существующий ввод */
+    /* Нажмите Del несколько раз */
     for(int j = 0; j < 10; j++) {
         press_button_by_text(g_kb, "Del");
     }
 
-    /* Verify empty state */
+    /* Проверьте пустое состояние */
     TEST_ASSERT_EQUAL(0, lv_strlen(ime->input_char));
     TEST_ASSERT_EQUAL(0, ime->k9_legal_py_count);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 backspace in K9 mode (lines 667-668) */
+/* Проверьте возврат K9 в режиме K9 (строки 667-668) */
 void test_ime_pinyin_k9_backspace_in_mode(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1388,20 +1388,20 @@ void test_ime_pinyin_k9_backspace_in_mode(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input some K9 characters */
+    /* Введите несколько символов K9. */
     const char * inputs[] = {"2", "2", "2"};
     input_text_sequence(g_kb, inputs, 3);
 
-    /* Now press backspace to trigger K9 mode backspace logic (lines 674-679) */
+    /* Теперь нажмите Backspace, чтобы активировать логику возврата в режим K9 (строки 674-679). */
     press_button_by_text(g_kb, "Del");
 
-    /* Input should be modified */
+    /* Ввод должен быть изменен */
     TEST_ASSERT_LESS_THAN_SIZE_T(3, lv_strlen(ime->input_char));
 
     lv_obj_delete(ta);
 }
 
-/* Test ABC/abc/1# button press (lines 686-687) */
+/* Тестирование нажатия кнопки ABC /abc/1# (строки 686-687) */
 void test_ime_pinyin_abc_button_press(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1409,20 +1409,20 @@ void test_ime_pinyin_abc_button_press(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input some text first */
+    /* Сначала введите текст */
     press_button_by_text(g_kb, "a");
 
-    /* Press ABC button - should clear data and return */
+    /* Нажмите кнопку ABC – данные должны быть очищены и возврат возможен. */
     if(!press_button_by_text(g_kb, "ABC")) {
         press_button_by_text(g_kb, "abc");
     }
-    /* Data should be cleared */
+    /* Данные должны быть очищены */
     TEST_ASSERT_EQUAL(0, lv_strlen(ime->input_char));
 
     lv_obj_delete(ta);
 }
 
-/* Test 123 button press (lines 690-691, 704-705) */
+/* Тест 123 нажатия кнопки (строки 690-691, 704-705) */
 void test_ime_pinyin_123_button_press(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1430,18 +1430,18 @@ void test_ime_pinyin_123_button_press(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Add some text to textarea first to trigger delete logic */
+    /* Сначала добавьте текст в текстовую область, чтобы активировать логику удаления. */
     lv_textarea_add_text(ta, "test123");
 
-    /* Press 123 button - should delete 3 chars and switch to number mode */
+    /* Нажмите кнопку 123 - должно удалить 3 символа и переключиться в цифровой режим. */
     press_button_by_text(g_kb, "123");
-    /* Should be in number mode */
+    /* Должно быть в числовом режиме */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 
     lv_obj_delete(ta);
 }
 
-/* Test cand panel button none (line 758) */
+/* Кнопка панели тестовой свечи нет (строка 758) */
 void test_ime_pinyin_cand_button_none(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1449,21 +1449,21 @@ void test_ime_pinyin_cand_button_none(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input to generate candidates */
+    /* Вход для генерации кандидатов */
     press_button_by_text(g_kb, "n");
 
-    /* Send event to cand_panel with no button selected */
+    /* Отправить событие на cand_panel, не нажимая кнопку */
     lv_obj_t * cand_panel = ime->cand_panel;
     lv_buttonmatrix_set_selected_button(cand_panel, LV_BUTTONMATRIX_BUTTON_NONE);
     lv_obj_send_event(cand_panel, LV_EVENT_VALUE_CHANGED, NULL);
 
-    /* Should handle gracefully */
+    /* Должен обращаться изящно */
     TEST_ASSERT_NOT_NULL(cand_panel);
 
     lv_obj_delete(ta);
 }
 
-/* Test pinyin page with page_num calculation (lines 817, 822, 825) */
+/* Тестовая страница пиньинь с расчетом page_num (строки 817, 822, 825) */
 void test_ime_pinyin_page_calculation(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1471,25 +1471,25 @@ void test_ime_pinyin_page_calculation(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input to generate many candidates for pagination */
+    /* Входные данные для создания множества кандидатов на нумерацию страниц */
     const char * inputs[] = {"n", "i"};
     input_text_sequence(g_kb, inputs, 2);
 
-    /* Should have candidates */
+    /* Должны быть кандидаты */
     TEST_ASSERT_GREATER_THAN_UINT16(0, ime->cand_num);
 
-    /* Try next page multiple times */
+    /* Попробуйте следующую страницу несколько раз */
     for(int p = 0; p < 3; p++) {
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
     }
 
-    /* Verify page state is valid */
+    /* Убедитесь, что состояние страницы допустимо */
     TEST_ASSERT_NOT_NULL(ime);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 specific candidate button range (lines 634-646) */
+/* Проверьте диапазон кнопок-кандидатов K9 (строки 634–646). */
 void test_ime_pinyin_k9_exact_cand_button(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1497,23 +1497,23 @@ void test_ime_pinyin_k9_exact_cand_button(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input K9 digit to generate legal pinyin */
+    /* Введите цифру K9, чтобы сгенерировать легальный пиньинь. */
     press_button_by_text(g_kb, "4");  /* 'h' in K9 */
 
-    /* Add text to textarea to have ta_count > 0 */
+    /* Добавьте текст в текстовую область, чтобы ta_count > 0. */
     lv_textarea_add_text(ta, "test");
     ime->ta_count = 4;
 
-    /* Now try to click button in range 16-18 (K9 candidate buttons) */
-    /* First ensure we have some input_char */
+    /* Теперь попробуйте нажать кнопку в диапазоне 16-18 (кнопки-кандидаты K9). */
+    /* Сначала убедитесь, что у нас есть input_char. */
     if(ime->k9_legal_py_count > 0 && lv_strlen(ime->input_char) > 0) {
-        /* Simulate button press in candidate range */
-        uint16_t btn_id = 16;  /* First K9 candidate button */
+        /* Имитировать нажатие кнопки в диапазоне кандидатов */
+        uint16_t btn_id = 16;  /* Первая кнопка-кандидат K9 */
 
-        /* Get button text from keyboard at position 16 */
+        /* Получить текст кнопки с клавиатуры в позиции 16 */
         const char * txt = lv_buttonmatrix_get_button_text(g_kb, btn_id);
         if(txt && lv_strlen(txt) > 0) {
-            /* Trigger the event with this button */
+            /* Запустите событие с помощью этой кнопки */
             lv_buttonmatrix_set_selected_button(g_kb, btn_id);
             lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
         }
@@ -1522,7 +1522,7 @@ void test_ime_pinyin_k9_exact_cand_button(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 pagination with enough candidates (lines 1142-1196) */
+/* Протестируйте нумерацию страниц K9 с достаточным количеством кандидатов (строки 1142–1196). */
 void test_ime_pinyin_k9_full_pagination(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1531,35 +1531,35 @@ void test_ime_pinyin_k9_full_pagination(void)
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
     /*
-     * Input K9 keys to generate many legal pinyin combinations
-     * K9 keyboard mapping: "abc "=2, "def"=3, "ghi"=4, "jkl"=5, "mno"=6, "pqrs"=7, "tuv"=8, "wxyz"=9
-     * Input "def" + "abc " + "ghi" generates combinations like: dai, dan, dao, fai, fan, fao, etc.
-     * This should produce more than LV_IME_PINYIN_K9_CAND_TEXT_NUM (3) candidates
+     * Введите ключи K9, чтобы сгенерировать множество допустимых комбинаций пиньинь.
+     * Раскладка клавиатуры K9: «abc» = 2, «def» = 3, «ghi» = 4, «jkl» = 5, «mno» = 6, «pqrs» = 7, «tuv» = 8, «wxyz» = 9
+     * Ввод «def» + «abc» + «ghi» генерирует такие комбинации, как: dai, dan, dao, fai, fan, fao и т. д.
+     * Это должно привести к появлению более чем LV_IME_PINYIN_K9_CAND_TEXT_NUM (3) кандидатов.
      */
     const char * k9_inputs[] = {"def", "abc ", "ghi"};
     input_text_sequence(g_kb, k9_inputs, 3);
 
-    /* Check if we have enough candidates for pagination */
+    /* Проверяем, достаточно ли у нас кандидатов на пагинацию */
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
-        /* Store initial position */
+        /* Сохранить исходное положение */
         int initial_pos = ime->k9_py_ll_pos;
 
-        /* Try next page (dir=1) - covers lines 1160-1174 */
+        /* Попробуйте следующую страницу (каталог = 1) – охватывает строки 1160–1174. */
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
-        /* Position should have changed */
+        /* Позиция должна была измениться */
         TEST_ASSERT_GREATER_OR_EQUAL_INT(initial_pos, ime->k9_py_ll_pos);
 
-        /* Try next page again to ensure we're past first page */
+        /* Попробуйте перейти на следующую страницу еще раз, чтобы убедиться, что первая страница уже пройдена. */
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
 
-        /* Try previous page (dir=0) - covers lines 1179-1193 */
+        /* Попробуйте предыдущую страницу (dir=0) – охватывает строки 1179–1193. */
         press_button_by_text(g_kb, LV_SYMBOL_LEFT);
     }
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 pagination edge cases */
+/* Тестирование краевых случаев нумерации страниц K9 */
 void test_ime_pinyin_k9_pagination_edge_cases(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1568,20 +1568,20 @@ void test_ime_pinyin_k9_pagination_edge_cases(void)
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
     /*
-     * Input multiple K9 keys to generate many candidates
-     * "ghi" + "abc " + "mno" + "ghi" -> generates combinations like: hang, gang, hao, gao, etc.
+     * Введите несколько ключей K9, чтобы создать множество кандидатов.
+     * «ghi» + «abc» + «mno» + «ghi» -> генерирует такие комбинации, как: Hang, Gang, Hao, Gao и т. д.
      */
     const char * k9_inputs[] = {"ghi", "abc ", "mno", "ghi"};
     input_text_sequence(g_kb, k9_inputs, 4);
 
-    /* Navigate pages if enough candidates */
+    /* Перемещайтесь по страницам, если кандидатов достаточно */
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
-        /* Navigate forward multiple times */
+        /* Перейти вперед несколько раз */
         for(int i = 0; i < 5; i++) {
             press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
         }
 
-        /* Navigate backward multiple times */
+        /* Перейти назад несколько раз */
         for(int i = 0; i < 5; i++) {
             press_button_by_text(g_kb, LV_SYMBOL_LEFT);
         }
@@ -1590,7 +1590,7 @@ void test_ime_pinyin_k9_pagination_edge_cases(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 pagination with different input patterns */
+/* Протестируйте нумерацию страниц K9 с различными шаблонами ввода. */
 void test_ime_pinyin_k9_pagination_various_inputs(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1598,26 +1598,26 @@ void test_ime_pinyin_k9_pagination_various_inputs(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Try different input patterns that generate many candidates */
-    /* Pattern 1: "jkl" + "ghi" + "abc " + "mno" */
+    /* Попробуйте разные шаблоны ввода, которые генерируют много кандидатов. */
+    /* Схема 1: «jkl» + «ghi» + «abc» + «mno» */
     const char * inputs1[] = {"jkl", "ghi", "abc ", "mno"};
     input_text_sequence(g_kb, inputs1, 4);
 
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
-        /* Forward navigation */
+        /* Вперед навигация */
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
         press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
-        /* Backward navigation */
+        /* Обратная навигация */
         press_button_by_text(g_kb, LV_SYMBOL_LEFT);
     }
 
-    /* Clear input and try another pattern */
+    /* Очистите ввод и попробуйте другой шаблон. */
     press_button_by_text(g_kb, LV_SYMBOL_BACKSPACE);
     press_button_by_text(g_kb, LV_SYMBOL_BACKSPACE);
     press_button_by_text(g_kb, LV_SYMBOL_BACKSPACE);
     press_button_by_text(g_kb, LV_SYMBOL_BACKSPACE);
 
-    /* Pattern 2: "mno" + "ghi" + "abc " + "mno" */
+    /* Схема 2: «мно» + «ги» + «abc» + «мно» */
     const char * inputs2[] = {"mno", "ghi", "abc ", "mno"};
     input_text_sequence(g_kb, inputs2, 4);
 
@@ -1629,7 +1629,7 @@ void test_ime_pinyin_k9_pagination_various_inputs(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 pagination with long input generating many candidates */
+/* Протестируйте разбиение на страницы K9 с длинным вводом, генерирующим множество кандидатов. */
 void test_ime_pinyin_k9_pagination_many_candidates(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1638,35 +1638,35 @@ void test_ime_pinyin_k9_pagination_many_candidates(void)
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
     /*
-     * Use input that generates maximum candidates
-     * "pqrs" + "ghi" + "mno" + "ghi" -> generates: shou, shong, etc.
+     * Используйте входные данные, которые генерируют максимальное количество кандидатов
+     * «pqrs» + «ghi» + «mno» + «ghi» -> генерирует: шоу, шонг и т.д.
      */
     const char * k9_inputs[] = {"pqrs", "ghi", "mno", "ghi"};
     input_text_sequence(g_kb, k9_inputs, 4);
 
     uint32_t ll_len = lv_ll_get_len(&ime->k9_legal_py_ll);
 
-    /* Only test pagination if we have enough candidates */
+    /* Тестируйте нумерацию страниц только в том случае, если у нас достаточно кандидатов. */
     if((ll_len > LV_IME_PINYIN_K9_CAND_TEXT_NUM) &&
        (ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM)) {
 
-        /* Store initial position */
+        /* Сохранить исходное положение */
         int initial_pos = ime->k9_py_ll_pos;
 
-        /* Navigate forward to last page */
+        /* Перейти к последней странице */
         for(int i = 0; i < 10; i++) {
             int prev_pos = ime->k9_py_ll_pos;
             press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
-            /* If position didn't change, we reached the end */
+            /* Если позиция не изменилась, мы дошли до конца */
             if(ime->k9_py_ll_pos == prev_pos) {
                 break;
             }
         }
 
-        /* Navigate backward to first page */
+        /* Перейти назад на первую страницу */
         for(int i = 0; i < 10; i++) {
             press_button_by_text(g_kb, LV_SYMBOL_LEFT);
-            /* If position is close to initial, stop */
+            /* Если позиция близка к исходной, остановитесь */
             if(ime->k9_py_ll_pos <= initial_pos + LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
                 break;
             }
@@ -1676,7 +1676,7 @@ void test_ime_pinyin_k9_pagination_many_candidates(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 mode candidate selection (covers lines 634-646) */
+/* Тестовый выбор кандидата в режим K9 (охватывает строки 634–646) */
 void test_ime_pinyin_k9_candidate_selection(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1684,18 +1684,18 @@ void test_ime_pinyin_k9_candidate_selection(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input K9 keys to generate candidates */
+    /* Введите ключи K9 для генерации кандидатов. */
     const char * k9_inputs[] = {"def", "abc "};
     input_text_sequence(g_kb, k9_inputs, 2);
 
-    /* If we have candidates, try selecting one (btn_id >= 16) */
+    /* Если у нас есть кандидаты, попробуйте выбрать одного ( btn_id >= 16) */
     if(ime->k9_legal_py_count > 0) {
-        /* Candidate buttons are in the range 16 to 16 + LV_IME_PINYIN_K9_CAND_TEXT_NUM */
-        /* Button 16 is LV_SYMBOL_LEFT, button 17-19 are candidates */
+        /* Кнопки-кандидаты находятся в диапазоне от 16 до 16 + LV_IME_PINYIN_K9_CAND_TEXT_NUM. */
+        /* Кнопка 16 — LV_SYMBOL_LEFT, кнопки 17–19 — кандидаты. */
         for(uint16_t i = 17; i < 17 + LV_IME_PINYIN_K9_CAND_TEXT_NUM; i++) {
             const char * txt = lv_buttonmatrix_get_button_text(g_kb, i);
             if(txt && lv_strlen(txt) > 0 && txt[0] != ' ') {
-                /* Select this candidate pinyin */
+                /* Выберите этого кандидата пиньинь */
                 lv_buttonmatrix_set_selected_button(g_kb, i);
                 lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
                 break;
@@ -1706,35 +1706,35 @@ void test_ime_pinyin_k9_candidate_selection(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 NUMBER mode switching (covers lines 704-705) */
+/* Тест переключения режима K9 NUMBER (охватывает строки 704-705) */
 void test_ime_pinyin_k9_number_mode_switch(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
 
-    /* First set up K9 mode */
+    /* Сначала настройте режим K9 */
     setup_ime_mode(g_pinyin_ime, g_kb, LV_IME_PINYIN_MODE_K9);
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Press "123" to switch to K9_NUMBER mode */
+    /* Нажмите «123», чтобы переключиться в режим K9_NUMBER. */
     press_button_by_text(g_kb, "123");
 
-    /* Verify mode changed to K9_NUMBER */
+    /* Режим проверки изменен на K9_NUMBER */
     TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9_NUMBER, ime->mode);
 
-    /* Now press keyboard button to switch back (from K9_NUMBER to K9) */
-    /* In NUMBER mode keyboard, LV_SYMBOL_KEYBOARD is at button index 3 */
-    /* First verify the button text is correct */
+    /* Теперь нажмите кнопку клавиатуры, чтобы переключиться обратно (с K9_NUMBER на K9). */
+    /* На клавиатуре режима NUMBER LV_SYMBOL_KEYBOARD находится на кнопке с индексом 3. */
+    /* Сначала проверьте правильность текста кнопки. */
     const char * btn_txt = lv_buttonmatrix_get_button_text(g_kb, 3);
     if(btn_txt && lv_strcmp(btn_txt, LV_SYMBOL_KEYBOARD) == 0) {
         lv_buttonmatrix_set_selected_button(g_kb, 3);
         lv_obj_send_event(g_kb, LV_EVENT_VALUE_CHANGED, NULL);
 
-        /* Verify mode changed back to K9 */
+        /* Режим проверки снова изменен на K9. */
         TEST_ASSERT_EQUAL(LV_IME_PINYIN_MODE_K9, ime->mode);
     }
     else {
-        /* Try to find keyboard button by searching */
+        /* Попробуйте найти кнопку клавиатуры с помощью поиска */
         for(uint16_t i = 0; i < 20; i++) {
             const char * txt = lv_buttonmatrix_get_button_text(g_kb, i);
             if(txt && lv_strcmp(txt, LV_SYMBOL_KEYBOARD) == 0) {
@@ -1748,7 +1748,7 @@ void test_ime_pinyin_k9_number_mode_switch(void)
     lv_obj_delete(ta);
 }
 
-/* Test K9 page navigation reaching boundaries (covers lines 817-840) */
+/* Тестовая навигация по страницам K9, достигающая границ (охватывает строки 817–840) */
 void test_ime_pinyin_page_navigation_boundaries(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1756,36 +1756,36 @@ void test_ime_pinyin_page_navigation_boundaries(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input pinyin that generates many candidates to test pagination */
-    /* 'shi' has many candidates in the dictionary */
+    /* Введите пиньинь, который генерирует множество кандидатов для проверки нумерации страниц. */
+    /* У слова «ши» много вариантов в словаре */
     press_button_by_text(g_kb, "s");
     press_button_by_text(g_kb, "h");
     press_button_by_text(g_kb, "i");
 
     if(ime->cand_num > LV_IME_PINYIN_CAND_TEXT_NUM) {
-        /* Navigate forward multiple pages */
+        /* Переход вперед на несколько страниц */
         uint16_t page_num = ime->cand_num / LV_IME_PINYIN_CAND_TEXT_NUM;
         for(int i = 0; i <= (int)page_num + 1; i++) {
             press_button_by_text(ime->cand_panel, LV_SYMBOL_RIGHT);
         }
 
-        /* Now try forward again at last page (should hit return at line 825) */
+        /* Теперь повторите попытку вперед на последней странице (должен появиться возврат в строке 825). */
         press_button_by_text(ime->cand_panel, LV_SYMBOL_RIGHT);
-        /* Page shouldn't change at boundary */
+        /* Страница не должна меняться на границе */
 
-        /* Navigate back multiple pages */
+        /* Перейти назад на несколько страниц */
         for(int i = 0; i <= (int)page_num + 1; i++) {
             press_button_by_text(ime->cand_panel, LV_SYMBOL_LEFT);
         }
 
-        /* Verify we're back at first page */
+        /* Убедитесь, что мы вернулись на первую страницу */
         TEST_ASSERT_EQUAL(0, ime->py_page);
     }
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 input length boundary (covers line 1004) */
+/* Проверка границы входной длины K9 (охватывает строку 1004) */
 void test_ime_pinyin_k9_max_input_length(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1793,21 +1793,21 @@ void test_ime_pinyin_k9_max_input_length(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Input maximum length K9 sequence (LV_IME_PINYIN_K9_MAX_INPUT = 7) */
+    /* Введите максимальную длину последовательности K9 ( LV_IME_PINYIN_K9_MAX_INPUT = 7) */
     const char * k9_inputs[] = {"def", "abc ", "ghi", "jkl", "mno", "pqrs", "tuv"};
     input_text_sequence(g_kb, k9_inputs, 7);
 
-    /* After 7 inputs, further input should be ignored */
+    /* После 7 вводов дальнейшие вводы следует игнорировать. */
     press_button_by_text(g_kb, "wxyz");
     uint16_t len_after = lv_strlen(ime->input_char);
 
-    /* Length should not increase beyond max */
+    /* Длина не должна превышать максимальную */
     TEST_ASSERT_LESS_OR_EQUAL_UINT16(LV_IME_PINYIN_K9_MAX_INPUT, len_after);
 
     lv_obj_delete(ta);
 }
 
-/* Test K9 pagination with exact boundary conditions */
+/* Тестирование нумерации страниц K9 с точными граничными условиями */
 void test_ime_pinyin_k9_pagination_exact_boundary(void)
 {
     lv_obj_t * ta = create_test_textarea(g_kb);
@@ -1815,18 +1815,18 @@ void test_ime_pinyin_k9_pagination_exact_boundary(void)
 
     lv_ime_pinyin_t * ime = (lv_ime_pinyin_t *)g_pinyin_ime;
 
-    /* Use input pattern that generates exactly enough candidates */
-    /* "pqrs" + "ghi" generates: qh, qi, ph, pi, sh, si, rh, ri */
+    /* Используйте шаблон ввода, который генерирует ровно достаточное количество кандидатов. */
+    /* «pqrs» + «ghi» генерирует: qh, qi, ph, pi, sh, si, rh, ri */
     const char * k9_inputs[] = {"pqrs", "ghi"};
     input_text_sequence(g_kb, k9_inputs, 2);
 
-    /* Navigate pages multiple times to hit boundary conditions */
+    /* Перемещайтесь по страницам несколько раз, чтобы достичь граничных условий. */
     if(ime->k9_legal_py_count > LV_IME_PINYIN_K9_CAND_TEXT_NUM) {
-        /* Forward navigation */
+        /* Вперед навигация */
         for(int i = 0; i < 20; i++) {
             press_button_by_text(g_kb, LV_SYMBOL_RIGHT);
         }
-        /* Backward navigation many times - should hit line 1193 */
+        /* Обратная навигация много раз – должна попасть на строку 1193. */
         for(int i = 0; i < 20; i++) {
             press_button_by_text(g_kb, LV_SYMBOL_LEFT);
         }

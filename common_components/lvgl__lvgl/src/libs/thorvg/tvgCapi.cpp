@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -40,7 +40,7 @@ extern "C" {
 
 
 /************************************************************************/
-/* Engine API                                                           */
+/* Двигатель API                                                           */
 /************************************************************************/
 
 TVG_API Tvg_Result tvg_engine_init(Tvg_Engine engine_method, unsigned threads)
@@ -62,7 +62,7 @@ TVG_API Tvg_Result tvg_engine_version(uint32_t* major, uint32_t* minor, uint32_t
 }
 
 /************************************************************************/
-/* Canvas API                                                           */
+/* Холст API                                                           */
 /************************************************************************/
 
 TVG_API Tvg_Canvas* tvg_swcanvas_create()
@@ -149,7 +149,7 @@ TVG_API Tvg_Result tvg_canvas_set_viewport(Tvg_Canvas* canvas, int32_t x, int32_
 
 
 /************************************************************************/
-/* Paint API                                                            */
+/* Краска API                                                            */
 /************************************************************************/
 
 TVG_API Tvg_Result tvg_paint_del(Tvg_Paint* paint)
@@ -268,7 +268,7 @@ TVG_DEPRECATED TVG_API Tvg_Result tvg_paint_get_identifier(const Tvg_Paint* pain
 }
 
 /************************************************************************/
-/* Shape API                                                            */
+/* Форма API                                                            */
 /************************************************************************/
 
 TVG_API Tvg_Paint* tvg_shape_new()
@@ -532,7 +532,7 @@ TVG_API Tvg_Result tvg_shape_get_gradient(const Tvg_Paint* paint, Tvg_Gradient**
 }
 
 /************************************************************************/
-/* Picture API                                                          */
+/* Изображение API                                                          */
 /************************************************************************/
 
 TVG_API Tvg_Paint* tvg_picture_new()
@@ -584,7 +584,7 @@ TVG_API const Tvg_Paint* tvg_picture_get_paint(Tvg_Paint* paint, uint32_t id)
 
 
 /************************************************************************/
-/* Gradient API                                                         */
+/* Градиент API                                                         */
 /************************************************************************/
 
 TVG_API Tvg_Gradient* tvg_linear_gradient_new()
@@ -701,7 +701,7 @@ TVG_DEPRECATED TVG_API Tvg_Result tvg_gradient_get_identifier(const Tvg_Gradient
 }
 
 /************************************************************************/
-/* Scene API                                                            */
+/* Сцена API                                                            */
 /************************************************************************/
 
 TVG_API Tvg_Paint* tvg_scene_new()
@@ -731,7 +731,7 @@ TVG_API Tvg_Result tvg_scene_clear(Tvg_Paint* scene, bool free)
 
 
 /************************************************************************/
-/* Text API                                                            */
+/* Текст API                                                            */
 /************************************************************************/
 
 TVG_API Tvg_Paint* tvg_text_new()
@@ -787,7 +787,7 @@ TVG_API Tvg_Result tvg_font_unload(const char* path)
 
 
 /************************************************************************/
-/* Saver API                                                            */
+/* Заставка API                                                            */
 /************************************************************************/
 
 TVG_API Tvg_Saver* tvg_saver_new()
@@ -819,7 +819,7 @@ TVG_API Tvg_Result tvg_saver_del(Tvg_Saver* saver)
 
 
 /************************************************************************/
-/* Animation API                                                        */
+/* Анимация API                                                        */
 /************************************************************************/
 
 TVG_API Tvg_Animation* tvg_animation_new()
@@ -889,7 +889,7 @@ TVG_API Tvg_Result tvg_animation_del(Tvg_Animation* animation)
 
 
 /************************************************************************/
-/* Accessor API                                                         */
+/* Аксессуар API                                                         */
 /************************************************************************/
 
 TVG_API uint32_t tvg_accessor_generate_id(const char* name)
@@ -899,7 +899,7 @@ TVG_API uint32_t tvg_accessor_generate_id(const char* name)
 
 
 /************************************************************************/
-/* Lottie Animation API                                                 */
+/* Лотти Анимация API                                                 */
 /************************************************************************/
 
 TVG_API Tvg_Animation* tvg_lottie_animation_new()

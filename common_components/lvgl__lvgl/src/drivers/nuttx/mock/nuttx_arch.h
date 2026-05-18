@@ -30,7 +30,7 @@ extern "C" {
 
 static inline unsigned long up_perf_getfreq(void)
 {
-    return 1000000; /*1 MHz for mock*/
+    return 1000000; /*1 МГц для макета*/
 }
 
 static inline uint32_t up_perf_gettime(void)
@@ -43,7 +43,7 @@ static inline uint32_t up_perf_gettime(void)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*NUTTX_ARCH_H*/

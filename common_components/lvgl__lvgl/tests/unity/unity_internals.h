@@ -1,7 +1,7 @@
 /* ==========================================
-    Unity Project - A Test Framework for C
+    Проект Unity — тестовая среда для C
     Copyright (c) 2007-21 Mike Karlesky, Mark VanderVoord, Greg Williams
-    [Released under MIT License. Please refer to license.txt for details]
+    [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
 ========================================== */
 #if LV_BUILD_TEST || LV_BUILD_TEST_PERF
 
@@ -28,10 +28,10 @@
 #include <stdarg.h>
 #endif
 
-/* Unity Attempts to Auto-Detect Integer Types
- * Attempt 1: UINT_MAX, ULONG_MAX in <limits.h>, or default to 32 bits
- * Attempt 2: UINTPTR_MAX in <stdint.h>, or default to same size as long
- * The user may override any of these derived constants:
+/* Unity пытается автоматически определять целочисленные типы
+ * Попытка 1: UINT_MAX , ULONG_MAX в <limits.h > или по умолчанию 32 бита.
+ * Попытка 2: UINTPTR_MAX в <stdint.h> или по умолчанию тот же размер, что и длинный
+ * Пользователь может переопределить любую из этих производных констант:
  * UNITY_INT_WIDTH, UNITY_LONG_WIDTH, UNITY_POINTER_WIDTH */
 #ifndef UNITY_EXCLUDE_STDINT_H
 #include <stdint.h>
@@ -44,7 +44,7 @@
 #if defined(__GNUC__) || defined(__clang__)
   #define UNITY_FUNCTION_ATTR(a)    __attribute__((a))
 #else
-  #define UNITY_FUNCTION_ATTR(a)    /* ignore */
+  #define UNITY_FUNCTION_ATTR(a)    /* игнорировать */
 #endif
 
 #ifndef UNITY_NORETURN
@@ -54,24 +54,24 @@
     #endif
   #elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
     #if defined(_WIN32) && defined(_MSC_VER)
-      /* We are using MSVC compiler on Windows platform. */
-      /* Not all Windows SDKs supports <stdnoreturn.h>, but compiler can support C11: */
+      /* Мы используем компилятор MSVC на платформе Windows. */
+      /* Не все Windows SDK поддерживают <stdnoreturn.h>, но компилятор может поддерживать C11: */
       /* https://devblogs.microsoft.com/cppblog/c11-and-c17-standard-support-arriving-in-msvc/ */
-      /* Not sure, that Mingw compilers has Windows SDK headers at all. */
+      /* Не уверен, что компиляторы Mingw вообще имеют заголовки Windows SDK. */
       #include <sdkddkver.h>
     #endif
 
-    /* Using Windows SDK predefined macro for detecting supported SDK with MSVC compiler. */
-    /* Mingw GCC should work without that fixes. */
-    /* Based on: */
+    /* Использование предопределенного макроса Windows SDK для обнаружения поддерживаемого SDK с помощью компилятора MSVC. */
+    /* Mingw GCC должен работать и без этих исправлений. */
+    /* На основе: */
     /* https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170 */
-    /* NTDDI_WIN10_FE is equal to Windows 10 SDK 2104 */
+    /* NTDDI_WIN10_FE равен Windows 10 SDK 2104. */
     #if defined(_MSC_VER) && ((!defined(NTDDI_WIN10_FE)) || WDK_NTDDI_VERSION < NTDDI_WIN10_FE)
-      /* Based on tests and: */
+      /* На основе тестов и: */
       /* https://docs.microsoft.com/en-us/cpp/c-language/noreturn?view=msvc-170 */
       /* https://en.cppreference.com/w/c/language/_Noreturn */
       #define UNITY_NORETURN _Noreturn
-    #else /* Using newer Windows SDK or not MSVC compiler */
+    #else /* Использование более новой версии Windows SDK или компилятора без MSVC. */
       #include <stdnoreturn.h>
       #define UNITY_NORETURN noreturn
     #endif
@@ -82,15 +82,15 @@
 #endif
 
 /*-------------------------------------------------------
- * Guess Widths If Not Specified
+ * Угадать ширину, если не указано
  *-------------------------------------------------------*/
 
-/* Determine the size of an int, if not already specified.
- * We cannot use sizeof(int), because it is not yet defined
- * at this stage in the translation of the C program.
- * Also sizeof(int) does return the size in addressable units on all platforms,
- * which may not necessarily be the size in bytes.
- * Therefore, infer it from UINT_MAX if possible. */
+/* Определите размер int, если он еще не указан.
+ * Мы не можем использовать sizeof(int), поскольку он еще не определен.
+ * на этом этапе перевода программы C.
+ * Также sizeof(int) возвращает размер в адресных единицах на всех платформах.
+ * размер которого не обязательно может быть в байтах.
+ * Поэтому, если возможно, сделайте вывод из UINT_MAX. */
 #ifndef UNITY_INT_WIDTH
   #ifdef UINT_MAX
     #if (UINT_MAX == 0xFFFF)
@@ -100,12 +100,12 @@
     #elif (UINT_MAX == 0xFFFFFFFFFFFFFFFF)
       #define UNITY_INT_WIDTH (64)
     #endif
-  #else /* Set to default */
+  #else /* Установить по умолчанию */
     #define UNITY_INT_WIDTH (32)
   #endif /* UINT_MAX */
 #endif
 
-/* Determine the size of a long, if not already specified. */
+/* Определите размер лонга, если он еще не указан. */
 #ifndef UNITY_LONG_WIDTH
   #ifdef ULONG_MAX
     #if (ULONG_MAX == 0xFFFF)
@@ -115,12 +115,12 @@
     #elif (ULONG_MAX == 0xFFFFFFFFFFFFFFFF)
       #define UNITY_LONG_WIDTH (64)
     #endif
-  #else /* Set to default */
+  #else /* Установить по умолчанию */
     #define UNITY_LONG_WIDTH (32)
   #endif /* ULONG_MAX */
 #endif
 
-/* Determine the size of a pointer, if not already specified. */
+/* Определите размер указателя, если он еще не указан. */
 #ifndef UNITY_POINTER_WIDTH
   #ifdef UINTPTR_MAX
     #if (UINTPTR_MAX <= 0xFFFF)
@@ -130,13 +130,13 @@
     #elif (UINTPTR_MAX <= 0xFFFFFFFFFFFFFFFF)
       #define UNITY_POINTER_WIDTH (64)
     #endif
-  #else /* Set to default */
+  #else /* Установить по умолчанию */
     #define UNITY_POINTER_WIDTH UNITY_LONG_WIDTH
   #endif /* UINTPTR_MAX */
 #endif
 
 /*-------------------------------------------------------
- * Int Support (Define types based on detected sizes)
+ * Поддержка Int (определение типов на основе обнаруженных размеров)
  *-------------------------------------------------------*/
 
 #if (UNITY_INT_WIDTH == 32)
@@ -158,24 +158,24 @@
 #endif
 
 /*-------------------------------------------------------
- * 64-bit Support
+ * 64-битная поддержка
  *-------------------------------------------------------*/
 
-/* Auto-detect 64 Bit Support */
+/* Автоматическое определение поддержки 64-битной версии */
 #ifndef UNITY_SUPPORT_64
   #if UNITY_LONG_WIDTH == 64 || UNITY_POINTER_WIDTH == 64
     #define UNITY_SUPPORT_64
   #endif
 #endif
 
-/* 64-Bit Support Dependent Configuration */
+/* 64-битная конфигурация, зависящая от поддержки */
 #ifndef UNITY_SUPPORT_64
-    /* No 64-bit Support */
+    /* Нет 64-битной поддержки */
     typedef UNITY_UINT32 UNITY_UINT;
     typedef UNITY_INT32  UNITY_INT;
-    #define UNITY_MAX_NIBBLES (8)  /* Maximum number of nibbles in a UNITY_(U)INT */
+    #define UNITY_MAX_NIBBLES (8)  /* Максимальное количество полубайтов в UNITY_ (U) INT */
 #else
-  /* 64-bit Support */
+  /* 64-битная поддержка */
   #if (UNITY_LONG_WIDTH == 32)
     typedef unsigned long long UNITY_UINT64;
     typedef signed long long   UNITY_INT64;
@@ -187,11 +187,11 @@
   #endif
     typedef UNITY_UINT64 UNITY_UINT;
     typedef UNITY_INT64  UNITY_INT;
-    #define UNITY_MAX_NIBBLES (16) /* Maximum number of nibbles in a UNITY_(U)INT */
+    #define UNITY_MAX_NIBBLES (16) /* Максимальное количество полубайтов в UNITY_ (U) INT */
 #endif
 
 /*-------------------------------------------------------
- * Pointer Support
+ * Поддержка указателя
  *-------------------------------------------------------*/
 
 #if (UNITY_POINTER_WIDTH == 32)
@@ -215,17 +215,17 @@
   #define UNITY_INTERNAL_PTR UNITY_PTR_ATTRIBUTE const void*
 #endif
 
-/* optionally define UNITY_COMPARE_PTRS_ON_ZERO_ARRAY */
+/* опционально определите UNITY_COMPARE_PTRS_ON_ZERO_ARRAY */
 
 /*-------------------------------------------------------
- * Float Support
+ * Плавающая поддержка
  *-------------------------------------------------------*/
 
 #ifdef UNITY_EXCLUDE_FLOAT
 
-/* No Floating Point Support */
+/* Нет поддержки чисел с плавающей запятой */
 #ifndef UNITY_EXCLUDE_DOUBLE
-#define UNITY_EXCLUDE_DOUBLE /* Remove double when excluding float support */
+#define UNITY_EXCLUDE_DOUBLE /* Удалить двойное значение при исключении поддержки с плавающей запятой */
 #endif
 #ifndef UNITY_EXCLUDE_FLOAT_PRINT
 #define UNITY_EXCLUDE_FLOAT_PRINT
@@ -233,7 +233,7 @@
 
 #else
 
-/* Floating Point Support */
+/* Поддержка чисел с плавающей запятой */
 #ifndef UNITY_FLOAT_PRECISION
 #define UNITY_FLOAT_PRECISION (0.00001f)
 #endif
@@ -242,21 +242,21 @@
 #endif
 typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 
-/* isnan macro should be provided by math.h. Override if not macro */
+/* макрос isnan должен быть предоставлен math.h. Переопределить, если не макрос */
 #ifndef UNITY_IS_NAN
 #ifndef isnan
-/* NaN is the only floating point value that does NOT equal itself.
- * Therefore if n != n, then it is NaN. */
+/* NaN — единственное значение с плавающей запятой, которое NOT равно самому себе.
+ * Следовательно, если n != n, то это NaN. */
 #define UNITY_IS_NAN(n) ((n != n) ? 1 : 0)
 #else
 #define UNITY_IS_NAN(n) isnan(n)
 #endif
 #endif
 
-/* isinf macro should be provided by math.h. Override if not macro */
+/* Макрос isinf должен быть предоставлен math.h. Переопределить, если не макрос */
 #ifndef UNITY_IS_INF
 #ifndef isinf
-/* The value of Inf - Inf is NaN */
+/* Значение Inf - Inf равно NaN. */
 #define UNITY_IS_INF(n) (UNITY_IS_NAN((n) - (n)) && !UNITY_IS_NAN(n))
 #else
 #define UNITY_IS_INF(n) isinf(n)
@@ -266,13 +266,13 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 #endif
 
 /*-------------------------------------------------------
- * Double Float Support
+ * Двойная поплавковая поддержка
  *-------------------------------------------------------*/
 
-/* unlike float, we DON'T include by default */
+/* в отличие от float, мы DON 'T включаем по умолчанию */
 #if defined(UNITY_EXCLUDE_DOUBLE) || !defined(UNITY_INCLUDE_DOUBLE)
 
-  /* No Floating Point Support */
+  /* Нет поддержки чисел с плавающей запятой */
   #ifndef UNITY_EXCLUDE_DOUBLE
   #define UNITY_EXCLUDE_DOUBLE
   #else
@@ -284,12 +284,12 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
     #define UNITY_DOUBLE_TYPE double
     #endif
   typedef UNITY_FLOAT UNITY_DOUBLE;
-  /* For parameter in UnityPrintFloat(UNITY_DOUBLE), which aliases to double or float */
+  /* Для параметра в UnityPrintFloat( UNITY_DOUBLE ), который является псевдонимом double или float. */
   #endif
 
 #else
 
-  /* Double Floating Point Support */
+  /* Поддержка двойных чисел с плавающей запятой */
   #ifndef UNITY_DOUBLE_PRECISION
   #define UNITY_DOUBLE_PRECISION (1e-12)
   #endif
@@ -302,14 +302,14 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 #endif
 
 /*-------------------------------------------------------
- * Output Method: stdout (DEFAULT)
+ * Метод вывода: стандартный вывод ( DEFAULT )
  *-------------------------------------------------------*/
 #ifndef UNITY_OUTPUT_CHAR
-  /* Default to using putchar, which is defined in stdio.h */
+  /* По умолчанию используется putchar, определенный в stdio.h. */
   #include <stdio.h>
   #define UNITY_OUTPUT_CHAR(a) (void)putchar(a)
 #else
-  /* If defined as something else, make sure we declare it here so it's ready for use */
+  /* Если определено как что-то другое, убедитесь, что мы объявили это здесь, чтобы оно было готово к использованию. */
   #ifdef UNITY_OUTPUT_CHAR_HEADER_DECLARATION
     extern void UNITY_OUTPUT_CHAR_HEADER_DECLARATION;
   #endif
@@ -317,15 +317,15 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 
 #ifndef UNITY_OUTPUT_FLUSH
   #ifdef UNITY_USE_FLUSH_STDOUT
-    /* We want to use the stdout flush utility */
+    /* Мы хотим использовать утилиту очистки stdout. */
     #include <stdio.h>
     #define UNITY_OUTPUT_FLUSH()    (void)fflush(stdout)
   #else
-    /* We've specified nothing, therefore flush should just be ignored */
+    /* Мы ничего не указали, поэтому флеш следует просто игнорировать. */
     #define UNITY_OUTPUT_FLUSH()    (void)0
   #endif
 #else
-  /* If defined as something else, make sure we declare it here so it's ready for use */
+  /* Если определено как что-то другое, убедитесь, что мы объявили это здесь, чтобы оно было готово к использованию. */
   #ifdef UNITY_OUTPUT_FLUSH_HEADER_DECLARATION
     extern void UNITY_OUTPUT_FLUSH_HEADER_DECLARATION;
   #endif
@@ -354,10 +354,10 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
       !defined(UNITY_EXEC_TIME_STOP) && \
       !defined(UNITY_PRINT_EXEC_TIME) && \
       !defined(UNITY_TIME_TYPE)
-      /* If none any of these macros are defined then try to provide a default implementation */
+      /* Если ни один из этих макросов не определен, попробуйте предоставить реализацию по умолчанию. */
 
     #if defined(UNITY_CLOCK_MS)
-      /* This is a simple way to get a default implementation on platforms that support getting a millisecond counter */
+      /* Это простой способ получить реализацию по умолчанию на платформах, поддерживающих счетчик миллисекунд. */
       #define UNITY_TIME_TYPE UNITY_UINT
       #define UNITY_EXEC_TIME_START() Unity.CurrentTestStartTime = UNITY_CLOCK_MS()
       #define UNITY_EXEC_TIME_STOP() Unity.CurrentTestStopTime = UNITY_CLOCK_MS()
@@ -397,11 +397,11 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 #endif
 
 #ifndef UNITY_EXEC_TIME_START
-#define UNITY_EXEC_TIME_START() do { /* nothing*/ } while (0)
+#define UNITY_EXEC_TIME_START() do { /* ничего*/ } while (0)
 #endif
 
 #ifndef UNITY_EXEC_TIME_STOP
-#define UNITY_EXEC_TIME_STOP()  do { /* nothing*/ } while (0)
+#define UNITY_EXEC_TIME_STOP()  do { /* ничего*/ } while (0)
 #endif
 
 #ifndef UNITY_TIME_TYPE
@@ -409,11 +409,11 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 #endif
 
 #ifndef UNITY_PRINT_EXEC_TIME
-#define UNITY_PRINT_EXEC_TIME() do { /* nothing*/ } while (0)
+#define UNITY_PRINT_EXEC_TIME() do { /* ничего*/ } while (0)
 #endif
 
 /*-------------------------------------------------------
- * Footprint
+ * След
  *-------------------------------------------------------*/
 
 #ifndef UNITY_LINE_TYPE
@@ -425,7 +425,7 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 #endif
 
 /*-------------------------------------------------------
- * Internal Structs Needed
+ * Необходимы внутренние структуры
  *-------------------------------------------------------*/
 
 typedef void (*UnityTestFunction)(void);
@@ -525,7 +525,7 @@ struct UNITY_STORAGE_T
 extern struct UNITY_STORAGE_T Unity;
 
 /*-------------------------------------------------------
- * Test Suite Management
+ * Управление набором тестов
  *-------------------------------------------------------*/
 
 void UnityBegin(const char* filename);
@@ -540,7 +540,7 @@ void UnityDefaultTestRun(UnityTestFunction Func, const char* FuncName, const int
 #endif
 
 /*-------------------------------------------------------
- * Details Support
+ * Подробности Поддержка
  *-------------------------------------------------------*/
 
 #ifdef UNITY_EXCLUDE_DETAILS
@@ -566,7 +566,7 @@ void UNITY_PRINT_TEST_CONTEXT(void);
 #endif
 
 /*-------------------------------------------------------
- * Test Output
+ * Тестовый вывод
  *-------------------------------------------------------*/
 
 void UnityPrint(const char* string);
@@ -587,12 +587,12 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number);
 #endif
 
 /*-------------------------------------------------------
- * Test Assertion Functions
+ * Тестовые функции утверждения
  *-------------------------------------------------------
- *  Use the macros below this section instead of calling
- *  these directly. The macros have a consistent naming
- *  convention and will pull in file and line information
- *  for you. */
+ *  Используйте макросы ниже этого раздела вместо вызова
+ *  это напрямую. Макросы имеют единообразные имена.
+ *  соглашение и будет извлекать информацию о файле и строке
+ *  для тебя. */
 
 void UnityAssertEqualNumber(const UNITY_INT expected,
                             const UNITY_INT actual,
@@ -740,7 +740,7 @@ void UnityAssertDoubleSpecial(const UNITY_DOUBLE actual,
 #endif
 
 /*-------------------------------------------------------
- * Helpers
+ * Помощники
  *-------------------------------------------------------*/
 
 UNITY_INTERNAL_PTR UnityNumToPtr(const UNITY_INT num, const UNITY_UINT8 size);
@@ -752,7 +752,7 @@ UNITY_INTERNAL_PTR UnityDoubleToPtr(const double num);
 #endif
 
 /*-------------------------------------------------------
- * Error Strings We Might Need
+ * Строки ошибок, которые могут нам понадобиться
  *-------------------------------------------------------*/
 
 extern const char UnityStrOk[];
@@ -766,7 +766,7 @@ extern const char UnityStrErr64[];
 extern const char UnityStrErrShorthand[];
 
 /*-------------------------------------------------------
- * Test Running Macros
+ * Тестовый запуск макросов
  *-------------------------------------------------------*/
 
 #ifdef UNITY_TEST_PROTECT
@@ -789,7 +789,7 @@ extern const char UnityStrErrShorthand[];
 #endif
 #endif
 
-/* Automatically enable variadic macros support, if it not enabled before */
+/* Автоматически включать поддержку макросов с переменным числом вариантов, если она не была включена ранее */
 #ifndef UNITY_SUPPORT_VARIADIC_MACROS
   #ifdef __STDC_VERSION__
     #if __STDC_VERSION__ >= 199901L
@@ -798,7 +798,7 @@ extern const char UnityStrErrShorthand[];
   #endif
 #endif
 
-/* This tricky series of macros gives us an optional line argument to treat it as RUN_TEST(func, num=__LINE__) */
+/* Эта хитрая серия макросов дает нам необязательный аргумент строки, который будет обрабатывать ее как RUN_TEST (func, num= __LINE__). */
 #ifndef RUN_TEST
 #ifdef UNITY_SUPPORT_VARIADIC_MACROS
 #define RUN_TEST(...) RUN_TEST_AT_LINE(__VA_ARGS__, __LINE__, throwaway)
@@ -806,7 +806,7 @@ extern const char UnityStrErrShorthand[];
 #endif
 #endif
 
-/* Enable default macros for masking param tests test cases */
+/* Включить макросы по умолчанию для маскирования тестов параметров */
 #ifdef UNITY_SUPPORT_TEST_CASES
   #ifdef UNITY_SUPPORT_VARIADIC_MACROS
     #if !defined(TEST_CASE) && !defined(UNITY_EXCLUDE_TEST_CASE)
@@ -821,7 +821,7 @@ extern const char UnityStrErrShorthand[];
   #endif
 #endif
 
-/* If we can't do the tricky version, we'll just have to require them to always include the line number */
+/* Если мы не сможем выполнить сложную версию, нам просто придется потребовать, чтобы они всегда включали номер строки. */
 #ifndef RUN_TEST
 #ifdef CMOCK
 #define RUN_TEST(func, num) UnityDefaultTestRun(func, #func, num)
@@ -856,7 +856,7 @@ extern const char UnityStrErrShorthand[];
 #endif
 
 /*-----------------------------------------------
- * Command Line Argument Support
+ * Поддержка аргументов командной строки
  *-----------------------------------------------*/
 
 #ifdef UNITY_USE_COMMAND_LINE_ARGS
@@ -865,17 +865,17 @@ int UnityTestMatches(void);
 #endif
 
 /*-------------------------------------------------------
- * Basic Fail and Ignore
+ * Базовый отказ и игнорирование
  *-------------------------------------------------------*/
 
 #define UNITY_TEST_FAIL(line, message)   UnityFail(   (message), (UNITY_LINE_TYPE)(line))
 #define UNITY_TEST_IGNORE(line, message) UnityIgnore( (message), (UNITY_LINE_TYPE)(line))
 
 /*-------------------------------------------------------
- * Test Asserts
+ * Тестовые утверждения
  *-------------------------------------------------------*/
 
-#define UNITY_TEST_ASSERT(condition, line, message)                                              do { if (condition) { /* nothing*/ } else { UNITY_TEST_FAIL((UNITY_LINE_TYPE)(line), (message)); } } while (0)
+#define UNITY_TEST_ASSERT(condition, line, message)                                              do { if (condition) { /* ничего*/ } else { UNITY_TEST_FAIL((UNITY_LINE_TYPE)(line), (message)); } } while (0)
 #define UNITY_TEST_ASSERT_NULL(pointer, line, message)                                           UNITY_TEST_ASSERT(((pointer) == NULL),  (UNITY_LINE_TYPE)(line), (message))
 #define UNITY_TEST_ASSERT_NOT_NULL(pointer, line, message)                                       UNITY_TEST_ASSERT(((pointer) != NULL),  (UNITY_LINE_TYPE)(line), (message))
 #define UNITY_TEST_ASSERT_EMPTY(pointer, line, message)                                          UNITY_TEST_ASSERT(((pointer[0]) == 0),  (UNITY_LINE_TYPE)(line), (message))
@@ -1166,7 +1166,7 @@ int UnityTestMatches(void);
 #define UNITY_TEST_ASSERT_DOUBLE_IS_NOT_DETERMINATE(actual, line, message)                       UnityAssertDoubleSpecial((UNITY_DOUBLE)(actual), (message), (UNITY_LINE_TYPE)(line), UNITY_FLOAT_IS_NOT_DET)
 #endif
 
-/* End of UNITY_INTERNALS_H */
+/* Конец UNITY_INTERNALS_H */
 #endif
 
 #endif /*LV_BUILD_TEST*/

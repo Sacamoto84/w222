@@ -79,10 +79,10 @@ struct _lv_nuttx_ctx_t;
 
 typedef struct _lv_global_t {
     /**
-     * User data for the LVGL library. Move from the bottom of the struct
-     * to avoid breaking the ABI. E.g., if the user data is used by a
-     * closed-source library, this can help to avoid re-compiling the library
-     * when the lvgl-related configs are changed.
+     * Пользовательские данные для библиотеки LVGL. Перемещение из нижней части структуры
+     * чтобы не сломать ABI. Например, если пользовательские данные используются
+     * библиотека с закрытым исходным кодом, это может помочь избежать повторной компиляции библиотеки
+     * когда изменяются конфигурации, связанные с lvgl.
      */
     void * user_data;
 
@@ -122,8 +122,8 @@ typedef struct _lv_global_t {
 
     lv_draw_buf_handlers_t draw_buf_handlers;
     lv_draw_buf_handlers_t font_draw_buf_handlers;
-    lv_draw_buf_handlers_t image_cache_draw_buf_handlers;  /**< Ensure that all assigned draw buffers
-                                                            * can be managed by image cache. */
+    lv_draw_buf_handlers_t image_cache_draw_buf_handlers;  /**< Убедитесь, что все назначенные буферы прорисовки
+                                                            * можно управлять с помощью кэша изображений. */
 
     lv_ll_t img_decoder_ll;
 #if LV_USE_OS != LV_OS_NONE
@@ -300,13 +300,13 @@ LV_ATTRIBUTE_EXTERN_DATA extern lv_global_t lv_global;
  **********************/
 #if LV_ENABLE_GLOBAL_CUSTOM
 /**
- * Get the default global object for current thread
- * @return  pointer to the default global object
+ * Получить глобальный объект по умолчанию для текущего потока
+ * @return  указатель на глобальный объект по умолчанию
  */
 lv_global_t * lv_global_default(void);
 #endif
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_GLOBAL_H*/

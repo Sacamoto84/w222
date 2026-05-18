@@ -5,12 +5,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -44,7 +44,7 @@ void test_set_language_sends_language_changed_event(void)
     lv_translation_set_language("es");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "El Tigre");
 
-    /* Unknown language translates to the tag */
+    /* Неизвестный язык переводится на тег */
     lv_translation_set_language("fr");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "tiger");
 }

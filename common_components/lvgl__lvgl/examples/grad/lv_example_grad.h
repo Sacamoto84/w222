@@ -35,7 +35,7 @@ void lv_example_grad_4(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_GRAD_H*/

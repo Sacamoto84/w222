@@ -25,11 +25,11 @@
  *      DEFINES
  *********************/
 
-/* ::Gamma Presets::
- * Standard Gamma value is 2.2
- * Values range from 0.5 to 3.5, roughly speaking, with
- * reasonable results between the 1.5 and 2.8 levels.
- * The value must be enclosed with quotes, as a string literal.
+/* ::Предустановки гаммы::
+ * Стандартное значение гаммы составляет 2,2.
+ * Значения варьируются от 0,5 до 3,5, грубо говоря, с
+ * разумные результаты между уровнями 1,5 и 2,8.
+ * Значение должно быть заключено в кавычки как строковый литерал.
  */
 #define LV_GLTF_GAMMA_BRIGHTEST "3.5"
 #define LV_GLTF_GAMMA_BRIGHTER  "3.0"
@@ -42,17 +42,17 @@
 #define LV_GLTF_DISTANCE_SCALE_FACTOR 2.5f
 #define LV_GLTF_TRANSMISSION_PASS_SIZE 256
 
-/* Apply defaults below if not set explicitly */
+/* Примените значения по умолчанию, указанные ниже, если они не заданы явно. */
 
-/* Tone-mapping is not applied if linear output is enabled.
- * Linear output is the default.
+/* Тональное отображение не применяется, если включен линейный выход.
+ * Линейный выход используется по умолчанию.
  */
 #ifndef LV_GLTF_LINEAR_OUTPUT
     #define LV_GLTF_LINEAR_OUTPUT 1
 #endif
 
-/* If tone-mapping is applied, this adjusts the brightness
- * and color range of the output. Use stringified values.
+/* Если применено тональное отображение, это регулирует яркость
+ * и цветовой диапазон вывода. Используйте строковые значения.
  */
 #ifndef LV_GLTF_TONEMAP_GAMMA
     #define LV_GLTF_TONEMAP_GAMMA LV_GLTF_GAMMA_STANDARD
@@ -88,9 +88,9 @@ typedef struct {
     float pitch;
     float yaw;
     float distance;
-    float fov;                  // The vertical FOV, in degrees.  If this is zero, the view will be orthographic (non-perspective)
-    int32_t render_width;       // If anti-aliasing is not applied this frame, these are the same as width/height, if antialiasing
-    int32_t render_height;      // is enabled, these are width/height * antialias upscale power (currently 2.0)
+    float fov;                  // Вертикаль FOV в градусах.  Если это значение равно нулю, вид будет ортогональным (неперспективным).
+    int32_t render_width;       // Если сглаживание не применяется к этому кадру, они такие же, как ширина/высота, если сглаживание
+    int32_t render_height;      // включен, это ширина/высота * мощность повышения разрешения сглаживания (в настоящее время 2.0)
     float focal_x;
     float focal_y;
     float focal_z;
@@ -98,51 +98,51 @@ typedef struct {
     int32_t animation_speed_ratio;
     lv_gltf_aa_mode_t aa_mode;
     lv_gltf_bg_mode_t bg_mode;
-    float blur_bg;              /** How much to blur the environment background, between 0.0 and 1.0 */
-    float env_pow;              /** Environmental brightness, 1.8 by default */
-    float exposure;             /** Image exposure level, 1.0 default */
+    float blur_bg;              /** Насколько сильно размыть фон окружающей среды, от 0,0 до 1,0. */
+    float env_pow;              /** Яркость окружающей среды, 1,8 по умолчанию. */
+    float exposure;             /** Уровень экспозиции изображения, по умолчанию 1,0. */
 } lv_gltf_view_desc_t;
 
 typedef struct {
-    /* Blend state */
+    /* Состояние смешивания */
     GLboolean blend_enabled;
     GLint blend_src;
     GLint blend_dst;
     GLint blend_equation;
 
-    /* Depth state */
+    /* Состояние глубины */
     GLboolean depth_test_enabled;
     GLboolean depth_mask;
     GLint depth_func;
 
-    /* Face culling state */
+    /* Состояние отсеивания лиц */
     GLboolean cull_face_enabled;
     GLint cull_face_mode;
     GLint front_face;
 
-    /* Stencil state */
+    /* Состояние трафарета */
     GLboolean stencil_test_enabled;
     GLuint stencil_mask;
     GLint stencil_func;
     GLint stencil_ref;
     GLuint stencil_value_mask;
 
-    /* Buffer bindings */
+    /* Привязки буфера */
     GLuint current_vao;
     GLuint current_vbo;
     GLuint current_ibo;
     GLuint current_program;
 
-    /* Texture state */
+    /* Состояние текстуры */
     GLint active_texture;
     GLuint bound_texture_2d;
 
-    /* Viewport and scissor */
+    /* Окно просмотра и ножницы */
     GLint viewport[4];
     GLboolean scissor_test_enabled;
     GLint scissor_box[4];
 
-    /* Clear values */
+    /* Четкие ценности */
     GLfloat clear_depth;
     GLfloat clear_color[4];
 } lv_opengl_state_t;

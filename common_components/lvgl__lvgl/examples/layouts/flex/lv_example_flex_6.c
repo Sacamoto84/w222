@@ -2,8 +2,8 @@
 #if LV_USE_FLEX && LV_BUILD_EXAMPLES
 
 /**
- * RTL base direction changes order of the items.
- * Also demonstrate how horizontal scrolling works with RTL.
+ * Базовое направление RTL меняет порядок элементов.
+ * Также продемонстрируйте, как горизонтальная прокрутка работает с RTL.
  */
 void lv_example_flex_6(void)
 {

@@ -32,7 +32,7 @@ void lv_example_snapshot_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_SNAPSHOT_H*/

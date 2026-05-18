@@ -58,8 +58,8 @@ void lv_draw_pxp_layer(lv_draw_task_t * t)
     lv_layer_t * layer_to_draw = (lv_layer_t *)draw_dsc->src;
     const lv_draw_buf_t * draw_buf = layer_to_draw->draw_buf;
 
-    /* It can happen that nothing was draw on a layer and therefore its buffer is not allocated.
-     * In this case just return.
+    /* Может случиться так, что на слое ничего не было нарисовано и поэтому его буфер не выделен.
+     * В этом случае просто вернитесь.
      */
     if(draw_buf == NULL)
         return;

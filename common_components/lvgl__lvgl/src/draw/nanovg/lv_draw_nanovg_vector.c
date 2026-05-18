@@ -170,7 +170,7 @@ static void task_draw_cb(void * ctx, const lv_vector_path_t * path, const lv_vec
     LV_PROFILER_DRAW_BEGIN;
     lv_draw_nanovg_unit_t * u = ctx;
 
-    /* clear area */
+    /* чистая территория */
     if(!path) {
         NVGcolor c = lv_color32_to_nvg(dsc->fill_dsc.color, dsc->fill_dsc.opa);
         nvgBeginPath(u->vg);

@@ -74,7 +74,7 @@ void lv_draw_dma2d_init(void)
     lv_thread_sync_init(&draw_dma2d_unit->interrupt_signal);
 #endif
 
-    /* enable the DMA2D clock */
+    /* включить часы DMA2D */
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32U5) || defined(STM32L4)
     RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN;
 #elif defined(STM32H7)
@@ -85,19 +85,19 @@ void lv_draw_dma2d_init(void)
 #warning "LVGL can't enable the clock for DMA2D"
 #endif
 
-    /* disable dead time */
+    /* отключить мертвое время */
     DMA2D->AMTCR = 0;
 
-    /* enable the interrupt */
+    /* включить прерывание */
     NVIC_EnableIRQ(DMA2D_IRQn);
 }
 
 void lv_draw_dma2d_deinit(void)
 {
-    /* disable the interrupt */
+    /* отключить прерывание */
     NVIC_DisableIRQ(DMA2D_IRQn);
 
-    /* disable the DMA2D clock */
+    /* отключить часы DMA2D */
 #if defined(STM32F4) || defined(STM32F7) || defined(STM32U5) || defined(STM32L4)
     RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA2DEN;
 #elif defined(STM32H7)
@@ -157,35 +157,35 @@ uint32_t lv_draw_dma2d_color_to_dma2d_color(lv_draw_dma2d_output_cf_t cf, lv_col
 
 void lv_draw_dma2d_configure_and_start_transfer(const lv_draw_dma2d_configuration_t * conf)
 {
-    /* number of lines register */
+    /* регистр количества строк */
     DMA2D->NLR = (conf->w << DMA2D_NLR_PL_Pos) | (conf->h << DMA2D_NLR_NL_Pos);
 
-    /* output */
+    /* вывод */
 
-    /* output memory address register */
+    /* регистр адреса выходной памяти */
     DMA2D->OMAR = (uint32_t)(uintptr_t) conf->output_address;
-    /* output offset register */
+    /* выходной регистр смещения */
     DMA2D->OOR = conf->output_offset;
-    /* output pixel format converter control register */
+    /* Регистр управления преобразователем формата выходного пикселя */
     DMA2D->OPFCCR = ((uint32_t) conf->output_cf) << DMA2D_OPFCCR_CM_Pos;
 
-    /* Fill color. Only for mode LV_DRAW_DMA2D_MODE_REGISTER_TO_MEMORY */
+    /* Цвет заливки. Только для режима LV_DRAW_DMA2D_MODE_REGISTER_TO_MEMORY */
     DMA2D->OCOLR = conf->reg_to_mem_mode_color;
 
-    /* foreground */
+    /* передний план */
 
-    /* foreground memory address register */
+    /* Адресный регистр памяти переднего плана */
     DMA2D->FGMAR = (uint32_t)(uintptr_t) conf->fg_address;
-    /* foreground offset register */
+    /* регистр смещения переднего плана */
     DMA2D->FGOR = conf->fg_offset;
-    /* foreground color. only for mem-to-mem with blending and fixed-color foreground */
+    /* цвет переднего плана. только для mem-to-mem со смешиванием и фиксированным цветом переднего плана */
     DMA2D->FGCOLR = conf->fg_color;
-    /* foreground pixel format converter control register */
+    /* Регистр управления преобразователем формата пикселей переднего плана */
     DMA2D->FGPFCCR = (((uint32_t) conf->fg_cf) << DMA2D_FGPFCCR_CM_Pos)
                      | (conf->fg_alpha << DMA2D_FGPFCCR_ALPHA_Pos)
                      | (conf->fg_alpha_mode << DMA2D_FGPFCCR_AM_Pos);
 
-    /* background */
+    /* фон */
 
     DMA2D->BGMAR = (uint32_t)(uintptr_t) conf->bg_address;
     DMA2D->BGOR = conf->bg_offset;
@@ -194,10 +194,10 @@ void lv_draw_dma2d_configure_and_start_transfer(const lv_draw_dma2d_configuratio
                      | (conf->bg_alpha << DMA2D_BGPFCCR_ALPHA_Pos)
                      | (conf->bg_alpha_mode << DMA2D_BGPFCCR_AM_Pos);
 
-    /* ensure the DMA2D register values are observed before the start transfer bit is set */
+    /* убедитесь, что значения регистра DMA2D наблюдаются до того, как будет установлен бит начала передачи */
     __DSB();
 
-    /* start the transfer (also set mode and enable transfer complete interrupt) */
+    /* начать передачу (также установить режим и включить прерывание завершения передачи) */
     DMA2D->CR = DMA2D_CR_START | (((uint32_t) conf->mode) << DMA2D_CR_MODE_Pos)
 #if LV_USE_DRAW_DMA2D_INTERRUPT
                 | DMA2D_CR_TCIE
@@ -286,7 +286,7 @@ static int32_t dispatch_cb(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 
     if(draw_dma2d_unit->task_act) {
 #if LV_DRAW_DMA2D_ASYNC
-        /*Return immediately if it's busy with draw task*/
+        /*Немедленно вернитесь, если он занят задачей рисования.*/
         return LV_DRAW_UNIT_IDLE;
 #else
         if(!check_transfer_completion()) {
@@ -368,10 +368,10 @@ static int32_t wait_finish_cb(lv_draw_unit_t * draw_unit)
 {
     lv_draw_dma2d_unit_t * u = (lv_draw_dma2d_unit_t *) draw_unit;
 
-    /* If a DMA2D task has been dispatched, wait its interrupt */
+    /* Если задача DMA2D была отправлена, дождитесь ее прерывания. */
     lv_thread_sync_wait(&u->interrupt_signal);
 
-    /* Then cleanup the DMA2D draw unit to accept a new task */
+    /* Затем очистите блок протяжки DMA2D, чтобы принять новую задачу. */
     post_transfer_tasks(u);
     return 0;
 }

@@ -32,24 +32,24 @@ extern "C" {
  **********************/
 
 /**
- * Initialize the test file system driver
+ * Инициализируйте драйвер тестовой файловой системы
  */
 void lv_test_fs_init(void);
 
 /**
- * Set whether the test file system is ready
+ * Установите, готова ли тестовая файловая система
  * @param ready true: ready, false: not ready
  */
 void lv_test_fs_set_ready(bool ready);
 
 /**
- * Set whether the open callback of the test file system is cleared
+ * Установите, очищается ли обратный вызов открытия тестовой файловой системы.
  * @param is_clear true: clear, false: not clear
  */
 void lv_test_fs_clear_open_cb(bool is_clear);
 
 /**
- * Set whether the close callback of the test file system is cleared
+ * Установите, очищается ли обратный вызов закрытия тестовой файловой системы.
  * @param is_clear true: clear, false: not clear
  */
 void lv_test_fs_clear_close_cb(bool is_clear);
@@ -61,7 +61,7 @@ void lv_test_fs_clear_close_cb(bool is_clear);
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEST_FS_H*/

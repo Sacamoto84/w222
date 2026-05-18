@@ -21,7 +21,7 @@ void setUp(void)
 void tearDown(void)
 {
     lv_obj_clean(g_screen);
-    lv_group_delete(g_group); /* also removes all indevs set to the group */
+    lv_group_delete(g_group); /* также удаляет всех пользователей, установленных в группе */
 }
 
 static void key_event_cb(lv_event_t * e)
@@ -51,7 +51,7 @@ static void gridnav_one_axis_move_only(uint32_t key_grid_axis_next,
     lv_obj_t * objs[3];
     for(uint32_t i = 0; i < 3; i++) {
         lv_obj_t * obj = lv_obj_create(cont);
-        lv_obj_create(obj); /* the obj needs a child to be focusable by gridnav */
+        lv_obj_create(obj); /* объекту нужно, чтобы дочерний элемент мог быть сфокусирован с помощью GridNav */
         lv_group_remove_obj(obj);
         lv_obj_add_event_cb(obj, key_event_cb, LV_EVENT_KEY, NULL);
         objs[i] = obj;
@@ -59,13 +59,13 @@ static void gridnav_one_axis_move_only(uint32_t key_grid_axis_next,
 
     TEST_ASSERT(lv_obj_get_state(objs[0]) & LV_STATE_FOCUSED);
 
-    /* gridnav direction key moves the focus */
+    /* Клавиша направления Gridnav перемещает фокус */
     lv_test_key_hit(key_grid_axis_next);
     TEST_ASSERT(lv_obj_get_state(objs[1]) & LV_STATE_FOCUSED);
     TEST_ASSERT_FALSE(g_key_data.press_happened);
 
-    /* non gridnav direction key does not move the focus. */
-    /* the key is sent to the object instead */
+    /* Клавиша направления без Gridnav не перемещает фокус. */
+    /* вместо этого ключ отправляется объекту */
     lv_test_key_hit(key_obj_axis_next);
     TEST_ASSERT(lv_obj_get_state(objs[1]) & LV_STATE_FOCUSED);
     TEST_ASSERT_TRUE(g_key_data.press_happened);
@@ -80,11 +80,11 @@ static void gridnav_one_axis_move_only(uint32_t key_grid_axis_next,
     TEST_ASSERT(g_key_data.obj == objs[1]);
     g_key_data.press_happened = false;
 
-    /* go back */
+    /* вернуться назад */
     lv_test_key_hit(key_grid_axis_prev);
     TEST_ASSERT(lv_obj_get_state(objs[0]) & LV_STATE_FOCUSED);
     TEST_ASSERT_FALSE(g_key_data.press_happened);
-    /* at the beginning, can't move further back */
+    /* в начале, не могу двигаться дальше назад */
     lv_test_key_hit(key_grid_axis_prev);
     TEST_ASSERT(lv_obj_get_state(objs[0]) & LV_STATE_FOCUSED);
     TEST_ASSERT_FALSE(g_key_data.press_happened);

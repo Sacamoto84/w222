@@ -13,7 +13,7 @@ static void event_handler(lv_event_t * e)
 }
 
 /**
- * An infinite roller with the name of the months
+ * Бесконечный ролик с названием месяцев
  */
 void lv_example_roller_1(void)
 {

@@ -37,7 +37,7 @@ void lv_example_event_draw(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_EVENT_H*/

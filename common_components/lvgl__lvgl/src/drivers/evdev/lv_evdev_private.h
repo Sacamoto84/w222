@@ -39,7 +39,7 @@ void lv_evdev_deinit(void);
 #endif /*LV_USE_EVDEV*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EVDEV_PRIVATE_H*/

@@ -19,11 +19,11 @@ static lv_subject_t fw_download_percent_subject;
 static lv_subject_t fw_update_status_subject;
 
 /**
- * Show how to handle a complete firmware update process with observers.
- * Normally it's hard to implement a firmware update process because in some cases
- *   - the App needs to was for the UI (wait for a button press)
- *   - the UI needs to wait for the App (connecting or downloading)
- * With observers these complex mechanisms can be implemented a simple and clean way.
+ * Покажите с наблюдателями, как выполнять полный процесс обновления прошивки.
+ * Обычно сложно реализовать процесс обновления встроенного ПО, поскольку в некоторых случаях
+ *   - Приложение должно быть дляUI(дождитесь нажатия кнопки)
+ *   - UI необходимо дождаться приложения (подключения или загрузки)
+ * С помощью наблюдателей эти сложные механизмы можно реализовать простым и понятным способом.
  */
 void lv_example_observer_5(void)
 {
@@ -32,7 +32,7 @@ void lv_example_observer_5(void)
 
     lv_subject_add_observer(&fw_update_status_subject, fw_upload_manager_observer_cb, NULL);
 
-    /*Create start FW update button*/
+    /*Создать кнопку запуска обновления FW*/
     lv_obj_t * btn = lv_button_create(lv_screen_active());
     lv_obj_add_event_cb(btn, fw_update_btn_clicked_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_center(btn);
@@ -146,7 +146,7 @@ static void download_timer_cb(lv_timer_t * t)
 }
 
 /**
- * Emulate connection and FW downloading by timers
+ * Эмулировать соединение и загрузку FW по таймерам
  */
 static void fw_upload_manager_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {

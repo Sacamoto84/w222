@@ -14,7 +14,7 @@ static void click_event_cb(lv_event_t * e)
 }
 
 /**
- * Create spans and get clicked one
+ * Создавайте промежутки и получайте щелчок по одному
  */
 void lv_example_span_1(void)
 {
@@ -25,7 +25,7 @@ void lv_example_span_1(void)
     lv_style_set_pad_all(&style, 2);
 
     lv_obj_t * spans = lv_spangroup_create(lv_screen_active());
-    /* Setting a fixed width and height to LV_SIZE_CONTENT will make the text wrap */
+    /* Установка фиксированной ширины и высоты LV_SIZE_CONTENT приведет к переносу текста. */
     lv_obj_set_width(spans, 300);
     lv_obj_set_height(spans, LV_SIZE_CONTENT);
     lv_obj_center(spans);

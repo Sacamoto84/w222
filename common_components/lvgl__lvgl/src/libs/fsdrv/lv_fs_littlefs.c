@@ -63,15 +63,15 @@ lv_fs_res_t lv_fs_littlefs_register_drive(lfs_t * lfs, char letter)
 {
 
     if(lfs == NULL) {
-        return LV_FS_RES_INV_PARAM; /*Invalid LittleFS handle*/
+        return LV_FS_RES_INV_PARAM; /*Неверный дескриптор LittleFS*/
     }
 
     if(LV_FS_IS_VALID_LETTER(letter) == false) {
-        return LV_FS_RES_INV_PARAM; /*Invalid letter*/
+        return LV_FS_RES_INV_PARAM; /*Неверная буква*/
     }
 
     if(lv_fs_get_drv(letter) != NULL) {
-        return LV_FS_RES_DRIVE_LETTER_ALREADY_USED; /*Already registered*/
+        return LV_FS_RES_DRIVE_LETTER_ALREADY_USED; /*Уже зарегистрирован*/
     }
 
     lv_fs_drv_t * fs_drv = lv_malloc(sizeof(lv_fs_drv_t));
@@ -90,7 +90,7 @@ lv_fs_res_t lv_fs_littlefs_register_drive(lfs_t * lfs, char letter)
     fs_drv->dir_close_cb = fs_dir_close;
     fs_drv->dir_read_cb = fs_dir_read;
 
-    fs_drv->remove_cb = fs_remove; /*Optional*/
+    fs_drv->remove_cb = fs_remove; /*Необязательно*/
     fs_drv->user_data = lfs;
 
     lv_fs_drv_register(fs_drv);
@@ -102,7 +102,7 @@ lv_fs_res_t lv_fs_littlefs_register_drive(lfs_t * lfs, char letter)
  **********************/
 
 /**
- * free the driver handle
+ * освободить ручку водителя
  * @param drv       pointer to a driver where this function belongs
  */
 static void fs_remove(lv_fs_drv_t * drv)
@@ -111,7 +111,7 @@ static void fs_remove(lv_fs_drv_t * drv)
 }
 
 /**
- * Open a file
+ * Открыть файл
  * @param drv       pointer to a driver where this function belongs
  * @param path      path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
  * @param mode      read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
@@ -144,7 +144,7 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
 /**
- * Close an opened file
+ * Закрыть открытый файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable. (opened with fs_open)
  * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
@@ -161,7 +161,7 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * Read data from an opened file
+ * Чтение данных из открытого файла
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable.
  * @param buf       pointer to a memory block where to store the read data
@@ -180,7 +180,7 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * Write into a file
+ * Записать в файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable
  * @param buf       pointer to a buffer with the bytes to write
@@ -199,7 +199,7 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 }
 
 /**
- * Set the read write pointer. Also expand the file size if necessary.
+ * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable. (opened with fs_open)
  * @param pos       the new position of read write pointer
@@ -225,7 +225,7 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * Give the position of the read write pointer
+ * Укажите положение указателя чтения и записи.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_p variable
  * @param pos_p     pointer to store the result
@@ -242,7 +242,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 }
 
 /**
- * Open a directory
+ * Открыть каталог
  * @param drv       pointer to a driver where this function belongs
  * @param path      path to the directory beginning with the driver letter (e.g. S:/folder)
  * @return          a directory descriptor or NULL on error
@@ -266,7 +266,7 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 }
 
 /**
- * Close an opened directory
+ * Закрыть открытый каталог
  * @param drv      pointer to a driver where this function belongs
  * @param dir_p    pointer to a dir_p variable. (opened with fs_dir_open)
  * @return         LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
@@ -285,7 +285,7 @@ static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p)
 }
 
 /**
- * Read data from an opened directory
+ * Чтение данных из открытого каталога
  * @param drv      pointer to a driver where this function belongs
  * @param dir_p    pointer to a file_t variable.
  * @param fn       pointer to a buffer to store the filename
@@ -306,7 +306,7 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
         int res = lfs_dir_read(lfs, &lf->dir, &info);
 
         if(res < 0) return LV_FS_RES_UNKNOWN;
-        if(res == 0) { /* End of the directory */
+        if(res == 0) { /* Конец каталога */
             fn[0] = '\0';
             break;
         }

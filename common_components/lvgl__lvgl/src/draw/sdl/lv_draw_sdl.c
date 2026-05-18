@@ -138,7 +138,7 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 {
     lv_draw_sdl_unit_t * draw_sdl_unit = (lv_draw_sdl_unit_t *) draw_unit;
 
-    /*Return immediately if it's busy with a draw task*/
+    /*Немедленно вернитесь, если он занят задачей рисования.*/
     if(draw_sdl_unit->task_act) return 0;
 
     lv_draw_task_t * t = NULL;
@@ -166,7 +166,7 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_sdl_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_sdl_unit->task_act = NULL;
 
-    /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+    /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
     lv_draw_dispatch_request();
     return 1;
 }
@@ -180,8 +180,8 @@ static int32_t evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
         return 0;
     }
 
-    /*If not refreshing the display probably it's a canvas rendering
-     *which his not support in SDL as it's not a texture.*/
+    /*Если не обновлять дисплей, возможно, это рендеринг холста.
+     *который не поддерживается в SDL, поскольку это не текстура.*/
     if(lv_refr_get_disp_refreshing() == NULL) return 0;
 
     if(((lv_draw_dsc_base_t *)task->draw_dsc)->user_data == NULL) {
@@ -389,13 +389,13 @@ static void draw_from_cached_texture(lv_draw_sdl_unit_t * u)
     data_to_find.h = lv_area_get_height(&t->_real_area);
     data_to_find.texture = NULL;
 
-    /*user_data stores the renderer to differentiate it from SW rendered tasks.
-     *However the cached texture is independent from the renderer so use NULL user_data*/
+    /*user_data сохраняет средство рендеринга, чтобы отличать его от задач рендеринга SW.
+     *Однако кэшированная текстура не зависит от средства рендеринга, поэтому используйте NULL user_data.*/
     void * user_data_saved = data_to_find.draw_dsc->user_data;
     data_to_find.draw_dsc->user_data = NULL;
 
-    /*Absolute coordinates are different for the same draw_dsc on a different position.
-     *So make everything relative to 0;0  before caching*/
+    /*Абсолютные координаты разные для одного и того же draw_dsc в другой позиции.
+     *Поэтому перед кэшированием сделайте все относительно 0;0.*/
     lv_area_t a = t->area;
     if(t->type == LV_DRAW_TASK_TYPE_IMAGE) {
         lv_draw_image_dsc_t * img_dsc = (lv_draw_image_dsc_t *)data_to_find.draw_dsc;
@@ -465,15 +465,15 @@ static void draw_from_cached_texture(lv_draw_sdl_unit_t * u)
 
     lv_cache_release(u->texture_cache, entry_cached, u);
 
-    /*Do not cache non static (const) texts as the text's pointer can be freed/reallocated
-     *at any time resulting in a wild pointer in the cached draw dsc. */
+    /*Не кэшируйте нестатические (константные) тексты, поскольку указатель текста может быть освобожден/перераспределен.
+     *в любой момент, что приведет к появлению дикого указателя в кэшированном dsc отрисовки. */
     if(t->type == LV_DRAW_TASK_TYPE_LABEL) {
         lv_draw_label_dsc_t * label_dsc = t->draw_dsc;
         if(!label_dsc->text_static) {
             lv_cache_drop(u->texture_cache, &data_to_find, NULL);
         }
     }
-    /*Do not cache lines rendered from points at dsc->points will be freed*/
+    /*Не кэшировать строки, отображаемые из точек в dsc->points, будут освобождены*/
     else if(t->type == LV_DRAW_TASK_TYPE_LINE) {
         lv_draw_line_dsc_t * line_dsc = t->draw_dsc;
         if(line_dsc->points) {

@@ -9,9 +9,9 @@ static void draw_event_cb(lv_event_t * e)
 
     lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
     lv_draw_dsc_base_t * base_dsc = (lv_draw_dsc_base_t *)lv_draw_task_get_draw_dsc(draw_task);
-    /*If the cells are drawn...*/
+    /*Если ячейки нарисованы...*/
     if(base_dsc->part == LV_PART_ITEMS && lv_draw_task_get_type(draw_task) == LV_DRAW_TASK_TYPE_FILL) {
-        /*Draw the background*/
+        /*Нарисуйте фон*/
         bool chk = lv_table_has_cell_ctrl(obj, base_dsc->id1, 0, LV_TABLE_CELL_CTRL_CUSTOM_1);
         lv_draw_rect_dsc_t rect_dsc;
         lv_draw_rect_dsc_init(&rect_dsc);
@@ -28,7 +28,7 @@ static void draw_event_cb(lv_event_t * e)
         lv_area_align(&draw_task_area, &sw_area, LV_ALIGN_RIGHT_MID, -15, 0);
         lv_draw_rect(base_dsc->layer, &rect_dsc, &sw_area);
 
-        /*Draw the knob*/
+        /*Нарисуйте ручку*/
         rect_dsc.bg_color = lv_color_white();
         lv_area_t knob_area;
         knob_area.x1 = 0;
@@ -57,11 +57,11 @@ static void change_event_cb(lv_event_t * e)
 }
 
 /**
- * A very light-weighted list created from table
+ * Очень легкий список, созданный на основе таблицы
  */
 void lv_example_table_2(void)
 {
-    /*Measure memory usage*/
+    /*Измерьте использование памяти*/
     lv_mem_monitor_t mon1;
     lv_mem_monitor(&mon1);
 
@@ -69,14 +69,14 @@ void lv_example_table_2(void)
 
     lv_obj_t * table = lv_table_create(lv_screen_active());
 
-    /*Set a smaller height to the table. It'll make it scrollable*/
+    /*Установите меньшую высоту стола. Это сделает его прокручиваемым*/
     lv_obj_set_size(table, LV_SIZE_CONTENT, 200);
 
     lv_table_set_column_width(table, 0, 150);
-    lv_table_set_row_count(table, ITEM_CNT); /*Not required but avoids a lot of memory reallocation lv_table_set_set_value*/
+    lv_table_set_row_count(table, ITEM_CNT); /*Не требуется, но позволяет избежать большого количества перераспределения памяти lv_table_set_set_value*/
     lv_table_set_column_count(table, 1);
 
-    /*Don't make the cell pressed, we will draw something different in the event*/
+    /*Не нажимайте ячейку, в случае события мы нарисуем что-то другое*/
     lv_obj_remove_style(table, NULL, LV_PART_ITEMS | LV_STATE_PRESSED);
 
     uint32_t i;
@@ -86,7 +86,7 @@ void lv_example_table_2(void)
 
     lv_obj_align(table, LV_ALIGN_CENTER, 0, -20);
 
-    /*Add an event callback to to apply some custom drawing*/
+    /*Добавьте обратный вызов события, чтобы применить пользовательский рисунок.*/
     lv_obj_add_event_cb(table, draw_event_cb, LV_EVENT_DRAW_TASK_ADDED, NULL);
     lv_obj_add_event_cb(table, change_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
     lv_obj_add_flag(table, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);

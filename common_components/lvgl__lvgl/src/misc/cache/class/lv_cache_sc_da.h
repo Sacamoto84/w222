@@ -38,7 +38,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_cache_class_t lv_cache_class_sc_da;
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CACHE_SC_DA_H*/

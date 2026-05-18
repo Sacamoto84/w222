@@ -4,18 +4,18 @@
  */
 
 /**
- * TODO Remove these instructions
- * Search and replace: templ -> object short name with lower case(e.g. btn, label etc)
- *                    TEMPL -> object short name with upper case (e.g. BTN, LABEL etc.)
+ * TODO Удалить эти инструкции
+ * Поиск и замена: templ -> короткое имя объекта в нижнем регистре (например, btn, label и т. д.)
+ *                    TEMPL -> короткое имя объекта в верхнем регистре (например, BTN , LABEL и т. д.)
  *
- * You can remove the defined() clause from the #if statement below. This exists because
- * LV_USE_TEMPL is not in lv_conf.h or lv_conf_template.h by default.
+ * Вы можете удалить предложение defined() из приведенного ниже оператора #if. Это существует потому, что
+ * По умолчанию LV_USE_TEMPL не входит в lv_conf.h или lv_conf_template.h.
  */
 
 /*********************
  *      INCLUDES
  *********************/
-//#include "lv_templ.h" /*TODO uncomment this*/
+//#include " lv_templ.h " /* TODO раскомментируйте это */
 
 #if defined(LV_USE_TEMPL) && LV_USE_TEMPL != 0
 
@@ -69,35 +69,35 @@ lv_obj_t * lv_templ_create(lv_obj_t * parent)
 }
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*
- * New object specific "add" or "remove" functions come here
+ * Сюда входят новые функции «добавить» или «удалить», специфичные для объекта.
  */
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /*
- * New object specific "set" functions come here
+ * Здесь появляются новые функции «набора», специфичные для объекта.
  */
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /*
- * New object specific "get" functions come here
+ * Здесь появляются новые функции «get», специфичные для объекта.
  */
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /*
- * New object specific "other" functions come here
+ * Здесь появляются новые «другие» функции, специфичные для объекта.
  */
 
 /**********************
@@ -110,7 +110,7 @@ static void lv_templ_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     LV_TRACE_OBJ_CREATE("begin");
 
     lv_templ_t * templ = (lv_templ_t *)obj;
-    /*Initialize the widget's data*/
+    /*Инициализируйте данные виджета*/
 
     LV_TRACE_OBJ_CREATE("finished");
 }
@@ -118,7 +118,7 @@ static void lv_templ_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 static void lv_templ_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 {
     lv_templ_t * templ = (lv_templ_t *)obj;
-    /*Free the widget specific data*/
+    /*Освободите данные виджета*/
 }
 
 static void lv_templ_event(const lv_obj_class_t * class_p, lv_event_t * e)
@@ -127,15 +127,15 @@ static void lv_templ_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
-    /*Add the widget specific event handling here*/
+    /*Добавьте сюда обработку событий, специфичных для виджета.*/
 }
 
-#else /*Enable this file at the top*/
+#else /*Включите этот файл вверху*/
 
-/*This dummy typedef exists purely to silence -Wpedantic.*/
+/*Этот фиктивный typedef существует исключительно для того, чтобы заставить замолчать -Wpedantic.*/
 typedef int keep_pedantic_happy;
 #endif

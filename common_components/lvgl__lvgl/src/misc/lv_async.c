@@ -44,13 +44,13 @@ static void lv_async_timer_cb(lv_timer_t * timer);
 
 lv_result_t lv_async_call(lv_async_cb_t async_xcb, void * user_data)
 {
-    /*Allocate an info structure*/
+    /*Выделить информационную структуру*/
     lv_async_info_t * info = lv_malloc(sizeof(lv_async_info_t));
 
     if(info == NULL)
         return LV_RESULT_INVALID;
 
-    /*Create a new timer*/
+    /*Создать новый таймер*/
     lv_timer_t * timer = lv_timer_create(lv_async_timer_cb, 0, info);
 
     if(timer == NULL) {
@@ -71,14 +71,14 @@ lv_result_t lv_async_call_cancel(lv_async_cb_t async_xcb, void * user_data)
     lv_result_t res = LV_RESULT_INVALID;
 
     while(timer != NULL) {
-        /*Find the next timer node*/
+        /*Найдите следующий узел таймера*/
         lv_timer_t * timer_next = lv_timer_get_next(timer);
 
-        /*Find async timer callback*/
+        /*Найти обратный вызов асинхронного таймера*/
         if(timer->timer_cb == lv_async_timer_cb) {
             lv_async_info_t * info = (lv_async_info_t *)timer->user_data;
 
-            /*Match user function callback and user data*/
+            /*Сопоставление обратного вызова пользовательской функции и пользовательских данных*/
             if(info->cb == async_xcb && info->user_data == user_data) {
                 lv_timer_delete(timer);
                 lv_free(info);
@@ -98,7 +98,7 @@ lv_result_t lv_async_call_cancel(lv_async_cb_t async_xcb, void * user_data)
 
 static void lv_async_timer_cb(lv_timer_t * timer)
 {
-    /*Save the info because an lv_async_call_cancel might delete it in the callback*/
+    /*Сохраните информацию, потому чтоlv_async_call_cancelможет удалить ее обратным вызовом.*/
     lv_async_info_t * info = (lv_async_info_t *)timer->user_data;
     lv_async_info_t info_save = *info;
     lv_timer_delete(timer);

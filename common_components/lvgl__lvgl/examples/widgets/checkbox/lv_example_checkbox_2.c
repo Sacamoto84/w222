@@ -16,7 +16,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Checkboxes as radio buttons
+ * Флажки как переключатели
  */
 void lv_example_checkbox_2(void)
 {
@@ -42,15 +42,15 @@ void lv_example_checkbox_2(void)
 
         lv_obj_add_event_cb(obj, event_cb, LV_EVENT_VALUE_CHANGED, NULL);
 
-        /*This makes the checkboxes act as radio buttons*/
+        /*Это заставляет флажки действовать как переключатели.*/
         lv_obj_set_radio_button(obj, true);
 
         lv_obj_add_style(obj, &style_radio, LV_PART_INDICATOR);
         lv_obj_add_style(obj, &style_radio_chk, LV_PART_INDICATOR | LV_STATE_CHECKED);
     }
 
-    /*Make the first checkbox checked*/
-    //    lv_obj_add_state(lv_obj_get_child(cont, 0), LV_STATE_CHECKED);
+    /*Установите первый флажок*/
+    //    lv_obj_add_state ( lv_obj_get_child (продолжение, 0), LV_STATE_CHECKED );
 }
 
 #endif

@@ -37,20 +37,20 @@ typedef struct _lv_font_manager_recycle_t lv_font_manager_recycle_t;
  **********************/
 
 /**
- * Create font recycle manager.
+ * Создайте менеджер переработки шрифтов.
  * @param max_size recycle size.
  * @return pointer to font recycle manager.
  */
 lv_font_manager_recycle_t * lv_font_manager_recycle_create(uint32_t max_size);
 
 /**
- * Delete font recycle manager.
+ * Удалить менеджер переработки шрифтов.
  * @param manager pointer to font recycle manager.
  */
 void lv_font_manager_recycle_delete(lv_font_manager_recycle_t * manager);
 
 /**
- * Get a reusable font.
+ * Приобретите многоразовый шрифт.
  * @param manager pointer to font recycle manager.
  * @param ft_info font info.
  * @return returns true on success.
@@ -58,7 +58,7 @@ void lv_font_manager_recycle_delete(lv_font_manager_recycle_t * manager);
 lv_font_t * lv_font_manager_recycle_get_reuse(lv_font_manager_recycle_t * manager, const lv_font_info_t * ft_info);
 
 /**
- * Set fonts to be reused.
+ * Установите шрифты для повторного использования.
  * @param manager pointer to font recycle manager.
  * @param ft_info font info.
  */
@@ -66,7 +66,7 @@ void lv_font_manager_recycle_set_reuse(lv_font_manager_recycle_t * manager, lv_f
                                        const lv_font_info_t * ft_info);
 
 /**
- * Remove fonts with name from recycle manager.
+ * Удалите шрифты с именем из диспетчера переработки.
  * @param manager pointer to font recycle manager.
  * @param name font name.
  */
@@ -79,7 +79,7 @@ void lv_font_recycle_remove_fonts(lv_font_manager_recycle_t * manager, const cha
 #endif /* LV_USE_FONT_MANAGER */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_FONT_MANAGER_RECYCLE_H */

@@ -60,18 +60,18 @@ enum _lv_property_bar_id_t {
  **********************/
 
 /**
- * Create a bar object
+ * Создать объект-бар
  * @param parent        pointer to an object, it will be the parent of the new bar
  * @return              pointer to the created bar
  */
 lv_obj_t * lv_bar_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set a new value on the bar
+ * Установите новое значение на панели
  * @param obj           pointer to a bar object
  * @param value         new value
  * @param anim          LV_ANIM_ON: set the value with an animation; LV_ANIM_OFF: change the value immediately
@@ -79,7 +79,7 @@ lv_obj_t * lv_bar_create(lv_obj_t * parent);
 void lv_bar_set_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim);
 
 /**
- * Set a new start value on the bar
+ * Установите новое начальное значение на панели
  * @param obj             pointer to a bar object
  * @param start_value     new start value
  * @param anim            LV_ANIM_ON: set the value with an animation; LV_ANIM_OFF: change the value immediately
@@ -87,7 +87,7 @@ void lv_bar_set_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim);
 void lv_bar_set_start_value(lv_obj_t * obj, int32_t start_value, lv_anim_enable_t anim);
 
 /**
- * Set minimum and the maximum values of a bar
+ * Установите минимальное и максимальное значения бара
  * @param obj       pointer to the bar object
  * @param min       minimum value
  * @param max       maximum value
@@ -96,81 +96,81 @@ void lv_bar_set_start_value(lv_obj_t * obj, int32_t start_value, lv_anim_enable_
 void lv_bar_set_range(lv_obj_t * obj, int32_t min, int32_t max);
 
 /**
- * Set minimum value of a bar
+ * Установить минимальное значение бара
  * @param obj       pointer to the bar object
  * @param min       minimum value
  */
 void lv_bar_set_min_value(lv_obj_t * obj, int32_t min);
 
 /**
- * Set maximum value of a bar
+ * Установить максимальное значение бара
  * @param obj       pointer to the bar object
  * @param max       maximum value
  */
 void lv_bar_set_max_value(lv_obj_t * obj, int32_t max);
 
 /**
- * Set the type of bar.
+ * Установите тип панели.
  * @param obj       pointer to bar object
  * @param mode      bar type from `lv_bar_mode_t`
  */
 void lv_bar_set_mode(lv_obj_t * obj, lv_bar_mode_t mode);
 
 /**
- * Set the orientation of bar.
+ * Установите ориентацию панели.
  * @param obj           pointer to bar object
  * @param orientation   bar orientation from `lv_bar_orientation_t`
  */
 void lv_bar_set_orientation(lv_obj_t * obj, lv_bar_orientation_t orientation);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the value of a bar
+ * Получить стоимость бара
  * @param obj       pointer to a bar object
  * @return          the value of the bar
  */
 int32_t lv_bar_get_value(const lv_obj_t * obj);
 
 /**
- * Get the start value of a bar
+ * Получить начальное значение бара
  * @param obj       pointer to a bar object
  * @return          the start value of the bar
  */
 int32_t lv_bar_get_start_value(const lv_obj_t * obj);
 
 /**
- * Get the minimum value of a bar
+ * Получить минимальное значение бара
  * @param obj       pointer to a bar object
  * @return          the minimum value of the bar
  */
 int32_t lv_bar_get_min_value(const lv_obj_t * obj);
 
 /**
- * Get the maximum value of a bar
+ * Получить максимальное значение бара
  * @param obj       pointer to a bar object
  * @return          the maximum value of the bar
  */
 int32_t lv_bar_get_max_value(const lv_obj_t * obj);
 
 /**
- * Get the type of bar.
+ * Получите тип бара.
  * @param obj       pointer to bar object
  * @return          bar type from `lv_bar_mode_t`
  */
 lv_bar_mode_t lv_bar_get_mode(lv_obj_t * obj);
 
 /**
- * Get the orientation of bar.
+ * Получите ориентацию бара.
  * @param obj       pointer to bar object
  * @return          bar orientation from `lv_bar_orientation_t`
  */
 lv_bar_orientation_t lv_bar_get_orientation(lv_obj_t * obj);
 
 /**
- * Give the bar is in symmetrical mode or not
+ * Подскажите бар в симметричном режиме или нет
  * @param obj       pointer to bar object
  * @return          true: in symmetrical mode false : not in
 */
@@ -178,7 +178,7 @@ bool lv_bar_is_symmetrical(lv_obj_t * obj);
 
 #if LV_USE_OBSERVER
 /**
- * Bind an integer or float Subject to a Bar's value.
+ * Привязка целого числа или числа с плавающей точкой к значению бара.
  * @param obj       pointer to Bar
  * @param subject   pointer to Subject
  * @return          pointer to newly-created Observer
@@ -193,7 +193,7 @@ lv_observer_t * lv_bar_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_BAR*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BAR_H*/

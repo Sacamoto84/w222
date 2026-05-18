@@ -40,7 +40,7 @@ static void freetype_release_glyph_cb(const lv_font_t * font, lv_font_glyph_dsc_
 
 static lv_cache_entry_t * lv_freetype_outline_lookup(lv_freetype_font_dsc_t * dsc, FT_UInt glyph_index);
 
-/*glyph dsc cache lru callbacks*/
+/*глиф dsc кэш обратные вызовы lru*/
 static bool freetype_glyph_outline_create_cb(lv_freetype_outline_node_t * node, lv_freetype_font_dsc_t * dsc);
 static void freetype_glyph_outline_free_cb(lv_freetype_outline_node_t * node, lv_freetype_font_dsc_t * dsc);
 static lv_cache_compare_res_t freetype_glyph_outline_cmp_cb(const lv_freetype_outline_node_t * node_a,
@@ -323,8 +323,8 @@ static lv_freetype_outline_t outline_create(
 
 
     /**
-     * Disable AUTOHINT(https://freetype.org/autohinting/hinter.html) to avoid display clipping
-     * caused by inconsistent glyph measurement and outline.
+     * Отключите AUTOHINT ( https://freetype.org/autohinting/hinter.html), чтобы избежать обрезки изображения).
+     * вызвано несоответствием размера и контура глифа.
      */
     error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT | FT_LOAD_NO_BITMAP | FT_LOAD_NO_AUTOHINT);
     if(error) {
@@ -365,15 +365,15 @@ static lv_freetype_outline_t outline_create(
         return NULL;
     }
 
-    /* 1 iteration if there is no border */
-    /* 2 iterations if there is a a border and the glyph itsef */
+    /* 1 итерация, если границы нет */
+    /* 2 итерации, если есть рамка и сам глиф */
     for(int i = 0; i < (border_width > 0 ? 2 : 1); i++) {
 
         FT_Outline glyph_outline;
 
         if(i == 1) {
 
-            /* decompose the border glyph */
+            /* разложить пограничный глиф */
             FT_Stroker_New(ctx->library, &stroker);
             FT_Stroker_Set(stroker, border_width * 64,
                            FT_STROKER_LINECAP_ROUND,
@@ -391,11 +391,11 @@ static lv_freetype_outline_t outline_create(
         }
         else {
 
-            /* decompose glyph */
+            /* разложить глиф */
             glyph_outline = face->glyph->outline;
         }
 
-        /*Calculate Total Segments Before decompose */
+        /*Вычислить общее количество сегментов перед разложением */
         int32_t tag_size = glyph_outline.n_points;
         int32_t segments = 0;
         int32_t vectors = 0;
@@ -404,7 +404,7 @@ static lv_freetype_outline_t outline_create(
 
 #if 0
             if(j == 0 && (glyph_outline.tags[j] & 0x1) == 0) {
-                /* TODO handle the case where the first point is 'off curve' */
+                /* TODO обрабатывает случай, когда первая точка находится вне кривой. */
 https://stackoverflow.com/questions/3465809/how-to-interpret-a-freetype-glyph-outline-when-the-first-point-on-the-contour-is
             }
 #endif
@@ -424,14 +424,14 @@ https://stackoverflow.com/questions/3465809/how-to-interpret-a-freetype-glyph-ou
             }
         }
 
-        /*Also for every contour we may have a line for close*/
+        /*Также для каждого контура у нас может быть линия закрытия.*/
         segments += glyph_outline.n_contours;
         vectors += glyph_outline.n_contours;
 
         param.sizes.data_size = vectors * 2;
         param.sizes.segments_size = segments;
 
-        /* Run outline decompose again to fill outline data */
+        /* Запустите разложение схемы еще раз, чтобы заполнить данные схемы. */
         error = FT_Outline_Decompose(&glyph_outline, &outline_funcs, outline);
         if(error) {
             FT_ERROR_MSG("FT_Outline_Decompose", error);
@@ -442,7 +442,7 @@ https://stackoverflow.com/questions/3465809/how-to-interpret-a-freetype-glyph-ou
 
         if(i == 0 && border_width > 0) {
 
-            /* Close the border glyph before decomposing the inside glyph */
+            /* Закройте пограничный глиф перед разложением внутреннего глифа. */
             res = outline_push_point(outline, LV_FREETYPE_OUTLINE_BORDER_START, NULL, NULL, NULL);
             if(res != LV_RESULT_OK) {
                 LV_LOG_ERROR("Outline object close failed");
@@ -454,7 +454,7 @@ https://stackoverflow.com/questions/3465809/how-to-interpret-a-freetype-glyph-ou
         }
         else if(i == 0 || (i == 1 && border_width > 0)) {
 
-            /* Close the border glyph or the regular glyph */
+            /* Закройте пограничный или обычный глиф */
             res = outline_push_point(outline, LV_FREETYPE_OUTLINE_END, NULL, NULL, NULL);
             if(res != LV_RESULT_OK) {
                 LV_LOG_ERROR("Outline object close failed");

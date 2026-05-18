@@ -19,12 +19,12 @@ static void key_buffer_add(struct key_buffer * key_buffer, lv_key_t key)
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -73,14 +73,14 @@ void test_indev_key_remap(void)
     lv_test_key_hit('a');
     lv_test_key_hit(LV_KEY_ESC);
 
-    /* Remap 'a' -> LV_KEY_LEFT, LV_KEY_ESC -> 'Z' */
+    /* Переназначить 'a' -> LV_KEY_LEFT, LV_KEY_ESC -> 'Z' */
 
     lv_indev_set_key_remap_cb(indev, remap_cb);
 
     lv_test_key_hit('a');
     lv_test_key_hit(LV_KEY_ESC);
 
-    /* Disable remapping */
+    /* Отключить переназначение */
 
     lv_indev_set_key_remap_cb(indev, NULL);
 

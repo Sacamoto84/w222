@@ -107,9 +107,9 @@ lv_font_t * lv_binfont_create(const char * path)
     if(!lvgl_load_font(&file, font)) {
         LV_LOG_WARN("Error loading font file: %s", path);
         /*
-        * When `lvgl_load_font` fails it can leak some pointers.
-        * All non-null pointers can be assumed as allocated and
-        * `lv_binfont_destroy` should free them correctly.
+        * При сбое `lvgl_load_font` может произойти утечка некоторых указателей.
+        * Все ненулевые указатели можно считать выделенными и
+        * `lv_binfont_destroy` должен освободить их правильно.
         */
         lv_binfont_destroy(font);
         font = NULL;
@@ -434,7 +434,7 @@ static int32_t load_glyph(lv_fs_file_t * fp, lv_font_fmt_txt_dsc_t * font_dsc,
         int next_offset = (i < loca_count - 1) ? glyph_offset[i + 1] : (uint32_t)glyph_length;
         int bmp_size = next_offset - glyph_offset[i] - nbits / 8;
 
-        if(nbits % 8 == 0) {  /*Fast path*/
+        if(nbits % 8 == 0) {  /*Быстрый путь*/
             if(lv_fs_read(fp, &glyph_bmp[cur_bmp_size], bmp_size, NULL) != LV_FS_RES_OK) {
                 return -1;
             }
@@ -451,7 +451,7 @@ static int32_t load_glyph(lv_fs_file_t * fp, lv_font_fmt_txt_dsc_t * font_dsc,
                 return -1;
             }
 
-            /*The last fragment should be on the MSB but read_bits() will place it to the LSB*/
+            /*Последний фрагмент должен находиться на MSB, но read_bits() поместит его на LSB.*/
             glyph_bmp[cur_bmp_size + bmp_size - 1] = glyph_bmp[cur_bmp_size + bmp_size - 1] << (nbits % 8);
 
         }
@@ -465,20 +465,20 @@ static void release_glyph_cb(const lv_font_t * font, lv_font_glyph_dsc_t * glyph
 {
     LV_UNUSED(font);
     LV_UNUSED(glyph_dsc);
-    /*No custom memory management needed*/
+    /*Никакого специального управления памятью не требуется.*/
 }
 
 /*
- * Loads a `lv_font_t` from a binary file, given a `lv_fs_file_t`.
+ * Загружает `lv_font_t` из двоичного файла, учитывая `lv_fs_file_t` .
  *
- * Memory allocations on `lvgl_load_font` should be immediately zeroed and
- * the pointer should be set on the `lv_font_t` data before any possible return.
+ * Выделения памяти на `lvgl_load_font` должны быть немедленно обнулены и
+ * указатель должен быть установлен на данные `lv_font_t` перед любым возможным возвратом.
  *
- * When something fails, it returns `false` and the memory on the `lv_font_t`
- * still needs to be freed using `lv_binfont_destroy`.
+ * Когда что-то выходит из строя, он возвращает `false` и память на `lv_font_t`.
+ * все еще необходимо освободить с помощью `lv_binfont_destroy`.
  *
- * `lv_binfont_destroy` will assume that all non-null pointers are allocated and
- * should be freed.
+ * `lv_binfont_destroy` будет считать, что все ненулевые указатели выделены и
+ * должен быть освобожден.
  */
 static bool lvgl_load_font(lv_fs_file_t * fp, lv_font_t * font)
 {
@@ -489,7 +489,7 @@ static bool lvgl_load_font(lv_fs_file_t * fp, lv_font_t * font)
 
     font->dsc = font_dsc;
 
-    /*header*/
+    /*заголовок*/
     int32_t header_length = read_label(fp, 0, "head");
     if(header_length < 0) {
         return false;
@@ -520,7 +520,7 @@ static bool lvgl_load_font(lv_fs_file_t * fp, lv_font_t * font)
         return false;
     }
 
-    /*loca*/
+    /*место*/
     uint32_t loca_start = cmaps_start + cmaps_length;
     int32_t loca_length = read_label(fp, loca_start, "loca");
     if(loca_length < 0) {
@@ -560,7 +560,7 @@ static bool lvgl_load_font(lv_fs_file_t * fp, lv_font_t * font)
         return false;
     }
 
-    /*glyph*/
+    /*глиф*/
     uint32_t glyph_start = loca_start + loca_length;
     int32_t glyph_length = load_glyph(
                                fp, font_dsc, glyph_start, glyph_offset, loca_count, &font_header);
@@ -571,7 +571,7 @@ static bool lvgl_load_font(lv_fs_file_t * fp, lv_font_t * font)
         return false;
     }
 
-    /*kerning*/
+    /*кернинг*/
     if(font_header.tables_count < 4) {
         font_dsc->kern_dsc = NULL;
         font_dsc->kern_classes = 0;
@@ -600,7 +600,7 @@ int32_t load_kern(lv_fs_file_t * fp, lv_font_fmt_txt_dsc_t * font_dsc, uint8_t f
         return -1;
     }
 
-    if(0 == kern_format_type) { /*sorted pairs*/
+    if(0 == kern_format_type) { /*отсортированные пары*/
         lv_font_fmt_txt_kern_pair_t * kern_pair = lv_malloc(sizeof(lv_font_fmt_txt_kern_pair_t));
 
         lv_memset(kern_pair, 0, sizeof(lv_font_fmt_txt_kern_pair_t));
@@ -637,7 +637,7 @@ int32_t load_kern(lv_fs_file_t * fp, lv_font_fmt_txt_dsc_t * font_dsc, uint8_t f
             return -1;
         }
     }
-    else if(3 == kern_format_type) { /*array M*N of classes*/
+    else if(3 == kern_format_type) { /*массив M*N классов*/
 
         lv_font_fmt_txt_kern_classes_t * kern_classes = lv_malloc(sizeof(lv_font_fmt_txt_kern_classes_t));
 

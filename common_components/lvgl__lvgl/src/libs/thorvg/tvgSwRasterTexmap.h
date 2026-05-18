@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2021 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -48,13 +48,13 @@ struct AASpans
    int32_t yEnd;
 };
 
-//Careful! Shared resource, No support threading
+//Осторожный! Общий ресурс, нет поддержки потоков
 static float dudx, dvdx;
 static float dxdya, dxdyb, dudya, dvdya;
 static float xa, xb, ua, va;
 
 
-//Y Range exception handling
+//Обработка исключений диапазона Y
 static bool _arrange(const SwImage* image, const SwBBox* region, int& yStart, int& yEnd)
 {
     int32_t regionTop, regionBottom;
@@ -80,7 +80,7 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
 {
     return false;
 
-#if 0 //Enable it when GRAYSCALE image is supported
+#if 0 //Включите его, если поддерживается образ GRAYSCALE.
     auto maskOp = _getMaskOp(surface->compositor->method);
     auto direct = _direct(surface->compositor->method);
     float _dudx = dudx, _dvdx = dvdx;
@@ -93,11 +93,11 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
     int32_t vv = 0, uu = 0;
     int32_t minx = INT32_MAX, maxx = 0;
     float dx, u, v, iptr;
-    SwSpan* span = nullptr;         //used only when rle based.
+    SwSpan* span = nullptr;         //используется только в том случае, если он основан на роли.
 
     if (!_arrange(image, region, yStart, yEnd)) return false;
 
-    //Loop through all lines in the segment
+    //Перебрать все строки в сегменте
     uint32_t spanIdx = 0;
 
     if (region) {
@@ -120,7 +120,7 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
         if (!region) {
             minx = INT32_MAX;
             maxx = 0;
-            //one single row, could be consisted of multiple spans.
+            //одна строка может состоять из нескольких промежутков.
             while (span->y == y && spanIdx < image->rle->size) {
                 if (minx > span->x) minx = span->x;
                 if (maxx < span->x + span->len) maxx = span->x + span->len;
@@ -131,15 +131,15 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
         if (x1 < minx) x1 = minx;
         if (x2 > maxx) x2 = maxx;
 
-        //Anti-Aliasing frames
+        //Сглаживание кадров
         ay = y - aaSpans->yStart;
         if (aaSpans->lines[ay].x[0] > x1) aaSpans->lines[ay].x[0] = x1;
         if (aaSpans->lines[ay].x[1] < x2) aaSpans->lines[ay].x[1] = x2;
 
-        //Range allowed
+        //Разрешенный диапазон
         if ((x2 - x1) >= 1 && (x1 < maxx) && (x2 > minx)) {
 
-            //Perform subtexel pre-stepping on UV
+            //Выполните предварительный шаг субтекселей на UV.
             dx = 1 - (_xa - x1);
             u = _ua + dx * _dudx;
             v = _va + dx * _dvdx;
@@ -150,7 +150,7 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
             auto dst = &surface->buf8[y * surface->stride + x1];
 
             if (opacity == 255) {
-                //Draw horizontal line
+                //Нарисуйте горизонтальную линию
                 while (x++ < x2) {
                     uu = (int) u;
                     if (uu >= sw) continue;
@@ -164,27 +164,27 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
 
                     px = *(sbuf + (vv * sw) + uu);
 
-                    /* horizontal interpolate */
+                    /* горизонтальная интерполяция */
                     if (iru < sw) {
-                        /* right pixel */
+                        /* правый пиксель */
                         int px2 = *(sbuf + (vv * sw) + iru);
                         px = INTERPOLATE(px, px2, ar);
                     }
-                    /* vertical interpolate */
+                    /* вертикальная интерполяция */
                     if (irv < sh) {
-                        /* bottom pixel */
+                        /* нижний пиксель */
                         int px2 = *(sbuf + (irv * sw) + uu);
 
-                        /* horizontal interpolate */
+                        /* горизонтальная интерполяция */
                         if (iru < sw) {
-                            /* bottom right pixel */
+                            /* нижний правый пиксель */
                             int px3 = *(sbuf + (irv * sw) + iru);
                             px2 = INTERPOLATE(px2, px3, ar);
                         }
                         px = INTERPOLATE(px, px2, ab);
                     }
                     if (direct) {
-                        auto tmp = maskOp(px, *cmp, 0);  //not use alpha
+                        auto tmp = maskOp(px, *cmp, 0);  //не использовать альфу
                         *dst = tmp + MULTIPLY(*dst, ~tmp);
                         ++dst;
                     } else {
@@ -192,14 +192,14 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
                     }
                     ++cmp;
 
-                    //Step UV horizontally
+                    //Шаг UV по горизонтали
                     u += _dudx;
                     v += _dvdx;
                     //range over?
                     if ((uint32_t)v >= image->h) break;
                 }
             } else {
-                //Draw horizontal line
+                //Нарисуйте горизонтальную линию
                 while (x++ < x2) {
                     uu = (int) u;
                     if (uu >= sw) continue;
@@ -213,20 +213,20 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
 
                     px = *(sbuf + (vv * sw) + uu);
 
-                    /* horizontal interpolate */
+                    /* горизонтальная интерполяция */
                     if (iru < sw) {
-                        /* right pixel */
+                        /* правый пиксель */
                         int px2 = *(sbuf + (vv * sw) + iru);
                         px = INTERPOLATE(px, px2, ar);
                     }
-                    /* vertical interpolate */
+                    /* вертикальная интерполяция */
                     if (irv < sh) {
-                        /* bottom pixel */
+                        /* нижний пиксель */
                         int px2 = *(sbuf + (irv * sw) + uu);
 
-                        /* horizontal interpolate */
+                        /* горизонтальная интерполяция */
                         if (iru < sw) {
-                            /* bottom right pixel */
+                            /* нижний правый пиксель */
                             int px3 = *(sbuf + (irv * sw) + iru);
                             px2 = INTERPOLATE(px2, px3, ar);
                         }
@@ -243,7 +243,7 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
                     }
                     ++cmp;
 
-                    //Step UV horizontally
+                    //Шаг UV по горизонтали
                     u += _dudx;
                     v += _dvdx;
                     //range over?
@@ -252,7 +252,7 @@ static bool _rasterMaskedPolygonImageSegment(SwSurface* surface, const SwImage* 
             }
         }
 
-        //Step along both edges
+        //Шаг по обоим краям
         _xa += _dxdya;
         _xb += _dxdyb;
         _ua += _dudya;
@@ -287,11 +287,11 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
     int32_t minx = INT32_MAX, maxx = 0;
     float dx, u, v, iptr;
     uint32_t* buf;
-    SwSpan* span = nullptr;         //used only when rle based.
+    SwSpan* span = nullptr;         //используется только в том случае, если он основан на роли.
 
     if (!_arrange(image, region, yStart, yEnd)) return;
 
-    //Loop through all lines in the segment
+    //Перебрать все строки в сегменте
     uint32_t spanIdx = 0;
 
     if (region) {
@@ -314,7 +314,7 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
         if (!region) {
             minx = INT32_MAX;
             maxx = 0;
-            //one single row, could be consisted of multiple spans.
+            //одна строка может состоять из нескольких промежутков.
             while (span->y == y && spanIdx < image->rle->size) {
                 if (minx > span->x) minx = span->x;
                 if (maxx < span->x + span->len) maxx = span->x + span->len;
@@ -325,15 +325,15 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
         if (x1 < minx) x1 = minx;
         if (x2 > maxx) x2 = maxx;
 
-        //Anti-Aliasing frames
+        //Сглаживание кадров
         ay = y - aaSpans->yStart;
         if (aaSpans->lines[ay].x[0] > x1) aaSpans->lines[ay].x[0] = x1;
         if (aaSpans->lines[ay].x[1] < x2) aaSpans->lines[ay].x[1] = x2;
 
-        //Range allowed
+        //Разрешенный диапазон
         if ((x2 - x1) >= 1 && (x1 < maxx) && (x2 > minx)) {
 
-            //Perform subtexel pre-stepping on UV
+            //Выполните предварительный шаг субтекселей на UV.
             dx = 1 - (_xa - x1);
             u = _ua + dx * _dudx;
             v = _va + dx * _dvdx;
@@ -343,7 +343,7 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
             x = x1;
 
             if (opacity == 255) {
-                //Draw horizontal line
+                //Нарисуйте горизонтальную линию
                 while (x++ < x2) {
                     uu = (int) u;
                     if (uu >= sw) continue;
@@ -357,20 +357,20 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
 
                     px = *(sbuf + (vv * sw) + uu);
 
-                    /* horizontal interpolate */
+                    /* горизонтальная интерполяция */
                     if (iru < sw) {
-                        /* right pixel */
+                        /* правый пиксель */
                         int px2 = *(sbuf + (vv * sw) + iru);
                         px = INTERPOLATE(px, px2, ar);
                     }
-                    /* vertical interpolate */
+                    /* вертикальная интерполяция */
                     if (irv < sh) {
-                        /* bottom pixel */
+                        /* нижний пиксель */
                         int px2 = *(sbuf + (irv * sw) + uu);
 
-                        /* horizontal interpolate */
+                        /* горизонтальная интерполяция */
                         if (iru < sw) {
-                            /* bottom right pixel */
+                            /* нижний правый пиксель */
                             int px3 = *(sbuf + (irv * sw) + iru);
                             px2 = INTERPOLATE(px2, px3, ar);
                         }
@@ -379,14 +379,14 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
                     *buf = surface->blender(px, *buf, IA(px));
                     ++buf;
 
-                    //Step UV horizontally
+                    //Шаг UV по горизонтали
                     u += _dudx;
                     v += _dvdx;
                     //range over?
                     if ((uint32_t)v >= image->h) break;
                 }
             } else {
-                //Draw horizontal line
+                //Нарисуйте горизонтальную линию
                 while (x++ < x2) {
                     uu = (int) u;
                     if (uu >= sw) continue;
@@ -400,20 +400,20 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
 
                     px = *(sbuf + (vv * sw) + uu);
 
-                    /* horizontal interpolate */
+                    /* горизонтальная интерполяция */
                     if (iru < sw) {
-                        /* right pixel */
+                        /* правый пиксель */
                         int px2 = *(sbuf + (vv * sw) + iru);
                         px = INTERPOLATE(px, px2, ar);
                     }
-                    /* vertical interpolate */
+                    /* вертикальная интерполяция */
                     if (irv < sh) {
-                        /* bottom pixel */
+                        /* нижний пиксель */
                         int px2 = *(sbuf + (irv * sw) + uu);
 
-                        /* horizontal interpolate */
+                        /* горизонтальная интерполяция */
                         if (iru < sw) {
-                            /* bottom right pixel */
+                            /* нижний правый пиксель */
                             int px3 = *(sbuf + (irv * sw) + iru);
                             px2 = INTERPOLATE(px2, px3, ar);
                         }
@@ -423,7 +423,7 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
                     *buf = surface->blender(src, *buf, IA(src));
                     ++buf;
 
-                    //Step UV horizontally
+                    //Шаг UV по горизонтали
                     u += _dudx;
                     v += _dvdx;
                     //range over?
@@ -432,7 +432,7 @@ static void _rasterBlendingPolygonImageSegment(SwSurface* surface, const SwImage
             }
         }
 
-        //Step along both edges
+        //Шаг по обоим краям
         _xa += _dxdya;
         _xb += _dxdyb;
         _ua += _dudya;
@@ -464,16 +464,16 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
     int32_t minx = INT32_MAX, maxx = 0;
     float dx, u, v, iptr;
     uint32_t* buf;
-    SwSpan* span = nullptr;         //used only when rle based.
+    SwSpan* span = nullptr;         //используется только в том случае, если он основан на роли.
 
-    //for matting(composition)
+    //для матирования(состав)
     auto csize = matting ? surface->compositor->image.channelSize: 0;
     auto alpha = matting ? surface->alpha(surface->compositor->method) : nullptr;
     uint8_t* cmp = nullptr;
 
     if (!_arrange(image, region, yStart, yEnd)) return;
 
-    //Loop through all lines in the segment
+    //Перебрать все строки в сегменте
     uint32_t spanIdx = 0;
 
     if (region) {
@@ -496,7 +496,7 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
         if (!region) {
             minx = INT32_MAX;
             maxx = 0;
-            //one single row, could be consisted of multiple spans.
+            //одна строка может состоять из нескольких промежутков.
             while (span->y == y && spanIdx < image->rle->size) {
                 if (minx > span->x) minx = span->x;
                 if (maxx < span->x + span->len) maxx = span->x + span->len;
@@ -507,15 +507,15 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
         if (x1 < minx) x1 = minx;
         if (x2 > maxx) x2 = maxx;
 
-        //Anti-Aliasing frames
+        //Сглаживание кадров
         ay = y - aaSpans->yStart;
         if (aaSpans->lines[ay].x[0] > x1) aaSpans->lines[ay].x[0] = x1;
         if (aaSpans->lines[ay].x[1] < x2) aaSpans->lines[ay].x[1] = x2;
 
-        //Range allowed
+        //Разрешенный диапазон
         if ((x2 - x1) >= 1 && (x1 < maxx) && (x2 > minx)) {
 
-            //Perform subtexel pre-stepping on UV
+            //Выполните предварительный шаг субтекселей на UV.
             dx = 1 - (_xa - x1);
             u = _ua + dx * _dudx;
             v = _va + dx * _dvdx;
@@ -527,7 +527,7 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
             if (matting) cmp = &surface->compositor->image.buf8[(y * surface->compositor->image.stride + x1) * csize];
 
             if (opacity == 255) {
-                //Draw horizontal line
+                //Нарисуйте горизонтальную линию
                 while (x++ < x2) {
                     uu = (int) u;
                     if (uu >= sw) continue;
@@ -541,20 +541,20 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
 
                     px = *(sbuf + (vv * sw) + uu);
 
-                    /* horizontal interpolate */
+                    /* горизонтальная интерполяция */
                     if (iru < sw) {
-                        /* right pixel */
+                        /* правый пиксель */
                         int px2 = *(sbuf + (vv * sw) + iru);
                         px = INTERPOLATE(px, px2, ar);
                     }
-                    /* vertical interpolate */
+                    /* вертикальная интерполяция */
                     if (irv < sh) {
-                        /* bottom pixel */
+                        /* нижний пиксель */
                         int px2 = *(sbuf + (irv * sw) + uu);
 
-                        /* horizontal interpolate */
+                        /* горизонтальная интерполяция */
                         if (iru < sw) {
-                            /* bottom right pixel */
+                            /* нижний правый пиксель */
                             int px3 = *(sbuf + (irv * sw) + iru);
                             px2 = INTERPOLATE(px2, px3, ar);
                         }
@@ -570,14 +570,14 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
                     *buf = src + ALPHA_BLEND(*buf, IA(src));
                     ++buf;
 
-                    //Step UV horizontally
+                    //Шаг UV по горизонтали
                     u += _dudx;
                     v += _dvdx;
                     //range over?
                     if ((uint32_t)v >= image->h) break;
                 }
             } else {
-                //Draw horizontal line
+                //Нарисуйте горизонтальную линию
                 while (x++ < x2) {
                     uu = (int) u;
                     vv = (int) v;
@@ -591,20 +591,20 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
 
                     px = *(sbuf + (vv * sw) + uu);
 
-                    /* horizontal interpolate */
+                    /* горизонтальная интерполяция */
                     if (iru < sw) {
-                        /* right pixel */
+                        /* правый пиксель */
                         int px2 = *(sbuf + (vv * sw) + iru);
                         px = INTERPOLATE(px, px2, ar);
                     }
-                    /* vertical interpolate */
+                    /* вертикальная интерполяция */
                     if (irv < sh) {
-                        /* bottom pixel */
+                        /* нижний пиксель */
                         int px2 = *(sbuf + (irv * sw) + uu);
 
-                        /* horizontal interpolate */
+                        /* горизонтальная интерполяция */
                         if (iru < sw) {
-                            /* bottom right pixel */
+                            /* нижний правый пиксель */
                             int px3 = *(sbuf + (irv * sw) + iru);
                             px2 = INTERPOLATE(px2, px3, ar);
                         }
@@ -620,7 +620,7 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
                     *buf = src + ALPHA_BLEND(*buf, IA(src));
                     ++buf;
 
-                    //Step UV horizontally
+                    //Шаг UV по горизонтали
                     u += _dudx;
                     v += _dvdx;
                     //range over?
@@ -629,7 +629,7 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
             }
         }
 
-        //Step along both edges
+        //Шаг по обоим краям
         _xa += _dxdya;
         _xb += _dxdyb;
         _ua += _dudya;
@@ -646,7 +646,7 @@ static void _rasterPolygonImageSegment(SwSurface* surface, const SwImage* image,
 }
 
 
-/* This mapping algorithm is based on Mikael Kalms's. */
+/* Этот алгоритм отображения основан на алгоритме Микаэля Калмса. */
 static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const SwBBox* region, Polygon& polygon, AASpans* aaSpans, uint8_t opacity)
 {
     float x[3] = {polygon.vertex[0].pt.x, polygon.vertex[1].pt.x, polygon.vertex[2].pt.x};
@@ -659,7 +659,7 @@ static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const 
 
     auto upper = false;
 
-    //Sort the vertices in ascending Y order
+    //Отсортируйте вершины в порядке возрастания Y.
     if (y[0] > y[1]) {
         std::swap(x[0], x[1]);
         std::swap(y[0], y[1]);
@@ -679,60 +679,60 @@ static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const 
         std::swap(v[1], v[2]);
     }
 
-    //Y indexes
+    //индексы Y
     int yi[3] = {(int)y[0], (int)y[1], (int)y[2]};
 
-    //Skip drawing if it's too thin to cover any pixels at all.
+    //Пропустите рисование, если он слишком тонкий, чтобы вообще покрыть какие-либо пиксели.
     if ((yi[0] == yi[1] && yi[0] == yi[2]) || ((int) x[0] == (int) x[1] && (int) x[0] == (int) x[2])) return;
 
-    //Calculate horizontal and vertical increments for UV axes (these calcs are certainly not optimal, although they're stable (handles any dy being 0)
+    //Вычислить горизонтальные и вертикальные приращения для осей UV (эти вычисления, конечно, не оптимальны, хотя они стабильны (обрабатывает любой dy, равный 0)
     auto denom = ((x[2] - x[0]) * (y[1] - y[0]) - (x[1] - x[0]) * (y[2] - y[0]));
 
-    //Skip poly if it's an infinitely thin line
+    //Пропустите полигон, если это бесконечно тонкая линия.
     if (tvg::zero(denom)) return;
 
-    denom = 1 / denom;   //Reciprocal for speeding up
+    denom = 1 / denom;   //Взаимное ускорение
     dudx = ((u[2] - u[0]) * (y[1] - y[0]) - (u[1] - u[0]) * (y[2] - y[0])) * denom;
     dvdx = ((v[2] - v[0]) * (y[1] - y[0]) - (v[1] - v[0]) * (y[2] - y[0])) * denom;
     auto dudy = ((u[1] - u[0]) * (x[2] - x[0]) - (u[2] - u[0]) * (x[1] - x[0])) * denom;
     auto dvdy = ((v[1] - v[0]) * (x[2] - x[0]) - (v[2] - v[0]) * (x[1] - x[0])) * denom;
 
-    //Calculate X-slopes along the edges
+    //Вычислить X-наклоны по краям
     if (y[1] > y[0]) dxdy[0] = (x[1] - x[0]) / (y[1] - y[0]);
     if (y[2] > y[0]) dxdy[1] = (x[2] - x[0]) / (y[2] - y[0]);
     if (y[2] > y[1]) dxdy[2] = (x[2] - x[1]) / (y[2] - y[1]);
 
-    //Determine which side of the polygon the longer edge is on
+    //Определите, на какой стороне многоугольника находится более длинное ребро.
     auto side = (dxdy[1] > dxdy[0]) ? true : false;
 
     if (tvg::equal(y[0], y[1])) side = x[0] > x[1];
     if (tvg::equal(y[1], y[2])) side = x[2] > x[1];
 
     auto regionTop = region ? region->min.y : image->rle->spans->y;  //Normal Image or Rle Image?
-    auto compositing = _compositing(surface);   //Composition required
-    auto blending = _blending(surface);         //Blending required
+    auto compositing = _compositing(surface);   //Требуется состав
+    auto blending = _blending(surface);         //Требуется смешивание
 
-    //Longer edge is on the left side
+    //Более длинный край находится на левой стороне
     if (!side) {
-        //Calculate slopes along left edge
+        //Рассчитать уклоны вдоль левого края
         dxdya = dxdy[1];
         dudya = dxdya * dudx + dudy;
         dvdya = dxdya * dvdx + dvdy;
 
-        //Perform subpixel pre-stepping along left edge
+        //Выполните предварительный шаг субпикселя вдоль левого края.
         auto dy = 1.0f - (y[0] - yi[0]);
         xa = x[0] + dy * dxdya;
         ua = u[0] + dy * dudya;
         va = v[0] + dy * dvdya;
 
-        //Draw upper segment if possibly visible
+        //Нарисуйте верхний сегмент, если он виден.
         if (yi[0] < yi[1]) {
             off_y = y[0] < regionTop ? (regionTop - y[0]) : 0;
             xa += (off_y * dxdya);
             ua += (off_y * dudya);
             va += (off_y * dvdya);
 
-            // Set right edge X-slope and perform subpixel pre-stepping
+            // Установите правый край X-наклона и выполните предварительный шаг субпикселя.
             dxdyb = dxdy[0];
             xb = x[0] + dy * dxdyb + (off_y * dxdyb);
 
@@ -746,7 +746,7 @@ static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const 
             }
             upper = true;
         }
-        //Draw lower segment if possibly visible
+        //Нарисуйте нижний сегмент, если он виден.
         if (yi[1] < yi[2]) {
             off_y = y[1] < regionTop ? (regionTop - y[1]) : 0;
             if (!upper) {
@@ -754,7 +754,7 @@ static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const 
                 ua += (off_y * dudya);
                 va += (off_y * dvdya);
             }
-            // Set right edge X-slope and perform subpixel pre-stepping
+            // Установите правый край X-наклона и выполните предварительный шаг субпикселя.
             dxdyb = dxdy[2];
             xb = x[1] + (1 - (y[1] - yi[1])) * dxdyb + (off_y * dxdyb);
             if (compositing) {
@@ -766,19 +766,19 @@ static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const 
                 _rasterPolygonImageSegment(surface, image, region, yi[1], yi[2], aaSpans, opacity, false);
             }
         }
-    //Longer edge is on the right side
+    //Более длинный край находится на правой стороне
     } else {
-        //Set right edge X-slope and perform subpixel pre-stepping
+        //Установите правый край X-наклона и выполните предварительный шаг субпикселя.
         dxdyb = dxdy[1];
         auto dy = 1.0f - (y[0] - yi[0]);
         xb = x[0] + dy * dxdyb;
 
-        //Draw upper segment if possibly visible
+        //Нарисуйте верхний сегмент, если он виден.
         if (yi[0] < yi[1]) {
             off_y = y[0] < regionTop ? (regionTop - y[0]) : 0;
             xb += (off_y *dxdyb);
 
-            // Set slopes along left edge and perform subpixel pre-stepping
+            // Установите наклоны вдоль левого края и выполните предварительный шаг субпикселя.
             dxdya = dxdy[0];
             dudya = dxdya * dudx + dudy;
             dvdya = dxdya * dvdx + dvdy;
@@ -797,12 +797,12 @@ static void _rasterPolygonImage(SwSurface* surface, const SwImage* image, const 
             }
             upper = true;
         }
-        //Draw lower segment if possibly visible
+        //Нарисуйте нижний сегмент, если он виден.
         if (yi[1] < yi[2]) {
             off_y = y[1] < regionTop ? (regionTop - y[1]) : 0;
             if (!upper) xb += (off_y *dxdyb);
 
-            // Set slopes along left edge and perform subpixel pre-stepping
+            // Установите наклоны вдоль левого края и выполните предварительный шаг субпикселя.
             dxdya = dxdy[2];
             dudya = dxdya * dudx + dudy;
             dvdya = dxdya * dvdx + dvdy;
@@ -836,7 +836,7 @@ static AASpans* _AASpans(float ymin, float ymax, const SwImage* image, const SwB
     aaSpans->yStart = yStart;
     aaSpans->yEnd = yEnd;
 
-    //Initialize X range
+    //Инициализировать диапазон X
     auto height = std::abs(yEnd - yStart);
 
     aaSpans->lines = static_cast<AALine*>(lv_malloc(height * sizeof(AALine)));
@@ -890,13 +890,13 @@ static void _calcHorizCoverage(AALine *lines, int32_t eidx, int32_t y, int32_t x
 
 
 /*
- * This Anti-Aliasing mechanism is originated from Hermet Park's idea.
- * To understand this AA logic, you can refer this page:
+ * Этот механизм сглаживания возник на основе идеи Гермета Парка.
+ * Чтобы понять эту логику AA, вы можете обратиться к этой странице:
  * https://uigraphics.tistory.com/1
 */
 static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
 {
-//Previous edge direction:
+//Предыдущее направление края:
 #define DirOutHor 0x0011
 #define DirOutVer 0x0001
 #define DirInHor  0x0010
@@ -917,14 +917,14 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
     };
 
     int32_t y = 0;
-    Point pEdge = {-1, -1};       //previous edge point
-    Point edgeDiff = {0, 0};      //temporary used for point distance
+    Point pEdge = {-1, -1};       //предыдущая краевая точка
+    Point edgeDiff = {0, 0};      //временно используется для точечного расстояния
 
-    /* store bigger to tx[0] between prev and current edge's x positions. */
+    /* сохраните больший размер в tx[0] между позициями x предыдущего и текущего края. */
     int32_t tx[2] = {0, 0};
-    /* back up prev tx values */
+    /* резервное копирование предыдущих значений передачи */
     int32_t ptx[2] = {0, 0};
-    int32_t diagonal = 0;           //straight diagonal pixels count
+    int32_t diagonal = 0;           //количество пикселей по прямой диагонали
 
     auto yStart = aaSpans->yStart;
     auto yEnd = aaSpans->yEnd;
@@ -935,18 +935,18 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
 
     yEnd -= yStart;
 
-    //Start Edge
+    //Начальный край
     if (y < yEnd) {
         pEdge.x = lines[y].x[eidx];
         pEdge.y = y;
     }
 
-    //Calculates AA Edges
+    //Вычисляет ребра AA
     for (y++; y < yEnd; y++) {
 
         if (lines[y].x[0] == INT32_MAX) continue;
 
-        //Ready tx
+        //Готовая передача
         if (eidx == 0) {
             tx[0] = pEdge.x;
             tx[1] = lines[y].x[0];
@@ -957,7 +957,7 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
         edgeDiff.x = (tx[0] - tx[1]);
         edgeDiff.y = (y - pEdge.y);
 
-        //Confirm current edge direction
+        //Подтвердите текущее направление края
         if (edgeDiff.x > 0) {
             if (edgeDiff.y == 1) curDir = DirOutHor;
             else curDir = DirOutVer;
@@ -966,7 +966,7 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
             else curDir = DirInVer;
         } else curDir = DirNone;
 
-        //straight diagonal increase
+        //прямое диагональное увеличение
         if ((curDir == prevDir) && (y < yEnd)) {
             if ((abs(edgeDiff.x) == 1) && (edgeDiff.y == 1)) {
                 ++diagonal;
@@ -982,10 +982,10 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
                     _calcIrregularCoverage(lines, eidx, y, diagonal, 0, true);
                     diagonal = 0;
                 }
-               /* Increment direction is changed: Outside Vertical -> Outside Horizontal */
+               /* Направление приращения изменено: за пределами вертикали -> за пределами горизонтали. */
                if (prevDir == DirOutVer) _calcHorizCoverage(lines, eidx, pEdge.y, ptx[0], ptx[1]);
 
-               //Trick, but fine-tunning!
+               //Хитрость, но тонкая настройка!
                if (y == 1) _calcHorizCoverage(lines, eidx, pEdge.y, tx[0], tx[1]);
                PUSH_VERTEX();
             }
@@ -996,7 +996,7 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
                     _calcIrregularCoverage(lines, eidx, y, diagonal, edgeDiff.y, false);
                     diagonal = 0;
                 }
-               /* Increment direction is changed: Outside Horizontal -> Outside Vertical */
+               /* Направление приращения изменено: за пределами горизонтали -> за пределами вертикали. */
                if (prevDir == DirOutHor) _calcHorizCoverage(lines, eidx, pEdge.y, ptx[0], ptx[1]);
                PUSH_VERTEX();
             }
@@ -1007,7 +1007,7 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
                     _calcIrregularCoverage(lines, eidx, y, diagonal, 0, false);
                     diagonal = 0;
                 }
-                /* Increment direction is changed: Outside Horizontal -> Inside Horizontal */
+                /* Направление приращения изменено: снаружи по горизонтали -> внутри по горизонтали. */
                if (prevDir == DirOutHor) _calcHorizCoverage(lines, eidx, pEdge.y, ptx[0], ptx[1]);
                PUSH_VERTEX();
             }
@@ -1019,7 +1019,7 @@ static void _calcAAEdge(AASpans *aaSpans, int32_t eidx)
                     _calcIrregularCoverage(lines, eidx, y, diagonal, edgeDiff.y, true);
                     diagonal = 0;
                 }
-                /* Increment direction is changed: Outside Horizontal -> Inside Vertical */
+                /* Направление приращения изменено: снаружи по горизонтали -> внутри по вертикали. */
                 if (prevDir == DirOutHor) _calcHorizCoverage(lines, eidx, pEdge.y, ptx[0], ptx[1]);
                 PUSH_VERTEX();
             }
@@ -1049,9 +1049,9 @@ static bool _apply(SwSurface* surface, AASpans* aaSpans)
     uint32_t* dst;
     int32_t pos;
 
-   //left side
+   //левая сторона
    _calcAAEdge(aaSpans, 0);
-   //right side
+   //правая сторона
    _calcAAEdge(aaSpans, 1);
 
     while (y < aaSpans->yEnd) {
@@ -1060,13 +1060,13 @@ static bool _apply(SwSurface* surface, AASpans* aaSpans)
         if (width > 0) {
             auto offset = y * surface->stride;
 
-            //Left edge
+            //Левый край
             dst = surface->buf32 + (offset + line->x[0]);
             if (line->x[0] > 1) pixel = *(dst - 1);
             else pixel = *dst;
             pos = 1;
 
-            //exceptional handling. out of memory bound.
+            //исключительная управляемость. вне памяти.
             if (dst + line->length[0] >= end) {
                 pos += (dst + line->length[0] - end);
             }
@@ -1077,14 +1077,14 @@ static bool _apply(SwSurface* surface, AASpans* aaSpans)
                 ++pos;
             }
 
-            //Right edge
+            //Правый край
             dst = surface->buf32 + offset + line->x[1] - 1;
 
             if (line->x[1] < (int32_t)(surface->w - 1)) pixel = *(dst + 1);
             else pixel = *dst;
             pos = line->length[1];
 
-            //exceptional handling. out of memory bound.
+            //исключительная управляемость. вне памяти.
             if (dst - pos < surface->buf32) --pos;
 
             while (pos > 0) {
@@ -1104,9 +1104,9 @@ static bool _apply(SwSurface* surface, AASpans* aaSpans)
 
 
 /*
-    2 triangles constructs 1 mesh.
-    below figure illustrates vert[4] index info.
-    If you need better quality, please divide a mesh by more number of triangles.
+    2 треугольника составляют 1 сетку.
+    На рисунке ниже показана информация об индексе vert[4].
+    Если вам нужно лучшее качество, разделите сетку на большее количество треугольников.
 
     0 -- 1
     |  / |
@@ -1123,8 +1123,8 @@ static bool _rasterTexmapPolygon(SwSurface* surface, const SwImage* image, const
     //Exceptions: No dedicated drawing area?
     if ((!image->rle && !region) || (image->rle && image->rle->size == 0)) return true;
 
-   /* Prepare vertices.
-      shift XY coordinates to match the sub-pixeling technique. */
+   /* Подготовьте вершины.
+      сдвиньте координаты XY в соответствии с методом субпикселизации. */
     Vertex vertices[4];
     vertices[0] = {{0.0f, 0.0f}, {0.0f, 0.0f}};
     vertices[1] = {{float(image->w), 0.0f}, {float(image->w), 0.0f}};
@@ -1143,14 +1143,14 @@ static bool _rasterTexmapPolygon(SwSurface* surface, const SwImage* image, const
 
     Polygon polygon;
 
-    //Draw the first polygon
+    //Нарисуйте первый многоугольник
     polygon.vertex[0] = vertices[0];
     polygon.vertex[1] = vertices[1];
     polygon.vertex[2] = vertices[3];
 
     _rasterPolygonImage(surface, image, region, polygon, aaSpans, opacity);
 
-    //Draw the second polygon
+    //Нарисуйте второй многоугольник
     polygon.vertex[0] = vertices[1];
     polygon.vertex[1] = vertices[2];
     polygon.vertex[2] = vertices[3];

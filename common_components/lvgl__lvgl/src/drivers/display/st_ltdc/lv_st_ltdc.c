@@ -67,7 +67,7 @@ static struct {
     sync_t sync[MAX_LAYER];
     volatile bool layer_interrupt_is_owned[MAX_LAYER];
 #if LV_ST_LTDC_USE_DMA2D_FLUSH
-    volatile uint32_t dma2d_interrupt_owner; /*layer_idx + 1, or 0 for none*/
+    volatile uint32_t dma2d_interrupt_owner; /*layer_idx + 1 или 0, если нет*/
 #endif
 } g_data;
 
@@ -148,10 +148,10 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
     if(disp->render_mode == LV_DISPLAY_RENDER_MODE_DIRECT) {
         bool flush_is_last = lv_display_flush_is_last(disp);
         if(flush_is_last) {
-            /* there is no ideal time to clean the cache (if present)
-               for **single-buffered** direct mode because the active buffer is drawn to
-               while LTDC is scanning it. Clean it in the last flush, at least,
-               but not every flush because it's expensive for not much visual improvement. */
+            /* идеального времени для очистки кеша (если он есть) не существует
+               для прямого режима **с одной буферизацией**, поскольку активный буфер рисуется в
+               пока LTDC сканирует его. Почистите его хотя бы при последней промывке.
+               но не каждый смыв, потому что это дорого и не дает большого визуального улучшения. */
             clean_dcache();
         }
         if(flush_is_last && lv_display_is_double_buffered(disp)) {
@@ -196,7 +196,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
             DMA2D->OOR = disp_width - area_width;
             DMA2D->NLR = (area_width << DMA2D_NLR_PL_Pos) | (area_height << DMA2D_NLR_NL_Pos);
             g_data.dma2d_interrupt_owner = layer_idx + 1;
-            DMA2D->CR = DMA2D_CR_START | DMA2D_CR_TCIE | (0x1U << DMA2D_CR_MODE_Pos); /* memory-to-memory with PFC */
+            DMA2D->CR = DMA2D_CR_START | DMA2D_CR_TCIE | (0x1U << DMA2D_CR_MODE_Pos); /* память-память с помощью PFC */
 #else
             uint32_t area_stride = px_size * area_width;
             uint8_t * fb_p = first_pixel;

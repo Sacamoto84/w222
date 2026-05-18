@@ -1,19 +1,19 @@
 /****************************************************************************
 *
 *    Copyright 2012 - 2023 Vivante Corporation, Santa Clara, California.
-*    All Rights Reserved.
+*    Все права защищены.
 *
-*    Permission is hereby granted, free of charge, to any person obtaining
-*    a copy of this software and associated documentation files (the
-*    'Software'), to deal in the Software without restriction, including
-*    without limitation the rights to use, copy, modify, merge, publish,
-*    distribute, sub license, and/or sell copies of the Software, and to
-*    permit persons to whom the Software is furnished to do so, subject
-*    to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации (файл
+*    «Программное обеспечение»), иметь дело с Программным обеспечением без ограничений, включая
+*    без ограничений права на использование, копирование, изменение, объединение, публикацию,
+*    распространять, сублицензировать и/или продавать копии Программного обеспечения, а также
+*    разрешать лицам, которым предоставлено Программное обеспечение, делать это при условии, что
+*    на следующие условия:
 *
-*    The above copyright notice and this permission notice (including the
-*    next paragraph) shall be included in all copies or substantial
-*    portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и данное уведомление о разрешении (включая
+*    следующий абзац) должны быть включены во все копии или существенные
+*    части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 *    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -35,7 +35,7 @@
 
 extern vg_lite_matrix_t identity_mtx;
 
-/* Get the plane memory pointer and strides info. */
+/* Получите указатель памяти самолета и информацию о шагах. */
 static uint32_t get_buffer_planes(vg_lite_buffer_t * buffer,
                                   uint8_t ** memory,
                                   uint32_t * strides)
@@ -145,11 +145,11 @@ vg_lite_error_t vg_lite_upload_buffer(vg_lite_buffer_t * buffer,
     VGLITE_LOG("vg_lite_upload_buffer %p %p %p\n", buffer, data, stride);
 #endif
 
-    /* Get buffer memory info. */
+    /* Получить информацию о буферной памяти. */
     plane_count = get_buffer_planes(buffer, buffer_memory, buffer_strides);
 
     if(plane_count > 0 && plane_count <= 3) {
-        /* Copy the data to buffer. */
+        /* Скопируйте данные в буфер. */
         for(i = 0; i < plane_count;  i++) {
             pdata = data[i];
             for(j = 0; j < buffer->height; j++) {
@@ -266,13 +266,13 @@ vg_lite_error_t vg_lite_set_scissor(vg_lite_int32_t x, vg_lite_int32_t y, vg_lit
     VGLITE_LOG("vg_lite_set_scissor %d %d %d %d\n", x, y, right, bottom);
 #endif
 
-    /* Save scissor Box States. */
+    /* Сохраните состояния ножничной коробки. */
     s_context.scissor[0] = x;
     s_context.scissor[1] = y;
     s_context.scissor[2] = right;
     s_context.scissor[3] = bottom;
 
-    /* Scissor dirty. */
+    /* Ножницы грязные. */
     s_context.scissor_dirty = 1;
     s_context.scissor_set = 1;
 
@@ -294,7 +294,7 @@ vg_lite_error_t vg_lite_enable_scissor()
     VGLITE_LOG("vg_lite_enable_scissor\n");
 #endif
 
-    /* Enable scissor Mode. */
+    /* Включите режим ножниц. */
     if(!s_context.scissor_enable) {
         s_context.scissor_enable = 1 << 4;
         s_context.scissor_dirty = 1;
@@ -302,7 +302,7 @@ vg_lite_error_t vg_lite_enable_scissor()
 
     return VG_LITE_SUCCESS;
 #else
-    /* Noop */
+    /* Нуп */
     return VG_LITE_SUCCESS;
 #endif
 }
@@ -319,7 +319,7 @@ vg_lite_error_t vg_lite_disable_scissor()
     VGLITE_LOG("vg_lite_disable_scissor\n");
 #endif
 
-    /* Disable scissor Mode. */
+    /* Отключите режим ножниц. */
     if(s_context.scissor_enable) {
         s_context.scissor_enable = 0;
         s_context.scissor_dirty = 1;
@@ -327,7 +327,7 @@ vg_lite_error_t vg_lite_disable_scissor()
 
     return VG_LITE_SUCCESS;
 #else
-    /* Noop */
+    /* Нуп */
     return VG_LITE_SUCCESS;
 #endif
 }
@@ -457,9 +457,9 @@ vg_lite_error_t vg_lite_set_color_key(vg_lite_color_key4_t colorkey)
     VGLITE_LOG("vg_lite_set_color_key %p\n", colorkey);
 #endif
 
-    /* Set color key states. */
+    /* Установите состояния цветовых клавиш. */
     for(i = 0; i < 4; i++) {
-        /* Set gcregVGPEColorKeyLow. Layout "E/R/G/B". */
+        /* Установите gcregVGPEColorKeyLow. Раскладка «Е/R/G/B». */
         r = colorkey[i].low_r;
         g = colorkey[i].low_g;
         b = colorkey[i].low_b;
@@ -467,7 +467,7 @@ vg_lite_error_t vg_lite_set_color_key(vg_lite_color_key4_t colorkey)
         value_low = (e << 24) | (r << 16) | (g << 8) | b;
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A90 + i, value_low));
 
-        /* Set gcregVGPEColorKeyHigh. Layout "A/R/G/B". */
+        /* Установите gcregVGPEColorKeyHigh. Раскладка «А/R/G/B». */
         r = colorkey[i].high_r;
         g = colorkey[i].high_g;
         b = colorkey[i].high_b;
@@ -856,11 +856,11 @@ vg_lite_error_t vg_lite_scissor_rects(vg_lite_buffer_t * target, vg_lite_uint32_
     }
 #endif
 
-    /* Record scissor enable flag and disable scissor. */
+    /* Запишите флаг включения ножниц и отключите ножницы. */
     vg_lite_uint8_t enable = s_context.scissor_enable;
     s_context.scissor_enable = 0;
 
-    /* Free the old scissor layer if its size is too small for target */
+    /* Освободите старый слой ножниц, если его размер слишком мал для целевого объекта. */
     if(s_context.scissor_layer &&
        (s_context.scissor_layer->width < ((target->width + 7) / 8) || s_context.scissor_layer->height < target->height)) {
         vg_lite_free(s_context.scissor_layer);
@@ -868,7 +868,7 @@ vg_lite_error_t vg_lite_scissor_rects(vg_lite_buffer_t * target, vg_lite_uint32_
         s_context.scissor_layer = NULL;
     }
 
-    /* Allocate if scissor layer is NULL */
+    /* Выделить, если ножничный слой равен NULL */
     if(s_context.scissor_layer == NULL) {
         s_context.scissor_layer = (vg_lite_buffer_t *)vg_lite_os_malloc(sizeof(vg_lite_buffer_t));
         if(!s_context.scissor_layer) {
@@ -884,16 +884,16 @@ vg_lite_error_t vg_lite_scissor_rects(vg_lite_buffer_t * target, vg_lite_uint32_
     }
     s_context.scissor_layer->scissor_buffer = 1;
 
-    /* Clear scissor layer*/
+    /* Очистить ножничный слой*/
     VG_LITE_RETURN_ERROR(vg_lite_clear(s_context.scissor_layer, NULL, 0x00000000));
     vg_lite_finish();
 
     max_x = s_context.scissor_layer->width * 8;
     max_y = s_context.scissor_layer->height;
 
-    /* Draw rectangle to scissor layer, one bit data of scissor layer corresponds to one pixel. */
+    /* Нарисуйте прямоугольник на ножничном слое, один бит данных ножничного слоя соответствует одному пикселю. */
     for(i = 0; i < nums; ++i) {
-        /* Clamp the rect */
+        /* Зажмите прямую */
         memcpy(&rect_clamp, &rect[i], sizeof(vg_lite_rectangle_t));
         {
             if(rect_clamp.x < 0 || rect_clamp.y < 0) {
@@ -924,14 +924,14 @@ vg_lite_error_t vg_lite_scissor_rects(vg_lite_buffer_t * target, vg_lite_uint32_
             }
         }
         else {
-            /* Split the rect */
+            /* Разделить прямоугольник */
             left_x = (rect_clamp.x % 8 == 0) ? rect_clamp.x : ((rect_clamp.x + 7) & 0xFFFFFFF8);
             right_x = (rect_clamp.x + rect_clamp.width) & 0xFFFFFFF8;
             middle_len = right_x - left_x;
             left_len = left_x - rect_clamp.x;
             right_len = rect_clamp.x + rect_clamp.width - right_x;
 
-            /* Draw left rect */
+            /* Нарисуйте левый прямоугольник */
             if(left_len) {
                 rect_draw.x = rect_clamp.x / 8;
                 rect_draw.y = rect_clamp.y;
@@ -944,7 +944,7 @@ vg_lite_error_t vg_lite_scissor_rects(vg_lite_buffer_t * target, vg_lite_uint32_
                 }
             }
 
-            /* Draw middle rect */
+            /* Нарисуйте средний прямоугольник */
             if(middle_len) {
                 rect_draw.x = left_x / 8;
                 rect_draw.y = rect_clamp.y;
@@ -954,7 +954,7 @@ vg_lite_error_t vg_lite_scissor_rects(vg_lite_buffer_t * target, vg_lite_uint32_
                 vg_lite_finish();
             }
 
-            /* Draw right rect */
+            /* Нарисуйте правый прямоугольник */
             if(right_len) {
                 rect_draw.x = (rect_clamp.x + rect_clamp.width - right_len) / 8;
                 rect_draw.y = rect_clamp.y;
@@ -1025,16 +1025,16 @@ vg_lite_error_t vg_lite_set_gamma(vg_lite_gamma_conversion_t gamma_value)
 #endif
 }
 
-/* Set s_context.gamma_value base on target buffer */
+/* Установите s_context. gamma_value базируется на целевом буфере */
 vg_lite_void set_gamma_dest_only(vg_lite_buffer_t * target, vg_lite_int32_t stencil)
 {
     uint32_t gamma_value = 0;
 
-    /* Set gamma configuration of source buffer */
-    /* Openvg paintcolor defaults to SRGB */
+    /* Установить конфигурацию гаммы исходного буфера */
+    /* Цвет краски Openvg по умолчанию равен SRGB. */
     s_context.gamma_src = 1;
 
-    /* Set gamma configuration of dst buffer */
+    /* Установить конфигурацию гаммы буфера dst */
     if((target->format >= OPENVG_lRGBX_8888 && target->format <= OPENVG_A_4) ||
        (target->format >= OPENVG_lXRGB_8888 && target->format <= OPENVG_lARGB_8888_PRE) ||
        (target->format >= OPENVG_lBGRX_8888 && target->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1067,12 +1067,12 @@ vg_lite_void set_gamma_dest_only(vg_lite_buffer_t * target, vg_lite_int32_t sten
     }
 }
 
-/* Set s_context.gamma_value base on source and target buffers */
+/* Установите s_context. gamma_value основан на исходном и целевом буферах */
 vg_lite_void get_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t * target)
 {
     uint32_t gamma_value = 0;
 
-    /* Set gamma configuration of source buffer */
+    /* Установить конфигурацию гаммы исходного буфера */
     if((source->format >= OPENVG_lRGBX_8888 && source->format <= OPENVG_A_4) ||
        (source->format >= OPENVG_lXRGB_8888 && source->format <= OPENVG_lARGB_8888_PRE) ||
        (source->format >= OPENVG_lBGRX_8888 && source->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1083,7 +1083,7 @@ vg_lite_void get_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t *
     else {
         s_context.gamma_src = 1;
     }
-    /* Set gamma configuration of dst buffer */
+    /* Установить конфигурацию гаммы буфера dst */
     if((target->format >= OPENVG_lRGBX_8888 && target->format <= OPENVG_A_4) ||
        (target->format >= OPENVG_lXRGB_8888 && target->format <= OPENVG_lARGB_8888_PRE) ||
        (target->format >= OPENVG_lBGRX_8888 && target->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1125,12 +1125,12 @@ vg_lite_void get_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t *
     }
 }
 
-/* Set s_context.gamma_value base on source and target buffers */
+/* Установите s_context. gamma_value основан на исходном и целевом буферах */
 vg_lite_void save_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t * target)
 {
     uint32_t gamma_value = 0;
 
-    /* Set gamma configuration of source buffer */
+    /* Установить конфигурацию гаммы исходного буфера */
     if((source->format >= OPENVG_lRGBX_8888 && source->format <= OPENVG_A_4) ||
        (source->format >= OPENVG_lXRGB_8888 && source->format <= OPENVG_lARGB_8888_PRE) ||
        (source->format >= OPENVG_lBGRX_8888 && source->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1141,7 +1141,7 @@ vg_lite_void save_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t 
     else {
         s_context.gamma_src = 1;
     }
-    /* Set gamma configuration of dst buffer */
+    /* Установить конфигурацию гаммы буфера dst */
     if((target->format >= OPENVG_lRGBX_8888 && target->format <= OPENVG_A_4) ||
        (target->format >= OPENVG_lXRGB_8888 && target->format <= OPENVG_lARGB_8888_PRE) ||
        (target->format >= OPENVG_lBGRX_8888 && target->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1536,7 +1536,7 @@ Color readPixel(vg_lite_buffer_t * src, int x, int y)
             }
     }
 
-    //rgba
+    //РГБА
     c.r = rb ? intToColor(p >> rs, (1 << rb) - 1) : (float)1.0f;
     c.g = gb ? intToColor(p >> gs, (1 << gb) - 1) : (float)1.0f;
     c.b = bb ? intToColor(p >> bs, (1 << bb) - 1) : (float)1.0f;
@@ -1815,7 +1815,7 @@ vg_lite_void setup_lvgl_image(vg_lite_buffer_t * dst, vg_lite_buffer_t * src, vg
                               vg_lite_blend_t operation)
 {
     Color c_src, c_dst, c_temp;
-    /* copy source region to tmp dst */
+    /* скопировать исходный регион в tmp dst */
     for(int j = 0; j < src->height; j++) {
         for(int i = 0; i < src->width; i++) {
             c_src = readPixel(src, i, j);
@@ -1891,10 +1891,10 @@ vg_lite_error_t vg_lite_flexa_enable()
     flexa_data.start_flag = s_context.start_flag = BIT(9);
     flexa_data.stop_flag = s_context.stop_flag = BIT(11);
     flexa_data.reset_flag = s_context.reset_flag = BIT(10);
-    /* set sync mode */
+    /* установить режим синхронизации */
     VG_LITE_RETURN_ERROR(vg_lite_kernel(VG_LITE_FLEXA_ENABLE, &flexa_data));
 
-    /* check if reset is complete */
+    /* проверьте, завершен ли сброс */
     data.addr = 0x03600;
     VG_LITE_RETURN_ERROR(vg_lite_kernel(VG_LITE_CHECK, &data));
     reset_bit = data.reg;
@@ -2013,7 +2013,7 @@ vg_lite_error_t vg_lite_flexa_disable()
     flexa_data.reset_flag = s_context.reset_flag = 0x0;
     VG_LITE_RETURN_ERROR(vg_lite_kernel(VG_LITE_FLEXA_DISABLE, &flexa_data));
 
-    /* check if reset is complete */
+    /* проверьте, завершен ли сброс */
     data.addr = 0x03600;
     VG_LITE_RETURN_ERROR(vg_lite_kernel(VG_LITE_CHECK, &data));
     reset_bit = data.reg;
@@ -2039,13 +2039,13 @@ static vg_lite_error_t _free_fc_buffer(vg_lite_fc_buffer_t * buffer)
     if(buffer == NULL)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Make sure we have a valid memory handle. */
+    /* Убедитесь, что у нас есть действительный дескриптор памяти. */
     if(buffer->handle) {
-        /* Free the buffer. */
+        /* Освободите буфер. */
         free.memory_handle = buffer->handle;
         VG_LITE_RETURN_ERROR(vg_lite_kernel(VG_LITE_FREE, &free));
 
-        /* Mark the buffer as freed. */
+        /* Отметьте буфер как освобожденный. */
         buffer->handle = NULL;
         buffer->memory = NULL;
     }
@@ -2144,7 +2144,7 @@ static vg_lite_error_t convert_color(vg_lite_buffer_format_t format, uint32_t va
     return error;
 }
 
-/* Fill Target buffer by FC buffer. Only used in cmodel/fpga for verification. */
+/* Заполните целевой буфер буфером FC. Используется только в cmodel/fpga для проверки. */
 #if defined(DEBUG) || defined(_DEBUG)
 static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_t * fcb)
 {
@@ -2165,7 +2165,7 @@ static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_
             target32 = (uint32_t *)target->memory;
             for(i = 0; i < fcb->width; i++) {
 
-                for(j = 0; j < 8; j++) {    /* Loop the bits*/
+                for(j = 0; j < 8; j++) {    /* Зациклить биты*/
 
                     if(!(((*fc) >> j) & 1)) {
                         for(k = 0; k < 64 / 4; k++) {
@@ -2187,7 +2187,7 @@ static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_
             target16 = (uint16_t *)target->memory;
             for(i = 0; i < fcb->width; i++) {
 
-                for(j = 0; j < 8; j++) {    /* Loop the bits*/
+                for(j = 0; j < 8; j++) {    /* Зациклить биты*/
 
                     if(!(((*fc) >> j) & 1)) {
                         for(k = 0; k < 64 / 2; k++) {
@@ -2209,7 +2209,7 @@ static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_
             target8 = (uint8_t *)target->memory;
             for(i = 0; i < fcb->width; i++) {
 
-                for(j = 0; j < 8; j++) {    /* Loop the bits*/
+                for(j = 0; j < 8; j++) {    /* Зациклить биты*/
 
                     if(!(((*fc) >> j) & 1)) {
                         for(k = 0; k < 64; k++) {
@@ -2233,7 +2233,7 @@ static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_
 }
 #endif
 
-/* Update the fast_clear buffer when render target switched. */
+/* Обновите буфер fast_clear при переключении цели рендеринга. */
 static vg_lite_error_t update_fc_buffer(vg_lite_buffer_t * target)
 {
     int rt_bytes;
@@ -2250,12 +2250,12 @@ static vg_lite_error_t update_fc_buffer(vg_lite_buffer_t * target)
         rt_bytes = target->stride * target->height;
         rt_bytes = VG_LITE_ALIGN(rt_bytes, (FC_BIT_TO_BYTES * 2));
         rt_bytes = rt_bytes / FC_BIT_TO_BYTES / 2;
-        /* Only allocate new buffer when the allocated is not big enough. Yes*/
+        /* Выделяйте новый буфер только в том случае, если выделенный недостаточно велик. Да*/
         if(rt_bytes > target->fc_buffer[0].stride) {
             _free_fc_buffer(&target->fc_buffer[0]);
 
-            target->fc_buffer[0].width = rt_bytes;         /* The actually used bytes. */
-            rt_bytes = VG_LITE_ALIGN(rt_bytes, FC_BURST_BYTES);     /* The allocated aligned bytes. */
+            target->fc_buffer[0].width = rt_bytes;         /* Фактически использованные байты. */
+            rt_bytes = VG_LITE_ALIGN(rt_bytes, FC_BURST_BYTES);     /* Выделенные выровненные байты. */
             target->fc_buffer[0].stride = rt_bytes;
             target->fc_buffer[0].height = 1;
             allocate.bytes = rt_bytes;
@@ -2267,17 +2267,17 @@ static vg_lite_error_t update_fc_buffer(vg_lite_buffer_t * target)
             target->fc_buffer[0].address = allocate.memory_gpu;
         }
         else {
-            /* Just update the fc buffer size. */
+            /* Просто обновите размер буфера fc. */
             target->fc_buffer[0].width = rt_bytes;
         }
         memset(target->fc_buffer[0].memory, 0xff, target->fc_buffer[0].stride);
-        VG_LITE_RETURN_ERROR(push_state(context, 0x0A9A, target->fc_buffer[0].address));   /* FC buffer address. */
+        VG_LITE_RETURN_ERROR(push_state(context, 0x0A9A, target->fc_buffer[0].address));   /* Адрес буфера FC. */
     } while(0);
 
     return error;
 }
 
-/* Update FC registers and clear FC buffer. */
+/* Обновите регистры FC и очистите буфер FC. */
 static vg_lite_error_t clear_fc(vg_lite_fc_buffer_t * buffer, uint32_t value)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
@@ -2290,8 +2290,8 @@ static vg_lite_error_t clear_fc(vg_lite_fc_buffer_t * buffer, uint32_t value)
     buffer->color = value;
 
     do {
-        VG_LITE_BREAK_ERROR(push_state(context, 0x0A9B, value));                       /* FC clear value. */
-        VG_LITE_BREAK_ERROR(push_state(context, 0x0AB0, 0x80000000 | bytes_to_clear));   /* FC clear command. */
+        VG_LITE_BREAK_ERROR(push_state(context, 0x0A9B, value));                       /* FC очистить значение. */
+        VG_LITE_BREAK_ERROR(push_state(context, 0x0AB0, 0x80000000 | bytes_to_clear));   /* FC команда очистки. */
     } while(0);
 
     return error;
@@ -2349,13 +2349,13 @@ static int fc_buf_dump(vg_lite_buffer_t * target, vg_lite_buffer_t * fcb)
         return -1;
     }
 
-    /* Dump FC buffer & Dump target buffer */
+    /* Дамп буфера FC и дамп целевого буфера */
     target8 = (uint8_t *)target->memory;
     target_bytes = target->stride * target->height;
 
     for(i = 0; i < fcb->width; ++i) {
         fprintf(fpFCBuf, "%02x\n", fc[i]);
-        /* 1 byte of fc related with 512 bytes of target buffer */
+        /* 1 байт fc связан с 512 байтами целевого буфера */
         for(j = 0; j < 128; ++j) {
             fprintf(fpTargetBuf, "%02x", byte_done < target_bytes ? target8[0] : 0);
             byte_done++;

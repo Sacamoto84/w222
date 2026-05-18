@@ -128,7 +128,7 @@ lv_obj_t * lv_demo_music_list_create(lv_obj_t * parent)
     lv_style_set_text_font(&style_time, font_medium);
     lv_style_set_text_color(&style_time, lv_color_hex(0xffffff));
 
-    /*Create an empty transparent container*/
+    /*Создайте пустой прозрачный контейнер*/
     list = lv_obj_create(parent);
     lv_obj_add_event_cb(list, list_delete_event_cb, LV_EVENT_DELETE, NULL);
     lv_obj_remove_style_all(list);

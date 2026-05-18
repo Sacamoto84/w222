@@ -49,7 +49,7 @@ struct _lv_roller_t {
 #endif /* LV_USE_ROLLER != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ROLLER_PRIVATE_H*/

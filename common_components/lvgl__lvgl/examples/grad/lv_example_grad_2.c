@@ -54,8 +54,8 @@ static void end_event_cb(lv_event_t * e)
 }
 
 /**
- * Play with the linear gradient.
- * Adjust the 2 point in between the a linear gradient can be drawn (can be skew as well)
+ * Поиграйте с линейным градиентом.
+ * Отрегулируйте 2 точки между ними: можно нарисовать линейный градиент (также можно перекос)
  */
 void lv_example_grad_2(void)
 {
@@ -73,20 +73,20 @@ void lv_example_grad_2(void)
     static lv_style_t style;
     lv_style_init(&style);
 
-    /*First define a color gradient. In this example we use a purple to black color map.*/
+    /*Сначала определите цветовой градиент. В этом примере мы используем карту цветов от фиолетового до черного.*/
     static lv_grad_dsc_t grad;
 
     lv_grad_init_stops(&grad, grad_colors, grad_opa, NULL, sizeof(grad_colors) / sizeof(lv_color_t));
 
     lv_grad_linear_init(&grad, 100, 100, 200, 150, LV_GRAD_EXTEND_PAD);
 
-    /*Set gradient as background*/
+    /*Установить градиент в качестве фона*/
     lv_style_set_bg_grad(&style, &grad);
     lv_style_set_border_width(&style, 2);
     lv_style_set_pad_all(&style, 0);
     lv_style_set_radius(&style, 12);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
     lv_obj_set_size(obj, lv_pct(80), lv_pct(80));

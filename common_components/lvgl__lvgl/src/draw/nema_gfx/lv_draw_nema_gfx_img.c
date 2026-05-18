@@ -1,19 +1,19 @@
 /**
- * MIT License
+ * Лицензия MIT
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2008-24 Think Silicon Single Member PC
  * -----------------------------------------------------------------------------
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice (including the next paragraph)
- * shall be included in all copies or substantial portions of the Software.
+ * Приведенное выше уведомление об авторских правах и данное уведомление о разрешении (включая следующий абзац)
+ * должны быть включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
@@ -87,13 +87,13 @@ static void _draw_nema_gfx_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * d
 
     lv_color_format_t src_cf = header->cf;
 
-    /*Image contains Alpha*/
+    /*Изображение содержит альфу*/
     if(src_cf == LV_COLOR_FORMAT_ARGB8888 || src_cf == LV_COLOR_FORMAT_XRGB8888) {
         blending_mode |= NEMA_BLOP_SRC_PREMULT;
     }
 
     uint32_t src_nema_cf = lv_nemagfx_cf_to_nema(src_cf);
-    /* the stride should be computed internally for NEMA_TSC images and images missing a stride value */
+    /* шаг должен рассчитываться внутренне для изображений NEMA_TSC и изображений, в которых отсутствует значение шага */
     int32_t src_stride = (src_cf >= LV_COLOR_FORMAT_NEMA_TSC_START && src_cf <= LV_COLOR_FORMAT_NEMA_TSC_END)
                          || header->stride == 0 ? -1 : (int32_t)header->stride;
 
@@ -113,7 +113,7 @@ static void _draw_nema_gfx_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * d
         blending_mode |= NEMA_BLOP_LUT;
     }
 
-    /*Guard for previous NemaGFX Version*/
+    /*Защита предыдущей версии NemaGFX*/
 #ifdef NEMA_BLOP_RECOLOR
     if(recolor) {
         lv_color32_t col32 = lv_color_to_32(dsc->recolor, LV_OPA_MIX2(dsc->recolor_opa, dsc->opa));
@@ -159,7 +159,7 @@ static void _draw_nema_gfx_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * d
                        (img_coords->y1 - layer->buf_area.y1), tex_w, tex_h);
     }
     else {
-        /*Calculate the transformed points*/
+        /*Вычислить преобразованные точки*/
         float x0 = (img_coords->x1 - layer->buf_area.x1);
         float y0 = (img_coords->y1 - layer->buf_area.y1);
         float x1 = x0 + tex_w  ;
@@ -173,14 +173,14 @@ static void _draw_nema_gfx_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * d
         nema_mat3x3_load_identity(m);
         nema_mat3x3_translate(m, -x0, -y0);
         nema_mat3x3_translate(m, -(float)dsc->pivot.x, -(float)dsc->pivot.y);
-        nema_mat3x3_rotate(m, (dsc->rotation / 10.0f)); /* angle is 1/10 degree */
+        nema_mat3x3_rotate(m, (dsc->rotation / 10.0f)); /* угол составляет 1/10 градуса */
         float scale_x = 1.f * dsc->scale_x / LV_SCALE_NONE;
         float scale_y = 1.f * dsc->scale_y / LV_SCALE_NONE;
         nema_mat3x3_scale(m, (float)scale_x, (float)scale_y);
         nema_mat3x3_translate(m, (float)dsc->pivot.x, (float)dsc->pivot.y);
         nema_mat3x3_translate(m, x0, y0);
 
-        /*Apply Transformation Matrix to Vertices*/
+        /*Примените матрицу преобразования к вершинам*/
         nema_mat3x3_mul_vec(m, &x0, &y0);
         nema_mat3x3_mul_vec(m, &x1, &y1);
         nema_mat3x3_mul_vec(m, &x2, &y2);
@@ -196,7 +196,7 @@ static void _draw_nema_gfx_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * d
 
 }
 
-/*NemaGFX does mask operations with A8,A4,A2 and A1 formats*/
+/*NemaGFX выполняет операции маски с форматами A8, A4, A2 и A1.*/
 static uint32_t lv_nemagfx_mask_cf_to_nema(lv_color_format_t cf)
 {
     switch(cf) {

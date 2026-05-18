@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_rotate90_RGB565(void)
@@ -182,15 +182,15 @@ void test_rotate90_ARGB8888(void)
 void test_rotate180_ARGB8888(void)
 {
     uint32_t srcArray[3 * 2] = {
-        0xFF0000FF, 0xFF00FF00, // Row 1: Red, Green
-        0xFFFF0000, 0xFFFFFFFF, // Row 2: Blue, White
-        0xFF00FFFF, 0xFFFFFF00  // Row 3: Cyan, Yellow
+        0xFF0000FF, 0xFF00FF00, // Ряд 1: Красный, Зеленый
+        0xFFFF0000, 0xFFFFFFFF, // Ряд 2: Синий, Белый
+        0xFF00FFFF, 0xFFFFFF00  // Ряд 3: голубой, желтый.
     };
     uint32_t dstArray[3 * 2] = {0};
     uint32_t expectedArray[3 * 2] = {
-        0xFFFFFF00, 0xFF00FFFF, // Rotated Row 1
-        0xFFFFFFFF, 0xFFFF0000, // Rotated Row 2
-        0xFF00FF00, 0xFF0000FF  // Rotated Row 3
+        0xFFFFFF00, 0xFF00FFFF, // Повернутая строка 1
+        0xFFFFFFFF, 0xFFFF0000, // Повернутая строка 2
+        0xFF00FF00, 0xFF0000FF  // Повернутая строка 3
     };
 
     lv_draw_sw_rotate(srcArray, dstArray,
@@ -299,17 +299,17 @@ void test_invert(void)
 {
     uint8_t expected_buf[10] = {0xff, 0xfe, 0xfd, 0xfc, 0xfb, 0xfa, 0xf9, 0xf8, 0xf7, 0xf6};
 
-    /*Aligned start and aligned end*/
+    /*Выровненное начало и выровненный конец*/
     uint8_t buf1[10] =         {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
     lv_draw_sw_i1_invert(buf1, 8);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(expected_buf, buf1, 8);
 
-    /*Unaligned start and unaligned end*/
+    /*Невыровненное начало и невыровненный конец*/
     uint8_t buf2[10] =         {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
     lv_draw_sw_i1_invert(&buf2[3], 6);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(&expected_buf[3], &buf2[3], 6);
 
-    /*Small buffer*/
+    /*Маленький буфер*/
     uint8_t buf3[10] =         {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
     lv_draw_sw_i1_invert(&buf3[3], 2);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(&expected_buf[3], &buf3[3], 2);

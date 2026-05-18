@@ -31,14 +31,14 @@
 #if LV_VG_LITE_FLUSH_MAX_COUNT > 0
     #define PATH_FLUSH_COUNT_MAX 0
 #else
-    /* When using IDLE Flush mode, reduce the number of flushes */
+    /* При использовании режима промывки IDLE уменьшите количество промывок. */
     #define PATH_FLUSH_COUNT_MAX 8
 #endif
 
 #define FT_F26DOT6_SHIFT 6
 
-/** After converting the font reference size, it is also necessary to scale the 26dot6 data
- * in the path to the real physical size
+/** После преобразования эталонного размера шрифта также необходимо масштабировать данные 26dot6.
+ * на пути к реальному физическому размеру
  */
 #define FT_F26DOT6_TO_PATH_SCALE(x) (LV_FREETYPE_F26DOT6_TO_FLOAT(x) / (1 << FT_F26DOT6_SHIFT))
 
@@ -80,7 +80,7 @@ void lv_draw_vg_lite_label_init(struct _lv_draw_vg_lite_unit_t * u)
     LV_ASSERT_NULL(u);
 
 #if LV_USE_FREETYPE
-    /*Set up the freetype outline event*/
+    /*Настройте событие Freetype Outline*/
     lv_freetype_outline_add_event(freetype_outline_event_cb, LV_EVENT_ALL, u);
 #endif /* LV_USE_FREETYPE */
 
@@ -180,11 +180,11 @@ static void draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_draw_
                     }
                     else {
                         if(resolved_font->release_glyph) {
-                            /* For dynamic fonts, its internal implementation already supports cache management. */
+                            /* Для динамических шрифтов его внутренняя реализация уже поддерживает управление кэшем. */
                             glyph_draw_dsc->glyph_data = lv_font_get_glyph_bitmap(glyph_draw_dsc->g, glyph_draw_dsc->_draw_buf);
                         }
                         else {
-                            /* For non-cached unaligned fonts, we need to manage the cache manually. */
+                            /* Для некешированных невыровненных шрифтов нам необходимо управлять кешем вручную. */
                             glyph_draw_dsc->glyph_data = lv_vg_lite_bitmap_font_cache_get(u, glyph_draw_dsc->g);
                         }
 
@@ -230,7 +230,7 @@ static void draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_draw_
 #if LV_USE_FONT_PLACEHOLDER
             case LV_FONT_GLYPH_FORMAT_NONE: {
                     if(glyph_draw_dsc->bg_coords == NULL) break;
-                    /* Draw a placeholder rectangle*/
+                    /* Нарисуйте прямоугольник-заполнитель*/
                     lv_draw_border_dsc_t border_draw_dsc;
                     lv_draw_border_dsc_init(&border_draw_dsc);
                     border_draw_dsc.opa = glyph_draw_dsc->opa;
@@ -250,7 +250,7 @@ static void draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_draw_
         lv_draw_vg_lite_fill(t, fill_draw_dsc, fill_area);
     }
 
-    /* Flush in time to avoid accumulation of drawing commands */
+    /* Сбрасывайте вовремя, чтобы избежать накопления команд рисования. */
     u->letter_count++;
     if(u->letter_count > PATH_FLUSH_COUNT_MAX) {
         lv_vg_lite_flush(u);
@@ -324,12 +324,12 @@ static void draw_letter_bitmap(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * d
     const int32_t clip_offset_x = clip_area.x1 - image_area.x1;
     const int32_t clip_offset_y = clip_area.y1 - image_area.y1;
 
-    /* If rotation is not required, blit directly */
+    /* Если вращение не требуется, бликуйте напрямую */
     if(!dsc->rotation
 #if LV_VG_LITE_DISABLE_BLIT_RECT_OFFSET
        /**
-        * For some hardware, the rect.x/y parameters of vg_lite_blit_rect do not work correctly,
-        * so the fallback is to vg_lite_draw_pattern for processing.
+        * На некотором оборудовании параметры rect.x/y vg_lite_blit_rect работают неправильно.
+        * поэтому резервным вариантом для обработки является vg_lite_draw_pattern.
         */
        && (clip_offset_x == 0 && clip_offset_y == 0)
 #endif
@@ -341,7 +341,7 @@ static void draw_letter_bitmap(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * d
             .height = lv_area_get_height(&clip_area)
         };
 
-        /* add offset for clipped area */
+        /* добавить смещение для обрезанной области */
         if(rect.x || rect.y) {
             vg_lite_translate(rect.x, rect.y, &matrix);
         }
@@ -383,9 +383,9 @@ static void draw_letter_bitmap(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * d
         lv_vg_lite_path_drop(u, path);
     }
 
-    /* Check if the data has cache and add it to the pending list */
+    /* Проверьте, есть ли у данных кеш, и добавьте их в список ожидающих. */
     if(dsc->g->entry) {
-        /* Increment the cache reference count */
+        /* Увеличение счетчика ссылок на кэш */
         lv_cache_entry_acquire_data(dsc->g->entry);
         lv_vg_lite_pending_add(u->letter_pending, dsc->g);
     }
@@ -415,7 +415,7 @@ static void draw_letter_outline(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * 
 
     lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)t->draw_unit;
 
-    /* vg-lite bounding_box will crop the pixels on the edge, so +1px is needed here */
+    /* vg-lite bounding_box обрежет пиксели по краям, поэтому здесь нужен +1 пиксель */
     path_clip_area.x2++;
     path_clip_area.y2++;
 
@@ -424,12 +424,12 @@ static void draw_letter_outline(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * 
         dsc->letter_coords->x1 - dsc->g->ofs_x,
         dsc->letter_coords->y1 + dsc->g->box_h + dsc->g->ofs_y
     };
-    /* scale size */
+    /* размер шкалы */
     const float scale = FT_F26DOT6_TO_PATH_SCALE(lv_freetype_outline_get_scale(dsc->g->resolved_font));
 
     const bool has_rotation_with_cliped = dsc->rotation && !lv_area_is_in(&letter_area, &t->clip_area, false);
 
-    /* calc convert matrix */
+    /* вычисление преобразования матрицы */
     vg_lite_matrix_t matrix;
     vg_lite_identity(&matrix);
 
@@ -444,11 +444,11 @@ static void draw_letter_outline(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * 
 
     vg_lite_scale(scale, scale, &matrix);
 
-    /* matrix for drawing, different from matrix for calculating the bounding box */
+    /* матрица для рисования, отличная от матрицы для расчета ограничивающей рамки */
     vg_lite_matrix_t draw_matrix = u->global_matrix;
     lv_vg_lite_matrix_multiply(&draw_matrix, &matrix);
 
-    /* calc inverse matrix */
+    /* вычислить обратную матрицу */
     vg_lite_matrix_t result;
     if(!lv_vg_lite_matrix_inverse(&result, &matrix)) {
         LV_LOG_ERROR("no inverse matrix");
@@ -464,8 +464,8 @@ static void draw_letter_outline(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * 
 
     if(has_rotation_with_cliped) {
         /**
-         * When intersecting the clipping region,
-         * rotate the path contents without rotating the bounding box for cropping
+         * При пересечении области отсечения
+         * повернуть содержимое пути без вращения ограничивающей рамки для обрезки
          */
         vg_lite_matrix_t internal_matrix;
         vg_lite_identity(&internal_matrix);
@@ -495,17 +495,17 @@ static void draw_letter_outline(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * 
     }
 
     if(dsc->rotation) {
-        /* The bounding rectangle before scaling relative to the original coordinates of the path */
+        /* Ограничивающий прямоугольник перед масштабированием относительно исходных координат пути. */
         lv_area_t box_area;
         box_area.x1 = dsc->g->ofs_x;
         box_area.y1 = -dsc->g->box_h - dsc->g->ofs_y;
         lv_area_set_width(&box_area, dsc->g->box_w);
         lv_area_set_height(&box_area, dsc->g->box_h);
 
-        /* Workaround for loss of rotation precision */
+        /* Обходной путь при потере точности вращения */
         lv_area_increase(&box_area, 5, 5);
 
-        /* Scale the path area to fit the original path data */
+        /* Масштабируйте область пути, чтобы она соответствовала исходным данным пути. */
         lv_vg_lite_path_set_bounding_box(outline,
                                          box_area.x1 / scale,
                                          box_area.y1 / scale,
@@ -537,8 +537,8 @@ static void vg_lite_outline_push(const lv_freetype_outline_event_param_t * param
     switch(type) {
 
         /**
-         * Reverse the Y-axis coordinate direction to achieve
-         * the conversion from Cartesian coordinate system to LCD coordinate system
+         * Измените направление координат оси Y, чтобы добиться
+         * преобразование из декартовой системы координат в систему координат LCD
          */
         case LV_FREETYPE_OUTLINE_END:
             lv_vg_lite_path_end(outline);

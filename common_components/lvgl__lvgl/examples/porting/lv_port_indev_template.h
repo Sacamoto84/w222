@@ -4,7 +4,7 @@
  *
  */
 
-/*Copy this file as "lv_port_indev.h" and set this value to "1" to enable content*/
+/*Скопируйте этот файл как «lv_port_indev.h» и установите для этого значения значение «1», чтобы отключить контент.*/
 #if 0
 
 #ifndef LV_PORT_INDEV_TEMPL_H
@@ -41,9 +41,9 @@ void lv_port_indev_init(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PORT_INDEV_TEMPL_H*/
 
-#endif /*Disable/Enable content*/
+#endif /*Отключить/включить контент*/

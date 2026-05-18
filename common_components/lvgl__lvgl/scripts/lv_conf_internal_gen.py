@@ -43,82 +43,82 @@ fout.write(
  */
 
 #ifndef LV_CONF_INTERNAL_H
-#define LV_CONF_INTERNAL_H
+#определить LV_CONF_INTERNAL_H
 /* clang-format off */
 
 /* Config options */
-#define LV_OS_NONE          0
-#define LV_OS_PTHREAD       1
-#define LV_OS_FREERTOS      2
-#define LV_OS_CMSIS_RTOS2   3
-#define LV_OS_RTTHREAD      4
-#define LV_OS_WINDOWS       5
-#define LV_OS_MQX           6
-#define LV_OS_SDL2          7
-#define LV_OS_CUSTOM        255
+#определить LV_OS_NONE 0
+#определить LV_OS_PTHREAD 1
+#определить LV_OS_FREERTOS 2
+#определить LV_OS_CMSIS_RTOS2 3
+#определить LV_OS_RTTHREAD 4
+#определить LV_OS_WINDOWS 5
+#определить LV_OS_MQX 6
+#определить LV_OS_SDL2 7
+#определить LV_OS_CUSTOM 255
 
-#define LV_STDLIB_BUILTIN           0
-#define LV_STDLIB_CLIB              1
-#define LV_STDLIB_MICROPYTHON       2
-#define LV_STDLIB_RTTHREAD          3
-#define LV_STDLIB_CUSTOM            255
+#определить LV_STDLIB_BUILTIN 0
+#определить LV_STDLIB_CLIB 1
+#определить LV_STDLIB_MICROPYTHON 2
+#определить LV_STDLIB_RTTHREAD 3
+#определить LV_STDLIB_CUSTOM 255
 
-#define LV_DRAW_SW_ASM_NONE             0
-#define LV_DRAW_SW_ASM_NEON             1
-#define LV_DRAW_SW_ASM_HELIUM           2
-#define LV_DRAW_SW_ASM_RISCV_V          3
-#define LV_DRAW_SW_ASM_CUSTOM           255
+#определить LV_DRAW_SW_ASM_NONE 0
+#определить LV_DRAW_SW_ASM_NEON 1
+#определить LV_DRAW_SW_ASM_HELIUM 2
+#определить LV_DRAW_SW_ASM_RISCV_V 3
+#определить LV_DRAW_SW_ASM_CUSTOM 255
 
-#define LV_NEMA_LIB_NONE            0
-#define LV_NEMA_LIB_M33_REVC        1
-#define LV_NEMA_LIB_M33_NEMAPVG     2
-#define LV_NEMA_LIB_M55             3
-#define LV_NEMA_LIB_M7              4
+#определить LV_NEMA_LIB_NONE 0
+#определить LV_NEMA_LIB_M33_REVC 1
+#определить LV_NEMA_LIB_M33_NEMAPVG 2
+#определить LV_NEMA_LIB_M55 3
+#определить LV_NEMA_LIB_M7 4
 
-#define LV_NEMA_HAL_CUSTOM          0
-#define LV_NEMA_HAL_STM32           1
+#определить LV_NEMA_HAL_CUSTOM 0
+#определить LV_NEMA_HAL_STM32 1
 
-#define LV_NANOVG_BACKEND_GL2       1
-#define LV_NANOVG_BACKEND_GL3       2
-#define LV_NANOVG_BACKEND_GLES2     3
-#define LV_NANOVG_BACKEND_GLES3     4
+#определить LV_NANOVG_BACKEND_GL2 1
+#определить LV_NANOVG_BACKEND_GL3 2
+#определить LV_NANOVG_BACKEND_GLES2 3
+#определить LV_NANOVG_BACKEND_GLES3 4
 
 /** Handle special Kconfig options. */
 #ifndef LV_KCONFIG_IGNORE
-    #include "lv_conf_kconfig.h"
-    #if defined(CONFIG_LV_CONF_SKIP) && !defined(LV_CONF_SKIP)
-        #define LV_CONF_SKIP
-    #endif
-#endif
+    #включить "lv_conf_kconfig.h"
+    #если определено ( CONFIG_LV_CONF_SKIP ) && ! определено ( LV_CONF_SKIP )
+        #определить LV_CONF_SKIP
+    #конец
+#конец
 
 /* If "lv_conf.h" is available from here try to use it later. */
 #ifdef __has_include
-    #if __has_include("lv_conf.h")
+    #если__has_include("lv_conf.h")
         #ifndef LV_CONF_INCLUDE_SIMPLE
-            #define LV_CONF_INCLUDE_SIMPLE
-        #endif
-    #endif
-#endif
+            #определить LV_CONF_INCLUDE_SIMPLE
+        #конец
+    #конец
+#конец
 
 /* If lv_conf.h is not skipped, include it. */
-#if !defined(LV_CONF_SKIP) || defined(LV_CONF_PATH)
-    #ifdef LV_CONF_PATH                           /* If there is a path defined for lv_conf.h, use it */
-        #include LV_CONF_PATH                     /* Note: Make sure to define custom CONF_PATH as a string */
-    #elif defined(LV_CONF_INCLUDE_SIMPLE)         /* Or simply include lv_conf.h is enabled. */
-        #include "lv_conf.h"
-    #else
-        #include "../../lv_conf.h"                /* Else assume lv_conf.h is next to the lvgl folder. */
-    #endif
-    #if !defined(LV_CONF_H) && !defined(LV_CONF_SUPPRESS_DEFINE_CHECK)
+#если !определено( LV_CONF_SKIP ) || определено( LV_CONF_PATH )
+    #ifdefLV_CONF_PATH/* Если дляlv_conf.hопределен путь, вскормите его */
+        #включитьLV_CONF_PATH/* Примечание. Обязательно определите пользовательскийCONF_PATHкак символ */
+    #elif определение(LV_CONF_INCLUDE_SIMPLE) /* Или простоlv_conf.h. */
+        #включить "lv_conf.h"
+    #еще
+        #include "../../lv_conf.h" /* Иначе предположим, чтоlv_conf.hнаходится рядом с папкой lvgl. */
+    #конец
+    #if !define(LV_CONF_H) && !define(LV_CONF_SUPPRESS_DEFINE_CHECK)
         /* #include will sometimes silently fail when __has_include is used */
         /* https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80753 */
-        #pragma message("Possible failure to include lv_conf.h, please read the comment in this file if you get errors")
-    #endif
-#endif
+        #pragma message("Возможно, не удалось включитьlv_conf.h. Если возникла ошибка, прочтите комментарий в этом файле")
+    #конец
+#конец
 
 #ifdef CONFIG_LV_COLOR_DEPTH
-    #define LV_KCONFIG_PRESENT
-#endif
+    #определить LV_KCONFIG_PRESENT
+#конец
 
 /*----------------------------------
  * Start parsing lv_conf_template.h
@@ -149,13 +149,13 @@ for line in fin.read().splitlines():
 
     line = re.sub(r'[\s]*', '', line, count=1)
 
-    #If the value should be 1 (enabled) by default use a more complex structure for Kconfig checks because
-    #if a not defined CONFIG_... value should be interpreted as 0 and not the LVGL default
+    #Если значение должно быть 1 (включено), по умолчанию используйте более сложную модель для тестов Kconfig, поскольку
+    #если не определенное значение CONFIG_ ... должно интерпретироваться как 0, а не как значение по умолчанию LVGL
     is_one = re.search(r'#[\s]*define[\s]*[A-Z0-9_]+[\s]+1([\s]*$|[\s]+)', line)
     if is_one:
-      #1. Use the value if already set from lv_conf.h or anything else (i.e. do nothing)
-      #2. In Kconfig environment use the CONFIG_... value if set, else use 0
-      #3. In not Kconfig environment use the LVGL's default value
+      #1. Используйте значение, если оно уже установлено, изlv_conf.hили чего-либо еще (т.е. ничего не делайте).
+      #2. В среде Kconfig викор значениеCONFIG_..., если оно установлено, в противном случае викор 0.
+      #3. В окружающей среде, отлично от Kconfig, воспользуйтесь значением по умолчаниюLVGL.
 
       fout.write(
         f'{indent}#ifndef {name}\n'
@@ -171,9 +171,9 @@ for line in fin.read().splitlines():
         f'{indent}#endif\n'
       )
     else:
-      #1. Use the value if already set from lv_conf.h or anything else  (i.e. do nothing)
-      #2. Use the Kconfig value if set
-      #3. Use the LVGL's default value
+      #1. Используйте значение, если оно уже установлено, изlv_conf.hили чего-либо еще (т.е. ничего не делайте).
+      #2. Используйте значение Kconfig, если оно установлено.
+      #3. Используйте значение по умолчанию LVGL.
 
       fout.write(
         f'{indent}#ifndef {name}\n'
@@ -198,148 +198,148 @@ r'''
  -----------------------------------*/
 
 /*Fix inconsistent name*/
-#define LV_USE_ANIMIMAGE LV_USE_ANIMIMG
+#определить LV_USE_ANIMIMAGE LV_USE_ANIMIMG
 
 #ifndef __ASSEMBLY__
 LV_EXPORT_CONST_INT(LV_DPI_DEF);
 LV_EXPORT_CONST_INT(LV_DRAW_BUF_STRIDE_ALIGN);
 LV_EXPORT_CONST_INT(LV_DRAW_BUF_ALIGN);
-#endif
+#конец
 
 #undef LV_KCONFIG_PRESENT
 
 /* Disable VGLite drivers if VGLite drawing is disabled */
 #ifndef LV_USE_VG_LITE_DRIVER
-    #define LV_USE_VG_LITE_DRIVER 0
-#endif
+    #определить LV_USE_VG_LITE_DRIVER 0
+#конец
 
 #ifndef LV_USE_VG_LITE_THORVG
-    #define LV_USE_VG_LITE_THORVG 0
-#endif
+    #определить LV_USE_VG_LITE_THORVG 0
+#конец
 
 /* Set some defines if a dependency is disabled. */
 #if LV_USE_LOG == 0
-    #define LV_LOG_LEVEL            LV_LOG_LEVEL_NONE
-    #define LV_LOG_TRACE_MEM        0
-    #define LV_LOG_TRACE_TIMER      0
-    #define LV_LOG_TRACE_INDEV      0
-    #define LV_LOG_TRACE_DISP_REFR  0
-    #define LV_LOG_TRACE_EVENT      0
-    #define LV_LOG_TRACE_OBJ_CREATE 0
-    #define LV_LOG_TRACE_LAYOUT     0
-    #define LV_LOG_TRACE_ANIM       0
-#endif  /*LV_USE_LOG*/
+    #определить LV_LOG_LEVEL LV_LOG_LEVEL_NONE
+    #определить LV_LOG_TRACE_MEM 0
+    #определить LV_LOG_TRACE_TIMER 0
+    #определить LV_LOG_TRACE_INDEV 0
+    #определить LV_LOG_TRACE_DISP_REFR 0
+    #определить LV_LOG_TRACE_EVENT 0
+    #определить LV_LOG_TRACE_OBJ_CREATE 0
+    #определить LV_LOG_TRACE_LAYOUT 0
+    #определить LV_LOG_TRACE_ANIM 0
+#endif /*LV_USE_LOG*/
 
 #if LV_USE_WAYLAND
     /*Automatically detect wayland backend*/
     #if LV_USE_OPENGLES
-        #define LV_WAYLAND_USE_EGL 1
-        #define LV_WAYLAND_USE_G2D 0
-        #define LV_WAYLAND_USE_SHM 0
-    #elif LV_USE_G2D
-        #define LV_WAYLAND_USE_EGL 0
-        #define LV_WAYLAND_USE_G2D 1
-        #define LV_WAYLAND_USE_SHM 0
-    #else
-        #define LV_WAYLAND_USE_EGL 0
-        #define LV_WAYLAND_USE_G2D 0
-        #define LV_WAYLAND_USE_SHM 1
-    #endif
-#else
-    #define LV_WAYLAND_USE_G2D 0
-    #define LV_WAYLAND_USE_SHM 0
-    #define LV_WAYLAND_USE_EGL 0
-#endif
+        #определить LV_WAYLAND_USE_EGL 1
+        #определить LV_WAYLAND_USE_G2D 0
+        #определить LV_WAYLAND_USE_SHM 0
+    #Элиф LV_USE_G2D
+        #определить LV_WAYLAND_USE_EGL 0
+        #определить LV_WAYLAND_USE_G2D 1
+        #определить LV_WAYLAND_USE_SHM 0
+    #еще
+        #определить LV_WAYLAND_USE_EGL 0
+        #определить LV_WAYLAND_USE_G2D 0
+        #определить LV_WAYLAND_USE_SHM 1
+    #конец
+#еще
+    #определить LV_WAYLAND_USE_G2D 0
+    #определить LV_WAYLAND_USE_SHM 0
+    #определить LV_WAYLAND_USE_EGL 0
+#конец
 
 #if LV_USE_LINUX_DRM
     #if LV_USE_OPENGLES
-        #define LV_LINUX_DRM_USE_EGL 1
-    #else
-        #define LV_LINUX_DRM_USE_EGL 0
+        #определить LV_LINUX_DRM_USE_EGL 1
+    #еще
+        #определить LV_LINUX_DRM_USE_EGL 0
     #endif /* LV_USE_OPENGLES */
-#else
-    #define LV_LINUX_DRM_USE_EGL 0
+#еще
+    #определить LV_LINUX_DRM_USE_EGL 0
 #endif /*LV_USE_LINUX_DRM*/
 
 #if LV_USE_SYSMON == 0
-    #define LV_USE_PERF_MONITOR 0
-    #define LV_USE_MEM_MONITOR 0
-    #define LV_SYSMON_PROC_IDLE_AVAILABLE 0
+    #определить LV_USE_PERF_MONITOR 0
+    #определить LV_USE_MEM_MONITOR 0
+    #определить LV_SYSMON_PROC_IDLE_AVAILABLE 0
 #endif /*LV_USE_SYSMON*/
 
 #if LV_USE_PERF_MONITOR == 0
-    #define LV_USE_PERF_MONITOR_LOG_MODE 0
+    #определить LV_USE_PERF_MONITOR_LOG_MODE 0
 #endif /*LV_USE_PERF_MONITOR*/
 
 #if LV_BUILD_DEMOS == 0
-    #define LV_USE_DEMO_WIDGETS 0
-    #define LV_USE_DEMO_KEYPAD_AND_ENCODER 0
-    #define LV_USE_DEMO_BENCHMARK 0
-    #define LV_USE_DEMO_RENDER 0
-    #define LV_USE_DEMO_STRESS 0
-    #define LV_USE_DEMO_MUSIC 0
-    #define LV_USE_DEMO_VECTOR_GRAPHIC  0
-    #define LV_USE_DEMO_FLEX_LAYOUT     0
-    #define LV_USE_DEMO_MULTILANG       0
-    #define LV_USE_DEMO_EBIKE           0
-    #define LV_USE_DEMO_HIGH_RES        0
-    #define LV_USE_DEMO_SMARTWATCH      0
-    #define LV_USE_DEMO_GLTF            0
+    #определить LV_USE_DEMO_WIDGETS 0
+    #определить LV_USE_DEMO_KEYPAD_AND_ENCODER 0
+    #определить LV_USE_DEMO_BENCHMARK 0
+    #определить LV_USE_DEMO_RENDER 0
+    #определить LV_USE_DEMO_STRESS 0
+    #определить LV_USE_DEMO_MUSIC 0
+    #определить LV_USE_DEMO_VECTOR_GRAPHIC 0
+    #определить LV_USE_DEMO_FLEX_LAYOUT 0
+    #определить LV_USE_DEMO_MULTILANG 0
+    #определить LV_USE_DEMO_EBIKE 0
+    #определить LV_USE_DEMO_HIGH_RES 0
+    #определить LV_USE_DEMO_SMARTWATCH 0
+    #определить LV_USE_DEMO_GLTF 0
 #endif /* LV_BUILD_DEMOS */
 
 #ifndef LV_USE_LZ4
     #if (LV_USE_LZ4_INTERNAL || LV_USE_LZ4_EXTERNAL)
-        #define LV_USE_LZ4 1
-    #else
-        #define LV_USE_LZ4 0
-    #endif
-#endif
+        #определить LV_USE_LZ4 1
+    #еще
+        #определить LV_USE_LZ4 0
+    #конец
+#конец
 
 #ifndef LV_USE_THORVG
     #if (LV_USE_THORVG_INTERNAL || LV_USE_THORVG_EXTERNAL)
-        #define LV_USE_THORVG 1
-    #else
-        #define LV_USE_THORVG 0
-    #endif
-#endif
+        #определить LV_USE_THORVG 1
+    #еще
+        #определить LV_USE_THORVG 0
+    #конец
+#конец
 
 #if LV_USE_SDL && LV_USE_OPENGLES && (LV_USE_DRAW_OPENGLES || LV_USE_DRAW_NANOVG)
-    #define LV_SDL_USE_EGL 1
-#else
-    #define LV_SDL_USE_EGL 0
-#endif
+    #определить LV_SDL_USE_EGL 1
+#еще
+    #определить LV_SDL_USE_EGL 0
+#конец
 
 #ifndef LV_USE_EGL
     #if LV_LINUX_DRM_USE_EGL || LV_WAYLAND_USE_EGL || LV_SDL_USE_EGL
-        #define LV_USE_EGL 1
-    #else
-        #define LV_USE_EGL 0
-    #endif
+        #определить LV_USE_EGL 1
+    #еще
+        #определить LV_USE_EGL 0
+    #конец
 #endif /* LV_USE_EGL */
 
 
 #if LV_USE_OS
     #if (LV_USE_FREETYPE || LV_USE_THORVG) && LV_DRAW_THREAD_STACK_SIZE < (32 * 1024)
-        #error "Increase LV_DRAW_THREAD_STACK_SIZE to at least 32KB for FreeType or ThorVG."
-    #endif
+        #ошибка «Увеличьте размерLV_DRAW_THREAD_STACK_SIZEкак минимум до 32 КБ для FreeType или ThorVG».
+    #конец
 
-    #if defined(LV_DRAW_THREAD_STACKSIZE) && !defined(LV_DRAW_THREAD_STACK_SIZE)
-        #warning "LV_DRAW_THREAD_STACKSIZE was renamed to LV_DRAW_THREAD_STACK_SIZE. Please update lv_conf.h or run menuconfig again."
-        #define LV_DRAW_THREAD_STACK_SIZE LV_DRAW_THREAD_STACKSIZE
-    #endif
-#endif
+    #если определено ( LV_DRAW_THREAD_STACKSIZE ) && ! определено ( LV_DRAW_THREAD_STACK_SIZE )
+        #предупреждение «LV_DRAW_THREAD_STACKSIZEбыл переименован вLV_DRAW_THREAD_STACK_SIZE. Пожалуйста, обновитеlv_conf.hили запустите меню настройки еще раз».
+        #определить LV_DRAW_THREAD_STACK_SIZE LV_DRAW_THREAD_STACKSIZE
+    #конец
+#конец
 
 /*Allow only upper case letters and '/'  ('/' is a special case for backward compatibility)*/
-#define LV_FS_IS_VALID_LETTER(l) ((l) == '/' || ((l) >= 'A' && (l) <= 'Z'))
+#определить LV_FS_IS_VALID_LETTER (l) ((l) == '/' || ((l) >= 'A' && (l) <= 'Z'))
 
 /* If running without lv_conf.h, add typedefs with default value. */
 #ifdef LV_CONF_SKIP
-    #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)    /*Disable warnings for Visual Studio*/
-        #define _CRT_SECURE_NO_WARNINGS
-    #endif
-#endif  /*defined(LV_CONF_SKIP)*/
+    #если определено(_MSC_VER) && !define(_CRT_SECURE_NO_WARNINGS) /*отключить преобразование для Visual Studio*/
+        #определить _CRT_SECURE_NO_WARNINGS
+    #конец
+#endif /* определение(LV_CONF_SKIP)*/
 
-#endif  /*LV_CONF_INTERNAL_H*/
+#endif /*LV_CONF_INTERNAL_H*/
 '''
 )
 

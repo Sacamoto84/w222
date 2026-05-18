@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_ERROR_EN_H_
 #define RAPIDJSON_ERROR_EN_H_
@@ -25,13 +25,13 @@ RAPIDJSON_DIAG_OFF(covered-switch-default)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Maps error code of parsing into error message.
+//! Сопоставляет код ошибки синтаксического анализа с сообщением об ошибке.
 /*!
     \ingroup RAPIDJSON_ERRORS
-    \param parseErrorCode Error code obtained in parsing.
-    \return the error message.
-    \note User can make a copy of this function for localization.
-        Using switch-case is safer for future modification of error codes.
+    \param parseErrorCode Код ошибки, полученный при разборе.
+    \вернуть сообщение об ошибке.
+    \note Пользователь может сделать копию этой функции для локализации.
+        Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
 inline const RAPIDJSON_ERROR_CHARTYPE* GetParseError_En(ParseErrorCode parseErrorCode) {
     switch (parseErrorCode) {
@@ -65,13 +65,13 @@ inline const RAPIDJSON_ERROR_CHARTYPE* GetParseError_En(ParseErrorCode parseErro
     }
 }
 
-//! Maps error code of validation into error message.
+//! Сопоставляет код ошибки проверки с сообщением об ошибке.
 /*!
     \ingroup RAPIDJSON_ERRORS
-    \param validateErrorCode Error code obtained from validator.
-    \return the error message.
-    \note User can make a copy of this function for localization.
-        Using switch-case is safer for future modification of error codes.
+    \param validateErrorCode Код ошибки, полученный от валидатора.
+    \вернуть сообщение об ошибке.
+    \note Пользователь может сделать копию этой функции для локализации.
+        Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
 inline const RAPIDJSON_ERROR_CHARTYPE* GetValidateError_En(ValidateErrorCode validateErrorCode) {
     switch (validateErrorCode) {
@@ -116,13 +116,13 @@ inline const RAPIDJSON_ERROR_CHARTYPE* GetValidateError_En(ValidateErrorCode val
     }
 }
 
-//! Maps error code of schema document compilation into error message.
+//! Сопоставляет код ошибки компиляции документа схемы с сообщением об ошибке.
 /*!
     \ingroup RAPIDJSON_ERRORS
-    \param schemaErrorCode Error code obtained from compiling the schema document.
-    \return the error message.
-    \note User can make a copy of this function for localization.
-        Using switch-case is safer for future modification of error codes.
+    \param SchemaErrorCode Код ошибки, полученный при компиляции документа схемы.
+    \вернуть сообщение об ошибке.
+    \note Пользователь может сделать копию этой функции для локализации.
+        Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
   inline const RAPIDJSON_ERROR_CHARTYPE* GetSchemaError_En(SchemaErrorCode schemaErrorCode) {
       switch (schemaErrorCode) {
@@ -146,13 +146,13 @@ inline const RAPIDJSON_ERROR_CHARTYPE* GetValidateError_En(ValidateErrorCode val
     }
   }
 
-//! Maps error code of pointer parse into error message.
+//! Сопоставляет код ошибки анализа указателя с сообщением об ошибке.
 /*!
     \ingroup RAPIDJSON_ERRORS
-    \param pointerParseErrorCode Error code obtained from pointer parse.
-    \return the error message.
-    \note User can make a copy of this function for localization.
-        Using switch-case is safer for future modification of error codes.
+    \param pointerParseErrorCode Код ошибки, полученный при анализе указателя.
+    \вернуть сообщение об ошибке.
+    \note Пользователь может сделать копию этой функции для локализации.
+        Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
 inline const RAPIDJSON_ERROR_CHARTYPE* GetPointerParseError_En(PointerParseErrorCode pointerParseErrorCode) {
     switch (pointerParseErrorCode) {

@@ -75,7 +75,7 @@ void lv_opengl_shader_program_destroy(lv_opengl_shader_program_t * program)
             GL_CALL(glGetAttachedShaders(program->id, shader_num, &shader_count,
                                          shader_names));
 
-            // Detach and delete each shader
+            // Отсоедините и удалите каждый шейдер
             for(GLsizei i = 0; i < shader_count && i < shader_num; ++i) {
                 if(shader_names[i] != 0)
                     GL_CALL(glDetachShader(program->id, shader_names[i]));
@@ -85,19 +85,19 @@ void lv_opengl_shader_program_destroy(lv_opengl_shader_program_t * program)
     }
 #endif
 
-    /* We should be able to call the function below without issue at this point
-     * but because of subtle issues regarding lazy updates of shader resources
-     * this induces significant pause on some platforms.  Since the shaders
-     * have already been detached, we can safely skip this function and leave
-     * the empty programs in OpenGL's cache until the app shuts down, it's a
-     * very small amount of memory.
+    /* На этом этапе мы сможем без проблем вызвать функцию, указанную ниже.
+     * но из-за тонких проблем, связанных с ленивым обновлением ресурсов шейдеров.
+     * это вызывает значительную паузу на некоторых платформах.  Поскольку шейдеры
+     * уже отсоединены, мы можем смело пропустить эту функцию и оставить
+     * пустые программы в кеше OpenGL, пока приложение не закроется, это
+     * очень маленький объем памяти.
      *
-     * To-do: Consider setting a flag at this point and if that flag is true
-     * when the app finally shuts down, then perform the glDeleteProgram calls
-     * if necessary.  That is not really necessary, OpenGL will do that anyways
-     * when it shuts down. */
+     * Задача: рассмотрите возможность установки флага на этом этапе и проверьте, верен ли этот флаг.
+     * когда приложение наконец закроется, выполните вызовы glDeleteProgram
+     * если необходимо.  В этом нет необходимости, OpenGL все равно это сделает.
+     * когда он выключится. */
 
-    /* GL_CALL(glDeleteProgram(program->id)); */
+    /* GL_CALL (glDeleteProgram(программа->id)); */
     lv_free(program);
 }
 

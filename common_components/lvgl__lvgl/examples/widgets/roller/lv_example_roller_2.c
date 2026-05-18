@@ -13,11 +13,11 @@ static void event_handler(lv_event_t * e)
 }
 
 /**
- * Roller with various alignments and larger text in the selected area
+ * Ролик с различными выравниваниями и более крупным текстом в выделенной области.
  */
 void lv_example_roller_2(void)
 {
-    /*A style to make the selected option larger*/
+    /*Стиль, позволяющий увеличить выбранный вариант.*/
     static lv_style_t style_sel;
     lv_style_init(&style_sel);
     lv_style_set_text_font(&style_sel, &lv_font_montserrat_22);
@@ -28,7 +28,7 @@ void lv_example_roller_2(void)
     const char * opts = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
     lv_obj_t * roller;
 
-    /*A roller on the left with left aligned text, and custom width*/
+    /*Ролик слева с текстом, выровненным по левому краю, и произвольной шириной.*/
     roller = lv_roller_create(lv_screen_active());
     lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL);
     lv_roller_set_visible_row_count(roller, 2);
@@ -42,7 +42,7 @@ void lv_example_roller_2(void)
     lv_obj_add_event_cb(roller, event_handler, LV_EVENT_ALL, NULL);
     lv_roller_set_selected(roller, 2, LV_ANIM_OFF);
 
-    /*A roller on the middle with center aligned text, and auto (default) width*/
+    /*Ролик посередине с текстом, выровненным по центру, и автоматической шириной (по умолчанию).*/
     roller = lv_roller_create(lv_screen_active());
     lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL);
     lv_roller_set_visible_row_count(roller, 3);
@@ -51,7 +51,7 @@ void lv_example_roller_2(void)
     lv_obj_add_event_cb(roller, event_handler, LV_EVENT_ALL, NULL);
     lv_roller_set_selected(roller, 5, LV_ANIM_OFF);
 
-    /*A roller on the right with right aligned text, and custom width*/
+    /*Ролик справа с текстом, выровненным по правому краю, и настраиваемой шириной.*/
     roller = lv_roller_create(lv_screen_active());
     lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL);
     lv_roller_set_visible_row_count(roller, 4);

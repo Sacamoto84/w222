@@ -17,7 +17,7 @@
  *********************/
 
 #ifdef ESP_PLATFORM
-    #define DIR FF_DIR  /* ESP IDF typedefs `DIR` as `FF_DIR` in its version of ff.h. Use `FF_DIR` in LVGL too */
+    #define DIR FF_DIR  /* ESP IDF определяет тип `DIR` как `FF_DIR` в своей версии ff.h. Используйте `FF_DIR` также в LVGL. */
 #endif
 
 #if !LV_FS_IS_VALID_LETTER(LV_FS_FATFS_LETTER)
@@ -58,18 +58,18 @@ static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p);
 void lv_fs_fatfs_init(void)
 {
     /*----------------------------------------------------
-     * Initialize your storage device and File System
+     * Инициализируйте устройство хранения и файловую систему.
      * -------------------------------------------------*/
     fs_init();
 
     /*---------------------------------------------------
-     * Register the file system interface in LVGL
+     * Зарегистрируйте интерфейс файловой системы в LVGL.
      *--------------------------------------------------*/
 
     lv_fs_drv_t * fs_drv_p = &(LV_GLOBAL_DEFAULT()->fatfs_fs_drv);
     lv_fs_drv_init(fs_drv_p);
 
-    /*Set up fields...*/
+    /*Настроить поля...*/
     fs_drv_p->letter = LV_FS_FATFS_LETTER;
     fs_drv_p->cache_size = LV_FS_FATFS_CACHE_SIZE;
 
@@ -91,15 +91,15 @@ void lv_fs_fatfs_init(void)
  *   STATIC FUNCTIONS
  **********************/
 
-/*Initialize your Storage device and File system.*/
+/*Инициализируйте устройство хранения и файловую систему.*/
 static void fs_init(void)
 {
-    /*Initialize the SD card and FatFS itself.
-     *Better to do it in your code to keep this library untouched for easy updating*/
+    /*Инициализируйте карту SD и саму FatFS.
+     *Лучше сделать это в своем коде, чтобы сохранить эту библиотеку нетронутой и упростить обновление.*/
 }
 
 /**
- * Open a file
+ * Открыть файл
  * @param drv   pointer to a driver where this function belongs
  * @param path  path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
  * @param mode  read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
@@ -131,11 +131,11 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
 /**
- * Close an opened file
+ * Закрыть открытый файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FIL variable. (opened with fs_open)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 {
@@ -146,14 +146,14 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * Read data from an opened file
+ * Чтение данных из открытого файла
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FIL variable.
  * @param buf       pointer to a memory block where to store the read data
  * @param btr       number of Bytes To Read
  * @param br        the real number of read bytes (Byte Read)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
 {
@@ -164,7 +164,7 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * Write into a file
+ * Записать в файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FIL variable
  * @param buf       pointer to a buffer with the bytes to write
@@ -181,13 +181,13 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 }
 
 /**
- * Set the read write pointer. Also expand the file size if necessary.
+ * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FIL variable. (opened with fs_open )
  * @param pos       the new position of read write pointer
  * @param whence    only LV_SEEK_SET is supported
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
@@ -209,12 +209,12 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * Give the position of the read write pointer
+ * Укажите положение указателя чтения и записи.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FIL variable
  * @param pos_p     pointer to store the result
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 {
@@ -224,7 +224,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 }
 
 /**
- * Initialize a 'DIR' variable for directory reading
+ * Инициализируйте переменную DIR для чтения каталога.
  * @param drv   pointer to a driver where this function belongs
  * @param path  path to a directory
  * @return pointer to an initialized 'DIR' variable
@@ -247,8 +247,8 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 }
 
 /**
- * Read the next filename from a directory.
- * The name of the directories will begin with '/'
+ * Прочитать следующее имя файла из каталога.
+ * Название каталогов начинается с '/'
  * @param drv       pointer to a driver where this function belongs
  * @param dir_p     pointer to an initialized 'DIR' variable
  * @param fn        pointer to a buffer to store the filename
@@ -268,7 +268,7 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
         res = f_readdir(dir_p, &fno);
         if(res != FR_OK) return LV_FS_RES_UNKNOWN;
 
-        if(fno.fname[0] == 0) break; /* End of the directory */
+        if(fno.fname[0] == 0) break; /* Конец каталога */
 
         if(fno.fattrib & AM_DIR) {
             lv_snprintf(fn, fn_len, "/%s", fno.fname);
@@ -281,7 +281,7 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
 }
 
 /**
- * Close the directory reading
+ * Закройте чтение каталога
  * @param drv   pointer to a driver where this function belongs
  * @param dir_p pointer to an initialized 'DIR' variable
  * @return LV_FS_RES_OK or any error from lv_fs_res_t enum

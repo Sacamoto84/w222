@@ -1,11 +1,11 @@
 /*!
-* \file thorvg_capi.h
+* \файл thorvg_capi.h
 *
-* \brief The module provides C bindings for the ThorVG library.
-* Please refer to src/examples/Capi.cpp to find the thorvg_capi usage examples.
+* \brief Модуль предоставляет привязки C для библиотеки ThorVG.
+* Пожалуйста, обратитесь к src/examples/Capi.cpp, чтобы найти примеры использования thorvg_capi.
 *
-* The thorvg_capi module allows to implement the ThorVG client and provides
-* the following functionalities:
+* Модуль thorvg_capi позволяет реализовать клиент ThorVG и предоставляет
+* следующие функциональные возможности:
 * - drawing shapes: line, curve, polygon, circle, user-defined, ...
 * - filling: solid, linear and radial gradient
 * - scene graph & affine transformation (translation, rotation, scale, ...)
@@ -67,86 +67,86 @@ extern "C" {
 
 /**
 * \defgroup ThorVG_CAPI ThorVG_CAPI
-* \brief ThorVG C language binding APIs.
+* \brief API привязки ThorVG к языку C.
 *
 * \{
 */
 
 
 /**
-* \brief A structure responsible for managing and drawing graphical elements.
+* \brief Структура, отвечающая за управление графическими элементами и их отрисовку.
 *
-* It sets up the target buffer, which can be drawn on the screen. It stores the Tvg_Paint objects (Shape, Scene, Picture).
+* Он устанавливает целевой буфер, который можно отобразить на экране. Он хранит объекты Tvg_Paint (Форма, Сцена, Изображение).
 */
 typedef struct _Tvg_Canvas Tvg_Canvas;
 
 
 /**
-* \brief A structure representing a graphical element.
+* \brief Структура, представляющая графический элемент.
 *
-* \warning The TvgPaint objects cannot be shared between Canvases.
+* \предупреждение Объекты TvgPaint не могут использоваться совместно между холстами.
 */
 typedef struct _Tvg_Paint Tvg_Paint;
 
 
 /**
-* \brief A structure representing a gradient fill of a Tvg_Paint object.
+* \brief Структура, представляющая градиентную заливку объекта Tvg_Paint.
 */
 typedef struct _Tvg_Gradient Tvg_Gradient;
 
 
 /**
-* \brief A structure representing an object that enables to save a Tvg_Paint object into a file.
+* \brief Структура, представляющая объект, позволяющая сохранить объект Tvg_Paint в файл.
 */
 typedef struct _Tvg_Saver Tvg_Saver;
 
 /**
-* \brief A structure representing an animation controller object.
+* \brief Структура, представляющая объект контроллера анимации.
 */
 typedef struct _Tvg_Animation Tvg_Animation;
 
 
 /**
-* \brief Enumeration specifying the engine type used for the graphics backend. For multiple backends bitwise operation is allowed.
+* \brief Перечисление, определяющее тип механизма, используемого для графического процессора. Для нескольких серверов разрешены побитовые операции.
 *
 * \ingroup ThorVGCapi_Initializer
 */
 typedef enum {
-    TVG_ENGINE_SW = (1 << 1),   ///< CPU rasterizer.
-    TVG_ENGINE_GL = (1 << 2)    ///< OpenGL rasterizer.
+    TVG_ENGINE_SW = (1 << 1),   ///< Растеризатор CPU.
+    TVG_ENGINE_GL = (1 << 2)    ///< Растеризатор OpenGL.
 } Tvg_Engine;
 
 
 /**
- * \brief Enumeration specifying the result from the APIs.
+ * \brief Перечисление, определяющее результат API.
  *
- * All ThorVG APIs could potentially return one of the values in the list.
- * Please note that some APIs may additionally specify the reasons that trigger their return values.
+ * Все API ThorVG потенциально могут возвращать одно из значений в списке.
+ * Обратите внимание, что некоторые API могут дополнительно указывать причины, по которым возвращаются их значения.
  *
  */
 typedef enum {
-    TVG_RESULT_SUCCESS = 0,            ///< The value returned in case of a correct request execution.
-    TVG_RESULT_INVALID_ARGUMENT,       ///< The value returned in the event of a problem with the arguments given to the API - e.g. empty paths or null pointers.
-    TVG_RESULT_INSUFFICIENT_CONDITION, ///< The value returned in case the request cannot be processed - e.g. asking for properties of an object, which does not exist.
-    TVG_RESULT_FAILED_ALLOCATION,      ///< The value returned in case of unsuccessful memory allocation.
-    TVG_RESULT_MEMORY_CORRUPTION,      ///< The value returned in the event of bad memory handling - e.g. failing in pointer releasing or casting
-    TVG_RESULT_NOT_SUPPORTED,          ///< The value returned in case of choosing unsupported engine features(options).
-    TVG_RESULT_UNKNOWN                 ///< The value returned in all other cases.
+    TVG_RESULT_SUCCESS = 0,            ///< Значение, возвращаемое в случае корректного выполнения запроса.
+    TVG_RESULT_INVALID_ARGUMENT,       ///< Значение, возвращаемое в случае проблемы с аргументами, переданными в API - например. пустые пути или нулевые указатели.
+    TVG_RESULT_INSUFFICIENT_CONDITION, ///< Значение, возвращаемое в случае, если запрос не может быть обработан - например. запрос свойств объекта, которого не существует.
+    TVG_RESULT_FAILED_ALLOCATION,      ///< Значение, возвращаемое в случае неудачного выделения памяти.
+    TVG_RESULT_MEMORY_CORRUPTION,      ///< Значение, возвращаемое в случае неправильной обработки памяти – например. сбой при освобождении или приведении указателя
+    TVG_RESULT_NOT_SUPPORTED,          ///< Значение, возвращаемое в случае выбора неподдерживаемых функций (опций) движка.
+    TVG_RESULT_UNKNOWN                 ///< Значение, возвращаемое во всех остальных случаях.
 } Tvg_Result;
 
 
 /**
- * \brief Enumeration indicating the method used in the composition of two objects - the target and the source.
+ * \brief Перечисление, указывающее метод, используемый в составе двух объектов - целевого и исходного.
  *
  * \ingroup ThorVGCapi_Paint
  */
 typedef enum {
-    TVG_COMPOSITE_METHOD_NONE = 0,           ///< No composition is applied.
-    TVG_COMPOSITE_METHOD_CLIP_PATH,          ///< The intersection of the source and the target is determined and only the resulting pixels from the source are rendered. Note that ClipPath only supports the Shape type. @deprecated Use Paint::clip() instead.
-    TVG_COMPOSITE_METHOD_ALPHA_MASK,         ///< The pixels of the source and the target are alpha blended. As a result, only the part of the source, which intersects with the target is visible.
-    TVG_COMPOSITE_METHOD_INVERSE_ALPHA_MASK, ///< The pixels of the source and the complement to the target's pixels are alpha blended. As a result, only the part of the source which is not covered by the target is visible.
-    TVG_COMPOSITE_METHOD_LUMA_MASK,          ///< The source pixels are converted to grayscale (luma value) and alpha blended with the target. As a result, only the part of the source which intersects with the target is visible. \since 0.9
-    TVG_COMPOSITE_METHOD_INVERSE_LUMA_MASK   ///< The source pixels are converted to grayscale (luma value) and complement to the target's pixels are alpha blended. As a result, only the part of the source which is not covered by the target is visible. \since 0.14
+    TVG_COMPOSITE_METHOD_NONE = 0,           ///< Композиция не применяется.
+    TVG_COMPOSITE_METHOD_CLIP_PATH,          ///< Определяется пересечение источника и цели, и визуализируются только результирующие пиксели из источника. Обратите внимание, что ClipPath поддерживает только тип Shape.  @deprecated Вместо этого используйте Paint:: clip().
+    TVG_COMPOSITE_METHOD_ALPHA_MASK,         ///< Пиксели источника и цели альфа-смешены. В результате видна только та часть источника, которая пересекается с целью.
+    TVG_COMPOSITE_METHOD_INVERSE_ALPHA_MASK, ///< Пиксели источника и дополнения к целевым пикселям альфа-смешены. В результате видна только та часть источника, которая не покрыта целью.
+    TVG_COMPOSITE_METHOD_LUMA_MASK,          ///< Исходные пиксели преобразуются в оттенки серого (значение яркости), а альфа-канал смешивается с целевым. В результате видна только та часть источника, которая пересекается с целью. \с 0,9
+    TVG_COMPOSITE_METHOD_INVERSE_LUMA_MASK   ///< Исходные пиксели преобразуются в оттенки серого (значение яркости), а в дополнение к целевым пикселям выполняется альфа-смешение. В результате видна только та часть источника, которая не покрыта целью. \с 0,14
 } Tvg_Composite_Method;
 
 /**
@@ -154,66 +154,66 @@ typedef enum {
  *
  * \ingroup ThorVGCapi_Paint
  *
- * \since 0.15
+ * \с 0,15
  */
 typedef enum {
-    TVG_BLEND_METHOD_NORMAL = 0,        ///< Perform the alpha blending(default). S if (Sa == 255), otherwise (Sa * S) + (255 - Sa) * D
-    TVG_BLEND_METHOD_MULTIPLY,          ///< Takes the RGB channel values from 0 to 255 of each pixel in the top layer and multiples them with the values for the corresponding pixel from the bottom layer. (S * D)
-    TVG_BLEND_METHOD_SCREEN,            ///< The values of the pixels in the two layers are inverted, multiplied, and then inverted again. (S + D) - (S * D)
-    TVG_BLEND_METHOD_OVERLAY,           ///< Combines Multiply and Screen blend modes. (2 * S * D) if (2 * D < Da), otherwise (Sa * Da) - 2 * (Da - S) * (Sa - D)
-    TVG_BLEND_METHOD_SRCOVER,           ///< Replace the bottom layer with the top layer.
-    TVG_BLEND_METHOD_DARKEN,            ///< Creates a pixel that retains the smallest components of the top and bottom layer pixels. min(S, D)
-    TVG_BLEND_METHOD_LIGHTEN,           ///< Only has the opposite action of Darken Only. max(S, D)
-    TVG_BLEND_METHOD_COLORDODGE,        ///< Divides the bottom layer by the inverted top layer. D / (255 - S)
-    TVG_BLEND_METHOD_COLORBURN,         ///< Divides the inverted bottom layer by the top layer, and then inverts the result. 255 - (255 - D) / S
-    TVG_BLEND_METHOD_HARDLIGHT,         ///< The same as Overlay but with the color roles reversed. (2 * S * D) if (S < Sa), otherwise (Sa * Da) - 2 * (Da - S) * (Sa - D)
-    TVG_BLEND_METHOD_SOFTLIGHT,         ///< The same as Overlay but with applying pure black or white does not result in pure black or white. (1 - 2 * S) * (D ^ 2) + (2 * S * D)
-    TVG_BLEND_METHOD_DIFFERENCE,        ///< Subtracts the bottom layer from the top layer or the other way around, to always get a non-negative value. (S - D) if (S > D), otherwise (D - S)
-    TVG_BLEND_METHOD_EXCLUSION,         ///< The result is twice the product of the top and bottom layers, subtracted from their sum. s + d - (2 * s * d)
-    TVG_BLEND_METHOD_HUE,               ///< Reserved. Not supported.
-    TVG_BLEND_METHOD_SATURATION,        ///< Reserved. Not supported.
-    TVG_BLEND_METHOD_COLOR,             ///< Reserved. Not supported.
-    TVG_BLEND_METHOD_LUMINOSITY,        ///< Reserved. Not supported.
-    TVG_BLEND_METHOD_ADD,               ///< Simply adds pixel values of one layer with the other. (S + D)
-    TVG_BLEND_METHOD_HARDMIX            ///< Reserved. Not supported.
+    TVG_BLEND_METHOD_NORMAL = 0,        ///< Выполняем альфа-смешение (по умолчанию). S если (Sa == 255), иначе (Sa * S) + (255 - Sa) * D
+    TVG_BLEND_METHOD_MULTIPLY,          ///< Принимает значения канала RGB от 0 до 255 для каждого пикселя верхнего слоя и умножает их на значения для соответствующего пикселя нижнего слоя. (С*Д)
+    TVG_BLEND_METHOD_SCREEN,            ///< Значения пикселей в двух слоях инвертируются, умножаются, а затем снова инвертируются. (С+Д) - (С*Д)
+    TVG_BLEND_METHOD_OVERLAY,           ///< Сочетает режимы наложения «Умножение» и «Экран». (2*С*Д), если (2*Д<Да), иначе (Са*Да) — 2*(Да — С)*(Са — Д)
+    TVG_BLEND_METHOD_SRCOVER,           ///< Заменить нижний слой верхним.
+    TVG_BLEND_METHOD_DARKEN,            ///< Создает пиксель, который сохраняет наименьшие компоненты пикселей верхнего и нижнего слоев. мин(С, Д)
+    TVG_BLEND_METHOD_LIGHTEN,           ///< Only имеет действие, противоположное «Только затемнить». макс(С, Д)
+    TVG_BLEND_METHOD_COLORDODGE,        ///< Делит нижний слой на инвертированный верхний слой. Д/(255 - С)
+    TVG_BLEND_METHOD_COLORBURN,         ///< Делит инвертированный нижний слой на верхний слой, а затем инвертирует результат. 255 - (255 - Д)/С
+    TVG_BLEND_METHOD_HARDLIGHT,         ///< То же, что и Overlay, но с обратным расположением цветов. (2*С*Д), если (С<Са), иначе (Са*Да)-2*(Да-С)*(Са-Д)
+    TVG_BLEND_METHOD_SOFTLIGHT,         ///< То же, что и наложение, но с применением чистого черного или белого цвета не получается чистый черный или белый цвет. (1 - 2*С)*(Д^2) + (2*С*Д)
+    TVG_BLEND_METHOD_DIFFERENCE,        ///< Вычитает нижний слой из верхнего слоя или наоборот, чтобы всегда получать неотрицательное значение. (S - D), если (S > D), иначе (D - S)
+    TVG_BLEND_METHOD_EXCLUSION,         ///< Результат — удвоенное произведение верхнего и нижнего слоев, вычтенное из их суммы. с + д - (2 * с * д)
+    TVG_BLEND_METHOD_HUE,               ///< Зарезервировано. Не поддерживается.
+    TVG_BLEND_METHOD_SATURATION,        ///< Зарезервировано. Не поддерживается.
+    TVG_BLEND_METHOD_COLOR,             ///< Зарезервировано. Не поддерживается.
+    TVG_BLEND_METHOD_LUMINOSITY,        ///< Зарезервировано. Не поддерживается.
+    TVG_BLEND_METHOD_ADD,               ///< Просто добавляет значения пикселей одного слоя к другому. (С + Д)
+    TVG_BLEND_METHOD_HARDMIX            ///< Зарезервировано. Не поддерживается.
 } Tvg_Blend_Method;
 
 
 /**
- * \see Tvg_Type
+ * \см. Tvg_Type
  * \deprecated
  */
 typedef enum {
-    TVG_IDENTIFIER_UNDEF = 0,   ///< Undefined type.
-    TVG_IDENTIFIER_SHAPE,       ///< A shape type paint.
-    TVG_IDENTIFIER_SCENE,       ///< A scene type paint.
-    TVG_IDENTIFIER_PICTURE,     ///< A picture type paint.
-    TVG_IDENTIFIER_LINEAR_GRAD, ///< A linear gradient type.
-    TVG_IDENTIFIER_RADIAL_GRAD, ///< A radial gradient type.
-    TVG_IDENTIFIER_TEXT         ///< A text type paint.
+    TVG_IDENTIFIER_UNDEF = 0,   ///< Неопределенный тип.
+    TVG_IDENTIFIER_SHAPE,       ///< Краска типа формы.
+    TVG_IDENTIFIER_SCENE,       ///< Краска типа сцены.
+    TVG_IDENTIFIER_PICTURE,     ///< Краска типа изображения.
+    TVG_IDENTIFIER_LINEAR_GRAD, ///< Тип линейного градиента.
+    TVG_IDENTIFIER_RADIAL_GRAD, ///< Тип радиального градиента.
+    TVG_IDENTIFIER_TEXT         ///< Краска текстового типа.
 } Tvg_Identifier;
 
 
 /**
- * \brief Enumeration indicating the ThorVG object type value.
+ * \brief Перечисление, указывающее значение типа объекта ThorVG.
  *
- * ThorVG's drawing objects can return object type values, allowing you to identify the specific type of each object.
+ * Объекты рисования ThorVG могут возвращать значения типов объектов, что позволяет вам идентифицировать конкретный тип каждого объекта.
  *
  * \ingroup ThorVGCapi_Paint
  *
- * \see tvg_paint_get_type()
- * \see tvg_gradient_get_type()
+ * \см. tvg_paint_get_type ()
+ * \см. tvg_gradient_get_type ()
  *
- * \note Experimental API
+ * \note Экспериментальный API
  */
 typedef enum {
-    TVG_TYPE_UNDEF = 0,        ///< Undefined type.
-    TVG_TYPE_SHAPE,            ///< A shape type paint.
-    TVG_TYPE_SCENE,            ///< A scene type paint.
-    TVG_TYPE_PICTURE,          ///< A picture type paint.
-    TVG_TYPE_TEXT,             ///< A text type paint.
-    TVG_TYPE_LINEAR_GRAD = 10, ///< A linear gradient type.
-    TVG_TYPE_RADIAL_GRAD       ///< A radial gradient type.
+    TVG_TYPE_UNDEF = 0,        ///< Неопределенный тип.
+    TVG_TYPE_SHAPE,            ///< Краска типа формы.
+    TVG_TYPE_SCENE,            ///< Краска типа сцены.
+    TVG_TYPE_PICTURE,          ///< Краска типа изображения.
+    TVG_TYPE_TEXT,             ///< Краска текстового типа.
+    TVG_TYPE_LINEAR_GRAD = 10, ///< Тип линейного градиента.
+    TVG_TYPE_RADIAL_GRAD       ///< Тип радиального градиента.
 } Tvg_Type;
 
 
@@ -223,58 +223,58 @@ typedef enum {
  */
 
 /**
- * \brief Enumeration specifying the values of the path commands accepted by TVG.
+ * \brief Перечисление, указывающее значения команд пути, принимаемых TVG .
  *
- * Not to be confused with the path commands from the svg path element (like M, L, Q, H and many others).
- * TVG interprets all of them and translates to the ones from the PathCommand values.
+ * Не путать с командами пути из элемента пути svg (например, M, L, Q, H и многими другими).
+ * TVG интерпретирует их все и преобразует в значения PathCommand.
  */
 typedef enum {
-    TVG_PATH_COMMAND_CLOSE = 0, ///< Ends the current sub-path and connects it with its initial point - corresponds to Z command in the svg path commands.
-    TVG_PATH_COMMAND_MOVE_TO,   ///< Sets a new initial point of the sub-path and a new current point - corresponds to M command in the svg path commands.
-    TVG_PATH_COMMAND_LINE_TO,   ///< Draws a line from the current point to the given point and sets a new value of the current point - corresponds to L command in the svg path commands.
-    TVG_PATH_COMMAND_CUBIC_TO   ///< Draws a cubic Bezier curve from the current point to the given point using two given control points and sets a new value of the current point - corresponds to C command in the svg path commands.
+    TVG_PATH_COMMAND_CLOSE = 0, ///< Завершает текущий подпуть и соединяет его с его начальной точкой — соответствует команде Z в командах пути svg.
+    TVG_PATH_COMMAND_MOVE_TO,   ///< Устанавливает новую начальную точку подпути и новую текущую точку — соответствует команде M в командах пути svg.
+    TVG_PATH_COMMAND_LINE_TO,   ///< Рисует линию от текущей точки до заданной точки и устанавливает новое значение текущей точки — соответствует команде L в командах пути svg.
+    TVG_PATH_COMMAND_CUBIC_TO   ///< Рисует кубическую кривую Безье от текущей точки до заданной точки, используя две заданные контрольные точки, и устанавливает новое значение текущей точки — соответствует команде C в командах пути svg.
 } Tvg_Path_Command;
 
 
 /**
- * \brief Enumeration determining the ending type of a stroke in the open sub-paths.
+ * \brief Перечисление, определяющее тип окончания штриха в открытых подпутях.
  */
 typedef enum {
-    TVG_STROKE_CAP_SQUARE = 0, ///< The stroke is extended in both endpoints of a sub-path by a rectangle, with the width equal to the stroke width and the length equal to the half of the stroke width. For zero length sub-paths the square is rendered with the size of the stroke width.
-    TVG_STROKE_CAP_ROUND,      ///< The stroke is extended in both endpoints of a sub-path by a half circle, with a radius equal to the half of a stroke width. For zero length sub-paths a full circle is rendered.
-    TVG_STROKE_CAP_BUTT        ///< The stroke ends exactly at each of the two endpoints of a sub-path. For zero length sub-paths no stroke is rendered.
+    TVG_STROKE_CAP_SQUARE = 0, ///< Обводка расширяется в обеих конечных точках подпути на прямоугольник с шириной, равной ширине обводки, и длиной, равной половине ширины обводки. Для подпутей нулевой длины квадрат отображается с размером ширины штриха.
+    TVG_STROKE_CAP_ROUND,      ///< Штрих расширяется в обеих конечных точках подпути на полукруг с радиусом, равным половине ширины штриха. Для подпутей нулевой длины отображается полный круг.
+    TVG_STROKE_CAP_BUTT        ///< Штрих заканчивается точно в каждой из двух конечных точек подпути. Для подпутей нулевой длины штрих не отображается.
 } Tvg_Stroke_Cap;
 
 
 /**
- * \brief Enumeration specifying how to fill the area outside the gradient bounds.
+ * \brief Перечисление, указывающее, как заполнить область за пределами границ градиента.
  */
 typedef enum {
-    TVG_STROKE_JOIN_BEVEL = 0, ///< The outer corner of the joined path segments is bevelled at the join point. The triangular region of the corner is enclosed by a straight line between the outer corners of each stroke.
-    TVG_STROKE_JOIN_ROUND,     ///< The outer corner of the joined path segments is rounded. The circular region is centered at the join point.
-    TVG_STROKE_JOIN_MITER      ///< The outer corner of the joined path segments is spiked. The spike is created by extension beyond the join point of the outer edges of the stroke until they intersect. In case the extension goes beyond the limit, the join style is converted to the Bevel style.
+    TVG_STROKE_JOIN_BEVEL = 0, ///< Внешний угол соединяемых сегментов пути скошен в точке соединения. Треугольная область угла ограничена прямой линией между внешними углами каждого штриха.
+    TVG_STROKE_JOIN_ROUND,     ///< Внешний угол соединяемых сегментов пути закруглен. Круглая область центрируется в точке соединения.
+    TVG_STROKE_JOIN_MITER      ///< Внешний угол соединенных сегментов пути имеет шипы. Шип создается путем расширения за пределы точки соединения внешних краев обводки до их пересечения. Если расширение выходит за пределы ограничения, стиль соединения преобразуется в стиль «Скос».
 } Tvg_Stroke_Join;
 
 
 /**
- * \brief Enumeration specifying how to fill the area outside the gradient bounds.
+ * \brief Перечисление, указывающее, как заполнить область за пределами границ градиента.
  */
 typedef enum {
-    TVG_STROKE_FILL_PAD = 0, ///< The remaining area is filled with the closest stop color.
-    TVG_STROKE_FILL_REFLECT, ///< The gradient pattern is reflected outside the gradient area until the expected region is filled.
-    TVG_STROKE_FILL_REPEAT   ///< The gradient pattern is repeated continuously beyond the gradient area until the expected region is filled.
+    TVG_STROKE_FILL_PAD = 0, ///< Оставшаяся область заполняется ближайшим стоп-цветом.
+    TVG_STROKE_FILL_REFLECT, ///< Узор градиента отражается за пределами области градиента до тех пор, пока ожидаемая область не будет заполнена.
+    TVG_STROKE_FILL_REPEAT   ///< Шаблон градиента непрерывно повторяется за пределами области градиента, пока ожидаемая область не будет заполнена.
 } Tvg_Stroke_Fill;
 
 
 /**
- * \brief Enumeration specifying the algorithm used to establish which parts of the shape are treated as the inside of the shape.
+ * \brief Перечисление, определяющее алгоритм, используемый для определения того, какие части фигуры считаются внутренней частью фигуры.
  */
 typedef enum {
-    TVG_FILL_RULE_WINDING = 0, ///< A line from the point to a location outside the shape is drawn. The intersections of the line with the path segment of the shape are counted. Starting from zero, if the path segment of the shape crosses the line clockwise, one is added, otherwise one is subtracted. If the resulting sum is non zero, the point is inside the shape.
-    TVG_FILL_RULE_EVEN_ODD     ///< A line from the point to a location outside the shape is drawn and its intersections with the path segments of the shape are counted. If the number of intersections is an odd number, the point is inside the shape.
+    TVG_FILL_RULE_WINDING = 0, ///< Рисуется линия от точки до места за пределами фигуры. Подсчитываются пересечения линии с сегментом пути фигуры. Начиная с нуля, если сегмент пути фигуры пересекает линию по часовой стрелке, единица добавляется, в противном случае единица вычитается. Если полученная сумма не равна нулю, точка находится внутри фигуры.
+    TVG_FILL_RULE_EVEN_ODD     ///< Рисуется линия от точки до места за пределами фигуры и подсчитываются ее пересечения с сегментами пути фигуры. Если количество пересечений нечетное, точка находится внутри фигуры.
 } Tvg_Fill_Rule;
 
-/** \} */   // end addtogroup ThorVGCapi_Shape
+/** \} */   // конец добавления в группу ThorVGCapi_Shape
 
 
 /*!
@@ -283,7 +283,7 @@ typedef enum {
 */
 
 /*!
-* \brief A data structure storing the information about the color and its relative position inside the gradient bounds.
+* \brief Структура данных, хранящая информацию о цвете и его относительном положении внутри границ градиента.
 */
 typedef struct
 {
@@ -294,11 +294,11 @@ typedef struct
     uint8_t a;    /**< The alpha channel value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque. */
 } Tvg_Color_Stop;
 
-/** \} */   // end addtogroup ThorVGCapi_Gradient
+/** \} */   // конец добавления в группу ThorVGCapi_Gradient
 
 
 /**
- * \brief A data structure representing a point in two-dimensional space.
+ * \brief Структура данных, представляющая точку в двумерном пространстве.
  */
 typedef struct
 {
@@ -307,11 +307,11 @@ typedef struct
 
 
 /**
- * \brief A data structure representing a three-dimensional matrix.
+ * \brief Структура данных, представляющая трехмерную матрицу.
  *
- * The elements e11, e12, e21 and e22 represent the rotation matrix, including the scaling factor.
- * The elements e13 and e23 determine the translation of the object along the x and y-axis, respectively.
- * The elements e31 and e32 are set to 0, e33 is set to 1.
+ * Элементы e11, e12, e21 и e22 представляют матрицу вращения, включая коэффициент масштабирования.
+ * Элементы e13 и e23 определяют перемещение объекта по осям x и y соответственно.
+ * Элементы e31 и e32 установлены в 0, e33 — в 1.
  */
 typedef struct
 {
@@ -322,95 +322,95 @@ typedef struct
 
 
 /**
-* \defgroup ThorVGCapi_Initializer Initializer
-* \brief A module enabling initialization and termination of the TVG engines.
+* \defgroup Инициализатор ThorVGCapi_Initializer
+* \brief Модуль, позволяющий инициализировать и завершить работу двигателей TVG.
 *
 * \{
 */
 
 /************************************************************************/
-/* Engine API                                                           */
+/* Двигатель API                                                           */
 /************************************************************************/
 /*!
-* \brief Initializes TVG engines.
+* \brief Инициализирует двигатели TVG.
 *
-* TVG requires the running-engine environment.
-* TVG runs its own task-scheduler for parallelizing rendering tasks efficiently.
-* You can indicate the number of threads, the count of which is designated @p threads.
-* In the initialization step, TVG will generate/spawn the threads as set by @p threads count.
+* TVG требует среды работающего двигателя.
+* TVG использует собственный планировщик задач для эффективного распараллеливания задач рендеринга.
+* Вы можете указать количество потоков, количество которых обозначается потоками @p.
+* На этапе инициализации TVG будет генерировать/создавать потоки в соответствии с количеством потоков @p.
 *
 * \code
-* tvg_engine_init(TVG_ENGINE_SW, 0);  //Initialize software renderer and use the main thread only
+* tvg_engine_init (TVG_ENGINE_SW, 0);  //Инициализируем программный рендерер и используем только основной поток
 * \endcode
 *
-* \param[in] engine_method The engine types to initialize. This is relative to the Canvas types, in which it will be used. For multiple backends bitwise operation is allowed.
+* \param[in] engine_method Типы механизмов для инициализации. Это относится к типам Canvas, в которых он будет использоваться. Для нескольких серверов разрешены побитовые операции.
 *   - TVG_ENGINE_SW: CPU rasterizer
 *   - TVG_ENGINE_GL: OpenGL rasterizer (not supported yet)
-* \param[in] threads The number of additional threads used to perform rendering. Zero indicates only the main thread is to be used.
+* \param[in] threads Количество дополнительных потоков, используемых для рендеринга. Ноль указывает, что будет использоваться только основной поток.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT Unknown engine type.
-* \retval TVG_RESULT_NOT_SUPPORTED Unsupported engine type.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неизвестный тип двигателя.
+* \retval TVG_RESULT_NOT_SUPPORTED Неподдерживаемый тип двигателя.
 *
-* \note The Initializer keeps track of the number of times it was called. Threads count is fixed at the first init() call.
-* \see tvg_engine_term()
-* \see Tvg_Engine
+* \note Инициализатор отслеживает количество вызовов. Количество потоков фиксируется при первом вызове init().
+* \см. tvg_engine_term ()
+* \см. Tvg_Engine
 */
 TVG_API Tvg_Result tvg_engine_init(Tvg_Engine engine_method, unsigned threads);
 
 
 /*!
-* \brief Terminates TVG engines.
+* \brief Завершает работу двигателей TVG.
 *
-* It should be called in case of termination of the TVG client with the same engine types as were passed when tvg_engine_init() was called.
+* Его следует вызывать в случае завершения работы клиента TVG с теми же типами движков, которые были переданы при вызове tvg_engine_init().
 *
 * \code
-* tvg_engine_init(TVG_ENGINE_SW, 0);
-* //define canvas and shapes, update shapes, general rendering calls
-* tvg_engine_term(TVG_ENGINE_SW);
+* tvg_engine_init (TVG_ENGINE_SW, 0);
+* //определяем холст и формы, обновляем формы, общие вызовы рендеринга
+* tvg_engine_term ( TVG_ENGINE_SW );
 * \endcode
 *
-* \param engine_method The engine types to terminate. This is relative to the Canvas types, in which it will be used. For multiple backends bitwise operation is allowed
+* \param engine_method Типы механизмов, которые необходимо завершить. Это относится к типам Canvas, в которых он будет использоваться. Для нескольких серверов разрешены побитовые операции.
 *   - TVG_ENGINE_SW: CPU rasterizer
 *   - TVG_ENGINE_GL: OpenGL rasterizer (not supported yet)
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION Nothing to be terminated.
-* \retval TVG_RESULT_INVALID_ARGUMENT Unknown engine type.
-* \retval TVG_RESULT_NOT_SUPPORTED Unsupported engine type.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Ничего не нужно прекращать.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неизвестный тип двигателя.
+* \retval TVG_RESULT_NOT_SUPPORTED Неподдерживаемый тип двигателя.
 *
-* \see tvg_engine_init()
-* \see Tvg_Engine
+* \см. tvg_engine_init ()
+* \см. Tvg_Engine
 */
 TVG_API Tvg_Result tvg_engine_term(Tvg_Engine engine_method);
 
 
 /**
-* \brief Retrieves the version of the TVG engine.
+* \brief Получает версию движка TVG.
 *
-* \param[out] major A major version number.
-* \param[out] minor A minor version number.
-* \param[out] micro A micro version number.
-* \param[out] version The version of the engine in the format major.minor.micro, or a @p nullptr in case of an internal error.
+* \param[out] major Основной номер версии.
+* \param[out] второстепенный номер версии.
+* \param[out] micro Номер микро-версии.
+* \param[out] version Версия движка в формате major.minor.micro или nullptr @p в случае внутренней ошибки.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_SUCCESS.
+* \return Перечисление Tvg_Result.
+* \ретвал TVG_RESULT_SUCCESS .
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_engine_version(uint32_t* major, uint32_t* minor, uint32_t* micro, const char** version);
 
-/** \} */   // end defgroup ThorVGCapi_Initializer
+/** \} */   // конец защитной группы ThorVGCapi_Initializer
 
 
 /**
-* \defgroup ThorVGCapi_Canvas Canvas
-* \brief A module for managing and drawing graphical elements.
+* \defgroup ThorVGCapi_Canvas Холст
+* \brief Модуль для управления и рисования графических элементов.
 *
-* A canvas is an entity responsible for drawing the target. It sets up the drawing engine and the buffer, which can be drawn on the screen. It also manages given Paint objects.
+* Холст — это объект, отвечающий за рисование цели. Он настраивает механизм рисования и буфер, который можно рисовать на экране. Он также управляет заданными объектами Paint.
 *
-* \note A Canvas behavior depends on the raster engine though the final content of the buffer is expected to be identical.
-* \warning The Paint objects belonging to one Canvas can't be shared among multiple Canvases.
+* \note Поведение Canvas зависит от растрового движка, хотя ожидается, что окончательное содержимое буфера будет идентичным.
+* \предупреждение Объекты Paint, принадлежащие одному холсту, не могут использоваться несколькими холстами.
 \{
 */
 
@@ -419,7 +419,7 @@ TVG_API Tvg_Result tvg_engine_version(uint32_t* major, uint32_t* minor, uint32_t
 * \defgroup ThorVGCapi_SwCanvas SwCanvas
 * \ingroup ThorVGCapi_Canvas
 *
-* \brief A module for rendering the graphical elements using the software engine.
+* \brief Модуль для рендеринга графических элементов с помощью программного движка.
 *
 * \{
 */
@@ -429,612 +429,612 @@ TVG_API Tvg_Result tvg_engine_version(uint32_t* major, uint32_t* minor, uint32_t
 /************************************************************************/
 
 /**
- * \brief Enumeration specifying the methods of Memory Pool behavior policy.
+ * \brief Перечисление, определяющее методы политики поведения пула памяти.
  */
 typedef enum {
-    TVG_MEMPOOL_POLICY_DEFAULT = 0, ///< Default behavior that ThorVG is designed to.
-    TVG_MEMPOOL_POLICY_SHAREABLE,   ///< Memory Pool is shared among canvases.
-    TVG_MEMPOOL_POLICY_INDIVIDUAL   ///< Allocate designated memory pool that is used only by the current canvas instance.
+    TVG_MEMPOOL_POLICY_DEFAULT = 0, ///< Поведение по умолчанию, для которого предназначен ThorVG.
+    TVG_MEMPOOL_POLICY_SHAREABLE,   ///< Пул памяти распределяется между холстами.
+    TVG_MEMPOOL_POLICY_INDIVIDUAL   ///< Выделяем назначенный пул памяти, который используется только текущим экземпляром холста.
 } Tvg_Mempool_Policy;
 
 
 /**
- * \brief Enumeration specifying the methods of combining the 8-bit color channels into 32-bit color.
+ * \brief Перечисление, определяющее методы объединения 8-битных цветовых каналов в 32-битный цвет.
  */
 typedef enum {
-    TVG_COLORSPACE_ABGR8888 = 0, ///< The channels are joined in the order: alpha, blue, green, red. Colors are alpha-premultiplied. (a << 24 | b << 16 | g << 8 | r)
-    TVG_COLORSPACE_ARGB8888,     ///< The channels are joined in the order: alpha, red, green, blue. Colors are alpha-premultiplied. (a << 24 | r << 16 | g << 8 | b)
-    TVG_COLORSPACE_ABGR8888S,    ///< The channels are joined in the order: alpha, blue, green, red. Colors are un-alpha-premultiplied. @since 0.13
-    TVG_COLORSPACE_ARGB8888S     ///< The channels are joined in the order: alpha, red, green, blue. Colors are un-alpha-premultiplied. @since 0.13
+    TVG_COLORSPACE_ABGR8888 = 0, ///< Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета предварительно умножаются на альфа-канал. (а << 24 | б << 16 | г << 8 | г)
+    TVG_COLORSPACE_ARGB8888,     ///< Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета предварительно умножаются на альфа-канал. (а << 24 | г << 16 | г << 8 | б)
+    TVG_COLORSPACE_ABGR8888S,    ///< Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета не умножаются по альфа-каналу.  @since 0.13
+    TVG_COLORSPACE_ARGB8888S     ///< Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета не умножаются по альфа-каналу.  @since 0.13
 } Tvg_Colorspace;
 
 
 /*!
-* \brief Creates a Canvas object.
+* \brief Создает объект Canvas.
 *
 * \code
-* Tvg_Canvas *canvas = NULL;
+* Tvg_Canvas *canvas = NULL ;
 *
-* tvg_engine_init(TVG_ENGINE_SW, 4);
+* tvg_engine_init (TVG_ENGINE_SW, 4);
 * canvas = tvg_swcanvas_create();
 *
-* //set up the canvas buffer
-* uint32_t *buffer = NULL;
+* //настраиваем буфер холста
+* uint32_t *буфер = NULL ;
 * buffer = (uint32_t*) malloc(sizeof(uint32_t) * 100 * 100);
 * if (!buffer) return;
 *
-* tvg_swcanvas_set_target(canvas, buffer, 100, 100, 100, TVG_COLORSPACE_ARGB8888);
+* tvg_swcanvas_set_target (холст, буфер, 100, 100, 100, TVG_COLORSPACE_ARGB8888 );
 *
-* //set up paints and add them into the canvas before drawing it
+* //настраиваем краски и добавляем их на холст перед его рисованием
 *
-* tvg_canvas_destroy(canvas);
-* tvg_engine_term(TVG_ENGINE_SW);
+* tvg_canvas_destroy (холст);
+* tvg_engine_term ( TVG_ENGINE_SW );
 * \endcode
 *
-* \return A new Tvg_Canvas object.
+* \return Новый объект Tvg_Canvas.
 */
 TVG_API Tvg_Canvas* tvg_swcanvas_create(void);
 
 
 /*!
-* \brief Sets the buffer used in the rasterization process and defines the used colorspace.
+* \brief Устанавливает буфер, используемый в процессе растеризации, и определяет используемое цветовое пространство.
 *
-* For optimisation reasons TVG does not allocate memory for the output buffer on its own.
-* The buffer of a desirable size should be allocated and owned by the caller.
+* По соображениям оптимизации TVG не выделяет память для выходного буфера самостоятельно.
+* Буфер желаемого размера должен быть выделен и принадлежать вызывающей стороне.
 *
-* \param[in] canvas The Tvg_Canvas object managing the @p buffer.
-* \param[in] buffer A pointer to the allocated memory block of the size @p stride x @p h.
-* \param[in] stride The stride of the raster image - in most cases same value as @p w.
-* \param[in] w The width of the raster image.
-* \param[in] h The height of the raster image.
-* \param[in] cs The colorspace value defining the way the 32-bits colors should be read/written.
+* \param[in] Canvas Объект Tvg_Canvas, управляющий буфером @p.
+* \param[in] buffer Указатель на выделенный блок памяти размером @p шаг x @p h.
+* \param[in] шаг Шаг растрового изображения – в большинстве случаев то же значение, что и @p w.
+* \param[in] w Ширина растрового изображения.
+* \param[in] h Высота растрового изображения.
+* \param[in] cs Значение цветового пространства, определяющее способ чтения/записи 32-битных цветов.
 * - TVG_COLORSPACE_ABGR8888
 * - TVG_COLORSPACE_ARGB8888
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENTS An invalid canvas or buffer pointer passed or one of the @p stride, @p w or @p h being zero.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION if the canvas is performing rendering. Please ensure the canvas is synced.
-* \retval TVG_RESULT_NOT_SUPPORTED The software engine is not supported.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENTS Передан недопустимый указатель холста или буфера, или один из шагов @p, @p w или @p h равен нулю.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION, если холст выполняет рендеринг. Убедитесь, что холст синхронизирован.
+* \retval TVG_RESULT_NOT_SUPPORTED Программный движок не поддерживается.
 *
-* \warning Do not access @p buffer during tvg_canvas_draw() - tvg_canvas_sync(). It should not be accessed while the engine is writing on it.
+* \предупреждение Не обращайтесь к буферу @p во время выполнения tvg_canvas_draw () - tvg_canvas_sync (). К нему не следует обращаться, пока движок пишет на нем.
 *
-* \see Tvg_Colorspace
+* \см. Tvg_Colorspace
 */
 TVG_API Tvg_Result tvg_swcanvas_set_target(Tvg_Canvas* canvas, uint32_t* buffer, uint32_t stride, uint32_t w, uint32_t h, Tvg_Colorspace cs);
 
 
 /*!
-* \brief Sets the software engine memory pool behavior policy.
+* \brief Устанавливает политику поведения пула памяти программного ядра.
 *
-* ThorVG draws a lot of shapes, it allocates/deallocates a few chunk of memory
-* while processing rendering. It internally uses one shared memory pool
-* which can be reused among the canvases in order to avoid memory overhead.
+* ThorVG рисует множество фигур, выделяет/освобождает часть памяти.
+* во время обработки рендеринга. Он внутренне использует один общий пул памяти.
+* который можно повторно использовать среди холстов, чтобы избежать накладных расходов на память.
 *
-* Thus ThorVG suggests using a memory pool policy to satisfy user demands,
-* if it needs to guarantee the thread-safety of the internal data access.
+* Таким образом, ThorVG предлагает использовать политику пула памяти для удовлетворения требований пользователей.
+* если ему необходимо гарантировать потокобезопасность доступа к внутренним данным.
 *
-* \param[in] canvas The Tvg_Canvas object of which the Memory Pool behavior is to be specified.
-* \param[in] policy The method specifying the Memory Pool behavior. The default value is @c TVG_MEMPOOL_POLICY_DEFAULT.
+* \param[in] Canvas Объект Tvg_Canvas, для которого необходимо указать поведение пула памяти.
+* \param[in] policy Метод, определяющий поведение пула памяти. Значение по умолчанию — @c TVG_MEMPOOL_POLICY_DEFAULT.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENTS An invalid canvas pointer passed.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION The canvas contains some paints already.
-* \retval TVG_RESULT_NOT_SUPPORTED The software engine is not supported.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENTS Передан неверный указатель холста.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION На холсте уже есть краски.
+* \retval TVG_RESULT_NOT_SUPPORTED Программный движок не поддерживается.
 *
-* \note When @c policy is set as @c TVG_MEMPOOL_POLICY_INDIVIDUAL, the current instance of canvas uses its own individual
-*       memory data, which is not shared with others. This is necessary when the canvas is accessed on a worker-thread.
+* \note Когда для политики @c установлено значение @c TVG_MEMPOOL_POLICY_INDIVIDUAL, текущий экземпляр холста использует свой собственный
+*       данные памяти, которые не используются совместно с другими. Это необходимо, когда доступ к холсту осуществляется через рабочий поток.
 *
-* \warning It's not allowed after pushing any paints.
+* \предупреждение Не допускается после нажатия каких-либо красок.
 */
 TVG_API Tvg_Result tvg_swcanvas_set_mempool(Tvg_Canvas* canvas, Tvg_Mempool_Policy policy);
 
-/** \} */   // end defgroup ThorVGCapi_SwCanvas
+/** \} */   // конец защитной группы ThorVGCapi_SwCanvas
 
 
 /************************************************************************/
-/* Common Canvas API                                                    */
+/* Обычный холст API                                                    */
 /************************************************************************/
 /*!
-* \brief Clears the canvas internal data, releases all paints stored by the canvas and destroys the canvas object itself.
+* \brief Очищает внутренние данные холста, освобождает все краски, хранящиеся на холсте, и уничтожает сам объект холста.
 *
 * \code
-* static Tvg_Canvas *canvas = NULL;
-* static uint32_t *buffer = NULL;
+* статический Tvg_Canvas *canvas = NULL ;
+* статический uint32_t *buffer = NULL ;
 *
-* static void _init() {
+* статическая пустота _init() {
 *   canvas = tvg_swcanvas_create();
 *   buffer = (uint32_t*) malloc(sizeof(uint32_t) * 100 * 100);
-*   tvg_swcanvas_set_target(canvas, buffer, 100, 100, 100, TVG_COLORSPACE_ARGB8888);
+*   tvg_swcanvas_set_target (холст, буфер, 100, 100, 100, TVG_COLORSPACE_ARGB8888 );
 * }
 *
-* //a task called from main function in a loop
+* //задача, вызываемая из основной функции в цикле
 * static void _job(const int cmd) {
-*   //define a valid rectangle shape
-*   switch (cmd) {
-*     case CMD_EXIT: return 0;
-*     case CMD_ADD_RECT:
-*       tvg_canvas_push(canvas, rect);
-*       break;
-*     case CMD_DEL_RECT:
-*       tvg_paint_del(rect);
-*       //now to safely delete Tvg_Canvas, tvg_canvas_clear() API have to be used
-*       break;
-*     default:
-*       break;
+*   //определяем допустимую форму прямоугольника
+*   переключатель (команда) {
+*     случай CMD_EXIT: вернуть 0;
+*     случай CMD_ADD_RECT :
+*       tvg_canvas_push (холст, прямоугольник);
+*       перерыв;
+*     случай CMD_DEL_RECT :
+*       tvg_paint_del (прямой);
+*       //теперь для безопасного удаления Tvg_Canvas необходимо использовать tvg_canvas_clear () API
+*       перерыв;
+*     по умолчанию:
+*       перерыв;
 *   }
 * }
 *
 * int main(int argc, char **argv) {
-*   int cmd = 0;
-*   int stop = 1;
+*   интервал cmd = 0;
+*   интервал остановки = 1;
 *
-*   tvg_engine_init(TVG_ENGINE_SW, 4);
+*   tvg_engine_init (TVG_ENGINE_SW, 4);
 *
-*   while (stop) {
-*      //wait for a command e.g. from a console
+*   пока (стоп) {
+*      //ждём команду, например. с консоли
 *      stop = _job(cmd);
 *   }
-*   tvg_canvas_clear(canvas, false);
-*   tvg_canvas_destroy(canvas);
-*   tvg_engine_term(TVG_ENGINE_SW);
-*   return 0;
+*   tvg_canvas_clear (холст, ложь);
+*   tvg_canvas_destroy (холст);
+*   tvg_engine_term ( TVG_ENGINE_SW );
+*   вернуть 0;
 * }
 *
-* tvg_canvas_destroy(canvas);
-* tvg_engine_term(TVG_ENGINE_SW)
+* tvg_canvas_destroy (холст);
+* tvg_engine_term ( TVG_ENGINE_SW )
 * \endcode
 *
-* \param[in] canvas The Tvg_Canvas object to be destroyed.
+* \param[in] Canvas Объект Tvg_Canvas, который необходимо уничтожить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer to the Tvg_Canvas object is passed.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Передан недопустимый указатель на объект Tvg_Canvas.
 *
-* \note If the paints from the canvas should not be released, the tvg_canvas_clear() with a @c free argument value set to @c false should be called.
-* Please be aware that in such a case TVG is not responsible for the paints release anymore and it has to be done manually in order to avoid memory leaks.
+* \note Если краски с холста не должны выпускаться, следует вызвать функцию tvg_canvas_clear() со значением свободного аргумента @c, установленным в @c false.
+* Имейте в виду, что в таком случае TVG больше не несет ответственности за выпуск красок, и это необходимо делать вручную во избежание утечек памяти.
 *
-* \see tvg_paint_del(), tvg_canvas_clear()
+* \см. tvg_paint_del (), tvg_canvas_clear ()
 */
 TVG_API Tvg_Result tvg_canvas_destroy(Tvg_Canvas* canvas);
 
 
 /*!
-* \brief Inserts a drawing element into the canvas using a Tvg_Paint object.
+* \brief Вставляет элемент рисунка в холст, используя объект Tvg_Paint.
 *
-* \param[in] canvas The Tvg_Canvas object managing the @p paint.
-* \param[in] paint The Tvg_Paint object to be drawn.
+* \param[in] холст Объект Tvg_Canvas, управляющий отрисовкой @p.
+* \param[in] Paint Объект Tvg_Paint, который нужно нарисовать.
 *
-* Only the paints pushed into the canvas will be drawing targets.
-* They are retained by the canvas until you call tvg_canvas_clear().
+* Только краски, нанесенные на холст, будут целями рисования.
+* Они сохраняются на холсте до тех пор, пока вы не вызовете tvg_canvas_clear().
 *
-* \return Tvg_Result return values:
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION An internal error.
+* \return Tvg_Result возвращаемые значения:
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Внутренняя ошибка.
 *
-* \note The rendering order of the paints is the same as the order as they were pushed. Consider sorting the paints before pushing them if you intend to use layering.
-* \see tvg_canvas_clear()
+* \note Порядок отрисовки красок такой же, как и порядок их перемещения. Если вы собираетесь использовать слои, рассмотрите возможность сортировки красок перед тем, как их раскладывать.
+* \см. tvg_canvas_clear ()
 */
 TVG_API Tvg_Result tvg_canvas_push(Tvg_Canvas* canvas, Tvg_Paint* paint);
 
 
 /*!
-* \brief Reserves a memory block where the objects pushed into a canvas are stored.
+* \brief Резервирует блок памяти, в котором хранятся объекты, помещенные в холст.
 *
-* If the number of Tvg_Paints to be stored in a canvas is known in advance, calling this function reduces the multiple
-* memory allocations thus improves the performance.
+* Если количество Tvg_Paints, которое будет сохранено в холсте, известно заранее, вызов этой функции уменьшает кратное число.
+* Таким образом, распределение памяти повышает производительность.
 *
 * \code
-* Tvg_Canvas *canvas = NULL;
+* Tvg_Canvas *canvas = NULL ;
 *
-* tvg_engine_init(TVG_ENGINE_SW, 4);
+* tvg_engine_init (TVG_ENGINE_SW, 4);
 * canvas = tvg_swcanvas_create();
 *
-* uint32_t *buffer = NULL;
+* uint32_t *буфер = NULL ;
 * buffer = (uint32_t*) malloc(sizeof(uint32_t) * 100 * 100);
 * if (!buffer) return;
 *
-* tvg_swcanvas_set_target(canvas, buffer, 100, 100, 100, TVG_COLORSPACE_ARGB8888);
+* tvg_swcanvas_set_target (холст, буфер, 100, 100, 100, TVG_COLORSPACE_ARGB8888 );
 *
-* tvg_canvas_destroy(canvas);
-* tvg_engine_term(TVG_ENGINE_SW)
+* tvg_canvas_destroy (холст);
+* tvg_engine_term ( TVG_ENGINE_SW )
 * \endcode
 *
-* \param[in] canvas The Tvg_Canvas object managing the reserved memory.
-* \param[in] n The number of objects for which the memory is to be reserved.
+* \param[in] Canvas Объект Tvg_Canvas, управляющий зарезервированной памятью.
+* \param[in] n Число объектов, для которых должна быть зарезервирована память.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Canvas pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Canvas.
 */
 TVG_DEPRECATED TVG_API Tvg_Result tvg_canvas_reserve(Tvg_Canvas* canvas, uint32_t n);
 
 
 /*!
-* \brief Sets the total number of the paints pushed into the canvas to be zero.
-* Tvg_Paint objects stored in the canvas are released if @p free is set to @c true, otherwise the memory is not deallocated and
-* all paints should be released manually in order to avoid memory leaks.
+* \brief Устанавливает общее количество красок, попавших на холст, равным нулю.
+* Объекты Tvg_Paint, хранящиеся на холсте, освобождаются, если для параметра @p free установлено значение @c true, в противном случае память не освобождается и
+* все краски следует освобождать вручную во избежание утечек памяти.
 *
-* \param[in] canvas The Tvg_Canvas object to be cleared.
-* \param[in] free If @c true the memory occupied by paints is deallocated, otherwise it is not.
+* \param[in] Canvas Объект Tvg_Canvas, который необходимо очистить.
+* \param[in] free Если @c true, память, занятая красками, освобождается, в противном случае — нет.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Canvas pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Canvas.
 *
-* \see tvg_canvas_destroy()
+* \см. tvg_canvas_destroy ()
 */
 TVG_API Tvg_Result tvg_canvas_clear(Tvg_Canvas* canvas, bool free);
 
 
 /*!
-* \brief Updates all paints in a canvas.
+* \brief Обновляет все краски на холсте.
 *
-* Should be called before drawing in order to prepare paints for the rendering.
+* Следует позвонить перед рисованием, чтобы подготовить краски к рендерингу.
 *
 * \code
-* //A frame drawing example. Thread safety and events implementation is skipped to show only TVG code.
+* //Пример рисования рамки. Реализация потокобезопасности и событий пропускается, чтобы отображался только код TVG.
 *
-* static Tvg_Canvas *canvas = NULL;
-* static Tvg_Paint *rect = NULL;
+* статический Tvg_Canvas *canvas = NULL ;
+* статический Tvg_Paint *rect = NULL ;
 *
-* int _frame_render(void) {
-*   tvg_canvas_update(canvas);
-*   tvg_canvas_draw(canvas);
-*   tvg_canvas_sync(canvas);
+* int _frame_render (недействительный) {
+*   tvg_canvas_update (холст);
+*   tvg_canvas_draw (холст);
+*   tvg_canvas_sync (холст);
 * }
 *
-* //event handler from your code or third party library
-* void _event_handler(event *event_data) {
-*   if (!event_data) return NULL;
-*     switch(event_data.type) {
-*       case EVENT_RECT_ADD:
-*         if (!rect) {
-*           tvg_shape_append_rect(rect, 10, 10, 50, 50, 0, 0);
-*           tvg_shape_set_stroke_width(rect, 1.0f);
-*           tvg_shape_set_stroke_color(rect, 255, 0, 0, 255);
-*           tvg_canvas_push(canvas, rect);
+* //обработчик событий из вашего кода или сторонней библиотеки
+* void _event_handler (событие * event_data) {
+*   если (! event_data) вернуть NULL;
+*     переключатель( event_data .type) {
+*       случай EVENT_RECT_ADD :
+*         если (!прямо) {
+*           tvg_shape_append_rect (прямоугольник, 10, 10, 50, 50, 0, 0);
+*           tvg_shape_set_stroke_width (прямоугольный, 1.0f);
+*           tvg_shape_set_stroke_color (прямоугольный, 255, 0, 0, 255);
+*           tvg_canvas_push (холст, прямоугольник);
 *         }
-*         break;
-*       case EVENT_RECT_MOVE:
-*         if (rect) tvg_paint_translate(rect, 10.0, 10.0);
-*           break;
-*         default:
-*           break;
+*         перерыв;
+*       случай EVENT_RECT_MOVE :
+*         если (прямой) tvg_paint_translate (прямой, 10.0, 10.0);
+*           перерыв;
+*         по умолчанию:
+*           перерыв;
 *   }
 * }
 *
 * int main(int argc, char **argv) {
-*   //example handler from your code or third party lib
-*   event_handler_add(handler, _event_handler);
+*   //пример обработчика из вашего кода или сторонней библиотеки
+*   event_handler_add (обработчик, _event_handler );
 *
-*   //create frame rendering process which calls _frame_render() function.
-*   app_loop_begin(_frame_render);
-*   app_loop_finish();
-*   cleanup();
+*   //создаем процесс рендеринга кадра, который вызывает функцию _frame_render().
+*   app_loop_begin ( _frame_render );
+*   app_loop_finish ();
+*   cleanup() ;
 * }
 * \endcode
 *
-* \param[in] canvas The Tvg_Canvas object to be updated.
+* \param[in] Canvas Объект Tvg_Canvas, который необходимо обновить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Canvas pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Canvas.
 *
-* \see tvg_canvas_update_paint()
+* \см. tvg_canvas_update_paint ()
 */
 TVG_API Tvg_Result tvg_canvas_update(Tvg_Canvas* canvas);
 
 
 /*!
-* \brief Updates the given Tvg_Paint object from the canvas before the rendering.
+* \brief Обновляет данный объект Tvg_Paint с холста перед рендерингом.
 *
-* If a client application using the TVG library does not update the entire canvas with tvg_canvas_update() in the frame
-* rendering process, Tvg_Paint objects previously added to the canvas should be updated manually with this function.
+* Если клиентское приложение, использующее библиотеку TVG, не обновляет весь холст с помощью tvg_canvas_update() в кадре
+* В процессе рендеринга объекты Tvg_Paint, ранее добавленные на холст, следует обновлять вручную с помощью этой функции.
 *
-* \param[in] canvas The Tvg_Canvas object to which the @p paint belongs.
-* \param[in] paint The Tvg_Paint object to be updated.
+* \param[in] холст Объект Tvg_Canvas, которому принадлежит краска @p.
+* \param[in] Paint Объект Tvg_Paint, который необходимо обновить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
 *
-* \see tvg_canvas_update()
+* \см. tvg_canvas_update ()
 */
 TVG_API Tvg_Result tvg_canvas_update_paint(Tvg_Canvas* canvas, Tvg_Paint* paint);
 
 
 /*!
-* \brief Requests the canvas to draw the Tvg_Paint objects.
+* \brief Запрашивает холст для рисования объектов Tvg_Paint.
 *
-* All paints from the given canvas will be rasterized to the buffer.
+* Все краски с данного холста будут растрированы в буфер.
 *
-* \param[in] canvas The Tvg_Canvas object containing elements to be drawn.
+* \param[in] Canvas Объект Tvg_Canvas, содержащий элементы для рисования.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Canvas pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Canvas.
 *
-* \note Drawing can be asynchronous based on the assigned thread number. To guarantee the drawing is done, call tvg_canvas_sync() afterwards.
-* \see tvg_canvas_sync()
+* \note Рисование может быть асинхронным в зависимости от назначенного номера резьбы. Чтобы гарантировать, что рисунок выполнен, после этого вызовите tvg_canvas_sync().
+* \см. tvg_canvas_sync ()
 */
 TVG_API Tvg_Result tvg_canvas_draw(Tvg_Canvas* canvas);
 
 
 /*!
-* \brief Guarantees that the drawing process is finished.
+* \brief Гарантирует, что процесс рисования завершен.
 *
-* Since the canvas rendering can be performed asynchronously, it should be called after the tvg_canvas_draw().
+* Поскольку рендеринг холста может выполняться асинхронно, его следует вызывать после tvg_canvas_draw().
 *
-* \param[in] canvas The Tvg_Canvas object containing elements which were drawn.
+* \param[in] Canvas Объект Tvg_Canvas, содержащий нарисованные элементы.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Canvas pointer.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION @p canvas is either already in sync condition or in a damaged condition (a draw is required before syncing).
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Canvas.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION @p Холст либо уже находится в состоянии синхронизации, либо в поврежденном состоянии (перед синхронизацией требуется отрисовка).
 *
-* \see tvg_canvas_draw()
+* \см. tvg_canvas_draw ()
 */
 TVG_API Tvg_Result tvg_canvas_sync(Tvg_Canvas* canvas);
 
 
 /*!
-* \brief Sets the drawing region in the canvas.
+* \brief Устанавливает область рисования на холсте.
 *
-* This function defines the rectangular area of the canvas that will be used for drawing operations.
-* The specified viewport is used to clip the rendering output to the boundaries of the rectangle.
+* Эта функция определяет прямоугольную область холста, которая будет использоваться для операций рисования.
+* Указанный область просмотра используется для обрезки вывода рендеринга по границам прямоугольника.
 *
-* \param[in] canvas The Tvg_Canvas object containing elements which were drawn.
-* \param[in] x The x-coordinate of the upper-left corner of the rectangle.
-* \param[in] y The y-coordinate of the upper-left corner of the rectangle.
-* \param[in] w The width of the rectangle.
-* \param[in] h The height of the rectangle.
+* \param[in] Canvas Объект Tvg_Canvas, содержащий нарисованные элементы.
+* \param[in] x Координата X верхнего левого угла прямоугольника.
+* \param[in] y Координата Y верхнего левого угла прямоугольника.
+* \param[in] w Ширина прямоугольника.
+* \param[in] h Высота прямоугольника.
 *
-* \return Tvg_Result enumeration.
+* \return Перечисление Tvg_Result.
 *
-* \warning It's not allowed to change the viewport during tvg_canvas_update() - tvg_canvas_sync() or tvg_canvas_push() - tvg_canvas_sync().
+* \предупреждение Не разрешается менять область просмотра во время tvg_canvas_update () - tvg_canvas_sync () или tvg_canvas_push () - tvg_canvas_sync ().
 *
-* \note When resetting the target, the viewport will also be reset to the target size.
-* \see tvg_swcanvas_set_target()
-* \since 0.15
+* \note При сбросе целевого размера область просмотра также будет сброшена до целевого размера.
+* \см. tvg_swcanvas_set_target ()
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_canvas_set_viewport(Tvg_Canvas* canvas, int32_t x, int32_t y, int32_t w, int32_t h);
 
-/** \} */   // end defgroup ThorVGCapi_Canvas
+/** \} */   // конец защитной группы ThorVGCapi_Canvas
 
 
 /**
-* \defgroup ThorVGCapi_Paint Paint
-* \brief A module for managing graphical elements. It enables duplication, transformation and composition.
+* \defgroup ThorVGCapi_Paint Краска
+* \brief Модуль для управления графическими элементами. Это позволяет дублировать, трансформировать и композицию.
 *
 * \{
 */
 
 /************************************************************************/
-/* Paint API                                                            */
+/* Краска API                                                            */
 /************************************************************************/
 /*!
-* \brief Releases the given Tvg_Paint object.
+* \brief Освобождает данный объект Tvg_Paint.
 *
 * \code
-* //example of cleanup function
-* Tvg_Paint *rect = NULL; //rectangle shape added in other function
+* //пример функции очистки
+* Tvg_Paint *rect = NULL ; //прямоугольная форма добавлена в другую функцию
 *
-* //rectangle delete API
-* int rectangle_delete(void) {
-*   if (rect) tvg_paint_del(rect);
-*   rect = NULL;
+* //удаляем прямоугольник API
+* int rectangle_delete (недействительный) {
+*   если (прямой) tvg_paint_del (прямой);
+*   прямоугольник = NULL ;
 * }
 *
-* int cleanup(void) {
-*   tvg_canvas_clear(canvas, false);
-*   tvg_canvas_destroy(canvas);
-*   canvas = NULL;
+* int очистка (недействительный) {
+*   tvg_canvas_clear (холст, ложь);
+*   tvg_canvas_destroy (холст);
+*   холст = NULL;
 * }
 * \endcode
 *
-* \param[in] paint The Tvg_Paint object to be released.
+* \param[in] Paint Объект Tvg_Paint, который необходимо освободить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \warning If this function is used, tvg_canvas_clear() with the @c free argument value set to @c false should be used in order to avoid unexpected behaviours.
+* \warning Если используется эта функция, во избежание непредвиденного поведения следует использовать tvg_canvas_clear () со значением свободного аргумента @c, установленным в @c false.
 *
-* \see tvg_canvas_clear(), tvg_canvas_destroy()
+* \см. tvg_canvas_clear (), tvg_canvas_destroy ()
 */
 TVG_API Tvg_Result tvg_paint_del(Tvg_Paint* paint);
 
 
 /*!
-* \brief Scales the given Tvg_Paint object by the given factor.
+* \brief Масштабирует данный объект Tvg_Paint с заданным коэффициентом.
 *
-* \param[in] paint The Tvg_Paint object to be scaled.
-* \param[in] factor The value of the scaling factor. The default value is 1.
+* \param[in] Paint Объект Tvg_Paint, который нужно масштабировать.
+* \param[in] коэффициент Значение коэффициента масштабирования. Значение по умолчанию — 1.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION in case a custom transform is applied.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION в случае применения специального преобразования.
 *
-* \see tvg_paint_set_transform()
+* \см. tvg_paint_set_transform ()
 */
 TVG_API Tvg_Result tvg_paint_scale(Tvg_Paint* paint, float factor);
 
 
 /*!
-* \brief Rotates the given Tvg_Paint by the given angle.
+* \brief Поворачивает заданный Tvg_Paint на заданный угол.
 *
-* The angle in measured clockwise from the horizontal axis.
-* The rotational axis passes through the point on the object with zero coordinates.
+* Угол измеряется по часовой стрелке от горизонтальной оси.
+* Ось вращения проходит через точку на объекте с нулевыми координатами.
 *
-* \param[in] paint The Tvg_Paint object to be rotated.
-* \param[in] degree The value of the rotation angle in degrees.
+* \param[in] Paint Объект Tvg_Paint, который нужно повернуть.
+* \param[in] степень Значение угла поворота в градусах.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION in case a custom transform is applied.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION в случае применения специального преобразования.
 *
-* \see tvg_paint_set_transform()
+* \см. tvg_paint_set_transform ()
 */
 TVG_API Tvg_Result tvg_paint_rotate(Tvg_Paint* paint, float degree);
 
 
 /*!
-* \brief Moves the given Tvg_Paint in a two-dimensional space.
+* \brief Перемещает заданный Tvg_Paint в двумерном пространстве.
 *
-* The origin of the coordinate system is in the upper-left corner of the canvas.
-* The horizontal and vertical axes point to the right and down, respectively.
+* Начало системы координат находится в верхнем левом углу холста.
+* Горизонтальная и вертикальная оси указывают вправо и вниз соответственно.
 *
-* \param[in] paint The Tvg_Paint object to be shifted.
-* \param[in] x The value of the horizontal shift.
-* \param[in] y The value of the vertical shift.
+* \param[in] Paint Объект Tvg_Paint, который необходимо сдвинуть.
+* \param[in] x Значение горизонтального сдвига.
+* \param[in] y Значение вертикального сдвига.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION in case a custom transform is applied.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION в случае применения специального преобразования.
 *
-* \see tvg_paint_set_transform()
+* \см. tvg_paint_set_transform ()
 */
 TVG_API Tvg_Result tvg_paint_translate(Tvg_Paint* paint, float x, float y);
 
 
 /*!
-* \brief Transforms the given Tvg_Paint using the augmented transformation matrix.
+* \brief Преобразует заданный Tvg_Paint, используя расширенную матрицу преобразования.
 *
-* The augmented matrix of the transformation is expected to be given.
+* Ожидается получение расширенной матрицы преобразования.
 *
-* \param[in] paint The Tvg_Paint object to be transformed.
-* \param[in] m The 3x3 augmented matrix.
+* \param[in] Paint Объект Tvg_Paint, который необходимо преобразовать.
+* \param[in] m Расширенная матрица 3x3.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается значение @c nullptr.
 */
 TVG_API Tvg_Result tvg_paint_set_transform(Tvg_Paint* paint, const Tvg_Matrix* m);
 
 
 /*!
-* \brief Gets the matrix of the affine transformation of the given Tvg_Paint object.
+* \brief Получает матрицу аффинного преобразования данного объекта Tvg_Paint.
 *
-* In case no transformation was applied, the identity matrix is returned.
+* Если преобразование не применялось, возвращается единичная матрица.
 *
-* \param[in] paint The Tvg_Paint object of which to get the transformation matrix.
-* \param[out] m The 3x3 augmented matrix.
+* \param[in] Paint Объект Tvg_Paint, из которого нужно получить матрицу преобразования.
+* \param[out] m Расширенная матрица 3x3.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается значение @c nullptr.
 */
 TVG_API Tvg_Result tvg_paint_get_transform(Tvg_Paint* paint, Tvg_Matrix* m);
 
 
 /*!
-* \brief Sets the opacity of the given Tvg_Paint.
+* \brief Устанавливает непрозрачность данного Tvg_Paint .
 *
-* \param[in] paint The Tvg_Paint object of which the opacity value is to be set.
-* \param[in] opacity The opacity value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque.
+* \param[in] Paint Объект Tvg_Paint, для которого необходимо установить значение непрозрачности.
+* \param[in] opacity Значение непрозрачности в диапазоне [0 ~ 255], где 0 — полная прозрачность, а 255 — непрозрачность.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note Setting the opacity with this API may require multiple renderings using a composition. It is recommended to avoid changing the opacity if possible.
+* \note Установка непрозрачности с помощью этого API может потребовать многократного рендеринга с использованием композиции. По возможности рекомендуется избегать изменения непрозрачности.
 */
 TVG_API Tvg_Result tvg_paint_set_opacity(Tvg_Paint* paint, uint8_t opacity);
 
 
 /*!
-* \brief Gets the opacity of the given Tvg_Paint.
+* \brief Получает непрозрачность заданного Tvg_Paint .
 *
-* \param[in] paint The Tvg_Paint object of which to get the opacity value.
-* \param[out] opacity The opacity value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque.
+* \param[in] Paint Объект Tvg_Paint, для которого нужно получить значение непрозрачности.
+* \param[out] opacity Значение непрозрачности в диапазоне [0 ~ 255], где 0 — полная прозрачность, а 255 — непрозрачность.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
 */
 TVG_API Tvg_Result tvg_paint_get_opacity(const Tvg_Paint* paint, uint8_t* opacity);
 
 
 /*!
-* \brief Duplicates the given Tvg_Paint object.
+* \brief Дублирует заданный объект Tvg_Paint.
 *
-* Creates a new object and sets its all properties as in the original object.
+* Создает новый объект и устанавливает все его свойства как в исходном объекте.
 *
-* \param[in] paint The Tvg_Paint object to be copied.
+* \param[in] Paint Объект Tvg_Paint, который необходимо скопировать.
 *
-* \return A copied Tvg_Paint object if succeed, @c nullptr otherwise.
+* \return Скопированный объект Tvg_Paint в случае успеха, в противном случае @c nullptr.
 */
 TVG_API Tvg_Paint* tvg_paint_duplicate(Tvg_Paint* paint);
 
 
 /*!
-* \brief Gets the axis-aligned bounding box of the Tvg_Paint object.
+* \brief Получает выровненную по оси ограничивающую рамку объекта Tvg_Paint.
 *
-* \param[in] paint The Tvg_Paint object of which to get the bounds.
-* \param[out] x The x-coordinate of the upper-left corner of the object.
-* \param[out] y The y-coordinate of the upper-left corner of the object.
-* \param[out] w The width of the object.
-* \param[out] h The height of the object.
-* \param[in] transformed If @c true, the paint's transformations are taken into account in the scene it belongs to. Otherwise they aren't.
+* \param[in] Paint Объект Tvg_Paint, границы которого нужно получить.
+* \param[out] x Координата X верхнего левого угла объекта.
+* \param[out] y Координата Y верхнего левого угла объекта.
+* \param[out] w Ширина объекта.
+* \param[out] h Высота объекта.
+* \param[in] Transform Если @c true, преобразования краски учитываются в сцене, к которой она принадлежит. В противном случае это не так.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note This is useful when you need to figure out the bounding box of the paint in the canvas space.
-* \note The bounding box doesn't indicate the actual drawing region. It's the smallest rectangle that encloses the object.
-* \note If @p transformed is @c true, the paint needs to be pushed into a canvas and updated before this api is called.
-* \see tvg_canvas_update_paint()
+* \note Это полезно, когда вам нужно определить ограничивающую рамку краски в пространстве холста.
+* \note Ограничивающая рамка не указывает фактическую область рисования. Это наименьший прямоугольник, заключающий объект.
+* \note Если преобразование @p имеет значение @c true, краску необходимо перенести на холст и обновить перед вызовом этого API.
+* \см. tvg_canvas_update_paint ()
 */
 TVG_API Tvg_Result tvg_paint_get_bounds(const Tvg_Paint* paint, float* x, float* y, float* w, float* h, bool transformed);
 
 
 /*!
-* \brief Sets the composition target object and the composition method.
+* \brief Устанавливает целевой объект композиции и метод композиции.
 *
-* \param[in] paint The source object of the composition.
-* \param[in] target The target object of the composition.
-* \param[in] method The method used to composite the source object with the target.
+* \param[in] краска Исходный объект композиции.
+* \param[in] target Целевой объект композиции.
+* \param[in] метод Метод, используемый для объединения исходного объекта с целевым.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid @p paint or @p target object or the @p method equal to TVG_COMPOSITE_METHOD_NONE.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Недопустимая отрисовка @p или целевой объект @p или метод @p, равный TVG_COMPOSITE_METHOD_NONE .
 */
 TVG_API Tvg_Result tvg_paint_set_composite_method(Tvg_Paint* paint, Tvg_Paint* target, Tvg_Composite_Method method);
 
 
 /**
-* \brief Gets the composition target object and the composition method.
+* \brief Получает целевой объект композиции и метод композиции.
 *
-* \param[in] paint The source object of the composition.
-* \param[out] target The target object of the composition.
-* \param[out] method The method used to composite the source object with the target.
+* \param[in] краска Исходный объект композиции.
+* \param[out] target Целевой объект композиции.
+* \param[out] метод Метод, используемый для объединения исходного объекта с целевым.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается значение @c nullptr.
 */
 TVG_API Tvg_Result tvg_paint_get_composite_method(const Tvg_Paint* paint, const Tvg_Paint** target, Tvg_Composite_Method* method);
 
 
 /*!
-* \brief Clip the drawing region of the paint object.
+* \brief Вырежьте область рисования объекта рисования.
 *
-* This function restricts the drawing area of the paint object to the specified shape's paths.
+* Эта функция ограничивает область рисования объекта рисования путями указанной фигуры.
 *
-* \param[in] paint The target object of the clipping.
-* \param[in] clipper The shape object as the clipper.
+* \param[in] Paint Целевой объект вырезания.
+* \param[in] clipper Объект формы в качестве инструмента обрезки.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
-* \retval TVG_RESULT_NOT_SUPPORTED If the @p clipper type is not Shape.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
+* \retval TVG_RESULT_NOT_SUPPORTED Если тип клипера @p не Shape.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_paint_set_clip(Tvg_Paint* paint, Tvg_Paint* clipper);
 
 
 /**
-* \brief Gets the unique value of the paint instance indicating the instance type.
+* \brief Получает уникальное значение экземпляра рисования, указывающее тип экземпляра.
 *
-* \param[in] paint The Tvg_Paint object of which to get the type value.
-* \param[out] type The unique type of the paint instance type.
+* \param[in] Paint Объект Tvg_Paint, значение типа которого необходимо получить.
+* \param[out] type Уникальный тип типа экземпляра рисования.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_paint_get_type(const Tvg_Paint* paint, Tvg_Type* type);
 
 
 /**
-* \see tvg_paint_get_type()
+* \см. tvg_paint_get_type ()
 */
 TVG_DEPRECATED TVG_API Tvg_Result tvg_paint_get_identifier(const Tvg_Paint* paint, Tvg_Identifier* identifier);
 
@@ -1042,1638 +1042,1638 @@ TVG_DEPRECATED TVG_API Tvg_Result tvg_paint_get_identifier(const Tvg_Paint* pain
 /**
  * @brief Sets the blending method for the paint object.
  *
- * The blending feature allows you to combine colors to create visually appealing effects, including transparency, lighting, shading, and color mixing, among others.
- * its process involves the combination of colors or images from the source paint object with the destination (the lower layer image) using blending operations.
- * The blending operation is determined by the chosen @p BlendMethod, which specifies how the colors or images are combined.
+ * Функция смешивания позволяет комбинировать цвета для создания визуально привлекательных эффектов, включая, среди прочего, прозрачность, освещение, затенение и смешивание цветов.
+ * его процесс включает в себя сочетание цветов или изображений исходного объекта рисования с целевым (изображением нижнего слоя) с использованием операций смешивания.
+ * Операция смешивания определяется выбранным @p BlendMethod, который определяет, как комбинируются цвета или изображения.
  *
- * \param[in] paint The Tvg_Paint object of which to set the blend method.
- * \param[in] method The blending method to be set.
+ * \param[in] Paint Объект Tvg_Paint, для которого устанавливается метод смешивания.
+ * \param[in] метод Устанавливаемый метод смешивания.
  *
- * \return Tvg_Result enumeration.
- * \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
+ * \return Перечисление Tvg_Result.
+ * \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
  *
- * \since 0.15
+ * \с 0,15
  */
 TVG_API Tvg_Result tvg_paint_set_blend_method(Tvg_Paint* paint, Tvg_Blend_Method method);
 
 
-/** \} */   // end defgroup ThorVGCapi_Paint
+/** \} */   // конец защитной группы ThorVGCapi_Paint
 
 /**
-* \defgroup ThorVGCapi_Shape Shape
+* \defgroup Форма ThorVGCapi_Shape
 *
-* \brief A module for managing two-dimensional figures and their properties.
+* \brief Модуль для управления двумерными фигурами и их свойствами.
 *
-* A shape has three major properties: shape outline, stroking, filling. The outline in the shape is retained as the path.
-* Path can be composed by accumulating primitive commands such as tvg_shape_move_to(), tvg_shape_line_to(), tvg_shape_cubic_to() or complete shape interfaces such as tvg_shape_append_rect(), tvg_shape_append_circle(), etc.
-* Path can consists of sub-paths. One sub-path is determined by a close command.
+* Форма имеет три основных свойства: контур фигуры, обводка, заполнение. Контур фигуры сохраняется как путь.
+* Путь может быть составлен путем накопления примитивных команд, таких как tvg_shape_move_to(), tvg_shape_line_to(), tvg_shape_cubic_to(), или полных интерфейсов формы, таких как tvg_shape_append_rect(), tvg_shape_append_circle() и т. д.
+* Путь может состоять из подпутей. Один подпуть определяется командой закрытия.
 *
-* The stroke of a shape is an optional property in case the shape needs to be represented with/without the outline borders.
-* It's efficient since the shape path and the stroking path can be shared with each other. It's also convenient when controlling both in one context.
+* Обводка фигуры — это необязательное свойство, если фигуру необходимо представить с границами контура или без них.
+* Это эффективно, поскольку путь формы и путь обводки можно использовать совместно. Это также удобно при управлении обоими в одном контексте.
 *
 * \{
 */
 
 /************************************************************************/
-/* Shape API                                                            */
+/* Форма API                                                            */
 /************************************************************************/
 /*!
-* \brief Creates a new shape object.
+* \brief Создает новый объект формы.
 *
-* \return A new shape object.
+* \return Новый объект формы.
 */
 TVG_API Tvg_Paint* tvg_shape_new(void);
 
 
 /*!
-* \brief Resets the shape path properties.
+* \brief Сбрасывает свойства контура фигуры.
 *
-* The color, the fill and the stroke properties are retained.
+* Свойства цвета, заливки и обводки сохраняются.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note The memory, where the path data is stored, is not deallocated at this stage for caching effect.
+* \note Память, в которой хранятся данные пути, на этом этапе не освобождается для эффекта кэширования.
 */
 TVG_API Tvg_Result tvg_shape_reset(Tvg_Paint* paint);
 
 
 /*!
-* \brief Sets the initial point of the sub-path.
+* \brief Устанавливает начальную точку подпути.
 *
-* The value of the current point is set to the given point.
+* Значение текущей точки устанавливается в данную точку.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] x The horizontal coordinate of the initial point of the sub-path.
-* \param[in] y The vertical coordinate of the initial point of the sub-path.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] x Горизонтальная координата начальной точки подпути.
+* \param[in] y Вертикальная координата начальной точки подпути.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_move_to(Tvg_Paint* paint, float x, float y);
 
 
 /*!
-* \brief Adds a new point to the sub-path, which results in drawing a line from the current point to the given end-point.
+* \brief Добавляет новую точку к подпути, в результате чего рисуется линия от текущей точки до заданной конечной точки.
 *
-* The value of the current point is set to the given end-point.
+* Значение текущей точки устанавливается в заданную конечную точку.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] x The horizontal coordinate of the end-point of the line.
-* \param[in] y The vertical coordinate of the end-point of the line.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] x Горизонтальная координата конечной точки линии.
+* \param[in] y Вертикальная координата конечной точки линии.
 
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note In case this is the first command in the path, it corresponds to the tvg_shape_move_to() call.
+* \note Если это первая команда в пути, она соответствует вызову tvg_shape_move_to().
 */
 TVG_API Tvg_Result tvg_shape_line_to(Tvg_Paint* paint, float x, float y);
 
 
 /*!
-* \brief Adds new points to the sub-path, which results in drawing a cubic Bezier curve.
+* \brief Добавляет новые точки к подпути, что приводит к рисованию кубической кривой Безье.
 *
-* The Bezier curve starts at the current point and ends at the given end-point (@p x, @p y). Two control points (@p cx1, @p cy1) and (@p cx2, @p cy2) are used to determine the shape of the curve.
-* The value of the current point is set to the given end-point.
+* Кривая Безье начинается в текущей точке и заканчивается в заданной конечной точке ( @p x, @p y). Две контрольные точки ( @p cx1, @p cy1) и ( @p cx2, @p cy2) используются для определения формы кривой.
+* Значение текущей точки устанавливается в заданную конечную точку.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] cx1 The horizontal coordinate of the 1st control point.
-* \param[in] cy1 The vertical coordinate of the 1st control point.
-* \param[in] cx2 The horizontal coordinate of the 2nd control point.
-* \param[in] cy2 The vertical coordinate of the 2nd control point.
-* \param[in] x The horizontal coordinate of the endpoint of the curve.
-* \param[in] y The vertical coordinate of the endpoint of the curve.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] cx1 Горизонтальная координата первой контрольной точки.
+* \param[in] cy1 Вертикальная координата первой контрольной точки.
+* \param[in] cx2 Горизонтальная координата второй контрольной точки.
+* \param[in] cy2 Вертикальная координата второй контрольной точки.
+* \param[in] x Горизонтальная координата конечной точки кривой.
+* \param[in] y Вертикальная координата конечной точки кривой.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note In case this is the first command in the path, no data from the path are rendered.
+* \note Если это первая команда в пути, никакие данные из пути не отображаются.
 */
 TVG_API Tvg_Result tvg_shape_cubic_to(Tvg_Paint* paint, float cx1, float cy1, float cx2, float cy2, float x, float y);
 
 
 /*!
-* \brief Closes the current sub-path by drawing a line from the current point to the initial point of the sub-path.
+* \brief Закрывает текущий вложенный путь, рисуя линию от текущей точки до начальной точки вложенного пути.
 *
-* The value of the current point is set to the initial point of the closed sub-path.
+* Значение текущей точки устанавливается в начальную точку замкнутого подпути.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note In case the sub-path does not contain any points, this function has no effect.
+* \note Если подпуть не содержит точек, эта функция не действует.
 */
 TVG_API Tvg_Result tvg_shape_close(Tvg_Paint* paint);
 
 
 /*!
-* \brief Appends a rectangle to the path.
+* \brief Добавляет прямоугольник к пути.
 *
-* The rectangle with rounded corners can be achieved by setting non-zero values to @p rx and @p ry arguments.
-* The @p rx and @p ry values specify the radii of the ellipse defining the rounding of the corners.
+* Прямоугольник с закругленными углами можно получить, установив ненулевые значения для аргументов @p rx и @p ry.
+* Значения @p rx и @p ry определяют радиусы эллипса, определяющие скругление углов.
 *
-* The position of the rectangle is specified by the coordinates of its upper-left corner -  @p x and @p y arguments.
+* Положение прямоугольника задается координатами его верхнего левого угла — аргументами @p x и @p y.
 *
-* The rectangle is treated as a new sub-path - it is not connected with the previous sub-path.
+* Прямоугольник рассматривается как новый подпуть — он не связан с предыдущим подпутем.
 *
-* The value of the current point is set to (@p x + @p rx, @p y) - in case @p rx is greater
-* than @p w/2 the current point is set to (@p x + @p w/2, @p y)
+* Значение текущей точки устанавливается на ( @p x + @p rx, @p y) - в случае, если @p rx больше
+* чем @p w/2, текущая точка устанавливается на ( @p x + @p w/2, @p y)
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] x The horizontal coordinate of the upper-left corner of the rectangle.
-* \param[in] y The vertical coordinate of the upper-left corner of the rectangle.
-* \param[in] w The width of the rectangle.
-* \param[in] h The height of the rectangle.
-* \param[in] rx The x-axis radius of the ellipse defining the rounded corners of the rectangle.
-* \param[in] ry The y-axis radius of the ellipse defining the rounded corners of the rectangle.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] x Горизонтальная координата верхнего левого угла прямоугольника.
+* \param[in] y Вертикальная координата верхнего левого угла прямоугольника.
+* \param[in] w Ширина прямоугольника.
+* \param[in] h Высота прямоугольника.
+* \param[in] rx Радиус эллипса по оси X, определяющий закругленные углы прямоугольника.
+* \param[in] ry Радиус эллипса по оси Y, определяющий закругленные углы прямоугольника.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-& \note For @p rx and @p ry greater than or equal to the half of @p w and the half of @p h, respectively, the shape become an ellipse.
+& \note Если @p rx и @p ry больше или равны половине @p w и половине @p h соответственно, форма становится эллипсом.
 */
 TVG_API Tvg_Result tvg_shape_append_rect(Tvg_Paint* paint, float x, float y, float w, float h, float rx, float ry);
 
 
 /*!
-* \brief Appends an ellipse to the path.
+* \brief Добавляет к пути эллипс.
 *
-* The position of the ellipse is specified by the coordinates of its center - @p cx and @p cy arguments.
+* Положение эллипса задается координатами его центра — аргументами @p cx и @p cy.
 *
-* The ellipse is treated as a new sub-path - it is not connected with the previous sub-path.
+* Эллипс рассматривается как новый подпуть — он не связан с предыдущим подпутем.
 *
-* The value of the current point is set to (@p cx, @p cy - @p ry).
+* Значение текущей точки установлено на ( @p cx, @p cy - @p ry).
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] cx The horizontal coordinate of the center of the ellipse.
-* \param[in] cy The vertical coordinate of the center of the ellipse.
-* \param[in] rx The x-axis radius of the ellipse.
-* \param[in] ry The y-axis radius of the ellipse.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] cx Горизонтальная координата центра эллипса.
+* \param[in] cy Вертикальная координата центра эллипса.
+* \param[in] rx Радиус эллипса по оси X.
+* \param[in] ry Радиус эллипса по оси Y.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_append_circle(Tvg_Paint* paint, float cx, float cy, float rx, float ry);
 
 
 /*!
-* \brief Appends a circular arc to the path.
+* \brief Добавляет к пути дугу окружности.
 *
-* The arc is treated as a new sub-path - it is not connected with the previous sub-path.
-* The current point value is set to the end-point of the arc in case @p pie is @c false, and to the center of the arc otherwise.
+* Дуга рассматривается как новый подпуть - она не связана с предыдущим подпутем.
+* Текущее значение точки устанавливается в конечную точку дуги, если круговая диаграмма @p имеет значение @c false, и в центр дуги в противном случае.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] cx The horizontal coordinate of the center of the arc.
-* \param[in] cy The vertical coordinate of the center of the arc.
-* \param[in] radius The radius of the arc.
-* \param[in] startAngle The start angle of the arc given in degrees, measured counter-clockwise from the horizontal line.
-* \param[in] sweep The central angle of the arc given in degrees, measured counter-clockwise from @p startAngle.
-* \param[in] pie Specifies whether to draw radii from the arc's center to both of its end-point - drawn if @c true.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] cx Горизонтальная координата центра дуги.
+* \param[in] cy Вертикальная координата центра дуги.
+* \param[in] радиус Радиус дуги.
+* \param[in] startAngle Начальный угол дуги, заданный в градусах и измеренный против часовой стрелки от горизонтальной линии.
+* \param[in] развертка Центральный угол дуги, заданный в градусах и отсчитываемый против часовой стрелки от @p startAngle.
+* \param[in] pie Определяет, следует ли рисовать радиусы от центра дуги до обеих ее конечных точек — рисуется, если @c истинно.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note Setting @p sweep value greater than 360 degrees, is equivalent to calling tvg_shape_append_circle(paint, cx, cy, radius, radius).
+* \note Установка значения развертки @p более 360 градусов эквивалентна вызову tvg_shape_append_circle (paint, cx, cy, radius, radius).
 */
 TVG_API Tvg_Result tvg_shape_append_arc(Tvg_Paint* paint, float cx, float cy, float radius, float startAngle, float sweep, uint8_t pie);
 
 
 /*!
-* \brief Appends a given sub-path to the path.
+* \brief Добавляет заданный подпуть к пути.
 *
-* The current point value is set to the last point from the sub-path.
-* For each command from the @p cmds array, an appropriate number of points in @p pts array should be specified.
-* If the number of points in the @p pts array is different than the number required by the @p cmds array, the shape with this sub-path will not be displayed on the screen.
+* Текущее значение точки устанавливается на последнюю точку подпути.
+* Для каждой команды из cmds-массива @p необходимо указать соответствующее количество точек в массиве @p pts.
+* Если количество точек в массиве точек @p отличается от количества, требуемого массивом cmds @p, фигура с этим подпутем не будет отображаться на экране.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] cmds The array of the commands in the sub-path.
-* \param[in] cmdCnt The length of the @p cmds array.
-* \param[in] pts The array of the two-dimensional points.
-* \param[in] ptsCnt The length of the @p pts array.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] cmds Массив команд в подпути.
+* \param[in] cmdCnt Длина массива командных команд @p.
+* \param[in] pts Массив двумерных точек.
+* \param[in] ptsCnt Длина массива точек @p.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument or @p cmdCnt or @p ptsCnt equal to zero.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT @c nullptr, переданный в качестве аргумента, или @p cmdCnt или @p ptsCnt, равный нулю.
 */
 TVG_API Tvg_Result tvg_shape_append_path(Tvg_Paint* paint, const Tvg_Path_Command* cmds, uint32_t cmdCnt, const Tvg_Point* pts, uint32_t ptsCnt);
 
 
 /*!
-* \brief Gets the points values of the path.
+* \brief Получает значения точек пути.
 *
-* The function does not allocate any data, it operates on internal memory. There is no need to free the @p pts array.
+* Функция не выделяет никаких данных, она работает с внутренней памятью. Нет необходимости освобождать массив точек @p.
 *
 * \code
-* Tvg_Paint *shape = tvg_shape_new();
-* Tvg_Point *coords = NULL;
-* uint32_t len = 0;
+* Tvg_Paint *форма = tvg_shape_new ();
+* Tvg_Point *coords = NULL ;
+* uint32_t лен = 0;
 *
-* tvg_shape_append_circle(shape, 10, 10, 50, 50);
-* tvg_shape_get_path_coords(shape, (const Tvg_Point**)&coords, &len);
-* //TVG approximates a circle by four Bezier curves. In the example above the coords array stores their coordinates.
+* tvg_shape_append_circle (форма, 10, 10, 50, 50);
+* tvg_shape_get_path_coords (форма, (const Tvg_Point **)&coords, &len);
+* // TVG аппроксимирует окружность четырьмя кривыми Безье. В приведенном выше примере массив координат хранит их координаты.
 * \endcode
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] pts The pointer to the array of the two-dimensional points from the path.
-* \param[out] cnt The length of the @p pts array.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] pts Указатель на массив двумерных точек пути.
+* \param[out] cnt Длина массива точек @p.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
 */
 TVG_API Tvg_Result tvg_shape_get_path_coords(const Tvg_Paint* paint, const Tvg_Point** pts, uint32_t* cnt);
 
 
 /*!
-* \brief Gets the commands data of the path.
+* \brief Получает данные команд пути.
 *
-* The function does not allocate any data. There is no need to free the @p cmds array.
+* Функция не выделяет никаких данных. Нет необходимости освобождать массив cmds @p.
 *
 * \code
-* Tvg_Paint *shape = tvg_shape_new();
-* Tvg_Path_Command *cmds = NULL;
-* uint32_t len = 0;
+* Tvg_Paint *форма = tvg_shape_new ();
+* Tvg_Path_Command *cmds = NULL ;
+* uint32_t лен = 0;
 *
-* tvg_shape_append_circle(shape, 10, 10, 50, 50);
-* tvg_shape_get_path_commands(shape, (const Tvg_Path_Command**)&cmds, &len);
-* //TVG approximates a circle by four Bezier curves. In the example above the cmds array stores the commands of the path data.
+* tvg_shape_append_circle (форма, 10, 10, 50, 50);
+* tvg_shape_get_path_commands (форма, (const Tvg_Path_Command **)&cmds, &len);
+* // TVG аппроксимирует окружность четырьмя кривыми Безье. В приведенном выше примере массив cmds хранит команды данных пути.
 * \endcode
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] cmds The pointer to the array of the commands from the path.
-* \param[out] cnt The length of the @p cmds array.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] cmds Указатель на массив команд из пути.
+* \param[out] cnt Длина массива командных команд @p.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
 */
 TVG_API Tvg_Result tvg_shape_get_path_commands(const Tvg_Paint* paint, const Tvg_Path_Command** cmds, uint32_t* cnt);
 
 
 /*!
-* \brief Sets the stroke width for all of the figures from the @p paint.
+* \brief Устанавливает ширину обводки для всех фигур из краски @p.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] width The width of the stroke. The default value is 0.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] width Ширина обводки. Значение по умолчанию — 0.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_width(Tvg_Paint* paint, float width);
 
 
 /*!
-* \brief Gets the shape's stroke width.
+* \brief Получает ширину обводки фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] width The stroke width.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] width Ширина обводки.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_width(const Tvg_Paint* paint, float* width);
 
 
 /*!
-* \brief Sets the shape's stroke color.
+* \brief Устанавливает цвет обводки фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] r The red color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] g The green color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] b The blue color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] a The alpha channel value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] a Значение альфа-канала в диапазоне [0 ~ 255], где 0 — полностью прозрачный, а 255 — непрозрачный.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_color(Tvg_Paint* paint, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 
 /*!
-* \brief Gets the shape's stroke color.
+* \brief Получает цвет обводки фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] r The red color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[out] g The green color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[out] b The blue color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[out] a The alpha channel value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[out] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[out] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[out] a Значение альфа-канала в диапазоне [0 ~ 255], где 0 — полностью прозрачный, а 255 — непрозрачный.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION No stroke was set.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Ход не установлен.
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_color(const Tvg_Paint* paint, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a);
 
 
 /*!
-* \brief Sets the linear gradient fill of the stroke for all of the figures from the path.
+* \brief Устанавливает линейную градиентную заливку обводки для всех фигур контура.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] grad The linear gradient fill.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] grad Линейная градиентная заливка.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_MEMORY_CORRUPTION An invalid Tvg_Gradient pointer or an error with accessing it.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_MEMORY_CORRUPTION Неверный указатель Tvg_Gradient или ошибка доступа к нему.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_linear_gradient(Tvg_Paint* paint, Tvg_Gradient* grad);
 
 
 /*!
-* \brief Sets the radial gradient fill of the stroke for all of the figures from the path.
+* \brief Устанавливает радиальную градиентную заливку обводки для всех фигур контура.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] grad The radial gradient fill.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] grad Заливка радиальным градиентом.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_MEMORY_CORRUPTION An invalid Tvg_Gradient pointer or an error with accessing it.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_MEMORY_CORRUPTION Неверный указатель Tvg_Gradient или ошибка доступа к нему.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_radial_gradient(Tvg_Paint* paint, Tvg_Gradient* grad);
 
 
 /*!
-* \brief Gets the gradient fill of the shape's stroke.
+* \brief Получает градиентную заливку обводки фигуры.
 *
-* The function does not allocate any memory.
+* Функция не выделяет никакой памяти.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] grad The gradient fill.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] grad Градиентная заливка.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_gradient(const Tvg_Paint* paint, Tvg_Gradient** grad);
 
 
 /*!
-* \brief Sets the shape's stroke dash pattern.
+* \brief Устанавливает образец штриха обводки фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] dashPattern The array of consecutive pair values of the dash length and the gap length.
-* \param[in] cnt The size of the @p dashPattern array.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] DashPattern Массив последовательных парных значений длины штриха и длины пробела.
+* \param[in] cnt Размер массива DashPattern @p.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument and @p cnt > 0, the given length of the array is less than two or any of the @p dashPattern values is zero or less.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Недопустимый указатель, переданный в качестве аргумента, и @p cnt > 0, заданная длина массива меньше двух или любое из значений DashPattern @p равно нулю или меньше.
 *
-* \note To reset the stroke dash pattern, pass @c nullptr to @p dashPattern and zero to @p cnt.
+* \note Чтобы сбросить образец штрихового штриха, передайте @c nullptr в @p DashPattern и ноль в @p cnt.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_dash(Tvg_Paint* paint, const float* dashPattern, uint32_t cnt);
 
 
 /*!
-* \brief Gets the dash pattern of the stroke.
+* \brief Получает штриховой образец обводки.
 *
-* The function does not allocate any memory.
+* Функция не выделяет никакой памяти.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] dashPattern The array of consecutive pair values of the dash length and the gap length.
-* \param[out] cnt The size of the @p dashPattern array.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] DashPattern Массив последовательных парных значений длины штриха и длины пробела.
+* \param[out] cnt Размер массива DashPattern @p.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_dash(const Tvg_Paint* paint, const float** dashPattern, uint32_t* cnt);
 
 
 /*!
-* \brief Sets the cap style used for stroking the path.
+* \brief Устанавливает стиль окончания, используемый для обводки пути.
 *
-* The cap style specifies the shape to be used at the end of the open stroked sub-paths.
+* Стиль окончания определяет форму, которая будет использоваться в конце открытых контуров с обводкой.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] cap The cap style value. The default value is @c TVG_STROKE_CAP_SQUARE.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] cap Значение стиля шапки. Значение по умолчанию — @c TVG_STROKE_CAP_SQUARE.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_cap(Tvg_Paint* paint, Tvg_Stroke_Cap cap);
 
 
 /*!
-* \brief Gets the stroke cap style used for stroking the path.
+* \brief Получает стиль обводки, используемый для обводки пути.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] cap The cap style value.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] cap Значение стиля шапки.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_cap(const Tvg_Paint* paint, Tvg_Stroke_Cap* cap);
 
 
 /*!
-* \brief Sets the join style for stroked path segments.
+* \brief Устанавливает стиль соединения для обведенных сегментов пути.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] join The join style value. The default value is @c TVG_STROKE_JOIN_BEVEL.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] join Значение стиля соединения. Значение по умолчанию — @c TVG_STROKE_JOIN_BEVEL.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_join(Tvg_Paint* paint, Tvg_Stroke_Join join);
 
 
 /*!
-* \brief The function gets the stroke join method
+* \brief Функция получает метод соединения штрихов
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] join The join style value.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] join Значение стиля соединения.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_join(const Tvg_Paint* paint, Tvg_Stroke_Join* join);
 
 
 /*!
-* \brief Sets the stroke miterlimit.
+* \brief Устанавливает предел хода.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] miterlimit The miterlimit imposes a limit on the extent of the stroke join when the @c TVG_STROKE_JOIN_MITER join style is set. The default value is 4.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] miterlimit Ограничение на митер накладывает ограничение на размер соединения штрихов, если установлен стиль соединения @c TVG_STROKE_JOIN_MITER. Значение по умолчанию — 4.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer or Unsupported @p miterlimit values (less than zero).
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Недопустимый указатель Tvg_Paint или неподдерживаемые значения предела скоса @p (меньше нуля).
 *
-* \since 0.11
+* \с 0,11
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_miterlimit(Tvg_Paint* paint, float miterlimit);
 
 
 /*!
-* \brief The function gets the stroke miterlimit.
+* \brief Функция получает предел хода митера.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] miterlimit The stroke miterlimit.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] miterlimit Ограничение хода хода.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 *
-* \since 0.11
+* \с 0,11
 */
 TVG_API Tvg_Result tvg_shape_get_stroke_miterlimit(const Tvg_Paint* paint, float* miterlimit);
 
 
 /*!
-* \brief Sets the trim of the stroke along the defined path segment, allowing control over which part of the stroke is visible.
+* \brief Устанавливает обрезку обводки вдоль определенного сегмента пути, позволяя контролировать, какая часть обводки видна.
 *
-* If the values of the arguments @p begin and @p end exceed the 0-1 range, they are wrapped around in a manner similar to angle wrapping, effectively treating the range as circular.
+* Если значения аргументов @p Begin и @p End превышают диапазон 0–1, они переносятся аналогично переносу углов, эффективно рассматривая диапазон как круговой.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] begin Specifies the start of the segment to display along the path.
-* \param[in] end Specifies the end of the segment to display along the path.
-* \param[in] simultaneous Determines how to trim multiple paths within a single shape. If set to @c true (default), trimming is applied simultaneously to all paths;
-* Otherwise, all paths are treated as a single entity with a combined length equal to the sum of their individual lengths and are trimmed as such.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] Begin Указывает начало сегмента, отображаемого по пути.
+* \param[in] end Указывает конец сегмента, отображаемого по пути.
+* \param[in] одновременно Определяет, как обрезать несколько контуров внутри одной фигуры. Если установлено значение @c true (по умолчанию), обрезка применяется одновременно ко всем путям;
+* В противном случае все пути рассматриваются как единый объект с общей длиной, равной сумме их отдельных длин, и обрезаются как таковые.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_shape_set_stroke_trim(Tvg_Paint* paint, float begin, float end, bool simultaneous);
 
 
 /*!
-* \brief Sets the shape's solid color.
+* \brief Устанавливает сплошной цвет фигуры.
 *
-* The parts of the shape defined as inner are colored.
+* Части фигуры, определенные как внутренние, окрашены.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] r The red color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] g The green color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] b The blue color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] a The alpha channel value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque. The default value is 0.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] a Значение альфа-канала в диапазоне [0 ~ 255], где 0 — полностью прозрачный, а 255 — непрозрачный. Значение по умолчанию — 0.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
-* \see tvg_shape_set_fill_rule()
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
+* \см. tvg_shape_set_fill_rule ()
 */
 TVG_API Tvg_Result tvg_shape_set_fill_color(Tvg_Paint* paint, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 
 /*!
-* \brief Gets the shape's solid color.
+* \brief Получает сплошной цвет фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] r The red color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[out] g The green color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[out] b The blue color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[out] a The alpha channel value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque. The default value is 0.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[out] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[out] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[out] a Значение альфа-канала в диапазоне [0 ~ 255], где 0 — полностью прозрачный, а 255 — непрозрачный. Значение по умолчанию — 0.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_get_fill_color(const Tvg_Paint* paint, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a);
 
 
 /*!
-* \brief Sets the shape's fill rule.
+* \brief Устанавливает правило заливки фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] rule The fill rule value. The default value is @c TVG_FILL_RULE_WINDING.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] rule Значение правила заполнения. Значение по умолчанию — @c TVG_FILL_RULE_WINDING.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_shape_set_fill_rule(Tvg_Paint* paint, Tvg_Fill_Rule rule);
 
 
 /*!
-* \brief Gets the shape's fill rule.
+* \brief Получает правило заливки фигуры.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] rule shape's fill rule
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] правило заполнения фигуры
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_fill_rule(const Tvg_Paint* paint, Tvg_Fill_Rule* rule);
 
 
 /*!
-* \brief Sets the rendering order of the stroke and the fill.
+* \brief Устанавливает порядок отрисовки обводки и заливки.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] strokeFirst If @c true the stroke is rendered before the fill, otherwise the stroke is rendered as the second one (the default option).
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in]strokeFirst Если @c true, обводка отображается перед заливкой, в противном случае обводка отображается как вторая (параметр по умолчанию).
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 *
-* \since 0.10
+* \с 0,10
 */
 TVG_API Tvg_Result tvg_shape_set_paint_order(Tvg_Paint* paint, bool strokeFirst);
 
 
 /*!
-* \brief Sets the linear gradient fill for all of the figures from the path.
+* \brief Устанавливает заливку линейным градиентом для всех фигур на пути.
 *
-* The parts of the shape defined as inner are filled.
+* Части фигуры, определенные как внутренние, заполняются.
 *
 * \code
-* Tvg_Gradient* grad = tvg_linear_gradient_new();
-* tvg_linear_gradient_set(grad, 700, 700, 800, 800);
-* Tvg_Color_Stop color_stops[4] =
+* Tvg_Gradient *град = tvg_linear_gradient_new ();
+* tvg_linear_gradient_set (град, 700, 700, 800, 800);
+* Tvg_Color_Stop color_stops [4] =
 * {
 *   {0.0 , 0,   0,   0,   255},
 *   {0.25, 255, 0,   0,   255},
 *   {0.5 , 0,   255, 0,   255},
 *   {1.0 , 0,   0,   255, 255}
 * };
-* tvg_gradient_set_color_stops(grad, color_stops, 4);
-* tvg_shape_set_linear_gradient(shape, grad);
+* tvg_gradient_set_color_stops (град, color_stops, 4);
+* tvg_shape_set_linear_gradient (форма, град);
 * \endcode
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] grad The linear gradient fill.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] grad Линейная градиентная заливка.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_MEMORY_CORRUPTION An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_MEMORY_CORRUPTION Неверный указатель Tvg_Gradient.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
-* \see tvg_shape_set_fill_rule()
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
+* \см. tvg_shape_set_fill_rule ()
 */
 TVG_API Tvg_Result tvg_shape_set_linear_gradient(Tvg_Paint* paint, Tvg_Gradient* grad);
 
 
 /*!
-* \brief Sets the radial gradient fill for all of the figures from the path.
+* \brief Устанавливает радиальную градиентную заливку для всех фигур на пути.
 *
-* The parts of the shape defined as inner are filled.
+* Части фигуры, определенные как внутренние, заполняются.
 *
 * \code
-* Tvg_Gradient* grad = tvg_radial_gradient_new();
-* tvg_radial_gradient_set(grad, 550, 550, 50);
-* Tvg_Color_Stop color_stops[4] =
+* Tvg_Gradient *град = tvg_radial_gradient_new ();
+* tvg_radial_gradient_set (град, 550, 550, 50);
+* Tvg_Color_Stop color_stops [4] =
 * {
 *   {0.0 , 0,   0,   0,   255},
 *   {0.25, 255, 0,   0,   255},
 *   {0.5 , 0,   255, 0,   255},
 *   {1.0 , 0,   0,   255, 255}
 * };
-* tvg_gradient_set_color_stops(grad, color_stops, 4);
-* tvg_shape_set_radial_gradient(shape, grad);
+* tvg_gradient_set_color_stops (град, color_stops, 4);
+* tvg_shape_set_radial_gradient (форма, град);
 * \endcode
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[in] grad The radial gradient fill.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[in] grad Заливка радиальным градиентом.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-* \retval TVG_RESULT_MEMORY_CORRUPTION An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
+* \retval TVG_RESULT_MEMORY_CORRUPTION Неверный указатель Tvg_Gradient.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
-* \see tvg_shape_set_fill_rule()
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
+* \см. tvg_shape_set_fill_rule ()
 */
 TVG_API Tvg_Result tvg_shape_set_radial_gradient(Tvg_Paint* paint, Tvg_Gradient* grad);
 
 
 /*!
-* \brief Gets the gradient fill of the shape.
+* \brief Получает градиентную заливку фигуры.
 *
-* The function does not allocate any data.
+* Функция не выделяет никаких данных.
 *
-* \param[in] paint A Tvg_Paint pointer to the shape object.
-* \param[out] grad The gradient fill.
+* \param[in] Paint Указатель Tvg_Paint на объект формы.
+* \param[out] grad Градиентная заливка.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый указатель.
 */
 TVG_API Tvg_Result tvg_shape_get_gradient(const Tvg_Paint* paint, Tvg_Gradient** grad);
 
 
-/** \} */   // end defgroup ThorVGCapi_Shape
+/** \} */   // конец защитной группы ThorVGCapi_Shape
 
 
 /**
-* \defgroup ThorVGCapi_Gradient Gradient
-* \brief A module managing the gradient fill of objects.
+* \defgroup ThorVGCapi_Gradient Градиент
+* \brief Модуль управления градиентной заливкой объектов.
 *
-* The module enables to set and to get the gradient colors and their arrangement inside the gradient bounds,
-* to specify the gradient bounds and the gradient behavior in case the area defined by the gradient bounds
-* is smaller than the area to be filled.
+* Модуль позволяет задавать и получать цвета градиента и их расположение внутри границ градиента,
+* указать границы градиента и поведение градиента в случае, если область определяется границами градиента
+* меньше площади, подлежащей заполнению.
 *
 * \{
 */
 
 /************************************************************************/
-/* Gradient API                                                         */
+/* Градиент API                                                         */
 /************************************************************************/
 /*!
-* \brief Creates a new linear gradient object.
+* \brief Создает новый объект линейного градиента.
 *
 * \code
-* Tvg_Paint* shape = tvg_shape_new();
-* tvg_shape_append_rect(shape, 700, 700, 100, 100, 20, 20);
-* Tvg_Gradient* grad = tvg_linear_gradient_new();
-* tvg_linear_gradient_set(grad, 700, 700, 800, 800);
-* Tvg_Color_Stop color_stops[2] =
+* Tvg_Paint * форма = tvg_shape_new ();
+* tvg_shape_append_rect (форма, 700, 700, 100, 100, 20, 20);
+* Tvg_Gradient *град = tvg_linear_gradient_new ();
+* tvg_linear_gradient_set (град, 700, 700, 800, 800);
+* Tvg_Color_Stop color_stops [2] =
 * {
 *   {0.0, 0, 0,   0, 255},
 *   {1.0, 0, 255, 0, 255},
 * };
-* tvg_gradient_set_color_stops(grad, color_stops, 2);
-* tvg_shape_set_linear_gradient(shape, grad);
+* tvg_gradient_set_color_stops (град, color_stops, 2);
+* tvg_shape_set_linear_gradient (форма, град);
 * \endcode
 *
-* \return A new linear gradient object.
+* \return Новый объект линейного градиента.
 */
 TVG_API Tvg_Gradient* tvg_linear_gradient_new(void);
 
 
 /*!
-* \brief Creates a new radial gradient object.
+* \brief Создает новый объект радиального градиента.
 *
 * \code
-* Tvg_Paint* shape = tvg_shape_new();
-* tvg_shape_append_rect(shape, 700, 700, 100, 100, 20, 20);
-* Tvg_Gradient* grad = tvg_radial_gradient_new();
-* tvg_radial_gradient_set(grad, 550, 550, 50);
-* Tvg_Color_Stop color_stops[2] =
+* Tvg_Paint * форма = tvg_shape_new ();
+* tvg_shape_append_rect (форма, 700, 700, 100, 100, 20, 20);
+* Tvg_Gradient *град = tvg_radial_gradient_new ();
+* tvg_radial_gradient_set (град, 550, 550, 50);
+* Tvg_Color_Stop color_stops [2] =
 * {
 *   {0.0, 0, 0,   0, 255},
 *   {1.0, 0, 255, 0, 255},
 * };
-* tvg_gradient_set_color_stops(grad, color_stops, 2);
-* tvg_shape_set_radial_gradient(shape, grad);
+* tvg_gradient_set_color_stops (град, color_stops, 2);
+* tvg_shape_set_radial_gradient (форма, град);
 * \endcode
 *
-* \return A new radial gradient object.
+* \return Новый объект радиального градиента.
 */
 TVG_API Tvg_Gradient* tvg_radial_gradient_new(void);
 
 
 /*!
-* \brief Sets the linear gradient bounds.
+* \brief Устанавливает границы линейного градиента.
 *
-* The bounds of the linear gradient are defined as a surface constrained by two parallel lines crossing
-* the given points (@p x1, @p y1) and (@p x2, @p y2), respectively. Both lines are perpendicular to the line linking
-* (@p x1, @p y1) and (@p x2, @p y2).
+* Границы линейного градиента определяются как поверхность, ограниченная двумя параллельными линиями, пересекающими
+* заданные точки ( @p x1, @p y1) и ( @p x2, @p y2) соответственно. Обе линии перпендикулярны линии, соединяющей
+* ( @p x1, @p y1) и ( @p x2, @p y2).
 *
-* \param[in] grad The Tvg_Gradient object of which bounds are to be set.
-* @param[in] x1 The horizontal coordinate of the first point used to determine the gradient bounds.
-* @param[in] y1 The vertical coordinate of the first point used to determine the gradient bounds.
-* @param[in] x2 The horizontal coordinate of the second point used to determine the gradient bounds.
-* @param[in] y2 The vertical coordinate of the second point used to determine the gradient bounds.
+* \param[in] grad Объект Tvg_Gradient, границы которого должны быть установлены.
+* @param [in] x1 Горизонтальная координата первой точки, используемая для определения границ градиента.
+* @param [in] y1 Вертикальная координата первой точки, используемой для определения границ градиента.
+* @param [in] x2 Горизонтальная координата второй точки, используемая для определения границ градиента.
+* @param [in] y2 Вертикальная координата второй точки, используемая для определения границ градиента.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Gradient.
 *
-* \note In case the first and the second points are equal, an object is filled with a single color using the last color specified in the tvg_gradient_set_color_stops().
-* \see tvg_gradient_set_color_stops()
+* \note В случае, если первая и вторая точки равны, объект заливается одним цветом, используя последний цвет, указанный в tvg_gradient_set_color_stops().
+* \см. tvg_gradient_set_color_stops ()
 */
 TVG_API Tvg_Result tvg_linear_gradient_set(Tvg_Gradient* grad, float x1, float y1, float x2, float y2);
 
 
 /*!
-* \brief Gets the linear gradient bounds.
+* \brief Получает границы линейного градиента.
 *
-* The bounds of the linear gradient are defined as a surface constrained by two parallel lines crossing
-* the given points (@p x1, @p y1) and (@p x2, @p y2), respectively. Both lines are perpendicular to the line linking
-* (@p x1, @p y1) and (@p x2, @p y2).
+* Границы линейного градиента определяются как поверхность, ограниченная двумя параллельными линиями, пересекающими
+* заданные точки ( @p x1, @p y1) и ( @p x2, @p y2) соответственно. Обе линии перпендикулярны линии, соединяющей
+* ( @p x1, @p y1) и ( @p x2, @p y2).
 *
-* \param[in] grad The Tvg_Gradient object of which to get the bounds.
-* \param[out] x1 The horizontal coordinate of the first point used to determine the gradient bounds.
-* \param[out] y1 The vertical coordinate of the first point used to determine the gradient bounds.
-* \param[out] x2 The horizontal coordinate of the second point used to determine the gradient bounds.
-* \param[out] y2 The vertical coordinate of the second point used to determine the gradient bounds.
+* \param[in] grad Объект Tvg_Gradient, границы которого нужно получить.
+* \param[out] x1 Горизонтальная координата первой точки, используемая для определения границ градиента.
+* \param[out] y1 Вертикальная координата первой точки, используемой для определения границ градиента.
+* \param[out] x2 Горизонтальная координата второй точки, используемая для определения границ градиента.
+* \param[out] y2 Вертикальная координата второй точки, используемая для определения границ градиента.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Gradient.
 */
 TVG_API Tvg_Result tvg_linear_gradient_get(Tvg_Gradient* grad, float* x1, float* y1, float* x2, float* y2);
 
 
 /*!
-* \brief Sets the radial gradient bounds.
+* \brief Устанавливает границы радиального градиента.
 *
-* The radial gradient bounds are defined as a circle centered in a given point (@p cx, @p cy) of a given radius.
+* Границы радиального градиента определяются как окружность с центром в заданной точке ( @p cx, @p cy) заданного радиуса.
 *
-* \param[in] grad The Tvg_Gradient object of which bounds are to be set.
-* \param[in] cx The horizontal coordinate of the center of the bounding circle.
-* \param[in] cy The vertical coordinate of the center of the bounding circle.
-* \param[in] radius The radius of the bounding circle.
+* \param[in] grad Объект Tvg_Gradient, границы которого должны быть установлены.
+* \param[in] cx Горизонтальная координата центра ограничивающего круга.
+* \param[in] cy Вертикальная координата центра ограничивающего круга.
+* \param[in] радиус Радиус ограничивающего круга.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer or the @p radius value less than zero.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Недопустимый указатель Tvg_Gradient или значение радиуса @p меньше нуля.
 *
-* \note In case the @p radius is zero, an object is filled with a single color using the last color specified in the specified in the tvg_gradient_set_color_stops().
-* \see tvg_gradient_set_color_stops()
+* \note В случае, если радиус @p равен нулю, объект заполняется одним цветом, используя последний цвет, указанный в указанном в tvg_gradient_set_color_stops().
+* \см. tvg_gradient_set_color_stops ()
 */
 TVG_API Tvg_Result tvg_radial_gradient_set(Tvg_Gradient* grad, float cx, float cy, float radius);
 
 
 /*!
-* \brief The function gets radial gradient center point ant radius
+* \brief Функция получает центральную точку радиального градиента и радиус муравья.
 *
-* \param[in] grad The Tvg_Gradient object of which bounds are to be set.
-* \param[out] cx The horizontal coordinate of the center of the bounding circle.
-* \param[out] cy The vertical coordinate of the center of the bounding circle.
-* \param[out] radius The radius of the bounding circle.
+* \param[in] grad Объект Tvg_Gradient, границы которого должны быть установлены.
+* \param[out] cx Горизонтальная координата центра ограничивающего круга.
+* \param[out] cy Вертикальная координата центра ограничивающего круга.
+* \param[out] radius Радиус ограничивающего круга.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Gradient.
 */
 TVG_API Tvg_Result tvg_radial_gradient_get(Tvg_Gradient* grad, float* cx, float* cy, float* radius);
 
 
 /*!
-* \brief Sets the parameters of the colors of the gradient and their position.
+* \brief Устанавливает параметры цветов градиента и их положение.
 *
-* \param[in] grad The Tvg_Gradient object of which the color information is to be set.
-* \param[in] color_stop An array of Tvg_Color_Stop data structure.
-* \param[in] cnt The size of the @p color_stop array equal to the colors number used in the gradient.
+* \param[in] grad Объект Tvg_Gradient, для которого должна быть установлена информация о цвете.
+* \param[in] color_stop Массив структуры данных Tvg_Color_Stop.
+* \param[in] cnt Размер массива @p color_stop, равный количеству цветов, используемых в градиенте.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Gradient.
 */
 TVG_API Tvg_Result tvg_gradient_set_color_stops(Tvg_Gradient* grad, const Tvg_Color_Stop* color_stop, uint32_t cnt);
 
 
 /*!
-* \brief Gets the parameters of the colors of the gradient, their position and number
+* \brief Получает параметры цветов градиента, их положение и количество.
 *
-* The function does not allocate any memory.
+* Функция не выделяет никакой памяти.
 *
-* \param[in] grad The Tvg_Gradient object of which to get the color information.
-* \param[out] color_stop An array of Tvg_Color_Stop data structure.
-* \param[out] cnt The size of the @p color_stop array equal to the colors number used in the gradient.
+* \param[in] grad Объект Tvg_Gradient, из которого требуется получить информацию о цвете.
+* \param[out] color_stop Массив структуры данных Tvg_Color_Stop.
+* \param[out] cnt Размер массива @p color_stop, равный количеству цветов, используемых в градиенте.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
 */
 TVG_API Tvg_Result tvg_gradient_get_color_stops(const Tvg_Gradient* grad, const Tvg_Color_Stop** color_stop, uint32_t* cnt);
 
 
 /*!
-* \brief Sets the Tvg_Stroke_Fill value, which specifies how to fill the area outside the gradient bounds.
+* \brief Устанавливает значение Tvg_Stroke_Fill, которое определяет, как заполнить область за пределами границ градиента.
 *
-* \param[in] grad The Tvg_Gradient object.
-* \param[in] spread The FillSpread value.
+* \param[in] grad Объект Tvg_Gradient.
+* \param[in]spread Значение FillSpread.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Gradient.
 */
 TVG_API Tvg_Result tvg_gradient_set_spread(Tvg_Gradient* grad, const Tvg_Stroke_Fill spread);
 
 
 /*!
-* \brief Gets the FillSpread value of the gradient object.
+* \brief Получает значение FillSpread объекта градиента.
 *
-* \param[in] grad The Tvg_Gradient object.
-* \param[out] spread The FillSpread value.
+* \param[in] grad Объект Tvg_Gradient.
+* \param[out]spread Значение FillSpread.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
 */
 TVG_API Tvg_Result tvg_gradient_get_spread(const Tvg_Gradient* grad, Tvg_Stroke_Fill* spread);
 
 
 /*!
-* \brief Sets the matrix of the affine transformation for the gradient object.
+* \brief Устанавливает матрицу аффинного преобразования для объекта градиента.
 *
-* The augmented matrix of the transformation is expected to be given.
+* Ожидается получение расширенной матрицы преобразования.
 *
-* \param[in] grad The Tvg_Gradient object to be transformed.
-* \param[in] m The 3x3 augmented matrix.
+* \param[in] grad Объект Tvg_Gradient, который необходимо преобразовать.
+* \param[in] m Расширенная матрица 3x3.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается значение @c nullptr.
 */
 TVG_API Tvg_Result tvg_gradient_set_transform(Tvg_Gradient* grad, const Tvg_Matrix* m);
 
 
 /*!
-* \brief Gets the matrix of the affine transformation of the gradient object.
+* \brief Получает матрицу аффинного преобразования объекта градиента.
 *
-* In case no transformation was applied, the identity matrix is set.
+* Если преобразование не применялось, устанавливается единичная матрица.
 *
-* \param[in] grad The Tvg_Gradient object of which to get the transformation matrix.
-* \param[out] m The 3x3 augmented matrix.
+* \param[in] grad Объект Tvg_Gradient, из которого нужно получить матрицу преобразования.
+* \param[out] m Расширенная матрица 3x3.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается значение @c nullptr.
 */
 TVG_API Tvg_Result tvg_gradient_get_transform(const Tvg_Gradient* grad, Tvg_Matrix* m);
 
 /**
-* \brief Gets the unique value of the gradient instance indicating the instance type.
+* \brief Получает уникальное значение экземпляра градиента, указывающее тип экземпляра.
 *
-* \param[in] grad The Tvg_Gradient object of which to get the type value.
-* \param[out] type The unique type of the gradient instance type.
+* \param[in] grad Объект Tvg_Gradient, для которого нужно получить значение типа.
+* \param[out] type Уникальный тип экземпляра градиента.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_gradient_get_type(const Tvg_Gradient* grad, Tvg_Type* type);
 
 
 /**
-* \see tvg_gradient_get_type()
+* \см. tvg_gradient_get_type ()
 */
 TVG_DEPRECATED TVG_API Tvg_Result tvg_gradient_get_identifier(const Tvg_Gradient* grad, Tvg_Identifier* identifier);
 
 
 /*!
-* \brief Duplicates the given Tvg_Gradient object.
+* \brief Дублирует заданный объект Tvg_Gradient.
 *
-* Creates a new object and sets its all properties as in the original object.
+* Создает новый объект и устанавливает все его свойства как в исходном объекте.
 *
-* \param[in] grad The Tvg_Gradient object to be copied.
+* \param[in] grad Объект Tvg_Gradient, который необходимо скопировать.
 *
-* \return A copied Tvg_Gradient object if succeed, @c nullptr otherwise.
+* \return Скопированный объект Tvg_Gradient в случае успеха, в противном случае @c nullptr.
 */
 TVG_API Tvg_Gradient* tvg_gradient_duplicate(Tvg_Gradient* grad);
 
 
 /*!
-* \brief Deletes the given gradient object.
+* \brief Удаляет заданный объект градиента.
 *
-* \param[in] grad The gradient object to be deleted.
+* \param[in] grad Объект градиента, который нужно удалить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Gradient.
 */
 TVG_API Tvg_Result tvg_gradient_del(Tvg_Gradient* grad);
 
 
-/** \} */   // end defgroup ThorVGCapi_Gradient
+/** \} */   // конец защитной группы ThorVGCapi_Gradient
 
 
 /**
-* \defgroup ThorVGCapi_Picture Picture
+* \defgroup ThorVGCapi_Picture Изображение
 *
-* \brief A module enabling to create and to load an image in one of the supported formats: svg, png, jpg, lottie and raw.
+* \brief Модуль, позволяющий создавать и загружать изображения в одном из поддерживаемых форматов: svg, png, jpg, lottie и raw.
 *
 *
 * \{
 */
 
 /************************************************************************/
-/* Picture API                                                          */
+/* Изображение API                                                          */
 /************************************************************************/
 /*!
-* \brief Creates a new picture object.
+* \brief Создает новый объект изображения.
 *
-* \return A new picture object.
+* \return Новый объект изображения.
 */
 TVG_API Tvg_Paint* tvg_picture_new(void);
 
 
 /*!
-* \brief Loads a picture data directly from a file.
+* \brief Загружает данные изображения непосредственно из файла.
 *
-* ThorVG efficiently caches the loaded data using the specified @p path as a key.
-* This means that loading the same file again will not result in duplicate operations;
-* instead, ThorVG will reuse the previously loaded picture data.
+* ThorVG эффективно кэширует загруженные данные, используя указанный путь @p в качестве ключа.
+* Это означает, что повторная загрузка того же файла не приведет к дублированию операций;
+* вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
 *
-* \param[in] paint A Tvg_Paint pointer to the picture object.
-* \param[in] path The absolute path to the image file.
+* \param[in] Paint Указатель Tvg_Paint на объект изображения.
+* \param[in] путь Абсолютный путь к файлу изображения.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer or an empty @p path.
-* \retval TVG_RESULT_NOT_SUPPORTED A file with an unknown extension.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Недопустимый указатель Tvg_Paint или пустой путь @p.
+* \retval TVG_RESULT_NOT_SUPPORTED Файл с неизвестным расширением.
 */
 TVG_API Tvg_Result tvg_picture_load(Tvg_Paint* paint, const char* path);
 
 
 /*!
-* \brief Loads a picture data from a memory block of a given size.
+* \brief Загружает данные изображения из блока памяти заданного размера.
 *
-* ThorVG efficiently caches the loaded data using the specified @p data address as a key
-* when the @p copy has @c false. This means that loading the same data again will not result in duplicate operations
-* for the sharable @p data. Instead, ThorVG will reuse the previously loaded picture data.
+* ThorVG эффективно кэширует загруженные данные, используя указанный адрес данных @p в качестве ключа.
+* когда копия @p имеет @c false. Это означает, что повторная загрузка тех же данных не приведет к дублированию операций.
+* для общих данных @p. Вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
 *
-* \param[in] paint A Tvg_Paint pointer to the picture object.
-* \param[in] data A pointer to a memory location where the content of the picture raw data is stored.
-* \param[in] w The width of the image @p data in pixels.
-* \param[in] h The height of the image @p data in pixels.
-* \param[in] premultiplied If @c true, the given image data is alpha-premultiplied.
-* \param[in] copy If @c true the data are copied into the engine local buffer, otherwise they are not.
+* \param[in] Paint Указатель Tvg_Paint на объект изображения.
+* \param[in] data Указатель на область памяти, где хранится содержимое необработанных данных изображения.
+* \param[in] w Ширина данных @p изображения в пикселях.
+* \param[in] h Высота данных @p изображения в пикселях.
+* \param[in] premultiplied Если @c true, данные изображения предварительно умножаются в альфа-канале.
+* \param[in] copy Если @c true, данные копируются в локальный буфер движка, в противном случае — нет.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer or no data are provided or the @p width or @p height value is zero or less.
-* \retval TVG_RESULT_FAILED_ALLOCATION A problem with memory allocation occurs.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint, или данные не предоставлены, или значение ширины @p или высоты @p равно нулю или меньше.
+* \retval TVG_RESULT_FAILED_ALLOCATION Возникла проблема с распределением памяти.
 *
-* \since 0.9
+* \с 0,9
 */
 TVG_API Tvg_Result tvg_picture_load_raw(Tvg_Paint* paint, uint32_t *data, uint32_t w, uint32_t h, bool copy);
 
 
 /*!
-* \brief Loads a picture data from a memory block of a given size.
+* \brief Загружает данные изображения из блока памяти заданного размера.
 *
-* ThorVG efficiently caches the loaded data using the specified @p data address as a key
-* when the @p copy has @c false. This means that loading the same data again will not result in duplicate operations
-* for the sharable @p data. Instead, ThorVG will reuse the previously loaded picture data.
+* ThorVG эффективно кэширует загруженные данные, используя указанный адрес данных @p в качестве ключа.
+* когда копия @p имеет @c false. Это означает, что повторная загрузка тех же данных не приведет к дублированию операций.
+* для общих данных @p. Вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
 *
-* \param[in] paint A Tvg_Paint pointer to the picture object.
-* \param[in] data A pointer to a memory location where the content of the picture file is stored. A null-terminated string is expected for non-binary data if @p copy is @c false
-* \param[in] size The size in bytes of the memory occupied by the @p data.
-* \param[in] mimetype Mimetype or extension of data such as "jpg", "jpeg", "svg", "svg+xml", "lottie", "png", etc. In case an empty string or an unknown type is provided, the loaders will be tried one by one.
-* \param[in] copy If @c true the data are copied into the engine local buffer, otherwise they are not.
+* \param[in] Paint Указатель Tvg_Paint на объект изображения.
+* \param[in] data Указатель на область памяти, где хранится содержимое файла изображения. Для недвоичных данных ожидается строка с нулевым завершением, если копия @p имеет значение @c false.
+* \param[in] size Размер памяти в байтах, занимаемой данными @p.
+* \param[in] mimetype Mimetype или расширение данных, например «jpg», «jpeg», «svg», «svg+xml», «lottie», «png» и т. д. Если указана пустая строка или неизвестный тип, загрузчики будут проверены один за другим.
+* \param[in] copy Если @c true, данные копируются в локальный буфер движка, в противном случае — нет.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument or the @p size is zero or less.
-* \retval TVG_RESULT_NOT_SUPPORTED A file with an unknown extension.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передан нулевой параметр @c или размер @p равен нулю или меньше.
+* \retval TVG_RESULT_NOT_SUPPORTED Файл с неизвестным расширением.
 *
-* \warning: It's the user responsibility to release the @p data memory if the @p copy is @c true.
+* \Предупреждение: Пользователь несет ответственность за освобождение памяти данных @p, если копия @p имеет значение @c true.
 */
 TVG_API Tvg_Result tvg_picture_load_data(Tvg_Paint* paint, const char *data, uint32_t size, const char *mimetype, bool copy);
 
 
 /*!
-* \brief Resizes the picture content to the given width and height.
+* \brief Изменяет размер содержимого изображения до заданной ширины и высоты.
 *
-* The picture content is resized while keeping the default size aspect ratio.
-* The scaling factor is established for each of dimensions and the smaller value is applied to both of them.
+* Размер содержимого изображения изменяется с сохранением соотношения сторон размера по умолчанию.
+* Коэффициент масштабирования устанавливается для каждого из измерений, и к обоим из них применяется меньшее значение.
 *
-* \param[in] paint A Tvg_Paint pointer to the picture object.
-* \param[in] w A new width of the image in pixels.
-* \param[in] h A new height of the image in pixels.
+* \param[in] Paint Указатель Tvg_Paint на объект изображения.
+* \param[in] w Новая ширина изображения в пикселях.
+* \param[in] h Новая высота изображения в пикселях.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_picture_set_size(Tvg_Paint* paint, float w, float h);
 
 
 /*!
-* \brief Gets the size of the loaded picture.
+* \brief Получает размер загруженного изображения.
 *
-* \param[in] paint A Tvg_Paint pointer to the picture object.
-* \param[out] w A width of the image in pixels.
-* \param[out] h A height of the image in pixels.
+* \param[in] Paint Указатель Tvg_Paint на объект изображения.
+* \param[out] w Ширина изображения в пикселях.
+* \param[out] h Высота изображения в пикселях.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_API Tvg_Result tvg_picture_get_size(const Tvg_Paint* paint, float* w, float* h);
 
 
 /*!
-* \brief Retrieve a paint object from the Picture scene by its Unique ID.
+* \brief Извлекает объект рисования из сцены Picture по его уникальному значению ID .
 *
-* This function searches for a paint object within the Picture scene that matches the provided @p id.
+* Эта функция ищет объект рисования в сцене изображения, соответствующий предоставленному идентификатору @p.
 *
-* \param[in] paint A Tvg_Paint pointer to the picture object.
-* \param[in] id The Unique ID of the paint object.
+* \param[in] Paint Указатель Tvg_Paint на объект изображения.
+* \param[in] id Уникальный ID объекта рисования.
 
-* \return A pointer to the paint object that matches the given identifier, or @c nullptr if no matching paint object is found.
+* \return Указатель на объект рисования, соответствующий заданному идентификатору, или @c nullptr, если соответствующий объект рисования не найден.
 *
-* \see tvg_accessor_generate_id()
-* \note experimental API
+* \см. tvg_accessor_generate_id ()
+* \примечание экспериментальный API
 */
 TVG_API const Tvg_Paint* tvg_picture_get_paint(Tvg_Paint* paint, uint32_t id);
 
 
-/** \} */   // end defgroup ThorVGCapi_Picture
+/** \} */   // конец защитной группы ThorVGCapi_Picture
 
 
 /**
-* \defgroup ThorVGCapi_Scene Scene
-* \brief A module managing the multiple paints as one group paint.
+* \defgroup Сцена ThorVGCapi_Scene
+* \brief Модуль, управляющий несколькими отрисовками как одной групповой отрисовкой.
 *
-* As a group, scene can be transformed, translucent, composited with other target paints,
-* its children will be affected by the scene world.
+* Как группа, сцена может трансформироваться, становиться полупрозрачной, комбинироваться с другими целевыми красками,
+* на его детей будет влиять мир сцены.
 *
 * \{
 */
 
 /************************************************************************/
-/* Scene API                                                            */
+/* Сцена API                                                            */
 /************************************************************************/
 /*!
-* \brief Creates a new scene object.
+* \brief Создает новый объект сцены.
 *
-* A scene object is used to group many paints into one object, which can be manipulated using TVG APIs.
+* Объект сцены используется для группировки множества красок в один объект, которым можно манипулировать с помощью API-интерфейсов TVG.
 *
-* \return A new scene object.
+* \return Новый объект сцены.
 */
 TVG_API Tvg_Paint* tvg_scene_new(void);
 
 
 /*!
-* \brief Sets the size of the container, where all the paints pushed into the scene are stored.
+* \brief Устанавливает размер контейнера, в котором хранятся все краски, помещенные в сцену.
 *
-* If the number of objects pushed into the scene is known in advance, calling the function
-* prevents multiple memory reallocation, thus improving the performance.
+* Если количество объектов, помещенных в сцену, известно заранее, вызов функции
+* предотвращает многократное перераспределение памяти, тем самым повышая производительность.
 *
-* \param[in] scene A Tvg_Paint pointer to the scene object.
-* \param[in] size The number of objects for which the memory is to be reserved.
+* \param[in] сцена Указатель Tvg_Paint на объект сцены.
+* \param[in] size Число объектов, для которых должна быть зарезервирована память.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_FAILED_ALLOCATION An internal error with a memory allocation.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_FAILED_ALLOCATION Внутренняя ошибка при выделении памяти.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Paint.
 */
 TVG_DEPRECATED TVG_API Tvg_Result tvg_scene_reserve(Tvg_Paint* scene, uint32_t size);
 
 
 /*!
-* \brief Passes drawing elements to the scene using Tvg_Paint objects.
+* \brief Передает элементы рисования на сцену, используя объекты Tvg_Paint.
 *
-* Only the paints pushed into the scene will be the drawn targets.
-* The paints are retained by the scene until the tvg_scene_clear() is called.
-* If you know the number of pushed objects in advance, please call tvg_scene_reserve().
+* Нарисованными целями будут только краски, попавшие в сцену.
+* Краски сохраняются в сцене до тех пор, пока не будет вызвана функция tvg_scene_clear().
+* Если вы заранее знаете количество толкаемых объектов, позвоните в tvg_scene_reserve().
 *
-* \param[in] scene A Tvg_Paint pointer to the scene object.
-* \param[in] paint A graphical object to be drawn.
+* \param[in] сцена Указатель Tvg_Paint на объект сцены.
+* \param[in] краска Графический объект, который нужно отрисовать.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
 *
-* \note The rendering order of the paints is the same as the order as they were pushed. Consider sorting the paints before pushing them if you intend to use layering.
+* \note Порядок отрисовки красок такой же, как и порядок их перемещения. Если вы собираетесь использовать слои, рассмотрите возможность сортировки красок перед тем, как их раскладывать.
 */
 TVG_API Tvg_Result tvg_scene_push(Tvg_Paint* scene, Tvg_Paint* paint);
 
 
 /*!
-* \brief Clears a scene objects from pushed paints.
+* \brief Очищает объекты сцены от нажатых красок.
 *
-* Tvg_Paint objects stored in the scene are released if @p free is set to @c true, otherwise the memory is not deallocated and
-* all paints should be released manually in order to avoid memory leaks.
+* Объекты Tvg_Paint, хранящиеся в сцене, освобождаются, если для параметра @p free установлено значение @c true, в противном случае память не освобождается и
+* все краски следует освобождать вручную во избежание утечек памяти.
 *
-* \param[in] scene The scene object to be cleared.
-* \param[in] free If @c true the memory occupied by paints is deallocated, otherwise it is not.
+* \param[in] сцена Объект сцены, который необходимо очистить.
+* \param[in] free Если @c true, память, занятая красками, освобождается, в противном случае — нет.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Canvas pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Canvas.
 *
-* \warning Please use the @p free argument only when you know how it works, otherwise it's not recommended.
+* \предупреждение Пожалуйста, используйте свободный аргумент @p только в том случае, если вы знаете, как он работает, в противном случае это не рекомендуется.
 */
 TVG_API Tvg_Result tvg_scene_clear(Tvg_Paint* scene, bool free);
 
-/** \} */   // end defgroup ThorVGCapi_Scene
+/** \} */   // конец защитной группы ThorVGCapi_Scene
 
 
 
 /**
-* \defgroup ThorVGCapi_Text Text
-* \brief A class to represent text objects in a graphical context, allowing for rendering and manipulation of unicode text.
+* \defgroup ThorVGCapi_Text Текст
+* \brief Класс для представления текстовых объектов в графическом контексте, позволяющий отображать и манипулировать текстом в Юникоде.
 *
-* \since 0.15
+* \с 0,15
 *
 * \{
 */
 
 /************************************************************************/
-/* Text API                                                            */
+/* Текст API                                                            */
 /************************************************************************/
 /*!
-* \brief Creates a new text object.
+* \brief Создает новый текстовый объект.
 *
-* \return A new text object.
+* \return Новый текстовый объект.
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Paint* tvg_text_new(void);
 
 
 /**
-* \brief Sets the font properties for the text.
+* \brief Устанавливает свойства шрифта для текста.
 *
-* This function allows you to define the font characteristics used for text rendering.
-* It sets the font name, size and optionally the style.
+* Эта функция позволяет вам определить характеристики шрифта, используемые для рендеринга текста.
+* Он устанавливает имя шрифта, его размер и, при необходимости, стиль.
 *
-* \param[in] paint A Tvg_Paint pointer to the text object.
-* \param[in] name The name of the font. This should correspond to a font available in the canvas.
-* \param[in] size The size of the font in points.
-* \param[in] style The style of the font. If empty, the default style is used. Currently only 'italic' style is supported.
+* \param[in] Paint Указатель Tvg_Paint на текстовый объект.
+* \param[in] name Имя шрифта. Это должно соответствовать шрифту, доступному на холсте.
+* \param[in] size Размер шрифта в пунктах.
+* \param[in] style Стиль шрифта. Если пусто, используется стиль по умолчанию. В настоящее время поддерживается только курсив.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A \c nullptr passed as the \p paint argument.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION  The specified \p name cannot be found.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT \c nullptr передается в качестве аргумента рисования \p.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Указанное имя \p не найдено.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_text_set_font(Tvg_Paint* paint, const char* name, float size, const char* style);
 
 
 /**
-* \brief Assigns the given unicode text to be rendered.
+* \brief Назначает отображаемый текст в Юникоде.
 *
-* This function sets the unicode text that will be displayed by the rendering system.
-* The text is set according to the specified UTF encoding method, which defaults to UTF-8.
+* Эта функция устанавливает текст в Юникоде, который будет отображаться системой рендеринга.
+* Текст задается в соответствии с указанным методом кодирования UTF, который по умолчанию равен UTF -8.
 *
-* \param[in] paint A Tvg_Paint pointer to the text object.
-* \param[in] text The multi-byte text encoded with utf8 string to be rendered.
+* \param[in] Paint Указатель Tvg_Paint на текстовый объект.
+* \param[in] text Многобайтовый текст, закодированный строкой utf8 для отображения.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A \c nullptr passed as the \p paint argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT \c nullptr передается в качестве аргумента рисования \p.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_text_set_text(Tvg_Paint* paint, const char* text);
 
 
 /**
-* \brief Sets the text solid color.
+* \brief Устанавливает сплошной цвет текста.
 *
-* \param[in] paint A Tvg_Paint pointer to the text object.
-* \param[in] r The red color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] g The green color channel value in the range [0 ~ 255]. The default value is 0.
-* \param[in] b The blue color channel value in the range [0 ~ 255]. The default value is 0.
+* \param[in] Paint Указатель Tvg_Paint на текстовый объект.
+* \param[in] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
+* \param[in] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A \c nullptr passed as the \p paint argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT \c nullptr передается в качестве аргумента рисования \p.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
-* \see tvg_text_set_font()
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
+* \см. tvg_text_set_font ()
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_text_set_fill_color(Tvg_Paint* paint, uint8_t r, uint8_t g, uint8_t b);
 
 
 /**
-* \brief Sets the gradient fill for the text.
+* \brief Устанавливает градиентную заливку текста.
 *
-* \param[in] paint A Tvg_Paint pointer to the text object.
-* \param[in] grad The linear or radial gradient fill
+* \param[in] Paint Указатель Tvg_Paint на текстовый объект.
+* \param[in] grad Линейная или радиальная градиентная заливка.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A \c nullptr passed as the \p paint argument.
-* \retval TVG_RESULT_MEMORY_CORRUPTION An invalid Tvg_Gradient pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT \c nullptr передается в качестве аргумента рисования \p.
+* \retval TVG_RESULT_MEMORY_CORRUPTION Неверный указатель Tvg_Gradient.
 *
-* \note Either a solid color or a gradient fill is applied, depending on what was set as last.
-* \see tvg_text_set_font()
+* \note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
+* \см. tvg_text_set_font ()
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_text_set_gradient(Tvg_Paint* paint, Tvg_Gradient* gradient);
 
 /**
-* \brief Loads a scalable font data from a file.
+* \brief Загружает данные масштабируемого шрифта из файла.
 *
-* ThorVG efficiently caches the loaded data using the specified \p path as a key.
-* This means that loading the same file again will not result in duplicate operations;
-* instead, ThorVG will reuse the previously loaded font data.
+* ThorVG эффективно кэширует загруженные данные, используя указанный путь \p в качестве ключа.
+* Это означает, что повторная загрузка того же файла не приведет к дублированию операций;
+* вместо этого ThorVG будет повторно использовать ранее загруженные данные шрифта.
 *
-* \param[in] path The path to the font file.
+* \param[in] путь Путь к файлу шрифта.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid \p path passed as an argument.
-* \retval TVG_RESULT_NOT_SUPPORTED When trying to load a file with an unknown extension.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передан недопустимый путь \p.
+* \retval TVG_RESULT_NOT_SUPPORTED При попытке загрузить файл с неизвестным расширением.
 *
-* \see tvg_font_unload()
+* \см. tvg_font_unload ()
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_font_load(const char* path);
 
 
 /**
-* \brief Loads a scalable font data from a memory block of a given size.
+* \brief Загружает данные масштабируемого шрифта из блока памяти заданного размера.
 *
-* ThorVG efficiently caches the loaded font data using the specified \p name as a key.
-* This means that loading the same fonts again will not result in duplicate operations.
-* Instead, ThorVG will reuse the previously loaded font data.
+* ThorVG эффективно кэширует загруженные данные шрифта, используя указанное имя \p в качестве ключа.
+* Это означает, что повторная загрузка тех же шрифтов не приведет к дублированию операций.
+* Вместо этого ThorVG будет повторно использовать ранее загруженные данные шрифта.
 *
-* \param[in] name The name under which the font will be stored and accessible (e.x. in a \p tvg_text_set_font API).
-* \param[in] data A pointer to a memory location where the content of the font data is stored.
-* \param[in] size The size in bytes of the memory occupied by the @p data.
-* \param[in] mimetype Mimetype or extension of font data. In case a \c NULL or an empty "" value is provided the loader will be determined automatically.
-* \param[in] copy If @c true the data are copied into the engine local buffer, otherwise they are not (default).
+* \param[in] name Имя, под которым шрифт будет храниться и доступен (например, в \p tvg_text_set_font API ).
+* \param[in] data Указатель на область памяти, где хранится содержимое данных шрифта.
+* \param[in] size Размер памяти в байтах, занимаемой данными @p.
+* \param[in] mimetype Mime-тип или расширение данных шрифта. Если указано \c NULL или пустое значение "", загрузчик будет определен автоматически.
+* \param[in] copy Если @c true, данные копируются в локальный буфер движка, в противном случае — нет (по умолчанию).
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT If no name is provided or if \p size is zero while \p data points to a valid memory location.
-* \retval TVG_RESULT_NOT_SUPPORTED When trying to load a file with an unknown extension.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION When trying to unload the font data that has not been previously loaded.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Если имя не указано или размер \p равен нулю, а данные \p указывают на допустимую ячейку памяти.
+* \retval TVG_RESULT_NOT_SUPPORTED При попытке загрузить файл с неизвестным расширением.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION При попытке выгрузить данные шрифта, которые не были загружены ранее.
 *
-* \warning: It's the user responsibility to release the \p data memory.
+* \предупреждение: ответственность за освобождение памяти данных \p лежит на пользователе.
 *
-* \note To unload the font data loaded using this API, pass the proper \p name and \c nullptr as \p data.
+* \note Чтобы выгрузить данные шрифта, загруженные с помощью этого API , передайте правильное имя \p и \c nullptr в качестве данных \p.
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_font_load_data(const char* name, const char* data, uint32_t size, const char *mimetype, bool copy);
 
 
 /**
-* \brief Unloads the specified scalable font data that was previously loaded.
+* \brief Выгружает указанные ранее загруженные данные масштабируемого шрифта.
 *
-* This function is used to release resources associated with a font file that has been loaded into memory.
+* Эта функция используется для освобождения ресурсов, связанных с файлом шрифта, загруженным в память.
 *
-* \param[in] path The path to the loaded font file.
+* \param[in] путь Путь к загруженному файлу шрифта.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION The loader is not initialized.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Загрузчик не инициализирован.
 *
-* \note If the font data is currently in use, it will not be immediately unloaded.
-* \see tvg_font_load()
+* \note Если данные шрифта в данный момент используются, они не будут немедленно выгружены.
+* \см. tvg_font_load ()
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Result tvg_font_unload(const char* path);
 
 
-/** \} */   // end defgroup ThorVGCapi_Text
+/** \} */   // конец защитной группы ThorVGCapi_Text
 
 
 /**
-* \defgroup ThorVGCapi_Saver Saver
-* \brief A module for exporting a paint object into a specified file.
+* \defgroup ThorVGCapi_Saver Заставка
+* \brief Модуль для экспорта объекта рисования в указанный файл.
 *
-* The module enables to save the composed scene and/or image from a paint object.
-* Once it's successfully exported to a file, it can be recreated using the Picture module.
+* Модуль позволяет сохранять составленную сцену и/или изображение с объекта рисования.
+* После успешного экспорта в файл его можно воссоздать с помощью модуля «Изображение».
 *
 * \{
 */
 
 /************************************************************************/
-/* Saver API                                                            */
+/* Заставка API                                                            */
 /************************************************************************/
 /*!
-* \brief Creates a new Tvg_Saver object.
+* \brief Создает новый объект Tvg_Saver.
 *
-* \return A new Tvg_Saver object.
+* \return Новый объект Tvg_Saver.
 */
 TVG_API Tvg_Saver* tvg_saver_new(void);
 
 
 /*!
-* \brief Exports the given @p paint data to the given @p path
+* \brief Экспортирует заданные данные рисования @p в заданный путь @p.
 *
-* If the saver module supports any compression mechanism, it will optimize the data size.
-* This might affect the encoding/decoding time in some cases. You can turn off the compression
-* if you wish to optimize for speed.
+* Если модуль сохранения поддерживает какой-либо механизм сжатия, он оптимизирует размер данных.
+* В некоторых случаях это может повлиять на время кодирования/декодирования. Вы можете отключить сжатие
+* если вы хотите оптимизировать скорость.
 *
-* \param[in] saver The Tvg_Saver object connected with the saving task.
-* \param[in] paint The paint to be saved with all its associated properties.
-* \param[in] path A path to the file, in which the paint data is to be saved.
-* \param[in] compress If @c true then compress data if possible.
+* \param[in] saver Объект Tvg_Saver, связанный с задачей сохранения.
+* \param[in] краска Краска, которую нужно сохранить, со всеми связанными с ней свойствами.
+* \param[in] путь Путь к файлу, в котором должны быть сохранены данные рисования.
+* \param[in] compress Если @c true, то сжимайте данные, если это возможно.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION Currently saving other resources.
-* \retval TVG_RESULT_NOT_SUPPORTED Trying to save a file with an unknown extension or in an unsupported format.
-* \retval TVG_RESULT_UNKNOWN An empty paint is to be saved.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION В настоящее время сохраняются другие ресурсы.
+* \retval TVG_RESULT_NOT_SUPPORTED Пытаюсь сохранить файл с неизвестным расширением или в неподдерживаемом формате.
+* \retval TVG_RESULT_UNKNOWN Необходимо сохранить пустую краску.
 *
-* \note Saving can be asynchronous if the assigned thread number is greater than zero. To guarantee the saving is done, call tvg_saver_sync() afterwards.
-* \see tvg_saver_sync()
+* \note Сохранение может быть асинхронным, если назначенный номер потока больше нуля. Чтобы гарантировать, что сохранение выполнено, после этого вызовите tvg_saver_sync().
+* \см. tvg_saver_sync ()
 */
 TVG_API Tvg_Result tvg_saver_save(Tvg_Saver* saver, Tvg_Paint* paint, const char* path, bool compress);
 
 
 /*!
-* \brief Guarantees that the saving task is finished.
+* \brief Гарантирует, что задача сохранения завершена.
 *
-* The behavior of the Saver module works on a sync/async basis, depending on the threading setting of the Initializer.
-* Thus, if you wish to have a benefit of it, you must call tvg_saver_sync() after the tvg_saver_save() in the proper delayed time.
-* Otherwise, you can call tvg_saver_sync() immediately.
+* Поведение модуля Saver работает на основе синхронизации/асинхронности, в зависимости от настройки потоков инициализатора.
+* Таким образом, если вы хотите получить от этого выгоду, вы должны вызвать tvg_saver_sync() после tvg_saver_save() в нужное время задержки.
+* В противном случае вы можете немедленно вызвать tvg_saver_sync().
 *
-* \param[in] saver The Tvg_Saver object connected with the saving task.
+* \param[in] saver Объект Tvg_Saver, связанный с задачей сохранения.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION No saving task is running.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В качестве аргумента передается нулевой параметр @c.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Задача сохранения не выполняется.
 *
-* \note The asynchronous tasking is dependent on the Saver module implementation.
-* \see tvg_saver_save()
+* \note Асинхронное выполнение задач зависит от реализации модуля Saver.
+* \см. tvg_saver_save ()
 */
 TVG_API Tvg_Result tvg_saver_sync(Tvg_Saver* saver);
 
 
 /*!
-* \brief Deletes the given Tvg_Saver object.
+* \brief Удаляет указанный объект Tvg_Saver.
 *
-* \param[in] saver The Tvg_Saver object to be deleted.
+* \param[in] saver Объект Tvg_Saver, который необходимо удалить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Saver pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Saver.
 */
 TVG_API Tvg_Result tvg_saver_del(Tvg_Saver* saver);
 
 
-/** \} */   // end defgroup ThorVGCapi_Saver
+/** \} */   // конец защитной группы ThorVGCapi_Saver
 
 
 /**
-* \defgroup ThorVGCapi_Animation Animation
-* \brief A module for manipulation of animatable images.
+* \defgroup ThorVGCapi_Animation Анимация
+* \brief Модуль для работы с анимационными изображениями.
 *
-* The module supports the display and control of animation frames.
+* Модуль поддерживает отображение и управление кадрами анимации.
 *
 * \{
 */
 
 /************************************************************************/
-/* Animation API                                                        */
+/* Анимация API                                                        */
 /************************************************************************/
 
 /*!
-* \brief Creates a new Animation object.
+* \brief Создает новый объект Animation.
 *
-* \return Tvg_Animation A new Tvg_Animation object.
+* \return Tvg_Animation Новый объект Tvg_Animation.
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Animation* tvg_animation_new(void);
 
 
 /*!
-* \brief Specifies the current frame in the animation.
+* \brief Указывает текущий кадр анимации.
 *
-* \param[in] animation A Tvg_Animation pointer to the animation object.
-* \param[in] no The index of the animation frame to be displayed. The index should be less than the tvg_animation_get_total_frame().
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
+* \param[in] no Индекс отображаемого кадра анимации. Индекс должен быть меньше tvg_animation_get_total_frame().
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Animation pointer.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION if the given @p no is the same as the current frame value.
-* \retval TVG_RESULT_NOT_SUPPORTED The picture data does not support animations.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Animation.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION, если заданный номер @p совпадает со значением текущего кадра.
+* \retval TVG_RESULT_NOT_SUPPORTED Данные изображения не поддерживают анимацию.
 *
-* \note For efficiency, ThorVG ignores updates to the new frame value if the difference from the current frame value
-*       is less than 0.001. In such cases, it returns @c Result::InsufficientCondition.
-*       Values less than 0.001 may be disregarded and may not be accurately retained by the Animation.
-* \see tvg_animation_get_total_frame()
+* \note В целях эффективности ThorVG игнорирует обновления нового значения кадра, если оно отличается от текущего значения кадра.
+*       меньше 0,001. В таких случаях он возвращает @c Result::InsufficientCondition.
+*       Значения меньше 0,001 могут быть проигнорированы и не могут быть точно сохранены анимацией.
+* \см. tvg_animation_get_total_frame ()
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Result tvg_animation_set_frame(Tvg_Animation* animation, float no);
 
 
 /*!
-* \brief Retrieves a picture instance associated with this animation instance.
+* \brief Извлекает экземпляр изображения, связанный с этим экземпляром анимации.
 *
-* This function provides access to the picture instance that can be used to load animation formats, such as Lottie(json).
-* After setting up the picture, it can be pushed to the designated canvas, enabling control over animation frames
-* with this Animation instance.
+* Эта функция обеспечивает доступ к экземпляру изображения, который можно использовать для загрузки форматов анимации, таких как Lottie(json).
+* После настройки изображения его можно переместить на назначенный холст, что позволит управлять кадрами анимации.
+* с этим экземпляром анимации.
 *
-* \param[in] animation A Tvg_Animation pointer to the animation object.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
 *
-* \return A picture instance that is tied to this animation.
+* \return Экземпляр изображения, привязанный к этой анимации.
 *
-* \warning The picture instance is owned by Animation. It should not be deleted manually.
+* \warning Экземпляр изображения принадлежит компании Animation. Его не следует удалять вручную.
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Paint* tvg_animation_get_picture(Tvg_Animation* animation);
 
 
 /*!
-* \brief Retrieves the current frame number of the animation.
+* \brief Получает текущий номер кадра анимации.
 *
-* \param[in] animation A Tvg_Animation pointer to the animation object.
-* \param[in] no The current frame number of the animation, between 0 and totalFrame() - 1.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
+* \param[in] no Номер текущего кадра анимации от 0 до totalFrame() - 1.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Animation pointer or @p no
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Animation или @p нет
 *
-* \see tvg_animation_get_total_frame()
-* \see tvg_animation_set_frame()
+* \см. tvg_animation_get_total_frame ()
+* \см. tvg_animation_set_frame ()
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Result tvg_animation_get_frame(Tvg_Animation* animation, float* no);
 
 
 /*!
-* \brief Retrieves the total number of frames in the animation.
+* \brief Получает общее количество кадров в анимации.
 *
-* \param[in] animation A Tvg_Animation pointer to the animation object.
-* \param[in] cnt The total number of frames in the animation.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
+* \param[in] cnt Общее количество кадров в анимации.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Animation pointer or @p cnt.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Animation или @p cnt.
 *
-* \note Frame numbering starts from 0.
-* \note If the Picture is not properly configured, this function will return 0.
+* \note Нумерация кадров начинается с 0.
+* \note Если изображение настроено неправильно, эта функция вернет 0.
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Result tvg_animation_get_total_frame(Tvg_Animation* animation, float* cnt);
 
 
 /*!
-* \brief Retrieves the duration of the animation in seconds.
+* \brief Получает продолжительность анимации в секундах.
 *
-* \param[in] animation A Tvg_Animation pointer to the animation object.
-* \param[in] duration The duration of the animation in seconds.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
+* \param[in] длительность Продолжительность анимации в секундах.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Animation pointer or @p duration.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Недопустимый указатель Tvg_Animation или длительность @p.
 *
-* \note If the Picture is not properly configured, this function will return 0.
+* \note Если изображение настроено неправильно, эта функция вернет 0.
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Result tvg_animation_get_duration(Tvg_Animation* animation, float* duration);
 
 
 /*!
-* \brief Specifies the playback segment of the animation.
+* \brief Определяет сегмент воспроизведения анимации.
 *
-* \param[in] animation The Tvg_Animation pointer to the animation object.
-* \param[in] begin segment begin.
-* \param[in] end segment end.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
+* \param[in] начало сегмента.
+* \param[in] конец сегмента конец.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION In case the animation is not loaded.
-* \retval TVG_RESULT_INVALID_ARGUMENT When the given parameters are out of range.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Если анимация не загружена.
+* \retval TVG_RESULT_INVALID_ARGUMENT Когда данные параметры выходят за пределы допустимого диапазона.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_animation_set_segment(Tvg_Animation* animation, float begin, float end);
 
 
 /*!
-* \brief Gets the current segment.
+* \brief Получает текущий сегмент.
 *
-* \param[in] animation The Tvg_Animation pointer to the animation object.
-* \param[out] begin segment begin.
-* \param[out] end segment end.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации.
+* \param[out] начало сегмента начало.
+* \param[out] конец сегмента конец.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION In case the animation is not loaded.
-* \retval TVG_RESULT_INVALID_ARGUMENT When the given parameters are @c nullptr.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Если анимация не загружена.
+* \retval TVG_RESULT_INVALID_ARGUMENT Если заданы параметры @c nullptr.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_animation_get_segment(Tvg_Animation* animation, float* begin, float* end);
 
 
 /*!
-* \brief Deletes the given Tvg_Animation object.
+* \brief Удаляет указанный объект Tvg_Animation.
 *
-* \param[in] animation The Tvg_Animation object to be deleted.
+* \param[in] анимация Объект Tvg_Animation, который необходимо удалить.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Animation pointer.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT Неверный указатель Tvg_Animation.
 *
-* \since 0.13
+* \с 0,13
 */
 TVG_API Tvg_Result tvg_animation_del(Tvg_Animation* animation);
 
 
-/** \} */   // end defgroup ThorVGCapi_Animation
+/** \} */   // конец защитной группы ThorVGCapi_Animation
 
 
 /**
-* \defgroup ThorVGCapi_Accesssor Accessor
-* \brief A module for manipulation of the scene tree
+* \defgroup Аксессор ThorVGCapi_Accesssor
+* \brief Модуль для манипуляций с деревом сцены
 *
-* This module helps to control the scene tree.
+* Этот модуль помогает управлять деревом сцен.
 * \{
 */
 
 /************************************************************************/
-/* Accessor API                                                         */
+/* Аксессуар API                                                         */
 /************************************************************************/
 
 /*!
-* \brief Generate a unique ID (hash key) from a given name.
+* \brief Генерирует уникальный ID (хэш-ключ) по заданному имени.
 *
-* This function computes a unique identifier value based on the provided string.
-* You can use this to assign a unique ID to the Paint object.
+* Эта функция вычисляет уникальное значение идентификатора на основе предоставленной строки.
+* Вы можете использовать это, чтобы назначить уникальный ID объекту Paint.
 *
-* \param[in] name The input string to generate the unique identifier from.
+* \param[in] name Входная строка, на основе которой создается уникальный идентификатор.
 *
-* \return The generated unique identifier value.
+* \return Сгенерированное значение уникального идентификатора.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API uint32_t tvg_accessor_generate_id(const char* name);
 
 
-/** \} */   // end defgroup ThorVGCapi_Accessor
+/** \} */   // конец защитной группы ThorVGCapi_Accessor
 
 
 /**
 * \defgroup ThorVGCapi_LottieAnimation LottieAnimation
-* \brief A module for manipulation of lottie extension features.
+* \brief Модуль для управления функциями расширения лотереи.
 *
-* The module enables control of advanced Lottie features.
+* Модуль позволяет управлять расширенными функциями Lottie.
 * \{
 */
 
 /************************************************************************/
-/* LottieAnimation Extension API                                        */
+/* Расширение LottieAnimation API                                        */
 /************************************************************************/
 
 /*!
-* \brief Creates a new LottieAnimation object.
+* \brief Создает новый объект LottieAnimation.
 *
-* \return Tvg_Animation A new Tvg_LottieAnimation object.
+* \return Tvg_Animation Новый объект Tvg_LottieAnimation.
 *
-* \since 0.15
+* \с 0,15
 */
 TVG_API Tvg_Animation* tvg_lottie_animation_new(void);
 
 
 /*!
-* \brief Override the lottie properties through the slot data.
+* \brief Переопределите свойства лотереи с помощью данных слота.
 *
-* \param[in] animation The Tvg_Animation object to override the property with the slot.
-* \param[in] slot The Lottie slot data in json, or @c nullptr to reset.
+* \param[in] анимация Объект Tvg_Animation для переопределения свойства со слотом.
+* \param[in] slot Данные слота Lottie в формате JSON или @c nullptr для сброса.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION In case the animation is not loaded.
-* \retval TVG_RESULT_INVALID_ARGUMENT When the given @p slot is invalid
-* \retval TVG_RESULT_NOT_SUPPORTED The Lottie Animation is not supported.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Если анимация не загружена.
+* \retval TVG_RESULT_INVALID_ARGUMENT Когда данный слот @p недействителен
+* \retval TVG_RESULT_NOT_SUPPORTED Анимация Лотти не поддерживается.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_lottie_animation_override(Tvg_Animation* animation, const char* slot);
 
 
 /*!
-* \brief Specifies a segment by marker.
+* \brief Определяет сегмент по маркеру.
 *
-* \param[in] animation The Tvg_Animation pointer to the Lottie animation object.
-* \param[in] marker The name of the segment marker.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации Lottie.
+* \param[in] маркер Имя маркера сегмента.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INSUFFICIENT_CONDITION In case the animation is not loaded.
-* \retval TVG_RESULT_INVALID_ARGUMENT When the given @p marker is invalid.
-* \retval TVG_RESULT_NOT_SUPPORTED The Lottie Animation is not supported.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INSUFFICIENT_CONDITION Если анимация не загружена.
+* \retval TVG_RESULT_INVALID_ARGUMENT Когда данный маркер @p недействителен.
+* \retval TVG_RESULT_NOT_SUPPORTED Анимация Лотти не поддерживается.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_lottie_animation_set_marker(Tvg_Animation* animation, const char* marker);
 
 
 /*!
-* \brief Gets the marker count of the animation.
+* \brief Получает количество маркеров анимации.
 *
-* \param[in] animation The Tvg_Animation pointer to the Lottie animation object.
-* \param[out] cnt The count value of the markers.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации Lottie.
+* \param[out] cnt Значение счетчика маркеров.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передается нулевой параметр @c.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_lottie_animation_get_markers_cnt(Tvg_Animation* animation, uint32_t* cnt);
 
 
 /*!
-* \brief Gets the marker name by a given index.
+* \brief Получает имя маркера по заданному индексу.
 *
-* \param[in] animation The Tvg_Animation pointer to the Lottie animation object.
-* \param[in] idx The index of the animation marker, starts from 0.
-* \param[out] name The name of marker when succeed.
+* \param[in] анимация Указатель Tvg_Animation на объект анимации Lottie.
+* \param[in] idx Индекс маркера анимации, начинается с 0.
+* \param[out] name Имя маркера в случае успеха.
 *
-* \return Tvg_Result enumeration.
-* \retval TVG_RESULT_INVALID_ARGUMENT In case @c nullptr is passed as the argument or @c idx is out of range.
+* \return Перечисление Tvg_Result.
+* \retval TVG_RESULT_INVALID_ARGUMENT В случае, если в качестве аргумента передан @c nullptr или @c idx выходит за пределы диапазона.
 *
-* \note Experimental API
+* \note Экспериментальный API
 */
 TVG_API Tvg_Result tvg_lottie_animation_get_marker(Tvg_Animation* animation, uint32_t idx, const char** name);
 
 
-/** \} */   // end addtogroup ThorVGCapi_LottieAnimation
+/** \} */   // конец добавления в группу ThorVGCapi_LottieAnimation
 
 
-/** \} */   // end defgroup ThorVGCapi
+/** \} */   // конец защитной группы ThorVGCapi
 
 
 #ifdef __cplusplus

@@ -49,11 +49,11 @@ void lv_example_scale_11(void)
     lv_obj_set_style_text_font(scale, &lv_font_montserrat_12, LV_PART_INDICATOR);
     lv_obj_set_style_pad_radial(scale, -6, LV_PART_INDICATOR);
 
-    /*Rotate the labels of the ticks*/
+    /*Поворот меток галочек*/
     lv_obj_set_style_transform_rotation(scale, LV_SCALE_LABEL_ROTATE_MATCH_TICKS | LV_SCALE_LABEL_ROTATE_KEEP_UPRIGHT,
                                         LV_PART_INDICATOR);
 
-    /* Style for major ticks */
+    /* Стиль для основных тиков */
     static lv_style_t style_ticks;
     lv_style_init(&style_ticks);
     lv_style_set_line_color(&style_ticks, lv_palette_darken(LV_PALETTE_GREY, 1));
@@ -61,22 +61,22 @@ void lv_example_scale_11(void)
     lv_style_set_width(&style_ticks, 10);
     lv_obj_add_style(scale, &style_ticks, LV_PART_INDICATOR);
 
-    /* Style for NIGHT — blue */
+    /* Стиль для NIGHT — синий */
     static lv_style_t style_night;
     lv_style_init(&style_night);
     lv_style_set_arc_color(&style_night, lv_palette_main(LV_PALETTE_BLUE));
 
-    /* Style for DAY — dark yellow */
+    /* Стиль для DAY — тёмно-жёлтый. */
     static lv_style_t style_day;
     lv_style_init(&style_day);
     lv_style_set_arc_color(&style_day, lv_palette_darken(LV_PALETTE_YELLOW, 3));
 
-    /* NIGHT section */
+    /* Раздел NIGHT */
     lv_scale_section_t * section_night1 = lv_scale_add_section(scale);
     lv_scale_set_section_range(scale, section_night1, 17, 5);
     lv_scale_set_section_style_main(scale, section_night1, &style_night);
 
-    /* DAY section */
+    /* Раздел DAY */
     lv_scale_section_t * section_day = lv_scale_add_section(scale);
     lv_scale_set_section_range(scale, section_day, 5, 17);
     lv_scale_set_section_style_main(scale, section_day, &style_day);

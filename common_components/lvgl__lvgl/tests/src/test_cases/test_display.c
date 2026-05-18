@@ -3,14 +3,14 @@
 #include "../../lvgl_private.h"
 #include "unity/unity.h"
 
-/*Bypassing resolution check*/
+/*Обход проверки разрешения*/
 #define TEST_DISPLAY_ASSERT_EQUAL_SCREENSHOT(path) TEST_ASSERT_MESSAGE(lv_test_screenshot_compare(path), path);
 
-#define TEST_DPX_CALC(dpi, n)   ((n) == 0 ? 0 :LV_MAX((( (dpi) * (n) + 80) / 160), 1)) /*+80 for rounding*/
+#define TEST_DPX_CALC(dpi, n)   ((n) == 0 ? 0 :LV_MAX((( (dpi) * (n) + 80) / 160), 1)) /*+80 за округление*/
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
@@ -23,12 +23,12 @@ void tearDown(void)
 }
 
 struct display_area_test_set {
-    /* Parameters for setting up the display */
+    /* Параметры для настройки дисплея */
     uint32_t width;
     uint32_t height;
     lv_color_format_t color_format;
     lv_display_render_mode_t render_mode;
-    /* Parameters for testing */
+    /* Параметры для тестирования */
     uint32_t invalidated_width;
     uint32_t invalidated_height;
     uint32_t expected_buf0_size;
@@ -265,7 +265,7 @@ static void refr_event_handler(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
     int * called = lv_event_get_user_data(e);
     (*called)++;
-    /* We should not receive the LV_EVENT_REFR_READY event as the display was deleted*/
+    /* Мы не должны получать событие LV_EVENT_REFR_READY, поскольку отображение было удалено.*/
     TEST_ASSERT_EQUAL(code, LV_EVENT_REFR_START);
     lv_display_delete(lv_event_get_current_target(e));
 }
@@ -317,11 +317,11 @@ static void test_display_resolution_full_rotation(
             TEST_ASSERT_EQUAL(rotations[i], lv_display_get_rotation(disp));
         }
 
-        /* Original resolution should be the same */
+        /* Исходное разрешение должно быть таким же */
         TEST_ASSERT_EQUAL_INT32(ori_hor_res, lv_display_get_original_horizontal_resolution(disp));
         TEST_ASSERT_EQUAL_INT32(ori_ver_res, lv_display_get_original_vertical_resolution(disp));
 
-        /* verify resolution */
+        /* проверить разрешение */
         switch(lv_display_get_rotation(disp)) {
             case LV_DISPLAY_ROTATION_0:
             case LV_DISPLAY_ROTATION_180:
@@ -342,7 +342,7 @@ static void test_display_resolution_full_rotation(
                 break;
         }
 
-        /* verify offset */
+        /* проверить смещение */
         switch(lv_display_get_rotation(disp)) {
             case LV_DISPLAY_ROTATION_0:
                 TEST_ASSERT_EQUAL_INT32(ori_offset_x, lv_display_get_offset_x(disp));
@@ -383,17 +383,17 @@ void test_display_resolution(void)
     lv_display_set_offset(disp, 10, 20);
     test_display_resolution_full_rotation(disp, 320, 480, 240, 320, 10, 20);
 
-    /* Set same resolution again */
+    /* Установите то же разрешение еще раз */
     lv_display_set_resolution(disp, 320, 480);
     test_display_resolution_full_rotation(disp, 320, 480, 240, 320, 10, 20);
 
-    /* Test default display */
+    /* Тестирование дисплея по умолчанию */
     lv_display_set_resolution(NULL, 32, 48);
     lv_display_set_physical_resolution(NULL, 24, 32);
     lv_display_set_offset(NULL, 1, 2);
     test_display_resolution_full_rotation(disp, 32, 48, 24, 32, 1, 2);
 
-    /* Test NULL default display, should not affect the display */
+    /* Тестирование дисплея NULL по умолчанию, не должно влиять на дисплей. */
     lv_display_set_default(NULL);
     lv_display_set_resolution(NULL, 2, 3);
     lv_display_set_physical_resolution(NULL, 4, 5);
@@ -401,7 +401,7 @@ void test_display_resolution(void)
     test_display_resolution_full_rotation(disp, 32, 48, 24, 32, 1, 2);
     test_display_resolution_full_rotation(NULL, 0, 0, 0, 0, 0, 0);
 
-    /* Restore default display */
+    /* Восстановить отображение по умолчанию */
     lv_display_set_default(disp_def);
     lv_display_delete(disp);
 }
@@ -416,7 +416,7 @@ void test_display_dpi_tile_cnt_antialiasing(void)
     lv_display_set_default(disp);
     lv_display_set_flush_cb(disp, never_called);
 
-    /* Verify default values */
+    /* Проверьте значения по умолчанию */
     TEST_ASSERT_EQUAL_INT32(LV_DPI_DEF, lv_display_get_dpi(disp));
 #if defined(LV_DRAW_SW_DRAW_UNIT_CNT) && (LV_DRAW_SW_DRAW_UNIT_CNT != 0)
     TEST_ASSERT_EQUAL_INT32(LV_DRAW_SW_DRAW_UNIT_CNT, lv_display_get_tile_cnt(disp));
@@ -438,7 +438,7 @@ void test_display_dpi_tile_cnt_antialiasing(void)
     lv_display_set_tile_cnt(disp, 10);
     TEST_ASSERT_EQUAL_INT32(10, lv_display_get_tile_cnt(disp));
 
-    /* Test default display, should same affect the display */
+    /* Проверьте отображение по умолчанию, должно ли это повлиять на отображение */
     lv_display_set_dpi(NULL, 160);
     TEST_ASSERT_EQUAL_INT32(160, lv_display_get_dpi(NULL));
     lv_display_set_antialiasing(NULL, false);
@@ -448,7 +448,7 @@ void test_display_dpi_tile_cnt_antialiasing(void)
     lv_display_set_tile_cnt(NULL, 20);
     TEST_ASSERT_EQUAL_INT32(20, lv_display_get_tile_cnt(NULL));
 
-    /* Test NULL default display, should not affect the display */
+    /* Тестирование дисплея NULL по умолчанию, не должно влиять на дисплей. */
     lv_display_set_default(NULL);
     lv_display_set_dpi(NULL, 200);
     TEST_ASSERT_EQUAL_INT32(LV_DPI_DEF, lv_display_get_dpi(NULL));
@@ -459,7 +459,7 @@ void test_display_dpi_tile_cnt_antialiasing(void)
     lv_display_set_tile_cnt(NULL, 20);
     TEST_ASSERT_EQUAL_INT32(0, lv_display_get_tile_cnt(NULL));
 
-    /* Restore default display */
+    /* Восстановить отображение по умолчанию */
     lv_display_set_default(disp_def);
     lv_display_delete(disp);
 }
@@ -510,7 +510,7 @@ void test_display_buffers_with_stride(void)
 void test_display_layers(void)
 {
     lv_obj_t * parents[] = {
-        lv_layer_bottom(), /* Bottom layer should be covered by screen active */
+        lv_layer_bottom(), /* Нижний слой должен быть закрыт активным экраном. */
         lv_screen_active(),
         lv_layer_top(),
         lv_layer_sys(),
@@ -574,7 +574,7 @@ void test_display_active_time(void)
     lv_tick_inc(1000);
     TEST_ASSERT_EQUAL_UINT32(1000, lv_display_get_inactive_time(NULL));
 
-    /* Test NULL default display, should not affect the display */
+    /* Тестирование дисплея NULL по умолчанию, не должно влиять на дисплей. */
     lv_display_set_default(NULL);
     lv_display_trigger_activity(NULL);
     lv_tick_inc(1000);

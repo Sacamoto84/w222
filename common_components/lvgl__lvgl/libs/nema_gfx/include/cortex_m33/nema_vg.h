@@ -2,32 +2,32 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 /**
  * @file
- * @brief Core NemaVG API drawing and initialization functions.
+ * @brief Основные функции рисования и инициализации NemaVG API.
  *
  */
 
@@ -48,47 +48,47 @@ extern "C" {
 //                           SETUP
 // -------------------------------------------------------------------------------
 
-/** \brief Initializes NemaVG library and allocates the stencil buffer to the default memory pool (NEMA_MEM_POOL_FB)
- * Call either this or nema_vg_init_stencil_pool to allocate the stencil buffer to a different memory pool
- * or nema_vg_init_stencil_prealloc to provide the stencil buffer
- * \param width Framebuffer width
- * \param height Framebuffer height
+/** \brief Инициализирует библиотеку NemaVG и предлагает трафаретный буфер в пуле памяти по умолчанию (NEMA_MEM_POOL_FB)
+ * Вызовите это илиnema_vg_init_stencil_pool, чтобы выделить буфер трафарета в другой пул памяти.
+ * илиnema_vg_init_stencil_prealloc, чтобы рассчитать буфер трафарета.
+ * \param width Ширина фреймбуфера
+ * \param height Высота каркасбуфера
  */
 void nema_vg_init(int width, int height);
 
-/** \brief Initializes NemaVG library and allocate the stencil buffer in a specific memory pool.
- * Call either this or nema_vg_init to allocate the stencil buffer to the default memory pool (NEMA_MEM_POOL_FB)
- * or nema_vg_init_stencil_prealloc to provide the stencil buffer
- * \param width Stencil buffer width - Must be the first multiple of 4 of the framebuffer width
- * \param height Stencil buffer height - Must be the first multiple of 4 of the framebuffer height
- * \param pool Memory pool for allocating the stencil buffer (memory pools are platform specific and defined in nema_sys_defs.h file)
+/** \brief Инициализирует компонент NemaVG и размещает трафаретный буфер в свободном пуле памяти.
+ * Вызовите это илиnema_vg_init, чтобы выделить буфер трафарета в пуле памяти по умолчанию (NEMA_MEM_POOL_FB).
+ * илиnema_vg_init_stencil_prealloc, чтобы рассчитать буфер трафарета.
+ * \param width Ширина буфера трафарета — должна быть кратной 4 диапазона кадрового буфера.
+ * \param height Высота буфера трафарета — должна быть равна высоте кадрового буфера, кратной 4.
+ * \param Пул памяти для выделения буфера трафарета (пулы памяти зависят от платформы и технологии в файле nema_sys_defs.h)
  */
 void nema_vg_init_stencil_pool(int width, int height, int pool);
 
-/** \brief Initializes NemaVG library without allocating the stencil buffer which is provided by the user.
- * Call either this or nema_vg_init to allocate the stencil buffer to the default memory pool (NEMA_MEM_POOL_FB)
- * or nema_vg_init_stencil_pool to allocate the stencil buffer to a different memory pool
- * \param width Stencil buffer width - Must be the first multiple of 4 of the framebuffer width
- * \param height Stencil buffer height - Must be the first multiple of 4 of the framebuffer height
- * \param stencil_bo stencil buffer
+/** \brief Инициализирует компонент NemaVG без выделения трафаретного буфера, предоставленного пользователем.
+ * Вызовите это илиnema_vg_init, чтобы выделить буфер трафарета в пуле памяти по умолчанию (NEMA_MEM_POOL_FB).
+ * илиnema_vg_init_stencil_pool, чтобы выделить буфер трафарета в другой пул памяти.
+ * \param width Ширина буфера трафарета — должна быть кратной 4 диапазона кадрового буфера.
+ * \param height Высота буфера трафарета — должна быть равна высоте кадрового буфера, кратной 4.
+ * \param Буфер трафарета stencil_bo
  */
 void nema_vg_init_stencil_prealloc(int width, int height, nema_buffer_t stencil_bo);
 
 
-/** \brief Reinitialize NemaVG library after a gpu powerofff
+/** \brief Повторная инициализация библиотеки NemaVG после отключения питания графического процессора
  *
  */
 void nema_vg_reinit(void);
 
-/** \brief Deinitialize NemaVG library. Free memory from implicitly allocated objects (stencil buffer
- *  if created inside the library, lut buffer and tsvgs' path, paint and gradient buffers)
+/** \brief Деинициализируйте библиотеку NemaVG. Освободить память от неявно выделенных объектов (трафаретный буфер
+ *  если он создал внутри библиотеки, буфер lut и путь tsvgs, буферы рисования и градиента)
  *
  *
  */
 void nema_vg_deinit(void);
 
-/** \brief Initialize NemaVG library for a new thread.
- * Must be called for every new thread that is used.
+/** \brief Инициализируйте базу NemaVG для нового потока.
+ * Должен вызываться для каждого нового используемого потока.
  *
  *
  */
@@ -99,60 +99,60 @@ void nema_vg_thread_init(void);
 //                           PATH DRAW
 // -------------------------------------------------------------------------------
 
-/** \brief Draw a path using a specified paint object
+/** \brief Нарисуйте путь, используя указанный объект рисования
  *
- * \param path Pointer (handle) to the path that will be drawn
- * \param paint Pointer (handle) to the paint object that wil be used for drawing
+ * \param path Указатель (дескриптор) пути, который будет нарисован
+ * \param Paint Указатель (дескриптор) объекта рисования, который будет использоваться для рисования.
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_path(NEMA_VG_PATH_HANDLE path, NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Draw a line shape
+/** \brief Нарисуйте строку
  *
- *  \param x1 Upper left x coordinate
- *  \param y1 Upper left y coordinate
- *  \param x2 The width
- *  \param y2 The height
- *  \param m 3x3 affine transformation matrix
- *  \param paint The paint to draw
+ *  \param x1 Верхняя левая координата x
+ *  \param y1 Верхняя левая координата y
+ *  \param x2 Ширина
+ *  \param y2 Высота
+ *  \param m 3x3 матрица аффинного преобразования
+ *  \param Paint Краска для рисования
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_line(float x1, float y1, float x2, float y2,
                             nema_matrix3x3_t m,
                             NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Draw a rectangle shape
+/** \brief Нарисуйте контур
  *
- *  \param x Upper left x coordinate
- *  \param y Upper left y coordinate
- *  \param width The width
- *  \param height The height
- *  \param m 3x3 affine transformation matrix
- *  \param paint The paint to draw
+ *  \param x Верхняя левая координата x
+ *  \param y Верхняя левая координата y
+ *  \param ширина Ширина
+ *  \param высота Высота
+ *  \param m 3x3 матрица аффинного преобразования
+ *  \param Paint Краска для рисования
 
- * \return Error code
+ * \return Код ошибки
  *
  */
 uint32_t nema_vg_draw_rect(float x, float y, float width, float height,
                             nema_matrix3x3_t m,
                             NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Draw a rounded rectangle shape
+/** \brief Нарисуйте закругленный контур
  *
- *  \param x Upper left x coordinate
- *  \param y Upper left y coordinate
- *  \param width The width
- *  \param height The height
- *  \param rx Horizontal cornel radius
- *  \param ry Vertical cornel radius
- *  \param m 3x3 affine transformation matrix
- *  \param paint The paint to draw
+ *  \param x Верхняя левая координата x
+ *  \param y Верхняя левая координата y
+ *  \param ширина Ширина
+ *  \param высота Высота
+ *  \param rx Горизонтальный радиус когилы
+ *  \param ry Вертикальный радиус когилы
+ *  \param m 3x3 матрица аффинного преобразования
+ *  \param Paint Краска для рисования
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_rounded_rect(float x, float y, float width, float height,
@@ -160,31 +160,31 @@ uint32_t nema_vg_draw_rounded_rect(float x, float y, float width, float height,
                                 nema_matrix3x3_t m,
                                 NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Draw a ellipse shape
+/** \brief Нарисуйте эллипс
  *
- *  \param cx The x position of the ellipse
- *  \param cy The y position of the ellipse
- *  \param rx Radius on the x axis
- *  \param ry Radius on the y axis
- *  \param m 3x3 affine transformation matrix
- *  \param paint The paint to draw
+ *  \param cx Положение эллипса по оси X.
+ *  \param cy Положение эллипса по оси Y.
+ *  \param rx Радиус оси X
+ *  \param ry Радиус по оси Y
+ *  \param m 3x3 матрица аффинного преобразования
+ *  \param Paint Краска для рисования
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_ellipse(float cx, float cy, float rx, float ry,
                             nema_matrix3x3_t m,
                             NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Draw a circle shape
+/** \brief Нарисуйте форму круга
  *
- *  \param cx The x center of the circle
- *  \param cy The y center of the circle
- *  \param r Radius of the circle
- *  \param m 3x3 affine transformation matrix
- *  \param paint The paint to draw
+ *  \param cx Центр окружности по оси X.
+ *  \param cy Центр окружности по оси Y.
+ *  \param r Радиус круга
+ *  \param m 3x3 матрица аффинного преобразования
+ *  \param Paint Краска для рисования
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_circle(float cx, float cy, float r,
@@ -192,57 +192,57 @@ uint32_t nema_vg_draw_circle(float cx, float cy, float r,
                             NEMA_VG_PAINT_HANDLE paint);
 
 
-/** \brief Draw a filled ring with rounded caps shape. In case of a conical gradient paint type,
- * the conical gradient center should be at the center of the ring(cx, cy). In other case, where the two centers do not match,
- * the ring should be drawn with NEMA_VG_QUALITY_MAXIMUM. The ring width can be set with the paint's stroke_width.
+/** \brief Нарисуйте заполненное кольцо с закругленными колпачками. В случае конического типа градиентной краски,
+ * центр конического градиента должен находиться в центре кольца (cx, cy). В другом случае, когда два центра не совпадают,
+ * Кольцо необходимо нарисовать с помощью NEMA_VG_QUALITY_MAXIMUM. Ширину кольца можно установить с помощью краски stroke_width.
  *
- *  \param cx The center x coordinate of the ring
- *  \param cy The center y coordinate of the ring
- *  \param ring_radius The radius of the ring
- *  \param angle_start The angle in degrees of the ring
- *  \param angle_end The angle in degrees that ends this ring
- *  \param paint The paint to draw
+ *  \param cx Координата центра x колец
+ *  \param cy Координата центра и кольца
+ *  \paramring_radiusРадиус кольца
+ *  \paramangle_startУгловые кольца в градусах
+ *  \paramangle_endУгол в градусах, которым заканчивается это кольцо.
+ *  \param Paint Краска для рисования
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_ring(float cx, float cy, float ring_radius, float angle_start, float angle_end,
                                             NEMA_VG_PAINT_HANDLE paint);
 
 /** \private
- * \brief Draw a filled ring with flat ending or rounded ending caps. In case of a conical gradient paint type,
- * the conical gradient center should be at the center of the ring(cx, cy). In other case, where the two centers do not match,
- * the ring should be drawn with NEMA_VG_QUALITY_MAXIMUM. The ring width can be set with the paint's stroke_width.
+ * \brief Нарисуйте заполненное кольцо с английским или закругленным концом. В случае конического типа градиентной краски,
+ * центр конического градиента должен находиться в центре кольца (cx, cy). В другом случае, когда два центра не совпадают,
+ * Кольцо необходимо нарисовать с помощью NEMA_VG_QUALITY_MAXIMUM. Ширину кольца можно установить с помощью краски stroke_width.
  *
- *  \param cx The center x coordinate of the ring
- *  \param cy The center y coordinate of the ring
- *  \param ring_radius The radius of the ring
- *  \param angle_start The angle in degrees of the ring
- *  \param angle_end The angle in degrees that ends this ring
- *  \param paint The paint to draw
- *  \param has_caps 1 For caps 0 for flat ending
+ *  \param cx Координата центра x колец
+ *  \param cy Координата центра и кольца
+ *  \paramring_radiusРадиус кольца
+ *  \paramangle_startУгловые кольца в градусах
+ *  \paramangle_endУгол в градусах, которым заканчивается это кольцо.
+ *  \param Paint Краска для рисования
+ *  \paramhas_caps1 Для колпачков 0 для плоского конца
 
- * \return Error code. See NEMA_VG_ERR_* defines in "nema_vg_context.h" header file for the error codes.
+ * \return Код ошибки. См. NEMA_VG_ERR_*, определяющее в заголовочном файле «nema_vg_context.h» коды ошибок.
  *
  */
 uint32_t nema_vg_draw_ring_generic(float cx, float cy, float ring_radius, float angle_start, float angle_end,
                                             NEMA_VG_PAINT_HANDLE paint, uint8_t has_caps);
 
 
-/** \brief Returns the minimum and maximum values for the coordinates that
- * can be handled by the underlying hardware
+/** \brief Возвращает минимальные и максимальные значения координат, которые
+ * может обрабатываться базовым оборудованием
  *
- *  \param min_coord Minimum coordinate (x or y) value (pointer)
- *  \param max_coord Maximum coordinate (x or y) value (pointer)
+ *  \parammin_coordМинимальное значение координат (x или y) (указатель)
+ *  \parammax_coordМаксимальное значение координат (x или y) (указатель)
  *
  */
 void nema_vg_get_coord_limits(float *min_coord, float *max_coord);
 
 
-/** \brief Disables tsvg features from rendering. Should be set before
- * nema_vg_draw_tsvg()
+/** \brief Отключает функцию tsvg при рендеринге. Должен быть установлен раньше
+ * nema_vg_draw_tsvg ()
  *
- *  \param feature feature to be disabled
+ *  \param Функция Функция, которую нужно отключить
  *
  */
 void nema_vg_tsvg_disable_feature(uint32_t feature);

@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2024
+ * Изменено NXP в 2024 г.
  */
 
 /*********************
@@ -64,7 +64,7 @@ lv_obj_t * lv_canvas_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_canvas_set_buffer(lv_obj_t * obj, void * buf, int32_t w, int32_t h, lv_color_format_t cf)
@@ -135,7 +135,7 @@ void lv_canvas_set_px(lv_obj_t * obj, int32_t x, int32_t y, lv_color_t color, lv
                 shift = 4 - 4 * (x & 0x1);
                 break;
             case LV_COLOR_FORMAT_I8:
-                /*Indexed8 format is a easy case, process and return.*/
+                /*Формат Indexed8 — это простой случай, обработка и возврат.*/
                 shift = 0;
                 *data = c_int;
             default:
@@ -198,7 +198,7 @@ void lv_canvas_set_palette(lv_obj_t * obj, uint8_t index, lv_color32_t color)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_draw_buf_t * lv_canvas_get_draw_buf(lv_obj_t * obj)
@@ -234,7 +234,7 @@ lv_color32_t lv_canvas_get_px(lv_obj_t * obj, int32_t x, int32_t y)
             break;
         case LV_COLOR_FORMAT_RGB565: {
                 lv_color16_t * c16 = (lv_color16_t *) px;
-                ret.red = (c16->red * 2106) >> 8;  /*To make it rounded*/
+                ret.red = (c16->red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                 ret.green = (c16->green * 1037) >> 8;
                 ret.blue = (c16->blue * 2106) >> 8;
                 ret.alpha = 0xFF;
@@ -283,7 +283,7 @@ const void * lv_canvas_get_buf(lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_canvas_copy_buf(lv_obj_t * obj, const lv_area_t * canvas_area, lv_draw_buf_t * src_buf,

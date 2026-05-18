@@ -37,7 +37,7 @@
  **********************/
 
 typedef struct {
-    /* fd should be defined at the beginning */
+    /* fd должен быть определен в начале */
     int fd;
     struct fb_videoinfo_s vinfo;
     struct fb_planeinfo_s pinfo;
@@ -107,7 +107,7 @@ int lv_nuttx_fbdev_set_file(lv_display_t * disp, const char * file)
 
     if(dsc->fd >= 0) close(dsc->fd);
 
-    /* Open the file for reading and writing*/
+    /* Откройте файл для чтения и записи.*/
 
     dsc->fd = open(file, O_RDWR);
     if(dsc->fd < 0) {
@@ -151,7 +151,7 @@ int lv_nuttx_fbdev_set_file(lv_display_t * disp, const char * file)
     uint32_t data_size = h * stride;
     lv_draw_buf_init(&dsc->buf1, w, h, color_format, stride, dsc->mem, data_size);
 
-    /* Check buffer mode */
+    /* Проверьте режим буфера */
     bool double_buffer = dsc->pinfo.yres_virtual >= (dsc->vinfo.yres * 2);
     if(double_buffer) {
         if((ret = fbdev_init_mem2(dsc)) < 0) {
@@ -219,10 +219,10 @@ static void fbdev_join_inv_areas(lv_display_t * disp, lv_area_t * final_inv_area
         if(disp->inv_area_joined[inv_index] == 0) {
             const lv_area_t * area_p = &disp->inv_areas[inv_index];
 
-            /* Join to final_area */
+            /* Присоединяйтесь к final_area */
 
             if(!area_joined) {
-                /* copy first area */
+                /* скопировать первую область */
                 lv_area_copy(final_inv_area, area_p);
                 area_joined = true;
             }
@@ -246,7 +246,7 @@ static void display_refr_timer_cb(lv_timer_t * tmr)
     pfds[0].fd = dsc->fd;
     pfds[0].events = POLLOUT;
 
-    /* Query free fb to draw */
+    /* Запросить бесплатный Facebook для рисования */
 
     if(poll(pfds, 1, 0) < 0) {
         return;
@@ -263,12 +263,12 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     lv_nuttx_fb_t * dsc = lv_display_get_driver_data(disp);
 
     if(dsc->mem_off_screen) {
-        /* When rendering in off-screen mode, copy the drawing buffer to fb */
-        /* buf2(off-screen buffer) -> buf1(fbmem)*/
+        /* При рендеринге в внеэкранном режиме скопируйте буфер рисования в fb. */
+        /* buf2(внеэкранный буфер) -> buf1(fbmem)*/
         lv_draw_buf_copy(&dsc->buf1, area, &dsc->buf2, area);
     }
 
-    /* Skip the non-last flush */
+    /* Пропустить непоследнюю промывку */
 
     if(!lv_display_flush_is_last(disp)) {
         lv_display_flush_ready(disp);
@@ -276,7 +276,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     }
 
 #if defined(CONFIG_FB_UPDATE)
-    /*May be some direct update command is required*/
+    /*Возможно, требуется какая-то команда прямого обновления.*/
     int yoffset = 0;
     if(disp->buf_act == disp->buf_2) {
         yoffset = dsc->mem2_yoffset;
@@ -284,7 +284,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     else if(disp->buf_act == disp->buf_3) {
         yoffset = dsc->mem3_yoffset;
     }
-    /* Join the areas to update */
+    /* Присоединяйтесь к областям для обновления */
     lv_area_t final_inv_area;
     lv_memzero(&final_inv_area, sizeof(final_inv_area));
     fbdev_join_inv_areas(disp, &final_inv_area);
@@ -299,7 +299,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     }
 #endif
 
-    /* double framebuffer */
+    /* двойной кадровый буфер */
 
     if(dsc->mem2 != NULL) {
         if(disp->buf_act == disp->buf_1) {
@@ -364,13 +364,13 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
 
     int ret;
 
-    /* Get display[0] planeinfo */
+    /* Получить display[0] planeinfo */
     lv_memzero(&pinfo, sizeof(pinfo));
     pinfo.display = dsc->pinfo.display;
     if((ret = fbdev_get_pinfo(dsc->fd, &pinfo)) < 0) return ret;
     phy_mem1 = pinfo.fbmem;
 
-    /* Get display[1] planeinfo */
+    /* Получить display[1] planeinfo */
     lv_memzero(&pinfo, sizeof(pinfo));
     pinfo.display = dsc->pinfo.display + 1;
     if((ret = fbdev_get_pinfo(dsc->fd, &pinfo)) < 0) return ret;
@@ -379,15 +379,15 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
     lv_uintptr_t offset = (lv_uintptr_t)phy_mem2 - (lv_uintptr_t)phy_mem1;
     bool is_consecutive = offset == 0;
 
-    /* Check bpp */
+    /* Проверить БПП */
 
     if(pinfo.bpp != dsc->pinfo.bpp) {
         LV_LOG_WARN("mem2 is incorrect");
         return -EINVAL;
     }
 
-    /* Check the buffer address offset,
-     * It needs to be divisible by pinfo.stride
+    /* Проверьте смещение адреса буфера,
+     * Оно должно делиться на pinfo.stride.
      */
 
     if((offset % dsc->pinfo.stride) != 0) {
@@ -397,7 +397,7 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
                     offset, dsc->pinfo.stride);
     }
 
-    /* Calculate the address and yoffset of mem2 */
+    /* Вычислить адрес и смещение по оси mem2 */
 
     if(is_consecutive) {
         dsc->mem2_yoffset = dsc->vinfo.yres;
@@ -429,7 +429,7 @@ static int fbdev_init_mem3(lv_nuttx_fb_t * dsc)
 
     lv_memzero(&pinfo, sizeof(pinfo));
 
-    /* Get display[2] planeinfo */
+    /* Получить display[2] planeinfo */
 
     pinfo.display = dsc->pinfo.display + 2;
 
@@ -437,15 +437,15 @@ static int fbdev_init_mem3(lv_nuttx_fb_t * dsc)
         return ret;
     }
 
-    /* Check bpp */
+    /* Проверить БПП */
 
     if(pinfo.bpp != dsc->pinfo.bpp) {
         LV_LOG_WARN("mem3 is incorrect");
         return -EINVAL;
     }
 
-    /* Check the buffer address offset,
-     * It needs to be divisible by pinfo.stride
+    /* Проверьте смещение адреса буфера,
+     * Оно должно делиться на pinfo.stride.
      */
 
     buf_offset = (uintptr_t)pinfo.fbmem - (uintptr_t)dsc->mem;
@@ -457,7 +457,7 @@ static int fbdev_init_mem3(lv_nuttx_fb_t * dsc)
                     buf_offset, dsc->pinfo.stride);
     }
 
-    /* Calculate the address and yoffset of mem3 */
+    /* Вычислить адрес и смещение по оси mem3 */
 
     if(buf_offset == 0) {
         dsc->mem3_yoffset = dsc->vinfo.yres * 2;
@@ -489,7 +489,7 @@ static void display_release_cb(lv_event_t * e)
         }
 
         if(dsc->mem_off_screen) {
-            /* Free the off-screen buffer */
+            /* Освободите внеэкранный буфер */
             free(dsc->mem_off_screen);
             dsc->mem_off_screen = NULL;
         }

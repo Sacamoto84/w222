@@ -32,7 +32,7 @@ LV_FONT_DECLARE(lv_font_benchmark_montserrat_26_aligned)
 
 #else
 
-/** Make sure that the aligned fonts are not built when not used */
+/** Убедитесь, что выровненные шрифты не создаются, когда они не используются. */
 #define LV_FONT_BENCHMARK_MONTSERRAT_12_ALIGNED 0
 #define LV_FONT_BENCHMARK_MONTSERRAT_14_ALIGNED 0
 #define LV_FONT_BENCHMARK_MONTSERRAT_16_ALIGNED 0
@@ -61,10 +61,10 @@ typedef struct {
 
 typedef struct {
     /*
-     * List of scenes
-     * The last scne in this array of scenes is terminated
-     * by a sentinel scene that has `create_cb` == NULL
-     * Must not be free'd
+     * Список сцен
+     * Последняя сцена в этом массиве сцен завершена.
+     * сторожевой сцены, которая имеет`create_cb`== NULL
+     * Не должно быть свободным
      */
     lv_demo_benchmark_scene_dsc_t * scenes;
 
@@ -72,7 +72,7 @@ typedef struct {
     int32_t total_avg_cpu;
     int32_t total_avg_render_time;
     int32_t total_avg_flush_time;
-    int32_t valid_scene_cnt; /* Number of scenes in `scenes` with a `measurement_cnt` greater than 0 */
+    int32_t valid_scene_cnt; /* Количество сцен в`scenes`с`measurement_cnt`больше 0 */
 } lv_demo_benchmark_summary_t;
 
 typedef void (*lv_demo_benchmark_on_end_cb_t)(const lv_demo_benchmark_summary_t *);
@@ -82,37 +82,37 @@ typedef void (*lv_demo_benchmark_on_end_cb_t)(const lv_demo_benchmark_summary_t 
  **********************/
 
 /**
- * Run all benchmark scenes.
+ * Запустите все тестовые сцены.
  *
- * On the summary end screen the values shall be interpreted according to the following:
- * - CPU usage:
- *    - If `LV_SYSMON_GET_IDLE` is not modified it's measured based on the time spent in
- *      `lv_timer_handler`.
- *    - If an (RT)OS is used `LV_SYSMON_GET_IDLE` can be changed to a custom function
- *      which returns the idle percentage of idle task.
+ * На конечном экране сводки значения интерпретируются следующим образом:
+ * - Использование CPU:
+ *    - Если`LV_SYSMON_GET_IDLE`не изменен, он измеряется на основе времени, проведенного в
+ *      `lv_timer_handler` .
+ *    - Если используется (RT) OS,`LV_SYSMON_GET_IDLE`можно изменить на пользовательскую функцию.
+ *      который возвращает процент простоя простаивающей задачи.
  *
- * - FPS: LVGL attempted to render this many times in a second. It's limited based on `LV_DEF_REFR_PERIOD`
+ * - FPS :LVGLпытался отрендерить это много раз в секунду. Это ограничено на основе `LV_DEF_REFR_PERIOD`.
  *
- * - Render time: LVGL spent this much time with rendering only. It's not aware of task yielding,
- *   but simply the time difference between the start and end of the rendering is measured
+ * - Время рендеринга:LVGLпотратил столько времени только на рендеринг. Он не знает о выполнении задач,
+ *   а просто измеряется разница во времени между началом и концом рендеринга
  *
- * - Flush time: It's the sum of
- *     - the time spent in the `flush_cb` and
- *     - the time spent with waiting for flush ready.
+ * - Время промывки: это сумма
+ *     - время, проведенное в`flush_cb`и
+ *     - время, потраченное на ожидание готовности флеша.
  */
 void lv_demo_benchmark(void);
 
 /*
- * Register a function to call when the benchmark demo is over
- * @param cb    function to call when the demo is over
+ * Зарегистрируйте функцию для вызова после завершения демонстрационного теста.
+ * @param cb    функция для вызова, когда демонстрация закончится
  */
 void lv_demo_benchmark_set_end_cb(lv_demo_benchmark_on_end_cb_t cb);
 
 
 /*
- * Display and log the summary
- * This function is called automatically if `lv_on_benchmark_end_cb` is not set
- * @param summary   summary of the benchmark results
+ * Отображение и запись сводки
+ * Эта функция появляется автоматически, если`lv_on_benchmark_end_cb`не установлен.
+ * @param summary   сводка результатов тестов
  */
 void lv_demo_benchmark_summary_display(const lv_demo_benchmark_summary_t * summary);
 
@@ -123,7 +123,7 @@ void lv_demo_benchmark_summary_display(const lv_demo_benchmark_summary_t * summa
 #endif /*LV_USE_DEMO_BENCHMARK*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_BENCHMARK_H*/

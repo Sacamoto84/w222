@@ -5,7 +5,7 @@
 
 #include "unity/unity.h"
 
-/*Bypassing resolution check*/
+/*Обход проверки разрешения*/
 #define TEST_DISPLAY_ROTATION_ASSERT_EQUAL_SCREENSHOT(path) TEST_ASSERT_MESSAGE(lv_test_screenshot_compare(path), path);
 
 #ifndef NON_AMD64_BUILD
@@ -18,18 +18,18 @@ typedef void (*draw_cb_t)(lv_layer_t *, const lv_matrix_t *);
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Test the cleanup of a specified name */
+    /* Проверка очистки указанного имени */
     lv_draw_unit_send_event("VG_LITE", LV_EVENT_CANCEL, NULL);
 
-    /* Test all cleanup */
+    /* Протестируйте всю очистку */
     lv_draw_unit_send_event(NULL, LV_EVENT_CANCEL, NULL);
 
-    /* Test draw unit dump info */
+    /* Информация о дампе тестового блока */
     lv_draw_unit_send_event(NULL, LV_EVENT_HIT_TEST, NULL);
 
     lv_obj_clean(lv_screen_active());
@@ -97,8 +97,8 @@ static void draw_shapes(lv_layer_t * layer, const lv_matrix_t * transform)
     lv_draw_vector_dsc_set_fill_image(ctx, &img_dsc);
     lv_matrix_identity(&mt);
     lv_matrix_translate(&mt, 50, 50);
-    //lv_matrix_rotate(&mt, 45);
-    //lv_matrix_scale(&mt, 1.5f, 1.5f);
+    //lv_matrix_rotate (&mt, 45);
+    //lv_matrix_scale (&mt, 1.5f, 1.5f);
     lv_matrix_translate(&mt, -50, -50);
     lv_draw_vector_dsc_set_fill_transform(ctx, &mt);
     lv_draw_vector_dsc_add_path(ctx, path);
@@ -127,9 +127,9 @@ static void draw_shapes(lv_layer_t * layer, const lv_matrix_t * transform)
     };
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_lighten(lv_color_black(), 50));
     rect = lv_matrix_transform_area(transform, &rect);
-    lv_draw_vector_dsc_clear_area(ctx, &rect); // clear screen
+    lv_draw_vector_dsc_clear_area(ctx, &rect); // очистить экран
 
-    lv_fpoint_t p = {500, 100}; /* Center */
+    lv_fpoint_t p = {500, 100}; /* Центр */
     lv_draw_vector_dsc_set_stroke_color(ctx, lv_color_make(0x00, 0xff, 0xff));
     lv_draw_vector_dsc_set_stroke_opa(ctx, LV_OPA_COVER);
     lv_draw_vector_dsc_set_stroke_width(ctx, 2.0f);
@@ -144,14 +144,14 @@ static void draw_shapes(lv_layer_t * layer, const lv_matrix_t * transform)
 
     lv_draw_vector_dsc_add_path(ctx, path);
 
-    /* Below code has same effect as above one but with solid fill */
+    /* Код ниже имеет тот же эффект, что и выше, но со сплошной заливкой. */
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0xFF, 0x00, 0x00));
     lv_draw_vector_dsc_set_fill_opa(ctx, LV_OPA_COVER);
     lv_vector_path_clear(path);
     lv_vector_path_append_arc(path, &p, 50, 45, 45, true);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 
-    /* Test image filling with absolute coordinates */
+    /* Тестовое заполнение изображения абсолютными координатами */
     lv_draw_vector_dsc_set_transform(ctx, transform);
     lv_draw_vector_dsc_set_fill_units(ctx, LV_VECTOR_FILL_UNITS_USER_SPACE_ON_USE);
     lv_draw_vector_dsc_set_fill_image(ctx, &img_dsc);
@@ -162,12 +162,12 @@ static void draw_shapes(lv_layer_t * layer, const lv_matrix_t * transform)
     lv_draw_vector_dsc_set_fill_transform(ctx, &mt);
 
     lv_vector_path_clear(path);
-    /* Aligned with translate. Image resolution is 100x100, cropped to 50% of width and height */
+    /* Согласовано с переводом. Разрешение изображения 100х100, обрезано до 50% ширины и высоты. */
     lv_area_t img_area = {50, 350, 50 + 50, 350 + 50};
     lv_vector_path_append_rect(path, &img_area, 0, 0);
     lv_draw_vector_dsc_add_path(ctx, path);
 
-    /* Test PNG image file */
+    /* Тестовый файл образа PNG */
     lv_vector_path_clear(path);
     lv_area_t rect3 = {200, 360, 0, 0};
     lv_area_set_width(&rect3, 200);
@@ -287,7 +287,7 @@ static void draw_lines(lv_layer_t * layer, const lv_matrix_t * transform)
     lv_draw_vector_dsc_set_stroke_linear_gradient(ctx, 250, 300, 350, 300);
     lv_draw_vector_dsc_set_stroke_gradient_color_stops(ctx, stops, 2);
     lv_draw_vector_dsc_set_stroke_gradient_spread(ctx, LV_VECTOR_GRADIENT_SPREAD_REFLECT);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 
     lv_draw_vector(ctx);
     lv_vector_path_delete(path);
@@ -393,13 +393,13 @@ static void draw_during_rendering(const char * name, draw_cb_t draw_cb, lv_opa_t
 
 void test_draw_during_rendering(void)
 {
-    /* Enable the Draw Unit dump parameters */
+    /* Включить параметры дампа Draw Unit */
     lv_draw_unit_send_event(NULL, LV_EVENT_FOCUSED, NULL);
 
     draw_during_rendering("shapes", draw_shapes, LV_OPA_COVER);
     draw_during_rendering("lines", draw_lines, LV_OPA_COVER);
 
-    /* Disable the Draw Unit dump parameters */
+    /* Отключить параметры дампа Draw Unit */
     lv_draw_unit_send_event(NULL, LV_EVENT_DEFOCUSED, NULL);
 
     draw_during_rendering("shapes_opa_50", draw_shapes, LV_OPA_50);

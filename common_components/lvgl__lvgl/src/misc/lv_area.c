@@ -93,13 +93,13 @@ void lv_area_move(lv_area_t * area, int32_t x_ofs, int32_t y_ofs)
 
 bool lv_area_intersect(lv_area_t * res_p, const lv_area_t * a1_p, const lv_area_t * a2_p)
 {
-    /*Get the smaller area from 'a1_p' and 'a2_p'*/
+    /*Получите меньшую область из «a1_p» и «a2_p».*/
     res_p->x1 = LV_MAX(a1_p->x1, a2_p->x1);
     res_p->y1 = LV_MAX(a1_p->y1, a2_p->y1);
     res_p->x2 = LV_MIN(a1_p->x2, a2_p->x2);
     res_p->y2 = LV_MIN(a1_p->y2, a2_p->y2);
 
-    /*If x1 or y1 greater than x2 or y2 then the areas union is empty*/
+    /*Если x1 или y1 больше, чем x2 или y2, то объединение областей пусто.*/
     bool union_ok = true;
     if((res_p->x1 > res_p->x2) || (res_p->y1 > res_p->y2)) {
         union_ok = false;
@@ -110,21 +110,21 @@ bool lv_area_intersect(lv_area_t * res_p, const lv_area_t * a1_p, const lv_area_
 
 int8_t lv_area_diff(lv_area_t res_p[], const lv_area_t * a1_p, const lv_area_t * a2_p)
 {
-    /*Areas have no common parts*/
+    /*Области не имеют общих частей*/
     if(!lv_area_is_on(a1_p, a2_p)) return -1;
 
-    /*No remaining areas after removing common parts*/
+    /*После удаления общих частей не осталось участков*/
     if(lv_area_is_in(a1_p, a2_p, 0)) return 0;
 
-    /*Result counter*/
+    /*Счетчик результатов*/
     int8_t res_c = 0;
 
-    /*Get required information*/
+    /*Получить необходимую информацию*/
     lv_area_t n;
     int32_t a1_w = lv_area_get_width(a1_p) - 1;
     int32_t a1_h = lv_area_get_height(a1_p) - 1;
 
-    /*Compute top rectangle*/
+    /*Вычислить верхний прямоугольник*/
     int32_t th = a2_p->y1 - a1_p->y1;
     if(th > 0) {
         n.x1 = a1_p->x1;
@@ -134,7 +134,7 @@ int8_t lv_area_diff(lv_area_t res_p[], const lv_area_t * a1_p, const lv_area_t *
         res_p[res_c++] = n;
     }
 
-    /*Compute the bottom rectangle*/
+    /*Вычислить нижний прямоугольник*/
     int32_t bh = a1_h - (a2_p->y2 - a1_p->y1);
     if(bh > 0 && a2_p->y2 < a1_p->y2) {
         n.x1 = a1_p->x1;
@@ -144,12 +144,12 @@ int8_t lv_area_diff(lv_area_t res_p[], const lv_area_t * a1_p, const lv_area_t *
         res_p[res_c++] = n;
     }
 
-    /*Compute side height*/
+    /*Вычислить высоту стороны*/
     int32_t y1 = a2_p->y1 > a1_p->y1 ? a2_p->y1 : a1_p->y1;
     int32_t y2 = a2_p->y2 < a1_p->y2 ? a2_p->y2 : a1_p->y2;
     int32_t sh = y2 - y1;
 
-    /*Compute the left rectangle*/
+    /*Вычислить левый прямоугольник*/
     int32_t lw = a2_p->x1 - a1_p->x1;
     if(lw > 0 && sh >= 0) {
         n.x1 = a1_p->x1;
@@ -159,7 +159,7 @@ int8_t lv_area_diff(lv_area_t res_p[], const lv_area_t * a1_p, const lv_area_t *
         res_p[res_c++] = n;
     }
 
-    /*Compute the right rectangle*/
+    /*Вычислить правильный прямоугольник*/
     int32_t rw = a1_w - (a2_p->x2 - a1_p->x1);
     if(rw > 0 && sh >= 0) {
         n.x1 = a2_p->x2 + 1;
@@ -169,7 +169,7 @@ int8_t lv_area_diff(lv_area_t res_p[], const lv_area_t * a1_p, const lv_area_t *
         res_p[res_c++] = n;
     }
 
-    //Return number of results
+    //Возврат количества результатов
     return res_c;
 }
 
@@ -183,16 +183,16 @@ void lv_area_join(lv_area_t * a_res_p, const lv_area_t * a1_p, const lv_area_t *
 
 bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t radius)
 {
-    /*First check the basic area*/
+    /*Сначала проверьте базовую зону*/
     bool is_on_rect = false;
     if((p_p->x >= a_p->x1 && p_p->x <= a_p->x2) && ((p_p->y >= a_p->y1 && p_p->y <= a_p->y2))) {
         is_on_rect = true;
     }
     if(!is_on_rect)
         return false;
-    /*Now handle potential rounded rectangles*/
+    /*Теперь обработайте потенциальные закругленные прямоугольники.*/
     if(radius <= 0) {
-        /*No radius, it is within the rectangle*/
+        /*Нет радиуса, он находится внутри прямоугольника*/
         return true;
     }
     int32_t w = lv_area_get_width(a_p) / 2;
@@ -201,9 +201,9 @@ bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t 
     if(radius > max_radius)
         radius = max_radius;
 
-    /*Check if it's in one of the corners*/
+    /*Проверьте, не находится ли он в одном из углов*/
     lv_area_t corner_area;
-    /*Top left*/
+    /*Вверху слева*/
     corner_area.x1 = a_p->x1;
     corner_area.x2 = a_p->x1 + radius;
     corner_area.y1 = a_p->y1;
@@ -213,7 +213,7 @@ bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t 
         corner_area.y2 += radius;
         return lv_point_within_circle(&corner_area, p_p);
     }
-    /*Bottom left*/
+    /*Внизу слева*/
     corner_area.y1 = a_p->y2 - radius;
     corner_area.y2 = a_p->y2;
     if(lv_area_is_point_on(&corner_area, p_p, 0)) {
@@ -221,7 +221,7 @@ bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t 
         corner_area.y1 -= radius;
         return lv_point_within_circle(&corner_area, p_p);
     }
-    /*Bottom right*/
+    /*Внизу справа*/
     corner_area.x1 = a_p->x2 - radius;
     corner_area.x2 = a_p->x2;
     if(lv_area_is_point_on(&corner_area, p_p, 0)) {
@@ -229,7 +229,7 @@ bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t 
         corner_area.y1 -= radius;
         return lv_point_within_circle(&corner_area, p_p);
     }
-    /*Top right*/
+    /*Вверху справа*/
     corner_area.y1 = a_p->y1;
     corner_area.y2 = a_p->y1 + radius;
     if(lv_area_is_point_on(&corner_area, p_p, 0)) {
@@ -237,7 +237,7 @@ bool lv_area_is_point_on(const lv_area_t * a_p, const lv_point_t * p_p, int32_t 
         corner_area.y2 += radius;
         return lv_point_within_circle(&corner_area, p_p);
     }
-    /*Not within corners*/
+    /*Не в углах*/
     return true;
 }
 
@@ -263,7 +263,7 @@ bool lv_area_is_in(const lv_area_t * ain_p, const lv_area_t * aholder_p, int32_t
     if(!is_in) return false;
     if(radius == 0) return true;
 
-    /*Check if the corner points are inside the radius or not*/
+    /*Проверьте, находятся ли угловые точки внутри радиуса или нет.*/
     lv_point_t p;
 
     lv_point_set(&p, ain_p->x1, ain_p->y1);
@@ -290,7 +290,7 @@ bool lv_area_is_out(const lv_area_t * aout_p, const lv_area_t * aholder_p, int32
 
     if(radius == 0) return false;
 
-    /*Check if the corner points are outside the radius or not*/
+    /*Проверьте, находятся ли угловые точки за пределами радиуса или нет.*/
     lv_point_t p;
 
     lv_point_set(&p, aout_p->x1, aout_p->y1);
@@ -585,11 +585,11 @@ static bool lv_point_within_circle(const lv_area_t * area, const lv_point_t * p)
 {
     int32_t r = (area->x2 - area->x1) / 2;
 
-    /*Circle center*/
+    /*Центр круга*/
     int32_t cx = area->x1 + r;
     int32_t cy = area->y1 + r;
 
-    /*Simplify the code by moving everything to (0, 0)*/
+    /*Упростите код, переместив все в (0, 0)*/
     int32_t px = p->x - cx;
     int32_t py = p->y - cy;
 

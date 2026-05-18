@@ -39,7 +39,7 @@ typedef struct _lv_svg_render_obj {
     lv_vector_path_ctx_t dsc;
     lv_matrix_t matrix;
 
-    /* for url(XXX) reference */
+    /* для ссылки на URL ( XXX ) */
     struct _lv_svg_render_obj * head;
     char * fill_ref;
     char * stroke_ref;

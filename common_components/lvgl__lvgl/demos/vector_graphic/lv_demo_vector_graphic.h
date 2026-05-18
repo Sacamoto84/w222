@@ -29,14 +29,14 @@ extern "C" {
  **********************/
 
 /**
- * Draw many vector based shapes and paths to canvas.
- * It requires a large amount of RAM for the buffer of the canvas
+ * Нарисуйте на холсте множество векторных фигур и путей.
+ * Требуется большое количество RAM для буфера холста.
  */
 void lv_demo_vector_graphic_buffered(void);
 
 /**
- * Draw many vector based shapes and paths to canvas directly to the screen.
- * It's slower as the graphics needs to rendered on each rendering cycle.
+ * Рисуйте множество векторных фигур и путей на холсте прямо на экране.
+ * Это медленнее, поскольку графика должна отображаться в каждом цикле рендеринга.
  */
 void lv_demo_vector_graphic_not_buffered(void);
 
@@ -45,7 +45,7 @@ void lv_demo_vector_graphic_not_buffered(void);
  **********************/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_VECTOR_GRAPHIC_H*/

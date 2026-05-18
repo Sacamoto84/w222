@@ -361,8 +361,8 @@ static void image_core_cb(lv_obj_t * parent, bool recolor, uint32_t startAt)
         "RGB\n565",
         "RGB\n565\nSWAP",
         "L8",
-        "", /*Make sure that RGB565A8 and I1 are on the same page.
-              Both are disabled in VGLite as they are not supported*/
+        "", /*Убедитесь, что RGB565A8 и I1 находятся на одной странице.
+              Оба отключены в VGLite, если не указано иное.*/
         "RGB\n565A8",
         "I1",
     };
@@ -594,25 +594,25 @@ static void triangle_cb(lv_obj_t * parent)
 {
     static lv_point_t points[16][3] = {
 
-        /*Right angle triangles*/
+        /*Прямоугольные треугольники*/
         {{0, 0},  {0, 26}, {26, 26}},   /* |\ */
         {{0, 26}, {26, 0}, {26, 26}},   /* /| */
         {{0, 0},  {26, 0}, {26, 26}},   /* \| */
         {{0, 0},  {0, 26}, {26, 0}},    /* |/ */
 
-        /*One side vertical or horizontal triangles*/
+        /*Односторонние вертикальные или горизонтальные треугольники*/
         {{0, 0},  {26, 0}, {13, 26}},   /* \/ */
         {{0, 26}, {26, 26}, {13, 0 }},  /* /\ */
         {{0, 0},  {0, 26}, {26, 13}},   /* > */
         {{0, 13}, {26, 0}, {26, 26}},   /* < */
 
-        /*Thin triangles*/
+        /*Тонкие треугольники*/
         {{0, 0},  {26, 26}, {13, 18}},  /* \ */
         {{0, 0},  {26, 26}, {13, 8}},   /* \ */
         {{26, 0},  {0, 26}, {13, 18}},  /* / */
         {{26, 0},  {0, 26}, {13, 8}},   /* / */
 
-        /*General triangles with various point orders*/
+        /*Общие треугольники с различным порядком точек.*/
         {{0, 1},  {26, 6},  {13, 26}},  /*ABC*/
         {{0, 1},  {13, 26}, {26, 6}},   /*ACB*/
         {{26, 6}, {0, 1},   {13, 26}},  /*BAC*/
@@ -793,7 +793,7 @@ static lv_obj_t * create_blend_mode_obj(lv_obj_t * parent, int32_t col, int32_t 
 static void canvas_draw_buf_reshape(lv_draw_buf_t * draw_buf)
 {
 #if LV_USE_DRAW_VG_LITE
-    /* VG-Lite requires automatic stride calculation */
+    /* VG -Lite требует автоматического расчета шага */
     lv_draw_buf_t * buf = lv_draw_buf_reshape(draw_buf,
                                               draw_buf->header.cf,
                                               draw_buf->header.w,
@@ -812,7 +812,7 @@ static void blend_mode_cb(lv_obj_t * parent)
     static const int32_t grid_rows[] = {32, 40, 40, 40, 40, 40, 40, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(parent, grid_cols, grid_rows);
 
-    /*Make the parent darker for additive blending*/
+    /*Сделайте родительский элемент темнее для аддитивного смешивания.*/
     lv_obj_set_style_bg_color(parent, lv_color_hex(0x808080), 0);
 
     LV_DRAW_BUF_DEFINE_STATIC(buf_rgb565, 36, 30, LV_COLOR_FORMAT_RGB565);
@@ -827,7 +827,7 @@ static void blend_mode_cb(lv_obj_t * parent)
     LV_DRAW_BUF_INIT_STATIC(buf_argb8888);
     LV_DRAW_BUF_INIT_STATIC(buf_argb8888_premul);
 
-    /*The canvas will stay in the top left corner to show the original image*/
+    /*Холст останется в верхнем левом углу, чтобы показать исходное изображение.*/
     lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
 
     const char * cf_txt[] = {"RGB565", "RGB888.", "XRGB8888", "ARGB8888", "ARGB8888_PREMUL"};
@@ -872,7 +872,7 @@ static void blend_mode_cb(lv_obj_t * parent)
         }
     }
 
-    /*Show the recolored image to show the original image*/
+    /*Покажите перекрашенное изображение, чтобы показать исходное изображение.*/
     lv_obj_t * img_recolored = lv_image_create(parent);
     lv_image_set_src(img_recolored, lv_canvas_get_image(canvas));
     lv_obj_set_style_image_recolor(img_recolored, lv_color_hex(0x00ff00), 0);
@@ -896,18 +896,18 @@ static lv_obj_t * create_linear_gradient_obj(lv_obj_t * parent, int32_t col, int
         LV_OPA_100, LV_OPA_0,
     };
 
-    /*init gradient color map*/
+    /*Инициализация цветовой карты градиента*/
     lv_grad_init_stops(grad, grad_color, use_opa_map ? grad_opa : NULL, NULL, sizeof(grad_color) / sizeof(lv_color_t));
 
-    /*init gradient parameters*/
+    /*параметры инициализации градиента*/
     grad->dir = LV_GRAD_DIR_LINEAR;
-    grad->params.linear.start.x = 0;                           /*vector start x position*/
-    grad->params.linear.start.y = 0;                           /*vector start y position*/
-    grad->params.linear.end.x = x1;                            /*vector end x position*/
-    grad->params.linear.end.y = y1;                            /*vector end y position*/
-    grad->extend = extend;                              /*color pattern outside the vector*/
+    grad->params.linear.start.x = 0;                           /*векторное начальное положение x*/
+    grad->params.linear.start.y = 0;                           /*векторное начало позиции Y*/
+    grad->params.linear.end.x = x1;                            /*Конец вектора по оси X*/
+    grad->params.linear.end.y = y1;                            /*векторная позиция конца Y*/
+    grad->extend = extend;                              /*цветовой узор вне вектора*/
 
-    /*create rectangle*/
+    /*создать прямоугольник*/
     lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, 70, 50);
@@ -915,7 +915,7 @@ static lv_obj_t * create_linear_gradient_obj(lv_obj_t * parent, int32_t col, int
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_opa(obj, opa_saved, 0);
 
-    /*set gradient as background*/
+    /*установить градиент в качестве фона*/
     lv_obj_set_style_bg_grad(obj, grad, 0);
 
     add_to_cell(obj, col, row);
@@ -972,22 +972,22 @@ static lv_obj_t * create_radial_gradient_obj(lv_obj_t * parent, int32_t col, int
         LV_OPA_100, LV_OPA_0,
     };
 
-    /*init gradient color map*/
+    /*Инициализация цветовой карты градиента*/
     lv_grad_init_stops(grad, grad_color, use_opa_map ? grad_opa : NULL, NULL, sizeof(grad_color) / sizeof(lv_color_t));
 
-    /*init gradient parameters*/
+    /*параметры инициализации градиента*/
     grad->dir = LV_GRAD_DIR_RADIAL;
-    grad->params.radial.focal.x = lv_pct(50);                          /*start circle center x position*/
-    grad->params.radial.focal.y = lv_pct(50);                          /*start circle center y position*/
-    grad->params.radial.focal_extent.x = grad->params.radial.focal.x + r0;    /*start circle point x coordinate*/
-    grad->params.radial.focal_extent.y = grad->params.radial.focal.y;         /*start circle point y coordinate*/
-    grad->params.radial.end.x = grad->params.radial.focal.x + offs;           /*end circle center x position*/
-    grad->params.radial.end.y = grad->params.radial.focal.y + offs;           /*end circle center y position*/
-    grad->params.radial.end_extent.x = grad->params.radial.end.x;             /*end circle point x coordinate*/
-    grad->params.radial.end_extent.y = lv_pct(85);                    /*end circle point y coordinate*/
-    grad->extend = extend;                                      /*color pattern outside the border circles*/
+    grad->params.radial.focal.x = lv_pct(50);                          /*начало круга, центр x, положение*/
+    grad->params.radial.focal.y = lv_pct(50);                          /*начало круга, центр y, позиция*/
+    grad->params.radial.focal_extent.x = grad->params.radial.focal.x + r0;    /*координата x начальной точки окружности*/
+    grad->params.radial.focal_extent.y = grad->params.radial.focal.y;         /*начальная точка круга, координата y*/
+    grad->params.radial.end.x = grad->params.radial.focal.x + offs;           /*положение центра x конечного круга*/
+    grad->params.radial.end.y = grad->params.radial.focal.y + offs;           /*положение центра Y конечного круга*/
+    grad->params.radial.end_extent.x = grad->params.radial.end.x;             /*координата x точки конечного круга*/
+    grad->params.radial.end_extent.y = lv_pct(85);                    /*координата точки y конечной окружности*/
+    grad->extend = extend;                                      /*цветной узор за пределами граничных кругов*/
 
-    /*create rectangle*/
+    /*создать прямоугольник*/
     lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, 70, 50);
@@ -995,7 +995,7 @@ static lv_obj_t * create_radial_gradient_obj(lv_obj_t * parent, int32_t col, int
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_opa(obj, opa_saved, 0);
 
-    /*set gradient as background*/
+    /*установить градиент в качестве фона*/
     lv_obj_set_style_bg_grad(obj, grad, 0);
 
     add_to_cell(obj, col, row);
@@ -1050,18 +1050,18 @@ static lv_obj_t * create_conical_gradient_obj(lv_obj_t * parent, int32_t col, in
         LV_OPA_100, LV_OPA_0,
     };
 
-    /*init gradient color map*/
+    /*Инициализация цветовой карты градиента*/
     lv_grad_init_stops(grad, grad_color, use_opa_map ? grad_opa : NULL, NULL, sizeof(grad_color) / sizeof(lv_color_t));
 
-    /*init gradient parameters*/
+    /*параметры инициализации градиента*/
     grad->dir = LV_GRAD_DIR_CONICAL;
-    grad->params.conical.center.x = lv_pct(50);                /*center x position*/
-    grad->params.conical.center.y = lv_pct(50);                /*center y position*/
-    grad->params.conical.start_angle = a0;                     /*start angle*/
-    grad->params.conical.end_angle = a1;                       /*end angle*/
-    grad->extend = extend;                              /*color pattern outside the vector*/
+    grad->params.conical.center.x = lv_pct(50);                /*центральное положение x*/
+    grad->params.conical.center.y = lv_pct(50);                /*центральное положение по оси Y*/
+    grad->params.conical.start_angle = a0;                     /*начальный угол*/
+    grad->params.conical.end_angle = a1;                       /*конечный угол*/
+    grad->extend = extend;                              /*цветовой узор вне вектора*/
 
-    /*create rectangle*/
+    /*создать прямоугольник*/
     lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, 70, 50);
@@ -1069,7 +1069,7 @@ static lv_obj_t * create_conical_gradient_obj(lv_obj_t * parent, int32_t col, in
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_opa(obj, opa_saved, 0);
 
-    /*set gradient as background*/
+    /*установить градиент в качестве фона*/
     lv_obj_set_style_bg_grad(obj, grad, 0);
 
     add_to_cell(obj, col, row);

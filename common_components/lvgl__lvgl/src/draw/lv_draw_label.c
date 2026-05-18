@@ -25,7 +25,7 @@
  *      DEFINES
  *********************/
 #define LABEL_RECOLOR_PAR_LENGTH 6
-#define LV_LABEL_HINT_UPDATE_TH 1024 /*Update the "hint" if the label's y coordinates have changed more then this*/
+#define LV_LABEL_HINT_UPDATE_TH 1024 /*Обновите «подсказку», если координаты Y метки изменились больше, чем это*/
 
 #define font_draw_buf_handlers &(LV_GLOBAL_DEFAULT()->font_draw_buf_handlers)
 
@@ -107,7 +107,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_label(lv_layer_t * layer, const lv_draw_label
         return;
     }
     if(coords->x1 > coords->x2) {
-        /* Attempting to draw a label too small (negative width), cancel to avoid error */
+        /* Попытка нарисовать метку слишком маленькой (отрицательная ширина). Отмените, чтобы избежать ошибки. */
         return;
     }
     LV_PROFILER_DRAW_BEGIN;
@@ -116,7 +116,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_label(lv_layer_t * layer, const lv_draw_label
         lv_layer_t * ds_layer = lv_draw_layer_create_drop_shadow(layer, &dsc->base, coords);
         LV_ASSERT_NULL(ds_layer);
         lv_draw_label_dsc_t ds_dsc = *dsc;
-        ds_dsc.base.drop_shadow_opa = 0; /*Disable drop shadow so rendering below will render plain label*/
+        ds_dsc.base.drop_shadow_opa = 0; /*Отключите тень, чтобы при рендеринге ниже отображалась простая метка.*/
         lv_draw_label(ds_layer, &ds_dsc, coords);
         lv_draw_layer_finish_drop_shadow(ds_layer, &dsc->base);
     }
@@ -126,7 +126,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_label(lv_layer_t * layer, const lv_draw_label
 
     lv_memcpy(t->draw_dsc, dsc, sizeof(*dsc));
 
-    /*The text is stored in a local variable so malloc memory for it*/
+    /*Текст хранится в локальной переменной, поэтому для него необходимо выделить память.*/
     if(dsc->text_local) {
         lv_draw_label_dsc_t * new_dsc = t->draw_dsc;
         new_dsc->text = lv_strndup(dsc->text, dsc->text_length);
@@ -160,7 +160,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_character(lv_layer_t * layer, lv_draw_label_d
     a.x2 = a.x1 + g.adv_w;
     a.y2 = a.y1 + lv_font_get_line_height(g.resolved_font ? g.resolved_font : dsc->font);
 
-    /*lv_draw_label needs UTF8 text so convert the Unicode character to an UTF8 string */
+    /*lv_draw_label нужен текст UTF8, поэтому преобразуйте символ Юникода в форму UTF8. */
     uint32_t letter_buf[2];
     letter_buf[0] = lv_text_unicode_to_encoded(unicode_letter);
     letter_buf[1] = '\0';
@@ -230,11 +230,11 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
     lv_bidi_calculate_align(&align, &base_dir, dsc->text);
 
     if((dsc->flag & LV_TEXT_FLAG_EXPAND) == 0) {
-        /*Normally use the label's width as width*/
+        /*Обычно используйте ширину этикетки в качестве ширины*/
         w = lv_area_get_width(coords);
     }
     else {
-        /*If EXPAND is enabled then not limit the text's width to the object's width*/
+        /*Если EXPAND включен, не ограничивайте ширину текста шириной объекта.*/
         if(base_dsc->obj && !lv_obj_has_flag(base_dsc->obj, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS)) {
             w = dsc->text_size.x;
         }
@@ -255,7 +255,7 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
     int32_t line_height_font = lv_font_get_line_height(font);
     int32_t line_height = line_height_font + dsc->line_space;
 
-    /*Init variables for the first line*/
+    /*Переменные инициализации для первой строки*/
     int32_t line_width = 0;
     lv_point_t pos;
     lv_point_set(&pos, coords->x1, coords->y1);
@@ -269,16 +269,16 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
     uint32_t line_start     = 0;
     int32_t last_line_start = -1;
 
-    /*Check the hint to use the cached info*/
+    /*Проверьте подсказку, чтобы использовать кэшированную информацию.*/
     if(dsc->hint && y_ofs == 0 && coords->y1 < 0) {
-        /*If the label changed too much recalculate the hint.*/
+        /*Если метка изменилась слишком сильно, пересчитайте подсказку.*/
         if(LV_ABS(dsc->hint->coord_y - coords->y1) > LV_LABEL_HINT_UPDATE_TH - 2 * line_height) {
             dsc->hint->line_start = -1;
         }
         last_line_start = dsc->hint->line_start;
     }
 
-    /*Use the hint if it's valid*/
+    /*Используйте подсказку, если она действительна*/
     if(dsc->hint && last_line_start >= 0) {
         line_start = last_line_start;
         pos.y += dsc->hint->y;
@@ -292,15 +292,15 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
 
     uint32_t line_end = line_start + lv_text_get_next_line(&dsc->text[line_start], remaining_len, font, NULL, &attributes);
 
-    /*Go the first visible line*/
+    /*Пройдите первую видимую линию*/
     while(pos.y + line_height_font < t->clip_area.y1) {
-        /*Go to next line*/
+        /*Перейти к следующей строке*/
         remaining_len -= line_end - line_start;
         line_start = line_end;
         line_end += lv_text_get_next_line(&dsc->text[line_start], remaining_len, font, NULL, &attributes);
         pos.y += line_height;
 
-        /*Save at the threshold coordinate*/
+        /*Сохранение по координате порога*/
         if(dsc->hint && pos.y >= -LV_LABEL_HINT_UPDATE_TH && dsc->hint->line_start < 0) {
             dsc->hint->line_start = line_start;
             dsc->hint->y          = pos.y - coords->y1;
@@ -310,13 +310,13 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
         if(dsc->text[line_start] == '\0') return;
     }
 
-    /*Align to middle*/
+    /*Выровнять по середине*/
     if(align == LV_TEXT_ALIGN_CENTER) {
         line_width = lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &attributes);
         pos.x += (lv_area_get_width(coords) - line_width) / 2;
 
     }
-    /*Align to the right*/
+    /*Выровнять по правому краю*/
     else if(align == LV_TEXT_ALIGN_RIGHT) {
         line_width = lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &attributes);
         pos.x += lv_area_get_width(coords) - line_width;
@@ -340,7 +340,7 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
     draw_letter_dsc.rotation = dsc->rotation;
     draw_letter_dsc.g = &glyph_dsc;
 
-    /* Set letter outline stroke attributes */
+    /* Установить атрибуты обводки контура буквы */
     draw_letter_dsc.outline_stroke_width = dsc->outline_stroke_width;
     draw_letter_dsc.outline_stroke_opa = dsc->outline_stroke_opa;
     draw_letter_dsc.outline_stroke_color = dsc->outline_stroke_color;
@@ -355,15 +355,15 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
     int32_t letter_w;
 
     cmd_state_t recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
-    lv_color_t recolor = lv_color_black(); /* Holds the selected color inside the recolor command */
+    lv_color_t recolor = lv_color_black(); /* Сохраняет выбранный цвет внутри команды перекрашивания. */
     uint8_t is_first_space_after_cmd = 0;
 
-    /*Write out all lines*/
+    /*Выпишите все строки*/
     while(remaining_len && dsc->text[line_start] != '\0') {
         pos.x += x_ofs;
         line_start_x = pos.x;
 
-        /*Write all letter of a line*/
+        /*Напишите все буквы строки*/
         next_char_offset = 0;
 #if LV_USE_BIDI
         size_t bidi_size = line_end - line_start;
@@ -371,8 +371,8 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
         LV_ASSERT_MALLOC(bidi_txt);
 
         /**
-          * has_bided = 1: already executed lv_bidi_process_paragraph.
-          * has_bided = 0: has not been executed lv_bidi_process_paragraph.*/
+          * has_bided = 1: lv_bidi_process_paragraph уже выполнен.
+          * has_bided = 0: не выполнялось lv_bidi_process_paragraph.*/
         if(dsc->has_bided) {
             lv_memcpy(bidi_txt, &dsc->text[line_start], bidi_size);
         }
@@ -386,7 +386,7 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
         while(next_char_offset < remaining_len && next_char_offset < line_end - line_start) {
             uint32_t logical_char_pos = 0;
 
-            /* Check if the text selection is enabled */
+            /* Проверьте, включено ли выделение текста */
             if(sel_start != LV_DRAW_LABEL_NO_TXT_SEL && sel_end != LV_DRAW_LABEL_NO_TXT_SEL) {
 #if LV_USE_BIDI
                 if(dsc->has_bided) {
@@ -406,29 +406,29 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
             uint32_t letter_next;
             lv_text_encoded_letter_next_2(bidi_txt, &letter, &letter_next, &next_char_offset);
 
-            /* If recolor is enabled */
+            /* Если перекрашивание включено */
             if((dsc->flag & LV_TEXT_FLAG_RECOLOR) != 0) {
 
                 if(letter == (uint32_t)LV_TXT_COLOR_CMD[0]) {
-                    /* Handle the recolor command marker depending of the current recolor state */
+                    /* Обработка маркера команды перекрашивания в зависимости от текущего состояния перекрашивания. */
 
                     if(recolor_cmd_state == RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER) {
                         recolor_command_start_index = next_char_offset;
                         recolor_cmd_state = RECOLOR_CMD_STATE_PARAMETER;
                         continue;
                     }
-                    /*Other start char in parameter escaped cmd. char*/
+                    /*Другой начальный символ в параметре cmd. голец*/
                     else if(recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) {
                         recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
                     }
-                    /* If letter is LV_TXT_COLOR_CMD and we were in the CMD_STATE_IN then the recolor close marked has been found */
+                    /* Если буква LV_TXT_COLOR_CMD и мы были в CMD_STATE_IN, то была найдена пометка закрытия перекраски. */
                     else if(recolor_cmd_state == RECOLOR_CMD_STATE_TEXT_INPUT) {
                         recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
                         continue;
                     }
                 }
 
-                /* Find the first space (aka ' ') after the recolor command parameter, we need to skip rendering it */
+                /* Найдите первый пробел (он же '') после параметра команды перекрашивания, нам нужно пропустить его рендеринг. */
                 if((recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) && (letter == ' ') && (is_first_space_after_cmd == 0)) {
                     is_first_space_after_cmd = 1;
                 }
@@ -436,18 +436,18 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
                     is_first_space_after_cmd = 0;
                 }
 
-                /* Skip the color parameter and wait the space after it
-                 * Once we have reach the space ' ', then we will extract the color information
-                 * and store it into the recolor variable */
+                /* Пропустите параметр цвета и подождите пробел после него.
+                 * Как только мы достигнем пробела ' ', мы извлечем информацию о цвете.
+                 * и сохраните его в переменной перекраске */
                 if(recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) {
                     /* Not an space? Continue with the next character */
                     if(letter != ' ') {
                         continue;
                     }
 
-                    /*Get the recolor parameter*/
+                    /*Получить параметр перекрашивания*/
                     if((next_char_offset - recolor_command_start_index) == LABEL_RECOLOR_PAR_LENGTH + 1) {
-                        /* Temporary buffer to hold the recolor information */
+                        /* Временный буфер для хранения информации о перекрашивании. */
                         char buf[LABEL_RECOLOR_PAR_LENGTH + 1];
                         lv_memcpy(buf, &bidi_txt[recolor_command_start_index], LABEL_RECOLOR_PAR_LENGTH);
                         buf[LABEL_RECOLOR_PAR_LENGTH] = '\0';
@@ -465,17 +465,17 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
                         recolor.green = dsc->color.green;
                     }
 
-                    /*After the parameter the text is in the command*/
+                    /*После параметра текст находится в команде*/
                     recolor_cmd_state = RECOLOR_CMD_STATE_TEXT_INPUT;
                 }
 
-                /* Don't draw the first space after the recolor command */
+                /* Не рисуйте первый пробел после команды перекрашивания */
                 if(is_first_space_after_cmd) {
                     continue;
                 }
             }
 
-            /* If we're in the CMD_STATE_IN state then we need to subtract the recolor command length */
+            /* Если мы находимся в состоянии CMD_STATE_IN, нам нужно вычесть длину команды перекрашивания. */
             if(((dsc->flag & LV_TEXT_FLAG_RECOLOR) != 0) && (recolor_cmd_state == RECOLOR_CMD_STATE_TEXT_INPUT)) {
                 logical_char_pos -= (LABEL_RECOLOR_PAR_LENGTH + 1);
             }
@@ -483,7 +483,7 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
             lv_font_get_glyph_dsc(font, &glyph_dsc, letter, letter_next);
             letter_w = lv_text_is_marker(letter) ? 0 : glyph_dsc.adv_w;
 
-            /*Always set the bg_coordinates for placeholder drawing*/
+            /*Всегда устанавливайтеbg_coordinatesдля рисования-заполнителя.*/
             bg_coords.x1 = pos.x - dsc->letter_space / 2;
             bg_coords.y1 = pos.y;
             bg_coords.x2 = pos.x + letter_w - 1 + (dsc->letter_space + 1) / 2;
@@ -512,7 +512,7 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
                 }
             }
 
-            /* Handle text selection */
+            /* Обработка выделения текста */
             if(sel_start != LV_DRAW_LABEL_NO_TXT_SEL && sel_end != LV_DRAW_LABEL_NO_TXT_SEL
                && logical_char_pos >= sel_start && logical_char_pos < sel_end) {
                 draw_letter_dsc.color = dsc->sel_color;
@@ -543,7 +543,7 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
         text_attributes.text_flags = dsc->flag;
         text_attributes.max_width = w;
 
-        /*Go to next line*/
+        /*Перейти к следующей строке*/
         remaining_len -= line_end - line_start;
         line_start = line_end;
         if(remaining_len) {
@@ -551,21 +551,21 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
         }
 
         pos.x = coords->x1;
-        /*Align to middle*/
+        /*Выровнять по середине*/
         if(align == LV_TEXT_ALIGN_CENTER) {
             line_width =
                 lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &text_attributes);
 
             pos.x += (lv_area_get_width(coords) - line_width) / 2;
         }
-        /*Align to the right*/
+        /*Выровнять по правому краю*/
         else if(align == LV_TEXT_ALIGN_RIGHT) {
             line_width =
                 lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &text_attributes);
             pos.x += lv_area_get_width(coords) - line_width;
         }
 
-        /*Go the next line position*/
+        /*Перейти на следующую позицию строки*/
         pos.y += line_height;
 
         if(pos.y > t->clip_area.y2) break;
@@ -581,14 +581,14 @@ void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_ds
  **********************/
 
 /**
- * Convert a hexadecimal characters to a number (0..15)
- * @param hex Pointer to a hexadecimal character (0..9, A..F)
- * @return the numerical value of `hex` or 0 on error
+ * Преобразование шестнадцатеричных символов в число (0..15)
+ * @param hex Указатель на шестнадцатеричный символ (0..9, A..F)
+ * @return числовое значение`hex`или 0 в случае ошибки
  */
 static uint8_t hex_char_to_num(char hex)
 {
     if(hex >= '0' && hex <= '9') return hex - '0';
-    if(hex >= 'a') hex -= 'a' - 'A'; /*Convert to upper case*/
+    if(hex >= 'a') hex -= 'a' - 'A'; /*Преобразовать в верхний регистр*/
     return 'A' <= hex && hex <= 'F' ? hex - 'A' + 10 : 0;
 }
 
@@ -597,25 +597,25 @@ void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  co
 {
     lv_font_glyph_dsc_t g;
 
-    if(lv_text_is_marker(letter)) /*Markers are valid letters but should not be rendered.*/
+    if(lv_text_is_marker(letter)) /*Маркеры являются допустимыми буквами, но не должны отображаться.*/
         return;
 
     LV_PROFILER_DRAW_BEGIN;
     if(dsc->g == NULL) {
         dsc->g = &g;
-        /*If the glyph dsc is not set then get it from the font*/
+        /*Если глиф dsc не установлен, создайте его из шрифта.*/
         bool g_ret = lv_font_get_glyph_dsc(font, &g, letter, 0);
         if(g_ret == false) {
-            /*Add warning if the dsc is not found*/
+            /*Добавить предупреждение, если dsc не найден*/
             LV_LOG_WARN("lv_draw_letter: glyph dsc. not found for U+%" LV_PRIX32, letter);
         }
     }
     else {
-        /*If the glyph dsc is set then use it*/
+        /*Если установлен глиф dsc, воспользуйтесь им.*/
         g = *dsc->g;
     }
 
-    /*Don't draw anything if the character is empty. E.g. space*/
+    /*Не рисуйте ничего, если персонаж пуст. Например. пространство*/
     if((g.box_h == 0) || (g.box_w == 0)) {
         goto exit;
     }
@@ -627,7 +627,7 @@ void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  co
     letter_coords.y2 = letter_coords.y1 + g.box_h - 1;
     lv_area_move(&letter_coords, -dsc->pivot.x, -dsc->pivot.y);
 
-    /*If the letter is completely out of mask don't draw it*/
+    /*Если буква полностью вышла за пределы маски, не рисуйте ее.*/
     if(lv_area_is_out(&letter_coords, &t->clip_area, 0) &&
        dsc->bg_coords &&
        lv_area_is_out(dsc->bg_coords, &t->clip_area, 0)) {
@@ -637,12 +637,12 @@ void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  co
     if(g.resolved_font) {
         lv_draw_buf_t * draw_buf = NULL;
         if(LV_FONT_GLYPH_FORMAT_NONE < g.format && g.format < LV_FONT_GLYPH_FORMAT_IMAGE) {
-            /*Only check draw buf for bitmap glyph*/
+            /*Проверьте только усиление рисования для растрового глифа*/
             draw_buf = lv_draw_buf_reshape(dsc->_draw_buf, 0, g.box_w, g.box_h, LV_STRIDE_AUTO);
             if(draw_buf == NULL) {
                 if(dsc->_draw_buf) lv_draw_buf_destroy(dsc->_draw_buf);
 
-                uint32_t h = LV_ROUND_UP(g.box_h, 32); /*Assume a larger size to avoid many reallocations*/
+                uint32_t h = LV_ROUND_UP(g.box_h, 32); /*Предполагайте больший размер, чтобы избежать большого количества перераспределений.*/
                 draw_buf = lv_draw_buf_create_ex(font_draw_buf_handlers, g.box_w, h, LV_COLOR_FORMAT_A8, LV_STRIDE_AUTO);
                 LV_ASSERT_MALLOC(draw_buf);
                 draw_buf->header.h = g.box_h;
@@ -654,7 +654,7 @@ void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  co
 
         if(g.format == LV_FONT_GLYPH_FORMAT_VECTOR) {
 
-            /*Load the outline of the glyph, even if the function says bitmap*/
+            /*Загрузите контур глифа, даже если функция говорит растровое изображение.*/
             dsc->glyph_data = (void *) lv_font_get_glyph_bitmap(dsc->g, draw_buf);
             dsc->format = dsc->glyph_data ? g.format : LV_FONT_GLYPH_FORMAT_NONE;
         }
@@ -670,7 +670,7 @@ void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  co
 
 exit:
     if(dsc->g == &g) {
-        /* If the glyph was created locally, we don't need to keep it */
+        /* Если глиф был создан локально, нам не нужно его сохранять. */
         dsc->g = NULL;
     }
     LV_PROFILER_DRAW_END;

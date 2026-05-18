@@ -15,20 +15,20 @@ static void cont_sub_event_cb(lv_event_t * e)
 }
 
 /**
- * Nested grid navigations
+ * Вложенная сетка навигации
  */
 void lv_example_gridnav_3(void)
 {
-    /*It's assumed that the default group is set and
-     *there is a keyboard indev*/
+    /*Предполагается, что группа по умолчанию установлена и
+     *есть разработка клавиатуры*/
 
     lv_obj_t * cont_main = lv_obj_create(lv_screen_active());
     lv_gridnav_add(cont_main, (lv_gridnav_ctrl_t)(LV_GRIDNAV_CTRL_ROLLOVER | LV_GRIDNAV_CTRL_SCROLL_FIRST));
 
-    /*Only the container needs to be in a group*/
+    /*Только контейнер должен быть в группе*/
     lv_group_add_obj(lv_group_get_default(), cont_main);
 
-    /*Use flex here, but works with grid or manually placed objects as well*/
+    /*Здесь используйте гибкость, но она также работает с сеткой или объектами, размещенными вручную.*/
     lv_obj_set_flex_flow(cont_main, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_style_bg_color(cont_main, lv_palette_lighten(LV_PALETTE_BLUE, 5), LV_STATE_FOCUSED);
     lv_obj_set_size(cont_main, lv_pct(80), LV_SIZE_CONTENT);
@@ -46,7 +46,7 @@ void lv_example_gridnav_3(void)
     label = lv_label_create(btn);
     lv_label_set_text(label, "Button 2");
 
-    /*Create another container with long text to show how LV_GRIDNAV_CTRL_SCROLL_FIRST works*/
+    /*Создайте еще один контейнер с длинным текстом, чтобы показать, как работает LV_GRIDNAV_CTRL_SCROLL_FIRST.*/
     lv_obj_t * cont_sub1 = lv_obj_create(cont_main);
     lv_obj_set_size(cont_sub1, lv_pct(100), 100);
 
@@ -65,15 +65,15 @@ void lv_example_gridnav_3(void)
                       "Hello world!\n"
                       "Hello world!");
 
-    /*Create a third container that can be focused with ENTER and contains another grid nav*/
+    /*Создайте третий контейнер, который можно сфокусировать с помощью ENTER и который содержит еще одну сетку навигации.*/
     lv_obj_t * cont_sub2 = lv_obj_create(cont_main);
     lv_gridnav_add(cont_sub2, LV_GRIDNAV_CTRL_ROLLOVER);
-    /*Only the container needs to be in a group*/
+    /*Только контейнер должен быть в группе*/
     lv_group_add_obj(lv_group_get_default(), cont_sub2);
 
     lv_obj_add_event_cb(cont_sub2, cont_sub_event_cb, LV_EVENT_KEY, NULL);
 
-    /*Use flex here, but works with grid or manually placed objects as well*/
+    /*Здесь используйте гибкость, но она также работает с сеткой или объектами, размещенными вручную.*/
     lv_obj_set_flex_flow(cont_sub2, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_style_bg_color(cont_sub2, lv_palette_lighten(LV_PALETTE_RED, 5), LV_STATE_FOCUSED);
     lv_obj_set_size(cont_sub2, lv_pct(100), LV_SIZE_CONTENT);

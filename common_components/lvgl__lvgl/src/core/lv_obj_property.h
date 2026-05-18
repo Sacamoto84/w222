@@ -23,33 +23,33 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/*All possible property value types*/
-#define LV_PROPERTY_TYPE_INVALID        0   /*Use default 0 as invalid to detect program outliers*/
-#define LV_PROPERTY_TYPE_INT            1   /*int32_t type*/
-#define LV_PROPERTY_TYPE_PRECISE        2   /*lv_value_precise_t, int32_t or float depending on LV_USE_FLOAT*/
-#define LV_PROPERTY_TYPE_COLOR          3   /*ARGB8888 type*/
+/*Все возможные типы значений свойств*/
+#define LV_PROPERTY_TYPE_INVALID        0   /*Используйте значение по умолчанию 0 как недействительное для обнаружения выбросов программы.*/
+#define LV_PROPERTY_TYPE_INT            1   /*Тип int32_t*/
+#define LV_PROPERTY_TYPE_PRECISE        2   /*lv_value_precise_t ,int32_tили плавающее число в зависимости от LV_USE_FLOAT*/
+#define LV_PROPERTY_TYPE_COLOR          3   /*Тип ARGB8888*/
 #define LV_PROPERTY_TYPE_POINT          4   /*lv_point_t */
-#define LV_PROPERTY_TYPE_POINTER        5   /*void * pointer*/
-#define LV_PROPERTY_TYPE_IMGSRC         6   /*Special pointer for image*/
-#define LV_PROPERTY_TYPE_TEXT           7   /*Special pointer of char* */
-#define LV_PROPERTY_TYPE_OBJ            8   /*Special pointer of lv_obj_t* */
-#define LV_PROPERTY_TYPE_DISPLAY        9   /*Special pointer of lv_display_t* */
-#define LV_PROPERTY_TYPE_FONT           10  /*Special pointer of lv_font_t* */
-#define LV_PROPERTY_TYPE_BOOL           11  /*int32_t type*/
+#define LV_PROPERTY_TYPE_POINTER        5   /*пустота * указатель*/
+#define LV_PROPERTY_TYPE_IMGSRC         6   /*Специальный указатель для изображения*/
+#define LV_PROPERTY_TYPE_TEXT           7   /*Специальный указатель char* */
+#define LV_PROPERTY_TYPE_OBJ            8   /*Специальный указательlv_obj_t* */
+#define LV_PROPERTY_TYPE_DISPLAY        9   /*Специальный указательlv_display_t* */
+#define LV_PROPERTY_TYPE_FONT           10  /*Специальный указательlv_font_t* */
+#define LV_PROPERTY_TYPE_BOOL           11  /*Тип int32_t*/
 
 #define LV_PROPERTY_TYPE_SHIFT          28
 #define LV_PROPERTY_TYPE2_SHIFT         24
 
-/* Example:
+/* Пример:
  * LV_PROPERTY_ID(OBJ, FLAG_CLICKABLE, LV_PROPERTY_TYPE_INT, 1),
- * produces
+ * производит
  * LV_PROPERTY_OBJ_FLAG_CLICKABLE = (LV_PROPERTY_OBJ_START + (1)) | ((LV_PROPERTY_TYPE_INT) << LV_PROPERTY_TYPE_SHIFT)
  */
 #define LV_PROPERTY_ID(clz, name, type, index)          LV_PROPERTY_## clz ##_##name = (LV_PROPERTY_## clz ##_START + ((int)index)) | ((type) << LV_PROPERTY_TYPE_SHIFT)
 
-/* Example:
+/* Пример:
  * LV_PROPERTY_ID2(SLIDER, VALUE, LV_PROPERTY_TYPE_INT, LV_PROPERTY_TYPE_BOOL, 0)
- * produces
+ * производит
  * LV_PROPERTY_SLIDER_VALUE = (LV_PROPERTY_SLIDER_START + (0)) | ((LV_PROPERTY_TYPE_INT) << LV_PROPERTY_TYPE_SHIFT) | ((LV_PROPERTY_TYPE_BOOL) << LV_PROPERTY_TYPE2_SHIFT)
  */
 #define LV_PROPERTY_ID2(clz, name, type, type2, index)  LV_PROPERTY_ID(clz, name, type, index) | ((type2) << LV_PROPERTY_TYPE2_SHIFT)
@@ -58,10 +58,10 @@ extern "C" {
 #define LV_PROPERTY_ID_TYPE2(id) ((id) >> LV_PROPERTY_TYPE_SHIFT)
 #define LV_PROPERTY_ID_INDEX(id) ((id) & 0xfffffff)
 
-/*Set properties from an array of lv_property_t*/
+/*Получить свойства из массива lv_property_t*/
 #define LV_OBJ_SET_PROPERTY_ARRAY(obj, array) lv_obj_set_properties(obj, array, LV_ARRAYLEN(array))
 
-/* Helper to implement class definition of property and property names */
+/* Помощник для реализации определения класса свойств и имен свойств. */
 /* *INDENT-OFF* */
 #if LV_USE_OBJ_PROPERTY_NAME
 #define LV_PROPERTY_CLASS_FIELDS(widget, uppercase) \
@@ -86,16 +86,16 @@ extern "C" {
  **********************/
 
 /**
- * Group of predefined widget ID start value.
+ * Группа предопределенных начальных значений виджета ID.
  */
 enum _lv_prop_id_range_boundary_t {
     LV_PROPERTY_ID_INVALID      = 0,
 
-    /*ID 0x01 to 0xff are style ID, check lv_style_prop_t*/
+    /*ID от0x01до0xffимеют стиль ID, от примеров lv_style_prop_t.*/
     LV_PROPERTY_STYLE_START     = 0x00,
 
-    LV_PROPERTY_ID_START        = 0x0100, /*ID smaller than 0xff is style ID*/
-    /*Define the property ID for every widget here. */
+    LV_PROPERTY_ID_START        = 0x0100, /*ID меньше, чем 0xff, — это стиль ID.*/
+    /*Определите здесь свойство ID для каждого виджета. */
     LV_PROPERTY_OBJ_START       = 0x0100, /* lv_obj.c */
     LV_PROPERTY_IMAGE_START     = 0x0200, /* lv_image.c */
     LV_PROPERTY_LABEL_START     = 0x0300, /* lv_label.c */
@@ -121,10 +121,10 @@ enum _lv_prop_id_range_boundary_t {
     LV_PROPERTY_MENU_START      = 0x1700, /* lv_menu.c */
     LV_PROPERTY_CHART_START     = 0x1800, /* lv_chart.c */
 
-    /*Special ID, use it to extend ID and make sure it's unique and compile time determinant*/
-    LV_PROPERTY_ID_BUILTIN_LAST = 0xffff, /*ID of 0x10000 ~ 0xfffffff is reserved for user*/
+    /*Специальный ID, используйте его для расширения ID и убедитесь, что он уникален и определяет время компиляции.*/
+    LV_PROPERTY_ID_BUILTIN_LAST = 0xffff, /*ID из0x10000~0xfffffffзарезервировано для пользователя.*/
 
-    LV_PROPERTY_ID_ANY          = 0x7ffffffe, /*Special ID used by lvgl to intercept all setter/getter call.*/
+    LV_PROPERTY_ID_ANY          = 0x7ffffffe, /*Специальный ID, интеллектуальный уровень для перехвата всех вызовов сеттера/геттера.*/
 };
 
 struct _lv_property_name_t {
@@ -145,23 +145,23 @@ typedef struct {
 
         struct {
             /**
-             * Note that place struct member `style` at first place is intended.
-             * `style` shares same memory with `num`, `ptr`, `color`.
-             * So we set the style value directly without using `prop.style.num`.
+             * Обратите внимание, что предусмотрено размещение члена структуры`style`на первом месте.
+             * `style` использует ту же память, что и`num`,`ptr`,`color`.
+             * Поэтому мы устанавливаем значение стиля напрямую, не используя `prop.style.num`.
              *
              * E.g.
              *
-             * static const lv_property_t obj_pos_x = {
+             * статическая константаlv_property_tobj_pos_x = {
              *      .id = LV_PROPERTY_STYLE_X,
-             *      .num = 123,
-             *      .selector = LV_STATE_PRESSED,
+             *      .номер = 123,
+             *      .селектор = LV_STATE_PRESSED,
              * }
              *
-             * instead of:
-             * static const lv_property_t obj_pos_x = {
+             * вместо:
+             * статическая константаlv_property_tobj_pos_x = {
              *      .id = LV_PROPERTY_STYLE_X,
-             *      .style.num = 123, // note this line.
-             *      .selector = LV_STATE_PRESSED,
+             *      .style.num = 123, // обратите внимание на этот символ.
+             *      .селектор = LV_STATE_PRESSED,
              * }
              */
             lv_style_value_t style; /**< Make sure it's the first element in struct. */
@@ -169,8 +169,8 @@ typedef struct {
         };
 
         /**
-         * For some properties like slider range, it contains two simple (4-byte) values
-         * so we can use `arg1.num` and `arg2.num` to set the argument.
+         * Для некоторых свойств, таких как диапазон ползунка, он содержит два простых (4-байтовых) значения.
+         * поэтому мы можем использовать`arg1.num`и`arg2.num`для установки аргумента.
          */
         struct {
             union {
@@ -197,71 +197,71 @@ typedef struct {
  **********************/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set Widget property.
- * @param obj       pointer to Widget
- * @param value     property value to set
- * @return          return LV_RESULT_OK if call succeeded
+ * Установите свойство виджета.
+ * @param obj       указатель на виджет
+ * @param value     значение свойства для установки
+ * @return          вернуть LV_RESULT_OK, если вызов удался
  */
 lv_result_t lv_obj_set_property(lv_obj_t * obj, const lv_property_t * value);
 
 /**
- * Set multiple Widget properties. Helper `LV_OBJ_SET_PROPERTY_ARRAY` can be used for constant property array.
- * @param obj       pointer to Widget
- * @param value     property value array to set
- * @param count     number of array elements
- * @return          return LV_RESULT_OK if call succeeded
+ * Установите несколько свойств виджета. Помощник `LV_OBJ_SET_PROPERTY_ARRAY` можно использовать для массива констант.
+ * @param obj       указатель на виджет
+ * @param value     Массив значений свойств для установки
+ * @param count     количество элементов массива
+ * @return          вернуть LV_RESULT_OK, если вызов удался
  */
 lv_result_t lv_obj_set_properties(lv_obj_t * obj, const lv_property_t * value, uint32_t count);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Read property value from Widget.
- * If id is a style property, computes the style of PART_MAIN.
- * @param obj       pointer to Widget
- * @param id        ID of property to read
- * @return          return property value read. The returned property ID is set to `LV_PROPERTY_ID_INVALID` if read failed.
+ * Считайте значение свойства из виджета.
+ * Если id является свойством стиля, вычисляет стиль PART_MAIN.
+ * @param obj       указатель на виджет
+ * @param id        ID свойства для чтения
+ * @return          вернуть прочитанное значение свойства. Возвращаемое свойствоIDустанавливается в `LV_PROPERTY_ID_INVALID`, если чтение не удалось.
  */
 lv_property_t lv_obj_get_property(lv_obj_t * obj, lv_prop_id_t id);
 
 /**
- * Read style property value from Widget
- * @param obj       pointer to Widget
- * @param id        ID of style property
- * @param part      part for which the style property should be computed
- * @return          return property value read. The returned property ID is set to `LV_PROPERTY_ID_INVALID` if read failed.
+ * Чтение значения свойства стиля из виджета
+ * @param obj       указатель на виджет
+ * @param id        ID свойства стиля
+ * @param part      часть, для которой должно быть вычислено свойство стиля
+ * @return          вернуть прочитанное значение свойства. Возвращаемое свойствоIDустанавливается в `LV_PROPERTY_ID_INVALID`, если чтение не удалось.
  */
 lv_property_t lv_obj_get_style_property(lv_obj_t * obj, lv_prop_id_t id, lv_part_t part);
 
 /**
- * Get property ID by recursively searching for name in Widget's class hierarchy, and
- * if still not found, then search style properties.
- * Requires to enabling `LV_USE_OBJ_PROPERTY_NAME`.
- * @param obj       pointer to Widget whose class and base-class hierarchy are to be searched.
- * @param name      property name
- * @return          property ID found or `LV_PROPERTY_ID_INVALID` if not found.
+ * Получите свойство ID, рекурсивно выполнив поиск имени в иерархии классов виджета, и
+ * если все еще не найдено, выполните поиск свойств стиля.
+ * Требуется включить `LV_USE_OBJ_PROPERTY_NAME` .
+ * @param obj       указатель на виджет, чей класс и иерархию базовых классов нужно искать.
+ * @param name      имя свойства
+ * @return          свойствоIDнайдено или `LV_PROPERTY_ID_INVALID`, если не найдено.
  */
 lv_prop_id_t lv_obj_property_get_id(const lv_obj_t * obj, const char * name);
 
 /**
- * Get property ID by doing a non-recursive search for name directly in Widget class properties.
- * Requires enabling `LV_USE_OBJ_PROPERTY_NAME`.
- * @param clz       pointer to Widget class that has specified property.
- * @param name      property name
- * @return          property ID found or `LV_PROPERTY_ID_INVALID` if not found.
+ * Получите свойство ID, выполнив нерекурсивный поиск имени непосредственно в свойствах класса виджета.
+ * Требуется включить `LV_USE_OBJ_PROPERTY_NAME`.
+ * @param clz       указатель на класс виджета, имеющий указанное свойство.
+ * @param name      имя свойства
+ * @return          свойствоIDнайдено или `LV_PROPERTY_ID_INVALID`, если не найдено.
  */
 lv_prop_id_t lv_obj_class_property_get_id(const lv_obj_class_t * clz, const char * name);
 
 /**
- * Get style property ID by name. Requires enabling `LV_USE_OBJ_PROPERTY_NAME`.
- * @param name      property name
- * @return          property ID found or `LV_PROPERTY_ID_INVALID` if not found.
+ * Получите свойство стиля ID по имени. Требуется включить `LV_USE_OBJ_PROPERTY_NAME`.
+ * @param name      имя свойства
+ * @return          свойствоIDнайдено или `LV_PROPERTY_ID_INVALID`, если не найдено.
  */
 lv_prop_id_t lv_style_property_get_id(const char * name);
 
@@ -277,7 +277,7 @@ lv_prop_id_t lv_style_property_get_id(const char * name);
 #endif /*LV_USE_OBJ_PROPERTY*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_PROPERTY_H*/

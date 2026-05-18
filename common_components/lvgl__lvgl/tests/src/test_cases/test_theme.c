@@ -5,12 +5,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -51,7 +51,7 @@ void test_theme(void)
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0xFF0000), lv_theme_get_color_primary(NULL));
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0x00FF00), lv_theme_get_color_secondary(NULL));
 
-    /* Verify default values */
+    /* Проверьте значения по умолчанию */
     lv_display_set_theme(NULL, NULL);
     TEST_ASSERT_EQUAL_PTR(LV_FONT_DEFAULT, lv_theme_get_font_small(obj));
     TEST_ASSERT_EQUAL_PTR(LV_FONT_DEFAULT, lv_theme_get_font_normal(obj));
@@ -141,7 +141,7 @@ static void test_widgets(const char * img_name)
 
     lv_spinner_create(scr_act);
 
-    lv_test_wait(1000); /*Wait for the transitions*/
+    lv_test_wait(1000); /*Ждите переходов*/
 
     TEST_ASSERT_EQUAL_SCREENSHOT(img_name);
 

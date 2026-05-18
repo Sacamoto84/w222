@@ -24,8 +24,8 @@
 
 #define image_cache_draw_buf_handlers &(LV_GLOBAL_DEFAULT()->image_cache_draw_buf_handlers)
 
-/* Since the palette and index image are next to each other,
- * the palette size needs to be aligned to ensure that the image is aligned.
+/* Поскольку палитра и индексное изображение находятся рядом друг с другом,
+ * размер палитры необходимо выровнять, чтобы обеспечить выравнивание изображения.
  */
 #define I8_IMG_OFFSET \
     LV_VG_LITE_ALIGN(LV_COLOR_INDEXED_PALETTE_SIZE(LV_COLOR_FORMAT_I8) * sizeof(lv_color32_t), LV_DRAW_BUF_ALIGN)
@@ -36,7 +36,7 @@
  *      TYPEDEFS
  **********************/
 
-/* This structure represents the ARGB8565 format (3 bytes per pixel). */
+/* Эта структура представляет формат ARGB8565 (3 байта на пиксель). */
 typedef struct {
     lv_color16_t color;
     uint8_t alpha;
@@ -98,14 +98,14 @@ static void image_color32_pre_mul(lv_color32_t * img_data, uint32_t px_size)
 
 static uint32_t get_image_stride(const lv_image_header_t * header)
 {
-    /* use stride in header */
+    /* используйте шаг в заголовке */
     if(header->stride) {
         return header->stride;
     }
 
-    /* compact format stride */
+    /* компактный формат */
     uint32_t ori_stride = header->w * lv_color_format_get_bpp(header->cf);
-    ori_stride = (ori_stride + 7) >> 3; /*Round up*/
+    ori_stride = (ori_stride + 7) >> 3; /*Округлить вверх*/
     return ori_stride;
 }
 
@@ -137,7 +137,7 @@ static void image_decode_to_index8_line(uint8_t * dest, const uint8_t * src, int
             return;
     }
 
-    mask = (1 << px_size) - 1; /*E.g. px_size = 2; mask = 0x03*/
+    mask = (1 << px_size) - 1; /*Например.  px_size = 2; маска = 0x03*/
 
     for(int32_t i = 0; i < w_px; i++) {
         uint8_t val_act = (*src >> shift) & mask;
@@ -155,8 +155,8 @@ static lv_color_format_t get_converted_cf(lv_color_format_t cf)
 {
     switch(cf) {
         /**
-         * VG_LITE_INDEX1, 2, and 4 require endian flipping + bit flipping,
-         * so for simplicity, convert them to I8.
+         * VG_LITE_INDEX1 , 2 и 4 требуют обратного порядка байтов + переворот битов,
+         * поэтому для простоты преобразуйте их в I8.
          */
         case LV_COLOR_FORMAT_I1:
         case LV_COLOR_FORMAT_I2:
@@ -168,8 +168,8 @@ static lv_color_format_t get_converted_cf(lv_color_format_t cf)
             return LV_COLOR_FORMAT_A8;
 
         /**
-         * If the GPU does not support the 24-bit format, convert it to ARGB8888;
-         * otherwise, use the normal bin_decoder processing flow.
+         * Если GPU не поддерживает 24-битный формат, преобразуйте его в ARGB8888;
+         * в противном случае используйте обычный поток обработки bin_decoder.
          */
         case LV_COLOR_FORMAT_RGB888:
             return vg_lite_query_feature(gcFEATURE_BIT_VG_24BIT) ? LV_COLOR_FORMAT_UNKNOWN : LV_COLOR_FORMAT_XRGB8888;
@@ -224,33 +224,33 @@ static lv_result_t decoder_open_variable_index(lv_draw_buf_t * dest_buf, const l
                                                bool premultiply)
 {
     LV_PROFILER_DECODER_BEGIN;
-    /* Since dsc->header.cf is uniformly set to I8,
-     * the original format is obtained from src for conversion.
+    /* Поскольку для dsc->header.cf одинаково установлено значение I8 ,
+     * исходный формат получается из src для преобразования.
      */
 
-    /*In case of uncompressed formats the image stored in the ROM/RAM.
-     *So simply give its pointer*/
+    /*В случае несжатых форматов изображение сохраняется в ROM/RAM.
+     *Поэтому просто дайте его указатель*/
     const uint8_t * src = src_buf->data;
     uint8_t * dest = dest_buf->data;
 
-    /* index format only */
+    /* только индексный формат */
     uint32_t palette_size = LV_COLOR_INDEXED_PALETTE_SIZE(src_buf->header.cf);
     LV_ASSERT(palette_size > 0);
     uint32_t palette_size_bytes = palette_size * sizeof(lv_color32_t);
 
-    /* copy palette */
+    /* копировать палитру */
     lv_memcpy(dest, src, palette_size_bytes);
 
     if(premultiply) {
-        /* pre-multiply palette */
+        /* палитра предварительного умножения */
         image_color32_pre_mul((lv_color32_t *)dest, palette_size);
     }
 
-    /* move to index image map */
+    /* перейти к карте индексного изображения */
     src += palette_size_bytes;
     dest += I8_IMG_OFFSET;
 
-    /* copy index image */
+    /* копировать индексное изображение */
     for(int32_t y = 0; y < src_buf->header.h; y++) {
         image_decode_to_index8_line(dest, src, src_buf->header.w, src_buf->header.cf);
         src += src_buf->header.stride;
@@ -481,11 +481,11 @@ static lv_result_t decoder_open_file_index(lv_draw_buf_t * dest_buf,
 
     uint8_t * dest = dest_buf->data;
 
-    /* index format only */
+    /* только индексный формат */
     uint32_t palette_size = LV_COLOR_INDEXED_PALETTE_SIZE(src_header->cf);
     LV_ASSERT(palette_size > 0);
 
-    /* read palette */
+    /* читать палитру */
     if(!file_read_line(file, dest, palette_size * sizeof(lv_color32_t))) {
         LV_LOG_ERROR("read palette failed");
         LV_PROFILER_DECODER_END;
@@ -493,7 +493,7 @@ static lv_result_t decoder_open_file_index(lv_draw_buf_t * dest_buf,
     }
 
     if(premultiply) {
-        /* pre-multiply palette */
+        /* палитра предварительного умножения */
         image_color32_pre_mul((lv_color32_t *)dest, palette_size);
     }
 
@@ -504,7 +504,7 @@ static lv_result_t decoder_open_file_index(lv_draw_buf_t * dest_buf,
         return LV_RESULT_INVALID;
     }
 
-    /* move to index image map */
+    /* перейти к карте индексного изображения */
     dest += I8_IMG_OFFSET;
 
     for(uint32_t y = 0; y < height; y++) {
@@ -514,7 +514,7 @@ static lv_result_t decoder_open_file_index(lv_draw_buf_t * dest_buf,
             return LV_RESULT_INVALID;
         }
 
-        /* convert to index8 */
+        /* конвертировать в index8 */
         image_decode_to_index8_line(dest, src_temp, width, src_header->cf);
         dest += dest_buf->header.stride;
     }
@@ -619,7 +619,7 @@ static lv_result_t decoder_open_file_rgb(lv_draw_buf_t * dest_buf,
             break;
 
         case LV_COLOR_FORMAT_RGB565A8: {
-                /* First pass: read RGB565 and convert to ARGB8888, skip alpha */
+                /* Первый проход: прочитайте RGB565 и преобразуйте в ARGB8888, пропустите альфу. */
                 for(uint32_t y = 0; y < height; y++) {
                     if(!file_read_line(file, src_temp, src_header->stride)) {
                         goto failed;
@@ -636,7 +636,7 @@ static lv_result_t decoder_open_file_rgb(lv_draw_buf_t * dest_buf,
                     }
                 }
 
-                /* Second pass: read A8 and update alpha, handle premultiply if needed */
+                /* Второй проход: прочитайте A8 и обновите альфу, при необходимости обработайте предварительное умножение. */
                 uint32_t alpha_stride = src_header->stride / 2;
                 for(uint32_t y = 0; y < height; y++) {
                     if(!file_read_line(file, src_temp, alpha_stride)) {
@@ -705,7 +705,7 @@ static lv_draw_buf_t * create_dest_buf(uint32_t width, uint32_t height, lv_color
 }
 
 /**
- * Decode an image using the vg_lite gpu.
+ * Декодируйте изображение с помощью графического процессора vg_lite.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -726,8 +726,8 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
                 const bool premultiply = src_premultiplied ? false : dsc->args.premultiply;
 
                 /**
-                 * Since lv_draw_buf_from_image automatically calculates the stride,
-                 * we need to obtain the original stride information.
+                 * Поскольку lv_draw_buf_from_image автоматически рассчитывает шаг,
+                 * нам нужно получить исходную информацию о шаге.
                  */
                 src_buf.header.stride = get_image_stride(&((lv_image_dsc_t *)dsc->src)->header);
 
@@ -783,7 +783,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
                     return LV_RESULT_INVALID;
                 }
 
-                /* get real src header */
+                /* получить реальный заголовок src */
                 lv_image_header_t src_header;
                 uint32_t header_br = 0;
                 fs_res = lv_fs_read(&file, &src_header, sizeof(src_header), &header_br);
@@ -857,10 +857,10 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
     if(dsc->args.no_cache) return res;
 
-    /*If the image cache is disabled, just return the decoded image*/
+    /*Если кэш изображений отключен, просто верните декодированное изображение.*/
     if(!lv_image_cache_is_enabled()) return res;
 
-    /*Add the decoded image to the cache*/
+    /*Добавьте декодированное изображение в кеш*/
     if(res == LV_RESULT_OK) {
         lv_image_cache_data_t search_key;
         search_key.src_type = dsc->src_type;
@@ -882,7 +882,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     if(dsc->args.no_cache || !lv_image_cache_is_enabled()) lv_draw_buf_destroy((lv_draw_buf_t *)dsc->decoded);
 }

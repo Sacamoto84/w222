@@ -109,12 +109,12 @@ static void event_handler_swap(lv_event_t * e)
 
 void lv_example_list_2(void)
 {
-    /*Create a list*/
+    /*Создать список*/
     list1 = lv_list_create(lv_screen_active());
     lv_obj_set_size(list1, lv_pct(60), lv_pct(100));
     lv_obj_set_style_pad_row(list1, 5, 0);
 
-    /*Add buttons to the list*/
+    /*Добавляем кнопки в список*/
     lv_obj_t * btn;
     int i;
     for(i = 0; i < 15; i++) {
@@ -126,11 +126,11 @@ void lv_example_list_2(void)
         lv_label_set_text_fmt(lab, "Item %d", i);
     }
 
-    /*Select the first button by default*/
+    /*Выберите первую кнопку по умолчанию*/
     currentButton = lv_obj_get_child(list1, 0);
     lv_obj_add_state(currentButton, LV_STATE_CHECKED);
 
-    /*Create a second list with up and down buttons*/
+    /*Создайте второй список с кнопками вверх и вниз.*/
     list2 = lv_list_create(lv_screen_active());
     lv_obj_set_size(list2, lv_pct(40), lv_pct(100));
     lv_obj_align(list2, LV_ALIGN_TOP_RIGHT, 0, 0);

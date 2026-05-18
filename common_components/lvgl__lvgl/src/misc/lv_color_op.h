@@ -40,53 +40,53 @@ struct _lv_color_filter_dsc_t {
  **********************/
 
 /**
- * Mix two colors with a given ratio.
- * @param c1 the first color to mix (usually the foreground)
- * @param c2 the second color to mix (usually the background)
- * @param mix The ratio of the colors. 0: full `c2`, 255: full `c1`, 127: half `c1` and half`c2`
- * @return the mixed color
+ * Смешайте два цвета в заданном соотношении.
+ * @param c1 первый цвет, который нужно смешать (обычно передний план)
+ * @param c2 второй цвет для смешивания (обычно фон)
+ * @param mix Соотношение цветов. 0: полный `c2`, 255: полный `c1`, 127: половина`c1`и половина `c2`
+ * @return смешанный цвет
  */
 lv_color_t LV_ATTRIBUTE_FAST_MEM lv_color_mix(lv_color_t c1, lv_color_t c2, uint8_t mix);
 
 /**
  *
- * @param fg
- * @param bg
+ * @param фг
+ * @param бг
  * @return
- * @note Use bg.alpha in the return value
- * @note Use fg.alpha as mix ratio
+ * @note Используйте bg.alpha в возвращаемом значении
+ * @note Используйте fg.alpha в качестве соотношения смешивания.
  */
 lv_color32_t lv_color_mix32(lv_color32_t fg, lv_color32_t bg);
 
 /**
- * @brief Blends two premultiplied ARGB8888 colors while maintaining correct alpha compositing.
+ * @brief Смешивает два предварительно умноженных цвета ARGB8888, сохраняя при этом правильную альфа-композицию.
  *
- * This function correctly blends the foreground (fg) and background (bg) colors,
- * ensuring that the output remains in a premultiplied alpha format.
+ * Эта функция правильно смешивает цвета переднего плана (fg) и фона (bg).
+ * обеспечение того, чтобы выходные данные оставались в предварительно умноженном альфа-формате.
  *
- * @param fg The foreground color in premultiplied ARGB8888 format.
- * @param bg The background color in premultiplied ARGB8888 format.
- * @return The resulting blended color in premultiplied ARGB8888 format.
+ * @param fg Цвет переднего плана в предварительно умноженном формате ARGB8888.
+ * @param bg Цвет фона в предварительно умноженном формате ARGB8888.
+ * @return Полученный смешанный цвет в предварительно умноженном формате ARGB8888.
  *
- * @note If the foreground is fully opaque, it is returned as is.
- * @note If the foreground is fully transparent, the background is returned.
+ * @note Если передний план полностью непрозрачен, он возвращается как есть.
+ * @note Если передний план полностью прозрачен, возвращается фон.
  */
 lv_color32_t lv_color_mix32_premultiplied(lv_color32_t fg, lv_color32_t bg);
 
 /**
- * Get the brightness of a color
- * @param c   a color
- * @return brightness in range [0..255]
+ * Получить яркость цвета
+ * @param c   цвет
+ * @return яркость в диапазоне [0..255]
  */
 uint8_t lv_color_brightness(lv_color_t c);
 
 void lv_color_filter_dsc_init(lv_color_filter_dsc_t * dsc, lv_color_filter_cb_t cb);
 
 /**
- * Blend two colors that have not been pre-multiplied using their alpha values
- * @param fg the foreground color
- * @param bg the background color
- * @return result color
+ * Смешайте два цвета, которые не были предварительно умножены, используя их альфа-значения.
+ * @param fg цвет переднего плана
+ * @param bg цвет фона
+ * @return цвет результата
  */
 lv_color32_t lv_color_over32(lv_color32_t fg, lv_color32_t bg);
 
@@ -99,7 +99,7 @@ lv_color32_t lv_color_over32(lv_color32_t fg, lv_color32_t bg);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_COLOR_OP_H*/

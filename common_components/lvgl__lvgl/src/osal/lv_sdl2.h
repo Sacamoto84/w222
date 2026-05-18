@@ -49,7 +49,7 @@ typedef struct {
 #endif /*LV_USE_OS == LV_OS_SDL2*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SDL2_H*/

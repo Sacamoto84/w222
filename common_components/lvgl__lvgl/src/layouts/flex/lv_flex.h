@@ -30,7 +30,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Can't include lv_obj.h because it includes this header file*/
+/*Невозможно включить lv_obj.h, поскольку он включает этот заголовочный файл.*/
 
 typedef enum {
     LV_FLEX_ALIGN_START,
@@ -61,19 +61,19 @@ typedef enum {
  **********************/
 
 /**
- * Initialize a flex layout to default values
+ * Инициализировать гибкий макет со значениями по умолчанию
  */
 void lv_flex_init(void);
 
 /**
- * Set how the item should flow
+ * Установите, как элемент должен течь
  * @param obj pointer to an object. The parent must have flex layout else nothing will happen.
  * @param flow an element of `lv_flex_flow_t`.
  */
 void lv_obj_set_flex_flow(lv_obj_t * obj, lv_flex_flow_t flow);
 
 /**
- * Set how to place (where to align) the items and tracks
+ * Установите, как размещать (где выравнивать) элементы и дорожки.
  * @param obj pointer to an object. The parent must have flex layout else nothing will happen.
  * @param main_place where to place the items on main axis (in their track). Any value of `lv_flex_align_t`.
  * @param cross_place where to place the item in their track on the cross axis. `LV_FLEX_ALIGN_START/END/CENTER`
@@ -83,7 +83,7 @@ void lv_obj_set_flex_align(lv_obj_t * obj, lv_flex_align_t main_place, lv_flex_a
                            lv_flex_align_t track_cross_place);
 
 /**
- * Sets the width or height (on main axis) to grow the object in order fill the free space
+ * Устанавливает ширину или высоту (по главной оси) для увеличения объекта, чтобы заполнить свободное пространство.
  * @param obj pointer to an object. The parent must have flex layout else nothing will happen.
  * @param grow a value to set how much free space to take proportionally to other growing items.
  */
@@ -96,7 +96,7 @@ void lv_obj_set_flex_grow(lv_obj_t * obj, uint8_t grow);
 #endif  /*LV_USE_FLEX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FLEX_H*/

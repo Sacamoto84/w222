@@ -78,7 +78,7 @@ bool pxp_buf_aligned(const void * buf, uint32_t stride);
 #endif /*LV_USE_PXP*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PXP_UTILS_H*/

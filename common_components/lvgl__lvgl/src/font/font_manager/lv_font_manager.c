@@ -26,26 +26,26 @@
  *      TYPEDEFS
  **********************/
 
-/* font manager object */
+/* объект диспетчера шрифтов */
 struct _lv_font_manager_t {
-    lv_ll_t refer_ll; /* font reference list */
-    lv_ll_t rec_ll; /* lvgl font record list */
-    lv_ll_t src_ll; /* font src record list */
+    lv_ll_t refer_ll; /* список ссылок на шрифты */
+    lv_ll_t rec_ll; /* список записей шрифтов lvgl */
+    lv_ll_t src_ll; /* список записей источника шрифта */
     lv_font_manager_recycle_t * recycle_manager;
 };
 
-/* font reference node */
+/* узел ссылки на шрифт */
 typedef struct _lv_font_refer_node_t {
     lv_font_t * font_p;
     lv_font_info_t ft_info;
-    char name[LV_FONT_MANAGER_NAME_MAX_LEN]; /* name buffer */
-    int ref_cnt; /* reference count */
+    char name[LV_FONT_MANAGER_NAME_MAX_LEN]; /* буфер имен */
+    int ref_cnt; /* счетчик ссылок */
 } lv_font_refer_node_t;
 
-/* lvgl font record node */
+/* узел записи шрифта lvgl */
 typedef struct _lv_font_rec_node_t {
-    lv_font_t font; /* lvgl font info */
-    const lv_font_refer_node_t * refer_node_p; /* referenced font resource */
+    lv_font_t font; /* информация о шрифте lvgl */
+    const lv_font_refer_node_t * refer_node_p; /* указанный ресурс шрифта */
 } lv_font_rec_node_t;
 
 typedef struct _lv_font_src_t {
@@ -110,16 +110,16 @@ bool lv_font_manager_delete(lv_font_manager_t * manager)
 {
     LV_ASSERT_NULL(manager);
 
-    /* Resource leak check */
+    /* Проверка утечки ресурсов */
     if(lv_font_manager_check_resource(manager)) {
         LV_LOG_ERROR("unfreed resource detected, delete failed!");
         return false;
     }
 
-    /* clean recycle_manager */
+    /* очистить recycle_manager */
     lv_font_manager_recycle_delete(manager->recycle_manager);
 
-    /* clean path map */
+    /* чистая карта пути */
     lv_font_src_t * font_src;
     LV_LL_READ(&manager->src_ll, font_src) {
         LV_LOG_INFO("remove src: %s", font_src->name);
@@ -217,7 +217,7 @@ lv_font_t * lv_font_manager_create_font(lv_font_manager_t * manager,
         ret_font = lv_font_manager_create_font_single(manager, &ft_info);
     }
 
-    /* Append fallback font to make LV_SYMBOL displayable */
+    /* Добавьте резервный шрифт, чтобы сделать LV_SYMBOL отображаемым. */
     lv_font_t * cur_font = ret_font;
     while(cur_font) {
         if(cur_font->fallback == NULL) {
@@ -257,15 +257,15 @@ static lv_font_t * lv_font_manager_create_font_single(lv_font_manager_t * manage
         return NULL;
     }
 
-    /* add font record node */
+    /* добавить узел записи шрифта */
     lv_font_rec_node_t * rec_node = lv_ll_ins_head(&manager->rec_ll);
     LV_ASSERT_MALLOC(rec_node);
     lv_memzero(rec_node, sizeof(lv_font_rec_node_t));
 
-    /* copy font data */
+    /* скопировать данные шрифта */
     rec_node->font = *refer_node->font_p;
 
-    /* record reference font */
+    /* записать эталонный шрифт */
     rec_node->refer_node_p = refer_node;
 
     LV_LOG_INFO("success");
@@ -282,7 +282,7 @@ static bool lv_font_manager_delete_font_single(lv_font_manager_t * manager, lv_f
         return false;
     }
 
-    /* check font is created by font manager */
+    /* проверить шрифт создан менеджером шрифтов */
     lv_font_rec_node_t * rec_node = lv_font_manager_search_rec_node(manager, font);
     if(!rec_node) {
         LV_LOG_WARN("NO record found for font: %p(%d),"
@@ -294,7 +294,7 @@ static bool lv_font_manager_delete_font_single(lv_font_manager_t * manager, lv_f
     bool retval = lv_font_manager_drop_font(manager, rec_node->refer_node_p);
     LV_ASSERT(retval);
 
-    /* free rec_node */
+    /* бесплатно */
     lv_ll_remove(&manager->rec_ll, rec_node);
     lv_free(rec_node);
 
@@ -341,12 +341,12 @@ static lv_font_t * lv_font_manager_create_font_family(lv_font_manager_t * manage
         lv_font_t * cur_font = lv_font_manager_create_font_single(manager, &tmp_ft_info);
 
         if(cur_font) {
-            /* save first font pointer */
+            /* сохранить первый указатель шрифта */
             if(!first_font) {
                 first_font = cur_font;
             }
 
-            /* append font fallback */
+            /* добавить резервный шрифт */
             if(pre_font) {
                 pre_font->fallback = cur_font;
             }
@@ -354,7 +354,7 @@ static lv_font_t * lv_font_manager_create_font_family(lv_font_manager_t * manage
             pre_font = cur_font;
         }
 
-        /* stop */
+        /* стоп */
         if(*family_str == '\0') {
             break;
         }
@@ -364,7 +364,7 @@ static lv_font_t * lv_font_manager_create_font_family(lv_font_manager_t * manage
             break;
         }
 
-        /* skip ',' */
+        /* пропустить ',' */
         family_str++;
     }
 
@@ -438,7 +438,7 @@ static bool lv_font_manager_check_resource(lv_font_manager_t * manager)
 {
     LV_ASSERT_NULL(manager);
 
-    /* Check the recorded font */
+    /* Проверьте записанный шрифт */
     lv_ll_t * rec_ll = &manager->rec_ll;
     uint32_t rec_ll_len = lv_ll_get_len(rec_ll);
     if(rec_ll_len) {
@@ -454,7 +454,7 @@ static bool lv_font_manager_check_resource(lv_font_manager_t * manager)
         }
     }
 
-    /* Check the recorded font resources created by font creator */
+    /* Проверьте записанные ресурсы шрифтов, созданные создателем шрифта. */
     lv_ll_t * refer_ll = &manager->refer_ll;
     uint32_t refer_ll_len = lv_ll_get_len(refer_ll);
     if(refer_ll_len) {
@@ -469,7 +469,7 @@ static bool lv_font_manager_check_resource(lv_font_manager_t * manager)
         }
     }
 
-    /* Check resource leak */
+    /* Проверьте утечку ресурсов */
     bool has_resource = (rec_ll_len || refer_ll_len);
 
     return has_resource;
@@ -539,15 +539,15 @@ static lv_font_t * lv_font_manager_create_font_wrapper(lv_font_manager_t * manag
 
     lv_font_t * font;
 
-    /* create font */
+    /* создать шрифт */
     font = lv_font_manager_recycle_get_reuse(manager->recycle_manager, ft_info);
 
-    /* get reuse font from recycle */
+    /* получить повторно использовать шрифт из корзины */
     if(font) {
         return font;
     }
 
-    /* cache miss */
+    /* промах в кэше */
 
     const lv_font_src_t * font_src = lv_font_manager_get_src(manager, ft_info->name);
     if(!font_src) {
@@ -578,7 +578,7 @@ static const lv_font_refer_node_t * lv_font_manager_get_font(lv_font_manager_t *
     LV_ASSERT_NULL(manager);
     LV_ASSERT_NULL(ft_info);
 
-    /* check refer_node is existed */
+    /* проверьте, существует ли refer_node */
     lv_font_refer_node_t * refer_node = lv_font_manager_search_refer_node(manager, ft_info);
     if(refer_node) {
         refer_node->ref_cnt++;
@@ -586,7 +586,7 @@ static const lv_font_refer_node_t * lv_font_manager_get_font(lv_font_manager_t *
         return refer_node;
     }
 
-    /* not found refer_node, start to create font */
+    /* не найден refer_node, начните создавать шрифт */
 
     lv_font_t * font = lv_font_manager_create_font_wrapper(manager, ft_info);
 
@@ -594,7 +594,7 @@ static const lv_font_refer_node_t * lv_font_manager_get_font(lv_font_manager_t *
         return NULL;
     }
 
-    /* add refer_node to refer_ll */
+    /* добавить refer_node к refer_ll */
     refer_node = lv_ll_ins_head(&manager->refer_ll);
     LV_ASSERT_MALLOC(refer_node);
     lv_memzero(refer_node, sizeof(lv_font_refer_node_t));
@@ -604,7 +604,7 @@ static const lv_font_refer_node_t * lv_font_manager_get_font(lv_font_manager_t *
     const lv_font_src_t * font_src = lv_font_manager_get_src(manager, ft_info->name);
     LV_ASSERT_NULL(font_src);
 
-    /* copy font data */
+    /* скопировать данные шрифта */
     refer_node->font_p = font;
     refer_node->ft_info = *ft_info;
     refer_node->ft_info.name = refer_node->name;
@@ -620,7 +620,7 @@ static bool lv_font_manager_drop_font(lv_font_manager_t * manager, const lv_font
     LV_ASSERT_NULL(manager);
     LV_ASSERT_NULL(node);
 
-    /* Check refer_node is existed */
+    /* Проверьте, существует ли refer_node. */
     lv_font_refer_node_t * refer_node = lv_font_manager_search_refer_node(manager, &node->ft_info);
     if(!refer_node) {
         LV_LOG_WARN("NO record found for font: %s(%d),"
@@ -631,16 +631,16 @@ static bool lv_font_manager_drop_font(lv_font_manager_t * manager, const lv_font
 
     refer_node->ref_cnt--;
 
-    /* If ref_cnt is > 0, no need to delete font */
+    /* Если ref_cnt > 0, шрифт удалять не нужно. */
     if(refer_node->ref_cnt > 0) {
         LV_LOG_INFO("refer_node existed, ref_cnt-- = %d", refer_node->ref_cnt);
         return true;
     }
 
-    /* if ref_cnt is about to be 0, free font resource */
+    /* если ref_cnt скоро будет равен 0, бесплатный ресурс шрифта */
     lv_font_manager_delete_font_wrapper(manager, refer_node);
 
-    /* free refer_node */
+    /* бесплатно */
     lv_ll_remove(&manager->refer_ll, refer_node);
     lv_free(refer_node);
 

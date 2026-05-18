@@ -115,7 +115,7 @@ void lv_demo_widgets_analytics_create(lv_obj_t * parent)
     lv_obj_t * chart2_hor_scale = lv_obj_get_sibling(chart2, 1);
     lv_obj_set_style_pad_hor(chart2_hor_scale, lv_chart_get_first_point_center_offset(chart2), 0);
 
-    /*Create all 3 scales first to have their size resolved*/
+    /*Сначала создайте все 3 шкалы, чтобы определить их размер.*/
     scale1 = create_scale_box(parent, "Monthly Target", "Revenue: -", "Sales: -", "Costs: -");
     lv_obj_add_flag(lv_obj_get_parent(scale1), LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
 
@@ -145,7 +145,7 @@ void lv_demo_widgets_analytics_create(lv_obj_t * parent)
     lv_anim_set_values(&a, 20, 100);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
 
-    /*Scale 1*/
+    /*Масштаб 1*/
     lv_scale_set_mode(scale1, LV_SCALE_MODE_ROUND_OUTER);
     lv_obj_set_style_pad_all(scale1, 30, 0);
     lv_obj_t * arc;
@@ -196,7 +196,7 @@ void lv_demo_widgets_analytics_create(lv_obj_t * parent)
     lv_anim_set_reverse_duration(&a, 1800);
     lv_anim_start(&a);
 
-    /*Scale 2*/
+    /*Масштаб 2*/
     static const char * scale2_text[] = {"0", "10", "20", "30", "40", "50", "60", "70", "80", "90", NULL};
     lv_scale_set_angle_range(scale2, 360);
     lv_scale_set_text_src(scale2, scale2_text);
@@ -240,7 +240,7 @@ void lv_demo_widgets_analytics_create(lv_obj_t * parent)
     lv_timer_t * scale2_timer = lv_timer_create(scale2_timer_cb, 100, scale2);
     lv_obj_add_event_cb(scale2, delete_timer_event_cb, LV_EVENT_DELETE, scale2_timer);
 
-    /*Scale 3*/
+    /*Масштаб 3*/
     lv_scale_set_range(scale3, 10, 60);
     lv_scale_set_total_tick_count(scale3, 21);
     lv_scale_set_major_tick_every(scale3, 4);
@@ -426,16 +426,16 @@ static void scale3_size_changed_event_cb(lv_event_t * e)
 {
     LV_UNUSED(e);
 
-    /* the center of the scale is half of the smaller dimension */
+    /* центр шкалы равен половине меньшего размера */
     int32_t width = lv_obj_get_width(scale3);
     int32_t height = lv_obj_get_height(scale3);
     int32_t minor_dim = LV_MIN(width, height);
     int32_t minor_dim_half = minor_dim / 2;
 
-    /* Update needle position */
+    /* Обновить положение иглы */
     lv_obj_align(scale3_needle, LV_ALIGN_TOP_LEFT, minor_dim_half, minor_dim_half);
 
-    /* Update labels position */
+    /* Обновить положение меток */
     lv_obj_align(scale3_mbps_label, LV_ALIGN_TOP_LEFT, minor_dim_half, minor_dim * 55 / 100);
 }
 
@@ -572,7 +572,7 @@ static void chart_event_cb(lv_event_t * e)
     lv_obj_t * obj = lv_event_get_target(e);
 
     if(code == LV_EVENT_PRESSED || code == LV_EVENT_RELEASED) {
-        lv_obj_invalidate(obj); /*To make the value boxes visible*/
+        lv_obj_invalidate(obj); /*Чтобы сделать поля значений видимыми*/
     }
     else if(code == LV_EVENT_DRAW_TASK_ADDED) {
         lv_draw_task_t * draw_task = lv_event_get_param(e);

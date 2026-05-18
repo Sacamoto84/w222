@@ -45,7 +45,7 @@ LV_EXPORT_CONST_INT(LV_LABEL_TEXT_SELECTION_OFF);
  *      TYPEDEFS
  **********************/
 
-/** Long mode behaviors. Used in 'lv_label_ext_t'*/
+/** Поведение в длительном режиме. Используется в 'lv_label_ext_t'*/
 typedef enum {
     LV_LABEL_LONG_MODE_WRAP,             /**< Keep the object width, wrap lines longer than object width and expand the object height*/
     LV_LABEL_LONG_MODE_DOTS,             /**< Keep the size and write dots at the end if the text is too long*/
@@ -71,57 +71,57 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_label_class;
  **********************/
 
 /**
- * Create a label object
+ * Создать объект метки
  * @param parent    pointer to an object, it will be the parent of the new label.
  * @return          pointer to the created button
  */
 lv_obj_t * lv_label_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set a new text for a label. Memory will be allocated to store the text by the label.
+ * Установите новый текст для метки. Для хранения текста метки будет выделена память.
  * @param obj           pointer to a label object
  * @param text          '\0' terminated character string. NULL to refresh with the current text.
  * @note If `LV_USE_ARABIC_PERSIAN_CHARS` is enabled the text will be modified to have the correct Arabic
- * characters in it.
+ * персонажи в нем.
  */
 void lv_label_set_text(lv_obj_t * obj, const char * text);
 
 /**
- * Set a new formatted text for a label. Memory will be allocated to store the text by the label.
+ * Установите новый форматированный текст для метки. Для хранения текста метки будет выделена память.
  * @param obj           pointer to a label object
  * @param fmt           `printf`-like format string
- * Example:
+ * Пример:
  * @code
- * lv_label_set_text_fmt(label1, "%d user", user_num);
+ * lv_label_set_text_fmt (метка1, "Пользователь %d", user_num );
  * @endcode
  * @note If `LV_USE_ARABIC_PERSIAN_CHARS` is enabled the text will be modified to have the correct Arabic characters in it.
  */
 void lv_label_set_text_fmt(lv_obj_t * obj, const char * fmt, ...) LV_FORMAT_ATTRIBUTE(2, 3);
 
 /**
- * Set a new formatted text for a label. Memory will be allocated to store the text by the label.
+ * Установите новый форматированный текст для метки. Для хранения текста метки будет выделена память.
  * @param obj           pointer to a label object
  * @param fmt           `printf`-like format string
  * @param args          variadic arguments list
  *
- * Example:
+ * Пример:
  * @code
- * va_list args;
- * va_start(args, fmt);
- * lv_label_set_text_vfmt(label1, fmt, args);
- * va_end(args);
+ * va_list арг;
+ * va_start (аргументы, fmt);
+ * lv_label_set_text_vfmt (метка1, fmt, args);
+ * va_end (аргументы);
  * @endcode
  * @note It ignores `LV_USE_ARABIC_PERSIAN_CHARS`
  */
 void lv_label_set_text_vfmt(lv_obj_t * obj, const char * fmt, va_list args);
 
 /**
- * Set a static text. It will not be saved by the label so the 'text' variable
- * has to be 'alive' while the label exists.
+ * Установите статический текст. Он не будет сохранен с помощью метки, поэтому переменная text
+ * должен быть «живым», пока существует метка.
  * @param obj           pointer to a label object
  * @param text          pointer to a text. NULL to refresh with the current text.
  * @note It ignores `LV_USE_ARABIC_PERSIAN_CHARS`
@@ -129,29 +129,29 @@ void lv_label_set_text_vfmt(lv_obj_t * obj, const char * fmt, va_list args);
 void lv_label_set_text_static(lv_obj_t * obj, const char * text);
 
 /**
- * Set the behavior of the label with text longer than the object size
+ * Установите поведение метки с текстом, длина которого превышает размер объекта.
  * @param obj           pointer to a label object
  * @param long_mode     the new mode from 'lv_label_long_mode' enum.
- *                      In LV_LONG_WRAP/DOT/SCROLL/SCROLL_CIRC the size of the label should be set AFTER this function
+ *                      В LV_LONG_WRAP/DOT/SCROLL/SCROLL_CIRC размер метки должен быть установлен AFTER этой функцией
  */
 void lv_label_set_long_mode(lv_obj_t * obj, lv_label_long_mode_t long_mode);
 
 /**
- * Set where text selection should start
+ * Установите, где должно начинаться выделение текста
  * @param obj       pointer to a label object
  * @param index     character index from where selection should start. `LV_LABEL_TEXT_SELECTION_OFF` for no selection
  */
 void lv_label_set_text_selection_start(lv_obj_t * obj, uint32_t index);
 
 /**
- * Set where text selection should end
+ * Установите, где должно закончиться выделение текста
  * @param obj       pointer to a label object
  * @param index     character index where selection should end. `LV_LABEL_TEXT_SELECTION_OFF` for no selection
  */
 void lv_label_set_text_selection_end(lv_obj_t * obj, uint32_t index);
 
 /**
- * Enable the recoloring by in-line commands
+ * Включите перекрашивание с помощью встроенных команд
  * @param obj           pointer to a label object
  * @param en            true: enable recoloring, false: disable
  * Example: "This is a #ff0000 red# word"
@@ -161,8 +161,8 @@ void lv_label_set_recolor(lv_obj_t * obj, bool en);
 #if LV_USE_TRANSLATION
 
 /**
- * Assign a translation tag for this label. Memory will be allocated to store the tag by the label.
- * The label text will automatically update when the language is changed via `lv_translation_set_language`.
+ * Назначьте тег перевода для этой метки. Для хранения тега по метке будет выделена память.
+ * Текст метки будет автоматически обновляться при изменении языка с помощью `lv_translation_set_language`.
  * @param obj           pointer to a label object
  * @param tag          '\0' terminated character string.
  */
@@ -172,44 +172,44 @@ void lv_label_set_translation_tag(lv_obj_t * obj, const char * tag);
 
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the text of a label
+ * Получить текст метки
  * @param obj       pointer to a label object
  * @return          the text of the label
  */
 char * lv_label_get_text(const lv_obj_t * obj);
 
 /**
- * Get the long mode of a label
+ * Получить длинный режим метки
  * @param obj       pointer to a label object
  * @return          the current long mode
  */
 lv_label_long_mode_t lv_label_get_long_mode(const lv_obj_t * obj);
 
 /**
- * Get the relative x and y coordinates of a letter
+ * Получить относительные координаты x и y буквы
  * @param obj       pointer to a label object
  * @param char_id   index of the character [0 ... text length - 1].
- *                  Expressed in character index, not byte index (different in UTF-8)
+ *                  Выражается в индексе символов, а не индексе байтов (отличается в UTF -8)
  * @param pos       store the result here (E.g. index = 0 gives 0;0 coordinates if the text if aligned to the left)
  */
 void lv_label_get_letter_pos(const lv_obj_t * obj, uint32_t char_id, lv_point_t * pos);
 
 /**
- * Get the index of letter on a relative point of a label.
+ * Получите индекс буквы в относительной точке метки.
  * @param obj       pointer to label object
  * @param pos_in    pointer to point with coordinates on a the label
  * @param bidi      whether to use bidi processed
  * @return          The index of the letter on the 'pos_p' point (E.g. on 0;0 is the 0. letter if aligned to the left)
- *                  Expressed in character index and not byte index (different in UTF-8)
+ *                  Выражается в символьном индексе, а не в байтовом индексе (отличается в UTF -8)
  */
 uint32_t lv_label_get_letter_on(const lv_obj_t * obj, lv_point_t * pos_in, bool bidi);
 
 /**
- * Check if a character is drawn under a point.
+ * Проверьте, нарисован ли символ под точкой.
  * @param obj       pointer to a label object
  * @param pos       Point to check for character under
  * @return          whether a character is drawn under the point
@@ -238,26 +238,26 @@ uint32_t lv_label_get_text_selection_end(const lv_obj_t * obj);
 bool lv_label_get_recolor(const lv_obj_t * obj);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 #if LV_USE_OBSERVER
 /**
- * Bind an integer, string, or pointer Subject to a Label.
+ * Привяжите целое число, строку или указатель к метке.
  * @param obj       pointer to Label
  * @param subject   pointer to Subject
  * @param fmt       optional printf-like format string with 1 format specifier (e.g. "%d °C")
- *                  or NULL to bind to the value directly.
+ *                  или NULL для прямой привязки к значению.
  * @return          pointer to newly-created Observer
  * @note            If `fmt == NULL` strings and pointers (`\0` terminated string) will be shown
- *                  as text as they are, integers as %d, floats as %0.1f
+ *                  в виде текста, целые числа — %d, числа с плавающей запятой — %0.1f.
  */
 lv_observer_t * lv_label_bind_text(lv_obj_t * obj, lv_subject_t * subject, const char * fmt);
 #endif
 
 
 /**
- * Insert a text to a label. The label text cannot be static.
+ * Вставьте текст в метку. Текст метки не может быть статическим.
  * @param obj       pointer to a label object
  * @param pos       character index to insert. Expressed in character index and not byte index.
  *                  0: before first char. LV_LABEL_POS_LAST: after last char.
@@ -266,7 +266,7 @@ lv_observer_t * lv_label_bind_text(lv_obj_t * obj, lv_subject_t * subject, const
 void lv_label_ins_text(lv_obj_t * obj, uint32_t pos, const char * txt);
 
 /**
- * Delete characters from a label. The label text cannot be static.
+ * Удаление символов из метки. Текст метки не может быть статическим.
  * @param obj       pointer to a label object
  * @param pos       character index from where to cut. Expressed in character index and not byte index.
  *                  0: start in front of the first character
@@ -283,7 +283,7 @@ void lv_label_cut_text(lv_obj_t * obj, uint32_t pos, uint32_t cnt);
 #endif /*LV_USE_LABEL*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LABEL_H*/

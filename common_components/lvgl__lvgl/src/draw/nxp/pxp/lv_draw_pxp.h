@@ -76,7 +76,7 @@ void lv_draw_pxp_layer(lv_draw_task_t * t);
 #endif /*LV_USE_PXP*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_PXP_H*/

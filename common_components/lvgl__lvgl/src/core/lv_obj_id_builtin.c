@@ -62,7 +62,7 @@ void lv_obj_assign_id(const lv_obj_class_t * class_p, lv_obj_t * obj)
         if(class_p == info->class_p) break;
     }
 
-    /*Resize array*/
+    /*Изменить размер массива*/
     if(i == global->objid_count) {
         void * array = lv_realloc(global->objid_array, sizeof(class_info_t) * (global->objid_count + 1));
         LV_ASSERT_MALLOC(array);

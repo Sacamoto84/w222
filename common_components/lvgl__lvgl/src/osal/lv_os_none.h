@@ -37,7 +37,7 @@ typedef int lv_thread_sync_t;
 #endif /*LV_USE_OS == LV_OS_NONE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OS_NONE_H*/

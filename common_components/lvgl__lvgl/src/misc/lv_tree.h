@@ -1,6 +1,6 @@
 /**
  * @file lv_tree.h
- * Tree. The tree nodes are dynamically allocated by the 'lv_mem' module.
+ * Дерево. Узлы дерева стремятся привлечь модуль lv_mem.
  */
 
 #ifndef LV_TREE_H
@@ -32,8 +32,8 @@ typedef void (*lv_tree_constructor_cb_t)(const lv_tree_class_t * class_p, lv_tre
 typedef void (*lv_tree_destructor_cb_t)(const lv_tree_class_t * class_p, lv_tree_node_t * node);
 
 /**
- * Describe the common methods of every object.
- * Similar to a C++ class.
+ * Опишите общие методы каждого объекта.
+ * Аналогично классу C++.
  */
 struct _lv_tree_class_t {
     const lv_tree_class_t * base_class;
@@ -42,7 +42,7 @@ struct _lv_tree_class_t {
     lv_tree_destructor_cb_t destructor_cb;
 };
 
-/** Description of a tree node*/
+/** Описание узла дерева*/
 struct _lv_tree_node_t {
     lv_tree_node_t * parent;
     lv_tree_node_t ** children;
@@ -68,28 +68,28 @@ typedef void (*lv_tree_after_cb_t)(const lv_tree_node_t * node, void * user_data
 extern const lv_tree_class_t lv_tree_node_class;
 
 /**
- * @brief Create a tree node
- * @param class_p pointer to a class of the node
- * @param parent pointer to the parent node (or NULL if it's the root node)
- * @return pointer to the new node
+ * @brief Создать узел дерева
+ * @param class_p указатель на класс узла
+ * @param parent указатель на родительский узел (или NULL, если это корневой узел)
+ * @return указатель на новый узел
  */
 lv_tree_node_t * lv_tree_node_create(const lv_tree_class_t * class_p, lv_tree_node_t * parent);
 
 /**
- * @brief Delete a tree node and all its children recursively
- * @param node pointer to the node to delete
+ * @brief Рекурсивно удалить узел дерева и все его дочерние элементы
+ * @param node указатель на узел, который нужно удалить
  */
 void lv_tree_node_delete(lv_tree_node_t * node);
 
 /**
- * @brief Walk the tree recursively and call a callback function on each node
- * @param node pointer to the root node of the tree
- * @param mode LV_TREE_WALK_PRE_ORDER or LV_TREE_WALK_POST_ORDER
- * @param cb callback function to call on each node
- * @param bcb callback function to call before visiting a node
- * @param acb callback function to call after visiting a node
- * @param user_data user data to pass to the callback functions
- * @return true: traversal is finished; false: traversal broken
+ * @brief Рекурсивно пройдитесь по дереву и вызовите функцию обратного вызова на каждом узле.
+ * @param node указатель на корневой узел дерева
+ * Режим @param LV_TREE_WALK_PRE_ORDER или LV_TREE_WALK_POST_ORDER
+ * @param cb функция обратного вызова для вызова каждого узла
+ * @param bcb функция обратного вызова для вызова перед посещением узла
+ * @param acb функция обратного вызова для вызова после посещения узла
+ * @param user_data пользовательские данные для передачи в функции обратного вызова
+ * @return true: обход завершен; false: обход нарушен
  */
 bool lv_tree_walk(const lv_tree_node_t * node,
                   lv_tree_walk_mode_t mode,
@@ -103,7 +103,7 @@ bool lv_tree_walk(const lv_tree_node_t * node,
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif

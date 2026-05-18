@@ -7,25 +7,25 @@
 
 static uint32_t MEM_SIZE = 0;
 
-// Cache size in bytes
+// Размер кэша в байтах
 #define CACHE_SIZE_BYTES 1000
 #define CACHE_EXPECTED_DATA_CNT 10
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     MEM_SIZE = lv_test_get_free_mem();
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     TEST_ASSERT_MEM_LEAK_LESS_THAN(MEM_SIZE, 64);
 }
 
 typedef struct {
     lv_cache_slot_size_t slot;
-    void * data; // malloced data
+    void * data; // распределенные данные
     int32_t key1;
     int32_t key2;
     uint32_t magic;
@@ -66,7 +66,7 @@ void test_cache_lru_rb_1(void)
     TEST_ASSERT_NOT_NULL(cache);
     void * record_data_ptr = NULL;
 
-    // create many node unless cache is full
+    // создать много узлов, если кеш не заполнен
     uint32_t curr_mem_size = 8;
     uint32_t curr_total_mem_size = 0;
     while(curr_total_mem_size < CACHE_SIZE_BYTES) {
@@ -76,14 +76,14 @@ void test_cache_lru_rb_1(void)
                                    .key2 = (int32_t)curr_mem_size + 1
                                  };
 
-        // acquire cache first
+        // сначала получить кэш
         lv_cache_entry_t * entry =
             lv_cache_acquire(cache, &search_key, NULL);
         if(entry != NULL) {
             continue;
         }
 
-        // if cache miss then add cache
+        // если кеш отсутствует, добавьте кеш
         entry = lv_cache_add(cache, &search_key, NULL);
         TEST_ASSERT_NOT_NULL(entry);
 
@@ -92,7 +92,7 @@ void test_cache_lru_rb_1(void)
 
         data->data = lv_malloc(data->slot.size);
 
-        // record data ptr when {key1 = 32, key2 = 33}.
+        // записать данные ptr, когда {key1 = 32, key2 = 33}.
         if(search_key.key1 == 32 && search_key.key2 == 33) {
             record_data_ptr = data->data;
         }
@@ -107,15 +107,15 @@ void test_cache_lru_rb_1(void)
     }
 
     /*
-     * allocated = 8 + 16 + 32 + 64 + 128 + 256 - 8 - 16 + 512 = 992
-     * free = 1000 - 992 = 8
-     * The last node size should be 1024, but the cache's max size is 1000. So new entry will be allocated failed and
-     * the loop will break.
+     * выделено = 8 + 16 + 32 + 64 + 128 + 256 - 8 - 16 + 512 = 992
+     * бесплатно = 1000 - 992 = 8
+     * Размер последнего узла должен быть 1024, но максимальный размер кэша равен 1000. Таким образом, новая запись будет выделена неудачно и
+     * петля разорвется.
      * */
     TEST_ASSERT_EQUAL(8, lv_cache_get_free_size(cache, NULL));
 
     /*
-     * Search entry {key1 = 32, key2 = 33}
+     * Поисковая запись {ключ1 = 32, ключ2 = 33}
      */
     test_data_t search_key32 = { .key1 = 32, .key2 = 33 };
     lv_cache_entry_t * entry_key32 =
@@ -125,28 +125,28 @@ void test_cache_lru_rb_1(void)
     TEST_ASSERT_EQUAL(record_data_ptr, cached_data_key32->data);
 
     /*
-     * Now drop the cache {key1 = 32, key2 = 33}. However, this entry is acquired once without release, so `drop`
-     * will not release the memory allocated by this entry.
+     * Теперь сбросьте кэш {key1 = 32, key2 = 33}. Однако эта запись приобретается один раз без выпуска, поэтому `drop`
+     * не освободит память, выделенную этой записью.
      */
     size_t mem_curr_free = lv_test_get_free_mem();
     lv_cache_drop(cache, &search_key32, NULL);
     /*
-     * Though it doesn't release the data, the entry and other structure has been freed.
-     * lv_rb_note_t (4 ptr + 1 int32 may align to 8 bit on 64 bit machine) + lv_ll (2 ptr + node_size).
-     * Also, the def heap has some other aligned attributes. It'll also affect the final result.
+     * Хотя данные не освобождаются, запись и другая структура были освобождены.
+     * lv_rb_note_t (4 пункта + 1 int32 могут быть выровнены по 8 битам на 64-битной машине) + lv_ll (2 пункта + node_size ).
+     * Кроме того, в куче определения есть некоторые другие выровненные атрибуты. Это также повлияет на конечный результат.
      */
     TEST_ASSERT_MEM_LEAK_LESS_THAN(
         mem_curr_free,
         sizeof(lv_rb_node_t) + sizeof(void *) +
         (sizeof(lv_ll_node_t *) + sizeof(lv_ll_node_t *)) +
-        32); // the last 32 is an error in memory allocating
+        32); // последние 32 — это ошибка выделения памяти
     mem_curr_free = lv_test_get_free_mem();
     lv_cache_release(cache, entry_key32, NULL);
     TEST_ASSERT_MEM_LEAK_LESS_THAN(
         mem_curr_free, lv_cache_entry_get_size(sizeof(test_data_t)) +
         sizeof(void *) + 32 + 32);
 
-    // Now the freed cache size should be 8 + 32 = 40
+    // Теперь размер освобожденного кэша должен составлять 8 + 32 = 40.
     TEST_ASSERT_EQUAL(40, lv_cache_get_free_size(cache, NULL));
 
     lv_cache_destroy(cache, NULL);
@@ -211,7 +211,7 @@ static void cache_eviction_test(lv_cache_t * cache, test_data_t * expected_data,
     TEST_ASSERT_EQUAL(new_expected_entry.key1, new_entry_data->key1);
     TEST_ASSERT_EQUAL(new_expected_entry.key2, new_entry_data->key2);
 
-    /* Check that we removed a previous entry */
+    /* Убедитесь, что мы удалили предыдущую запись */
     size_t original_entries_found_cnt = 0;
     for(size_t i = 0; i < expected_data_cnt; ++i) {
         lv_cache_entry_t * entry =
@@ -291,7 +291,7 @@ void test_cache_sc_da_eviction_second_chance_spares_referenced_entries(void)
         test_data_t * actual_data = lv_cache_entry_get_data(entry);
         TEST_ASSERT_EQUAL(expected_data[i].key1, actual_data->key1);
         TEST_ASSERT_EQUAL(expected_data[i].key2, actual_data->key2);
-        /* Do not release the entry so that it stays referenced*/
+        /* Не освобождайте запись, чтобы на нее оставалась ссылка*/
     }
 
     test_data_t new_expected_entry = {

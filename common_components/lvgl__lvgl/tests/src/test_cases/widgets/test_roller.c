@@ -64,7 +64,7 @@ void test_roller_get_option_str(void)
     char * expected_strs[] = {"One", "Two", "Three"};
     uint16_t expected_str_count = sizeof(expected_strs) / sizeof(expected_strs[0]);
 
-    /* Select the last option, index starts at 0 */
+    /* Выберите последний вариант, индекс начинается с 0. */
     uint16_t option_count = lv_roller_get_option_count(roller);
     TEST_ASSERT_EQUAL(expected_str_count, option_count);
 
@@ -91,14 +91,14 @@ void test_roller_get_selected_option(void)
     int16_t actual_index = 0;
     char * expected_index_str = "Three";
 
-    /* Select the last option, index starts at 0 */
+    /* Выберите последний вариант, индекс начинается с 0. */
     uint16_t option_count = lv_roller_get_option_count(roller);
     lv_roller_set_selected(roller, option_count - 1, LV_ANIM_OFF);
 
     actual_index = lv_roller_get_selected(roller);
     TEST_ASSERT_EQUAL(expected_index, actual_index);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller, actual_str, OPTION_BUFFER_SZ);
 
     TEST_ASSERT_EQUAL_STRING(expected_index_str, actual_str);
@@ -109,11 +109,11 @@ void test_roller_get_selected_option_truncated_buffer(void)
     char actual_str[OPTION_SMALL_BUFFER_SZ] = {0x00};
     char * expected_index_str = "Th";
 
-    /* Select the last option, index starts at 0 */
+    /* Выберите последний вариант, индекс начинается с 0. */
     uint16_t option_count = lv_roller_get_option_count(roller);
     lv_roller_set_selected(roller, option_count - 1, LV_ANIM_OFF);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller, actual_str, OPTION_SMALL_BUFFER_SZ);
 
     TEST_ASSERT_EQUAL_STRING(expected_index_str, actual_str);
@@ -125,7 +125,7 @@ void test_roller_infinite_mode_get_selected_option(void)
     int16_t expected_index = 9;
     int16_t actual_index = 0;
 
-    /* Select the last option of page 2 */
+    /* Выберите последний вариант на странице 2. */
     uint16_t option_count = lv_roller_get_option_count(roller_infinite);
     option_count = (option_count * 2) - 1;
     lv_roller_set_selected(roller_infinite, option_count, LV_ANIM_OFF);
@@ -133,19 +133,19 @@ void test_roller_infinite_mode_get_selected_option(void)
     actual_index = lv_roller_get_selected(roller_infinite);
     TEST_ASSERT_EQUAL(expected_index, actual_index);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller_infinite, actual_str, OPTION_BUFFER_SZ);
 
     TEST_ASSERT_EQUAL_STRING("Ten", actual_str);
     memset(actual_str, 0x00, OPTION_BUFFER_SZ);
 
-    /* Select the second option of page */
+    /* Выберите второй вариант страницы */
     lv_roller_set_selected(roller_infinite, 1, LV_ANIM_OFF);
 
     actual_index = lv_roller_get_selected(roller_infinite);
     TEST_ASSERT_EQUAL(1, actual_index);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller_infinite, actual_str, OPTION_BUFFER_SZ);
 
     TEST_ASSERT_EQUAL_STRING("Two", actual_str);
@@ -156,17 +156,17 @@ void test_roller_set_selected_option_str(void)
     bool selected;
     TEST_ASSERT_EQUAL(0, lv_roller_get_selected(roller));
 
-    /* Test an item that exists in the roller */
+    /* Проверьте элемент, который существует в ролике */
     selected = lv_roller_set_selected_str(roller, "Two", LV_ANIM_OFF);
     TEST_ASSERT_TRUE(selected);
 
     TEST_ASSERT_EQUAL(1, lv_roller_get_selected(roller));
 
-    /* Try to select an item that does not exist in the roller */
+    /* Попробуйте выбрать предмет, которого нет в ролике */
     selected = lv_roller_set_selected_str(roller, "No", LV_ANIM_OFF);
     TEST_ASSERT_FALSE(selected);
 
-    /* Make sure that the selection did not change */
+    /* Убедитесь, что выбор не изменился */
     TEST_ASSERT_EQUAL(1, lv_roller_get_selected(roller));
 }
 
@@ -175,28 +175,28 @@ void test_roller_keypad_events(void)
     int16_t expected_index = 1;
     int16_t actual_index = 0;
 
-    /* Select option index 1 with LV_KEY_RIGHT event */
+    /* Выберите индекс опции 1 с событием LV_KEY_RIGHT. */
     lv_roller_set_selected(roller, 0, LV_ANIM_OFF);
     lv_test_key_hit(LV_KEY_RIGHT);
 
     actual_index = lv_roller_get_selected(roller);
     TEST_ASSERT_EQUAL(expected_index, actual_index);
 
-    /* Select next option with LV_KEY_DOWN */
+    /* Выберите следующий вариант с помощью LV_KEY_DOWN */
     expected_index = 2;
     lv_test_key_hit(LV_KEY_DOWN);
 
     actual_index = lv_roller_get_selected(roller);
     TEST_ASSERT_EQUAL(expected_index, actual_index);
 
-    /* Select previous option with LV_KEY_LEFT */
+    /* Выберите предыдущий вариант с помощью LV_KEY_LEFT */
     expected_index = 1;
     lv_test_key_hit(LV_KEY_LEFT);
 
     actual_index = lv_roller_get_selected(roller);
     TEST_ASSERT_EQUAL(expected_index, actual_index);
 
-    /* Select previous option with LV_KEY_UP */
+    /* Выберите предыдущий вариант с помощью LV_KEY_UP */
     expected_index = 0;
     lv_test_key_hit(LV_KEY_UP);
 
@@ -219,12 +219,12 @@ void test_roller_infinite_mode_first_option_gets_selected_after_last_option(void
     lv_group_remove_obj(roller);
     lv_group_add_obj(g, roller_infinite);
 
-    /* Select the last option of page 2 */
+    /* Выберите последний вариант на странице 2. */
     uint16_t option_count = lv_roller_get_option_count(roller_infinite);
     option_count = (option_count * 2) - 1;
     lv_roller_set_selected(roller_infinite, option_count, LV_ANIM_OFF);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller_infinite, actual_str, OPTION_BUFFER_SZ);
 
     TEST_ASSERT_EQUAL_STRING("Ten", actual_str);
@@ -232,7 +232,7 @@ void test_roller_infinite_mode_first_option_gets_selected_after_last_option(void
 
     lv_test_key_hit(LV_KEY_DOWN);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller_infinite, actual_str, OPTION_BUFFER_SZ);
     TEST_ASSERT_EQUAL_STRING("One", actual_str);
 
@@ -264,7 +264,7 @@ void test_roller_select_option_with_click(void)
     lv_test_encoder_click();
     lv_test_encoder_turn(1);
 
-    /* Get the index string */
+    /* Получить индексную строку */
     lv_roller_get_selected_str(roller_infinite, actual_str, OPTION_BUFFER_SZ);
 
     TEST_ASSERT_EQUAL_STRING("Two", actual_str);
@@ -273,14 +273,14 @@ void test_roller_select_option_with_click(void)
 
 void test_roller_release_handler_pointer_indev(void)
 {
-    /* Click in the widget */
+    /* Нажмите на виджет */
     lv_test_mouse_click_at(roller_mouse->coords.x1 + 5, roller_mouse->coords.y1 + 5);
-    /* Check which is the selected option */
+    /* Проверьте, какой вариант выбран */
     TEST_ASSERT_EQUAL(0, lv_roller_get_selected(roller_mouse));
 
-    /* Click further down the roller */
+    /* Нажмите дальше вниз по ролику */
     lv_test_mouse_click_at(roller_mouse->coords.x1 + 5, roller_mouse->coords.y1 + 100);
-    /* Check which is the selected option */
+    /* Проверьте, какой вариант выбран */
     TEST_ASSERT_NOT_EQUAL(0, lv_roller_get_selected(roller_mouse));
 }
 
@@ -312,7 +312,7 @@ void test_roller_transformed_click(void)
 
 void test_roller_appearance(void)
 {
-    /* use a number, a symbol, a high letter, a low letter */
+    /* используйте цифру, символ, большую букву, маленькую букву */
     const char * opts =
         "0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg\n0@Tg";
 
@@ -321,13 +321,13 @@ void test_roller_appearance(void)
     lv_obj_t * rollers[10] = {roller, roller_infinite};
     uint32_t i = 2;
 
-    /* a normal and infinite roller with the same size font for the main and selected parts */
+    /* обычный и бесконечный ролик с одинаковым размером шрифта для основной и выбранных частей */
     lv_obj_set_pos(roller, 20, 20);
     lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL);
     lv_obj_set_pos(roller_infinite, 20, 200);
     lv_roller_set_options(roller_infinite, opts, LV_ROLLER_MODE_INFINITE);
 
-    /* a normal and infinite roller with slightly different size fonts for the main and selected parts */
+    /* обычный и бесконечный ролик с немного разным размером шрифтов для основной и выбранных частей */
     lv_obj_t * r = lv_roller_create(active_screen);
     lv_obj_set_pos(r, 130, 20);
     lv_roller_set_options(r, opts, LV_ROLLER_MODE_NORMAL);
@@ -341,7 +341,7 @@ void test_roller_appearance(void)
     lv_obj_set_style_text_font(r, &lv_font_montserrat_24, LV_PART_SELECTED);
     rollers[i++] = r;
 
-    /* same as previous pair but the fonts are swapped for the main and selected parts */
+    /* то же, что и предыдущая пара, но шрифты в основной и выбранной частях поменяны местами */
     r = lv_roller_create(active_screen);
     lv_obj_set_pos(r, 270, 20);
     lv_roller_set_options(r, opts, LV_ROLLER_MODE_NORMAL);
@@ -355,7 +355,7 @@ void test_roller_appearance(void)
     lv_obj_set_style_text_font(r, &lv_font_montserrat_16, LV_PART_SELECTED);
     rollers[i++] = r;
 
-    /* a normal and infinite roller with extremely different size fonts for the main and selected parts */
+    /* обычный и бесконечный ролик с крайне разным размером шрифтов для основной и выбранных частей */
     r = lv_roller_create(active_screen);
     lv_obj_set_pos(r, 410, 20);
     lv_roller_set_options(r, opts, LV_ROLLER_MODE_NORMAL);
@@ -369,7 +369,7 @@ void test_roller_appearance(void)
     lv_obj_set_style_text_font(r, &lv_font_montserrat_36, LV_PART_SELECTED);
     rollers[i++] = r;
 
-    /* same as previous pair but the fonts are swapped for the main and selected parts */
+    /* то же, что и предыдущая пара, но шрифты в основной и выбранной частях поменяны местами */
     r = lv_roller_create(active_screen);
     lv_obj_set_pos(r, 580, 20);
     lv_roller_set_options(r, opts, LV_ROLLER_MODE_NORMAL);
@@ -385,7 +385,7 @@ void test_roller_appearance(void)
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/roller_2.png");
 
-    /* test that the selected label stays in sync with the main label for scrolling */
+    /* проверьте, что выбранная метка остается синхронизированной с основной меткой для прокрутки */
     for(i = 0; i < 10; i++) {
         lv_roller_set_selected(rollers[i], lv_roller_get_option_count(rollers[i]) - 1, LV_ANIM_OFF);
     }

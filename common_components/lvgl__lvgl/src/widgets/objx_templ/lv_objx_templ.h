@@ -4,9 +4,9 @@
  */
 
 /**
- * TODO Remove these instructions
- * Search and replace: templ -> object short name with lower case(e.g. btn, label etc)
- *                    TEMPL -> object short name with upper case (e.g. BTN, LABEL etc.)
+ * TODO Удалить эти инструкции
+ * Поиск и замена: templ -> короткое имя объекта в нижнем регистре (например, btn, label и т. д.)
+ *                    TEMPL -> короткое имя объекта в верхнем регистре (например, BTN , LABEL и т. д.)
  *
  */
 
@@ -33,10 +33,10 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-/*Data of template*/
+/*Данные шаблона*/
 typedef struct {
-    lv_ANCESTOR_t ancestor; /*The ancestor widget, e.g. lv_slider_t slider*/
-    /*New data for this type*/
+    lv_ANCESTOR_t ancestor; /*Виджет-предок, например.  Ползунок lv_slider_t*/
+    /*Новые данные для этого типа*/
 } lv_templ_t;
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_templ_class;
@@ -46,26 +46,26 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_templ_class;
  **********************/
 
 /**
- * Create a templ object
+ * Создать объект templ
  * @param parent    pointer to an object, it will be the parent of the new templ
  * @return          pointer to the created bar
  */
 lv_obj_t * lv_templ_create(lv_obj_t * parent);
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**********************
@@ -75,7 +75,7 @@ lv_obj_t * lv_templ_create(lv_obj_t * parent);
 #endif /*LV_USE_TEMPL*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJX_TEMPL_H*/

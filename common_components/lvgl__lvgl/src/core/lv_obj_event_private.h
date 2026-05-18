@@ -25,11 +25,11 @@ extern "C" {
  **********************/
 
 /**
- * Used as the event parameter of ::LV_EVENT_HIT_TEST to check if an `point` can click the object or not.
- * `res` should be set like this:
- *   - If already set to `false` another event wants that point non clickable. If you want to respect it leave it as `false` or set `true` to overwrite it.
- *   - If already set `true` and `point` shouldn't be clickable set to `false`
- *   - If already set to `true` you agree that `point` can click the object leave it as `true`
+ * Используется в качестве параметра событий ::LV_EVENT_HIT_TEST, чтобы проверить, может ли`point`щелкнуть объект или нет.
+ * `res` должен быть установлен следующим образом:
+ *   - Если уже установлено значение `false`, другое событие не хочет, чтобы эта точка была доступна для кликов. Если вы хотите соблюдать его, оставьте его как`false`или установите `true`, чтобы перезаписать его.
+ *   - Если они уже установлены,`true`и`point`не должны быть кликабельными, установите `false`.
+ *   - Если уже установлено значение `true`, вы соглашаетесь с тем, что`point`может щелкнуть объект, оставьте его как `true`.
  */
 struct _lv_hit_test_info_t {
     const lv_point_t * point;   /**< A point relative to screen to check if it can click the object or not*/
@@ -37,9 +37,9 @@ struct _lv_hit_test_info_t {
 };
 
 /**
- * Used as the event parameter of ::LV_EVENT_COVER_CHECK to check if an area is covered by the object or not.
- * In the event use `const lv_area_t * area = lv_event_get_cover_area(e)` to get the area to check
- * and `lv_event_set_cover_res(e, res)` to set the result.
+ * Используется в качестве параметра события :: LV_EVENT_COVER_CHECK для проверки того, покрыта ли область объектом или нет.
+ * В этом случае воспользуйтесь`const lv_area_t * area = lv_event_get_cover_area(e)`, чтобы проверить регион.
+ * и`lv_event_set_cover_res(e, res)`, чтобы установить результат.
  */
 struct _lv_cover_check_info_t {
     lv_cover_res_t res;
@@ -56,7 +56,7 @@ struct _lv_cover_check_info_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_EVENT_PRIVATE_H*/

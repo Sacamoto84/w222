@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,7 +28,7 @@
 #include "tvgFill.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 #define RADIAL_A_THRESHOLD 0.0005f
@@ -37,14 +37,14 @@
 #define FIXPT_SIZE (1<<FIXPT_BITS)
 
 /*
- * quadratic equation with the following coefficients (rx and ry defined in the _calculateCoefficients()):
+ * квадратное уравнение со следующими коэффициентами (rx и ry определены в _calculateCoefficients()):
  * A = a  // fill->radial.a
  * B = 2 * (dr * fr + rx * dx + ry * dy)
  * C = fr^2 - rx^2 - ry^2
- * Derivatives are computed with respect to dx.
- * This procedure aims to optimize and eliminate the need to calculate all values from the beginning
- * for consecutive x values with a constant y. The Taylor series expansions are computed as long as
- * its terms are non-zero.
+ * Производные вычисляются по dx.
+ * Эта процедура направлена на оптимизацию и устранение необходимости рассчитывать все значения с самого начала.
+ * для последовательных значений x с константой y. Разложения в ряд Тейлора вычисляются до тех пор, пока
+ * его условия ненулевые.
  */
 static void _calculateCoefficients(const SwFill* fill, uint32_t x, uint32_t y, float& b, float& deltaB, float& det, float& deltaDet, float& deltaDeltaDet)
 {
@@ -154,7 +154,7 @@ static bool _updateColorTable(SwFill* fill, const Fill* fdata, const SwSurface* 
     auto pos = 1.5f * inc;
     uint32_t i = 0;
 
-    //If repeat is true, anti-aliasing must be applied between the last and the first colors.
+    //Если значение повтора истинно, между последним и первым цветами должно быть применено сглаживание.
     auto repeat = fill->spread == FillSpread::Repeat;
     uint32_t iAABegin = repeat ? _estimateAAMargin(fdata) : 0;
     uint32_t iAAEnd = 0;
@@ -202,8 +202,8 @@ static bool _updateColorTable(SwFill* fill, const Fill* fdata, const SwSurface* 
     for (; i < GRADIENT_STOP_SIZE; ++i)
         fill->ctable[i] = rgba;
 
-    //For repeat fill spread apply anti-aliasing between the last and first colors,
-    //othewise make sure the last color stop is represented at the end of the table.
+    //Для повторного распространения заливки примените сглаживание между последним и первым цветами.
+    //В противном случае убедитесь, что последняя цветовая точка находится в конце таблицы.
     if (repeat) _applyAA(fill, iAABegin, iAAEnd);
     else fill->ctable[GRADIENT_STOP_SIZE - 1] = rgba;
 
@@ -278,8 +278,8 @@ bool _prepareRadial(SwFill* fill, const RadialGradient* radial, const Matrix& tr
     fill->radial.fy = fy;
     fill->radial.a = fill->radial.dr * fill->radial.dr - fill->radial.dx * fill->radial.dx - fill->radial.dy * fill->radial.dy;
 
-    //This condition fulfills the SVG 1.1 std:
-    //the focal point, if outside the end circle, is moved to be on the end circle
+    //Это условие соответствует стандарту SVG 1.1:
+    //точка фокуса, если она находится за пределами конечного круга, перемещается в конечный круг
     //See: the SVG 2 std requirements: https://www.w3.org/TR/SVG2/pservers.html#RadialGradientNotes
     if (fill->radial.a < 0) {
         auto dist = sqrtf(fill->radial.dx * fill->radial.dx + fill->radial.dy * fill->radial.dy);
@@ -287,7 +287,7 @@ bool _prepareRadial(SwFill* fill, const RadialGradient* radial, const Matrix& tr
         fill->radial.fy = cy + r * (fy - cy) / dist;
         fill->radial.dx = cx - fill->radial.fx;
         fill->radial.dy = cy - fill->radial.fy;
-        // Prevent loss of precision on Apple Silicon when dr=dy and dx=0 due to FMA
+        // Предотвратите потерю точности Apple Silicon, когда dr=dy и dx=0 из-за FMA
         // https://github.com/thorvg/thorvg/issues/2014
         auto dr2 = fill->radial.dr * fill->radial.dr;
         auto dx2 = fill->radial.dx * fill->radial.dx;
@@ -365,13 +365,13 @@ static inline uint32_t _pixel(const SwFill* fill, float pos)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 
 void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwAlpha alpha, uint8_t csize, uint8_t opacity)
 {
-    //edge case
+    //крайний случай
     if (fill->radial.a < RADIAL_A_THRESHOLD) {
         auto radial = &fill->radial;
         auto rx = (x + 0.5f) * radial->a11 + (y + 0.5f) * radial->a12 + radial->a13 - radial->fx;
@@ -550,7 +550,7 @@ void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
 
 void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwAlpha alpha, uint8_t csize, uint8_t opacity)
 {
-    //Rotation
+    //Вращение
     float rx = x + 0.5f;
     float ry = y + 0.5f;
     float t = (fill->linear.dx * rx + fill->linear.dy * ry + fill->linear.offset) * (GRADIENT_STOP_SIZE - 1);
@@ -569,7 +569,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
         auto vMin = -vMax;
         auto v = t + (inc * len);
 
-        //we can use fixed point math
+        //мы можем использовать математику с фиксированной точкой
         if (v < vMax && v > vMin) {
             auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
             auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -577,7 +577,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
                 *dst = opBlendNormal(_fixedPixel(fill, t2), *dst, alpha(cmp));
                 t2 += inc2;
             }
-        //we have to fallback to float math
+        //нам придется вернуться к математике с плавающей запятой
         } else {
             uint32_t counter = 0;
             while (counter++ < len) {
@@ -600,7 +600,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
         auto vMin = -vMax;
         auto v = t + (inc * len);
 
-        //we can use fixed point math
+        //мы можем использовать математику с фиксированной точкой
         if (v < vMax && v > vMin) {
             auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
             auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -608,7 +608,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
                 *dst = opBlendNormal(_fixedPixel(fill, t2), *dst, MULTIPLY(alpha(cmp), opacity));
                 t2 += inc2;
             }
-        //we have to fallback to float math
+        //нам придется вернуться к математике с плавающей запятой
         } else {
             uint32_t counter = 0;
             while (counter++ < len) {
@@ -624,7 +624,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
 
 void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, SwMask maskOp, uint8_t a)
 {
-    //Rotation
+    //Вращение
     float rx = x + 0.5f;
     float ry = y + 0.5f;
     float t = (fill->linear.dx * rx + fill->linear.dy * ry + fill->linear.offset) * (GRADIENT_STOP_SIZE - 1);
@@ -642,7 +642,7 @@ void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32
     auto vMin = -vMax;
     auto v = t + (inc * len);
 
-    //we can use fixed point math
+    //мы можем использовать математику с фиксированной точкой
     if (v < vMax && v > vMin) {
         auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
         auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -651,7 +651,7 @@ void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32
             *dst = maskOp(src, *dst, ~src);
             t2 += inc2;
         }
-    //we have to fallback to float math
+    //нам придется вернуться к математике с плавающей запятой
     } else {
         uint32_t counter = 0;
         while (counter++ < len) {
@@ -666,7 +666,7 @@ void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32
 
 void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwMask maskOp, uint8_t a)
 {
-    //Rotation
+    //Вращение
     float rx = x + 0.5f;
     float ry = y + 0.5f;
     float t = (fill->linear.dx * rx + fill->linear.dy * ry + fill->linear.offset) * (GRADIENT_STOP_SIZE - 1);
@@ -686,7 +686,7 @@ void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32
     auto vMin = -vMax;
     auto v = t + (inc * len);
 
-    //we can use fixed point math
+    //мы можем использовать математику с фиксированной точкой
     if (v < vMax && v > vMin) {
         auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
         auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -696,7 +696,7 @@ void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32
             *dst = tmp + MULTIPLY(*dst, ~tmp);
             t2 += inc2;
         }
-    //we have to fallback to float math
+    //нам придется вернуться к математике с плавающей запятой
     } else {
         uint32_t counter = 0;
         while (counter++ < len) {
@@ -713,7 +713,7 @@ void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32
 
 void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, uint8_t a)
 {
-    //Rotation
+    //Вращение
     float rx = x + 0.5f;
     float ry = y + 0.5f;
     float t = (fill->linear.dx * rx + fill->linear.dy * ry + fill->linear.offset) * (GRADIENT_STOP_SIZE - 1);
@@ -731,7 +731,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
     auto vMin = -vMax;
     auto v = t + (inc * len);
 
-    //we can use fixed point math
+    //мы можем использовать математику с фиксированной точкой
     if (v < vMax && v > vMin) {
         auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
         auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -739,7 +739,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
             *dst = op(_fixedPixel(fill, t2), *dst, a);
             t2 += inc2;
         }
-    //we have to fallback to float math
+    //нам придется вернуться к математике с плавающей запятой
     } else {
         uint32_t counter = 0;
         while (counter++ < len) {
@@ -753,7 +753,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
 
 void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, SwBlender op2, uint8_t a)
 {
-    //Rotation
+    //Вращение
     float rx = x + 0.5f;
     float ry = y + 0.5f;
     float t = (fill->linear.dx * rx + fill->linear.dy * ry + fill->linear.offset) * (GRADIENT_STOP_SIZE - 1);
@@ -781,7 +781,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
     auto v = t + (inc * len);
 
     if (a == 255) {
-        //we can use fixed point math
+        //мы можем использовать математику с фиксированной точкой
         if (v < vMax && v > vMin) {
             auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
             auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -790,7 +790,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
                 *dst = op2(tmp, *dst, 255);
                 t2 += inc2;
             }
-        //we have to fallback to float math
+        //нам придется вернуться к математике с плавающей запятой
         } else {
             uint32_t counter = 0;
             while (counter++ < len) {
@@ -801,7 +801,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
             }
         }
     } else {
-        //we can use fixed point math
+        //мы можем использовать математику с фиксированной точкой
         if (v < vMax && v > vMin) {
             auto t2 = static_cast<int32_t>(t * FIXPT_SIZE);
             auto inc2 = static_cast<int32_t>(inc * FIXPT_SIZE);
@@ -811,7 +811,7 @@ void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint3
                 *dst = INTERPOLATE(tmp2, *dst, a);
                 t2 += inc2;
             }
-        //we have to fallback to float math
+        //нам придется вернуться к математике с плавающей запятой
         } else {
             uint32_t counter = 0;
             while (counter++ < len) {

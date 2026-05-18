@@ -36,12 +36,12 @@ struct _lv_fs_file_cache_t {
  **********************/
 
 /**
- * Initialize the File system interface
+ * Инициализируйте интерфейс файловой системы
  */
 void lv_fs_init(void);
 
 /**
- * Deinitialize the File system interface
+ * Деинициализировать интерфейс файловой системы
  */
 void lv_fs_deinit(void);
 
@@ -50,7 +50,7 @@ void lv_fs_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FS_PRIVATE_H*/

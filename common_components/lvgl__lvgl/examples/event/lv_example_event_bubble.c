@@ -3,21 +3,21 @@
 
 static void event_cb(lv_event_t * e)
 {
-    /*The original target of the event. Can be the buttons or the container*/
+    /*Исходная цель мероприятия. Это могут быть кнопки или контейнер*/
     lv_obj_t * target = lv_event_get_target_obj(e);
 
-    /*The current target is always the container as the event is added to it*/
+    /*Текущей целью всегда является контейнер, поскольку в него добавляется событие.*/
     lv_obj_t * cont = lv_event_get_current_target_obj(e);
 
-    /*If container was clicked do nothing*/
+    /*Если контейнер был нажат, ничего не делайте*/
     if(target == cont) return;
 
-    /*Make the clicked buttons red*/
+    /*Сделайте нажатые кнопки красными*/
     lv_obj_set_style_bg_color(target, lv_palette_main(LV_PALETTE_RED), 0);
 }
 
 /**
- * Demonstrate event bubbling
+ * Демонстрация всплытия событий
  */
 void lv_example_event_bubble(void)
 {

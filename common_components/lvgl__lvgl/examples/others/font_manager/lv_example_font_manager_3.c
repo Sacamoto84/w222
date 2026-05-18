@@ -71,16 +71,16 @@ static const lv_font_class_t imgfont_class = {
 
 void lv_example_font_manager_3(void)
 {
-    /* Create font manager, with 8 fonts recycling buffers */
+    /* Создайте менеджер шрифтов с 8 буферами переработки шрифтов. */
     g_font_manager = lv_font_manager_create(8);
 
-    /* Add font path mapping to font manager */
+    /* Добавить сопоставление путей шрифтов в диспетчер шрифтов */
     lv_font_manager_add_src_static(g_font_manager,
                                    "Lato-Regular",
                                    PATH_PREFIX "lvgl/examples/libs/freetype/Lato-Regular.ttf",
                                    &lv_freetype_font_class);
 
-    /* Add custom imgfont source to font manager */
+    /* Добавить увеличенный источник imgfont в диспетчере шрифтов */
     static const imgfont_src_t imgfont_src = {
         .match_size_min = 70,
         .match_size_max = 80,
@@ -91,7 +91,7 @@ void lv_example_font_manager_3(void)
                                    &imgfont_src,
                                    &imgfont_class);
 
-    /* Create font from font manager */
+    /* Создать шрифт из диспетчера шрифтов */
     lv_font_t * font = lv_font_manager_create_font(g_font_manager,
                                                    "Lato-Regular,Emoji",
                                                    LV_FREETYPE_FONT_RENDER_MODE_BITMAP,
@@ -104,7 +104,7 @@ void lv_example_font_manager_3(void)
         return;
     }
 
-    /* Create label with the font */
+    /* Создать этикетку со шрифтом */
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_set_style_text_font(label, font, 0);
     lv_label_set_text(label, "Quiet\uF617~");

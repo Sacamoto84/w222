@@ -29,7 +29,7 @@ extern "C" {
  **********************/
 
 /**
- * Register the JPEG-Turbo decoder functions in LVGL
+ * Зарегистрируйте функции JPEG -Turbo декодера в LVGL.
  */
 void lv_libjpeg_turbo_init(void);
 
@@ -42,7 +42,7 @@ void lv_libjpeg_turbo_deinit(void);
 #endif /*LV_USE_LIBJPEG_TURBO*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_LIBJPEG_TURBO_H*/

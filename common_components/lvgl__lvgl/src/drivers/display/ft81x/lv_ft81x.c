@@ -22,12 +22,12 @@
  *      DEFINES
  *********************/
 
-/* Increase as functionality is added if needed. */
+/* При необходимости увеличивайте по мере добавления функциональности. */
 #define LV_FT81X_CMD_BUF_SIZE 63
 
-/* The PWM value that corresponds to the backlight being "on".
-   0x80 was found to work on at least two boards but should
-   be changed as needed. */
+/* Значение PWM, соответствующее включенной подсветке.
+   Было обнаружено, что 0x80 работает как минимум на двух платах, но должен
+   быть изменены по мере необходимости. */
 #define PWM_DUTY_BACKLIGHT_ON 0x80
 
 /**********************
@@ -55,7 +55,7 @@ static void delete_cb(lv_event_t * e);
 static void lv_ft81x_cmd(lv_display_t * disp, uint8_t command, uint8_t parameter);
 static uint8_t lv_ft81x_read_8(lv_display_t * disp, uint32_t address);
 static uint16_t lv_ft81x_read_16(lv_display_t * disp, uint32_t address);
-/* static uint32_t lv_ft81x_read_32(lv_display_t * disp, uint32_t address); */
+/* статический uint32_t lv_ft81x_read_32 (lv_display_t *disp, uint32_t адрес); */
 static void lv_ft81x_write_8(lv_display_t * disp, uint32_t address, uint8_t val);
 static void lv_ft81x_write_16(lv_display_t * disp, uint32_t address, uint16_t val);
 static void lv_ft81x_write_32(lv_display_t * disp, uint32_t address, uint32_t val);
@@ -133,7 +133,7 @@ static lv_result_t initialize(lv_display_t * disp, const lv_ft81x_parameters_t *
     if(params->is_bt81x) lv_ft81x_cmd(disp, EVE_CLKSEL, 0x46);
     lv_ft81x_cmd(disp, EVE_ACTIVE, 0);
 
-    /* at least 40 ms is needed for EVE to become ready. */
+    /* для готовности EVE требуется не менее 40 мс. */
     lv_delay_ms(40);
 
     uint32_t start_millis = lv_tick_get();
@@ -158,31 +158,31 @@ static lv_result_t initialize(lv_display_t * disp, const lv_ft81x_parameters_t *
 
     lv_ft81x_write_8(disp, REG_PWM_DUTY, PWM_DUTY_BACKLIGHT_ON);
 
-    lv_ft81x_write_16(disp, REG_HSIZE,   params->hor_res);   /* active display width */
-    lv_ft81x_write_16(disp, REG_HCYCLE,  params->hcycle);  /* total number of clocks per line, incl front/back porch */
-    lv_ft81x_write_16(disp, REG_HOFFSET, params->hoffset); /* start of active line */
-    lv_ft81x_write_16(disp, REG_HSYNC0,  params->hsync0);  /* start of horizontal sync pulse */
-    lv_ft81x_write_16(disp, REG_HSYNC1,  params->hsync1);  /* end of horizontal sync pulse */
-    lv_ft81x_write_16(disp, REG_VSIZE,   params->ver_res);   /* active display height */
-    lv_ft81x_write_16(disp, REG_VCYCLE,  params->vcycle);  /* total number of lines per screen, including pre/post */
-    lv_ft81x_write_16(disp, REG_VOFFSET, params->voffset); /* start of active screen */
-    lv_ft81x_write_16(disp, REG_VSYNC0,  params->vsync0);  /* start of vertical sync pulse */
-    lv_ft81x_write_16(disp, REG_VSYNC1,  params->vsync1);  /* end of vertical sync pulse */
-    lv_ft81x_write_8(disp, REG_SWIZZLE,  params->swizzle); /* FT8xx output to LCD - pin order */
-    lv_ft81x_write_8(disp, REG_PCLK_POL, params->pclkpol); /* LCD data is clocked in on this PCLK edge */
+    lv_ft81x_write_16(disp, REG_HSIZE,   params->hor_res);   /* активная ширина дисплея */
+    lv_ft81x_write_16(disp, REG_HCYCLE,  params->hcycle);  /* общее количество часов на линию, включая переднее/заднее крыльцо */
+    lv_ft81x_write_16(disp, REG_HOFFSET, params->hoffset); /* начало активной строки */
+    lv_ft81x_write_16(disp, REG_HSYNC0,  params->hsync0);  /* начало строчного синхроимпульса */
+    lv_ft81x_write_16(disp, REG_HSYNC1,  params->hsync1);  /* конец строчного синхроимпульса */
+    lv_ft81x_write_16(disp, REG_VSIZE,   params->ver_res);   /* активная высота дисплея */
+    lv_ft81x_write_16(disp, REG_VCYCLE,  params->vcycle);  /* общее количество строк на экране, включая до/после */
+    lv_ft81x_write_16(disp, REG_VOFFSET, params->voffset); /* начало активного экрана */
+    lv_ft81x_write_16(disp, REG_VSYNC0,  params->vsync0);  /* начало вертикального синхроимпульса */
+    lv_ft81x_write_16(disp, REG_VSYNC1,  params->vsync1);  /* конец вертикального синхроимпульса */
+    lv_ft81x_write_8(disp, REG_SWIZZLE,  params->swizzle); /* Выход FT8xx на LCD — порядок контактов */
+    lv_ft81x_write_8(disp, REG_PCLK_POL, params->pclkpol); /* Данные LCD синхронизируются на этом ребре PCLK. */
     lv_ft81x_write_8(disp, REG_CSPREAD,
-                     params->cspread); /* helps with noise, when set to 1 fewer signals are changed simultaneously, reset-default: 1 */
+                     params->cspread); /* помогает с шумом, при значении 1 одновременно изменяется меньше сигналов, сброс по умолчанию: 1 */
 
-    /* write a basic display-list to get things started */
+    /* напишите базовый список отображения, чтобы начать работу */
     lv_ft81x_write_32(disp, EVE_RAM_DL, DL_CLEAR_RGB);
     lv_ft81x_write_32(disp, EVE_RAM_DL + 4, (DL_CLEAR | CLR_COL | CLR_STN | CLR_TAG));
-    lv_ft81x_write_32(disp, EVE_RAM_DL + 8, DL_DISPLAY);    /* end of display list */
+    lv_ft81x_write_32(disp, EVE_RAM_DL + 8, DL_DISPLAY);    /* конец списка отображения */
     lv_ft81x_write_32(disp, REG_DLSWAP, EVE_DLSWAP_FRAME);
 
-    /* nothing is being displayed yet... the pixel clock is still 0x00 */
+    /* пока ничего не отображается... частота пикселей все еще 0x00 */
     lv_ft81x_write_8(disp, REG_GPIO,
-                     0x80); /* enable the DISP signal to the LCD panel, it is set to output in REG_GPIO_DIR by default */
-    lv_ft81x_write_8(disp, REG_PCLK, params->pclk); /* now start clocking data to the LCD panel */
+                     0x80); /* включите сигнал DISP на панель LCD, по умолчанию он настроен на вывод в REG_GPIO_DIR */
+    lv_ft81x_write_8(disp, REG_PCLK, params->pclk); /* теперь начните синхронизацию данных на панели LCD */
 
     LV_ASSERT(lv_ft81x_read_16(disp, REG_CMD_READ) != 0xfff);
 
@@ -192,23 +192,23 @@ static lv_result_t initialize(lv_display_t * disp, const lv_ft81x_parameters_t *
     lv_ft81x_cmd_list_t cmd_list;
     lv_ft81x_cmd_list_init(disp, &cmd_list);
     lv_ft81x_cmd_list_add_32(disp, &cmd_list, CMD_MEMSET);
-    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 0); /* address */
-    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 0x00); /* val */
-    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 2 * params->hor_res * params->ver_res); /* count */
+    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 0); /* адрес */
+    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 0x00); /* вал */
+    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 2 * params->hor_res * params->ver_res); /* считать */
     lv_ft81x_cmd_list_send(disp, &cmd_list);
 
     lv_ft81x_cmd_list_init(disp, &cmd_list);
 
     lv_ft81x_cmd_list_add_32(disp, &cmd_list, CMD_DLSTART);
 
-    lv_ft81x_cmd_list_add_32(disp, &cmd_list, DL_CLEAR_RGB | 0); /* clear to black */
+    lv_ft81x_cmd_list_add_32(disp, &cmd_list, DL_CLEAR_RGB | 0); /* прозрачный до черного */
     lv_ft81x_cmd_list_add_32(disp, &cmd_list, DL_CLEAR | CLR_COL | CLR_STN | CLR_TAG);
 
     lv_ft81x_cmd_list_add_32(disp, &cmd_list, TAG(0));
 
     lv_ft81x_cmd_list_add_32(disp, &cmd_list, TAG(20));
     lv_ft81x_cmd_list_add_32(disp, &cmd_list, CMD_SETBITMAP);
-    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 0); /* address */
+    lv_ft81x_cmd_list_add_32(disp, &cmd_list, 0); /* адрес */
     lv_ft81x_cmd_list_add_16(disp, &cmd_list, EVE_RGB565);
     lv_ft81x_cmd_list_add_16(disp, &cmd_list, params->hor_res);
     lv_ft81x_cmd_list_add_16(disp, &cmd_list, params->ver_res);
@@ -361,7 +361,7 @@ static void lv_ft81x_cmd_list_add_16(lv_display_t * disp, lv_ft81x_cmd_list_t * 
     LV_ASSERT_MSG(cmd_list->buf_len <= LV_FT81X_CMD_BUF_SIZE, "increase LV_FT81X_CMD_BUF_SIZE as needed");
     value = LE_TO_OR_FROM_NATIVE_16(value);
     lv_memcpy(buf_dst, &value, 2);
-    drv->cmd_offset = (drv->cmd_offset + 2) & 0xfff; /* circular */
+    drv->cmd_offset = (drv->cmd_offset + 2) & 0xfff; /* круговой */
 }
 
 static void lv_ft81x_cmd_list_add_32(lv_display_t * disp, lv_ft81x_cmd_list_t * cmd_list, uint32_t value)
@@ -372,7 +372,7 @@ static void lv_ft81x_cmd_list_add_32(lv_display_t * disp, lv_ft81x_cmd_list_t * 
     LV_ASSERT_MSG(cmd_list->buf_len <= LV_FT81X_CMD_BUF_SIZE, "increase LV_FT81X_CMD_BUF_SIZE as needed");
     value = LE_TO_OR_FROM_NATIVE_32(value);
     lv_memcpy(buf_dst, &value, 4);
-    drv->cmd_offset = (drv->cmd_offset + 4) & 0xfff; /* circular */
+    drv->cmd_offset = (drv->cmd_offset + 4) & 0xfff; /* круговой */
 }
 
 static void lv_ft81x_cmd_list_send(lv_display_t * disp, lv_ft81x_cmd_list_t * cmd_list)

@@ -70,17 +70,17 @@ typedef struct {
  **********************/
 
 /**
- * Set it for `traceTASK_SWITCHED_IN()` as
+ * Установите его для`traceTASK_SWITCHED_IN()`как
  * `lv_freertos_task_switch_in(pxCurrentTCB->pcTaskName)`
- * to save the start time stamp of a task
- * @param name      the name of the which is switched in
+ * чтобы сохранить отметку времени начала задачи
+ * @param name      имя которого включено
  */
 void lv_freertos_task_switch_in(const char * name);
 
 /**
- * Set it for `traceTASK_SWITCHED_OUT()` as
+ * Установите его для`traceTASK_SWITCHED_OUT()`как
  * `lv_freertos_task_switch_out()`
- * to save finish time stamp of a task
+ * сохранить отметку времени завершения задачи
  */
 void lv_freertos_task_switch_out(void);
 
@@ -92,7 +92,7 @@ void lv_freertos_task_switch_out(void);
 #endif /*LV_USE_OS == LV_OS_FREERTOS*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FREERTOS_H*/

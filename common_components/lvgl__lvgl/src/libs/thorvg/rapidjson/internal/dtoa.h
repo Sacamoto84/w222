@@ -1,20 +1,20 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
-// This is a C++ header-only implementation of Grisu2 algorithm from the publication:
-// Loitsch, Florian. "Printing floating-point numbers quickly and accurately with
-// integers." ACM Sigplan Notices 45.6 (2010): 233-243.
+// Это реализация алгоритма Grisu2 на C++ из публикации:
+// Лойч, Флориан. «Быстрая и точная печать чисел с плавающей запятой с помощью
+// целые числа».  ACM Уведомления Sigplan 45.6 (2010 г.): 233–243.
 
 #ifndef RAPIDJSON_DTOA_
 #define RAPIDJSON_DTOA_
@@ -34,7 +34,7 @@ RAPIDJSON_DIAG_OFF(array-bounds) // some gcc versions generate wrong warnings ht
 
 inline void GrisuRound(char* buffer, int len, uint64_t delta, uint64_t rest, uint64_t ten_kappa, uint64_t wp_w) {
     while (rest < wp_w && delta - rest >= ten_kappa &&
-           (rest + ten_kappa < wp_w ||  /// closer
+           (rest + ten_kappa < wp_w ||  /// ближе
             wp_w - rest > rest + ten_kappa - wp_w)) {
         buffer[len - 1]--;
         rest += ten_kappa;
@@ -42,7 +42,7 @@ inline void GrisuRound(char* buffer, int len, uint64_t delta, uint64_t rest, uin
 }
 
 inline int CountDecimalDigit32(uint32_t n) {
-    // Simple pure C++ implementation was faster than __builtin_clz version in this situation.
+    // В этой ситуации простая реализация на чистом C++ оказалась быстрее, чем версия __builtin_clz.
     if (n < 10) return 1;
     if (n < 100) return 2;
     if (n < 1000) return 3;
@@ -51,9 +51,9 @@ inline int CountDecimalDigit32(uint32_t n) {
     if (n < 1000000) return 6;
     if (n < 10000000) return 7;
     if (n < 100000000) return 8;
-    // Will not reach 10 digits in DigitGen()
-    //if (n < 1000000000) return 9;
-    //return 10;
+    // Не достигнет 10 цифр в DigitGen()
+    //если (n < 1000000000) вернуть 9;
+    //вернуть 10;
     return 9;
 }
 
@@ -67,7 +67,7 @@ inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buff
     const DiyFp wp_w = Mp - W;
     uint32_t p1 = static_cast<uint32_t>(Mp.f >> -one.e);
     uint64_t p2 = Mp.f & (one.f - 1);
-    int kappa = CountDecimalDigit32(p1); // kappa in [0, 9]
+    int kappa = CountDecimalDigit32(p1); // каппа в [0, 9]
     *len = 0;
 
     while (kappa > 0) {
@@ -95,7 +95,7 @@ inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buff
         }
     }
 
-    // kappa = 0
+    // каппа = 0
     for (;;) {
         p2 *= 10;
         delta *= 10;
@@ -167,12 +167,12 @@ inline char* Prettify(char* buffer, int length, int k, int maxDecimalPlaces) {
         std::memmove(&buffer[kk + 1], &buffer[kk], static_cast<size_t>(length - kk));
         buffer[kk] = '.';
         if (0 > k + maxDecimalPlaces) {
-            // When maxDecimalPlaces = 2, 1.2345 -> 1.23, 1.102 -> 1.1
-            // Remove extra trailing zeros (at least one) after truncation.
+            // Когда maxDecimalPlaces = 2, 1,2345 -> 1,23, 1,102 -> 1,1.
+            // Удалите лишние конечные нули (хотя бы один) после усечения.
             for (int i = kk + maxDecimalPlaces; i > kk + 1; i--)
                 if (buffer[i] != '0')
                     return &buffer[i + 1];
-            return &buffer[kk + 2]; // Reserve one zero
+            return &buffer[kk + 2]; // Зарезервировать один ноль
         }
         else
             return &buffer[length + 1];
@@ -186,18 +186,18 @@ inline char* Prettify(char* buffer, int length, int k, int maxDecimalPlaces) {
         for (int i = 2; i < offset; i++)
             buffer[i] = '0';
         if (length - kk > maxDecimalPlaces) {
-            // When maxDecimalPlaces = 2, 0.123 -> 0.12, 0.102 -> 0.1
-            // Remove extra trailing zeros (at least one) after truncation.
+            // Когда maxDecimalPlaces = 2, 0,123 -> 0,12, 0,102 -> 0,1
+            // Удалите лишние конечные нули (хотя бы один) после усечения.
             for (int i = maxDecimalPlaces + 1; i > 2; i--)
                 if (buffer[i] != '0')
                     return &buffer[i + 1];
-            return &buffer[3]; // Reserve one zero
+            return &buffer[3]; // Зарезервировать один ноль
         }
         else
             return &buffer[length + offset];
     }
     else if (kk < -maxDecimalPlaces) {
-        // Truncate to zero
+        // Обрезать до нуля
         buffer[0] = '0';
         buffer[1] = '.';
         buffer[2] = '0';
@@ -222,7 +222,7 @@ inline char* dtoa(double value, char* buffer, int maxDecimalPlaces = 324) {
     Double d(value);
     if (d.IsZero()) {
         if (d.Sign())
-            *buffer++ = '-';     // -0.0, Issue #289
+            *buffer++ = '-';     // -0.0, выпуск №289
         buffer[0] = '0';
         buffer[1] = '.';
         buffer[2] = '0';
@@ -243,7 +243,7 @@ inline char* dtoa(double value, char* buffer, int maxDecimalPlaces = 324) {
 RAPIDJSON_DIAG_POP
 #endif
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #endif // RAPIDJSON_DTOA_

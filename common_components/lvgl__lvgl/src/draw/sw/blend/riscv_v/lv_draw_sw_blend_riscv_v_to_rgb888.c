@@ -1,12 +1,12 @@
 /**
  * @file lv_draw_sw_blend_riscv_v_to_rgb888.c
- * RGB888/XRGB8888 blend implementation for RISC-V Vector Extension (RVV 1.0)
+ * Реализация смеси RGB888/XRGB8888 для векторного расширения RISC -V (RVV 1.0)
  *
- * Supports both dest_px_size=3 (RGB888) and dest_px_size=4 (XRGB8888)
- * Reference: lv_draw_sw_blend_neon_to_rgb888.c
+ * Поддерживает как dest_px_size =3 ( RGB888 ), так и dest_px_size =4 ( XRGB8888 ).
+ * Ссылка: lv_draw_sw_blend_neon_to_rgb888.c
  *
  * NOTE: All RVV blend logic is inlined to avoid passing vuint32m4_t as function
- * parameters, which causes complex stack operations that can corrupt the stack.
+ * параметры, что вызывает сложные операции со стеком, которые могут повредить стек.
  */
 
 /*********************
@@ -37,7 +37,7 @@
  **********************/
 
 /**
- * Fill with solid color (no blending needed, opa >= 255)
+ * Залейте сплошным цветом (смешивание не требуется, непрозрачность >= 255).
  */
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888(lv_draw_sw_blend_fill_dsc_t * dsc, uint32_t dest_px_size)
 {
@@ -53,14 +53,14 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888(lv_draw_sw_blend_fill_dsc_t
 
     if(dest_px_size == 3) {
         /* RGB888: 3 bytes per pixel (B, G, R) - use RVV segmented store */
-        /* Initialize color vectors once with max vl */
+        /* Инициализируйте цветовые векторы один раз с максимальным vl */
         size_t vlmax = __riscv_vsetvlmax_e8m2();
         vuint8m2_t v_b = __riscv_vmv_v_x_u8m2(dsc->color.blue, vlmax);
         vuint8m2_t v_g = __riscv_vmv_v_x_u8m2(dsc->color.green, vlmax);
         vuint8m2_t v_r = __riscv_vmv_v_x_u8m2(dsc->color.red, vlmax);
 
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV using segmented store for 3-byte pixels */
+            /* Обработка с помощью RVV с использованием сегментированного хранилища для 3-байтовых пикселей. */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
                 LV_RVV_VSSEG3E8_U8M2(dest_buf + x * 3, v_b, v_g, v_r, vl);
@@ -74,12 +74,12 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888(lv_draw_sw_blend_fill_dsc_t
         const uint32_t color32 = 0xFF000000 | ((uint32_t)dsc->color.red << 16) |
                                  ((uint32_t)dsc->color.green << 8) | dsc->color.blue;
 
-        /* Initialize color vector once with max vl */
+        /* Инициализировать цветовой вектор один раз с максимальным vl */
         size_t vlmax = __riscv_vsetvlmax_e32m4();
         vuint32m4_t v_color = __riscv_vmv_v_x_u32m4(color32, vlmax);
 
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV - use m4 to reduce register pressure */
+            /* Процесс с RVV — используйте m4 для снижения давления регистра */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e32m4(w - x);
                 __riscv_vse32_v_u32m4((uint32_t *)(dest_buf + x * 4), v_color, vl);
@@ -93,8 +93,8 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888(lv_draw_sw_blend_fill_dsc_t
 }
 
 /**
- * Fill with color and opacity (opa < 255)
- * blend formula: result = (fg * opa + bg * (255 - opa)) >> 8
+ * Залейте цветом и непрозрачностью (opa < 255).
+ * формула смешивания: результат = (fg * opa + bg * (255 - opa)) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa(lv_draw_sw_blend_fill_dsc_t * dsc, uint32_t dest_px_size)
 {
@@ -113,26 +113,26 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa(lv_draw_sw_blend_f
     uint8_t * dest_buf        = dsc->dest_buf;
     size_t vl;
 
-    /* Early exit if fully transparent */
+    /* Досрочный выход, если полностью прозрачен */
     if(opa == 0) return LV_RESULT_OK;
 
     if(dest_px_size == 3) {
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV using segmented load/store for 3-byte pixels */
+            /* Обработка с помощью RVV с использованием сегментированной загрузки/сохранения для 3-байтовых пикселей. */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
 
-                /* Load destination B, G, R channels using segmented load */
+                /* Загрузка каналов назначения B, G, R с использованием сегментированной нагрузки */
                 vuint8m2_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_VLSEG3E8_U8M2(dest_buf + x * 3, vl, v_dst_b, v_dst_g, v_dst_r);
 
-                /* Blend solid color with destination */
+                /* Смешайте однотонный цвет с местом назначения */
                 vuint8m2_t v_b, v_g, v_r;
                 LV_RVV_BLEND_SOLID_RGB_U8M2(v_dst_r, v_dst_g, v_dst_b,
                                             fg_r_opa, fg_g_opa, fg_b_opa, opa_inv,
                                             v_r, v_g, v_b, vl);
 
-                /* Store result using segmented store */
+                /* Сохраните результат, используя сегментированное хранилище */
                 LV_RVV_VSSEG3E8_U8M2(dest_buf + x * 3, v_b, v_g, v_r, vl);
             }
 
@@ -144,13 +144,13 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa(lv_draw_sw_blend_f
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
 
-                /* Load destination B, G, R, X channels using segmented load */
+                /* Загрузка каналов назначения B, G, R, X с использованием сегментированной нагрузки */
                 vuint8m2_t v_dst_b, v_dst_g, v_dst_r, v_dst_x;
                 LV_RVV_VLSEG4E8_U8M2(dest_buf + x * 4, vl, v_dst_b, v_dst_g, v_dst_r, v_dst_x);
-                /* v_dst_x is X/Alpha, ignored for input */
+                /* v_dst_x — это X/Alpha, игнорируется при вводе. */
                 (void)v_dst_x;
 
-                /* Blend solid color with destination */
+                /* Смешайте однотонный цвет с местом назначения */
                 vuint8m2_t v_b, v_g, v_r;
                 LV_RVV_BLEND_SOLID_RGB_U8M2(v_dst_r, v_dst_g, v_dst_b,
                                             fg_r_opa, fg_g_opa, fg_b_opa, opa_inv,
@@ -158,7 +158,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa(lv_draw_sw_blend_f
 
                 vuint8m2_t v_x = __riscv_vmv_v_x_u8m2(0xFF, vl);  /* Alpha = 0xFF */
 
-                /* Store result using segmented store */
+                /* Сохраните результат, используя сегментированное хранилище */
                 LV_RVV_VSSEG4E8_U8M2(dest_buf + x * 4, v_b, v_g, v_r, v_x, vl);
             }
             dest_buf = drawbuf_next_row(dest_buf, dest_stride);
@@ -169,7 +169,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa(lv_draw_sw_blend_f
 }
 
 /**
- * Fill with color and per-pixel mask (opa >= 255)
+ * Заливка цветом и попиксельной маской (opa >= 255)
  */
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_fill_dsc_t * dsc, uint32_t dest_px_size)
 {
@@ -191,32 +191,32 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_
     if(dest_px_size == 3) {
         /* RGB888: 3 bytes per pixel - use RVV for blending with mask */
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV using segmented load/store for 3-byte pixels */
+            /* Обработка с помощью RVV с использованием сегментированной загрузки/сохранения для 3-байтовых пикселей. */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
 
-                /* Load mask values */
+                /* Загрузить значения маски */
                 vuint8m2_t v_mask8 = __riscv_vle8_v_u8m2(&mask_buf[x], vl);
 
-                /* Load destination B, G, R channels using segmented load */
+                /* Загрузка каналов назначения B, G, R с использованием сегментированной нагрузки */
                 vuint8m2_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_VLSEG3E8_U8M2(dest_buf + x * 3, vl, v_dst_b, v_dst_g, v_dst_r);
 
-                /* Blend solid color with mask */
+                /* Смешайте сплошной цвет с маской */
                 vuint8m2_t v_b, v_g, v_r;
                 LV_RVV_BLEND_SOLID_RGB_VMASK_U8M2(v_dst_r, v_dst_g, v_dst_b,
                                                   fg_r, fg_g, fg_b, v_mask8,
                                                   v_r, v_g, v_b, vl);
 
                 /* Optional: Handle special cases for mask == 0 or mask >= 255.
-                 * Without this, max error is ±1 (e.g., (x*255)>>8 ≈ x*0.996).
-                 * For graphics rendering, ±1 error is typically acceptable.
-                 * Uncomment below if exact values are required. */
+                 * Без этого максимальная ошибка равна ±1 (например, (x*255)>>8 ≈ x*0,996).
+                 * Для рендеринга графики обычно допустима ошибка ±1.
+                 * Раскомментируйте ниже, если требуются точные значения. */
                 LV_RVV_BLEND_OPTIMIZE_MASK_SCALAR_U8M2(v_r, v_g, v_b,
                                                        fg_r, fg_g, fg_b,
                                                        v_dst_r, v_dst_g, v_dst_b,
                                                        v_mask8, vl);
-                /* Store result using segmented store */
+                /* Сохраните результат, используя сегментированное хранилище */
                 LV_RVV_VSSEG3E8_U8M2(dest_buf + x * 3, v_b, v_g, v_r, vl);
             }
 
@@ -227,20 +227,20 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_
     else { /* dest_px_size == 4 */
         /* XRGB8888: 4 bytes per pixel - use segmented load/store like RGB888 */
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV using segmented load/store for 4-byte pixels */
+            /* Обработка с помощью RVV с использованием сегментированной загрузки/сохранения для 4-байтовых пикселей. */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
 
-                /* Load mask values */
+                /* Загрузить значения маски */
                 vuint8m2_t v_mask8 = __riscv_vle8_v_u8m2(&mask_buf[x], vl);
 
-                /* Load destination B, G, R, X channels using segmented load */
+                /* Загрузка каналов назначения B, G, R, X с использованием сегментированной нагрузки */
                 vuint8m2_t v_dst_b, v_dst_g, v_dst_r, v_dst_x;
                 LV_RVV_VLSEG4E8_U8M2(dest_buf + x * 4, vl, v_dst_b, v_dst_g, v_dst_r, v_dst_x);
-                /* v_dst_x is X/Alpha, ignored for input */
+                /* v_dst_x — это X/Alpha, игнорируется при вводе. */
                 (void)v_dst_x;
 
-                /* Blend solid color with mask */
+                /* Смешайте сплошной цвет с маской */
                 vuint8m2_t v_b, v_g, v_r;
                 LV_RVV_BLEND_SOLID_RGB_VMASK_U8M2(v_dst_r, v_dst_g, v_dst_b,
                                                   fg_r, fg_g, fg_b, v_mask8,
@@ -248,13 +248,13 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_
                 vuint8m2_t v_x = __riscv_vmv_v_x_u8m2(0xFF, vl);  /* Alpha = 0xFF */
 
                 /* Optional: Handle special cases for mask == 0 or mask >= 255.
-                 * Without this, max error is ±1. Uncomment if exact values required. */
+                 * Без этого максимальная ошибка составляет ±1. Раскомментируйте, если требуются точные значения. */
                 LV_RVV_BLEND_OPTIMIZE_MASK_SCALAR_U8M2(v_r, v_g, v_b,
                                                        fg_r, fg_g, fg_b,
                                                        v_dst_r, v_dst_g, v_dst_b,
                                                        v_mask8, vl);
 
-                /* Store result using segmented store */
+                /* Сохраните результат, используя сегментированное хранилище */
                 LV_RVV_VSSEG4E8_U8M2(dest_buf + x * 4, v_b, v_g, v_r, v_x, vl);
             }
 
@@ -267,8 +267,8 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_
 }
 
 /**
- * Fill with color, opacity, and per-pixel mask
- * Effective mix = (mask * opa) >> 8
+ * Заполните цветом, непрозрачностью и попиксельной маской.
+ * Эффективная смесь = (маска * опа) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa_mask(lv_draw_sw_blend_fill_dsc_t * dsc,
                                                                    uint32_t dest_px_size)
@@ -289,43 +289,43 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa_mask(lv_draw_sw_bl
     const uint8_t fg_r = dsc->color.red;
     size_t vl;
 
-    /* Early exit if fully transparent */
+    /* Досрочный выход, если полностью прозрачен */
     if(opa == 0) return LV_RESULT_OK;
 
     if(dest_px_size == 3) {
         /* RGB888: 3 bytes per pixel - use RVV for blending with opa and mask */
 
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV using segmented load/store for 3-byte pixels */
+            /* Обработка с помощью RVV с использованием сегментированной загрузки/сохранения для 3-байтовых пикселей. */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
 
-                /* Load mask values */
+                /* Загрузить значения маски */
                 vuint8m2_t v_mask8 = __riscv_vle8_v_u8m2(&mask_buf[x], vl);
 
-                /* Load destination B, G, R channels using segmented load */
+                /* Загрузка каналов назначения B, G, R с использованием сегментированной нагрузки */
                 vuint8m2_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_VLSEG3E8_U8M2(dest_buf + x * 3, vl, v_dst_b, v_dst_g, v_dst_r);
 
-                /* Compute mix = (mask * opa) >> 8 using widening multiply then narrow */
+                /* Вычислить смесь = (маска * опа) >> 8, используя расширяющее умножение, а затем суженное */
                 vuint16m4_t v_mix16 = __riscv_vwmulu_vx_u16m4(v_mask8, opa, vl);
                 vuint8m2_t v_mix8 = __riscv_vnsrl_wx_u8m2(v_mix16, 8, vl);
 
-                /* Blend solid color with mix (mask * opa) */
+                /* Смешайте сплошной цвет со смесью (маска * опа) */
                 vuint8m2_t v_b, v_g, v_r;
                 LV_RVV_BLEND_SOLID_RGB_VMASK_U8M2(v_dst_r, v_dst_g, v_dst_b,
                                                   fg_r, fg_g, fg_b, v_mix8,
                                                   v_r, v_g, v_b, vl);
 
                 /* Optional: Handle special cases for mix == 0 or mix >= 255.
-                 * Without this, max error is ±1. Uncomment if exact values required. */
+                 * Без этого максимальная ошибка составляет ±1. Раскомментируйте, если требуются точные значения. */
 
                 LV_RVV_BLEND_OPTIMIZE_MASK_SCALAR_U8M2(v_r, v_g, v_b,
                                                        fg_r, fg_g, fg_b,
                                                        v_dst_r, v_dst_g, v_dst_b,
                                                        v_mix8, vl);
 
-                /* Store result using segmented store */
+                /* Сохраните результат, используя сегментированное хранилище */
                 LV_RVV_VSSEG3E8_U8M2(dest_buf + x * 3, v_b, v_g, v_r, vl);
             }
 
@@ -338,24 +338,24 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa_mask(lv_draw_sw_bl
 
 
         for(int32_t y = 0; y < h; y++) {
-            /* Process with RVV using segmented load/store for 4-byte pixels */
+            /* Обработка с помощью RVV с использованием сегментированной загрузки/сохранения для 4-байтовых пикселей. */
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m2(w - x);
 
-                /* Load mask values */
+                /* Загрузить значения маски */
                 vuint8m2_t v_mask8 = __riscv_vle8_v_u8m2(&mask_buf[x], vl);
 
-                /* Compute mix = (mask * opa) >> 8 using widening multiply */
+                /* Вычислить смесь = (маска * опа) >> 8, используя расширяющее умножение */
                 vuint16m4_t v_mix16 = __riscv_vsrl_vx_u16m4(
                                           __riscv_vwmulu_vx_u16m4(v_mask8, opa, vl), 8, vl);
                 vuint8m2_t v_mix8 = __riscv_vnsrl_wx_u8m2(v_mix16, 0, vl);
 
-                /* Load destination B, G, R, X channels using segmented load */
+                /* Загрузка каналов назначения B, G, R, X с использованием сегментированной нагрузки */
                 vuint8m2_t v_dst_b, v_dst_g, v_dst_r, v_dst_x;
                 LV_RVV_VLSEG4E8_U8M2(dest_buf + x * 4, vl, v_dst_b, v_dst_g, v_dst_r, v_dst_x);
-                (void)v_dst_x;  /* v_dst_x is X/Alpha, ignored for input */
+                (void)v_dst_x;  /* v_dst_x — это X/Alpha, игнорируется при вводе. */
 
-                /* Blend solid color with mix (mask * opa) */
+                /* Смешайте сплошной цвет со смесью (маска * опа) */
                 vuint8m2_t v_b, v_g, v_r;
                 LV_RVV_BLEND_SOLID_RGB_VMASK_U8M2(v_dst_r, v_dst_g, v_dst_b,
                                                   fg_r, fg_g, fg_b, v_mix8,
@@ -368,7 +368,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa_mask(lv_draw_sw_bl
 
                 vuint8m2_t v_x = __riscv_vmv_v_x_u8m2(0xFF, vl);  /* Alpha = 0xFF */
 
-                /* Store result using segmented store */
+                /* Сохраните результат, используя сегментированное хранилище */
                 LV_RVV_VSSEG4E8_U8M2(dest_buf + x * 4, v_b, v_g, v_r, v_x, vl);
             }
 
@@ -385,8 +385,8 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa_mask(lv_draw_sw_bl
  **********************/
 
 /**
- * RGB565 to RGB888/XRGB8888 simple copy (no blending, opa >= 255)
- * RGB565 format: RRRRRGGGGGGBBBBB (5-6-5 bits)
+ * От RGB565 до RGB888 / XRGB8888 простая копия (без смешивания, непрозрачность >= 255)
+ * Формат RGB565: RRRRRGGGGGGBBBBB (5-6-5 бит)
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc, uint32_t dest_px_size)
 {
@@ -407,25 +407,25 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888(lv_draw_sw_blend_image_dsc
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e16m2(w - x);
 
-                /* Load RGB565 pixels */
+                /* Загрузить пиксели RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Extract R5, G6, B5 components */
+                /* Извлеките компоненты R5, G6, B5. */
                 vuint16m2_t v_r5 = __riscv_vand_vx_u16m2(__riscv_vsrl_vx_u16m2(v_rgb565, 11, vl), 0x1F, vl);
                 vuint16m2_t v_g6 = __riscv_vand_vx_u16m2(__riscv_vsrl_vx_u16m2(v_rgb565, 5, vl), 0x3F, vl);
                 vuint16m2_t v_b5 = __riscv_vand_vx_u16m2(v_rgb565, 0x1F, vl);
 
-                /* Convert to 8-bit: R8 = (R5 * 2106) >> 8, G8 = (G6 * 1037) >> 8, B8 = (B5 * 2106) >> 8 */
+                /* Преобразование в 8-битное: R8 = ( R5 * 2106) >> 8, G8 = ( G6 * 1037) >> 8, B8 = ( B5 * 2106) >> 8 */
                 vuint16m2_t v_r8_16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_r5, 2106, vl), 8, vl);
                 vuint16m2_t v_g8_16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_g6, 1037, vl), 8, vl);
                 vuint16m2_t v_b8_16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_b5, 2106, vl), 8, vl);
 
-                /* Narrow to 8-bit */
+                /* Ограничить до 8-битного */
                 vuint8m1_t v_r = __riscv_vnsrl_wx_u8m1(v_r8_16, 0, vl);
                 vuint8m1_t v_g = __riscv_vnsrl_wx_u8m1(v_g8_16, 0, vl);
                 vuint8m1_t v_b = __riscv_vnsrl_wx_u8m1(v_b8_16, 0, vl);
 
-                /* Store using stride store for RGB888 (3 bytes per pixel) */
+                /* Сохранение с использованием хранилища шагов для RGB888 (3 байта на пиксель) */
                 LV_RVV_STORE_RGB888_U8M1(dest_buf, x, v_b, v_g, v_r, vl);
             }
 
@@ -438,26 +438,26 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888(lv_draw_sw_blend_image_dsc
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e16m2(w - x);
 
-                /* Load RGB565 pixels */
+                /* Загрузить пиксели RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Extract R5, G6, B5 components */
+                /* Извлеките компоненты R5, G6, B5. */
                 vuint16m2_t v_r5 = __riscv_vand_vx_u16m2(__riscv_vsrl_vx_u16m2(v_rgb565, 11, vl), 0x1F, vl);
                 vuint16m2_t v_g6 = __riscv_vand_vx_u16m2(__riscv_vsrl_vx_u16m2(v_rgb565, 5, vl), 0x3F, vl);
                 vuint16m2_t v_b5 = __riscv_vand_vx_u16m2(v_rgb565, 0x1F, vl);
 
-                /* Convert to 8-bit */
+                /* Преобразовать в 8-битный */
                 vuint16m2_t v_r8_16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_r5, 2106, vl), 8, vl);
                 vuint16m2_t v_g8_16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_g6, 1037, vl), 8, vl);
                 vuint16m2_t v_b8_16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_b5, 2106, vl), 8, vl);
 
-                /* Narrow to 8-bit */
+                /* Ограничить до 8-битного */
                 vuint8m1_t v_r = __riscv_vnsrl_wx_u8m1(v_r8_16, 0, vl);
                 vuint8m1_t v_g = __riscv_vnsrl_wx_u8m1(v_g8_16, 0, vl);
                 vuint8m1_t v_b = __riscv_vnsrl_wx_u8m1(v_b8_16, 0, vl);
                 vuint8m1_t v_a = __riscv_vmv_v_x_u8m1(0xFF, vl);
 
-                /* Store using stride store for XRGB8888 (4 bytes per pixel) */
+                /* Сохранение с использованием хранилища шагов для XRGB8888 (4 байта на пиксель) */
                 LV_RVV_STORE_XRGB8888_U8M1(dest_buf, x, v_b, v_g, v_r, v_a, vl);
             }
 
@@ -470,9 +470,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888(lv_draw_sw_blend_image_dsc
 }
 
 /**
- * RGB565 to RGB888/XRGB8888 with opacity
- * blend formula: result = (src * opa + dst * (255 - opa)) >> 8
- * Optimized using vwmaccu for blend calculation
+ * От RGB565 до RGB888 / XRGB8888 с непрозрачностью
+ * формула смешивания: результат = (src * opa + dst * (255 - opa)) >> 8
+ * Оптимизировано использование vwmaccu для расчета смеси.
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                uint32_t dest_px_size)
@@ -495,27 +495,27 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa(lv_draw_sw_blend_
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
 
-                /* Load RGB565 source pixels */
+                /* Загрузите исходные пиксели RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Convert RGB565 to RGB888 using macro, then narrow to 8-bit */
+                /* Преобразуйте RGB565 в RGB888 с помощью макроса, затем сузьте его до 8-битного. */
                 vuint16m2_t v_src_r16, v_src_g16, v_src_b16;
                 LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_src_r16, v_src_g16, v_src_b16, vl);
                 vuint8m1_t v_src_r = __riscv_vnsrl_wx_u8m1(v_src_r16, 0, vl);
                 vuint8m1_t v_src_g = __riscv_vnsrl_wx_u8m1(v_src_g16, 0, vl);
                 vuint8m1_t v_src_b = __riscv_vnsrl_wx_u8m1(v_src_b16, 0, vl);
 
-                /* Load destination RGB888 using stride load */
+                /* Загрузите пункт назначения RGB888, используя нагрузку на шаг */
                 vuint8m1_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_LOAD_RGB888_U8M1(dest_buf, x, v_dst_b, v_dst_g, v_dst_r, vl);
 
-                /* Blend using vwmaccu */
+                /* Смешайте с помощью vwmaccu */
                 vuint8m1_t v_r, v_g, v_b;
                 LV_RVV_BLEND_RGB_U8M1(v_src_r, v_src_g, v_src_b,
                                       v_dst_r, v_dst_g, v_dst_b,
                                       opa, v_r, v_g, v_b, vl);
 
-                /* Store result */
+                /* Сохранить результат */
                 LV_RVV_STORE_RGB888_U8M1(dest_buf, x, v_b, v_g, v_r, vl);
             }
 
@@ -528,28 +528,28 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa(lv_draw_sw_blend_
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
 
-                /* Load RGB565 source pixels */
+                /* Загрузите исходные пиксели RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Convert RGB565 to RGB888 using macro, then narrow to 8-bit */
+                /* Преобразуйте RGB565 в RGB888 с помощью макроса, затем сузьте его до 8-битного. */
                 vuint16m2_t v_src_r16, v_src_g16, v_src_b16;
                 LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_src_r16, v_src_g16, v_src_b16, vl);
                 vuint8m1_t v_src_r = __riscv_vnsrl_wx_u8m1(v_src_r16, 0, vl);
                 vuint8m1_t v_src_g = __riscv_vnsrl_wx_u8m1(v_src_g16, 0, vl);
                 vuint8m1_t v_src_b = __riscv_vnsrl_wx_u8m1(v_src_b16, 0, vl);
 
-                /* Load destination XRGB8888 using stride load */
+                /* Загрузите пункт назначения XRGB8888, используя нагрузку на шаг */
                 vuint8m1_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_LOAD_XRGB8888_U8M1(dest_buf, x, v_dst_b, v_dst_g, v_dst_r, vl);
 
-                /* Blend using vwmaccu */
+                /* Смешайте с помощью vwmaccu */
                 vuint8m1_t v_r, v_g, v_b;
                 LV_RVV_BLEND_RGB_U8M1(v_src_r, v_src_g, v_src_b,
                                       v_dst_r, v_dst_g, v_dst_b,
                                       opa, v_r, v_g, v_b, vl);
                 vuint8m1_t v_a = __riscv_vmv_v_x_u8m1(0xFF, vl);
 
-                /* Store result */
+                /* Сохранить результат */
                 LV_RVV_STORE_XRGB8888_U8M1(dest_buf, x, v_b, v_g, v_r, v_a, vl);
             }
 
@@ -562,9 +562,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa(lv_draw_sw_blend_
 }
 
 /**
- * RGB565 to RGB888/XRGB8888 with per-pixel mask
- * blend formula: result = (src * mask + dst * (255 - mask)) >> 8
- * Optimized using vwmaccu for blend calculation
+ * От RGB565 до RGB888 / XRGB8888 с попиксельной маской
+ * формула смешивания: результат = (src * маска + dst * (255 - маска)) >> 8
+ * Оптимизировано использование vwmaccu для расчета смеси.
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                 uint32_t dest_px_size)
@@ -588,24 +588,24 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_mask(lv_draw_sw_blend
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
 
-                /* Load mask */
+                /* Загрузить маску */
                 vuint8m1_t v_mask = __riscv_vle8_v_u8m1(&mask_buf[x], vl);
 
-                /* Load RGB565 source */
+                /* Загрузить исходный код RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Convert RGB565 to RGB888 and narrow to 8-bit */
+                /* Преобразуйте RGB565 в RGB888 и сузьте до 8-битного. */
                 vuint16m2_t v_src_r16, v_src_g16, v_src_b16;
                 LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_src_r16, v_src_g16, v_src_b16, vl);
                 vuint8m1_t v_src_r = __riscv_vnsrl_wx_u8m1(v_src_r16, 0, vl);
                 vuint8m1_t v_src_g = __riscv_vnsrl_wx_u8m1(v_src_g16, 0, vl);
                 vuint8m1_t v_src_b = __riscv_vnsrl_wx_u8m1(v_src_b16, 0, vl);
 
-                /* Load destination */
+                /* Загрузить пункт назначения */
                 vuint8m1_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_LOAD_RGB888_U8M1(dest_buf, x, v_dst_b, v_dst_g, v_dst_r, vl);
 
-                /* Blend with mask using vwmaccu */
+                /* Смешайте с маской, используя vwmaccu */
                 vuint8m1_t v_r, v_g, v_b;
                 LV_RVV_BLEND_RGB_VMASK_U8M1(v_src_r, v_src_g, v_src_b,
                                             v_dst_r, v_dst_g, v_dst_b,
@@ -627,24 +627,24 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_mask(lv_draw_sw_blend
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
 
-                /* Load mask */
+                /* Загрузить маску */
                 vuint8m1_t v_mask = __riscv_vle8_v_u8m1(&mask_buf[x], vl);
 
-                /* Load RGB565 source */
+                /* Загрузить исходный код RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Convert RGB565 to RGB888 and narrow to 8-bit */
+                /* Преобразуйте RGB565 в RGB888 и сузьте до 8-битного. */
                 vuint16m2_t v_src_r16, v_src_g16, v_src_b16;
                 LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_src_r16, v_src_g16, v_src_b16, vl);
                 vuint8m1_t v_src_r = __riscv_vnsrl_wx_u8m1(v_src_r16, 0, vl);
                 vuint8m1_t v_src_g = __riscv_vnsrl_wx_u8m1(v_src_g16, 0, vl);
                 vuint8m1_t v_src_b = __riscv_vnsrl_wx_u8m1(v_src_b16, 0, vl);
 
-                /* Load destination */
+                /* Загрузить пункт назначения */
                 vuint8m1_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_LOAD_XRGB8888_U8M1(dest_buf, x, v_dst_b, v_dst_g, v_dst_r, vl);
 
-                /* Blend with mask using vwmaccu */
+                /* Смешайте с маской, используя vwmaccu */
                 vuint8m1_t v_r, v_g, v_b;
                 LV_RVV_BLEND_RGB_VMASK_U8M1(v_src_r, v_src_g, v_src_b,
                                             v_dst_r, v_dst_g, v_dst_b,
@@ -670,12 +670,12 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_mask(lv_draw_sw_blend
 }
 
 /**
- * RGB565 to RGB888/XRGB8888 with opacity and per-pixel mask
- * effective mix = (mask * opa) >> 8
- * blend formula: result = (src * mix + dst * (255 - mix)) >> 8
+ * От RGB565 до RGB888 / XRGB8888 с непрозрачностью и попиксельной маской.
+ * эффективная смесь = (маска * опа) >> 8
+ * формула смешивания: результат = (src * mix + dst * (255 - mix)) >> 8
  *
  * Note: with_opa_mask needs 16-bit intermediate for mix calculation,
- * so we cannot directly use the vwmaccu optimization for this case.
+ * поэтому мы не можем напрямую использовать оптимизацию vwmaccu для этого случая.
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                     uint32_t dest_px_size)
@@ -700,27 +700,27 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa_mask(lv_draw_sw_b
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
 
-                /* Load mask and compute effective mix = (mask * opa) >> 8 */
+                /* Загрузите маску и вычислите эффективное сочетание = (маска * opa) >> 8 */
                 vuint8m1_t v_mask = __riscv_vle8_v_u8m1(&mask_buf[x], vl);
                 vuint16m2_t v_mask16 = __riscv_vzext_vf2_u16m2(v_mask, vl);
                 vuint16m2_t v_mix16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_mask16, opa, vl), 8, vl);
                 vuint8m1_t v_mix = __riscv_vnsrl_wx_u8m1(v_mix16, 0, vl);
 
-                /* Load RGB565 source */
+                /* Загрузить исходный код RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Convert RGB565 to RGB888 and narrow to 8-bit */
+                /* Преобразуйте RGB565 в RGB888 и сузьте до 8-битного. */
                 vuint16m2_t v_src_r16, v_src_g16, v_src_b16;
                 LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_src_r16, v_src_g16, v_src_b16, vl);
                 vuint8m1_t v_src_r = __riscv_vnsrl_wx_u8m1(v_src_r16, 0, vl);
                 vuint8m1_t v_src_g = __riscv_vnsrl_wx_u8m1(v_src_g16, 0, vl);
                 vuint8m1_t v_src_b = __riscv_vnsrl_wx_u8m1(v_src_b16, 0, vl);
 
-                /* Load destination */
+                /* Загрузить пункт назначения */
                 vuint8m1_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_LOAD_RGB888_U8M1(dest_buf, x, v_dst_b, v_dst_g, v_dst_r, vl);
 
-                /* Blend with effective mix using vwmaccu */
+                /* Смешайте с эффективной смесью, используя vwmaccu */
                 vuint8m1_t v_r, v_g, v_b;
                 LV_RVV_BLEND_RGB_VMASK_U8M1(v_src_r, v_src_g, v_src_b,
                                             v_dst_r, v_dst_g, v_dst_b,
@@ -744,27 +744,27 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa_mask(lv_draw_sw_b
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
 
-                /* Load mask and compute effective mix */
+                /* Загрузите маску и вычислите эффективное сочетание */
                 vuint8m1_t v_mask = __riscv_vle8_v_u8m1(&mask_buf[x], vl);
                 vuint16m2_t v_mask16 = __riscv_vzext_vf2_u16m2(v_mask, vl);
                 vuint16m2_t v_mix16 = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(v_mask16, opa, vl), 8, vl);
                 vuint8m1_t v_mix = __riscv_vnsrl_wx_u8m1(v_mix16, 0, vl);
 
-                /* Load RGB565 source */
+                /* Загрузить исходный код RGB565 */
                 vuint16m2_t v_rgb565 = __riscv_vle16_v_u16m2(&src_buf[x], vl);
 
-                /* Convert RGB565 to RGB888 and narrow to 8-bit */
+                /* Преобразуйте RGB565 в RGB888 и сузьте до 8-битного. */
                 vuint16m2_t v_src_r16, v_src_g16, v_src_b16;
                 LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_src_r16, v_src_g16, v_src_b16, vl);
                 vuint8m1_t v_src_r = __riscv_vnsrl_wx_u8m1(v_src_r16, 0, vl);
                 vuint8m1_t v_src_g = __riscv_vnsrl_wx_u8m1(v_src_g16, 0, vl);
                 vuint8m1_t v_src_b = __riscv_vnsrl_wx_u8m1(v_src_b16, 0, vl);
 
-                /* Load destination */
+                /* Загрузить пункт назначения */
                 vuint8m1_t v_dst_b, v_dst_g, v_dst_r;
                 LV_RVV_LOAD_XRGB8888_U8M1(dest_buf, x, v_dst_b, v_dst_g, v_dst_r, vl);
 
-                /* Blend with effective mix using vwmaccu */
+                /* Смешайте с эффективной смесью, используя vwmaccu */
                 vuint8m1_t v_r, v_g, v_b;
                 LV_RVV_BLEND_RGB_VMASK_U8M1(v_src_r, v_src_g, v_src_b,
                                             v_dst_r, v_dst_g, v_dst_b,
@@ -792,7 +792,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa_mask(lv_draw_sw_b
  **********************/
 
 /**
- * RGB888/XRGB8888 to RGB888/XRGB8888 simple copy (no blending, opa >= 255)
+ * RGB888 / XRGB8888 — RGB888 / XRGB8888 простая копия (без смешивания, непрозрачность >= 255)
  * src_px_size: 3 for RGB888, 4 for XRGB8888
  * dest_px_size: 3 for RGB888, 4 for XRGB8888
  */
@@ -812,7 +812,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888(lv_draw_sw_blend_image_dsc
     const uint8_t * src_buf = dsc->src_buf;
     size_t vl;
 
-    /* Fast path: same pixel size, use RVV memcpy */
+    /* Быстрый путь: тот же размер пикселей, используйте RVV memcpy */
     if(src_px_size == dest_px_size) {
         const int32_t row_bytes = w * dest_px_size;
         for(int32_t y = 0; y < h; y++) {
@@ -827,9 +827,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888(lv_draw_sw_blend_image_dsc
         return LV_RESULT_OK;
     }
 
-    /* Different pixel sizes: need per-pixel conversion */
+    /* Различные размеры пикселей: требуется попиксельное преобразование */
     if(dest_px_size == 3) {
-        /* Source: XRGB8888 -> RGB888 */
+        /* Источник: XRGB8888 -> RGB888 */
         for(int32_t y = 0; y < h; y++) {
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
@@ -842,11 +842,11 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888(lv_draw_sw_blend_image_dsc
         }
     }
     else {
-        /* Destination: XRGB8888 */
+        /* Пункт назначения: XRGB8888 */
         size_t max_vl = __riscv_vsetvlmax_e8m1();
         vuint8m1_t v_a = __riscv_vmv_v_x_u8m1(0xFF, max_vl);
 
-        /* Source: RGB888 -> XRGB8888 */
+        /* Источник: RGB888 -> XRGB8888 */
         for(int32_t y = 0; y < h; y++) {
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
@@ -863,8 +863,8 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888(lv_draw_sw_blend_image_dsc
 }
 
 /**
- * RGB888/XRGB8888 to RGB888/XRGB8888 with opacity
- * blend formula: result = (src * opa + dst * (255 - opa)) >> 8
+ * RGB888 / XRGB8888 — RGB888 / XRGB8888 с непрозрачностью
+ * формула смешивания: результат = (src * opa + dst * (255 - opa)) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                uint32_t dest_px_size, uint32_t src_px_size)
@@ -964,8 +964,8 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa(lv_draw_sw_blend_
 }
 
 /**
- * RGB888/XRGB8888 to RGB888/XRGB8888 with per-pixel mask
- * blend formula: result = (src * mask + dst * (255 - mask)) >> 8
+ * RGB888 / XRGB8888 — RGB888 / XRGB8888 с попиксельной маской
+ * формула смешивания: результат = (src * маска + dst * (255 - маска)) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                 uint32_t dest_px_size, uint32_t src_px_size)
@@ -1103,9 +1103,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_mask(lv_draw_sw_blend
 }
 
 /**
- * RGB888/XRGB8888 to RGB888/XRGB8888 with opacity and per-pixel mask
- * effective mix = (mask * opa) >> 8
- * blend formula: result = (src * mix + dst * (255 - mix)) >> 8
+ * RGB888 / XRGB8888 — RGB888 / XRGB8888 с непрозрачностью и попиксельной маской
+ * эффективная смесь = (маска * опа) >> 8
+ * формула смешивания: результат = (src * mix + dst * (255 - mix)) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                     uint32_t dest_px_size, uint32_t src_px_size)
@@ -1247,8 +1247,8 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa_mask(lv_draw_sw_b
  **********************/
 
 /**
- * ARGB8888 to RGB888/XRGB8888 blend using source alpha
- * blend formula: result = (src * src_alpha + dst * (255 - src_alpha)) >> 8
+ * Смешение ARGB8888 с RGB888/XRGB8888 с использованием исходного альфа-канала
+ * формула смешивания: результат = (src * src_alpha + dst * (255 - src_alpha )) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc,
                                                         uint32_t dest_px_size)
@@ -1314,9 +1314,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888(lv_draw_sw_blend_image_d
 }
 
 /**
- * ARGB8888 to RGB888/XRGB8888 with global opacity
+ * От ARGB8888 до RGB888/XRGB8888 с глобальной непрозрачностью.
  * effective_alpha = (src_alpha * opa) >> 8
- * blend formula: result = (src * effective_alpha + dst * (255 - effective_alpha)) >> 8
+ * формула смешивания: результат = (src * effective_alpha + dst * (255 - effective_alpha )) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_opa(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                  uint32_t dest_px_size)
@@ -1387,9 +1387,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_opa(lv_draw_sw_blen
 }
 
 /**
- * ARGB8888 to RGB888/XRGB8888 with per-pixel mask
+ * От ARGB8888 до RGB888 / XRGB8888 с попиксельной маской
  * effective_alpha = (src_alpha * mask) >> 8
- * blend formula: result = (src * effective_alpha + dst * (255 - effective_alpha)) >> 8
+ * формула смешивания: результат = (src * effective_alpha + dst * (255 - effective_alpha )) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                   uint32_t dest_px_size)
@@ -1467,9 +1467,9 @@ lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_mask(lv_draw_sw_ble
 }
 
 /**
- * ARGB8888 to RGB888/XRGB8888 with opacity and per-pixel mask
+ * От ARGB8888 до RGB888 / XRGB8888 с непрозрачностью и попиксельной маской.
  * effective_alpha = (src_alpha * mask * opa) >> 16
- * blend formula: result = (src * effective_alpha + dst * (255 - effective_alpha)) >> 8
+ * формула смешивания: результат = (src * effective_alpha + dst * (255 - effective_alpha )) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_opa_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                       uint32_t dest_px_size)
@@ -1551,11 +1551,11 @@ lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_opa_mask(lv_draw_sw
 }
 
 /**
- * ARGB8888 premultiplied to RGB888/XRGB8888
- * For premultiplied alpha, source RGB is already multiplied by alpha:
+ * ARGB8888 предварительно умножается на RGB888 / XRGB8888
+ * Для предварительно умноженной альфа источник RGB уже умножен на альфу:
  *   src_premul = src * src_alpha / 255
- * blend formula: result = src_premul + dst * (255 - src_alpha) / 255
- *              = src_premul + (dst * (255 - src_alpha)) >> 8
+ * формула смешивания: результат = src_premul + dst * (255 - src_alpha ) / 255
+ *              = src_premul + (dst * (255 - src_alpha )) >> 8
  */
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_premultiplied_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                       uint32_t dest_px_size)
@@ -1571,7 +1571,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_argb8888_premultiplied_to_rgb888(lv_draw_sw
     size_t vl;
 
     if(dest_px_size == 3) {
-        /* ARGB8888 premultiplied -> RGB888 */
+        /* ARGB8888 предварительно умноженный -> RGB888 */
         for(int32_t y = 0; y < h; y++) {
             for(int32_t x = 0; x < w; x += vl) {
                 vl = __riscv_vsetvl_e8m1(w - x);
@@ -1603,7 +1603,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_argb8888_premultiplied_to_rgb888(lv_draw_sw
         }
     }
     else {
-        /* ARGB8888 premultiplied -> XRGB8888 */
+        /* ARGB8888 предварительно умноженный -> XRGB8888 */
         size_t max_vl = __riscv_vsetvlmax_e8m1();
         vuint8m1_t v_a = __riscv_vmv_v_x_u8m1(0xFF, max_vl);
         for(int32_t y = 0; y < h; y++) {

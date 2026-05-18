@@ -46,9 +46,9 @@ extern "C" {
  * @param ver_res The vertical resolution value of LVGL display.
  * @param zoom_level The zoom level value. Base value is 100 a.k.a 100%.
  * @param allow_dpi_override Allow DPI override if true, or follow the
- *                           Windows DPI scaling setting dynamically.
+ *                           Динамическая настройка масштабирования Windows DPI.
  * @param simulator_mode Create simulator mode display if true (not resizable),
- *                       or create application mode display (resizable).
+ *                       или создать отображение режима приложения (с возможностью изменения размера).
  * @return The created LVGL display object.
 */
 lv_display_t * lv_windows_create_display(
@@ -68,49 +68,49 @@ HWND lv_windows_get_display_window_handle(lv_display_t * display);
 
 /**
  * @brief Get logical pixel value from physical pixel value taken account
- *        with zoom level.
+ *        с уровнем масштабирования.
  * @param physical The physical pixel value taken account with zoom level.
  * @param zoom_level The zoom level value. Base value is 100 a.k.a 100%.
  * @return The logical pixel value.
- * @remark It uses the same calculation style as Windows OS implementation.
- *         It will be useful for integrate LVGL Windows backend to other
- *         Windows applications.
+ * @remark Он использует тот же стиль вычислений, что и реализация Windows OS.
+ *         Будет полезно для интеграции серверной части Windows LVGL с другими
+ *         Windows-приложения.
 */
 int32_t lv_windows_zoom_to_logical(int32_t physical, int32_t zoom_level);
 
 /**
  * @brief Get physical pixel value taken account with zoom level from
- *        logical pixel value.
+ *        значение логического пикселя.
  * @param logical The logical pixel value.
  * @param zoom_level The zoom level value. Base value is 100 a.k.a 100%.
  * @return The physical pixel value taken account with zoom level.
- * @remark It uses the same calculation style as Windows OS implementation.
- *         It will be useful for integrate LVGL Windows backend to other
- *         Windows applications.
+ * @remark Он использует тот же стиль вычислений, что и реализация Windows OS.
+ *         Будет полезно для интеграции серверной части Windows LVGL с другими
+ *         Windows-приложения.
 */
 int32_t lv_windows_zoom_to_physical(int32_t logical, int32_t zoom_level);
 
 /**
  * @brief Get logical pixel value from physical pixel value taken account
- *        with DPI scaling.
+ *        с масштабированием DPI.
  * @param physical The physical pixel value taken account with DPI scaling.
  * @param dpi The DPI scaling value. Base value is USER_DEFAULT_SCREEN_DPI.
  * @return The logical pixel value.
- * @remark It uses the same calculation style as Windows OS implementation.
- *         It will be useful for integrate LVGL Windows backend to other
- *         Windows applications.
+ * @remark Он использует тот же стиль вычислений, что и реализация Windows OS.
+ *         Будет полезно для интеграции серверной части Windows LVGL с другими
+ *         Windows-приложения.
 */
 int32_t lv_windows_dpi_to_logical(int32_t physical, int32_t dpi);
 
 /**
  * @brief Get physical pixel value taken account with DPI scaling from
- *        logical pixel value.
+ *        значение логического пикселя.
  * @param logical The logical pixel value.
  * @param dpi The DPI scaling value. Base value is USER_DEFAULT_SCREEN_DPI.
  * @return The physical pixel value taken account with DPI scaling.
- * @remark It uses the same calculation style as Windows OS implementation.
- *         It will be useful for integrate LVGL Windows backend to other
- *         Windows applications.
+ * @remark Он использует тот же стиль вычислений, что и реализация Windows OS.
+ *         Будет полезно для интеграции серверной части Windows LVGL с другими
+ *         Windows-приложения.
 */
 int32_t lv_windows_dpi_to_physical(int32_t logical, int32_t dpi);
 
@@ -121,7 +121,7 @@ int32_t lv_windows_dpi_to_physical(int32_t logical, int32_t dpi);
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WINDOWS_DISPLAY_H*/

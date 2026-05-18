@@ -7,12 +7,12 @@
 static void slider_event_cb(lv_event_t * e);
 
 /**
- * Show the current value when the slider is pressed by extending the drawer
+ * Показывать текущее значение при нажатии ползунка, выдвинув ящик.
  *
  */
 void lv_example_slider_3(void)
 {
-    /*Create a slider in the center of the display*/
+    /*Создайте слайдер в центре дисплея.*/
     lv_obj_t * slider;
     slider = lv_slider_create(lv_screen_active());
     lv_obj_center(slider);
@@ -31,7 +31,7 @@ static void slider_event_cb(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target_obj(e);
 
-    /*Provide some extra space for the value*/
+    /*Укажите дополнительное место для значения*/
     if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
         lv_event_set_ext_draw_size(e, 50);
     }

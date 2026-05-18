@@ -108,7 +108,7 @@ bool lv_vg_lite_draw_grad_helper(
 #endif /*LV_USE_DRAW_VG_LITE && LV_USE_VECTOR_GRAPHIC*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_VG_LITE_GRAD_H*/

@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 27 mar 2023
+/*  Создано: 27 марта 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -69,7 +69,7 @@ void lv_draw_eve_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc, co
     int32_t short_side = LV_MIN(coords_w, coords_h);
     if(rout > short_side >> 1) rout = short_side >> 1;
 
-    /*Get the inner area*/
+    /*Получить внутреннюю область*/
     lv_area_t area_inner;
     lv_area_copy(&area_inner, coords);
     area_inner.x1 += ((dsc->side & LV_BORDER_SIDE_LEFT) ? dsc->width : - (dsc->width));

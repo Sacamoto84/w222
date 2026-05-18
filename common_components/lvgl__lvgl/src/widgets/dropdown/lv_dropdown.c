@@ -158,7 +158,7 @@ lv_obj_t * lv_dropdown_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_dropdown_set_text(lv_obj_t * obj, const char * text)
@@ -198,17 +198,17 @@ void lv_dropdown_set_options(lv_obj_t * obj, const char * options)
 
     lv_dropdown_t * dropdown = (lv_dropdown_t *)obj;
 
-    /*Count the '\n'-s to determine the number of options*/
+    /*Подсчитайте '\n'-s, чтобы определить количество вариантов.*/
     dropdown->option_cnt = 0;
     uint32_t i;
     for(i = 0; options[i] != '\0'; i++) {
         if(options[i] == '\n') dropdown->option_cnt++;
     }
-    dropdown->option_cnt++;   /*Last option has no `\n`*/
+    dropdown->option_cnt++;   /*Последний вариант не имеет `\n`*/
     dropdown->sel_opt_id      = 0;
     dropdown->sel_opt_id_orig = 0;
 
-    /*Allocate space for the new text*/
+    /*Выделите место для нового текста*/
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
     size_t len = lv_strlen(options) + 1;
 #else
@@ -231,7 +231,7 @@ void lv_dropdown_set_options(lv_obj_t * obj, const char * options)
     lv_text_ap_proc(options, dropdown->options);
 #endif
 
-    /*Now the text is dynamically allocated*/
+    /*Теперь текст распределяется динамически*/
     dropdown->static_options = 0;
 
     lv_obj_invalidate(obj);
@@ -245,13 +245,13 @@ void lv_dropdown_set_options_static(lv_obj_t * obj, const char * options)
 
     lv_dropdown_t * dropdown = (lv_dropdown_t *)obj;
 
-    /*Count the '\n'-s to determine the number of options*/
+    /*Подсчитайте '\n'-s, чтобы определить количество вариантов.*/
     dropdown->option_cnt = 0;
     uint32_t i;
     for(i = 0; options[i] != '\0'; i++) {
         if(options[i] == '\n') dropdown->option_cnt++;
     }
-    dropdown->option_cnt++;   /*Last option has no `\n`*/
+    dropdown->option_cnt++;   /*Последний вариант не имеет `\n`*/
     dropdown->sel_opt_id      = 0;
     dropdown->sel_opt_id_orig = 0;
 
@@ -274,21 +274,21 @@ void lv_dropdown_add_option(lv_obj_t * obj, const char * option, uint32_t pos)
 
     lv_dropdown_t * dropdown = (lv_dropdown_t *)obj;
 
-    /*Convert static options to dynamic*/
+    /*Преобразование статических параметров в динамические*/
     if(dropdown->static_options != 0) {
         char * static_options = dropdown->options;
         if(dropdown->options) {
             dropdown->options = lv_strdup(static_options);
         }
         else {
-            dropdown->options = lv_calloc(1, 1); /*Allocate at least 1 byte for the NULL terminator*/
+            dropdown->options = lv_calloc(1, 1); /*Выделите как минимум 1 байт для терминатора NULL.*/
         }
         LV_ASSERT_MALLOC(dropdown->options);
         if(dropdown->options == NULL) return;
         dropdown->static_options = 0;
     }
 
-    /*Allocate space for the new option*/
+    /*Выделите место для новой опции*/
     size_t old_len = lv_strlen(dropdown->options);
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
     size_t ins_len = lv_strlen(option) + 1;
@@ -296,14 +296,14 @@ void lv_dropdown_add_option(lv_obj_t * obj, const char * option, uint32_t pos)
     size_t ins_len = lv_text_ap_calc_bytes_count(option) + 1;
 #endif
 
-    size_t new_len = ins_len + old_len + 2; /*+2 for terminating NULL and possible \n*/
+    size_t new_len = ins_len + old_len + 2; /*+2 за завершение NULL и возможно \n*/
     dropdown->options        = lv_realloc(dropdown->options, new_len + 1);
     LV_ASSERT_MALLOC(dropdown->options);
     if(dropdown->options == NULL) return;
 
     dropdown->options[old_len] = '\0';
 
-    /*Find the insert character position*/
+    /*Найдите позицию вставляемого символа*/
     uint32_t insert_pos = old_len;
     if(pos != LV_DROPDOWN_POS_LAST) {
         uint32_t opcnt = 0;
@@ -315,12 +315,12 @@ void lv_dropdown_add_option(lv_obj_t * obj, const char * option, uint32_t pos)
         }
     }
 
-    /*Add delimiter to existing options*/
+    /*Добавить разделитель к существующим параметрам*/
     if((insert_pos > 0) && (pos >= dropdown->option_cnt))
         lv_text_ins(dropdown->options, lv_text_encoded_get_char_id(dropdown->options, insert_pos++), "\n");
 
-    /*Insert the new option, adding \n if necessary*/
-    char * ins_buf = lv_malloc(ins_len + 2); /*+ 2 for terminating NULL and possible \n*/
+    /*Вставьте новую опцию, добавив при необходимости \n.*/
+    char * ins_buf = lv_malloc(ins_len + 2); /*+ 2 для завершения NULL и возможно \n*/
     LV_ASSERT_MALLOC(ins_buf);
     if(ins_buf == NULL) return;
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
@@ -404,7 +404,7 @@ void lv_dropdown_set_selected_highlight(lv_obj_t * obj, bool en)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_obj_t * lv_dropdown_get_list(lv_obj_t * obj)
@@ -489,7 +489,7 @@ int32_t lv_dropdown_get_option_index(lv_obj_t * obj, const char * option)
     uint32_t char_i = 0;
     uint32_t opt_i = 0;
     const char * start = opts;
-    const size_t option_len = lv_strlen(option); /*avoid recomputing this multiple times in the loop*/
+    const size_t option_len = lv_strlen(option); /*избегайте повторных вычислений несколько раз в цикле*/
 
     while(start[0] != '\0') {
         for(char_i = 0; (start[char_i] != '\n') && (start[char_i] != '\0'); char_i++);
@@ -529,7 +529,7 @@ lv_dir_t lv_dropdown_get_dir(const lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_dropdown_open(lv_obj_t * dropdown_obj)
@@ -543,7 +543,7 @@ void lv_dropdown_open(lv_obj_t * dropdown_obj)
     lv_obj_move_to_index(dropdown->list, -1);
     lv_obj_remove_flag(dropdown->list, LV_OBJ_FLAG_HIDDEN);
 
-    /*To allow styling the list*/
+    /*Чтобы разрешить стилизацию списка*/
     lv_obj_send_event(dropdown_obj, LV_EVENT_READY, NULL);
 
     lv_obj_t * label = get_label(dropdown_obj);
@@ -551,7 +551,7 @@ void lv_dropdown_open(lv_obj_t * dropdown_obj)
     lv_obj_set_width(dropdown->list, LV_SIZE_CONTENT);
 
     lv_obj_update_layout(label);
-    /*Set smaller width to the width of the button*/
+    /*Установите меньшую ширину, равную ширине кнопки.*/
     if(lv_obj_get_width(dropdown->list) <= lv_obj_get_width(dropdown_obj) &&
        (dropdown->dir == LV_DIR_TOP || dropdown->dir == LV_DIR_BOTTOM)) {
         lv_obj_set_width(dropdown->list, lv_obj_get_width(dropdown_obj));
@@ -570,7 +570,7 @@ void lv_dropdown_open(lv_obj_t * dropdown_obj)
     if(dropdown->dir == LV_DIR_BOTTOM) {
         if(dropdown_obj->coords.y2 + list_h > LV_VER_RES) {
             if(dropdown_obj->coords.y1 > LV_VER_RES - dropdown_obj->coords.y2) {
-                /*There is more space on the top, so make it drop up*/
+                /*Сверху больше места, поэтому опустите его вверх.*/
                 dir = LV_DIR_TOP;
                 list_h = dropdown_obj->coords.y1 - 1;
             }
@@ -583,7 +583,7 @@ void lv_dropdown_open(lv_obj_t * dropdown_obj)
     else if(dropdown->dir == LV_DIR_TOP) {
         if(dropdown_obj->coords.y1 - list_h < 0) {
             if(dropdown_obj->coords.y1 < LV_VER_RES - dropdown_obj->coords.y2) {
-                /*There is more space on the top, so make it drop up*/
+                /*Сверху больше места, поэтому опустите его вверх.*/
                 dir = LV_DIR_BOTTOM;
                 list_h = LV_VER_RES - dropdown_obj->coords.y2;
             }
@@ -691,7 +691,7 @@ static void lv_dropdown_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
 
     lv_dropdown_t * dropdown = (lv_dropdown_t *)obj;
 
-    /*Initialize the allocated 'ext'*/
+    /*Инициализировать выделенный «ext»*/
     dropdown->list          = NULL;
     dropdown->options     = NULL;
     dropdown->symbol         = LV_SYMBOL_DOWN;
@@ -764,7 +764,7 @@ static void lv_dropdown_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -777,13 +777,13 @@ static void lv_dropdown_event(const lv_obj_class_t * class_p, lv_event_t * e)
         bool editing               = lv_group_get_editing(g);
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
 
-        /*Encoders need special handling*/
+        /*Энкодеры требуют особого обращения*/
         if(indev_type == LV_INDEV_TYPE_ENCODER) {
-            /*Open the list if editing*/
+            /*Открыть список при редактировании*/
             if(editing) {
                 lv_dropdown_open(obj);
             }
-            /*Close the list if navigating*/
+            /*Закройте список при навигации*/
             else {
                 dropdown->sel_opt_id = dropdown->sel_opt_id_orig;
                 lv_dropdown_close(obj);
@@ -834,8 +834,8 @@ static void lv_dropdown_event(const lv_obj_class_t * class_p, lv_event_t * e)
             lv_dropdown_close(obj);
         }
         else if(c == LV_KEY_ENTER) {
-            /* Handle the ENTER key only if it was send by another object.
-             * Do no process it if ENTER is sent by the dropdown because it's handled in LV_EVENT_RELEASED */
+            /* Обрабатывайте ключ ENTER, только если он был отправлен другим объектом.
+             * Не обрабатывайте его, если ENTER отправляется из раскрывающегося списка, поскольку он обрабатывается в LV_EVENT_RELEASED. */
             lv_obj_t * indev_obj = lv_indev_get_active_obj();
             if(indev_obj != obj) {
                 res = btn_release_handler(obj);
@@ -867,7 +867,7 @@ static void lv_dropdown_list_event(const lv_obj_class_t * class_p, lv_event_t * 
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     lv_event_code_t code = lv_event_get_code(e);
     if(code != LV_EVENT_DRAW_POST) {
         res = lv_obj_event_base(MY_CLASS_LIST, e);
@@ -912,7 +912,7 @@ static void draw_main(lv_event_t * e)
     symbol_dsc.base.layer = layer;
     lv_obj_init_draw_label_dsc(obj, LV_PART_INDICATOR, &symbol_dsc);
 
-    /*If no text specified use the selected option*/
+    /*Если текст не указан, используйте выбранный вариант*/
     const char * opt_txt;
     char buf[128];
     if(dropdown->text) opt_txt = dropdown->text;
@@ -1003,15 +1003,15 @@ static void draw_main(lv_event_t * e)
     txt_area.y2 = txt_area.y1 + size.y - 1;
     lv_area_align(&obj->coords, &txt_area, LV_ALIGN_CENTER, 0, 0);
 
-    /*Center align the text if no symbol*/
+    /*Выровнять текст по центру, если нет символа*/
     if(dropdown->symbol == NULL && label_dsc.align == LV_TEXT_ALIGN_AUTO) {
         label_dsc.align = LV_TEXT_ALIGN_CENTER;
     }
     else {
-        /*Add some space between the label and symbol*/
+        /*Добавьте немного места между меткой и символом.*/
         symbol_w += lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
 
-        /*Text to the right*/
+        /*Текст справа*/
         if(symbol_to_left) {
             if(label_dsc.align == LV_TEXT_ALIGN_AUTO) label_dsc.align = LV_TEXT_ALIGN_RIGHT;
             txt_area.x1 += symbol_w;
@@ -1040,8 +1040,8 @@ static void draw_list(lv_event_t * e)
     lv_dropdown_t * dropdown = (lv_dropdown_t *)dropdown_obj;
     lv_layer_t * layer = lv_event_get_layer(e);
 
-    /* Clip area might be too large too to shadow but
-     * the selected option can be drawn on only the background*/
+    /* Область обрезки может быть слишком большой для затенения, но
+     * выбранный вариант можно нарисовать только на фоне*/
     lv_area_t clip_area_core;
     bool has_common;
     has_common = lv_area_intersect(&clip_area_core, &layer->_clip_area, &dropdown->list->coords);
@@ -1081,12 +1081,12 @@ static void draw_box(lv_obj_t * dropdown_obj, lv_layer_t * layer, uint32_t id, l
         list_obj->skip_trans = 1;
     }
 
-    /*Draw a rectangle under the selected item*/
+    /*Нарисуйте прямоугольник под выбранным элементом*/
     const lv_font_t * font    = lv_obj_get_style_text_font(list_obj, LV_PART_SELECTED);
     int32_t line_space = lv_obj_get_style_text_line_space(list_obj,  LV_PART_SELECTED);
     int32_t font_h         = lv_font_get_line_height(font);
 
-    /*Draw the selected*/
+    /*Нарисуйте выбранное*/
     lv_obj_t * label = get_label(dropdown_obj);
     LV_ASSERT_NULL(label);
     lv_area_t rect_area;
@@ -1127,7 +1127,7 @@ static void draw_box_label(lv_obj_t * dropdown_obj, lv_layer_t * layer, uint32_t
     lv_obj_init_draw_label_dsc(list_obj, LV_PART_SELECTED, &label_dsc);
 
     label_dsc.line_space = lv_obj_get_style_text_line_space(list_obj,
-                                                            LV_PART_SELECTED);  /*Line space should come from the list*/
+                                                            LV_PART_SELECTED);  /*Межстрочное пространство должно быть взято из списка*/
 
     lv_obj_t * label = get_label(dropdown_obj);
     if(label == NULL) return;
@@ -1166,7 +1166,7 @@ static lv_result_t btn_release_handler(lv_obj_t * obj)
             if(dropdown->sel_opt_id_orig != dropdown->sel_opt_id) {
                 dropdown->sel_opt_id_orig = dropdown->sel_opt_id;
                 lv_result_t res;
-                uint32_t id  = dropdown->sel_opt_id; /*Just to use uint32_t in event data*/
+                uint32_t id  = dropdown->sel_opt_id; /*Просто использовать uint32_t в данных о событиях*/
                 res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, &id);
                 if(res != LV_RESULT_OK) return res;
                 lv_obj_invalidate(obj);
@@ -1188,7 +1188,7 @@ static lv_result_t btn_release_handler(lv_obj_t * obj)
 }
 
 /**
- * Called when a drop down list is released to open it or set new option
+ * Вызывается, когда открывается раскрывающийся список, чтобы открыть его или установить новую опцию.
  * @param list pointer to the drop down list's list
  * @return LV_RESULT_INVALID if the list is not being deleted in the user callback. Else LV_RESULT_OK
  */
@@ -1199,7 +1199,7 @@ static lv_result_t list_release_handler(lv_obj_t * list_obj)
     lv_dropdown_t * dropdown = (lv_dropdown_t *)dropdown_obj;
 
     lv_indev_t * indev = lv_indev_active();
-    /*Leave edit mode once a new item is selected*/
+    /*Выйдите из режима редактирования после выбора нового элемента.*/
     if(lv_indev_get_type(indev) == LV_INDEV_TYPE_ENCODER) {
         dropdown->sel_opt_id_orig = dropdown->sel_opt_id;
         lv_group_t * g      = lv_obj_get_group(dropdown_obj);
@@ -1208,7 +1208,7 @@ static lv_result_t list_release_handler(lv_obj_t * list_obj)
         }
     }
 
-    /*Search the clicked option (For KEYPAD and ENCODER the new value should be already set)*/
+    /*Найдите выбранную опцию (для KEYPAD и ENCODER новое значение должно быть уже установлено)*/
     if(lv_indev_get_type(indev) == LV_INDEV_TYPE_POINTER || lv_indev_get_type(indev) == LV_INDEV_TYPE_BUTTON) {
         lv_point_t p;
         lv_indev_get_point(indev, &p);
@@ -1218,10 +1218,10 @@ static lv_result_t list_release_handler(lv_obj_t * list_obj)
 
     lv_dropdown_close(dropdown_obj);
 
-    /*Invalidate to refresh the text*/
+    /*Недействительно, чтобы обновить текст*/
     if(dropdown->text == NULL) lv_obj_invalidate(dropdown_obj);
 
-    uint32_t id  = dropdown->sel_opt_id; /*Just to use uint32_t in event data*/
+    uint32_t id  = dropdown->sel_opt_id; /*Просто использовать uint32_t в данных о событиях*/
     lv_result_t res = lv_obj_send_event(dropdown_obj, LV_EVENT_VALUE_CHANGED, &id);
     if(res != LV_RESULT_OK) return res;
 
@@ -1264,7 +1264,7 @@ static uint32_t get_id_on_point(lv_obj_t * dropdown_obj, int32_t y)
 }
 
 /**
- * Set the position of list when it is closed to show the selected item
+ * Установите положение списка, когда он закрыт, чтобы показать выбранный элемент.
  * @param ddlist pointer to a drop down list
  */
 static void position_to_selected(lv_obj_t * dropdown_obj, lv_anim_enable_t anim_en)
@@ -1282,7 +1282,7 @@ static void position_to_selected(lv_obj_t * dropdown_obj, lv_anim_enable_t anim_
     int32_t unit_h = font_h + line_space;
     int32_t line_y1 = dropdown->sel_opt_id * unit_h;
 
-    /*Scroll to the selected option*/
+    /*Прокрутите до выбранного варианта*/
     lv_obj_scroll_to_y(dropdown->list, line_y1, anim_en);
     lv_obj_invalidate(dropdown->list);
 }

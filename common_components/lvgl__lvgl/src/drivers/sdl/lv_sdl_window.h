@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2025
+ * Изменено NXP в 2025 г.
  */
 
 #ifndef LV_SDL_WINDOW_H
@@ -27,9 +27,9 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* Possible values of LV_SDL_MOUSEWHEEL_MODE */
-#define LV_SDL_MOUSEWHEEL_MODE_ENCODER  0  /* The mousewheel emulates an encoder input device*/
-#define LV_SDL_MOUSEWHEEL_MODE_CROWN    1  /* The mousewheel emulates a smart watch crown*/
+/* Возможные значения LV_SDL_MOUSEWHEEL_MODE */
+#define LV_SDL_MOUSEWHEEL_MODE_ENCODER  0  /* Колесо мыши имитирует устройство ввода кодера.*/
+#define LV_SDL_MOUSEWHEEL_MODE_CROWN    1  /* Колесо мыши имитирует заводную головку умных часов.*/
 
 /**********************
  *      TYPEDEFS
@@ -69,7 +69,7 @@ struct SDL_Window * lv_sdl_window_get_window(lv_display_t * disp);
 #endif /* LV_DRV_SDL */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_SDL_WINDOW_H */

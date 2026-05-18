@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 8 abr 2023
+/*  Создано: 8 апр 2023
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -39,7 +39,7 @@ void lv_draw_eve_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
     if(dsc->dash_gap || dsc->dash_width) {
         LV_LOG_WARN("line dash_gap and dash_width not implemented by EVE yet.");
     }
-    /* Check if it's a vertical or horizontal line without rounding */
+    /* Проверьте, вертикальная или горизонтальная линия без закруглений. */
     bool is_vertical = (dsc->p1.x == dsc->p2.x);
     bool is_horizontal = (dsc->p1.y == dsc->p2.y);
     bool no_round = (!dsc->round_end || !dsc->round_start);
@@ -50,7 +50,7 @@ void lv_draw_eve_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
         lv_eve_vertex_2f(dsc->p2.x, dsc->p2.y);
     }
     else {
-        /* Draw inclined line or line with rounding (not possible without rounding)*/
+        /* Нарисовать наклонную линию или линию с закруглением (без закругления невозможно)*/
         lv_eve_primitive(LV_EVE_PRIMITIVE_LINE_STRIP);
         lv_eve_line_width(line_w);
         lv_eve_vertex_2f(dsc->p1.x, dsc->p1.y);

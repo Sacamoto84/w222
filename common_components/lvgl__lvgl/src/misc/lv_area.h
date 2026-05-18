@@ -26,7 +26,7 @@ extern "C" {
  **********************/
 
 /**
- * Represents a point on the screen.
+ * Представляет точку на экране.
  */
 typedef struct {
     int32_t x;
@@ -38,7 +38,7 @@ typedef struct {
     lv_value_precise_t y;
 } lv_point_precise_t;
 
-/** Represents an area of the screen.*/
+/** Представляет область экрана.*/
 typedef struct {
     int32_t x1;
     int32_t y1;
@@ -46,7 +46,7 @@ typedef struct {
     int32_t y2;
 } lv_area_t;
 
-/** Alignments*/
+/** Выравнивания*/
 
 typedef enum {
     LV_ALIGN_DEFAULT = 0,
@@ -90,19 +90,19 @@ typedef enum {
  **********************/
 
 /**
- * Initialize an area
- * @param area_p pointer to an area
- * @param x1 left coordinate of the area
- * @param y1 top coordinate of the area
- * @param x2 right coordinate of the area
- * @param y2 bottom coordinate of the area
+ * Инициализировать область
+ * @param area_p указатель на область
+ * @param x1 левая координата местности
+ * @param y1 верхняя координата области
+ * @param x2 правильные координаты местности
+ * @param y2 нижняя координата области
  */
 void lv_area_set(lv_area_t * area_p, int32_t x1, int32_t y1, int32_t x2, int32_t y2);
 
 /**
- * Copy an area
- * @param dest pointer to the destination area
- * @param src pointer to the source area
+ * Копировать область
+ * @param dest указатель на область назначения
+ * @param src указатель на исходную область
  */
 inline static void lv_area_copy(lv_area_t * dest, const lv_area_t * src)
 {
@@ -113,37 +113,37 @@ inline static void lv_area_copy(lv_area_t * dest, const lv_area_t * src)
 }
 
 /**
- * Get the width of an area
- * @param area_p pointer to an area
- * @return the width of the area (if x1 == x2 -> width = 1)
+ * Получить ширину области
+ * @param area_p указатель на область
+ * @return ширина области (если x1 == x2 -> ширина = 1)
  */
 int32_t lv_area_get_width(const lv_area_t * area_p);
 
 /**
- * Get the height of an area
- * @param area_p pointer to an area
- * @return the height of the area (if y1 == y2 -> height = 1)
+ * Получить высоту области
+ * @param area_p указатель на область
+ * @return высота области (если y1 == y2 -> высота = 1)
  */
 int32_t lv_area_get_height(const lv_area_t * area_p);
 
 /**
- * Set the width of an area
- * @param area_p pointer to an area
- * @param w the new width of the area (w == 1 makes x1 == x2)
+ * Установить ширину области
+ * @param area_p указатель на область
+ * @param w новая ширина области (w == 1 делает x1 == x2)
  */
 void lv_area_set_width(lv_area_t * area_p, int32_t w);
 
 /**
- * Set the height of an area
- * @param area_p pointer to an area
- * @param h the new height of the area (h == 1 makes y1 == y2)
+ * Установить высоту области
+ * @param area_p указатель на область
+ * @param h новая высота области (h == 1 делает y1 == y2)
  */
 void lv_area_set_height(lv_area_t * area_p, int32_t h);
 
 /**
- * Return with area of an area (x * y)
- * @param area_p pointer to an area
- * @return size of area
+ * Возврат с площадью области (x * y)
+ * @param area_p указатель на область
+ * @return размер площади
  */
 uint32_t lv_area_get_size(const lv_area_t * area_p);
 
@@ -152,36 +152,36 @@ void lv_area_increase(lv_area_t * area, int32_t w_extra, int32_t h_extra);
 void lv_area_move(lv_area_t * area, int32_t x_ofs, int32_t y_ofs);
 
 /**
- * Align an area to another
- * @param base an area where the other will be aligned
- * @param to_align the area to align
- * @param align `LV_ALIGN_...`
- * @param ofs_x X offset
- * @param ofs_y Y offset
+ * Выровнять область относительно другой
+ * @param base область, где другой будет выровнен
+ * @param to_align область для выравнивания
+ * @param выровнять `LV_ALIGN_...`
+ * @param ofs_x Смещение по оси X
+ * @param ofs_y Смещение по оси Y
  */
 void lv_area_align(const lv_area_t * base, lv_area_t * to_align, lv_align_t align, int32_t ofs_x, int32_t ofs_y);
 
 /**
- * Transform a point
- * @param point         pointer to a point
- * @param angle         angle with 0.1 resolutions (123 means 12.3°)
- * @param scale_x       horizontal zoom, 256 means 100%
- * @param scale_y       vertical zoom, 256 means 100%
- * @param pivot         pointer to the pivot point of the transformation
- * @param zoom_first    true: zoom first and rotate after that; else: opposite order
+ * Преобразование точки
+ * @param point         указатель на точку
+ * @param angle         угол с разрешением 0,1 (123 означает 12,3°)
+ * @param scale_x       горизонтальный зум, 256 означает 100%
+ * @param scale_y       вертикальный зум, 256 означает 100%
+ * @param pivot         указатель на опорную точку преобразования
+ * @param zoom_first    true: сначала масштабировать, а затем вращать; еще: противоположный порядок
  */
 void lv_point_transform(lv_point_t * point, int32_t angle, int32_t scale_x, int32_t scale_y, const lv_point_t * pivot,
                         bool zoom_first);
 
 /**
- * Transform an array of points
- * @param points        pointer to an array of points
- * @param count         number of points in the array
- * @param angle         angle with 0.1 resolutions (123 means 12.3°)
- * @param scale_x       horizontal zoom, 256 means 100%
- * @param scale_y       vertical zoom, 256 means 100%
- * @param pivot         pointer to the pivot point of the transformation
- * @param zoom_first    true: zoom first and rotate after that; else: opposite order
+ * Преобразование массива точек
+ * @param points        указатель на массив точек
+ * @param count         количество точек в массиве
+ * @param angle         угол с разрешением 0,1 (123 означает 12,3°)
+ * @param scale_x       горизонтальный зум, 256 означает 100%
+ * @param scale_y       вертикальный зум, 256 означает 100%
+ * @param pivot         указатель на опорную точку преобразования
+ * @param zoom_first    true: сначала масштабировать, а затем вращать; еще: противоположный порядок
  */
 void lv_point_array_transform(lv_point_t * points, size_t count, int32_t angle, int32_t scale_x, int32_t scale_y,
                               const lv_point_t * pivot,
@@ -206,8 +206,8 @@ void lv_point_precise_swap(lv_point_precise_t * p1, lv_point_precise_t * p2);
 #define LV_COORD_TYPE_SHIFT    (29U)
 
 #define LV_COORD_TYPE_MASK     (3 << LV_COORD_TYPE_SHIFT)
-#define LV_COORD_TYPE(x)       ((x) & LV_COORD_TYPE_MASK)  /*Extract type specifiers*/
-#define LV_COORD_PLAIN(x)      ((x) & ~LV_COORD_TYPE_MASK) /*Remove type specifiers*/
+#define LV_COORD_TYPE(x)       ((x) & LV_COORD_TYPE_MASK)  /*Спецификаторы типа извлечения*/
+#define LV_COORD_PLAIN(x)      ((x) & ~LV_COORD_TYPE_MASK) /*Удалить спецификаторы типа*/
 
 #define LV_COORD_TYPE_PX       (0 << LV_COORD_TYPE_SHIFT)
 #define LV_COORD_TYPE_SPEC     (1 << LV_COORD_TYPE_SHIFT)
@@ -218,11 +218,11 @@ void lv_point_precise_swap(lv_point_precise_t * p1, lv_point_precise_t * p2);
 
 #define LV_COORD_SET_SPEC(x)    ((x) | LV_COORD_TYPE_SPEC)
 
-/** Max coordinate value */
+/** Максимальное значение координаты */
 #define LV_COORD_MAX            ((1 << LV_COORD_TYPE_SHIFT) - 1)
 #define LV_COORD_MIN            (-LV_COORD_MAX)
 
-/*Special coordinates*/
+/*Специальные координаты*/
 #define LV_SIZE_CONTENT         LV_COORD_SET_SPEC(LV_COORD_MAX)
 #define LV_PCT_STORED_MAX       (LV_COORD_MAX - 1)
 #if LV_PCT_STORED_MAX % 2 != 0
@@ -238,17 +238,17 @@ LV_EXPORT_CONST_INT(LV_COORD_MIN);
 LV_EXPORT_CONST_INT(LV_SIZE_CONTENT);
 
 /**
- * Convert a percentage value to `int32_t`.
- * Percentage values are stored in special range
- * @param x the percentage (0..1000)
- * @return a coordinate that stores the percentage
+ * Преобразуйте процентное значение в`int32_t`.
+ * Процентные значения хранятся в специальном диапазоне.
+ * @param x процент (0..1000)
+ * @return координата, в которой хранится процент
  */
 int32_t lv_pct(int32_t x);
 
 int32_t lv_pct_to_px(int32_t v, int32_t base);
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif

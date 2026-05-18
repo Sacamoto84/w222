@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -31,13 +31,13 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 void LottieSlot::reset()
@@ -75,9 +75,9 @@ void LottieSlot::reset()
 
 void LottieSlot::assign(LottieObject* target)
 {
-    //apply slot object to all targets
+    //применить объект слота ко всем целям
     for (auto pair = pairs.begin(); pair < pairs.end(); ++pair) {
-        //backup the original properties before overwriting
+        //сделайте резервную копию исходных свойств перед перезаписью
         switch (type) {
             case LottieProperty::Type::ColorStop: {
                 if (!overridden) {
@@ -144,7 +144,7 @@ void LottieImage::prepare()
 
     auto picture = Picture::gen().release();
 
-    //force to load a picture on the same thread
+    //принудительно загрузить картинку в ту же ветку
     TaskScheduler::async(false);
 
     if (size > 0) picture->load((const char*)b64Data, size, mimeType, false);
@@ -192,13 +192,13 @@ uint32_t LottieGradient::populate(ColorStop& color, size_t count)
 
     uint32_t alphaCnt = (color.input->count - (count * 4)) / 2;
     Array<Fill::ColorStop> output(count + alphaCnt);
-    uint32_t cidx = 0;               //color count
+    uint32_t cidx = 0;               //количество цветов
     uint32_t clast = count * 4;
     if (clast > color.input->count) clast = color.input->count;
-    uint32_t aidx = clast;           //alpha count
+    uint32_t aidx = clast;           //альфа-счет
     Fill::ColorStop cs;
 
-    //merge color stops.
+    //объединить цветовые остановки.
     for (uint32_t i = 0; i < color.input->count; ++i) {
         if (cidx == clast || aidx == color.input->count) break;
         if ((*color.input)[cidx] == (*color.input)[aidx]) {
@@ -214,7 +214,7 @@ uint32_t LottieGradient::populate(ColorStop& color, size_t count)
             cs.r = (uint8_t)nearbyint((*color.input)[cidx + 1] * 255.0f);
             cs.g = (uint8_t)nearbyint((*color.input)[cidx + 2] * 255.0f);
             cs.b = (uint8_t)nearbyint((*color.input)[cidx + 3] * 255.0f);
-            //generate alpha value
+            //генерировать альфа-значение
             if (output.count > 0) {
                 auto p = ((*color.input)[cidx] - output.last().offset) / ((*color.input)[aidx] - output.last().offset);
                 cs.a = lerp<uint8_t>(output.last().a, (uint8_t)nearbyint((*color.input)[aidx + 1] * 255.0f), p);
@@ -223,7 +223,7 @@ uint32_t LottieGradient::populate(ColorStop& color, size_t count)
         } else {
             cs.offset = (*color.input)[aidx];
             cs.a = (uint8_t)nearbyint((*color.input)[aidx + 1] * 255.0f);
-            //generate color value
+            //генерировать значение цвета
             if (output.count > 0) {
                 auto p = ((*color.input)[aidx] - output.last().offset) / ((*color.input)[cidx] - output.last().offset);
                 cs.r = lerp<uint8_t>(output.last().r, (uint8_t)nearbyint((*color.input)[cidx + 1] * 255.0f), p);
@@ -239,7 +239,7 @@ uint32_t LottieGradient::populate(ColorStop& color, size_t count)
         output.push(cs);
     }
 
-    //color remains
+    //цвет остается
     while (cidx + 3 < clast) {
         cs.offset = (*color.input)[cidx];
         cs.r = (uint8_t)nearbyint((*color.input)[cidx + 1] * 255.0f);
@@ -250,7 +250,7 @@ uint32_t LottieGradient::populate(ColorStop& color, size_t count)
         cidx += 4;
     }
 
-    //alpha remains
+    //альфа остается
     while (aidx < color.input->count) {
         cs.offset = (*color.input)[aidx];
         cs.a = (uint8_t)nearbyint((*color.input)[aidx + 1] * 255.0f);
@@ -282,12 +282,12 @@ Fill* LottieGradient::fill(float frameNo, LottieExpressions* exps)
     auto s = start(frameNo, exps);
     auto e = end(frameNo, exps);
 
-    //Linear Graident
+    //Линейный градиент
     if (id == 1) {
         fill = LinearGradient::gen().release();
         static_cast<LinearGradient*>(fill)->linear(s.x, s.y, e.x, e.y);
     }
-    //Radial Gradient
+    //Радиальный градиент
     if (id == 2) {
         fill = RadialGradient::gen().release();
 
@@ -304,7 +304,7 @@ Fill* LottieGradient::fill(float frameNo, LottieExpressions* exps)
             auto angle = deg2rad((startAngle + this->angle(frameNo, exps)));
             auto fx = s.x + cos(angle) * progress * r;
             auto fy = s.y + sin(angle) * progress * r;
-            // Lottie doesn't have any focal radius concept
+            // У Лотти нет концепции фокального радиуса.
             P(static_cast<RadialGradient*>(fill))->radial(s.x, s.y, r, fx, fy, 0.0f);
         }
     }
@@ -313,7 +313,7 @@ Fill* LottieGradient::fill(float frameNo, LottieExpressions* exps)
 
     colorStops(frameNo, fill, exps);
 
-    //multiply the current opacity with the fill
+    //умножить текущую непрозрачность на заливку
     if (opacity < 255) {
         const Fill::ColorStop* colorStops;
         auto cnt = fill->colorStops(&colorStops);
@@ -350,11 +350,11 @@ void LottieGroup::prepare(LottieObject::Type type)
 
         if (child->type == LottieObject::Type::Trimpath) trimpath = true;
 
-        /* Figure out if this group is a simple path drawing.
-           In that case, the rendering context can be sharable with the parent's. */
+        /* Выясните, является ли эта группа простым рисунком пути.
+           В этом случае контекст рендеринга может быть общим с родительским контекстом. */
         if (allowMerge && (child->type == LottieObject::Group || !child->mergeable())) allowMerge = false;
 
-        //Figure out this group has visible contents
+        //Выясните, что в этой группе есть видимое содержимое
         switch (child->type) {
             case LottieObject::Group: {
                 visible |= static_cast<LottieGroup*>(child)->visible;
@@ -374,9 +374,9 @@ void LottieGroup::prepare(LottieObject::Type type)
 
         if (reqFragment) continue;
 
-        /* Figure out if the rendering context should be fragmented.
-           Multiple stroking or grouping with a stroking would occur this.
-           This fragment resolves the overlapped stroke outlines. */
+        /* Выясните, следует ли фрагментировать контекст рендеринга.
+           При этом произойдет многократное поглаживание или группировка поглаживанием.
+           Этот фрагмент разрешает перекрывающиеся контуры штрихов. */
         if (child->type == LottieObject::Group && !child->mergeable()) {
             if (strokeCnt > 0 || fillCnt > 0) reqFragment = true;
         } else if (child->type == LottieObject::SolidStroke || child->type == LottieObject::GradientStroke) {
@@ -388,7 +388,7 @@ void LottieGroup::prepare(LottieObject::Type type)
         }
     }
 
-    //Reverse the drawing order if this group has a trimpath.
+    //Измените порядок прорисовки, если в этой группе есть контур обрезки.
     if (!trimpath) return;
 
     for (uint32_t i = 0; i < children.count - 1; ) {
@@ -411,7 +411,7 @@ void LottieGroup::prepare(LottieObject::Type type)
 
 LottieLayer::~LottieLayer()
 {
-    //No need to free assets children because the Composition owns them.
+    //Нет необходимости освобождать дочерние активы, поскольку они принадлежат Составу.
     if (rid) children.clear();
 
     for (auto m = masks.begin(); m < masks.end(); ++m) {
@@ -429,8 +429,8 @@ LottieLayer::~LottieLayer()
 
 void LottieLayer::prepare(RGB24* color)
 {
-    /* if layer is hidden, only useful data is its transform matrix.
-       so force it to be a Null Layer and release all resource. */
+    /* если слой скрыт, только полезные данные — это его матрица преобразования.
+       поэтому сделайте его нулевым слоем и освободите все ресурсы. */
     if (hidden) {
         type = LottieLayer::Null;
         for (auto p = children.begin(); p < children.end(); ++p) delete(*p);
@@ -438,13 +438,13 @@ void LottieLayer::prepare(RGB24* color)
         return;
     }
 
-    //prepare the viewport clipper
+    //подготовить инструмент обрезки видового экрана
     if (type == LottieLayer::Precomp) {
         auto clipper = Shape::gen().release();
         clipper->appendRect(0.0f, 0.0f, w, h);
         PP(clipper)->ref();
         statical.pooler.push(clipper);
-    //prepare solid fill in advance if it is a layer type.
+    //заранее подготовьте сплошную заливку, если это тип слоя.
     } else if (color && type == LottieLayer::Solid) {
         auto solidFill = Shape::gen().release();
         solidFill->appendRect(0, 0, static_cast<float>(w), static_cast<float>(h));
@@ -476,23 +476,23 @@ LottieComposition::~LottieComposition()
     lv_free(version);
     lv_free(name);
 
-    //delete interpolators
+    //удалить интерполяторы
     for (auto i = interpolators.begin(); i < interpolators.end(); ++i) {
     	lv_free((*i)->key);
     	lv_free(*i);
     }
 
-    //delete assets
+    //удалить активы
     for (auto a = assets.begin(); a < assets.end(); ++a) {
         delete(*a);
     }
 
-    //delete fonts
+    //удалить шрифты
     for (auto f = fonts.begin(); f < fonts.end(); ++f) {
         delete(*f);
     }
 
-    //delete slots
+    //удалить слоты
     for (auto s = slots.begin(); s < slots.end(); ++s) {
         delete(*s);
     }

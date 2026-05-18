@@ -29,25 +29,25 @@ typedef enum {
 } time_am_pm_t;
 
 /**
- * Show how to handle a complex time setting with hour, minute, 12/24 hour mode, and AM/PM switch
- * In a real application the time can be displayed on multiple screens and it's not trivial
- * how and where to store the current values and how to get them.
- * In this example the widgets to set the time are create/deleted dynamically,
- * yet they always know what the current values are by using subjects.
+ * Покажите, как управлять сложной настройкой времени с помощью режима часов, минут, 12/24 часов и переключателя AM/PM.
+ * В реальном приложении время может отображаться на нескольких экранах, и это нетривиально.
+ * как и где хранить текущие значения и как их получить.
+ * В этом примере виджеты для установки времени создаются/удаляются динамически.
+ * тем не менее, они всегда знают, каковы текущие значения, используя предметы.
  */
 void lv_example_observer_3(void)
 {
-    /*Initialize the subjects.
-     *The UI will update these and read the current values from here,
-     *however the application can update these values at any time and
-     *the widgets will be updated automatically. */
+    /*Инициализируйте предметы.
+     *UI обновит их и прочитает текущие значения отсюда,
+     *однако приложение может обновить эти значения в любое время и
+     *виджеты будут обновляться автоматически. */
     lv_subject_init_int(&hour_subject, 7);
     lv_subject_init_int(&minute_subject, 45);
     lv_subject_init_int(&format_subject, TIME_FORMAT_12);
     lv_subject_init_int(&am_pm_subject, TIME_AM);
     lv_subject_init_group(&time_subject, time_group_array_subject, 4);
 
-    /*Create the UI*/
+    /*Создайте UI.*/
     lv_obj_t * time_label = lv_label_create(lv_screen_active());
     lv_obj_set_style_text_font(time_label, &lv_font_montserrat_30, 0);
     lv_subject_add_observer_obj(&time_subject, time_observer_cb, time_label, NULL);
@@ -60,7 +60,7 @@ void lv_example_observer_3(void)
     lv_obj_t * set_label = lv_label_create(set_btn);
     lv_label_set_text(set_label, "Set");
 
-    /*Update some subjects to see if the UI is updated as well*/
+    /*Обновите некоторые темы, чтобы увидеть, обновлен ли также UI.*/
     lv_subject_set_int(&hour_subject, 9);
     lv_subject_set_int(&minute_subject, 30);
     lv_subject_set_int(&am_pm_subject, TIME_PM);
@@ -101,7 +101,7 @@ static void set_btn_clicked_event_cb(lv_event_t * e)
 
     lv_obj_t * close_btn = lv_button_create(cont);
     lv_obj_align(close_btn, LV_ALIGN_TOP_RIGHT, 0, 0);
-    /*Pass the set_btn as user_data to make it non-disabled on close*/
+    /*Передайтеset_btnкакuser_data, чтобы он не отключался при закрытии.*/
     lv_obj_add_event_cb(close_btn, close_clicked_event_cb, LV_EVENT_CLICKED, set_btn);
 
     lv_obj_t * close_label = lv_label_create(close_btn);
@@ -117,7 +117,7 @@ static void close_clicked_event_cb(lv_event_t * e)
     lv_obj_delete(cont);
 }
 
-/*Watch all related subject to display the current time correctly*/
+/*Посмотрите все связанные темы, чтобы правильно отображать текущее время*/
 static void time_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {
     int32_t hour = lv_subject_get_int(lv_subject_get_group_element(subject, 0));
@@ -135,7 +135,7 @@ static void time_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
     }
 }
 
-/*Change the hour options on format change*/
+/*Изменение параметров часа при изменении формата*/
 static void hour_roller_options_update(lv_observer_t * observer, lv_subject_t * subject)
 {
     lv_obj_t * roller = (lv_obj_t *) lv_observer_get_target(observer);

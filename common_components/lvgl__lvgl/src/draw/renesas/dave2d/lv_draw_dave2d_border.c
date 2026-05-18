@@ -24,7 +24,7 @@ void lv_draw_dave2d_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc,
     int32_t short_side = LV_MIN(coords_w, coords_h);
     if(rout > short_side >> 1) rout = short_side >> 1;
 
-    /*Get the inner area*/
+    /*Получить внутреннюю область*/
     lv_area_t area_inner;
     lv_area_copy(&area_inner, coords);
     area_inner.x1 += ((dsc->side & LV_BORDER_SIDE_LEFT) ? dsc->width : - (dsc->width + rout));
@@ -93,7 +93,7 @@ static void dave2d_draw_border_simple(lv_draw_task_t * t, const lv_area_t * oute
     bool left_side = local_outer_area.x1 <= local_inner_area.x1;
     bool right_side = local_outer_area.x2 >= local_inner_area.x2;
 
-    /*Top*/
+    /*Топ*/
     a.x1 = local_outer_area.x1;
     a.x2 = local_outer_area.x2;
     a.y1 = local_outer_area.y1;
@@ -105,7 +105,7 @@ static void dave2d_draw_border_simple(lv_draw_task_t * t, const lv_area_t * oute
                      (d2_point)D2_FIX4(lv_area_get_height(&a)));
     }
 
-    /*Bottom*/
+    /*Внизу*/
     a.y1 = local_inner_area.y2 + 1;
     a.y2 = local_outer_area.y2;
     if(bottom_side) {
@@ -115,7 +115,7 @@ static void dave2d_draw_border_simple(lv_draw_task_t * t, const lv_area_t * oute
                      (d2_point)D2_FIX4(lv_area_get_height(&a)));
     }
 
-    /*Left*/
+    /*Левый*/
     a.x1 = local_outer_area.x1;
     a.x2 = local_inner_area.x1 - 1;
     a.y1 = (top_side) ? local_inner_area.y1 : local_outer_area.y1;
@@ -127,7 +127,7 @@ static void dave2d_draw_border_simple(lv_draw_task_t * t, const lv_area_t * oute
                      (d2_point)D2_FIX4(lv_area_get_height(&a)));
     }
 
-    /*Right*/
+    /*Правильно*/
     a.x1 = local_inner_area.x2 + 1;
     a.x2 = local_outer_area.x2;
     if(right_side) {
@@ -149,8 +149,8 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                                        const lv_area_t * orig_inner_area,
                                        int32_t rout, int32_t rin, lv_color_t color, lv_opa_t opa)
 {
-    /*Get clipped draw area which is the real draw area.
-     *It is always the same or inside `coords`*/
+    /*Получите обрезанную область прорисовки, которая является настоящей областью прорисовки.
+     *Всегда одно и то же или внутри `coords`*/
     lv_area_t draw_area;
     lv_area_t outer_area;
     lv_area_t inner_area;
@@ -181,7 +181,7 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
     lv_area_move(&inner_area, x, y);
 
     //
-    // Generate render operations
+    // Генерация операций рендеринга
     //
 
     d2_framebuffer_from_layer(u->d2_handle, t->target_layer);
@@ -192,7 +192,7 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                 (d2_border)draw_area.y2);
 
     lv_area_t blend_area;
-    /*Calculate the x and y coordinates where the straight parts area are */
+    /*Рассчитайте координаты x и y, в которых находятся площади прямых частей. */
     lv_area_t core_area;
     core_area.x1 = LV_MAX(outer_area.x1 + rout, inner_area.x1);
     core_area.x2 = LV_MIN(outer_area.x2 - rout, inner_area.x2);
@@ -202,11 +202,11 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
     bool top_side = outer_area.y1 <= inner_area.y1;
     bool bottom_side = outer_area.y2 >= inner_area.y2;
 
-    /*No masks*/
+    /*Без масок*/
     bool left_side = outer_area.x1 <= inner_area.x1;
     bool right_side = outer_area.x2 >= inner_area.x2;
 
-    /*Draw the straight lines first */
+    /*Сначала нарисуйте прямые линии */
     if(top_side) {
         blend_area.x1 = core_area.x1;
         blend_area.x2 = core_area.x2;
@@ -255,9 +255,9 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                      (d2_point)D2_FIX4(lv_area_get_height(&blend_area)));
     }
 
-    /*Draw the corners*/
+    /*Нарисуйте углы*/
     int32_t blend_w;
-    /*Left corners*/
+    /*Левые углы*/
     blend_area.x1 = draw_area.x1;
     blend_area.x2 = LV_MIN(draw_area.x2, core_area.x1 - 1);
 
@@ -266,7 +266,7 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
     if(blend_w > 0) {
         d2_s32 aa;
         aa = d2_getantialiasing(u->d2_handle);
-        d2_setantialiasing(u->d2_handle, 0); //Don't blend with the background according to coverage value
+        d2_setantialiasing(u->d2_handle, 0); //Не смешивайтесь с фоном в соответствии со значением покрытия
 
         if(left_side || top_side) {
             lv_area_t arc_area;
@@ -285,9 +285,9 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                                         (d2_point) D2_FIX4(core_area.y1),
                                         (d2_width) D2_FIX4(rout),
                                         (d2_width) D2_FIX4((rout - rin)),
-                                        (d2_s32) D2_FIX16(0), // 180 Degrees
+                                        (d2_s32) D2_FIX16(0), // 180 градусов
                                         (d2_s32)  D2_FIX16((int16_t) -1),
-                                        (d2_s32)  D2_FIX16((int16_t) -1),//( 270 Degrees
+                                        (d2_s32)  D2_FIX16((int16_t) -1),//(270 градусов
                                         (d2_s32) D2_FIX16(0),
                                         flags);
                 LV_ASSERT(D2_OK == result);
@@ -313,17 +313,17 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                                         (d2_point) D2_FIX4(core_area.y2),
                                         (d2_width) D2_FIX4(rout),
                                         (d2_width) D2_FIX4((rout - rin)),
-                                        (d2_s32) D2_FIX16((int16_t) -1), //90 degrees
+                                        (d2_s32) D2_FIX16((int16_t) -1), //90 градусов
                                         (d2_s32)  D2_FIX16(0),
-                                        (d2_s32)  D2_FIX16(0), //180 degrees
+                                        (d2_s32)  D2_FIX16(0), //180 градусов
                                         (d2_s32) D2_FIX16(1),
                                         flags);
                 LV_ASSERT(D2_OK == result);
             }
         }
 
-        /*Right corners*/
-        blend_area.x1 = LV_MAX(draw_area.x1, blend_area.x2 + 1);    /*To not overlap with the left side*/
+        /*Правые углы*/
+        blend_area.x1 = LV_MAX(draw_area.x1, blend_area.x2 + 1);    /*Чтобы не пересекаться с левой стороной*/
         blend_area.x1 = LV_MAX(draw_area.x1, core_area.x2 + 1);
 
         blend_area.x2 = draw_area.x2;
@@ -349,9 +349,9 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                                             (d2_point) D2_FIX4(core_area.y1),
                                             (d2_width) D2_FIX4(rout),
                                             (d2_width) D2_FIX4((rout - rin)),
-                                            (d2_s32) D2_FIX16((int16_t)1), // 270 Degrees
+                                            (d2_s32) D2_FIX16((int16_t)1), // 270 градусов
                                             (d2_s32)  D2_FIX16(0),
-                                            (d2_s32)  D2_FIX16(0),// 0 degrees
+                                            (d2_s32)  D2_FIX16(0),// 0 градусов
                                             (d2_s32) D2_FIX16(-1),
                                             flags);
                     LV_ASSERT(D2_OK == result);
@@ -377,16 +377,16 @@ static void dave2d_draw_border_complex(lv_draw_task_t * t, const lv_area_t * ori
                                             (d2_point) D2_FIX4(core_area.y2),
                                             (d2_width) D2_FIX4(rout),
                                             (d2_width) D2_FIX4((rout - rin)),
-                                            (d2_s32) D2_FIX16(0),// 0 degrees
+                                            (d2_s32) D2_FIX16(0),// 0 градусов
                                             (d2_s32)  D2_FIX16(1),
-                                            (d2_s32)  D2_FIX16(1),// 90 degrees
+                                            (d2_s32)  D2_FIX16(1),// 90 градусов
                                             (d2_s32) D2_FIX16(0),
                                             flags);
                     LV_ASSERT(D2_OK == result);
                 }
             }
         }
-        d2_setantialiasing(u->d2_handle, aa); //restore original setting
+        d2_setantialiasing(u->d2_handle, aa); //восстановить исходную настройку
     }
 
     d2_setalpha(u->d2_handle, current_alpha);

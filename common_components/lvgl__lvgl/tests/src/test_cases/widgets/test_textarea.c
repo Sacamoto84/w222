@@ -24,13 +24,13 @@ void test_textarea_should_have_valid_documented_default_values(void)
 {
     TEST_ASSERT(lv_textarea_get_cursor_click_pos(textarea));
     TEST_ASSERT_EQUAL(0U, lv_textarea_get_one_line(textarea));
-    /* No placeholder text should be set on widget creation */
+    /* При создании виджета не должен быть задан текст-заполнитель. */
     TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_placeholder_text(textarea));
     TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_text(textarea));
 }
 
-/* When in password mode the lv_textarea_get_text function returns
- * the actual text, not the bullet characters. */
+/* В режиме пароля функция lv_textarea_get_text возвращает значение.
+ * фактический текст, а не символы маркера. */
 void test_textarea_should_return_actual_text_when_password_mode_is_enabled(void)
 {
     const char * text = "Hello LVGL!";
@@ -96,15 +96,15 @@ void test_textarea_should_update_placeholder_text(void)
     const char * new_placeholder = "LVGL Rocks!!!!!";
     const char * text = "Hello LVGL!";
 
-    /* Allocating memory for placeholder text */
+    /* Выделение памяти для текста-заполнителя */
     lv_textarea_set_placeholder_text(textarea, text);
     TEST_ASSERT_EQUAL_STRING(text, lv_textarea_get_placeholder_text(textarea));
 
-    /* Reallocating memory for the new placeholder text */
+    /* Перераспределение памяти для нового текста-заполнителя */
     lv_textarea_set_placeholder_text(textarea, new_placeholder);
     TEST_ASSERT_EQUAL_STRING(new_placeholder, lv_textarea_get_placeholder_text(textarea));
 
-    /* Freeing allocated memory for placeholder text */
+    /* Освобождение выделенной памяти для текста-заполнителя */
     lv_textarea_set_placeholder_text(textarea, "");
     TEST_ASSERT_EQUAL_STRING("", lv_textarea_get_placeholder_text(textarea));
 }
@@ -135,26 +135,26 @@ void test_textarea_should_hide_password_characters(void)
     lv_textarea_set_password_mode(textarea, true);
     lv_textarea_set_text(textarea, "12345");
 
-    /* setting bullet hides characters */
+    /* настройка маркера скрывает символы */
     lv_textarea_set_password_bullet(textarea, "O");
     TEST_ASSERT_EQUAL_STRING("OOOOO", lv_label_get_text(lv_textarea_get_label(textarea)));
 
-    /* setting text hides characters */
+    /* настройка текста скрывает символы */
     lv_textarea_set_text(textarea, "A");
     TEST_ASSERT_EQUAL_STRING("O", lv_label_get_text(lv_textarea_get_label(textarea)));
 
     lv_textarea_add_char(textarea, 'B');
     TEST_ASSERT_EQUAL_STRING("OB", lv_label_get_text(lv_textarea_get_label(textarea)));
 
-    /* setting show time hides characters */
-    /* current behavior is to hide the characters upon setting the show time regardless of the value */
+    /* установка времени показа скрывает символы */
+    /* текущее поведение заключается в том, чтобы скрыть символы при установке времени показа независимо от значения */
     lv_textarea_set_password_show_time(textarea, lv_textarea_get_password_show_time(textarea));
     TEST_ASSERT_EQUAL_STRING("OO", lv_label_get_text(lv_textarea_get_label(textarea)));
 
     lv_textarea_set_password_mode(textarea, false);
     TEST_ASSERT_EQUAL_STRING("AB", lv_label_get_text(lv_textarea_get_label(textarea)));
 
-    /* enabling password mode hides characters */
+    /* включение режима пароля скрывает символы */
     lv_textarea_set_password_mode(textarea, true);
     TEST_ASSERT_EQUAL_STRING("OO", lv_label_get_text(lv_textarea_get_label(textarea)));
 }

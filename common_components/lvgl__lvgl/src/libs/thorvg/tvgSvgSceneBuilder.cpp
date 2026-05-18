@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,7 +23,7 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_THORVG_INTERNAL
 
-#include "tvgMath.h" /* to include math.h before cstring */
+#include "tvgMath.h" /* включить math.h перед cstring */
 #include <cstring>
 #include <string>
 #include "tvgShape.h"
@@ -37,7 +37,7 @@
 #include "tvgSvgUtil.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static bool _appendShape(SvgLoaderData& loaderData, SvgNode* node, Shape* shape, const Box& vBox, const string& svgPath);
@@ -52,8 +52,8 @@ static inline bool _isGroupType(SvgNodeType type)
 }
 
 
-//According to: https://www.w3.org/TR/SVG11/coords.html#ObjectBoundingBoxUnits (the last paragraph)
-//a stroke width should be ignored for bounding box calculations
+//По: https://www.w3.org/TR/SVG11/coords.html#ObjectBoundingBoxUnits (последний абзац)
+//ширину обводки следует игнорировать при расчетах ограничивающей рамки.
 static Box _boundingBox(const Shape* shape)
 {
     float x, y, w, h;
@@ -119,7 +119,7 @@ static unique_ptr<LinearGradient> _applyLinearGradientProperty(SvgStyleGradient*
     fillGrad->linear(g->linear->x1, g->linear->y1, g->linear->x2, g->linear->y2);
     fillGrad->spread(g->spread);
 
-    //Update the stops
+    //Обновите остановки
     stopCount = g->stops.count;
     if (stopCount > 0) {
         stops = (Fill::ColorStop*)lv_zalloc(stopCount * sizeof(Fill::ColorStop));
@@ -128,13 +128,13 @@ static unique_ptr<LinearGradient> _applyLinearGradientProperty(SvgStyleGradient*
         auto prevOffset = 0.0f;
         for (uint32_t i = 0; i < g->stops.count; ++i) {
             auto colorStop = &g->stops[i];
-            //Use premultiplied color
+            //Использовать предварительно умноженный цвет
             stops[i].r = colorStop->r;
             stops[i].g = colorStop->g;
             stops[i].b = colorStop->b;
             stops[i].a = static_cast<uint8_t>((colorStop->a * opacity) / 255);
             stops[i].offset = colorStop->offset;
-            //check the offset corner cases - refer to: https://svgwg.org/svg2-draft/pservers.html#StopNotes
+            //проверьте смещенные угловые случаи - см.: https://svgwg.org/svg2-draft/pservers.html#StopNotes
             if (colorStop->offset < prevOffset) stops[i].offset = prevOffset;
             else if (colorStop->offset > 1) stops[i].offset = 1;
             prevOffset = stops[i].offset;
@@ -157,7 +157,7 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
     if (isTransform) finalTransform = *g->transform;
 
     if (g->userSpace) {
-        //The radius scaling is done according to the Units section:
+        //Масштабирование радиуса осуществляется в соответствии с разделом «Единицы измерения»:
         //https://www.w3.org/TR/2015/WD-SVG2-20150915/coords.html
         g->radial->cx = g->radial->cx * vBox.w;
         g->radial->cy = g->radial->cy * vBox.h;
@@ -179,7 +179,7 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
     P(fillGrad)->radial(g->radial->cx, g->radial->cy, g->radial->r, g->radial->fx, g->radial->fy, g->radial->fr);
     fillGrad->spread(g->spread);
 
-    //Update the stops
+    //Обновите остановки
     stopCount = g->stops.count;
     if (stopCount > 0) {
         stops = (Fill::ColorStop*)lv_zalloc(stopCount * sizeof(Fill::ColorStop));
@@ -188,13 +188,13 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
         auto prevOffset = 0.0f;
         for (uint32_t i = 0; i < g->stops.count; ++i) {
             auto colorStop = &g->stops[i];
-            //Use premultiplied color
+            //Использовать предварительно умноженный цвет
             stops[i].r = colorStop->r;
             stops[i].g = colorStop->g;
             stops[i].b = colorStop->b;
             stops[i].a = static_cast<uint8_t>((colorStop->a * opacity) / 255);
             stops[i].offset = colorStop->offset;
-            //check the offset corner cases - refer to: https://svgwg.org/svg2-draft/pservers.html#StopNotes
+            //проверьте смещенные угловые случаи - см.: https://svgwg.org/svg2-draft/pservers.html#StopNotes
             if (colorStop->offset < prevOffset) stops[i].offset = prevOffset;
             else if (colorStop->offset > 1) stops[i].offset = 1;
             prevOffset = stops[i].offset;
@@ -206,7 +206,7 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
 }
 
 
-//The SVG standard allows only for 'use' nodes that point directly to a basic shape.
+//Стандарт SVG позволяет «использовать» только узлы, указывающие непосредственно на базовую форму.
 static bool _appendClipUseNode(SvgLoaderData& loaderData, SvgNode* node, Shape* shape, const Box& vBox, const string& svgPath)
 {
     if (node->child.count != 1) return false;
@@ -236,7 +236,7 @@ static bool _appendClipChild(SvgLoaderData& loaderData, SvgNode* node, Shape* sh
 static Matrix _compositionTransform(Paint* paint, const SvgNode* node, const SvgNode* compNode, SvgNodeType type)
 {
     Matrix m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
-    //The initial mask transformation ignored according to the SVG standard.
+    //Первоначальное преобразование маски игнорируется в соответствии со стандартом SVG.
     if (node->transform && type != SvgNodeType::Mask) {
         m = *node->transform;
     }
@@ -255,9 +255,9 @@ static Matrix _compositionTransform(Paint* paint, const SvgNode* node, const Svg
 
 static void _applyComposition(SvgLoaderData& loaderData, Paint* paint, const SvgNode* node, const Box& vBox, const string& svgPath)
 {
-    /* ClipPath */
-    /* Do not drop in Circular Dependency for ClipPath.
-       Composition can be applied recursively if its children nodes have composition target to this one. */
+    /* КлипПат */
+    /* Не добавляйте циклическую зависимость для ClipPath.
+       Композиция может применяться рекурсивно, если ее дочерние узлы имеют цель композиции для этого узла. */
     if (node->style->clipPath.applying) {
         TVGLOG("SVG", "Multiple Composition Tried! Check out Circular dependency?");
     } else {
@@ -268,7 +268,7 @@ static void _applyComposition(SvgLoaderData& loaderData, Paint* paint, const Svg
             auto comp = Shape::gen();
 
             auto child = compNode->child.data;
-            auto valid = false; //Composite only when valid shapes exist
+            auto valid = false; //Составное только тогда, когда существуют допустимые формы.
 
             for (uint32_t i = 0; i < compNode->child.count; ++i, ++child) {
                 if (_appendClipChild(loaderData, *child, comp.get(), vBox, svgPath, compNode->child.count > 1)) valid = true;
@@ -284,9 +284,9 @@ static void _applyComposition(SvgLoaderData& loaderData, Paint* paint, const Svg
         }
     }
 
-    /* Mask */
-    /* Do not drop in Circular Dependency for Mask.
-       Composition can be applied recursively if its children nodes have composition target to this one. */
+    /* Маска */
+    /* Не добавляйте циклическую зависимость для маски.
+       Композиция может применяться рекурсивно, если ее дочерние узлы имеют цель композиции для этого узла. */
     if (node->style->mask.applying) {
         TVGLOG("SVG", "Multiple Composition Tried! Check out Circular dependency?");
     } else {
@@ -320,13 +320,13 @@ static void _applyProperty(SvgLoaderData& loaderData, SvgNode* node, Shape* vg, 
 {
     SvgStyleProperty* style = node->style;
 
-    //Clip transformation is applied directly to the path in the _appendClipShape function
+    //Преобразование клипа применяется непосредственно к пути в функции _appendClipShape.
     if (node->transform && !clip) vg->transform(*node->transform);
     if (node->type == SvgNodeType::Doc || !node->style->display) return;
 
-    //If fill property is nullptr then do nothing
+    //Если свойство fill имеет значение nullptr, ничего не делайте.
     if (style->fill.paint.none) {
-        //Do nothing
+        //ничего не делать
     } else if (style->fill.paint.gradient) {
         Box bBox = vBox;
         if (!style->fill.paint.gradient->userSpace) bBox = _boundingBox(vg);
@@ -342,24 +342,24 @@ static void _applyProperty(SvgLoaderData& loaderData, SvgNode* node, Shape* vg, 
         //TODO: Apply the color pointed by url
         TVGLOG("SVG", "The fill's url not supported.");
     } else if (style->fill.paint.curColor) {
-        //Apply the current style color
+        //Применить текущий цвет стиля
         vg->fill(style->color.r, style->color.g, style->color.b, style->fill.opacity);
     } else {
-        //Apply the fill color
+        //Применить цвет заливки
         vg->fill(style->fill.paint.color.r, style->fill.paint.color.g, style->fill.paint.color.b, style->fill.opacity);
     }
 
-    //Apply the fill rule
+    //Применить правило заполнения
     vg->fill((tvg::FillRule)style->fill.fillRule);
-    //Rendering order
+    //Порядок рендеринга
     vg->order(!style->paintOrder);
 
-    //Apply node opacity
+    //Применить непрозрачность узла
     if (style->opacity < 255) vg->opacity(style->opacity);
 
     if (node->type == SvgNodeType::G || node->type == SvgNodeType::Use) return;
 
-    //Apply the stroke style property
+    //Примените свойство стиля обводки
     vg->stroke(style->stroke.width);
     vg->stroke(style->stroke.cap);
     vg->stroke(style->stroke.join);
@@ -368,7 +368,7 @@ static void _applyProperty(SvgLoaderData& loaderData, SvgNode* node, Shape* vg, 
         P(vg)->strokeDash(style->stroke.dash.array.data, style->stroke.dash.array.count, style->stroke.dash.offset);
     }
 
-    //If stroke property is nullptr then do nothing
+    //Если свойство хода равно nullptr, ничего не делайте.
     if (style->stroke.paint.none) {
         vg->stroke(0.0f);
     } else if (style->stroke.paint.gradient) {
@@ -386,10 +386,10 @@ static void _applyProperty(SvgLoaderData& loaderData, SvgNode* node, Shape* vg, 
         //TODO: Apply the color pointed by url
         TVGLOG("SVG", "The stroke's url not supported.");
     } else if (style->stroke.paint.curColor) {
-        //Apply the current style color
+        //Применить текущий цвет стиля
         vg->stroke(style->color.r, style->color.g, style->color.b, style->stroke.opacity);
     } else {
-        //Apply the stroke color
+        //Применить цвет обводки
         vg->stroke(style->stroke.paint.color.r, style->stroke.paint.color.g, style->stroke.paint.color.b, style->stroke.opacity);
     }
 
@@ -472,7 +472,7 @@ static bool _appendShape(SvgLoaderData& loaderData, SvgNode* node, Shape* shape,
 
 static bool _appendClipShape(SvgLoaderData& loaderData, SvgNode* node, Shape* shape, const Box& vBox, const string& svgPath, const Matrix* transform)
 {
-    //The 'transform' matrix has higher priority than the node->transform, since it already contains it
+    //Матрица «преобразование» имеет более высокий приоритет, чем матрица node->transform, поскольку она уже содержит ее.
     auto m = transform ? transform : (node->transform ? node->transform : nullptr);
 
     uint32_t currentPtsCnt = 0;
@@ -528,12 +528,12 @@ static constexpr struct
 
 
 static bool _isValidImageMimeTypeAndEncoding(const char** href, const char** mimetype, imageMimeTypeEncoding* encoding) {
-    if (strncmp(*href, "image/", sizeof("image/") - 1)) return false; //not allowed mime type
+    if (strncmp(*href, "image/", sizeof("image/") - 1)) return false; //недопустимый тип MIME
     *href += sizeof("image/") - 1;
 
-    //RFC2397 data:[<mediatype>][;base64],<data>
-    //mediatype  := [ type "/" subtype ] *( ";" parameter )
-    //parameter  := attribute "=" value
+    //Данные RFC2397:[<тип носителя>][;base64],<данные>
+    //медиатип := [ подтип типа "/" ] *( параметр ";" )
+    //параметр := атрибут "=" значение
     for (unsigned int i = 0; i < sizeof(imageMimeTypes) / sizeof(imageMimeTypes[0]); i++) {
         if (!strncmp(*href, imageMimeTypes[i].name, imageMimeTypes[i].sz - 1)) {
             *href += imageMimeTypes[i].sz  - 1;
@@ -548,22 +548,22 @@ static bool _isValidImageMimeTypeAndEncoding(const char** href, const char** mim
                     if (!strncmp(*href, "base64,", sizeof("base64,") - 1)) {
                         *href += sizeof("base64,") - 1;
                         *encoding = imageMimeTypeEncoding::base64;
-                        return true; //valid base64
+                        return true; //действительная база64
                     }
                 }
                 if (imageMimeTypes[i].encoding & imageMimeTypeEncoding::utf8) {
                     if (!strncmp(*href, "utf8,", sizeof("utf8,") - 1)) {
                         *href += sizeof("utf8,") - 1;
                         *encoding = imageMimeTypeEncoding::utf8;
-                        return true; //valid utf8
+                        return true; //действительный utf8
                     }
                 }
             }
-            //no encoding defined
+            //кодировка не определена
             if (**href == ',' && (imageMimeTypes[i].encoding & imageMimeTypeEncoding::utf8)) {
                 ++(*href);
                 *encoding = imageMimeTypeEncoding::utf8;
-                return true; //allow no encoding defined if utf8 expected
+                return true; //разрешить отсутствие кодировки, если ожидается utf8
             }
             return false;
         }
@@ -578,14 +578,14 @@ static unique_ptr<Picture> _imageBuildHelper(SvgLoaderData& loaderData, SvgNode*
     if (!node->node.image.href || !strlen(node->node.image.href)) return nullptr;
     auto picture = Picture::gen();
 
-    TaskScheduler::async(false);    //force to load a picture on the same thread
+    TaskScheduler::async(false);    //принудительно загрузить картинку в ту же ветку
 
     const char* href = node->node.image.href;
     if (!strncmp(href, "data:", sizeof("data:") - 1)) {
         href += sizeof("data:") - 1;
         const char* mimetype;
         imageMimeTypeEncoding encoding;
-        if (!_isValidImageMimeTypeAndEncoding(&href, &mimetype, &encoding)) return nullptr; //not allowed mime type or encoding
+        if (!_isValidImageMimeTypeAndEncoding(&href, &mimetype, &encoding)) return nullptr; //не разрешен тип MIME или кодировка
         char *decoded = nullptr;
         if (encoding == imageMimeTypeEncoding::base64) {
             auto size = b64Decode(href, strlen(href), &decoded);
@@ -606,7 +606,7 @@ static unique_ptr<Picture> _imageBuildHelper(SvgLoaderData& loaderData, SvgNode*
     } else {
         if (!strncmp(href, "file://", sizeof("file://") - 1)) href += sizeof("file://") - 1;
         //TODO: protect against recursive svg image loading
-        //Temporarily disable embedded svg:
+        //Временно отключите встроенный SVG:
         const char *dot = strrchr(href, '.');
         if (dot && !strcmp(dot, ".svg")) {
             TVGLOG("SVG", "Embedded svg file is disabled.");
@@ -652,7 +652,7 @@ static Matrix _calculateAspectRatioMatrix(AspectRatioAlign align, AspectRatioMee
     if (align == AspectRatioAlign::None)
         return {sx, 0, -tvx, 0, sy, -tvy, 0, 0, 1};
 
-    //Scale
+    //Масштаб
     if (meetOrSlice == AspectRatioMeetOrSlice::Meet) {
         if (sx < sy) sy = sx;
         else sx = sy;
@@ -661,7 +661,7 @@ static Matrix _calculateAspectRatioMatrix(AspectRatioAlign align, AspectRatioMee
         else sy = sx;
     }
 
-    //Align
+    //Выровнять
     tvx = box.x * sx;
     tvy = box.y * sy;
     auto tvw = box.w * sx;
@@ -777,9 +777,9 @@ static unique_ptr<Scene> _useBuildHelper(SvgLoaderData& loaderData, const SvgNod
 
 static void _applyTextFill(SvgStyleProperty* style, Text* text, const Box& vBox)
 {
-    //If fill property is nullptr then do nothing
+    //Если свойство fill имеет значение nullptr, ничего не делайте.
     if (style->fill.paint.none) {
-        //Do nothing
+        //ничего не делать
     } else if (style->fill.paint.gradient) {
         Box bBox = vBox;
         if (!style->fill.paint.gradient->userSpace) bBox = _boundingBox(text);
@@ -795,11 +795,11 @@ static void _applyTextFill(SvgStyleProperty* style, Text* text, const Box& vBox)
         //TODO: Apply the color pointed by url
         TVGLOG("SVG", "The fill's url not supported.");
     } else if (style->fill.paint.curColor) {
-        //Apply the current style color
+        //Применить текущий цвет стиля
         text->fill(style->color.r, style->color.g, style->color.b);
         text->opacity(style->fill.opacity);
     } else {
-        //Apply the fill color
+        //Применить цвет заливки
         text->fill(style->fill.paint.color.r, style->fill.paint.color.g, style->fill.paint.color.b);
         text->opacity(style->fill.opacity);
     }
@@ -832,8 +832,8 @@ static unique_ptr<Text> _textBuildHelper(SvgLoaderData& loaderData, const SvgNod
 
 static unique_ptr<Scene> _sceneBuildHelper(SvgLoaderData& loaderData, const SvgNode* node, const Box& vBox, const string& svgPath, bool mask, int depth, bool* isMaskWhite)
 {
-    /* Exception handling: Prevent invalid SVG data input.
-       The size is the arbitrary value, we need an experimental size. */
+    /* Обработка исключений: предотвращение ввода неверных данных SVG.
+       Размер — произвольная величина, нам нужен экспериментальный размер. */
     if (depth > 2192) {
         TVGERR("SVG", "Infinite recursive call - stopped after %d calls! Svg file may be incorrectly formatted.", depth);
         return nullptr;
@@ -841,7 +841,7 @@ static unique_ptr<Scene> _sceneBuildHelper(SvgLoaderData& loaderData, const SvgN
 
     if (_isGroupType(node->type) || mask) {
         auto scene = Scene::gen();
-        // For a Symbol node, the viewBox transformation has to be applied first - see _useBuildHelper()
+        // Для узла «Символ» сначала необходимо применить преобразование viewBox — см. _useBuildHelper().
         if (!mask && node->transform && node->type != SvgNodeType::Symbol) scene->transform(*node->transform);
 
         if (node->style->display && node->style->opacity != 0) {
@@ -900,13 +900,13 @@ static void _updateInvalidViewSize(const Scene* scene, Box& vBox, float& w, floa
         if (validHeight) vBox.h = h;
     }
 
-    //the size would have 1x1 or percentage values.
+    //размер будет иметь 1x1 или процентные значения.
     if (!validWidth) w *= vBox.w;
     if (!validHeight) h *= vBox.h;
 }
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 Scene* svgSceneBuild(SvgLoaderData& loaderData, Box vBox, float w, float h, AspectRatioAlign align, AspectRatioMeetOrSlice meetOrSlice, const string& svgPath, SvgViewFlag viewFlag)

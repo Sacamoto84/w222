@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * Change Logs:
- * Date           Author       Notes
- * 2021-10-18     Meco Man     the first version
- * 2022-05-10     Meco Man     improve rt-thread initialization process
+ * Журналы изменений:
+ * Дата Примечания автора
+ * 18.10.2021 Meco Man первая версия
+ * 10 мая 2022 г. Meco Man обеспечивает процесс инициализации rt-потока.
  */
 
 #ifdef __RTTHREAD__
@@ -77,7 +77,7 @@ static void lvgl_thread_entry(void *parameter)
     cpu_usage_init();
 #endif /* PKG_USING_CPU_USAGE */
 
-    /* handle the tasks of LVGL */
+    /* справиться с задачами LVGL */
     while(1)
     {
         lv_timer_handler();

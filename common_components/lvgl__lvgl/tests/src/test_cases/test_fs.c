@@ -14,7 +14,7 @@ static void read_random_drv(char drv_letter, uint32_t cache_size);
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_test_fs_clear_open_cb(false);
     lv_test_fs_clear_close_cb(false);
     lv_test_fs_set_ready(true);
@@ -22,7 +22,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 #include <stdio.h>
 #include <errno.h>
@@ -39,17 +39,17 @@ void test_read(void)
         printf("%s, %d, %p\n", cur, errno, a);
         fclose(a);
 
-        /*'A' has cache*/
+        /*У «А» есть кэш*/
         lv_fs_file_t fa;
         res = lv_fs_open(&fa, "A:src/test_files/readtest.txt", LV_FS_MODE_RD);
         TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-        /*'B' has no cache*/
+        /*У «B» нет кэша*/
         lv_fs_file_t fb;
         res = lv_fs_open(&fb, "B:src/test_files/readtest.txt", LV_FS_MODE_RD);
         TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-        /*Use an odd size to make sure it's not aligned with the driver's cache size*/
+        /*Используйте нечетный размер, чтобы убедиться, что он не соответствует размеру кэша драйвера.*/
         uint8_t buf[79];
         uint32_t cnt = 0;
         uint32_t br = 1;
@@ -89,8 +89,8 @@ void test_read_random(void)
 }
 
 /**
- * Read bytes from the `from` index to the `to index`
- * Assume that file `f` has 256 byte of content 0..255
+ * Считайте байты из индекса `from` в `to index`.
+ * Предположим, что файл `f` имеет 256 байт содержимого 0..255.
  */
 static void read_range(lv_fs_file_t * f, uint32_t from, uint32_t to)
 {
@@ -125,7 +125,7 @@ static void read_next(lv_fs_file_t * f, uint32_t from, uint32_t len)
 
 static void read_random_drv(char drv_letter, uint32_t cache_size)
 {
-    /*Hack to force a small cache size*/
+    /*Взлом для принудительного уменьшения размера кэша*/
     lv_fs_drv_t * drv = lv_fs_get_drv(drv_letter);
     uint32_t original_cache_size = drv->cache_size;
     drv->cache_size = cache_size;
@@ -153,7 +153,7 @@ static void read_random_drv(char drv_letter, uint32_t cache_size)
 
     // *INDENT-OFF*
     static const uint8_t ranges[1000][4] = {
-            /*{from, to, next_read_cnt, next_read_cnt}*/
+            /*{от, до, next_read_cnt, next_read_cnt }*/
             {34, 36, 31, 13}, {40, 55, 40, 19}, {75, 92, 31, 1}, {80, 91, 19, 31}, {121, 141, 5, 22}, {8, 23, 21, 39}, {33, 37, 5, 34}, {71, 90, 22, 37}, {111, 124, 14, 38}, {2, 15, 6, 16}, {109, 129, 14, 13}, {85, 97, 10, 24}, {79, 90, 31, 32}, {8, 23, 4, 1}, {13, 21, 9, 15}, {90, 95, 2, 21}, {77, 95, 17, 28}, {60, 75, 26, 13}, {115, 117, 19, 24}, {31, 46, 9, 17}, {81, 98, 8, 32}, {115, 121, 33, 2}, {25, 31, 34, 23}, {26, 42, 16, 26}, {105, 121, 30, 16}, {82, 99, 26, 3}, {83, 87, 37, 6}, {33, 43, 34, 36}, {35, 51, 18, 30}, {29, 34, 20, 31}, {25, 36, 21, 23}, {123, 125, 40, 16}, {12, 30, 35, 14}, {80, 94, 19, 19}, {94, 112, 19, 13}, {113, 117, 15, 20}, {39, 53, 19, 14}, {38, 49, 29, 16}, {56, 63, 3, 7}, {128, 140, 8, 7}, {112, 115, 5, 16}, {68, 87, 24, 34}, {88, 95, 18, 12}, {4, 20, 18, 29}, {4, 8, 10, 32}, {33, 43, 28, 3}, {67, 80, 10, 13}, {74, 86, 14, 8}, {78, 98, 12, 26}, {86, 92, 24, 34}, {63, 66, 12, 30}, {117, 119, 40, 37}, {90, 97, 23, 11}, {95, 107, 39, 40}, {67, 74, 6, 34}, {128, 133, 11, 22}, {98, 99, 12, 25}, {91, 110, 5, 15}, {33, 37, 13, 32}, {12, 32, 3, 34}, {100, 102, 5, 25}, {52, 63, 37, 31}, {108, 125, 39, 7}, {77, 81, 28, 27}, {36, 54, 9, 29}, {109, 126, 12, 29}, {61, 70, 28, 19}, {47, 66, 9, 25}, {66, 69, 3, 17}, {75, 89, 26, 5}, {89, 103, 22, 15}, {113, 133, 34, 28}, {113, 114, 32, 33}, {124, 141, 9, 33}, {79, 85, 30, 28}, {60, 61, 30, 9}, {39, 54, 9, 18}, {93, 104, 35, 17}, {112, 122, 15, 6}, {104, 116, 1, 3}, {60, 62, 29, 9}, {119, 132, 40, 22}, {54, 70, 15, 14}, {8, 20, 24, 30}, {18, 29, 24, 1}, {104, 120, 15, 23}, {15, 25, 16, 32}, {45, 54, 14, 16}, {75, 79, 1, 38}, {52, 59, 15, 19}, {109, 128, 35, 38}, {85, 89, 7, 33}, {5, 6, 26, 32}, {12, 16, 32, 39}, {85, 105, 30, 4}, {88, 103, 37, 31}, {88, 104, 21, 23}, {18, 31, 5, 32}, {35, 50, 7, 5}, {3, 4, 3, 3}, {105, 120, 7, 3},
             {21, 37, 21, 23}, {75, 93, 4, 39}, {3, 10, 6, 40}, {90, 107, 1, 23}, {100, 115, 37, 11}, {99, 107, 18, 14}, {127, 135, 11, 33}, {63, 74, 27, 14}, {96, 108, 3, 14}, {64, 76, 19, 3}, {67, 84, 15, 34}, {82, 91, 15, 22}, {34, 44, 14, 36}, {107, 114, 15, 31}, {120, 130, 31, 33}, {126, 134, 25, 31}, {58, 78, 11, 14}, {124, 127, 19, 13}, {114, 129, 13, 12}, {111, 128, 9, 40}, {127, 134, 9, 23}, {128, 131, 39, 7}, {62, 65, 28, 29}, {87, 104, 38, 17}, {13, 29, 24, 37}, {124, 133, 20, 24}, {63, 64, 28, 32}, {59, 69, 17, 8}, {12, 13, 1, 25}, {64, 78, 14, 25}, {49, 69, 20, 36}, {96, 105, 10, 8}, {29, 31, 27, 11}, {67, 83, 37, 2}, {89, 96, 2, 6}, {23, 27, 7, 1}, {87, 93, 13, 9}, {25, 43, 1, 26}, {81, 93, 12, 39}, {62, 68, 13, 32}, {114, 133, 6, 19}, {10, 21, 2, 25}, {94, 102, 24, 12}, {13, 29, 2, 26}, {110, 111, 14, 10}, {120, 123, 17, 1}, {121, 135, 31, 16}, {120, 127, 3, 34}, {74, 79, 32, 24}, {120, 138, 16, 13}, {121, 133, 25, 20}, {87, 101, 33, 31}, {79, 89, 27, 39}, {48, 60, 20, 35}, {43, 63, 9, 30}, {8, 27, 39, 13}, {77, 83, 30, 29}, {109, 116, 24, 5}, {122, 139, 4, 34}, {74, 82, 1, 22}, {98, 118, 20, 4}, {30, 34, 9, 25}, {98, 99, 37, 35}, {105, 108, 17, 4}, {84, 103, 19, 8}, {116, 133, 28, 40}, {53, 70, 27, 23}, {91, 93, 40, 8}, {116, 124, 21, 30}, {66, 68, 11, 32}, {91, 109, 27, 27}, {74, 83, 3, 17}, {57, 60, 22, 12}, {7, 15, 37, 16}, {93, 106, 6, 22}, {104, 106, 30, 20}, {56, 73, 9, 38}, {105, 110, 5, 19}, {122, 134, 30, 37}, {71, 83, 25, 26}, {68, 85, 21, 28}, {126, 140, 10, 29}, {87, 93, 38, 14}, {68, 82, 31, 20}, {26, 41, 8, 32}, {52, 55, 17, 13}, {51, 60, 31, 14}, {122, 126, 30, 26}, {32, 43, 3, 22}, {76, 93, 28, 24}, {97, 117, 12, 21}, {9, 17, 36, 21}, {52, 71, 24, 5}, {123, 138, 14, 21}, {82, 84, 9, 17}, {32, 34, 40, 24}, {89, 99, 21, 15}, {16, 32, 19, 9}, {39, 48, 38, 6}, {125, 129, 18, 31},
             {28, 37, 21, 15}, {70, 77, 35, 31}, {107, 127, 18, 31}, {118, 125, 3, 23}, {89, 97, 28, 25}, {78, 96, 21, 40}, {19, 20, 9, 21}, {25, 38, 19, 35}, {63, 83, 2, 34}, {39, 58, 37, 1}, {52, 63, 1, 33}, {110, 120, 10, 16}, {84, 87, 31, 22}, {10, 22, 32, 22}, {84, 87, 39, 21}, {61, 70, 12, 22}, {118, 132, 4, 30}, {41, 50, 19, 36}, {3, 5, 40, 2}, {122, 123, 4, 28}, {121, 139, 25, 38}, {49, 69, 32, 13}, {60, 78, 32, 24}, {26, 32, 36, 19}, {54, 71, 15, 7}, {70, 76, 17, 37}, {15, 32, 15, 40}, {37, 52, 22, 22}, {46, 47, 20, 27}, {90, 91, 37, 23}, {104, 123, 4, 31}, {111, 129, 1, 33}, {25, 45, 21, 36}, {1, 21, 29, 25}, {104, 123, 33, 26}, {1, 3, 17, 20}, {63, 77, 14, 5}, {48, 55, 29, 19}, {126, 137, 29, 32}, {83, 91, 1, 36}, {120, 123, 22, 18}, {42, 57, 27, 9}, {106, 114, 8, 20}, {101, 107, 14, 36}, {52, 58, 11, 26}, {16, 22, 39, 27}, {107, 120, 35, 31}, {21, 37, 9, 11}, {110, 128, 35, 5}, {65, 83, 39, 39}, {13, 18, 10, 9}, {95, 96, 37, 8}, {94, 96, 14, 2}, {85, 87, 25, 7}, {27, 38, 1, 34}, {15, 25, 21, 27}, {87, 92, 18, 24}, {34, 44, 10, 19}, {123, 140, 31, 35}, {40, 48, 14, 2}, {63, 80, 14, 22}, {104, 109, 9, 39}, {109, 121, 36, 22}, {43, 53, 26, 36}, {117, 127, 15, 15}, {27, 31, 34, 32}, {30, 41, 2, 11}, {89, 102, 40, 16}, {107, 124, 22, 19}, {104, 117, 33, 22}, {10, 26, 21, 32}, {51, 58, 11, 34}, {87, 98, 27, 25}, {99, 116, 36, 35}, {103, 114, 4, 34}, {109, 121, 25, 8}, {114, 126, 6, 6}, {47, 66, 31, 14}, {115, 125, 39, 34}, {27, 29, 15, 7}, {103, 109, 12, 5}, {109, 111, 21, 39}, {83, 84, 7, 2}, {63, 67, 2, 37}, {14, 15, 35, 10}, {43, 56, 25, 27}, {74, 93, 2, 22}, {59, 79, 2, 18}, {56, 70, 39, 16}, {116, 128, 40, 38}, {14, 24, 6, 26}, {103, 106, 18, 29}, {128, 146, 7, 21}, {63, 83, 32, 33}, {109, 116, 26, 16}, {85, 89, 10, 5}, {116, 129, 17, 37}, {97, 116, 26, 7}, {98, 100, 40, 13}, {94, 109, 24, 32},
@@ -193,7 +193,7 @@ void test_write_read_random(void)
     uint32_t original_cache_size = drv->cache_size;
     drv->cache_size = 7;
 
-    /* create the file and reopen for read+write. stdio "rb+" mode requires the file to exist */
+    /* создайте файл и снова откройте его для чтения+записи. Режим stdio "rb+" требует, чтобы файл существовал */
     lv_fs_res_t res;
     lv_fs_file_t f;
     res = lv_fs_open(&f, "A:fs_write_read_random.bin", LV_FS_MODE_WR);
@@ -209,10 +209,10 @@ void test_write_read_random(void)
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
     /**
-     * {{{action, amount}, ... x20 actions per combo}, ... x100 combos}
-     * actions are read (0), write (1), seek (2)
-     * read and write amount ranges from 1 to 20. seek amount ranges from -20 to 20.
-     * seeks occur as frequently as reads+writes combined.
+     * {{{действие, сумма}, ... х20 действий на комбо}, ... х100 комбинаций}
+     * действия читать (0), писать (1), искать (2)
+     * Сумма чтения и записи варьируется от 1 до 20. Сумма поиска находится в диапазоне от -20 до 20.
+     * поиск происходит так же часто, как чтение+запись вместе взятые.
      */
     // *INDENT-OFF*
     static const int8_t actions[100][20][2] = {
@@ -233,7 +233,7 @@ void test_write_read_random(void)
     uint8_t n = 0;
     uint32_t bres = 0;
     for(uint32_t i = 0; i < 100; i++) {
-        /* bring the pos back to the middle of the file */
+        /* верните позицию обратно в середину файла */
         int32_t pos = 500;
         res = lv_fs_seek(&f, pos, LV_FS_SEEK_SET);
         TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
@@ -241,14 +241,14 @@ void test_write_read_random(void)
             int8_t action = actions[i][j][0];
             int8_t amount = actions[i][j][1];
             switch(action) {
-                case 0: /* read */
+                case 0: /* читать */
                     res = lv_fs_read(&f, buf, amount, &bres);
                     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
                     TEST_ASSERT_EQUAL(amount, bres);
                     TEST_ASSERT(0 == memcmp(buf, buf1000 + pos, amount));
                     pos += amount;
                     break;
-                case 1: /* write */
+                case 1: /* писать */
                     for(int32_t k = 0; k < amount; k++) {
                         buf[k] = n;
                         buf1000[pos + k] = n;
@@ -259,8 +259,8 @@ void test_write_read_random(void)
                     TEST_ASSERT_EQUAL(amount, bres);
                     pos += amount;
                     break;
-                case 2: /* seek */
-                    pos += amount; /* amount may be negative */
+                case 2: /* искать */
+                    pos += amount; /* сумма может быть отрицательной */
                     res = lv_fs_seek(&f, pos, LV_FS_SEEK_SET);
                     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
                     break;
@@ -268,7 +268,7 @@ void test_write_read_random(void)
         }
     }
 
-    /* test SEEK_END */
+    /* тест SEEK_END */
     uint32_t tell_pos;
     res = lv_fs_seek(&f, 0, LV_FS_SEEK_END);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
@@ -293,7 +293,7 @@ void test_fs_is_ready(void)
 
 void test_fs_open(void)
 {
-    /*'T' has cache*/
+    /*У 'T' есть кэш*/
     lv_fs_file_t fa;
     lv_fs_res_t res;
     res = lv_fs_open(&fa, NULL, LV_FS_MODE_RD);
@@ -326,29 +326,29 @@ void test_fs_seek(void)
     lv_fs_res_t res;
     lv_fs_file_t f;
 
-    /* Test with drive 'A' (has cache) */
+    /* Тест с диском «А» (есть кеш) */
     res = lv_fs_open(&f, "A:src/test_files/readtest.txt", LV_FS_MODE_RD);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Test forward seek from current position */
+    /* Тестовый поиск вперед из текущей позиции */
     uint8_t buf[10];
     uint32_t br;
 
-    /* Read first 10 bytes to establish position */
+    /* Прочитайте первые 10 байт, чтобы установить позицию. */
     res = lv_fs_read(&f, buf, sizeof(buf), &br);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL_UINT32(sizeof(buf), br);
 
-    /* Seek forward 5 bytes from current position */
+    /* Перейти вперед на 5 байт от текущей позиции */
     res = lv_fs_seek(&f, 5, LV_FS_SEEK_CUR);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Read next 5 bytes to verify position */
+    /* Прочитайте следующие 5 байтов, чтобы проверить позицию. */
     res = lv_fs_read(&f, buf, 5, &br);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL_UINT32(5, br);
 
-    /* Verify we're at position 20 (10 + 5 + 5) */
+    /* Убедитесь, что мы находимся в позиции 20 (10 + 5 + 5). */
     uint32_t pos;
     res = lv_fs_tell(&f, &pos);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
@@ -356,36 +356,36 @@ void test_fs_seek(void)
 
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_close(&f));
 
-    /* Test with drive 'B' (no cache) */
+    /* Тест с диском «B» (без кэша) */
     res = lv_fs_open(&f, "B:src/test_files/readtest.txt", LV_FS_MODE_RD);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Test backward seek from current position */
+    /* Проверка обратного поиска с текущей позиции */
     res = lv_fs_seek(&f, 20, LV_FS_SEEK_SET);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Read 5 bytes to establish position */
+    /* Прочитайте 5 байтов, чтобы установить позицию. */
     res = lv_fs_read(&f, buf, 5, &br);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL_UINT32(5, br);
 
-    /* Seek backward 3 bytes from current position */
+    /* Перейти назад на 3 байта от текущей позиции */
     res = lv_fs_seek(&f, -3, LV_FS_SEEK_CUR);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Verify position is now 22 (20 + 5 - 3) */
+    /* Убедитесь, что позиция теперь равна 22 (20 + 5 – 3) */
     res = lv_fs_tell(&f, &pos);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL_UINT32(22, pos);
 
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_close(&f));
 
-    /* Test error cases */
+    /* Случаи ошибок тестирования */
     lv_fs_file_t invalid_file = {0};
     res = lv_fs_seek(&invalid_file, 0, LV_FS_SEEK_CUR);
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
 
-    /* Test with drive 'T' (has cache, but not ready) */
+    /* Тест с диском «Т» (кэш есть, но не готов) */
     lv_test_fs_set_ready(false);
     res = lv_fs_open(&f, "T:src/test_files/readtest.txt", LV_FS_MODE_RD);
     TEST_ASSERT_EQUAL(LV_FS_RES_HW_ERR, res);
@@ -396,27 +396,27 @@ void test_fs_path_get_size(void)
 {
     lv_fs_res_t res;
     uint32_t size;
-    const uint32_t expected_size = 745; /* Size of readtest.txt */
+    const uint32_t expected_size = 745; /* Размер readtest.txt */
 
-    /* Test with drive 'A' (has cache) */
+    /* Тест с диском «А» (есть кеш) */
     res = lv_fs_path_get_size("A:src/test_files/readtest.txt", &size);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL_UINT32(expected_size, size);
 
-    /* Test with drive 'B' (no cache) */
+    /* Тест с диском «B» (без кэша) */
     res = lv_fs_path_get_size("B:src/test_files/readtest.txt", &size);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL_UINT32(expected_size, size);
 
-    /* Test error cases */
+    /* Случаи ошибок тестирования */
     res = lv_fs_path_get_size(NULL, &size);
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
 
-    /* Test with non-existent file */
+    /* Тест с несуществующим файлом */
     res = lv_fs_path_get_size("A:src/test_files/nonexistent.txt", &size);
     TEST_ASSERT_EQUAL(LV_FS_RES_UNKNOWN, res);
 
-    /* Test with drive 'T' (has cache, but not ready) */
+    /* Тест с диском «Т» (кэш есть, но не готов) */
     lv_test_fs_set_ready(false);
     res = lv_fs_path_get_size("T:src/test_files/readtest.txt", &size);
     TEST_ASSERT_EQUAL(LV_FS_RES_HW_ERR, res);
@@ -428,22 +428,22 @@ void test_fs_load_to_buf(void)
     lv_fs_res_t res;
     uint8_t buf[256];
 
-    /* Test with drive 'A' (has cache) - load partial content */
+    /* Проверьте диск «A» (есть кеш) — загрузите частичный контент. */
     res = lv_fs_load_to_buf(buf, 50, "A:src/test_files/readtest.txt");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Verify first few bytes match expected content */
+    /* Убедитесь, что первые несколько байтов соответствуют ожидаемому содержимому. */
     TEST_ASSERT_TRUE(lv_memcmp(buf, read_exp, 50) == 0);
 
-    /* Test with drive 'B' (no cache) - load full content */
+    /* Проверьте диск «B» (без кэша) — загрузите полное содержимое. */
     res = lv_fs_load_to_buf(buf, sizeof(buf), "B:src/test_files/readtest.txt");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Test with non-existent file */
+    /* Тест с несуществующим файлом */
     res = lv_fs_load_to_buf(buf, 10, "A:src/test_files/nonexistent.txt");
     TEST_ASSERT_EQUAL(LV_FS_RES_UNKNOWN, res);
 
-    /* Test with drive 'T' (has cache, but not ready) */
+    /* Тест с диском «Т» (кэш есть, но не готов) */
     lv_test_fs_set_ready(false);
     res = lv_fs_load_to_buf(buf, 10, "T:src/test_files/readtest.txt");
     TEST_ASSERT_EQUAL(LV_FS_RES_HW_ERR, res);
@@ -455,31 +455,31 @@ void test_fs_dir_open(void)
     lv_fs_res_t res;
     lv_fs_dir_t dir;
 
-    /* Test with NULL path */
+    /* Тестирование с путем NULL */
     res = lv_fs_dir_open(&dir, NULL);
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
 
-    /* Test with drive 'A' (has cache) */
+    /* Тест с диском «А» (есть кеш) */
     res = lv_fs_dir_open(&dir, "A:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_dir_close(&dir));
 
-    /* Test with drive 'B' (no cache) */
+    /* Тест с диском «B» (без кэша) */
     res = lv_fs_dir_open(&dir, "B:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_dir_close(&dir));
 
-    /* Test with non-existent directory */
+    /* Тестирование с несуществующим каталогом */
     res = lv_fs_dir_open(&dir, "A:src/nonexistent_dir");
     TEST_ASSERT_EQUAL(LV_FS_RES_UNKNOWN, res);
 
-    /* Test with drive 'T' (has cache, but not ready) */
+    /* Тест с диском «Т» (кэш есть, но не готов) */
     lv_test_fs_set_ready(false);
     res = lv_fs_dir_open(&dir, "T:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_HW_ERR, res);
     lv_test_fs_set_ready(true);
 
-    /* Test with invalid drive letter */
+    /* Тест с неверной буквой диска */
     res = lv_fs_dir_open(&dir, "Z:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_NOT_EX, res);
 }
@@ -490,35 +490,35 @@ void test_fs_dir_read(void)
     lv_fs_dir_t dir;
     char filename[256];
 
-    /* Test with invalid directory handle */
+    /* Тест с неверным дескриптором каталога */
     lv_fs_dir_t invalid_dir = {0};
     res = lv_fs_dir_read(&invalid_dir, filename, sizeof(filename));
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
     TEST_ASSERT_EQUAL_CHAR('\0', filename[0]);
 
-    /* Test with zero buffer length */
+    /* Тест с нулевой длиной буфера */
     res = lv_fs_dir_open(&dir, "A:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     res = lv_fs_dir_read(&dir, filename, 0);
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_dir_close(&dir));
 
-    /* Test normal directory reading with drive 'A' */
+    /* Проверьте нормальное чтение каталога с диска «A». */
     res = lv_fs_dir_open(&dir, "A:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Read directory entries until end */
+    /* Читать записи каталога до конца */
     uint32_t entry_count = 0;
     while((res = lv_fs_dir_read(&dir, filename, sizeof(filename))) == LV_FS_RES_OK) {
-        if(filename[0] == '\0') break; /* End of directory */
+        if(filename[0] == '\0') break; /* Конец каталога */
         entry_count++;
     }
 
-    /* Should have at least one entry (readtest.txt) */
+    /* Должна быть хотя бы одна запись ( readtest.txt ). */
     TEST_ASSERT_TRUE(entry_count > 0);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_dir_close(&dir));
 
-    /* Test normal directory reading with drive 'B' */
+    /* Проверьте нормальное чтение каталога с диска «B». */
     res = lv_fs_dir_open(&dir, "B:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
@@ -531,7 +531,7 @@ void test_fs_dir_read(void)
     TEST_ASSERT_TRUE(entry_count > 0);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, lv_fs_dir_close(&dir));
 
-    /* Test with drive 'T' (has cache, but not ready) */
+    /* Тест с диском «Т» (кэш есть, но не готов) */
     lv_test_fs_set_ready(false);
     res = lv_fs_dir_open(&dir, "T:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_HW_ERR, res);
@@ -543,32 +543,32 @@ void test_fs_dir_close(void)
     lv_fs_res_t res;
     lv_fs_dir_t dir;
 
-    /* Test with invalid directory handle */
+    /* Тест с неверным дескриптором каталога */
     lv_fs_dir_t invalid_dir = {0};
     res = lv_fs_dir_close(&invalid_dir);
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
 
-    /* Test normal close with drive 'A' */
+    /* Проверьте нормальное закрытие с приводом «А». */
     res = lv_fs_dir_open(&dir, "A:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     res = lv_fs_dir_close(&dir);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Test normal close with drive 'B' */
+    /* Проверьте нормальное закрытие с приводом «B». */
     res = lv_fs_dir_open(&dir, "B:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     res = lv_fs_dir_close(&dir);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
 
-    /* Test double close (should be safe) */
+    /* Проверьте двойное закрытие (должно быть безопасно) */
     res = lv_fs_dir_open(&dir, "A:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
     res = lv_fs_dir_close(&dir);
     TEST_ASSERT_EQUAL(LV_FS_RES_OK, res);
-    res = lv_fs_dir_close(&dir); /* Second close on same handle */
+    res = lv_fs_dir_close(&dir); /* Второе закрытие на той же ручке */
     TEST_ASSERT_EQUAL(LV_FS_RES_INV_PARAM, res);
 
-    /* Test with drive 'T' (has cache, but not ready) */
+    /* Тест с диском «Т» (кэш есть, но не готов) */
     lv_test_fs_set_ready(false);
     res = lv_fs_dir_open(&dir, "T:src/test_files");
     TEST_ASSERT_EQUAL(LV_FS_RES_HW_ERR, res);
@@ -579,42 +579,42 @@ void test_fs_up(void)
 {
     char path[256];
 
-    /* Test empty path */
+    /* Проверить пустой путь */
     lv_strcpy(path, "");
     char * result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("", result);
 
-    /* Test root path (cannot go up further) */
+    /* Проверить корневой путь (дальше подняться невозможно) */
     lv_strcpy(path, "/");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("", result);
 
-    /* Test single level directory */
+    /* Тестовый одноуровневый каталог */
     lv_strcpy(path, "/home");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("/home", result);
 
-    /* Test multi-level directory */
+    /* Тестовый многоуровневый каталог */
     lv_strcpy(path, "/home/user/documents");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("/home/user", result);
 
-    /* Test path with trailing slash */
+    /* Тестовый путь с косой чертой в конце */
     lv_strcpy(path, "/home/user/documents/");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("/home/user", result);
 
-    /* Test path with mixed slashes */
+    /* Тестовый путь со смешанными косыми чертами */
     lv_strcpy(path, "C:\\Users\\Documents\\");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("C:\\Users", result);
 
-    /* Test path with only filename */
+    /* Тестовый путь только с именем файла */
     lv_strcpy(path, "file.txt");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("file.txt", result);
 
-    /* Test path with drive letter and multiple levels */
+    /* Тестовый путь с буквой диска и несколькими уровнями */
     lv_strcpy(path, "A:src/test_files");
     result = lv_fs_up(path);
     TEST_ASSERT_EQUAL_STRING("A:src", result);
@@ -624,57 +624,57 @@ void test_fs_get_last(void)
 {
     const char * result;
 
-    /* Test empty path */
+    /* Проверить пустой путь */
     result = lv_fs_get_last("");
     TEST_ASSERT_EQUAL_STRING("", result);
 
-    /* Test path with only filename */
+    /* Тестовый путь только с именем файла */
     result = lv_fs_get_last("file.txt");
     TEST_ASSERT_EQUAL_STRING("file.txt", result);
 
-    /* Test multi-level directory path */
+    /* Проверить многоуровневый путь к каталогу */
     result = lv_fs_get_last("/home/user/documents");
     TEST_ASSERT_EQUAL_STRING("documents", result);
 
-    /* Test path with trailing slash */
+    /* Тестовый путь с косой чертой в конце */
     result = lv_fs_get_last("/home/user/documents/");
     TEST_ASSERT_EQUAL_STRING("documents/", result);
 
-    /* Test path with mixed slashes */
+    /* Тестовый путь со смешанными косыми чертами */
     result = lv_fs_get_last("C:\\Users\\Documents");
     TEST_ASSERT_EQUAL_STRING("Documents", result);
 
-    /* Test path with no separators */
+    /* Тестовый путь без разделителей */
     result = lv_fs_get_last("filename");
     TEST_ASSERT_EQUAL_STRING("filename", result);
 
-    /* Test root path */
+    /* Проверить корневой путь */
     result = lv_fs_get_last("/");
     TEST_ASSERT_EQUAL_STRING("/", result);
 
-    /* Test path with drive letter */
+    /* Тестовый путь с буквой диска */
     result = lv_fs_get_last("A:src/test_files/readtest.txt");
     TEST_ASSERT_EQUAL_STRING("readtest.txt", result);
 
-    /* Test path ending with separator */
+    /* Тестовый путь заканчивается разделителем */
     result = lv_fs_get_last("A:src/test_files/");
     TEST_ASSERT_EQUAL_STRING("test_files/", result);
 
-    /* Test single character path */
+    /* Тестирование односимвольного пути */
     result = lv_fs_get_last("a");
     TEST_ASSERT_EQUAL_STRING("a", result);
 }
 
 void test_fs_get_letters(void)
 {
-    char buf[16]; /* Increased buffer size to accommodate more drive letters */
+    char buf[16]; /* Увеличен размер буфера для размещения большего количества букв дисков. */
     char * result;
 
-    /* Test with sufficient buffer size */
+    /* Тест с достаточным размером буфера */
     result = lv_fs_get_letters(buf);
-    TEST_ASSERT_EQUAL_PTR(buf, result); /* Should return the same buffer */
+    TEST_ASSERT_EQUAL_PTR(buf, result); /* Должен возвращать тот же буфер */
 
-    /* Verify that the buffer contains valid drive letters */
+    /* Убедитесь, что буфер содержит допустимые буквы дисков. */
     TEST_ASSERT_EQUAL_STRING("TMBA", buf);
 }
 

@@ -240,16 +240,16 @@ static inline void * /* LV_ATTRIBUTE_FAST_MEM */ drawbuf_next_row(const void * b
  **********************/
 
 /**
- * Fill an area with a color.
- * Supports normal fill, fill with opacity, fill with mask, and fill with mask and opacity.
- * dest_buf and color have native color depth. (RGB565, RGB888, XRGB8888)
- * The background (dest_buf) cannot have alpha channel
+ * Залейте область цветом.
+ * Поддерживает обычную заливку, заливку с непрозрачностью, заливку с маской и заливку с маской и непрозрачностью.
+ * dest_buf и цвет имеют собственную глубину цвета. ( RGB565 , RGB888 , XRGB8888 )
+ * Фон ( dest_buf ) не может иметь альфа-канал.
  * @param dest_buf
  * @param dest_area
  * @param dest_stride
- * @param color
- * @param opa
- * @param mask
+ * Цвет @param
+ * @param опа
+ * Маска @param
  * @param mask_stride
  */
 void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb565(lv_draw_sw_blend_fill_dsc_t * dsc)
@@ -277,7 +277,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb565(lv_draw_sw_blend_fil
     LV_UNUSED(dest_stride);
     LV_UNUSED(dest_buf_u16);
 
-    /*Simple fill*/
+    /*Простая заливка*/
     if(mask == NULL && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB565(dsc)) {
             for(y = 0; y < h; y++) {
@@ -315,10 +315,10 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb565(lv_draw_sw_blend_fil
         }
 
     }
-    /*Opacity only*/
+    /*Только непрозрачность*/
     else if(mask == NULL && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB565_WITH_OPA(dsc)) {
-            uint32_t last_dest32_color = dest_buf_u16[0] + 1; /*Set to value which is not equal to the first pixel*/
+            uint32_t last_dest32_color = dest_buf_u16[0] + 1; /*Установите значение, которое не равно первому пикселю.*/
             uint32_t last_res32_color = 0;
 
             for(y = 0; y < h; y++) {
@@ -356,7 +356,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb565(lv_draw_sw_blend_fil
             }
         }
     }
-    /*Masked with full opacity*/
+    /*Замаскировано с полной непрозрачностью*/
     else if(mask && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB565_WITH_MASK(dsc)) {
             for(y = 0; y < h; y++) {
@@ -386,7 +386,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb565(lv_draw_sw_blend_fil
             }
         }
     }
-    /*Masked with opacity*/
+    /*Маскировано с непрозрачностью*/
     else if(mask && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB565_MIX_MASK_OPA(dsc)) {
             for(y = 0; y < h; y++) {
@@ -532,21 +532,21 @@ static void LV_ATTRIBUTE_FAST_MEM i1_image_blend(lv_draw_sw_blend_image_dsc_t * 
                 uint8_t chan_val = get_bit(src_buf_i1, src_x) * 255;
                 switch(dsc->blend_mode) {
                     case LV_BLEND_MODE_ADDITIVE:
-                        // Additive blending mode
+                        // Аддитивный режим смешивания
                         res = (LV_MIN(dest_buf_u16[dest_x] + l8_to_rgb565(chan_val), 0xFFFF));
                         break;
                     case LV_BLEND_MODE_SUBTRACTIVE:
-                        // Subtractive blending mode
+                        // Режим субтрактивного смешивания
                         res = (LV_MAX(dest_buf_u16[dest_x] - l8_to_rgb565(chan_val), 0));
                         break;
                     case LV_BLEND_MODE_MULTIPLY:
-                        // Multiply blending mode
+                        // Режим наложения «Умножить»
                         res = ((((dest_buf_u16[dest_x] >> 11) * (l8_to_rgb565(chan_val) >> 3)) & 0x1F) << 11) |
                               ((((dest_buf_u16[dest_x] >> 5) & 0x3F) * ((l8_to_rgb565(chan_val) >> 2) & 0x3F) >> 6) << 5) |
                               (((dest_buf_u16[dest_x] & 0x1F) * (l8_to_rgb565(chan_val) & 0x1F)) >> 5);
                         break;
                     case LV_BLEND_MODE_DIFFERENCE:
-                        /*Difference blending mode*/
+                        /*Режим наложения различий*/
                         res = (LV_ABS(dest_buf_u16[dest_x] - l8_to_rgb565(chan_val)));
                         break;
                     default:
@@ -888,19 +888,19 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
             for(x = 0; x < w; x++) {
                 switch(dsc->blend_mode) {
                     case LV_BLEND_MODE_ADDITIVE:
-                        if(src_buf_u16[x] == 0x0000) continue;   /*Do not add pure black*/
+                        if(src_buf_u16[x] == 0x0000) continue;   /*Не добавляйте чистый черный*/
                         res = (LV_MIN(dest_buf_c16[x].red + src_buf_c16[x].red, 31)) << 11;
                         res += (LV_MIN(dest_buf_c16[x].green + src_buf_c16[x].green, 63)) << 5;
                         res += LV_MIN(dest_buf_c16[x].blue + src_buf_c16[x].blue, 31);
                         break;
                     case LV_BLEND_MODE_SUBTRACTIVE:
-                        if(src_buf_u16[x] == 0x0000) continue;   /*Do not subtract pure black*/
+                        if(src_buf_u16[x] == 0x0000) continue;   /*Не вычитайте чистый черный*/
                         res = (LV_MAX(dest_buf_c16[x].red - src_buf_c16[x].red, 0)) << 11;
                         res += (LV_MAX(dest_buf_c16[x].green - src_buf_c16[x].green, 0)) << 5;
                         res += LV_MAX(dest_buf_c16[x].blue - src_buf_c16[x].blue, 0);
                         break;
                     case LV_BLEND_MODE_MULTIPLY:
-                        if(src_buf_u16[x] == 0xffff) continue;   /*Do not multiply with pure white (considered as 1)*/
+                        if(src_buf_u16[x] == 0xffff) continue;   /*Не умножайте на чистый белый цвет (считается за 1)*/
                         res = ((dest_buf_c16[x].red * src_buf_c16[x].red) >> 5) << 11;
                         res += ((dest_buf_c16[x].green * src_buf_c16[x].green) >> 6) << 5;
                         res += (dest_buf_c16[x].blue * src_buf_c16[x].blue) >> 5;
@@ -1003,24 +1003,24 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_swapped_image_blend(lv_draw_sw_blend_im
             for(x = 0; x < w; x++) {
                 uint16_t raw;
                 lv_color16_t px;
-                raw = lv_color_swap_16(src_buf_u16[x]);                        /* swap byte order */
+                raw = lv_color_swap_16(src_buf_u16[x]);                        /* поменять порядок байтов */
                 px = lv_color16_from_u16(raw);
 
                 switch(dsc->blend_mode) {
                     case LV_BLEND_MODE_ADDITIVE:
-                        if(src_buf_u16[x] == 0x0000) continue;   /*Do not add pure black*/
+                        if(src_buf_u16[x] == 0x0000) continue;   /*Не добавляйте чистый черный*/
                         res = (LV_MIN(dest_buf_c16[x].red + px.red, 31)) << 11;
                         res += (LV_MIN(dest_buf_c16[x].green + px.green, 63)) << 5;
                         res += LV_MIN(dest_buf_c16[x].blue + px.blue, 31);
                         break;
                     case LV_BLEND_MODE_SUBTRACTIVE:
-                        if(src_buf_u16[x] == 0x0000) continue;   /*Do not subtract pure black*/
+                        if(src_buf_u16[x] == 0x0000) continue;   /*Не вычитайте чистый черный*/
                         res = (LV_MAX(dest_buf_c16[x].red - px.red, 0)) << 11;
                         res += (LV_MAX(dest_buf_c16[x].green - px.green, 0)) << 5;
                         res += LV_MAX(dest_buf_c16[x].blue - px.blue, 0);
                         break;
                     case LV_BLEND_MODE_MULTIPLY:
-                        if(src_buf_u16[x] == 0xffff) continue;   /*Do not multiply with pure white (considered as 1)*/
+                        if(src_buf_u16[x] == 0xffff) continue;   /*Не умножайте на чистый белый цвет (считается за 1)*/
                         res = ((dest_buf_c16[x].red * px.red) >> 5) << 11;
                         res += ((dest_buf_c16[x].green * px.green) >> 6) << 5;
                         res += (dest_buf_c16[x].blue * px.blue) >> 5;
@@ -1334,8 +1334,8 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
             if(LV_RESULT_INVALID == LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_RGB565(dsc)) {
                 for(y = 0; y < h; y++) {
                     for(dest_x = 0, src_x = 0; dest_x < w; dest_x++, src_x += 4) {
-                        /*For the trivial case use the premultiplied image as it is.
-                         *For the other cases unpremultiply as another alpha also needs to be applied.*/
+                        /*В тривиальном случае используйте предварительно умноженное изображение как есть.
+                         *В других случаях также необходимо применять unpremultiply в качестве другой альфа.*/
                         dest_buf_u16[dest_x] = lv_color_24_16_mix_premult(&src_buf_u8[src_x], dest_buf_u16[dest_x], src_buf_u8[src_x + 3]);
                     }
                     dest_buf_u16 = drawbuf_next_row(dest_buf_u16, dest_stride);
@@ -1436,11 +1436,11 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                 }
 
                 if(mask_buf == NULL && opa >= LV_OPA_MAX) {
-                    /* Blending premultiplied ARGB8888 to RGB565 with no mask and full opacity */
+                    /* Смешивание предварительно умноженных ARGB8888 с RGB565 без маски и полной непрозрачности. */
                     dest_buf_u16[dest_x] = lv_color_16_16_mix(res, dest_buf_u16[dest_x], src_buf_u8[src_x + 3]);
                 }
                 else if(mask_buf == NULL && opa < LV_OPA_MAX) {
-                    /* Blending premultiplied ARGB8888 to RGB565 with no mask and partial opacity */
+                    /* Смешивание предварительно умноженных ARGB8888 с RGB565 без маски и частичной непрозрачности. */
                     dest_buf_u16[dest_x] = lv_color_16_16_mix(res, dest_buf_u16[dest_x], LV_OPA_MIX2(opa, src_buf_u8[src_x + 3]));
                 }
                 else {

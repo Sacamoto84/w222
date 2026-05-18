@@ -79,7 +79,7 @@ lv_obj_t * lv_checkbox_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_checkbox_set_text(lv_obj_t * obj, const char * txt)
@@ -128,7 +128,7 @@ void lv_checkbox_set_text_static(lv_obj_t * obj, const char * txt)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const char * lv_checkbox_get_text(const lv_obj_t * obj)
@@ -182,7 +182,7 @@ static void lv_checkbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
     LV_UNUSED(class_p);
 
     lv_result_t res;
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 

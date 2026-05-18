@@ -18,8 +18,8 @@ static lv_obj_t * load_item(lv_obj_t * parent, int32_t num)
 
 static void update_scroll(lv_obj_t * obj)
 {
-    /* do not re-enter this function when `lv_obj_scroll_by`
-     * triggers this callback again.
+    /* не вводите повторно эту функцию, когда `lv_obj_scroll_by`
+     * снова запускает этот обратный вызов.
      */
     if(update_scroll_running) return;
     update_scroll_running = true;
@@ -27,7 +27,7 @@ static void update_scroll(lv_obj_t * obj)
     int32_t top_num_original = top_num;
     int32_t bottom_num_original = bottom_num;
 
-    /* load items we're getting close to */
+    /* загрузить предметы, к которым мы приближаемся */
     while(bottom_num > -30 && lv_obj_get_scroll_bottom(obj) < 200) {
         bottom_num -= 1;
         load_item(obj, bottom_num);
@@ -45,7 +45,7 @@ static void update_scroll(lv_obj_t * obj)
         LV_LOG_USER("loaded top num: %" PRId32, top_num);
     }
 
-    /* delete far-away items */
+    /* удалять удаленные объекты */
     while(lv_obj_get_scroll_bottom(obj) > 600) {
         bottom_num += 1;
         lv_obj_t * child = lv_obj_get_child(obj, -1);
@@ -89,7 +89,7 @@ static void checkbox_cb(lv_event_t * e)
 }
 
 /**
- * Dynamically load widgets while scrolling
+ * Динамически загружать виджеты при прокрутке
  */
 void lv_example_scroll_7(void)
 {
@@ -114,7 +114,7 @@ void lv_example_scroll_7(void)
     lv_obj_align(low_label, LV_ALIGN_BOTTOM_LEFT, 10, -10);
 
     load_item(obj, 3);
-    /* These counters hold the highest/lowest number currently loaded. */
+    /* Эти счетчики содержат наибольшее/наименьшее число, загруженное в данный момент. */
     top_num = 3;
     bottom_num = 3;
 

@@ -158,7 +158,7 @@ lv_indev_t * lv_libinput_create(lv_indev_type_t indev_type, const char * dev_pat
 
     dsc->fd = libinput_get_fd(dsc->libinput_context);
 
-    /* Prepare poll */
+    /* Подготовить опрос */
     dsc->fds[0].fd = dsc->fd;
     dsc->fds[0].events = POLLIN;
     dsc->fds[0].revents = 0;
@@ -168,7 +168,7 @@ lv_indev_t * lv_libinput_create(lv_indev_type_t indev_type, const char * dev_pat
     lv_xkb_init(&(dsc->xkb), names);
 #endif /* LV_LIBINPUT_XKB */
 
-    /* Create indev */
+    /* Создать индев. */
     lv_indev_t * indev = lv_indev_create();
     if(!indev) {
         _delete(dsc);
@@ -178,7 +178,7 @@ lv_indev_t * lv_libinput_create(lv_indev_type_t indev_type, const char * dev_pat
     lv_indev_set_read_cb(indev, _read);
     lv_indev_set_driver_data(indev, dsc);
 
-    /* Set up thread & lock */
+    /* Настроить тред и заблокировать */
     pthread_mutex_init(&dsc->event_lock, NULL);
     pthread_create(&dsc->worker_thread, NULL, _poll_thread, dsc);
 
@@ -196,7 +196,7 @@ void lv_libinput_delete(lv_indev_t * indev)
  **********************/
 
 /**
- * rescan all attached evdev devices and store capable ones into the static devices array for quick later filtering
+ * повторно сканировать все подключенные устройства evdev и сохранять совместимые устройства в массиве статических устройств для последующей быстрой фильтрации.
  * @return true if the operation succeeded
  */
 static bool _rescan_devices(void)
@@ -217,7 +217,7 @@ static bool _rescan_devices(void)
             continue;
         }
 
-        /* 11 characters for /dev/input/ + length of name + 1 NUL terminator */
+        /* 11 символов для /dev/input/ + длина имени + 1 терминатор NUL */
         char * path = malloc((11 + strlen(ent->d_name) + 1) * sizeof(char));
         if(!path) {
             perror("could not allocate memory for device node path");
@@ -235,8 +235,8 @@ static bool _rescan_devices(void)
             continue;
         }
 
-        /* The device pointer is guaranteed to be valid until the next libinput_dispatch. Since we're not dispatching events
-         * as part of this function, we don't have to increase its reference count to keep it alive.
+        /* Указатель устройства гарантированно действителен до следующего libinput_dispatch. Поскольку мы не отправляем события
+         * как часть этой функции, нам не нужно увеличивать счетчик ссылок, чтобы поддерживать ее работоспособность.
          * https://wayland.freedesktop.org/libinput/doc/latest/api/group__base.html#gaa797496f0150b482a4e01376bd33a47b */
 
         lv_libinput_capability capabilities = lv_libinput_query_capability(device);
@@ -261,14 +261,14 @@ static bool _rescan_devices(void)
 }
 
 /**
- * add a new scanned device to the static devices array, growing its size when necessary
+ * добавить новое сканируемое устройство в массив статических устройств, увеличивая его размер при необходимости
  * @param path device file path
  * @param capabilities device input capabilities
  * @return true if the operation succeeded
  */
 static bool _add_scanned_device(char * path, lv_libinput_capability capabilities)
 {
-    /* Double array size every 2^n elements */
+    /* Двойной размер массива каждые 2^n элементов */
     if((num_devices & (num_devices + 1)) == 0) {
         struct _lv_libinput_device * tmp = realloc(devices, (2 * num_devices + 1) * sizeof(struct _lv_libinput_device));
         if(!tmp) {
@@ -286,7 +286,7 @@ static bool _add_scanned_device(char * path, lv_libinput_capability capabilities
 }
 
 /**
- * reset the array of scanned devices and free any dynamically allocated memory
+ * сбросьте массив сканируемых устройств и освободите всю динамически выделяемую память
  */
 static void _reset_scanned_devices(void)
 {
@@ -319,7 +319,7 @@ static void * _poll_thread(void * data)
                 __attribute__((fallthrough));
             case 0:
                 if(dsc->deinit) {
-                    dsc->deinit = false; /* Signal that we're done */
+                    dsc->deinit = false; /* Сигнал, что мы закончили */
                     return NULL;
                 }
                 continue;
@@ -366,8 +366,8 @@ lv_libinput_event_t * _create_event(lv_libinput_t * dsc)
     if(++dsc->end == LV_LIBINPUT_MAX_EVENTS)
         dsc->end = 0;
 
-    /* We have overflowed the buffer, start overwriting
-     * old events.
+    /* Мы переполнили буфер, начинаем перезаписывать
+     * старые события.
      */
     if(dsc->end == dsc->start) {
         LV_LOG_INFO("libinput: overflowed event buffer!");
@@ -390,14 +390,14 @@ static void _read(lv_indev_t * indev, lv_indev_data_t * data)
     lv_libinput_event_t * evt = _get_event(dsc);
 
     if(!evt)
-        evt = &dsc->last_event; /* indev expects us to report the most recent state */
+        evt = &dsc->last_event; /* indev ожидает, что мы сообщим о самом последнем состоянии */
 
     data->point = evt->point;
     data->state = evt->pressed;
     data->key = evt->key_val;
     data->continue_reading = _event_pending(dsc);
 
-    dsc->last_event = *evt; /* Remember the last event for the next call */
+    dsc->last_event = *evt; /* Запомните последнее событие для следующего звонка */
 
     pthread_mutex_unlock(&dsc->event_lock);
 
@@ -426,14 +426,14 @@ static void _read_pointer(lv_libinput_t * dsc, struct libinput_event * event)
             pointer_event = libinput_event_get_pointer_event(event);
             break;
         default:
-            return; /* We don't care about this events */
+            return; /* Нас не волнуют эти события */
     }
 
-    /* We need to read unrotated display dimensions directly from the driver because libinput won't account
-     * for any rotation inside of LVGL */
+    /* Нам нужно прочитать размеры неповернутого дисплея непосредственно из драйвера, потому что libinput не будет учитывать
+     * для любого вращения внутри LVGL */
     lv_display_t * disp = lv_display_get_default();
 
-    /* ignore more than 2 fingers as it will only confuse LVGL */
+    /* игнорируйте более двух пальцев, так как это только запутает LVGL */
     if(touch_event && (slot = libinput_event_touch_get_slot(touch_event)) > 1)
         return;
 
@@ -451,7 +451,7 @@ static void _read_pointer(lv_libinput_t * dsc, struct libinput_event * event)
                 point.y = (int32_t)LV_CLAMP(INT32_MIN, libinput_event_touch_get_y_transformed(touch_event, ver_res) - disp->offset_y,
                                             INT32_MAX);
                 if(point.x < 0 || point.x > disp->hor_res || point.y < 0 || point.y > disp->ver_res) {
-                    break; /* ignore touches that are out of bounds */
+                    break; /* игнорировать касания, выходящие за пределы поля */
                 }
                 evt->point = point;
                 evt->pressed = LV_INDEV_STATE_PRESSED;
@@ -461,46 +461,46 @@ static void _read_pointer(lv_libinput_t * dsc, struct libinput_event * event)
             }
         case LIBINPUT_EVENT_TOUCH_UP:
             /*
-             * We don't support "multitouch", but libinput does. To make fast typing with two thumbs
-             * on a keyboard feel good, it's necessary to handle two fingers individually. The edge
-             * case here is if you press a key with one finger and then press a second key with another
-             * finger. No matter which finger you release, it will count as the second finger releasing
-             * and ignore the first because LVGL only stores a single (the latest) pressed state.
+             * Мы не поддерживаем «мультитач», но libinput поддерживает. Чтобы быстро печатать двумя большими пальцами
+             * На клавиатуре комфортно, приходится управлять двумя пальцами по отдельности. Край
+             * В данном случае вы нажимаете клавишу одним пальцем, а затем нажимаете вторую клавишу другим.
+             * палец. Независимо от того, какой палец вы отпустите, это будет считаться отпусканием второго пальца.
+             * и игнорировать первое, потому что LVGL хранит только одно (последнее) состояние нажатия.
              *
-             * To work around this, we detect the case where one finger is released while the other is
-             * still pressed and insert dummy events so that both release events trigger at the correct
-             * position.
+             * Чтобы обойти эту проблему, мы обнаруживаем случай, когда один палец отпускается, а другой
+             * все еще нажата, и вставьте фиктивные события, чтобы оба события отпускания срабатывали в правильном месте.
+             * позиция.
              */
             if(slot == 0 && dsc->slots[1].pressed == LV_INDEV_STATE_PRESSED) {
-                /* The first finger is released while the second finger is still pressed.
-                 * We turn P1 > P2 > R1 > R2 into P1 > P2 > (P1) > R1 > (P2) > R2.
+                /* Первый палец отпускают, а второй палец все еще нажат.
+                 * Превратим P1 > P2 > R1 > R2 в P1 > P2 > ( P1 ) > R1 > ( P2 ) > R2 .
                  */
 
-                /* Inject the dummy press event for the first finger */
+                /* Внедрить фиктивное событие нажатия для первого пальца */
                 lv_libinput_event_t * synth_evt = evt;
                 synth_evt->pressed = LV_INDEV_STATE_PRESSED;
                 synth_evt->point = dsc->slots[0].point;
 
-                /* Append the real release event for the first finger */
+                /* Добавьте реальное событие выпуска для первого пальца */
                 evt = _create_event(dsc);
                 evt->pressed = LV_INDEV_STATE_RELEASED;
                 evt->point = dsc->slots[0].point;
 
-                /* Inject the dummy press event for the second finger */
+                /* Внедрить фиктивное событие нажатия для второго пальца */
                 synth_evt = _create_event(dsc);
                 synth_evt->pressed = LV_INDEV_STATE_PRESSED;
                 synth_evt->point = dsc->slots[1].point;
             }
             else if(slot == 1 && dsc->slots[0].pressed == LV_INDEV_STATE_PRESSED) {
-                /* The second finger is released while the first finger is still pressed.
-                 * We turn P1 > P2 > R2 > R1 into P1 > P2 > R2 > (P1) > R1.
+                /* Второй палец отпускают, а первый палец все еще нажат.
+                 * Превращаем P1 > P2 > R2 > R1 в P1 > P2 > R2 > ( P1 ) > R1 .
                  */
 
-                /* Append the real release event for the second finger */
+                /* Добавьте реальное событие освобождения второго пальца. */
                 evt->pressed = LV_INDEV_STATE_RELEASED;
                 evt->point = dsc->slots[1].point;
 
-                /* Inject the dummy press event for the first finger */
+                /* Внедрить фиктивное событие нажатия для первого пальца */
                 lv_libinput_event_t * synth_evt = _create_event(dsc);
                 synth_evt->pressed = LV_INDEV_STATE_PRESSED;
                 synth_evt->point = dsc->slots[0].point;
@@ -528,7 +528,7 @@ static void _read_pointer(lv_libinput_t * dsc, struct libinput_event * event)
                 point.y = (int32_t)LV_CLAMP(INT32_MIN, libinput_event_pointer_get_absolute_y_transformed(pointer_event,
                                                                                                          ver_res) - disp->offset_y, INT32_MAX);
                 if(point.x < 0 || point.x > disp->hor_res || point.y < 0 || point.y > disp->ver_res) {
-                    break; /* ignore pointer events that are out of bounds */
+                    break; /* игнорировать события указателя, выходящие за пределы */
                 }
                 evt->point = point;
                 evt->pressed = dsc->pointer_button_down;
@@ -604,11 +604,11 @@ static void _read_keypad(lv_libinput_t * dsc, struct libinput_event * event)
             }
 #endif /* LV_LIBINPUT_XKB */
             if(evt->key_val != 0) {
-                /* Only record button state when actual output is produced to prevent widgets from refreshing */
+                /* Состояние кнопки записывайте только при фактическом выводе, чтобы предотвратить обновление виджетов. */
                 evt->pressed = (key_state == LIBINPUT_KEY_STATE_RELEASED) ? LV_INDEV_STATE_RELEASED : LV_INDEV_STATE_PRESSED;
 
-                // just release the key immediately after it got pressed.
-                // but don't handle special keys where holding a key makes sense
+                // просто отпустите клавишу сразу после ее нажатия.
+                // но не обрабатывайте специальные клавиши, если удержание клавиши имеет смысл
                 if(evt->key_val != LV_KEY_BACKSPACE &&
                    evt->key_val != LV_KEY_UP &&
                    evt->key_val != LV_KEY_LEFT &&
@@ -644,7 +644,7 @@ static void _delete(lv_libinput_t * dsc)
     if(dsc->fd)
         dsc->deinit = true;
 
-    /* Give worker thread a whole second to quit */
+    /* Дайте рабочему потоку целую секунду, чтобы выйти */
     for(int i = 0; i < 100; i++) {
         if(!dsc->deinit)
             break;

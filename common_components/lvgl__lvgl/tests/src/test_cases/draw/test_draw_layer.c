@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -92,7 +92,7 @@ void test_draw_layer_dispatch(void)
     lv_obj_set_style_opa(obj, LV_OPA_0, 0);
     lv_obj_center(obj);
 
-    /*Verify whether this scenario will result in a busy loop.*/
+    /*Проверьте, приведет ли этот сценарий к циклу занятости.*/
     TEST_ASSERT_EQUAL_SCREENSHOT("draw/draw_layer_dispatch.png");
 }
 

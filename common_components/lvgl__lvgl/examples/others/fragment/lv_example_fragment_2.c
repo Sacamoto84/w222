@@ -1,6 +1,6 @@
 /**
  * @file lv_example_fragment_2.c
- * @brief Navigation stack using obj fragment
+ * @brief Стек навигации с использованием фрагмента obj
  */
 #include "../../lv_examples.h"
 
@@ -56,7 +56,7 @@ void lv_example_fragment_2(void)
     lv_obj_set_grid_cell(pop_btn, LV_GRID_ALIGN_END, 1, 1, LV_GRID_ALIGN_CENTER, 1, 1);
 
     lv_fragment_manager_t * manager = lv_fragment_manager_create(NULL);
-    /* Clean up the fragment manager before objects in containers got deleted */
+    /* Очистите менеджер фрагментов до удаления объектов в контейнерах. */
     lv_obj_add_event_cb(root, sample_container_delete, LV_EVENT_DELETE, manager);
 
     int depth = 0;

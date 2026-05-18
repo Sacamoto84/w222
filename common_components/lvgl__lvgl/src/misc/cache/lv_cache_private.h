@@ -25,7 +25,7 @@ extern "C" {
  **********************/
 
 /**
- * The result of the cache reserve condition callback
+ * Результат обратного вызова условия резервирования кэша
  */
 typedef enum {
     LV_CACHE_RESERVE_COND_OK,          /**< The condition is met and no entries need to be evicted */
@@ -48,71 +48,71 @@ typedef void (*lv_cache_free_cb_t)(void * node, void * user_data);
 typedef lv_cache_compare_res_t (*lv_cache_compare_cb_t)(const void * a, const void * b);
 
 /**
- * The cache instance allocation function, used by the cache class to allocate memory for cache instances.
+ * Функция выделения экземпляра кэша, используемая классом кэша для выделения памяти для экземпляров кэша.
  * @return It should return a pointer to the allocated instance.
  */
 typedef void * (*lv_cache_alloc_cb_t)(void);
 
 /**
- * The cache instance initialization function, used by the cache class to initialize the cache instance.
+ * Функция инициализации экземпляра кэша, используемая классом кэша для инициализации экземпляра кэша.
  * @return It should return true if the initialization is successful, false otherwise.
  */
 typedef bool (*lv_cache_init_cb_t)(lv_cache_t * cache);
 
 /**
- * The cache instance destruction function, used by the cache class to destroy the cache instance.
+ * Функция уничтожения экземпляра кэша, используемая классом кэша для уничтожения экземпляра кэша.
  */
 typedef void (*lv_cache_destroy_cb_t)(lv_cache_t * cache, void * user_data);
 
 /**
- * The cache get function, used by the cache class to get a cache entry by its key.
+ * Функция получения кэша, используемая классом кэша для получения записи кэша по его ключу.
  * @return `NULL` if the key is not found.
  */
 typedef lv_cache_entry_t * (*lv_cache_get_cb_t)(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
- * The cache add function, used by the cache class to add a cache entry with a given key.
- * This function only cares about how to add the entry, it doesn't check if the entry already exists and doesn't care about is it a victim or not.
+ * Функция добавления кэша, используемая классом кэша для добавления записи кэша с заданным ключом.
+ * Эта функция заботится только о том, как добавить запись, она не проверяет, существует ли запись, и не заботится о том, является ли она жертвой или нет.
  * @return the added cache entry, or NULL if the entry is not added.
  */
 typedef lv_cache_entry_t * (*lv_cache_add_cb_t)(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
- * The cache remove function, used by the cache class to remove a cache entry from the cache but doesn't free the memory..
- * This function only cares about how to remove the entry, it doesn't care about is it a victim or not.
+ * Функция удаления кэша, используемая классом кэша для удаления записи из кэша, но не освобождает память.
+ * Эта функция заботится только о том, как удалить запись, ее не волнует, является ли она жертвой или нет.
  */
 typedef void (*lv_cache_remove_cb_t)(lv_cache_t * cache, lv_cache_entry_t * entry, void * user_data);
 
 /**
- * The cache drop function, used by the cache class to remove a cache entry from the cache and free the memory.
+ * Функция удаления кэша, используемая классом кэша для удаления записи кэша из кэша и освобождения памяти.
  */
 typedef void (*lv_cache_drop_cb_t)(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
- * The cache drop all function, used by the cache class to remove all cache entries from the cache and free the memory.
+ * Функция удаления всех кэшей, используемая классом кэша для удаления всех записей кэша из кэша и освобождения памяти.
  */
 typedef void (*lv_cache_drop_all_cb_t)(lv_cache_t * cache, void * user_data);
 
 /**
- * The cache get victim function, used by the cache class to get a victim entry to be evicted.
+ * Функция получения жертвы кэша, используемая классом кэша для удаления записи жертвы.
  */
 typedef lv_cache_entry_t * (*lv_cache_get_victim_cb)(lv_cache_t * cache, void * user_data);
 
 /**
- * The cache reserve condition function, used by the cache class to check if a new entry can be added to the cache without exceeding its maximum size.
- * See lv_cache_reserve_cond_res_t for the possible results.
+ * Функция условия резерва кэша, используемая классом кэша для проверки возможности добавления новой записи в кэш без превышения его максимального размера.
+ * Возможные результаты см. в lv_cache_reserve_cond_res_t.
  */
 typedef lv_cache_reserve_cond_res_t (*lv_cache_reserve_cond_cb)(lv_cache_t * cache, const void * key, size_t size,
                                                                 void * user_data);
 
 /**
- * The cache iterator creation function, used by the cache class to create an iterator for the cache.
+ * Функция создания итератора кэша, используемая классом кэша для создания итератора для кэша.
  * @return A pointer to the created iterator, or NULL if the iterator cannot be created.
  */
 typedef lv_iter_t * (*lv_cache_iter_create_cb)(lv_cache_t * cache);
 
 /**
- * The cache operations struct
+ * Структура операций с кэшем
  */
 struct _lv_cache_ops_t {
     lv_cache_compare_cb_t compare_cb;    /**< Compare function for keys */
@@ -121,10 +121,10 @@ struct _lv_cache_ops_t {
 };
 
 /**
- * The cache entry struct
+ * Структура записи кэша
  */
 struct _lv_cache_t {
-    const lv_cache_class_t * clz;     /**< Cache class. There are two built-in classes:
+    const lv_cache_class_t * clz;     /**<Класс кэша. Есть два встроенных класса:
                                        * - lv_cache_class_lru_rb_count for LRU-based cache with count-based eviction policy.
                                        * - lv_cache_class_lru_rb_size for LRU-based cache with size-based eviction policy. */
 
@@ -141,9 +141,9 @@ struct _lv_cache_t {
 };
 
 /**
- * Cache class struct for building custom cache classes
+ * Структура класса кэша для создания пользовательских классов кэша
  *
- * Examples:
+ * Примеры:
  * - lv_cache_class_lru_rb_count for LRU-based cache with count-based eviction policy.
  * - lv_cache_class_lru_rb_size for LRU-based cache with size-based eviction policy.
  */
@@ -164,7 +164,7 @@ struct _lv_cache_class_t {
 };
 
 /*-----------------
- * Cache entry slot
+ * Слот входа в кэш
  *----------------*/
 
 struct _lv_cache_slot_size_t;
@@ -172,10 +172,10 @@ struct _lv_cache_slot_size_t;
 typedef struct _lv_cache_slot_size_t lv_cache_slot_size_t;
 
 /**
- * Cache entry slot struct
+ * Структура слота входа в кэш
  *
- * To add new fields to the cache entry, add them to a new struct and add it to the first
- * field of the cache data struct.  And this one is a size slot for the cache entry.
+ * Чтобы добавить новые поля в запись кэша, добавьте их в новую структуру и добавьте ее в первую
+ * поле структуры данных кэша.  А это размер слота для записи кэша.
  */
 struct _lv_cache_slot_size_t {
     size_t size;
@@ -193,7 +193,7 @@ struct _lv_cache_slot_size_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CACHE_PRIVATE_H*/

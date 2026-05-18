@@ -25,16 +25,16 @@ Usage:
 
     import doxygen_config
     ...
-    # 1. Load configuration from Doxyfile.
+    # 1. Загрузите конфигурацию из Doxyfile.
     cfg = doxygen_config.DoxygenConfig()
     cfg.load(doxyfile_src_file)
 
-    # 2. Get a list of Doxygen option names.
+    # 2. Получите список названий опций Doxygen.
     opt_list = cfg.options()
     ok_to_proceed = cfg.is_valid_option('PREDEFINED') \
         and cfg.is_valid_option('INPUT')
 
-    # 3. Update it.
+    # 3. Обновите его.
     if ok_to_proceed:
         temp = cfg.value('PREDEFINED')
         temp = temp.replace('<<CONFIG_PATH>>', config_file)
@@ -44,9 +44,9 @@ Usage:
         temp = temp.replace('<<SRC>>', f'"{pjt_src_dir}"')
         cfg.set('INPUT', temp)
 
-    # 4. Save it.
-    # The original comments and order of config options are preserved.
-    # The ``bare`` argument discards comments from the output.
+    # 4. Сохраните его.
+    # Исходные комментарии и порядок параметров конфигурации сохраняются.
+    # Пустой аргумент `` `` отбрасывает комментарии из вывода.
     cfg.save(cfg_dict, doxyfile_dst_file, bare=True)
 
 Design Differences from `doxygen-python-interface`:
@@ -215,17 +215,17 @@ class DoxygenConfig:
 
     def __init__(self):
         """Prepare instantiated DoxygenConfig for use."""
-        # Regexes used during Doxyfile parsing
+        # Регулярные выражения, использование во время анализа Doxyfile
         self._re_single_line_option = re.compile(r'^\s*(\w+)\s*=\s*([^\\]*)\s*$')
         self._re_top_of_multiline_option = re.compile(r'^\s*(\w+)\s*=\s*(|.*\S)\s*\\$')
-        # Doxygen cfg items by option name
+        # Элементы Doxygen cfg по имени параметра
         self._cfg_items_dict = {}
-        # Comments by name of option below it.
-        # Comments at end of file have key 'self._end_key'.
+        # Комментарии по названию опции под ней.
+        # Комментарии в конце файла имеют ключ «self. _end_key'.
         self._cfg_comments_dict = {}
-        # Key used for comments found after last option in Doxyfile
+        # Ключ, значение для комментариев, найденное после последних опций в Doxyfile.
         self._end_key = 'END'
-        # Configuration to match Doxygen -g output (template Doxyfile)
+        # Конфигурация, соответствующая выводу Doxygen -g (шаблон Doxyfile)
         self._char_count_before_equals = 23
 
     def load(self, doxyfile: str):
@@ -244,7 +244,7 @@ class DoxygenConfig:
         self._cfg_items_dict.clear()
         self._cfg_comments_dict.clear()
 
-        # Default encoding:  UTF-8.
+        # Кодировка по умолчанию: UTF -8.
         with open(doxyfile, 'r') as file:
             in_multiline_opt = False
             multiline_opt_name_bep = None   # "bep" = "being processed"
@@ -254,11 +254,11 @@ class DoxygenConfig:
                 line = line.strip()
 
                 if in_multiline_opt:
-                    # There are 2 ways this list can end:
-                    # 1.  the normal way when last item has no trailing `\`, or
-                    # 2.  the last item has a trailing `\` and there is a blank-
-                    #     or comment-line after it, which should NOT be added
-                    #     to the list, but instead signal end-of-list.
+                    # Этот список может закончиться двумя способами:
+                    # 1. обычный способ, когда последний элемент не имеет завершающего `\` , или
+                    # 2. последний элемент имеет завершающий `\` и есть пробел.
+                    # или строку комментария после него, куда следует добавить NOT
+                    # в список, но вместо этого сигнализирует о конце списка.
                     if not line.endswith('\\'):
                         in_multiline_opt = False
 
@@ -286,8 +286,8 @@ class DoxygenConfig:
                     self._cfg_comments_dict[option_name] = accumulated_other_lines
                     accumulated_other_lines = []
 
-            # Any comments or blank lines found after last Doxygen option
-            # are represented in _cfg_comments_dict with key `self._end_key`.
+            # Любые комментарии или пустые строки, обнаруженные после последних опций Doxygen.
+            # детали в_cfg_comments_dictключом `self._end_key`.
             if accumulated_other_lines:
                 self._cfg_comments_dict[self._end_key] = accumulated_other_lines
                 accumulated_other_lines.clear()
@@ -307,21 +307,21 @@ class DoxygenConfig:
                 lines.extend(self._cfg_comments_dict[option_name])
 
             if type(val) is list:
-                # We will be aligning the backslashes after the
-                # items in the list, so we need to know the longest.
-                # First value in list:
+                # Мы будем выравнивать обратную косую черту после
+                # элементы в списке, поэтому нам нужно знать самые длинные.
+                # Первое значение в списке:
                 multi_line_indent = ' ' * (self._char_count_before_equals + 2)
                 longest_len = len(max(val, key=len))
                 val_w_len = val[0].ljust(longest_len)
                 lines.append(f'{option_name:<23}= {val_w_len}  \\')
 
-                # Next n-2 values in list:
+                # Следующие n-2 значений в списке:
                 if len(val) > 2:
                     for temp in val[1:-1]:
                         val_w_len = temp.ljust(longest_len)
                         lines.append(f'{multi_line_indent}{val_w_len}  \\')
 
-                # Last value in list:
+                # Последнее значение в списке:
                 lines.append(f'{multi_line_indent}{val[-1]}')
             elif type(val) is str:
                 val_w_len = option_name.ljust(self._char_count_before_equals)
@@ -334,7 +334,7 @@ class DoxygenConfig:
             if not bare:
                 lines.extend(self._cfg_comments_dict[self._end_key])
 
-        # Ensure there is exactly 1 newline at end of file.
+        # Убедитесь, что в конце файла есть ровно 1 новая строка.
         lines.append('')
 
         with open(doxyfile, 'w') as file:

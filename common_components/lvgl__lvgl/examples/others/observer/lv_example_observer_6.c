@@ -13,7 +13,7 @@ static void switch_theme_event_cb(lv_event_t * e);
 static lv_subject_t theme_subject;
 
 /**
- * Change between light and dark mode
+ * Переключение между светлым и темным режимом
  */
 void lv_example_observer_6(void)
 {
@@ -47,8 +47,8 @@ static void switch_theme_event_cb(lv_event_t * e)
 /*-----------------------------------------
  * my_panel.c
  *
- * It would be a separate file with its own
- * local types, data, and functions
+ * Это будет отдельный файл со своим собственным
+ * локальные типы, данные и функции
  *------------------------------------------*/
 
 typedef struct {
@@ -116,8 +116,8 @@ static lv_obj_t * my_panel_create(lv_obj_t * parent)
 /*-----------------------------------------
  * my_button.c
  *
- * It would be a separate file with its own
- * local types, data, and functions
+ * Это будет отдельный файл со своим собственным
+ * локальные типы, данные и функции
  *------------------------------------------*/
 
 typedef struct {

@@ -31,12 +31,12 @@ extern "C" {
  **********************/
 
 /**
- * Timers execute this type of functions.
+ * Таймеры выполняют этот тип функций.
  */
 typedef void (*lv_timer_cb_t)(lv_timer_t *);
 
 /**
- * Timer handler resume this type of function.
+ * Обработчик таймера возобновляет работу этого типа.
  */
 typedef void (*lv_timer_handler_resume_cb_t)(void * data);
 
@@ -45,169 +45,169 @@ typedef void (*lv_timer_handler_resume_cb_t)(void * data);
  **********************/
 
 /**
- * Call it periodically to handle lv_timers.
- * @return time till it needs to be run next (in ms)
+ * Периодически вызывайте его для обработки lv_timers.
+ * @return время до следующего запуска (в мс)
  */
 LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler(void);
 
 /**
- * Call it in the super-loop of main() or threads. It will run lv_timer_handler()
- * with a given period in ms. You can use it with sleep or delay in OS environment.
- * This function is used to simplify the porting.
- * @param period the period for running lv_timer_handler()
- * @return the time after which it must be called again
+ * Вызовите его в суперциклеmain()или потоках. Он будет запускатьlv_timer_handler()
+ * с заданным периодом в мс. Вы можете использовать его со сном или задержкой в ​​среде OS.
+ * Эта функция используется для упрощения портирования.
+ * @param period период запуска lv_timer_handler()
+ * @return время, через которое его необходимо вызвать снова
  */
 LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_timer_handler_run_in_period(uint32_t period);
 
 /**
- * Call it in the super-loop of main() or threads. It will automatically call lv_timer_handler() at the right time.
- * This function is used to simplify the porting.
+ * Вызовите его в суперциклеmain()или потоках. Он автоматически вызываетlv_timer_handler() в нужный момент.
+ * Эта функция используется для упрощения портирования.
  */
 LV_ATTRIBUTE_TIMER_HANDLER void lv_timer_periodic_handler(void);
 
 /**
- * Set the resume callback to the timer handler
- * @param cb the function to call when timer handler is resumed
- * @param data pointer to a resume data
+ * Установите обратный вызов возобновления для обработчика таймера
+ * @param cb функция, вызываемая при возобновлении обработчика таймера
+ * @param data указатель на данные резюме
  */
 void lv_timer_handler_set_resume_cb(lv_timer_handler_resume_cb_t cb, void * data);
 
 /**
- * Create an "empty" timer. It needs to be initialized with at least
- * `lv_timer_set_cb` and `lv_timer_set_period`
- * @return pointer to the created timer
+ * Создайте «пустой» таймер. Его необходимо инициализировать как минимум
+ * `lv_timer_set_cb` и `lv_timer_set_period`
+ * @return указатель на созданный таймер
  */
 lv_timer_t * lv_timer_create_basic(void);
 
 /**
- * Create a new lv_timer
- * @param timer_xcb a callback to call periodically.
- *                 (the 'x' in the argument name indicates that it's not a fully generic function because it not follows
- *                  the `func_name(object, callback, ...)` convention)
- * @param period call period in ms unit
- * @param user_data custom parameter
- * @return pointer to the new timer
+ * создать новый lv_timer.
+ * @param timer_xcb обратный вызов для периодического вызова.
+ *                 (знак «x» в имени аргумента указывает на то, что это не полностью универсальная функция, поскольку она не следует
+ *                  соглашение`func_name(object, callback, ...)`)
+ * @param period период звонка в мс
+ * @param user_data специальный параметр
+ * @return указатель на новый таймер
  */
 lv_timer_t * lv_timer_create(lv_timer_cb_t timer_xcb, uint32_t period, void * user_data);
 
 /**
- * Delete a lv_timer
- * @param timer pointer to an lv_timer
+ * Удалить lv_timer
+ * @param timer указатель на lv_timer
  */
 void lv_timer_delete(lv_timer_t * timer);
 
 /**
- * Pause a timer.
- * It is typically safe to call from an interrupt handler or a different thread.
- * @param timer pointer to an lv_timer
+ * Приостановите таймер.
+ * Обычно безопасно вызывать из обработчика прерывания или другого потока.
+ * @param timer указатель на lv_timer
  */
 void lv_timer_pause(lv_timer_t * timer);
 
 /**
- * Resume a timer.
- * @param timer pointer to an lv_timer
+ * Возобновите таймер.
+ * @param timer указатель на lv_timer
  */
 void lv_timer_resume(lv_timer_t * timer);
 
 /**
- * Set the callback to the timer (the function to call periodically)
- * @param timer pointer to a timer
- * @param timer_cb the function to call periodically
+ * Установите обратный вызов на таймер (функция для периодического вызова)
+ * @param timer указатель на таймер
+ * @param timer_cb функция, вызываемая периодически
  */
 void lv_timer_set_cb(lv_timer_t * timer, lv_timer_cb_t timer_cb);
 
 /**
- * Set new period for a lv_timer
- * @param timer pointer to a lv_timer
- * @param period the new period
+ * Установить новый период для lv_timer
+ * @param timer указатель на lv_timer
+ * @param period новый период
  */
 void lv_timer_set_period(lv_timer_t * timer, uint32_t period);
 
 /**
- * Make a lv_timer ready. It will not wait its period.
- * @param timer pointer to a lv_timer.
+ * Подготовьте lv_timer. Оно не будет ждать своего часа.
+ * @param timer указатель на lv_timer.
  */
 void lv_timer_ready(lv_timer_t * timer);
 
 /**
- * Set the number of times a timer will repeat.
- * @param timer pointer to a lv_timer.
- * @param repeat_count -1 : infinity;  0 : stop ;  n>0: residual times
+ * Установите количество повторений таймера.
+ * @param timer указатель на lv_timer.
+ * @param repeat_count -1: бесконечность;  0: стоп;  n>0: остаточные времена
  */
 void lv_timer_set_repeat_count(lv_timer_t * timer, int32_t repeat_count);
 
 /**
- * Set whether a lv_timer will be deleted automatically when it is called `repeat_count` times.
- * @param timer pointer to a lv_timer.
- * @param auto_delete true: auto delete; false: timer will be paused when it is called `repeat_count` times.
+ * Установите, будет лиlv_timerавтоматически удаляться при многократном вызове`repeat_count`.
+ * @param timer указатель на lv_timer.
+ * @param auto_delete true: автоматическое удаление; false: таймер будет поставлен на паузу при вызове`repeat_count`раз.
  */
 void lv_timer_set_auto_delete(lv_timer_t * timer, bool auto_delete);
 
 /**
- * Set custom parameter to the lv_timer.
- * @param timer pointer to a lv_timer.
- * @param user_data custom parameter
+ * Установите пользовательский параметр lv_timer.
+ * @param timer указатель на lv_timer.
+ * @param user_data специальный параметр
  */
 void lv_timer_set_user_data(lv_timer_t * timer, void * user_data);
 
 /**
- * Reset a lv_timer.
- * It will be called the previously set period milliseconds later.
- * @param timer pointer to a lv_timer.
+ * Сбросьтеlv_timer.
+ * Через несколько миллисекунд он будет называться ранее установленным периодом.
+ * @param timer указатель на lv_timer.
  */
 void lv_timer_reset(lv_timer_t * timer);
 
 /**
- * Enable or disable the whole lv_timer handling
- * @param en true: lv_timer handling is running, false: lv_timer handling is suspended
+ * Включите или отключите всю обработку lv_timer.
+ * @param en true: обработкаlv_timerвыполняется, false: обработкаlv_timerприостановлена
  */
 void lv_timer_enable(bool en);
 
 /**
- * Get idle percentage
- * @return the lv_timer idle in percentage
+ * Получить процент простоя
+ * @return простояlv_timerв процентах
  */
 uint32_t lv_timer_get_idle(void);
 
 /**
- * Get the time remaining until the next timer will run
- * @return the time remaining in ms
+ * Получите время, оставшееся до запуска следующего таймера
+ * @return оставшееся время в мс
  */
 uint32_t lv_timer_get_time_until_next(void);
 
 /**
- * Iterate through the timers
- * @param timer NULL to start iteration or the previous return value to get the next timer
- * @return the next timer or NULL if there is no more timer
+ * Перебирать таймеры
+ * @param timer NULL для начала итерации или предыдущее возвращаемое значение для получения следующего таймера
+ * @return следующий таймер или NULL, если таймера больше нет
  */
 lv_timer_t * lv_timer_get_next(lv_timer_t * timer);
 
 /**
- * Get the user_data passed when the timer was created
- * @param timer pointer to the lv_timer
- * @return pointer to the user_data
+ * Получитьuser_data, передаваемый при создании таймера
+ * @param timer указатель на lv_timer
+ * @return указатель на user_data
  */
 void * lv_timer_get_user_data(lv_timer_t * timer);
 
 /**
- * Get the pause state of a timer
- * @param timer pointer to a lv_timer
- * @return true: timer is paused; false: timer is running
+ * Получить состояние паузы таймера
+ * @param timer указатель на lv_timer
+ * @return true: таймер приостановлен; ложь: таймер работает
  */
 bool lv_timer_get_paused(lv_timer_t * timer);
 
 #if LV_USE_EXT_DATA
 /**
- * @brief Attaches external user data and destructor callback to a timer object
+ * @brief Прикрепляет внешние пользовательские данные и обратный вызов деструктора к объекту таймера.
  *
- * Associates custom user data with an LVGL timer and specifies a destructor function
- * that will be automatically invoked when the timer is deleted to properly clean up
- * the associated resources.
+ * Связывает пользовательские данные с таймером LVGL и определяет функцию деструктора.
+ * который будет автоматически вызываться при удалении таймера для правильной очистки.
+ * связанные ресурсы.
  *
- * @param timer      Pointer to the timer object
- * @param data       User-defined data pointer to associate with the timer
- * @param destructor Callback function for cleaning up ext_data when timer is deleted.
- *                   Receives ext_data as parameter. NULL means no cleanup required.
+ * @param timer      Указатель на объект таймера
+ * @param data       Пользовательский указатель данных для связи с таймером
+ * @param destructor Функция обратного вызова для очисткиext_dataпри удалении таймера.
+ *                   Получаетext_dataв качестве параметра.  NULLозначает, что очистка не требуется.
  */
 void lv_timer_set_external_data(lv_timer_t * timer, void * data, void (* free_cb)(void * data));
 #endif
@@ -217,7 +217,7 @@ void lv_timer_set_external_data(lv_timer_t * timer, void * data, void (* free_cb
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif

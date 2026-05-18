@@ -19,7 +19,7 @@ const lv_image_dsc_t test_image_svg = {
     .header.stride = 0,
     .header.cf = LV_COLOR_FORMAT_NATIVE,
     .data = img_svg_data,
-    .data_size = sizeof(img_svg_data) - 1, // ignore '\0'
+    .data_size = sizeof(img_svg_data) - 1, // игнорировать '\0'
 };
 
 #endif /* LV_BUILD_TEST */

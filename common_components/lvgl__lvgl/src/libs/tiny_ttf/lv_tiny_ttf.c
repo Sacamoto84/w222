@@ -28,12 +28,12 @@
 #define STBTT_free(x, u) ((void)(u), lv_free(x))
 
 #if LV_TINY_TTF_FILE_SUPPORT != 0
-/* for stream support */
+/* для поддержки потоков */
 #define STBTT_STREAM_TYPE ttf_cb_stream_t *
 #define STBTT_STREAM_SEEK(s, x) ttf_cb_stream_seek(s, x);
 #define STBTT_STREAM_READ(s, x, y) ttf_cb_stream_read(s, x, y);
 
-/* a hydra stream that can be in memory or from a file*/
+/* поток гидры, который может находиться в памяти или из файла*/
 typedef struct ttf_cb_stream {
     lv_fs_file_t * file;
     const void * data;
@@ -162,7 +162,7 @@ void lv_tiny_ttf_set_size(lv_font_t * font, int32_t font_size)
     font->line_height = (int32_t)(dsc->scale * (dsc->ascent - dsc->descent + line_gap));
     font->base_line = (int32_t)(dsc->scale * (line_gap - dsc->descent));
 
-    /* size change means cache needs to be invalidated. */
+    /* изменение размера означает, что кеш необходимо сделать недействительным. */
 
     if(dsc->glyph_cache) {
         lv_cache_destroy(dsc->glyph_cache, NULL);
@@ -240,7 +240,7 @@ static void ttf_cb_stream_seek(ttf_cb_stream_t * stream, size_t position)
 static inline uint16_t ttf_calculate_kerning_width(float scale, uint16_t adv_w, int k)
 {
 
-    /*Horizontal space required by the glyph in [px]*/;
+    /*Горизонтальное пространство, необходимое для глифа, в [пикселях]*/;
     return (uint16_t)(scale * (adv_w + k) + 0.5f);
 }
 
@@ -257,7 +257,7 @@ static uint16_t ttf_get_glyph_pair_kerning_width(const ttf_font_desc_t * dsc, ui
     };
 
     if(dsc->kerning_cache->max_size == 0) {
-        /* No cache, call the create function directly */
+        /* Нет кеша, вызовите функцию создания напрямую */
         bool ret = tiny_ttf_kerning_cache_create_cb(&kerning_cache_search_key, (void *)&kerning_cache_create_data);
         LV_ASSERT(ret);
         return kerning_cache_search_key.adv_w16;
@@ -282,9 +282,9 @@ static bool ttf_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_t * d
        unicode_letter == 0x200c) { /*ZERO WIDTH NON-JOINER*/
         dsc_out->box_w = 0;
         dsc_out->adv_w = 0;
-        dsc_out->box_h = 0; /*height of the bitmap in [px]*/
-        dsc_out->ofs_x = 0; /*X offset of the bitmap in [pf]*/
-        dsc_out->ofs_y = 0; /*Y offset of the bitmap in [pf]*/
+        dsc_out->box_h = 0; /*высота растрового изображения в [пикселях]*/
+        dsc_out->ofs_x = 0; /*Смещение X растрового изображения в [pf]*/
+        dsc_out->ofs_y = 0; /*Смещение растрового изображения по оси Y в [pf]*/
         dsc_out->format = LV_FONT_GLYPH_FORMAT_NONE;
         dsc_out->is_placeholder = false;
         return true;
@@ -301,16 +301,16 @@ static bool ttf_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_t * d
     lv_cache_entry_t * entry = lv_cache_acquire_or_create(dsc->glyph_cache, &search_key, (void *)dsc);
 
     if(entry == NULL) {
-        if(!dsc->cache_size) {  /* no cache, do everything directly */
+        if(!dsc->cache_size) {  /* нет кеша, делай все напрямую */
             int g1 = stbtt_FindGlyphIndex(&dsc->info, (int)unicode_letter);
             tiny_ttf_glyph_cache_create_cb(&search_key, dsc);
             *dsc_out = search_key.glyph_dsc;
             adv_w = search_key.adv_w;
 
-            /*Kerning correction*/
+            /*Коррекция Кернинга*/
             if(font->kerning == LV_FONT_KERNING_NORMAL &&
                unicode_letter_next != 0) {
-                int g2 = stbtt_FindGlyphIndex(&dsc->info, (int)unicode_letter_next); /* not using cache, only do glyph id lookup */
+                int g2 = stbtt_FindGlyphIndex(&dsc->info, (int)unicode_letter_next); /* не использовать кеш, выполнять только поиск идентификатора глифа */
                 if(g2) {
                     dsc_out->adv_w = ttf_get_glyph_pair_kerning_width(dsc, g1, g2, adv_w);
                 }
@@ -328,13 +328,13 @@ static bool ttf_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_t * d
     adv_w = data->adv_w;
     lv_cache_release(dsc->glyph_cache, entry, NULL);
 
-    /*Kerning correction*/
+    /*Коррекция Кернинга*/
     if(font->kerning == LV_FONT_KERNING_NORMAL &&
-       unicode_letter_next != 0) { /* check if we need to do any kerning calculations */
+       unicode_letter_next != 0) { /* проверьте, нужно ли нам выполнять какие-либо вычисления кернинга */
         uint32_t g1 = dsc_out->gid.index;
 
         int g2 = 0;
-        search_key.unicode = unicode_letter_next; /* reuse search key */
+        search_key.unicode = unicode_letter_next; /* повторно использовать ключ поиска */
         lv_cache_entry_t * entry_next = lv_cache_acquire_or_create(dsc->glyph_cache, &search_key, (void *)dsc);
 
         if(entry_next == NULL) {
@@ -367,9 +367,9 @@ static const void * ttf_get_glyph_bitmap_cb(lv_font_glyph_dsc_t * g_dsc, lv_draw
 
     lv_cache_entry_t * entry = lv_cache_acquire_or_create(dsc->draw_data_cache, &search_key, (void *)font->dsc);
     if(entry == NULL) {
-        if(!dsc->cache_size) {  /* no cache, do everything directly */
+        if(!dsc->cache_size) {  /* нет кеша, делай все напрямую */
             if(tiny_ttf_draw_data_cache_create_cb(&search_key, (void *)font->dsc)) {
-                /* use the cache entry to store the buffer if no cache specified */
+                /* используйте запись кеша для хранения буфера, если кеш не указан */
                 g_dsc->entry = (lv_cache_entry_t *)search_key.draw_buf;
                 return g_dsc->entry;
             }
@@ -391,7 +391,7 @@ static void ttf_release_glyph_cb(const lv_font_t * font, lv_font_glyph_dsc_t * g
     LV_ASSERT_NULL(font);
 
     ttf_font_desc_t * dsc = (ttf_font_desc_t *)font->dsc;
-    if(!dsc->cache_size) {  /* no cache, do everything directly */
+    if(!dsc->cache_size) {  /* нет кеша, делай все напрямую */
         lv_draw_buf_destroy((lv_draw_buf_t *)g_dsc->entry);
     }
     else {
@@ -405,7 +405,7 @@ static void ttf_release_glyph_cb(const lv_font_t * font, lv_font_glyph_dsc_t * g
 
 static void lv_tiny_ttf_cache_create(ttf_font_desc_t * dsc)
 {
-    /*Init cache*/
+    /*Инициализирующий кэш*/
     dsc->glyph_cache = lv_cache_create(&lv_cache_class_lru_rb_count, sizeof(tiny_ttf_glyph_cache_data_t), dsc->cache_size,
     (lv_cache_ops_t) {
         .compare_cb = (lv_cache_compare_cb_t)tiny_ttf_glyph_cache_compare_cb,
@@ -482,9 +482,9 @@ static lv_font_t * lv_tiny_ttf_create(const char * path, const void * data, size
         return NULL;
     }
 
-    /* check if font  has kerning tables to use, else disable kerning automatically. */
+    /* проверьте, есть ли в шрифте таблицы кернинга, иначе отключите кернинг автоматически. */
     if(kerning != LV_FONT_KERNING_NONE && stbtt_KernTableCheck(&dsc->info) == 0) {
-        /* disable kerning if font has no tables. */
+        /* отключите кернинг, если в шрифте нет таблиц. */
         LV_LOG_INFO("Disabling kerning as font doesn't support it.");
         kerning = LV_FONT_KERNING_NONE;
     }
@@ -522,7 +522,7 @@ lv_font_t * lv_tiny_ttf_create_data(const void * data, size_t data_size, int32_t
 }
 
 /*-----------------
- * Cache Callbacks
+ * Кэшировать обратные вызовы
  *----------------*/
 
 static bool tiny_ttf_glyph_cache_create_cb(tiny_ttf_glyph_cache_data_t * node, void * user_data)
@@ -534,7 +534,7 @@ static bool tiny_ttf_glyph_cache_create_cb(tiny_ttf_glyph_cache_data_t * node, v
 
     int g1 = stbtt_FindGlyphIndex(&dsc->info, (int)unicode_letter);
     if(g1 == 0) {
-        /* Glyph not found */
+        /* Глиф не найден */
         return false;
     }
     int x1, y1, x2, y2;
@@ -544,18 +544,18 @@ static bool tiny_ttf_glyph_cache_create_cb(tiny_ttf_glyph_cache_data_t * node, v
     int advw;
     int lsb;
     stbtt_GetGlyphHMetrics(&dsc->info, g1, &advw, &lsb);
-    if(dsc->kerning != LV_FONT_KERNING_NORMAL) { /* calculate default advance */
+    if(dsc->kerning != LV_FONT_KERNING_NORMAL) { /* рассчитать аванс по умолчанию */
         dsc_out->adv_w = ttf_get_glyph_pair_kerning_width(dsc, g1, 0, advw);
     }
     else {
         dsc_out->adv_w = ttf_calculate_kerning_width(dsc->scale, advw, 0);
     }
-    /* precalculate no kerning value */
+    /* предварительно рассчитать значение без кернинга */
     node->adv_w = advw;
-    dsc_out->box_w = (x2 - x1 + 1);         /*width of the bitmap in [px]*/
-    dsc_out->box_h = (y2 - y1 + 1);         /*height of the bitmap in [px]*/
-    dsc_out->ofs_x = x1;                    /*X offset of the bitmap in [pf]*/
-    dsc_out->ofs_y = -y2;                   /*Y offset of the bitmap measured from the as line*/
+    dsc_out->box_w = (x2 - x1 + 1);         /*ширина растрового изображения в [пикселях]*/
+    dsc_out->box_h = (y2 - y1 + 1);         /*высота растрового изображения в [пикселях]*/
+    dsc_out->ofs_x = x1;                    /*Смещение X растрового изображения в [pf]*/
+    dsc_out->ofs_y = -y2;                   /*Смещение Y растрового изображения, измеренное от строки as*/
     dsc_out->format = LV_FONT_GLYPH_FORMAT_A8;
     dsc_out->is_placeholder = false;
     dsc_out->gid.index = (uint32_t)g1;
@@ -583,7 +583,7 @@ static bool tiny_ttf_draw_data_cache_create_cb(tiny_ttf_cache_data_t * node, voi
 {
     int g1 = (int)node->glyph_index;
     if(g1 == 0) {
-        /* Glyph not found */
+        /* Глиф не найден */
         return false;
     }
 

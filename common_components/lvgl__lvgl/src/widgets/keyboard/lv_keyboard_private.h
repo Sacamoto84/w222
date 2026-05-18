@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of keyboard */
+/** Данные клавиатуры */
 struct _lv_keyboard_t {
     lv_buttonmatrix_t btnm;
     lv_obj_t * ta;              /**< Pointer to the assigned text area */
@@ -47,7 +47,7 @@ struct _lv_keyboard_t {
 #endif /* LV_USE_KEYBOARD */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_KEYBOARD_PRIVATE_H*/

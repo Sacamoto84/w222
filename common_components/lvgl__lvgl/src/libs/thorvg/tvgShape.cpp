@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -27,12 +27,12 @@
 #include "tvgShape.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 Shape :: Shape() : pImpl(new Impl(this))
@@ -161,7 +161,7 @@ Result Shape::appendCircle(float cx, float cy, float rx, float ry) noexcept
 
 Result Shape::appendArc(float cx, float cy, float radius, float startAngle, float sweep, bool pie) noexcept
 {
-    //just circle
+    //просто обведи
     if (sweep >= 360.0f || sweep <= -360.0f) return appendCircle(cx, cy, radius, radius);
 
     const float arcPrecision = 1e-5f;
@@ -174,7 +174,7 @@ Result Shape::appendArc(float cx, float cy, float radius, float startAngle, floa
     auto fract = fmodf(sweep, MATH_PI2);
     fract = (fabsf(fract) < arcPrecision) ? MATH_PI2 * sweepSign : fract;
 
-    //Start from here
+    //Начни отсюда
     Point start = {radius * cosf(startAngle), radius * sinf(startAngle)};
 
     if (pie) {
@@ -188,10 +188,10 @@ Result Shape::appendArc(float cx, float cy, float radius, float startAngle, floa
         auto endAngle = startAngle + ((i != nCurves - 1) ? MATH_PI2 * sweepSign : fract);
         Point end = {radius * cosf(endAngle), radius * sinf(endAngle)};
 
-        //variables needed to calculate bezier control points
+        //переменные, необходимые для расчета контрольных точек Безье
 
-        //get bezier control points using article:
-        //(http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
+        //получить контрольные точки Безье, используя статью:
+        //( http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
         auto ax = start.x;
         auto ay = start.y;
         auto bx = end.x;
@@ -200,7 +200,7 @@ Result Shape::appendArc(float cx, float cy, float radius, float startAngle, floa
         auto q2 = ax * bx + ay * by + q1;
         auto k2 = (4.0f/3.0f) * ((sqrtf(2 * q1 * q2) - q2) / (ax * by - ay * bx));
 
-        start = end; //Next start point is the current end point
+        start = end; //Следующая начальная точка — текущая конечная точка.
 
         end.x += cx;
         end.y += cy;
@@ -226,11 +226,11 @@ Result Shape::appendRect(float x, float y, float w, float h, float rx, float ry)
     auto halfW = w * 0.5f;
     auto halfH = h * 0.5f;
 
-    //clamping cornerRadius by minimum size
+    //зажимной уголокРадиус по минимальному размеру
     if (rx > halfW) rx = halfW;
     if (ry > halfH) ry = halfH;
 
-    //rectangle
+    //прямоугольник
     if (rx == 0 && ry == 0) {
         pImpl->grow(5, 4);
         pImpl->moveTo(x, y);
@@ -238,7 +238,7 @@ Result Shape::appendRect(float x, float y, float w, float h, float rx, float ry)
         pImpl->lineTo(x + w, y + h);
         pImpl->lineTo(x, y + h);
         pImpl->close();
-    //rounded rectangle or circle
+    //закругленный прямоугольник или круг
     } else {
         auto hrx = rx * PATH_KAPPA;
         auto hry = ry * PATH_KAPPA;
@@ -386,7 +386,7 @@ Result Shape::strokeMiterlimit(float miterlimit) noexcept
     // https://www.w3.org/TR/SVG2/painting.html#LineJoin
     // - A negative value for stroke-miterlimit must be treated as an illegal value.
     if (miterlimit < 0.0f) return Result::InvalidArguments;
-    // TODO Find out a reasonable max value.
+    // TODO Найдите разумное максимальное значение.
     pImpl->strokeMiterlimit(miterlimit);
     return Result::Success;
 }

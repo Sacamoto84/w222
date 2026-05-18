@@ -184,11 +184,11 @@ void lv_gltf_environment_delete(lv_gltf_environment_t * env)
 
 static lv_result_t ibl_sampler_load(lv_gltf_ibl_sampler_t * sampler, const char * path)
 {
-    // vv -- WebGL Naming
+    // vv — Именование WebGL
     if(ibl_gl_has_extension("GL_NV_float") && ibl_gl_has_extension("GL_ARB_color_buffer_float")) {
         LV_LOG_INFO("Device supports float format textures");
     }
-    // Native naming #2
+    // Родное именование # 2
     if(ibl_gl_has_extension("GL_ARB_color_buffer_float") || ibl_gl_has_extension("GL_NV_half_float")) {
         LV_LOG_INFO("Device supports half_float format textures");
     }
@@ -264,7 +264,7 @@ static void ibl_sampler_filter(lv_gltf_ibl_sampler_t * sampler)
     ibl_sample_ggx_lut(sampler);
     ibl_sample_charlie_lut(sampler);
 
-    // Restore all GL state
+    // Восстановить все состояние GL
     GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, prev_framebuffer));
     GL_CALL(glViewport(prev_viewport[0], prev_viewport[1], prev_viewport[2], prev_viewport[3]));
     GL_CALL(glUseProgram(prev_program));
@@ -336,7 +336,7 @@ static void ibl_texture_from_image(lv_gltf_ibl_sampler_t * sampler, lv_gltf_ibl_
 
     float scale_factor = 1.0;
     if(clamped_sum > 1.0) {
-        // Apply global scale factor to compensate for intensity lost when clamping
+        // Примените глобальный масштабный коэффициент, чтобы компенсировать потерю интенсивности при ограничении
         scale_factor = (clamped_sum + diff_sum) / clamped_sum;
         LV_LOG_INFO("HDR Intensity Scale %f\n", scale_factor);
     }
@@ -350,12 +350,12 @@ static uint32_t ibl_load_texture_hdr(lv_gltf_ibl_sampler_t * sampler, const lv_g
     GLuint texture_id;
     GL_CALL(glGenTextures(1, &texture_id));
     GL_CALL(glBindTexture(GL_TEXTURE_2D, texture_id));
-    GL_CALL(glTexImage2D(GL_TEXTURE_2D, // target
-                         0, // level
+    GL_CALL(glTexImage2D(GL_TEXTURE_2D, // цель
+                         0, // уровень
                          texture.internal_format, image->width, image->height,
-                         0, // border
-                         texture.format, // format of the pixel data
-                         texture.type, // type of the pixel data
+                         0, // граница
+                         texture.format, // формат данных пикселей
+                         texture.type, // тип данных пикселя
                          texture.data));
 
     lv_free(texture.data);
@@ -431,14 +431,14 @@ static void ibl_panorama_to_cubemap(lv_gltf_ibl_sampler_t * sampler)
 
         GL_CALL(glUseProgram(program_id));
         GL_CALL(glActiveTexture(GL_TEXTURE0 + 0));
-        // Bind texture ID to active texture
+        // Привязать текстуру ID к активной текстуре.
         GL_CALL(glBindTexture(GL_TEXTURE_2D, sampler->input_texture_id));
-        // map shader uniform to texture unit (TEXTURE0)
+        // Сопоставить форму шейдера с текстурным блоком ( TEXTURE0 )
         GLuint location;
         GL_CALL(location = glGetUniformLocation(program_id, "u_panorama"));
         GL_CALL(glUniform1i(location, 0));
         program->update_uniform_1i(program, "u_currentFace", i);
-        //fullscreen triangle
+        //полноэкранный треугольник
         draw_fullscreen_quad(sampler, program_id);
     }
 
@@ -471,16 +471,16 @@ static void ibl_apply_filter(lv_gltf_ibl_sampler_t * sampler, uint32_t distribut
 
         GL_CALL(glUseProgram(program_id));
         GL_CALL(glActiveTexture(GL_TEXTURE0));
-        // Bind texture ID to active texture
+        // Привязать текстуру ID к активной текстуре.
         GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, sampler->cube_map_texture_id));
-        // map shader uniform to texture unit (TEXTURE0)
+        // Сопоставить форму шейдера с текстурным блоком ( TEXTURE0 )
         uint32_t location = glGetUniformLocation(program_id, "u_cubemapTexture");
-        GL_CALL(glUniform1i(location, 0)); // texture unit 0
+        GL_CALL(glUniform1i(location, 0)); // текстурный блок 0
         program->update_uniform_1f(program, "u_roughness", roughness);
         program->update_uniform_1i(program, "u_sampleCount", sample_count);
-        /* Software rendered mode looks better with this and horrible with below */
-        /*program->update_uniform_1i(program, "u_width", current_texture_size);  */
-        /* Standard mode looks best with this and somewhat worse with above */
+        /* Программный режим рендеринга выглядит лучше с этим и ужасно с ниже */
+        /*программа-> update_uniform_1i (программа, "u_width", current_texture_size);  */
+        /* Стандартный режим выглядит лучше всего с этим и несколько хуже с предыдущим. */
         program->update_uniform_1i(program, "u_width", sampler->cube_map_resolution);
         program->update_uniform_1f(program, "u_lodBias", lod_bias);
         program->update_uniform_1i(program, "u_distribution", distribution);
@@ -488,7 +488,7 @@ static void ibl_apply_filter(lv_gltf_ibl_sampler_t * sampler, uint32_t distribut
         program->update_uniform_1i(program, "u_isGeneratingLUT", 0);
         program->update_uniform_1i(program, "u_floatTexture", 0);
         program->update_uniform_1f(program, "u_intensityScale", sampler->scale_value);
-        //fullscreen triangle
+        //полноэкранный треугольник
         draw_fullscreen_quad(sampler, program_id);
     }
 }
@@ -538,20 +538,20 @@ static void ibl_sample_lut(lv_gltf_ibl_sampler_t * sampler, uint32_t distributio
     GL_CALL(glUseProgram(program_id));
     //  TEXTURE0 = active.
     GL_CALL(glActiveTexture(GL_TEXTURE0 + 0));
-    // Bind texture ID to active texture
+    // Привязать текстуру ID к активной текстуре.
     GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, sampler->cube_map_texture_id));
-    // map shader uniform to texture unit (TEXTURE0)
+    // Сопоставить форму шейдера с текстурным блоком ( TEXTURE0 )
     uint32_t location = glGetUniformLocation(program_id, "u_cubemapTexture");
-    GL_CALL(glUniform1i(location, 0)); // texture unit 0
+    GL_CALL(glUniform1i(location, 0)); // текстурный блок 0
     program->update_uniform_1f(program, "u_roughness", 0.0);
     program->update_uniform_1i(program, "u_sampleCount", sampler->lut_sample_count);
-    //shader->update_uniform_1i( shader, "u_sampleCount", 512);
+    //шейдер-> update_uniform_1i (шейдер, "u_sampleCount", 512);
     program->update_uniform_1i(program, "u_width", 0.0);
     program->update_uniform_1f(program, "u_lodBias", 0.0);
     program->update_uniform_1i(program, "u_distribution", distribution);
     program->update_uniform_1i(program, "u_currentFace", 0);
     program->update_uniform_1i(program, "u_isGeneratingLUT", 1);
-    //fullscreen triangle
+    //полноэкранный треугольник
     draw_fullscreen_quad(sampler, program_id);
 }
 static void ibl_sample_ggx_lut(lv_gltf_ibl_sampler_t * sampler)
@@ -577,7 +577,7 @@ static bool ibl_gl_has_extension(const char * extension)
     const char * next;
 
     while(*current) {
-        /* Find the next space or end of string */
+        /* Найти следующий пробел или конец строки */
         next = strchr(current, ' ');
         if(next) {
             size_t length = next - current;
@@ -587,7 +587,7 @@ static bool ibl_gl_has_extension(const char * extension)
             current = next + 1;
         }
         else {
-            /* Last extension (no space found) */
+            /* Последнее расширение (место не найдено) */
             if(strcmp(current, extension) == 0) {
                 return true;
             }
@@ -609,7 +609,7 @@ static int ibl_count_bits(int value)
 
 static void init_fullscreen_quad(lv_gltf_ibl_sampler_t * sampler)
 {
-    /* Vertices go from -1 -1 (left bottom) to 1 1 (right top)*/
+    /* Вершины идут от -1 -1 (слева внизу) до 1 1 (справа вверху).*/
     GLfloat vertices[] = {
         -1.0f, -1.0f,
         1.0f, -1.0f,
@@ -617,7 +617,7 @@ static void init_fullscreen_quad(lv_gltf_ibl_sampler_t * sampler)
         1.0f,  1.0f
     };
 
-    /* Texture coords go from 0 0 (left botton) to 1 1 (right top)*/
+    /* Координаты текстуры варьируются от 0 0 (слева внизу) до 1 1 (справа вверху).*/
     GLfloat texCoords[] = {
         0.0f, 0.0f,
         1.0f, 0.0f,

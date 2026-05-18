@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -42,73 +42,73 @@ typedef struct _color_var_t {
     float a; /**< Alpha */
 } color_var_t;
 
-/** \brief Interpolate color gradient for rectangle
+/** \brief Интерполировать цветной градиент для контура
  *
- * \param x0 x coordinate of the upper left vertex of the rectangle
- * \param y0 y coordinate at the upper left vertex of the rectangle
- * \param w width of the rectangle
- * \param h height of the rectangle
- * \param col0 color for the first vertex
- * \param col1 color for the second vertex
- * \param col1 color for the third vertex
+ * \param x0 x координата верхних левых вершин вершины
+ * \param y0 Координата y на верхней левой вершине
+ * \param w ширина стороны
+ * \param h высота стороны
+ * \param col0 цвет первой вершины
+ * \param col1 цвет второй вершины
+ * \param col1 цвет кончиков вершины
  *
  */
 void nema_interpolate_rect_colors(int x0, int y0, int w, int h, color_var_t* col0, color_var_t* col1, color_var_t* col2);
 
 
-/** \brief Interpolate color gradient for triangle
+/** \brief Интерполировать цветной градиент для треугольника
  *
- * \details The upper left vertex of the triangle to be drawn
- *  must be in the vertex arguments as well. In addition, if
- * clipping is applied for rendering a triangle with gradient,
- * the upper left vertex must be within the clipping area.
- * \param x0 x coordinate at the first vertex of the triangle
- * \param y0 y coordinate at the first vertex of the triangle
- * \param x1 x coordinate at the second vertex of the triangle
- * \param y1 y coordinate at the second vertex of the triangle
- * \param x2 x coordinate at the third vertex of the triangle
- * \param y2 y coordinate at the third vertex of the triangle
- * \param col0 color for the first vertex
- * \param col1 color for the second vertex
- * \param col1 color for the third vertex
+ * \details Верхняя левая вершина рисуемого треугольника.
+ *  также должен быть в аргументах вершины. Кроме того, если
+ * обрезка применяется для рендеринга треугольника с градиентом,
+ * верхняя левая вершина должна находиться внутри области отсечения.
+ * \param x0 Координата x в первой вершине треугольника
+ * \param y0 Координата y в первой вершине треугольника
+ * \param x1 Координата x на вершине второго треугольника
+ * \param y1 Координата y во второй вершине треугольника
+ * \param x2 Координата x в вершине треугольника
+ * \param y2 Координата y в вершине треугольника
+ * \param col0 цвет первой вершины
+ * \param col1 цвет второй вершины
+ * \param col1 цвет кончиков вершины
  *
  */
 void nema_interpolate_tri_colors(float x0, float y0, float x1, float y1, float x2, float y2, color_var_t* col0, color_var_t* col1, color_var_t* col2);
 
-/** \brief Interpolate depth buffer values for triangle
+/** \brief Интерполировать значения буфера глубины для треугольника
  *
- * \param x0 x coordinate at the first vertex of the triangle
- * \param y0 y coordinate at the first vertex of the triangle
- * \param z0 z coordinate at the first vertex of the triangle
- * \param x1 x coordinate at the second vertex of the triangle
- * \param y1 y coordinate at the second vertex of the triangle
- * \param z1 z coordinate at the second vertex of the triangle
- * \param x2 x coordinate at the third vertex of the triangle
- * \param y2 y coordinate at the third vertex of the triangle
- * \param z2 z coordinate at the third vertex of the triangle
+ * \param x0 Координата x в первой вершине треугольника
+ * \param y0 Координата y в первой вершине треугольника
+ * \param z0 Координата z в первой вершине треугольника
+ * \param x1 Координата x на вершине второго треугольника
+ * \param y1 Координата y во второй вершине треугольника
+ * \param z1 Координата z на вершине второго треугольника
+ * \param x2 Координата x в вершине треугольника
+ * \param y2 Координата y в вершине треугольника
+ * \param z2 Координата z в вершине треугольника
  *
  */
 void nema_interpolate_tri_depth(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2);
 
-/** \brief Interpolate texture values for triangle
+/** \brief Интерполировать значения текстур для треугольника
  *
- * \param x0 x coordinate at the first vertex of the triangle
- * \param y0 y coordinate at the first vertex of the triangle
- * \param w0 w coordinate at the first vertex of the triangle
- * \param tx0 x texture coordinate at the first vertex of the triangle
- * \param ty0 y texture coordinate at the first vertex of the triangle
- * \param x1 x coordinate at the second vertex of the triangle
- * \param y1 y coordinate at the second vertex of the triangle
- * \param w1 w coordinate at the second vertex of the triangle
- * \param tx1 x texture coordinate at the second vertex of the triangle
- * \param ty1 y texture coordinate at the second vertex of the triangle
- * \param x2 x coordinate at the third vertex of the triangle
- * \param y2 y coordinate at the third vertex of the triangle
- * \param w2 w coordinate at the third vertex of the triangle
- * \param tx2 x texture coordinate at the third vertex of the triangle
- * \param ty2 x texture coordinate at the third vertex of the triangle
- * \param tex_width texture width
- * \param tex_height texture height
+ * \param x0 Координата x в первой вершине треугольника
+ * \param y0 Координата y в первой вершине треугольника
+ * \param w0 координата w в первой вершине треугольника
+ * \param tx0 x координаты текстуры в первой вершине треугольника
+ * \param ty0 y координаты текстуры в первой вершине треугольника
+ * \param x1 Координата x на вершине второго треугольника
+ * \param y1 Координата y во второй вершине треугольника
+ * \param w1 координата w во второй вершине треугольника
+ * \param tx1 x координаты текстуры во второй вершине треугольника
+ * \param ty1 y координаты текстуры во второй вершине треугольника
+ * \param x2 Координата x в вершине треугольника
+ * \param y2 Координата y в вершине треугольника
+ * \param координата w2 w в конце вершины треугольника
+ * \param tx2 координаты текстуры x в вершине треугольника
+ * \param ty2 координаты текстуры x на вершине треугольника
+ * \param Ширина текстуры tex_width
+ * \param Высота текстуры tex_height
  *
  */
 void nema_interpolate_tx_ty(float x0, float y0, float w0, float tx0, float ty0,

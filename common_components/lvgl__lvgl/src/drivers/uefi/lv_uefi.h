@@ -48,7 +48,7 @@
         #error No UEFI headers available
     #endif
 
-    // Verify that all required protocols are known
+    // Убедитесь, что все необходимые протоколы известны.
     #if !defined(EFI_LOADED_IMAGE_PROTOCOL_GUID)
         #error Missing support for EFI_LOADED_IMAGE_PROTOCOL
     #endif
@@ -80,7 +80,7 @@
         #error Missing support for EFI_TIMESTAMP_PROTOCOL_GUID
     #endif
 
-    // Verify that all types have the correct size
+    // Убедитесь, что все типы имеют правильный размер.
     LV_UEFI_STATIC_ASSERT(sizeof(BOOLEAN)  == 1, "Size check for 'BOOLEAN' failed.");
     LV_UEFI_STATIC_ASSERT(sizeof(INT8)     == 1, "Size check for 'INT8' failed.");
     LV_UEFI_STATIC_ASSERT(sizeof(UINT8)    == 1, "Size check for 'UINT8' failed.");

@@ -87,45 +87,45 @@ void lv_draw_nanovg_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
 
     nvgBeginPath(u->vg);
 
-    /* head point */
+    /* головная точка */
     float head_start_x = p1_x + w2_dx;
     float head_start_y = p1_y - w2_dy;
     float head_end_x = p1_x - w2_dx;
     float head_end_y = p1_y + w2_dy;
 
-    /* tail point */
+    /* хвостовая точка */
     float tail_start_x = p2_x - w2_dx;
     float tail_start_y = p2_y + w2_dy;
     float tail_end_x = p2_x + w2_dx;
     float tail_end_y = p2_y - w2_dy;
 
     /*
-          head_start        tail_end
+          head_start tail_end
               *-----------------*
              /|                 |\
             / |                 | \
-    arc_c *(  *p1             p2*  )* arc_c
+    arc_c *( *p1 p2* )* arc_c
             \ |                 | /
              \|                 |/
               *-----------------*
-          head_end          tail_start
+          head_end tail_start
     */
 
-    /* move to start point */
+    /* перейти к начальной точке */
     nvgMoveTo(u->vg, head_start_x, head_start_y);
 
-    /* draw line head */
+    /* нарисовать линию головы */
     if(dsc->round_start) {
         float arc_cx = p1_x - w2_dy;
         float arc_cy = p1_y - w2_dx;
 
-        /* start 90deg arc */
+        /* начать дугу 90 градусов */
         lv_nanovg_path_append_arc_right_angle(u->vg,
                                               head_start_x, head_start_y,
                                               p1_x, p1_y,
                                               arc_cx, arc_cy);
 
-        /* end 90deg arc */
+        /* конец дуги 90 градусов */
         lv_nanovg_path_append_arc_right_angle(u->vg,
                                               arc_cx, arc_cy,
                                               p1_x, p1_y,
@@ -135,10 +135,10 @@ void lv_draw_nanovg_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
         nvgLineTo(u->vg, head_end_x, head_end_y);
     }
 
-    /* draw line body */
+    /* нарисовать тело линии */
     nvgLineTo(u->vg, tail_start_x, tail_start_y);
 
-    /* draw line tail */
+    /* нарисовать линию хвоста */
     if(dsc->round_end) {
         float arc_cx = p2_x + w2_dy;
         float arc_cy = p2_y + w2_dx;
@@ -155,7 +155,7 @@ void lv_draw_nanovg_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
         nvgLineTo(u->vg, tail_end_x, tail_end_y);
     }
 
-    /* close draw line body */
+    /* закрыть тело линии рисования */
     nvgLineTo(u->vg, head_start_x, head_start_y);
 
     for(int32_t i = 0; i < ndash; i++) {

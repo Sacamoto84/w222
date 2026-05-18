@@ -1,7 +1,7 @@
 /**
  * @file lv_array.c
- * Array.
- * The nodes are dynamically allocated by the 'lv_mem' module,
+ * Массив.
+ * Узлы направления ослабляются с помощью модуля lv_mem.
  */
 
 /*********************
@@ -97,7 +97,7 @@ lv_result_t lv_array_remove(lv_array_t * array, uint32_t index)
         return LV_RESULT_INVALID;
     }
 
-    /*Shortcut*/
+    /*Ярлык*/
     if(index == array->size - 1) {
         array->size--;
         lv_array_shrink(array);
@@ -123,14 +123,14 @@ lv_result_t lv_array_remove_unordered(lv_array_t * array, uint32_t index)
         return LV_RESULT_INVALID;
     }
 
-    /*Shortcut*/
+    /*Ярлык*/
     if(index == array->size - 1) {
         array->size--;
         lv_array_shrink(array);
         return LV_RESULT_OK;
     }
 
-    /* Copy the last element into the position to remove*/
+    /* Скопируйте последний элемент в позицию для удаления*/
     uint8_t * dst = lv_array_at(array, index);
     uint8_t * src = lv_array_at(array, array->size - 1);
 
@@ -150,7 +150,7 @@ lv_result_t lv_array_erase(lv_array_t * array, uint32_t start, uint32_t end)
         return LV_RESULT_INVALID;
     }
 
-    /*Shortcut*/
+    /*Ярлык*/
     if(end == array->size) {
         array->size = start;
         lv_array_shrink(array);
@@ -191,7 +191,7 @@ lv_result_t lv_array_concat(lv_array_t * array, const lv_array_t * other)
     LV_ASSERT_NULL(array->data);
     uint32_t size = other->size;
     if(array->size + size > array->capacity) {
-        /*array is full*/
+        /*массив заполнен*/
         if(lv_array_resize(array, array->size + size) == false) {
             return LV_RESULT_INVALID;
         }
@@ -208,14 +208,14 @@ lv_result_t lv_array_push_back(lv_array_t * array, const void * element)
     LV_ASSERT_NULL(array->data);
 
     if(array->size == array->capacity) {
-        /*array is full*/
+        /*массив заполнен*/
         if(lv_array_resize(array, array->capacity + LV_ARRAY_DEFAULT_CAPACITY) == false) {
             return LV_RESULT_INVALID;
         }
     }
 
     /**
-     * When the element is NULL, it means that the user wants to add an empty element.
+     * Когда элемент имеет значение NULL, это означает, что пользователь хочет добавить пустой элемент.
      */
     uint8_t * data = array->data + array->size * array->element_size;
     if(element) lv_memcpy(data, element, array->element_size);

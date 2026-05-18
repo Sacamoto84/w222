@@ -70,14 +70,14 @@ uint32_t lv_os_get_idle_percent(void)
         for(size_t i = 0; i < LV_PROC_STAT_PARAMS_LEN; ++i) {
             uint32_t delta =
                 proc_stat.buffer[i] - last_proc_stat.buffer[i];
-            /* Update old for next call*/
+            /* Обновить старую версию для следующего звонка*/
             last_proc_stat.buffer[i] = proc_stat.buffer[i];
-            /* Store delta in new */
+            /* Сохранить дельту в новом */
             proc_stat.buffer[i] = delta;
         }
     }
 
-    /* From here onwards, there's no risk of overflowing as long as we call this function regularly */
+    /* С этого момента риск переполнения отсутствует, если мы регулярно вызываем эту функцию. */
     const uint32_t total = lv_proc_stat_get_total(&proc_stat);
 
     if(total == 0) {
@@ -111,16 +111,16 @@ uint32_t lv_os_get_proc_idle_percent(void)
 
     fclose(self);
 
-    /* The comm field can contain spaces and parentheses, so we find the last ')'
-     * Skip the whitespace after finding the last ')' */
+    /* Поле связи может содержать пробелы и круглые скобки, поэтому найдем ничего ')'
+     * Пропустить пробелы после нахождения последней ')' */
     char * p = strrchr(self_stat_buffer, ')');
     if(!p) {
         LV_LOG_ERROR(LV_UPTIME_MONITOR_SELF_FILE " is missing the closing ')'");
         return UINT32_MAX;
     }
-    p++; /* move past the ')' */
+    p++; /* пройти мимо ')' */
     while(*p && (*p == ' ' || *p == '\t'))
-        p++; /* skip whitespace after ')' */
+        p++; /* пропустить пробелы после ')' */
     if(!*p) {
         LV_LOG_ERROR(LV_UPTIME_MONITOR_SELF_FILE " unexpectedly ends after the closing ')'");
         return UINT32_MAX;
@@ -130,11 +130,11 @@ uint32_t lv_os_get_proc_idle_percent(void)
     uint64_t stime = 0;
 
     int scanned_items = sscanf(p,
-                               "%*c "                         // state (field 3)
-                               "%*d %*d %*d %*d %*d "         // ppid, pgrp, session, tty_nr, tpgid (fields 4-8)
-                               "%*u "                         // flags (field 9)
-                               "%*u %*u %*u %*u "             // minflt, cminflt, majflt, cmajflt (fields 10-13)
-                               "%" SCNu64 " %" SCNu64,        // utime, stime (fields 14-15)
+                               "%*c "                         // штат (поле 3)
+                               "%*d %*d %*d %*d %*d "         // ppid, pgrp, session,tty_nr, tpgid (поля 4-8)
+                               "%*u "                         // флаги (поле 9)
+                               "%*u %*u %*u %*u "             // минфлт, сминфлт, майфлт, смайфлт (поля 10-13)
+                               "%" SCNu64 " %" SCNu64,        // время, время (поля 14-15)
                                &utime, &stime);
 
     if(scanned_items != 2) {
@@ -149,12 +149,12 @@ uint32_t lv_os_get_proc_idle_percent(void)
         return UINT32_MAX;
     }
 
-    /* no delta on the first call so return 0, next call will have actual values*/
+    /* нет дельты при первом вызове, поэтому верните 0, следующий вызов будет иметь фактические значения*/
     if(last_self_ticks == 0) {
         last_self_ticks = self_current_time_ticks;
         last_system_total_ticks_stat = stat_current_system_total_ticks;
 
-        return 100; /* 100% idle = 0% CPU usage*/
+        return 100; /* 100% простоя = 0% использования CPU*/
     }
 
     uint64_t delta_self_proc_ticks = self_current_time_ticks - last_self_ticks;

@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -84,7 +84,7 @@ struct SwPoint
 
     bool small() const
     {
-        //2 is epsilon...
+        //2 это эпсилон...
         if (abs(x) < 2 && abs(y) < 2) return true;
         else return false;
     }
@@ -102,9 +102,9 @@ struct SwSize
 
 struct SwOutline
 {
-    Array<SwPoint> pts;             //the outline's points
-    Array<uint32_t> cntrs;          //the contour end points
-    Array<uint8_t> types;           //curve type
+    Array<SwPoint> pts;             //пункты плана
+    Array<uint32_t> cntrs;          //конечные точки контура
+    Array<uint8_t> types;           //тип кривой
     Array<bool> closed;             //opened or closed path?
     FillRule fillRule;
 };
@@ -156,7 +156,7 @@ struct SwFill
     uint32_t* ctable;
     FillSpread spread;
 
-    bool solid = false; //solid color fill with the last color from colorStops
+    bool solid = false; //сплошная заливка последним цветом из colorStops
     bool translucent;
 };
 
@@ -166,7 +166,7 @@ struct SwStrokeBorder
     uint32_t maxPts;
     SwPoint* pts;
     uint8_t* tags;
-    int32_t start;     //index of current sub-path start point
+    int32_t start;     //индекс начальной точки текущего подпути
     bool movable;      //true: for ends of lineto borders
 };
 
@@ -216,7 +216,7 @@ struct SwShape
     SwFill*      fill = nullptr;
     SwRle*   rle = nullptr;
     SwRle*   strokeRle = nullptr;
-    SwBBox       bbox;           //Keep it boundary without stroke region. Using for optimal filling.
+    SwBBox       bbox;           //Сохраняйте границу без области обводки. Использование для оптимального наполнения.
 
     bool         fastTrack = false;   //Fast Track: axis-aligned rectangle without any clips?
 };
@@ -226,39 +226,39 @@ struct SwImage
     SwOutline*   outline = nullptr;
     SwRle*   rle = nullptr;
     union {
-        pixel_t*  data;      //system based data pointer
-        uint32_t* buf32;     //for explicit 32bits channels
-        uint8_t*  buf8;      //for explicit 8bits grayscale
+        pixel_t*  data;      //системный указатель данных
+        uint32_t* buf32;     //для явных 32-битных каналов
+        uint8_t*  buf8;      //для явных 8-битных оттенков серого
     };
     uint32_t     w, h, stride;
-    int32_t      ox = 0;         //offset x
-    int32_t      oy = 0;         //offset y
+    int32_t      ox = 0;         //смещение х
+    int32_t      oy = 0;         //смещение y
     float        scale;
     uint8_t      channelSize;
 
-    bool         direct = false;  //draw image directly (with offset)
-    bool         scaled = false;  //draw scaled image
+    bool         direct = false;  //нарисовать изображение напрямую (со смещением)
+    bool         scaled = false;  //нарисовать масштабированное изображение
 };
 
-typedef uint8_t(*SwMask)(uint8_t s, uint8_t d, uint8_t a);                  //src, dst, alpha
-typedef uint32_t(*SwBlender)(uint32_t s, uint32_t d, uint8_t a);            //src, dst, alpha
-typedef uint32_t(*SwJoin)(uint8_t r, uint8_t g, uint8_t b, uint8_t a);      //color channel join
-typedef uint8_t(*SwAlpha)(uint8_t*);                                        //blending alpha
+typedef uint8_t(*SwMask)(uint8_t s, uint8_t d, uint8_t a);                  //источник, летнее время, альфа
+typedef uint32_t(*SwBlender)(uint32_t s, uint32_t d, uint8_t a);            //источник, летнее время, альфа
+typedef uint32_t(*SwJoin)(uint8_t r, uint8_t g, uint8_t b, uint8_t a);      //присоединение к цветовому каналу
+typedef uint8_t(*SwAlpha)(uint8_t*);                                        //смешивание альфа
 
 struct SwCompositor;
 
 struct SwSurface : RenderSurface
 {
     SwJoin  join;
-    SwAlpha alphas[4];                    //Alpha:2, InvAlpha:3, Luma:4, InvLuma:5
-    SwBlender blender = nullptr;          //blender (optional)
-    SwCompositor* compositor = nullptr;   //compositor (optional)
+    SwAlpha alphas[4];                    //Альфа:2, ИнвАльфа:3, Яркость:4, ИнвЛума:5
+    SwBlender blender = nullptr;          //блендер (по желанию)
+    SwCompositor* compositor = nullptr;   //композитор (необязательно)
     BlendMethod blendMethod = BlendMethod::Normal;
 
     SwAlpha alpha(CompositeMethod method)
     {
         auto idx = (int)(method) - 2;       //0: None, 1: ClipPath
-        return alphas[idx > 3 ? 0 : idx];   //CompositeMethod has only four Matting methods.
+        return alphas[idx > 3 ? 0 : idx];   //CompositeMethod имеет только четыре метода Matting.
     }
 
     SwSurface()
@@ -277,8 +277,8 @@ struct SwSurface : RenderSurface
 
 struct SwCompositor : RenderCompositor
 {
-    SwSurface* recoverSfc;                  //Recover surface when composition is started
-    SwCompositor* recoverCmp;               //Recover compositor when composition is done
+    SwSurface* recoverSfc;                  //Восстановление поверхности при запуске композиции
+    SwCompositor* recoverCmp;               //Восстановить композитор после завершения композиции
     SwImage image;
     SwBBox bbox;
     bool valid;
@@ -373,7 +373,7 @@ static inline uint32_t opBlendSrcOver(uint32_t s, TVG_UNUSED uint32_t d, TVG_UNU
 static inline uint32_t opBlendDifference(uint32_t s, uint32_t d, TVG_UNUSED uint8_t a)
 {
     //if (s > d) => s - d
-    //else => d - s
+    //еще => д - с
     auto c1 = (C1(s) > C1(d)) ? (C1(s) - C1(d)) : (C1(d) - C1(s));
     auto c2 = (C2(s) > C2(d)) ? (C2(s) - C2(d)) : (C2(d) - C2(s));
     auto c3 = (C3(s) > C3(d)) ? (C3(s) - C3(d)) : (C3(d) - C3(s));
@@ -419,7 +419,7 @@ static inline uint32_t opBlendMultiply(uint32_t s, uint32_t d, TVG_UNUSED uint8_
 static inline uint32_t opBlendOverlay(uint32_t s, uint32_t d, TVG_UNUSED uint8_t a)
 {
     // if (2 * d < da) => 2 * s * d,
-    // else => 1 - 2 * (1 - s) * (1 - d)
+    // иначе => 1 - 2 * (1 - с) * (1 - d)
     auto c1 = (C1(d) < 128) ? std::min(255, 2 * MULTIPLY(C1(s), C1(d))) : (255 - std::min(255, 2 * MULTIPLY(255 - C1(s), 255 - C1(d))));
     auto c2 = (C2(d) < 128) ? std::min(255, 2 * MULTIPLY(C2(s), C2(d))) : (255 - std::min(255, 2 * MULTIPLY(255 - C2(s), 255 - C2(d))));
     auto c3 = (C3(d) < 128) ? std::min(255, 2 * MULTIPLY(C3(s), C3(d))) : (255 - std::min(255, 2 * MULTIPLY(255 - C3(s), 255 - C3(d))));
@@ -428,7 +428,7 @@ static inline uint32_t opBlendOverlay(uint32_t s, uint32_t d, TVG_UNUSED uint8_t
 
 static inline uint32_t opBlendDarken(uint32_t s, uint32_t d, TVG_UNUSED uint8_t a)
 {
-    // min(s, d)
+    // мин(с, д)
     auto c1 = std::min(C1(s), C1(d));
     auto c2 = std::min(C2(s), C2(d));
     auto c3 = std::min(C3(s), C3(d));
@@ -437,7 +437,7 @@ static inline uint32_t opBlendDarken(uint32_t s, uint32_t d, TVG_UNUSED uint8_t 
 
 static inline uint32_t opBlendLighten(uint32_t s, uint32_t d, TVG_UNUSED uint8_t a)
 {
-    // max(s, d)
+    // макс(с, д)
     auto c1 = std::max(C1(s), C1(d));
     auto c2 = std::max(C2(s), C2(d));
     auto c3 = std::max(C3(s), C3(d));
@@ -533,17 +533,17 @@ void fillReset(SwFill* fill);
 void fillFree(SwFill* fill);
 
 //OPTIMIZE_ME: Skip the function pointer access
-void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, SwMask maskOp, uint8_t opacity);                                   //composite masking ver.
-void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwMask maskOp, uint8_t opacity);                     //direct masking ver.
-void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, uint8_t a);                                         //blending ver.
-void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, SwBlender op2, uint8_t a);                          //blending + BlendingMethod(op2) ver.
-void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwAlpha alpha, uint8_t csize, uint8_t opacity);     //matting ver.
+void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, SwMask maskOp, uint8_t opacity);                                   //композитная маскировка вер.
+void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwMask maskOp, uint8_t opacity);                     //прямая маскировка вер.
+void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, uint8_t a);                                         //смешивание вер.
+void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, SwBlender op2, uint8_t a);                          //blending + BlendingMethod(op2) вер.
+void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwAlpha alpha, uint8_t csize, uint8_t opacity);     //коврик вер.
 
-void fillRadial(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, SwMask op, uint8_t a);                                             //composite masking ver.
-void fillRadial(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwMask op, uint8_t a) ;                              //direct masking ver.
-void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, uint8_t a);                                         //blending ver.
-void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, SwBlender op2, uint8_t a);                          //blending + BlendingMethod(op2) ver.
-void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwAlpha alpha, uint8_t csize, uint8_t opacity);     //matting ver.
+void fillRadial(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, SwMask op, uint8_t a);                                             //композитная маскировка вер.
+void fillRadial(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwMask op, uint8_t a) ;                              //прямая маскировка вер.
+void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, uint8_t a);                                         //смешивание вер.
+void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, SwBlender op2, uint8_t a);                          //blending + BlendingMethod(op2) вер.
+void fillRadial(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwAlpha alpha, uint8_t csize, uint8_t opacity);     //коврик вер.
 
 SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegion, bool antiAlias);
 SwRle* rleRender(const SwBBox* bbox);

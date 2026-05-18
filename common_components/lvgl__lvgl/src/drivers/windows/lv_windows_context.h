@@ -103,9 +103,9 @@ typedef struct _lv_windows_create_display_data_t {
 
 /**
  * @brief Initialize the LVGL Windows backend.
- * @remark This is a private API which is used for LVGL Windows backend
- *         implementation. LVGL users shouldn't use that because the
- *         LVGL has already used it in lv_init.
+ * @remark Это частный API, который используется для серверной части Windows LVGL.
+ *         реализация.  Пользователям LVGL не следует использовать это, потому что
+ *         LVGL уже использовал его в lv_init.
 */
 void lv_windows_platform_init(void);
 
@@ -113,10 +113,10 @@ void lv_windows_platform_init(void);
  * @brief Get the window context from specific LVGL display window.
  * @param window_handle The window handle of specific LVGL display window.
  * @return The window context from specific LVGL display window.
- * @remark This is a private API which is used for LVGL Windows backend
- *         implementation. LVGL users shouldn't use that because the
- *         maintainer doesn't promise the application binary interface
- *         compatibility for this API.
+ * @remark Это частный API, который используется для серверной части Windows LVGL.
+ *         реализация.  Пользователям LVGL не следует использовать это, потому что
+ *         сопровождающий не обещает бинарный интерфейс приложения
+ *         совместимость для этого API.
 */
 lv_windows_window_context_t * lv_windows_get_window_context(
     HWND window_handle);
@@ -128,7 +128,7 @@ lv_windows_window_context_t * lv_windows_get_window_context(
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WINDOWS_CONTEXT_H*/

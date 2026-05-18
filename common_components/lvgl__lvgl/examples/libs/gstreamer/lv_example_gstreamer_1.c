@@ -21,7 +21,7 @@ static void play_pause_pressed(lv_event_t * e);
 static void stream_state_changed(lv_event_t * e);
 
 /**
- * Loads a video from the internet using the gstreamer widget
+ * Загружает видео из Интернета с помощью виджета gstreamer
  */
 void lv_example_gstreamer_1(void)
 {
@@ -29,40 +29,40 @@ void lv_example_gstreamer_1(void)
 
     event_data.streamer = lv_gstreamer_create(lv_screen_active());
 
-    /* the gstreamer widget inherits the `lv_image` widget,
-     * meaning you can also provide it lv_image functions, like
-    lv_image_set_scale(event_data.streamer, 100);
-    lv_image_set_rotation(event_data.streamer, 100);
+    /* виджет gstreamer наследует виджет`lv_image`,
+     * это означает, что вы также можете оплатить ему функциюlv_image, например
+    lv_image_set_scale (event_data.streamer, 100);
+    lv_image_set_rotation (event_data.streamer, 100);
     */
 
-    /* Set the current src of the streamer.
-     * Using the `URI` "factory", we can
-     * specify various URI schemes as media sources including local files (file://),
-     * web streams (http://, https://), RTSP streams (rtsp://), UDP streams (udp://),
-     * and many others. GStreamer's uridecodebin automatically selects the appropriate
-     * source element and decoder based on the URI scheme and media format. */
+    /* Установите текущий источник стримера.
+     * Используя «фабрику» `URI`, мы можем
+     * использовать различные схемыURIв качестве источников мультимедиа, включая локальные файлы (file://),
+     * веб-потоки (потокиhttp://,https://),RTSP(rtsp://), потокиUDP(udp://),
+     * и многие другие. Uridecodebin GStreamer автоматически выбирает подходящий
+     * исходный элемент и декодер на основе схемы URI и медиаформата. */
     lv_gstreamer_set_src(event_data.streamer, LV_GSTREAMER_FACTORY_URI_DECODE, LV_GSTREAMER_PROPERTY_URI_DECODE,
                          "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm");
 
     lv_obj_center(event_data.streamer);
 
-    /* Create a slider to modify the stream volume and a label to visualize the current value */
+    /* Создайте ползунок для изменения объема потока и метку для визуализации текущего значения. */
     volume_setter_create(&event_data);
 
-    /* Create a slider to see the position in the stream with 2 text label on each side
-     * One for the current position in the stream and the other for the total duration of the stream
-     * Also add a pause/play button*/
+    /* Создайте ползунок, чтобы увидеть положение в потоке, с двумя текстовыми метками с каждой стороны.
+     * Один для текущей позиции в потоке, а другой для общей продолжительности потока.
+     * Также добавьте кнопку паузы/воспроизведения.*/
     control_bar_create(&event_data);
 
-    /* The LV_EVENT_STATE_CHANGED will fire when the stream is ready at that point we can query the stream
-     * information like its resolution and duration. See `streamer_ready` */
+    /* LV_EVENT_STATE_CHANGED сработает, когда поток будет готов, и в этот момент мы сможем запросить поток.
+     * такая информация, как его разрешение и продолжительность. См. `streamer_ready`. */
     lv_obj_add_event_cb(event_data.streamer, stream_state_changed, LV_EVENT_STATE_CHANGED, &event_data);
 
-    /* Play the stream immediately */
+    /* Воспроизвести трансляцию немедленно */
     lv_gstreamer_play(event_data.streamer);
 
-    /* Create a timer that will update the slider position based on the stream position
-     * Make it 3 times faster than the refresh rate for a smoother effect */
+    /* Создайте таймер, который будет обновлять положение ползунка в зависимости от положения потока.
+     * Сделайте это в 3 раза быстрее, чем частота обновления, для более плавного эффекта. */
     lv_timer_create(update_position_slider, LV_DEF_REFR_PERIOD, &event_data);
 }
 
@@ -88,8 +88,8 @@ static void volume_setter_create(event_data_t * event_data)
     lv_obj_set_style_text_align(volume_label, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_width(volume_label, 50);
 
-    /* We use `lv_subject` to simplify binding the data between multiple objects.
-     * Here the data is shared between the slider, the label and the gstreamer widgets */
+    /* Мы используем`lv_subject`для упрощения связывания данных между несколькими объектами.
+     * Здесь данные извлекаются между слайдером, меткой и виджетами gstreamer. */
     static lv_subject_t volume_subject;
     lv_subject_init_int(&volume_subject, 50);
     lv_subject_add_observer_obj(&volume_subject, volume_observer_cb, event_data->streamer, NULL);
@@ -121,7 +121,7 @@ static void control_bar_create(event_data_t * event_data)
     lv_obj_set_width(event_data->position_label, 80);
     lv_label_set_text_static(event_data->position_label, "0:00:000");
 
-    /* Create a button a button to play/pause the stream */
+    /* Создайте кнопку для воспроизведения/паузы потока. */
     event_data->pp_button = lv_button_create(cont);
     lv_obj_center(event_data->pp_button);
     lv_obj_add_event_cb(event_data->pp_button, play_pause_pressed, LV_EVENT_CLICKED, event_data);
@@ -225,7 +225,7 @@ static void stream_state_changed(lv_event_t * e)
 void lv_example_gstreamer_1(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "GStreamer web support is coming soon");

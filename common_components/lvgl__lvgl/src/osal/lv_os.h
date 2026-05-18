@@ -32,31 +32,31 @@ extern "C" {
  **********************/
 
 /**
- * Lock LVGL's general mutex.
- * LVGL is not thread safe, so a mutex is used to avoid executing multiple LVGL functions at the same time
- * from different threads. It shall be called when calling LVGL functions from threads
- * different than lv_timer_handler's thread. It doesn't need to be called in LVGL events because
- * they are called from lv_timer_handler().
- * It is called internally in lv_timer_handler().
+ * Заблокируйте общий мьютекс LVGL.
+ * LVGL не является потокобезопасным, поэтому используется мьютекс, чтобы избежать одновременного выполнения нескольких функций LVGL.
+ * из разных тем. Он должен вызываться при вызове функций LVGL из потоков.
+ * отличается от темыlv_timer_handler. Его не нужно выходить в событияLVGL, потому что
+ * они звонят изlv_timer_handler().
+ * Он появляется внутриlv_timer_handler().
  */
 void lv_lock(void);
 
 /**
- * Same as `lv_lock()` but can be called from an interrupt.
- * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
+ * То же самое, что`lv_lock()`, но может отключиться из-за прерывания.
+ * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой
  */
 lv_result_t lv_lock_isr(void);
 
 /**
- * The pair of `lv_lock()` and `lv_lock_isr()`.
- * It unlocks LVGL general mutex.
- * It is called internally in lv_timer_handler().
+ * Пара`lv_lock()`и`lv_lock_isr()`.
+ * Он разблокирует общий мьютекс LVGL.
+ * Он появляется внутриlv_timer_handler().
  */
 void lv_unlock(void);
 
 /**
- * Sleeps the current thread by an amount of milliseconds.
- * @param ms     amount of milliseconds to sleep the current thread.
+ * Приостанавливает текущий поток на определенное количество миллисекунд.
+ * @param ms     количество миллисекунд для сна текущего потока.
  */
 void lv_sleep_ms(uint32_t ms);
 
@@ -65,7 +65,7 @@ void lv_sleep_ms(uint32_t ms);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OS_H*/

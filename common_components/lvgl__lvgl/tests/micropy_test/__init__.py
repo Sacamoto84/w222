@@ -79,8 +79,8 @@ class TestData:
 
 
 class MicroPython_Test(unittest.TestCase):
-    # these are here simply to make an IDE happy. Their values get dynamically
-    # set when the class gets constructed
+    # они здесь просто для того, чтобы сделать IDE счастливым. Их значения динамически
+    # устанавливается при создании класса
     process: subprocess.Popen = None
     exit_event: threading.Event = None
 
@@ -233,7 +233,7 @@ class MicroPython_Test(unittest.TestCase):
 
             time.sleep(0.002)
 
-        # self.read_until(b'# end\n')
+        # сам. read_until (b'# конец\n')
 
         def _do(td: TestData):
             self.send(CTRL_D)
@@ -292,7 +292,7 @@ class MicroPython_Test(unittest.TestCase):
 
         if not test_data.event.is_set():
             self.__class__.exit_event.set()
-            # self.read_until(REPL_PROMPT)
+            # сам. read_until ( REPL_PROMPT )
 
         self.send(CTRL_C)
         self.send(CTRL_C)
@@ -308,7 +308,7 @@ class MicroPython_Test(unittest.TestCase):
                 b''.join(binascii.unhexlify(lne) for lne in test_data.result)
             )
 
-            # I don't exactly know why the byte order is backwards but it is
+            # Я точно не знаю, почему порядок байтов обратный, но это так.
             frame = bytes(bytearray([
                 item for j in range(0, len(frame), 3)
                 for item in [frame[j + 2], frame[j + 1], frame[j]]
@@ -324,8 +324,8 @@ class MicroPython_Test(unittest.TestCase):
             img.close()
 
             with open(os.path.join(ARTIFACT_PATH, f'frame.bin'), 'wb') as f:
-                # have to flatten the data and remove the alpha
-                # from the PIL image it is formatted as
+                # придется сгладить данные и удалить альфу
+                # из образа PIL он отформатирован как
                 # [(r, g, b), (r, g, b)]
                 f.write(bytes(bytearray([
                     item for sublist in byte_data

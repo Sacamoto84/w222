@@ -124,7 +124,7 @@ void lv_text_get_size_attributes(lv_point_t * size_res, const char * text, const
         attributes->max_width = LV_COORD_MAX;
     }
 
-    /*Calc. the height and longest line*/
+    /*Расчет высота и самая длинная линия*/
     while(text[line_start] != '\0') {
         new_line_start += lv_text_get_next_line(
                               &text[line_start], LV_TEXT_LEN_MAX, font, NULL, attributes);
@@ -139,7 +139,7 @@ void lv_text_get_size_attributes(lv_point_t * size_res, const char * text, const
             size_res->y += attributes->line_space;
         }
 
-        /*Calculate the longest line*/
+        /*Вычислить самую длинную линию*/
         int32_t act_line_length = lv_text_get_width(
                                       &text[line_start], new_line_start - line_start, font, attributes);
 
@@ -147,12 +147,12 @@ void lv_text_get_size_attributes(lv_point_t * size_res, const char * text, const
         line_start  = new_line_start;
     }
 
-    /*Make the text one line taller if the last character is '\n' or '\r'*/
+    /*Сделайте текст на одну строку выше, если последний символ — «\n» или «\r».*/
     if((line_start != 0) && (text[line_start - 1] == '\n' || text[line_start - 1] == '\r')) {
         size_res->y += letter_height + attributes->line_space;
     }
 
-    /*Correction with the last line space or set the height manually if the text is empty*/
+    /*Исправление с последним межстрочным интервалом или установка высоты вручную, если текст пустой*/
     if(size_res->y == 0)
         size_res->y = letter_height;
     else
@@ -164,25 +164,25 @@ bool lv_text_is_cmd(lv_text_cmd_state_t * state, uint32_t c)
     bool ret = false;
 
     if(c == (uint32_t)LV_TXT_COLOR_CMD[0]) {
-        if(*state == LV_TEXT_CMD_STATE_WAIT) { /*Start char*/
+        if(*state == LV_TEXT_CMD_STATE_WAIT) { /*Начать символ*/
             *state = LV_TEXT_CMD_STATE_PAR;
             ret = true;
         }
-        /*Other start char in parameter is escaped cmd. char*/
+        /*Другой начальный символ в параметре отображается cmd. голец*/
         else if(*state == LV_TEXT_CMD_STATE_WAIT) {
             *state = LV_TEXT_CMD_STATE_WAIT;
         }
-        /*Command end*/
+        /*Конец команды*/
         else if(*state == LV_TEXT_CMD_STATE_IN) {
             *state = LV_TEXT_CMD_STATE_WAIT;
             ret = true;
         }
     }
 
-    /*Skip the color parameter and wait the space after it*/
+    /*Пропустите параметр цвета и подождите пробел после него.*/
     if(*state == LV_TEXT_CMD_STATE_PAR) {
         if(c == ' ') {
-            *state = LV_TEXT_CMD_STATE_IN; /*After the parameter the text is in the command*/
+            *state = LV_TEXT_CMD_STATE_IN; /*После параметра текст находится в команде*/
         }
         ret = true;
     }
@@ -191,35 +191,35 @@ bool lv_text_is_cmd(lv_text_cmd_state_t * state, uint32_t c)
 }
 
 /**
- * Get the next word of text. A word is delimited by break characters.
+ * Получите следующее слово текста. Слово разделяется символами разрыва.
  *
- * If the word cannot fit in the max_width space, obey LV_TXT_LINE_BREAK_LONG_* rules.
+ * Если слово не помещается в пространство max_width, подчиняйтесь правиламLV_TXT_LINE_BREAK_LONG_*.
  *
- * If the next word cannot fit anything, return 0.
+ * Если следующее слово ничего не может поместить, верните 0.
  *
- * If the first character is a break character, returns the next index.
+ * Если первый символ является символом разрыва, возвращается следующий индекс.
  *
- * Example calls from lv_text_get_next_line() assuming sufficient max_width and
- * txt = "Test text\n"
+ * Пример вызовов из lv_text_get_next_line() при достаточном количествеmax_widthи
+ * txt = "Тестовый текст\n"
  *        0123456789
  *
- * Calls would be as follows:
- *     1. Return i=4, pointing at breakchar ' ', for the string "Test"
- *     2. Return i=5, since i=4 was a breakchar.
- *     3. Return i=9, pointing at breakchar '\n'
- *     4. Parenting lv_text_get_next_line() would detect subsequent '\0'
+ * Звонки будут следующими:
+ *     1. Верните i=4, указывая на символ прерывания ' ', для строки "Test"
+ *     2. Верните i=5, так как i=4 был символом прерывания.
+ *     3. Верните i=9, указывая на символ прерывания '\n'
+ *     4. Родительскийlv_text_get_next_line() обнаружит последующий '\0'
  *
- * TODO: Returned word_w_ptr may overestimate the returned word's width when
- * max_width is reached. In current usage, this has no impact.
+ * TODO: Возвращенныйword_w_ptrможет переоценить ширину возвращаемого слова, когда
+ * max_width добился. При нынешнем использовании это не имеет никакого значения.
  *
- * @param txt a '\0' terminated string
- * @param font pointer to a font
- * @param letter_space letter space
- * @param max_width max width of the text (break the lines to fit this size). Set COORD_MAX to avoid line breaks
- * @param flags settings for the text from 'txt_flag_type' enum
- * @param[out] word_w_ptr width (in pixels) of the parsed word. May be NULL.
- * @param cmd_state Pointer to a lv_text_cmd_state_t variable which stored the current state of command processing
- * @return the index of the first char of the next word (in byte index not letter index. With UTF-8 they are different)
+ * @param txt строка, завершающаяся '\0'
+ * @param font указатель на шрифт
+ * @param letter_space буквенное пространство
+ * @param max_width максимальная ширина текста (разорвите строки, чтобы они соответствовали этому размеру). Установите COORD_MAX, чтобы избежать разрывов строк.
+ * @param flags настройки для текста из перечисления 'txt_flag_type'
+ * @param [out] word_w_ptr ширина (в пикселях) анализируемого слова. Может быть NULL.
+ * @param cmd_state Указатель на переменную lv_text_cmd_state_t, в которой хранится текущее состояние обработки команды.
+ * @return индекс первого символа следующего слова (в индексе байта, а не индекса буквы. СUTF-8 они разные)
  */
 static uint32_t lv_text_get_next_word(const char * txt, const lv_font_t * font,
                                       int32_t letter_space, int32_t max_width,
@@ -231,30 +231,30 @@ static uint32_t lv_text_get_next_word(const char * txt, const lv_font_t * font,
 
     if(flag & LV_TEXT_FLAG_EXPAND) max_width = LV_COORD_MAX;
 
-    uint32_t i = 0, i_next = 0, i_next_next = 0;  /*Iterating index into txt*/
-    uint32_t letter = 0;      /*Letter at i*/
-    uint32_t letter_next = 0; /*Letter at i_next*/
+    uint32_t i = 0, i_next = 0, i_next_next = 0;  /*Итерация индекса в txt*/
+    uint32_t letter = 0;      /*Письмо в я*/
+    uint32_t letter_next = 0; /*Письмо на i_next*/
     int32_t letter_w;
-    int32_t cur_w = 0;  /*Pixel Width of traversed string*/
-    uint32_t word_len = 0;   /*Number of characters in the traversed word*/
-    uint32_t break_index = NO_BREAK_FOUND; /*only used for "long" words*/
-    uint32_t break_letter_count = 0; /*Number of characters up to the long word break point*/
+    int32_t cur_w = 0;  /*Пиксель Ширина пройденной строки*/
+    uint32_t word_len = 0;   /*Количество символов в пройденном слове*/
+    uint32_t break_index = NO_BREAK_FOUND; /*используется только для «длинных» слов*/
+    uint32_t break_letter_count = 0; /*Количество символов до точки разрыва длинного слова*/
 
     letter = lv_text_encoded_next(txt, &i_next);
     i_next_next = i_next;
 
-    /*Obtain the full word, regardless if it fits or not in max_width*/
+    /*Получите полное слово, независимо от того, подходит оно или нет в max_width.*/
     while(txt[i] != '\0') {
         letter_next = lv_text_encoded_next(txt, &i_next_next);
         word_len++;
 
-        /*Handle the recolor command*/
+        /*Обработка команды перекрашивания*/
         if((flag & LV_TEXT_FLAG_RECOLOR) != 0) {
             if(lv_text_is_cmd(cmd_state, letter)) {
                 i = i_next;
                 i_next = i_next_next;
                 letter = letter_next;
-                continue;   /*Skip the letter if it is part of a command*/
+                continue;   /*Пропустить букву, если она является частью команды*/
             }
         }
 
@@ -265,32 +265,32 @@ static uint32_t lv_text_get_next_word(const char * txt, const lv_font_t * font,
             cur_w += letter_space;
         }
 
-        /*Test if this character fits within max_width*/
+        /*Проверьте, находится ли этот символ в max_width.*/
         if(break_index == NO_BREAK_FOUND && (cur_w - letter_space) > max_width) {
             break_index = i;
             break_letter_count = word_len - 1;
             if(flag & LV_TEXT_FLAG_BREAK_ALL) {
                 break;
             }
-            /*break_index is now pointing at the character that doesn't fit*/
+            /*break_index теперь указывает на неподходящий символ.*/
         }
 
-        /*Check for new line chars and breakchars*/
+        /*Проверьте наличие новых строк и символов разрыва.*/
         if(letter == '\n' || letter == '\r' || lv_text_is_break_char(letter)) {
-            /*Update the output width on the first character if it fits.
-             *Must do this here in case first letter is a break character.*/
+            /*Обновите выходную ширину первого символа, если она подходит.
+             *Это необходимо сделать здесь, если первая буква является символом разрыва.*/
             if(i == 0 && break_index == NO_BREAK_FOUND && word_w_ptr != NULL) *word_w_ptr = cur_w;
             word_len--;
             break;
         }
         else if(lv_text_is_a_word(letter_next) || lv_text_is_a_word(letter)) {
-            /*Found a word for single letter, usually true for CJK*/
+            /*Нашёл слово для одной буквы, обычно верно для CJK.*/
             *word_w_ptr = cur_w;
             i = i_next;
             break;
         }
 
-        /*Update the output width*/
+        /*Обновить ширину вывода*/
         if(word_w_ptr != NULL && break_index == NO_BREAK_FOUND) *word_w_ptr = cur_w;
 
         i = i_next;
@@ -298,44 +298,44 @@ static uint32_t lv_text_get_next_word(const char * txt, const lv_font_t * font,
         letter = letter_next;
     }
 
-    /*Entire Word fits in the provided space*/
+    /*Все слово помещается в отведенное место*/
     if(break_index == NO_BREAK_FOUND) {
         if(word_len == 0 || (letter == '\r' && letter_next == '\n')) i = i_next;
         return i;
     }
 
 #if LV_TXT_LINE_BREAK_LONG_LEN > 0
-    /*Word doesn't fit in provided space, but isn't "long"*/
+    /*Слово не помещается в отведенное место, но не является «длинным».*/
     if(word_len < LV_TXT_LINE_BREAK_LONG_LEN) {
         if(flag & LV_TEXT_FLAG_BREAK_ALL) return break_index;
-        if(word_w_ptr != NULL) *word_w_ptr = 0; /*Return no word*/
+        if(word_w_ptr != NULL) *word_w_ptr = 0; /*Не возвращайте ни слова*/
         return 0;
     }
 
-    /*Word is "long," but insufficient amounts can fit in provided space*/
+    /*Слово «длинное», но в отведенном месте может поместиться недостаточное количество слов.*/
     if(break_letter_count < LV_TXT_LINE_BREAK_LONG_PRE_MIN_LEN) {
         if(flag & LV_TEXT_FLAG_BREAK_ALL) return break_index;
         if(word_w_ptr != NULL) *word_w_ptr = 0;
         return 0;
     }
 
-    /*Word is a "long", but letters may need to be better distributed*/
+    /*Слово «длинное», но буквы, возможно, нужно лучше распределить.*/
     {
         i = break_index;
         int32_t n_move = LV_TXT_LINE_BREAK_LONG_POST_MIN_LEN - (word_len - break_letter_count);
-        /*Move pointer "i" backwards*/
+        /*Переместить указатель «i» назад*/
         for(; n_move > 0; n_move--) {
             lv_text_encoded_prev(txt, &i);
             /**
-             * TODO: it would be appropriate to update the returned
-             * word width hereHowever, in current usage, this doesn't impact anything.
+             * TODO: было бы целесообразно обновить возвращенный
+             * ширина слова здесьОднако при нынешнем использовании это ни на что не влияет.
              */
         }
     }
     return i;
 #else
     if(flag & LV_TEXT_FLAG_BREAK_ALL) return break_index;
-    if(word_w_ptr != NULL) *word_w_ptr = 0; /*Return no word*/
+    if(word_w_ptr != NULL) *word_w_ptr = 0; /*Не возвращайте ни слова*/
     (void) break_letter_count;
     return 0;
 #endif
@@ -353,16 +353,16 @@ uint32_t lv_text_get_next_line(const char * txt, uint32_t len,
 
     int32_t line_w = 0;
 
-    /*If max_width doesn't matter simply find the new line character
-     *without thinking about word wrapping*/
+    /*Еслиmax_widthне имеет значения, просто найдите символ новой строки.
+     *не думая о переносе слов*/
     if((attributes->text_flags & LV_TEXT_FLAG_EXPAND) ||
        (attributes->text_flags & LV_TEXT_FLAG_FIT)) {
 
         uint32_t i;
         for(i = 0; i < len && txt[i] != '\n' && txt[i] != '\r' && txt[i] != '\0'; i++) {
-            /*Just find the new line chars or string ends by incrementing `i`*/
+            /*Просто найдите новые символы строки или концы строк, увеличив `i`.*/
         }
-        if(i < len && txt[i] != '\0') i++;    /*To go beyond `\n`*/
+        if(i < len && txt[i] != '\0') i++;    /*Чтобы выйти за пределы `\n`*/
         if(used_width) *used_width = -1;
         return i;
     }
@@ -372,7 +372,7 @@ uint32_t lv_text_get_next_line(const char * txt, uint32_t len,
     }
     lv_text_cmd_state_t cmd_state = LV_TEXT_CMD_STATE_WAIT;
 
-    uint32_t i = 0;                                        /*Iterating index into txt*/
+    uint32_t i = 0;                                        /*Итерация индекса в txt*/
     uint32_t max_width = attributes->max_width;
     bool explicit_new_line = false;
 
@@ -399,13 +399,13 @@ uint32_t lv_text_get_next_line(const char * txt, uint32_t len,
         }
 
         if(txt[i] == '\n' || txt[i] == '\r') {
-            i++;  /*Include the following newline in the current line*/
+            i++;  /*Включите следующую новую строку в текущую строку*/
             explicit_new_line = true;
             break;
         }
     }
 
-    /*Always step at least one to avoid infinite loops*/
+    /*Всегда делайте хотя бы один шаг, чтобы избежать бесконечных циклов.*/
     if(i == 0) {
         uint32_t letter = lv_text_encoded_next(txt, &i);
         if(used_width != NULL) {
@@ -417,7 +417,7 @@ uint32_t lv_text_get_next_line(const char * txt, uint32_t len,
         *used_width = line_w;
     }
 
-    /*Skip leading spaces of the next line only for automatic word wrapping*/
+    /*Пропускать начальные пробелы следующей строки только для автоматического переноса слов.*/
     if(!explicit_new_line) {
         while(i < len && txt[i] == ' ') {
             i++;
@@ -460,8 +460,8 @@ int32_t lv_text_get_width(const char * txt, uint32_t length, const lv_font_t * f
         }
 
         if(width > 0) {
-            width -= attributes->letter_space; /*Trim the last letter space. Important if the text is center
-                                      aligned*/
+            width -= attributes->letter_space; /*Обрежьте последний пробел между буквами. Важно, если текст находится по центру
+                                      выровнен*/
         }
     }
 
@@ -477,15 +477,15 @@ void lv_text_ins(char * txt_buf, uint32_t pos, const char * ins_txt)
     if(ins_len == 0) return;
 
     size_t new_len = ins_len + old_len;
-    pos              = lv_text_encoded_get_byte_id(txt_buf, pos); /*Convert to byte index instead of letter index*/
+    pos              = lv_text_encoded_get_byte_id(txt_buf, pos); /*Преобразование в байтовый индекс вместо буквенного индекса*/
 
-    /*Copy the second part into the end to make place to text to insert*/
+    /*Скопируйте вторую часть в конец, чтобы освободить место для текста для вставки.*/
     size_t i;
     for(i = new_len; i >= pos + ins_len; i--) {
         txt_buf[i] = txt_buf[i - ins_len];
     }
 
-    /*Copy the text into the new space*/
+    /*Скопируйте текст в новое место*/
     lv_memcpy(txt_buf + pos, ins_txt, ins_len);
 }
 
@@ -495,10 +495,10 @@ void lv_text_cut(char * txt, uint32_t pos, uint32_t len)
 
     size_t old_len = lv_strlen(txt);
 
-    pos = lv_text_encoded_get_byte_id(txt, pos); /*Convert to byte index instead of letter index*/
+    pos = lv_text_encoded_get_byte_id(txt, pos); /*Преобразование в байтовый индекс вместо буквенного индекса*/
     len = lv_text_encoded_get_byte_id(&txt[pos], len);
 
-    /*Copy the second part into the end to make place to text to insert*/
+    /*Скопируйте вторую часть в конец, чтобы освободить место для текста для вставки.*/
     uint32_t i;
     for(i = pos; i <= old_len - len; i++) {
         txt[i] = txt[i + len];
@@ -507,7 +507,7 @@ void lv_text_cut(char * txt, uint32_t pos, uint32_t len)
 
 char * lv_text_set_text_vfmt(const char * fmt, va_list ap)
 {
-    /*Allocate space for the new text by using trick from C99 standard section 7.19.6.12*/
+    /*Выделите место для нового текста, используя трюк из стандартного раздела C99 7.19.6.12.*/
     va_list ap_copy;
     va_copy(ap_copy, ap);
     uint32_t len = lv_vsnprintf(NULL, 0, fmt, ap_copy);
@@ -515,7 +515,7 @@ char * lv_text_set_text_vfmt(const char * fmt, va_list ap)
 
     char * text = 0;
 #if LV_USE_ARABIC_PERSIAN_CHARS
-    /*Put together the text according to the format string*/
+    /*Соберите текст в соответствии со строкой формата*/
     char * raw_txt = lv_malloc(len + 1);
     LV_ASSERT_MALLOC(raw_txt);
     if(raw_txt == NULL) {
@@ -524,7 +524,7 @@ char * lv_text_set_text_vfmt(const char * fmt, va_list ap)
 
     lv_vsnprintf(raw_txt, len + 1, fmt, ap);
 
-    /*Get the size of the Arabic text and process it*/
+    /*Получите размер арабского текста и обработайте его.*/
     size_t len_ap = lv_text_ap_calc_bytes_count(raw_txt);
     text = lv_malloc(len_ap + 1);
     LV_ASSERT_MALLOC(text);
@@ -559,9 +559,9 @@ void lv_text_encoded_letter_next_2(const char * txt, uint32_t * letter, uint32_t
  ******************************/
 
 /**
- * Give the size of an UTF-8 coded character
- * @param str pointer to a character in a string
- * @return length of the UTF-8 character (1,2,3 or 4), 0 on invalid code.
+ * Укажите размер кодированного символа UTF -8.
+ * @param str указатель на символ в строке
+ * @return длина символаUTF-8 (1,2,3 или 4), 0 для неверного кода.
  */
 static uint8_t lv_text_utf8_size(const char * str)
 {
@@ -577,9 +577,9 @@ static uint8_t lv_text_utf8_size(const char * str)
 }
 
 /**
- * Convert a Unicode letter to UTF-8.
- * @param letter_uni a Unicode letter
- * @return UTF-8 coded character in Little Endian to be compatible with C chars (e.g. 'Á', 'Ű')
+ * Преобразуйте букву Юникода в UTF -8.
+ * @param letter_uni буква Юникода
+ * @return UTF -8 закодированный символ в Little Endian для совместимости с символами C (например, 'Á', 'Ű')
  */
 static uint32_t lv_text_unicode_to_utf8(uint32_t letter_uni)
 {
@@ -613,14 +613,14 @@ static uint32_t lv_text_unicode_to_utf8(uint32_t letter_uni)
 }
 
 /**
- * Convert a wide character, e.g. 'Á' little endian to be UTF-8 compatible
- * @param c a wide character or a  Little endian number
- * @return `c` in big endian
+ * Преобразование широкого символа, например. 'Á' с прямым порядком байтов будет совместим с UTF -8
+ * @param c широкий символ или число с прямым порядком байтов
+ * @return `c` с прямым порядком байтов
  */
 static uint32_t lv_text_utf8_conv_wc(uint32_t c)
 {
 #if LV_BIG_ENDIAN_SYSTEM == 0
-    /*Swap the bytes (UTF-8 is big endian, but the MCUs are little endian)*/
+    /*Поменяйте местами байты ( UTF -8 — с прямым порядком байтов, но у MCU — с прямым порядком байтов)*/
     if((c & 0x80) != 0) {
         uint32_t swapped;
         uint8_t c8[4];
@@ -629,7 +629,7 @@ static uint32_t lv_text_utf8_conv_wc(uint32_t c)
         uint8_t i;
         for(i = 0; i < 4; i++) {
             if((swapped & 0xFF) == 0)
-                swapped = (swapped >> 8); /*Ignore leading zeros (they were in the end originally)*/
+                swapped = (swapped >> 8); /*Игнорировать ведущие нули (они изначально были в конце)*/
         }
         c = swapped;
     }
@@ -638,17 +638,17 @@ static uint32_t lv_text_utf8_conv_wc(uint32_t c)
 }
 
 /**
- * Decode an UTF-8 character from a string.
- * @param txt pointer to '\0' terminated string
- * @param i start byte index in 'txt' where to start.
- *          After call it will point to the next UTF-8 char in 'txt'.
- *          NULL to use txt[0] as index
- * @return the decoded Unicode character or 0 on invalid UTF-8 code
+ * Декодируйте символ UTF -8 из строки.
+ * @param txt указатель на строку, завершающуюся '\0'
+ * @param i Индекс начального байта в «txt», с чего начать.
+ *          После вызова он будет указывать на следующий символ UTF -8 в текстовом формате.
+ *          NULL для использования txt[0] в качестве индекса
+ * @return декодированный символ Юникода или 0 в недопустимом кодеUTF-8
  */
 static uint32_t lv_text_utf8_next(const char * txt, uint32_t * i)
 {
     /**
-     * Unicode to UTF-8
+     * Юникод в UTF -8
      * 00000000 00000000 00000000 0xxxxxxx -> 0xxxxxxx
      * 00000000 00000000 00000yyy yyxxxxxx -> 110yyyyy 10xxxxxx
      * 00000000 00000000 zzzzyyyy yyxxxxxx -> 1110zzzz 10yyyyyy 10xxxxxx
@@ -657,23 +657,23 @@ static uint32_t lv_text_utf8_next(const char * txt, uint32_t * i)
 
     uint32_t result = 0;
 
-    /*Dummy 'i' pointer is required*/
+    /*Требуется фиктивный указатель «i».*/
     uint32_t i_tmp = 0;
     if(i == NULL) i = &i_tmp;
 
-    /* Ensure the string is not null */
+    /* Убедитесь, что строка не равна нулю */
     if(txt == NULL || txt[*i] == '\0') {
         return result;
     }
 
-    /*Normal ASCII*/
+    /*Обычный ASCII*/
     if(LV_IS_ASCII(txt[*i])) {
         result = txt[*i];
         (*i)++;
     }
-    /*Real UTF-8 decode*/
+    /*Настоящее декодирование UTF -8*/
     else {
-        /*2 bytes UTF-8 code*/
+        /*2 байта кода UTF -8*/
         if(LV_IS_2BYTES_UTF8_CODE(txt[*i])) {
             result = (uint32_t)(txt[*i] & 0x1F) << 6;
             (*i)++;
@@ -681,7 +681,7 @@ static uint32_t lv_text_utf8_next(const char * txt, uint32_t * i)
             result += (txt[*i] & 0x3F);
             (*i)++;
         }
-        /*3 bytes UTF-8 code*/
+        /*3 байта кода UTF -8*/
         else if(LV_IS_3BYTES_UTF8_CODE(txt[*i])) {
             result = (uint32_t)(txt[*i] & 0x0F) << 12;
             (*i)++;
@@ -694,7 +694,7 @@ static uint32_t lv_text_utf8_next(const char * txt, uint32_t * i)
             result += (txt[*i] & 0x3F);
             (*i)++;
         }
-        /*4 bytes UTF-8 code*/
+        /*4 байта кода UTF -8*/
         else if(LV_IS_4BYTES_UTF8_CODE(txt[*i])) {
             result = (uint32_t)(txt[*i] & 0x07) << 18;
             (*i)++;
@@ -712,28 +712,28 @@ static uint32_t lv_text_utf8_next(const char * txt, uint32_t * i)
             (*i)++;
         }
         else {
-            (*i)++; /*Not UTF-8 char. Go the next.*/
+            (*i)++; /*Не UTF -8 символов. Иди следующий.*/
         }
     }
     return result;
 }
 
 /**
- * Get previous UTF-8 character form a string.
- * @param txt pointer to '\0' terminated string
- * @param i start byte index in 'txt' where to start. After the call it will point to the previous
- * UTF-8 char in 'txt'.
- * @return the decoded Unicode character or 0 on invalid UTF-8 code
+ * Получить предыдущий символ UTF -8 из строки.
+ * @param txt указатель на строку, завершающуюся '\0'
+ * @param i Индекс начального байта в «txt», с чего начать. После вызова он укажет на предыдущий
+ * UTF -8 символов в формате «txt».
+ * @return декодированный символ Юникода или 0 в недопустимом кодеUTF-8
  */
 static uint32_t lv_text_utf8_prev(const char * txt, uint32_t * i)
 {
     uint8_t c_size;
     uint8_t cnt = 0;
 
-    /*Try to find a !0 long UTF-8 char by stepping one character back*/
+    /*Попробуйте найти длинный символ !0 UTF -8, отойдя на один символ назад.*/
     (*i)--;
     do {
-        if(cnt >= 4) return 0; /*No UTF-8 char found before the initial*/
+        if(cnt >= 4) return 0; /*Перед начальным символом UTF -8 не обнаружено.*/
 
         c_size = lv_text_encoded_size(&txt[*i]);
         if(c_size == 0) {
@@ -746,17 +746,17 @@ static uint32_t lv_text_utf8_prev(const char * txt, uint32_t * i)
     } while(c_size == 0);
 
     uint32_t i_tmp  = *i;
-    uint32_t letter = lv_text_encoded_next(txt, &i_tmp); /*Character found, get it*/
+    uint32_t letter = lv_text_encoded_next(txt, &i_tmp); /*Персонаж найден, получите его*/
 
     return letter;
 }
 
 /**
- * Convert a character index (in an UTF-8 text) to byte index.
- * E.g. in "AÁRT" index of 'R' is 2th char but start at byte 3 because 'Á' is 2 bytes long
- * @param txt a '\0' terminated UTF-8 string
- * @param utf8_id character index
- * @return byte index of the 'utf8_id'th letter
+ * Преобразуйте индекс символа (в тексте UTF -8) в индекс байта.
+ * например в «AÁRT» индекс «R» равен 2-му символу, но начинается с байта 3, поскольку длина «Á» составляет 2 байта.
+ * @param txt строкаUTF-8, завершающаяся '\0'
+ * @param utf8_id индекс символов
+ * @return индекс байта 'utf8_id'-ой буквы
  */
 static uint32_t lv_text_utf8_get_byte_id(const char * txt, uint32_t utf8_id)
 {
@@ -764,7 +764,7 @@ static uint32_t lv_text_utf8_get_byte_id(const char * txt, uint32_t utf8_id)
     uint32_t byte_cnt = 0;
     for(i = 0; i < utf8_id && txt[byte_cnt] != '\0'; i++) {
         uint8_t c_size = lv_text_encoded_size(&txt[byte_cnt]);
-        /* If the char was invalid tell it's 1 byte long*/
+        /* Если символ недействителен, сообщите, что его длина составляет 1 байт.*/
         byte_cnt += c_size ? c_size : 1;
     }
 
@@ -772,11 +772,11 @@ static uint32_t lv_text_utf8_get_byte_id(const char * txt, uint32_t utf8_id)
 }
 
 /**
- * Convert a byte index (in an UTF-8 text) to character index.
- * E.g. in "AÁRT" index of 'R' is 2th char but start at byte 3 because 'Á' is 2 bytes long
- * @param txt a '\0' terminated UTF-8 string
- * @param byte_id byte index
- * @return character index of the letter at 'byte_id'th position
+ * Преобразуйте индекс байта (в тексте UTF -8) в индекс символа.
+ * например в «AÁRT» индекс «R» равен 2-му символу, но начинается с байта 3, поскольку длина «Á» составляет 2 байта.
+ * @param txt строкаUTF-8, завершающаяся '\0'
+ * @param byte_id байтовый индекс
+ * @return индекс символа буквы в 'byte_id'-ой позиции
  */
 static uint32_t lv_text_utf8_get_char_id(const char * txt, uint32_t byte_id)
 {
@@ -784,7 +784,7 @@ static uint32_t lv_text_utf8_get_char_id(const char * txt, uint32_t byte_id)
     uint32_t char_cnt = 0;
 
     while(i < byte_id) {
-        lv_text_encoded_next(txt, &i); /*'i' points to the next letter so use the prev. value*/
+        lv_text_encoded_next(txt, &i); /*«i» указывает на следующую букву, поэтому используйте предыдущую. ценность*/
         char_cnt++;
     }
 
@@ -792,10 +792,10 @@ static uint32_t lv_text_utf8_get_char_id(const char * txt, uint32_t byte_id)
 }
 
 /**
- * Get the number of characters (and NOT bytes) in a string. Decode it with UTF-8 if enabled.
- * E.g.: "ÁBC" is 3 characters (but 4 bytes)
- * @param txt a '\0' terminated char string
- * @return number of characters
+ * Получите количество символов (и байтов NOT) в строке. Декодируйте его с помощью UTF -8, если он включен.
+ * Например: «ABC» — 3 символа (но 4 байта).
+ * @param txt символьная строка, завершающаяся '\0'
+ * @return количество символов
  */
 static uint32_t lv_text_utf8_get_length(const char * txt)
 {
@@ -816,20 +816,20 @@ static uint32_t lv_text_utf8_get_length(const char * txt)
  ******************************/
 
 /**
- * Give the size of an ISO8859-1 coded character
- * @param str pointer to a character in a string
- * @return length of the ISO8859-1 coded character, will be always 1.
+ * Укажите размер кодированного символа ISO8859 -1.
+ * @param str указатель на символ в строке
+ * @return длина кодированного символаISO8859-1 всегда будет равна 1.
  */
 static uint8_t lv_text_iso8859_1_size(const char * str)
 {
-    LV_UNUSED(str); /*Unused*/
+    LV_UNUSED(str); /*Неиспользованный*/
     return 1;
 }
 
 /**
- * Convert a Unicode letter to ISO8859-1.
- * @param letter_uni a Unicode letter
- * @return ISO8859-1 coded character in Little Endian to be compatible with C chars (e.g. 'Á', 'Ű')
+ * Преобразуйте букву Юникода в ISO8859 -1.
+ * @param letter_uni буква Юникода
+ * @return ISO8859 -1 закодированный символ в Little Endian для совместимости с символами C (например, 'Á', 'Ű')
  */
 static uint32_t lv_text_unicode_to_iso8859_1(uint32_t letter_uni)
 {
@@ -840,10 +840,10 @@ static uint32_t lv_text_unicode_to_iso8859_1(uint32_t letter_uni)
 }
 
 /**
- * Convert wide characters to ASCII, however wide characters in ASCII range (e.g. 'A') are ASCII compatible by default.
- * So this function does nothing just returns with `c`.
- * @param c a character, e.g. 'A'
- * @return same as `c`
+ * Преобразуйте широкие символы в ASCII , однако широкие символы в диапазоне ASCII (например, «A») по умолчанию совместимы с ASCII.
+ * Таким образом, эта функция ничего не делает, а просто возвращает `c`.
+ * @param c персонаж, например 'А'
+ * @return то же, что `c`
  */
 static uint32_t lv_text_iso8859_1_conv_wc(uint32_t c)
 {
@@ -851,16 +851,16 @@ static uint32_t lv_text_iso8859_1_conv_wc(uint32_t c)
 }
 
 /**
- * Decode an ISO8859-1 character from a string.
- * @param txt pointer to '\0' terminated string
- * @param i start byte index in 'txt' where to start.
- *          After call it will point to the next ISO8859-1 coded char in 'txt'.
- *          NULL to use txt[0] as index
- * @return the decoded ISO8859-1 character.
+ * Декодируйте символ ISO8859 -1 из строки.
+ * @param txt указатель на строку, завершающуюся '\0'
+ * @param i Индекс начального байта в «txt», с чего начать.
+ *          После вызова он будет следовать далее закодированный символISO8859-1 в формате «txt».
+ *          NULL для использования txt[0] в качестве индекса
+ * @return декодированный символISO8859-1.
  */
 static uint32_t lv_text_iso8859_1_next(const char * txt, uint32_t * i)
 {
-    if(i == NULL) return txt[0]; /*Get the next char*/
+    if(i == NULL) return txt[0]; /*Получить следующий символ*/
 
     uint8_t letter = txt[*i];
     (*i)++;
@@ -868,14 +868,14 @@ static uint32_t lv_text_iso8859_1_next(const char * txt, uint32_t * i)
 }
 
 /**
- * Get previous ISO8859-1 character form a string.
- * @param txt pointer to '\0' terminated string
- * @param i start byte index in 'txt' where to start. After the call it will point to the previous ISO8859-1 coded char in 'txt'.
- * @return the decoded ISO8859-1 character.
+ * Получить предыдущий символ ISO8859 -1 из строки.
+ * @param txt указатель на строку, завершающуюся '\0'
+ * @param i Индекс начального байта в «txt», с чего начать. После вызова он будет указывать на предыдущий закодированный символISO8859-1 в «txt».
+ * @return декодированный символISO8859-1.
  */
 static uint32_t lv_text_iso8859_1_prev(const char * txt, uint32_t * i)
 {
-    if(i == NULL) return *(txt - 1); /*Get the prev. char*/
+    if(i == NULL) return *(txt - 1); /*Получите пред. голец*/
 
     (*i)--;
     uint8_t letter = txt[*i];
@@ -884,36 +884,36 @@ static uint32_t lv_text_iso8859_1_prev(const char * txt, uint32_t * i)
 }
 
 /**
- * Convert a character index (in an ISO8859-1 text) to byte index.
- * The ISO8859-1 encoding is compatible with ASCII so the indices of characters is the same as the indices of bytes.
- * @param txt a '\0' terminated char string
- * @param utf8_id character index
- * @return byte index of the 'utf8_id'th letter
+ * Преобразуйте индекс символа (в тексте ISO8859 -1) в индекс байта.
+ * Кодировка ISO8859 -1 совместима с ASCII, поэтому индексы символов совпадают с индексами байтов.
+ * @param txt символьная строка, завершающаяся '\0'
+ * @param utf8_id индекс символов
+ * @return индекс байта 'utf8_id'-ой буквы
  */
 static uint32_t lv_text_iso8859_1_get_byte_id(const char * txt, uint32_t utf8_id)
 {
-    LV_UNUSED(txt); /*Unused*/
-    return utf8_id; /*In Non encoded no difference*/
+    LV_UNUSED(txt); /*Неиспользованный*/
+    return utf8_id; /*В некодированном состоянии нет разницы*/
 }
 
 /**
- * Convert a byte index (in an ISO8859-1 text) to character index.
- * The ISO8859-1 encoding is compatible with ASCII so the indices of characters is the same as the indices of bytes.
- * @param txt a '\0' terminated char string
- * @param byte_id byte index
- * @return character index of the letter at 'byte_id'th position
+ * Преобразуйте индекс байта (в тексте ISO8859 -1) в индекс символа.
+ * Кодировка ISO8859 -1 совместима с ASCII, поэтому индексы символов совпадают с индексами байтов.
+ * @param txt символьная строка, завершающаяся '\0'
+ * @param byte_id байтовый индекс
+ * @return индекс символа буквы в 'byte_id'-ой позиции
  */
 static uint32_t lv_text_iso8859_1_get_char_id(const char * txt, uint32_t byte_id)
 {
-    LV_UNUSED(txt); /*Unused*/
-    return byte_id; /*In Non encoded no difference*/
+    LV_UNUSED(txt); /*Неиспользованный*/
+    return byte_id; /*В некодированном состоянии нет разницы*/
 }
 
 /**
- * Get the number of characters (and NOT bytes) in a string.
- * The ISO8859-1 encoding is compatible with ASCII so the number of characters is the same as the number of bytes.
- * @param txt a '\0' terminated char string
- * @return number of characters
+ * Получите количество символов (и байтов NOT) в строке.
+ * Кодировка ISO8859 -1 совместима с ASCII, поэтому количество символов равно количеству байтов.
+ * @param txt символьная строка, завершающаяся '\0'
+ * @return количество символов
  */
 static uint32_t lv_text_iso8859_1_get_length(const char * txt)
 {

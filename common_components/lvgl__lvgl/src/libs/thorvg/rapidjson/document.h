@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_DOCUMENT_H_
 #define RAPIDJSON_DOCUMENT_H_
@@ -22,7 +22,7 @@
 #include "internal/strfunc.h"
 #include "memorystream.h"
 #include "encodedstream.h"
-#include <new>      // placement new
+#include <new>      // размещение новое
 #include <limits>
 #ifdef __cpp_lib_three_way_comparison
 #include <compare>
@@ -34,8 +34,8 @@ RAPIDJSON_DIAG_OFF(padded)
 RAPIDJSON_DIAG_OFF(switch-enum)
 RAPIDJSON_DIAG_OFF(c++98-compat)
 #elif defined(_MSC_VER)
-RAPIDJSON_DIAG_OFF(4127) // conditional expression is constant
-RAPIDJSON_DIAG_OFF(4244) // conversion from kXxxFlags to 'uint16_t', possible loss of data
+RAPIDJSON_DIAG_OFF(4127) // условное выражение является константой
+RAPIDJSON_DIAG_OFF(4244) // преобразование из kXxxFlags в 'uint16_t', возможна потеря данных
 #endif
 
 #ifdef __GNUC__
@@ -43,9 +43,9 @@ RAPIDJSON_DIAG_OFF(effc++)
 #endif // __GNUC__
 
 #ifdef GetObject
-// see https://github.com/Tencent/rapidjson/issues/1448
-// a former included windows.h might have defined a macro called GetObject, which affects
-// GetObject defined here. This ensures the macro does not get applied
+// см. https://github.com/Tencent/rapidjson/issues/1448
+// предыдущий включенный windows.h мог определять макрос GetObject, который влияет
+// GetObject определен здесь. Это гарантирует, что макрос не будет применен.
 #pragma push_macro("GetObject")
 #define RAPIDJSON_WINDOWS_GETOBJECT_WORKAROUND_APPLIED
 #undef GetObject
@@ -56,12 +56,12 @@ RAPIDJSON_DIAG_OFF(effc++)
 #endif
 
 #if RAPIDJSON_USE_MEMBERSMAP
-#include <map> // std::multimap
+#include <map> // станд::мультимап
 #endif
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-// Forward declaration.
+// Форвардное заявление.
 template <typename Encoding, typename Allocator>
 class GenericValue;
 
@@ -70,9 +70,9 @@ class GenericDocument;
 
 /*! \def RAPIDJSON_DEFAULT_ALLOCATOR
     \ingroup RAPIDJSON_CONFIG
-    \brief Allows to choose default allocator.
+    \brief Позволяет выбрать распределитель по умолчанию.
 
-    User can define this to use CrtAllocator or MemoryPoolAllocator.
+    Пользователь может определить это для использования CrtAllocator или MemoryPoolAllocator.
 */
 #ifndef RAPIDJSON_DEFAULT_ALLOCATOR
 #define RAPIDJSON_DEFAULT_ALLOCATOR ::RAPIDJSON_NAMESPACE::MemoryPoolAllocator<::RAPIDJSON_NAMESPACE::CrtAllocator>
@@ -80,9 +80,9 @@ class GenericDocument;
 
 /*! \def RAPIDJSON_DEFAULT_STACK_ALLOCATOR
     \ingroup RAPIDJSON_CONFIG
-    \brief Allows to choose default stack allocator for Document.
+    \brief Позволяет выбрать распределитель стека по умолчанию для документа.
 
-    User can define this to use CrtAllocator or MemoryPoolAllocator.
+    Пользователь может определить это для использования CrtAllocator или MemoryPoolAllocator.
 */
 #ifndef RAPIDJSON_DEFAULT_STACK_ALLOCATOR
 #define RAPIDJSON_DEFAULT_STACK_ALLOCATOR ::RAPIDJSON_NAMESPACE::CrtAllocator
@@ -90,54 +90,54 @@ class GenericDocument;
 
 /*! \def RAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY
     \ingroup RAPIDJSON_CONFIG
-    \brief User defined kDefaultObjectCapacity value.
+    \brief Определяемое пользователем значение kDefaultObjectCapacity.
 
-    User can define this as any natural number.
+    Пользователь может определить это как любое натуральное число.
 */
 #ifndef RAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY
-// number of objects that rapidjson::Value allocates memory for by default
+// количество объектов, для которых Rapidjson::Value выделяет память по умолчанию
 #define RAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY 16
 #endif
 
 /*! \def RAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY
     \ingroup RAPIDJSON_CONFIG
-    \brief User defined kDefaultArrayCapacity value.
+    \brief Определяемое пользователем значение kDefaultArrayCapacity.
 
-    User can define this as any natural number.
+    Пользователь может определить это как любое натуральное число.
 */
 #ifndef RAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY
-// number of array elements that rapidjson::Value allocates memory for by default
+// количество элементов массива, для которых Rapidjson::Value выделяет память по умолчанию
 #define RAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY 16
 #endif
 
-//! Name-value pair in a JSON object value.
+//! Пара имя-значение в значении объекта JSON.
 /*!
-    This class was internal to GenericValue. It used to be a inner struct.
-    But a compiler (IBM XL C/C++ for AIX) have reported to have problem with that so it moved as a namespace scope struct.
+    Этот класс был внутренним для GenericValue. Раньше это была внутренняя структура.
+    Но компилятор ( IBM XL C/C++ для AIX ) сообщил о проблеме с этим, поэтому он был перемещен как структура области пространства имен.
     https://code.google.com/p/rapidjson/issues/detail?id=64
 */
 template <typename Encoding, typename Allocator>
 class GenericMember {
 public:
-    GenericValue<Encoding, Allocator> name;     //!< name of member (must be a string)
-    GenericValue<Encoding, Allocator> value;    //!< value of member.
+    GenericValue<Encoding, Allocator> name;     //!< имя участника (должно быть строкой)
+    GenericValue<Encoding, Allocator> value;    //!< значение члена.
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-    //! Move constructor in C++11
+    //! Переместить конструктор в C++11
     GenericMember(GenericMember&& rhs) RAPIDJSON_NOEXCEPT
         : name(std::move(rhs.name)),
           value(std::move(rhs.value))
     {
     }
 
-    //! Move assignment in C++11
+    //! Переместить назначение в C++11
     GenericMember& operator=(GenericMember&& rhs) RAPIDJSON_NOEXCEPT {
         return *this = static_cast<GenericMember&>(rhs);
     }
 #endif
 
-    //! Assignment with move semantics.
-    /*! \param rhs Source of the assignment. Its name and value will become a null value after assignment.
+    //! Задание с семантикой перемещения.
+    /*! \param rhs Источник задания. Его имя и значение после присвоения станут нулевым значением.
     */
     GenericMember& operator=(GenericMember& rhs) RAPIDJSON_NOEXCEPT {
         if (RAPIDJSON_LIKELY(this != &rhs)) {
@@ -147,14 +147,14 @@ public:
         return *this;
     }
 
-    // swap() for std::sort() and other potential use in STL.
+    // swap() для std::sort() и другое потенциальное использование в STL.
     friend inline void swap(GenericMember& a, GenericMember& b) RAPIDJSON_NOEXCEPT {
         a.name.Swap(b.name);
         a.value.Swap(b.value);
     }
 
 private:
-    //! Copy constructor is not permitted.
+    //! Копирование конструктора не разрешено.
     GenericMember(const GenericMember& rhs);
 };
 
@@ -163,24 +163,24 @@ private:
 
 #ifndef RAPIDJSON_NOMEMBERITERATORCLASS
 
-//! (Constant) member iterator for a JSON object value
+//! (Константный) итератор-член для значения объекта JSON
 /*!
     \tparam Const Is this a constant iterator?
-    \tparam Encoding    Encoding of the value. (Even non-string values need to have the same encoding in a document)
-    \tparam Allocator   Allocator type for allocating memory of object, array and string.
+    \tparam Кодировка Кодировка значения. (Даже нестроковые значения должны иметь одинаковую кодировку в документе)
+    \tparam Allocator Тип распределителя для выделения памяти для объекта, массива и строки.
 
-    This class implements a Random Access Iterator for GenericMember elements
-    of a GenericValue, see ISO/IEC 14882:2003(E) C++ standard, 24.1 [lib.iterator.requirements].
+    Этот класс реализует итератор произвольного доступа для элементов GenericMember.
+    GenericValue см. в разделе ISO/IEC 14882:2003(E) стандарт C++, 24.1 [lib.iterator.requirements].
 
-    \note This iterator implementation is mainly intended to avoid implicit
-        conversions from iterator values to \c NULL,
-        e.g. from GenericValue::FindMember.
+    \note Эта реализация итератора в основном предназначена для того, чтобы избежать неявного
+        преобразования значений итератора в \c NULL ,
+        например из GenericValue::FindMember.
 
-    \note Define \c RAPIDJSON_NOMEMBERITERATORCLASS to fall back to a
-        pointer-based implementation, if your platform doesn't provide
-        the C++ <iterator> header.
+    \note Определите \c RAPIDJSON_NOMEMBERITERATORCLASS, чтобы вернуться к
+        реализация на основе указателей, если ваша платформа не предоставляет
+        заголовок <итератор> C++.
 
-    \see GenericMember, GenericValue::MemberIterator, GenericValue::ConstMemberIterator
+    \см. GenericMember, GenericValue::MemberIterator, GenericValue::ConstMemberIterator
  */
 template <bool Const, typename Encoding, typename Allocator>
 class GenericMemberIterator {
@@ -192,14 +192,14 @@ class GenericMemberIterator {
     typedef typename internal::MaybeAddConst<Const,PlainType>::Type ValueType;
 
 public:
-    //! Iterator type itself
+    //! Тип итератора сам по себе
     typedef GenericMemberIterator Iterator;
-    //! Constant iterator type
+    //! Тип постоянного итератора
     typedef GenericMemberIterator<true,Encoding,Allocator>  ConstIterator;
-    //! Non-constant iterator type
+    //! Непостоянный тип итератора
     typedef GenericMemberIterator<false,Encoding,Allocator> NonConstIterator;
 
-    /** \name std::iterator_traits support */
+    /** \name std:: Поддержка iterator_traits */
     //@{
     typedef ValueType      value_type;
     typedef ValueType *    pointer;
@@ -208,39 +208,39 @@ public:
     typedef std::random_access_iterator_tag iterator_category;
     //@}
 
-    //! Pointer to (const) GenericMember
+    //! Указатель на (const) GenericMember
     typedef pointer         Pointer;
-    //! Reference to (const) GenericMember
+    //! Ссылка на (const) GenericMember
     typedef reference       Reference;
-    //! Signed integer type (e.g. \c ptrdiff_t)
+    //! Целочисленный тип со знаком (например, \c ptrdiff_t )
     typedef difference_type DifferenceType;
 
-    //! Default constructor (singular value)
-    /*! Creates an iterator pointing to no element.
-        \note All operations, except for comparisons, are undefined on such values.
+    //! Конструктор по умолчанию (единственное значение)
+    /*! Создает итератор, не указывающий ни на один элемент.
+        \note Все операции, кроме сравнения, для таких значений не определены.
      */
     GenericMemberIterator() : ptr_() {}
 
-    //! Iterator conversions to more const
+    //! Преобразования итераторов в более константные
     /*!
-        \param it (Non-const) iterator to copy from
+        \param it (неконстантный) итератор для копирования
 
-        Allows the creation of an iterator from another GenericMemberIterator
-        that is "less const".  Especially, creating a non-constant iterator
-        from a constant iterator are disabled:
-        \li const -> non-const (not ok)
-        \li const -> const (ok)
-        \li non-const -> const (ok)
-        \li non-const -> non-const (ok)
+        Позволяет создавать итератор из другого GenericMemberIterator.
+        это «меньше константы».  В частности, создание непостоянного итератора
+        из постоянного итератора отключены:
+        \li const -> неконстантный (не ок)
+        \li const -> const (ок)
+        \li неконстантный -> константный (ок)
+        \li неконстантный -> неконстантный (ок)
 
-        \note If the \c Const template parameter is already \c false, this
-            constructor effectively defines a regular copy-constructor.
-            Otherwise, the copy constructor is implicitly defined.
+        \note Если параметр шаблона \c Const уже имеет значение \c false, это
+            Конструктор фактически определяет обычный конструктор-копию.
+            В противном случае конструктор копирования определяется неявно.
     */
     GenericMemberIterator(const NonConstIterator & it) : ptr_(it.ptr_) {}
     Iterator& operator=(const NonConstIterator & it) { ptr_ = it.ptr_; return *this; }
 
-    //! @name stepping
+    //!  @name степпинг
     //@{
     Iterator& operator++(){ ++ptr_; return *this; }
     Iterator& operator--(){ --ptr_; return *this; }
@@ -248,7 +248,7 @@ public:
     Iterator  operator--(int){ Iterator old(*this); --ptr_; return old; }
     //@}
 
-    //! @name increment/decrement
+    //!  @name приращение/уменьшение
     //@{
     Iterator operator+(DifferenceType n) const { return Iterator(ptr_+n); }
     Iterator operator-(DifferenceType n) const { return Iterator(ptr_-n); }
@@ -257,7 +257,7 @@ public:
     Iterator& operator-=(DifferenceType n) { ptr_-=n; return *this; }
     //@}
 
-    //! @name relations
+    //!  @name отношения
     //@{
     template <bool Const_> bool operator==(const GenericMemberIterator<Const_, Encoding, Allocator>& that) const { return ptr_ == that.ptr_; }
     template <bool Const_> bool operator!=(const GenericMemberIterator<Const_, Encoding, Allocator>& that) const { return ptr_ != that.ptr_; }
@@ -271,42 +271,42 @@ public:
 #endif
     //@}
 
-    //! @name dereference
+    //!  Разыменование @name
     //@{
     Reference operator*() const { return *ptr_; }
     Pointer   operator->() const { return ptr_; }
     Reference operator[](DifferenceType n) const { return ptr_[n]; }
     //@}
 
-    //! Distance
+    //! Расстояние
     DifferenceType operator-(ConstIterator that) const { return ptr_-that.ptr_; }
 
 private:
-    //! Internal constructor from plain pointer
+    //! Внутренний конструктор из простого указателя
     explicit GenericMemberIterator(Pointer p) : ptr_(p) {}
 
-    Pointer ptr_; //!< raw pointer
+    Pointer ptr_; //!< необработанный указатель
 };
 
 #else // RAPIDJSON_NOMEMBERITERATORCLASS
 
-// class-based member iterator implementation disabled, use plain pointers
+// реализация итератора членов на основе класса отключена, используйте простые указатели
 
 template <bool Const, typename Encoding, typename Allocator>
 class GenericMemberIterator;
 
-//! non-const GenericMemberIterator
+//! неконстантный GenericMemberIterator
 template <typename Encoding, typename Allocator>
 class GenericMemberIterator<false,Encoding,Allocator> {
 public:
-    //! use plain pointer as iterator type
+    //! используйте простой указатель в качестве типа итератора
     typedef GenericMember<Encoding,Allocator>* Iterator;
 };
 //! const GenericMemberIterator
 template <typename Encoding, typename Allocator>
 class GenericMemberIterator<true,Encoding,Allocator> {
 public:
-    //! use plain const pointer as iterator type
+    //! используйте простой константный указатель в качестве типа итератора
     typedef const GenericMember<Encoding,Allocator>* Iterator;
 };
 
@@ -315,97 +315,97 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 // GenericStringRef
 
-//! Reference to a constant string (not taking a copy)
+//! Ссылка на константную строку (без копирования)
 /*!
-    \tparam CharType character type of the string
+    \tparam CharType тип символа строки
 
-    This helper class is used to automatically infer constant string
-    references for string literals, especially from \c const \b (!)
-    character arrays.
+    Этот вспомогательный класс используется для автоматического вывода постоянной строки.
+    ссылки на строковые литералы, особенно из \c const \b (!)
+    массивы символов.
 
-    The main use is for creating JSON string values without copying the
-    source string via an \ref Allocator.  This requires that the referenced
-    string pointers have a sufficient lifetime, which exceeds the lifetime
-    of the associated GenericValue.
+    Основное использование — создание строковых значений JSON без копирования
+    исходная строка через распределитель \ref.  Для этого необходимо, чтобы упомянутый
+    строковые указатели имеют достаточное время жизни, которое превышает время жизни
+    связанного GenericValue.
 
-    \b Example
+    \b Пример
     \code
-    Value v("foo");   // ok, no need to copy & calculate length
+    Значение v("foo");   // ок, не нужно копировать и вычислять длину
     const char foo[] = "foo";
-    v.SetString(foo); // ok
+    v.SetString(фу); // ок
 
     const char* bar = foo;
-    // Value x(bar); // not ok, can't rely on bar's lifetime
-    Value x(StringRef(bar)); // lifetime explicitly guaranteed by user
-    Value y(StringRef(bar, 3));  // ok, explicitly pass length
+    // Значение х(бар); // не ок, нельзя полагаться на время жизни бара
+    Значение x(StringRef(bar)); // время жизни явно гарантировано пользователем
+    Значение y(StringRef(bar, 3));  // ок, явно передаем длину
     \endcode
 
-    \see StringRef, GenericValue::SetString
+    \см. StringRef, GenericValue::SetString
 */
 template<typename CharType>
 struct GenericStringRef {
-    typedef CharType Ch; //!< character type of the string
+    typedef CharType Ch; //!< тип символа строки
 
-    //! Create string reference from \c const character array
-#ifndef __clang__ // -Wdocumentation
+    //! Создать ссылку на строку из массива символов \c const
+#ifndef __clang__ // -Документация
     /*!
-        This constructor implicitly creates a constant string reference from
-        a \c const character array.  It has better performance than
-        \ref StringRef(const CharType*) by inferring the string \ref length
-        from the array length, and also supports strings containing null
-        characters.
+        Этот конструктор неявно создает ссылку на константную строку из
+        константный массив символов \c.  Он имеет лучшую производительность, чем
+        \ref StringRef(const CharType*) путем определения длины строки \ref
+        от длины массива, а также поддерживает строки, содержащие ноль
+        персонажи.
 
-        \tparam N length of the string, automatically inferred
+        \tparam N длина строки, определяемая автоматически
 
-        \param str Constant character array, lifetime assumed to be longer
-            than the use of the string in e.g. a GenericValue
+        \param str Постоянный массив символов, предполагается, что время жизни больше
+            чем использование строки, например. универсальное значение
 
-        \post \ref s == str
+        \post \ref s == ул
 
-        \note Constant complexity.
-        \note There is a hidden, private overload to disallow references to
-            non-const character arrays to be created via this constructor.
-            By this, e.g. function-scope arrays used to be filled via
-            \c snprintf are excluded from consideration.
-            In such cases, the referenced string should be \b copied to the
-            GenericValue instead.
+        \note Постоянная сложность.
+        \note Существует скрытая частная перегрузка, запрещающая ссылки на
+            неконстантные массивы символов, которые будут созданы с помощью этого конструктора.
+            При этом, напр. Массивы области функций раньше заполнялись через
+            \c snprintf исключены из рассмотрения.
+            В таких случаях указанную строку следует скопировать \b в файл
+            Вместо этого GenericValue.
      */
 #endif
     template<SizeType N>
     GenericStringRef(const CharType (&str)[N]) RAPIDJSON_NOEXCEPT
         : s(str), length(N-1) {}
 
-    //! Explicitly create string reference from \c const character pointer
-#ifndef __clang__ // -Wdocumentation
+    //! Явно создать ссылку на строку из указателя символа \c const
+#ifndef __clang__ // -Документация
     /*!
-        This constructor can be used to \b explicitly  create a reference to
-        a constant string pointer.
+        Этот конструктор можно использовать для явного создания ссылки на \b.
+        постоянный указатель строки.
 
         \see StringRef(const CharType*)
 
-        \param str Constant character pointer, lifetime assumed to be longer
-            than the use of the string in e.g. a GenericValue
+        \param str Указатель постоянного символа, предполагается, что время жизни больше
+            чем использование строки, например. универсальное значение
 
-        \post \ref s == str
+        \post \ref s == ул
 
-        \note There is a hidden, private overload to disallow references to
-            non-const character arrays to be created via this constructor.
-            By this, e.g. function-scope arrays used to be filled via
-            \c snprintf are excluded from consideration.
-            In such cases, the referenced string should be \b copied to the
-            GenericValue instead.
+        \note Существует скрытая частная перегрузка, запрещающая ссылки на
+            неконстантные массивы символов, которые будут созданы с помощью этого конструктора.
+            При этом, напр. Массивы области функций раньше заполнялись через
+            \c snprintf исключены из рассмотрения.
+            В таких случаях указанную строку следует скопировать \b в файл
+            Вместо этого GenericValue.
      */
 #endif
     explicit GenericStringRef(const CharType* str)
         : s(str), length(NotNullStrLen(str)) {}
 
-    //! Create constant string reference from pointer and length
-#ifndef __clang__ // -Wdocumentation
-    /*! \param str constant string, lifetime assumed to be longer than the use of the string in e.g. a GenericValue
-        \param len length of the string, excluding the trailing NULL terminator
+    //! Создать постоянную ссылку на строку из указателя и длины
+#ifndef __clang__ // -Документация
+    /*! \param str константная строка, предполагается, что время жизни больше, чем использование строки, например. универсальное значение
+        \param len длина строки, исключая завершающий терминатор NULL
 
         \post \ref s == str && \ref length == len
-        \note Constant complexity.
+        \note Постоянная сложность.
      */
 #endif
     GenericStringRef(const CharType* str, SizeType len)
@@ -413,11 +413,11 @@ struct GenericStringRef {
 
     GenericStringRef(const GenericStringRef& rhs) : s(rhs.s), length(rhs.length) {}
 
-    //! implicit conversion to plain CharType pointer
+    //! неявное преобразование в простой указатель CharType
     operator const Ch *() const { return s; }
 
-    const Ch* const s; //!< plain CharType pointer
-    const SizeType length; //!< length of the string (excluding the trailing NULL terminator)
+    const Ch* const s; //!< простой указатель CharType
+    const SizeType length; //!< длина строки (исключая завершающий терминатор NULL)
 
 private:
     SizeType NotNullStrLen(const CharType* str) {
@@ -425,27 +425,27 @@ private:
         return internal::StrLen(str);
     }
 
-    /// Empty string - used when passing in a NULL pointer
+    /// Пустая строка — используется при передаче указателя NULL.
     static const Ch emptyString[];
 
-    //! Disallow construction from non-const array
+    //! Запретить построение из неконстантного массива
     template<SizeType N>
-    GenericStringRef(CharType (&str)[N]) /* = delete */;
-    //! Copy assignment operator not permitted - immutable type
-    GenericStringRef& operator=(const GenericStringRef& rhs) /* = delete */;
+    GenericStringRef(CharType (&str)[N]) /* = удалить */;
+    //! Копировать оператор присваивания не разрешено — неизменяемый тип
+    GenericStringRef& operator=(const GenericStringRef& rhs) /* = удалить */;
 };
 
 template<typename CharType>
 const CharType GenericStringRef<CharType>::emptyString[] = { CharType() };
 
-//! Mark a character pointer as constant string
-/*! Mark a plain character pointer as a "string literal".  This function
-    can be used to avoid copying a character string to be referenced as a
-    value in a JSON GenericValue object, if the string's lifetime is known
-    to be valid long enough.
-    \tparam CharType Character type of the string
-    \param str Constant string, lifetime assumed to be longer than the use of the string in e.g. a GenericValue
-    \return GenericStringRef string reference object
+//! Пометить указатель символа как константную строку
+/*! Пометьте простой указатель символа как «строковый литерал».  Эта функция
+    можно использовать, чтобы избежать копирования строки символов, на которую будет ссылаться как на
+    значение в объекте JSON GenericValue, если известно время жизни строки
+    быть действительным достаточно долго.
+    \tparam CharType Тип символа строки
+    \param str Константная строка, срок жизни которой предполагается больше, чем использование строки, например. универсальное значение
+    \return Объект ссылки на строку GenericStringRef
     \relatesalso GenericStringRef
 
     \see GenericValue::GenericValue(StringRefType), GenericValue::operator=(StringRefType), GenericValue::SetString(StringRefType), GenericValue::PushBack(StringRefType, Allocator&), GenericValue::AddMember
@@ -455,19 +455,19 @@ inline GenericStringRef<CharType> StringRef(const CharType* str) {
     return GenericStringRef<CharType>(str);
 }
 
-//! Mark a character pointer as constant string
-/*! Mark a plain character pointer as a "string literal".  This function
-    can be used to avoid copying a character string to be referenced as a
-    value in a JSON GenericValue object, if the string's lifetime is known
-    to be valid long enough.
+//! Пометить указатель символа как константную строку
+/*! Пометьте простой указатель символа как «строковый литерал».  Эта функция
+    можно использовать, чтобы избежать копирования строки символов, на которую будет ссылаться как на
+    значение в объекте JSON GenericValue, если известно время жизни строки
+    быть действительным достаточно долго.
 
-    This version has better performance with supplied length, and also
-    supports string containing null characters.
+    Эта версия имеет лучшую производительность при указанной длине, а также
+    поддерживает строку, содержащую нулевые символы.
 
-    \tparam CharType character type of the string
-    \param str Constant string, lifetime assumed to be longer than the use of the string in e.g. a GenericValue
-    \param length The length of source string.
-    \return GenericStringRef string reference object
+    \tparam CharType тип символа строки
+    \param str Константная строка, срок жизни которой предполагается больше, чем использование строки, например. универсальное значение
+    \param length Длина исходной строки.
+    \return Объект ссылки на строку GenericStringRef
     \relatesalso GenericStringRef
 */
 template<typename CharType>
@@ -476,17 +476,17 @@ inline GenericStringRef<CharType> StringRef(const CharType* str, size_t length) 
 }
 
 #if RAPIDJSON_HAS_STDSTRING
-//! Mark a string object as constant string
-/*! Mark a string object (e.g. \c std::string) as a "string literal".
-    This function can be used to avoid copying a string to be referenced as a
-    value in a JSON GenericValue object, if the string's lifetime is known
-    to be valid long enough.
+//! Пометить строковый объект как константную строку
+/*! Отметьте строковый объект (например, \c std::string) как «строковый литерал».
+    Эту функцию можно использовать, чтобы избежать копирования строки, на которую будет ссылаться как на
+    значение в объекте JSON GenericValue, если известно время жизни строки
+    быть действительным достаточно долго.
 
-    \tparam CharType character type of the string
-    \param str Constant string, lifetime assumed to be longer than the use of the string in e.g. a GenericValue
-    \return GenericStringRef string reference object
+    \tparam CharType тип символа строки
+    \param str Константная строка, срок жизни которой предполагается больше, чем использование строки, например. универсальное значение
+    \return Объект ссылки на строку GenericStringRef
     \relatesalso GenericStringRef
-    \note Requires the definition of the preprocessor symbol \ref RAPIDJSON_HAS_STDSTRING.
+    \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
 */
 template<typename CharType>
 inline GenericStringRef<CharType> StringRef(const std::basic_string<CharType>& str) {
@@ -495,23 +495,23 @@ inline GenericStringRef<CharType> StringRef(const std::basic_string<CharType>& s
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// GenericValue type traits
+// Признаки типа GenericValue
 namespace internal {
 
 template <typename T, typename Encoding = void, typename Allocator = void>
 struct IsGenericValueImpl : FalseType {};
 
-// select candidates according to nested encoding and allocator types
+// выбирать кандидатов в соответствии с вложенными типами кодировки и распределителя
 template <typename T> struct IsGenericValueImpl<T, typename Void<typename T::EncodingType>::Type, typename Void<typename T::AllocatorType>::Type>
     : IsBaseOf<GenericValue<typename T::EncodingType, typename T::AllocatorType>, T>::Type {};
 
-// helper to match arbitrary GenericValue instantiations, including derived classes
+// помощник для сопоставления произвольных экземпляров GenericValue, включая производные классы
 template <typename T> struct IsGenericValue : IsGenericValueImpl<T>::Type {};
 
-} // namespace internal
+} // внутреннее пространство имен
 
 ///////////////////////////////////////////////////////////////////////////////
-// TypeHelper
+// ТипПомощник
 
 namespace internal {
 
@@ -645,77 +645,77 @@ struct TypeHelper<ValueType, typename ValueType::ConstObject> {
     static ObjectType Get(const ValueType& v) { return v.GetObject(); }
 };
 
-} // namespace internal
+} // внутреннее пространство имен
 
-// Forward declarations
+// Форвардные декларации
 template <bool, typename> class GenericArray;
 template <bool, typename> class GenericObject;
 
 ///////////////////////////////////////////////////////////////////////////////
 // GenericValue
 
-//! Represents a JSON value. Use Value for UTF8 encoding and default allocator.
+//! Представляет значение JSON. Используйте Value для кодировки UTF8 и распределителя по умолчанию.
 /*!
-    A JSON value can be one of 7 types. This class is a variant type supporting
-    these types.
+    Значение JSON может быть одного из 7 типов. Этот класс представляет собой вариантный тип, поддерживающий
+    эти типы.
 
-    Use the Value if UTF8 and default allocator
+    Используйте значение if UTF8 и распределитель по умолчанию.
 
-    \tparam Encoding    Encoding of the value. (Even non-string values need to have the same encoding in a document)
-    \tparam Allocator   Allocator type for allocating memory of object, array and string.
+    \tparam Кодировка Кодировка значения. (Даже нестроковые значения должны иметь одинаковую кодировку в документе)
+    \tparam Allocator Тип распределителя для выделения памяти для объекта, массива и строки.
 */
 template <typename Encoding, typename Allocator = RAPIDJSON_DEFAULT_ALLOCATOR >
 class GenericValue {
 public:
-    //! Name-value pair in an object.
+    //! Пара имя-значение в объекте.
     typedef GenericMember<Encoding, Allocator> Member;
-    typedef Encoding EncodingType;                  //!< Encoding type from template parameter.
-    typedef Allocator AllocatorType;                //!< Allocator type from template parameter.
-    typedef typename Encoding::Ch Ch;               //!< Character type derived from Encoding.
-    typedef GenericStringRef<Ch> StringRefType;     //!< Reference to a constant string
-    typedef typename GenericMemberIterator<false,Encoding,Allocator>::Iterator MemberIterator;  //!< Member iterator for iterating in object.
-    typedef typename GenericMemberIterator<true,Encoding,Allocator>::Iterator ConstMemberIterator;  //!< Constant member iterator for iterating in object.
-    typedef GenericValue* ValueIterator;            //!< Value iterator for iterating in array.
-    typedef const GenericValue* ConstValueIterator; //!< Constant value iterator for iterating in array.
-    typedef GenericValue<Encoding, Allocator> ValueType;    //!< Value type of itself.
+    typedef Encoding EncodingType;                  //!< Тип кодировки из параметра шаблона.
+    typedef Allocator AllocatorType;                //!< Тип распределителя из параметра шаблона.
+    typedef typename Encoding::Ch Ch;               //!< Тип символа, полученный из Encoding.
+    typedef GenericStringRef<Ch> StringRefType;     //!< Ссылка на константную строку
+    typedef typename GenericMemberIterator<false,Encoding,Allocator>::Iterator MemberIterator;  //!< Итератор-член для итерации по объекту.
+    typedef typename GenericMemberIterator<true,Encoding,Allocator>::Iterator ConstMemberIterator;  //!< Итератор постоянного члена для итерации по объекту.
+    typedef GenericValue* ValueIterator;            //!< Итератор значений для перебора по массиву.
+    typedef const GenericValue* ConstValueIterator; //!< Итератор постоянного значения для итерации в массиве.
+    typedef GenericValue<Encoding, Allocator> ValueType;    //!< Тип значения самого себя.
     typedef GenericArray<false, ValueType> Array;
     typedef GenericArray<true, ValueType> ConstArray;
     typedef GenericObject<false, ValueType> Object;
     typedef GenericObject<true, ValueType> ConstObject;
 
-    //!@name Constructors and destructor.
+    //! @name Конструкторы и деструктор.
     //@{
 
-    //! Default constructor creates a null value.
+    //! Конструктор по умолчанию создает нулевое значение.
     GenericValue() RAPIDJSON_NOEXCEPT : data_() { data_.f.flags = kNullFlag; }
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-    //! Move constructor in C++11
+    //! Переместить конструктор в C++11
     GenericValue(GenericValue&& rhs) RAPIDJSON_NOEXCEPT : data_(rhs.data_) {
-        rhs.data_.f.flags = kNullFlag; // give up contents
+        rhs.data_.f.flags = kNullFlag; // отказаться от содержания
     }
 #endif
 
 private:
-    //! Copy constructor is not permitted.
+    //! Копирование конструктора не разрешено.
     GenericValue(const GenericValue& rhs);
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-    //! Moving from a GenericDocument is not permitted.
+    //! Перемещение из GenericDocument не разрешено.
     template <typename StackAllocator>
     GenericValue(GenericDocument<Encoding,Allocator,StackAllocator>&& rhs);
 
-    //! Move assignment from a GenericDocument is not permitted.
+    //! Перемещение назначения из GenericDocument не разрешено.
     template <typename StackAllocator>
     GenericValue& operator=(GenericDocument<Encoding,Allocator,StackAllocator>&& rhs);
 #endif
 
 public:
 
-    //! Constructor with JSON value type.
-    /*! This creates a Value of specified type with default content.
-        \param type Type of the value.
-        \note Default content for number is zero.
+    //! Конструктор с типом значения JSON.
+    /*! При этом создается значение указанного типа с содержимым по умолчанию.
+        \param type Тип значения.
+        \note Содержимое номера по умолчанию равно нулю.
     */
     explicit GenericValue(Type type) RAPIDJSON_NOEXCEPT : data_() {
         static const uint16_t defaultFlags[] = {
@@ -725,18 +725,18 @@ public:
         RAPIDJSON_NOEXCEPT_ASSERT(type >= kNullType && type <= kNumberType);
         data_.f.flags = defaultFlags[type];
 
-        // Use ShortString to store empty string.
+        // Используйте ShortString для хранения пустой строки.
         if (type == kStringType)
             data_.ss.SetLength(0);
     }
 
-    //! Explicit copy constructor (with allocator)
-    /*! Creates a copy of a Value by using the given Allocator
-        \tparam SourceAllocator allocator of \c rhs
-        \param rhs Value to copy from (read-only)
-        \param allocator Allocator for allocating copied elements and buffers. Commonly use GenericDocument::GetAllocator().
-        \param copyConstStrings Force copying of constant strings (e.g. referencing an in-situ buffer)
-        \see CopyFrom()
+    //! Явный конструктор копирования (с распределителем)
+    /*! Создает копию значения, используя данный распределитель.
+        \tparam SourceAllocator распределитель \c rhs
+        \param rhs Значение для копирования (только для чтения)
+        \param allocator Распределитель для распределения скопированных элементов и буферов. Обычно используйте GenericDocument::GetAllocator() .
+        \param copyConstStrings Принудительное копирование константных строк (например, ссылка на локальный буфер)
+        \см. CopyFrom()
     */
     template <typename SourceAllocator>
     GenericValue(const GenericValue<Encoding,SourceAllocator>& rhs, Allocator& allocator, bool copyConstStrings = false) {
@@ -770,37 +770,37 @@ public:
         }
     }
 
-    //! Constructor for boolean value.
-    /*! \param b Boolean value
-        \note This constructor is limited to \em real boolean values and rejects
-            implicitly converted types like arbitrary pointers.  Use an explicit cast
-            to \c bool, if you want to construct a boolean JSON value in such cases.
+    //! Конструктор для логического значения.
+    /*! \param b Логическое значение
+        \note Этот конструктор \em ограничен реальными логическими значениями и отклоняет
+            неявно преобразованные типы, такие как произвольные указатели.  Используйте явное приведение типов
+            в \c bool, если в таких случаях вы хотите создать логическое значение JSON.
      */
-#ifndef RAPIDJSON_DOXYGEN_RUNNING // hide SFINAE from Doxygen
+#ifndef RAPIDJSON_DOXYGEN_RUNNING // скрыть SFINAE от Doxygen
     template <typename T>
-    explicit GenericValue(T b, RAPIDJSON_ENABLEIF((internal::IsSame<bool, T>))) RAPIDJSON_NOEXCEPT  // See #472
+    explicit GenericValue(T b, RAPIDJSON_ENABLEIF((internal::IsSame<bool, T>))) RAPIDJSON_NOEXCEPT  // См. № 472.
 #else
     explicit GenericValue(bool b) RAPIDJSON_NOEXCEPT
 #endif
         : data_() {
-            // safe-guard against failing SFINAE
+            // защита от сбоя SFINAE
             RAPIDJSON_STATIC_ASSERT((internal::IsSame<bool,T>::Value));
             data_.f.flags = b ? kTrueFlag : kFalseFlag;
     }
 
-    //! Constructor for int value.
+    //! Конструктор для значения int.
     explicit GenericValue(int i) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.i64 = i;
         data_.f.flags = (i >= 0) ? (kNumberIntFlag | kUintFlag | kUint64Flag) : kNumberIntFlag;
     }
 
-    //! Constructor for unsigned value.
+    //! Конструктор для беззнакового значения.
     explicit GenericValue(unsigned u) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.u64 = u;
         data_.f.flags = (u & 0x80000000) ? kNumberUintFlag : (kNumberUintFlag | kIntFlag | kInt64Flag);
     }
 
-    //! Constructor for int64_t value.
+    //! Конструктор для значения int64_t.
     explicit GenericValue(int64_t i64) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.i64 = i64;
         data_.f.flags = kNumberInt64Flag;
@@ -815,7 +815,7 @@ public:
             data_.f.flags |= kIntFlag;
     }
 
-    //! Constructor for uint64_t value.
+    //! Конструктор для значения uint64_t.
     explicit GenericValue(uint64_t u64) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.u64 = u64;
         data_.f.flags = kNumberUint64Flag;
@@ -827,59 +827,59 @@ public:
             data_.f.flags |= kIntFlag;
     }
 
-    //! Constructor for double value.
+    //! Конструктор для двойного значения.
     explicit GenericValue(double d) RAPIDJSON_NOEXCEPT : data_() { data_.n.d = d; data_.f.flags = kNumberDoubleFlag; }
 
-    //! Constructor for float value.
+    //! Конструктор для значения с плавающей запятой.
     explicit GenericValue(float f) RAPIDJSON_NOEXCEPT : data_() { data_.n.d = static_cast<double>(f); data_.f.flags = kNumberDoubleFlag; }
 
-    //! Constructor for constant string (i.e. do not make a copy of string)
+    //! Конструктор для константной строки (т.е. не копировать строку)
     GenericValue(const Ch* s, SizeType length) RAPIDJSON_NOEXCEPT : data_() { SetStringRaw(StringRef(s, length)); }
 
-    //! Constructor for constant string (i.e. do not make a copy of string)
+    //! Конструктор для константной строки (т.е. не копировать строку)
     explicit GenericValue(StringRefType s) RAPIDJSON_NOEXCEPT : data_() { SetStringRaw(s); }
 
-    //! Constructor for copy-string (i.e. do make a copy of string)
+    //! Конструктор для копирования строки (т.е. сделать копию строки)
     GenericValue(const Ch* s, SizeType length, Allocator& allocator) : data_() { SetStringRaw(StringRef(s, length), allocator); }
 
-    //! Constructor for copy-string (i.e. do make a copy of string)
+    //! Конструктор для копирования строки (т.е. сделать копию строки)
     GenericValue(const Ch*s, Allocator& allocator) : data_() { SetStringRaw(StringRef(s), allocator); }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Constructor for copy-string from a string object (i.e. do make a copy of string)
-    /*! \note Requires the definition of the preprocessor symbol \ref RAPIDJSON_HAS_STDSTRING.
+    //! Конструктор для копирования строки из строкового объекта (т.е. создания копии строки)
+    /*! \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
      */
     GenericValue(const std::basic_string<Ch>& s, Allocator& allocator) : data_() { SetStringRaw(StringRef(s), allocator); }
 #endif
 
-    //! Constructor for Array.
+    //! Конструктор массива.
     /*!
-        \param a An array obtained by \c GetArray().
-        \note \c Array is always pass-by-value.
-        \note the source array is moved into this value and the source array becomes empty.
+        \param a Массив, полученный с помощью \c GetArray().
+        \note \c Массив всегда передается по значению.
+        \note исходный массив перемещается в это значение, и исходный массив становится пустым.
     */
     GenericValue(Array a) RAPIDJSON_NOEXCEPT : data_(a.value_.data_) {
         a.value_.data_ = Data();
         a.value_.data_.f.flags = kArrayFlag;
     }
 
-    //! Constructor for Object.
+    //! Конструктор объекта.
     /*!
-        \param o An object obtained by \c GetObject().
-        \note \c Object is always pass-by-value.
-        \note the source object is moved into this value and the source object becomes empty.
+        \param o Объект, полученный с помощью \c GetObject().
+        \note \c Объект всегда передается по значению.
+        \note исходный объект перемещается в это значение, и исходный объект становится пустым.
     */
     GenericValue(Object o) RAPIDJSON_NOEXCEPT : data_(o.value_.data_) {
         o.value_.data_ = Data();
         o.value_.data_.f.flags = kObjectFlag;
     }
 
-    //! Destructor.
-    /*! Need to destruct elements of array, members of object, or copy-string.
+    //! Деструктор.
+    /*! Необходимо уничтожить элементы массива, члены объекта или копию строки.
     */
     ~GenericValue() {
-        // With RAPIDJSON_USE_MEMBERSMAP, the maps need to be destroyed to release
-        // their Allocator if it's refcounted (e.g. MemoryPoolAllocator).
+        // С RAPIDJSON_USE_MEMBERSMAP карты необходимо уничтожить, чтобы выпустить.
+        // их распределитель, если он пересчитан (например, MemoryPoolAllocator).
         if (Allocator::kNeedFree || (RAPIDJSON_USE_MEMBERSMAP+0 &&
                                      internal::IsRefCounted<Allocator>::Value)) {
             switch(data_.f.flags) {
@@ -888,7 +888,7 @@ public:
                     GenericValue* e = GetElementsPointer();
                     for (GenericValue* v = e; v != e + data_.a.size; ++v)
                         v->~GenericValue();
-                    if (Allocator::kNeedFree) { // Shortcut by Allocator's trait
+                    if (Allocator::kNeedFree) { // Ярлык по признаку Allocator
                         Allocator::Free(e);
                     }
                 }
@@ -899,30 +899,30 @@ public:
                 break;
 
             case kCopyStringFlag:
-                if (Allocator::kNeedFree) { // Shortcut by Allocator's trait
+                if (Allocator::kNeedFree) { // Ярлык по признаку Allocator
                     Allocator::Free(const_cast<Ch*>(GetStringPointer()));
                 }
                 break;
 
             default:
-                break;  // Do nothing for other types.
+                break;  // Ничего не делайте для других типов.
             }
         }
     }
 
     //@}
 
-    //!@name Assignment operators
+    //! @name Операторы присваивания
     //@{
 
-    //! Assignment with move semantics.
-    /*! \param rhs Source of the assignment. It will become a null value after assignment.
+    //! Задание с семантикой перемещения.
+    /*! \param rhs Источник задания. После присвоения оно станет нулевым значением.
     */
     GenericValue& operator=(GenericValue& rhs) RAPIDJSON_NOEXCEPT {
         if (RAPIDJSON_LIKELY(this != &rhs)) {
-            // Can't destroy "this" before assigning "rhs", otherwise "rhs"
-            // could be used after free if it's an sub-Value of "this",
-            // hence the temporary dance.
+            // Невозможно уничтожить «this» перед присвоением «rhs», иначе — «rhs».
+            // можно использовать после free, если это подзначение «this»,
+            // отсюда и временный танец.
             GenericValue temp;
             temp.RawAssign(rhs);
             this->~GenericValue();
@@ -932,33 +932,33 @@ public:
     }
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-    //! Move assignment in C++11
+    //! Переместить назначение в C++11
     GenericValue& operator=(GenericValue&& rhs) RAPIDJSON_NOEXCEPT {
         return *this = rhs.Move();
     }
 #endif
 
-    //! Assignment of constant string reference (no copy)
-    /*! \param str Constant string reference to be assigned
-        \note This overload is needed to avoid clashes with the generic primitive type assignment overload below.
-        \see GenericStringRef, operator=(T)
+    //! Присвоение ссылки на константную строку (без копирования)
+    /*! \param str Ссылка на константную строку, которая будет назначена
+        \note Эта перегрузка необходима во избежание конфликтов с приведенной ниже общей перегрузкой назначения примитивного типа.
+        \см. GenericStringRef, оператор=(T)
     */
     GenericValue& operator=(StringRefType str) RAPIDJSON_NOEXCEPT {
         GenericValue s(str);
         return *this = s;
     }
 
-    //! Assignment with primitive types.
-    /*! \tparam T Either \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t
-        \param value The value to be assigned.
+    //! Присваивание с примитивными типами.
+    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+        \param value Назначаемое значение.
 
-        \note The source type \c T explicitly disallows all pointer types,
-            especially (\c const) \ref Ch*.  This helps avoiding implicitly
-            referencing character strings with insufficient lifetime, use
-            \ref SetString(const Ch*, Allocator&) (for copying) or
-            \ref StringRef() (to explicitly mark the pointer as constant) instead.
-            All other pointer types would implicitly convert to \c bool,
-            use \ref SetBool() instead.
+        \note Исходный тип \c T явно запрещает все типы указателей,
+            особенно (\c const) \ref Ch*.  Это помогает избежать неявного
+            для ссылки на строки символов с недостаточным временем жизни используйте
+            \ref SetString(const Ch*, Allocator&) (для копирования) или
+            Вместо этого \ref StringRef() (чтобы явно пометить указатель как константу).
+            Все остальные типы указателей будут неявно преобразованы в \c bool,
+            вместо этого используйте \ref SetBool().
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::IsPointer<T>), (GenericValue&))
@@ -967,12 +967,12 @@ public:
         return *this = v;
     }
 
-    //! Deep-copy assignment from Value
-    /*! Assigns a \b copy of the Value to the current Value object
-        \tparam SourceAllocator Allocator type of \c rhs
-        \param rhs Value to copy from (read-only)
-        \param allocator Allocator to use for copying
-        \param copyConstStrings Force copying of constant strings (e.g. referencing an in-situ buffer)
+    //! Назначение глубокого копирования из Value
+    /*! Назначает копию \b значения текущему объекту значения.
+        \tparam SourceAllocator Тип распределителя \c rhs
+        \param rhs Значение для копирования (только для чтения)
+        \param allocator Распределитель, используемый для копирования
+        \param copyConstStrings Принудительное копирование константных строк (например, ссылка на локальный буфер)
      */
     template <typename SourceAllocator>
     GenericValue& CopyFrom(const GenericValue<Encoding, SourceAllocator>& rhs, Allocator& allocator, bool copyConstStrings = false) {
@@ -982,10 +982,10 @@ public:
         return *this;
     }
 
-    //! Exchange the contents of this value with those of other.
+    //! Обменяйте содержимое этого значения содержимым другого.
     /*!
-        \param other Another value.
-        \note Constant complexity.
+        \param другое Другое значение.
+        \note Постоянная сложность.
     */
     GenericValue& Swap(GenericValue& other) RAPIDJSON_NOEXCEPT {
         GenericValue temp;
@@ -995,31 +995,31 @@ public:
         return *this;
     }
 
-    //! free-standing swap function helper
+    //! отдельно стоящий помощник функции подкачки
     /*!
-        Helper function to enable support for common swap implementation pattern based on \c std::swap:
+        Вспомогательная функция для включения поддержки общего шаблона реализации подкачки на основе \c std::swap:
         \code
         void swap(MyClass& a, MyClass& b) {
-            using std::swap;
-            swap(a.value, b.value);
+            используя std::swap;
+            своп(a.value, b.value);
             // ...
         }
         \endcode
-        \see Swap()
+        \см. Swap()
      */
     friend inline void swap(GenericValue& a, GenericValue& b) RAPIDJSON_NOEXCEPT { a.Swap(b); }
 
-    //! Prepare Value for move semantics
+    //! Подготовьте значение для семантики перемещения
     /*! \return *this */
     GenericValue& Move() RAPIDJSON_NOEXCEPT { return *this; }
     //@}
 
-    //!@name Equal-to and not-equal-to operators
+    //! @name Операторы равенства и не равно
     //@{
-    //! Equal-to operator
+    //! Оператор равенства
     /*!
-        \note If an object contains duplicated named member, comparing equality with any object is always \c false.
-        \note Complexity is quadratic in Object's member number and linear for the rest (number of all values in the subtree and total lengths of all strings).
+        \note Если объект содержит повторяющийся именованный элемент, сравнение равенства с любым объектом всегда \c ложно.
+        \note Сложность квадратична по количеству членов объекта и линейна по всем остальным значениям (числу всех значений в поддереве и общей длине всех строк).
     */
     template <typename SourceAllocator>
     bool operator==(const GenericValue<Encoding, SourceAllocator>& rhs) const {
@@ -1051,9 +1051,9 @@ public:
 
         case kNumberType:
             if (IsDouble() || rhs.IsDouble()) {
-                double a = GetDouble();     // May convert from integer to double.
-                double b = rhs.GetDouble(); // Ditto
-                return a >= b && a <= b;    // Prevent -Wfloat-equal
+                double a = GetDouble();     // Может конвертировать целое число в двойное.
+                double b = rhs.GetDouble(); // то же самое
+                return a >= b && a <= b;    // Предотвратить -Wfloat-равный
             }
             else
                 return data_.n.u64 == rhs.data_.n.u64;
@@ -1063,49 +1063,49 @@ public:
         }
     }
 
-    //! Equal-to operator with const C-string pointer
+    //! Оператор равенства с константным указателем на строку C
     bool operator==(const Ch* rhs) const { return *this == GenericValue(StringRef(rhs)); }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Equal-to operator with string object
-    /*! \note Requires the definition of the preprocessor symbol \ref RAPIDJSON_HAS_STDSTRING.
+    //! Оператор равенства со строковым объектом
+    /*! \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
      */
     bool operator==(const std::basic_string<Ch>& rhs) const { return *this == GenericValue(StringRef(rhs)); }
 #endif
 
-    //! Equal-to operator with primitive types
-    /*! \tparam T Either \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t, \c double, \c true, \c false
+    //! Оператор равенства с примитивными типами
+    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t, \c double, \c true, \c false
     */
     template <typename T> RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>,internal::IsGenericValue<T> >), (bool)) operator==(const T& rhs) const { return *this == GenericValue(rhs); }
 
 #ifndef __cpp_impl_three_way_comparison
-    //! Not-equal-to operator
-    /*! \return !(*this == rhs)
+    //! Оператор «не равно»
+    /*! \return !(*this == правая сторона)
      */
     template <typename SourceAllocator>
     bool operator!=(const GenericValue<Encoding, SourceAllocator>& rhs) const { return !(*this == rhs); }
 
-    //! Not-equal-to operator with const C-string pointer
+    //! Оператор «не равно» с константным указателем на строку C
     bool operator!=(const Ch* rhs) const { return !(*this == rhs); }
 
-    //! Not-equal-to operator with arbitrary types
-    /*! \return !(*this == rhs)
+    //! Оператор «не равно» с произвольными типами
+    /*! \return !(*this == правая сторона)
      */
     template <typename T> RAPIDJSON_DISABLEIF_RETURN((internal::IsGenericValue<T>), (bool)) operator!=(const T& rhs) const { return !(*this == rhs); }
 
-    //! Equal-to operator with arbitrary types (symmetric version)
-    /*! \return (rhs == lhs)
+    //! Оператор равенства с произвольными типами (симметричная версия)
+    /*! \return (правая сторона == левая сторона)
      */
     template <typename T> friend RAPIDJSON_DISABLEIF_RETURN((internal::IsGenericValue<T>), (bool)) operator==(const T& lhs, const GenericValue& rhs) { return rhs == lhs; }
 
-    //! Not-Equal-to operator with arbitrary types (symmetric version)
-    /*! \return !(rhs == lhs)
+    //! Оператор «Не равно» с произвольными типами (симметричная версия)
+    /*! \return !(правая сторона == левая сторона)
      */
     template <typename T> friend RAPIDJSON_DISABLEIF_RETURN((internal::IsGenericValue<T>), (bool)) operator!=(const T& lhs, const GenericValue& rhs) { return !(rhs == lhs); }
     //@}
 #endif
 
-    //!@name Type
+    //! Тип @name
     //@{
 
     Type GetType()  const { return static_cast<Type>(data_.f.flags & kTypeMask); }
@@ -1123,7 +1123,7 @@ public:
     bool IsDouble() const { return (data_.f.flags & kDoubleFlag) != 0; }
     bool IsString() const { return (data_.f.flags & kStringFlag) != 0; }
 
-    // Checks whether a number can be losslessly converted to a double.
+    // Проверяет, можно ли без потерь преобразовать число в двойное.
     bool IsLosslessDouble() const {
         if (!IsNumber()) return false;
         if (IsUint64()) {
@@ -1140,17 +1140,17 @@ public:
                 && (d < static_cast<double>((std::numeric_limits<int64_t>::max)()))
                 && (i == static_cast<int64_t>(d));
         }
-        return true; // double, int, uint are always lossless
+        return true; // double, int, uint всегда без потерь
     }
 
-    // Checks whether a number is a float (possible lossy).
+    // Проверяет, является ли число числом с плавающей точкой (возможно, с потерями).
     bool IsFloat() const  {
         if ((data_.f.flags & kDoubleFlag) == 0)
             return false;
         double d = GetDouble();
         return d >= -3.4028234e38 && d <= 3.4028234e38;
     }
-    // Checks whether a number can be losslessly converted to a float.
+    // Проверяет, может ли число быть преобразовано без потерь в число с плавающей запятой.
     bool IsLosslessFloat() const {
         if (!IsNumber()) return false;
         double a = GetDouble();
@@ -1158,52 +1158,52 @@ public:
                 || a > static_cast<double>((std::numeric_limits<float>::max)()))
             return false;
         double b = static_cast<double>(static_cast<float>(a));
-        return a >= b && a <= b;    // Prevent -Wfloat-equal
+        return a >= b && a <= b;    // Предотвратить -Wfloat-равный
     }
 
     //@}
 
-    //!@name Null
+    //! @name Нуль
     //@{
 
     GenericValue& SetNull() { this->~GenericValue(); new (this) GenericValue(); return *this; }
 
     //@}
 
-    //!@name Bool
+    //! @name Бул
     //@{
 
     bool GetBool() const { RAPIDJSON_ASSERT(IsBool()); return data_.f.flags == kTrueFlag; }
-    //!< Set boolean value
+    //!< Установить логическое значение
     /*! \post IsBool() == true */
     GenericValue& SetBool(bool b) { this->~GenericValue(); new (this) GenericValue(b); return *this; }
 
     //@}
 
-    //!@name Object
+    //! Объект @name
     //@{
 
-    //! Set this value as an empty object.
+    //! Установите это значение как пустой объект.
     /*! \post IsObject() == true */
     GenericValue& SetObject() { this->~GenericValue(); new (this) GenericValue(kObjectType); return *this; }
 
-    //! Get the number of members in the object.
+    //! Получите количество членов в объекте.
     SizeType MemberCount() const { RAPIDJSON_ASSERT(IsObject()); return data_.o.size; }
 
-    //! Get the capacity of object.
+    //! Получить емкость объекта.
     SizeType MemberCapacity() const { RAPIDJSON_ASSERT(IsObject()); return data_.o.capacity; }
 
-    //! Check whether the object is empty.
+    //! Проверьте, пуст ли объект.
     bool ObjectEmpty() const { RAPIDJSON_ASSERT(IsObject()); return data_.o.size == 0; }
 
-    //! Get a value from an object associated with the name.
+    //! Получите значение из объекта, связанного с именем.
     /*! \pre IsObject() == true
-        \tparam T Either \c Ch or \c const \c Ch (template used for disambiguation with \ref operator[](SizeType))
-        \note In version 0.1x, if the member is not found, this function returns a null value. This makes issue 7.
-        Since 0.2, if the name is not correct, it will assert.
-        If user is unsure whether a member exists, user should use HasMember() first.
-        A better approach is to use FindMember().
-        \note Linear time complexity.
+        \tparam T Либо \c Ch, либо \c const \c Ch (шаблон, используемый для устранения неоднозначности с помощью \ref оператора[](SizeType))
+        \note В версии 0.1x, если элемент не найден, эта функция возвращает нулевое значение. Это создает проблему 7.
+        Начиная с версии 0.2, если имя неверное, оно будет утверждаться.
+        Если пользователь не уверен, существует ли элемент, ему следует сначала использовать HasMember().
+        Лучшим подходом является использование FindMember() .
+        \note Линейная временная сложность.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::NotExpr<internal::IsSame<typename internal::RemoveConst<T>::Type, Ch> >),(GenericValue&)) operator[](T* name) {
@@ -1213,14 +1213,14 @@ public:
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::NotExpr<internal::IsSame<typename internal::RemoveConst<T>::Type, Ch> >),(const GenericValue&)) operator[](T* name) const { return const_cast<GenericValue&>(*this)[name]; }
 
-    //! Get a value from an object associated with the name.
+    //! Получите значение из объекта, связанного с именем.
     /*! \pre IsObject() == true
-        \tparam SourceAllocator Allocator of the \c name value
+        \tparam SourceAllocator Распределитель значения имени \c
 
-        \note Compared to \ref operator[](T*), this version is faster because it does not need a StrLen().
-        And it can also handle strings with embedded null characters.
+        \note По сравнению с \refoperator[](T*) эта версия работает быстрее, поскольку ей не требуется StrLen().
+        И он также может обрабатывать строки со встроенными нулевыми символами.
 
-        \note Linear time complexity.
+        \note Линейная временная сложность.
     */
     template <typename SourceAllocator>
     GenericValue& operator[](const GenericValue<Encoding, SourceAllocator>& name) {
@@ -1228,27 +1228,27 @@ public:
         if (member != MemberEnd())
             return member->value;
         else {
-            RAPIDJSON_ASSERT(false);    // see above note
+            RAPIDJSON_ASSERT(false);    // см. примечание выше
 
 #if RAPIDJSON_HAS_CXX11
-            // Use thread-local storage to prevent races between threads.
-            // Use static buffer and placement-new to prevent destruction, with
-            // alignas() to ensure proper alignment.
+            // Используйте локальное хранилище потоков, чтобы предотвратить гонки между потоками.
+            // Используйте статический буфер и новое размещение, чтобы предотвратить разрушение, с
+            // alignas(), чтобы обеспечить правильное выравнивание.
             alignas(GenericValue) thread_local static char buffer[sizeof(GenericValue)];
             return *new (buffer) GenericValue();
 #elif defined(_MSC_VER) && _MSC_VER < 1900
-            // There's no way to solve both thread locality and proper alignment
-            // simultaneously.
+            // Невозможно решить как локальность потока, так и правильное выравнивание.
+            // одновременно.
             __declspec(thread) static char buffer[sizeof(GenericValue)];
             return *new (buffer) GenericValue();
 #elif defined(__GNUC__) || defined(__clang__)
-            // This will generate -Wexit-time-destructors in clang, but that's
-            // better than having under-alignment.
+            // Это создаст деструкторы -Wexit-time-destructors в clang, но это
+            // лучше, чем иметь недостаточное выравнивание.
             __thread static GenericValue buffer;
             return buffer;
 #else
-            // Don't know what compiler this is, so don't know how to ensure
-            // thread-locality.
+            // Не знаю, что это за компилятор, поэтому не знаю, как гарантировать
+            // локальность потока.
             static GenericValue buffer;
             return buffer;
 #endif
@@ -1258,29 +1258,29 @@ public:
     const GenericValue& operator[](const GenericValue<Encoding, SourceAllocator>& name) const { return const_cast<GenericValue&>(*this)[name]; }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Get a value from an object associated with name (string object).
+    //! Получите значение из объекта, связанного с именем (строковый объект).
     GenericValue& operator[](const std::basic_string<Ch>& name) { return (*this)[GenericValue(StringRef(name))]; }
     const GenericValue& operator[](const std::basic_string<Ch>& name) const { return (*this)[GenericValue(StringRef(name))]; }
 #endif
 
-    //! Const member iterator
+    //! Итератор константного члена
     /*! \pre IsObject() == true */
     ConstMemberIterator MemberBegin() const { RAPIDJSON_ASSERT(IsObject()); return ConstMemberIterator(GetMembersPointer()); }
-    //! Const \em past-the-end member iterator
+    //! Const \em итератор конечного члена
     /*! \pre IsObject() == true */
     ConstMemberIterator MemberEnd() const   { RAPIDJSON_ASSERT(IsObject()); return ConstMemberIterator(GetMembersPointer() + data_.o.size); }
-    //! Member iterator
+    //! Итератор члена
     /*! \pre IsObject() == true */
     MemberIterator MemberBegin()            { RAPIDJSON_ASSERT(IsObject()); return MemberIterator(GetMembersPointer()); }
-    //! \em Past-the-end member iterator
+    //! \em Прошедший итератор члена
     /*! \pre IsObject() == true */
     MemberIterator MemberEnd()              { RAPIDJSON_ASSERT(IsObject()); return MemberIterator(GetMembersPointer() + data_.o.size); }
 
-    //! Request the object to have enough capacity to store members.
-    /*! \param newCapacity  The capacity that the object at least need to have.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \note Linear time complexity.
+    //! Запросите у объекта достаточную емкость для хранения участников.
+    /*! \param newCapacity Емкость, которую по крайней мере должен иметь объект.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \note Линейная временная сложность.
     */
     GenericValue& MemberReserve(SizeType newCapacity, Allocator &allocator) {
         RAPIDJSON_ASSERT(IsObject());
@@ -1288,51 +1288,51 @@ public:
         return *this;
     }
 
-    //! Check whether a member exists in the object.
+    //! Проверьте, существует ли член в объекте.
     /*!
-        \param name Member name to be searched.
+        \param name Имя элемента для поиска.
         \pre IsObject() == true
-        \return Whether a member with that name exists.
-        \note It is better to use FindMember() directly if you need the obtain the value as well.
-        \note Linear time complexity.
+        \return Существует ли элемент с таким именем.
+        \note Лучше использовать FindMember() напрямую, если вам также нужно получить значение.
+        \note Линейная временная сложность.
     */
     bool HasMember(const Ch* name) const { return FindMember(name) != MemberEnd(); }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Check whether a member exists in the object with string object.
+    //! Проверьте, существует ли член в объекте с помощью строкового объекта.
     /*!
-        \param name Member name to be searched.
+        \param name Имя элемента для поиска.
         \pre IsObject() == true
-        \return Whether a member with that name exists.
-        \note It is better to use FindMember() directly if you need the obtain the value as well.
-        \note Linear time complexity.
+        \return Существует ли элемент с таким именем.
+        \note Лучше использовать FindMember() напрямую, если вам также нужно получить значение.
+        \note Линейная временная сложность.
     */
     bool HasMember(const std::basic_string<Ch>& name) const { return FindMember(name) != MemberEnd(); }
 #endif
 
-    //! Check whether a member exists in the object with GenericValue name.
+    //! Проверьте, существует ли в объекте член с именем GenericValue.
     /*!
-        This version is faster because it does not need a StrLen(). It can also handle string with null character.
-        \param name Member name to be searched.
+        Эта версия работает быстрее, поскольку ей не требуется StrLen(). Он также может обрабатывать строку с нулевым символом.
+        \param name Имя элемента для поиска.
         \pre IsObject() == true
-        \return Whether a member with that name exists.
-        \note It is better to use FindMember() directly if you need the obtain the value as well.
-        \note Linear time complexity.
+        \return Существует ли элемент с таким именем.
+        \note Лучше использовать FindMember() напрямую, если вам также нужно получить значение.
+        \note Линейная временная сложность.
     */
     template <typename SourceAllocator>
     bool HasMember(const GenericValue<Encoding, SourceAllocator>& name) const { return FindMember(name) != MemberEnd(); }
 
-    //! Find member by name.
+    //! Найдите участника по имени.
     /*!
-        \param name Member name to be searched.
+        \param name Имя элемента для поиска.
         \pre IsObject() == true
-        \return Iterator to member, if it exists.
-            Otherwise returns \ref MemberEnd().
+        \return Итератор к члену, если он существует.
+            В противном случае возвращается \ref MemberEnd().
 
-        \note Earlier versions of Rapidjson returned a \c NULL pointer, in case
-            the requested member doesn't exist. For consistency with e.g.
-            \c std::map, this has been changed to MemberEnd() now.
-        \note Linear time complexity.
+        \note Более ранние версии Rapidjson возвращали указатель \c NULL на случай, если
+            запрошенный член не существует. Для согласованности, например.
+            \c std::map, теперь это было изменено на MemberEnd().
+        \note Линейная временная сложность.
     */
     MemberIterator FindMember(const Ch* name) {
         GenericValue n(StringRef(name));
@@ -1341,18 +1341,18 @@ public:
 
     ConstMemberIterator FindMember(const Ch* name) const { return const_cast<GenericValue&>(*this).FindMember(name); }
 
-    //! Find member by name.
+    //! Найдите участника по имени.
     /*!
-        This version is faster because it does not need a StrLen(). It can also handle string with null character.
-        \param name Member name to be searched.
+        Эта версия работает быстрее, поскольку ей не требуется StrLen(). Он также может обрабатывать строку с нулевым символом.
+        \param name Имя элемента для поиска.
         \pre IsObject() == true
-        \return Iterator to member, if it exists.
-            Otherwise returns \ref MemberEnd().
+        \return Итератор к члену, если он существует.
+            В противном случае возвращается \ref MemberEnd().
 
-        \note Earlier versions of Rapidjson returned a \c NULL pointer, in case
-            the requested member doesn't exist. For consistency with e.g.
-            \c std::map, this has been changed to MemberEnd() now.
-        \note Linear time complexity.
+        \note Более ранние версии Rapidjson возвращали указатель \c NULL на случай, если
+            запрошенный член не существует. Для согласованности, например.
+            \c std::map, теперь это было изменено на MemberEnd().
+        \note Линейная временная сложность.
     */
     template <typename SourceAllocator>
     MemberIterator FindMember(const GenericValue<Encoding, SourceAllocator>& name) {
@@ -1363,26 +1363,26 @@ public:
     template <typename SourceAllocator> ConstMemberIterator FindMember(const GenericValue<Encoding, SourceAllocator>& name) const { return const_cast<GenericValue&>(*this).FindMember(name); }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Find member by string object name.
+    //! Найти члена по имени строкового объекта.
     /*!
-        \param name Member name to be searched.
+        \param name Имя элемента для поиска.
         \pre IsObject() == true
-        \return Iterator to member, if it exists.
-            Otherwise returns \ref MemberEnd().
+        \return Итератор к члену, если он существует.
+            В противном случае возвращается \ref MemberEnd().
     */
     MemberIterator FindMember(const std::basic_string<Ch>& name) { return FindMember(GenericValue(StringRef(name))); }
     ConstMemberIterator FindMember(const std::basic_string<Ch>& name) const { return FindMember(GenericValue(StringRef(name))); }
 #endif
 
-    //! Add a member (name-value pair) to the object.
-    /*! \param name A string value as name of member.
-        \param value Value of any type.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \note The ownership of \c name and \c value will be transferred to this object on success.
-        \pre  IsObject() && name.IsString()
-        \post name.IsNull() && value.IsNull()
-        \note Amortized Constant time complexity.
+    //! Добавьте член (пару имя-значение) к объекту.
+    /*! \param name Строковое значение в качестве имени члена.
+        \param value Значение любого типа.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \note В случае успеха право собственности на имя \c и значение \c будет передано этому объекту.
+        \pre IsObject() && имя. IsString()
+        \имя сообщения. IsNull() && значение. IsNull()
+        \note Амортизированная постоянная временная сложность.
     */
     GenericValue& AddMember(GenericValue& name, GenericValue& value, Allocator& allocator) {
         RAPIDJSON_ASSERT(IsObject());
@@ -1391,14 +1391,14 @@ public:
         return *this;
     }
 
-    //! Add a constant string value as member (name-value pair) to the object.
-    /*! \param name A string value as name of member.
-        \param value constant string reference as value of member.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \pre  IsObject()
-        \note This overload is needed to avoid clashes with the generic primitive type AddMember(GenericValue&,T,Allocator&) overload below.
-        \note Amortized Constant time complexity.
+    //! Добавьте к объекту постоянное строковое значение в качестве члена (пара имя-значение).
+    /*! \param name Строковое значение в качестве имени члена.
+        \param value — ссылка на константную строку как значение члена.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \pre IsObject()
+        \note Эта перегрузка необходима во избежание конфликтов с перегрузкой универсального примитивного типа AddMember(GenericValue&,T,Allocator&), приведенной ниже.
+        \note Амортизированная постоянная временная сложность.
     */
     GenericValue& AddMember(GenericValue& name, StringRefType value, Allocator& allocator) {
         GenericValue v(value);
@@ -1406,14 +1406,14 @@ public:
     }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Add a string object as member (name-value pair) to the object.
-    /*! \param name A string value as name of member.
-        \param value constant string reference as value of member.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \pre  IsObject()
-        \note This overload is needed to avoid clashes with the generic primitive type AddMember(GenericValue&,T,Allocator&) overload below.
-        \note Amortized Constant time complexity.
+    //! Добавьте к объекту строковый объект в качестве члена (пара имя-значение).
+    /*! \param name Строковое значение в качестве имени члена.
+        \param value — ссылка на константную строку как значение члена.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \pre IsObject()
+        \note Эта перегрузка необходима во избежание конфликтов с перегрузкой универсального примитивного типа AddMember(GenericValue&,T,Allocator&), приведенной ниже.
+        \note Амортизированная постоянная временная сложность.
     */
     GenericValue& AddMember(GenericValue& name, std::basic_string<Ch>& value, Allocator& allocator) {
         GenericValue v(value, allocator);
@@ -1421,22 +1421,22 @@ public:
     }
 #endif
 
-    //! Add any primitive value as member (name-value pair) to the object.
-    /*! \tparam T Either \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t
-        \param name A string value as name of member.
-        \param value Value of primitive type \c T as value of member
-        \param allocator Allocator for reallocating memory. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \pre  IsObject()
+    //! Добавьте любое примитивное значение в качестве члена (пара имя-значение) к объекту.
+    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+        \param name Строковое значение в качестве имени члена.
+        \param value Значение примитивного типа \c T как значение члена
+        \param allocator Распределитель для перераспределения памяти. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \pre IsObject()
 
-        \note The source type \c T explicitly disallows all pointer types,
-            especially (\c const) \ref Ch*.  This helps avoiding implicitly
-            referencing character strings with insufficient lifetime, use
-            \ref AddMember(StringRefType, GenericValue&, Allocator&) or \ref
-            AddMember(StringRefType, StringRefType, Allocator&).
-            All other pointer types would implicitly convert to \c bool,
-            use an explicit cast instead, if needed.
-        \note Amortized Constant time complexity.
+        \note Исходный тип \c T явно запрещает все типы указателей,
+            особенно (\c const) \ref Ch*.  Это помогает избежать неявного
+            для ссылки на строки символов с недостаточным временем жизни используйте
+            \ref AddMember(StringRefType, GenericValue&, Allocator&) или \ref
+            AddMember(StringRefType, StringRefType, Распределитель&).
+            Все остальные типы указателей будут неявно преобразованы в \c bool,
+            вместо этого используйте явное приведение, если необходимо.
+        \note Амортизированная постоянная временная сложность.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (GenericValue&))
@@ -1462,51 +1462,51 @@ public:
 #endif // RAPIDJSON_HAS_CXX11_RVALUE_REFS
 
 
-    //! Add a member (name-value pair) to the object.
-    /*! \param name A constant string reference as name of member.
-        \param value Value of any type.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \note The ownership of \c value will be transferred to this object on success.
-        \pre  IsObject()
-        \post value.IsNull()
-        \note Amortized Constant time complexity.
+    //! Добавьте член (пару имя-значение) к объекту.
+    /*! \param name Ссылка на константную строку как имя члена.
+        \param value Значение любого типа.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \note В случае успеха право собственности на значение \c будет передано этому объекту.
+        \pre IsObject()
+        \ опубликовать значение. IsNull()
+        \note Амортизированная постоянная временная сложность.
     */
     GenericValue& AddMember(StringRefType name, GenericValue& value, Allocator& allocator) {
         GenericValue n(name);
         return AddMember(n, value, allocator);
     }
 
-    //! Add a constant string value as member (name-value pair) to the object.
-    /*! \param name A constant string reference as name of member.
-        \param value constant string reference as value of member.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \pre  IsObject()
-        \note This overload is needed to avoid clashes with the generic primitive type AddMember(StringRefType,T,Allocator&) overload below.
-        \note Amortized Constant time complexity.
+    //! Добавьте к объекту постоянное строковое значение в качестве члена (пара имя-значение).
+    /*! \param name Ссылка на константную строку как имя члена.
+        \param value — ссылка на константную строку как значение члена.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \pre IsObject()
+        \note Эта перегрузка необходима во избежание конфликтов с перегрузкой универсального примитивного типа AddMember(StringRefType,T,Allocator&), приведенной ниже.
+        \note Амортизированная постоянная временная сложность.
     */
     GenericValue& AddMember(StringRefType name, StringRefType value, Allocator& allocator) {
         GenericValue v(value);
         return AddMember(name, v, allocator);
     }
 
-    //! Add any primitive value as member (name-value pair) to the object.
-    /*! \tparam T Either \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t
-        \param name A constant string reference as name of member.
-        \param value Value of primitive type \c T as value of member
-        \param allocator Allocator for reallocating memory. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \pre  IsObject()
+    //! Добавьте любое примитивное значение в качестве члена (пара имя-значение) к объекту.
+    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+        \param name Ссылка на константную строку как имя члена.
+        \param value Значение примитивного типа \c T как значение члена
+        \param allocator Распределитель для перераспределения памяти. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \pre IsObject()
 
-        \note The source type \c T explicitly disallows all pointer types,
-            especially (\c const) \ref Ch*.  This helps avoiding implicitly
-            referencing character strings with insufficient lifetime, use
-            \ref AddMember(StringRefType, GenericValue&, Allocator&) or \ref
-            AddMember(StringRefType, StringRefType, Allocator&).
-            All other pointer types would implicitly convert to \c bool,
-            use an explicit cast instead, if needed.
-        \note Amortized Constant time complexity.
+        \note Исходный тип \c T явно запрещает все типы указателей,
+            особенно (\c const) \ref Ch*.  Это помогает избежать неявного
+            для ссылки на строки символов с недостаточным временем жизни используйте
+            \ref AddMember(StringRefType, GenericValue&, Allocator&) или \ref
+            AddMember(StringRefType, StringRefType, Распределитель&).
+            Все остальные типы указателей будут неявно преобразованы в \c bool,
+            вместо этого используйте явное приведение, если необходимо.
+        \note Амортизированная постоянная временная сложность.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (GenericValue&))
@@ -1515,22 +1515,22 @@ public:
         return AddMember(n, value, allocator);
     }
 
-    //! Remove all members in the object.
-    /*! This function do not deallocate memory in the object, i.e. the capacity is unchanged.
-        \note Linear time complexity.
+    //! Удалить все члены объекта.
+    /*! Эта функция не освобождает память в объекте, т.е. емкость не изменяется.
+        \note Линейная временная сложность.
     */
     void RemoveAllMembers() {
         RAPIDJSON_ASSERT(IsObject());
         DoClearMembers();
     }
 
-    //! Remove a member in object by its name.
-    /*! \param name Name of member to be removed.
-        \return Whether the member existed.
-        \note This function may reorder the object members. Use \ref
-            EraseMember(ConstMemberIterator) if you need to preserve the
-            relative order of the remaining members.
-        \note Linear time complexity.
+    //! Удалить член объекта по его имени.
+    /*! \param name Имя удаляемого участника.
+        \return Существовал ли этот член.
+        \note Эта функция может изменить порядок членов объекта. Используйте \ref
+            EraseMember(ConstMemberIterator), если вам нужно сохранить
+            относительный порядок остальных членов.
+        \note Линейная временная сложность.
     */
     bool RemoveMember(const Ch* name) {
         GenericValue n(StringRef(name));
@@ -1552,13 +1552,13 @@ public:
             return false;
     }
 
-    //! Remove a member in object by iterator.
-    /*! \param m member iterator (obtained by FindMember() or MemberBegin()).
-        \return the new iterator after removal.
-        \note This function may reorder the object members. Use \ref
-            EraseMember(ConstMemberIterator) if you need to preserve the
-            relative order of the remaining members.
-        \note Constant time complexity.
+    //! Удалить член объекта с помощью итератора.
+    /*! Итератор-член \param m (полученный FindMember() или MemberBegin()).
+        \вернуть новый итератор после удаления.
+        \note Эта функция может изменить порядок членов объекта. Используйте \ref
+            EraseMember(ConstMemberIterator), если вам нужно сохранить
+            относительный порядок остальных членов.
+        \note Постоянная временная сложность.
     */
     MemberIterator RemoveMember(MemberIterator m) {
         RAPIDJSON_ASSERT(IsObject());
@@ -1568,27 +1568,27 @@ public:
         return DoRemoveMember(m);
     }
 
-    //! Remove a member from an object by iterator.
-    /*! \param pos iterator to the member to remove
+    //! Удалить член объекта с помощью итератора.
+    /*! \param pos итератор для удаляемого элемента
         \pre IsObject() == true && \ref MemberBegin() <= \c pos < \ref MemberEnd()
-        \return Iterator following the removed element.
-            If the iterator \c pos refers to the last element, the \ref MemberEnd() iterator is returned.
-        \note This function preserves the relative order of the remaining object
-            members. If you do not need this, use the more efficient \ref RemoveMember(MemberIterator).
-        \note Linear time complexity.
+        \return Итератор, следующий за удаленным элементом.
+            Если итератор \c pos ссылается на последний элемент, возвращается итератор \ref MemberEnd().
+        \note Эта функция сохраняет относительный порядок оставшегося объекта.
+            члены. Если вам это не нужно, используйте более эффективный метод \ref RemoveMember(MemberIterator).
+        \note Линейная временная сложность.
     */
     MemberIterator EraseMember(ConstMemberIterator pos) {
         return EraseMember(pos, pos +1);
     }
 
-    //! Remove members in the range [first, last) from an object.
-    /*! \param first iterator to the first member to remove
-        \param last  iterator following the last member to remove
-        \pre IsObject() == true && \ref MemberBegin() <= \c first <= \c last <= \ref MemberEnd()
-        \return Iterator following the last removed element.
-        \note This function preserves the relative order of the remaining object
-            members.
-        \note Linear time complexity.
+    //! Удалить элементы в диапазоне [первый, последний) из объекта.
+    /*! \param первый итератор для первого удаляемого члена
+        \param последний итератор, следующий за последним удаляемым элементом
+        \pre IsObject() == true && \ref MemberBegin() <= \c первый <= \c последний <= \ref MemberEnd()
+        \return Итератор, следующий за последним удаленным элементом.
+        \note Эта функция сохраняет относительный порядок оставшегося объекта.
+            члены.
+        \note Линейная временная сложность.
     */
     MemberIterator EraseMember(ConstMemberIterator first, ConstMemberIterator last) {
         RAPIDJSON_ASSERT(IsObject());
@@ -1600,10 +1600,10 @@ public:
         return DoEraseMembers(first, last);
     }
 
-    //! Erase a member in object by its name.
-    /*! \param name Name of member to be removed.
-        \return Whether the member existed.
-        \note Linear time complexity.
+    //! Удалить член объекта по его имени.
+    /*! \param name Имя удаляемого участника.
+        \return Существовал ли этот член.
+        \note Линейная временная сложность.
     */
     bool EraseMember(const Ch* name) {
         GenericValue n(StringRef(name));
@@ -1632,25 +1632,25 @@ public:
 
     //@}
 
-    //!@name Array
+    //! @name Массив
     //@{
 
-    //! Set this value as an empty array.
+    //! Установите это значение как пустой массив.
     /*! \post IsArray == true */
     GenericValue& SetArray() { this->~GenericValue(); new (this) GenericValue(kArrayType); return *this; }
 
-    //! Get the number of elements in array.
+    //! Получить количество элементов в массиве.
     SizeType Size() const { RAPIDJSON_ASSERT(IsArray()); return data_.a.size; }
 
-    //! Get the capacity of array.
+    //! Получить емкость массива.
     SizeType Capacity() const { RAPIDJSON_ASSERT(IsArray()); return data_.a.capacity; }
 
-    //! Check whether the array is empty.
+    //! Проверьте, пуст ли массив.
     bool Empty() const { RAPIDJSON_ASSERT(IsArray()); return data_.a.size == 0; }
 
-    //! Remove all elements in the array.
-    /*! This function do not deallocate memory in the array, i.e. the capacity is unchanged.
-        \note Linear time complexity.
+    //! Удалить все элементы массива.
+    /*! Эта функция не освобождает память в массиве, т.е. емкость не изменяется.
+        \note Линейная временная сложность.
     */
     void Clear() {
         RAPIDJSON_ASSERT(IsArray());
@@ -1660,10 +1660,10 @@ public:
         data_.a.size = 0;
     }
 
-    //! Get an element from array by index.
+    //! Получить элемент из массива по индексу.
     /*! \pre IsArray() == true
-        \param index Zero-based index of element.
-        \see operator[](T*)
+        \param index Индекс элемента, отсчитываемый от нуля.
+        \см. оператор[](T*)
     */
     GenericValue& operator[](SizeType index) {
         RAPIDJSON_ASSERT(IsArray());
@@ -1672,24 +1672,24 @@ public:
     }
     const GenericValue& operator[](SizeType index) const { return const_cast<GenericValue&>(*this)[index]; }
 
-    //! Element iterator
+    //! Итератор элемента
     /*! \pre IsArray() == true */
     ValueIterator Begin() { RAPIDJSON_ASSERT(IsArray()); return GetElementsPointer(); }
-    //! \em Past-the-end element iterator
+    //! \em Итератор элемента прошедшего конца
     /*! \pre IsArray() == true */
     ValueIterator End() { RAPIDJSON_ASSERT(IsArray()); return GetElementsPointer() + data_.a.size; }
-    //! Constant element iterator
+    //! Итератор постоянного элемента
     /*! \pre IsArray() == true */
     ConstValueIterator Begin() const { return const_cast<GenericValue&>(*this).Begin(); }
-    //! Constant \em past-the-end element iterator
+    //! Константный итератор элемента \em после конца
     /*! \pre IsArray() == true */
     ConstValueIterator End() const { return const_cast<GenericValue&>(*this).End(); }
 
-    //! Request the array to have enough capacity to store elements.
-    /*! \param newCapacity  The capacity that the array at least need to have.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \note Linear time complexity.
+    //! Запросите у массива достаточную емкость для хранения элементов.
+    /*! \param newCapacity Емкость, которую по крайней мере должен иметь массив.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \note Линейная временная сложность.
     */
     GenericValue& Reserve(SizeType newCapacity, Allocator &allocator) {
         RAPIDJSON_ASSERT(IsArray());
@@ -1700,15 +1700,15 @@ public:
         return *this;
     }
 
-    //! Append a GenericValue at the end of the array.
-    /*! \param value        Value to be appended.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
+    //! Добавьте GenericValue в конец массива.
+    /*! \param value Добавляемое значение.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
         \pre IsArray() == true
-        \post value.IsNull() == true
-        \return The value itself for fluent API.
-        \note The ownership of \c value will be transferred to this array on success.
-        \note If the number of elements to be appended is known, calls Reserve() once first may be more efficient.
-        \note Amortized constant time complexity.
+        \ опубликовать значение. IsNull() == правда
+        \return Само значение для беглого API .
+        \note В случае успеха право собственности на значение \c будет передано этому массиву.
+        \note Если количество добавляемых элементов известно, то вызов Reserve() один раз может быть более эффективным.
+        \note Амортизированная постоянная временная сложность.
     */
     GenericValue& PushBack(GenericValue& value, Allocator& allocator) {
         RAPIDJSON_ASSERT(IsArray());
@@ -1724,35 +1724,35 @@ public:
     }
 #endif // RAPIDJSON_HAS_CXX11_RVALUE_REFS
 
-    //! Append a constant string reference at the end of the array.
-    /*! \param value        Constant string reference to be appended.
-        \param allocator    Allocator for reallocating memory. It must be the same one used previously. Commonly use GenericDocument::GetAllocator().
+    //! Добавьте ссылку на константную строку в конец массива.
+    /*! \param value Ссылка на константную строку, которая будет добавлена.
+        \param allocator Распределитель для перераспределения памяти. Это должен быть тот же самый вариант, который использовался ранее. Обычно используйте GenericDocument::GetAllocator() .
         \pre IsArray() == true
-        \return The value itself for fluent API.
-        \note If the number of elements to be appended is known, calls Reserve() once first may be more efficient.
-        \note Amortized constant time complexity.
-        \see GenericStringRef
+        \return Само значение для беглого API .
+        \note Если количество добавляемых элементов известно, то вызов Reserve() один раз может быть более эффективным.
+        \note Амортизированная постоянная временная сложность.
+        \см. GenericStringRef
     */
     GenericValue& PushBack(StringRefType value, Allocator& allocator) {
         return (*this).template PushBack<StringRefType>(value, allocator);
     }
 
-    //! Append a primitive value at the end of the array.
-    /*! \tparam T Either \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t
-        \param value Value of primitive type T to be appended.
-        \param allocator    Allocator for reallocating memory. It must be the same one as used before. Commonly use GenericDocument::GetAllocator().
+    //! Добавьте примитивное значение в конец массива.
+    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+        \param value Добавляемое значение примитивного типа T.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
         \pre IsArray() == true
-        \return The value itself for fluent API.
-        \note If the number of elements to be appended is known, calls Reserve() once first may be more efficient.
+        \return Само значение для беглого API .
+        \note Если количество добавляемых элементов известно, то вызов Reserve() один раз может быть более эффективным.
 
-        \note The source type \c T explicitly disallows all pointer types,
-            especially (\c const) \ref Ch*.  This helps avoiding implicitly
-            referencing character strings with insufficient lifetime, use
-            \ref PushBack(GenericValue&, Allocator&) or \ref
-            PushBack(StringRefType, Allocator&).
-            All other pointer types would implicitly convert to \c bool,
-            use an explicit cast instead, if needed.
-        \note Amortized constant time complexity.
+        \note Исходный тип \c T явно запрещает все типы указателей,
+            особенно (\c const) \ref Ch*.  Это помогает избежать неявного
+            для ссылки на строки символов с недостаточным временем жизни используйте
+            \ref PushBack(GenericValue&, Allocator&) или \ref
+            PushBack(StringRefType, Распределитель&).
+            Все остальные типы указателей будут неявно преобразованы в \c bool,
+            вместо этого используйте явное приведение, если необходимо.
+        \note Амортизированная постоянная временная сложность.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (GenericValue&))
@@ -1761,9 +1761,9 @@ public:
         return PushBack(v, allocator);
     }
 
-    //! Remove the last element in the array.
+    //! Удалить последний элемент массива.
     /*!
-        \note Constant time complexity.
+        \note Постоянная временная сложность.
     */
     GenericValue& PopBack() {
         RAPIDJSON_ASSERT(IsArray());
@@ -1772,24 +1772,24 @@ public:
         return *this;
     }
 
-    //! Remove an element of array by iterator.
+    //! Удалить элемент массива с помощью итератора.
     /*!
-        \param pos iterator to the element to remove
+        \param pos итератор элемента, который нужно удалить
         \pre IsArray() == true && \ref Begin() <= \c pos < \ref End()
-        \return Iterator following the removed element. If the iterator pos refers to the last element, the End() iterator is returned.
-        \note Linear time complexity.
+        \return Итератор, следующий за удаленным элементом. Если итератор pos ссылается на последний элемент, возвращается итератор End().
+        \note Линейная временная сложность.
     */
     ValueIterator Erase(ConstValueIterator pos) {
         return Erase(pos, pos + 1);
     }
 
-    //! Remove elements in the range [first, last) of the array.
+    //! Удалить элементы в диапазоне [первый, последний) массива.
     /*!
-        \param first iterator to the first element to remove
-        \param last  iterator following the last element to remove
-        \pre IsArray() == true && \ref Begin() <= \c first <= \c last <= \ref End()
-        \return Iterator following the last removed element.
-        \note Linear time complexity.
+        \param первый итератор первого удаляемого элемента
+        \param последний итератор, следующий за последним удаляемым элементом
+        \pre IsArray() == true && \ref Begin() <= \c первый <= \c последний <= \ref End()
+        \return Итератор, следующий за последним удаленным элементом.
+        \note Линейная временная сложность.
     */
     ValueIterator Erase(ConstValueIterator first, ConstValueIterator last) {
         RAPIDJSON_ASSERT(IsArray());
@@ -1811,7 +1811,7 @@ public:
 
     //@}
 
-    //!@name Number
+    //! @name Номер
     //@{
 
     int GetInt() const          { RAPIDJSON_ASSERT(data_.f.flags & kIntFlag);   return data_.n.i.i;   }
@@ -1819,20 +1819,20 @@ public:
     int64_t GetInt64() const    { RAPIDJSON_ASSERT(data_.f.flags & kInt64Flag); return data_.n.i64; }
     uint64_t GetUint64() const  { RAPIDJSON_ASSERT(data_.f.flags & kUint64Flag); return data_.n.u64; }
 
-    //! Get the value as double type.
-    /*! \note If the value is 64-bit integer type, it may lose precision. Use \c IsLosslessDouble() to check whether the conversion is lossless.
+    //! Получите значение как двойной тип.
+    /*! \note Если значение представляет собой 64-битное целое число, оно может потерять точность. Используйте \c IsLosslessDouble(), чтобы проверить, происходит ли преобразование без потерь.
     */
     double GetDouble() const {
         RAPIDJSON_ASSERT(IsNumber());
-        if ((data_.f.flags & kDoubleFlag) != 0)                return data_.n.d;   // exact type, no conversion.
-        if ((data_.f.flags & kIntFlag) != 0)                   return data_.n.i.i; // int -> double
-        if ((data_.f.flags & kUintFlag) != 0)                  return data_.n.u.u; // unsigned -> double
-        if ((data_.f.flags & kInt64Flag) != 0)                 return static_cast<double>(data_.n.i64); // int64_t -> double (may lose precision)
-        RAPIDJSON_ASSERT((data_.f.flags & kUint64Flag) != 0);  return static_cast<double>(data_.n.u64); // uint64_t -> double (may lose precision)
+        if ((data_.f.flags & kDoubleFlag) != 0)                return data_.n.d;   // точный тип, без преобразования.
+        if ((data_.f.flags & kIntFlag) != 0)                   return data_.n.i.i; // интервал -> двойной
+        if ((data_.f.flags & kUintFlag) != 0)                  return data_.n.u.u; // без знака -> двойной
+        if ((data_.f.flags & kInt64Flag) != 0)                 return static_cast<double>(data_.n.i64); // int64_t -> double (может потерять точность)
+        RAPIDJSON_ASSERT((data_.f.flags & kUint64Flag) != 0);  return static_cast<double>(data_.n.u64); // uint64_t -> double (может потерять точность)
     }
 
-    //! Get the value as float type.
-    /*! \note If the value is 64-bit integer type, it may lose precision. Use \c IsLosslessFloat() to check whether the conversion is lossless.
+    //! Получите значение как тип float.
+    /*! \note Если значение представляет собой 64-битное целое число, оно может потерять точность. Используйте \c IsLosslessFloat(), чтобы проверить, происходит ли преобразование без потерь.
     */
     float GetFloat() const {
         return static_cast<float>(GetDouble());
@@ -1847,78 +1847,78 @@ public:
 
     //@}
 
-    //!@name String
+    //! @name Строка
     //@{
 
     const Ch* GetString() const { RAPIDJSON_ASSERT(IsString()); return DataString(data_); }
 
-    //! Get the length of string.
-    /*! Since rapidjson permits "\\u0000" in the json string, strlen(v.GetString()) may not equal to v.GetStringLength().
+    //! Получить длину строки.
+    /*! Поскольку Rapidjson допускает использование "\\u0000" в строке json, strlen(v. GetString() ) может не равняться v. GetStringLength() .
     */
     SizeType GetStringLength() const { RAPIDJSON_ASSERT(IsString()); return DataStringLength(data_); }
 
-    //! Set this value as a string without copying source string.
-    /*! This version has better performance with supplied length, and also support string containing null character.
-        \param s source string pointer.
-        \param length The length of source string, excluding the trailing null terminator.
-        \return The value itself for fluent API.
-        \post IsString() == true && GetString() == s && GetStringLength() == length
-        \see SetString(StringRefType)
+    //! Установите это значение как строку, не копируя исходную строку.
+    /*! Эта версия имеет лучшую производительность с указанной длиной, а также поддерживает строку, содержащую нулевой символ.
+        \param указатель исходной строки.
+        \param length Длина исходной строки, исключая завершающий нулевой признак.
+        \return Само значение для беглого API .
+        \post IsString() == true && GetString() == s && GetStringLength() == длина
+        \см. SetString(StringRefType)
     */
     GenericValue& SetString(const Ch* s, SizeType length) { return SetString(StringRef(s, length)); }
 
-    //! Set this value as a string without copying source string.
-    /*! \param s source string reference
-        \return The value itself for fluent API.
+    //! Установите это значение как строку, не копируя исходную строку.
+    /*! Ссылка на исходную строку \param s
+        \return Само значение для беглого API .
         \post IsString() == true && GetString() == s && GetStringLength() == s.length
     */
     GenericValue& SetString(StringRefType s) { this->~GenericValue(); SetStringRaw(s); return *this; }
 
-    //! Set this value as a string by copying from source string.
-    /*! This version has better performance with supplied length, and also support string containing null character.
-        \param s source string.
-        \param length The length of source string, excluding the trailing null terminator.
-        \param allocator Allocator for allocating copied buffer. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \post IsString() == true && GetString() != s && strcmp(GetString(),s) == 0 && GetStringLength() == length
+    //! Установите это значение как строку, скопировав исходную строку.
+    /*! Эта версия имеет лучшую производительность с указанной длиной, а также поддерживает строку, содержащую нулевой символ.
+        Исходная строка \param s.
+        \param length Длина исходной строки, исключая завершающий нулевой признак.
+        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \post IsString() == true && GetString() != s && strcmp( GetString() ,s) == 0 && GetStringLength() == длина
     */
     GenericValue& SetString(const Ch* s, SizeType length, Allocator& allocator) { return SetString(StringRef(s, length), allocator); }
 
-    //! Set this value as a string by copying from source string.
-    /*! \param s source string.
-        \param allocator Allocator for allocating copied buffer. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \post IsString() == true && GetString() != s && strcmp(GetString(),s) == 0 && GetStringLength() == length
+    //! Установите это значение как строку, скопировав исходную строку.
+    /*! Исходная строка \param s.
+        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \post IsString() == true && GetString() != s && strcmp( GetString() ,s) == 0 && GetStringLength() == длина
     */
     GenericValue& SetString(const Ch* s, Allocator& allocator) { return SetString(StringRef(s), allocator); }
 
-    //! Set this value as a string by copying from source string.
-    /*! \param s source string reference
-        \param allocator Allocator for allocating copied buffer. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \post IsString() == true && GetString() != s.s && strcmp(GetString(),s) == 0 && GetStringLength() == length
+    //! Установите это значение как строку, скопировав исходную строку.
+    /*! Ссылка на исходную строку \param s
+        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \post IsString() == true && GetString() != s.s && strcmp( GetString() ,s) == 0 && GetStringLength() == длина
     */
     GenericValue& SetString(StringRefType s, Allocator& allocator) { this->~GenericValue(); SetStringRaw(s, allocator); return *this; }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Set this value as a string by copying from source string.
-    /*! \param s source string.
-        \param allocator Allocator for allocating copied buffer. Commonly use GenericDocument::GetAllocator().
-        \return The value itself for fluent API.
-        \post IsString() == true && GetString() != s.data() && strcmp(GetString(),s.data() == 0 && GetStringLength() == s.size()
-        \note Requires the definition of the preprocessor symbol \ref RAPIDJSON_HAS_STDSTRING.
+    //! Установите это значение как строку, скопировав исходную строку.
+    /*! Исходная строка \param s.
+        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
+        \return Само значение для беглого API .
+        \post IsString() == true && GetString() != s. data() && strcmp( GetString() ,s. data() == 0 && GetStringLength() == s. size()
+        \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
     */
     GenericValue& SetString(const std::basic_string<Ch>& s, Allocator& allocator) { return SetString(StringRef(s), allocator); }
 #endif
 
     //@}
 
-    //!@name Array
+    //! @name Массив
     //@{
 
-    //! Templated version for checking whether this value is type T.
+    //! Шаблонная версия для проверки того, является ли это значение типом T.
     /*!
-        \tparam T Either \c bool, \c int, \c unsigned, \c int64_t, \c uint64_t, \c double, \c float, \c const \c char*, \c std::basic_string<Ch>
+        \tparam T Либо \c bool, \c int, \c unsigned, \c int64_t , \c uint64_t , \c double, \c float, \c const \c char*, \c std:: basic_string <Ch>
     */
     template <typename T>
     bool Is() const { return internal::TypeHelper<ValueType, T>::Is(*this); }
@@ -1937,12 +1937,12 @@ public:
 
     //@}
 
-    //! Generate events of this value to a Handler.
-    /*! This function adopts the GoF visitor pattern.
-        Typical usage is to output this JSON value as JSON text via Writer, which is a Handler.
-        It can also be used to deep clone this value via GenericDocument, which is also a Handler.
-        \tparam Handler type of handler.
-        \param handler An object implementing concept Handler.
+    //! Генерируйте события этого значения для обработчика.
+    /*! Эта функция использует шаблон посетителя GoF.
+        Типичное использование — вывод этого значения JSON в виде текста JSON через Writer, который является обработчиком.
+        Его также можно использовать для глубокого клонирования этого значения через GenericDocument, который также является обработчиком.
+        \tparam Handler Тип обработчика.
+        \param handler Объект, реализующий концепцию Handler.
     */
     template <typename Handler>
     bool Accept(Handler& handler) const {
@@ -1955,7 +1955,7 @@ public:
             if (RAPIDJSON_UNLIKELY(!handler.StartObject()))
                 return false;
             for (ConstMemberIterator m = MemberBegin(); m != MemberEnd(); ++m) {
-                RAPIDJSON_ASSERT(m->name.IsString()); // User may change the type of name by MemberIterator.
+                RAPIDJSON_ASSERT(m->name.IsString()); // Пользователь может изменить тип имени с помощью MemberIterator.
                 if (RAPIDJSON_UNLIKELY(!handler.Key(m->name.GetString(), m->name.GetStringLength(), (m->name.data_.f.flags & kCopyFlag) != 0)))
                     return false;
                 if (RAPIDJSON_UNLIKELY(!m->value.Accept(handler)))
@@ -2000,9 +2000,9 @@ private:
         kCopyFlag       = 0x0800,
         kInlineStrFlag  = 0x1000,
 
-        // Initial flags of different types.
+        // Начальные флаги разных типов.
         kNullFlag = kNullType,
-        // These casts are added to suppress the warning on MSVC about bitwise operations between enums of different types.
+        // Эти приведения добавлены для подавления предупреждений MSVC о побитовых операциях между перечислениями разных типов.
         kTrueFlag = static_cast<int>(kTrueType) | static_cast<int>(kBoolFlag),
         kFalseFlag = static_cast<int>(kFalseType) | static_cast<int>(kBoolFlag),
         kNumberIntFlag = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kIntFlag | kInt64Flag),
@@ -2025,29 +2025,29 @@ private:
 
     struct Flag {
 #if RAPIDJSON_48BITPOINTER_OPTIMIZATION
-        char payload[sizeof(SizeType) * 2 + 6];     // 2 x SizeType + lower 48-bit pointer
+        char payload[sizeof(SizeType) * 2 + 6];     // 2 x SizeType + нижний 48-битный указатель
 #elif RAPIDJSON_64BIT
-        char payload[sizeof(SizeType) * 2 + sizeof(void*) + 6]; // 6 padding bytes
+        char payload[sizeof(SizeType) * 2 + sizeof(void*) + 6]; // 6 байтов заполнения
 #else
-        char payload[sizeof(SizeType) * 2 + sizeof(void*) + 2]; // 2 padding bytes
+        char payload[sizeof(SizeType) * 2 + sizeof(void*) + 2]; // 2 байта заполнения
 #endif
         uint16_t flags;
     };
 
     struct String {
         SizeType length;
-        SizeType hashcode;  //!< reserved
+        SizeType hashcode;  //!< зарезервировано
         const Ch* str;
-    };  // 12 bytes in 32-bit mode, 16 bytes in 64-bit mode
+    };  // 12 байт в 32-битном режиме, 16 байт в 64-битном режиме.
 
-    // implementation detail: ShortString can represent zero-terminated strings up to MaxSize chars
-    // (excluding the terminating zero) and store a value to determine the length of the contained
-    // string in the last character str[LenPos] by storing "MaxSize - length" there. If the string
-    // to store has the maximal length of MaxSize then str[LenPos] will be 0 and therefore act as
-    // the string terminator as well. For getting the string length back from that value just use
-    // "MaxSize - str[LenPos]".
-    // This allows to store 13-chars strings in 32-bit mode, 21-chars strings in 64-bit mode,
-    // 13-chars strings for RAPIDJSON_48BITPOINTER_OPTIMIZATION=1 inline (for `UTF8`-encoded strings).
+    // деталь реализации: ShortString может представлять строки с нулевым завершением до символов MaxSize.
+    // (исключая завершающий ноль) и сохраните значение, чтобы определить длину содержащегося
+    // строку в последнем символе str[LenPos], сохранив там «MaxSize — длина». Если строка
+    // для хранения имеет максимальную длину MaxSize, тогда str[LenPos] будет равно 0 и, следовательно, будет действовать как
+    // терминатор строки, а также. Чтобы получить длину строки из этого значения, просто используйте
+    // «MaxSize — str[LenPos]».
+    // Это позволяет хранить строки длиной 13 символов в 32-битном режиме, строки из 21 символа в 64-битном режиме.
+    // Строки из 13 символов для встроенного RAPIDJSON_48BITPOINTER_OPTIMIZATION =1 (для строк в кодировке `UTF8`).
     struct ShortString {
         enum { MaxChars = sizeof(static_cast<Flag*>(0)->payload) / sizeof(Ch), MaxSize = MaxChars - 1, LenPos = MaxSize };
         Ch str[MaxChars];
@@ -2055,9 +2055,9 @@ private:
         inline static bool Usable(SizeType len) { return                       (MaxSize >= len); }
         inline void     SetLength(SizeType len) { str[LenPos] = static_cast<Ch>(MaxSize -  len); }
         inline SizeType GetLength() const       { return  static_cast<SizeType>(MaxSize -  str[LenPos]); }
-    };  // at most as many bytes as "String" above => 12 bytes in 32-bit mode, 16 bytes in 64-bit mode
+    };  // максимум столько же байтов, сколько «Строка» выше => 12 байтов в 32-битном режиме, 16 байтов в 64-битном режиме
 
-    // By using proper binary layout, retrieval of different integer types do not need conversions.
+    // При использовании правильной двоичной компоновки получение различных целочисленных типов не требует преобразований.
     union Number {
 #if RAPIDJSON_ENDIAN == RAPIDJSON_LITTLEENDIAN
         struct I {
@@ -2081,19 +2081,19 @@ private:
         int64_t i64;
         uint64_t u64;
         double d;
-    };  // 8 bytes
+    };  // 8 байт
 
     struct ObjectData {
         SizeType size;
         SizeType capacity;
         Member* members;
-    };  // 12 bytes in 32-bit mode, 16 bytes in 64-bit mode
+    };  // 12 байт в 32-битном режиме, 16 байт в 64-битном режиме.
 
     struct ArrayData {
         SizeType size;
         SizeType capacity;
         GenericValue* elements;
-    };  // 12 bytes in 32-bit mode, 16 bytes in 64-bit mode
+    };  // 12 байт в 32-битном режиме, 16 байт в 64-битном режиме.
 
     union Data {
         String s;
@@ -2102,7 +2102,7 @@ private:
         ObjectData o;
         ArrayData a;
         Flag f;
-    };  // 16 bytes in 32-bit mode, 24 bytes in 64-bit mode, 16 bytes in 64-bit with RAPIDJSON_48BITPOINTER_OPTIMIZATION
+    };  // 16 байт в 32-битном режиме, 24 байта в 64-битном режиме, 16 байт в 64-битном режиме с RAPIDJSON_48BITPOINTER_OPTIMIZATION
 
     static RAPIDJSON_FORCEINLINE const Ch* DataString(const Data& data) {
         return (data.f.flags & kInlineStrFlag) ? data.ss.str : RAPIDJSON_GETPOINTER(Ch, data.s.str);
@@ -2138,11 +2138,11 @@ private:
     typedef typename MapTraits::Iterator    MapIterator;
 
     //
-    // Layout of the members' map/array, re(al)located according to the needed capacity:
+    // Макет карты/массива участников, перемещаемый в соответствии с необходимой емкостью:
     //
     //    {Map*}<>{capacity}<>{Member[capacity]}<>{MapIterator[capacity]}
     //
-    // (where <> stands for the RAPIDJSON_ALIGN-ment, if needed)
+    // (где <> означает RAPIDJSON_ALIGN -ment, если необходимо)
     //
 
     static RAPIDJSON_FORCEINLINE size_t GetMapLayoutSize(SizeType capacity) {
@@ -2177,7 +2177,7 @@ private:
                                         RAPIDJSON_ALIGN(sizeof(Map*)));
     }
 
-    // Some compilers' debug mechanisms want all iterators to be destroyed, for their accounting..
+    // Механизмы отладки некоторых компиляторов требуют, чтобы все итераторы были уничтожены для их учета.
     RAPIDJSON_FORCEINLINE MapIterator DropMapIterator(MapIterator& rhs) {
 #if RAPIDJSON_HAS_CXX11
         MapIterator ret = std::move(rhs);
@@ -2255,7 +2255,7 @@ private:
             for (SizeType i = 0; i < data_.o.size; i++) {
                 members[i].~Member();
             }
-            if (Allocator::kNeedFree) { // Shortcut by Allocator's trait
+            if (Allocator::kNeedFree) { // Ярлык по признаку Allocator
                 Map** map = &GetMap(members);
                 Allocator::Free(*map);
                 Allocator::Free(map);
@@ -2332,10 +2332,10 @@ private:
             new (&mit[mpos]) MapIterator(DropMapIterator(mit[&*last - members]));
             mit[mpos]->second = mpos;
 #endif
-            *m = *last; // Move the last one to this place
+            *m = *last; // Переместите последний на это место
         }
         else {
-            m->~Member(); // Only one left, just destroy
+            m->~Member(); // Остался только один, просто уничтожь
         }
         --o.size;
         return m;
@@ -2358,7 +2358,7 @@ private:
         }
 #if RAPIDJSON_USE_MEMBERSMAP
         if (first != last) {
-            // Move remaining members/iterators
+            // Переместить оставшиеся члены/итераторы
             MemberIterator next = pos + (last - first);
             for (MemberIterator itr = pos; next != end; ++itr, ++next) {
                 std::memcpy(static_cast<void*>(&*itr), &*next, sizeof(Member));
@@ -2398,7 +2398,7 @@ private:
         SetMembersPointer(lm);
     }
 
-    // Initialize this value as array with initial data, without calling destructor.
+    // Инициализируйте это значение как массив с начальными данными, не вызывая деструктор.
     void SetArrayRaw(GenericValue* values, SizeType count, Allocator& allocator) {
         data_.f.flags = kArrayFlag;
         if (count) {
@@ -2411,7 +2411,7 @@ private:
         data_.a.size = data_.a.capacity = count;
     }
 
-    //! Initialize this value as object with initial data, without calling destructor.
+    //! Инициализируйте это значение как объект с начальными данными, не вызывая деструктор.
     void SetObjectRaw(Member* members, SizeType count, Allocator& allocator) {
         data_.f.flags = kObjectFlag;
         if (count) {
@@ -2431,14 +2431,14 @@ private:
         data_.o.size = data_.o.capacity = count;
     }
 
-    //! Initialize this value as constant string, without calling destructor.
+    //! Инициализируйте это значение как константную строку без вызова деструктора.
     void SetStringRaw(StringRefType s) RAPIDJSON_NOEXCEPT {
         data_.f.flags = kConstStringFlag;
         SetStringPointer(s);
         data_.s.length = s.length;
     }
 
-    //! Initialize this value as copy string with initial data, without calling destructor.
+    //! Инициализируйте это значение как строку копирования с начальными данными, не вызывая деструктор.
     void SetStringRaw(StringRefType s, Allocator& allocator) {
         Ch* str = 0;
         if (ShortString::Usable(s.length)) {
@@ -2455,10 +2455,10 @@ private:
         str[s.length] = '\0';
     }
 
-    //! Assignment without calling destructor
+    //! Присвоение без вызова деструктора
     void RawAssign(GenericValue& rhs) RAPIDJSON_NOEXCEPT {
         data_ = rhs.data_;
-        // data_.f.flags = rhs.data_.f.flags;
+        // data_ .f.flags = rhs. data_ .f.флаги;
         rhs.data_.f.flags = kNullFlag;
     }
 
@@ -2473,7 +2473,7 @@ private:
 
         const Ch* const str1 = GetString();
         const Ch* const str2 = rhs.GetString();
-        if(str1 == str2) { return true; } // fast path for constant string
+        if(str1 == str2) { return true; } // быстрый путь для постоянной строки
 
         return (std::memcmp(str1, str2, sizeof(Ch) * len1) == 0);
     }
@@ -2481,34 +2481,34 @@ private:
     Data data_;
 };
 
-//! GenericValue with UTF8 encoding
+//! GenericValue с кодировкой UTF8
 typedef GenericValue<UTF8<> > Value;
 
 ///////////////////////////////////////////////////////////////////////////////
-// GenericDocument
+// Общий документ
 
-//! A document for parsing JSON text as DOM.
+//! Документ для анализа текста JSON как DOM.
 /*!
-    \note implements Handler concept
-    \tparam Encoding Encoding for both parsing and string storage.
-    \tparam Allocator Allocator for allocating memory for the DOM
-    \tparam StackAllocator Allocator for allocating memory for stack during parsing.
-    \warning Although GenericDocument inherits from GenericValue, the API does \b not provide any virtual functions, especially no virtual destructor.  To avoid memory leaks, do not \c delete a GenericDocument object via a pointer to a GenericValue.
+    \note реализует концепцию Handler
+    \tparam Кодировка Кодировка для синтаксического анализа и хранения строк.
+    \tparam Распределитель Распределитель для выделения памяти для DOM
+    \tparam StackAllocator Распределитель для выделения памяти для стека во время синтаксического анализа.
+    \warning Хотя GenericDocument наследует от GenericValue, API \b не предоставляет никаких виртуальных функций, особенно виртуального деструктора.  Чтобы избежать утечек памяти, не \c ​​удаляйте объект GenericDocument с помощью указателя на GenericValue.
 */
 template <typename Encoding, typename Allocator = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator = RAPIDJSON_DEFAULT_STACK_ALLOCATOR >
 class GenericDocument : public GenericValue<Encoding, Allocator> {
 public:
-    typedef typename Encoding::Ch Ch;                       //!< Character type derived from Encoding.
-    typedef GenericValue<Encoding, Allocator> ValueType;    //!< Value type of the document.
-    typedef Allocator AllocatorType;                        //!< Allocator type from template parameter.
-    typedef StackAllocator StackAllocatorType;              //!< StackAllocator type from template parameter.
+    typedef typename Encoding::Ch Ch;                       //!< Тип символа, полученный из Encoding.
+    typedef GenericValue<Encoding, Allocator> ValueType;    //!< Тип значения документа.
+    typedef Allocator AllocatorType;                        //!< Тип распределителя из параметра шаблона.
+    typedef StackAllocator StackAllocatorType;              //!< Тип StackAllocator из параметра шаблона.
 
-    //! Constructor
-    /*! Creates an empty document of specified type.
-        \param type             Mandatory type of object to create.
-        \param allocator        Optional allocator for allocating memory.
-        \param stackCapacity    Optional initial capacity of stack in bytes.
-        \param stackAllocator   Optional allocator for allocating memory for stack.
+    //! Конструктор
+    /*! Создает пустой документ указанного типа.
+        \param type Обязательный тип создаваемого объекта.
+        \param allocator Необязательный распределитель для выделения памяти.
+        \param stackCapacity Необязательная начальная емкость стека в байтах.
+        \param stackAllocator Необязательный распределитель для выделения памяти для стека.
     */
     explicit GenericDocument(Type type, Allocator* allocator = 0, size_t stackCapacity = kDefaultStackCapacity, StackAllocator* stackAllocator = 0) :
         GenericValue<Encoding, Allocator>(type),  allocator_(allocator), ownAllocator_(0), stack_(stackAllocator, stackCapacity), parseResult_()
@@ -2517,11 +2517,11 @@ public:
             ownAllocator_ = allocator_ = RAPIDJSON_NEW(Allocator)();
     }
 
-    //! Constructor
-    /*! Creates an empty document which type is Null.
-        \param allocator        Optional allocator for allocating memory.
-        \param stackCapacity    Optional initial capacity of stack in bytes.
-        \param stackAllocator   Optional allocator for allocating memory for stack.
+    //! Конструктор
+    /*! Создает пустой документ с типом Null.
+        \param allocator Необязательный распределитель для выделения памяти.
+        \param stackCapacity Необязательная начальная емкость стека в байтах.
+        \param stackAllocator Необязательный распределитель для выделения памяти для стека.
     */
     GenericDocument(Allocator* allocator = 0, size_t stackCapacity = kDefaultStackCapacity, StackAllocator* stackAllocator = 0) :
         allocator_(allocator), ownAllocator_(0), stack_(stackAllocator, stackCapacity), parseResult_()
@@ -2531,9 +2531,9 @@ public:
     }
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-    //! Move constructor in C++11
+    //! Переместить конструктор в C++11
     GenericDocument(GenericDocument&& rhs) RAPIDJSON_NOEXCEPT
-        : ValueType(std::forward<ValueType>(rhs)), // explicit cast to avoid prohibited move from Document
+        : ValueType(std::forward<ValueType>(rhs)), // явное приведение, чтобы избежать запрещенного перемещения из документа
           allocator_(rhs.allocator_),
           ownAllocator_(rhs.ownAllocator_),
           stack_(std::move(rhs.stack_)),
@@ -2546,10 +2546,10 @@ public:
 #endif
 
     ~GenericDocument() {
-        // Clear the ::ValueType before ownAllocator is destroyed, ~ValueType()
-        // runs last and may access its elements or members which would be freed
-        // with an allocator like MemoryPoolAllocator (CrtAllocator does not
-        // free its data when destroyed, but MemoryPoolAllocator does).
+        // Очистите ::ValueType перед уничтожением ownAllocator, ~ ValueType()
+        // запускается последним и может получить доступ к своим элементам или членам, которые будут освобождены
+        // с распределителем, например MemoryPoolAllocator (CrtAllocator не
+        // освобождает свои данные при уничтожении, но это делает MemoryPoolAllocator).
         if (ownAllocator_) {
             ValueType::SetNull();
         }
@@ -2557,14 +2557,14 @@ public:
     }
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-    //! Move assignment in C++11
+    //! Переместить назначение в C++11
     GenericDocument& operator=(GenericDocument&& rhs) RAPIDJSON_NOEXCEPT
     {
-        // The cast to ValueType is necessary here, because otherwise it would
-        // attempt to call GenericValue's templated assignment operator.
+        // Здесь необходимо приведение к ValueType, поскольку в противном случае
+        // попытайтесь вызвать шаблонный оператор присваивания GenericValue.
         ValueType::operator=(std::forward<ValueType>(rhs));
 
-        // Calling the destructor here would prematurely call stack_'s destructor
+        // Вызов деструктора здесь приведет к преждевременному вызову деструктора stack_.
         Destroy();
 
         allocator_ = rhs.allocator_;
@@ -2580,11 +2580,11 @@ public:
     }
 #endif
 
-    //! Exchange the contents of this document with those of another.
+    //! Обменяйтесь содержимым этого документа с содержимым другого.
     /*!
-        \param rhs Another document.
-        \note Constant complexity.
-        \see GenericValue::Swap
+        \param rhs Другой документ.
+        \note Постоянная сложность.
+        \см. GenericValue::Swap
     */
     GenericDocument& Swap(GenericDocument& rhs) RAPIDJSON_NOEXCEPT {
         ValueType::Swap(rhs);
@@ -2595,48 +2595,48 @@ public:
         return *this;
     }
 
-    // Allow Swap with ValueType.
-    // Refer to Effective C++ 3rd Edition/Item 33: Avoid hiding inherited names.
+    // Разрешить обмен с ValueType.
+    // См. «Эффективное C++, 3-е издание», пункт 33: Не скрывайте унаследованные имена.
     using ValueType::Swap;
 
-    //! free-standing swap function helper
+    //! отдельно стоящий помощник функции подкачки
     /*!
-        Helper function to enable support for common swap implementation pattern based on \c std::swap:
+        Вспомогательная функция для включения поддержки общего шаблона реализации подкачки на основе \c std::swap:
         \code
         void swap(MyClass& a, MyClass& b) {
-            using std::swap;
-            swap(a.doc, b.doc);
+            используя std::swap;
+            своп(а.док, б.док);
             // ...
         }
         \endcode
-        \see Swap()
+        \см. Swap()
      */
     friend inline void swap(GenericDocument& a, GenericDocument& b) RAPIDJSON_NOEXCEPT { a.Swap(b); }
 
-    //! Populate this document by a generator which produces SAX events.
-    /*! \tparam Generator A functor with <tt>bool f(Handler)</tt> prototype.
-        \param g Generator functor which sends SAX events to the parameter.
-        \return The document itself for fluent API.
+    //! Заполните этот документ генератором, который генерирует события SAX.
+    /*! \tparam Генератор Функтор с прототипом <tt>bool f(Handler)</tt>.
+        \param g Функтор-генератор, который отправляет события SAX в параметр.
+        \return Сам документ для беглого API .
     */
     template <typename Generator>
     GenericDocument& Populate(Generator& g) {
         ClearStackOnExit scope(*this);
         if (g(*this)) {
-            RAPIDJSON_ASSERT(stack_.GetSize() == sizeof(ValueType)); // Got one and only one root object
-            ValueType::operator=(*stack_.template Pop<ValueType>(1));// Move value from stack to document
+            RAPIDJSON_ASSERT(stack_.GetSize() == sizeof(ValueType)); // Получил один и только один корневой объект
+            ValueType::operator=(*stack_.template Pop<ValueType>(1));// Переместить значение из стека в документ
         }
         return *this;
     }
 
-    //!@name Parse from stream
+    //! @name Анализ потока
     //!@{
 
-    //! Parse JSON text from an input stream (with Encoding conversion)
-    /*! \tparam parseFlags Combination of \ref ParseFlag.
-        \tparam SourceEncoding Encoding of input stream
-        \tparam InputStream Type of input stream, implementing Stream concept
-        \param is Input stream to be parsed.
-        \return The document itself for fluent API.
+    //! Анализ текста JSON из входного потока (с преобразованием кодировки)
+    /*! \tparam parseFlags Комбинация \ref ParseFlag.
+        \tparam SourceEncoding Кодирование входного потока
+        \tparam InputStream Тип входного потока, реализующий концепцию потока
+        \param — входной поток для анализа.
+        \return Сам документ для беглого API .
     */
     template <unsigned parseFlags, typename SourceEncoding, typename InputStream>
     GenericDocument& ParseStream(InputStream& is) {
@@ -2645,27 +2645,27 @@ public:
         ClearStackOnExit scope(*this);
         parseResult_ = reader.template Parse<parseFlags>(is, *this);
         if (parseResult_) {
-            RAPIDJSON_ASSERT(stack_.GetSize() == sizeof(ValueType)); // Got one and only one root object
-            ValueType::operator=(*stack_.template Pop<ValueType>(1));// Move value from stack to document
+            RAPIDJSON_ASSERT(stack_.GetSize() == sizeof(ValueType)); // Получил один и только один корневой объект
+            ValueType::operator=(*stack_.template Pop<ValueType>(1));// Переместить значение из стека в документ
         }
         return *this;
     }
 
-    //! Parse JSON text from an input stream
-    /*! \tparam parseFlags Combination of \ref ParseFlag.
-        \tparam InputStream Type of input stream, implementing Stream concept
-        \param is Input stream to be parsed.
-        \return The document itself for fluent API.
+    //! Разобрать текст JSON из входного потока
+    /*! \tparam parseFlags Комбинация \ref ParseFlag.
+        \tparam InputStream Тип входного потока, реализующий концепцию потока
+        \param — входной поток для анализа.
+        \return Сам документ для беглого API .
     */
     template <unsigned parseFlags, typename InputStream>
     GenericDocument& ParseStream(InputStream& is) {
         return ParseStream<parseFlags, Encoding, InputStream>(is);
     }
 
-    //! Parse JSON text from an input stream (with \ref kParseDefaultFlags)
-    /*! \tparam InputStream Type of input stream, implementing Stream concept
-        \param is Input stream to be parsed.
-        \return The document itself for fluent API.
+    //! Анализировать текст JSON из входного потока (с помощью \ref kParseDefaultFlags)
+    /*! \tparam InputStream Тип входного потока, реализующий концепцию потока
+        \param — входной поток для анализа.
+        \return Сам документ для беглого API .
     */
     template <typename InputStream>
     GenericDocument& ParseStream(InputStream& is) {
@@ -2673,13 +2673,13 @@ public:
     }
     //!@}
 
-    //!@name Parse in-place from mutable string
+    //! @name Анализ изменяемой строки на месте
     //!@{
 
-    //! Parse JSON text from a mutable string
-    /*! \tparam parseFlags Combination of \ref ParseFlag.
-        \param str Mutable zero-terminated string to be parsed.
-        \return The document itself for fluent API.
+    //! Анализировать текст JSON из изменяемой строки
+    /*! \tparam parseFlags Комбинация \ref ParseFlag.
+        \param str Изменяемая строка с нулевым завершением, подлежащая анализу.
+        \return Сам документ для беглого API .
     */
     template <unsigned parseFlags>
     GenericDocument& ParseInsitu(Ch* str) {
@@ -2687,22 +2687,22 @@ public:
         return ParseStream<parseFlags | kParseInsituFlag>(s);
     }
 
-    //! Parse JSON text from a mutable string (with \ref kParseDefaultFlags)
-    /*! \param str Mutable zero-terminated string to be parsed.
-        \return The document itself for fluent API.
+    //! Анализировать текст JSON из изменяемой строки (с помощью \ref kParseDefaultFlags)
+    /*! \param str Изменяемая строка с нулевым завершением, подлежащая анализу.
+        \return Сам документ для беглого API .
     */
     GenericDocument& ParseInsitu(Ch* str) {
         return ParseInsitu<kParseDefaultFlags>(str);
     }
     //!@}
 
-    //!@name Parse from read-only string
+    //! @name Анализ строки, доступной только для чтения.
     //!@{
 
-    //! Parse JSON text from a read-only string (with Encoding conversion)
-    /*! \tparam parseFlags Combination of \ref ParseFlag (must not contain \ref kParseInsituFlag).
-        \tparam SourceEncoding Transcoding from input Encoding
-        \param str Read-only zero-terminated string to be parsed.
+    //! Анализ текста JSON из строки, доступной только для чтения (с преобразованием кодировки)
+    /*! \tparam parseFlags Комбинация \ref ParseFlag (не должна содержать \ref kParseInsituFlag).
+        \tparam SourceEncoding Транскодирование из входной кодировки
+        \param str Строка с нулевым завершением, доступная только для чтения и подлежащая синтаксическому анализу.
     */
     template <unsigned parseFlags, typename SourceEncoding>
     GenericDocument& Parse(const typename SourceEncoding::Ch* str) {
@@ -2711,17 +2711,17 @@ public:
         return ParseStream<parseFlags, SourceEncoding>(s);
     }
 
-    //! Parse JSON text from a read-only string
-    /*! \tparam parseFlags Combination of \ref ParseFlag (must not contain \ref kParseInsituFlag).
-        \param str Read-only zero-terminated string to be parsed.
+    //! Анализировать текст JSON из строки, доступной только для чтения.
+    /*! \tparam parseFlags Комбинация \ref ParseFlag (не должна содержать \ref kParseInsituFlag).
+        \param str Строка с нулевым завершением, доступная только для чтения и подлежащая синтаксическому анализу.
     */
     template <unsigned parseFlags>
     GenericDocument& Parse(const Ch* str) {
         return Parse<parseFlags, Encoding>(str);
     }
 
-    //! Parse JSON text from a read-only string (with \ref kParseDefaultFlags)
-    /*! \param str Read-only zero-terminated string to be parsed.
+    //! Анализировать текст JSON из строки, доступной только для чтения (с помощью \ref kParseDefaultFlags)
+    /*! \param str Строка с нулевым завершением, доступная только для чтения и подлежащая синтаксическому анализу.
     */
     GenericDocument& Parse(const Ch* str) {
         return Parse<kParseDefaultFlags>(str);
@@ -2748,7 +2748,7 @@ public:
 #if RAPIDJSON_HAS_STDSTRING
     template <unsigned parseFlags, typename SourceEncoding>
     GenericDocument& Parse(const std::basic_string<typename SourceEncoding::Ch>& str) {
-        // c_str() is constant complexity according to standard. Should be faster than Parse(const char*, size_t)
+        // c_str() — постоянная сложность по стандарту. Должно быть быстрее, чем Parse(const char*, size_t )
         return Parse<parseFlags, SourceEncoding>(str.c_str());
     }
 
@@ -2764,44 +2764,44 @@ public:
 
     //!@}
 
-    //!@name Handling parse errors
+    //! @name Обработка ошибок синтаксического анализа
     //!@{
 
-    //! Whether a parse error has occurred in the last parsing.
+    //! Произошла ли ошибка синтаксического анализа при последнем синтаксическом анализе.
     bool HasParseError() const { return parseResult_.IsError(); }
 
-    //! Get the \ref ParseErrorCode of last parsing.
+    //! Получите \ref ParseErrorCode последнего синтаксического анализа.
     ParseErrorCode GetParseError() const { return parseResult_.Code(); }
 
-    //! Get the position of last parsing error in input, 0 otherwise.
+    //! Получите позицию последней ошибки синтаксического анализа во входных данных, в противном случае — 0.
     size_t GetErrorOffset() const { return parseResult_.Offset(); }
 
-    //! Implicit conversion to get the last parse result
-#ifndef __clang // -Wdocumentation
-    /*! \return \ref ParseResult of the last parse operation
+    //! Неявное преобразование для получения последнего результата анализа
+#ifndef __clang // -Документация
+    /*! \return \ref ParseResult последней операции анализа
 
         \code
-          Document doc;
-          ParseResult ok = doc.Parse(json);
+          Документ-документ;
+          ParseResult ок = doc.Parse(json);
           if (!ok)
-            printf( "JSON parse error: %s (%u)\n", GetParseError_En(ok.Code()), ok.Offset());
+            printf( "Ошибка анализа JSON: %s (%u)\n", GetParseError_En (ок. Code()), ок. Offset() );
         \endcode
      */
 #endif
     operator ParseResult() const { return parseResult_; }
     //!@}
 
-    //! Get the allocator of this document.
+    //! Получите распределитель этого документа.
     Allocator& GetAllocator() {
         RAPIDJSON_ASSERT(allocator_);
         return *allocator_;
     }
 
-    //! Get the capacity of stack in bytes.
+    //! Получите емкость стека в байтах.
     size_t GetStackCapacity() const { return stack_.GetCapacity(); }
 
 private:
-    // clear stack on any exit from ParseStream, e.g. due to exception
+    // очистить стек при любом выходе из ParseStream, например. из-за исключения
     struct ClearStackOnExit {
         explicit ClearStackOnExit(GenericDocument& d) : d_(d) {}
         ~ClearStackOnExit() { d_.ClearStack(); }
@@ -2811,12 +2811,12 @@ private:
         GenericDocument& d_;
     };
 
-    // callers of the following private Handler functions
-    // template <typename,typename,typename> friend class GenericReader; // for parsing
-    template <typename, typename> friend class GenericValue; // for deep copying
+    // вызывающие стороны следующих частных функций-обработчиков
+    // шаблон <имя типа, имя типа, имя типа> дружественный класс GenericReader; // для разбора
+    template <typename, typename> friend class GenericValue; // для глубокого копирования
 
 public:
-    // Implementation of Handler
+    // Реализация обработчика
     bool Null() { new (stack_.template Push<ValueType>()) ValueType(); return true; }
     bool Bool(bool b) { new (stack_.template Push<ValueType>()) ValueType(b); return true; }
     bool Int(int i) { new (stack_.template Push<ValueType>()) ValueType(i); return true; }
@@ -2860,14 +2860,14 @@ public:
     }
 
 private:
-    //! Prohibit copying
+    //! Запретить копирование
     GenericDocument(const GenericDocument&);
-    //! Prohibit assignment
+    //! Запретить назначение
     GenericDocument& operator=(const GenericDocument&);
 
     void ClearStack() {
         if (Allocator::kNeedFree)
-            while (stack_.GetSize() > 0)    // Here assumes all elements in stack array are GenericValue (Member is actually 2 GenericValue objects)
+            while (stack_.GetSize() > 0)    // Здесь предполагается, что все элементы в массиве стека имеют значение GenericValue (на самом деле элементом являются 2 объекта GenericValue).
                 (stack_.template Pop<ValueType>(1))->~ValueType();
         else
             stack_.Clear();
@@ -2885,14 +2885,14 @@ private:
     ParseResult parseResult_;
 };
 
-//! GenericDocument with UTF8 encoding
+//! GenericDocument с кодировкой UTF8
 typedef GenericDocument<UTF8<> > Document;
 
 
-//! Helper class for accessing Value of array type.
+//! Вспомогательный класс для доступа к значению типа массива.
 /*!
-    Instance of this helper class is obtained by \c GenericValue::GetArray().
-    In addition to all APIs for array type, it provides range-based for loop if \c RAPIDJSON_HAS_CXX11_RANGE_FOR=1.
+    Экземпляр этого вспомогательного класса получается с помощью \c GenericValue:: GetArray() .
+    В дополнение ко всем API-интерфейсам для типа массива он обеспечивает цикл for на основе диапазона, если \c RAPIDJSON_HAS_CXX11_RANGE_FOR =1.
 */
 template <bool Const, typename ValueT>
 class GenericArray {
@@ -2901,7 +2901,7 @@ public:
     typedef GenericArray<false, ValueT> Array;
     typedef ValueT PlainType;
     typedef typename internal::MaybeAddConst<Const,PlainType>::Type ValueType;
-    typedef ValueType* ValueIterator;  // This may be const or non-const iterator
+    typedef ValueType* ValueIterator;  // Это может быть константный или неконстантный итератор.
     typedef const ValueT* ConstValueIterator;
     typedef typename ValueType::AllocatorType AllocatorType;
     typedef typename ValueType::StringRefType StringRefType;
@@ -2943,10 +2943,10 @@ private:
     ValueType& value_;
 };
 
-//! Helper class for accessing Value of object type.
+//! Вспомогательный класс для доступа к значению типа объекта.
 /*!
-    Instance of this helper class is obtained by \c GenericValue::GetObject().
-    In addition to all APIs for array type, it provides range-based for loop if \c RAPIDJSON_HAS_CXX11_RANGE_FOR=1.
+    Экземпляр этого вспомогательного класса получается с помощью \c GenericValue:: GetObject() .
+    В дополнение ко всем API-интерфейсам для типа массива он обеспечивает цикл for на основе диапазона, если \c RAPIDJSON_HAS_CXX11_RANGE_FOR =1.
 */
 template <bool Const, typename ValueT>
 class GenericObject {
@@ -2955,7 +2955,7 @@ public:
     typedef GenericObject<false, ValueT> Object;
     typedef ValueT PlainType;
     typedef typename internal::MaybeAddConst<Const,PlainType>::Type ValueType;
-    typedef GenericMemberIterator<Const, typename ValueT::EncodingType, typename ValueT::AllocatorType> MemberIterator;  // This may be const or non-const iterator
+    typedef GenericMemberIterator<Const, typename ValueT::EncodingType, typename ValueT::AllocatorType> MemberIterator;  // Это может быть константный или неконстантный итератор.
     typedef GenericMemberIterator<true, typename ValueT::EncodingType, typename ValueT::AllocatorType> ConstMemberIterator;
     typedef typename ValueType::AllocatorType AllocatorType;
     typedef typename ValueType::StringRefType StringRefType;

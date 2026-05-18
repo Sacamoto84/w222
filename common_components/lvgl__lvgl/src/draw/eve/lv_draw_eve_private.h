@@ -5,7 +5,7 @@
 
 /*  Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 #ifndef LV_DRAW_EVE_PRIVATE_H
@@ -111,7 +111,7 @@ void lv_draw_eve_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_EVE_PRIVATE_H*/

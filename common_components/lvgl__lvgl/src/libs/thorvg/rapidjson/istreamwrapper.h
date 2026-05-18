@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_ISTREAMWRAPPER_H_
 #define RAPIDJSON_ISTREAMWRAPPER_H_
@@ -24,14 +24,14 @@ RAPIDJSON_DIAG_PUSH
 RAPIDJSON_DIAG_OFF(padded)
 #elif defined(_MSC_VER)
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(4351) // new behavior: elements of array 'array' will be default initialized
+RAPIDJSON_DIAG_OFF(4351) // новое поведение: элементы массива «array» будут инициализированы по умолчанию.
 #endif
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Wrapper of \c std::basic_istream into RapidJSON's Stream concept.
+//! Обертка \c std::basic_istream в концепцию RapidJSON Stream.
 /*!
-    The classes can be wrapped including but not limited to:
+    Классы могут быть обернуты, включая, помимо прочего:
 
     - \c std::istringstream
     - \c std::stringstream
@@ -42,7 +42,7 @@ RAPIDJSON_NAMESPACE_BEGIN
     - \c std::wifstream
     - \c std::wfstream
 
-    \tparam StreamType Class derived from \c std::basic_istream.
+    \tparam Класс StreamType, производный от \c std::basic_istream .
 */
 
 template <typename StreamType>
@@ -50,19 +50,19 @@ class BasicIStreamWrapper {
 public:
     typedef typename StreamType::char_type Ch;
 
-    //! Constructor.
+    //! Конструктор.
     /*!
-        \param stream stream opened for read.
+        \param поток поток, открытый для чтения.
     */
     BasicIStreamWrapper(StreamType &stream) : stream_(stream), buffer_(peekBuffer_), bufferSize_(4), bufferLast_(0), current_(buffer_), readCount_(0), count_(0), eof_(false) {
         Read();
     }
 
-    //! Constructor.
+    //! Конструктор.
     /*!
-        \param stream stream opened for read.
-        \param buffer user-supplied buffer.
-        \param bufferSize size of buffer in bytes. Must >=4 bytes.
+        \param поток поток, открытый для чтения.
+        \param buffer Буфер, предоставляемый пользователем.
+        \paramufferSize размер буфера в байтах. Должно >= 4 байта.
     */
     BasicIStreamWrapper(StreamType &stream, char* buffer, size_t bufferSize) : stream_(stream), buffer_(buffer), bufferSize_(bufferSize), bufferLast_(0), current_(buffer_), readCount_(0), count_(0), eof_(false) {
         RAPIDJSON_ASSERT(bufferSize >= 4);
@@ -73,13 +73,13 @@ public:
     Ch Take() { Ch c = *current_; Read(); return c; }
     size_t Tell() const { return count_ + static_cast<size_t>(current_ - buffer_); }
 
-    // Not implemented
+    // Не реализовано
     void Put(Ch) { RAPIDJSON_ASSERT(false); }
     void Flush() { RAPIDJSON_ASSERT(false); }
     Ch* PutBegin() { RAPIDJSON_ASSERT(false); return 0; }
     size_t PutEnd(Ch*) { RAPIDJSON_ASSERT(false); return 0; }
 
-    // For encoding detection only.
+    // Только для обнаружения кодировки.
     const Ch* Peek4() const {
         return (current_ + 4 - !eof_ <= bufferLast_) ? current_ : 0;
     }
@@ -112,7 +112,7 @@ private:
     Ch *bufferLast_;
     Ch *current_;
     size_t readCount_;
-    size_t count_;  //!< Number of characters read
+    size_t count_;  //!< Количество прочитанных символов
     bool eof_;
 };
 

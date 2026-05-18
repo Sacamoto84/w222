@@ -2,7 +2,7 @@
 #if LV_BUILD_EXAMPLES && LV_FONT_DEJAVU_16_PERSIAN_HEBREW
 
 /**
- * Scrolling with Right To Left base direction
+ * Прокрутка в базовом направлении справа налево
  */
 void lv_example_scroll_5(void)
 {

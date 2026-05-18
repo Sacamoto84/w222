@@ -43,7 +43,7 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* Select NanoVG OpenGL backend based on LV_NANOVG_BACKEND */
+/* Выберите бэкэнд NanoVG OpenGL на основе LV_NANOVG_BACKEND. */
 #if LV_NANOVG_BACKEND == LV_NANOVG_BACKEND_GL2
 #define NANOVG_GL2_IMPLEMENTATION
 #elif LV_NANOVG_BACKEND == LV_NANOVG_BACKEND_GL3
@@ -87,7 +87,7 @@ typedef struct _lv_draw_nanovg_unit_t {
 
 #if LV_USE_3DTEXTURE
 /**
- * Draw 3D texture on a NanoVG context
+ * Нарисуйте 3D-текстуру в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a 3D draw descriptor
  * @param coords the coordinates of the 3D texture
@@ -96,7 +96,7 @@ void lv_draw_nanovg_3d(lv_draw_task_t * t, const lv_draw_3d_dsc_t * dsc, const l
 #endif
 
 /**
- * Draw arc on a NanoVG context
+ * Нарисуйте дугу в контексте NanoVG
  * @param t pointer to a drawing task
  * @param dsc pointer to an arc descriptor
  * @param coords the coordinates of the arc
@@ -104,7 +104,7 @@ void lv_draw_nanovg_3d(lv_draw_task_t * t, const lv_draw_3d_dsc_t * dsc, const l
 void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw border on a NanoVG context
+ * Нарисуйте границу в контексте NanoVG
  * @param t pointer to a drawing task
  * @param dsc pointer to a border descriptor
  * @param coords the coordinates of the border
@@ -112,7 +112,7 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
 void lv_draw_nanovg_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw box on a NanoVG context
+ * Нарисуйте рамку в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a box descriptor
  * @param coords the coordinates of the box
@@ -120,7 +120,7 @@ void lv_draw_nanovg_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc,
 void lv_draw_nanovg_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Fill a rectangle on a NanoVG context
+ * Заполните прямоугольник в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a fill descriptor
  * @param coords the coordinates of the rectangle
@@ -128,7 +128,7 @@ void lv_draw_nanovg_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_
 void lv_draw_nanovg_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw image on a NanoVG context
+ * Нарисуйте изображение в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to an image descriptor
  * @param coords the coordinates of the image
@@ -138,19 +138,19 @@ void lv_draw_nanovg_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc, c
                           int image_handle);
 
 /**
- * Initialize draw label on a NanoVG context
+ * Инициализируйте метку рисования в контексте NanoVG.
  * @param u pointer to a NanoVG unit
  */
 void lv_draw_nanovg_label_init(lv_draw_nanovg_unit_t * u);
 
 /**
- * Deinitialize draw label on a NanoVG context
+ * Деинициализировать метку рисования в контексте NanoVG
  * @param u pointer to a NanoVG unit
  */
 void lv_draw_nanovg_label_deinit(lv_draw_nanovg_unit_t * u);
 
 /**
- * Draw letter on a NanoVG context
+ * Нарисуйте письмо в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a letter descriptor
  * @param coords the coordinates of the letter
@@ -158,7 +158,7 @@ void lv_draw_nanovg_label_deinit(lv_draw_nanovg_unit_t * u);
 void lv_draw_nanovg_letter(lv_draw_task_t * t, const lv_draw_letter_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw label on a NanoVG context
+ * Нарисуйте метку в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a label descriptor
  * @param coords the coordinates of the label
@@ -166,7 +166,7 @@ void lv_draw_nanovg_letter(lv_draw_task_t * t, const lv_draw_letter_dsc_t * dsc,
 void lv_draw_nanovg_label(lv_draw_task_t * t, const lv_draw_label_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw layer on a NanoVG context
+ * Нарисуйте слой в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param draw_dsc pointer to an image descriptor
  * @param coords the coordinates of the layer
@@ -174,28 +174,28 @@ void lv_draw_nanovg_label(lv_draw_task_t * t, const lv_draw_label_dsc_t * dsc, c
 void lv_draw_nanovg_layer(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc, const lv_area_t * coords);
 
 /**
- * Draw line on a NanoVG context
+ * Нарисуйте линию в контексте NanoVG
  * @param t pointer to a drawing task
  * @param dsc pointer to a line descriptor
  */
 void lv_draw_nanovg_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc);
 
 /**
- * Draw triangle on a NanoVG context
+ * Нарисуйте треугольник в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a triangle descriptor
  */
 void lv_draw_nanovg_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc);
 
 /**
- * Draw mask rectangles on a NanoVG context
+ * Нарисуйте прямоугольники маски в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a mask descriptor
  */
 void lv_draw_nanovg_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t * dsc);
 
 /**
- * Get image handle from framebuffer
+ * Получить дескриптор изображения из фреймбуфера
  * @param fb the framebuffer to get the image handle from
  * @return the image handle
  */
@@ -203,7 +203,7 @@ int lv_nanovg_fb_get_image_handle(struct NVGLUframebuffer * fb);
 
 #if LV_USE_VECTOR_GRAPHIC
 /**
- * Draw vector graphics on a NanoVG context
+ * Рисование векторной графики в контексте NanoVG.
  * @param t pointer to a drawing task
  * @param dsc pointer to a vector descriptor
  */
@@ -252,7 +252,7 @@ void lv_nanovg_draw_grad_helper(
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_USE_DRAW_NANOVG*/

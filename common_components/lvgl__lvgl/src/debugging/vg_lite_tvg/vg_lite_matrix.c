@@ -43,7 +43,7 @@
 
 vg_lite_error_t vg_lite_identity(vg_lite_matrix_t * matrix)
 {
-    /* Set identify matrix. */
+    /* Установите идентификационную матрицу. */
     matrix->m[0][0] = 1.0f;
     matrix->m[0][1] = 0.0f;
     matrix->m[0][2] = 0.0f;
@@ -68,18 +68,18 @@ static void multiply(vg_lite_matrix_t * matrix, vg_lite_matrix_t * mult)
     vg_lite_matrix_t temp;
     int row, column;
 
-    /* Process all rows. */
+    /* Обработать все строки. */
     for(row = 0; row < 3; row++) {
-        /* Process all columns. */
+        /* Обработать все столбцы. */
         for(column = 0; column < 3; column++) {
-            /* Compute matrix entry. */
+            /* Вычислить запись матрицы. */
             temp.m[row][column] = (matrix->m[row][0] * mult->m[0][column])
                                   + (matrix->m[row][1] * mult->m[1][column])
                                   + (matrix->m[row][2] * mult->m[2][column]);
         }
     }
 
-    /* Copy temporary matrix into result. */
+    /* Скопируйте временную матрицу в результат. */
 #if VG_SW_BLIT_PRECISION_OPT
     memcpy(matrix, &temp, sizeof(vg_lite_float_t) * 9);
 #else
@@ -89,7 +89,7 @@ static void multiply(vg_lite_matrix_t * matrix, vg_lite_matrix_t * mult)
 
 vg_lite_error_t vg_lite_translate(vg_lite_float_t x, vg_lite_float_t y, vg_lite_matrix_t * matrix)
 {
-    /* Set translation matrix. */
+    /* Установить матрицу перевода. */
     vg_lite_matrix_t t = { { {1.0f, 0.0f, x},
             {0.0f, 1.0f, y},
             {0.0f, 0.0f, 1.0f},
@@ -97,7 +97,7 @@ vg_lite_error_t vg_lite_translate(vg_lite_float_t x, vg_lite_float_t y, vg_lite_
         0.0f, 0.0f, 0.0f
     };
 
-    /* Multiply with current matrix. */
+    /* Умножьте на текущую матрицу. */
     multiply(matrix, &t);
 
     return VG_LITE_SUCCESS;
@@ -105,7 +105,7 @@ vg_lite_error_t vg_lite_translate(vg_lite_float_t x, vg_lite_float_t y, vg_lite_
 
 vg_lite_error_t vg_lite_scale(vg_lite_float_t scale_x, vg_lite_float_t scale_y, vg_lite_matrix_t * matrix)
 {
-    /* Set scale matrix. */
+    /* Установить масштабную матрицу. */
     vg_lite_matrix_t s = { { {scale_x, 0.0f, 0.0f},
             {0.0f, scale_y, 0.0f},
             {0.0f, 0.0f, 1.0f},
@@ -113,7 +113,7 @@ vg_lite_error_t vg_lite_scale(vg_lite_float_t scale_x, vg_lite_float_t scale_y, 
         0.0f, 0.0f, 0.0f
     };
 
-    /* Multiply with current matrix. */
+    /* Умножьте на текущую матрицу. */
     multiply(matrix, &s);
 
 #if VG_SW_BLIT_PRECISION_OPT
@@ -126,14 +126,14 @@ vg_lite_error_t vg_lite_scale(vg_lite_float_t scale_x, vg_lite_float_t scale_y, 
 
 vg_lite_error_t vg_lite_rotate(vg_lite_float_t degrees, vg_lite_matrix_t * matrix)
 {
-    /* Convert degrees into radians. */
+    /* Перевести градусы в радианы. */
     vg_lite_float_t angle = (degrees / 180.0f) * 3.141592654f;
 
-    /* Compute cosine and sine values. */
+    /* Вычислите значения косинуса и синуса. */
     vg_lite_float_t cos_angle = cosf(angle);
     vg_lite_float_t sin_angle = sinf(angle);
 
-    /* Set rotation matrix. */
+    /* Установите матрицу вращения. */
     vg_lite_matrix_t r = { { {cos_angle, -sin_angle, 0.0f},
             {sin_angle, cos_angle, 0.0f},
             {0.0f, 0.0f, 1.0f},
@@ -141,7 +141,7 @@ vg_lite_error_t vg_lite_rotate(vg_lite_float_t degrees, vg_lite_matrix_t * matri
         0.0f, 0.0f, 0.0f
     };
 
-    /* Multiply with current matrix. */
+    /* Умножьте на текущую матрицу. */
     multiply(matrix, &r);
 
 #if VG_SW_BLIT_PRECISION_OPT

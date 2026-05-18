@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,7 +28,7 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static float TO_RADIAN(SwFixed angle)
@@ -38,7 +38,7 @@ static float TO_RADIAN(SwFixed angle)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 SwFixed mathMean(SwFixed angle1, SwFixed angle2)
@@ -57,7 +57,7 @@ int mathCubicAngle(const SwPoint* base, SwFixed& angleIn, SwFixed& angleMid, SwF
         if (d2.small()) {
             if (d3.small()) {
                 angleIn = angleMid = angleOut = 0;
-                return -1;  //ignoreable
+                return -1;  //игнорировать
             } else {
                 angleIn = angleMid = angleOut = mathAtan(d3);
             }
@@ -93,7 +93,7 @@ int mathCubicAngle(const SwPoint* base, SwFixed& angleIn, SwFixed& angleMid, SwF
     auto theta1 = abs(mathDiff(angleIn, angleMid));
     auto theta2 = abs(mathDiff(angleMid, angleOut));
 
-    if ((theta1 < (SW_ANGLE_PI / 8)) && (theta2 < (SW_ANGLE_PI / 8))) return 0; //small size
+    if ((theta1 < (SW_ANGLE_PI / 8)) && (theta2 < (SW_ANGLE_PI / 8))) return 0; //маленький размер
     return 1;
 }
 
@@ -102,7 +102,7 @@ int64_t mathMultiply(int64_t a, int64_t b)
 {
     int32_t s = 1;
 
-    //move sign
+    //переместить знак
     if (a < 0) {
         a = -a;
         s = -s;
@@ -120,7 +120,7 @@ int64_t mathDivide(int64_t a, int64_t b)
 {
     int32_t s = 1;
 
-    //move sign
+    //переместить знак
     if (a < 0) {
         a = -a;
         s = -s;
@@ -138,7 +138,7 @@ int64_t mathMulDiv(int64_t a, int64_t b, int64_t c)
 {
     int32_t s = 1;
 
-    //move sign
+    //переместить знак
     if (a < 0) {
         a = -a;
         s = -s;
@@ -203,16 +203,16 @@ SwFixed mathLength(const SwPoint& pt)
 {
     if (pt.zero()) return 0;
 
-    //trivial case
+    //тривиальный случай
     if (pt.x == 0) return abs(pt.y);
     if (pt.y == 0) return abs(pt.x);
 
     auto v = pt.toPoint();
-    //return static_cast<SwFixed>(sqrtf(v.x * v.x + v.y * v.y) * 65536.0f);
+    //return static_cast <SwFixed>(sqrtf(v.x * v.x + v.y * v.y) * 65536.0f);
 
-    /* approximate sqrt(x*x + y*y) using alpha max plus beta min algorithm.
-       With alpha = 1, beta = 3/8, giving results with the largest error less
-       than 7% compared to the exact value. */
+    /* приблизительное sqrt(x*x + y*y) с использованием алгоритма альфа-макс плюс бета-мин.
+       При альфа = 1, бета = 3/8, что дает результаты с наибольшей ошибкой меньше.
+       более 7% по сравнению с точным значением. */
     if (v.x < 0) v.x = -v.x;
     if (v.y < 0) v.y = -v.y;
     return static_cast<SwFixed>((v.x > v.y) ? (v.x + v.y * 0.375f) : (v.y + v.x * 0.375f));
@@ -282,10 +282,10 @@ bool mathClipBBox(const SwBBox& clipper, SwBBox& clippee)
     clippee.min.x = (clippee.min.x > clipper.min.x) ? clippee.min.x : clipper.min.x;
     clippee.min.y = (clippee.min.y > clipper.min.y) ? clippee.min.y : clipper.min.y;
 
-    //Check valid region
+    //Проверьте действительный регион
     if (clippee.max.x - clippee.min.x < 1 && clippee.max.y - clippee.min.y < 1) return false;
 
-    //Check boundary
+    //Проверить границу
     if (clippee.min.x >= clipper.max.x || clippee.min.y >= clipper.max.y ||
         clippee.max.x <= clipper.min.x || clippee.max.y <= clipper.min.y) return false;
 

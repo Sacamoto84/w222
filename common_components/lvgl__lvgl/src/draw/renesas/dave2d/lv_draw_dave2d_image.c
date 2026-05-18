@@ -61,7 +61,7 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
 
     lv_draw_dave2d_unit_t * u = (lv_draw_dave2d_unit_t *)t->draw_unit;
 
-    (void)sup; //remove warning about unused parameter
+    (void)sup; //убрать предупреждение о неиспользуемом параметре
 
     bool transformed = draw_dsc->rotation != 0 || draw_dsc->scale_x != LV_SCALE_NONE ||
                        draw_dsc->scale_y != LV_SCALE_NONE ? true : false;
@@ -118,13 +118,13 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
 #if defined(RENESAS_CORTEX_M85) || defined(_RENESAS_RZA_)
 #if (BSP_CFG_DCACHE_ENABLED) || defined(_RENESAS_RZA_)
     d1_cacheblockflush(u->d2_handle, 0, src_buf,
-                       img_stride * header->h); //Stride is in bytes, not pixels/texels
+                       img_stride * header->h); //Stride измеряется в байтах, а не в пикселях/текселях.
 #endif
 #endif
 
     if(LV_COLOR_FORMAT_RGB565A8 == cf) {
 
-        lv_point_t p1[4] = { //Points in clockwise order
+        lv_point_t p1[4] = { //Точки по часовой стрелке
             {0, 0},
             {header->w - 1, 0},
             {header->w - 1, header->h - 1},
@@ -175,9 +175,9 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
                       (d2_point)D2_FIX4(p1[3].y),
                       0);
 
-        d2_setblendmode(u->d2_handle, d2_bm_zero, d2_bm_one); //Keep the RGB data in the intermediate buffer
+        d2_setblendmode(u->d2_handle, d2_bm_zero, d2_bm_one); //Сохраняйте данные RGB в промежуточном буфере.
 
-        d2_setalphablendmode(u->d2_handle, d2_bm_one, d2_bm_zero);    //Write SRC alpha, i.e. A8 data
+        d2_setalphablendmode(u->d2_handle, d2_bm_one, d2_bm_zero);    //Запишите SRC альфа, т.е. данные A8.
 
         d2_settextureoperation(u->d2_handle, d2_to_copy, d2_to_copy, d2_to_copy, d2_to_copy);
 
@@ -213,25 +213,25 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
     if(LV_COLOR_FORMAT_RGB565 == cf) {
         d2_settextureoperation(u->d2_handle, d2_to_replace, d2_to_copy, d2_to_copy, d2_to_copy);
     }
-    else { //Formats with an alpha channel,
+    else { //Форматы с альфа-каналом,
         d2_settextureoperation(u->d2_handle, d2_to_multiply, d2_to_copy, d2_to_copy, d2_to_copy);
     }
 
     if(LV_BLEND_MODE_NORMAL == draw_dsc->blend_mode) { /**< Simply mix according to the opacity value*/
-        d2_setblendmode(u->d2_handle, d2_bm_alpha, d2_bm_one_minus_alpha);  //direct linear blend
+        d2_setblendmode(u->d2_handle, d2_bm_alpha, d2_bm_one_minus_alpha);  //прямая линейная смесь
     }
     else if(LV_BLEND_MODE_ADDITIVE == draw_dsc->blend_mode) { /**< Add the respective color channels*/
         /* TODO */
-        d2_setblendmode(u->d2_handle, d2_bm_alpha, d2_bm_one);  //Additive blending
+        d2_setblendmode(u->d2_handle, d2_bm_alpha, d2_bm_one);  //Аддитивное смешивание
     }
     else if(LV_BLEND_MODE_SUBTRACTIVE == draw_dsc->blend_mode) { /**< Subtract the foreground from the background*/
         /* TODO */
     }
-    else { //LV_BLEND_MODE_MULTIPLY,   /**< Multiply the foreground and background*/
+    else { //LV_BLEND_MODE_MULTIPLY , /**< Умножить передний план и фон*/
         /* TODO */
     }
 
-    lv_point_t p[4] = { //Points in clockwise order
+    lv_point_t p[4] = { //Точки по часовой стрелке
         {0, 0},
         {header->w - 1, 0},
         {header->w - 1, header->h - 1},
@@ -263,7 +263,7 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
         int32_t angle_low = angle_limited / 10;
 
         if(0 != angle_low) {
-            /* LV_TRIGO_SHIFT is 15, so only need to shift by 1 to get 16:16 fixed point */
+            /* LV_TRIGO_SHIFT равен 15, поэтому нужно сдвинуть его только на 1, чтобы получить фиксированную точку 16:16. */
             dxv = (d2_s32)((1 << 1) * lv_trigo_sin((int16_t)angle_low));
             dxu = (d2_s32)((1 << 1) * lv_trigo_cos((int16_t)angle_low));
             dyv = (d2_s32)((1 << 1) * lv_trigo_sin((int16_t)angle_low + 90));

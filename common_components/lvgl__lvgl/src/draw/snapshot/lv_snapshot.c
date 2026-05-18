@@ -43,7 +43,7 @@
  **********************/
 
 /**
- * Create a draw buffer for object to store the snapshot image.
+ * Создайте буфер рисования для объекта, в котором будет храниться изображение снимка.
  */
 lv_draw_buf_t * lv_snapshot_create_draw_buf(lv_obj_t * obj, lv_color_format_t cf)
 {
@@ -108,7 +108,7 @@ lv_result_t lv_snapshot_take_to_draw_buf(lv_obj_t * obj, lv_color_format_t cf, l
 
     lv_obj_t * top_obj = lv_refr_get_top_obj(&snapshot_area, obj);
     if(top_obj == NULL) {
-        /* Clear draw buffer when no top object*/
+        /* Очистить буфер прорисовки, если нет верхнего объекта*/
         lv_draw_buf_clear(draw_buf, NULL);
         top_obj = obj;
     }
@@ -143,7 +143,7 @@ lv_result_t lv_snapshot_take_to_draw_buf(lv_obj_t * obj, lv_color_format_t cf, l
         lv_obj_t * parent = lv_obj_get_parent(top_obj);
         lv_obj_t * border_p = top_obj;
 
-        /*Do until not reach the screen*/
+        /*Делайте, пока не доберетесь до экрана*/
         while(parent != NULL && border_p != obj) {
             bool go = false;
             uint32_t i;
@@ -154,20 +154,20 @@ lv_result_t lv_snapshot_take_to_draw_buf(lv_obj_t * obj, lv_color_format_t cf, l
                     if(child == border_p) go = true;
                 }
                 else {
-                    /*Refresh the objects*/
+                    /*Обновить объекты*/
                     lv_obj_refr(&layer, child);
                 }
             }
 
-            /*Call the post draw draw function of the parents of the to object*/
+            /*Вызов функции post draw родительского объекта to.*/
             lv_obj_send_event(parent, LV_EVENT_DRAW_POST_BEGIN, (void *)&layer);
             lv_obj_send_event(parent, LV_EVENT_DRAW_POST, (void *)&layer);
             lv_obj_send_event(parent, LV_EVENT_DRAW_POST_END, (void *)&layer);
 
-            /*The new border will be the last parents,
-            *so the 'younger' brothers of parent will be refreshed*/
+            /*На новой границе будут последние родители,
+            *так что «младшие» братья родителя будут обновлены*/
             border_p = parent;
-            /*Go a level deeper*/
+            /*Перейти на уровень глубже*/
             parent = lv_obj_get_parent(parent);
         }
     }

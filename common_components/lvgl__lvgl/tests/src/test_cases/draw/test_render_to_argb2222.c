@@ -7,20 +7,20 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_render_to_argb2222(void)
 {
     /**
-     * There is a slight color deviation between thorvg on 32-bit and 64-bit platforms.
-     * The deviation will be amplified when using lower precision color formats.
-     * Only 64-bit platforms are tested here.
+     * Существует небольшое отклонение цвета между thorvg на 32-битных и 64-битных платформах.
+     * Отклонение будет усиливаться при использовании цветовых форматов с более низкой точностью.
+     * Здесь тестируются только 64-битные платформы.
      */
 #if LV_USE_DRAW_VG_LITE && LV_USE_SNAPSHOT && !defined(NON_AMD64_BUILD)
 
@@ -30,7 +30,7 @@ void test_render_to_argb2222(void)
         uint32_t i;
         for(i = 0; i < LV_DEMO_RENDER_SCENE_NUM; i++) {
 
-            /*Skip test with transformed indexed images if they are not loaded to RAM*/
+            /*Пропустить тест с преобразованными индексированными изображениями, если они не загружены в RAM.*/
             if(LV_BIN_DECODER_RAM_LOAD == 0 &&
                (i == LV_DEMO_RENDER_SCENE_IMAGE_NORMAL_3 ||
                 i == LV_DEMO_RENDER_SCENE_IMAGE_RECOLOR_3)) continue;

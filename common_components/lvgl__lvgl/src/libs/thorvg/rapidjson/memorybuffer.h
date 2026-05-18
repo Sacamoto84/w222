@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_MEMORYBUFFER_H_
 #define RAPIDJSON_MEMORYBUFFER_H_
@@ -20,22 +20,22 @@
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Represents an in-memory output byte stream.
+//! Представляет поток выходных байтов в памяти.
 /*!
-    This class is mainly for being wrapped by EncodedOutputStream or AutoUTFOutputStream.
+    Этот класс в основном предназначен для оболочки EncodedOutputStream или AutoUTFOutputStream.
 
-    It is similar to FileWriteBuffer but the destination is an in-memory buffer instead of a file.
+    Он похож на FileWriteBuffer, но местом назначения является буфер в памяти, а не файл.
 
-    Differences between MemoryBuffer and StringBuffer:
+    Различия между MemoryBuffer и StringBuffer:
     1. StringBuffer has Encoding but MemoryBuffer is only a byte buffer.
     2. StringBuffer::GetString() returns a null-terminated string. MemoryBuffer::GetBuffer() returns a buffer without terminator.
 
-    \tparam Allocator type for allocating memory buffer.
-    \note implements Stream concept
+    \tparam Тип распределителя для выделения буфера памяти.
+    \note реализует концепцию Stream
 */
 template <typename Allocator = CrtAllocator>
 struct GenericMemoryBuffer {
-    typedef char Ch; // byte
+    typedef char Ch; // байт
 
     GenericMemoryBuffer(Allocator* allocator = 0, size_t capacity = kDefaultCapacity) : stack_(allocator, capacity) {}
 
@@ -59,7 +59,7 @@ struct GenericMemoryBuffer {
 
 typedef GenericMemoryBuffer<> MemoryBuffer;
 
-//! Implement specialized version of PutN() with memset() for better performance.
+//! Внедрите специализированную версию PutN() с memset() для повышения производительности.
 template<>
 inline void PutN(MemoryBuffer& memoryBuffer, char c, size_t n) {
     std::memset(memoryBuffer.stack_.Push<char>(n), c, n * sizeof(c));

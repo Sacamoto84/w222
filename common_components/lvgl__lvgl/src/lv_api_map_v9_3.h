@@ -91,7 +91,7 @@ extern "C" {
 
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_API_MAP_V9_3_H */

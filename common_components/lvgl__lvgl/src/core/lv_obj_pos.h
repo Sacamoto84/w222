@@ -24,16 +24,16 @@ extern "C" {
  **********************/
 
 typedef enum {
-    /** No flags */
+    /** Нет флагов */
     LV_OBJ_POINT_TRANSFORM_FLAG_NONE = 0x00,
 
-    /** Consider the transformation properties of the parents too */
+    /** Учитывайте также трансформационные свойства родителей. */
     LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE = 0x01,
 
-    /** Execute the inverse of the transformation (-angle and 1/zoom) */
+    /** Выполните обратное преобразование (-угол и 1/зум) */
     LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE = 0x02,
 
-    /** Both inverse and recursive*/
+    /** И инверсный, и рекурсивный*/
     LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE_RECURSIVE = 0x03,
 } lv_obj_point_transform_flag_t;
 
@@ -42,378 +42,378 @@ typedef enum {
  **********************/
 
 /**
- * Set the position of an object relative to the set alignment.
- * @param obj       pointer to an object
- * @param x         new x coordinate
- * @param y         new y coordinate
- * @note            With default alignment it's the distance from the top left corner
- * @note            E.g. LV_ALIGN_CENTER alignment it's the offset from the center of the parent
- * @note            The position is interpreted on the content area of the parent
- * @note            The values can be set in pixel or in percentage of parent size with `lv_pct(v)`
+ * Задайте положение объекта относительно заданного выравнивания.
+ * @param obj       указатель на объект
+ * @param x         новая координата x
+ * @param y         новая координата Y
+ * @note            При выравнивании по умолчанию это расстояние от верхнего левого угла.
+ * @note            например  ВыравниваниеLV_ALIGN_CENTER— это смещение от центра родительского элемента.
+ * @note            Позиция интерпретируется в области содержимого родительского элемента.
+ * @note            Значения могут быть установлены в пикселях или процентах от родительского размера с помощью `lv_pct(v)`.
  */
 void lv_obj_set_pos(lv_obj_t * obj, int32_t x, int32_t y);
 
 /**
- * Set the x coordinate of an object
- * @param obj       pointer to an object
- * @param x         new x coordinate
- * @note            With default alignment it's the distance from the top left corner
- * @note            E.g. LV_ALIGN_CENTER alignment it's the offset from the center of the parent
- * @note            The position is interpreted on the content area of the parent
- * @note            The values can be set in pixel or in percentage of parent size with `lv_pct(v)`
+ * Установите координату x объекта
+ * @param obj       указатель на объект
+ * @param x         новая координата x
+ * @note            При выравнивании по умолчанию это расстояние от верхнего левого угла.
+ * @note            например  ВыравниваниеLV_ALIGN_CENTER— это смещение от центра родительского элемента.
+ * @note            Позиция интерпретируется в области содержимого родительского элемента.
+ * @note            Значения могут быть установлены в пикселях или процентах от родительского размера с помощью `lv_pct(v)`.
  */
 void lv_obj_set_x(lv_obj_t * obj, int32_t x);
 
 /**
- * Set the y coordinate of an object
- * @param obj       pointer to an object
- * @param y         new y coordinate
- * @note            With default alignment it's the distance from the top left corner
- * @note            E.g. LV_ALIGN_CENTER alignment it's the offset from the center of the parent
- * @note            The position is interpreted on the content area of the parent
- * @note            The values can be set in pixel or in percentage of parent size with `lv_pct(v)`
+ * Установите координату y объекта
+ * @param obj       указатель на объект
+ * @param y         новая координата Y
+ * @note            При выравнивании по умолчанию это расстояние от верхнего левого угла.
+ * @note            например  ВыравниваниеLV_ALIGN_CENTER— это смещение от центра родительского элемента.
+ * @note            Позиция интерпретируется в области содержимого родительского элемента.
+ * @note            Значения могут быть установлены в пикселях или процентах от родительского размера с помощью `lv_pct(v)`.
  */
 void lv_obj_set_y(lv_obj_t * obj, int32_t y);
 
 /**
- * Set the size of an object.
- * @param obj       pointer to an object
- * @param w         the new width
- * @param h         the new height
- * @note            possible values are:
- *                  pixel               simple set the size accordingly
- *                  LV_SIZE_CONTENT     set the size to involve all children in the given direction
- *                  lv_pct(x)           to set size in percentage of the parent's content area size (the size without paddings).
- *                                      x should be in [0..1000]% range
+ * Установите размер объекта.
+ * @param obj       указатель на объект
+ * @param w         новая ширина
+ * @param h         новая высота
+ * @note            возможные значения:
+ *                  пиксель просто установите размер соответственно
+ *                  LV_SIZE_CONTENT задает размер, чтобы задействовать всех дочерних элементов в заданном направлении.
+ *                  lv_pct (x), чтобы установить размер в процентах от размера области измерения родительского элемента (размер без отступов).
+ *                                      x должен находиться в диапазоне [0..1000]%
  */
 void lv_obj_set_size(lv_obj_t * obj, int32_t w, int32_t h);
 
 /**
- * Recalculate the size of the object
- * @param obj       pointer to an object
- * @return          true: the size has been changed
+ * Пересчитать размер объекта
+ * @param obj       указатель на объект
+ * @return          правда: размер был изменен
  */
 bool lv_obj_refr_size(lv_obj_t * obj);
 
 /**
- * Set the width of an object
- * @param obj       pointer to an object
- * @param w         the new width
- * @note            possible values are:
- *                  pixel               simple set the size accordingly
- *                  LV_SIZE_CONTENT     set the size to involve all children in the given direction
- *                  lv_pct(x)           to set size in percentage of the parent's content area size (the size without paddings).
- *                                      x should be in [0..1000]% range
+ * Установить ширину объекта
+ * @param obj       указатель на объект
+ * @param w         новая ширина
+ * @note            возможные значения:
+ *                  пиксель просто установите размер соответственно
+ *                  LV_SIZE_CONTENT задает размер, чтобы задействовать всех дочерних элементов в заданном направлении.
+ *                  lv_pct (x), чтобы установить размер в процентах от размера области измерения родительского элемента (размер без отступов).
+ *                                      x должен находиться в диапазоне [0..1000]%
  */
 void lv_obj_set_width(lv_obj_t * obj, int32_t w);
 
 /**
- * Set the height of an object
- * @param obj       pointer to an object
- * @param h         the new height
- * @note            possible values are:
- *                  pixel               simple set the size accordingly
- *                  LV_SIZE_CONTENT     set the size to involve all children in the given direction
- *                  lv_pct(x)           to set size in percentage of the parent's content area size (the size without paddings).
- *                                      x should be in [0..1000]% range
+ * Установить высоту объекта
+ * @param obj       указатель на объект
+ * @param h         новая высота
+ * @note            возможные значения:
+ *                  пиксель просто установите размер соответственно
+ *                  LV_SIZE_CONTENT задает размер, чтобы задействовать всех дочерних элементов в заданном направлении.
+ *                  lv_pct (x), чтобы установить размер в процентах от размера области измерения родительского элемента (размер без отступов).
+ *                                      x должен находиться в диапазоне [0..1000]%
  */
 void lv_obj_set_height(lv_obj_t * obj, int32_t h);
 
 /**
- * Set the width reduced by the left and right padding and the border width.
- * @param obj       pointer to an object
- * @param w         the width without paddings in pixels
+ * Установите ширину, уменьшенную за счет левого и правого отступа, а также ширину границы.
+ * @param obj       указатель на объект
+ * @param w         ширина без отступов в пикселях
  */
 void lv_obj_set_content_width(lv_obj_t * obj, int32_t w);
 
 /**
- * Set the height reduced by the top and bottom padding and the border width.
- * @param obj       pointer to an object
- * @param h         the height without paddings in pixels
+ * Установите высоту, уменьшенную верхним и нижним отступом, а также ширину границы.
+ * @param obj       указатель на объект
+ * @param h         высота без отступов в пикселях
  */
 void lv_obj_set_content_height(lv_obj_t * obj, int32_t h);
 
 /**
- * Set a layout for an object
- * @param obj       pointer to an object
- * @param layout    pointer to a layout descriptor to set
+ * Установить макет объекта
+ * @param obj       указатель на объект
+ * @param layout    указатель на дескриптор макета для установки
  */
 void lv_obj_set_layout(lv_obj_t * obj, uint32_t layout);
 
 /**
- * Test whether the and object is positioned by a layout or not
- * @param obj       pointer to an object to test
- * @return true:    positioned by a layout; false: not positioned by a layout
+ * Проверьте, позиционируется ли объект и по макету или нет.
+ * @param obj       указатель на объект для тестирования
+ * @return true: позиционируется по макету; false: не позиционируется макетом
  */
 bool lv_obj_is_layout_positioned(const lv_obj_t * obj);
 
 /**
- * Mark the object for layout update.
- * @param obj      pointer to an object whose children need to be updated
+ * Отметьте объект для обновления макета.
+ * @param obj      указатель на объект, дочерние элементы которого необходимо обновить
  */
 void lv_obj_mark_layout_as_dirty(lv_obj_t * obj);
 
 /**
- * Update the layout of an object.
- * @param obj      pointer to an object whose position and size needs to be updated
+ * Обновите макет объекта.
+ * @param obj      указатель на объект, положение и размер которого необходимо обновить
  */
 void lv_obj_update_layout(const lv_obj_t * obj);
 
 /**
- * Change the alignment of an object.
- * @param obj       pointer to an object to align
- * @param align     type of alignment (see 'lv_align_t' enum) `LV_ALIGN_OUT_...` can't be used.
+ * Измените выравнивание объекта.
+ * @param obj       указатель на объект для выравнивания
+ * @param align     тип выравнивания (см. перечисление «lv_align_t»)`LV_ALIGN_OUT_...`использовать нельзя.
  */
 void lv_obj_set_align(lv_obj_t * obj, lv_align_t align);
 
 /**
- * Change the alignment of an object and set new coordinates.
- * Equivalent to:
- * lv_obj_set_align(obj, align);
- * lv_obj_set_pos(obj, x_ofs, y_ofs);
- * @param obj       pointer to an object to align
- * @param align     type of alignment (see 'lv_align_t' enum) `LV_ALIGN_OUT_...` can't be used.
- * @param x_ofs     x coordinate offset after alignment
- * @param y_ofs     y coordinate offset after alignment
+ * Измените выравнивание объекта и установите новые координаты.
+ * Эквивалентно:
+ * lv_obj_set_align (объект, выровнять);
+ * lv_obj_set_pos (объект,x_ofs,y_ofs);
+ * @param obj       указатель на объект для выравнивания
+ * @param align     тип выравнивания (см. перечисление «lv_align_t»)`LV_ALIGN_OUT_...`использовать нельзя.
+ * @param x_ofs     Смещение координаты x после выравнивания
+ * @param y_ofs     смещение координаты y после выравнивания
  */
 void lv_obj_align(lv_obj_t * obj, lv_align_t align, int32_t x_ofs, int32_t y_ofs);
 
 /**
- * Align an object to another object.
- * @param obj       pointer to an object to align
- * @param base      pointer to another object (if NULL `obj`s parent is used). 'obj' will be aligned to it.
- * @param align     type of alignment (see 'lv_align_t' enum)
- * @param x_ofs     x coordinate offset after alignment
- * @param y_ofs     y coordinate offset after alignment
- * @note            if the position or size of `base` changes `obj` needs to be aligned manually again
+ * Совместите объект с другим объектом.
+ * @param obj       указатель на объект для выравнивания
+ * @param base      указатель на другой объект (если используется родительский элементNULL`obj`). 'obj' будет выровнен по нему.
+ * @param align     тип выравнивания (см. перечисление 'lv_align_t')
+ * @param x_ofs     Смещение координаты x после выравнивания
+ * @param y_ofs     смещение координаты y после выравнивания
+ * @note            если положение или размер`base`изменяется,`obj`необходимо снова выровнять вручную
  */
 void lv_obj_align_to(lv_obj_t * obj, const lv_obj_t * base, lv_align_t align, int32_t x_ofs,
                      int32_t y_ofs);
 
 /**
- * Align an object to the center on its parent.
- * @param obj       pointer to an object to align
- * @note            if the parent size changes `obj` needs to be aligned manually again
+ * Выровняйте объект по центру его родителя.
+ * @param obj       указатель на объект для выравнивания
+ * @note            если родительский размер изменится,`obj`необходимо снова выровнять вручную
  */
 void lv_obj_center(lv_obj_t * obj);
 
 /**
- * Set the transform matrix of an object
- * @param obj       pointer to an object
- * @param matrix    pointer to a matrix to set
- * @note `LV_DRAW_TRANSFORM_USE_MATRIX` needs to be enabled.
+ * Установите матрицу преобразования объекта
+ * @param obj       указатель на объект
+ * @param matrix    указатель на матрицу для установки
+ * @note `LV_DRAW_TRANSFORM_USE_MATRIX` необходимо включить.
  */
 void lv_obj_set_transform(lv_obj_t * obj, const lv_matrix_t * matrix);
 
 /**
- * Reset the transform matrix of an object to identity matrix
- * @param obj       pointer to an object
- * @note `LV_DRAW_TRANSFORM_USE_MATRIX` needs to be enabled.
+ * Сбросить матрицу преобразования объекта в единичную матрицу
+ * @param obj       указатель на объект
+ * @note `LV_DRAW_TRANSFORM_USE_MATRIX` необходимо включить.
  */
 void lv_obj_reset_transform(lv_obj_t * obj);
 
 /**
- * Copy the coordinates of an object to an area
- * @param obj       pointer to an object
- * @param coords    pointer to an area to store the coordinates
+ * Копирование координат объекта в область
+ * @param obj       указатель на объект
+ * @param coords    указатель на область для хранения координат
  */
 void lv_obj_get_coords(const lv_obj_t * obj, lv_area_t * coords);
 
 /**
- * Get the x coordinate of object.
- * @param obj       pointer to an object
- * @return          distance of `obj` from the left side of its parent plus the parent's left padding
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @note            Zero return value means the object is on the left padding of the parent, and not on the left edge.
- * @note            Scrolling of the parent doesn't change the returned value.
- * @note            The returned value is always the distance from the parent even if `obj` is positioned by a layout.
+ * Получите координату x объекта.
+ * @param obj       указатель на объект
+ * @return          расстояние`obj`от левой стороны родительского элемента плюс левое отступ родительского элемента
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @note            Нулевое возвращаемое значение означает, что объект находится на левом отступе от родителя, а не на левом краю.
+ * @note            Прокрутка родительского элемента не меняет возвращаемое значение.
+ * @note            Возвращаемое значение всегда является расстоянием от родителя, даже если`obj`позиционируется макетом.
  */
 int32_t lv_obj_get_x(const lv_obj_t * obj);
 
 /**
- * Get the x2 coordinate of object.
- * @param obj       pointer to an object
- * @return          distance of `obj` from the right side of its parent plus the parent's right padding
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @note            Zero return value means the object is on the right padding of the parent, and not on the right edge.
- * @note            Scrolling of the parent doesn't change the returned value.
- * @note            The returned value is always the distance from the parent even if `obj` is positioned by a layout.
+ * Получите координату x2 объекта.
+ * @param obj       указатель на объект
+ * @return          расстояние`obj`от правой стороны родительского элемента плюс правое дополнение родительского элемента
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @note            Нулевое возвращаемое значение означает, что объект находится на правом отступе от родителя, а не на правом краю.
+ * @note            Прокрутка родительского элемента не меняет возвращаемое значение.
+ * @note            Возвращаемое значение всегда является расстоянием от родителя, даже если`obj`позиционируется макетом.
  */
 int32_t lv_obj_get_x2(const lv_obj_t * obj);
 
 /**
- * Get the y coordinate of object.
- * @param obj       pointer to an object
- * @return          distance of `obj` from the top side of its parent plus the parent's top padding
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @note            Zero return value means the object is on the top padding of the parent, and not on the top edge.
- * @note            Scrolling of the parent doesn't change the returned value.
- * @note            The returned value is always the distance from the parent even if `obj` is positioned by a layout.
+ * Получите координату y объекта.
+ * @param obj       указатель на объект
+ * @return          расстояние`obj`от верхней стороны родительского элемента плюс верхнее отступ родительского элемента
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @note            Нулевое возвращаемое значение означает, что объект находится на верхнем отступе родительского элемента, а не на верхнем крае.
+ * @note            Прокрутка родительского элемента не меняет возвращаемое значение.
+ * @note            Возвращаемое значение всегда является расстоянием от родителя, даже если`obj`позиционируется макетом.
  */
 int32_t lv_obj_get_y(const lv_obj_t * obj);
 
 /**
- * Get the y2 coordinate of object.
- * @param obj       pointer to an object
- * @return          distance of `obj` from the bottom side of its parent plus the parent's bottom padding
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @note            Zero return value means the object is on the bottom padding of the parent, and not on the bottom edge.
- * @note            Scrolling of the parent doesn't change the returned value.
- * @note            The returned value is always the distance from the parent even if `obj` is positioned by a layout.
+ * Получите координату y2 объекта.
+ * @param obj       указатель на объект
+ * @return          расстояние`obj`от нижней стороны родительского элемента плюс нижнее отступ родительского элемента
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @note            Нулевое возвращаемое значение означает, что объект находится на нижнем отступе родительского элемента, а не на нижнем крае.
+ * @note            Прокрутка родительского элемента не меняет возвращаемое значение.
+ * @note            Возвращаемое значение всегда является расстоянием от родителя, даже если`obj`позиционируется макетом.
  */
 int32_t lv_obj_get_y2(const lv_obj_t * obj);
 
 /**
- * Get the actually set x coordinate of object, i.e. the offset from the set alignment
- * @param obj       pointer to an object
- * @return          the set x coordinate
+ * Получите фактически установленную координату x объекта, т.е. смещение от заданного выравнивания.
+ * @param obj       указатель на объект
+ * @return          заданная координата x
  */
 int32_t lv_obj_get_x_aligned(const lv_obj_t * obj);
 
 /**
- * Get the actually set y coordinate of object, i.e. the offset from the set alignment
- * @param obj       pointer to an object
- * @return          the set y coordinate
+ * Получите фактически установленную координату y объекта, т.е. смещение от заданного выравнивания.
+ * @param obj       указатель на объект
+ * @return          заданная координата y
  */
 int32_t lv_obj_get_y_aligned(const lv_obj_t * obj);
 
 /**
- * Get the width of an object
- * @param obj       pointer to an object
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @return          the width in pixels
+ * Получить ширину объекта
+ * @param obj       указатель на объект
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @return          ширина в пикселях
  */
 int32_t lv_obj_get_width(const lv_obj_t * obj);
 
 /**
- * Get the height of an object
- * @param obj       pointer to an object
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @return          the height in pixels
+ * Получить высоту объекта
+ * @param obj       указатель на объект
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @return          высота в пикселях
  */
 int32_t lv_obj_get_height(const lv_obj_t * obj);
 
 /**
- * Get the width reduced by the left and right padding and the border width.
- * @param obj       pointer to an object
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @return          the width which still fits into its parent without causing overflow (making the parent scrollable)
+ * Получите ширину, уменьшенную на левое и правое отступы и ширину границы.
+ * @param obj       указатель на объект
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @return          ширина, которая по-прежнему вписывается в родительский элемент, не вызывая переполнения (что делает родительский элемент прокручиваемым)
  */
 int32_t lv_obj_get_content_width(const lv_obj_t * obj);
 
 /**
- * Get the height reduced by the top and bottom padding and the border width.
- * @param obj       pointer to an object
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @return          the height which still fits into the parent without causing overflow (making the parent scrollable)
+ * Уменьшите высоту на верхнее и нижнее отступы и ширину границы.
+ * @param obj       указатель на объект
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @return          высота, которая по-прежнему вписывается в родительский элемент, не вызывая переполнения (что делает родительский элемент прокручиваемым)
  */
 int32_t lv_obj_get_content_height(const lv_obj_t * obj);
 
 /**
- * Get the area reduced by the paddings and the border width.
- * @param obj       pointer to an object
- * @note            The position of the object is recalculated only on the next redraw. To force coordinate recalculation
- *                  call `lv_obj_update_layout(obj)`.
- * @param area      the area which still fits into the parent without causing overflow (making the parent scrollable)
+ * Получите площадь, уменьшенную за счет отступов и ширины границы.
+ * @param obj       указатель на объект
+ * @note            Положение объекта пересчитывается только при следующей перерисовке. Принудительный перерасчет координат
+ *                  позвоните`lv_obj_update_layout(obj)`.
+ * @param area      область, которая по-прежнему вписывается в родительский элемент, не вызывая переполнения (что делает родительский элемент прокручиваемым)
  */
 void lv_obj_get_content_coords(const lv_obj_t * obj, lv_area_t * area);
 
 /**
- * Get the width occupied by the "parts" of the widget. E.g. the width of all columns of a table.
- * @param obj       pointer to an object
- * @return          the width of the virtually drawn content
- * @note            This size independent from the real size of the widget.
- *                  It just tells how large the internal ("virtual") content is.
+ * Получите ширину, занимаемую «частями» виджета. Например. ширина всех столбцов таблицы.
+ * @param obj       указатель на объект
+ * @return          ширина виртуально нарисованного контента
+ * @note            Этот размер не зависит от реального размера виджета.
+ *                  Он просто показывает, насколько велик внутренний («виртуальный») контент.
  */
 int32_t lv_obj_get_self_width(const lv_obj_t * obj);
 
 /**
- * Get the height occupied by the "parts" of the widget. E.g. the height of all rows of a table.
- * @param obj       pointer to an object
- * @return          the width of the virtually drawn content
- * @note            This size independent from the real size of the widget.
- *                  It just tells how large the internal ("virtual") content is.
+ * Получите высоту, занимаемую «частями» виджета. Например. высота всех строк таблицы.
+ * @param obj       указатель на объект
+ * @return          ширина виртуально нарисованного контента
+ * @note            Этот размер не зависит от реального размера виджета.
+ *                  Он просто показывает, насколько велик внутренний («виртуальный») контент.
  */
 int32_t lv_obj_get_self_height(const lv_obj_t * obj);
 
 /**
- * Get the style width actually used by the object after clamping the width within the min max range.
- * @param obj       pointer to an object
- * @return          the min/max/normal width set by `lv_obj_set_style_<min/max>_width()`
- * @note            This is not the calculated size, so if the size was set as `LV_SIZE_CONTENT` or `LV_PCT()`
- *                  then that value will be returned.
+ * Получите ширину стиля, фактически используемую объектом, после ограничения ширины в минимальном и максимальном диапазоне.
+ * @param obj       указатель на объект
+ * @return          минимальная/максимальная/нормальная ширина, установленная `lv_obj_set_style_<min/max>_width()`
+ * @note            Это не расчетный размер, поэтому, если размер был установлен как`LV_SIZE_CONTENT`или `LV_PCT()`
+ *                  тогда это значение будет возвращено.
  */
 int32_t lv_obj_get_style_clamped_width(lv_obj_t * obj);
 
 /**
- * Get the style height actually used by the object after clamping the height within the min max range.
- * @param obj       pointer to an object
- * @return          the min/max/normal height set by `lv_obj_set_style_<min/max>_height()`
- * @note            This is not the calculated size, so if the size was set as `LV_SIZE_CONTENT` or `LV_PCT()`
- *                  then that value will be returned.
+ * Получите высоту стиля, фактически используемую объектом, после ограничения высоты в минимальном и максимальном диапазоне.
+ * @param obj       указатель на объект
+ * @return          минимальная/максимальная/нормальная высота, установленная `lv_obj_set_style_<min/max>_height()`
+ * @note            Это не расчетный размер, поэтому, если размер был установлен как`LV_SIZE_CONTENT`или `LV_PCT()`
+ *                  тогда это значение будет возвращено.
  */
 int32_t lv_obj_get_style_clamped_height(lv_obj_t * obj);
 
 /**
- * @brief Determine if the object's resolved width was limited by its minimum width constraint.
+ * @brief Определите, была ли разрешенная ширина объекта ограничена ограничением минимальной ширины.
  *
- * This function reports whether, in the most recent layout / size calculation, the object's
- * final (used) width had to be raised to satisfy a minimum width requirement.
+ * Эта функция сообщает, были ли в последнем расчете макета/размера объект
+ * конечную (использованную) ширину пришлось увеличить, чтобы удовлетворить требованиям минимальной ширины.
  *
- * @param obj Pointer to a valid object.
- * @return true  The computed width == the effective minimum width (i.e. it was clamped).
- * @return false The width is larger than the minimum (not min‑clamped).
+ * @param obj Указатель на действительный объект.
+ * @return true Вычисленная ширина == эффективная минимальная ширина (т. е. она была зафиксирована).
+ * @return false Ширина больше минимальной (не ограничена минимальной величиной).
  */
 bool lv_obj_is_width_min(lv_obj_t * obj);
 
 /**
- * @brief Determine if the object's resolved height was limited by its minimum height constraint.
+ * @brief Определите, была ли разрешенная высота объекта ограничена ограничением минимальной высоты.
  *
- * This function reports whether, in the most recent layout / size calculation, the object's
- * final (used) height had to be raised to satisfy a minimum height requirement.
+ * Эта функция сообщает, были ли в последнем расчете макета/размера объект
+ * конечную (использованную) высоту пришлось увеличить, чтобы удовлетворить требования к минимальной высоте.
  *
- * @param obj Pointer to a valid object.
- * @return true  The computed height == the effective minimum height (i.e. it was clamped).
- * @return false The height is larger than the minimum (not min‑clamped).
+ * @param obj Указатель на действительный объект.
+ * @return true Вычисленная высота == эффективная минимальная высота (т. е. она была зафиксирована).
+ * @return false Высота больше минимальной (не ограничена минимальной высотой).
  */
 bool lv_obj_is_height_min(lv_obj_t * obj);
 
 /**
- * @brief Determine if the object's resolved width was limited by its maximum width constraint.
+ * @brief Определите, была ли разрешенная ширина объекта ограничена ограничением максимальной ширины.
  *
- * This function reports whether, in the most recent layout / size calculation, the object's
- * final (used) width had to be raised to satisfy a maximum width requirement.
+ * Эта функция сообщает, были ли в последнем расчете макета/размера объект
+ * конечную (использованную) ширину пришлось увеличить, чтобы удовлетворить требованиям максимальной ширины.
  *
- * @param obj Pointer to a valid object.
- * @return true  The computed width == the effective maximum width (i.e. it was clamped).
- * @return false The width is smaller than the maximum (not min‑clamped).
+ * @param obj Указатель на действительный объект.
+ * @return true Вычисленная ширина == эффективная максимальная ширина (т. е. она была зафиксирована).
+ * @return false Ширина меньше максимальной (не ограничена минимальной).
  */
 bool lv_obj_is_width_max(lv_obj_t * obj);
 
 /**
- * @brief Determine if the object's resolved height was limited by its maximum height constraint.
+ * @brief Определите, была ли разрешенная высота объекта ограничена ограничением максимальной высоты.
  *
- * This function reports whether, in the most recent layout / size calculation, the object's
- * final (used) height had to be raised to satisfy a maximum height requirement.
+ * Эта функция сообщает, были ли в последнем расчете макета/размера объект
+ * конечную (использованную) высоту пришлось увеличить, чтобы удовлетворить требования к максимальной высоте.
  *
- * @param obj Pointer to a valid object.
- * @return true  The computed height == the effective maximum height (i.e. it was clamped).
- * @return false The height is smaller than the maximum (not min‑clamped).
+ * @param obj Указатель на действительный объект.
+ * @return true Вычисленная высота == эффективная максимальная высота (т. е. она была зафиксирована).
+ * @return false Высота меньше максимальной (не ограничена минимальной).
  */
 bool lv_obj_is_height_max(lv_obj_t * obj);
 
 /**
- * Handle if the size of the internal ("virtual") content of an object has changed.
- * @param obj       pointer to an object
- * @return          false: nothing happened; true: refresh happened
+ * Обрабатывается, если размер внутреннего («виртуального») содержимого объекта изменился.
+ * @param obj       указатель на объект
+ * @return          ложь: ничего не произошло; правда: произошло обновление
  */
 bool lv_obj_refresh_self_size(lv_obj_t * obj);
 
@@ -424,135 +424,135 @@ void lv_obj_move_to(lv_obj_t * obj, int32_t x, int32_t y);
 void lv_obj_move_children_by(lv_obj_t * obj, int32_t x_diff, int32_t y_diff, bool ignore_floating);
 
 /**
- * Get the transform matrix of an object
- * @param obj       pointer to an object
- * @return          pointer to the transform matrix or NULL if not set
+ * Получить матрицу преобразования объекта
+ * @param obj       указатель на объект
+ * @return          указатель на матрицу преобразования или NULL, если не установлен
  */
 const lv_matrix_t * lv_obj_get_transform(const lv_obj_t * obj);
 
 /**
- * Transform a point using the angle and zoom style properties of an object
- * @param obj           pointer to an object whose style properties should be used
- * @param p             a point to transform, the result will be written back here too
- * @param flags         OR-ed valued of :cpp:enum:`lv_obj_point_transform_flag_t`
+ * Преобразуйте точку, используя свойства стиля угла и масштабирования объекта.
+ * @param obj           указатель на объект, свойства стиля которого следует использовать
+ * @param p             точку для преобразования, сюда также будет записан результат
+ * @param flags         OR -ed значение :cpp:enum: `lv_obj_point_transform_flag_t`
  */
 void lv_obj_transform_point(const lv_obj_t * obj, lv_point_t * p, lv_obj_point_transform_flag_t flags);
 
 /**
- * Transform an array of points using the angle and zoom style properties of an object
- * @param obj           pointer to an object whose style properties should be used
- * @param points        the array of points to transform, the result will be written back here too
- * @param count         number of points in the array
- * @param flags         OR-ed valued of :cpp:enum:`lv_obj_point_transform_flag_t`
+ * Преобразуйте массив точек, используя свойства стиля угла и масштабирования объекта.
+ * @param obj           указатель на объект, свойства стиля которого следует использовать
+ * @param points        массив точек для преобразования, сюда также будет записан результат
+ * @param count         количество точек в массиве
+ * @param flags         OR -ed значение :cpp:enum: `lv_obj_point_transform_flag_t`
  */
 void lv_obj_transform_point_array(const lv_obj_t * obj, lv_point_t points[], size_t count,
                                   lv_obj_point_transform_flag_t flags);
 
 /**
- * Transform an area using the angle and zoom style properties of an object
- * @param obj           pointer to an object whose style properties should be used
- * @param area          an area to transform, the result will be written back here too
- * @param flags         OR-ed valued of :cpp:enum:`lv_obj_point_transform_flag_t`
+ * Преобразуйте область, используя свойства стиля угла и масштабирования объекта.
+ * @param obj           указатель на объект, свойства стиля которого следует использовать
+ * @param area          область для преобразования, сюда также будет записан результат
+ * @param flags         OR -ed значение :cpp:enum: `lv_obj_point_transform_flag_t`
  */
 void lv_obj_get_transformed_area(const lv_obj_t * obj, lv_area_t * area, lv_obj_point_transform_flag_t flags);
 
 /**
- * Mark an area of an object as invalid.
- * The area will be truncated to the object's area and marked for redraw.
- * @param obj       pointer to an object
- * @param           area the area to redraw
- * @return LV_RESULT_OK: the area is invalidated; LV_RESULT_INVALID: the area wasn't invalidated.
- *         (maybe it was off-screen or fully clipped)
+ * Пометить область объекта как недействительную.
+ * Область будет усечена до площади объекта и помечена для перерисовки.
+ * @param obj       указатель на объект
+ * @param           area область для перерисовки
+ * @return LV_RESULT_OK : область признана недействительной; LV_RESULT_INVALID: область не была признана недействительной.
+ *         (возможно, это было за кадром или полностью обрезано)
  */
 lv_result_t lv_obj_invalidate_area(const lv_obj_t * obj, const lv_area_t * area);
 
 /**
- * Mark the object as invalid to redrawn its area
- * @param obj       pointer to an object
- * @return LV_RESULT_OK: the area is invalidated; LV_RESULT_INVALID: the area wasn't invalidated.
- *         (maybe it was off-screen or fully clipped)
+ * Отметьте объект как недействительный, чтобы перерисовать его область.
+ * @param obj       указатель на объект
+ * @return LV_RESULT_OK : область признана недействительной; LV_RESULT_INVALID: область не была признана недействительной.
+ *         (возможно, это было за кадром или полностью обрезано)
  */
 lv_result_t lv_obj_invalidate(const lv_obj_t * obj);
 
 /**
- * Tell whether an area of an object is visible (even partially) now or not
- * @param obj       pointer to an object
- * @param area      the are to check. The visible part of the area will be written back here.
- * @return true     visible; false not visible (hidden, out of parent, on other screen, etc)
+ * Укажите, видна ли сейчас часть объекта (хотя бы частично) или нет.
+ * @param obj       указатель на объект
+ * @param area      нужно проверить. Сюда будет записана видимая часть области.
+ * @return истинно видимый; false не отображается (скрыто, вне родительского элемента, на другом экране и т. д.)
  */
 bool lv_obj_area_is_visible(const lv_obj_t * obj, lv_area_t * area);
 
 /**
- * Tell whether an object is visible (even partially) now or not
- * @param obj       pointer to an object
- * @return      true: visible; false not visible (hidden, out of parent, on other screen, etc)
+ * Сказать, виден ли объект (хотя бы частично) сейчас или нет
+ * @param obj       указатель на объект
+ * @return      правда: видимый; false не отображается (скрыто, вне родительского элемента, на другом экране и т. д.)
  */
 bool lv_obj_is_visible(const lv_obj_t * obj);
 
 /**
- * Set the size of an extended clickable area
- * @param obj       pointer to an object
- * @param size      extended clickable area in all 4 directions [px]
+ * Установить размер расширенной кликабельной области
+ * @param obj       указатель на объект
+ * @param size      расширенная кликабельная область во всех 4 направлениях [px]
  */
 void lv_obj_set_ext_click_area(lv_obj_t * obj, int32_t size);
 
 /**
- * Get the an area where to object can be clicked.
- * It's the object's normal area plus the extended click area.
- * @param obj       pointer to an object
- * @param area      store the result area here
+ * Получите область, в которой можно щелкнуть объект.
+ * Это обычная область объекта плюс расширенная область щелчка.
+ * @param obj       указатель на объект
+ * @param area      сохраните область результатов здесь
  */
 void lv_obj_get_click_area(const lv_obj_t * obj, lv_area_t * area);
 
 /**
- * Hit-test an object given a particular point in screen space.
- * @param obj       object to hit-test
- * @param point     screen-space point (absolute coordinate)
- * @return          true: if the object is considered under the point
+ * Проверка попадания объекта в определенную точку экранного пространства.
+ * @param obj       возражать против хит-теста
+ * @param point     точка экранного пространства (абсолютная координата)
+ * @return          true: если объект рассматривается под точкой
  */
 bool lv_obj_hit_test(lv_obj_t * obj, const lv_point_t * point);
 
 /**
- * Clamp a width between min and max width. If the min/max width is in percentage value use the ref_width
- * @param width         width to clamp
- * @param min_width     the minimal width
- * @param max_width     the maximal width
- * @param ref_width     the reference width used when min/max width is in percentage
- * @return              the clamped width
+ * Зафиксируйте уменьшение между минимальной и верхней границей. Если минимальная/максимальная ширина указана в валютах, используйтеref_width.
+ * @param width         ширина для зажима
+ * @param min_width     минимальная ширина
+ * @param max_width     максимальная ширина
+ * @param ref_width     эталонная ширина, используемая, когда минимальная/максимальная ширина указана в процентах
+ * @return              зажатая ширина
  */
 int32_t lv_clamp_width(int32_t width, int32_t min_width, int32_t max_width, int32_t ref_width);
 
 /**
- * Clamp a height between min and max height. If the min/max height is in percentage value use the ref_height
- * @param height         height to clamp
- * @param min_height     the minimal height
- * @param max_height     the maximal height
- * @param ref_height     the reference height used when min/max height is in percentage
- * @return              the clamped height
+ * Зафиксируйте высоту между минимальной и высокой высотой. Если минимальная/максимальная высота указана в валютах, используйтеref_height.
+ * @param height         высота для зажима
+ * @param min_height     минимальная высота
+ * @param max_height     максимальная высота
+ * @param ref_height     эталонная высота, используемая, когда минимальная/максимальная высота указана в процентах
+ * @return              Зажатая высота
  */
 int32_t lv_clamp_height(int32_t height, int32_t min_height, int32_t max_height, int32_t ref_height);
 
 /**
- * @brief Calculates the width in pixels of an LVGL object based on its style and parent for a given width `prop`.
- * @param obj Pointer to the LVGL object whose width is being calculated.
- * @param prop Which style width to calculate for. Valid values are: LV_STYLE_WIDTH, LV_STYLE_MIN_WIDTH, or
+ * @brief Вычисляет ширину в пикселях объектаLVGLна основе его стиля и родителя для заданной ширины `prop`.
+ * @param obj Указатель на объект LVGL, ширина которого вычисляется.
+ * @param prop Для какой ширины стиля рассчитываться. Допустимые значения:LV_STYLE_WIDTH,LV_STYLE_MIN_WIDTHили
  * LV_STYLE_MAX_WIDTH.
- * @return The computed width for the object:
- * @note If the style width is a fixed value, that value is returned.
- * @note If the style width is `LV_SIZE_CONTENT`, the content width is calculated and returned.
- * @note If the style width is a `LV_PCT()`, the percentage is applied to the parent's width.
+ * @return Вычисленная ширина объекта:
+ * @note Если ширина стиля имеет фиксированное значение, возвращается это значение.
+ * @note Если ширина стиля равна `LV_SIZE_CONTENT`, вычисляется и возвращается ширина содержимого.
+ * @note Если ширина стиля равна `LV_PCT()`, процент применяется к ширине родительского элемента.
  */
 int32_t lv_obj_calc_dynamic_width(lv_obj_t * obj, lv_style_prop_t prop);
 
 /**
- * @brief Calculates the height in pixels of an LVGL object based on its style and parent for a given height `prop`.
- * @param obj Pointer to the LVGL object whose height is being calculated.
- * @param prop Which style height to calculate for. Valid values are: LV_STYLE_HEIGHT, LV_STYLE_MIN_HEIGHT, or
+ * @brief Вычисляет высоту в пикселях объектаLVGLна основе его стиля и родителя для заданной высоты `prop`.
+ * @param obj Указатель на объект LVGL, высота которого вычисляется.
+ * @param prop На какую высоту стиля рассчитывать. Допустимые значения:LV_STYLE_HEIGHT,LV_STYLE_MIN_HEIGHTили
  * LV_STYLE_MAX_HEIGHT.
- * @return The computed height for the object:
- * @note If the style height is a fixed value, that value is returned.
- * @note If the style height is `LV_SIZE_CONTENT`, the content height is calculated and returned.
- * @note If the style height is a `LV_PCT()`, the percentage is applied to the parent's height.
+ * @return Вычисленная высота объекта:
+ * @note Если высота стиля имеет фиксированное значение, возвращается это значение.
+ * @note Если высота стиля равна `LV_SIZE_CONTENT`, высота содержимого вычисляется и возвращается.
+ * @note Если высота стиля равна `LV_PCT()`, процент применяется к высоте родительского элемента.
  */
 int32_t lv_obj_calc_dynamic_height(lv_obj_t * obj, lv_style_prop_t prop);
 
@@ -561,7 +561,7 @@ int32_t lv_obj_calc_dynamic_height(lv_obj_t * obj, lv_style_prop_t prop);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_POS_H*/

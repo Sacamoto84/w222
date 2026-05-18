@@ -18,13 +18,13 @@ echo "Current directory: $CUR_DIR"
 
 echo "Checking prerequisites..."
 
-# List of packages to install
+# Список пакетов для установки
 apt_packages=$(cat scripts/prerequisites-apt.txt)
 echo "Required packages: $apt_packages"
 
 missing_packages_count=0
 
-# Check if each package is installed
+# Проверьте, установлен ли каждый пакет
 for package in $apt_packages; do
     if ! dpkg -l | grep -q "^ii  $package"; then
         echo "Package $package is not installed."
@@ -34,11 +34,11 @@ for package in $apt_packages; do
     fi
 done
 
-# List of Python packages to install
+# Список пакета Python для установки
 pip_packages=$(cat scripts/prerequisites-pip.txt)
 echo "Required Python packages: $pip_packages"
 
-# Check if each Python package is installed
+# Проверьте, установлен ли каждый пакет Python
 for package in $pip_packages; do
     if ! pip3 show $package > /dev/null 2>&1; then
         echo "Python package $package is not installed"
@@ -55,7 +55,7 @@ else
     echo "All required packages are installed."
 fi
 
-# Check gcovr version
+# проверить версию gcovr
 gcovr_version=$(gcovr --version | grep -oP '\d+\.\d+')
 required_version=7.0
 
@@ -67,23 +67,23 @@ else
     echo "gcovr version is $gcovr_version, which meets the requirement."
 fi
 
-# Get versions of g++, gcc, and gcov
+# Получите версии g++, gcc и gcov.
 gpp_version=$(g++ -dumpversion)
 gcc_version=$(gcc -dumpversion)
 
-# Prefer the gcov that matches the active gcc major version (e.g. gcov-13)
+# Предпочитайте gcov, используя активную основную версию gcc (например, gcov-13).
 gcc_major=$(echo "$gcc_version" | cut -d'.' -f1)
 gcov_cmd="gcov"
 if command -v "gcov-${gcc_major}" >/dev/null 2>&1; then
     gcov_cmd="gcov-${gcc_major}"
 fi
 
-# Export for downstream scripts/tools (gcovr respects GCOV)
+# Экспорт для поддержки скриптов/инструментов (gcovr supportGCOV)
 export GCOV="$gcov_cmd"
 
-# Determine gcov major version (robust against different output formats)
-# - Some distros print just "13" for -dumpversion
-# - Others may print a banner like "gcov (Ubuntu 13.2.0-...) 13.2.0"
+# Определить основную версию gcov (устойчивую к различным формам вывода)
+# - Некоторые дистрибутивы печатают только «13» для -dumpversion.
+# - Другие могут напечатать баннер типа «gcov (Ubuntu 13.2.0-...) 13.2.0».
 gcov_version=$($gcov_cmd -dumpversion 2>&1 | head -n 1 | grep -oE '[0-9]+' | head -n 1)
 
 if [ -z "$gcov_version" ]; then
@@ -92,7 +92,7 @@ if [ -z "$gcov_version" ]; then
     exit 1
 fi
 
-# Check if g++, gcc, and gcov versions are the same (major version match)
+# Проверить, проверить ли версии g++, gcc и gcov (соответствие основной версии)
 gpp_major=$(echo "$gpp_version" | cut -d'.' -f1)
 if [ "$gpp_major" != "$gcc_major" ] || [ "$gcc_major" != "$gcov_version" ]; then
     echo "Versions mismatch detected:"
@@ -115,7 +115,7 @@ if [ "$skip_tests" = true ]; then
     exit 0
 fi
 
-# Run tests for 32-bit build and test
+# Запуск тестов для 32-битной сборки и тестирование
 echo "Running tests for 32-bit build and test..."
 
 export NON_AMD64_BUILD=1
@@ -129,7 +129,7 @@ else
     exit 1
 fi
 
-# Run tests for 64-bit build and test
+# Запуск тестов для 64-битной сборки и тестирование
 echo "Running tests for 64-bit build and test..."
 
 unset NON_AMD64_BUILD

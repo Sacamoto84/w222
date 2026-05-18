@@ -269,7 +269,7 @@ static int glad_egl_find_core_egl(EGLDisplay display) {
     const char *version;
 
     if (display == NULL) {
-        display = EGL_NO_DISPLAY; /* this is usually NULL, better safe than sorry */
+        display = EGL_NO_DISPLAY; /* обычно это NULL, лучше перестраховаться, чем потом сожалеть */
     }
     if (display == EGL_NO_DISPLAY) {
         display = eglGetCurrentDisplay();

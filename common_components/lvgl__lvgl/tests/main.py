@@ -19,7 +19,7 @@ wayland_protocols_dir = os.path.realpath("/usr/share/wayland-protocols")
 from perf import perf_test_options
 from LVGLImage import LVGLImage, ColorFormat, CompressMethod
 
-# Key values must match variable names in CMakeLists.txt.
+# Значения ключей должны соответствовать именам методов в CMakeLists.txt.
 build_only_options = {
     'OPTIONS_NORMAL_8BIT': 'Normal config, 8 bit color depth',
     'OPTIONS_16BIT': 'Minimal config, 16 bit color depth',
@@ -93,7 +93,7 @@ def gen_wayland_protocols(clean):
             os.path.join(wayland_dir, "wayland_xdg_shell.c.original"),
         ])
 
-        # Insert guards
+        # Вставьте ограждения
         with open(os.path.join(wayland_dir, "wayland_xdg_shell.h"), "w") as outfile:
             subprocess.check_call(['sed','-e', "1i #if LV_BUILD_TEST", '-e', '$a #endif',
                 os.path.join(wayland_dir, "wayland_xdg_shell.h.original")], stdout=outfile)
@@ -295,26 +295,26 @@ if __name__ == "__main__":
             build_dir = get_build_dir(options_name)
 
             if args.report:
-                # Keep the files that gcovr analysis depends on and delete
-                # the rest to solve the storage capacity limit of GitHub CI
+                # Сохраните файлы, от которых зависит анализ gcovr, и удалите их.
+                # остальное, чтобы решить проблему ограничений емкости хранилища GitHub CI
                 clean_filters = ['CMakeFiles', '.c']
                 clean_build_dirs_with_filter(build_dir, clean_filters)
 
                 if args.keep_report:
-                    # Retain the gcov report files for subsequent automated coverage analysis.
+                    # Сохраните файлы отчетов gcov для последующего автоматического анализа покрытий.
                     print(f"Keeping {build_dir} for report")
                 else:
                     print(f"Append {build_dir} to clean list")
                     clean_build_dirs.append(build_dir)
             else:
-                # Remove all build directories directly
+                # Удалить все каталоги сборки напрямую
                 print(f"Removing {build_dir}")
                 shutil.rmtree(build_dir)
 
     if args.report:
         generate_code_coverage_report()
 
-    # Clean all build directories after report
+    # Очистите все каталоги сборки после отчета
     for build_dir in clean_build_dirs:
         print(f"Removing {build_dir}")
         shutil.rmtree(build_dir)

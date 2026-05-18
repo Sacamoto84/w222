@@ -33,75 +33,75 @@ typedef void (*lv_iter_inspect_cb)(void * elem);
  **********************/
 
 /**
- * Create an iterator based on an instance, and then the next element of the iterator can be obtained through lv_iter_next,
- * In order to obtain the next operation in a unified and abstract way.
- * @param instance       The instance to be iterated
- * @param elem_size      The size of the element to be iterated in bytes
- * @param context_size   The size of the context to be passed to the next_cb in bytes
- * @param next_cb        The callback function to get the next element
- * @return               The iterator object
+ * Создайте итератор на основе экземпляра, а затем следующий элемент итератора можно будет получить черезlv_iter_next,
+ * Чтобы получить следующую операцию унифицированным и абстрактным способом.
+ * @param instance       Экземпляр для итерации
+ * @param elem_size      Размер элемента, который будет повторяться в байтах
+ * @param context_size   Размер контекста, передаваемого в next_cb, в байтах.
+ * @param next_cb        Функция обратного вызова для получения следующего элемента
+ * @return               Объект итератора
  */
 lv_iter_t * lv_iter_create(void * instance, uint32_t elem_size, uint32_t context_size, lv_iter_next_cb next_cb);
 
 /**
- * Get the context of the iterator. You can use it to store some temporary variables associated with current iterator..
- * @param iter           `lv_iter_t` object create before
- * @return the iter context
+ * Получите контекст итератора. Вы можете использовать его для хранения некоторых временных переменных, связанных с текущим итератором.
+ * @param iter           Объект`lv_iter_t`создан ранее
+ * @return контекст iter
  */
 void * lv_iter_get_context(const lv_iter_t * iter);
 
 /**
- * Destroy the iterator object, and release the context. Other resources allocated by the user are not released.
- * The user needs to release it by itself.
- * @param iter          `lv_iter_t` object create before
+ * Уничтожьте объект итератора и освободите контекст. Другие ресурсы, выделенные пользователем, не освобождаются.
+ * Пользователю необходимо освободить его самостоятельно.
+ * @param iter          Объект`lv_iter_t`создан ранее
  */
 void lv_iter_destroy(lv_iter_t * iter);
 
 /**
- * Get the next element of the iterator.
- * @param iter          `lv_iter_t` object create before
- * @param elem          The pointer to store the next element
- * @return              LV_RESULT_OK: Get the next element successfully
- *                      LV_RESULT_INVALID: The next element is invalid
+ * Получите следующий элемент итератора.
+ * @param iter          Объект`lv_iter_t`создан ранее
+ * @param elem          Указатель для сохранения следующего элемента
+ * @return              LV_RESULT_OK: успешно получить следующий элемент.
+ *                      LV_RESULT_INVALID: Следующий элемент недействителен
  */
 lv_result_t lv_iter_next(lv_iter_t * iter, void * elem);
 
 /**
- * Make the iterator peekable, which means that the user can peek the next element without advancing the iterator.
- * @param iter          `lv_iter_t` object create before
- * @param capacity      The capacity of the peek buffer
+ * Сделайте итератор доступным для просмотра, что означает, что пользователь может просматривать следующий элемент, не перемещая итератор.
+ * @param iter          Объект`lv_iter_t`создан ранее
+ * @param capacity      Емкость буфера просмотра
  */
 void lv_iter_make_peekable(lv_iter_t * iter, uint32_t capacity);
 
 /**
- * Peek the next element of the iterator without advancing the iterator.
- * @param iter          `lv_iter_t` object create before
- * @param elem          The pointer to store the next element
- * @return              LV_RESULT_OK: Peek the next element successfully
- *                      LV_RESULT_INVALID: The next element is invalid
+ * Просмотрите следующий элемент итератора, не перемещая итератор вперед.
+ * @param iter          Объект`lv_iter_t`создан ранее
+ * @param elem          Указатель для сохранения следующего элемента
+ * @return              LV_RESULT_OK: успешно просмотреть следующий элемент.
+ *                      LV_RESULT_INVALID: Следующий элемент недействителен
  */
 lv_result_t lv_iter_peek(lv_iter_t * iter, void * elem);
 
 /**
- * Only advance the iterator without getting the next element.
- * @param iter          `lv_iter_t` object create before
- * @return              LV_RESULT_OK: Peek the next element successfully
- *                      LV_RESULT_INVALID: The next element is invalid
+ * Только продвигайте итератор без получения следующего элемента.
+ * @param iter          Объект`lv_iter_t`создан ранее
+ * @return              LV_RESULT_OK: успешно просмотреть следующий элемент.
+ *                      LV_RESULT_INVALID: Следующий элемент недействителен
  */
 lv_result_t lv_iter_peek_advance(lv_iter_t * iter);
 
 /**
- * Reset the peek cursor to the `next` cursor.
- * @param iter          `lv_iter_t` object create before
- * @return              LV_RESULT_OK: Reset the peek buffer successfully
- *                      LV_RESULT_INVALID: The peek buffer is invalid
+ * Сбросьте взгляд на одежду `next`.
+ * @param iter          Объект`lv_iter_t`создан ранее
+ * @return              LV_RESULT_OK: успешно сбросить буфер просмотра.
+ *                      LV_RESULT_INVALID: Буфер просмотра недействителен.
  */
 lv_result_t lv_iter_peek_reset(lv_iter_t * iter);
 
 /**
- * Inspect the element of the iterator. The callback function will be called for each element of the iterator.
- * @param iter          `lv_iter_t` object create before
- * @param inspect_cb    The callback function to inspect the element
+ * Проверьте элемент итератора. Функция обратного вызова будет вызываться для каждого элемента итератора.
+ * @param iter          Объект`lv_iter_t`создан ранее
+ * @param inspect_cb    Функция обратного вызова для проверки элемента
  */
 void lv_iter_inspect(lv_iter_t * iter, lv_iter_inspect_cb inspect_cb);
 
@@ -114,7 +114,7 @@ void lv_iter_inspect(lv_iter_t * iter, lv_iter_inspect_cb inspect_cb);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ITER_H*/

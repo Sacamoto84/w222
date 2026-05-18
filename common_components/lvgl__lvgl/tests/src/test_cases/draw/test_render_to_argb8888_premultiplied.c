@@ -7,12 +7,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_display_set_color_format(NULL, LV_COLOR_FORMAT_XRGB8888);
 }
 
@@ -27,9 +27,9 @@ void test_render_to_argb8888_premultiplied(void)
         for(i = 0; i < LV_DEMO_RENDER_SCENE_NUM; i++) {
 
             /*
-             * Skip test with transformed indexed images if they are not loaded to RAM
-             * also skip normal_3 and recolor_3 on VGLite
-             * because RGB565A8 and I8 are not supported
+             * Пропустить тест с преобразованными индексированными изображениями, если они не загружены в RAM.
+             * также пропустите normal_3 и recolor_3 на VGLite
+             * потому что RGB565A8 и I8 не поддерживаются
              */
             if((LV_BIN_DECODER_RAM_LOAD == 0 || LV_USE_DRAW_VG_LITE) &&
                (i == LV_DEMO_RENDER_SCENE_IMAGE_NORMAL_3 ||

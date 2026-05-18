@@ -4,7 +4,7 @@
 
 #include "unity/unity.h"
 
-/* This function runs before each test */
+/* Эта функция запускается перед каждым тестом */
 void setUp(void);
 
 void test_arc_creation_successful(void);
@@ -55,7 +55,7 @@ void test_arc_basic_render(void)
 void test_arc_rgb565a8_image(void)
 {
 #if LV_BIN_DECODER_RAM_LOAD
-    /*RGB565A8 image rendering requires special handling*/
+    /*Рендеринг изображений RGB565A8 требует особого обращения.*/
     arc = lv_arc_create(active_screen);
     lv_obj_set_size(arc, 100, 100);
     lv_obj_center(arc);
@@ -72,7 +72,7 @@ void test_arc_rgb565a8_image(void)
 
 void test_arc_should_truncate_to_max_range_when_new_value_exceeds_it(void)
 {
-    /* Default max range is 100 */
+    /* Максимальный диапазон по умолчанию — 100. */
     int16_t value_after_truncation = 100;
 
     arc = lv_arc_create(active_screen);
@@ -84,7 +84,7 @@ void test_arc_should_truncate_to_max_range_when_new_value_exceeds_it(void)
 
 void test_arc_should_truncate_to_min_range_when_new_value_is_inferior(void)
 {
-    /* Default min range is 100 */
+    /* Минимальный диапазон по умолчанию — 100. */
     int16_t value_after_truncation = 0;
 
     arc = lv_arc_create(active_screen);
@@ -117,7 +117,7 @@ void test_arc_should_update_angles_when_changing_to_symmetrical_mode(void)
     lv_value_precise_t expected_angle_start = 135;
     lv_value_precise_t expected_angle_end = 270;
 
-    /* start angle is 135, end angle is 45 at creation */
+    /* начальный угол 135, конечный угол 45 при создании */
     arc = lv_arc_create(active_screen);
     lv_arc_set_mode(arc, LV_ARC_MODE_SYMMETRICAL);
 
@@ -130,7 +130,7 @@ void test_arc_should_update_angles_when_changing_to_symmetrical_mode_value_more_
     lv_value_precise_t expected_angle_start = 270;
     lv_value_precise_t expected_angle_end = 45;
 
-    /* start angle is 135, end angle is 45 at creation */
+    /* начальный угол 135, конечный угол 45 при создании */
     arc = lv_arc_create(active_screen);
     lv_arc_set_value(arc, 100);
     lv_arc_set_mode(arc, LV_ARC_MODE_SYMMETRICAL);
@@ -139,7 +139,7 @@ void test_arc_should_update_angles_when_changing_to_symmetrical_mode_value_more_
     TEST_ASSERT_EQUAL_FLOAT(expected_angle_end, lv_arc_get_angle_end(arc));
 }
 
-/* See #2522 for more information */
+/* См. #2522 для получения дополнительной информации. */
 void test_arc_angles_when_reversed(void)
 {
     lv_value_precise_t expected_start_angle = 54;
@@ -169,33 +169,33 @@ void test_arc_click_area_with_adv_hittest(void)
     lv_obj_add_event_cb(arc, dummy_event_cb, LV_EVENT_PRESSED, NULL);
     lv_obj_set_ext_click_area(arc, 5);
 
-    /*No click detected at the middle*/
+    /*Щелка в середине не обнаружено.*/
     event_cnt = 0;
     lv_test_mouse_click_at(50, 50);
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);
 
-    /*No click close to the radius - bg_arc - ext_click_area*/
+    /*Нет щелчка вблизи радиуса - bg_arc - ext_click_area*/
     event_cnt = 0;
     lv_test_mouse_click_at(83, 50);
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);
 
-    /*Click on the radius - bg_arc - ext_click_area*/
+    /*Нажмите на радиус — bg_arc — ext_click_area.*/
     event_cnt = 0;
     lv_test_mouse_click_at(86, 50);
     TEST_ASSERT_GREATER_THAN(0, event_cnt);
 
-    /*Click on the radius + ext_click_area*/
+    /*Нажмите на радиус + ext_click_area*/
     event_cnt = 0;
     lv_test_mouse_click_at(104, 50);
     TEST_ASSERT_GREATER_THAN(0, event_cnt);
 
-    /*No click beyond to the radius + ext_click_area*/
+    /*Никаких щелчков за пределами радиуса + ext_click_area*/
     event_cnt = 0;
     lv_test_mouse_click_at(106, 50);
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);
 }
 
-/* Check value doesn't go to max when clicking on the other side of the arc */
+/* Значение проверки не достигает максимального значения при нажатии на другую сторону дуги */
 void test_arc_click_sustained_from_start_to_end_does_not_set_value_to_max(void)
 {
     arc = lv_arc_create(lv_screen_active());
@@ -206,7 +206,7 @@ void test_arc_click_sustained_from_start_to_end_does_not_set_value_to_max(void)
     lv_obj_add_event_cb(arc, dummy_event_cb, LV_EVENT_PRESSED, NULL);
     event_cnt = 0;
 
-    /* Click close to start angle */
+    /* Нажмите «Закрыть», чтобы начать угол */
     event_cnt = 0;
     lv_test_mouse_release();
     lv_test_wait(50);
@@ -219,7 +219,7 @@ void test_arc_click_sustained_from_start_to_end_does_not_set_value_to_max(void)
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt);
     TEST_ASSERT_EQUAL_INT32(lv_arc_get_min_value(arc), lv_arc_get_value(arc));
 
-    /* Click close to end angle */
+    /* Нажмите рядом с конечным углом */
     event_cnt = 0;
 
     lv_test_mouse_release();
@@ -258,15 +258,15 @@ void test_two_overlapping_arcs_can_be_interacted_independently(void)
     lv_obj_center(arc);
     lv_obj_center(arc2);
 
-    // Add event callback to both arcs
+    // Добавьте обратный вызов события в обе дуги
     lv_obj_add_event_cb(arc, dummy_event_cb, LV_EVENT_PRESSED, NULL);
     lv_obj_add_event_cb(arc2, dummy_event_cb2, LV_EVENT_PRESSED, NULL);
 
-    // Reset event counters
+    // Сбросить счетчики событий
     event_cnt = 0;
     event_cnt2 = 0;
 
-    // Click on the position of the first arc (center)
+    // Нажмите на положение первой дуги (в центре).
     lv_test_mouse_release();
     lv_test_wait(50);
     lv_test_mouse_move_to(400, 195);
@@ -275,11 +275,11 @@ void test_two_overlapping_arcs_can_be_interacted_independently(void)
     lv_test_mouse_release();
     lv_test_wait(50);
 
-    // Verify that the event callback was called for the first arc
+    // Убедитесь, что обратный вызов события был вызван для первой дуги.
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt2);
 
-    // click on the position of the second arc (center)
+    // щелкните по положению второй дуги (в центре)
     lv_test_mouse_release();
     lv_test_wait(50);
     lv_test_mouse_move_to(400, 285);
@@ -288,11 +288,11 @@ void test_two_overlapping_arcs_can_be_interacted_independently(void)
     lv_test_mouse_release();
     lv_test_wait(50);
 
-    // Verify that the event callback was called for the second arc
+    // Убедитесь, что обратный вызов события был вызван для второй дуги.
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt);
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt2);
 
-    // Verify that the screen remains as expected after the interactions
+    // Убедитесь, что после взаимодействия экран остается таким, как ожидалось.
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/overlapping_arcs_test.png");
 }
 
@@ -332,49 +332,49 @@ void test_arc_properties(void)
     lv_obj_t * obj = lv_arc_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Test START_ANGLE property (PRECISE type) */
+    /* Тестирование свойства START_ANGLE (тип PRECISE) */
     prop.id = LV_PROPERTY_ARC_START_ANGLE;
     prop.precise = 45;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(45, lv_obj_get_property(obj, LV_PROPERTY_ARC_START_ANGLE).precise);
     TEST_ASSERT_EQUAL_INT(45, lv_arc_get_angle_start(obj));
 
-    /* Test END_ANGLE property (PRECISE type) */
+    /* Тестирование свойства END_ANGLE (тип PRECISE) */
     prop.id = LV_PROPERTY_ARC_END_ANGLE;
     prop.precise = 270;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(270, lv_obj_get_property(obj, LV_PROPERTY_ARC_END_ANGLE).precise);
     TEST_ASSERT_EQUAL_INT(270, lv_arc_get_angle_end(obj));
 
-    /* Test BG_START_ANGLE property (PRECISE type) */
+    /* Тестирование свойства BG_START_ANGLE (тип PRECISE) */
     prop.id = LV_PROPERTY_ARC_BG_START_ANGLE;
     prop.precise = 30;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(30, lv_obj_get_property(obj, LV_PROPERTY_ARC_BG_START_ANGLE).precise);
     TEST_ASSERT_EQUAL_INT(30, lv_arc_get_bg_angle_start(obj));
 
-    /* Test BG_END_ANGLE property (PRECISE type) */
+    /* Тестирование свойства BG_END_ANGLE (тип PRECISE) */
     prop.id = LV_PROPERTY_ARC_BG_END_ANGLE;
     prop.precise = 300;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(300, lv_obj_get_property(obj, LV_PROPERTY_ARC_BG_END_ANGLE).precise);
     TEST_ASSERT_EQUAL_INT(300, lv_arc_get_bg_angle_end(obj));
 
-    /* Test ROTATION property (INT type) */
+    /* Тестирование свойства ROTATION (тип INT) */
     prop.id = LV_PROPERTY_ARC_ROTATION;
     prop.num = 90;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(90, lv_obj_get_property(obj, LV_PROPERTY_ARC_ROTATION).num);
     TEST_ASSERT_EQUAL_INT(90, lv_arc_get_rotation(obj));
 
-    /* Test MODE property (INT type) */
+    /* Тестирование свойства MODE (тип INT) */
     prop.id = LV_PROPERTY_ARC_MODE;
     prop.num = LV_ARC_MODE_SYMMETRICAL;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_ARC_MODE_SYMMETRICAL, lv_obj_get_property(obj, LV_PROPERTY_ARC_MODE).num);
     TEST_ASSERT_EQUAL_INT(LV_ARC_MODE_SYMMETRICAL, lv_arc_get_mode(obj));
 
-    /* Test VALUE property (INT type) */
+    /* Тестирование свойства VALUE (тип INT) */
     lv_arc_set_range(obj, 0, 100);
     prop.id = LV_PROPERTY_ARC_VALUE;
     prop.num = 75;
@@ -382,27 +382,27 @@ void test_arc_properties(void)
     TEST_ASSERT_EQUAL_INT(75, lv_obj_get_property(obj, LV_PROPERTY_ARC_VALUE).num);
     TEST_ASSERT_EQUAL_INT(75, lv_arc_get_value(obj));
 
-    /* Test MIN_VALUE property (INT type) */
+    /* Тестирование свойства MIN_VALUE (тип INT) */
     prop.id = LV_PROPERTY_ARC_MIN_VALUE;
     prop.num = 10;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(10, lv_obj_get_property(obj, LV_PROPERTY_ARC_MIN_VALUE).num);
     TEST_ASSERT_EQUAL_INT(10, lv_arc_get_min_value(obj));
 
-    /* Test MAX_VALUE property (INT type) */
+    /* Тестирование свойства MAX_VALUE (тип INT) */
     prop.id = LV_PROPERTY_ARC_MAX_VALUE;
     prop.num = 200;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(200, lv_obj_get_property(obj, LV_PROPERTY_ARC_MAX_VALUE).num);
     TEST_ASSERT_EQUAL_INT(200, lv_arc_get_max_value(obj));
 
-    /* Test CHANGE_RATE property (INT type) */
+    /* Тестирование свойства CHANGE_RATE (тип INT) */
     prop.id = LV_PROPERTY_ARC_CHANGE_RATE;
     prop.num = 50;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(50, lv_obj_get_property(obj, LV_PROPERTY_ARC_CHANGE_RATE).num);
 
-    /* Test KNOB_OFFSET property (INT type) */
+    /* Тестирование свойства KNOB_OFFSET (тип INT) */
     prop.id = LV_PROPERTY_ARC_KNOB_OFFSET;
     prop.num = 5;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
@@ -417,7 +417,7 @@ void test_arc_set_change_rate(void)
 {
     arc = lv_arc_create(active_screen);
 
-    /* Test setting various change rate values */
+    /* Тестовая установка различных значений скорости изменения */
     lv_arc_set_change_rate(arc, 0);
     lv_arc_set_change_rate(arc, 100);
     lv_arc_set_change_rate(arc, 500);
@@ -432,15 +432,15 @@ void test_arc_set_knob_offset(void)
 
     arc = lv_arc_create(active_screen);
 
-    /* Test setting positive offset */
+    /* Тестовая установка положительного смещения */
     lv_arc_set_knob_offset(arc, test_offset_positive);
     TEST_ASSERT_EQUAL_INT32(test_offset_positive, lv_arc_get_knob_offset(arc));
 
-    /* Test setting negative offset */
+    /* Тестовая настройка отрицательного смещения */
     lv_arc_set_knob_offset(arc, test_offset_negative);
     TEST_ASSERT_EQUAL_INT32(test_offset_negative, lv_arc_get_knob_offset(arc));
 
-    /* Test setting zero offset */
+    /* Тестовая установка смещения нулевой точки */
     lv_arc_set_knob_offset(arc, test_offset_zero);
     TEST_ASSERT_EQUAL_INT32(test_offset_zero, lv_arc_get_knob_offset(arc));
 }
@@ -449,7 +449,7 @@ void test_arc_getter_functions(void)
 {
     arc = lv_arc_create(active_screen);
 
-    /* Test background angle getters */
+    /* Тестовые геттеры угла фона */
     lv_value_precise_t bg_start_angle = 45.0f;
     lv_value_precise_t bg_end_angle = 270.0f;
 
@@ -457,22 +457,22 @@ void test_arc_getter_functions(void)
     TEST_ASSERT_EQUAL_FLOAT(bg_start_angle, lv_arc_get_bg_angle_start(arc));
     TEST_ASSERT_EQUAL_FLOAT(bg_end_angle, lv_arc_get_bg_angle_end(arc));
 
-    /* Test max value getter */
+    /* Тестирование метода получения максимального значения */
     int32_t max_value = 200;
     lv_arc_set_range(arc, 0, max_value);
     TEST_ASSERT_EQUAL_INT32(max_value, lv_arc_get_max_value(arc));
 
-    /* Test mode getter */
+    /* Геттер тестового режима */
     lv_arc_mode_t mode = LV_ARC_MODE_SYMMETRICAL;
     lv_arc_set_mode(arc, mode);
     TEST_ASSERT_EQUAL(mode, lv_arc_get_mode(arc));
 
-    /* Test rotation getter */
+    /* Тестовый геттер вращения */
     int32_t rotation = 90;
     lv_arc_set_rotation(arc, rotation);
     TEST_ASSERT_EQUAL_INT32(rotation, lv_arc_get_rotation(arc));
 
-    /* Test knob offset getter */
+    /* Геттер смещения тестовой ручки */
     int32_t knob_offset = 15;
     lv_arc_set_knob_offset(arc, knob_offset);
     TEST_ASSERT_EQUAL_INT32(knob_offset, lv_arc_get_knob_offset(arc));
@@ -485,15 +485,15 @@ void test_arc_drag_prevents_big_angle_jumps(void)
     lv_obj_center(arc);
     lv_obj_update_layout(arc);
 
-    /* Set initial value */
+    /* Установить начальное значение */
     lv_arc_set_value(arc, 25);
 
-    /* Test normal drag - drag along the arc smoothly */
-    lv_test_mouse_move_to(376, 285);  /* Start position on arc */
+    /* Проверьте нормальное перетаскивание — плавно перетаскивайте по дуге */
+    lv_test_mouse_move_to(376, 285);  /* Стартовая позиция на дуге */
     lv_test_mouse_press();
     lv_test_wait(500);
 
-    /* Drag to a nearby position on the arc */
+    /* Перетащите в ближайшее положение на дуге. */
     lv_test_mouse_move_to(390, 290);
     lv_test_wait(500);
 
@@ -502,10 +502,10 @@ void test_arc_drag_prevents_big_angle_jumps(void)
     lv_test_mouse_release();
     lv_test_wait(50);
 
-    /* Value should have changed during drag */
+    /* Значение должно было измениться во время перетаскивания */
     TEST_ASSERT_NOT_EQUAL(25, value_after_small_drag);
 
-    /* Test with different arc range to cover more of the logic */
+    /* Тестируйте с другим диапазоном дуги, чтобы охватить больше логики. */
     lv_arc_set_bg_angles(arc, 0, 270);
     lv_arc_set_value(arc, 50);
 
@@ -527,46 +527,46 @@ void test_arc_align_obj_to_angle(void)
     lv_obj_set_size(arc, 100, 100);
     lv_obj_center(arc);
 
-    /* Create an object to align */
+    /* Создайте объект для выравнивания */
     lv_obj_t * aligned_obj = lv_obj_create(arc);
     lv_obj_set_size(aligned_obj, 10, 10);
 
-    /* Test align with different values and offsets */
+    /* Проверьте выравнивание с различными значениями и смещениями. */
     lv_arc_set_value(arc, 0);
     lv_arc_align_obj_to_angle(arc, aligned_obj, 0);
 
-    /* Get coordinates after alignment */
+    /* Получить координаты после выравнивания */
     int32_t x1 = lv_obj_get_x(aligned_obj);
     int32_t y1 = lv_obj_get_y(aligned_obj);
 
-    /* Test with different arc value */
+    /* Тест с другим значением дуги */
     lv_arc_set_value(arc, 50);
     lv_arc_align_obj_to_angle(arc, aligned_obj, 0);
 
-    /* Position should change when value changes */
+    /* Позиция должна меняться при изменении значения */
     int32_t x2 = lv_obj_get_x(aligned_obj);
     int32_t y2 = lv_obj_get_y(aligned_obj);
 
-    /* At least one coordinate should be different */
+    /* Хотя бы одна координата должна отличаться */
     TEST_ASSERT_TRUE((x1 != x2) || (y1 != y2));
 
-    /* Test with positive radius offset */
+    /* Тест с положительным смещением радиуса */
     lv_arc_align_obj_to_angle(arc, aligned_obj, 10);
     int32_t x3 = lv_obj_get_x(aligned_obj);
     int32_t y3 = lv_obj_get_y(aligned_obj);
 
-    /* Position should be different with offset */
+    /* Позиция должна отличаться от смещения */
     TEST_ASSERT_TRUE((x2 != x3) || (y2 != y3));
 
-    /* Test with negative radius offset */
+    /* Тест со смещением отрицательного радиуса */
     lv_arc_align_obj_to_angle(arc, aligned_obj, -10);
     int32_t x4 = lv_obj_get_x(aligned_obj);
     int32_t y4 = lv_obj_get_y(aligned_obj);
 
-    /* Position should be different with negative offset */
+    /* Позиция должна быть другой с отрицательным смещением */
     TEST_ASSERT_TRUE((x3 != x4) || (y3 != y4));
 
-    /* Test with maximum value */
+    /* Тест с максимальным значением */
     lv_arc_set_value(arc, 100);
     lv_arc_align_obj_to_angle(arc, aligned_obj, 0);
 }
@@ -577,50 +577,50 @@ void test_arc_rotate_obj_to_angle(void)
     lv_obj_set_size(arc, 100, 100);
     lv_obj_center(arc);
 
-    /* Create an object to rotate */
+    /* Создайте объект для вращения */
     lv_obj_t * rotated_obj = lv_obj_create(arc);
     lv_obj_set_size(rotated_obj, 10, 10);
 
-    /* Test rotate with value 0 */
+    /* Тестовое вращение со значением 0 */
     lv_arc_set_value(arc, 0);
     lv_arc_rotate_obj_to_angle(arc, rotated_obj, 0);
 
-    /* Get initial rotation */
+    /* Получить начальное вращение */
     int32_t rotation1 = lv_obj_get_style_transform_rotation(rotated_obj, 0);
 
-    /* Test with different arc value */
+    /* Тест с другим значением дуги */
     lv_arc_set_value(arc, 50);
     lv_arc_rotate_obj_to_angle(arc, rotated_obj, 0);
 
-    /* Rotation should change when value changes */
+    /* Вращение должно меняться при изменении значения */
     int32_t rotation2 = lv_obj_get_style_transform_rotation(rotated_obj, 0);
     TEST_ASSERT_NOT_EQUAL(rotation1, rotation2);
 
-    /* Test with positive radius offset */
+    /* Тест с положительным смещением радиуса */
     lv_arc_rotate_obj_to_angle(arc, rotated_obj, 15);
 
-    /* Get coordinates with offset */
+    /* Получить координаты со смещением */
     int32_t x1 = lv_obj_get_x(rotated_obj);
     int32_t y1 = lv_obj_get_y(rotated_obj);
 
-    /* Test with different offset */
+    /* Тест с другим смещением */
     lv_arc_rotate_obj_to_angle(arc, rotated_obj, -15);
 
-    /* Position should change with different offset */
+    /* Позиция должна измениться с другим смещением */
     int32_t x2 = lv_obj_get_x(rotated_obj);
     int32_t y2 = lv_obj_get_y(rotated_obj);
     TEST_ASSERT_TRUE((x1 != x2) || (y1 != y2));
 
-    /* Test with maximum value */
+    /* Тест с максимальным значением */
     lv_arc_set_value(arc, 100);
     lv_arc_rotate_obj_to_angle(arc, rotated_obj, 0);
 
-    /* Rotation should be different at max value */
+    /* Вращение должно быть разным при максимальном значении */
     int32_t rotation3 = lv_obj_get_style_transform_rotation(rotated_obj, 0);
     TEST_ASSERT_NOT_EQUAL(rotation2, rotation3);
 
-    /* Verify rotation is within expected range (angle * 10 + 900) */
-    /* For arc angle 0-270 degrees, rotation should be 900-3600 */
+    /* Убедитесь, что вращение находится в пределах ожидаемого диапазона (угол * 10 + 900). */
+    /* Для угла дуги 0–270 градусов поворот должен составлять 900–3600. */
     TEST_ASSERT_GREATER_OR_EQUAL_INT32(0, rotation3);
 }
 
@@ -637,22 +637,22 @@ void test_arc_key_event_handling(void)
     lv_obj_set_size(arc, 100, 100);
     lv_arc_set_range(arc, 0, 100);
 
-    /* Test RIGHT key increases value */
+    /* Тестовый ключ RIGHT увеличивает значение */
     test_arc_key_step(arc, 50, LV_KEY_RIGHT, 51);
 
-    /* Test UP key increases value */
+    /* Тестовый ключ UP увеличивает значение */
     test_arc_key_step(arc, 50, LV_KEY_UP, 51);
 
-    /* Test LEFT key decreases value */
+    /* Тестовый ключ LEFT уменьшает значение */
     test_arc_key_step(arc, 50, LV_KEY_LEFT, 49);
 
-    /* Test DOWN key decreases value */
+    /* Тестовый ключ DOWN уменьшает значение */
     test_arc_key_step(arc, 50, LV_KEY_DOWN, 49);
 
-    /* Test that value respects maximum limit */
+    /* Проверьте, что значение соответствует максимальному пределу */
     test_arc_key_step(arc, 100, LV_KEY_RIGHT, 100);
 
-    /* Test that value respects minimum limit */
+    /* Проверьте, соответствует ли значение минимальному пределу */
     test_arc_key_step(arc, 0, LV_KEY_LEFT, 0);
 }
 
@@ -669,19 +669,19 @@ void test_arc_rotary_event_handling(void)
     lv_obj_set_size(arc, 100, 100);
     lv_arc_set_range(arc, 0, 100);
 
-    /* Test positive rotary diff increases value */
+    /* Тест положительного поворотного дифференциала увеличивает значение */
     test_arc_rotary_step(arc, 50, 5, 55);
 
-    /* Test negative rotary diff decreases value */
+    /* Тест отрицательного поворотного дифференциала уменьшает значение */
     test_arc_rotary_step(arc, 50, -5, 45);
 
-    /* Test large positive rotary diff respects maximum */
+    /* Проверьте большой положительный поворотный дифференциал, соблюдая максимум. */
     test_arc_rotary_step(arc, 95, 10, 100);
 
-    /* Test large negative rotary diff respects minimum */
+    /* Проверьте большой отрицательный поворотный дифференциал, соблюдая минимум */
     test_arc_rotary_step(arc, 5, -10, 0);
 
-    /* Test zero rotary diff keeps value unchanged */
+    /* Тест нулевого поворотного дифференциала сохраняет значение неизменным */
     test_arc_rotary_step(arc, 50, 0, 50);
 }
 
@@ -692,42 +692,42 @@ void test_arc_encoder_focused_event(void)
     lv_arc_set_range(arc, 0, 100);
     lv_arc_set_value(arc, 30);
 
-    /* Create a group and add arc to it */
+    /* Создайте группу и добавьте в нее дугу */
     lv_group_t * g = lv_group_create();
     lv_indev_set_group(lv_test_indev_get_indev(LV_INDEV_TYPE_ENCODER), g);
     lv_group_add_obj(g, arc);
 
-    /* Test encoder click to enter editing mode */
+    /* Тестовый кодер нажмите, чтобы войти в режим редактирования */
     lv_group_set_editing(g, false);
     TEST_ASSERT_FALSE(lv_group_get_editing(g));
 
     lv_test_encoder_click();
     lv_test_wait(50);
 
-    /* Clicking should enter editing mode */
+    /* При нажатии должен войти режим редактирования. */
     TEST_ASSERT_TRUE(lv_group_get_editing(g));
 
-    /* Test value change with encoder in editing mode */
+    /* Изменение тестового значения, когда энкодер находится в режиме редактирования */
     int32_t value_before = lv_arc_get_value(arc);
     lv_test_encoder_turn(10);
     lv_test_wait(50);
     int32_t value_after = lv_arc_get_value(arc);
 
-    /* Value should change when encoder is used in editing mode */
+    /* Значение должно измениться, когда кодер используется в режиме редактирования. */
     TEST_ASSERT_EQUAL_INT32(value_before + 10, value_after);
 
-    /* Test encoder click again to exit editing mode */
+    /* Тестовый кодер нажмите еще раз, чтобы выйти из режима редактирования. */
     lv_test_encoder_click();
     lv_test_wait(50);
     TEST_ASSERT_FALSE(lv_group_get_editing(g));
 
-    /* Test rotary in non-editing mode should not change value */
+    /* Тестовый поворотный переключатель в режиме без редактирования не должен менять значение */
     value_before = lv_arc_get_value(arc);
     lv_test_encoder_turn(5);
     lv_test_wait(50);
     value_after = lv_arc_get_value(arc);
 
-    /* Value should not change when not in editing mode */
+    /* Значение не должно меняться, если вы не находитесь в режиме редактирования. */
     TEST_ASSERT_EQUAL_INT32(value_before, value_after);
     lv_group_delete(g);
 }
@@ -765,31 +765,31 @@ void test_arc_angle_within_bg_bounds_edge_cases(void)
     lv_obj_center(arc);
     lv_obj_update_layout(arc);
 
-    /* Test 1: angle in [360-tolerance, 360] range */
+    /* Тест 1: угол в диапазоне [допуск 360, 360] */
     run_arc_drag_test(60, 270, 10, 90, 50);
 
-    /* Test 2: angle near 360° with small tolerance */
+    /* Тест 2: угол около 360° с небольшим допуском. */
     run_arc_drag_test(10, 270, 20, 60, 5);
 
-    /* Test 3: angle after end within tolerance */
+    /* Тест 3: угол после конца в пределах допуска */
     run_arc_drag_test(40, 250, 80, 240, 275);
 
-    /* Test 4: tolerance wraps past 360° */
+    /* Тест 4: допуск превышает 360°. */
     run_arc_drag_test(10, 355, 90, 40, 5);
 
-    /* Edge test 1: 360° boundary tolerance */
+    /* Краевой тест 1: допуск на границу 360° */
     run_arc_drag_test(60, 300, 15, 100, 350);
 
-    /* Edge test 2: wrapped arc tolerance */
+    /* Испытание кромки 2: допуск на обернутую дугу */
     run_arc_drag_test(300, 60, 50, 30, 245);
 
-    /* Edge test 3: after-end tolerance */
+    /* Краевой тест 3: допуск после окончания */
     run_arc_drag_test(30, 240, 85, 240, 280);
 
-    /* Edge test 4: wrap past 360° tolerance */
+    /* Краевой тест 4: заворачивание за пределы допуска на 360° */
     run_arc_drag_test(15, 350, 92, 30, 8);
 
-    /* Edge test 5: wrapped arc after-end tolerance */
+    /* Испытание кромки 5: допуск на конце обернутой дуги */
     run_arc_drag_test(300, 60, 80, 60, 75);
 }
 

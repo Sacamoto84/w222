@@ -17,7 +17,7 @@ static void value_changed_event_cb(lv_event_t * e)
 }
 
 /**
- * Show cursor on the clicked point
+ * Показать курсор в выбранной точке
  */
 void lv_example_chart_6(void)
 {

@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 17 jun 2023
+/*  Создано: 17 июн 2023
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -108,7 +108,7 @@ void lv_draw_eve_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc,
 
     lv_eve_primitive(LV_EVE_PRIMITIVE_BITMAPS);
     lv_eve_bitmap_source(ramg_addr);
-    /*real height and width is mandatory for rotation and scale (Clip Area)*/
+    /*реальная высота и ширина обязательны для вращения и масштабирования (область обрезки)*/
     lv_eve_bitmap_size(EVE_NEAREST, EVE_BORDER, EVE_BORDER, src_w, src_h);
 
     lv_eve_bitmap_layout(eve_format, eve_stride, src_h);
@@ -119,11 +119,11 @@ void lv_draw_eve_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc,
         EVE_cmd_translate_burst(F16(coords->x1 - t->clip_area.x1 + draw_dsc->pivot.x),
                                 F16(coords->y1 - t->clip_area.y1 + draw_dsc->pivot.y));
         if(draw_dsc->scale_x != LV_SCALE_NONE || draw_dsc->scale_y != LV_SCALE_NONE) {
-            /*Image Scale*/
+            /*Масштаб изображения*/
             EVE_cmd_scale_burst(F16_SCALE_DIV_256(draw_dsc->scale_x), F16_SCALE_DIV_256(draw_dsc->scale_y));
         }
         if(draw_dsc->rotation != 0) {
-            /*Image Rotate*/
+            /*Поворот изображения*/
             EVE_cmd_rotate_burst(DEGREES(draw_dsc->rotation));
         }
         EVE_cmd_translate_burst(-F16(draw_dsc->pivot.x), -F16(draw_dsc->pivot.y));
@@ -198,10 +198,10 @@ uint32_t lv_draw_eve_image_upload_image(bool burst_is_active, const lv_image_dsc
     uint32_t ramg_addr;
     bool img_is_loaded = lv_draw_eve_ramg_get_addr(&ramg_addr, (uintptr_t) src_buf, eve_size, eve_alignment);
 
-    /* New image to load  */
+    /* Новое изображение для загрузки  */
     if(!img_is_loaded && ramg_addr != LV_DRAW_EVE_RAMG_OUT_OF_RAMG) {
 
-        /* Load image to RAM_G */
+        /* Загрузите изображение в RAM_G */
 
         if(burst_is_active) {
             EVE_end_cmd_burst();

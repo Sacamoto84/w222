@@ -28,21 +28,21 @@ extern "C" {
  **********************/
 
 /**
- * Options for text rendering.
+ * Параметры рендеринга текста.
  */
 typedef enum {
     LV_TEXT_FLAG_NONE      = 0x00,
 
-    /*Ignore max-width to avoid automatic word wrapping*/
+    /*Игнорируйте максимальную ширину, чтобы избежать автоматического переноса слов.*/
     LV_TEXT_FLAG_EXPAND    = 0x01,
 
     /**Max-width is already equal to the longest line. (Used to skip some calculation)*/
     LV_TEXT_FLAG_FIT       = 0x02,
 
-    /**To prevent overflow, insert breaks between any two characters.
-    Otherwise breaks are inserted at word boundaries, as configured via LV_TXT_BREAK_CHARS
-    or according to LV_TXT_LINE_BREAK_LONG_LEN, LV_TXT_LINE_BREAK_LONG_PRE_MIN_LEN,
-    and LV_TXT_LINE_BREAK_LONG_POST_MIN_LEN.*/
+    /**Чтобы предотвратить переполнение, вставляйте разрывы между любыми двумя символами.
+    В противном случае разрывы вставляются по границам слов, как настроено через LV_TXT_BREAK_CHARS.
+    или согласно LV_TXT_LINE_BREAK_LONG_LEN, LV_TXT_LINE_BREAK_LONG_PRE_MIN_LEN,
+    и LV_TXT_LINE_BREAK_LONG_POST_MIN_LEN.*/
     LV_TEXT_FLAG_BREAK_ALL = 0x04,
 
     /**Enable parsing of recolor command*/
@@ -50,7 +50,7 @@ typedef enum {
 
 } lv_text_flag_t;
 
-/** Label align policy*/
+/** Политика выравнивания меток*/
 typedef enum {
     LV_TEXT_ALIGN_AUTO, /**< Align text auto*/
     LV_TEXT_ALIGN_LEFT, /**< Align text to left*/
@@ -63,14 +63,14 @@ typedef enum {
  **********************/
 
 /**
- * Get size of a text
- * @param size_res pointer to a 'point_t' variable to store the result
- * @param text pointer to a text
- * @param font pointer to font of the text
- * @param letter_space letter space of the text
- * @param line_space line space of the text
- * @param max_width max width of the text (break the lines to fit this size). Set COORD_MAX to avoid
- * @param flag settings for the text from ::lv_text_flag_t
+ * Получить размер текста
+ * @param size_res указатель на переменнуюpoint_tдля хранения результата
+ * @param text указатель на текст
+ * @param font указатель на шрифт текста
+ * @param letter_space расстояние между буквами текста
+ * @param line_space межстрочное пространство текста
+ * @param max_width максимальная ширина текста (разорвите строки, чтобы они соответствовали этому размеру). Установите COORD_MAX, чтобы избежать
+ * @param flag настройки текста из::lv_text_flag_t
  */
 void lv_text_get_size(lv_point_t * size_res, const char * text, const lv_font_t * font, int32_t letter_space,
                       int32_t line_space, int32_t max_width, lv_text_flag_t flag);
@@ -80,7 +80,7 @@ void lv_text_get_size(lv_point_t * size_res, const char * text, const lv_font_t 
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEXT_H*/

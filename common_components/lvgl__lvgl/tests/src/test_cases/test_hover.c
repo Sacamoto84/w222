@@ -5,7 +5,7 @@
 #define TEST_HOVER_COUNTS   20
 
 typedef struct _test_hover_t {
-    /* data */
+    /* данные */
     char id[32];
     uint32_t counts;
 } test_hover_t;
@@ -23,12 +23,12 @@ static const lv_point_t pointer2[] = {
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -59,7 +59,7 @@ void test_hover_basic(void)
     lv_obj_add_flag(label, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_style_text_color(label, lv_color_hex(0x5be1b6), LV_PART_MAIN | LV_STATE_HOVERED);
 
-    /*Set hover callback*/
+    /*Установить обратный вызов при наведении*/
     lv_obj_stringify_id(label, label_hovered.id, sizeof(label_hovered.id));
     label_hovered.counts = 0;
     lv_obj_add_event_cb(label, hovered_event_cb, LV_EVENT_HOVER_OVER, &label_hovered);
@@ -69,7 +69,7 @@ void test_hover_basic(void)
     lv_obj_set_size(btn, 128, 48);
     lv_obj_set_style_bg_opa(btn, 128, LV_PART_MAIN | LV_STATE_HOVERED);
 
-    /*Set hover callback*/
+    /*Установить обратный вызов при наведении*/
     lv_obj_stringify_id(btn, btn_hovered.id, sizeof(btn_hovered.id));
     btn_hovered.counts = 0;
     lv_obj_add_event_cb(btn, hovered_event_cb, LV_EVENT_HOVER_OVER, &btn_hovered);
@@ -87,7 +87,7 @@ void test_hover_delete(void)
         lv_test_mouse_move_to(i * 10, 50);
         lv_test_wait(50);
 
-        lv_obj_delete(btn);  /*No crash while deleting the hovered button*/
+        lv_obj_delete(btn);  /*Никаких сбоев при удалении наведенной кнопки*/
         lv_test_wait(50);
     }
 }

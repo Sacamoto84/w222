@@ -52,9 +52,9 @@
  *  STATIC PROTOTYPES
  **********************/
 
-/* Timer callback to process Wayland compositor events without blocking the UI.
- * We use an independent timer so that we always read and flush compositor events even if LVGL
- * doesn't need to redraw anything.
+/* Обратный вызов таймера для обработки событий композитора Wayland без блокировки UI.
+ * Мы используем независимый таймер, чтобы всегда читать и сбрасывать события композитора, даже если LVGL
+ * не нужно ничего перерисовывать.
  */
 static void read_compositor_events_timer_cb(lv_timer_t * timer);
 
@@ -95,7 +95,7 @@ static const struct wl_output_listener output_listener = {
  **********************/
 
 /**
- * Get Wayland display file descriptor
+ * Получить дескриптор файла отображения Wayland
  * @return Wayland display file descriptor
  */
 int lv_wayland_get_fd(void)
@@ -119,7 +119,7 @@ lv_result_t lv_wayland_init(void)
     }
     lv_memset(&lv_wl_ctx, 0, sizeof(lv_wl_ctx));
 
-    /* Connect to Wayland display */
+    /* Подключитесь к дисплею Wayland */
     lv_wl_ctx.wl_display = wl_display_connect(NULL);
     if(!lv_wl_ctx.wl_display) {
         LV_LOG_ERROR("failed to connect to Wayland server");
@@ -128,7 +128,7 @@ lv_result_t lv_wayland_init(void)
 
     lv_wl_ctx.backend_data = wl_backend_ops.init();
 
-    /* Add registry listener and wait for registry reception */
+    /* Добавьте прослушиватель реестра и дождитесь получения реестра. */
     lv_wl_ctx.wl_registry = wl_display_get_registry(lv_wl_ctx.wl_display);
     wl_registry_add_listener(lv_wl_ctx.wl_registry, &registry_listener, &lv_wl_ctx);
     wl_display_dispatch(lv_wl_ctx.wl_display);
@@ -211,7 +211,7 @@ void lv_wayland_flush(void)
             LV_LOG_ERROR("poll failed: %s", strerror(errno));
             break;
         }
-        /* Socket is writable now, loop back and try flush again */
+        /* Сокет теперь доступен для записи, вернитесь назад и повторите попытку сброса */
     }
 }
 /**********************
@@ -275,7 +275,7 @@ static void output_mode(void * data, struct wl_output * wl_output, uint32_t flag
 
 static void output_done(void * data, struct wl_output * output)
 {
-    /* Called when all geometry/mode info for this output has been sent */
+    /* Вызывается, когда вся информация о геометрии/режиме для этого вывода отправлена. */
     LV_UNUSED(data);
     LV_UNUSED(output);
 }
@@ -305,7 +305,7 @@ static void handle_global(void * data, struct wl_registry * registry, uint32_t n
         ctx->wl_compositor = wl_registry_bind(registry, name, &wl_compositor_interface, 1);
     }
     else if(strcmp(interface, wl_shm_interface.name) == 0) {
-        /* Regardless of the backend, we always need SHM for the pointer cursor*/
+        /* Независимо от бэкэнда нам всегда нужен SHM для курсора указателя.*/
         ctx->wl_shm = wl_registry_bind(registry, name, &wl_shm_interface, 1);
     }
     else if(strcmp(interface, wl_seat_interface.name) == 0) {

@@ -57,8 +57,8 @@ typedef enum {
 } lv_draw_sw_mask_line_side_t;
 
 /**
- * A common callback type for every mask type.
- * Used internally by the library.
+ * Общий тип обратного вызова для каждого типа маски.
+ * Используется внутри библиотеки.
  */
 typedef lv_draw_sw_mask_res_t (*lv_draw_sw_mask_xcb_t)(lv_opa_t * mask_buf, int32_t abs_x, int32_t abs_y,
                                                        int32_t len,
@@ -73,7 +73,7 @@ void lv_draw_sw_mask_init(void);
 void lv_draw_sw_mask_deinit(void);
 
 /**
- * Apply the added buffers on a line. Used internally by the library's drawing routines.
+ * Примените добавленные буферы к строке. Используется внутри библиотеки подпрограммами рисования.
  * @param masks the masks list to apply, must be ended with NULL pointer in array.
  * @param mask_buf store the result mask here. Has to be `len` byte long. Should be initialized with `0xFF`.
  * @param abs_x absolute X coordinate where the line to calculate start
@@ -90,44 +90,44 @@ lv_draw_sw_mask_res_t /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_mask_apply(void * m
                                                                         int32_t len);
 
 /**
- * Free the data from the parameter.
- * It's called inside `lv_draw_sw_mask_remove_id` and `lv_draw_sw_mask_remove_custom`
- * Needs to be called only in special cases when the mask is not added by `lv_draw_mask_add`
- * and not removed by `lv_draw_mask_remove_id` or `lv_draw_mask_remove_custom`
+ * Освободите данные из параметра.
+ * Внутри он называется `lv_draw_sw_mask_remove_id` и `lv_draw_sw_mask_remove_custom`.
+ * Необходимо вызывать только в особых случаях, когда маска не добавляется `lv_draw_mask_add`.
+ * и не удаляется `lv_draw_mask_remove_id` или `lv_draw_mask_remove_custom`
  * @param p pointer to a mask parameter
  */
 void lv_draw_sw_mask_free_param(void * p);
 
 /**
- *Initialize a line mask from two points.
+ *Инициализируйте маску линии из двух точек.
  * @param param pointer to a `lv_draw_mask_param_t` to initialize
  * @param p1x X coordinate of the first point of the line
  * @param p1y Y coordinate of the first point of the line
  * @param p2x X coordinate of the second point of the line
  * @param p2y y coordinate of the second point of the line
  * @param side and element of `lv_draw_mask_line_side_t` to describe which side to keep.
- * With `LV_DRAW_MASK_LINE_SIDE_LEFT/RIGHT` and horizontal line all pixels are kept
- * With `LV_DRAW_MASK_LINE_SIDE_TOP/BOTTOM` and vertical line all pixels are kept
+ * При использовании `LV_DRAW_MASK_LINE_SIDE_LEFT/RIGHT` и горизонтальной линии все пиксели сохраняются.
+ * При использовании `LV_DRAW_MASK_LINE_SIDE_TOP/BOTTOM` и вертикальной линии все пиксели сохраняются.
  */
 void lv_draw_sw_mask_line_points_init(lv_draw_sw_mask_line_param_t * param, int32_t p1x, int32_t p1y,
                                       int32_t p2x,
                                       int32_t p2y, lv_draw_sw_mask_line_side_t side);
 
 /**
- *Initialize a line mask from a point and an angle.
+ *Инициализируйте маску линии из точки и угла.
  * @param param  pointer to a `lv_draw_mask_param_t` to initialize
  * @param px     X coordinate of a point of the line
  * @param py     X coordinate of a point of the line
  * @param angle  right 0 deg, bottom: 90
  * @param side   an element of `lv_draw_mask_line_side_t` to describe which side to keep.
- * With `LV_DRAW_MASK_LINE_SIDE_LEFT/RIGHT` and horizontal line all pixels are kept
- * With `LV_DRAW_MASK_LINE_SIDE_TOP/BOTTOM` and vertical line all pixels are kept
+ * При использовании `LV_DRAW_MASK_LINE_SIDE_LEFT/RIGHT` и горизонтальной линии все пиксели сохраняются.
+ * При использовании `LV_DRAW_MASK_LINE_SIDE_TOP/BOTTOM` и вертикальной линии все пиксели сохраняются.
  */
 void lv_draw_sw_mask_line_angle_init(lv_draw_sw_mask_line_param_t * param, int32_t px, int32_t py, int16_t angle,
                                      lv_draw_sw_mask_line_side_t side);
 
 /**
- * Initialize an angle mask.
+ * Инициализируйте угловую маску.
  * @param param pointer to a `lv_draw_mask_param_t` to initialize
  * @param vertex_x X coordinate of the angle vertex (absolute coordinates)
  * @param vertex_y Y coordinate of the angle vertex (absolute coordinates)
@@ -138,7 +138,7 @@ void lv_draw_sw_mask_angle_init(lv_draw_sw_mask_angle_param_t * param, int32_t v
                                 int32_t start_angle, int32_t end_angle);
 
 /**
- * Initialize a fade mask.
+ * Инициализируйте маску затухания.
  * @param param pointer to an `lv_draw_mask_radius_param_t` to initialize
  * @param rect coordinates of the rectangle to affect (absolute coordinates)
  * @param radius radius of the rectangle
@@ -148,7 +148,7 @@ void lv_draw_sw_mask_radius_init(lv_draw_sw_mask_radius_param_t * param, const l
                                  bool inv);
 
 /**
- * Initialize a fade mask.
+ * Инициализируйте маску затухания.
  * @param param pointer to a `lv_draw_mask_param_t` to initialize
  * @param coords coordinates of the area to affect (absolute coordinates)
  * @param opa_top opacity on the top
@@ -161,7 +161,7 @@ void lv_draw_sw_mask_fade_init(lv_draw_sw_mask_fade_param_t * param, const lv_ar
                                lv_opa_t opa_bottom, int32_t y_bottom);
 
 /**
- * Initialize a map mask.
+ * Инициализируйте маску карты.
  * @param param pointer to a `lv_draw_mask_param_t` to initialize
  * @param coords coordinates of the map (absolute coordinates)
  * @param map array of bytes with the mask values
@@ -175,7 +175,7 @@ void lv_draw_sw_mask_map_init(lv_draw_sw_mask_map_param_t * param, const lv_area
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_MASK_H*/

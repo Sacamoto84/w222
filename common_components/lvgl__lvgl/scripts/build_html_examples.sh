@@ -2,9 +2,9 @@
 
 set -e
 
-# These variables allow us to specify an alternate repository URL and commit reference
-# This is particularly useful when running in CI environments for pull requests
-# where we need to build from the contributor's forked repository
+# Эти переменные позволяют нам указать альтернативный репозиторий URL и ссылку на коммит.
+# Это особенно полезно при работе в средах CI для запросов на включение.
+# где нам нужно собрать из разветвленного репозитория участника
 ARG_1="${1:-}"
 ARG_2="${2:-}"
 
@@ -31,13 +31,13 @@ else
   ln -s -T "$SYMLINK_TARGET" lvgl
 fi
 
-# Grab the path to emscripten's port examplelist.c before changing to LVGL's directory
+# Перейдите к порту emscripten examplelist.c, прежде чем перейти к каталогу LVGL.
 EXAMPLE_LIST_C=$(pwd)/examplelist.c
 cd lvgl
 scripts/genexamplelist.sh > $EXAMPLE_LIST_C
 cd ..
 
-# Generate lv_conf
+# Создать lv_conf
 LV_CONF_PATH=`pwd`/lvgl/configs/ci/docs/lv_conf_docs.h
 
 python ./lvgl/scripts/generate_lv_conf.py \

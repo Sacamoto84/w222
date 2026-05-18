@@ -195,7 +195,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_a8(lv_draw_sw_blend_fill_ds
     LV_UNUSED(mask_stride);
     LV_UNUSED(dest_stride);
 
-    /*Simple fill*/
+    /*Простая заливка*/
     if(mask == NULL && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_A8(dsc)) {
             uint8_t * dest_buf = dsc->dest_buf;
@@ -205,7 +205,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_a8(lv_draw_sw_blend_fill_ds
             }
         }
     }
-    /*Opacity only*/
+    /*Только непрозрачность*/
     else if(mask == NULL && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_A8_WITH_OPA(dsc)) {
             uint8_t * dest_buf = dsc->dest_buf;
@@ -219,7 +219,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_a8(lv_draw_sw_blend_fill_ds
         }
 
     }
-    /*Masked with full opacity*/
+    /*Замаскировано с полной непрозрачностью*/
     else if(mask && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_A8_WITH_MASK(dsc)) {
             uint8_t * dest_buf = dsc->dest_buf;
@@ -233,7 +233,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_a8(lv_draw_sw_blend_fill_ds
         }
 
     }
-    /*Masked with opacity*/
+    /*Маскировано с непрозрачностью*/
     else {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_A8_MIX_MASK_OPA(dsc)) {
             uint8_t * dest_buf = dsc->dest_buf;

@@ -26,16 +26,16 @@
  **********************/
 
 typedef struct {
-    /* context */
+    /* контекст */
     lv_draw_nanovg_unit_t * u;
 
-    /* key */
+    /* ключ */
     int width;
     int height;
     int flags;
     enum NVGtexture format;
 
-    /* value */
+    /* ценность */
     struct NVGLUframebuffer * fbo;
 } fbo_item_t;
 

@@ -1,6 +1,6 @@
 /**
  * @file lv_array.h
- * Array. The elements are dynamically allocated by the 'lv_mem' module.
+ * Массив. Элементы перемещаются модулямlv_mem.
  */
 
 #ifndef LV_ARRAY_H
@@ -31,14 +31,14 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Description of a array*/
+/** Описание массива*/
 struct _lv_array_t {
     uint8_t * data;
     uint32_t size;
     uint32_t capacity;
     uint32_t element_size;
 
-    bool inner_alloc; /* true: data is allocated by the array; false: data is allocated by the user */
+    bool inner_alloc; /* true: данные выделяются массивом; false: данные выделяются пользователем */
 };
 
 /**********************
@@ -46,42 +46,42 @@ struct _lv_array_t {
  **********************/
 
 /**
- * Init an array.
- * @param array pointer to an `lv_array_t` variable to initialize
- * @param capacity the initial capacity of the array
- * @param element_size the size of an element in bytes
+ * Инициализировать массив.
+ * @param array указатель на переменную`lv_array_t`для инициализации
+ * @param capacity начальная емкость массива
+ * @param element_size размер элемента в байтах
  */
 void lv_array_init(lv_array_t * array, uint32_t capacity, uint32_t element_size);
 
 /**
- * Init an array from a buffer.
- * @note The buffer must be large enough to store `capacity` elements. The array will not release the buffer and reallocate it.
- *       The user must ensure that the buffer is valid during the lifetime of the array. And release the buffer when the array is no longer needed.
- * @param array pointer to an `lv_array_t` variable to initialize
- * @param buf pointer to a buffer to use as the array's data
- * @param capacity the initial capacity of the array
- * @param element_size the size of an element in bytes
+ * Инициализировать массив из буфера.
+ * @note Буфер должен быть достаточно большим для хранения элементов `capacity`. Массив не освободит буфер и не перераспределит его.
+ *       Пользователь должен убедиться, что буфер действителен в течение всего срока службы массива. И освободите буфер, когда массив больше не нужен.
+ * @param array указатель на переменную`lv_array_t`для инициализации
+ * @param buf указатель на буфер, который будет использоваться в качестве данных массива
+ * @param capacity начальная емкость массива
+ * @param element_size размер элемента в байтах
  */
 void lv_array_init_from_buf(lv_array_t * array, void * buf, uint32_t capacity, uint32_t element_size);
 
 /**
- * Resize the array to the given capacity.
- * @note if the new capacity is smaller than the current size, the array will be truncated.
- * @param array pointer to an `lv_array_t` variable
- * @param new_capacity the new capacity of the array
+ * Измените размер массива до заданной емкости.
+ * @note если новая емкость меньше текущего размера, массив будет усечен.
+ * @param array указатель на переменную `lv_array_t`
+ * @param new_capacity новая емкость массива
  */
 bool lv_array_resize(lv_array_t * array, uint32_t new_capacity);
 
 /**
- * Deinit the array, and free the allocated memory
- * @param array pointer to an `lv_array_t` variable to deinitialize
+ * Определите массив и освободите выделенную память.
+ * @param array указатель на переменную`lv_array_t`для деинициализации
  */
 void lv_array_deinit(lv_array_t * array);
 
 /**
- * Return how many elements are stored in the array.
- * @param array pointer to an `lv_array_t` variable
- * @return the number of elements stored in the array
+ * Возвращает количество элементов, хранящихся в массиве.
+ * @param array указатель на переменную `lv_array_t`
+ * @return количество элементов, хранящихся в массиве
  */
 static inline uint32_t lv_array_size(const lv_array_t * array)
 {
@@ -89,9 +89,9 @@ static inline uint32_t lv_array_size(const lv_array_t * array)
 }
 
 /**
- * Return the capacity of the array, i.e. how many elements can be stored.
- * @param array pointer to an `lv_array_t` variable
- * @return the capacity of the array
+ * Возвращает емкость массива, т. е. сколько элементов можно хранить.
+ * @param array указатель на переменную `lv_array_t`
+ * @return емкость массива
  */
 static inline uint32_t lv_array_capacity(const lv_array_t * array)
 {
@@ -99,9 +99,9 @@ static inline uint32_t lv_array_capacity(const lv_array_t * array)
 }
 
 /**
- * Return if the array is empty
- * @param array pointer to an `lv_array_t` variable
- * @return true: array is empty; false: array is not empty
+ * Возврат, если массив пуст
+ * @param array указатель на переменную `lv_array_t`
+ * @return true: массив пуст; false: массив не пуст
  */
 static inline bool lv_array_is_empty(const lv_array_t * array)
 {
@@ -109,9 +109,9 @@ static inline bool lv_array_is_empty(const lv_array_t * array)
 }
 
 /**
- * Return if the array is full
- * @param array pointer to an `lv_array_t` variable
- * @return true: array is full; false: array is not full
+ * Возврат, если массив заполнен
+ * @param array указатель на переменную `lv_array_t`
+ * @return true: массив заполнен; ложь: массив не заполнен
  */
 static inline bool lv_array_is_full(const lv_array_t * array)
 {
@@ -119,16 +119,16 @@ static inline bool lv_array_is_full(const lv_array_t * array)
 }
 
 /**
- * Copy an array to another.
- * @note this will create a new array with the same capacity and size as the source array.
- * @param target pointer to an `lv_array_t` variable to copy to
- * @param source pointer to an `lv_array_t` variable to copy from
+ * Скопируйте массив в другой.
+ * @note это создаст новый массив с той же емкостью и размером, что и исходный массив.
+ * @param target указатель на переменную `lv_array_t`, в которую нужно скопировать
+ * @param source указатель на переменную`lv_array_t`для копирования
  */
 void lv_array_copy(lv_array_t * target, const lv_array_t * source);
 
 /**
- * Remove all elements in array.
- * @param array pointer to an `lv_array_t` variable
+ * Удалить все элементы массива.
+ * @param array указатель на переменную `lv_array_t`
  */
 static inline void lv_array_clear(lv_array_t * array)
 {
@@ -136,84 +136,84 @@ static inline void lv_array_clear(lv_array_t * array)
 }
 
 /**
- * Shrink the memory capacity of array if necessary.
- * @param array pointer to an `lv_array_t` variable
+ * При необходимости уменьшите объем памяти массива.
+ * @param array указатель на переменную `lv_array_t`
  */
 void lv_array_shrink(lv_array_t * array);
 
 /**
- * Remove the element at the specified position in the array.
+ * Удалить элемент в указанной позиции массива.
  *
- * This function keeps the array order. Complexity is O(n)
+ * Эта функция сохраняет порядок массива. Сложность равна O(n)
  *
- * @param array pointer to an `lv_array_t` variable
- * @param index the index of the element to remove
- * @return LV_RESULT_OK: success, otherwise: error
+ * @param array указатель на переменную `lv_array_t`
+ * @param index индекс элемента, который нужно удалить
+ * @return LV_RESULT_OK: успех, иначе: ошибка.
  */
 lv_result_t lv_array_remove(lv_array_t * array, uint32_t index);
 
 /**
- * Remove the element at the specified position in the array.
+ * Удалить элемент в указанной позиции массива.
  *
- * This function does not guarantee the array order. Complexity is O(1)
+ * Эта функция не гарантирует порядок массива. Сложность равна O(1)
  *
- * @param array pointer to an `lv_array_t` variable
- * @param index the index of the element to remove
- * @return LV_RESULT_OK: success, otherwise: error
+ * @param array указатель на переменную `lv_array_t`
+ * @param index индекс элемента, который нужно удалить
+ * @return LV_RESULT_OK: успех, иначе: ошибка.
  */
 lv_result_t lv_array_remove_unordered(lv_array_t * array, uint32_t index);
 
 /**
- * Remove from the array either a single element or a range of elements ([start, end)).
- * @note This effectively reduces the container size by the number of elements removed.
- * @note When start equals to end, the function has no effect.
- * @param array pointer to an `lv_array_t` variable
- * @param start the index of the first element to be removed
- * @param end the index of the first element that is not to be removed
- * @return LV_RESULT_OK: success, otherwise: error
+ * Удалить из массива один элемент или диапазон элементов ([start, end)).
+ * @note Это эффективно уменьшает размер контейнера на количество удаленных элементов.
+ * @note Когда начало равно концу, функция не имеет никакого эффекта.
+ * @param array указатель на переменную `lv_array_t`
+ * @param start индекс первого элемента, который будет удален
+ * @param end индекс первого элемента, который не подлежит удалению
+ * @return LV_RESULT_OK: успех, иначе: ошибка.
  */
 lv_result_t lv_array_erase(lv_array_t * array, uint32_t start, uint32_t end);
 
 /**
- * Concatenate two arrays. Adds new elements to the end of the array.
- * @note The destination array is automatically expanded as necessary.
- * @param array pointer to an `lv_array_t` variable
- * @param other pointer to the array to concatenate
- * @return LV_RESULT_OK: success, otherwise: error
+ * Объединить два массива. Добавляет новые элементы в конец массива.
+ * @note Массив назначения автоматически расширяется по мере необходимости.
+ * @param array указатель на переменную `lv_array_t`
+ * @param other указатель на массив для объединения
+ * @return LV_RESULT_OK: успех, иначе: ошибка.
  */
 lv_result_t lv_array_concat(lv_array_t * array, const lv_array_t * other);
 
 /**
- * Push back element. Adds a new element to the end of the array.
- * If the array capacity is not enough for the new element, the array will be resized automatically.
- * @note If the element is NULL, it will be added as an empty element.
- * @param array pointer to an `lv_array_t` variable
- * @param element pointer to the element to add. NULL to push an empty element.
- * @return LV_RESULT_OK: success, otherwise: error
+ * Отодвиньте элемент назад. Добавляет новый элемент в конец массива.
+ * Если емкости массива недостаточно для нового элемента, размер массива будет изменен автоматически.
+ * @note Если элементNULL, он будет добавлен как пустой элемент.
+ * @param array указатель на переменную `lv_array_t`
+ * @param element указатель на элемент, который нужно добавить. NULLдля отправки пустого элемента.
+ * @return LV_RESULT_OK: успех, иначе: ошибка.
  */
 lv_result_t lv_array_push_back(lv_array_t * array, const void * element);
 
 /**
- * Assigns one content to the array, replacing its current content.
- * @param array pointer to an `lv_array_t` variable
- * @param index the index of the element to replace
- * @param value pointer to the elements to add
- * @return true: success; false: error
+ * Назначает одно содержимое массиву, заменяя его текущее содержимое.
+ * @param array указатель на переменную `lv_array_t`
+ * @param index индекс элемента для замены
+ * @param value указатель на элементы, которые нужно добавить
+ * @return правда: успех; ложь: ошибка
  */
 lv_result_t lv_array_assign(lv_array_t * array, uint32_t index, const void * value);
 
 /**
- * Returns a pointer to the element at position n in the array.
- * @param array pointer to an `lv_array_t` variable
- * @param index the index of the element to return
- * @return a pointer to the requested element, NULL if `index` is out of range
+ * Возвращает указатель на элемент в позиции n массива.
+ * @param array указатель на переменную `lv_array_t`
+ * @param index индекс возвращаемого элемента
+ * @return указатель на запрошенный элемент, NULL, если`index`находится вне диапазона
  */
 void * lv_array_at(const lv_array_t * array, uint32_t index);
 
 /**
- * Returns a pointer to the first element in the array.
- * @param array pointer to an `lv_array_t` variable
- * @return a pointer to the first element in the array
+ * Возвращает указатель на первый элемент массива.
+ * @param array указатель на переменную `lv_array_t`
+ * @return указатель на первый элемент массива
  */
 static inline void * lv_array_front(const lv_array_t * array)
 {
@@ -221,8 +221,8 @@ static inline void * lv_array_front(const lv_array_t * array)
 }
 
 /**
- * Returns a pointer to the last element in the array.
- * @param array pointer to an `lv_array_t` variable
+ * Возвращает указатель на последний элемент массива.
+ * @param array указатель на переменную `lv_array_t`
  */
 static inline void * lv_array_back(const lv_array_t * array)
 {
@@ -234,7 +234,7 @@ static inline void * lv_array_back(const lv_array_t * array)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif

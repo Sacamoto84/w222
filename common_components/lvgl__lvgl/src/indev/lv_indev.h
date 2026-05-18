@@ -26,7 +26,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Possible input device types*/
+/** Возможные типы устройств ввода*/
 typedef enum {
     LV_INDEV_TYPE_NONE,    /**< Uninitialized state*/
     LV_INDEV_TYPE_POINTER, /**< Touch pad, mouse, external button*/
@@ -35,7 +35,7 @@ typedef enum {
     LV_INDEV_TYPE_ENCODER, /**< Encoder with only Left, Right turn and a Button*/
 } lv_indev_type_t;
 
-/** States for input devices*/
+/** Состояния для устройств ввода*/
 typedef enum {
     LV_INDEV_STATE_RELEASED = 0,
     LV_INDEV_STATE_PRESSED
@@ -48,21 +48,21 @@ typedef enum {
 } lv_indev_mode_t;
 
 
-/* Supported types of gestures */
+/* Поддерживаемые типы жестов */
 typedef enum {
     LV_INDEV_GESTURE_NONE = 0,
     LV_INDEV_GESTURE_PINCH,
     LV_INDEV_GESTURE_SWIPE,
     LV_INDEV_GESTURE_ROTATE,
     LV_INDEV_GESTURE_TWO_FINGERS_SWIPE,
-    LV_INDEV_GESTURE_SCROLL,            /* Used with scrollwheels */
-    LV_INDEV_GESTURE_CNT,               /* Total number of gestures types */
+    LV_INDEV_GESTURE_SCROLL,            /* Используется с колесами прокрутки */
+    LV_INDEV_GESTURE_CNT,               /* Общее количество типов жестов */
 } lv_indev_gesture_type_t;
 
-/** Data structure passed to an input driver to fill*/
+/** Структура данных передается драйверу ввода для заполнения*/
 typedef struct {
-    lv_indev_gesture_type_t gesture_type[LV_INDEV_GESTURE_CNT]; /* Current gesture types, per gesture */
-    void * gesture_data[LV_INDEV_GESTURE_CNT]; /* Used to store data per gesture */
+    lv_indev_gesture_type_t gesture_type[LV_INDEV_GESTURE_CNT]; /* Текущие типы жестов, по жесту */
+    void * gesture_data[LV_INDEV_GESTURE_CNT]; /* Используется для хранения данных для каждого жеста */
 
     lv_indev_state_t state; /**< LV_INDEV_STATE_RELEASED or LV_INDEV_STATE_PRESSED*/
 
@@ -77,7 +77,7 @@ typedef struct {
 
 typedef void (*lv_indev_read_cb_t)(lv_indev_t * indev, lv_indev_data_t * data);
 
-/** Indev key remapping callback */
+/** Обратный вызов переназначения ключей Indev */
 typedef lv_key_t (*lv_indev_key_remap_cb_t)(lv_indev_t * indev, lv_key_t key);
 
 /**********************
@@ -85,406 +85,406 @@ typedef lv_key_t (*lv_indev_key_remap_cb_t)(lv_indev_t * indev, lv_key_t key);
  **********************/
 
 /**
- * Create an indev
- * @return Pointer to the created indev or NULL when allocation failed
+ * Создать индев.
+ * @return Указатель на созданный indev или NULL, если выделение не удалось.
  */
 lv_indev_t * lv_indev_create(void);
 
 /**
- * Remove the provided input device. Make sure not to use the provided input device afterwards anymore.
- * @param indev pointer to delete
+ * Удалите предоставленное устройство ввода. Обязательно больше не используйте предоставленное устройство ввода.
+ * @param indev указатель на удаление
  */
 void lv_indev_delete(lv_indev_t * indev);
 
 /**
- * Get the next input device.
- * @param indev pointer to the current input device. NULL to initialize.
- * @return the next input device or NULL if there are no more. Provide the first input device when
- * the parameter is NULL
+ * Получите следующее устройство ввода.
+ * @param indev указатель на текущее устройство ввода. NULLдля инициализации.
+ * @return следующее устройство ввода или NULL, если их больше нет. Предоставьте первое устройство ввода, когда
+ * параметр NULL
  */
 lv_indev_t * lv_indev_get_next(lv_indev_t * indev);
 
 /**
- * Read data from an input device.
- * @param indev pointer to an input device
+ * Чтение данных с устройства ввода.
+ * @param indev указатель на устройство ввода
  */
 void lv_indev_read(lv_indev_t * indev);
 
 /**
- * Called periodically to read the input devices
- * @param timer pointer to a timer to read
+ * Вызывается периодически для чтения устройств ввода
+ * @param timer указатель на таймер для чтения
  */
 void lv_indev_read_timer_cb(lv_timer_t * timer);
 
 /**
- * Enable or disable one or all input devices (default enabled)
- * @param indev pointer to an input device or NULL to enable/disable all of them
- * @param enable true to enable, false to disable
+ * Включить или отключить одно или все устройства ввода (по умолчанию включено)
+ * @param indev указатель на устройство ввода или NULL, чтобы включить/отключить их все
+ * @param enable true для включения, false для отключения
  */
 void lv_indev_enable(lv_indev_t * indev, bool enable);
 
 /**
- * Get the currently processed input device. Can be used in action functions too.
- * @return pointer to the currently processed input device or NULL if no input device processing
- * right now
+ * Получите текущее обрабатываемое устройство ввода. Также может использоваться в функциях действий.
+ * @return указатель на обрабатываемое в данный момент устройство ввода или NULL, если обработка устройства ввода отсутствует
+ * прямо сейчас
  */
 lv_indev_t * lv_indev_active(void);
 
 /**
- * Set the type of an input device
- * @param indev pointer to an input device
- * @param indev_type the type of the input device from `lv_indev_type_t` (`LV_INDEV_TYPE_...`)
+ * Установите тип устройства ввода
+ * @param indev указатель на устройство ввода
+ * @param indev_type тип устройства ввода из`lv_indev_type_t`(`LV_INDEV_TYPE_...`)
  */
 void lv_indev_set_type(lv_indev_t * indev, lv_indev_type_t indev_type);
 
 /**
- * Set a callback function to read input device data to the indev
- * @param indev pointer to an input device
- * @param read_cb pointer to callback function to read input device data
+ * Установите функцию обратного вызова для чтения данных входного устройства в indev.
+ * @param indev указатель на устройство ввода
+ * @param read_cb указатель на функцию обратного вызова для чтения данных устройства ввода
  */
 void lv_indev_set_read_cb(lv_indev_t * indev,  lv_indev_read_cb_t read_cb);
 
 /**
- * Set user data to the indev
- * @param indev pointer to an input device
- * @param user_data pointer to user data
+ * Установите пользовательские данные в indev
+ * @param indev указатель на устройство ввода
+ * @param user_data указатель на данные пользователя
  */
 void lv_indev_set_user_data(lv_indev_t * indev, void * user_data);
 
 /**
- * Set driver data to the indev
- * @param indev pointer to an input device
- * @param driver_data pointer to driver data
+ * Установите данные драйвера в indev
+ * @param indev указатель на устройство ввода
+ * @param driver_data указатель на данные водителя
  */
 void lv_indev_set_driver_data(lv_indev_t * indev, void * driver_data);
 
 /**
- * Assign a display to the indev
- * @param indev pointer to an input device
- * @param disp pointer to an display
+ * Назначить значение indev
+ * @param indev указатель на устройство ввода
+ * @param disp указатель на дисплей
  */
 void lv_indev_set_display(lv_indev_t * indev, struct _lv_display_t * disp);
 
 /**
- * Set long press time to indev
- * @param  indev            pointer to input device
- * @param  long_press_time  time long press time in ms
+ * Установите время длительного нажатия на индев.
+ * @param  indev            указатель на устройство ввода
+ * @param  long_press_time  время длительного нажатия, мс
  */
 void lv_indev_set_long_press_time(lv_indev_t * indev, uint16_t long_press_time);
 
 /**
- * Set long press repeat time to indev
- * @param  indev            pointer to input device
- * @param  long_press_repeat_time  long press repeat time in ms
+ * Установите время повторения длительного воздействия на индев.
+ * @param  indev            указатель на устройство ввода
+ * @param  long_press_repeat_time  время повтора длительного нажатия в мс
  */
 void lv_indev_set_long_press_repeat_time(lv_indev_t * indev, uint16_t long_press_repeat_time);
 
 /**
- * Set scroll limit to the input device
- * @param indev pointer to an input device
- * @param scroll_limit the number of pixels to slide before actually drag the object
+ * Установить ограничение прокрутки для устройства ввода
+ * @param indev указатель на устройство ввода
+ * @param scroll_limit количество пикселей, на которое нужно сдвинуть объект перед фактическим перетаскиванием
  */
 void lv_indev_set_scroll_limit(lv_indev_t * indev, uint8_t scroll_limit);
 
 /**
- * Set scroll throw slow-down to the indev. Greater value means faster slow-down
- * @param indev pointer to an input device
- * @param scroll_throw the slow-down in [%]
+ * Установите замедление прокрутки на индев. Большее значение означает более быстрое замедление.
+ * @param indev указатель на устройство ввода
+ * @param scroll_throw замедление в [%]
  */
 void lv_indev_set_scroll_throw(lv_indev_t * indev, uint8_t scroll_throw);
 
 /**
- * Set the minimum velocity threshold for gesture detection.
- * The difference between consecutive points must exceed this value (in pixels)
- * for the movement to be considered fast enough to trigger a gesture.
+ * Установите минимальный порог скорости для обнаружения жестов.
+ * Разница между последовательными точками должна превышать это значение (в пикселях).
+ * чтобы движение считалось достаточно быстрым, чтобы вызвать жест.
  *
- * @param indev pointer to an input device
- * @param min_velocity minimum velocity threshold in pixels (default: 3)
+ * @param indev указатель на устройство ввода
+ * @param min_velocity минимальный порог скорости в пикселях (по умолчанию: 3)
  */
 void lv_indev_set_gesture_min_velocity(lv_indev_t * indev, uint8_t min_velocity);
 
 /**
- * Set the minimum distance threshold for gesture detection.
- * The total distance from the first point to the current point must exceed
- * this value (in pixels) for the movement to be considered large enough
- * to trigger a gesture.
+ * Установите порог минимального расстояния для обнаружения жестов.
+ * Общее расстояние от первой точки до текущей точки должно превышать
+ * это значение (в пикселях), чтобы движение считалось достаточно большим
+ * чтобы вызвать жест.
  *
- * @param indev pointer to an input device
- * @param min_distance minimum distance threshold in pixels (default: 50)
+ * @param indev указатель на устройство ввода
+ * @param min_distance порог минимального расстояния в пикселях (по умолчанию: 50)
  */
 void lv_indev_set_gesture_min_distance(lv_indev_t * indev, uint8_t min_distance);
 
 /**
- * Get the type of an input device
- * @param indev pointer to an input device
- * @return the type of the input device from `lv_hal_indev_type_t` (`LV_INDEV_TYPE_...`)
+ * Получить тип устройства ввода
+ * @param indev указатель на устройство ввода
+ * @return тип устройства ввода из`lv_hal_indev_type_t`(`LV_INDEV_TYPE_...`)
  */
 lv_indev_type_t lv_indev_get_type(const lv_indev_t * indev);
 
 /**
- * Get the callback function to read input device data to the indev
- * @param indev pointer to an input device
- * @return Pointer to callback function to read input device data or NULL if indev is NULL
+ * Получите функцию обратного вызова для чтения данных входного устройства в индев.
+ * @param indev указатель на устройство ввода
+ * @return Указатель на функцию обратного вызова для чтения данных устройства ввода или NULL, если indev равен NULL
  */
 lv_indev_read_cb_t lv_indev_get_read_cb(lv_indev_t * indev);
 
 /**
- * Get the indev state
- * @param indev pointer to an input device
- * @return Indev state or LV_INDEV_STATE_RELEASED if indev is NULL
+ * Получить состояние разработки
+ * @param indev указатель на устройство ввода
+ * @return Состояние Indev или LV_INDEV_STATE_RELEASED, если indev равно NULL
  */
 lv_indev_state_t lv_indev_get_state(const lv_indev_t * indev);
 
 /**
- * Get the indev assigned group
- * @param indev pointer to an input device
- * @return Pointer to indev assigned group or NULL if indev is NULL
+ * Получить группу, назначенную разработчиком
+ * @param indev указатель на устройство ввода
+ * @return Указатель на группу, назначенную indev, или NULL, если indev равен NULL.
  */
 lv_group_t * lv_indev_get_group(const lv_indev_t * indev);
 
 /**
- * Get a pointer to the assigned display of the indev
- * @param indev pointer to an input device
- * @return pointer to the assigned display or NULL if indev is NULL
+ * Получить указатель на назначенное оборудование Indev
+ * @param indev указатель на устройство ввода
+ * @return указатель на назначенный дисплей или NULL, если indev равен NULL
  */
 lv_display_t * lv_indev_get_display(const lv_indev_t * indev);
 
 /**
- * Get a pointer to the user data of the indev
- * @param indev pointer to an input device
- * @return pointer to the user data or NULL if indev is NULL
+ * Получить указатель на пользовательские данные indev
+ * @param indev указатель на устройство ввода
+ * @return указатель на пользовательские данные или NULL, если indev равен NULL
  */
 void * lv_indev_get_user_data(const lv_indev_t * indev);
 
 /**
- * Get a pointer to the driver data of the indev
- * @param indev pointer to an input device
- * @return pointer to the driver data or NULL if indev is NULL
+ * Получить указатель данных драйвера indev
+ * @param indev указатель на устройство ввода
+ * @return указатель на данные драйвера или NULL, если indev равен NULL
  */
 void * lv_indev_get_driver_data(const lv_indev_t * indev);
 
 /**
- * Get whether indev is moved while pressed
- * @param indev pointer to an input device
- * @return true: indev is moved while pressed; false: indev is not moved while pressed
+ * Решение, перемещается ли инициатива при выступлении
+ * @param indev указатель на устройство ввода
+ * @return true: indev перемещается при нажатии; false: indev не перемещается при нажатии
  */
 bool lv_indev_get_press_moved(const lv_indev_t * indev);
 
 /**
- * Reset one or all input devices
- * @param indev pointer to an input device to reset or NULL to reset all of them
- * @param obj pointer to an object which triggers the reset.
+ * Сброс одного или всех устройств ввода
+ * @param indev указатель на устройство ввода для сброса илиNULLдля сброса всех из них
+ * @param obj указатель на объект, который запускает сброс.
  */
 void lv_indev_reset(lv_indev_t * indev, lv_obj_t * obj);
 
 /**
- * Touch and key related events are sent to the input device first and to the widget after that.
- * If this functions called in an indev event, the event won't be sent to the widget.
- * @param indev pointer to an input device
+ * События, связанные с касанием и клавишами, сначала отправляются на устройство ввода, а затем в виджет.
+ * Если эта функция появится в событии indev, событие не будет отправлено в виджет.
+ * @param indev указатель на устройство ввода
  */
 void lv_indev_stop_processing(lv_indev_t * indev);
 
 /**
- * Reset the long press state of an input device
- * @param indev pointer to an input device
+ * Сброс состояния длительного нажатия устройства ввода
+ * @param indev указатель на устройство ввода
  */
 void lv_indev_reset_long_press(lv_indev_t * indev);
 
 /**
- * Set a cursor for a pointer input device (for LV_INPUT_TYPE_POINTER and LV_INPUT_TYPE_BUTTON)
- * @param indev pointer to an input device
- * @param cur_obj pointer to an object to be used as cursor
+ * Установите курсор для устройства ввода указателя (для LV_INPUT_TYPE_POINTER и LV_INPUT_TYPE_BUTTON)
+ * @param indev указатель на устройство ввода
+ * @param cur_obj указатель на объект, который будет использоваться в качестве курсора
  */
 void lv_indev_set_cursor(lv_indev_t * indev, lv_obj_t * cur_obj);
 
 /**
- * Set a destination group for a keypad input device (for LV_INDEV_TYPE_KEYPAD)
- * @param indev pointer to an input device
- * @param group pointer to a group
+ * Установите группу назначения для устройства ввода с клавиатуры (для LV_INDEV_TYPE_KEYPAD)
+ * @param indev указатель на устройство ввода
+ * @param group указатель на группу
  */
 void lv_indev_set_group(lv_indev_t * indev, lv_group_t * group);
 
 /**
- * Set the an array of points for LV_INDEV_TYPE_BUTTON.
- * These points will be assigned to the buttons to press a specific point on the screen
- * @param indev pointer to an input device
- * @param points array of points
+ * Установите массив точек для LV_INDEV_TYPE_BUTTON.
+ * Эти точки будут назначены кнопкам для нажатия определенной точки на экране.
+ * @param indev указатель на устройство ввода
+ * @param points массив точек
  */
 void lv_indev_set_button_points(lv_indev_t * indev, const lv_point_t points[]);
 
 /**
- * Get the last point of an input device (for LV_INDEV_TYPE_POINTER and LV_INDEV_TYPE_BUTTON)
- * @param indev pointer to an input device
- * @param point pointer to a point to store the result
+ * Получить последнюю точку устройства ввода (для LV_INDEV_TYPE_POINTER и LV_INDEV_TYPE_BUTTON)
+ * @param indev указатель на устройство ввода
+ * @param point указатель на точку для сохранения результата
  */
 void lv_indev_get_point(const lv_indev_t * indev, lv_point_t * point);
 
 /**
-* Get the current gesture direct
-* @param indev pointer to an input device
-* @return current gesture direct
+* Получить текущий жест напрямую
+* @param indev указатель на устройство ввода
+* @return текущий жест прямой
 */
 lv_dir_t lv_indev_get_gesture_dir(const lv_indev_t * indev);
 
 /**
- * Get the last pressed key of an input device (for LV_INDEV_TYPE_KEYPAD)
- * @param indev pointer to an input device
- * @return the last pressed key (0 on error)
+ * Получить последнюю нажатую клавишу устройства ввода (для LV_INDEV_TYPE_KEYPAD )
+ * @param indev указатель на устройство ввода
+ * @return последняя нажатая клавиша (0 в случае ошибки)
  */
 uint32_t lv_indev_get_key(const lv_indev_t * indev);
 
 
 /**
- * Get the counter for consecutive clicks within a short distance and time.
- * The counter is updated before LV_EVENT_SHORT_CLICKED is fired.
- * @param indev pointer to an input device
- * @return short click streak counter
+ * Получите счетчик последовательных кликов на небольшом расстоянии и во времени.
+ * Счетчик обновляется до запуска LV_EVENT_SHORT_CLICKED.
+ * @param indev указатель на устройство ввода
+ * @return счетчик коротких кликов
  */
 uint8_t lv_indev_get_short_click_streak(const lv_indev_t * indev);
 
 /**
- * Check the current scroll direction of an input device (for LV_INDEV_TYPE_POINTER and
+ * Проверьте текущее направление прокрутки устройства ввода (для LV_INDEV_TYPE_POINTER и
  * LV_INDEV_TYPE_BUTTON)
- * @param indev pointer to an input device
- * @return LV_DIR_NONE: no scrolling now
+ * @param indev указатель на устройство ввода
+ * @return LV_DIR_NONE : прокрутки больше нет
  *         LV_DIR_HOR/VER
  */
 lv_dir_t lv_indev_get_scroll_dir(const lv_indev_t * indev);
 
 /**
- * Get the currently scrolled object (for LV_INDEV_TYPE_POINTER and
+ * Получить текущий прокручиваемый объект (для LV_INDEV_TYPE_POINTER и
  * LV_INDEV_TYPE_BUTTON)
- * @param indev pointer to an input device
- * @return pointer to the currently scrolled object or NULL if no scrolling by this indev
+ * @param indev указатель на устройство ввода
+ * @return указатель на прокручиваемый в данный момент объект или NULL, если прокрутка по этому индеву отсутствует
  */
 lv_obj_t * lv_indev_get_scroll_obj(const lv_indev_t * indev);
 
 /**
- * Get the movement vector of an input device (for LV_INDEV_TYPE_POINTER and
+ * Получить вектор движения устройства ввода (для LV_INDEV_TYPE_POINTER и
  * LV_INDEV_TYPE_BUTTON)
- * @param indev pointer to an input device
- * @param point pointer to a point to store the types.pointer.vector
+ * @param indev указатель на устройство ввода
+ * @param point указатель на точку для хранения типов.pointer.vector
  */
 void lv_indev_get_vect(const lv_indev_t * indev, lv_point_t * point);
 
 /**
- * Get the cursor object of an input device (for LV_INDEV_TYPE_POINTER only)
- * @param indev pointer to an input device
- * @return pointer to the cursor object
+ * Получить объект курсора устройства ввода (только для LV_INDEV_TYPE_POINTER)
+ * @param indev указатель на устройство ввода
+ * @return указатель на объект курсора
  */
 lv_obj_t * lv_indev_get_cursor(lv_indev_t * indev);
 
 /**
- * Do nothing until the next release
- * @param indev pointer to an input device
+ * Ничего не делать до следующего выпуска
+ * @param indev указатель на устройство ввода
  */
 void lv_indev_wait_release(lv_indev_t * indev);
 
 /**
- * Gets a pointer to the currently active object in the currently processed input device.
- * @return pointer to currently active object or NULL if no active object
+ * Получает указатель на текущий активный объект в обрабатываемом в данный момент устройстве ввода.
+ * @return указатель на текущий активный объект или NULL, если активного объекта нет
  */
 lv_obj_t * lv_indev_get_active_obj(void);
 
 /**
- * Get a pointer to the indev read timer to
- * modify its parameters with `lv_timer_...` functions.
- * @param indev pointer to an input device
- * @return pointer to the indev read refresher timer. (NULL on error)
+ * Получите указатель на таймер чтения indev для
+ * измените его параметры с помощью функции `lv_timer_...`.
+ * @param indev указатель на устройство ввода
+ * @return указатель на таймер обновления чтения indev. (NULLпри ошибке)
  */
 lv_timer_t * lv_indev_get_read_timer(lv_indev_t * indev);
 
 /**
-* Set the input device's event model: event-driven mode or timer mode.
-* @param indev pointer to an input device
-* @param mode the mode of input device
+* Установите модель событий устройства ввода: управляемый событиями режим или режим таймера.
+* @param indev указатель на устройство ввода
+* @param mode режим устройства ввода
 */
 void lv_indev_set_mode(lv_indev_t * indev, lv_indev_mode_t mode);
 
 /**
- * Get the input device's running mode.
- * @param indev pointer to an input device
- * @return the running mode for the specified input device.
+ * Получите рабочий режим устройства ввода.
+ * @param indev указатель на устройство ввода
+ * @return режим работы для указанного устройства ввода.
  */
 lv_indev_mode_t lv_indev_get_mode(lv_indev_t * indev);
 
 /**
- * Search the most top, clickable object by a point
- * @param obj pointer to a start object, typically the screen
- * @param point pointer to a point for searching the most top child
- * @return pointer to the found object or NULL if there was no suitable object
+ * Поиск по точке самого верхнего кликабельного объекта
+ * @param obj указатель на начальный объект, обычно экран
+ * @param point указатель на точку для поиска самого верхнего дочернего элемента
+ * @return указатель на найденный объект или NULL, если подходящего объекта не нашлось
  */
 lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point);
 
 /**
- * Add an event handler to the indev
- * @param indev          pointer to an indev
- * @param event_cb      an event callback
- * @param filter        event code to react or `LV_EVENT_ALL`
- * @param user_data     optional user_data
+ * добавить обработчик событий в indev
+ * @param indev          указатель на indev
+ * @param event_cb      обратный вызов события
+ * @param filter        код события для реакции или `LV_EVENT_ALL`
+ * @param user_data     опционально user_data
  */
 void lv_indev_add_event_cb(lv_indev_t * indev, lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
 
 /**
- * Get the number of event attached to an indev
- * @param indev          pointer to an indev
- * @return              number of events
+ * Получить количество событий, прикрепленных к устройствам
+ * @param indev          указатель на indev
+ * @return              количество событий
  */
 uint32_t lv_indev_get_event_count(lv_indev_t * indev);
 
 /**
- * Get an event descriptor for an event
- * @param indev          pointer to an indev
- * @param index         the index of the event
- * @return              the event descriptor
+ * Получить дескриптор события для события
+ * @param indev          указатель на indev
+ * @param index         индекс события
+ * @return              дескриптор события
  */
 lv_event_dsc_t * lv_indev_get_event_dsc(lv_indev_t * indev, uint32_t index);
 
 /**
- * Remove an event
- * @param indev         pointer to an indev
- * @param index         the index of the event to remove
- * @return              true: and event was removed; false: no event was removed
+ * Удалить событие
+ * @param indev         указатель на indev
+ * @param index         индекс события, которое нужно удалить
+ * @return              true: и событие было удалено; false: ни одно событие не было удалено
  */
 bool lv_indev_remove_event(lv_indev_t * indev, uint32_t index);
 
 /**
- * Remove an event_cb with user_data
- * @param indev         pointer to a indev
- * @param event_cb      the event_cb of the event to remove
- * @param user_data     user_data
- * @return              the count of the event removed
+ * Удалитеevent_cbс помощью user_data.
+ * @param indev         указатель на indev
+ * @param event_cb      event_cb события, которое нужно удалить
+ * @param user_data user_data
+ * @return              количество событий удалено
  */
 uint32_t lv_indev_remove_event_cb_with_user_data(lv_indev_t * indev, lv_event_cb_t event_cb, void * user_data);
 
 /**
- * Send an event to an indev
- * @param indev         pointer to an indev
- * @param code          an event code. LV_EVENT_...
- * @param param         optional param
- * @return              LV_RESULT_OK: indev wasn't deleted in the event.
+ * Отправить событие разработчику
+ * @param indev         указатель на indev
+ * @param code          код события.  LV_EVENT_...
+ * @param param         необязательный параметр
+ * @return              LV_RESULT_OK: indev не был удален в этом событии.
  */
 lv_result_t lv_indev_send_event(lv_indev_t * indev, lv_event_code_t code, void * param);
 
 /**
- * Set key remapping callback (LV_INDEV_TYPE_KEYPAD)
- * @param indev         pointer to an indev
- * @param remap_cb      remapping function callback. Use NULL to disable callback.
+ * Установить обратный вызов переназначения клавиш ( LV_INDEV_TYPE_KEYPAD )
+ * @param indev         указатель на indev
+ * @param remap_cb      обратный вызов функции переназначения. Используйте NULL, чтобы отключить обратный вызов.
  */
 void lv_indev_set_key_remap_cb(lv_indev_t * indev, lv_indev_key_remap_cb_t remap_cb);
 
 #if LV_USE_EXT_DATA
 /**
- * @brief Attaches external user data and destructor callback to an indev
+ * @brief Прикрепляет внешние пользовательские данные и обратный вызов деструктора к indev.
  *
- * Associates custom user data with an LVGL indev and specifies a destructor function
- * that will be automatically invoked when the indev is deleted to properly clean up
- * the associated resources.
+ * Связывает пользовательские данные с индевом LVGL и определяет функцию деструктора.
+ * который будет автоматически включаться при удалении indev для логической очистки
+ * связанные ресурсы.
  *
- * @param indev      Pointer to an indev
- * @param data       User-defined data pointer to associate with the indev
- * @param free_cb    Callback function for cleaning up ext_data when indev is deleted.
- *                   Receives ext_data as parameter. NULL means no cleanup required.
+ * @param indev      Указатель на indev
+ * @param data       Определяемый пользователем указатель данных для связи с indev
+ * @param free_cb    Функция обратного вызова для очисткиext_dataпри удалении indev.
+ *                   Получаетext_dataв качестве параметра.  NULLозначает, что очистка не требуется.
  */
 void lv_indev_set_external_data(lv_indev_t * indev, void * data, void (* free_cb)(void * data));
 #endif
@@ -494,7 +494,7 @@ void lv_indev_set_external_data(lv_indev_t * indev, void * data, void (* free_cb
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_INDEV_H*/

@@ -25,7 +25,7 @@ void lv_draw_ppa_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc,
 
     lv_area_t blend_area;
     if(!lv_area_intersect(&blend_area, &rel_coords, &rel_clip_area))
-        return; /*Fully clipped, nothing to do*/
+        return; /*Полностью обрезан, делать нечего.*/
 
     fill_cfg.fill_argb_color.val = lv_color_to_u32(dsc->color);
     fill_cfg.out.block_offset_x = blend_area.x1;

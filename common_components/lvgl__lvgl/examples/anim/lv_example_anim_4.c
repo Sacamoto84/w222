@@ -43,7 +43,7 @@ static void sw_event_cb(lv_event_t * e)
 }
 
 /**
- * Start animation on an event
+ * Запустить анимацию по событию
  */
 void lv_example_anim_4(void)
 {

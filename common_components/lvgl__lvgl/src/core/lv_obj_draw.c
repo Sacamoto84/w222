@@ -341,7 +341,7 @@ void lv_obj_init_draw_blur_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_blur_dsc_
     draw_dsc->blur_radius = lv_obj_get_style_blur_radius(obj, part);
     draw_dsc->quality = lv_obj_get_style_blur_quality(obj, part);
 
-    /*Radius might be set earlier as it's already known*/
+    /*Радиус может быть установлен раньше, поскольку он уже известен.*/
     if(draw_dsc->corner_radius == 0) {
         draw_dsc->corner_radius = lv_obj_get_style_radius(obj, part);
     }
@@ -359,7 +359,7 @@ int32_t lv_obj_calculate_ext_draw_size(lv_obj_t * obj, lv_part_t part)
     if(sh_width) {
         lv_opa_t sh_opa = lv_obj_get_style_shadow_opa(obj, part);
         if(sh_opa > LV_OPA_MIN) {
-            sh_width = sh_width / 2 + 1;    /*The blur adds only half width*/
+            sh_width = sh_width / 2 + 1;    /*Размытие добавляет только половину ширины*/
             sh_width += lv_obj_get_style_shadow_spread(obj, part);
             int32_t sh_ofs_x = lv_obj_get_style_shadow_offset_x(obj, part);
             int32_t sh_ofs_y = lv_obj_get_style_shadow_offset_y(obj, part);
@@ -404,12 +404,12 @@ void lv_obj_refresh_ext_draw_size(lv_obj_t * obj)
     int32_t s_new = 0;
     lv_obj_send_event(obj, LV_EVENT_REFR_EXT_DRAW_SIZE, &s_new);
 
-    /*Store the result if the special attrs already allocated*/
+    /*Сохраните результат, если специальные атрибуты уже выделены.*/
     if(obj->spec_attr) {
         obj->spec_attr->ext_draw_size = s_new;
     }
-    /*Allocate spec. attrs. only if the result is not zero.
-     *Zero is the default value if the spec. attr. are not defined.*/
+    /*Выделить спец. атрибуты только если результат не равен нулю.
+     *Ноль — это значение по умолчанию, если спец. атрибут не определены.*/
     else if(s_new != 0) {
         lv_obj_allocate_spec_attr(obj);
         obj->spec_attr->ext_draw_size = s_new;
@@ -439,7 +439,7 @@ lv_layer_type_t lv_obj_get_layer_type(const lv_obj_t * obj)
 static inline lv_opa_t get_layer_opa(const lv_obj_t * obj, lv_part_t part, const lv_draw_dsc_base_t * base_dsc)
 {
     if(base_dsc->layer) {
-        /* Accessing the layer opa directly is faster than using get style opa recursive */
+        /* Прямой доступ к слою opa происходит быстрее, чем использование рекурсивного стиля opa get. */
         if(part == LV_PART_MAIN) {
             return base_dsc->layer->opa;
         }
@@ -447,7 +447,7 @@ static inline lv_opa_t get_layer_opa(const lv_obj_t * obj, lv_part_t part, const
         return LV_OPA_MIX2(base_dsc->layer->opa, lv_obj_get_style_opa(obj, part));
     }
 
-    /* fallback to old recursive style opa */
+    /* возврат к старому рекурсивному стилю опа */
     return lv_obj_get_style_opa_recursive(obj, part);
 }
 

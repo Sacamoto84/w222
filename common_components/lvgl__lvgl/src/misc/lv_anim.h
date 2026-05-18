@@ -29,18 +29,18 @@ extern "C" {
 #define LV_ANIM_PAUSE_FOREVER        0xFFFFFFFF
 
 /*
- * Macros used to set cubic-bezier anim parameter.
- * Parameters come from https://easings.net/
+ * Макросы, используемые для установки параметра анимации кубической кривой Безье.
+ * Параметры берутся из https://easings.net/
  *
- * Usage:
+ * Использование:
  *
- * lv_anim_t a;
- * lv_anim_init(&a);
+ * lv_anim_t а;
+ * lv_anim_init (&а);
  * ...
- * lv_anim_set_path_cb(&a, lv_anim_path_custom_bezier3);
- * LV_ANIM_SET_EASE_IN_SINE(&a); //Set cubic-bezier anim parameter to easeInSine
+ * lv_anim_set_path_cb (&a,lv_anim_path_custom_bezier3);
+ * LV_ANIM_SET_EASE_IN_SINE (&а); //Устанавливаем параметр кубического анимации Без значения easyInSine
  * ...
- * lv_anim_start(&a);
+ * lv_anim_start (&а);
  */
 
 #define _PARA(a, x1, y1, x2, y2) ((a)->parameter.bezier3 =                                  \
@@ -81,39 +81,39 @@ LV_EXPORT_CONST_INT(LV_ANIM_PLAYTIME_INFINITE);
  *      TYPEDEFS
  **********************/
 
-/** Can be used to indicate if animations are enabled or disabled in a case*/
+/** Может использоваться для указания, включена или отключена анимация в конкретном случае.*/
 #define LV_ANIM_OFF false
 #define LV_ANIM_ON true
 typedef bool lv_anim_enable_t;
 
-/** Get the current value during an animation*/
+/** Получить текущее значение во время анимации*/
 typedef int32_t (*lv_anim_path_cb_t)(const lv_anim_t *);
 
-/** Generic prototype of "animator" functions.
- * First parameter is the variable to animate.
- * Second parameter is the value to set.
- * Compatible with `lv_xxx_set_yyy(obj, value)` functions
- * The `x` in `_xcb_t` means it's not a fully generic prototype because
- * it doesn't receive `lv_anim_t *` as its first argument*/
+/** Общий прототип функций «аниматора».
+ * Первый параметр — это переменная для анимации.
+ * Второй параметр — это значение, которое нужно установить.
+ * Совместимость с механизмами `lv_xxx_set_yyy(obj, value)`.
+ * `x` в`_xcb_t`означает, что это не полностью универсальный прототип, потому что
+ * он не получает`lv_anim_t *`в качестве первого аргумента*/
 typedef void (*lv_anim_exec_xcb_t)(void *, int32_t);
 
-/** Same as `lv_anim_exec_xcb_t` but receives `lv_anim_t *` as the first parameter.
- * It's more consistent but less convenient. Might be used by binding generator functions.*/
+/** То же самое, что `lv_anim_exec_xcb_t`, но принимает`lv_anim_t *`в качестве первого параметра.
+ * Это более последовательно, но менее удобно. Может использоваться привязкой функций генератора.*/
 typedef void (*lv_anim_custom_exec_cb_t)(lv_anim_t *, int32_t);
 
-/** Callback to call when the animation is ready*/
+/** Обратный вызов для вызова, когда анимация будет готова*/
 typedef void (*lv_anim_completed_cb_t)(lv_anim_t *);
 
-/** Callback to call when the animation really stars (considering `delay`)*/
+/** Обратный вызов для вызова, когда анимация действительно начинается (учитывая`delay`)*/
 typedef void (*lv_anim_start_cb_t)(lv_anim_t *);
 
-/** Callback used when the animation values are relative to get the current value*/
+/** Обратный вызов используется, когда значения анимации являются относительными для получения текущего значения.*/
 typedef int32_t (*lv_anim_get_value_cb_t)(lv_anim_t *);
 
-/** Callback used when the animation is deleted*/
+/** Обратный вызов, используемый при удалении анимации*/
 typedef void (*lv_anim_deleted_cb_t)(lv_anim_t *);
 
-/** Parameter used when path is custom_bezier */
+/** Параметр, когда путь светитсяcustom_bezier. */
 typedef struct {
     int16_t x1;
     int16_t y1;
@@ -121,15 +121,15 @@ typedef struct {
     int16_t y2;
 } lv_anim_bezier3_para_t;
 
-/** Describes an animation*/
+/** Описывает анимацию*/
 struct _lv_anim_t {
 #if LV_USE_EXT_DATA
     lv_ext_data_t ext_data;
 #endif
     void * var;                               /**< Variable (Widget or other user-provided object) to animate */
     lv_anim_exec_xcb_t exec_cb;               /**< Function to execute to animate */
-    lv_anim_custom_exec_cb_t custom_exec_cb;  /**< Function to execute to animate,
-                                               * same purpose as exec_cb but different parameters */
+    lv_anim_custom_exec_cb_t custom_exec_cb;  /**< Функция, которую нужно выполнить для анимации,
+                                               * та же цель, что иexec_cb, но другие параметры */
     lv_anim_start_cb_t start_cb;              /**< Call it when animation is starts (considering `delay`) */
     lv_anim_completed_cb_t completed_cb;      /**< Call it when animation is fully completed */
     lv_anim_deleted_cb_t deleted_cb;          /**< Call it when animation is deleted */
@@ -149,14 +149,14 @@ struct _lv_anim_t {
         lv_anim_bezier3_para_t bezier3;       /**< Parameter used when path is custom_bezier */
     } parameter;
 
-    /* Animation system use these - user shouldn't set */
+    /* Их использует система анимации — пользователь не должен устанавливать */
     uint32_t last_timer_run;
     uint32_t pause_time;                      /**<The time when the animation was paused*/
     uint32_t pause_duration;                  /**<The amount of the time the animation must stay paused for*/
     uint8_t is_paused : 1;                    /**<Indicates that the animation is paused */
     uint8_t reverse_play_in_progress : 1;     /**< Reverse play is in progress */
-    uint8_t run_round : 1;                    /**< When not equal to global.anim_state.anim_run_round (which toggles each
-                                               * time animation timer executes), indicates this animation needs to be updated. */
+    uint8_t run_round : 1;                    /**< Когда не равно глобальному. anim_state. anim_run_round(который переключает каждый
+                                               * таймер анимации времени выполняется), указывает на необходимость обновления этой анимации. */
     uint8_t start_cb_called : 1;              /**< Indicates that `start_cb` was already called */
     uint8_t early_apply  : 1;                 /**< 1: Apply start value immediately even is there is a `delay` */
 };
@@ -166,414 +166,414 @@ struct _lv_anim_t {
  **********************/
 
 /**
- * Initialize an animation variable.
+ * Инициализируйте переменную анимации.
  * E.g.:
- * lv_anim_t a;
- * lv_anim_init(&a);
- * lv_anim_set_...(&a);
- * lv_anim_start(&a);
- * @param a     pointer to an `lv_anim_t` variable to initialize
+ * lv_anim_t а;
+ * lv_anim_init (&а);
+ * lv_anim_set_ ...(&а);
+ * lv_anim_start (&а);
+ * @param a     указатель на переменную`lv_anim_t`для инициализации
  */
 void lv_anim_init(lv_anim_t * a);
 
 /**
- * Set a variable to animate
- * @param a     pointer to an initialized `lv_anim_t` variable
- * @param var   pointer to a variable to animate
+ * Установите переменную для анимации
+ * @param a     указатель на инициализированную переменную `lv_anim_t`
+ * @param var   указатель на переменную для анимации
  */
 void lv_anim_set_var(lv_anim_t * a, void * var);
 
 /**
- * Set a function to animate `var`
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param exec_cb   a function to execute during animation
- *                  LVGL's built-in functions can be used.
- *                  E.g. lv_obj_set_x
+ * Установить функцию для анимации `var`
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param exec_cb   функция, выполняемая во время анимации
+ *                  Можно использовать встроенные функции LVGL.
+ *                  например lv_obj_set_x
  */
 void lv_anim_set_exec_cb(lv_anim_t * a, lv_anim_exec_xcb_t exec_cb);
 
 /**
- * Set the duration of an animation
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param duration  duration of the animation in milliseconds
+ * Установить продолжительность анимации
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param duration  продолжительность анимации в миллисекундах
  */
 void lv_anim_set_duration(lv_anim_t * a, uint32_t duration);
 
 /**
- * Set a delay before starting the animation
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param delay     delay before the animation in milliseconds
+ * Установите задержку перед запуском анимации
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param delay     задержка перед анимацией в миллисекундах
  */
 void lv_anim_set_delay(lv_anim_t * a, uint32_t delay);
 
 /**
- * Resumes a paused animation
- * @param a         pointer to an initialized `lv_anim_t` variable
+ * Возобновляет приостановленную анимацию
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
  */
 void lv_anim_resume(lv_anim_t * a);
 
 /**
- * Pauses the animation
- * @param a         pointer to an initialized `lv_anim_t` variable
+ * Приостанавливает анимацию
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
  */
 void lv_anim_pause(lv_anim_t * a);
 
 /**
- * Pauses the animation for ms milliseconds
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param ms        the pause time in milliseconds
+ * Приостанавливает анимацию на миллисекунды мс.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param ms        время паузы в миллисекундах
  */
 void lv_anim_pause_for(lv_anim_t * a, uint32_t ms);
 
 /**
- * Check if the animation is paused
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @return          true if the animation is paused else false
+ * Проверьте, приостановлена ли анимация
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @return          true, если анимация приостановлена, иначе false
  */
 bool lv_anim_is_paused(lv_anim_t * a);
 
 /**
- * Set the start and end values of an animation
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param start     the start value
- * @param end       the end value
+ * Установите начальное и конечное значения анимации
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param start     начальное значение
+ * @param end       конечная стоимость
  */
 void lv_anim_set_values(lv_anim_t * a, int32_t start, int32_t end);
 
 /**
- * Similar to `lv_anim_set_exec_cb` but `lv_anim_custom_exec_cb_t` receives
- * `lv_anim_t * ` as its first parameter instead of `void *`.
- * This function might be used when LVGL is bound to other languages because
- * it's more consistent to have `lv_anim_t *` as first parameter.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param exec_cb   a function to execute.
+ * Аналогично`lv_anim_set_exec_cb`, но`lv_anim_custom_exec_cb_t`получает
+ * `lv_anim_t * ` в качестве первого места вместо `void *`.
+ * Эту функцию можно использовать, когда LVGL привязан к другим языкам, поскольку
+ * более одновременно иметь`lv_anim_t *`в качестве первого параметра.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param exec_cb   функция для выполнения.
  */
 void lv_anim_set_custom_exec_cb(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb);
 
 /**
- * Set the path (curve) of the animation.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param path_cb a function to set the current value of the animation.
+ * Установите путь (кривую) анимации.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param path_cb функция для установки текущего значения анимации.
  */
 void lv_anim_set_path_cb(lv_anim_t * a, lv_anim_path_cb_t path_cb);
 
 /**
- * Set a function call when the animation really starts (considering `delay`)
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param start_cb  a function call when the animation starts
+ * Установите функцию вызова, когда анимация действительно запускается (учитывая`delay`)
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param start_cb  вызов функции при запуске анимации
  */
 void lv_anim_set_start_cb(lv_anim_t * a, lv_anim_start_cb_t start_cb);
 
 /**
- * Set a function to use the current value of the variable and make start and end value
- * relative to the returned current value.
- * @param a             pointer to an initialized `lv_anim_t` variable
- * @param get_value_cb  a function call when the animation starts
+ * Установите функцию, которая будет использовать текущее значение переменной и создавать начальное и конечное значения.
+ * относительно возвращаемого текущего значения.
+ * @param a             указатель на инициализированную переменную `lv_anim_t`
+ * @param get_value_cb  вызов функции при запуске анимации
  */
 void lv_anim_set_get_value_cb(lv_anim_t * a, lv_anim_get_value_cb_t get_value_cb);
 
 /**
- * Set a function call when the animation is completed
- * @param a             pointer to an initialized `lv_anim_t` variable
- * @param completed_cb  a function call when the animation is fully completed
+ * Установите вызов функции после завершения анимации
+ * @param a             указатель на инициализированную переменную `lv_anim_t`
+ * @param completed_cb  вызов функции, когда анимация полностью завершена
  */
 void lv_anim_set_completed_cb(lv_anim_t * a, lv_anim_completed_cb_t completed_cb);
 
 /**
- * Set a function call when the animation is deleted.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param deleted_cb  a function call when the animation is deleted
+ * Установите вызов функции при удалении анимации.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param deleted_cb  вызов функции при удалении анимации
  */
 void lv_anim_set_deleted_cb(lv_anim_t * a, lv_anim_deleted_cb_t deleted_cb);
 
 /**
- * Make the animation to play back to when the forward direction is ready
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param duration  duration of playback animation in milliseconds. 0: disable playback
+ * Создайте анимацию, которая будет воспроизводиться, когда будет готово направление вперед.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param duration  продолжительность воспроизведения анимации в миллисекундах. 0: отключить воспроизведение
  */
 void lv_anim_set_reverse_duration(lv_anim_t * a, uint32_t duration);
 
 /**
- * Legacy `lv_anim_set_reverse_time` API will be removed soon, use `lv_anim_set_reverse_duration` instead.
+ * Устаревший`lv_anim_set_reverse_time`API скоро будет удален, вместо него викорируйте`lv_anim_set_reverse_duration`.
  */
 void lv_anim_set_reverse_time(lv_anim_t * a, uint32_t duration);
 
 /**
- * Make the animation to play back to when the forward direction is ready
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param delay     delay in milliseconds before starting the playback animation.
+ * Создайте анимацию, которая будет воспроизводиться, когда будет готово направление вперед.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param delay     задержка в миллисекундах перед началом воспроизведения анимации.
  */
 void lv_anim_set_reverse_delay(lv_anim_t * a, uint32_t delay);
 
 /**
- * Make the animation repeat itself.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param cnt       repeat count or `LV_ANIM_REPEAT_INFINITE` for infinite repetition. 0: to disable repetition.
+ * Заставьте анимацию повторяться.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param cnt       количество повторов или`LV_ANIM_REPEAT_INFINITE`для бесконечного повторения. 0: отключить повторение.
  */
 void lv_anim_set_repeat_count(lv_anim_t * a, uint32_t cnt);
 
 /**
- * Set a delay before repeating the animation.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param delay     delay in milliseconds before repeating the animation.
+ * Установите задержку перед повторением анимации.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param delay     задержка в миллисекундах перед повторением анимации.
  */
 void lv_anim_set_repeat_delay(lv_anim_t * a, uint32_t delay);
 
 /**
- * Set a whether the animation's should be applied immediately or only when the delay expired.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param en        true: apply the start value immediately in `lv_anim_start`;
- *                  false: apply the start value only when `delay` ms is elapsed and the animations really starts
+ * Установите, должна ли анимация применяться немедленно или только по истечении задержки.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param en        true: немедленно применить начальное значение в `lv_anim_start`;
+ *                  false: применять начальное значение только по истечении`delay`мс и анимация действительно запускается
  */
 void lv_anim_set_early_apply(lv_anim_t * a, bool en);
 
 /**
  * Set the custom user data field of the animation.
- * @param a           pointer to an initialized `lv_anim_t` variable
- * @param user_data   pointer to the new user_data.
+ * @param a           указатель на инициализированную переменную `lv_anim_t`
+ * @param user_data   указатель на новый user_data.
  */
 void lv_anim_set_user_data(lv_anim_t * a, void * user_data);
 
 /**
- * Set parameter for cubic bezier path
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @param x1        first control point X
- * @param y1        first control point Y
- * @param x2        second control point X
- * @param y2        second control point Y
+ * Установите параметр для кубического пути Безье
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @param x1        первая контрольная точка X
+ * @param y1        первая контрольная точка Y
+ * @param x2        вторая контрольная точка X
+ * @param y2        вторая контрольная точка Y
  */
 void lv_anim_set_bezier3_param(lv_anim_t * a, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 
 /**
- * Create an animation
- * @param a         an initialized 'anim_t' variable. Not required after call.
- * @return          pointer to the created animation (different from the `a` parameter)
+ * Создать анимацию
+ * @param a         инициализированная переменная anim_t. Не требуется после звонка.
+ * @return          указатель на созданную анимацию (отличный от параметра `a`)
  */
 lv_anim_t * lv_anim_start(const lv_anim_t * a);
 
 /**
- * Get a delay before starting the animation
- * @param a pointer to an initialized `lv_anim_t` variable
- * @return delay before the animation in milliseconds
+ * Получить задержку перед запуском анимации
+ * @param a указатель на инициализированную переменную `lv_anim_t`
+ * @return задержка перед анимацией в миллисекундах
  */
 uint32_t lv_anim_get_delay(const lv_anim_t * a);
 
 /**
- * Get the time used to play the animation.
- * @param a pointer to an animation.
- * @return the play time in milliseconds.
+ * Получите время, используемое для воспроизведения анимации.
+ * @param a указатель на анимацию.
+ * @return время воспроизведения в миллисекундах.
  */
 uint32_t lv_anim_get_playtime(const lv_anim_t * a);
 
 /**
- * Get the duration of an animation
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @return the duration of the animation in milliseconds
+ * Получить продолжительность анимации
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @return продолжительность анимации в миллисекундах
  */
 uint32_t lv_anim_get_time(const lv_anim_t * a);
 
 /**
  * Get the repeat count of the animation.
- * @param a         pointer to an initialized `lv_anim_t` variable
- * @return the repeat count or `LV_ANIM_REPEAT_INFINITE` for infinite repetition. 0: disabled repetition.
+ * @param a         указатель на инициализированную переменную `lv_anim_t`
+ * @return количество повторов или`LV_ANIM_REPEAT_INFINITE`для бесконечного повторения. 0: повтор отключен.
  */
 uint32_t lv_anim_get_repeat_count(const lv_anim_t * a);
 
 /**
- * Get the user_data field of the animation
- * @param   a pointer to an initialized `lv_anim_t` variable
- * @return  the pointer to the custom user_data of the animation
+ * Получите полеuser_dataанимации.
+ * @param   a указатель на инициализированную переменную `lv_anim_t`
+ * @return  указатель на пользовательскийuser_dataанимации
  */
 void * lv_anim_get_user_data(const lv_anim_t * a);
 
 /**
- * Delete animation(s) of a variable with a given animator function
- * @param var       pointer to variable
- * @param exec_cb   a function pointer which is animating 'var',
- *                  or NULL to ignore it and delete all the animations of 'var
- * @return          true: at least 1 animation is deleted, false: no animation is deleted
+ * Удалить анимацию(и) переменной с помощью заданной функции аниматора.
+ * @param var       указатель на переменную
+ * @param exec_cb   указатель функции, который анимирует 'var',
+ *                  илиNULL, чтобы стоять рядом с ним и удалить все анимации 'var
+ * @return          true: удалена как минимум 1 анимация, false: ни одна анимация не удалена
  */
 bool lv_anim_delete(void * var, lv_anim_exec_xcb_t exec_cb);
 
 /**
- * Delete all the animations
+ * Удалить все анимации
  */
 void lv_anim_delete_all(void);
 
 /**
- * Get the animation of a variable and its `exec_cb`.
- * @param var       pointer to variable
- * @param exec_cb   a function pointer which is animating 'var', or NULL to return first matching 'var'
- * @return          pointer to the animation.
+ * Получите переменную анимацию и ее `exec_cb`.
+ * @param var       указатель на переменную
+ * @param exec_cb   указатель на функцию, которая анимирует «var», илиNULLдля возврата первого соответствующего «var».
+ * @return          указатель на анимацию.
  */
 lv_anim_t * lv_anim_get(void * var, lv_anim_exec_xcb_t exec_cb);
 
 /**
- * Get global animation refresher timer.
- * @return pointer to the animation refresher timer.
+ * Получите глобальный таймер обновления анимации.
+ * @return указатель на таймер обновления анимации.
  */
 lv_timer_t * lv_anim_get_timer(void);
 
 /**
- * Delete an animation by getting the animated variable from `a`.
- * Only animations with `exec_cb` will be deleted.
- * This function exists because it's logical that all anim. functions receives an
- * `lv_anim_t` as their first parameter. It's not practical in C but might make
- * the API more consequent and makes easier to generate bindings.
- * @param a         pointer to an animation.
- * @param exec_cb   a function pointer which is animating 'var',
- *                  or NULL to ignore it and delete all the animations of 'var
- * @return          true: at least 1 animation is deleted, false: no animation is deleted
+ * Удалите анимацию, получив анимированную переменную из `a`.
+ * Будут удалены только анимации с `exec_cb`.
+ * Эта функция существует, потому что логично, что все животные. функция получает
+ * `lv_anim_t` в качестве первого параметра. Это непрактично в C, но можно сделать
+ * API более последователен и упрощает создание привязок.
+ * @param a         указатель на анимацию.
+ * @param exec_cb   указатель функции, который анимирует 'var',
+ *                  илиNULL, чтобы стоять рядом с ним и удалить все анимации 'var
+ * @return          true: удалена как минимум 1 анимация, false: ни одна анимация не удалена
  */
 bool lv_anim_custom_delete(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb);
 
 /**
- * Get the animation of a variable and its `exec_cb`.
- * This function exists because it's logical that all anim. functions receives an
- * `lv_anim_t` as their first parameter. It's not practical in C but might make
- * the API more consequent and makes easier to generate bindings.
- * @param a         pointer to an animation.
- * @param exec_cb   a function pointer which is animating 'var', or NULL to return first matching 'var'
- * @return          pointer to the animation.
+ * Получите переменную анимацию и ее `exec_cb`.
+ * Эта функция существует, потому что логично, что все животные. функция получает
+ * `lv_anim_t` в качестве первого параметра. Это непрактично в C, но можно сделать
+ * API более последователен и упрощает создание привязок.
+ * @param a         указатель на анимацию.
+ * @param exec_cb   указатель на функцию, которая анимирует «var», илиNULLдля возврата первого соответствующего «var».
+ * @return          указатель на анимацию.
  */
 lv_anim_t * lv_anim_custom_get(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb);
 
 /**
- * Get the number of currently running animations
- * @return      the number of running animations
+ * Получить количество запущенных в данный момент анимаций
+ * @return      количество запущенных анимаций
  */
 uint16_t lv_anim_count_running(void);
 
 /**
- * Store the speed as a special value which can be used as time in animations.
- * It will be converted to time internally based on the start and end values.
- * The return value can be used as a constant with multiple animations
- * and let LVGL convert the speed to time based on the actual values.
- * LIMITATION: the max time stored this way can be 10,000 ms.
- * @param speed         the speed of the animation in with unit / sec resolution in 0..10k range
- * @return              a special value which can be used as an animation time
- * @note                internally speed is stored as 10 unit/sec
+ * Сохраните скорость как специальное значение, которое можно использовать как время в анимации.
+ * Оно будет внутренне преобразовано во время на основе начального и конечного значений.
+ * Возвращаемое значение можно использовать как константу с несколькими анимациями.
+ * и позвольте LVGL преобразовать скорость во время на основе фактических значений.
+ * LIMITATION: максимальное время, сохраненное таким образом, может составлять 10 000 мс.
+ * @param speed         скорость анимации с разрешением единицы/сек в диапазоне 0..10к
+ * @return              специальное значение, которое можно использовать в качестве времени анимации
+ * @note                внутренняя скорость хранится как 10 единиц/сек.
  */
 uint32_t lv_anim_speed(uint32_t speed);
 
 /**
- * Store the speed as a special value which can be used as time in animations.
- * It will be converted to time internally based on the start and end values.
- * The return value can be used as a constant with multiple animations
- * and let LVGL convert the speed to time based on the actual values.
- * @param speed         the speed of the animation in as unit / sec resolution in 0..10k range
- * @param min_time      the minimum time in 0..10k range
- * @param max_time      the maximum time in 0..10k range
- * @return              a special value in where all three values are stored and can be used as an animation time
- * @note                internally speed is stored as 10 unit/sec
- * @note                internally min/max_time are stored with 10 ms unit
+ * Сохраните скорость как специальное значение, которое можно использовать как время в анимации.
+ * Оно будет внутренне преобразовано во время на основе начального и конечного значений.
+ * Возвращаемое значение можно использовать как константу с несколькими анимациями.
+ * и позвольте LVGL преобразовать скорость во время на основе фактических значений.
+ * @param speed         скорость анимации в единицах измерения в секунду, разрешение в диапазоне 0..10k.
+ * @param min_time      минимальное время в диапазоне 0..10k
+ * @param max_time      максимальное время в диапазоне 0..10k
+ * @return              специальное значение, в котором хранятся все три значения и которое можно использовать в качестве времени анимации.
+ * @note                внутренняя скорость хранится как 10 единиц/сек.
+ * @note                внутренне мин/max_time хранятся с шагом 10 мс
  *
  */
 uint32_t lv_anim_speed_clamped(uint32_t speed, uint32_t min_time, uint32_t max_time);
 
 /**
- * Resolve the speed (created with `lv_anim_speed` or `lv_anim_speed_clamped`) to time
- * based on start and end values.
- * @param speed     return values of `lv_anim_speed` or `lv_anim_speed_clamped`
- * @param start     the start value of the animation
- * @param end       the end value of the animation
- * @return          the time required to get from `start` to `end` with the given `speed` setting
+ * Приведите скорость (созданную с помощью`lv_anim_speed`или `lv_anim_speed_clamped`) ко времени.
+ * на основе начального и конечного значений.
+ * @param speed     возвращаемые значения`lv_anim_speed`или `lv_anim_speed_clamped`
+ * @param start     начальное значение анимации
+ * @param end       конечное значение анимации
+ * @return          время, необходимое для перехода от`start`к`end`с заданной настройкой `speed`
  */
 uint32_t lv_anim_resolve_speed(uint32_t speed, int32_t start, int32_t end);
 
 /**
- * Calculate the time of an animation based on its speed, start and end values.
- * It simpler than `lv_anim_speed` or `lv_anim_speed_clamped` as it converts
- * speed, start, and end to a time immediately.
- * As it's simpler there is no limit on the maximum time.
- * @param speed         the speed of the animation
- * @param start         the start value
- * @param end           the end value
- * @return              the time of the animation in milliseconds
+ * Рассчитайте время анимации на основе ее скорости, начального и конечного значений.
+ * Это проще, чем`lv_anim_speed`или `lv_anim_speed_clamped`, поскольку он конвертирует
+ * скорость, начало и конец времени немедленно.
+ * Поскольку это проще, максимальное время не ограничено.
+ * @param speed         скорость анимации
+ * @param start         начальное значение
+ * @param end           конечная стоимость
+ * @return              время анимации в миллисекундах
  */
 uint32_t lv_anim_speed_to_time(uint32_t speed, int32_t start, int32_t end);
 
 
 /**
- * Manually refresh the state of the animations.
- * Useful to make the animations running in a blocking process where
- * `lv_timer_handler` can't run for a while.
- * Shouldn't be used directly because it is called in `lv_refr_now()`.
+ * Вручную обновите состояние анимации.
+ * Полезно для запуска анимации в процессе блокировки, где
+ * `lv_timer_handler` некоторое время не может работать.
+ * Не следует использовать напрямую, поскольку он появляется в `lv_refr_now()`.
  */
 void lv_anim_refr_now(void);
 
 /**
- * Calculate the current value of an animation applying linear characteristic
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Рассчитать текущее значение анимации, применяя линейную характеристику
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_linear(const lv_anim_t * a);
 
 /**
- * Calculate the current value of an animation slowing down the start phase
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Вычислить текущее значение анимации, замедляющей начальную фазу
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_ease_in(const lv_anim_t * a);
 
 /**
- * Calculate the current value of an animation slowing down the end phase
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Вычислить текущее значение анимации, замедляющей конечную фазу
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_ease_out(const lv_anim_t * a);
 
 /**
- * Calculate the current value of an animation applying an "S" characteristic (cosine)
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Вычислить текущее значение анимации, применяя характеристику «S» (косинус).
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_ease_in_out(const lv_anim_t * a);
 
 /**
- * Calculate the current value of an animation with overshoot at the end
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Вычислить текущее значение анимации с выбросом в конце
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_overshoot(const lv_anim_t * a);
 
 /**
- * Calculate the current value of an animation with 3 bounces
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Рассчитать текущее значение анимации с 3 отскоками
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_bounce(const lv_anim_t * a);
 
 /**
- * Calculate the current value of an animation applying step characteristic.
- * (Set end value on the end of the animation)
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Вычислить текущее значение анимации, применяя ступенчатую характеристику.
+ * (Установите конечное значение в конце анимации)
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_step(const lv_anim_t * a);
 
 /**
- * A custom cubic bezier animation path, need to specify cubic-parameters in a->parameter.bezier3
- * @param a     pointer to an animation
- * @return      the current value to set
+ * Пользовательский путь анимации кубической Безье, необходимо указать кубические параметры в a->parameter.bezier3
+ * @param a     указатель на анимацию
+ * @return      текущее значение для установки
  */
 int32_t lv_anim_path_custom_bezier3(const lv_anim_t * a);
 
 #if LV_USE_EXT_DATA
 /**
- * @brief Associates external user data with an animation instance
+ * @brief Связывает внешние пользовательские данные с экземпляром анимации.
  *
- * Attaches arbitrary user-defined data to an LVGL animation object along with an optional
- * destructor callback that will be automatically invoked when the animation completes
- * or is deleted, enabling proper resource cleanup.
+ * Прикрепляет произвольные пользовательские данные к объекту анимации LVGL вместе с необязательным
+ * обратный вызов деструктора, который будет автоматически вызываться после завершения анимации
+ * или удаляется, обеспечивая надлежащую очистку ресурса.
  *
- * @param anim       Pointer to the animation object to configure
- * @param data       User-defined data pointer to associate
- * @param free_cb    Cleanup callback that receives ext_data when:
- *                   - Animation completes naturally
- *                   - Animation is deleted prematurely
- *                   - New data replaces current association
- *                   NULL indicates no cleanup required
+ * @param anim       Указатель на объект анимации для настройки
+ * @param data       Пользовательский указатель данных для связи
+ * @param free_cb    Обратный вызов очистки, который получает ext_data, когда:
+ *                   - Анимация завершается естественным образом
+ *                   - Анимация удаляется преждевременно
+ *                   - Новые данные заменяют текущую ассоциацию
+ *                   NULL указывает, что очистка не требуется.
  */
 void lv_anim_set_external_data(lv_anim_t * anim, void * data, void (* free_cb)(void * data));
 #endif
@@ -587,7 +587,7 @@ void lv_anim_set_external_data(lv_anim_t * anim, void * data, void (* free_cb)(v
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ANIM_H*/

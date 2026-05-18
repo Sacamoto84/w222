@@ -13,7 +13,7 @@
 
 #define VG_SYSTEM_RESERVE_COUNT 2
 
-/* Implementation of list. ****************************************/
+/* Реализация списка. *****************************************/
 typedef struct list_head {
     struct list_head * next;
     struct list_head * prev;

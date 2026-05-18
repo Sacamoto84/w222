@@ -38,18 +38,18 @@ enum _lv_property_line_id_t {
  **********************/
 
 /**
- * Create a line object
+ * Создать объект линии
  * @param parent pointer to an object, it will be the parent of the new line
  * @return pointer to the created line
  */
 lv_obj_t * lv_line_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set an array of points. The line object will connect these points.
+ * Задайте массив точек. Линейный объект соединит эти точки.
  * @param obj           pointer to a line object
  * @param points        an array of points. Only the address is saved, so the array needs to be alive while the line exists
  * @param point_num     number of points in 'point_a'
@@ -57,7 +57,7 @@ lv_obj_t * lv_line_create(lv_obj_t * parent);
 void lv_line_set_points(lv_obj_t * obj, const lv_point_precise_t points[], uint32_t point_num);
 
 /**
- * Set a non-const array of points. Identical to `lv_line_set_points` except the array may be retrieved by `lv_line_get_points_mutable`.
+ * Установите неконстантный массив точек. Идентичен `lv_line_set_points`, за исключением того, что массив можно получить с помощью `lv_line_get_points_mutable`.
  * @param obj           pointer to a line object
  * @param points        a non-const array of points. Only the address is saved, so the array needs to be alive while the line exists.
  * @param point_num     number of points in 'point_a'
@@ -65,48 +65,48 @@ void lv_line_set_points(lv_obj_t * obj, const lv_point_precise_t points[], uint3
 void lv_line_set_points_mutable(lv_obj_t * obj, lv_point_precise_t points[], uint32_t point_num);
 
 /**
- * Enable (or disable) the y coordinate inversion.
- * If enabled then y will be subtracted from the height of the object,
- * therefore the y = 0 coordinate will be on the bottom.
+ * Включите (или отключите) инверсию координаты y.
+ * Если этот параметр включен, то y будет вычитаться из высоты объекта.
+ * поэтому координата y = 0 будет внизу.
  * @param obj       pointer to a line object
  * @param en        true: enable the y inversion, false:disable the y inversion
  */
 void lv_line_set_y_invert(lv_obj_t * obj, bool en);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the pointer to the array of points.
+ * Получите указатель на массив точек.
  * @param obj           pointer to a line object
  * @return              const pointer to the array of points
  */
 const lv_point_precise_t * lv_line_get_points(lv_obj_t * obj);
 
 /**
- * Get the number of points in the array of points.
+ * Получите количество точек в массиве точек.
  * @param obj           pointer to a line object
  * @return              number of points in array of points
  */
 uint32_t lv_line_get_point_count(lv_obj_t * obj);
 
 /**
- * Check the mutability of the stored point array pointer.
+ * Проверьте изменчивость указателя сохраненного массива точек.
  * @param obj           pointer to a line object
  * @return              true: the point array pointer is mutable, false: constant
  */
 bool lv_line_is_point_array_mutable(lv_obj_t * obj);
 
 /**
- * Get a pointer to the mutable array of points or NULL if it is not mutable
+ * Получите указатель на изменяемый массив точек или NULL, если он не является изменяемым.
  * @param obj           pointer to a line object
  * @return              pointer to the array of points. NULL if not mutable.
  */
 lv_point_precise_t * lv_line_get_points_mutable(lv_obj_t * obj);
 
 /**
- * Get the y inversion attribute
+ * Получить атрибут инверсии y
  * @param obj       pointer to a line object
  * @return          true: y inversion is enabled, false: disabled
  */
@@ -119,7 +119,7 @@ bool lv_line_get_y_invert(const lv_obj_t * obj);
 #endif /*LV_USE_LINE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LINE_H*/

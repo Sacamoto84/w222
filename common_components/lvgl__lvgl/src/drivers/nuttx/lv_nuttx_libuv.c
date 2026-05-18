@@ -133,7 +133,7 @@ static void lv_nuttx_uv_timer_cb(uv_timer_t * handle)
         return;
     }
 
-    /* Prevent busy loops. */
+    /* Предотвратите занятые циклы. */
 
     if(sleep_ms == 0) {
         sleep_ms = 1;
@@ -261,7 +261,7 @@ static int lv_nuttx_uv_fb_init(lv_nuttx_uv_t * uv_info, lv_nuttx_uv_ctx_t * uv_c
         return -EINVAL;
     }
 
-    /* Remove default refr timer. */
+    /* Удалить таймер реф-таймера по умолчанию. */
     lv_display_delete_refr_timer(disp);
 
     fb_ctx->fb_poll.data = uv_ctx;
@@ -276,7 +276,7 @@ static int lv_nuttx_uv_fb_init(lv_nuttx_uv_t * uv_info, lv_nuttx_uv_ctx_t * uv_c
 
     LV_LOG_USER("lvgl fb loop start OK");
 
-    /* Register for the invalidate area event */
+    /* Зарегистрируйтесь на мероприятие по аннулированию зоны */
     lv_display_add_event_cb(disp, lv_nuttx_uv_disp_refr_req_cb, LV_EVENT_REFR_REQUEST, fb_ctx);
 
     return 0;
@@ -284,7 +284,7 @@ static int lv_nuttx_uv_fb_init(lv_nuttx_uv_t * uv_info, lv_nuttx_uv_ctx_t * uv_c
 
 static void lv_nuttx_uv_fb_deinit(lv_nuttx_uv_ctx_t * uv_ctx)
 {
-    /* should remove event */
+    /* следует удалить событие */
     lv_nuttx_uv_fb_ctx_t * fb_ctx = &uv_ctx->fb_ctx;
     if(fb_ctx->fd > 0) {
         uv_close((uv_handle_t *)&fb_ctx->fb_poll, lv_nuttx_uv_deinit_cb);

@@ -37,8 +37,8 @@ extern "C" {
 
 void lv_demo_music(void);
 /**
- * Create the music demo with custom arguments.
- * @param args Pointer to demo arguments structure containing the parent widget and other options.
+ * Создайте демо-версию музыки с настраиваемыми аргументами.
+ * @param args Указатель на структуру аргументов демонстрации, содержащую родительский виджет и другие параметры.
  */
 void lv_demo_music_with_args(const lv_demo_args_t * args);
 const char * lv_demo_music_get_title(uint32_t track_id);
@@ -53,7 +53,7 @@ uint32_t lv_demo_music_get_track_length(uint32_t track_id);
 #endif /*LV_USE_DEMO_MUSIC*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_MUSIC_H*/

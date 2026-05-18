@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2021 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -29,14 +29,14 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static float _lineLengthApprox(const Point& pt1, const Point& pt2)
 {
-    /* approximate sqrt(x*x + y*y) using alpha max plus beta min algorithm.
-       With alpha = 1, beta = 3/8, giving results with the largest error less
-       than 7% compared to the exact value. */
+    /* приблизительное sqrt(x*x + y*y) с использованием алгоритма альфа-макс плюс бета-мин.
+       При альфа = 1, бета = 3/8, что дает результаты с наибольшей ошибкой меньше.
+       более 7% по сравнению с точным значением. */
     Point diff = {pt2.x - pt1.x, pt2.y - pt1.y};
     if (diff.x < 0) diff.x = -diff.x;
     if (diff.y < 0) diff.y = -diff.y;
@@ -73,7 +73,7 @@ float _bezAt(const Bezier& bz, float at, float length, LengthFunc lineLengthFunc
     auto smallest = 0.0f;
     auto t = 0.5f;
 
-    //just in case to prevent an infinite loop
+    //на всякий случай, чтобы предотвратить бесконечный цикл
     if (at <= 0) return 0.0f;
     if (at >= length) return 1.0f;
 
@@ -98,7 +98,7 @@ float _bezAt(const Bezier& bz, float at, float length, LengthFunc lineLengthFunc
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 namespace tvg {
@@ -293,8 +293,8 @@ void Bezier::split(float t, Bezier& left)
     left.ctrl1.x = start.x + t * (ctrl1.x - start.x);
     left.ctrl1.y = start.y + t * (ctrl1.y - start.y);
 
-    left.ctrl2.x = ctrl1.x + t * (ctrl2.x - ctrl1.x); //temporary holding spot
-    left.ctrl2.y = ctrl1.y + t * (ctrl2.y - ctrl1.y); //temporary holding spot
+    left.ctrl2.x = ctrl1.x + t * (ctrl2.x - ctrl1.x); //место временного задержания
+    left.ctrl2.y = ctrl1.y + t * (ctrl2.y - ctrl1.y); //место временного задержания
 
     ctrl2.x = ctrl2.x + t * (end.x - ctrl2.x);
     ctrl2.y = ctrl2.y + t * (end.y - ctrl2.y);
@@ -349,7 +349,7 @@ float Bezier::angle(float t) const
 {
     if (t < 0 || t > 1) return 0;
 
-    //derivate
+    //производить
     // p'(t) = 3 * (-(1-2t+t^2) * p0 + (1 - 4 * t + 3 * t^2) * p1 + (2 * t - 3 *
     // t^2) * p2 + t^2 * p3)
     float mt = 1.0f - t;

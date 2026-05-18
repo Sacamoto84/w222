@@ -28,14 +28,14 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/*If __UINTPTR_MAX__ or UINTPTR_MAX are available, use them to determine arch size*/
+/*Если доступны __UINTPTR_MAX__ или UINTPTR_MAX, используйте их для определения размера дуги.*/
 #if defined(__UINTPTR_MAX__) && __UINTPTR_MAX__ > 0xFFFFFFFF
 #define LV_ARCH_64
 
 #elif defined(UINTPTR_MAX) && UINTPTR_MAX > 0xFFFFFFFF
 #define LV_ARCH_64
 
-/*Otherwise use compiler-dependent means to determine arch size*/
+/*В противном случае используйте средства, зависящие от компилятора, для определения размера арки.*/
 #elif defined(_WIN64) || defined(__x86_64__) || defined(__ppc64__) || defined (__aarch64__)
 #define LV_ARCH_64
 
@@ -55,26 +55,26 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/* Exclude C enum and struct definitions when included by assembly code */
+/* Исключить определения перечислений и структур C, если они включены в ассемблерный код. */
 #ifndef __ASSEMBLY__
 
 /**
- * LVGL error codes.
+ * Коды ошибок LVGL.
  */
 typedef enum {
-    LV_RESULT_INVALID = 0, /*Typically indicates that the object is deleted (become invalid) in the action
-                      function or an operation was failed*/
-    LV_RESULT_OK,      /*The object is valid (no deleted) after the action*/
+    LV_RESULT_INVALID = 0, /*Обычно указывает, что объект удаляется (становится недействительным) в действии.
+                      функция или операция не удалась*/
+    LV_RESULT_OK,      /*Объект действителен (не удален) после действия*/
 } lv_result_t;
 
 #if defined(__cplusplus) || __STDC_VERSION__ >= 199901L
-/*If c99 or newer,  use the definition of uintptr_t directly from <stdint.h>*/
+/*Если версия c99 или новая, используйте определениеuintptr_tнепосредственно из <stdint.h>.*/
 typedef uintptr_t lv_uintptr_t;
 typedef intptr_t lv_intptr_t;
 
 #else
 
-/*Otherwise, use the arch size determination*/
+/*В противном случае используйте определение размера арки.*/
 #ifdef LV_ARCH_64
 typedef uint64_t lv_uintptr_t;
 typedef int64_t lv_intptr_t;
@@ -98,8 +98,8 @@ typedef unsigned int lv_3dtexture_id_t;
 #endif
 
 /**
- * Typedefs from various lvgl modules.
- * They are defined here to avoid circular dependencies.
+ * Определение типов из различных модулей lvgl.
+ * Они определены здесь, чтобы избежать циклических зависимостей.
  */
 
 typedef struct _lv_obj_t lv_obj_t;
@@ -438,7 +438,7 @@ typedef struct _lv_draw_eve_unit_t lv_draw_eve_unit_t;
 #else
 #define LV_NORETURN
 #endif
-#endif /* LV_NORETURN not defined */
+#endif /* LV_NORETURN не определен */
 
 #ifndef LV_UNREACHABLE
 #if defined(__GNUC__)
@@ -448,14 +448,14 @@ typedef struct _lv_draw_eve_unit_t lv_draw_eve_unit_t;
 #else
 #define LV_UNREACHABLE() while(1)
 #endif
-#endif /* LV_UNREACHABLE not defined */
+#endif /* LV_UNREACHABLE не определен */
 
 #ifndef LV_ARRAYLEN
 #define LV_ARRAYLEN(a) (sizeof(a)/sizeof((a)[0]))
 #endif /*LV_ARRAYLEN*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TYPES_H*/

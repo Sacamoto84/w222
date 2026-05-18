@@ -4,8 +4,8 @@
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
 
 /**
- * Simulate metallic knob using conical gradient
- * For best effect set LV_GRADIENT_MAX_STOPS to 8 or at least 3
+ * Имитируйте металлическую ручку, используя конический градиент
+ * Для лучшего эффекта установите LV_GRADIENT_MAX_STOPS на 8 или хотя бы 3.
  */
 void lv_example_style_17(void)
 {
@@ -33,7 +33,7 @@ void lv_example_style_17(void)
     };
 #endif
 
-    /*Create a style with gradient background and shadow*/
+    /*Создайте стиль с градиентным фоном и тенью.*/
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_radius(&style, 500);
@@ -44,12 +44,12 @@ void lv_example_style_17(void)
     lv_style_set_shadow_offset_y(&style, 20);
     lv_style_set_shadow_opa(&style, LV_OPA_50);
 
-    /*First define a color gradient. In this example we use a gray color map with random values.*/
+    /*Сначала определите цветовой градиент. В этом примере мы используем карту серого цвета со случайными значениями.*/
     static lv_grad_dsc_t grad;
 
     lv_grad_init_stops(&grad, grad_colors, NULL, NULL, sizeof(grad_colors) / sizeof(lv_color_t));
 
-    /*Make a conical gradient with the center in the middle of the object*/
+    /*Создайте конический градиент с центром в середине объекта.*/
 #if LV_GRADIENT_MAX_STOPS >= 8
     lv_grad_conical_init(&grad, LV_GRAD_CENTER, LV_GRAD_CENTER, 0, 120, LV_GRAD_EXTEND_REFLECT);
 #elif LV_GRADIENT_MAX_STOPS >= 3
@@ -58,10 +58,10 @@ void lv_example_style_17(void)
     lv_grad_conical_init(&grad, LV_GRAD_CENTER, LV_GRAD_CENTER, 45, 110, LV_GRAD_EXTEND_REFLECT);
 #endif
 
-    /*Set gradient as background*/
+    /*Установить градиент в качестве фона*/
     lv_style_set_bg_grad(&style, &grad);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
     lv_obj_set_size(obj, 200, 200);

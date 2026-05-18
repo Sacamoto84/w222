@@ -28,24 +28,24 @@
 /*********************
  *      DEFINES
  *********************/
-/*Drag threshold in pixels*/
+/*Порог перетаскивания в пикселях*/
 #define LV_INDEV_DEF_SCROLL_LIMIT         10
 
-/*Drag throw slow-down in [%]. Greater value -> faster slow-down*/
+/*Перетащите замедление броска в [%]. Большее значение -> более быстрое замедление*/
 #define LV_INDEV_DEF_SCROLL_THROW         10
 
-/*Long press time in milliseconds.
- *Time to send `LV_EVENT_LONG_PRESSED`)*/
+/*Время длительного нажатия в миллисекундах.
+ *Время отправлять `LV_EVENT_LONG_PRESSED` )*/
 #define LV_INDEV_DEF_LONG_PRESS_TIME      400
 
-/*Repeated trigger period in long press [ms]
- *Time between `LV_EVENT_LONG_PRESSED_REPEAT*/
+/*Период повторения триггера при длительном нажатии [мс]
+ *Время между ` LV_EVENT_LONG_PRESSED_REPEAT*/
 #define LV_INDEV_DEF_LONG_PRESS_REP_TIME  100
 
-/*Gesture threshold in pixels*/
+/*Порог жеста в пикселях*/
 #define LV_INDEV_DEF_GESTURE_LIMIT        50
 
-/*Gesture min velocity at release before swipe (pixels)*/
+/*Минимальная скорость жеста при отпускании перед пролистыванием (пиксели)*/
 #define LV_INDEV_DEF_GESTURE_MIN_VELOCITY 3
 
 /**< Rotary diff count will be multiplied by this and divided by 256 */
@@ -162,10 +162,10 @@ void lv_indev_delete(lv_indev_t * indev)
     lv_event_mark_deleted(indev);
     lv_event_remove_all(&(indev->event_list));
 
-    /*Clean up the read timer first*/
+    /*Сначала очистите таймер чтения*/
     if(indev->read_timer) lv_timer_delete(indev->read_timer);
 
-    /*Remove the input device from the list*/
+    /*Удалить устройство ввода из списка*/
     lv_ll_remove(indev_ll_head, indev);
 
 #if LV_USE_EXT_DATA
@@ -175,7 +175,7 @@ void lv_indev_delete(lv_indev_t * indev)
     }
 #endif
 
-    /*Free the memory of the input device*/
+    /*Освободите память устройства ввода*/
     lv_free(indev);
 }
 
@@ -192,17 +192,17 @@ void indev_read_core(lv_indev_t * indev, lv_indev_data_t * data)
     LV_PROFILER_INDEV_BEGIN;
     lv_memzero(data, sizeof(lv_indev_data_t));
 
-    /* For touchpad sometimes users don't set the last pressed coordinate on release.
-     * So be sure a coordinates are initialized to the last point */
+    /* Для тачпада иногда пользователи не устанавливают координату последнего нажатия при отпускании.
+     * Поэтому убедитесь, что координаты инициализированы до последней точки. */
     if(indev->type == LV_INDEV_TYPE_POINTER) {
         data->point.x = indev->pointer.last_raw_point.x;
         data->point.y = indev->pointer.last_raw_point.y;
     }
-    /*Similarly set at least the last key in case of the user doesn't set it on release*/
+    /*Аналогичным образом установите хотя бы последний ключ, если пользователь не установил его при выпуске.*/
     else if(indev->type == LV_INDEV_TYPE_KEYPAD) {
         data->key = indev->keypad.last_key;
     }
-    /*For compatibility assume that used button was enter (encoder push)*/
+    /*Для совместимости предположим, что использованная кнопка была введена (нажатие энкодера)*/
     else if(indev->type == LV_INDEV_TYPE_ENCODER) {
         data->key = LV_KEY_ENTER;
     }
@@ -211,7 +211,7 @@ void indev_read_core(lv_indev_t * indev, lv_indev_data_t * data)
         LV_TRACE_INDEV("calling indev_read_cb");
         indev->read_cb(indev, data);
 
-        /*Set the time stamp to the current time is it was not set in the read_cb*/
+        /*Установите отметку текущего времени, если она не была установлена ​​в read_cb.*/
         if(data->timestamp == 0) data->timestamp = lv_tick_get();
     }
     else {
@@ -234,10 +234,10 @@ void lv_indev_read(lv_indev_t * indev)
 
     indev_act = indev;
 
-    /*Read and process all indevs*/
-    if(indev->disp == NULL) return; /*Not assigned to any displays*/
+    /*Чтение и обработка всех данных*/
+    if(indev->disp == NULL) return; /*Не присвоен ни одному дисплею*/
 
-    /*Handle reset query before processing the point*/
+    /*Обработка запроса сброса перед обработкой точки*/
     indev_proc_reset_query_handler(indev);
 
     if(indev->enabled == 0) return;
@@ -252,17 +252,17 @@ void lv_indev_read(lv_indev_t * indev)
     lv_indev_data_t data;
 
     do {
-        /*Read the data*/
+        /*Прочтите данные*/
         indev_read_core(indev, &data);
         continue_reading = indev->mode != LV_INDEV_MODE_EVENT && data.continue_reading;
 
-        /*The active object might be deleted even in the read function*/
+        /*Активный объект может быть удален даже в функции чтения.*/
         indev_proc_reset_query_handler(indev);
         indev_obj_act = NULL;
 
         indev->state = data.state;
 
-        /*Save the last activity time*/
+        /*Сохраните время последней активности*/
         indev->timestamp = data.timestamp;
         if(indev->state == LV_INDEV_STATE_PRESSED) {
             indev->disp->last_activity_time = data.timestamp;
@@ -283,11 +283,11 @@ void lv_indev_read(lv_indev_t * indev)
         else if(indev->type == LV_INDEV_TYPE_BUTTON) {
             indev_button_proc(indev, &data);
         }
-        /*Handle reset query if it happened in during processing*/
+        /*Обработка запроса на сброс, если это произошло во время обработки.*/
         indev_proc_reset_query_handler(indev);
     } while(continue_reading);
 
-    /*End of indev processing, so no act indev*/
+    /*Окончание обработки обработки, поэтому обработка не выполняется.*/
     indev_act     = NULL;
     indev_obj_act = NULL;
 
@@ -608,7 +608,7 @@ void lv_indev_set_mode(lv_indev_t * indev, lv_indev_mode_t mode)
             lv_timer_pause(indev->read_timer);
         }
         else if(mode == LV_INDEV_MODE_TIMER) {
-            /* use default timer mode*/
+            /* использовать режим таймера по умолчанию*/
             lv_timer_set_cb(indev->read_timer, lv_indev_read_timer_cb);
             lv_timer_resume(indev->read_timer);
         }
@@ -619,7 +619,7 @@ lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point)
 {
     lv_obj_t * found_p = NULL;
 
-    /*If this obj is hidden the children are hidden too so return immediately*/
+    /*Если этот объект скрыт, дочерние элементы тоже скрыты, поэтому немедленно вернитесь.*/
     if(lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN)) return NULL;
 
     lv_point_t p_trans = *point;
@@ -627,7 +627,7 @@ lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point)
 
     bool hit_test_ok = lv_obj_hit_test(obj, &p_trans);
 
-    /*If the point is on this object check its children too*/
+    /*Если точка находится на этом объекте, проверьте и его дочерние элементы.*/
     lv_area_t obj_coords = obj->coords;
     if(lv_obj_has_flag(obj, LV_OBJ_FLAG_OVERFLOW_VISIBLE)) {
         int32_t ext_draw_size = lv_obj_get_ext_draw_size(obj);
@@ -637,7 +637,7 @@ lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point)
         int32_t i;
         uint32_t child_cnt = lv_obj_get_child_count(obj);
 
-        /*If a child matches use it*/
+        /*Если ребенок совпадает, используйте его*/
         for(i = child_cnt - 1; i >= 0; i--) {
             lv_obj_t * child = obj->spec_attr->children[i];
             found_p = lv_indev_search_obj(child, &p_trans);
@@ -645,8 +645,8 @@ lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point)
         }
     }
 
-    /*If not return earlier for a clicked child and this obj's hittest was ok use it
-     *else return NULL*/
+    /*Если вы не вернулись раньше для дочернего элемента, по которому щелкнули, и лучший результат этого объекта был в порядке, используйте его.
+     *иначе верните NULL*/
     if(hit_test_ok) return obj;
     else return NULL;
 }
@@ -730,19 +730,19 @@ void lv_indev_set_external_data(lv_indev_t * indev, void * data, void (* free_cb
  **********************/
 
 /**
- * Process a new point from LV_INDEV_TYPE_POINTER input device
- * @param i pointer to an input device
- * @param data pointer to the data read from the input device
+ * Обработка новой точки с устройства ввода LV_INDEV_TYPE_POINTER
+ * @param i указатель на устройство ввода
+ * @param data указатель на данные, считанные с устройства ввода
  */
 static void indev_pointer_proc(lv_indev_t * i, lv_indev_data_t * data)
 {
-    /*Save the raw points so they can be used again in indev_read_core*/
+    /*Сохраните необработанные точки, чтобы их можно было снова использовать в indev_read_core.*/
     i->pointer.last_raw_point.x = data->point.x;
     i->pointer.last_raw_point.y = data->point.y;
 
     lv_display_rotate_point(i->disp, &data->point);
 
-    /*Simple sanity check*/
+    /*Простая проверка работоспособности*/
     if(data->point.x < 0) {
         LV_LOG_WARN("X is %d which is smaller than zero", (int)data->point.x);
     }
@@ -756,7 +756,7 @@ static void indev_pointer_proc(lv_indev_t * i, lv_indev_data_t * data)
         LV_LOG_WARN("Y is %d which is greater than ver. res", (int)data->point.y);
     }
 
-    /*Move the cursor if set and moved*/
+    /*Переместите курсор, если он установлен и перемещен.*/
     if(i->cursor != NULL &&
        (i->pointer.last_point.x != data->point.x || i->pointer.last_point.y != data->point.y)) {
         lv_obj_set_pos(i->cursor, data->point.x, data->point.y);
@@ -773,7 +773,7 @@ static void indev_pointer_proc(lv_indev_t * i, lv_indev_data_t * data)
     }
 #endif
 
-    /*Process the diff first as scrolling will be processed in indev_proc_release*/
+    /*Сначала обработайте разницу, так как прокрутка будет обрабатываться вindev_proc_release.*/
     indev_proc_pointer_diff(i);
 
     if(i->state == LV_INDEV_STATE_PRESSED) {
@@ -789,9 +789,9 @@ static void indev_pointer_proc(lv_indev_t * i, lv_indev_data_t * data)
 }
 
 /**
- * Process a new point from LV_INDEV_TYPE_KEYPAD input device
- * @param i pointer to an input device
- * @param data pointer to the data read from the input device
+ * Обработка новой точки с устройства ввода LV_INDEV_TYPE_KEYPAD
+ * @param i указатель на устройство ввода
+ * @param data указатель на данные, считанные с устройства ввода
  */
 static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
 {
@@ -801,15 +801,15 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
         i->wait_until_release      = 0;
         i->pr_timestamp            = 0;
         i->long_pr_sent            = 0;
-        i->keypad.last_state = LV_INDEV_STATE_RELEASED; /*To skip the processing of release*/
+        i->keypad.last_state = LV_INDEV_STATE_RELEASED; /*Чтобы пропустить обработку выпуска*/
     }
 
-    /* Remap key using callback */
+    /* Переназначить ключ с помощью обратного вызова */
     if(i->key_remap_cb) {
         data->key = i->key_remap_cb(i, data->key);
     }
 
-    /*Save the last key. *It must be done here else `lv_indev_get_key` will return the last key in events*/
+    /*Сохраните последний ключ. *Это необходимо сделать здесь, иначе`lv_indev_get_key`вернет последний ключ в событиях.*/
     uint32_t prev_key = i->keypad.last_key;
     i->keypad.last_key = data->key;
 
@@ -827,13 +827,13 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
 
     const bool is_enabled = (g == NULL) || !lv_obj_has_state(indev_obj_act, LV_STATE_DISABLED);
 
-    /*Save the previous state so we can detect state changes below and also set the last state now
-     *so if any event handler on the way returns `LV_RESULT_INVALID` the last state is remembered
-     *for the next time*/
+    /*Сохраните предыдущее состояние, чтобы мы могли обнаружить изменения состояния ниже, а также установить последнее состояние сейчас.
+     *поэтому, если какой-либо обработчик событий на пути возвращает `LV_RESULT_INVALID`, запоминается последнее состояние
+     *в следующий раз*/
     uint32_t prev_state             = i->keypad.last_state;
     i->keypad.last_state = data->state;
 
-    /*Key press happened*/
+    /*Произошло нажатие клавиши*/
     if(data->state == LV_INDEV_STATE_PRESSED && prev_state == LV_INDEV_STATE_RELEASED) {
         LV_LOG_INFO("%" LV_PRIu32 " key is pressed", data->key);
         i->pr_timestamp = i->timestamp;
@@ -841,22 +841,22 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
         if(g == NULL) {
             if(send_event(LV_EVENT_PRESSED, indev_act) == LV_RESULT_INVALID) return;
         }
-        /*Move the focus on NEXT*/
+        /*Переместите фокус на NEXT*/
         else if(data->key == LV_KEY_NEXT) {
-            lv_group_set_editing(g, false); /*Editing is not used by KEYPAD is be sure it is disabled*/
+            lv_group_set_editing(g, false); /*Редактирование не используется KEYPAD, убедитесь, что оно отключено.*/
             lv_group_focus_next(g);
             if(indev_reset_check(i)) return;
         }
-        /*Move the focus on PREV*/
+        /*Переместите фокус на PREV*/
         else if(data->key == LV_KEY_PREV) {
-            lv_group_set_editing(g, false); /*Editing is not used by KEYPAD is be sure it is disabled*/
+            lv_group_set_editing(g, false); /*Редактирование не используется KEYPAD, убедитесь, что оно отключено.*/
             lv_group_focus_prev(g);
             if(indev_reset_check(i)) return;
         }
         else if(is_enabled) {
-            /*Simulate a press on the object if ENTER was pressed*/
+            /*Имитировать нажатие на объект, если был нажат ENTER.*/
             if(data->key == LV_KEY_ENTER) {
-                /*Send the ENTER as a normal KEY*/
+                /*Отправьте ENTER как обычный KEY.*/
                 if(lv_group_send_data(g, LV_KEY_ENTER) == LV_RESULT_INVALID) return;
                 if(indev_reset_check(i)) return;
 
@@ -864,20 +864,20 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
 
             }
             else if(data->key == LV_KEY_ESC) {
-                /*Send the ESC as a normal KEY*/
+                /*Отправьте ESC как обычный KEY.*/
                 if(lv_group_send_data(g, LV_KEY_ESC) == LV_RESULT_INVALID) return;
                 if(indev_reset_check(i)) return;
 
                 if(send_event(LV_EVENT_CANCEL, indev_act) == LV_RESULT_INVALID) return;
             }
-            /*Just send other keys to the object (e.g. 'A' or `LV_GROUP_KEY_RIGHT`)*/
+            /*Просто отправьте объекту другие ключи (например, «A» или `LV_GROUP_KEY_RIGHT`).*/
             else {
                 if(lv_group_send_data(g, data->key) == LV_RESULT_INVALID) return;
                 if(indev_reset_check(i)) return;
             }
         }
     }
-    /*Pressing*/
+    /*Прессование*/
     else if(is_enabled && data->state == LV_INDEV_STATE_PRESSED && prev_state == LV_INDEV_STATE_PRESSED) {
 
         if(g == NULL || data->key == LV_KEY_ENTER) {
@@ -899,34 +899,34 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
 
             i->longpr_rep_timestamp = i->timestamp;
 
-            /*Send LONG_PRESS_REP on ENTER*/
+            /*Отправить LONG_PRESS_REP на ENTER*/
             if(g == NULL || data->key == LV_KEY_ENTER) {
                 if(send_event(LV_EVENT_LONG_PRESSED_REPEAT, indev_act) == LV_RESULT_INVALID) return;
             }
-            /*Move the focus on NEXT again*/
+            /*Снова переместите фокус на NEXT.*/
             else if(data->key == LV_KEY_NEXT) {
-                lv_group_set_editing(g, false); /*Editing is not used by KEYPAD is be sure it is disabled*/
+                lv_group_set_editing(g, false); /*Редактирование не используется KEYPAD, убедитесь, что оно отключено.*/
                 lv_group_focus_next(g);
                 if(indev_reset_check(i)) return;
             }
-            /*Move the focus on PREV again*/
+            /*Снова переместите фокус на PREV.*/
             else if(data->key == LV_KEY_PREV) {
-                lv_group_set_editing(g, false); /*Editing is not used by KEYPAD is be sure it is disabled*/
+                lv_group_set_editing(g, false); /*Редактирование не используется KEYPAD, убедитесь, что оно отключено.*/
                 lv_group_focus_prev(g);
                 if(indev_reset_check(i)) return;
             }
-            /*Just send other keys again to the object (e.g. 'A' or `LV_GROUP_KEY_RIGHT)*/
+            /*Просто отправьте объекту другие ключи еще раз (например, «A» или «LV_GROUP_KEY_RIGHT»).*/
             else {
                 lv_group_send_data(g, data->key);
                 if(indev_reset_check(i)) return;
             }
         }
     }
-    /*Release happened*/
+    /*Релиз состоялся*/
     else if(is_enabled && data->state == LV_INDEV_STATE_RELEASED && prev_state == LV_INDEV_STATE_PRESSED) {
         LV_LOG_INFO("%" LV_PRIu32 " key is released", data->key);
 
-        /*The user might clear the key when it was released. Always release the pressed key*/
+        /*Пользователь может очистить ключ, когда он будет отпущен. Всегда отпускайте нажатую клавишу*/
         data->key = prev_key;
         if(g == NULL || data->key == LV_KEY_ENTER) {
 
@@ -948,9 +948,9 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
 
 
 /**
- * Process a new point from LV_INDEV_TYPE_ENCODER input device
- * @param i pointer to an input device
- * @param data pointer to the data read from the input device
+ * Обработка новой точки с устройства ввода LV_INDEV_TYPE_ENCODER
+ * @param i указатель на устройство ввода
+ * @param data указатель на данные, считанные с устройства ввода
  */
 static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
 {
@@ -960,11 +960,11 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
         i->wait_until_release      = 0;
         i->pr_timestamp            = 0;
         i->long_pr_sent            = 0;
-        i->keypad.last_state = LV_INDEV_STATE_RELEASED; /*To skip the processing of release*/
+        i->keypad.last_state = LV_INDEV_STATE_RELEASED; /*Чтобы пропустить обработку выпуска*/
     }
 
-    /*Save the last keys before anything else.
-     *They need to be already saved if the function returns for any reason*/
+    /*Прежде всего сохраните последние ключи.
+     *Они должны быть уже сохранены, если функция по какой-либо причине возвращает значение.*/
     lv_indev_state_t last_state     = i->keypad.last_state;
     i->keypad.last_state = data->state;
     i->keypad.last_key   = data->key;
@@ -975,14 +975,14 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
     indev_obj_act = lv_group_get_focused(g);
     if(indev_obj_act == NULL) return;
 
-    /*Process the steps they are valid only with released button*/
+    /*Обработайте шаги, они действительны только при отпущенной кнопке.*/
     if(data->state != LV_INDEV_STATE_RELEASED) {
         data->enc_diff = 0;
     }
 
     const bool is_enabled = !lv_obj_has_state(indev_obj_act, LV_STATE_DISABLED);
 
-    /*Button press happened*/
+    /*Нажатие кнопки произошло*/
     if(data->state == LV_INDEV_STATE_PRESSED && last_state == LV_INDEV_STATE_RELEASED) {
         LV_LOG_INFO("pressed");
 
@@ -999,15 +999,15 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
             }
         }
         else if(data->key == LV_KEY_LEFT) {
-            /*emulate encoder left*/
+            /*эмулировать левый кодер*/
             data->enc_diff--;
         }
         else if(data->key == LV_KEY_RIGHT) {
-            /*emulate encoder right*/
+            /*эмулировать кодировщик правильно*/
             data->enc_diff++;
         }
         else if(data->key == LV_KEY_ESC) {
-            /*Send the ESC as a normal KEY*/
+            /*Отправьте ESC как обычный KEY.*/
             lv_group_send_data(g, LV_KEY_ESC);
             if(indev_reset_check(i)) return;
 
@@ -1015,38 +1015,38 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
                 if(send_event(LV_EVENT_CANCEL, indev_act) == LV_RESULT_INVALID) return;
             }
         }
-        /*Just send other keys to the object (e.g. 'A' or `LV_GROUP_KEY_RIGHT`)*/
+        /*Просто отправьте объекту другие ключи (например, «A» или `LV_GROUP_KEY_RIGHT`).*/
         else {
             lv_group_send_data(g, data->key);
             if(indev_reset_check(i)) return;
         }
     }
-    /*Pressing*/
+    /*Прессование*/
     else if(data->state == LV_INDEV_STATE_PRESSED && last_state == LV_INDEV_STATE_PRESSED) {
-        /*Long press*/
+        /*Длительное нажатие*/
         if(i->long_pr_sent == 0 && lv_tick_diff(i->timestamp, i->pr_timestamp) >= i->long_press_time) {
 
             i->long_pr_sent = 1;
             i->longpr_rep_timestamp = i->timestamp;
 
             if(data->key == LV_KEY_ENTER) {
-                /* Always send event to indev callbacks*/
+                /* Всегда отправлять событие в обратные вызовы indev*/
                 lv_indev_send_event(indev_act, LV_EVENT_LONG_PRESSED, indev_obj_act);
                 if(indev_reset_check(indev_act)) return;
 
                 bool editable_or_scrollable = lv_obj_is_editable(indev_obj_act) ||
                                               lv_obj_has_flag(indev_obj_act, LV_OBJ_FLAG_SCROLLABLE);
 
-                /*On enter long press toggle edit mode.*/
+                /*При входе и длительном нажатии переключается режим редактирования.*/
                 if(editable_or_scrollable) {
-                    /*Don't leave edit mode if there is only one object (nowhere to navigate)*/
+                    /*Не выходить из режима редактирования, если объект только один (некуда ориентироваться)*/
                     if(lv_group_get_obj_count(g) > 1) {
                         LV_LOG_INFO("toggling edit mode");
-                        lv_group_set_editing(g, lv_group_get_editing(g) ? false : true); /*Toggle edit mode on long press*/
-                        lv_obj_remove_state(indev_obj_act, LV_STATE_PRESSED);    /*Remove the pressed state manually*/
+                        lv_group_set_editing(g, lv_group_get_editing(g) ? false : true); /*Переключить режим редактирования при длительном нажатии*/
+                        lv_obj_remove_state(indev_obj_act, LV_STATE_PRESSED);    /*Удалить нажатое состояние вручную*/
                     }
                 }
-                /*If not editable then just send a long press event*/
+                /*Если нельзя редактировать, просто отправьте событие длительного нажатия*/
                 else {
                     if(is_enabled) {
                         lv_obj_send_event(indev_obj_act, LV_EVENT_LONG_PRESSED, indev_act);
@@ -1068,11 +1068,11 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
                 }
             }
             else if(data->key == LV_KEY_LEFT) {
-                /*emulate encoder left*/
+                /*эмулировать левый кодер*/
                 data->enc_diff--;
             }
             else if(data->key == LV_KEY_RIGHT) {
-                /*emulate encoder right*/
+                /*эмулировать кодировщик правильно*/
                 data->enc_diff++;
             }
             else {
@@ -1083,7 +1083,7 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
         }
 
     }
-    /*Release happened*/
+    /*Релиз состоялся*/
     else if(data->state == LV_INDEV_STATE_RELEASED && last_state == LV_INDEV_STATE_PRESSED) {
         LV_LOG_INFO("released");
 
@@ -1091,7 +1091,7 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
             bool editable_or_scrollable = lv_obj_is_editable(indev_obj_act) ||
                                           lv_obj_has_flag(indev_obj_act, LV_OBJ_FLAG_SCROLLABLE);
 
-            /*The button was released on a non-editable object. Just send enter*/
+            /*Кнопка была отпущена на нередактируемом объекте. Просто отправьте ввод*/
             if(editable_or_scrollable == false) {
                 if(is_enabled) {
                     if(send_event(LV_EVENT_RELEASED, indev_act) == LV_RESULT_INVALID) return;
@@ -1106,9 +1106,9 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
                 }
 
             }
-            /*An object is being edited and the button is released.*/
+            /*Объект редактируется, кнопка отпущена.*/
             else if(lv_group_get_editing(g)) {
-                /*Ignore long pressed enter release because it comes from mode switch*/
+                /*Игнорируйте движение поворота Enter Release, поскольку это происходит от переключателя режимов.*/
                 if(!i->long_pr_sent || lv_group_get_obj_count(g) <= 1) {
                     if(is_enabled) {
                         if(send_event(LV_EVENT_RELEASED, indev_act) == LV_RESULT_INVALID) return;
@@ -1120,14 +1120,14 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
                     if(indev_reset_check(i)) return;
                 }
                 else {
-                    lv_obj_remove_state(indev_obj_act, LV_STATE_PRESSED);    /*Remove the pressed state manually*/
+                    lv_obj_remove_state(indev_obj_act, LV_STATE_PRESSED);    /*Удалить нажатое состояние вручную*/
                 }
             }
-            /*If the focused object is editable and now in navigate mode then on enter switch edit
-               mode*/
+            /*Если объект в фокусе доступен для редактирования и теперь находится в режиме навигации, то при вводе переключайтесь на редактирование.
+               режим*/
             else if(!i->long_pr_sent) {
                 LV_LOG_INFO("entering edit mode");
-                lv_group_set_editing(g, true); /*Set edit mode*/
+                lv_group_set_editing(g, true); /*Установить режим редактирования*/
             }
         }
 
@@ -1136,9 +1136,9 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
     }
     indev_obj_act = NULL;
 
-    /*if encoder steps or simulated steps via left/right keys*/
+    /*если шаги энкодера или имитированные шаги с помощью клавиш влево/вправо*/
     if(data->enc_diff != 0) {
-        /*In edit mode send LEFT/RIGHT keys*/
+        /*В режиме редактирования отправьте ключи LEFT/RIGHT.*/
         if(lv_group_get_editing(g)) {
             LV_LOG_INFO("rotated by %+d (edit)", data->enc_diff);
             int32_t s;
@@ -1155,7 +1155,7 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
                 }
             }
         }
-        /*In navigate mode focus on the next/prev objects*/
+        /*В режиме навигации сосредоточьтесь на следующем/предыдущем объекте.*/
         else {
             LV_LOG_INFO("rotated by %+d (nav)", data->enc_diff);
             int32_t s;
@@ -1176,14 +1176,14 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
 }
 
 /**
- * Process new points from an input device. indev->state.pressed has to be set
- * @param indev pointer to an input device state
- * @param x x coordinate of the next point
- * @param y y coordinate of the next point
+ * Обработка новых точек ввода устройства. indev->state.pressed должен быть установлен
+ * @param indev указатель на состояние устройства ввода
+ * @param x координата x следующей точки
+ * @param y координата y следующей точки
  */
 static void indev_button_proc(lv_indev_t * i, lv_indev_data_t * data)
 {
-    /*Die gracefully if i->btn_points is NULL*/
+    /*Умри красиво, если i->btn_pointsравно NULL*/
     if(i->btn_points == NULL) {
         LV_LOG_WARN("btn_points is NULL");
         return;
@@ -1201,7 +1201,7 @@ static void indev_button_proc(lv_indev_t * i, lv_indev_data_t * data)
         }
     }
 
-    /*If a new point comes always make a release*/
+    /*Если приходит новая точка, всегда делайте релиз*/
     if(data->state == LV_INDEV_STATE_PRESSED) {
         if(i->pointer.last_point.x != x ||
            i->pointer.last_point.y != y) {
@@ -1211,7 +1211,7 @@ static void indev_button_proc(lv_indev_t * i, lv_indev_data_t * data)
 
     if(indev_reset_check(i)) return;
 
-    /*Save the new points*/
+    /*Сохраните новые точки*/
     i->pointer.act_point.x = x;
     i->pointer.act_point.y = y;
 
@@ -1231,11 +1231,11 @@ static void indev_button_proc(lv_indev_t * i, lv_indev_data_t * data)
 }
 
 /**
- * Apply time decay to a scroll throw vector, such that there is no decay
- * initially and full decay after a short period of time.
- * @param x scroll throw vector component
- * @param t expired time in milliseconds
- * @return decayed vector component
+ * Примените временное затухание к вектору прокрутки, чтобы не было затухания.
+ * первоначально и полный распад через короткий промежуток времени.
+ * @param x Компонент вектора прокрутки
+ * @param t время истечения срока действия в миллисекундах
+ * @return распавшаяся векторная компонента
  */
 static int32_t indev_scroll_throw_decay(int32_t x, int32_t t)
 {
@@ -1245,8 +1245,8 @@ static int32_t indev_scroll_throw_decay(int32_t x, int32_t t)
 }
 
 /**
- * Process the pressed state of LV_INDEV_TYPE_POINTER input devices
- * @param indev pointer to an input device 'proc'
+ * Обработка нажатого состояния устройств ввода LV_INDEV_TYPE_POINTER
+ * @param indev указатель на устройство ввода «proc»
  */
 static void indev_proc_press(lv_indev_t * indev)
 {
@@ -1259,21 +1259,21 @@ static void indev_proc_press(lv_indev_t * indev)
     lv_display_t * disp = indev_act->disp;
     bool new_obj_searched = false;
 
-    /*If there is no last object then search*/
+    /*Если последнего объекта нет, то выполните поиск*/
     if(indev_obj_act == NULL) {
         indev_obj_act = pointer_search_obj(disp, &indev->pointer.act_point);
         new_obj_searched = true;
     }
-    /*If there is an active object it's not scrolled and not press locked also search*/
+    /*Если есть активный объект, он не прокручивается и не нажимается, а также выполняется поиск.*/
     else if(indev->pointer.scroll_obj == NULL &&
             lv_obj_has_flag(indev_obj_act, LV_OBJ_FLAG_PRESS_LOCK) == false) {
         indev_obj_act = pointer_search_obj(disp, &indev->pointer.act_point);
         new_obj_searched = true;
     }
 
-    /*The scroll object might have scroll throw. Stop it manually*/
+    /*Объект прокрутки может иметь прокрутку. Остановите это вручную*/
     if(new_obj_searched && indev->pointer.scroll_obj) {
-        /*Attempt to stop scroll throw animation firstly*/
+        /*Сначала попытайтесь остановить анимацию прокрутки.*/
         if(indev->scroll_throw_anim) {
             lv_anim_delete(indev, indev_scroll_throw_anim_cb);
             indev->scroll_throw_anim = NULL;
@@ -1283,16 +1283,16 @@ static void indev_proc_press(lv_indev_t * indev)
         if(indev_reset_check(indev)) return;
     }
 
-    /*If a new object was found reset some variables and send a pressed event handler*/
+    /*Если был найден новый объект, сбросьте некоторые переменные и отправьте обработчик события нажатия.*/
     if(indev_obj_act != indev->pointer.act_obj) {
-        /*If no previous object was lost, overwrite the last point.*/
+        /*Если предыдущий объект не был потерян, перезапишите последнюю точку.*/
         if(indev->pointer.act_obj == NULL) {
             indev->pointer.last_point.x = indev->pointer.act_point.x;
             indev->pointer.last_point.y = indev->pointer.act_point.y;
         }
         indev->pointer.pressed = indev->prev_state == LV_INDEV_STATE_RELEASED;
 
-        /*Without `LV_OBJ_FLAG_PRESS_LOCK` new widget can be found while pressing.*/
+        /*Без `LV_OBJ_FLAG_PRESS_LOCK` новый виджет можно найти при нажатии.*/
         if(indev->pointer.last_hovered && indev->pointer.last_hovered != indev_obj_act) {
             lv_obj_send_event(indev->pointer.last_hovered, LV_EVENT_HOVER_LEAVE, indev);
             if(indev_reset_check(indev)) return;
@@ -1303,19 +1303,19 @@ static void indev_proc_press(lv_indev_t * indev)
             indev->pointer.last_hovered = indev_obj_act;
         }
 
-        /*If a new object found the previous was lost, so send a PRESS_LOST event*/
+        /*Если обнаружен новый объект, предыдущий был потерян, поэтому отправьте событие PRESS_LOST.*/
         if(indev->pointer.act_obj != NULL) {
-            /*Save the obj because in special cases `act_obj` can change in the event */
+            /*Охраните объект, потому что в отдельных случаях`act_obj`может измениться в событии. */
             lv_obj_t * prev_act_obj = indev->pointer.act_obj;
             lv_obj_send_event(prev_act_obj, LV_EVENT_PRESS_LOST, indev_act);
             if(indev_reset_check(indev)) return;
         }
 
-        indev->pointer.act_obj  = indev_obj_act; /*Save the pressed object*/
+        indev->pointer.act_obj  = indev_obj_act; /*Сохраните нажатый объект*/
 
         if(indev_obj_act != NULL) {
 
-            /*Save the time when the obj pressed to count long press time.*/
+            /*Сохраните время нажатия объекта, чтобы подсчитать время длительного нажатия.*/
             indev->pr_timestamp                 = indev->timestamp;
             indev->long_pr_sent                 = 0;
             indev->pointer.scroll_sum.x     = 0;
@@ -1331,9 +1331,9 @@ static void indev_proc_press(lv_indev_t * indev)
             indev->pointer.vect.y         = 0;
 
 
-            /* If the indev was already in a pressed state it means that we got dragged here
-             * so we shouldn't send any hover nor pressed events for a new object since the
-             * originally pressed object didn't get released
+            /* Если индев уже был в нажатом состоянии, значит, нас перетащили сюда.
+             * поэтому нам не следует отправлять события наведения или нажатия для нового объекта, поскольку
+             * первоначально нажатый объект не был отпущен
              */
             if(indev->prev_state != LV_INDEV_STATE_PRESSED) {
                 const bool is_enabled = !lv_obj_has_state(indev_obj_act, LV_STATE_DISABLED);
@@ -1347,14 +1347,14 @@ static void indev_proc_press(lv_indev_t * indev)
 
             if(indev_act->wait_until_release) return;
 
-            /*Handle focus*/
+            /*Ручка фокуса*/
             indev_click_focus(indev_act);
             if(indev_reset_check(indev)) return;
 
         }
     }
 
-    /*Update vector and scroll throw vector*/
+    /*Вектор обновления и вектор прокрутки*/
     indev->pointer.vect.x = indev->pointer.act_point.x - indev->pointer.last_point.x;
     indev->pointer.vect.y = indev->pointer.act_point.y - indev->pointer.last_point.y;
 
@@ -1378,7 +1378,7 @@ static void indev_proc_press(lv_indev_t * indev)
 
 #if LV_USE_GESTURE_RECOGNITION
     for(int i = 0; i < LV_INDEV_GESTURE_CNT; i++) {
-        /* Send a gesture event to a potential indev cb callback, even if no object was found */
+        /* Отправьте событие жеста в потенциальный обратный вызов indev cb, даже если ни один объект не был найден. */
         if(indev->gesture_type[i] != LV_INDEV_GESTURE_NONE) {
             indev->cur_gesture = (lv_indev_gesture_type_t) i;
             lv_indev_send_event(indev, LV_EVENT_GESTURE, indev_act);
@@ -1416,23 +1416,23 @@ static void indev_proc_press(lv_indev_t * indev)
         indev_gesture(indev);
         if(indev_reset_check(indev)) return;
 
-        /*In event driven mode resume the timer so that it can trigger long pressed and other time related events.
-         *As a side effect it will also call read_cb periodically in event driven mode. */
+        /*В режиме, управляемом событиями, возобновляйте таймер, чтобы он мог запускать длительное нажатие и другие события, связанные со временем.
+         *В качестве побочного эффекта он также будет периодически включатьread_cbв режим, управляемый событиями. */
         if(indev->mode == LV_INDEV_MODE_EVENT && indev->read_timer && lv_timer_get_paused(indev->read_timer)) {
             lv_timer_resume(indev->read_timer);
         }
 
-        /*If there is no scrolling then check for long press time*/
+        /*Если прокрутки нет, проверьте время длительного нажатия.*/
         if(indev->pointer.scroll_obj == NULL && indev->long_pr_sent == 0) {
-            /*Send a long press event if enough time elapsed*/
+            /*Отправьте длинное нажатие, если прошло достаточно времени*/
             if(lv_tick_diff(indev->timestamp, indev->pr_timestamp) >= indev_act->long_press_time) {
                 if(is_enabled) {
                     if(send_event(LV_EVENT_LONG_PRESSED, indev_act) == LV_RESULT_INVALID) return;
                 }
-                /*Mark it to do not send the event again*/
+                /*Отметьте это, чтобы больше не отправлять событие.*/
                 indev->long_pr_sent = 1;
 
-                /*Save the long press time stamp for the long press repeat handler*/
+                /*Сохраните отметку времени длительного нажатия для обработчика повтора длительного нажатия.*/
                 indev->longpr_rep_timestamp = indev->timestamp;
             }
         }
@@ -1449,12 +1449,12 @@ static void indev_proc_press(lv_indev_t * indev)
 }
 
 /**
- * Process the released state of LV_INDEV_TYPE_POINTER input devices
- * @param proc pointer to an input device 'proc'
+ * Обработка выпущенного состояния устройств ввода LV_INDEV_TYPE_POINTER
+ * @param proc указатель на устройство ввода «proc»
  */
 static void indev_proc_release(lv_indev_t * indev)
 {
-    if(indev->wait_until_release || /*Hover the new widget even if the coordinates didn't changed*/
+    if(indev->wait_until_release || /*Наведите курсор на новый виджет, даже если координаты не изменились.*/
        (indev->pointer.last_point.x != indev->pointer.act_point.x ||
         indev->pointer.last_point.y != indev->pointer.act_point.y)) {
         lv_obj_t ** last = &indev->pointer.last_hovered;
@@ -1493,7 +1493,7 @@ static void indev_proc_release(lv_indev_t * indev)
     }
 
 #if LV_USE_GESTURE_RECOGNITION
-    /* Send a gesture event to a potential indev cb callback, even if no object was found */
+    /* Отправьте событие жеста в потенциальный обратный вызов indev cb, даже если ни один объект не был найден. */
     for(int i = 0; i < LV_INDEV_GESTURE_CNT; i++) {
 
         if(indev->gesture_type[i] != LV_INDEV_GESTURE_NONE) {
@@ -1540,7 +1540,7 @@ static void indev_proc_release(lv_indev_t * indev)
         indev->pr_timestamp          = 0;
         indev->longpr_rep_timestamp  = 0;
 
-        /*Get the transformed vector with this object*/
+        /*Получите преобразованный вектор с помощью этого объекта*/
         if(scroll_obj) {
             int16_t angle = 0;
             int16_t scale_x = 256;
@@ -1585,7 +1585,7 @@ static void indev_proc_release(lv_indev_t * indev)
 
 static lv_result_t indev_proc_short_click(lv_indev_t * indev)
 {
-    /*Update streak for clicks within small distance and short time*/
+    /*Обновление серии кликов на небольшом расстоянии и за короткое время.*/
     indev->pointer.short_click_streak++;
     if(lv_tick_diff(indev->timestamp, indev->pointer.last_short_click_timestamp) > indev->long_press_time) {
         indev->pointer.short_click_streak = 1;
@@ -1599,13 +1599,13 @@ static lv_result_t indev_proc_short_click(lv_indev_t * indev)
     indev->pointer.last_short_click_timestamp = indev->timestamp;
     lv_indev_get_point(indev, &indev->pointer.last_short_click_point);
 
-    /*Simple short click*/
+    /*Простой короткий клик*/
     lv_result_t res = send_event(LV_EVENT_SHORT_CLICKED, indev_act);
     if(res == LV_RESULT_INVALID) {
         return res;
     }
 
-    /*Cycle through single/double/triple click*/
+    /*Циклическое переключение одинарного/двойного/тройного щелчка мыши.*/
     switch((indev->pointer.short_click_streak - 1) % 3) {
         case 0:
             return send_event(LV_EVENT_SINGLE_CLICKED, indev_act);
@@ -1659,7 +1659,7 @@ static lv_obj_t * pointer_search_obj(lv_display_t * disp, lv_point_t * p)
     indev_obj_act = lv_indev_search_obj(lv_display_get_layer_top(disp), p);
     if(indev_obj_act) return indev_obj_act;
 
-    /* Search the object in the active screen */
+    /* Поиск объекта на активном экране */
     indev_obj_act = lv_indev_search_obj(lv_display_get_screen_active(disp), p);
     if(indev_obj_act) return indev_obj_act;
 
@@ -1668,11 +1668,11 @@ static lv_obj_t * pointer_search_obj(lv_display_t * disp, lv_point_t * p)
 }
 
 /**
- * Process a new point from LV_INDEV_TYPE_BUTTON input device
- * @param i pointer to an input device
- * @param data pointer to the data read from the input device
- * Reset input device if a reset query has been sent to it
- * @param indev pointer to an input device
+ * Обработка новой точки с устройства ввода LV_INDEV_TYPE_BUTTON
+ * @param i указатель на устройство ввода
+ * @param data указатель на данные, считанные с устройства ввода
+ * Сбросить устройство ввода, если на него был отправлен запрос на сброс
+ * @param indev указатель на устройство ввода
  */
 static void indev_proc_reset_query_handler(lv_indev_t * indev)
 {
@@ -1699,12 +1699,12 @@ static void indev_proc_reset_query_handler(lv_indev_t * indev)
 }
 
 /**
- * Handle focus/defocus on click for POINTER input devices
- * @param proc pointer to the state of the indev
+ * Обработка фокусировки/расфокусировки при нажатии для устройств ввода POINTER
+ * @param proc указатель на состояние indev
  */
 static void indev_click_focus(lv_indev_t * indev)
 {
-    /*Handle click focus*/
+    /*Обработка фокуса щелчка*/
     if(lv_obj_has_flag(indev_obj_act, LV_OBJ_FLAG_CLICK_FOCUSABLE) == false) {
         return;
     }
@@ -1712,14 +1712,14 @@ static void indev_click_focus(lv_indev_t * indev)
     lv_group_t * g_act = lv_obj_get_group(indev_obj_act);
     lv_group_t * g_prev = indev->pointer.last_pressed ? lv_obj_get_group(indev->pointer.last_pressed) : NULL;
 
-    /*If both the last and act. obj. are in the same group (or have no group)*/
+    /*Если и последнее, и действие. объект находятся в одной группе (или не имеют группы)*/
     if(g_act == g_prev) {
-        /*The objects are in a group*/
+        /*Объекты находятся в группе*/
         if(g_act) {
             lv_group_focus_obj(indev_obj_act);
             if(indev_reset_check(indev)) return;
         }
-        /*The object are not in group*/
+        /*Объект не в группе*/
         else {
             if(indev->pointer.last_pressed != indev_obj_act) {
                 lv_obj_send_event(indev->pointer.last_pressed, LV_EVENT_DEFOCUSED, indev_act);
@@ -1730,22 +1730,22 @@ static void indev_click_focus(lv_indev_t * indev)
             }
         }
     }
-    /*The object are not in the same group (in different groups or one has no group)*/
+    /*Объект не находится в одной группе (в разных группах или у одного нет группы)*/
     else {
-        /*If the prev. obj. is not in a group then defocus it.*/
+        /*Если пред. объект не находится в группе, то расфокусируйте его.*/
         if(g_prev == NULL && indev->pointer.last_pressed) {
             lv_obj_send_event(indev->pointer.last_pressed, LV_EVENT_DEFOCUSED, indev_act);
             if(indev_reset_check(indev)) return;
         }
-        /*Focus on a non-group object*/
+        /*Сосредоточьтесь на негрупповом объекте*/
         else {
             if(indev->pointer.last_pressed) {
-                /*If the prev. object also wasn't in a group defocus it*/
+                /*Если пред. объекта также не было в группе, расфокусируйте его*/
                 if(g_prev == NULL) {
                     lv_obj_send_event(indev->pointer.last_pressed, LV_EVENT_DEFOCUSED, indev_act);
                     if(indev_reset_check(indev)) return;
                 }
-                /*If the prev. object also was in a group at least "LEAVE" it instead of defocus*/
+                /*Если пред. объект тоже был в группе как минимум "LEAVE" он вместо расфокусировки*/
                 else {
                     lv_obj_send_event(indev->pointer.last_pressed, LV_EVENT_LEAVE, indev_act);
                     if(indev_reset_check(indev)) return;
@@ -1753,7 +1753,7 @@ static void indev_click_focus(lv_indev_t * indev)
             }
         }
 
-        /*Focus to the act. in its group*/
+        /*Сосредоточьтесь на действии. в своей группе*/
         if(g_act) {
             lv_group_focus_obj(indev_obj_act);
             if(indev_reset_check(indev)) return;
@@ -1767,8 +1767,8 @@ static void indev_click_focus(lv_indev_t * indev)
 }
 
 /**
-* Handle the gesture of indev_proc_p->pointer.act_obj
-* @param indev pointer to an input device state
+* Обработка жестаindev_proc_p->указателя.  act_obj
+* @param indev указатель на состояние устройства ввода
 */
 void indev_gesture(lv_indev_t * indev)
 {
@@ -1777,7 +1777,7 @@ void indev_gesture(lv_indev_t * indev)
 
     lv_obj_t * gesture_obj = indev->pointer.act_obj;
 
-    /*If gesture parent is active check recursively the gesture attribute*/
+    /*Если родительский элемент жеста активен, рекурсивно проверьте атрибут жеста.*/
     while(gesture_obj && lv_obj_has_flag(gesture_obj, LV_OBJ_FLAG_GESTURE_BUBBLE)) {
         gesture_obj = lv_obj_get_parent(gesture_obj);
     }
@@ -1790,7 +1790,7 @@ void indev_gesture(lv_indev_t * indev)
         indev->pointer.gesture_sum.y = 0;
     }
 
-    /*Count the movement by gesture*/
+    /*Считайте движение по жесту*/
     indev->pointer.gesture_sum.x += indev->pointer.vect.x;
     indev->pointer.gesture_sum.y += indev->pointer.vect.y;
 
@@ -1821,9 +1821,9 @@ void indev_gesture(lv_indev_t * indev)
 }
 
 /**
- * Checks if the reset_query flag has been set. If so, perform necessary global indev cleanup actions
- * @param proc pointer to an input device 'proc'
- * @return true if indev query should be immediately truncated.
+ * Проверяет, установлен ли флагreset_query. Если да, выполните необходимые глобальные действия по очистке индев.
+ * @param proc указатель на устройство ввода «proc»
+ * @return true, если запрос indev должен быть немедленно усечен.
  */
 static bool indev_reset_check(lv_indev_t * indev)
 {
@@ -1835,9 +1835,9 @@ static bool indev_reset_check(lv_indev_t * indev)
 }
 
 /**
- * Checks if the stop_processing_query flag has been set. If so, do not send any events to the object
- * @param indev pointer to an input device
- * @return true if indev should stop processing the event.
+ * Проверяет, установлен ли флагstop_processing_query. Если да, не игнорируйте никакие события объекта.
+ * @param indev указатель на устройство ввода
+ * @return true, если indev должен прекратить обработку события.
  */
 static bool indev_stop_processing_check(lv_indev_t * indev)
 {
@@ -1845,9 +1845,9 @@ static bool indev_stop_processing_check(lv_indev_t * indev)
 }
 
 /**
- * Reset the indev and send event to active obj and scroll obj
- * @param indev pointer to an input device
- * @param obj pointer to obj
+ * Сбросьте indev и отправьте событие в активный объект и прокрутите объект
+ * @param indev указатель на устройство ввода
+ * @param obj указатель на объект
 */
 static void indev_reset_core(lv_indev_t * indev, lv_obj_t * obj)
 {
@@ -1862,7 +1862,7 @@ static void indev_reset_core(lv_indev_t * indev, lv_obj_t * obj)
         }
 
         if(indev->pointer.act_obj) {
-            /* Avoid recursive calls */
+            /* Избегайте рекурсивных вызовов */
             act_obj = indev->pointer.act_obj;
             indev->pointer.act_obj = NULL;
             lv_obj_send_event(act_obj, LV_EVENT_INDEV_RESET, indev);
@@ -1871,7 +1871,7 @@ static void indev_reset_core(lv_indev_t * indev, lv_obj_t * obj)
         }
 
         if(indev->pointer.scroll_obj) {
-            /* Avoid recursive calls */
+            /* Избегайте рекурсивных вызовов */
             scroll_obj = indev->pointer.scroll_obj;
             indev->pointer.scroll_obj = NULL;
             lv_obj_send_event(scroll_obj, LV_EVENT_INDEV_RESET, indev);
@@ -1901,7 +1901,7 @@ static lv_result_t send_event(lv_event_code_t code, void * param)
         if(indev_reset_check(indev)) return LV_RESULT_INVALID;
 
         if(indev_stop_processing_check(indev)) {
-            /* Not send event to the object if stop processing query is set */
+            /* Не отправлять событие объекту, если установлен запрос на остановку обработки. */
             indev->stop_processing_query = 0;
             return LV_RESULT_OK;
         }

@@ -59,7 +59,7 @@ void lv_example_observer_4(void)
     lv_obj_align(indicator, LV_ALIGN_BOTTOM_LEFT, 0, 0);
     lv_obj_add_flag(indicator, LV_OBJ_FLAG_IGNORE_LAYOUT);
 
-    /*Be sure the indicator has the correct size*/
+    /*Убедитесь, что индикатор имеет правильный размер.*/
     lv_obj_update_layout(indicator);
     lv_subject_notify(&current_tab_subject);
 }
@@ -80,7 +80,7 @@ static void cont_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
     int32_t cur_v = lv_subject_get_int(subject);
     lv_obj_t * cont = (lv_obj_t *) lv_observer_get_target(observer);
 
-    /*Animate out the previous content*/
+    /*Анимировать предыдущий контент*/
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_duration(&a, 300);
@@ -107,7 +107,7 @@ static void cont_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
         delay += 50;
     }
 
-    /*Create the widgets according to the current value*/
+    /*Создайте виджеты в соответствии с текущим значением*/
     if(cur_v == 0) {
         for(i = 0; i < 4; i++) {
             lv_obj_t * slider = lv_slider_create(cont);
@@ -130,7 +130,7 @@ static void cont_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
         }
     }
 
-    /*Animate in the new widgets*/
+    /*Анимация в новых виджетах*/
     lv_anim_set_completed_cb(&a, NULL);
     for(i = child_cnt_prev; i < lv_obj_get_child_count(cont); i++) {
         lv_obj_t * child = lv_obj_get_child(cont, i);

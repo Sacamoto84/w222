@@ -1,19 +1,19 @@
 /****************************************************************************
 *
 *    Copyright 2012 - 2023 Vivante Corporation, Santa Clara, California.
-*    All Rights Reserved.
+*    Все права защищены.
 *
-*    Permission is hereby granted, free of charge, to any person obtaining
-*    a copy of this software and associated documentation files (the
-*    'Software'), to deal in the Software without restriction, including
-*    without limitation the rights to use, copy, modify, merge, publish,
-*    distribute, sub license, and/or sell copies of the Software, and to
-*    permit persons to whom the Software is furnished to do so, subject
-*    to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации (файл
+*    «Программное обеспечение»), иметь дело с Программным обеспечением без ограничений, включая
+*    без ограничений права на использование, копирование, изменение, объединение, публикацию,
+*    распространять, сублицензировать и/или продавать копии Программного обеспечения, а также
+*    разрешать лицам, которым предоставлено Программное обеспечение, делать это при условии, что
+*    на следующие условия:
 *
-*    The above copyright notice and this permission notice (including the
-*    next paragraph) shall be included in all copies or substantial
-*    portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и данное уведомление о разрешении (включая
+*    следующий абзац) должны быть включены во все копии или существенные
+*    части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 *    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF

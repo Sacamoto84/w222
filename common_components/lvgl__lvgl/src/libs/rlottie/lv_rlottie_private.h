@@ -26,7 +26,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** definition in lottieanimation_capi.c */
+/** определение в lottieanimation_capi.c */
 struct Lottie_Animation_S;
 
 struct _lv_rlottie_t {
@@ -55,7 +55,7 @@ struct _lv_rlottie_t {
 #endif /*LV_USE_RLOTTIE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_RLOTTIE_PRIVATE_H*/

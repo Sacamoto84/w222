@@ -21,7 +21,7 @@
 *      DEFINES
 *********************/
 
-/* Magic number from https://spencermortensen.com/articles/bezier-circle/ */
+/* Магическое число из https://spencermortensen.com/articles/bezier-circle/ */
 #define PATH_ARC_MAGIC 0.55191502449351f
 
 #define SIGN(x) (nvg_math_is_zero(x) ? 0 : ((x) > 0 ? 1 : -1))
@@ -101,7 +101,7 @@ void lv_nanovg_path_append_rect(NVGcontext * ctx, float x, float y, float w, flo
         const float half_w = w / 2.0f;
         const float half_h = h / 2.0f;
 
-        /*clamping cornerRadius by minimum size*/
+        /*зажимной уголокРадиус по минимальному размеру*/
         const float r_max = LV_MIN(half_w, half_h);
 
         nvgRoundedRect(ctx, x, y, w, h, r > r_max ? r_max : r);
@@ -159,7 +159,7 @@ void lv_nanovg_path_append_arc(NVGcontext * ctx,
         return;
     }
 
-    /* just circle */
+    /* просто обведи */
     if(sweep >= 360.0f || sweep <= -360.0f) {
         nvgCircle(ctx, cx, cy, radius);
         LV_PROFILER_DRAW_END;
@@ -174,7 +174,7 @@ void lv_nanovg_path_append_arc(NVGcontext * ctx,
     float fract = fmodf(sweep, NVG_MATH_HALF_PI);
     fract = (nvg_math_is_zero(fract)) ? NVG_MATH_HALF_PI * sweep_sign : fract;
 
-    /* Start from here */
+    /* Начни отсюда */
     float start_x = radius * NVG_MATH_COSF(start_angle);
     float start_y = radius * NVG_MATH_SINF(start_angle);
 
@@ -188,10 +188,10 @@ void lv_nanovg_path_append_arc(NVGcontext * ctx,
         float end_x = radius * NVG_MATH_COSF(end_angle);
         float end_y = radius * NVG_MATH_SINF(end_angle);
 
-        /* variables needed to calculate bezier control points */
+        /* переменные, необходимые для расчета контрольных точек Безье */
 
-        /** get bezier control points using article:
-         * (http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
+        /** получить контрольные точки Безье, используя статью:
+         * ( http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
          */
         float ax = start_x;
         float ay = start_y;
@@ -201,7 +201,7 @@ void lv_nanovg_path_append_arc(NVGcontext * ctx,
         float q2 = ax * bx + ay * by + q1;
         float k2 = (4.0f / 3.0f) * ((NVG_MATH_SQRTF(2 * q1 * q2) - q2) / (ax * by - ay * bx));
 
-        /* Next start point is the current end point */
+        /* Следующая начальная точка — текущая конечная точка. */
         start_x = end_x;
         start_y = end_y;
 

@@ -1,25 +1,25 @@
 /*
-@file    EVE.h
+@file EVE.h
 @brief   Contains FT80x/FT81x/BT81x API definitions
 @version 5.0
-@date    2024-01-28
-@author  Rudolph Riedel
+@date 28 января 2024 г.
+@author Рудольф Ридель
 
 @section LICENSE
 
-MIT License
+Лицензия MIT
 
 Copyright (c) 2016-2024 Rudolph Riedel
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
+Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+Программное обеспечение без ограничений, включая, помимо прочего, права
+использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать,
+и/или продавать копии Программного обеспечения, а также разрешать лицам, которым Программное обеспечение
+предоставлено для этого при соблюдении следующих условий:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+копии или существенные части Программного обеспечения.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -28,7 +28,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-@section History
+История @section
 
 5.0
 - started to add BT817 / BT818 defines
@@ -41,7 +41,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - removed the history from before 4.0
 - fixed typo: REG_AH_CYCLE_MAX -> REG_AH_HCYCLE_MAX
 - re-arranged the host commands, removed EVE_CLKINT for BT817/BT818,
-    removed FT80x EVE_CLK36M and EVE_CLK48M
+    удалены FT80x EVE_CLK36M и EVE_CLK48M
 - added EVE_OPT_OVERLAY
 - removed the 4.0 history
 - fixed some MISRA-C issues
@@ -53,18 +53,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - basic maintenance: checked for violations of white space and indent rules
 - more linter fixes
 - changed EVE_COMPRESSED_RGBA_ASTC_nxn_KHR to EVE_ASTC_nXn to fix linter
-    warnings and used the opportunity to make these shorter
+    предупреждения и воспользовались возможностью сделать их короче
 - added DL_COLOR_A as alternative to the COLOR_A macro
 - added defines for all DL_ display list commands
 - cleaned up the macros
 - fix: changed DL_CLEAR_RGB to DL_CLEAR_COLOR_RGB
-    as this is what the programming guide uses
+    поскольку это то, что использует руководство по программированию
 - fix: renamed EVE_ROM_FONT_ADDR to EVE_ROM_FONTROOT
 - added #ifdef __cplusplus / extern "C" to allow
-    adding EVE_ functions to C++ code
+    добавление функций EVE_ в код C++
 - fix: typo REG_COPRO_PATCH_DTR -> REG_COPRO_PATCH_PTR
 - started to convert the function-like macros to static inline functions to be
-    a little friendlier towards C++ in regards of type-safety
+    немного более дружелюбен по отношению к C++ в отношении безопасности типов
 - added type-casts to all simple macros
 - converted some more function-like macros to static inline functions
 - converted the rest of the function-like macros to static inline functions
@@ -85,7 +85,7 @@ extern "C"
 #include "EVE_config.h"
 #include "EVE_commands.h"
 
-/* Memory */
+/* Память */
 #define EVE_RAM_G         ((uint32_t) 0x00000000UL)
 #define EVE_ROM_CHIPID    ((uint32_t) 0x000C0000UL)
 #define EVE_ROM_FONT      ((uint32_t) 0x001E0000UL)
@@ -94,12 +94,12 @@ extern "C"
 #define EVE_RAM_REG       ((uint32_t) 0x00302000UL)
 #define EVE_RAM_CMD       ((uint32_t) 0x00308000UL)
 
-/* Memory buffer sizes */
+/* Размеры буфера памяти */
 #define EVE_RAM_G_SIZE   ((uint32_t) 1024U*1024UL)
 #define EVE_CMDFIFO_SIZE ((uint32_t) 4U*1024UL)
 #define EVE_RAM_DL_SIZE  ((uint32_t) 8U*1024UL)
 
-/* diplay list list commands, most need OR's arguments */
+/* команды списка списка diplay, большинству из них нужны аргументы OR */
 #define DL_DISPLAY       ((uint32_t) 0x00000000UL)
 #define DL_BITMAP_SOURCE ((uint32_t) 0x01000000UL)
 #define DL_CLEAR_COLOR_RGB ((uint32_t) 0x02000000UL)
@@ -154,20 +154,20 @@ extern "C"
 #define CLR_STN     ((uint8_t) 0x2U)
 #define CLR_TAG     ((uint8_t) 0x1U)
 
-/* Host commands */
-#define EVE_ACTIVE       ((uint8_t) 0x00U) /* place EVE in active state */
-#define EVE_STANDBY      ((uint8_t) 0x41U) /* place EVE in Standby (clk running) */
-#define EVE_SLEEP        ((uint8_t) 0x42U) /* place EVE in Sleep (clk off) */
-#define EVE_CLKEXT       ((uint8_t) 0x44U) /* select external clock source */
-#define EVE_CLKINT       ((uint8_t) 0x48U) /* select internal clock source, not a valid option for BT817 / BT818 */
-#define EVE_PWRDOWN      ((uint8_t) 0x50U) /* place EVE in Power Down (core off) */
-#define EVE_CLKSEL       ((uint8_t) 0x61U) /* configure system clock */
-#define EVE_RST_PULSE    ((uint8_t) 0x68U) /* reset core - all registers default and processors reset */
-#define EVE_CORERST      ((uint8_t) 0x68U) /* reset core - all registers default and processors reset */
-#define EVE_PINDRIVE     ((uint8_t) 0x70U) /* setup drive strength for various pins */
-#define EVE_PIN_PD_STATE ((uint8_t) 0x71U) /* setup how pins behave during power down */
+/* Команды хоста */
+#define EVE_ACTIVE       ((uint8_t) 0x00U) /* перевести EVE в активное состояние */
+#define EVE_STANDBY      ((uint8_t) 0x41U) /* перевести EVE в режим ожидания (clk работает) */
+#define EVE_SLEEP        ((uint8_t) 0x42U) /* перевести EVE в спящий режим (выключить) */
+#define EVE_CLKEXT       ((uint8_t) 0x44U) /* выбрать внешний источник синхронизации */
+#define EVE_CLKINT       ((uint8_t) 0x48U) /* выберите внутренний источник синхронизации, недопустимый вариант для BT817 / BT818 */
+#define EVE_PWRDOWN      ((uint8_t) 0x50U) /* поместите EVE в Power Down (ядро выключено) */
+#define EVE_CLKSEL       ((uint8_t) 0x61U) /* настроить системные часы */
+#define EVE_RST_PULSE    ((uint8_t) 0x68U) /* сброс ядра - все регистры по умолчанию и процессоры сброшены */
+#define EVE_CORERST      ((uint8_t) 0x68U) /* сброс ядра - все регистры по умолчанию и процессоры сброшены */
+#define EVE_PINDRIVE     ((uint8_t) 0x70U) /* настройка силы привода для различных контактов */
+#define EVE_PIN_PD_STATE ((uint8_t) 0x71U) /* настроить поведение контактов при отключении питания */
 
-/* Graphic command defines */
+/* Графическая команда определяет */
 #define EVE_NEVER      ((uint8_t) 0UL)
 #define EVE_LESS       ((uint8_t) 1UL)
 #define EVE_LEQUAL     ((uint8_t) 2UL)
@@ -177,7 +177,7 @@ extern "C"
 #define EVE_NOTEQUAL   ((uint8_t) 6UL)
 #define EVE_ALWAYS     ((uint8_t) 7UL)
 
-/* Bitmap formats */
+/* Растровые форматы */
 #define EVE_ARGB1555   ((uint8_t) 0UL)
 #define EVE_L1         ((uint8_t) 1UL)
 #define EVE_L4         ((uint8_t) 2UL)
@@ -191,27 +191,27 @@ extern "C"
 #define EVE_TEXTVGA    ((uint8_t) 10UL)
 #define EVE_BARGRAPH   ((uint8_t) 11UL)
 
-/* Bitmap filter types */
+/* Типы растровых фильтров */
 #define EVE_NEAREST    ((uint8_t) 0UL)
 #define EVE_BILINEAR   ((uint8_t) 1UL)
 
-/* Bitmap wrap types */
+/* Типы переноса растровых изображений */
 #define EVE_BORDER     ((uint8_t) 0UL)
 #define EVE_REPEAT     ((uint8_t) 1UL)
 
-/* Stencil defines */
+/* Трафарет определяет */
 #define EVE_KEEP       ((uint8_t) 1UL)
 #define EVE_REPLACE    ((uint8_t) 2UL)
 #define EVE_INCR       ((uint8_t) 3UL)
 #define EVE_DECR       ((uint8_t) 4UL)
 #define EVE_INVERT     ((uint8_t) 5UL)
 
-/* Graphics display list swap defines */
+/* Перестановка списка графического отображения определяет */
 #define EVE_DLSWAP_DONE   ((uint8_t) 0UL)
 #define EVE_DLSWAP_LINE   ((uint8_t) 1UL)
 #define EVE_DLSWAP_FRAME  ((uint8_t) 2UL)
 
-/* Interrupt bits */
+/* Биты прерываний */
 #define EVE_INT_SWAP          ((uint8_t) 0x01)
 #define EVE_INT_TOUCH         ((uint8_t) 0x02)
 #define EVE_INT_TAG           ((uint8_t) 0x04)
@@ -221,13 +221,13 @@ extern "C"
 #define EVE_INT_CMDFLAG       ((uint8_t) 0x40)
 #define EVE_INT_CONVCOMPLETE  ((uint8_t) 0x80)
 
-/* Touch mode */
+/* Сенсорный режим */
 #define EVE_TMODE_OFF        ((uint8_t) 0U)
 #define EVE_TMODE_ONESHOT    ((uint8_t) 1U)
 #define EVE_TMODE_FRAME      ((uint8_t) 2U)
 #define EVE_TMODE_CONTINUOUS ((uint8_t) 3U)
 
-/* Alpha blending */
+/* Альфа-смешение */
 #define EVE_ZERO                 ((uint32_t) 0UL)
 #define EVE_ONE                  ((uint32_t) 1UL)
 #define EVE_SRC_ALPHA            ((uint32_t) 2UL)
@@ -235,7 +235,7 @@ extern "C"
 #define EVE_ONE_MINUS_SRC_ALPHA  ((uint32_t) 4UL)
 #define EVE_ONE_MINUS_DST_ALPHA  ((uint32_t) 5UL)
 
-/* Graphics primitives */
+/* Графические примитивы */
 #define EVE_BITMAPS              ((uint32_t) 1UL)
 #define EVE_POINTS               ((uint32_t) 2UL)
 #define EVE_LINES                ((uint32_t) 3UL)
@@ -253,7 +253,7 @@ extern "C"
 #define EVE_PALETTED8            ((uint32_t) 16UL)
 #define EVE_L2                   ((uint32_t) 17UL)
 
-/* Widget command options */
+/* Параметры команды виджета */
 #define EVE_OPT_MONO             ((uint16_t) 1U)
 #define EVE_OPT_NODL             ((uint16_t) 2U)
 #define EVE_OPT_FLAT             ((uint16_t) 256U)
@@ -278,17 +278,17 @@ extern "C"
 #define EVE_ADC_DIFFERENTIAL     ((uint32_t) 1UL)
 #define EVE_ADC_SINGLE_ENDED     ((uint32_t) 0UL)
 
-/* Fonts */
-#define EVE_NUMCHAR_PERFONT     ((uint32_t) 128UL)  /* number of font characters per bitmap handle */
-#define EVE_FONT_TABLE_SIZE     ((uint32_t) 148UL)  /* size of the font table - utilized for loopup by the graphics engine */
-#define EVE_FONT_TABLE_POINTER  ((uint32_t) 0xFFFFCUL) /* pointer to the inbuilt font tables starting from bitmap handle 16 */
+/* Шрифты */
+#define EVE_NUMCHAR_PERFONT     ((uint32_t) 128UL)  /* количество символов шрифта на дескриптор растрового изображения */
+#define EVE_FONT_TABLE_SIZE     ((uint32_t) 148UL)  /* размер таблицы шрифтов — используется для цикла графическим движком */
+#define EVE_FONT_TABLE_POINTER  ((uint32_t) 0xFFFFCUL) /* указатель на встроенные таблицы шрифтов, начиная с дескриптора растрового изображения 16 */
 
-/* Audio sample type defines */
-#define EVE_LINEAR_SAMPLES       ((uint32_t) 0UL) /* 8bit signed samples */
-#define EVE_ULAW_SAMPLES         ((uint32_t) 1UL) /* 8bit ulaw samples */
-#define EVE_ADPCM_SAMPLES        ((uint32_t) 2UL) /* 4bit ima adpcm samples */
+/* Тип аудиосэмпла определяет */
+#define EVE_LINEAR_SAMPLES       ((uint32_t) 0UL) /* 8-битные подписанные образцы */
+#define EVE_ULAW_SAMPLES         ((uint32_t) 1UL) /* 8-битные образцы Ulaw */
+#define EVE_ADPCM_SAMPLES        ((uint32_t) 2UL) /* 4-битные образцы ima adpcm */
 
-/* Synthesized sound */
+/* Синтезированный звук */
 #define EVE_SILENCE      ((uint8_t) 0x00U)
 #define EVE_SQUAREWAVE   ((uint8_t) 0x01U)
 #define EVE_SINEWAVE     ((uint8_t) 0x02U)
@@ -321,7 +321,7 @@ extern "C"
 #define EVE_MUTE         ((uint8_t) 0x60U)
 #define EVE_UNMUTE       ((uint8_t) 0x61U)
 
-/* Synthesized sound frequencies, midi note */
+/* Синтезированные звуковые частоты, миди-нота */
 #define EVE_MIDI_A0   ((uint8_t) 21U)
 #define EVE_MIDI_A_0  ((uint8_t) 22U)
 #define EVE_MIDI_B0   ((uint8_t) 23U)
@@ -411,16 +411,16 @@ extern "C"
 #define EVE_MIDI_B7   ((uint8_t) 107U)
 #define EVE_MIDI_C8   ((uint8_t) 108U)
 
-/* GPIO bits */
+/* Биты GPIO */
 #define EVE_GPIO0  ((uint8_t) 0U)
-#define EVE_GPIO1  ((uint8_t) 1U) /* default gpio pin for audio shutdown, 1 - enable, 0 - disable */
-#define EVE_GPIO7  ((uint8_t) 7U) /* default gpio pin for display enable, 1 - enable, 0 - disable */
+#define EVE_GPIO1  ((uint8_t) 1U) /* вывод gpio по умолчанию для отключения звука, 1 — включить, 0 — отключить */
+#define EVE_GPIO7  ((uint8_t) 7U) /* PIN-код gpio по умолчанию для включения дисплея, 1 — включить, 0 — отключить */
 
-/* Display rotation */
-#define EVE_DISPLAY_0   ((uint8_t) 0U) /* 0 degrees rotation */
-#define EVE_DISPLAY_180 ((uint8_t) 1U) /* 180 degrees rotation */
+/* Поворот дисплея */
+#define EVE_DISPLAY_0   ((uint8_t) 0U) /* вращение 0 градусов */
+#define EVE_DISPLAY_180 ((uint8_t) 1U) /* вращение на 180 градусов */
 
-/* Commands */
+/* Команды */
 #define CMD_APPEND       ((uint32_t) 0xFFFFFF1EUL)
 #define CMD_BGCOLOR      ((uint32_t) 0xFFFFFF09UL)
 #define CMD_BUTTON       ((uint32_t) 0xFFFFFF0DUL)
@@ -478,9 +478,9 @@ extern "C"
 #define CMD_VIDEOFRAME   ((uint32_t) 0xFFFFFF41UL)
 #define CMD_VIDEOSTART   ((uint32_t) 0xFFFFFF40UL)
 
-/* Registers */
-#define REG_ANA_COMP         ((uint32_t) 0x00302184UL) /* only listed in datasheet */
-#define REG_BIST_EN          ((uint32_t) 0x00302174UL) /* only listed in datasheet */
+/* Регистры */
+#define REG_ANA_COMP         ((uint32_t) 0x00302184UL) /* указано только в даташите */
+#define REG_BIST_EN          ((uint32_t) 0x00302174UL) /* указано только в даташите */
 #define REG_CLOCK            ((uint32_t) 0x00302008UL)
 #define REG_CMDB_SPACE       ((uint32_t) 0x00302574UL)
 #define REG_CMDB_WRITE       ((uint32_t) 0x00302578UL)
@@ -490,14 +490,14 @@ extern "C"
 #define REG_CPURESET         ((uint32_t) 0x00302020UL)
 #define REG_CSPREAD          ((uint32_t) 0x00302068UL)
 #define REG_CTOUCH_EXTENDED  ((uint32_t) 0x00302108UL)
-#define REG_CTOUCH_TOUCH0_XY ((uint32_t) 0x00302124UL) /* only listed in datasheet */
+#define REG_CTOUCH_TOUCH0_XY ((uint32_t) 0x00302124UL) /* указано только в даташите */
 #define REG_CTOUCH_TOUCH4_X  ((uint32_t) 0x0030216cUL)
 #define REG_CTOUCH_TOUCH4_Y  ((uint32_t) 0x00302120UL)
 #define REG_CTOUCH_TOUCH1_XY ((uint32_t) 0x0030211cUL)
 #define REG_CTOUCH_TOUCH2_XY ((uint32_t) 0x0030218cUL)
 #define REG_CTOUCH_TOUCH3_XY ((uint32_t) 0x00302190UL)
 #define REG_TOUCH_CONFIG     ((uint32_t) 0x00302168UL)
-#define REG_DATESTAMP        ((uint32_t) 0x00302564UL) /* only listed in datasheet */
+#define REG_DATESTAMP        ((uint32_t) 0x00302564UL) /* указано только в даташите */
 #define REG_DITHER           ((uint32_t) 0x00302060UL)
 #define REG_DLSWAP           ((uint32_t) 0x00302054UL)
 #define REG_FRAMES           ((uint32_t) 0x00302004UL)
@@ -517,8 +517,8 @@ extern "C"
 #define REG_INT_MASK         ((uint32_t) 0x003020b0UL)
 #define REG_MACRO_0          ((uint32_t) 0x003020d8UL)
 #define REG_MACRO_1          ((uint32_t) 0x003020dcUL)
-#define REG_MEDIAFIFO_READ   ((uint32_t) 0x00309014UL) /* only listed in programmers guide */
-#define REG_MEDIAFIFO_WRITE  ((uint32_t) 0x00309018UL) /* only listed in programmers guide */
+#define REG_MEDIAFIFO_READ   ((uint32_t) 0x00309014UL) /* указан только в руководстве для программистов */
+#define REG_MEDIAFIFO_WRITE  ((uint32_t) 0x00309018UL) /* указан только в руководстве для программистов */
 #define REG_OUTBITS          ((uint32_t) 0x0030205cUL)
 #define REG_PCLK             ((uint32_t) 0x00302070UL)
 #define REG_PCLK_POL         ((uint32_t) 0x0030206cUL)
@@ -532,19 +532,19 @@ extern "C"
 #define REG_PLAYBACK_START   ((uint32_t) 0x003020b4UL)
 #define REG_PWM_DUTY         ((uint32_t) 0x003020d4UL)
 #define REG_PWM_HZ           ((uint32_t) 0x003020d0UL)
-#define REG_RENDERMODE       ((uint32_t) 0x00302010UL) /* only listed in datasheet */
+#define REG_RENDERMODE       ((uint32_t) 0x00302010UL) /* указано только в даташите */
 #define REG_ROTATE           ((uint32_t) 0x00302058UL)
-#define REG_SNAPFORMAT       ((uint32_t) 0x0030201cUL) /* only listed in datasheet */
-#define REG_SNAPSHOT         ((uint32_t) 0x00302018UL) /* only listed in datasheet */
-#define REG_SNAPY            ((uint32_t) 0x00302014UL) /* only listed in datasheet */
+#define REG_SNAPFORMAT       ((uint32_t) 0x0030201cUL) /* указано только в даташите */
+#define REG_SNAPSHOT         ((uint32_t) 0x00302018UL) /* указано только в даташите */
+#define REG_SNAPY            ((uint32_t) 0x00302014UL) /* указано только в даташите */
 #define REG_SOUND            ((uint32_t) 0x00302088UL)
-#define REG_SPI_WIDTH        ((uint32_t) 0x00302188UL) /* listed with false offset in programmers guide V1.1 */
+#define REG_SPI_WIDTH        ((uint32_t) 0x00302188UL) /* указан с ложным смещением в руководстве для программистов V1 .1 */
 #define REG_SWIZZLE          ((uint32_t) 0x00302064UL)
 #define REG_TAG              ((uint32_t) 0x0030207cUL)
 #define REG_TAG_X            ((uint32_t) 0x00302074UL)
 #define REG_TAG_Y            ((uint32_t) 0x00302078UL)
-#define REG_TAP_CRC          ((uint32_t) 0x00302024UL) /* only listed in datasheet */
-#define REG_TAP_MASK         ((uint32_t) 0x00302028UL) /* only listed in datasheet */
+#define REG_TAP_CRC          ((uint32_t) 0x00302024UL) /* указано только в даташите */
+#define REG_TAP_MASK         ((uint32_t) 0x00302028UL) /* указано только в даташите */
 #define REG_TOUCH_ADC_MODE   ((uint32_t) 0x00302108UL)
 #define REG_TOUCH_CHARGE     ((uint32_t) 0x0030210cUL)
 #define REG_TOUCH_DIRECT_XY  ((uint32_t) 0x0030218cUL)
@@ -557,14 +557,14 @@ extern "C"
 #define REG_TOUCH_SCREEN_XY  ((uint32_t) 0x00302124UL)
 #define REG_TOUCH_SETTLE     ((uint32_t) 0x00302110UL)
 #define REG_TOUCH_TAG        ((uint32_t) 0x0030212cUL)
-#define REG_TOUCH_TAG1       ((uint32_t) 0x00302134UL) /* only listed in datasheet */
-#define REG_TOUCH_TAG1_XY    ((uint32_t) 0x00302130UL) /* only listed in datasheet */
-#define REG_TOUCH_TAG2       ((uint32_t) 0x0030213cUL) /* only listed in datasheet */
-#define REG_TOUCH_TAG2_XY    ((uint32_t) 0x00302138UL) /* only listed in datasheet */
-#define REG_TOUCH_TAG3       ((uint32_t) 0x00302144UL) /* only listed in datasheet */
-#define REG_TOUCH_TAG3_XY    ((uint32_t) 0x00302140UL) /* only listed in datasheet */
-#define REG_TOUCH_TAG4       ((uint32_t) 0x0030214cUL)/* only listed in datasheet */
-#define REG_TOUCH_TAG4_XY    ((uint32_t) 0x00302148UL) /* only listed in datasheet */
+#define REG_TOUCH_TAG1       ((uint32_t) 0x00302134UL) /* указано только в даташите */
+#define REG_TOUCH_TAG1_XY    ((uint32_t) 0x00302130UL) /* указано только в даташите */
+#define REG_TOUCH_TAG2       ((uint32_t) 0x0030213cUL) /* указано только в даташите */
+#define REG_TOUCH_TAG2_XY    ((uint32_t) 0x00302138UL) /* указано только в даташите */
+#define REG_TOUCH_TAG3       ((uint32_t) 0x00302144UL) /* указано только в даташите */
+#define REG_TOUCH_TAG3_XY    ((uint32_t) 0x00302140UL) /* указано только в даташите */
+#define REG_TOUCH_TAG4       ((uint32_t) 0x0030214cUL)/* указано только в даташите */
+#define REG_TOUCH_TAG4_XY    ((uint32_t) 0x00302148UL) /* указано только в даташите */
 #define REG_TOUCH_TAG_XY     ((uint32_t) 0x00302128UL)
 #define REG_TOUCH_TRANSFORM_A ((uint32_t) 0x00302150UL)
 #define REG_TOUCH_TRANSFORM_B ((uint32_t) 0x00302154UL)
@@ -572,11 +572,11 @@ extern "C"
 #define REG_TOUCH_TRANSFORM_D ((uint32_t) 0x0030215cUL)
 #define REG_TOUCH_TRANSFORM_E ((uint32_t) 0x00302160UL)
 #define REG_TOUCH_TRANSFORM_F ((uint32_t) 0x00302164UL)
-#define REG_TRACKER          ((uint32_t) 0x00309000UL) /* only listed in programmers guide */
-#define REG_TRACKER_1        ((uint32_t) 0x00309004UL) /* only listed in programmers guide */
-#define REG_TRACKER_2        ((uint32_t) 0x00309008UL) /* only listed in programmers guide */
-#define REG_TRACKER_3        ((uint32_t) 0x0030900cUL) /* only listed in programmers guide */
-#define REG_TRACKER_4        ((uint32_t) 0x00309010UL) /* only listed in programmers guide */
+#define REG_TRACKER          ((uint32_t) 0x00309000UL) /* указан только в руководстве для программистов */
+#define REG_TRACKER_1        ((uint32_t) 0x00309004UL) /* указан только в руководстве для программистов */
+#define REG_TRACKER_2        ((uint32_t) 0x00309008UL) /* указан только в руководстве для программистов */
+#define REG_TRACKER_3        ((uint32_t) 0x0030900cUL) /* указан только в руководстве для программистов */
+#define REG_TRACKER_4        ((uint32_t) 0x00309010UL) /* указан только в руководстве для программистов */
 #define REG_TRIM             ((uint32_t) 0x00302180UL)
 #define REG_VCYCLE           ((uint32_t) 0x00302040UL)
 #define REG_VOFFSET          ((uint32_t) 0x00302044UL)
@@ -587,9 +587,9 @@ extern "C"
 #define REG_VSYNC1           ((uint32_t) 0x00302050UL)
 
 
-/* Macros for static display list generation */
+/* Макросы для создания статического списка отображения */
 
-//#define ALPHA_FUNC(func,ref) ((DL_ALPHA_FUNC) | (((func) & 7UL) << 8U) | ((ref) & 0xFFUL))
+//#define ALPHA_FUNC (func,ref) (( DL_ALPHA_FUNC ) | (((func) & 7UL) << 8U) | ((ref) & 0xFFUL))
 /**
  * @brief Set the alpha test function.
  *
@@ -601,7 +601,7 @@ static inline uint32_t ALPHA_FUNC(uint8_t func, uint8_t ref)
     return (DL_ALPHA_FUNC | funcv | ref);
 }
 
-//#define BITMAP_HANDLE(handle) ((DL_BITMAP_HANDLE) | ((handle) & 0x1FUL))
+//#define BITMAP_HANDLE (дескриптор) (( DL_BITMAP_HANDLE ) | ((дескриптор) & 0x1FUL))
 /**
  * @brief Set the bitmap handle.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -611,7 +611,7 @@ static inline uint32_t BITMAP_HANDLE(uint8_t handle)
     return (DL_BITMAP_HANDLE | ((handle) & 0x1FUL));
 }
 
-//#define BITMAP_LAYOUT(format,linestride,height) ((DL_BITMAP_LAYOUT) | (((format) & 0x1FUL) << 19U) | (((linestride) & 0x3FFUL) << 9U) | ((height) & 0x1FFUL))
+//#define BITMAP_LAYOUT (формат,линейный шаг,высота) (( DL_BITMAP_LAYOUT ) | (((формат) & 0x1FUL) << 19U) | (((линейный шаг) & 0x3FFUL) << 9U) | ((высота) & 0x1FFUL))
 /**
  * @brief Set the source bitmap memory format and layout for the current handle.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -624,7 +624,7 @@ static inline uint32_t BITMAP_LAYOUT(uint8_t format, uint16_t linestride, uint16
     return (DL_BITMAP_LAYOUT | formatv | linestridev | heightv);
 }
 
-//#define BITMAP_SIZE(filter,wrapx,wrapy,width,height) ((DL_BITMAP_SIZE) | (((filter) & 1UL) << 20U) | (((wrapx) & 1UL) << 19U) | (((wrapy) & 1UL) << 18U) | (((width) & 0x1FFUL) << 9U) | ((height) & 0x1FFUL))
+//#define BITMAP_SIZE (filter,wrapx,wrapy,width,height) (( DL_BITMAP_SIZE ) | (((filter) & 1UL) << 20U) | (((wrapx) & 1UL) << 19U) | (((wrapy) & 1UL) << 18U) | (((ширина) & 0x1FFUL) << 9U) | ((высота) и 0x1FFUL))
 /**
  * @brief Set the source bitmap memory format and layout for the current handle.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -639,7 +639,7 @@ static inline uint32_t BITMAP_SIZE(uint8_t filter, uint8_t wrapx, uint8_t wrapy,
     return (DL_BITMAP_SIZE | filterv | wrapxv | wrapyv | widthv | heightv);
 }
 
-//#define BITMAP_LAYOUT_H(linestride,height) ((DL_BITMAP_LAYOUT_H) | (((((linestride) & 0xC00U) >> 10U)&3UL) << 2U) | ((((height) & 0x600U) >> 9U) & 3UL))
+//#define BITMAP_LAYOUT_H (линейный шаг, высота) (( DL_BITMAP_LAYOUT_H ) | (((((линейный шаг) & 0xC00U) >> 10U)&3UL) << 2U) | ((((высота) & 0x600U) >> 9U) & 3UL))
 /**
  * @brief Set the 2 most significant bits of the source bitmap memory format and layout for the current handle.
  * @param linestride 12-bit value specified to BITMAP_LAYOUT
@@ -654,7 +654,7 @@ static inline uint32_t BITMAP_LAYOUT_H(uint16_t linestride, uint16_t height)
     return (DL_BITMAP_LAYOUT_H | linestridev | heightv);
 }
 
-//#define BITMAP_SIZE_H(width,height) ((DL_BITMAP_SIZE_H) | (((((width) & 0x600U) >> 9U) & 3UL) << 2U) | ((((height) & 0x600U) >> 9U) & 3UL))
+//#define BITMAP_SIZE_H (ширина,высота) (( DL_BITMAP_SIZE_H ) | (((((ширина) & 0x600U) >> 9U) & 3UL) << 2U) | ((((высота) & 0x600U) >> 9U) & 3UL))
 /**
  * @brief Set the 2 most significant bits of bitmaps dimension for the current handle.
  * @param linestride 11-bit value of bitmap width, the 2 most significant bits are used
@@ -669,7 +669,7 @@ static inline uint32_t BITMAP_SIZE_H(uint16_t width, uint16_t height)
     return ((DL_BITMAP_SIZE_H) | widthv | heightv);
 }
 
-//#define BITMAP_SOURCE(addr) ((DL_BITMAP_SOURCE) | ((addr) & 0x3FFFFFUL))
+//#define BITMAP_SOURCE (адрес) (( DL_BITMAP_SOURCE ) | ((адрес) & 0x3FFFFFUL))
 /**
  * @brief Set the source address of bitmap data in RAM_G or flash memory.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -679,8 +679,8 @@ static inline uint32_t BITMAP_SOURCE(uint32_t addr)
     return (DL_BITMAP_SOURCE | (addr & 0x3FFFFFUL));
 }
 
-#if EVE_GEN < 3 /* only define these for FT81x */
-//#define BITMAP_TRANSFORM_A(a) ((DL_BITMAP_TRANSFORM_A) | ((a) & 0x1FFFFUL))
+#if EVE_GEN < 3 /* определите их только для FT81x */
+//#define BITMAP_TRANSFORM_A (a) (( DL_BITMAP_TRANSFORM_A ) | ((a) & 0x1FFFFUL))
 /**
  * @brief Set the A coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -690,7 +690,7 @@ static inline uint32_t BITMAP_TRANSFORM_A(uint32_t val)
     return (DL_BITMAP_TRANSFORM_A | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_B(b) ((DL_BITMAP_TRANSFORM_B) | ((b) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_B (b) (( DL_BITMAP_TRANSFORM_B ) | ((b) & 0x1FFFFUL))
 /**
  * @brief Set the B coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -700,7 +700,7 @@ static inline uint32_t BITMAP_TRANSFORM_B(uint32_t val)
     return (DL_BITMAP_TRANSFORM_B | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_D(d) ((DL_BITMAP_TRANSFORM_D) | ((d) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_D (d) (( DL_BITMAP_TRANSFORM_D ) | ((d) & 0x1FFFFUL))
 /**
  * @brief Set the D coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -710,7 +710,7 @@ static inline uint32_t BITMAP_TRANSFORM_D(uint32_t val)
     return (DL_BITMAP_TRANSFORM_D | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_E(e) ((DL_BITMAP_TRANSFORM_E) | ((e) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_E (e) (( DL_BITMAP_TRANSFORM_E ) | ((e) & 0x1FFFFUL))
 /**
  * @brief Set he E coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -722,7 +722,7 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint32_t val)
 
 #endif
 
-//#define BITMAP_TRANSFORM_C(c) ((DL_BITMAP_TRANSFORM_C) | ((c) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_C (c) (( DL_BITMAP_TRANSFORM_C ) | ((c) & 0x1FFFFUL))
 /**
  * @brief Set the C coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -732,7 +732,7 @@ static inline uint32_t BITMAP_TRANSFORM_C(uint32_t val)
     return (DL_BITMAP_TRANSFORM_C | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_F(f) ((DL_BITMAP_TRANSFORM_F) | ((f) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_F (f) (( DL_BITMAP_TRANSFORM_F ) | ((f) & 0x1FFFFUL))
 /**
  * @brief Set the F coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -742,7 +742,7 @@ static inline uint32_t BITMAP_TRANSFORM_F(uint32_t val)
     return (DL_BITMAP_TRANSFORM_F | (val & 0x1FFFFUL));
 }
 
-//#define BLEND_FUNC(src,dst) ((DL_BLEND_FUNC) | (((src) & 7UL) << 3U) | ((dst) & 7UL))
+//#define BLEND_FUNC (src,dst) (( DL_BLEND_FUNC ) | (((источник) & 7UL) << 3U) | ((dst) & 7UL))
 /**
  * @brief Execute a sequence of commands at another location in the display list.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -754,7 +754,7 @@ static inline uint32_t BLEND_FUNC(uint8_t src, uint8_t dst)
     return (DL_BLEND_FUNC | srcv | dstv);
 }
 
-//#define CALL(dest) ((DL_CALL) | ((dest) & 0xFFFFUL))
+//#define CALL (назначение) (( DL_CALL ) | ((назначение) & 0xFFFFUL))
 /**
  * @brief Execute a sequence of commands at another location in the display list.
  * @note valid range for dest is from zero to 2047
@@ -765,7 +765,7 @@ static inline uint32_t CALL(uint16_t dest)
     return (DL_CALL | (dest & 0x7FFUL));
 }
 
-//#define JUMP(dest) ((DL_JUMP) | ((dest) & 0xFFFFUL))
+//#define JUMP (назначение) (( DL_JUMP ) | ((назначение) & 0xFFFFUL))
 /**
  * @brief Execute commands at another location in the display list.
  * @note valid range for dest is from zero to 2047
@@ -776,7 +776,7 @@ static inline uint32_t JUMP(uint16_t dest)
     return (DL_JUMP | (dest & 0x7FFUL));
 }
 
-//#define CELL(cell) ((DL_CELL) | ((cell) & 0x7FUL))
+//#define CELL (ячейка) (( DL_CELL ) | ((ячейка) & 0x7FUL))
 /**
  * @brief Set the bitmap cell number for the VERTEX2F command.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -786,7 +786,7 @@ static inline uint32_t CELL(uint8_t cell)
     return (DL_CELL | (cell & 0x7FUL));
 }
 
-//#define CLEAR(c,s,t) ((DL_CLEAR) | (((c) & 1UL) << 2U) | (((s) & 1UL) << 1U) | ((t) & 1UL))
+//#define CLEAR (c,s,t) (( DL_CLEAR ) | (((c) & 1UL) << 2U) | (((s) & 1UL) << 1U) | ((t) & 1UL))
 /**
  * @brief Clear buffers to preset values.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -799,7 +799,7 @@ static inline uint32_t CLEAR(uint8_t color, uint8_t stencil, uint8_t tag)
     return (DL_CLEAR | colorv | stencilv | tagv);
 }
 
-//#define CLEAR_COLOR_A(alpha) ((DL_CLEAR_COLOR_A) | ((alpha) & 0xFFUL))
+//#define CLEAR_COLOR_A (альфа) (( DL_CLEAR_COLOR_A ) | ((альфа) & 0xFFUL))
 /**
  * @brief Set clear value for the alpha channel.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -809,7 +809,7 @@ static inline uint32_t CLEAR_COLOR_A(uint8_t alpha)
     return (DL_CLEAR_COLOR_A | alpha);
 }
 
-//#define CLEAR_COLOR_RGB(red,green,blue) ((DL_CLEAR_COLOR_RGB) | (((red) & 0xFFUL) << 16U) | (((green) & 0xFFUL) << 8U) | ((blue) & 0xFFUL))
+//#define CLEAR_COLOR_RGB (красный,зеленый,синий) (( DL_CLEAR_COLOR_RGB ) | (((красный) & 0xFFUL) << 16U) | (((зеленый) & 0xFFUL) << 8U) | ((синий) & 0xFFUL))
 /**
  * @brief Set clear values for red, green and blue channels.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -822,7 +822,7 @@ static inline uint32_t CLEAR_COLOR_RGB(uint8_t red, uint8_t green, uint8_t blue)
     return (DL_CLEAR_COLOR_RGB | redv | greenv | bluev);
 }
 
-//#define CLEAR_STENCIL(s) ((DL_CLEAR_STENCIL) | ((s) & 0xFFUL))
+//#define CLEAR_STENCIL (s) (( DL_CLEAR_STENCIL ) | ((s) & 0xFFUL))
 /**
  * @brief Set clear value for the stencil buffer.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -832,7 +832,7 @@ static inline uint32_t CLEAR_STENCIL(uint8_t val)
     return (DL_CLEAR_STENCIL | val);
 }
 
-//#define CLEAR_TAG(s) ((DL_CLEAR_TAG) | ((s) & 0xFFUL))
+//#define CLEAR_TAG (s) (( DL_CLEAR_TAG ) | ((s) & 0xFFUL))
 /**
  * @brief Set clear value for the tag buffer.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -842,7 +842,7 @@ static inline uint32_t CLEAR_TAG(uint8_t val)
     return (DL_CLEAR_TAG | val);
 }
 
-//#define COLOR_A(alpha) ((DL_COLOR_A) | ((alpha) & 0xFFUL))
+//#define COLOR_A (альфа) (( DL_COLOR_A ) | ((альфа) & 0xFFUL))
 /**
  * @brief Set the current color alpha.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -852,7 +852,7 @@ static inline uint32_t COLOR_A(uint8_t alpha)
     return (DL_COLOR_A | alpha);
 }
 
-//#define COLOR_MASK(r,g,b,a) ((DL_COLOR_MASK) | (((r) & 1UL) << 3U) | (((g) & 1UL) << 2U) | (((b) & 1UL) << 1U) | ((a) & 1UL))
+//#define COLOR_MASK (r,g,b,a) (( DL_COLOR_MASK ) | (((r) & 1UL) << 3U) | (((g) & 1UL) << 2U) | (((b) & 1UL) << 1U) | ((a) & 1UL))
 /**
  * @brief Enable or disable writing of color components.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -866,7 +866,7 @@ static inline uint32_t COLOR_MASK(uint8_t red, uint8_t green, uint8_t blue, uint
     return (DL_COLOR_MASK | redv | greenv | bluev | alphav);
 }
 
-//#define COLOR_RGB(red,green,blue) ((DL_COLOR_RGB) | (((red) & 0xFFUL) << 16U) | (((green) & 0xFFUL) << 8U) | ((blue) & 0xFFUL))
+//#define COLOR_RGB (красный,зеленый,синий) (( DL_COLOR_RGB ) | (((красный) & 0xFFUL) << 16U) | (((зеленый) & 0xFFUL) << 8U) | ((синий) & 0xFFUL))
 /**
  * @brief Set the current color red, green and blue.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -879,7 +879,7 @@ static inline uint32_t COLOR_RGB(uint8_t red, uint8_t green, uint8_t blue)
     return (DL_COLOR_RGB | redv | greenv | bluev);
 }
 
-//#define LINE_WIDTH(width) ((DL_LINE_WIDTH) | (((uint32_t) (width)) & 0xFFFUL))
+//#define LINE_WIDTH (ширина) (( DL_LINE_WIDTH ) | ((( uint32_t ) (ширина)) & 0xFFFUL))
 /**
  * @brief Set the width of lines to be drawn with primitive LINES in 1/16 pixel precision.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -889,7 +889,7 @@ static inline uint32_t LINE_WIDTH(uint16_t width)
     return (DL_LINE_WIDTH | (width & 0xFFFUL));
 }
 
-//#define MACRO(m) ((DL_MACRO) | ((m) & 1UL))
+//#define MACRO (м) (( DL_MACRO ) | ((м) & 1UL))
 /**
  * @brief Execute a single command from a macro register.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -899,7 +899,7 @@ static inline uint32_t MACRO(uint8_t macro)
     return (DL_MACRO | (macro & 0x1UL));
 }
 
-//#define PALETTE_SOURCE(addr) ((DL_PALETTE_SOURCE) | ((addr) & 0x3FFFFF3UL))
+//#define PALETTE_SOURCE (адрес) (( DL_PALETTE_SOURCE ) | ((адрес) & 0x3FFFFF3UL))
 /**
  * @brief Set the base address of the palette.
  * @note 2-byte alignment is required if pixel format is PALETTE4444 or PALETTE565.
@@ -910,7 +910,7 @@ static inline uint32_t PALETTE_SOURCE(uint32_t addr)
     return (DL_PALETTE_SOURCE | (addr & 0x3FFFFFUL));
 }
 
-//#define POINT_SIZE(size) ((DL_POINT_SIZE) | ((size) & 0x1FFFUL))
+//#define POINT_SIZE (размер) (( DL_POINT_SIZE ) | ((размер) & 0x1FFFUL))
 /**
  * @brief Set the radius of points to be drawn with primitive POINTS in 1/16 pixel precision.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -920,7 +920,7 @@ static inline uint32_t POINT_SIZE(uint16_t size)
     return (DL_POINT_SIZE | (size & 0x1FFFUL));
 }
 
-//#define SCISSOR_SIZE(width,height) ((DL_SCISSOR_SIZE) | (((width) & 0xFFFUL) << 12U) | ((height) & 0xFFFUL))
+//#define SCISSOR_SIZE (ширина,высота) (( DL_SCISSOR_SIZE ) | (((ширина) & 0xFFFUL) << 12U) | ((высота) & 0xFFFUL))
 /**
  * @brief Set the size of the scissor clip rectangle.
  * @note valid range for width and height is from zero to 2048
@@ -933,7 +933,7 @@ static inline uint32_t SCISSOR_SIZE(uint16_t width, uint16_t height)
     return (DL_SCISSOR_SIZE | widthv | heightv);
 }
 
-//#define SCISSOR_XY(x,y) ((DL_SCISSOR_XY) | (((x) & 0x7FFUL) << 11U) | ((y) & 0x7FFUL))
+//#define SCISSOR_XY (x,y) (( DL_SCISSOR_XY ) | (((x) & 0x7FFUL) << 11U) | ((y) & 0x7FFUL))
 /**
  * @brief Set the top left corner of the scissor clip rectangle.
  * @note valid range for width and height is from zero to 2047
@@ -946,7 +946,7 @@ static inline uint32_t SCISSOR_XY(uint16_t xc0, uint16_t yc0)
     return (DL_SCISSOR_XY | xc0v | yc0v);
 }
 
-//#define STENCIL_FUNC(func,ref,mask) ((DL_STENCIL_FUNC) | (((func) & 7UL) << 16U) | (((ref) & 0xFFUL) << 8U)|((mask) & 0xFFUL))
+//#define STENCIL_FUNC (func,ref,mask) (( DL_STENCIL_FUNC ) | (((func) & 7UL) << 16U) | (((ref) & 0xFFUL) << 8U)|((маска) & 0xFFUL))
 /**
  * @brief Set function and reference value for stencil testing.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -959,7 +959,7 @@ static inline uint32_t STENCIL_FUNC(uint8_t func, uint8_t ref, uint8_t mask)
     return (DL_STENCIL_FUNC | funcv | refv | maskv);
 }
 
-//#define STENCIL_MASK(mask) ((DL_STENCIL_MASK) | ((mask) & 0xFFUL))
+//#define STENCIL_MASK (маска) (( DL_STENCIL_MASK ) | ((маска) & 0xFFUL))
 /**
  * @brief Control the writing of individual bits in the stencil planes.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -969,7 +969,7 @@ static inline uint32_t STENCIL_MASK(uint8_t mask)
     return (DL_STENCIL_MASK | mask);
 }
 
-//#define STENCIL_OP(sfail,spass) ((DL_STENCIL_OP) | (((sfail) & 7UL) << 3U) | ((spass) & 7UL))
+//#define STENCIL_OP (sfail,spass) (( DL_STENCIL_OP ) | (((sfail) & 7UL) << 3U) | ((spass) & 7UL))
 /**
  * @brief Set stencil test actions.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -981,7 +981,7 @@ static inline uint32_t STENCIL_OP(uint8_t sfail, uint8_t spass)
     return (DL_STENCIL_OP | sfailv | spassv);
 }
 
-//#define TAG(s) ((DL_TAG) | ((s) & 0xFFUL))
+//#define TAG (s) (( DL_TAG ) | ((s) & 0xFFUL))
 /**
  * @brief Attach the tag value for the following graphics objects drawn on the screen.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -991,7 +991,7 @@ static inline uint32_t TAG(uint8_t tagval)
     return (DL_TAG | tagval);
 }
 
-//#define TAG_MASK(mask) ((DL_TAG_MASK) | ((mask) & 1UL))
+//#define TAG_MASK (маска) (( DL_TAG_MASK ) | ((маска) & 1UL))
 /**
  * @brief Control the writing of the tag buffer.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1001,7 +1001,7 @@ static inline uint32_t TAG_MASK(uint8_t mask)
     return (DL_TAG_MASK | ((mask) & 1UL));
 }
 
-//#define VERTEX2F(x,y) ((DL_VERTEX2F) | ((((uint32_t) (x)) & 0x7FFFUL) << 15U) | (((uint32_t) (y)) & 0x7FFFUL))
+//#define VERTEX2F (x,y) (( DL_VERTEX2F ) | (((( uint32_t ) (x)) & 0x7FFFUL) << 15U) | ((( uint32_t ) (y)) & 0x7FFFUL))
 /**
  * @brief Set coordinates for graphics primitves.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1013,7 +1013,7 @@ static inline uint32_t VERTEX2F(int16_t xc0, int16_t yc0)
     return (DL_VERTEX2F | xc0v | yc0v);
 }
 
-//#define VERTEX2II(x,y,handle,cell) ((DL_VERTEX2II) | (((x) & 0x1FFUL) << 21U) | (((y) & 0x1FFUL) << 12U) | (((handle) & 0x1FUL) << 7U) | ((cell) & 0x7FUL))
+//#define VERTEX2II (x,y,дескриптор,ячейка) (( DL_VERTEX2II ) | (((x) & 0x1FFUL) << 21U) | (((y) & 0x1FFUL) << 12U) | (((дескриптор) & 0x1FUL) << 7U) | ((ячейка) & 0x7FUL))
 /**
  * @brief Set coordinates, bitmap-handle and cell-number for graphics primitves.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1027,7 +1027,7 @@ static inline uint32_t VERTEX2II(uint16_t xc0, uint16_t yc0, uint8_t handle, uin
     return (DL_VERTEX2II | xc0v | yc0v | handlev | cellv);
 }
 
-//#define VERTEX_FORMAT(frac) ((DL_VERTEX_FORMAT) | ((frac) & 7UL))
+//#define VERTEX_FORMAT (ГРП) (( DL_VERTEX_FORMAT ) | ((ГРП) & 7UL))
 /**
  * @brief Set the precision of VERTEX2F coordinates.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1037,7 +1037,7 @@ static inline uint32_t VERTEX_FORMAT(uint8_t frac)
     return (DL_VERTEX_FORMAT | ((frac) & 7UL));
 }
 
-//#define VERTEX_TRANSLATE_X(x) ((DL_VERTEX_TRANSLATE_X) | ((x) & 0x1FFFFUL))
+//#define VERTEX_TRANSLATE_X (x) (( DL_VERTEX_TRANSLATE_X ) | ((x) & 0x1FFFFUL))
 /**
  * @brief Set the vertex transformations X translation component.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1047,7 +1047,7 @@ static inline uint32_t VERTEX_TRANSLATE_X(int32_t xco)
     return (DL_VERTEX_TRANSLATE_X | (((uint32_t) xco) & 0x1FFFFUL));
 }
 
-//#define VERTEX_TRANSLATE_Y(y) ((DL_VERTEX_TRANSLATE_Y) | ((y) & 0x1FFFFUL))
+//#define VERTEX_TRANSLATE_Y (y) (( DL_VERTEX_TRANSLATE_Y ) | ((y) & 0x1FFFFUL))
 /**
  * @brief Set the vertex transformations Y translation component.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1057,25 +1057,25 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
     return (DL_VERTEX_TRANSLATE_Y | (((uint32_t) yco) & 0x1FFFFUL));
 }
 
-/* #define BEGIN(prim) ((DL_BEGIN) | ((prim) & 15UL)) */ /* use define DL_BEGIN */
-/* #define DISPLAY() ((DL_DISPLAY)) */ /* use define DL_DISPLAY */
-/* #define END() ((DL_END)) */ /* use define DL_END */
-/* #define RESTORE_CONTEXT() ((DL_RESTORE_CONTEXT)) */ /* use define DL_RESTORE_CONTEXT */
-/* #define RETURN() ((DL_RETURN)) */ /* use define DL_RETURN */
-/* #define SAVE_CONTEXT() ((DL_SAVE_CONTEXT)) */ /* use define DL_SAVE_CONTEXT */
+/* #define BEGIN(prim) ((DL_BEGIN) | ((prim) & 15UL)) */ /* используйте определение DL_BEGIN */
+/* #define DISPLAY() ((DL_DISPLAY)) */ /* используйте определение DL_DISPLAY */
+/* #define END() ((DL_END)) */ /* используйте определение DL_END */
+/* #define RESTORE_CONTEXT() ((DL_RESTORE_CONTEXT)) */ /* используйте определение DL_RESTORE_CONTEXT */
+/* #define RETURN() ((DL_RETURN)) */ /* используйте определение DL_RETURN */
+/* #define SAVE_CONTEXT() ((DL_SAVE_CONTEXT)) */ /* используйте определение DL_SAVE_CONTEXT */
 /* #define NOP() ((DL_NOP)) */
 
 /* ########## EVE Generation 3: BT815 / BT816 definitions ########## */
 
 #if EVE_GEN > 2
 
-#define EVE_GLFORMAT  ((uint32_t) 31UL) /* used with BITMAP_LAYOUT to indicate bitmap-format is specified by BITMAP_EXT_FORMAT */
+#define EVE_GLFORMAT  ((uint32_t) 31UL) /* используется с BITMAP_LAYOUT для указания формата растрового изображения, заданного BITMAP_EXT_FORMAT */
 
-#define DL_BITMAP_EXT_FORMAT ((uint32_t) 0x2E000000UL) /* requires OR'd arguments */
+#define DL_BITMAP_EXT_FORMAT ((uint32_t) 0x2E000000UL) /* требуются аргументы OR */
 #define DL_BITMAP_SWIZZLE    ((uint32_t) 0x2F000000UL)
-/* #define DL_INT_FRR           ((uint32_t) 0x30000000UL) */ /* ESE displays "Internal: flash read result" - undocumented display list command */
+/* #define DL_INT_FRR           ((uint32_t) 0x30000000UL) */ /* ESE отображает «Внутренний: результат чтения флэш-памяти» — недокументированная команда списка отображения. */
 
-/* Extended Bitmap formats */
+/* Расширенные форматы растровых изображений */
 #define EVE_ASTC_4X4   ((uint32_t) 37808UL)
 #define EVE_ASTC_5X4   ((uint32_t) 37809UL)
 #define EVE_ASTC_5X5   ((uint32_t) 37810UL)
@@ -1091,7 +1091,7 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 #define EVE_ASTC_12X10 ((uint32_t) 37820UL)
 #define EVE_ASTC_12X12 ((uint32_t) 37821UL)
 
-#define EVE_RAM_ERR_REPORT      ((uint32_t) 0x309800UL) /* max 128 bytes null terminated string */
+#define EVE_RAM_ERR_REPORT      ((uint32_t) 0x309800UL) /* строка длиной не более 128 байт, завершающаяся нулем */
 #define EVE_RAM_FLASH           ((uint32_t) 0x800000UL)
 #define EVE_RAM_FLASH_POSTBLOB  ((uint32_t) 0x801000UL)
 
@@ -1100,24 +1100,24 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 #define EVE_OPT_FORMAT ((uint16_t) 4096U)
 #define EVE_OPT_FILL   ((uint16_t) 8192U)
 
-/* Commands for BT815 / BT816 */
+/* Команды для BT815/BT816 */
 #define CMD_BITMAP_TRANSFORM ((uint32_t) 0xFFFFFF21UL)
-#define CMD_SYNC             ((uint32_t) 0xFFFFFF42UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_SYNC) */
-#define CMD_FLASHERASE       ((uint32_t) 0xFFFFFF44UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHERASE) */
+#define CMD_SYNC             ((uint32_t) 0xFFFFFF42UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_SYNC ) */
+#define CMD_FLASHERASE       ((uint32_t) 0xFFFFFF44UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHERASE ) */
 #define CMD_FLASHWRITE       ((uint32_t) 0xFFFFFF45UL)
 #define CMD_FLASHREAD        ((uint32_t) 0xFFFFFF46UL)
 #define CMD_FLASHUPDATE      ((uint32_t) 0xFFFFFF47UL)
-#define CMD_FLASHDETACH      ((uint32_t) 0xFFFFFF48UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHDETACH) */
-#define CMD_FLASHATTACH      ((uint32_t) 0xFFFFFF49UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHATTACH) */
+#define CMD_FLASHDETACH      ((uint32_t) 0xFFFFFF48UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHDETACH ) */
+#define CMD_FLASHATTACH      ((uint32_t) 0xFFFFFF49UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHATTACH ) */
 #define CMD_FLASHFAST        ((uint32_t) 0xFFFFFF4AUL)
-#define CMD_FLASHSPIDESEL    ((uint32_t) 0xFFFFFF4BUL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHSPIDESEL) */
+#define CMD_FLASHSPIDESEL    ((uint32_t) 0xFFFFFF4BUL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHSPIDESEL ) */
 #define CMD_FLASHSPITX       ((uint32_t) 0xFFFFFF4CUL)
 #define CMD_FLASHSPIRX       ((uint32_t) 0xFFFFFF4DUL)
 #define CMD_FLASHSOURCE      ((uint32_t) 0xFFFFFF4EUL)
-#define CMD_CLEARCACHE       ((uint32_t) 0xFFFFFF4FUL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_CLEARCACHE) */
+#define CMD_CLEARCACHE       ((uint32_t) 0xFFFFFF4FUL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_CLEARCACHE ) */
 #define CMD_INFLATE2         ((uint32_t) 0xFFFFFF50UL)
 #define CMD_ROTATEAROUND     ((uint32_t) 0xFFFFFF51UL)
-#define CMD_RESETFONTS       ((uint32_t) 0xFFFFFF52UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_RESETFONTS) */
+#define CMD_RESETFONTS       ((uint32_t) 0xFFFFFF52UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_RESETFONTS ) */
 #define CMD_ANIMSTART        ((uint32_t) 0xFFFFFF53UL)
 #define CMD_ANIMSTOP         ((uint32_t) 0xFFFFFF54UL)
 #define CMD_ANIMXY           ((uint32_t) 0xFFFFFF55UL)
@@ -1126,9 +1126,9 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 #define CMD_FILLWIDTH        ((uint32_t) 0xFFFFFF58UL)
 #define CMD_APPENDF          ((uint32_t) 0xFFFFFF59UL)
 #define CMD_ANIMFRAME        ((uint32_t) 0xFFFFFF5AUL)
-#define CMD_VIDEOSTARTF      ((uint32_t) 0xFFFFFF5FUL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_VIDEOSTARTF) */
+#define CMD_VIDEOSTARTF      ((uint32_t) 0xFFFFFF5FUL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_VIDEOSTARTF ) */
 
-/* Registers for BT815 / BT816 */
+/* Регистры для BT815/BT816 */
 #define REG_ADAPTIVE_FRAMERATE ((uint32_t) 0x0030257cUL)
 #define REG_PLAYBACK_PAUSE     ((uint32_t) 0x003025ecUL)
 #define REG_FLASH_STATUS       ((uint32_t) 0x003025f0UL)
@@ -1136,9 +1136,9 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 #define REG_PLAY_CONTROL       ((uint32_t) 0x0030914eUL)
 #define REG_COPRO_PATCH_PTR    ((uint32_t) 0x00309162UL)
 
-/* Macros for BT815 / BT816 */
+/* Макросы для BT815/BT816 */
 
-//#define BITMAP_EXT_FORMAT(format) ((DL_BITMAP_EXT_FORMAT) | ((format) & 0xFFFFUL))
+//#define BITMAP_EXT_FORMAT (формат) (( DL_BITMAP_EXT_FORMAT ) | ((формат) & 0xFFFFUL))
 /**
  * @brief Set the extended format of the bitmap.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1148,7 +1148,7 @@ static inline uint32_t BITMAP_EXT_FORMAT(uint16_t format)
     return (DL_BITMAP_EXT_FORMAT | format);
 }
 
-//#define BITMAP_SWIZZLE(r,g,b,a) ((DL_BITMAP_SWIZZLE) | (((r) & 7UL) << 9U) | (((g) & 7UL) << 6U) | (((b) & 7UL) << 3U) | ((a) & 7UL))
+//#define BITMAP_SWIZZLE (r,g,b,a) (( DL_BITMAP_SWIZZLE ) | (((r) & 7UL) << 9U) | (((g) & 7UL) << 6U) | (((b) & 7UL) << 3U) | ((a) & 7UL))
 /**
  * @brief Set the source for the red, green, blue and alpha channels of a bitmap.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1162,7 +1162,7 @@ static inline uint32_t BITMAP_SWIZZLE(uint8_t red, uint8_t green, uint8_t blue, 
     return (DL_BITMAP_SWIZZLE | redv | greenv | bluev | alphav);
 }
 
-//#define BITMAP_TRANSFORM_A_EXT(p,v) ((DL_BITMAP_TRANSFORM_A) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_A_EXT (p,v) (( DL_BITMAP_TRANSFORM_A ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
  * @brief Set the A coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1174,7 +1174,7 @@ static inline uint32_t BITMAP_TRANSFORM_A(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_A | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_B_EXT(p,v) ((DL_BITMAP_TRANSFORM_B) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_B_EXT (p,v) (( DL_BITMAP_TRANSFORM_B ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
  * @brief Set the B coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1186,7 +1186,7 @@ static inline uint32_t BITMAP_TRANSFORM_B(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_B | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_D_EXT(p,v) ((DL_BITMAP_TRANSFORM_D) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_D_EXT (p,v) (( DL_BITMAP_TRANSFORM_D ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
  * @brief Set the D coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1198,7 +1198,7 @@ static inline uint32_t BITMAP_TRANSFORM_D(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_D | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_E_EXT(p,v) ((DL_BITMAP_TRANSFORM_E) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#define BITMAP_TRANSFORM_E_EXT (p,v) (( DL_BITMAP_TRANSFORM_E ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
  * @brief Set the E coefficient of the bitmap transform matrix.
  * @return a 32 bit word for use with EVE_cmd_dl()
@@ -1210,10 +1210,10 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_E | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_A(a) BITMAP_TRANSFORM_A_EXT(0UL,(a))
-//#define BITMAP_TRANSFORM_B(b) BITMAP_TRANSFORM_B_EXT(0UL,(b))
-//#define BITMAP_TRANSFORM_D(d) BITMAP_TRANSFORM_D_EXT(0UL,(d))
-//#define BITMAP_TRANSFORM_E(e) BITMAP_TRANSFORM_E_EXT(0UL,(e))
+//#define BITMAP_TRANSFORM_A (а) BITMAP_TRANSFORM_A_EXT (0UL,(а))
+//#define BITMAP_TRANSFORM_B (б) BITMAP_TRANSFORM_B_EXT (0UL,(б))
+//#define BITMAP_TRANSFORM_D (д) BITMAP_TRANSFORM_D_EXT (0UL,(д))
+//#define BITMAP_TRANSFORM_E (e) BITMAP_TRANSFORM_E_EXT (0UL,(e))
 
 #endif  /* EVE_GEN > 2 */
 
@@ -1221,13 +1221,13 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
 
 #if EVE_GEN > 3
 
-/* Commands for BT817 / BT818 */
+/* Команды для BT817/BT818 */
 #define CMD_ANIMFRAMERAM   ((uint32_t) 0xFFFFFF6DUL)
 #define CMD_ANIMSTARTRAM   ((uint32_t) 0xFFFFFF6EUL)
 #define CMD_APILEVEL       ((uint32_t) 0xFFFFFF63UL)
 #define CMD_CALIBRATESUB   ((uint32_t) 0xFFFFFF60UL)
 #define CMD_CALLLIST       ((uint32_t) 0xFFFFFF67UL)
-#define CMD_ENDLIST        ((uint32_t) 0xFFFFFF69UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_ENDLIST) */
+#define CMD_ENDLIST        ((uint32_t) 0xFFFFFF69UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_ENDLIST ) */
 #define CMD_FLASHPROGRAM   ((uint32_t) 0xFFFFFF70UL)
 #define CMD_FONTCACHE      ((uint32_t) 0xFFFFFF6BUL)
 #define CMD_FONTCACHEQUERY ((uint32_t) 0xFFFFFF6CUL)
@@ -1236,12 +1236,12 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
 #define CMD_LINETIME       ((uint32_t) 0xFFFFFF5EUL)
 #define CMD_NEWLIST        ((uint32_t) 0xFFFFFF68UL)
 #define CMD_PCLKFREQ       ((uint32_t) 0xFFFFFF6AUL)
-#define CMD_RETURN         ((uint32_t) 0xFFFFFF66UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_RETURN) */
+#define CMD_RETURN         ((uint32_t) 0xFFFFFF66UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_RETURN ) */
 #define CMD_RUNANIM        ((uint32_t) 0xFFFFFF6FUL)
-#define CMD_TESTCARD       ((uint32_t) 0xFFFFFF61UL) /* does not need a dedicated function, just use EVE_cmd_dl(CMD_TESTCARD) */
+#define CMD_TESTCARD       ((uint32_t) 0xFFFFFF61UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_TESTCARD ) */
 #define CMD_WAIT           ((uint32_t) 0xFFFFFF65UL)
 
-/* Registers for BT817 / BT818 */
+/* Регистры для BT817/BT818 */
 #define REG_UNDERRUN      ((uint32_t) 0x0030260cUL)
 #define REG_AH_HCYCLE_MAX ((uint32_t) 0x00302610UL)
 #define REG_PCLK_FREQ     ((uint32_t) 0x00302614UL)

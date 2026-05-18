@@ -98,7 +98,7 @@ extern "C" {
 #define LV_FS_DEFAULT_DRIVER_LETTER LV_FS_DEFAULT_DRIVE_LETTER
 #endif
 
-#endif /* defined(LV_FS_DEFAULT_DRIVE_LETTER) */
+#endif /* определено( LV_FS_DEFAULT_DRIVE_LETTER ) */
 
 #define LV_LABEL_LONG_WRAP             LV_LABEL_LONG_MODE_WRAP
 #define LV_LABEL_LONG_DOT              LV_LABEL_LONG_MODE_DOTS
@@ -123,7 +123,7 @@ extern "C" {
 #define lv_calendar_header_dropdown_create  lv_calendar_add_header_dropdown
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_API_MAP_V9_1_H */

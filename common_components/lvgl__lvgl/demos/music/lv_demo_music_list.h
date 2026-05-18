@@ -37,7 +37,7 @@ void lv_demo_music_list_button_check(uint32_t track_id, bool state);
 #endif /*LV_USE_DEMO_MUSIC*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_MUSIC_LIST_H*/

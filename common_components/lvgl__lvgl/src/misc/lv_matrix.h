@@ -42,92 +42,92 @@ struct _lv_matrix_t {
  **********************/
 
 /**
- * Set matrix to identity matrix
- * @param matrix           pointer to a matrix
+ * Установить матрицу в единичную матрицу
+ * @param matrix           указатель на матрицу
  */
 void lv_matrix_identity(lv_matrix_t * matrix);
 
 /**
- * Translate the matrix to new position
- * @param matrix           pointer to a matrix
- * @param tx               the amount of translate in x direction
- * @param tx               the amount of translate in y direction
+ * Перевести матрицу в новую позицию
+ * @param matrix           указатель на матрицу
+ * @param tx               величина перевода в направлении x
+ * @param tx               сумма перевода в направлении Y
  */
 void lv_matrix_translate(lv_matrix_t * matrix, float tx, float ty);
 
 /**
- * Change the scale factor of the matrix
- * @param matrix           pointer to a matrix
- * @param scale_x          the scale factor for the X direction
- * @param scale_y          the scale factor for the Y direction
+ * Измените масштабный коэффициент матрицы
+ * @param matrix           указатель на матрицу
+ * @param scale_x          масштабный коэффициент для направления X
+ * @param scale_y          масштабный коэффициент для направления Y
  */
 void lv_matrix_scale(lv_matrix_t * matrix, float scale_x, float scale_y);
 
 /**
- * Rotate the matrix with origin
- * @param matrix           pointer to a matrix
- * @param degree           angle to rotate
+ * Поворот матрицы относительно начала координат
+ * @param matrix           указатель на матрицу
+ * @param degree           угол для поворота
  */
 void lv_matrix_rotate(lv_matrix_t * matrix, float degree);
 
 /**
- * Change the skew factor of the matrix
- * @param matrix           pointer to a matrix
- * @param skew_x           the skew factor for x direction
- * @param skew_y           the skew factor for y direction
+ * Измените коэффициент перекоса матрицы
+ * @param matrix           указатель на матрицу
+ * @param skew_x           коэффициент перекоса для направления x
+ * @param skew_y           коэффициент перекоса для направления y
  */
 void lv_matrix_skew(lv_matrix_t * matrix, float skew_x, float skew_y);
 
 /**
- * Multiply two matrix and store the result to the first one
- * @param matrix           pointer to a matrix
- * @param matrix2          pointer to another matrix
+ * Умножьте две матрицы и сохраните результат в первой
+ * @param matrix           указатель на матрицу
+ * @param matrix2          указатель на другую матрицу
  */
 void lv_matrix_multiply(lv_matrix_t * matrix, const lv_matrix_t * mul);
 
 /**
- * Invert the matrix
- * @param matrix           pointer to a matrix
- * @param m                pointer to another matrix (optional)
- * @return true: the matrix is invertible, false: the matrix is singular and cannot be inverted
+ * Инвертировать матрицу
+ * @param matrix           указатель на матрицу
+ * @param m                указатель на другую матрицу (необязательно)
+ * @return true: матрица обратима, false: матрица сингулярна и не может быть инвертирована
  */
 bool lv_matrix_inverse(lv_matrix_t * matrix, const lv_matrix_t * m);
 
 /**
- * Transform a point by a matrix
- * @param matrix           pointer to a matrix
- * @param point            pointer to a point
- * @return the transformed point
+ * Преобразование точки с помощью матрицы
+ * @param matrix           указатель на матрицу
+ * @param point            указатель на точку
+ * @return преобразованная точка
  */
 lv_point_precise_t lv_matrix_transform_precise_point(const lv_matrix_t * matrix, const lv_point_precise_t * point);
 
 /**
- * Transform an area by a matrix
- * @param matrix           pointer to a matrix
- * @param area             pointer to an area
- * @return the transformed area
+ * Преобразование области с помощью матрицы
+ * @param matrix           указатель на матрицу
+ * @param area             указатель на область
+ * @return преобразованная территория
  */
 lv_area_t lv_matrix_transform_area(const lv_matrix_t * matrix, const lv_area_t * area);
 
 /**
- * Check if the matrix is identity
- * @param matrix           pointer to a matrix
- * @return true: the matrix is identity , false: the matrix is not identity
+ * Проверьте, является ли матрица тождественной
+ * @param matrix           указатель на матрицу
+ * @return true: матрица единичная, false: матрица не единичная
  */
 bool lv_matrix_is_identity(const lv_matrix_t * matrix);
 
 /**
- * Check if the matrix is identity or translation matrix
- * @param matrix           pointer to a matrix
- * @return true: the matrix is identity or translation matrix, false: the matrix is not identity or translation matrix
+ * Проверьте, является ли матрица тождественной или матрицей перевода.
+ * @param matrix           указатель на матрицу
+ * @return true: матрица является тождественной матрицей или матрицей перевода, false: матрица не является тождественной матрицей или матрицей перевода.
  */
 bool lv_matrix_is_identity_or_translation(const lv_matrix_t * matrix);
 
 /**
- * Transpose a matrix.
- * @param src   pointer to the source matrix. If NULL, the function returns.
- * @param dst   pointer to the destination matrix. If NULL, the function returns.
- * Note: src and dst may point to the same matrix for in-place transposition.
+ * Транспонировать матрицу.
+ * @param src   указатель на исходную матрицу. ЕслиNULL, функция возвращает значение.
+ * @param dst   указатель на матрицу назначения. ЕслиNULL, функция возвращает значение.
+ * Note: src и dst могут указывать на одну и ту же матрицу для транспонирования на месте.
  */
 void lv_matrix_transpose(const lv_matrix_t * src, lv_matrix_t * dst);
 
@@ -138,7 +138,7 @@ void lv_matrix_transpose(const lv_matrix_t * src, lv_matrix_t * dst);
 #endif /*LV_USE_MATRIX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_MATRIX_H*/

@@ -36,15 +36,15 @@ extern "C" {
  **********************/
 
 /**
- * Wrapper around lv_timer_handler
+ * Обертка вокруг lv_timer_handler
  * @note Must be called in the application run loop instead of the
- * regular lv_timer_handler provided by LVGL
+ * обычный lv_timer_handler предоставлен LVGL
  * @return time till it needs to be run next (in ms)
  */
 uint32_t lv_wayland_timer_handler(void);
 
 /**
- * Retrieves the file descriptor of the wayland socket
+ * Получает файловый дескриптор сокета Wayland.
  */
 int lv_wayland_get_fd(void);
 
@@ -55,7 +55,7 @@ int lv_wayland_get_fd(void);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_WAYLAND_H */

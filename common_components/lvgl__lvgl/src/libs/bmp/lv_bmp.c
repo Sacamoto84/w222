@@ -83,7 +83,7 @@ void lv_bmp_deinit(void)
  **********************/
 
 /**
- * Get info about a BMP image
+ * Получить информацию об изображении BMP
  * @param dsc image descriptor containing the source and type of the image and other info.
  * @param header store the info here
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
@@ -93,13 +93,13 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
     LV_UNUSED(decoder);
 
     const void * src = dsc->src;
-    lv_image_src_t src_type = dsc->src_type;          /*Get the source type*/
+    lv_image_src_t src_type = dsc->src_type;          /*Получить тип источника*/
 
-    /*If it's a BMP file...*/
+    /*Если это файл BMP...*/
     if(src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = src;
-        if(lv_strcmp(lv_fs_get_ext(fn), "bmp") == 0) {              /*Check the extension*/
-            /*Save the data in the header*/
+        if(lv_strcmp(lv_fs_get_ext(fn), "bmp") == 0) {              /*Проверьте расширение*/
+            /*Сохраняем данные в шапке*/
             uint8_t headers[54];
 
             lv_fs_read(&dsc->file, headers, 54, NULL);
@@ -129,17 +129,17 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_OK;
         }
     }
-    /* BMP file as data not supported for simplicity.
-     * Convert them to LVGL compatible C arrays directly. */
+    /* BMP как данные не поддерживаются для простоты.
+     * Преобразуйте их напрямую в LVGL-совместимые массивы C. */
     else if(src_type == LV_IMAGE_SRC_VARIABLE) {
         return LV_RESULT_INVALID;
     }
 
-    return LV_RESULT_INVALID;         /*If didn't succeeded earlier then it's an error*/
+    return LV_RESULT_INVALID;         /*Если раньше это не удалось, то это ошибка*/
 }
 
 /**
- * Open a BMP image and return the decided image
+ * Откройте изображение BMP и верните выбранное изображение.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -148,12 +148,12 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 {
     LV_UNUSED(decoder);
 
-    /*If it's a BMP file...*/
+    /*Если это файл BMP...*/
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = dsc->src;
 
         if(lv_strcmp(lv_fs_get_ext(fn), "bmp") != 0) {
-            return LV_RESULT_INVALID;       /*Check the extension*/
+            return LV_RESULT_INVALID;       /*Проверьте расширение*/
         }
 
         bmp_dsc_t b;
@@ -182,13 +182,13 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         lv_memcpy(dsc->user_data, &b, sizeof(b));
         return LV_RESULT_OK;
     }
-    /* BMP file as data not supported for simplicity.
-     * Convert them to LVGL compatible C arrays directly. */
+    /* BMP как данные не поддерживаются для простоты.
+     * Преобразуйте их напрямую в LVGL-совместимые массивы C. */
     else if(dsc->src_type == LV_IMAGE_SRC_VARIABLE) {
         return LV_RESULT_INVALID;
     }
 
-    return LV_RESULT_INVALID;    /*If not returned earlier then it failed*/
+    return LV_RESULT_INVALID;    /*Если не вернулся раньше, значит, это не удалось*/
 }
 
 static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
@@ -226,7 +226,7 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
         return LV_RESULT_INVALID;
     }
     else {
-        int32_t y = (b->px_height - 1) - (decoded_area->y1); /*BMP images are stored upside down*/
+        int32_t y = (b->px_height - 1) - (decoded_area->y1); /*Изображения BMP хранятся в перевернутом виде.*/
         uint32_t p = b->px_offset + b->row_size_bytes * y;
         p += (decoded_area->x1) * (b->bpp / 8);
         lv_fs_seek(&b->f, p, LV_FS_SEEK_SET);
@@ -238,7 +238,7 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 }
 
 /**
- * Free the allocated resources
+ * Освободите выделенные ресурсы
  */
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {

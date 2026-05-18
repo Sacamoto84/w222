@@ -23,7 +23,7 @@ void lv_example_win_1(void)
     btn = lv_win_add_button(win, LV_SYMBOL_CLOSE, 60);
     lv_obj_add_event_cb(btn, event_handler, LV_EVENT_CLICKED, NULL);
 
-    lv_obj_t * cont = lv_win_get_content(win);  /*Content can be added here*/
+    lv_obj_t * cont = lv_win_get_content(win);  /*Контент можно добавить сюда*/
     lv_obj_t * label = lv_label_create(cont);
     lv_label_set_text(label, "This is\n"
                       "a pretty\n"

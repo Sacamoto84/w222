@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -39,7 +39,7 @@
 #include "tvgStr.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 bool _isIgnoreUnsupportedLogAttributes(TVG_UNUSED const char* tagAttribute, TVG_UNUSED const char* tagValue)
@@ -49,7 +49,7 @@ bool _isIgnoreUnsupportedLogAttributes(TVG_UNUSED const char* tagAttribute, TVG_
     const struct
     {
         const char* tag;
-        bool tagWildcard; //If true, it is assumed that a wildcard is used after the tag. (ex: tagName*)
+        bool tagWildcard; //Если это правда, предполагается, что после тега используется подстановочный знак. (например: имя_тега*)
         const char* value;
     } attributes[] = {
         {"id", false, nullptr},
@@ -244,7 +244,7 @@ static SimpleXMLType _getXMLType(const char* itr, const char* itrEnd, size_t &to
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 const char* simpleXmlNodeTypeToString(TVG_UNUSED SvgNodeType type)
@@ -318,7 +318,7 @@ bool simpleXmlParseAttributes(const char* buf, unsigned bufLength, simpleXMLAttr
             if ((*keyEnd == '=') || (isspace((unsigned char)*keyEnd))) break;
         }
         if (keyEnd == itrEnd) goto error;
-        if (keyEnd == key) {  // There is no key. This case is invalid, but explores the following syntax.
+        if (keyEnd == key) {  // Ключа нет. Этот случай недействителен, но используется следующий синтаксис.
             itr = keyEnd + 1;
             continue;
         }
@@ -384,7 +384,7 @@ bool simpleXmlParse(const char* buf, unsigned bufLength, bool strip, simpleXMLCb
 
     while (itr < itrEnd) {
         if (itr[0] == '<') {
-            //Invalid case
+            //Неверный регистр
             if (itr + 1 >= itrEnd) return false;
 
             size_t toff = 0;
@@ -397,7 +397,7 @@ bool simpleXmlParse(const char* buf, unsigned bufLength, bool strip, simpleXMLCb
             else p = _simpleXmlFindEndTag(itr + 1 + toff, itrEnd);
 
             if (p) {
-                //Invalid case: '<' nested
+                //Неверный регистр: '<' вложен
                 if (*p == '<' && type != SimpleXMLType::Doctype) return false;
                 const char *start, *end;
 
@@ -535,8 +535,8 @@ bool simpleXmlParseW3CAttribute(const char* buf, unsigned bufLength, simpleXMLAt
 
 
 /*
- * Supported formats:
- * tag {}, .name {}, tag.name{}
+ * Поддерживаемые форматы:
+ * тег {}, .имя {}, тег.имя{}
  */
 const char* simpleXmlParseCSSAttribute(const char* buf, unsigned bufLength, char** tag, char** name, const char** attrs, unsigned* attrsLength)
 {
@@ -581,7 +581,7 @@ const char* simpleXmlFindAttributesTag(const char* buf, unsigned bufLength)
 
     for (; itr < itrEnd; itr++) {
         if (!isspace((unsigned char)*itr)) {
-            //User skip tagname and already gave it the attributes.
+            //Пользователь пропустил тэг и уже присвоил ему атрибуты.
             if (*itr == '=') return buf;
         } else {
             itr = _simpleXmlUnskipXmlEntities(itr, buf);

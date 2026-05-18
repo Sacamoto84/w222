@@ -188,7 +188,7 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 {
     lv_draw_opengles_unit_t * draw_opengles_unit = (lv_draw_opengles_unit_t *) draw_unit;
 
-    /*Return immediately if it's busy with a draw task*/
+    /*Немедленно вернитесь, если он занят задачей рисования.*/
     if(draw_opengles_unit->task_act) return 0;
 
     lv_draw_task_t * t = NULL;
@@ -214,7 +214,7 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_opengles_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_opengles_unit->task_act = NULL;
 
-    /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+    /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
     lv_draw_dispatch_request();
     return 1;
 }
@@ -228,8 +228,8 @@ static int32_t evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
         return 0;
     }
 
-    /*If not refreshing the display probably it's a canvas rendering
-     *which his not supported in OpenGL as it's not a texture.*/
+    /*Если не обновлять дисплей, возможно, это рендеринг холста.
+     *который не поддерживается в OpenGL, поскольку это не текстура.*/
     if(lv_refr_get_disp_refreshing() == NULL) return 0;
 
     if(((lv_draw_dsc_base_t *)task->draw_dsc)->user_data == NULL) {
@@ -361,8 +361,8 @@ static bool draw_to_texture(lv_draw_opengles_unit_t * u, cache_data_t * cache_da
                 break;
             }
         default:
-            /*The malloced cache_data->draw_dsc will be freed automatically on failure
-            *in opengles_texture_cache_free_cb*/
+            /*Malloced cache_data -> draw_dsc будет автоматически освобожден в случае сбоя.
+            *в opengles_texture_cache_free_cb*/
             LV_PROFILER_DRAW_END;
             return false;
     }
@@ -419,7 +419,7 @@ static void blend_texture_layer(lv_draw_task_t * t)
     }
 
     lv_opengles_viewport(0, 0, targ_tex_w, targ_tex_h);
-    // TODO rotation
+    // TODO вращение
     bool h_flip = false;
     bool v_flip = false;
 #if LV_USE_3DTEXTURE
@@ -459,13 +459,13 @@ static void draw_from_cached_texture(lv_draw_task_t * t)
     data_to_find.h = lv_area_get_height(&t->_real_area);
     data_to_find.texture = 0;
 
-    /*user_data stores the renderer to differentiate it from SW rendered tasks.
-     *However the cached texture is independent from the renderer so use NULL user_data*/
+    /*user_data сохраняет средство рендеринга, чтобы отличать его от задач рендеринга SW.
+     *Однако кэшированная текстура не зависит от средства рендеринга, поэтому используйте NULL user_data.*/
     void * user_data_saved = data_to_find.draw_dsc->user_data;
     data_to_find.draw_dsc->user_data = NULL;
 
-    /*img_dsc->image_area is an absolute coordinate so it's different
-     *for the same image on a different position. So make it relative before using for cache. */
+    /*img_dsc -> image_area — абсолютная координата, поэтому она другая.
+     *для того же изображения в другой позиции. Поэтому сделайте его относительным, прежде чем использовать для кеша. */
     lv_area_t a = t->area;
     if(t->type == LV_DRAW_TASK_TYPE_IMAGE) {
         lv_draw_image_dsc_t * img_dsc = (lv_draw_image_dsc_t *)data_to_find.draw_dsc;
@@ -535,23 +535,23 @@ static void draw_from_cached_texture(lv_draw_task_t * t)
 
     lv_cache_release(u->texture_cache, entry_cached, u);
 
-    /*Do not cache modifiable images as they might change in the next frame
-     *resulting in stale textures in the cache. */
+    /*Не кэшируйте изменяемые изображения, поскольку они могут измениться в следующем кадре.
+     *что приводит к устаревшим текстурам в кеше. */
     if(t->type == LV_DRAW_TASK_TYPE_IMAGE) {
         lv_draw_image_dsc_t * img_dsc = (lv_draw_image_dsc_t *)t->draw_dsc;
         if(img_dsc->header.flags & LV_IMAGE_FLAGS_MODIFIABLE) {
             lv_cache_drop(u->texture_cache, &data_to_find, u);
         }
     }
-    /*Do not cache non static (const) texts as the text's pointer can be freed/reallocated
-     *at any time resulting in a wild pointer in the cached draw dsc. */
+    /*Не кэшируйте нестатические (константные) тексты, поскольку указатель текста может быть освобожден/перераспределен.
+     *в любой момент, что приведет к появлению дикого указателя в кэшированном dsc отрисовки. */
     if(t->type == LV_DRAW_TASK_TYPE_LABEL) {
         lv_draw_label_dsc_t * label_dsc = t->draw_dsc;
         if(!label_dsc->text_static) {
             lv_cache_drop(u->texture_cache, &data_to_find, u);
         }
     }
-    /*Do not cache lines rendered from points at dsc->points will be freed*/
+    /*Не кэшировать строки, отображаемые из точек в dsc->points, будут освобождены*/
     else if(t->type == LV_DRAW_TASK_TYPE_LINE) {
         lv_draw_line_dsc_t * line_dsc = t->draw_dsc;
         if(line_dsc->points) {
@@ -566,7 +566,7 @@ static void execute_drawing(lv_draw_opengles_unit_t * u)
     lv_draw_task_t * t = u->task_act;
     t->draw_unit = (lv_draw_unit_t *)u;
 
-    /* the shader-based fill is not working reliably with EGL. */
+    /* заливка на основе шейдера не работает надежно с EGL. */
     if(t->type == LV_DRAW_TASK_TYPE_FILL) {
         lv_draw_fill_dsc_t * fill_dsc = t->draw_dsc;
         if(fill_dsc->radius == 0 && fill_dsc->grad.dir == LV_GRAD_DIR_NONE) {
@@ -590,7 +590,7 @@ static void execute_drawing(lv_draw_opengles_unit_t * u)
                 float tex_h = (float)lv_area_get_height(&fill_area);
                 GL_CALL(glEnable(GL_SCISSOR_TEST));
                 GL_CALL(glScissor(fill_area.x1, targ_tex_h - fill_area.y1 - tex_h, tex_w, tex_h));
-                /* swap red and blue channels here as they will be swapped back during flushing*/
+                /* поменяйте местами красный и синий каналы здесь, так как они поменяются местами во время промывки*/
                 GL_CALL(glClearColor((float)fill_dsc->color.blue / 255.0f, (float)fill_dsc->color.green / 255.0f,
                                      (float)fill_dsc->color.red / 255.0f, 1.0f));
                 GL_CALL(glClearDepthf(1.0f));
@@ -648,18 +648,18 @@ static unsigned int create_texture(int32_t w, int32_t h, const void * data)
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     GL_CALL(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
 
-    /* LV_COLOR_DEPTH 32, 16 are supported but the cached textures will always
-     * have full ARGB pixels since the alpha channel is required for blending.
+    /* LV_COLOR_DEPTH 32, 16 поддерживаются, но кэшированные текстуры всегда будут
+     * иметь полные пиксели ARGB, поскольку для смешивания необходим альфа-канал.
      */
     GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
 #if 0
     GL_CALL(glGenerateMipmap(GL_TEXTURE_2D));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 20));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-    /* GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST));
-     * Alternatively, the above form can be used in some cases for slightly faster performance, but
-     * visual quality when using image scales that are not exactly 1:1 (or 2:1 or some other increment)
-     * will be not as good.
+    /* GL_CALL (glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST_MIPMAP_NEAREST ));
+     * В качестве альтернативы в некоторых случаях можно использовать приведенную выше форму для немного более высокой производительности, но
+     * визуальное качество при использовании масштабов изображения, не являющихся точно 1:1 (или 2:1, или какое-либо другое приращение)
+     * будет не так хорошо.
      */
 #endif
 

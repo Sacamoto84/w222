@@ -54,7 +54,7 @@ lv_display_t * lv_lovyan_gfx_create(uint32_t hor_res, uint32_t ver_res, void * b
     }
 
     dsc->tft = new LGFX();
-    dsc->tft->init();     /* TFT init */
+    dsc->tft->init();     /* TFT инициализация */
     dsc->tft->initDMA();
     dsc->tft->setRotation(0);
     dsc->tft->setBrightness(255);
@@ -68,7 +68,7 @@ lv_display_t * lv_lovyan_gfx_create(uint32_t hor_res, uint32_t ver_res, void * b
     lv_display_set_buffers(disp, (void *)buf, NULL, buf_size_bytes, LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     if(touch) {
-        /* Register an input device when touch is enabled */
+        /* Зарегистрируйте устройство ввода, когда сенсорное управление включено */
         lv_indev_t * lv_input = lv_indev_create();
         lv_indev_set_driver_data(lv_input, (void *)dsc);
         lv_indev_set_type(lv_input, LV_INDEV_TYPE_POINTER);
@@ -108,19 +108,19 @@ static void resolution_changed_event_cb(lv_event_t * e)
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
     lv_display_rotation_t rot = lv_display_get_rotation(disp);
 
-    /* handle rotation */
+    /* вращение ручки */
     switch(rot) {
         case LV_DISPLAY_ROTATION_0:
-            dsc->tft->setRotation(0);   /* Portrait orientation */
+            dsc->tft->setRotation(0);   /* Портретная ориентация */
             break;
         case LV_DISPLAY_ROTATION_90:
-            dsc->tft->setRotation(1);   /* Landscape orientation */
+            dsc->tft->setRotation(1);   /* Альбомная ориентация */
             break;
         case LV_DISPLAY_ROTATION_180:
-            dsc->tft->setRotation(2);   /* Portrait orientation, flipped */
+            dsc->tft->setRotation(2);   /* Портретная ориентация, перевернутый */
             break;
         case LV_DISPLAY_ROTATION_270:
-            dsc->tft->setRotation(3);   /* Landscape orientation, flipped */
+            dsc->tft->setRotation(3);   /* Альбомная ориентация, перевернутая */
             break;
     }
 }
@@ -137,10 +137,10 @@ static void read_touch(lv_indev_t * indev, lv_indev_data_t * data)
     else {
         data->state = LV_INDEV_STATE_PRESSED;
 
-        /* LovyanGFX returns coordinates relative to the current software rotation.
-         * LVGL will also rotate the input coordinates based on the display rotation.
-         * To avoid "double rotation", we must reverse the LovyanGFX rotation
-         * and pass raw (Physical/Rotation 0) coordinates to LVGL.
+        /* LovyanGFX возвращает координаты относительно текущего вращения программного обеспечения.
+         * LVGL также будет вращать входные координаты в зависимости от поворота дисплея.
+         * Чтобы избежать «двойной ротации», мы должны обратить вспять ротацию LovyanGFX.
+         * и передайте необработанные координаты (Physical/Rotation 0) в LVGL .
          */
         uint8_t rotation = dsc->tft->getRotation();
 
@@ -149,30 +149,30 @@ static void read_touch(lv_indev_t * indev, lv_indev_data_t * data)
         int32_t h = dsc->tft->height();
 
         switch(rotation) {
-            case 1: /* Landscape (90 deg CW) */
-                /* Rot 0 (Phys) Top-Left becomes Rot 1 Top-Right.
-                 * Phys X = Rot1 Y
-                 * Phys Y = Rot1 Width - 1 - Rot1 X */
+            case 1: /* Пейзаж (90 градусов CW ) */
+                /* Rot 0 (Phys) Верхний левый становится Rot 1 Верхний правый.
+                 * Физ X = Рот1 Y
+                 * Phys Y = Ширина Rot1 - 1 - Rot1 X */
                 data->point.x = y;
                 data->point.y = w - 1 - x;
                 break;
 
-            case 2: /* Portrait Inverted (180 deg) */
-                /* Phys X = Rot2 Width - 1 - Rot2 X
-                 * Phys Y = Rot2 Height - 1 - Rot2 Y */
+            case 2: /* Портрет перевернутый (180 градусов) */
+                /* Физический X = Ширина Рота2 - 1 - Рот2 X
+                 * Phys Y = Высота Rot2 - 1 - Rot2 Y */
                 data->point.x = w - 1 - x;
                 data->point.y = h - 1 - y;
                 break;
 
-            case 3: /* Landscape Inverted (270 deg CW) */
-                /* Phys X = Rot3 Height - 1 - Rot3 Y
-                 * Phys Y = Rot3 X */
+            case 3: /* Пейзаж перевернутый (270 градусов CW ) */
+                /* Phys X = Высота Rot3 - 1 - Rot3 Y
+                 * Физика Y = Рот3 X */
                 data->point.x = h - 1 - y;
                 data->point.y = x;
                 break;
 
-            default: /* Portrait (0 deg) */
-                /* Pass through raw coordinates */
+            default: /* Портрет (0 град.) */
+                /* Пройти через необработанные координаты */
                 data->point.x = x;
                 data->point.y = y;
                 break;

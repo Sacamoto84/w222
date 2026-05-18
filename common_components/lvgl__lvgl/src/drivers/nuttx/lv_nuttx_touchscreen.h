@@ -37,7 +37,7 @@ extern "C" {
  **********************/
 
 /**
- * Initialize indev with specified input device.
+ * Инициализировать indev с указанным устройством ввода.
  * @param dev_path      path of input device
  */
 lv_indev_t * lv_nuttx_touchscreen_create(const char * dev_path);
@@ -51,7 +51,7 @@ lv_indev_t * lv_nuttx_touchscreen_create(const char * dev_path);
 #endif /* LV_USE_NUTTX*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_NUTTX_TOUCHSCREEN_H */

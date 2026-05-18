@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,9 +23,9 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_THORVG_INTERNAL
 
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+ * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
+ * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
 #include <string.h>
 #include "tvgCommon.h"
@@ -34,7 +34,7 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 #define NEWTON_MIN_SLOPE 0.02f
@@ -62,7 +62,7 @@ static inline float _calcBezier(float t, float aA1, float aA2)
 
 float LottieInterpolator::getTForX(float aX)
 {
-    //Find interval where t lies
+    //Найдите интервал, в котором лежит t
     auto intervalStart = 0.0f;
     auto currentSample = &samples[1];
     auto lastSample = &samples[SPLINE_TABLE_SIZE - 1];
@@ -71,15 +71,15 @@ float LottieInterpolator::getTForX(float aX)
         intervalStart += SAMPLE_STEP_SIZE;
     }
 
-    --currentSample;  // t now lies between *currentSample and *currentSample+1
+    --currentSample;  // t теперь находится между *currentSample и *currentSample+1
 
-    // Interpolate to provide an initial guess for t
+    // Интерполируйте, чтобы получить начальное предположение о t
     auto dist = (aX - *currentSample) / (*(currentSample + 1) - *currentSample);
     auto guessForT = intervalStart + dist * SAMPLE_STEP_SIZE;
 
-    // Check the slope to see what strategy to use. If the slope is too small
-    // Newton-Raphson iteration won't converge on a root so we use bisection
-    // instead.
+    // Проверьте наклон, чтобы увидеть, какую стратегию использовать. Если уклон слишком мал
+    // Итерация Ньютона-Рафсона не сходится к корню, поэтому мы используем деление пополам.
+    // вместо этого.
     auto initialSlope = _getSlope(guessForT, outTangent.x, inTangent.x);
     if (initialSlope >= NEWTON_MIN_SLOPE) return NewtonRaphsonIterate(aX, guessForT);
     else if (initialSlope == 0.0) return guessForT;
@@ -104,10 +104,10 @@ float LottieInterpolator::binarySubdivide(float aX, float aA, float aB)
 
 float LottieInterpolator::NewtonRaphsonIterate(float aX, float aGuessT)
 {
-    // Refine guess with Newton-Raphson iteration
+    // Уточните предположение с помощью итерации Ньютона-Рафсона
     for (int i = 0; i < NEWTON_ITERATIONS; ++i) {
-        // We're trying to find where f(t) = aX,
-        // so we're actually looking for a root for: CalcBezier(t) - aX
+        // Мы пытаемся найти, где f(t) = aX,
+        // поэтому на самом деле мы ищем корень для: CalcBezier(t) - aX
         auto currentX = _calcBezier(aGuessT, outTangent.x, inTangent.x) - aX;
         auto currentSlope = _getSlope(aGuessT, outTangent.x, inTangent.x);
         if (currentSlope == 0.0f) return aGuessT;
@@ -118,7 +118,7 @@ float LottieInterpolator::NewtonRaphsonIterate(float aX, float aGuessT)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 float LottieInterpolator::progress(float t)
@@ -136,7 +136,7 @@ void LottieInterpolator::set(const char* key, Point& inTangent, Point& outTangen
 
     if (outTangent.x == outTangent.y && inTangent.x == inTangent.y) return;
 
-    //calculates sample values
+    //вычисляет выборочные значения
     for (int i = 0; i < SPLINE_TABLE_SIZE; ++i) {
         samples[i] = _calcBezier(float(i) * SAMPLE_STEP_SIZE, outTangent.x, inTangent.x);
     }

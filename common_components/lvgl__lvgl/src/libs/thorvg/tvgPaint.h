@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -55,10 +55,10 @@ namespace tvg
         Paint* clipper = nullptr;
         RenderMethod* renderer = nullptr;
         struct {
-            Matrix m;                 //input matrix
-            Matrix cm;                //multipled parents matrix
-            float degree;             //rotation degree
-            float scale;              //scale factor
+            Matrix m;                 //входная матрица
+            Matrix cm;                //матрица множественных родителей
+            float degree;             //степень вращения
+            float scale;              //масштабный коэффициент
             bool overriding;          //user transform?
 
             void update()
@@ -79,7 +79,7 @@ namespace tvg
         uint8_t renderFlag;
         uint8_t ctxFlag;
         uint8_t opacity;
-        uint8_t refCnt = 0;                              //reference count
+        uint8_t refCnt = 0;                              //счетчик ссылок
 
         Impl(Paint* pnt) : paint(pnt)
         {
@@ -119,7 +119,7 @@ namespace tvg
 
         Matrix& transform(bool origin = false)
         {
-            //update transform
+            //обновить преобразование
             if (renderFlag & RenderUpdateFlag::Transform) tr.update();
             if (origin) return tr.cm;
             return tr.m;
@@ -141,7 +141,7 @@ namespace tvg
 
         bool composite(Paint* source, Paint* target, CompositeMethod method)
         {
-            //Invalid case
+            //Неверный регистр
             if ((!target && method != CompositeMethod::None) || (target && method == CompositeMethod::None)) return false;
 
             if (compData) {
@@ -149,7 +149,7 @@ namespace tvg
                 if ((compData->target != target) && P(compData->target)->refCnt == 0) {
                     delete(compData->target);
                 }
-                //Reset scenario
+                //Сбросить сценарий
                 if (!target && method == CompositeMethod::None) {
                 	lv_free(compData);
                     compData = nullptr;

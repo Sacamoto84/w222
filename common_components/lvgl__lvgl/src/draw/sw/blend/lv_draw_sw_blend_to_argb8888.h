@@ -39,7 +39,7 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_blend_image_to_argb8888(lv_draw_sw_b
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_TO_ARGB8888_H*/

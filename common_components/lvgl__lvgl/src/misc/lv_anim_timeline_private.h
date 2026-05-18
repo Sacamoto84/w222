@@ -25,30 +25,30 @@ extern "C" {
 
 struct _lv_anim_timeline_dsc_t;
 
-/*Data of anim_timeline*/
+/*Данные anim_timeline*/
 struct _lv_anim_timeline_t {
-    /** Dynamically allocated anim dsc array*/
+    /** Динамически выделенный массив anim dsc*/
     struct _lv_anim_timeline_dsc_t * anim_dsc;
 
-    /** The length of anim dsc array*/
+    /** Длина массива anim dsc*/
     uint32_t anim_dsc_cnt;
 
-    /** Current time of the animation*/
+    /** Текущее время анимации*/
     uint32_t act_time;
 
-    /** Reverse playback*/
+    /** Обратное воспроизведение*/
     bool reverse;
 
-    /** Delay before starting the animation from any ends*/
+    /** Задержка перед запуском анимации с любого конца*/
     uint32_t delay;
 
-    /** Repeat count*/
+    /** Повторить счет*/
     uint32_t repeat_count;
 
-    /** Wait before repeat*/
+    /** Подождите, прежде чем повторить*/
     uint32_t repeat_delay;
 
-    /** For any custom data*/
+    /** Для любых пользовательских данных*/
     void * user_data;
 };
 
@@ -61,7 +61,7 @@ struct _lv_anim_timeline_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ANIM_TIMELINE_PRIVATE_H*/

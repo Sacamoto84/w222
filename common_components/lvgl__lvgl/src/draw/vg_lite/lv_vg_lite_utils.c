@@ -383,7 +383,7 @@ void lv_vg_lite_stroke_dump_info(const vg_lite_stroke_t * stroke)
     LV_ASSERT(stroke != NULL);
     LV_LOG_USER("stroke: %p", (void *)stroke);
 
-    /* Stroke parameters */
+    /* Параметры хода */
     LV_LOG_USER("cap_style: 0x%X", (int)stroke->cap_style);
     LV_LOG_USER("join_style: 0x%X", (int)stroke->join_style);
     LV_LOG_USER("line_width: %f", stroke->line_width);
@@ -402,13 +402,13 @@ void lv_vg_lite_stroke_dump_info(const vg_lite_stroke_t * stroke)
     LV_LOG_USER("dash_index: %d", (int)stroke->dash_index);
     LV_LOG_USER("half_width: %f", stroke->half_width);
 
-    /* Total length of stroke dash patterns. */
+    /* Общая длина штриховых штрихов. */
     LV_LOG_USER("pattern_length: %f", stroke->pattern_length);
 
-    /* For fast checking. */
+    /* Для быстрой проверки. */
     LV_LOG_USER("miter_square: %f", stroke->miter_square);
 
-    /* Temp storage of stroke subPath. */
+    /* Временное хранение штриха subPath. */
     LV_LOG_USER("path_points: %p", (void *)stroke->path_points);
     LV_LOG_USER("path_end: %p", (void *)stroke->path_end);
     LV_LOG_USER("point_count: %d", (int)stroke->point_count);
@@ -419,23 +419,23 @@ void lv_vg_lite_stroke_dump_info(const vg_lite_stroke_t * stroke)
     LV_LOG_USER("stroke_end: %p", (void *)stroke->stroke_end);
     LV_LOG_USER("stroke_count: %d", (int)stroke->stroke_count);
 
-    /* Divide stroke path according to move or move_rel for avoiding implicit closure. */
+    /* Разделите траекторию хода в соответствии с перемещением или move_rel, чтобы избежать неявного закрытия. */
     LV_LOG_USER("path_list_divide: %p", (void *)stroke->path_list_divide);
 
-    /* pointer to current divided path data. */
+    /* указатель на текущие данные разделенного пути. */
     LV_LOG_USER("cur_list: %p", (void *)stroke->cur_list);
 
-    /* Flag that add end_path in driver. */
+    /* Флаг, добавляющий end_path в драйвер. */
     LV_LOG_USER("add_end: %d", (int)stroke->add_end);
     LV_LOG_USER("dash_reset: %d", (int)stroke->dash_reset);
 
-    /* Sub path list. */
+    /* Список дополнительных путей. */
     LV_LOG_USER("stroke_paths: %p", (void *)stroke->stroke_paths);
 
-    /* Last sub path. */
+    /* Последний подпуть. */
     LV_LOG_USER("last_stroke: %p", (void *)stroke->last_stroke);
 
-    /* Swing area handling. */
+    /* Обработка подменной зоны. */
     LV_LOG_USER("swing_handling: %d", (int)stroke->swing_handling);
     LV_LOG_USER("swing_deltax: %f", stroke->swing_deltax);
     LV_LOG_USER("swing_deltay: %f", stroke->swing_deltay);
@@ -592,8 +592,8 @@ vg_lite_buffer_format_t lv_vg_lite_vg_fmt(lv_color_format_t cf)
             return VG_LITE_BGR888;
 
         /**
-         * The lv_vg_lite_blend_mode function will automatically select the appropriate blend mode,
-         * which is uniformly mapped to VG_LITE_BGRA8888 here.
+         * Функция lv_vg_lite_blend_mode автоматически выберет подходящий режим наложения.
+         * который здесь равномерно сопоставлен с VG_LITE_BGRA8888.
          */
         case LV_COLOR_FORMAT_ARGB8888:
         case LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED:
@@ -623,7 +623,7 @@ void lv_vg_lite_buffer_format_bytes(
     uint32_t * div,
     uint32_t * bytes_align)
 {
-    /* Get the bpp information of a color format. */
+    /* Получите информацию bpp о цветовом формате. */
     *mul = *div = 1;
     *bytes_align = 4;
     switch(format) {
@@ -647,7 +647,7 @@ void lv_vg_lite_buffer_format_bytes(
         case VG_LITE_YUYV:
         case VG_LITE_YUY2:
         case VG_LITE_YUY2_TILED:
-        /* AYUY2 buffer memory = YUY2 + alpha. */
+        /* Буферная память AYUY2 = YUY2 + альфа. */
         case VG_LITE_AYUY2:
         case VG_LITE_AYUY2_TILED:
             *mul = 2;
@@ -745,7 +745,7 @@ void lv_vg_lite_buffer_init(
                              "width : %" LV_PRId32 ", height : %" LV_PRId32, width, height);
     }
 
-    /* Alpha image need to be multiplied by color */
+    /* Альфа-изображение необходимо умножить на цвет. */
     if(format == VG_LITE_A8 || format == VG_LITE_A4) {
         buffer->image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
     }
@@ -794,7 +794,7 @@ void lv_vg_lite_buffer_from_draw_buf(vg_lite_buffer_t * buffer, const lv_draw_bu
     if(LV_COLOR_FORMAT_IS_INDEXED(draw_buf->header.cf)) {
         uint32_t palette_size_bytes = LV_COLOR_INDEXED_PALETTE_SIZE(draw_buf->header.cf) * sizeof(uint32_t);
 
-        /* Skip palette */
+        /* Пропустить палитру */
         ptr += LV_VG_LITE_ALIGN(palette_size_bytes, LV_DRAW_BUF_ALIGN);
     }
 
@@ -838,21 +838,21 @@ vg_lite_color_t lv_vg_lite_image_recolor(vg_lite_buffer_t * buffer, const lv_dra
     LV_ASSERT_NULL(buffer);
     LV_ASSERT_NULL(dsc);
 
-    /* alpha image and image recolor */
+    /* альфа-изображение и перекрашивание изображения */
     if(buffer->format == VG_LITE_A4 || buffer->format == VG_LITE_A8) {
-        /*Alpha only image ignore recolor opa*/
+        /*Только альфа-изображение игнорирует перекрашивание.*/
         buffer->image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
         return lv_vg_lite_color(dsc->recolor, dsc->opa, true);
     }
     else if(dsc->recolor_opa > LV_OPA_TRANSP) {
         buffer->image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
-        /** The 0xff value in a color channel (R/G/B) maintains that channel's maximum intensity,
-         *  effectively preserving its original color contribution when used in blending operations.*/
+        /** Значение 0xff в цветовом канале (R/G/B) поддерживает максимальную интенсивность этого канала,
+         *  эффективно сохраняя свой первоначальный цвет при использовании в операциях смешивания.*/
         lv_color_t recolor = lv_color_mix(dsc->recolor, lv_color_make(0xff, 0xff, 0xff), dsc->recolor_opa);
         return lv_vg_lite_color(recolor, dsc->opa, true);
     }
     else if(dsc->opa < LV_OPA_COVER) {
-        /* normal image opa */
+        /* нормальное изображение, опа */
         buffer->image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
         vg_lite_color_t color;
         lv_memset(&color, dsc->opa, sizeof(color));
@@ -876,8 +876,8 @@ bool lv_vg_lite_buffer_open_image(vg_lite_buffer_t * buffer, lv_image_decoder_ds
     args.use_indexed = true;
     args.no_cache = no_cache;
 
-    /** For images output by the GPU itself (such as draw layer),
-     *  there is no need to flush the cache */
+    /** Для изображений, выводимых самим GPU (например, слоя рисования),
+     *  кэш очищать не нужно */
     args.flush_cache = !no_cache;
 
     lv_result_t res = lv_image_decoder_open(decoder_dsc, src, &args);
@@ -1145,16 +1145,16 @@ bool lv_vg_lite_path_check(const vg_lite_path_t * path)
     const uint8_t * end = cur + path->path_length;
 
     while(cur < end) {
-        /* get op code */
+        /* получить код операции */
         uint8_t op_code = LV_VG_LITE_PATH_GET_OP_CODE(cur);
 
-        /* get arguments length */
+        /* получить длину аргументов */
         uint8_t arg_len = lv_vg_lite_vlc_op_arg_len(op_code);
 
-        /* get next op code */
+        /* получить следующий код операции */
         cur += (fmt_len * (1 + arg_len)) ;
 
-        /* break if end */
+        /* сломать, если закончится */
         if(op_code == VLC_OP_END) {
             break;
         }
@@ -1169,7 +1169,7 @@ bool lv_vg_lite_path_check(const vg_lite_path_t * path)
         case VG_LITE_DRAW_ZERO:
         case VG_LITE_DRAW_FILL_PATH:
         case VG_LITE_DRAW_FILL_STROKE_PATH: {
-                /* Check end op code */
+                /* Проверьте код завершения операции */
                 uint8_t end_op_code = LV_VG_LITE_PATH_GET_OP_CODE(end - fmt_len);
                 if(end_op_code != VLC_OP_END) {
                     LV_LOG_ERROR("%d (%s) -> is NOT VLC_OP_END", end_op_code, lv_vg_lite_vlc_op_string(end_op_code));
@@ -1179,7 +1179,7 @@ bool lv_vg_lite_path_check(const vg_lite_path_t * path)
             break;
 
         case VG_LITE_DRAW_STROKE_PATH:
-            /* No need to check stroke path end */
+            /* Нет необходимости проверять конец траектории хода */
             break;
 
         default:
@@ -1218,18 +1218,18 @@ void lv_vg_lite_matrix_multiply(vg_lite_matrix_t * matrix, const vg_lite_matrix_
     int row, column;
     vg_lite_float_t (*m)[3] = matrix->m;
 
-    /* Process all rows. */
+    /* Обработать все строки. */
     for(row = 0; row < 3; row++) {
-        /* Process all columns. */
+        /* Обработать все столбцы. */
         for(column = 0; column < 3; column++) {
-            /* Compute matrix entry. */
+            /* Вычислить запись матрицы. */
             temp.m[row][column] = (m[row][0] * mult->m[0][column])
                                   + (m[row][1] * mult->m[1][column])
                                   + (m[row][2] * mult->m[2][column]);
         }
     }
 
-    /* Copy temporary 3x3 matrix into result. */
+    /* Скопируйте временную матрицу 3x3 в результат. */
     *(lv_matrix_t *)matrix = temp;
 }
 
@@ -1239,7 +1239,7 @@ bool lv_vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matrix_t
     vg_lite_float_t d;
     bool is_affine;
 
-    /* Test for identity matrix. */
+    /* Тест на идентификационную матрицу. */
     if(matrix == NULL) {
         result->m[0][0] = 1.0f;
         result->m[0][1] = 0.0f;
@@ -1251,7 +1251,7 @@ bool lv_vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matrix_t
         result->m[2][1] = 0.0f;
         result->m[2][2] = 1.0f;
 
-        /* Success. */
+        /* Успех. */
         return true;
     }
 
@@ -1261,17 +1261,17 @@ bool lv_vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matrix_t
     det01 = m[2][0] * m[1][2] - m[1][0] * m[2][2];
     det02 = m[1][0] * m[2][1] - m[2][0] * m[1][1];
 
-    /* Compute determinant. */
+    /* Вычислить определитель. */
     d = m[0][0] * det00 + m[0][1] * det01 + m[0][2] * det02;
 
-    /* Return 0 if there is no inverse matrix. */
+    /* Верните 0, если обратной матрицы нет. */
     if(d == 0.0f)
         return false;
 
-    /* Compute reciprocal. */
+    /* Вычислить обратную величину. */
     d = 1.0f / d;
 
-    /* Determine if the matrix is affine. */
+    /* Определите, является ли матрица аффинной. */
     is_affine = (m[2][0] == 0.0f) && (m[2][1] == 0.0f) && (m[2][2] == 1.0f);
 
     result->m[0][0] = d * det00;
@@ -1284,7 +1284,7 @@ bool lv_vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matrix_t
     result->m[2][1] = is_affine ? 0.0f : d * ((m[2][0] * m[0][1]) - (m[0][0] * m[2][1]));
     result->m[2][2] = is_affine ? 1.0f : d * ((m[0][0] * m[1][1]) - (m[1][0] * m[0][1]));
 
-    /* Success. */
+    /* Успех. */
     return true;
 }
 
@@ -1301,7 +1301,7 @@ void lv_vg_lite_set_scissor_area(struct _lv_draw_vg_lite_unit_t * u, const lv_ar
 {
     LV_PROFILER_DRAW_BEGIN;
 
-    /* Avoid setting the same scissor frequently */
+    /* Избегайте частого использования одних и тех же ножниц. */
     if(lv_area_is_equal(area, &u->current_scissor_area)) {
         LV_PROFILER_DRAW_END;
         return;
@@ -1309,13 +1309,13 @@ void lv_vg_lite_set_scissor_area(struct _lv_draw_vg_lite_unit_t * u, const lv_ar
 
 #if VGLITE_RELEASE_VERSION <= VGLITE_MAKE_VERSION(4,0,57)
     /**
-     * In the new version of VG-Lite, vg_lite_set_scissor no longer needs to call vg_lite_enable_scissor and
-     * vg_lite_disable_scissor APIs.
+     * В новой версии VG -Lite vg_lite_set_scissor больше не нужно вызывать vg_lite_enable_scissor и
+     * vg_lite_disable_scissor API.
      *
-     * Original description in the manual:
+     * Оригинальное описание в инструкции:
      * Description: This is a legacy scissor API function that can be used to set and enable a single scissor rectangle
-     * for the render target. This scissor API is supported by a different hardware mechanism other than the mask layer,
-     * and it is not enabled/disabled by vg_lite_enable_scissor and vg_lite_disable_scissor APIs.
+     * для цели рендеринга. Этот ножничный API поддерживается другим аппаратным механизмом, отличным от слоя маски.
+     * и он не включается/отключается API-интерфейсами vg_lite_enable_scissor и vg_lite_disable_scissor.
      */
     LV_VG_LITE_CHECK_ERROR(vg_lite_enable_scissor(), {});
 #endif
@@ -1324,7 +1324,7 @@ void lv_vg_lite_set_scissor_area(struct _lv_draw_vg_lite_unit_t * u, const lv_ar
                                area->y1,
                                area->x2 + 1,
                                area->y2 + 1),
-                           /* Dump parameters */
+                           /* Параметры дампа */
     {
         LV_LOG_USER("area: %d, %d, %d, %d",
                     (int)area->x1, (int)area->y1, (int)area->x2, (int)area->y2);
@@ -1337,13 +1337,13 @@ void lv_vg_lite_set_scissor_area(struct _lv_draw_vg_lite_unit_t * u, const lv_ar
 void lv_vg_lite_disable_scissor(void)
 {
     LV_PROFILER_DRAW_BEGIN;
-    /* Restore full screen scissor */
+    /* Восстановить полноэкранные ножницы */
     LV_VG_LITE_CHECK_ERROR(vg_lite_set_scissor(
                                0,
                                0,
                                LV_HOR_RES,
                                LV_VER_RES),
-                           /* Dump parameters */
+                           /* Параметры дампа */
     {
         LV_LOG_USER("hor_res: %d, ver_res: %d", (int)LV_HOR_RES, (int)LV_VER_RES);
     });
@@ -1360,7 +1360,7 @@ void lv_vg_lite_flush(struct _lv_draw_vg_lite_unit_t * u)
 
 #if LV_VG_LITE_FLUSH_MAX_COUNT
     if(u->flush_count < LV_VG_LITE_FLUSH_MAX_COUNT) {
-        /* Do not flush too often */
+        /* Не смывайте слишком часто */
         LV_PROFILER_DRAW_END;
         return;
     }
@@ -1368,7 +1368,7 @@ void lv_vg_lite_flush(struct _lv_draw_vg_lite_unit_t * u)
     vg_lite_uint32_t is_gpu_idle = 0;
     LV_VG_LITE_CHECK_ERROR(vg_lite_get_parameter(VG_LITE_GPU_IDLE_STATE, 1, (vg_lite_pointer)&is_gpu_idle), {});
     if(!is_gpu_idle) {
-        /* Do not flush if GPU is busy */
+        /* Не сбрасывать, если GPU занят */
         LV_PROFILER_DRAW_END;
         return;
     }
@@ -1376,7 +1376,7 @@ void lv_vg_lite_flush(struct _lv_draw_vg_lite_unit_t * u)
 
     LV_VG_LITE_CHECK_ERROR(vg_lite_flush(), {});
 
-    /* Remove all old caches reference and swap new caches reference */
+    /* Удалите все ссылки на старые кеши и замените ссылки на новые кеши. */
 #if LV_USE_VECTOR_GRAPHIC
     lv_vg_lite_pending_swap(lv_vg_lite_grad_ctx_get_pending(u->grad_ctx));
 #endif
@@ -1398,18 +1398,18 @@ void lv_vg_lite_finish(struct _lv_draw_vg_lite_unit_t * u)
     LV_VG_LITE_CHECK_ERROR(vg_lite_finish(), {});
 
 #if LV_USE_VECTOR_GRAPHIC
-    /* Clear all gradient caches reference */
+    /* Справочник по очистке всех кэшей градиентов */
     lv_vg_lite_pending_remove_all(lv_vg_lite_grad_ctx_get_pending(u->grad_ctx));
 #endif
 
-    /* Clear image decoder dsc reference */
+    /* Справочник по декодеру четкого изображения dsc */
     lv_vg_lite_pending_remove_all(u->image_dsc_pending);
 
-    /* Clear bitmap font dsc reference */
+    /* Очистить ссылку на dsc растрового шрифта */
     lv_vg_lite_pending_remove_all(u->bitmap_font_pending);
     lv_vg_lite_pending_remove_all(u->letter_pending);
 
-    /* Reset scissor area */
+    /* Сбросить область ножниц */
     lv_memzero(&u->current_scissor_area, sizeof(u->current_scissor_area));
 
     u->flush_count = 0;

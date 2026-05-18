@@ -11,7 +11,7 @@ class LVCache(Value):
     def __init__(
         self, cache: Union[Value, gdb.Value, int], datatype: Union[gdb.Type, str]
     ):
-        # Convert to Value first if needed
+        # Если необходимо, сначала преобразуйте в значение.
         if isinstance(cache, int):
             cache = Value(cache).cast("lv_cache_t", ptr=True)
             if cache is None:
@@ -39,7 +39,7 @@ class LVCache(Value):
         print(f"  Free Size: {int(self.max_size) - int(self.size)}")
         print(f"  Enabled: {bool(int(self.max_size) > 0)}")
 
-        # Try to identify cache type
+        # Попробуйте определить тип кэша
         try:
             iterator = create_cache_iterator(self)
             print(f"  Iterator Type: {iterator.__class__.__name__}")

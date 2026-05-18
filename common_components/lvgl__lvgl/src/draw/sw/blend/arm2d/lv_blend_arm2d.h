@@ -656,7 +656,7 @@ static inline lv_result_t lv_rgb565_blend_normal_to_rgb888_with_opa_arm2d(lv_dra
         return LV_RESULT_INVALID;
     }
 
-    /* get rgb565 */
+    /* получить RGB565 */
     __arm_2d_impl_rgb565_to_cccn888((uint16_t *)dsc->src_buf,
                                     src_stride,
                                     (uint32_t *)tmp_buf,
@@ -931,7 +931,7 @@ static inline lv_result_t lv_argb8888_blend_normal_to_rgb888_mix_mask_opa_arm2d(
 #endif /* LV_USE_DRAW_ARM2D_SYNC */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BLEND_ARM2D_H*/

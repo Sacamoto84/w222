@@ -228,10 +228,10 @@ from io import TextIOWrapper
 from announce import *
 
 # -------------------------------------------------------------------------
-# This is the order that LVGL documentation uses for the section heading
-# levels.  header_defs[0] is the highest and header_defs[5] is the lowest.
-# If this order is not kept in the reST files Sphinx will complain, and
-# have difficulty formatting the TOC correctly.
+# Это порядок, который используется в документации LVGL для заголовка раздела.
+# уровни.   header_defs[0] — самый высокий, аheader_defs[5] — самый низкий.
+# Если этот порядок не сохранится в файлах rest, Sphinx будет жаловаться и
+# возникли трудности с правильным форматированием TOC.
 # -------------------------------------------------------------------------
 TITLE = '='
 CHAPTER = '*'
@@ -279,14 +279,14 @@ def _default_section_heading(level: int, path: str, is_file: bool) -> str:
 
     parent_dir = os.path.basename(dir_path)
 
-    # Compose default section heading based on capitalized words in `parent_dir`.
+    # Составьте заголовок раздела по умолчанию на основе слов, написанных заглавными буквами в`parent_dir`.
     word_list = parent_dir.replace('_', ' ').replace('-', ' ').split(' ')
     result = ''
 
     for word in word_list:
         result += ' ' + word.capitalize()
 
-    # Remove leading space.
+    # Удалить начальный пробел.
     if result:
         result = result[1:]
 
@@ -335,14 +335,14 @@ def _validate_sub_dirs(sub_dirs: list[str], index_rst_path: str) -> bool:
     """
     result = True
 
-    # Check that each sub-dir is an existing directory.
+    # Убедитесь, что каждый подкаталог является существующим каталогом.
     for sub_dir in sub_dirs:
         if not os.path.isdir(sub_dir):
             result = False
             _warn(f'Dir-order directive in {index_rst_path} contains dir [{sub_dir}] that does not exist.')
-            # We won't break here so that all such dirs can be listed.
+            # Мы не будем здесь останавливаться, чтобы перечислить все такие каталоги.
 
-    # Check that there are none missing except those in `avoid_dirs`.
+    # Убедитесь, что ничего не пропущено, кроме`avoid_dirs`.
     dir_path = os.path.dirname(index_rst_path)
     actual_dirs = []
 
@@ -352,7 +352,7 @@ def _validate_sub_dirs(sub_dirs: list[str], index_rst_path: str) -> bool:
             actual_dirs.append(path_bep)
 
     # Are there any missing that are not in `avoid_dirs` list?
-    # If so, issue warning about each directory missing.
+    # Если да, выдайте предупреждение об отсутствии каждого каталога.
     for sub_dir in actual_dirs:
         if sub_dir not in sub_dirs:
             if not _in_avoid_dirs_list(sub_dir):
@@ -416,9 +416,9 @@ def _generate_output_from_dir(level: int,
     dir_order_override = []
     result_dir_list = orig_dir_list
 
-    # It is an error to proceed with `level` out of range.  Clamping it to be in
-    # range is also an error because it would cause the output to be corrupted with
-    # an invalid section-heading underscore, which would generate an error later.
+    # Продолжение работы с`level`вне телефона является ошибкой.  Зажимая его, чтобы он был внутри
+    # диапазон также является ошибкой, поскольку это может привести к повреждению вывода с помощью
+    # недопустимое подчеркивание заголовка раздела, которое позже приведет к ошибке.
     if 0 <= level and level + 1 < len(header_defs):
         section_heading = _default_section_heading(level, file_or_dir, is_file)
         example_tuples = []
@@ -426,10 +426,10 @@ def _generate_output_from_dir(level: int,
 
         if is_file:
             announce(__file__, f'Processing file [{file_or_dir}]...')
-            # We are processing an index.rst file.
+            # Мы обрабатываем файл index.rst.
             with open(file_or_dir, 'r', encoding='utf-8') as fidx:
-                # It is important that this is NOT fidx.readlines() because
-                # it leaves blank lines containing '\n' instead of ''.
+                # Важно, что это именноNOTfidx. readlines()потому что
+                # он оставляет пустые строки, содержащие '\n' вместо ''.
                 lines = fidx.read().split('\n')
 
             example_title = ''
@@ -437,17 +437,17 @@ def _generate_output_from_dir(level: int,
             dir_path = os.path.dirname(file_or_dir)
             in_dir_order_directive = False
 
-            # Accumulate data from `index.rst`.  This needs to be done
-            # first in case it overrides the default section heading.
+            # Скопируйте данные из `index.rst`.  Это необходимо сделать
+            # сначала, если он переопределяет заголовок раздела по умолчанию.
             for line in lines:
                 if in_dir_order_directive:
                     leading_non_blank = (len(line) > 0) and not (line[0] == ' ' or line[0] == '\t')
 
                     if leading_non_blank:
-                        # Leading non-blank character ends dir-order directive.
+                        # Начальный непустой символ завершает директиву-порядок.
                         in_dir_order_directive = False
                     else:
-                        # Still in dir-order directive.
+                        # Все еще в директиве dir-order.
                         stripped_line = line.strip()
                         if stripped_line:
                             dir_order_override.append(os.path.join(dir_path, stripped_line))
@@ -474,12 +474,12 @@ def _generate_output_from_dir(level: int,
 
                 prev_line = stripped_line
 
-        # Output section heading.  This occurs even when we have descended into an
-        # empty directory with example sub-dirs below it.
+        # Заголовок раздела вывода.  Это происходит даже тогда, когда мы спустились в
+        # пустой каталог с примерами подкаталогов под ним.
         _emit_heading(level, section_heading, f)
 
-        # Output examples, if any.  Will be empty when we are in an empty directory
-        # with example sub-dirs below it.
+        # Примеры вывода, если таковые имеются.  Будет пусто, когда мы находимся в пустом каталоге
+        # с примерами подкаталогов под ним.
         for example_tuple in example_tuples:
             example_title = example_tuple[0]
             rel_path_from_examples_dir = example_tuple[1]
@@ -512,7 +512,7 @@ def process_dir_recursively(level: int, root_len: int, dir_bep: str, f: TextIOWr
         _warn(f'process_dir_recursively: `dir_bep` [{dir_bep}] does not exist.')
         return
 
-    # For each "thing" found in `dir_bep`, build lists:  sub_dirs and idx_files.
+    # Для каждого «вещи», найденного в `dir_bep`, создайте таблицы:sub_dirsи idx_files.
     for dir_item in os.listdir(dir_bep):
         path_bep = os.path.join(dir_bep, dir_item)
         if os.path.isdir(path_bep):
@@ -522,11 +522,11 @@ def process_dir_recursively(level: int, root_len: int, dir_bep: str, f: TextIOWr
 
     if idx_files:
         sub_dirs = _generate_output_from_dir(level, root_len, idx_files[0], True, sub_dirs, f)
-        # `sub_dirs` can be replaced if `index.rst` contains a dir-order directive.
+        # `sub_dirs` можно заменить, если`index.rst`содержит директиву dir-order.
     else:
         _generate_output_from_dir(level, root_len, dir_bep, False, sub_dirs, f)
 
-    # Now recursively process sub_dirs.
+    # Теперь рекурсивно обработаемsub_dirs.
     for subdir in sub_dirs:
         if not _in_avoid_dirs_list(subdir):
             process_dir_recursively(level + 1, root_len, subdir, f)
@@ -537,15 +537,15 @@ def exec(intermediate_dir):
     output_path = os.path.join(intermediate_dir, 'examples.rst')
     input_paths = [
         os.path.join('..', 'examples'),
-        # os.path.join('..', 'demos')
+        # os.path.join('..', 'демо')
     ]
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write('.. _examples:\n')
         f.write('\n')
 
-        # Recursively walk the directories in `input_paths` array for
-        # ``index.rst`` files.
+        # Рекурсивно пройти по каталогам в массиве`input_paths`для
+        # ``index.rst`` файлы.
         for root_path in input_paths:
             root_len = len(root_path) + 1
             process_dir_recursively(0, root_len, root_path, f)

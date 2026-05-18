@@ -127,7 +127,7 @@ def main():
         output_path = path(output_folder, mpk_file)
 
         if mpk_file not in input_mpk:
-            # First time this config is being run
+            # Эта конфигурация запускается впервые
             print(
                 f"Couldn't find pair for {json_file} - ({mpk_file} not found). Generating new mpk file"
             )
@@ -139,7 +139,7 @@ def main():
             append_json_to_mpk(mpk_path, json_path, output_path, commit_hash)
             input_mpk.remove(mpk_file)
 
-    # Keep old mpk files
+    # Храните старые файлы mpk
     for mpk_file in input_mpk:
         print(f"Couldn't find new reults to add to {mpk_file}. Copying it")
         mpk_path = path(input_folder, mpk_file)

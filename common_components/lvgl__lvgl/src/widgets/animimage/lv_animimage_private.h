@@ -28,11 +28,11 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of the animimage */
+/** Данные анимационного изображения */
 struct _lv_animimg_t {
     lv_image_t img;
     lv_anim_t anim;
-    /* picture sequence */
+    /* последовательность изображений */
     const void ** dsc;
     int8_t  pic_count;
 };
@@ -49,7 +49,7 @@ struct _lv_animimg_t {
 #endif /* LV_USE_ANIMIMG != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ANIMIMAGE_PRIVATE_H*/

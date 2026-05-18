@@ -48,7 +48,7 @@ static lv_draw_buf_t * decode_png(lv_image_decoder_dsc_t * dsc);
  **********************/
 
 /**
- * Register the PNG decoder functions in LVGL
+ * Зарегистрируйте функции декодера PNG в LVGL.
  */
 void lv_libpng_init(void)
 {
@@ -76,27 +76,27 @@ void lv_libpng_deinit(void)
  **********************/
 
 /**
- * Get info about a PNG image
+ * Получить информацию об изображении PNG
  * @param dsc can be file name or pointer to a C array
  * @param header store the info here
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
-    lv_image_src_t src_type = dsc->src_type;          /*Get the source type*/
+    lv_image_src_t src_type = dsc->src_type;          /*Получить тип источника*/
 
     if(src_type == LV_IMAGE_SRC_FILE || src_type == LV_IMAGE_SRC_VARIABLE) {
         uint32_t * size;
         static const uint8_t magic[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
         uint8_t buf[24];
 
-        /*If it's a PNG file...*/
+        /*Если это файл PNG...*/
         if(src_type == LV_IMAGE_SRC_FILE) {
-            /* Read the width and height from the file. They have a constant location:
-            * [16..19]: width
-            * [20..23]: height
+            /* Прочтите ширину и высоту из файла. Они имеют постоянное местонахождение:
+            * [16..19]: ширина
+            * [20..23]: высота
             */
             uint32_t rn;
             lv_fs_read(&dsc->file, buf, sizeof(buf), &rn);
@@ -107,7 +107,7 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
             size = (uint32_t *)&buf[16];
         }
-        /*If it's a PNG file in a  C array...*/
+        /*Если это файл PNG в массиве C...*/
         else {
             const lv_image_dsc_t * img_dsc = dsc->src;
             const uint32_t data_size = img_dsc->data_size;
@@ -117,27 +117,27 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             if(lv_memcmp(img_dsc->data, magic, sizeof(magic)) != 0) return LV_RESULT_INVALID;
         }
 
-        /*Save the data in the header*/
+        /*Сохраняем данные в шапке*/
         header->cf = LV_COLOR_FORMAT_ARGB8888;
-        /*The width and height are stored in Big endian format so convert them to little endian*/
+        /*Ширина и высота хранятся в формате с прямым порядком байтов, поэтому преобразуйте их в формат с прямым порядком байтов.*/
         header->w = (int32_t)((size[0] & 0xff000000) >> 24) + ((size[0] & 0x00ff0000) >> 8);
         header->h = (int32_t)((size[1] & 0xff000000) >> 24) + ((size[1] & 0x00ff0000) >> 8);
 
         return LV_RESULT_OK;
     }
 
-    return LV_RESULT_INVALID;         /*If didn't succeeded earlier then it's an error*/
+    return LV_RESULT_INVALID;         /*Если раньше это не удалось, то это ошибка*/
 }
 
 /**
- * Open a PNG image and return the decoded image
+ * Откройте изображение PNG и верните декодированное изображение.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     lv_draw_buf_t * decoded;
     decoded = decode_png(dsc);
@@ -152,7 +152,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_INVALID;
     }
 
-    /*The adjusted draw buffer is newly allocated.*/
+    /*Скорректированный буфер отрисовки выделяется заново.*/
     if(adjusted != decoded) {
         lv_draw_buf_destroy(decoded);
         decoded = adjusted;
@@ -164,12 +164,12 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_OK;
     }
 
-    /*If the image cache is disabled, just return the decoded image*/
+    /*Если кэш изображений отключен, просто верните декодированное изображение.*/
     if(!lv_image_cache_is_enabled()) {
         return LV_RESULT_OK;
     }
 
-    /*Add the decoded image to the cache*/
+    /*Добавьте декодированное изображение в кеш*/
     lv_image_cache_data_t search_key;
     search_key.src_type = dsc->src_type;
     search_key.src = dsc->src;
@@ -183,15 +183,15 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
     }
     dsc->cache_entry = entry;
 
-    return LV_RESULT_OK;     /*The image is fully decoded. Return with its pointer*/
+    return LV_RESULT_OK;     /*Изображение полностью декодировано. Возврат с его указателем*/
 }
 
 /**
- * Free the allocated resources
+ * Освободите выделенные ресурсы
  */
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     if(dsc->args.no_cache ||
        !lv_image_cache_is_enabled()) lv_draw_buf_destroy((lv_draw_buf_t *)dsc->decoded);
@@ -203,7 +203,7 @@ static lv_draw_buf_t * decode_png(lv_image_decoder_dsc_t * dsc)
     int ret;
     uint8_t * png_data;
     uint32_t png_data_size;
-    /*Prepare png_image*/
+    /*Подготовьте png_image*/
     png_image image;
     lv_memzero(&image, sizeof(image));
     image.version = PNG_IMAGE_VERSION;
@@ -226,7 +226,7 @@ static lv_draw_buf_t * decode_png(lv_image_decoder_dsc_t * dsc)
         return NULL;
     }
 
-    /*Ready to read file*/
+    /*Готов к чтению файла*/
     LV_PROFILER_DECODER_BEGIN_TAG("png_image_begin_read_from_memory");
     ret = png_image_begin_read_from_memory(&image, png_data, png_data_size);
     LV_PROFILER_DECODER_END_TAG("png_image_begin_read_from_memory");
@@ -248,7 +248,7 @@ static lv_draw_buf_t * decode_png(lv_image_decoder_dsc_t * dsc)
         image.format = PNG_FORMAT_BGRA;
     }
 
-    /*Alloc image buffer*/
+    /*Выделить буфер изображения*/
     lv_draw_buf_t * decoded;
     decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, image.width, image.height, cf, LV_STRIDE_AUTO);
     if(decoded == NULL) {
@@ -271,7 +271,7 @@ static lv_draw_buf_t * decode_png(lv_image_decoder_dsc_t * dsc)
     void * palette = decoded->data;
     void * map = decoded->data + LV_COLOR_INDEXED_PALETTE_SIZE(cf) * sizeof(lv_color32_t);
 
-    /*Start decoding*/
+    /*Начать декодирование*/
     LV_PROFILER_DECODER_BEGIN_TAG("png_image_finish_read");
     ret = png_image_finish_read(&image, NULL, map, decoded->header.stride, palette);
     LV_PROFILER_DECODER_END_TAG("png_image_finish_read");

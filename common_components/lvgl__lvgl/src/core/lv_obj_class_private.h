@@ -25,16 +25,16 @@ extern "C" {
  **********************/
 
 /**
- * Describe the common methods of every object.
- * Similar to a C++ class.
+ * Опишите общие методы каждого объекта.
+ * Аналогично классу C++.
  */
 struct _lv_obj_class_t {
     const lv_obj_class_t * base_class;
-    /** class_p is the final class while obj->class_p is the class currently being [de]constructed. */
+    /** class_p — это последний класс, а obj->class_p— это класс, который в настоящее время [де] создан. */
     void (*constructor_cb)(const lv_obj_class_t * class_p, lv_obj_t * obj);
     void (*destructor_cb)(const lv_obj_class_t * class_p, lv_obj_t * obj);
 
-    /** class_p is the class in which event is being processed. */
+    /** class_p — класс, в котором обрабатывается событие. */
     void (*event_cb)(const lv_obj_class_t * class_p, lv_event_t * e);  /**< Widget type specific event function*/
 
 #if LV_USE_OBJ_PROPERTY
@@ -44,7 +44,7 @@ struct _lv_obj_class_t {
     uint32_t properties_count;
 
 #if LV_USE_OBJ_PROPERTY_NAME
-    /* An array of property ID and name */
+    /* Массив свойства ID и имени. */
     const lv_property_name_t * property_names;
     uint32_t names_count;
 #endif
@@ -72,7 +72,7 @@ void lv_obj_destruct(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_CLASS_PRIVATE_H*/

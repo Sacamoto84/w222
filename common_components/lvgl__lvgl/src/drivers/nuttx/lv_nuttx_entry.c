@@ -215,9 +215,9 @@ void lv_nuttx_run(lv_nuttx_result_t * result)
         uint32_t idle;
         idle = lv_timer_handler();
 
-        /* Minimum sleep of 1ms */
+        /* Минимальная продолжительность сна 1 мс */
         idle = idle ? idle : 1;
-        /* Handle LV_DEF_REFR_PERIOD */
+        /* Ручка LV_DEF_REFR_PERIOD */
         idle = idle != LV_NO_TIMER_READY ? idle : LV_DEF_REFR_PERIOD;
         usleep(idle * 1000);
     }

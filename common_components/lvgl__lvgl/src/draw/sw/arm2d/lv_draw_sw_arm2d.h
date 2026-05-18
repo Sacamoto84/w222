@@ -116,7 +116,7 @@ extern void arm_2d_helper_swap_rgb16(uint16_t * phwBuffer, uint32_t wCount);
                     .iWidth = src_w,                                            \
                     .iHeight = src_h,                                           \
                 };                                                              \
-                /* apply re-color */                                            \
+                /* применить повторный цвет */                                            \
                 __arm_2d_impl_rgb565_colour_filling_with_opacity(               \
                     (uint16_t *)rgb_tmp_buf,                                    \
                     src_w,                                                      \
@@ -124,7 +124,7 @@ extern void arm_2d_helper_swap_rgb16(uint16_t * phwBuffer, uint32_t wCount);
                     lv_color_to_u16(draw_dsc->recolor),                         \
                     draw_dsc->recolor_opa);                                     \
                                                                                 \
-                /* replace src_buf for the following operation */               \
+                /* замените src_buf для следующей операции */               \
                 src_buf = (const uint8_t *)rgb_tmp_buf;                         \
             }                                                                   \
             else if(LV_COLOR_FORMAT_XRGB8888 == des_cf) {                       \
@@ -143,7 +143,7 @@ extern void arm_2d_helper_swap_rgb16(uint16_t * phwBuffer, uint32_t wCount);
                     .iWidth = src_w,                                            \
                     .iHeight = src_h,                                           \
                 };                                                              \
-                /* apply re-color */                                            \
+                /* применить повторный цвет */                                            \
                 __arm_2d_impl_cccn888_colour_filling_with_opacity(              \
                     (uint32_t *)rgb_tmp_buf,                                    \
                     src_w,                                                      \
@@ -151,7 +151,7 @@ extern void arm_2d_helper_swap_rgb16(uint16_t * phwBuffer, uint32_t wCount);
                     lv_color_to_u32(draw_dsc->recolor),                         \
                     draw_dsc->recolor_opa);                                     \
                                                                                 \
-                /* replace src_buf for the following operation */               \
+                /* замените src_buf для следующей операции */               \
                 src_buf = (const uint8_t *)rgb_tmp_buf;                         \
             }                                                                   \
         }                                                                       \
@@ -199,7 +199,7 @@ static inline lv_result_t lv_draw_sw_image_helium(
             break;
         }
     #endif
-        /* filter the unsupported colour format combination */
+        /* отфильтровать неподдерживаемую комбинацию цветовых форматов */
         if((LV_COLOR_FORMAT_RGB565 == des_cf)
         && !(  (LV_COLOR_FORMAT_RGB565 == src_cf)
            ||  (LV_COLOR_FORMAT_RGB565A8 == src_cf)
@@ -225,7 +225,7 @@ static inline lv_result_t lv_draw_sw_image_helium(
         }
     #endif
 
-        /* ------------- prepare parameters for arm-2d APIs - BEGIN --------- */
+        /* ------------- подготовка параметров для API Arm-2d - BEGIN --------- */
 
         lv_area_t blend_area;
         if(!lv_area_intersect(&blend_area, des_area, &t->clip_area)) {
@@ -240,35 +240,35 @@ static inline lv_result_t lv_draw_sw_image_helium(
             .iHeight = (int16_t)src_h,
         };
 
-//        arm_2d_size_t des_size;
+//        arm_2d_size_t des_size ;
 
 //        do{
-//            int32_t des_w = lv_area_get_width(&blend_area);
-//            int32_t des_h = lv_area_get_height(&blend_area);
+//            int32_t des_w = lv_area_get_width (& blend_area );
+//            int32_t des_h = lv_area_get_height (& blend_area );
 
-//            LV_ASSERT(des_w <= INT16_MAX);
-//            LV_ASSERT(des_h <= INT16_MAX);
+//            LV_ASSERT ( des_w <= INT16_MAX );
+//            LV_ASSERT ( des_h <= INT16_MAX );
 
-//            des_size.iWidth = (int16_t)des_w;
-//            des_size.iHeight = (int16_t)des_h;
-//        } while(0);
+//            des_size .iWidth = ( int16_t ) des_w ;
+//            des_size .iHeight = ( int16_t ) des_h ;
+//        } Пока (0);
 //
 //        arm_2d_size_t copy_size = {
-//            .iWidth = MIN(des_size.iWidth, src_size.iWidth),
-//            .iHeight = MIN(des_size.iHeight, src_size.iHeight),
+//            .iWidth = MIN ( des_size .iWidth, src_size .iWidth),
+//            .iHeight = MIN ( des_size .iHeight, src_size .iHeight),
 //        };
 //
-//        int32_t des_stride = lv_draw_buf_width_to_stride(
-//                                lv_area_get_width(&layer->buf_area),
-//                                des_cf);
-//        uint8_t *des_buf_moved = (uint8_t *)lv_draw_layer_go_to_xy(
-//                                            layer,
-//                                            blend_area.x1 - layer->buf_area.x1,
-//                                            blend_area.y1 - layer->buf_area.y1);
+//        int32_t des_stride = lv_draw_buf_width_to_stride (
+//                                lv_area_get_width (&layer-> buf_area ),
+//                                des_cf );
+//        uint8_t * des_buf_moved = ( uint8_t *) lv_draw_layer_go_to_xy (
+//                                            слой,
+//                                            blend_area .x1 - слой-> buf_area .x1,
+//                                            blend_area .y1 - слой-> buf_area .y1);
         uint8_t *des_buf = (uint8_t *)lv_draw_layer_go_to_xy(layer, 0, 0);
         uint8_t opa = draw_dsc->opa;
 
-        /* ------------- prepare parameters for arm-2d APIs - END ----------- */
+        /* ------------- подготовка параметров для API Arm-2d - END ----------- */
         __RECOLOUR_BEGIN()
 
         static arm_2d_tile_t target_tile_origin;
@@ -673,7 +673,7 @@ static inline lv_result_t lv_draw_sw_image_recolor_rgb888(
 /* *INDENT-ON* */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_ARM2D_H */

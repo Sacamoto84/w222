@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of line */
+/** Данные линии */
 struct _lv_line_t {
     lv_obj_t obj;
     union {
@@ -51,7 +51,7 @@ struct _lv_line_t {
 #endif /* LV_USE_LINE != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LINE_PRIVATE_H*/

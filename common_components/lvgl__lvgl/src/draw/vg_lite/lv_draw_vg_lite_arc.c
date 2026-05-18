@@ -56,7 +56,7 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
 
     lv_area_t clip_area;
     if(!lv_area_intersect(&clip_area, coords, &t->clip_area)) {
-        /*Fully clipped, nothing to do*/
+        /*Полностью обрезан, делать нечего.*/
         return;
     }
 
@@ -72,7 +72,7 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
         sweep_angle -= 360;
     }
 
-    /*If the angles are the same then there is nothing to draw*/
+    /*Если углы одинаковые, то рисовать нечего.*/
     if(math_zero(sweep_angle)) {
         return;
     }
@@ -92,7 +92,7 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
     if(math_equal(sweep_angle, 360)) {
         lv_vg_lite_path_append_circle(path, cx, cy, radius_out, radius_out);
 
-        /* radius_in <= 0, normal fill circle */
+        /* radius_in <= 0, обычный закрашенный круг */
         if(radius_in > 0) {
             lv_vg_lite_path_append_circle(path, cx, cy, radius_in, radius_in);
         }
@@ -103,17 +103,17 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
         float end_angle_rad = MATH_RADIANS(end_angle);
 
         if(radius_in > 0) {
-            /* radius_out start point */
+            /* radius_out начальная точка */
             float start_x = radius_out * MATH_COSF(start_angle_rad) + cx;
             float start_y = radius_out * MATH_SINF(start_angle_rad) + cy;
 
-            /* radius_in start point */
+            /* radius_in начальная точка */
             float end_x = radius_in * MATH_COSF(end_angle_rad) + cx;
             float end_y = radius_in * MATH_SINF(end_angle_rad) + cy;
 
             lv_vg_lite_path_move_to(path, start_x, start_y);
 
-            /* radius_out arc */
+            /* radius_out дуга */
             lv_vg_lite_path_append_arc(path,
                                        cx, cy,
                                        radius_out,
@@ -121,10 +121,10 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
                                        sweep_angle,
                                        false);
 
-            /* line to radius_in */
+            /* линия на radius_in */
             lv_vg_lite_path_line_to(path, end_x, end_y);
 
-            /* radius_in arc */
+            /* radius_in дуга */
             lv_vg_lite_path_append_arc(path,
                                        cx, cy,
                                        radius_in,
@@ -132,15 +132,15 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
                                        -sweep_angle,
                                        false);
 
-            /* close arc */
+            /* замкнутая дуга */
             lv_vg_lite_path_close(path);
         }
         else {
-            /* draw a normal arc pie shape */
+            /* нарисуйте нормальную дуговую форму круга */
             lv_vg_lite_path_append_arc(path, cx, cy, radius_out, start_angle, sweep_angle, true);
         }
 
-        /* draw round */
+        /* обводить */
         if(dsc->rounded && dsc->width > 0) {
             float round_radius = radius_out > dsc->width ? dsc->width / 2.0f : radius_out / 2.0f;
             float round_center = radius_out - round_radius;
@@ -165,14 +165,14 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
 
             vg_lite_color_t img_color = 0;
             if(dsc->opa < LV_OPA_COVER) {
-                /* normal image opa */
+                /* нормальное изображение, опа */
                 src_buf.image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
                 lv_memset(&img_color, dsc->opa, sizeof(img_color));
             }
 
             vg_lite_matrix_t path_matrix = u->global_matrix;
 
-            /* move image to center */
+            /* переместить изображение в центр */
             float img_half_w = decoder_dsc.decoded->header.w / 2.0f;
             float img_half_h = decoder_dsc.decoded->header.h / 2.0f;
             vg_lite_translate(cx - img_half_w, cy - img_half_h, &matrix);
@@ -194,7 +194,7 @@ void lv_draw_vg_lite_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc,
         }
     }
     else {
-        /* normal color fill */
+        /* обычная цветовая заливка */
         lv_vg_lite_draw(
             &u->target_buffer,
             lv_vg_lite_path_get_path(path),

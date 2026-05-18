@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // (C) Copyright IBM Corporation 2021
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_URI_H_
 #define RAPIDJSON_URI_H_
@@ -21,13 +21,13 @@
 RAPIDJSON_DIAG_PUSH
 RAPIDJSON_DIAG_OFF(c++98-compat)
 #elif defined(_MSC_VER)
-RAPIDJSON_DIAG_OFF(4512) // assignment operator could not be generated
+RAPIDJSON_DIAG_OFF(4512) // не удалось сгенерировать оператор присваивания
 #endif
 
 RAPIDJSON_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
-// GenericUri
+// ОбщийUri
 
 template <typename ValueType, typename Allocator=CrtAllocator>
 class GenericUri {
@@ -37,7 +37,7 @@ public:
     typedef std::basic_string<Ch> String;
 #endif
 
-    //! Constructors
+    //! Конструкторы
     GenericUri(Allocator* allocator = 0) : uri_(), base_(), scheme_(), auth_(), path_(), query_(), frag_(), allocator_(allocator), ownAllocator_() {
     }
 
@@ -49,9 +49,9 @@ public:
         Parse(uri, internal::StrLen<Ch>(uri));
     }
 
-    // Use with specializations of GenericValue
+    // Используйте со специализациями GenericValue.
     template<typename T> GenericUri(const T& uri, Allocator* allocator = 0) : uri_(), base_(), scheme_(), auth_(), path_(), query_(), frag_(), allocator_(allocator), ownAllocator_() {
-        const Ch* u = uri.template Get<const Ch*>(); // TypeHelper from document.h
+        const Ch* u = uri.template Get<const Ch*>(); // TypeHelper от document.h
         Parse(u, internal::StrLen<Ch>(u));
     }
 
@@ -61,26 +61,26 @@ public:
     }
 #endif
 
-    //! Copy constructor
+    //! Копировать конструктор
     GenericUri(const GenericUri& rhs) : uri_(), base_(), scheme_(), auth_(), path_(), query_(), frag_(), allocator_(), ownAllocator_() {
         *this = rhs;
     }
 
-    //! Copy constructor
+    //! Копировать конструктор
     GenericUri(const GenericUri& rhs, Allocator* allocator) : uri_(), base_(), scheme_(), auth_(), path_(), query_(), frag_(), allocator_(allocator), ownAllocator_() {
         *this = rhs;
     }
 
-    //! Destructor.
+    //! Деструктор.
     ~GenericUri() {
         Free();
         RAPIDJSON_DELETE(ownAllocator_);
     }
 
-    //! Assignment operator
+    //! Оператор присваивания
     GenericUri& operator=(const GenericUri& rhs) {
         if (this != &rhs) {
-            // Do not delete ownAllocator
+            // Не удаляйте ownAllocator
             Free();
             Allocate(rhs.GetStringLength());
             auth_ = CopyPart(scheme_, rhs.scheme_, rhs.GetSchemeStringLength());
@@ -94,10 +94,10 @@ public:
         return *this;
     }
 
-    //! Getters
-    // Use with specializations of GenericValue
+    //! Геттеры
+    // Используйте со специализациями GenericValue.
     template<typename T> void Get(T& uri, Allocator& allocator) {
-        uri.template Set<const Ch*>(this->GetString(), allocator); // TypeHelper from document.h
+        uri.template Set<const Ch*>(this->GetString(), allocator); // TypeHelper от document.h
     }
 
     const Ch* GetString() const { return uri_; }
@@ -125,7 +125,7 @@ public:
     static String GetFrag(const GenericUri& uri) { return String(uri.GetFragString(), uri.GetFragStringLength()); }
 #endif
 
-    //! Equality operators
+    //! Операторы равенства
     bool operator==(const GenericUri& rhs) const {
         return Match(rhs, true);
     }
@@ -149,52 +149,52 @@ public:
         return internal::StrCmp<Ch>(s1, s2) == 0;
     }
 
-    //! Resolve this URI against another (base) URI in accordance with URI resolution rules.
-    // See https://tools.ietf.org/html/rfc3986
-    // Use for resolving an id or $ref with an in-scope id.
-    // Returns a new GenericUri for the resolved URI.
+    //! Сопоставьте этот URI с другим (базовым) URI в соответствии с правилами разрешения URI.
+    // См. https://tools.ietf.org/html/rfc3986.
+    // Используйте для разрешения идентификатора или $ref с идентификатором в области видимости.
+    // Возвращает новый GenericUri для разрешенного URI.
     GenericUri Resolve(const GenericUri& baseuri, Allocator* allocator = 0) {
         GenericUri resuri;
         resuri.allocator_ = allocator;
-        // Ensure enough space for combining paths
-        resuri.Allocate(GetStringLength() + baseuri.GetStringLength() + 1); // + 1 for joining slash
+        // Обеспечьте достаточно места для объединения путей.
+        resuri.Allocate(GetStringLength() + baseuri.GetStringLength() + 1); // + 1 за присоединение косой черты
 
         if (!(GetSchemeStringLength() == 0)) {
-            // Use all of this URI
+            // Используйте все это URI
             resuri.auth_ = CopyPart(resuri.scheme_, scheme_, GetSchemeStringLength());
             resuri.path_ = CopyPart(resuri.auth_, auth_, GetAuthStringLength());
             resuri.query_ = CopyPart(resuri.path_, path_, GetPathStringLength());
             resuri.frag_ = CopyPart(resuri.query_, query_, GetQueryStringLength());
             resuri.RemoveDotSegments();
         } else {
-            // Use the base scheme
+            // Используйте базовую схему
             resuri.auth_ = CopyPart(resuri.scheme_, baseuri.scheme_, baseuri.GetSchemeStringLength());
             if (!(GetAuthStringLength() == 0)) {
-                // Use this auth, path, query
+                // Используйте эту аутентификацию, путь, запрос
                 resuri.path_ = CopyPart(resuri.auth_, auth_, GetAuthStringLength());
                 resuri.query_ = CopyPart(resuri.path_, path_, GetPathStringLength());
                 resuri.frag_ = CopyPart(resuri.query_, query_, GetQueryStringLength());
                 resuri.RemoveDotSegments();
             } else {
-                // Use the base auth
+                // Используйте базовую аутентификацию
                 resuri.path_ = CopyPart(resuri.auth_, baseuri.auth_, baseuri.GetAuthStringLength());
                 if (GetPathStringLength() == 0) {
-                    // Use the base path
+                    // Используйте базовый путь
                     resuri.query_ = CopyPart(resuri.path_, baseuri.path_, baseuri.GetPathStringLength());
                     if (GetQueryStringLength() == 0) {
-                        // Use the base query
+                        // Используйте базовый запрос
                         resuri.frag_ = CopyPart(resuri.query_, baseuri.query_, baseuri.GetQueryStringLength());
                     } else {
-                        // Use this query
+                        // Используйте этот запрос
                         resuri.frag_ = CopyPart(resuri.query_, query_, GetQueryStringLength());
                     }
                 } else {
                     if (path_[0] == '/') {
-                        // Absolute path - use all of this path
+                        // Абсолютный путь — используйте весь этот путь
                         resuri.query_ = CopyPart(resuri.path_, path_, GetPathStringLength());
                         resuri.RemoveDotSegments();
                     } else {
-                        // Relative path - append this path to base path after base path's last slash
+                        // Относительный путь — добавьте этот путь к базовому пути после последней косой черты базового пути.
                         size_t pos = 0;
                         if (!(baseuri.GetAuthStringLength() == 0) && baseuri.GetPathStringLength() == 0) {
                             resuri.path_[pos] = '/';
@@ -210,35 +210,35 @@ public:
                         resuri.query_ = CopyPart(&resuri.path_[pos], path_, GetPathStringLength());
                         resuri.RemoveDotSegments();
                     }
-                    // Use this query
+                    // Используйте этот запрос
                     resuri.frag_ = CopyPart(resuri.query_, query_, GetQueryStringLength());
                 }
             }
         }
-        // Always use this frag
+        // Всегда используйте этот фрагмент
         resuri.base_ = CopyPart(resuri.frag_, frag_, GetFragStringLength());
 
-        // Re-constitute base_ and uri_
+        // Восстановите base_ и uri_.
         resuri.SetBase();
         resuri.uri_ = resuri.base_ + resuri.GetBaseStringLength() + 1;
         resuri.SetUri();
         return resuri;
     }
 
-    //! Get the allocator of this GenericUri.
+    //! Получите распределитель этого GenericUri.
     Allocator& GetAllocator() { return *allocator_; }
 
 private:
-    // Allocate memory for a URI
-    // Returns total amount allocated
+    // Выделить память для URI
+    // Возвращает общую выделенную сумму
     std::size_t Allocate(std::size_t len) {
-        // Create own allocator if user did not supply.
+        // Создайте собственный распределитель, если пользователь не предоставил его.
         if (!allocator_)
             ownAllocator_ =  allocator_ = RAPIDJSON_NEW(Allocator)();
 
-        // Allocate one block containing each part of the URI (5) plus base plus full URI, all null terminated.
+        // Выделите один блок, содержащий каждую часть URI (5) плюс базовый плюс полный URI , все с нулевым завершением.
         // Order: scheme, auth, path, query, frag, base, uri
-        // Note need to set, increment, assign in 3 stages to avoid compiler warning bug.
+        // Обратите внимание, что необходимо устанавливать, увеличивать и назначать в три этапа, чтобы избежать ошибки предупреждения компилятора.
         size_t total = (3 * len + 7) * sizeof(Ch);
         scheme_ = static_cast<Ch*>(allocator_->Malloc(total));
         *scheme_ = '\0';
@@ -263,7 +263,7 @@ private:
         return total;
     }
 
-    // Free memory for a URI
+    // Свободная память для URI
     void Free() {
         if (scheme_) {
             Allocator::Free(scheme_);
@@ -271,7 +271,7 @@ private:
         }
     }
 
-    // Parse a URI into constituent scheme, authority, path, query, & fragment parts
+    // Разобрать URI на составляющие схему, полномочия, путь, запрос и части фрагмента.
     // Supports URIs that match regex ^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))? as per
     // https://tools.ietf.org/html/rfc3986
     void Parse(const Ch* uri, std::size_t len) {
@@ -300,7 +300,7 @@ private:
             }
         }
         // Look for auth (//([^/?#]*))?
-        // Note need to set, increment, assign in 3 stages to avoid compiler warning bug.
+        // Обратите внимание, что необходимо устанавливать, увеличивать и назначать в три этапа, чтобы избежать ошибки предупреждения компилятора.
         auth_ = scheme_ + GetSchemeStringLength();
         auth_++;
         *auth_ = '\0';
@@ -317,7 +317,7 @@ private:
             start = pos2;
         }
         // Look for path ([^?#]*)
-        // Note need to set, increment, assign in 3 stages to avoid compiler warning bug.
+        // Обратите внимание, что необходимо устанавливать, увеличивать и назначать в три этапа, чтобы избежать ошибки предупреждения компилятора.
         path_ = auth_ + GetAuthStringLength();
         path_++;
         *path_ = '\0';
@@ -332,12 +332,12 @@ private:
                 std::memcpy(path_, &uri[start], (pos2 - start) * sizeof(Ch));
                 path_[pos2 - start] = '\0';
                 if (path_[0] == '/')
-                    RemoveDotSegments();   // absolute path - normalize
+                    RemoveDotSegments();   // абсолютный путь - нормализовать
                 start = pos2;
             }
         }
         // Look for query (\?([^#]*))?
-        // Note need to set, increment, assign in 3 stages to avoid compiler warning bug.
+        // Обратите внимание, что необходимо устанавливать, увеличивать и назначать в три этапа, чтобы избежать ошибки предупреждения компилятора.
         query_ = path_ + GetPathStringLength();
         query_++;
         *query_ = '\0';
@@ -354,7 +354,7 @@ private:
             }
         }
         // Look for fragment (#(.*))?
-        // Note need to set, increment, assign in 3 stages to avoid compiler warning bug.
+        // Обратите внимание, что необходимо устанавливать, увеличивать и назначать в три этапа, чтобы избежать ошибки предупреждения компилятора.
         frag_ = query_ + GetQueryStringLength();
         frag_++;
         *frag_ = '\0';
@@ -363,14 +363,14 @@ private:
             frag_[len - start] = '\0';
         }
 
-        // Re-constitute base_ and uri_
+        // Восстановите base_ и uri_.
         base_ = frag_ + GetFragStringLength() + 1;
         SetBase();
         uri_ = base_ + GetBaseStringLength() + 1;
         SetUri();
     }
 
-    // Reconstitute base
+    // Восстановить базу
     void SetBase() {
         Ch* next = base_;
         std::memcpy(next, scheme_, GetSchemeStringLength() * sizeof(Ch));
@@ -384,7 +384,7 @@ private:
         *next = '\0';
     }
 
-    // Reconstitute uri
+    // Восстановить ури
     void SetUri() {
         Ch* next = uri_;
         std::memcpy(next, base_, GetBaseStringLength() * sizeof(Ch));
@@ -394,8 +394,8 @@ private:
         *next = '\0';
     }
 
-    // Copy a part from one GenericUri to another
-    // Return the pointer to the next part to be copied to
+    // Скопируйте часть из одного GenericUri в другой.
+    // Верните указатель на следующую часть, в которую нужно скопировать.
     Ch* CopyPart(Ch* to, Ch* from, std::size_t len) {
         RAPIDJSON_ASSERT(to != 0);
         RAPIDJSON_ASSERT(from != 0);
@@ -405,71 +405,71 @@ private:
         return next;
     }
 
-    // Remove . and .. segments from the path_ member.
+    // Удалить. и .. сегменты участника path_.
     // https://tools.ietf.org/html/rfc3986
-    // This is done in place as we are only removing segments.
+    // Это делается на месте, поскольку мы удаляем только сегменты.
     void RemoveDotSegments() {
         std::size_t pathlen = GetPathStringLength();
-        std::size_t pathpos = 0;  // Position in path_
-        std::size_t newpos = 0;   // Position in new path_
+        std::size_t pathpos = 0;  // Позиция в path_
+        std::size_t newpos = 0;   // Позиция в новом path_
 
-        // Loop through each segment in original path_
+        // Прокрутите каждый сегмент в исходном path_.
         while (pathpos < pathlen) {
-            // Get next segment, bounded by '/' or end
+            // Получить следующий сегмент, ограниченный '/' или концом
             size_t slashpos = 0;
             while ((pathpos + slashpos) < pathlen) {
                 if (path_[pathpos + slashpos] == '/') break;
                 slashpos++;
             }
-            // Check for .. and . segments
+            // Проверьте .. и . сегменты
             if (slashpos == 2 && path_[pathpos] == '.' && path_[pathpos + 1] == '.') {
-                // Backup a .. segment in the new path_
-                // We expect to find a previously added slash at the end or nothing
+                // Резервное копирование сегмента .. в новом path_
+                // Мы ожидаем найти ранее добавленную косую черту в конце или ничего.
                 RAPIDJSON_ASSERT(newpos == 0 || path_[newpos - 1] == '/');
                 size_t lastslashpos = newpos;
-                // Make sure we don't go beyond the start segment
+                // Следим, чтобы мы не выходили за пределы стартового сегмента
                 if (lastslashpos > 1) {
-                    // Find the next to last slash and back up to it
+                    // Найдите предпоследнюю косую черту и вернитесь к ней.
                     lastslashpos--;
                     while (lastslashpos > 0) {
                         if (path_[lastslashpos - 1] == '/') break;
                         lastslashpos--;
                     }
-                    // Set the new path_ position
+                    // Установите новую позицию path_.
                     newpos = lastslashpos;
                 }
             } else if (slashpos == 1 && path_[pathpos] == '.') {
-                // Discard . segment, leaves new path_ unchanged
+                // Отбросить. сегмент, оставляет новый path_ без изменений
             } else {
-                // Move any other kind of segment to the new path_
+                // Переместите сегмент любого другого типа в новый path_.
                 RAPIDJSON_ASSERT(newpos <= pathpos);
                 std::memmove(&path_[newpos], &path_[pathpos], slashpos * sizeof(Ch));
                 newpos += slashpos;
-                // Add slash if not at end
+                // Добавьте косую черту, если не в конце
                 if ((pathpos + slashpos) < pathlen) {
                     path_[newpos] = '/';
                     newpos++;
                 }
             }
-            // Move to next segment
+            // Перейти к следующему сегменту
             pathpos += slashpos + 1;
         }
         path_[newpos] = '\0';
     }
 
-    Ch* uri_;    // Everything
-    Ch* base_;   // Everything except fragment
-    Ch* scheme_; // Includes the :
-    Ch* auth_;   // Includes the //
-    Ch* path_;   // Absolute if starts with /
+    Ch* uri_;    // все
+    Ch* base_;   // Все, кроме фрагмента
+    Ch* scheme_; // Включает в себя:
+    Ch* auth_;   // Включает //
+    Ch* path_;   // Абсолютно, если начинается с /
     Ch* query_;  // Includes the ?
-    Ch* frag_;   // Includes the #
+    Ch* frag_;   // Включает #
 
-    Allocator* allocator_;      //!< The current allocator. It is either user-supplied or equal to ownAllocator_.
-    Allocator* ownAllocator_;   //!< Allocator owned by this Uri.
+    Allocator* allocator_;      //!< Текущий распределитель. Он либо предоставляется пользователем, либо равен ownAllocator_ .
+    Allocator* ownAllocator_;   //!< Распределитель, принадлежащий этому Uri.
 };
 
-//! GenericUri for Value (UTF-8, default allocator).
+//! GenericUri для значения ( UTF -8, распределитель по умолчанию).
 typedef GenericUri<Value> Uri;
 
 RAPIDJSON_NAMESPACE_END

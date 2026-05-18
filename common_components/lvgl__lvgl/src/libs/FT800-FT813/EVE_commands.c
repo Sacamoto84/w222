@@ -1,33 +1,33 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_DRAW_EVE
 /*
-@file    EVE_commands.c
+@file EVE_commands.c
 @brief   contains FT8xx / BT8xx functions
 @version 5.0
-@date    2023-12-29
-@author  Rudolph Riedel
+@date 29 декабря 2023 г.
+@author Рудольф Ридель
 
-@section info
+@section информация
 
-At least for Arm Cortex-M0 and Cortex-M4 I have fastest execution with -O2.
-The c-standard is C99.
+По крайней мере, для Arm Cortex- M0 и Cortex- M4 у меня самое быстрое исполнение с - O2.
+C-стандарт — C99.
 
 
 @section LICENSE
 
-MIT License
+Лицензия MIT
 
 Copyright (c) 2016-2023 Rudolph Riedel
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
+Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+Программное обеспечение без ограничений, включая, помимо прочего, права
+использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать,
+и/или продавать копии Программного обеспечения, а также разрешать лицам, которым Программное обеспечение
+предоставлено для этого при соблюдении следующих условий:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+копии или существенные части Программного обеспечения.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -37,13 +37,13 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-@section History
+История @section
 
 5.0
 - added EVE_cmd_pclkfreq()
 - put back writing of REG_CSSPREAD as it needs to be deactivated for higher frequencies
 - added the configuration of the second PLL for the pixel clock in BT817/BT818 to EVE_init() in case the display config
-has EVE_PCLK_FREQ defined
+определен EVE_PCLK_FREQ
 - replaced BT81X_ENABLE with "EVE_GEN > 2"
 - removed FT81X_ENABLE as FT81x already is the lowest supported chip revision now
 - removed the formerly as deprected marked EVE_get_touch_tag()
@@ -77,49 +77,49 @@ has EVE_PCLK_FREQ defined
 - removed a couple of spi_transmit_32() calls from EVE_cmd_getptr() to make it work again
 - Bugfix: EVE_cmd_setfont2_burst() was using CMD_SETFONT instead of CMD_SETFONT2
 - removed a check for cmd_burst from EVE_cmd_getimage() as it is in the group of commands that are not used for display
-lists
+списки
 - moved EVE_cmd_newlist() to the group of commands that are not used for display lists
 - removed EVE_cmd_newlist_burst()
 - renamed spi_flash_write() to private_block_write() and made it static
 - renamed EVE_write_string() to private_string_write() and made it static
 - made EVE_start_command() static
 - Bugfix: ESP8266 needs 32 bit alignment for 32 bit pointers,
-    changed private_string_write() for burst-mode to read 8-bit values
+    изменен private_string_write() для пакетного режима для чтения 8-битных значений
 - Bugfix: somehow messed up private_string_write() for burst-mode
-    but only for 8-Bit controllers
+    но только для 8-битных контроллеров
 - changed EVE_memRead8(), EVE_memRead16() and EVE_memRead32() to use
-    spi_transmit_32() for the initial address+zero byte transfer
-    This speeds up ESP32/ESP8266 by several us, has no measureable effect
-    for ATSAMD51 and is a little slower for AVR.
+    spi_transmit_32() для начального адреса+передача нулевого байта
+    Это ускоряет ESP32/ESP8266 на несколько человек, но не имеет заметного эффекта.
+    для ATSAMD51 и немного медленнее для AVR.
 - Bugfix: not sure why but setting private_block_write() to static broke it, without "static" it works
 - Bugfix: EVE_cmd_flashspirx() was using CMD_FLASHREAD
 - fixed a warning in EVE_init() when compiling for EVE4
 - renamed internal function EVE_begin_cmd() to eve_begin_cmd() and made it static
 - changed all the EVE_start_command() calls to eve_begin_cmd() calls following the report on Github from
-  Michael Wachs that these are identical - they weren't prior to V5
+  Майкл Вакс, они идентичны, их не было до V5.
 - removed EVE_start_command()
 - Bugfix: EVE_init() was only checking the first two bits of REG_CPURESET and ignored the bit for the audio-engine, not
-an issue but not correct either.
+проблема, но не правильная.
 - fixed a few clang-tidy warnings
 - fixed a few cppcheck warnings
 - fixed a few CERT warnings
 - converted all TABs to SPACEs
 - made EVE_TOUCH_RZTHRESH in EVE_init() optional to a) remove it from EVE_config.h and b) make it configureable
-externally
+внешне
 - changed EVE_init() to write 1200U to REG_TOUCH_RZTHRESH if EVE_TOUCH_RZTHRESH is not defined
 - changed EVE_init() to return E_OK = 0x00 in case of success and more meaningfull values in case of failure
 - changed EVE_busy() to return EVE_IS_BUSY if EVE is busy and E_OK = 0x00 if EVE is not busy - no real change in
-functionality
+функциональность
 - finally removed EVE_cmd_start() after setting it to deprecatd with the first 5.0 release
 - renamed EVE_cmd_execute() to EVE_execute_cmd() to be more consistent, this is is not an EVE command
 - changed EVE_init_flash() to return E_OK in case of success and more meaningfull values in case of failure
 - added the return-value of EVE_FIFO_HALF_EMPTY to EVE_busy() to indicate there is more than 2048 bytes available
 - minor cleanup, less break and else statements
 - added the burst code back into all the functions for which there is a _burst version, this allows to use the version
-without the traling _burst in the name when exceution speed is not an issue - e.g. with all targets supporting DMA
+без traling _burst в имени, когда скорость выполнения не является проблемой - например. со всеми целями, поддерживающими DMA
 - removed the 4.0 history
 - added the optional parameter EVE_ROTATE as define to EVE_init() to allow for screen rotation during init
-    thanks for the idea to AndrejValand on Github!
+    спасибо за идею Андрею Валанду на Github!
 - added the optional parameter EVE_BACKLIGHT_PWM to EVE_init() to allow setting the backlight during init
 - modified EVE_calibrate_manual() to work better with bar type displays
 - fixed a large number of MISRA-C issues - mostly more casts for explicit type conversion and more brackets
@@ -133,15 +133,15 @@ without the traling _burst in the name when exceution speed is not an issue - e.
 - added prototype for EVE_write_display_parameters()
 - added EVE_memRead_sram_buffer()
 - Bugfix issue #81: neither DISP or the pixel clock are enabled for EVE4 configurations not using EVE_PCLK_FREQ.
-    thanks for the report to grados73 on Github!
+    спасибо за отчет grados73 на Github!
 - added a few support lines for the Gameduino GD3X to EVE_init()
 - switched from using CMD_PCLKFREQ to writing to REG_PCLK_FREQ directly
 - added define EVE_SET_REG_PCLK_2X to set REG_PCLK_2X to 1 when necessary
 - Bugfix: EVE_init() did not set the audio engine to "mute" as intended, but to "silent"
 - Bugfix: EVE_busy() returns E_NOT_OK now on coprocessor faults.
-    thanks for the report to Z0ld3n on Github!
+    спасибо за отчет Z0ld3n на Github!
 - Fix: reworked EVE_busy() to return EVE_FAULT_RECOVERED on deteced coprocessor faults,
-    removed the flash commands from the fault recovery sequence as these are project specific.
+    удалены флэш-команды из последовательности восстановления после сбоя, поскольку они зависят от проекта.
 - added EVE_get_and_reset_fault_state() to check if EVE_busy() triggered a fault recovery
 - added notes on how to use to EVE_cmd_setfont2() and EVE_cmd_romfont()
 - new optional parameter in EVE_init(): EVE_BACKLIGHT_FREQ
@@ -150,7 +150,7 @@ without the traling _burst in the name when exceution speed is not an issue - e.
 - renamed chipid references to regid as suggested by #93 on github
 - Bugfix: broke transfers of buffers larger than 3840 when fixing issues from static code analysis
 - changed a number of function parameters from signed to unsigned following the
-    updated BT81x series programming guide V2.4
+    обновленное руководство по программированию серии BT81x V2 .4
 - did another linter pass and fixed some things
 - started to improve the embedded documentation
 - added more documentation
@@ -160,20 +160,20 @@ without the traling _burst in the name when exceution speed is not an issue - e.
 
 #include "EVE_commands.h"
 
-/* EVE Memory Commands - used with EVE_memWritexx and EVE_memReadxx */
-#define MEM_WRITE 0x80U /* EVE Host Memory Write */
-/* #define MEM_READ 0x00U */ /* EVE Host Memory Read */
+/* Команды памяти EVE — используются с EVE_memWritexx и EVE_memReadxx. */
+#define MEM_WRITE 0x80U /* EVE Запись в память хоста */
+/* #define MEM_READ 0x00U */ /* EVE Чтение памяти хоста */
 
-/* define NULL if it not already is */
+/* определите NULL, если он еще не существует */
 #ifndef NULL
 #include <stdio.h>
 #endif
 
-static volatile uint8_t cmd_burst = 0U; /* flag to indicate cmd-burst is active */
-static volatile uint8_t fault_recovered = E_OK; /* flag to indicate if EVE_busy triggered a fault recovery */
+static volatile uint8_t cmd_burst = 0U; /* флаг, указывающий, что cmd-burst активен */
+static volatile uint8_t fault_recovered = E_OK; /* флаг, указывающий, вызвал ли EVE_busy восстановление после сбоя */
 
 /* ##################################################################
-    helper functions
+    вспомогательные функции
 ##################################################################### */
 
 /**
@@ -196,7 +196,7 @@ uint8_t EVE_memRead8(uint32_t const ft_address)
     uint8_t data;
     EVE_cs_set();
     spi_transmit_32(((ft_address >> 16U) & 0x0000007fUL) + (ft_address & 0x0000ff00UL) + ((ft_address & 0x000000ffUL) << 16U));
-    data = spi_receive(0U); /* read data byte by sending another dummy byte */
+    data = spi_receive(0U); /* прочитать байт данных, отправив еще один фиктивный байт */
     EVE_cs_clear();
     return (data);
 }
@@ -210,8 +210,8 @@ uint16_t EVE_memRead16(uint32_t const ft_address)
 
     EVE_cs_set();
     spi_transmit_32(((ft_address >> 16U) & 0x0000007fUL) + (ft_address & 0x0000ff00UL) + ((ft_address & 0x000000ffUL) << 16U));
-    uint8_t const lowbyte = spi_receive(0U); /* read low byte */
-    uint8_t const hibyte = spi_receive(0U); /* read high byte */
+    uint8_t const lowbyte = spi_receive(0U); /* прочитать младший байт */
+    uint8_t const hibyte = spi_receive(0U); /* прочитать старший байт */
     data = ((uint16_t) hibyte * 256U) | lowbyte;
     EVE_cs_clear();
     return (data);
@@ -225,10 +225,10 @@ uint32_t EVE_memRead32(uint32_t const ft_address)
     uint32_t data;
     EVE_cs_set();
     spi_transmit_32(((ft_address >> 16U) & 0x0000007fUL) + (ft_address & 0x0000ff00UL) + ((ft_address & 0x000000ffUL) << 16U));
-    data = ((uint32_t) spi_receive(0U)); /* read low byte */
+    data = ((uint32_t) spi_receive(0U)); /* прочитать младший байт */
     data = ((uint32_t) spi_receive(0U) << 8U) | data;
     data = ((uint32_t) spi_receive(0U) << 16U) | data;
-    data = ((uint32_t) spi_receive(0U) << 24U) | data; /* read high byte */
+    data = ((uint32_t) spi_receive(0U) << 24U) | data; /* прочитать старший байт */
     EVE_cs_clear();
     return (data);
 }
@@ -252,11 +252,11 @@ void EVE_memWrite8(uint32_t const ft_address, uint8_t const ft_data)
 void EVE_memWrite16(uint32_t const ft_address, uint16_t const ft_data)
 {
     EVE_cs_set();
-    spi_transmit((uint8_t) (ft_address >> 16U) | MEM_WRITE); /* send Memory Write plus high address byte */
-    spi_transmit((uint8_t) (ft_address >> 8U));              /* send middle address byte */
-    spi_transmit((uint8_t) (ft_address & 0x000000ffUL));     /* send low address byte */
-    spi_transmit((uint8_t) (ft_data & 0x00ffU));             /* send data low byte */
-    spi_transmit((uint8_t) (ft_data >> 8U));                 /* send data high byte */
+    spi_transmit((uint8_t) (ft_address >> 16U) | MEM_WRITE); /* отправить запись в память плюс старший адресный байт */
+    spi_transmit((uint8_t) (ft_address >> 8U));              /* отправить средний байт адреса */
+    spi_transmit((uint8_t) (ft_address & 0x000000ffUL));     /* отправить младший байт адреса */
+    spi_transmit((uint8_t) (ft_data & 0x00ffU));             /* отправить младший байт данных */
+    spi_transmit((uint8_t) (ft_data >> 8U));                 /* отправить старший байт данных */
     EVE_cs_clear();
 }
 
@@ -266,9 +266,9 @@ void EVE_memWrite16(uint32_t const ft_address, uint16_t const ft_data)
 void EVE_memWrite32(uint32_t const ft_address, uint32_t const ft_data)
 {
     EVE_cs_set();
-    spi_transmit((uint8_t) (ft_address >> 16U) | MEM_WRITE); /* send Memory Write plus high address byte */
-    spi_transmit((uint8_t) (ft_address >> 8U));              /* send middle address byte */
-    spi_transmit((uint8_t) (ft_address & 0x000000ffUL));     /* send low address byte */
+    spi_transmit((uint8_t) (ft_address >> 16U) | MEM_WRITE); /* отправить запись в память плюс старший адресный байт */
+    spi_transmit((uint8_t) (ft_address >> 8U));              /* отправить средний байт адреса */
+    spi_transmit((uint8_t) (ft_address & 0x000000ffUL));     /* отправить младший байт адреса */
     spi_transmit_32(ft_data);
     EVE_cs_clear();
 }
@@ -321,7 +321,7 @@ void EVE_memRead_sram_buffer(uint32_t const ft_address, uint8_t *p_data, uint32_
 
         for (uint32_t count = 0U; count < len; count++)
         {
-            p_data[count] = spi_receive(0U); /* read data byte by sending another dummy byte */
+            p_data[count] = spi_receive(0U); /* прочитать байт данных, отправив еще один фиктивный байт */
         }
 
         EVE_cs_clear();
@@ -335,25 +335,25 @@ static void CoprocessorFaultRecover(void)
         copro_patch_pointer = EVE_memRead16(REG_COPRO_PATCH_PTR);
 #endif
 
-        EVE_memWrite8(REG_CPURESET, 1U); /* hold coprocessor engine in the reset condition */
-        EVE_memWrite16(REG_CMD_READ, 0U); /* set REG_CMD_READ to 0 */
-        EVE_memWrite16(REG_CMD_WRITE, 0U); /* set REG_CMD_WRITE to 0 */
-        EVE_memWrite16(REG_CMD_DL, 0U); /* reset REG_CMD_DL to 0 as required by the BT81x programming guide, should not hurt FT8xx */
+        EVE_memWrite8(REG_CPURESET, 1U); /* удерживать двигатель сопроцессора в состоянии сброса */
+        EVE_memWrite16(REG_CMD_READ, 0U); /* установите REG_CMD_READ в 0 */
+        EVE_memWrite16(REG_CMD_WRITE, 0U); /* установите REG_CMD_WRITE в 0 */
+        EVE_memWrite16(REG_CMD_DL, 0U); /* сбросьте REG_CMD_DL на 0, как того требует руководство по программированию BT81x, это не должно повредить FT8xx */
 
 #if EVE_GEN > 2
         EVE_memWrite16(REG_COPRO_PATCH_PTR, copro_patch_pointer);
 
-        /* restore REG_PCLK in case it was set to zero by an error */
+        /* восстановить REG_PCLK, если он был обнулен по ошибке */
 #if (EVE_GEN > 3) && (defined EVE_PCLK_FREQ)
         EVE_memWrite16(REG_PCLK_FREQ, (uint16_t) EVE_PCLK_FREQ);
-        EVE_memWrite8(REG_PCLK, 1U); /* enable extsync mode */
+        EVE_memWrite8(REG_PCLK, 1U); /* включить режим extsync */
 #else
         EVE_memWrite8(REG_PCLK, EVE_PCLK);
 #endif
 
 #endif
-        EVE_memWrite8(REG_CPURESET, 0U); /* set REG_CPURESET to 0 to restart the coprocessor engine*/
-        DELAY_MS(10U);                   /* just to be safe */
+        EVE_memWrite8(REG_CPURESET, 0U); /* установите REG_CPURESET в 0, чтобы перезапустить механизм сопроцессора*/
+        DELAY_MS(10U);                   /* просто на всякий случай */
 }
 
 /**
@@ -376,11 +376,11 @@ uint8_t EVE_busy(void)
 
     space = EVE_memRead16(REG_CMDB_SPACE);
 
-    /* (REG_CMDB_SPACE & 0x03) != 0 -> we have a coprocessor fault */
-    if ((space & 3U) != 0U) /* we have a coprocessor fault, make EVE play with us again */
+    /* ( REG_CMDB_SPACE & 0x03 ) != 0 -> у нас неисправность сопроцессора */
+    if ((space & 3U) != 0U) /* у нас неисправен сопроцессор, заставьте EVE снова поиграть с нами */
     {
         ret = EVE_FAULT_RECOVERED;
-        fault_recovered = EVE_FAULT_RECOVERED; /* save fault recovery state */
+        fault_recovered = EVE_FAULT_RECOVERED; /* сохранить состояние восстановления после сбоя */
         CoprocessorFaultRecover();
     }
     else
@@ -408,7 +408,7 @@ uint8_t EVE_busy(void)
 
 /**
  * @brief Helper function to check if EVE_busy() tried to recover from a coprocessor fault.
- * The internal fault indicator is cleared so it could be set by EVE_busy() again.
+ * Индикатор внутренней неисправности очищается, и его можно снова установить с помощью EVE_busy().
  * @return - EVE_FAULT_RECOVERED - if EVE_busy() detected a coprocessor fault
  * @return - E_OK - if EVE_busy() did not detect a coprocessor fault
  */
@@ -434,17 +434,17 @@ void EVE_execute_cmd(void)
     }
 }
 
-/* begin a coprocessor command, this is used for non-display-list and non-burst-mode commands.*/
+/* начать команду сопроцессора, это используется для команд без списка отображения и без пакетного режима.*/
 static void eve_begin_cmd(uint32_t command)
 {
     EVE_cs_set();
-    spi_transmit((uint8_t) 0xB0U); /* high-byte of REG_CMDB_WRITE + MEM_WRITE */
-    spi_transmit((uint8_t) 0x25U); /* middle-byte of REG_CMDB_WRITE */
-    spi_transmit((uint8_t) 0x78U); /* low-byte of REG_CMDB_WRITE */
+    spi_transmit((uint8_t) 0xB0U); /* старший байт REG_CMDB_WRITE + MEM_WRITE */
+    spi_transmit((uint8_t) 0x25U); /* средний байт REG_CMDB_WRITE */
+    spi_transmit((uint8_t) 0x78U); /* младший байт REG_CMDB_WRITE */
     spi_transmit_32(command);
 }
 
-static void private_block_write(const uint8_t *p_data, uint16_t len); /* prototype to comply with MISRA */
+static void private_block_write(const uint8_t *p_data, uint16_t len); /* прототип, соответствующий MISRA */
 
 static void private_block_write(const uint8_t *p_data, uint16_t len)
 {
@@ -466,7 +466,7 @@ static void private_block_write(const uint8_t *p_data, uint16_t len)
     }
 }
 
-static void block_transfer(const uint8_t *p_data, uint32_t len); /* prototype to comply with MISRA */
+static void block_transfer(const uint8_t *p_data, uint32_t len); /* прототип, соответствующий MISRA */
 
 static void block_transfer(const uint8_t *p_data, uint32_t len)
 {
@@ -481,9 +481,9 @@ static void block_transfer(const uint8_t *p_data, uint32_t len)
         block_len = (bytes_left > 3840UL) ? 3840UL : bytes_left;
 
         EVE_cs_set();
-        spi_transmit((uint8_t) 0xB0U); /* high-byte of REG_CMDB_WRITE + MEM_WRITE */
-        spi_transmit((uint8_t) 0x25U); /* middle-byte of REG_CMDB_WRITE */
-        spi_transmit((uint8_t) 0x78U); /* low-byte of REG_CMDB_WRITE */
+        spi_transmit((uint8_t) 0xB0U); /* старший байт REG_CMDB_WRITE + MEM_WRITE */
+        spi_transmit((uint8_t) 0x25U); /* средний байт REG_CMDB_WRITE */
+        spi_transmit((uint8_t) 0x78U); /* младший байт REG_CMDB_WRITE */
         private_block_write(&p_data[offset], (uint16_t) block_len);
         EVE_cs_clear();
         offset += block_len;
@@ -493,8 +493,8 @@ static void block_transfer(const uint8_t *p_data, uint32_t len)
 }
 
 /* ##################################################################
-    coprocessor commands that are not used in displays lists,
-    these are not to be used with burst transfers
+    команды сопроцессора, которые не используются в списках дисплеев,
+    они не должны использоваться при пакетной передаче
 ################################################################### */
 
 /* BT817 / BT818 */
@@ -552,7 +552,7 @@ void EVE_cmd_fontcachequery(uint32_t *p_total, uint32_t *p_used)
     EVE_cs_clear();
     EVE_execute_cmd();
 
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
 
     if (p_total != NULL)
     {
@@ -583,7 +583,7 @@ void EVE_cmd_getimage(uint32_t *p_source, uint32_t *p_fmt, uint32_t *p_width, ui
     EVE_cs_clear();
     EVE_execute_cmd();
 
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
 
     if (p_palette != NULL)
     {
@@ -653,7 +653,7 @@ uint32_t EVE_cmd_pclkfreq(uint32_t ftarget, int32_t rounding)
     spi_transmit_32(0UL);
     EVE_cs_clear();
     EVE_execute_cmd();
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
     cmdoffset -= 4U;
     cmdoffset &= 0x0fffU;
     return (EVE_memRead32(EVE_RAM_CMD + cmdoffset));
@@ -754,7 +754,7 @@ uint32_t EVE_cmd_flashfast(void)
     spi_transmit_32(0UL);
     EVE_cs_clear();
     EVE_execute_cmd();
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
     cmdoffset -= 4U;
     cmdoffset &= 0x0fffU;
     return (EVE_memRead32(EVE_RAM_CMD + cmdoffset));
@@ -895,7 +895,7 @@ void EVE_cmd_inflate2(uint32_t ptr, uint32_t options, const uint8_t *p_data, uin
     spi_transmit_32(options);
     EVE_cs_clear();
 
-    if (0UL == options) /* direct data, not by Media-FIFO or Flash */
+    if (0UL == options) /* прямые данные, а не через Media- FIFO или Flash */
     {
         if (p_data != NULL)
         {
@@ -922,7 +922,7 @@ void EVE_cmd_getprops(uint32_t *p_pointer, uint32_t *p_width, uint32_t *p_height
     spi_transmit_32(0UL);
     EVE_cs_clear();
     EVE_execute_cmd();
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
 
     if (p_pointer != NULL)
     {
@@ -952,7 +952,7 @@ uint32_t EVE_cmd_getptr(void)
     spi_transmit_32(0UL);
     EVE_cs_clear();
     EVE_execute_cmd();
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
     cmdoffset -= 4U;
     cmdoffset &= 0x0fffU;
     return (EVE_memRead32(EVE_RAM_CMD + cmdoffset));
@@ -1008,9 +1008,9 @@ void EVE_cmd_loadimage(uint32_t ptr, uint32_t options, const uint8_t *p_data, ui
 
 #if EVE_GEN > 2
     if ((0UL == (options & EVE_OPT_MEDIAFIFO)) &&
-        (0UL == (options & EVE_OPT_FLASH))) /* direct data, neither by Media-FIFO or from Flash */
+        (0UL == (options & EVE_OPT_FLASH))) /* прямые данные, ни через Media-FIFO, ни из Flash */
 #else
-    if (0UL == (options & EVE_OPT_MEDIAFIFO))  /* direct data, not by Media-FIFO */
+    if (0UL == (options & EVE_OPT_MEDIAFIFO))  /* прямые данные, а не СМИ- FIFO */
 #endif
     {
         if (p_data != NULL)
@@ -1067,7 +1067,7 @@ uint32_t EVE_cmd_memcrc(uint32_t ptr, uint32_t num)
     spi_transmit_32(0UL);
     EVE_cs_clear();
     EVE_execute_cmd();
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* read the coprocessor write pointer */
+    cmdoffset = EVE_memRead16(REG_CMD_WRITE); /* прочитать указатель записи сопроцессора */
     cmdoffset -= 4U;
     cmdoffset &= 0x0fffU;
     return (EVE_memRead32(EVE_RAM_CMD + cmdoffset));
@@ -1097,21 +1097,21 @@ void EVE_cmd_memset(uint32_t ptr, uint8_t value, uint32_t num)
  * @note - Does not support burst-mode.
  */
 /*
-void EVE_cmd_memwrite(uint32_t dest, uint32_t num, const uint8_t *p_data)
+void EVE_cmd_memwrite ( uint32_t назначение, uint32_t число, const uint8_t * p_data )
 {
-    eve_begin_cmd(CMD_MEMWRITE);
-    spi_transmit_32(dest);
-    spi_transmit_32(num);
+    eve_begin_cmd ( CMD_MEMWRITE );
+    spi_transmit_32 (адресат);
+    spi_transmit_32 (число);
 
     num = (num + 3U) & (~3U);
 
-    for (uint32_t count = 0U; count<len; count++)
+    for ( uint32_t count = 0U; count<len; count++)
     {
-        spi_transmit(pgm_read_byte_far(p_data + count));
+        spi_transmit ( pgm_read_byte_far ( p_data + счет));
     }
 
-    EVE_cs_clear();
-    EVE_execute_cmd();
+    EVE_cs_clear ();
+    EVE_execute_cmd ();
 }
 */
 
@@ -1123,19 +1123,19 @@ void EVE_cmd_memwrite(uint32_t dest, uint32_t num, const uint8_t *p_data)
  * @note - Does not support burst-mode.
  */
 /*
-uint32_t EVE_cmd_regread(uint32_t ptr)
+uint32_t EVE_cmd_regread ( uint32_t точка)
 {
     uint16_t cmdoffset;
 
-    eve_begin_cmd(CMD_REGREAD);
-    spi_transmit_32(ptr);
-    spi_transmit_32(0UL);
-    EVE_cs_clear();
-    EVE_execute_cmd();
+    eve_begin_cmd ( CMD_REGREAD );
+    spi_transmit_32 (птр);
+    spi_transmit_32 (0UL);
+    EVE_cs_clear ();
+    EVE_execute_cmd ();
     cmdoffset = EVE_memRead16(REG_CMD_WRITE); // read the coprocessor write pointer
     cmdoffset -= 4U;
     cmdoffset &= 0x0fffU;
-    return (EVE_memRead32(EVE_RAM_CMD + cmdoffset));
+    return ( EVE_memRead32 ( EVE_RAM_CMD + cmdoffset));
 }
 */
 
@@ -1169,9 +1169,9 @@ void EVE_cmd_playvideo(uint32_t options, const uint8_t *p_data, uint32_t len)
 
 #if EVE_GEN > 2
     if ((0UL == (options & EVE_OPT_MEDIAFIFO)) &&
-        (0UL == (options & EVE_OPT_FLASH))) /* direct data, neither by Media-FIFO or from Flash */
+        (0UL == (options & EVE_OPT_FLASH))) /* прямые данные, ни через Media-FIFO, ни из Flash */
 #else
-    if (0UL == (options & EVE_OPT_MEDIAFIFO))  /* direct data, not by Media-FIFO */
+    if (0UL == (options & EVE_OPT_MEDIAFIFO))  /* прямые данные, а не СМИ- FIFO */
 #endif
     {
         if (p_data != NULL)
@@ -1280,7 +1280,7 @@ void EVE_cmd_videoframe(uint32_t dest, uint32_t result_ptr)
 }
 
 /* ##################################################################
-        patching and initialization
+        исправление и инициализация
 #################################################################### */
 
 #if EVE_GEN > 2
@@ -1288,8 +1288,8 @@ void EVE_cmd_videoframe(uint32_t dest, uint32_t result_ptr)
 /**
  * @brief EVE flash initialization for BT81x, switches the FLASH attached to a BT81x to full-speed mode
  * @return Returns E_OK in case of success, EVE_FAIL_FLASH_STATUS_INIT if the status remains init,
- * EVE_FAIL_FLASH_STATUS_DETACHED if no flash chip was found, a number of different values for failures with
- * cmd_flashfast and E_NOT_OK if a not supported status is returned in REG_FLASH_STATUS.
+ * EVE_FAIL_FLASH_STATUS_DETACHED, если флэш-чип не найден, ряд различных значений для ошибок с
+ * cmd_flashfast и E_NOT_OK, если в REG_FLASH_STATUS возвращается статус «не поддерживается».
  */
 uint8_t EVE_init_flash(void)
 {
@@ -1297,34 +1297,34 @@ uint8_t EVE_init_flash(void)
     uint8_t status;
     uint8_t ret_val = E_NOT_OK;
 
-    status = EVE_memRead8(REG_FLASH_STATUS); /* should be 0x02 - FLASH_STATUS_BASIC, power-up is done and the attached flash is detected */
+    status = EVE_memRead8(REG_FLASH_STATUS); /* должно быть 0x02 - FLASH_STATUS_BASIC, включение питания выполнено и подключенная вспышка обнаружена */
 
-     /* we are somehow still in init, give it a litte more time, this should never happen */
+     /* мы каким-то образом все еще находимся в инициализации, подождите еще немного, этого никогда не должно произойти */
     while (EVE_FLASH_STATUS_INIT == status)
     {
         status = EVE_memRead8(REG_FLASH_STATUS);
         DELAY_MS(1U);
         timeout++;
-        if (timeout > 100U) /* 100ms and still in init, lets call quits now and exit with an error */
+        if (timeout > 100U) /* 100 мс и все еще в инициализации, давайте сейчас завершим работу и выйдем с ошибкой */
         {
             ret_val = EVE_FAIL_FLASH_STATUS_INIT;
             break;
         }
     }
 
-    /* no flash was found during init, no flash present or the detection failed, give it another try */
+    /* во время инициализации флэш-память не обнаружена, флэш-память отсутствует или обнаружение не удалось, попробуйте еще раз */
     if (EVE_FLASH_STATUS_DETACHED == status)
     {
         EVE_cmd_dl(CMD_FLASHATTACH);
         EVE_execute_cmd();
         status = EVE_memRead8(REG_FLASH_STATUS);
-        if (status != 2U) /* still not in FLASH_STATUS_BASIC, time to give up */
+        if (status != 2U) /* еще не в FLASH_STATUS_BASIC, пора сдаваться */
         {
             ret_val = EVE_FAIL_FLASH_STATUS_DETACHED;
         }
     }
 
-    /* flash detected and ready for action, move it up to FLASH_STATUS_FULL */
+    /* вспышка обнаружена и готова к действию, переместите ее на FLASH_STATUS_FULL */
     if (EVE_FLASH_STATUS_BASIC == status)
     {
         uint32_t result;
@@ -1357,7 +1357,7 @@ uint8_t EVE_init_flash(void)
                 ret_val = EVE_FAIL_FLASHFAST_SPEED_TEST;
             break;
 
-            default: /* we have an unknown error, so just return failure */
+            default: /* у нас неизвестная ошибка, поэтому просто верните ошибку */
                 ret_val = E_NOT_OK;
             break;
         }
@@ -1386,10 +1386,10 @@ static void use_gt911(void);
 static void use_gt911(void)
 {
 #if EVE_GEN > 2
-    EVE_memWrite16(REG_TOUCH_CONFIG, 0x05d0U); /* switch to Goodix touch controller */
+    EVE_memWrite16(REG_TOUCH_CONFIG, 0x05d0U); /* переключиться на сенсорный контроллер Goodix */
 #else
 
-/* FT811 / FT813 binary-blob from FTDIs AN_336 to patch the touch-engine for Goodix GT911 / GT9271 touch controllers */
+/* FT811/FT813 бинарный объект от FTDIs AN_336 для патча тач-движка для сенсорных контроллеров Goodix GT911/GT9271 */
 const uint8_t eve_gt911_data[1184U] PROGMEM =
 {
     26,  255, 255, 255, 32,  32,  48,  0,   4,   0,   0,   0,   2,   0,   0,   0,   34,  255, 255, 255, 0,   176, 48,
@@ -1447,32 +1447,32 @@ const uint8_t eve_gt911_data[1184U] PROGMEM =
 };
 
     EVE_cs_set();
-    spi_transmit((uint8_t) 0xB0U); /* high-byte of REG_CMDB_WRITE + MEM_WRITE */
-    spi_transmit((uint8_t) 0x25U); /* middle-byte of REG_CMDB_WRITE */
-    spi_transmit((uint8_t) 0x78U); /* low-byte of REG_CMDB_WRITE */
+    spi_transmit((uint8_t) 0xB0U); /* старший байт REG_CMDB_WRITE + MEM_WRITE */
+    spi_transmit((uint8_t) 0x25U); /* средний байт REG_CMDB_WRITE */
+    spi_transmit((uint8_t) 0x78U); /* младший байт REG_CMDB_WRITE */
     private_block_write(eve_gt911_data, sizeof(eve_gt911_data));
     EVE_cs_clear();
     EVE_execute_cmd();
 
-    EVE_memWrite8(REG_TOUCH_OVERSAMPLE, 0x0fU); /* setup oversample to 0x0f as "hidden" in binary-blob for AN_336 */
-    EVE_memWrite16(REG_TOUCH_CONFIG, 0x05D0U);  /* write magic cookie as requested by AN_336 */
+    EVE_memWrite8(REG_TOUCH_OVERSAMPLE, 0x0fU); /* настроить передискретизацию для 0x0f как «скрытую» в двоичном объекте для AN_336 */
+    EVE_memWrite16(REG_TOUCH_CONFIG, 0x05D0U);  /* напишите волшебный cookie по запросу AN_336 */
 
-    /* specific to the EVE2 modules from Matrix-Orbital we have to use GPIO3 to reset GT911 */
-    EVE_memWrite16(REG_GPIOX_DIR, 0x8008U); /* Reset-Value is 0x8000, adding 0x08 sets GPIO3 to output, default-value
-                                              for REG_GPIOX is 0x8000 -> Low output on GPIO3 */
-    DELAY_MS(1U);                           /* wait more than 100us */
-    EVE_memWrite8(REG_CPURESET, 0U);        /* clear all resets */
-    DELAY_MS(110U); /* wait more than 55ms - does not work with multitouch, for some reason a minimum delay of 108ms is
-                      required */
-    EVE_memWrite16(REG_GPIOX_DIR, 0x8000U); /* setting GPIO3 back to input */
+    /* специально для модулей EVE2 от Matrix-Orbital, мы должны использовать GPIO3 для сброса GT911 */
+    EVE_memWrite16(REG_GPIOX_DIR, 0x8008U); /* Reset-Value — 0x8000 , добавление 0x08 устанавливает GPIO3 на выход, значение по умолчанию.
+                                              для REG_GPIOX это 0x8000 -> Низкий выход на GPIO3 */
+    DELAY_MS(1U);                           /* подожди больше 100 нас */
+    EVE_memWrite8(REG_CPURESET, 0U);        /* очистить все сбросы */
+    DELAY_MS(110U); /* ждать более 55мс - не работает мультитач, почему-то минимальная задержка 108мс
+                      требуется */
+    EVE_memWrite16(REG_GPIOX_DIR, 0x8000U); /* установка GPIO3 обратно на ввод */
 #endif
 }
 
 /**
  * @brief Waits for either reading REG_ID with a value of 0x7c, indicating that
- *  an EVE chip is present and ready to communicate, or untill a timeout of 400ms has passed.
+ *  чип EVE присутствует и готов к обмену данными или пока не пройдет тайм-аут 400 мс.
  * @return Returns E_OK in case of success, EVE_FAIL_REGID_TIMEOUT if the
- * value of 0x7c could not be read.
+ * значение 0x7c не удалось прочитать.
  */
 static uint8_t wait_regid(void)
 {
@@ -1484,7 +1484,7 @@ static uint8_t wait_regid(void)
         DELAY_MS(1U);
 
         regid = EVE_memRead8(REG_ID);
-        if (0x7cU == regid) /* EVE is up and running */
+        if (0x7cU == regid) /* EVE запущен и работает. */
         {
             ret = E_OK;
             break;
@@ -1496,10 +1496,10 @@ static uint8_t wait_regid(void)
 
 /**
  * @brief Waits for either REG_CPURESET to indicate that the audio, touch and
- * coprocessor units finished their respective reset cycles,
- * or untill a timeout of 50ms has passed.
+ * сопроцессоры завершили соответствующие циклы сброса,
+ * или пока не пройдет таймаут 50 мс.
  * @return Returns E_OK in case of success, EVE_FAIL_RESET_TIMEOUT if either the
- * audio, touch or coprocessor unit indicate a fault by not returning from reset.
+ * аудио, сенсорный или сопроцессорный блок указывает на неисправность, не возвращаясь после сброса.
  */
 static uint8_t wait_reset(void)
 {
@@ -1511,7 +1511,7 @@ static uint8_t wait_reset(void)
         DELAY_MS(1U);
 
         reset = EVE_memRead8(REG_CPURESET) & 7U;
-        if (0U == reset) /* EVE reports all units running */
+        if (0U == reset) /* EVE сообщает обо всех работающих устройствах */
         {
             ret = E_OK;
             break;
@@ -1523,43 +1523,43 @@ static uint8_t wait_reset(void)
 
 /**
  * @brief Writes all parameters defined for the display selected in EVE_config.h.
- * to the corresponding registers.
- * It is used by EVE_init() and can be used to refresh the register values if needed.
+ * в соответствующие регистры.
+ * Он используется EVE_init() и при необходимости может использоваться для обновления значений регистра.
  */
 void EVE_write_display_parameters(void)
 {
-    /* Initialize Display */
-    EVE_memWrite16(REG_HSIZE, EVE_HSIZE);     /* active display width */
-    EVE_memWrite16(REG_HCYCLE, EVE_HCYCLE);   /* total number of clocks per line, incl front/back porch */
-    EVE_memWrite16(REG_HOFFSET, EVE_HOFFSET); /* start of active line */
-    EVE_memWrite16(REG_HSYNC0, EVE_HSYNC0);   /* start of horizontal sync pulse */
-    EVE_memWrite16(REG_HSYNC1, EVE_HSYNC1);   /* end of horizontal sync pulse */
-    EVE_memWrite16(REG_VSIZE, EVE_VSIZE);     /* active display height */
-    EVE_memWrite16(REG_VCYCLE, EVE_VCYCLE);   /* total number of lines per screen, including pre/post */
-    EVE_memWrite16(REG_VOFFSET, EVE_VOFFSET); /* start of active screen */
-    EVE_memWrite16(REG_VSYNC0, EVE_VSYNC0);   /* start of vertical sync pulse */
-    EVE_memWrite16(REG_VSYNC1, EVE_VSYNC1);   /* end of vertical sync pulse */
-    EVE_memWrite8(REG_SWIZZLE, EVE_SWIZZLE);  /* FT8xx output to LCD - pin order */
-    EVE_memWrite8(REG_PCLK_POL, EVE_PCLKPOL); /* LCD data is clocked in on this PCLK edge */
-    EVE_memWrite8(REG_CSPREAD, EVE_CSPREAD);  /* helps with noise, when set to 1 fewer signals are changed simultaneously, reset-default: 1 */
+    /* Инициализировать дисплей */
+    EVE_memWrite16(REG_HSIZE, EVE_HSIZE);     /* активная ширина дисплея */
+    EVE_memWrite16(REG_HCYCLE, EVE_HCYCLE);   /* общее количество часов на линию, включая переднее/заднее крыльцо */
+    EVE_memWrite16(REG_HOFFSET, EVE_HOFFSET); /* начало активной строки */
+    EVE_memWrite16(REG_HSYNC0, EVE_HSYNC0);   /* начало строчного синхроимпульса */
+    EVE_memWrite16(REG_HSYNC1, EVE_HSYNC1);   /* конец строчного синхроимпульса */
+    EVE_memWrite16(REG_VSIZE, EVE_VSIZE);     /* активная высота дисплея */
+    EVE_memWrite16(REG_VCYCLE, EVE_VCYCLE);   /* общее количество строк на экране, включая до/после */
+    EVE_memWrite16(REG_VOFFSET, EVE_VOFFSET); /* начало активного экрана */
+    EVE_memWrite16(REG_VSYNC0, EVE_VSYNC0);   /* начало вертикального синхроимпульса */
+    EVE_memWrite16(REG_VSYNC1, EVE_VSYNC1);   /* конец вертикального синхроимпульса */
+    EVE_memWrite8(REG_SWIZZLE, EVE_SWIZZLE);  /* Выход FT8xx на LCD — порядок контактов */
+    EVE_memWrite8(REG_PCLK_POL, EVE_PCLKPOL); /* Данные LCD синхронизируются на этом ребре PCLK. */
+    EVE_memWrite8(REG_CSPREAD, EVE_CSPREAD);  /* помогает с шумом, при значении 1 одновременно изменяется меньше сигналов, сброс по умолчанию: 1 */
 
-    /* configure Touch */
-    EVE_memWrite8(REG_TOUCH_MODE, EVE_TMODE_CONTINUOUS); /* enable touch */
+    /* настроить сенсорный */
+    EVE_memWrite8(REG_TOUCH_MODE, EVE_TMODE_CONTINUOUS); /* включить сенсорный ввод */
 #if defined (EVE_TOUCH_RZTHRESH)
-    EVE_memWrite16(REG_TOUCH_RZTHRESH, EVE_TOUCH_RZTHRESH); /* configure the sensitivity of resistive touch */
+    EVE_memWrite16(REG_TOUCH_RZTHRESH, EVE_TOUCH_RZTHRESH); /* настроить чувствительность резистивного касания */
 #else
-    EVE_memWrite16(REG_TOUCH_RZTHRESH, 1200U); /* set a reasonable default value if none is given */
+    EVE_memWrite16(REG_TOUCH_RZTHRESH, 1200U); /* установите разумное значение по умолчанию, если оно не указано */
 #endif
 
 #if defined (EVE_ROTATE)
     EVE_memWrite8(REG_ROTATE, EVE_ROTATE & 7U); /* bit0 = invert, bit2 = portrait, bit3 = mirrored */
-    /* reset default value is 0x0 - not inverted, landscape, not mirrored */
+    /* значение по умолчанию для сброса: 0x0 — не инвертировано, горизонтально, не зеркально. */
 #endif
 }
 
 static void enable_pixel_clock(void)
 {
-    EVE_memWrite8(REG_GPIO, 0x80U); /* enable the DISP signal to the LCD panel, it is set to output in REG_GPIO_DIR by default */
+    EVE_memWrite8(REG_GPIO, 0x80U); /* включите сигнал DISP на панель LCD, по умолчанию он настроен на вывод в REG_GPIO_DIR */
 
 #if (EVE_GEN > 3) && (defined EVE_PCLK_FREQ)
     EVE_memWrite16(REG_PCLK_FREQ, (uint16_t) EVE_PCLK_FREQ);
@@ -1568,9 +1568,9 @@ static void enable_pixel_clock(void)
     EVE_memWrite8(REG_PCLK_2X, 1U);
 #endif
 
-    EVE_memWrite8(REG_PCLK, 1U); /* enable extsync mode */
+    EVE_memWrite8(REG_PCLK, 1U); /* включить режим extsync */
 #else
-    EVE_memWrite8(REG_PCLK, EVE_PCLK); /* start clocking data to the LCD panel */
+    EVE_memWrite8(REG_PCLK, EVE_PCLK); /* начать синхронизацию данных на панели LCD */
 #endif
 }
 
@@ -1590,27 +1590,27 @@ uint8_t EVE_init(void)
     uint8_t ret;
 
     EVE_pdn_set();
-    DELAY_MS(6U); /* minimum time for power-down is 5ms */
+    DELAY_MS(6U); /* минимальное время отключения питания составляет 5 мс. */
     EVE_pdn_clear();
-    DELAY_MS(21U); /* minimum time to allow from rising PD_N to first access is 20ms */
+    DELAY_MS(21U); /* минимальное время от повышения PD_N до первого доступа составляет 20 мс. */
 
 #if defined (EVE_GD3X)
-    EVE_cmdWrite(EVE_RST_PULSE,0U); /* reset, only required for warm-start if PowerDown line is not used */
+    EVE_cmdWrite(EVE_RST_PULSE,0U); /* сброс, требуется только для горячего запуска, если линия PowerDown не используется */
 #endif
 
     if(EVE_HAS_CRYSTAL) {
-        EVE_cmdWrite(EVE_CLKEXT, 0U); /* setup EVE for external clock */
+        EVE_cmdWrite(EVE_CLKEXT, 0U); /* настройка EVE для внешних часов */
     }
     else {
-        EVE_cmdWrite(EVE_CLKINT, 0U); /* setup EVE for internal clock */
+        EVE_cmdWrite(EVE_CLKINT, 0U); /* настройка EVE для внутренних часов */
     }
 
 #if EVE_GEN > 2
-    EVE_cmdWrite(EVE_CLKSEL, 0x46U); /* set clock to 72 MHz */
+    EVE_cmdWrite(EVE_CLKSEL, 0x46U); /* установите тактовую частоту на 72 МГц */
 #endif
 
-    EVE_cmdWrite(EVE_ACTIVE, 0U); /* start EVE */
-    DELAY_MS(40U); /* give EVE a moment of silence to power up */
+    EVE_cmdWrite(EVE_ACTIVE, 0U); /* начать EVE */
+    DELAY_MS(40U); /* дайте EVE минуту молчания, чтобы включиться */
 
     ret = wait_regid();
     if (E_OK == ret)
@@ -1618,50 +1618,50 @@ uint8_t EVE_init(void)
         ret = wait_reset();
         if (E_OK == ret)
         {
-/* tell EVE that we changed the frequency from default to 72MHz for BT8xx */
+/* скажите EVE, что мы изменили частоту со стандартной на 72 МГц для BT8xx */
 #if EVE_GEN > 2
             EVE_memWrite32(REG_FREQUENCY, 72000000UL);
 #endif
 
-/* we have a display with a Goodix GT911 / GT9271 touch-controller on it,
- so we patch our FT811 or FT813 according to AN_336 or setup a BT815 / BT817 accordingly */
+/* у нас есть дисплей с сенсорным контроллером Goodix GT911/GT9271,
+ поэтому мы исправляем наши FT811 или FT813 в соответствии с AN_336 или настраиваем BT815 / BT817 соответственно. */
             if(EVE_HAS_GT911) {
                 use_gt911();
             }
 
 #if defined (EVE_ADAM101)
-            EVE_memWrite8(REG_PWM_DUTY, 0x80U); /* turn off backlight for Glyn ADAM101 module, it uses inverted values */
+            EVE_memWrite8(REG_PWM_DUTY, 0x80U); /* отключить подсветку модуля Glyn ADAM101, он использует инвертированные значения */
 #else
-            EVE_memWrite8(REG_PWM_DUTY, 0U); /* turn off backlight for any other module */
+            EVE_memWrite8(REG_PWM_DUTY, 0U); /* отключить подсветку для любого другого модуля */
 #endif
             EVE_write_display_parameters();
 
-            /* disable Audio for now */
-            EVE_memWrite8(REG_VOL_PB, 0U);      /* turn recorded audio volume down, reset-default is 0xff */
-            EVE_memWrite8(REG_VOL_SOUND, 0U);   /* turn synthesizer volume down, reset-default is 0xff */
-            EVE_memWrite16(REG_SOUND, EVE_MUTE); /* set synthesizer to mute */
+            /* отключить звук сейчас */
+            EVE_memWrite8(REG_VOL_PB, 0U);      /* уменьшите громкость записанного звука, сброс по умолчанию — 0xff */
+            EVE_memWrite8(REG_VOL_SOUND, 0U);   /* уменьшите громкость синтезатора, сброс по умолчанию — 0xff */
+            EVE_memWrite16(REG_SOUND, EVE_MUTE); /* отключить звук синтезатора */
 
-            /* write a basic display-list to get things started */
+            /* напишите базовый список отображения, чтобы начать работу */
             EVE_memWrite32(EVE_RAM_DL, DL_CLEAR_COLOR_RGB);
             EVE_memWrite32(EVE_RAM_DL + 4U, (DL_CLEAR | CLR_COL | CLR_STN | CLR_TAG));
-            EVE_memWrite32(EVE_RAM_DL + 8U, DL_DISPLAY); /* end of display list */
+            EVE_memWrite32(EVE_RAM_DL + 8U, DL_DISPLAY); /* конец списка отображения */
             EVE_memWrite32(REG_DLSWAP, EVE_DLSWAP_FRAME);
-            /* nothing is being displayed yet... the pixel clock is still 0x00 */
+            /* пока ничего не отображается... частота пикселей все еще 0x00 */
 
 #if defined (EVE_GD3X)
-            EVE_memWrite16(REG_OUTBITS,0x01B6U); /* the GD3X is only using 6 bits per color */
+            EVE_memWrite16(REG_OUTBITS,0x01B6U); /* GD3X использует только 6 бит на цвет */
 #endif
 
             enable_pixel_clock();
 
-            EVE_memWrite16(REG_PWM_HZ, EVE_BACKLIGHT_FREQ); /* set backlight frequency to configured value */
+            EVE_memWrite16(REG_PWM_HZ, EVE_BACKLIGHT_FREQ); /* установить частоту подсветки на настроенное значение */
 
-            EVE_memWrite8(REG_PWM_DUTY, EVE_BACKLIGHT_PWM); /* set backlight pwm to user requested level */
+            EVE_memWrite8(REG_PWM_DUTY, EVE_BACKLIGHT_PWM); /* установить ШИМ подсветки на запрошенный пользователем уровень */
             DELAY_MS(1U);
-            EVE_execute_cmd(); /* just to be safe, wait for EVE to not be busy */
+            EVE_execute_cmd(); /* на всякий случай подождите, пока EVE не будет занят */
 
 #if defined (EVE_DMA)
-            EVE_init_dma(); /* prepare DMA */
+            EVE_init_dma(); /* подготовить DMA */
 #endif
         }
     }
@@ -1670,7 +1670,7 @@ uint8_t EVE_init(void)
 }
 
 /* ##################################################################
-    functions for display lists
+    функции для отображения списков
 ##################################################################### */
 
 /**
@@ -1684,22 +1684,22 @@ void EVE_start_cmd_burst(void)
 #if defined (EVE_DMA)
     if (EVE_dma_busy)
     {
-        EVE_execute_cmd(); /* this is a safe-guard to protect segmented display-list building with DMA from overlapping */
+        EVE_execute_cmd(); /* это мера защиты построения сегментированного списка отображения с помощью DMA от перекрытия. */
     }
 #endif
 
     cmd_burst = 42U;
 
 #if defined (EVE_DMA)
-    EVE_dma_buffer[0U] = 0x7825B000UL; /* REG_CMDB_WRITE + MEM_WRITE low mid hi 00 */
-//    ((uint8_t) (ft_address >> 16U) | MEM_WRITE) | (ft_address & 0x0000ff00UL) | ((uint8_t) (ft_address) << 16U);
+    EVE_dma_buffer[0U] = 0x7825B000UL; /* REG_CMDB_WRITE + MEM_WRITE низкий средний привет 00 */
+//    (( uint8_t ) ( ft_address >> 16U) | MEM_WRITE ) | ( ft_address & 0x0000ff00UL) | (( uint8_t ) ( ft_address ) << 16U);
 //    EVE_dma_buffer[0U] = EVE_dma_buffer[0U] << 8U;
     EVE_dma_buffer_index = 1U;
 #else
     EVE_cs_set();
-    spi_transmit((uint8_t) 0xB0U); /* high-byte of REG_CMDB_WRITE + MEM_WRITE */
-    spi_transmit((uint8_t) 0x25U); /* middle-byte of REG_CMDB_WRITE */
-    spi_transmit((uint8_t) 0x78U); /* low-byte of REG_CMDB_WRITE */
+    spi_transmit((uint8_t) 0xB0U); /* старший байт REG_CMDB_WRITE + MEM_WRITE */
+    spi_transmit((uint8_t) 0x25U); /* средний байт REG_CMDB_WRITE */
+    spi_transmit((uint8_t) 0x78U); /* младший байт REG_CMDB_WRITE */
 #endif
 }
 
@@ -1712,17 +1712,17 @@ void EVE_end_cmd_burst(void)
     cmd_burst = 0U;
 
 #if defined (EVE_DMA)
-    EVE_start_dma_transfer(); /* begin DMA transfer */
+    EVE_start_dma_transfer(); /* начать передачу DMA */
 #else
     EVE_cs_clear();
 #endif
 }
 
-/* write a string to coprocessor memory in context of a command: */
-/* no chip-select, just plain SPI-transfers */
+/* записать строку в память сопроцессора в контексте команды: */
+/* без выбора чипа, просто SPI -передачи */
 static void private_string_write(const char *p_text)
 {
-    /* treat the array as bunch of bytes */
+    /* относиться к массиву как к группе байтов */
     const uint8_t *const p_bytes = (const uint8_t *)p_text;
 
     if (0U == cmd_burst)
@@ -1730,15 +1730,15 @@ static void private_string_write(const char *p_text)
         uint8_t textindex = 0U;
         uint8_t padding;
 
-        /* either leave on Zero or when the string is too long */
+        /* либо оставьте на нуле, либо когда строка слишком длинная */
         while ((textindex < 249U) && (p_bytes[textindex] != 0U))
         {
             spi_transmit(p_bytes[textindex]);
             textindex++;
         }
 
-        /* transmit at least one 0x00 byte */
-        /* and up to four if the string happens to be 4-byte aligned already */
+        /* передать хотя бы один байт 0x00 */
+        /* и до четырех, если строка уже выровнена по 4 байтам */
         padding = textindex & 3U; /* 0, 1, 2 or 3 */
         padding = 4U - padding;   /* 4, 3, 2 or 1 */
 
@@ -1748,7 +1748,7 @@ static void private_string_write(const char *p_text)
             padding--;
         }
     }
-    else /* we are in burst mode, so every transfer is 32 bits */
+    else /* мы находимся в пакетном режиме, поэтому каждая передача составляет 32 бита */
     {
         for (uint8_t textindex = 0U; textindex < 249U; textindex += 4U)
         {
@@ -1763,7 +1763,7 @@ static void private_string_write(const char *p_text)
                 if (0U == data)
                 {
                     spi_transmit_burst(calc);
-                    return; /* MISRA 2012 rule 15.5 (advisory) violation */
+                    return; /* MISRA Нарушение правила 15.5 (рекомендательное) 2012 г. */
                 }
 
                 calc += ((uint32_t)data) << (index * 8U);
@@ -1772,7 +1772,7 @@ static void private_string_write(const char *p_text)
             spi_transmit_burst(calc);
         }
 
-        spi_transmit_burst(0U); /* executed when the line is too long */
+        spi_transmit_burst(0U); /* выполняется, когда строка слишком длинная */
     }
 }
 
@@ -2349,7 +2349,7 @@ void EVE_cmd_rotatearound_burst(int32_t xc0, int32_t yc0, uint32_t angle,
 
 /**
  * @brief Draw a button with a label, varargs version.
- * @param p_arguments[] pointer to an array of values converted to uint32_t to be used when using EVE_OPT_FORMAT
+ * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
  * @param num_args the number of elements provided in p_arguments[]
  */
 void EVE_cmd_button_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
@@ -2408,7 +2408,7 @@ void EVE_cmd_button_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 
 /**
  * @brief Draw a button with a label, varargs version, only works in burst-mode.
- * @param p_arguments[] pointer to an array of values converted to uint32_t to be used when using EVE_OPT_FORMAT
+ * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
  * @param num_args the number of elements provided in p_arguments[]
  */
 void EVE_cmd_button_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
@@ -2435,7 +2435,7 @@ void EVE_cmd_button_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t h
 
 /**
  * @brief Draw a text string, varargs version.
- * @param p_arguments[] pointer to an array of values converted to uint32_t to be used when using EVE_OPT_FORMAT
+ * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
  * @param num_args the number of elements provided in p_arguments[]
  */
 void EVE_cmd_text_var(int16_t xc0, int16_t yc0, uint16_t font,
@@ -2489,7 +2489,7 @@ void EVE_cmd_text_var(int16_t xc0, int16_t yc0, uint16_t font,
 
 /**
  * @brief Draw a text string, varargs version.
- * @param p_arguments[] pointer to an array of values converted to uint32_t to be used when using EVE_OPT_FORMAT
+ * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
  * @param num_args the number of elements provided in p_arguments[]
  */
 void EVE_cmd_text_var_burst(int16_t xc0, int16_t yc0, uint16_t font,
@@ -2515,7 +2515,7 @@ void EVE_cmd_text_var_burst(int16_t xc0, int16_t yc0, uint16_t font,
 
 /**
  * @brief Draw a toggle switch with labels, varargs version.
- * @param p_arguments[] pointer to an array of values converted to uint32_t to be used when using EVE_OPT_FORMAT
+ * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
  * @param num_args the number of elements provided in p_arguments[]
  */
 void EVE_cmd_toggle_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
@@ -2574,7 +2574,7 @@ void EVE_cmd_toggle_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
 
 /**
  * @brief Draw a toggle switch with labels, varargs version, only works in burst-mode.
- * @param p_arguments[] pointer to an array of values converted to uint32_t to be used when using EVE_OPT_FORMAT
+ * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
  * @param num_args the number of elements provided in p_arguments[]
  */
 void EVE_cmd_toggle_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
@@ -3176,8 +3176,8 @@ void EVE_cmd_progress(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
         spi_transmit((uint8_t) (val >> 8U));
         spi_transmit((uint8_t) (range));
         spi_transmit((uint8_t) (range >> 8U));
-        spi_transmit(0U); /* dummy byte for 4-byte alignment */
-        spi_transmit(0U); /* dummy byte for 4-byte alignment */
+        spi_transmit(0U); /* фиктивный байт для 4-байтового выравнивания */
+        spi_transmit(0U); /* фиктивный байт для 4-байтового выравнивания */
         EVE_cs_clear();
     }
     else
@@ -3574,8 +3574,8 @@ void EVE_cmd_slider(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
         spi_transmit((uint8_t) (val >> 8U));
         spi_transmit((uint8_t) (range));
         spi_transmit((uint8_t) (range >> 8U));
-        spi_transmit(0U); /* dummy byte for 4-byte alignment */
-        spi_transmit(0U); /* dummy byte for 4-byte alignment */
+        spi_transmit(0U); /* фиктивный байт для 4-байтового выравнивания */
+        spi_transmit(0U); /* фиктивный байт для 4-байтового выравнивания */
         EVE_cs_clear();
     }
     else
@@ -3790,20 +3790,20 @@ void EVE_color_a_burst(uint8_t alpha)
 
 
 /* ##################################################################
-    special purpose functions
+    функции специального назначения
 ##################################################################### */
 
-/* This is meant to be called outside display-list building. */
-/* This function displays an interactive calibration screen, calculates the calibration values */
-/* and writes the new values to the touch matrix registers of EVE.*/
-/* Unlike the built-in cmd_calibrate() of EVE this also works with displays that are cut down from larger ones like
+/* Это должно называться построением вне списка отображения. */
+/* Эта функция отображает интерактивный экран калибровки, рассчитывает значения калибровки. */
+/* и записывает новые значения в регистры сенсорной матрицы EVE.*/
+/* В отличие от встроенного cmd_calibrate() у EVE это работает и с дисплеями, урезанными из более крупных, например
  * EVE2-38A / EVE2-38G. */
-/* The dimensions are needed as parameter as EVE_VSIZE for the EVE2-38 is 272 but the visible size is only 116. */
-/* So the call would be EVE_calibrate_manual(EVE_HSIZE, 116); for the EVE2-38A and EVE2-38G while for most other
- * displays */
-/* using EVE_calibrate_manual(EVE_VSIZE, EVE_VSIZE) would work - but for normal displays the built-in cmd_calibrate
- * would work as expected anyways */
-/* This code was taken from the MatrixOrbital EVE2-Library on Github, adapted and modified */
+/* Размеры необходимы в качестве параметра, так как EVE_VSIZE для EVE2 -38 равен 272, но видимый размер составляет только 116. */
+/* Таким образом, вызов будет EVE_calibrate_manual ( EVE_HSIZE , 116); для EVE2 -38A и EVE2 -38G, а для большинства других
+ * дисплеи */
+/* использование EVE_calibrate_manual ( EVE_VSIZE , EVE_VSIZE ) будет работать, но для обычных дисплеев встроенный cmd_calibrate
+ * в любом случае будет работать так, как ожидалось */
+/* Этот код был взят из библиотеки MatrixOrbital EVE2 на Github, адаптирован и модифицирован. */
 void EVE_calibrate_manual(uint16_t width, uint16_t height)
 {
     int32_t display_x[3U];
@@ -3820,7 +3820,7 @@ void EVE_calibrate_manual(uint16_t width, uint16_t height)
     char num[4U];
     uint8_t touch_lock = 1U;
 
-    /* these values determine where your calibration points will be drawn on your display */
+    /* эти значения определяют, где на вашем дисплее будут отображаться точки калибровки. */
     display_x[0U] = (int32_t) width / 6;
     display_y[0U] = (int32_t) height / 6;
 
@@ -3835,9 +3835,9 @@ void EVE_calibrate_manual(uint16_t width, uint16_t height)
         EVE_cmd_dl(CMD_DLSTART);
         EVE_cmd_dl(DL_CLEAR_COLOR_RGB);
         EVE_cmd_dl(DL_CLEAR | CLR_COL | CLR_STN | CLR_TAG);
-        EVE_cmd_dl(DL_VERTEX_FORMAT); /* set to 0 - reduce precision for VERTEX2F to 1 pixel instead of 1/16 pixel default */
+        EVE_cmd_dl(DL_VERTEX_FORMAT); /* установлено значение 0 — уменьшите точность для VERTEX2F до 1 пикселя вместо 1/16 пикселя по умолчанию. */
 
-        /* draw Calibration Point on screen */
+        /* нарисовать точку калибровки на экране */
         EVE_cmd_dl(DL_COLOR_RGB | 0x0000ffUL);
         EVE_cmd_dl(POINT_SIZE(15U * 16U));
         EVE_cmd_dl((DL_BEGIN | EVE_POINTS));
@@ -3853,7 +3853,7 @@ void EVE_calibrate_manual(uint16_t width, uint16_t height)
         EVE_cmd_text((int16_t) width / 2, 20, 26U, EVE_OPT_CENTER, "tap on the dot");
         calc = count + 0x31U;
         num[0U] = (char) calc;
-        num[1U] = (char) 0U; /* null terminated string of one character */
+        num[1U] = (char) 0U; /* строка из одного символа, завершающаяся нулем */
         EVE_cmd_text((int16_t) display_x[count], (int16_t) display_y[count], 27U, EVE_OPT_CENTER, num);
 
         EVE_cmd_dl(DL_DISPLAY);
@@ -3862,26 +3862,26 @@ void EVE_calibrate_manual(uint16_t width, uint16_t height)
 
         for (;;)
         {
-            touch_value = EVE_memRead32(REG_TOUCH_DIRECT_XY); /* read for any new touch tag inputs */
+            touch_value = EVE_memRead32(REG_TOUCH_DIRECT_XY); /* читайте, нет ли новых вводов сенсорных тегов */
 
             if (touch_lock != 0U)
             {
-                if ((touch_value & 0x80000000UL) != 0UL) /* check if we have no touch */
+                if ((touch_value & 0x80000000UL) != 0UL) /* проверь, нет ли у нас касания */
                 {
                     touch_lock = 0U;
                 }
             }
             else
             {
-                if (0UL == (touch_value & 0x80000000UL)) /* check if a touch is detected */
+                if (0UL == (touch_value & 0x80000000UL)) /* проверьте, обнаружено ли прикосновение */
                 {
                     calc32 = ((touch_value >> 16U) & 0x03FFUL);
-                    touch_x[count] = (int32_t) calc32; /* raw Touchscreen X coordinate */
+                    touch_x[count] = (int32_t) calc32; /* необработанная координата X сенсорного экрана */
                     calc32 = touch_value & 0x03FFUL;
-                    touch_y[count] = (int32_t) calc32; /* raw Touchscreen Y coordinate */
+                    touch_y[count] = (int32_t) calc32; /* необработанная координата Y сенсорного экрана */
                     touch_lock = 1U;
                     count++;
-                    break; /* leave for (;;) */
+                    break; /* оставить на (;;) */
                 }
             }
         }

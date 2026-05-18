@@ -23,7 +23,7 @@
 **********************/
 
 /*
- *  tag mask     quote mask   tag   search  comment  doc type  xml inst
+ *  маска тега маска цитаты поиск тега комментарий тип документа xml inst
  * |   0 0 0   |    0 0     |  0  |   0   |    0   |    0    |    0    |
  */
 enum {
@@ -264,7 +264,7 @@ static bool _svg_parser_tag(_lv_svg_parser_state_t * state, _lv_svg_token_t * to
                             _set_tag_state(state, SVG_SEARCH_VALUE);
                         }
                         else {
-                            // attr name has empty value
+                            // имя атрибута имеет пустое значение
                             token->cur_attr = NULL;
                             _set_tag_state(state, SVG_ATTR_START);
                             continue;
@@ -367,7 +367,7 @@ bool _lv_svg_tokenizer(const char * svg_data, uint32_t data_len, svg_token_proce
 
     while(state.cur < state.end) {
         char ch = *(state.cur);
-        if(ch == '\r' || ch == '\n') { // skip LR character
+        if(ch == '\r' || ch == '\n') { // пропустить символ LR
             state.cur++;
             continue;
         }
@@ -375,17 +375,17 @@ bool _lv_svg_tokenizer(const char * svg_data, uint32_t data_len, svg_token_proce
             if(_is_state(&state, SVG_TAG)) {
                 _clear_state(&state, SVG_TAG);
                 switch(ch) {
-                    case '/': // end tag
+                    case '/': // конечный тег
                         _set_tag_state(&state, SVG_TAG_NAME);
                         break;
                     case '!': {
-                            // <!-- comment or <!DOCTYPE>
-                            _set_state(&state, SVG_SEARCH); // get more character
+                            // <!-- прокомментируйте или <! DOCTYPE >
+                            _set_state(&state, SVG_SEARCH); // получить больше характера
                             state.cur++;
                         }
                         break;
                     case '?': {
-                            // xml instruction
+                            // XML-инструкция
                             _set_state(&state, SVG_XMLINST);
                             state.cur++;
                         }
@@ -401,7 +401,7 @@ bool _lv_svg_tokenizer(const char * svg_data, uint32_t data_len, svg_token_proce
                             }
                         }
                 }
-                // process token
+                // токен процесса
                 if(!_lv_svg_token_process(&token, cb, data)) {
                     LV_LOG_ERROR("svg document parser error!");
                     lv_array_deinit(&token.attrs);
@@ -416,14 +416,14 @@ bool _lv_svg_tokenizer(const char * svg_data, uint32_t data_len, svg_token_proce
                     token.end = state.cur;
                 }
                 else {
-                    // processing as a normal tag name.
+                    // обработка как обычное имя тега.
                     _clear_state(&state, SVG_SEARCH);
                     _set_tag_state(&state, SVG_TAG_NAME);
                     continue;
                 }
 
                 if(((token.end - token.start) == 1) && (token.start[0] == '-') && (token.start[1] == '-')) {
-                    // is <!-- comment start
+                    // is <!-- начало комментария
                     _clear_state(&state, SVG_SEARCH);
                     token.start = token.end = NULL;
                     _set_state(&state, SVG_COMMENT);
@@ -455,7 +455,7 @@ bool _lv_svg_tokenizer(const char * svg_data, uint32_t data_len, svg_token_proce
         else {
             switch(ch) {
                 case '<': {
-                        _set_state(&state, SVG_TAG); // start a new tag
+                        _set_state(&state, SVG_TAG); // начать новый тег
                         state.cur++;
                     }
                     break;

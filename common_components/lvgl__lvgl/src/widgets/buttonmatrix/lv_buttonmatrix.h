@@ -30,8 +30,8 @@ LV_EXPORT_CONST_INT(LV_BUTTONMATRIX_BUTTON_NONE);
  *      TYPEDEFS
  **********************/
 
-/** Type to store button control flags (disabled, hidden etc.)
- *  The least-significant 4 bits are used to store button-width proportions in range [1..15]. */
+/** Введите для сохранения флагов управления кнопками (отключено, скрыто и т. д.).
+ *  Младшие 4 бита используются для хранения пропорций ширины кнопок в диапазоне [1..15]. */
 typedef enum {
     LV_BUTTONMATRIX_CTRL_NONE         = 0x0000, /**< No extra control, use the default settings*/
     LV_BUTTONMATRIX_CTRL_WIDTH_1      = 0x0001, /**< Set the width to 1 relative to the other buttons in the same row */
@@ -81,48 +81,48 @@ enum _lv_property_buttonmatrix_id_t {
  **********************/
 
 /**
- * Create a button matrix object
+ * Создайте объект матрицы кнопок
  * @param parent    pointer to an object, it will be the parent of the new button matrix
  * @return          pointer to the created button matrix
  */
 lv_obj_t * lv_buttonmatrix_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set a new map. Buttons will be created/deleted according to the map. The
- * button matrix keeps a reference to the map and so the string array must not
- * be deallocated during the life of the matrix.
+ * Установить новую карту. Кнопки будут созданы/удалены в соответствии с картой.
+ * матрица кнопок сохраняет ссылку на карту, поэтому массив строк не должен
+ * быть освобождены в течение срока службы матрицы.
  * @param obj       pointer to a button matrix object
  * @param map       pointer a string array. The last string has to be: "". Use "\n" to make a line break.
  */
 void lv_buttonmatrix_set_map(lv_obj_t * obj, const char * const map[]);
 
 /**
- * Set the button control map (hidden, disabled etc.) for a button matrix.
- * The control map array will be copied and so may be deallocated after this
- * function returns.
+ * Установите карту управления кнопками (скрытая, отключенная и т. д.) для матрицы кнопок.
+ * Массив карты управления будет скопирован и после этого может быть освобожден.
+ * функция возвращает.
  * @param obj       pointer to a button matrix object
  * @param ctrl_map  pointer to an array of `lv_button_ctrl_t` control bytes. The
- *                  length of the array and position of the elements must match
- *                  the number and order of the individual buttons (i.e. excludes
- *                  newline entries).
- *                  An element of the map should look like e.g.:
+ *                  длина массива и положение элементов должны совпадать
+ *                  количество и порядок отдельных кнопок (т.е. исключает
+ *                  записи новой строки).
+ *                  Элемент карты должен выглядеть, например, так:
  *                 `ctrl_map[0] = width | LV_BUTTONMATRIX_CTRL_NO_REPEAT |  LV_BUTTONMATRIX_CTRL_TGL_ENABLE`
  */
 void lv_buttonmatrix_set_ctrl_map(lv_obj_t * obj, const lv_buttonmatrix_ctrl_t ctrl_map[]);
 
 /**
- * Set the selected buttons
+ * Установить выбранные кнопки
  * @param obj        pointer to button matrix object
  * @param btn_id     0 based index of the button to modify. (Not counting new lines)
  */
 void lv_buttonmatrix_set_selected_button(lv_obj_t * obj, uint32_t btn_id);
 
 /**
- * Set the attributes of a button of the button matrix
+ * Установите атрибуты кнопки матрицы кнопок
  * @param obj       pointer to button matrix object
  * @param btn_id    0 based index of the button to modify. (Not counting new lines)
  * @param ctrl      OR-ed attributes. E.g. `LV_BUTTONMATRIX_CTRL_NO_REPEAT | LV_BUTTONMATRIX_CTRL_CHECKABLE`
@@ -130,7 +130,7 @@ void lv_buttonmatrix_set_selected_button(lv_obj_t * obj, uint32_t btn_id);
 void lv_buttonmatrix_set_button_ctrl(lv_obj_t * obj, uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
 
 /**
- * Clear the attributes of a button of the button matrix
+ * Очистить атрибуты кнопки матрицы кнопок.
  * @param obj       pointer to button matrix object
  * @param btn_id    0 based index of the button to modify. (Not counting new lines)
  * @param ctrl      OR-ed attributes. E.g. `LV_BUTTONMATRIX_CTRL_NO_REPEAT | LV_BUTTONMATRIX_CTRL_CHECKABLE`
@@ -138,24 +138,24 @@ void lv_buttonmatrix_set_button_ctrl(lv_obj_t * obj, uint32_t btn_id, lv_buttonm
 void lv_buttonmatrix_clear_button_ctrl(lv_obj_t * obj, uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
 
 /**
- * Set attributes of all buttons of a button matrix
+ * Установить атрибуты всех кнопок матрицы кнопок
  * @param obj       pointer to a button matrix object
  * @param ctrl      attribute(s) to set from `lv_buttonmatrix_ctrl_t`. Values can be ORed.
  */
 void lv_buttonmatrix_set_button_ctrl_all(lv_obj_t * obj, lv_buttonmatrix_ctrl_t ctrl);
 
 /**
- * Clear the attributes of all buttons of a button matrix
+ * Очистить атрибуты всех кнопок матрицы кнопок.
  * @param obj       pointer to a button matrix object
  * @param ctrl      attribute(s) to set from `lv_buttonmatrix_ctrl_t`. Values can be ORed.
  */
 void lv_buttonmatrix_clear_button_ctrl_all(lv_obj_t * obj, lv_buttonmatrix_ctrl_t ctrl);
 
 /**
- * Set a single button's relative width.
- * This method will cause the matrix be regenerated and is a relatively
- * expensive operation. It is recommended that initial width be specified using
- * `lv_buttonmatrix_set_ctrl_map` and this method only be used for dynamic changes.
+ * Установите относительную ширину одной кнопки.
+ * Этот метод приведет к регенерации матрицы и является относительно
+ * дорогая операция. Рекомендуется указывать начальную ширину с помощью
+ * `lv_buttonmatrix_set_ctrl_map` и этот метод можно использовать только для динамических изменений.
  * @param obj       pointer to button matrix object
  * @param btn_id    0 based index of the button to modify.
  * @param width     relative width compared to the buttons in the same row. [1..15]
@@ -163,35 +163,35 @@ void lv_buttonmatrix_clear_button_ctrl_all(lv_obj_t * obj, lv_buttonmatrix_ctrl_
 void lv_buttonmatrix_set_button_width(lv_obj_t * obj, uint32_t btn_id, uint32_t width);
 
 /**
- * Make the button matrix like a selector widget (only one button may be checked at a time).
- * `LV_BUTTONMATRIX_CTRL_CHECKABLE` must be enabled on the buttons to be selected using
- * `lv_buttonmatrix_set_ctrl()` or `lv_buttonmatrix_set_button_ctrl_all()`.
+ * Сделайте матрицу кнопок похожей на виджет выбора (одновременно можно проверять только одну кнопку).
+ * `LV_BUTTONMATRIX_CTRL_CHECKABLE` должен быть включен на кнопках, которые будут выбраны с помощью
+ * `lv_buttonmatrix_set_ctrl()` или `lv_buttonmatrix_set_button_ctrl_all()` .
  * @param obj       pointer to a button matrix object
  * @param en        whether "one check" mode is enabled
  */
 void lv_buttonmatrix_set_one_checked(lv_obj_t * obj, bool en);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the current map of a button matrix
+ * Получить текущую карту матрицы кнопок
  * @param obj       pointer to a button matrix object
  * @return          the current map
  */
 const char * const * lv_buttonmatrix_get_map(const lv_obj_t * obj);
 
 /**
- * Get the index of the lastly "activated" button by the user (pressed, released, focused etc)
- * Useful in the `event_cb` to get the text of the button, check if hidden etc.
+ * Получить индекс последней «активированной» пользователем кнопки (нажатой, отпущенной, сфокусированной и т. д.)
+ * Полезно в `event_cb`, чтобы получить текст кнопки, проверить, скрыта ли она и т. д.
  * @param obj       pointer to button matrix object
  * @return          index of the last released button (LV_BUTTONMATRIX_BUTTON_NONE: if unset)
  */
 uint32_t lv_buttonmatrix_get_selected_button(const lv_obj_t * obj);
 
 /**
- * Get the button's text
+ * Получить текст кнопки
  * @param obj       pointer to button matrix object
  * @param btn_id    the index a button not counting new line characters.
  * @return          text of btn_index` button
@@ -199,7 +199,7 @@ uint32_t lv_buttonmatrix_get_selected_button(const lv_obj_t * obj);
 const char * lv_buttonmatrix_get_button_text(const lv_obj_t * obj, uint32_t btn_id);
 
 /**
- * Get the whether a control value is enabled or disabled for button of a button matrix
+ * Узнайте, включено или отключено значение элемента управления для кнопки матрицы кнопок.
  * @param obj       pointer to a button matrix object
  * @param btn_id    the index of a button not counting new line characters.
  * @param ctrl      control values to check (ORed value can be used)
@@ -208,7 +208,7 @@ const char * lv_buttonmatrix_get_button_text(const lv_obj_t * obj, uint32_t btn_
 bool lv_buttonmatrix_has_button_ctrl(lv_obj_t * obj, uint32_t btn_id, lv_buttonmatrix_ctrl_t ctrl);
 
 /**
- * Tell whether "one check" mode is enabled or not.
+ * Скажите, включен режим «одной проверки» или нет.
  * @param obj       Button matrix object
  * @return          true: "one check" mode is enabled; false: disabled
  */
@@ -221,7 +221,7 @@ bool lv_buttonmatrix_get_one_checked(const lv_obj_t * obj);
 #endif /*LV_USE_BUTTONMATRIX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BUTTONMATRIX_H*/

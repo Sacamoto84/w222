@@ -35,19 +35,19 @@ extern "C" {
 typedef struct {
     lv_draw_dsc_base_t base;
 
-    /**The first point of the line. If `LV_USE_FLOAT` is enabled float number can be also used.
-     *Ignored if `points` are set*/
+    /**Первая точка линии. Если `LV_USE_FLOAT` включен, можно также использовать число с плавающей запятой.
+     *Игнорируется, если установлен`points`.*/
     lv_point_precise_t p1;
 
-    /**The second point of the line. If `LV_USE_FLOAT` is enabled float number can be also used
-     * Ignored if `points` are set*/
+    /**Вторая точка линии. Если `LV_USE_FLOAT` включен, можно также использовать число с плавающей запятой.
+     * Игнорируется, если установлен`points`.*/
     lv_point_precise_t p2;
 
     /**Array of points to draw. If `LV_USE_FLOAT` is enabled, float numbers can also be used.*/
     lv_point_precise_t * points;
 
     /**
-     * Number of points in the `points`
+     * Количество очков в `points`
      */
     int32_t point_cnt;
 
@@ -57,14 +57,14 @@ typedef struct {
     /**The width (thickness) of the line*/
     int32_t width;
 
-    /** The length of a dash (0: don't dash)*/
+    /** Длина тире (0: не тире)*/
     int32_t dash_width;
 
-    /** The length of the gaps between dashes (0: don't dash)*/
+    /** Длина промежутков между тире (0: не тире)*/
     int32_t dash_gap;
 
-    /**Opacity of the line in 0...255 range.
-     * LV_OPA_TRANSP, LV_OPA_10, LV_OPA_20, .. LV_OPA_COVER can be used as well*/
+    /**Непрозрачность линии в диапазоне 0...255.
+     * LV_OPA_TRANSP , LV_OPA_10 , LV_OPA_20 , .. LV_OPA_COVER также можно использовать*/
     lv_opa_t opa;
 
     /**Make the line start rounded*/
@@ -82,32 +82,32 @@ typedef struct {
  **********************/
 
 /**
- * Initialize a line draw descriptor
- * @param dsc       pointer to a draw descriptor
+ * Инициализировать дескриптор рисования линии
+ * @param dsc       указатель на дескриптор отрисовки
  */
 void lv_draw_line_dsc_init(lv_draw_line_dsc_t * dsc);
 
 /**
- * Try to get a line draw descriptor from a draw task.
- * @param task      draw task
- * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_LINE
+ * Попробуйте получить дескриптор рисования линии из задачи рисования.
+ * @param task      нарисовать задачу
+ * @return          дескриптор отрисовки задачи или NULL, если задача не относится к типу LV_DRAW_TASK_TYPE_LINE
  */
 lv_draw_line_dsc_t * lv_draw_task_get_line_dsc(lv_draw_task_t * task);
 
 /**
- * Create a line draw task
- * @param layer     pointer to a layer
- * @param dsc       pointer to an initialized `lv_draw_line_dsc_t` variable
+ * Создать задачу рисования линий
+ * @param layer     указатель на слой
+ * @param dsc       указатель на инициализированную переменную `lv_draw_line_dsc_t`
  */
 void lv_draw_line(lv_layer_t * layer, const lv_draw_line_dsc_t * dsc);
 
 /**
- * A helper function to call a callback which draws a line between two points.
- * This way it doesn't matter if ``p1, p2`` or ``points`` were used as it calls the
- * ``callback`` as needed.
- * @param t             draw task
- * @param dsc           pointer to a draw descriptor
- * @param draw_line_cb  a callback that draws a line between ``dsc->p1`` and ``dsc->p2``
+ * Вспомогательная функция для вызова обратного вызова, который рисует линию между двумя точками.
+ * Таким образом, не имеет значения, использовались ли точки `` p1, p2 `` или ``, ``, поскольку он вызывает
+ * `` обратный вызов `` при необходимости.
+ * @param t             нарисовать задачу
+ * @param dsc           указатель на дескриптор отрисовки
+ * @param draw_line_cb  обратный вызов, который рисует линию между``dsc->p1``и``dsc->p2 ``
  */
 void lv_draw_line_iterate(lv_draw_task_t * t, lv_draw_line_dsc_t * dsc,
                           void (*draw_line_cb)(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc));
@@ -117,7 +117,7 @@ void lv_draw_line_iterate(lv_draw_task_t * t, lv_draw_line_dsc_t * dsc,
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_LINE_H*/

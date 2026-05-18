@@ -11,9 +11,9 @@ static void event_cb(lv_event_t * e)
         pressed = true;
     }
 
-    /*When the keyboard draws the buttons...*/
+    /*Когда клавиатура рисует кнопки...*/
     if(base_dsc->part == LV_PART_ITEMS) {
-        /*Get a color based on the button's index*/
+        /*Получить цвет на основе индекса кнопки*/
         lv_palette_t palette = (lv_palette_t)(base_dsc->id1 % LV_PALETTE_LAST);
         lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
         if(fill_draw_dsc) {
@@ -21,9 +21,9 @@ static void event_cb(lv_event_t * e)
         }
         lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
         if(label_draw_dsc) {
-            /*For the OK symbol, draw a star instead*/
+            /*Вместо символа OK нарисуйте звезду.*/
             if(lv_strcmp(label_draw_dsc->text, LV_SYMBOL_OK) == 0) {
-                label_draw_dsc->opa = 0;    /*Hide the label*/
+                label_draw_dsc->opa = 0;    /*Скрыть ярлык*/
 
                 LV_IMAGE_DECLARE(img_star);
                 lv_image_header_t header;
@@ -42,7 +42,7 @@ static void event_cb(lv_event_t * e)
                 lv_draw_image(base_dsc->layer, &img_draw_dsc, &a);
             }
             else {
-                /*For the other labels just pick an lighter color*/
+                /*Для остальных надписей просто выберите более светлый цвет.*/
                 label_draw_dsc->color = lv_palette_lighten(palette, 4);
             }
         }
@@ -51,7 +51,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Add custom drawer to the keyboard to customize the buttons one by one
+ * Добавьте на клавиатуру специальный ящик, чтобы настраивать кнопки одну за другой.
  */
 void lv_example_keyboard_3(void)
 {

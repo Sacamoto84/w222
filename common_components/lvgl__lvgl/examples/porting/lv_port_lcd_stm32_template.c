@@ -1,17 +1,17 @@
 /**
  * @file lv_port_lcd_stm32_template.c
  *
- * Example implementation of the LVGL LCD display drivers on the STM32 platform
+ * Пример реализации драйверов дисплея LVGL LCD на платформе STM32
  */
 
-/*Copy this file as "lv_port_disp.c" and set this value to "1" to enable content*/
+/*Скопируйте этот файл как «lv_port_disp.c» и установите для этого значения значение «1», чтобы отключить контент.*/
 #if 0
 
 /*********************
  *      INCLUDES
  *********************/
-/* Include STM32Cube files here, e.g.:
-#include "stm32f7xx_hal.h"
+/* Включите сюда файлы STM32Cube, например:
+#включить "stm32f7xx_hal.h"
 */
 
 #include "lv_port_disp.h"
@@ -62,15 +62,15 @@ static volatile int lcd_bus_busy = 0;
 
 void lv_port_display_init(void)
 {
-    /* Initialize LCD I/O */
+    /* Инициализация ввода-вывода LCD */
     if(lcd_io_init() != 0)
         return;
 
-    /* Create the LVGL display object and the ST7789 LCD display driver */
+    /* Создайте объект отображения LVGL и драйвер дисплея ST7789 LCD. */
     lcd_disp = lv_st7789_create(MY_DISP_HOR_RES, MY_DISP_VER_RES, LV_LCD_FLAG_NONE, lcd_send_cmd, lcd_send_color);
-    lv_display_set_rotation(lcd_disp, LV_DISPLAY_ROTATION_270);     /* set landscape orientation */
+    lv_display_set_rotation(lcd_disp, LV_DISPLAY_ROTATION_270);     /* установить альбомную ориентацию */
 
-    /* Example: two dynamically allocated buffers for partial rendering */
+    /* Example: два динамически выделяемых буфера для частичного рендеринга */
     uint8_t * buf1 = NULL;
     uint8_t * buf2 = NULL;
 
@@ -96,22 +96,22 @@ void lv_port_display_init(void)
  *   STATIC FUNCTIONS
  **********************/
 
-/* Callback is called when background transfer finished */
+/* Обратный вызов вызывается, когда фоновая передача завершена */
 static void lcd_color_transfer_ready_cb(SPI_HandleTypeDef * hspi)
 {
-    /* CS high */
+    /* CS высокий */
     HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
     lcd_bus_busy = 0;
     lv_display_flush_ready(lcd_disp);
 }
 
-/* Initialize LCD I/O bus, reset LCD */
+/* Инициализируйте шину ввода-вывода LCD, сбросьте LCD. */
 static int32_t lcd_io_init(void)
 {
-    /* Register SPI Tx Complete Callback */
+    /* РегистрацияSPITx Полный обратный вызов */
     HAL_SPI_RegisterCallback(&hspi1, HAL_SPI_TX_COMPLETE_CB_ID, lcd_color_transfer_ready_cb);
 
-    /* reset LCD */
+    /* сброс LCD */
     HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
     HAL_Delay(100);
     HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
@@ -123,61 +123,61 @@ static int32_t lcd_io_init(void)
     return HAL_OK;
 }
 
-/* Platform-specific implementation of the LCD send command function. In general this should use polling transfer. */
+/* Реализация функции отправки команды LCD для конкретной платформы. В общем случае следует использовать передачу по запросу. */
 static void lcd_send_cmd(lv_display_t * disp, const uint8_t * cmd, size_t cmd_size, const uint8_t * param,
                          size_t param_size)
 {
     LV_UNUSED(disp);
-    while(lcd_bus_busy);    /* wait until previous transfer is finished */
-    /* Set the SPI in 8-bit mode */
+    while(lcd_bus_busy);    /* дождитесь завершения предыдущей передачи */
+    /* Установите SPI в 8-битный режим. */
     hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
     HAL_SPI_Init(&hspi1);
-    /* DCX low (command) */
+    /* DCX низкий уровень (команда) */
     HAL_GPIO_WritePin(LCD_DCX_GPIO_Port, LCD_DCX_Pin, GPIO_PIN_RESET);
-    /* CS low */
+    /* CS низкий */
     HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-    /* send command */
+    /* отправить команду */
     if(HAL_SPI_Transmit(&hspi1, cmd, cmd_size, BUS_SPI1_POLL_TIMEOUT) == HAL_OK) {
-        /* DCX high (data) */
+        /* DCX высокий (данные) */
         HAL_GPIO_WritePin(LCD_DCX_GPIO_Port, LCD_DCX_Pin, GPIO_PIN_SET);
-        /* for short data blocks we use polling transfer */
+        /* для коротких блоков данных мы используем передачу по запросу */
         HAL_SPI_Transmit(&hspi1, (uint8_t *)param, (uint16_t)param_size, BUS_SPI1_POLL_TIMEOUT);
-        /* CS high */
+        /* CS высокий */
         HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_SET);
     }
 }
 
-/* Platform-specific implementation of the LCD send color function. For better performance this should use DMA transfer.
- * In case of a DMA transfer a callback must be installed to notify LVGL about the end of the transfer.
+/* Специфическая для платформы реализация функции отправки цвета LCD. Для повышения производительности следует использовать передачу DMA.
+ * В случае передачи DMA должен быть установлен обратный вызов для уведомления LVGL об окончании передачи.
  */
 static void lcd_send_color(lv_display_t * disp, const uint8_t * cmd, size_t cmd_size, uint8_t * param,
                            size_t param_size)
 {
     LV_UNUSED(disp);
-    while(lcd_bus_busy);    /* wait until previous transfer is finished */
-    /* Set the SPI in 8-bit mode */
+    while(lcd_bus_busy);    /* дождитесь завершения предыдущей передачи */
+    /* Установите SPI в 8-битный режим. */
     hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
     HAL_SPI_Init(&hspi1);
-    /* DCX low (command) */
+    /* DCX низкий уровень (команда) */
     HAL_GPIO_WritePin(LCD_DCX_GPIO_Port, LCD_DCX_Pin, GPIO_PIN_RESET);
-    /* CS low */
+    /* CS низкий */
     HAL_GPIO_WritePin(LCD_CS_GPIO_Port, LCD_CS_Pin, GPIO_PIN_RESET);
-    /* send command */
+    /* отправить команду */
     if(HAL_SPI_Transmit(&hspi1, cmd, cmd_size, BUS_SPI1_POLL_TIMEOUT) == HAL_OK) {
-        /* DCX high (data) */
+        /* DCX высокий (данные) */
         HAL_GPIO_WritePin(LCD_DCX_GPIO_Port, LCD_DCX_Pin, GPIO_PIN_SET);
-        /* for color data use DMA transfer */
-        /* Set the SPI in 16-bit mode to match endianness */
+        /* для цветовых данных используйте передачу DMA */
+        /* Установите SPI в 16-битный режим, чтобы соответствовать порядку байтов. */
         hspi1.Init.DataSize = SPI_DATASIZE_16BIT;
         HAL_SPI_Init(&hspi1);
         lcd_bus_busy = 1;
         HAL_SPI_Transmit_DMA(&hspi1, param, (uint16_t)param_size / 2);
-        /* NOTE: CS will be reset in the transfer ready callback */
+        /* NOTE: CS будет сброшен в обратном вызове готовности к передаче. */
     }
 }
 
-#else /*Enable this file at the top*/
+#else /*Включите этот файл вверху*/
 
-/*This dummy typedef exists purely to silence -Wpedantic.*/
+/*Этот вымышленный typedef существует исключительно для того, чтобы успеть замолчать -Wpedantic.*/
 typedef int keep_pedantic_happy;
 #endif

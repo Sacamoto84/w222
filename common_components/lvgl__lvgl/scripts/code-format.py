@@ -3,17 +3,17 @@
 import os
 import sys
 
-# Argument enhancement:  to only run `astyle` on a specified directory, to
-# only include changed source code, these arguments have been added.  If
-# run with no arguments, all the normal directories are examined as before:
-# - /demos/
-# - /examples/
-# - /src/
-# - /tests/
+# Аргумент улучшения: запустить`astyle`только в указанном каталоге, чтобы
+# включать только измененный исходный код, эти аргументы были добавлены.  Если
+# запускается без аргументов, все обычные каталоги проверяются, как и раньше:
+# - /демо/
+# - /примеры/
+# - /источник/
+# - /тесты/
 #
-# Args:
-# If ANY args are specified, ONLY run `astyle` on the specified directories.
-# Any combination can be specified.
+# Аргументы:
+# Если указаны аргументыANY,ONLYзапускает`astyle`в указанных каталогах.
+# Можно указать любую комбинацию.
 include_demos = True
 include_examples = True
 include_src = True

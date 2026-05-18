@@ -3,12 +3,12 @@
 #if LV_USE_LOVYAN_GFX
 
 /**
- * If using LovyanGFX create LGFX class that inherits from lgfx::LGFX_Device
+ * Если вы используете LovyanGFX, создайте класс LGFX, который наследуется от lgfx::LGFX_Device.
  * https://github.com/lovyan03/LovyanGFX/blob/master/examples/HowToUse/2_user_setting/2_user_setting.ino */
 
 /**
- * If using other display drivers that is not LovyanGFX
- * Create an LGFX wrapper class that implements the functions used in lv_lovyan_gfx.cpp */
+ * Если вы используете другие драйверы дисплея, кроме LovyanGFX
+ * Создайте класс-оболочку LGFX, реализующий функции, используемые в lv_lovyan_gfx.cpp. */
 class LGFX
 {
 public:

@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -26,7 +26,7 @@
 #include "tvgSwCommon.h"
 
 /************************************************************************/
-/* Gaussian Filter Implementation                                       */
+/* Реализация фильтра Гаусса                                       */
 /************************************************************************/
 
 struct SwGaussianBlur
@@ -39,7 +39,7 @@ struct SwGaussianBlur
 
 static void _gaussianExtendRegion(RenderRegion& region, int extra, int8_t direction)
 {
-    //bbox region expansion for feathering
+    //Расширение региона bbox для растушевки
     if (direction != 2) {
         region.x = -extra;
         region.w = extra * 2;
@@ -53,10 +53,10 @@ static void _gaussianExtendRegion(RenderRegion& region, int extra, int8_t direct
 
 static int _gaussianRemap(int end, int idx, int border)
 {
-    //wrap
+    //обернуть
     if (border == 1) return idx % end;
 
-    //duplicate
+    //дубликат
     if (idx < 0) return 0;
     else if (idx >= end) return end - 1;
     return idx;
@@ -78,12 +78,12 @@ static void _gaussianBlur(uint8_t* src, uint8_t* dst, int32_t stride, int32_t w,
 
     for (int x = 0; x < h; x++) {
         auto p = x * stride;
-        auto i = p * 4;                 //current index
-        auto l = -(dimension + 1);      //left index
-        auto r = dimension;             //right index
-        int acc[4] = {0, 0, 0, 0};      //sliding accumulator
+        auto i = p * 4;                 //текущий индекс
+        auto l = -(dimension + 1);      //левый индекс
+        auto r = dimension;             //правый индекс
+        int acc[4] = {0, 0, 0, 0};      //скользящий аккумулятор
 
-        //initial acucmulation
+        //начальное накопление
         for (int x2 = l; x2 < r; ++x2) {
             auto id = (_gaussianRemap(w, x2, border) + p) * 4;
             acc[0] += src[id++];
@@ -91,7 +91,7 @@ static void _gaussianBlur(uint8_t* src, uint8_t* dst, int32_t stride, int32_t w,
             acc[2] += src[id++];
             acc[3] += src[id];
         }
-        //perform filtering
+        //выполнить фильтрацию
         for (int x2 = 0; x2 < w; ++x2, ++r, ++l) {
             auto rid = (_gaussianRemap(w, r, border) + p) * 4;
             auto lid = (_gaussianRemap(w, l, border) + p) * 4;
@@ -112,7 +112,7 @@ static int _gaussianInit(int* kernel, float sigma, int level)
 {
     const auto MAX_LEVEL = SwGaussianBlur::MAX_LEVEL;
 
-    //compute the kernel
+    //вычислить ядро
     auto wl = (int) sqrt((12 * sigma / MAX_LEVEL) + 1);
     if (wl % 2 == 0) --wl;
     auto wu = wl + 2;
@@ -134,11 +134,11 @@ bool effectGaussianPrepare(RenderEffectGaussian* params)
     auto data = (SwGaussianBlur*)lv_malloc(sizeof(SwGaussianBlur));
     LV_ASSERT_MALLOC(data);
 
-    //compute box kernel sizes
+    //вычислить размеры ядра коробки
     data->level = int(SwGaussianBlur::MAX_LEVEL * ((params->quality - 1) * 0.01f)) + 1;
     auto extends = _gaussianInit(data->kernel, params->sigma * params->sigma, data->level);
 
-    //skip, if the parameters are invalid.
+    //пропустить, если параметры недействительны.
     if (extends == 0) {
         params->invalid = true;
         lv_free(data);
@@ -153,9 +153,9 @@ bool effectGaussianPrepare(RenderEffectGaussian* params)
 }
 
 
-/* It is best to take advantage of the Gaussian blur’s separable property
-   by dividing the process into two passes. horizontal and vertical.
-   We can expect fewer calculations. */
+/* Лучше всего воспользоваться свойством отделяемости размытия по Гауссу.
+   разделив процесс на два прохода. горизонтальные и вертикальные.
+   Мы можем ожидать меньшего количества вычислений. */
 bool effectGaussianBlur(SwImage& image, SwImage& buffer, const SwBBox& bbox, const RenderEffectGaussian* params)
 {
     if (params->invalid) return false;
@@ -173,12 +173,12 @@ bool effectGaussianBlur(SwImage& image, SwImage& buffer, const SwBBox& bbox, con
     auto back = buffer.buf8;
     auto swapped = false;
 
-    //fine-tuning for low-quality (experimental)
+    //тонкая настройка на низкое качество (экспериментальная)
     auto threshold = (std::min(w, h) < 300) ? 2 : 1;
 
     TVGLOG("SW_ENGINE", "GaussianFilter region(%ld, %ld, %ld, %ld) params(%f %d %d), level(%d)", bbox.min.x, bbox.min.y, bbox.max.x, bbox.max.y, params->sigma, params->direction, params->border, data->level);
 
-    //horizontal
+    //горизонтальный
     if (params->direction == 0 || params->direction == 1) {
         for (int i = 0; i < data->level; ++i) {
             auto k = data->kernel[i] / threshold;
@@ -189,7 +189,7 @@ bool effectGaussianBlur(SwImage& image, SwImage& buffer, const SwBBox& bbox, con
         }
     }
 
-    //vertical. x/y flipping and horionztal access is pretty compatible with the memory architecture.
+    //вертикальный. Переворот x/y и горизонтальный доступ вполне совместимы с архитектурой памяти.
     if (params->direction == 0 || params->direction == 2) {
         rasterXYFlip(reinterpret_cast<uint32_t*>(front), reinterpret_cast<uint32_t*>(back), stride, w, h, bbox, false);
         std::swap(front, back);

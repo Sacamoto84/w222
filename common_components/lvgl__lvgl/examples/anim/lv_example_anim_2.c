@@ -12,7 +12,7 @@ static void anim_size_cb(void * var, int32_t v)
 }
 
 /**
- * Create a playback animation
+ * Создание анимации воспроизведения
  */
 void lv_example_anim_2(void)
 {

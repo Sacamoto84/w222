@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_OSTREAMWRAPPER_H_
 #define RAPIDJSON_OSTREAMWRAPPER_H_
@@ -25,9 +25,9 @@ RAPIDJSON_DIAG_OFF(padded)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Wrapper of \c std::basic_ostream into RapidJSON's Stream concept.
+//! Обертка \c std::basic_ostream в концепцию RapidJSON Stream.
 /*!
-    The classes can be wrapped including but not limited to:
+    Классы могут быть обернуты, включая, помимо прочего:
 
     - \c std::ostringstream
     - \c std::stringstream
@@ -38,7 +38,7 @@ RAPIDJSON_NAMESPACE_BEGIN
     - \c std::wofstream
     - \c std::wfstream
 
-    \tparam StreamType Class derived from \c std::basic_ostream.
+    \tparam Класс StreamType, производный от \c std::basic_ostream .
 */
 
 template <typename StreamType>
@@ -55,7 +55,7 @@ public:
         stream_.flush();
     }
 
-    // Not implemented
+    // Не реализовано
     char Peek() const { RAPIDJSON_ASSERT(false); return 0; }
     char Take() { RAPIDJSON_ASSERT(false); return 0; }
     size_t Tell() const { RAPIDJSON_ASSERT(false); return 0; }

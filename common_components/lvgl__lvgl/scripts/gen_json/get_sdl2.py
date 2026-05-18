@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# --*- кодировка: utf-8 --*-
 
 import zipfile
 import io
@@ -31,14 +31,14 @@ def get_sdl2(path, url=SDL2_URL):
         content_length = int(r.headers['Content-Length'])
         chunks = 0
         # print()
-        # sys.stdout.write('\r' + str(chunks) + '/' + str(content_length))
-        # sys.stdout.flush()
+        # sys.stdout.write('\r' + str(куски) + '/' + str(content_length))
+        # sys.stdout.  flush()
 
         for chunk in r.iter_content(chunk_size=1024):
             stream.write(chunk)
             chunks += len(chunk)
-            # sys.stdout.write('\r' + str(chunks) + '/' + str(content_length))
-            # sys.stdout.flush()
+            # sys.stdout.write('\r' + str(куски) + '/' + str(content_length))
+            # sys.stdout.  flush()
 
     # print()
     stream.seek(0)

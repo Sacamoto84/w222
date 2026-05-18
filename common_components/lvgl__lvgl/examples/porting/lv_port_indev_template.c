@@ -3,7 +3,7 @@
  *
  */
 
-/*Copy this file as "lv_port_indev.c" and set this value to "1" to enable content*/
+/*Скопируйте этот файл как «lv_port_indev.c» и установите для этого значения значение «1», чтобы отключить контент.*/
 #if 0
 
 /*********************
@@ -69,96 +69,96 @@ static lv_indev_state_t encoder_state;
 void lv_port_indev_init(void)
 {
     /**
-     * Here you will find example implementation of input devices supported by LittelvGL:
-     *  - Touchpad
-     *  - Mouse (with cursor support)
-     *  - Keypad (supports GUI usage only with key)
-     *  - Encoder (supports GUI usage only with: left, right, push)
-     *  - Button (external buttons to press points on the screen)
+     * Здесь вы найдете пример реализации устройства ввода, поддерживающего LittelvGL:
+     *  - Тачпад
+     *  - Мышь (с поддержкой курсора)
+     *  - Клавиатура (поддерживает использованиеGUIтолько с ключом)
+     *  - Энкодер (поддерживает использованиеGUIтолько с: влево, вправо, нажатие)
+     *  - Кнопка (внешние кнопки для нажатия точек на экране)
      *
-     *  The `..._read()` function are only examples.
-     *  You should shape them according to your hardware
+     *  Функция`..._read()`реализована лишь.
+     *  Вы должны сформировать их в соответствии с вашим оборудованием.
      */
 
     /*------------------
-     * Touchpad
+     * Тачпад
      * -----------------*/
 
-    /*Initialize your touchpad if you have*/
+    /*Инициализируйте сенсорную панель, если у вас есть*/
     touchpad_init();
 
-    /*Register a touchpad input device*/
+    /*Регистрация устройства ввода с сенсорной панелью*/
     indev_touchpad = lv_indev_create();
     lv_indev_set_type(indev_touchpad, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(indev_touchpad, touchpad_read);
 
     /*------------------
-     * Mouse
+     * Мышь
      * -----------------*/
 
-    /*Initialize your mouse if you have*/
+    /*Инициализируйте мышь, если у вас есть*/
     mouse_init();
 
-    /*Register a mouse input device*/
+    /*Зарегистрируйте устройство ввода мыши*/
     indev_mouse = lv_indev_create();
     lv_indev_set_type(indev_mouse, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(indev_mouse, mouse_read);
 
-    /*Set cursor. For simplicity set a HOME symbol now.*/
+    /*Установить курсор. Для простоты установите сейчас символ HOME.*/
     lv_obj_t * mouse_cursor = lv_image_create(lv_screen_active());
     lv_image_set_src(mouse_cursor, LV_SYMBOL_HOME);
     lv_indev_set_cursor(indev_mouse, mouse_cursor);
 
     /*------------------
-     * Keypad
+     * Клавиатура
      * -----------------*/
 
-    /*Initialize your keypad or keyboard if you have*/
+    /*Инициализируйте клавиатуру или клавиатуру, если у вас есть*/
     keypad_init();
 
-    /*Register a keypad input device*/
+    /*Регистрация устройства ввода с клавиатуры*/
     indev_keypad = lv_indev_create();
     lv_indev_set_type(indev_keypad, LV_INDEV_TYPE_KEYPAD);
     lv_indev_set_read_cb(indev_keypad, keypad_read);
 
-    /*Later you should create group(s) with `lv_group_t * group = lv_group_create()`,
-     *add objects to the group with `lv_group_add_obj(group, obj)`
-     *and assign this input device to group to navigate in it:
+    /*Позже вам следует создать группу(ы) с помощью`lv_group_t * group = lv_group_create()`,
+     *добавить элементы в группу с помощью `lv_group_add_obj(group, obj)`
+     *и назначьте это устройство ввода в группу для навигации по нему:
      *`lv_indev_set_group(indev_keypad, group);`*/
 
     /*------------------
-     * Encoder
+     * Кодер
      * -----------------*/
 
-    /*Initialize your encoder if you have*/
+    /*Инициализируйте свой кодер, если у вас есть*/
     encoder_init();
 
-    /*Register a encoder input device*/
+    /*Зарегистрируйте устройство ввода кодера*/
     indev_encoder = lv_indev_create();
     lv_indev_set_type(indev_encoder, LV_INDEV_TYPE_ENCODER);
     lv_indev_set_read_cb(indev_encoder, encoder_read);
 
-    /*Later you should create group(s) with `lv_group_t * group = lv_group_create()`,
-     *add objects to the group with `lv_group_add_obj(group, obj)`
-     *and assign this input device to group to navigate in it:
+    /*Позже вам следует создать группу(ы) с помощью`lv_group_t * group = lv_group_create()`,
+     *добавить элементы в группу с помощью `lv_group_add_obj(group, obj)`
+     *и назначьте это устройство ввода в группу для навигации по нему:
      *`lv_indev_set_group(indev_encoder, group);`*/
 
     /*------------------
-     * Button
+     * Кнопка
      * -----------------*/
 
-    /*Initialize your button if you have*/
+    /*Инициализируйте кнопку, если у вас есть*/
     button_init();
 
-    /*Register a button input device*/
+    /*Регистрация устройства кнопочного ввода*/
     indev_button = lv_indev_create();
     lv_indev_set_type(indev_button, LV_INDEV_TYPE_BUTTON);
     lv_indev_set_read_cb(indev_button, button_read);
 
-    /*Assign buttons to points on the screen*/
+    /*Назначение кнопок точкам на экране*/
     static const lv_point_t btn_points[2] = {
-        {10, 10},   /*Button 0 -> x:10; y:10*/
-        {40, 100},  /*Button 1 -> x:40; y:100*/
+        {10, 10},   /*Кнопка 0 -> х:10; у:10*/
+        {40, 100},  /*Кнопка 1 -> х:40; г:100*/
     };
     lv_indev_set_button_points(indev_button, btn_points);
 }
@@ -168,22 +168,22 @@ void lv_port_indev_init(void)
  **********************/
 
 /*------------------
- * Touchpad
+ * Тачпад
  * -----------------*/
 
-/*Initialize your touchpad*/
+/*Инициализируйте сенсорную панель*/
 static void touchpad_init(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 }
 
-/*Will be called by the library to read the touchpad*/
+/*Будет вызван библиотекой для чтения тачпада*/
 static void touchpad_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
 {
     static int32_t last_x = 0;
     static int32_t last_y = 0;
 
-    /*Save the pressed coordinates and the state*/
+    /*Сохраните нажатые координаты и состояние*/
     if(touchpad_is_pressed()) {
         touchpad_get_xy(&last_x, &last_y);
         data->state = LV_INDEV_STATE_PRESSED;
@@ -192,45 +192,45 @@ static void touchpad_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
         data->state = LV_INDEV_STATE_RELEASED;
     }
 
-    /*Set the last pressed coordinates*/
+    /*Установить последние нажатые координаты*/
     data->point.x = last_x;
     data->point.y = last_y;
 }
 
-/*Return true is the touchpad is pressed*/
+/*Возвращает true, если нажата сенсорная панель.*/
 static bool touchpad_is_pressed(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     return false;
 }
 
-/*Get the x and y coordinates if the touchpad is pressed*/
+/*Получите координаты x и y, если нажата сенсорная панель.*/
 static void touchpad_get_xy(int32_t * x, int32_t * y)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     (*x) = 0;
     (*y) = 0;
 }
 
 /*------------------
- * Mouse
+ * Мышь
  * -----------------*/
 
-/*Initialize your mouse*/
+/*Инициализируйте мышь*/
 static void mouse_init(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 }
 
-/*Will be called by the library to read the mouse*/
+/*Будет вызван библиотекой для чтения мыши*/
 static void mouse_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
 {
-    /*Get the current x and y coordinates*/
+    /*Получить текущие координаты x и y*/
     mouse_get_xy(&data->point.x, &data->point.y);
 
-    /*Get whether the mouse button is pressed or released*/
+    /*Узнайте, нажата или отпущена кнопка мыши*/
     if(mouse_is_pressed()) {
         data->state = LV_INDEV_STATE_PRESSED;
     }
@@ -239,47 +239,47 @@ static void mouse_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
     }
 }
 
-/*Return true is the mouse button is pressed*/
+/*Возвращает true, если нажата кнопка мыши.*/
 static bool mouse_is_pressed(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     return false;
 }
 
-/*Get the x and y coordinates if the mouse is pressed*/
+/*Получите координаты x и y, если нажата мышь.*/
 static void mouse_get_xy(int32_t * x, int32_t * y)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     (*x) = 0;
     (*y) = 0;
 }
 
 /*------------------
- * Keypad
+ * Клавиатура
  * -----------------*/
 
-/*Initialize your keypad*/
+/*Инициализируйте клавиатуру*/
 static void keypad_init(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 }
 
-/*Will be called by the library to read the mouse*/
+/*Будет вызван библиотекой для чтения мыши*/
 static void keypad_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
 {
     static uint32_t last_key = 0;
 
-    /*Get the current x and y coordinates*/
+    /*Получить текущие координаты x и y*/
     mouse_get_xy(&data->point.x, &data->point.y);
 
-    /*Get whether the a key is pressed and save the pressed key*/
+    /*Узнайте, нажата ли клавиша, и сохраните нажатую клавишу.*/
     uint32_t act_key = keypad_get_key();
     if(act_key != 0) {
         data->state = LV_INDEV_STATE_PRESSED;
 
-        /*Translate the keys to LVGL control characters according to your key definitions*/
+        /*Переведите клавиши в управляющие символы LVGL в соответствии с вашими определениями клавиш.*/
         switch(act_key) {
             case 1:
                 act_key = LV_KEY_NEXT;
@@ -307,25 +307,25 @@ static void keypad_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
     data->key = last_key;
 }
 
-/*Get the currently being pressed key.  0 if no key is pressed*/
+/*Получить нажимаемую в данный момент клавишу.  0, если ни одна клавиша не нажата*/
 static uint32_t keypad_get_key(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     return 0;
 }
 
 /*------------------
- * Encoder
+ * Кодер
  * -----------------*/
 
-/*Initialize your encoder*/
+/*Инициализируйте свой кодировщик*/
 static void encoder_init(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 }
 
-/*Will be called by the library to read the encoder*/
+/*Будет вызван библиотекой для чтения кодировщика*/
 static void encoder_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
 {
 
@@ -333,32 +333,32 @@ static void encoder_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
     data->state = encoder_state;
 }
 
-/*Call this function in an interrupt to process encoder events (turn, press)*/
+/*Вызов этой функции в прерывании для обработки событий энкодера (поворот, нажатие)*/
 static void encoder_handler(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     encoder_diff += 0;
     encoder_state = LV_INDEV_STATE_RELEASED;
 }
 
 /*------------------
- * Button
+ * Кнопка
  * -----------------*/
 
-/*Initialize your buttons*/
+/*Инициализируйте свои кнопки*/
 static void button_init(void)
 {
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 }
 
-/*Will be called by the library to read the button*/
+/*Будет вызван библиотекой для чтения кнопки*/
 static void button_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
 {
 
     static uint8_t last_btn = 0;
 
-    /*Get the pressed button's ID*/
+    /*Получить ID нажатой кнопки*/
     int8_t btn_act = button_get_pressed_id();
 
     if(btn_act >= 0) {
@@ -369,38 +369,38 @@ static void button_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
         data->state = LV_INDEV_STATE_RELEASED;
     }
 
-    /*Save the last pressed button's ID*/
+    /*Сохраните ID последней нажатой кнопки.*/
     data->btn_id = last_btn;
 }
 
-/*Get ID  (0, 1, 2 ..) of the pressed button*/
+/*Получить ID (0, 1, 2..) нажатой кнопки*/
 static int8_t button_get_pressed_id(void)
 {
     uint8_t i;
 
-    /*Check to buttons see which is being pressed (assume there are 2 buttons)*/
+    /*Проверьте кнопки, чтобы увидеть, какая из них нажимается (предположим, есть 2 кнопки)*/
     for(i = 0; i < 2; i++) {
-        /*Return the pressed button's ID*/
+        /*Вернуть ID нажатой кнопки*/
         if(button_is_pressed(i)) {
             return i;
         }
     }
 
-    /*No button pressed*/
+    /*Ни одна кнопка не нажата*/
     return -1;
 }
 
-/*Test if `id` button is pressed or not*/
+/*Проверьте, нажата ли кнопка `id` или нет.*/
 static bool button_is_pressed(uint8_t id)
 {
 
-    /*Your code comes here*/
+    /*Ваш код находится здесь*/
 
     return false;
 }
 
-#else /*Enable this file at the top*/
+#else /*Включите этот файл вверху*/
 
-/*This dummy typedef exists purely to silence -Wpedantic.*/
+/*Этот вымышленный typedef существует исключительно для того, чтобы успеть замолчать -Wpedantic.*/
 typedef int keep_pedantic_happy;
 #endif

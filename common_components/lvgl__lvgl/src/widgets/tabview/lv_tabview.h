@@ -38,14 +38,14 @@ enum _lv_property_tabview_id_t {
  **********************/
 
 /**
- * Create a tabview widget
+ * Создайте виджет просмотра вкладок
  * @param parent    pointer to a parent widget
  * @return          the created tabview
  */
 lv_obj_t * lv_tabview_create(lv_obj_t * parent);
 
 /**
- * Add a tab to the tabview
+ * Добавить вкладку в представление вкладок
  * @param obj       pointer to a tabview widget
  * @param name      the name of the tab, it will be displayed on the tab bar
  * @return          the widget where the content of the tab can be created
@@ -53,7 +53,7 @@ lv_obj_t * lv_tabview_create(lv_obj_t * parent);
 lv_obj_t * lv_tabview_add_tab(lv_obj_t * obj, const char * name);
 
 /**
- * Change the name of the tab
+ * Изменить название вкладки
  * @param obj       pointer to a tabview widget
  * @param idx       the index of the tab to rename
  * @param new_name  the new name as a string
@@ -63,7 +63,7 @@ void lv_tabview_set_tab_text(lv_obj_t * obj, uint32_t idx, const char * new_name
 #if LV_USE_TRANSLATION
 
 /**
- * Add a tab with a translation tag to the tabview.
+ * Добавьте вкладку с тегом перевода в представление вкладок.
  * @param obj       pointer to a tabview widget
  * @param tag       translation key used for the tab label; will be displayed on the tab bar
  * @return          the widget where the content of the tab can be created
@@ -73,7 +73,7 @@ lv_obj_t * lv_tabview_set_tab_translation_tag(lv_obj_t * obj, const char * tag);
 #endif
 
 /**
- * Show a tab
+ * Показать вкладку
  * @param obj       pointer to a tabview widget
  * @param idx       the index of the tab to show
  * @param anim_en   LV_ANIM_ON/OFF
@@ -81,59 +81,59 @@ lv_obj_t * lv_tabview_set_tab_translation_tag(lv_obj_t * obj, const char * tag);
 void lv_tabview_set_active(lv_obj_t * obj, uint32_t idx, lv_anim_enable_t anim_en);
 
 /**
- * Set the position of the tab bar
+ * Установите положение панели вкладок
  * @param obj       pointer to a tabview widget
  * @param dir       LV_DIR_TOP/BOTTOM/LEFT/RIGHT
  */
 void lv_tabview_set_tab_bar_position(lv_obj_t * obj, lv_dir_t dir);
 
 /**
- * Set the width or height of the tab bar
+ * Установите ширину или высоту панели вкладок
  * @param obj       pointer to tabview widget
  * @param size      size of the tab bar in pixels or percentage.
- *                  will be used as width or height based on the position of the tab bar)
+ *                  будет использоваться как ширина или высота в зависимости от положения панели вкладок)
  */
 void lv_tabview_set_tab_bar_size(lv_obj_t * obj, int32_t size);
 
 /**
- * Get the number of tabs
+ * Получить количество вкладок
  * @param obj       pointer to a tabview widget
  * @return          the number of tabs
  */
 uint32_t lv_tabview_get_tab_count(lv_obj_t * obj);
 
 /**
- * Get the current tab's index
+ * Получить индекс текущей вкладки
  * @param obj       pointer to a tabview widget
  * @return          the zero based index of the current tab
  */
 uint32_t lv_tabview_get_tab_active(lv_obj_t * obj);
 
 /**
- * Get a given tab button by index
+ * Получить данную кнопку вкладки по индексу
  * @param obj       pointer to a tabview widget
  * @param idx       zero based index of the tab button to get.
- *                  < 0 means start counting tab button from the back (-1 is the last tab button)
+ *                  <0 означает начало отсчета кнопки вкладки сзади (-1 — последняя кнопка вкладки)
  * @return          pointer to the tab button, or NULL if the index was out of range
  */
 lv_obj_t * lv_tabview_get_tab_button(lv_obj_t * obj, int32_t idx);
 
 /**
- * Get the widget where the container of each tab is created
+ * Получите виджет, в котором создается контейнер каждой вкладки.
  * @param obj       pointer to a tabview widget
  * @return          the main container widget
  */
 lv_obj_t * lv_tabview_get_content(lv_obj_t * obj);
 
 /**
- * Get the tab bar where the buttons are created
+ * Получить панель вкладок, где созданы кнопки
  * @param obj       pointer to a tabview widget
  * @return          the tab bar
  */
 lv_obj_t * lv_tabview_get_tab_bar(lv_obj_t * obj);
 
 /**
- * Get the position of the tab bar
+ * Получить положение панели вкладок
  * @param obj       pointer to a tabview widget
  * @return          LV_DIR_TOP/BOTTOM/LEFT/RIGHT
  */
@@ -146,7 +146,7 @@ lv_dir_t lv_tabview_get_tab_bar_position(lv_obj_t * obj);
 #endif /*LV_USE_TABVIEW*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TABVIEW_H*/

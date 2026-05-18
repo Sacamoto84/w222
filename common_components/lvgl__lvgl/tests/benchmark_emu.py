@@ -243,14 +243,14 @@ def run_benchmark(config_name: str, pull: bool) -> None:
     docker_image_name = benchmark_configs[config_name]["image_name"]
 
     volumes = [
-        # This is necessary to create a loop device
+        # Это необходимо для создания шлейфового устройства
         volume("/dev", "/dev"),
-        # Replace container's lvgl source and lv_conf
+        # Замените источник контейнера lvgl на lv_conf.
         volume(lvgl_h_path, so3_usr_lib("lvgl/lvgl.h")),
         volume(lvgl_src_path, so3_usr_lib("lvgl/src")),
         volume(lvgl_demos_path, so3_usr_lib("lvgl/demos")),
         volume(lv_conf_path, so3_usr_lib("lv_conf.h")),
-        # Cache build and disk folders so we don't regenerate everything in consecutive runs
+        # Кэшируйте папки сборки и дисков, чтобы не создавать заново все при последовательных запусках.
         volume(get_build_cache_volume(config_name), so3_usr_build),
         volume(get_disk_cache_volume(config_name), persistence_dir),
     ]

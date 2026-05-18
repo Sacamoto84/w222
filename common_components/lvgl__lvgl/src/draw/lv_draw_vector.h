@@ -44,7 +44,7 @@ typedef enum {
 } lv_vector_stroke_join_t;
 
 typedef enum {
-    LV_VECTOR_PATH_QUALITY_MEDIUM = 0, /* default*/
+    LV_VECTOR_PATH_QUALITY_MEDIUM = 0, /* по умолчанию*/
     LV_VECTOR_PATH_QUALITY_HIGH,
     LV_VECTOR_PATH_QUALITY_LOW,
 } lv_vector_path_quality_t;
@@ -87,8 +87,8 @@ typedef enum {
 } lv_vector_gradient_style_t;
 
 typedef enum {
-    LV_VECTOR_FILL_UNITS_OBJECT_BOUNDING_BOX = 0, /** Relative coordinates relative to the object bounding box. */
-    LV_VECTOR_FILL_UNITS_USER_SPACE_ON_USE, /** Absolute coordinates relative to the layer's coordinate system */
+    LV_VECTOR_FILL_UNITS_OBJECT_BOUNDING_BOX = 0, /** Относительные координаты относительно ограничивающей рамки объекта. */
+    LV_VECTOR_FILL_UNITS_USER_SPACE_ON_USE, /** Абсолютные координаты относительно системы координат слоя. */
 } lv_vector_fill_units_t;
 
 struct _lv_fpoint_t {
@@ -101,122 +101,122 @@ struct _lv_fpoint_t {
  **********************/
 
 /**
- * Transform the coordinates of a point using given matrix
- * @param matrix           pointer to a matrix
- * @param point            pointer to a point
+ * Преобразуйте координаты точки, используя заданную матрицу
+ * @param matrix           указатель на матрицу
+ * @param point            указатель на точку
  */
 void lv_matrix_transform_point(const lv_matrix_t * matrix, lv_fpoint_t * point);
 
 /**
- * Transform all the coordinates of a path using given matrix
- * @param matrix           pointer to a matrix
- * @param path             pointer to a path
+ * Преобразуйте все координаты пути, используя заданную матрицу
+ * @param matrix           указатель на матрицу
+ * @param path             указатель на путь
  */
 void lv_matrix_transform_path(const lv_matrix_t * matrix, lv_vector_path_t * path);
 
 /**
- * Create a vector graphic path object
- * @param quality       the quality hint of path
- * @return              pointer to the created path object
+ * Создайте объект векторного графического контура
+ * @param quality       Качественный намек на путь
+ * @return              указатель на созданный объект пути
  */
 lv_vector_path_t * lv_vector_path_create(lv_vector_path_quality_t quality);
 
 /**
- * Copy a path data to another
- * @param target_path       pointer to a path
- * @param path              pointer to source path
+ * Скопируйте данные пути в другой
+ * @param target_path       указатель на путь
+ * @param path              указатель на исходный путь
  */
 void lv_vector_path_copy(lv_vector_path_t * target_path, const lv_vector_path_t * path);
 
 /**
- * Clear path data
- * @param path              pointer to a path
+ * Очистить данные пути
+ * @param path              указатель на путь
  */
 void lv_vector_path_clear(lv_vector_path_t * path);
 
 /**
- * Delete the graphic path object
- * @param path              pointer to a path
+ * Удалить объект графического пути
+ * @param path              указатель на путь
  */
 void lv_vector_path_delete(lv_vector_path_t * path);
 
 /**
- * Begin a new sub path and set a point to path
- * @param path              pointer to a path
- * @param p                 pointer to a `lv_fpoint_t` variable
+ * Начните новый подпуть и установите точку на пути.
+ * @param path              указатель на путь
+ * @param p                 указатель на переменную `lv_fpoint_t`
  */
 void lv_vector_path_move_to(lv_vector_path_t * path, const lv_fpoint_t * p);
 
 /**
- * Add a line to the path from last point to the point
- * @param path              pointer to a path
- * @param p                 pointer to a `lv_fpoint_t` variable
+ * Добавьте линию к пути от последней точки до точки
+ * @param path              указатель на путь
+ * @param p                 указатель на переменную `lv_fpoint_t`
  */
 void lv_vector_path_line_to(lv_vector_path_t * path, const lv_fpoint_t * p);
 
 /**
- * Add a quadratic bezier line to the path from last point to the point
- * @param path              pointer to a path
- * @param p1                pointer to a `lv_fpoint_t` variable for control point
- * @param p2                pointer to a `lv_fpoint_t` variable for end point
+ * Добавьте квадратичную линию Безье к пути от последней точки до точки.
+ * @param path              указатель на путь
+ * @param p1                указатель на переменную`lv_fpoint_t`для контрольной точки
+ * @param p2                указатель на переменную`lv_fpoint_t`для конечной точки
  */
 void lv_vector_path_quad_to(lv_vector_path_t * path, const lv_fpoint_t * p1, const lv_fpoint_t * p2);
 
 /**
- * Add a cubic bezier line to the path from last point to the point
- * @param path              pointer to a path
- * @param p1                pointer to a `lv_fpoint_t` variable for first control point
- * @param p2                pointer to a `lv_fpoint_t` variable for second control point
- * @param p3                pointer to a `lv_fpoint_t` variable for end point
+ * Добавьте кубическую линию Безье к пути от последней точки до точки.
+ * @param path              указатель на путь
+ * @param p1                указатель на переменную`lv_fpoint_t`для первой контрольной точки
+ * @param p2                указатель на переменную`lv_fpoint_t`для второй контрольной точки
+ * @param p3                указатель на переменную`lv_fpoint_t`для конечной точки
  */
 void lv_vector_path_cubic_to(lv_vector_path_t * path, const lv_fpoint_t * p1, const lv_fpoint_t * p2,
                              const lv_fpoint_t * p3);
 
 /**
- * Add ellipse arc to the path from last point to the point
- * @param path              pointer to a path
- * @param radius_x          the x radius for ellipse arc
- * @param radius_y          the y radius for ellipse arc
- * @param rotate_angle      the rotate angle for arc
- * @param large_arc         true for large arc, otherwise small
- * @param clockwise         true for clockwise, otherwise anticlockwise
- * @param p                 pointer to a `lv_fpoint_t` variable for end point
+ * Добавить дугу эллипса к пути от последней точки до точки
+ * @param path              указатель на путь
+ * @param radius_x          радиус x для дуги эллипса
+ * @param radius_y          радиус y для дуги эллипса
+ * @param rotate_angle      угол поворота дуги
+ * @param large_arc         верно для большой дуги, в противном случае — для маленькой
+ * @param clockwise         верно для по часовой стрелке, в противном случае против часовой стрелки
+ * @param p                 указатель на переменную`lv_fpoint_t`для конечной точки
  */
 void lv_vector_path_arc_to(lv_vector_path_t * path, float radius_x, float radius_y, float rotate_angle,
                            bool large_arc,
                            bool clockwise, const lv_fpoint_t * p);
 
 /**
- * Close the sub path
- * @param path              pointer to a path
+ * Закрыть дополнительный путь
+ * @param path              указатель на путь
  */
 void lv_vector_path_close(lv_vector_path_t * path);
 
 /**
- * Get the bounding box of a path
- * @param path              pointer to a path
- * @param area              pointer to a `lv_area_t` variable for bounding box
+ * Получить ограничивающую рамку пути
+ * @param path              указатель на путь
+ * @param area              указатель на переменную`lv_area_t`для ограничивающей рамки
  */
 void lv_vector_path_get_bounding(const lv_vector_path_t * path, lv_area_t * area);
 
 /**
- * Add a rectangle to the path by x/y/w/h. rx/ry are corner radii
- * @param path              pointer to a path
- * @param x                 the x coordinate of the top-left corner of the rectangle
- * @param y                 the y coordinate of the top-left corner of the rectangle
- * @param w                 the width of the rectangle
- * @param h                 the height of the rectangle
- * @param rx                the horizontal radius for rounded rectangle
- * @param ry                the vertical radius for rounded rectangle
+ * Добавьте прямоугольник к пути по x/y/w/h. rx/ry — угловые радиусы
+ * @param path              указатель на путь
+ * @param x                 координата x верхнего левого угла прямоугольника
+ * @param y                 координата y верхнего левого угла прямоугольника
+ * @param w                 ширина прямоугольника
+ * @param h                 высота прямоугольника
+ * @param rx                горизонтальный радиус для скругленного прямоугольника
+ * @param ry                вертикальный радиус для скругленного прямоугольника
  */
 void lv_vector_path_append_rectangle(lv_vector_path_t * path, float x, float y, float w, float h, float rx, float ry);
 
 /**
- * Add a rectangle to the path (legacy api, recommend use lv_vector_path_append_rectangle instead)
- * @param path              pointer to a path
- * @param rect              pointer to a `lv_area_t` variable
- * @param rx                the horizontal radius for rounded rectangle
- * @param ry                the vertical radius for rounded rectangle
+ * Добавьте вариант к пути (устаревший API, вместо этого рекомендуется использовать lv_vector_path_append_rectangle)
+ * @param path              указатель на путь
+ * @param rect              указатель на переменную `lv_area_t`
+ * @param rx                горизонтальный радиус для скругленного прямоугольника
+ * @param ry                вертикальный радиус для скругленного прямоугольника
  */
 static inline void lv_vector_path_append_rect(lv_vector_path_t * path, const lv_area_t * rect, float rx, float ry)
 {
@@ -228,346 +228,346 @@ static inline void lv_vector_path_append_rect(lv_vector_path_t * path, const lv_
 }
 
 /**
- * Add a circle to the path
- * @param path              pointer to a path
- * @param c                 pointer to a `lv_fpoint_t` variable for center of the circle
- * @param rx                the horizontal radius for circle
- * @param ry                the vertical radius for circle
+ * Добавьте круг к пути
+ * @param path              указатель на путь
+ * @param c                 указатель на переменную`lv_fpoint_t`для центра круга
+ * @param rx                горизонтальный радиус круга
+ * @param ry                вертикальный радиус круга
  */
 void lv_vector_path_append_circle(lv_vector_path_t * path, const lv_fpoint_t * c, float rx, float ry);
 
 /**
- * Add a arc to the path
- * @param path              pointer to a path
- * @param c                 pointer to a `lv_fpoint_t` variable for center of the circle
- * @param radius            the radius for arc
- * @param start_angle       the start angle for arc
- * @param sweep             the sweep angle for arc, could be negative
- * @param pie               true: draw a pie, false: draw a arc
+ * Добавьте дугу к пути
+ * @param path              указатель на путь
+ * @param c                 указатель на переменную`lv_fpoint_t`для центра круга
+ * @param radius            радиус дуги
+ * @param start_angle       начальный угол дуги
+ * @param sweep             угол поворота дуги может быть отрицательным
+ * @param pie               true: нарисовать круг, false: нарисовать дугу
  */
 void lv_vector_path_append_arc(lv_vector_path_t * path, const lv_fpoint_t * c, float radius, float start_angle,
                                float sweep, bool pie);
 
 /**
- * Add an sub path to the path
- * @param path              pointer to a path
- * @param subpath           pointer to another path which will be added
+ * Добавьте дополнительный путь к пути
+ * @param path              указатель на путь
+ * @param subpath           указатель на другой путь, который будет добавлен
  */
 void lv_vector_path_append_path(lv_vector_path_t * path, const lv_vector_path_t * subpath);
 
 /**
- * Create a vector graphic descriptor
- * @param layer         pointer to a layer
- * @return              pointer to the created descriptor
+ * Создайте векторный графический дескриптор
+ * @param layer         указатель на слой
+ * @return              указатель на созданный дескриптор
  */
 lv_draw_vector_dsc_t * lv_draw_vector_dsc_create(lv_layer_t * layer);
 
 /**
- * Delete the vector graphic descriptor
- * @param dsc              pointer to a vector graphic descriptor
+ * Удалить дескриптор векторной графики
+ * @param dsc              указатель на дескриптор векторной графики
  */
 void lv_draw_vector_dsc_delete(lv_draw_vector_dsc_t * dsc);
 
 /**
- * Set a matrix to current transformation matrix.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this matrix.
- * @param dsc              pointer to a vector graphic descriptor
- * @param matrix           pointer to a matrix
+ * Установите матрицу в качестве текущей матрицы преобразования.
+ * Новые формы путей, добавленные `lv_draw_vector_dsc_add_path`, будут использовать эту матрицу.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param matrix           указатель на матрицу
  */
 void lv_draw_vector_dsc_set_transform(lv_draw_vector_dsc_t * dsc, const lv_matrix_t * matrix);
 
 /**
- * Set blend mode for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this blend mode.
- * @param dsc              pointer to a vector graphic descriptor
- * @param blend            the blend mode to be set in `lv_vector_blend_t`
+ * Установите режим наложения для дескриптора.
+ * Новые формы контуров, добавленные`lv_draw_vector_dsc_add_path`, будут использовать этот режим приложения.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param blend            режим наложения, который будет установлен в `lv_vector_blend_t`
  */
 void lv_draw_vector_dsc_set_blend_mode(lv_draw_vector_dsc_t * dsc, lv_vector_blend_t blend);
 
 /**
- * Set the fill color for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this color.
- * @param dsc              pointer to a vector graphic descriptor
- * @param color            the color to be set in lv_color32_t format
+ * Установите цвет заливки для дескриптора.
+ * Новые формы способов, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот цвет.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param color            цвет, который нужно установить в формате lv_color32_t
  */
 void lv_draw_vector_dsc_set_fill_color32(lv_draw_vector_dsc_t * dsc, lv_color32_t color);
 
 /**
- * Set fill color for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this color.
- * @param dsc              pointer to a vector graphic descriptor
- * @param color            the color to be set in lv_color_t format
+ * Установите цвет заливки для дескриптора.
+ * Новые формы способов, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот цвет.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param color            цвет, который нужно установить в формате lv_color_t
  */
 void lv_draw_vector_dsc_set_fill_color(lv_draw_vector_dsc_t * dsc, lv_color_t color);
 
 /**
- * Set fill opacity for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this opacity.
- * @param dsc              pointer to a vector graphic descriptor
- * @param opa              the opacity to be set in lv_opa_t format
+ * Установите непрозрачность заливки для дескриптора.
+ * Новые формы путей, добавленные`lv_draw_vector_dsc_add_path`, будут использовать эту непрозрачность.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param opa              непрозрачность должна быть установлена в формате lv_opa_t
  */
 void lv_draw_vector_dsc_set_fill_opa(lv_draw_vector_dsc_t * dsc, lv_opa_t opa);
 
 /**
- * Set fill rule for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this fill rule.
- * @param dsc              pointer to a vector graphic descriptor
- * @param rule             the fill rule to be set in lv_vector_fill_t format
+ * Установите правило заполнения для дескриптора.
+ * Новые формы контуров, добавленные`lv_draw_vector_dsc_add_path`, будут использовать это правило заливки.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param rule             правило заполнения задается в формате lv_vector_fill_t
  */
 void lv_draw_vector_dsc_set_fill_rule(lv_draw_vector_dsc_t * dsc, lv_vector_fill_t rule);
 
 /**
- * Set the fill units for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this fill units.
- * @param dsc              pointer to a vector graphic descriptor
- * @param units            the units to be set in lv_vector_fill_units_t format
- * @note The units can be either relative to the object bounding box or absolute in user space.
- *       This API specifically affects the drawing position of the fill image and does not impact other elements.
+ * Установите единицы заполнения для дескриптора.
+ * Новые формы контуров, добавленные `lv_draw_vector_dsc_add_path`, будут использоваться в этих заливах.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param units            единицы измерения должны быть установлены в формате lv_vector_fill_units_t
+ * @note Единицы могут быть либо относительными к ограничивающей рамке объекта, либо абсолютными в пользовательском пространстве.
+ *       Этот API конкретно влияет на положение изображения заливки и не влияет на другие элементы.
  */
 void lv_draw_vector_dsc_set_fill_units(lv_draw_vector_dsc_t * dsc, const lv_vector_fill_units_t units);
 
 /**
- * Set fill image for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this fill image.
- * @param dsc              pointer to a vector graphic descriptor
- * @param img_dsc          pointer to a `lv_draw_image_dsc_t` variable
+ * Установите изображение заливки для дескриптора.
+ * Новые формы контуров, добавленные`lv_draw_vector_dsc_add_path`, будут использовать это изображение заливки.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param img_dsc          указатель на переменную `lv_draw_image_dsc_t`
  */
 void lv_draw_vector_dsc_set_fill_image(lv_draw_vector_dsc_t * dsc, const lv_draw_image_dsc_t * img_dsc);
 
 /**
- * Set fill linear gradient for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this gradient.
- * @param dsc pointer to a vector graphic descriptor
- * @param x1 the x for start point
- * @param y1 the y for start point
- * @param x2 the x for end point
- * @param y2 the y for end point
+ * Установить линейный градиент заливки для дескриптора
+ * Новые формы, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот градиент.
+ * @param dsc указатель на дескриптор векторной графики
+ * @param x1 x для начальной точки
+ * @param y1 y для начальной точки
+ * @param x2 x для конечной точки
+ * @param y2 y для конечной точки
  */
 void lv_draw_vector_dsc_set_fill_linear_gradient(lv_draw_vector_dsc_t * dsc, float x1, float y1, float x2, float y2);
 
 /**
 
- * Set fill radial gradient radius for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this gradient.
- * @param dsc pointer to a vector graphic descriptor
- * @param cx the x for center of the circle
- * @param cy the y for center of the circle
- * @param radius the radius for circle
+ * Установить радиус радиального градиента заливки для дескриптора
+ * Новые формы, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот градиент.
+ * @param dsc указатель на дескриптор векторной графики
+ * @param cx x означает центр круга
+ * @param cy y для центра круга
+ * @param radius радиус круга
  */
 void lv_draw_vector_dsc_set_fill_radial_gradient(lv_draw_vector_dsc_t * dsc, float cx, float cy, float radius);
 
 /**
- * Set fill radial gradient spread for descriptor
- * @param dsc pointer to a vector graphic descriptor
- * @param spread the gradient spread to be set in lv_vector_gradient_spread_t format
+ * Установить распространение радиального градиента заливки для дескриптора
+ * @param dsc указатель на дескриптор векторной графики
+ * @param spread распространение градиента должно быть установлено в формате lv_vector_gradient_spread_t
  */
 void lv_draw_vector_dsc_set_fill_gradient_spread(lv_draw_vector_dsc_t * dsc, lv_vector_gradient_spread_t spread);
 
 /**
- * Set fill gradient color stops for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this gradient color stops.
- * @param dsc              pointer to a vector graphic descriptor
- * @param stops            an array of `lv_grad_stop_t` variables
- * @param count            the number of stops in the array, range: 0..LV_GRADIENT_MAX_STOPS
+ * Установите ограничители цвета градиента заливки для дескриптора.
+ * Новые формы пути, добавленные `lv_draw_vector_dsc_add_path`, будут использовать остановку этого цвета градиента.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param stops            массив переменных `lv_grad_stop_t`
+ * @param count            количество остановок в массиве, диапазон: 0.. LV_GRADIENT_MAX_STOPS
  */
 void lv_draw_vector_dsc_set_fill_gradient_color_stops(lv_draw_vector_dsc_t * dsc, const lv_grad_stop_t * stops,
                                                       uint16_t count);
 
 /**
- * Set a matrix to current fill transformation matrix
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this matrix.
- * @param dsc              pointer to a vector graphic descriptor
- * @param matrix           pointer to a matrix
+ * Установите матрицу для текущей матрицы преобразования заполнения
+ * Новые формы путей, добавленные `lv_draw_vector_dsc_add_path`, будут использовать эту матрицу.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param matrix           указатель на матрицу
  */
 void lv_draw_vector_dsc_set_fill_transform(lv_draw_vector_dsc_t * dsc, const lv_matrix_t * matrix);
 
 /**
- * Set stroke color for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this color.
- * @param dsc              pointer to a vector graphic descriptor
- * @param color            the color to be set in lv_color32_t format
+ * Установите цвет обводки для дескриптора.
+ * Новые формы способов, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот цвет.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param color            цвет, который нужно установить в формате lv_color32_t
  */
 void lv_draw_vector_dsc_set_stroke_color32(lv_draw_vector_dsc_t * dsc, lv_color32_t color);
 
 /**
- * Set stroke color for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this color.
- * @param dsc              pointer to a vector graphic descriptor
- * @param color            the color to be set in lv_color_t format
+ * Установите цвет обводки для дескриптора.
+ * Новые формы способов, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот цвет.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param color            цвет, который нужно установить в формате lv_color_t
  */
 void lv_draw_vector_dsc_set_stroke_color(lv_draw_vector_dsc_t * dsc, lv_color_t color);
 
 /**
- * Set stroke opacity for descriptor
- * @param dsc              pointer to a vector graphic descriptor
- * @param opa              the opacity to be set in lv_opa_t format
+ * Установить непрозрачность обводки для дескриптора
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param opa              непрозрачность должна быть установлена в формате lv_opa_t
  */
 void lv_draw_vector_dsc_set_stroke_opa(lv_draw_vector_dsc_t * dsc, lv_opa_t opa);
 
 /**
- * Set stroke line width for descriptor.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this stroke width.
- * @param dsc              pointer to a vector graphic descriptor
- * @param width            the stroke line width
+ * Установите толщину линии обводки для дескриптора.
+ * Новые формы контуров, добавленные`lv_draw_vector_dsc_add_path`, будут использовать эти дополнительные обводки.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param width            ширина линии штриха
  */
 void lv_draw_vector_dsc_set_stroke_width(lv_draw_vector_dsc_t * dsc, float width);
 
 /**
- * Set stroke line dash pattern for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this dash.
- * @param dsc              pointer to a vector graphic descriptor
- * @param dash_pattern     an array of values that specify the segments of dash line
- * @param dash_count       the length of dash pattern array
+ * Установить образец штриховой линии для дескриптора
+ * Новые формы путей, добавленные `lv_draw_vector_dsc_add_path`, будут использовать эту шину.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param dash_pattern     массив значений, определяющих сегменты пунктирной линии
+ * @param dash_count       длина массива штриховых шаблонов
  */
 void lv_draw_vector_dsc_set_stroke_dash(lv_draw_vector_dsc_t * dsc, float * dash_pattern, uint16_t dash_count);
 
 /**
- * Set stroke line cap style for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this line cap.
- * @param dsc              pointer to a vector graphic descriptor
- * @param cap              the line cap to be set in lv_vector_stroke_cap_t format
+ * Установить стиль окончания линии штриха для дескриптора
+ * Новые формы пути, добавленные `lv_draw_vector_dsc_add_path`, будут использовать эту конечную линию.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param cap              ограничение строки должно быть установлено в формате lv_vector_stroke_cap_t
  */
 void lv_draw_vector_dsc_set_stroke_cap(lv_draw_vector_dsc_t * dsc, lv_vector_stroke_cap_t cap);
 
 /**
- * Set stroke line join style for descriptor
- * @param dsc              pointer to a vector graphic descriptor
- * @param join             the line join to be set in lv_vector_stroke_join_t format
+ * Установить стиль соединения линий штриха для дескриптора
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param join             соединение линий должно быть установлено в формате lv_vector_stroke_join_t
  */
 void lv_draw_vector_dsc_set_stroke_join(lv_draw_vector_dsc_t * dsc, lv_vector_stroke_join_t join);
 
 /**
- * Set stroke miter limit for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this miter limit.
- * @param dsc              pointer to a vector graphic descriptor
- * @param miter_limit      the stroke miter_limit
+ * Установить предел угла хода для дескриптора
+ * Новые формы траекторий, добавленные`lv_draw_vector_dsc_add_path`, будут использовать этот предел среза.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param miter_limit      инсульт miter_limit
  */
 void lv_draw_vector_dsc_set_stroke_miter_limit(lv_draw_vector_dsc_t * dsc, uint16_t miter_limit);
 
 /**
- * Set stroke linear gradient for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this gradient.
- * @param dsc              pointer to a vector graphic descriptor
- * @param x1               the x for start point
- * @param y1               the y for start point
- * @param x2               the x for end point
- * @param y2               the y for end point
+ * Установить линейный градиент штриха для дескриптора
+ * Новые формы, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот градиент.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param x1               x для начальной точки
+ * @param y1               y для начальной точки
+ * @param x2               x для конечной точки
+ * @param y2               y для конечной точки
  */
 void lv_draw_vector_dsc_set_stroke_linear_gradient(lv_draw_vector_dsc_t * dsc, float x1, float y1, float x2, float y2);
 /**
- * Set stroke radial gradient for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this gradient.
- * @param dsc              pointer to a vector graphic descriptor
- * @param cx               the x for center of the circle
- * @param cy               the y for center of the circle
- * @param radius           the radius for circle
+ * Установить радиальный градиент обводки для дескриптора
+ * Новые формы, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот градиент.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param cx               x означает центр круга
+ * @param cy               y для центра круга
+ * @param radius           радиус круга
  */
 void lv_draw_vector_dsc_set_stroke_radial_gradient(lv_draw_vector_dsc_t * dsc, float cx, float cy, float radius);
 
 /**
- * Set stroke color stops for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this gradient spread.
- * @param dsc              pointer to a vector graphic descriptor
- * @param spread           the gradient spread to be set in lv_vector_gradient_spread_t format
+ * Установить ограничители цвета обводки для дескриптора
+ * Новые формы, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот градиент.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param spread           распространение градиента должно быть установлено в формате lv_vector_gradient_spread_t
  */
 void lv_draw_vector_dsc_set_stroke_gradient_spread(lv_draw_vector_dsc_t * dsc, lv_vector_gradient_spread_t spread);
 
 /**
- * Set stroke color stops for descriptor
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this color stops.
- * @param dsc              pointer to a vector graphic descriptor
- * @param stops            an array of `lv_grad_stop_t` variables
- * @param count            the number of stops in the array
+ * Установить ограничители цвета обводки для дескриптора
+ * Новые формы пути, добавленные `lv_draw_vector_dsc_add_path`, будут использовать остановку этого цвета.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param stops            массив переменных `lv_grad_stop_t`
+ * @param count            количество остановок в массиве
  */
 void lv_draw_vector_dsc_set_stroke_gradient_color_stops(lv_draw_vector_dsc_t * dsc, const lv_grad_stop_t * stops,
                                                         uint16_t count);
 
 /**
- * Set a matrix to current stroke transformation matrix.
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this matrix.
- * @param dsc              pointer to a vector graphic descriptor
- * @param matrix           pointer to a matrix
+ * Установите матрицу в качестве текущей матрицы преобразования штрихов.
+ * Новые формы путей, добавленные `lv_draw_vector_dsc_add_path`, будут использовать эту матрицу.
+ * @param dsc              указатель на дескриптор векторной графики
+ * @param matrix           указатель на матрицу
  */
 void lv_draw_vector_dsc_set_stroke_transform(lv_draw_vector_dsc_t * dsc, const lv_matrix_t * matrix);
 
 /**
- * Set current transformation matrix to identity matrix
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this matrix.
- * @param dsc           pointer to a vector graphic descriptor
+ * Установите текущую матрицу преобразования в единичную матрицу
+ * Новые формы путей, добавленные `lv_draw_vector_dsc_add_path`, будут использовать эту матрицу.
+ * @param dsc           указатель на дескриптор векторной графики
  */
 void lv_draw_vector_dsc_identity(lv_draw_vector_dsc_t * dsc);
 
 /**
- * Change the scale factor of current transformation matrix
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this scale.
- * @param dsc           pointer to a vector graphic descriptor
- * @param scale_x       the scale factor for the X direction
- * @param scale_y       the scale factor for the Y direction
+ * Измените масштабный коэффициент текущей матрицы преобразования
+ * Новые формы, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот масштаб.
+ * @param dsc           указатель на дескриптор векторной графики
+ * @param scale_x       масштабный коэффициент для направления X
+ * @param scale_y       масштабный коэффициент для направления Y
  */
 void lv_draw_vector_dsc_scale(lv_draw_vector_dsc_t * dsc, float scale_x, float scale_y);
 
 /**
- * Rotate current transformation matrix with origin
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this rotation.
- * @param dsc           pointer to a vector graphic descriptor
- * @param degree        angle to rotate
+ * Поворот текущей матрицы преобразования с началом координат
+ * Новые формы пути, добавленные `lv_draw_vector_dsc_add_path`, будут использоваться в обращении.
+ * @param dsc           указатель на дескриптор векторной графики
+ * @param degree        угол для поворота
  */
 void lv_draw_vector_dsc_rotate(lv_draw_vector_dsc_t * dsc, float degree);
 
 /**
- * Translate current transformation matrix to new position
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this rotation.
- * @param dsc           pointer to a vector graphic descriptor
- * @param tx            the amount of translate in x direction
- * @param ty            the amount of translate in y direction
+ * Перевести текущую матрицу преобразования в новую позицию
+ * Новые формы пути, добавленные `lv_draw_vector_dsc_add_path`, будут использоваться в обращении.
+ * @param dsc           указатель на дескриптор векторной графики
+ * @param tx            величина перевода в направлении x
+ * @param ty            сумма перевода в направлении Y
  */
 void lv_draw_vector_dsc_translate(lv_draw_vector_dsc_t * dsc, float tx, float ty);
 
 /**
- * Change the skew factor of current transformation matrix
- * The new path shapes added by `lv_draw_vector_dsc_add_path` will use this skew.
- * @param dsc           pointer to a vector graphic descriptor
- * @param skew_x        the skew factor for x direction
- * @param skew_y        the skew factor for y direction
+ * Измените коэффициент перекоса текущей матрицы преобразования
+ * Новые формы пути, добавленные `lv_draw_vector_dsc_add_path`, будут использовать этот наклон.
+ * @param dsc           указатель на дескриптор векторной графики
+ * @param skew_x        коэффициент перекоса для направления x
+ * @param skew_y        коэффициент перекоса для направления y
  */
 void lv_draw_vector_dsc_skew(lv_draw_vector_dsc_t * dsc, float skew_x, float skew_y);
 
 /**
- * Add a graphic path to the draw list.
- * It will use colors, opacity, matrix and other parameters set
- * by `lv_draw_vector_dsc_set_fill_color()` and similar functions.
- * @param dsc           pointer to a vector graphic descriptor
- * @param path          pointer to a path
+ * Добавьте графический путь в список прорисовки.
+ * Он будет использовать цвета, непрозрачность, матрицу и другие установленные параметры.
+ * с помощью`lv_draw_vector_dsc_set_fill_color()`и других функций.
+ * @param dsc           указатель на дескриптор векторной графики
+ * @param path          указатель на путь
  */
 void lv_draw_vector_dsc_add_path(lv_draw_vector_dsc_t * dsc, const lv_vector_path_t * path);
 
 /**
- * Clear a rectangle area use current fill color
- * @param dsc           pointer to a vector graphic descriptor
- * @param rect          the area to clear in the buffer
+ * Очистить область прямоугольника, используя текущий цвет заливки
+ * @param dsc           указатель на дескриптор векторной графики
+ * @param rect          область, которую нужно очистить в буфере
  */
 void lv_draw_vector_dsc_clear_area(lv_draw_vector_dsc_t * dsc, const lv_area_t * rect);
 
 /**
- * Draw all the vector graphic paths
- * @param dsc           pointer to a vector graphic descriptor
+ * Нарисуйте все векторные графические пути
+ * @param dsc           указатель на дескриптор векторной графики
  */
 void lv_draw_vector(lv_draw_vector_dsc_t * dsc);
 
 /**
- * Try to get a vector draw descriptor from a draw task.
- * @param task      draw task
- * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_VECTOR
+ * Попробуйте получить дескриптор векторной отрисовки из задачи рисования.
+ * @param task      нарисовать задачу
+ * @return          дескриптор отрисовки задачи или NULL, если задача не относится к типу LV_DRAW_TASK_TYPE_VECTOR
  */
 lv_draw_vector_dsc_t * lv_draw_task_get_vector_dsc(lv_draw_task_t * task);
 
-/* Traverser for task list */
+/* Траверсер для списка задач */
 typedef void (*vector_draw_task_cb)(void * ctx, const lv_vector_path_t * path, const lv_vector_path_ctx_t * dsc);
 
 #endif /* LV_USE_VECTOR_GRAPHIC */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_DRAW_VECTOR_H */

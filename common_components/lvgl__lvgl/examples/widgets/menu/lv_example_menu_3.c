@@ -3,12 +3,12 @@
 
 void lv_example_menu_3(void)
 {
-    /*Create a menu object*/
+    /*Создать объект меню*/
     lv_obj_t * menu = lv_menu_create(lv_screen_active());
     lv_obj_set_size(menu, lv_display_get_horizontal_resolution(NULL), lv_display_get_vertical_resolution(NULL));
     lv_obj_center(menu);
 
-    /*Modify the header*/
+    /*Изменить заголовок*/
     lv_obj_t * back_btn = lv_menu_get_main_header_back_button(menu);
     lv_obj_t * back_button_label = lv_label_create(back_btn);
     lv_label_set_text(back_button_label, "Back");
@@ -16,7 +16,7 @@ void lv_example_menu_3(void)
     lv_obj_t * cont;
     lv_obj_t * label;
 
-    /*Create sub pages*/
+    /*Создание подстраниц*/
     lv_obj_t * sub_1_page = lv_menu_page_create(menu, "Page 1");
 
     cont = lv_menu_cont_create(sub_1_page);
@@ -35,7 +35,7 @@ void lv_example_menu_3(void)
     label = lv_label_create(cont);
     lv_label_set_text(label, "Hello, I am hiding here");
 
-    /*Create a main page*/
+    /*Создать главную страницу*/
     lv_obj_t * main_page = lv_menu_page_create(menu, NULL);
 
     cont = lv_menu_cont_create(main_page);

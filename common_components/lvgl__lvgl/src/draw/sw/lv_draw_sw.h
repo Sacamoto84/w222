@@ -40,18 +40,18 @@ extern "C" {
  **********************/
 
 /**
- * Initialize the SW renderer. Called in internally.
- * It creates as many SW renderers as defined in LV_DRAW_SW_DRAW_UNIT_CNT
+ * Инициализируйте рендерер SW. Позвонил внутрь.
+ * Он создает столько рендереров SW, сколько определено в LV_DRAW_SW_DRAW_UNIT_CNT.
  */
 void lv_draw_sw_init(void);
 
 /**
- * Deinitialize the SW renderers
+ * Деинициализируйте средства рендеринга SW.
  */
 void lv_draw_sw_deinit(void);
 
 /**
- * Fill an area using SW render. Handle gradient and radius.
+ * Заполните область, используя рендер SW. Обработка градиента и радиуса.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the coordinates of the rectangle
@@ -59,7 +59,7 @@ void lv_draw_sw_deinit(void);
 void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw border with SW render.
+ * Нарисуйте границу с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the coordinates of the rectangle
@@ -67,7 +67,7 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
 void lv_draw_sw_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw box shadow with SW render.
+ * Нарисуйте тень блока с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the coordinates of the rectangle for which the box shadow should be drawn
@@ -75,7 +75,7 @@ void lv_draw_sw_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc, con
 void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw an image with SW render. It handles image decoding, tiling, transformations, and recoloring.
+ * Нарисуйте изображение с помощью рендеринга SW. Он обрабатывает декодирование изображений, мозаику, преобразования и перекрашивание.
  * @param t             pointer to a draw task
  * @param draw_dsc      the draw descriptor
  * @param coords        the coordinates of the image
@@ -86,7 +86,7 @@ void lv_draw_sw_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc,
 void lv_draw_sw_letter(lv_draw_task_t * t, const lv_draw_letter_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw a label with SW render.
+ * Нарисуйте метку с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the coordinates of the label
@@ -94,7 +94,7 @@ void lv_draw_sw_letter(lv_draw_task_t * t, const lv_draw_letter_dsc_t * dsc, con
 void lv_draw_sw_label(lv_draw_task_t * t, const lv_draw_label_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw an arc with SW render.
+ * Нарисуйте дугу с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the coordinates of the arc
@@ -102,14 +102,14 @@ void lv_draw_sw_label(lv_draw_task_t * t, const lv_draw_label_dsc_t * dsc, const
 void lv_draw_sw_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Draw a line with SW render.
+ * Нарисуйте линию с помощью рендера SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  */
 void lv_draw_sw_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc);
 
 /**
- * Blend a layer with SW render
+ * Смешайте слой с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param draw_dsc      the draw descriptor
  * @param coords        the coordinates of the layer
@@ -117,7 +117,7 @@ void lv_draw_sw_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc);
 void lv_draw_sw_layer(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc, const lv_area_t * coords);
 
 /**
- * Draw a triangle with SW render.
+ * Нарисуйте треугольник с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  */
@@ -125,7 +125,7 @@ void lv_draw_sw_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc)
 
 
 /**
- * Blur an area with SW render
+ * Размытие области с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the area to blur
@@ -133,7 +133,7 @@ void lv_draw_sw_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc)
 void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Mask out a rectangle with radius from a current layer
+ * Замаскируйте прямоугольник радиусом текущего слоя.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  * @param coords        the coordinates of the mask
@@ -141,7 +141,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 void lv_draw_sw_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t * dsc);
 
 /**
- * Used internally to get a transformed are of an image
+ * Используется внутренне для получения преобразованного изображения.
  * @param dest_area     area to calculate, i.e. get this area from the transformed image
  * @param src_buf       source buffer
  * @param src_w         source buffer width in pixels
@@ -158,7 +158,7 @@ void lv_draw_sw_transform(const lv_area_t * dest_area, const void * src_buf,
 
 #if LV_USE_VECTOR_GRAPHIC && LV_USE_THORVG
 /**
- * Draw vector graphics with SW render.
+ * Рисуйте векторную графику с помощью рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           the draw descriptor
  */
@@ -166,11 +166,11 @@ void lv_draw_sw_vector(lv_draw_task_t * t, lv_draw_vector_dsc_t * dsc);
 #endif
 
 /**
- * Register a custom blend handler for a color format.
- * Handler will be called when blending a color or an
- * image to a buffer with the given color format.
- * At most one handler can be registered for a color format.
- * Subsequent registrations will overwrite the previous handler.
+ * Зарегистрируйте собственный обработчик смешивания для цветового формата.
+ * Обработчик будет вызываться при смешивании цвета или
+ * изображение в буфер с заданным цветовым форматом.
+ * Для цветового формата можно зарегистрировать не более одного обработчика.
+ * Последующие регистрации перезапишут предыдущий обработчик.
  *
  * @param handler pointer to a blend handler
  * @return true if the handler was registered, false if the handler could not be registered
@@ -178,14 +178,14 @@ void lv_draw_sw_vector(lv_draw_task_t * t, lv_draw_vector_dsc_t * dsc);
 bool lv_draw_sw_register_blend_handler(lv_draw_sw_custom_blend_handler_t * handler);
 
 /**
- * Unregister a custom blend handler for a color format.
+ * Отмените регистрацию пользовательского обработчика смешивания для цветового формата.
  * @param dest_cf color format
  * @return true if a handler was unregistered, false if no handler was registered
  */
 bool lv_draw_sw_unregister_blend_handler(lv_color_format_t dest_cf);
 
 /**
- * Get the blend handler for a color format.
+ * Получите обработчик смешивания для цветового формата.
  * @param dest_cf color format
  * @return pointer to the blend handler or NULL if no handler is registered
  */
@@ -202,7 +202,7 @@ lv_draw_sw_blend_handler_t lv_draw_sw_get_blend_handler(lv_color_format_t dest_c
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_H*/

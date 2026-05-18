@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -31,7 +31,7 @@
 #include "tvgText.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 #define PAINT_METHOD(ret, METHOD) \
@@ -46,7 +46,7 @@
 
 static Result _clipRect(RenderMethod* renderer, const Point* pts, const Matrix& pm, const Matrix& rm, RenderRegion& before)
 {
-    //sorting
+    //сортировка
     Point tmp[4];
     Point min = {FLT_MAX, FLT_MAX};
     Point max = {0.0f, 0.0f};
@@ -63,11 +63,11 @@ static Result _clipRect(RenderMethod* renderer, const Point* pts, const Matrix& 
 
     float region[4] = {float(before.x), float(before.x + before.w), float(before.y), float(before.y + before.h)};
 
-    //figure out if the clipper is a superset of the current viewport(before) region
+    //выяснить, является ли клиппер надмножеством текущей области просмотра (до)
     if (min.x <= region[0] && max.x >= region[1] && min.y <= region[2] && max.y >= region[3]) {
-        //viewport region is same, nothing to do.
+        //Область просмотра та же, делать нечего.
         return Result::Success;
-    //figure out if the clipper is totally outside of the viewport
+    //выяснить, находится ли клипер полностью за пределами области просмотра
     } else if (max.x <= region[0] || min.x >= region[1] || max.y <= region[2] || min.y >= region[3]) {
         renderer->viewport({0, 0, 0, 0});
         return Result::Success;
@@ -78,20 +78,20 @@ static Result _clipRect(RenderMethod* renderer, const Point* pts, const Matrix& 
 
 static Result _compFastTrack(RenderMethod* renderer, Paint* cmpTarget, const Matrix& pm, RenderRegion& before)
 {
-    /* Access Shape class by Paint is bad... but it's ok still it's an internal usage. */
+    /* Доступ к классу Shape с помощью Paint плох... но все в порядке, но это внутреннее использование. */
     auto shape = static_cast<Shape*>(cmpTarget);
 
     //Rectangle Candidates?
     const Point* pts;
     auto ptsCnt = shape->pathCoords(&pts);
 
-    //nothing to clip
+    //нечего обрезать
     if (ptsCnt == 0) return Result::InvalidArguments;
     if (ptsCnt != 4) return Result::InsufficientCondition;
 
     auto& rm = P(cmpTarget)->transform();
 
-    //No rotation and no skewing, still can try out clipping the rect region.
+    //Никакого вращения и наклона, все же можно попробовать обрезать прямоугольную область.
     auto tryClip = false;
 
     if ((!rightAngle(pm) || skewed(pm))) tryClip = true;
@@ -117,7 +117,7 @@ static Result _compFastTrack(RenderMethod* renderer, Paint* cmpTarget, const Mat
         v1 *= pm;
         v2 *= pm;
 
-        //sorting
+        //сортировка
         if (v1.x > v2.x) std::swap(v1.x, v2.x);
         if (v1.y > v2.y) std::swap(v1.y, v2.y);
 
@@ -160,7 +160,7 @@ Paint* Paint::Impl::duplicate(Paint* ret)
 
     PAINT_METHOD(ret, duplicate(ret));
 
-    //duplicate Transform
+    //дублировать преобразование
     ret->pImpl->tr = tr;
     ret->pImpl->renderFlag |= RenderUpdateFlag::Transform;
 
@@ -247,22 +247,22 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
     if (renderFlag & RenderUpdateFlag::Transform) tr.update();
 
     /* 1. Composition Pre Processing */
-    RenderData trd = nullptr;                 //composite target render data
+    RenderData trd = nullptr;                 //данные рендеринга составной цели
     RenderRegion viewport;
     Result compFastTrack = Result::InsufficientCondition;
 
     if (compData) {
         auto target = compData->target;
         auto method = compData->method;
-        P(target)->ctxFlag &= ~ContextFlag::FastTrack;   //reset
+        P(target)->ctxFlag &= ~ContextFlag::FastTrack;   //сброс
 
-        /* If the transformation has no rotational factors and the Alpha(InvAlpha)Masking involves a simple rectangle,
-           we can optimize by using the viewport instead of the regular AlphaMasking sequence for improved performance. */
+        /* Если преобразование не имеет коэффициентов вращения и маска Alpha(InvAlpha) включает простой прямоугольник,
+           мы можем оптимизировать, используя область просмотра вместо обычной последовательности AlphaMasking для повышения производительности. */
         if (target->type() == Type::Shape) {
             auto shape = static_cast<Shape*>(target);
             uint8_t a;
             shape->fillColor(nullptr, nullptr, nullptr, &a);
-            //no gradient fill & no compositions of the composition target.
+            //без градиентной заливки и без композиций целевой композиции.
             if (!shape->fill() && !(PP(shape)->compData)) {
                 if ((method == CompositeMethod::AlphaMask && a == 255 && PP(shape)->opacity == 255) || (method == CompositeMethod::InvAlphaMask && (a == 0 || PP(shape)->opacity == 0))) {
                     viewport = renderer->viewport();
@@ -279,10 +279,10 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
 
     /* 2. Clipping */
     if (this->clipper) {
-        P(this->clipper)->ctxFlag &= ~ContextFlag::FastTrack;   //reset
+        P(this->clipper)->ctxFlag &= ~ContextFlag::FastTrack;   //сброс
         viewport = renderer->viewport();
         /* TODO: Intersect the clipper's clipper, if both are FastTrack.
-           Update the subsequent clipper first and check its ctxFlag. */
+           Сначала обновите следующий клиппер и проверьте его ctxFlag. */
         if (!P(this->clipper)->clipper && (compFastTrack = _compFastTrack(renderer, this->clipper, pm, viewport)) == Result::Success) {
             P(this->clipper)->ctxFlag |= ContextFlag::FastTrack;
         }
@@ -329,16 +329,16 @@ bool Paint::Impl::bounds(float* x, float* y, float* w, float* h, bool transforme
 
     PAINT_METHOD(ret, bounds(&tx, &ty, &tw, &th, stroking));
 
-    //Get vertices
+    //Получить вершины
     Point pt[4] = {{tx, ty}, {tx + tw, ty}, {tx + tw, ty + th}, {tx, ty + th}};
 
-    //New bounding box
+    //Новая ограничивающая рамка
     auto x1 = FLT_MAX;
     auto y1 = FLT_MAX;
     auto x2 = -FLT_MAX;
     auto y2 = -FLT_MAX;
 
-    //Compute the AABB after transformation
+    //Вычислите AABB после преобразования
     for (int i = 0; i < 4; i++) {
         pt[i] *= m;
 
@@ -384,7 +384,7 @@ void Paint::Impl::reset()
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 Paint :: Paint() : pImpl(new Impl(this))

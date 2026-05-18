@@ -16,7 +16,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include <sys/param.h> /*To detect BSD*/
+#include <sys/param.h> /*Чтобы обнаружить BSD*/
 #ifdef BSD
     #include <dev/evdev/input.h>
 #else
@@ -51,29 +51,29 @@
  **********************/
 
 typedef struct {
-    /*Device*/
+    /*Устройство*/
     int fd;
     dev_t st_dev;
     ino_t st_ino;
     lv_evdev_type_t type;
-    /*Config*/
+    /*Конфигурация*/
     bool swap_axes;
     int min_x;
     int min_y;
     int max_x;
     int max_y;
-    /*State*/
+    /*Государство*/
     int root_x;
     int root_y;
     int key;
     lv_indev_state_t state;
     bool deleting;
-    /* Multi-touch support */
+    /* Поддержка мультитач */
 #if LV_USE_GESTURE_RECOGNITION
-    lv_indev_touch_data_t touch_data[MAX_TOUCH_POINTS]; /* Array of touch points for gesture recognition */
-    uint8_t touch_count; /* Number of valid touch points */
-    uint8_t current_slot; /* Current touch point slot */
-    bool touch_data_changed; /* Flag to indicate if touch data has changed since last SYN_REPORT */
+    lv_indev_touch_data_t touch_data[MAX_TOUCH_POINTS]; /* Массив точек касания для распознавания жестов */
+    uint8_t touch_count; /* Количество действительных точек касания */
+    uint8_t current_slot; /* Текущий слот точки взаимодействия */
+    bool touch_data_changed; /* Флаг, указывающий, изменились ли данные касания с момента последнего SYN_REPORT. */
 #endif
 } lv_evdev_t;
 
@@ -161,7 +161,7 @@ static void _evdev_read(lv_indev_t * indev, lv_indev_data_t * data)
     lv_evdev_t * dsc = lv_indev_get_driver_data(indev);
     LV_ASSERT_NULL(dsc);
 
-    /*Update dsc with buffered events*/
+    /*Обновить dsc с помощью буферизованных событий*/
     struct input_event in = { 0 };
     ssize_t br;
     while((br = read(dsc->fd, &in, sizeof(in))) > 0) {
@@ -244,14 +244,14 @@ static void _evdev_read(lv_indev_t * indev, lv_indev_data_t * data)
                 dsc->key = _evdev_process_key(in.code);
                 if(dsc->key) {
                     dsc->state = in.value ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
-                    data->continue_reading = true; /*Keep following events in buffer for now*/
+                    data->continue_reading = true; /*Пока держите следующие события в буфере*/
                     break;
                 }
             }
         }
 #if LV_USE_GESTURE_RECOGNITION
         else if(in.type == EV_SYN && in.code == SYN_REPORT) {
-            /* Handle gesture recognition at sync event */
+            /* Обработка распознавания жестов при событии синхронизации */
             if(dsc->touch_count > 0 && dsc->touch_data_changed) {
                 LV_LOG_TRACE("=== SYN_REPORT: touch_count=%d ===", dsc->touch_count);
                 for(int i = 0; i < MAX_TOUCH_POINTS; i++) {
@@ -263,7 +263,7 @@ static void _evdev_read(lv_indev_t * indev, lv_indev_data_t * data)
                     }
                 }
 
-                /* Create a temporary array with calibrated coordinates for gesture recognition */
+                /* Создайте временный массив с калиброванными координатами для распознавания жестов. */
                 lv_indev_touch_data_t calibrated_touch_data[MAX_TOUCH_POINTS];
 
                 int active_touches = 0;
@@ -288,15 +288,15 @@ static void _evdev_read(lv_indev_t * indev, lv_indev_data_t * data)
                 lv_indev_gesture_recognizers_update(indev, calibrated_touch_data, active_touches);
                 lv_indev_gesture_recognizers_set_data(indev, data);
 
-                /* Clear RELEASED touch points after gesture recognition to prevent duplicate processing */
+                /* Очистите точки касания RELEASED после распознавания жестов, чтобы предотвратить дублирующую обработку. */
                 for(int i = 0; i < MAX_TOUCH_POINTS; i++) {
                     if(dsc->touch_data[i].state == LV_INDEV_STATE_RELEASED) {
-                        /* Mark touch point as invalid by zeroing out the data */
+                        /* Пометить точку касания как недействительную, обнулив данные */
                         dsc->touch_data[i].point.x = 0;
                         dsc->touch_data[i].point.y = 0;
-                        dsc->touch_data[i].id = -1; /* Mark as invalid */
+                        dsc->touch_data[i].id = -1; /* Отметить как недействительный */
                         /* Note: We keep the RELEASED state for this frame, it will be naturally
-                         * cleared when new touch events come in or when all touches end */
+                         * очищается, когда приходят новые события касания или когда все касания заканчиваются */
                         LV_LOG_TRACE("Cleared released touch point slot %d", i);
                     }
                 }
@@ -318,7 +318,7 @@ static void _evdev_read(lv_indev_t * indev, lv_indev_data_t * data)
         dsc->deleting = true;
     }
 
-    /*Process and store in data*/
+    /*Обрабатывать и хранить в данных*/
     switch(lv_indev_get_type(indev)) {
         case LV_INDEV_TYPE_KEYPAD:
             data->state = dsc->state;
@@ -369,20 +369,20 @@ static void _evdev_discovery_indev_try_create(const char * file_name)
 
     lv_evdev_t * dsc = lv_indev_get_driver_data(indev);
 
-    /* Compare this new evdev's unique identity with the already registered ones.
-     * If a match is found, it means the user has already added it and a duplicate
-     * should not be added automatically -- although it is valid for `lv_evdev_create`
-     * to be explicitly called with the same path by the user -- or an edge case
-     * has occurred where discoverey has just been started and a new device was
-     * connected between the creation of the inotify watcher and the initial full
-     * scan of the directory with `readdir`.
+    /* Сравните уникальные идентификаторы нового evdev с уже зарегистрированными.
+     * Если совпадение найдено, это означает, что пользователь уже добавил его и дубликат.
+     * не следует добавлять автоматически, хотя это справедливо для `lv_evdev_create`
+     * быть явно вызван пользователем по тому же пути - или в крайнем случае
+     * произошло, когда Discovery только что был запущен и было установлено новое устройство.
+     * связано между созданием наблюдателя inotify и первоначальным полным
+     * сканирование каталога с помощью `readdir`.
      */
     lv_indev_t * ex_indev = NULL;
     while(NULL != (ex_indev = lv_indev_get_next(ex_indev))) {
         if(ex_indev == indev || lv_indev_get_read_cb(ex_indev) != _evdev_read) continue;
         lv_evdev_t * ex_dsc = lv_indev_get_driver_data(ex_indev);
         if(!ex_dsc->deleting && dsc->st_dev == ex_dsc->st_dev && dsc->st_ino == ex_dsc->st_ino) {
-            /* an indev for this exact device instance already exists */
+            /* индев для этого конкретного экземпляра устройства уже существует */
             lv_indev_delete(indev);
             return;
         }
@@ -414,10 +414,10 @@ static bool _evdev_discovery_inotify_try_init_watcher(int inotify_fd)
     }
     while(1) {
         struct dirent * dirent = readdir(dir);
-        if(dirent == NULL) break; /* only possible error is EBADF, so no errno check needed */
+        if(dirent == NULL) break; /* единственная возможная ошибка — EBADF, поэтому проверка ошибок не требуется. */
         _evdev_discovery_indev_try_create(dirent->d_name);
         if(evdev_discovery == NULL) {
-            /* was stopped by the callback. cleanup was already done */
+            /* был остановлен обратным вызовом. очистка уже завершена */
             closedir(dir);
             return false;
         }
@@ -450,16 +450,16 @@ static void _evdev_discovery_timer_cb(lv_timer_t * tim)
             in_data_buf_p += sizeof(struct inotify_event) + in_ev_p->len) {
             in_ev_p = (struct inotify_event *)in_data_buf_p;
             if(in_ev_p->mask & IN_IGNORED) {
-                /* /dev/input/ was deleted because the last device was removed.
-                 * The watch was removed implicitly. It will try to be
-                 * recreated the next time the timer runs.
+                /* /dev/input/ был удален, поскольку было удалено последнее устройство.
+                 * Часы были сняты безоговорочно. Он попытается быть
+                 * воссоздается при следующем запуске таймера.
                  */
                 ed->inotify_watch_active = false;
                 return;
             }
             if(!(in_ev_p->mask & IN_ISDIR) && in_ev_p->len) {
                 _evdev_discovery_indev_try_create(in_ev_p->name);
-                if(evdev_discovery == NULL) return; /* was stopped by the callback */
+                if(evdev_discovery == NULL) return; /* был остановлен обратным вызовом */
             }
         }
     }
@@ -493,7 +493,7 @@ lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd)
     if(indev_type == LV_INDEV_TYPE_NONE) {
         uint32_t rel_bits = 0;
         if(ioctl(dsc->fd, EVIOCGBIT(EV_REL, sizeof(rel_bits)), &rel_bits) >= 0) {
-            /* if this device can emit relative X and Y events, it shall be a pointer indev */
+            /* если это устройство может генерировать относительные события X и Y, это должен быть указатель indev */
             if((rel_bits & REL_XY_MASK) == REL_XY_MASK) {
                 indev_type = LV_INDEV_TYPE_POINTER;
                 dsc->type = LV_EVDEV_TYPE_REL;
@@ -507,7 +507,7 @@ lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd)
     if(indev_type == LV_INDEV_TYPE_NONE) {
         uint32_t abs_bits = 0;
         if(ioctl(dsc->fd, EVIOCGBIT(EV_ABS, sizeof(abs_bits)), &abs_bits) >= 0) {
-            /* if this device can emit absolute X and Y events, it shall be a pointer indev */
+            /* если это устройство может генерировать абсолютные события X и Y, это должен быть указатель indev */
             if((abs_bits & ABS_XY_MASK) == ABS_XY_MASK) {
                 indev_type = LV_INDEV_TYPE_POINTER;
                 dsc->type = LV_EVDEV_TYPE_ABS;
@@ -521,7 +521,7 @@ lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd)
     if(indev_type == LV_INDEV_TYPE_NONE) {
         uint32_t key_bits[KEY_MAX / 32 + 1] = {0};
         if(ioctl(dsc->fd, EVIOCGBIT(EV_KEY, sizeof(key_bits)), key_bits) >= 0) {
-            /* if this device can emit any key events, it shall be a keypad indev */
+            /* если это устройство может генерировать какие-либо ключевые события, оно должно быть устройством клавиатуры. */
             for(int32_t i = 0; i < (int32_t)(sizeof(key_bits) / sizeof(uint32_t)); i++) {
                 if(key_bits[i]) {
                     indev_type = LV_INDEV_TYPE_KEYPAD;
@@ -544,7 +544,7 @@ lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd)
         goto err_after_malloc;
     }
 
-    /* Detect the minimum and maximum values of the input device for calibration. */
+    /* Определите минимальные и максимальные значения устройства ввода для калибровки. */
 
     if(indev_type == LV_INDEV_TYPE_POINTER) {
         struct input_absinfo absinfo;
@@ -614,7 +614,7 @@ lv_result_t lv_evdev_discovery_start(lv_evdev_discovery_cb_t cb, void * user_dat
     ed->inotify_fd = inotify_fd;
 
     ed->inotify_watch_active = _evdev_discovery_inotify_try_init_watcher(inotify_fd);
-    if(evdev_discovery == NULL) return LV_RESULT_OK; /* was stopped by the callback. cleanup was already done */
+    if(evdev_discovery == NULL) return LV_RESULT_OK; /* был остановлен обратным вызовом. очистка уже завершена */
 
     timer = lv_timer_create(_evdev_discovery_timer_cb, LV_DEF_REFR_PERIOD, NULL);
     if(timer == NULL) goto err_out;

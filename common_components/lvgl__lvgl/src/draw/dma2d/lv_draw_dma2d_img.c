@@ -111,7 +111,7 @@ static void lv_draw_dma2d_opaque_image_core(lv_draw_task_t * t, const lv_draw_im
     lv_draw_dma2d_unit_t * u = (lv_draw_dma2d_unit_t *) t->draw_unit;
     lv_memcpy(&u->writing_area, &dest_area, sizeof(lv_draw_dma2d_cache_area_t));
     if(lv_color_format_has_alpha(image_cf)) {
-        /* make sure the background area DMA2D is blending is up-to-date in main memory */
+        /* убедитесь, что область фона, которую смешивает DMA2D, актуальна в основной памяти */
         lv_draw_dma2d_clean_cache(&dest_area);
     }
 #endif
@@ -127,7 +127,7 @@ static void lv_draw_dma2d_opaque_image_core(lv_draw_task_t * t, const lv_draw_im
         .height = h,
         .stride = image_stride
     };
-    /* make sure the image area is up-to-date in main memory for DMA2D */
+    /* убедитесь, что область изображения в основной памяти обновлена для DMA2D */
     lv_draw_dma2d_clean_cache(&src_area);
 #endif
 
@@ -146,7 +146,7 @@ static void lv_draw_dma2d_opaque_image_core(lv_draw_task_t * t, const lv_draw_im
         .fg_cf = image_cf_dma2d
     };
 
-    /* only process the background if the image might be transparent */
+    /* обрабатывать фон только в том случае, если изображение может быть прозрачным */
     if(lv_color_format_has_alpha(image_cf)) {
         conf.mode = LV_DRAW_DMA2D_MODE_MEMORY_TO_MEMORY_WITH_BLENDING;
 
@@ -155,7 +155,7 @@ static void lv_draw_dma2d_opaque_image_core(lv_draw_task_t * t, const lv_draw_im
         conf.bg_cf = output_cf_dma2d;
     }
 
-    /* Alpha channel should be treated as 0xFF if the cf is XRGB */
+    /* Альфа-канал следует рассматривать как 0xFF, если cf равен XRGB. */
     if(image_cf == LV_COLOR_FORMAT_XRGB8888) {
         conf.fg_alpha_mode = LV_DRAW_DMA2D_ALPHA_MODE_REPLACE_ALPHA_CHANNEL;
         conf.fg_alpha = 0xff;
@@ -207,7 +207,7 @@ static void lv_draw_dma2d_image_core(lv_draw_task_t * t, const lv_draw_image_dsc
     };
     lv_draw_dma2d_unit_t * u = (lv_draw_dma2d_unit_t *) t->draw_unit;
     lv_memcpy(&u->writing_area, &dest_area, sizeof(lv_draw_dma2d_cache_area_t));
-    /* make sure the background area DMA2D is blending is up-to-date in main memory */
+    /* убедитесь, что область фона, которую смешивает DMA2D, актуальна в основной памяти */
     lv_draw_dma2d_clean_cache(&dest_area);
 #endif
 
@@ -222,7 +222,7 @@ static void lv_draw_dma2d_image_core(lv_draw_task_t * t, const lv_draw_image_dsc
         .height = h,
         .stride = image_stride
     };
-    /* make sure the image area is up-to-date in main memory for DMA2D */
+    /* убедитесь, что область изображения в основной памяти обновлена для DMA2D */
     lv_draw_dma2d_clean_cache(&src_area);
 #endif
 
@@ -247,7 +247,7 @@ static void lv_draw_dma2d_image_core(lv_draw_task_t * t, const lv_draw_image_dsc
         .bg_cf = output_cf_dma2d,
     };
 
-    /* Alpha channel should be treated as 0xFF if the cf is XRGB */
+    /* Альфа-канал следует рассматривать как 0xFF, если cf равен XRGB. */
     if(image_cf == LV_COLOR_FORMAT_XRGB8888) {
         conf.fg_alpha_mode = LV_DRAW_DMA2D_ALPHA_MODE_REPLACE_ALPHA_CHANNEL;
     }

@@ -37,14 +37,14 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_list_button_class;
  **********************/
 
 /**
- * Create a list object
+ * Создать объект списка
  * @param parent    pointer to an object, it will be the parent of the new list
  * @return          pointer to the created list
  */
 lv_obj_t * lv_list_create(lv_obj_t * parent);
 
 /**
- * Add text to a list
+ * Добавить текст в список
  * @param list      pointer to a list, it will be the parent of the new label
  * @param txt       text of the new label
  * @return          pointer to the created label
@@ -52,7 +52,7 @@ lv_obj_t * lv_list_create(lv_obj_t * parent);
 lv_obj_t * lv_list_add_text(lv_obj_t * list, const char * txt);
 
 /**
- * Add button to a list
+ * Добавить кнопку в список
  * @param list      pointer to a list, it will be the parent of the new button
  * @param icon      icon for the button, when NULL it will have no icon
  * @param txt       text of the new button, when NULL no text will be added
@@ -61,7 +61,7 @@ lv_obj_t * lv_list_add_text(lv_obj_t * list, const char * txt);
 lv_obj_t * lv_list_add_button(lv_obj_t * list, const void * icon, const char * txt);
 
 /**
- * Get text of a given list button
+ * Получить текст данной кнопки списка
  * @param list      pointer to a list
  * @param btn       pointer to the button
  * @return          text of btn, if btn doesn't have text "" will be returned
@@ -69,7 +69,7 @@ lv_obj_t * lv_list_add_button(lv_obj_t * list, const void * icon, const char * t
 const char * lv_list_get_button_text(lv_obj_t * list, lv_obj_t * btn);
 
 /**
- * Set text of a given list button
+ * Установить текст данной кнопки списка
  * @param list      pointer to a list
  * @param btn       pointer to the button
  * @param txt       pointer to the text
@@ -79,7 +79,7 @@ void lv_list_set_button_text(lv_obj_t * list, lv_obj_t * btn, const char * txt);
 #if LV_USE_TRANSLATION
 
 /**
- * Add translation tag text to a list
+ * Добавить текст тега перевода в список
  * @param list      pointer to a list, it will be the parent of the new label
  * @param tag       translation tag of the new label
  * @return          pointer to the created label
@@ -87,7 +87,7 @@ void lv_list_set_button_text(lv_obj_t * list, lv_obj_t * btn, const char * txt);
 lv_obj_t * lv_list_add_translation_tag(lv_obj_t * list, const char * tag);
 
 /**
- * Add translation tag button to a list
+ * Добавить кнопку тега перевода в список
  * @param list      pointer to a list, it will be the parent of the new button
  * @param icon      icon for the button, when NULL it will have no icon
  * @param tag       translation tag of the new button, when NULL no translation tag will be added
@@ -96,7 +96,7 @@ lv_obj_t * lv_list_add_translation_tag(lv_obj_t * list, const char * tag);
 lv_obj_t * lv_list_add_button_translation_tag(lv_obj_t * list, const void * icon, const char * tag);
 
 /**
- * Set translation tag text of a given list button
+ * Установить текст тега перевода для данной кнопки списка
  * @param list      pointer to a list
  * @param btn       pointer to the button
  * @param tag       pointer to the translation tag
@@ -112,7 +112,7 @@ void lv_list_set_button_translation_tag(lv_obj_t * list, lv_obj_t * btn, const c
 #endif /*LV_USE_LIST*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LIST_H*/

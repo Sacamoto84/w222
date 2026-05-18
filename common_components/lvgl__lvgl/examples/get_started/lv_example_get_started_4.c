@@ -7,26 +7,26 @@ static void slider_event_cb(lv_event_t * e)
 {
     lv_obj_t * slider = lv_event_get_target_obj(e);
 
-    /*Refresh the text*/
+    /*Обновить текст*/
     lv_label_set_text_fmt(label, "%" LV_PRId32, lv_slider_get_value(slider));
-    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
+    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Выровнять верхнюю часть слайдера*/
 }
 
 /**
- * Create a slider and write its value on a label.
+ * Создайте ползунок и напишите его значение на этикетке.
  */
 void lv_example_get_started_4(void)
 {
-    /*Create a slider in the center of the display*/
+    /*Создайте слайдер в центре дисплея.*/
     lv_obj_t * slider = lv_slider_create(lv_screen_active());
-    lv_obj_set_width(slider, 200);                          /*Set the width*/
-    lv_obj_center(slider);                                  /*Align to the center of the parent (screen)*/
-    lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);     /*Assign an event function*/
+    lv_obj_set_width(slider, 200);                          /*Установите ширину*/
+    lv_obj_center(slider);                                  /*Выровнять по центру родительского элемента (экрана)*/
+    lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);     /*Назначьте функцию события*/
 
-    /*Create a label above the slider*/
+    /*Создайте метку над ползунком*/
     label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "0");
-    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
+    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Выровнять верхнюю часть слайдера*/
 }
 
 #endif

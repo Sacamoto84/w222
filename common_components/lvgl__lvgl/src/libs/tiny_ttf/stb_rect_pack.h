@@ -1,62 +1,62 @@
-// stb_rect_pack.h - v1.01 - public domain - rectangle packing
-// Sean Barrett 2014
+// stb_rect_pack.h - v1.01 - общедоступное достояние - прямоугольная упаковка
+// Шон Барретт, 2014 г.
 //
-// Useful for e.g. packing rectangular textures into an atlas.
-// Does not do rotation.
+// Полезно, например. упаковка прямоугольных текстур в атлас.
+// Не выполняет вращение.
 //
-// Before #including,
+// До #including ,
 //
 //    #define STB_RECT_PACK_IMPLEMENTATION
 //
-// in the file that you want to have the implementation.
+// в файле, который вы хотите иметь реализацию.
 //
-// Not necessarily the awesomest packing method, but better than
-// the totally naive one in stb_truetype (which is primarily what
-// this is meant to replace).
+// Не обязательно самый потрясающий метод упаковки, но лучше, чем
+// совершенно наивный в stb_truetype (что в первую очередь и есть
+// это замена).
 //
-// Has only had a few tests run, may have issues.
+// Было проведено всего несколько тестов, могут возникнуть проблемы.
 //
-// More docs to come.
+// Еще больше документов впереди.
 //
-// No memory allocations; uses qsort() and assert() from stdlib.
-// Can override those by defining STBRP_SORT and STBRP_ASSERT.
+// Никаких выделений памяти; использует qsort() и assert() из стандартной библиотеки.
+// Можно переопределить их, определив STBRP_SORT и STBRP_ASSERT .
 //
-// This library currently uses the Skyline Bottom-Left algorithm.
+// В настоящее время эта библиотека использует алгоритм Skyline Bottom-Left.
 //
-// Please note: better rectangle packers are welcome! Please
-// implement them to the same API, but with a different init
-// function.
+// Обратите внимание: лучшие прямоугольные упаковщики приветствуются! Пожалуйста
+// реализовать их в том же API, но с другим инициализатором
+// функция.
 //
-// Credits
+// Кредиты
 //
-//  Library
-//    Sean Barrett
-//  Minor features
-//    Martins Mozeiko
+//  Библиотека
+//    Шон Барретт
+//  Незначительные особенности
+//    Мартиньш Можейко
 //    github:IntellectualKitty
 //
-//  Bugfixes / warning fixes
-//    Jeremy Jaussaud
-//    Fabian Giesen
+//  Исправления ошибок/предупреждений
+//    Джереми Жоссо
+//    Фабиан Гизен
 //
-// Version history:
+// История версий:
 //
-//     1.01  (2021-07-11)  always use large rect mode, expose STBRP__MAXVAL in public section
-//     1.00  (2019-02-25)  avoid small space waste; gracefully fail too-wide rectangles
-//     0.99  (2019-02-07)  warning fixes
-//     0.11  (2017-03-03)  return packing success/fail result
-//     0.10  (2016-10-25)  remove cast-away-const to avoid warnings
-//     0.09  (2016-08-27)  fix compiler warnings
-//     0.08  (2015-09-13)  really fix bug with empty rects (w=0 or h=0)
-//     0.07  (2015-09-13)  fix bug with empty rects (w=0 or h=0)
-//     0.06  (2015-04-15)  added STBRP_SORT to allow replacing qsort
-//     0.05:  added STBRP_ASSERT to allow replacing assert
-//     0.04:  fixed minor bug in STBRP_LARGE_RECTS support
-//     0.01:  initial release
+//     1.01 (11 июля 2021 г.) всегда используйте режим больших прямоугольников, выставляйте STBRP__MAXVAL в общедоступном разделе.
+//     1.00 (25.02.2019) избегайте небольших космических отходов; изящно провалить слишком широкие прямоугольники
+//     0.99 (07.02.2019) исправления предупреждений
+//     0.11 (03.03.2017) результат успешной/неуспешной упаковки
+//     0.10 (25 октября 2016 г.) удалена cast-away-const, чтобы избежать предупреждений
+//     0.09 (27 августа 2016 г.) исправлены предупреждения компилятора.
+//     0.08 (13 сентября 2015 г.) действительно исправлена ошибка с пустыми прямоугольниками (w=0 или h=0)
+//     0.07 (13 сентября 2015 г.) исправлена ошибка с пустыми прямоугольниками (w=0 или h=0)
+//     В версии 0.06 (15 апреля 2015 г.) добавлен STBRP_SORT, позволяющий заменить qsort.
+//     0.05: добавлен STBRP_ASSERT, позволяющий заменять утверждение.
+//     0.04: исправлена небольшая ошибка в поддержке STBRP_LARGE_RECTS.
+//     0.01: первоначальный выпуск
 //
 // LICENSE
 //
-//   See end of file for license information.
+//   Информацию о лицензии смотрите в конце файла.
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -80,7 +80,7 @@ extern "C" {
 
 /// @cond
 /**
- *  Tells Doxygen to ignore a duplicate declaration
+ *  Сообщает Doxygen игнорировать дублирующее объявление.
  */
 typedef struct stbrp_context stbrp_context;
 typedef struct stbrp_node    stbrp_node;
@@ -90,7 +90,7 @@ typedef struct stbrp_rect    stbrp_rect;
 typedef int            stbrp_coord;
 
 #define STBRP__MAXVAL  0x7fffffff
-// Mostly for internal use, but this is the maximum supported coordinate value.
+// В основном для внутреннего использования, но это максимальное поддерживаемое значение координат.
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -98,73 +98,73 @@ typedef int            stbrp_coord;
 #endif
 
 STBRP_DEF int stbrp_pack_rects(stbrp_context * context, stbrp_rect * rects, int num_rects);
-// Assign packed locations to rectangles. The rectangles are of type
-// 'stbrp_rect' defined below, stored in the array 'rects', and there
-// are 'num_rects' many of them.
+// Назначьте упакованные места прямоугольникам. Прямоугольники имеют тип
+// ' stbrp_rect ', определенный ниже, хранится в массиве 'rects' и там
+// многие из них - 'num_rects'.
 //
-// Rectangles which are successfully packed have the 'was_packed' flag
-// set to a non-zero value and 'x' and 'y' store the minimum location
-// on each axis (i.e. bottom-left in cartesian coordinates, top-left
-// if you imagine y increasing downwards). Rectangles which do not fit
-// have the 'was_packed' flag set to 0.
+// Успешно упакованные прямоугольники имеют флаг was_packed.
+// установлено ненулевое значение, а «x» и «y» сохраняют минимальное местоположение.
+// на каждой оси (т.е. внизу слева в декартовых координатах, вверху слева
+// если представить, что y увеличивается вниз). Прямоугольники, которые не подходят
+// установите флаг «was_packed» в 0.
 //
-// You should not try to access the 'rects' array from another thread
-// while this function is running, as the function temporarily reorders
-// the array while it executes.
+// Вам не следует пытаться получить доступ к массиву «rects» из другого потока.
+// пока эта функция работает, поскольку функция временно меняет порядок
+// массив во время его выполнения.
 //
-// To pack into another rectangle, you need to call stbrp_init_target
-// again. To continue packing into the same rectangle, you can call
-// this function again. Calling this multiple times with multiple rect
-// arrays will probably produce worse packing results than calling it
-// a single time with the full rectangle array, but the option is
-// available.
+// Чтобы упаковать в другой прямоугольник, вам нужно вызвать stbrp_init_target
+// снова. Чтобы продолжить упаковку в тот же прямоугольник, вы можете вызвать
+// эту функцию еще раз. Вызов этого несколько раз с несколькими прямоугольниками
+// массивы, вероятно, дадут худшие результаты упаковки, чем их вызов
+// один раз с полным массивом прямоугольников, но опция
+// доступен.
 //
-// The function returns 1 if all of the rectangles were successfully
-// packed and 0 otherwise.
+// Функция возвращает 1, если все прямоугольники были успешно обработаны.
+// упаковано и 0 в противном случае.
 
 struct stbrp_rect {
-    // reserved for your use:
+    // зарезервировано для вашего использования:
     int            id;
 
-    // input:
+    // ввод:
     stbrp_coord    w, h;
 
-    // output:
+    // вывод:
     stbrp_coord    x, y;
-    int            was_packed;  // non-zero if valid packing
+    int            was_packed;  // ненулевое, если действительная упаковка
 
-}; // 16 bytes, nominally
+}; // 16 байт, номинально
 
 STBRP_DEF void stbrp_init_target(stbrp_context * context, int width, int height, stbrp_node * nodes, int num_nodes);
-// Initialize a rectangle packer to:
-//    pack a rectangle that is 'width' by 'height' in dimensions
-//    using temporary storage provided by the array 'nodes', which is 'num_nodes' long
+// Инициализируйте упаковщик прямоугольников, чтобы:
+//    упакуйте прямоугольник размером «ширина» на «высоту»
+//    используя временное хранилище, предоставляемое массивом «узлы», длиной «num_nodes»
 //
-// You must call this function every time you start packing into a new target.
+// Вы должны вызывать эту функцию каждый раз, когда начинаете упаковывать новую цель.
 //
-// There is no "shutdown" function. The 'nodes' memory must stay valid for
-// the following stbrp_pack_rects() call (or calls), but can be freed after
-// the call (or calls) finish.
+// Функции «выключения» нет. Память «узлов» должна оставаться действующей в течение
+// следующий вызов stbrp_pack_rects() (или вызовы), но может быть освобожден после
+// звонок (или звонки) завершаются.
 //
 // Note: to guarantee best results, either:
 //       1. make sure 'num_nodes' >= 'width'
-//   or  2. call stbrp_allow_out_of_mem() defined below with 'allow_out_of_mem = 1'
+//   или 2. вызвать stbrp_allow_out_of_mem(), определенный ниже, с 'allow_out_of_mem = 1'
 //
-// If you don't do either of the above things, widths will be quantized to multiples
-// of small integers to guarantee the algorithm doesn't run out of temporary storage.
+// Если вы не выполните ни одно из вышеперечисленных действий, ширина будет кратна кратному значению.
+// небольших целых чисел, чтобы гарантировать, что алгоритму не хватит места во временной памяти.
 //
-// If you do #2, then the non-quantized algorithm will be used, but the algorithm
-// may run out of temporary storage and be unable to pack some rectangles.
+// Если вы сделаете №2, то будет использоваться неквантованный алгоритм, но алгоритм
+// может не хватить места для временного хранения, и он не сможет упаковать некоторые прямоугольники.
 
 STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context * context, int allow_out_of_mem);
-// Optionally call this function after init but before doing any packing to
-// change the handling of the out-of-temp-memory scenario, described above.
-// If you call init again, this will be reset to the default (false).
+// При желании вызовите эту функцию после инициализации, но перед выполнением какой-либо упаковки в
+// измените обработку сценария нехватки памяти, описанного выше.
+// Если вы снова вызовете init, оно будет сброшено до значения по умолчанию (false).
 
 STBRP_DEF void stbrp_setup_heuristic(stbrp_context * context, int heuristic);
-// Optionally select which packing heuristic the library should use. Different
-// heuristics will produce better/worse results for different data sets.
-// If you call init again, this will be reset to the default.
+// При необходимости выберите, какую эвристику упаковки должна использовать библиотека. Разные
+// эвристика даст лучшие/худшие результаты для разных наборов данных.
+// Если вы снова вызовете init, оно будет сброшено до значения по умолчанию.
 
 enum {
     STBRP_HEURISTIC_Skyline_default = 0,
@@ -174,8 +174,8 @@ enum {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// the details of the following structures don't matter to you, but they must
-// be visible so you can handle the memory allocations for them
+// детали следующих структур не имеют для вас значения, но они должны
+// быть видимыми, чтобы вы могли управлять выделением памяти для них
 
 struct stbrp_node {
     stbrp_coord  x, y;
@@ -191,7 +191,7 @@ struct stbrp_context {
     int num_nodes;
     stbrp_node * active_head;
     stbrp_node * free_head;
-    stbrp_node extra[2]; // we allocate two extra nodes so optimal user-node-count is 'width' not 'width+2'
+    stbrp_node extra[2]; // мы выделяем два дополнительных узла, поэтому оптимальное количество пользовательских узлов равно «ширине», а не «ширине +2».
 };
 
 #ifdef __cplusplus
@@ -243,17 +243,17 @@ STBRP_DEF void stbrp_setup_heuristic(stbrp_context * context, int heuristic)
 STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context * context, int allow_out_of_mem)
 {
     if(allow_out_of_mem)
-        // if it's ok to run out of memory, then don't bother aligning them;
-        // this gives better packing, but may fail due to OOM (even though
-        // the rectangles easily fit). @TODO a smarter approach would be to only
-        // quantize once we've hit OOM, then we could get rid of this parameter.
+        // если не хватает памяти, то не беспокойтесь о их выравнивании;
+        // это дает лучшую упаковку, но может потерпеть неудачу из-за OOM (хотя
+        // прямоугольники легко помещаются).  @TODO более разумным подходом было бы только
+        // quantize, как только мы нажмем OOM, тогда мы сможем избавиться от этого параметра.
         context->align = 1;
     else {
-        // if it's not ok to run out of memory, then quantize the widths
-        // so that num_nodes is always enough nodes.
+        // если нехватка памяти не является нормой, тогда квантовайте ширину
+        // так что узлов num_nodes всегда достаточно.
         //
-        // I.e. num_nodes * align >= width
-        //                  align >= width / num_nodes
+        // Т.е.  num_nodes * выравнивание >= ширина
+        //                  выровнять >= ширина / num_nodes
         //                  align = ceil(width/num_nodes)
 
         context->align = (context->width + context->num_nodes - 1) / context->num_nodes;
@@ -276,7 +276,7 @@ STBRP_DEF void stbrp_init_target(stbrp_context * context, int width, int height,
     context->num_nodes = num_nodes;
     stbrp_setup_allow_out_of_mem(context, 0);
 
-    // node 0 is the full width, node 1 is the sentinel (lets us not store width explicitly)
+    // узел 0 — полная ширина, узел 1 — контрольный (позволяет не сохранять ширину явно)
     context->extra[0].x = 0;
     context->extra[0].y = 0;
     context->extra[0].next = &context->extra[1];
@@ -285,7 +285,7 @@ STBRP_DEF void stbrp_init_target(stbrp_context * context, int width, int height,
     context->extra[1].next = NULL;
 }
 
-// find minimum y position if it starts at x1
+// найти минимальную позицию y, если она начинается с x1
 static int stbrp__skyline_find_min_y(stbrp_context * c, stbrp_node * first, int x0, int width, int * pwaste)
 {
     stbrp_node * node = first;
@@ -297,11 +297,11 @@ static int stbrp__skyline_find_min_y(stbrp_context * c, stbrp_node * first, int 
     STBRP_ASSERT(first->x <= x0);
 
 #if 0
-    // skip in case we're past the node
+    // пропустить, если мы прошли узел
     while(node->next->x <= x0)
         ++node;
 #else
-    STBRP_ASSERT(node->next->x > x0); // we ended up handling this in the caller for efficiency
+    STBRP_ASSERT(node->next->x > x0); // в конечном итоге мы обработали это в вызывающей программе для повышения эффективности
 #endif
 
     STBRP_ASSERT(node->x <= x0);
@@ -311,19 +311,19 @@ static int stbrp__skyline_find_min_y(stbrp_context * c, stbrp_node * first, int 
     visited_width = 0;
     while(node->x < x1) {
         if(node->y > min_y) {
-            // raise min_y higher.
-            // we've accounted for all waste up to min_y,
-            // but we'll now add more waste for everything we've visited
+            // поднимите min_y выше.
+            // мы учли все отходы до min_y ,
+            // но теперь мы добавим больше отходов ко всему, что мы посетили
             waste_area += visited_width * (node->y - min_y);
             min_y = node->y;
-            // the first time through, visited_width might be reduced
+            // при первом прохождении visited_width может быть уменьшен
             if(node->x < x0)
                 visited_width += node->next->x - x0;
             else
                 visited_width += node->next->x - node->x;
         }
         else {
-            // add waste area
+            // добавить место для мусора
             int under_width = node->next->x - node->x;
             if(under_width + visited_width > width)
                 under_width = width - visited_width;
@@ -348,12 +348,12 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
     stbrp__findresult fr;
     stbrp_node ** prev, * node, * tail, ** best = NULL;
 
-    // align to multiple of c->align
+    // выровнять по кратному c->align
     width = (width + c->align - 1);
     width -= width % c->align;
     STBRP_ASSERT(width % c->align == 0);
 
-    // if it can't possibly fit, bail immediately
+    // если оно не помещается, немедленно внесите залог
     if(width > c->width || height > c->height) {
         fr.prev_link = NULL;
         fr.x = fr.y = 0;
@@ -365,17 +365,17 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
     while(node->x + width <= c->width) {
         int y, waste;
         y = stbrp__skyline_find_min_y(c, node, node->x, width, &waste);
-        if(c->heuristic == STBRP_HEURISTIC_Skyline_BL_sortHeight) {  // actually just want to test BL
-            // bottom left
+        if(c->heuristic == STBRP_HEURISTIC_Skyline_BL_sortHeight) {  // на самом деле просто хочу протестировать BL
+            // внизу слева
             if(y < best_y) {
                 best_y = y;
                 best = prev;
             }
         }
         else {
-            // best-fit
+            // наиболее подходящий
             if(y + height <= c->height) {
-                // can only use it if it first vertically
+                // можно использовать только если он сначала вертикально
                 if(y < best_y || (y == best_y && waste < best_waste)) {
                     best_y = y;
                     best_waste = waste;
@@ -389,35 +389,35 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
 
     best_x = (best == NULL) ? 0 : (*best)->x;
 
-    // if doing best-fit (BF), we also have to try aligning right edge to each node position
+    // если мы делаем наилучшее соответствие ( BF ), нам также нужно попытаться выровнять правый край по положению каждого узла.
     //
-    // e.g, if fitting
+    // например, если подходит
     //
     //     ____________________
     //    |____________________|
     //
-    //            into
+    //            в
     //
     //   |                         |
     //   |             ____________|
     //   |____________|
     //
-    // then right-aligned reduces waste, but bottom-left BL is always chooses left-aligned
+    // тогда выравнивание по правому краю уменьшает количество отходов, но нижний левый BL всегда выбирает выравнивание по левому краю
     //
-    // This makes BF take about 2x the time
+    // Из-за этого BF занимает примерно в 2 раза больше времени.
 
     if(c->heuristic == STBRP_HEURISTIC_Skyline_BF_sortHeight) {
         tail = c->active_head;
         node = c->active_head;
         prev = &c->active_head;
-        // find first node that's admissible
+        // найти первый допустимый узел
         while(tail->x < width)
             tail = tail->next;
         while(tail) {
             int xpos = tail->x - width;
             int y, waste;
             STBRP_ASSERT(xpos >= 0);
-            // find the left position that matches this
+            // найдите левую позицию, соответствующую этому
             while(node->next->x <= xpos) {
                 prev = &node->next;
                 node = node->next;
@@ -447,11 +447,11 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context * c, int wid
 
 static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context * context, int width, int height)
 {
-    // find best position according to heuristic
+    // найти лучшую позицию согласно эвристике
     stbrp__findresult res = stbrp__skyline_find_best_pos(context, width, height);
     stbrp_node * node, * cur;
 
-    // bail if:
+    // залог, если:
     //    1. it failed
     //    2. the best node doesn't fit (we don't always check this)
     //    3. we're out of memory
@@ -460,20 +460,20 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context * context, 
         return res;
     }
 
-    // on success, create new node
+    // в случае успеха создайте новый узел
     node = context->free_head;
     node->x = (stbrp_coord) res.x;
     node->y = (stbrp_coord)(res.y + height);
 
     context->free_head = node->next;
 
-    // insert the new node into the right starting point, and
-    // let 'cur' point to the remaining nodes needing to be
-    // stitched back in
+    // вставьте новый узел в правильную начальную точку и
+    // пусть 'cur' указывает на оставшиеся узлы, которые необходимо
+    // вшит обратно
 
     cur = *res.prev_link;
     if(cur->x < res.x) {
-        // preserve the existing one, so start testing with the next one
+        // сохраните существующий, поэтому начните тестирование со следующего
         stbrp_node * next = cur->next;
         cur->next = node;
         cur = next;
@@ -482,17 +482,17 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context * context, 
         *res.prev_link = node;
     }
 
-    // from here, traverse cur and free the nodes, until we get to one
-    // that shouldn't be freed
+    // отсюда проходим Cur и освобождаем узлы, пока не доберемся до одного
+    // это не должно быть освобождено
     while(cur->next && cur->next->x <= res.x + width) {
         stbrp_node * next = cur->next;
-        // move the current node to the free list
+        // переместить текущий узел в свободный список
         cur->next = context->free_head;
         context->free_head = cur;
         cur = next;
     }
 
-    // stitch the list back in
+    // вшить список обратно
     node->next = cur;
 
     if(cur->x < res.x + width)
@@ -547,17 +547,17 @@ STBRP_DEF int stbrp_pack_rects(stbrp_context * context, stbrp_rect * rects, int 
 {
     int i, all_rects_packed = 1;
 
-    // we use the 'was_packed' field internally to allow sorting/unsorting
+    // мы используем поле «was_packed» внутри, чтобы разрешить сортировку/отсортировку
     for(i = 0; i < num_rects; ++i) {
         rects[i].was_packed = i;
     }
 
-    // sort according to heuristic
+    // сортировать по эвристике
     STBRP_SORT(rects, num_rects, sizeof(rects[0]), rect_height_compare);
 
     for(i = 0; i < num_rects; ++i) {
         if(rects[i].w == 0 || rects[i].h == 0) {
-            rects[i].x = rects[i].y = 0;  // empty rect needs no space
+            rects[i].x = rects[i].y = 0;  // пустой прямоугольник не требует места
         }
         else {
             stbrp__findresult fr = stbrp__skyline_pack_rectangle(context, rects[i].w, rects[i].h);
@@ -571,17 +571,17 @@ STBRP_DEF int stbrp_pack_rects(stbrp_context * context, stbrp_rect * rects, int 
         }
     }
 
-    // unsort
+    // не сортировать
     STBRP_SORT(rects, num_rects, sizeof(rects[0]), rect_original_order);
 
-    // set was_packed flags and all_rects_packed status
+    // установить флаги was_packed и статус all_rects_packed
     for(i = 0; i < num_rects; ++i) {
         rects[i].was_packed = !(rects[i].x == STBRP__MAXVAL && rects[i].y == STBRP__MAXVAL);
         if(!rects[i].was_packed)
             all_rects_packed = 0;
     }
 
-    // return the all_rects_packed status
+    // вернуть статус all_rects_packed
     return all_rects_packed;
 }
 #endif
@@ -592,18 +592,18 @@ STBRP_DEF int stbrp_pack_rects(stbrp_context * context, stbrp_rect * rects, int 
 
 /*
 ------------------------------------------------------------------------------
-This software is available under 2 licenses -- choose whichever you prefer.
+Это программное обеспечение доступно по двум лицензиям — выбирайте ту, которую предпочитаете.
 ------------------------------------------------------------------------------
-ALTERNATIVE A - MIT License
+ALTERNATIVE A - MIT Лицензия
 Copyright (c) 2017 Sean Barrett
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+Программное обеспечение без ограничений, включая, помимо прочего, права на
+использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+Программного обеспечения и разрешать лицам, которым предоставлено Программное обеспечение, делать
+Итак, при соблюдении следующих условий:
+Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+копии или существенные части Программного обеспечения.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -612,17 +612,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ------------------------------------------------------------------------------
-ALTERNATIVE B - Public Domain (www.unlicense.org)
-This is free and unencumbered software released into the public domain.
-Anyone is free to copy, modify, publish, use, compile, sell, or distribute this
-software, either in source code form or as a compiled binary, for any purpose,
-commercial or non-commercial, and by any means.
-In jurisdictions that recognize copyright laws, the author or authors of this
-software dedicate any and all copyright interest in the software to the public
-domain. We make this dedication for the benefit of the public at large and to
-the detriment of our heirs and successors. We intend this dedication to be an
-overt act of relinquishment in perpetuity of all present and future rights to
-this software under copyright law.
+ALTERNATIVE B - общественное достояние ( www.unlicense.org)
+Это бесплатное и ничем не обремененное программное обеспечение, общедоступное.
+Любой может свободно копировать, изменять, публиковать, использовать, компилировать, продавать или распространять это
+программное обеспечение в виде исходного кода или в виде скомпилированного двоичного файла для любых целей,
+коммерческие или некоммерческие, и любыми способами.
+В юрисдикциях, признающих законы об авторском праве, автор или авторы настоящего
+программное обеспечение передать все права, связанные с авторскими правами на программное обеспечение, для общественности
+домен. Мы делаем это на благо общества в целом и
+в ущерб нашим наследникам и преемникам. Мы намерены, чтобы это посвящение стало
+явный акт отказа навечно от всех нынешних и будущих прав на
+это программное обеспечение согласно закону об авторском праве.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE

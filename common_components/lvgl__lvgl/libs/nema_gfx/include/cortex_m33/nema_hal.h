@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -42,130 +42,130 @@ typedef struct nema_buffer_t_ {
     uintptr_t base_phys;            /**< Physical address of buffer */
 } nema_buffer_t;
 
-/** \brief Initialize system. Implementor defined. Called in nema_init()
+/** \brief Инициализируйте систему. Определен разработчик. Вызывается вnema_init()
  *
- * \param void
- * \return 0 if no errors occurred
- * \see nema_init()
+ * \параметр недействителен
+ * \return 0, если ошибки не произошли
+ * \см. nema_init()
  *
  */
 int32_t nema_sys_init(void);
 
 
-/** \brief Wait for interrupt from the GPU
+/** \brief Дождитесь прерывания от GPU
  *
- * \param void
- * \return 0 on success
+ * \параметр недействителен
+ * \return 0 в случае успеха
  *
  */
 int nema_wait_irq(void);
 
-/** \brief Wait for a Command List to finish
+/** \brief Дождитесь составления списка команд
  *
- * \param cl_id Command List ID
- * \return 0 on success
+ * \paramcl_idСписок команды ID
+ * \return 0 в случае успеха
  *
  */
 int nema_wait_irq_cl(int cl_id);
 
-/** \brief Wait for a Breakpoint
+/** \brief Дождитесь точки остановки
  *
- * \param cl_id Breakpoint ID
- * \return 0 on success
+ * \paramcl_idТочка остановки ID
+ * \return 0 в случае успеха
  *
  */
 int nema_wait_irq_brk(int brk_id);
 
-/** \brief Read Hardware register
+/** \brief Чтение реестра оборудования
  *
- * \param reg Register to read
- * \return Value read from the register
- * \see nema_reg_write
+ * \param reg Зарегистрируйтесь, чтобы прочитать
+ * \return, прочитанное из регистра
+ * \см.  nema_reg_write
  *
  */
 uint32_t nema_reg_read(uint32_t reg);
 
-/** \brief Write Hardware Register
+/** \brief Запись в регистр оборудования
  *
- * \param reg Register to write
- * \param value Value to be written
+ * \param reg Зарегистрируйтесь, чтобы написать
+ * Значение \param для записей
  * \return void()
- * \see nema_reg_read()
+ * \см. nema_reg_read()
  *
  */
 void nema_reg_write(uint32_t reg, uint32_t value);
 
-/** \brief Create memory buffer
+/** \brief Создание буфера памяти
  *
- * \param size Size of buffer in bytes
- * \return nema_buffer_t struct
+ * \param size Размер буфера в байтах
+ * \return структура nema_buffer_t
  *
  */
 nema_buffer_t nema_buffer_create(int size);
 
-/** \brief Create memory buffer at a specific pool
+/** \brief Создать буфер памяти в среднем пуле
  *
- * \param pool ID of the desired memory pool
- * \param size Size of buffer in bytes
- * \return nema_buffer_t struct
+ * \param пулIDнужного пула памяти
+ * \param size Размер буфера в байтах
+ * \return структура nema_buffer_t
  *
  */
 nema_buffer_t nema_buffer_create_pool(int pool, int size);
 
-/** \brief Maps buffer
+/** \brief Буфер карт
  *
- * \param bo Pointer to buffer struct
- * \return Virtual pointer of the buffer (same as in bo->base_virt)
+ * \param bo Указатель структуры буфера
+ * \return Виртуальный указатель буфера (так же, как в bo->base_virt)
  *
  */
 void *nema_buffer_map(nema_buffer_t *bo);
 
-/** \brief Unmaps buffer
+/** \brief Отображение буфера
  *
- * \param bo Pointer to buffer struct
+ * \param bo Указатель структуры буфера
  * \return void
  *
  */
 void nema_buffer_unmap(nema_buffer_t *bo);
 
-/** \brief Destroy/deallocate buffer
+/** \brief Уничтожить/освободить буфер
  *
- * \param bo Pointer to buffer struct
+ * \param bo Указатель структуры буфера
  * \return void
  *
  */
 void nema_buffer_destroy(nema_buffer_t *bo);
 
-/** \brief Get physical (GPU) base address of a given buffer
+/** \brief Получить физический (GPU) базовый адрес данного буфера
  *
- * \param bo Pointer to buffer struct
- * \return Physical base address of a given buffer
+ * \param bo Указатель структуры буфера
+ * \return Физический базовый адрес данного буфера
  *
  */
 uintptr_t nema_buffer_phys(nema_buffer_t *bo);
 
-/** \brief Write-back buffer from cache to main memory
+/** \brief Буфер обратные записи из кэша в основной памяти
  *
- * \param bo Pointer to buffer struct
+ * \param bo Указатель структуры буфера
  * \return void
  *
  */
 void nema_buffer_flush(nema_buffer_t * bo);
 
-/** \brief Allocate memory for CPU to use (typically, standard malloc() is called)
+/** \brief Выделите память для использованияCPU(обычно называется стандартный malloc())
  *
- * \param size Size in bytes
- * \return Pointer to allocated memory (virtual)
- * \see nema_host_free()
+ * \param size Размер в байтах
+ * \return Указатель выделенной памяти (виртуальной)
+ * \см. nema_host_free()
  *
  */
 void *nema_host_malloc(size_t size);
 
-/** \brief Free memory previously allocated with nema_host_malloc()
+/** \brief Свободная память, ранее выделенная с помощьюnema_host_malloc()
  *
- * \param ptr Pointer to allocated memory (virtual)
+ * \param ptr Указатель выделенной памяти (виртуальной)
  * \return void
- * \see nema_host_malloc()
+ * \см. nema_host_malloc()
  *
  */
 void  nema_host_free(void *ptr );
@@ -173,18 +173,18 @@ void  nema_host_free(void *ptr );
 /** \private */
 typedef struct nema_ringbuffer_t_ {
     nema_buffer_t bo;
-    int      offset;    //number of 32-bit entries
+    int      offset;    //количество 32-битных записей
     int	     last_submission_id;
 } nema_ringbuffer_t;
 
 
-/** \brief Initialize Ring Buffer. Should be called from inside nema_sys_init().
- *   This is a private function, the user should never call it.
+/** \brief Инициализация кольцевого буфера. Должен сохраняться изнутри nema_sys_init().
+ *   Это частная функция, пользователь никогда не должен ее вызывать.
  *
- * \param *rb 	Pointer to nema_ring_buffer_t struct
- * \param reset Resets the Ring Buffer if non-zero
- * \return 		Negative number on error
- * \see nema_sys_init()
+ * \param *rb Указатель структуры nema_ring_buffer_t
+ * \param reset Сбрасывает кольцевой буфер, если он не возникает.
+ * \return Отрицательное число при деньгах
+ * \см. nema_sys_init()
  *
  */
 /** \private */
@@ -195,18 +195,18 @@ int nema_rb_init(nema_ringbuffer_t *rb, int reset);
 #define MUTEX_FLUSH  2
 #define MUTEX_MAX    2
 
-/** \brief Mutex Lock for multiple processes/threads
+/** \brief Блокировка мьютекса для нескольких процессов/потоков
  *
- * \param MUTEX_RB or MUTEX_MALLOC
- * \return int
+ * \paramMUTEX_RBили MUTEX_MALLOC
+ * \return
  *
  */
 int nema_mutex_lock(int mutex_id);
 
-/** \brief Mutex Unlock for multiple processes/threads
+/** \brief Разблокировка мьютекса для нескольких процессов/потоков
  *
- * \param MUTEX_RB or MUTEX_MALLOC
- * \return int
+ * \paramMUTEX_RBили MUTEX_MALLOC
+ * \return
  *
  */
 int nema_mutex_unlock(int mutex_id);

@@ -41,10 +41,10 @@
 static uint32_t img_width_to_stride(lv_image_header_t * header);
 
 /**
- * Get the header info of an image source, and return the a pointer to the decoder that can open it.
- * @param dsc       Image descriptor containing the source and type of the image and other info.
- * @param header    The header of the image
- * @return The decoder that can open the image source or NULL if not found (or can't open it).
+ * Получите информацию заголовка источника изображения и верните указатель на декодер, который может его открыть.
+ * @param dsc       Дескриптор изображения, содержащий источник и тип изображения, а также другую информацию.
+ * @param header    Заголовок изображения
+ * @return Декодер, который может открыть источник изображения или NULL, если он не найден (или не может его открыть).
  */
 static lv_image_decoder_t * image_decoder_get_info(lv_image_decoder_dsc_t * dsc, lv_image_header_t * header);
 
@@ -63,13 +63,13 @@ static lv_result_t try_cache(lv_image_decoder_dsc_t * dsc);
  **********************/
 
 /**
- * Initialize the image decoder module
+ * Инициализируйте модуль декодера изображений
  */
 void lv_image_decoder_init(uint32_t image_cache_size, uint32_t image_header_count)
 {
     lv_ll_init(img_decoder_ll_p, sizeof(lv_image_decoder_t));
 
-    /*Initialize the cache*/
+    /*Инициализировать кеш*/
     lv_image_cache_init(image_cache_size);
     lv_image_header_cache_init(image_header_count);
 
@@ -78,7 +78,7 @@ void lv_image_decoder_init(uint32_t image_cache_size, uint32_t image_header_coun
 }
 
 /**
- * Deinitialize the image decoder module
+ * Деинициализируйте модуль декодера изображений.
  */
 void lv_image_decoder_deinit(void)
 {
@@ -123,11 +123,11 @@ lv_result_t lv_image_decoder_open(lv_image_decoder_dsc_t * dsc, const void * src
 
     if(lv_image_cache_is_enabled()) {
         dsc->cache = img_cache_p;
-        /*Try cache first, unless we are told to ignore cache.*/
+        /*Сначала попробуйте кеш, если только нам не скажут игнорировать кеш.*/
         if(!(args && args->no_cache)) {
             /*
-            * Check the cache first
-            * If the image is found in the cache, just return it.*/
+            * Сначала проверь кэш
+            * Если изображение найдено в кеше, просто верните его.*/
             if(try_cache(dsc) == LV_RESULT_OK) {
                 lv_mutex_unlock(img_decoder_open_lock_p);
                 LV_PROFILER_DECODER_END;
@@ -136,7 +136,7 @@ lv_result_t lv_image_decoder_open(lv_image_decoder_dsc_t * dsc, const void * src
         }
     }
 
-    /*Find the decoder that can open the image source, and get the header info in the same time.*/
+    /*Найдите декодер, который может открыть источник изображения и одновременно получить информацию о заголовке.*/
     dsc->decoder = image_decoder_get_info(dsc, &dsc->header);
     if(dsc->decoder == NULL) {
         lv_mutex_unlock(img_decoder_open_lock_p);
@@ -144,7 +144,7 @@ lv_result_t lv_image_decoder_open(lv_image_decoder_dsc_t * dsc, const void * src
         return LV_RESULT_INVALID;
     }
 
-    /*Make a copy of args*/
+    /*Сделать макияж*/
     dsc->args = args ? *args : (lv_image_decoder_args_t) {
         .stride_align = LV_DRAW_BUF_STRIDE_ALIGN != 1,
         .premultiply = false,
@@ -154,9 +154,9 @@ lv_result_t lv_image_decoder_open(lv_image_decoder_dsc_t * dsc, const void * src
     };
 
     /*
-     * We assume that if a decoder can get the info, it can open the image.
-     * If decoder open failed, free the source and return error.
-     * If decoder open succeed, add the image to cache if enabled.
+     * Мы предполагаем, что если декодер сможет получить информацию, он сможет открыть изображение.
+     * Если открытие декодера не удалось, освободите источник и верните ошибку.
+     * Если открытие декодера прошло успешно, добавьте изображение в кеш, если оно включено.
      * */
     LV_PROFILER_DECODER_BEGIN_TAG(dsc->decoder->name);
     lv_result_t res = dsc->decoder->open_cb(dsc->decoder, dsc);
@@ -165,7 +165,7 @@ lv_result_t lv_image_decoder_open(lv_image_decoder_dsc_t * dsc, const void * src
     if(res == LV_RESULT_OK && dsc->decoded != NULL) {
         LV_ASSERT_MSG(dsc->decoded->unaligned_data && dsc->decoded->handlers, "Invalid draw buffer");
 
-        /* Flush the D-Cache if enabled and the image was successfully opened */
+        /* Очистите D-кэш, если он включен и изображение было успешно открыто. */
         if(dsc->args.flush_cache) {
             lv_draw_buf_flush_cache(dsc->decoded, NULL);
             LV_LOG_INFO("Flushed D-cache: src %p (%s) (W%d x H%d, data: %p cf: %d)",
@@ -215,7 +215,7 @@ void lv_image_decoder_close(lv_image_decoder_dsc_t * dsc)
     }
 
     if(lv_image_cache_is_enabled() && dsc->cache && dsc->cache_entry) {
-        /*Decoded data is in cache, release it from cache's callback*/
+        /*Декодированные данные находятся в кеше, освободите их из обратного вызова кеша.*/
         lv_cache_release(dsc->cache, dsc->cache_entry, NULL);
     }
 
@@ -224,8 +224,8 @@ void lv_image_decoder_close(lv_image_decoder_dsc_t * dsc)
 }
 
 /**
- * Create a new image decoder
- * @return pointer to the new image decoder
+ * Создайте новый декодер изображений
+ * @return указатель на новый декодер изображений
  */
 lv_image_decoder_t * lv_image_decoder_create(void)
 {
@@ -287,12 +287,12 @@ lv_cache_entry_t * lv_image_decoder_add_to_cache(lv_image_decoder_t * decoder,
     lv_image_cache_data_t * cached_data;
     cached_data = lv_cache_entry_get_data(cache_entry);
 
-    /*Set the cache entry to decoder data*/
+    /*Установите запись кэша для данных декодера*/
     cached_data->decoded = decoded;
     if(cached_data->src_type == LV_IMAGE_SRC_FILE) {
         cached_data->src = lv_strdup(cached_data->src);
     }
-    cached_data->user_data = user_data; /*Need to free data on cache invalidate instead of decoder_close*/
+    cached_data->user_data = user_data; /*Необходимо уменьшить данные при аннулировании кеша вместо decoder_close*/
     cached_data->decoder = decoder;
 
     LV_PROFILER_DECODER_END;
@@ -304,7 +304,7 @@ lv_draw_buf_t * lv_image_decoder_post_process(lv_image_decoder_dsc_t * dsc, lv_d
     LV_PROFILER_DECODER_BEGIN;
     if(decoded == NULL) {
         LV_PROFILER_DECODER_END;
-        return NULL; /*No need to adjust*/
+        return NULL; /*Нет необходимости настраивать*/
     }
 
     lv_image_decoder_args_t * args = &dsc->args;
@@ -328,16 +328,16 @@ lv_draw_buf_t * lv_image_decoder_post_process(lv_image_decoder_dsc_t * dsc, lv_d
         }
     }
 
-    /*Premultiply alpha channel*/
+    /*Предварительно умножить альфа-канал*/
     if(args->premultiply
        && !LV_COLOR_FORMAT_IS_ALPHA_ONLY(decoded->header.cf)
        && lv_color_format_has_alpha(decoded->header.cf)
        && !lv_draw_buf_has_flag(decoded, LV_IMAGE_FLAGS_PREMULTIPLIED)
-       && decoded->header.cf != LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED /*Hasn't done yet*/
+       && decoded->header.cf != LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED /*еще не сделал*/
       ) {
         LV_LOG_TRACE("Alpha premultiply.");
         if(lv_draw_buf_has_flag(decoded, LV_IMAGE_FLAGS_MODIFIABLE)) {
-            /*Do it directly*/
+            /*Сделайте это напрямую*/
             lv_draw_buf_premultiply(decoded);
         }
         else {
@@ -410,9 +410,9 @@ static lv_image_decoder_t * image_decoder_get_info(lv_image_decoder_dsc_t * dsc,
         }
     }
 
-    /*Search the decoders*/
+    /*Поиск декодеров*/
     LV_LL_READ(img_decoder_ll_p, decoder) {
-        /*Info and Open callbacks are required*/
+        /*Требуется информация и открытые обратные вызовы.*/
         if(decoder->info_cb && decoder->open_cb) {
             lv_fs_seek(&dsc->file, 0, LV_FS_SEEK_SET);
             LV_PROFILER_DECODER_BEGIN_TAG(decoder->name);
@@ -486,7 +486,7 @@ static lv_result_t try_cache(lv_image_decoder_dsc_t * dsc)
         lv_image_cache_data_t * cached_data = lv_cache_entry_get_data(entry);
         dsc->decoded = cached_data->decoded;
         dsc->decoder = (lv_image_decoder_t *)cached_data->decoder;
-        dsc->cache_entry = entry;     /*Save the cache to release it in decoder_close*/
+        dsc->cache_entry = entry;     /*Сохраните кеш, чтобы положить его в decoder_close.*/
         LV_PROFILER_DECODER_END;
         return LV_RESULT_OK;
     }

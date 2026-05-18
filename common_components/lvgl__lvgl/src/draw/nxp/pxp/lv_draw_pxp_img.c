@@ -39,17 +39,17 @@ static void _pxp_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
                               const lv_image_decoder_dsc_t * decoder_dsc, lv_draw_image_sup_t * sup,
                               const lv_area_t * img_coords, const lv_area_t * clipped_img_area);
 
-/* Blit w/ recolor for images w/o opa and alpha channel */
+/* Blit с перекрашиванием для изображений без opa и альфа-канала */
 static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t dest_stride,
                               lv_color_format_t dest_cf, const uint8_t * src_buf, const lv_area_t * src_area,
                               int32_t src_stride, lv_color_format_t src_cf, const lv_draw_image_dsc_t * dsc);
 
-/* Blit w/ transformation for images w/o opa and alpha channel */
+/* Блит с преобразованием для изображений без опы и альфа-канала */
 static void _pxp_blit_transform(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t dest_stride,
                                 lv_color_format_t dest_cf, const uint8_t * src_buf, const lv_area_t * src_area,
                                 int32_t src_stride, lv_color_format_t src_cf, const lv_draw_image_dsc_t * dsc);
 
-/* Blit simple w/ opa and alpha channel */
+/* Простой Blit с opa и альфа-каналом */
 static void _pxp_blit(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t dest_stride,
                       lv_color_format_t dest_cf, const uint8_t * src_buf, const lv_area_t * src_area,
                       int32_t src_stride, lv_color_format_t src_cf, lv_opa_t opa);
@@ -143,7 +143,7 @@ static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, i
 
     lv_pxp_reset();
 
-    /*AS buffer - source image*/
+    /*Буфер AS — исходное изображение*/
     pxp_as_buffer_config_t asBufferConfig = {
         .pixelFormat = pxp_get_as_px_format(src_cf),
         .bufferAddr = (uint32_t)(src_buf + src_stride * src_area->y1 + src_px_size * src_area->x1),
@@ -152,11 +152,11 @@ static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, i
     PXP_SetAlphaSurfaceBufferConfig(PXP_ID, &asBufferConfig);
     PXP_SetAlphaSurfacePosition(PXP_ID, 0U, 0U, src_w - 1U, src_h - 1U);
 
-    /*Disable PS, use as color generator*/
+    /*Отключить PS, использовать в качестве генератора цвета.*/
     PXP_SetProcessSurfacePosition(PXP_ID, 0xFFFFU, 0xFFFFU, 0U, 0U);
     PXP_SetProcessSurfaceBackGroundColor(PXP_ID, lv_color_to_u32(dsc->recolor));
 
-    /*Output buffer*/
+    /*Выходной буфер*/
     pxp_output_buffer_config_t outputBufferConfig = {
         .pixelFormat = pxp_get_out_px_format(dest_cf),
         .interlacedMode = kPXP_OutputProgressive,
@@ -169,11 +169,11 @@ static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, i
     PXP_SetOutputBufferConfig(PXP_ID, &outputBufferConfig);
 
     /**
-     * Configure Porter-Duff blending.
+     * Настройте смешивание Портера-Даффа.
      *
      * Note: srcFactorMode and dstFactorMode are inverted in fsl_pxp.h:
-     * srcFactorMode is actually applied on PS alpha value
-     * dstFactorMode is actually applied on AS alpha value
+     * srcFactorMode фактически применяется к альфа-значению PS.
+     * dstFactorMode фактически применяется к альфа-значению AS.
      */
     pxp_porter_duff_config_t pdConfig = {
         .enable = 1,
@@ -185,7 +185,7 @@ static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, i
         .srcFactorMode = kPXP_PorterDuffFactorInversed,
         .dstGlobalAlpha = dsc->recolor_opa,
         .srcGlobalAlpha = 0xff,
-        .dstAlphaMode = kPXP_PorterDuffAlphaStraight, /*don't care*/
+        .dstAlphaMode = kPXP_PorterDuffAlphaStraight, /*плевать*/
         .srcAlphaMode = kPXP_PorterDuffAlphaStraight
     };
     PXP_SetPorterDuffConfig(PXP_ID, &pdConfig);
@@ -210,7 +210,7 @@ static void _pxp_blit_transform(uint8_t * dest_buf, const lv_area_t * dest_area,
     lv_pxp_reset();
 
     if(has_rotation) {
-        /*Convert rotation angle and calculate offsets caused by pivot*/
+        /*Преобразование угла поворота и расчет смещений, вызванных поворотом*/
         pxp_rotate_degree_t pxp_angle;
         switch(dsc->rotation) {
             case 0:
@@ -228,11 +228,11 @@ static void _pxp_blit_transform(uint8_t * dest_buf, const lv_area_t * dest_area,
             default:
                 pxp_angle = kPXP_Rotate0;
         }
-        /*PS buffer rotation and decimation does not function at the same time*/
+        /*PS вращение и прореживание буфера не работают одновременно*/
         PXP_SetRotateConfig(PXP_ID, kPXP_RotateOutputBuffer, pxp_angle, kPXP_FlipDisable);
     }
 
-    /*PS buffer - source image*/
+    /*Буфер PS — исходное изображение*/
     pxp_ps_buffer_config_t psBufferConfig = {
         .pixelFormat = pxp_get_ps_px_format(src_cf),
         .swapByte = false,
@@ -247,10 +247,10 @@ static void _pxp_blit_transform(uint8_t * dest_buf, const lv_area_t * dest_area,
     if(has_scale)
         PXP_SetProcessSurfaceScaler(PXP_ID, src_w, src_h, dest_w, dest_h);
 
-    /*AS disabled */
+    /*AS отключен */
     PXP_SetAlphaSurfacePosition(PXP_ID, 0xFFFFU, 0xFFFFU, 0U, 0U);
 
-    /*Output buffer*/
+    /*Выходной буфер*/
     pxp_output_buffer_config_t outputBufferConfig = {
         .pixelFormat = pxp_get_out_px_format(dest_cf),
         .interlacedMode = kPXP_OutputProgressive,
@@ -288,12 +288,12 @@ static void _pxp_blit(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
     };
 
     if(opa >= (lv_opa_t)LV_OPA_MAX && !src_has_alpha) {
-        /*Simple blit, no effect - Disable PS buffer*/
+        /*Простое блитирование, без эффекта — отключить буфер PS.*/
         PXP_SetProcessSurfacePosition(PXP_ID, 0xFFFFU, 0xFFFFU, 0U, 0U);
     }
     else {
-        /*PS must be enabled to fetch background pixels.
-          PS and OUT buffers are the same, blend will be done in-place*/
+        /*PS должен быть включен для получения фоновых пикселей.
+          Буферы PS и OUT одинаковы, смешивание будет выполняться на месте.*/
         pxp_ps_buffer_config_t psBufferConfig = {
             .pixelFormat = pxp_get_ps_px_format(dest_cf),
             .swapByte = false,
@@ -312,7 +312,7 @@ static void _pxp_blit(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
         PXP_SetProcessSurfacePosition(PXP_ID, 0U, 0U, dest_w - 1U, dest_h - 1U);
     }
 
-    /*AS buffer - source image*/
+    /*Буфер AS — исходное изображение*/
     pxp_as_buffer_config_t asBufferConfig = {
         .pixelFormat = pxp_get_as_px_format(src_cf),
         .bufferAddr = (uint32_t)(src_buf + src_stride * src_area->y1 + src_px_size * src_area->x1),
@@ -323,7 +323,7 @@ static void _pxp_blit(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
     PXP_SetAlphaSurfaceBlendConfig(PXP_ID, &asBlendConfig);
     PXP_EnableAlphaSurfaceOverlayColorKey(PXP_ID, false);
 
-    /*Output buffer.*/
+    /*Выходной буфер.*/
     pxp_output_buffer_config_t outputBufferConfig = {
         .pixelFormat = pxp_get_out_px_format(dest_cf),
         .interlacedMode = kPXP_OutputProgressive,

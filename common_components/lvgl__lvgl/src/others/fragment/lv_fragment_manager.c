@@ -28,11 +28,11 @@ typedef struct _lv_fragment_stack_item_t {
 struct _lv_fragment_manager_t {
     lv_fragment_t * parent;
     /**
-     * Linked list to store attached fragments
+     * Связанный список для хранения прикрепленных фрагментов
      */
     lv_ll_t attached;
     /**
-     * Linked list to store fragments in stack
+     * Связанный список для хранения фрагментов в стеке
      */
     lv_ll_t stack;
 };
@@ -91,7 +91,7 @@ void lv_fragment_manager_create_obj(lv_fragment_manager_t * manager)
     lv_fragment_managed_states_t * states = NULL;
     LV_LL_READ(&manager->attached, states) {
         if(states->in_stack && top->states != states) {
-            /*Only create obj for top item in stack*/
+            /*Создавайте объект только для верхнего элемента в стеке*/
             continue;
         }
         item_create_obj(states);
@@ -158,7 +158,7 @@ void lv_fragment_manager_push(lv_fragment_manager_t * manager, lv_fragment_t * f
     }
     lv_fragment_managed_states_t * states = fragment_attach(manager, fragment, container);
     states->in_stack = true;
-    /*Add fragment to the top of the stack*/
+    /*Добавить фрагмент в начало стека*/
     lv_fragment_stack_item_t * item = lv_ll_ins_tail(&manager->stack);
     lv_memzero(item, sizeof(lv_fragment_stack_item_t));
     item->states = states;
@@ -243,7 +243,7 @@ static void item_delete_obj(lv_fragment_managed_states_t * item)
 }
 
 /**
- * Detach, then destroy fragment
+ * Отсоединить, затем уничтожить фрагмент
  * @param item fragment states
  */
 static void item_delete_fragment(lv_fragment_managed_states_t * item)

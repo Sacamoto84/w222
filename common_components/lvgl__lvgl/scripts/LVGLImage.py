@@ -264,7 +264,7 @@ def unpack_colors(data: bytes, cf: ColorFormat, w) -> List:
                     break
     elif bpp == 16:
         if cf == ColorFormat.RGB565:
-            #  This is RGB565
+            # Это RGB565
             pixels = [(data[2 * i + 1] << 8) | data[2 * i]
                     for i in range(len(data) // 2)]
             for p in pixels:
@@ -272,7 +272,7 @@ def unpack_colors(data: bytes, cf: ColorFormat, w) -> List:
                 ret.append(bit_extend((p >> 5) & 0x3f, 6))  # G
                 ret.append(bit_extend((p >> 0) & 0x1f, 5))  # B
         elif cf == ColorFormat.RGB565_SWAPPED:
-            #  This is RGB565_SWAPPED
+            # Это RGB565_SWAPPED
             pixels = [(data[2 * i] << 8) | data[2 * i + 1]
                     for i in range(len(data) // 2)]
             for p in pixels:
@@ -280,7 +280,7 @@ def unpack_colors(data: bytes, cf: ColorFormat, w) -> List:
                 ret.append(bit_extend((p >> 5) & 0x3f, 6))  # G
                 ret.append(bit_extend((p >> 0) & 0x1f, 5))  # B
         elif cf == ColorFormat.AL88:
-            # AL88: low 8bit = Luminance, high 8bit = Alpha
+            # AL88: низкие 8 бит = яркость, высокие 8 бит = альфа
             L = data[0::2]  # low byte: luminance
             A = data[1::2]  # high byte: alpha
             for luma, alpha in zip(L, A):
@@ -357,23 +357,23 @@ def write_c_array_file(
 
     macro = "LV_ATTRIBUTE_" + varname.upper()
     header = f'''
-#if defined(LV_LVGL_H_INCLUDE_SIMPLE)
-#include "lvgl.h"
-#elif defined(LV_LVGL_H_INCLUDE_SYSTEM)
-#include <lvgl.h>
-#elif defined(LV_BUILD_TEST)
-#include "../lvgl.h"
-#else
-#include "lvgl/lvgl.h"
-#endif
+#если определено ( LV_LVGL_H_INCLUDE_SIMPLE )
+#включить "lvgl.h"
+#определено элиф( LV_LVGL_H_INCLUDE_SYSTEM )
+#включить <lvgl.h>
+#определено элиф( LV_BUILD_TEST )
+#включить "../lvgl.h"
+#еще
+#включить "lvgl/lvgl.h"
+#конец
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
-#define LV_ATTRIBUTE_MEM_ALIGN
-#endif
+#определить LV_ATTRIBUTE_MEM_ALIGN
+#конец
 
-#ifndef {macro}
-#define {macro}
-#endif
+#ifndef {макрос}
+#определить {макрос}
+#конец
 
 static const
 LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST {macro}
@@ -414,7 +414,7 @@ const lv_image_dsc_t {varname} = {{
         if compress != CompressMethod.NONE:
             write_binary(f, data, 16)
         else:
-            # write palette separately
+            # написать палитру отдельно
             ncolors = cf.ncolors
             if ncolors:
                 write_binary(f, data[:ncolors * 4], 16)
@@ -440,7 +440,7 @@ class LVGLImageHeader:
         if w > 0xffff or h > 0xffff:
             raise ParameterError(f"w, h overflow: {w}x{h}")
         if align < 1:
-            # stride align in bytes must be larger than 1
+            # шаг выравнивания в байтах должен быть больше 1
             raise ParameterError(f"Invalid stride align: {align}")
 
         self.stride = self.stride_align(align) if stride == 0 else stride
@@ -507,7 +507,7 @@ class LVGLCompressData:
             return raw_data
 
         if self.compress == CompressMethod.RLE:
-            # RLE compression performs on pixel unit, pad data to pixel unit
+            # Сжатие RLE выполняется на пиксельной единице, данные дополняются пиксельной единицей.
             pad = b'\x00' * 0
             if self.raw_data_len % self.blk_size:
                 pad = b'\x00' * (self.blk_size - self.raw_data_len % self.blk_size)
@@ -551,12 +551,12 @@ class LVGLImage:
         Stride can be set directly, or by stride alignment in bytes
         """
         if self.stride == 0:
-            #  stride can only be 0, when LVGLImage is created with empty data
+            # шаг может быть только 0, когда LVGLImage создается с пустыми данными
             logging.warning("Cannot adjust stride for empty image")
             return
 
         if align >= 1 and stride == 0:
-            # The header with specified stride alignment
+            # Заголовок с указанным выравниванием шага
             header = LVGLImageHeader(self.cf, self.w, self.h, align=align)
             stride = header.stride
         elif stride > 0:
@@ -568,7 +568,7 @@ class LVGLImage:
         if self.stride == stride:
             return  # no stride adjustment
 
-        # if current image is empty, no need to do anything
+        # если текущее изображение пусто, ничего делать не нужно
         if self.data_len == 0:
             self.stride = 0
             return
@@ -601,7 +601,7 @@ class LVGLImage:
             change_stride(self.data[palette_size:], self.h, current.stride,
                           stride))
 
-        # deal with alpha map for RGB565A8
+        # разобраться с альфа-картой для RGB565A8
         if self.cf == ColorFormat.RGB565A8:
             logging.warning("handle RGB565A8 alpha map")
             a8_stride = self.stride // 2
@@ -626,12 +626,12 @@ class LVGLImage:
         if self.cf.is_indexed:
 
             def multiply(b, g, r, a):
-                # The precision is reduced, the correct way would be to divide by 255,
-                # but this is consistent with the premultiply function in the code.
+                # Точность снижается, правильный способ - разделить на 255,
+                # но это согласуется с функцией предварительного умножения в коде.
                 r, g, b = (r * a) >> 8, (g * a) >> 8, (b * a) >> 8
                 return uint8_t(b) + uint8_t(g) + uint8_t(r) + uint8_t(a)
 
-            # process the palette only.
+            # обрабатывайте только палитру.
             palette_size = self.cf.ncolors * 4
             palette = self.data[:palette_size]
             palette = [
@@ -668,11 +668,11 @@ class LVGLImage:
 
             line_width = self.w * 2
             for h in range(self.h):
-                # alpha map offset for this line
+                # смещение альфа-карты для этой линии
                 offset = self.h * self.stride + h * (self.stride // 2)
                 a = self.data[offset:offset + self.stride // 2]
 
-                # RGB map offset
+                # Смещение карты RGB
                 offset = h * self.stride
                 rgb = self.data[offset:offset + self.stride]
 
@@ -712,7 +712,7 @@ class LVGLImage:
         Return data_len in byte of this image, excluding image header
         """
 
-        # palette is always in ARGB format, 4Byte per color
+        # палитра всегда имеет формат ARGB, по 4 байта на цвет.
         p = self.cf.ncolors * 4 if self.is_indexed and self.w * self.h else 0
         p += self.stride * self.h
         if self.cf is ColorFormat.RGB565A8:
@@ -745,8 +745,8 @@ class LVGLImage:
         self.w = w
         self.h = h
 
-        # if stride is 0, then it's aligned to 1byte by default,
-        # let image header handle it
+        # если шаг равен 0, то по умолчанию он выравнивается по 1 байту,
+        # пусть заголовок изображения справится с этим
         self.stride = LVGLImageHeader(cf, w, h, stride, align=1).stride
 
         if self.data_len != len(data):
@@ -835,9 +835,9 @@ class LVGLImage:
         self.adjust_stride(align=1)
         if self.cf.is_indexed:
             data = self.data
-            # Separate lvgl bin image data to palette and bitmap
-            # The palette is in format of [(RGBA), (RGBA)...].
-            # LVGL palette is in format of B,G,R,A,...
+            # Разделение данных изображения lvgl bin на палитру и растровое изображение.
+            # Палитра имеет формат [( RGBA ), ( RGBA )...].
+            # Палитра LVGL имеет формат B,G,R,A,...
             palette = [(data[i * 4 + 2], data[i * 4 + 1], data[i * 4 + 0],
                         data[i * 4 + 3]) for i in range(self.cf.ncolors)]
 
@@ -847,17 +847,17 @@ class LVGLImage:
                                  self.h,
                                  palette=palette,
                                  bitdepth=self.cf.bpp)
-            # separate packed data to plain data
+            # разделить упакованные данные на простые данные
             data = unpack_colors(data, self.cf, self.w)
         elif self.cf.is_alpha_only:
-            # separate packed data to plain data
+            # разделить упакованные данные на простые данные
             transparency = unpack_colors(self.data, self.cf, self.w)
             data = []
             for a in transparency:
                 data += [0, 0, 0, a]
             encoder = png.Writer(self.w, self.h, greyscale=False, alpha=True)
         elif self.cf == ColorFormat.L8:
-            # to grayscale
+            # в оттенки серого
             encoder = png.Writer(self.w,
                                  self.h,
                                  bitdepth=self.cf.bpp,
@@ -865,7 +865,7 @@ class LVGLImage:
                                  alpha=False)
             data = self.data
         elif self.cf == ColorFormat.AL88:
-            # to grayscale with alpha
+            # в оттенки серого с альфа
             encoder = png.Writer(self.w,
                                  self.h,
                                  bitdepth=8,
@@ -903,8 +903,8 @@ class LVGLImage:
         self.nema_gfx = nema_gfx
 
         if cf is None:  # guess cf from filename
-            # split filename string and match with ColorFormat to check
-            # which cf to use
+            # отобразите имя файла и поставьте его с ColorFormat для проверки.
+            # какой вариант использовать
             names = str(path.basename(filename)).split(".")
             for c in names[1:-1]:
                 if c in ColorFormat.__members__:
@@ -928,17 +928,17 @@ class LVGLImage:
         return self
 
     def _png_to_indexed(self, cf: ColorFormat, filename: str):
-        # convert to palette mode
+        # конвертировать в режим палитры
         auto_cf = cf is None
 
-        # read the image data to get the metadata
+        # прочитать данные изображения, чтобы получить метаданные
         reader = png.Reader(filename=filename)
         w, h, rows, metadata = reader.read()
 
-        # to preserve original palette data only convert the image if needed. For this
-        # check if image has a palette and the requested palette size equals the existing one
+        # Чтобы сохранить исходные данные палитры, преобразуйте изображение только при необходимости. Для этого
+        # проверьте, есть ли у изображения палитра и запрошенный размер палитры равен существующему
         if not 'palette' in metadata or not auto_cf and len(metadata['palette']) !=  2 ** cf.bpp:
-            # reread and convert file
+            # перечитать и преобразовать файл
             reader = png.Reader(
                 bytes=PngQuant(256 if auto_cf else cf.ncolors).convert(filename))
             w, h, rows, _ = reader.read()
@@ -963,14 +963,14 @@ class LVGLImage:
                     f"extended to: {cf.ncolors}")
             palette += [(255, 255, 255, 0)] * (cf.ncolors - palette_len)
 
-        # Assemble lvgl image palette from PNG palette.
-        # PNG palette is a list of tuple(R,G,B,A)
+        # Соберите палитру изображений lvgl из палитры PNG.
+        # Палитра PNG представляет собой список кортежей (R,G,B,A)
 
         rawdata = bytearray()
         for (r, g, b, a) in palette:
             rawdata += uint32_t((a << 24) | (r << 16) | (g << 8) | (b << 0))
 
-        # pack data if not in I8 format
+        # упакуйте данные, если они не в формате I8
         if cf == ColorFormat.I8:
             for e in rows:
                 if self.nema_gfx:
@@ -1026,13 +1026,13 @@ class LVGLImage:
             B = row[2::4]
             A = row[3::4]
             for r, g, b, a in zip(R, G, B, A):
-                # Calculate luminance using ITU-R BT.709 coefficients
+                # Рассчитайте яркость, используя коэффициенты ITU -R BT .709.
                 r_linear = self.sRGB_to_linear(r / 255.0)
                 g_linear = self.sRGB_to_linear(g / 255.0)
                 b_linear = self.sRGB_to_linear(b / 255.0)
                 luma = 0.2126 * r_linear + 0.7152 * g_linear + 0.0722 * b_linear
                 luma_byte = int(self.linear_to_sRGB(luma) * 255)
-                # AL88: low byte = luminance, high byte = alpha
+                # AL88 : младший байт = яркость, старший байт = альфа
                 rawdata += uint8_t(luma_byte)  # L
                 rawdata += uint8_t(a)          # A
 
@@ -1066,12 +1066,12 @@ class LVGLImage:
         elif cf == ColorFormat.ARGB8888_PREMULTIPLIED:
 
             def pack(r, g, b, a):
-                # Premultiply RGB by Alpha
+                # Предварительное умножениеRGBна Alpha
                 r = (r * a // 255)
                 g = (g * a // 255)
                 b = (b * a // 255)
 
-                # Pack into ARGB8888 format
+                # Упаковать в формат ARGB8888.
                 return uint32_t((a << 24) | (r << 16) | (g << 8) | (b << 0))
         elif cf == ColorFormat.XRGB8888:
 
@@ -1217,7 +1217,7 @@ class RLEImage(LVGLImage):
         self._check_ext(filename, ".rle")
         self._check_dir(filename)
 
-        # compress image data excluding lvgl image header
+        # сжимать данные изображения, выполнять заголовок изображения lvgl
         blksize = (self.cf.bpp + 7) // 8
         compressed = self.rle_compress(self.data, blksize)
         with open(filename, "wb+") as f:
@@ -1234,7 +1234,7 @@ class RLEImage(LVGLImage):
         while index < data_len:
             repeat_cnt = self.get_repeat_count(memview[index:], blksize)
             if repeat_cnt == 0:
-                # done
+                # сделано
                 break
             elif repeat_cnt < threshold:
                 nonrepeat_cnt = self.get_nonrepeat_count(
@@ -1289,7 +1289,7 @@ class RLEImage(LVGLImage):
             if value == pre_value:
                 repeat_cnt += 1
                 if repeat_cnt > threshold:
-                    # repeat found.
+                    # повтор найден.
                     break
             else:
                 pre_value = value
@@ -1328,8 +1328,8 @@ class RAWImage():
     def to_c_array(self,
                    filename: str,
                    outputname: str = None):
-        # Image size is set to zero, to let PNG or JPEG decoder to handle it
-        # Stride is meaningless for RAW image
+        # Размер изображения установлен на ноль, чтобы декодер PNG или JPEG мог его обработать.
+        # Страйд не имеет смысла для изображения RAW
         write_c_array_file(0, 0, 0, self.cf, filename, outputname,
                            False, CompressMethod.NONE, self.data)
 
@@ -1384,7 +1384,7 @@ class PNGConverter:
         else:
             name, _ = path.splitext(path.basename(input))
 
-        # change output name to 'outputname', if specified
+        # измените имя вывода на «имя_выхода», если указано
         if outputname is not None:
             name = path.join(path.dirname(name), outputname)
 
@@ -1399,7 +1399,7 @@ class PNGConverter:
         output = []
         for f in self.files:
             if self.cf in (ColorFormat.RAW, ColorFormat.RAW_ALPHA):
-                # Process RAW image explicitly
+                # Явно обработать изображение RAW
                 img = RAWImage().from_file(f, self.cf)
                 img.to_c_array(self._replace_ext(f, ".c", outputname), outputname=outputname)
             else:
@@ -1543,5 +1543,5 @@ def test_raw():
 
 if __name__ == "__main__":
     # test()
-    # test_raw()
+    # test_raw ()
     main()

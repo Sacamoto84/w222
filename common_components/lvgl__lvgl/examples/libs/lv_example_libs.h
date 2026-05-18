@@ -47,7 +47,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_LIBS_H*/

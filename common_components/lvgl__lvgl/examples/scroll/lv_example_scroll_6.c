@@ -22,31 +22,31 @@ static void scroll_event_cb(lv_event_t * e)
         int32_t diff_y = child_y_center - cont_y_center;
         diff_y = LV_ABS(diff_y);
 
-        /*Get the x of diff_y on a circle.*/
+        /*Получите x изdiff_yпо кругу.*/
         int32_t x;
-        /*If diff_y is out of the circle use the last point of the circle (the radius)*/
+        /*Еслиdiff_yнаходится за пределами круга, воспользуйтесь точкой круга (радиус).*/
         if(diff_y >= r) {
             x = r;
         }
         else {
-            /*Use Pythagoras theorem to get x from radius and y*/
+            /*Используйте теорему Пифагора, чтобы получить x из радиуса и y.*/
             uint32_t x_sqr = r * r - diff_y * diff_y;
             lv_sqrt_res_t res;
-            lv_sqrt(x_sqr, &res, 0x8000);   /*Use lvgl's built in sqrt root function*/
+            lv_sqrt(x_sqr, &res, 0x8000);   /*Используйте встроенную корневую функцию sqrt в lvgl.*/
             x = r - res.i;
         }
 
-        /*Translate the item by the calculated X coordinate*/
+        /*Перевести элемент по рассчитанной координате X*/
         lv_obj_set_style_translate_x(child, x, 0);
 
-        /*Use some opacity with larger translations*/
+        /*Используйте некоторую непрозрачность при больших переводах*/
         lv_opa_t opa = (lv_opa_t)lv_map(x, 0, r, LV_OPA_TRANSP, LV_OPA_COVER);
         lv_obj_set_style_opa(child, LV_OPA_COVER - opa, 0);
     }
 }
 
 /**
- * Translate the object as they scroll
+ * Перевести объект по мере его прокрутки
  */
 void lv_example_scroll_6(void)
 {
@@ -70,10 +70,10 @@ void lv_example_scroll_6(void)
         lv_label_set_text_fmt(label, "Button %" LV_PRIu32, i);
     }
 
-    /*Update the buttons position manually for first*/
+    /*Сначала обновите положение кнопок вручную.*/
     lv_obj_send_event(cont, LV_EVENT_SCROLL, NULL);
 
-    /*Be sure the fist button is in the middle*/
+    /*Убедитесь, что первая кнопка находится посередине.*/
     lv_obj_scroll_to_view(lv_obj_get_child(cont, 0), LV_ANIM_OFF);
 }
 

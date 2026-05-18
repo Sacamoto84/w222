@@ -26,16 +26,16 @@ void test_bar_should_have_valid_default_attributes(void)
 }
 
 /*
- * Bar has two parts, main and indicator, coordinates of the latter are
- * calculated based on:
+ * Бар состоит из двух частей: основной и индикаторной, координаты последней
+ * рассчитывается на основе:
  * - Bar size
  * - Bar (main part) padding
  * - Bar value
  * - Bar coordinates
  * - Bar base direction
- * See Boxing model in docs for reference.
+ * См. Модель бокса в документации.
  *
- * Bar properties assumed:
+ * Предполагаемые свойства бара:
  * - mode: LV_BAR_MODE_NORMAL
  * - min value: 0
  * - max value: 100
@@ -55,11 +55,11 @@ void test_bar_should_update_indicator_right_coordinate_based_on_bar_value(void)
     lv_style_init(&bar_style);
     lv_style_set_pad_all(&bar_style, style_padding);
 
-    /* Setup new style */
+    /* Установить новый стиль */
     lv_obj_remove_style_all(g_bar);
     lv_obj_add_style(g_bar, &bar_style, LV_PART_MAIN);
 
-    /* Set properties */
+    /* Установить свойства */
     lv_obj_set_size(g_bar, bar_width, bar_height);
     lv_bar_set_value(g_bar, bar_value, LV_ANIM_OFF);
 
@@ -68,7 +68,7 @@ void test_bar_should_update_indicator_right_coordinate_based_on_bar_value(void)
 
     int32_t actual_coord = lv_area_get_width(&bar_ptr->indic_area);
 
-    /* Calculate bar indicator right coordinate, using rule of 3 */
+    /* Рассчитать правую координату барного индикатора, используя правило 3 */
     int32_t bar_max_value = lv_bar_get_max_value(g_bar);
     int32_t indicator_part_width = lv_obj_get_content_width(g_bar);
 
@@ -78,16 +78,16 @@ void test_bar_should_update_indicator_right_coordinate_based_on_bar_value(void)
 }
 
 /*
- * Bar has two parts, main and indicator, coordinates of the latter are
- * calculated based on:
+ * Бар состоит из двух частей: основной и индикаторной, координаты последней
+ * рассчитывается на основе:
  * - Bar size
  * - Bar (main part) padding
  * - Bar value
  * - Bar coordinates
  * - Bar base direction
- * See Boxing model in docs for reference.
+ * См. Модель бокса в документации.
  *
- * Bar properties assumed:
+ * Предполагаемые свойства бара:
  * - mode: LV_BAR_MODE_NORMAL
  * - min value: 0
  * - max value: 100
@@ -106,11 +106,11 @@ void test_bar_rtl_should_update_indicator_left_coordinate_based_on_bar_value(voi
     lv_style_init(&bar_style);
     lv_style_set_pad_all(&bar_style, style_padding);
 
-    /* Setup new style */
+    /* Установить новый стиль */
     lv_obj_remove_style_all(g_bar);
     lv_obj_add_style(g_bar, &bar_style, LV_PART_MAIN);
 
-    /* Set properties */
+    /* Установить свойства */
     lv_obj_set_size(g_bar, bar_width, bar_height);
     lv_bar_set_value(g_bar, bar_value, LV_ANIM_OFF);
     lv_obj_set_style_base_dir(g_bar, LV_BASE_DIR_RTL, 0);
@@ -120,7 +120,7 @@ void test_bar_rtl_should_update_indicator_left_coordinate_based_on_bar_value(voi
 
     int32_t actual_coord = bar_ptr->indic_area.x1;
 
-    /* Calculate current indicator width */
+    /* Рассчитать текущую ширину индикатора */
     int32_t bar_max_value = lv_bar_get_max_value(g_bar);
     int32_t indicator_part_width = lv_obj_get_content_width(g_bar);
     int32_t right_padding = lv_obj_get_style_pad_right(g_bar, LV_PART_MAIN);
@@ -203,7 +203,7 @@ void test_bar_normal(void)
 }
 
 /**
- * Same as test_bar_normal, but with min and max values set.
+ * То же, что test_bar_normal , но с установленными минимальным и максимальным значениями.
  */
 void test_bar_normal_empty_and_full(void)
 {
@@ -346,16 +346,16 @@ void test_bar_indicator_area_should_get_smaller_when_padding_is_increased(void)
     original_width = lv_area_get_width(&bar_ptr->indic_area);
     original_height = lv_area_get_height(&bar_ptr->indic_area);
 
-    /* Setup new padding */
+    /* Настройка нового отступа */
     lv_style_init(&bar_style);
     lv_style_set_pad_all(&bar_style, style_padding);
     lv_obj_set_size(g_bar, 100, 50);
 
-    /* Apply new style  */
+    /* Применить новый стиль  */
     lv_obj_remove_style_all(g_bar);
     lv_obj_add_style(g_bar, &bar_style, LV_PART_MAIN);
 
-    /* Notify LVGL of style change */
+    /* Уведомить LVGL об изменении стиля */
     lv_obj_report_style_change(&bar_style);
     lv_test_wait(50);
 
@@ -373,10 +373,10 @@ void test_bar_start_value_should_only_change_when_in_range_mode(void)
     lv_bar_set_value(g_bar, 90, LV_ANIM_OFF);
     lv_bar_set_start_value(g_bar, new_start_value, LV_ANIM_OFF);
 
-    /* Start value shouldn't be updated when not in RANGE mode */
+    /* Начальное значение не должно обновляться, если не в режиме RANGE. */
     TEST_ASSERT_EQUAL_INT32(0u, lv_bar_get_start_value(g_bar));
 
-    /* Set bar in RANGE mode so we can edit the start value */
+    /* Установите бар в режим RANGE, чтобы мы могли редактировать начальное значение. */
     lv_bar_set_mode(g_bar, LV_BAR_MODE_RANGE);
     lv_bar_set_start_value(g_bar, new_start_value, LV_ANIM_OFF);
 
@@ -385,7 +385,7 @@ void test_bar_start_value_should_only_change_when_in_range_mode(void)
 
 void test_bar_start_value_should_be_smaller_than_current_value_in_range_mode(void)
 {
-    /* Set bar in RANGE mode so we can edit the start value */
+    /* Установите бар в режим RANGE, чтобы мы могли редактировать начальное значение. */
     lv_bar_set_mode(g_bar, LV_BAR_MODE_RANGE);
     lv_bar_set_value(g_bar, 50, LV_ANIM_OFF);
     lv_bar_set_start_value(g_bar, 100u, LV_ANIM_OFF);
@@ -411,29 +411,29 @@ void test_bar_current_value_should_be_truncated_to_min_value_when_it_is_below_it
     TEST_ASSERT_EQUAL_INT32(min_value, lv_bar_get_value(g_bar));
 }
 
-/** When in symmetrical mode, the bar indicator has to be drawn towards the min
- * range value. Requires a negative min range value and a positive max range
- * value.
+/** В симметричном режиме индикатор столбца должен быть направлен к минимальному значению.
+ * значение диапазона. Требуется отрицательное минимальное значение диапазона и положительное максимальное значение.
+ * ценность.
  *
- * Bar properties assumed:
+ * Предполагаемые свойства бара:
  * - base direction: LTR
  */
 void test_bar_indicator_should_be_drawn_towards_the_min_range_side_after_setting_a_more_negative_value(void)
 {
     lv_bar_t * bar_ptr = (lv_bar_t *) g_bar;
 
-    /* Setup bar properties */
+    /* Свойства панели настройки */
     lv_obj_set_size(g_bar, 100, 50);
     lv_bar_set_mode(g_bar, LV_BAR_MODE_SYMMETRICAL);
     lv_bar_set_range(g_bar, -100, 100);
 
-    /* Set bar value to 1, so it gets drawn at the middle of the bar */
+    /* Установите значение столбца равным 1, чтобы он отображался в середине столбца. */
     lv_bar_set_value(g_bar, 1, LV_ANIM_OFF);
     lv_test_wait(50);
 
     int32_t original_pos = bar_ptr->indic_area.x1;
 
-    /* Set bar to a more negative value */
+    /* Установите для бара более отрицательное значение */
     lv_bar_set_value(g_bar, -50, LV_ANIM_OFF);
     lv_test_wait(50);
 
@@ -576,42 +576,42 @@ void test_bar_properties(void)
     lv_obj_t * obj = lv_bar_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Test VALUE property */
+    /* Тестирование свойства VALUE */
     prop.id = LV_PROPERTY_BAR_VALUE;
     prop.num = 50;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(50, lv_obj_get_property(obj, LV_PROPERTY_BAR_VALUE).num);
     TEST_ASSERT_EQUAL_INT(50, lv_bar_get_value(obj));
 
-    /* Test MIN_VALUE property */
+    /* Тестирование свойства MIN_VALUE */
     prop.id = LV_PROPERTY_BAR_MIN_VALUE;
     prop.num = 10;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(10, lv_obj_get_property(obj, LV_PROPERTY_BAR_MIN_VALUE).num);
     TEST_ASSERT_EQUAL_INT(10, lv_bar_get_min_value(obj));
 
-    /* Test MAX_VALUE property */
+    /* Тестирование свойства MAX_VALUE */
     prop.id = LV_PROPERTY_BAR_MAX_VALUE;
     prop.num = 200;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(200, lv_obj_get_property(obj, LV_PROPERTY_BAR_MAX_VALUE).num);
     TEST_ASSERT_EQUAL_INT(200, lv_bar_get_max_value(obj));
 
-    /* Test MODE property */
+    /* Тестирование свойства MODE */
     prop.id = LV_PROPERTY_BAR_MODE;
     prop.num = LV_BAR_MODE_RANGE;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(LV_BAR_MODE_RANGE, lv_obj_get_property(obj, LV_PROPERTY_BAR_MODE).num);
     TEST_ASSERT_EQUAL_INT(LV_BAR_MODE_RANGE, lv_bar_get_mode(obj));
 
-    /* Test START_VALUE property (only works in RANGE mode) */
+    /* Тестирование свойства START_VALUE (работает только в режиме RANGE) */
     prop.id = LV_PROPERTY_BAR_START_VALUE;
     prop.num = 20;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(20, lv_obj_get_property(obj, LV_PROPERTY_BAR_START_VALUE).num);
     TEST_ASSERT_EQUAL_INT(20, lv_bar_get_start_value(obj));
 
-    /* Test ORIENTATION property */
+    /* Тестирование свойства ORIENTATION */
     prop.id = LV_PROPERTY_BAR_ORIENTATION;
     prop.num = LV_BAR_ORIENTATION_VERTICAL;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);

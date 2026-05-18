@@ -117,9 +117,9 @@ lv_display_t * lv_display_create(int32_t hor_res, int32_t ver_res)
     lv_ll_init(&disp->sync_areas, sizeof(lv_area_t));
 
     lv_display_t * disp_def_tmp = disp_def;
-    disp_def                 = disp; /*Temporarily change the default screen to create the default screens on the
-                                        new display*/
-    /*Create a refresh timer*/
+    disp_def                 = disp; /*Временно измените экран по умолчанию, чтобы создать экраны по умолчанию на
+                                        новый дисплей*/
+    /*Создать таймер обновления*/
     disp->refr_timer = lv_timer_create(lv_display_refr_timer, LV_DEF_REFR_PERIOD, disp);
     LV_ASSERT_MALLOC(disp->refr_timer);
     if(disp->refr_timer == NULL) {
@@ -151,10 +151,10 @@ lv_display_t * lv_display_create(int32_t hor_res, int32_t ver_res)
     }
 #endif
 
-    disp->bottom_layer = lv_obj_create(NULL); /*Create bottom layer on the display*/
-    disp->act_scr   = lv_obj_create(NULL); /*Create a default screen on the display*/
-    disp->top_layer = lv_obj_create(NULL); /*Create top layer on the display*/
-    disp->sys_layer = lv_obj_create(NULL); /*Create sys layer on the display*/
+    disp->bottom_layer = lv_obj_create(NULL); /*Создать нижний слой на дисплее*/
+    disp->act_scr   = lv_obj_create(NULL); /*Создать экран по умолчанию на дисплее*/
+    disp->top_layer = lv_obj_create(NULL); /*Создать верхний слой на дисплее*/
+    disp->sys_layer = lv_obj_create(NULL); /*Создайте системный слой на дисплее.*/
     lv_obj_remove_style_all(disp->bottom_layer);
     lv_obj_remove_style_all(disp->top_layer);
     lv_obj_remove_style_all(disp->sys_layer);
@@ -174,12 +174,12 @@ lv_display_t * lv_display_create(int32_t hor_res, int32_t ver_res)
 
     lv_obj_invalidate(disp->act_scr);
 
-    disp_def = disp_def_tmp; /*Revert the default display*/
-    if(disp_def == NULL) disp_def = disp; /*Initialize the default display*/
+    disp_def = disp_def_tmp; /*Вернуть отображение по умолчанию*/
+    if(disp_def == NULL) disp_def = disp; /*Инициализировать дисплей по умолчанию*/
 
     lv_display_add_event_cb(disp, disp_event_cb, LV_EVENT_REFR_REQUEST, NULL);
 
-    lv_timer_ready(disp->refr_timer); /*Be sure the screen will be refreshed immediately on start up*/
+    lv_timer_ready(disp->refr_timer); /*Убедитесь, что экран обновится сразу же при запуске.*/
 
 #if LV_USE_PERF_MONITOR
     lv_sysmon_show_performance(disp);
@@ -203,7 +203,7 @@ void lv_display_delete(lv_display_t * disp)
     lv_event_mark_deleted(disp);
     lv_event_remove_all(&(disp->event_list));
 
-    /*Detach the input devices*/
+    /*Отсоедините устройства ввода*/
     lv_indev_t * indev;
     indev = lv_indev_get_next(NULL);
     while(indev) {
@@ -213,7 +213,7 @@ void lv_display_delete(lv_display_t * disp)
         indev = lv_indev_get_next(indev);
     }
 
-    /* Delete screen and other obj */
+    /* Удалить экран и другие объекты */
     if(disp->sys_layer) {
         lv_obj_delete(disp->sys_layer);
         disp->sys_layer = NULL;
@@ -231,7 +231,7 @@ void lv_display_delete(lv_display_t * disp)
     disp->act_scr = NULL;
 
     while(disp->screen_cnt != 0) {
-        /*Delete the screens*/
+        /*Удалить экраны*/
         lv_obj_delete(disp->screens[0]);
     }
 
@@ -460,7 +460,7 @@ int32_t lv_display_get_offset_y(const lv_display_t * disp)
 int32_t lv_display_get_dpi(const lv_display_t * disp)
 {
     if(disp == NULL) disp = lv_display_get_default();
-    if(disp == NULL) return LV_DPI_DEF;  /*Do not return 0 because it might be a divider*/
+    if(disp == NULL) return LV_DPI_DEF;  /*Не возвращайте 0, потому что это может быть делитель.*/
     return disp->dpi;
 }
 
@@ -500,14 +500,14 @@ void lv_display_set_buffers(lv_display_t * disp, void * buf1, void * buf2, uint3
     uint32_t h = lv_display_get_original_vertical_resolution(disp);
     LV_ASSERT_MSG(w != 0 && h != 0, "display resolution is 0");
 
-    /* buf1 or buf2 is not aligned according to LV_DRAW_BUF_ALIGN */
+    /* buf1 или buf2 не выровнены согласно LV_DRAW_BUF_ALIGN */
     LV_ASSERT_FORMAT_MSG(buf1 == lv_draw_buf_align(buf1, cf), "buf1 is not aligned: %p", buf1);
     LV_ASSERT_FORMAT_MSG(buf2 == NULL || buf2 == lv_draw_buf_align(buf2, cf), "buf2 is not aligned: %p", buf2);
 
     uint32_t stride = lv_draw_buf_width_to_stride(w, cf);
     if(render_mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
         LV_ASSERT_FORMAT_MSG(stride != 0, "stride is 0, check your color format %d and width: %" LV_PRIu32, cf, w);
-        /* for partial mode, we calculate the height based on the buf_size and stride */
+        /* для частичного режима мы вычисляем высоту на основеbuf_sizeи шага */
         h = buf_size / stride;
         LV_ASSERT_MSG(h != 0, "the buffer is too small");
     }
@@ -521,7 +521,7 @@ void lv_display_set_buffers(lv_display_t * disp, void * buf1, void * buf2, uint3
     lv_display_set_draw_buffers(disp, &disp->_static_buf1, buf2 ? &disp->_static_buf2 : NULL);
     lv_display_set_render_mode(disp, render_mode);
 
-    /* the stride was not set explicitly */
+    /* шаг не был установлен явно */
     disp->stride_is_auto = 1;
 }
 
@@ -540,7 +540,7 @@ void lv_display_set_buffers_with_stride(lv_display_t * disp, void * buf1, void *
     LV_ASSERT_MSG(w != 0 && h != 0, "display resolution is 0");
 
     if(render_mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
-        /* for partial mode, we calculate the height based on the buf_size and stride */
+        /* для частичного режима мы вычисляем высоту на основеbuf_sizeи шага */
         h = buf_size / stride;
         LV_ASSERT_MSG(h != 0, "the buffer is too small");
     }
@@ -775,15 +775,15 @@ void lv_screen_load_anim(lv_obj_t * new_scr, lv_screen_load_anim_t anim_type, ui
         return;
     }
 
-    /*If another screen load animation is in progress
-     *make target screen loaded immediately. */
+    /*Если выполняется другая анимация загрузки экрана
+     *сделать целевой экран загруженным немедленно. */
     if(d->scr_to_load && act_scr != d->scr_to_load) {
         lv_anim_delete(d->scr_to_load, NULL);
         lv_obj_set_pos(d->scr_to_load, 0, 0);
         lv_obj_remove_local_style_prop(d->scr_to_load, LV_STYLE_OPA, 0);
 
         d->prev_scr = d->act_scr;
-        act_scr = d->scr_to_load; /*Active screen changed.*/
+        act_scr = d->scr_to_load; /*Активный экран изменен.*/
         lv_load_screen_result_t res = load_new_screen(d->scr_to_load);
         if(res == LV_LOAD_SCREEN_RESULT_DISPLAY_DELETED) {
             return;
@@ -806,17 +806,17 @@ void lv_screen_load_anim(lv_obj_t * new_scr, lv_screen_load_anim_t anim_type, ui
     d->draw_prev_over_act = is_out_anim(anim_type);
     d->del_prev = auto_del;
 
-    /*Be sure there is no other animation on the screens*/
+    /*Убедитесь, что на экранах нет другой анимации.*/
     lv_anim_delete(new_scr, NULL);
     if(act_scr) lv_anim_delete(act_scr, NULL);
 
-    /*Be sure both screens are in a normal position*/
+    /*Убедитесь, что оба экрана находятся в нормальном положении.*/
     lv_obj_set_pos(new_scr, 0, 0);
     if(act_scr) lv_obj_set_pos(act_scr, 0, 0);
     lv_obj_remove_local_style_prop(new_scr, LV_STYLE_OPA, 0);
     if(act_scr) lv_obj_remove_local_style_prop(act_scr, LV_STYLE_OPA, 0);
 
-    /*Shortcut for immediate load*/
+    /*Ярлык для немедленной загрузки*/
     if(time == 0 && delay == 0) {
         lv_load_screen_result_t res = load_new_screen(new_scr);
         if(res == LV_LOAD_SCREEN_RESULT_DISPLAY_DELETED) {
@@ -847,7 +847,7 @@ void lv_screen_load_anim(lv_obj_t * new_scr, lv_screen_load_anim_t anim_type, ui
 
     switch(anim_type) {
         case LV_SCREEN_LOAD_ANIM_NONE:
-            /*Create a dummy animation to apply the delay*/
+            /*Создайте фиктивную анимацию, чтобы применить задержку.*/
             lv_anim_set_exec_cb(&a_new, set_x_anim);
             lv_anim_set_values(&a_new, 0, 0);
             break;
@@ -1052,7 +1052,7 @@ void lv_display_set_theme(lv_display_t * disp, lv_theme_t * th)
         lv_theme_apply(disp->screens[0]);
 
         if(!th) {
-            /* When th is NULL, clear all styles */
+            /* Если это NULL, очистите все стили. */
             for(uint32_t i = 1; i < disp->screen_cnt; i++) {
                 lv_theme_apply(disp->screens[i]);
             }
@@ -1150,7 +1150,7 @@ bool lv_display_register_vsync_event(lv_display_t * disp, lv_event_cb_t event_cb
 
     lv_display_add_event_cb(disp, event_cb, LV_EVENT_VSYNC, user_data);
 
-    /*only send once*/
+    /*отправить только один раз*/
     if(disp->vsync_count == 0)
         lv_display_send_event(disp, LV_EVENT_VSYNC_REQUEST, disp);
 
@@ -1168,7 +1168,7 @@ bool lv_display_unregister_vsync_event(lv_display_t * disp, lv_event_cb_t event_
         return false;
 
     disp->vsync_count -= removed_count;
-    /*only send once*/
+    /*отправить только один раз*/
     if(disp->vsync_count == 0)
         lv_display_send_event(disp, LV_EVENT_VSYNC_REQUEST, NULL);
 
@@ -1410,24 +1410,24 @@ static void screen_event_delete_cb(lv_event_t * e)
 }
 
 /**
- * Load a new screen and report the result.
+ * Загрузите новый экран и сообщите результат.
  *
- * @param scr  the screen object to load; must not be NULL
- * @return     a value of ::lv_load_screen_result_t indicating the outcome:
- *             - LV_LOAD_SCREEN_RESULT_OK: the new screen was loaded successfully;
- *               both the old and new screens remain valid.
- *             - LV_LOAD_SCREEN_RESULT_OLD_SCREEN_DELETED: the old screen was
- *               deleted while loading the new screen, but the new screen remains valid.
- *             - LV_LOAD_SCREEN_RESULT_NEW_SCREEN_DELETED: the new screen was
- *               deleted during loading/unloading events; the old screen remains valid.
- *             - LV_LOAD_SCREEN_RESULT_BOTH_SCREENS_DELETED: both the old and new
- *               screens were deleted during the operation.
- *             - LV_LOAD_SCREEN_RESULT_DISPLAY_DELETED: the display was deleted
- *               while processing screen load/unload events.
+ * @param scr  объект экрана для загрузки; не должно быть NULL
+ * @return     значение :: lv_load_screen_result_t, указывающее результат:
+ *             - LV_LOAD_SCREEN_RESULT_OK: новый экран успешно загружен;
+ *               и старый, и новый экраны остаются действительными.
+ *             - LV_LOAD_SCREEN_RESULT_OLD_SCREEN_DELETED: старый экран был
+ *               удален при загрузке нового экрана, но новый экран остается действительным.
+ *             - LV_LOAD_SCREEN_RESULT_NEW_SCREEN_DELETED: новый экран был
+ *               удаляется во время событий загрузки/выгрузки; старый экран остается действительным.
+ *             - LV_LOAD_SCREEN_RESULT_BOTH_SCREENS_DELETED: и старый, и новый
+ *               экраны были удалены во время операции.
+ *             - LV_LOAD_SCREEN_RESULT_DISPLAY_DELETED: отображение было удалено
+ *               при обработке событий загрузки/выгрузки экрана.
  */
 static lv_load_screen_result_t load_new_screen(lv_obj_t * scr)
 {
-    /*scr must not be NULL, but d->act_scr might be*/
+    /*scr не должен бытьNULL, но d->act_scrможет быть*/
     LV_ASSERT_NULL(scr);
     if(scr == NULL) return false;
 
@@ -1435,7 +1435,7 @@ static lv_load_screen_result_t load_new_screen(lv_obj_t * scr)
     LV_ASSERT_NULL(d);
 
     lv_obj_t * old_scr = d->act_scr;
-    /* Attach an event delete cb to the screen so we know if the screen is deleted during an event*/
+    /* Прикрепите к экрану сообщение об удалении события, чтобы мы знали, удаляется ли экран во время события.*/
     if(old_scr) {
         lv_obj_add_event_cb(old_scr, screen_event_delete_cb, LV_EVENT_DELETE, &old_scr);
     }

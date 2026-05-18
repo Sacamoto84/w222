@@ -1,7 +1,7 @@
 /**
  * @file lv_tree.c
- * Tree.
- * The nodes are dynamically allocated by the 'lv_mem' module,
+ * Дерево.
+ * Узлы направления ослабляются с помощью модуля lv_mem.
  */
 
 /*********************
@@ -128,7 +128,7 @@ void lv_tree_node_delete(lv_tree_node_t * node)
 {
     if(node) {
         if(node->parent) {
-            /* Remove from parent */
+            /* Удалить из родительского */
             lv_tree_node_t * parent = node->parent;
             for(uint32_t i = 0; i < parent->child_cnt; i++) {
                 if(parent->children[i] == node) {

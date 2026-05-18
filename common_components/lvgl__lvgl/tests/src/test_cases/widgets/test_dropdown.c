@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -27,7 +27,7 @@ void test_dropdown_create_delete(void)
     lv_dropdown_open(dd2);
     TEST_ASSERT_EQUAL(4, lv_obj_get_child_count(lv_screen_active()));
     TEST_ASSERT_TRUE(lv_dropdown_is_open(dd2));
-    lv_dropdown_open(dd2);    /*Try to open again*/
+    lv_dropdown_open(dd2);    /*Попробуйте открыть еще раз*/
     TEST_ASSERT_EQUAL(4, lv_obj_get_child_count(lv_screen_active()));
 
     lv_obj_t * dd3 = lv_dropdown_create(lv_screen_active());
@@ -37,7 +37,7 @@ void test_dropdown_create_delete(void)
     TEST_ASSERT_EQUAL(6, lv_obj_get_child_count(lv_screen_active()));
     lv_dropdown_close(dd3);
     TEST_ASSERT_EQUAL(6, lv_obj_get_child_count(lv_screen_active()));
-    lv_dropdown_close(dd3);   /*Try to close again*/
+    lv_dropdown_close(dd3);   /*Попробуйте закрыть еще раз*/
     TEST_ASSERT_EQUAL(6, lv_obj_get_child_count(lv_screen_active()));
 
     lv_obj_delete(dd2);
@@ -85,7 +85,7 @@ void test_dropdown_set_options(void)
     TEST_ASSERT_EQUAL_STRING("", lv_dropdown_get_options(dd1));
     TEST_ASSERT_EQUAL(0, lv_dropdown_get_option_count(dd1));
 
-    lv_dropdown_set_options(dd1, "o1\no2"); /*Just to add some content before lv_dropdown_set_options_static*/
+    lv_dropdown_set_options(dd1, "o1\no2"); /*Просто чтобы добавить немного контента перед lv_dropdown_set_options_static*/
 
     lv_dropdown_set_options_static(dd1, "a1\nb2\nc3\nd4\ne5\nf6");
     TEST_ASSERT_EQUAL_STRING("a1\nb2\nc3\nd4\ne5\nf6", lv_dropdown_get_options(dd1));
@@ -130,7 +130,7 @@ void test_dropdown_select(void)
     lv_dropdown_get_selected_str(dd1, buf, 4);
     TEST_ASSERT_EQUAL_STRING("Opt", buf);
 
-    /*Out of range*/
+    /*Вне диапазона*/
     lv_dropdown_set_selected(dd1, 3);
     TEST_ASSERT_EQUAL(2, lv_dropdown_get_selected(dd1));
 }
@@ -185,13 +185,13 @@ void test_dropdown_keypad(void)
     TEST_ASSERT_FALSE(lv_dropdown_is_open(dd2));
 
     lv_test_key_hit(LV_KEY_DOWN);
-    lv_test_key_hit(LV_KEY_RIGHT);  /*Same as down*/
+    lv_test_key_hit(LV_KEY_RIGHT);  /*То же, что вниз*/
     lv_test_key_hit(LV_KEY_ENTER);
     TEST_ASSERT_FALSE(lv_dropdown_is_open(dd1));
     TEST_ASSERT_EQUAL(2, lv_dropdown_get_selected(dd1));
     TEST_ASSERT_EQUAL(1, event_cnt);
 
-    lv_test_key_hit(LV_KEY_DOWN); /*Open the list too*/
+    lv_test_key_hit(LV_KEY_DOWN); /*Откройте список тоже*/
     TEST_ASSERT_NOT_NULL(lv_dropdown_get_list(dd1));
     lv_test_key_hit(LV_KEY_DOWN);
     lv_test_key_hit(LV_KEY_ENTER);
@@ -199,7 +199,7 @@ void test_dropdown_keypad(void)
     TEST_ASSERT_EQUAL(3, lv_dropdown_get_selected(dd1));
     TEST_ASSERT_EQUAL(2, event_cnt);
 
-    lv_test_key_hit(LV_KEY_RIGHT); /*Open the list too*/
+    lv_test_key_hit(LV_KEY_RIGHT); /*Откройте список тоже*/
     TEST_ASSERT_NOT_NULL(lv_dropdown_get_list(dd1));
     lv_test_key_hit(LV_KEY_RIGHT);
     lv_test_key_hit(LV_KEY_ENTER);
@@ -207,7 +207,7 @@ void test_dropdown_keypad(void)
     TEST_ASSERT_EQUAL(4, lv_dropdown_get_selected(dd1));
     TEST_ASSERT_EQUAL(3, event_cnt);
 
-    lv_test_key_hit(LV_KEY_LEFT); /*Open the list too*/
+    lv_test_key_hit(LV_KEY_LEFT); /*Откройте список тоже*/
     TEST_ASSERT_TRUE(lv_dropdown_is_open(dd1));
     lv_test_key_hit(LV_KEY_LEFT);
     lv_test_key_hit(LV_KEY_ENTER);
@@ -215,7 +215,7 @@ void test_dropdown_keypad(void)
     TEST_ASSERT_EQUAL(3, lv_dropdown_get_selected(dd1));
     TEST_ASSERT_EQUAL(4, event_cnt);
 
-    lv_test_key_hit(LV_KEY_UP); /*Open the list too*/
+    lv_test_key_hit(LV_KEY_UP); /*Откройте список тоже*/
     TEST_ASSERT_NOT_NULL(lv_dropdown_get_list(dd1));
     lv_test_key_hit(LV_KEY_UP);
     lv_test_key_hit(LV_KEY_ENTER);
@@ -301,7 +301,7 @@ void test_dropdown_encoder(void)
     lv_test_encoder_click();
     lv_test_encoder_turn(2);
     lv_test_encoder_press();
-    lv_test_wait(1000);  //Long press
+    lv_test_wait(1000);  //Длительное нажатие
     lv_test_encoder_release();
     lv_test_wait(50);
     TEST_ASSERT_FALSE(lv_dropdown_is_open(dd1));
@@ -422,7 +422,7 @@ void test_dropdown_render_2(void)
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/dropdown_2.png");
 }
 
-/* See #2893 */
+/* См. № 2893. */
 void test_dropdown_should_list_on_top(void)
 {
     lv_obj_t * cont1 = lv_obj_create(lv_screen_active());
@@ -440,7 +440,7 @@ void test_dropdown_should_list_on_top(void)
     TEST_ASSERT_EQUAL_INT(2, lv_obj_get_index(list));
 }
 
-/* See #4191 */
+/* См. № 4191. */
 void test_dropdown_get_options_should_check_lengths(void)
 {
     lv_obj_t * dd = lv_dropdown_create(lv_screen_active());

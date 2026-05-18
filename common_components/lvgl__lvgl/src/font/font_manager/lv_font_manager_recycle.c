@@ -76,7 +76,7 @@ void lv_font_manager_recycle_delete(lv_font_manager_recycle_t * manager)
 
     lv_font_recycle_t * recycle = lv_ll_get_head(recycle_ll);
 
-    /* clear all recycle */
+    /* очистить всю корзину */
     while(recycle != NULL) {
         lv_font_recycle_t * recycle_next = lv_ll_get_next(recycle_ll, recycle);
         lv_font_recycle_close(manager, recycle);
@@ -99,12 +99,12 @@ lv_font_t * lv_font_manager_recycle_get_reuse(lv_font_manager_recycle_t * manage
 
     lv_font_recycle_t * recycle;
     LV_LL_READ(recycle_ll, recycle) {
-        /* match font */
+        /* подобрать шрифт */
         if(lv_font_info_is_equal(ft_info, &recycle->ft_info)) {
             lv_font_t * font = recycle->font;
             LV_LOG_INFO("found font: %p", (void *)font);
 
-            /* remove reused font */
+            /* удалить повторно используемый шрифт */
             lv_ll_remove(recycle_ll, recycle);
             lv_free(recycle);
             return font;
@@ -124,13 +124,13 @@ void lv_font_manager_recycle_set_reuse(lv_font_manager_recycle_t * manager, lv_f
 
     lv_ll_t * recycle_ll = &manager->recycle_ll;
 
-    /* check recycled size */
+    /* проверьте размер вторичной переработки */
     if(lv_ll_get_len(recycle_ll) >= manager->max_size) {
         LV_LOG_INFO("recycle full, remove tail font...");
         lv_font_manager_recycle_remove_tail(manager);
     }
 
-    /* record reuse font */
+    /* записать повторное использование шрифта */
     lv_font_recycle_t * recycle = lv_ll_ins_head(recycle_ll);
     LV_ASSERT_MALLOC(recycle);
     lv_memzero(recycle, sizeof(lv_font_recycle_t));

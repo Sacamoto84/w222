@@ -71,20 +71,20 @@ lv_obj_t * lv_calendar_add_header_dropdown(lv_obj_t * parent)
 
 void lv_calendar_header_dropdown_set_year_list(lv_obj_t * parent, const char * years_list)
 {
-    /* Search for the header dropdown */
+    /* Найдите раскрывающийся список заголовка */
     lv_obj_t * header = lv_obj_get_child_by_type(parent, 0, &lv_calendar_header_dropdown_class);
     if(NULL == header) {
-        /* Header not found */
+        /* Заголовок не найден */
         return;
     }
 
-    /* Search for the year dropdown
-     * Index is 0 because in the header dropdown constructor the year dropdown (year_dd)
-     * is the first created child of the header */
+    /* Найдите раскрывающийся список года
+     * Индекс равен 0, потому что в конструкторе раскрывающегося списка заголовков раскрывающийся список года ( year_dd )
+     * является первым созданным дочерним элементом заголовка */
     const int32_t year_dropdown_index = 0;
     lv_obj_t * year_dropdown = lv_obj_get_child_by_type(header, year_dropdown_index, &lv_dropdown_class);
     if(NULL == year_dropdown) {
-        /* year dropdown not found */
+        /* раскрывающийся список года не найден */
         return;
     }
 
@@ -120,7 +120,7 @@ static void my_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 
     lv_obj_add_event_cb(obj, value_changed_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
 
-    /*Refresh the drop down*/
+    /*Обновить раскрывающийся список*/
     lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
 }
 

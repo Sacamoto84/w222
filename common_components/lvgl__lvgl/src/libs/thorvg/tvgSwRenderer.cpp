@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -33,7 +33,7 @@
 #include "tvgSwRenderer.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 static int32_t initEngineCnt = false;
 static int32_t rendererCnt = 0;
@@ -44,7 +44,7 @@ struct SwTask : Task
 {
     SwSurface* surface = nullptr;
     SwMpool* mpool = nullptr;
-    SwBBox bbox;                          //Rendering Region
+    SwBBox bbox;                          //Регион рендеринга
     Matrix transform;
     Array<RenderData> clips;
     RenderUpdateFlag flags = RenderUpdateFlag::None;
@@ -82,10 +82,10 @@ struct SwShapeTask : SwTask
     const RenderShape* rshape = nullptr;
     bool clipper = false;
 
-    /* We assume that if the stroke width is greater than 2,
-       the shape's outline beneath the stroke could be adequately covered by the stroke drawing.
-       Therefore, antialiasing is disabled under this condition.
-       Additionally, the stroke style should not be dashed. */
+    /* Мы предполагаем, что если ширина штриха больше 2,
+       контур фигуры под обводкой может быть адекватно покрыт рисунком обводки.
+       Поэтому сглаживание при этом условии отключается.
+       Кроме того, стиль обводки не должен быть пунктирным. */
     bool antialiasing(float strokeWidth)
     {
         return strokeWidth < 2.0f || rshape->stroke->dashCnt > 0 || rshape->stroke->strokeFirst || rshape->strokeTrim() || rshape->stroke->color[3] < 255;
@@ -115,7 +115,7 @@ struct SwShapeTask : SwTask
 
     void run(unsigned tid) override
     {
-        //Invisible
+        //Невидимый
         if (opacity == 0 && !clipper) {
             bbox.reset();
             return;
@@ -125,11 +125,11 @@ struct SwShapeTask : SwTask
         SwBBox renderRegion{};
         auto visibleFill = false;
 
-        //This checks also for the case, if the invisible shape turned to visible by alpha.
+        //Это также проверяет случай, если невидимая форма превратилась в видимую с помощью альфы.
         auto prepareShape = false;
         if (!shapePrepared(&shape) && (flags & RenderUpdateFlag::Color)) prepareShape = true;
 
-        //Shape
+        //Форма
         if (flags & (RenderUpdateFlag::Path | RenderUpdateFlag::Transform) || prepareShape) {
             uint8_t alpha = 0;
             rshape->fillColor(nullptr, nullptr, nullptr, &alpha);
@@ -143,7 +143,7 @@ struct SwShapeTask : SwTask
                 }
             }
         }
-        //Fill
+        //Заполнить
         if (flags & (RenderUpdateFlag::Path |RenderUpdateFlag::Gradient | RenderUpdateFlag::Transform | RenderUpdateFlag::Color)) {
             if (visibleFill || clipper) {
                 if (!shapeGenRle(&shape, rshape, antialiasing(strokeWidth))) goto err;
@@ -156,7 +156,7 @@ struct SwShapeTask : SwTask
                 shapeDelFill(&shape);
             }
         }
-        //Stroke
+        //Инсульт
         if (flags & (RenderUpdateFlag::Path | RenderUpdateFlag::Stroke | RenderUpdateFlag::Transform)) {
             if (strokeWidth > 0.0f) {
                 shapeResetStroke(&shape, rshape, transform);
@@ -174,19 +174,19 @@ struct SwShapeTask : SwTask
             }
         }
 
-        //Clear current task memorypool here if the clippers would use the same memory pool
+        //Очистите текущий пул памяти задачи, если клипперы будут использовать тот же пул памяти.
         shapeDelOutline(&shape, mpool, tid);
 
-        //Clip Path
+        //Путь клипа
         for (auto clip = clips.begin(); clip < clips.end(); ++clip) {
             auto clipper = static_cast<SwTask*>(*clip);
-            //Clip shape rle
+            //Форма клипа
             if (shape.rle && !clipper->clip(shape.rle)) goto err;
-            //Clip stroke rle
+            //Роль клипа
             if (shape.strokeRle && !clipper->clip(shape.strokeRle)) goto err;
         }
 
-        bbox = renderRegion; //sync
+        bbox = renderRegion; //синхронизировать
 
         return;
 
@@ -206,7 +206,7 @@ struct SwShapeTask : SwTask
 struct SwImageTask : SwTask
 {
     SwImage image;
-    RenderSurface* source;                //Image source
+    RenderSurface* source;                //Источник изображения
 
     bool clip(SwRle* target) override
     {
@@ -218,7 +218,7 @@ struct SwImageTask : SwTask
     {
         auto clipRegion = bbox;
 
-        //Convert colorspace if it's not aligned.
+        //Преобразуйте цветовое пространство, если оно не выровнено.
         rasterConvertCS(source, surface->cs);
         rasterPremultiply(source);
 
@@ -228,7 +228,7 @@ struct SwImageTask : SwTask
         image.stride = source->stride;
         image.channelSize = source->channelSize;
 
-        //Invisible shape turned to visible by alpha.
+        //Невидимая форма стала видимой с помощью альфы.
         if ((flags & (RenderUpdateFlag::Image | RenderUpdateFlag::Transform | RenderUpdateFlag::Color)) && (opacity > 0)) {
             imageReset(&image);
             if (!image.data || image.w == 0 || image.h == 0) goto end;
@@ -238,7 +238,7 @@ struct SwImageTask : SwTask
             if (clips.count > 0) {
                 if (!imageGenRle(&image, bbox, false)) goto end;
                 if (image.rle) {
-                    //Clear current task memorypool here if the clippers would use the same memory pool
+                    //Очистите текущий пул памяти задачи, если клипперы будут использовать тот же пул памяти.
                     imageDelOutline(&image, mpool, tid);
                     for (auto clip = clips.begin(); clip < clips.end(); ++clip) {
                         auto clipper = static_cast<SwTask*>(*clip);
@@ -297,7 +297,7 @@ static void _renderStroke(SwShapeTask* task, SwSurface* surface, uint8_t opacity
 }
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 SwRenderer::~SwRenderer()
@@ -385,7 +385,7 @@ bool SwRenderer::preRender()
 
 void SwRenderer::clearCompositors()
 {
-    //Free Composite Caches
+    //Бесплатные составные кеши
     for (auto comp = compositors.begin(); comp < compositors.end(); ++comp) {
         lv_free((*comp)->compositor->image.data);
         delete((*comp)->compositor);
@@ -397,7 +397,7 @@ void SwRenderer::clearCompositors()
 
 bool SwRenderer::postRender()
 {
-    //Unmultiply alpha if needed
+    //При необходимости умножьте альфу.
     if (surface->cs == ColorSpace::ABGR8888S || surface->cs == ColorSpace::ARGB8888S) {
         rasterUnpremultiply(surface);
     }
@@ -432,7 +432,7 @@ bool SwRenderer::renderShape(RenderData data)
 
     if (task->opacity == 0) return true;
 
-    //Main raster stage
+    //Основной растровый этап
     if (task->rshape->stroke && task->rshape->stroke->strokeFirst) {
         _renderStroke(task, surface, task->opacity);
         _renderFill(task, surface, task->opacity);
@@ -553,7 +553,7 @@ SwSurface* SwRenderer::request(int channelSize)
 {
     SwSurface* cmp = nullptr;
 
-    //Use cached data
+    //Использовать кэшированные данные
     for (auto p = compositors.begin(); p < compositors.end(); ++p) {
         if ((*p)->compositor->valid && (*p)->compositor->image.channelSize == channelSize) {
             cmp = *p;
@@ -561,9 +561,9 @@ SwSurface* SwRenderer::request(int channelSize)
         }
     }
 
-    //New Composition
+    //Новая композиция
     if (!cmp) {
-        //Inherits attributes from main surface
+        //Наследует атрибуты основной поверхности
         cmp = new SwSurface(surface);
         cmp->compositor = new SwCompositor;
         cmp->compositor->image.data = (pixel_t*)lv_malloc(channelSize * surface->stride * surface->h);
@@ -580,7 +580,7 @@ SwSurface* SwRenderer::request(int channelSize)
         compositors.push(cmp);
     }
 
-    //Sync. This may have been modified by post-processing.
+    //Синхронизация. Это могло быть изменено путем постобработки.
     cmp->data = cmp->compositor->image.data;
 
     return cmp;
@@ -596,12 +596,12 @@ RenderCompositor* SwRenderer::target(const RenderRegion& region, ColorSpace cs)
     auto sw = static_cast<int32_t>(surface->w);
     auto sh = static_cast<int32_t>(surface->h);
 
-    //Out of boundary
+    //За пределами границы
     if (x >= sw || y >= sh || x + w < 0 || y + h < 0) return nullptr;
 
     auto cmp = request(CHANNEL_SIZE(cs));
 
-    //Boundary Check
+    //Проверка границы
     if (x < 0) x = 0;
     if (y < 0) y = 0;
     if (x + w > sw) w = (sw - x);
@@ -616,11 +616,11 @@ RenderCompositor* SwRenderer::target(const RenderRegion& region, ColorSpace cs)
     cmp->compositor->bbox.max.y = y + h;
 
     /* TODO: Currently, only blending might work.
-       Blending and composition must be handled together. */
+       Смешивание и композицию следует рассматривать вместе. */
     auto color = (surface->blender && !surface->compositor) ? 0x00ffffff : 0x00000000;
     rasterClear(cmp, x, y, w, h, color);
 
-    //Switch render target
+    //Переключить цель рендеринга
     surface = cmp;
 
     return cmp->compositor;
@@ -634,11 +634,11 @@ bool SwRenderer::endComposite(RenderCompositor* cmp)
     auto p = static_cast<SwCompositor*>(cmp);
     p->valid = true;
 
-    //Recover Context
+    //Восстановить контекст
     surface = p->recoverSfc;
     surface->compositor = p->recoverCmp;
 
-    //Default is alpha blending
+    //По умолчанию используется альфа-смешение.
     if (p->method == CompositeMethod::None) {
         Matrix m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
         return rasterImage(surface, &p->image, m, p->bbox, p->opacity);
@@ -694,8 +694,8 @@ void* SwRenderer::prepareCommon(SwTask* task, const Matrix& transform, const Arr
     if (flags == RenderUpdateFlag::None) return task;
 
     //TODO: Failed threading them. It would be better if it's possible.
-    //See: https://github.com/thorvg/thorvg/issues/1409
-    //Guarantee composition targets get ready.
+    //См.: https://github.com/thorvg/thorvg/issues/1409
+    //Цели гарантийного состава готовятся.
     for (auto clip = clips.begin(); clip < clips.end(); ++clip) {
         static_cast<SwTask*>(*clip)->done();
     }
@@ -704,8 +704,8 @@ void* SwRenderer::prepareCommon(SwTask* task, const Matrix& transform, const Arr
     task->transform = transform;
 
     //zero size?
-    if (task->transform.e11 == 0.0f && task->transform.e12 == 0.0f) return task; //zero width
-    if (task->transform.e21 == 0.0f && task->transform.e22 == 0.0f) return task; //zero height
+    if (task->transform.e11 == 0.0f && task->transform.e12 == 0.0f) return task; //нулевая ширина
+    if (task->transform.e21 == 0.0f && task->transform.e22 == 0.0f) return task; //нулевая высота
 
     task->opacity = opacity;
     task->surface = surface;
@@ -729,7 +729,7 @@ void* SwRenderer::prepareCommon(SwTask* task, const Matrix& transform, const Arr
 
 RenderData SwRenderer::prepare(RenderSurface* surface, RenderData data, const Matrix& transform, Array<RenderData>& clips, uint8_t opacity, RenderUpdateFlag flags)
 {
-    //prepare task
+    //подготовить задание
     auto task = static_cast<SwImageTask*>(data);
     if (!task) task = new SwImageTask;
     else task->done();
@@ -742,7 +742,7 @@ RenderData SwRenderer::prepare(RenderSurface* surface, RenderData data, const Ma
 
 RenderData SwRenderer::prepare(const RenderShape& rshape, RenderData data, const Matrix& transform, Array<RenderData>& clips, uint8_t opacity, RenderUpdateFlag flags, bool clipper)
 {
-    //prepare task
+    //подготовить задание
     auto task = static_cast<SwShapeTask*>(data);
     if (!task) task = new SwShapeTask;
     else task->done();
@@ -765,7 +765,7 @@ bool SwRenderer::init(uint32_t threads)
 
     threadsCnt = threads;
 
-    //Share the memory pool among the renderer
+    //Разделите пул памяти между рендерерами
     globalMpool = mpoolInit(threads);
     if (!globalMpool) {
         --initEngineCnt;

@@ -12,14 +12,14 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_SPACE_EVENLY);
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -141,7 +141,7 @@ static void test_draw_letter(lv_freetype_font_render_mode_t render_mode, uint32_
     lv_canvas_init_layer(canvas, &layer);
     lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
 
-    /* drawing letter with clipping */
+    /* рисуем букву с вырезкой */
     lv_area_t clip_area;
     lv_area_set(&clip_area, 40, 40, 200 - 1, 200 - 1);
     layer._clip_area = clip_area;

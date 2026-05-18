@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 ##################################################################
-# sjpeg converter script version 1.0
-# Dependencies: (PYTHON-3)
+# скрипт конвертера sjpeg версия 1.0
+# Зависимости: ( PYTHON -3)
 ##################################################################
 SJPG_FILE_FORMAT_VERSION = "V1.00"  #
 JPEG_SPLIT_HEIGHT   = 16

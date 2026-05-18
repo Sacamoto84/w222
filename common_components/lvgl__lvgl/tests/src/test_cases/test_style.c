@@ -12,7 +12,7 @@ static void obj_set_height_helper(void * obj, int32_t height)
 
 void test_gradient_vertical_misalignment(void)
 {
-    /* Tests gradient caching as the height of widget changes.*/
+    /* Тестирует кэширование градиента при изменении высоты виджета.*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_VER, 0);
     lv_obj_set_style_bg_grad_color(obj, lv_color_hex(0xff0000), 0);
@@ -37,7 +37,7 @@ void test_gradient_vertical_misalignment(void)
     uint32_t i;
     for(i = 0; i < 100; i++) {
         lv_timer_handler();
-        lv_tick_inc(73); /*Use a not round number to cover more anim states */
+        lv_tick_inc(73); /*Используйте некруглое число, чтобы охватить больше состояний анимации. */
         usleep(1000);
     }
 }
@@ -49,13 +49,13 @@ void test_custom_prop_ids(void)
     uint32_t max_props_to_register = 64;
     for(uint32_t i = 0; i < max_props_to_register; i++) {
         lv_style_prop_t prop = lv_style_register_prop(fake_flag);
-        /* Should have a higher index than the last built-in prop */
+        /* Должен иметь более высокий индекс, чем последний встроенный реквизит. */
         TEST_ASSERT_GREATER_THAN(LV_STYLE_LAST_BUILT_IN_PROP, prop);
         if(i == 0) {
-            /* Should be equal to the first expected index of a custom prop */
+            /* Должно быть равно первому ожидаемому индексу пользовательского свойства. */
             TEST_ASSERT_EQUAL(LV_STYLE_NUM_BUILT_IN_PROPS + initial_custom_props, prop);
         }
-        /*We should find our flags*/
+        /*Мы должны найти наши флаги*/
         TEST_ASSERT_EQUAL(fake_flag, lv_style_prop_lookup_flags(prop));
         if(fake_flag == 0xff)
             fake_flag = 0;
@@ -64,9 +64,9 @@ void test_custom_prop_ids(void)
     }
     TEST_ASSERT_EQUAL(initial_custom_props + max_props_to_register, lv_style_get_num_custom_props());
     /*
-     * Check that the resizing algorithm works correctly, given that 64 props
-     * were registered + whatever's built-in. A failure here may just indicate
-     * that LVGL registers more built-in properties now and this needs adjustment.
+     * Убедитесь, что алгоритм изменения размера работает правильно, учитывая, что 64 реквизита
+     * были зарегистрированы + все встроенное. Ошибка здесь может просто указывать
+     * что LVGL теперь регистрирует больше встроенных свойств, и это требует настройки.
      */
     TEST_ASSERT_EQUAL(LV_GLOBAL_DEFAULT()->style_custom_table_size, 64);
 }
@@ -89,7 +89,7 @@ void test_const_style(void)
 
 void test_style_replacement(void)
 {
-    /*Define styles*/
+    /*Определение стилей*/
     lv_style_t style_red;
     lv_style_t style_blue;
 
@@ -99,17 +99,17 @@ void test_style_replacement(void)
     lv_style_init(&style_blue);
     lv_style_set_bg_color(&style_blue, lv_color_hex(0x0000ff));
 
-    /*Create object with style*/
+    /*Создать объект со стилем*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style_red, LV_PART_MAIN);
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0xff0000), lv_obj_get_style_bg_color(obj, LV_PART_MAIN));
 
-    /*Replace style successfully*/
+    /*Заменить стиль успешно*/
     bool replaced = lv_obj_replace_style(obj, &style_red, &style_blue, LV_PART_MAIN);
     TEST_ASSERT_EQUAL(true, replaced);
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0x0000ff), lv_obj_get_style_bg_color(obj, LV_PART_MAIN));
 
-    /*Failed replacement (already replaced)*/
+    /*Неудачная замена (уже заменено)*/
     replaced = lv_obj_replace_style(obj, &style_red, &style_blue, LV_PART_MAIN);
     TEST_ASSERT_EQUAL(false, replaced);
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0x0000ff), lv_obj_get_style_bg_color(obj, LV_PART_MAIN));
@@ -131,7 +131,7 @@ void test_style_copy(void)
     const lv_color_t copied_outline_color = lv_color_hex(0xffff00);
 
     lv_style_init(&style1);
-    lv_style_set_bg_color(&style1, lv_color_hex(0xff0000)); // this should get overwritten
+    lv_style_set_bg_color(&style1, lv_color_hex(0xff0000)); // это должно быть перезаписано
     lv_style_set_outline_color(&style1, copied_outline_color);
 
     lv_style_init(&style2);
@@ -140,7 +140,7 @@ void test_style_copy(void)
 
     lv_style_init(&copied_style);
     lv_style_copy(&copied_style, &style1);
-    lv_style_copy(&copied_style, &style2); // This should reset `copied_style` then duplicate the properties of `style2`
+    lv_style_copy(&copied_style, &style2); // Это должно сбросить `copied_style`, а затем продублировать свойства `style2`.
 
     lv_style_value_t value;
 
@@ -150,7 +150,7 @@ void test_style_copy(void)
     TEST_ASSERT_EQUAL_COLOR(copied_border_color, value.color);
     TEST_ASSERT_TRUE(lv_style_get_prop(&copied_style, LV_STYLE_OUTLINE_COLOR, &value) == LV_STYLE_RES_NOT_FOUND);
 
-    /* Changing the original style should not impact the style that copied it */
+    /* Изменение исходного стиля не должно влиять на стиль, в котором он был скопирован. */
     lv_style_set_bg_color(&style2, lv_color_hex(0x00ff00));
     TEST_ASSERT_TRUE(lv_style_get_prop(&copied_style, LV_STYLE_BG_COLOR, &value) == LV_STYLE_RES_FOUND);
     TEST_ASSERT_EQUAL_COLOR(copied_bg_color, value.color);
@@ -171,7 +171,7 @@ void test_style_merge(void)
     const lv_color_t merged_outline_color = lv_color_hex(0xffff00);
 
     lv_style_init(&style1);
-    lv_style_set_bg_color(&style1, lv_color_hex(0xff0000)); // this should get overwritten
+    lv_style_set_bg_color(&style1, lv_color_hex(0xff0000)); // это должно быть перезаписано
     lv_style_set_outline_color(&style1, merged_outline_color);
 
     lv_style_init(&style2);
@@ -191,7 +191,7 @@ void test_style_merge(void)
     TEST_ASSERT_TRUE(lv_style_get_prop(&merged_style, LV_STYLE_OUTLINE_COLOR, &value) == LV_STYLE_RES_FOUND);
     TEST_ASSERT_EQUAL_COLOR(merged_outline_color, value.color);
 
-    /* Changing the original style should not impact the style that copied it */
+    /* Изменение исходного стиля не должно влиять на стиль, в котором он был скопирован. */
     lv_style_set_bg_color(&style2, lv_color_hex(0x00ff00));
     TEST_ASSERT_TRUE(lv_style_get_prop(&merged_style, LV_STYLE_BG_COLOR, &value) == LV_STYLE_RES_FOUND);
     TEST_ASSERT_EQUAL_COLOR(merged_bg_color, value.color);
@@ -207,7 +207,7 @@ void test_style_has_prop(void)
     lv_style_init(&style);
     lv_style_set_outline_color(&style, lv_color_white());
 
-    /*Create object with style*/
+    /*Создать объект со стилем*/
     lv_obj_t * obj =
         lv_obj_create(lv_screen_active());
 
@@ -238,14 +238,14 @@ void test_style_remove_theme(void)
 
     lv_obj_update_layout(sw);
 
-    /*Local style props are kept on main*/
+    /*Реквизит в местном стиле сохраняется на основном*/
     TEST_ASSERT_EQUAL(100, lv_obj_get_width(sw));
     TEST_ASSERT_EQUAL(50, lv_obj_get_height(sw));
 
-    /*Local style is kept on the knob*/
+    /*Местный стиль сохранен на ручке*/
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0xff0000), lv_obj_get_style_bg_color(sw, LV_PART_KNOB));
 
-    /*Bg. opa is back to the default 0*/
+    /*Бг. opa вернулся к значению по умолчанию 0*/
     TEST_ASSERT_EQUAL(0, lv_obj_get_style_bg_opa(sw, LV_PART_KNOB));
 }
 

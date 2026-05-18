@@ -1,19 +1,19 @@
 /****************************************************************************
 *
 *    Copyright 2012 - 2023 Vivante Corporation, Santa Clara, California.
-*    All Rights Reserved.
+*    Все права защищены.
 *
-*    Permission is hereby granted, free of charge, to any person obtaining
-*    a copy of this software and associated documentation files (the
-*    'Software'), to deal in the Software without restriction, including
-*    without limitation the rights to use, copy, modify, merge, publish,
-*    distribute, sub license, and/or sell copies of the Software, and to
-*    permit persons to whom the Software is furnished to do so, subject
-*    to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации (файл
+*    «Программное обеспечение»), иметь дело с Программным обеспечением без ограничений, включая
+*    без ограничений права на использование, копирование, изменение, объединение, публикацию,
+*    распространять, сублицензировать и/или продавать копии Программного обеспечения, а также
+*    разрешать лицам, которым предоставлено Программное обеспечение, делать это при условии, что
+*    на следующие условия:
 *
-*    The above copyright notice and this permission notice (including the
-*    next paragraph) shall be included in all copies or substantial
-*    portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и данное уведомление о разрешении (включая
+*    следующий абзац) должны быть включены во все копии или существенные
+*    части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 *    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -30,7 +30,7 @@
 
 #include "vg_lite_context.h"
 
-/* Path data operations. */
+/* Операции с данными пути. */
 #define CDALIGN(value, by) (((value) + (by) - 1) & ~((by) - 1))
 #define CDMIN(x, y) ((x) > (y) ? (y) : (x))
 #define CDMAX(x, y) ((x) > (y) ? (x) : (y))
@@ -49,7 +49,7 @@ extern vg_lite_error_t srcbuf_align_check(vg_lite_buffer_t * source);
 
 extern vg_lite_matrix_t identity_mtx;
 
-/* Convert VGLite data format to HW value. */
+/* Преобразуйте формат данных VGLite в значение HW. */
 static uint32_t convert_path_format(vg_lite_format_t format)
 {
     switch(format) {
@@ -70,7 +70,7 @@ static uint32_t convert_path_format(vg_lite_format_t format)
     }
 }
 
-/* Convert VGLite quality enums to HW values. */
+/* Преобразуйте перечисления качества VGLite в значения HW. */
 static uint32_t convert_path_quality(vg_lite_quality_t quality)
 {
     switch(quality) {
@@ -193,7 +193,7 @@ vg_lite_error_t vg_lite_init_path(vg_lite_path_t * path,
     path->bounding_box[2] = max_x;
     path->bounding_box[3] = max_y;
 
-    /* Path data cannot end with a CLOSE op. Replace CLOSE with END for path_data */
+    /* Данные пути не могут заканчиваться операцией CLOSE. Замените CLOSE на END для path_data. */
     data_size = get_data_size(data_format);
     num = path_length / data_size;
 
@@ -237,7 +237,7 @@ vg_lite_error_t vg_lite_init_path(vg_lite_path_t * path,
     path->pdata_internal = 0;
     s_context.path_lastX = 0;
     s_context.path_lastY = 0;
-    /* Default FILL path type*/
+    /* Тип пути по умолчанию FILL*/
     path->path_type = VG_LITE_DRAW_FILL_PATH;
 
     return VG_LITE_SUCCESS;
@@ -369,37 +369,37 @@ vg_lite_error_t vg_lite_upload_path(vg_lite_path_t * path)
 
     buffer = &Buf;
 
-    /* Compute the number of bytes required for path + command buffer prefix/postfix. */
+    /* Вычислите количество байтов, необходимое для пути + префикса/постфикса буфера команд. */
     bytes = (8 + path->path_length + 7 + 8) & ~7;
 
-    /* Allocate GPU memory. */
+    /* Выделите память GPU. */
     buffer->width  = bytes;
     buffer->height = 1;
     buffer->stride = 0;
     buffer->format = VG_LITE_A8;
     VG_LITE_RETURN_ERROR(vg_lite_allocate(buffer));
 
-    /* Initialize command buffer prefix. */
+    /* Инициализировать префикс командного буфера. */
     ((uint32_t *) buffer->memory)[0] = VG_LITE_DATA((path->path_length + 7) / 8);
     ((uint32_t *) buffer->memory)[1] = 0;
 
-    /* Copy the path data. */
+    /* Скопируйте данные пути. */
     memcpy((uint32_t *) buffer->memory + 2, path->path, path->path_length);
 
-    /* Initialize command buffer postfix. */
+    /* Инициализировать постфикс командного буфера. */
     ((uint32_t *) buffer->memory)[(bytes >> 2) - 2] = VG_LITE_RETURN();
     ((uint32_t *) buffer->memory)[(bytes >> 2) - 1] = 0;
 
-    /* Mark path as uploaded. */
+    /* Отметить путь как загруженный. */
     path->path = buffer->memory;
     path->uploaded.handle = buffer->handle;
     path->uploaded.address = buffer->address;
     path->uploaded.memory = buffer->memory;
     path->uploaded.bytes = bytes;
     path->path_changed = 0;
-    VLM_PATH_ENABLE_UPLOAD(*path);      /* Implicitly enable path uploading. */
+    VLM_PATH_ENABLE_UPLOAD(*path);      /* Неявно включить загрузку путей. */
 
-    /* Return pointer to vg_lite_buffer structure. */
+    /* Возвращает указатель на структуру vg_lite_buffer. */
     return error;
 }
 
@@ -462,7 +462,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
             return VG_LITE_INVALID_ARGUMENT;
     }
 
-    /* Support NULL path->path case for OpenVG */
+    /* Поддержка NULL путь->путь для OpenVG */
     if(!path->path) {
         data_size = vg_lite_get_path_length(cmd, seg_count, path->format);
         path->path = (vg_lite_pointer)vg_lite_os_malloc(data_size);
@@ -480,7 +480,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
     path_s16 = (int16_t *)path->path;
     path_s8 = (int8_t *)path->path;
     pathc = (uint8_t *)path->path;
-    /* Set bounding box if the first opcode is VLC_OP_MOVE_* */
+    /* Установить ограничивающую рамку, если первый код операции — VLC_OP_MOVE_ * */
     if((cmd[0] & 0xfe) == VLC_OP_MOVE) {
         switch(path->format) {
             case VG_LITE_S8:
@@ -504,7 +504,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
         path->bounding_box[1] = path->bounding_box[3] = cy;
     }
 
-    /* Loop to fill path data. */
+    /* Цикл для заполнения данных пути. */
     for(i = 0; i < seg_count; i++) {
 #if (CHIPID == 0x355)
         if((i < seg_count) && cmd[i] == VLC_OP_CLOSE && (cmd[i + 1] == VLC_OP_MOVE || cmd[i + 1] == VLC_OP_MOVE_REL)) {
@@ -529,7 +529,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
         }
 
         dataCount = get_data_count(cmd[i]);
-        /* compute the bounding_box. */
+        /* вычислите bounding_box . */
         if(dataCount >= 0) {
             offset = CDALIGN(offset, data_size);
             if((cmd[i] > VLC_OP_CLOSE) &&
@@ -603,14 +603,14 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                         break;
                 }
                 h_v_path = 1;
-                /* Update path bounds. */
+                /* Обновить границы пути. */
                 path->bounding_box[0] = CDMIN(path->bounding_box[0], cx);
                 path->bounding_box[2] = CDMAX(path->bounding_box[2], cx);
                 path->bounding_box[1] = CDMIN(path->bounding_box[1], cy);
                 path->bounding_box[3] = CDMAX(path->bounding_box[3], cy);
             }
             else if(cmd[i] < VLC_OP_SCCWARC) {
-                /* Mark smooth path,convert it in next step. */
+                /* Отметьте плавный путь, преобразуйте его на следующем шаге. */
                 if(cmd[i] <= VLC_OP_SCUBIC_REL && cmd[i] >= VLC_OP_SQUAD) {
                     smooth_path = 1;
                 }
@@ -685,7 +685,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                             return VG_LITE_INVALID_ARGUMENT;
                     }
                     if(cmd[i] <= VLC_OP_LINE_REL && cmd[i] >= VLC_OP_MOVE) {
-                        /* Update move to and line path bounds. */
+                        /* Обновить перемещение и границы пути. */
                         path->bounding_box[0] = CDMIN(path->bounding_box[0], cx);
                         path->bounding_box[2] = CDMAX(path->bounding_box[2], cx);
                         path->bounding_box[1] = CDMIN(path->bounding_box[1], cy);
@@ -719,7 +719,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                             cx = path_s8[3];
                             cy = path_s8[4];
                         }
-                        /* Update path bounds. */
+                        /* Обновить границы пути. */
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
                                            cx + 2 * path_s8[0], cy + 2 * path_s8[1]);
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
@@ -751,7 +751,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                             cx = path_s16[3];
                             cy = path_s16[4];
                         }
-                        /* Update path bounds. */
+                        /* Обновить границы пути. */
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
                                            cx + 2 * path_s16[0], cy + 2 * path_s16[1]);
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
@@ -783,7 +783,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                             cx = (float)path_s32[3];
                             cy = (float)path_s32[4];
                         }
-                        /* Update path bounds. */
+                        /* Обновить границы пути. */
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
                                            cx + 2 * path_s32[0], cy + 2 * path_s32[1]);
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
@@ -815,7 +815,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                             cx = pathf[3];
                             cy = pathf[4];
                         }
-                        /* Update path bounds. */
+                        /* Обновить границы пути. */
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
                                            cx + 2 * pathf[0], cy + 2 * pathf[1]);
                         compute_pathbounds(&path->bounding_box[0], &path->bounding_box[1], &path->bounding_box[2], &path->bounding_box[3],
@@ -864,7 +864,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
     return error;
 }
 
-#if (CHIPID==0x355 || CHIPID==0x255) /* GC355/GC255 vg_lite_draw functions */
+#if (CHIPID==0x355 || CHIPID==0x255) /* GC355 / GC255 vg_lite_draw функции */
 
 #define UPDATE_BOUNDING_BOX(bbx, point)                                 \
     do {                                                                \
@@ -892,34 +892,34 @@ static vg_lite_error_t transform_bounding_box(vg_lite_rectangle_t * in_bbx,
 
     memset(out_bbx, 0, sizeof(vg_lite_rectangle_t));
 
-    /* Transform image point (0, 0). */
+    /* Преобразовать точку изображения (0, 0). */
     if(!transform(&temp, 0.0f, 0.0f, matrix))
         return VG_LITE_INVALID_ARGUMENT;
     out_bbx->x = temp.x;
     out_bbx->y = temp.y;
 
-    /* Provide position of the new origin to the caller if requested. */
+    /* При необходимости сообщите вызывающему абоненту положение нового источника. */
     if(origin != NULL) {
         origin->x = temp.x;
         origin->y = temp.y;
     }
 
-    /* Transform image point (0, height). */
+    /* Преобразовать точку изображения (0, высота). */
     if(!transform(&temp, 0.0f, (vg_lite_float_t)in_bbx->height, matrix))
         return VG_LITE_INVALID_ARGUMENT;
     UPDATE_BOUNDING_BOX(*out_bbx, temp);
 
-    /* Transform image point (width, height). */
+    /* Преобразовать точку изображения (ширину, высоту). */
     if(!transform(&temp, (vg_lite_float_t)in_bbx->width, (vg_lite_float_t)in_bbx->height, matrix))
         return VG_LITE_INVALID_ARGUMENT;
     UPDATE_BOUNDING_BOX(*out_bbx, temp);
 
-    /* Transform image point (width, 0). */
+    /* Преобразовать точку изображения (ширина, 0). */
     if(!transform(&temp, (vg_lite_float_t)in_bbx->width, 0.0f, matrix))
         return VG_LITE_INVALID_ARGUMENT;
     UPDATE_BOUNDING_BOX(*out_bbx, temp);
 
-    /* Clip is required */
+    /* Требуется клип */
     if(clip) {
         out_bbx->x = MAX(out_bbx->x, clip->x);
         out_bbx->y = MAX(out_bbx->y, clip->y);
@@ -943,7 +943,7 @@ static vg_lite_error_t set_interpolation_steps(vg_lite_buffer_t * target,
 
 #define ERR_LIMIT   0.0000610351562f
 
-    /* Get bounding box. */
+    /* Получите ограничивающую рамку. */
     memset(&src_bbx, 0, sizeof(vg_lite_rectangle_t));
     memset(&clip, 0, sizeof(vg_lite_rectangle_t));
     src_bbx.width       = (int32_t)s_width;
@@ -961,25 +961,25 @@ static vg_lite_error_t set_interpolation_steps(vg_lite_buffer_t * target,
         clip.height = s_context.rtbuffer->height;
     }
     transform_bounding_box(&src_bbx, matrix, &clip, &bounding_box, NULL);
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&im, matrix))
         return VG_LITE_INVALID_ARGUMENT;
-    /* Compute interpolation steps. */
-    /* X step */
+    /* Вычислите шаги интерполяции. */
+    /* X шаг */
     xs[0] = im.m[0][0] / s_width;
     xs[1] = im.m[1][0] / s_height;
     xs[2] = im.m[2][0];
-    /* Y step */
+    /* шаг Y */
     ys[0] = im.m[0][1] / s_width;
     ys[1] = im.m[1][1] / s_height;
     ys[2] = im.m[2][1];
-    /* C step 2 */
+    /* С, шаг 2 */
     cs[2] = 0.5f * (im.m[2][0] + im.m[2][1]) + im.m[2][2];
 
-    /* C step 0, 1*/
+    /* С шаг 0, 1*/
     cs[0] = (0.5f * (im.m[0][0] + im.m[0][1]) + im.m[0][2] + dx) / s_width;
     cs[1] = (0.5f * (im.m[1][0] + im.m[1][1]) + im.m[1][2] + dy) / s_height;
-    /* Set command buffer */
+    /* Установить буфер команд */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A18, (void *)&cs[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A19, (void *)&cs[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A1A, (void *)&cs[2]));
@@ -1007,7 +1007,7 @@ static vg_lite_error_t set_interpolation_steps_draw_paint(vg_lite_buffer_t * tar
 
 #define ERR_LIMIT   0.0000610351562f
 
-    /* Get bounding box. */
+    /* Получите ограничивающую рамку. */
     memset(&src_bbx, 0, sizeof(vg_lite_rectangle_t));
     memset(&clip, 0, sizeof(vg_lite_rectangle_t));
     src_bbx.width = (int32_t)s_width;
@@ -1025,22 +1025,22 @@ static vg_lite_error_t set_interpolation_steps_draw_paint(vg_lite_buffer_t * tar
         clip.height = s_context.rtbuffer->height;
     }
     transform_bounding_box(&src_bbx, matrix, &clip, &bounding_box, NULL);
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&im, matrix))
         return VG_LITE_INVALID_ARGUMENT;
-    /* Compute interpolation steps. */
-    /* X step */
+    /* Вычислите шаги интерполяции. */
+    /* X шаг */
     xs[0] = im.m[0][0] / s_width;
     xs[1] = im.m[1][0] / s_height;
     xs[2] = im.m[2][0];
-    /* Y step */
+    /* шаг Y */
     ys[0] = im.m[0][1] / s_width;
     ys[1] = im.m[1][1] / s_height;
     ys[2] = im.m[2][1];
-    /* C step 2 */
+    /* С, шаг 2 */
     cs[2] = 0.5f * (im.m[2][0] + im.m[2][1]) + im.m[2][2];
 
-    /* C step 0, 1*/
+    /* С шаг 0, 1*/
     cs[0] = (0.5f * (im.m[0][0] + im.m[0][1]) + im.m[0][2] + dx) / s_width;
     cs[1] = (0.5f * (im.m[1][0] + im.m[1][1]) + im.m[1][2] + dy) / s_height;
 
@@ -1050,7 +1050,7 @@ static vg_lite_error_t set_interpolation_steps_draw_paint(vg_lite_buffer_t * tar
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A07, (void *)&xs[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A08, (void *)&ys[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A09, (void *)&ys[1]));
-    /* Set command buffer */
+    /* Установить буфер команд */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A18, (void *)&cs[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A19, (void *)&cs[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A1A, (void *)&cs[2]));
@@ -1065,7 +1065,7 @@ static vg_lite_error_t set_interpolation_steps_draw_paint(vg_lite_buffer_t * tar
     return VG_LITE_SUCCESS;
 }
 
-/* GC355/GC255 vg_lite_draw API implementation
+/* GC355 / GC255 vg_lite_draw API реализация
  */
 vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                              vg_lite_path_t * path,
@@ -1127,10 +1127,10 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     set_gamma_dest_only(target, VGL_FALSE);
 #endif
 
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
-    /* Adjust premultiply setting according to openvg condition */
+    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
     target->apply_premult = 0;
     premul_flag = (s_context.blend_mode >= OPENVG_BLEND_SRC_OVER && s_context.blend_mode <= OPENVG_BLEND_ADDITIVE);
     if(target->premultiplied == 0 && premul_flag == 0) {
@@ -1150,8 +1150,8 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
         return error;
     }
     else if(error == VG_LITE_NO_CONTEXT) {
-        /* If scissoring is enabled and no valid scissoring rectangles
-           are present, no drawing occurs */
+        /* Если ножницы включены и нет допустимых прямоугольников ножниц
+           присутствуют, рисования не происходит */
         return VG_LITE_SUCCESS;
     }
 
@@ -1204,7 +1204,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
         }
     }
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -1212,18 +1212,18 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     fill = (fill_rule == VG_LITE_FILL_EVEN_ODD) ? 0x10 : 0;
     tessellation_size = s_context.tessbuf.L2_size ? s_context.tessbuf.L2_size : s_context.tessbuf.L1_size;
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     in_premult | s_context.capabilities.cap.tiled | blend_mode | s_context.enable_mask | s_context.scissor_enable |
                                     s_context.color_transform | s_context.matrix_enable));
 
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A02, color));
-    /* Program tessellation control: for TS module. */
+    /* Программное управление тесселяцией: для модуля TS. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000200 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &matrix->m[0][0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &matrix->m[0][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &matrix->m[0][2]));
@@ -1231,12 +1231,12 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A44, (void *) &matrix->m[1][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A45, (void *) &matrix->m[1][2]));
 
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_FILL_PATH || path->path_type == VG_LITE_DRAW_ZERO ||
        path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -1252,11 +1252,11 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
             }
         }
     }
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_STROKE_PATH || path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -1275,13 +1275,13 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
             }
         }
     }
-    /* Finialize command buffer. */
+    /* Завершить буфер команд. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0));
 
     return error;
 }
 
-/* GC355/GC255 vg_lite_draw_pattern API implementation
+/* GC355 / GC255 vg_lite_draw_pattern API реализация
  */
 vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                      vg_lite_path_t * path,
@@ -1307,7 +1307,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     uint32_t pattern_tile = 0;
     uint32_t transparency_mode = 0;
 
-    /* The following code is from "draw path" */
+    /* Следующий код взят из «путь рисования» */
     uint32_t format, quality, tiling, fill;
     uint32_t tessellation_size;
 
@@ -1360,7 +1360,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
             source->lvgl_buffer->lvgl_buffer = NULL;
             vg_lite_allocate(source->lvgl_buffer);
         }
-        /* Make sure render target is up to date before reading RT. */
+        /* Прежде чем читать RT, убедитесь, что цель рендеринга обновлена. */
         vg_lite_finish();
         setup_lvgl_image(target, source, source->lvgl_buffer, blend);
         blend = VG_LITE_BLEND_SRC_OVER;
@@ -1379,7 +1379,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         pattern_matrix = &identity_mtx;
     }
 
-    /* Work on pattern states. */
+    /* Работайте над состояниями шаблона. */
     matrix = *pattern_matrix;
     if(source->paintType == VG_LITE_PAINT_PATTERN) {
         matrix.m[2][0] = 0;
@@ -1392,11 +1392,11 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     save_st_gamma_src_dest(source, target);
 #endif
 
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
     in_premult = 0x00000000;
 
-    /* Adjust premultiply setting according to openvg condition */
+    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -1419,7 +1419,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* when src and dst all pre format, im pre_out set to 0 to perform data truncation to prevent data overflow */
+    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -1453,8 +1453,8 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         return error;
     }
     else if(error == VG_LITE_NO_CONTEXT) {
-        /* If scissoring is enabled and no valid scissoring rectangles
-           are present, no drawing occurs */
+        /* Если ножницы включены и нет допустимых прямоугольников ножниц
+           присутствуют, рисования не происходит */
         return VG_LITE_SUCCESS;
     }
 
@@ -1473,12 +1473,12 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         point_max.y = target->height;
     }
 
-    /* If target is L8 and source is in YUV or RGB (not L8 or A8) then we have to convert RGB into L8. */
+    /* Если цель — L8, а источник — YUV или RGB (а не L8 или A8), тогда нам нужно преобразовать RGB в L8. */
     if((target->format == VG_LITE_L8) && ((source->format != VG_LITE_L8) && (source->format != VG_LITE_A8))) {
         conversion = 0x80000000;
     }
 
-    /* Determine image mode (NORMAL or MULTIPLY) depending on the color. */
+    /* Определите режим изображения ( NORMAL или MULTIPLY ) в зависимости от цвета. */
     imageMode = (source->image_mode == VG_LITE_NONE_IMAGE_MODE) ? 0 : (source->image_mode == VG_LITE_MULTIPLY_IMAGE_MODE) ?
                 0x00002000 : 0x00001000;
     tiled_source = (source->tiled != VG_LITE_LINEAR) ? 0x10000000 : 0 ;
@@ -1527,7 +1527,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
 
     if(source->paintType == VG_LITE_PAINT_PATTERN) {
         VG_LITE_RETURN_ERROR(set_interpolation_steps_draw_paint(target, source->width, source->height, &matrix));
-        /* enable pre-multiplied in image unit */
+        /* включить предварительное умножение в единице изображения */
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A24, convert_source_format(source->format) |
                                         filter_mode | pattern_tile | conversion | src_premultiply_enable));
 
@@ -1540,7 +1540,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     }
     else {
         VG_LITE_RETURN_ERROR(set_interpolation_steps(target, source->width, source->height, &matrix));
-        /* enable pre-multiplied in image unit */
+        /* включить предварительное умножение в единице изображения */
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A25, convert_source_format(source->format) |
                                         filter_mode | pattern_tile | conversion | src_premultiply_enable));
 
@@ -1559,7 +1559,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2F, source->width | (source->height << 16)));
     }
 
-    /* Work on path states. */
+    /* Работайте над состояниями путей. */
     matrix = *path_matrix;
 
     if(ts_is_fullscreen == 0) {
@@ -1597,7 +1597,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         }
     }
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -1605,20 +1605,20 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     fill = (fill_rule == VG_LITE_FILL_EVEN_ODD) ? 0x10 : 0;
     tessellation_size = s_context.tessbuf.L2_size ? s_context.tessbuf.L2_size : s_context.tessbuf.L1_size;
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
     if(source->paintType == VG_LITE_PAINT_PATTERN) {
         paintType = 1 << 24 | 1 << 25;
     }
-    /* enable pre-multiplied from VG to VGPE */
+    /* включить предварительное умножение от VG до VGPE */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     0x2 | in_premult | paintType  | s_context.capabilities.cap.tiled | imageMode | blend_mode | transparency_mode |
                                     s_context.enable_mask | s_context.scissor_enable | s_context.color_transform | s_context.matrix_enable));
 
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000400 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &matrix.m[0][0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &matrix.m[0][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &matrix.m[0][2]));
@@ -1626,12 +1626,12 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A44, (void *) &matrix.m[1][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A45, (void *) &matrix.m[1][2]));
 
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_FILL_PATH || path->path_type == VG_LITE_DRAW_ZERO ||
        path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -1647,11 +1647,11 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
             }
         }
     }
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_STROKE_PATH || path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -1671,14 +1671,14 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         }
     }
 
-    /* Finialize command buffer. */
+    /* Завершить буфер команд. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0));
     vglitemDUMP_BUFFER("image", (size_t)source->address, source->memory, 0, (source->stride) * (source->height));
 
     return error;
 }
 
-/* GC355/GC255 vg_lite_draw_linear_grad API implementation
+/* GC355 / GC255 vg_lite_draw_linear_grad API реализация
  */
 vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -1708,7 +1708,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     uint32_t prediv_flag = 0;
     void * data;
 
-    /* The following code is from "draw path" */
+    /* Следующий код взят из «путь рисования» */
     uint32_t format, quality, tiling, fill;
     uint32_t tessellation_size;
 
@@ -1767,7 +1767,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     set_gamma_dest_only(target, VGL_TRUE);
 #endif
 
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
     src_premultiply_enable = 0x01000100;
@@ -1792,7 +1792,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* when src and dst all pre format, im pre_out set to 0 to perform data truncation to prevent data overflow */
+    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -1829,8 +1829,8 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         return error;
     }
     else if(error == VG_LITE_NO_CONTEXT) {
-        /* If scissoring is enabled and no valid scissoring rectangles
-           are present, no drawing occurs */
+        /* Если ножницы включены и нет допустимых прямоугольников ножниц
+           присутствуют, рисования не происходит */
         return VG_LITE_SUCCESS;
     }
 
@@ -1849,12 +1849,12 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         point_max.y = target->height;
     }
 
-    /* If target is L8 and source is in YUV or RGB (not L8 or A8) then we have to convert RGB into L8. */
+    /* Если цель — L8, а источник — YUV или RGB (а не L8 или A8), тогда нам нужно преобразовать RGB в L8. */
     if((target->format == VG_LITE_L8) && ((source->format != VG_LITE_L8) && (source->format != VG_LITE_A8))) {
         conversion = 0x80000000;
     }
 
-    /* Determine image mode (NORMAL or MULTIPLY) depending on the color. */
+    /* Определите режим изображения ( NORMAL или MULTIPLY ) в зависимости от цвета. */
     image_mode = (source->image_mode == VG_LITE_NONE_IMAGE_MODE) ? 0 : (source->image_mode == VG_LITE_MULTIPLY_IMAGE_MODE) ?
                  0x00002000 : 0x00001000;
     tiled_source = (source->tiled != VG_LITE_LINEAR) ? 0x10000000 : 0 ;
@@ -1904,9 +1904,9 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         paint_color = (a << 24) | (b << 16) | (g << 8) | r;
     }
 
-    /* compute radial gradient paremeters */
+    /* вычислить параметры радиального градиента */
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
@@ -1919,7 +1919,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     **  g = -------------------------------
     **                dx^2 + dy^2
     **
-    **  where
+    **  где
     **
     **      dx := x1 - x0
     **      dy := y1 - y1
@@ -1928,7 +1928,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     **      T(y) := (x + 0.5) m10 + (y + 0.5) m11 + m12
     **            = x m10 + y m11 + 0.5 (m10 + m11) + m12.
     **
-    **  We can factor the top line into:
+    **  Мы можем факторизовать верхнюю строку на:
     **
     **      = dx (x m00 + y m01 + 0.5 (m00 + m01) + m02 - x0)
     **      + dy (x m10 + y m11 + 0.5 (m10 + m11) + m12 - y0)
@@ -1963,9 +1963,9 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         )
         / dxdx_dydy;
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
 
-    /* linear gradient parameters*/
+    /* параметры линейного градиента*/
     data = &lg_constant_lin;
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A04, *(uint32_t *) data));
     data = &lg_step_x_lin;
@@ -1975,7 +1975,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
 
     VG_LITE_RETURN_ERROR(set_interpolation_steps(target, source->width, source->height, matrix));
 
-    /* enable pre-multiplied in image unit */
+    /* включить предварительное умножение в единице изображения */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A24, convert_source_format(source->format) |
                                     filter_mode | linear_tile | conversion | src_premultiply_enable));
 
@@ -1986,7 +1986,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2C, 0));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2E, source->width));
 
-    /* Work on path states. */
+    /* Работайте над состояниями путей. */
     matrix = path_matrix;
 
     if(ts_is_fullscreen == 0) {
@@ -2024,7 +2024,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         }
     }
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -2032,18 +2032,18 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     fill = (fill_rule == VG_LITE_FILL_EVEN_ODD) ? 0x10 : 0;
     tessellation_size = s_context.tessbuf.L2_size ? s_context.tessbuf.L2_size : s_context.tessbuf.L1_size;
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
 
-    /* enable pre-multiplied from VG to VGPE */
+    /* включить предварительное умножение от VG до VGPE */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     0x01000002 | s_context.capabilities.cap.tiled | in_premult | image_mode | blend_mode | transparency_mode |
                                     s_context.enable_mask | s_context.scissor_enable | s_context.color_transform | s_context.matrix_enable));
 
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000400 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &matrix->m[0][0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &matrix->m[0][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &matrix->m[0][2]));
@@ -2060,7 +2060,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                 path->uploaded.memory = NULL;
                 path->uploaded.handle = NULL;
             }
-            /* Allocate memory for the path data. */
+            /* Выделите память для данных пути. */
             memory.bytes = 16 + VG_LITE_ALIGN(path->path_length, 8);
             return_offset = (8 + VG_LITE_ALIGN(path->path_length, 8)) / 4;
             memory.contiguous = 1;
@@ -2080,11 +2080,11 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         }
     }
 
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_FILL_PATH || path->path_type == VG_LITE_DRAW_ZERO) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -2100,11 +2100,11 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
             }
         }
     }
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_STROKE_PATH || path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -2124,13 +2124,13 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         }
     }
 
-    /* Finialize command buffer. */
+    /* Завершить буфер команд. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0));
 
     return error;
 }
 
-/* GC355/GC255 vg_lite_draw_radial_grad API implementation
+/* GC355 / GC255 vg_lite_draw_radial_grad API реализация
  */
 vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -2160,7 +2160,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     uint32_t prediv_flag = 0;
     void * data;
 
-    /* The following code is from "draw path" */
+    /* Следующий код взят из «путь рисования» */
     uint32_t format, quality, tiling, fill;
     uint32_t tessellation_size;
 
@@ -2242,7 +2242,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     set_gamma_dest_only(target, VGL_TRUE);
 #endif
 
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
     src_premultiply_enable = 0x01000100;
@@ -2267,7 +2267,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* when src and dst all pre format, im pre_out set to 0 to perform data truncation to prevent data overflow */
+    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -2304,8 +2304,8 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         return error;
     }
     else if(error == VG_LITE_NO_CONTEXT) {
-        /* If scissoring is enabled and no valid scissoring rectangles
-           are present, no drawing occurs */
+        /* Если ножницы включены и нет допустимых прямоугольников ножниц
+           присутствуют, рисования не происходит */
         return VG_LITE_SUCCESS;
     }
 
@@ -2324,12 +2324,12 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         point_max.y = target->height;
     }
 
-    /* If target is L8 and source is in YUV or RGB (not L8 or A8) then we have to convert RGB into L8. */
+    /* Если цель — L8, а источник — YUV или RGB (а не L8 или A8), тогда нам нужно преобразовать RGB в L8. */
     if((target->format == VG_LITE_L8) && ((source->format != VG_LITE_L8) && (source->format != VG_LITE_A8))) {
         conversion = 0x80000000;
     }
 
-    /* Determine image mode (NORMAL or MULTIPLY) depending on the color. */
+    /* Определите режим изображения ( NORMAL или MULTIPLY ) в зависимости от цвета. */
     imageMode = (source->image_mode == VG_LITE_NONE_IMAGE_MODE) ? 0 : (source->image_mode == VG_LITE_MULTIPLY_IMAGE_MODE) ?
                 0x00002000 : 0x00001000;
     tiled_source = (source->tiled != VG_LITE_LINEAR) ? 0x10000000 : 0 ;
@@ -2379,26 +2379,26 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         paint_color = (a << 24) | (b << 16) | (g << 8) | r;
     }
 
-    /* compute radial gradient paremeters */
+    /* вычислить параметры радиального градиента */
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Make shortcuts to the gradient information. */
+    /* Сделайте ярлыки для информации о градиенте. */
     centerX = grad->radial_grad.cx;
     centerY = grad->radial_grad.cy;
     focalX  = grad->radial_grad.fx;
     focalY  = grad->radial_grad.fy;
 
-    /* Compute constants of the equation. */
+    /* Вычислите константы уравнения. */
     fx           = focalX - centerX;
     fy           = focalY - centerY;
     radius2      = radius * radius;
     if(fx * fx + fy * fy > radius2) {
-        /* If the focal point is outside the circle, let's move it
-            to inside the circle. Per vg11 spec pg125 "If (fx, fy) lies outside ...
-            For here, we set it at 0.9 ratio to the center.
+        /* Если точка фокуса находится за пределами круга, давайте переместим ее.
+            внутрь круга. Согласно спецификации vg11 pg125 «Если (fx, fy) лежит снаружи...
+            Здесь мы установили соотношение 0,9 к центру.
         */
         vg_lite_float_t fr = (vg_lite_float_t)sqrt(fx * fx + fy * fy);
         fx = radius * fx / fr * 0.9f;
@@ -2420,38 +2420,38 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **  g = -------------------------------------------------------
     **                         r^2 - fx^2 - fy^2
     **
-    **  Where
+    **  Где
     **
-    **      dx := F(x) - focalX
-    **      dy := F(y) - focalY
-    **      fx := focalX - centerX
-    **      fy := focalX - centerY
+    **      dx := F(x) - фокусX
+    **      dy := F(y) - фокусY
+    **      fx := фокусX - центрX
+    **      fy := фокусX - центрY
     **
-    **  and
+    **  и
     **
     **      F(x) := (x + 0.5) m00 + (y + 0.5) m01 + m02
     **      F(y) := (x + 0.5) m10 + (y + 0.5) m11 + m12
     **
-    **  So, dx can be factored into
+    **  Таким образом, dx может быть учтено в
     **
     **      dx = (x + 0.5) m00 + (y + 0.5) m01 + m02 - focalX
-    **         = x m00 + y m01 + 0.5 m00 + 0.5 m01 + m02 - focalX
+    **         = x m00 + y m01 + 0,5 m00 + 0,5 m01 + m02 - фокус X
     **
     **         = x m00 + y m01 + cx
     **
-    **  where
+    **  где
     **
-    **      cx := 0.5 m00 + 0.5 m01 + m02 - focalX
+    **      cx := 0,5 m00 + 0,5 m01 + m02 - фокусX
     **
-    **  The same way we can factor dy into
+    **  Точно так же мы можем учесть dy в
     **
     **      dy = x m10 + y m11 + cy
     **
-    **  where
+    **  где
     **
-    **      cy := 0.5 m10 + 0.5 m11 + m12 - focalY.
+    **      cy := 0,5 м10 + 0,5 м11 + м12 – фокусY.
     **
-    **  Now we can rewrite g as
+    **  Теперь мы можем переписать g как
     **                               ______________________________________
     **        dx fx + dy fy         / r^2 (dx^2 + dy^2) - (dx fy - dy fx)^2
     **  g = ----------------- + \  /  -------------------------------------
@@ -2459,14 +2459,14 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **               ____
     **    = gLin + \/gRad
     **
-    **  where
+    **  где
     **
     **                dx fx + dy fy
-    **      gLin := -----------------
+    **      гЛин := -----------------
     **              r^2 - fx^2 - fy^2
     **
     **              r^2 (dx^2 + dy^2) - (dx fy - dy fx)^2
-    **      gRad := -------------------------------------
+    **      гРад := -------------------------------------
     **                      (r^2 - fx^2 - fy^2)^2
     */
 
@@ -2482,10 +2482,10 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
     /*
     **            dx fx + dy fy
-    **  gLin := -----------------
+    **  гЛин := -----------------
     **          r^2 - fx^2 - fy^2
     **
-    **  We can factor the top half into
+    **  Мы можем учесть верхнюю половину
     **
     **      = (x m00 + y m01 + cx) fx + (x m10 + y m11 + cy) fy
     **
@@ -2506,7 +2506,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
     /*
     **          r^2 (dx^2 + dy^2) - (dx fy - dy fx)^2
-    **  gRad := -------------------------------------
+    **  гРад := -------------------------------------
     **                  (r^2 - fx^2 - fy^2)^2
     **
     **          r^2 (dx^2 + dy^2) - dx^2 fy^2 - dy^2 fx^2 + 2 dx dy fx fy
@@ -2517,7 +2517,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **       := -----------------------------------------------------
     **                          (r^2 - fx^2 - fy^2)^2
     **
-    **  First, lets factor dx^2 into
+    **  Во-первых, давайте факторизуем dx^2 в
     **
     **      dx^2 = (x m00 + y m01 + cx)^2
     **           = x^2 m00^2 + y^2 m01^2 + 2 x y m00 m01
@@ -2530,7 +2530,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **           + y (2 m01 cx)
     **           + cx^2.
     **
-    **  The same can be done for dy^2:
+    **  То же самое можно сделать и для dy^2:
     **
     **      dy^2 = x^2 (m10^2)
     **           + y^2 (m11^2)
@@ -2539,7 +2539,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **           + y (2 m11 cy)
     **           + cy^2.
     **
-    **  Let's also factor dx dy into
+    **  Давайте также учтем dx dy в
     **
     **      dx dy = (x m00 + y m01 + cx) (x m10 + y m11 + cy)
     **            = x^2 m00 m10 + y^2 m01 m11 + x y m00 m11 + x y m01 m10
@@ -2552,7 +2552,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **            + y (m01 cy + m11 cx)
     **            + cx cy.
     **
-    **  Now that we have all this, lets look at the top of gRad.
+    **  Теперь, когда у нас есть все это, давайте посмотрим на верхнюю часть gRad.
     **
     **      = dx^2 (r^2 - fy^2) + dy^2 (r^2 - fx^2) + 2 dx dy fx fy
     **      = x^2 m00^2 (r^2 - fy^2) + y^2 m01^2 (r^2 - fy^2)
@@ -2649,7 +2649,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         )
         / r2_fx2_fy2sq;
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
     data = &rgConstantLin;
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A04, *(uint32_t *) data));
     data = &rgStepXLin;
@@ -2670,7 +2670,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A0B, *(uint32_t *) data));
     VG_LITE_RETURN_ERROR(set_interpolation_steps(target, source->width, source->height, matrix));
 
-    /* enable pre-multiplied in image unit */
+    /* включить предварительное умножение в единице изображения */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A24, convert_source_format(source->format) |
                                     filter_mode | rad_tile | conversion | src_premultiply_enable));
 
@@ -2681,7 +2681,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2C, 0));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2E, source->width));
 
-    /* Work on path states. */
+    /* Работайте над состояниями путей. */
     matrix = path_matrix;
 
     if(ts_is_fullscreen == 0) {
@@ -2719,7 +2719,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         }
     }
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -2727,18 +2727,18 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     fill = (fill_rule == VG_LITE_FILL_EVEN_ODD) ? 0x10 : 0;
     tessellation_size = s_context.tessbuf.L2_size ? s_context.tessbuf.L2_size : s_context.tessbuf.L1_size;
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
 
-    /* enable pre-multiplied from VG to VGPE */
+    /* включить предварительное умножение от VG до VGPE */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     0x02000002 | s_context.capabilities.cap.tiled | in_premult | imageMode | blend_mode | transparency_mode |
                                     s_context.enable_mask | s_context.scissor_enable | s_context.color_transform | s_context.matrix_enable));
 
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000400 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &matrix->m[0][0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &matrix->m[0][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &matrix->m[0][2]));
@@ -2755,7 +2755,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                 path->uploaded.memory = NULL;
                 path->uploaded.handle = NULL;
             }
-            /* Allocate memory for the path data. */
+            /* Выделите память для данных пути. */
             memory.bytes = 16 + VG_LITE_ALIGN(path->path_length, 8);
             return_offset = (8 + VG_LITE_ALIGN(path->path_length, 8)) / 4;
             memory.contiguous = 1;
@@ -2775,12 +2775,12 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         }
     }
 
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_FILL_PATH || path->path_type == VG_LITE_DRAW_ZERO ||
        path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -2796,11 +2796,11 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
             }
         }
     }
-    /* Setup tessellation loop. */
+    /* Настройте цикл тесселяции. */
     if(path->path_type == VG_LITE_DRAW_STROKE_PATH || path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
         for(y = point_min.y; y < point_max.y; y += height) {
             for(x = point_min.x; x < point_max.x; x += width) {
-                /* Tessellate path. */
+                /* Мозаичный путь. */
                 VG_LITE_RETURN_ERROR(push_stall(&s_context, 15));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
                 VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A01, x | (y << 16)));
@@ -2820,7 +2820,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         }
     }
 
-    /* Finialize command buffer. */
+    /* Завершить буфер команд. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0));
 
     return error;
@@ -2828,7 +2828,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
 #else /* (CHIPID==0x355 || CHIPID==0x255) */
 
-/* GC555 vg_lite_draw API implementation
+/* GC555 vg_lite_draw API реализация
  */
 vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                              vg_lite_path_t * path,
@@ -2908,10 +2908,10 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(vg_lite_dest_global_alpha(VG_LITE_GLOBAL, 0xff));
     }
 #endif
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
-    /* Adjust premultiply setting according to openvg condition */
+    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
     target->apply_premult = 0;
     premul_flag = (s_context.blend_mode >= OPENVG_BLEND_SRC_OVER && s_context.blend_mode <= OPENVG_BLEND_ADDITIVE)
                   || (s_context.blend_mode >= VG_LITE_BLEND_NORMAL_LVGL && s_context.blend_mode <= VG_LITE_BLEND_MULTIPLY_LVGL);
@@ -2998,7 +2998,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     new_matrix[4] = matrix->m[1][1] * scale;
     new_matrix[5] = (matrix->m[1][0] + matrix->m[1][1]) * bias + matrix->m[1][2];
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -3009,17 +3009,17 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     tile_setting = (target->tiled != VG_LITE_LINEAR) ? 0x40 : 0;
 #endif
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     in_premult | s_context.capabilities.cap.tiled | blend_mode | tile_setting | s_context.enable_mask |
                                     s_context.scissor_enable | s_context.color_transform | s_context.matrix_enable));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A02, color));
-    /* Program tessellation control: for TS module. */
+    /* Программное управление тесселяцией: для модуля TS. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000000 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *)&new_matrix[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *)&new_matrix[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *)&new_matrix[2]));
@@ -3029,7 +3029,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0ACD, (void *)&matrix->m[0][2]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0ACE, (void *)&matrix->m[1][2]));
 
-    /* DDRLess does not support uploading path data. */
+    /* DDRless не поддерживает загрузку данных о пути. */
     if(VLM_PATH_GET_UPLOAD_BIT(*path) == 1) {
         if(path->path_changed != 0) {
             if(path->uploaded.handle != NULL) {
@@ -3039,7 +3039,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                 path->uploaded.memory = NULL;
                 path->uploaded.handle = NULL;
             }
-            /* Allocate memory for the path data. */
+            /* Выделите память для данных пути. */
             memory.bytes = 16 + VG_LITE_ALIGN(path->path_length, 8);
             return_offset = (8 + VG_LITE_ALIGN(path->path_length, 8)) / 4;
             memory.contiguous = 1;
@@ -3097,7 +3097,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                                             in_premult | s_context.capabilities.cap.tiled | blend_mode | tile_setting | s_context.enable_mask |
                                             s_context.scissor_enable | s_context.color_transform | s_context.matrix_enable));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A02, color));
-            /* Program tessellation control: for TS module. */
+            /* Программное управление тесселяцией: для модуля TS. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000000 | format | quality | tiling | fill));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3D, tessellation_size / 64));
@@ -3175,7 +3175,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
         s_context.tessbuf.tess_w_h = width | (height << 16);
         if(path->path_type == VG_LITE_DRAW_FILL_PATH || path->path_type == VG_LITE_DRAW_ZERO ||
            path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
-            /* Tessellate path. */
+            /* Мозаичный путь. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3D, tessellation_size / 64));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A39, point_min.x | (point_min.y << 16)));
@@ -3189,7 +3189,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
             }
         }
         if(path->path_type == VG_LITE_DRAW_STROKE_PATH || path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH) {
-            /* Tessellate path. */
+            /* Мозаичный путь. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3D, tessellation_size / 64));
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A39, point_min.x | (point_min.y << 16)));
@@ -3217,7 +3217,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     return error;
 }
 
-/* GC555 vg_lite_draw_pattern API implementation
+/* GC555 vg_lite_draw_pattern API реализация
  */
 vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                      vg_lite_path_t * path,
@@ -3254,7 +3254,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     uint32_t tile_setting = 0;
     uint32_t yuv2rgb = 0;
     uint32_t uv_swiz = 0;
-    /* The following code is from "draw path" */
+    /* Следующий код взят из «путь рисования» */
     uint32_t format, quality, tiling, fill;
     uint32_t tessellation_size;
 
@@ -3377,7 +3377,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
             source->lvgl_buffer->lvgl_buffer = NULL;
             vg_lite_allocate(source->lvgl_buffer);
         }
-        /* Make sure render target is up to date before reading RT. */
+        /* Прежде чем читать RT, убедитесь, что цель рендеринга обновлена. */
         vg_lite_finish();
         setup_lvgl_image(target, source, source->lvgl_buffer, blend);
         blend = VG_LITE_BLEND_SRC_OVER;
@@ -3396,7 +3396,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         pattern_matrix = &identity_mtx;
     }
 
-    /* Work on pattern states. */
+    /* Работайте над состояниями шаблона. */
     matrix = *pattern_matrix;
     if(source->paintType == VG_LITE_PAINT_PATTERN) {
         matrix.m[2][0] = 0;
@@ -3420,11 +3420,11 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(vg_lite_dest_global_alpha(VG_LITE_GLOBAL, 0xff));
     }
 #endif
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
     in_premult = 0x00000000;
 
-    /* Adjust premultiply setting according to openvg condition */
+    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -3448,7 +3448,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* when src and dst all pre format, im pre_out set to 0 to perform data truncation to prevent data overflow */
+    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -3507,17 +3507,17 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         point_max.y = target->height;
     }
 
-    /* If target is L8 and source is in YUV or RGB (not L8 or A8) then we have to convert RGB into L8. */
+    /* Если цель — L8, а источник — YUV или RGB (а не L8 или A8), тогда нам нужно преобразовать RGB в L8. */
     if((target->format == VG_LITE_L8) && ((source->format != VG_LITE_L8) && (source->format != VG_LITE_A8))) {
         conversion = 0x80000000;
     }
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, &matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
 #if gcFEATURE_VG_MATH_PRECISION_FIX
-    /* Compute interpolation steps. */
+    /* Вычислите шаги интерполяции. */
     x_step[0] = inverse_matrix.m[0][0];
     x_step[1] = inverse_matrix.m[1][0];
     x_step[2] = inverse_matrix.m[2][0];
@@ -3528,7 +3528,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     c_step[1] = (0.5f * (inverse_matrix.m[1][0] + inverse_matrix.m[1][1]) + inverse_matrix.m[1][2]);
     c_step[2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 #else
-    /* Compute interpolation steps. */
+    /* Вычислите шаги интерполяции. */
     x_step[0] = inverse_matrix.m[0][0] / source->width;
     x_step[1] = inverse_matrix.m[1][0] / source->height;
     x_step[2] = inverse_matrix.m[2][0];
@@ -3540,7 +3540,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     c_step[2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 #endif
 
-    /* Determine image mode (NORMAL, NONE , MULTIPLY or STENCIL) depending on the color. */
+    /* Определите режим изображения ( NORMAL , NONE , MULTIPLY или STENCIL ) в зависимости от цвета. */
     switch(source->image_mode) {
         case VG_LITE_NONE_IMAGE_MODE:
             imageMode = 0x0;
@@ -3618,7 +3618,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A09, (void *) &y_step[1]));
     }
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A18, (void *) &c_step[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A19, (void *) &c_step[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A1A, (void *) &c_step[2]));
@@ -3645,17 +3645,17 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                         src_premultiply_enable | index_endian));
 
         if(source->yuv.uv_planar) {
-            /* Program u plane address if necessary. */
+            /* При необходимости запрограммируйте адрес самолета. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A50, source->yuv.uv_planar));
         }
         if(source->yuv.v_planar) {
-            /* Program v plane address if necessary. */
+            /* При необходимости запрограммируйте v-адрес плоскости. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A52, source->yuv.v_planar));
         }
 
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A26, pattern_color));
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A28, source->address));
-        /* 24bit format stride configured to 4bpp. */
+        /* Шаг формата 24 бит настроен на 4 бита на пиксель. */
         if(source->format >= VG_LITE_RGB888 && source->format <= VG_LITE_RGBA5658) {
             stride = source->stride / 3 * 4;
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2A, stride | tiled_source));
@@ -3672,11 +3672,11 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                         src_premultiply_enable | index_endian));
 
         if(source->yuv.uv_planar) {
-            /* Program u plane address if necessary. */
+            /* При необходимости запрограммируйте адрес самолета. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A51, source->yuv.uv_planar));
         }
         if(source->yuv.v_planar) {
-            /* Program v plane address if necessary. */
+            /* При необходимости запрограммируйте v-адрес плоскости. */
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A53, source->yuv.v_planar));
         }
 
@@ -3690,7 +3690,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
 #endif
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A29, source->address));
 
-        /* 24bit format stride configured to 4bpp. */
+        /* Шаг формата 24 бит настроен на 4 бита на пиксель. */
         if(source->format >= VG_LITE_RGB888 && source->format <= VG_LITE_RGBA5658) {
             stride = source->stride / 3 * 4;
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2B, stride | tiled_source));
@@ -3702,7 +3702,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2F, source->width | (source->height << 16)));
     }
 
-    /* Work on path states. */
+    /* Работайте над состояниями путей. */
     matrix = *path_matrix;
 
     if(ts_is_fullscreen == 0) {
@@ -3751,7 +3751,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     new_matrix[4] = matrix.m[1][1] * Scale;
     new_matrix[5] = (matrix.m[1][0] + matrix.m[1][1]) * Bias + matrix.m[1][2];
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
     tiling = (s_context.capabilities.cap.tiled == 2) ? 0x2000000 : 0;
@@ -3765,20 +3765,20 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         paintType = 1 << 24 | 1 << 25;
     }
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
 #if gcFEATURE_VG_GLOBAL_ALPHA
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0AD1,
                                     s_context.dst_alpha_mode | s_context.dst_alpha_value | s_context.src_alpha_mode | s_context.src_alpha_value));
 #endif
-    /* Program color register. */
+    /* Программный регистр цветов. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     in_premult | paintType | s_context.capabilities.cap.tiled | imageMode | blend_mode | transparency_mode | tile_setting |
                                     s_context.enable_mask | s_context.scissor_enable | s_context.color_transform | s_context.matrix_enable | 0x2));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000000 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A02, color));
-    /* Program matrix. */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &new_matrix[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &new_matrix[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &new_matrix[2]));
@@ -3797,7 +3797,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                 path->uploaded.memory = NULL;
                 path->uploaded.handle = NULL;
             }
-            /* Allocate memory for the path data. */
+            /* Выделите память для данных пути. */
             memory.bytes = 16 + VG_LITE_ALIGN(path->path_length, 8);
             return_offset = (8 + VG_LITE_ALIGN(path->path_length, 8)) / 4;
             memory.contiguous = 1;
@@ -3883,7 +3883,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     }
 #else
     {
-        /* Tessellate path. */
+        /* Мозаичный путь. */
         s_context.tessbuf.tess_w_h = width | (height << 16);
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3D, tessellation_size / 64));
@@ -3920,7 +3920,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
 #endif
 }
 
-/* GC555 vg_lite_draw_linear_grad API implementation
+/* GC555 vg_lite_draw_linear_grad API реализация
  */
 vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -3958,7 +3958,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     uint32_t prediv_flag = 0;
     void * data;
 
-    /* The following code is from "draw path" */
+    /* Следующий код взят из «путь рисования» */
     uint32_t format, quality, tiling, fill;
     uint32_t tessellation_size;
 
@@ -4045,7 +4045,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(vg_lite_dest_global_alpha(VG_LITE_GLOBAL, 0xff));
     }
 #endif
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
     src_premultiply_enable = 0x01000100;
@@ -4071,7 +4071,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* when src and dst all pre format, im pre_out set to 0 to perform data truncation to prevent data overflow */
+    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -4105,8 +4105,8 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         return error;
     }
     else if(error == VG_LITE_NO_CONTEXT) {
-        /* If scissoring is enabled and no valid scissoring rectangles
-           are present, no drawing occurs */
+        /* Если ножницы включены и нет допустимых прямоугольников ножниц
+           присутствуют, рисования не происходит */
         return VG_LITE_SUCCESS;
     }
 
@@ -4124,12 +4124,12 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         point_max.y = target->height;
     }
 
-    /* If target is L8 and source is in YUV or RGB (not L8 or A8) then we have to convert RGB into L8. */
+    /* Если цель — L8, а источник — YUV или RGB (а не L8 или A8), тогда нам нужно преобразовать RGB в L8. */
     if((target->format == VG_LITE_L8) && ((source->format != VG_LITE_L8) && (source->format != VG_LITE_A8))) {
         conversion = 0x80000000;
     }
 
-    /* Determine image mode (NORMAL, NONE , MULTIPLY or STENCIL) depending on the color. */
+    /* Определите режим изображения ( NORMAL , NONE , MULTIPLY или STENCIL ) в зависимости от цвета. */
     switch(source->image_mode) {
         case VG_LITE_NONE_IMAGE_MODE:
             image_mode = 0x0;
@@ -4198,9 +4198,9 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         paint_color = (a << 24) | (b << 16) | (g << 8) | r;
     }
 
-    /* compute linear gradient paremeters */
+    /* вычислить параметры линейного градиента */
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
@@ -4217,7 +4217,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     **  g = -------------------------------
     **                dx^2 + dy^2
     **
-    **  where
+    **  где
     **
     **      dx := x1 - x0
     **      dy := y1 - y0
@@ -4226,7 +4226,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     **      T(y) := (x + 0.5) m10 + (y + 0.5) m11 + m12
     **            = x m10 + y m11 + 0.5 (m10 + m11) + m12.
     **
-    **  We can factor the top line into:
+    **  Мы можем факторизовать верхнюю строку на:
     **
     **      = dx (x m00 + y m01 + 0.5 (m00 + m01) + m02 - x0)
     **      + dy (x m10 + y m11 + 0.5 (m10 + m11) + m12 - y0)
@@ -4261,9 +4261,9 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         )
         / dxdx_dydy;
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
 
-    /* linear gradient parameters*/
+    /* параметры линейного градиента*/
     data = &lg_constant_lin;
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A04, *(uint32_t *) data));
     data = &lg_step_x_lin;
@@ -4271,12 +4271,12 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     data = &lg_step_y_lin;
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A08, *(uint32_t *) data));
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
 #if gcFEATURE_VG_MATH_PRECISION_FIX
-    /* Compute interpolation steps. */
+    /* Вычислите шаги интерполяции. */
     x_step[0] = inverse_matrix.m[0][0];
     x_step[1] = inverse_matrix.m[1][0];
     x_step[2] = inverse_matrix.m[2][0];
@@ -4287,7 +4287,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     c_step[1] = (0.5f * (inverse_matrix.m[1][0] + inverse_matrix.m[1][1]) + inverse_matrix.m[1][2]);
     c_step[2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 #else
-    /* Compute interpolation steps. */
+    /* Вычислите шаги интерполяции. */
     x_step[0] = inverse_matrix.m[0][0] / source->width;
     x_step[1] = inverse_matrix.m[1][0] / source->height;
     x_step[2] = inverse_matrix.m[2][0];
@@ -4299,7 +4299,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     c_step[2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 #endif
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A18, (void *) &c_step[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A19, (void *) &c_step[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A1A, (void *) &c_step[2]));
@@ -4320,11 +4320,11 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     }
 
     if(source->yuv.uv_planar) {
-        /* Program u plane address if necessary. */
+        /* При необходимости запрограммируйте адрес самолета. */
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A51, source->yuv.uv_planar));
     }
     if(source->yuv.v_planar) {
-        /* Program v plane address if necessary. */
+        /* При необходимости запрограммируйте v-адрес плоскости. */
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A53, source->yuv.v_planar));
     }
 
@@ -4337,7 +4337,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2C, 0));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2E, source->width | (source->height << 16)));
 
-    /* Work on path states. */
+    /* Работайте над состояниями путей. */
     matrix = path_matrix;
 
     if(ts_is_fullscreen == 0) {
@@ -4384,7 +4384,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     new_matrix[4] = matrix->m[1][1] * Scale;
     new_matrix[5] = (matrix->m[1][0] + matrix->m[1][1]) * Bias + matrix->m[1][2];
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -4392,15 +4392,15 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     fill = (fill_rule == VG_LITE_FILL_EVEN_ODD) ? 0x10 : 0;
     tessellation_size = s_context.tessbuf.tessbuf_size;
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     0x01000002 | s_context.capabilities.cap.tiled | in_premult | image_mode | blend_mode | transparency_mode |
                                     s_context.enable_mask | s_context.color_transform | s_context.matrix_enable | s_context.scissor_enable));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000400 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &new_matrix[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &new_matrix[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &new_matrix[2]));
@@ -4419,7 +4419,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                 path->uploaded.memory = NULL;
                 path->uploaded.handle = NULL;
             }
-            /* Allocate memory for the path data. */
+            /* Выделите память для данных пути. */
             memory.bytes = 16 + VG_LITE_ALIGN(path->path_length, 8);
             return_offset = (8 + VG_LITE_ALIGN(path->path_length, 8)) / 4;
             memory.contiguous = 1;
@@ -4453,7 +4453,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
 
 #if (gcFEATURE_VG_PARALLEL_PATHS && gcFEATURE_VG_512_PARALLEL_PATHS)
     {
-        /* Tessellate path. */
+        /* Мозаичный путь. */
         s_context.tessbuf.tess_w_h = width | (height << 16);
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3D, tessellation_size / 64));
@@ -4551,7 +4551,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     }
 #endif
 
-    /* Finialize command buffer. */
+    /* Завершить буфер команд. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0));
 #if gcFEATURE_VG_GLOBAL_ALPHA
     if(blend >= VG_LITE_BLEND_NORMAL_LVGL && blend <= VG_LITE_BLEND_MULTIPLY_LVGL) {
@@ -4569,7 +4569,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
 #endif
 }
 
-/* GC555 vg_lite_draw_radial_grad API implementation
+/* GC555 vg_lite_draw_radial_grad API реализация
  */
 vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -4608,7 +4608,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     uint32_t premul_flag = 0;
     uint32_t prediv_flag = 0;
 
-    /* The following code is from "draw path" */
+    /* Следующий код взят из «путь рисования» */
     uint32_t format, quality, tiling, fill;
     uint32_t tessellation_size;
 
@@ -4714,7 +4714,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(vg_lite_dest_global_alpha(VG_LITE_GLOBAL, 0xff));
     }
 #endif
-    /*blend input into context*/
+    /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
     src_premultiply_enable = 0x01000100;
@@ -4740,7 +4740,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* when src and dst all pre format, im pre_out set to 0 to perform data truncation to prevent data overflow */
+    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -4774,8 +4774,8 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         return error;
     }
     else if(error == VG_LITE_NO_CONTEXT) {
-        /* If scissoring is enabled and no valid scissoring rectangles
-           are present, no drawing occurs */
+        /* Если ножницы включены и нет допустимых прямоугольников ножниц
+           присутствуют, рисования не происходит */
         return VG_LITE_SUCCESS;
     }
 
@@ -4800,12 +4800,12 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         point_max.y = target->height;
     }
 
-    /* If target is L8 and source is in YUV or RGB (not L8 or A8) then we have to convert RGB into L8. */
+    /* Если цель — L8, а источник — YUV или RGB (а не L8 или A8), тогда нам нужно преобразовать RGB в L8. */
     if((target->format == VG_LITE_L8) && ((source->format != VG_LITE_L8) && (source->format != VG_LITE_A8))) {
         conversion = 0x80000000;
     }
 
-    /* Determine image mode (NORMAL, NONE , MULTIPLY or STENCIL) depending on the color. */
+    /* Определите режим изображения ( NORMAL , NONE , MULTIPLY или STENCIL ) в зависимости от цвета. */
     switch(source->image_mode) {
         case VG_LITE_NONE_IMAGE_MODE:
             imageMode = 0x0;
@@ -4877,26 +4877,26 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         paint_color = (a << 24) | (b << 16) | (g << 8) | r;
     }
 
-    /* compute radial gradient paremeters */
+    /* вычислить параметры радиального градиента */
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Make shortcuts to the gradient information. */
+    /* Сделайте ярлыки для информации о градиенте. */
     centerX = grad->radial_grad.cx;
     centerY = grad->radial_grad.cy;
     focalX  = grad->radial_grad.fx;
     focalY  = grad->radial_grad.fy;
 
-    /* Compute constants of the equation. */
+    /* Вычислите константы уравнения. */
     fx           = focalX - centerX;
     fy           = focalY - centerY;
     radius2      = radius * radius;
     if(fx * fx + fy * fy > radius2) {
-        /* If the focal point is outside the circle, let's move it
-            to inside the circle. Per vg11 spec pg125 "If (fx, fy) lies outside ...
-            For here, we set it at 0.9 ratio to the center.
+        /* Если точка фокуса находится за пределами круга, давайте переместим ее.
+            внутрь круга. Согласно спецификации vg11 pg125 «Если (fx, fy) лежит снаружи...
+            Здесь мы установили соотношение 0,9 к центру.
         */
         vg_lite_float_t fr = (vg_lite_float_t)sqrt(fx * fx + fy * fy);
         fx = radius * fx / fr * 0.9f;
@@ -4923,38 +4923,38 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **  g = -------------------------------------------------------
     **                         r^2 - fx^2 - fy^2
     **
-    **  Where
+    **  Где
     **
-    **      dx := F(x) - focalX
-    **      dy := F(y) - focalY
-    **      fx := focalX - centerX
-    **      fy := focalX - centerY
+    **      dx := F(x) - фокусX
+    **      dy := F(y) - фокусY
+    **      fx := фокусX - центрX
+    **      fy := фокусX - центрY
     **
-    **  and
+    **  и
     **
     **      F(x) := (x + 0.5) m00 + (y + 0.5) m01 + m02
     **      F(y) := (x + 0.5) m10 + (y + 0.5) m11 + m12
     **
-    **  So, dx can be factored into
+    **  Таким образом, dx может быть учтено в
     **
     **      dx = (x + 0.5) m00 + (y + 0.5) m01 + m02 - focalX
-    **         = x m00 + y m01 + 0.5 m00 + 0.5 m01 + m02 - focalX
+    **         = x m00 + y m01 + 0,5 m00 + 0,5 m01 + m02 - фокус X
     **
     **         = x m00 + y m01 + cx
     **
-    **  where
+    **  где
     **
-    **      cx := 0.5 m00 + 0.5 m01 + m02 - focalX
+    **      cx := 0,5 m00 + 0,5 m01 + m02 - фокусX
     **
-    **  The same way we can factor dy into
+    **  Точно так же мы можем учесть dy в
     **
     **      dy = x m10 + y m11 + cy
     **
-    **  where
+    **  где
     **
-    **      cy := 0.5 m10 + 0.5 m11 + m12 - focalY.
+    **      cy := 0,5 м10 + 0,5 м11 + м12 – фокусY.
     **
-    **  Now we can rewrite g as
+    **  Теперь мы можем переписать g как
     **                               ______________________________________
     **        dx fx + dy fy         / r^2 (dx^2 + dy^2) - (dx fy - dy fx)^2
     **  g = ----------------- + \  /  -------------------------------------
@@ -4962,14 +4962,14 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **               ____
     **    = gLin + \/gRad
     **
-    **  where
+    **  где
     **
     **                dx fx + dy fy
-    **      gLin := -----------------
+    **      гЛин := -----------------
     **              r^2 - fx^2 - fy^2
     **
     **              r^2 (dx^2 + dy^2) - (dx fy - dy fx)^2
-    **      gRad := -------------------------------------
+    **      гРад := -------------------------------------
     **                      (r^2 - fx^2 - fy^2)^2
     */
 
@@ -4985,10 +4985,10 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
     /*
     **            dx fx + dy fy
-    **  gLin := -----------------
+    **  гЛин := -----------------
     **          r^2 - fx^2 - fy^2
     **
-    **  We can factor the top half into
+    **  Мы можем учесть верхнюю половину
     **
     **      = (x m00 + y m01 + cx) fx + (x m10 + y m11 + cy) fy
     **
@@ -5009,7 +5009,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
     /*
     **          r^2 (dx^2 + dy^2) - (dx fy - dy fx)^2
-    **  gRad := -------------------------------------
+    **  гРад := -------------------------------------
     **                  (r^2 - fx^2 - fy^2)^2
     **
     **          r^2 (dx^2 + dy^2) - dx^2 fy^2 - dy^2 fx^2 + 2 dx dy fx fy
@@ -5020,7 +5020,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **       := -----------------------------------------------------
     **                          (r^2 - fx^2 - fy^2)^2
     **
-    **  First, lets factor dx^2 into
+    **  Во-первых, давайте факторизуем dx^2 в
     **
     **      dx^2 = (x m00 + y m01 + cx)^2
     **           = x^2 m00^2 + y^2 m01^2 + 2 x y m00 m01
@@ -5033,7 +5033,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **           + y (2 m01 cx)
     **           + cx^2.
     **
-    **  The same can be done for dy^2:
+    **  То же самое можно сделать и для dy^2:
     **
     **      dy^2 = x^2 (m10^2)
     **           + y^2 (m11^2)
@@ -5042,7 +5042,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **           + y (2 m11 cy)
     **           + cy^2.
     **
-    **  Let's also factor dx dy into
+    **  Давайте также учтем dx dy в
     **
     **      dx dy = (x m00 + y m01 + cx) (x m10 + y m11 + cy)
     **            = x^2 m00 m10 + y^2 m01 m11 + x y m00 m11 + x y m01 m10
@@ -5055,7 +5055,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **            + y (m01 cy + m11 cx)
     **            + cx cy.
     **
-    **  Now that we have all this, lets look at the top of gRad.
+    **  Теперь, когда у нас есть все это, давайте посмотрим на верхнюю часть gRad.
     **
     **      = dx^2 (r^2 - fy^2) + dy^2 (r^2 - fx^2) + 2 dx dy fx fy
     **      = x^2 m00^2 (r^2 - fy^2) + y^2 m01^2 (r^2 - fy^2)
@@ -5152,9 +5152,9 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         )
         / r2_fx2_fy2sq;
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
 
-    /* rad gradient parameters*/
+    /* параметры рад-градиента*/
     data = &rgConstantLin;
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A04, *(uint32_t *) data));
     data = &rgStepXLin;
@@ -5174,12 +5174,12 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     data = &rgStepXYRad;
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A0B, *(uint32_t *) data));
 
-    /* Compute inverse matrix. */
+    /* Вычислить обратную матрицу. */
     if(!inverse(&inverse_matrix, matrix))
         return VG_LITE_INVALID_ARGUMENT;
 
 #if gcFEATURE_VG_MATH_PRECISION_FIX
-    /* Compute interpolation steps. */
+    /* Вычислите шаги интерполяции. */
     x_step[0] = inverse_matrix.m[0][0];
     x_step[1] = inverse_matrix.m[1][0];
     x_step[2] = inverse_matrix.m[2][0];
@@ -5190,7 +5190,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     c_step[1] = (0.5f * (inverse_matrix.m[1][0] + inverse_matrix.m[1][1]) + inverse_matrix.m[1][2]);
     c_step[2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 #else
-    /* Compute interpolation steps. */
+    /* Вычислите шаги интерполяции. */
     x_step[0] = inverse_matrix.m[0][0] / source->width;
     x_step[1] = inverse_matrix.m[1][0] / source->height;
     x_step[2] = inverse_matrix.m[2][0];
@@ -5202,7 +5202,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     c_step[2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 #endif
 
-    /* Setup the command buffer. */
+    /* Настройте буфер команд. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A18, (void *) &c_step[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A19, (void *) &c_step[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A1A, (void *) &c_step[2]));
@@ -5223,11 +5223,11 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     }
 
     if(source->yuv.uv_planar) {
-        /* Program u plane address if necessary. */
+        /* При необходимости запрограммируйте адрес самолета. */
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A51, source->yuv.uv_planar));
     }
     if(source->yuv.v_planar) {
-        /* Program v plane address if necessary. */
+        /* При необходимости запрограммируйте v-адрес плоскости. */
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A53, source->yuv.v_planar));
     }
 
@@ -5240,7 +5240,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2C, 0));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2E, source->width | (source->height << 16)));
 
-    /* Work on path states. */
+    /* Работайте над состояниями путей. */
     matrix = path_matrix;
 
     if(ts_is_fullscreen == 0) {
@@ -5287,7 +5287,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     new_matrix[4] = matrix->m[1][1] * Scale;
     new_matrix[5] = (matrix->m[1][0] + matrix->m[1][1]) * Bias + matrix->m[1][2];
 
-    /* Convert states into hardware values. */
+    /* Преобразуйте состояния в аппаратные значения. */
     blend_mode = convert_blend(blend);
     format = convert_path_format(path->format);
     quality = convert_path_quality(path->quality);
@@ -5295,15 +5295,15 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     fill = (fill_rule == VG_LITE_FILL_EVEN_ODD) ? 0x10 : 0;
     tessellation_size = s_context.tessbuf.tessbuf_size;
 
-    /* Setup the command buffer. */
-    /* Program color register. */
+    /* Настройте буфер команд. */
+    /* Программный регистр цветов. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A00,
                                     0x02000002 | s_context.capabilities.cap.tiled | in_premult | imageMode | blend_mode | transparency_mode |
                                     s_context.enable_mask | s_context.color_transform | s_context.matrix_enable | s_context.scissor_enable));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0x01000000 | format | quality | tiling | fill));
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Path tessellation SCALE. */
-    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Path tessellation BIAS.  */
-    /* Program matrix. */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3B, 0x3F800000));      /* Тесселяция путей SCALE . */
+    VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3C, 0x00000000));      /* Тесселяция путей BIAS .  */
+    /* Матрица программы. */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A40, (void *) &new_matrix[0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A41, (void *) &new_matrix[1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A42, (void *) &new_matrix[2]));
@@ -5322,7 +5322,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                 path->uploaded.memory = NULL;
                 path->uploaded.handle = NULL;
             }
-            /* Allocate memory for the path data. */
+            /* Выделите память для данных пути. */
             memory.bytes = 16 + VG_LITE_ALIGN(path->path_length, 8);
             return_offset = (8 + VG_LITE_ALIGN(path->path_length, 8)) / 4;
             memory.contiguous = 1;
@@ -5356,7 +5356,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
 #if (gcFEATURE_VG_PARALLEL_PATHS && gcFEATURE_VG_512_PARALLEL_PATHS)
     {
-        /* Tessellate path. */
+        /* Мозаичный путь. */
         s_context.tessbuf.tess_w_h = width | (height << 16);
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A1B, 0x00011000));
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A3D, tessellation_size / 64));
@@ -5454,7 +5454,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     }
 #endif
 
-    /* Finialize command buffer. */
+    /* Завершить буфер команд. */
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A34, 0));
 #if gcFEATURE_VG_GLOBAL_ALPHA
     if(blend >= VG_LITE_BLEND_NORMAL_LVGL && blend <= VG_LITE_BLEND_MULTIPLY_LVGL) {
@@ -5474,7 +5474,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
 #endif /* (CHIPID==0x355 || CHIPID==0x255) */
 
-/* GC555/GC355/GC255 vg_lite_draw_grad API implementation
+/* GC555 / GC355 / GC255 vg_lite_draw_grad API реализация
  */
 vg_lite_error_t vg_lite_draw_grad(vg_lite_buffer_t * target,
                                   vg_lite_path_t * path,

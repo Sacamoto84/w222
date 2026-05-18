@@ -12,17 +12,17 @@ static void set_scale(void * img, int32_t v)
 }
 
 /**
- * Show transformations (zoom and rotation) using a pivot point.
+ * Покажите преобразования (масштабирование и вращение) с помощью точки поворота.
  */
 void lv_example_image_3(void)
 {
     LV_IMAGE_DECLARE(img_cogwheel_argb);
 
-    /*Now create the actual image*/
+    /*Теперь создайте фактическое изображение*/
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, &img_cogwheel_argb);
     lv_obj_align(img, LV_ALIGN_CENTER, 50, 50);
-    lv_image_set_pivot(img, 0, 0);    /*Rotate around the top left corner*/
+    lv_image_set_pivot(img, 0, 0);    /*Поворот вокруг верхнего левого угла*/
 
     lv_anim_t a;
     lv_anim_init(&a);

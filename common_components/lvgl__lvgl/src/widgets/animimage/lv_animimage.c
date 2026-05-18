@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2025
+ * Изменено NXP в 2025 г.
  */
 
 /*********************
@@ -14,7 +14,7 @@
 #include "../../core/lv_obj_class_private.h"
 #if LV_USE_ANIMIMG != 0
 
-/*Testing of dependencies*/
+/*Тестирование зависимостей*/
 #if LV_USE_IMAGE == 0
     #error "lv_animimg: lv_img is required. Enable it in lv_conf.h (LV_USE_IMAGE  1) "
 #endif
@@ -123,7 +123,7 @@ bool lv_animimg_delete(lv_obj_t * obj)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_animimg_set_duration(lv_obj_t * obj, uint32_t duration)
@@ -170,7 +170,7 @@ void lv_animimg_set_completed_cb(lv_obj_t * obj, lv_anim_completed_cb_t complete
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const void ** lv_animimg_get_src(lv_obj_t * obj)
@@ -222,7 +222,7 @@ static void lv_animimg_constructor(const lv_obj_class_t * class_p, lv_obj_t * ob
     animimg->dsc = NULL;
     animimg->pic_count = -1;
 
-    /*initial animation*/
+    /*начальная анимация*/
     lv_anim_init(&animimg->anim);
     lv_anim_set_var(&animimg->anim, obj);
     lv_anim_set_duration(&animimg->anim, 30);

@@ -239,7 +239,7 @@ static void lv_slider_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj
     LV_UNUSED(class_p);
     lv_slider_t * slider = (lv_slider_t *)obj;
 
-    /*Initialize the allocated 'slider'*/
+    /*Инициализировать выделенный «ползунок»*/
     slider->value_to_set = NULL;
     slider->dragging = 0U;
     slider->left_knob_focus = 0U;
@@ -256,7 +256,7 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -265,7 +265,7 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
     lv_slider_t * slider = (lv_slider_t *)obj;
     lv_slider_mode_t type = lv_slider_get_mode(obj);
 
-    /*Advanced hit testing: react only on dragging the knob(s)*/
+    /*Расширенное тестирование попадания: реагируйте только на перетаскивание ручки(-ок)*/
     if(code == LV_EVENT_HIT_TEST) {
         lv_hit_test_info_t * info = lv_event_get_param(e);
         int32_t ext_click_area = obj->spec_attr ? obj->spec_attr->ext_click_pad : 0;
@@ -276,7 +276,7 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
         lv_area_increase(&a, ext_click_area, ext_click_area);
         info->res = lv_area_is_point_on(&a, info->point, 0);
 
-        /*There's still a chance that there is a hit if there is another knob*/
+        /*Еще есть шанс, что будет попадание, если есть еще одна ручка*/
         if((info->res == false) && (type == LV_SLIDER_MODE_RANGE)) {
             lv_area_copy(&a, &slider->left_knob_area);
             lv_area_increase(&a, ext_click_area, ext_click_area);
@@ -284,7 +284,7 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
         }
     }
     else if(code == LV_EVENT_PRESSED) {
-        /*Save the pressed coordinates*/
+        /*Сохраняем нажатые координаты*/
         lv_indev_get_point(lv_indev_active(), &slider->pressed_point);
         lv_obj_transform_point(obj, &slider->pressed_point, LV_OBJ_POINT_TRANSFORM_FLAG_INVERSE_RECURSIVE);
     }
@@ -298,7 +298,7 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         lv_obj_invalidate(obj);
 
-        /*Leave edit mode if released. (No need to wait for LONG_PRESS)*/
+        /*Выйдите из режима редактирования, если он отпущен. (Не нужно ждать LONG_PRESS )*/
         lv_group_t * g   = lv_obj_get_group(obj);
         bool editing     = lv_group_get_editing(g);
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
@@ -344,15 +344,15 @@ static void lv_slider_event(const lv_obj_class_t * class_p, lv_event_t * e)
         int32_t knob_top = lv_obj_get_style_pad_top(obj, LV_PART_KNOB);
         int32_t knob_bottom = lv_obj_get_style_pad_bottom(obj, LV_PART_KNOB);
 
-        /*The smaller size is the knob diameter*/
+        /*Меньший размер-это диаметр ручки.*/
         int32_t trans_w = lv_obj_get_style_transform_width(obj, LV_PART_KNOB);
         int32_t trans_h = lv_obj_get_style_transform_height(obj, LV_PART_KNOB);
         int32_t knob_size = LV_MIN(lv_obj_get_width(obj) + 2 * trans_w, lv_obj_get_height(obj) + 2 * trans_h) >> 1;
         knob_size += LV_MAX(LV_MAX(knob_left, knob_right), LV_MAX(knob_bottom, knob_top));
-        knob_size += 2;         /*For rounding error*/
+        knob_size += 2;         /*За ошибку округления*/
         knob_size += lv_obj_calculate_ext_draw_size(obj, LV_PART_KNOB);
 
-        /*Indic. size is handled by bar*/
+        /*Индик. размер обрабатывается баром*/
         int32_t * s = lv_event_get_param(e);
         *s  = LV_MAX(*s, knob_size);
 
@@ -419,24 +419,24 @@ static void draw_knob(lv_event_t * e)
     lv_draw_rect_dsc_init(&knob_rect_dsc);
     knob_rect_dsc.base.layer = layer;
     lv_obj_init_draw_rect_dsc(obj, LV_PART_KNOB, &knob_rect_dsc);
-    /* Update knob area with knob style */
+    /* Обновить область ручки, используя стиль ручки */
     position_knob(obj, &knob_area, knob_size, is_horizontal);
-    /* Update right knob area with calculated knob area */
+    /* Обновить область правой ручки, используя расчетную площадь ручки. */
     lv_area_copy(&slider->right_knob_area, &knob_area);
 
     if(lv_slider_get_mode(obj) != LV_SLIDER_MODE_RANGE) {
         lv_draw_rect(layer, &knob_rect_dsc, &slider->right_knob_area);
     }
     else {
-        /*Save the draw part_draw_dsc. because it can be modified in the event*/
+        /*Сохраните розыгрыш part_draw_dsc. потому что его можно изменить в случае*/
         lv_draw_rect_dsc_t knob_rect_dsc_tmp;
         lv_memcpy(&knob_rect_dsc_tmp, &knob_rect_dsc, sizeof(lv_draw_rect_dsc_t));
-        /* Draw the right knob */
+        /* Нарисуйте правую ручку */
         lv_draw_rect(layer, &knob_rect_dsc, &slider->right_knob_area);
 
-        /*Calculate the second knob area*/
+        /*Вычисляем площадь второй ручки*/
         if(is_horizontal) {
-            /*use !is_reversed to get the other knob*/
+            /*используйте! is_reversed, чтобы получить другую ручку*/
             knob_area.x1 = LV_SLIDER_KNOB_COORD(!is_reversed, slider->bar.indic_area);
         }
         else {
@@ -474,7 +474,7 @@ static void position_knob(lv_obj_t * obj, lv_area_t * knob_area, const int32_t k
     int32_t transf_w = lv_obj_get_style_transform_width(obj, LV_PART_KNOB);
     int32_t transf_h = lv_obj_get_style_transform_height(obj, LV_PART_KNOB);
 
-    /*Apply the paddings on the knob area*/
+    /*Нанесите накладки на область ручки.*/
     knob_area->x1 -= knob_left + transf_w;
     knob_area->x2 += knob_right + transf_w;
     knob_area->y1 -= knob_top + transf_h;
@@ -513,10 +513,10 @@ static void drag_start(lv_obj_t * obj)
                 slider->value_to_set = &slider->bar.start_value;
             }
             else {
-                /*Calculate the distance from each knob*/
+                /*Рассчитайте расстояние от каждой ручки*/
                 dist_left = LV_ABS((slider->left_knob_area.x1 + (slider->left_knob_area.x2 - slider->left_knob_area.x1) / 2) - p.x);
                 dist_right = LV_ABS((slider->right_knob_area.x1 + (slider->right_knob_area.x2 - slider->right_knob_area.x1) / 2) - p.x);
-                /*Use whichever one is closer*/
+                /*Используйте тот, который ближе*/
                 if(dist_right < dist_left) {
                     slider->value_to_set = &slider->bar.cur_value;
                     slider->left_knob_focus = 0;
@@ -535,11 +535,11 @@ static void drag_start(lv_obj_t * obj)
                 slider->value_to_set = &slider->bar.start_value;
             }
             else {
-                /*Calculate the distance from each knob*/
+                /*Рассчитайте расстояние от каждой ручки*/
                 dist_left = LV_ABS((slider->left_knob_area.y1 + (slider->left_knob_area.y2 - slider->left_knob_area.y1) / 2) - p.y);
                 dist_right = LV_ABS((slider->right_knob_area.y1 + (slider->right_knob_area.y2 - slider->right_knob_area.y1) / 2) - p.y);
 
-                /*Use whichever one is closer*/
+                /*Используйте тот, который ближе*/
                 if(dist_right < dist_left) {
                     slider->value_to_set = &slider->bar.cur_value;
                     slider->left_knob_focus = 0;
@@ -571,14 +571,14 @@ static void update_knob_pos(lv_obj_t * obj, bool check_drag)
     if(check_drag && !slider->dragging) {
         int32_t ofs = is_hor ? (p.x - slider->pressed_point.x) : (p.y - slider->pressed_point.y);
 
-        /*Stop processing when offset is below scroll_limit*/
+        /*Остановить обработку, когда смещение меньше scroll_limit*/
         if(LV_ABS(ofs) < indev->scroll_limit) {
             return;
         }
     }
 
     if(!slider->value_to_set) {
-        /*Ready to start drag*/
+        /*Готов начать перетаскивание*/
         drag_start(obj);
     }
 
@@ -595,11 +595,11 @@ static void update_knob_pos(lv_obj_t * obj, bool check_drag)
         const int32_t indic_w = w - bg_left - bg_right;
 
         if(is_reversed) {
-            /*Make the point relative to the indicator*/
+            /*Сделайте точку относительно индикатора*/
             new_value = (obj->coords.x2 - bg_right) - p.x;
         }
         else {
-            /*Make the point relative to the indicator*/
+            /*Сделайте точку относительно индикатора*/
             new_value = p.x - (obj->coords.x1 + bg_left);
         }
         if(indic_w) {
@@ -614,11 +614,11 @@ static void update_knob_pos(lv_obj_t * obj, bool check_drag)
         const int32_t indic_h = h - bg_bottom - bg_top;
 
         if(is_reversed) {
-            /*Make the point relative to the indicator*/
+            /*Сделайте точку относительно индикатора*/
             new_value = p.y - (obj->coords.y1 + bg_top);
         }
         else {
-            /*Make the point relative to the indicator*/
+            /*Сделайте точку относительно индикатора*/
             new_value = p.y - (obj->coords.y2 + bg_bottom);
             new_value = -new_value;
         }
@@ -628,7 +628,7 @@ static void update_knob_pos(lv_obj_t * obj, bool check_drag)
 
     int32_t real_max_value = slider->bar.max_value;
     int32_t real_min_value = slider->bar.min_value;
-    /*Figure out the min. and max. for this mode*/
+    /*Вычислите мин. и макс. для этого режима*/
     if(slider->value_to_set == &slider->bar.start_value) {
         real_max_value = slider->bar.cur_value;
     }
@@ -672,7 +672,7 @@ static void slider_value_changed_event_cb(lv_event_t * e)
 static void slider_value_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {
     lv_obj_t * obj = lv_observer_get_target_obj(observer);
-    /*If the slider is not rendered yet show the new state immediately*/
+    /*Если слайдер еще не отображается, немедленно покажите новое состояние.*/
     lv_anim_enable_t anim_on = obj->rendered ? LV_ANIM_ON : LV_ANIM_OFF;
     if(subject->type == LV_SUBJECT_TYPE_INT) {
         lv_slider_set_value(observer->target, subject->value.num, anim_on);

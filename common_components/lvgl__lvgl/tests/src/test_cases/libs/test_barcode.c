@@ -38,21 +38,21 @@ void test_barcode_normal(void)
     TEST_ASSERT_EQUAL_COLOR(lv_barcode_get_light_color(barcode), light_color);
     TEST_ASSERT_EQUAL(lv_barcode_get_scale(barcode), scale);
 
-    /* Test horizontal mode */
+    /* Тестовый горизонтальный режим */
     lv_barcode_set_direction(barcode, LV_DIR_HOR);
     lv_obj_set_height(barcode, 50);
     res = lv_barcode_update(barcode, "https://lvgl.io");
     TEST_ASSERT_EQUAL(res, LV_RESULT_OK);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/barcode_1.png");
 
-    /* Test vertical mode */
+    /* Тестовый вертикальный режим */
     lv_barcode_set_direction(barcode, LV_DIR_VER);
     lv_obj_set_size(barcode, 50, LV_SIZE_CONTENT);
     res = lv_barcode_update(barcode, "https://lvgl.io");
     TEST_ASSERT_EQUAL(res, LV_RESULT_OK);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/barcode_2.png");
 
-    /* Test tiled + horizontal mode */
+    /* Тестовый мозаичный + горизонтальный режим */
     lv_barcode_set_tiled(barcode, true);
     lv_barcode_set_direction(barcode, LV_DIR_HOR);
     lv_obj_set_size(barcode, LV_SIZE_CONTENT, 50);
@@ -61,7 +61,7 @@ void test_barcode_normal(void)
     TEST_ASSERT_EQUAL(res, LV_RESULT_OK);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/barcode_tiled_1.png");
 
-    /* Test tiled + vertical mode */
+    /* Тестовый мозаичный + вертикальный режим */
     lv_barcode_set_direction(barcode, LV_DIR_VER);
     lv_obj_set_size(barcode, 50, LV_SIZE_CONTENT);
     res = lv_barcode_update(barcode, "https://lvgl.io");

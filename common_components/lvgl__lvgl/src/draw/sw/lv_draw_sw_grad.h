@@ -37,8 +37,8 @@ typedef struct {
  *      PROTOTYPES
  **********************/
 
-/** Compute the color in the given gradient and fraction
- *  Gradient are specified in a virtual [0-255] range, so this function scales the virtual range to the given range
+/** Вычислить цвет в заданном градиенте и дроби
+ *  Градиент указан в виртуальном диапазоне [0–255], поэтому эта функция масштабирует виртуальный диапазон до заданного диапазона.
  * @param dsc       The gradient descriptor to use
  * @param range     The range to use in computation.
  * @param frac      The current part used in the range. frac is in [0; range]
@@ -49,11 +49,11 @@ typedef struct {
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_color_calculate(const lv_grad_dsc_t * dsc, int32_t range,
                                                                  int32_t frac, lv_color_t * color_out, lv_opa_t * opa_out);
 
-/** Get a gradient cache from the given parameters */
+/** Получить градиентный кеш по заданным параметрам */
 lv_draw_sw_grad_calc_t * lv_draw_sw_grad_get(const lv_grad_dsc_t * gradient, int32_t w, int32_t h);
 
 /**
- * Clean up the gradient item after it was get with `lv_grad_get_from_cache`.
+ * Очистите элемент градиента после того, как он был получен с помощью `lv_grad_get_from_cache`.
  * @param grad      pointer to a gradient
  */
 void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad);
@@ -62,20 +62,20 @@ void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad);
 
 
 /**
- * Calculate constants from the given parameters that are used during rendering
+ * Вычислить константы по заданным параметрам, которые используются во время рендеринга.
  * @param dsc      gradient descriptor
  * @param coords    the area where to draw the gradient
  */
 void lv_draw_sw_grad_linear_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Free up the allocated memory for the gradient calculation
+ * Освободите выделенную память для расчета градиента.
  * @param dsc      gradient descriptor
  */
 void lv_draw_sw_grad_linear_cleanup(lv_grad_dsc_t * dsc);
 
 /**
- * Calculate a line segment of a linear gradient
+ * Вычислить отрезок линейного градиента
  * @param dsc       gradient descriptor
  * @param xp        starting point x coordinate in gradient space
  * @param yp        starting point y coordinate in gradient space
@@ -87,20 +87,20 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_linear_get_line(lv_grad_dsc_t *
                                                                  lv_draw_sw_grad_calc_t * result);
 
 /**
- * Calculate constants from the given parameters that are used during rendering
+ * Вычислить константы по заданным параметрам, которые используются во время рендеринга.
  * @param dsc       gradient descriptor
  * @param coords    the area where to draw the gradient
  */
 void lv_draw_sw_grad_radial_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Free up the allocated memory for the gradient calculation
+ * Освободите выделенную память для расчета градиента.
  * @param dsc      gradient descriptor
  */
 void lv_draw_sw_grad_radial_cleanup(lv_grad_dsc_t * dsc);
 
 /**
- * Calculate a line segment of a radial gradient
+ * Вычислить отрезок радиального градиента
  * @param dsc       gradient descriptor
  * @param xp        starting point x coordinate in gradient space
  * @param yp        starting point y coordinate in gradient space
@@ -112,20 +112,20 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t *
                                                                  lv_draw_sw_grad_calc_t * result);
 
 /**
- * Calculate constants from the given parameters that are used during rendering
+ * Вычислить константы по заданным параметрам, которые используются во время рендеринга.
  * @param dsc      gradient descriptor
  * @param coords    the area where to draw the gradient
  */
 void lv_draw_sw_grad_conical_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Free up the allocated memory for the gradient calculation
+ * Освободите выделенную память для расчета градиента.
  * @param dsc      gradient descriptor
  */
 void lv_draw_sw_grad_conical_cleanup(lv_grad_dsc_t * dsc);
 
 /**
- * Calculate a line segment of a conical gradient
+ * Вычислить отрезок линии конического градиента
  * @param dsc       gradient descriptor
  * @param xp        starting point x coordinate in gradient space
  * @param yp        starting point y coordinate in gradient space
@@ -141,7 +141,7 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_conical_get_line(lv_grad_dsc_t 
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_GRAD_H*/

@@ -294,7 +294,7 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 {
     LV_UNUSED(decoder);
 
-    /* Get the source type */
+    /* Получить тип источника */
     lv_image_src_t src_type = dsc->src_type;
 
     if(src_type == LV_IMAGE_SRC_FILE) {
@@ -306,12 +306,12 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_OK;
     }
 
-    /* If didn't succeeded earlier then it's an error */
+    /* Если раньше это не удалось, то это ошибка */
     return LV_RESULT_INVALID;
 }
 
 /**
- * Decode an image using ffmpeg library
+ * Декодируйте изображение с помощью библиотеки ffmpeg.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -356,7 +356,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             dsc->header.stride * dsc->header.h);
         lv_draw_buf_set_flag(decoded, LV_IMAGE_FLAGS_MODIFIABLE);
 
-        /* Empty handlers to avoid decoder asserts */
+        /* Пустые обработчики, чтобы избежать утверждений декодера */
         lv_draw_buf_handlers_init(&ffmpeg_ctx->draw_buf_handlers, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
         decoded->handlers = &ffmpeg_ctx->draw_buf_handlers;
 
@@ -366,11 +366,11 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
         dsc->decoded = decoded;
 
-        /* The image is fully decoded. Return with its pointer */
+        /* Изображение полностью декодировано. Возврат с его указателем */
         return LV_RESULT_OK;
     }
 
-    /* If not returned earlier then it failed */
+    /* Если не вернулся раньше, значит, это не удалось */
     return LV_RESULT_INVALID;
 }
 
@@ -430,8 +430,8 @@ static int ffmpeg_output_video_frame(struct ffmpeg_context_s * ffmpeg_ctx)
        || frame->height != height
        || frame->format != ffmpeg_ctx->video_dec_ctx->pix_fmt) {
 
-        /* To handle this change, one could call av_image_alloc again and
-         * decode the following frames into another rawvideo file.
+        /* Чтобы обработать это изменение, можно снова вызвать av_image_alloc и
+         * декодируйте следующие кадры в другой файл rawvideo.
          */
         LV_LOG_ERROR("Width, height and pixel format have to be "
                      "constant in a rawvideo file, but the width, height or "
@@ -451,12 +451,12 @@ static int ffmpeg_output_video_frame(struct ffmpeg_context_s * ffmpeg_ctx)
 
         if(ffmpeg_pix_fmt_is_yuv(ffmpeg_ctx->video_dec_ctx->pix_fmt)) {
 
-            /* When the video width and height are not multiples of 8,
-             * and there is no size change in the conversion,
-             * a blurry screen will appear on the right side
-             * This problem was discovered in 2012 and
-             * continues to exist in version 4.1.3 in 2019
-             * This problem can be avoided by increasing SWS_ACCURATE_RND
+            /* Если ширина и высота видео не кратны 8,
+             * и при преобразовании размер не меняется,
+             * с правой стороны появится размытый экран
+             * Эта проблема была обнаружена в 2012 году и
+             * продолжает существовать в версии 4.1.3 в 2019 г.
+             * Этой проблемы можно избежать, увеличив SWS_ACCURATE_RND.
              */
             if((width & 0x7) || (height & 0x7)) {
                 LV_LOG_WARN("The width(%d) and height(%d) the image "
@@ -503,7 +503,7 @@ static int ffmpeg_decode_packet(AVCodecContext * dec, const AVPacket * pkt,
 {
     int ret = 0;
 
-    /* submit the packet to the decoder */
+    /* отправить пакет в декодер */
     ret = avcodec_send_packet(dec, pkt);
     if(ret < 0) {
         LV_LOG_ERROR("Error submitting a packet for decoding (%s)",
@@ -511,14 +511,14 @@ static int ffmpeg_decode_packet(AVCodecContext * dec, const AVPacket * pkt,
         return ret;
     }
 
-    /* get all the available frames from the decoder */
+    /* получить все доступные кадры из декодера */
     while(ret >= 0) {
         ret = avcodec_receive_frame(dec, ffmpeg_ctx->frame);
         if(ret < 0) {
 
-            /* those two return values are special and mean there is
-             * no output frame available,
-             * but there were no errors during decoding
+            /* эти два возвращаемых значения являются особенными и означают, что существует
+             * нет выходного кадра,
+             * но ошибок при декодировании не было
              */
             if(ret == AVERROR_EOF || ret == AVERROR(EAGAIN)) {
                 return 0;
@@ -528,7 +528,7 @@ static int ffmpeg_decode_packet(AVCodecContext * dec, const AVPacket * pkt,
             return ret;
         }
 
-        /* write the frame data to output file */
+        /* записать данные кадра в выходной файл */
         if(dec->codec->type == AVMEDIA_TYPE_VIDEO) {
             ret = ffmpeg_output_video_frame(ffmpeg_ctx);
         }
@@ -548,20 +548,20 @@ static int ffmpeg_init_codec_context(AVCodecContext ** dec_ctx, const AVCodec * 
 {
     int ret = 0;
 
-    /* Allocate a codec context for the decoder */
+    /* Выделите контекст кодека для декодера */
     *dec_ctx = avcodec_alloc_context3(dec);
     if(*dec_ctx == NULL) {
         return AVERROR(ENOMEM);
     }
 
-    /* Copy codec parameters from input stream to output codec context */
+    /* Скопируйте параметры кодека из входного потока в контекст выходного кодека */
     if((ret = avcodec_parameters_to_context(*dec_ctx, st->codecpar)) < 0) {
         LV_LOG_ERROR("Failed to allocate the %s codec context",
                      av_get_media_type_string(type));
         goto free_dec_ctx;
     }
 
-    /* Init the decoders */
+    /* Инициализировать декодеры */
     if((ret = avcodec_open2(*dec_ctx, dec, NULL)) < 0) {
         LV_LOG_ERROR(
             "Failed to copy %s codec parameters to decoder context",
@@ -596,7 +596,7 @@ static int ffmpeg_open_codec_context(int * stream_idx,
         stream_index = ret;
         st = fmt_ctx->streams[stream_index];
 
-        /* find decoder for the stream */
+        /* найти декодер для потока */
         if(decoder_name) {
             dec = avcodec_find_decoder_by_name(decoder_name);
             if(dec) {
@@ -652,13 +652,13 @@ static int ffmpeg_get_image_header(lv_image_decoder_dsc_t * dsc,
     fmt_ctx->pb = io_ctx;
     fmt_ctx->flags |= AVFMT_FLAG_CUSTOM_IO;
 
-    /* open input file, and allocate format context */
+    /* открыть входной файл и выделить контекст формата */
     if(avformat_open_input(&fmt_ctx, (const char *)dsc->src, NULL, NULL) < 0) {
         LV_LOG_ERROR("Could not open source file %s", (const char *)dsc->src);
         goto failed;
     }
 
-    /* retrieve stream information */
+    /* получить информацию о потоке */
     if(avformat_find_stream_info(fmt_ctx, NULL) < 0) {
         LV_LOG_ERROR("Could not find stream information");
         goto failed;
@@ -669,7 +669,7 @@ static int ffmpeg_get_image_header(lv_image_decoder_dsc_t * dsc,
        >= 0) {
         bool has_alpha = ffmpeg_pix_fmt_has_alpha(video_dec_ctx->pix_fmt);
 
-        /* allocate image where the decoded image will be put */
+        /* выделить изображение, куда будет помещено декодированное изображение */
         header->w = video_dec_ctx->width;
         header->h = video_dec_ctx->height;
         header->cf = has_alpha ? LV_COLOR_FORMAT_ARGB8888 : LV_COLOR_FORMAT_NATIVE;
@@ -707,12 +707,12 @@ static int ffmpeg_update_next_frame(struct ffmpeg_context_s * ffmpeg_ctx)
 
     while(1) {
 
-        /* read frames from the file */
+        /* прочитать кадры из файла */
         if(av_read_frame(ffmpeg_ctx->fmt_ctx, ffmpeg_ctx->pkt) >= 0) {
             bool is_image = false;
 
-            /* check if the packet belongs to a stream we are interested in,
-             * otherwise skip it
+            /* проверяем, принадлежит ли пакет интересующему нас потоку,
+             * иначе пропусти это
              */
             if(ffmpeg_ctx->pkt->stream_index == ffmpeg_ctx->video_stream_idx) {
                 ret = ffmpeg_decode_packet(ffmpeg_ctx->video_dec_ctx,
@@ -727,7 +727,7 @@ static int ffmpeg_update_next_frame(struct ffmpeg_context_s * ffmpeg_ctx)
                 break;
             }
 
-            /* Used to filter data that is not an image */
+            /* Используется для фильтрации данных, не являющихся изображением. */
             if(is_image) {
                 break;
             }
@@ -747,7 +747,7 @@ static int ffmpeg_lvfs_read(void * ptr, uint8_t * buf, int buf_size)
     uint32_t bytesRead = 0;
     lv_fs_res_t res = lv_fs_read(file, buf, buf_size, &bytesRead);
     if(bytesRead == 0)
-        return AVERROR_EOF;  /* Let FFmpeg know that we have reached eof */
+        return AVERROR_EOF;  /* Сообщите FFmpeg, что мы достигли eof */
     if(res != LV_FS_RES_OK)
         return AVERROR_EOF;
     return bytesRead;
@@ -769,12 +769,12 @@ static AVIOContext * ffmpeg_open_io_context(lv_fs_file_t * file)
         LV_LOG_ERROR("iBuffer malloc failed");
         return NULL;
     }
-    AVIOContext * pIOCtx = avio_alloc_context(iBuffer, DECODER_BUFFER_SIZE,   /* internal Buffer and its size */
-                                              0,                                   /* bWriteable (1=true,0=false) */
-                                              file,                                /* user data ; will be passed to our callback functions */
-                                              ffmpeg_lvfs_read,                    /* Read callback function */
-                                              0,                                   /* Write callback function */
-                                              ffmpeg_lvfs_seek);                   /* Seek callback function */
+    AVIOContext * pIOCtx = avio_alloc_context(iBuffer, DECODER_BUFFER_SIZE,   /* внутренний буфер и его размер */
+                                              0,                                   /* bЗаписываемый (1=истина, 0=ложь) */
+                                              file,                                /* данные пользователя; будет передано в наши функции обратного вызова */
+                                              ffmpeg_lvfs_read,                    /* Чтение функции обратного вызова */
+                                              0,                                   /* Написать функцию обратного вызова */
+                                              ffmpeg_lvfs_seek);                   /* Искать функцию обратного вызова */
     if(pIOCtx == NULL) {
         av_free(iBuffer);
         return NULL;
@@ -804,7 +804,7 @@ static struct ffmpeg_context_s * ffmpeg_open_file(const char * path, bool is_lv_
             return NULL;
         }
 
-        ffmpeg_ctx->io_ctx = ffmpeg_open_io_context(&(ffmpeg_ctx->lv_file));     /* Save the buffer pointer to free it later */
+        ffmpeg_ctx->io_ctx = ffmpeg_open_io_context(&(ffmpeg_ctx->lv_file));     /* Сохраните указатель буфера, чтобы освободить его позже. */
 
         if(ffmpeg_ctx->io_ctx == NULL) {
             LV_LOG_ERROR("io_ctx malloc failed");
@@ -820,14 +820,14 @@ static struct ffmpeg_context_s * ffmpeg_open_file(const char * path, bool is_lv_
         ffmpeg_ctx->fmt_ctx->flags |= AVFMT_FLAG_CUSTOM_IO;
     }
 
-    /* open input file, and allocate format context */
+    /* открыть входной файл и выделить контекст формата */
 
     if(avformat_open_input(&(ffmpeg_ctx->fmt_ctx), path, NULL, NULL) < 0) {
         LV_LOG_ERROR("Could not open source file %s", path);
         goto failed;
     }
 
-    /* retrieve stream information */
+    /* получить информацию о потоке */
 
     if(avformat_find_stream_info(ffmpeg_ctx->fmt_ctx, NULL) < 0) {
         LV_LOG_ERROR("Could not find stream information");
@@ -847,7 +847,7 @@ static struct ffmpeg_context_s * ffmpeg_open_file(const char * path, bool is_lv_
     }
 
 #if LV_FFMPEG_DUMP_FORMAT
-    /* dump input information to stderr */
+    /* выгрузить входную информацию в stderr */
     av_dump_format(ffmpeg_ctx->fmt_ctx, 0, path, 0);
 #endif
 
@@ -867,11 +867,11 @@ static int ffmpeg_image_allocate(struct ffmpeg_context_s * ffmpeg_ctx, int align
 {
     int ret;
 
-    /* Allocate video_dst_data as a separate buffer for the destination image.
-     * This is necessary because the destination may require a different pixel format
-     * or layout than the source (decoded) frame, so we cannot always use the source
-     * frame's data directly. Unlike video_src_data, which is no longer allocated,
-     * video_dst_data is still needed for format conversion or copying. */
+    /* Выделите video_dst_data как отдельный буфер для целевого изображения.
+     * Это необходимо, поскольку для места назначения может потребоваться другой формат пикселей.
+     * или макет, чем исходный (декодированный) кадр, поэтому мы не всегда можем использовать исходный
+     * данные кадра напрямую. В отличие от video_src_data, который больше не выделяется,
+     * video_dst_data по-прежнему необходим для преобразования формата или копирования. */
     ret = av_image_alloc(
               ffmpeg_ctx->video_dst_data,
               ffmpeg_ctx->video_dst_linesize,
@@ -894,7 +894,7 @@ static int ffmpeg_image_allocate(struct ffmpeg_context_s * ffmpeg_ctx, int align
         return -1;
     }
 
-    /* allocate packet, set data to NULL, let the demuxer fill it */
+    /* выделите пакет, установите данные в NULL, позвольте демультиплексору заполнить их */
 
     ffmpeg_ctx->pkt = av_packet_alloc();
     if(ffmpeg_ctx->pkt == NULL) {

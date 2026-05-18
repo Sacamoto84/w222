@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Size: 20 px
- * Bpp: 8
+ * Размер: 20 пикселей
+ * Бпп: 8
  * Opts: --bpp 8 --size 20 --no-compress --font Montserrat-Medium.ttf --range 32-127 --format lvgl -o test_font_montserrat_ascii_8bpp.c
  ******************************************************************************/
 
@@ -17,7 +17,7 @@
  *    BITMAPS
  *----------------*/
 
-/*Store the image of the glyphs*/
+/*Сохраните изображение глифов*/
 static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
 
@@ -2025,7 +2025,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
 
 
 
-/*Collect the unicode lists and glyph_id offsets*/
+/*Соберите списки Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] =
 {
     {
@@ -2041,7 +2041,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] =
  *--------------------*/
 
 #if LVGL_VERSION_MAJOR == 8
-/*Store all the custom data of the font*/
+/*Храните все пользовательские данные шрифта*/
 static  lv_font_fmt_txt_glyph_cache_t cache;
 #endif
 
@@ -2070,16 +2070,16 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
  *  PUBLIC FONT
  *----------------*/
 
-/*Initialize a public general font descriptor*/
+/*Инициализировать общедоступный общий дескриптор шрифта*/
 #if LVGL_VERSION_MAJOR >= 8
 const lv_font_t test_font_montserrat_ascii_8bpp = {
 #else
 lv_font_t test_font_montserrat_ascii_8bpp = {
 #endif
-    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
-    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
-    .line_height = 22,          /*The maximum line height required by the font*/
-    .base_line = 4,             /*Baseline measured from the bottom of the line*/
+    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Указатель функции для получения данных глифа*/
+    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Указатель функции для получения растрового изображения глифа*/
+    .line_height = 22,          /*Максимальная высота строки, требуемая шрифтом*/
+    .base_line = 4,             /*Базовая линия измеряется от нижней части линии*/
 #if !(LVGL_VERSION_MAJOR == 6 && LVGL_VERSION_MINOR == 0)
     .subpx = LV_FONT_SUBPX_NONE,
 #endif
@@ -2087,7 +2087,7 @@ lv_font_t test_font_montserrat_ascii_8bpp = {
     .underline_position = -2,
     .underline_thickness = 1,
 #endif
-    .dsc = &font_dsc,          /*The custom font data. Will be accessed by `get_glyph_bitmap/dsc` */
+    .dsc = &font_dsc,          /*Данные пользовательского шрифта. Будет доступен `get_glyph_bitmap/dsc` */
 #if LV_VERSION_CHECK(8, 2, 0) || LVGL_VERSION_MAJOR >= 9
     .fallback = NULL,
 #endif

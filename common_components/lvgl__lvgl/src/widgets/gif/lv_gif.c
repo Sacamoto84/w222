@@ -24,7 +24,7 @@
  *      TYPEDEFS
  **********************/
 
-/* the type of the AnimatedGIF pallete type passed to `GIF_begin` */
+/* тип палитры AnimatedGIF, переданный в `GIF_begin` */
 typedef unsigned char animatedgif_color_format_t;
 
 typedef struct {
@@ -133,7 +133,7 @@ void lv_gif_restart(lv_obj_t * obj)
     }
 
     GIF_reset(&gifobj->gif);
-    gifobj->loop_count = -1; /* match the behavior of the old library */
+    gifobj->loop_count = -1; /* соответствовать поведению старой библиотеки */
     lv_timer_resume(gifobj->timer);
     lv_timer_reset(gifobj->timer);
 
@@ -311,7 +311,7 @@ static inline void gif_blend_to_rgb565(GIFDRAW * pDraw, lv_draw_buf_t * draw_buf
 
     if(pDraw->ucHasTransparency) {
         if(pDraw->ucDisposalMethod == 2) {
-            /* Disposal 2: Replace transparent pixels with background color */
+            /* Способ 2. Замените прозрачные пиксели цветом фона. */
             while(src < end) {
                 pixel = *src++;
                 if(pixel == pDraw->ucTransparent) {
@@ -321,8 +321,8 @@ static inline void gif_blend_to_rgb565(GIFDRAW * pDraw, lv_draw_buf_t * draw_buf
             }
         }
         else {
-            /* Disposal 0,1,3: Replace transparent pixels with background color to maintain position
-             * The gif_disposal_last_frame function handles the actual background clearing
+            /* Disposal 0,1,3: замените прозрачные пиксели цветом фона, чтобы сохранить положение.
+             * Функция gif_disposal_last_frame занимается фактической очисткой фона.
             */
             uint16_t bg_color = pal[pDraw->ucBackground];
             while(src < end) {
@@ -358,7 +358,7 @@ static inline void gif_blend_to_rgb888(GIFDRAW * pDraw, lv_draw_buf_t * draw_buf
 
     if(pDraw->ucHasTransparency) {
         if(pDraw->ucDisposalMethod == 2) {
-            /* Disposal 2: Replace transparent pixels with background color */
+            /* Способ 2. Замените прозрачные пиксели цветом фона. */
             while(src < end) {
                 pixel = *src++;
                 if(pixel == pDraw->ucTransparent) {
@@ -371,7 +371,7 @@ static inline void gif_blend_to_rgb888(GIFDRAW * pDraw, lv_draw_buf_t * draw_buf
             }
         }
         else {
-            /* Disposal 0,1,3: Replace transparent pixels with background color to maintain position */
+            /* Disposal 0,1,3: замените прозрачные пиксели цветом фона, чтобы сохранить положение. */
             uint8_t bg_r = pal[(pDraw->ucBackground * 3) + 2];
             uint8_t bg_g = pal[(pDraw->ucBackground * 3) + 1];
             uint8_t bg_b = pal[(pDraw->ucBackground * 3) + 0];
@@ -416,7 +416,7 @@ static inline void gif_blend_to_argb8888(GIFDRAW * pDraw, lv_draw_buf_t * draw_b
 
     if(pDraw->ucHasTransparency) {
         if(pDraw->ucDisposalMethod == 2) {
-            /* Disposal 2: Transparent pixels get alpha=0, opaque pixels get alpha=255 */
+            /* Вариант 2: прозрачные пиксели получают альфа=0, непрозрачные пиксели получают альфа=255. */
             while(src < end) {
                 pixel = *src++;
                 if(pixel != pDraw->ucTransparent) {
@@ -432,7 +432,7 @@ static inline void gif_blend_to_argb8888(GIFDRAW * pDraw, lv_draw_buf_t * draw_b
             }
         }
         else {
-            /* Disposal 0,1,3: Transparent pixels get alpha=0, opaque pixels get alpha=255 */
+            /* Disposal 0,1,3: прозрачные пиксели получают альфа=0, непрозрачные пиксели получают альфа=255. */
             while(src < end) {
                 pixel = *src++;
                 if(pixel != pDraw->ucTransparent) {
@@ -487,7 +487,7 @@ static void gif_previous_close(lv_gif_t * gifobj)
 {
     LV_PROFILER_DECODER_BEGIN;
 
-    /* Close previous gif if any */
+    /* Закройте предыдущую гифку, если она есть. */
     const char * src = lv_image_get_src((lv_obj_t *) gifobj);
     if(src != NULL) {
         lv_image_cache_drop(src);
@@ -574,20 +574,20 @@ static void gif_initialize(lv_gif_t * gifobj)
 }
 
 /**
- * Dispose the previous frame area before rendering the next frame, according to the GIF disposal method.
+ * Удалите область предыдущего кадра перед визуализацией следующего кадра в соответствии с методом удаления GIF.
  *
- * This function handles the disposal of the previous frame's area in the GIF image, as specified by the disposal method.
- * Disposal method values:
+ * Эта функция обрабатывает удаление области предыдущего кадра в изображении GIF, как указано в методе удаления.
+ * Значения метода утилизации:
  *   0: No disposal specified (do nothing)
  *   1: Do not dispose (leave as is)
  *   2: Restore to background color (the affected area is filled with the background color)
  *   3: Restore to previous (not implemented here)
- * Only disposal method 2 ("restore to background") is handled in this function.
+ * В этой функции обрабатывается только метод удаления 2 («восстановление в фоновый режим»).
  *
  * @param gif      Pointer to the GIFIMAGE structure representing the current GIF frame.
  * @param drawbuf  Pointer to the draw buffer where the frame is rendered.
  *
- * Assumptions:
+ * Предположения:
  *   - The coordinates and dimensions (iX, iY, iWidth, iHeight) are within the bounds of the draw buffer.
  *   - The palette type and background color are valid for the current GIF frame.
  */
@@ -602,16 +602,16 @@ static void gif_disposal_last_frame(GIFIMAGE * gif, lv_draw_buf_t * drawbuf)
     int disposal_method = (gif->ucGIFBits & 0x1c) >> 2;
     int i, j;
 
-    /* Bounds validation to prevent out-of-bounds access */
+    /* Проверка границ для предотвращения доступа за пределами границ */
     if(x < 0 || y < 0 || w <= 0 || h <= 0 ||
        x + w > drawbuf->header.w || y + h > drawbuf->header.h) {
         LV_PROFILER_DECODER_END;
         return;
     }
 
-    /* Only disposal method 2 requires explicit clearing */
+    /* Только метод утилизации 2 требует явного сброса. */
     if(disposal_method == 2) {
-        /* Restore to background color */
+        /* Восстановить цвет фона */
         unsigned char bg = gif->ucBackground;
         unsigned char * palette = (unsigned char *)(gif->bUseLocalPalette ? gif->pLocalPalette : gif->pPalette);
         switch(gif->ucPaletteType) {
@@ -638,7 +638,7 @@ static void gif_disposal_last_frame(GIFIMAGE * gif, lv_draw_buf_t * drawbuf)
                 break;
             case GIF_PALETTE_RGB8888: {
                     lv_color32_t bg_color = lv_color32_make(palette[(bg * 3) + 2], palette[(bg * 3) + 1], palette[(bg * 3)], 0xff);
-                    /* has transparent */
+                    /* имеет прозрачный */
                     if(gif->ucGIFBits & 1) {
                         bg_color = lv_color32_make(0, 0, 0, 0);
                     }
@@ -655,8 +655,8 @@ static void gif_disposal_last_frame(GIFIMAGE * gif, lv_draw_buf_t * drawbuf)
                 break;
         }
     }
-    /* disposal_method 0 and 1: do nothing, leave existing content */
-    /* disposal_method 3: not supported, do nothing */
+    /* disposal_method 0 и 1: ничего не делать, оставить существующий контент */
+    /* disposal_method 3: не поддерживается, ничего не делать */
 
     LV_PROFILER_DECODER_END;
 }
@@ -690,7 +690,7 @@ static void gif_next_frame_task_cb(lv_timer_t * t)
 
     if(has_next <= 0) {
         gifobj->cur_frame_index = 0;
-        /*It was the last repeat*/
+        /*Это был последний повтор*/
         lv_result_t res = lv_obj_send_event(obj, LV_EVENT_READY, NULL);
         if(gifobj->loop_count > 0) {
             if(gifobj->loop_count == 1) {

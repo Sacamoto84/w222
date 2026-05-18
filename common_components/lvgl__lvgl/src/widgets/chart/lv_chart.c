@@ -362,7 +362,7 @@ void lv_chart_get_point_pos_by_id(lv_obj_t * obj, lv_chart_series_t * ser, uint3
         uint32_t ser_cnt = lv_ll_get_len(&chart->series_ll);
         int32_t ser_gap = lv_obj_get_style_pad_column(obj, LV_PART_ITEMS);
 
-        /*Gap between the columns on adjacent X ticks*/
+        /*Разрыв между столбцами на соседних X тиках*/
         int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
 
         int32_t block_w = (w - ((chart->point_cnt - 1) * block_gap)) / chart->point_cnt;
@@ -396,7 +396,7 @@ void lv_chart_get_point_pos_by_id(lv_obj_t * obj, lv_chart_series_t * ser, uint3
         p_out->y = h - temp_y;
     }
     else if(chart->type == LV_CHART_TYPE_STACKED) {
-        /*Gap between the columns on adjacent X ticks*/
+        /*Разрыв между столбцами на соседних X тиках*/
         int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
 
         int32_t block_w = (w - ((chart->point_cnt - 1) * block_gap)) / chart->point_cnt;
@@ -419,8 +419,8 @@ void lv_chart_get_point_pos_by_id(lv_obj_t * obj, lv_chart_series_t * ser, uint3
             int32_t v_act = s->y_points[p_act];
             if(s->y_points[p_act] == LV_CHART_POINT_NONE) continue;
 
-            /* Skip negative values in stacked charts. Negative values are not supported
-             * in stacked charts as they cannot be visually represented in the stacking logic. */
+            /* Пропускайте отрицательные значения в составных диаграммах. Отрицательные значения не поддерживаются.
+             * в составных диаграммах, поскольку они не могут быть визуально представлены в логике суммирования. */
             if(v_act <= 0) {
                 LV_LOG_WARN("Stacked chart doesn't support negative values.");
                 continue;
@@ -457,7 +457,7 @@ void lv_chart_refresh(lv_obj_t * obj)
 }
 
 /*======================
- * Series
+ * Серия
  *=====================*/
 
 lv_chart_series_t * lv_chart_add_series(lv_obj_t * obj, lv_color_t color, lv_chart_axis_t axis)
@@ -468,13 +468,13 @@ lv_chart_series_t * lv_chart_add_series(lv_obj_t * obj, lv_color_t color, lv_cha
 
     lv_chart_t * chart    = (lv_chart_t *)obj;
 
-    /* Allocate space for a new series and add it to the chart series linked list */
+    /* Выделите место для новой серии и добавьте ее в связанный список серий диаграмм. */
     lv_chart_series_t * ser = lv_ll_ins_tail(&chart->series_ll);
     LV_ASSERT_MALLOC(ser);
     if(ser == NULL) return NULL;
     lv_memzero(ser, sizeof(lv_chart_series_t));
 
-    /* Allocate memory for point_cnt points, handle failure below */
+    /* Выделите память для точек point_cnt, обработайте ошибку ниже. */
     ser->y_points = lv_malloc(sizeof(int32_t) * chart->point_cnt);
     LV_ASSERT_MALLOC(ser->y_points);
 
@@ -503,7 +503,7 @@ lv_chart_series_t * lv_chart_add_series(lv_obj_t * obj, lv_color_t color, lv_cha
         return NULL;
     }
 
-    /* Set series properties on successful allocation */
+    /* Установить свойства серии при успешном распределении */
     ser->color = color;
     ser->start_point = 0;
     ser->y_ext_buf_assigned = false;
@@ -584,7 +584,7 @@ lv_chart_series_t * lv_chart_get_series_next(const lv_obj_t * obj, const lv_char
 }
 
 /*=====================
- * Cursor
+ * Курсор
  *====================*/
 
 lv_chart_cursor_t  * lv_chart_add_cursor(lv_obj_t * obj, lv_color_t color, lv_dir_t dir)
@@ -666,7 +666,7 @@ lv_point_t lv_chart_get_cursor_point(lv_obj_t * chart, lv_chart_cursor_t * curso
 }
 
 /*=====================
- * Set/Get value(s)
+ * Установить/получить значение(я)
  *====================*/
 
 void lv_chart_set_all_values(lv_obj_t * obj, lv_chart_series_t * ser, int32_t value)
@@ -812,7 +812,7 @@ int32_t lv_chart_get_first_point_center_offset(lv_obj_t * obj)
     int32_t x_ofs = lv_obj_get_style_pad_left(obj, LV_PART_MAIN);
     if(chart->type == LV_CHART_TYPE_BAR || chart->type == LV_CHART_TYPE_STACKED) {
         lv_obj_update_layout(obj);
-        /*Gap between the columns on ~adjacent X*/
+        /*Зазор между столбцами на соседнем X*/
         int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
         int32_t w = lv_obj_get_content_width(obj);
         int32_t block_w = (w + block_gap) / (chart->point_cnt);
@@ -890,7 +890,7 @@ static void lv_chart_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     lv_result_t res;
 
     res = lv_obj_event_base(MY_CLASS, e);
@@ -1039,7 +1039,7 @@ static void draw_series_line(lv_obj_t * obj, lv_layer_t * layer)
     lv_obj_init_draw_line_dsc(obj, LV_PART_ITEMS, &line_dsc);
     line_dsc.base.id1 = ser_cnt - 1;
 
-    /*If there are at least as many points as pixels then draw only vertical lines*/
+    /*Если точек хотя бы столько же, сколько пикселей, рисуйте только вертикальные линии.*/
     bool crowded_mode = (int32_t)chart->point_cnt >= w;
 
     int32_t bullet_w = lv_obj_get_style_width(obj, LV_PART_INDICATOR) / 2;
@@ -1070,7 +1070,7 @@ static void draw_series_line(lv_obj_t * obj, lv_layer_t * layer)
 
     line_dsc.points = points;
 
-    /*Go through all data lines*/
+    /*Пройтись по всем строкам данных*/
     LV_LL_READ_BACK(&chart->series_ll, ser) {
         if(ser->hidden) {
             if(line_dsc.base.id1 > 0) {
@@ -1113,16 +1113,16 @@ static void draw_series_line(lv_obj_t * obj, lv_layer_t * layer)
                 p_y = (int32_t)lv_map(v, min_v, max_v, y_ofs + h, y_ofs);
             }
 
-            /*In normal mode just collect the points here*/
+            /*В обычном режиме просто собирайте очки здесь*/
             if(crowded_mode == false) {
                 points[line_dsc.point_cnt].x = p_x;
                 points[line_dsc.point_cnt].y = p_y;
                 line_dsc.point_cnt++;
             }
-            /*In crowded mode draw vertical lines from the min/max on the same X coordinate*/
+            /*В многолюдном режиме рисуйте вертикальные линии от минимума/максимума по одной и той же координате X.*/
             else {
                 if(ser->y_points[p_prev] != LV_CHART_POINT_NONE && ser->y_points[p_act] != LV_CHART_POINT_NONE) {
-                    /*Draw only one vertical line between the min and max y-values on the same x-value*/
+                    /*Нарисуйте только одну вертикальную линию между минимальным и максимальным значениями y для одного и того же значения x.*/
                     y_max = LV_MAX(y_max, p_y);
                     y_min = LV_MIN(y_min, p_y);
                     if(x_prev != p_x) {
@@ -1133,11 +1133,11 @@ static void draw_series_line(lv_obj_t * obj, lv_layer_t * layer)
                         line_dsc.points[line_dsc.point_cnt + 2].y = LV_DRAW_LINE_POINT_NONE;
                         line_dsc.points[line_dsc.point_cnt + 2].x = p_x;
 
-                        /*If they are the same no line would be drawn*/
+                        /*Если они одинаковы, линия не будет проведена.*/
                         if(line_dsc.points[line_dsc.point_cnt].y == line_dsc.points[line_dsc.point_cnt + 1].y) {
                             line_dsc.points[line_dsc.point_cnt + 1].y++;
                         }
-                        y_min = p_y;  /*Start the line of the next x from the current last y*/
+                        y_min = p_y;  /*Начать строку следующего x с текущего последнего y*/
                         y_max = p_y;
                         x_prev = p_x;
                         line_dsc.point_cnt += 3;
@@ -1148,14 +1148,14 @@ static void draw_series_line(lv_obj_t * obj, lv_layer_t * layer)
             p_prev = p_act;
         }
 
-        /*Draw the line from the accumulated points*/
+        /*Проведите линию по накопленным баллам*/
         lv_draw_line(layer, &line_dsc);
         if(!crowded_mode) {
             point_draw_dsc.bg_color = ser->color;
             point_draw_dsc.base.id1 = line_dsc.base.id1;
-            /*Add the bullets too*/
+            /*Добавьте еще пули*/
             if(bullet_w > 0 && bullet_h > 0) {
-                point_draw_dsc.base.id2 = i - 1; /*Start from the last rendered point*/
+                point_draw_dsc.base.id2 = i - 1; /*Начать с последней визуализированной точки*/
                 int32_t j;
                 for(j = line_dsc.point_cnt - 1; j >= 0; j--) {
                     if(points[j].y == LV_DRAW_LINE_POINT_NONE) continue;
@@ -1217,7 +1217,7 @@ static void draw_series_curve(lv_obj_t * obj, lv_layer_t * layer)
     lv_vector_path_t * path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
     dsc->base.id1 = ser_cnt - 1;
     point_dsc_default.base.id1 = dsc->base.id1;
-    /*Go through all data lines (series)*/
+    /*Пройтись по всем строкам данных (сериям)*/
     LV_LL_READ_BACK(&chart->series_ll, ser) {
         if(ser->hidden) {
             if(dsc->base.id1 > 0) {
@@ -1241,14 +1241,14 @@ static void draw_series_curve(lv_obj_t * obj, lv_layer_t * layer)
 
         int32_t start_point = chart->update_mode == LV_CHART_UPDATE_MODE_SHIFT ? ser->start_point : 0;
 
-        /*The X distance between points.
-         *Just a rough calculation to know the extra area of interest around the chart*/
+        /*Расстояние X между точками.
+         *Просто приблизительный расчет, чтобы узнать дополнительную область интереса вокруг графика.*/
         int32_t max_dx = w / (chart->point_cnt - 1) + 1;
 
         lv_fpoint_t scaled_points[3];
         int32_t raw_points[3];
-        int32_t s_prev = 0; /*Previous steepness around N-1 (y_diff of N-2 and N) */
-        int32_t s_act = 0; /*Steepness around N (y_diff of N-1 and N+1)*/
+        int32_t s_prev = 0; /*Предыдущая крутизна вокруг N-1 (y_diff N-2 и N) */
+        int32_t s_act = 0; /*Крутизна вокруг N (y_diff N-1 и N+1)*/
         int32_t min_v = chart->ymin[ser->y_axis_sec];
         int32_t max_v = chart->ymax[ser->y_axis_sec];
 
@@ -1263,7 +1263,7 @@ static void draw_series_curve(lv_obj_t * obj, lv_layer_t * layer)
                 continue;
             }
 
-            /*We need 3 points to draw the curves (N-1, N, N+1)*/
+            /*Нам нужно 3 точки, чтобы нарисовать кривые (N-1, N, N+1).*/
             scaled_points[0] = scaled_points[1];
             scaled_points[1] = scaled_points[2];
 
@@ -1302,7 +1302,7 @@ static void draw_series_curve(lv_obj_t * obj, lv_layer_t * layer)
                     lv_vector_path_move_to(path, &scaled_points[0]);
                     dsc->base.id2 = i;
 
-                    /*Average slope*/
+                    /*Средний уклон*/
                     int32_t dx = (int32_t)(scaled_points[1].x - scaled_points[0].x);
 
                     lv_fpoint_t c1 = {scaled_points[0].x + dx / 3, scaled_points[0].y + s_prev / 3};
@@ -1327,7 +1327,7 @@ static void draw_series_curve(lv_obj_t * obj, lv_layer_t * layer)
             valid_point_cnt++;
         }
 
-        lv_draw_vector_dsc_add_path(dsc, path); // draw a path
+        lv_draw_vector_dsc_add_path(dsc, path); // нарисовать путь
 
         if(dsc->base.id1 > 0) {
             point_dsc_default.base.id1--;
@@ -1373,11 +1373,11 @@ static void draw_series_scatter(lv_obj_t * obj, lv_layer_t * layer)
     int32_t point_w = lv_obj_get_style_width(obj, LV_PART_INDICATOR) / 2;
     int32_t point_h = lv_obj_get_style_height(obj, LV_PART_INDICATOR) / 2;
 
-    /*Do not bother with line ending is the point will over it*/
+    /*Не беспокойтесь об окончании линии, точка будет над ней.*/
     if(LV_MIN(point_w, point_h) > line_dsc.width / 2) line_dsc.raw_end = 1;
     if(line_dsc.width == 1) line_dsc.raw_end = 1;
 
-    /*Go through all data lines*/
+    /*Пройтись по всем строкам данных*/
     LV_LL_READ_BACK(&chart->series_ll, ser) {
         if(ser->hidden) continue;
         line_dsc.color = ser->color;
@@ -1421,7 +1421,7 @@ static void draw_series_scatter(lv_obj_t * obj, lv_layer_t * layer)
                 continue;
             }
 
-            if(i != 0) { /*Don't draw line *to* the first point.*/
+            if(i != 0) { /*Не проводите линию *до* первой точки.*/
                 lv_area_t point_area;
                 point_area.x1 = (int32_t)line_dsc.p1.x - point_w;
                 point_area.x2 = (int32_t)line_dsc.p1.x + point_w;
@@ -1440,7 +1440,7 @@ static void draw_series_scatter(lv_obj_t * obj, lv_layer_t * layer)
                 p_prev = p_act;
             }
 
-            /*Draw the last point*/
+            /*Нарисуйте последнюю точку*/
             if(i == chart->point_cnt - 1) {
 
                 if(ser->y_points[p_act] != LV_CHART_POINT_NONE) {
@@ -1476,9 +1476,9 @@ static void draw_series_bar(lv_obj_t * obj, lv_layer_t * layer)
     if(ser_cnt == 0) {
         return;
     }
-    int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);  /*Gap between the column on ~adjacent X*/
+    int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);  /*Разрыв между столбцом на соседнем X*/
     int32_t block_w = (w - ((chart->point_cnt - 1) * block_gap)) / chart->point_cnt;
-    int32_t ser_gap = lv_obj_get_style_pad_column(obj, LV_PART_ITEMS); /*Gap between the columns on the ~same X*/
+    int32_t ser_gap = lv_obj_get_style_pad_column(obj, LV_PART_ITEMS); /*Зазор между столбцами на одном и том же X*/
     int32_t col_w = (block_w - (ser_cnt - 1) * ser_gap) / ser_cnt;
     if(col_w < 1) col_w  = 1;
 
@@ -1493,10 +1493,10 @@ static void draw_series_bar(lv_obj_t * obj, lv_layer_t * layer)
     col_dsc.bg_grad.dir = LV_GRAD_DIR_NONE;
     col_dsc.bg_opa = LV_OPA_COVER;
 
-    /*Make the cols longer with `radius` to clip the rounding from the bottom*/
+    /*Удлините столбцы с помощью `radius`, чтобы обрезать закругления снизу.*/
     col_a.y2 = obj->coords.y2 + col_dsc.radius;
 
-    /*Go through all points*/
+    /*Пройти все пункты*/
     for(i = 0; i < chart->point_cnt; i++) {
         int32_t x_act;
         if(chart->point_cnt <= 1) {
@@ -1509,7 +1509,7 @@ static void draw_series_bar(lv_obj_t * obj, lv_layer_t * layer)
         col_dsc.base.id2 = i;
         col_dsc.base.id1 = 0;
 
-        /*Draw the current point of all data line*/
+        /*Нарисуйте текущую точку всей линии данных*/
         LV_LL_READ(&chart->series_ll, ser) {
             if(ser->hidden) continue;
 
@@ -1555,7 +1555,7 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
         return;
     }
 
-    int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);  /*Gap between the columns on adjacent X ticks*/
+    int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);  /*Разрыв между столбцами на соседних X тиках*/
     int32_t block_w = (w - ((chart->point_cnt - 1) * block_gap)) / chart->point_cnt;
 
     int32_t border_w = lv_obj_get_style_border_width(obj, LV_PART_MAIN);
@@ -1571,13 +1571,13 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
 
     lv_area_t clip_area_ori = layer->_clip_area;
 
-    /*Go through all points*/
+    /*Пройти все пункты*/
     lv_area_t bar_full_area;
     for(i = 0; i < chart->point_cnt; i++) {
         col_dsc.base.id2 = i;
         col_dsc.base.id1 = 0;
 
-        /*Get the total bar height. All segments (series) will be drawn in the height*/
+        /*Получите общую высоту бара. Все сегменты (серии) будут нарисованы по высоте.*/
         int32_t v_sum_all = 0;
         LV_LL_READ(&chart->series_ll, ser) {
             if(ser->hidden) continue;
@@ -1586,8 +1586,8 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
             int32_t v_act = ser->y_points[p_act];
             if(ser->y_points[p_act] == LV_CHART_POINT_NONE) continue;
 
-            /* Skip negative values in stacked charts. Negative values are not supported
-             * in stacked charts as they cannot be visually represented in the stacking logic. */
+            /* Пропускайте отрицательные значения в составных диаграммах. Отрицательные значения не поддерживаются.
+             * в составных диаграммах, поскольку они не могут быть визуально представлены в логике суммирования. */
             if(v_act <= 0) {
                 LV_LOG_WARN("Stacked chart doesn't support negative values.");
                 continue;
@@ -1606,20 +1606,20 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
         }
         bar_full_area.x2 = bar_full_area.x1 + block_w - 1;
 
-        /*No in the clip area yet*/
+        /*В области клипа пока нет*/
         if(bar_full_area.x2 < clip_area_ori.x1) continue;
 
-        /*Out of the clip area already*/
+        /*Уже вне зоны клипа*/
         if(bar_full_area.x1 > clip_area_ori.x2) break;
 
-        /*Draw the full_bar_area and set the clip area to clip the segments*/
+        /*Нарисуйте full_bar_area и установите область обрезки для обрезки сегментов.*/
         bar_full_area.y2 = obj->coords.y2 + col_dsc.radius;
         bar_full_area.y1 = obj->coords.y2 - y_ofs - total_bar_height + 1;
 
         lv_area_t bar_clip_area = bar_full_area;
         int32_t y_prev = obj->coords.y2 + 1;
 
-        /*Draw the current point of all data line*/
+        /*Нарисуйте текущую точку всей линии данных*/
         int32_t v_sum_act = 0;
         LV_LL_READ(&chart->series_ll, ser) {
             int32_t start_point = chart->update_mode == LV_CHART_UPDATE_MODE_SHIFT ? ser->start_point : 0;
@@ -1628,7 +1628,7 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
 
             int32_t p_act = (start_point + i) % chart->point_cnt;
             int32_t v_act = ser->y_points[p_act];
-            /*Can't show negative values on a stacked chart*/
+            /*Невозможно отображать отрицательные значения на составной диаграмме.*/
             if(ser->y_points[p_act] == LV_CHART_POINT_NONE ||
                v_act <= 0 ||
                ser->hidden) {
@@ -1636,7 +1636,7 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
                 continue;
             }
 
-            v_sum_act += v_act; /*Use the summed value to get its `y` to avoid rounding errors*/
+            v_sum_act += v_act; /*Используйте суммированное значение, чтобы получить `y`, чтобы избежать ошибок округления.*/
 
             int32_t segment_y = value_to_y(obj, ser, v_sum_act, h);
             bar_clip_area.y2 = y_prev - 1;
@@ -1677,7 +1677,7 @@ static void draw_cursors(lv_obj_t * obj, lv_layer_t * layer)
     int32_t point_w = lv_obj_get_style_width(obj, LV_PART_CURSOR) / 2;
     int32_t point_h = lv_obj_get_style_width(obj, LV_PART_CURSOR) / 2;
 
-    /*Go through all cursor lines*/
+    /*Пройти по всем строкам курсора*/
     LV_LL_READ_BACK(&chart->cursor_ll, cursor) {
         lv_memcpy(&line_dsc, &line_dsc_ori, sizeof(lv_draw_line_dsc_t));
         lv_memcpy(&point_dsc_tmp, &point_dsc_ori, sizeof(lv_draw_rect_dsc_t));
@@ -1745,7 +1745,7 @@ static void draw_cursors(lv_obj_t * obj, lv_layer_t * layer)
 }
 
 /**
- * Get the nearest index to an X coordinate
+ * Получить ближайший индекс к координате X
  * @param chart pointer to a chart object
  * @param coord the coordination of the point relative to the series area.
  * @return the found index
@@ -1763,7 +1763,7 @@ static uint32_t get_index_from_x(lv_obj_t * obj, int32_t x)
        chart->type == LV_CHART_TYPE_CURVE) return (x * (chart->point_cnt - 1) + w / 2) / w;
     if(chart->type == LV_CHART_TYPE_BAR || chart->type == LV_CHART_TYPE_STACKED) return (x * chart->point_cnt) / w;
     if(chart->type == LV_CHART_TYPE_SCATTER) {
-        /*For scatter charts, the nearest id could be different depending on the series. Just check the first series.*/
+        /*Для точечных диаграмм ближайший идентификатор может отличаться в зависимости от серии. Просто посмотрите первую серию.*/
         lv_chart_series_t * ser = lv_chart_get_series_next(obj, NULL);
         if(ser) {
             int32_t best_dist = INT32_MAX;
@@ -1788,7 +1788,7 @@ static void invalidate_point(lv_obj_t * obj, uint32_t i)
     if(i >= chart->point_cnt) return;
 
 
-    /*In shift mode the whole chart changes so the whole object*/
+    /*В режиме сдвига вся диаграмма изменяется, поэтому весь объект*/
     if(chart->update_mode == LV_CHART_UPDATE_MODE_SHIFT) {
         lv_obj_invalidate(obj);
         return;
@@ -1808,7 +1808,7 @@ static void invalidate_point(lv_obj_t * obj, uint32_t i)
         coords.y1 -= line_width + point_w;
         coords.y2 += line_width + point_w;
 
-        /*Invalidate the area between the previous and the next points*/
+        /*Сделать недействительной область между предыдущей и следующей точками*/
         if(i < chart->point_cnt - 1) {
             coords.x1 = ((w * i) / (chart->point_cnt - 1)) + x_ofs - line_width - point_w;
             coords.x2 = ((w * (i + 1)) / (chart->point_cnt - 1)) + x_ofs + line_width + point_w;
@@ -1823,7 +1823,7 @@ static void invalidate_point(lv_obj_t * obj, uint32_t i)
     }
     else if(chart->type == LV_CHART_TYPE_BAR || chart->type == LV_CHART_TYPE_STACKED) {
         lv_area_t col_a;
-        /*Gap between the column on ~adjacent X*/
+        /*Разрыв между столбцом на соседнем X*/
         int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
         int32_t block_w = (w - ((chart->point_cnt - 1) * block_gap)) / chart->point_cnt;
 
@@ -1863,20 +1863,20 @@ static void new_points_alloc(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t c
         if(cnt >= point_cnt_old) {
             for(i = 0; i < point_cnt_old; i++) {
                 new_points[i] =
-                    (*a)[(i + ser->start_point) % point_cnt_old]; /*Copy old contents to new array*/
+                    (*a)[(i + ser->start_point) % point_cnt_old]; /*Скопировать старое содержимое в новый массив*/
             }
             for(i = point_cnt_old; i < cnt; i++) {
-                new_points[i] = LV_CHART_POINT_NONE; /*Fill up the rest with default value*/
+                new_points[i] = LV_CHART_POINT_NONE; /*Остальное заполните значением по умолчанию.*/
             }
         }
         else {
             for(i = 0; i < cnt; i++) {
                 new_points[i] =
-                    (*a)[(i + ser->start_point) % point_cnt_old]; /*Copy old contents to new array*/
+                    (*a)[(i + ser->start_point) % point_cnt_old]; /*Скопировать старое содержимое в новый массив*/
             }
         }
 
-        /*Switch over pointer from old to new*/
+        /*Переключить указатель со старого на новый*/
         lv_free((*a));
         (*a) = new_points;
     }
@@ -1884,7 +1884,7 @@ static void new_points_alloc(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t c
         (*a) = lv_realloc((*a), sizeof(int32_t) * cnt);
         LV_ASSERT_MALLOC((*a));
         if((*a) == NULL) return;
-        /*Initialize the new points*/
+        /*Инициализируйте новые точки*/
         if(cnt > point_cnt_old) {
             for(i = point_cnt_old - 1; i < cnt; i++) {
                 (*a)[i] = LV_CHART_POINT_NONE;
@@ -1894,7 +1894,7 @@ static void new_points_alloc(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t c
 }
 
 /**
- * Map a value to a height
+ * Сопоставьте значение с высотой
  * @param obj   pointer to a chart
  * @param ser   pointer to the series
  * @param v     the value to map

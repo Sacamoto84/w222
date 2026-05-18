@@ -2,7 +2,7 @@
 
 #if LV_USE_TRANSLATION && LV_USE_DROPDOWN && LV_USE_LABEL && LV_BUILD_EXAMPLES
 
-/* Arrays are defined `const` to place them in program space instead of RAM. */
+/* Массы развивают`const`для размещения их в пространстве программы вместо RAM. */
 static const char * const tags[] = {"tiger", "lion", "rabbit", "elephant", NULL};
 static const char * const languages[] = {"English", "Deutsch", "Español", NULL};
 
@@ -28,7 +28,7 @@ static void language_change_cb(lv_event_t * e)
 }
 
 /**
- * Use a translation tag in labels
+ * Используйте тег перевода в ярлыках
  */
 void lv_example_label_7(void)
 {
@@ -39,7 +39,7 @@ void lv_example_label_7(void)
     const size_t tag_count = sizeof(tags) / sizeof(tags[0]) - 1;
     const size_t lang_count = sizeof(languages) / sizeof(languages[0]) - 1;
 
-    /* Create a dropdown to be able to select the language */
+    /* Создайте раскрывающийся список, чтобы иметь возможность выбрать язык */
     lv_obj_t * language_dropdown = lv_dropdown_create(lv_screen_active());
     lv_dropdown_clear_options(language_dropdown);
 
@@ -50,7 +50,7 @@ void lv_example_label_7(void)
     lv_obj_add_event_cb(language_dropdown, language_change_cb, LV_EVENT_VALUE_CHANGED, NULL);
     lv_translation_set_language("English");
 
-    /* Create a label for each tag */
+    /* Создайте метку для каждого тега */
     for(size_t i = 0; i < tag_count; ++i) {
         lv_obj_t * label = lv_label_create(lv_screen_active());
         lv_label_set_translation_tag(label, tags[i]);

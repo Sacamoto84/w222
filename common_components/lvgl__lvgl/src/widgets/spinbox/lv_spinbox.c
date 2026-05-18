@@ -115,7 +115,7 @@ lv_obj_t * lv_spinbox_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_spinbox_set_value(lv_obj_t * obj, int32_t v)
@@ -252,7 +252,7 @@ void lv_spinbox_set_digit_step_direction(lv_obj_t * obj, lv_dir_t direction)
     lv_spinbox_updatevalue(obj);
 }
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 int32_t lv_spinbox_get_value(lv_obj_t * obj)
@@ -272,7 +272,7 @@ int32_t lv_spinbox_get_step(lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_spinbox_step_next(lv_obj_t * obj)
@@ -347,8 +347,8 @@ void lv_spinbox_increment(lv_obj_t * obj)
     lv_spinbox_t * spinbox = (lv_spinbox_t *)obj;
 
     int32_t v = spinbox->value;
-    /* Special mode when zero crossing. E.g -3+10 should be 3, not 7.
-     * Pretend we are on -7 now.*/
+    /* Специальный режим при переходе через ноль. Например, -3+10 должно быть 3, а не 7.
+     * Представьте, что сейчас у нас -7.*/
     if((spinbox->value < 0) && (spinbox->value + spinbox->step) > 0) {
         v = -(spinbox->step + spinbox->value);
     }
@@ -376,8 +376,8 @@ void lv_spinbox_decrement(lv_obj_t * obj)
     lv_spinbox_t * spinbox = (lv_spinbox_t *)obj;
 
     int32_t v = spinbox->value;
-    /* Special mode when zero crossing. E.g 3-10 should be -3, not -7.
-     * Pretend we are on 7 now.*/
+    /* Специальный режим при переходе через ноль. Например, 3-10 должно быть -3, а не -7.
+     * Представьте, что сейчас у нас 7.*/
     if((spinbox->value > 0) && (spinbox->value - spinbox->step) < 0) {
         v = spinbox->step - spinbox->value;
     }
@@ -428,7 +428,7 @@ static void lv_spinbox_constructor(const lv_obj_class_t * class_p, lv_obj_t * ob
 
     lv_spinbox_t * spinbox = (lv_spinbox_t *)obj;
 
-    /*Initialize the allocated 'ext'*/
+    /*Инициализировать выделенный «ext»*/
     spinbox->value              = 0;
     spinbox->dec_point_pos      = 0;
     spinbox->digit_count        = 5;
@@ -450,7 +450,7 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     lv_result_t res = LV_RESULT_OK;
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
@@ -459,7 +459,7 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
     lv_obj_t * obj = lv_event_get_current_target(e);
     lv_spinbox_t * spinbox = (lv_spinbox_t *)obj;
     if(code == LV_EVENT_RELEASED) {
-        /*If released with an ENCODER then move to the next digit*/
+        /*Если вы отпустите ENCODER, перейдите к следующей цифре.*/
         lv_indev_t * indev = lv_indev_active();
         if(lv_indev_get_type(indev) == LV_INDEV_TYPE_ENCODER && lv_group_get_editing(lv_obj_get_group(obj))) {
             if(spinbox->digit_count > 1) {
@@ -468,7 +468,7 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
                         lv_spinbox_step_next(obj);
                     }
                     else {
-                        /*Restart from the MSB*/
+                        /*Перезагрузитесь с MSB*/
                         spinbox->step = lv_pow(10, spinbox->digit_count - 2);
                         lv_spinbox_step_prev(obj);
                     }
@@ -478,34 +478,34 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
                         lv_spinbox_step_prev(obj);
                     }
                     else {
-                        /*Restart from the LSB*/
+                        /*Перезагрузитесь с LSB*/
                         spinbox->step = 10;
                         lv_spinbox_step_next(obj);
                     }
                 }
             }
         }
-        /*The cursor has been positioned to a digit.
-         * Set `step` accordingly*/
+        /*Курсор установлен на цифру.
+         * Установите `step` соответственно.*/
         else {
             const char * txt = lv_textarea_get_text(obj);
             const size_t txt_len = lv_strlen(txt);
 
-            /* Check cursor position */
-            /* Cursor is in '.' digit */
+            /* Проверьте положение курсора */
+            /* Курсор находится в '.' цифра */
             if(txt[spinbox->ta.cursor.pos] == '.') {
                 lv_textarea_cursor_left(obj);
             }
-            /* Cursor is already in the right-most digit */
+            /* Курсор уже находится на самой правой цифре */
             else if(spinbox->ta.cursor.pos == (uint32_t)txt_len) {
                 lv_textarea_set_cursor_pos(obj, txt_len - 1);
             }
-            /* Cursor is already in the left-most digit AND range_min is negative */
+            /* Курсор уже находится в самой левой цифре. AND range_min имеет отрицательное значение. */
             else if(spinbox->ta.cursor.pos == 0 && spinbox->range_min < 0) {
                 lv_textarea_set_cursor_pos(obj, 1);
             }
 
-            /* Handle spinbox with decimal point (spinbox->dec_point_pos != 0) */
+            /* Обработка счетчика с десятичной точкой (счетчик-> dec_point_pos != 0) */
             uint32_t cp = spinbox->ta.cursor.pos;
             if(spinbox->ta.cursor.pos > spinbox->dec_point_pos && spinbox->dec_point_pos != 0) cp--;
 
@@ -524,7 +524,7 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
     else if(code == LV_EVENT_KEY) {
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
 
-        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t because can be UTF-8*/
+        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t, потому что может быть UTF -8*/
         if(c == LV_KEY_RIGHT) {
             if(indev_type == LV_INDEV_TYPE_ENCODER)
                 lv_spinbox_increment(obj);
@@ -553,26 +553,26 @@ static void lv_spinbox_updatevalue(lv_obj_t * obj)
 {
     lv_spinbox_t * spinbox = (lv_spinbox_t *)obj;
 
-    /* LV_SPINBOX_MAX_DIGIT_COUNT_WITH_8BYTES (18): Max possible digit_count value (15) + sign + decimal point + NULL terminator */
+    /* LV_SPINBOX_MAX_DIGIT_COUNT_WITH_8BYTES (18): Максимально возможное значение digit_count (15) + знак + десятичная точка + знак завершения NULL */
     char textarea_txt[LV_SPINBOX_MAX_DIGIT_COUNT_WITH_8BYTES] = {0U};
     char * buf_p = textarea_txt;
 
     uint32_t cur_shift_left = 0;
-    if(spinbox->range_min < 0) {  /*hide sign if there are only positive values*/
-        /*Add the sign*/
+    if(spinbox->range_min < 0) {  /*скрыть знак, если есть только положительные значения*/
+        /*Добавить знак*/
         (*buf_p) = spinbox->value >= 0 ? '+' : '-';
         buf_p++;
     }
     else {
-        /*Cursor need shift to left*/
+        /*Курсор нужно сдвинуть влево*/
         cur_shift_left++;
     }
 
-    /*Convert the numbers to string (the sign is already handled so always convert positive number)*/
+    /*Преобразуйте числа в строку (знак уже обработан, поэтому всегда преобразуйте положительное число)*/
     char digits[LV_SPINBOX_MAX_DIGIT_COUNT_WITH_4BYTES];
     lv_snprintf(digits, LV_SPINBOX_MAX_DIGIT_COUNT_WITH_4BYTES, "%" LV_PRId32, LV_ABS(spinbox->value));
 
-    /*Add leading zeros*/
+    /*Добавить ведущие нули*/
     int32_t i;
     const size_t digits_len = lv_strlen(digits);
 
@@ -587,28 +587,28 @@ static void lv_spinbox_updatevalue(lv_obj_t * obj)
         }
     }
 
-    /*Add the decimal part*/
+    /*Добавьте десятичную часть*/
     const uint32_t int_digits = (spinbox->dec_point_pos == 0) ? spinbox->digit_count : spinbox->dec_point_pos;
     for(i = 0; i < (int32_t)int_digits && digits[i] != '\0'; i++) {
         (*buf_p) = digits[i];
         buf_p++;
     }
 
-    /*Insert the decimal point*/
+    /*Вставьте десятичную точку*/
     if(spinbox->dec_point_pos) {
         (*buf_p) = '.';
         buf_p++;
 
-        for(/*Leave i*/; i < spinbox->digit_count && digits[i] != '\0'; i++) {
+        for(/*Оставь меня*/; i < spinbox->digit_count && digits[i] != '\0'; i++) {
             (*buf_p) = digits[i];
             buf_p++;
         }
     }
 
-    /*Refresh the text*/
+    /*Обновить текст*/
     lv_textarea_set_text(obj, (char *)textarea_txt);
 
-    /*Set the cursor position*/
+    /*Установите положение курсора*/
     int32_t step = spinbox->step;
     uint32_t cur_pos = (uint32_t)spinbox->digit_count;
     while(step >= 10) {
@@ -616,7 +616,7 @@ static void lv_spinbox_updatevalue(lv_obj_t * obj)
         cur_pos--;
     }
 
-    if(cur_pos > int_digits) cur_pos++; /*Skip the decimal point*/
+    if(cur_pos > int_digits) cur_pos++; /*Пропустить десятичную точку*/
 
     cur_pos -= cur_shift_left;
 

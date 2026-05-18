@@ -32,7 +32,7 @@ extern "C" {
  **********************/
 
 /**
- * Register the SVG decoder functions in LVGL
+ * Зарегистрируйте функции декодера SVG в LVGL.
  */
 void lv_svg_decoder_init(void);
 
@@ -45,7 +45,7 @@ void lv_svg_decoder_deinit(void);
 #endif /*LV_USE_SVG*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SVG_DECODER_H*/

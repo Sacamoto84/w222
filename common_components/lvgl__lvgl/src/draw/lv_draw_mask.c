@@ -63,8 +63,8 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_mask_rect(lv_layer_t * layer, const lv_draw_m
     base_dsc->layer = layer;
 
     if(base_dsc->obj && lv_obj_has_flag(base_dsc->obj, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS)) {
-        /*Disable sending LV_EVENT_DRAW_TASK_ADDED first to avoid triggering recursive
-         *event calls due draw task adds in the event*/
+        /*Сначала отключите отправку LV_EVENT_DRAW_TASK_ADDED, чтобы избежать запуска рекурсивной обработки.
+         *событие вызывает задачу розыгрыша, добавленную в событие*/
         lv_obj_remove_flag(base_dsc->obj, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
         lv_obj_send_event(dsc->base.obj, LV_EVENT_DRAW_TASK_ADDED, t);
         lv_obj_add_flag(base_dsc->obj, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);

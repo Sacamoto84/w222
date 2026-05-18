@@ -63,7 +63,7 @@ lv_display_t * lv_opengles_texture_create(int32_t w, int32_t h)
     unsigned int texture_id = create_texture(w, h);
     texture->texture_id = texture_id;
     texture->is_texture_owner = true;
-    /* Attach the texture to the display after the texture id has been set*/
+    /* Прикрепите текстуру к дисплею после установки идентификатора текстуры.*/
     lv_opengles_texture_attach_to_display(texture, display);
     return display;
 }
@@ -78,7 +78,7 @@ lv_display_t * lv_opengles_texture_create_from_texture_id(int32_t w, int32_t h, 
     lv_opengles_texture_t * texture = lv_display_get_driver_data(display);
     texture->texture_id = texture_id;
     texture->is_texture_owner = false;
-    /* Attach the texture to the display after the texture id has been set*/
+    /* Прикрепите текстуру к дисплею после установки идентификатора текстуры.*/
     lv_opengles_texture_attach_to_display(texture, display);
     return display;
 }
@@ -227,8 +227,8 @@ static unsigned int create_texture(int32_t w, int32_t h)
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     GL_CALL(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
 
-    /* set the dimensions and format to complete the texture */
-    /* Color depth: 16 (RGB565), 32 (XRGB8888) */
+    /* установите размеры и формат для завершения текстуры */
+    /* Глубина цвета: 16 ( RGB565 ), 32 ( XRGB8888 ) */
 #if LV_COLOR_DEPTH == 16
     GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
                          NULL));
@@ -271,7 +271,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
 
         GL_CALL(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
         GL_CALL(glPixelStorei(GL_UNPACK_ROW_LENGTH, stride / lv_color_format_get_size(cf)));
-        /*Color depth: 16 (RGB565), 32 (XRGB8888)*/
+        /*Глубина цвета: 16 ( RGB565 ), 32 ( XRGB8888 )*/
 #if LV_COLOR_DEPTH == 16
         GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB565, disp->hor_res, disp->ver_res, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
                              texture->fb1));

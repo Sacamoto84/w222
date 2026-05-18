@@ -57,14 +57,14 @@ static void /* LV_ATTRIBUTE_FAST_MEM */ shadow_blur_corner(int32_t size, int32_t
 
 void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc, const lv_area_t * coords)
 {
-    /*Calculate the rectangle which is blurred to get the shadow in `shadow_area`*/
+    /*Вычислите размытый прямоугольник, чтобы получить тень в `shadow_area`.*/
     lv_area_t core_area;
     core_area.x1 = coords->x1  + dsc->ofs_x - dsc->spread;
     core_area.x2 = coords->x2  + dsc->ofs_x + dsc->spread;
     core_area.y1 = coords->y1  + dsc->ofs_y - dsc->spread;
     core_area.y2 = coords->y2  + dsc->ofs_y + dsc->spread;
 
-    /*Calculate the bounding box of the shadow*/
+    /*Вычислить ограничивающую рамку тени*/
     lv_area_t shadow_area;
     shadow_area.x1 = core_area.x1 - dsc->width / 2 - 1;
     shadow_area.x2 = core_area.x2 + dsc->width / 2 + 1;
@@ -74,27 +74,27 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
     lv_opa_t opa = dsc->opa;
     if(opa > LV_OPA_MAX) opa = LV_OPA_COVER;
 
-    /*Get clipped draw area which is the real draw area.
-     *It is always the same or inside `shadow_area`*/
+    /*Получите обрезанную область прорисовки, которая является настоящей областью прорисовки.
+     *Всегда одно и то же или внутри `shadow_area`*/
     lv_area_t draw_area;
     if(!lv_area_intersect(&draw_area, &shadow_area, &t->clip_area)) return;
 
-    /*Consider 1 px smaller bg to be sure the edge will be covered by the shadow*/
+    /*Уменьшите фон на 1 пиксель, чтобы быть уверенным, что край будет закрыт тенью.*/
     lv_area_t bg_area;
     lv_area_copy(&bg_area, coords);
     lv_area_increase(&bg_area, -1, -1);
 
-    /*Get the clamped radius*/
+    /*Получить зажатый радиус*/
     int32_t r_bg = dsc->radius;
     int32_t short_side = LV_MIN(lv_area_get_width(&bg_area), lv_area_get_height(&bg_area));
     if(r_bg > short_side >> 1) r_bg = short_side >> 1;
 
-    /*Get the clamped radius*/
+    /*Получить зажатый радиус*/
     int32_t r_sh = dsc->radius;
     short_side = LV_MIN(lv_area_get_width(&core_area), lv_area_get_height(&core_area));
     if(r_sh > short_side >> 1) r_sh = short_side >> 1;
 
-    /*Get how many pixels are affected by the blur on the corners*/
+    /*Узнайте, на сколько пикселей влияет размытие по углам.*/
     int32_t corner_size = dsc->width  + r_sh;
 
     lv_opa_t * sh_buf;
@@ -102,18 +102,18 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
 #if LV_DRAW_SW_SHADOW_CACHE_SIZE
     lv_draw_sw_shadow_cache_t * cache = &shadow_cache;
     if(cache->cache_size == corner_size && cache->cache_r == r_sh) {
-        /*Use the cache if available*/
+        /*Используйте кеш, если он доступен*/
         sh_buf = lv_malloc(corner_size * corner_size);
         LV_ASSERT_MALLOC(sh_buf);
         lv_memcpy(sh_buf, cache->cache, corner_size * corner_size);
     }
     else {
-        /*A larger buffer is required for calculation*/
+        /*Для расчета требуется больший буфер*/
         sh_buf = lv_malloc(corner_size * corner_size * sizeof(uint16_t));
         LV_ASSERT_MALLOC(sh_buf);
         shadow_draw_corner_buf(&core_area, (uint16_t *)sh_buf, dsc->width, r_sh);
 
-        /*Cache the corner if it fits into the cache size*/
+        /*Кэшируйте угол, если он соответствует размеру кеша.*/
         if((uint32_t)corner_size * corner_size < sizeof(cache->cache)) {
             lv_memcpy(cache->cache, sh_buf, corner_size * corner_size);
             cache->cache_size = corner_size;
@@ -126,10 +126,10 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
     shadow_draw_corner_buf(&core_area, (uint16_t *)sh_buf, dsc->width, r_sh);
 #endif /*LV_DRAW_SW_SHADOW_CACHE_SIZE*/
 
-    /*Skip a lot of masking if the background will cover the shadow that would be masked out*/
+    /*Пропустите большую часть маскировки, если фон закроет тень, которая будет замаскирована.*/
     bool simple = dsc->bg_cover;
 
-    /*Create a radius mask to clip remove shadow on the bg area*/
+    /*Создайте радиусную маску для обрезки и удаления тени в области заднего плана.*/
 
     lv_draw_sw_mask_radius_param_t mask_rout_param;
     void * masks[2] = {0};
@@ -156,14 +156,14 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
     int32_t w_half = shadow_area.x1 + lv_area_get_width(&shadow_area) / 2;
     int32_t h_half = shadow_area.y1 + lv_area_get_height(&shadow_area) / 2;
 
-    /*Draw the corners if they are on the current clip area and not fully covered by the bg*/
+    /*Нарисуйте углы, если они находятся в текущей области клипа и не полностью покрыты фоном.*/
 
-    /*Top right corner*/
+    /*Верхний правый угол*/
     blend_area.x2 = shadow_area.x2;
     blend_area.x1 = shadow_area.x2 - corner_size + 1;
     blend_area.y1 = shadow_area.y1;
     blend_area.y2 = shadow_area.y1 + corner_size - 1;
-    /*Do not overdraw the other top corners*/
+    /*Не перерисовывайте другие верхние углы*/
     blend_area.x1 = LV_MAX(blend_area.x1, w_half);
     blend_area.y2 = LV_MIN(blend_area.y2, h_half);
 
@@ -174,14 +174,14 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp += (clip_area_sub.y1 - shadow_area.y1) * corner_size;
         sh_buf_tmp += clip_area_sub.x1 - (shadow_area.x2 - corner_size + 1);
 
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
         if(w > 0) {
             blend_dsc.mask_buf = mask_buf;
             blend_area.x1 = clip_area_sub.x1;
             blend_area.x2 = clip_area_sub.x2;
-            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*In simple mode it won't be overwritten*/
+            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*В простом режиме он не будет перезаписан.*/
             for(y = clip_area_sub.y1; y <= clip_area_sub.y2; y++) {
                 blend_area.y1 = y;
                 blend_area.y2 = y;
@@ -200,13 +200,13 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    /*Bottom right corner.
-     *Almost the same as top right just read the lines of `sh_buf` from then end*/
+    /*Нижний правый угол.
+     *Почти то же самое, что и вверху справа, просто прочитайте строки `sh_buf` с конца.*/
     blend_area.x2 = shadow_area.x2;
     blend_area.x1 = shadow_area.x2 - corner_size + 1;
     blend_area.y1 = shadow_area.y2 - corner_size + 1;
     blend_area.y2 = shadow_area.y2;
-    /*Do not overdraw the other corners*/
+    /*Не перерисовывайте другие углы*/
     blend_area.x1 = LV_MAX(blend_area.x1, w_half);
     blend_area.y1 = LV_MAX(blend_area.y1, h_half + 1);
 
@@ -216,7 +216,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp = sh_buf;
         sh_buf_tmp += (blend_area.y2 - clip_area_sub.y2) * corner_size;
         sh_buf_tmp += clip_area_sub.x1 - (shadow_area.x2 - corner_size + 1);
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
 
@@ -224,7 +224,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
             blend_dsc.mask_buf = mask_buf;
             blend_area.x1 = clip_area_sub.x1;
             blend_area.x2 = clip_area_sub.x2;
-            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*In simple mode it won't be overwritten*/
+            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*В простом режиме он не будет перезаписан.*/
             for(y = clip_area_sub.y2; y >= clip_area_sub.y1; y--) {
                 blend_area.y1 = y;
                 blend_area.y2 = y;
@@ -243,7 +243,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    /*Top side*/
+    /*Верхняя сторона*/
     blend_area.x1 = shadow_area.x1 + corner_size;
     blend_area.x2 = shadow_area.x2 - corner_size;
     blend_area.y1 = shadow_area.y1;
@@ -256,7 +256,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp = sh_buf;
         sh_buf_tmp += (clip_area_sub.y1 - blend_area.y1) * corner_size;
 
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
 
@@ -288,9 +288,9 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
             }
         }
     }
-    blend_dsc.opa = dsc->opa;    /*Restore*/
+    blend_dsc.opa = dsc->opa;    /*Восстановить*/
 
-    /*Bottom side*/
+    /*Нижняя сторона*/
     blend_area.x1 = shadow_area.x1 + corner_size;
     blend_area.x2 = shadow_area.x2 - corner_size;
     blend_area.y1 = shadow_area.y2 - corner_size + 1;
@@ -303,7 +303,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp = sh_buf;
         sh_buf_tmp += (blend_area.y2 - clip_area_sub.y2) * corner_size;
         if(w > 0) {
-            /*Do not mask if out of the bg*/
+            /*Не маскируйтесь, если находитесь вне фона*/
             if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
             else simple_sub = simple;
 
@@ -320,7 +320,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
                 blend_area.y1 = y;
                 blend_area.y2 = y;
 
-                /*Do not mask if out of the bg*/
+                /*Не маскируйтесь, если находитесь вне фона*/
                 if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
                 else simple_sub = simple;
 
@@ -340,14 +340,14 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    blend_dsc.opa = dsc->opa;    /*Restore*/
+    blend_dsc.opa = dsc->opa;    /*Восстановить*/
 
-    /*Right side*/
+    /*Правая сторона*/
     blend_area.x1 = shadow_area.x2 - corner_size + 1;
     blend_area.x2 = shadow_area.x2;
     blend_area.y1 = shadow_area.y1 + corner_size;
     blend_area.y2 = shadow_area.y2 - corner_size;
-    /*Do not overdraw the other corners*/
+    /*Не перерисовывайте другие углы*/
     blend_area.y1 = LV_MIN(blend_area.y1, h_half + 1);
     blend_area.y2 = LV_MAX(blend_area.y2, h_half);
     blend_area.x1 = LV_MAX(blend_area.x1, w_half);
@@ -359,7 +359,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp += (corner_size - 1) * corner_size;
         sh_buf_tmp += clip_area_sub.x1 - (shadow_area.x2 - corner_size + 1);
 
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
         blend_dsc.mask_buf = simple_sub ? sh_buf_tmp : mask_buf;
@@ -367,7 +367,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         if(w > 0) {
             blend_area.x1 = clip_area_sub.x1;
             blend_area.x2 = clip_area_sub.x2;
-            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*In simple mode it won't be overwritten*/
+            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*В простом режиме он не будет перезаписан.*/
             for(y = clip_area_sub.y1; y <= clip_area_sub.y2; y++) {
                 blend_area.y1 = y;
                 blend_area.y2 = y;
@@ -382,7 +382,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    /*Mirror the shadow corner buffer horizontally*/
+    /*Зеркально отразить угловой буфер тени по горизонтали*/
     sh_buf_tmp = sh_buf ;
     for(y = 0; y < corner_size; y++) {
         int32_t x;
@@ -399,12 +399,12 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp += corner_size;
     }
 
-    /*Left side*/
+    /*Левая сторона*/
     blend_area.x1 = shadow_area.x1;
     blend_area.x2 = shadow_area.x1 + corner_size - 1;
     blend_area.y1 = shadow_area.y1 + corner_size;
     blend_area.y2 = shadow_area.y2 - corner_size;
-    /*Do not overdraw the other corners*/
+    /*Не перерисовывайте другие углы*/
     blend_area.y1 = LV_MIN(blend_area.y1, h_half + 1);
     blend_area.y2 = LV_MAX(blend_area.y2, h_half);
     blend_area.x2 = LV_MIN(blend_area.x2, w_half - 1);
@@ -416,14 +416,14 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp += (corner_size - 1) * corner_size;
         sh_buf_tmp += clip_area_sub.x1 - blend_area.x1;
 
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
         blend_dsc.mask_buf = simple_sub ? sh_buf_tmp : mask_buf;
         if(w > 0) {
             blend_area.x1 = clip_area_sub.x1;
             blend_area.x2 = clip_area_sub.x2;
-            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*In simple mode it won't be overwritten*/
+            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*В простом режиме он не будет перезаписан.*/
             for(y = clip_area_sub.y1; y <= clip_area_sub.y2; y++) {
                 blend_area.y1 = y;
                 blend_area.y2 = y;
@@ -439,12 +439,12 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    /*Top left corner*/
+    /*Верхний левый угол*/
     blend_area.x1 = shadow_area.x1;
     blend_area.x2 = shadow_area.x1 + corner_size - 1;
     blend_area.y1 = shadow_area.y1;
     blend_area.y2 = shadow_area.y1 + corner_size - 1;
-    /*Do not overdraw the other corners*/
+    /*Не перерисовывайте другие углы*/
     blend_area.x2 = LV_MIN(blend_area.x2, w_half - 1);
     blend_area.y2 = LV_MIN(blend_area.y2, h_half);
 
@@ -455,7 +455,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp += (clip_area_sub.y1 - blend_area.y1) * corner_size;
         sh_buf_tmp += clip_area_sub.x1 - blend_area.x1;
 
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
         blend_dsc.mask_buf = mask_buf;
@@ -463,7 +463,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         if(w > 0) {
             blend_area.x1 = clip_area_sub.x1;
             blend_area.x2 = clip_area_sub.x2;
-            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*In simple mode it won't be overwritten*/
+            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*В простом режиме он не будет перезаписан.*/
             for(y = clip_area_sub.y1; y <= clip_area_sub.y2; y++) {
                 blend_area.y1 = y;
                 blend_area.y2 = y;
@@ -483,13 +483,13 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    /*Bottom left corner.
-     *Almost the same as bottom right just read the lines of `sh_buf` from then end*/
+    /*Нижний левый угол.
+     *Почти то же самое, что и внизу справа, просто прочитайте строки `sh_buf` с конца.*/
     blend_area.x1 = shadow_area.x1 ;
     blend_area.x2 = shadow_area.x1 + corner_size - 1;
     blend_area.y1 = shadow_area.y2 - corner_size + 1;
     blend_area.y2 = shadow_area.y2;
-    /*Do not overdraw the other corners*/
+    /*Не перерисовывайте другие углы*/
     blend_area.y1 = LV_MAX(blend_area.y1, h_half + 1);
     blend_area.x2 = LV_MIN(blend_area.x2, w_half - 1);
 
@@ -500,14 +500,14 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         sh_buf_tmp += (blend_area.y2 - clip_area_sub.y2) * corner_size;
         sh_buf_tmp += clip_area_sub.x1 - blend_area.x1;
 
-        /*Do not mask if out of the bg*/
+        /*Не маскируйтесь, если находитесь вне фона*/
         if(simple && lv_area_is_out(&clip_area_sub, &bg_area, r_bg)) simple_sub = true;
         else simple_sub = simple;
         blend_dsc.mask_buf = mask_buf;
         if(w > 0) {
             blend_area.x1 = clip_area_sub.x1;
             blend_area.x2 = clip_area_sub.x2;
-            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*In simple mode it won't be overwritten*/
+            blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;    /*В простом режиме он не будет перезаписан.*/
             for(y = clip_area_sub.y2; y >= clip_area_sub.y1; y--) {
                 blend_area.y1 = y;
                 blend_area.y2 = y;
@@ -526,7 +526,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
         }
     }
 
-    /*Draw the center rectangle.*/
+    /*Нарисуйте центральный прямоугольник.*/
     blend_area.x1 = shadow_area.x1 + corner_size ;
     blend_area.x2 = shadow_area.x2 - corner_size;
     blend_area.y1 = shadow_area.y1 + corner_size;
@@ -564,7 +564,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
  **********************/
 
 /**
- * Calculate a blurred corner
+ * Вычислить размытый угол
  * @param coords Coordinates of the shadow
  * @param sh_buf a buffer to store the result. Its size should be `(sw + r)^2 * 2`
  * @param sw shadow width
@@ -588,7 +588,7 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_draw_corner_buf(const lv_area_t * coord
     lv_draw_sw_mask_radius_init(&mask_param, &sh_area, r, false);
 
 #if SHADOW_ENHANCE
-    /*Set half shadow width because blur will be repeated*/
+    /*Установите ширину полутени, потому что размытие будет повторяться.*/
     if(sw_ori == 1) sw = 1;
     else sw = sw_ori >> 1;
 #endif /*SHADOW_ENHANCE*/
@@ -629,7 +629,7 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_draw_corner_buf(const lv_area_t * coord
     shadow_blur_corner(size, sw, sh_buf);
 
 #if SHADOW_ENHANCE == 0
-    /*The result is required in lv_opa_t not uint16_t*/
+    /*Результат требуется в lv_opa_t, а не в uint16_t.*/
     uint32_t x;
     lv_opa_t * res_buf = (lv_opa_t *)sh_buf;
     for(x = 0; x < size * size; x++) {
@@ -663,7 +663,7 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_blur_corner(int32_t size, int32_t sw, u
     int32_t s_right = (sw >> 1);
     if((sw & 1) == 0) s_left--;
 
-    /*Horizontal blur*/
+    /*Горизонтальное размытие*/
     uint16_t * sh_ups_blur_buf = lv_malloc(size * sizeof(uint16_t));
 
     int32_t x;
@@ -676,12 +676,12 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_blur_corner(int32_t size, int32_t sw, u
         for(x = size - 1; x >= 0; x--) {
             sh_ups_blur_buf[x] = v;
 
-            /*Forget the right pixel*/
+            /*Забудьте правый пиксель*/
             uint32_t right_val = 0;
             if(x + s_right < size) right_val = sh_ups_tmp_buf[x + s_right];
             v -= right_val;
 
-            /*Add the left pixel*/
+            /*Добавляем левый пиксель*/
             uint32_t left_val;
             if(x - s_left - 1 < 0) left_val = sh_ups_tmp_buf[0];
             else left_val = sh_ups_tmp_buf[x - s_left - 1];
@@ -691,7 +691,7 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_blur_corner(int32_t size, int32_t sw, u
         sh_ups_tmp_buf += size;
     }
 
-    /*Vertical blur*/
+    /*Вертикальное размытие*/
     uint32_t i;
     uint32_t max_v = LV_OPA_COVER << SHADOW_UPSCALE_SHIFT;
     uint32_t max_v_div = max_v / sw;
@@ -707,20 +707,20 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_blur_corner(int32_t size, int32_t sw, u
         for(y = 0; y < size ; y++, sh_ups_tmp_buf += size) {
             sh_ups_blur_buf[y] = v < 0 ? 0 : (v >> SHADOW_UPSCALE_SHIFT);
 
-            /*Forget the top pixel*/
+            /*Забудьте верхний пиксель*/
             uint32_t top_val;
             if(y - s_right <= 0) top_val = sh_ups_tmp_buf[0];
             else top_val = sh_ups_buf[(y - s_right) * size + x];
             v -= top_val;
 
-            /*Add the bottom pixel*/
+            /*Добавляем нижний пиксель*/
             uint32_t bottom_val;
             if(y + s_left + 1 < size) bottom_val = sh_ups_buf[(y + s_left + 1) * size + x];
             else bottom_val = sh_ups_buf[(size - 1) * size + x];
             v += bottom_val;
         }
 
-        /*Write back the result into `sh_ups_buf`*/
+        /*Запишите результат в `sh_ups_buf`.*/
         sh_ups_tmp_buf = &sh_ups_buf[x];
         for(y = 0; y < size; y++, sh_ups_tmp_buf += size) {
             (*sh_ups_tmp_buf) = sh_ups_blur_buf[y];

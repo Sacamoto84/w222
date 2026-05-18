@@ -87,16 +87,16 @@ void lv_obj_set_y(lv_obj_t * obj, int32_t y)
 }
 
 /**
- * @brief Calculates the width in pixels of an LVGL object based on its style and parent for a given width `prop`.
- * @param obj Pointer to the LVGL object whose width is being calculated.
- * @param prop Which style width to calculate for. Valid values are: LV_STYLE_WIDTH, LV_STYLE_MIN_WIDTH, or
+ * @brief Вычисляет ширину в пикселях объектаLVGLна основе его стиля и родителя для заданной ширины `prop`.
+ * @param obj Указатель на объект LVGL, ширина которого вычисляется.
+ * @param prop Для какой ширины стиля рассчитываться. Допустимые значения:LV_STYLE_WIDTH,LV_STYLE_MIN_WIDTHили
  * LV_STYLE_MAX_WIDTH.
- * @param content_width Pointer to an integer storing the object's content width to prevent unnecessary recalculation.
- * If negative or NULL and width is `LV_SIZE_CONTENT`, it will be calculated.
- * @return The computed width for the object:
- * @note If the style width is a fixed value, that value is returned.
- * @note If the style width is `LV_SIZE_CONTENT`, the content width is calculated and returned.
- * @note If the style width is a `LV_PCT()`, the percentage is applied to the parent's width.
+ * @param content_width Указатель на целое число, хранящее ширину содержимого объекта, чтобы предотвратить ненужный перерасчет.
+ * Если отрицательное значение или NULL и ширина равна `LV_SIZE_CONTENT` , оно будет рассчитано.
+ * @return Вычисленная ширина объекта:
+ * @note Если ширина стиля имеет фиксированное значение, возвращается это значение.
+ * @note Если ширина стиля равна `LV_SIZE_CONTENT`, вычисляется и возвращается ширина содержимого.
+ * @note Если ширина стиля равна `LV_PCT()`, процент применяется к ширине родительского элемента.
  */
 static int32_t calc_dynamic_width(lv_obj_t * obj, lv_style_prop_t prop, int32_t * const content_width)
 {
@@ -130,16 +130,16 @@ int32_t lv_obj_calc_dynamic_width(lv_obj_t * obj, lv_style_prop_t prop)
 }
 
 /**
- * @brief Calculates the height in pixels of an LVGL object based on its style and parent for a given height `prop`.
- * @param obj Pointer to the LVGL object whose height is being calculated.
- * @param prop Which style height to calculate for. Valid values are: LV_STYLE_HEIGHT, LV_STYLE_MIN_HEIGHT, or
+ * @brief Вычисляет высоту в пикселях объектаLVGLна основе его стиля и родителя для заданной высоты `prop`.
+ * @param obj Указатель на объект LVGL, высота которого вычисляется.
+ * @param prop На какую высоту стиля рассчитывать. Допустимые значения:LV_STYLE_HEIGHT,LV_STYLE_MIN_HEIGHTили
  * LV_STYLE_MAX_HEIGHT.
- * @param content_height Pointer to an integer storing the object's content height to prevent unnecessary recalculation.
- * If negative or NULL and height is `LV_SIZE_CONTENT`, it will be calculated.
- * @return The computed height for the object:
- * @note If the style height is a fixed value, that value is returned.
- * @note If the style height is `LV_SIZE_CONTENT`, the content height is calculated and returned.
- * @note If the style height is a `LV_PCT()`, the percentage is applied to the parent's height.
+ * @param content_height Указатель на целое число, хранящее высоту содержимого объекта, чтобы предотвратить ненужный перерасчет.
+ * Если отрицательное значение или NULL и высота равна `LV_SIZE_CONTENT` , она будет рассчитана.
+ * @return Вычисленная высота объекта:
+ * @note Если высота стиля имеет фиксированное значение, возвращается это значение.
+ * @note Если высота стиля равна `LV_SIZE_CONTENT`, высота содержимого вычисляется и возвращается.
+ * @note Если высота стиля равна `LV_PCT()`, процент применяется к высоте родительского элемента.
  */
 static int32_t calc_dynamic_height(lv_obj_t * obj, lv_style_prop_t prop, int32_t * const content_height)
 {
@@ -176,7 +176,7 @@ bool lv_obj_refr_size(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    /*If the width or height is set by a layout do not modify them*/
+    /*Если ширина или высота заданы макетом, не изменяйте их.*/
     if(obj->w_layout && obj->h_layout) return false;
 
     lv_obj_t * parent = lv_obj_get_parent(obj);
@@ -194,9 +194,9 @@ bool lv_obj_refr_size(lv_obj_t * obj)
         w = LV_CLAMP(minw, w, maxw);
 
         /**
-         * If the object style (after clamping) results in a width that is defined as a percentage of the parent,
-         * and if the parent's width is set to LV_SIZE_CONTENT and not managed by a layout, this object should not
-         * influence the parent's content width calculation. Thus, the `w_ignore_size` flag is set accordingly.
+         * Если стиль объекта (после фиксации) приводит к ширине, определяемой в процентах от родительского стиля,
+         * и если ширина родительского элемента установлена на LV_SIZE_CONTENT и не управляется макетом, этот объект не должен
+         * при расчете сравнительного показателя компонентного элемента. Таким образом, настраиваем флаг `w_ignore_size`.
          */
         int32_t w_style;
         if(w == minw) {
@@ -224,9 +224,9 @@ bool lv_obj_refr_size(lv_obj_t * obj)
         h = LV_CLAMP(minh, h, maxh);
 
         /**
-         * If the object style (after clamping) results in a height that is defined as a percentage of the parent,
-         * and if the parent's height is set to LV_SIZE_CONTENT and not managed by a layout, this object should not
-         * influence the parent's content height calculation. Thus, the `h_ignore_size` flag is set accordingly.
+         * Если стиль объекта (после фиксации) приводит к высоте, определенной как процент от родительского элемента,
+         * и если высота родительского элемента установлена на LV_SIZE_CONTENT и не управляется макетом, этот объект не должен
+         * расчет на высоту родительского содержания. Таким образом, настраиваем флаг `h_ignore_size`.
          */
         int32_t h_style;
         if(h == minh) {
@@ -242,30 +242,30 @@ bool lv_obj_refr_size(lv_obj_t * obj)
                               lv_obj_get_style_height(parent, 0) == LV_SIZE_CONTENT);
     }
 
-    /*Do nothing if the size is not changed*/
-    /*It is very important else recursive resizing can occur without size change*/
+    /*Ничего не делайте, если размер не изменился*/
+    /*Это очень важно, иначе рекурсивное изменение размера может происходить без изменения размера.*/
     if(lv_obj_get_width(obj) == w && lv_obj_get_height(obj) == h)
         return false;
 
-    /*Invalidate the original area*/
+    /*Сделать недействительной исходную область*/
     lv_obj_invalidate(obj);
 
-    /*Save the original coordinates*/
+    /*Сохраните исходные координаты*/
     lv_area_t ori;
     lv_obj_get_coords(obj, &ori);
 
-    /*Check if the object inside the parent or not*/
+    /*Проверьте, находится ли объект внутри родителя или нет*/
     lv_area_t parent_fit_area;
     lv_obj_get_content_coords(parent, &parent_fit_area);
 
-    /*If the object is already out of the parent and its position is changes
-     *surely the scrollbars also changes so invalidate them*/
+    /*Если объект уже вышел за пределы родителя и его положение изменилось
+     *конечно, полосы прокрутки также меняются, поэтому сделайте их недействительными*/
     bool on1 = lv_area_is_in(&ori, &parent_fit_area, 0);
     if(!on1)
         lv_obj_scrollbar_invalidate(parent);
 
-    /*Set the length and height
-     *Be sure the content is not scrolled in an invalid position on the new size*/
+    /*Установите длину и высоту
+     *Убедитесь, что контент не прокручивается в недопустимом положении при новом размере.*/
     obj->coords.y2 = obj->coords.y1 + h - 1;
     if(lv_obj_get_style_base_dir(obj, LV_PART_MAIN) == LV_BASE_DIR_RTL) {
         obj->coords.x1 = obj->coords.x2 - w + 1;
@@ -274,19 +274,19 @@ bool lv_obj_refr_size(lv_obj_t * obj)
         obj->coords.x2 = obj->coords.x1 + w - 1;
     }
 
-    /*Call the ancestor's event handler to the object with its new coordinates*/
+    /*Вызов обработчика событий предка для объекта с его новыми координатами.*/
     lv_obj_send_event(obj, LV_EVENT_SIZE_CHANGED, &ori);
 
-    /*Call the ancestor's event handler to the parent too*/
+    /*Также вызовите обработчик событий предка для родителя.*/
     lv_obj_send_event(parent, LV_EVENT_CHILD_CHANGED, obj);
 
-    /*Invalidate the new area*/
+    /*Недействительность новой области*/
     lv_obj_invalidate(obj);
 
     obj->readjust_scroll_after_layout = 1;
 
-    /*If the object was out of the parent invalidate the new scrollbar area too.
-     *If it wasn't out of the parent but out now, also invalidate the scrollbars*/
+    /*Если объект находился за пределами родительского объекта, сделайте недействительной и новую область полосы прокрутки.
+     *Если он вышел не из родителя, а сейчас, также сделайте недействительными полосы прокрутки.*/
     bool on2 = lv_area_is_in(&obj->coords, &parent_fit_area, 0);
     if(on1 || (!on1 && on2))
         lv_obj_scrollbar_invalidate(parent);
@@ -369,11 +369,11 @@ void lv_obj_mark_layout_as_dirty(lv_obj_t * obj)
 {
     obj->layout_inv = 1;
 
-    /*Mark the screen as dirty too to mark that there is something to do on this screen*/
+    /*Отметьте экран как грязный, чтобы отметить, что на этом экране есть чем заняться.*/
     lv_obj_t * scr = lv_obj_get_screen(obj);
     scr->scr_layout_inv = 1;
 
-    /*Make the display refreshing*/
+    /*Сделайте дисплей освежающим*/
     lv_display_t * disp = lv_obj_get_display(scr);
     lv_display_send_event(disp, LV_EVENT_REFR_REQUEST, NULL);
 }
@@ -388,7 +388,7 @@ void lv_obj_update_layout(const lv_obj_t * obj)
     update_layout_mutex = true;
 
     lv_obj_t * scr = lv_obj_get_screen(obj);
-    /*Repeat until there are no more layout invalidations*/
+    /*Повторяйте, пока не исчезнут недействительные макеты.*/
     while(scr->scr_layout_inv) {
         LV_LOG_TRACE("Layout update begin");
         scr->scr_layout_inv = 0;
@@ -787,20 +787,20 @@ void lv_obj_refr_pos(lv_obj_t * obj)
         return;
     }
 
-    /*Handle percentage value*/
+    /*Обработка процентного значения*/
     int32_t pw = lv_obj_get_content_width(parent);
     int32_t ph = lv_obj_get_content_height(parent);
     if(LV_COORD_IS_PCT(x)) {
-        if(lv_obj_get_style_width(parent, LV_PART_MAIN) == LV_SIZE_CONTENT) x = 0; /*Avoid circular dependency*/
+        if(lv_obj_get_style_width(parent, LV_PART_MAIN) == LV_SIZE_CONTENT) x = 0; /*Избегайте циклической зависимости*/
         else x = (pw * LV_COORD_GET_PCT(x)) / 100;
     }
 
     if(LV_COORD_IS_PCT(y)) {
-        if(lv_obj_get_style_height(parent, LV_PART_MAIN) == LV_SIZE_CONTENT) y = 0; /*Avoid circular dependency*/
+        if(lv_obj_get_style_height(parent, LV_PART_MAIN) == LV_SIZE_CONTENT) y = 0; /*Избегайте циклической зависимости*/
         y = (ph * LV_COORD_GET_PCT(y)) / 100;
     }
 
-    /*Handle percentage value of translate*/
+    /*Обработка процентного значения перевода*/
     int32_t tr_x = lv_obj_get_style_translate_x(obj, LV_PART_MAIN);
     int32_t tr_y = lv_obj_get_style_translate_y(obj, LV_PART_MAIN);
     int32_t w = lv_obj_get_width(obj);
@@ -808,7 +808,7 @@ void lv_obj_refr_pos(lv_obj_t * obj)
     if(LV_COORD_IS_PCT(tr_x)) tr_x = (w * LV_COORD_GET_PCT(tr_x)) / 100;
     if(LV_COORD_IS_PCT(tr_y)) tr_y = (h * LV_COORD_GET_PCT(tr_y)) / 100;
 
-    /*Use the translation*/
+    /*Используйте перевод*/
     x += tr_x;
     y += tr_y;
 
@@ -885,7 +885,7 @@ void lv_obj_refr_pos(lv_obj_t * obj)
 
 void lv_obj_move_to(lv_obj_t * obj, int32_t x, int32_t y)
 {
-    /*Convert x and y to absolute coordinates*/
+    /*Преобразуйте x и y в абсолютные координаты*/
     lv_obj_t * parent = obj->parent;
 
     if(parent) {
@@ -902,31 +902,31 @@ void lv_obj_move_to(lv_obj_t * obj, int32_t x, int32_t y)
         y += lv_obj_get_style_space_top(parent, LV_PART_MAIN);
     }
 
-    /*Calculate and set the movement*/
+    /*Рассчитайте и задайте движение*/
     lv_point_t diff;
     diff.x = x - obj->coords.x1;
     diff.y = y - obj->coords.y1;
 
-    /*Do nothing if the position is not changed*/
-    /*It is very important else recursive positioning can
-     *occur without position change*/
+    /*Ничего не делайте, если положение не изменилось*/
+    /*Это очень важно, иначе рекурсивное позиционирование может
+     *происходят без изменения положения*/
     if(diff.x == 0 && diff.y == 0) return;
 
-    /*Invalidate the original area*/
+    /*Сделать недействительной исходную область*/
     lv_obj_invalidate(obj);
 
-    /*Save the original coordinates*/
+    /*Сохраните исходные координаты*/
     lv_area_t ori;
     lv_obj_get_coords(obj, &ori);
 
-    /*Check if the object inside the parent or not*/
+    /*Проверьте, находится ли объект внутри родителя или нет*/
     lv_area_t parent_fit_area;
     bool on1 = false;
     if(parent) {
         lv_obj_get_content_coords(parent, &parent_fit_area);
 
-        /*If the object is already out of the parent and its position is changes
-         *surely the scrollbars also changes so invalidate them*/
+        /*Если объект уже вышел за пределы родителя и его положение изменилось
+         *конечно, полосы прокрутки также меняются, поэтому сделайте их недействительными*/
         on1 = lv_area_is_in(&ori, &parent_fit_area, 0);
         if(!on1) lv_obj_scrollbar_invalidate(parent);
     }
@@ -938,14 +938,14 @@ void lv_obj_move_to(lv_obj_t * obj, int32_t x, int32_t y)
 
     lv_obj_move_children_by(obj, diff.x, diff.y, false);
 
-    /*Call the ancestor's event handler to the parent too*/
+    /*Также вызовите обработчик событий предка для родителя.*/
     if(parent) lv_obj_send_event(parent, LV_EVENT_CHILD_CHANGED, obj);
 
-    /*Invalidate the new area*/
+    /*Недействительность новой области*/
     lv_obj_invalidate(obj);
 
-    /*If the object was out of the parent invalidate the new scrollbar area too.
-     *If it wasn't out of the parent but out now, also invalidate the scrollbars*/
+    /*Если объект находился за пределами родительского объекта, сделайте недействительной и новую область полосы прокрутки.
+     *Если он вышел не из родителя, а сейчас, также сделайте недействительными полосы прокрутки.*/
     if(parent) {
         bool on2 = lv_area_is_in(&obj->coords, &parent_fit_area, 0);
         if(on1 || (!on1 && on2)) lv_obj_scrollbar_invalidate(parent);
@@ -1019,7 +1019,7 @@ static lv_obj_tree_walk_res_t blur_walk_cb(lv_obj_t * obj, void * user_data)
     blur_walk_data_t * blur_data = user_data;
     if(obj == blur_data->requester_obj) return LV_OBJ_TREE_WALK_SKIP_CHILDREN;
 
-    /*Truncate the area to the object*/
+    /*Усечь область до объекта*/
     lv_area_t obj_coords;
     int32_t ext_size = lv_obj_get_ext_draw_size(obj);
     lv_area_copy(&obj_coords, &obj->coords);
@@ -1029,7 +1029,7 @@ static lv_obj_tree_walk_res_t blur_walk_cb(lv_obj_t * obj, void * user_data)
         lv_obj_get_transformed_area(obj, &obj_coords, LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE);
     }
 
-    /*If the widget has blur set, invalidate it*/
+    /*Если в виджете установлено размытие, сделайте его недействительным.*/
     if(lv_area_is_on(blur_data->inv_area, &obj_coords)) {
         const uint32_t group_blur = (uint32_t)1 << lv_style_get_prop_group(LV_STYLE_BLUR_RADIUS);
         const uint32_t group_dropshadow = (uint32_t)1 << lv_style_get_prop_group(LV_STYLE_DROP_SHADOW_OPA);
@@ -1056,7 +1056,7 @@ static lv_obj_tree_walk_res_t blur_walk_cb(lv_obj_t * obj, void * user_data)
 
             if(invalidation_needed == false) continue;
 
-            /*Truncate the area to the object*/
+            /*Усечь область до объекта*/
             ext_size = lv_obj_get_ext_draw_size(obj);
             lv_area_copy(&obj_coords, &obj->coords);
             obj_coords.x1 -= ext_size;
@@ -1066,16 +1066,16 @@ static lv_obj_tree_walk_res_t blur_walk_cb(lv_obj_t * obj, void * user_data)
 
             invalidate_area_core(obj, &obj_coords);
 
-            /*No need to check the children as the widget is already invalidated
-             *which will redraw the children too*/
+            /*Нет необходимости проверять дочерние элементы, поскольку виджет уже недействителен.
+             *который перерисует и детей*/
             return LV_OBJ_TREE_WALK_SKIP_CHILDREN;
         }
 
-        /*Check the next child, maybe it's blurred*/
+        /*Проверьте следующего ребенка, возможно, он размыт.*/
         return LV_OBJ_TREE_WALK_NEXT;
     }
     else {
-        /*Not on the area of interest, skip it*/
+        /*Не в интересующей области, пропустите*/
         return LV_OBJ_TREE_WALK_SKIP_CHILDREN;
     }
 
@@ -1099,7 +1099,7 @@ lv_result_t lv_obj_invalidate(const lv_obj_t * obj)
     lv_display_t * disp = lv_obj_get_display(obj);
     if(!lv_display_is_invalidation_enabled(disp)) return LV_RESULT_INVALID;
 
-    /*Truncate the area to the object*/
+    /*Усечь область до объекта*/
     lv_area_t obj_coords;
     int32_t ext_size = lv_obj_get_ext_draw_size(obj);
     lv_area_copy(&obj_coords, &obj->coords);
@@ -1117,7 +1117,7 @@ bool lv_obj_area_is_visible(const lv_obj_t * obj, lv_area_t * area)
 {
     if(lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN)) return false;
 
-    /*Invalidate the object only if it belongs to the current or previous or one of the layers'*/
+    /*Делайте объект недействительным только в том случае, если он принадлежит текущему, предыдущему или одному из слоев.*/
     lv_obj_t * obj_scr = lv_obj_get_screen(obj);
     lv_display_t * disp   = lv_obj_get_display(obj_scr);
     if(obj_scr != lv_display_get_screen_active(disp) &&
@@ -1128,26 +1128,26 @@ bool lv_obj_area_is_visible(const lv_obj_t * obj, lv_area_t * area)
         return false;
     }
 
-    /*Truncate the area to the object*/
+    /*Усечь область до объекта*/
     lv_area_t obj_coords;
     int32_t ext_size = lv_obj_get_ext_draw_size(obj);
     lv_area_copy(&obj_coords, &obj->coords);
     lv_area_increase(&obj_coords, ext_size, ext_size);
 
-    /*The area is not on the object*/
+    /*Участок не на объекте*/
     if(!lv_area_intersect(area, area, &obj_coords)) return false;
 
     if(is_transformed(obj)) {
         lv_obj_get_transformed_area(obj, area, LV_OBJ_POINT_TRANSFORM_FLAG_RECURSIVE);
     }
 
-    /*Truncate recursively to the parents*/
+    /*Рекурсивно обрезать до родителей*/
     lv_obj_t * parent = lv_obj_get_parent(obj);
     while(parent != NULL) {
-        /*If the parent is hidden then the child is hidden and won't be drawn*/
+        /*Если родительский элемент скрыт, дочерний элемент скрыт и не будет нарисован.*/
         if(lv_obj_has_flag(parent, LV_OBJ_FLAG_HIDDEN)) return false;
 
-        /*Truncate to the parent and if no common parts break*/
+        /*Усечь до родительского элемента, и если общие части не сломаются*/
         lv_area_t parent_coords = parent->coords;
         if(lv_obj_has_flag(parent, LV_OBJ_FLAG_OVERFLOW_VISIBLE)) {
             int32_t parent_ext_size = lv_obj_get_ext_draw_size(parent);
@@ -1251,16 +1251,16 @@ void lv_obj_set_transform(lv_obj_t * obj, const lv_matrix_t * matrix)
         LV_ASSERT_MALLOC(obj->spec_attr->matrix);
     }
 
-    /* Invalidate the old area */
+    /* Аннулировать старую область */
     lv_obj_invalidate(obj);
 
-    /* Copy the matrix */
+    /* Скопируйте матрицу */
     *obj->spec_attr->matrix = *matrix;
 
-    /* Matrix is set. Update the layer type */
+    /* Матрица установлена. Обновите тип слоя */
     lv_obj_update_layer_type(obj);
 
-    /* Invalidate the new area */
+    /* Недействительность новой области */
     lv_obj_invalidate(obj);
 #else
     LV_UNUSED(obj);
@@ -1281,17 +1281,17 @@ void lv_obj_reset_transform(lv_obj_t * obj)
         return;
     }
 
-    /* Invalidate the old area */
+    /* Аннулировать старую область */
     lv_obj_invalidate(obj);
 
-    /* Free the matrix */
+    /* Освободите матрицу */
     lv_free(obj->spec_attr->matrix);
     obj->spec_attr->matrix = NULL;
 
-    /* Matrix is cleared. Update the layer type */
+    /* Матрица очищается. Обновите тип слоя */
     lv_obj_update_layer_type(obj);
 
-    /* Invalidate the new area */
+    /* Недействительность новой области */
     lv_obj_invalidate(obj);
 #else
     LV_UNUSED(obj);
@@ -1328,7 +1328,7 @@ static lv_result_t obj_invalidate_area_internal(const lv_display_t * disp, const
     lv_result_t res = invalidate_area_core(obj, &area_tmp);
     if(res == LV_RESULT_INVALID) return res;
 
-    /*If this area is on a blurred widget, invalidate that widget too*/
+    /*Если эта область находится на размытом виджете, сделайте недействительным и этот виджет.*/
     blur_walk_data_t blur_walk_data;
     blur_walk_data.requester_obj = obj;
     blur_walk_data.inv_area = &area_tmp;
@@ -1366,7 +1366,7 @@ static int32_t calc_content_width(lv_obj_t * obj)
     if(!lv_layout_get_min_size(obj, &child_res, true)) {
         uint32_t i;
         uint32_t child_cnt = lv_obj_get_child_count(obj);
-        /*With RTL find the left most coordinate*/
+        /*С помощью RTL найдите самую левую координату.*/
         if(lv_obj_get_style_base_dir(obj, LV_PART_MAIN) == LV_BASE_DIR_RTL) {
             for(i = 0; i < child_cnt; i++) {
                 int32_t child_res_tmp = LV_COORD_MIN;
@@ -1384,12 +1384,12 @@ static int32_t calc_content_width(lv_obj_t * obj)
                         case LV_ALIGN_TOP_RIGHT:
                         case LV_ALIGN_BOTTOM_RIGHT:
                         case LV_ALIGN_RIGHT_MID:
-                            /*Normal right aligns. Other are ignored due to possible circular dependencies*/
+                            /*Обычное выравнивание по правому краю. Остальные игнорируются из-за возможных циклических зависимостей.*/
                             child_res_tmp = obj->coords.x2 - child->coords.x1 + 1;
                             break;
                         default:
-                            /* Consider other cases only if x=0 and use the width of the object.
-                             * With x!=0 circular dependency could occur. */
+                            /* Остальные случаи рассматривайте только в том случае, если x=0 и используйте ширину объекта.
+                             * При x!=0 может возникнуть циклическая зависимость. */
                             if(lv_obj_get_style_x(child, LV_PART_MAIN) == 0) {
                                 child_res_tmp = lv_area_get_width(&child->coords) + space_right;
                                 child_res_tmp += lv_obj_get_style_margin_left(child, LV_PART_MAIN);
@@ -1406,7 +1406,7 @@ static int32_t calc_content_width(lv_obj_t * obj)
                 child_res += space_left;
             }
         }
-        /*Else find the right most coordinate*/
+        /*Иначе найдите самую правильную координату*/
         else {
             for(i = 0; i < child_cnt; i++) {
                 int32_t child_res_tmp = LV_COORD_MIN;
@@ -1423,12 +1423,12 @@ static int32_t calc_content_width(lv_obj_t * obj)
                         case LV_ALIGN_TOP_LEFT:
                         case LV_ALIGN_BOTTOM_LEFT:
                         case LV_ALIGN_LEFT_MID:
-                            /*Normal left aligns.*/
+                            /*Обычное выравнивание по левому краю.*/
                             child_res_tmp = child->coords.x2 - obj->coords.x1 + 1;
                             break;
                         default:
-                            /* Consider other cases only if x=0 and use the width of the object.
-                             * With x!=0 circular dependency could occur. */
+                            /* Остальные случаи рассматривайте только в том случае, если x=0 и используйте ширину объекта.
+                             * При x!=0 может возникнуть циклическая зависимость. */
                             if(lv_obj_get_style_x(child, LV_PART_MAIN) == 0) {
                                 child_res_tmp = lv_area_get_width(&child->coords) + space_left;
                                 child_res_tmp += lv_obj_get_style_margin_right(child, LV_PART_MAIN);
@@ -1492,12 +1492,12 @@ static int32_t calc_content_height(lv_obj_t * obj)
                     case LV_ALIGN_TOP_RIGHT:
                     case LV_ALIGN_TOP_MID:
                     case LV_ALIGN_TOP_LEFT:
-                        /*Normal top aligns. */
+                        /*Нормальный верх выравнивается. */
                         child_res_tmp = child->coords.y2 - obj->coords.y1 + 1;
                         break;
                     default:
-                        /* Consider other cases only if y=0 and use the height of the object.
-                         * With y!=0 circular dependency could occur. */
+                        /* Остальные случаи рассматривайте только в том случае, если y=0 и используйте высоту объекта.
+                         * При y!=0 может возникнуть циклическая зависимость. */
                         if(lv_obj_get_style_y(child, LV_PART_MAIN) == 0) {
                             child_res_tmp = lv_area_get_height(&child->coords) + space_top;
                             child_res_tmp += lv_obj_get_style_margin_top(child, LV_PART_MAIN);
@@ -1617,14 +1617,14 @@ static lv_result_t invalidate_area_core(const lv_obj_t * obj, lv_area_t * area_t
     if(!lv_obj_area_is_visible(obj, area_tmp)) return LV_RESULT_INVALID;
 #if LV_DRAW_TRANSFORM_USE_MATRIX
     /**
-     * When using the global matrix, the vertex coordinates of clip_area lose precision after transformation,
-     * which can be solved by expanding the redrawing area.
+     * При использовании координат вершины глобальной матрицыclip_areaдостигается точность после преобразования.
+     * которую можно решить расширением области перерисовки.
      */
     lv_area_increase(area_tmp, 5, 5);
 #else
     if(obj->spec_attr && obj->spec_attr->layer_type == LV_LAYER_TYPE_TRANSFORM) {
-        /*Make the area slightly larger to avoid rounding errors.
-         *5 is an empirical value*/
+        /*Увеличьте область немного, чтобы избежать ошибок округления.
+         *5 — эмпирическое значение*/
         lv_area_increase(area_tmp, 5, 5);
     }
 #endif

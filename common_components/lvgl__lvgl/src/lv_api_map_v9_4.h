@@ -35,7 +35,7 @@ extern "C" {
 #define lv_wayland_display_close_f_t    lv_wayland_display_close_cb_t
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_API_MAP_V9_4_H */

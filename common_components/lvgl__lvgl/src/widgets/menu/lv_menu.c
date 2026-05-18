@@ -152,7 +152,7 @@ lv_obj_t * lv_menu_page_create(lv_obj_t * menu, char const * const title)
     lv_obj_class_init_obj(obj);
 
     lv_menu_page_t * page = (lv_menu_page_t *)obj;
-    /* Initialise the object */
+    /* Инициализировать объект */
     page->title        = NULL;
     page->static_title = false;
     lv_menu_set_page_title(obj, title);
@@ -203,25 +203,25 @@ void lv_menu_refr(lv_obj_t * obj)
     lv_menu_t * menu = (lv_menu_t *)obj;
     lv_ll_t * history_ll = &(menu->history_ll);
 
-    /* The current menu */
+    /* Текущее меню */
     lv_menu_history_t * act_hist = lv_ll_get_head(history_ll);
 
     lv_obj_t * page = NULL;
 
     if(act_hist != NULL) {
         page = act_hist->page;
-        /* Delete the current item from the history */
+        /* Удалить текущий элемент из истории */
         lv_ll_remove(history_ll, act_hist);
         lv_free(act_hist);
         menu->cur_depth--;
     }
 
-    /* Set it */
+    /* Установите это */
     lv_menu_set_page(obj, page);
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_menu_set_page(lv_obj_t * obj, lv_obj_t * page)
@@ -230,30 +230,30 @@ void lv_menu_set_page(lv_obj_t * obj, lv_obj_t * page)
 
     lv_menu_t * menu = (lv_menu_t *)obj;
 
-    /* Hide previous page */
+    /* Скрыть предыдущую страницу */
     if(menu->main_page != NULL) {
         lv_obj_set_parent(menu->main_page, menu->storage);
     }
 
     if(page != NULL) {
-        /* Add a new node */
+        /* Добавить новый узел */
         lv_ll_t * history_ll = &(menu->history_ll);
         lv_menu_history_t * new_node = lv_ll_ins_head(history_ll);
         LV_ASSERT_MALLOC(new_node);
         new_node->page = page;
         menu->cur_depth++;
 
-        /* Place page in main */
+        /* Разместить страницу на главной */
         lv_obj_set_parent(page, menu->main);
     }
     else {
-        /* Empty page, clear history */
+        /* Пустая страница, очистка истории */
         lv_menu_clear_history(obj);
     }
 
     menu->main_page = page;
 
-    /* If there is a selected tab, update checked state */
+    /* Если есть выбранная вкладка, обновите проверенное состояние. */
     if(menu->selected_tab != NULL) {
         if(menu->sidebar_page != NULL) {
             lv_obj_add_state(menu->selected_tab, LV_STATE_CHECKED);
@@ -263,12 +263,12 @@ void lv_menu_set_page(lv_obj_t * obj, lv_obj_t * page)
         }
     }
 
-    /* Back btn management */
+    /* Управление задней кнопкой */
     if(menu->sidebar_page != NULL) {
-        /* With sidebar enabled */
+        /* С включенной боковой панелью */
         if(menu->sidebar_generated) {
             if(menu->mode_root_back_btn == LV_MENU_ROOT_BACK_BUTTON_ENABLED) {
-                /* Root back btn is always shown if enabled*/
+                /* Кнопка Root Back всегда отображается, если она включена.*/
                 lv_obj_remove_flag(menu->sidebar_header_back_btn, LV_OBJ_FLAG_HIDDEN);
                 lv_obj_add_flag(menu->sidebar_header_back_btn, LV_OBJ_FLAG_CLICKABLE);
             }
@@ -288,7 +288,7 @@ void lv_menu_set_page(lv_obj_t * obj, lv_obj_t * page)
         }
     }
     else {
-        /* With sidebar disabled */
+        /* С отключенной боковой панелью */
         if(menu->cur_depth >= 2 || menu->mode_root_back_btn == LV_MENU_ROOT_BACK_BUTTON_ENABLED) {
             lv_obj_remove_flag(menu->main_header_back_btn, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(menu->main_header_back_btn, LV_OBJ_FLAG_CLICKABLE);
@@ -310,11 +310,11 @@ void lv_menu_set_sidebar_page(lv_obj_t * obj, lv_obj_t * page)
 
     lv_menu_t * menu = (lv_menu_t *)obj;
 
-    /* Sidebar management*/
+    /* Управление боковой панелью*/
     if(page != NULL) {
-        /* Sidebar should be enabled */
+        /* Боковая панель должна быть включена */
         if(!menu->sidebar_generated) {
-            /* Create sidebar */
+            /* Создать боковую панель */
             lv_obj_t * sidebar_cont = lv_obj_class_create_obj(&lv_menu_sidebar_cont_class, obj);
             lv_obj_class_init_obj(sidebar_cont);
             lv_obj_move_to_index(sidebar_cont, 1);
@@ -354,7 +354,7 @@ void lv_menu_set_sidebar_page(lv_obj_t * obj, lv_obj_t * page)
         lv_menu_refr_sidebar_header_mode(obj);
     }
     else {
-        /* Sidebar should be disabled */
+        /* Боковую панель следует отключить */
         if(menu->sidebar_generated) {
             lv_obj_set_parent(menu->sidebar_page, menu->storage);
             lv_obj_delete(menu->sidebar);
@@ -400,16 +400,16 @@ void lv_menu_set_load_page_event(lv_obj_t * menu, lv_obj_t * obj, lv_obj_t * pag
     lv_obj_remove_flag(obj, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_add_flag(obj, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
 
-    /* Remove old event */
+    /* Удалить старое мероприятие */
     uint32_t i;
     uint32_t event_cnt = lv_obj_get_event_count(obj);
     for(i = 0; i < event_cnt; i++) {
         lv_event_dsc_t * event_dsc = lv_obj_get_event_dsc(obj, i);
         if(lv_event_dsc_get_cb(event_dsc) == lv_menu_load_page_event_cb) {
-            /* Free the old event data */
+            /* Освободите старые данные о событиях */
             lv_menu_load_page_event_data_t * old_event_data = lv_event_dsc_get_user_data(event_dsc);
             lv_obj_remove_event(obj, i);
-            /* Also remove the corresponding DELETE event callback */
+            /* Также удалите соответствующий обратный вызов события DELETE. */
             event_cnt = lv_obj_get_event_count(obj);
             for(uint32_t j = 0; j < event_cnt; j++) {
                 lv_event_dsc_t * del_dsc = lv_obj_get_event_dsc(obj, j);
@@ -439,7 +439,7 @@ void lv_menu_set_page_title(lv_obj_t * page_obj, char const * const title)
     LV_LOG_INFO("begin");
     lv_menu_page_t * page = (lv_menu_page_t *)page_obj;
 
-    /* Cleanup any previous set titles */
+    /* Очистка любых предыдущих наборов заголовков */
     if((!page->static_title) && page->title) {
         lv_free(page->title);
         page->title = NULL;
@@ -466,13 +466,13 @@ void lv_menu_set_page_title_static(lv_obj_t * page_obj, char const * const title
     LV_LOG_INFO("begin");
     lv_menu_page_t * page = (lv_menu_page_t *)page_obj;
 
-    /* Cleanup any previous set titles */
+    /* Очистка любых предыдущих наборов заголовков */
     if((!page->static_title) && page->title) {
         lv_free(page->title);
         page->title = NULL;
     }
 
-    /* Set or clear the static title text */
+    /* Установите или очистите статический текст заголовка */
     if(title) {
         page->title        = (char *) title;
         page->static_title = true;
@@ -484,7 +484,7 @@ void lv_menu_set_page_title_static(lv_obj_t * page_obj, char const * const title
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 lv_obj_t * lv_menu_get_cur_main_page(lv_obj_t * obj)
 {
@@ -624,7 +624,7 @@ static void lv_menu_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     lv_obj_add_flag(main_header, LV_OBJ_FLAG_EVENT_BUBBLE);
     menu->main_header = main_header;
 
-    /* Create the default simple back btn and title */
+    /* Создайте простую заднюю кнопку и заголовок по умолчанию. */
     lv_obj_t * main_header_back_btn = lv_button_create(menu->main_header);
     lv_obj_add_event_cb(main_header_back_btn, lv_menu_back_event_cb, LV_EVENT_CLICKED, menu);
     lv_obj_add_flag(main_header_back_btn, LV_OBJ_FLAG_EVENT_BUBBLE);
@@ -709,7 +709,7 @@ static void lv_menu_refr_sidebar_header_mode(lv_obj_t * obj)
 
     switch(menu->mode_header) {
         case LV_MENU_HEADER_TOP_FIXED:
-            /* Content should fill the remaining space */
+            /* Содержимое должно заполнять оставшееся пространство. */
             lv_obj_move_to_index(menu->sidebar_header, 0);
             lv_obj_set_flex_grow(menu->sidebar_page, 1);
             break;
@@ -744,7 +744,7 @@ static void lv_menu_refr_main_header_mode(lv_obj_t * obj)
 
     switch(menu->mode_header) {
         case LV_MENU_HEADER_TOP_FIXED:
-            /* Content should fill the remaining space */
+            /* Содержимое должно заполнять оставшееся пространство. */
             lv_obj_move_to_index(menu->main_header, 0);
             lv_obj_set_flex_grow(menu->main_page, 1);
             break;
@@ -778,7 +778,7 @@ static void lv_menu_load_page_event_cb(lv_event_t * e)
     lv_obj_t * page = event_data->page;
 
     if(menu->sidebar_page != NULL) {
-        /* Check if clicked obj is in the sidebar */
+        /* Проверьте, находится ли выбранный объект на боковой панели */
         bool sidebar = false;
         lv_obj_t * parent = obj;
 
@@ -792,7 +792,7 @@ static void lv_menu_load_page_event_cb(lv_event_t * e)
         }
 
         if(sidebar) {
-            /* Clear checked state of previous obj */
+            /* Очистить проверенное состояние предыдущего объекта */
             if(menu->selected_tab != obj && menu->selected_tab != NULL) {
                 lv_obj_remove_state(menu->selected_tab, LV_STATE_CHECKED);
             }
@@ -806,7 +806,7 @@ static void lv_menu_load_page_event_cb(lv_event_t * e)
     lv_menu_set_page((lv_obj_t *)menu, page);
 
     if(lv_group_get_default() != NULL && menu->sidebar_page == NULL) {
-        /* Sidebar is not supported for now*/
+        /* Боковая панель пока не поддерживается*/
         lv_group_focus_next(lv_group_get_default());
     }
 }
@@ -827,26 +827,26 @@ static void lv_menu_back_event_cb(lv_event_t * e)
 
         if(!(obj == menu->main_header_back_btn || obj == menu->sidebar_header_back_btn)) return;
 
-        menu->prev_depth = menu->cur_depth; /* Save the previous value for user event handler */
+        menu->prev_depth = menu->cur_depth; /* Сохраните предыдущее значение для обработчика пользовательских событий. */
 
         if(lv_menu_back_button_is_root((lv_obj_t *)menu, obj)) return;
 
         lv_ll_t * history_ll = &(menu->history_ll);
 
-        /* The current menu */
+        /* Текущее меню */
         lv_menu_history_t * act_hist = lv_ll_get_head(history_ll);
 
-        /* The previous menu */
+        /* Предыдущее меню */
         lv_menu_history_t * prev_hist = lv_ll_get_next(history_ll, act_hist);
 
         if(prev_hist != NULL) {
-            /* Previous menu exists */
-            /* Delete the current item from the history */
+            /* Предыдущее меню существует */
+            /* Удалить текущий элемент из истории */
             lv_ll_remove(history_ll, act_hist);
             lv_free(act_hist);
             menu->cur_depth--;
-            /* Create the previous menu.
-            *  Remove it from the history because `lv_menu_set_page` will add it again */
+            /* Создайте предыдущее меню.
+            *  Удалите его из истории, потому что `lv_menu_set_page` добавит его снова. */
             lv_ll_remove(history_ll, prev_hist);
             menu->cur_depth--;
             lv_menu_set_page(&(menu->obj), prev_hist->page);

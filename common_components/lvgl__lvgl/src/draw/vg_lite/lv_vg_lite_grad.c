@@ -60,8 +60,8 @@ typedef struct _lv_vg_lite_grad_ctx_t {
     lv_ll_t item_pool;
 
     /**
-     * Temporary reuse of data to reduce the use of
-     * large memory allocations on the heap and stack during runtime
+     * Временное повторное использование данных для сокращения использования
+     * большие выделения памяти в куче и стеке во время выполнения
      */
     grad_item_t local_grad_item;
     vg_lite_color_ramp_t local_color_ramp[VLC_MAX_COLOR_RAMP_STOPS];
@@ -161,21 +161,21 @@ bool lv_vg_lite_draw_grad(
     LV_VG_LITE_ASSERT_MATRIX(grad_matrix);
     LV_VG_LITE_ASSERT_MATRIX(matrix);
 
-    /* check radial gradient is supported */
+    /* проверить, поддерживается ли радиальный градиент */
     if(grad->style == LV_VECTOR_GRADIENT_STYLE_RADIAL) {
         if(!vg_lite_query_feature(gcFEATURE_BIT_VG_RADIAL_GRADIENT)) {
             LV_LOG_WARN("radial gradient is not supported");
             return false;
         }
 
-        /* check if the radius is valid */
+        /* проверьте, действителен ли радиус */
         if(grad->cr <= 0) {
             LV_LOG_WARN("radius: %f is not valid", grad->cr);
             return false;
         }
     }
 
-    /* check spread mode is supported */
+    /* поддерживается режим распространения чеков */
     if(grad->spread == LV_VECTOR_GRADIENT_SPREAD_REPEAT || grad->spread == LV_VECTOR_GRADIENT_SPREAD_REFLECT) {
         if(!vg_lite_query_feature(gcFEATURE_BIT_VG_IM_REPEAT_REFLECT)) {
             LV_LOG_WARN("repeat/reflect spread(%d) is not supported", grad->spread);
@@ -206,7 +206,7 @@ bool lv_vg_lite_draw_grad(
                                            (vg_lite_matrix_t *)matrix,
                                            linear_grad,
                                            blend),
-                                       /* Dump parameters */
+                                       /* Параметры дампа */
                 {
                     lv_vg_lite_buffer_dump_info(buffer);
                     lv_vg_lite_path_dump_info(path);
@@ -234,7 +234,7 @@ bool lv_vg_lite_draw_grad(
                                            0,
                                            blend,
                                            VG_LITE_FILTER_LINEAR),
-                                       /* Dump parameters */
+                                       /* Параметры дампа */
                 {
                     lv_vg_lite_buffer_dump_info(buffer);
                     lv_vg_lite_path_dump_info(path);
@@ -264,7 +264,7 @@ bool lv_vg_lite_draw_grad(
                         0,
                         blend,
                         VG_LITE_FILTER_LINEAR),
-                    /* Dump parameters */
+                    /* Параметры дампа */
                 {
                     lv_vg_lite_buffer_dump_info(buffer);
                     lv_vg_lite_path_dump_info(path);
@@ -309,7 +309,7 @@ bool lv_vg_lite_draw_grad_helper(
     grad.stops_count = grad_dsc->stops_count;
     lv_memcpy(grad.stops, grad_dsc->stops, sizeof(lv_grad_stop_t) * grad_dsc->stops_count);
 
-    /*convert to spread mode*/
+    /*перевести в режим распространения*/
     switch(grad_dsc->extend) {
         case LV_GRAD_EXTEND_PAD:
             grad.spread = LV_VECTOR_GRADIENT_SPREAD_PAD;
@@ -390,7 +390,7 @@ static grad_item_t * grad_get(lv_vg_lite_grad_ctx_t * ctx, const lv_vector_gradi
 
     lv_cache_entry_t * cache_node_entry = lv_cache_acquire(ctx->cache, &search_key, ctx);
     if(cache_node_entry == NULL) {
-        /* check if the cache is full */
+        /* проверьте, заполнен ли кеш */
         size_t free_size = lv_cache_get_free_size(ctx->cache, NULL);
         if(free_size == 0) {
             LV_LOG_INFO("grad cache is full, release all pending cache entries");
@@ -405,7 +405,7 @@ static grad_item_t * grad_get(lv_vg_lite_grad_ctx_t * ctx, const lv_vector_gradi
         }
     }
 
-    /* Add the new entry to the pending list */
+    /* Добавить новую запись в список ожидания */
     lv_vg_lite_pending_add(ctx->pending, &cache_node_entry);
 
     grad_item_ref_t * grad_item_ref = lv_cache_entry_get_data(cache_node_entry);
@@ -420,13 +420,13 @@ static grad_item_t * grad_item_pool_alloc(lv_vg_lite_grad_ctx_t * ctx, grad_type
 
     grad_item_t * item = lv_ll_get_head(&ctx->item_pool);
 
-    /* Try to obtain a free node from the head */
+    /* Попробуйте получить свободный узел от головы */
     if(item && item->type == GRAD_TYPE_FREE) {
         lv_ll_move_before(&ctx->item_pool, item, NULL);
         LV_LOG_TRACE("reuse item: %p, type: %d", (void *)item, type);
     }
     else {
-        /* Allocate a new node if the pool is empty or all nodes are in use */
+        /* Выделите новый узел, если пул пуст или все узлы используются. */
         item = lv_ll_ins_tail(&ctx->item_pool);
         LV_ASSERT_MALLOC(item);
         if(!item) {
@@ -449,7 +449,7 @@ static void grad_item_pool_free(grad_item_t * item)
     LV_ASSERT_NULL(item);
     LV_ASSERT_NULL(item->ctx);
 
-    /* Move the free nodes to the head to ensure quick allocation */
+    /* Переместите свободные узлы в голову, чтобы обеспечить быстрое распределение. */
     item->type = GRAD_TYPE_FREE;
     grad_item_t * head = lv_ll_get_head(&item->ctx->item_pool);
     lv_ll_move_before(&item->ctx->item_pool, item, head);
@@ -482,7 +482,7 @@ static bool linear_grad_create(grad_item_t * item)
 {
     LV_PROFILER_DRAW_BEGIN;
 
-    /* Capture error code from LV_VG_LITE_CHECK_ERROR */
+    /* Захват кода ошибки из LV_VG_LITE_CHECK_ERROR */
     vg_lite_error_t err = VG_LITE_SUCCESS;
     LV_VG_LITE_CHECK_ERROR(
     err = vg_lite_init_grad(&item->vg.linear), {
@@ -497,7 +497,7 @@ static bool linear_grad_create(grad_item_t * item)
     vg_lite_uint32_t colors[VLC_MAX_GRADIENT_STOPS];
     vg_lite_uint32_t stops[VLC_MAX_GRADIENT_STOPS];
 
-    /* Gradient setup */
+    /* Настройка градиента */
     if(item->lv.stops_count > VLC_MAX_GRADIENT_STOPS) {
         LV_LOG_WARN("Gradient stops limited: %d, max: %d", item->lv.stops_count, VLC_MAX_GRADIENT_STOPS);
         item->lv.stops_count = VLC_MAX_GRADIENT_STOPS;
@@ -508,7 +508,7 @@ static bool linear_grad_create(grad_item_t * item)
         const lv_color_t * c = &item->lv.stops[i].color;
         lv_opa_t opa = item->lv.stops[i].opa;
 
-        /* lvgl color -> gradient color */
+        /* Цвет lvgl -> цвет градиента */
         lv_color_t grad_color = lv_color_make(c->blue, c->green, c->red);
         colors[i] = lv_vg_lite_color(grad_color, opa, true);
     }
@@ -556,7 +556,7 @@ static bool linear_ext_grad_create(grad_item_t * item, vg_lite_color_ramp_t * co
             grad_param,
             lv_spread_to_vg(item->lv.spread),
             1),
-        /* Dump parameters */
+        /* Параметры дампа */
     {
         lv_vg_lite_ext_linear_gradient_dump_info(&item->vg.linear_ext);
     });
@@ -601,7 +601,7 @@ static bool radial_grad_create(grad_item_t * item, vg_lite_color_ramp_t * color_
             grad_param,
             lv_spread_to_vg(item->lv.spread),
             1),
-        /* Dump parameters */
+        /* Параметры дампа */
     {
         lv_vg_lite_radial_gradient_dump_info(&item->vg.radial);
     });
@@ -674,12 +674,12 @@ static bool grad_create_cb(grad_item_ref_t * item_ref, void * user_data)
 
     grad_item_t * item = grad_item_pool_alloc(user_data, type);
     if(item == NULL) {
-        /* Should not happen */
+        /* Не должно произойти */
         LV_PROFILER_DRAW_END;
         return false;
     }
 
-    /* Copy key information */
+    /* Скопируйте ключевую информацию */
     item->lv = (*item_ref)->lv;
 
     bool is_success = false;
@@ -754,20 +754,20 @@ static lv_cache_compare_res_t grad_compare_cb(const grad_item_ref_t * lhs_ref, c
     const grad_item_t * lhs = *lhs_ref;
     const grad_item_t * rhs = *rhs_ref;
 
-    /* compare type first */
+    /* сначала сравните тип */
     if(lhs->type != rhs->type) {
         return lhs->type > rhs->type ? 1 : -1;
     }
 
-    /* compare spread mode */
+    /* сравнить режим распространения */
     if(lhs->lv.spread != rhs->lv.spread) {
         return lhs->lv.spread > rhs->lv.spread ? 1 : -1;
     }
 
-    /* compare gradient parameters */
+    /* сравнить параметры градиента */
     switch(lhs->type) {
         case GRAD_TYPE_LINEAR:
-            /* no extra compare needed */
+            /* дополнительное сравнение не требуется */
             break;
 
         case GRAD_TYPE_LINEAR_EXT:
@@ -807,7 +807,7 @@ static lv_cache_compare_res_t grad_compare_cb(const grad_item_ref_t * lhs_ref, c
             break;
     }
 
-    /* compare stops count and stops */
+    /* сравнить количество остановок и остановок */
     if(lhs->lv.stops_count != rhs->lv.stops_count) {
         return lhs->lv.stops_count > rhs->lv.stops_count ? 1 : -1;
     }

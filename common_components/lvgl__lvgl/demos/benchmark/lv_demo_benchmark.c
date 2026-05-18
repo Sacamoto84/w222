@@ -189,7 +189,7 @@ static void rotated_argb_image_cb(void)
     lv_obj_set_style_pad_bottom(scr, FALL_HEIGHT + PAD_BASIC, 0);
 
     LV_IMAGE_DECLARE(img_benchmark_lvgl_logo_argb);
-    int32_t hor_cnt = ((int32_t)lv_obj_get_content_width(scr)) / 240;   /*240 instead of 160 to have less rotated images*/
+    int32_t hor_cnt = ((int32_t)lv_obj_get_content_width(scr)) / 240;   /*240 вместо 160, чтобы изображения меньше поворачивались*/
     int32_t ver_cnt = ((int32_t)lv_obj_get_content_height(scr)) / 240;
 
     if(hor_cnt < 1) hor_cnt = 1;
@@ -433,8 +433,8 @@ static void containers_with_scrolling_cb(void)
     if(hor_cnt < 1) hor_cnt = 1;
     if(ver_cnt < 1) ver_cnt = 1;
 
-    ver_cnt *= 2; /*To make it scroll*/
-    if(ver_cnt < 20) ver_cnt = 20; /*The test with many widgets*/
+    ver_cnt *= 2; /*Чтобы сделать это прокруткой*/
+    if(ver_cnt < 20) ver_cnt = 20; /*Тест со множеством виджетов*/
 
     int32_t y;
     for(y = 0; y < ver_cnt; y++) {
@@ -558,7 +558,7 @@ void lv_demo_benchmark_summary_display(const lv_demo_benchmark_summary_t * summa
     lv_table_set_cell_value(table, 0, 1, "Avg. CPU");
     lv_table_set_cell_value(table, 0, 2, "Avg. FPS");
     lv_table_set_cell_value(table, 0, 3, "Avg. time (render + flush)");
-    /* csv log */
+    /* CSV-журнал */
     LV_LOG("Benchmark Summary (%d.%d.%d %s)\r\n",
            LVGL_VERSION_MAJOR,
            LVGL_VERSION_MINOR,
@@ -593,7 +593,7 @@ void lv_demo_benchmark_summary_display(const lv_demo_benchmark_summary_t * summa
             lv_table_set_cell_value_fmt(table, i + 2, 3, "%"LV_PRIu32" ms (%"LV_PRIu32" + %"LV_PRIu32")",
                                         total_time, render_time, flush_time);
 
-            /* csv log */
+            /* CSV-журнал */
             LV_LOG("%s, %"LV_PRIu32"%%, %"LV_PRIu32", %"LV_PRIu32", %"LV_PRIu32", %"LV_PRIu32"\r\n",
                    scenes[i].name,
                    scenes[i].cpu_avg_usage / cnt,
@@ -619,7 +619,7 @@ void lv_demo_benchmark_summary_display(const lv_demo_benchmark_summary_t * summa
         const uint32_t total_time = render_time + flush_time;
         lv_table_set_cell_value_fmt(table, 1, 3, "%"LV_PRIu32" ms (%"LV_PRIu32" + %"LV_PRIu32")",
                                     total_time, render_time, flush_time);
-        /* csv log */
+        /* CSV-журнал */
         LV_LOG("All scenes avg.,%"LV_PRIu32"%%, %"LV_PRIu32", %"LV_PRIu32", %"LV_PRIu32", %"LV_PRIu32"\r\n",
                summary->total_avg_cpu / summary->valid_scene_cnt,
                summary->total_avg_fps / summary->valid_scene_cnt,
@@ -667,8 +667,8 @@ static void next_scene_timer_cb(lv_timer_t * timer)
         lv_timer_delete(timer);
         summary_create(&summary);
         /*
-         * Don't display the summary if the user sets a callback function
-         * He can always call this function himself inside the callback
+         * Не отображать сводку, если пользователь устанавливает функцию обратного вызова
+         * Он всегда может сам вызвать эту функцию внутри обратного вызова
          */
         if(on_demo_end_cb) {
             on_demo_end_cb(&summary);
@@ -710,7 +710,7 @@ static void sysmon_perf_observer_cb(lv_observer_t * observer, lv_subject_t * sub
     LV_UNUSED(observer);
 #endif
 
-    /*Ignore the first call as it contains data from the previous scene*/
+    /*Игнорируйте первый вызов, поскольку он содержит данные из предыдущей сцены.*/
     if(scenes[scene_act].measurement_cnt != 0) {
         scenes[scene_act].cpu_avg_usage += info->calculated.cpu;
         scenes[scene_act].fps_avg += info->calculated.fps;
@@ -761,7 +761,7 @@ static void summary_create(lv_demo_benchmark_summary_t * summary)
     summary->scenes = scenes;
 
     for(size_t i = 0; scenes[i].create_cb; i++) {
-        /*the first measurement was ignored as it contains data from the previous scene*/
+        /*первое измерение было проигнорировано, поскольку оно содержит данные из предыдущей сцены*/
         if(scenes[i].measurement_cnt > 1) {
             const int32_t cnt = --scenes[i].measurement_cnt;
             summary->valid_scene_cnt++;
@@ -793,7 +793,7 @@ static void color_anim(lv_obj_t * obj)
     lv_anim_init(&a);
     lv_anim_set_exec_cb(&a, color_anim_cb);
     lv_anim_set_values(&a, 0, 100);
-    lv_anim_set_duration(&a, 100);      /*New value in each ms*/
+    lv_anim_set_duration(&a, 100);      /*Новое значение в каждой мс*/
     lv_anim_set_var(&a, obj);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
@@ -941,7 +941,7 @@ static int32_t rnd_next(int32_t min, int32_t max)
         0x71d698b2, 0x9a954baa, 0xe7423a82, 0xdd9898e1,
         0xf4980e5c, 0x4f3607b9, 0x9ce35d27, 0xb4b764e0,
         0xa1fa3ad3, 0x220ad165, 0x282216b4, 0x7e583888,
-        0xf8315b2b, 0x81c27062, 0x8eb89a85,     /*Intentionally incomplete line to make the length of array more arbitrary*/
+        0xf8315b2b, 0x81c27062, 0x8eb89a85,     /*Намеренно неполная строка, чтобы сделать длину массива более произвольной.*/
 
     };
 
@@ -969,7 +969,7 @@ static lv_color_t rnd_color(void)
 
 static uint32_t loop_optimizable(void)
 {
-    /*Easy to optimize as only local variables change*/
+    /*Легко оптимизировать, поскольку изменяются только локальные переменные.*/
     uint32_t i;
     uint32_t c = 0;
     for(i = 0; i < 100000; i++) {
@@ -996,8 +996,8 @@ static bool is_optimization_enabled(void)
     uint32_t t_unoptimized;
     uint32_t t_optimized;
     uint32_t max_cnt = 1;
-    /*Run the unoptimizable loop as many times as needed
-     *to make the execution time at least 50ms  */
+    /*Запустите неоптимизируемый цикл столько раз, сколько необходимо.
+     *сделать время выполнения не менее 50 мс  */
     do {
         max_cnt *= 2;
         t = lv_tick_get();
@@ -1007,15 +1007,15 @@ static bool is_optimization_enabled(void)
         t_unoptimized = lv_tick_elaps(t);
     } while(t_unoptimized < 50);
 
-    /*Run the optimizable loop the same amount of times*/
+    /*Запустите оптимизируемый цикл одинаковое количество раз.*/
     t = lv_tick_get();
     for(i = 0; i < max_cnt; i++) {
         loop_optimizable();
     }
     t_optimized = lv_tick_elaps(t);
 
-    /*If the optimized loop was at least 5 times faster
-     *the compiler optimization is probably enabled*/
+    /*Если бы оптимизированный цикл был хотя бы в 5 раз быстрее
+     *оптимизация компилятора, вероятно, включена*/
     return t_optimized * 5 < t_unoptimized;
 }
 

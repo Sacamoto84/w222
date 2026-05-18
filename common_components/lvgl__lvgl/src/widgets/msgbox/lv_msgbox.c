@@ -26,7 +26,7 @@
 /*********************
  *      DEFINES
  *********************/
-#define LV_MSGBOX_FLAG_AUTO_PARENT  LV_OBJ_FLAG_WIDGET_1        /*Mark that the parent was automatically created*/
+#define LV_MSGBOX_FLAG_AUTO_PARENT  LV_OBJ_FLAG_WIDGET_1        /*Отметьте, что родительский элемент был создан автоматически*/
 #define MY_CLASS (&lv_msgbox_class)
 
 /**********************
@@ -174,7 +174,7 @@ lv_obj_t * lv_msgbox_add_header_button(lv_obj_t * obj, const void * icon)
 {
     lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
     if(mbox->header == NULL) {
-        lv_msgbox_add_title(obj, ""); /*Just to push the buttons to the right*/
+        lv_msgbox_add_title(obj, ""); /*Просто нажать кнопки вправо*/
     }
 
     lv_obj_t * btn = lv_obj_class_create_obj(&lv_msgbox_header_button_class, mbox->header);

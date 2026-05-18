@@ -8,7 +8,7 @@ static void event_cb(lv_event_t * e)
     bool prev = id == 0;
     bool next = id == 6;
     if(prev || next) {
-        /*Find the checked button*/
+        /*Найдите отмеченную кнопку*/
         uint32_t i;
         for(i = 1; i < 7; i++) {
             if(lv_buttonmatrix_has_button_ctrl(obj, i, LV_BUTTONMATRIX_CTRL_CHECKED)) break;
@@ -22,7 +22,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Make a button group (pagination)
+ * Создать группу кнопок (нумерация страниц)
  */
 void lv_example_buttonmatrix_3(void)
 {
@@ -52,7 +52,7 @@ void lv_example_buttonmatrix_3(void)
     lv_obj_add_event_cb(btnm, event_cb, LV_EVENT_VALUE_CHANGED, NULL);
     lv_obj_set_size(btnm, 225, 35);
 
-    /*Allow selecting on one number at time*/
+    /*Разрешить выбор по одному номеру за раз*/
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_buttonmatrix_clear_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_buttonmatrix_clear_button_ctrl(btnm, 6, LV_BUTTONMATRIX_CTRL_CHECKABLE);

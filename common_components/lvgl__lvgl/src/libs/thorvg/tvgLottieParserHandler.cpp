@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -26,15 +26,15 @@
 /*
  * Copyright (c) 2020 Samsung Electronics Co., Ltd. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -49,14 +49,14 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static const int PARSE_FLAGS = kParseDefaultFlags | kParseInsituFlag;
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 
@@ -77,7 +77,7 @@ bool LookaheadParserHandler::nextArrayValue()
         parseNext();
         return false;
     }
-    //SPECIAL CASE: same as nextObjectKey()
+    //SPECIAL CASE: то же, что nextObjectKey()
     if (state == kExitingObject) return false;
     if (state == kError || state == kHasKey) {
         Error();
@@ -206,10 +206,10 @@ const char* LookaheadParserHandler::nextObjectKey()
         return result;
     }
 
-    /* SPECIAL CASE: The parser works with a predefined rule that it will be only
-       while (nextObjectKey()) for each object but in case of our nested group
-       object we can call multiple time nextObjectKey() while exiting the object
-       so ignore those and don't put parser in the error state. */
+    /* SPECIAL CASE : Парсер работает по предопределенному правилу, согласно которому он будет
+       while ( nextObjectKey() ) для каждого объекта, но в случае нашей вложенной группы
+       объект, который мы можем вызвать несколько раз nextObjectKey() при выходе из объекта
+       поэтому игнорируйте их и не переводите парсер в состояние ошибки. */
     if (state == kExitingArray || state == kEnteringObject) return nullptr;
 
     if (state != kExitingObject) {
@@ -224,7 +224,7 @@ const char* LookaheadParserHandler::nextObjectKey()
 
 void LookaheadParserHandler::skip(const char* key)
 {
-    //if (key) TVGLOG("LOTTIE", "Skipped parsing value = %s", key);
+    //if (ключ) TVGLOG (" LOTTIE ", "Пропущенное значение синтаксического анализа = %s", ключ);
 
     if (peekType() == kArrayType) {
         enterArray();

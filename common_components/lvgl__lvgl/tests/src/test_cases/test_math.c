@@ -4,7 +4,7 @@
 
 #include "unity/unity.h"
 
-#define ERROR_THRESHOLD         5 /*5 in 1024, 0.5% max error allowed*/
+#define ERROR_THRESHOLD         5 /*5 из 1024, допускается максимальная ошибка 0,5 %.*/
 #define NEWTON_ITERATIONS       8
 
 static float do_cubic_bezier_f(float t, float a, float b, float c)
@@ -14,7 +14,7 @@ static float do_cubic_bezier_f(float t, float a, float b, float c)
 }
 
 /**
- * Calculate the y value of cubic-bezier(x1, y1, x2, y2) function as specified x.
+ * Вычислите значение y функции кубического Безье (x1, y1, x2, y2), как указано x.
  * @param x time in range of [0..1]
  * @param x1 x of control point 1 in range of [0..1]
  * @param y1 y of control point 1 in range of [0..1]
@@ -25,9 +25,9 @@ static float do_cubic_bezier_f(float t, float a, float b, float c)
 static float lv_cubic_bezier_f(float x, float x1, float y1, float x2, float y2)
 {
     float ax, bx, cx, ay, by, cy;
-    float tl, tr, t;  /*t in cubic-bezier function, used for bisection */
-    float xs;  /*x sampled on curve */
-    float d; /*slope value at specified t*/
+    float tl, tr, t;  /*t в функции кубического Безье, используемой для деления пополам */
+    float xs;  /*x выбрано на кривой */
+    float d; /*значение наклона при указанном t*/
 
     if(x == 0 || x == 1) return x;
 
@@ -39,8 +39,8 @@ static float lv_cubic_bezier_f(float x, float x1, float y1, float x2, float y2)
     by = 3.f * (y2 - y1) - cy;
     ay = 1.f - cy - by;
 
-    /*Try Newton's method firstly */
-    t = x; /*Make a guess*/
+    /*Сначала попробуйте метод Ньютона */
+    t = x; /*Сделайте предположение*/
     for(int i = 0; i < NEWTON_ITERATIONS; i++) {
         xs = do_cubic_bezier_f(t, ax, bx, cx);
         xs -= x;
@@ -51,7 +51,7 @@ static float lv_cubic_bezier_f(float x, float x1, float y1, float x2, float y2)
         t -= xs / d;
     }
 
-    /*Fallback to bisection method for reliability*/
+    /*Возврат к методу деления пополам для надежности*/
     tl = 0.f, tr = 1.f, t = x;
 
     if(t < tl) {
@@ -109,17 +109,17 @@ static uint32_t lv_bezier3_legacy(uint32_t t, uint32_t u0, uint32_t u1, uint32_t
     return v1 + v2 + v3 + v4;
 }
 
-/* Test lv_trigo_sin function */
+/* Проверка функции lv_trigo_sin */
 void test_math_trigo_sin_basic(void)
 {
-    /* Test boundary values */
+    /* Граничные значения теста */
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_sin(0));
     TEST_ASSERT_EQUAL_INT32(32768, lv_trigo_sin(90));
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_sin(180));
     TEST_ASSERT_EQUAL_INT32(-32768, lv_trigo_sin(270));
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_sin(360));
 
-    /* Test all quadrants */
+    /* Проверьте все квадранты */
     TEST_ASSERT_EQUAL_INT32(16384, lv_trigo_sin(30));    /* Q1 */
     TEST_ASSERT_EQUAL_INT32(28378, lv_trigo_sin(120));   /* Q2 */
     TEST_ASSERT_EQUAL_INT32(-16384, lv_trigo_sin(210));   /* Q3 */
@@ -128,7 +128,7 @@ void test_math_trigo_sin_basic(void)
 
 void test_math_trigo_sin_negative_angles(void)
 {
-    /* Test negative angles */
+    /* Тестирование отрицательных углов */
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_sin(-360));
     TEST_ASSERT_EQUAL_INT32(-32768, lv_trigo_sin(-90));
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_sin(-180));
@@ -137,16 +137,16 @@ void test_math_trigo_sin_negative_angles(void)
 
 void test_math_trigo_sin_large_angles(void)
 {
-    /* Test large angles */
+    /* Тестируйте большие углы */
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_sin(720));
     TEST_ASSERT_EQUAL_INT32(32768, lv_trigo_sin(450)); /* 450 = 360 + 90 */
     TEST_ASSERT_EQUAL_INT32(-32768, lv_trigo_sin(630)); /* 630 = 360 + 270 */
 }
 
-/* Test lv_trigo_cos function */
+/* Проверка функции lv_trigo_cos */
 void test_math_trigo_cos_basic(void)
 {
-    /* Test boundary values */
+    /* Граничные значения теста */
     TEST_ASSERT_EQUAL_INT32(32768, lv_trigo_cos(0));
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_cos(90));
     TEST_ASSERT_EQUAL_INT32(-32768, lv_trigo_cos(180));
@@ -156,7 +156,7 @@ void test_math_trigo_cos_basic(void)
 
 void test_math_trigo_cos_negative_angles(void)
 {
-    /* Test negative angles */
+    /* Тестирование отрицательных углов */
     TEST_ASSERT_EQUAL_INT32(32768, lv_trigo_cos(-360));
     TEST_ASSERT_EQUAL_INT32(0, lv_trigo_cos(-90));
     TEST_ASSERT_EQUAL_INT32(-32768, lv_trigo_cos(-180));
@@ -173,19 +173,19 @@ static void assert_sqrt32_floor(uint32_t x)
     TEST_ASSERT_LESS_THAN_UINT32(rr_next, x);
 }
 
-/* Test lv_cubic_bezier function */
+/* Проверка функции lv_cubic_bezier */
 void test_math_cubic_bezier_result_should_be_precise(void)
 {
-    /*ease-in-out function*/
+    /*функция легкого извлечения*/
     test_cubic_bezier_ease_functions(.42f, 0, .58f, 1);
 
-    /*ease-out function*/
+    /*функция облегчения*/
     test_cubic_bezier_ease_functions(0, 0, .58f, 1);
 
-    /*ease-in function*/
+    /*функция облегчения входа*/
     test_cubic_bezier_ease_functions(.42f, 0, 1, 1);
 
-    /*ease function*/
+    /*функция облегчения*/
     test_cubic_bezier_ease_functions(.25f, .1f, .25f, 1);
 
     int32_t u0 = 0, u1 = 50, u2 = 952, u3 = LV_BEZIER_VAL_MAX;
@@ -196,7 +196,7 @@ void test_math_cubic_bezier_result_should_be_precise(void)
         TEST_ASSERT_LESS_OR_EQUAL_INT32(5, LV_ABS(legacy - cubic_bezier));
     }
 
-    /* Compare with legacy implementation */
+    /* Сравните с устаревшей реализацией */
     u0 = 0, u1 = 341, u2 = 683, u3 = 1024;
 
     for(int32_t i = 0; i <= 1024; i++) {
@@ -208,7 +208,7 @@ void test_math_cubic_bezier_result_should_be_precise(void)
 
 void test_math_cubic_bezier_edge_cases(void)
 {
-    /* Test x = 0 and x = LV_BEZIER_VAL_MAX - should return x directly */
+    /* Тест x = 0 и x = LV_BEZIER_VAL_MAX - должен возвращать x напрямую */
     int32_t result1 = lv_cubic_bezier(0, 341, 512, 683, 1024);
     int32_t result2 = lv_cubic_bezier(1024, 341, 512, 683, 1024);
     TEST_ASSERT_EQUAL_INT32(0, result1);
@@ -217,17 +217,17 @@ void test_math_cubic_bezier_edge_cases(void)
 
 void test_math_cubic_bezier_boundary_values(void)
 {
-    /* Test with boundary control points - simplified tests */
+    /* Тест с граничными контрольными точками – упрощенные тесты */
     int32_t result1 = lv_cubic_bezier(512, 0, 0, 0, 0);
     int32_t result2 = lv_cubic_bezier(512, 1024, 1024, 1024, 1024);
-    /* These should produce results in valid range */
-    TEST_ASSERT_INT32_WITHIN(512, 512, result1);  /* result1 should be between 0 and 1024 */
-    TEST_ASSERT_INT32_WITHIN(512, 512, result2);  /* result2 should be between 0 and 1024 */
+    /* Они должны давать результаты в допустимом диапазоне. */
+    TEST_ASSERT_INT32_WITHIN(512, 512, result1);  /* результат1 должен быть между 0 и 1024 */
+    TEST_ASSERT_INT32_WITHIN(512, 512, result2);  /* результат2 должен быть между 0 и 1024 */
 }
 
 void test_math_cubic_bezier_clamps_out_of_range(void)
 {
-    /* Force the bisection fallback to clamp t to the valid range */
+    /* Принудительно использовать резервный вариант деления пополам, чтобы зафиксировать t в допустимом диапазоне. */
     int32_t below = lv_cubic_bezier(-50, 0, 0, 0, 0);
     int32_t above = lv_cubic_bezier(LV_BEZIER_VAL_MAX + 50, LV_BEZIER_VAL_MAX, LV_BEZIER_VAL_MAX,
                                     LV_BEZIER_VAL_MAX, LV_BEZIER_VAL_MAX);
@@ -236,40 +236,40 @@ void test_math_cubic_bezier_clamps_out_of_range(void)
     TEST_ASSERT_EQUAL_INT32(LV_BEZIER_VAL_MAX, above);
 }
 
-/* Test lv_bezier3 function */
+/* Проверка функции lv_bezier3 */
 void test_math_bezier3_basic(void)
 {
-    /* Test basic cases */
+    /* Тестирование базовых случаев */
     TEST_ASSERT_EQUAL_INT32(0, lv_bezier3(0, 0, 50, 952, 1024));
     TEST_ASSERT_EQUAL_INT32(1024, lv_bezier3(1024, 0, 50, 952, 1024));
-    /* Test that it returns a valid value in range */
+    /* Проверьте, что он возвращает допустимое значение в диапазоне. */
     int32_t result = lv_bezier3(512, 0, 50, 50, 1024);
-    TEST_ASSERT_INT32_WITHIN(512, 512, result);  /* Should be in valid range between 0 and 1024 */
+    TEST_ASSERT_INT32_WITHIN(512, 512, result);  /* Должно быть в допустимом диапазоне от 0 до 1024. */
 }
 
-/* Test lv_sqrt function */
+/* Проверка функции lv_sqrt */
 void test_math_sqrt_basic(void)
 {
     lv_sqrt_res_t result;
 
-    /* Test 0 */
+    /* Тест 0 */
     lv_sqrt(0, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(0, result.i);
     TEST_ASSERT_EQUAL_UINT16(0, result.f);
 
-    /* Test 1 */
+    /* Тест 1 */
     lv_sqrt(1, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(1, result.i);
 
-    /* Test 16 */
+    /* Тест 16 */
     lv_sqrt(16, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(4, result.i);
 
-    /* Test 256 */
+    /* Тест 256 */
     lv_sqrt(256, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(16, result.i);
 
-    /* Test 65536 */
+    /* Тест 65536 */
     lv_sqrt(65536, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(256, result.i);
 }
@@ -278,12 +278,12 @@ void test_math_sqrt_fractional(void)
 {
     lv_sqrt_res_t result;
 
-    /* Test 2 - should give 1.414... */
+    /* Тест 2 - должно дать 1,414... */
     lv_sqrt(2, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(1, result.i);
-    TEST_ASSERT_EQUAL_UINT16(96, result.f); /* Should have fractional part */
+    TEST_ASSERT_EQUAL_UINT16(96, result.f); /* Должна иметь дробную часть */
 
-    /* Test 100 - should give 10 */
+    /* Тест 100 - должен дать 10 */
     lv_sqrt(100, &result, 0x8000);
     TEST_ASSERT_EQUAL_UINT16(10, result.i);
     TEST_ASSERT_EQUAL_UINT16(0, result.f);
@@ -293,24 +293,24 @@ void test_math_sqrt_with_different_masks(void)
 {
     lv_sqrt_res_t result;
 
-    /* Test with different mask values - results may vary slightly */
-    lv_sqrt(256, &result, 0x80);   /* Root < 16 */
+    /* Тестируйте с разными значениями маски — результаты могут незначительно отличаться */
+    lv_sqrt(256, &result, 0x80);   /* Корень < 16 */
     TEST_ASSERT_EQUAL_UINT16(15, result.i);
     TEST_ASSERT_EQUAL_UINT16(240, result.f);
 
-    lv_sqrt(65536, &result, 0x800); /* Root < 256 */
-    TEST_ASSERT_EQUAL_UINT16(255, result.i);  /* result.i should be 255 or 256 */
+    lv_sqrt(65536, &result, 0x800); /* Корень < 256 */
+    TEST_ASSERT_EQUAL_UINT16(255, result.i);  /* результат. мне должно быть 255 или 256 */
     TEST_ASSERT_EQUAL_UINT16(240, result.f);
 
-    lv_sqrt(1048576, &result, 0x8000); /* Root >= 256 */
+    lv_sqrt(1048576, &result, 0x8000); /* Корень >= 256 */
     TEST_ASSERT_EQUAL_UINT16(1024, result.i);
     TEST_ASSERT_EQUAL_UINT16(0, result.f);
 }
 
-/* Test lv_sqrt32 function */
+/* Проверка функции lv_sqrt32 */
 void test_math_sqrt32_basic(void)
 {
-    /* Test basic values */
+    /* Проверьте базовые значения */
     TEST_ASSERT_EQUAL_INT32(0, lv_sqrt32(0));
     TEST_ASSERT_EQUAL_INT32(1, lv_sqrt32(1));
     TEST_ASSERT_EQUAL_INT32(2, lv_sqrt32(4));
@@ -323,10 +323,10 @@ void test_math_sqrt32_basic(void)
 
 void test_math_sqrt32_range(void)
 {
-    /* Test various ranges */
+    /* Тестируйте различные диапазоны */
     TEST_ASSERT_EQUAL_INT32(255, lv_sqrt32(65025));   /* 255^2 = 65025 */
     TEST_ASSERT_EQUAL_INT32(256, lv_sqrt32(65536));   /* 256^2 = 65536 */
-    /* Avoid testing near max to prevent overflow */
+    /* Избегайте тестирования вблизи максимума, чтобы предотвратить переполнение */
     TEST_ASSERT_EQUAL_INT32(1000, lv_sqrt32(1000000)); /* 1000^2 = 1,000,000 */
 }
 
@@ -334,34 +334,34 @@ void test_math_sqrt32_large_values(void)
 {
     uint32_t max_sq = 65535U * 65535U;
 
-    TEST_ASSERT_EQUAL_INT32(65535, lv_sqrt32(max_sq));          /* Covers saturated upper branch */
-    TEST_ASSERT_EQUAL_INT32(32768, lv_sqrt32(0x40000000));      /* Uses highest lookup bucket */
-    TEST_ASSERT_EQUAL_INT32(8192, lv_sqrt32(0x4000000));        /* Exercises mid-high lookup path */
-    TEST_ASSERT_EQUAL_INT32(256, lv_sqrt32(0x10000));           /* Uses mid-range path and nr1 step */
+    TEST_ASSERT_EQUAL_INT32(65535, lv_sqrt32(max_sq));          /* Прикрывает насыщенную верхнюю ветку */
+    TEST_ASSERT_EQUAL_INT32(32768, lv_sqrt32(0x40000000));      /* Использует самый высокий сегмент поиска */
+    TEST_ASSERT_EQUAL_INT32(8192, lv_sqrt32(0x4000000));        /* Упражнения для пути поиска среднего и высокого уровня. */
+    TEST_ASSERT_EQUAL_INT32(256, lv_sqrt32(0x10000));           /* Использует путь среднего радиуса действия и шаг №1. */
 }
 
 void test_math_sqrt32_midrange_buckets(void)
 {
-    /* Hit the 0x4000000> x >=0x1000000 branches */
-    assert_sqrt32_floor(0x5000000U);  /* takes x>=0x4000000 path */
-    assert_sqrt32_floor(0x2000000U);  /* takes x>=0x1000000 but <0x4000000 path */
-    assert_sqrt32_floor(0x20000000U); /* takes x>=0x10000000 but <0x40000000 path */
+    /* Нажмите на ветки 0x4000000 > x >= 0x1000000. */
+    assert_sqrt32_floor(0x5000000U);  /* принимает путь x>= 0x4000000 */
+    assert_sqrt32_floor(0x2000000U);  /* принимает x>= 0x1000000, но < путь 0x4000000 */
+    assert_sqrt32_floor(0x20000000U); /* принимает x>= 0x10000000, но < путь 0x40000000 */
 }
 
-/* Test lv_atan2 function */
+/* Проверка функции lv_atan2 */
 /* Note: lv_atan2(x, y) returns angle for vector (x, y) where x is horizontal, y is vertical */
 void test_math_atan2_quadrants(void)
 {
-    /* Test all four quadrants - lv_atan2(x, y) */
-    TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1, 0));      /* Positive X axis (x=1, y=0) */
-    TEST_ASSERT_EQUAL_INT32(0, lv_atan2(0, 1));       /* Positive Y axis (x=0, y=1) */
-    TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1, 0));    /* Negative X axis (x=-1, y=0) */
-    TEST_ASSERT_EQUAL_INT32(180, lv_atan2(0, -1));    /* Negative Y axis (x=0, y=-1) */
+    /* Проверьте все четыре квадранта — lv_atan2 (x, y) */
+    TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1, 0));      /* Положительная ось X (x=1, y=0) */
+    TEST_ASSERT_EQUAL_INT32(0, lv_atan2(0, 1));       /* Положительная ось Y (x=0, y=1) */
+    TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1, 0));    /* Отрицательная ось X (x=-1, y=0) */
+    TEST_ASSERT_EQUAL_INT32(180, lv_atan2(0, -1));    /* Отрицательная ось Y (x=0, y=-1) */
 }
 
 void test_math_atan2_diagonal(void)
 {
-    /* Test diagonal angles - lv_atan2(x, y) */
+    /* Проверка диагональных углов - lv_atan2 (x, y) */
     TEST_ASSERT_EQUAL_INT32(45, lv_atan2(100, 100));    /* Q1: (100, 100) */
     TEST_ASSERT_EQUAL_INT32(135, lv_atan2(100, -100));  /* Q2: (100, -100) */
     TEST_ASSERT_EQUAL_INT32(225, lv_atan2(-100, -100)); /* Q3: (-100, -100) */
@@ -370,26 +370,26 @@ void test_math_atan2_diagonal(void)
 
 void test_math_atan2_edge_cases(void)
 {
-    /* Test edge cases - lv_atan2(x, y) */
-    TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1000, 0));   /* (1000, 0) = positive X axis */
-    TEST_ASSERT_EQUAL_INT32(0, lv_atan2(0, 1000));    /* (0, 1000) = positive Y axis */
-    TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1000, 0)); /* (-1000, 0) = negative X axis */
-    TEST_ASSERT_EQUAL_INT32(180, lv_atan2(0, -1000)); /* (0, -1000) = negative Y axis */
+    /* Краевые случаи теста — lv_atan2 (x, y) */
+    TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1000, 0));   /* (1000, 0) = положительная ось X */
+    TEST_ASSERT_EQUAL_INT32(0, lv_atan2(0, 1000));    /* (0, 1000) = положительная ось Y */
+    TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1000, 0)); /* (-1000, 0) = отрицательная ось X */
+    TEST_ASSERT_EQUAL_INT32(180, lv_atan2(0, -1000)); /* (0, -1000) = отрицательная ось Y */
 }
 
 void test_math_atan2_large_values(void)
 {
-    /* Test with large values - lv_atan2(x, y) */
-    TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1456, 1));    /* (1456, 1) ≈ positive X axis */
-    TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1456, 1));  /* (-1456, 1) ≈ negative X axis */
-    TEST_ASSERT_EQUAL_INT32(0, lv_atan2(1, 1456));     /* (1, 1456) ≈ positive Y axis */
-    TEST_ASSERT_EQUAL_INT32(180, lv_atan2(1, -1456));  /* (1, -1456) ≈ negative Y axis */
+    /* Тест с большими значениями — lv_atan2 (x, y) */
+    TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1456, 1));    /* (1456, 1) ≈ положительная ось X */
+    TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1456, 1));  /* (-1456, 1) ≈ отрицательная ось X */
+    TEST_ASSERT_EQUAL_INT32(0, lv_atan2(1, 1456));     /* (1, 1456) ≈ положительная ось Y */
+    TEST_ASSERT_EQUAL_INT32(180, lv_atan2(1, -1456));  /* (1, -1456) ≈ отрицательная ось Y */
 }
 
-/* Test lv_pow function */
+/* Проверка функции lv_pow */
 void test_math_pow_basic(void)
 {
-    /* Test basic powers */
+    /* Проверьте базовые способности */
     TEST_ASSERT_EQUAL_INT32(1, lv_pow(5, 0));
     TEST_ASSERT_EQUAL_INT32(5, lv_pow(5, 1));
     TEST_ASSERT_EQUAL_INT32(25, lv_pow(5, 2));
@@ -399,65 +399,65 @@ void test_math_pow_basic(void)
 
 void test_math_pow_negative_exponent(void)
 {
-    /* Test negative exponents - in integer math, result < 1 so returns 0 */
+    /* Проверка отрицательных показателей степени — в целочисленной математике результат < 1, поэтому возвращается 0 */
     TEST_ASSERT_EQUAL_INT32(0, lv_pow(5, -1));   /* 5^(-1) = 1/5 = 0.2 -> 0 */
     TEST_ASSERT_EQUAL_INT32(0, lv_pow(10, -5));  /* 10^(-5) = 1/100000 = 0.00001 -> 0 */
     TEST_ASSERT_EQUAL_INT32(0, lv_pow(2, -10));  /* 2^(-10) = 1/1024 = 0.00098 -> 0 */
 
-    /* Special cases */
+    /* Особые случаи */
     TEST_ASSERT_EQUAL_INT32(1, lv_pow(1, -1));   /* 1^(-1) = 1 */
     TEST_ASSERT_EQUAL_INT32(1, lv_pow(1, -100)); /* 1^(-100) = 1 */
-    TEST_ASSERT_EQUAL_INT32(0, lv_pow(0, -1));   /* 0^(-1) is undefined, return 0 */
+    TEST_ASSERT_EQUAL_INT32(0, lv_pow(0, -1));   /* 0^(-1) не определено, верните 0 */
 }
 
 void test_math_pow_zero_base(void)
 {
-    /* Test zero base */
+    /* Тестирование нулевой базы */
     TEST_ASSERT_EQUAL_INT32(0, lv_pow(0, 1));
     TEST_ASSERT_EQUAL_INT32(1, lv_pow(0, 0));
 }
 
 void test_math_pow_large_values(void)
 {
-    /* Test moderately large values */
+    /* Тестируйте умеренно большие значения */
     TEST_ASSERT_EQUAL_INT32(1024, lv_pow(2, 10));
     TEST_ASSERT_EQUAL_INT32(1000, lv_pow(10, 3));
     TEST_ASSERT_EQUAL_INT32(256, lv_pow(4, 4));
 }
 
-/* Test lv_map function */
+/* Проверка функции lv_map */
 void test_math_map_basic(void)
 {
-    /* Test basic mapping */
-    TEST_ASSERT_EQUAL_INT32(50, lv_map(50, 0, 100, 0, 100));   /* Identity */
+    /* Тестирование базового картографирования */
+    TEST_ASSERT_EQUAL_INT32(50, lv_map(50, 0, 100, 0, 100));   /* идентичность */
     TEST_ASSERT_EQUAL_INT32(0, lv_map(0, 0, 100, 0, 100));
     TEST_ASSERT_EQUAL_INT32(100, lv_map(100, 0, 100, 0, 100));
 }
 
 void test_math_map_scaling(void)
 {
-    /* Test scaling */
-    TEST_ASSERT_EQUAL_INT32(25, lv_map(50, 0, 100, 0, 50));    /* Scale down */
-    TEST_ASSERT_EQUAL_INT32(100, lv_map(50, 0, 100, 0, 200));  /* Scale up */
-    TEST_ASSERT_EQUAL_INT32(75, lv_map(50, 0, 100, 50, 100));  /* Shift range */
+    /* Тестовое масштабирование */
+    TEST_ASSERT_EQUAL_INT32(25, lv_map(50, 0, 100, 0, 50));    /* Уменьшить масштаб */
+    TEST_ASSERT_EQUAL_INT32(100, lv_map(50, 0, 100, 0, 200));  /* Масштабировать */
+    TEST_ASSERT_EQUAL_INT32(75, lv_map(50, 0, 100, 50, 100));  /* Диапазон переключения */
 }
 
 void test_math_map_negative_ranges(void)
 {
-    /* Test negative ranges - simplified, just verify it works */
+    /* Проверка отрицательных диапазонов — упрощенно, просто убедитесь, что это работает */
     int32_t result1 = lv_map(-50, -100, 0, 0, 100);
     int32_t result2 = lv_map(0, -100, 0, 0, 100);
     int32_t result3 = lv_map(0, 0, 100, -100, 0);
 
-    /* Just verify results are reasonable */
-    TEST_ASSERT_INT32_WITHIN(50, 50, result1);  /* result1 should be between 0 and 100 */
-    TEST_ASSERT_INT32_WITHIN(50, 50, result2);  /* result2 should be between 0 and 100 */
-    TEST_ASSERT_INT32_WITHIN(50, -50, result3);  /* result3 should be between -100 and 0 */
+    /* Просто убедитесь, что результаты являются разумными */
+    TEST_ASSERT_INT32_WITHIN(50, 50, result1);  /* результат1 должен быть между 0 и 100 */
+    TEST_ASSERT_INT32_WITHIN(50, 50, result2);  /* результат2 должен быть между 0 и 100 */
+    TEST_ASSERT_INT32_WITHIN(50, -50, result3);  /* результат3 должен быть между -100 и 0 */
 }
 
 void test_math_map_reverse_range(void)
 {
-    /* Test reverse mapping */
+    /* Тестовое обратное сопоставление */
     TEST_ASSERT_EQUAL_INT32(100, lv_map(0, 0, 100, 100, 0));    /* (0-0)/(100-0) * (-100) + 100 = 100 */
     TEST_ASSERT_EQUAL_INT32(0, lv_map(100, 0, 100, 100, 0));    /* (100-0)/(100-0) * (-100) + 100 = 0 */
     TEST_ASSERT_EQUAL_INT32(50, lv_map(50, 0, 100, 100, 0));    /* (50-0)/(100-0) * (-100) + 100 = 50 */
@@ -465,58 +465,58 @@ void test_math_map_reverse_range(void)
 
 void test_math_map_out_of_bounds(void)
 {
-    /* Test out of bounds input */
-    TEST_ASSERT_EQUAL_INT32(100, lv_map(150, 0, 100, 0, 100)); /* Above max_in */
-    TEST_ASSERT_EQUAL_INT32(0, lv_map(-50, 0, 100, 0, 100));   /* Below min_in */
+    /* Проверка ввода за пределами границ */
+    TEST_ASSERT_EQUAL_INT32(100, lv_map(150, 0, 100, 0, 100)); /* Выше max_in */
+    TEST_ASSERT_EQUAL_INT32(0, lv_map(-50, 0, 100, 0, 100));   /* Ниже min_in */
 }
 
-/* Test lv_rand and lv_rand_set_seed */
+/* Тест lv_rand и lv_rand_set_seed */
 void test_math_rand_set_seed(void)
 {
-    /* Test seed setting */
+    /* Проверка настройки семян */
     lv_rand_set_seed(12345);
     uint32_t r1 = lv_rand(0, 100);
 
     lv_rand_set_seed(12345);
     uint32_t r2 = lv_rand(0, 100);
 
-    TEST_ASSERT_EQUAL_UINT32(r1, r2); /* Same seed should give same sequence */
+    TEST_ASSERT_EQUAL_UINT32(r1, r2); /* То же семя должно давать ту же последовательность */
 }
 
 void test_math_rand_range(void)
 {
-    /* Test range constraints */
+    /* Ограничения испытательного диапазона */
     lv_rand_set_seed(1000);
 
     for(int i = 0; i < 100; i++) {
         uint32_t r = lv_rand(10, 20);
-        TEST_ASSERT_UINT32_WITHIN(5, 15, r);  /* r should be between 10 and 20 */
+        TEST_ASSERT_UINT32_WITHIN(5, 15, r);  /* r должно быть от 10 до 20 */
     }
 }
 
 void test_math_rand_distribution(void)
 {
-    /* Test that random values change */
+    /* Проверьте, что случайные значения меняются */
     lv_rand_set_seed(3000);
     uint32_t r1 = lv_rand(0, 1000);
     uint32_t r2 = lv_rand(0, 1000);
 
     TEST_ASSERT_NOT_EQUAL_UINT32(r1, r2);
 
-    /* They could be the same by chance, but highly unlikely */
-    /* Just verify they're within range */
+    /* Случайно они могут оказаться одинаковыми, но это маловероятно. */
+    /* Просто убедитесь, что они в пределах досягаемости */
     TEST_ASSERT_LESS_OR_EQUAL_UINT32(1000, r1);
     TEST_ASSERT_LESS_OR_EQUAL_UINT32(1000, r2);
 }
 
-/* Test lv_sqr (inline function) */
+/* Тест lv_sqr (встроенная функция) */
 void test_math_sqr(void)
 {
     struct {
         int32_t input;
         int32_t expected;
     } test_cases[] = {
-        /* Test basic cases */
+        /* Тестирование базовых случаев */
         {0, 0},
         {1, 1},
         {2, 4},
@@ -524,11 +524,11 @@ void test_math_sqr(void)
         {10, 100},
         {103, 10609},
 
-        /* Test negative input */
+        /* Тестовый отрицательный вход */
         {-5, 25},
         {-10, 100},
 
-        /* Test large values within valid range */
+        /* Проверка больших значений в допустимом диапазоне */
         {1000, 1000000},
         {500, 250000},
     };

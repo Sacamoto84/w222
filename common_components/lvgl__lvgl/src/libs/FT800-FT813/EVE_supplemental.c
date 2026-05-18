@@ -1,27 +1,27 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_DRAW_EVE
 /*
-@file    EVE_supplemental.h
+@file EVE_supplemental.h
 @brief   supplemental functions
 @version 5.0
-@date    2023-12-23
-@author  Rudolph Riedel
+@date 23 декабря 2023 г.
+@author Рудольф Ридель
 
 @section LICENSE
 
-MIT License
+Лицензия MIT
 
 Copyright (c) 2016-2023 Rudolph Riedel
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
+Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+Программное обеспечение без ограничений, включая, помимо прочего, права
+использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать,
+и/или продавать копии Программного обеспечения, а также разрешать лицам, которым Программное обеспечение
+предоставлено для этого при соблюдении следующих условий:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+копии или существенные части Программного обеспечения.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -30,7 +30,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-@section History
+История @section
 
 5.0
 - added EVE_polar_cartesian()
@@ -39,7 +39,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "EVE_suppplemental.h"
 
-/* define NULL if it not already is */
+/* определите NULL, если он еще не существует */
 #ifndef NULL
 #include <stdio.h>
 #endif

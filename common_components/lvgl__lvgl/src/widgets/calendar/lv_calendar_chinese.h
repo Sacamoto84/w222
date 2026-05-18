@@ -35,21 +35,21 @@ typedef struct {
  **********************/
 
 /**
- * Enable the chinese calendar.
+ * Включите китайский календарь.
  * @param obj   pointer to a calendar object.
  * @param en    true: enable chinese calendar; false: disable
  */
 void lv_calendar_set_chinese_mode(lv_obj_t * obj, bool en);
 
 /**
- * Get the name of the day
+ * Узнайте название дня
  * @param gregorian   to obtain the gregorian time for the name
  * @return            return the name of the day
  */
 const char * lv_calendar_get_day_name(lv_calendar_date_t * gregorian);
 
 /**
- * Get the chinese time of the gregorian time (reference: https://www.cnblogs.com/liyang31tg/p/4123171.html)
+ * Получите китайское время по григорианскому времени (ссылка: https://www.cnblogs.com/liyang31tg/p/4123171.html)
  * @param gregorian_time   need to convert to chinese time in gregorian time
  * @param chinese_time     the chinese time convert from gregorian time
  */
@@ -62,7 +62,7 @@ void lv_calendar_gregorian_to_chinese(lv_calendar_date_t * gregorian_time, lv_ca
 #endif /*LV_USE_CALENDAR_CHINESE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CALENDAR_CHINESE_H*/

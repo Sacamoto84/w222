@@ -49,7 +49,7 @@ void lv_draw_dave2d_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
     bool dashed = dsc->dash_gap && dsc->dash_width;
 
     //
-    // Generate render operations
+    // Генерация операций рендеринга
     //
     d2_framebuffer_from_layer(u->d2_handle, t->target_layer);
 
@@ -63,7 +63,7 @@ void lv_draw_dave2d_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
         mode = d2_lc_round;
     }
     else {
-        mode = d2_lc_butt; // lines end directly at endpoints
+        mode = d2_lc_butt; // линии заканчиваются непосредственно в конечных точках
     }
 
     d2_setlinecap(u->d2_handle, mode);

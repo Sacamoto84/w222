@@ -5,7 +5,7 @@
 
 /*  Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -71,7 +71,7 @@ bool lv_draw_eve_label_font_check(const lv_font_t * font)
 
     const lv_font_fmt_txt_dsc_t * font_dsc = font->dsc;
 
-    /* Only 4 bpp is supported for now. Support for 1 and 8 bpp can be added. (EVE_L1, EVE_L8) */
+    /* На данный момент поддерживается только 4 бит/с. Можно добавить поддержку 1 и 8 бит на пиксель. ( EVE_L1 , EVE_L8 ) */
     if(font_dsc->bpp != 4) {
         LV_LOG_WARN("lv_draw_eve can only render static fonts for now.");
         return false;
@@ -97,7 +97,7 @@ uint32_t lv_draw_eve_label_upload_glyph(bool burst_is_active, const lv_font_fmt_
     uintptr_t glyph_ramg_key = (uintptr_t) glyph_bitmap;
     bool font_is_loaded = lv_draw_eve_ramg_get_addr(&ramg_addr, glyph_ramg_key, glyph_ramg_size, 1);
 
-    /* If the font is not yet loaded in ramG, load it */
+    /* Если шрифт еще не загружен в ramG, загрузите его */
     if(!font_is_loaded && ramg_addr != LV_DRAW_EVE_RAMG_OUT_OF_RAMG) {
         if(burst_is_active) {
             EVE_end_cmd_burst();
@@ -123,12 +123,12 @@ static void lv_draw_eve_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyp
 {
 
     if(fill_draw_dsc && fill_area) {
-        /* draw UNDERLINE and STRIKETHROUGH */
+        /* нарисуйте UNDERLINE и STRIKETHROUGH */
         lv_eve_draw_rect_simple(fill_area->x1, fill_area->y1, fill_area->x2, fill_area->y2, 0);
     }
 
     if(glyph_draw_dsc == NULL)
-        return;  /* Important */
+        return;  /* Важно */
 
     const lv_font_t * font = glyph_draw_dsc->g->resolved_font;
 
@@ -193,12 +193,12 @@ static void font_bitmap_to_ramg(uint32_t addr, const uint8_t * src, uint32_t wid
     uint8_t nibble_2;
     uint8_t key = 0;
 
-    /* Iterate through each row of the bitmap*/
+    /* Перебирать каждую строку растрового изображения*/
     for(uint32_t y = 0; y < height; y++) {
-        /* Iterate through each byte of the row*/
+        /* Перебрать каждый байт строки*/
         uint32_t row_i;
         for(row_i = 0; row_i < (width / 2); ++row_i) {
-            /*Get the two nibbles from the current byte*/
+            /*Получить два полубайта из текущего байта*/
             if(key == 0) {
                 nibble_1 = GET_NIBBLE_1(src[src_i]);
                 nibble_2 = GET_NIBBLE_2(src[src_i]);
@@ -208,13 +208,13 @@ static void font_bitmap_to_ramg(uint32_t addr, const uint8_t * src, uint32_t wid
                 nibble_2 = GET_NIBBLE_1(src[src_i]);
             }
 
-            /*Combine the nibbles and assign the result to the output byte*/
+            /*Объедините полубайты и присвойте результат выходному байте.*/
             row_buf[row_i] = (nibble_1 << 4) | nibble_2;
 
             src_i++;
         }
 
-        /*process the last remaining nibble*/
+        /*обработать последний оставшийся полубайт*/
         row_buf[row_i] =
             (key == 0) ?
             (GET_NIBBLE_1(src[src_i])) << 4 | 0x0 : (GET_NIBBLE_2(src[src_i - 1])) << 4 | 0x0;

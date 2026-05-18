@@ -7,12 +7,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void create_image_unit(const char * img_src, uint32_t image_pos_x, uint32_t image_pos_y, const char * label_text,
@@ -31,35 +31,35 @@ static void create_images(void)
 {
     lv_obj_clean(lv_screen_active());
 
-    /* Test images with exif orientation 0 */
+    /* Тестовые изображения с ориентацией exif 0 */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_0.jpg", -150, -150,
                       "jpeg with exif orientation 0", -150, -110);
-    /* Test images with exif orientation 180 */
+    /* Тестовые изображения с ориентацией exif 180 */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_180.jpg", 150, -150,
                       "jpeg with exif orientation 180", 150, -110);
-    /* Test images with exif orientation hflip */
+    /* Тестовые изображения с ориентацией exif hflip */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_hflip.jpg", -150, -60,
                       "jpeg with exif orientation hflip", -150, -20);
-    /* Test images with exif orientation vflip */
+    /* Тестовые изображения с ориентацией exif vflip */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_vflip.jpg", 150, -60,
                       "jpeg with exif orientation vflip", 150, -20);
-    /* Test images with exif orientation 90 */
+    /* Тестовые изображения с ориентацией exif 90 */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_90.jpg", -280, 70, "orientation 90", -280,
                       150);
-    /* Test images with exif orientation 270 */
+    /* Тестовые изображения с ориентацией exif 270 */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_270.jpg", -100, 70, "orientation 270",
                       -100, 150);
-    /* Test images with exif orientation transpose */
+    /* Тестовые изображения с транспонированием ориентации exif */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_transpose.jpg", 100, 70,
                       "orientation transpose", 100, 150);
-    /* Test images with exif orientation transverse */
+    /* Тестовые изображения с поперечной ориентацией exif */
     create_image_unit("A:src/test_assets/test_img_lvgl_logo_with_exif_orientation_transverse.jpg", 300, 70,
                       "orientation transverse", 300, 150);
 }
 
 void test_jpg_2(void)
 {
-    /* Temporarily remove tjpgd decoder */
+    /* Временно удалите декодер tjpgd */
     lv_tjpgd_deinit();
 
     create_images();
@@ -78,13 +78,13 @@ void test_jpg_2(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 64);
 
-    /* Re-add tjpgd decoder */
+    /* Повторно добавить декодер tjpgd */
     lv_tjpgd_init();
 }
 
 void test_jpg_cmyk(void)
 {
-    /* Temporarily remove tjpgd decoder */
+    /* Временно удалите декодер tjpgd */
     lv_tjpgd_deinit();
 
     lv_obj_clean(lv_screen_active());
@@ -94,13 +94,13 @@ void test_jpg_cmyk(void)
 
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/jpg_cmyk.png");
 
-    /* Re-add tjpgd decoder */
+    /* Повторно добавить декодер tjpgd */
     lv_tjpgd_init();
 }
 
 void test_jpg_sign_error(void)
 {
-    /* Temporarily remove tjpgd decoder */
+    /* Временно удалите декодер tjpgd */
     lv_tjpgd_deinit();
 
     lv_obj_clean(lv_screen_active());
@@ -110,25 +110,25 @@ void test_jpg_sign_error(void)
 
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/jpg_sign_error.png");
 
-    /* Re-add tjpgd decoder */
+    /* Повторно добавить декодер tjpgd */
     lv_tjpgd_init();
 }
 
 void test_jpg_decode_failed(void)
 {
-    /* Temporarily remove tjpgd decoder */
+    /* Временно удалите декодер tjpgd */
     lv_tjpgd_deinit();
 
     lv_image_decoder_dsc_t decoder_dsc;
     const char * image_path = "A:src/test_assets/test_img_lvgl_logo_with_decode_failed.jpg";
 
-    /* Try to decode the image */
+    /* Попробуйте расшифровать изображение */
     lv_result_t res = lv_image_decoder_open(&decoder_dsc, image_path, NULL);
 
-    /* Should fail when decoder is removed */
+    /* Должен произойти сбой при удалении декодера */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res);
 
-    /* Re-add tjpgd decoder */
+    /* Повторно добавить декодер tjpgd */
     lv_tjpgd_init();
 }
 

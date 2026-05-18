@@ -24,7 +24,7 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p);
 
 /**
- * Register a driver for the LittleFS File System interface
+ * Зарегистрируйте драйвер для интерфейса файловой системы LittleFS.
  */
 extern "C" void lv_fs_arduino_esp_littlefs_init(void)
 {
@@ -52,14 +52,14 @@ extern "C" void lv_fs_arduino_esp_littlefs_init(void)
  *   STATIC FUNCTIONS
  **********************/
 
-/*Initialize your Storage device and File system.*/
+/*Инициализируйте устройство хранения и файловую систему.*/
 static void fs_init(void)
 {
     LittleFS.begin();
 }
 
 /**
- * Open a file
+ * Открыть файл
  * @param drv       pointer to a driver where this function belongs
  * @param path      path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
  * @param mode      read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
@@ -91,7 +91,7 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
 /**
- * Close an opened file
+ * Закрыть открытый файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable. (opened with fs_open)
  * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
@@ -107,7 +107,7 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * Read data from an opened file
+ * Чтение данных из открытого файла
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable.
  * @param buf       pointer to a memory block where to store the read data
@@ -125,7 +125,7 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * Write into a file
+ * Записать в файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable
  * @param buf       pointer to a buffer with the bytes to write
@@ -143,7 +143,7 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 }
 
 /**
- * Set the read write pointer. Also expand the file size if necessary.
+ * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_t variable. (opened with fs_open )
  * @param pos       the new position of read write pointer
@@ -169,7 +169,7 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * Give the position of the read write pointer
+ * Укажите положение указателя чтения и записи.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a file_p variable
  * @param pos_p     pointer to store the result

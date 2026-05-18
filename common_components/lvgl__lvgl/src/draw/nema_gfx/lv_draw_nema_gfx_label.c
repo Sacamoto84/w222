@@ -1,19 +1,19 @@
 /**
- * MIT License
+ * Лицензия MIT
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2008-24 Think Silicon Single Member PC
  * -----------------------------------------------------------------------------
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice (including the next paragraph)
- * shall be included in all copies or substantial portions of the Software.
+ * Приведенное выше уведомление об авторских правах и данное уведомление о разрешении (включая следующий абзац)
+ * должны быть включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
@@ -46,18 +46,18 @@
  *      DEFINES
  *********************/
 #define LABEL_RECOLOR_PAR_LENGTH 6
-#define LV_LABEL_HINT_UPDATE_TH 1024 /*Update the "hint" if the label's y coordinates have changed more then this*/
+#define LV_LABEL_HINT_UPDATE_TH 1024 /*Обновите «подсказку», если координаты Y метки изменились больше, чем это*/
 #define FT_F26DOT6_SHIFT 6
 #define NEMA_COORD_LIMIT 2046
 
 #define font_draw_buf_handlers &(LV_GLOBAL_DEFAULT()->font_draw_buf_handlers)
 
-/** After converting the font reference size, it is also necessary to scale the 26dot6 data
- * in the path to the real physical size
+/** После преобразования эталонного размера шрифта также необходимо масштабировать данные 26dot6.
+ * на пути к реальному физическому размеру
  */
 #define FT_F26DOT6_TO_PATH_SCALE(x) (LV_FREETYPE_F26DOT6_TO_FLOAT(x) / (1 << FT_F26DOT6_SHIFT))
 
-/*Forward declarations*/
+/*Форвардные декларации*/
 void nema_set_matrix(nema_matrix3x3_t m);
 void nema_raster_rect(int x, int y, int w, int h);
 
@@ -109,7 +109,7 @@ static bool is_raw_bitmap;
 void lv_draw_nema_gfx_label_init(lv_draw_unit_t * draw_unit)
 {
 #if LV_USE_FREETYPE
-    /*Set up the freetype outline event*/
+    /*Настройте событие Freetype Outline*/
     lv_freetype_outline_add_event(freetype_outline_event_cb, LV_EVENT_ALL, draw_unit);
 #else
     LV_UNUSED(draw_unit);
@@ -164,7 +164,7 @@ static void _draw_nema_gfx_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * gly
 
     float scale = FT_F26DOT6_TO_PATH_SCALE(lv_freetype_outline_get_scale(glyph_draw_dsc->g->resolved_font));
 
-    /*Calculate Path Matrix*/
+    /*Вычислить матрицу путей*/
     nema_matrix3x3_t matrix;
     nema_mat3x3_load_identity(matrix);
     nema_mat3x3_scale(matrix, scale, -scale);
@@ -261,14 +261,14 @@ static void lv_nema_outline_event_alloc(const lv_freetype_outline_event_param_t 
 #endif /* LV_USE_FREETYPE && LV_USE_NEMA_VG */
 
 /**
- * Convert a hexadecimal characters to a number (0..15)
+ * Преобразование шестнадцатеричных символов в число (0..15)
  * @param hex Pointer to a hexadecimal character (0..9, A..F)
  * @return the numerical value of `hex` or 0 on error
  */
 static uint8_t hex_char_to_num(char hex)
 {
     if(hex >= '0' && hex <= '9') return hex - '0';
-    if(hex >= 'a') hex -= 'a' - 'A'; /*Convert to upper case*/
+    if(hex >= 'a') hex -= 'a' - 'A'; /*Преобразовать в верхний регистр*/
     return 'A' <= hex && hex <= 'F' ? hex - 'A' + 10 : 0;
 }
 
@@ -296,7 +296,7 @@ static void _draw_nema_gfx_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyp
     if(glyph_draw_dsc) {
         if(glyph_draw_dsc->format == LV_FONT_GLYPH_FORMAT_NONE) {
 #if LV_USE_FONT_PLACEHOLDER
-            /* Draw a placeholder rectangle*/
+            /* Нарисуйте прямоугольник-заполнитель*/
             lv_draw_border_dsc_t border_draw_dsc;
             lv_draw_border_dsc_init(&border_draw_dsc);
             border_draw_dsc.opa = glyph_draw_dsc->opa;
@@ -307,7 +307,7 @@ static void _draw_nema_gfx_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyp
         }
         else if(glyph_draw_dsc->format >= LV_FONT_GLYPH_FORMAT_A1 &&
                 glyph_draw_dsc->format <= LV_FONT_GLYPH_FORMAT_A8) {
-            /*Do not draw transparent things*/
+            /*Не рисуйте прозрачные вещи*/
             if(glyph_draw_dsc->opa <= LV_OPA_MIN)
                 return;
 
@@ -328,7 +328,7 @@ static void _draw_nema_gfx_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyp
 
             int32_t x, y, w, h;
 
-            /*Read the static font*/
+            /*Прочтите статический шрифт*/
             if(is_raw_bitmap) {
                 mask_buf = glyph_draw_dsc->glyph_data;
                 src_cf = _bpp_nema_gfx_format(glyph_draw_dsc);
@@ -337,7 +337,7 @@ static void _draw_nema_gfx_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyp
                 w = glyph_draw_dsc->g->box_w;
                 h = glyph_draw_dsc->g->box_h;
             }
-            /*Read the draw buffer*/
+            /*Чтение буфера отрисовки*/
             else {
                 mask_buf = draw_buf->data;
                 src_cf = lv_nemagfx_cf_to_nema(draw_buf->header.cf);
@@ -430,11 +430,11 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
     lv_bidi_calculate_align(&align, &base_dir, dsc->text);
 
     if((dsc->flag & LV_TEXT_FLAG_EXPAND) == 0) {
-        /*Normally use the label's width as width*/
+        /*Обычно используйте ширину этикетки в качестве ширины*/
         attributes.max_width = lv_area_get_width(coords);
     }
     else {
-        /*If EXPAND is enabled then not limit the text's width to the object's width*/
+        /*Если EXPAND включен, не ограничивайте ширину текста шириной объекта.*/
         lv_point_t p;
         lv_text_get_size_attributes(&p, dsc->text, dsc->font, &attributes);
         attributes.max_width = p.x;
@@ -443,7 +443,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
     int32_t line_height_font = lv_font_get_line_height(font);
     int32_t line_height = line_height_font + dsc->line_space;
 
-    /*Init variables for the first line*/
+    /*Переменные инициализации для первой строки*/
     int32_t line_width = 0;
     lv_point_t pos;
     lv_point_set(&pos, coords->x1, coords->y1);
@@ -457,16 +457,16 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
     uint32_t line_start     = 0;
     int32_t last_line_start = -1;
 
-    /*Check the hint to use the cached info*/
+    /*Проверьте подсказку, чтобы использовать кэшированную информацию.*/
     if(dsc->hint && y_ofs == 0 && coords->y1 < 0) {
-        /*If the label changed too much recalculate the hint.*/
+        /*Если метка изменилась слишком сильно, пересчитайте подсказку.*/
         if(LV_ABS(dsc->hint->coord_y - coords->y1) > LV_LABEL_HINT_UPDATE_TH - 2 * line_height) {
             dsc->hint->line_start = -1;
         }
         last_line_start = dsc->hint->line_start;
     }
 
-    /*Use the hint if it's valid*/
+    /*Используйте подсказку, если она действительна*/
     if(dsc->hint && last_line_start >= 0) {
         line_start = last_line_start;
         pos.y += dsc->hint->y;
@@ -476,14 +476,14 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
 
     uint32_t line_end = line_start + lv_text_get_next_line(&dsc->text[line_start], remaining_len, font, NULL, &attributes);
 
-    /*Go the first visible line*/
+    /*Пройдите первую видимую линию*/
     while(pos.y + line_height_font < t->clip_area.y1) {
-        /*Go to next line*/
+        /*Перейти к следующей строке*/
         line_start = line_end;
         line_end += lv_text_get_next_line(&dsc->text[line_start], remaining_len, font, NULL, &attributes);
         pos.y += line_height;
 
-        /*Save at the threshold coordinate*/
+        /*Сохранение по координате порога*/
         if(dsc->hint && pos.y >= -LV_LABEL_HINT_UPDATE_TH && dsc->hint->line_start < 0) {
             dsc->hint->line_start = line_start;
             dsc->hint->y          = pos.y - coords->y1;
@@ -493,14 +493,14 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
         if(dsc->text[line_start] == '\0') return;
     }
 
-    /*Align to middle*/
+    /*Выровнять по середине*/
     if(align == LV_TEXT_ALIGN_CENTER) {
         line_width = lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &attributes);
 
         pos.x += (lv_area_get_width(coords) - line_width) / 2;
 
     }
-    /*Align to the right*/
+    /*Выровнять по правому краю*/
     else if(align == LV_TEXT_ALIGN_RIGHT) {
         line_width = lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &attributes);
         pos.x += lv_area_get_width(coords) - line_width;
@@ -532,7 +532,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
     int32_t letter_w;
 
     cmd_state_t recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
-    lv_color_t recolor = lv_color_black(); /* Holds the selected color inside the recolor command */
+    lv_color_t recolor = lv_color_black(); /* Сохраняет выбранный цвет внутри команды перекрашивания. */
     uint8_t is_first_space_after_cmd = 0;
 
     lv_color32_t dsc_col32 = lv_color_to_32(dsc->color, dsc->opa);
@@ -548,12 +548,12 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
     uint8_t cur_state = 2;
     uint8_t prev_state = 2;
 
-    /*Write out all lines*/
+    /*Выпишите все строки*/
     while(remaining_len && dsc->text[line_start] != '\0') {
         pos.x += x_ofs;
         line_start_x = pos.x;
 
-        /*Write all letter of a line*/
+        /*Напишите все буквы строки*/
         next_char_offset = 0;
 #if LV_USE_BIDI
         char * bidi_txt = lv_malloc(line_end - line_start + 1);
@@ -566,7 +566,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
         while(next_char_offset < remaining_len && next_char_offset < line_end - line_start) {
             uint32_t logical_char_pos = 0;
 
-            /* Check if the text selection is enabled */
+            /* Проверьте, включено ли выделение текста */
             if(sel_start != LV_DRAW_LABEL_NO_TXT_SEL && sel_end != LV_DRAW_LABEL_NO_TXT_SEL) {
 #if LV_USE_BIDI
                 logical_char_pos = lv_text_encoded_get_char_id(dsc->text, line_start);
@@ -581,29 +581,29 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
             uint32_t letter_next;
             lv_text_encoded_letter_next_2(bidi_txt, &letter, &letter_next, &next_char_offset);
 
-            /* If recolor is enabled */
+            /* Если перекрашивание включено */
             if((dsc->flag & LV_TEXT_FLAG_RECOLOR) != 0) {
 
                 if(letter == (uint32_t)LV_TXT_COLOR_CMD[0]) {
-                    /* Handle the recolor command marker depending of the current recolor state */
+                    /* Обработка маркера команды перекрашивания в зависимости от текущего состояния перекрашивания. */
 
                     if(recolor_cmd_state == RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER) {
                         recolor_command_start_index = next_char_offset;
                         recolor_cmd_state = RECOLOR_CMD_STATE_PARAMETER;
                         continue;
                     }
-                    /*Other start char in parameter escaped cmd. char*/
+                    /*Другой начальный символ в параметре экранирован cmd. голец*/
                     else if(recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) {
                         recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
                     }
-                    /* If letter is LV_TXT_COLOR_CMD and we were in the CMD_STATE_IN then the recolor close marked has been found */
+                    /* Если буква LV_TXT_COLOR_CMD и мы были в CMD_STATE_IN, то была найдена пометка закрытия перекраски. */
                     else if(recolor_cmd_state == RECOLOR_CMD_STATE_TEXT_INPUT) {
                         recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
                         continue;
                     }
                 }
 
-                /* Find the first space (aka ' ') after the recolor command parameter, we need to skip rendering it */
+                /* Найдите первый пробел (он же '') после параметра команды перекрашивания, нам нужно пропустить его рендеринг. */
                 if((recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) && (letter == ' ') && (is_first_space_after_cmd == 0)) {
                     is_first_space_after_cmd = 1;
                 }
@@ -611,18 +611,18 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
                     is_first_space_after_cmd = 0;
                 }
 
-                /* Skip the color parameter and wait the space after it
-                 * Once we have reach the space ' ', then we will extract the color information
-                 * and store it into the recolor variable */
+                /* Пропустите параметр цвета и подождите пробел после него.
+                 * Как только мы достигнем пробела ' ', мы извлечем информацию о цвете.
+                 * и сохраните его в переменной recolor */
                 if(recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) {
                     /* Not an space? Continue with the next character */
                     if(letter != ' ') {
                         continue;
                     }
 
-                    /*Get the recolor parameter*/
+                    /*Получить параметр перекрашивания*/
                     if((next_char_offset - recolor_command_start_index) == LABEL_RECOLOR_PAR_LENGTH + 1) {
-                        /* Temporary buffer to hold the recolor information */
+                        /* Временный буфер для хранения информации о перекрашивании. */
                         char buf[LABEL_RECOLOR_PAR_LENGTH + 1];
                         lv_memcpy(buf, &bidi_txt[recolor_command_start_index], LABEL_RECOLOR_PAR_LENGTH);
                         buf[LABEL_RECOLOR_PAR_LENGTH] = '\0';
@@ -640,24 +640,24 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
                         recolor.green = dsc->color.green;
                     }
 
-                    /*After the parameter the text is in the command*/
+                    /*После параметра текст находится в команде*/
                     recolor_cmd_state = RECOLOR_CMD_STATE_TEXT_INPUT;
                 }
 
-                /* Don't draw the first space after the recolor command */
+                /* Не рисуйте первый пробел после команды перекрашивания */
                 if(is_first_space_after_cmd) {
                     continue;
                 }
             }
 
-            /* If we're in the CMD_STATE_IN state then we need to subtract the recolor command length */
+            /* Если мы находимся в состоянии CMD_STATE_IN, нам нужно вычесть длину команды перекрашивания. */
             if(((dsc->flag & LV_TEXT_FLAG_RECOLOR) != 0) && (recolor_cmd_state == RECOLOR_CMD_STATE_TEXT_INPUT)) {
                 logical_char_pos -= (LABEL_RECOLOR_PAR_LENGTH + 1);
             }
 
             letter_w = lv_font_get_glyph_width(font, letter, letter_next);
 
-            /*Always set the bg_coordinates for placeholder drawing*/
+            /*Всегда устанавливайте bg_coordinates для рисования-заполнителя.*/
             bg_coords.x1 = pos.x;
             bg_coords.y1 = pos.y;
             bg_coords.x2 = pos.x + letter_w - 1;
@@ -686,7 +686,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
                 }
             }
 
-            /* Handle text selection */
+            /* Обработка выделения текста */
             if(sel_start != LV_DRAW_LABEL_NO_TXT_SEL && sel_end != LV_DRAW_LABEL_NO_TXT_SEL
                && logical_char_pos >= sel_start && logical_char_pos < sel_end) {
                 draw_letter_dsc.color = dsc->sel_color;
@@ -727,7 +727,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
         lv_free(bidi_txt);
         bidi_txt = NULL;
 #endif
-        /*Go to next line*/
+        /*Перейти к следующей строке*/
         remaining_len -= line_end - line_start;
         line_start = line_end;
         if(remaining_len) {
@@ -735,21 +735,21 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
         }
 
         pos.x = coords->x1;
-        /*Align to middle*/
+        /*Выровнять по середине*/
         if(align == LV_TEXT_ALIGN_CENTER) {
             line_width =
                 lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &attributes);
 
             pos.x += (lv_area_get_width(coords) - line_width) / 2;
         }
-        /*Align to the right*/
+        /*Выровнять по правому краю*/
         else if(align == LV_TEXT_ALIGN_RIGHT) {
             line_width =
                 lv_text_get_width(&dsc->text[line_start], line_end - line_start, font, &attributes);
             pos.x += lv_area_get_width(coords) - line_width;
         }
 
-        /*Go the next line position*/
+        /*Перейти на следующую позицию строки*/
         pos.y += line_height;
 
         if(pos.y > t->clip_area.y2) break;
@@ -765,17 +765,17 @@ static void _draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const l
 {
     lv_font_glyph_dsc_t g;
 
-    if(lv_text_is_marker(letter)) /*Markers are valid letters but should not be rendered.*/
+    if(lv_text_is_marker(letter)) /*Маркеры являются допустимыми буквами, но не должны отображаться.*/
         return;
 
     LV_PROFILER_DRAW_BEGIN;
     bool g_ret = lv_font_get_glyph_dsc(font, &g, letter, '\0');
     if(g_ret == false) {
-        /*Add warning if the dsc is not found*/
+        /*Добавить предупреждение, если dsc не найден*/
         LV_LOG_WARN("lv_draw_letter: glyph dsc. not found for U+%" LV_PRIX32, letter);
     }
 
-    /*Don't draw anything if the character is empty. E.g. space*/
+    /*Не рисуйте ничего, если персонаж пуст. Например. пространство*/
     if((g.box_h == 0) || (g.box_w == 0)) {
         LV_PROFILER_DRAW_END;
         return;
@@ -788,7 +788,7 @@ static void _draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const l
     letter_coords.y2 = letter_coords.y1 + g.box_h - 1;
     lv_area_move(&letter_coords, -dsc->pivot.x, -dsc->pivot.y);
 
-    /*If the letter is completely out of mask don't draw it*/
+    /*Если буква полностью вышла за пределы маски, не рисуйте ее.*/
     if(lv_area_is_out(&letter_coords, &t->clip_area, 0) &&
        dsc->bg_coords &&
        lv_area_is_out(dsc->bg_coords, &t->clip_area, 0)) {
@@ -799,12 +799,12 @@ static void _draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const l
     if(g.resolved_font) {
         lv_draw_buf_t * draw_buf = NULL;
         if(LV_FONT_GLYPH_FORMAT_NONE < g.format && g.format < LV_FONT_GLYPH_FORMAT_IMAGE) {
-            /*Only check draw buf for bitmap glyph*/
+            /*Проверьте только рисование buff для растрового глифа*/
             draw_buf = lv_draw_buf_reshape(dsc->_draw_buf, 0, g.box_w, g.box_h, LV_STRIDE_AUTO);
             if(draw_buf == NULL) {
                 if(dsc->_draw_buf) lv_draw_buf_destroy(dsc->_draw_buf);
 
-                uint32_t h = LV_ROUND_UP(g.box_h, 32); /*Assume a larger size to avoid many reallocations*/
+                uint32_t h = LV_ROUND_UP(g.box_h, 32); /*Предполагайте больший размер, чтобы избежать большого количества перераспределений.*/
                 draw_buf = lv_draw_buf_create_ex(font_draw_buf_handlers, g.box_w, h, LV_COLOR_FORMAT_A8, LV_STRIDE_AUTO);
                 LV_ASSERT_MALLOC(draw_buf);
                 draw_buf->header.h = g.box_h;
@@ -812,8 +812,8 @@ static void _draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const l
             }
         }
 
-        /* Performance Optimization for lv_font_fmt_txt_dsc_t fonts, always request raw bitmaps */
-        /*Exception for w*h >= NEMA_COORD_LIMIT due to HW limitation on data handling*/
+        /* Оптимизация производительности для шрифтов lv_font_fmt_txt_dsc_t: всегда запрашивать необработанные растровые изображения. */
+        /*Исключение для w*h >= NEMA_COORD_LIMIT из-за ограничения HW на обработку данных.*/
         is_raw_bitmap = false;
         if(g.box_h * g.box_w <= NEMA_COORD_LIMIT) {
             g.req_raw_bitmap = 1;

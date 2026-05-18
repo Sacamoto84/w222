@@ -264,7 +264,7 @@ static void shm_delete_display_data(lv_wl_shm_display_data_t * ddata)
             continue;
         }
         if(buffer->busy) {
-            /* Defer the deletion of this display data until the buffers are released */
+            /* Отложить удаление этих отображаемых данных до тех пор, пока не будут освобождены буферы. */
             LV_LOG_INFO("Buffer is still busy, deferring deletion to when its released");
             ddata->delete_on_release = true;
             return;
@@ -398,7 +398,7 @@ static void shm_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
     const lv_display_rotation_t rotation = lv_display_get_rotation(disp);
     const lv_color_format_t cf = lv_display_get_color_format(disp);
 
-    /* When using ARGB8888, the compositor expects premultiplied ARGB8888 so premultiply it here*/
+    /* При использовании ARGB8888 наборщик ожидает предварительно умноженный ARGB8888, поэтому умножьте его здесь*/
     if(ddata->shm_cf == WL_SHM_FORMAT_ARGB8888 && cf != LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED) {
         const int32_t w = lv_area_get_width(area);
         const int32_t h = lv_area_get_height(area);
@@ -410,7 +410,7 @@ static void shm_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
         }
     }
 
-    /* If we have rotation, copy from rotated_buf to Wayland buffer */
+    /* Если у нас есть вращение, копируем из rotated_buf в буфер Wayland. */
     if(rotation != LV_DISPLAY_ROTATION_0) {
         const int32_t hor_res = lv_display_get_horizontal_resolution(disp);
         const int32_t ver_res = lv_display_get_vertical_resolution(disp);

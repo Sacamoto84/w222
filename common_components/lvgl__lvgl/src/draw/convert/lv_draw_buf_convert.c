@@ -58,7 +58,7 @@ lv_result_t lv_draw_buf_convert_premultiply(lv_draw_buf_t * draw_buf)
     LV_PROFILER_DRAW_BEGIN;
     LV_ASSERT_NULL(draw_buf);
 
-    /*Premultiply color with alpha, do case by case by judging color format*/
+    /*Предварительно умножьте цвет на альфу, делайте это в каждом конкретном случае, оценивая цветовой формат.*/
     lv_color_format_t cf = draw_buf->header.cf;
     if(LV_COLOR_FORMAT_IS_INDEXED(cf)) {
         if(LV_RESULT_INVALID == LV_DRAW_CONVERT_PREMULTIPLY_INDEXED(draw_buf)) {

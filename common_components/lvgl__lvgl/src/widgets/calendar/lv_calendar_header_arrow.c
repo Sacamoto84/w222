@@ -98,7 +98,7 @@ static void my_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     lv_obj_remove_flag(mo_next, LV_OBJ_FLAG_CLICK_FOCUSABLE);
 
     lv_obj_add_event_cb(obj, value_changed_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
-    /*Refresh the drop downs*/
+    /*Обновить раскрывающиеся списки*/
     lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
 }
 
@@ -116,7 +116,7 @@ static void month_event_cb(lv_event_t * e)
     LV_ASSERT_FORMAT_MSG(newd.month >= 1 && newd.month <= 12,
                          "Invalid month: %d (expected 1-12)", newd.month);
 
-    /*The last child is the right button*/
+    /*Последний ребенок — правая кнопка*/
     if(lv_obj_get_child(header, 0) == btn) {
         if(newd.month == 1) {
             newd.month = 12;

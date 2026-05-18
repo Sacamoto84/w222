@@ -30,7 +30,7 @@ static lv_obj_t * create_gif_image(const char * src)
     return gif;
 }
 
-/* Common event handler for all the consecutive test cases. */
+/* Общий обработчик событий для всех последовательных тестовых случаев. */
 static void event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);

@@ -9,12 +9,12 @@ static uint32_t observer_called = 0;
 void setUp(void)
 {
     observer_called = 0;
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -51,12 +51,12 @@ void test_observer_add_remove(void)
     lv_observer_remove(observer);
     lv_subject_set_int(&subject, 15);
     TEST_ASSERT_EQUAL(15, lv_subject_get_int(&subject));
-    TEST_ASSERT_EQUAL(10, current_v); /*The observer cb is not called*/
+    TEST_ASSERT_EQUAL(10, current_v); /*Наблюдатель cb не вызывается*/
 
     static lv_subject_t uninitialized_subject;
     observer = lv_subject_add_observer(&uninitialized_subject, observer_int,
                                        NULL);
-    TEST_ASSERT_EQUAL_PTR(NULL, observer); /*The observer must be NULL*/
+    TEST_ASSERT_EQUAL_PTR(NULL, observer); /*Наблюдатель должен быть NULL.*/
 }
 
 void test_object_observer_add_remove(void)
@@ -74,16 +74,16 @@ void test_object_observer_add_remove(void)
     lv_observer_remove(observer);
     lv_subject_set_int(&subject, 1);
 
-    /* This shouldn't get updated */
+    /* Это не должно обновляться */
     TEST_ASSERT_EQUAL(true, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
     lv_obj_delete(obj);
-    /* We shouldn't crash here */
+    /* Мы не должны здесь разбиться */
 }
 
 static lv_event_dsc_t * get_event_delete_from_obj(lv_obj_t * obj)
 {
 
-    /* The remove event is a event callback using the observer as the user data */
+    /* Событие удаления — это обратный вызов события, использующий наблюдателя в качестве пользовательских данных. */
     uint32_t event_cnt = lv_event_get_count(&obj->spec_attr->event_list);
     for(uint32_t i = 0; i < event_cnt; i++) {
         lv_event_dsc_t * event = lv_obj_get_event_dsc(obj, i);
@@ -104,8 +104,8 @@ void test_obj_remove_from_subject_removes_delete_event(void)
 
     {
         /*
-         * We expect the event delete to be added to the object allowing the observer
-         * to be deleted when the object is deleted
+         * Мы ожидаем, что удаление события будет добавлено к объекту, что позволит наблюдателю
+         * удаляться при удалении объекта
          */
         TEST_ASSERT_NOT_NULL(obj->spec_attr);
         TEST_ASSERT_EQUAL(lv_event_get_count(&obj->spec_attr->event_list), 1);
@@ -113,7 +113,7 @@ void test_obj_remove_from_subject_removes_delete_event(void)
         TEST_ASSERT_NOT_NULL(delete_event);
     }
     {
-        /* Removing the object from the subject should remove the delete event entry */
+        /* Удаление объекта из темы должно удалить запись о событии удаления. */
         lv_obj_remove_from_subject(obj, &subject);
         lv_event_dsc_t * delete_event  = get_event_delete_from_obj(obj);
         TEST_ASSERT_NULL(delete_event);
@@ -130,8 +130,8 @@ void test_observer_remove_removes_obj_callback(void)
 
     {
         /*
-         * We expect the event delete to be added to the object allowing the observer
-         * to be deleted when the object is deleted
+         * Мы ожидаем, что удаление события будет добавлено к объекту, что позволит наблюдателю
+         * удаляться при удалении объекта
          */
         TEST_ASSERT_NOT_NULL(obj->spec_attr);
         TEST_ASSERT_EQUAL(lv_event_get_count(&obj->spec_attr->event_list), 1);
@@ -139,7 +139,7 @@ void test_observer_remove_removes_obj_callback(void)
         TEST_ASSERT_NOT_NULL(delete_event);
     }
     {
-        /* Removing the observer associated with the object should remove the delete event entry */
+        /* Удаление наблюдателя, связанного с объектом, должно удалить запись о событии удаления. */
         lv_observer_remove(observer);
         lv_event_dsc_t * delete_event  = get_event_delete_from_obj(obj);
         TEST_ASSERT_NULL(delete_event);
@@ -167,13 +167,13 @@ void test_observer_int(void)
     TEST_ASSERT_EQUAL(10, lv_subject_get_previous_int(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /* Observer shouldn't be called if value is the same */
+    /* Наблюдатель не должен вызываться, если значение одинаковое */
     lv_subject_set_int(&subject, 15);
     TEST_ASSERT_EQUAL(15, lv_subject_get_int(&subject));
     TEST_ASSERT_EQUAL(15, lv_subject_get_previous_int(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /*Ignore incorrect types*/
+    /*Игнорировать неправильные типы*/
     lv_subject_set_pointer(&subject, NULL);
     TEST_ASSERT_EQUAL(15, lv_subject_get_int(&subject));
     TEST_ASSERT_EQUAL(15, lv_subject_get_previous_int(&subject));
@@ -213,13 +213,13 @@ void test_observer_float(void)
     TEST_ASSERT_EQUAL_FLOAT(10.5, lv_subject_get_previous_float(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /* Observer shouldn't be called if value is the same */
+    /* Наблюдатель не должен вызываться, если значение одинаковое */
     lv_subject_set_float(&subject, 15.75);
     TEST_ASSERT_EQUAL_FLOAT(15.75, lv_subject_get_float(&subject));
     TEST_ASSERT_EQUAL_FLOAT(15.75, lv_subject_get_previous_float(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /*Ignore incorrect types*/
+    /*Игнорировать неправильные типы*/
     lv_subject_set_pointer(&subject, NULL);
     TEST_ASSERT_EQUAL_FLOAT(15.75, lv_subject_get_float(&subject));
     TEST_ASSERT_EQUAL_FLOAT(15.75, lv_subject_get_previous_float(&subject));
@@ -268,7 +268,7 @@ void test_observer_string(void)
                              lv_subject_get_previous_string(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /* Observer shouldn't be called with same value */
+    /* Наблюдатель не должен вызываться с тем же значением */
     lv_subject_copy_string(&subject, "how are you?");
     TEST_ASSERT_EQUAL_STRING("how are you?",
                              lv_subject_get_string(&subject));
@@ -290,7 +290,7 @@ void test_observer_string(void)
                              lv_subject_get_previous_string(&subject));
     TEST_ASSERT_EQUAL(5, observer_called);
 
-    /* Observer shouldn't be called with same value */
+    /* Наблюдатель не должен вызываться с тем же значением */
     lv_subject_snprintf(&subject, "%d: %s", 1, "Coding is fun !");
     TEST_ASSERT_EQUAL_STRING("1: Coding is fun !",
                              lv_subject_get_string(&subject));
@@ -298,7 +298,7 @@ void test_observer_string(void)
                              lv_subject_get_previous_string(&subject));
     TEST_ASSERT_EQUAL(5, observer_called);
 
-    /*Clip long text*/
+    /*Вырезать длинный текст*/
     lv_subject_copy_string(
         &subject,
         "text to be clipped to 32 chars.this should be clipped");
@@ -308,14 +308,14 @@ void test_observer_string(void)
                              lv_subject_get_previous_string(&subject));
     TEST_ASSERT_EQUAL(6, observer_called);
 
-    /*Check if the previous string is clipped correctly*/
+    /*Проверьте, правильно ли обрезана предыдущая строка*/
     lv_subject_copy_string(&subject, "a");
     TEST_ASSERT_EQUAL_STRING("a", lv_subject_get_string(&subject));
     TEST_ASSERT_EQUAL_STRING("text to be clipped to 32 chars.",
                              lv_subject_get_previous_string(&subject));
     TEST_ASSERT_EQUAL(7, observer_called);
 
-    /*Ignore incorrect types*/
+    /*Игнорировать неправильные типы*/
     lv_subject_set_pointer(&subject, NULL);
     TEST_ASSERT_EQUAL_STRING("a", lv_subject_get_string(&subject));
     TEST_ASSERT_EQUAL_STRING("text to be clipped to 32 chars.",
@@ -361,15 +361,15 @@ void test_observer_pointer(void)
     TEST_ASSERT_EQUAL(3, observer_called);
 
     /*
-     * Even if pointer is the same, the observer should still get called as we shouldn't assume
-     * what the pointer is indicating
+     * Даже если указатель тот же, наблюдатель все равно должен вызываться, поскольку мы не должны предполагать, что
+     * что указывает указатель
      */
     lv_subject_set_pointer(&subject, &a[2]);
     TEST_ASSERT_EQUAL_PTR(&a[2], lv_subject_get_pointer(&subject));
     TEST_ASSERT_EQUAL_PTR(&a[2], lv_subject_get_previous_pointer(&subject));
     TEST_ASSERT_EQUAL(4, observer_called);
 
-    /*Ignore incorrect types*/
+    /*Игнорировать неправильные типы*/
     lv_subject_set_int(&subject, 10);
     TEST_ASSERT_EQUAL_PTR(&a[2], lv_subject_get_pointer(&subject));
     TEST_ASSERT_EQUAL_PTR(&a[2], lv_subject_get_previous_pointer(&subject));
@@ -414,7 +414,7 @@ void test_observer_color(void)
                             lv_subject_get_previous_color(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /* Observer shouldn't be called if value is the same */
+    /* Наблюдатель не должен вызываться, если значение одинаковое */
     lv_subject_set_color(&subject, lv_color_hex3(0xabc));
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex3(0xabc),
                             lv_subject_get_color(&subject));
@@ -422,7 +422,7 @@ void test_observer_color(void)
                             lv_subject_get_previous_color(&subject));
     TEST_ASSERT_EQUAL(3, observer_called);
 
-    /*Ignore incorrect types*/
+    /*Игнорировать неправильные типы*/
     lv_subject_set_pointer(&subject, NULL);
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex3(0xabc),
                             lv_subject_get_color(&subject));
@@ -502,7 +502,7 @@ void test_observer_obj_flag_invalid_subject(void)
     const size_t subjects_size =
         sizeof(invalid_subjects) / sizeof(invalid_subjects[0]);
 
-    /* Can only bind to int */
+    /* Можно привязать только к int */
     lv_subject_init_pointer(&invalid_subjects[0], NULL);
     lv_subject_init_string(&invalid_subjects[1], buf1, buf2, 30, "test");
     lv_subject_init_color(&invalid_subjects[2], (lv_color_t) {
@@ -525,11 +525,11 @@ void test_observer_obj_flag_eq(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_flag_if_eq(obj, &subject, LV_OBJ_FLAG_HIDDEN, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
 
     lv_obj_bind_flag_if_not_eq(obj, &subject, LV_OBJ_FLAG_CHECKABLE, 10);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
     TEST_ASSERT_EQUAL(true, lv_obj_has_flag(obj, LV_OBJ_FLAG_CHECKABLE));
 
@@ -549,7 +549,7 @@ void test_observer_obj_flag_ge(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_flag_if_ge(obj, &subject, LV_OBJ_FLAG_HIDDEN, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
 
     lv_subject_set_int(&subject, 5);
@@ -569,7 +569,7 @@ void test_observer_obj_flag_gt(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_flag_if_gt(obj, &subject, LV_OBJ_FLAG_HIDDEN, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
 
     lv_subject_set_int(&subject, 5);
@@ -589,7 +589,7 @@ void test_observer_obj_flag_le(void)
     lv_subject_init_int(&subject, 7);
 
     lv_obj_bind_flag_if_le(obj, &subject, LV_OBJ_FLAG_HIDDEN, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
 
     lv_subject_set_int(&subject, 5);
@@ -609,7 +609,7 @@ void test_observer_obj_flag_lt(void)
     lv_subject_init_int(&subject, 7);
 
     lv_obj_bind_flag_if_lt(obj, &subject, LV_OBJ_FLAG_HIDDEN, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN));
 
     lv_subject_set_int(&subject, 4);
@@ -642,7 +642,7 @@ void test_observer_obj_state_invalid_subject(void)
     const size_t subjects_size =
         sizeof(invalid_subjects) / sizeof(invalid_subjects[0]);
 
-    /* Can only bind to int */
+    /* Можно привязать только к int */
     lv_subject_init_pointer(&invalid_subjects[0], NULL);
     lv_subject_init_string(&invalid_subjects[1], buf1, buf2, 30, "test");
     lv_subject_init_color(&invalid_subjects[2], (lv_color_t) {
@@ -666,11 +666,11 @@ void test_observer_obj_state_eq(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_state_if_eq(obj, &subject, LV_STATE_CHECKED, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_state(obj, LV_STATE_CHECKED));
 
     lv_obj_bind_state_if_not_eq(obj, &subject, LV_STATE_DISABLED, 10);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_state(obj, LV_STATE_CHECKED));
     TEST_ASSERT_EQUAL(true, lv_obj_has_state(obj, LV_STATE_DISABLED));
 
@@ -690,7 +690,7 @@ void test_observer_obj_state_gt(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_state_if_gt(obj, &subject, LV_STATE_CHECKED, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_state(obj, LV_STATE_CHECKED));
 
     lv_subject_set_int(&subject, 6);
@@ -710,7 +710,7 @@ void test_observer_obj_state_ge(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_state_if_ge(obj, &subject, LV_STATE_CHECKED, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(false, lv_obj_has_state(obj, LV_STATE_CHECKED));
 
     lv_subject_set_int(&subject, 6);
@@ -730,7 +730,7 @@ void test_observer_obj_state_le(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_state_if_le(obj, &subject, LV_STATE_CHECKED, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(true, lv_obj_has_state(obj, LV_STATE_CHECKED));
 
     lv_subject_set_int(&subject, 6);
@@ -747,7 +747,7 @@ void test_observer_obj_state_lt(void)
     lv_subject_init_int(&subject, 1);
 
     lv_obj_bind_state_if_lt(obj, &subject, LV_STATE_CHECKED, 5);
-    /*Should be applied immediately*/
+    /*Следует применять немедленно*/
     TEST_ASSERT_EQUAL(true, lv_obj_has_state(obj, LV_STATE_CHECKED));
 
     lv_subject_set_int(&subject, 5);
@@ -764,7 +764,7 @@ void test_observer_button_checked(void)
     lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_update_layout(obj);
 
-    /*Can bind only to int*/
+    /*Может привязываться только к int*/
     static lv_subject_t subject_wrong;
     lv_subject_init_pointer(&subject_wrong, NULL);
     lv_observer_t * observer = lv_obj_bind_checked(obj, &subject_wrong);
@@ -790,30 +790,30 @@ void test_observer_label_text_normal(void)
 
     lv_observer_t * observer;
 
-    /*Cannot bind color*/
+    /*Не могу привязать цвет*/
     static lv_subject_t subject_color;
     lv_subject_init_color(&subject_color, lv_color_black());
     observer = lv_label_bind_text(obj, &subject_color, NULL);
     TEST_ASSERT_EQUAL_PTR(NULL, observer);
 
-    /*Bind it with "%d" if NULL is passed*/
+    /*Свяжите его с помощью "%d", если передан NULL.*/
     static lv_subject_t subject_int;
     lv_subject_init_int(&subject_int, 10);
     observer = lv_label_bind_text(obj, &subject_int, NULL);
     TEST_ASSERT_EQUAL_STRING("10", lv_label_get_text(obj));
 
-    /*Bind it with "%0.1f" if NULL is passed*/
+    /*Свяжите его с помощью «%0.1f», если передан NULL.*/
     static lv_subject_t subject_float;
     lv_subject_init_float(&subject_float, 10.5);
     observer = lv_label_bind_text(obj, &subject_float, NULL);
     TEST_ASSERT_EQUAL_STRING("10.5", lv_label_get_text(obj));
 
-    /*Bind it with "%0.1f" if NULL is passed*/
+    /*Свяжите его с помощью «%0.1f», если передан NULL.*/
     lv_subject_set_float(&subject_float, 81.5);
     observer = lv_label_bind_text(obj, &subject_float, "Value: %0.2f");
     TEST_ASSERT_EQUAL_STRING("Value: 81.50", lv_label_get_text(obj));
 
-    /*Bind to string*/
+    /*Привязать к строке*/
     static char buf[32];
     static lv_subject_t subject_string;
     lv_subject_init_string(&subject_string, buf, NULL, 32, "hello");
@@ -823,12 +823,12 @@ void test_observer_label_text_normal(void)
     lv_subject_copy_string(&subject_string, "world");
     TEST_ASSERT_EQUAL_STRING("world", lv_label_get_text(obj));
 
-    /*Remove the label from the subject*/
+    /*Удалить ярлык с темы*/
     lv_obj_remove_from_subject(obj, &subject_string);
     lv_subject_copy_string(&subject_string, "nothing");
     TEST_ASSERT_EQUAL_STRING("world", lv_label_get_text(obj));
 
-    /*Bind to pointer*/
+    /*Привязка к указателю*/
     static lv_subject_t subject_pointer;
     lv_subject_init_pointer(&subject_pointer, "HELLO");
     lv_label_bind_text(obj, &subject_pointer, NULL);
@@ -837,7 +837,7 @@ void test_observer_label_text_normal(void)
     lv_subject_set_pointer(&subject_pointer, "WORLD");
     TEST_ASSERT_EQUAL_STRING("WORLD", lv_label_get_text(obj));
 
-    /*Remove the label from the subject*/
+    /*Удалить ярлык с темы*/
     lv_obj_remove_from_subject(obj, &subject_pointer);
     lv_subject_copy_string(&subject_pointer, "NOTHING");
     TEST_ASSERT_EQUAL_STRING("WORLD", lv_label_get_text(obj));
@@ -849,13 +849,13 @@ void test_observer_label_text_formatted(void)
 
     lv_observer_t * observer;
 
-    /*Cannot bind color*/
+    /*Не могу привязать цвет*/
     static lv_subject_t subject_color;
     lv_subject_init_color(&subject_color, lv_color_black());
     observer = lv_label_bind_text(obj, &subject_color, NULL);
     TEST_ASSERT_EQUAL_PTR(NULL, observer);
 
-    /*Bind to int*/
+    /*Привязка к int*/
     static lv_subject_t subject_int;
     lv_subject_init_int(&subject_int, 10);
     lv_label_bind_text(obj, &subject_int, "value: %d");
@@ -864,12 +864,12 @@ void test_observer_label_text_formatted(void)
     lv_subject_set_int(&subject_int, -20);
     TEST_ASSERT_EQUAL_STRING("value: -20", lv_label_get_text(obj));
 
-    /*Remove the label from the subject*/
+    /*Удалить ярлык с темы*/
     lv_obj_remove_from_subject(obj, &subject_int);
     lv_subject_set_int(&subject_int, 100);
     TEST_ASSERT_EQUAL_STRING("value: -20", lv_label_get_text(obj));
 
-    /*Bind to string*/
+    /*Привязать к строке*/
     static char buf[32];
     static lv_subject_t subject_string;
     lv_subject_init_string(&subject_string, buf, NULL, 32, "hello");
@@ -879,12 +879,12 @@ void test_observer_label_text_formatted(void)
     lv_subject_copy_string(&subject_string, "world");
     TEST_ASSERT_EQUAL_STRING("text: world", lv_label_get_text(obj));
 
-    /*Remove the label from the subject*/
+    /*Удалить ярлык с темы*/
     lv_obj_remove_from_subject(obj, &subject_string);
     lv_subject_copy_string(&subject_string, "nothing");
     TEST_ASSERT_EQUAL_STRING("text: world", lv_label_get_text(obj));
 
-    /*Bind to pointer*/
+    /*Привязка к указателю*/
     static lv_subject_t subject_pointer;
     lv_subject_init_pointer(&subject_pointer, "HELLO");
     lv_label_bind_text(obj, &subject_pointer, "pointer: %s");
@@ -893,7 +893,7 @@ void test_observer_label_text_formatted(void)
     lv_subject_set_pointer(&subject_pointer, "WORLD");
     TEST_ASSERT_EQUAL_STRING("pointer: WORLD", lv_label_get_text(obj));
 
-    /*Remove the label from the subject*/
+    /*Удалить ярлык с темы*/
     lv_obj_remove_from_subject(obj, &subject_pointer);
     lv_subject_copy_string(&subject_pointer, "NOTHING");
     TEST_ASSERT_EQUAL_STRING("pointer: WORLD", lv_label_get_text(obj));

@@ -20,7 +20,7 @@
 
 #define PATH_KAPPA 0.552284f
 
-/* Magic number from https://spencermortensen.com/articles/bezier-circle/ */
+/* Магическое число из https://spencermortensen.com/articles/bezier-circle/ */
 #define PATH_ARC_MAGIC 0.55191502449351f
 
 #define PATH_MEM_SIZE_MIN 128
@@ -110,7 +110,7 @@ void lv_vg_lite_path_destroy(lv_vg_lite_path_t * path)
         lv_free(path->base.path);
         path->base.path = NULL;
 
-        /* clear remaining path data */
+        /* очистить оставшиеся данные пути */
         LV_VG_LITE_CHECK_ERROR(vg_lite_clear_path(&path->base), {});
     }
     lv_free(path);
@@ -224,16 +224,16 @@ bool lv_vg_lite_path_update_bounding_box(lv_vg_lite_path_t * path)
 
     lv_vg_lite_path_bounds_t bounds;
 
-    /* init bounds */
+    /* границы инициализации */
     bounds.min_x = FLT_MAX;
     bounds.min_y = FLT_MAX;
     bounds.max_x = -FLT_MAX;
     bounds.max_y = -FLT_MAX;
 
-    /* calc bounds */
+    /* расчетные границы */
     lv_vg_lite_path_for_each_data(lv_vg_lite_path_get_path(path), path_bounds_iter_cb, &bounds);
 
-    /* set bounds */
+    /* установить границы */
     lv_vg_lite_path_set_bounding_box(path, bounds.min_x, bounds.min_y, bounds.max_x, bounds.max_y);
 
     LV_PROFILER_DRAW_END;
@@ -261,13 +261,13 @@ void lv_vg_lite_path_reserve_space(lv_vg_lite_path_t * path, size_t len)
 {
     bool need_reallocated = false;
 
-    /*Calculate new mem size until match the contidion*/
+    /*Рассчитать новый размер памяти до тех пор, пока он не будет соответствовать условию*/
     while(path->base.path_length + len > path->mem_size) {
         if(path->mem_size == 0) {
             path->mem_size = LV_MAX(len, PATH_MEM_SIZE_MIN);
         }
         else {
-            /* Increase memory size by 1.5 times */
+            /* Увеличить объем памяти в 1,5 раза */
             path->mem_size = path->mem_size * 3 / 2;
         }
         need_reallocated = true;
@@ -317,7 +317,7 @@ static inline void lv_vg_lite_path_append_point(lv_vg_lite_path_t * path, float 
 {
     if(path->has_transform) {
         LV_VG_LITE_ASSERT_MATRIX(&path->matrix);
-        /* transform point */
+        /* точка преобразования */
         float ori_x = x;
         float ori_y = y;
         x = ori_x * path->matrix.m[0][0] + ori_y * path->matrix.m[0][1] + path->matrix.m[0][2];
@@ -423,12 +423,12 @@ void lv_vg_lite_path_append_rect(
     const float half_w = w / 2.0f;
     const float half_h = h / 2.0f;
 
-    /*clamping cornerRadius by minimum size*/
+    /*зажимной уголокРадиус по минимальному размеру*/
     const float r_max = LV_MIN(half_w, half_h);
     if(r > r_max)
         r = r_max;
 
-    /*rectangle*/
+    /*прямоугольник*/
     if(r <= 0) {
         lv_vg_lite_path_move_to(path, x, y);
         lv_vg_lite_path_line_to(path, x + w, y);
@@ -439,45 +439,45 @@ void lv_vg_lite_path_append_rect(
         return;
     }
 
-    /*circle*/
+    /*круг*/
     if(math_equal(r, half_w) && math_equal(r, half_h)) {
         lv_vg_lite_path_append_circle(path, x + half_w, y + half_h, r, r);
         LV_PROFILER_DRAW_END;
         return;
     }
 
-    /* Get the control point offset for rounded cases */
+    /* Получите смещение контрольной точки для закругленных случаев */
     const float offset = r * PATH_ARC_MAGIC;
 
-    /* Rounded rectangle case */
-    /* Starting point */
+    /* Прямоугольный корпус со скругленными углами */
+    /* Начальная точка */
     lv_vg_lite_path_move_to(path, x + r, y);
 
-    /* Top side */
+    /* Верхняя сторона */
     lv_vg_lite_path_line_to(path, x + w - r, y);
 
-    /* Top-right corner */
+    /* Верхний правый угол */
     lv_vg_lite_path_cubic_to(path, x + w - r + offset, y, x + w, y + r - offset, x + w, y + r);
 
-    /* Right side */
+    /* Правая сторона */
     lv_vg_lite_path_line_to(path, x + w, y + h - r);
 
-    /* Bottom-right corner*/
+    /* Нижний правый угол*/
     lv_vg_lite_path_cubic_to(path, x + w, y + h - r + offset, x + w - r + offset, y + h, x + w - r, y + h);
 
-    /* Bottom side */
+    /* Нижняя сторона */
     lv_vg_lite_path_line_to(path, x + r, y + h);
 
-    /* Bottom-left corner */
+    /* Нижний левый угол */
     lv_vg_lite_path_cubic_to(path, x + r - offset, y + h, x, y + h - r + offset, x, y + h - r);
 
-    /* Left side*/
+    /* Левая сторона*/
     lv_vg_lite_path_line_to(path, x, y + r);
 
-    /* Top-left corner */
+    /* Верхний левый угол */
     lv_vg_lite_path_cubic_to(path, x, y + r - offset, x + r - offset, y, x + r, y);
 
-    /* Ending point */
+    /* Конечная точка */
     lv_vg_lite_path_close(path);
     LV_PROFILER_DRAW_END;
 }
@@ -529,7 +529,7 @@ void lv_vg_lite_path_append_arc(lv_vg_lite_path_t * path,
                                 bool pie)
 {
     LV_PROFILER_DRAW_BEGIN;
-    /* just circle */
+    /* просто обведи */
     if(sweep >= 360.0f || sweep <= -360.0f) {
         lv_vg_lite_path_append_circle(path, cx, cy, radius, radius);
         LV_PROFILER_DRAW_END;
@@ -544,7 +544,7 @@ void lv_vg_lite_path_append_arc(lv_vg_lite_path_t * path,
     float fract = fmodf(sweep, MATH_HALF_PI);
     fract = (math_zero(fract)) ? MATH_HALF_PI * sweep_sign : fract;
 
-    /* Start from here */
+    /* Начни отсюда */
     float start_x = radius * MATH_COSF(start_angle);
     float start_y = radius * MATH_SINF(start_angle);
 
@@ -558,10 +558,10 @@ void lv_vg_lite_path_append_arc(lv_vg_lite_path_t * path,
         float end_x = radius * MATH_COSF(end_angle);
         float end_y = radius * MATH_SINF(end_angle);
 
-        /* variables needed to calculate bezier control points */
+        /* переменные, необходимые для расчета контрольных точек Безье */
 
-        /** get bezier control points using article:
-         * (http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
+        /** получить контрольные точки Безье, используя статью:
+         * ( http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
          */
         float ax = start_x;
         float ay = start_y;
@@ -571,7 +571,7 @@ void lv_vg_lite_path_append_arc(lv_vg_lite_path_t * path,
         float q2 = ax * bx + ay * by + q1;
         float k2 = (4.0f / 3.0f) * ((MATH_SQRTF(2 * q1 * q2) - q2) / (ax * by - ay * bx));
 
-        /* Next start point is the current end point */
+        /* Следующая начальная точка — текущая конечная точка. */
         start_x = end_x;
         start_y = end_y;
 
@@ -654,16 +654,16 @@ void lv_vg_lite_path_for_each_data(const vg_lite_path_t * path, lv_vg_lite_path_
     float tmp_data[8];
 
     while(cur < end) {
-        /* get op code */
+        /* получить код операции */
         uint8_t op_code = LV_VG_LITE_PATH_GET_OP_CODE(cur);
 
-        /* get arguments length */
+        /* получить длину аргументов */
         uint8_t arg_len = lv_vg_lite_vlc_op_arg_len(op_code);
 
-        /* skip op code */
+        /* пропустить код операции */
         cur += fmt_len;
 
-        /* print arguments */
+        /* вывести аргументы */
         for(uint8_t i = 0; i < arg_len; i++) {
             switch(path->format) {
                 case VG_LITE_S8:

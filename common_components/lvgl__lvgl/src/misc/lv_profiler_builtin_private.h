@@ -27,7 +27,7 @@ extern "C" {
  **********************/
 
 /**
- * @brief LVGL profiler built-in configuration structure
+ * @brief Встроенная структура конфигурации профилировщика LVGL
  */
 struct _lv_profiler_builtin_config_t {
     size_t buf_size;                    /**< The size of the buffer used for profiling data */
@@ -46,7 +46,7 @@ struct _lv_profiler_builtin_config_t {
 #if LV_USE_PROFILER_BUILTIN_POSIX
 
 /**
- * Initialize the built-in profiler with POSIX functions.
+ * Инициализируйте встроенный профилировщик с помощью функций POSIX.
  */
 void lv_profiler_builtin_posix_init(void);
 
@@ -59,7 +59,7 @@ void lv_profiler_builtin_posix_init(void);
 #endif /* LV_USE_PROFILER && LV_USE_PROFILER_BUILTIN */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PROFILER_BUILTIN_PRIVATE_H*/

@@ -39,7 +39,7 @@ void test_led_set_color_works(void)
     lv_obj_t * led  = lv_led_create(active_screen);
     lv_led_t * ledObj = (lv_led_t *)led;
 
-    /* Test by changing colors randomly. */
+    /* Проверьте, меняя цвета случайным образом. */
     lv_led_set_color(led, lv_palette_main(LV_PALETTE_AMBER));
     TEST_ASSERT_EQUAL_COLOR(lv_palette_main(LV_PALETTE_AMBER), ledObj->color);
 
@@ -54,7 +54,7 @@ void test_led_set_brightness_works(void)
 {
     lv_obj_t * led  = lv_led_create(active_screen);
 
-    /* Test by changing brightness randomly. */
+    /* Проверьте, меняя яркость случайным образом. */
     lv_led_set_brightness(led, 150);
     TEST_ASSERT_EQUAL(150, lv_led_get_brightness(led));
 
@@ -110,13 +110,13 @@ void test_led_properties(void)
     lv_obj_t * obj = lv_led_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Test COLOR property */
+    /* Тестирование свойства COLOR */
     prop.id = LV_PROPERTY_LED_COLOR;
     prop.color = lv_palette_main(LV_PALETTE_RED);
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_COLOR(lv_palette_main(LV_PALETTE_RED), lv_obj_get_property(obj, LV_PROPERTY_LED_COLOR).color);
 
-    /* Test BRIGHTNESS property */
+    /* Тестирование свойства BRIGHTNESS */
     prop.id = LV_PROPERTY_LED_BRIGHTNESS;
     prop.num = 200;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);

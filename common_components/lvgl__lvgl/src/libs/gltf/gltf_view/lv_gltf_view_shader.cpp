@@ -107,7 +107,7 @@ lv_result_t lv_gltf_view_shader_injest_discover_defines(lv_array_t * result, lv_
                && material.pbrData.metallicFactor == 1.0f
                && material.pbrData.roughnessFactor == 1.0f
                && material.emissiveStrength > 0.0f) {
-                /* Special case where settings preclude IBL's ability to have visible effect, so disable it entirely */
+                /* Особый случай, когда настройки исключают возможность IBL иметь видимый эффект, поэтому полностью отключите его. */
                 LV_LOG_TRACE("Special case identified, disabling IBL and enabling UNLIT\n");
                 if(add_define(result, "MATERIAL_UNLIT", NULL, false) == LV_RESULT_INVALID) {
                     return LV_RESULT_INVALID;
@@ -147,7 +147,7 @@ lv_result_t lv_gltf_view_shader_injest_discover_defines(lv_array_t * result, lv_
         }
 #endif
 
-        // only set cutoff value for mask material
+        // установить пороговое значение только для материала маски
         if(material.alphaMode == fastgltf::AlphaMode::Mask) {
             if(add_define(result, "ALPHAMODE", "_MASK", false) == LV_RESULT_INVALID) {
                 return LV_RESULT_INVALID;
@@ -212,7 +212,7 @@ lv_result_t lv_gltf_view_shader_injest_discover_defines(lv_array_t * result, lv_
             if(add_define(result, "MATERIAL_TRANSMISSION", NULL, false) == LV_RESULT_INVALID) {
                 return LV_RESULT_INVALID;
             }
-#if 0 /* Material dispersion is being revisited.*/
+#if 0 /* Вопрос о дисперсии материалов пересматривается.*/
             if(add_define(result, "MATERIAL_DISPERSION", NULL, false) == LV_RESULT_INVALID) {
                 return LV_RESULT_INVALID;
             }

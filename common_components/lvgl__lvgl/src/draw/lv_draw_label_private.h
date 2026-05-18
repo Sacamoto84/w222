@@ -24,25 +24,25 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Store some info to speed up drawing of very large texts
- * It takes a lot of time to get the first visible character because
- * all the previous characters needs to be checked to calculate the positions.
- * This structure stores an earlier (e.g. at -1000 px) coordinate and the index of that line.
- * Therefore the calculations can start from here.*/
+/** Сохраните некоторую информацию, чтобы ускорить рисование очень больших текстов.
+ * Получение первого видимого символа занимает много времени, потому что
+ * все предыдущие символы необходимо проверить для расчета позиций.
+ * Эта структура хранит более раннюю координату (например, -1000 пикселей) и индекс этой строки.
+ * Поэтому расчеты можно начинать отсюда.*/
 struct _lv_draw_label_hint_t {
-    /** Index of the line at `y` coordinate*/
+    /** Индекс линии по координате `y`*/
     int32_t line_start;
 
-    /** Give the `y` coordinate of the first letter at `line start` index. Relative to the label's coordinates*/
+    /** Укажите координату`y`первой буквы по индексу`line start`. Относительно координаты метки*/
     int32_t y;
 
-    /** The 'y1' coordinate of the label when the hint was saved.
-     * Used to invalidate the hint if the label has moved too much.*/
+    /** Координата «y1» метки при сохранении подсказки.
+     * Используется для отмены подсказки, если метка сдвинулась слишком сильно.*/
     int32_t coord_y;
 };
 
 struct _lv_draw_glyph_dsc_t {
-    /** Depends on `format` field, it could be image source or draw buf of bitmap or vector data. */
+    /** В зависимости от полей`format`это может быть источником изображения или буфера рисования растровых или векторных данных. */
     const void * glyph_data;
     lv_font_glyph_format_t format;
     const lv_area_t * letter_coords;
@@ -68,7 +68,7 @@ struct _lv_draw_glyph_dsc_t {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_LABEL_PRIVATE_H*/

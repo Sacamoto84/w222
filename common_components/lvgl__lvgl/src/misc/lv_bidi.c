@@ -19,7 +19,7 @@
  *********************/
 #define LV_BIDI_BRACKET_DEPTH   4
 
-// Highest bit of the 16-bit pos_conv value specifies whether this pos is RTL or not
+// Старший бит 16-битного значенияpos_convопределяется, является ли эта позицияRTLили нет.
 #define GET_POS(x) ((x) & 0x7FFF)
 #define IS_RTL_POS(x) (((x) & 0x8000) != 0)
 #define SET_RTL_POS(x, is_rtl) (GET_POS(x) | ((is_rtl)? 0x8000: 0))
@@ -101,9 +101,9 @@ void lv_bidi_process(const char * str_in, char * str_out, lv_base_dir_t base_dir
 }
 
 /**
- * Auto-detect the direction of a text based on the first strong character
- * @param txt the text to process
- * @return `LV_BASE_DIR_LTR` or `LV_BASE_DIR_RTL`
+ * Автоматическое определение направления текста по первому сильному символу
+ * @param txt текст для обработки
+ * @return `LV_BASE_DIR_LTR` или `LV_BASE_DIR_RTL`
  */
 lv_base_dir_t lv_bidi_detect_base_dir(const char * txt)
 {
@@ -117,7 +117,7 @@ lv_base_dir_t lv_bidi_detect_base_dir(const char * txt)
         if(dir == LV_BASE_DIR_RTL || dir == LV_BASE_DIR_LTR) return dir;
     }
 
-    /*If there were no strong char earlier return with the default base dir*/
+    /*Если ранее не было сильного символа, вернитесь с базовым каталогом по умолчанию.*/
     if(LV_BIDI_BASE_DIR_DEF == LV_BASE_DIR_AUTO) return LV_BASE_DIR_LTR;
     else return LV_BIDI_BASE_DIR_DEF;
 }
@@ -204,11 +204,11 @@ void lv_bidi_process_paragraph(const char * str_in, char * str_out, uint32_t len
 
     lv_base_dir_t dir = base_dir;
 
-    /*Empty the bracket stack*/
+    /*Очистите стопку кронштейнов*/
     lv_bidi_ctx_t ctx;
     lv_memzero(&ctx, sizeof(ctx));
 
-    /*Process neutral chars in the beginning*/
+    /*Обработка нейтральных символов в начале*/
     while(rd < len) {
         uint32_t letter = lv_text_encoded_next(str_in, &rd);
         pos_conv_rd++;
@@ -241,7 +241,7 @@ void lv_bidi_process_paragraph(const char * str_in, char * str_out, uint32_t len
         }
     }
 
-    /*Get and process the runs*/
+    /*Получить и обработать прогоны*/
 
     while(rd < len && str_in[rd]) {
         run_dir = get_next_run(&ctx, &str_in[rd], base_dir, len - rd, &run_len, &pos_conv_run_len);
@@ -292,9 +292,9 @@ void lv_bidi_set_custom_neutrals_static(const char * neutrals)
  **********************/
 
 /**
- * Get the next paragraph from a text
- * @param txt the text to process
- * @return the length of the current paragraph in byte count
+ * Получить следующий абзац из текста
+ * @param txt текст для обработки
+ * @return длина текущего абзаца в байтах
  */
 static uint32_t lv_bidi_get_next_paragraph(const char * txt)
 {
@@ -310,8 +310,8 @@ static uint32_t lv_bidi_get_next_paragraph(const char * txt)
 }
 
 /**
- * Get the direction of a character
- * @param letter a Unicode character
+ * Получить направление персонажа
+ * @param letter символ Юникода
  * @return `LV_BASE_DIR_RTL/LTR/WEAK/NEUTRAL`
  */
 static lv_base_dir_t lv_bidi_get_letter_dir(uint32_t letter)
@@ -323,9 +323,9 @@ static lv_base_dir_t lv_bidi_get_letter_dir(uint32_t letter)
     return LV_BASE_DIR_LTR;
 }
 /**
- * Tell whether a character is weak or not
- * @param letter a Unicode character
- * @return true/false
+ * Расскажите, слабый персонаж или нет
+ * @param letter символ Юникода
+ * @return истина/ложь
  */
 static bool lv_bidi_letter_is_weak(uint32_t letter)
 {
@@ -342,20 +342,20 @@ static bool lv_bidi_letter_is_weak(uint32_t letter)
     return false;
 }
 /**
- * Tell whether a character is RTL or not
- * @param letter a Unicode character
- * @return true/false
+ * Укажите, является ли персонаж RTL или нет.
+ * @param letter символ Юникода
+ * @return истина/ложь
  */
 static bool lv_bidi_letter_is_rtl(uint32_t letter)
 {
-    if(letter == 0x202E) return true;               /*Unicode of LV_BIDI_RLO*/
+    if(letter == 0x202E) return true;               /*Юникод LV_BIDI_RLO*/
 
-    /*Check for Persian and Arabic characters [https://en.wikipedia.org/wiki/Arabic_script_in_Unicode]*/
+    /*Проверьте наличие персидских и арабских символов [ https://en.wikipedia.org/wiki/Arabic_script_in_Unicode]*/
     if(letter >= 0x600 && letter <= 0x6FF) return true;
     if(letter >= 0xFB50 && letter <= 0xFDFF) return true;
     if(letter >= 0xFE70 && letter <= 0xFEFF) return true;
 
-    /*Check for Hebrew characters [https://en.wikipedia.org/wiki/Unicode_and_HTML_for_the_Hebrew_alphabet]*/
+    /*Проверить наличие символов иврита [ https://en.wikipedia.org/wiki/Unicode_and_HTML_for_the_Hebrew_alphabet]*/
     if(letter >= 0x590 && letter <= 0x5FF) return true;
     if(letter >= 0xFB1D && letter <= 0xFB4F) return true;
 
@@ -363,9 +363,9 @@ static bool lv_bidi_letter_is_rtl(uint32_t letter)
 }
 
 /**
- * Tell whether a character is neutral or not
- * @param letter a Unicode character
- * @return true/false
+ * Расскажите, нейтральный персонаж или нет
+ * @param letter символ Юникода
+ * @return истина/ложь
  */
 static bool lv_bidi_letter_is_neutral(uint32_t letter)
 {
@@ -417,7 +417,7 @@ static lv_base_dir_t get_next_run(lv_bidi_ctx_t * ctx, const char * txt, lv_base
     lv_base_dir_t dir = lv_bidi_get_letter_dir(letter);
     if(dir == LV_BASE_DIR_NEUTRAL)  dir = bracket_process(ctx, txt, 0, max_len, letter, base_dir);
 
-    /*Find the first strong char. Skip the neutrals*/
+    /*Найдите первый сильный символ. Пропустите нейтральные цвета*/
     while(dir == LV_BASE_DIR_NEUTRAL || dir == LV_BASE_DIR_WEAK) {
         letter = lv_text_encoded_next(txt, &i);
 
@@ -441,7 +441,7 @@ static lv_base_dir_t get_next_run(lv_bidi_ctx_t * ctx, const char * txt, lv_base
     uint16_t pos_conv_i_prev = pos_conv_i;
     uint16_t pos_conv_i_last_strong = pos_conv_i;
 
-    /*Find the next char which has different direction*/
+    /*Найдите следующий символ, имеющий другое направление.*/
     lv_base_dir_t next_dir = base_dir;
     while(i_prev < max_len && txt[i] != '\0' && txt[i] != '\n' && txt[i] != '\r') {
         letter = lv_text_encoded_next(txt, &i);
@@ -459,12 +459,12 @@ static lv_base_dir_t get_next_run(lv_bidi_ctx_t * ctx, const char * txt, lv_base
 
         /*New dir found?*/
         if((next_dir == LV_BASE_DIR_RTL || next_dir == LV_BASE_DIR_LTR) && next_dir != run_dir) {
-            /*Include neutrals if `run_dir == base_dir`*/
+            /*Включите нейтральные значения, если `run_dir == base_dir`*/
             if(run_dir == base_dir) {
                 *len = i_prev;
                 *pos_conv_len = pos_conv_i_prev;
             }
-            /*Exclude neutrals if `run_dir != base_dir`*/
+            /*Исключить нейтралы, если `run_dir != base_dir`*/
             else {
                 *len = i_last_strong;
                 *pos_conv_len = pos_conv_i_last_strong;
@@ -482,14 +482,14 @@ static lv_base_dir_t get_next_run(lv_bidi_ctx_t * ctx, const char * txt, lv_base
         pos_conv_i_prev = pos_conv_i;
     }
 
-    /*Handle end of of string. Apply `base_dir` on trailing neutrals*/
+    /*Обработать конец строки. Замените`base_dir`на замыкающих нейтральных передачах.*/
 
-    /*Include neutrals if `run_dir == base_dir`*/
+    /*Включите нейтральные значения, если `run_dir == base_dir`*/
     if(run_dir == base_dir) {
         *len = i_prev;
         *pos_conv_len = pos_conv_i_prev;
     }
-    /*Exclude neutrals if `run_dir != base_dir`*/
+    /*Исключить нейтралы, если `run_dir != base_dir`*/
     else {
         *len = i_last_strong;
         *pos_conv_len = pos_conv_i_last_strong;
@@ -510,7 +510,7 @@ static void rtl_reverse(char * dest, const char * src, uint32_t len, uint16_t * 
         uint32_t letter = lv_text_encoded_prev(src, &i);
         uint16_t pos_conv_letter = --pos_conv_i;
 
-        /*Keep weak letters (numbers) as LTR*/
+        /*Слабые буквы (цифры) оставьте как LTR.*/
         if(lv_bidi_letter_is_weak(letter)) {
             uint32_t last_weak = i;
             uint32_t first_weak = i;
@@ -520,12 +520,12 @@ static void rtl_reverse(char * dest, const char * src, uint32_t len, uint16_t * 
                 letter = lv_text_encoded_prev(src, &i);
                 pos_conv_letter = --pos_conv_i;
 
-                /*No need to call `char_change_to_pair` because there not such chars here*/
+                /*Не нужно сохранять`char_change_to_pair`, потому что таких символов здесь нет.*/
 
-                /*Finish on non-weak char*/
-                /*but treat number and currency related chars as weak*/
+                /*Закончить на неслабом персонаже*/
+                /*но считать символы, связанные с числом и валютой, слабыми*/
                 if(lv_bidi_letter_is_weak(letter) == false && letter != '.' && letter != ',' && letter != '$' && letter != '%') {
-                    lv_text_encoded_next(src, &i);   /*Rewind one letter*/
+                    lv_text_encoded_next(src, &i);   /*Перемотать одну букву назад*/
                     pos_conv_i++;
                     first_weak = i;
                     pos_conv_first_weak = pos_conv_i;
@@ -544,10 +544,10 @@ static void rtl_reverse(char * dest, const char * src, uint32_t len, uint16_t * 
             pos_conv_wr += pos_conv_last_weak - pos_conv_first_weak + 1;
         }
 
-        /*Simply store in reversed order*/
+        /*Просто сохраните в обратном порядке*/
         else {
             uint32_t letter_size = lv_text_encoded_size((const char *)&src[i]);
-            /*Swap arithmetical symbols*/
+            /*Поменять местами арифметические символы*/
             if(letter_size == 1) {
                 uint32_t new_letter = letter = char_change_to_pair(letter);
                 if(dest) dest[wr] = (uint8_t)new_letter;
@@ -555,7 +555,7 @@ static void rtl_reverse(char * dest, const char * src, uint32_t len, uint16_t * 
                 wr++;
                 pos_conv_wr++;
             }
-            /*Just store the letter*/
+            /*Просто сохрани письмо*/
             else {
                 if(dest) lv_memcpy(&dest[wr], &src[i], letter_size);
                 if(pos_conv_out) pos_conv_out[pos_conv_wr] = SET_RTL_POS(pos_conv_rd_base + pos_conv_i, true);
@@ -591,17 +591,17 @@ static lv_base_dir_t bracket_process(lv_bidi_ctx_t * ctx, const char * txt, uint
     /*Is the letter an opening bracket?*/
     for(i = 0; bracket_left[i] != '\0'; i++) {
         if(bracket_left[i] == letter) {
-            /*If so find its matching closing bracket.
-             *If a char with base dir. direction is found then the brackets will have `base_dir` direction*/
+            /*Если да, найдите соответствующую закрывающую скобку.
+             *Если символ с базовым каталогом. направление найдено, то скобки будут иметь направление `base_dir`*/
             uint32_t txt_i = next_pos;
             while(txt_i < len) {
                 uint32_t letter_next = lv_text_encoded_next(txt, &txt_i);
                 if(letter_next == bracket_right[i]) {
-                    /*Closing bracket found*/
+                    /*Закрывающая скобка найдена*/
                     break;
                 }
                 else {
-                    /*Save the dir*/
+                    /*Сохраните каталог*/
                     lv_base_dir_t letter_dir = lv_bidi_get_letter_dir(letter_next);
                     if(letter_dir == base_dir) {
                         bracket_dir = base_dir;
@@ -609,13 +609,13 @@ static lv_base_dir_t bracket_process(lv_bidi_ctx_t * ctx, const char * txt, uint
                 }
             }
 
-            /*There were no matching closing bracket*/
+            /*Не найдено подходящей закрывающей скобки*/
             if(txt_i > len)  return LV_BASE_DIR_NEUTRAL;
 
-            /*There where a strong char with base dir in the bracket so the dir is found.*/
+            /*Там, где есть сильный символ с базовым каталогом в скобках, поэтому каталог находится.*/
             if(bracket_dir != LV_BASE_DIR_NEUTRAL && bracket_dir != LV_BASE_DIR_WEAK) break;
 
-            /*If there were no matching strong chars in the brackets then check the previous chars*/
+            /*Если в скобках не было соответствующих сильных символов, проверьте предыдущие символы.*/
             txt_i = next_pos;
             if(txt_i) lv_text_encoded_prev(txt, &txt_i);
             while(txt_i > 0) {
@@ -627,17 +627,17 @@ static lv_base_dir_t bracket_process(lv_bidi_ctx_t * ctx, const char * txt, uint
                 }
             }
 
-            /*There where a previous strong char which can be used*/
+            /*Там, где предыдущий сильный символ, который можно использовать*/
             if(bracket_dir != LV_BASE_DIR_NEUTRAL) break;
 
-            /*There were no strong chars before the bracket, so use the base dir.*/
+            /*Перед скобками не было сильных символов, поэтому используйте базовый каталог.*/
             if(txt_i == 0) bracket_dir = base_dir;
 
             break;
         }
     }
 
-    /*The letter was an opening bracket*/
+    /*Буква была открывающей скобкой*/
     if(bracket_left[i] != '\0') {
 
         if(bracket_dir == LV_BASE_DIR_NEUTRAL || ctx->br_stack_p == LV_BIDI_BRACKET_DEPTH) return LV_BASE_DIR_NEUTRAL;

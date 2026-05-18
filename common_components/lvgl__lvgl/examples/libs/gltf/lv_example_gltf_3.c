@@ -40,34 +40,34 @@ static void clicked_event_cb(lv_event_t * e)
     lv_point_t point;
     lv_indev_get_point(indev, &point);
 
-    /* Create a ray starting from the 2d point in the same direction as the camera view */
+    /* Создайте луч, начиная с 2D-точки в том же направлении, что и вид камеры. */
     lv_3dray_t ray = lv_gltf_get_ray_from_2d_coordinate(gltf, &point);
-    /* Create the ground plane */
+    /* Создайте наземную плоскость */
     lv_3dplane_t plane = lv_get_ground_plane(0.f);
 
-    /* Check if the ray intersects with the ground plane*/
+    /* Проверьте, пересекается ли луч с плоскостью заземления.*/
     lv_3dpoint_t collision_point;
     lv_result_t res = lv_intersect_ray_with_plane(&ray, &plane, &collision_point);
     if(res != LV_RESULT_OK) {
-        /* No hit*/
+        /* Нет попадания*/
         hide_node(cursor_node);
         return;
     }
 
     if(code == LV_EVENT_PRESSED) {
-        /* Get the selected plant if the collision point is near enough
-         * and also compute its offset point so the plant doesn't suddenly
-         * jump to collision point*/
+        /* Получите выбранное растение, если точка столкновения находится достаточно близко.
+         * а также вычислить точку смещения, чтобы растение внезапно не
+         * прыжок к точке столкновения*/
         selected_plant.plant = get_plant(&collision_point, &selected_plant.offset_point);
         if(!selected_plant.plant) {
-            /* No plant near hit*/
+            /* Ни одно растение рядом не пострадало*/
             hide_node(cursor_node);
             return;
         }
     }
     if(selected_plant.plant) {
-        /* Calculate the offset based on when it first was pressed
-         * so that the plant doesn't jump */
+        /* Рассчитайте смещение в зависимости от того, когда оно было впервые нажато.
+         * чтобы растение не прыгало */
         collision_point.x -= selected_plant.offset_point.x;
         collision_point.y -= selected_plant.offset_point.y;
         collision_point.z -= selected_plant.offset_point.z;
@@ -96,7 +96,7 @@ static void plant_position_cb(lv_event_t * e)
     lv_gltf_model_node_t * node = (lv_gltf_model_node_t *)lv_event_get_target(e);
     for(size_t i = 0; i < PLANT_COUNT; ++i) {
         if(node == plant_positions[i].root) {
-            /* Since we're using the root node of the plant, the local position will be the same as the world position*/
+            /* Поскольку мы используем корневой узел растения, локальная позиция будет такой же, как мировая позиция.*/
             lv_gltf_model_node_get_local_position(e, &plant_positions[i].position);
             lv_gltf_model_node_get_euler_rotation(e, &plant_positions[i].rotation);
         }
@@ -105,7 +105,7 @@ static void plant_position_cb(lv_event_t * e)
 
 static void hide_node(lv_gltf_model_node_t * cursor)
 {
-    /* Setting the scale to 0 will make the node essentially invisible*/
+    /* Установка масштаба на 0 сделает узел практически невидимым.*/
     lv_gltf_model_node_set_scale_x(cursor, 0);
     lv_gltf_model_node_set_scale_y(cursor, 0);
     lv_gltf_model_node_set_scale_z(cursor, 0);
@@ -118,12 +118,12 @@ static void rotate_plant(plant_t * plant)
 static void move_plant(plant_t * plant, const lv_3dpoint_t * point)
 {
 
-    /* Make sure we can see the cursor by setting its scale back to 1*/
+    /* Убедитесь, что мы видим курсор, вернув его масштаб на 1.*/
     lv_gltf_model_node_set_scale_x(cursor_node, 1);
     lv_gltf_model_node_set_scale_y(cursor_node, 1);
     lv_gltf_model_node_set_scale_z(cursor_node, 1);
 
-    /* Set the cursor and plant position to the same point*/
+    /* Установите курсор и положение растения в одну и ту же точку.*/
     lv_gltf_model_node_set_position_x(cursor_node, point->x);
     lv_gltf_model_node_set_position_y(cursor_node, point->y);
     lv_gltf_model_node_set_position_z(cursor_node, point->z);
@@ -133,7 +133,7 @@ static void move_plant(plant_t * plant, const lv_3dpoint_t * point)
 }
 
 /**
- * Load multiple models in a single glTF object and modify their position, rotation and scale at runtime
+ * Загрузите несколько моделей в один объект glTF и измените их положение, обращение и масштаб во время выполнения.
  */
 void lv_example_gltf_3(void)
 {
@@ -149,11 +149,11 @@ void lv_example_gltf_3(void)
                                                                      "A:lvgl/examples/libs/gltf/webp_diffuse_transmission_plant.glb");
         plant_positions[i].root = lv_gltf_model_node_get_by_numeric_path(plant_model, ".0");
 
-        /* Register an event so that we can get the plant position when it's updated*/
-        /* For the plant we are interested in its world position and its rotation
-         * but since we're using the root node of the plant, its local position
-         * will be the same as the world position so we can use it instead of the world position
-         * to avoid computation overhead*/
+        /* Зарегистрируйте событие, чтобы мы могли получить положение растения при его обновлении.*/
+        /* Для растения нас интересует его мировое положение и его вращение.
+         * но поскольку мы используем корневой узел растения, его локальная позиция
+         * будет таким же, как мировая позиция, поэтому мы можем использовать ее вместо мировой позиции
+         * чтобы избежать накладных расходов на вычисления*/
         lv_gltf_model_node_add_event_cb(plant_positions[i].root, plant_position_cb,
                                         LV_EVENT_VALUE_CHANGED, NULL);
 
@@ -176,7 +176,7 @@ void lv_example_gltf_3(void)
 void lv_example_gltf_3(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "glTF web support is coming soon");

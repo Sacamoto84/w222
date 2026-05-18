@@ -33,7 +33,7 @@ void lv_example_ffmpeg_2(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_FFMPEG_H*/

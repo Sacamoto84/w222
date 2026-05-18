@@ -86,26 +86,26 @@ void g2d_insert_buf_map(void * key, struct g2d_buf * value)
     int index = _map_hash_function(key);
 
     if(table->count == table->size) {
-        /* Table is full. */
+        /* Стол заполнен. */
         _map_free_item(item);
         G2D_ASSERT_MSG(false, "Hash table is full. Increase LV_G2D_HASH_TABLE_SIZE.");
         return;
     }
 
     if(table->items[index] == NULL) {
-        /* Key not found. Insert item. */
+        /* Ключ не найден. Вставить элемент. */
         table->items[index] = item;
         table->count++;
         return;
     }
     else {
         if(table->items[index]->key == key) {
-            /* Key already exists, update value. */
+            /* Ключ уже существует, обновите значение. */
             table->items[index]->value = value;
             return;
         }
         else {
-            /* Handle the collision */
+            /* Справьтесь со столкновением */
             _handle_collision(index, item);
             return;
         }
@@ -139,27 +139,27 @@ struct g2d_buf * g2d_search_buf_map(void * key)
 
 void g2d_free_item(void * key)
 {
-    /* Delete an item from the table. */
+    /* Удалить элемент из таблицы. */
     int index = _map_hash_function(key);
     lv_map_item_t * item = table->items[index];
     lv_array_t * list = (lv_array_t *)table->overflow_list[index];
 
-    /* If there is no item, then nothing to do. */
+    /* Если пункта нет, то делать нечего. */
     if(item == NULL) {
         return;
     }
     else if(item->key == key) {
-        /* Remove the item. */
+        /* Удалите элемент. */
         table->items[index] = NULL;
         _map_free_item(item);
         table->count--;
 
-        /* If there is no collision chain, just return. */
+        /* Если цепочки столкновений нет, просто вернитесь. */
         if(list == NULL) {
             return;
         }
 
-        /* If a collision chain exists, promote the first item. */
+        /* Если существует цепочка коллизий, повысьте уровень первого элемента. */
         lv_map_item_t * promoted_item = (lv_map_item_t *)lv_array_at(list, 0);
         table->items[index] = _map_create_item(promoted_item->key, promoted_item->value);
         lv_array_remove(list, 0);
@@ -168,10 +168,10 @@ void g2d_free_item(void * key)
         }
         return;
     }
-    /* If the item is not the one we are searching, and there is no list, then return. */
+    /* Если элемент не тот, который мы ищем, и списка нет, то возвращаемся. */
     if(list == NULL) return;
     else {
-        /* The item might be inside the list. */
+        /* Элемент может находиться внутри списка. */
         for(uint32_t i = 0; i < lv_array_size(list); i++) {
             item = (lv_map_item_t *)lv_array_at(list, i);
             if(item->key == key) {
@@ -227,7 +227,7 @@ static unsigned long _map_hash_function(void * ptr)
 static void _handle_collision(unsigned long index, lv_map_item_t * item)
 {
     if(table->overflow_list[index] == NULL) {
-        /* Create the list. */
+        /* Создайте список. */
         lv_array_t * list = (lv_array_t *) lv_malloc(sizeof(lv_array_t));
         lv_array_init(list, LV_ARRAY_DEFAULT_CAPACITY, sizeof(lv_map_item_t));
         lv_array_push_back(list, item);
@@ -240,12 +240,12 @@ static void _handle_collision(unsigned long index, lv_map_item_t * item)
         for(uint32_t i = 0; i < lv_array_size(list); i++) {
             lv_map_item_t * it = (lv_map_item_t *)lv_array_at(list, i);
             if(it->key == item->key) {
-                /* Key exists, update value. */
+                /* Ключ существует, обновите значение. */
                 it->value = item->value;
                 return;
             }
         }
-        /* Insert to the list. */
+        /* Вставьте в список. */
         lv_array_push_back(table->overflow_list[index], item);
         table->count++;
         return;
@@ -263,7 +263,7 @@ static lv_map_item_t * _map_create_item(void * key, struct g2d_buf * value)
 
 static void _map_free_item(lv_map_item_t * item)
 {
-    /* Also free the g2d_buf. */
+    /* Также освободите g2d_buf. */
     g2d_free(item->value);
     item->key = NULL;
     item->value = NULL;

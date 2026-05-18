@@ -138,8 +138,8 @@ lv_result_t lv_gstreamer_set_src(lv_obj_t * obj, const char * factory_name, cons
         g_object_set(G_OBJECT(head), property, source, NULL);
     }
 
-    /* The uri decode source element will automatically handle parsing and decoding for us
-     * for other source types, we need to add a parser and a decoder ourselves element*/
+    /* Исходный элемент uri decode автоматически выполнит для нас синтаксический анализ и декодирование.
+     * для других типов источников нам необходимо добавить элемент синтаксического анализатора и декодера*/
     if(!lv_streq(LV_GSTREAMER_FACTORY_URI_DECODE, factory_name)) {
         GstElement * decodebin = gst_element_factory_make("decodebin", "lv_gstreamer_decodebin");
         if(!decodebin) {
@@ -162,10 +162,10 @@ lv_result_t lv_gstreamer_set_src(lv_obj_t * obj, const char * factory_name, cons
         head = decodebin;
     }
 
-    /* At this point we don't yet know the input format
-     * Once the source starts receiving the data, it will create the necessary pads,
-     * i.e one pad for audio and one for video
-     * We add a callback so that we automatically connect to the data once it's figured out*/
+    /* На данный момент мы еще не знаем формат ввода.
+     * Как только источник начнет получать данные, он создаст необходимые площадки,
+     * то есть одна панель для аудио и одна для видео
+     * Мы добавляем обратный вызов, чтобы автоматически подключаться к данным, как только они будут получены.*/
     g_signal_connect(head, "pad-added", G_CALLBACK(on_decode_pad_added), streamer);
 
     streamer->pipeline = pipeline;
@@ -360,7 +360,7 @@ void lv_gstreamer_set_rate(lv_obj_t * obj, uint32_t rate)
         return;
     }
 
-    /* Perform the seek with new rate from the current position */
+    /* Выполнить поиск с новой ставкой из текущей позиции. */
     if(!gst_element_seek(streamer->pipeline, gst_rate,
                          GST_FORMAT_TIME,
                          GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_ACCURATE,
@@ -419,7 +419,7 @@ static lv_result_t gstreamer_poll_bus(lv_gstreamer_t * streamer)
                 }
             case GST_MESSAGE_EOS:
                 if(gstreamer_send_state_changed(streamer, LV_GSTREAMER_STREAM_STATE_END) == LV_RESULT_INVALID) {
-                    /* Object deleted inside event handler */
+                    /* Объект удален внутри обработчика событий */
                     gst_object_unref(bus);
                     gst_message_unref(msg);
                     return LV_RESULT_INVALID;
@@ -490,14 +490,14 @@ static void gstreamer_update_frame(lv_gstreamer_t * streamer)
         };
         lv_image_set_src((lv_obj_t *)streamer, &streamer->frame);
     }
-    /* We send the event AFTER setting the image source so that users can query the
-     * resolution on this specific event callback */
+    /* Мы отправляем событие AFTER, устанавливающее источник изображения, чтобы пользователи могли запросить
+     * разрешение по этому конкретному обратному вызову события */
     if(first_frame) {
         if(gstreamer_send_state_changed(streamer, LV_GSTREAMER_STREAM_STATE_START) == LV_RESULT_INVALID) {
-            /* Object deleted inside event handler */
+            /* Объект удален внутри обработчика событий */
             return;
         }
-        /*Send READY event for backwards compatibility with v9.4*/
+        /*Отправьте событие READY для обратной совместимости с версией 9.4.*/
         lv_obj_send_event((lv_obj_t *)streamer, LV_EVENT_READY, streamer);
     }
 
@@ -548,8 +548,8 @@ static lv_result_t gstreamer_make_and_add_to_pipeline(lv_gstreamer_t * streamer,
     for(size_t i = 0; i < element_count; ++i) {
         GstElement * el = gst_element_factory_make(elements[i].factory, elements[i].name);
         if(!el) {
-            /* The previous elements were added to the pipeline so we don't need to unref them explicitly
-             * Unrefing the pipeline is enough and is done by caller*/
+            /* Предыдущие элементы были добавлены в конвейер, поэтому нам не нужно явно отменять их ссылку.
+             * Отмена ссылки на конвейер достаточна и выполняется вызывающей стороной.*/
             LV_LOG_ERROR("Failed to create %s element", elements[i].name);
             return LV_RESULT_INVALID;
         }
@@ -590,9 +590,9 @@ static void on_decode_pad_added(GstElement * element, GstPad * pad, gpointer use
                 goto exit;
             }
 
-            /* Here we set the fps we want the pipeline to produce and the color format
-             * This is achieved by the video_convert and video_rate elements that will automatically throttle and
-             * convert the image to the format we desire*/
+            /* Здесь мы устанавливаем частоту кадров в секунду, которую мы хотим, чтобы конвейер выдавал, и формат цвета.
+             * Это достигается с помощью элементов video_convert и video_rate, которые автоматически дросселируют и
+             * конвертируем изображение в желаемый формат*/
             uint32_t target_fps = 1000 / LV_DEF_REFR_PERIOD;
             char caps_str[128];
             lv_snprintf(caps_str, sizeof(caps_str), "video/x-raw,format=%s,framerate=%" LV_PRIu32 "/1", GST_FORMAT, target_fps);
@@ -662,10 +662,10 @@ exit:
 
 static GstFlowReturn on_new_sample(GstElement * sink, gpointer user_data)
 {
-    /* This function is called from a thread other than the main one so we can't call anything related to LVGL here
-     * Instead, we acquire the new sample (the new frame) and push it to the queue so that we can retrieve it from an LVGL timer
-     * Note that the pipeline spits out a new frame every LV_DEF_REFR_PERIOD as per the way it's set up so we shouldn't ever lose any
-     * frames with this method*/
+    /* Эта функция вызывается из потока, отличного от основного, поэтому мы не можем здесь вызывать что-либо, связанное с LVGL.
+     * Вместо этого мы получаем новую выборку (новый кадр) и помещаем ее в очередь, чтобы можно было получить ее по таймеру LVGL.
+     * Обратите внимание, что конвейер выдает новый кадр каждый LV_DEF_REFR_PERIOD в соответствии с тем, как он настроен, поэтому мы никогда не должны терять ни одного кадра.
+     * кадры с этим методом*/
     lv_gstreamer_t * streamer = (lv_gstreamer_t *)user_data;
     GstSample * sample;
 

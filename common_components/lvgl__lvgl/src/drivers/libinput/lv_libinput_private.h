@@ -40,20 +40,20 @@ struct _lv_libinput_t {
     int fd;
     struct pollfd fds[1];
 
-    /* The points array is implemented as a circular LIFO queue */
-    lv_libinput_event_t points[LV_LIBINPUT_MAX_EVENTS]; /* Event buffer */
-    lv_libinput_event_t slots[2]; /* Realtime state of up to 2 fingers to handle multitouch */
+    /* Массив точек реализован в виде круговой очереди LIFO. */
+    lv_libinput_event_t points[LV_LIBINPUT_MAX_EVENTS]; /* Буфер событий */
+    lv_libinput_event_t slots[2]; /* Состояние до 2 пальцев в реальном времени для обработки мультитач */
 
-    /* Pointer devices work a bit differently in libinput which requires us to store their last known state */
+    /* Указательные устройства работают немного по-другому в libinput, что требует от нас сохранения их последнего известного состояния. */
     lv_point_t pointer_position;
     bool pointer_button_down;
 
-    int start; /* Index of start of event queue */
-    int end; /* Index of end of queue*/
-    lv_libinput_event_t last_event; /* Report when no new events
-                                   * to keep indev state consistent
+    int start; /* Индекс начала очереди событий */
+    int end; /* Индекс конца очереди*/
+    lv_libinput_event_t last_event; /* Сообщать, когда нет новых событий
+                                   * чтобы поддерживать постоянное состояние разработки
                                    */
-    bool deinit; /* Tell worker thread to quit */
+    bool deinit; /* Скажите рабочему потоку выйти */
     pthread_mutex_t event_lock;
     pthread_t worker_thread;
 
@@ -77,7 +77,7 @@ struct _lv_libinput_t {
 #endif /* LV_USE_LIBINPUT */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LIBINPUT_PRIVATE_H*/

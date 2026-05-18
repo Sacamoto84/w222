@@ -48,7 +48,7 @@ static lv_draw_buf_t * decode_png_data(const void * png_data, size_t png_data_si
  **********************/
 
 /**
- * Register the PNG decoder functions in LVGL
+ * Зарегистрируйте функции декодера PNG в LVGL.
  */
 void lv_lodepng_init(void)
 {
@@ -76,7 +76,7 @@ void lv_lodepng_deinit(void)
  **********************/
 
 /**
- * Get info about a PNG image
+ * Получить информацию об изображении PNG
  * @param decoder   pointer to the decoder where this function belongs
  * @param dsc       image descriptor containing the source and type of the image and other info.
  * @param header    image information is set in header parameter
@@ -84,20 +84,20 @@ void lv_lodepng_deinit(void)
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
-    lv_image_src_t src_type = dsc->src_type;          /*Get the source type*/
+    lv_image_src_t src_type = dsc->src_type;          /*Получить тип источника*/
 
     if(src_type == LV_IMAGE_SRC_FILE || src_type == LV_IMAGE_SRC_VARIABLE) {
         uint32_t * size;
         static const uint8_t magic[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
         uint8_t buf[24];
 
-        /*If it's a PNG file...*/
+        /*Если это файл PNG...*/
         if(src_type == LV_IMAGE_SRC_FILE) {
-            /* Read the width and height from the file. They have a constant location:
-            * [16..19]: width
-            * [20..23]: height
+            /* Прочтите ширину и высоту из файла. Они имеют постоянное местонахождение:
+            * [16..19]: ширина
+            * [20..23]: высота
             */
             uint32_t rn;
             lv_fs_read(&dsc->file, buf, sizeof(buf), &rn);
@@ -108,7 +108,7 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
             size = (uint32_t *)&buf[16];
         }
-        /*If it's a PNG file in a  C array...*/
+        /*Если это файл PNG в массиве C...*/
         else {
             const lv_image_dsc_t * img_dsc = dsc->src;
             const uint32_t data_size = img_dsc->data_size;
@@ -118,20 +118,20 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             if(lv_memcmp(img_dsc->data, magic, sizeof(magic)) != 0) return LV_RESULT_INVALID;
         }
 
-        /*Save the data in the header*/
+        /*Сохраняем данные в шапке*/
         header->cf = LV_COLOR_FORMAT_ARGB8888;
-        /*The width and height are stored in Big endian format so convert them to little endian*/
+        /*Ширина и высота хранятся в формате с прямым порядком байтов, поэтому преобразуйте их в формат с прямым порядком байтов.*/
         header->w = (int32_t)((size[0] & 0xff000000) >> 24) + ((size[0] & 0x00ff0000) >> 8);
         header->h = (int32_t)((size[1] & 0xff000000) >> 24) + ((size[1] & 0x00ff0000) >> 8);
 
         return LV_RESULT_OK;
     }
 
-    return LV_RESULT_INVALID;         /*If didn't succeeded earlier then it's an error*/
+    return LV_RESULT_INVALID;         /*Если раньше это не удалось, то это ошибка*/
 }
 
 /**
- * Open a PNG image and decode it into dsc.decoded
+ * Откройте изображение PNG и декодируйте его в dsc.decoded.
  * @param decoder   pointer to the decoder where this function belongs
  * @param dsc       decoded image descriptor
  * @return          LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -146,7 +146,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = dsc->src;
 
-        /*Load the file*/
+        /*Загрузите файл*/
         unsigned error = lodepng_load_file((void *)&png_data, &png_data_size, fn);
         if(error) {
             if(png_data != NULL) {
@@ -184,7 +184,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_INVALID;
     }
 
-    /*The adjusted draw buffer is newly allocated.*/
+    /*Скорректированный буфер отрисовки выделяется заново.*/
     if(adjusted != decoded) {
         lv_draw_buf_destroy(decoded);
         decoded = adjusted;
@@ -197,13 +197,13 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_OK;
     }
 
-    /*If the image cache is disabled, just return the decoded image*/
+    /*Если кэш изображений отключен, просто верните декодированное изображение.*/
     if(!lv_image_cache_is_enabled()) {
         LV_PROFILER_DECODER_END_TAG("lv_lodepng_decoder_open");
         return LV_RESULT_OK;
     }
 
-    /*Add the decoded image to the cache*/
+    /*Добавьте декодированное изображение в кеш*/
     lv_image_cache_data_t search_key;
     search_key.src_type = dsc->src_type;
     search_key.src = dsc->src;
@@ -220,11 +220,11 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
     dsc->cache_entry = entry;
 
     LV_PROFILER_DECODER_END_TAG("lv_lodepng_decoder_open");
-    return LV_RESULT_OK;    /*If not returned earlier then it failed*/
+    return LV_RESULT_OK;    /*Если не вернулся раньше, значит, это не удалось*/
 }
 
 /**
- * Close PNG image and free data
+ * Закрыть изображение PNG и бесплатные данные
  * @param decoder   pointer to the decoder where this function belongs
  * @param dsc       decoded image descriptor
  * @return          LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
@@ -239,25 +239,25 @@ static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t *
 
 static lv_draw_buf_t * decode_png_data(const void * png_data, size_t png_data_size)
 {
-    unsigned png_width;             /*Not used, just required by the decoder*/
-    unsigned png_height;            /*Not used, just required by the decoder*/
+    unsigned png_width;             /*Не используется, просто требуется декодером*/
+    unsigned png_height;            /*Не используется, просто требуется декодером*/
     lv_draw_buf_t * decoded = NULL;
 
-    /*Decode the image in ARGB8888 */
+    /*Раскодируйте изображение в ARGB8888 */
     unsigned error = lodepng_decode32((unsigned char **)&decoded, &png_width, &png_height, png_data, png_data_size);
     if(error) {
         if(decoded != NULL)  lv_draw_buf_destroy(decoded);
         return NULL;
     }
 
-    /*Convert the image to the system's color depth*/
+    /*Преобразуйте изображение в глубину цвета системы.*/
     convert_color_depth(decoded->data,  png_width * png_height);
 
     return decoded;
 }
 
 /**
- * If the display is not in 32 bit format (ARGB888) then convert the image to the current color depth
+ * Если дисплей не в 32-битном формате ( ARGB888 ), преобразуйте изображение в текущую глубину цвета.
  * @param img the ARGB888 image
  * @param px_cnt number of pixels in `img`
  */

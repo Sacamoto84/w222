@@ -52,7 +52,7 @@ static void timer_cb(lv_timer_t * timer)
 
 void lv_example_canvas_12(void)
 {
-    /*Create a buffer for the canvas*/
+    /*Создайте буфер для холста*/
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_COLOR_FORMAT_ARGB8888);
     LV_DRAW_BUF_INIT_STATIC(draw_buf);
 

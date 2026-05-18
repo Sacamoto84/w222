@@ -78,10 +78,10 @@ static inline LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_task_handler(void)
 }
 
 /**
- * Move the object to the foreground.
- * It will look like if it was created as the last child of its parent.
- * It also means it can cover any of the siblings.
- * @param obj       pointer to an object
+ * Переместите объект на передний план.
+ * Это будет выглядеть так, как если бы оно было создано как последний дочерний элемент своего родителя.
+ * Это также означает, что он может охватывать любого из братьев и сестер.
+ * @param obj       указатель на объект
  */
 static inline void lv_obj_move_foreground(lv_obj_t * obj)
 {
@@ -95,10 +95,10 @@ static inline void lv_obj_move_foreground(lv_obj_t * obj)
 }
 
 /**
- * Move the object to the background.
- * It will look like if it was created as the first child of its parent.
- * It also means any of the siblings can cover the object.
- * @param obj       pointer to an object
+ * Переместите объект на задний план.
+ * Это будет выглядеть так, как если бы он был создан как первый дочерний элемент своего родителя.
+ * Это также означает, что любой из братьев и сестер может прикрыть объект.
+ * @param obj       указатель на объект
  */
 static inline void lv_obj_move_background(lv_obj_t * obj)
 {
@@ -314,7 +314,7 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
 /**********************
  *      MACROS
  **********************/
-/** Use this macro to declare an image in a C file*/
+/** Используйте этот макрос, чтобы объявить изображение в файле C.*/
 #define LV_IMG_DECLARE(var_name) extern const lv_image_dsc_t var_name;
 
 /**********************
@@ -322,7 +322,7 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_API_MAP_V8_H*/

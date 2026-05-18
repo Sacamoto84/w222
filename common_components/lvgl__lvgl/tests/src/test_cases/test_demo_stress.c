@@ -22,10 +22,10 @@ void test_demo_stress(void)
 #if LV_USE_DEMO_STRESS
     lv_demo_stress();
 #endif
-    /* loop once to allow objects to be created */
+    /* зациклитесь один раз, чтобы разрешить создание объектов */
     loop_through_stress_test();
     size_t mem_before = lv_test_get_free_mem();
-    /* loop 5 more times */
+    /* повторите еще 5 раз */
     for(uint32_t i = 0; i < 5; i++) {
         loop_through_stress_test();
     }

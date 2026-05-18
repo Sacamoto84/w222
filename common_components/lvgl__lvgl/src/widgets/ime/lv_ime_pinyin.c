@@ -419,7 +419,7 @@ lv_obj_t * lv_ime_pinyin_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_ime_pinyin_set_keyboard(lv_obj_t * obj, lv_obj_t * kb)
@@ -465,7 +465,7 @@ void lv_ime_pinyin_set_mode(lv_obj_t * obj, lv_ime_pinyin_mode_t mode)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_obj_t * lv_ime_pinyin_get_kb(lv_obj_t * obj)
@@ -496,7 +496,7 @@ const lv_pinyin_dict_t * lv_ime_pinyin_get_dict(lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**********************
@@ -543,7 +543,7 @@ static void lv_ime_pinyin_constructor(const lv_obj_class_t * class_p, lv_obj_t *
     init_pinyin_dict(obj, lv_ime_pinyin_def_dict);
 #endif
 
-    /* Init pinyin_ime->cand_panel */
+    /* Инициализировать pinyin_ime -> cand_panel */
     pinyin_ime->cand_panel = lv_buttonmatrix_create(lv_obj_get_parent(obj));
     lv_buttonmatrix_set_map(pinyin_ime->cand_panel, (const char **)lv_btnm_def_pinyin_sel_map);
     lv_obj_set_size(pinyin_ime->cand_panel, LV_PCT(100), LV_PCT(5));
@@ -552,8 +552,8 @@ static void lv_ime_pinyin_constructor(const lv_obj_class_t * class_p, lv_obj_t *
     lv_buttonmatrix_set_one_checked(pinyin_ime->cand_panel, true);
     lv_obj_remove_flag(pinyin_ime->cand_panel, LV_OBJ_FLAG_CLICK_FOCUSABLE);
 
-    /* Set cand_panel style*/
-    // Default style
+    /* Установить стиль cand_panel*/
+    // Стиль по умолчанию
     lv_obj_set_style_bg_opa(pinyin_ime->cand_panel, LV_OPA_0, 0);
     lv_obj_set_style_border_width(pinyin_ime->cand_panel, 0, 0);
     lv_obj_set_style_pad_all(pinyin_ime->cand_panel, 8, 0);
@@ -562,17 +562,17 @@ static void lv_ime_pinyin_constructor(const lv_obj_class_t * class_p, lv_obj_t *
     lv_obj_set_style_pad_gap(pinyin_ime->cand_panel, 0, 0);
     lv_obj_set_style_base_dir(pinyin_ime->cand_panel, LV_BASE_DIR_LTR, 0);
 
-    // LV_PART_ITEMS style
+    // Стиль LV_PART_ITEMS
     lv_obj_set_style_radius(pinyin_ime->cand_panel, 12, LV_PART_ITEMS);
     lv_obj_set_style_bg_color(pinyin_ime->cand_panel, lv_color_white(), LV_PART_ITEMS);
     lv_obj_set_style_bg_opa(pinyin_ime->cand_panel, LV_OPA_0, LV_PART_ITEMS);
     lv_obj_set_style_shadow_opa(pinyin_ime->cand_panel, LV_OPA_0, LV_PART_ITEMS);
 
-    // LV_PART_ITEMS | LV_STATE_PRESSED style
+    // LV_PART_ITEMS |  Стиль LV_STATE_PRESSED
     lv_obj_set_style_bg_opa(pinyin_ime->cand_panel, LV_OPA_COVER, LV_PART_ITEMS | LV_STATE_PRESSED);
     lv_obj_set_style_bg_color(pinyin_ime->cand_panel, lv_color_white(), LV_PART_ITEMS | LV_STATE_PRESSED);
 
-    /* event handler */
+    /* обработчик событий */
     lv_obj_add_event_cb(pinyin_ime->cand_panel, lv_ime_pinyin_cand_panel_event, LV_EVENT_VALUE_CHANGED, obj);
     lv_obj_add_event_cb(obj, lv_ime_pinyin_style_change_event, LV_EVENT_STYLE_CHANGED, NULL);
 
@@ -653,7 +653,7 @@ static void lv_ime_pinyin_kb_event(lv_event_t * e)
             lv_obj_add_flag(pinyin_ime->cand_panel, LV_OBJ_FLAG_HIDDEN);
         }
         else if(lv_strcmp(txt, LV_SYMBOL_BACKSPACE) == 0) {
-            // del input char
+            // del входной символ
             if(pinyin_ime->ta_count > 0) {
                 if(pinyin_ime->mode == LV_IME_PINYIN_MODE_K26)
                     pinyin_ime->input_char[pinyin_ime->ta_count - 1] = '\0';
@@ -793,7 +793,7 @@ static void pinyin_input_proc(lv_obj_t * obj)
         lv_pinyin_cand_str[i][0] = ' ';
     }
 
-    // fill buf
+    // заполнить буфер
     for(uint8_t i = 0; (i < pinyin_ime->cand_num && i < LV_IME_PINYIN_CAND_TEXT_NUM); i++) {
         for(uint8_t j = 0; j < 3; j++) {
             lv_pinyin_cand_str[i][j] = pinyin_ime->cand_str[i * 3 + j];
@@ -832,7 +832,7 @@ static void pinyin_page_proc(lv_obj_t * obj, uint16_t dir)
         lv_pinyin_cand_str[i][0] = ' ';
     }
 
-    // fill buf
+    // заполнить буфер
     uint16_t offset = pinyin_ime->py_page * (3 * LV_IME_PINYIN_CAND_TEXT_NUM);
     for(uint8_t i = 0; (i < pinyin_ime->cand_num && i < LV_IME_PINYIN_CAND_TEXT_NUM); i++) {
         if((remainder > 0) && (pinyin_ime->py_page == page_num)) {
@@ -919,9 +919,9 @@ static char * pinyin_search_matching(lv_obj_t * obj, char * py_str, uint16_t * c
             }
         }
 
-        // perfect match
+        // идеальное совпадение
         if(len == 1 || index == len) {
-            // The Chinese character in UTF-8 encoding format is 3 bytes
+            // Китайский иероглиф в формате кодировки UTF-8 имеет длину 3 байта.
             * cand_num = lv_strlen((const char *)(cpHZ->py_mb)) / 3;
             return (char *)(cpHZ->py_mb);
         }
@@ -1078,7 +1078,7 @@ static bool pinyin_k9_is_valid_py(lv_obj_t * obj, char * py_str)
             }
         }
 
-        // perfect match
+        // идеальное совпадение
         if(len == 1 || index == len) {
             return true;
         }
@@ -1118,7 +1118,7 @@ static void pinyin_k9_fill_cand(lv_obj_t * obj)
             lv_strlcpy(lv_pinyin_k9_cand_str[index], ll_index->py_str, LV_IME_PINYIN_K9_MAX_INPUT);
         }
 
-        ll_index = lv_ll_get_next(&pinyin_ime->k9_legal_py_ll, ll_index); /*Find the next list*/
+        ll_index = lv_ll_get_next(&pinyin_ime->k9_legal_py_ll, ll_index); /*Найти следующий список*/
         index++;
     }
     pinyin_ime->k9_py_ll_pos = index;
@@ -1146,7 +1146,7 @@ static void pinyin_k9_cand_page_proc(lv_obj_t * obj, uint16_t dir)
         while(ll_index) {
             if(count >= pinyin_ime->k9_py_ll_pos)   break;
 
-            ll_index = lv_ll_get_next(&pinyin_ime->k9_legal_py_ll, ll_index); /*Find the next list*/
+            ll_index = lv_ll_get_next(&pinyin_ime->k9_legal_py_ll, ll_index); /*Найти следующий список*/
             count++;
         }
 
@@ -1156,7 +1156,7 @@ static void pinyin_k9_cand_page_proc(lv_obj_t * obj, uint16_t dir)
         lv_strlcpy(lv_pinyin_k9_cand_str[LV_IME_PINYIN_K9_CAND_TEXT_NUM], LV_SYMBOL_RIGHT"\0", LV_IME_PINYIN_K9_MAX_INPUT);
         lv_strlcpy(lv_pinyin_k9_cand_str[LV_IME_PINYIN_K9_CAND_TEXT_NUM + 1], "\0", LV_IME_PINYIN_K9_MAX_INPUT);
 
-        // next page
+        // следующая страница
         if(dir == 1) {
             for(uint8_t i = 0; i < LV_IME_PINYIN_K9_CAND_TEXT_NUM; i++) {
                 lv_strlcpy(lv_pinyin_k9_cand_str[i], " ", LV_IME_PINYIN_K9_MAX_INPUT);
@@ -1168,13 +1168,13 @@ static void pinyin_k9_cand_page_proc(lv_obj_t * obj, uint16_t dir)
                     break;
 
                 lv_strlcpy(lv_pinyin_k9_cand_str[count], ll_index->py_str, LV_IME_PINYIN_K9_MAX_INPUT);
-                ll_index = lv_ll_get_next(&pinyin_ime->k9_legal_py_ll, ll_index); /*Find the next list*/
+                ll_index = lv_ll_get_next(&pinyin_ime->k9_legal_py_ll, ll_index); /*Найти следующий список*/
                 count++;
             }
             pinyin_ime->k9_py_ll_pos += count - 1;
 
         }
-        // previous page
+        // предыдущая страница
         else {
             for(uint8_t i = 0; i < LV_IME_PINYIN_K9_CAND_TEXT_NUM; i++) {
                 lv_strlcpy(lv_pinyin_k9_cand_str[i], " ", LV_IME_PINYIN_K9_MAX_INPUT);
@@ -1185,7 +1185,7 @@ static void pinyin_k9_cand_page_proc(lv_obj_t * obj, uint16_t dir)
                 if(count < 0)  break;
 
                 lv_strlcpy(lv_pinyin_k9_cand_str[count], ll_index->py_str, LV_IME_PINYIN_K9_MAX_INPUT);
-                ll_index = lv_ll_get_prev(&pinyin_ime->k9_legal_py_ll, ll_index); /*Find the previous list*/
+                ll_index = lv_ll_get_prev(&pinyin_ime->k9_legal_py_ll, ll_index); /*Найти предыдущий список*/
                 count--;
             }
 

@@ -38,13 +38,13 @@ typedef struct {
 } lv_urange_t;
 
 struct _lv_monkey_config_t {
-    /** Input device type */
+    /** Тип устройства ввода */
     lv_indev_type_t type;
 
-    /** Monkey execution period */
+    /** Период казни обезьяны */
     lv_urange_t period_range;
 
-    /** The range of input value */
+    /** Диапазон входного значения */
     lv_range_t input_range;
 };
 
@@ -53,56 +53,56 @@ struct _lv_monkey_config_t {
  **********************/
 
 /**
- * Initialize a monkey config with default values
- * @param config pointer to 'lv_monkey_config_t' variable to initialize
+ * Инициализируйте конфигурацию обезьяны со значениями по умолчанию.
+ * @param config указатель на переменную 'lv_monkey_config_t' для инициализации
  */
 void lv_monkey_config_init(lv_monkey_config_t * config);
 
 /**
- * Create monkey for test
- * @param config pointer to 'lv_monkey_config_t' variable
- * @return pointer to the created monkey
+ * Создать обезьянку для теста
+ * @param config указатель на переменную 'lv_monkey_config_t'
+ * @return указатель на созданную обезьяну
  */
 lv_monkey_t * lv_monkey_create(const lv_monkey_config_t * config);
 
 /**
- * Get monkey input device
- * @param monkey pointer to a monkey
- * @return pointer to the input device
+ * Получить устройство ввода обезьяны
+ * @param monkey указатель на обезьяну
+ * @return указатель на устройство ввода
  */
 lv_indev_t * lv_monkey_get_indev(lv_monkey_t * monkey);
 
 /**
- * Enable monkey
- * @param monkey pointer to a monkey
- * @param en set to true to enable
+ * Включить обезьяну
+ * @param monkey указатель на обезьяну
+ * @param en установите значение true, чтобы включить
  */
 void lv_monkey_set_enable(lv_monkey_t * monkey, bool en);
 
 /**
- * Get whether monkey is enabled
- * @param monkey pointer to a monkey
- * @return return true if monkey enabled
+ * Узнайте, включена ли обезьяна
+ * @param monkey указатель на обезьяну
+ * @return вернуть true, если обезьяна включена
  */
 bool lv_monkey_get_enable(lv_monkey_t * monkey);
 
 /**
- * Set the user_data field of the monkey
- * @param monkey   pointer to a monkey
- * @param user_data   pointer to the new user_data.
+ * Установите полеuser_dataобезьяны.
+ * @param monkey   указатель на обезьяну
+ * @param user_data   указатель на новый user_data.
  */
 void lv_monkey_set_user_data(lv_monkey_t * monkey, void * user_data);
 
 /**
- * Get the user_data field of the monkey
- * @param monkey pointer to a monkey
- * @return the pointer to the user_data of the monkey
+ * Получите полеuser_dataобезьяны.
+ * @param monkey указатель на обезьяну
+ * @return указатель наuser_dataобезьяны
  */
 void * lv_monkey_get_user_data(lv_monkey_t * monkey);
 
 /**
- * Delete monkey
- * @param monkey pointer to monkey
+ * Удалить обезьяну
+ * @param monkey указатель на обезьяну
  */
 void lv_monkey_delete(lv_monkey_t * monkey);
 
@@ -113,7 +113,7 @@ void lv_monkey_delete(lv_monkey_t * monkey);
 #endif /*LV_USE_MONKEY*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_MONKEY_H*/

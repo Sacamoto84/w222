@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -31,10 +31,10 @@
 namespace tvg
 {
 
-float strToFloat(const char *nPtr, char **endPtr);  //convert to float
-char* strDuplicate(const char *str, size_t n);      //copy the string
-char* strAppend(char* lhs, const char* rhs, size_t n);  //append the rhs to the lhs
-char* strDirname(const char* path);                 //return the full directory name
+float strToFloat(const char *nPtr, char **endPtr);  //преобразовать в плавающее число
+char* strDuplicate(const char *str, size_t n);      //скопировать строку
+char* strAppend(char* lhs, const char* rhs, size_t n);  //добавить правую сторону к левой
+char* strDirname(const char* path);                 //вернуть полное имя каталога
 
 }
 #endif //_TVG_STR_H_

@@ -35,18 +35,18 @@
 
 void lv_mem_init(void)
 {
-    return; /*Nothing to init*/
+    return; /*Нечего инициализировать*/
 }
 
 void lv_mem_deinit(void)
 {
-    return; /*Nothing to deinit*/
+    return; /*Нечего деинитизировать*/
 
 }
 
 lv_mem_pool_t lv_mem_add_pool(void * mem, size_t bytes)
 {
-    /*Not supported*/
+    /*Не поддерживается*/
     LV_UNUSED(mem);
     LV_UNUSED(bytes);
     return NULL;
@@ -54,7 +54,7 @@ lv_mem_pool_t lv_mem_add_pool(void * mem, size_t bytes)
 
 void lv_mem_remove_pool(lv_mem_pool_t pool)
 {
-    /*Not supported*/
+    /*Не поддерживается*/
     LV_UNUSED(pool);
     return;
 }
@@ -76,14 +76,14 @@ void lv_free_core(void * p)
 
 void lv_mem_monitor_core(lv_mem_monitor_t * mon_p)
 {
-    /*Not supported*/
+    /*Не поддерживается*/
     LV_UNUSED(mon_p);
     return;
 }
 
 lv_result_t lv_mem_test_core(void)
 {
-    /*Not supported*/
+    /*Не поддерживается*/
     return LV_RESULT_OK;
 }
 

@@ -87,11 +87,11 @@ class LVDrawBuf(Value):
             bool: True if successful, False otherwise
         """
         try:
-            # Validate input parameters
+            # Проверка входных параметров
             if not filename:
                 raise ValueError("Output filename cannot be empty")
 
-            # Get buffer metadata
+            # Получить метаданные буфера
             header = self.super_value("header")
             stride = int(header["stride"])
             height = int(header["h"])
@@ -101,7 +101,7 @@ class LVDrawBuf(Value):
             width = (stride * 8) // cf_info["bpp"] if cf_info["bpp"] else 0
             expected_data_size = stride * height
 
-            # Validate buffer data
+            # Проверка данных буфера
             if not data_ptr:
                 raise ValueError("Data pointer is NULL")
             if width <= 0 or height <= 0:
@@ -117,7 +117,7 @@ class LVDrawBuf(Value):
                     f"\033[93mData size mismatch: expected {expected_data_size}, got {data_size}\033[0m\n"
                 )
 
-            # Read pixel data
+            # Чтение данных пикселей
             pixel_data = (
                 gdb.selected_inferior()
                 .read_memory(int(data_ptr), expected_data_size)
@@ -126,17 +126,17 @@ class LVDrawBuf(Value):
             if not pixel_data:
                 raise ValueError("Failed to read pixel data")
 
-            # Process based on color format
+            # Процесс на основе цветового формата
             img = self._convert_to_image(pixel_data, width, height, cf_info["value"])
             if img is None:
                 return False
 
-            # Determine output format
+            # Определить выходной формат
             output_format = (
                 format.upper() if format else Path(filename).suffix[1:].upper() or "BMP"
             )
 
-            # Save image
+            # Сохранить изображение
             img.save(filename, format=output_format)
             print(
                 f"Successfully saved {cf_info['name']} buffer as {output_format} to {filename}"
@@ -170,7 +170,7 @@ class LVDrawBuf(Value):
         """
         try:
             if color_format == self._color_formats["RGB565"]:
-                # Convert RGB565 to RGB888
+                # Преобразовать RGB565 в RGB888
                 arr = np.frombuffer(pixel_data, dtype=np.uint8)
                 arr = arr.reshape((height, width, 2))
                 rgb565 = np.frombuffer(pixel_data, dtype=np.uint16).reshape(

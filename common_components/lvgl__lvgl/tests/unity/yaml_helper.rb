@@ -1,7 +1,7 @@
 # ==========================================
-#   Unity Project - A Test Framework for C
+# Проект Unity — тестовая среда для C
 #   Copyright (c) 2007 Mike Karlesky, Mark VanderVoord, Greg Williams
-#   [Released under MIT License. Please refer to license.txt for details]
+# [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
 # ==========================================
 
 require 'yaml'

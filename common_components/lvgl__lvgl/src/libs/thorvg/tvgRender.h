@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -43,27 +43,27 @@ enum RenderUpdateFlag : uint8_t {None = 0, Path = 1, Color = 2, Gradient = 4, St
 //TODO: Move this in public header unifying with SwCanvas::Colorspace
 enum ColorSpace : uint8_t
 {
-    ABGR8888 = 0,      //The channels are joined in the order: alpha, blue, green, red. Colors are alpha-premultiplied.
-    ARGB8888,          //The channels are joined in the order: alpha, red, green, blue. Colors are alpha-premultiplied.
-    ABGR8888S,         //The channels are joined in the order: alpha, blue, green, red. Colors are un-alpha-premultiplied.
-    ARGB8888S,         //The channels are joined in the order: alpha, red, green, blue. Colors are un-alpha-premultiplied.
-    Grayscale8,        //One single channel data.
+    ABGR8888 = 0,      //Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета предварительно умножаются на альфа-канал.
+    ARGB8888,          //Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета предварительно умножаются на альфа-канал.
+    ABGR8888S,         //Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета не умножаются по альфа-каналу.
+    ARGB8888S,         //Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета не умножаются по альфа-каналу.
+    Grayscale8,        //Данные одного канала.
     Unsupported        //TODO: Change to the default, At the moment, we put it in the last to align with SwCanvas::Colorspace.
 };
 
 struct RenderSurface
 {
     union {
-        pixel_t* data = nullptr;    //system based data pointer
-        uint32_t* buf32;            //for explicit 32bits channels
-        uint8_t*  buf8;             //for explicit 8bits grayscale
+        pixel_t* data = nullptr;    //системный указатель данных
+        uint32_t* buf32;            //для явных 32-битных каналов
+        uint8_t*  buf8;             //для явных 8-битных оттенков серого
     };
-    Key key;                        //a reserved lock for the thread safety
+    Key key;                        //зарезервированная блокировка для потокобезопасности
     uint32_t stride = 0;
     uint32_t w = 0, h = 0;
     ColorSpace cs = ColorSpace::Unsupported;
     uint8_t channelSize = 0;
-    bool premultiplied = false;         //Alpha-premultiplied
+    bool premultiplied = false;         //Альфа-предварительное умножение
 
     RenderSurface()
     {
@@ -285,7 +285,7 @@ struct RenderEffectGaussian : RenderEffect
     float sigma;
     uint8_t direction; //0: both, 1: horizontal, 2: vertical
     uint8_t border;    //0: duplicate, 1: wrap
-    uint8_t quality;   //0 ~ 100  (optional)
+    uint8_t quality;   //0 ~ 100 (необязательно)
 
     static RenderEffectGaussian* gen(va_list& args)
     {
@@ -305,7 +305,7 @@ struct RenderEffectGaussian : RenderEffect
 class RenderMethod
 {
 private:
-    uint32_t refCnt = 0;        //reference count
+    uint32_t refCnt = 0;        //счетчик ссылок
     Key key;
 
 public:
@@ -348,7 +348,7 @@ static inline bool MASK_REGION_MERGING(CompositeMethod method)
         case CompositeMethod::SubtractMask:
         case CompositeMethod::IntersectMask:
             return false;
-        //these might expand the rendering region
+        //это может расширить область рендеринга
         case CompositeMethod::AddMask:
         case CompositeMethod::DifferenceMask:
         case CompositeMethod::LightenMask:

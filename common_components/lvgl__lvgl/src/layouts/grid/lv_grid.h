@@ -22,7 +22,7 @@ extern "C" {
  *      DEFINES
  *********************/
 /**
- * Can be used track size to make the track fill the free space.
+ * Можно использовать размер дорожки, чтобы дорожка заполняла свободное пространство.
  * @param x how much space to take proportionally to other FR tracks
  * @return a special track size
  */
@@ -38,7 +38,7 @@ LV_EXPORT_CONST_INT(LV_GRID_TEMPLATE_LAST);
  *      TYPEDEFS
  **********************/
 
-/*Can't include lv_obj.h because it includes this header file*/
+/*Невозможно включить lv_obj.h, поскольку он включает этот заголовочный файл.*/
 
 typedef enum {
     LV_GRID_ALIGN_START,
@@ -65,7 +65,7 @@ void lv_obj_set_grid_dsc_array(lv_obj_t * obj, const int32_t col_dsc[], const in
 void lv_obj_set_grid_align(lv_obj_t * obj, lv_grid_align_t column_align, lv_grid_align_t row_align);
 
 /**
- * Set the cell of an object. The object's parent needs to have grid layout, else nothing will happen
+ * Установите ячейку объекта. Родитель объекта должен иметь сетку, иначе ничего не произойдет.
  * @param obj pointer to an object
  * @param column_align the vertical alignment in the cell. `LV_GRID_START/END/CENTER/STRETCH`
  * @param col_pos column ID
@@ -78,7 +78,7 @@ void lv_obj_set_grid_cell(lv_obj_t * obj, lv_grid_align_t column_align, int32_t 
                           lv_grid_align_t row_align, int32_t row_pos, int32_t row_span);
 
 /**
- * Just a wrapper to `LV_GRID_FR` for bindings.
+ * Просто обертка для `LV_GRID_FR` для привязок.
  */
 int32_t lv_grid_fr(uint8_t x);
 
@@ -93,7 +93,7 @@ int32_t lv_grid_fr(uint8_t x);
 #endif /*LV_USE_GRID*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_GRID_H*/

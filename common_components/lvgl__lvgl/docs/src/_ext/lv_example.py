@@ -2,8 +2,8 @@ import os
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
-# from docutils.parsers.rst.directives.images import Image
-# from sphinx.directives.code import LiteralInclude
+# изdocutils.parsers.rst.directives.images импортировать изображение
+# из sphinx.directives.code импорт LiteralInclude
 
 
 def excluded_list(argument):
@@ -106,14 +106,14 @@ class LvExample(Directive):
 
 def setup(app):
     app.add_directive("lv_example", LvExample)
-    # Direct [View on GitHub] links in examples to use current
-    # branch (stored in LVGL_GITCOMMIT environment variable) instead
-    # of the current commit hash as was being done previously.
-    # Default to 'master' if Sphinx is being run outside of `build.py`.
-    # Resulting example link:
-    # [https://github.com/lvgl/lvgl/blob/master/examples/anim/lv_example_anim_1.c].
-    # [https://github.com/lvgl/lvgl/blob/v8.4.0/examples/anim/lv_example_anim_1.c].
-    # [https://github.com/lvgl/lvgl/blob/v9.2.0/examples/anim/lv_example_anim_1.c].
+    # Прямые ссылки [Просмотреть на GitHub] в примерах для использования в настоящее время
+    # вместо этого ветка (хранится в переменной среды LVGL_GITCOMMIT)
+    # текущего хеша коммита, как это делалось ранее.
+    # По умолчанию установлено значение «хозяин», если Сфинкс запускается из-за отношения`build.py`.
+    # Итоговая ссылка на пример:
+    # [ https://github.com/lvgl/lvgl/blob/master/examples/anim/lv_example_anim_1.c].
+    # [ https://github.com/lvgl/lvgl/blob/v8.4.0/examples/anim/lv_example_anim_1.c].
+    # [ https://github.com/lvgl/lvgl/blob/v9.2.0/examples/anim/lv_example_anim_1.c].
     if 'LVGL_GITCOMMIT' in os.environ:
         git_commit = os.environ['LVGL_GITCOMMIT']
     else:
@@ -121,10 +121,10 @@ def setup(app):
 
     app.add_config_value("repo_commit_hash", git_commit, "env")
 
-    # if 'repo_commit_hash' in app.config._options:
-    #     print(f"repo_commit_hash from lv_example.py:  [{app.config._options['repo_commit_hash']}]")
-    # else:
-    #     print("repo_commit_hash not found in [app.config._options] at this time.")
+    # если 'repo_commit_hash' в app.config._options:
+    # print(f"repo_commit_hashизlv_example.py: [{app.config._options['repo_commit_hash']}]")
+    # еще:
+    # print("repo_commit_hashв настоящее время не найден в [app.config._options].")
 
     return {
         'version': '0.1',

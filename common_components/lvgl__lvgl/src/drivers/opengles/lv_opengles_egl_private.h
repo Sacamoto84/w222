@@ -97,7 +97,7 @@ struct _lv_opengles_egl {
 
 #endif /*LV_USE_EGL*/
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OPENGLES_EGL_PRIVATE_H*/

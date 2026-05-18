@@ -233,11 +233,11 @@ lv_color_hsv_t lv_color_rgb_to_hsv(uint8_t r8, uint8_t g8, uint8_t b8)
     // https://en.wikipedia.org/wiki/HSL_and_HSV#Hue_and_chroma
     int32_t h;
     if(rgbMax == r)
-        h = (((g - b) << 10) / delta) + (g < b ? (6 << 10) : 0); // between yellow & magenta
+        h = (((g - b) << 10) / delta) + (g < b ? (6 << 10) : 0); // между желтым и пурпурным
     else if(rgbMax == g)
-        h = (((b - r) << 10) / delta) + (2 << 10); // between cyan & yellow
+        h = (((b - r) << 10) / delta) + (2 << 10); // между голубым и желтым
     else if(rgbMax == b)
-        h = (((r - g) << 10) / delta) + (4 << 10); // between magenta & cyan
+        h = (((r - g) << 10) / delta) + (4 << 10); // между пурпурным и голубым
     else
         h = 0;
     h *= 60;
@@ -249,9 +249,9 @@ lv_color_hsv_t lv_color_rgb_to_hsv(uint8_t r8, uint8_t g8, uint8_t b8)
 }
 
 /**
- * Convert a color to HSV
- * @param color color
- * @return the given color in HSV
+ * Преобразовать цвет в HSV
+ * @param color цвет
+ * @return данный цвет в HSV
  */
 lv_color_hsv_t lv_color_to_hsv(lv_color_t c)
 {
@@ -321,7 +321,7 @@ uint16_t LV_ATTRIBUTE_FAST_MEM lv_color_16_16_mix(uint16_t c1, uint16_t c2, uint
 
     uint16_t ret;
 
-    /* Source: https://stackoverflow.com/a/50012418/1999969*/
+    /* Источник: https://stackoverflow.com/a/50012418/1999969*/
     mix = (uint32_t)((uint32_t)mix + 4) >> 3;
 
     /*0x7E0F81F = 0b00000111111000001111100000011111*/
@@ -401,16 +401,16 @@ uint8_t lv_color32_luminance(lv_color32_t c)
  **********************/
 
 /**
- * Helper function to easily create color filters
- * @param dsc       pointer to a color filter descriptor
- * @param c         the color to modify
- * @param opa       the intensity of the modification
- *                      - LV_OPA_50:    do nothing
- *                      - < LV_OPA_50:  darken
- *                      - LV_OPA_0:     fully black
- *                      - > LV_OPA_50:  lighten
- *                      - LV_OPA_100:   fully white
- * @return          the modified color
+ * Вспомогательная функция для легкого создания цветовых фильтров
+ * @param dsc       указатель на дескриптор цветового фильтра
+ * @param c         цвет, который нужно изменить
+ * @param opa       интенсивность модификации
+ *                      - LV_OPA_50 : ничего не делать
+ *                      - <LV_OPA_50: затемнить
+ *                      - LV_OPA_0: полностью черный
+ *                      - >LV_OPA_50: осветлить
+ *                      - LV_OPA_100: полностью белый
+ * @return          измененный цвет
  */
 static lv_color_t lv_color_filter_shade_cb(const lv_color_filter_dsc_t * dsc, lv_color_t c, lv_opa_t opa)
 {

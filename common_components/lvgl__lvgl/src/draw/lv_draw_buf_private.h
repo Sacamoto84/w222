@@ -39,7 +39,7 @@ struct _lv_draw_buf_handlers_t {
  **********************/
 
 /**
- * Called internally to initialize the draw_buf_handlers in lv_global
+ * Вызывается внутренне для созданияdraw_buf_handlersв lv_global.
  */
 void lv_draw_buf_init_handlers(void);
 
@@ -48,7 +48,7 @@ void lv_draw_buf_init_handlers(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_BUF_PRIVATE_H*/

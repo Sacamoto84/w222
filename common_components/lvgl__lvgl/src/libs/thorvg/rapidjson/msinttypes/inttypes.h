@@ -1,21 +1,21 @@
-// ISO C9x  compliant inttypes.h for Microsoft Visual Studio
-// Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124
+// ISO C9x-совместимый inttypes.h для Microsoft Visual Studio
+// На основе ISO / IEC 9899: Проект комитета TC2 (6 мая 2005 г.) WG14 / N1124
 //
 //  Copyright (c) 2006-2013 Alexander Chemeris
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+// Распространение и использование в исходной и двоичной форме, с или без
+// Модификация допускается при соблюдении следующих условий:
 //
 //   1. Redistributions of source code must retain the above copyright notice,
-//      this list of conditions and the following disclaimer.
+//      этот список условий и следующий отказ от ответственности.
 //
 //   2. Redistributions in binary form must reproduce the above copyright
-//      notice, this list of conditions and the following disclaimer in the
-//      documentation and/or other materials provided with the distribution.
+//      уведомление, этот список условий и следующий отказ от ответственности в
+//      документация и/или другие материалы, поставляемые вместе с дистрибутивом.
 //
 //   3. Neither the name of the product nor the names of its contributors may
-//      be used to endorse or promote products derived from this software
-//      without specific prior written permission.
+//      использоваться для одобрения или продвижения продуктов, созданных на основе этого программного обеспечения.
+//      без специального предварительного письменного разрешения.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
 // WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -30,8 +30,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-// The above software in this distribution may have been modified by
-// THL A29 Limited ("Tencent Modifications").
+// Вышеуказанное программное обеспечение в этом дистрибутиве могло быть изменено
+// THL A29 Limited («Модификации Tencent»).
 // All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.
 
 #ifndef _MSC_VER // [
@@ -52,18 +52,18 @@
 #include <inttypes.h>
 #else
 
-// 7.8 Format conversion of integer types
+// 7.8 Преобразование формата целочисленных типов
 
 typedef struct {
    intmax_t quot;
    intmax_t rem;
 } imaxdiv_t;
 
-// 7.8.1 Macros for format specifiers
+// 7.8.1 Макросы для спецификаторов формата
 
-#if !defined(__cplusplus) || defined(__STDC_FORMAT_MACROS) // [   See footnote 185 at page 198
+#if !defined(__cplusplus) || defined(__STDC_FORMAT_MACROS) // [См. сноску 185 на стр. 198.
 
-// The fprintf macros for signed integers are:
+// Макросы fprintf для целых чисел со знаком:
 #define PRId8       "d"
 #define PRIi8       "i"
 #define PRIdLEAST8  "d"
@@ -98,7 +98,7 @@ typedef struct {
 #define PRIdPTR     "Id"
 #define PRIiPTR     "Ii"
 
-// The fprintf macros for unsigned integers are:
+// Макросы fprintf для беззнаковых целых чисел:
 #define PRIo8       "o"
 #define PRIu8       "u"
 #define PRIx8       "x"
@@ -161,7 +161,7 @@ typedef struct {
 #define PRIxPTR     "Ix"
 #define PRIXPTR     "IX"
 
-// The fscanf macros for signed integers are:
+// Макросы fscanf для целых чисел со знаком:
 #define SCNd8       "d"
 #define SCNi8       "i"
 #define SCNdLEAST8  "d"
@@ -201,7 +201,7 @@ typedef struct {
 #  define SCNiPTR     "li"
 #endif  // _WIN64 ]
 
-// The fscanf macros for unsigned integers are:
+// Макросы fscanf для беззнаковых целых чисел:
 #define SCNo8       "o"
 #define SCNu8       "u"
 #define SCNx8       "x"
@@ -273,15 +273,15 @@ typedef struct {
 
 #endif // __STDC_FORMAT_MACROS ]
 
-// 7.8.2 Functions for greatest-width integer types
+// 7.8.2 Функции для целочисленных типов наибольшей ширины
 
-// 7.8.2.1 The imaxabs function
+// 7.8.2.1 Функция imaxabs
 #define imaxabs _abs64
 
-// 7.8.2.2 The imaxdiv function
+// 7.8.2.2 Функция imaxdiv
 
-// This is modified version of div() function from Microsoft's div.c found
-// in %MSVC.NET%\crt\src\div.c
+// Это модифицированная версия функции div() из найденного Microsoft div.c.
+// в % MSVC. NET %\crt\src\ div.c
 #ifdef STATIC_IMAXDIV // [
 static
 #else // STATIC_IMAXDIV ][
@@ -295,7 +295,7 @@ imaxdiv_t __cdecl imaxdiv(intmax_t numer, intmax_t denom)
    result.rem = numer % denom;
 
    if (numer < 0 && result.rem > 0) {
-      // did division wrong; must fix up
+      // сделал деление неправильно; должен исправить
       ++result.quot;
       result.rem -= denom;
    }
@@ -303,11 +303,11 @@ imaxdiv_t __cdecl imaxdiv(intmax_t numer, intmax_t denom)
    return result;
 }
 
-// 7.8.2.3 The strtoimax and strtoumax functions
+// 7.8.2.3 Функции strtoimax и strtoumax
 #define strtoimax _strtoi64
 #define strtoumax _strtoui64
 
-// 7.8.2.4 The wcstoimax and wcstoumax functions
+// 7.8.2.4 Функции wcstoimax и wcstoumax
 #define wcstoimax _wcstoi64
 #define wcstoumax _wcstoui64
 

@@ -76,14 +76,14 @@ lv_result_t lv_thread_init(
     init_data->user_data = user_data;
 
     /*
-    Reference: https://learn.microsoft.com/en-us/windows/win32/api
+    Ссылка: https://learn.microsoft.com/en-us/windows/win32/api
                /processthreadsapi/nf-processthreadsapi-createthread
 
-    A thread in an executable that calls the C run-time library (CRT) should
-    use the _beginthreadex and _endthreadex functions for thread management
-    rather than CreateThread and ExitThread; this requires the use of the
-    multithreaded version of the CRT. If a thread created using CreateThread
-    calls the CRT, the CRT may terminate the process in low-memory conditions.
+    Поток в исполняемом файле, который вызывает библиотеку времени выполнения C ( CRT ), должен
+    воспользуйтесь функциями _beginthreadex и _endthreadex для управления потоками
+    вместо CreateThread и ExitThread; для этого необходимо использовать
+    многопоточная версияCRT. Если поток, созданный с помощью CreateThread
+    вызывает CRT , CRT может завершить процесс в условиях нехватки памяти.
     */
     *thread = (HANDLE)(_beginthreadex(
                            NULL,
@@ -97,7 +97,7 @@ lv_result_t lv_thread_init(
     }
 
     /*
-    Try to set the thread priority. (Not mandatory for creating a new thread.)
+    Попробуйте установить приоритет потока. (Не обязательно для создания новой темы.)
     */
     SetThreadPriority(*thread, prio_map[prio]);
 

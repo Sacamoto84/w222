@@ -463,12 +463,12 @@ static const char * _parse_number(const char * str, const char * str_end, float 
     if(!str) {
         return NULL;
     }
-    // skip loading
+    // пропустить загрузку
     while((str < str_end) && !_is_number_begin(*str)) {
         ++str;
     }
 
-    if(str == str_end) { // parse fail
+    if(str == str_end) { // анализ не выполнен
         return NULL;
     }
 
@@ -484,7 +484,7 @@ static const char * _parse_length(const char * str, const char * str_end, int32_
         uint32_t len = str_end - str;
         if(len > 0) {
             if(len == 1 && (*str == '%')) {
-                // percentage
+                // процент
                 *val *= 0.01f;
             }
             else if(len == 2) {
@@ -523,7 +523,7 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
     }
 
     const char * ptr = str;
-    while((ptr < str_end) && (*ptr != ')')) { // calc letters end
+    while((ptr < str_end) && (*ptr != ')')) { // буквы расчета заканчиваются
         ++ptr;
     }
 
@@ -531,7 +531,7 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
     uint32_t r = 0, g = 0, b = 0;
 
     if(*str == '#') {
-        if(len == 4) { // three digit hex format '#rgb'
+        if(len == 4) { // трехзначный шестнадцатеричный формат '#rgb'
             if(isxdigit((unsigned char)str[1]) && isxdigit((unsigned char)str[2]) && isxdigit((unsigned char)str[3])) {
                 char st[3] = {0};
                 st[0] = st[1] = str[1];
@@ -542,7 +542,7 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
                 b = (uint8_t)strtol(st, NULL, 16);
             }
         }
-        else if(len == 7) {    // six digit hex format '#rrggbb'
+        else if(len == 7) {    // шестизначный шестнадцатеричный формат '#rrggbb'
             if(isxdigit((unsigned char)str[1]) && isxdigit((unsigned char)str[2]) && isxdigit((unsigned char)str[3])
                && isxdigit((unsigned char)str[4]) && isxdigit((unsigned char)str[5]) && isxdigit((unsigned char)str[6])) {
                 char st[3] = {0};
@@ -557,7 +557,7 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
                 b = (uint8_t)strtol(st, NULL, 16);
             }
         }
-        // make color
+        // сделать цвет
         *val = (r << 16) + (g << 8) + b;
     }
     else if(len > 5 && strncmp(str, "rgba(", 5) == 0) {
@@ -592,7 +592,7 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
             g = (uint8_t)vals[1];
             b = (uint8_t)vals[2];
         }
-        // make color
+        // сделать цвет
         *val = (alpha << 24) + (r << 16) + (g << 8) + b;
     }
     else if(len > 4 && strncmp(str, "rgb(", 4) == 0) {
@@ -614,10 +614,10 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
             g = (uint8_t)vals[1];
             b = (uint8_t)vals[2];
         }
-        // make color
+        // сделать цвет
         *val = (r << 16) + (g << 8) + b;
     }
-    else {   // color keyword
+    else {   // ключевое слово цвета
         uint32_t map_len = MAP_LEN(_svg_color_map);
         for(uint32_t i = 0; i < map_len; i++) {
             if(len == _svg_color_map[i].name_len && strncmp(_svg_color_map[i].name, str, len) == 0) {
@@ -647,12 +647,12 @@ static void _multiply_matrix(lv_svg_matrix_t * matrix, const lv_svg_matrix_t * m
 static const char * _parse_matrix(const char * str, const char * str_end, lv_svg_transform_type_t type,
                                   lv_svg_matrix_t * matrix)
 {
-    // skip loading
+    // пропустить загрузку
     while((str < str_end) && *str != '(') {
         ++str;
     }
 
-    if(str == str_end) { // parse fail
+    if(str == str_end) { // анализ не выполнен
         return str;
     }
 
@@ -1464,7 +1464,7 @@ static void _process_paint(lv_svg_node_t * node, lv_svg_attr_type_t type, const 
         return;
     }
     else if(len > 4 && strncmp(val_start, "url(", 4) == 0) {
-        // parse url
+        // анализировать URL
         const char * ptr = val_start + 4;
         const char * url_start = NULL;
         const char * url_end = NULL;
@@ -1508,7 +1508,7 @@ static void _process_paint(lv_svg_node_t * node, lv_svg_attr_type_t type, const 
             }
         }
 #endif
-        // parse color
+        // анализировать цвет
         uint32_t color = 0;
         _parse_color(val_start, val_end, &color);
         attr->value.uval = color;
@@ -1579,7 +1579,7 @@ static void _process_transform(lv_svg_node_t * node, lv_svg_attr_type_t type, co
 
     lv_svg_matrix_t * matrix = lv_malloc_zeroed(sizeof(lv_svg_matrix_t));
     LV_ASSERT_MALLOC(matrix);
-    matrix->m[0][0] = matrix->m[1][1] = matrix->m[2][2] = 1.0f; // identity
+    matrix->m[0][0] = matrix->m[1][1] = matrix->m[2][2] = 1.0f; // личность
 
     const char * ptr = val_start;
     while(ptr < val_end) {
@@ -1754,13 +1754,13 @@ static void _process_anim_attr_number(lv_svg_node_t * node, lv_svg_attr_type_t t
         uint32_t len = val_end - val_start;
         if(len == 4 && strncmp(val_start, "auto", 4) == 0) {
             attr->class_type =
-                LV_SVG_ATTR_VALUE_INHERIT; // rotated over time by the angle of the direction (i.e., directional tangent vector) of the motion path
+                LV_SVG_ATTR_VALUE_INHERIT; // поворачивается с течением времени на угол направления (т. е. вектора касательной) траектории движения
             attr->value.fval = 0.0f;
             return;
         }
         else if(len == 12 && strncmp(val_start, "auto-reverse", 12) == 0) {
             attr->class_type =
-                LV_SVG_ATTR_VALUE_INHERIT; // rotated over time by the angle of the direction (i.e., directional tangent vector) of the motion path plus 180 degrees.
+                LV_SVG_ATTR_VALUE_INHERIT; // поворачивается с течением времени на угол направления (т. е. вектор касательной) траектории движения плюс 180 градусов.
             attr->value.fval = 180.0f;
             return;
         }
@@ -2051,17 +2051,17 @@ static void _anim_begin_end_cb(lv_svg_node_t * node, lv_svg_attr_t * attr, const
     LV_UNUSED(dpi);
     struct _parse_value_list_context * ctx = (struct _parse_value_list_context *)data;
 
-    // offset-value
+    // значение смещения
     float * val_number = NULL;
     GET_NEXT_VALUE_PTR(val_number, ctx, float);
     val_start = _parse_clock_time(val_start, val_end, val_number);
 
     //FIXME: not support begin-end type
-    // syncbase-value
-    // event-value
-    // repeat-value
-    // accessKey-value
-    // indefinite
+    // значение syncbase
+    // значение события
+    // повторяющееся значение
+    // доступКлюч-значение
+    // неопределенный
 
     ctx->list->length = ctx->list_count;
 }
@@ -2114,21 +2114,21 @@ static void create_tokens_from_style_attr(lv_array_t * result, _lv_svg_token_att
     LV_ASSERT(type == LV_SVG_ATTR_STYLE);
     tok_attr->value_start = _skip_space(tok_attr->value_start, tok_attr->value_end);
 
-    /*Generate extra tokens from a style attribute (eg: style="fill:none;stroke-width:6;")*/
+    /*Создайте дополнительные токены из атрибута стиля (например: style="fill:none;stroke-width:6;")*/
     while(tok_attr->value_end - tok_attr->value_start > 0) {
         const char * name_start = tok_attr->value_start;
-        /*colon separates attribute name from value*/
+        /*двоеточие отделяет имя атрибута от значения*/
         const char * colon = _next_colon(tok_attr->value_start, tok_attr->value_end);
         if(colon == tok_attr->value_end) {
-            /* No colon found, invalid style property */
+            /* Двоеточие не найдено, неверное свойство стиля. */
             break;
         }
-        /* semicolon marks the end of the value*/
+        /* точка с запятой отмечает конец значения*/
         const char * semicolon = _next_semicolon(colon, tok_attr->value_end);
 
         const char * value_start = colon + 1;
         if(value_start >= semicolon) {
-            /* Empty value like "fill:;" or "fill:" at end*/
+            /* Пустое значение, например «fill:;» или «заполнить:» в конце*/
             tok_attr->value_start = _skip_space(semicolon + 1, tok_attr->value_end);
             continue;
         }
@@ -2153,10 +2153,10 @@ static void _process_attr_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, _
 {
     lv_svg_attr_type_t type = _get_svg_attr_type(tok_attr->name_start, tok_attr->name_end);
 
-    /* Style attributes are processed separately and expanded into individual
-     * property attributes (e.g., style="fill:red;stroke:blue" becomes separate
-     * fill and stroke attributes). Skip processing the style attribute itself
-     * since its constituent properties have already been added to the token array */
+    /* Атрибуты стиля обрабатываются отдельно и расширяются до отдельных
+     * атрибуты свойств (например, style="fill:red;stroke:blue" становятся отдельными
+     * атрибуты заливки и обводки). Пропустить обработку самого атрибута стиля
+     * поскольку его составляющие свойства уже добавлены в массив токенов */
     if(type == LV_SVG_ATTR_STYLE) {
         return;
     }
@@ -2164,10 +2164,10 @@ static void _process_attr_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, _
     tok_attr->value_start = _skip_space(tok_attr->value_start, tok_attr->value_end);
     uint32_t value_len = tok_attr->value_end - tok_attr->value_start;
     if(value_len == 0) {
-        return; // skip empty value attribute
+        return; // пропустить атрибут пустого значения
     }
 
-    if(type == LV_SVG_ATTR_XML_ID || type == LV_SVG_ATTR_ID) { // get xml:id
+    if(type == LV_SVG_ATTR_XML_ID || type == LV_SVG_ATTR_ID) { // получить xml:id
         char * str = lv_malloc(value_len + 1);
         LV_ASSERT_MALLOC(str);
         lv_memcpy(str, tok_attr->value_start, value_len);
@@ -2293,7 +2293,7 @@ static void _process_attr_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, _
         case LV_SVG_ATTR_VISIBILITY:
         case LV_SVG_ATTR_TEXT_ANCHOR:
             LV_LOG_USER("Attribute not supported %.*s", (int)(tok_attr->name_end - tok_attr->name_start), tok_attr->name_start);
-            // not support yet
+            // пока не поддерживаю
             break;
     }
 
@@ -2308,7 +2308,7 @@ static void _process_attrs_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, 
         _lv_svg_token_attr_t * tok_attr = lv_array_at(&token->attrs, i);
         lv_svg_attr_type_t type = _get_svg_attr_type(tok_attr->name_start, tok_attr->name_end);
 
-        /* Expand style attributes into individual property attributes */
+        /* Расширьте атрибуты стиля до отдельных атрибутов свойств. */
         if(type == LV_SVG_ATTR_STYLE) {
             create_tokens_from_style_attr(&inline_style_tokens, tok_attr);
             continue;
@@ -2318,8 +2318,8 @@ static void _process_attrs_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, 
 
     len = lv_array_size(&inline_style_tokens);
 
-    /* Process style-derived attributes last to ensure inline
-     * style properties override regular attributes*/
+    /* Атрибуты, производные от стиля обработки, выполняются в последнюю очередь, чтобы гарантировать встроенность.
+     * свойства стиля переопределяют обычные атрибуты*/
     for(uint32_t i = 0; i < len; i++) {
         _lv_svg_token_attr_t * tok_attr = lv_array_at(&inline_style_tokens, i);
         _process_attr_tag(parser, node, tok_attr);
@@ -2330,7 +2330,7 @@ static void _process_attrs_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, 
 static bool _process_begin_tag(_lv_svg_parser_t * parser, lv_svg_tag_t tag, const _lv_svg_token_t * token)
 {
     if(parser->state == LV_SVG_PARSER_IGNORE) {
-        // ignore ignored tokens
+        // игнорировать игнорируемые токены
         return true;
     }
 
@@ -2346,7 +2346,7 @@ static bool _process_begin_tag(_lv_svg_parser_t * parser, lv_svg_tag_t tag, cons
         return true;
     }
 
-    // begin invalid tag
+    // начать неверный тег
     if(tag == LV_SVG_TAG_INVALID) {
         if(!token->flat) {
             parser->state = LV_SVG_PARSER_IGNORE;
@@ -2360,12 +2360,12 @@ static bool _process_begin_tag(_lv_svg_parser_t * parser, lv_svg_tag_t tag, cons
         return true;
     }
 
-    // create new node
+    // создать новый узел
     lv_svg_node_t * node = lv_svg_node_create(parser->cur_node);
     node->type = tag;
     _process_attrs_tag(parser, node, token);
 
-    if(!parser->doc_root) { // root node
+    if(!parser->doc_root) { // корневой узел
         parser->doc_root = node;
     }
     if(!token->flat) { // FIXME: not leaf node

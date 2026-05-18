@@ -1,6 +1,6 @@
 /**
  * @file lv_example_fragment_1.c
- * @brief Basic usage of obj fragment
+ * @brief Основное использование фрагмента obj
  */
 #include "../../lv_examples.h"
 
@@ -30,7 +30,7 @@ void lv_example_fragment_1(void)
     root = lv_obj_create(lv_screen_active());
     lv_obj_set_size(root, LV_PCT(100), LV_PCT(100));
     lv_fragment_manager_t * manager = lv_fragment_manager_create(NULL);
-    /* Clean up the fragment manager before objects in containers got deleted */
+    /* Очистите менеджер фрагментов до удаления объектов в контейнерах. */
     lv_obj_add_event_cb(root, sample_container_delete, LV_EVENT_DELETE, manager);
 
     lv_fragment_t * fragment = lv_fragment_create(&sample_cls, (void *) "Fragment");

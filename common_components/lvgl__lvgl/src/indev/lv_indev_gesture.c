@@ -1,11 +1,11 @@
 /******************************************************************
  * @file lv_indev_gesture.c
  *
- * Recognize gestures that consist of multiple touch events
+ * Распознавание жестов, состоящих из нескольких событий касания
  *
  * Copyright (c) 2024 EDGEMTech Ltd
  *
- * Author EDGEMTech Ltd. (erik.tagirov@edgemtech.ch)
+ * Автор ООО "ЭДГЕМТех" (erik.tagiros@edgemtech.ch)
  *
  ******************************************************************/
 
@@ -26,10 +26,10 @@
  *      DEFINES
  ********************/
 
-#define LV_GESTURE_PINCH_DOWN_THRESHOLD 0.75f /* Default value - start sending events when reached */
-#define LV_GESTURE_PINCH_UP_THRESHOLD 1.5f /* Default value - start sending events when reached */
-#define LV_GESTURE_PINCH_MAX_INITIAL_SCALE 2.5f /* Default value */
-#define LV_GESTURE_ROTATION_ANGLE_RAD_THRESHOLD 0.2f /* Default value - start sending events when reached */
+#define LV_GESTURE_PINCH_DOWN_THRESHOLD 0.75f /* Значение по умолчанию — начинать отправку событий при достижении */
+#define LV_GESTURE_PINCH_UP_THRESHOLD 1.5f /* Значение по умолчанию — начинать отправку событий при достижении */
+#define LV_GESTURE_PINCH_MAX_INITIAL_SCALE 2.5f /* Значение по умолчанию */
+#define LV_GESTURE_ROTATION_ANGLE_RAD_THRESHOLD 0.2f /* Значение по умолчанию — начинать отправку событий при достижении */
 
 
 /********************
@@ -82,7 +82,7 @@ void lv_indev_gesture_init(lv_indev_t * indev)
 
 void lv_indev_set_pinch_up_threshold(lv_indev_t * indev, float threshold)
 {
-    /* A up threshold MUST always be bigger than 1 */
+    /* Порог повышения MUST всегда больше 1. */
     LV_ASSERT(threshold > 1.0f);
 
     lv_indev_gesture_recognizer_t * recognizer = &indev->recognizers[LV_INDEV_GESTURE_PINCH];
@@ -98,7 +98,7 @@ void lv_indev_set_pinch_up_threshold(lv_indev_t * indev, float threshold)
 
 void lv_indev_set_pinch_down_threshold(lv_indev_t * indev, float threshold)
 {
-    /* A down threshold MUST always be smaller than 1 */
+    /* Нижний порог MUST всегда меньше 1. */
     LV_ASSERT(threshold < 1.0f);
 
     lv_indev_gesture_recognizer_t * recognizer = &indev->recognizers[LV_INDEV_GESTURE_PINCH];
@@ -114,7 +114,7 @@ void lv_indev_set_pinch_down_threshold(lv_indev_t * indev, float threshold)
 
 void lv_indev_set_rotation_rad_threshold(lv_indev_t * indev, float threshold)
 {
-    /* A rotation threshold MUST always be a positive number */
+    /* Порог вращения MUST всегда является положительным числом. */
     LV_ASSERT(threshold > 0.0f);
 
     lv_indev_gesture_recognizer_t * recognizer = &indev->recognizers[LV_INDEV_GESTURE_ROTATE];
@@ -137,7 +137,7 @@ void lv_indev_get_gesture_primary_point(lv_indev_gesture_recognizer_t * recogniz
         return;
     }
 
-    /* There are currently no active contact points */
+    /* В настоящее время нет активных контактных лиц */
     point->x = 0;
     point->y = 0;
 }
@@ -241,8 +241,8 @@ void lv_indev_set_gesture_data(lv_indev_data_t * data, lv_indev_gesture_recogniz
     data->gesture_type[type] = LV_INDEV_GESTURE_NONE;
     data->gesture_data[type] = NULL;
 
-    /* The call below returns false if there are no active contact points */
-    /* - OR when the gesture has ended, false is considered as a RELEASED state */
+    /* Вызов ниже возвращает ложь, если нет активных точек контакта. */
+    /* - OR, когда жест завершился, false считается состоянием RELEASED. */
     is_active = lv_indev_recognizer_is_active(recognizer);
 
     if(is_active == false) {
@@ -290,7 +290,7 @@ void lv_indev_gesture_detect_pinch(lv_indev_gesture_recognizer_t * recognizer, l
         r->config->pinch_down_threshold = LV_GESTURE_PINCH_DOWN_THRESHOLD;
     }
 
-    /* Process collected touch events */
+    /* Обработка собранных событий касания */
     for(i = 0; i < touch_cnt; i++) {
         touch = touches;
         process_touch_event(touch, r->info);
@@ -306,7 +306,7 @@ void lv_indev_gesture_detect_pinch(lv_indev_gesture_recognizer_t * recognizer, l
         switch(r->state) {
             case LV_INDEV_GESTURE_STATE_NONE:
 
-                /* 2 fingers down - potential pinch or swipe */
+                /* 2 пальца вниз – возможное защемление или смахивание */
                 reset_recognizer(recognizer);
                 gesture_update_center_point(r->info, 2);
                 r->state = LV_INDEV_GESTURE_STATE_ONGOING;
@@ -323,7 +323,7 @@ void lv_indev_gesture_detect_pinch(lv_indev_gesture_recognizer_t * recognizer, l
                 }
                 break;
             case LV_INDEV_GESTURE_STATE_RECOGNIZED:
-                /* It's an ongoing pinch gesture - update the factors */
+                /* Это постоянный жест щипка – обновите факторы */
                 gesture_calculate_factors(r->info, 2);
                 LV_ASSERT(r->info != NULL);
                 r->scale = r->info->scale;
@@ -340,11 +340,11 @@ void lv_indev_gesture_detect_pinch(lv_indev_gesture_recognizer_t * recognizer, l
     else {
         switch(r->state) {
             case LV_INDEV_GESTURE_STATE_RECOGNIZED:
-                /* Gesture has ended */
+                /* Жест завершен */
                 r->state = LV_INDEV_GESTURE_STATE_ENDED;
                 break;
             case LV_INDEV_GESTURE_STATE_ONGOING:
-                /* User lifted a finger before reaching threshold */
+                /* Пользователь поднял палец, не дойдя до порога */
                 r->state = LV_INDEV_GESTURE_STATE_CANCELED;
                 break;
             case LV_INDEV_GESTURE_STATE_ENDED:
@@ -377,7 +377,7 @@ void lv_indev_gesture_detect_rotation(lv_indev_gesture_recognizer_t * recognizer
         LV_ASSERT(r->config != NULL);
     }
 
-    /* Process collected touch events */
+    /* Обработка собранных событий касания */
     for(i = 0; i < touch_cnt; i++) {
 
         touch = touches;
@@ -393,13 +393,13 @@ void lv_indev_gesture_detect_rotation(lv_indev_gesture_recognizer_t * recognizer
     if(r->info->finger_cnt == 2) {
         switch(r->state) {
             case LV_INDEV_GESTURE_STATE_NONE:
-                /* 2 fingers down - potential rotation or swipe */
+                /* 2 пальца вниз – возможное вращение или смахивание */
                 reset_recognizer(recognizer);
                 gesture_update_center_point(r->info, 2);
                 r->state = LV_INDEV_GESTURE_STATE_ONGOING;
                 break;
             case LV_INDEV_GESTURE_STATE_ONGOING:
-                /* Update the rotation from the inputs */
+                /* Обновить вращение из входных данных */
                 gesture_calculate_factors(r->info, 2);
                 if(fabs(r->info->rotation - r->info->p_rotation) > r->config->rotation_angle_rad_threshold) {
 
@@ -408,7 +408,7 @@ void lv_indev_gesture_detect_rotation(lv_indev_gesture_recognizer_t * recognizer
                 }
                 break;
             case LV_INDEV_GESTURE_STATE_RECOGNIZED:
-                /* It's a recognized rotation gesture - update the factors */
+                /* Это общепризнанный жест вращения. Обновите коэффициенты. */
                 gesture_calculate_factors(r->info, 2);
                 r->type = LV_INDEV_GESTURE_ROTATE;
                 r->rotation = r->info->rotation;
@@ -426,12 +426,12 @@ void lv_indev_gesture_detect_rotation(lv_indev_gesture_recognizer_t * recognizer
     else {
         switch(r->state) {
             case LV_INDEV_GESTURE_STATE_RECOGNIZED:
-                /* Gesture has ended */
+                /* Жест завершен */
                 r->type = LV_INDEV_GESTURE_ROTATE;
                 r->state = LV_INDEV_GESTURE_STATE_ENDED;
                 break;
             case LV_INDEV_GESTURE_STATE_ONGOING:
-                /* User lifted a finger before reaching threshold */
+                /* Пользователь поднял палец, не дойдя до порога */
                 reset_recognizer(r);
                 break;
             case LV_INDEV_GESTURE_STATE_CANCELED:
@@ -465,7 +465,7 @@ void lv_indev_gesture_detect_two_fingers_swipe(lv_indev_gesture_recognizer_t * r
         LV_ASSERT(r->config != NULL);
     }
 
-    /* Process collected touch events */
+    /* Обработка собранных событий касания */
     for(i = 0; i < touch_cnt; i++) {
 
         touch = touches;
@@ -482,14 +482,14 @@ void lv_indev_gesture_detect_two_fingers_swipe(lv_indev_gesture_recognizer_t * r
 
         switch(r->state) {
             case LV_INDEV_GESTURE_STATE_NONE:
-                /* 2 fingers down - potential rotation or swipe */
+                /* 2 пальца вниз – возможное вращение или смахивание */
                 reset_recognizer(recognizer);
                 gesture_update_center_point(r->info, 2);
                 r->state = LV_INDEV_GESTURE_STATE_ONGOING;
                 break;
             case LV_INDEV_GESTURE_STATE_ONGOING:
-                /* The gesture is ongoing, now wait for the distance from the center
-                to be higher than the threshold to pass it as recognized */
+                /* Жест продолжается, теперь дождитесь расстояния от центра
+                быть выше порога, чтобы пройти его как признанный */
                 gesture_calculate_factors(r->info, 2);
                 dist = SQUARE_SUM(r->info->delta_x, r->info->delta_y);
                 if(dist > SQUARE(lv_indev_active()->gesture_min_distance)) {
@@ -497,8 +497,8 @@ void lv_indev_gesture_detect_two_fingers_swipe(lv_indev_gesture_recognizer_t * r
                 }
                 break;
             case LV_INDEV_GESTURE_STATE_RECOGNIZED:
-                /* The gesture is now recognized, and will stay recognized
-                until a finger is lifted */
+                /* Жест теперь распознан и останется распознанным
+                пока палец не поднимется */
                 gesture_calculate_factors(r->info, 2);
                 r->distance = (float) sqrt(SQUARE_SUM(r->info->delta_x, r->info->delta_y));
                 r->two_fingers_swipe_dir = calculate_swipe_dir(r);
@@ -516,12 +516,12 @@ void lv_indev_gesture_detect_two_fingers_swipe(lv_indev_gesture_recognizer_t * r
 
         switch(r->state) {
             case LV_INDEV_GESTURE_STATE_RECOGNIZED:
-                /* Gesture has ended */
+                /* Жест завершен */
                 r->state = LV_INDEV_GESTURE_STATE_ENDED;
                 r->type = LV_INDEV_GESTURE_TWO_FINGERS_SWIPE;
                 break;
             case LV_INDEV_GESTURE_STATE_ONGOING:
-                /* User lifted a finger before reaching threshold */
+                /* Пользователь поднял палец, не дойдя до порога */
                 reset_recognizer(r);
                 r->state = LV_INDEV_GESTURE_STATE_ENDED;
                 break;
@@ -540,8 +540,8 @@ void lv_indev_gesture_recognizers_update(lv_indev_t * indev, lv_indev_touch_data
 {
     lv_indev_gesture_type_t type;
 
-    /* First check if a recognizer state is RECOGNIZED or ENDED. *
-     * In that case, call its recongizer function and reset the other*/
+    /* Сначала проверьте, является ли состояние распознавателя RECOGNIZED или ENDED. *
+     * В этом случае вызовите его функцию распознавания и сбросьте другой.*/
     type = get_first_recognized_or_ended_gesture(indev);
     if(type != LV_INDEV_GESTURE_NONE) {
 
@@ -549,10 +549,10 @@ void lv_indev_gesture_recognizers_update(lv_indev_t * indev, lv_indev_touch_data
 
             if(indev->recognizers[i].recog_fn != NULL) {
 
-                /* Update all recognizers to let them process input */
+                /* Обновите все распознаватели, чтобы они могли обрабатывать ввод. */
                 indev->recognizers[i].recog_fn(&indev->recognizers[i], &touches[0], touch_cnt);
 
-                /* Then reset the recognizers which did not report RECOGNIZED or ENDED */
+                /* Затем сбросьте распознаватели, которые не сообщали RECOGNIZED или ENDED. */
                 if(((lv_indev_gesture_type_t)i) != type) {
                     reset_recognizer(&indev->recognizers[i]);
                 }
@@ -562,17 +562,17 @@ void lv_indev_gesture_recognizers_update(lv_indev_t * indev, lv_indev_touch_data
     }
     else {
 
-        /* Otherwise call all recognizer functions, and stop as soon as one recognizer *
-        * reports the state RECOGNIZED or ENDED */
+        /* В противном случае вызовите все функции распознавателя и остановитесь, как только один из них *
+        * сообщает о состоянии RECOGNIZED или ENDED */
         for(int i = 0; i < LV_INDEV_GESTURE_CNT; i++) {
             if(indev->recognizers[i].recog_fn != NULL) {
                 indev->recognizers[i].recog_fn(&indev->recognizers[i], &touches[0], touch_cnt);
 
-                /* If the new state is RECOGNIZED or ENDED */
+                /* Если новое состояние — RECOGNIZED или ENDED */
                 if(indev->recognizers[i].state == LV_INDEV_GESTURE_STATE_RECOGNIZED ||
                    indev->recognizers[i].state == LV_INDEV_GESTURE_STATE_ENDED) {
 
-                    /* Reset the others registered recognizers */
+                    /* Сбросить другие зарегистрированные распознаватели */
                     for(int j = 0; j < LV_INDEV_GESTURE_CNT; j++) {
                         if(j != i && indev->recognizers[j].recog_fn != NULL) {
                             reset_recognizer(&indev->recognizers[j]);
@@ -590,12 +590,12 @@ void lv_indev_gesture_recognizers_set_data(lv_indev_t * indev, lv_indev_data_t *
     lv_indev_gesture_type_t type;
     type = get_first_recognized_or_ended_gesture(indev);
 
-    /* If a gesture is RECOGNIZED or ENDED, set only its data */
+    /* Если жест RECOGNIZED или ENDED, задайте только его данные. */
     if(type != LV_INDEV_GESTURE_NONE) {
         lv_indev_set_gesture_data(data, &indev->recognizers[type], type);
     }
     else {
-        /* Otherwise, set data from all initialized recognizer */
+        /* В противном случае установите данные из всех инициализированных распознавателей. */
         for(int i = 0; i < LV_INDEV_GESTURE_CNT; i++) {
             if(indev->recognizers[i].recog_fn != NULL) {
                 lv_indev_set_gesture_data(data, &indev->recognizers[i], i);
@@ -610,10 +610,10 @@ void lv_indev_gesture_recognizers_set_data(lv_indev_t * indev, lv_indev_data_t *
  ********************/
 
 /**
- * Calculate the direction from the starting center of a two fingers swipe gesture
- * @param recognizer        pointer to the recognizer handling the two fingers
- *                          swipe gesture
- * @return                  the direction of the swipe, from the starting center
+ * Вычисление направления от начального центра жеста пролистывания двумя пальцами
+ * @param recognizer        указатель на распознаватель, обрабатывающий два пальца
+ *                          жест смахивания
+ * @return                  направление смахивания от начального центра
  */
 static lv_dir_t calculate_swipe_dir(lv_indev_gesture_recognizer_t * recognizer)
 {
@@ -629,10 +629,10 @@ static lv_dir_t calculate_swipe_dir(lv_indev_gesture_recognizer_t * recognizer)
 }
 
 /**
- * Get the gesture recognizer associated to the event
- * @param gesture_event     an LV_GESTURE_EVENT event
- * @param type              the type of the recognizer we want to get
- * @return                  a pointer to the gesture recognizer that emitted the event
+ * Получите распознаватель жестов, связанный с событием
+ * @param gesture_event     событие LV_GESTURE_EVENT
+ * @param type              тип распознавателя, который мы хотим получить
+ * @return                  указатель на распознаватель жестов, выдавший событие
  */
 lv_indev_gesture_recognizer_t * lv_indev_get_gesture_recognizer(lv_event_t * gesture_event,
                                                                 lv_indev_gesture_type_t type)
@@ -649,8 +649,8 @@ lv_indev_gesture_recognizer_t * lv_indev_get_gesture_recognizer(lv_event_t * ges
 }
 
 /**
- * Resets a gesture recognizer, motion descriptors are preserved
- * @param recognizer        a pointer to the recognizer to reset
+ * Сбрасывает распознаватель жестов, дескрипторы движения сохраняются.
+ * @param recognizer        указатель на распознаватель для сброса
  */
 static void reset_recognizer(lv_indev_gesture_recognizer_t * recognizer)
 {
@@ -666,8 +666,8 @@ static void reset_recognizer(lv_indev_gesture_recognizer_t * recognizer)
     conf = recognizer->config;
     recog_fn = recognizer->recog_fn;
 
-    /* Set everything to zero but preserve the motion descriptors,
-     * which are located at the start of the lv_indev_gesture_t struct */
+    /* Установите все на ноль, но сохраните дескрипторы движения.
+     * которые расположены в ранней структуре lv_indev_gesture_t */
     lv_memzero((uint8_t *)info + sizeof(info->motions), sizeof(lv_indev_gesture_t) - sizeof(info->motions));
     lv_memzero(recognizer, sizeof(lv_indev_gesture_recognizer_t));
 
@@ -683,8 +683,8 @@ static void reset_recognizer(lv_indev_gesture_recognizer_t * recognizer)
 }
 
 /**
- * Initializes a motion descriptors used with the recognizer(s)
- * @return a pointer to gesture descriptor
+ * Инициализирует дескрипторы движения, используемые с распознавателями.
+ * @return указатель на дескриптор жеста
  */
 static lv_indev_gesture_t * init_gesture_info(void)
 {
@@ -705,10 +705,10 @@ static lv_indev_gesture_t * init_gesture_info(void)
 }
 
 /**
- * Obtains the contact point motion descriptor with id
- * @param id        the id of the contact point
- * @param info      a pointer to the gesture descriptor that stores the motion of each contact point
- * @return          a pointer to the motion descriptor or NULL if not found
+ * Получает дескриптор движения точки контакта с идентификатором
+ * @param id        идентификатор точки контакта
+ * @param info      указатель на дескриптор жеста, который хранит движение каждой точки контакта
+ * @return          указатель на дескриптор движения или NULL, если не найден
  */
 static lv_indev_gesture_motion_t * get_motion(uint8_t id, lv_indev_gesture_t * info)
 {
@@ -724,10 +724,10 @@ static lv_indev_gesture_motion_t * get_motion(uint8_t id, lv_indev_gesture_t * i
 }
 
 /**
- * Obtains the index of the contact point motion descriptor
- * @param id        the id of the contact point
- * @param info      a pointer to the gesture descriptor that stores the motion of each contact point
- * @return          the index of the motion descriptor or -1 if not found
+ * Получает индекс дескриптора движения точки контакта.
+ * @param id        идентификатор точки контакта
+ * @param info      указатель на дескриптор жеста, который хранит движение каждой точки контакта
+ * @return          индекс дескриптора движения или -1, если не найден
  */
 static int8_t get_motion_idx(uint8_t id, lv_indev_gesture_t * info)
 {
@@ -743,9 +743,9 @@ static int8_t get_motion_idx(uint8_t id, lv_indev_gesture_t * info)
 }
 
 /**
- * Update the motion descriptors of a gesture
- * @param touch     a pointer to a touch data structure
- * @param info      a pointer to a gesture descriptor
+ * Обновите дескрипторы движения жеста.
+ * @param touch     указатель на структуру данных касания
+ * @param info      указатель на дескриптор жеста
  */
 static void process_touch_event(lv_indev_touch_data_t * touch, lv_indev_gesture_t * info)
 {
@@ -758,11 +758,11 @@ static void process_touch_event(lv_indev_touch_data_t * touch, lv_indev_gesture_
 
     if(motion_idx == -1 && touch->state == LV_INDEV_STATE_PRESSED) {
         if(g->finger_cnt >= LV_GESTURE_MAX_POINTS) {
-            /* Skip touch */
+            /* Пропустить касание */
             return;
         }
 
-        /* New touch point id */
+        /* Новый идентификатор точки касания */
         motion = &g->motions[g->finger_cnt];
         motion->start_point.x = touch->point.x;
         motion->start_point.y = touch->point.y;
@@ -776,7 +776,7 @@ static void process_touch_event(lv_indev_touch_data_t * touch, lv_indev_gesture_
     else if(motion_idx >= 0 && touch->state == LV_INDEV_STATE_RELEASED) {
         if(motion_idx == g->finger_cnt - 1) {
 
-            /* Mark last item as un-used */
+            /* Отметить последний элемент как неиспользованный */
             motion = get_motion(touch->id, g);
 
             if(motion == NULL) {
@@ -789,7 +789,7 @@ static void process_touch_event(lv_indev_touch_data_t * touch, lv_indev_gesture_
         }
         else {
 
-            /* Move back by one */
+            /* Вернитесь назад на один */
             len = (g->finger_cnt - 1) - motion_idx;
 
             if(len > 0) {
@@ -830,10 +830,10 @@ static void process_touch_event(lv_indev_touch_data_t * touch, lv_indev_gesture_
 }
 
 /**
- * Calculate the center point of a gesture, called when there
- * is a probability for the gesture to occur
- * @param touch             a pointer to a touch data structure
- * @param touch_points_nb   The number of contact point to take into account
+ * Вычисление центральной точки жеста, вызываемого при наличии
+ * вероятность того, что жест произойдет
+ * @param touch             указатель на структуру данных касания
+ * @param touch_points_nb   Количество контактных лиц, которые следует учитывать
  */
 static void gesture_update_center_point(lv_indev_gesture_t * gesture, int touch_points_nb)
 {
@@ -887,10 +887,10 @@ static void gesture_update_center_point(lv_indev_gesture_t * gesture, int touch_
 }
 
 /**
- * Calculate the scale, translation and rotation of a gesture, called when
- * the gesture has been recognized
- * @param gesture           a pointer to the gesture descriptor
- * @param touch_points_nb   the number of contact points to take into account
+ * Рассчитать масштаб, перевод и вращение жеста, вызываемого при
+ * жест был признан
+ * @param gesture           указатель на дескриптор жеста
+ * @param touch_points_nb   количество точек контакта, которые следует учитывать
  */
 static void gesture_calculate_factors(lv_indev_gesture_t * gesture, int touch_points_nb)
 {
@@ -921,11 +921,11 @@ static void gesture_calculate_factors(lv_indev_gesture_t * gesture, int touch_po
     center_x = center_x / touch_cnt;
     center_y = center_y / touch_cnt;
 
-    /* translation */
+    /* перевод */
     g->delta_x = g->p_delta_x + (center_x - g->center.x);
     g->delta_y = g->p_delta_y + (center_y - g->center.y);
 
-    /* rotation & scaling */
+    /* вращение и масштабирование */
     for(i = 0; i < touch_points_nb; i++) {
         motion = &g->motions[i];
 
@@ -942,12 +942,12 @@ static void gesture_calculate_factors(lv_indev_gesture_t * gesture, int touch_po
 }
 
 /**
- * Get the type of the first gesture which reports either a LV_INDEV_GESTURE_STATE_RECOGNIZED
- * or LV_INDEV_GESTURE_STATE_ENDED state
- * @param indev         pointer to the indev device from which we want to check the gestures states
- * @return              the type of the gesture having the state LV_INDEV_GESTURE_STATE_RECOGNIZED or
- *                      LV_INDEV_GESTURE_STATE_ENDED, if found
- *                      LV_INDEV_GESTURE_NONE otherwise
+ * Получите тип первого жеста, который сообщает LV_INDEV_GESTURE_STATE_RECOGNIZED
+ * или состояние LV_INDEV_GESTURE_STATE_ENDED
+ * @param indev         указатель на устройство разработки, с которого мы хотим проверить состояния жестов
+ * @return              тип жеста, имеющего состояниеLV_INDEV_GESTURE_STATE_RECOGNIZEDили
+ *                      LV_INDEV_GESTURE_STATE_ENDED , если найден
+ *                      LV_INDEV_GESTURE_NONE иначе
  */
 static lv_indev_gesture_type_t get_first_recognized_or_ended_gesture(lv_indev_t * indev)
 {

@@ -120,7 +120,7 @@ typedef UINT8 bool;
 #define UINT_MAX  (0xFFFFFFFFFFFFFFFFULL)
 
 ///
-/// Minimum values for the signed UEFI Data Types
+/// Минимальные значения для подписанных типов данных UEFI
 ///
 #define INT8_MIN   ((  -127) - 1)
 #define INT16_MIN  (( -32767) - 1)

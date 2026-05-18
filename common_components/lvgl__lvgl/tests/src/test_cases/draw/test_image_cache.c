@@ -6,17 +6,17 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_image_cache_dump(void)
 {
-    /* Dump should not crash or memory leaks */
+    /* Дамп не должен давать сбоев или утечек памяти. */
     lv_image_cache_dump();
     lv_image_header_cache_dump();
 }

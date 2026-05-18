@@ -48,10 +48,10 @@ typedef void (*lv_obj_class_event_cb_t)(lv_obj_class_t * class_p, lv_event_t * e
  **********************/
 
 /**
- * Create an object form a class descriptor
- * @param class_p   pointer to a class
- * @param parent    pointer to an object where the new object should be created
- * @return          pointer to the created object
+ * Создайте объект из дескриптора класса.
+ * @param class_p   указатель на класс
+ * @param parent    указатель на объект, где должен быть создан новый объект
+ * @return          указатель на созданный объект
  */
 lv_obj_t * lv_obj_class_create_obj(const lv_obj_class_t * class_p, lv_obj_t * parent);
 
@@ -63,17 +63,17 @@ bool lv_obj_is_group_def(lv_obj_t * obj);
 
 #if LV_USE_EXT_DATA
 /**
- * @brief Associates an array of external data pointers with an LVGL object
+ * @brief Связывает массив указателей на внешние данные с объектом LVGL.
  *
- * Associates custom user data with an LVGL object and specifies a destructor function
- * that will be automatically invoked when the object is deleted to properly clean up
- * the associated resources.
+ * Связывает пользовательские данные с объектом LVGL и определяет функцию деструктора.
+ * который будет автоматически вызываться при удалении объекта для правильной очистки.
+ * связанные ресурсы.
  *
- * @param obj          Target LVGL object
- * @param data         User-defined data pointer to associate with a object
- * @param free_cb      Cleanup function called for each non-NULL data pointer during
- *                     object deletion. Receives single data pointer as parameter.
- *                     NULL means no automatic cleanup.
+ * @param obj          Целевой объект LVGL
+ * @param data         Пользовательский указатель данных для связи с объектом
+ * @param free_cb      Функция очистки вызывается для каждого указателя данных, отличного от NULL, во время
+ *                     удаление объекта. Получает один указатель данных в качестве параметра.
+ *                     NULL означает отсутствие автоматической очистки.
  */
 void lv_obj_set_external_data(lv_obj_t * obj, void * data, void (* free_cb)(void * data));
 #endif
@@ -83,7 +83,7 @@ void lv_obj_set_external_data(lv_obj_t * obj, void * data, void (* free_cb)(void
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_CLASS_H*/

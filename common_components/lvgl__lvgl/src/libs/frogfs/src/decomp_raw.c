@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+ * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
+ * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
 #include "../../../lv_conf_internal.h"
 #include LV_STDDEF_INCLUDE

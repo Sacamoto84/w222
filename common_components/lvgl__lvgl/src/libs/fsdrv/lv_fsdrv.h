@@ -53,18 +53,18 @@ void lv_fs_memfs_init(void);
 #include "lfs.h"
 struct lfs;
 /**
- * Set the default LittleFS handler to be used by LVGL
+ * Установите обработчик LittleFS по умолчанию, который будет использоваться LVGL.
  * @param  lfs     pointer to an initialized LittleFS filesystem structure
  */
 void lv_littlefs_set_handler(struct lfs * lfs);
 
 /**
- * Initialize LittleFS file system driver
+ * Инициализировать драйвер файловой системы LittleFS
  */
 void lv_fs_littlefs_init(void);
 
 /**
- * Register a LittleFS drive with LVGL
+ * Зарегистрируйте диск LittleFS с помощью LVGL
  * @param  lfs     pointer to an initialized LittleFS filesystem structure
  * @param  letter  driver letter to register (e.g. 'A')
  * @return         LV_FS_RES_OK: success, LV_FS_RES_INV_PARAM: lfs is NULL or letter not in range A-Z,
@@ -90,9 +90,9 @@ void lv_fs_frogfs_init(void);
 void lv_fs_frogfs_deinit(void);
 
 /**
- * Mount a frogfs blob at the path prefix. If there is a file "foo.txt"
- * in the blob and the blob is registered with `path_prefix` as "my_blob",
- * it can be opened later at path "my_blob/foo.txt".
+ * Подключите объект frogfs по префиксу пути. Если есть файл "foo.txt"
+ * в большом двоичном объекте, и этот большой двоичный объект зарегистрирован в `path_prefix` как "my_blob",
+ * его можно открыть позже по пути «my_blob / foo.txt».
  * @param blob         a frogfs blob/image from mkfrogfs.py
  * @param path_prefix  a prefix that will be used to refer to this blob when accessing it.
  * @return             LV_RESULT_OK or LV_RESULT_INVALID if there was an issue with the blob
@@ -100,8 +100,8 @@ void lv_fs_frogfs_deinit(void);
 lv_result_t lv_fs_frogfs_register_blob(const void * blob, const char * path_prefix);
 
 /**
- * Unmount a frogfs blob that was previously mounted by `lv_fs_frogfs_register_blob`.
- * All files and dirs should be closed before calling this.
+ * Отключите объект frogfs, который ранее был смонтирован `lv_fs_frogfs_register_blob`.
+ * Перед вызовом этого метода все файлы и каталоги должны быть закрыты.
  * @param path_prefix  the path prefix that the blob was registered with
  */
 void lv_fs_frogfs_unregister_blob(const char * path_prefix);
@@ -113,7 +113,7 @@ void lv_fs_frogfs_unregister_blob(const char * path_prefix);
  **********************/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_FSDRV_H*/

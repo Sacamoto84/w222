@@ -106,7 +106,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_hor(lv_draw_task_t * t, const lv_dra
 {
     int32_t w = dsc->width - 1;
     int32_t w_half0 = w >> 1;
-    int32_t w_half1 = w_half0 + (w & 0x1); /*Compensate rounding error*/
+    int32_t w_half1 = w_half0 + (w & 0x1); /*Компенсация ошибки округления*/
 
     lv_area_t blend_area;
     blend_area.x1 = (int32_t)LV_MIN(dsc->p1.x, dsc->p2.x);
@@ -126,12 +126,12 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_hor(lv_draw_task_t * t, const lv_dra
     blend_dsc.color = dsc->color;
     blend_dsc.opa = dsc->opa;
 
-    /*If there is no mask then simply draw a rectangle*/
+    /*Если маски нет, просто нарисуйте прямоугольник.*/
     if(!dashed) {
         lv_draw_sw_blend(t, &blend_dsc);
     }
 #if LV_DRAW_SW_COMPLEX
-    /*If there other mask apply it*/
+    /*Если есть другая маска, примените ее.*/
     else {
 
         int32_t blend_area_w = lv_area_get_width(&blend_area);
@@ -183,7 +183,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_ver(lv_draw_task_t * t, const lv_dra
 {
     int32_t w = dsc->width - 1;
     int32_t w_half0 = w >> 1;
-    int32_t w_half1 = w_half0 + (w & 0x1); /*Compensate rounding error*/
+    int32_t w_half1 = w_half0 + (w & 0x1); /*Компенсация ошибки округления*/
 
     lv_area_t blend_area;
     blend_area.x1 = (int32_t)dsc->p1.x - w_half1;
@@ -203,13 +203,13 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_ver(lv_draw_task_t * t, const lv_dra
     blend_dsc.color = dsc->color;
     blend_dsc.opa = dsc->opa;
 
-    /*If there is no mask then simply draw a rectangle*/
+    /*Если маски нет, просто нарисуйте прямоугольник.*/
     if(!dashed) {
         lv_draw_sw_blend(t, &blend_dsc);
     }
 
 #if LV_DRAW_SW_COMPLEX
-    /*If there other mask apply it*/
+    /*Если есть другая маска, примените ее.*/
     else {
         int32_t draw_area_w = lv_area_get_width(&blend_area);
 
@@ -253,7 +253,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_ver(lv_draw_task_t * t, const lv_dra
 static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc)
 {
 #if LV_DRAW_SW_COMPLEX
-    /*Keep the great y in p1*/
+    /*Держи отличное в п1*/
     lv_point_t p1;
     lv_point_t p2;
     if(dsc->p1.y < dsc->p2.y) {
@@ -282,9 +282,9 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
     if(flat) wcorr_i = (LV_ABS(ydiff) << 5) / LV_ABS(xdiff);
     else wcorr_i = (LV_ABS(xdiff) << 5) / LV_ABS(ydiff);
 
-    w = (w * wcorr[wcorr_i] + 63) >> 7;     /*+ 63 for rounding*/
+    w = (w * wcorr[wcorr_i] + 63) >> 7;     /*+ 63 для округления*/
     int32_t w_half0 = w >> 1;
-    int32_t w_half1 = w_half0 + (w & 0x1); /*Compensate rounding error*/
+    int32_t w_half1 = w_half0 + (w & 0x1); /*Компенсация ошибки округления*/
 
     lv_area_t blend_area;
     blend_area.x1 = LV_MIN(p1.x, p2.x) - w;
@@ -292,9 +292,9 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
     blend_area.y1 = LV_MIN(p1.y, p2.y) - w;
     blend_area.y2 = LV_MAX(p1.y, p2.y) + w;
 
-    /*Get the union of `coords` and `clip`*/
-    /*`clip` is already truncated to the `draw_buf` size
-     *in 'lv_refr_area' function*/
+    /*Получите объединение `coords` и `clip`.*/
+    /*`clip` уже усечен до размера `draw_buf`.
+     *в функции «lv_refr_area»*/
     bool is_common = lv_area_intersect(&blend_area, &blend_area, &t->clip_area);
     if(is_common == false) return;
 
@@ -327,7 +327,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
 
     }
 
-    /*Use the normal vector for the endings*/
+    /*Используйте нормальный вектор для концовок.*/
 
     if(!dsc->raw_end) {
         lv_draw_sw_mask_line_points_init(&mask_top_param, p1.x, p1.y, p1.x - ydiff, p1.y + xdiff,
@@ -339,14 +339,14 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
     }
 
 
-    /*Draw the background line by line*/
+    /*Рисуем фон по линиям.*/
     int32_t h;
     size_t mask_buf_size = LV_MIN((int32_t)lv_area_get_size(&blend_area), lv_area_get_width(&blend_area));
     lv_opa_t * mask_buf = lv_malloc(mask_buf_size);
 
-    /*The real draw area is around the line.
-     *It's easy to calculate with steep lines, but the area can be very wide with very flat lines.
-     *So deal with it only with steep lines.*/
+    /*Настоящая зона розыгрыша находится вокруг линии.
+     *С помощью крутых линий рассчитать легко, но с очень плоскими линиями область может быть очень широкой.
+     *Так что справляйтесь только с крутыми линиями.*/
     size_t draw_area_w = LV_MIN((size_t)lv_area_get_width(&blend_area), mask_buf_size);
 
     int32_t y2 = blend_area.y2;
@@ -363,7 +363,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
     blend_dsc.mask_buf = mask_buf;
     blend_dsc.mask_area = &blend_area;
 
-    /*Fill the first row with 'color'*/
+    /*Заполните первую строку словом «цвет».*/
     for(h = blend_area.y1; h <= y2; h++) {
         blend_dsc.mask_res = lv_draw_sw_mask_apply(masks, &mask_buf[mask_p], blend_area.x1, h, draw_area_w);
         if(blend_dsc.mask_res == LV_DRAW_SW_MASK_RES_TRANSP) {
@@ -385,7 +385,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
         }
     }
 
-    /*Flush the last part*/
+    /*Промойте последнюю часть*/
     if(blend_area.y1 != blend_area.y2) {
         blend_area.y2--;
         blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;

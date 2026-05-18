@@ -57,13 +57,13 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
             y2 = (float)LV_MAX(coordinates.y1, coordinates.y2);
 
             if(a1 < a2) {
-                y0 = 0.0f;//silence the compiler warning
+                y0 = 0.0f;//отключить предупреждение компилятора
                 y3 = 0.0f;
 
             }
             else {
-                y0 = y2 - ((y2 - y1) / (a2 - a1) * (a2)); //point where alpha is 0
-                y3 = y1 + ((y2 - y1) / (a2 - a1) * (255 - a1)); //point where alpha is 255
+                y0 = y2 - ((y2 - y1) / (a2 - a1) * (a2)); //точка, где альфа равна 0
+                y3 = y1 + ((y2 - y1) / (a2 - a1) * (255 - a1)); //точка, где альфа равна 255
             }
 
             y0_i = (int16_t)y0;
@@ -89,13 +89,13 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
             x2 = (float)LV_MAX(coordinates.x1, coordinates.x2);
 
             if(a1 < a2) {
-                x0 = 0.0f;//silence the compiler warning
+                x0 = 0.0f;//отключить предупреждение компилятора
                 x3 = 0.0f;
 
             }
             else {
-                x0 = x2 - ((x2 - x1) / (a2 - a1) * (a2)); //point where alpha is 0
-                x3 = x1 + ((x2 - x1) / (a2 - a1) * (255 - a1)); //point where alpha is 255
+                x0 = x2 - ((x2 - x1) / (a2 - a1) * (a2)); //точка, где альфа равна 0
+                x3 = x1 + ((x2 - x1) / (a2 - a1) * (255 - a1)); //точка, где альфа равна 255
             }
 
             x0_i = (int16_t)x0;
@@ -111,7 +111,7 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
         d2_setalphamode(u->d2_handle, d2_am_gradient1);
     }
     else {
-        d2_setfillmode(u->d2_handle, d2_fm_color); //default
+        d2_setfillmode(u->d2_handle, d2_fm_color); //по умолчанию
         d2_setcolor(u->d2_handle, 0, lv_draw_dave2d_lv_colour_to_d2_colour(dsc->color));
         d2_setalpha(u->d2_handle, dsc->opa);
     }
@@ -127,7 +127,7 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
                      (d2_point)D2_FIX4(lv_area_get_height(&coordinates)));
     }
     else {
-        /*Get the real radius. Can't be larger than the half of the shortest side */
+        /*Получите реальный радиус. Не может быть больше половины самой короткой стороны. */
         int32_t coords_bg_w = lv_area_get_width(&coordinates);
         int32_t coords_bg_h = lv_area_get_height(&coordinates);
         int32_t short_side = LV_MIN(coords_bg_w, coords_bg_h);
@@ -161,15 +161,15 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
                 d2_cliprect(u->d2_handle, (d2_border)clip_arc.x1, (d2_border)clip_arc.y1, (d2_border)clip_arc.x2,
                             (d2_border)clip_arc.y2);
 
-                // d2_renderwedge internally changes the clip rectangle, only draw it if it is in side the current clip rectangle
+                // d2_renderwedge внутренне изменяет прямоугольник клипа, рисует его только в том случае, если он находится внутри текущего прямоугольника клипа.
                 result = d2_renderwedge(u->d2_handle,
                                         (d2_point)D2_FIX4(arc_centre.x),
                                         (d2_point) D2_FIX4(arc_centre.y),
                                         (d2_width) D2_FIX4(radius),
                                         (d2_width) D2_FIX4(0),
-                                        (d2_s32) D2_FIX16(0), // 180 Degrees
+                                        (d2_s32) D2_FIX16(0), // 180 градусов
                                         (d2_s32)  D2_FIX16((int16_t) -1),
-                                        (d2_s32)  D2_FIX16((int16_t) -1),//( 270 Degrees
+                                        (d2_s32)  D2_FIX16((int16_t) -1),//(270 градусов
                                         (d2_s32) D2_FIX16(0),
                                         flags);
                 LV_ASSERT(D2_OK == result);
@@ -192,9 +192,9 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
                                         (d2_point) D2_FIX4(arc_centre.y),
                                         (d2_width) D2_FIX4(radius),
                                         (d2_width) D2_FIX4(0),
-                                        (d2_s32) D2_FIX16((int16_t)1), // 270 Degrees
+                                        (d2_s32) D2_FIX16((int16_t)1), // 270 градусов
                                         (d2_s32)  D2_FIX16(0),
-                                        (d2_s32)  D2_FIX16(0),// 0 degrees
+                                        (d2_s32)  D2_FIX16(0),// 0 градусов
                                         (d2_s32) D2_FIX16(-1),
                                         flags);
                 LV_ASSERT(D2_OK == result);
@@ -217,9 +217,9 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
                                         (d2_point) D2_FIX4(arc_centre.y),
                                         (d2_width) D2_FIX4(radius),
                                         (d2_width) D2_FIX4(0),
-                                        (d2_s32) D2_FIX16(0),// 0 degrees
+                                        (d2_s32) D2_FIX16(0),// 0 градусов
                                         (d2_s32)  D2_FIX16(1),
-                                        (d2_s32)  D2_FIX16(1),// 90 degrees
+                                        (d2_s32)  D2_FIX16(1),// 90 градусов
                                         (d2_s32) D2_FIX16(0),
                                         flags);
                 LV_ASSERT(D2_OK == result);
@@ -242,15 +242,15 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
                                         (d2_point) D2_FIX4(arc_centre.y),
                                         (d2_width) D2_FIX4(radius),
                                         (d2_width) D2_FIX4(0),
-                                        (d2_s32) D2_FIX16((int16_t) -1), //90 degrees
+                                        (d2_s32) D2_FIX16((int16_t) -1), //90 градусов
                                         (d2_s32)  D2_FIX16(0),
-                                        (d2_s32)  D2_FIX16(0), //180 degrees
+                                        (d2_s32)  D2_FIX16(0), //180 градусов
                                         (d2_s32) D2_FIX16(1),
                                         flags);
                 LV_ASSERT(D2_OK == result);
             }
 
-            /* reset the clip rectangle */
+            /* сбросить прямоугольник клипа */
             d2_cliprect(u->d2_handle, (d2_border)draw_area.x1, (d2_border)draw_area.y1, (d2_border)draw_area.x2,
                         (d2_border)draw_area.y2);
 
@@ -279,7 +279,7 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
 
     if(LV_GRAD_DIR_NONE != dsc->grad.dir) {
         d2_setalphamode(u->d2_handle, current_alpha_mode);
-        d2_setfillmode(u->d2_handle, d2_fm_color); //default
+        d2_setfillmode(u->d2_handle, d2_fm_color); //по умолчанию
     }
     else {
         d2_setalpha(u->d2_handle, current_alpha);

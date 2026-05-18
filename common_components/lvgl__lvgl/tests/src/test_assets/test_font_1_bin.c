@@ -1,6 +1,6 @@
-/*  table exported by mirkes.de's tiny hexer
-    filename: D:\lvgl\test\lv_port_pc_visual_studio\LvglPlatform\lvgl\tests\src\test_assets\font_1.fnt
-    position 0, 6876 bytes   */
+/*  таблица, экспортированная крошечным шестнадцатеричным инструментом mirkes.de
+    имя файла: D:\lvgl\test\lv_port_pc_visual_studio\LvglPlatform\lvgl\tests\src\test_assets\font_1.fnt
+    позиция 0, 6876 байт   */
 
 #if LV_BUILD_TEST
 

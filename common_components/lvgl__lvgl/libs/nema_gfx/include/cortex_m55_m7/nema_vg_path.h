@@ -2,32 +2,32 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 /**
  * @file
- * @brief Path operation related fuctions
+ * @brief Функции, связанные с работой пути
  *
  */
 
@@ -80,58 +80,58 @@ extern "C" {
 #define NEMA_VG_PRIM_POLYLINE_REL       (NEMA_VG_PRIM_POLYLINE | NEMA_VG_REL) /**< Relative polyline segment */
 
 
-/** \brief Create path
+/** \brief Создать путь
  *
- * \return  Created path
+ * \return Созданный путь
  *
  */
 NEMA_VG_PATH_HANDLE nema_vg_path_create();
 
-/** \brief Destroy path
+/** \brief Уничтожить путь
  *
- * \param path Pointer to Path
+ * \param path Указатель пути
  * \return void
  *
  */
 void nema_vg_path_destroy(NEMA_VG_PATH_HANDLE path);
 
-/** \brief Clear path
+/** \brief Очистить путь
  *
- * \param path Pointer to Path
+ * \param path Указатель пути
  * \return void
  *
  */
 void nema_vg_path_clear(NEMA_VG_PATH_HANDLE path);
 
-/** \brief Set path shape (vertex buffer)
+/** \brief Установить форму пути (буфер вершины)
  *
- * \param path Pointer to path
- * \param seg_size Number of segments to be added
- * \param seg Pointer to segments
- * \param data_size Number of data to be added
- * \param data Pointer to coordinates
+ * \param путь Указатель пути
+ * \paramseg_sizeКоличество дополненных сегментов
+ * \param seg Указатель сегментов
+ * \paramdata_sizeКоличество дополненных данных
+ * \param data Указатель координат
  *
  */
 void nema_vg_path_set_shape(NEMA_VG_PATH_HANDLE path, const size_t seg_size , const uint8_t* seg, const size_t data_size, const nema_vg_float_t* data);
 
-/** \brief Set path shape (vertex buffer) and bounding box. Same functionality as nema_vg_path_set_shape()
- *         but bbox is given by user (reduces CPU utilization)
+/** \brief Установите форму пути (буфер вершины) и ограничительную рамку. Та же функция, что и уnema_vg_path_set_shape()
+ *         но bbox задается пользователем (уменьшает использованиеCPU)
  *
- * \param path Pointer to path
- * \param seg_size Number of segments to be added
- * \param seg Pointer to segments
- * \param data_size Number of data to be added
- * \param data Pointer to coordinates
- * \param bbox Pointer to shape bound box coordinates {min_x, min_y, max_x, max_y}
+ * \param путь Указатель пути
+ * \paramseg_sizeКоличество дополненных сегментов
+ * \param seg Указатель сегментов
+ * \paramdata_sizeКоличество дополненных данных
+ * \param data Указатель координат
+ * \param bbox Указатель координат связанной валюты формы {min_x,min_y,max_x,max_y}
  *
  */
 void
 nema_vg_path_set_shape_and_bbox(NEMA_VG_PATH_HANDLE path, const size_t seg_size, const uint8_t* seg, const size_t data_size, const nema_vg_float_t* data, const nema_vg_float_t *bbox);
 
-/** \brief Set affine transformation matrix
+/** \brief Установка матрицы аффинного преобразования
  *
- * \param path Pointer to path
- * \param m 3x3 affine transformation matrix
+ * \param путь Указатель пути
+ * \param m 3x3 матрица аффинного преобразования
  *
  */
 void nema_vg_path_set_matrix(NEMA_VG_PATH_HANDLE path, nema_matrix3x3_t m);

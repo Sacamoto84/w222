@@ -25,7 +25,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Handle multiple events
+ * Обрабатывать несколько событий
  */
 void lv_example_event_button(void)
 {

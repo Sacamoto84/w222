@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# --*- кодировка: utf-8 --*-
 
 import sys
 import os
@@ -604,22 +604,22 @@ class FileAST(c_ast.FileAST):
             import doxygen_xml  # NoQA
 
             doxygen_xml.EMIT_WARNINGS = False
-            # doxygen_xml.DOXYGEN_OUTPUT = False
+            # doxygen_xml . DOXYGEN_OUTPUT= Ложь
 
-            # Instantiating a doxygen_xml.DoxygenXml object:
-            # - runs Doxygen in `temp_directory`
-            # - loads XML into `doxygen_xml.index` as a `xml.etree.ElementTree`
-            # - builds these dictionaries as direct children of `doxygen_xml`:
-            #   = doxygen_xml.defines     dictionary of doxygen_xml.DEFINE objects
-            #   = doxygen_xml.enums       dictionary of doxygen_xml.ENUM objects
-            #   = doxygen_xml.variables   dictionary of doxygen_xml.VARIABLE objects
-            #   = doxygen_xml.namespaces  dictionary of doxygen_xml.NAMESPACE objects
-            #   = doxygen_xml.structures  dictionary of doxygen_xml.STRUCT objects
-            #   = doxygen_xml.typedefs    dictionary of doxygen_xml.TYPEDEF objects
-            #   = doxygen_xml.functions   dictionary of doxygen_xml.FUNCTION objects
-            #   = doxygen_xml.groups      dictionary of doxygen_xml.GROUP objects
-            #   = doxygen_xml.files       dictionary of doxygen_xml.FILE objects
-            #   = doxygen_xml.classes     dictionary of doxygen_xml.CLASS objects
+            # Создание экземпляра объектаdoxygen_xml.DoxygenXml:
+            # - запускаем Doxygen в `temp_directory`
+            # - загружаетXMLв`doxygen_xml.index`как `xml.etree.ElementTree`
+            # — строит эти словари как прямые дочерние элементы `doxygen_xml`:
+            # =doxygen_xml.определяет словарьdoxygen_xml. DEFINEобъектов
+            # =doxygen_xml.enums словарьdoxygen_xml. ENUMобъектов
+            # =doxygen_xml.словарь поддержкиdoxygen_xml. VARIABLEобъектов
+            # =doxygen_xml.словарь территории с именемdoxygen_xml. NAMESPACEобъектов
+            # =doxygen_xml.словарь структурыdoxygen_xml. STRUCTобъектов
+            # =doxygen_xml.typedefs словарьdoxygen_xml. TYPEDEFобъектов
+            # =doxygen_xml.словарь функцийdoxygen_xml. FUNCTIONобъектов
+            # =doxygen_xml.групповой словарьdoxygen_xml. GROUPобъектов
+            # =doxygen_xml.files словарьdoxygen_xml. FILEобъектов
+            # =doxygen_xml.словарь классовdoxygen_xml. CLASSобъектов
             doxygen_xml = doxygen_xml.DoxygenXml(lvgl_src_dir,
                                                  intermediate_dir,
                                                  doxyfile_src_file,
@@ -650,10 +650,10 @@ class FileAST(c_ast.FileAST):
     def to_dict(self):
         items = []
 
-        # This code block is to handle how pycparser handles forward
-        # declarations and combining the forward declarations with the actual
-        # types so any information that is contained in the type gets properly
-        # attached to the forward declaration
+        # Этот блок-код предназначен для обработки, например, pycparser обрабатывает пересылку.
+        # декларации и объединение предварительных деклараций с фактическими
+        # типы, чтобы любая информация, содержащаяся в типе, была правильно
+        # прилагается к форвардному заявлению
         forward_struct_decls = {}
 
         for item in self.ext[:]:

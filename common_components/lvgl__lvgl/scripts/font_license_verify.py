@@ -11,13 +11,13 @@ except ImportError:
     print("Need fonttools package, do `pip3 install fonttools`")
     sys.exit(1)
 
-# Fonts that are excluded from the license check
-# Only add fonts that are known to be public domain or have a compatible license
+# Шрифты, исключенные из проверки лицензии
+# Добавляйте только те шрифты, которые, как известно, являются общедоступными или имеют совместимую лицензию.
 _EXCLUDED_FONTS = {
     "OpenTypeTest GPOS One",
 }
 
-# Font name mapping to remove any style suffix
+# Сопоставление имен шрифтов для удаления любого суффикса стиля.
 _FONT_NAME_MAP = {
     "Montserrat Medium": "Montserrat",
     "Montserrat SemiBold": "Montserrat",
@@ -50,7 +50,7 @@ def list_intree_fonts(path: str) -> List[Tuple[str, str]]:
                 font_path = os.path.join(root, file)
                 font_name = get_font_full_name(font_path).strip()
                 if font_name:
-                    # Add a no-strict mode to ignore missing license files
+                    # Добавьте нестрогий режим, чтобы игнорировать отсутствующие файлы лицензий.
                     fonts.append((font_path, font_name))
     return fonts
 
@@ -59,7 +59,7 @@ def has_intree_license(license_root_folder: str, font_name: str) -> bool:
     if font_name in _EXCLUDED_FONTS:
         return True
 
-    # Prepare candidate folder names, ignoring casing
+    # Подготовьте имена папок-кандидатов, игнорируя регистр.
     candidates = {
         font_name.lower(),
         font_name.replace(" ", "_").lower(),
@@ -71,13 +71,13 @@ def has_intree_license(license_root_folder: str, font_name: str) -> bool:
         candidates.add(_FONT_NAME_MAP[font_name].replace(" ", "_").lower())
         candidates.add(_FONT_NAME_MAP[font_name].replace(" ", "").lower())
 
-    # List all directories in the license_root_folder
+    # Список всех каталогов в license_root_folder
     for entry in os.listdir(license_root_folder):
         entry_path = os.path.join(license_root_folder, entry)
         if os.path.isdir(entry_path):
-            # Compare the directory name in lowercase with candidates
+            # Сравните имя каталога в нижнем регистре с кандидатами
             if entry.lower() in candidates:
-                # Check if the directory contains at least one file (ignoring subdirectories)
+                # Проверьте, содержит ли каталог хотя бы один файл (игнорируя подкаталоги)
                 for item in os.listdir(entry_path):
                     item_path = os.path.join(entry_path, item)
                     if os.path.isfile(item_path):
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     SCRIPT_DIR = os.path.dirname(__file__)
-    # List of font files in the tree
+    # Список файлов шрифтов в дереве
     fonts = list_intree_fonts(os.path.join(SCRIPT_DIR, ".."))
     has_font_without_license = False
 

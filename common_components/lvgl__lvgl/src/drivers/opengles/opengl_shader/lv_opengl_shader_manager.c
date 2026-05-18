@@ -104,7 +104,7 @@ void lv_opengl_shader_manager_init(lv_opengl_shader_manager_t * manager, const l
                (lv_rb_compare_t)compiled_shader_compare_cb,
                sizeof(lv_opengl_compiled_shader_t));
 
-    /* Textures and compiled shaders share the same compare function */
+    /* Текстуры и скомпилированные шейдеры используют одну и ту же функцию сравнения. */
     lv_rb_init(&manager->textures_map,
                (lv_rb_compare_t)compiled_shader_compare_cb,
                sizeof(lv_opengl_shader_texture_t));
@@ -163,7 +163,7 @@ lv_result_t lv_opengl_shader_manager_select_shader(lv_opengl_shader_manager_t * 
                                                    const lv_opengl_shader_define_t * permutations, size_t permutations_len,
                                                    lv_opengl_glsl_version_t glsl_version, uint32_t * out_hash)
 {
-    /* First check that the shader identifier exists */
+    /* Сначала проверьте, существует ли идентификатор шейдера. */
     lv_opengl_shader_t key = { shader_identifier, NULL };
     lv_rb_node_t * source_node = lv_rb_find(&shader->sources_map, &key);
     LV_LOG_TRACE("Select shader '%s'", shader_identifier);
@@ -173,7 +173,7 @@ lv_result_t lv_opengl_shader_manager_select_shader(lv_opengl_shader_manager_t * 
         return LV_RESULT_INVALID;
     }
 
-    /* Then hash the name with the permutations and see if we already compiled it */
+    /* Затем хешируйте имя с перестановками и посмотрите, скомпилировали ли мы его уже. */
     char define[512];
     uint32_t hash = lv_opengl_shader_hash(shader_identifier);
     for(size_t i = 0; i < permutations_len; ++i) {
@@ -186,14 +186,14 @@ lv_result_t lv_opengl_shader_manager_select_shader(lv_opengl_shader_manager_t * 
         }
         hash ^= lv_opengl_shader_hash(define);
     }
-    /* hash the version so that the same shader with different versions produces a different hash*/
+    /* хешировать версию, чтобы один и тот же шейдер с разными версиями создавал разные хэши*/
     hash ^= lv_opengl_shader_hash(lv_opengles_glsl_version_to_string(glsl_version));
 
     lv_opengl_compiled_shader_t shader_map_key = { hash, 0 };
     lv_rb_node_t * shader_map_node =
         lv_rb_find(&shader->compiled_shaders_map, &shader_map_key);
 
-    /* Fast path. Shader already compiled */
+    /* Быстрый путь. Шейдер уже скомпилирован */
     if(shader_map_node != NULL) {
         LV_LOG_INFO("Shader '%s' with hash %u found. Id: %d", shader_identifier, hash,
                     ((lv_opengl_compiled_shader_t *)shader_map_node->data)->id);
@@ -201,7 +201,7 @@ lv_result_t lv_opengl_shader_manager_select_shader(lv_opengl_shader_manager_t * 
         return LV_RESULT_OK;
     }
 
-    /* New shader requested, construct and compile it */
+    /* Запрошен новый шейдер, создайте и скомпилируйте его. */
     bool is_vertex = string_ends_with(shader_identifier, ".vert");
     const char * original_shader_source = ((lv_opengl_shader_source_t *)source_node->data)->data.source;
 
@@ -547,7 +547,7 @@ static char * construct_shader(const char * source,
     const size_t prefix_len = lv_strlen(prefix);
     size_t shader_source_size = lv_strlen(defines) + lv_strlen(source);
 
-    /* First calculate the necessary size */
+    /* Сначала рассчитайте необходимый размер */
     for(size_t i = 0; i < permutations_len; ++i) {
         shader_source_size += prefix_len;
         if(!permutations[i].name) {
@@ -562,7 +562,7 @@ static char * construct_shader(const char * source,
         }
     }
 
-    /* Allocate enough for memory with calculated size*/
+    /* Выделите достаточно памяти с расчетным размером*/
     char * result = (char *)lv_malloc(shader_source_size + 1);
     if(!result) {
         LV_LOG_ERROR(
@@ -570,7 +570,7 @@ static char * construct_shader(const char * source,
         return 0;
     }
 
-    /* Construct shader */
+    /* Построить шейдер */
     size_t curr_index = 0;
     append_to_shader(result, defines, &curr_index);
     for(size_t i = 0; i < permutations_len; ++i) {
@@ -614,7 +614,7 @@ static char * replace_include(const char * source, const char * pattern,
     lv_memcpy(result + before_len, replacement, replacement_len);
     lv_strcpy(result + before_len + replacement_len, pos + pattern_len);
 
-    /* Replace other patterns with whitespaces */
+    /* Замените другие шаблоны пробелами. */
     while((pos = strstr(result, pattern))) {
         lv_memset((void *)pos, ' ', pattern_len);
     }

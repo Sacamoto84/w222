@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -62,9 +62,9 @@ enum class SvgNodeType
 
 /*
 // TODO - remove?
-enum class SvgLengthType
+класс перечисления SvgLengthType
 {
-    Percent,
+    Процент,
     Px,
     Pc,
     Pt,
@@ -213,22 +213,22 @@ enum class SvgMaskType
     Alpha
 };
 
-//Length type to recalculate %, pt, pc, mm, cm etc
+//Тип длины для перерасчета %, пт, шт, мм, см и т. д.
 enum class SvgParserLengthType
 {
     Vertical,
     Horizontal,
     Diagonal,
-    //In case of, for example, radius of radial gradient
+    //Например, в случае радиуса радиального градиента
     Other
 };
 
 enum class SvgViewFlag
 {
     None = 0x0,
-    Width = 0x01,   //viewPort width
-    Height = 0x02,  //viewPort height
-    Viewbox = 0x04,  //viewBox x,y,w,h - used only if all 4 are correctly set
+    Width = 0x01,   //Ширина порта просмотра
+    Height = 0x02,  //Высота порта просмотра
+    Viewbox = 0x04,  //viewBox x,y,w,h — используется только в том случае, если все 4 установлены правильно.
     WidthInPercent = 0x08,
     HeightInPercent = 0x10
 };
@@ -418,7 +418,7 @@ struct SvgComposite
 {
     char *url;
     SvgNode* node;
-    bool applying;              //flag for checking circular dependency.
+    bool applying;              //флаг для проверки циклической зависимости.
 };
 
 struct SvgColor
@@ -499,9 +499,9 @@ struct SvgStyleProperty
     SvgColor color;
     char* cssClass;
     SvgStyleFlags flags;
-    SvgStyleFlags flagsImportance; //indicates the importance of the flag - if set, higher priority is applied (https://drafts.csswg.org/css-cascade-4/#importance)
+    SvgStyleFlags flagsImportance; //указывает на важность флага — если установлен, применяется более высокий приоритет ( https://drafts.csswg.org/css-cascade-4/#importance)
     bool curColorSet;
-    bool paintOrder; //true if default (fill, stroke), false otherwise
+    bool paintOrder; //true, если по умолчанию (заливка, обводка), в противном случае — false
     bool display;
 };
 
@@ -569,14 +569,14 @@ struct SvgLoaderData
 {
     Array<SvgNode*> stack;
     SvgNode* doc = nullptr;
-    SvgNode* def = nullptr; //also used to store nested graphic nodes
+    SvgNode* def = nullptr; //также используется для хранения вложенных графических узлов
     SvgNode* cssStyle = nullptr;
     Array<SvgStyleGradient*> gradients;
-    SvgStyleGradient* latestGradient = nullptr; //For stops
+    SvgStyleGradient* latestGradient = nullptr; //Для остановок
     SvgParser* svgParse = nullptr;
     Array<SvgNodeIdPair> cloneNodes;
     Array<SvgNodeIdPair> nodesToStyle;
-    Array<char*> images;        //embedded images
+    Array<char*> images;        //встроенные изображения
     int level = 0;
     bool result = false;
     OpenedTagType openedTag = OpenedTagType::Other;

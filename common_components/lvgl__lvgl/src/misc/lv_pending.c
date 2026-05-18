@@ -108,7 +108,7 @@ static inline void lv_pending_array_clear(lv_pending_t * pending, lv_array_t * a
         return;
     }
 
-    /* remove all the pending objects */
+    /* удалить все ожидающие объекты */
     for(uint32_t i = 0; i < size; i++) {
         pending->free_cb(lv_array_at(arr, i), pending->user_data);
     }

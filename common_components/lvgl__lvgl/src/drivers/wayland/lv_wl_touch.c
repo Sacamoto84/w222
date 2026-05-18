@@ -129,7 +129,7 @@ static void touch_read(lv_indev_t * indev, lv_indev_data_t * data)
         return;
     }
 #if LV_USE_GESTURE_RECOGNITION
-    /* Collect touches if there are any - send them to the gesture recognizer */
+    /* Собирайте касания, если они есть — отправляйте их в распознаватель жестов */
     lv_indev_gesture_recognizers_update(indev, tdata->touches, tdata->event_cnt);
 
     LV_LOG_TRACE("collected touch events: %d", tdata->event_cnt);
@@ -143,7 +143,7 @@ static void touch_read(lv_indev_t * indev, lv_indev_data_t * data)
 
     tdata->event_cnt = 0;
 
-    /* Set the gesture information, before returning to LVGL */
+    /* Установите информацию о жесте, прежде чем вернуться к LVGL. */
     lv_indev_gesture_recognizers_set_data(indev, data);
 
 #else
@@ -190,7 +190,7 @@ static void touch_handle_up(void * data, struct wl_touch * wl_touch, uint32_t se
     LV_UNUSED(data);
     lv_wl_seat_touch_t * tdata = wl_touch_get_user_data(wl_touch);
 
-    /* Create a released event */
+    /* Создать выпущенное событие */
 #if LV_USE_GESTURE_RECOGNITION
     uint8_t i = tdata->event_cnt;
 
@@ -216,7 +216,7 @@ static void touch_handle_motion(void * data, struct wl_touch * wl_touch, uint32_
     lv_wl_seat_touch_t * tdata = wl_touch_get_user_data(wl_touch);
 
 #if LV_USE_GESTURE_RECOGNITION
-    /* Update the contact point of the corresponding id with the latest coordinate */
+    /* Обновите точку контакта с соответствующим идентификатором последней координатой. */
     lv_indev_touch_data_t * touch = &tdata->touches[0];
     lv_indev_touch_data_t * cur = NULL;
 

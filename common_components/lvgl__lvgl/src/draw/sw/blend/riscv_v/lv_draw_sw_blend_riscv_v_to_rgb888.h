@@ -21,7 +21,7 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* Color fill to RGB888/XRGB8888 */
+/* Цветовая заливка до RGB888 / XRGB8888 */
 #ifndef LV_DRAW_SW_COLOR_BLEND_TO_RGB888
 #define LV_DRAW_SW_COLOR_BLEND_TO_RGB888(dsc, dest_px_size) \
     lv_draw_sw_blend_riscv_v_color_to_rgb888(dsc, dest_px_size)
@@ -43,7 +43,7 @@ extern "C" {
 #endif
 
 
-/* RGB565 image blend to RGB888/XRGB8888 */
+/* Изображение RGB565 смешивается с RGB888 / XRGB8888 */
 #ifndef LV_DRAW_SW_RGB565_BLEND_NORMAL_TO_RGB888
 #define LV_DRAW_SW_RGB565_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size) \
     lv_draw_sw_blend_riscv_v_rgb565_to_rgb888(dsc, dest_px_size)
@@ -64,7 +64,7 @@ extern "C" {
     lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa_mask(dsc, dest_px_size)
 #endif
 
-/* RGB888/XRGB8888 image blend to RGB888/XRGB8888 */
+/* Изображение RGB888 / XRGB8888 смешивается с RGB888 / XRGB8888 */
 #ifndef LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_RGB888
 #define LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size, src_px_size) \
     lv_draw_sw_blend_riscv_v_rgb888_to_rgb888(dsc, dest_px_size, src_px_size)
@@ -85,7 +85,7 @@ extern "C" {
     lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa_mask(dsc, dest_px_size, src_px_size)
 #endif
 
-/* ARGB8888 image blend to RGB888/XRGB8888 */
+/* Изображение ARGB8888 смешивается с RGB888 / XRGB8888 */
 #ifndef LV_DRAW_SW_ARGB8888_BLEND_NORMAL_TO_RGB888
 #define LV_DRAW_SW_ARGB8888_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size) \
     lv_draw_sw_blend_riscv_v_argb8888_to_rgb888(dsc, dest_px_size)
@@ -119,7 +119,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 
-/* Color fill functions */
+/* Функции заливки цветом */
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888(lv_draw_sw_blend_fill_dsc_t * dsc, uint32_t dest_px_size);
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa(lv_draw_sw_blend_fill_dsc_t * dsc, uint32_t dest_px_size);
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_fill_dsc_t * dsc,
@@ -127,7 +127,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_mask(lv_draw_sw_blend_
 lv_result_t lv_draw_sw_blend_riscv_v_color_to_rgb888_with_opa_mask(lv_draw_sw_blend_fill_dsc_t * dsc,
                                                                    uint32_t dest_px_size);
 
-/* RGB565 to RGB888/XRGB8888 blend functions */
+/* Функции смешивания от RGB565 до RGB888 / XRGB8888 */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc, uint32_t dest_px_size);
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                uint32_t dest_px_size);
@@ -136,7 +136,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_mask(lv_draw_sw_blend
 lv_result_t lv_draw_sw_blend_riscv_v_rgb565_to_rgb888_with_opa_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                     uint32_t dest_px_size);
 
-/* RGB888/XRGB8888 to RGB888/XRGB8888 blend functions */
+/* Функции смешивания от RGB888 / XRGB8888 до RGB888 / XRGB8888 */
 lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc, uint32_t dest_px_size,
                                                       uint32_t src_px_size);
 lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa(lv_draw_sw_blend_image_dsc_t * dsc,
@@ -146,7 +146,7 @@ lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_mask(lv_draw_sw_blend
 lv_result_t lv_draw_sw_blend_riscv_v_rgb888_to_rgb888_with_opa_mask(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                     uint32_t dest_px_size, uint32_t src_px_size);
 
-/* ARGB8888 to RGB888/XRGB8888 blend functions */
+/* Функции смешивания от ARGB8888 до RGB888 / XRGB8888 */
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc, uint32_t dest_px_size);
 lv_result_t lv_draw_sw_blend_riscv_v_argb8888_to_rgb888_with_opa(lv_draw_sw_blend_image_dsc_t * dsc,
                                                                  uint32_t dest_px_size);

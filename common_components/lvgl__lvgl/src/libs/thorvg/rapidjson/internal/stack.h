@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_INTERNAL_STACK_H_
 #define RAPIDJSON_INTERNAL_STACK_H_
@@ -28,16 +28,16 @@ RAPIDJSON_NAMESPACE_BEGIN
 namespace internal {
 
 ///////////////////////////////////////////////////////////////////////////////
-// Stack
+// Стек
 
-//! A type-unsafe stack for storing different types of data.
-/*! \tparam Allocator Allocator for allocating stack memory.
+//! Небезопасный по типам стек для хранения различных типов данных.
+/*! \tparam Распределитель Распределитель для выделения памяти стека.
 */
 template <typename Allocator>
 class Stack {
 public:
-    // Optimization note: Do not allocate memory for stack_ in constructor.
-    // Do it lazily when first Push() -> Expand() -> Resize().
+    // Примечание по оптимизации: не выделяйте память для stack_ в конструкторе.
+    // Делайте это лениво, когда сначала Push() -> Expand() -> Resize() .
     Stack(Allocator* allocator, size_t stackCapacity) : allocator_(allocator), ownAllocator_(0), stack_(0), stackTop_(0), stackEnd_(0), initialCapacity_(stackCapacity) {
     }
 
@@ -100,7 +100,7 @@ public:
 
     void ShrinkToFit() {
         if (Empty()) {
-            // If the stack is empty, completely deallocate the memory.
+            // Если стек пуст, полностью освободите память.
             Allocator::Free(stack_); // NOLINT (+clang-analyzer-unix.Malloc)
             stack_ = 0;
             stackTop_ = 0;
@@ -110,11 +110,11 @@ public:
             Resize(GetSize());
     }
 
-    // Optimization note: try to minimize the size of this function for force inline.
-    // Expansion is run very infrequently, so it is moved to another (probably non-inline) function.
+    // Примечание по оптимизации: постарайтесь минимизировать размер этой функции для принудительного встроенного выполнения.
+    // Расширение выполняется очень редко, поэтому оно переносится в другую (вероятно, не встроенную) функцию.
     template<typename T>
     RAPIDJSON_FORCEINLINE void Reserve(size_t count = 1) {
-         // Expand the stack if needed
+         // Расширьте стек при необходимости
         if (RAPIDJSON_UNLIKELY(static_cast<std::ptrdiff_t>(sizeof(T) * count) > (stackEnd_ - stackTop_)))
             Expand<T>(count);
     }
@@ -181,7 +181,7 @@ public:
 private:
     template<typename T>
     void Expand(size_t count) {
-        // Only expand the capacity if the current stack exists. Otherwise just create a stack with initial capacity.
+        // Расширяйте емкость только в том случае, если текущий стек существует. В противном случае просто создайте стек с начальной емкостью.
         size_t newCapacity;
         if (stack_ == 0) {
             if (!allocator_)
@@ -199,7 +199,7 @@ private:
     }
 
     void Resize(size_t newCapacity) {
-        const size_t size = GetSize();  // Backup the current size
+        const size_t size = GetSize();  // Резервная копия текущего размера
         stack_ = static_cast<char*>(allocator_->Realloc(stack_, GetCapacity(), newCapacity));
         stackTop_ = stack_ + size;
         stackEnd_ = stack_ + newCapacity;
@@ -207,10 +207,10 @@ private:
 
     void Destroy() {
         Allocator::Free(stack_);
-        RAPIDJSON_DELETE(ownAllocator_); // Only delete if it is owned by the stack
+        RAPIDJSON_DELETE(ownAllocator_); // Удалить только в том случае, если он принадлежит стеку
     }
 
-    // Prohibit copy constructor & assignment operator.
+    // Запретить конструктор копирования и оператор присваивания.
     Stack(const Stack&);
     Stack& operator=(const Stack&);
 
@@ -222,7 +222,7 @@ private:
     size_t initialCapacity_;
 };
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #if defined(__clang__)

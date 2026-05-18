@@ -29,13 +29,13 @@ extern "C" {
  **********************/
 
 /**
- * Low level function to scroll by given x and y coordinates.
- * `LV_EVENT_SCROLL` is sent.
- * @param obj       pointer to an object to scroll
- * @param x         pixels to scroll horizontally
- * @param y         pixels to scroll vertically
- * @return          `LV_RESULT_INVALID`: to object was deleted in `LV_EVENT_SCROLL`;
- *                  `LV_RESULT_OK`: if the object is still valid
+ * Функция низкого уровня для прокрутки по заданным координатам x и y.
+ * `LV_EVENT_SCROLL` отправлен.
+ * @param obj       указатель на объект для прокрутки
+ * @param x         пикселей для горизонтальной прокрутки
+ * @param y         пикселей для вертикальной прокрутки
+ * @return          `LV_RESULT_INVALID` : объект был удален в`LV_EVENT_SCROLL`;
+ *                  `LV_RESULT_OK`: если объект все еще действителен
  */
 lv_result_t lv_obj_scroll_by_raw(lv_obj_t * obj, int32_t x, int32_t y);
 
@@ -44,7 +44,7 @@ lv_result_t lv_obj_scroll_by_raw(lv_obj_t * obj, int32_t x, int32_t y);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_SCROLL_PRIVATE_H*/

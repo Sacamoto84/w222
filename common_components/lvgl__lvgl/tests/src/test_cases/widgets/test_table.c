@@ -43,14 +43,14 @@ void test_table_should_return_assigned_cell_value(void)
 
 void test_table_should_grow_columns_automatically_when_setting_formatted_cell_value(void)
 {
-    /* Newly created tables have 1 column and 1 row */
+    /* Вновь созданные таблицы имеют 1 столбец и 1 строку. */
     uint16_t original_column_count = lv_table_get_column_count(table);
     TEST_ASSERT_EQUAL_UINT16(1, original_column_count);
 
-    /* Table currently only has a cell at 0,0 (row, column) */
+    /* В настоящее время в таблице есть только ячейка с номером 0,0 (строка, столбец). */
     lv_table_set_cell_value_fmt(table, 0, 1, "LVGL %s", "Rocks!");
 
-    /* Table now should have cells at 0,0 and 0,1, so 2 columns */
+    /* В таблице теперь должны быть ячейки с номерами 0,0 и 0,1, поэтому 2 столбца. */
     uint16_t expected_column_count = original_column_count + 1;
     TEST_ASSERT_EQUAL_UINT16(expected_column_count, lv_table_get_column_count(table));
 }
@@ -95,7 +95,7 @@ void test_table_should_keep_not_selected_cell_ctrl(void)
     TEST_ASSERT_TRUE(has_ctrl);
 }
 
-/* We're using a newly created table */
+/* Мы используем недавно созданную таблицу */
 void test_table_cell_value_should_return_empty_string_when_cell_is_empty(void)
 {
     TEST_ASSERT_EQUAL_STRING("", lv_table_get_cell_value(table, 0, 0));
@@ -130,23 +130,23 @@ void test_table_should_wrap_long_texts(void)
     lv_table_set_cell_value(table, 0, 0, long_text);
     int32_t wrapped_row_height = table_ptr->row_h[0];
 
-    /* Row height on cells with wrapped text is bigger than cells with small texts */
+    /* Высота строки в ячейках с обёрнутым текстом больше, чем в ячейках с небольшим текстом. */
     TEST_ASSERT_GREATER_THAN(row_height, wrapped_row_height);
 }
 
 static void draw_part_event_cb(lv_event_t * e)
 {
-    /* Test lv_event_get_invalidated_area error handling. */
+    /* Проверьте обработку ошибок lv_event_get_invalidated_area. */
     TEST_ASSERT_NULL(lv_event_get_invalidated_area(e));
 
     lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
     lv_draw_dsc_base_t * base_dsc = draw_task->draw_dsc;
-    /*If the cells are drawn...*/
+    /*Если ячейки нарисованы...*/
     if(base_dsc->part == LV_PART_ITEMS) {
         uint32_t row = base_dsc->id1;
         uint32_t col = base_dsc->id2;
 
-        /*Make the texts in the first cell center aligned*/
+        /*Выровняйте тексты в центре первой ячейки.*/
         if(row == 0) {
             lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
             if(label_draw_dsc) {
@@ -158,7 +158,7 @@ static void draw_part_event_cb(lv_event_t * e)
                 fill_draw_dsc->opa = LV_OPA_COVER;
             }
         }
-        /*In the first column align the texts to the right*/
+        /*В первом столбце выровняйте тексты по правому краю.*/
         else if(col == 0) {
             lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
             if(label_draw_dsc) {
@@ -166,7 +166,7 @@ static void draw_part_event_cb(lv_event_t * e)
             }
         }
 
-        /*Make every 2nd row grayish*/
+        /*Каждый второй ряд сделайте серым.*/
         if((row != 0 && row % 2) == 0) {
             lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
             if(fill_draw_dsc) {
@@ -232,13 +232,13 @@ void test_table_rendering(void)
 
 #if LV_DRAW_TRANSFORM_USE_MATRIX
     /**
-     * From `lv_obj_pos`:
+     * От `lv_obj_pos`:
      *
-     * When using the global matrix, the vertex coordinates of clip_area lose precision after transformation,
-     * which can be solved by expanding the redrawing area.
-     * lv_area_increase(&area_tmp, 5, 5);
+     * При использовании глобальной матрицы координаты вершин clip_area теряют точность после преобразования.
+     * которую можно решить расширением области перерисовки.
+     * lv_area_increase (& area_tmp, 5, 5);
      *
-     * This accommodates for this specific calculation.
+     * Это соответствует данному конкретному расчету.
      */
     TEST_ASSERT_EQUAL_INT32(lv_area_get_width(&g_inv_area), merged_col_width + 10);
 #else
@@ -246,7 +246,7 @@ void test_table_rendering(void)
 #endif
 }
 
-/* See #3120 for context */
+/* См. #3120 для контекста. */
 void test_table_should_reduce_cells(void)
 {
     const uint16_t initial_col_num = 8;
@@ -276,7 +276,7 @@ void test_table_should_reduce_cells(void)
     }
 }
 
-/* See #3120 for context */
+/* См. #3120 для контекста. */
 void test_table_should_reduce_cells_with_more_than_one_row(void)
 {
     const uint16_t initial_col_num = 8;
@@ -362,11 +362,11 @@ void test_table_properties(void)
     lv_table_set_row_count(tbl, 5);
     lv_table_set_column_count(tbl, 3);
 
-    /* Test getters */
+    /* Тестовые геттеры */
     TEST_ASSERT_EQUAL_INT(5, lv_obj_get_property(tbl, LV_PROPERTY_TABLE_ROW_COUNT).num);
     TEST_ASSERT_EQUAL_INT(3, lv_obj_get_property(tbl, LV_PROPERTY_TABLE_COLUMN_COUNT).num);
 
-    /* Test setters */
+    /* Разработчики тестов */
     lv_property_t prop = { };
 
     prop.id = LV_PROPERTY_TABLE_ROW_COUNT;

@@ -1,18 +1,18 @@
 //
 // Copyright (c) 2013 Mikko Mononen memon@inside.org
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
+// Данное программное обеспечение предоставляется «как есть», без каких-либо явных или подразумеваемых
+// гарантия.  Ни при каких обстоятельствах авторы не несут ответственности за какой-либо ущерб.
+// возникшие в результате использования данного программного обеспечения.
+// Разрешение предоставляется каждому на использование этого программного обеспечения для любых целей,
+// включая коммерческие приложения, а также изменять его и распространять
+// свободно, с соблюдением следующих ограничений:
 // 1. The origin of this software must not be misrepresented; you must not
-//    claim that you wrote the original software. If you use this software
-//    in a product, an acknowledgment in the product documentation would be
-//    appreciated but is not required.
+//    утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
+//    в продукте подтверждение в документации по продукту будет
+//    приветствуется, но не является обязательным.
 // 2. Altered source versions must be plainly marked as such, and must not be
-//    misrepresented as being the original software.
+//    ошибочно представлено как оригинальное программное обеспечение.
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
@@ -31,7 +31,7 @@ extern "C" {
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable: 4201)  // nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)  // используется нестандартное расширение: безымянная структура/объединение
 #endif
 
 typedef struct NVGcontext NVGcontext;
@@ -56,8 +56,8 @@ struct NVGpaint {
 typedef struct NVGpaint NVGpaint;
 
 enum NVGwinding {
-    NVG_CCW = 1,            // Winding for solid shapes
-    NVG_CW = 2,             // Winding for holes
+    NVG_CCW = 1,            // Намотка для твердых форм
+    NVG_CW = 2,             // Намотка для отверстий
 };
 
 enum NVGsolidity {
@@ -74,15 +74,15 @@ enum NVGlineCap {
 };
 
 enum NVGalign {
-    // Horizontal align
-    NVG_ALIGN_LEFT      = 1 << 0, // Default, align text horizontally to left.
-    NVG_ALIGN_CENTER    = 1 << 1, // Align text horizontally to center.
-    NVG_ALIGN_RIGHT     = 1 << 2, // Align text horizontally to right.
-    // Vertical align
-    NVG_ALIGN_TOP       = 1 << 3, // Align text vertically to top.
-    NVG_ALIGN_MIDDLE    = 1 << 4, // Align text vertically to middle.
-    NVG_ALIGN_BOTTOM    = 1 << 5, // Align text vertically to bottom.
-    NVG_ALIGN_BASELINE  = 1 << 6, // Default, align text vertically to baseline.
+    // Горизонтальное выравнивание
+    NVG_ALIGN_LEFT      = 1 << 0, // По умолчанию выравнивание текста горизонтально по левому краю.
+    NVG_ALIGN_CENTER    = 1 << 1, // Выровняйте текст по горизонтали по центру.
+    NVG_ALIGN_RIGHT     = 1 << 2, // Выровняйте текст по горизонтали вправо.
+    // Вертикальное выравнивание
+    NVG_ALIGN_TOP       = 1 << 3, // Выровняйте текст по вертикали сверху.
+    NVG_ALIGN_MIDDLE    = 1 << 4, // Выровняйте текст вертикально по центру.
+    NVG_ALIGN_BOTTOM    = 1 << 5, // Выровняйте текст вертикально вниз.
+    NVG_ALIGN_BASELINE  = 1 << 6, // По умолчанию текст выравнивается вертикально по базовой линии.
 };
 
 enum NVGblendFactor {
@@ -122,519 +122,519 @@ struct NVGcompositeOperationState {
 typedef struct NVGcompositeOperationState NVGcompositeOperationState;
 
 struct NVGglyphPosition {
-    const char * str;   // Position of the glyph in the input string.
-    float x;            // The x-coordinate of the logical glyph position.
-    float minx, maxx;   // The bounds of the glyph shape.
+    const char * str;   // Позиция глифа во входной строке.
+    float x;            // Координата X логического положения глифа.
+    float minx, maxx;   // Границы формы глифа.
 };
 typedef struct NVGglyphPosition NVGglyphPosition;
 
 struct NVGtextRow {
-    const char * start; // Pointer to the input text where the row starts.
-    const char * end;   // Pointer to the input text where the row ends (one past the last character).
-    const char * next;  // Pointer to the beginning of the next row.
-    float width;        // Logical width of the row.
+    const char * start; // Указатель на входной текст, где начинается строка.
+    const char * end;   // Указатель на входной текст, где заканчивается строка (на один после последнего символа).
+    const char * next;  // Указатель на начало следующей строки.
+    float width;        // Логическая ширина строки.
     float minx,
-          maxx;   // Actual bounds of the row. Logical with and bounds can differ because of kerning and some parts over extending.
+          maxx;   // Фактические границы строки. Логические операции и границы могут различаться из-за кернинга и расширения некоторых частей.
 };
 typedef struct NVGtextRow NVGtextRow;
 
 enum NVGimageFlags {
-    NVG_IMAGE_GENERATE_MIPMAPS  = 1 << 0,   // Generate mipmaps during creation of the image.
-    NVG_IMAGE_REPEATX           = 1 << 1,   // Repeat image in X direction.
-    NVG_IMAGE_REPEATY           = 1 << 2,   // Repeat image in Y direction.
-    NVG_IMAGE_FLIPY             = 1 << 3,   // Flips (inverses) image in Y direction when rendered.
-    NVG_IMAGE_PREMULTIPLIED     = 1 << 4,   // Image data has premultiplied alpha.
-    NVG_IMAGE_NEAREST           = 1 << 5,   // Image interpolation is Nearest instead Linear
+    NVG_IMAGE_GENERATE_MIPMAPS  = 1 << 0,   // Генерируйте MIP-карты во время создания изображения.
+    NVG_IMAGE_REPEATX           = 1 << 1,   // Повторите изображение в направлении X.
+    NVG_IMAGE_REPEATY           = 1 << 2,   // Повторите изображение в направлении Y.
+    NVG_IMAGE_FLIPY             = 1 << 3,   // Переворачивает (инвертирует) изображение в направлении Y при рендеринге.
+    NVG_IMAGE_PREMULTIPLIED     = 1 << 4,   // Данные изображения имеют предварительно умноженную альфу.
+    NVG_IMAGE_NEAREST           = 1 << 5,   // Интерполяция изображения является ближайшей, а не линейной.
 };
 
-// Begin drawing a new frame
-// Calls to nanovg drawing API should be wrapped in nvgBeginFrame() & nvgEndFrame()
-// nvgBeginFrame() defines the size of the window to render to in relation currently
-// set viewport (i.e. glViewport on GL backends). Device pixel ration allows to
-// control the rendering on Hi-DPI devices.
-// For example, GLFW returns two dimension for an opened window: window size and
-// frame buffer size. In that case you would set windowWidth/Height to the window size
-// devicePixelRatio to: frameBufferWidth / windowWidth.
+// Начинаем рисовать новую рамку
+// Вызовы рисования nanovg API должны быть заключены в nvgBeginFrame() и nvgEndFrame().
+// nvgBeginFrame() определяет размер окна для рендеринга относительно текущего момента.
+// установите область просмотра (т. е. glViewport на бэкэндах GL). Соотношение пикселей устройства позволяет
+// управлять рендерингом на устройствах Hi-DPI.
+// Например, GLFW возвращает два измерения открытого окна: размер окна и
+// размер буфера кадра. В этом случае вы должны установить windowWidth/Height в размер окна.
+// devicePixelRatio к:frameBufferWidth/windowWidth.
 void nvgBeginFrame(NVGcontext * ctx, float windowWidth, float windowHeight, float devicePixelRatio);
 
-// Cancels drawing the current frame.
+// Отменяет рисование текущего кадра.
 void nvgCancelFrame(NVGcontext * ctx);
 
-// Ends drawing flushing remaining render state.
+// Завершает рисование, сбрасывая оставшееся состояние рендеринга.
 void nvgEndFrame(NVGcontext * ctx);
 
 //
-// Composite operation
+// Композитная операция
 //
-// The composite operations in NanoVG are modeled after HTML Canvas API, and
-// the blend func is based on OpenGL (see corresponding manuals for more info).
-// The colors in the blending state have premultiplied alpha.
+// Составные операции в NanoVG смоделированы по образцу HTML Canvas API и
+// функция смешивания основана на OpenGL (дополнительную информацию см. в соответствующих руководствах).
+// Цвета в состоянии смешивания имеют предварительно умноженную альфу.
 
-// Sets the composite operation. The op parameter should be one of NVGcompositeOperation.
+// Устанавливает составную операцию. Параметр op должен быть одним из NVGcompositeOperation.
 void nvgGlobalCompositeOperation(NVGcontext * ctx, int op);
 
-// Sets the composite operation with custom pixel arithmetic. The parameters should be one of NVGblendFactor.
+// Устанавливает составную операцию с пользовательской пиксельной арифметикой. Параметры должны быть одним из NVGblendFactor.
 void nvgGlobalCompositeBlendFunc(NVGcontext * ctx, int sfactor, int dfactor);
 
-// Sets the composite operation with custom pixel arithmetic for RGB and alpha components separately. The parameters should be one of NVGblendFactor.
+// Устанавливает составную операцию с пользовательской пиксельной арифметикой для RGB и альфа-компонентов отдельно. Параметры должны быть одним из NVGblendFactor.
 void nvgGlobalCompositeBlendFuncSeparate(NVGcontext * ctx, int srcRGB, int dstRGB, int srcAlpha, int dstAlpha);
 
 //
-// Color utils
+// Цветовые утилиты
 //
-// Colors in NanoVG are stored as unsigned ints in ABGR format.
+// Цвета в NanoVG хранятся как целые числа без знака в формате ABGR.
 
-// Returns a color value from red, green, blue values. Alpha will be set to 255 (1.0f).
+// Возвращает значение цвета из значений красного, зеленого и синего. Альфа будет установлена ​​на 255 (1.0f).
 NVGcolor nvgRGB(unsigned char r, unsigned char g, unsigned char b);
 
-// Returns a color value from red, green, blue values. Alpha will be set to 1.0f.
+// Возвращает значение цвета из значений красного, зеленого и синего. Альфа будет установлена ​​на 1.0f.
 NVGcolor nvgRGBf(float r, float g, float b);
 
 
-// Returns a color value from red, green, blue and alpha values.
+// Возвращает значение цвета из значений красного, зеленого, синего и альфа.
 NVGcolor nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
-// Returns a color value from red, green, blue and alpha values.
+// Возвращает значение цвета из значений красного, зеленого, синего и альфа.
 NVGcolor nvgRGBAf(float r, float g, float b, float a);
 
 
-// Linearly interpolates from color c0 to c1, and returns resulting color value.
+// Линейно интерполирует цвет от c0 до c1 и возвращает результирующее значение цвета.
 NVGcolor nvgLerpRGBA(NVGcolor c0, NVGcolor c1, float u);
 
-// Sets transparency of a color value.
+// Устанавливает прозрачность значения цвета.
 NVGcolor nvgTransRGBA(NVGcolor c0, unsigned char a);
 
-// Sets transparency of a color value.
+// Устанавливает прозрачность значения цвета.
 NVGcolor nvgTransRGBAf(NVGcolor c0, float a);
 
-// Returns color value specified by hue, saturation and lightness.
-// HSL values are all in range [0..1], alpha will be set to 255.
+// Возвращает значение цвета, заданное оттенком, насыщенностью и яркостью.
+// Все значения HSL находятся в диапазоне [0..1], альфа будет установлена на 255.
 NVGcolor nvgHSL(float h, float s, float l);
 
-// Returns color value specified by hue, saturation and lightness and alpha.
-// HSL values are all in range [0..1], alpha in range [0..255]
+// Возвращает значение цвета, заданное оттенком, насыщенностью, яркостью и альфа-каналом.
+// Все значения HSL находятся в диапазоне [0..1], альфа в диапазоне [0..255]
 NVGcolor nvgHSLA(float h, float s, float l, unsigned char a);
 
 //
-// State Handling
+// Обработка состояния
 //
-// NanoVG contains state which represents how paths will be rendered.
-// The state contains transform, fill and stroke styles, text and font styles,
-// and scissor clipping.
+// NanoVG содержит состояние, которое показывает, как будут отображаться пути.
+// Состояние содержит стили преобразования, заливки и обводки, стили текста и шрифта,
+// и стрижка ножницами.
 
-// Pushes and saves the current render state into a state stack.
-// A matching nvgRestore() must be used to restore the state.
+// Отправляет и сохраняет текущее состояние рендеринга в стек состояний.
+// Для восстановления состояния необходимо использовать соответствующий nvgRestore().
 void nvgSave(NVGcontext * ctx);
 
-// Pops and restores current render state.
+// Вызывает и восстанавливает текущее состояние рендеринга.
 void nvgRestore(NVGcontext * ctx);
 
-// Resets current render state to default values. Does not affect the render state stack.
+// Сбрасывает текущее состояние рендеринга к значениям по умолчанию. Не влияет на стек состояний рендеринга.
 void nvgReset(NVGcontext * ctx);
 
 //
-// Render styles
+// Стили рендеринга
 //
-// Fill and stroke render style can be either a solid color or a paint which is a gradient or a pattern.
-// Solid color is simply defined as a color value, different kinds of paints can be created
-// using nvgLinearGradient(), nvgBoxGradient(), nvgRadialGradient() and nvgImagePattern().
+// Стиль рендеринга заливки и обводки может быть либо сплошным цветом, либо краской, которая представляет собой градиент или узор.
+// Сплошной цвет определяется просто как значение цвета, можно создавать различные виды красок.
+// используя nvgLinearGradient(), nvgBoxGradient(), nvgRadialGradient() и nvgImagePattern().
 //
-// Current render style can be saved and restored using nvgSave() and nvgRestore().
+// Текущий стиль рендеринга можно сохранить и восстановить с помощью nvgSave() и nvgRestore().
 
-// Sets whether to draw antialias for nvgStroke() and nvgFill(). It's enabled by default.
+// Устанавливает, рисовать ли сглаживание для nvgStroke() и nvgFill(). Он включен по умолчанию.
 void nvgShapeAntiAlias(NVGcontext * ctx, int enabled);
 
-// Sets current stroke style to a solid color.
+// Устанавливает текущий стиль обводки сплошным цветом.
 void nvgStrokeColor(NVGcontext * ctx, NVGcolor color);
 
-// Sets current stroke style to a paint, which can be a one of the gradients or a pattern.
+// Устанавливает текущий стиль обводки в качестве краски, которая может быть одним из градиентов или узором.
 void nvgStrokePaint(NVGcontext * ctx, NVGpaint paint);
 
-// Sets current fill style to a solid color.
+// Устанавливает текущий стиль заливки сплошным цветом.
 void nvgFillColor(NVGcontext * ctx, NVGcolor color);
 
-// Sets current fill style to a paint, which can be a one of the gradients or a pattern.
+// Устанавливает текущий стиль заливки в виде краски, которая может быть одним из градиентов или узором.
 void nvgFillPaint(NVGcontext * ctx, NVGpaint paint);
 
-// Sets the miter limit of the stroke style.
-// Miter limit controls when a sharp corner is beveled.
+// Устанавливает предел угла скоса для стиля штриха.
+// Ограничение скоса контролируется при скосе острого угла.
 void nvgMiterLimit(NVGcontext * ctx, float limit);
 
-// Sets the stroke width of the stroke style.
+// Устанавливает ширину обводки стиля обводки.
 void nvgStrokeWidth(NVGcontext * ctx, float size);
 
-// Sets how the end of the line (cap) is drawn,
-// Can be one of: NVG_BUTT (default), NVG_ROUND, NVG_SQUARE.
+// Устанавливает способ рисования конца линии (конца),
+// Может быть одним из: NVG_BUTT (по умолчанию), NVG_ROUND, NVG_SQUARE.
 void nvgLineCap(NVGcontext * ctx, int cap);
 
-// Sets how sharp path corners are drawn.
-// Can be one of NVG_MITER (default), NVG_ROUND, NVG_BEVEL.
+// Устанавливает, насколько острые углы контура прорисовываются.
+// Может быть одним из NVG_MITER (по умолчанию), NVG_ROUND, NVG_BEVEL.
 void nvgLineJoin(NVGcontext * ctx, int join);
 
-// Sets the transparency applied to all rendered shapes.
-// Already transparent paths will get proportionally more transparent as well.
+// Устанавливает прозрачность, применяемую ко всем отображаемым фигурам.
+// Уже прозрачные пути станут пропорционально более прозрачными.
 void nvgGlobalAlpha(NVGcontext * ctx, float alpha);
 
 //
-// Transforms
+// Преобразует
 //
-// The paths, gradients, patterns and scissor region are transformed by an transformation
-// matrix at the time when they are passed to the API.
-// The current transformation matrix is a affine matrix:
+// Пути, градиенты, узоры и ножничная область преобразуются преобразованием
+// матрица в момент их передачи в API.
+// Текущая матрица преобразования является аффинной матрицей:
 //   [sx kx tx]
 //   [ky sy ty]
 //   [ 0  0  1]
 // Where: sx,sy define scaling, kx,ky skewing, and tx,ty translation.
-// The last row is assumed to be 0,0,1 and is not stored.
+// Предполагается, что последняя строка равна 0,0,1 и не сохраняется.
 //
-// Apart from nvgResetTransform(), each transformation function first creates
-// specific transformation matrix and pre-multiplies the current transformation by it.
+// Помимо nvgResetTransform(), каждая функция преобразования сначала создает
+// конкретную матрицу преобразования и предварительно умножает на нее текущее преобразование.
 //
-// Current coordinate system (transformation) can be saved and restored using nvgSave() and nvgRestore().
+// Текущую систему координат (преобразование) можно сохранить и восстановить с помощью nvgSave() и nvgRestore().
 
-// Resets current transform to a identity matrix.
+// Сбрасывает текущее преобразование в единичную матрицу.
 void nvgResetTransform(NVGcontext * ctx);
 
-// Premultiplies current coordinate system by specified matrix.
-// The parameters are interpreted as matrix as follows:
+// Предварительно умножает текущую систему координат на указанную матрицу.
+// Параметры интерпретируются как матричные следующим образом:
 //   [a c e]
 //   [b d f]
 //   [0 0 1]
 void nvgTransform(NVGcontext * ctx, float a, float b, float c, float d, float e, float f);
 
-// Translates current coordinate system.
+// Переводит текущую систему координат.
 void nvgTranslate(NVGcontext * ctx, float x, float y);
 
-// Rotates current coordinate system. Angle is specified in radians.
+// Поворачивает текущую систему координат. Угол указывается в радианах.
 void nvgRotate(NVGcontext * ctx, float angle);
 
-// Skews the current coordinate system along X axis. Angle is specified in radians.
+// Смещает текущую систему координат по оси X. Угол указывается в радианах.
 void nvgSkewX(NVGcontext * ctx, float angle);
 
-// Skews the current coordinate system along Y axis. Angle is specified in radians.
+// Смещает текущую систему координат по оси Y. Угол указывается в радианах.
 void nvgSkewY(NVGcontext * ctx, float angle);
 
-// Scales the current coordinate system.
+// Масштабирует текущую систему координат.
 void nvgScale(NVGcontext * ctx, float x, float y);
 
-// Stores the top part (a-f) of the current transformation matrix in to the specified buffer.
+// Сохраняет верхнюю часть (a-f) текущей матрицы преобразования в указанный буфер.
 //   [a c e]
 //   [b d f]
 //   [0 0 1]
-// There should be space for 6 floats in the return buffer for the values a-f.
+// В буфере возврата должно быть место для 6 чисел с плавающей запятой для значений a-f.
 void nvgCurrentTransform(NVGcontext * ctx, float * xform);
 
 
-// The following functions can be used to make calculations on 2x3 transformation matrices.
-// A 2x3 matrix is represented as float[6].
+// Следующие функции можно использовать для вычислений с матрицами преобразования 2x3.
+// Матрица 2x3 представлена как float[6].
 
-// Sets the transform to identity matrix.
+// Устанавливает преобразование в единичную матрицу.
 void nvgTransformIdentity(float * dst);
 
-// Sets the transform to translation matrix matrix.
+// Устанавливает преобразование в матрицу перевода.
 void nvgTransformTranslate(float * dst, float tx, float ty);
 
-// Sets the transform to scale matrix.
+// Устанавливает преобразование для масштабирования матрицы.
 void nvgTransformScale(float * dst, float sx, float sy);
 
-// Sets the transform to rotate matrix. Angle is specified in radians.
+// Устанавливает преобразование для поворота матрицы. Угол указывается в радианах.
 void nvgTransformRotate(float * dst, float a);
 
-// Sets the transform to skew-x matrix. Angle is specified in radians.
+// Устанавливает преобразование в матрицу skew-x. Угол указывается в радианах.
 void nvgTransformSkewX(float * dst, float a);
 
-// Sets the transform to skew-y matrix. Angle is specified in radians.
+// Устанавливает преобразование в асимметричную матрицу. Угол указывается в радианах.
 void nvgTransformSkewY(float * dst, float a);
 
-// Sets the transform to the result of multiplication of two transforms, of A = A*B.
+// Устанавливает преобразование в результат умножения двух преобразований A = A*B.
 void nvgTransformMultiply(float * dst, const float * src);
 
-// Sets the transform to the result of multiplication of two transforms, of A = B*A.
+// Устанавливает преобразование в результат умножения двух преобразований A = B*A.
 void nvgTransformPremultiply(float * dst, const float * src);
 
-// Sets the destination to inverse of specified transform.
-// Returns 1 if the inverse could be calculated, else 0.
+// Устанавливает место назначения, обратное указанному преобразованию.
+// Возвращает 1, если обратное значение можно вычислить, иначе 0.
 int nvgTransformInverse(float * dst, const float * src);
 
-// Transform a point by given transform.
+// Преобразовать точку заданным преобразованием.
 void nvgTransformPoint(float * dstx, float * dsty, const float * xform, float srcx, float srcy);
 
-// Converts degrees to radians and vice versa.
+// Преобразует градусы в радианы и наоборот.
 float nvgDegToRad(float deg);
 float nvgRadToDeg(float rad);
 
 //
-// Images
+// Изображения
 //
-// NanoVG allows you to load jpg, png, psd, tga, pic and gif files to be used for rendering.
-// In addition you can upload your own image. The image loading is provided by stb_image.
-// The parameter imageFlags is combination of flags defined in NVGimageFlags.
+// NanoVG позволяет загружать файлы jpg, png, psd, tga, pic и gif, которые будут использоваться для рендеринга.
+// Кроме того, вы можете загрузить свое собственное изображение. Загрузку изображения обеспечивает stb_image.
+// Параметр imageFlags представляет собой комбинацию флагов, определенных в NVGimageFlags.
 
-// Creates image from specified image data with custom format.
+// Создает изображение из указанных данных изображения в пользовательском формате.
 // format: see NVGtexture.
-// Returns handle to the image.
+// Возвращает дескриптор изображения.
 int nvgCreateImage(NVGcontext * ctx, int w, int h, int imageFlags, int format, const unsigned char * data);
 
-// Updates image data specified by image handle.
+// Обновляет данные изображения, указанные дескриптором изображения.
 void nvgUpdateImage(NVGcontext * ctx, int image, const unsigned char * data);
 
-// Returns the dimensions of a created image.
+// Возвращает размеры созданного изображения.
 void nvgImageSize(NVGcontext * ctx, int image, int * w, int * h);
 
-// Deletes created image.
+// Удаляет созданное изображение.
 void nvgDeleteImage(NVGcontext * ctx, int image);
 
 //
-// Paints
+// Краски
 //
-// NanoVG supports four types of paints: linear gradient, box gradient, radial gradient and image pattern.
-// These can be used as paints for strokes and fills.
+// NanoVG поддерживает четыре типа красок: линейный градиент, прямоугольный градиент, радиальный градиент и узор изображения.
+// Их можно использовать в качестве красок для штрихов и заливок.
 
-// Creates and returns a linear gradient. Parameters (sx,sy)-(ex,ey) specify the start and end coordinates
-// of the linear gradient, icol specifies the start color and ocol the end color.
-// The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
+// Создает и возвращает линейный градиент. Параметры (sx,sy)-(ex,ey) определяют координаты начала и конца.
+// Для линейного градиента icol определяет начальный цвет, а ocol — конечный цвет.
+// Градиент преобразуется текущим преобразованием, когда он передается nvgFillPaint() или nvgStrokePaint().
 NVGpaint nvgLinearGradient(NVGcontext * ctx, float sx, float sy, float ex, float ey,
                            NVGcolor icol, NVGcolor ocol);
 
-// Creates and returns a box gradient. Box gradient is a feathered rounded rectangle, it is useful for rendering
-// drop shadows or highlights for boxes. Parameters (x,y) define the top-left corner of the rectangle,
-// (w,h) define the size of the rectangle, r defines the corner radius, and f feather. Feather defines how blurry
-// the border of the rectangle is. Parameter icol specifies the inner color and ocol the outer color of the gradient.
-// The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
+// Создает и возвращает градиент прямоугольника. Градиент коробки — это растушеванный прямоугольник со скругленными углами, он полезен для рендеринга.
+// тени или блики для коробок. Параметры (x,y) определяют верхний левый угол прямоугольника.
+// (w,h) определяют размер прямоугольника, r определяет радиус угла, а f растушевка. Растушевка определяет, насколько размыта
+// граница прямоугольника. Параметр icol определяет внутренний цвет, а ocol — внешний цвет градиента.
+// Градиент преобразуется текущим преобразованием, когда он передается nvgFillPaint() или nvgStrokePaint().
 NVGpaint nvgBoxGradient(NVGcontext * ctx, float x, float y, float w, float h,
                         float r, float f, NVGcolor icol, NVGcolor ocol);
 
-// Creates and returns a radial gradient. Parameters (cx,cy) specify the center, inr and outr specify
-// the inner and outer radius of the gradient, icol specifies the start color and ocol the end color.
-// The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
+// Создает и возвращает радиальный градиент. Параметры (cx,cy) определяют центр, inr и outr определяют
+// внутренний и внешний радиус градиента, icol определяет начальный цвет, а ocol — конечный цвет.
+// Градиент преобразуется текущим преобразованием, когда он передается nvgFillPaint() или nvgStrokePaint().
 NVGpaint nvgRadialGradient(NVGcontext * ctx, float cx, float cy, float inr, float outr,
                            NVGcolor icol, NVGcolor ocol);
 
-// Creates and returns an image pattern. Parameters (ox,oy) specify the left-top location of the image pattern,
-// (ex,ey) the size of one image, angle rotation around the top-left corner, image is handle to the image to render.
-// The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
+// Создает и возвращает шаблон изображения. Параметры (ox,oy) определяют расположение шаблона изображения слева вверху.
+// (например, ey) размер одного изображения, угол поворота вокруг верхнего левого угла, изображение — это дескриптор изображения для рендеринга.
+// Градиент преобразуется текущим преобразованием, когда он передается nvgFillPaint() или nvgStrokePaint().
 NVGpaint nvgImagePattern(NVGcontext * ctx, float ox, float oy, float ex, float ey,
                          float angle, int image, float alpha);
 
 //
-// Scissoring
+// ножницы
 //
-// Scissoring allows you to clip the rendering into a rectangle. This is useful for various
-// user interface cases like rendering a text edit or a timeline.
+// Вырезание позволяет вам обрезать рендеринг в прямоугольник. Это полезно для различных
+// случаи пользовательского интерфейса, такие как рендеринг редактирования текста или временной шкалы.
 
-// Sets the current scissor rectangle.
-// The scissor rectangle is transformed by the current transform.
+// Устанавливает текущий прямоугольник-ножницы.
+// Прямоугольник-ножницы преобразуется текущим преобразованием.
 void nvgScissor(NVGcontext * ctx, float x, float y, float w, float h);
 
-// Intersects current scissor rectangle with the specified rectangle.
-// The scissor rectangle is transformed by the current transform.
+// Пересекает текущий прямоугольник-ножницы с указанным прямоугольником.
+// Прямоугольник-ножницы преобразуется текущим преобразованием.
 // Note: in case the rotation of previous scissor rect differs from
-// the current one, the intersection will be done between the specified
-// rectangle and the previous scissor rectangle transformed in the current
-// transform space. The resulting shape is always rectangle.
+// текущий, пересечение будет выполнено между указанными
+// прямоугольник и предыдущий прямоугольник-ножницы преобразуются в текущий
+// трансформировать пространство. Полученная форма всегда является прямоугольником.
 void nvgIntersectScissor(NVGcontext * ctx, float x, float y, float w, float h);
 
-// Reset and disables scissoring.
+// Сброс и отключение ножниц.
 void nvgResetScissor(NVGcontext * ctx);
 
 //
-// Paths
+// Пути
 //
-// Drawing a new shape starts with nvgBeginPath(), it clears all the currently defined paths.
-// Then you define one or more paths and sub-paths which describe the shape. The are functions
-// to draw common shapes like rectangles and circles, and lower level step-by-step functions,
-// which allow to define a path curve by curve.
+// Рисование новой фигуры начинается с nvgBeginPath(), при этом очищаются все определенные в данный момент пути.
+// Затем вы определяете один или несколько путей и подпутей, описывающих форму. Это функции
+// рисовать общие формы, такие как прямоугольники и круги, а также пошаговые функции более низкого уровня,
+// которые позволяют определять кривую пути за кривой.
 //
-// NanoVG uses even-odd fill rule to draw the shapes. Solid shapes should have counter clockwise
-// winding and holes should have counter clockwise order. To specify winding of a path you can
-// call nvgPathWinding(). This is useful especially for the common shapes, which are drawn CCW.
+// NanoVG использует правило заливки чет-нечет для рисования фигур. Твердые фигуры должны располагаться против часовой стрелки.
+// обмотка и отверстия должны располагаться против часовой стрелки. Указать извилистость пути можно
+// позвоните nvgPathWinding(). Это особенно полезно для распространенных фигур, которые рисуются CCW.
 //
-// Finally you can fill the path using current fill style by calling nvgFill(), and stroke it
-// with current stroke style by calling nvgStroke().
+// Наконец, вы можете заполнить путь, используя текущий стиль заливки, вызвав nvgFill() и обведя его.
+// с текущим стилем штриха, вызвав nvgStroke() .
 //
-// The curve segments and sub-paths are transformed by the current transform.
+// Сегменты кривой и подпути преобразуются текущим преобразованием.
 
-// Clears the current path and sub-paths.
+// Очищает текущий путь и подпути.
 void nvgBeginPath(NVGcontext * ctx);
 
-// Starts new sub-path with specified point as first point.
+// Начинает новый подпуть с указанной точки в качестве первой точки.
 void nvgMoveTo(NVGcontext * ctx, float x, float y);
 
-// Adds line segment from the last point in the path to the specified point.
+// Добавляет сегмент линии из последней точки пути к указанной точке.
 void nvgLineTo(NVGcontext * ctx, float x, float y);
 
-// Adds cubic bezier segment from last point in the path via two control points to the specified point.
+// Добавляет кубический сегмент Безье от последней точки пути через две контрольные точки до указанной точки.
 void nvgBezierTo(NVGcontext * ctx, float c1x, float c1y, float c2x, float c2y, float x, float y);
 
-// Adds quadratic bezier segment from last point in the path via a control point to the specified point.
+// Добавляет квадратичный сегмент Безье из последней точки пути через контрольную точку в указанную точку.
 void nvgQuadTo(NVGcontext * ctx, float cx, float cy, float x, float y);
 
-// Adds an arc segment at the corner defined by the last path point, and two specified points.
+// Добавляет сегмент дуги в углу, определенном последней точкой пути, и двух указанных точках.
 void nvgArcTo(NVGcontext * ctx, float x1, float y1, float x2, float y2, float radius);
 
-// Closes current sub-path with a line segment.
+// Закрывает текущий подпуть отрезком линии.
 void nvgClosePath(NVGcontext * ctx);
 
-// Sets the current sub-path winding, see NVGwinding and NVGsolidity.
+// Устанавливает текущую обмотку подпути, см. NVGwinding и NVGsolidity.
 void nvgPathWinding(NVGcontext * ctx, int dir);
 
-// Creates new circle arc shaped sub-path. The arc center is at cx,cy, the arc radius is r,
-// and the arc is drawn from angle a0 to a1, and swept in direction dir (NVG_CCW, or NVG_CW).
-// Angles are specified in radians.
+// Создает новый подпуть в форме дуги окружности. Центр дуги находится в cx,cy, радиус дуги равен r,
+// и дуга рисуется от угла a0 до a1 и движется в направлении dir ( NVG_CCW или NVG_CW ).
+// Углы указаны в радианах.
 void nvgArc(NVGcontext * ctx, float cx, float cy, float r, float a0, float a1, int dir);
 
-// Creates new rectangle shaped sub-path.
+// Создает новый подпуть в форме прямоугольника.
 void nvgRect(NVGcontext * ctx, float x, float y, float w, float h);
 
-// Creates new rounded rectangle shaped sub-path.
+// Создает новый подпуть в форме закругленного прямоугольника.
 void nvgRoundedRect(NVGcontext * ctx, float x, float y, float w, float h, float r);
 
-// Creates new rounded rectangle shaped sub-path with varying radii for each corner.
+// Создает новый подпуть в форме скругленного прямоугольника с различными радиусами для каждого угла.
 void nvgRoundedRectVarying(NVGcontext * ctx, float x, float y, float w, float h, float radTopLeft, float radTopRight,
                            float radBottomRight, float radBottomLeft);
 
-// Creates new ellipse shaped sub-path.
+// Создает новый подпуть в форме эллипса.
 void nvgEllipse(NVGcontext * ctx, float cx, float cy, float rx, float ry);
 
-// Creates new circle shaped sub-path.
+// Создает новый подпуть в форме круга.
 void nvgCircle(NVGcontext * ctx, float cx, float cy, float r);
 
-// Fills the current path with current fill style.
+// Заполняет текущий путь текущим стилем заливки.
 void nvgFill(NVGcontext * ctx);
 
-// Fills the current path with current stroke style.
+// Заполняет текущий путь текущим стилем обводки.
 void nvgStroke(NVGcontext * ctx);
 
 
 //
-// Text
+// Текст
 //
-// NanoVG allows you to load .ttf files and use the font to render text.
+// NanoVG позволяет загружать файлы .ttf и использовать шрифт для рендеринга текста.
 //
-// The appearance of the text can be defined by setting the current text style
-// and by specifying the fill color. Common text and font settings such as
-// font size, letter spacing and text align are supported. Font blur allows you
-// to create simple text effects such as drop shadows.
+// Внешний вид текста можно определить, установив текущий стиль текста.
+// и указав цвет заливки. Общие настройки текста и шрифта, такие как
+// Поддерживаются размер шрифта, межбуквенный интервал и выравнивание текста. Размытие шрифта позволяет вам
+// для создания простых текстовых эффектов, таких как тени.
 //
-// At render time the font face can be set based on the font handles or name.
+// Во время рендеринга шрифт может быть установлен на основе дескрипторов или имени шрифта.
 //
-// Font measure functions return values in local space, the calculations are
-// carried in the same resolution as the final rendering. This is done because
-// the text glyph positions are snapped to the nearest pixels sharp rendering.
+// Функции измерения шрифта возвращают значения в локальном пространстве, вычисления
+// выполняется в том же разрешении, что и окончательный рендеринг. Это сделано потому, что
+// Позиции текстовых глифов привязываются к четкому рендерингу с точностью до ближайших пикселей.
 //
-// The local space means that values are not rotated or scale as per the current
-// transformation. For example if you set font size to 12, which would mean that
-// line height is 16, then regardless of the current scaling and rotation, the
-// returned line height is always 16. Some measures may vary because of the scaling
-// since aforementioned pixel snapping.
+// Локальное пространство означает, что значения не поворачиваются и не масштабируются в соответствии с текущим значением.
+// трансформация. Например, если вы установите размер шрифта равным 12, это будет означать, что
+// высота строки равна 16, то независимо от текущего масштабирования и поворота
+// высота возвращаемой строки всегда равна 16. Некоторые показатели могут отличаться из-за масштабирования.
+// начиная с вышеупомянутой привязки пикселей.
 //
-// While this may sound a little odd, the setup allows you to always render the
-// same way regardless of scaling. I.e. following works regardless of scaling:
+// Хотя это может показаться немного странным, настройка позволяет всегда отображать
+// одинаково независимо от масштабирования. Т.е. следующие работы независимо от масштабирования:
 //
-//      const char* txt = "Text me up.";
-//      nvgTextBounds(vg, x,y, txt, NULL, bounds);
-//      nvgBeginPath(vg);
-//      nvgRect(vg, bounds[0],bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1]);
-//      nvgFill(vg);
+//      const char* txt = "Напиши мне.";
+//      nvgTextBounds(vg, x,y, txt, NULL, границы);
+//      nvgBeginPath (вг);
+//      nvgRect(vg,bounds[0],bounds[1],bounds[2]-bounds[0],bounds[3]-bounds[1]);
+//      nvgFill (вг);
 //
 // Note: currently only solid color fill is supported for text.
 
-// Creates font by loading it from the disk from specified file name.
-// Returns handle to the font.
+// Создает шрифт, загружая его с диска из указанного имени файла.
+// Возвращает дескриптор шрифта.
 int nvgCreateFont(NVGcontext * ctx, const char * name, const char * filename);
 
-// fontIndex specifies which font face to load from a .ttf/.ttc file.
+// FontIndex указывает, какой шрифт загружается из файла .ttf/.ttc.
 int nvgCreateFontAtIndex(NVGcontext * ctx, const char * name, const char * filename, const int fontIndex);
 
-// Creates font by loading it from the specified memory chunk.
-// Returns handle to the font.
+// Создает шрифт, загружая его из указанного фрагмента памяти.
+// Возвращает дескриптор шрифта.
 int nvgCreateFontMem(NVGcontext * ctx, const char * name, unsigned char * data, int ndata, int freeData);
 
-// fontIndex specifies which font face to load from a .ttf/.ttc file.
+// FontIndex указывает, какой шрифт загружается из файла .ttf/.ttc.
 int nvgCreateFontMemAtIndex(NVGcontext * ctx, const char * name, unsigned char * data, int ndata, int freeData,
                             const int fontIndex);
 
-// Finds a loaded font of specified name, and returns handle to it, or -1 if the font is not found.
+// Находит загруженный шрифт с указанным именем и возвращает его дескриптор или -1, если шрифт не найден.
 int nvgFindFont(NVGcontext * ctx, const char * name);
 
-// Adds a fallback font by handle.
+// Добавляет запасной шрифт по дескриптору.
 int nvgAddFallbackFontId(NVGcontext * ctx, int baseFont, int fallbackFont);
 
-// Adds a fallback font by name.
+// Добавляет запасной шрифт по имени.
 int nvgAddFallbackFont(NVGcontext * ctx, const char * baseFont, const char * fallbackFont);
 
-// Resets fallback fonts by handle.
+// Сбрасывает резервные шрифты по дескриптору.
 void nvgResetFallbackFontsId(NVGcontext * ctx, int baseFont);
 
-// Resets fallback fonts by name.
+// Сбрасывает резервные шрифты по имени.
 void nvgResetFallbackFonts(NVGcontext * ctx, const char * baseFont);
 
-// Sets the font size of current text style.
+// Устанавливает размер шрифта текущего стиля текста.
 void nvgFontSize(NVGcontext * ctx, float size);
 
-// Sets the blur of current text style.
+// Устанавливает размытие текущего стиля текста.
 void nvgFontBlur(NVGcontext * ctx, float blur);
 
-// Sets the letter spacing of current text style.
+// Устанавливает интервал между буквами текущего стиля текста.
 void nvgTextLetterSpacing(NVGcontext * ctx, float spacing);
 
-// Sets the proportional line height of current text style. The line height is specified as multiple of font size.
+// Устанавливает пропорциональную высоту строки текущего стиля текста. Высота строки задается кратной размеру шрифта.
 void nvgTextLineHeight(NVGcontext * ctx, float lineHeight);
 
-// Sets the text align of current text style, see NVGalign for options.
+// Устанавливает выравнивание текста текущего стиля текста, параметры см. в разделе NVGalign.
 void nvgTextAlign(NVGcontext * ctx, int align);
 
-// Sets the font face based on specified id of current text style.
+// Устанавливает вид шрифта на основе указанного идентификатора текущего стиля текста.
 void nvgFontFaceId(NVGcontext * ctx, int font);
 
-// Sets the font face based on specified name of current text style.
+// Устанавливает вид шрифта на основе указанного имени текущего стиля текста.
 void nvgFontFace(NVGcontext * ctx, const char * font);
 
-// Draws text string at specified location. If end is specified only the sub-string up to the end is drawn.
+// Рисует текстовую строку в указанном месте. Если указан конец, рисуется только подстрока до конца.
 float nvgText(NVGcontext * ctx, float x, float y, const char * string, const char * end);
 
-// Draws multi-line text string at specified location wrapped at the specified width. If end is specified only the sub-string up to the end is drawn.
-// White space is stripped at the beginning of the rows, the text is split at word boundaries or when new-line characters are encountered.
-// Words longer than the max width are slit at nearest character (i.e. no hyphenation).
+// Рисует многострочную текстовую строку в указанном месте, завернутую в указанную ширину. Если указан конец, рисуется только подстрока до конца.
+// Пробелы удаляются в начале строк, текст разделяется по границам слов или при появлении символов новой строки.
+// Слова длиннее максимальной ширины разрезаются по ближайшему символу (т. е. без переносов).
 void nvgTextBox(NVGcontext * ctx, float x, float y, float breakRowWidth, const char * string, const char * end);
 
-// Measures the specified text string. Parameter bounds should be a pointer to float[4],
-// if the bounding box of the text should be returned. The bounds value are [xmin,ymin, xmax,ymax]
-// Returns the horizontal advance of the measured text (i.e. where the next character should drawn).
-// Measured values are returned in local coordinate space.
+// Измеряет указанную текстовую строку. Границы параметра должны быть указателем на float[4],
+// если должна быть возвращена ограничивающая рамка текста. Значения границ: [xmin,ymin, xmax,ymax]
+// Возвращает горизонтальное перемещение измеренного текста (т. е. места, где должен быть нарисован следующий символ).
+// Измеренные значения возвращаются в локальном пространстве координат.
 float nvgTextBounds(NVGcontext * ctx, float x, float y, const char * string, const char * end, float * bounds);
 
-// Measures the specified multi-text string. Parameter bounds should be a pointer to float[4],
-// if the bounding box of the text should be returned. The bounds value are [xmin,ymin, xmax,ymax]
-// Measured values are returned in local coordinate space.
+// Измеряет указанную многотекстовую строку. Границы параметра должны быть указателем на float[4],
+// если должна быть возвращена ограничивающая рамка текста. Значения границ: [xmin,ymin, xmax,ymax]
+// Измеренные значения возвращаются в локальном пространстве координат.
 void nvgTextBoxBounds(NVGcontext * ctx, float x, float y, float breakRowWidth, const char * string, const char * end,
                       float * bounds);
 
-// Calculates the glyph x positions of the specified text. If end is specified only the sub-string will be used.
-// Measured values are returned in local coordinate space.
+// Вычисляет позиции x глифа указанного текста. Если указан конец, будет использоваться только подстрока.
+// Измеренные значения возвращаются в локальном пространстве координат.
 int nvgTextGlyphPositions(NVGcontext * ctx, float x, float y, const char * string, const char * end,
                           NVGglyphPosition * positions, int maxPositions);
 
-// Returns the vertical metrics based on the current text style.
-// Measured values are returned in local coordinate space.
+// Возвращает вертикальные показатели на основе текущего стиля текста.
+// Измеренные значения возвращаются в локальном пространстве координат.
 void nvgTextMetrics(NVGcontext * ctx, float * ascender, float * descender, float * lineh);
 
-// Breaks the specified text into lines. If end is specified only the sub-string will be used.
-// White space is stripped at the beginning of the rows, the text is split at word boundaries or when new-line characters are encountered.
-// Words longer than the max width are slit at nearest character (i.e. no hyphenation).
+// Разбивает указанный текст на строки. Если указан конец, будет использоваться только подстрока.
+// Пробелы удаляются в начале строк, текст разделяется по границам слов или при появлении символов новой строки.
+// Слова длиннее максимальной ширины разрезаются по ближайшему символу (т. е. без переносов).
 int nvgTextBreakLines(NVGcontext * ctx, const char * string, const char * end, float breakRowWidth, NVGtextRow * rows,
                       int maxRows);
 
 //
-// Internal Render API
+// Внутренний рендер API
 //
 enum NVGtexture {
     NVG_TEXTURE_ALPHA = 0x01,
-    NVG_TEXTURE_BGRA = 0x02,   /* ARGB8888 format (memory order: B-G-R-A) */
-    NVG_TEXTURE_RGBA = 0x03,   /* Standard OpenGL RGBA format */
-    NVG_TEXTURE_BGR = 0x04,    /* RGB888 format (memory order: B-G-R) */
-    NVG_TEXTURE_RGB565 = 0x05, /* RGB565 format */
-    NVG_TEXTURE_BGRX = 0x06,   /* XRGB8888 format (memory order: B-G-R-X, X ignored) */
+    NVG_TEXTURE_BGRA = 0x02,   /* Формат ARGB8888 (порядок памяти: B-G-R-A) */
+    NVG_TEXTURE_RGBA = 0x03,   /* Стандартный формат OpenGL RGBA */
+    NVG_TEXTURE_BGR = 0x04,    /* Формат RGB888 (порядок памяти: B-G-R) */
+    NVG_TEXTURE_RGB565 = 0x05, /* Формат RGB565 */
+    NVG_TEXTURE_BGRX = 0x06,   /* Формат XRGB8888 (порядок памяти: B-G-R-X, X игнорируется) */
 };
 
 struct NVGscissor {
@@ -683,13 +683,13 @@ struct NVGparams {
 };
 typedef struct NVGparams NVGparams;
 
-// Constructor and destructor, called by the render back-end.
+// Конструктор и деструктор, вызываемые серверной частью рендеринга.
 NVGcontext * nvgCreateInternal(NVGparams * params);
 void nvgDeleteInternal(NVGcontext * ctx);
 
 NVGparams * nvgInternalParams(NVGcontext * ctx);
 
-// Debug function to dump cached path data.
+// Функция отладки для сброса данных кэшированного пути.
 void nvgDebugDumpPathCache(NVGcontext * ctx);
 
 #ifdef _MSC_VER

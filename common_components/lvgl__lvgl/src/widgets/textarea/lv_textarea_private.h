@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of text area */
+/** Данные текстовой области */
 struct _lv_textarea_t {
     lv_obj_t obj;
     lv_obj_t * label;            /**< Label of the text area */
@@ -38,10 +38,10 @@ struct _lv_textarea_t {
     uint32_t max_length;         /**< The max. number of characters. 0: no limit */
     uint32_t pwd_show_time;      /**< Time to show characters in password mode before change them to '*' */
     struct {
-        int32_t valid_x;         /**< Used when stepping up/down to a shorter line.
-                                  *(Used by the library) */
-        uint32_t pos;            /**< The current cursor position
-                                  *(0: before 1st letter; 1: before 2nd letter ...) */
+        int32_t valid_x;         /**< Используется при переходе вверх/вниз на более короткую линию.
+                                  *(Используется библиотекой) */
+        uint32_t pos;            /**< Текущая позиция курсора
+                                  *(0: перед 1-й буквой; 1: перед 2-й буквой...) */
         lv_area_t area;          /**< Cursor area relative to the Text Area */
         uint32_t txt_byte_pos;   /**< Byte index of the letter after (on) the cursor */
         uint8_t show : 1;        /**< Cursor is visible now or not (Handled by the library) */
@@ -70,7 +70,7 @@ struct _lv_textarea_t {
 #endif /* LV_USE_TEXTAREA != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEXTAREA_PRIVATE_H*/

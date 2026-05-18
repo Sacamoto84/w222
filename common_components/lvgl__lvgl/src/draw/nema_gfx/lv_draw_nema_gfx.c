@@ -1,19 +1,19 @@
 /**
- * MIT License
+ * Лицензия MIT
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2008-24 Think Silicon Single Member PC
  * -----------------------------------------------------------------------------
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice (including the next paragraph)
- * shall be included in all copies or substantial portions of the Software.
+ * Приведенное выше уведомление об авторских правах и данное уведомление о разрешении (включая следующий абзац)
+ * должны быть включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
@@ -52,7 +52,7 @@
 
 #if LV_USE_OS
 /**
- * Structure of pending nema_gfx draw task
+ * Структура ожидающей задачи розыгрыша nema_gfx
  */
 typedef struct _nema_gfx_draw_task_t {
     lv_draw_task_t * task;
@@ -93,7 +93,7 @@ static int32_t nema_gfx_wait_for_finish(lv_draw_unit_t * draw_unit);
 void lv_draw_nema_gfx_init(void)
 {
     lv_draw_nema_gfx_unit_t * draw_nema_gfx_unit = lv_draw_create_unit(sizeof(lv_draw_nema_gfx_unit_t));
-    /*Initialize NemaGFX*/
+    /*Инициализировать NemaGFX*/
     nema_init();
 
     draw_nema_gfx_unit->base_unit.dispatch_cb = nema_gfx_dispatch;
@@ -103,18 +103,18 @@ void lv_draw_nema_gfx_init(void)
     draw_nema_gfx_unit->base_unit.name = "NEMA_GFX";
 
 #if LV_USE_NEMA_VG
-    /*Initialize NemaVG */
+    /*Инициализировать НемаВГ */
     nema_vg_init(LV_NEMA_GFX_MAX_RESX, LV_NEMA_GFX_MAX_RESY);
-    /* Allocate VG Buffers*/
+    /* Выделение буферов VG*/
     draw_nema_gfx_unit->paint = nema_vg_paint_create();
     draw_nema_gfx_unit->gradient = nema_vg_grad_create();
     draw_nema_gfx_unit->path = nema_vg_path_create();
-    /*Initialize Freetype Support*/
+    /*Инициализация поддержки Freetype*/
     lv_draw_nema_gfx_label_init(&(draw_nema_gfx_unit->base_unit));
 #endif
-    /*Create GPU Command List*/
+    /*Создать список команд GPU*/
     draw_nema_gfx_unit->cl = nema_cl_create();
-    /*Bind Command List*/
+    /*Привязать список команд*/
     nema_cl_bind_circular(&(draw_nema_gfx_unit->cl));
 
 
@@ -189,7 +189,7 @@ static int32_t nema_gfx_evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * ta
 #endif
         case LV_DRAW_TASK_TYPE_IMAGE: {
                 lv_draw_image_dsc_t * draw_image_dsc = (lv_draw_image_dsc_t *) task->draw_dsc;
-                /*Guard for previous NemaGFX Version*/
+                /*Защита предыдущей версии NemaGFX*/
 #ifndef NEMA_BLOP_RECOLOR
                 if(draw_image_dsc->recolor_opa > LV_OPA_MIN)
                     break;
@@ -266,14 +266,14 @@ static int32_t nema_gfx_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 {
     lv_draw_nema_gfx_unit_t * draw_nema_gfx_unit = (lv_draw_nema_gfx_unit_t *) draw_unit;
 
-    /* Return immediately if it's busy with draw task. */
+    /* Немедленно вернитесь, если он занят задачей рисования. */
     if(draw_nema_gfx_unit->task_act)
         return 0;
 
-    /* Try to get an ready to draw. */
+    /* Попробуйте получить готовый рисунок. */
     lv_draw_task_t * t = lv_draw_get_available_task(layer, NULL, DRAW_UNIT_ID_NEMA_GFX);
 
-    /* Return 0 is no selection, some tasks can be supported by other units. */
+    /* Возврат 0 означает отсутствие выбора, некоторые задачи могут поддерживаться другими устройствами. */
     if(t == NULL || t->preferred_draw_unit_id != DRAW_UNIT_ID_NEMA_GFX)
         return LV_DRAW_UNIT_IDLE;
 
@@ -285,7 +285,7 @@ static int32_t nema_gfx_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_nema_gfx_unit->task_act = t;
 
 #if LV_USE_OS
-    /* Let the render thread work. */
+    /* Пусть поток рендеринга работает. */
     if(draw_nema_gfx_unit->inited)
         lv_thread_sync_signal(&draw_nema_gfx_unit->sync);
 #else
@@ -294,7 +294,7 @@ static int32_t nema_gfx_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_nema_gfx_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_nema_gfx_unit->task_act = NULL;
 
-    /* The draw unit is free now. Request a new dispatching as it can get a new task. */
+    /* Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу. */
     lv_draw_dispatch_request();
 #endif
 
@@ -304,7 +304,7 @@ static int32_t nema_gfx_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 static void nema_gfx_execute_drawing(lv_draw_nema_gfx_unit_t * u)
 {
     lv_draw_task_t * t = u->task_act;
-    /* remember draw unit for access to unit's context */
+    /* помните о блоке рисования для доступа к контексту модуля */
     t->draw_unit = (lv_draw_unit_t *)u;
 
     switch(t->type) {
@@ -347,7 +347,7 @@ static void nema_gfx_execute_drawing(lv_draw_nema_gfx_unit_t * u)
 static int32_t nema_gfx_delete(lv_draw_unit_t * draw_unit)
 {
 #if LV_USE_NEMA_VG
-    /*Free VG Buffers*/
+    /*Бесплатные буферы VG*/
     lv_draw_nema_gfx_unit_t * draw_nema_gfx_unit = (lv_draw_nema_gfx_unit_t *) draw_unit;
     nema_vg_paint_destroy(draw_nema_gfx_unit->paint);
     nema_vg_path_destroy(draw_nema_gfx_unit->path);
@@ -382,7 +382,7 @@ static void nema_gfx_render_thread_cb(void * ptr)
     u->inited = true;
 
     while(1) {
-        /* Wait for sync if there is no task set. */
+        /* Дождитесь синхронизации, если задача не задана. */
         while(u->task_act == NULL) {
             if(u->exit_status)
                 break;
@@ -398,12 +398,12 @@ static void nema_gfx_render_thread_cb(void * ptr)
         if(u->task_act) {
             nema_gfx_execute_drawing(u);
         }
-        /* Signal the ready state to dispatcher. */
+        /* Сигнализировать о готовности диспетчеру. */
         u->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
-        /* Cleanup. */
+        /* Уборка. */
         u->task_act = NULL;
 
-        /* The draw unit is free now. Request a new dispatching as it can get a new task. */
+        /* Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу. */
         lv_draw_dispatch_request();
     }
 

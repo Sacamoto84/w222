@@ -7,8 +7,8 @@
 *                                                                           *
 *                                             ┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ┓ *
 * ┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━          ┌ ─ ─ ─ ┐                *
-*             ┌ ─ ─ ─ ─ ─ ─ ─            ┃    ┃      Cache   insert       ┃ *
-* ┃               RB Tree    │                     │Hitting│  head          *
+*             ┌ ─ ─ ─ ─ ─ ─ ─ ┃ ┃ Вставка в кэш ┃ *
+* ┃ RB Дерево │ │Удар│ головой *
 *             └ ─ ─ ─ ─ ─ ─ ─            ┃    ┃     ─ ─ ─ ─               ┃ *
 * ┃      ┌─┬─┬─┬─┐                                  ┌─────┐                 *
 *     ┌──│◄│B│►│ │─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┃─ ─ ╋ ─ ─▶│  B  │               ┃ *
@@ -21,7 +21,7 @@
 * ┃│◄│A│►│ │─ ─ ┘ ┌─┬─┬─┬─┐                     │   ┌──┴──┐                 *
 *  └─┴─┴─┴─┘  ┌───│◄│D│►│ │─ ─ ─ ─ ─ ─│─ ╋ ┐  ┃  ─ ▶│  A  │ ┌ ─ ─ ─ ─ ─ ┐ ┃ *
 * ┃           │   └─┴─┴─┴─┘                         └──▲──┘      LRU        *
-*             │        │              │  ┃ │  ┃        │    │   Cache   │ ┃ *
+*             │ │ │ ┃ │ ┃ │ │ Кэш │ ┃ *
 * ┃           ▼        └──────┐                     ┌──┴──┐  ─ ─ ─ ─ ─ ─    *
 *          ┌─┬─┬─┬─┐          ▼       │  ┃ └ ─┃─ ─ ▶│  D  │               ┃ *
 * ┃        │◄│C│►│ │─ ─    ┌─┬─┬─┬─┐                └──▲──┘                 *
@@ -34,8 +34,8 @@
 *                            │◄│F│►│ │─ ─┃─ ─ ╋ ─ ┼▶│  F  │ │             ┃ *
 * ┃                          └─┴─┴─┴─┘              └─────┘                 *
 *                                        ┃    ┃   └ ─ ─ ─ ─ ┘             ┃ *
-* ┃                                                 remove                  *
-*                                        ┃    ┃      tail                 ┃ *
+* ┃ удалить *
+*                                        ┃ ┃ хвост ┃ *
 * ┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━      ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━  *
 *                                                                           *
 \***************************************************************************/
@@ -211,7 +211,7 @@ static bool init_cnt_cb(lv_cache_t * cache)
         return false;
     }
 
-    /*add void* to store the ll node pointer*/
+    /*добавьте void* для хранения указателя узла ll*/
     if(!lv_rb_init(&lru->rb, lru->cache.ops.compare_cb, lv_cache_entry_get_size(lru->cache.node_size) + sizeof(void *))) {
         return false;
     }
@@ -234,7 +234,7 @@ static bool init_size_cb(lv_cache_t * cache)
         return false;
     }
 
-    /*add void* to store the ll node pointer*/
+    /*добавьте void* для хранения указателя узла ll*/
     if(!lv_rb_init(&lru->rb, lru->cache.ops.compare_cb, lv_cache_entry_get_size(lru->cache.node_size) + sizeof(void *))) {
         return false;
     }
@@ -273,7 +273,7 @@ static lv_cache_entry_t * get_cb(lv_cache_t * cache, const void * key, void * us
         return NULL;
     }
 
-    /*try the first ll node first*/
+    /*сначала попробуйте первый узел ll*/
     void * head = lv_ll_get_head(&lru->ll);
     if(head) {
         lv_rb_node_t * node = *(lv_rb_node_t **)head;
@@ -285,7 +285,7 @@ static lv_cache_entry_t * get_cb(lv_cache_t * cache, const void * key, void * us
     }
 
     lv_rb_node_t * node = lv_rb_find(&lru->rb, key);
-    /*cache hit*/
+    /*попадание в кэш*/
     if(node) {
         void * lru_node = *get_lru_node(lru, node);
         head = lv_ll_get_head(&lru->ll);
@@ -393,7 +393,7 @@ static void drop_all_cb(lv_cache_t * cache, void * user_data)
     uint32_t used_cnt = 0;
     lv_rb_node_t ** node;
     LV_LL_READ(&lru->ll, node) {
-        /*free user handled data and do other clean up*/
+        /*бесплатные данные, обрабатываемые пользователем, и другая очистка*/
         void * search_key = (*node)->data;
         lv_cache_entry_t * entry = lv_cache_entry_get_entry(search_key, cache->node_size);
         if(lv_cache_entry_get_ref(entry) == 0) {

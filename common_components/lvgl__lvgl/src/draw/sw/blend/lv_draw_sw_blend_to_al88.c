@@ -218,7 +218,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_al88(lv_draw_sw_blend_fill_
     LV_UNUSED(mask_stride);
     LV_UNUSED(dest_stride);
 
-    /*Simple fill*/
+    /*Простая заливка*/
     if(mask == NULL && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_AL88(dsc)) {
             lv_color16a_t color16a;
@@ -255,7 +255,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_al88(lv_draw_sw_blend_fill_
             }
         }
     }
-    /*Opacity only*/
+    /*Только непрозрачность*/
     else if(mask == NULL && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_AL88_WITH_OPA(dsc)) {
             lv_color16a_t color16a;
@@ -271,7 +271,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_al88(lv_draw_sw_blend_fill_
         }
 
     }
-    /*Masked with full opacity*/
+    /*Замаскировано с полной непрозрачностью*/
     else if(mask && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_AL88_WITH_MASK(dsc)) {
             lv_color16a_t color16a;
@@ -288,7 +288,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_al88(lv_draw_sw_blend_fill_
         }
 
     }
-    /*Masked with opacity*/
+    /*Маскировано с непрозрачностью*/
     else {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_AL88_MIX_MASK_OPA(dsc)) {
             lv_color16a_t color16a;
@@ -743,7 +743,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb888_image_blend(lv_draw_sw_blend_image_dsc_
     int32_t y;
 
     if(dsc->blend_mode == LV_BLEND_MODE_NORMAL) {
-        /*Special case*/
+        /*Особый случай*/
         if(mask_buf == NULL && opa >= LV_OPA_MAX) {
             if(LV_RESULT_INVALID == LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_AL88(dsc, src_px_size)) {
                 for(y = 0; y < h; y++) {
@@ -922,7 +922,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
 #endif
 
 /**
- * Check if two AL88 colors are equal
+ * Проверьте, равны ли два цвета AL88
  * @param c1    the first color
  * @param c2    the second color
  * @return      true: equal
@@ -950,25 +950,25 @@ static inline lv_color16a_t LV_ATTRIBUTE_FAST_MEM lv_color_mix16a(lv_color16a_t 
 static inline void LV_ATTRIBUTE_FAST_MEM lv_color_16a_16a_mix(lv_color16a_t fg, lv_color16a_t * bg,
                                                               lv_color_mix_alpha_cache_t * cache)
 {
-    /*Pick the foreground if it's fully opaque or the Background is fully transparent*/
+    /*Выберите передний план, если он полностью непрозрачен или фон полностью прозрачен.*/
     if(fg.alpha >= LV_OPA_MAX || bg->alpha <= LV_OPA_MIN) {
         *bg = fg;
     }
-    /*Transparent foreground: use the Background*/
+    /*Прозрачный передний план: используйте фон*/
     else if(fg.alpha <= LV_OPA_MIN) {
-        /* no need to copy */
+        /* нет необходимости копировать */
     }
-    /*Opaque background: use simple mix*/
+    /*Непрозрачный фон: используйте простой микс*/
     else if(bg->alpha == 255) {
         *bg = lv_color_mix16a(fg, *bg);
     }
-    /*Both colors have alpha. Expensive calculation needs to be applied*/
+    /*Оба цвета имеют альфу. Необходимо применить дорогостоящий расчет*/
     else {
-        /*Save the parameters and the result. If they will be asked again don't compute again*/
+        /*Сохраните параметры и результат. Если их спросят еще раз, больше не вычисляйте.*/
 
-        /*Update the ratio and the result alpha value if the input alpha values change*/
+        /*Обновите соотношение и результирующее альфа-значение, если входные альфа-значения изменяются.*/
         if(bg->alpha != cache->bg_saved.alpha || fg.alpha != cache->fg_saved.alpha) {
-            /*Info:
+            /*Информация:
              * https://en.wikipedia.org/wiki/Alpha_compositing#Analytical_derivation_of_the_over_operator*/
             cache->res_alpha_saved = 255 - LV_OPA_MIX2(255 - fg.alpha, 255 - bg->alpha);
             LV_ASSERT(cache->res_alpha_saved != 0);

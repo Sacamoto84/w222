@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -62,13 +62,13 @@ struct Picture::Impl
 {
     ImageLoader* loader = nullptr;
 
-    Paint* paint = nullptr;           //vector picture uses
-    RenderSurface* surface = nullptr; //bitmap picture uses
-    RenderData rd = nullptr;          //engine data
+    Paint* paint = nullptr;           //векторное изображение использует
+    RenderSurface* surface = nullptr; //использование растрового изображения
+    RenderData rd = nullptr;          //данные двигателя
     float w = 0, h = 0;
     Picture* picture = nullptr;
     bool resizing = false;
-    bool needComp = false;            //need composition
+    bool needComp = false;            //нужна композиция
 
     bool needComposition(uint8_t opacity);
     bool render(RenderMethod* renderer);
@@ -98,7 +98,7 @@ struct Picture::Impl
         if (surface) {
             if (flag == RenderUpdateFlag::None) return rd;
 
-            //Overriding Transformation by the desired image size
+            //Переопределение преобразования по желаемому размеру изображения
             auto sx = w / loader->w;
             auto sy = h / loader->h;
             auto scale = sx < sy ? sx : sy;
@@ -129,7 +129,7 @@ struct Picture::Impl
     {
         if (paint || surface) return Result::InsufficientCondition;
 
-        bool invalid;  //Invalid Path
+        bool invalid;  //Неверный путь
         auto loader = static_cast<ImageLoader*>(LoaderMgr::loader(path, &invalid));
         if (!loader) {
             if (invalid) return Result::InvalidArguments;
@@ -189,7 +189,7 @@ struct Picture::Impl
 
     uint32_t* data(uint32_t* w, uint32_t* h)
     {
-        //Try it, If not loaded yet.
+        //Попробуйте, если еще не загружено.
         load();
 
         if (loader) {

@@ -58,7 +58,7 @@ void * LV_ATTRIBUTE_FAST_MEM lv_memcpy(void * dst, const void * src, size_t len)
     volatile uint8_t * d8 = dst;
     const uint8_t * s8 = src;
 
-    /*Simplify for small memories*/
+    /*Упростите для небольших воспоминаний*/
     if(len < 16) {
         while(len) {
             *d8 = *s8;
@@ -72,7 +72,7 @@ void * LV_ATTRIBUTE_FAST_MEM lv_memcpy(void * dst, const void * src, size_t len)
     lv_uintptr_t d_align = (lv_uintptr_t)d8 & ALIGN_MASK;
     lv_uintptr_t s_align = (lv_uintptr_t)s8 & ALIGN_MASK;
 
-    /*Byte copy for unaligned memories*/
+    /*Байтовая копия для невыровненной памяти*/
     if(s_align != d_align) {
         while(len > 32) {
             _REPEAT8(_COPY(d8, s8));
@@ -88,7 +88,7 @@ void * LV_ATTRIBUTE_FAST_MEM lv_memcpy(void * dst, const void * src, size_t len)
         return dst;
     }
 
-    /*Make the memories aligned*/
+    /*Сделайте воспоминания согласованными*/
     if(d_align) {
         d_align = ALIGN_MASK + 1 - d_align;
         while(d_align && len) {
@@ -120,7 +120,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_memset(void * dst, uint8_t v, size_t len)
     uint8_t * d8 = (uint8_t *)dst;
     uintptr_t d_align = (lv_uintptr_t) d8 & ALIGN_MASK;
 
-    /*Make the address aligned*/
+    /*Выровнять адрес*/
     if(d_align) {
         d_align = ALIGN_MASK + 1 - d_align;
         while(d_align && len) {
@@ -182,7 +182,7 @@ int lv_memcmp(const void * p1, const void * p2, size_t len)
     return *s1 - *s2;
 }
 
-/* See https://en.cppreference.com/w/c/string/byte/strlen for reference */
+/* См. https://en.cppreference.com/w/c/string/byte/strlen для справки. */
 size_t lv_strlen(const char * str)
 {
     size_t i = 0;
@@ -262,7 +262,7 @@ char * lv_strdup(const char * src)
     char * dst = lv_malloc(len);
     if(dst == NULL) return NULL;
 
-    lv_memcpy(dst, src, len); /*memcpy is faster than strncpy when length is known*/
+    lv_memcpy(dst, src, len); /*memcpy работает быстрее, чем strncpy, если известна длина*/
     return dst;
 }
 

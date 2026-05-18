@@ -3,7 +3,7 @@
  *
  */
 
-/*Copy this file as "lv_port_disp.c" and set this value to "1" to enable content*/
+/*Скопируйте этот файл как «lv_port_disp.c» и установите для этого значения значение «1», чтобы отключить контент.*/
 #if 0
 
 /*********************
@@ -25,7 +25,7 @@
     #define MY_DISP_VER_RES    240
 #endif
 
-#define BYTE_PER_PIXEL (LV_COLOR_FORMAT_GET_SIZE(LV_COLOR_FORMAT_RGB565)) /*will be 2 for RGB565 */
+#define BYTE_PER_PIXEL (LV_COLOR_FORMAT_GET_SIZE(LV_COLOR_FORMAT_RGB565)) /*будет 2 для RGB565 */
 
 /**********************
  *      TYPEDEFS
@@ -53,25 +53,25 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 void lv_port_disp_init(void)
 {
     /*-------------------------
-     * Initialize your display
+     * Инициализируйте свой дисплей
      * -----------------------*/
     disp_init();
 
     /*------------------------------------
-     * Create a display and set a flush_cb
+     * Создайте устройство и установите flush_cb.
      * -----------------------------------*/
     lv_display_t * disp = lv_display_create(MY_DISP_HOR_RES, MY_DISP_VER_RES);
     lv_display_set_flush_cb(disp, disp_flush);
 
-    /* Example 1
-     * One buffer for partial rendering*/
+    /* Пример 1
+     * Один буфер для частичного рендеринга*/
     LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_1_1[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];            /*A buffer for 10 rows*/
+    static uint8_t buf_1_1[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];            /*Буфер на 10 строк*/
     lv_display_set_buffers(disp, buf_1_1, NULL, sizeof(buf_1_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
-    /* Example 2
-     * Two buffers for partial rendering
-     * In flush_cb DMA or similar hardware should be used to update the display in the background.*/
+    /* Пример 2
+     * Два буфера для частичного рендеринга
+     * Вflush_cbDMA или аналогичном оборудовании должно быть предусмотрено обновление мониторов в фоновом режиме.*/
     LV_ATTRIBUTE_MEM_ALIGN
     static uint8_t buf_2_1[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
 
@@ -79,9 +79,9 @@ void lv_port_disp_init(void)
     static uint8_t buf_2_2[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
     lv_display_set_buffers(disp, buf_2_1, buf_2_2, sizeof(buf_2_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
-    /* Example 3
-     * Two buffers screen sized buffer for double buffering.
-     * Both LV_DISPLAY_RENDER_MODE_DIRECT and LV_DISPLAY_RENDER_MODE_FULL works, see their comments*/
+    /* Пример 3
+     * Два буфера размером с экран для двойной буферизации.
+     * И LV_DISPLAY_RENDER_MODE_DIRECT, и LV_DISPLAY_RENDER_MODE_FULL работают, смотрите их комментарии.*/
     LV_ATTRIBUTE_MEM_ALIGN
     static uint8_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES * BYTE_PER_PIXEL];
 
@@ -95,55 +95,55 @@ void lv_port_disp_init(void)
  *   STATIC FUNCTIONS
  **********************/
 
-/*Initialize your display and the required peripherals.*/
+/*Инициализируйте дисплей и необходимые периферийные устройства.*/
 static void disp_init(void)
 {
-    /*You code here*/
+    /*Вы кодируете здесь*/
 }
 
 volatile bool disp_flush_enabled = true;
 
-/* Enable updating the screen (the flushing process) when disp_flush() is called by LVGL
+/* Включить экран обновления (очистку процесса) при вызовеdisp_flush() по LVGL
  */
 void disp_enable_update(void)
 {
     disp_flush_enabled = true;
 }
 
-/* Disable updating the screen (the flushing process) when disp_flush() is called by LVGL
+/* Включить обновление экрана (процесс промывки) при вызовеdisp_flush() по LVGL
  */
 void disp_disable_update(void)
 {
     disp_flush_enabled = false;
 }
 
-/*Flush the content of the internal buffer the specific area on the display.
- *`px_map` contains the rendered image as raw pixel map and it should be copied to `area` on the display.
- *You can use DMA or any hardware acceleration to do this operation in the background but
- *'lv_display_flush_ready()' has to be called when it's finished.*/
+/*Сбрасывает содержимое внутреннего буфера в определенную область дисплея.
+ *`px_map` содержит визуализированное изображение в виде необработанной карты изображения, и его следует скопировать в`area`на дисплей.
+ *Вы можете использовать DMA или любое аппаратное ускорение, чтобы выполнить эту операцию в фоновом режиме, но
+ *'lv_display_flush_ready()' обязательно вызывается после завершения.*/
 static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t * px_map)
 {
     if(disp_flush_enabled) {
-        /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
+        /*Самый простой (но и самый медленный) вариант вывода всех пикселей на экран по одному.*/
 
         int32_t x;
         int32_t y;
         for(y = area->y1; y <= area->y2; y++) {
             for(x = area->x1; x <= area->x2; x++) {
-                /*Put a pixel to the display. For example:*/
-                /*put_px(x, y, *px_map)*/
+                /*Поместите пиксель на дисплей. Например:*/
+                /*put_px (x, y, *px_map)*/
                 px_map++;
             }
         }
     }
 
     /*IMPORTANT!!!
-     *Inform the graphics library that you are ready with the flushing*/
+     *Сообщите графической библиотеке, что вы готовы к очистке.*/
     lv_display_flush_ready(disp_drv);
 }
 
-#else /*Enable this file at the top*/
+#else /*Включите этот файл вверху*/
 
-/*This dummy typedef exists purely to silence -Wpedantic.*/
+/*Этот вымышленный typedef существует исключительно для того, чтобы успеть замолчать -Wpedantic.*/
 typedef int keep_pedantic_happy;
 #endif

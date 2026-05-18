@@ -237,7 +237,7 @@ static void _set_paint_stroke(Tvg_Paint * obj, const lv_vector_stroke_dsc_t * ds
         lv_color_to_tvg(&c, &dsc->color, dsc->opa);
         tvg_shape_set_stroke_color(obj, c.r, c.g, c.b, c.a);
     }
-    else {   /*gradient*/
+    else {   /*градиент*/
         _set_paint_stroke_gradient(obj, &dsc->gradient, &dsc->matrix);
     }
 
@@ -348,7 +348,7 @@ static void _set_paint_fill(Tvg_Paint * obj, Tvg_Canvas * canvas, const lv_vecto
         lv_matrix_t imx = *matrix;
 
         if(dsc->fill_units == LV_VECTOR_FILL_UNITS_OBJECT_BOUNDING_BOX) {
-            /* Convert to object bounding box coordinates */
+            /* Преобразование в координаты ограничивающей рамки объекта */
             float x, y, w, h;
             tvg_paint_get_bounds(obj, &x, &y, &w, &h, false);
             lv_matrix_translate(&imx, x, y);
@@ -380,7 +380,7 @@ static Tvg_Blend_Method lv_blend_to_tvg(lv_vector_blend_t blend)
         case LV_VECTOR_BLEND_DST_OVER:
         case LV_VECTOR_BLEND_DST_IN:
         case LV_VECTOR_BLEND_SUBTRACTIVE:
-        /*not support yet.*/
+        /*пока не поддерживает.*/
         default:
             return TVG_BLEND_METHOD_NORMAL;
     }
@@ -439,7 +439,7 @@ static void _task_draw_cb(void * ctx, const lv_vector_path_t * path, const lv_ve
     _tvg_rect rc;
     lv_area_to_tvg(&rc, &dsc->scissor_area);
 
-    if(!path) {  /*clear*/
+    if(!path) {  /*ясно*/
         _tvg_color c;
         lv_color_to_tvg(&c, &dsc->fill_dsc.color, dsc->fill_dsc.opa);
 

@@ -1,4 +1,4 @@
-# GDB script to get lvgl global pointer in NuttX.
+# СкриптGDBдля получения глобального указателя lvgl в NuttX.
 
 import argparse
 import sys
@@ -37,7 +37,7 @@ class Lvglobal(gdb.Command):
             self.set_lvgl_instance(lv_global)
             return
 
-        # find the lvgl global pointer in tls
+        # найти глобальный указатель lvgl в tls
         if not args.pid:
             print("LVGL is in multi-process mode; please provide --pid.")
             return

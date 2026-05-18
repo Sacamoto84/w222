@@ -83,11 +83,11 @@ void lv_demo_widgets_shop_create(lv_obj_t * parent)
     if(disp_size == DISP_LARGE) {
         static int32_t grid1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid1_row_dsc[] = {
-            LV_GRID_CONTENT,  /*Title*/
-            LV_GRID_CONTENT,  /*Sub title*/
-            20,               /*Spacer*/
-            LV_GRID_CONTENT,  /*Amount*/
-            LV_GRID_CONTENT,  /*Hint*/
+            LV_GRID_CONTENT,  /*Название*/
+            LV_GRID_CONTENT,  /*Подзаголовок*/
+            20,               /*Проставка*/
+            LV_GRID_CONTENT,  /*Сумма*/
+            LV_GRID_CONTENT,  /*Подсказка*/
             LV_GRID_TEMPLATE_LAST
         };
 
@@ -104,9 +104,9 @@ void lv_demo_widgets_shop_create(lv_obj_t * parent)
     else if(disp_size == DISP_MEDIUM) {
         static int32_t grid1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid1_row_dsc[] = {
-            LV_GRID_CONTENT,  /*Title + Date*/
-            LV_GRID_CONTENT,  /*Amount + Hint*/
-            200,              /*Chart*/
+            LV_GRID_CONTENT,  /*Название + Дата*/
+            LV_GRID_CONTENT,  /*Сумма + Подсказка*/
+            200,              /*Диаграмма*/
             LV_GRID_TEMPLATE_LAST
         };
 
@@ -124,11 +124,11 @@ void lv_demo_widgets_shop_create(lv_obj_t * parent)
     else if(disp_size == DISP_SMALL) {
         static int32_t grid1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid1_row_dsc[] = {
-            LV_GRID_CONTENT,  /*Title*/
-            LV_GRID_CONTENT,  /*Date*/
-            LV_GRID_CONTENT,  /*Amount*/
-            LV_GRID_CONTENT,  /*Hint*/
-            LV_GRID_CONTENT,  /*Chart*/
+            LV_GRID_CONTENT,  /*Название*/
+            LV_GRID_CONTENT,  /*Дата*/
+            LV_GRID_CONTENT,  /*Сумма*/
+            LV_GRID_CONTENT,  /*Подсказка*/
+            LV_GRID_CONTENT,  /*Диаграмма*/
             LV_GRID_TEMPLATE_LAST
         };
 

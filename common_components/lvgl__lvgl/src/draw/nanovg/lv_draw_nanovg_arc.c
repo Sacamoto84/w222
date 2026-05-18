@@ -63,7 +63,7 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
         sweep_angle -= 360;
     }
 
-    /*If the angles are the same then there is nothing to draw*/
+    /*Если углы одинаковые, то рисовать нечего.*/
     if(nvg_math_is_zero(sweep_angle)) {
         LV_PROFILER_DRAW_END;
         return;
@@ -81,7 +81,7 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
     if(nvg_math_is_equal(sweep_angle, 360)) {
         nvgCircle(u->vg, cx, cy, radius_out);
 
-        /* radius_in <= 0, normal fill circle */
+        /* radius_in <= 0, обычный закрашенный круг */
         if(radius_in > 0) {
             nvgCircle(u->vg, cx, cy, radius_in);
         }
@@ -92,17 +92,17 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
         float end_angle_rad = NVG_MATH_RADIANS(end_angle);
 
         if(radius_in > 0) {
-            /* radius_out start point */
+            /* radius_out начальная точка */
             float start_x = radius_out * NVG_MATH_COSF(start_angle_rad) + cx;
             float start_y = radius_out * NVG_MATH_SINF(start_angle_rad) + cy;
 
-            /* radius_in start point */
+            /* radius_in начальная точка */
             float end_x = radius_in * NVG_MATH_COSF(end_angle_rad) + cx;
             float end_y = radius_in * NVG_MATH_SINF(end_angle_rad) + cy;
 
             nvgMoveTo(u->vg, start_x, start_y);
 
-            /* radius_out arc */
+            /* radius_out дуга */
             lv_nanovg_path_append_arc(u->vg,
                                       cx, cy,
                                       radius_out,
@@ -110,10 +110,10 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
                                       sweep_angle,
                                       false);
 
-            /* line to radius_in */
+            /* линия на radius_in */
             nvgLineTo(u->vg, end_x, end_y);
 
-            /* radius_in arc */
+            /* radius_in дуга */
             lv_nanovg_path_append_arc(u->vg,
                                       cx, cy,
                                       radius_in,
@@ -121,15 +121,15 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
                                       -sweep_angle,
                                       false);
 
-            /* close arc */
+            /* замкнутая дуга */
             nvgClosePath(u->vg);
         }
         else {
-            /* draw a normal arc pie shape */
+            /* нарисуйте нормальную дуговую форму круга */
             lv_nanovg_path_append_arc(u->vg, cx, cy, radius_out, start_angle, sweep_angle, true);
         }
 
-        /* draw round */
+        /* обводить */
         if(dsc->rounded && dsc->width > 0) {
             float round_radius = radius_out > dsc->width ? dsc->width / 2.0f : radius_out / 2.0f;
             float round_center = radius_out - round_radius;
@@ -151,7 +151,7 @@ void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
             return;
         }
 
-        /* move image to center */
+        /* переместить изображение в центр */
         float img_half_w = header.w / 2.0f;
         float img_half_h = header.h / 2.0f;
 

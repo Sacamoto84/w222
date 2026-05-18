@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+ * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
+ * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
 #pragma once
 
@@ -14,28 +14,28 @@ extern "C" {
 #include "frogfs_types.h"
 
 /**
- * \brief       Magic number used in the frogfs file header
+ * \brief Магическое число, используемое в заголовке файла frogfs
  */
 #define FROGFS_MAGIC 0x474F5246 /** FROG */
 
 /**
- * \brief       Major version this source distribution supports
+ * \brief Основная версия, поддерживаемая этим исходным дистрибутивом
  */
 #define FROGFS_VER_MAJOR 1
 
 /**
- * \brief       Minor version this source distribution supports
+ * \brief Дополнительная версия, поддерживаемая этим исходным дистрибутивом
  */
 #define FROGFS_VER_MINOR 0
 
 /**
- * \brief       Flag for \a frogfs_open to open any file as raw. Useful to
- *              pass compressed data over a transport such as HTTP.
+ * \brief Флаг для \a frogfs_open, позволяющий открывать любой файл как необработанный. Полезно для
+ *              передавать сжатые данные через транспорт, например HTTP.
  */
 #define FROGFS_OPEN_RAW (1 << 0)
 
 /**
- * \brief       Enum of frogfs entry types
+ * \brief Перечисление типов записей frogfs
  */
 typedef enum frogfs_entry_type_t {
     FROGFS_ENTRY_TYPE_DIR,
@@ -43,7 +43,7 @@ typedef enum frogfs_entry_type_t {
 } frogfs_entry_type_t;
 
 /**
- * \brief       Compression algorithm ids
+ * \brief Идентификаторы алгоритмов сжатия
  */
 typedef enum frogfs_comp_algo_t {
     FROGFS_COMP_ALGO_NONE,
@@ -53,19 +53,19 @@ typedef enum frogfs_comp_algo_t {
 } frogfs_comp_algo_t;
 
 /**
- * \brief       Configuration for the \a frogfs_init function
+ * \brief Конфигурация функции \a frogfs_init
  */
 typedef struct frogfs_config_t {
     const void *addr; /**< address of an frogfs filesystem in memory */
 } frogfs_config_t;
 
 /**
- * \brief       A frogfs filesystem handle
+ * \brief Дескриптор файловой системы frogfs
  */
 typedef struct frogfs_fs_t frogfs_fs_t;
 
 /**
- * \brief       Structure filled by the \a frogfs_stat function
+ * \brief Структура, заполняемая функцией \a frogfs_stat
  */
 typedef struct frogfs_stat_t {
     frogfs_entry_type_t type; /**< entry type */
@@ -75,7 +75,7 @@ typedef struct frogfs_stat_t {
 } frogfs_stat_t;
 
 /**
- * \brief       Fiilesystem entry pointer
+ * \brief Указатель входа в файловую систему
 */
 typedef struct frogfs_entry_t frogfs_entry_t;
 typedef struct frogfs_dh_t frogfs_dh_t;
@@ -83,7 +83,7 @@ typedef struct frogfs_fh_t frogfs_fh_t;
 
 #if !defined(FROGFS_PRIVATE_STRUCTS)
 /**
- * \brief       A frogfs directory handle
+ * \brief Дескриптор каталога frogfs
  */
 struct frogfs_dh_t {
     const frogfs_fs_t *fs; /**< filesystem handle */
@@ -91,7 +91,7 @@ struct frogfs_dh_t {
 };
 
 /**
- * \brief       A frogfs file handle
+ * \brief Дескриптор файла frogfs
  */
 struct frogfs_fh_t {
     const frogfs_fs_t *fs; /**< filesystem handle */
@@ -100,161 +100,161 @@ struct frogfs_fh_t {
 #endif
 
 /**
- * \brief      Initialize and return a \a frogfs_fs_t instance
- * \param[in]  config   frogfs configuration
- * \return              \a frogfs_fs_t pointer or \a NULL on error
+ * \brief Инициализация и возврат экземпляра \a frogfs_fs_t
+ * \param[in] config конфигурация frogfs
+ * \return \a указатель frogfs_fs_t или \a NULL в случае ошибки
  */
 frogfs_fs_t *frogfs_init(const frogfs_config_t *conf);
 
 /**
- * \brief      Tear down a \a frogfs_fs_t instance
- * \param[in]  fs       \a frogfs_fs_t pointer
+ * \brief Удалить экземпляр \a frogfs_fs_t
+ * \param[in] fs \a указатель frogfs_fs_t
  */
 void frogfs_deinit(frogfs_fs_t *fs);
 
 /**
- * \brief       Get frogfs entry for path
- * \param[in]   fs      \a frogfs_fs_t pointer
- * \param[in]   path    path string
- * \return              \a frogfs_entry_t pointer or \a NULL if path was not
- *                      found
+ * \brief Получить запись frogfs для пути
+ * \param[in] fs \a указатель frogfs_fs_t
+ * \param[in] путь строка пути
+ * \return \a указатель frogfs_entry_t или \a NULL, если путь не указан
+ *                      нашел
  */
 const frogfs_entry_t *frogfs_get_entry(const frogfs_fs_t *fs,
         const char *path);
 
 /**
- * \brief       Get name for frogfs entry
- * \param[in]   entry   \a frogfs_entry_t pointer
- * \return              name string, caller is expected to free
+ * \brief Получить имя для записи frogfs
+ * \param[in] запись \a указатель frogfs_entry_t
+ * \return строка имени, ожидается, что вызывающий абонент освободится
  */
 char *frogfs_get_name(const frogfs_entry_t *entry);
 
 /**
- * \brief       Get full path for frogfs entry
- * \param[in]   fs      \a frogfs_fs_t pointer
- * \param[in]   entry   \a frogfs_entry_t pointer
- * \return              full path string or \a NULL if entry is NULL, caller is
- *                      expected to free
+ * \brief Получение полного пути к записи frogfs
+ * \param[in] fs \a указатель frogfs_fs_t
+ * \param[in] запись \a указатель frogfs_entry_t
+ * \return строка полного пути или \a NULL, если запись NULL, вызывающий абонент
+ *                      ожидается освобождение
  */
 char *frogfs_get_path(const frogfs_fs_t *fs, const frogfs_entry_t *entry);
 
 /**
- * \brief       Return if entry is a directory
- * \param[in]   entry   \a frogfs_entry_t pointer
- * \return              1 if directory, 0 otherwise
+ * \brief Возврат, если запись является каталогом
+ * \param[in] запись \a указатель frogfs_entry_t
+ * \return 1, если каталог, 0 в противном случае
  */
 int frogfs_is_dir(const frogfs_entry_t *entry);
 
 /**
- * \brief       Return if entry is a file
- * \param[in]   entry   \a frogfs_entry_t pointer
- * \return              1 if file, 0 otherwise
+ * \brief Возврат, если запись является файлом
+ * \param[in] запись \a указатель frogfs_entry_t
+ * \return 1, если файл, 0 в противном случае
  */
 int frogfs_is_file(const frogfs_entry_t *entry);
 
 /**
- * \brief       Get information about a frogfs entry
- * \param[in]   fs      \a frogfs_fs_t pointer
- * \param[in]   entry   \a frogfs_entry_t pointer
- * \param[out]  st      \a frogfs_stat_t structure
+ * \brief Получение информации о записи frogfs
+ * \param[in] fs \a указатель frogfs_fs_t
+ * \param[in] запись \a указатель frogfs_entry_t
+ * \param[out] st \a структура frogfs_stat_t
  */
 void frogfs_stat(const frogfs_fs_t *fs, const frogfs_entry_t *entry,
         frogfs_stat_t *st);
 
 /**
- * \brief       Open a frogfs entry as a file from a \a frogfs_fs_t instance
- * \param[in]   fs      \a frogfs_fs_t poitner
- * \param[in]   entry   \a frogfs_entry_t pointer
- * \param[in]   flags   open flags
- * \return              \a frogfs_fh_t or \a NULL if not found
+ * \brief Откройте запись frogfs как файл из экземпляра \a frogfs_fs_t.
+ * \param[in] fs \a frogfs_fs_t указатель
+ * \param[in] запись \a указатель frogfs_entry_t
+ * \param[in] флаги открытые флаги
+ * \return \a frogfs_fh_t или \a NULL, если не найден
  */
 frogfs_fh_t *frogfs_open(const frogfs_fs_t *fs, const frogfs_entry_t *entry,
         unsigned int flags);
 
 /**
- * \brief       Close an open file entry
- * \param[in]   f       \a frogfs_fh_t pointer
+ * \brief Закрытие открытой записи файла
+ * \param[in] f \a указатель frogfs_fh_t
  */
 void frogfs_close(frogfs_fh_t *fh);
 
 /**
- * \brief       Determine if file handle is opened raw.
- * \param[in]   f       \a frogfs_fh_t pointer
- * \return              1 if file is open raw, 0 otherwise
+ * \brief Определяет, открыт ли дескриптор файла в исходном виде.
+ * \param[in] f \a указатель frogfs_fh_t
+ * \return 1, если файл открыт в исходном виде, 0 в противном случае
 */
 int frogfs_is_raw(frogfs_fh_t *fh);
 
 /**
- * \brief       Read data from an open file entry
- * \param[in]   f       \a frogfs_fh_t pointer
- * \param[out]  buf     buffer to read into
- * \param[in]   len     maximum number of bytes to read
- * \return              actual number of bytes read, zero if end of file
- *                      reached
+ * \brief Чтение данных из записи открытого файла
+ * \param[in] f \a указатель frogfs_fh_t
+ * \param[out] буфер буфера для чтения
+ * \param[in] len максимальное количество байтов для чтения
+ * \возвращает фактическое количество прочитанных байтов, ноль, если конец файла
+ *                      достиг
  */
 ssize_t frogfs_read(frogfs_fh_t *fh, void *buf, size_t len);
 
 /**
- * \brief       Seek to a position within an open file entry
- * \param[in]   f       \a frogfs_fh_t pointer
- * \param[in]   offset  file position (relative or absolute)
- * \param[in]   mode    \a SEEK_SET, \a SEEK_CUR, or \a SEEK_END
- * \return              current position in file or < 0 upon error
+ * \brief Поиск позиции в записи открытого файла
+ * \param[in] f \a указатель frogfs_fh_t
+ * \param[in] смещение позиции файла (относительное или абсолютное)
+ * Режим \param[in] \a SEEK_SET , \a SEEK_CUR или \a SEEK_END
+ * \вернуть текущую позицию в файле или <0 в случае ошибки
  */
 ssize_t frogfs_seek(frogfs_fh_t *fh, long offset, int mode);
 
 /**
- * \brief       Get the current position in an open file entry
- * \param[in]   f       \a frogfs_fh_t pointer
- * \return              current position in file or < 0 upon error
+ * \brief Получить текущую позицию в записи открытого файла
+ * \param[in] f \a указатель frogfs_fh_t
+ * \вернуть текущую позицию в файле или <0 в случае ошибки
  */
 size_t frogfs_tell(frogfs_fh_t *fh);
 
 /**
- * \brief       Get raw memory for raw file entry
- * \param[in]   f       \a frogfs_fh_t pointer
- * \param[out]  buf     pointer pointer to buf
- * \return              length of raw data
+ * \brief Получение необработанной памяти для записи необработанного файла
+ * \param[in] f \a указатель frogfs_fh_t
+ * \param[out] указатель buf указатель на buf
+ * \возвращает длину необработанных данных
  */
 size_t frogfs_access(frogfs_fh_t *fh, const void **buf);
 
 /**
- * \brief       Open a directory for reading child entrys
- * \param[in]   fs      \a frogfs_fs_t pointer
- * \param[in]   entry   \a frogfs_entry_t pointer to root director
- * \return              \a frogfs_dh_t pointer or \a NULL if invalid
+ * \brief Открыть каталог для чтения дочерних записей
+ * \param[in] fs \a указатель frogfs_fs_t
+ * \param[in] запись \a frogfs_entry_t указатель на корневой директорий
+ * \return \a указатель frogfs_dh_t или \a NULL, если он недействителен
  */
 frogfs_dh_t *frogfs_opendir(frogfs_fs_t *fs, const frogfs_entry_t *entry);
 
 /**
- * \brief       Close a directory
- * \param[in]   d       \a frogfs_dh_t pointer
+ * \brief Закрыть каталог
+ * \param[in] d \a указатель frogfs_dh_t
  */
 void frogfs_closedir(frogfs_dh_t *dh);
 
 /**
- * \brief       Get the next child entry in directory
- * \param[in]   d       \a frogfs_dh_t pointer
- * \return              \a frogfs_entry_t pointer or \a NULL if end has been
- *                      reached
+ * \brief Получить следующую дочернюю запись в каталоге
+ * \param[in] d \a указатель frogfs_dh_t
+ * \return \a указатель frogfs_entry_t или \a NULL, если был достигнут конец
+ *                      достиг
  */
 const frogfs_entry_t *frogfs_readdir(frogfs_dh_t *dh);
 
 /**
- * \brief       Set dir entry index to a value returned by \a frogfs_telldir
- *              for the current \a frogfs_dh_t pointer
- * \param[in]   d       \a frogfs_dh_t pointer
- * \param[in]   loc     entry index
+ * \brief Установить индекс записи каталога в значение, возвращаемое \a frogfs_telldir
+ *              для текущего указателя \a frogfs_dh_t
+ * \param[in] d \a указатель frogfs_dh_t
+ * \param[in] индекс записи loc
  */
 void frogfs_seekdir(frogfs_dh_t *dh, long loc);
 
 /**
- * \brief       Return the current entry index for a directory
- * \param[in]   d       \a frogfs_dh_t pointer
- * \return              entry index
+ * \brief Возвращает текущий индекс записи для каталога
+ * \param[in] d \a указатель frogfs_dh_t
+ * \вернуть индекс записи
  */
 long frogfs_telldir(frogfs_dh_t *dh);
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif

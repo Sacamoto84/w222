@@ -27,10 +27,10 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of spinbox */
+/** Данные счетчика */
 struct _lv_spinbox_t {
     lv_textarea_t ta;             /**< Ext. of ancestor */
-    /*New data for this type*/
+    /*Новые данные для этого типа*/
     int32_t value;
     int32_t range_max;
     int32_t range_min;
@@ -53,7 +53,7 @@ struct _lv_spinbox_t {
 #endif /* LV_USE_SPINBOX */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_SPINBOX_PRIVATE_H*/

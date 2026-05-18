@@ -60,7 +60,7 @@ typedef struct {
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 

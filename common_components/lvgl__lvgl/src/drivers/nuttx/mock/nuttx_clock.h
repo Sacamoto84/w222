@@ -29,8 +29,8 @@ extern "C" {
  **********************/
 
 struct cpuload_s {
-    volatile uint32_t total;   /* Total number of clock ticks */
-    volatile uint32_t active;  /* Number of ticks while this thread was active */
+    volatile uint32_t total;   /* Общее количество тактов */
+    volatile uint32_t active;  /* Количество тиков, пока эта тема была активна */
 };
 
 /**********************
@@ -49,7 +49,7 @@ static inline int clock_cpuload(int pid, struct cpuload_s * cpuload)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*NUTTX_CLOCK_H*/

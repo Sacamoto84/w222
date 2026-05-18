@@ -60,7 +60,7 @@ void lv_profiler_builtin_posix_init(void)
     lv_profiler_builtin_config_t config;
     lv_profiler_builtin_config_init(&config);
 
-    /* One second is equal to 1000000000 nanoseconds */
+    /* Одна секунда равна 1000000000 наносекунд. */
     config.tick_per_sec = 1000000000;
     config.tick_get_cb = tick_get_cb;
     config.flush_cb = flush_cb;
@@ -91,7 +91,7 @@ static uint64_t tick_get_cb(void)
         return 0;
     }
 
-    /* Convert counter to nanoseconds */
+    /* Перевести счетчик в наносекунды */
     return counter.QuadPart * 1000000000ULL / frequency.QuadPart;
 #else
     struct timespec ts;

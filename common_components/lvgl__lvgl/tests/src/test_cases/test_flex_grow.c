@@ -25,8 +25,8 @@ static void simple_style(lv_obj_t * obj)
 }
 
 /**
- * Tests that various flex tracks containing fixed and growing items are
- * always completely filled, no red background visible.
+ * Проверяет, что различные гибкие треки, содержащие фиксированные и растущие элементы, являются
+ * всегда полностью заполнен, красный фон не виден.
  */
 void test_grid_fr(void)
 {

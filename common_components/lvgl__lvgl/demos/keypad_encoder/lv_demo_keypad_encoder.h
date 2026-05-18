@@ -33,7 +33,7 @@ void lv_demo_keypad_encoder(void);
  **********************/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_KEYPAD_ENCODER_H*/

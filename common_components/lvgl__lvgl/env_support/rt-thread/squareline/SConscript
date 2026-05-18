@@ -4,7 +4,7 @@ cwd = GetCurrentDir()
 src = Glob('*.c')
 inc = [cwd]
  
-# check if .h or .hpp files exists
+# проверьте, существуют ли файлы .h или .hpp
 def check_h_hpp_exists(path):
     file_dirs = os.listdir(path)
     for file_dir in file_dirs:

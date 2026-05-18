@@ -338,7 +338,7 @@ MISSING_TYPEDEF = 'MissingTypedefDoc'
 MISSING_VARIABLE = 'MissingVariableDoc'
 MISSING_MACRO = 'MissingMacroDoc'
 
-# Dictionaries built from Doxygen XML output via `xml.etree.ElementTree`
+# Словари, созданные на основе вывода DoxygenXMLчерез`xml.etree.ElementTree`.
 defines = {}     # dictionary of doxygen_xml.DEFINE objects
 enums = {}       # dictionary of doxygen_xml.ENUM objects
 variables = {}   # dictionary of doxygen_xml.VARIABLE objects
@@ -351,7 +351,7 @@ files = {}       # dictionary of doxygen_xml.FILE objects
 classes = {}     # dictionary of doxygen_xml.CLASS objects
 unions = {}      # appears to be unused at this time (unions => structures dict).
 
-# Module-Global Variables
+# Глобальные переменные модуля
 xml_path = ''
 
 
@@ -374,9 +374,9 @@ def run_ext_cmd(cmd_str: str, start_dir: str = None, quiet: bool = False, exit_o
         os.chdir(start_dir)
 
     if quiet:
-        # This method of running Doxygen is used because we do not
-        # want anything going to STDOUT.  Running it via `os.system()`
-        # would send its output to STDOUT.
+        # Этот метод запуска Doxygen используется потому, что мы не
+        # хочу, чтобы что-нибудь пошло на STDOUT.  Запускаем через `os.system()`
+        # отправит свой вывод в STDOUT.
         p = subprocess.Popen(
             cmd_str,
             stdout=subprocess.PIPE,
@@ -388,9 +388,9 @@ def run_ext_cmd(cmd_str: str, start_dir: str = None, quiet: bool = False, exit_o
 
         if p.returncode:
             if out:
-                # Note the `.decode("utf-8")` is required because
-                # `sys.stdout.write()` requires a string, and `out` is
-                # a byte array; generates an exception if passed alone.
+                # Обратите внимание, что требуется `.decode("utf-8")`, потому что
+                # `sys.stdout.write()` требует строки, а `out`
+                # массив байтов; генерирует исключение, если оно передается отдельно.
                 sys.stdout.write(out.decode("utf-8"))
                 sys.stdout.flush()
             if err:
@@ -470,20 +470,20 @@ def load_xml_etree(fle):
     with open(fle, 'rb') as f:
         d = f.read().decode('utf-8')
 
-    # This code is to correct a bug in Doxygen. That bug incorrectly parses
-    # a typedef, and it causes an error to occur building the docs. The Error
-    # doesn't stop the documentation from being generated, I just don't want
-    # to see the ugly red output.
+    # Этот код предназначен для исправления ошибок в Doxygen. Эта ошибка неправильно анализирует
+    # typedef, и это приводит к необходимости при построении документов. Ошибка
+    # не мешает созданию документации, я просто не хочу
+    # чтобы увидеть уродливый красный результат.
     #
-    # if 'typedef void() lv_lru_free_t(void *v)' in d:
-    #     d = d.replace(
-    #         '<type>void()</type>\n        '
-    #         '<definition>typedef void() lv_lru_free_t(void *v)</definition>',
-    #         '<type>void</type>\n        '
-    #         '<definition>typedef void(lv_lru_free_t)(void *v)</definition>'
+    # if 'typedefvoid()lv_lru_free_t (void *v)' в d:
+    # d = d.replace(
+    # '<type>void()</type>\n '
+    # '<definition>typedefvoid()lv_lru_free_t (void *v)</definition>',
+    # '<type>void</type>\n '
+    # '<definition>typedef void(lv_lru_free_t)(void *v)</definition>'
     #     )
-    #     with open(fle, 'wb') as f:
-    #         f.write(d.encode('utf-8'))
+    # с open(fle, 'wb') как f:
+    # f.write(d.encode('utf-8'))
 
     return ElementTree.fromstring(d)
 
@@ -556,7 +556,7 @@ class STRUCT(object):
         global unions
 
         if type(self) is UNION:
-            # UNION inherits from STRUCT.
+            # UNION наследует от STRUCT.
             if name in unions:
                 self.__dict__.update(unions[name].__dict__)
             else:
@@ -572,7 +572,7 @@ class STRUCT(object):
                 self.file_name = None
                 self.line_no = None
         else:
-            # STRUCT type
+            # Тип STRUCT
             if name in structures:
                 self.__dict__.update(structures[name].__dict__)
             else:
@@ -588,13 +588,13 @@ class STRUCT(object):
                 self.file_name = None
                 self.line_no = None
 
-        # Prior to 9-Mar-2025, the code below was never executing since this
-        # __init__() was never called with a `parent` value other than `None`.
-        # Reason:  `kind="struct"` only occurs in `index.xml` as a top-level
-        # entry, and not as a child element of `kind="file"` as do <sectiondef>
-        # elements with kind = define, var, enum and func.
-        # Original code:
-        # if parent and refid:
+        # До 9 марта 2025 г. приведенный ниже код никогда не выполнялся, поскольку это
+        # __init__ () никогда не вызывался со значением `parent`, например от `None`.
+        # Причина:`kind="struct"`встречается только в`index.xml`на верхнем уровне.
+        # запись, а не как дочерний элемент`kind="file"`, как <sectiondef>
+        # элементы с kind = define, var, enum и func.
+        # Исходный код:
+        # если родительский и переопределен:
         if refid:
             root = load_xml_etree(refid)
 
@@ -622,7 +622,7 @@ class STRUCT(object):
                             file_name = None
                             line_no = None
 
-                            # For each struct member...
+                            # Для каждого члена структуры...
                             for element in memberdef:
                                 if element.tag == 'location':
                                     file_name = element.attrib['file']
@@ -798,39 +798,39 @@ class NAMESPACE(object):
             self.unions = []
             self.classes = []
 
-        # root = load_xml(refid)
+        # корень =load_xml(переопределение)
         #
-        # for compounddef in root:
-        #     if compounddef.attrib['id'] != refid:
-        #         continue
+        # для составного определения в корне:
+        # if complexdef.attrib['id'] != переопределение:
+        # продолжать
         #
-        #     for sectiondef in compounddef:
-        #         if sectiondef.tag != 'sectiondef':
-        #             continue
+        # для раздела в complexdef:
+        # ifsectiondef.tag != 'sectiondef':
+        # продолжать
         #
-        #         enum
-        #         typedef
-        #         func
-        #         struct
-        #         union
+        # перечисление
+        # определение типа
+        # функция
+        # структура
+        # союз
         #
         #
-        #         cls = globals()[sectiondef.attrib['kind'].upper()]
-        #         if cls == ENUM:
-        #             if sectiondef[0].text:
-        #                 sectiondef.attrib['name'] = sectiondef[0].text.strip()
-        #                 enums_.append(cls(self, **sectiondef.attrib))
-        #             else:
-        #                 sectiondef.attrib['name'] = None
-        #                 enums_.append(cls(self, **sectiondef.attrib))
+        # cls = globals() [sectiondef.attrib['вид']. upper()]
+        # если cls ==ENUM:
+        # если разделdef[0].текст:
+        # разделdef.attrib['имя'] = разделdef[0].text.  strip()
+        # enums_ .append(cls(self, **sectiondef.attrib))
+        # еще:
+        # sectiondef.attrib['name'] = Нет
+        # enums_ .append(cls(self, **sectiondef.attrib))
         #
-        #         elif cls == ENUMVALUE:
-        #             if enums_[-1].is_member(sectiondef):
-        #                 enums_[-1].add_member(sectiondef)
+        # элиф cls ==ENUMVALUE:
+        # еслиenums_[-1]. is_member(разделdef):
+        # enums_ [-1]. add_member(определение раздела)
         #
-        #         else:
-        #             sectiondef.attrib['name'] = sectiondef[0].text.strip()
-        #             cls(self, **sectiondef.attrib)
+        # еще:
+        # разделdef.attrib['имя'] = разделdef[0].text.  strip()
+        # cls(self, **sectiondef.attrib)
 
     def __str__(self):
         return self.template.format(name=self.name)
@@ -1137,8 +1137,8 @@ class ENUM(object):
         global enums
 
         if name in enums:
-            # This happens when `name` is `None`, for example.
-            # This is true for unnamed enumerations.
+            # Это происходит, например, когда`name`равен`None`.
+            # Это справедливо для безымянных перечислений.
             self.__dict__.update(enums[name].__dict__)
         else:
 
@@ -1182,7 +1182,7 @@ class ENUM(object):
                 break
             else:
                 return
-                # raise RuntimeError(f'not able to locate enum {name} ({refid})')
+                # поднять RuntimeError(f'невозможно найти перечисление {name} ({refid})')
 
             for element in memberdef:
                 if element.tag == 'location':
@@ -1513,7 +1513,7 @@ class DoxygenXml(object):
         :param doxyfile_src_file:
         :param silent_mode:
         """
-        # Dictionaries to Be Populated:
+        # Словари, которые необходимо заполнить:
         global defines
         global enums
         global variables
@@ -1535,8 +1535,8 @@ class DoxygenXml(object):
         lv_conf_file = os.path.join(intermediate_dir, 'lv_conf.h')
         xml_path = os.path.join(intermediate_dir, 'xml')
 
-        # In case DoxygenXml() is ever instantiated twice in 1 session,
-        # clear these dictionaries before they are (re-)populated below.
+        # Если экземплярDoxygenXml()возник случайно за один сеанс,
+        # очистите эти словари, прежде чем они будут (повторно) заполнены ниже.
         defines.clear()
         enums.clear()
         variables.clear()
@@ -1550,14 +1550,14 @@ class DoxygenXml(object):
         unions.clear()
 
         # -----------------------------------------------------------------
-        # Prep and run Doxygen
+        # Подготовьте и запустите Doxygen
         # -----------------------------------------------------------------
-        # Generate Doxyfile into `intermediate_dir` replacing certain
-        # config options for this run.
-        # 1. Load from Doxyfile
+        # Сгенерировать Doxyfile в`intermediate_dir`, заменив настройку
+        # параметры конфигурации для этого запуска.
+        # 1. Загрузка из Doxyfile
         cfg = doxygen_config.DoxygenConfig()
         cfg.load(doxyfile_src_file)
-        # 2. Update cfg.
+        # 2. Обновите файл конфигурации.
         cfg.set('OUTPUT_DIRECTORY', '.')
         cfg.set('XML_OUTPUT', "xml")
         cfg.set('HTML_OUTPUT', 'doxygen_html')
@@ -1576,24 +1576,24 @@ class DoxygenXml(object):
         cfg.set('GENERATE_DOCBOOK', 'NO')
         cfg.set('GENERATE_PERLMOD', 'NO')
 
-        # The predefined definitions are:
-        # - DOXYGEN (defines it as 1 and allows conditional directives [e.g. #if]
-        #   to do special things when DOXYGEN is processing it, as opposed to
-        #   a C compiler.
-        # - LV_CONF_PATH predefines the path where `lv_conf_internal.h` will
-        #   include the `lv_conf.h` file.
-        # - All the others here are used when macros prefix a line of code like this:
+        # Предопределенные определения:
+        # - DOXYGEN (определяет его как 1 и разрешает условные директивы [например, #if]
+        # делать особые действия, когда DOXYGEN обрабатывает его, а не
+        # компилятор C.
+        # - LV_CONF_PATH предопределяет путь, по которому будет`lv_conf_internal.h`.
+        # файл файла`lv_conf.h`.
+        # - Все остальные здесь используются, когда макросы добавляют префикс к следующей строке кода:
         #
-        #       LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_obj_class;
+        # LV_ATTRIBUTE_EXTERN_DATA extern constlv_obj_class_tlv_obj_class ;
         #
-        #   which occurs in `lv_obj.h`.  When these are added to the PREDEFINED list as
-        #   "MACRO_NAME=" with no value, Doxygen expands the macro to an empty string
-        #   allowing Doxygen to correctly parse the line.  The additional macros that
-        #   are treated that way are found in the middle of `lv_conf_template.h` in a
-        #   section called "COMPILER SETTINGS" with no definitions, made for prefixing
-        #   various code.  (This works around Doxygen's failure to correctly deal with
-        #   macros that are defined with no values, as these are in lv_conf.h.)
-        #   This list is current as of 28-Apr-2025.
+        # что происходит в `lv_obj.h`.  Когда они включились в списокPREDEFINEDкак
+        # "MACRO_NAME=" без значения, Doxygen расширяет макрос до пустой строки
+        # запустить Doxygen правильно проанализировать текст.  Дополнительные макросы, которые
+        # таким образом, находиться в середине`lv_conf_template.h`в
+        # раздел под названием «COMPILER SETTINGS» без определений, созданный для префиксов
+        # различный код.  (Это работает из-за неспособности Doxygen правильно хранить с возможностью
+        # макросы, которые остаются без измерений, как вlv_conf.h.)
+        # Этот список актуален по состоянию на 28 апреля 2025 г.
         predefined_symbols = [
             'DOXYGEN',
             f'LV_CONF_PATH="{lv_conf_file}"',
@@ -1611,9 +1611,9 @@ class DoxygenXml(object):
 
         cfg.set('PREDEFINED', predefined_symbols)
 
-        # Exclude OSAL `.h` files except for `lv_os_none.h`.  Reason:  they define
-        # lv_mutex_t, lv_thread_t and lv_thread_sync_t in multiple places.  Doxygen
-        # must only see one.
+        # Исключить файлыOSAL`.h`, за исключением `lv_os_none.h`.  Причина: они определяют
+        # lv_mutex_t ,lv_thread_tиlv_thread_sync_tв нескольких точках.  Доксиген
+        # должен увидеть только один.
         osal_dir = 'osal'
 
         osal_exclude_list = [
@@ -1632,57 +1632,57 @@ class DoxygenXml(object):
             full_path = os.path.join(lvgl_src_dir, osal_dir, osal_h)
             exclude_paths.append(full_path)
 
-        # Exclude as a workaround for Breathe parsing problems.
+        # Исключение в качестве обходного пути для задач синтаксического анализа Дышите.
         full_path = os.path.join(lvgl_src_dir, 'core', 'lv_obj_property.h')
         exclude_paths.append(full_path)
 
-        # Exclude GLTF templates that Breathe appears to not know how to parse.
+        # Исключите шаблоныGLTF, которые Breathe не умеют анализировать.
         full_path = os.path.join(lvgl_src_dir, 'libs', 'gltf', 'fastgltf', 'lv_fastgltf.hpp')
         exclude_paths.append(full_path)
 
-        # As of 07-Jan-2026, LVGL doc-build now replaces `lv_conf_internal.h`
-        # (which has no Doxygen documentation) with a temporary `lv_conf.h`
-        # generated ONLY for the purpose of doc-builds, which file goes away
-        # after Doxygen is done.  This causes conflicts of symbols between
-        # these 2 files because the former is a "generated copy" of the latter.
-        # So this exclusion removes the file with no documentation in it.
+        # С 7 января 2026 г. LVGLdoc-build заменяет`lv_conf_internal.h`.
+        # (у которого нет документации Doxygen) временным `lv_conf.h`
+        # сгенерирован ONLY для сборки документации, какой файл удаляется
+        # после завершения работы Doxygen.  Это вызывает конфликты символов между
+        # эти два файла, потому что первый является «сгенерированной копией» второго.
+        # Таким образом, это исключение удаляет файл без документации.
         full_path = os.path.join(lvgl_src_dir, 'lv_conf_internal.h')
         exclude_paths.append(full_path)
 
         cfg.set('EXCLUDE', exclude_paths)
 
-        # Include TAGFILES if requested.
+        # Включите TAGFILES, если требуется.
         if doxy_tagfile:
             cfg.set('GENERATE_TAGFILE', doxy_tagfile)
 
-        # 3. Store it for use by Doxygen in intermediate directory.
+        # 3. Сохраните его для использования Doxygen в промежуточном каталоге.
         cfg.save(doxyfile_dst_file)
 
-        # Run Doxygen in intermediate directory.
+        # Запустите Doxygen в промежуточный каталог.
         run_ext_cmd('doxygen Doxyfile', intermediate_dir, quiet=silent_mode)
 
         # -----------------------------------------------------------------
-        # Load root of Doxygen output (index.xml) as an `xml.etree.ElementTree`.
+        # Загрузите корень вывода Doxygen (index.xml) как`xml.etree.ElementTree`.
         # -----------------------------------------------------------------
         index_xml_etree = load_xml_etree('index')
 
-        # Populate these dictionaries.
-        #     Keys  :  C-code-element names (str) found by Doxygen.
-        #     Values:  The <compound> XML-node created by `xml.etree::ElementTree` in `load_xml()` above.
+        # Заполните эти словари.
+        # Ключи: имена элементов C-кода (str), найденные Doxygen.
+        # Значения: узел <соединение>XML, созданный`xml.etree::ElementTree`в`load_xml()`выше.
         #
-        #     defines,     enums,       variables,
-        #     namespaces,  structures,  typedefs,
-        #     functions,   unions,      groups,
-        #     files,       classes.
+        # определяет, перечисляет, переменные,
+        # пространства имен, структуры, определения типов,
+        # функции, объединения, группы,
+        # файлы, классы.
         announce_start(__file__, "Building source-code symbol dictionaries...")
         module_namespace = globals()
 
         for compound in index_xml_etree:
-            # Here we will encounter these "kind" in the index.xml
-            # <compound> elements: dir, file, page, struct, union.
+            # Здесь мы встретим эти «виды» в index.xml.
+            # <составные> элементы: каталог, файл, страница, структура, объединение.
             compound.attrib['name'] = compound[0].text.strip()
 
-            # Filter out dir, page, example.
+            # Отфильтровать каталог, страницу, пример.
             if compound.attrib['kind'] not in ('example', 'page', 'dir'):
                 class_name = compound.attrib['kind'].upper()
                 class_obj = module_namespace[class_name]
@@ -1690,30 +1690,30 @@ class DoxygenXml(object):
 
         announce_finish()
 
-        # Additional data:  the above instantiates the class, but doesn't
-        # store the resulting object anywhere, since each class' __init__()
-        # function adds the new object to the appropriate dictionary,
-        # and uses the arguments it gets to "build out" additional
-        # structure and/or populate additional dictionaries based on
-        # content.  Each class __init__() function specifies args it
-        # in its parameter list.  They match needed key values in the
-        # `**compound.attrib` dictionary.  The remaining (unused)
-        # keys in that dictionary are accepted in the `**_` parameter
-        # at the end of the parameter list.
+        # Дополнительные данные: приведенное выше создает экземпляр класса, но не
+        # сохраняется полученный объект где угодно, поскольку каждый класс__init__()
+        # функция добавляет новый объект в соответствующий словарь,
+        # и использует полученные аргументы для «создания» дополнительных
+        # структурировать и/или заполнять дополнительные словари на основе
+        # содержание.  каждая функция класса__init__() приводит ее аргументы.
+        # в списке его параметров.  Они соответствуют необходимым ключевым значениям в
+        # словарь`**compound.attrib`.  Остаток (неиспользованный)
+        # ключи в этом словаре принимаются в параметре `**_`.
+        # в конце списка параметров.
         #
-        # FILE class populates `files` dict plus:
-        #   - `defines` dictionary
-        #   - `enums` dictionary with children:
-        #       - ENUMVALUEs
-        #   - `variables` dictionary
-        #   - `typedefs` dictionary
-        #   - `functions` dictionary with children:
-        #       - FUNC_ARGs
-        # STRUCT class populates the `structures` dictionary with children:
-        #   - STRUCT_FIELDs
+        # КлассFILEЗаполняет`files`dict plus:
+        # - словарь `defines`
+        # - словарь`enums`для детей:
+        # - ПЕРЕЧИСЛЕНИЯ
+        # - словарь `variables`
+        # - словарь `typedefs`
+        # - словарь`functions`для детей:
+        # - FUNC_ARGs
+        # КлассSTRUCTзаполняет словарь`structures`дочерними элементами:
+        # - STRUCT_FIELDs
         #
-        # and possibly `namespaces`, `groups` and `classes` if
-        # they are present in `index.xml`.
+        # и, возможно,`namespaces`,`groups`и`classes`, если
+        # они присутствуют в `index.xml`.
 
 
     def get_macros(self):

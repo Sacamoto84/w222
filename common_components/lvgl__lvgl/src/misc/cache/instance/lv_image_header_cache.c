@@ -145,7 +145,7 @@ static lv_cache_compare_res_t image_header_cache_compare_cb(
 
 static void image_header_cache_free_cb(lv_image_header_cache_data_t * entry, void * user_data)
 {
-    LV_UNUSED(user_data); /*Unused*/
+    LV_UNUSED(user_data); /*Неиспользованный*/
 
     if(entry->src_type == LV_IMAGE_SRC_FILE) lv_free((void *)entry->src);
 }
@@ -161,7 +161,7 @@ static void iter_inspect_cb(void * elem)
     LV_UNUSED(header);
     LV_UNUSED(entry);
 
-    /*  size    data_size   cf  rc  type    decoded         src*/
+    /*  размер data_size cf rc тип декодированного src*/
 #define IMAGE_CACHE_DUMP_FORMAT "	%4dx%-4d	%9"LV_PRIu32"	%d	%" LV_PRId32 "	"
     switch(data->src_type) {
         case LV_IMAGE_SRC_FILE:

@@ -50,7 +50,7 @@ static lv_draw_buf_t * decode_webp_file(lv_image_decoder_dsc_t * dsc, const char
  **********************/
 
 /**
- * Register the WEBP decoder functions in LVGL
+ * Зарегистрируйте функции декодера WEBP в LVGL.
  */
 void lv_libwebp_init(void)
 {
@@ -78,17 +78,17 @@ void lv_libwebp_deinit(void)
  **********************/
 
 /**
- * Get info about a WEBP image
+ * Получить информацию об изображении WEBP
  * @param dsc can be file name or pointer to a C array
  * @param header store the info here
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
-    LV_UNUSED(decoder); /*Unused*/
-    lv_image_src_t src_type = dsc->src_type;          /*Get the source type*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
+    lv_image_src_t src_type = dsc->src_type;          /*Получить тип источника*/
 
-    /*If it's a webp file...*/
+    /*Если это веб-файл...*/
     if(src_type == LV_IMAGE_SRC_FILE) {
         uint8_t buf[WEBP_HEADER_SIZE];
         int width;
@@ -96,11 +96,11 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         uint32_t rn;
         lv_fs_res_t res = lv_fs_read(&dsc->file, buf, sizeof(buf), &rn);
 
-        /* The max header size = RIFF + VP8X + (optional chunks) + VP8(L), 64 bytes is enough to get the width and height.
-         * If the file is smaller than 64 bytes, it's maybe a valid webp file,
-         * so we don't check the result length here.
+        /* Максимальный размер заголовка = RIFF + VP8X + (необязательные фрагменты) + VP8 (L), 64 байта достаточно для получения ширины и высоты.
+         * Если размер файла меньше 64 байт, возможно, это действительный файл WebP.
+         * поэтому мы не проверяем здесь длину результата.
          * VP8X : RIFF(12) + VP8X(18) = 30bytes;
-         * VP8(L): RIFF(12) + VP8(L) chunk header(8) + VP8(L) frame header(5)  = 23bytes;
+         * VP8 (L): RIFF (12) + VP8 (L) заголовок фрагмента (8) + VP8 (L) заголовок кадра (5) = 23 байта;
          * VP8: RIFF(12) + VP8(L) chunk header(8) + VP8(L) frame header(10) = 28bytes;
          */
         if(res != LV_FS_RES_OK) return LV_RESULT_INVALID;
@@ -109,7 +109,7 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_INVALID;
         }
 
-        /*Default decoder color format is ARGB8888*/
+        /*Цветовой формат декодера по умолчанию — ARGB8888.*/
         header->cf = LV_COLOR_FORMAT_ARGB8888;
         header->w = width;
         header->h = height;
@@ -117,20 +117,20 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         return LV_RESULT_OK;
     }
 
-    return LV_RESULT_INVALID;         /*If it didn't succeed earlier then it's an error*/
+    return LV_RESULT_INVALID;         /*Если раньше это не удалось, то это ошибка*/
 }
 
 /**
- * Open a WEBP image and return the decoded image
+ * Откройте изображение WEBP и верните декодированное изображение.
  * @param decoder pointer to the decoder
  * @param dsc     pointer to the decoder descriptor
  * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
-    /*If it's a webp file...*/
+    /*Если это веб-файл...*/
     if(dsc->src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = dsc->src;
         lv_draw_buf_t * decoded = decode_webp_file(dsc, fn);
@@ -144,7 +144,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_INVALID;
         }
 
-        /*The adjusted draw buffer is newly allocated.*/
+        /*Скорректированный буфер отрисовки выделяется заново.*/
         if(adjusted != decoded) {
             lv_draw_buf_destroy(decoded);
             decoded = adjusted;
@@ -156,7 +156,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_OK;
         }
 
-        /*If the image cache is disabled, just return the decoded image*/
+        /*Если кэш изображений отключен, просто верните декодированное изображение.*/
         if(!lv_image_cache_is_enabled()) {
             return LV_RESULT_OK;
         }
@@ -174,18 +174,18 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         }
         dsc->cache_entry = entry;
 
-        return LV_RESULT_OK;     /*The image is fully decoded. Return with its pointer*/
+        return LV_RESULT_OK;     /*Изображение полностью декодировано. Возврат с его указателем*/
     }
 
-    return LV_RESULT_INVALID;    /*If not returned earlier then it failed*/
+    return LV_RESULT_INVALID;    /*Если не вернулся раньше, значит, это не удалось*/
 }
 
 /**
- * Free the allocated resources
+ * Освободите выделенные ресурсы
  */
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
-    LV_UNUSED(decoder); /*Unused*/
+    LV_UNUSED(decoder); /*Неиспользованный*/
 
     if(dsc->args.no_cache ||
        !lv_image_cache_is_enabled()) lv_draw_buf_destroy((lv_draw_buf_t *)dsc->decoded);
@@ -202,7 +202,7 @@ static lv_draw_buf_t * decode_webp_file(lv_image_decoder_dsc_t * dsc, const char
         return NULL;
     }
 
-    /*Alloc image buffer*/
+    /*Выделить буфер изображения*/
     lv_draw_buf_t * decoded;
     decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, dsc->header.w, dsc->header.h, dsc->header.cf,
                                     LV_STRIDE_AUTO);

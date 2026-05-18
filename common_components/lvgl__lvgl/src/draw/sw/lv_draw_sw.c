@@ -153,7 +153,7 @@ bool lv_draw_sw_register_blend_handler(lv_draw_sw_custom_blend_handler_t * handl
     lv_draw_sw_custom_blend_handler_t * existing_handler = NULL;
     lv_draw_sw_custom_blend_handler_t * new_handler = NULL;
 
-    // Check if a handler is already registered for the color format
+    // Проверьте, зарегистрирован ли уже обработчик для цветового формата.
     LV_LL_READ(&LV_GLOBAL_DEFAULT()->draw_sw_blend_handler_ll, existing_handler) {
         if(existing_handler->dest_cf == handler->dest_cf) {
             new_handler = existing_handler;
@@ -214,7 +214,7 @@ static int32_t evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
         case LV_DRAW_TASK_TYPE_LAYER: {
                 lv_draw_image_dsc_t * draw_dsc = task->draw_dsc;
 
-                /* not support skew */
+                /* не поддерживает перекос */
                 if(draw_dsc->skew_x != 0 || draw_dsc->skew_y != 0) {
                     return 0;
                 }
@@ -255,12 +255,12 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 #if LV_USE_OS
     uint32_t i;
     uint32_t taken_cnt = 0;
-    /* All idle (couldn't take any tasks): return LV_DRAW_UNIT_IDLE;
-     * All busy: return 0; as 0 tasks were taken
-     * Otherwise return taken_cnt;
+    /* Все простаивает (не может выполнять никаких задач): return LV_DRAW_UNIT_IDLE ;
+     * Все занято: вернуть 0; так как было принято 0 задач
+     * В противном случае верните taken_cnt ;
      */
 
-    /*If at least one is busy, it's not all idle*/
+    /*Если хотя бы один занят, значит, не все простаивают*/
     bool all_idle = true;
     for(i = 0; i < LV_DRAW_SW_DRAW_UNIT_CNT; i++) {
         if(draw_sw_unit->thread_dscs[i].task_act) {
@@ -273,41 +273,41 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     for(i = 0; i < LV_DRAW_SW_DRAW_UNIT_CNT; i++) {
         lv_draw_sw_thread_dsc_t * thread_dsc = &draw_sw_unit->thread_dscs[i];
 
-        /*Do nothing if busy*/
+        /*Ничего не делать, если занят*/
         if(thread_dsc->task_act) continue;
 
-        /*Find an available task. Start from the previously taken task.*/
+        /*Найдите доступную задачу. Начните с ранее взятого задания.*/
         t = lv_draw_get_next_available_task(layer, t, DRAW_UNIT_ID_SW);
 
-        /*If there is not available task don't try other threads as there won't be available
-         *tasks for then either*/
+        /*Если задача недоступна, не пробуйте другие темы, поскольку они не будут доступны.
+         *задачи на то либо*/
         if(t == NULL) {
             LV_PROFILER_DRAW_END;
-            if(all_idle) return LV_DRAW_UNIT_IDLE;  /*Couldn't start rendering*/
+            if(all_idle) return LV_DRAW_UNIT_IDLE;  /*Не удалось начать рендеринг*/
             else return taken_cnt;
         }
 
-        /*Allocate a buffer if not done yet.*/
+        /*Выделите буфер, если это еще не сделано.*/
         void * buf = lv_draw_layer_alloc_buf(layer);
-        /*Do not return is failed. The other thread might already have a buffer can do something. */
+        /*Не вернуть не удалось. Другой поток, возможно, уже имеет буфер и может что-то сделать. */
         if(buf == NULL) continue;
 
-        /*Take the task*/
+        /*Возьми задание*/
         all_idle = false;
         taken_cnt++;
         t->state = LV_DRAW_TASK_STATE_IN_PROGRESS;
         thread_dsc->task_act = t;
 
-        /*Let the render thread work*/
+        /*Пусть поток рендеринга работает*/
         if(thread_dsc->inited) lv_thread_sync_signal(&thread_dsc->sync);
     }
 
     LV_PROFILER_DRAW_END;
-    if(all_idle) return LV_DRAW_UNIT_IDLE;  /*Couldn't start rendering*/
+    if(all_idle) return LV_DRAW_UNIT_IDLE;  /*Не удалось начать рендеринг*/
     else return taken_cnt;
 
 #else
-    /*Return immediately if it's busy with draw task*/
+    /*Немедленно вернитесь, если он занят задачей рисования.*/
     if(draw_sw_unit->task_act) {
         LV_PROFILER_DRAW_END;
         return 0;
@@ -317,13 +317,13 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     t = lv_draw_get_available_task(layer, NULL, DRAW_UNIT_ID_SW);
     if(t == NULL) {
         LV_PROFILER_DRAW_END;
-        return LV_DRAW_UNIT_IDLE;  /*Couldn't start rendering*/
+        return LV_DRAW_UNIT_IDLE;  /*Не удалось начать рендеринг*/
     }
 
     void * buf = lv_draw_layer_alloc_buf(layer);
     if(buf == NULL) {
         LV_PROFILER_DRAW_END;
-        return LV_DRAW_UNIT_IDLE;  /*Couldn't start rendering*/
+        return LV_DRAW_UNIT_IDLE;  /*Не удалось начать рендеринг*/
     }
 
     t->state = LV_DRAW_TASK_STATE_IN_PROGRESS;
@@ -333,7 +333,7 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_sw_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_sw_unit->task_act = NULL;
 
-    /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+    /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
     lv_draw_dispatch_request();
 
     LV_PROFILER_DRAW_END;
@@ -370,7 +370,7 @@ static void render_thread_cb(void * ptr)
         thread_dsc->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
         thread_dsc->task_act = NULL;
 
-        /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+        /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
         lv_draw_dispatch_request();
 
     }
@@ -384,7 +384,7 @@ static void render_thread_cb(void * ptr)
 static void execute_drawing(lv_draw_task_t * t)
 {
     LV_PROFILER_DRAW_BEGIN;
-    /*Render the draw task*/
+    /*Рендеринг задачи рисования*/
     switch(t->type) {
         case LV_DRAW_TASK_TYPE_FILL:
             lv_draw_sw_fill(t, t->draw_dsc, &t->area);
@@ -438,7 +438,7 @@ static void execute_drawing(lv_draw_task_t * t)
 #if LV_USE_PARALLEL_DRAW_DEBUG
 static void parallel_debug_draw(lv_draw_task_t * t, uint32_t idx)
 {
-    /*Layers manage it for themselves*/
+    /*Слои управляют этим сами*/
     if(t->type != LV_DRAW_TASK_TYPE_LAYER) {
         lv_area_t draw_area;
         lv_text_attributes_t attributes = {0};

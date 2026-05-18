@@ -3,7 +3,7 @@
 
 #define LV_MEM_SIZE                     (32 * 1024 * 1024)
 #define LV_DRAW_SW_SHADOW_CACHE_SIZE    8
-#define LV_DRAW_THREAD_STACK_SIZE    (64 * 1024) /*Increase stack size to 64KB in order to run ThorVG*/
+#define LV_DRAW_THREAD_STACK_SIZE    (64 * 1024) /*Увеличьте размер стека до 64 КБ, чтобы запустить ThorVG.*/
 #define LV_USE_LOG              1
 #define LV_LOG_LEVEL            LV_LOG_LEVEL_TRACE
 #define LV_LOG_PRINTF           1
@@ -80,7 +80,7 @@
 #define LV_USE_TJPGD        1
 #ifndef _WIN32
     #define LV_USE_LIBJPEG_TURBO       1
-    #ifndef LV_USE_LIBWEBP /* If WebP library is not found, defaulting to 0 in CMakeLists.txt */
+    #ifndef LV_USE_LIBWEBP /* Если библиотека WebP не найдена, значение по умолчанию равно 0 в CMakeLists.txt. */
         #define LV_USE_LIBWEBP             1
     #endif
 #endif
@@ -152,7 +152,7 @@
     #define LV_USE_NUTTX    0
 #endif
 #if defined(_WIN32) && LV_USE_NUTTX
-    #undef LV_USE_NUTTX /* Disable NuttX build on Windows */
+    #undef LV_USE_NUTTX /* Отключить сборку NuttX в Windows */
     #define LV_USE_NUTTX    0
 #endif
 #if LV_USE_NUTTX

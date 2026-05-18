@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Data of barcode*/
+/*Данные штрих-кода*/
 struct _lv_barcode_t {
     lv_canvas_t canvas;
     lv_color_t dark_color;
@@ -50,7 +50,7 @@ struct _lv_barcode_t {
 #endif /* LV_USE_BARCODE */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BARCODE_PRIVATE_H*/

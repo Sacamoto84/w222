@@ -50,7 +50,7 @@ void lv_opengles_egl_context_destroy(lv_opengles_egl_t * ctx);
 
 #endif /*LV_USE_EGL*/
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OPENGLES_EGL_H*/

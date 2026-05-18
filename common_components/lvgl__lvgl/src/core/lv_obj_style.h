@@ -26,13 +26,13 @@ extern "C" {
  **********************/
 
 /**
- * Possible states of a widget.
- * OR-ed values are possible
+ * Возможные состояния виджета.
+ * Возможны значения OR -ed
  */
 typedef enum {
     LV_STATE_DEFAULT     = 0,
     LV_STATE_ALT         = 1 << 0,
-    /*1 reserved*/
+    /*1 зарезервировано*/
     LV_STATE_CHECKED     = 1 << 2,
     LV_STATE_FOCUSED     = 1 << 3,
     LV_STATE_FOCUS_KEY   = 1 << 4,
@@ -41,7 +41,7 @@ typedef enum {
     LV_STATE_PRESSED     = 1 << 7,
     LV_STATE_SCROLLED    = 1 << 8,
     LV_STATE_DISABLED    = 1 << 9,
-    /*2 reserved*/
+    /*2 зарезервировано*/
     LV_STATE_USER_1      = 1 << 12,
     LV_STATE_USER_2      = 1 << 13,
     LV_STATE_USER_3      = 1 << 14,
@@ -51,10 +51,10 @@ typedef enum {
 } lv_state_t;
 
 /**
- * The possible parts of widgets.
- * The parts can be considered as the internal building block of the widgets.
- * E.g. slider = background + indicator + knob
- * Not all parts are used by every widget
+ * Возможные части виджетов.
+ * Части можно рассматривать как внутренние строительные блоки виджетов.
+ * например ползунок = фон + индикатор + ручка
+ * Не все части используются каждым виджетом
  */
 
 typedef enum {
@@ -79,8 +79,8 @@ typedef enum {
 } lv_style_state_cmp_t;
 
 /**
- * A joint type for `lv_part_t` and `lv_state_t`. Example values
- * - `0`: means `LV_PART_MAIN | LV_STATE_DEFAULT`
+ * Тип соединения для`lv_part_t`и `lv_state_t`. Примеры результатов
+ * - `0` : означает `LV_PART_MAIN | LV_STATE_DEFAULT`
  * - `LV_STATE_PRSSED`
  * - `LV_PART_KNOB`
  * - `LV_PART_KNOB | LV_STATE_PRESSED | LV_STATE_CHECKED`
@@ -92,138 +92,138 @@ typedef uint32_t lv_style_selector_t;
  **********************/
 
 /**
- * Add a style to an object.
- * @param obj       pointer to an object
- * @param style     pointer to a style to add
- * @param selector  OR-ed value of parts and state to which the style should be added
+ * Добавьте стиль к объекту.
+ * @param obj       указатель на объект
+ * @param style     указатель на стиль, который нужно добавить
+ * @param selector  OR -ed значение деталей и состояние, к которому следует добавить стиль
  *
- * Examples:
+ * Примеры:
  * @code
- * lv_obj_add_style(btn, &style_btn, 0); //Default button style
+ * lv_obj_add_style (кнопка, & style_btn, 0); //Стиль кнопки по умолчанию
  *
- * lv_obj_add_style(btn, &btn_red, LV_STATE_PRESSED); //Overwrite only some colors to red when pressed
+ * lv_obj_add_style (кнопка, &btn_red,LV_STATE_PRESSED); //Перезаписываем только некоторые цвета на красное лицо
  * @endcode
  */
 void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selector_t selector);
 
 /**
- * Replaces a style of an object, preserving the order of the style stack (local styles and transitions are ignored).
- * @param obj           pointer to an object
- * @param old_style     pointer to a style to replace.
- * @param new_style     pointer to a style to replace the old style with.
- * @param selector      OR-ed values of states and a part to replace only styles with matching selectors. LV_STATE_ANY and LV_PART_ANY can be used
+ * Заменяет стиль объекта, сохраняя порядок стека стилей (локальные стили и переходы игнорируются).
+ * @param obj           указатель на объект
+ * @param old_style     указатель на стиль, который необходимо заменить.
+ * @param new_style     указатель на стиль, которым нужно заменить старый стиль.
+ * @param selector      OR -ed значения состояний и часть для замены только стилей соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
  *
- * Examples:
+ * Примеры:
  * @code
- * lv_obj_replace_style(obj, &yellow_style, &blue_style, LV_PART_ANY | LV_STATE_ANY); //Replace a specific style
+ * lv_obj_replace_style (obj, & yellow_style, & blue_style,LV_PART_ANY| LV_STATE_ANY); //Заменяем текущий стиль
  *
- * lv_obj_replace_style(obj, &yellow_style, &blue_style, LV_PART_MAIN | LV_STATE_PRESSED); //Replace a specific style assigned to the main part when it is pressed
+ * lv_obj_replace_style (obj, & yellow_style, & blue_style,LV_PART_MAIN| LV_STATE_PRESSED); //Заменить текущий стиль, назначенный основной деталью, при ее появлении
  * @endcode
  */
 bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv_style_t * new_style,
                           lv_style_selector_t selector);
 
 /**
- * Remove a style from an object.
- * @param obj       pointer to an object
- * @param style     pointer to a style to remove. Can be NULL to check only the selector
- * @param selector  OR-ed values of states and a part to remove only styles with matching selectors. LV_STATE_ANY and LV_PART_ANY can be used
+ * Удаление стиля из объекта.
+ * @param obj       указатель на объект
+ * @param style     указатель на стиль, который нужно удалить. Может быть NULL, чтобы проверить только селектор
+ * @param selector  OR -ed значения состояний и часть для удаления только стилей с соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
  *
- * Examples:
+ * Примеры:
  * @code
- * lv_obj_remove_style(obj, &style, LV_PART_ANY | LV_STATE_ANY); //Remove a specific style
+ * lv_obj_remove_style (obj, &style,LV_PART_ANY|LV_STATE_ANY); //Удалить современный стиль
  *
- * lv_obj_remove_style(obj, NULL, LV_PART_MAIN | LV_STATE_ANY); //Remove all styles from the main part
+ * lv_obj_remove_style (obj,NULL,LV_PART_MAIN|LV_STATE_ANY); //Удалим все стили из основной части
  *
- * lv_obj_remove_style(obj, NULL, LV_PART_ANY | LV_STATE_ANY); //Remove all styles
+ * lv_obj_remove_style (obj,NULL,LV_PART_ANY|LV_STATE_ANY); //Удаляем все стили
  * @endcode
  */
 void lv_obj_remove_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selector_t selector);
 
 
 /**
- * Remove all styles added by a theme from a widget
- * @param selector  OR-ed values of states and a part to remove only styles with matching selectors.
- *                  LV_STATE_ANY and LV_PART_ANY can be used
- * @param obj   pointer to a widget
+ * Удалить все стили, добавленные темой, из виджета.
+ * @param selector  OR -ed значения состояний и часть для удаления только стилей с соответствующими селекторами.
+ *                  Можно использовать LV_STATE_ANY и LV_PART_ANY.
+ * @param obj   указатель на виджет
  */
 void lv_obj_remove_theme(lv_obj_t * obj, lv_style_selector_t selector);
 
 /**
- * Remove all styles from an object
- * @param obj       pointer to an object
+ * Удалить все стили из объекта
+ * @param obj       указатель на объект
  */
 void lv_obj_remove_style_all(lv_obj_t * obj);
 
 /**
- * Notify all object if a style is modified
- * @param style     pointer to a style. Only the objects with this style will be notified
- *                  (NULL to notify all objects)
+ * Уведомить весь объект, если стиль изменен
+ * @param style     указатель на стиль. Уведомляться будут только объекты с этим стилем.
+ *                  ( NULL для уведомления всех объектов)
  */
 void lv_obj_report_style_change(lv_style_t * style);
 
 /**
- * Notify an object and its children about its style is modified.
- * @param obj       pointer to an object
- * @param part      the part whose style was changed. E.g. `LV_PART_ANY`, `LV_PART_MAIN`
- * @param prop      `LV_STYLE_PROP_ANY` or an `LV_STYLE_...` property.
- *                  It is used to optimize what needs to be refreshed.
- *                  `LV_STYLE_PROP_INV` to perform only a style cache update
+ * Уведомить объект и его дочерние элементы об изменении его стиля.
+ * @param obj       указатель на объект
+ * @param part      часть, стиль которой был изменен. Например. `LV_PART_ANY`, `LV_PART_MAIN`
+ * @param prop      `LV_STYLE_PROP_ANY` или свойство `LV_STYLE_...`.
+ *                  Он используется для оптимизации того, что необходимо обновить.
+ *                  `LV_STYLE_PROP_INV` для выполнения только обновления кэша стилей
  */
 void lv_obj_refresh_style(lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop);
 
 /**
- * Temporary disable a style for a selector. It will look like is the style wasn't added
- * @param obj       pointer to an object
- * @param style     pointer to a style
- * @param selector  the selector of a style (e.g. LV_STATE_PRESSED | LV_PART_KNOB)
- * @param dis       true: disable the style, false: enable the style
+ * Временно отключите стиль для селектора. Это будет выглядеть так, будто стиль не был добавлен.
+ * @param obj       указатель на объект
+ * @param style     указатель на стиль
+ * @param selector  селектор стиля (например,LV_STATE_PRESSED|LV_PART_KNOB)
+ * @param dis       true: отключить стиль, false: включить стиль
  */
 void lv_obj_style_set_disabled(lv_obj_t * obj, const lv_style_t * style, lv_style_selector_t selector, bool dis);
 
 /**
- * Get if a given style is disabled on an object.
- * @param obj       pointer to an object
- * @param style     pointer to a style
- * @param selector  the selector of a style (e.g. LV_STATE_PRESSED | LV_PART_KNOB)
- * @return          true: disable the style, false: enable the style
+ * Получите, отключен ли данный стиль для объекта.
+ * @param obj       указатель на объект
+ * @param style     указатель на стиль
+ * @param selector  селектор стиля (например,LV_STATE_PRESSED|LV_PART_KNOB)
+ * @return          true: отключить стиль, false: включить стиль
  */
 bool lv_obj_style_get_disabled(lv_obj_t * obj, const lv_style_t * style, lv_style_selector_t selector);
 
 /**
- * Enable or disable automatic style refreshing when a new style is added/removed to/from an object
- * or any other style change happens.
- * @param en        true: enable refreshing; false: disable refreshing
+ * Включить или отключить автоматическое обновление стиля при добавлении/удалении нового стиля в/из объекта.
+ * или произойдет любое другое изменение стиля.
+ * @param en        true: включить обновление; false: отключить обновление
  */
 void lv_obj_enable_style_refresh(bool en);
 
 /**
- * Get the value of a style property. The current state of the object will be considered.
- * Inherited properties will be inherited.
- * If a property is not set a default value will be returned.
- * @param obj       pointer to an object
- * @param part      a part from which the property should be get
- * @param prop      the property to get
- * @return          the value of the property.
- *                  Should be read from the correct field of the `lv_style_value_t` according to the type of the property.
+ * Получите значение свойства стиля. Будет учитываться текущее состояние объекта.
+ * Унаследованные свойства будут унаследованы.
+ * Если свойство не установлено, будет возвращено значение по умолчанию.
+ * @param obj       указатель на объект
+ * @param part      часть, из которой должно быть получено имущество
+ * @param prop      собственность, которую нужно получить
+ * @return          стоимость имущества.
+ *                  Следует читать поля`lv_style_value_t`в соответствии с типом свойств.
  */
 lv_style_value_t lv_obj_get_style_prop(const lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop);
 
 /**
- * Check if an object has a specified style property for a given style selector.
- * @param obj       pointer to an object
- * @param selector  the style selector to be checked, defining the scope of the style to be examined.
- * @param prop      the property to be checked.
- * @return          true if the object has the specified selector and property, false otherwise.
+ * Проверьте, имеет ли объект указанное свойство стиля для данного селектора стиля.
+ * @param obj       указатель на объект
+ * @param selector  селектор стиля, который необходимо проверить, определяющий область действия проверяемого стиля.
+ * @param prop      имущество, подлежащее проверке.
+ * @return          true, если объект имеет указанный селектор и свойство, в противном случае — false.
  */
 bool lv_obj_has_style_prop(const lv_obj_t * obj, lv_style_selector_t selector, lv_style_prop_t prop);
 
 /**
- * Set local style property on an object's part and state.
- * @param obj       pointer to an object
- * @param prop      the property
- * @param value     value of the property. The correct element should be set according to the type of the property
- * @param selector  OR-ed value of parts and state for which the style should be set
+ * Установите локальное свойство стиля для части и состояния объекта.
+ * @param obj       указатель на объект
+ * @param prop      собственность
+ * @param value     стоимость имущества. Правильный элемент должен быть установлен в соответствии с типом свойства.
+ * @param selector  OR -ed значение деталей и состояние, для которого должен быть установлен стиль
  */
 void lv_obj_set_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_value_t value,
                                  lv_style_selector_t selector);
@@ -232,32 +232,32 @@ lv_style_res_t lv_obj_get_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop,
                                            lv_style_selector_t selector);
 
 /**
- * Remove a local style property from a part of an object with a given state.
- * @param obj       pointer to an object
- * @param prop      a style property to remove.
- * @param selector  OR-ed value of parts and state for which the style should be removed
- * @return true     the property was found and removed; false: the property was not found
+ * Удалите свойство локального стиля из части объекта с заданным состоянием.
+ * @param obj       указатель на объект
+ * @param prop      свойство стиля, которое нужно удалить.
+ * @param selector  OR -ed значение деталей и состояние, для которого стиль следует удалить
+ * @return правда, имущество было найдено и удалено; ложь: свойство не найдено
  */
 bool lv_obj_remove_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_selector_t selector);
 
 /**
- * Used internally for color filtering
+ * Используется внутри для цветовой фильтрации.
  */
 lv_style_value_t lv_obj_style_apply_color_filter(const lv_obj_t * obj, lv_part_t part, lv_style_value_t v);
 
 /**
- * Fade in an an object and all its children.
- * @param obj       the object to fade in
- * @param time      time of fade
- * @param delay     delay to start the animation
+ * Затухание объекта и всех его дочерних элементов.
+ * @param obj       объект, который будет исчезать
+ * @param time      время затухания
+ * @param delay     задержка начала анимации
  */
 void lv_obj_fade_in(lv_obj_t * obj, uint32_t time, uint32_t delay);
 
 /**
- * Fade out an an object and all its children.
- * @param obj       the object to fade out
- * @param time      time of fade
- * @param delay     delay to start the animation
+ * Затемнение объекта и всех его дочерних элементов.
+ * @param obj       объект, который исчезнет
+ * @param time      время затухания
+ * @param delay     задержка начала анимации
  */
 void lv_obj_fade_out(lv_obj_t * obj, uint32_t time, uint32_t delay);
 
@@ -380,52 +380,52 @@ static inline int32_t lv_obj_get_style_transform_scale_y_safe(const lv_obj_t * o
 }
 
 /**
- * Get the `opa` style property from all parents and multiply and `>> 8` them.
- * @param obj       the object whose opacity should be get
- * @param part      the part whose opacity should be get. Non-MAIN parts will consider the `opa` of the MAIN part too
- * @return          the final opacity considering the parents' opacity too
+ * Получите свойство стиля`opa`от всех родительских элементов и умножьте их на `>> 8`.
+ * @param obj       объект, непрозрачность которого должна быть получена
+ * @param part      часть, непрозрачность которой должна быть получена. Детали, отличные от MAIN, также будут учитывать`opa`детали MAIN.
+ * @return          окончательная непрозрачность, учитывая также непрозрачность родителей
  */
 lv_opa_t lv_obj_get_style_opa_recursive(const lv_obj_t * obj, lv_part_t part);
 
 
 /**
- * Apply recolor effect to the input color based on the object's style properties.
- * @param obj       the target object containing recolor style properties
- * @param part      the part to retrieve recolor styles.
- * @param color     the original color to be modified
- * @return          the blended color after applying recolor and opacity
+ * Примените эффект перекрашивания к входному цвету на основе свойств стиля объекта.
+ * @param obj       целевой объект, содержащий свойства стиля перекрашивания
+ * @param part      часть для получения стилей перекрашивания.
+ * @param color     исходный цвет, который нужно изменить
+ * @return          смешанный цвет после применения перекраски и непрозрачности
  */
 lv_color32_t lv_obj_style_apply_recolor(const lv_obj_t * obj, lv_part_t part, lv_color32_t color);
 
 /**
- * Get the `recolor` style property from all parents and blend them recursively.
- * @param obj       the object whose recolor value should be retrieved
- * @param part      the target part to check. Non-MAIN parts will also consider
- *                  the `recolor` value from the MAIN part during calculation
- * @return          the final blended recolor value combining all parent's recolor values
+ * Получите свойство стиля`recolor`от всех родительских элементов и рекурсивно подключите их.
+ * @param obj       объект, значение перекрашивания которого должно быть получено
+ * @param part      целевую часть для проверки. Детали, отличные от MAIN, также будут рассмотрены.
+ *                  значение`recolor`из частиMAINво время расчета
+ * @return          окончательное смешанное значение перекрашивания, объединяющее значения перекрашивания всех родительских элементов
  */
 lv_color32_t lv_obj_get_style_recolor_recursive(const lv_obj_t * obj, lv_part_t part);
 
 #if LV_USE_OBSERVER
 /**
- * Disable a style if a subject's value is not equal to a reference value
- * @param obj           pointer to Widget
- * @param style         pointer to a style
- * @param selector      pointer to a selector
- * @param subject       pointer to Subject
- * @param ref_value     reference value to compare Subject's value with
- * @return              pointer to newly-created Observer
+ * Отключите стиль, если значение субъекта не равно эталонному значению.
+ * @param obj           указатель на виджет
+ * @param style         указатель на стиль
+ * @param selector      указатель на селектор
+ * @param subject       указатель на тему
+ * @param ref_value     эталонное значение для сравнения значения субъекта с
+ * @return              указатель на вновь созданный наблюдатель
  */
 lv_observer_t * lv_obj_bind_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selector_t selector,
                                   lv_subject_t * subject, int32_t ref_value);
 
 /**
- * Connect a subject's value to a style property of a widget.
- * @param obj       pointer to a Widget
- * @param prop      a style property
- * @param selector  a selector for which the property should be added, e.g. `LV_PART_KNOB | LV_STATE_PRESSED`
- * @param subject   pointer a Subject to which value the property should be bound
- * @return              pointer to newly-created Observer
+ * Подключите значение темы к свойству стиля виджета.
+ * @param obj       указатель на виджет
+ * @param prop      свойство стиля
+ * @param selector  селектор, для которого следует добавить свойство, например.  `LV_PART_KNOB | LV_STATE_PRESSED`
+ * @param subject   указатель Субъект, к которому должно быть привязано свойство
+ * @return              указатель на вновь созданный наблюдатель
  */
 lv_observer_t * lv_obj_bind_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_selector_t selector,
                                        lv_subject_t * subject);
@@ -437,7 +437,7 @@ lv_observer_t * lv_obj_bind_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBJ_STYLE_H*/

@@ -32,13 +32,13 @@ typedef enum {
     LV_IME_PINYIN_MODE_K9_NUMBER,
 } lv_ime_pinyin_mode_t;
 
-/*Data of pinyin_dict*/
+/*Данные pinyin_dict*/
 typedef struct {
     const char * const py;
     const char * const py_mb;
 } lv_pinyin_dict_t;
 
-/*Data of 9-key input(k9) mode*/
+/*Данные режима 9-кнопочного ввода (k9)*/
 typedef struct {
     char py_str[7];
 } ime_pinyin_k9_py_str_t;
@@ -55,57 +55,57 @@ extern const lv_obj_class_t lv_ime_pinyin_class;
 lv_obj_t * lv_ime_pinyin_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set the keyboard of Pinyin input method.
+ * Установите клавиатуру для метода ввода пиньинь.
  * @param obj  pointer to a Pinyin input method object
  * @param kb pointer to a Pinyin input method keyboard
  */
 void lv_ime_pinyin_set_keyboard(lv_obj_t * obj, lv_obj_t * kb);
 
 /**
- * Set the dictionary of Pinyin input method.
+ * Установите словарь метода ввода пиньинь.
  * @param obj  pointer to a Pinyin input method object
  * @param dict pointer to a Pinyin input method dictionary
  */
 void lv_ime_pinyin_set_dict(lv_obj_t * obj, lv_pinyin_dict_t * dict);
 
 /**
- * Set mode, 26-key input(k26) or 9-key input(k9).
+ * Режим установки: 26-кнопочный ввод (k26) или 9-кнопочный ввод (k9).
  * @param obj  pointer to a Pinyin input method object
  * @param mode   the mode from 'lv_ime_pinyin_mode_t'
  */
 void lv_ime_pinyin_set_mode(lv_obj_t * obj, lv_ime_pinyin_mode_t mode);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Set the dictionary of Pinyin input method.
+ * Установите словарь метода ввода пиньинь.
  * @param obj  pointer to a Pinyin IME object
  * @return     pointer to the Pinyin IME keyboard
  */
 lv_obj_t * lv_ime_pinyin_get_kb(lv_obj_t * obj);
 
 /**
- * Set the dictionary of Pinyin input method.
+ * Установите словарь метода ввода пиньинь.
  * @param obj  pointer to a Pinyin input method object
  * @return     pointer to the Pinyin input method candidate panel
  */
 lv_obj_t * lv_ime_pinyin_get_cand_panel(lv_obj_t * obj);
 
 /**
- * Set the dictionary of Pinyin input method.
+ * Установите словарь метода ввода пиньинь.
  * @param obj  pointer to a Pinyin input method object
  * @return     pointer to the Pinyin input method dictionary
  */
 const lv_pinyin_dict_t * lv_ime_pinyin_get_dict(lv_obj_t * obj);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**********************
@@ -115,7 +115,7 @@ const lv_pinyin_dict_t * lv_ime_pinyin_get_dict(lv_obj_t * obj);
 #endif  /*LV_IME_PINYIN*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_IME_PINYIN_H*/

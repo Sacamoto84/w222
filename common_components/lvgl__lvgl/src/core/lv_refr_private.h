@@ -29,48 +29,48 @@ extern "C" {
  **********************/
 
 /**
- * Initialize the screen refresh subsystem
+ * Инициализировать подсистему обновления экрана
  */
 void lv_refr_init(void);
 
 /**
- * Deinitialize the screen refresh subsystem
+ * Деинициализируйте подсистему обновления экрана.
  */
 void lv_refr_deinit(void);
 
 /**
- * Invalidate an area on display to redraw it
- * @param area_p pointer to area which should be invalidated (NULL: delete the invalidated areas)
- * @param disp pointer to display where the area should be invalidated (NULL can be used if there is
- * only one display)
- * @return LV_RESULT_OK: the area is invalidated; LV_RESULT_INVALID: the area wasn't invalidated.
+ * Сделайте недействительной отображаемую область, чтобы перерисовать ее.
+ * @param area_p указатель на область, которая должна быть признана недействительной (NULL: удалить недействительные области)
+ * @param disp указатель для отображения места, где область должна быть признана недействительной (можно использовать NULL, если есть
+ * только один дисплей)
+ * @return LV_RESULT_OK : область признана недействительной; LV_RESULT_INVALID: область не была признана недействительной.
  */
 lv_result_t lv_inv_area(lv_display_t * disp, const lv_area_t * area_p);
 
 /**
- * Get the display which is being refreshed
- * @return the display being refreshed
+ * Получить дисплей, который обновляется
+ * @return дисплей обновляется
  */
 lv_display_t * lv_refr_get_disp_refreshing(void);
 
 /**
- * Set the display which is being refreshed
- * @param disp the display being refreshed
+ * Установите обновляемый дисплей
+ * @param disp дисплей обновляется
  */
 void lv_refr_set_disp_refreshing(lv_display_t * disp);
 
 /**
- * Search the most top object which fully covers an area
- * @param area_p pointer to an area
- * @param obj the first object to start the searching (typically a screen)
+ * Найдите самый верхний объект, который полностью покрывает область.
+ * @param area_p указатель на область
+ * @param obj первый объект, с которого начинается поиск (обычно экран)
  * @return
  */
 lv_obj_t * lv_refr_get_top_obj(const lv_area_t * area_p, lv_obj_t * obj);
 
 /**
- * Render an object to a layer
- * @param layer target drawing layer
- * @param obj   object to render
+ * Рендеринг объекта в слой
+ * @param layer целевой слой чертежа
+ * @param obj   объект для рендеринга
  */
 void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj);
 
@@ -79,7 +79,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_REFR_PRIVATE_H*/

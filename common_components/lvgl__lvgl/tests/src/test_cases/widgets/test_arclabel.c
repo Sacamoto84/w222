@@ -205,16 +205,16 @@ void test_arclabel_opacity(void)
 
         lv_obj_align(arclabel, LV_ALIGN_CENTER, pos_ofs_x, pos_ofs_y);
 
-        /* Use fixed-point LUT for gamma-corrected opacity (base perceived brightness from 1.0 to 0.5)
-         * Values are pre-calculated: (pow(1.0 - (i/15.0)*0.5, 1/2.2) * 255) */
+        /* Используйте фиксированную точку LUT для непрозрачности с гамма-коррекцией (базовая воспринимаемая яркость от 1,0 до 0,5).
+         * Значения предварительно рассчитываются: (pow(1,0 - (i/15,0)*0,5, 1/2,2) * 255) */
         static const uint8_t opa_gamma_lut[] = {
             255, 251, 247, 242, 238, 234, 229, 225, 220, 215, 210, 205, 200, 195, 189, 184
         };
 
         int32_t opa_gamma = opa_gamma_lut[i];
 
-        /* Apply light attenuation: final_opa = opa_gamma / (1 + (i*k)^2)
-         * With k = 0.25 (1/4), the formula becomes: opa_gamma * 16 / (16 + i*i) */
+        /* Примените ослабление света: final_opa = opa_gamma / (1 + (i*k)^2)
+         * При k = 0,25 (1/4) формула принимает вид: opa_gamma * 16 / (16 + i*i) */
         int32_t final_opa = (opa_gamma * 16) / (16 + i * i);
         if(final_opa < 0) final_opa = 0;
         if(final_opa > LV_OPA_COVER) final_opa = LV_OPA_COVER;

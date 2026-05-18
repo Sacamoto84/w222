@@ -2,7 +2,7 @@
 #if LV_USE_DROPDOWN && LV_BUILD_EXAMPLES
 
 /**
- * Create a drop down, up, left and right menus
+ * Создайте раскрывающееся меню, верхнее, левое и правое меню.
  */
 void lv_example_dropdown_2(void)
 {

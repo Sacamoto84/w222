@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -42,10 +42,10 @@ struct LottieObject;
 template<typename T>
 struct LottieScalarFrame
 {
-    T value;                    //keyframe value
-    float no;                   //frame number
+    T value;                    //значение ключевого кадра
+    float no;                   //номер кадра
     LottieInterpolator* interpolator;
-    bool hold = false;           //do not interpolate.
+    bool hold = false;           //не интерполируйте.
 
     T interpolate(LottieScalarFrame<T>* next, float frameNo)
     {
@@ -64,8 +64,8 @@ struct LottieScalarFrame
 template<typename T>
 struct LottieVectorFrame
 {
-    T value;                    //keyframe value
-    float no;                   //frame number
+    T value;                    //значение ключевого кадра
+    float no;                   //номер кадра
     LottieInterpolator* interpolator;
     T outTangent, inTangent;
     float length;
@@ -112,14 +112,14 @@ struct LottieVectorFrame
 };
 
 
-//Property would have an either keyframes or single value.
+//Свойство будет иметь либо ключевые кадры, либо одно значение.
 struct LottieProperty
 {
     enum class Type : uint8_t { Point = 0, Float, Opacity, Color, PathSet, ColorStop, Position, TextDoc, Invalid };
 
     LottieExpression* exp = nullptr;
     Type type;
-    uint8_t ix;  //property index
+    uint8_t ix;  //индекс недвижимости
 
     //TODO: Apply common bodies?
     virtual ~LottieProperty() {}
@@ -141,8 +141,8 @@ struct LottieExpression
     bool disabled = false;
 
     struct {
-        uint32_t key = 0;      //the keyframe number repeating to
-        float in = FLT_MAX;    //looping duration in frame number
+        uint32_t key = 0;      //номер ключевого кадра, повторяющийся
+        float in = FLT_MAX;    //продолжительность цикла в номере кадра
         LoopMode mode = None;
     } loop;
 
@@ -257,7 +257,7 @@ float _loop(T* frames, float frameNo, LottieExpression* exp)
 template<typename T>
 struct LottieGenericProperty : LottieProperty
 {
-    //Property has an either keyframes or single value.
+    //Свойство имеет либо ключевые кадры, либо одно значение.
     Array<LottieScalarFrame<T>>* frames = nullptr;
     T value;
 
@@ -334,7 +334,7 @@ struct LottieGenericProperty : LottieProperty
 
     LottieGenericProperty<T>& operator=(const LottieGenericProperty<T>& other)
     {
-        //shallow copy, used for slot overriding
+        //неглубокая копия, используется для переопределения слота
         if (other.frames) {
             frames = other.frames;
             const_cast<LottieGenericProperty<T>&>(other).frames = nullptr;
@@ -506,7 +506,7 @@ struct LottieColorStop : LottieProperty
 {
     Array<LottieScalarFrame<ColorStop>>* frames = nullptr;
     ColorStop value;
-    uint16_t count = 0;     //colorstop count
+    uint16_t count = 0;     //количество цветов
     bool populated = false;
 
     ~LottieColorStop()
@@ -591,7 +591,7 @@ struct LottieColorStop : LottieProperty
         auto frame = frames->data + _bsearch(frames, frameNo);
         if (tvg::equal(frame->no, frameNo)) return fill->colorStops(frame->value.data, count);
 
-        //interpolate
+        //интерполировать
         auto t = (frameNo - frame->no) / ((frame + 1)->no - frame->no);
         if (frame->interpolator) t = frame->interpolator->progress(t);
 
@@ -618,7 +618,7 @@ struct LottieColorStop : LottieProperty
 
     LottieColorStop& operator=(const LottieColorStop& other)
     {
-        //shallow copy, used for slot overriding
+        //неглубокая копия, используется для переопределения слота
         if (other.frames) {
             frames = other.frames;
             const_cast<LottieColorStop&>(other).frames = nullptr;
@@ -818,7 +818,7 @@ struct LottieTextDoc : LottieProperty
 
     LottieTextDoc& operator=(const LottieTextDoc& other)
     {
-        //shallow copy, used for slot overriding
+        //неглубокая копия, используется для переопределения слота
         if (other.frames) {
             frames = other.frames;
             const_cast<LottieTextDoc&>(other).frames = nullptr;

@@ -33,26 +33,26 @@ extern "C" {
  **********************/
 
 /**
- * Emulate a delay. It's not real delay, but it tricks LVGL to think that the
- * required time has been elapsed.
- * `lv_timer_handler` is called after each millisecond, meaning all the events
- * will be fired inside this function.
- * At the end the animations and display will be also updated.
+ * Эмулировать задержку. Это не настоящая задержка, но LVGL заставляет думать, что
+ * необходимое время истекло.
+ * `lv_timer_handler` вызывается после каждой миллисекунды, то есть всех событий.
+ * будет запущен внутри этой функции.
+ * В конце анимация и отображение также будут обновлены.
  * @param ms    the number of milliseconds to pass
  */
 void lv_test_wait(uint32_t ms);
 
 /**
- * Emulates some time passing.
- * Update the animations and the display only once at the end.
+ * Эмулирует течение некоторого времени.
+ * Обновляйте анимацию и отображение только один раз в конце.
  * @param ms    the number of milliseconds to pass
  */
 void lv_test_fast_forward(uint32_t ms);
 
 #if LV_USE_STDLIB_MALLOC != LV_STDLIB_BUILTIN
-/* Skip checking heap as we don't have the info available */
+/* Пропустить проверку кучи, так как у нас нет доступной информации. */
 #define LV_HEAP_CHECK(x) do {} while(0)
-/* Pick a non-zero value */
+/* Выберите ненулевое значение */
 #define lv_test_get_free_mem() (65536)
 #else
 #define LV_HEAP_CHECK(x) x
@@ -74,7 +74,7 @@ static inline size_t lv_test_get_free_mem(void)
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEST_HELPERS_H*/

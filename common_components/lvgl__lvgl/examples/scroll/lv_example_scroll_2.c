@@ -15,7 +15,7 @@ static void sw_event_cb(lv_event_t * e)
 }
 
 /**
- * Show an example to scroll snap
+ * Показать пример для прокрутки привязки
  */
 void lv_example_scroll_2(void)
 {
@@ -44,7 +44,7 @@ void lv_example_scroll_2(void)
     lv_obj_update_snap(panel, LV_ANIM_ON);
 
 #if LV_USE_SWITCH
-    /*Switch between "One scroll" and "Normal scroll" mode*/
+    /*Переключение между режимами «Одна прокрутка» и «Обычная прокрутка».*/
     lv_obj_t * sw = lv_switch_create(lv_screen_active());
     lv_obj_align(sw, LV_ALIGN_TOP_RIGHT, -20, 10);
     lv_obj_add_event_cb(sw, sw_event_cb, LV_EVENT_ALL, panel);

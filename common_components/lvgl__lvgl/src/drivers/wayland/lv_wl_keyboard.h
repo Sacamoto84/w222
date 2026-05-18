@@ -33,7 +33,7 @@ extern "C" {
 lv_indev_t * lv_wayland_keyboard_create(void);
 
 /**
- * Get keyboard input device for given LVGL display
+ * Получить устройство ввода с клавиатуры для данного дисплея LVGL.
  * @param display LVGL display
  * @return input device connected to keyboard, or NULL on error
  */
@@ -46,7 +46,7 @@ lv_indev_t * lv_wayland_get_keyboard(lv_display_t * display);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WL_KEYBOARD_H*/

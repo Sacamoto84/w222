@@ -2,7 +2,7 @@
 #if LV_USE_BAR && LV_BUILD_EXAMPLES
 
 /**
- * Example of styling the bar
+ * Пример оформления панели
  */
 void lv_example_bar_2(void)
 {
@@ -12,7 +12,7 @@ void lv_example_bar_2(void)
     lv_style_init(&style_bg);
     lv_style_set_border_color(&style_bg, lv_palette_main(LV_PALETTE_BLUE));
     lv_style_set_border_width(&style_bg, 2);
-    lv_style_set_pad_all(&style_bg, 6); /*To make the indicator smaller*/
+    lv_style_set_pad_all(&style_bg, 6); /*Чтобы уменьшить индикатор*/
     lv_style_set_radius(&style_bg, 6);
     lv_style_set_anim_duration(&style_bg, 1000);
 
@@ -22,7 +22,7 @@ void lv_example_bar_2(void)
     lv_style_set_radius(&style_indic, 3);
 
     lv_obj_t * bar = lv_bar_create(lv_screen_active());
-    lv_obj_remove_style_all(bar);  /*To have a clean start*/
+    lv_obj_remove_style_all(bar);  /*Чтобы начать с чистого листа*/
     lv_obj_add_style(bar, &style_bg, 0);
     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
 

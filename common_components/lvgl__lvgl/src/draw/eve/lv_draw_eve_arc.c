@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 11 dic 2023
+/*  Создано: 11 декабря 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -115,7 +115,7 @@ static void lv_draw_eve_mask_angle(const lv_draw_arc_dsc_t * dsc, int32_t vertex
                                    int32_t start_angle, int32_t end_angle)
 {
 
-    /*Constrain the input angles*/
+    /*Ограничьте входные углы*/
 
 
     if(start_angle < 0)
@@ -164,18 +164,18 @@ static void lv_draw_eve_mask_angle(const lv_draw_arc_dsc_t * dsc, int32_t vertex
     angle_range_op.x = (lv_trigo_cos(mid_angle_op) >> 5) + vertex_x;
 
     if(angle_range <= 180) {
-        /* Two sides mask and 6 vertex points */
+        /* Двусторонняя маска и 6 вершинных точек. */
 
-        /* Masking end angle */
+        /* Конечный угол маскировки */
         lv_eve_primitive_t edge = get_mask_direction(mask_dir_end);
-        lv_eve_primitive(edge); /* Side one */
+        lv_eve_primitive(edge); /* Сторона первая */
         lv_eve_vertex_2f(angle_range_op.x, angle_range_op.y);
         lv_eve_vertex_2f(vertex_x, vertex_y);
         lv_eve_vertex_2f(end.x, end.y);
 
-        /* Masking start angle */
+        /* Начальный угол маскировки */
         edge = get_mask_direction(mask_dir_start);
-        lv_eve_primitive(edge); /* Side two */
+        lv_eve_primitive(edge); /* Вторая сторона */
         lv_eve_vertex_2f(angle_range_op.x, angle_range_op.y);
         lv_eve_vertex_2f(vertex_x, vertex_y);
         lv_eve_vertex_2f(start.x, start.y);
@@ -185,8 +185,8 @@ static void lv_draw_eve_mask_angle(const lv_draw_arc_dsc_t * dsc, int32_t vertex
     else {
 
         if(is_same_quadrant(start_angle,
-                            end_angle)) { /* "It is not an optimal implementation for the case where both angles (start and end) are in the same quadrant */
-            /* todo */
+                            end_angle)) { /* «Это не оптимальная реализация для случая, когда оба угла (начало и конец) находятся в одном квадранте. */
+            /* дела */
             lv_point_t end_line_cntr;
             lv_point_t start_line_cntr;
 
@@ -225,8 +225,8 @@ static void lv_draw_eve_mask_angle(const lv_draw_arc_dsc_t * dsc, int32_t vertex
             lv_eve_vertex_2f(end_line_cntr.x, end_line_cntr.y);
 
         }
-        else { /* One side mask and 3 vertex points */
-            /* Masking end and start angles */
+        else { /* Одна боковая маска и 3 точки вершин. */
+            /* Маскирование конечных и начальных углов */
             lv_eve_primitive_t edge = get_mask_direction(mid_angle_op);
             lv_eve_primitive(edge);
             lv_eve_vertex_2f(end.x, end.y);
@@ -286,11 +286,11 @@ static void draw_eve_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, cons
     lv_eve_blend_func(EVE_ZERO, EVE_ONE_MINUS_SRC_ALPHA);
     lv_eve_color_opa(0XFF);
 
-    /* Start masking arc */
+    /* Начать маскировку дуги */
 
     lv_draw_eve_mask_angle(dsc, center.x, center.y, start_angle, end_angle);
 
-    /* End masking arc */
+    /* Конечная маскирующая дуга */
 
     lv_eve_draw_circle_simple(center.x, center.y, radius_in); /* radius_in */
 

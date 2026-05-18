@@ -40,7 +40,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TICK_PRIVATE_H*/

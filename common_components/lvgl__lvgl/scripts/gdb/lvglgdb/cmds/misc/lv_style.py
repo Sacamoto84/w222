@@ -34,7 +34,7 @@ class InfoStyle(gdb.Command):
 
         obj = Value(obj)
 
-        # show all styles applied to this obj
+        # показать все стили, примененные к этому объекту
         for style in LVObject(obj).styles:
             print("  ", end="")
             dump_style_info(style)

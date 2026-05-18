@@ -1,9 +1,9 @@
 #!/usr/bin/ruby
 
 # ==========================================
-#   Unity Project - A Test Framework for C
+# Проект Unity — тестовая среда для C
 #   Copyright (c) 2007 Mike Karlesky, Mark VanderVoord, Greg Williams
-#   [Released under MIT License. Please refer to license.txt for details]
+# [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
 # ==========================================
 
 class UnityTestRunnerGenerator
@@ -15,7 +15,7 @@ class UnityTestRunnerGenerator
     when String
       @options.merge!(UnityTestRunnerGenerator.grab_config(options))
     when Hash
-      # Check if some of these have been specified
+      # Проверьте, были ли указаны некоторые из них
       @options[:has_setup] = !options[:setup_name].nil?
       @options[:has_teardown] = !options[:teardown_name].nil?
       @options[:has_suite_setup] = !options[:suite_setup].nil?
@@ -65,7 +65,7 @@ class UnityTestRunnerGenerator
   def run(input_file, output_file, options = nil)
     @options.merge!(options) unless options.nil?
 
-    # pull required data from source file
+    # извлечь необходимые данные из исходного файла
     source = File.read(input_file)
     source = source.force_encoding('ISO-8859-1').encode('utf-8', replace: nil)
     tests = find_tests(source)
@@ -76,10 +76,10 @@ class UnityTestRunnerGenerator
     testfile_includes.delete_if { |inc| inc =~ /(unity|cmock)/ }
     find_setup_and_teardown(source)
 
-    # build runner file
+    # построить файл бегуна
     generate(input_file, output_file, tests, used_mocks, testfile_includes)
 
-    # determine which files were used to return them
+    # определить, какие файлы использовались для их возврата
     all_files_used = [input_file, output_file]
     all_files_used += testfile_includes.map { |filename| "#{filename}.c" } unless testfile_includes.empty?
     all_files_used += @options[:includes] unless @options[:includes].empty?
@@ -112,9 +112,9 @@ class UnityTestRunnerGenerator
   def find_tests(source)
     tests_and_line_numbers = []
 
-    # contains characters which will be substituted from within strings, doing
-    # this prevents these characters from interfering with scrubbers
-    # @ is not a valid C character, so there should be no clashes with files genuinely containing these markers
+    # содержит символы, которые будут заменены внутри строк, что делает
+    # это не позволяет этим персонажам мешать скрубберам
+    # @ не является допустимым символом C, поэтому не должно быть конфликтов с файлами, действительно содержащими эти маркеры.
     substring_subs = { '{' => '@co@', '}' => '@cc@', ';' => '@ss@', '/' => '@fs@' }
     substring_re = Regexp.union(substring_subs.keys)
     substring_unsubs = substring_subs.invert                   # the inverse map will be used to fix the strings afterwards
@@ -132,7 +132,7 @@ class UnityTestRunnerGenerator
                            .map { |line| line.gsub(substring_unre, substring_unsubs) } # unhide the problematic characters previously removed
 
     lines.each_with_index do |line, _index|
-      # find tests
+      # найти тесты
       next unless line =~ /^((?:\s*(?:TEST_(?:CASE|RANGE|MATRIX))\s*\(.*?\)\s*)*)\s*void\s+((?:#{@options[:test_prefix]}).*)\s*\(\s*(.*)\s*\)/m
       next unless line =~ /^((?:\s*(?:TEST_(?:CASE|RANGE|MATRIX))\s*\(.*?\)\s*)*)\s*void\s+((?:#{@options[:test_prefix]})\w*)\s*\(\s*(.*)\s*\)/m
 
@@ -185,7 +185,7 @@ class UnityTestRunnerGenerator
 
     tests_and_line_numbers.uniq! { |v| v[:test] }
 
-    # determine line numbers and create tests to run
+    # определить номера строк и создать тесты для запуска
     source_lines = source.split("\n")
     source_index = 0
     tests_and_line_numbers.size.times do |i|
@@ -202,12 +202,12 @@ class UnityTestRunnerGenerator
   end
 
   def find_includes(source)
-    # remove comments (block and line, in three steps to ensure correct precedence)
+    # удалить комментарии (блок и строка, в три этапа, чтобы обеспечить правильный приоритет)
     source.gsub!(/\/\/(?:.+\/\*|\*(?:$|[^\/])).*$/, '')  # remove line comments that comment out the start of blocks
     source.gsub!(/\/\*.*?\*\//m, '')                     # remove block comments
     source.gsub!(/\/\/.*$/, '')                          # remove line comments (all that remain)
 
-    # parse out includes
+    # анализ включает в себя
     {
       local: source.scan(/^\s*#include\s+"\s*(.+\.#{@options[:include_extensions]})\s*"/).flatten,
       system: source.scan(/^\s*#include\s+<\s*(.+)\s*>/).flatten.map { |inc| "<#{inc}>" },
@@ -490,7 +490,7 @@ end
 if $0 == __FILE__
   options = { includes: [] }
 
-  # parse out all the options first (these will all be removed as we go)
+  # сначала разберите все варианты (все они будут удалены по ходу дела)
   ARGV.reject! do |arg|
     case arg
     when '-cexception'
@@ -512,7 +512,7 @@ if $0 == __FILE__
     end
   end
 
-  # make sure there is at least one parameter left (the input file)
+  # убедитесь, что остался хотя бы один параметр (входной файл)
   unless ARGV[0]
     puts ["\nusage: ruby #{__FILE__} (files) (options) input_test_file (output)",
           "\n  input_test_file         - this is the C file you want to create a runner for",
@@ -538,7 +538,7 @@ if $0 == __FILE__
     exit 1
   end
 
-  # create the default test runner name if not specified
+  # создайте имя запуска теста по умолчанию, если оно не указано
   ARGV[1] = ARGV[0].gsub('.c', '_Runner.c') unless ARGV[1]
 
   UnityTestRunnerGenerator.new(options).run(ARGV[0], ARGV[1])

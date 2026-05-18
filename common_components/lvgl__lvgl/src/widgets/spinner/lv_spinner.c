@@ -82,7 +82,7 @@ void lv_spinner_set_anim_params(lv_obj_t * obj, uint32_t t, uint32_t angle)
     spinner->duration = t;
     spinner->angle = angle;
 
-    /*Delete the current animation*/
+    /*Удалить текущую анимацию*/
     lv_anim_delete(obj, NULL);
 
     lv_anim_t a;

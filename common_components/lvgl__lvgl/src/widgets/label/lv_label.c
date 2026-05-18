@@ -35,7 +35,7 @@
 #define LV_LABEL_DEF_SCROLL_SPEED   lv_anim_speed_clamped(40, 300, 10000)
 #define LV_LABEL_SCROLL_DELAY       300
 #define LV_LABEL_DOT_BEGIN_INV 0xFFFFFFFF
-#define LV_LABEL_HINT_HEIGHT_LIMIT 1024 /*Enable "hint" to buffer info about labels larger than this. (Speed up drawing)*/
+#define LV_LABEL_HINT_HEIGHT_LIMIT 1024 /*Включите «подсказку» для буферизации информации о метках большего размера. (ускорить рисование)*/
 
 /**********************
  *      TYPEDEFS
@@ -125,7 +125,7 @@ lv_obj_t * lv_label_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_label_set_text(lv_obj_t * obj, const char * text)
@@ -153,7 +153,7 @@ void lv_label_set_text_vfmt(lv_obj_t * obj, const char * fmt, va_list args)
 
     lv_label_revert_dots(obj);
 
-    /*If text is NULL then refresh*/
+    /*Если текст NULL, обновите*/
     if(fmt == NULL) {
         lv_label_mark_need_refr_text(obj);
         return;
@@ -165,7 +165,7 @@ void lv_label_set_text_vfmt(lv_obj_t * obj, const char * fmt, va_list args)
     }
 
     label->text = lv_text_set_text_vfmt(fmt, args);
-    label->static_txt = 0; /*Now the text is dynamically allocated*/
+    label->static_txt = 0; /*Теперь текст распределяется динамически*/
 
     lv_label_mark_need_refr_text(obj);
 }
@@ -217,7 +217,7 @@ void lv_label_set_long_mode(lv_obj_t * obj, lv_label_long_mode_t long_mode)
 
     lv_label_t * label = (lv_label_t *)obj;
 
-    /*Delete the old animation (if exists)*/
+    /*Удалить старую анимацию (если существует)*/
     lv_anim_delete(obj, set_ofs_x_anim);
     lv_anim_delete(obj, set_ofs_y_anim);
     lv_point_set(&label->offset, 0, 0);
@@ -241,8 +241,8 @@ void lv_label_set_text_selection_start(lv_obj_t * obj, uint32_t index)
     label->sel_start   = index;
     lv_obj_invalidate(obj);
 #else
-    LV_UNUSED(obj);    /*Unused*/
-    LV_UNUSED(index);  /*Unused*/
+    LV_UNUSED(obj);    /*Неиспользованный*/
+    LV_UNUSED(index);  /*Неиспользованный*/
 #endif
 }
 
@@ -255,8 +255,8 @@ void lv_label_set_text_selection_end(lv_obj_t * obj, uint32_t index)
     label->sel_end     = index;
     lv_obj_invalidate(obj);
 #else
-    LV_UNUSED(obj);   /*Unused*/
-    LV_UNUSED(index); /*Unused*/
+    LV_UNUSED(obj);   /*Неиспользованный*/
+    LV_UNUSED(index); /*Неиспользованный*/
 #endif
 }
 
@@ -269,12 +269,12 @@ void lv_label_set_recolor(lv_obj_t * obj, bool en)
 
     label->recolor = en == false ? 0 : 1;
 
-    /*Refresh the text because the potential color codes in text needs to be hidden or revealed*/
+    /*Обновите текст, поскольку потенциальные цветовые коды в тексте необходимо скрыть или раскрыть.*/
     lv_label_mark_need_refr_text(obj);
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 char * lv_label_get_text(const lv_obj_t * obj)
@@ -321,7 +321,7 @@ void lv_label_get_letter_pos(const lv_obj_t * obj, uint32_t char_id, lv_point_t 
 
 
     const uint32_t byte_id = lv_text_encoded_get_byte_id(txt, char_id);
-    /*Search the line of the index letter*/
+    /*Поиск строки индексной буквы*/
     lv_text_attributes_t attributes = {0};
     attributes.text_flags = get_label_flags(label);
     attributes.line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
@@ -346,13 +346,13 @@ void lv_label_get_letter_pos(const lv_obj_t * obj, uint32_t char_id, lv_point_t 
         new_line_start += lv_text_get_next_line(&txt[line_start], LV_TEXT_LEN_MAX, font, NULL, &attributes);
 
         if(byte_id < new_line_start || txt[new_line_start] == '\0')
-            break; /*The line of 'index' letter begins at 'line_start'*/
+            break; /*Строка «индексной» буквы начинается с «line_start».*/
 
         y += letter_height + attributes.line_space;
         line_start = new_line_start;
     }
 
-    /*If the last character is line break then go to the next line*/
+    /*Если последний символ является разрывом строки, перейдите к следующей строке.*/
     if(byte_id > 0) {
         if((txt[byte_id - 1] == '\n' || txt[byte_id - 1] == '\r') && txt[byte_id] == '\0') {
             y += letter_height + attributes.line_space;
@@ -367,7 +367,7 @@ void lv_label_get_letter_pos(const lv_obj_t * obj, uint32_t char_id, lv_point_t 
     if(base_dir == LV_BASE_DIR_AUTO) base_dir = lv_bidi_detect_base_dir(txt);
 
     char * mutable_bidi_txt = NULL;
-    /*Handle Bidi*/
+    /*Ручка Биди*/
     if(new_line_start == byte_id) {
         visual_byte_pos = base_dir == LV_BASE_DIR_RTL ? 0 : byte_id - line_start;
         bidi_txt = &txt[line_start];
@@ -388,7 +388,7 @@ void lv_label_get_letter_pos(const lv_obj_t * obj, uint32_t char_id, lv_point_t 
     visual_byte_pos = byte_id - line_start;
 #endif
 
-    /*Calculate the x coordinate*/
+    /*Вычислить координату x*/
     int32_t x = lv_text_get_width(bidi_txt, visual_byte_pos, font, &attributes);
     if(char_id != line_start) x += attributes.letter_space;
 
@@ -429,18 +429,18 @@ uint32_t lv_label_get_letter_on(const lv_obj_t * obj, lv_point_t * pos_in, bool 
     attributes.text_flags = get_label_flags(label);
     attributes.max_width = lv_area_get_width(&txt_coords);
 
-    /*Search the line of the index letter*/;
+    /*Поиск строки индексной буквы*/;
     while(txt[line_start] != '\0') {
-        /*If dots will be shown, break the last visible line anywhere,
-         *not only at word boundaries.*/
+        /*Если отображаются точки, разорвите последнюю видимую линию в любом месте,
+         *не только на границах слов.*/
         bool last_line = y + letter_height + attributes.line_space + letter_height > max_h;
         if(last_line && label->long_mode == LV_LABEL_LONG_MODE_DOTS) attributes.text_flags |= LV_TEXT_FLAG_BREAK_ALL;
 
         new_line_start += lv_text_get_next_line(&txt[line_start], LV_TEXT_LEN_MAX, font, NULL, &attributes);
 
         if(pos.y <= y + letter_height) {
-            /*The line is found (stored in 'line_start')*/
-            /*Include the NULL terminator in the last line*/
+            /*Строка найдена (сохранена в 'line_start')*/
+            /*Включите терминатор NULL в последнюю строку.*/
             uint32_t tmp = new_line_start;
             uint32_t letter;
             letter = lv_text_encoded_prev(txt, &tmp);
@@ -468,7 +468,7 @@ uint32_t lv_label_get_letter_on(const lv_obj_t * obj, lv_point_t * pos_in, bool 
         bidi_txt = (char *)txt + line_start;
     }
 
-    /*Calculate the x coordinate*/
+    /*Вычислить координату x*/
     int32_t x = 0;
     const lv_text_align_t align = lv_obj_calculate_style_text_align(obj, LV_PART_MAIN, label->text);
     uint32_t length = new_line_start - line_start;
@@ -483,19 +483,19 @@ uint32_t lv_label_get_letter_on(const lv_obj_t * obj, lv_point_t * pos_in, bool 
         while(i + line_start < new_line_start) {
             uint32_t letter;
             uint32_t letter_next;
-            /*Get the current letter and the next letter for kerning*/
-            /*Be careful 'i' already points to the next character*/
+            /*Получить текущую букву и следующую букву для кернинга*/
+            /*Будьте осторожны, 'i' уже указывает на следующий символ.*/
             lv_text_encoded_letter_next_2(bidi_txt, &letter, &letter_next, &i);
 
             if((attributes.text_flags & LV_TEXT_FLAG_RECOLOR) != 0) {
                 if(lv_text_is_cmd(&cmd_state, bidi_txt[i]) != false) {
-                    continue; /*Skip the letter if it is part of a command*/
+                    continue; /*Пропустить букву, если она является частью команды*/
                 }
             }
 
             int32_t gw = lv_font_get_glyph_width(font, letter, letter_next);
 
-            /*Finish if the x position or the last char of the next line is reached*/
+            /*Завершить, если достигнута позиция x или последний символ следующей строки.*/
             if(pos.x < x + gw || i + line_start == new_line_start ||  txt[i_act + line_start] == '\0') {
                 i = i_act;
                 break;
@@ -509,7 +509,7 @@ uint32_t lv_label_get_letter_on(const lv_obj_t * obj, lv_point_t * pos_in, bool 
     uint32_t logical_pos;
 #if LV_USE_BIDI
     if(bidi) {
-        /*Handle Bidi*/
+        /*Ручка Биди*/
         uint32_t cid = lv_text_encoded_get_char_id(bidi_txt, i);
         if(txt[line_start + i] == '\0') {
             logical_pos = i;
@@ -552,7 +552,7 @@ bool lv_label_is_char_under_pos(const lv_obj_t * obj, lv_point_t * pos)
     attributes.letter_space = lv_obj_get_style_text_letter_space(obj, LV_PART_MAIN);
     attributes.text_flags = get_label_flags(label);
 
-    /*Search the line of the index letter*/
+    /*Поиск строки индексной буквы*/
     int32_t y = 0;
     while(txt[line_start] != '\0') {
         bool last_line = y + letter_height + attributes.line_space + letter_height > max_h;
@@ -560,13 +560,13 @@ bool lv_label_is_char_under_pos(const lv_obj_t * obj, lv_point_t * pos)
 
         new_line_start += lv_text_get_next_line(&txt[line_start], LV_TEXT_LEN_MAX, font, NULL, &attributes);
 
-        if(pos->y <= y + letter_height) break; /*The line is found (stored in 'line_start')*/
+        if(pos->y <= y + letter_height) break; /*Строка найдена (сохранена в 'line_start')*/
         y += letter_height + attributes.line_space;
 
         line_start = new_line_start;
     }
 
-    /*Calculate the x coordinate*/
+    /*Вычислить координату x*/
     const lv_text_align_t align = lv_obj_calculate_style_text_align(obj, LV_PART_MAIN, label->text);
 
     int32_t x = 0;
@@ -589,13 +589,13 @@ bool lv_label_is_char_under_pos(const lv_obj_t * obj, lv_point_t * pos)
 
     if(new_line_start > 0) {
         while(i <= new_line_start - 1) {
-            /*Get the current letter and the next letter for kerning*/
-            /*Be careful 'i' already points to the next character*/
+            /*Получить текущую букву и следующую букву для кернинга*/
+            /*Будьте осторожны, 'i' уже указывает на следующий символ.*/
             lv_text_encoded_letter_next_2(txt, &letter, &letter_next, &i);
 
             if((attributes.text_flags & LV_TEXT_FLAG_RECOLOR) != 0) {
                 if(lv_text_is_cmd(&cmd_state, txt[i]) != false) {
-                    continue; /*Skip the letter if it is part of a command*/
+                    continue; /*Пропустить букву, если она является частью команды*/
                 }
             }
 
@@ -622,7 +622,7 @@ uint32_t lv_label_get_text_selection_start(const lv_obj_t * obj)
     lv_label_t * label = (lv_label_t *)obj;
     return label->sel_start;
 #else
-    LV_UNUSED(obj); /*Unused*/
+    LV_UNUSED(obj); /*Неиспользованный*/
     return LV_LABEL_TEXT_SELECTION_OFF;
 #endif
 }
@@ -635,7 +635,7 @@ uint32_t lv_label_get_text_selection_end(const lv_obj_t * obj)
     lv_label_t * label = (lv_label_t *)obj;
     return label->sel_end;
 #else
-    LV_UNUSED(obj); /*Unused*/
+    LV_UNUSED(obj); /*Неиспользованный*/
     return LV_LABEL_TEXT_SELECTION_OFF;
 #endif
 }
@@ -649,7 +649,7 @@ bool lv_label_get_recolor(const lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 #if LV_USE_OBSERVER
@@ -693,10 +693,10 @@ void lv_label_ins_text(lv_obj_t * obj, uint32_t pos, const char * txt)
 
     lv_label_t * label = (lv_label_t *)obj;
 
-    /*Cannot append to static text*/
+    /*Невозможно добавить к статическому тексту*/
     if(label->static_txt != 0) return;
 
-    /*Allocate space for the new text*/
+    /*Выделите место для нового текста*/
     size_t old_len = lv_strlen(label->text);
     size_t ins_len = lv_strlen(txt);
     size_t new_len = ins_len + old_len;
@@ -717,14 +717,14 @@ void lv_label_cut_text(lv_obj_t * obj, uint32_t pos, uint32_t cnt)
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_label_t * label = (lv_label_t *)obj;
 
-    /*Cannot append to static text*/
+    /*Невозможно добавить к статическому тексту*/
     if(label->static_txt) return;
 
     char * label_txt = lv_label_get_text(obj);
-    /*Delete the characters*/
+    /*Удалить символы*/
     lv_text_cut(label_txt, pos, cnt);
 
-    /*Refresh the label*/
+    /*Обновить этикетку*/
     lv_label_mark_need_refr_text(obj);
 }
 
@@ -786,7 +786,7 @@ static void lv_label_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     const lv_result_t res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -797,10 +797,10 @@ static void lv_label_event(const lv_obj_class_t * class_p, lv_event_t * e)
         lv_label_mark_need_refr_text(obj);
     }
     else if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
-        /* Italic or other non-typical letters can be drawn of out of the object.
-         * It happens if box_w + ofs_x > adw_w in the glyph.
-         * To avoid this add some extra draw area.
-         * font_h / 4 is an empirical value. */
+        /* Курсив или другие нетипичные буквы могут быть нарисованы за пределами объекта.
+         * Это происходит, если в глифе box_w + ofs_x > adw_w.
+         * Чтобы избежать этого, добавьте дополнительную область рисования.
+         * font_h/4 – эмпирическое значение. */
         const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
         const int32_t font_h = lv_font_get_line_height(font);
         lv_event_set_ext_draw_size(e, font_h / 4);
@@ -895,14 +895,14 @@ static void draw_main(lv_event_t * e)
         label_draw_dsc.sel_bg_color = lv_obj_get_style_bg_color(obj, LV_PART_SELECTED);
     }
 
-    /* get the style attributes of a letter outline */
+    /* получить атрибуты стиля контура буквы */
     label_draw_dsc.outline_stroke_color = lv_obj_get_style_text_outline_stroke_color(obj, LV_PART_MAIN);
     label_draw_dsc.outline_stroke_opa = lv_obj_get_style_text_outline_stroke_opa(obj, LV_PART_MAIN);
     label_draw_dsc.outline_stroke_width = lv_obj_get_style_text_outline_stroke_width(obj, LV_PART_MAIN);
 
 
-    /* In SCROLL and SCROLL_CIRCULAR mode the CENTER and RIGHT are pointless, so remove them.
-     * (In addition, they will create misalignment in this situation)*/
+    /* В режимах SCROLL и SCROLL_CIRCULAR CENTER и RIGHT бессмысленны, поэтому удалите их.
+     * (Кроме того, в этой ситуации они создадут перекос)*/
     if((label->long_mode == LV_LABEL_LONG_MODE_SCROLL || label->long_mode == LV_LABEL_LONG_MODE_SCROLL_CIRCULAR) &&
        (label_draw_dsc.align == LV_TEXT_ALIGN_CENTER || label_draw_dsc.align == LV_TEXT_ALIGN_RIGHT)) {
         lv_point_t size = label->text_size;
@@ -928,7 +928,7 @@ static void draw_main(lv_event_t * e)
         txt_coords.y2 = obj->coords.y2;
     }
 
-    /*Clip to the text in some cases to avoid ugly overflows*/
+    /*В некоторых случаях прикрепите текст к тексту, чтобы избежать неприятных переполнений.*/
     if(label->long_mode == LV_LABEL_LONG_MODE_SCROLL ||
        label->long_mode == LV_LABEL_LONG_MODE_SCROLL_CIRCULAR ||
        label->long_mode == LV_LABEL_LONG_MODE_CLIP) {
@@ -937,13 +937,13 @@ static void draw_main(lv_event_t * e)
         lv_draw_label(layer, &label_draw_dsc, &txt_coords);
         layer->_clip_area = clip_area_ori;
     }
-    /*Do not clip to make the drop shadow  visible*/
+    /*Не обрезайте, чтобы тень была видна.*/
     else if(label_draw_dsc.base.drop_shadow_opa > 0) {
         lv_draw_label(layer, &label_draw_dsc, &txt_coords);
     }
-    /*Labels have some extra draw area by default to not clip characters with
-     *italic, handwritten and other less standard fonts.
-     *However, with most of the fonts typically it's safe to clip at least to bottom side*/
+    /*По умолчанию метки имеют дополнительную область рисования, чтобы не обрезать символы.
+     *курсив, рукописный и другие менее стандартные шрифты.
+     *Однако большинство шрифтов обычно безопасно обрезать хотя бы до нижней стороны.*/
     else {
         const lv_area_t clip_area_ori = layer->_clip_area;
         layer->_clip_area.y2 = txt_clip.y2;
@@ -957,7 +957,7 @@ static void draw_main(lv_event_t * e)
     if(label->long_mode == LV_LABEL_LONG_MODE_SCROLL_CIRCULAR) {
         lv_point_t size = label->text_size;
 
-        /*Draw the text again on label to the original to make a circular effect */
+        /*Снова нарисуйте текст на этикетке по отношению к оригиналу, чтобы создать круговой эффект. */
         if(size.x > lv_area_get_width(&txt_coords)) {
             label_draw_dsc.ofs_x = label->offset.x + size.x +
                                    lv_font_get_glyph_width(label_draw_dsc.font, ' ', ' ') * LV_LABEL_WAIT_CHAR_COUNT;
@@ -966,7 +966,7 @@ static void draw_main(lv_event_t * e)
             lv_draw_label(layer, &label_draw_dsc, &txt_coords);
         }
 
-        /*Draw the text again below the original to make a circular effect */
+        /*Снова нарисуйте текст под оригиналом, чтобы создать круговой эффект. */
         if(size.y > lv_area_get_height(&txt_coords)) {
             label_draw_dsc.ofs_x = label->offset.x;
             label_draw_dsc.ofs_y = label->offset.y + size.y + lv_font_get_line_height(label_draw_dsc.font);
@@ -982,13 +982,13 @@ static void set_text_internal(lv_obj_t * obj, const char * text)
 {
     lv_label_t * label = (lv_label_t *)obj;
 
-    /*If text is NULL then just refresh with the current text*/
+    /*Если текст NULL, просто обновите текущий текст.*/
     if(text == NULL) text = label->text;
 
-    lv_label_revert_dots(obj); /*In case text == label->text*/
+    lv_label_revert_dots(obj); /*В случае, если текст == метка->текст*/
     const size_t text_len = get_text_length(text);
 
-    /*If set its own text then reallocate it (maybe its size changed)*/
+    /*Если установлен собственный текст, перераспределите его (возможно, его размер изменился)*/
     if(label->text == text && label->static_txt == 0) {
         label->text = lv_realloc(label->text, text_len);
         LV_ASSERT_MALLOC(label->text);
@@ -1000,7 +1000,7 @@ static void set_text_internal(lv_obj_t * obj, const char * text)
 
     }
     else {
-        /*Free the old text*/
+        /*Освободите старый текст*/
         if(label->text != NULL && label->static_txt == 0) {
             lv_free(label->text);
             label->text = NULL;
@@ -1012,7 +1012,7 @@ static void set_text_internal(lv_obj_t * obj, const char * text)
 
         copy_text_to_label(label, text);
 
-        /*Now the text is dynamically allocated*/
+        /*Теперь текст распределяется динамически*/
         label->static_txt = 0;
     }
 
@@ -1024,7 +1024,7 @@ static void remove_translation_tag(lv_obj_t * obj)
     LV_UNUSED(obj);
 #if LV_USE_TRANSLATION
     lv_label_t * label = (lv_label_t *)obj;
-    /* Remove translation tag so we don't update the text automatically if the language changes*/
+    /* Удалите тег перевода, чтобы мы не обновляли текст автоматически при изменении языка.*/
     if(label->translation_tag) {
         lv_free(label->translation_tag);
         label->translation_tag = NULL;
@@ -1035,7 +1035,7 @@ static void overwrite_anim_property(lv_anim_t * dest, const lv_anim_t * src, lv_
 {
     switch(mode) {
         case LV_LABEL_LONG_MODE_SCROLL:
-            /* If the dest animation is already running, overwrite is not allowed */
+            /* Если конечная анимация уже запущена, перезапись не допускается. */
             if(dest->act_time <= 0)
                 dest->act_time = src->act_time;
             dest->repeat_cnt = src->repeat_cnt;
@@ -1044,7 +1044,7 @@ static void overwrite_anim_property(lv_anim_t * dest, const lv_anim_t * src, lv_
             dest->reverse_delay = src->reverse_delay;
             break;
         case LV_LABEL_LONG_MODE_SCROLL_CIRCULAR:
-            /* If the dest animation is already running, overwrite is not allowed */
+            /* Если конечная анимация уже запущена, перезапись не допускается. */
             if(dest->act_time <= 0)
                 dest->act_time = src->act_time;
             dest->repeat_cnt = src->repeat_cnt;
@@ -1085,7 +1085,7 @@ static void update_layout_completed_cb(lv_event_t * e)
 }
 
 /**
- * Refresh the label with its text stored in its extended data
+ * Обновите метку, сохранив ее текст в расширенных данных.
  * @param label pointer to a label object
  */
 static void lv_label_refr_text(lv_obj_t * obj)
@@ -1093,7 +1093,7 @@ static void lv_label_refr_text(lv_obj_t * obj)
     lv_label_t * label = (lv_label_t *)obj;
     if(label->text == NULL) return;
 #if LV_LABEL_LONG_TXT_HINT
-    label->hint.line_start = -1; /*The hint is invalid if the text changes*/
+    label->hint.line_start = -1; /*Подсказка недействительна, если текст меняется*/
 #endif
 
     lv_area_t txt_coords;
@@ -1105,14 +1105,14 @@ static void lv_label_refr_text(lv_obj_t * obj)
     attributes.text_flags = get_label_flags(label);
     attributes.max_width = lv_area_get_width(&txt_coords);
 
-    /*Calc. the height and longest line*/
+    /*Расчет высота и самая длинная линия*/
     lv_point_t size;
 
     lv_label_revert_dots(obj);
     lv_text_get_size_attributes(&size, label->text, font, &attributes);
     label->text_size = size;
 
-    /*In scroll mode start an offset animation*/
+    /*В режиме прокрутки запустите анимацию смещения.*/
     if(label->long_mode == LV_LABEL_LONG_MODE_SCROLL) {
         const lv_anim_t * anim_template = lv_obj_get_style_anim(obj, LV_PART_MAIN);
         uint32_t anim_time = lv_obj_get_style_anim_duration(obj, LV_PART_MAIN);
@@ -1159,13 +1159,13 @@ static void lv_label_refr_text(lv_obj_t * obj)
             }
 
             int32_t duration_resolved = lv_anim_resolve_speed(anim_time, start, end);
-            /*To keep the old position*/
+            /*Чтобы сохранить старую позицию*/
             if(act_time > duration_resolved) act_time = duration_resolved;
 
             a.act_time = act_time;
             if(reverse_play_in_progress) {
                 a.reverse_play_in_progress = 1;
-                /*Swap the start and end values*/
+                /*Поменяйте местами начальное и конечное значения.*/
                 int32_t tmp;
                 tmp      = a.start_value;
                 a.start_value = a.end_value;
@@ -1174,18 +1174,18 @@ static void lv_label_refr_text(lv_obj_t * obj)
             lv_anim_set_duration(&a, anim_time);
             lv_anim_set_reverse_duration(&a, anim_time);
 
-            /*If a template animation exists, overwrite some property*/
+            /*Если анимация шаблона существует, перезапишите какое-либо свойство.*/
             if(anim_template)
                 overwrite_anim_property(&a, anim_template, label->long_mode);
             lv_anim_start(&a);
 
-            /*If a delay is happening, apply the start value manually*/
+            /*Если происходит задержка, примените начальное значение вручную.*/
             if(act_time < 0) label->offset.x = start;
 
             hor_anim = true;
         }
         else {
-            /*Delete the offset animation if not required*/
+            /*Удалите анимацию смещения, если она не требуется.*/
             lv_anim_delete(obj, set_ofs_x_anim);
             label->offset.x = 0;
         }
@@ -1202,10 +1202,10 @@ static void lv_label_refr_text(lv_obj_t * obj)
                 reverse_play_in_progress = anim_cur->reverse_play_in_progress;
             }
             if(act_time > a.duration) act_time = a.duration;
-            a.act_time = act_time;      /*To keep the old position*/
+            a.act_time = act_time;      /*Чтобы сохранить старую позицию*/
             if(reverse_play_in_progress) {
                 a.reverse_play_in_progress = 1;
-                /*Swap the start and end values*/
+                /*Поменяйте местами начальное и конечное значения.*/
                 int32_t tmp;
                 tmp      = a.start_value;
                 a.start_value = a.end_value;
@@ -1215,19 +1215,19 @@ static void lv_label_refr_text(lv_obj_t * obj)
             lv_anim_set_duration(&a, anim_time);
             lv_anim_set_reverse_duration(&a, anim_time);
 
-            /*If a template animation exists, overwrite some property*/
+            /*Если анимация шаблона существует, перезапишите какое-либо свойство.*/
             if(anim_template) {
                 overwrite_anim_property(&a, anim_template, label->long_mode);
             }
             lv_anim_start(&a);
         }
         else {
-            /*Delete the offset animation if not required*/
+            /*Удалите анимацию смещения, если она не требуется.*/
             lv_anim_delete(obj, set_ofs_y_anim);
             label->offset.y = 0;
         }
     }
-    /*In roll inf. mode keep the size but start offset animations*/
+    /*В рулоне инф. режим сохраняет размер, но запускает анимацию смещения*/
     else if(label->long_mode == LV_LABEL_LONG_MODE_SCROLL_CIRCULAR) {
         const lv_anim_t * anim_template = lv_obj_get_style_anim(obj, LV_PART_MAIN);
         uint32_t anim_time = lv_obj_get_style_anim_duration(obj, LV_PART_MAIN);
@@ -1266,13 +1266,13 @@ static void lv_label_refr_text(lv_obj_t * obj)
             lv_anim_t * anim_cur = lv_anim_get(obj, set_ofs_x_anim);
             int32_t act_time = anim_cur ? anim_cur->act_time : 0;
 
-            /*To keep the old position when the label text is updated mid-scrolling*/
+            /*Чтобы сохранить старую позицию при обновлении текста метки во время прокрутки*/
             int32_t duration_resolved = lv_anim_resolve_speed(anim_time, a.start_value, a.end_value);
             if(act_time < duration_resolved) {
                 a.act_time = act_time;
             }
 
-            /*If a template animation exists, overwrite some property*/
+            /*Если анимация шаблона существует, перезапишите какое-либо свойство.*/
             if(anim_template) {
                 overwrite_anim_property(&a, anim_template, label->long_mode);
             }
@@ -1281,7 +1281,7 @@ static void lv_label_refr_text(lv_obj_t * obj)
             hor_anim = true;
         }
         else {
-            /*Delete the offset animation if not required*/
+            /*Удалите анимацию смещения, если она не требуется.*/
             lv_anim_delete(obj, set_ofs_x_anim);
             label->offset.x = 0;
         }
@@ -1294,11 +1294,11 @@ static void lv_label_refr_text(lv_obj_t * obj)
             lv_anim_t * anim_cur = lv_anim_get(obj, set_ofs_y_anim);
             int32_t act_time = anim_cur ? anim_cur->act_time : 0;
 
-            /*If a template animation exists, overwrite some property*/
+            /*Если анимация шаблона существует, перезапишите какое-либо свойство.*/
             if(anim_template) {
                 overwrite_anim_property(&a, anim_template, label->long_mode);
             }
-            /*To keep the old position when the label text is updated mid-scrolling*/
+            /*Чтобы сохранить старую позицию при обновлении текста метки во время прокрутки*/
             else if(act_time < a.duration) {
                 a.act_time = act_time;
             }
@@ -1306,24 +1306,24 @@ static void lv_label_refr_text(lv_obj_t * obj)
             lv_anim_start(&a);
         }
         else {
-            /*Delete the offset animation if not required*/
+            /*Удалите анимацию смещения, если она не требуется.*/
             lv_anim_delete(obj, set_ofs_y_anim);
             label->offset.y = 0;
         }
     }
     else if(label->long_mode == LV_LABEL_LONG_MODE_DOTS) {
 
-        if(size.y > lv_area_get_height(&txt_coords) && /*Text overflows available area*/
-           size.y > lv_font_get_line_height(font) && /*No break requested, so no dots required*/
-           lv_text_get_encoded_length(label->text) > LV_LABEL_DOT_NUM) { /*Do not turn all characters into dots*/
+        if(size.y > lv_area_get_height(&txt_coords) && /*Текст выходит за пределы доступной области*/
+           size.y > lv_font_get_line_height(font) && /*Никаких перерывов не требуется, поэтому точки не требуются.*/
+           lv_text_get_encoded_length(label->text) > LV_LABEL_DOT_NUM) { /*Не превращайте все символы в точки*/
             lv_point_t p;
             int32_t y_overed;
             p.x = lv_area_get_width(&txt_coords) -
                   (lv_font_get_glyph_width(font, '.', '.') + attributes.letter_space) *
-                  LV_LABEL_DOT_NUM; /*Shrink with dots*/
+                  LV_LABEL_DOT_NUM; /*Уменьшить с помощью точек*/
             p.y = lv_area_get_height(&txt_coords);
             y_overed = p.y %
-                       (lv_font_get_line_height(font) + attributes.line_space); /*Round down to the last line*/
+                       (lv_font_get_line_height(font) + attributes.line_space); /*Округлить до последней строки*/
             if(y_overed >= lv_font_get_line_height(font)) {
                 p.y -= y_overed;
                 p.y += lv_font_get_line_height(font);
@@ -1335,7 +1335,7 @@ static void lv_label_refr_text(lv_obj_t * obj)
 
             uint32_t letter_id = lv_label_get_letter_on(obj, &p, false);
 
-            /*Be sure there is space for the dots*/
+            /*Убедитесь, что есть место для точек*/
             size_t txt_len = lv_strlen(label->text);
             uint32_t byte_id     = lv_text_encoded_get_byte_id(label->text, letter_id);
             while(byte_id + LV_LABEL_DOT_NUM > txt_len) {
@@ -1343,12 +1343,12 @@ static void lv_label_refr_text(lv_obj_t * obj)
                 letter_id--;
             }
 
-            /*Save letters under the dots and replace them with dots*/
+            /*Сохраняйте буквы под точками и заменяйте их точками.*/
             lv_label_set_dots(obj, byte_id);
         }
     }
     else if(label->long_mode == LV_LABEL_LONG_MODE_CLIP || label->long_mode == LV_LABEL_LONG_MODE_WRAP) {
-        /*Do nothing*/
+        /*ничего не делать*/
     }
 
     lv_obj_invalidate(obj);
@@ -1377,10 +1377,10 @@ static void lv_label_set_dots(lv_obj_t * obj, uint32_t dot_begin)
             return;
         }
 
-        /*Save characters*/
+        /*Сохранение персонажей*/
         lv_strncpy(label->dot, &label->text[dot_begin], LV_LABEL_DOT_NUM + 1);
 
-        /*Overwrite up to LV_LABEL_DOT_NUM + 1 characters with dots and null terminator*/
+        /*Перезаписать до LV_LABEL_DOT_NUM + 1 символ с точками и нулевым терминатором.*/
         int i = 0;
         for(; i < LV_LABEL_DOT_NUM && label->text[dot_begin + i]; i++) {
             label->text[dot_begin + i] = '.';
@@ -1441,7 +1441,7 @@ static lv_text_flag_t get_label_flags(lv_label_t * label)
     return flag;
 }
 
-/* Function created because of this pattern be used in multiple functions */
+/* Функция, созданная на основе этого шаблона, может использоваться в нескольких функциях. */
 static void calculate_x_coordinate(int32_t * x, const lv_text_align_t align, const char * txt, uint32_t length,
                                    const lv_font_t * font, lv_area_t * txt_coords, lv_text_attributes_t * attributes)
 {
@@ -1454,7 +1454,7 @@ static void calculate_x_coordinate(int32_t * x, const lv_text_align_t align, con
         *x += lv_area_get_width(txt_coords) - line_w;
     }
     else {
-        /* Nothing to do */
+        /* Нечего делать */
     }
 }
 

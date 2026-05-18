@@ -43,47 +43,47 @@ extern "C" {
 struct lcddev_area_s {
     fb_coord_t row_start, row_end;
     fb_coord_t col_start, col_end;
-    fb_coord_t stride;               /* row stride in bytes */
+    fb_coord_t stride;               /* шаг строки в байтах */
     uint8_t * data;
 };
 
-/* Some special LCD drivers require input data to be aligned.
- * Such as starting row and column, width, height, data address, etc.
+/* Некоторые специальные драйверы LCD требуют выравнивания входных данных.
+ * Например, начальная строка и столбец, ширина, высота, адрес данных и т. д.
  */
 
 struct lcddev_area_align_s {
-    uint16_t row_start_align; /* Start row index alignment */
-    uint16_t height_align;    /* Height alignment */
-    uint16_t col_start_align; /* Start column index alignment */
-    uint16_t width_align;     /* Width alignment */
-    uint16_t buf_align;       /* Buffer addr alignment */
+    uint16_t row_start_align; /* Начать выравнивание индекса строки */
+    uint16_t height_align;    /* Выравнивание по высоте */
+    uint16_t col_start_align; /* Начать выравнивание индекса столбца */
+    uint16_t width_align;     /* Выравнивание по ширине */
+    uint16_t buf_align;       /* Выравнивание адреса буфера */
 };
 
-/* This structure describes one color plane.  Some YUV formats may support
- * up to 4 planes (although they probably wouldn't be used on LCD hardware).
- * The framebuffer driver provides the video memory address in its
- * corresponding fb_planeinfo_s structure.  The LCD driver, instead, provides
- * methods to transfer data to/from the LCD color plane.
+/* Эта структура описывает одну цветовую плоскость.  Некоторые форматы YUV могут поддерживать
+ * до 4 плоскостей (хотя они, вероятно, не будут использоваться на оборудовании LCD).
+ * Драйвер кадрового буфера предоставляет адрес видеопамяти в своем
+ * соответствующая структура fb_planeinfo_s.  Вместо этого драйвер LCD предоставляет
+ * методы для передачи данных в/из цветовой плоскости LCD.
  */
 
 struct lcd_planeinfo_s {
-    /* This is working memory allocated by the LCD driver for each LCD device
-    * and for each color plane.  This memory will hold one raster line of
-    * data. The size of the allocated run buffer must therefore be at least
-    * (bpp * xres / 8).  Actual alignment of the buffer must conform to the
-    * bitwidth of the underlying pixel type.
+    /* Это рабочая память, выделяемая драйвером LCD для каждого устройства LCD.
+    * и для каждой цветовой плоскости.  Эта память будет содержать одну растровую строку
+    * данные. Поэтому размер выделенного буфера выполнения должен быть не менее
+    * (бпп*xres/8).  Фактическое выравнивание буфера должно соответствовать
+    * разрядность базового типа пикселя.
     *
-    * If there are multiple planes, they may share the same working buffer
-    * because different planes will not be operate on concurrently.  However,
-    * if there are multiple LCD devices, they must each have unique run
-    * buffers.
+    * Если существует несколько плоскостей, они могут использовать один и тот же рабочий буфер.
+    * потому что разные самолеты не будут работать одновременно.  Однако,
+    * если имеется несколько устройств LCD, каждое из них должно иметь уникальный запуск
+    * буферы.
     */
 
     uint8_t * buffer;
 
-    /* This is the number of bits in one pixel.  This may be one of {1, 2, 4,
-     * 8, 16, 24, or 32} unless support for one or more of those resolutions
-     * has been disabled.
+    /* Это количество бит в одном пикселе.  Это может быть один из {1, 2, 4,
+     * 8, 16, 24 или 32}, если не поддерживается одно или несколько из этих разрешений.
+     * был отключен.
      */
 
     uint8_t  bpp;
@@ -98,7 +98,7 @@ struct lcd_planeinfo_s {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*NUTTX_LCD_DEV_H*/

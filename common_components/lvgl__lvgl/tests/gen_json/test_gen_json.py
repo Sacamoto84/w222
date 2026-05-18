@@ -1,6 +1,6 @@
-# Basic test to see if the API jeson generator is able to run without any errors
-# This test doesn't not check to make sure the output is correct. It is for the
-# sole purpose of making sure it completes.
+# Базовый тест, чтобы проверить, может ли генератор джезонов API работать без каких-либо ошибок.
+# Этот тест не проверяет правильность вывода. Это для
+# единственная цель - убедиться, что он завершен.
 
 import os
 import sys

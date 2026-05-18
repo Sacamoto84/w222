@@ -5,17 +5,17 @@ static void slider_event_cb(lv_event_t * e);
 static lv_obj_t * slider_label;
 
 /**
- * Slider with opposite direction
+ * Ползунок с противоположным направлением
  */
 void lv_example_slider_4(void)
 {
-    /*Create a slider in the center of the display*/
+    /*Создайте слайдер в центре дисплея.*/
     lv_obj_t * slider = lv_slider_create(lv_screen_active());
     lv_obj_center(slider);
     lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
-    /*Reverse the direction of the slider*/
+    /*Изменение направления ползунка*/
     lv_slider_set_range(slider, 100, 0);
-    /*Create a label below the slider*/
+    /*Создайте метку под слайдером*/
     slider_label = lv_label_create(lv_screen_active());
     lv_label_set_text(slider_label, "0%");
 

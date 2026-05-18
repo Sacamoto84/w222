@@ -137,15 +137,15 @@ lib_c_files = (
 
 
 contents = '''\
-#include "_fake_defines.h"
-#include "_fake_typedefs.h"
+#включить "_fake_defines.h"
+#включить "_fake_typedefs.h"
 '''
 
 define_template = '''
-#ifndef {define_name}
-#define {define_name}
+#еслиndef {define_name}
+#{define_name}
 {file_data}
-#endif
+#конец
 '''
 
 

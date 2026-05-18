@@ -27,7 +27,7 @@ extern "C" {
  **********************/
 
 /**
- * The observer object: a descriptor returned when subscribing LVGL widgets to subjects
+ * Объект наблюдателя: дескриптор, возвращаемый при подписке виджетов LVGL на субъектов.
  */
 struct _lv_observer_t {
     lv_subject_t * subject;             /**< Observed subject */
@@ -40,7 +40,7 @@ struct _lv_observer_t {
 };
 
 /**
- * Descriptor created by `lv_obj_add_subject_increment_event()`
+ * Дескриптор создан `lv_obj_add_subject_increment_event()`
  */
 struct _lv_subject_increment_dsc_t {
     lv_subject_t * subject; /**< The subject to adjust*/
@@ -61,7 +61,7 @@ struct _lv_subject_increment_dsc_t {
 #endif /* LV_USE_OBSERVER */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_OBSERVER_PRIVATE_H*/

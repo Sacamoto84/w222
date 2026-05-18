@@ -35,7 +35,7 @@ extern "C" {
 /**
  * @brief Create an indev object.
  * @param display_res The resolution of the display in pixels, needed to scale the input.
- * If NULL the resolution of the current default display will be used.
+ * Если NULL, будет использоваться разрешение текущего дисплея по умолчанию.
  * @return The created LVGL indev object.
 */
 lv_indev_t * lv_uefi_simple_pointer_indev_create(lv_point_t * display_res);

@@ -158,7 +158,7 @@ void test_tabview_add_several_tabs_no_scroll(void)
     lv_obj_t * label1 = lv_label_create(tab1);
     lv_label_set_text(label1, "Content of the first tab\n");
 
-    /*avoid compiler error: unused variable*/
+    /*избежать ошибки компилятора: неиспользуемая переменная*/
     LV_UNUSED(tab2);
     LV_UNUSED(tab3);
 
@@ -175,12 +175,12 @@ void test_tabview_rename_tab(void)
     lv_obj_t * tab2 = lv_tabview_add_tab(tabview, "Tab 2");
     lv_obj_t * tab3 = lv_tabview_add_tab(tabview, "Tab 3");
 
-    /*avoid compiler error: unused variable*/
+    /*избежать ошибки компилятора: неиспользуемая переменная*/
     LV_UNUSED(tab1);
     LV_UNUSED(tab2);
     LV_UNUSED(tab3);
 
-    /*rename 2nd tab (0-based index)*/
+    /*переименовать вторую вкладку (индекс отсчитывается от 0)*/
     lv_tabview_set_tab_text(tabview, 1, "2nd Tab");
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/tabview_08.png");
@@ -199,7 +199,7 @@ void test_tabview_add_several_tabs_hor(void)
     lv_obj_t * label1 = lv_label_create(tab1);
     lv_label_set_text(label1, "Content of the first tab\n");
 
-    /*avoid compiler error: unused variable*/
+    /*избежать ошибки компилятора: неиспользуемая переменная*/
     LV_UNUSED(tab2);
     LV_UNUSED(tab3);
 
@@ -242,7 +242,7 @@ void test_tabview_tab2_selected_event(void)
     lv_obj_t * tab1 = lv_tabview_add_tab(tabview, "Tab 1");
     lv_obj_t * tab2 = lv_tabview_add_tab(tabview, "Tab 2");
 
-    /*avoid compiler error: unused variable*/
+    /*избежать ошибки компилятора: неиспользуемая переменная*/
     LV_UNUSED(tab1);
     LV_UNUSED(tab2);
 
@@ -262,7 +262,7 @@ void test_tabview_update_on_external_scroll(void)
     lv_obj_t * tab3 = lv_tabview_add_tab(tabview, "Tab 3");
     lv_obj_t * tab4 = lv_tabview_add_tab(tabview, "Tab 4");
 
-    /*avoid compiler error: unused variable*/
+    /*избежать ошибки компилятора: неиспользуемая переменная*/
     LV_UNUSED(tab1);
     LV_UNUSED(tab2);
     LV_UNUSED(tab4);
@@ -309,7 +309,7 @@ void test_tabview_translation_tag(void)
     lv_translation_set_language("es");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "El Tigre");
 
-    /* Unknown language translates to the tag */
+    /* Неизвестный язык переводится на тег */
     lv_translation_set_language("fr");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "tiger");
 }
@@ -342,7 +342,7 @@ void test_tabview_properties(void)
 
     lv_property_t prop = { };
 
-    /* Test TAB_ACTIVE property */
+    /* Тестирование свойства TAB_ACTIVE */
     prop.id = LV_PROPERTY_TABVIEW_TAB_ACTIVE;
     prop.num = 1;
     TEST_ASSERT_TRUE(lv_obj_set_property(tv, &prop) == LV_RESULT_OK);
@@ -352,7 +352,7 @@ void test_tabview_properties(void)
     TEST_ASSERT_TRUE(lv_obj_set_property(tv, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(2, lv_obj_get_property(tv, LV_PROPERTY_TABVIEW_TAB_ACTIVE).num);
 
-    /* Test TAB_BAR_POSITION property */
+    /* Тестирование свойства TAB_BAR_POSITION */
     prop.id = LV_PROPERTY_TABVIEW_TAB_BAR_POSITION;
     prop.num = LV_DIR_BOTTOM;
     TEST_ASSERT_TRUE(lv_obj_set_property(tv, &prop) == LV_RESULT_OK);

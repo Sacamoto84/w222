@@ -2,7 +2,7 @@
 #if LV_USE_BARCODE && LV_BUILD_EXAMPLES
 
 /**
- * Create a Barcode
+ * Создать штрих-код
  */
 void lv_example_barcode_1(void)
 {
@@ -13,14 +13,14 @@ void lv_example_barcode_1(void)
     lv_obj_set_height(barcode, 50);
     lv_obj_center(barcode);
 
-    /*Set color*/
+    /*Установить цвет*/
     lv_barcode_set_dark_color(barcode, fg_color);
     lv_barcode_set_light_color(barcode, bg_color);
 
-    /*Add a border with bg_color*/
+    /*добавьте рамку с помощью bg_color*/
     lv_obj_set_style_border_color(barcode, bg_color, 0);
 
-    /*Set data*/
+    /*Установить данные*/
     lv_barcode_update(barcode, "https://lvgl.io");
 }
 

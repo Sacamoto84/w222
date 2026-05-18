@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 8 jun 2023
+/*  Создано: 8 июня 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -43,7 +43,7 @@ static lv_eve_drawing_context_t ct = {
     .primitive = LV_EVE_PRIMITIVE_ZERO_VALUE,
     .color = {0xff, 0xff, 0xff},
     .opa = 255,
-    .line_width = 1,  /* for format(0) */
+    .line_width = 1,  /* для формата(0) */
     .point_size = 1,
     .color_mask = {1, 1, 1, 1},
     .stencil_func = {EVE_ALWAYS, 0, 255},
@@ -233,7 +233,7 @@ void lv_eve_bitmap_size(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t w
         EVE_cmd_dl_burst(bitmap_size);
         st.bitmap_size = bitmap_size;
     }
-    /* set the high bits too, of the width and height */
+    /* также установите старшие биты ширины и высоты */
     uint32_t bitmap_size_h = BITMAP_SIZE_H(width, height);
     if(st.bitmap_size_h != bitmap_size_h) {
         EVE_cmd_dl_burst(bitmap_size_h);
@@ -248,7 +248,7 @@ void lv_eve_bitmap_layout(uint8_t format, uint16_t linestride, uint16_t height)
         EVE_cmd_dl_burst(bitmap_layout);
         st.bitmap_layout = bitmap_layout;
     }
-    /* set the high bits too, of the linestride and height */
+    /* также установите старшие биты линейного шага и высоты */
     uint32_t bitmap_layout_h = BITMAP_LAYOUT_H(linestride, height);
     if(st.bitmap_layout_h != bitmap_layout_h) {
         EVE_cmd_dl_burst(bitmap_layout_h);

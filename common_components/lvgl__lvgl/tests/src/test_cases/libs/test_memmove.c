@@ -7,12 +7,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_memmove(void)
@@ -25,13 +25,13 @@ void test_memmove(void)
     dst = buf;
     src = buf;
 
-    /*Case of dst == src*/
+    /*Случай dst == src*/
     lv_memmove(dst, src, 4);
     for(int i = 0; i < 4; i++) {
         TEST_ASSERT_EQUAL_INT(i, buf[i]);
     }
 
-    /* Case of dst < src */
+    /* Случай dst < src */
     dst = &buf[0];
     src = &buf[1];
     lv_memmove(dst, src, 4);
@@ -39,7 +39,7 @@ void test_memmove(void)
         TEST_ASSERT_EQUAL_INT(i + 1, buf[i]);
     }
 
-    /* Case of dst > src */
+    /* Случай dst > src */
     for(int i = 0; i < 5; i++) buf[i] = i;
     dst = &buf[1];
     src = &buf[0];

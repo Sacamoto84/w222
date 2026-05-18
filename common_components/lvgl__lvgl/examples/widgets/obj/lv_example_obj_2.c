@@ -17,7 +17,7 @@ static void drag_event_handler(lv_event_t * e)
 }
 
 /**
- * Make an object draggable.
+ * Сделайте объект перетаскиваемым.
  */
 void lv_example_obj_2(void)
 {

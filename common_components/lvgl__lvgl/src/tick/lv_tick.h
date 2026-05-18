@@ -1,6 +1,6 @@
 /**
  * @file lv_tick.h
- * Provide access to the system tick with 1 millisecond resolution
+ * Обеспечить доступ к системному тику с разрешением 1 миллисекунду
  */
 
 #ifndef LV_TICK_H
@@ -36,56 +36,56 @@ typedef void (*lv_delay_cb_t)(uint32_t ms);
  **********************/
 
 /**
- * You have to call this function periodically.
- * It is typically safe to call from an interrupt handler or a different thread.
- * @param tick_period   the call period of this function in milliseconds
+ * Вам придется периодически вызывать эту функцию.
+ * Обычно безопасно вызывать из обработчика прерывания или другого потока.
+ * @param tick_period   период вызова этой функции в миллисекундах
  */
 LV_ATTRIBUTE_TICK_INC void lv_tick_inc(uint32_t tick_period);
 
 /**
- * Get the elapsed milliseconds since start up
- * @return          the elapsed milliseconds
+ * Получите количество миллисекунд, прошедших с момента запуска
+ * @return          прошедшие миллисекунды
  */
 uint32_t lv_tick_get(void);
 
 /**
- * Get the elapsed milliseconds since a previous time stamp
- * @param prev_tick     a previous time stamp (return value of lv_tick_get() )
- * @return              the elapsed milliseconds since 'prev_tick'
+ * Получите количество миллисекунд, прошедших с момента предыдущей отметки времени.
+ * @param prev_tick     предыдущая отметка времени (возвращаемое значениеlv_tick_get())
+ * @return              количество миллисекунд, прошедших с момента 'prev_tick'
  */
 uint32_t lv_tick_elaps(uint32_t prev_tick);
 
 /**
- * Get the elapsed milliseconds between two time stamps
- * @param tick          a time stamp
- * @param prev_tick     a time stamp before `tick`
- * @return              the elapsed milliseconds between `prev_tick` and `tick`
+ * Получите прошедшее миллисекунды между двумя отметками времени
+ * @param tick          отметка времени
+ * @param prev_tick     отметка времени перед `tick`
+ * @return              прошедшие миллисекунды между`prev_tick`и `tick`
  */
 uint32_t lv_tick_diff(uint32_t tick, uint32_t prev_tick);
 
 /**
- * Delay for the given milliseconds.
- * By default it's a blocking delay, but with `lv_delay_set_cb()`
- * a custom delay function can be set too
- * @param ms        the number of milliseconds to delay
+ * Задержка для заданных миллисекунд.
+ * По умолчанию это блокирующая задержка, но с `lv_delay_set_cb()`
+ * также можно установить пользовательскую функцию задержки
+ * @param ms        количество миллисекунд задержки
  */
 void lv_delay_ms(uint32_t ms);
 
 /**
- * Set a callback for a blocking delay
- * @param cb        pointer to a callback
+ * Установите обратный вызов для задержки блокировки
+ * @param cb        указатель на обратный вызов
  */
 void lv_delay_set_cb(lv_delay_cb_t cb);
 
 /**
- * Set the custom callback for 'lv_tick_get'
- * @param cb        call this callback on 'lv_tick_get'
+ * Установите пользовательский обратный вызов для «lv_tick_get»
+ * @param cb        вызовите этот обратный вызов на 'lv_tick_get'
  */
 void lv_tick_set_cb(lv_tick_get_cb_t cb);
 
 /**
- * Get the custom callback for 'lv_tick_get'
- * @return      call this callback on 'lv_tick_get'
+ * Получите собственный обратный вызов для «lv_tick_get»
+ * @return      вызовите этот обратный вызов на 'lv_tick_get'
  */
 lv_tick_get_cb_t lv_tick_get_cb(void);
 
@@ -94,7 +94,7 @@ lv_tick_get_cb_t lv_tick_get_cb(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TICK_H*/

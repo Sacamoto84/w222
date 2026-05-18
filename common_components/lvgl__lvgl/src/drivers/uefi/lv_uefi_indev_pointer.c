@@ -69,7 +69,7 @@ static EFI_GUID _uefi_guid_simple_pointer = EFI_SIMPLE_POINTER_PROTOCOL_GUID;
 /**
  * @brief Create an indev object.
  * @param display_res The resolution of the display in pixels, needed to scale the input.
- * If NULL the resolution of the current default display will be used.
+ * Если NULL, будет использоваться разрешение текущего дисплея по умолчанию.
  * @return The created LVGL indev object.
 */
 lv_indev_t * lv_uefi_simple_pointer_indev_create(lv_point_t * display_res)
@@ -194,7 +194,7 @@ static void _simple_pointer_read_cb(lv_indev_t * indev, lv_indev_data_t * data)
     lv_uefi_simple_pointer_context_t * indev_ctx = (lv_uefi_simple_pointer_context_t *)lv_indev_get_user_data(indev);
     LV_ASSERT_NULL(indev_ctx);
 
-    /* Read from all registered devices */
+    /* Чтение со всех зарегистрированных устройств */
     for(node = lv_ll_get_head(&indev_ctx->handles); node != NULL; node = lv_ll_get_next(&indev_ctx->handles, node)) {
         lv_uefi_simple_pointer_handle_context_t * handle_ctx = (lv_uefi_simple_pointer_handle_context_t *) node;
         bool was_pressed = false;
@@ -204,7 +204,7 @@ static void _simple_pointer_read_cb(lv_indev_t * indev, lv_indev_data_t * data)
         data->state |= was_pressed ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
     }
 
-    /* Sanitize the events position */
+    /* Очистите положение событий */
     if(indev_ctx->position.x < 0) {
         indev_ctx->position.x = 0;
     }
@@ -278,7 +278,7 @@ static void _simple_pointer_read(lv_uefi_simple_pointer_context_t * indev_ctx,
     indev_ctx->position.x += pointer_mov.x;
     indev_ctx->position.y += pointer_mov.y;
 
-    /* Set the state to pressed if one of the interfaces reports a press */
+    /* Установите состояние «Нажато», если один из интерфейсов сообщает о нажатии */
     *was_pressed = state.LeftButton;
 }
 

@@ -15,8 +15,8 @@
  *      DEFINES
  *********************/
 #define DRAW_UNIT_ID_DAVE2D         4
-/* The amount of tasks exercising pressure to the current to get finished
- * This one is used as the main signal to start to render a block of tasks.
+/* Количество задач, требующих текущего выполнения для завершения
+ * Используется как основной сигнал для начала рендеринга блока задач.
  */
 #ifndef LV_DAVE2D_MAX_DRAW_PRESSURE
     #define LV_DAVE2D_MAX_DRAW_PRESSURE    256
@@ -59,10 +59,10 @@ void dave2d_execute_dlist_and_flush(void);
 
 static d2_device * _d2_handle;
 
-/* Main render buffer, used to carry the block of dave commands for any shape */
+/* Основной буфер рендеринга, используемый для переноса блока команд Дейва для любой формы. */
 static d2_renderbuffer * _renderbuffer;
 
-/* Label dedicated render buffer, used to carry only label related dave commands */
+/* Выделенный буфер рендеринга для меток, используемый для переноса только команд Дейва, связанных с метками. */
 static d2_renderbuffer * _label_renderbuffer;
 
 static lv_ll_t  draw_tasks_on_dlist;
@@ -139,7 +139,7 @@ static void _dave2d_buf_invalidate_cache_cb(const lv_draw_buf_t * draw_buf, cons
     int32_t lines = lv_area_get_height(area);
     int32_t bytes_to_flush_per_line = (int32_t)width * (int32_t)bytes_per_pixel;
 
-    /* Stride is in bytes, not pixels */
+    /* Шаг измеряется в байтах, а не в пикселях. */
     address = address + (area->x1 * (int32_t)bytes_per_pixel) + (stride * (uint32_t)area->y1);
 
     for(i = 0; i < lines; i++) {
@@ -156,7 +156,7 @@ static void _dave2d_buf_invalidate_cache_cb(const lv_draw_buf_t * draw_buf, cons
 
 /**
  * @todo
- * LVGL needs to use hardware acceleration for buf_copy and do not affect GPU rendering.
+ * LVGL должен использовать аппаратное ускорение для buf_copy и не влиять на рендеринг GPU.
  */
 #if 0
 static void _dave2d_buf_copy(void * dest_buf, uint32_t dest_w, uint32_t dest_h, const lv_area_t * dest_area,
@@ -180,7 +180,7 @@ static void _dave2d_buf_copy(void * dest_buf, uint32_t dest_w, uint32_t dest_h, 
     result = d2_setblendmode(_d2_handle, d2_bm_one, d2_bm_zero);
     LV_ASSERT(D2_OK == result);
 
-    // Generate render operations
+    // Генерация операций рендеринга
     result = d2_framebuffer(_d2_handle, (uint16_t *)dest_buf, DISPLAY_HSIZE_INPUT0, DISPLAY_BUFFER_STRIDE_PIXELS_INPUT0,
                             DISPLAY_VSIZE_INPUT0, lv_draw_dave2d_cf_fb_get());
     LV_ASSERT(D2_OK == result);
@@ -198,7 +198,7 @@ static void _dave2d_buf_copy(void * dest_buf, uint32_t dest_w, uint32_t dest_h, 
                          D2_FIX4(dest_area->x1), D2_FIX4(dest_area->y1), 0);
     LV_ASSERT(D2_OK == result);
 
-    // Execute render operations
+    // Выполнение операций рендеринга
     result = d2_executerenderbuffer(_d2_handle, _blit_renderbuffer, 0);
     LV_ASSERT(D2_OK == result) ;
 
@@ -379,21 +379,21 @@ static int32_t lv_draw_dave2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * 
     uint32_t deps = 0;
 
     if(draw_dave2d_unit->task_act) {
-        /* Return immediately if it's busy with draw task */
+        /* Немедленно вернитесь, если он занят задачей рисования. */
         return LV_DRAW_UNIT_IDLE;
     }
 
     lv_draw_task_t * t = NULL;
     t = lv_draw_get_next_available_task(layer, NULL, DRAW_UNIT_ID_DAVE2D);
     if(t == NULL) {
-        /* No valid task, but there are tasks waiting to be rendered,
-         * start to draw then immediately.
+        /* Нет допустимой задачи, но есть задачи, ожидающие обработки,
+         * начните рисовать, тогда немедленно.
          */
         if(false == lv_ll_is_empty(&draw_tasks_on_dlist)) {
             draw_pressure = 0;
             dave2d_execute_dlist_and_flush();
         }
-        return LV_DRAW_UNIT_IDLE;  /* This task is not for us. */
+        return LV_DRAW_UNIT_IDLE;  /* Эта задача не для нас. */
     }
 
     if((t->preferred_draw_unit_id != DRAW_UNIT_ID_DAVE2D)) return LV_DRAW_UNIT_IDLE;
@@ -406,9 +406,9 @@ static int32_t lv_draw_dave2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * 
     if(deps > 0 || draw_pressure > 0) {
         draw_pressure += deps;
         if(draw_pressure < LV_DAVE2D_MAX_DRAW_PRESSURE) {
-            /* No other tasks are pressuring to get the current block
-             * of tasks including the latest one, just accumulate it
-             * and tells the drawing pipeline to send a new one if there is any
+            /* Никакие другие задачи не требуют получения текущего блока.
+             * задач, включая самую последнюю, просто накопите ее
+             * и сообщает конвейеру рисования отправить новый, если таковой имеется.
              */
             lv_draw_task_t ** p_new_list_entry;
             p_new_list_entry = lv_ll_ins_tail(&draw_tasks_on_dlist);
@@ -423,18 +423,18 @@ static int32_t lv_draw_dave2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * 
 
             return 1;
         }
-        /* If the pressure for drawing value was maxed-out, it is time to render
-         * return IDLE to force the drawing pipeline to wait while the Dave
-         * draw the block of tasks in a single row
+        /* Если давление при рисовании было максимальным, пришло время рендерить.
+         * верните IDLE, чтобы заставить конвейер рисования ждать, пока Дейв
+         * нарисовать блок задач в одну строку
          */
         return LV_DRAW_UNIT_IDLE;
     }
     else {
-        /* Handles a special case when there is no sufficient draw pressure
-         * But the actual task did not carry any extra pressure to get drew
-         * in this case, the drawing pipeline have a few set of tasks that
-         * don't make sense to accumulate them, just do a run to completion
-         * here, that is it, render the incoming task immediately.
+        /* Обрабатывает особый случай, когда нет достаточного давления вытяжки.
+         * Но сама задача не требовала какого-либо дополнительного давления.
+         * в этом случае конвейер рисования имеет несколько наборов задач, которые
+         * нет смысла их накапливать, просто бегите до завершения
+         * вот и всё, рендерить входящую задачу сразу.
          */
         draw_dave2d_unit->task_act = t;
         draw_dave2d_unit->task_act->state = LV_DRAW_TASK_STATE_IN_PROGRESS;
@@ -453,16 +453,16 @@ static int32_t lv_draw_dave2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * 
 
 static int32_t _dave2d_wait_finish(lv_draw_unit_t * draw_unit)
 {
-    /* If the drawing pipeline is waiting it means the pressure for drawing
-     * has been maxed out, defer the block of tasks to be rendered by the
-     * Dave and wait for its interrupt. (Dave2D driver is RTOS aware, no need for semaphores);
+    /* Если конвейер рисования ожидает, это означает, что давление для рисования
+     * исчерпан, отложите блок задач, которые должны быть выполнены
+     * Дэйв и дождись его прерывания. (Драйвер Dave2D поддерживает RTOS, семафоры не нужны);
      */
     lv_draw_dave2d_unit_t * draw_dave2d_unit = (lv_draw_dave2d_unit_t *) draw_unit;
 
     if(!draw_pressure) {
-        /* It reached here because Dave2D Draw Unit was not suitable to take a task
-         * While there is nothing being rendered, prevent the dead lock
-         * by flushing the GPU command buffer empty and just return.
+        /* Оно дошло сюда, потому что Dave2D Draw Unit не подходил для выполнения задачи.
+         * Пока ничего не рендерится, предотвратите мертвую блокировку
+         * очистив пустой буфер команд GPU и просто вернувшись.
          */
         return 0;
     }
@@ -474,10 +474,10 @@ static int32_t _dave2d_wait_finish(lv_draw_unit_t * draw_unit)
 
 static void execute_drawing(lv_draw_dave2d_unit_t * u)
 {
-    /*Render the draw task*/
+    /*Рендеринг задачи рисования*/
     lv_draw_task_t * t = u->task_act;
 
-    /* remember draw unit for access to unit's context */
+    /* помните о блоке рисования для доступа к контексту модуля */
     t->draw_unit = (lv_draw_unit_t *)u;
 
 #if defined(RENESAS_CORTEX_M85) || defined(_RENESAS_RZA_)
@@ -494,7 +494,7 @@ static void execute_drawing(lv_draw_dave2d_unit_t * u)
 
     lv_area_move(&clipped_area, x, y);
 
-    /* Invalidate cache */
+    /* Недействительный кеш */
     lv_draw_buf_invalidate_cache(layer->draw_buf, &clipped_area);
 #endif
 #endif
@@ -507,11 +507,11 @@ static void execute_drawing(lv_draw_dave2d_unit_t * u)
             lv_draw_dave2d_border(t, t->draw_dsc, &t->area);
             break;
         case LV_DRAW_TASK_TYPE_BOX_SHADOW:
-            //lv_draw_dave2d_box_shadow(t, t->draw_dsc, &t->area);
+            //lv_draw_dave2d_box_shadow (t, t-> draw_dsc , &t->площадь);
             break;
 #if 0
         case LV_DRAW_TASK_TYPE_BG_IMG:
-            //lv_draw_dave2d_bg_image(t, t->draw_dsc, &t->area);
+            //lv_draw_dave2d_bg_image (t, t-> draw_dsc , &t->площадь);
             break;
 #endif
         case LV_DRAW_TASK_TYPE_LABEL:
@@ -530,10 +530,10 @@ static void execute_drawing(lv_draw_dave2d_unit_t * u)
             lv_draw_dave2d_triangle(t, t->draw_dsc);
             break;
         case LV_DRAW_TASK_TYPE_LAYER:
-            //lv_draw_dave2d_layer(t, t->draw_dsc, &t->area);
+            //lv_draw_dave2d_layer (t, t-> draw_dsc , &t->площадь);
             break;
         case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
-            //lv_draw_dave2d_mask_rect(t, t->draw_dsc, &t->area);
+            //lv_draw_dave2d_mask_rect (t, t-> draw_dsc , &t->площадь);
             break;
         default:
             break;
@@ -559,7 +559,7 @@ static d2_s32 lv_dave2d_init(void)
         return D2_NOMEMORY;
     }
 
-    /* bind the hardware */
+    /* привязать оборудование */
     result = d2_inithw(_d2_handle, 0);
     if(result != D2_OK) {
         LV_LOG_ERROR("Could NOT d2_inithw");
@@ -568,7 +568,7 @@ static d2_s32 lv_dave2d_init(void)
     }
 
     //
-    // Set various D2 parameters
+    // Установите различные параметры D2
     //
     result = d2_setblendmode(_d2_handle, d2_bm_alpha, d2_bm_one_minus_alpha);
     result = d2_setalphamode(_d2_handle, d2_am_constant);
@@ -577,7 +577,7 @@ static d2_s32 lv_dave2d_init(void)
     result = d2_setlinecap(_d2_handle, d2_lc_butt);
     result = d2_setlinejoin(_d2_handle, d2_lj_miter);
 
-    /* set blocksize for default displaylist */
+    /* установить размер блока для списка отображения по умолчанию */
     result = d2_setdlistblocksize(_d2_handle, 20);
     if(D2_OK != result) {
         LV_LOG_ERROR("Could NOT d2_setdlistblocksize");

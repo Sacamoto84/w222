@@ -47,7 +47,7 @@ void test_spinner_properties(void)
     prop.id = LV_PROPERTY_SPINNER_ARC_SWEEP;
     TEST_ASSERT_EQUAL_INT(270, lv_obj_get_property(sp, prop.id).num);
 
-    /* Test setter */
+    /* Наладчик тестов */
     prop.id = LV_PROPERTY_SPINNER_ANIM_DURATION;
     prop.num = 1500;
     TEST_ASSERT_TRUE(lv_obj_set_property(sp, &prop) == LV_RESULT_OK);

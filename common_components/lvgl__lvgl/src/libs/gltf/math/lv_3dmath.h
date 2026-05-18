@@ -52,7 +52,7 @@ typedef lv_3dplane_t lv_3dray_t;
  **********************/
 
 /**
- * Get a plane that faces upward, centered at a given height
+ * Получите плоскость, обращенную вверх, с центром на заданной высоте.
  * @param elevation elevation of the ground plane, in world units. this is usually zero
  * @return ground plane
  */
@@ -65,7 +65,7 @@ lv_3dplane_t lv_get_ground_plane(float elevation);
 #endif /*LV_USE_GLTF*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 

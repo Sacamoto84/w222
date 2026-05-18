@@ -38,7 +38,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_font_class_t lv_binfont_font_class;
  **********************/
 
 /**
- * Loads a `lv_font_t` object from a binary font file
+ * Загружает объект `lv_font_t` из двоичного файла шрифта.
  * @param path   path to font file
  * @return  pointer to font where to load
  */
@@ -46,8 +46,8 @@ lv_font_t * lv_binfont_create(const char * path);
 
 #if LV_USE_FS_MEMFS
 /**
- * Loads a `lv_font_t` object from a memory buffer containing the binary font file.
- * Requires LV_USE_FS_MEMFS
+ * Загружает объект `lv_font_t` из буфера памяти, содержащего файл двоичного шрифта.
+ * Требуется LV_USE_FS_MEMFS
  * @param buffer        address of the font file in the memory
  * @param size          size of the font file buffer
  * @return              pointer to font where to load
@@ -56,7 +56,7 @@ lv_font_t * lv_binfont_create_from_buffer(void * buffer, uint32_t size);
 #endif
 
 /**
- * Frees the memory allocated by the `lv_binfont_create()` function
+ * Освобождает память, выделенную функцией `lv_binfont_create()`.
  * @param font          lv_font_t object created by the lv_binfont_create function
  */
 void lv_binfont_destroy(lv_font_t * font);
@@ -66,7 +66,7 @@ void lv_binfont_destroy(lv_font_t * font);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_BINFONT_LOADER_H */

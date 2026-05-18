@@ -25,13 +25,13 @@ extern "C" {
  **********************/
 
 /**
- * Image decoder args.
- * It determines how to decoder an image, e.g. whether to premultiply the alpha or not.
- * It should be passed to lv_img_decoder_open() function. If NULL is provided, default
- * args are used.
+ * Аргументы декодера изображения.
+ * Он определяет, как декодировать изображение, например. следует ли предварительно умножить альфу или нет.
+ * Его следует передать в функцию lv_img_decoder_open(). Если указаноNULL, по умолчанию
+ * используются аргументы.
  *
- * Default args:
- * all field are zero or false.
+ * Аргументы по умолчанию:
+ * все поля равны нулю или ложны.
  */
 struct _lv_image_decoder_args_t {
     bool stride_align;      /**< Whether stride should be aligned */
@@ -92,19 +92,19 @@ struct _lv_image_decoder_dsc_t {
     /**Info about the opened image: color format, size, etc. MUST be set in `open` function*/
     lv_image_header_t header;
 
-    /** Pointer to a draw buffer where the image's data (pixels) are stored in a decoded, plain format.
-     *  MUST be set in `open` or `get_area_cb`function*/
+    /** Указатель на буфер отрисовки, в котором данные изображения (пиксели) хранятся в декодированном простом формате.
+     *  MUST можно установить в функции`open`или `get_area_cb`.*/
     const lv_draw_buf_t * decoded;
 
     const lv_color32_t * palette;
     uint32_t palette_size;
 
-    /** How much time did it take to open the image. [ms]
-     *  If not set `lv_image_cache` will measure and set the time to open*/
+    /** Сколько времени ушло на открытие изображения. [мс]
+     *  Если не установлено,`lv_image_cache`измерит и установит время открытия.*/
     uint32_t time_to_open;
 
-    /**A text to display instead of the image when the image can't be opened.
-     * Can be set in `open` function or set NULL.*/
+    /**Текст, который будет отображаться вместо изображения, если изображение невозможно открыть.
+     * Можно установить в функцию`open`или установитьNULL.*/
     const char * error_msg;
 
     lv_cache_t * cache;
@@ -122,14 +122,14 @@ struct _lv_image_decoder_dsc_t {
  **********************/
 
 /**
- * Initialize the image decoder module
- * @param image_cache_size    Image cache size in bytes. 0 to disable cache.
- * @param image_header_count  Number of header cache entries. 0 to disable header cache.
+ * Инициализируйте модуль декодера изображений
+ * @param image_cache_size    Размер кэша изображений в байтах. 0, чтобы отключить кеш.
+ * @param image_header_count  Количество записей кэша заголовков. 0, чтобы отключить кэш заголовков.
  */
 void lv_image_decoder_init(uint32_t image_cache_size, uint32_t image_header_count);
 
 /**
- * Deinitialize the image decoder module
+ * Деинициализируйте модуль декодера изображений.
  */
 void lv_image_decoder_deinit(void);
 
@@ -138,7 +138,7 @@ void lv_image_decoder_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_IMAGE_DECODER_PRIVATE_H*/

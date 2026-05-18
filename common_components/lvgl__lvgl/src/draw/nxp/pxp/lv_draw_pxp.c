@@ -39,19 +39,19 @@
  **********************/
 
 /*
- * Evaluate a task and set the score and preferred PXP unit.
- * Return 1 if task is preferred, 0 otherwise (task is not supported).
+ * Оцените задачу и установите оценку и предпочитаемый юнит PXP.
+ * Возвращайте 1, если задача предпочтительнее, и 0 в противном случае (задача не поддерживается).
  */
 static int32_t _pxp_evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task);
 
 /*
- * Dispatch a task to the PXP unit.
- * Return 1 if task was dispatched, 0 otherwise (task not supported).
+ * Отправьте задание отряду PXP.
+ * Возвращает 1, если задача была отправлена, и 0 в противном случае (задача не поддерживается).
  */
 static int32_t _pxp_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer);
 
 /*
- * Delete the PXP draw unit.
+ * Удалите блок рисования PXP.
  */
 static int32_t _pxp_delete(lv_draw_unit_t * draw_unit);
 
@@ -111,12 +111,12 @@ void lv_draw_pxp_rotate(const void * src_buf, void * dest_buf, int32_t src_width
 {
     lv_pxp_reset();
 
-    /* Convert rotation angle
-     * To be in sync with CPU, the received angle is counterclockwise
-     * and the PXP constants are for clockwise rotation
+    /* Преобразовать угол поворота
+     * Чтобы быть синхронизированным с CPU, полученный угол направлен против часовой стрелки.
+     * а константы PXP предназначены для вращения по часовой стрелке.
      *
-     *    counterclockwise          clockwise
-     * LV_DISPLAY_ROTATION_90  -> kPXP_Rotate270
+     *    против часовой стрелки по часовой стрелке
+     * LV_DISPLAY_ROTATION_90 -> kPXP_Rotate270
      * LV_DISPLAY_ROTATION_270 -> kPXP_Rotate90
      */
     pxp_rotate_degree_t pxp_rotation;
@@ -139,10 +139,10 @@ void lv_draw_pxp_rotate(const void * src_buf, void * dest_buf, int32_t src_width
     }
     PXP_SetRotateConfig(PXP_ID, kPXP_RotateOutputBuffer, pxp_rotation, kPXP_FlipDisable);
 
-    /*Simple blit, no effect - Disable PS buffer*/
+    /*Простое блитирование, без эффекта — отключить буфер PS.*/
     PXP_SetProcessSurfacePosition(PXP_ID, 0xFFFFU, 0xFFFFU, 0U, 0U);
 
-    /*AS buffer - source image*/
+    /*Буфер AS — исходное изображение*/
     pxp_as_buffer_config_t asBufferConfig = {
         .pixelFormat = pxp_get_as_px_format(cf),
         .bufferAddr = (uint32_t)src_buf,
@@ -152,7 +152,7 @@ void lv_draw_pxp_rotate(const void * src_buf, void * dest_buf, int32_t src_width
     PXP_SetAlphaSurfacePosition(PXP_ID, 0U, 0U, src_width - 1U, src_height - 1U);
     PXP_EnableAlphaSurfaceOverlayColorKey(PXP_ID, false);
 
-    /*Output buffer.*/
+    /*Выходной буфер.*/
     pxp_output_buffer_config_t outputBufferConfig = {
         .pixelFormat = pxp_get_out_px_format(cf),
         .interlacedMode = kPXP_OutputProgressive,
@@ -214,7 +214,7 @@ static bool _pxp_draw_img_supported(const lv_draw_image_dsc_t * draw_dsc)
     bool has_transform = (draw_dsc->rotation != 0 || draw_dsc->scale_x != LV_SCALE_NONE ||
                           draw_dsc->scale_y != LV_SCALE_NONE);
 
-    /* Recolor and transformation are not supported at the same time. */
+    /* Перекрашивание и трансформация не поддерживаются одновременно. */
     if(has_recolor && has_transform)
         return false;
 
@@ -222,27 +222,27 @@ static bool _pxp_draw_img_supported(const lv_draw_image_dsc_t * draw_dsc)
     bool src_has_alpha = (img_dsc->header.cf == LV_COLOR_FORMAT_ARGB8888);
 
     /*
-     * Recolor or transformation for images w/ opa or alpha channel can't
-     * be obtained in a single PXP configuration. Two steps are required.
+     * Перекрашивание или преобразование изображений с opa или альфа-каналом невозможно.
+     * быть получен в одной конфигурации PXP. Требуется два шага.
      */
     if((has_recolor || has_transform) && (has_opa || src_has_alpha))
         return false;
 
-    /* PXP can only rotate at 90x angles. */
+    /* PXP может вращаться только на угол 90x. */
     if(draw_dsc->rotation % 900)
         return false;
 
     /*
-     * PXP is set to process 16x16 blocks to optimize the system for memory
-     * bandwidth and image processing time.
-     * The output engine essentially truncates any output pixels after the
-     * desired number of pixels has been written.
-     * When rotating a source image and the output is not divisible by the block
-     * size, the incorrect pixels could be truncated and the final output image
-     * can look shifted.
+     * PXP настроен на обработку блоков 16x16 для оптимизации памяти системы.
+     * пропускная способность и время обработки изображения.
+     * Механизм вывода по существу усекает любые выходные пиксели после
+     * желаемое количество пикселей было записано.
+     * При вращении исходного изображения и вывод не делится на блок
+     * размера, неправильные пиксели могут быть обрезаны, и окончательное выходное изображение
+     * может выглядеть смещенным.
      *
-     * No combination of rotate with flip, scaling or decimation is possible
-     * if buffer is unaligned.
+     * Никакая комбинация поворота с переворотом, масштабированием или прореживанием невозможна.
+     * если буфер не выровнен.
      */
     if(has_transform && (img_dsc->header.w % 16 || img_dsc->header.h % 16))
         return false;
@@ -263,7 +263,7 @@ static int32_t _pxp_evaluate(lv_draw_unit_t * u, lv_draw_task_t * t)
         case LV_DRAW_TASK_TYPE_FILL: {
                 const lv_draw_fill_dsc_t * draw_dsc = (lv_draw_fill_dsc_t *) t->draw_dsc;
 
-                /* Most simple case: just a plain rectangle (no radius, no gradient). */
+                /* Самый простой случай: простой прямоугольник (без радиуса и градиента). */
                 if((draw_dsc->radius != 0) || (draw_dsc->grad.dir != (lv_grad_dir_t)LV_GRAD_DIR_NONE))
                     return 0;
 
@@ -322,11 +322,11 @@ static int32_t _pxp_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 {
     lv_draw_pxp_unit_t * draw_pxp_unit = (lv_draw_pxp_unit_t *) draw_unit;
 
-    /* Return immediately if it's busy with draw task. */
+    /* Немедленно вернитесь, если он занят задачей рисования. */
     if(draw_pxp_unit->task_act)
         return 0;
 
-    /* Try to get an ready to draw. */
+    /* Попробуйте получить готовый рисунок. */
     lv_draw_task_t * t = lv_draw_get_available_task(layer, NULL, DRAW_UNIT_ID_PXP);
 
     if(t == NULL || t->preferred_draw_unit_id != DRAW_UNIT_ID_PXP)
@@ -339,7 +339,7 @@ static int32_t _pxp_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_pxp_unit->task_act = t;
 
 #if LV_USE_PXP_DRAW_THREAD
-    /* Let the render thread work. */
+    /* Пусть поток рендеринга работает. */
     if(draw_pxp_unit->inited)
         lv_thread_sync_signal(&draw_pxp_unit->sync);
 #else
@@ -348,7 +348,7 @@ static int32_t _pxp_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_pxp_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_pxp_unit->task_act = NULL;
 
-    /* The draw unit is free now. Request a new dispatching as it can get a new task. */
+    /* Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу. */
     lv_draw_dispatch_request();
 #endif
 
@@ -384,12 +384,12 @@ static void _pxp_execute_drawing(lv_draw_pxp_unit_t * u)
 
     lv_area_t draw_area;
     if(!lv_area_intersect(&draw_area, &t->area, &t->clip_area))
-        return; /*Fully clipped, nothing to do*/
+        return; /*Полностью обрезан, делать нечего.*/
 
-    /* Make area relative to the buffer */
+    /* Сделать область относительно буфера */
     lv_area_move(&draw_area, -layer->buf_area.x1, -layer->buf_area.y1);
 
-    /* Invalidate only the drawing area */
+    /* Сделать недействительной только область рисования */
     lv_draw_buf_invalidate_cache(draw_buf, &draw_area);
 
 #if LV_USE_PARALLEL_DRAW_DEBUG
@@ -411,7 +411,7 @@ static void _pxp_execute_drawing(lv_draw_pxp_unit_t * u)
     }
 
 #if LV_USE_PARALLEL_DRAW_DEBUG
-    /*Layers manage it for themselves*/
+    /*Слои управляют этим сами*/
     if(t->type != LV_DRAW_TASK_TYPE_LAYER) {
         lv_area_t draw_area;
         if(!lv_area_intersect(&draw_area, &t->area, &t->clip_area))
@@ -461,7 +461,7 @@ static void _pxp_render_thread_cb(void * ptr)
     u->inited = true;
 
     while(1) {
-        /* Wait for sync if there is no task set. */
+        /* Дождитесь синхронизации, если задача не задана. */
         while(u->task_act == NULL) {
             if(u->exit_status)
                 break;
@@ -476,13 +476,13 @@ static void _pxp_render_thread_cb(void * ptr)
 
         _pxp_execute_drawing(u);
 
-        /* Signal the ready state to dispatcher. */
+        /* Сигнализировать о готовности диспетчеру. */
         u->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
 
-        /* Cleanup. */
+        /* Уборка. */
         u->task_act = NULL;
 
-        /* The draw unit is free now. Request a new dispatching as it can get a new task. */
+        /* Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу. */
         lv_draw_dispatch_request();
     }
 

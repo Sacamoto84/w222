@@ -1,25 +1,25 @@
 /*
-@file    EVE_commands.h
+@file EVE_commands.h
 @brief   contains FT8xx / BT8xx function prototypes
 @version 5.0
-@date    2023-12-29
-@author  Rudolph Riedel
+@date 29 декабря 2023 г.
+@author Рудольф Ридель
 
 @section LICENSE
 
-MIT License
+Лицензия MIT
 
 Copyright (c) 2016-2023 Rudolph Riedel
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
+Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+Программное обеспечение без ограничений, включая, помимо прочего, права
+использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать,
+и/или продавать копии Программного обеспечения, а также разрешать лицам, которым Программное обеспечение
+предоставлено для этого при соблюдении следующих условий:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+копии или существенные части Программного обеспечения.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -28,7 +28,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-@section History
+История @section
 
 5.0
 - added prototype for EVE_cmd_plkfreq()
@@ -50,7 +50,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 - added prototype for EVE_cmd_flashprogram()
 - added prototype for EVE_cmd_calibratesub()
 - added prototypes for EVE_cmd_animframeram(), EVE_cmd_animframeram_burst(), EVE_cmd_animstartram(),
-EVE_cmd_animstartram_burst()
+EVE_cmd_animstartram_burst ()
 - added prototypes for EVE_cmd_apilevel(), EVE_cmd_apilevel_burst()
 - added prototypes for EVE_cmd_calllist(), EVE_cmd_calllist_burst()
 - added prototype for EVE_cmd_getimage()
@@ -78,10 +78,10 @@ EVE_cmd_animstartram_burst()
 - added defines for the state of the external flash
 - added protype for EVE_get_and_reset_fault_state()
 - put E_OK and E_NOT_OK in #ifndef/#endif guards as these are usually defined
-  already in AUTOSAR projects
+  уже в проектах AUTOSAR
 - renamed EVE_FAIL_CHIPID_TIMEOUT to EVE_FAIL_REGID_TIMEOUT as suggested by #93 on github
 - changed a number of function parameters from signed to unsigned following the
-    updated BT81x series programming guide V2.4
+    обновленное руководство по программированию серии BT81x V2 .4
 - commented out EVE_cmd_regread() prototype
 - removed prototype for EVE_cmd_hsf_burst()
 
@@ -120,7 +120,7 @@ EVE_cmd_animstartram_burst()
 #define EVE_FLASH_STATUS_FULL 3U
 
 /* ##################################################################
-    helper functions
+    вспомогательные функции
 ##################################################################### */
 
 void EVE_cmdWrite(uint8_t const command, uint8_t const parameter);
@@ -139,7 +139,7 @@ uint8_t EVE_get_and_reset_fault_state(void);
 void EVE_execute_cmd(void);
 
 /* ##################################################################
-    commands and functions to be used outside of display-lists
+    команды и функции, которые будут использоваться вне списков отображения
 ##################################################################### */
 
 /* EVE4: BT817 / BT818 */
@@ -191,11 +191,11 @@ void EVE_cmd_snapshot(uint32_t ptr);
 void EVE_cmd_snapshot2(uint32_t fmt, uint32_t ptr, int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt);
 void EVE_cmd_track(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt, uint16_t tag);
 void EVE_cmd_videoframe(uint32_t dest, uint32_t result_ptr);
-/*void EVE_cmd_memwrite(uint32_t dest, uint32_t num, const uint8_t *p_data);*/
-/*uint32_t EVE_cmd_regread(uint32_t ptr);*/
+/*void EVE_cmd_memwrite ( uint32_t dest, uint32_t число, const uint8_t * p_data );*/
+/*uint32_t EVE_cmd_regread ( uint32_t ptr);*/
 
 /* ##################################################################
-    patching and initialization
+    исправление и инициализация
 ##################################################################### */
 
 #if EVE_GEN > 2
@@ -206,7 +206,7 @@ void EVE_write_display_parameters(void);
 uint8_t EVE_init(void);
 
 /* ##################################################################
-    functions for display lists
+    функции для отображения списков
 ##################################################################### */
 
 void EVE_start_cmd_burst(void);
@@ -331,7 +331,7 @@ void EVE_color_a(uint8_t alpha);
 void EVE_color_a_burst(uint8_t alpha);
 
 /* ##################################################################
-    special purpose functions
+    функции специального назначения
 ##################################################################### */
 
 void EVE_calibrate_manual(uint16_t width, uint16_t height);

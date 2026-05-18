@@ -22,92 +22,92 @@ extern "C" {
 
 #define _TSIOC(x) (x)
 
-/* Common TSC IOCTL commands */
+/* Общие команды TSC IOCTL */
 
 #define TSIOC_SETXRCAL       _TSIOC(0x0001) /* arg: Pointer to
-                                             * int Xplate R calibration value
+                                             * int Xplate R калибровочное значение
                                              */
 #define TSIOC_GETXRCAL       _TSIOC(0x0002) /* arg: Pointer to
-                                             * int Xplate R calibration value
+                                             * int Xplate R калибровочное значение
                                              */
 #define TSIOC_SETFREQUENCY   _TSIOC(0x0003) /* arg: Pointer to
-                                             * uint32_t frequency value
+                                             * Значение частоты uint32_t
                                              */
 #define TSIOC_GETFREQUENCY   _TSIOC(0x0004) /* arg: Pointer to
-                                             *  uint32_t frequency value
+                                             *  Значение частоты uint32_t
                                              */
 #define TSIOC_GETFWVERSION   _TSIOC(0x0005) /* arg: Pointer to
-                                             * uint32_t firmware version
-                                             * value
+                                             * Версия прошивки uint32_t
+                                             * ценность
                                              * */
 #define TSIOC_ENABLEGESTURE  _TSIOC(0x0006) /* arg: Pointer to
-                                             * int for enable gesture feature
+                                             * int для включения функции жестов
                                              */
 #define TSIOC_DOACALIB       _TSIOC(0x0007) /* arg: none.
-                                             * Initiate TS auto calibration
+                                             * Запустить автоматическую калибровку TS
                                              */
 #define TSIOC_CALDATA        _TSIOC(0x0008) /* arg: Pointer to
-                                             * struct g_tscaldata_s
+                                             * структура g_tscaldata_s
                                              */
 #define TSIOC_USESCALED      _TSIOC(0x0009) /* arg: bool, yes/no */
 #define TSIOC_GETOFFSETX     _TSIOC(0x000a) /* arg: Pointer to
-                                             * int X offset value
+                                             * int значение смещения X
                                              */
 #define TSIOC_GETOFFSETY     _TSIOC(0x000b) /* arg: Pointer to
-                                             * int Y offset value
+                                             * int значение смещения Y
                                              */
 #define TSIOC_GETTHRESHX     _TSIOC(0x000c) /* arg: Pointer to
-                                             * int X threshold value
+                                             * int X пороговое значение
                                              */
 #define TSIOC_GETTHRESHY     _TSIOC(0x000d) /* arg: Pointer to
-                                             * int Y threshold value
+                                             * int Y пороговое значение
                                              */
 
 #define TSIOC_GRAB           _TSIOC(0x000e) /* arg: Pointer to
-                                             * int for enable grab
+                                             * int для включения захвата
                                              */
 
 #define TSIOC_GETMAXPOINTS   _TSIOC(0x000f) /* arg: Pointer to
-                                             * uint8_t max touch point
+                                             * uint8_t максимальная точка касания
                                              */
 #define TSIOC_GETRESOLUTION  _TSIOC(0x0010) /* arg: Pointer to
-                                             * struct touch_resolution_s
+                                             * структура touch_resolution_s
                                              */
 
-/* These definitions provide the meaning of all of the bits that may be
- * reported in the struct touch_point_s flags.
+/* Эти определения определяют значение всех битов, которые могут быть
+ * сообщается в флагах структуры touch_point_s.
  */
 
-#define TOUCH_DOWN           (1 << 0) /* A new touch contact is established */
-#define TOUCH_MOVE           (1 << 1) /* Movement occurred with previously reported contact */
-#define TOUCH_UP             (1 << 2) /* The touch contact was lost */
-#define TOUCH_ID_VALID       (1 << 3) /* Touch ID is certain */
-#define TOUCH_POS_VALID      (1 << 4) /* Hardware provided a valid X/Y position */
-#define TOUCH_PRESSURE_VALID (1 << 5) /* Hardware provided a valid pressure */
-#define TOUCH_SIZE_VALID     (1 << 6) /* Hardware provided a valid H/W contact size */
-#define TOUCH_GESTURE_VALID  (1 << 7) /* Hardware provided a valid gesture */
+#define TOUCH_DOWN           (1 << 0) /* Установлен новый сенсорный контакт */
+#define TOUCH_MOVE           (1 << 1) /* Передвижение произошло при ранее зарегистрированном контакте */
+#define TOUCH_UP             (1 << 2) /* Сенсорный контакт пропал */
+#define TOUCH_ID_VALID       (1 << 3) /* Касание ID обязательно */
+#define TOUCH_POS_VALID      (1 << 4) /* Аппаратное обеспечение предоставило допустимую позицию X/Y. */
+#define TOUCH_PRESSURE_VALID (1 << 5) /* Аппаратное обеспечение обеспечивает допустимое давление */
+#define TOUCH_SIZE_VALID     (1 << 6) /* Аппаратное обеспечение предоставило действительный размер контактов аппаратного обеспечения. */
+#define TOUCH_GESTURE_VALID  (1 << 7) /* Аппаратное обеспечение предоставило действительный жест */
 
 /**********************
  *      TYPEDEFS
  **********************/
 
 struct touch_point_s {
-    uint8_t  id;        /* Unique identifies contact; Same in all reports for the contact */
-    uint8_t  flags;     /* See TOUCH_* definitions above */
-    int16_t  x;         /* X coordinate of the touch point (uncalibrated) */
-    int16_t  y;         /* Y coordinate of the touch point (uncalibrated) */
-    int16_t  h;         /* Height of touch point (uncalibrated) */
-    int16_t  w;         /* Width of touch point (uncalibrated) */
-    uint16_t gesture;   /* Gesture of touchscreen contact */
-    uint16_t pressure;  /* Touch pressure */
-    uint16_t dummy;     /* Padded with 2 bytes here */
-    uint64_t timestamp; /* Touch event time stamp, in microseconds */
+    uint8_t  id;        /* Уникальный идентифицирует контакт; То же во всех отчетах по контакту */
+    uint8_t  flags;     /* См. определения TOUCH_ * выше. */
+    int16_t  x;         /* Координата X точки касания (некалиброванная) */
+    int16_t  y;         /* Координата Y точки касания (некалиброванная) */
+    int16_t  h;         /* Высота точки касания (некалиброванная) */
+    int16_t  w;         /* Ширина точки касания (некалиброванная) */
+    uint16_t gesture;   /* Жест касания сенсорного экрана */
+    uint16_t pressure;  /* Сенсорное давление */
+    uint16_t dummy;     /* Дополнено 2 байтами здесь */
+    uint64_t timestamp; /* Отметка времени события касания, в микросекундах */
 };
 
 struct touch_sample_s {
-    int32_t npoints;               /* The number of touch points in point[] */
-    int32_t dummy;                 /* Padded with 4 bytes here */
-    struct touch_point_s point[1]; /* Actual dimension is npoints */
+    int32_t npoints;               /* Количество точек касания в точке[] */
+    int32_t dummy;                 /* Дополнено 4 байтами здесь */
+    struct touch_point_s point[1]; /* Фактический размер – n пунктов. */
 };
 
 /**********************
@@ -119,7 +119,7 @@ struct touch_sample_s {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*NUTTX_INPUT_TOUCHSCREEN_H*/

@@ -108,8 +108,8 @@ void lv_draw_sw_layer(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc, 
 {
     lv_layer_t * layer_to_draw = (lv_layer_t *)draw_dsc->src;
 
-    /*It can happen that nothing was draw on a layer and therefore its buffer is not allocated.
-     *In this case just return. */
+    /*Может случиться так, что на слое ничего не было нарисовано и поэтому его буфер не выделен.
+     *В этом случае просто вернитесь. */
     if(layer_to_draw->draw_buf == NULL) return;
 
     if(draw_dsc->bitmap_mask_src) {
@@ -117,7 +117,7 @@ void lv_draw_sw_layer(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc, 
         if(!visible) return;
     }
 
-    /*The source should be a draw_buf, not a layer*/
+    /*Источником должен быть draw_buf, а не слой.*/
     lv_draw_image_dsc_t new_draw_dsc = *draw_dsc;
     new_draw_dsc.src = layer_to_draw->draw_buf;
 
@@ -260,9 +260,9 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
         blend_dsc.mask_buf = (lv_opa_t *)src_buf;
         blend_dsc.mask_buf += img_stride * src_w / header->w * src_h;
         /**
-         * Note, for RGB565A8, lacking of stride parameter, we always use
-         * always half of RGB map stride as alpha map stride. The image should
-         * be generated in this way too.
+         * Обратите внимание: для RGB565A8, при отсутствии параметра шага, мы всегда используем
+         * всегда половина шага карты RGB является шагом альфа-карты. Изображение должно
+         * генерироваться таким же образом.
          */
         blend_dsc.mask_stride = img_stride / 2;
         blend_dsc.blend_area = img_coords;
@@ -279,7 +279,7 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
         blend_dsc.src_color_format = cf;
         lv_draw_sw_blend(t, &blend_dsc);
     }
-    /*The simplest case just copy the pixels into the draw_buf. Blending will convert the colors if needed*/
+    /*Самый простой случай — просто скопировать пиксели в draw_buf. Смешивание преобразует цвета при необходимости.*/
     else if(!transformed && !radius && draw_dsc->recolor_opa <= LV_OPA_MIN && draw_dsc->colorkey == NULL) {
         blend_dsc.src_area = img_coords;
         blend_dsc.src_buf = src_buf;
@@ -291,21 +291,21 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
         recolor_only(t, draw_dsc, decoder_dsc, img_coords,  clipped_img_area);
     }
 #if LV_DRAW_SW_COMPLEX
-    /*Handle masked RGB565, RGB888, XRGB888, or ARGB8888 images*/
+    /*Обработка маскированных изображений RGB565, RGB888, XRGB888 или ARGB8888.*/
     else if(!transformed && radius && draw_dsc->recolor_opa <= LV_OPA_MIN && draw_dsc->colorkey == NULL) {
         radius_only(t, draw_dsc, decoder_dsc, img_coords,  clipped_img_area);
     }
 #endif /*LV_DRAW_SW_COMPLEX*/
-    /* check whether it is possible to accelerate the operation in synchronous mode */
-    else if(LV_RESULT_INVALID == LV_DRAW_SW_IMAGE(transformed,      /* whether require transform */
-                                                  cf,               /* image format */
-                                                  src_buf,          /* image buffer */
-                                                  img_coords,       /* src_h, src_w, src_x1, src_y1 */
-                                                  img_stride,       /* image stride */
-                                                  clipped_img_area, /* blend area */
-                                                  t,                /* target buffer, buffer width, buffer height, buffer stride */
-                                                  draw_dsc)) {      /* opa, recolour_opa and colour */
-        /*In the other cases every pixel need to be checked one-by-one*/
+    /* проверьте, можно ли ускорить работу в синхронном режиме */
+    else if(LV_RESULT_INVALID == LV_DRAW_SW_IMAGE(transformed,      /* требуется ли преобразование */
+                                                  cf,               /* формат изображения */
+                                                  src_buf,          /* буфер изображения */
+                                                  img_coords,       /* src_h , src_w , src_x1 , src_y1 */
+                                                  img_stride,       /* шаг изображения */
+                                                  clipped_img_area, /* область смешивания */
+                                                  t,                /* целевой буфер, ширина буфера, высота буфера, шаг буфера */
+                                                  draw_dsc)) {      /* опа, recolour_opa и цвет */
+        /*В остальных случаях необходимо проверять каждый пиксель по отдельности.*/
         transform_and_recolor(t, draw_dsc, decoder_dsc, sup, img_coords, clipped_img_area);
 
     }
@@ -380,10 +380,10 @@ static void radius_only(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc
             blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;
         }
 
-        /*Blend*/
+        /*Смесь*/
         lv_draw_sw_blend(t, &blend_dsc);
 
-        /*Go to the next area*/
+        /*Перейти в следующую область*/
         blend_area.y1 ++;
         blend_area.y2 ++;
     }
@@ -448,7 +448,7 @@ static void recolor_only(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_ds
 
         lv_draw_sw_blend(t, &blend_dsc);
 
-        /*Go to the next area*/
+        /*Перейти в следующую область*/
         blend_area.y1 = blend_area.y2 + 1;
         blend_area.y2 = blend_area.y1 + buf_h - 1;
         if(blend_area.y2 > y_last) {
@@ -526,8 +526,8 @@ static void transform_and_recolor(lv_draw_task_t * t, const lv_draw_image_dsc_t 
     blend_dsc.src_area = &blend_area;
     const uint8_t * src_buf = decoded->data;
     if(cf_final == LV_COLOR_FORMAT_RGB565A8) {
-        /*RGB565A8 images will blended as RGB565 + mask
-         *Therefore the stride can be different. */
+        /*Изображения RGB565A8 будут смешаны как RGB565 + маска.
+         *Поэтому шаг может быть разным. */
         blend_dsc.src_stride = blend_w * 2;
         blend_dsc.mask_area = &blend_area;
         blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;
@@ -536,7 +536,7 @@ static void transform_and_recolor(lv_draw_task_t * t, const lv_draw_image_dsc_t 
         blend_dsc.src_color_format = LV_COLOR_FORMAT_RGB565;
     }
     else if(cf_final == LV_COLOR_FORMAT_AL88) {
-        /*AL88 images will be blended as L8 + mask*/
+        /*Изображения AL88 будут смешаны как L8 + маска.*/
         blend_dsc.src_stride = blend_w;
         blend_dsc.mask_area = &blend_area;
         blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;
@@ -556,7 +556,7 @@ static void transform_and_recolor(lv_draw_task_t * t, const lv_draw_image_dsc_t 
     }
 
     while(blend_area.y1 <= y_last) {
-        /*Apply transformations if any or separate the channels*/
+        /*Примените преобразования, если таковые имеются, или разделите каналы.*/
         lv_area_t relative_area;
         lv_area_copy(&relative_area, &blend_area);
         lv_area_move(&relative_area, -img_coords->x1, -img_coords->y1);
@@ -576,10 +576,10 @@ static void transform_and_recolor(lv_draw_task_t * t, const lv_draw_image_dsc_t 
             }
         }
 
-        /*Blend*/
+        /*Смесь*/
         lv_draw_sw_blend(t, &blend_dsc);
 
-        /*Go to the next area*/
+        /*Перейти в следующую область*/
         blend_area.y1 = blend_area.y2 + 1;
         blend_area.y2 = blend_area.y1 + buf_h - 1;
         if(blend_area.y2 > y_last) {
@@ -602,12 +602,12 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
     int32_t w = lv_area_get_width(&relative_area);
     int32_t h = lv_area_get_height(&relative_area);
 
-    /* Recolor parameters */
+    /* Параметры перекрашивания */
     lv_color_t recolor = draw_dsc->recolor;
     lv_opa_t mix = draw_dsc->recolor_opa;
     lv_opa_t mix_inv = 255 - mix;
 
-    /* Colorkey parameters */
+    /* Параметры цветовых клавиш */
     lv_color_t colorkey_low = draw_dsc->colorkey->low;
     lv_color_t colorkey_high = draw_dsc->colorkey->high;
     if(cf == LV_COLOR_FORMAT_RGB565A8 || cf == LV_COLOR_FORMAT_RGB565) {
@@ -629,16 +629,16 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
             for(x = 0; x < w; x++) {
                 lv_color_t src_color = lv_color16_to_color(*(lv_color16_t *)&buf16_src[x]);
 
-                /* Check colorkey */
+                /* Проверьте цветовую клавишу */
                 if(lv_color_is_in_range(src_color, colorkey_low, colorkey_high)) {
                     if(cf == LV_COLOR_FORMAT_RGB565A8 && mask_buf_tmp) {
                         mask_buf_tmp[x] = 0;
                     }
                     else {
-                        *buf16_dest = 0x0000; // Transparent
+                        *buf16_dest = 0x0000; // Прозрачный
                     }
                 }
-                /* Apply recolor */
+                /* Применить перекрашивание */
                 else if(mix >= LV_OPA_MAX) {
                     *buf16_dest = recolor16;
                 }
@@ -649,7 +649,7 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
                                   ((c_mult[0] + (src16 & 0x1F) * mix_inv) >> 8);
                 }
                 else {
-                    *buf16_dest = buf16_src[x]; // No change
+                    *buf16_dest = buf16_src[x]; // Без изменений
                 }
                 buf16_dest++;
             }
@@ -676,22 +676,22 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
                 src_color.green = src_buf_tmp[1];
                 src_color.red = src_buf_tmp[2];
 
-                /* Check colorkey */
+                /* Проверьте цветовую клавишу */
                 if(lv_color_is_in_range(src_color, colorkey_low, colorkey_high)) {
                     dest_buf_tmp[0] = 0;
                     dest_buf_tmp[1] = 0;
                     dest_buf_tmp[2] = 0;
                     if(cf == LV_COLOR_FORMAT_ARGB8888) {
-                        dest_buf_tmp[3] = 0; // Set alpha to 0
+                        dest_buf_tmp[3] = 0; // Установить альфу на 0
                     }
                 }
-                /* Apply recolor */
+                /* Применить перекрашивание */
                 else if(mix >= LV_OPA_MAX) {
                     dest_buf_tmp[0] = recolor.blue;
                     dest_buf_tmp[1] = recolor.green;
                     dest_buf_tmp[2] = recolor.red;
                     if(cf == LV_COLOR_FORMAT_ARGB8888) {
-                        dest_buf_tmp[3] = src_buf_tmp[3]; // Keep original alpha
+                        dest_buf_tmp[3] = src_buf_tmp[3]; // Сохранить оригинальную альфу
                     }
                 }
                 else if(mix > LV_OPA_MIN) {
@@ -699,11 +699,11 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
                     dest_buf_tmp[1] = (c_mult[1] + (src_buf_tmp[1] * mix_inv)) >> 8;
                     dest_buf_tmp[2] = (c_mult[2] + (src_buf_tmp[2] * mix_inv)) >> 8;
                     if(cf == LV_COLOR_FORMAT_ARGB8888) {
-                        dest_buf_tmp[3] = src_buf_tmp[3]; // Keep original alpha
+                        dest_buf_tmp[3] = src_buf_tmp[3]; // Сохранить оригинальную альфу
                     }
                 }
                 else {
-                    // Copy as-is
+                    // Копировать как есть
                     dest_buf_tmp[0] = src_buf_tmp[0];
                     dest_buf_tmp[1] = src_buf_tmp[1];
                     dest_buf_tmp[2] = src_buf_tmp[2];
@@ -734,9 +734,9 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
             for(x = 0; x < w; x++) {
                 uint8_t alpha = src_buf_tmp[3];
 
-                // Only process if pixel is visible
+                // Обрабатывать только в том случае, если пиксель виден
                 if(alpha > 0) {
-                    /* Unpremultiply for color comparison and recolor */
+                    /* Unpremultiply для сравнения цветов и перекрашивания */
                     uint16_t reciprocal = (255 * 256) / alpha;
                     uint8_t r = (src_buf_tmp[2] * reciprocal) >> 8;
                     uint8_t g = (src_buf_tmp[1] * reciprocal) >> 8;
@@ -744,15 +744,15 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
 
                     lv_color_t src_color = lv_color_make(r, g, b);
 
-                    /* Check colorkey */
+                    /* Проверьте цветовую клавишу */
                     if(lv_color_is_in_range(src_color, colorkey_low, colorkey_high)) {
-                        // Set entire pixel to transparent
+                        // Сделать весь пиксель прозрачным
                         dest_buf_tmp[0] = 0;
                         dest_buf_tmp[1] = 0;
                         dest_buf_tmp[2] = 0;
                         dest_buf_tmp[3] = 0;
                     }
-                    /* Apply recolor */
+                    /* Применить перекрашивание */
                     else {
                         if(mix >= LV_OPA_MAX) {
                             r = recolor.red;
@@ -764,21 +764,21 @@ static void colorkey_and_recolor(lv_area_t relative_area, uint8_t * src_buf, uin
                             g = (c_mult[1] + (g * mix_inv)) >> 8;
                             b = (c_mult[0] + (b * mix_inv)) >> 8;
                         }
-                        // Else keep original colors
+                        // В противном случае сохраните оригинальные цвета.
 
-                        /* Premultiply again */
+                        /* Снова умножить */
                         dest_buf_tmp[0] = (b * alpha) >> 8;
                         dest_buf_tmp[1] = (g * alpha) >> 8;
                         dest_buf_tmp[2] = (r * alpha) >> 8;
-                        dest_buf_tmp[3] = alpha; // Keep original alpha
+                        dest_buf_tmp[3] = alpha; // Сохранить оригинальную альфу
                     }
                 }
                 else {
-                    // Already transparent, copy as-is
+                    // Уже прозрачно, скопируйте как есть
                     dest_buf_tmp[0] = src_buf_tmp[0];
                     dest_buf_tmp[1] = src_buf_tmp[1];
                     dest_buf_tmp[2] = src_buf_tmp[2];
-                    dest_buf_tmp[3] = 0; // Ensure alpha is 0
+                    dest_buf_tmp[3] = 0; // Убедитесь, что альфа равна 0
                 }
 
                 src_buf_tmp += px_size;
@@ -795,7 +795,7 @@ static void recolor(lv_area_t relative_area, uint8_t * src_buf, uint8_t * dest_b
     int32_t w = lv_area_get_width(&relative_area);
     int32_t h = lv_area_get_height(&relative_area);
 
-    /*Apply recolor*/
+    /*Применить перекрашивание*/
     lv_color_t color = draw_dsc->recolor;
     lv_opa_t mix = draw_dsc->recolor_opa;
     lv_opa_t mix_inv = 255 - mix;
@@ -936,30 +936,30 @@ static void recolor(lv_area_t relative_area, uint8_t * src_buf, uint8_t * dest_b
                     uint8_t alpha = src_buf[3];
 
                     if(alpha > 0) {
-                        /* Step 1: Unpremultiply (convert to non-premultiplied RGB) */
+                        /* Шаг 1: Без предварительного умножения (преобразование в RGB без предварительного умножения) */
                         uint16_t reciprocal = (255 * 256) / alpha;
                         uint8_t r = (src_buf[2] * reciprocal) >> 8;
                         uint8_t g = (src_buf[1] * reciprocal) >> 8;
                         uint8_t b = (src_buf[0] * reciprocal) >> 8;
 
-                        /* Step 2: Apply recoloring */
+                        /* Шаг 2. Примените перекрашивание */
                         r = (c_mult[2] + (r * mix_inv)) >> 8;
                         g = (c_mult[1] + (g * mix_inv)) >> 8;
                         b = (c_mult[0] + (b * mix_inv)) >> 8;
 
-                        /* Step 3: Premultiply again */
+                        /* Шаг 3. Снова умножьте */
                         dest_buf[0] = (b * alpha) >> 8;
                         dest_buf[1] = (g * alpha) >> 8;
                         dest_buf[2] = (r * alpha) >> 8;
                     }
                     else {
-                        /* If alpha is 0, just copy the pixel as is */
+                        /* Если альфа равна 0, просто скопируйте пиксель как есть. */
                         dest_buf[0] = src_buf[0];
                         dest_buf[1] = src_buf[1];
                         dest_buf[2] = src_buf[2];
                     }
 
-                    dest_buf[3] = alpha; /* Keep original alpha*/
+                    dest_buf[3] = alpha; /* Сохранить оригинальную альфу*/
 
                     src_buf += px_size;
                     dest_buf += px_size;
@@ -996,47 +996,47 @@ static bool apply_mask(const lv_draw_image_dsc_t * draw_dsc)
     const lv_draw_buf_t * mask_draw_buf = mask_decoder_dsc.decoded;
     mask_stride = mask_draw_buf->header.stride;
 
-    /*Align the mask to the center*/
+    /*Выровняйте маску по центру*/
     lv_area_t image_area;
-    image_area = draw_dsc->image_area;  /*Use the whole image area for the alignment*/
+    image_area = draw_dsc->image_area;  /*Используйте всю область изображения для выравнивания*/
     lv_area_set(&mask_area, 0, 0, mask_draw_buf->header.w - 1, mask_draw_buf->header.h - 1);
     lv_area_align(&image_area, &mask_area, LV_ALIGN_CENTER, 0, 0);
 
     image_area =
-        layer_to_draw->buf_area; /*The image can be smaller if only a part was rendered. Use this are during rendering*/
+        layer_to_draw->buf_area; /*Изображение может быть меньше, если визуализировалась только его часть. Используйте это во время рендеринга*/
 
-    /*Only the intersection of the mask and image needs to be rendered
-     *If if there is no intersection there is nothing to render as the image is out of the mask.*/
+    /*Необходимо визуализировать только пересечение маски и изображения.
+     *Если пересечения нет, рендерить нечего, поскольку изображение находится за пределами маски.*/
     lv_area_t masked_area;
     if(!lv_area_intersect(&masked_area, &mask_area, &image_area)) {
         lv_image_decoder_close(&mask_decoder_dsc);
         return false;
     }
 
-    /*Clear the sides if any*/
+    /*Очистите боковые стороны, если они есть.*/
     lv_area_t side_area = {0};
-    /*Top*/
+    /*Топ*/
     side_area.x2 = layer_to_draw->draw_buf->header.w - 1;
     side_area.y2 = masked_area.y1 - 1 - image_area.y1;
     lv_draw_buf_clear(layer_to_draw->draw_buf, &side_area);
 
-    /*Bottom*/
+    /*Внизу*/
     side_area.y1 = masked_area.y2 + 1 - image_area.y1;
     side_area.y2 = layer_to_draw->draw_buf->header.h - 1;
     lv_draw_buf_clear(layer_to_draw->draw_buf, &side_area);
 
-    /*Left*/
+    /*Левый*/
     side_area.y1 = 0;
     side_area.x1 = 0;
     side_area.x2 = masked_area.x1 - 1 - image_area.x1;
     lv_draw_buf_clear(layer_to_draw->draw_buf, &side_area);
 
-    /*Right*/
+    /*Правильно*/
     side_area.x1 = masked_area.x2 + 1 - image_area.x1;
     side_area.x2 = layer_to_draw->draw_buf->header.w - 1;
     lv_draw_buf_clear(layer_to_draw->draw_buf, &side_area);
 
-    /*Seek to the first of the image and mask on the masked area*/
+    /*Найдите первое изображение и замаскируйте замаскированную область.*/
     uint8_t * img_start = lv_draw_buf_goto_xy(image_draw_buf,
                                               masked_area.x1 - image_area.x1,
                                               masked_area.y1 - image_area.y1);

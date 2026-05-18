@@ -41,22 +41,22 @@
 void lv_draw_vg_lite_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc,
                                 const lv_area_t * coords)
 {
-    /*Calculate the rectangle which is blurred to get the shadow in `shadow_area`*/
+    /*Вычислите размытый прямоугольник, чтобы получить тень в `shadow_area`.*/
     lv_area_t core_area;
     core_area.x1 = coords->x1  + dsc->ofs_x - dsc->spread;
     core_area.x2 = coords->x2  + dsc->ofs_x + dsc->spread;
     core_area.y1 = coords->y1  + dsc->ofs_y - dsc->spread;
     core_area.y2 = coords->y2  + dsc->ofs_y + dsc->spread;
 
-    /*Calculate the bounding box of the shadow*/
+    /*Вычислить ограничивающую рамку тени*/
     lv_area_t shadow_area;
     shadow_area.x1 = core_area.x1 - dsc->width / 2 - 1;
     shadow_area.x2 = core_area.x2 + dsc->width / 2 + 1;
     shadow_area.y1 = core_area.y1 - dsc->width / 2 - 1;
     shadow_area.y2 = core_area.y2 + dsc->width / 2 + 1;
 
-    /*Get clipped draw area which is the real draw area.
-     *It is always the same or inside `shadow_area`*/
+    /*Получите обрезанную область прорисовки, которая является настоящей областью прорисовки.
+     *Всегда одно и то же или внутри `shadow_area`*/
     lv_area_t draw_area;
     if(!lv_area_intersect(&draw_area, &shadow_area, &t->clip_area)) return;
 
@@ -79,7 +79,7 @@ void lv_draw_vg_lite_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc
         lv_draw_vg_lite_border(t, &border_dsc, &draw_area);
     }
 
-    /* fill center */
+    /* центр заполнения */
     if(dsc->ofs_x || dsc->ofs_y) {
         lv_draw_fill_dsc_t fill_dsc;
         lv_draw_fill_dsc_init(&fill_dsc);

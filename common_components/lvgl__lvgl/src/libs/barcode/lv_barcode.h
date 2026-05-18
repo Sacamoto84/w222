@@ -30,11 +30,11 @@ extern "C" {
 
 typedef enum {
     /**
-     * Code 128 with GS1 encoding. Strips `[FCN1]` and spaces.
+     * Код 128 с кодировкой GS1. Полосы `[FCN1]` и пробелы.
      */
     LV_BARCODE_ENCODING_CODE128_GS1,
     /**
-     * Code 128 with raw encoding.
+     * Код 128 с необработанной кодировкой.
      */
     LV_BARCODE_ENCODING_CODE128_RAW,
 } lv_barcode_encoding_t;
@@ -46,56 +46,56 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_barcode_class;
  **********************/
 
 /**
- * Create an empty barcode (an `lv_canvas`) object.
+ * Создайте пустой объект штрих-кода (`lv_canvas`).
  * @param parent point to an object where to create the barcode
  * @return pointer to the created barcode object
  */
 lv_obj_t * lv_barcode_create(lv_obj_t * parent);
 
 /**
- * Set the dark color of a barcode object
+ * Установите темный цвет объекта штрих-кода
  * @param obj pointer to barcode object
  * @param color dark color of the barcode
  */
 void lv_barcode_set_dark_color(lv_obj_t * obj, lv_color_t color);
 
 /**
- * Set the light color of a barcode object
+ * Установите цвет света объекта штрих-кода
  * @param obj pointer to barcode object
  * @param color light color of the barcode
  */
 void lv_barcode_set_light_color(lv_obj_t * obj, lv_color_t color);
 
 /**
- * Set the scale of a barcode object
+ * Установите масштаб объекта штрих-кода
  * @param obj pointer to barcode object
  * @param scale scale factor
  */
 void lv_barcode_set_scale(lv_obj_t * obj, uint16_t scale);
 
 /**
- * Set the direction of a barcode object
+ * Задайте направление объекта штрих-кода
  * @param obj pointer to barcode object
  * @param direction draw direction (`LV_DIR_HOR` or `LB_DIR_VER`)
  */
 void lv_barcode_set_direction(lv_obj_t * obj, lv_dir_t direction);
 
 /**
- * Set the tiled mode of a barcode object
+ * Установите мозаичный режим объекта штрих-кода
  * @param obj pointer to barcode object
  * @param tiled true: tiled mode, false: normal mode (default)
  */
 void lv_barcode_set_tiled(lv_obj_t * obj, bool tiled);
 
 /**
- * Set the encoding of a barcode object
+ * Установите кодировку объекта штрих-кода
  * @param obj pointer to barcode object
  * @param encoding encoding (default is `LV_BARCODE_CODE128_GS1`)
  */
 void lv_barcode_set_encoding(lv_obj_t * obj, lv_barcode_encoding_t encoding);
 
 /**
- * Set the data of a barcode object
+ * Установите данные объекта штрих-кода
  * @param obj pointer to barcode object
  * @param data data to display
  * @return LV_RESULT_OK: if no error; LV_RESULT_INVALID: on error
@@ -103,28 +103,28 @@ void lv_barcode_set_encoding(lv_obj_t * obj, lv_barcode_encoding_t encoding);
 lv_result_t lv_barcode_update(lv_obj_t * obj, const char * data);
 
 /**
- * Get the dark color of a barcode object
+ * Получить темный цвет объекта штрих-кода
  * @param obj pointer to barcode object
  * @return dark color of the barcode
  */
 lv_color_t lv_barcode_get_dark_color(lv_obj_t * obj);
 
 /**
- * Get the light color of a barcode object
+ * Получить светлый цвет объекта штрих-кода
  * @param obj pointer to barcode object
  * @return light color of the barcode
  */
 lv_color_t lv_barcode_get_light_color(lv_obj_t * obj);
 
 /**
- * Get the scale of a barcode object
+ * Получить масштаб объекта штрих-кода
  * @param obj pointer to barcode object
  * @return scale factor
  */
 uint16_t lv_barcode_get_scale(lv_obj_t * obj);
 
 /**
- * Get the encoding of a barcode object
+ * Получить кодировку объекта штрих-кода
  * @param obj pointer to barcode object
  * @return encoding
  */
@@ -137,7 +137,7 @@ lv_barcode_encoding_t lv_barcode_get_encoding(const lv_obj_t * obj);
 #endif /*LV_USE_BARCODE*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_BARCODE_H*/

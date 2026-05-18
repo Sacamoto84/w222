@@ -15,7 +15,7 @@
 #include "../../misc/lv_assert.h"
 #include "../../stdlib/lv_string.h"
 
-/*Testing of dependencies*/
+/*Тестирование зависимостей*/
 #if LV_USE_BUTTONMATRIX == 0
     #error "lv_buttonmatrix is required. Enable it in lv_conf.h (LV_USE_BUTTONMATRIX  1) "
 #endif
@@ -233,7 +233,7 @@ lv_obj_t * lv_keyboard_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_keyboard_set_textarea(lv_obj_t * obj, lv_obj_t * ta)
@@ -245,14 +245,14 @@ void lv_keyboard_set_textarea(lv_obj_t * obj, lv_obj_t * ta)
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_keyboard_t * keyboard = (lv_keyboard_t *)obj;
 
-    /*Hide the cursor of the old Text area if cursor management is enabled*/
+    /*Скрыть курсор старой текстовой области, если управление курсором включено.*/
     if(keyboard->ta) {
         lv_obj_remove_state(keyboard->ta, LV_STATE_FOCUSED);
     }
 
     keyboard->ta = ta;
 
-    /*Show the cursor of the new Text area if cursor management is enabled*/
+    /*Показывать курсор новой текстовой области, если управление курсором включено.*/
     if(keyboard->ta) {
         lv_obj_add_state(keyboard->ta, LV_STATE_FOCUSED);
     }
@@ -290,7 +290,7 @@ void lv_keyboard_set_map(lv_obj_t * obj, lv_keyboard_mode_t mode, const char * c
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_obj_t * lv_keyboard_get_textarea(const lv_obj_t * obj)
@@ -314,7 +314,7 @@ bool lv_keyboard_get_popovers(const lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_keyboard_def_event_cb(lv_event_t * e)
@@ -376,7 +376,7 @@ void lv_keyboard_def_event_cb(lv_event_t * e)
         return;
     }
 
-    /*Add the characters to the text area if set*/
+    /*Добавьте символы в текстовую область, если установлено*/
     if(keyboard->ta == NULL) return;
 
     if(lv_strcmp(txt, "Enter") == 0 || lv_strcmp(txt, LV_SYMBOL_NEW_LINE) == 0) {
@@ -458,7 +458,7 @@ static void lv_keyboard_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
 }
 
 /**
- * Update the key and control map for the current mode
+ * Обновите карту клавиш и элементов управления для текущего режима.
  * @param obj pointer to a keyboard object
  */
 static void lv_keyboard_update_map(lv_obj_t * obj)
@@ -469,7 +469,7 @@ static void lv_keyboard_update_map(lv_obj_t * obj)
 }
 
 /**
- * Update the control map for the current mode
+ * Обновить карту управления для текущего режима
  * @param obj pointer to a keyboard object
  */
 static void lv_keyboard_update_ctrl_map(lv_obj_t * obj)
@@ -477,22 +477,22 @@ static void lv_keyboard_update_ctrl_map(lv_obj_t * obj)
     lv_keyboard_t * keyboard = (lv_keyboard_t *)obj;
 
     if(keyboard->popovers) {
-        /*Apply the current control map (already includes LV_BUTTONMATRIX_CTRL_POPOVER flags)*/
+        /*Применить текущую карту управления (уже включает флаги LV_BUTTONMATRIX_CTRL_POPOVER)*/
         lv_buttonmatrix_set_ctrl_map(obj, kb_ctrl[keyboard->mode]);
     }
     else {
-        /*Make a copy of the current control map*/
+        /*Сделайте копию текущей карты управления*/
         lv_buttonmatrix_t * btnm = (lv_buttonmatrix_t *)obj;
         lv_buttonmatrix_ctrl_t * ctrl_map = lv_malloc(btnm->btn_cnt * sizeof(lv_buttonmatrix_ctrl_t));
         lv_memcpy(ctrl_map, kb_ctrl[keyboard->mode], sizeof(lv_buttonmatrix_ctrl_t) * btnm->btn_cnt);
 
-        /*Remove all LV_BUTTONMATRIX_CTRL_POPOVER flags*/
+        /*Удалить все флаги LV_BUTTONMATRIX_CTRL_POPOVER.*/
         uint32_t i;
         for(i = 0; i < btnm->btn_cnt; i++) {
             ctrl_map[i] &= (~LV_BUTTONMATRIX_CTRL_POPOVER);
         }
 
-        /*Apply new control map and clean up*/
+        /*Примените новую карту управления и очистите*/
         lv_buttonmatrix_set_ctrl_map(obj, ctrl_map);
         lv_free(ctrl_map);
     }

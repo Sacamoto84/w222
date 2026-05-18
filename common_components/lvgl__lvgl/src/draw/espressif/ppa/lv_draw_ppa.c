@@ -37,7 +37,7 @@ void lv_draw_ppa_init(void)
     esp_err_t res;
     ppa_client_config_t cfg = {0};
 
-    /* Create draw unit */
+    /* Создать блок рисования */
     lv_draw_buf_ppa_init_handlers();
     lv_draw_ppa_unit_t * draw_ppa_unit = lv_draw_create_unit(sizeof(lv_draw_ppa_unit_t));
     draw_ppa_unit->base_unit.evaluate_cb = ppa_evaluate;
@@ -45,7 +45,7 @@ void lv_draw_ppa_init(void)
     draw_ppa_unit->base_unit.delete_cb    = ppa_delete;
     draw_ppa_unit->base_unit.name         = "ESP_PPA";
 
-    /* Register SRM client */
+    /* Зарегистрируйте клиент SRM */
     cfg.oper_type = PPA_OPERATION_SRM;
     cfg.max_pending_trans_num = 1;
 #if (LV_PPA_BURST_LENGTH == 128)
@@ -65,12 +65,12 @@ void lv_draw_ppa_init(void)
     res = ppa_register_client(&cfg, &draw_ppa_unit->srm_client);
     LV_ASSERT(res == ESP_OK);
 
-    /* Register Fill client */
+    /* Зарегистрироваться Заполнить клиент */
     cfg.oper_type = PPA_OPERATION_FILL;
     res = ppa_register_client(&cfg, &draw_ppa_unit->fill_client);
     LV_ASSERT(res == ESP_OK);
 
-    /* Register Blend client */
+    /* Зарегистрировать клиент Blend */
     cfg.oper_type = PPA_OPERATION_BLEND;
 
     res = ppa_register_client(&cfg, &draw_ppa_unit->blend_client);
@@ -79,7 +79,7 @@ void lv_draw_ppa_init(void)
 
 void lv_draw_ppa_deinit(void)
 {
-    /* No global deinit required */
+    /* Глобальный деинит не требуется */
 }
 
 /**********************

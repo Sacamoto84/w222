@@ -205,7 +205,7 @@ void lv_spangroup_delete_span(lv_obj_t * obj, lv_span_t * span)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_span_set_text(lv_span_t * span, const char * text)
@@ -386,8 +386,8 @@ void lv_spangroup_set_mode(lv_obj_t * obj, lv_span_mode_t mode)
         lv_obj_set_height(obj, LV_SIZE_CONTENT);
     }
     else if(mode == LV_SPAN_MODE_FIXED) {
-        /* use this mode, The user needs to set the size. */
-        /* This is just to prevent an infinite loop. */
+        /* используйте этот режим. Пользователь должен установить размер. */
+        /* Это сделано для предотвращения бесконечного цикла. */
         if(lv_obj_get_style_width(obj, LV_PART_MAIN) == LV_SIZE_CONTENT) {
             lv_obj_set_width(obj, 100);
         }
@@ -409,7 +409,7 @@ void lv_spangroup_set_max_lines(lv_obj_t * obj, int32_t lines)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_style_t * lv_span_get_style(lv_span_t * span)
@@ -436,7 +436,7 @@ lv_span_t * lv_spangroup_get_child(const lv_obj_t * obj, int32_t id)
     int32_t cur_idx = 0;
     lv_ll_node_t * cur_node = linked_list->head;
 
-    /*If using a negative index, start from the tail and use cur -1 to indicate the end*/
+    /*Если вы используете отрицательный индекс, начните с хвоста и используйте cur -1, чтобы указать конец.*/
     if(!traverse_forwards) {
         cur_idx = -1;
         cur_node = linked_list->tail;
@@ -499,11 +499,11 @@ lv_span_mode_t lv_spangroup_get_mode(lv_obj_t * obj)
         return LV_SPAN_MODE_EXPAND;
     }
 
-    /*Width is fixed for the following cases*/
+    /*Ширина фиксирована для следующих случаев*/
     else if(lv_obj_get_style_height(obj, LV_PART_MAIN) == LV_SIZE_CONTENT) {
         return LV_SPAN_MODE_BREAK;
     }
-    /*Both fixed*/
+    /*Оба исправлены*/
     else {
         return LV_SPAN_MODE_FIXED;
     }
@@ -578,35 +578,35 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
         return 0;
     }
 
-    /* init draw variable */
+    /* инициализация переменной рисования */
     lv_text_flag_t txt_flag = LV_TEXT_FLAG_NONE;
     int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
     int32_t max_width = width;
     int32_t indent = convert_indent_pct(obj, max_width);
-    int32_t max_w  = max_width - indent; /* first line need minus indent */
+    int32_t max_w  = max_width - indent; /* первая строка должна быть минус отступ */
 
-    /* coords of draw span-txt */
+    /* координаты прорисовки span-txt */
     lv_point_t txt_pos;
-    lv_point_set(&txt_pos, indent, 0); /* first line need add indent */
+    lv_point_set(&txt_pos, indent, 0); /* в первую строку нужно добавить отступ */
 
     lv_span_t * cur_span = lv_ll_get_head(&spans->child_ll);
     const char * cur_txt = cur_span->txt;
     span_text_check(&cur_txt);
     uint32_t cur_txt_ofs = 0;
-    lv_snippet_t snippet;   /* use to save cur_span info and push it to stack */
+    lv_snippet_t snippet;   /* используйте, чтобы сохранить информацию cur_span и поместить ее в стек */
     lv_memset(&snippet, 0, sizeof(snippet));
 
     lv_span_t * prev_span = cur_span;
     int32_t line_cnt = 0;
     int32_t lines = spans->lines < 0 ? INT32_MAX : spans->lines;
-    /* the loop control how many lines need to draw */
+    /* цикл контролирует, сколько линий нужно нарисовать */
     while(cur_span) {
         int snippet_cnt = 0;
-        int32_t max_line_h = 0;  /* the max height of span-font when a line have a lot of span */
+        int32_t max_line_h = 0;  /* максимальная высота шрифта интервала, когда строка имеет большой интервал */
 
-        /* the loop control to find a line and push the relevant span info into stack  */
+        /* управление циклом, чтобы найти строку и поместить соответствующую информацию о интервале в стек  */
         while(1) {
-            /* switch to the next span when current is end */
+            /* переключиться на следующий диапазон, когда ток закончится */
             if(cur_txt[cur_txt_ofs] == '\0') {
                 cur_span->trailing_pos = txt_pos;
 
@@ -615,11 +615,11 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
                 cur_txt = cur_span->txt;
                 span_text_check(&cur_txt);
                 cur_txt_ofs = 0;
-                /* maybe also cur_txt[cur_txt_ofs] == '\0' */
+                /* возможно также cur_txt [ cur_txt_ofs ] == '\0' */
                 continue;
             }
 
-            /* init span info to snippet. */
+            /* Информация об интервале инициализации для фрагмента. */
             if(cur_txt_ofs == 0) {
                 snippet.span = cur_span;
                 snippet.font = lv_span_get_style_text_font(obj, cur_span);
@@ -627,7 +627,7 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
                 snippet.line_h = lv_font_get_line_height(snippet.font) + line_space;
             }
 
-            /* get current span text line info */
+            /* получить информацию о текущей текстовой строке диапазона */
             uint32_t next_ofs = 0;
             int32_t use_width = 0;
             bool isfill = lv_text_get_snippet(&cur_txt[cur_txt_ofs], snippet.font, snippet.letter_space,
@@ -635,7 +635,7 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
             if(isfill) txt_pos.x = 0;
             else txt_pos.x += use_width;
 
-            /* break word deal width */
+            /* ширина сделки по разрыву слова */
             if(isfill && next_ofs > 0 && snippet_cnt > 0) {
                 int32_t drawn_width = use_width;
                 if(lv_ll_get_next(&spans->child_ll, cur_span) == NULL) {
@@ -670,10 +670,10 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
             }
         }
 
-        /* next line init */
+        /* следующая строка инициализации */
         txt_pos.y += max_line_h;
 
-        /* iterate all the spans in the current line and set the trailing height to the max line height */
+        /* перебрать все промежутки в текущей строке и установить конечную высоту на максимальную высоту строки */
         for(lv_span_t * tmp_span = prev_span;
             tmp_span && tmp_span != cur_span;
             tmp_span = lv_ll_get_next(&spans->child_ll, tmp_span))
@@ -698,7 +698,7 @@ lv_span_coords_t lv_spangroup_get_span_coords(lv_obj_t * obj, const lv_span_t * 
         0
     };
 
-    /* find previous span */
+    /* найти предыдущий интервал */
     const lv_spangroup_t * spangroup = (lv_spangroup_t *)obj;
     const lv_ll_t * spans = &spangroup->child_ll;
     const int32_t width = lv_obj_get_content_width(obj);
@@ -737,7 +737,7 @@ lv_span_t * lv_spangroup_get_span_by_point(lv_obj_t * obj, const lv_point_t * p)
     point.x = p->x - obj->coords.x1;
     point.y = p->y - obj->coords.y1;
 
-    /* find previous span */
+    /* найти предыдущий интервал */
 
     const lv_span_t * prev_span = NULL;
     lv_span_t * curr_span;
@@ -761,7 +761,7 @@ lv_span_t * lv_spangroup_get_span_by_point(lv_obj_t * obj, const lv_point_t * p)
 
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_spangroup_refresh(lv_obj_t * obj)
@@ -858,7 +858,7 @@ static void lv_spangroup_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    /* Call the ancestor's event handler */
+    /* Вызов обработчика событий предка */
     if(lv_obj_event_base(MY_CLASS, e) != LV_RESULT_OK) return;
 
     lv_event_code_t code = lv_event_get_code(e);
@@ -935,8 +935,8 @@ static bool lv_text_get_snippet(const char * txt, const lv_font_t * font,
 
     int32_t real_max_width = max_width;
 #if !LV_USE_FONT_PLACEHOLDER
-    /* fix incomplete text display when disable the placeholder. */
-    /* workaround by: https://github.com/lvgl/lvgl/issues/3685 */
+    /* исправить неполное отображение текста при отключении заполнителя. */
+    /* обходной путь: https://github.com/lvgl/lvgl/issues/3685 */
     real_max_width++;
 #endif
 
@@ -1075,7 +1075,7 @@ static int32_t convert_indent_pct(lv_obj_t * obj, int32_t width)
 }
 
 /**
- * draw span group
+ * нарисовать группу промежутков
  * @param spans obj handle
  * @param coords coordinates of the label
  * @param mask the label will be drawn only in this area
@@ -1088,29 +1088,29 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
 
     lv_spangroup_t * spans = (lv_spangroup_t *)obj;
 
-    /* return if not span */
+    /* вернуть, если не охват */
     if(lv_ll_get_head(&spans->child_ll) == NULL) {
         return;
     }
 
-    /* return if no draw area */
+    /* вернуться, если нет области рисования */
     lv_area_t clip_area;
     if(!lv_area_intersect(&clip_area, &coords, &layer->_clip_area))  return;
     const lv_area_t clip_area_ori = layer->_clip_area;
     layer->_clip_area = clip_area;
 
-    /* init draw variable */
+    /* инициализация переменной рисования */
     lv_text_flag_t txt_flag = LV_TEXT_FLAG_NONE;
     int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
     int32_t max_width = lv_area_get_width(&coords);
     int32_t indent = convert_indent_pct(obj, max_width);
-    int32_t max_w  = max_width - indent; /* first line need minus indent */
+    int32_t max_w  = max_width - indent; /* первая строка должна быть минус отступ */
     lv_opa_t obj_opa = lv_obj_get_style_opa_recursive(obj, LV_PART_MAIN);
 
-    /* coords of draw span-txt */
+    /* координаты прорисовки span-txt */
     lv_point_t txt_pos;
     txt_pos.y = coords.y1;
-    txt_pos.x = coords.x1 + indent; /* first line need add indent */
+    txt_pos.x = coords.x1 + indent; /* в первую строку нужно добавить отступ */
 
     lv_span_t * cur_span = lv_ll_get_head(&spans->child_ll);
     const char * cur_txt = cur_span->txt;
@@ -1138,35 +1138,35 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
 #endif
 
     uint32_t cur_txt_ofs = 0;
-    lv_snippet_t snippet;   /* use to save cur_span info and push it to stack */
+    lv_snippet_t snippet;   /* используйте, чтобы сохранить информацию cur_span и поместить ее в стек */
     lv_memzero(&snippet, sizeof(snippet));
 
     lv_draw_label_dsc_t label_draw_dsc;
     lv_draw_label_dsc_init(&label_draw_dsc);
 
     bool is_first_line = true;
-    /* the loop control how many lines need to draw */
+    /* цикл контролирует, сколько линий нужно нарисовать */
     while(cur_span) {
         bool is_end_line = false;
         bool ellipsis_valid = false;
-        int32_t max_line_h = 0;  /* the max height of span-font when a line have a lot of span */
-        int32_t max_baseline = 0; /*baseline of the highest span*/
+        int32_t max_line_h = 0;  /* максимальная высота шрифта интервала, когда строка имеет большой интервал */
+        int32_t max_baseline = 0; /*базовая линия самого высокого диапазона*/
         lv_snippet_clear();
 
-        /* the loop control to find a line and push the relevant span info into stack  */
+        /* управление циклом, чтобы найти строку и поместить соответствующую информацию о интервале в стек  */
         while(1) {
-            /* switch to the next span when current is end */
+            /* переключиться на следующий диапазон, когда ток закончится */
             if(cur_txt[cur_txt_ofs] == '\0') {
                 cur_span = lv_ll_get_next(&spans->child_ll, cur_span);
                 if(cur_span == NULL) break;
                 cur_txt = cur_span->txt;
                 span_text_check(&cur_txt);
                 cur_txt_ofs = 0;
-                /* maybe also cur_txt[cur_txt_ofs] == '\0' */
+                /* возможно также cur_txt [ cur_txt_ofs ] == '\0' */
                 continue;
             }
 
-            /* init span info to snippet. */
+            /* Информация об интервале инициализации для фрагмента. */
             if(cur_txt_ofs == 0) {
                 snippet.span = cur_span;
                 snippet.font = lv_span_get_style_text_font(obj, cur_span);
@@ -1174,7 +1174,7 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
                 snippet.line_h = lv_font_get_line_height(snippet.font) + line_space;
             }
 
-            /* get current span text line info */
+            /* получить информацию о текущей текстовой строке диапазона */
             uint32_t next_ofs = 0;
             int32_t use_width = 0;
             bool isfill = lv_text_get_snippet(&cur_txt[cur_txt_ofs], snippet.font, snippet.letter_space,
@@ -1186,8 +1186,8 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
                     if(lv_ll_get_next(&spans->child_ll, cur_span) == NULL) {
                         drawn_width -= snippet.letter_space;
                     }
-                    /* To prevent infinite loops, the lv_text_get_next_line() may return incomplete words, */
-                    /* This phenomenon should be avoided when lv_get_snippet_count() > 0 */
+                    /* Чтобы предотвратить бесконечные циклы, lv_text_get_next_line() может возвращать неполные слова, */
+                    /* Этого явления следует избегать, когда lv_get_snippet_count () > 0. */
                     if(max_w < drawn_width) {
                         break;
                     }
@@ -1219,36 +1219,36 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
             }
         }
 
-        /* start current line deal with */
+        /* начать текущую строку сделки с */
 
         uint32_t item_cnt = lv_get_snippet_count();
-        if(item_cnt == 0) {     /* break if stack is empty */
+        if(item_cnt == 0) {     /* прерывать, если стек пуст */
             break;
         }
 
-        /* Whether the current line is the end line and does overflow processing */
+        /* Является ли текущая строка конечной строкой и выполняет ли она обработку переполнения */
         {
             lv_snippet_t * last_snippet = lv_get_snippet(item_cnt - 1);
             int32_t next_line_h = last_snippet->line_h;
             if(last_snippet->txt[last_snippet->bytes] == '\0') {
                 next_line_h = 0;
                 lv_span_t * next_span = lv_ll_get_next(&spans->child_ll, last_snippet->span);
-                if(next_span && next_span->txt && next_span->txt[0]) { /* have the next line */
+                if(next_span && next_span->txt && next_span->txt[0]) { /* есть следующая строка */
                     next_line_h = lv_font_get_line_height(lv_span_get_style_text_font(obj, next_span)) + line_space;
                 }
             }
-            if(txt_pos.y + max_line_h + next_line_h - line_space > coords.y2 + 1) { /* for overflow if is end line. */
+            if(txt_pos.y + max_line_h + next_line_h - line_space > coords.y2 + 1) { /* для переполнения, если это конечная строка. */
                 ellipsis_valid = spans->overflow == LV_SPAN_OVERFLOW_ELLIPSIS;
                 is_end_line = true;
             }
         }
 
-        /*Go the first visible line*/
+        /*Пройдите первую видимую линию*/
         if(txt_pos.y + max_line_h < clip_area.y1) {
             goto Next_line_init;
         }
 
-        /* align deal with */
+        /* согласовать сделку с */
 #if LV_USE_BIDI
         if(base_dir == LV_BASE_DIR_AUTO) {
             base_dir = LV_BASE_DIR_LTR;
@@ -1296,7 +1296,7 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
             }
         }
 #endif
-        /* draw line letters */
+        /* рисовать линии букв */
         uint32_t i;
         for(i = 0; i < item_cnt; i++) {
             lv_snippet_t * pinfo = lv_get_snippet(i);
@@ -1354,7 +1354,7 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
 
             bool need_draw_ellipsis = false;
             int32_t dot_width = 0;
-            /* deal overflow */
+            /* переполнение сделки */
             if(ellipsis_valid) {
                 int32_t dot_letter_w = lv_font_get_glyph_width(pinfo->font, '.', '.');
                 dot_width = dot_letter_w * 3;
@@ -1430,7 +1430,7 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
         }
 
 Next_line_init:
-        /* next line init */
+        /* следующая строка инициализации */
         is_first_line = false;
         txt_pos.x = coords.x1;
         txt_pos.y += max_line_h;
@@ -1450,7 +1450,7 @@ static lv_span_coords_t make_span_coords(const lv_span_t * prev_span, const lv_s
 
     if(curr_span == NULL) return coords;
 
-    /* first line */
+    /* первая линия */
     if(prev_span == NULL) {
         lv_area_set(&coords.heading, padding.x1 + indent, padding.y1, width + padding.x1,
                     curr_span->trailing_pos.y + padding.y1);
@@ -1461,7 +1461,7 @@ static lv_span_coords_t make_span_coords(const lv_span_t * prev_span, const lv_s
         return coords;
     }
 
-    /* start and end on the same line */
+    /* начинать и заканчивать на одной строке */
     const bool is_same_line = prev_span->trailing_pos.y == curr_span->trailing_pos.y;
     if(is_same_line == true) {
         lv_area_set(&coords.heading,
@@ -1470,16 +1470,16 @@ static lv_span_coords_t make_span_coords(const lv_span_t * prev_span, const lv_s
         return coords;
     }
 
-    /* common case */
+    /* общий случай */
     const lv_point_t pre_trailing_pos = prev_span->trailing_pos;
     const int32_t pre_trailing_height = prev_span->trailing_height;
 
     lv_area_set(&coords.heading,
                 pre_trailing_pos.x + padding.x1, pre_trailing_pos.y + padding.y1,
                 width + padding.x1, pre_trailing_pos.y + pre_trailing_height + padding.y1);
-    /* When it happens to be two lines of text,
-    * the y2 of the middle area is exactly the y1 + line height of the first line of text,
-    * so the area of the middle area is empty.
+    /* Когда это две строки текста,
+    * y2 средней области — это в точности y1 + высота первой строки текста,
+    * поэтому область средней области пуста.
     * */
     lv_area_set(&coords.middle,
                 padding.x1, coords.heading.y2,

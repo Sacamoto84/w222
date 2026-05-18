@@ -89,7 +89,7 @@ lv_display_t * lv_wayland_window_create(uint32_t hor_res, uint32_t ver_res, char
 
     lv_display_set_driver_data(window->lv_disp, window);
 
-    /* Initialize display driver */
+    /* Инициализировать драйвер дисплея */
     window->backend_display_data = wl_backend_ops.init_display(lv_wl_ctx.backend_data, window->lv_disp, hor_res, ver_res);
 
     lv_wayland_xdg_configure_surface(window);
@@ -99,7 +99,7 @@ lv_display_t * lv_wayland_window_create(uint32_t hor_res, uint32_t ver_res, char
     lv_display_add_event_cb(window->lv_disp, refr_end_event, LV_EVENT_REFR_READY, NULL);
     lv_display_add_event_cb(window->lv_disp, delete_event, LV_EVENT_DELETE, NULL);
 
-    /* Register input */
+    /* Регистрация ввода */
     window->lv_indev_pointer = lv_wayland_pointer_create();
     lv_indev_set_display(window->lv_indev_pointer, window->lv_disp);
 
@@ -278,7 +278,7 @@ void lv_wayland_window_delete(lv_wl_window_t * window)
     }
     lv_wayland_xdg_delete_window(&window->xdg);
 
-    /* Commit a NULL buffer to the body surface so that we release buffers*/
+    /* Зафиксируйте буфер NULL на поверхности тела, чтобы освободить буферы.*/
     wl_surface_attach(window->body, NULL, 0, 0);
     wl_surface_commit(window->body);
     wl_display_roundtrip(lv_wl_ctx.wl_display);
@@ -286,14 +286,14 @@ void lv_wayland_window_delete(lv_wl_window_t * window)
     wl_surface_destroy(window->body);
     window->body = NULL;
 
-    /* Make sure buffer is correctly released*/
+    /* Убедитесь, что буфер правильно освобожден*/
     wl_display_roundtrip(lv_wl_ctx.wl_display);
 
     wl_backend_ops.deinit_display(window->backend_display_data, window->lv_disp);
     window->backend_display_data = NULL;
 
-    /* Set the driver data to NULL before calling display delete
-     * so that the delete event doesn't do anything*/
+    /* Установите данные драйвера на NULL перед вызовом удаления дисплея.
+     * чтобы событие удаления ничего не делало*/
     lv_display_set_driver_data(window->lv_disp, NULL);
     lv_display_delete(window->lv_disp);
 
@@ -301,7 +301,7 @@ void lv_wayland_window_delete(lv_wl_window_t * window)
     lv_ll_remove(&lv_wl_ctx.window_ll, window);
 
     if(LV_WAYLAND_DIRECT_EXIT && lv_ll_is_empty(&lv_wl_ctx.window_ll)) {
-        /* lv_deinit will deinit the wayland driver*/
+        /* lv_deinit отключит драйвер Wayland.*/
         lv_deinit();
         exit(0);
     }

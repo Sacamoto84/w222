@@ -59,9 +59,9 @@ static void end_event_cb(lv_event_t * e)
 }
 
 /**
- * Play with the radial gradient
- * Adjust the end circle and focal point position.
- * The radius of the end circle and an focal point are hardcoded in the example.
+ * Поиграйте с радиальным градиентом
+ * Отрегулируйте конечный круг и положение фокусной точки.
+ * В примере радиус конечной окружности и фокальной точки жестко запрограммированы.
  */
 void lv_example_grad_3(void)
 {
@@ -78,30 +78,30 @@ void lv_example_grad_3(void)
     static lv_style_t style;
     lv_style_init(&style);
 
-    /*First define a color gradient. In this example we use a purple to black color map.*/
+    /*Сначала определите цветовой градиент. В этом примере мы используем карту цветов от фиолетового до черного.*/
     static lv_grad_dsc_t grad;
 
     lv_grad_init_stops(&grad, grad_colors, grad_opa, NULL, sizeof(grad_colors) / sizeof(lv_color_t));
 
-    /*Init a radial gradient where the center is at 100;100
-     *and the edge of the circle is at 200;100.
-     *Try LV_GRAD_EXTEND_REFLECT and LV_GRAD_EXTEND_REPEAT too. */
+    /*Инициализировать радиальный градиент, где центр находится на уровне 100;100.
+     *а край круга находится на отметке 200;100.
+     *Попробуйте также LV_GRAD_EXTEND_REFLECT и LV_GRAD_EXTEND_REPEAT. */
     lv_grad_radial_init(&grad, 100, 100, 200, 100, LV_GRAD_EXTEND_PAD);
 
-    /*The gradient will be calculated between the focal point's circle and the
-     *edge of the circle. If the center of the focal point and the
-     *center of the main circle is the same, the gradient will spread
-     *evenly in all directions. The focal point should be inside the
-     *main circle.*/
+    /*Градиент будет рассчитываться между кругом фокусной точки и
+     *край круга. Если центр фокуса и
+     *центр основного круга тот же, градиент будет распространяться
+     *равномерно во всех направлениях. Фокус должен находиться внутри
+     *основной круг.*/
     lv_grad_radial_set_focal(&grad, 50, 50, 10);
 
-    /*Set the widget containing the gradient*/
+    /*Установите виджет, содержащий градиент*/
     lv_style_set_bg_grad(&style, &grad);
     lv_style_set_border_width(&style, 2);
     lv_style_set_pad_all(&style, 0);
     lv_style_set_radius(&style, 12);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
     lv_obj_set_size(obj, lv_pct(80), lv_pct(80));

@@ -20,7 +20,7 @@ static void exch_table_item(lv_obj_t * tb, int16_t i, int16_t j)
     lv_table_set_cell_value(tb, j, 1, lv_table_get_cell_value(tb, 0, 2));
 }
 
-/*Quick sort 3 way*/
+/*Быстрая сортировка 3 способа*/
 static void sort_by_file_kind(lv_obj_t * tb, int16_t lo, int16_t hi)
 {
     if(lo >= hi) return;
@@ -64,21 +64,21 @@ static void file_explorer_event_handler(lv_event_t * e)
 void lv_example_file_explorer_3(void)
 {
     lv_obj_t * file_explorer = lv_file_explorer_create(lv_screen_active());
-    /*Before custom sort, please set the default sorting to NONE. The default is NONE.*/
+    /*Перед пользовательской сортировкой установите сортировку по умолчанию на NONE. По умолчанию — NONE.*/
     lv_file_explorer_set_sort(file_explorer, LV_EXPLORER_SORT_NONE);
 
 #if LV_USE_FS_WIN32
-    /* Note to Windows users:  the initial "C:" on these paths corresponds to
-     * the value of `LV_FS_WIN32_LETTER` in `lv_conf.h`, and should not be
-     * confused with the Windows/DOS drive letter.  It is an identifier that
-     * is used to enable LVGL to look up the appropriate driver from a list of
-     * registered file-system drivers.  `lv_fs_win32_init()` happens to use the
-     * identifier letter 'C' so "C:" is the driver-identifier-prefix used here.
-     * The "C:" following that is indeed the Windows/DOS drive letter and is
-     * part of the actual path that gets passed to the OS-level functions.
+    /* Примечание для пользователей Windows: начальная буква «C:» в этих путях соответствует
+     * значение`LV_FS_WIN32_LETTER`в`lv_conf.h`и не должно быть
+     * перепутан с буквой диска Windows/DOS.  Это идентификатор, который
+     * используется, чтобы позволить LVGL искать соответствующий драйвер из списка
+     * зарегистрированные драйверы файловой системы.   `lv_fs_win32_init()`использует
+     * буква идентификатора «C», поэтому «C:» — это используемый здесь префикс идентификатора драйвера.
+     * Символ «C:», следующий за ним, действительно является буквой диска Windows/DOSи
+     * часть фактического пути, которая передается функциям уровня OS.
      *
-     * See https://docs.lvgl.io/master/main-modules/fs.html for details.
-     * File Explorer uses `lv_fs` internally, thus the required prefix in path strings.
+     * Подробности см. в https://docs.lvgl.io/master/main-modules/fs.html.
+     * Проводник файлов использует `lv_fs` внутри, поэтому является обязательным префиксом в строках пути.
      */
     lv_file_explorer_open_dir(file_explorer, "C:C:/");
 #if LV_FILE_EXPLORER_QUICK_ACCESS
@@ -91,13 +91,13 @@ void lv_example_file_explorer_3(void)
 #endif
 
 #else
-    /* linux */
+    /* Линукс */
     lv_file_explorer_open_dir(file_explorer, "A:/");
 #if LV_FILE_EXPLORER_QUICK_ACCESS
     const char * envvar = "HOME";
     char home_dir[LV_FS_MAX_PATH_LENGTH];
     strcpy(home_dir, "A:");
-    /* get the user's home directory from the HOME environment variable*/
+    /* получить домашний каталог пользователя из переменной среды HOME*/
     strcat(home_dir, getenv(envvar));
     LV_LOG_USER("home_dir: %s\n", home_dir);
     lv_file_explorer_set_quick_access_path(file_explorer, LV_EXPLORER_HOME_DIR, home_dir);

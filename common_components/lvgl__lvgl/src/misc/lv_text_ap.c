@@ -45,7 +45,7 @@ static bool lv_text_is_arabic_vowel(uint16_t c);
  **********************/
 
 const ap_chars_map_t ap_chars_map[] = {
-    /*{Key Offset, End, Beginning, Middle, Isolated, {conjunction}}*/
+    /*{Смещение клавиши, Конец, Начало, Середина, Изолированный, {соединение}}*/
     {0, 0xFE81, 0, 0, 0,  {0, 0}},      // أ
     {1, 0xFE84, -1, 0, -1,  {1, 0}},    // أ
     {2, 0xFE86, -1, 0, -1,  {1, 0}},    // ؤ
@@ -73,7 +73,7 @@ const ap_chars_map_t ap_chars_map[] = {
     {22, 0xFEC6, 1, 2, -1,  {1, 1}},   // ظ
     {23, 0xFECA, 1, 2, -1,  {1, 1}},   // ع
     {24, 0xFECE, 1, 2, -1,  {1, 1}},   // غ
-    {30, 0x0640, 0, 0, 0,  {1, 1}},   // - (mad, hyphen)
+    {30, 0x0640, 0, 0, 0,  {1, 1}},   // - (безумный, дефис)
     {31, 0xFED2, 1, 2, -1,  {1, 1}},   // ف
     {32, 0xFED6, 1, 2, -1,  {1, 1}},   // ق
     {135, 0xFB8F, 1, 2, -1,  {1, 1}},  // ک
@@ -168,14 +168,14 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
         index_current = lv_ap_get_char_index(ch_enc[i]);
         idx_next = lv_ap_get_char_index(ch_enc[i + 1]);
 
-        if(lv_text_is_arabic_vowel(ch_enc[i])) {  // Current character is a vowel
+        if(lv_text_is_arabic_vowel(ch_enc[i])) {  // Текущий символ — гласная
             ch_fin[j] = ch_enc[i];
             i++;
             j++;
-            continue;   // Skip this character
+            continue;   // Пропустить этого персонажа
         }
-        else if(lv_text_is_arabic_vowel(ch_enc[i + 1])) {    // Next character is a vowel
-            idx_next = lv_ap_get_char_index(ch_enc[i + 2]); // Skip the vowel character to join with the character after it
+        else if(lv_text_is_arabic_vowel(ch_enc[i + 1])) {    // Следующий символ — гласная
+            idx_next = lv_ap_get_char_index(ch_enc[i + 2]); // Пропустите гласный символ, чтобы присоединиться к следующему за ним символу.
         }
 
         if(index_current == LV_UNDEF_ARABIC_PERSIAN_CHARS) {
@@ -259,10 +259,10 @@ static uint32_t lv_ap_get_char_index(uint16_t c)
     for(uint8_t i = 0; ap_chars_map[i].char_end_form; i++) {
         if(c == (ap_chars_map[i].char_offset + LV_AP_ALPHABET_BASE_CODE))
             return i;
-        else if(c == ap_chars_map[i].char_end_form                                                  //is it an End form
-                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_beginning_form_offset)     //is it a Beginning form
-                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_middle_form_offset)       //is it a middle form
-                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_isolated_form_offset)) {  //is it an isolated form
+        else if(c == ap_chars_map[i].char_end_form                                                  //это конечная форма
+                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_beginning_form_offset)     //это начальная форма
+                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_middle_form_offset)       //это средняя форма
+                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_isolated_form_offset)) {  //это изолированная форма
             return i;
         }
     }
@@ -280,16 +280,16 @@ static uint32_t lv_text_lam_alef(uint32_t ch_curr, uint32_t ch_next)
     }
     ch_code = ap_chars_map[ch_next].char_offset + LV_AP_ALPHABET_BASE_CODE;
     if(ch_code == 0x0622) {
-        return 0xFEF5;    // (lam-alef) mad
+        return 0xFEF5;    // (лам-алеф) безумный
     }
     if(ch_code == 0x0623) {
-        return 0xFEF7;    // (lam-alef) top hamza
+        return 0xFEF7;    // (лам-алеф) верхняя хамза
     }
     if(ch_code == 0x0625) {
-        return 0xFEF9;    // (lam-alef) bot hamza
+        return 0xFEF9;    // (лам-алеф) бот хамза
     }
     if(ch_code == 0x0627) {
-        return 0xFEFB;    // (lam-alef) alef
+        return 0xFEFB;    // (лам-алеф) алеф
     }
     return 0;
 }

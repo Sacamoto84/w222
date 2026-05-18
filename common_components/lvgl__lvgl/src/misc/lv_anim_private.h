@@ -37,18 +37,18 @@ typedef struct {
  **********************/
 
 /**
- * Init the animation module
+ * Запустите модуль анимации
  */
 void lv_anim_core_init(void);
 
 /**
- * Deinit the animation module
+ * Деинитизировать модуль анимации
  */
 void lv_anim_core_deinit(void);
 
 /*
- * Set animation use vsync mode.
- * @param enable true: use vsync mode, false: use timer mode.
+ * Установите для анимации режим вертикальной синхронизации.
+ * @param enable true: использовать режим vsync, false: использовать режим таймера.
  */
 void lv_anim_enable_vsync_mode(bool enable);
 
@@ -57,7 +57,7 @@ void lv_anim_enable_vsync_mode(bool enable);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ANIM_PRIVATE_H*/

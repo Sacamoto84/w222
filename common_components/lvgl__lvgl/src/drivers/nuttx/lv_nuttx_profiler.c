@@ -44,7 +44,7 @@
  *  STATIC PROTOTYPES
  **********************/
 
-static uint32_t cpu_freq = 0; /* MHz */
+static uint32_t cpu_freq = 0; /* МГц */
 
 /**********************
  *  STATIC VARIABLES
@@ -76,7 +76,7 @@ void lv_nuttx_profiler_init(void)
 
     lv_profiler_builtin_config_t config;
     lv_profiler_builtin_config_init(&config);
-    config.tick_per_sec = 1000000000; /* 1 sec = 1000000000 nsec */
+    config.tick_per_sec = 1000000000; /* 1 секунда = 1000000000 нс */
     config.tick_get_cb = tick_get_cb;
     config.flush_cb = flush_cb;
     lv_profiler_builtin_init(&config);
@@ -118,7 +118,7 @@ static uint64_t tick_get_cb(void)
     uint32_t act_time = up_perf_gettime();
     uint64_t elaps;
 
-    /*If there is no overflow in sys_time simple subtract*/
+    /*Если в sys_time нет переполнения, простое вычитание*/
     if(act_time >= prev_tick) {
         elaps = act_time - prev_tick;
     }

@@ -21,7 +21,7 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* Special PID to query the info about alloc, free and mempool */
+/* Специальный PID для запроса информации о распределении, свободном доступе и мемпуле. */
 
 #define PID_MM_ORPHAN  (-6)
 #define PID_MM_BIGGEST (-5)
@@ -41,46 +41,46 @@ extern "C" {
  **********************/
 
 struct mm_heap_s {
-    /* This is the size of the heap provided to mm */
+    /* Это размер кучи, предоставленный в мм. */
 
     size_t mm_heapsize;
 
-    /* This is the heap maximum used memory size */
+    /* Это максимальный размер используемой памяти кучи. */
 
     size_t mm_maxused;
 
-    /* This is the current used size of the heap */
+    /* Это текущий используемый размер кучи. */
 
     size_t mm_curused;
 
-    /* Kasan is disable or enable for this heap */
+    /* Kasan отключен или включен для этой кучи */
 
     bool mm_nokasan;
 };
 
 struct malltask {
-    /* Negative pid means differently. See include/malloc.h */
+    /* Отрицательный pid означает другое. См. включение/malloc.h */
 
-    int pid; /* Process id */
-    unsigned long seqmin; /* The minimum sequence */
-    unsigned long seqmax; /* The maximum sequence */
+    int pid; /* Идентификатор процесса */
+    unsigned long seqmin; /* Минимальная последовательность */
+    unsigned long seqmax; /* Максимальная последовательность */
 };
 
 #define mm_memdump_s malltask
 
 struct mallinfo {
-    int arena;    /* non-mmapped space allocated from system */
-    int ordblks;  /* number of free chunks */
-    int smblks;   /* number of fastbin blocks */
-    int hblks;    /* number of mmapped regions */
-    int hblkhd;   /* space in mmapped regions */
-    int usmblks;  /* always 0, preserved for backwards compatibility */
-    int fsmblks;  /* space available in freed fastbin blocks */
-    int uordblks; /* total allocated space */
-    int fordblks; /* total free space */
-    int keepcost; /* top-most, releasable (via malloc_trim) space */
-    int aordblks; /* This is the number of allocated (in use) chunks for task */
-    int mxordblk; /* size of the largest free chunk */
+    int arena;    /* неотображенное пространство, выделенное из системы */
+    int ordblks;  /* количество свободных кусков */
+    int smblks;   /* количество блоков fastbin */
+    int hblks;    /* количество отображаемых регионов */
+    int hblkhd;   /* пространство в mmapped регионах */
+    int usmblks;  /* всегда 0, сохраняется для обратной совместимости */
+    int fsmblks;  /* доступное место в освобожденных блоках fastbin */
+    int uordblks; /* общее выделенное пространство */
+    int fordblks; /* общее свободное пространство */
+    int keepcost; /* самое верхнее, освобождаемое (через malloc_trim) пространство */
+    int aordblks; /* Это количество выделенных (используемых) фрагментов для задачи. */
+    int mxordblk; /* размер самого большого свободного фрагмента */
 };
 
 /**********************
@@ -136,7 +136,7 @@ static inline int gettid(void)
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*NUTTX_MM_H*/

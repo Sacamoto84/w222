@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------
- * Called by 'DOMContentLoaded' event listener below; adds
- * documentation-version dropdown list just above search form in
- * upper part of left (nav) panel.
+ * Вызывается прослушивателем событий DOMContentLoaded ниже; добавить
+ * Раскрывающийся список версии документации чуть выше формы поиска в
+ * верхняя часть левой (навигационной) панели.
  *---------------------------------------------------------------------*/
 
 function add_version_selector() {
@@ -19,7 +19,7 @@ function add_version_selector() {
         })
         .join("");
 
-      // Wait for the next animation frame to ensure DOM is updated
+      // Подождите следующего кадра анимации, чтобы убедиться, что DOM обновлен.
       requestAnimationFrame(() => {
         const versionDropdownValue = window.location.pathname.split("/")[1];
         const isValidVersion = versionDropdownValue.match(/^([0-9]+\.[0-9]+|master)$/);
@@ -31,7 +31,7 @@ function add_version_selector() {
 }
 
 /*---------------------------------------------------------------------
- * Fires when user selects a documentation version from version dropdown.
+ * Срабатывает, когда пользователь выбирает версию документации из раскрывающегося списка версий.
  *---------------------------------------------------------------------*/
 function ver_sel() {
   var x = document.getElementById("version_dropdown").value;
@@ -43,8 +43,8 @@ function ver_sel() {
 }
 
 /*---------------------------------------------------------------------
- * Once:  add documentation-version dropdown list just above search form in
- * upper part of left panel.
+ * Once:  добавить раскрывающийся список версий документации прямо над формой поиска в
+ * верхняя часть левой панели.
  *---------------------------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", (event) => {
   add_version_selector().then(() => {
@@ -54,13 +54,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 /*---------------------------------------------------------------------
- * This listener delays loading (slow-to-load) examples until they are
- * actually in view in the browser's viewport.
+ * Этот прослушиватель откладывает загрузку (медленно загружаемых) примеров до тех пор, пока они не будут
+ * фактически отображается в окне просмотра браузера.
  *
- * Once:  for each "lv-example" class element, adds observer which watches
- * for that element to come into view in the browser's viewport.  When it
- * does, `onIntersection()` function is fired, causing example to be loaded
- * if it hasn't already, or removed when its intersectionRatio <= 0.
+ * Once:  для каждого элемента класса «lv-example» добавляет наблюдателя, который наблюдает
+ * чтобы этот элемент появился в области просмотра браузера.  Когда это
+ * это так, функция`onIntersection()`запускается, вызывая загрузку примера
+ * если он еще этого не сделал или удалил, когда его пересечениеRatio <= 0.
  */
 document.addEventListener("DOMContentLoaded", (event) => {
   function onIntersection(entries) {
@@ -92,33 +92,33 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 document.addEventListener("DOMContentLoaded", (event) => {
   /*---------------------------------------------------------------------
-   * For API pages:
+   * Для страниц API:
    *
-   * Documented code elements on API pages each have a structure that looks
-   * like this example for a function:
+   * Каждый элемент документированного кода на страницах API имеет структуру, которая выглядит
+   * как этот пример для функции:
    *
-   * <dl class="cpp function _state_>                             // container
-   *     <dt id="_function_identifier_">function signature</dt>   // code highlighting done with <span> child elements
-   *     <dd>documentation</dd>                                   // documentation, initially closed
+   * <dl class="cpp function_state_> // контейнер
+   *     <dt id="_function_identifier_">функция подписи</dt> // подсветка кода прогресса с помощью дочерних элементов <span>
+   *     <dd>документация</dd> // документация, изначально закрытая
    *     </dl>
    *
-   * where `_state_` is either "expanded" or "unexpanded".  When "unexpanded"
-   * class is present, the <dd> element containing the documentation is hidden
-   * by CSS in `custom.css`.  Without that class present (i.e. when "expanded"
-   * class is present instead), the <dd> element reverts to its normal state
-   * of being visible.
+   * где`_state_`— «расширенный» или «нерасширенный».  Когда «нерасширенный»
+   * класс присутствует, элемент <dd>, содержащий документацию, скрыт
+   * авторCSSв`custom.css`.  Без присутствия этого класса (т.е. при «расширении»
+   * вместо этого присутствует класс), элемент <dd> возвращается в свое нормальное состояние
+   * быть видимым.
    *
-   * The job of the code below is to:
-   * 1.  Add "unexpanded" class to all <dl class="cpp ..."> elements...
-   * 2.  ...except if the URL had a hash string ("...#identifier_string")
-   *     that matches the immediate <dt> child element's id attribute, in which
-   *     case the "expanded" class is added instead.  (This usually indicates
-   *     the user navigated there by clicking a hyperlinked code element in
-   *     one of the documentation pages.)
-   * 3.  Add an open/close button <span class="lv-api-expansion-button" />
-   *     element just before each code element to toggle its expanded/unexpanded
-   *     class.  (The click-able arrow icon before it is set in `custom.css`
-   *     based on the <dl> element's "expanded" or "unexpanded" class.)
+   * Задача приведенного ниже кода заключается в следующем:
+   * 1.  Добавьте «нерасширенный» класс ко всем элементам <dl class="cpp ...">...
+   * 2.  ...кроме случаев, когда уURLбыла хэш-строка ("... #identifier_string")
+   *     который соответствует атрибуту id непосредственного дочернего элемента <dt>, в котором
+   *     если вместо этого добавляется «расширенный» класс.  (Обычно это указывает
+   *     пользователь перешел туда, щелкнув элемент кода с гиперссылкой в
+   *     одна из страниц документации.)
+   * 3.  Добавьте кнопку открытия/закрытия <span class="lv-api-expansion-button" />
+   *     элемент непосредственно перед каждым элементом кода, чтобы переключить его развернутое/нерасширенное
+   *     класс.  (Значок направления, на котором можно щелкнуть, до того, как он установлен в `custom.css`
+   *     на основе «расширенного» или «нерасширенного» класса элемента <dl>.)
    *---------------------------------------------------------------------*/
   document.querySelectorAll("dl.cpp").forEach((cppListing) => {
     const dt = cppListing.querySelector("dt");
@@ -129,8 +129,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (shouldBeExpanded) {
       cppListing.classList.add(exClass);
 
-      /* If `dt.id` is for an enumerator, also expand its parent
-       * <dl class="cpp enum unexpanded"> element. */
+      /* Если `dt.id` предназначен для перечислителя, также разверните его родительский элемент.
+       * Элемент <dl class="cpp enum unexpanded">. */
       let parentDlNode = cppListing.parentNode.parentNode;
       if (
            parentDlNode != null
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         parentDlNode.classList.add(exClass);
       }
 
-      /* Have browser scroll `cppListing` into view if it is not already. */
+      /* Пусть браузер прокрутит`cppListing`в поле зрения, если это еще не сделано. */
       cppListing.scrollIntoView();
     } else {
       cppListing.classList.add(unExClass);
@@ -158,45 +158,45 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
   /*---------------------------------------------------------------------
-   * Display any current custom banner in `banner.json` at top of each page.
+   * Создайте любой текущий пользовательский баннер в`banner.json`вверху каждой страницы.
    *---------------------------------------------------------------------
-   * Custom banners are inserted between these two elements at top of page.
-  <a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+   * Пользовательские баннеры вставляются между этими двумя элементами вверху страницы.
+  <a class="skip-to-content muted-link" href="#furo-main-content">Перейти к содержимому</a>
 
   <div class="lv-custom-banner-list">
     <p class="lv-custom-banner">
-      <em>Important</em> announcement one!
+      <em>Важное</em> объявление!
     </p>
     <p class="lv-custom-banner">
-      <em>Important</em> announcement two!
+      <em>Важное</em> объявление номер два!
     </p>
     <p class="lv-custom-banner">
-      <em>Important</em> announcement three!
+      <em>Важное</em> объявление третье!
     </p>
   </div>
 
-  <div class="page">
-    ...page content...
+  <div класс="страница">
+    ...содержание страницы...
    *---------------------------------------------------------------------*/
   let bannerJsonUrl = "https://lvgl.io/data/banner.json";
   let bannerContainerClass = "lv-custom-banner-list";
   let bannerClass = "lv-custom-banner";
-  /* Note:  banner priority property can have only one of these values:
-   * ("highest" | "high" | "normal" | "low" | "lowest").
-   * If not present, the default is "normal-priority".  This controls banner styling. */
+  /* Note:  Свойство приоритета баннера может иметь только одно из следующих значений:
+   * («самый высокий» | «высокий» | «нормальный» | «низкий» | «самый низкий»).
+   * Если его нет, по умолчанию используется «нормальный приоритет».  Это управляет стилем баннера. */
   let priorityPropVals = ["highest", "high", "normal", "low", "lowest"];
   let defaultPrioPropVal = priorityPropVals[2];
   let priorityClassSuffix = "-priority";
 
-  /* Sorting json banners in priority order.
-   * `a` and `b` are BANNER objects from incoming `banner.json`. */
+  /* Сортировка json-баннеров в порядке приоритета.
+   * `a` и`b`— это объектыBANNERиз входящего`banner.json`. */
   function prio_compare(a, b) {
     let aPrioPropStr = a.hasOwnProperty("priority") ? a.priority : defaultPrioPropVal;
     let bPrioPropStr = b.hasOwnProperty("priority") ? b.priority : defaultPrioPropVal;
     let aPrio = 0;
     let bPrio = 0;
 
-    /* Establish numeric values for `a` and `b`. */
+    /* Установите числовые значения для `a` и `b`. */
     for (var i = 0; i < 5; i++) {
       if (aPrioPropStr === priorityPropVals[i]) {
         aPrio = i;
@@ -211,15 +211,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
     }
 
-    /* Correctness Proof
+    /* Доказательство правильности
      * -----------------
-     * < 0 = `a` should come before `b`.
-     * > 0 = `a` should come after `b`.
-     *   0 or NaN = a === b.
+     * < 0 = `a` должен идти раньше `b`.
+     * > 0 = `a` должен идти после `b`.
+     *   0 или NaN = а === б.
      *
-     * Example:  a === "highest-priority"; b === "normal-priority".
-     *           aPrio === 0             ; bPrio === 2.
-     *           aPrio - bPrio === -2 means (`a` should come before `b`).
+     * Example:  а === "наивысший приоритет"; b === «нормальный приоритет».
+     *           аПрио === 0 ; бПрио === 2.
+     *           aPrio - bPrio === -2 означает (`a`должен идти раньше`b`).
      */
     return aPrio - bPrio;
   }
@@ -229,37 +229,37 @@ document.addEventListener("DOMContentLoaded", (event) => {
       if (response.ok) {
         return response.json();
       } else {
-        /* Note:  per OOSC2, it is not appropriate to throw an exception for a
-         * situation that is being checked for.  Sometimes the banner file will
-         * not be there, in which case, we simply return an empty array object. */
+        /* Note:  согласноOOSC2нецелесообразно создавать исключение для
+         * ситуация, по которой проводится проверка.  Иногда файл баннера
+         * там не будет, и в этом случае мы просто возвращаем пустой объект массива. */
         return [];
       }
     })
-    /* JSON file was fetched successfully.... */
+    /* Файл JSON успешно получен.... */
     .then((json) => {
       if (json.constructor !== Array) {
-        /* Data structure not recognized. */
+        /* Структура данных не распознана. */
       } else {
-        /* console.log('JSON is an array.'); */
+        /* console.log('JSON— массив.'); */
         /* Does it contain any banners? */
         if (json.length === 0) {
           console.log("JSON has no banners -- nothing to do.");
         } else {
-          /* Note:  `div.page` is unique to Furo theme. */
+          /* Note:  `div.page` уникален для темы Furo. */
 
-          /* Create and insert banner container. */
+          /* Создайте и вставьте контейнер баннеров. */
           const newDiv = document.createElement("div");
           newDiv.classList.add(bannerContainerClass);
           let bannerCount = 0;
 
-          /* Create a <p> or an <a> element for each banner.
-           * First, sort them in priority order with "highest-priority" being
-           * at the top.  The JSON is an ARRAY of BANNER objects.
-           * `prio_compare()` knows how to compare them.
+          /* Создайте элемент <p> или <a> для каждого баннера.
+           * Сначала отсортируйте их в порядке приоритета, при этом «наивысший приоритет» будет
+           * наверху.  JSON — это ARRAY объектов BANNER.
+           * `prio_compare()` умеет их сравнивать.
            *
-           * If the BANNER object has a "url" property, then
-           * encapsulate banner in an anchor element that will send
-           * user to designated URL.
+           * Если объектBANNERимеет свойство «url», то
+           * инкапсулировать баннер в элементе привязки, который будет отправлять
+           * пользователю назначен URL.
            */
           json.sort(prio_compare);
 
@@ -296,17 +296,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const pgParent = page.parentElement;
             pgParent.insertBefore(newDiv, page);
 
-            /* Finally, we need to tell the page element that its `min-hight`
-             * is 100% minus the hight of all the banners, including the one
-             * supplied by `conf.py` in `conf.html_theme_options.announcement`
-             * if one is present === var(--header-height).
+            /* Наконец, нам нужно сообщить элементу страницы, что его `min-hight`
+             * составляет 100% минус высота всех баннеров, включая один
+             * предоставлено`conf.py`в `conf.html_theme_options.announcement`
+             * если он присутствует === var(--header-height).
              *
-             * This extends short pages by just enough to place [PREV] and [NEXT]
-             * buttoms and footer at bottom of page without scrolling.
+             * Это удлинит короткие страницы ровно настолько, чтобы разместить [ PREV ] и [ NEXT ]
+             * кнопки и нижний колонтитул внизу страницы без прокрутки.
              *
-             * Note:  this overrides the `min-height` property set for this
-             * element in `furo.css`, which is:  calc(100% - var(--header-height)).
-             * It additionally subtracts height of banner list.
+             * Note:  это переопределяет набор свойств`min-height`для этого
+             * элемент в`furo.css`, имеющий вид: Calc(100% - var(--header-height)).
+             * Дополнительно уменьшается высота списка баннеров.
              * */
             let height = newDiv.offsetHeight;
             page.style["min-height"] = `calc(100% - var(--header-height) - ${height}px)`;
@@ -320,9 +320,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 /*---------------------------------------------------------------------
- * This listener adds a click handler to all .toggle elements.
- * When a .toggle is clicked, all children are hidden except .header.
- * When .header is clicked, all children are toggled.
+ * Этот прослушиватель добавляет обработчик кликов ко всем элементам .toggle.
+ * При нажатии на .toggle все дополнительные элементы, кроме .header, раскрываются.
+ * При нажатии на .header все дочерние элементы переключаются.
  *---------------------------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".toggle").forEach(function (toggle) {

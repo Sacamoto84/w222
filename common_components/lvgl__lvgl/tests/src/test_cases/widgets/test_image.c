@@ -15,7 +15,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -38,7 +38,7 @@ void test_image_rotated_pivot_center(void)
         img = img_create();
         lv_obj_set_pos(img, 100 + (i % 4) * 160, 150 + (i / 4) * 150);
         lv_image_set_rotation(img, i * 450);
-        /*The default pivot should be the center*/
+        /*По умолчанию точка поворота должна быть в центре*/
     }
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/image_rotate_pivot_center.png");
@@ -66,7 +66,7 @@ void test_image_scale_pivot_center(void)
         img = img_create();
         lv_obj_set_pos(img, 40 + (i % 4) * 200, 150 + (i / 4) * 150);
         lv_image_set_scale(img, 64 + i * 64);
-        /*The default pivot should be the center*/
+        /*По умолчанию точка поворота должна быть в центре*/
     }
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/image_scale_pivot_center.png");
@@ -94,7 +94,7 @@ void test_image_scale_x_pivot_center(void)
         img = img_create();
         lv_obj_set_pos(img, 40 + (i % 4) * 200, 150 + (i / 4) * 150);
         lv_image_set_scale_x(img, 64 + i * 64);
-        /*The default pivot should be the center*/
+        /*По умолчанию точка поворота должна быть в центре*/
     }
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/image_scale_x_pivot_center.png");
@@ -122,7 +122,7 @@ void test_image_scale_y_pivot_center(void)
         img = img_create();
         lv_obj_set_pos(img, 40 + (i % 4) * 200, 150 + (i / 4) * 150);
         lv_image_set_scale_y(img, 64 + i * 64);
-        /*The default pivot should be the center*/
+        /*По умолчанию точка поворота должна быть в центре*/
     }
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/image_scale_y_pivot_center.png");
@@ -152,7 +152,7 @@ void test_image_rotate_and_scale_pivot_center(void)
         lv_image_set_scale_x(img, 64 + i * 64);
         lv_image_set_scale_y(img, 32 + i * 96);
         lv_image_set_rotation(img, 200 + i * 333);
-        /*The default pivot should be the center*/
+        /*По умолчанию точка поворота должна быть в центре*/
     }
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/image_rotate_and_scale_pivot_center.png");
@@ -283,7 +283,7 @@ void test_image_stretch(void)
         lv_obj_set_pos(img, 30 + (i % 3) * 260, 40 + (i / 3) * 150);
         lv_image_set_inner_align(img, LV_IMAGE_ALIGN_STRETCH);
 
-        // Because of the integer scaling, it is possible the actual image width is 1 less than the object width
+        // Из-за целочисленного масштабирования фактическая ширина изображения может быть на 1 меньше ширины объекта.
         TEST_ASSERT_INT_WITHIN(1, w, lv_image_get_transformed_width(img));
         TEST_ASSERT_INT_WITHIN(1, h, lv_image_get_transformed_height(img));
     }
@@ -739,8 +739,8 @@ void test_image_set_src_null(void)
 
 void test_image_raw_data_as_file(void)
 {
-    /* Hex dumped like:
-     * xxd -p -c32 test_images/stride_align1/UNCOMPRESSED/test_RGB565.bin | \
+    /* Hex сбрасывается как:
+     * xxd -p -c32 test_images/stride_align1/UNCOMPRESSED/test_RGB565 .bin | \
      * awk '{for(i=1;i<=length($0);i+=2) printf "0x%s%s", substr($0,i,2), (i<length($0)?", ":"\n") }'
      */
 
@@ -826,10 +826,10 @@ void test_image_blend_mode_set_get(void)
 {
     lv_obj_t * img = img_create();
 
-    /* Get the initial blend mode value */
+    /* Получите начальное значение режима наложения. */
     lv_blend_mode_t initial_mode = lv_image_get_blend_mode(img);
 
-    /* Test setting and getting all available blend modes */
+    /* Тестовая настройка и получение всех доступных режимов наложения. */
     lv_blend_mode_t mode_values[] = {
         LV_BLEND_MODE_NORMAL,
         LV_BLEND_MODE_ADDITIVE,
@@ -842,7 +842,7 @@ void test_image_blend_mode_set_get(void)
         TEST_ASSERT_EQUAL_UINT8(mode_values[i], lv_image_get_blend_mode(img));
     }
 
-    /* Test setting back to initial mode */
+    /* Тестовая настройка возврата в исходный режим */
     lv_image_set_blend_mode(img, initial_mode);
     TEST_ASSERT_EQUAL_UINT8(initial_mode, lv_image_get_blend_mode(img));
 }
@@ -851,10 +851,10 @@ void test_image_inner_align_set_get(void)
 {
     lv_obj_t * img = img_create();
 
-    /* Get the initial inner align value */
+    /* Получите начальное значение внутреннего выравнивания */
     lv_image_align_t initial_align = lv_image_get_inner_align(img);
 
-    /* Test setting and getting all available align modes */
+    /* Тестовая настройка и получение всех доступных режимов выравнивания */
     lv_image_align_t align_values[] = {
         LV_IMAGE_ALIGN_DEFAULT,
         LV_IMAGE_ALIGN_TOP_LEFT,
@@ -875,7 +875,7 @@ void test_image_inner_align_set_get(void)
         TEST_ASSERT_EQUAL_UINT8(align_values[i], lv_image_get_inner_align(img));
     }
 
-    /* Test setting back to initial align */
+    /* Тестовая настройка возврата к исходному выравниванию */
     lv_image_set_inner_align(img, initial_align);
     TEST_ASSERT_EQUAL_UINT8(initial_align, lv_image_get_inner_align(img));
 }
@@ -886,7 +886,7 @@ void test_image_hit_test(void)
     lv_obj_set_pos(img, 100, 100);
     lv_obj_update_layout(img);
 
-    /* Test hit test without transformations */
+    /* Тест попадания без преобразований */
     lv_point_t point_inside = {
         .x = 110,
         .y = 110
@@ -900,13 +900,13 @@ void test_image_hit_test(void)
     lv_obj_send_event(img, LV_EVENT_HIT_TEST, &info_no_transform);
     TEST_ASSERT_TRUE(info_no_transform.res);
 
-    /* Test hit test with transformations */
-    /* Set image size to match source image size and apply transformations */
+    /* Тестирование попаданий с преобразованиями */
+    /* Установите размер изображения в соответствии с размером исходного изображения и примените преобразования. */
     int32_t img_w = test_img_lvgl_logo_png.header.w;
     int32_t img_h = test_img_lvgl_logo_png.header.h;
     lv_obj_set_size(img, img_w, img_h);
 
-    /* Apply transformations: rotation, scaling, and non-center pivot */
+    /* Примените преобразования: вращение, масштабирование и поворот не по центру. */
     lv_image_set_rotation(img, 450);
     lv_image_set_scale_x(img, 512);
     lv_image_set_scale_y(img, 512);
@@ -914,7 +914,7 @@ void test_image_hit_test(void)
 
     lv_obj_update_layout(img);
 
-    /* Test point inside the transformed area */
+    /* Тестовая точка внутри преобразованной области */
     lv_point_t point_inside_transformed = {
         .x = 105,
         .y = 105
@@ -928,7 +928,7 @@ void test_image_hit_test(void)
     lv_obj_send_event(img, LV_EVENT_HIT_TEST, &info_with_transform);
     TEST_ASSERT_TRUE(info_with_transform.res);
 
-    /* Test point outside the transformed area */
+    /* Тестовая точка за пределами трансформируемой территории */
     lv_point_t point_outside = {
         .x = 10,
         .y = 10
@@ -945,12 +945,12 @@ void test_image_hit_test(void)
 
 void test_image_hit_test_else_branch(void)
 {
-    /* Specific test to ensure coverage of the else branch in hit test logic */
+    /* Специальный тест для обеспечения покрытия другой ветки в логике проверки попадания. */
     lv_obj_t * img = img_create();
     lv_obj_set_pos(img, 100, 100);
     lv_obj_update_layout(img);
 
-    /* This should trigger the else branch because image size != object size */
+    /* Это должно вызвать ветку else, потому что размер изображения! = размер объекта. */
     lv_point_t point = {
         .x = 110,
         .y = 110
@@ -998,12 +998,12 @@ void test_image_cover_check_symbol(void)
 
 void test_image_cover_check_no_alpha(void)
 {
-    /* Test cover check for images without alpha channel */
+    /* Тестовая проверка обложки для изображений без альфа-канала */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, &test_img_lvgl_logo_jpg);
     lv_obj_set_pos(img, 100, 100);
     lv_obj_set_size(img, 100, 100);
-    /* Ensure base object cover check passes */
+    /* Убедитесь, что проверка покрытия базового объекта прошла успешно. */
     lv_obj_set_style_bg_opa(img, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_opa(img, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_update_layout(img);
@@ -1018,7 +1018,7 @@ void test_image_cover_check_no_alpha(void)
         .res = LV_COVER_RES_COVER
     };
 
-    /* Test case 1: Image opacity != LV_OPA_COVER */
+    /* Тестовый пример 1: непрозрачность изображения != LV_OPA_COVER */
     lv_obj_set_style_image_opa(img, LV_OPA_50, LV_PART_MAIN);
     lv_image_set_rotation(img, 0);
     lv_image_set_scale_x(img, LV_SCALE_NONE);
@@ -1030,7 +1030,7 @@ void test_image_cover_check_no_alpha(void)
     lv_obj_send_event(img, LV_EVENT_COVER_CHECK, &cover_info);
     TEST_ASSERT_EQUAL(LV_COVER_RES_NOT_COVER, cover_info.res);
 
-    /* Test case 2: Rotation != 0 */
+    /* Тестовый пример 2: вращение != 0 */
     lv_obj_set_style_image_opa(img, LV_OPA_COVER, LV_PART_MAIN);
     lv_image_set_rotation(img, 450);
     lv_image_set_scale_x(img, LV_SCALE_NONE);
@@ -1041,20 +1041,20 @@ void test_image_cover_check_no_alpha(void)
     lv_obj_send_event(img, LV_EVENT_COVER_CHECK, &cover_info);
     TEST_ASSERT_EQUAL(LV_COVER_RES_NOT_COVER, cover_info.res);
 
-    /* Test case 3: No scaling, area inside coords */
+    /* Тестовый пример 3: без масштабирования, область внутри координат */
     lv_image_set_rotation(img, 0);
     lv_image_set_scale_x(img, LV_SCALE_NONE);
     lv_image_set_scale_y(img, LV_SCALE_NONE);
     lv_image_set_bitmap_map_src(img, NULL);
     lv_obj_update_layout(img);
 
-    /* Reset area pointer to test_area */
+    /* Сбросить указатель области на test_area */
     cover_info.area = &test_area;
     cover_info.res = LV_COVER_RES_COVER;
     lv_obj_send_event(img, LV_EVENT_COVER_CHECK, &cover_info);
     TEST_ASSERT_EQUAL(LV_COVER_RES_COVER, cover_info.res);
 
-    /* Test case 4: No scaling, area outside coords */
+    /* Тестовый пример 4: без масштабирования, область за пределами координат */
     lv_area_t outside_area = {
         .x1 = 10, .y1 = 10,
         .x2 = 50, .y2 = 50
@@ -1064,7 +1064,7 @@ void test_image_cover_check_no_alpha(void)
     lv_obj_send_event(img, LV_EVENT_COVER_CHECK, &cover_info);
     TEST_ASSERT_EQUAL(LV_COVER_RES_NOT_COVER, cover_info.res);
 
-    /* Test case 5: With scaling, area inside transformed bounds */
+    /* Тестовый пример 5: при масштабировании область внутри преобразованных границ */
     lv_image_set_scale_x(img, 512);
     lv_image_set_scale_y(img, 512);
     lv_obj_update_layout(img);
@@ -1078,7 +1078,7 @@ void test_image_cover_check_no_alpha(void)
     lv_obj_send_event(img, LV_EVENT_COVER_CHECK, &cover_info);
     TEST_ASSERT_EQUAL(LV_COVER_RES_COVER, cover_info.res);
 
-    /* Test case 6: With scaling, area outside transformed bounds */
+    /* Тестовый пример 6: при масштабировании область за пределами преобразованных границ */
     lv_area_t scaled_outside_area = {
         .x1 = 10, .y1 = 10,
         .x2 = 50, .y2 = 50
@@ -1088,7 +1088,7 @@ void test_image_cover_check_no_alpha(void)
     lv_obj_send_event(img, LV_EVENT_COVER_CHECK, &cover_info);
     TEST_ASSERT_EQUAL(LV_COVER_RES_NOT_COVER, cover_info.res);
 
-    /* Test case 7: With bitmap mask */
+    /* Тестовый пример 7: с растровой маской */
     lv_image_set_scale_x(img, LV_SCALE_NONE);
     lv_image_set_scale_y(img, LV_SCALE_NONE);
     lv_image_set_bitmap_map_src(img, &test_arc_bg);
@@ -1102,7 +1102,7 @@ void test_image_cover_check_no_alpha(void)
 
 void test_image_set_src_file_to_symbol(void)
 {
-    /* Test switching from FILE to SYMBOL source */
+    /* Тестовое переключение с источника FILE на источник SYMBOL */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, "A:src/test_assets/test_img_lvgl_logo.png");
     lv_obj_update_layout(img);
@@ -1113,7 +1113,7 @@ void test_image_set_src_file_to_symbol(void)
 
 void test_image_set_src_with_rotation(void)
 {
-    /* Test setting image source with rotation */
+    /* Тестовая настройка источника изображения с вращением */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_rotation(img, 450);
     lv_image_set_src(img, &test_img_lvgl_logo_png);
@@ -1123,7 +1123,7 @@ void test_image_set_src_with_rotation(void)
 
 void test_image_draw_main_src_null(void)
 {
-    /* Test draw main with NULL src */
+    /* Тестовый рисунок с NULL src */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, &test_img_lvgl_logo_png);
     lv_obj_update_layout(img);
@@ -1136,7 +1136,7 @@ void test_image_draw_main_src_null(void)
 
 void test_image_draw_main_unknown_src_type(void)
 {
-    /* Test draw main with unknown src_type */
+    /* Тестовый розыгрыш основного с неизвестным src_type */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, &test_img_lvgl_logo_png);
     lv_obj_update_layout(img);

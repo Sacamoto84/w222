@@ -6,7 +6,7 @@ void lv_example_monkey_3(void)
     static lv_point_t btn_points[3];
     int32_t hor_res = LV_HOR_RES;
 
-    /*Create button monkey test*/
+    /*Создать тест кнопки-обезьянки*/
     lv_monkey_config_t config;
     lv_monkey_config_init(&config);
     config.type = LV_INDEV_TYPE_BUTTON;
@@ -16,7 +16,7 @@ void lv_example_monkey_3(void)
     config.input_range.max = sizeof(btn_points) / sizeof(lv_point_t) - 1;
     lv_monkey_t * monkey = lv_monkey_create(&config);
 
-    /*Set the coordinates bound to the button*/
+    /*Установите координаты, привязанные к кнопке*/
     btn_points[0].x = hor_res / 4;
     btn_points[0].y = 10;
     btn_points[1].x = hor_res / 2;
@@ -26,7 +26,7 @@ void lv_example_monkey_3(void)
 
     lv_indev_set_button_points(lv_monkey_get_indev(monkey), btn_points);
 
-    /*Start monkey test*/
+    /*Начать тест на обезьянах*/
     lv_monkey_set_enable(monkey, true);
 }
 

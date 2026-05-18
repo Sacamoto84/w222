@@ -3,7 +3,7 @@
  *
  */
 
-/*Copy this file as "lv_port_fs.h" and set this value to "1" to enable content*/
+/*Скопируйте этот файл как «lv_port_fs.h» и установите для этого значения значение «1», чтобы отключить контент.*/
 #if 0
 
 #ifndef LV_PORT_FS_TEMPL_H
@@ -36,9 +36,9 @@ void lv_port_fs_init(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PORT_FS_TEMPL_H*/
 
-#endif /*Disable/Enable content*/
+#endif /*Отключить/включить контент*/

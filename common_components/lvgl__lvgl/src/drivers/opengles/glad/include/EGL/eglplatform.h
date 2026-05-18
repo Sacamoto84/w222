@@ -9,25 +9,25 @@
 ** SPDX-License-Identifier: Apache-2.0
 */
 
-/* Platform-specific types and definitions for egl.h
+/* Типы и определения для egl.h, зависящие от платформы
  *
- * Adopters may modify khrplatform.h and this file to suit their platform.
- * You are encouraged to submit all modifications to the Khronos group so that
- * they can be included in future versions of this file.  Please submit changes
- * by filing an issue or pull request on the public Khronos EGL Registry, at
+ * Усыновители могут изменить khrplatform.h и этот файл в соответствии со своей платформой.
+ * Вам рекомендуется отправлять все изменения в группу Khronos, чтобы
+ * они могут быть включены в будущие версии этого файла.  Пожалуйста, отправьте изменения
+ * оформив вопрос или запрос на включение в общедоступный реестр Khronos EGL по адресу
  * https://www.github.com/KhronosGroup/EGL-Registry/
  */
 
 #include <KHR/khrplatform.h>
 
-/* Macros used in EGL function prototype declarations.
+/* Макросы, используемые в объявлениях прототипов функций EGL.
  *
- * EGL functions should be prototyped as:
+ * Функции EGL должны быть прототипированы как:
  *
- * EGLAPI return-type EGLAPIENTRY eglFunction(arguments);
- * typedef return-type (EXPAPIENTRYP PFNEGLFUNCTIONPROC) (arguments);
+ * EGLAPI возвращаемый тип EGLAPIENTRY eglFunction(аргументы);
+ * typedef тип возвращаемого значения ( EXPAPIENTRYP PFNEGLFUNCTIONPROC ) (аргументы);
  *
- * KHRONOS_APICALL and KHRONOS_APIENTRY are defined in KHR/khrplatform.h
+ * KHRONOS_APICALL и KHRONOS_APIENTRY определены в KHR/khrplatform.h.
  */
 
 #ifndef EGLAPI
@@ -39,16 +39,16 @@
 #endif
 #define EGLAPIENTRYP EGLAPIENTRY*
 
-/* The types NativeDisplayType, NativeWindowType, and NativePixmapType
- * are aliases of window-system-dependent types, such as X Display * or
- * Windows Device Context. They must be defined in platform-specific
- * code below. The EGL-prefixed versions of Native*Type are the same
- * types, renamed in EGL 1.3 so all types in the API start with "EGL".
+/* Типы NativeDisplayType, NativeWindowType и NativePixmapType.
+ * являются псевдонимами типов, зависящих от оконной системы, таких как X Display * или
+ * Контекст устройства Windows. Они должны быть определены в специфичных для платформы
+ * код ниже. Версии Native*Type с префиксом EGL одинаковы.
+ * типы, переименованные в EGL 1.3, поэтому все типы в API начинаются с «EGL».
  *
- * Khronos STRONGLY RECOMMENDS that you use the default definitions
- * provided below, since these changes affect both binary and source
- * portability of applications using EGL running on different EGL
- * implementations.
+ * Khronos STRONGLY RECOMMENDS, что вы используете определения по умолчанию.
+ * представлено ниже, поскольку эти изменения затрагивают как двоичный, так и исходный код.
+ * переносимость приложений, использующих EGL, работающих на разных EGL
+ * реализации.
  */
 
 #if defined(EGL_NO_PLATFORM_SPECIFIC_TYPES)
@@ -57,7 +57,7 @@ typedef void *EGLNativeDisplayType;
 typedef void *EGLNativePixmapType;
 typedef void *EGLNativeWindowType;
 
-#elif defined(_WIN32) || defined(__VC32__) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__) /* Win32 and WinCE */
+#elif defined(_WIN32) || defined(__VC32__) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__) /* Win32 и WinCE */
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif
@@ -79,7 +79,7 @@ typedef int EGLNativeDisplayType;
 typedef int EGLNativePixmapType;
 typedef int EGLNativeWindowType;
 
-#elif defined(__WINSCW__) || defined(__SYMBIAN32__)  /* Symbian */
+#elif defined(__WINSCW__) || defined(__SYMBIAN32__)  /* Симбиан */
 
 typedef int   EGLNativeDisplayType;
 typedef void *EGLNativePixmapType;
@@ -114,7 +114,7 @@ typedef intptr_t EGLNativeWindowType;
 
 #elif defined(USE_X11)
 
-/* X11 (tentative)  */
+/* X11 (предварительно)  */
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -152,23 +152,23 @@ typedef khronos_uintptr_t  EGLNativeWindowType;
 #error "Platform not recognized"
 #endif
 
-/* EGL 1.2 types, renamed for consistency in EGL 1.3 */
+/* Типы EGL 1.2, переименованные для обеспечения единообразия в EGL 1.3. */
 typedef EGLNativeDisplayType NativeDisplayType;
 typedef EGLNativePixmapType  NativePixmapType;
 typedef EGLNativeWindowType  NativeWindowType;
 
 
-/* Define EGLint. This must be a signed integral type large enough to contain
- * all legal attribute names and values passed into and out of EGL, whether
- * their type is boolean, bitmask, enumerant (symbolic constant), integer,
- * handle, or other.  While in general a 32-bit integer will suffice, if
- * handles are 64 bit types, then EGLint should be defined as a signed 64-bit
- * integer type.
+/* Определите EGLint. Это должен быть целочисленный тип со знаком, достаточно большой, чтобы содержать
+ * все допустимые имена и значения атрибутов, передаваемые в EGL и из него, независимо от того,
+ * их тип — логический, битовая маска, перечисляемый (символическая константа), целочисленный,
+ * ручка или что-то другое.  Хотя в целом 32-битного целого числа будет достаточно, если
+ * дескрипторы являются 64-битными типами, тогда EGLint должен быть определен как подписанный 64-битный тип.
+ * целочисленный тип.
  */
 typedef khronos_int32_t EGLint;
 
 
-/* C++ / C typecast macros for special EGL handle values */
+/* Макросы приведения типов C++/C для специальных значений дескриптора EGL */
 #if defined(__cplusplus)
 #define EGL_CAST(type, value) (static_cast<type>(value))
 #else

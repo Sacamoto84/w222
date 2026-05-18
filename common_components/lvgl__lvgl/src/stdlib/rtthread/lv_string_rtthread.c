@@ -8,7 +8,7 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_STDLIB_STRING == LV_STDLIB_RTTHREAD
 #include "../lv_string.h"
-#include "../lv_mem.h" /*Need lv_malloc*/
+#include "../lv_mem.h" /*Нужен lv_malloc*/
 #include <rtthread.h>
 
 /*********************
@@ -105,7 +105,7 @@ char * lv_strdup(const char * src)
     char * dst = lv_malloc(len);
     if(dst == NULL) return NULL;
 
-    lv_memcpy(dst, src, len); /*memcpy is faster than strncpy when length is known*/
+    lv_memcpy(dst, src, len); /*memcpy работает быстрее, чем strncpy, если известна длина*/
     return dst;
 }
 
@@ -122,8 +122,8 @@ char * lv_strndup(const char * src, size_t max_len)
 
 char * lv_strcat(char * dst, const char * src)
 {
-    /*Since RT-thread does not have rt_strcat,
-    the following code is used instead.*/
+    /*Поскольку RT -thread не имеет rt_strcat ,
+    Вместо этого используется следующий код.*/
     lv_strcpy(dst + lv_strlen(dst), src);
     return dst;
 }

@@ -226,7 +226,7 @@ void lv_style_merge(lv_style_t * dst, const lv_style_t * src)
         return;
     }
 
-    /*Source is empty*/
+    /*Источник пуст*/
     if(src->values_and_props == NULL) {
         LV_LOG_TRACE("Source style is empty");
         return;
@@ -236,7 +236,7 @@ void lv_style_merge(lv_style_t * dst, const lv_style_t * src)
         return;
     }
 
-    /* Merge the styles */
+    /* Объедините стили */
     int32_t i;
     if(lv_style_is_const(src)) {
         lv_style_const_prop_t * props_and_values = (lv_style_const_prop_t *)src->values_and_props;
@@ -261,11 +261,11 @@ lv_style_prop_t lv_style_register_prop(uint8_t flag)
     }
 
     /*
-     * Allocate the lookup table if it's not yet available.
+     * Выделите таблицу поиска, если она еще не доступна.
      */
     size_t required_size = (last_custom_prop_id + 1 - LV_STYLE_LAST_BUILT_IN_PROP);
     if(lv_style_custom_prop_flag_lookup_table_size < required_size) {
-        /* Round required_size up to the nearest 32-byte value */
+        /* Округлитеrequired_sizeдо ближайшего 32-байтового значения. */
         required_size = (required_size + 31) & ~31;
         LV_ASSERT_MSG(required_size > 0, "required size has become 0?");
         uint8_t * old_p = lv_style_custom_prop_flag_lookup_table;
@@ -278,7 +278,7 @@ lv_style_prop_t lv_style_register_prop(uint8_t flag)
         lv_style_custom_prop_flag_lookup_table_size = required_size;
     }
     last_custom_prop_id++;
-    /* This should never happen - we should bail out above */
+    /* Этого никогда не должно случиться - мы должны спастись выше */
     LV_ASSERT_NULL(lv_style_custom_prop_flag_lookup_table);
     lv_style_custom_prop_flag_lookup_table[last_custom_prop_id - LV_STYLE_NUM_BUILT_IN_PROPS] = flag;
     return last_custom_prop_id;
@@ -325,7 +325,7 @@ bool lv_style_remove_prop(lv_style_t * style, lv_style_prop_t prop)
 
             uint32_t j;
             for(i = j = 0; j <= style->prop_cnt;
-                j++) { /*<=: because prop_cnt already reduced but all the old props. needs to be checked.*/
+                j++) { /*<=: потому чтоprop_cntуже уменьшен, но все старые реквизиты. необходимо проверить.*/
                 if(old_props[j] != prop) {
                     new_values[i] = old_values[j];
                     new_props[i++] = old_props[j];
@@ -378,17 +378,17 @@ void lv_style_set_prop(lv_style_t * style, lv_style_prop_t prop, lv_style_value_
     style->values_and_props = values_and_props;
 
     props = values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-    /*Shift all props to make place for the value before them*/
+    /*Сдвиньте все реквизиты, чтобы освободить место для значения перед ними.*/
     for(i = style->prop_cnt - 1; i >= 0; i--) {
         props[i + sizeof(lv_style_value_t) / sizeof(lv_style_prop_t)] = props[i];
     }
     style->prop_cnt++;
 
-    /*Go to the new position with the props*/
+    /*Перейдите на новую позицию с реквизитом*/
     props = values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
     lv_style_value_t * values = (lv_style_value_t *)values_and_props;
 
-    /*Set the new property and value*/
+    /*Установите новое свойство и значение*/
     props[style->prop_cnt - 1] = prop;
     values[style->prop_cnt - 1] = value;
 
@@ -505,7 +505,7 @@ bool lv_style_is_empty(const lv_style_t * style)
 
 uint8_t lv_style_prop_lookup_flags(lv_style_prop_t prop)
 {
-    if(prop == LV_STYLE_PROP_ANY) return LV_STYLE_PROP_FLAG_ALL; /*Any prop can have any flags*/
+    if(prop == LV_STYLE_PROP_ANY) return LV_STYLE_PROP_FLAG_ALL; /*Любой реквизит может иметь любые флаги*/
     if(prop == LV_STYLE_PROP_INV) return 0;
 
     if(prop < LV_STYLE_NUM_BUILT_IN_PROPS)

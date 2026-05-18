@@ -64,7 +64,7 @@ void lv_test_fs_init(void)
 {
     lv_fs_drv_init(&fs_drv);
 
-    /*Set up fields...*/
+    /*Настроить поля...*/
     fs_drv.letter = LV_TEST_FS_LETTER;
     fs_drv.cache_size = LV_TEST_FS_CACHE_SIZE;
 

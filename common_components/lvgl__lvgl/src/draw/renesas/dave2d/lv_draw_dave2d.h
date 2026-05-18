@@ -22,7 +22,7 @@ extern "C" {
 
 #if LV_USE_FLOAT
 
-/* We need to redefine some of D2 fixed point math macros to deal with lv_precise_t being float now */
+/* Нам нужно переопределить некоторые математические макросы с фиксированной точкой D2, чтобы теперь lv_precise_t был плавающим. */
 #undef D2_FIX4
 #undef D2_INT4
 #undef D2_FLOOR4
@@ -45,7 +45,7 @@ extern "C" {
 #define D2_CEIL16(x)    ((((d2_u32)(x)) + 65535u) & ~65535u)
 #define D2_FRAC16(x)    (((d2_u32)(x)) & 65535u)
 
-/* It also should be included here before the other LVGL Dave2D files */
+/* Его также следует включить сюда перед другими файлами LVGL Dave2D. */
 #endif
 
 #include "lv_draw_dave2d_utils.h"
@@ -130,7 +130,7 @@ void lv_draw_dave2d_transform(lv_draw_task_t * t, const lv_area_t * dest_area, c
 #endif /*LV_USE_DRAW_DAVE2D*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_DAVE2D_H*/

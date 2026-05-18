@@ -346,9 +346,9 @@ static lv_result_t add_write_op(lv_gltf_model_node_t * node, lv_gltf_node_prop_t
         return LV_RESULT_INVALID;
     }
 
-    /* Try to find if a write operation for this property + channel combination exists*/
-    /* Doing this is ok for now because the array will be of max size 9 (3 properties x 3 channels)
-     * In case we start adding more properties we need to look into other approaches*/
+    /* Попробуйте выяснить, существует ли операция записи для этой комбинации свойства + канала.*/
+    /* На данный момент это нормально, потому что максимальный размер массива будет 9 (3 свойства x 3 канала).
+     * В случае, если мы начнем добавлять больше свойств, нам нужно будет изучить другие подходы.*/
     const uint32_t write_ops_count = lv_array_size(&node->write_ops);
     for(uint32_t i = 0; i < write_ops_count; ++i) {
         lv_gltf_write_op_t * write_op = (lv_gltf_write_op_t *)lv_array_at(&node->write_ops, i);
@@ -361,7 +361,7 @@ static lv_result_t add_write_op(lv_gltf_model_node_t * node, lv_gltf_node_prop_t
         }
         return LV_RESULT_OK;
     }
-    /* Else create a new one */
+    /* Иначе создайте новый */
     lv_gltf_write_op_t write_op {prop, channel, value};
     lv_result_t res = lv_array_push_back(&node->write_ops, &write_op);
     if(res != LV_RESULT_OK) {

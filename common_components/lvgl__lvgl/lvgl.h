@@ -1,6 +1,6 @@
 /**
  * @file lvgl.h
- * Include all LVGL related headers
+ * Включить все заголовки, связанные с LVGL.
  */
 
 #ifndef LVGL_H
@@ -134,8 +134,8 @@ extern "C" {
 
 #include "src/drivers/lv_drivers.h"
 
-/* Define LV_DISABLE_API_MAPPING using a compiler option
- * to make sure your application is not using deprecated names */
+/* Определите LV_DISABLE_API_MAPPING, используя опцию компилятора
+ * чтобы убедиться, что ваше приложение не использует устаревшие имена */
 #ifndef LV_DISABLE_API_MAPPING
 #include "src/lv_api_map_v8.h"
 #include "src/lv_api_map_v9_0.h"
@@ -166,31 +166,31 @@ extern "C" {
  *      MACROS
  **********************/
 
-/** Gives 1 if the x.y.z version is supported in the current version
- * Usage:
+/** Возвращает 1, если версия xyz переходит в текущую версию.
+ * Использование:
  *
- * - Require v6
+ * - Требовать версию 6
  * #if LV_VERSION_CHECK(6,0,0)
- *   new_func_in_v6();
+ *   new_func_in_v6 ();
  * #endif
  *
  *
- * - Require at least v5.3
+ * - Требуйте как минимум v5.3
  * #if LV_VERSION_CHECK(5,3,0)
- *   new_feature_from_v5_3();
+ *   new_feature_from_v5_3 ();
  * #endif
  *
  *
- * - Require v5.3.2 bugfixes
+ * - Требуются исправления ошибок версии 5.3.2.
  * #if LV_VERSION_CHECK(5,3,2)
- *   bugfix_in_v5_3_2();
+ *   bugfix_in_v5_3_2 ();
  * #endif
  *
  */
 #define LV_VERSION_CHECK(x,y,z) (x == LVGL_VERSION_MAJOR && (y < LVGL_VERSION_MINOR || (y == LVGL_VERSION_MINOR && z <= LVGL_VERSION_PATCH)))
 
 /**
- * Wrapper functions for VERSION macros
+ * Функции-оболочки для макросов VERSION
  */
 
 static inline int lv_version_major(void)
@@ -214,7 +214,7 @@ static inline const char * lv_version_info(void)
 }
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LVGL_H*/

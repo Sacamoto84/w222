@@ -2,7 +2,7 @@
 #if LV_USE_BAR && LV_BUILD_EXAMPLES
 
 /**
- * Bar with stripe pattern and ranged value
+ * Панель с полосатым рисунком и диапазоном значений
  */
 void lv_example_bar_4(void)
 {

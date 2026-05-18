@@ -64,7 +64,7 @@ void testNodeTree(void)
 void test_property_is_inherited(void)
 {
 
-    /* Circle should not be filled as parent node has 'fill="none"' attribute*/
+    /* Круг не должен быть заполнен, поскольку родительский узел имеет атрибут fill="none"*/
     const char * svg =
         "<svg width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" fill=\"none\">\n"
         "<circle cx=\"100\" cy=\"100\" r=\"50\" stroke=\"black\"/>\n"
@@ -98,7 +98,7 @@ void testSvgElement(void)
     TEST_ASSERT_EQUAL_STRING((LV_ARRAY_GET(&svg_node1->attrs, 1, lv_svg_attr_t))->value.sval, "tiny");
     lv_svg_node_delete(svg_node1);
 
-    /* test viewBox */
+    /* тестовый viewBox */
     const char * svg_viewbox0 = \
                                 "<svg viewBox=\"none\"></svg>";
     lv_svg_node_t * svg_node_viewbox = lv_svg_load_data(svg_viewbox0, lv_strlen(svg_viewbox0));
@@ -132,7 +132,7 @@ void testSvgElement(void)
     TEST_ASSERT_EQUAL_FLOAT_ARRAY(ret4, (float *)(LV_ARRAY_GET(&svg_node_viewbox4->attrs, 0, lv_svg_attr_t))->value.val, 4);
     lv_svg_node_delete(svg_node_viewbox4);
 
-    /* width and height */
+    /* ширина и высота */
     const char * svg_wh = \
                           "<svg width=\"100\" height=\"100px\"></svg>";
     lv_svg_node_t * svg_node_wh = lv_svg_load_data(svg_wh, lv_strlen(svg_wh));
@@ -179,7 +179,7 @@ void testSvgElement(void)
     lv_svg_render_delete(draw_list);
     lv_svg_node_delete(svg_node_wh6);
 
-    /* preserveAspectRatio */
+    /* сохранитьAspectRatio */
 
     const char * svg_ar0 = \
                            "<svg preserveAspectRatio=\"none meet\"></svg>";
@@ -764,7 +764,7 @@ void testGradient(void)
                            "<stop offset=\"1\" stop-color=\"red\"/>"
                            "</radialGradient></defs></svg>";
     svg_node_root = lv_svg_load_data(svg_gt2, lv_strlen(svg_gt2));
-    svg_node = LV_SVG_NODE_CHILD(svg_node_root, 0); //defs
+    svg_node = LV_SVG_NODE_CHILD(svg_node_root, 0); //защита
     svg_node1 = LV_SVG_NODE_CHILD(svg_node, 0);
     TEST_ASSERT_EQUAL_STRING(svg_node1->xml_id, "gt2");
     uint32_t g = (LV_ARRAY_GET(&svg_node1->attrs, 0, lv_svg_attr_t))->value.ival;

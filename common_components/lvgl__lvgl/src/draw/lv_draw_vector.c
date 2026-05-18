@@ -101,7 +101,7 @@ void lv_matrix_transform_path(const lv_matrix_t * matrix, lv_vector_path_t * pat
     }
 }
 
-/* path functions */
+/* функции пути */
 lv_vector_path_t * lv_vector_path_create(lv_vector_path_quality_t quality)
 {
     lv_vector_path_t * path = lv_malloc(sizeof(lv_vector_path_t));
@@ -145,7 +145,7 @@ void lv_vector_path_move_to(lv_vector_path_t * path, const lv_fpoint_t * p)
 void lv_vector_path_line_to(lv_vector_path_t * path, const lv_fpoint_t * p)
 {
     if(lv_array_is_empty(&path->ops)) {
-        /*first op must be move_to*/
+        /*первая операция должна быть move_to*/
         return;
     }
 
@@ -159,7 +159,7 @@ void lv_vector_path_line_to(lv_vector_path_t * path, const lv_fpoint_t * p)
 void lv_vector_path_quad_to(lv_vector_path_t * path, const lv_fpoint_t * p1, const lv_fpoint_t * p2)
 {
     if(lv_array_is_empty(&path->ops)) {
-        /*first op must be move_to*/
+        /*первая операция должна быть move_to*/
         return;
     }
 
@@ -175,7 +175,7 @@ void lv_vector_path_cubic_to(lv_vector_path_t * path, const lv_fpoint_t * p1, co
                              const lv_fpoint_t * p3)
 {
     if(lv_array_is_empty(&path->ops)) {
-        /*first op must be move_to*/
+        /*первая операция должна быть move_to*/
         return;
     }
 
@@ -222,12 +222,12 @@ void lv_vector_path_arc_to(lv_vector_path_t * path, float rx, float ry, float ro
     LV_ASSERT_NULL(p);
 
     if(lv_array_is_empty(&path->ops)) {
-        /*first op must be move_to*/
+        /*первая операция должна быть move_to*/
         return;
     }
 
     if(rx <= 0 || ry <= 0) {
-        /*no needed to draw*/
+        /*нет необходимости рисовать*/
         return;
     }
 
@@ -238,9 +238,9 @@ void lv_vector_path_arc_to(lv_vector_path_t * path, float rx, float ry, float ro
     float x0 = cpt->x;
     float y0 = cpt->y;
 
-    /*1. dealing with degradation*/
+    /*1. борьба с деградацией*/
     if(fabsf(x0 - p->x) < EPSILON && fabsf(y0 - p->y) < EPSILON) {
-        /*same point*/
+        /*та же самая точка*/
         return;
     }
 
@@ -248,21 +248,21 @@ void lv_vector_path_arc_to(lv_vector_path_t * path, float rx, float ry, float ro
     float sin_r = sinf(rotate);
     float cos_r = cosf(rotate);
 
-    /*2. transform point*/
+    /*2. точка преобразования*/
     float dx = (x0 - p->x) * 0.5f;
     float dy = (y0 - p->y) * 0.5f;
 
     float x1 = cos_r * dx + sin_r * dy;
     float y1 = -sin_r * dx + cos_r * dy;
 
-    /*3. adjust radius*/
+    /*3. отрегулировать радиус*/
     float lambda_val = (x1 * x1) / (rx * rx) + (y1 * y1) / (ry * ry);
     if(lambda_val > 1.0f) {
         rx *= sqrtf(lambda_val);
         ry *= sqrtf(lambda_val);
     }
 
-    /*4. calc center point*/
+    /*4. центральная точка расчета*/
     float rx_sq = rx * rx;
     float ry_sq = ry * ry;
     float x1_sq = x1 * x1;
@@ -286,7 +286,7 @@ void lv_vector_path_arc_to(lv_vector_path_t * path, float rx, float ry, float ro
     float ux = (x1 - cx_prime) / rx;
     float uy = (y1 - cy_prime) / ry;
 
-    /*5. calculate the starting angle and ending angle*/
+    /*5. рассчитать начальный и конечный угол*/
     float n_sq = ux * ux + uy * uy;
     float theta1 = 0.0f;
     if(n_sq > EPSILON) {
@@ -314,7 +314,7 @@ void lv_vector_path_arc_to(lv_vector_path_t * path, float rx, float ry, float ro
         delta += 2.0f * MATH_PI;
     }
 
-    /*6. split arc into segments within 90 degrees*/
+    /*6. разделить дугу на сегменты в пределах 90 градусов*/
     float angle_left = fabsf(delta);
     int seg_count = (int)ceilf(angle_left / MATH_HALF_PI);
     if(seg_count == 0) seg_count = 1;
@@ -347,7 +347,7 @@ void lv_vector_path_arc_to(lv_vector_path_t * path, float rx, float ry, float ro
 void lv_vector_path_close(lv_vector_path_t * path)
 {
     if(lv_array_is_empty(&path->ops)) {
-        /*first op must be move_to*/
+        /*первая операция должна быть move_to*/
         return;
     }
 
@@ -523,13 +523,13 @@ void lv_vector_path_append_circle(lv_vector_path_t * path, const lv_fpoint_t * c
 }
 
 /**
- * Add a arc to the path
- * @param path              pointer to a path
- * @param c                 pointer to a `lv_fpoint_t` variable for center of the circle
- * @param radius            the radius for arc
- * @param start_angle       the start angle for arc
- * @param sweep             the sweep angle for arc, could be negative
- * @param pie               true: draw a pie, false: draw a arc
+ * Добавьте дугу к пути
+ * @param path              указатель на путь
+ * @param c                 указатель на переменную`lv_fpoint_t`для центра круга
+ * @param radius            радиус дуги
+ * @param start_angle       начальный угол дуги
+ * @param sweep             угол поворота дуги может быть отрицательным
+ * @param pie               true: нарисовать круг, false: нарисовать дугу
  */
 void lv_vector_path_append_arc(lv_vector_path_t * path, const lv_fpoint_t * c, float radius, float start_angle,
                                float sweep, bool pie)
@@ -537,7 +537,7 @@ void lv_vector_path_append_arc(lv_vector_path_t * path, const lv_fpoint_t * c, f
     float cx = c->x;
     float cy = c->y;
 
-    /* just circle */
+    /* просто обведи */
     if(sweep >= 360.0f || sweep <= -360.0f) {
         lv_vector_path_append_circle(path, c, radius, radius);
         return;
@@ -551,7 +551,7 @@ void lv_vector_path_append_arc(lv_vector_path_t * path, const lv_fpoint_t * c, f
     float fract = fmodf(sweep, MATH_HALF_PI);
     fract = (fabsf(fract) < FLT_EPSILON) ? MATH_HALF_PI * sweep_sign : fract;
 
-    /* Start from here */
+    /* Начни отсюда */
     lv_fpoint_t start = {
         .x = radius * cosf(start_angle),
         .y = radius * sinf(start_angle),
@@ -576,10 +576,10 @@ void lv_vector_path_append_arc(lv_vector_path_t * path, const lv_fpoint_t * c, f
         float end_x = radius * cosf(end_angle);
         float end_y = radius * sinf(end_angle);
 
-        /* variables needed to calculate bezier control points */
+        /* переменные, необходимые для расчета контрольных точек Безье */
 
-        /** get bezier control points using article:
-         * (http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
+        /** получить контрольные точки Безье, используя статью:
+         * ( http://itc.ktu.lt/index.php/ITC/article/view/11812/6479)
          */
         float ax = start.x;
         float ay = start.y;
@@ -589,7 +589,7 @@ void lv_vector_path_append_arc(lv_vector_path_t * path, const lv_fpoint_t * c, f
         float q2 = ax * bx + ay * by + q1;
         float k2 = (4.0f / 3.0f) * ((sqrtf(2 * q1 * q2) - q2) / (ax * by - ay * bx));
 
-        /* Next start point is the current end point */
+        /* Следующая начальная точка — текущая конечная точка. */
         start.x = end_x;
         start.y = end_y;
 
@@ -622,7 +622,7 @@ void lv_vector_path_append_path(lv_vector_path_t * path, const lv_vector_path_t 
     path->points.size = point_size + npoint_size;
 }
 
-/* draw dsc functions */
+/* рисовать функции ДСК */
 
 lv_draw_vector_dsc_t * lv_draw_vector_dsc_create(lv_layer_t * layer)
 {
@@ -648,21 +648,21 @@ lv_draw_vector_dsc_t * lv_draw_vector_dsc_create(lv_layer_t * layer)
     fill_dsc->color = lv_color_to_32(lv_color_black(), 0xFF);
     fill_dsc->opa = LV_OPA_COVER;
     fill_dsc->fill_rule = LV_VECTOR_FILL_NONZERO;
-    lv_matrix_identity(&(fill_dsc->matrix)); /*identity matrix*/
+    lv_matrix_identity(&(fill_dsc->matrix)); /*идентификационная матрица*/
 
     lv_vector_stroke_dsc_t * stroke_dsc = &(dsc->ctx->stroke_dsc);
     stroke_dsc->style = LV_VECTOR_DRAW_STYLE_SOLID;
     stroke_dsc->color = lv_color_to_32(lv_color_black(), 0xFF);
-    stroke_dsc->opa = LV_OPA_0; /*default no stroke*/
+    stroke_dsc->opa = LV_OPA_0; /*по умолчанию нет инсульта*/
     stroke_dsc->width = 1.0f;
     stroke_dsc->cap = LV_VECTOR_STROKE_CAP_BUTT;
     stroke_dsc->join = LV_VECTOR_STROKE_JOIN_MITER;
     stroke_dsc->miter_limit = 4.0f;
-    lv_matrix_identity(&(stroke_dsc->matrix)); /*identity matrix*/
+    lv_matrix_identity(&(stroke_dsc->matrix)); /*идентификационная матрица*/
 
     dsc->ctx->blend_mode = LV_VECTOR_BLEND_SRC_OVER;
     dsc->ctx->scissor_area = layer->_clip_area;
-    lv_matrix_identity(&(dsc->ctx->matrix)); /*identity matrix*/
+    lv_matrix_identity(&(dsc->ctx->matrix)); /*идентификационная матрица*/
     dsc->task_list = NULL;
     return dsc;
 }
@@ -805,7 +805,7 @@ void lv_draw_vector_dsc_set_stroke_dash(lv_draw_vector_dsc_t * dsc, float * dash
             lv_array_push_back(dash_array, &dash_pattern[i]);
         }
     }
-    else {   /*clear dash*/
+    else {   /*очистить черту*/
         lv_array_clear(dash_array);
     }
 }
@@ -861,7 +861,7 @@ void lv_draw_vector_dsc_set_stroke_gradient_color_stops(lv_draw_vector_dsc_t * d
     dsc->ctx->stroke_dsc.gradient.stops_count = count;
 }
 
-/* draw functions */
+/* функции рисования */
 void lv_draw_vector_dsc_add_path(lv_draw_vector_dsc_t * dsc, const lv_vector_path_t * path)
 {
     lv_area_t rect;
@@ -930,10 +930,10 @@ void lv_draw_vector(lv_draw_vector_dsc_t * dsc)
     dsc->task_list = NULL;
 }
 
-/* draw dsc transform */
+/* нарисовать преобразование DSC */
 void lv_draw_vector_dsc_identity(lv_draw_vector_dsc_t * dsc)
 {
-    lv_matrix_identity(&(dsc->ctx->matrix)); /*identity matrix*/
+    lv_matrix_identity(&(dsc->ctx->matrix)); /*идентификационная матрица*/
 }
 
 void lv_draw_vector_dsc_scale(lv_draw_vector_dsc_t * dsc, float scale_x, float scale_y)

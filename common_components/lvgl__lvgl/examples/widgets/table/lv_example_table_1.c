@@ -5,12 +5,12 @@ static void draw_event_cb(lv_event_t * e)
 {
     lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
     lv_draw_dsc_base_t * base_dsc = (lv_draw_dsc_base_t *)lv_draw_task_get_draw_dsc(draw_task);
-    /*If the cells are drawn...*/
+    /*Если ячейки нарисованы...*/
     if(base_dsc->part == LV_PART_ITEMS) {
         uint32_t row = base_dsc->id1;
         uint32_t col = base_dsc->id2;
 
-        /*Make the texts in the first cell center aligned*/
+        /*Выровняйте тексты в центре первой ячейки.*/
         if(row == 0) {
             lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
             if(label_draw_dsc) {
@@ -22,7 +22,7 @@ static void draw_event_cb(lv_event_t * e)
                 fill_draw_dsc->opa = LV_OPA_COVER;
             }
         }
-        /*In the first column align the texts to the right*/
+        /*В первом столбце выровняйте тексты по правому краю.*/
         else if(col == 0) {
             lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
             if(label_draw_dsc) {
@@ -30,7 +30,7 @@ static void draw_event_cb(lv_event_t * e)
             }
         }
 
-        /*Make every 2nd row grayish*/
+        /*Каждый второй ряд сделайте серым.*/
         if((row != 0 && row % 2) == 0) {
             lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
             if(fill_draw_dsc) {
@@ -45,7 +45,7 @@ void lv_example_table_1(void)
 {
     lv_obj_t * table = lv_table_create(lv_screen_active());
 
-    /*Fill the first column*/
+    /*Заполните первый столбец*/
     lv_table_set_cell_value(table, 0, 0, "Name");
     lv_table_set_cell_value(table, 1, 0, "Apple");
     lv_table_set_cell_value(table, 2, 0, "Banana");
@@ -55,7 +55,7 @@ void lv_example_table_1(void)
     lv_table_set_cell_value(table, 6, 0, "Peach");
     lv_table_set_cell_value(table, 7, 0, "Nuts");
 
-    /*Fill the second column*/
+    /*Заполните второй столбец*/
     lv_table_set_cell_value(table, 0, 1, "Price");
     lv_table_set_cell_value(table, 1, 1, "$7");
     lv_table_set_cell_value(table, 2, 1, "$4");
@@ -65,11 +65,11 @@ void lv_example_table_1(void)
     lv_table_set_cell_value(table, 6, 1, "$1");
     lv_table_set_cell_value(table, 7, 1, "$9");
 
-    /*Set a smaller height to the table. It'll make it scrollable*/
+    /*Установите меньшую высоту стола. Это сделает его прокручиваемым*/
     lv_obj_set_height(table, 200);
     lv_obj_center(table);
 
-    /*Add an event callback to to apply some custom drawing*/
+    /*Добавьте обратный вызов события, чтобы применить пользовательский рисунок.*/
     lv_obj_add_event_cb(table, draw_event_cb, LV_EVENT_DRAW_TASK_ADDED, NULL);
     lv_obj_add_flag(table, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
 }

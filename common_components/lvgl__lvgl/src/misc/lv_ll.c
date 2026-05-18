@@ -1,7 +1,7 @@
 /**
  * @file lv_ll.c
- * Handle linked lists.
- * The nodes are dynamically allocated by the 'lv_mem' module,
+ * Обработка связанных списков.
+ * Узлы направления ослабляются с помощью модуля lv_mem.
  */
 
 /*********************
@@ -44,10 +44,10 @@ void lv_ll_init(lv_ll_t * ll_p, uint32_t node_size)
     ll_p->head = NULL;
     ll_p->tail = NULL;
 #ifdef LV_ARCH_64
-    /*Round the size up to 8*/
+    /*Округляем размер до 8.*/
     node_size = (node_size + 7) & (~0x7);
 #else
-    /*Round the size up to 4*/
+    /*Округляем размер до 4.*/
     node_size = (node_size + 3) & (~0x3);
 #endif
 
@@ -61,15 +61,15 @@ void * lv_ll_ins_head(lv_ll_t * ll_p)
     n_new = lv_malloc(ll_p->n_size + LL_NODE_META_SIZE);
 
     if(n_new != NULL) {
-        node_set_prev(ll_p, n_new, NULL);       /*No prev. before the new head*/
-        node_set_next(ll_p, n_new, ll_p->head); /*After new comes the old head*/
+        node_set_prev(ll_p, n_new, NULL);       /*Нет пред. перед новым руководителем*/
+        node_set_next(ll_p, n_new, ll_p->head); /*После новой приходит старая голова*/
 
-        if(ll_p->head != NULL) { /*If there is old head then before it goes the new*/
+        if(ll_p->head != NULL) { /*Если есть старая голова, то прежде чем она пойдет новая*/
             node_set_prev(ll_p, ll_p->head, n_new);
         }
 
-        ll_p->head = n_new;      /*Set the new head in the dsc.*/
-        if(ll_p->tail == NULL) { /*If there is no tail (1. node) set the tail too*/
+        ll_p->head = n_new;      /*Установите новую головку в dsc.*/
+        if(ll_p->tail == NULL) { /*Если хвоста (1. узла) нет, установите и хвост.*/
             ll_p->tail = n_new;
         }
     }
@@ -109,14 +109,14 @@ void * lv_ll_ins_tail(lv_ll_t * ll_p)
     n_new = lv_malloc(ll_p->n_size + LL_NODE_META_SIZE);
 
     if(n_new != NULL) {
-        node_set_next(ll_p, n_new, NULL);       /*No next after the new tail*/
-        node_set_prev(ll_p, n_new, ll_p->tail); /*The prev. before new is the old tail*/
-        if(ll_p->tail != NULL) {                /*If there is old tail then the new comes after it*/
+        node_set_next(ll_p, n_new, NULL);       /*Нет следующего после нового хвоста*/
+        node_set_prev(ll_p, n_new, ll_p->tail); /*Предыдущий. прежде чем новый будет старым хвостом*/
+        if(ll_p->tail != NULL) {                /*Если есть старый хвост, то за ним следует новый.*/
             node_set_next(ll_p, ll_p->tail, n_new);
         }
 
-        ll_p->tail = n_new;      /*Set the new tail in the dsc.*/
-        if(ll_p->head == NULL) { /*If there is no head (1. node) set the head too*/
+        ll_p->tail = n_new;      /*Установите новый хвост в dsc.*/
+        if(ll_p->head == NULL) { /*Если головки (1. узла) нет, установите и головку.*/
             ll_p->head = n_new;
         }
     }
@@ -129,7 +129,7 @@ void lv_ll_remove(lv_ll_t * ll_p, void * node_p)
     if(ll_p == NULL) return;
 
     if(lv_ll_get_head(ll_p) == node_p) {
-        /*The new head will be the node after 'node_p'*/
+        /*Голова будет узлом после 'node_p'.*/
         ll_p->head = lv_ll_get_next(ll_p, node_p);
         if(ll_p->head == NULL) {
             ll_p->tail = NULL;
@@ -139,7 +139,7 @@ void lv_ll_remove(lv_ll_t * ll_p, void * node_p)
         }
     }
     else if(lv_ll_get_tail(ll_p) == node_p) {
-        /*The new tail will be the node before 'node_p'*/
+        /*Новый хвост будет узлом передnode_p.*/
         ll_p->tail = lv_ll_get_prev(ll_p, node_p);
         if(ll_p->tail == NULL) {
             ll_p->head = NULL;
@@ -183,30 +183,30 @@ void lv_ll_chg_list(lv_ll_t * ll_ori_p, lv_ll_t * ll_new_p, void * node, bool he
     lv_ll_remove(ll_ori_p, node);
 
     if(head) {
-        /*Set node as head*/
+        /*Установить узел в качестве головы*/
         node_set_prev(ll_new_p, node, NULL);
         node_set_next(ll_new_p, node, ll_new_p->head);
 
-        if(ll_new_p->head != NULL) { /*If there is old head then before it goes the new*/
+        if(ll_new_p->head != NULL) { /*Если есть старая голова, то прежде чем она пойдет новая*/
             node_set_prev(ll_new_p, ll_new_p->head, node);
         }
 
-        ll_new_p->head = node;       /*Set the new head in the dsc.*/
-        if(ll_new_p->tail == NULL) { /*If there is no tail (first node) set the tail too*/
+        ll_new_p->head = node;       /*Установите новую головку в dsc.*/
+        if(ll_new_p->tail == NULL) { /*Если хвоста (первого узла) нет, установите и хвост.*/
             ll_new_p->tail = node;
         }
     }
     else {
-        /*Set node as tail*/
+        /*Установить узел как хвост*/
         node_set_prev(ll_new_p, node, ll_new_p->tail);
         node_set_next(ll_new_p, node, NULL);
 
-        if(ll_new_p->tail != NULL) { /*If there is old tail then after it goes the new*/
+        if(ll_new_p->tail != NULL) { /*Если есть старый хвост, то вслед за ним идет новый*/
             node_set_next(ll_new_p, ll_new_p->tail, node);
         }
 
-        ll_new_p->tail = node;       /*Set the new tail in the dsc.*/
-        if(ll_new_p->head == NULL) { /*If there is no head (first node) set the head too*/
+        ll_new_p->tail = node;       /*Установите новый хвост в dsc.*/
+        if(ll_new_p->head == NULL) { /*Если головы (первого узла) нет, установите и голову.*/
             ll_new_p->head = node;
         }
     }
@@ -226,8 +226,8 @@ void * lv_ll_get_tail(const lv_ll_t * ll_p)
 
 void * lv_ll_get_next(const lv_ll_t * ll_p, const void * n_act)
 {
-    /*Pointer to the next node is stored in the end of this node.
-     *Go there and return the address found there*/
+    /*Указатель на следующий узел хранится в конце этого узла.
+     *Идите туда и верните найденный там адрес*/
     const lv_ll_node_t * n_act_d = n_act;
     n_act_d += LL_NEXT_P_OFFSET(ll_p);
     return *((lv_ll_node_t **)n_act_d);
@@ -235,8 +235,8 @@ void * lv_ll_get_next(const lv_ll_t * ll_p, const void * n_act)
 
 void * lv_ll_get_prev(const lv_ll_t * ll_p, const void * n_act)
 {
-    /*Pointer to the prev. node is stored in the end of this node.
-     *Go there and return the address found there*/
+    /*Указатель на пред. узел хранится в конце этого узла.
+     *Идите туда и верните найденный там адрес*/
     const lv_ll_node_t * n_act_d = n_act;
     n_act_d += LL_PREV_P_OFFSET(ll_p);
     return *((lv_ll_node_t **)n_act_d);
@@ -256,29 +256,29 @@ uint32_t lv_ll_get_len(const lv_ll_t * ll_p)
 
 void lv_ll_move_before(lv_ll_t * ll_p, void * n_act, void * n_after)
 {
-    if(n_act == n_after) return; /*Can't move before itself*/
+    if(n_act == n_after) return; /*Не может двигаться перед собой*/
 
     void * n_before;
     if(n_after != NULL)
         n_before = lv_ll_get_prev(ll_p, n_after);
     else
-        n_before = lv_ll_get_tail(ll_p); /*if `n_after` is NULL `n_act` should be the new tail*/
+        n_before = lv_ll_get_tail(ll_p); /*если`n_after`— этоNULL,`n_act`должен быть новым хвостом*/
 
-    if(n_act == n_before) return; /*Already before `n_after`*/
+    if(n_act == n_before) return; /*Уже до `n_after`*/
 
-    /*It's much easier to remove from the list and add again*/
+    /*Гораздо проще удалить из списка и добавить заново*/
     lv_ll_remove(ll_p, n_act);
 
-    /*Add again by setting the prev. and next nodes*/
+    /*Добавьте еще раз, установив пред. и следующие узлы*/
     node_set_next(ll_p, n_before, n_act);
     node_set_prev(ll_p, n_act, n_before);
     node_set_prev(ll_p, n_after, n_act);
     node_set_next(ll_p, n_act, n_after);
 
-    /*If `n_act` was moved before NULL then it become the new tail*/
+    /*Если`n_act`был перенесен в NULL, то он станет новым хвостом.*/
     if(n_after == NULL) ll_p->tail = n_act;
 
-    /*If `n_act` was moved before `NULL` then it's the new head*/
+    /*Если`n_act`был перенесен в `NULL`, то это новая голова.*/
     if(n_before == NULL) ll_p->head = n_act;
 }
 
@@ -301,14 +301,14 @@ void lv_ll_clear(lv_ll_t * ll_p)
  **********************/
 
 /**
- * Set the previous node pointer of a node
- * @param ll_p pointer to linked list
- * @param act pointer to a node which prev. node pointer should be set
- * @param prev pointer to a node which should be the previous node before 'act'
+ * Установить указатель предыдущего узла узла
+ * @param ll_p указатель на связанный список
+ * @param act указатель на узел, который пред. указатель узла должен быть установлен
+ * @param prev указатель на узел, который должен быть предыдущим узлом перед «действием»
  */
 static void node_set_prev(lv_ll_t * ll_p, lv_ll_node_t * act, lv_ll_node_t * prev)
 {
-    if(act == NULL) return; /*Can't set the prev node of `NULL`*/
+    if(act == NULL) return; /*Невозможно установить предыдущий узел `NULL`.*/
 
     uint8_t * act8 = (uint8_t *)act;
 
@@ -321,14 +321,14 @@ static void node_set_prev(lv_ll_t * ll_p, lv_ll_node_t * act, lv_ll_node_t * pre
 }
 
 /**
- * Set the 'next node pointer' of a node
- * @param ll_p pointer to linked list
- * @param act pointer to a node which next node pointer should be set
- * @param next pointer to a node which should be the next node before 'act'
+ * Установите «указатель следующего узла» узла
+ * @param ll_p указатель на связанный список
+ * @param act указатель на узел, указатель которого должен быть установлен на следующий узел
+ * @param next указатель на узел, который должен быть следующим узлом перед «действием»
  */
 static void node_set_next(lv_ll_t * ll_p, lv_ll_node_t * act, lv_ll_node_t * next)
 {
-    if(act == NULL) return; /*Can't set the next node of `NULL`*/
+    if(act == NULL) return; /*Невозможно установить следующий узел `NULL`.*/
     uint8_t * act8 = (uint8_t *)act;
 
     act8 += LL_NEXT_P_OFFSET(ll_p);

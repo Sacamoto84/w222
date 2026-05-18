@@ -53,7 +53,7 @@ lv_obj_t * lv_obj_class_create_obj(const lv_obj_class_t * class_p, lv_obj_t * pa
     obj->class_p = class_p;
     obj->parent = parent;
 
-    /*Create a screen*/
+    /*Создать экран*/
     if(parent == NULL) {
         LV_TRACE_OBJ_CREATE("creating a screen");
         lv_display_t * disp = lv_display_get_default();
@@ -78,13 +78,13 @@ lv_obj_t * lv_obj_class_create_obj(const lv_obj_class_t * class_p, lv_obj_t * pa
         disp->screens = screens;
         disp->screens[disp->screen_cnt - 1] = obj;
 
-        /*Set coordinates to full screen size*/
+        /*Установить координаты на весь экран*/
         obj->coords.x1 = 0;
         obj->coords.y1 = 0;
         obj->coords.x2 = lv_display_get_horizontal_resolution(NULL) - 1;
         obj->coords.y2 = lv_display_get_vertical_resolution(NULL) - 1;
     }
-    /*Create a normal object*/
+    /*Создать обычный объект*/
     else {
         LV_TRACE_OBJ_CREATE("creating normal object");
         LV_ASSERT_OBJ(parent, MY_CLASS);
@@ -123,12 +123,12 @@ void lv_obj_class_init_obj(lv_obj_t * obj)
 
     lv_obj_t * parent = lv_obj_get_parent(obj);
     if(parent) {
-        /*Call the ancestor's event handler to the parent to notify it about the new child.
-         *Also triggers layout update*/
+        /*Вызовите обработчик событий предка родительскому элементу, чтобы уведомить его о новом дочернем элементе.
+         *Также запускает обновление макета*/
         lv_obj_send_event(parent, LV_EVENT_CHILD_CHANGED, obj);
         lv_obj_send_event(parent, LV_EVENT_CHILD_CREATED, obj);
 
-        /*Invalidate the area if not screen created*/
+        /*Сделайте область недействительной, если экран не создан.*/
         lv_obj_invalidate(obj);
     }
 }
@@ -145,10 +145,10 @@ void lv_obj_destruct(lv_obj_t * obj)
     if(obj->class_p->destructor_cb) obj->class_p->destructor_cb(obj->class_p, obj);
 
     if(obj->class_p->base_class) {
-        /*Don't let the descendant methods run during destructing the ancestor type*/
+        /*Не позволяйте методам-потомкам выполняться во время разрушения типа-предка.*/
         obj->class_p = obj->class_p->base_class;
 
-        /*Call the base class's destructor too*/
+        /*Вызовите также деструктор базового класса*/
         lv_obj_destruct(obj);
     }
 }
@@ -157,7 +157,7 @@ bool lv_obj_is_editable(lv_obj_t * obj)
 {
     const lv_obj_class_t * class_p = obj->class_p;
 
-    /*Find a base in which editable is set*/
+    /*Найдите базу, в которой установлен редактируемый*/
     while(class_p && class_p->editable == LV_OBJ_CLASS_EDITABLE_INHERIT) class_p = class_p->base_class;
 
     if(class_p == NULL) return false;
@@ -169,7 +169,7 @@ bool lv_obj_is_group_def(lv_obj_t * obj)
 {
     const lv_obj_class_t * class_p = obj->class_p;
 
-    /*Find a base in which group_def is set*/
+    /*Найдите сайты, в которых установлен group_def*/
     while(class_p && class_p->group_def == LV_OBJ_CLASS_GROUP_DEF_INHERIT) class_p = class_p->base_class;
 
     if(class_p == NULL) return false;
@@ -208,13 +208,13 @@ static void lv_obj_construct(const lv_obj_class_t * class_p, lv_obj_t * obj)
     if(obj->class_p->base_class) {
         const lv_obj_class_t * original_class_p = obj->class_p;
 
-        /*Don't let the descendant methods run during constructing the ancestor type*/
+        /*Не позволяйте методам-потомкам выполняться во время создания типа-предка.*/
         obj->class_p = obj->class_p->base_class;
 
-        /*Construct the base first*/
+        /*Сначала постройте базу*/
         lv_obj_construct(class_p, obj);
 
-        /*Restore the original class*/
+        /*Восстановить исходный класс*/
         obj->class_p = original_class_p;
     }
 
@@ -223,11 +223,11 @@ static void lv_obj_construct(const lv_obj_class_t * class_p, lv_obj_t * obj)
 
 static uint32_t get_instance_size(const lv_obj_class_t * class_p)
 {
-    /*Find a base in which instance size is set*/
+    /*Найдите базу, в которой установлен размер экземпляра*/
     const lv_obj_class_t * base = class_p;
     while(base && base->instance_size == 0) base = base->base_class;
 
-    if(base == NULL) return 0;  /*Never happens: set at least in `lv_obj` class*/
+    if(base == NULL) return 0;  /*Никогда не происходит: установить хотя бы в классе`lv_obj`.*/
 
     return base->instance_size;
 }

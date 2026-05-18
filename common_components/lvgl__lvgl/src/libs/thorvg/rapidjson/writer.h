@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_WRITER_H_
 #define RAPIDJSON_WRITER_H_
@@ -23,7 +23,7 @@
 #include "internal/dtoa.h"
 #include "internal/itoa.h"
 #include "stringbuffer.h"
-#include <new>      // placement new
+#include <new>      // размещение новое
 
 #if defined(RAPIDJSON_SIMD) && defined(_MSC_VER)
 #include <intrin.h>
@@ -44,7 +44,7 @@ RAPIDJSON_DIAG_OFF(unreachable-code)
 RAPIDJSON_DIAG_OFF(c++98-compat)
 #elif defined(_MSC_VER)
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(4127) // conditional expression is constant
+RAPIDJSON_DIAG_OFF(4127) // условное выражение является константой
 #endif
 
 RAPIDJSON_NAMESPACE_BEGIN
@@ -54,37 +54,37 @@ RAPIDJSON_NAMESPACE_BEGIN
 
 /*! \def RAPIDJSON_WRITE_DEFAULT_FLAGS
     \ingroup RAPIDJSON_CONFIG
-    \brief User-defined kWriteDefaultFlags definition.
+    \brief Определяемое пользователем определение kwriteDefaultFlags.
 
-    User can define this as any \c WriteFlag combinations.
+    Пользователь может определить это как любую комбинацию \c WriteFlag.
 */
 #ifndef RAPIDJSON_WRITE_DEFAULT_FLAGS
 #define RAPIDJSON_WRITE_DEFAULT_FLAGS kWriteNoFlags
 #endif
 
-//! Combination of writeFlags
+//! Комбинация writeFlags
 enum WriteFlag {
-    kWriteNoFlags = 0,              //!< No flags are set.
-    kWriteValidateEncodingFlag = 1, //!< Validate encoding of JSON strings.
-    kWriteNanAndInfFlag = 2,        //!< Allow writing of Infinity, -Infinity and NaN.
-    kWriteDefaultFlags = RAPIDJSON_WRITE_DEFAULT_FLAGS  //!< Default write flags. Can be customized by defining RAPIDJSON_WRITE_DEFAULT_FLAGS
+    kWriteNoFlags = 0,              //!< Флаги не установлены.
+    kWriteValidateEncodingFlag = 1, //!< Проверка кодировки строк JSON.
+    kWriteNanAndInfFlag = 2,        //!< Разрешить запись Infinity, -Infinity и NaN.
+    kWriteDefaultFlags = RAPIDJSON_WRITE_DEFAULT_FLAGS  //!< Флаги записи по умолчанию. Можно настроить, определив RAPIDJSON_WRITE_DEFAULT_FLAGS.
 };
 
-//! JSON writer
-/*! Writer implements the concept Handler.
-    It generates JSON text by events to an output os.
+//!  JSON писатель
+/*! Writer реализует концепцию Handler.
+    Он генерирует текст JSON по событиям в выходную систему.
 
-    User may programmatically calls the functions of a writer to generate JSON text.
+    Пользователь может программно вызывать функции записи для генерации текста JSON.
 
-    On the other side, a writer can also be passed to objects that generates events,
+    С другой стороны, писатель также может быть передан объектам, которые генерируют события.
 
-    for example Reader::Parse() and Document::Accept().
+    например Reader::Parse() и Document::Accept() .
 
-    \tparam OutputStream Type of output stream.
-    \tparam SourceEncoding Encoding of source string.
-    \tparam TargetEncoding Encoding of output stream.
-    \tparam StackAllocator Type of allocator for allocating memory of stack.
-    \note implements Handler concept
+    \tparam OutputStream Тип выходного потока.
+    \tparam SourceEncoding Кодировка исходной строки.
+    \tparam TargetEncoding Кодирование выходного потока.
+    \tparam StackAllocator Тип распределителя для выделения памяти стека.
+    \note реализует концепцию Handler
 */
 template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
 class Writer {
@@ -93,10 +93,10 @@ public:
 
     static const int kDefaultMaxDecimalPlaces = 324;
 
-    //! Constructor
-    /*! \param os Output stream.
-        \param stackAllocator User supplied allocator. If it is null, it will create a private one.
-        \param levelDepth Initial capacity of stack.
+    //! Конструктор
+    /*! \param os Выходной поток.
+        \param stackAllocator Пользовательский распределитель. Если оно равно нулю, будет создан частный.
+        \param levelDepth Начальная емкость стека.
     */
     explicit
     Writer(OutputStream& os, StackAllocator* stackAllocator = 0, size_t levelDepth = kDefaultLevelDepth) :
@@ -113,22 +113,22 @@ public:
     }
 #endif
 
-    //! Reset the writer with a new stream.
+    //! Сбросьте писатель с новым потоком.
     /*!
-        This function reset the writer with a new stream and default settings,
-        in order to make a Writer object reusable for output multiple JSONs.
+        Эта функция сбрасывает записывающее устройство с использованием нового потока и настроек по умолчанию.
+        чтобы сделать объект Writer пригодным для повторного использования для вывода нескольких JSON.
 
-        \param os New output stream.
+        \param os Новый выходной поток.
         \code
-        Writer<OutputStream> writer(os1);
-        writer.StartObject();
+        Writer<OutputStream> Writer(os1);
+        писатель. StartObject() ;
         // ...
-        writer.EndObject();
+        писатель. EndObject() ;
 
-        writer.Reset(os2);
-        writer.StartObject();
+        писатель.Сброс (os2);
+        писатель. StartObject() ;
         // ...
-        writer.EndObject();
+        писатель. EndObject() ;
         \endcode
     */
     void Reset(OutputStream& os) {
@@ -137,9 +137,9 @@ public:
         level_stack_.Clear();
     }
 
-    //! Checks whether the output is a complete JSON.
+    //! Проверяет, является ли вывод полным JSON.
     /*!
-        A complete JSON has a complete root object or array.
+        Полный JSON имеет полный корневой объект или массив.
     */
     bool IsComplete() const {
         return hasRoot_ && level_stack_.Empty();
@@ -149,33 +149,33 @@ public:
         return maxDecimalPlaces_;
     }
 
-    //! Sets the maximum number of decimal places for double output.
+    //! Устанавливает максимальное количество десятичных знаков для двойного вывода.
     /*!
-        This setting truncates the output with specified number of decimal places.
+        Этот параметр усекает вывод с указанным количеством десятичных знаков.
 
-        For example,
+        Например,
 
         \code
-        writer.SetMaxDecimalPlaces(3);
-        writer.StartArray();
-        writer.Double(0.12345);                 // "0.123"
-        writer.Double(0.0001);                  // "0.0"
-        writer.Double(1.234567890123456e30);    // "1.234567890123456e30" (do not truncate significand for positive exponent)
-        writer.Double(1.23e-4);                 // "0.0"                  (do truncate significand for negative exponent)
-        writer.EndArray();
+        писатель.SetMaxDecimalPlaces(3);
+        писатель. StartArray() ;
+        писатель.Двойной(0.12345);                 // "0,123"
+        писатель.Двойной(0.0001);                  // "0.0"
+        писатель.Double(1.234567890123456e30);    // "1.234567890123456e30" (не обрезать значащее число для положительного показателя)
+        писатель.Дабл(1.23e-4);                 // "0.0" (обрезаем значащее значение для отрицательного показателя)
+        писатель. EndArray() ;
         \endcode
 
-        The default setting does not truncate any decimal places. You can restore to this setting by calling
+        Настройка по умолчанию не усекает десятичные знаки. Вы можете восстановить эту настройку, позвонив
         \code
-        writer.SetMaxDecimalPlaces(Writer::kDefaultMaxDecimalPlaces);
+        Writer.SetMaxDecimalPlaces(Writer::kDefaultMaxDecimalPlaces);
         \endcode
     */
     void SetMaxDecimalPlaces(int maxDecimalPlaces) {
         maxDecimalPlaces_ = maxDecimalPlaces;
     }
 
-    /*!@name Implementation of Handler
-        \see Handler
+    /*!@name Реализация обработчика
+        \см. обработчик
     */
     //@{
 
@@ -186,10 +186,10 @@ public:
     bool Int64(int64_t i64)     { Prefix(kNumberType); return EndValue(WriteInt64(i64)); }
     bool Uint64(uint64_t u64)   { Prefix(kNumberType); return EndValue(WriteUint64(u64)); }
 
-    //! Writes the given \c double value to the stream
+    //! Записывает заданное значение \c double в поток.
     /*!
-        \param d The value to be written.
-        \return Whether it is succeed.
+        \param d Значение, которое нужно записать.
+        \return Удалось ли это.
     */
     bool Double(double d)       { Prefix(kNumberType); return EndValue(WriteDouble(d)); }
 
@@ -230,9 +230,9 @@ public:
 
     bool EndObject(SizeType memberCount = 0) {
         (void)memberCount;
-        RAPIDJSON_ASSERT(level_stack_.GetSize() >= sizeof(Level)); // not inside an Object
-        RAPIDJSON_ASSERT(!level_stack_.template Top<Level>()->inArray); // currently inside an Array, not Object
-        RAPIDJSON_ASSERT(0 == level_stack_.template Top<Level>()->valueCount % 2); // Object has a Key without a Value
+        RAPIDJSON_ASSERT(level_stack_.GetSize() >= sizeof(Level)); // не внутри объекта
+        RAPIDJSON_ASSERT(!level_stack_.template Top<Level>()->inArray); // в настоящее время внутри массива, а не объекта
+        RAPIDJSON_ASSERT(0 == level_stack_.template Top<Level>()->valueCount % 2); // Объект имеет ключ без значения
         level_stack_.template Pop<Level>(1);
         return EndValue(WriteEndObject());
     }
@@ -255,19 +255,19 @@ public:
     /*! @name Convenience extensions */
     //@{
 
-    //! Simpler but slower overload.
+    //! Более простая, но медленная перегрузка.
     bool String(const Ch* const& str) { return String(str, internal::StrLen(str)); }
     bool Key(const Ch* const& str) { return Key(str, internal::StrLen(str)); }
 
     //@}
 
-    //! Write a raw JSON value.
+    //! Запишите необработанное значение JSON.
     /*!
-        For user to write a stringified JSON as a value.
+        Чтобы пользователь мог записать в качестве значения строковое значение JSON.
 
-        \param json A well-formed JSON value. It should not contain null character within [0, length - 1] range.
-        \param length Length of the json.
-        \param type Type of the root of json.
+        \param json Правильно сформированное значение JSON. Он не должен содержать нулевой символ в диапазоне [0, длина – 1].
+        \param length Длина json.
+        \param type Тип корня json.
     */
     bool RawValue(const Ch* json, size_t length, Type type) {
         RAPIDJSON_ASSERT(json != 0);
@@ -275,9 +275,9 @@ public:
         return EndValue(WriteRawValue(json, length));
     }
 
-    //! Flush the output stream.
+    //! Очистите выходной поток.
     /*!
-        Allows the user to flush the output stream immediately.
+        Позволяет пользователю немедленно очистить выходной поток.
      */
     void Flush() {
         os_->Flush();
@@ -286,11 +286,11 @@ public:
     static const size_t kDefaultLevelDepth = 32;
 
 protected:
-    //! Information for each nested level
+    //! Информация для каждого вложенного уровня
     struct Level {
         Level(bool inArray_) : valueCount(0), inArray(inArray_) {}
-        size_t valueCount;  //!< number of values in this level
-        bool inArray;       //!< true if in array, otherwise in object
+        size_t valueCount;  //!< количество значений на этом уровне
+        bool inArray;       //!< true, если в массиве, иначе в объекте
     };
 
     bool WriteNull()  {
@@ -389,16 +389,16 @@ protected:
         };
 
         if (TargetEncoding::supportUnicode)
-            PutReserve(*os_, 2 + length * 6); // "\uxxxx..."
+            PutReserve(*os_, 2 + length * 6); // "\ухххх..."
         else
-            PutReserve(*os_, 2 + length * 12);  // "\uxxxx\uyyyy..."
+            PutReserve(*os_, 2 + length * 12);  // "\uxxxx\ууууу..."
 
         PutUnsafe(*os_, '\"');
         GenericStringStream<SourceEncoding> is(str);
         while (ScanWriteUnescapedString(is, length)) {
             const Ch c = is.Peek();
             if (!TargetEncoding::supportUnicode && static_cast<unsigned>(c) >= 0x80) {
-                // Unicode escaping
+                // Экранирование Юникода
                 unsigned codepoint;
                 if (RAPIDJSON_UNLIKELY(!SourceEncoding::Decode(is, &codepoint)))
                     return false;
@@ -412,7 +412,7 @@ protected:
                 }
                 else {
                     RAPIDJSON_ASSERT(codepoint >= 0x010000 && codepoint <= 0x10FFFF);
-                    // Surrogate pair
+                    // Суррогатная пара
                     unsigned s = codepoint - 0x010000;
                     unsigned lead = (s >> 10) + 0xD800;
                     unsigned trail = (s & 0x3FF) + 0xDC00;
@@ -472,27 +472,27 @@ protected:
 
     void Prefix(Type type) {
         (void)type;
-        if (RAPIDJSON_LIKELY(level_stack_.GetSize() != 0)) { // this value is not at root
+        if (RAPIDJSON_LIKELY(level_stack_.GetSize() != 0)) { // это значение не является корневым
             Level* level = level_stack_.template Top<Level>();
             if (level->valueCount > 0) {
                 if (level->inArray)
-                    os_->Put(','); // add comma if it is not the first element in array
-                else  // in object
+                    os_->Put(','); // добавьте запятую, если это не первый элемент массива
+                else  // в объекте
                     os_->Put((level->valueCount % 2 == 0) ? ',' : ':');
             }
             if (!level->inArray && level->valueCount % 2 == 0)
-                RAPIDJSON_ASSERT(type == kStringType);  // if it's in object, then even number should be a name
+                RAPIDJSON_ASSERT(type == kStringType);  // если он находится в объекте, то четное число должно быть именем
             level->valueCount++;
         }
         else {
-            RAPIDJSON_ASSERT(!hasRoot_);    // Should only has one and only one root.
+            RAPIDJSON_ASSERT(!hasRoot_);    // Должно иметь только один и только один корень.
             hasRoot_ = true;
         }
     }
 
-    // Flush the value if it is the top level one.
+    // Сбросьте значение, если оно является значением верхнего уровня.
     bool EndValue(bool ret) {
-        if (RAPIDJSON_UNLIKELY(level_stack_.Empty()))   // end of json text
+        if (RAPIDJSON_UNLIKELY(level_stack_.Empty()))   // конец текста JSON
             Flush();
         return ret;
     }
@@ -503,12 +503,12 @@ protected:
     bool hasRoot_;
 
 private:
-    // Prohibit copy constructor & assignment operator.
+    // Запретить конструктор копирования и оператор присваивания.
     Writer(const Writer&);
     Writer& operator=(const Writer&);
 };
 
-// Full specialization for StringStream to prevent memory copying
+// Полная специализация для StringStream для предотвращения копирования памяти.
 
 template<>
 inline bool Writer<StringBuffer>::WriteInt(int i) {
@@ -594,7 +594,7 @@ inline bool Writer<StringBuffer>::ScanWriteUnescapedString(StringStream& is, siz
         else
             os_->PutUnsafe(*p++);
 
-    // The rest of string using SIMD
+    // Остальная часть строки с использованием SIMD
     static const char dquote[16] = { '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"', '\"' };
     static const char bslash[16] = { '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\', '\\' };
     static const char space[16]  = { 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F };
@@ -606,12 +606,12 @@ inline bool Writer<StringBuffer>::ScanWriteUnescapedString(StringStream& is, siz
         const __m128i s = _mm_load_si128(reinterpret_cast<const __m128i *>(p));
         const __m128i t1 = _mm_cmpeq_epi8(s, dq);
         const __m128i t2 = _mm_cmpeq_epi8(s, bs);
-        const __m128i t3 = _mm_cmpeq_epi8(_mm_max_epu8(s, sp), sp); // s < 0x20 <=> max(s, 0x1F) == 0x1F
+        const __m128i t3 = _mm_cmpeq_epi8(_mm_max_epu8(s, sp), sp); // s < 0x20 <=> max(s, 0x1F ) == 0x1F
         const __m128i x = _mm_or_si128(_mm_or_si128(t1, t2), t3);
         unsigned short r = static_cast<unsigned short>(_mm_movemask_epi8(x));
-        if (RAPIDJSON_UNLIKELY(r != 0)) {   // some of characters is escaped
+        if (RAPIDJSON_UNLIKELY(r != 0)) {   // некоторые символы экранированы
             SizeType len;
-#ifdef _MSC_VER         // Find the index of first escaped
+#ifdef _MSC_VER         // Найдите индекс первого сбежавшего
             unsigned long offset;
             _BitScanForward(&offset, r);
             len = offset;
@@ -655,7 +655,7 @@ inline bool Writer<StringBuffer>::ScanWriteUnescapedString(StringStream& is, siz
         else
             os_->PutUnsafe(*p++);
 
-    // The rest of string using SIMD
+    // Остальная часть строки с использованием SIMD
     const uint8x16_t s0 = vmovq_n_u8('"');
     const uint8x16_t s1 = vmovq_n_u8('\\');
     const uint8x16_t s2 = vmovq_n_u8('\b');
@@ -668,9 +668,9 @@ inline bool Writer<StringBuffer>::ScanWriteUnescapedString(StringStream& is, siz
         x = vorrq_u8(x, vceqq_u8(s, s2));
         x = vorrq_u8(x, vcltq_u8(s, s3));
 
-        x = vrev64q_u8(x);                     // Rev in 64
-        uint64_t low = vgetq_lane_u64(vreinterpretq_u64_u8(x), 0);   // extract
-        uint64_t high = vgetq_lane_u64(vreinterpretq_u64_u8(x), 1);  // extract
+        x = vrev64q_u8(x);                     // Оборот в 64
+        uint64_t low = vgetq_lane_u64(vreinterpretq_u64_u8(x), 0);   // извлекать
+        uint64_t high = vgetq_lane_u64(vreinterpretq_u64_u8(x), 1);  // извлекать
 
         SizeType len = 0;
         bool escaped = false;
@@ -685,7 +685,7 @@ inline bool Writer<StringBuffer>::ScanWriteUnescapedString(StringStream& is, siz
             len = lz >> 3;
             escaped = true;
         }
-        if (RAPIDJSON_UNLIKELY(escaped)) {   // some of characters is escaped
+        if (RAPIDJSON_UNLIKELY(escaped)) {   // некоторые символы экранированы
             char* q = reinterpret_cast<char*>(os_->PushUnsafe(len));
             for (size_t i = 0; i < len; i++)
                 q[i] = p[i];

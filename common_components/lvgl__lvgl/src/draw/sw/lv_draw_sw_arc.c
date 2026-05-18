@@ -27,8 +27,8 @@ static void get_rounded_area(int16_t angle, int32_t radius, uint8_t thickness, l
 /*********************
  *      DEFINES
  *********************/
-#define SPLIT_RADIUS_LIMIT 10  /*With radius greater than this the arc will drawn in quarters. A quarter is drawn only if there is arc in it*/
-#define SPLIT_ANGLE_GAP_LIMIT 60  /*With small gaps in the arc don't bother with splitting because there is nothing to skip.*/
+#define SPLIT_RADIUS_LIMIT 10  /*При радиусе больше этого дуга будет рисоваться в четвертях. Четверть рисуется только в том случае, если в ней есть дуга*/
+#define SPLIT_ANGLE_GAP_LIMIT 60  /*При небольших промежутках в дуге не заморачивайтесь с расщеплением, ведь пропускать нечего.*/
 
 /**********************
  *      TYPEDEFS
@@ -64,7 +64,7 @@ void lv_draw_sw_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const lv_
     lv_area_t clipped_area;
     if(!lv_area_intersect(&clipped_area, &area_out, &t->clip_area)) return;
 
-    /*Draw a full ring*/
+    /*Нарисуйте полное кольцо*/
     if(dsc->img_src == NULL &&
        (dsc->start_angle + 360 == dsc->end_angle || dsc->start_angle == dsc->end_angle + 360)) {
         lv_draw_border_dsc_t cir_dsc;
@@ -91,17 +91,17 @@ void lv_draw_sw_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const lv_
     while(end_angle >= 360) end_angle -= 360;
 
     void * mask_list[4] = {0};
-    /*Create an angle mask*/
+    /*Создайте угловую маску*/
     lv_draw_sw_mask_angle_param_t mask_angle_param;
     lv_draw_sw_mask_angle_init(&mask_angle_param, dsc->center.x, dsc->center.y, start_angle, end_angle);
     mask_list[0] = &mask_angle_param;
 
-    /*Create an outer mask*/
+    /*Создайте внешнюю маску*/
     lv_draw_sw_mask_radius_param_t mask_out_param;
     lv_draw_sw_mask_radius_init(&mask_out_param, &area_out, LV_RADIUS_CIRCLE, false);
     mask_list[1] = &mask_out_param;
 
-    /*Create inner the mask*/
+    /*Создайте внутреннюю маску*/
     lv_draw_sw_mask_radius_param_t mask_in_param;
     bool mask_in_param_valid = false;
     if(lv_area_get_width(&area_in) > 0 && lv_area_get_height(&area_in) > 0) {
@@ -204,7 +204,7 @@ void lv_draw_sw_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const lv_
             }
         }
 
-        /*If it was an RGB565A8 image use consider its A8 part on the mask*/
+        /*Если это было изображение RGB565A8, используйте его часть A8 на маске.*/
         if(img_mask && blend_dsc.mask_res != LV_DRAW_SW_MASK_RES_TRANSP) {
             const uint8_t * img_mask_tmp = img_mask;
             img_mask_tmp += blend_dsc.src_stride / 2 * (blend_area.y1 - blend_dsc.src_area->y1);
@@ -280,7 +280,7 @@ static void get_rounded_area(int16_t angle, int32_t radius, uint8_t thickness, l
     cir_x = ((radius - thick_half) * lv_trigo_cos(angle)) >> (LV_TRIGO_SHIFT - 8);
     cir_y = ((radius - thick_half) * lv_trigo_sin(angle)) >> (LV_TRIGO_SHIFT - 8);
 
-    /*The center of the pixel need to be calculated so apply 1/2 px offset*/
+    /*Центр пикселя необходимо вычислить, поэтому примените смещение на 1/2 пикселя.*/
     if(cir_x > 0) {
         cir_x = (cir_x - 128) >> 8;
         res_area->x1 = cir_x - thick_half + thick_corr;

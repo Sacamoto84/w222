@@ -2,11 +2,11 @@
 #if LV_USE_BUTTON && LV_BUILD_EXAMPLES
 
 /**
- * Style a button from scratch
+ * Оформление кнопки с нуля
  */
 void lv_example_button_2(void)
 {
-    /*Init the style for the default state*/
+    /*Инициализировать стиль для состояния по умолчанию*/
     static lv_style_t style;
     lv_style_init(&style);
 
@@ -31,11 +31,11 @@ void lv_example_button_2(void)
     lv_style_set_text_color(&style, lv_color_white());
     lv_style_set_pad_all(&style, 10);
 
-    /*Init the pressed style*/
+    /*Инициализировать нажатый стиль*/
     static lv_style_t style_pr;
     lv_style_init(&style_pr);
 
-    /*Add a large outline when pressed*/
+    /*Добавить большой контур при нажатии*/
     lv_style_set_outline_width(&style_pr, 30);
     lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
 
@@ -44,7 +44,7 @@ void lv_example_button_2(void)
     lv_style_set_bg_color(&style_pr, lv_palette_darken(LV_PALETTE_BLUE, 2));
     lv_style_set_bg_grad_color(&style_pr, lv_palette_darken(LV_PALETTE_BLUE, 4));
 
-    /*Add a transition to the outline*/
+    /*Добавьте переход к контуру*/
     static lv_style_transition_dsc_t trans;
     static lv_style_prop_t props[] = {LV_STYLE_OUTLINE_WIDTH, LV_STYLE_OUTLINE_OPA, 0};
     lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0, NULL);
@@ -52,7 +52,7 @@ void lv_example_button_2(void)
     lv_style_set_transition(&style_pr, &trans);
 
     lv_obj_t * btn1 = lv_button_create(lv_screen_active());
-    lv_obj_remove_style_all(btn1);                          /*Remove the style coming from the theme*/
+    lv_obj_remove_style_all(btn1);                          /*Удалить стиль из темы*/
     lv_obj_add_style(btn1, &style, 0);
     lv_obj_add_style(btn1, &style_pr, LV_STATE_PRESSED);
     lv_obj_set_size(btn1, LV_SIZE_CONTENT, LV_SIZE_CONTENT);

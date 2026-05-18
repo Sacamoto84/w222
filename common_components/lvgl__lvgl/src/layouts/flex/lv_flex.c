@@ -41,8 +41,8 @@ typedef struct {
 
 typedef struct {
     int32_t track_cross_size;
-    int32_t track_main_size;         /*For all items*/
-    int32_t track_fix_main_size;     /*For non grow items*/
+    int32_t track_main_size;         /*Для всех предметов*/
+    int32_t track_fix_main_size;     /*Для нерастущих предметов*/
     int32_t track_grow_min_size;
     uint32_t item_cnt;
     grow_dsc_t * grow_dsc;
@@ -96,7 +96,7 @@ static inline int32_t div_round_closest(int32_t dividend, int32_t divisor)
  **********************/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_flex_init(void)
@@ -157,7 +157,7 @@ static bool calc_min_size(lv_obj_t * cont, int32_t * req_size, bool width, void 
         return false;
     }
 
-    /* Can't wrap if size is LV_SIZE_CONTENT */
+    /* Невозможно обернуть, если размер LV_SIZE_CONTENT */
     f.wrap = false;
 
     *req_size = 0;
@@ -174,7 +174,7 @@ static bool calc_min_size(lv_obj_t * cont, int32_t * req_size, bool width, void 
     int32_t next_track_first_item;
 
     while(track_first_item < (int32_t)cont->spec_attr->child_cnt && track_first_item >= 0) {
-        /*Search the first item of the next row*/
+        /*Поиск первого элемента следующей строки*/
         track_t t;
         t.grow_dsc_calc = 0;
         next_track_first_item = find_track_end(cont, &f, track_first_item, 0, item_gap, &t);
@@ -188,7 +188,7 @@ static bool calc_min_size(lv_obj_t * cont, int32_t * req_size, bool width, void 
 
     *req_size += (cont_space_start + cont_space_end);
 
-    // (*req_size)++;
+    // (* req_size )++;
     return true;
 }
 
@@ -215,7 +215,7 @@ static void flex_update(lv_obj_t * cont, void * user_data)
     int32_t w_set = lv_obj_get_style_width(cont, LV_PART_MAIN);
     int32_t h_set = lv_obj_get_style_height(cont, LV_PART_MAIN);
 
-    /*Content sized objects should squeeze the gap between the children, therefore any alignment will look like
+    /*Объекты размера контента должны сжимать зазор между дочерними элементами, поэтому любое выравнивание будет выглядеть так:
      * `START`*/
     if((f.row && h_set == LV_SIZE_CONTENT && cont->h_layout == 0) ||
        (!f.row && w_set == LV_SIZE_CONTENT && cont->w_layout == 0)) {
@@ -239,7 +239,7 @@ static void flex_update(lv_obj_t * cont, void * user_data)
         track_first_item = f.rev ? cont->spec_attr->child_cnt - 1 : 0;
         track_t t;
         while(track_first_item < (int32_t)cont->spec_attr->child_cnt && track_first_item >= 0) {
-            /*Search the first item of the next row*/
+            /*Поиск первого элемента следующей строки*/
             t.grow_dsc_calc = 0;
             next_track_first_item = find_track_end(cont, &f, track_first_item, max_main_size, item_gap, &t);
             total_track_cross_size += t.track_cross_size + track_gap;
@@ -248,9 +248,9 @@ static void flex_update(lv_obj_t * cont, void * user_data)
         }
 
         if(track_cnt)
-            total_track_cross_size -= track_gap; /*No gap after the last track*/
+            total_track_cross_size -= track_gap; /*Нет пробела после последнего трека*/
 
-        /*Place the tracks to get the start position*/
+        /*Разместите дорожки, чтобы получить начальную позицию.*/
         int32_t max_cross_size = (f.row ? lv_obj_get_content_height(cont) : lv_obj_get_content_width(cont));
         place_content(track_cross_place, max_cross_size, total_track_cross_size, track_cnt, cross_pos, &gap);
     }
@@ -264,7 +264,7 @@ static void flex_update(lv_obj_t * cont, void * user_data)
     while(track_first_item < (int32_t)cont->spec_attr->child_cnt && track_first_item >= 0) {
         track_t t;
         t.grow_dsc_calc = 1;
-        /*Search the first item of the next row*/
+        /*Поиск первого элемента следующей строки*/
         next_track_first_item = find_track_end(cont, &f, track_first_item, max_main_size, item_gap, &t);
 
         if(rtl && !f.row) {
@@ -293,7 +293,7 @@ static void flex_update(lv_obj_t * cont, void * user_data)
 }
 
 /**
- * Find the last item of a track
+ * Найти последний элемент трека
  */
 static int32_t find_track_end(lv_obj_t * cont, flex_t * f, int32_t item_start_id, int32_t max_main_size,
                               int32_t item_gap, track_t * t)
@@ -307,14 +307,14 @@ static int32_t find_track_end(lv_obj_t * cont, flex_t * f, int32_t item_start_id
         bool parent_is_flex = lv_obj_get_style_layout(parent, LV_PART_MAIN) == LV_LAYOUT_FLEX;
         uint8_t grow_value = lv_obj_get_style_flex_grow(cont, LV_PART_MAIN);
 
-        /* If the obj is grown then the size in that direction is known and overrides LV_SIZE_CONTENT if it is set. In
-         * the next `if` statement we no longer need to prevent wrapping if the width/height (depending on flow) is
-         * `LV_SIZE_CONTENT`, since it is not used.
+        /* Если объект увеличивается, то размер в этом направлении известен и переопределяет LV_SIZE_CONTENT, если он установлен. В
+         * В следующем операторе `if` нам больше не нужно предотвращать перенос, если ширина/высота (в зависимости от потока) равна
+         * `LV_SIZE_CONTENT` , так как он не используется.
          */
         ignore_size_content = parent_is_flex && (grow_value > 0);
     }
 
-    /*Can't wrap if the size is auto (i.e. the size depends on the children)*/
+    /*Невозможно обернуть, если размер указан автоматически (т. е. размер зависит от дочерних элементов)*/
     if(f->wrap && ((f->row && w_set == LV_SIZE_CONTENT) || (!f->row && h_set == LV_SIZE_CONTENT)) &&
        !ignore_size_content) {
         f->wrap = false;
@@ -345,16 +345,16 @@ static int32_t find_track_end(lv_obj_t * cont, flex_t * f, int32_t item_start_id
                                    : lv_obj_calc_dynamic_height(item, LV_STYLE_MIN_HEIGHT);
                 int32_t req_size = min_size;
                 if(item_id != item_start_id) {
-                    req_size += item_gap; /*No gap before the first item*/
+                    req_size += item_gap; /*Нет пробела перед первым элементом*/
                 }
 
-                /*Wrap if can't fit*/
+                /*Оберните, если не подходит*/
                 if(f->wrap && t->track_fix_main_size + t->track_grow_min_size + req_size > max_main_size)
                     break;
 
                 t->track_grow_min_size += min_size;
                 if(item_id != item_start_id) {
-                    t->track_fix_main_size += item_gap; /*The gap is always taken from the space*/
+                    t->track_fix_main_size += item_gap; /*Зазор всегда берется из пространства*/
                 }
 
                 t->grow_item_cnt++;
@@ -381,7 +381,7 @@ static int32_t find_track_end(lv_obj_t * cont, flex_t * f, int32_t item_start_id
                 int32_t item_size = get_main_size(item);
                 int32_t req_size = item_size;
                 if(!first_item)
-                    req_size += item_gap; /*No gap before the first item*/
+                    req_size += item_gap; /*Нет пробела перед первым элементом*/
                 if(f->wrap && t->track_fix_main_size + t->track_grow_min_size + req_size > max_main_size)
                     break;
                 t->track_fix_main_size += req_size;
@@ -398,10 +398,10 @@ static int32_t find_track_end(lv_obj_t * cont, flex_t * f, int32_t item_start_id
         item = lv_obj_get_child(cont, item_id);
     }
 
-    /*If there is at least one "grow item" the track takes the full space*/
+    /*Если есть хотя бы один «элемент роста», дорожка занимает все пространство.*/
     t->track_main_size = t->grow_item_cnt ? max_main_size : t->track_fix_main_size;
 
-    /*Have at least one item in a row*/
+    /*Иметь хотя бы один элемент подряд*/
     if(item && item_id == item_start_id) {
         item = cont->spec_attr->children[item_id];
         get_next_item(cont, f->rev, &item_id);
@@ -416,7 +416,7 @@ static int32_t find_track_end(lv_obj_t * cont, flex_t * f, int32_t item_start_id
 }
 
 /**
- * Position the children in the same track
+ * Расположите детей на одной дорожке
  */
 static void children_repos(lv_obj_t * cont, flex_t * f, int32_t item_first_id, int32_t item_last_id, int32_t abs_x,
                            int32_t abs_y, int32_t max_main_size, int32_t item_gap, track_t * t)
@@ -431,7 +431,7 @@ static void children_repos(lv_obj_t * cont, flex_t * f, int32_t item_first_id, i
     margin_func_t get_margin_cross_start = (!f->row ? lv_obj_get_style_margin_left : lv_obj_get_style_margin_top);
     margin_func_t get_margin_cross_end = (!f->row ? lv_obj_get_style_margin_right : lv_obj_get_style_margin_bottom);
 
-    /*Calculate the size of grow items first*/
+    /*Сначала рассчитайте размер выращиваемых предметов*/
     uint32_t i;
     bool grow_reiterate = true;
     while(grow_reiterate && t->grow_item_cnt) {
@@ -473,7 +473,7 @@ static void children_repos(lv_obj_t * cont, flex_t * f, int32_t item_first_id, i
     if(f->row && rtl) main_pos = max_main_size - main_pos;
 
     lv_obj_t * item = lv_obj_get_child(cont, item_first_id);
-    /*Reposition the children*/
+    /*Переставьте детей*/
     while(item && item_first_id != item_last_id) {
         if(lv_obj_has_flag_any(item, LV_OBJ_FLAG_IGNORE_LAYOUT | LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_FLOATING)) {
             item = get_next_item(cont, f->rev, &item_first_id);
@@ -525,8 +525,8 @@ static void children_repos(lv_obj_t * cont, flex_t * f, int32_t item_first_id, i
         int32_t cross_pos = 0;
         switch(f->cross_place) {
             case LV_FLEX_ALIGN_CENTER:
-                /*Round up the cross size to avoid rounding error when dividing by 2
-                 *The issue comes up e,g, with column direction with center cross direction if an element's width changes*/
+                /*Округлите размер креста в большую сторону, чтобы избежать ошибки округления при делении на 2.
+                 *Проблема возникает, например, с направлением столбца с центральным поперечным направлением, если ширина элемента изменяется.*/
                 cross_pos = (((t->track_cross_size + 1) & (~1)) - area_get_cross_size(&item->coords)) / 2;
                 cross_pos += (get_margin_cross_start(item, LV_PART_MAIN) - get_margin_cross_end(item, LV_PART_MAIN)) / 2;
                 break;
@@ -542,7 +542,7 @@ static void children_repos(lv_obj_t * cont, flex_t * f, int32_t item_first_id, i
         if(f->row && rtl)
             main_pos -= area_get_main_size(&item->coords);
 
-        /*Handle percentage value of translate*/
+        /*Обработка процентного значения перевода*/
         int32_t tr_x = lv_obj_get_style_translate_x(item, LV_PART_MAIN);
         int32_t tr_y = lv_obj_get_style_translate_y(item, LV_PART_MAIN);
         int32_t w = lv_obj_get_width(item);
@@ -578,7 +578,7 @@ static void children_repos(lv_obj_t * cont, flex_t * f, int32_t item_first_id, i
 }
 
 /**
- * Tell a start coordinate and gap for a placement type.
+ * Укажите начальную координату и промежуток для типа размещения.
  */
 static void place_content(lv_flex_align_t place, int32_t max_size, int32_t content_size, int32_t item_cnt,
                           int32_t * start_pos, int32_t * gap)

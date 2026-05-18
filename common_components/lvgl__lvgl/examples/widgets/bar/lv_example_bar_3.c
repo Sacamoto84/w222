@@ -7,7 +7,7 @@ static void set_temp(void * bar, int32_t temp)
 }
 
 /**
- * A temperature meter example
+ * Пример измерителя температуры
  */
 void lv_example_bar_3(void)
 {

@@ -1,25 +1,25 @@
 /**
   ******************************************************************************
-  * @file    nema_sys_defs.h
-  * @author  MCD Application Team
-  * @brief   Header file of NemaGFX System Definitions for STM32 Platforms.
-  *          This file provides definition of types being used by the NemaGFX
-  *          library.
+  * @file nema_sys_defs.h
+  * @authorMCDКоманда разработчиков приложений
+  * @brief   Заголовочный файл определений системы NemaGFX для платформ STM32.
+  *          Этот файл содержит определение образца, включающее NemaGFX.
+  *          библиотека.
   ******************************************************************************
   * @attention
   *
   * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Все права защищены.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
+  * Этот программный компонент лицензируется ST по лицензии BSD с 3 пунктами,
+  * «Лицензия»; Вы не можете использовать этот файл, кроме как в соответствии с
+  * Лицензия. Вы можете получить копию Лицензии по адресу:
   *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+/* Определите, чтобы предотвратить рекурсивное включение ------------------------------------*/
 #ifndef NEMA_SYS_DEFS_H__
 #define NEMA_SYS_DEFS_H__
 
@@ -27,20 +27,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* Includes ------------------------------------------------------------------*/
+/* Включает ------------------------------------------------------------------*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 
-/* Temporarily added by ST */
+/* Временно добавлен ST */
 #ifdef __ICCARM__
 #define FORCE_INLINE _Pragma("inline = forced")
 #else
 #define FORCE_INLINE
 #endif  
   
-/* No Multi-Thread support */
+/* Нет поддержки многопоточности */
 #define TLS_VAR
 
 #ifdef NEMA_VG_INVALIDATE_CACHE

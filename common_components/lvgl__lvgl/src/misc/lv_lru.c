@@ -37,19 +37,19 @@ struct _lv_lru_item_t {
  **********************/
 
 /**
- * MurmurHash2
- * @author Austin Appleby
+ * МурмурХэш2
+ * @author Остин Эпплби
  * @see http://sites.google.com/site/murmurhash/
  */
 static uint32_t lv_lru_hash(lv_lru_t * cache, const void * key, uint32_t key_length);
 
-/** compare a key against an existing item's key */
+/** сравнить ключ с ключом существующего элемента */
 static int lv_lru_cmp_keys(lv_lru_item_t * item, const void * key, uint32_t key_length);
 
-/** remove an item and push it to the free items queue */
+/** удалить элемент и поместить его в очередь свободных элементов */
 static void lv_lru_remove_item(lv_lru_t * cache, lv_lru_item_t * prev, lv_lru_item_t * item, uint32_t hash_index);
 
-/** pop an existing item off the free queue, or create a new one */
+/** удалить существующий элемент из свободной очереди или создать новый */
 static lv_lru_item_t * lv_lru_pop_or_create_item(lv_lru_t * cache);
 
 /**********************
@@ -60,7 +60,7 @@ static lv_lru_item_t * lv_lru_pop_or_create_item(lv_lru_t * cache);
  *      MACROS
  **********************/
 
-/* error helpers */
+/* помощники по ошибкам */
 #define error_for(conditions, error)  if(conditions) {return error;}
 #define test_for_missing_cache()      error_for(!cache, LV_LRU_MISSING_CACHE)
 #define test_for_missing_key()        error_for(!key, LV_LRU_MISSING_KEY)
@@ -74,7 +74,7 @@ static lv_lru_item_t * lv_lru_pop_or_create_item(lv_lru_t * cache);
 lv_lru_t * lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_cb_t value_free,
                          lv_lru_free_cb_t key_free)
 {
-    // create the cache
+    // создать кэш
     lv_lru_t * cache = lv_malloc_zeroed(sizeof(lv_lru_t));
     if(!cache) {
         LV_LOG_WARN("LRU Cache unable to create cache object");
@@ -88,7 +88,7 @@ lv_lru_t * lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_c
     cache->value_free = value_free ? value_free : lv_free;
     cache->key_free = key_free ? key_free : lv_free;
 
-    // size the hash table to a guesstimate of the number of slots required (assuming a perfect hash)
+    // размер хэш-таблицы примерно соответствует количеству требуемых слотов (при условии идеального хеша)
     cache->items = lv_malloc_zeroed(sizeof(lv_lru_item_t *) * cache->hash_table_size);
     if(!cache->items) {
         LV_LOG_WARN("LRU Cache unable to create cache hash table");
@@ -102,7 +102,7 @@ void lv_lru_delete(lv_lru_t * cache)
 {
     LV_ASSERT_NULL(cache);
 
-    // free each of the cached items, and the hash table
+    // освободить каждый из кэшированных элементов и хеш-таблицу
     lv_lru_item_t * item = NULL, * next = NULL;
     uint32_t i = 0;
     if(cache->items) {
@@ -129,7 +129,7 @@ void lv_lru_delete(lv_lru_t * cache)
         }
     }
 
-    // free the cache
+    // освободить кэш
     lv_free(cache);
 }
 
@@ -140,7 +140,7 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
     test_for_missing_value();
     test_for_value_too_large();
 
-    // see if the key already exists
+    // посмотреть, существует ли уже ключ
     uint32_t hash_index = lv_lru_hash(cache, key, key_length);
     int required = 0;
     lv_lru_item_t * item = NULL, * prev = NULL;
@@ -152,7 +152,7 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
     }
 
     if(item) {
-        // update the value and value_lengths
+        // обновить значение и value_lengths
         required = (int)(value_length - item->value_length);
         cache->value_free(item->value);
         item->value = value;
@@ -160,7 +160,7 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
 
     }
     else {
-        // insert a new item
+        // вставить новый элемент
         item = lv_lru_pop_or_create_item(cache);
         item->value = value;
         item->key = lv_malloc(key_length);
@@ -176,7 +176,7 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
     }
     item->access_count = ++cache->access_count;
 
-    // remove as many items as necessary to free enough space
+    // удалите столько предметов, сколько необходимо, чтобы освободить достаточно места
     if(required > 0 && (size_t) required > cache->free_memory) {
         while(cache->free_memory < (size_t) required)
             lv_lru_remove_lru_item(cache);
@@ -190,7 +190,7 @@ lv_lru_res_t lv_lru_get(lv_lru_t * cache, const void * key, size_t key_size, voi
     test_for_missing_cache();
     test_for_missing_key();
 
-    // loop until we find the item, or hit the end of a chain
+    // цикл, пока мы не найдем элемент или не достигнем конца цепочки
     uint32_t hash_index = lv_lru_hash(cache, key, key_size);
     lv_lru_item_t * item = cache->items[hash_index];
 
@@ -213,7 +213,7 @@ lv_lru_res_t lv_lru_remove(lv_lru_t * cache, const void * key, size_t key_size)
     test_for_missing_cache();
     test_for_missing_key();
 
-    // loop until we find the item, or hit the end of a chain
+    // цикл, пока мы не найдем элемент или не достигнем конца цепочки
     lv_lru_item_t * item = NULL, * prev = NULL;
     uint32_t hash_index = lv_lru_hash(cache, key, key_size);
     item = cache->items[hash_index];
@@ -316,12 +316,12 @@ static void lv_lru_remove_item(lv_lru_t * cache, lv_lru_item_t * prev, lv_lru_it
         cache->items[hash_index] = (lv_lru_item_t *) item->next;
     }
 
-    // free memory and update the free memory counter
+    // освободите память и обновите счетчик свободной памяти
     cache->free_memory += item->value_length;
     cache->value_free(item->value);
     cache->key_free(item->key);
 
-    // push the item to the free items queue
+    // отправить предмет в очередь бесплатных предметов
     lv_memzero(item, sizeof(lv_lru_item_t));
     item->next = cache->free_items;
     cache->free_items = item;

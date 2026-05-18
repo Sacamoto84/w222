@@ -52,7 +52,7 @@ extern "C" {
  **********************/
 
 /**
- * Check if the floating point number is zero
+ * Проверьте, равно ли число с плавающей запятой нулю
  * @param a the number to check
  * @return true if the number is zero, false otherwise
  */
@@ -62,7 +62,7 @@ static inline bool nvg_math_is_zero(float a)
 }
 
 /**
- * Check if two floating point numbers are equal
+ * Проверьте, равны ли два числа с плавающей запятой
  * @param a the first number
  * @param b the second number
  * @return true if the numbers are equal, false otherwise
@@ -73,13 +73,13 @@ static inline bool nvg_math_is_equal(float a, float b)
 }
 
 /**
- * Calculate the inverse square root (1/sqrt(x))
+ * Вычислить обратный квадратный корень (1/sqrt(x))
  * @param number the input number
  * @return the inverse square root
  */
 static inline float nvg_math_inv_sqrtf(float number)
 {
-    /* From https://en.wikipedia.org/wiki/Fast_inverse_square_root#Avoiding_undefined_behavior */
+    /* От https://en.wikipedia.org/wiki/Fast_inverse_square_root#Avoiding_undefined_behavior */
     union {
         float   f;
         int32_t i;
@@ -96,7 +96,7 @@ static inline float nvg_math_inv_sqrtf(float number)
 #endif /*LV_USE_DRAW_NANOVG*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_NANOVG_MATH_H*/

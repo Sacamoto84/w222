@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2024 EDGEMTech Ltd.
  *
- * Author EDGEMTech Ltd, (erik.tagirov@edgemtech.ch)
+ * Автор EDGEMTech Ltd, (erik.tagiros@edgemtech.ch)
  *
  ******************************************************************/
 
@@ -34,7 +34,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/* Opaque types defined in the private header */
+/* Непрозрачные типы, определенные в частном заголовке */
 struct lv_indev_gesture;
 struct lv_indev_gesture_configuration;
 
@@ -46,38 +46,38 @@ typedef struct lv_indev_gesture_configuration lv_indev_gesture_configuration_t;
 
 typedef void (*lv_recognizer_func_t)(lv_indev_gesture_recognizer_t *, lv_indev_touch_data_t *, uint16_t);
 
-/* The states of a gesture recognizer */
+/* Состояния распознавателя жестов */
 typedef enum {
-    LV_INDEV_GESTURE_STATE_NONE = 0,    /* Beginning & end */
-    LV_INDEV_GESTURE_STATE_ONGOING,     /* Set when there is a probability */
-    LV_INDEV_GESTURE_STATE_RECOGNIZED,  /* Recognized, the event will contain touch info */
-    LV_INDEV_GESTURE_STATE_ENDED,       /* A recognized gesture has ended */
-    LV_INDEV_GESTURE_STATE_CANCELED,    /* Canceled - usually a finger is lifted */
+    LV_INDEV_GESTURE_STATE_NONE = 0,    /* Начало и конец */
+    LV_INDEV_GESTURE_STATE_ONGOING,     /* Устанавливайте, когда есть вероятность */
+    LV_INDEV_GESTURE_STATE_RECOGNIZED,  /* Известно, что событие будет содержать сенсорную информацию */
+    LV_INDEV_GESTURE_STATE_ENDED,       /* Распознанный жест закончился */
+    LV_INDEV_GESTURE_STATE_CANCELED,    /* Canceled - обычно палец поднимается */
 } lv_indev_gesture_state_t;
 
-/* Data structures for touch events - used to repsensent a libinput event */
-/* Emitted by devices capable of tracking identifiable contacts (type B) */
+/* Структуры данных для событий касания — используются для отображения событий libinput. */
+/* Излучается устройствами, способными отслеживать идентифицируемые контакты (тип B) */
 struct lv_indev_touch_data {
-    lv_point_t point;                   /* Coordinates of the touch */
-    lv_indev_state_t state;             /* The state i.e PRESSED or RELEASED */
-    uint8_t id;                         /* Identification/slot of the contact point */
-    uint32_t timestamp;                 /* Timestamp in milliseconds */
+    lv_point_t point;                   /* Координаты касания */
+    lv_indev_state_t state;             /* Состояние, т.е. PRESSED или RELEASED. */
+    uint8_t id;                         /* Идентификация/слот точки контакта */
+    uint32_t timestamp;                 /* Временная метка в миллисекундах */
 };
 
-/* Gesture recognizer */
+/* Распознаватель жестов */
 struct lv_indev_gesture_recognizer {
-    lv_indev_gesture_type_t type;       /* The detected gesture type */
-    lv_indev_gesture_state_t state;     /* The gesture state ongoing, recognized */
-    lv_indev_gesture_t * info;          /* Information on the motion of each touch point */
-    float scale;                        /* Relevant for the pinch gesture */
-    float rotation;                     /* Relevant for rotation */
-    float distance;                     /* Relevant for swipes */
+    lv_indev_gesture_type_t type;       /* Обнаруженный тип жеста */
+    lv_indev_gesture_state_t state;     /* Состояние жеста продолжается, распознано */
+    lv_indev_gesture_t * info;          /* Информация о движении каждой точки касания */
+    float scale;                        /* Актуально для жеста щипка */
+    float rotation;                     /* Актуально для ротации */
+    float distance;                     /* Актуально для свайпов */
     float speed;
-    lv_dir_t two_fingers_swipe_dir;     /* Relevant for swipes */
+    lv_dir_t two_fingers_swipe_dir;     /* Актуально для свайпов */
 
-    lv_indev_gesture_configuration_t * config;  /* The recognizer config, containing the gestures
-                                                   thresholds */
-    lv_recognizer_func_t recog_fn;      /* The recognizer function that this recongnizer must execute */
+    lv_indev_gesture_configuration_t * config;  /* Конфигурация распознавателя, содержащая жесты
+                                                   пороги */
+    lv_recognizer_func_t recog_fn;      /* Функция распознавателя, которую должен выполнить этот распознаватель */
 };
 
 /**********************
@@ -85,153 +85,153 @@ struct lv_indev_gesture_recognizer {
  **********************/
 
 /**
- * Initialize this indev's recognizers. It specifies their recognizer functions
- * @param indev             pointer to the indev containing the recognizers to initialize
+ * Инициализируйте распознаватели этого индев. Он определил их функцию определения
+ * @param indev             указатель на indev, содержащий распознаватели для инициализации
  */
 void lv_indev_gesture_init(lv_indev_t * indev);
 
-/* PINCH Gesture */
+/* PINCH Жест */
 
 /**
- * Pinch gesture recognizer function
- * Will update the recognizer data
- * @param recognizer        pointer to a gesture recognizer
- * @param touches           pointer to the first element of the collected touch events
- * @param touch_cnt         length of passed touch event array.
+ * Функция распознавания жестов щипка
+ * Обновит данные распознавателя
+ * @param recognizer        указатель на распознаватель жестов
+ * @param touches           указатель на первый элемент собранных событий касания
+ * @param touch_cnt         длина переданного массива событий касания.
  */
 void lv_indev_gesture_detect_pinch(lv_indev_gesture_recognizer_t * recognizer, lv_indev_touch_data_t * touches,
                                    uint16_t touch_cnt);
 
 /**
- * Rotation gesture recognizer function
- * Will update the recognizer data
- * @param recognizer        pointer to a gesture recognizer
- * @param touches           pointer to the first element of the collected touch events
- * @param touch_cnt         length of passed touch event array.
+ * Функция распознавания жестов вращения
+ * Обновит данные распознавателя
+ * @param recognizer        указатель на распознаватель жестов
+ * @param touches           указатель на первый элемент собранных событий касания
+ * @param touch_cnt         длина переданного массива событий касания.
  */
 void lv_indev_gesture_detect_rotation(lv_indev_gesture_recognizer_t * recognizer, lv_indev_touch_data_t * touches,
                                       uint16_t touch_cnt);
 
 /**
- * Two finger swipe gesture recognizer function
- * Will update the recognizer data
- * @param recognizer        pointer to a gesture recognizer
- * @param touches           pointer to the first element of the collected touch events
- * @param touch_cnt         length of passed touch event array.
+ * Функция распознавания жестов двумя пальцами
+ * Обновит данные распознавателя
+ * @param recognizer        указатель на распознаватель жестов
+ * @param touches           указатель на первый элемент собранных событий касания
+ * @param touch_cnt         длина переданного массива событий касания.
  */
 void lv_indev_gesture_detect_two_fingers_swipe(lv_indev_gesture_recognizer_t * recognizer,
                                                lv_indev_touch_data_t * touches,
                                                uint16_t touch_cnt);
 
 /**
- * Set the threshold for the pinch gesture scale up, when the scale factor of gesture
- * reaches the threshold events get sent
- * @param indev             pointer to the indev device containing the pinch recognizer
- * @param threshold         threshold for a pinch up gesture to be recognized
+ * Установите порог масштабирования жеста сведения, когда масштабный коэффициент жеста увеличивается.
+ * достигает порогового значения, события отправляются
+ * @param indev             указатель на устройство разработки, содержащее распознаватель сжатия
+ * @param threshold         порог распознавания жеста сжатия вверх
  */
 void lv_indev_set_pinch_up_threshold(lv_indev_t * indev, float threshold);
 
 /**
- * Set the threshold for the pinch gesture scale down, when the scale factor of gesture
- * reaches the threshold events get sent
- * @param indev             pointer to the indev device containing the pinch recognizer
- * @param threshold         threshold for a pinch down gesture to be recognized
+ * Уменьшите порог масштабирования жеста разведения, когда масштабный коэффициент жеста
+ * достигает порогового значения, события отправляются
+ * @param indev             указатель на устройство разработки, содержащее распознаватель сжатия
+ * @param threshold         порог распознавания жеста сжатия вниз
  */
 void lv_indev_set_pinch_down_threshold(lv_indev_t * indev, float threshold);
 
 /**
- * Set the rotation threshold in radian for the rotation gesture
- * @param indev             pointer to the indev device containing the rotation recognizer
- * @param threshold         threshold in radian for a rotation gesture to be recognized
+ * Установите порог вращения в радианах для жеста вращения.
+ * @param indev             указатель на устройство разработки, содержащее распознаватель вращения
+ * @param threshold         порог в радианах для распознавания жеста вращения
  */
 void lv_indev_set_rotation_rad_threshold(lv_indev_t * indev, float threshold);
 
 /**
- * Obtains the current scale of a pinch gesture
- * @param gesture_event     pointer to a gesture event
- * @return                  the scale of the current gesture
+ * Получает текущий масштаб жеста сжатия.
+ * @param gesture_event     указатель на событие жеста
+ * @return                  масштаб текущего жеста
  */
 float lv_event_get_pinch_scale(lv_event_t * gesture_event);
 
 /**
- * Obtains the current angle in radian of a rotation gesture
- * @param gesture_event     pointer to a gesture event
- * @return                  the rotation angle in radian of the current gesture
+ * Получает текущий угол в радианах жеста вращения.
+ * @param gesture_event     указатель на событие жеста
+ * @return                  угол поворота в радианах текущего жеста
  */
 float lv_event_get_rotation(lv_event_t * gesture_event);
 
 /**
- * Obtains the current distance in pixels of a two fingers swipe gesture, from the starting center
- * @param gesture_event     pointer to a gesture event
- * @return                  the distance from the center, in pixels, of the current gesture
+ * Получает текущее расстояние в пикселях по жесту смахивания двумя пальцами от начального центра.
+ * @param gesture_event     указатель на событие жеста
+ * @return                  расстояние от центра текущего жеста в пикселях
  */
 float lv_event_get_two_fingers_swipe_distance(lv_event_t * gesture_event);
 
 /**
- * Obtains the current direction from the center of a two finger swipe
- * @param gesture_event     pointer to a gesture event
- * @return                  the rotation angle in radian of the current gesture
+ * Получает текущее направление от центра пролистывания двумя пальцами
+ * @param gesture_event     указатель на событие жеста
+ * @return                  угол поворота в радианах текущего жеста
  */
 lv_dir_t lv_event_get_two_fingers_swipe_dir(lv_event_t * gesture_event);
 
 /**
- * Sets the state of the recognizer to a indev data structure,
- * it is usually called from the indev read callback
- * @param data the indev data
- * @param recognizer pointer to a gesture recognizer
+ * Устанавливает состояние распознавателя в независимую структуру данных,
+ * обычно он возникает из-за обратного вызова чтения indev
+ * @param data данные разработки
+ * @param recognizer указатель на распознаватель жестов
  */
 void lv_indev_set_gesture_data(lv_indev_data_t * data, lv_indev_gesture_recognizer_t * recognizer,
                                lv_indev_gesture_type_t type);
 
 /**
- * Obtains the center point of a gesture
- * @param gesture_event     pointer to a gesture recognizer event
- * @param point             pointer to a point
+ * Получает центральную точку жеста
+ * @param gesture_event     указатель на событие распознавания жестов
+ * @param point             указатель на точку
  */
 void lv_indev_get_gesture_center_point(lv_indev_gesture_recognizer_t * recognizer, lv_point_t * point);
 
 /**
- * Obtains the current state of the gesture recognizer attached to an event
- * @param gesture_event     pointer to a gesture recognizer event
- * @return                  current state of the gesture recognizer
+ * Получает текущее состояние распознавателя жестов, прикрепленного к событию.
+ * @param gesture_event     указатель на событие распознавания жестов
+ * @return                  текущее состояние распознавателя жестов
  */
 lv_indev_gesture_state_t lv_event_get_gesture_state(lv_event_t * gesture_event, lv_indev_gesture_type_t type);
 
 /**
- * Obtains the current event type of the gesture recognizer attached to an event
- * @param gesture_event     pointer to a gesture recognizer event
- * @return                  current event type of the gesture recognizer
+ * Получает текущий тип события распознавателя жестов, прикрепленного к событию.
+ * @param gesture_event     указатель на событие распознавания жестов
+ * @return                  текущий тип события распознавателя жестов
  */
 lv_indev_gesture_type_t lv_event_get_gesture_type(lv_event_t * gesture_event);
 
 /**
- * Obtains the coordinates of the current primary point
- * @param recognizer        pointer to a gesture recognizer
- * @param point             pointer to a point
+ * Получает координаты текущей основной точки
+ * @param recognizer        указатель на распознаватель жестов
+ * @param point             указатель на точку
  */
 void lv_indev_get_gesture_primary_point(lv_indev_gesture_recognizer_t * recognizer, lv_point_t * point);
 
 /**
- * Allows to determine if there is an are ongoing gesture
- * @param recognizer        pointer to a gesture recognizer
- * @return                  false if there are no contact points, or the gesture has ended - true otherwise
+ * Позволяет определить, выполняется ли текущий жест
+ * @param recognizer        указатель на распознаватель жестов
+ * @return                  false, если нет точек контакта или жест завершился — в противном случае true
  */
 bool lv_indev_recognizer_is_active(lv_indev_gesture_recognizer_t * recognizer);
 
 /**
- * Update the recognizers. It execute the recognizers functions and checks for
- * LV_GESTURE_STATE_RECOGNIZED or LV_GESTURE_STATE_ENDED gestures.
- * To be called in the indev read_cb.
- * @param indev             pointer to the indev containing from which the reconizer need an update
- * @param touches           indev touch data array, containing the last touch data from indev
- *                          since the last recognizers update
- * @param touch_cnt         number of indev touch data in touches
+ * Обновите распознаватели. Он выполняет функции распознавателя и проверяет
+ * Жесты LV_GESTURE_STATE_RECOGNIZED или LV_GESTURE_STATE_ENDED.
+ * Будет сохраняться в indevread_cb.
+ * @param indev             указатель на indev, из которого реконайзеру требуется обновление
+ * @param touches           массив данных касания indev, содержащий данные о последнем касании из indev
+ *                          с момента последнего обновления распознавателей
+ * @param touch_cnt         количество данных indev touch в касаниях
  */
 void lv_indev_gesture_recognizers_update(lv_indev_t * indev, lv_indev_touch_data_t * touches, uint16_t touch_cnt);
 
 /**
- * Set the lv_indev_data_t struct from the recognizer data.
- * To be called in the indev read_cb.
+ * Установите структуруlv_indev_data_tиз данных распознавателя.
+ * Будет сохраняться в indevread_cb.
  */
 void lv_indev_gesture_recognizers_set_data(lv_indev_t * indev, lv_indev_data_t * data);
 
@@ -243,7 +243,7 @@ void lv_indev_gesture_recognizers_set_data(lv_indev_t * indev, lv_indev_data_t *
 #endif /* END LV_USE_RECOGNITION */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_INDEV_GESTURE_H */

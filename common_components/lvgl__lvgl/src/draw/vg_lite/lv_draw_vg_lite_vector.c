@@ -101,7 +101,7 @@ static void draw_fill(lv_draw_vg_lite_unit_t * u,
     const vg_lite_blend_t blend = lv_blend_to_vg(ctx->blend_mode);
     const vg_lite_fill_t fill = lv_fill_to_vg(ctx->fill_dsc.fill_rule);
 
-    /* If it is fill mode, the end op code should be added */
+    /* Если это режим заполнения, необходимо добавить код конечной операции. */
     lv_vg_lite_path_end(lv_vg_path);
 
     vg_lite_path_t * vg_path = lv_vg_lite_path_get_path(lv_vg_path);
@@ -109,7 +109,7 @@ static void draw_fill(lv_draw_vg_lite_unit_t * u,
 
     switch(ctx->fill_dsc.style) {
         case LV_VECTOR_DRAW_STYLE_SOLID: {
-                /* normal draw shape */
+                /* нормальная форма рисунка */
                 lv_vg_lite_draw(
                     &u->target_buffer,
                     vg_path,
@@ -120,15 +120,15 @@ static void draw_fill(lv_draw_vg_lite_unit_t * u,
             }
             break;
         case LV_VECTOR_DRAW_STYLE_PATTERN: {
-                /* draw image */
+                /* нарисовать изображение */
                 vg_lite_buffer_t image_buffer;
                 lv_image_decoder_dsc_t decoder_dsc;
                 if(lv_vg_lite_buffer_open_image(&image_buffer, &decoder_dsc, ctx->fill_dsc.img_dsc.src, false, true)) {
-                    /* Calculate pattern matrix. Should start from path bond box, and also apply fill matrix. */
+                    /* Рассчитать матрицу шаблонов. Следует начинать с поля связи пути, а также применять матрицу заполнения. */
                     vg_lite_matrix_t pattern_matrix = *matrix;
 
                     if(ctx->fill_dsc.fill_units == LV_VECTOR_FILL_UNITS_OBJECT_BOUNDING_BOX) {
-                        /* Convert to object bounding box coordinates */
+                        /* Преобразование в координаты ограничивающей рамки объекта */
                         vg_lite_translate(offset->x, offset->y, &pattern_matrix);
                     }
 
@@ -227,12 +227,12 @@ static void draw_stroke(lv_draw_vg_lite_unit_t * u,
 
     vg_lite_path_t * vg_stroke_path = lv_vg_lite_path_get_path(lv_vg_lite_stroke_get_path(stroke_cache_entey));
 
-    /* set stroke params */
+    /* установить параметры обводки */
     vg_stroke_path->quality = vg_path->quality;
     vg_stroke_path->stroke_color = lv_color32_to_vg(ctx->stroke_dsc.color, OPA_MIX(ctx->stroke_dsc.opa, opa));
     const vg_lite_color_t vg_color = 0;
 
-    /* set stroke path bounding box */
+    /* установить ограничивающую рамку пути обводки */
     lv_memcpy(vg_stroke_path->bounding_box, vg_path->bounding_box, sizeof(vg_path->bounding_box));
     LV_VG_LITE_ASSERT_PATH(vg_stroke_path);
 
@@ -240,7 +240,7 @@ static void draw_stroke(lv_draw_vg_lite_unit_t * u,
 
     switch(ctx->stroke_dsc.style) {
         case LV_VECTOR_DRAW_STYLE_SOLID: {
-                /* normal draw shape */
+                /* нормальная форма рисунка */
                 lv_vg_lite_draw(
                     &u->target_buffer,
                     vg_stroke_path,
@@ -271,7 +271,7 @@ static void task_draw_cb(void * user_data, const lv_vector_path_t * path, const 
                                    ? ctx->scissor_area
                                    : lv_matrix_transform_area((lv_matrix_t *)&matrix, &ctx->scissor_area);
 
-    /* clear area */
+    /* чистая территория */
     if(!path) {
         vg_lite_color_t c = lv_color32_to_vg(ctx->fill_dsc.color, OPA_MIX(ctx->fill_dsc.opa, u->task_act->opa));
         lv_vg_lite_clear(&u->target_buffer, &scissor_area, c);
@@ -285,26 +285,26 @@ static void task_draw_cb(void * user_data, const lv_vector_path_t * path, const 
         return;
     }
 
-    /* transform matrix */
+    /* преобразовать матрицу */
     vg_lite_matrix_t dsc_matrix;
     lv_vg_lite_matrix(&dsc_matrix, &ctx->matrix);
     lv_vg_lite_matrix_multiply(&matrix, &dsc_matrix);
     LV_VG_LITE_ASSERT_MATRIX(&matrix);
 
-    /* convert path */
+    /* конвертировать путь */
     lv_vg_lite_path_t * lv_vg_path = lv_vg_lite_path_get(u, VG_LITE_FP32);
 
     lv_fpoint_t offset = {0, 0};
     lv_path_to_vg(lv_vg_path, path, &offset, ctx->stroke_dsc.opa ? ctx->stroke_dsc.width : 0);
 
     if(vg_lite_query_feature(gcFEATURE_BIT_VG_SCISSOR)) {
-        /* set scissor area */
+        /* установить область ножниц */
         lv_vg_lite_set_scissor_area(u, &scissor_area);
         LV_LOG_TRACE("Set scissor area: X1:%" LV_PRId32 ", Y1:%" LV_PRId32 ", X2:%" LV_PRId32 ", Y2:%" LV_PRId32,
                      scissor_area.x1, scissor_area.y1, scissor_area.x2, scissor_area.y2);
     }
     else {
-        /* calc inverse matrix */
+        /* вычислить обратную матрицу */
         vg_lite_matrix_t result;
         if(!lv_vg_lite_matrix_inverse(&result, &matrix)) {
             LV_LOG_ERROR("no inverse matrix");
@@ -315,8 +315,8 @@ static void task_draw_cb(void * user_data, const lv_vector_path_t * path, const 
         }
 
         /**
-         * Use lv_matrix to uniformly handle clipping region transformations,
-         * and obtain the transformed bounding rectangle.
+         * Используйте lv_matrix для единой обработки преобразований областей отсечения.
+         * и получить преобразованный ограничивающий прямоугольник.
          */
         const lv_area_t bounding_box_area = lv_matrix_transform_area((lv_matrix_t *)&result, &scissor_area);
         lv_vg_lite_path_set_bounding_box_area(lv_vg_path, &bounding_box_area);
@@ -332,10 +332,10 @@ static void task_draw_cb(void * user_data, const lv_vector_path_t * path, const 
         draw_stroke(u, path, lv_vg_path, ctx, &matrix, layer_opa);
     }
 
-    /* drop path */
+    /* путь падения */
     lv_vg_lite_path_drop(u, lv_vg_path);
 
-    /* Flush in time to avoid accumulation of drawing commands */
+    /* Сбрасывайте вовремя, чтобы избежать накопления команд рисования. */
     lv_vg_lite_flush(u);
 
     LV_PROFILER_DRAW_END;
@@ -388,7 +388,7 @@ static void lv_path_to_vg(lv_vg_lite_path_t * dest, const lv_vector_path_t * src
     const uint32_t point_size = lv_array_size(&src->points);
     const uint32_t path_length = (op_size + point_size * 2) * sizeof(float);
 
-    /* Reserved memory for path data */
+    /* Зарезервированная память для данных пути */
     lv_vg_lite_path_reserve_space(dest, path_length);
     vg_lite_path_t * vg_path = lv_vg_lite_path_get_path(dest);
     vg_path->path_length = path_length;

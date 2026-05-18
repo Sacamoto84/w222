@@ -26,19 +26,19 @@
 **********************/
 
 typedef struct {
-    /* context */
+    /* контекст */
     lv_draw_nanovg_unit_t * u;
 
-    /* key */
+    /* ключ */
     lv_draw_buf_t src_buf;
     lv_color32_t color;
     int image_flags;
 
-    /* for drop search */
+    /* для поиска по падению */
     const void * src;
     lv_image_src_t src_type;
 
-    /* value */
+    /* ценность */
     int image_handle;
 } image_item_t;
 
@@ -144,7 +144,7 @@ int lv_nanovg_image_cache_get_handle(struct _lv_draw_nanovg_unit_t * u,
 
     lv_cache_entry_t * cache_node_entry = lv_cache_acquire(u->image_cache, &search_key, NULL);
     if(cache_node_entry == NULL) {
-        /* check if the cache is full */
+        /* проверьте, заполнен ли кеш */
         size_t free_size = lv_cache_get_free_size(u->image_cache, NULL);
         if(free_size == 0) {
             LV_LOG_INFO("image cache is full, release all pending cache entries");
@@ -162,7 +162,7 @@ int lv_nanovg_image_cache_get_handle(struct _lv_draw_nanovg_unit_t * u,
 
     lv_image_decoder_close(&decoder_dsc);
 
-    /* Add the new entry to the pending list */
+    /* Добавить новую запись в список ожидания */
     lv_pending_add(u->image_pending, &cache_node_entry);
 
     image_item_t * image_item = lv_cache_entry_get_data(cache_node_entry);
@@ -185,7 +185,7 @@ void lv_nanovg_image_cache_drop(struct _lv_draw_nanovg_unit_t * u, const void * 
     lv_iter_t * iter = lv_cache_iter_create(u->image_cache);
     LV_ASSERT_NULL(iter);
 
-    /* Collect all cache entries that match the drop source */
+    /* Соберите все записи кэша, соответствующие источнику удаления. */
     lv_iter_inspect(iter, image_cache_drop_collect_cb);
 
     image_item_t * drop_item;
@@ -218,7 +218,7 @@ static bool image_create_cb(image_item_t * item, void * user_data)
     const uint32_t stride = item->src_buf.header.stride;
     enum NVGtexture nvg_tex_type = NVG_TEXTURE_BGRA;
 
-    /* Determine texture type and pixel size based on color format */
+    /* Определите тип текстуры и размер пикселя на основе цветового формата. */
     switch(cf) {
         case LV_COLOR_FORMAT_A8:
             nvg_tex_type = NVG_TEXTURE_ALPHA;
@@ -248,15 +248,15 @@ static bool image_create_cb(image_item_t * item, void * user_data)
 
     void * data = NULL;
 
-    /* Check if stride is tightly packed */
+    /* Проверьте, плотно ли набит шаг */
     uint32_t tight_stride = (w * lv_color_format_get_bpp(cf) + 7) >> 3;
     if(stride == tight_stride) {
-        /* Stride matches, use source buffer directly (zero-copy) */
+        /* Соответствие Stride, использование исходного буфера напрямую (нулевая копия) */
         data = lv_draw_buf_goto_xy(&item->src_buf, 0, 0);
         LV_LOG_TRACE("Image stride matches: %" LV_PRIu32, stride);
     }
     else {
-        /* Stride doesn't match, need to copy with tight alignment */
+        /* Страйд не соответствует, нужно копировать с точным выравниванием */
         lv_draw_buf_t * tmp_buf = lv_nanovg_reshape_global_image(item->u, cf, w, h);
         if(!tmp_buf) {
             LV_LOG_ERROR("Failed to allocate temp buffer for stride conversion");
@@ -333,9 +333,9 @@ static lv_cache_compare_res_t image_compare_cb(const image_item_t * lhs, const i
 static void image_cache_drop_collect_cb(void * elem)
 {
     /**
-     * If the cache is deleted during the traversal process,
-     * it will cause iter to become invalid.
-     * Therefore, we will first add it to the drop collection list and postpone the deletion.
+     * Если кеш удаляется в процессе обхода,
+     * это приведет к тому, что iter станет недействительным.
+     * Поэтому мы сначала добавим его в список выпадающих коллекций и отложим удаление.
      */
     LV_ASSERT_NULL(elem);
     image_item_t * item = elem;

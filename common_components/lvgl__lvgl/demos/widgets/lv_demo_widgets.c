@@ -260,7 +260,7 @@ static void color_event_cb(lv_event_t * e)
 
 
         lv_palette_t * palette_primary = lv_event_get_user_data(e);
-        lv_palette_t palette_secondary = (*palette_primary) + 3; /*Use another palette as secondary*/
+        lv_palette_t palette_secondary = (*palette_primary) + 3; /*Используйте другую палитру в качестве вторичной*/
         if(palette_secondary >= LV_PALETTE_LAST) palette_secondary = 0;
 #if LV_USE_THEME_DEFAULT
         lv_theme_default_init(NULL, lv_palette_main(*palette_primary), lv_palette_main(palette_secondary),

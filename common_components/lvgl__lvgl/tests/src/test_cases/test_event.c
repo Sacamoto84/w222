@@ -17,14 +17,14 @@ static const lv_obj_class_t event_object_deletion_class = {
     .base_class = &lv_obj_class
 };
 
-/* Checks for memory leaks/invalid memory accesses on deleted objects */
+/* Проверяет наличие утечек памяти/недопустимого доступа к памяти удаленных объектов. */
 void test_event_object_deletion(void)
 {
     lv_obj_t * obj = lv_obj_class_create_obj(&event_object_deletion_class, lv_screen_active());
     lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
 }
 
-/* Add and then remove event should not memory leak */
+/* Добавление и последующее удаление события не должно вызывать утечки памяти. */
 void test_event_should_not_memory_lean(void)
 {
     lv_mem_monitor_t monitor;
@@ -74,7 +74,7 @@ static void event_post_2_cb(lv_event_t * e)
     post_cnt_2++;
 }
 
-/* Add and then remove event should not memory leak */
+/* Добавление и последующее удаление события не должно вызывать утечки памяти. */
 void test_event_stop_processing(void)
 {
     lv_obj_t * btn = lv_button_create(lv_screen_active());
@@ -142,7 +142,7 @@ void test_event_delete_obj_in_recursive_event_call(void)
     lv_test_mouse_click_at(30, 30);
 }
 
-// Test event callback function
+// Тестовая функция обратного вызова события
 static void test_event_cb_1(lv_event_t * e)
 {
     LV_UNUSED(e);
@@ -152,26 +152,26 @@ void test_event_remove_event_cb(void)
 {
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
 
-    // Register the same callback function twice with different event types
+    // Зарегистрируйте одну и ту же функцию обратного вызова дважды с разными типами событий.
     lv_obj_add_event_cb(obj, test_event_cb_1, LV_EVENT_CLICKED, NULL);
     lv_obj_add_event_cb(obj, test_event_cb_1, LV_EVENT_PRESSED, NULL);
 
-    // Check event count after adding
+    // Проверьте количество событий после добавления
     uint32_t event_count_after_add = lv_obj_get_event_count(obj);
 
-    // Verify that 2 events were added
+    // Убедитесь, что добавлено 2 события.
     TEST_ASSERT_EQUAL_UINT32(2, event_count_after_add);
 
-    // Remove all events with test_event_cb_1 callback
+    // Удалить все события с помощью обратного вызова test_event_cb_1
     uint32_t removed_count = lv_obj_remove_event_cb(obj, test_event_cb_1);
 
-    // Verify that 2 events were removed
+    // Убедитесь, что 2 события были удалены.
     TEST_ASSERT_EQUAL_UINT32(2, removed_count);
 
-    // Check event count after removal
+    // Проверьте количество событий после удаления
     uint32_t event_count_after_remove = lv_obj_get_event_count(obj);
 
-    // Verify that all events were removed
+    // Убедитесь, что все события были удалены
     TEST_ASSERT_EQUAL_UINT32(0, event_count_after_remove);
 
     lv_obj_delete(obj);

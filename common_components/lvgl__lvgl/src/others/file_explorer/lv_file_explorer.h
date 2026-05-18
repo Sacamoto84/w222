@@ -54,12 +54,12 @@ extern const lv_obj_class_t lv_file_explorer_class;
 lv_obj_t * lv_file_explorer_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
 /**
- * Set file_explorer
+ * Установить file_explorer
  * @param obj   pointer to a label object
  * @param dir   the dir from 'lv_file_explorer_dir_t' enum.
  * @param path   path
@@ -69,53 +69,53 @@ void lv_file_explorer_set_quick_access_path(lv_obj_t * obj, lv_file_explorer_dir
 #endif
 
 /**
- * Set file_explorer sort
+ * Установить сортировку file_explorer
  * @param obj   pointer to a file explorer object
  * @param sort  the sort from 'lv_file_explorer_sort_t' enum.
  */
 void lv_file_explorer_set_sort(lv_obj_t * obj, lv_file_explorer_sort_t sort);
 
 /**
- * Set the visibility of the "< Back" button
+ * Настройте видимость кнопки «<Назад»
  * @param obj   pointer to a file explorer object
  * @param show  bool true/false, enable or disable button
  */
 void lv_file_explorer_show_back_button(lv_obj_t * obj, bool show);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get file explorer Selected file
+ * Получить файловый менеджер Выбранный файл
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer selected file name
  */
 const char * lv_file_explorer_get_selected_file_name(const lv_obj_t * obj);
 
 /**
- * Get file explorer cur path
+ * Получить путь к файловому проводнику
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer cur path
  */
 const char * lv_file_explorer_get_current_path(const lv_obj_t * obj);
 
 /**
- * Get file explorer file list obj(lv_table)
+ * Получить список файлов в проводнике (lv_table)
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer file table obj(lv_table)
  */
 lv_obj_t * lv_file_explorer_get_file_table(lv_obj_t * obj);
 
 /**
- * Get file explorer head area obj
+ * Получить объект области головы в проводнике
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer head area obj(lv_obj)
  */
 lv_obj_t * lv_file_explorer_get_header(lv_obj_t * obj);
 
 /**
- * Get file explorer path obj(label)
+ * Получить путь к файлу в проводнике obj (метка)
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer path obj(lv_label)
  */
@@ -123,21 +123,21 @@ lv_obj_t * lv_file_explorer_get_path_label(lv_obj_t * obj);
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
 /**
- * Get file explorer head area obj
+ * Получить объект области головы в проводнике
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer quick access area obj(lv_obj)
  */
 lv_obj_t * lv_file_explorer_get_quick_access_area(lv_obj_t * obj);
 
 /**
- * Get file explorer places list obj(lv_list)
+ * Получить объект списка мест в проводнике (lv_list)
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer places list obj(lv_list)
  */
 lv_obj_t * lv_file_explorer_get_places_list(lv_obj_t * obj);
 
 /**
- * Get file explorer device list obj(lv_list)
+ * Получить объект списка устройств в проводнике (lv_list)
  * @param obj   pointer to a file explorer object
  * @return      pointer to the file explorer device list obj(lv_list)
  */
@@ -145,18 +145,18 @@ lv_obj_t * lv_file_explorer_get_device_list(lv_obj_t * obj);
 #endif
 
 /**
- * Set file_explorer sort
+ * Установить сортировку file_explorer
  * @param obj   pointer to a file explorer object
  * @return the current mode from 'lv_file_explorer_sort_t'
  */
 lv_file_explorer_sort_t lv_file_explorer_get_sort(const lv_obj_t * obj);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**
- * Open a specified path
+ * Открыть указанный путь
  * @param obj   pointer to a file explorer object
  * @param dir   pointer to the path
  */
@@ -169,7 +169,7 @@ void lv_file_explorer_open_dir(lv_obj_t * obj, const char * dir);
 #endif  /*LV_USE_FILE_EXPLORER*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FILE_EXPLORER_H*/

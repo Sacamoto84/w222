@@ -19,14 +19,14 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/** Magic number for lvgl image, 9 means lvgl version 9
- *  It must be neither a valid ASCII character nor larger than 0x80. See `lv_image_src_get_type`.
+/** Магическое число для изображения lvgl, 9 — версия lvgl 9.
+ *  Он не должен быть ни допустимым символом ASCII, ни больше, чем 0x80. См. `lv_image_src_get_type`.
  */
 #define LV_IMAGE_HEADER_MAGIC (0x19)
 LV_EXPORT_CONST_INT(LV_IMAGE_HEADER_MAGIC);
 
 /**
- * Flags reserved for user, lvgl won't use these bits.
+ * Флаги зарезервированы для пользователя, lvgl не будет использовать эти биты.
  */
 #define LV_IMAGE_FLAGS_USER_MASK (0xFF00)
 
@@ -36,37 +36,37 @@ LV_EXPORT_CONST_INT(LV_IMAGE_HEADER_MAGIC);
 
 typedef enum _lvimage_flags_t {
     /**
-     * For RGB map of the image data, mark if it's pre-multiplied with alpha.
-     * For indexed image, this bit indicated palette data is pre-multiplied with alpha.
+     * Для карты RGB данных изображения отметьте, если она предварительно умножена на альфу.
+     * Для индексированного изображения этот бит указывает данные палитры, предварительно умножаемые на альфу.
      */
     LV_IMAGE_FLAGS_PREMULTIPLIED    = 0x0001,
     /**
-     * The image data is compressed, so decoder needs to decode image firstly.
-     * If this flag is set, the whole image will be decompressed upon decode, and
-     * `get_area_cb` won't be necessary.
+     * Данные изображения сжаты, поэтому декодеру необходимо сначала декодировать изображение.
+     * Если этот флаг установлен, все изображение будет распаковано при декодировании.
+     * `get_area_cb` не понадобится.
      */
     LV_IMAGE_FLAGS_COMPRESSED       = 0x0008,
 
-    /*Below flags are applicable only for draw buffer header.*/
+    /*Нижеуказанные флаги применимы только для заголовка буфера отрисовки.*/
 
     /**
-     * The image is allocated from heap, thus should be freed after use.
+     * Изображение выделяется из кучи, поэтому должно быть освобождено после использования.
      */
     LV_IMAGE_FLAGS_ALLOCATED        = 0x0010,
 
     /**
-     * If the image data is malloced and can be processed in place.
-     * In image decoder post processing, this flag means we modify it in-place.
+     * Если данные изображения распределены по памяти и могут быть обработаны на месте.
+     * При постобработке декодера изображений этот флаг означает, что мы модифицируем его на месте.
      */
     LV_IMAGE_FLAGS_MODIFIABLE       = 0x0020,
 
     /**
-     * The image has custom drawing methods.
+     * Изображение имеет собственные методы рисования.
      */
     LV_IMAGE_FLAGS_CUSTOM_DRAW      = 0x0040,
 
     /**
-     * Flags reserved for user, lvgl won't use these bits.
+     * Флаги зарезервированы для пользователя, lvgl не будет использовать эти биты.
      */
     LV_IMAGE_FLAGS_USER1            = 0x0100,
     LV_IMAGE_FLAGS_USER2            = 0x0200,
@@ -126,8 +126,8 @@ typedef union {
 } lv_yuv_buf_t;
 
 /**
- * Struct to describe a constant image resource.
- * It's similar to lv_draw_buf_t, but the data is constant.
+ * Структура для описания постоянного ресурса изображения.
+ * Он похож на lv_draw_buf_t, но данные постоянны.
  */
 typedef struct {
     lv_image_header_t header;   /**< A header describing the basics of the image*/
@@ -146,7 +146,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_IMAGE_DSC_H*/

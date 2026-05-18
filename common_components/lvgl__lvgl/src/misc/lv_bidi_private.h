@@ -30,60 +30,60 @@ extern "C" {
  **********************/
 
 /**
- * Convert a text to get the characters in the correct visual order according to
- * Unicode Bidirectional Algorithm
- * @param str_in the text to process
- * @param str_out store the result here. Has the be `strlen(str_in)` length
- * @param base_dir `LV_BASE_DIR_LTR` or `LV_BASE_DIR_RTL`
+ * Преобразуйте текст, чтобы расположить символы в правильном визуальном порядке в соответствии с
+ * Двунаправленный алгоритм Unicode
+ * @param str_in текст для обработки
+ * @param str_out сохраните результат здесь. Имеет длину `strlen(str_in)`
+ * @param base_dir `LV_BASE_DIR_LTR` или `LV_BASE_DIR_RTL`
  */
 void lv_bidi_process(const char * str_in, char * str_out, lv_base_dir_t base_dir);
 
 /**
- * Auto-detect the direction of a text based on the first strong character
- * @param txt the text to process
- * @return `LV_BASE_DIR_LTR` or `LV_BASE_DIR_RTL`
+ * Автоматическое определение направления текста по первому сильному символу
+ * @param txt текст для обработки
+ * @return `LV_BASE_DIR_LTR` или `LV_BASE_DIR_RTL`
  */
 lv_base_dir_t lv_bidi_detect_base_dir(const char * txt);
 
 /**
- * Get the logical position of a character in a line
- * @param str_in the input string. Can be only one line.
- * @param bidi_txt internally the text is bidi processed which buffer can be get here.
- * If not required anymore has to freed with `lv_free()`
- * Can be `NULL` is unused
- * @param len length of the line in character count
- * @param base_dir base direction of the text: `LV_BASE_DIR_LTR` or `LV_BASE_DIR_RTL`
- * @param visual_pos the visual character position which logical position should be get
- * @param is_rtl tell the char at `visual_pos` is RTL or LTR context
- * @return the logical character position
+ * Получить логическое положение символа в строке
+ * @param str_in входная строка. Может быть только одна строка.
+ * @param bidi_txt внутри текст обрабатывается двунаправленным текстом, какой буфер можно получить здесь.
+ * Если большего не требуется, необходимо поднять с помощью `lv_free()`.
+ * Может быть `NULL` не используется
+ * @param len длина строки в количестве символов
+ * @param base_dir базовое направление текста:`LV_BASE_DIR_LTR`или `LV_BASE_DIR_RTL`
+ * @param visual_pos позиция визуального персонажа, какую логическую позицию следует получить
+ * @param is_rtl сообщите, что символ в`visual_pos`является контекстомRTLили LTR
+ * @return логическая позиция персонажа
  */
 uint16_t lv_bidi_get_logical_pos(const char * str_in, char ** bidi_txt, uint32_t len, lv_base_dir_t base_dir,
                                  uint32_t visual_pos, bool * is_rtl);
 
 /**
- * Get the visual position of a character in a line
- * @param str_in the input string. Can be only one line.
- * @param bidi_txt internally the text is bidi processed which buffer can be get here.
- * If not required anymore has to freed with `lv_free()`
- * Can be `NULL` is unused
- * @param len length of the line in character count
- * @param base_dir base direction of the text: `LV_BASE_DIR_LTR` or `LV_BASE_DIR_RTL`
- * @param logical_pos the logical character position which visual position should be get
- * @param is_rtl tell the char at `logical_pos` is RTL or LTR context
- * @return the visual character position
+ * Получить визуальное положение персонажа в строке
+ * @param str_in входная строка. Может быть только одна строка.
+ * @param bidi_txt внутри текст обрабатывается двунаправленным текстом, какой буфер можно получить здесь.
+ * Если большего не требуется, необходимо поднять с помощью `lv_free()`.
+ * Может быть `NULL` не используется
+ * @param len длина строки в количестве символов
+ * @param base_dir базовое направление текста:`LV_BASE_DIR_LTR`или `LV_BASE_DIR_RTL`
+ * @param logical_pos логическая позиция персонажа, какую визуальную позицию следует получить
+ * @param is_rtl сообщите, что символ в`logical_pos`является контекстомRTLили LTR
+ * @return визуальное положение персонажа
  */
 uint16_t lv_bidi_get_visual_pos(const char * str_in, char ** bidi_txt, uint16_t len, lv_base_dir_t base_dir,
                                 uint32_t logical_pos, bool * is_rtl);
 
 /**
- * Bidi process a paragraph of text
- * @param str_in the string to process
- * @param str_out store the result here
- * @param len length of the text
- * @param base_dir base dir of the text
- * @param pos_conv_out an `uint16_t` array to store the related logical position of the character.
- * Can be `NULL` is unused
- * @param pos_conv_len length of `pos_conv_out` in element count
+ * Биди обрабатывает абзац текста
+ * @param str_in строка для обработки
+ * @param str_out сохранить результат здесь
+ * @param len длина текста
+ * @param base_dir базовая директория текста
+ * @param pos_conv_out массив`uint16_t`для хранения соответствующей логической позиции символа.
+ * Может быть `NULL` не используется
+ * @param pos_conv_len длина`pos_conv_out`в количестве элементов
  */
 void lv_bidi_process_paragraph(const char * str_in, char * str_out, uint32_t len, lv_base_dir_t base_dir,
                                uint16_t * pos_conv_out, uint16_t pos_conv_len);
@@ -95,7 +95,7 @@ void lv_bidi_process_paragraph(const char * str_in, char * str_out, uint32_t len
 #endif /*LV_USE_BIDI*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BIDI_PRIVATE_H*/

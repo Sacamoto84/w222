@@ -2,33 +2,33 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 /**
  * @file
- * @brief Paint operation related fuctions. Paint is an internal (opaque) struct of NemaVG.
- * The functions defined here can be used access its parameters.
+ * @brief Функции, связанные с покраской. Paint — это внутренняя (непрозрачная) структура NemaVG.
+ * Определенные здесь функции можно использовать для доступа к его параметрам.
  *
  */
 
@@ -53,54 +53,54 @@ extern "C" {
 
 #define  NEMA_VG_PAINT_MAX_GRAD_STOPS (32) /**< Maximum gradient stops*/
 
-/** \brief Create a paint object.
+/** \brief создать объект рисования.
  *
- * \return Handle to the created paint object
+ * \return Дескриптор созданного объекта рисования
  *
  */
 NEMA_VG_PAINT_HANDLE nema_vg_paint_create();
 
-/** \brief Destroy a paint object.
+/** \brief Уничтожить объект рисования.
  *
- * \param paint Handle to paint object that should be destroyed
+ * \param Дескриптор Paint для рисования объекта, который должен быть уничтожен.
  *
  */
 void nema_vg_paint_destroy(NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Clear the parameters of a paint object.
+/** \brief Очистка параметров объекта рисования.
  *
- * \param paint Pointer (handle) to paint object
+ * \param Paint Указатель (дескриптор) для рисования объекта
  *
  */
 void nema_vg_paint_clear(NEMA_VG_PAINT_HANDLE paint);
 
-/** \brief Set the paint type
+/** \brief Установка типа краски
  *
- * \param paint Pointer (handle) to paint
- * \param type Paint type (NEMA_VG_PAINT_COLOR, NEMA_VG_PAINT_GRAD_LINEAR, NEMA_VG_PAINT_TEXTURE, NEMA_VG_PAINT_GRAD_RADIAL, NEMA_VG_PAINT_GRAD_CONICAL)
+ * \param Paint Указатель (дескриптор) для рисования
+ * \param type Тип краски (NEMA_VG_PAINT_COLOR,NEMA_VG_PAINT_GRAD_LINEAR,NEMA_VG_PAINT_TEXTURE,NEMA_VG_PAINT_GRAD_RADIAL,NEMA_VG_PAINT_GRAD_CONICAL)
  *
  */
 void nema_vg_paint_set_type(NEMA_VG_PAINT_HANDLE paint, uint8_t type);
 
 
-/** \brief Lock paint transformation to path. If locked, path and paint
- *  transformation will be in sync.
+/** \brief Заблокируйте преобразование краски по пути. Если заблокировано, путь и краска
+ *  трансформация будет синхронизирована.
  *
- * \param paint Pointer to paint object
- * \param locked 1 if locked (default), 0 if not locked
+ * \param Paint Указатель для рисования объекта
+ * \param locked 1, если заблокировано (по умолчанию), 0, если не заблокировано
  *
  */
 void nema_vg_paint_lock_tran_to_path(NEMA_VG_PAINT_HANDLE paint, int locked);
 
-/** \brief Set linear gradient to a paint object
+/** \brief Установка линейного градиента для объекта рисования
  *
- * \param paint Pointer to paint object
- * \param grad Pointer to gradient object
- * \param x0  Linear gradient start point x coordinate
- * \param y0  Linear gradient start point y coordinate
- * \param x1  Linear gradient end point x coordinate
- * \param y1  Linear gradient end point y coordinate
- * \param sampling_mode Sampling mode. NEMA_TEX_BORDER defaults to NEMA_TEX_CLAMP
+ * \param Paint Указатель для рисования объекта
+ * \param grad Указатель объекта градиента
+ * \param x0 Координата x начальные точки линейного градиента
+ * \param y0 Координата исходных точек линейного градиента
+ * \param x1 Координата x конечной точки линейного градиента
+ * \param y1 Координата и конечные точки линейного градиента
+ * \paramsampling_modeРежим выбора.  NEMA_TEX_BORDERпо умолчанию равенNEMA_TEX_CLAMP.
  *
  */
 void nema_vg_paint_set_grad_linear(NEMA_VG_PAINT_HANDLE paint,
@@ -109,18 +109,18 @@ void nema_vg_paint_set_grad_linear(NEMA_VG_PAINT_HANDLE paint,
                                   float x1, float y1,
                                   nema_tex_mode_t sampling_mode);
 
- /** \brief Set the paint color
+ /** \brief Установка цвета краски
  *
- * \param paint Pointer (handle) to paint object
- * \param rgba Color to be set, in rgba (hex 0xAABBGGRR) format
+ * \param Paint Указатель (дескриптор) для рисования объекта
+ * \param rgba Устанавливаемый цвет в формате rgba (шестнадцатеричный 0xAABBGGRR).
  *
  */
 void nema_vg_paint_set_paint_color(NEMA_VG_PAINT_HANDLE paint, uint32_t rgba);
 
- /** \brief Set the paint opacity
+ /** \brief Установка непрозрачности краски
  *
- * \param paint Pointer (pointer) to paint object
- * \param opacity Opacity to be set, 1 is fully opaque and 0 is fully transparent
+ * \param Paint Указатель (указатель) для рисования объекта
+ * \param opacity Устанавливаемая непрозрачность: 1 — полностью непрозрачный, 0 — полностью прозрачный.
  *
  */
 void nema_vg_paint_set_opacity(NEMA_VG_PAINT_HANDLE paint, float opacity);
@@ -128,38 +128,38 @@ void nema_vg_paint_set_opacity(NEMA_VG_PAINT_HANDLE paint, float opacity);
 /** \private */
 void nema_vg_paint_set_stroke_width(NEMA_VG_PAINT_HANDLE paint, float stroke_width) __attribute__ ((deprecated("This function is deprecated use nema_vg_stroke_set_width instead.")));
 
- /** \brief Set transformation matrix for texture
+ /** \brief Установка матрицы конвертировать текстуры
  *
- * \param paint Pointer (handle) to paint object
- * \param m 3x3 transformation matrix
+ * \param Paint Указатель (дескриптор) для рисования объекта
+ * \param m матрица конвертировать 3x3
  *
  */
 void nema_vg_paint_set_tex_matrix(NEMA_VG_PAINT_HANDLE paint, nema_matrix3x3_t m);
 
- /** \brief Set texture to paint object
+ /** \brief Установка текстур для рисования объекта
  *
- * \param paint Pointer (handle) to paint
- * \param text Pointer to texture image object
+ * \param Paint Указатель (дескриптор) для рисования
+ * \param text Указатель объекта изображения текстуры
  *
  */
 void nema_vg_paint_set_tex(NEMA_VG_PAINT_HANDLE paint, nema_img_obj_t* tex);
 
- /** \brief Set Lut-based (look-up-table) texture to paint object. See Nema Pixpresso User Manual regarding Lut formats
+ /** \brief Установите текстуру на основе Lut (справочная таблица) для рисования объекта. См. руководство пользователя Nema Pixpresso относительно форматов Lut.
  *
- * \param paint Pointer (handle) to paint object
- * \param lut_palette Pointer to the Palette of the Lut image object
- * \param lut_indices Pointer to the indices of the Lut image object
+ * \param Paint Указатель (дескриптор) для рисования объекта
+ * \paramlut_paletteУказатель на палитру объекта изображения Лут
+ * \paramlut_indicesУказатель индекса объекта изображения Lut
  *
  */
 void nema_vg_paint_set_lut_tex(NEMA_VG_PAINT_HANDLE paint, nema_img_obj_t* lut_palette, nema_img_obj_t* lut_indices);
 
-/** \brief Set Conical gradient to paint object
+/** \brief Установите конический градиент для рисования объекта
  *
- * \param paint Pointer (handle) to paint
- * \param grad Pointer (handle) to gradient
- * \param cx  Conical gradient center point x coordinate
- * \param cy  Conical gradient center point y coordinate
- * \param sampling_mode Sampling mode
+ * \param Paint Указатель (дескриптор) для рисования
+ * \param grad Указатель (дескриптор) градиента
+ * \param cx Координата x центральных точек конического градиента
+ * \param cy Координата и центральные точки конического градиента
+ * \paramsampling_modeРежим выбора
  *
  */
 void nema_vg_paint_set_grad_conical(NEMA_VG_PAINT_HANDLE paint,
@@ -167,14 +167,14 @@ void nema_vg_paint_set_grad_conical(NEMA_VG_PAINT_HANDLE paint,
                                     float cx, float cy,
                                     nema_tex_mode_t sampling_mode);
 
-/** \brief Set radial gradient to paint object
+/** \brief Установка радиального градиента для рисования объекта
  *
- * \param paint Pointer (handle) to paint
- * \param grad Pointer (handle) to gradient
- * \param x0  Radial gradient center point x coordinate
- * \param y0  Radial gradient center point y coordinate
- * \param r  Radial gradient radius
- * \param sampling_mode Sampling mode
+ * \param Paint Указатель (дескриптор) для рисования
+ * \param grad Указатель (дескриптор) градиента
+ * \param x0 Координата x центральных точек радиального градиента
+ * \param y0 Координата центра радиального градиента по оси y
+ * \param r Радиусного градиента
+ * \paramsampling_modeРежим выбора
  *
  */
 void
@@ -185,15 +185,15 @@ nema_vg_paint_set_grad_radial(NEMA_VG_PAINT_HANDLE paint,
                               nema_tex_mode_t sampling_mode);
 
 
-/** \brief Set radial gradient to paint object, with different horizontal and vertical radius
+/** \brief Установите радиальный градиент для рисования объекта с разным горизонтальным и вертикальным радиусом
  *
- * \param paint Pointer (handle) to paint
- * \param grad Pointer (handle) to gradient
- * \param x0  Radial gradient center point x coordinate
- * \param y0  Radial gradient center point y coordinate
- * \param rx  Radial gradient radius on x axis
- * \param ry  Radial gradient radius on y axis
- * \param sampling_mode Sampling mode
+ * \param Paint Указатель (дескриптор) для рисования
+ * \param grad Указатель (дескриптор) градиента
+ * \param x0 Координата x центральных точек радиального градиента
+ * \param y0 Координата центра радиального градиента по оси y
+ * \param rx Радиальный градиент градиента по оси x
+ * \param ry Радиусного градиента оси Y
+ * \paramsampling_modeРежим выбора
  *
  */
 void
@@ -203,27 +203,27 @@ nema_vg_paint_set_grad_radial2(NEMA_VG_PAINT_HANDLE paint,
                                float rx, float ry,
                                nema_tex_mode_t sampling_mode);
 
-/** \brief Create gradient object
+/** \brief Создание объекта градиента
  *
- * \return Handle (pointer) to the created gradient object
+ * \return Дескриптор (указатель) созданного объекта градиента
  */
 NEMA_VG_GRAD_HANDLE
 nema_vg_grad_create(void);
 
-/** \brief Destroy gradient object
+/** \brief Уничтожить объект градиента
  *
- * \param grad Pointer to the gradient object
+ * \param grad Указатель объекта градиента
  *
  */
 void
 nema_vg_grad_destroy(NEMA_VG_GRAD_HANDLE grad);
 
-/** \brief Set gradient parameters to a gradient object
+/** \brief Установка параметров градиента для объекта градиента
  *
- * \param grad Pointer (handle) to gradient object
- * \param stops_count  Number of stop colors
- * \param stops Pointer to stop colors coordinates
- * \param colors Pointer to stop color values
+ * \param grad Указатель (дескриптор) объекта градиента
+ * \paramstops_countКоличество стоп-цветов
+ * \param stop Указатель для остановки координат цветов
+ * \paramcolors Указатель для остановки измерений цвета
  *
  */
 void

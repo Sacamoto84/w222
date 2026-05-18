@@ -24,8 +24,8 @@ void lv_example_calendar_1(void)
     lv_calendar_set_today_date(calendar, 2021, 02, 23);
     lv_calendar_set_month_shown(calendar, 2021, 02);
 
-    /*Highlight a few days*/
-    static lv_calendar_date_t highlighted_days[3];       /*Only its pointer will be saved so should be static*/
+    /*Выделите несколько дней*/
+    static lv_calendar_date_t highlighted_days[3];       /*Будет сохранен только его указатель, поэтому он должен быть статическим.*/
     highlighted_days[0].year = 2021;
     highlighted_days[0].month = 02;
     highlighted_days[0].day = 6;

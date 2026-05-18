@@ -28,7 +28,7 @@ void test_line_should_have_valid_documented_default_values(void)
     TEST_ASSERT_NULL(lv_line_get_points(line));
     TEST_ASSERT_FALSE(lv_line_get_y_invert(line));
     TEST_ASSERT_FALSE(lv_obj_has_flag(line, LV_OBJ_FLAG_CLICKABLE));
-    /* line doesn't have any points, so it's 0,0 in size */
+    /* линия не имеет точек, поэтому ее размер равен 0,0 */
     TEST_ASSERT_EQUAL_UINT16(0U, lv_obj_get_self_width(line));
     TEST_ASSERT_EQUAL_UINT16(0U, lv_obj_get_self_height(line));
 }
@@ -48,7 +48,7 @@ void test_line_size_should_be_updated_after_adding_points(void)
     int32_t calculated_width = 0;
     int32_t calculated_height = 0;
 
-    /* Get the biggest coordinate on both axis */
+    /* Получите самую большую координату по обеим осям */
     uint16_t point_idx = 0;
     for(point_idx = 0; point_idx < point_cnt; point_idx++) {
         calculated_width = (int32_t)LV_MAX(points[point_idx].x, calculated_width);
@@ -64,25 +64,25 @@ static void line_event_cb(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
 
     if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
-        /* Set the new line extra draw size */
+        /* Установите дополнительный размер прорисовки новой линии */
         lv_event_set_ext_draw_size(e, initial_extra_draw_size);
     }
 }
 
 void test_line_should_update_extra_draw_size_based_on_style(void)
 {
-    /* Setup an event handler for line extra draw size event */
+    /* Настройте обработчик событий для события дополнительного размера линии. */
     lv_obj_add_event_cb(line, line_event_cb, LV_EVENT_ALL, NULL);
-    /* Trigger the extra draw size event */
+    /* Запустить событие дополнительного размера розыгрыша */
     lv_obj_refresh_ext_draw_size(line);
 
     TEST_ASSERT_EQUAL(initial_extra_draw_size, lv_obj_get_ext_draw_size(line));
 
-    /* Update line width style, the event handler should set the extra draw size
-     * to the line width */
+    /* Обновите стиль ширины линии, обработчик событий должен установить дополнительный размер рисования.
+     * к ширине линии */
     lv_obj_set_style_line_width(line, final_extra_draw_size, LV_PART_MAIN);
 
-    /* Trigger the extra draw size event */
+    /* Запустить событие дополнительного размера розыгрыша */
     lv_obj_refresh_ext_draw_size(line);
 
     TEST_ASSERT_EQUAL(final_extra_draw_size, lv_obj_get_ext_draw_size(line));
@@ -91,10 +91,10 @@ void test_line_should_update_extra_draw_size_based_on_style(void)
 void test_line_basic_render(void)
 {
     static lv_point_precise_t points[] = { {5, 5},
-        {100, 5},    /*Horizontal*/
-        {100, 100},  /*Vertical*/
-        {120, 5},    /*Steep*/
-        {200, 20},   /*Flat*/
+        {100, 5},    /*Горизонтальный*/
+        {100, 100},  /*Вертикальный*/
+        {120, 5},    /*Крутой*/
+        {200, 20},   /*Квартира*/
     };
     uint16_t point_cnt = (uint16_t) sizeof(points) / sizeof(lv_point_precise_t);
     lv_line_set_points(line, points, point_cnt);
@@ -168,7 +168,7 @@ void test_line_properties(void)
     lv_obj_t * obj = lv_line_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Test Y_INVERT property */
+    /* Тестирование свойства Y_INVERT */
     prop.id = LV_PROPERTY_LINE_Y_INVERT;
     prop.num = 1;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);

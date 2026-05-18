@@ -48,7 +48,7 @@ Hi :wave:, thank you for your PR!
 
 We've run benchmarks in an emulated environment. Here are the results:
 
-#### ARM Emulated 32b - lv_conf_perf32b
+#### ARM Эмулируемый 32b — lv_conf_perf32b
 
 | Scene Name | Avg CPU (%) | Avg FPS | Avg Time (ms) | Render Time (ms) | Flush Time (ms) |
 |------------|------------|---------|--------------|----------------|--------------|
@@ -172,14 +172,14 @@ def main():
             with open(results_path, "rb") as f:
                 previousb = f.read()
                 rs: list = msgpack.unpackb(previousb)
-                # We store the filename so it's easier to match with the related results
+                # Мы сохраняем имя файла, чтобы его было легче сопоставить с соответствующими результатами.
                 previous_results_map[os.path.basename(results_path)] = rs
 
     new_results: dict[str, list[dict]] = {}
     for results_path in results_paths:
         with open(results_path, "r") as f:
             r: list[dict] = json.load(f)
-            # We store the filename so it's easier to match with the related results
+            # Мы сохраняем имя файла, чтобы его было легче сопоставить с соответствующими результатами.
             new_results[os.path.basename(results_path)] = r
 
     comment = "Hi :wave:, thank you for your PR!\n\n"
@@ -206,10 +206,10 @@ def main():
             ]
             prev_results = prev_scenes
         else:
-            # If there are no previous results, we use the current result as
-            # the previous aswell
-            # In this case, the difference will always be zero and we won't
-            # add any new information to the result table
+            # Если предыдущих результатов нет, мы используем текущий результат как
+            # предыдущий тоже
+            # В этом случае разница всегда будет равна нулю и мы не будем
+            # добавить любую новую информацию в таблицу результатов
             prev_results = result
             prev_all_scene_avg = new_all_scene_avg
 

@@ -26,42 +26,42 @@ static uint32_t test_tick_inc_cb(void)
 /* TEST FUNCTIONS */
 void setUp(void)
 {
-    /* Function run before every test */
-    /* Reset test variables */
+    /* Функция запускается перед каждым тестом */
+    /* Сбросить тестовые переменные */
     test_tick_value = 0;
     test_delay_called = 0;
 
-    /* Reset tick module */
+    /* Сбросить модуль галочки */
     lv_tick_set_cb(NULL);
     lv_delay_set_cb(NULL);
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_tick_inc_and_get(void)
 {
-    /* Initial tick should be 0 */
+    /* Начальный тик должен быть 0 */
     TEST_ASSERT_EQUAL(0, lv_tick_get());
 
-    /* Increment tick by 10 */
+    /* Увеличить тик на 10. */
     lv_tick_inc(10);
     TEST_ASSERT_EQUAL(10, lv_tick_get());
 
-    /* Increment tick by 100 */
+    /* Увеличить тик на 100 */
     lv_tick_inc(100);
     TEST_ASSERT_EQUAL(110, lv_tick_get());
 }
 
 void test_tick_get_with_callback(void)
 {
-    /* Set callback */
+    /* Установить обратный вызов */
     lv_tick_set_cb(test_tick_cb);
     TEST_ASSERT_EQUAL(test_tick_cb, lv_tick_get_cb());
 
-    /* Test callback value */
+    /* Проверить ценность обратного вызова */
     test_tick_value = 1234;
     TEST_ASSERT_EQUAL(1234, lv_tick_get());
 
@@ -82,12 +82,12 @@ void test_tick_elaps_normal(void)
 
 void test_tick_elaps_overflow(void)
 {
-    /* Simulate near overflow */
+    /* Имитировать переполнение */
     test_tick_value = UINT32_MAX - 10;
     lv_tick_set_cb(test_tick_cb);
     uint32_t start = lv_tick_get();
 
-    /* Simulate overflow */
+    /* Имитировать переполнение */
     test_tick_value = 20;
     TEST_ASSERT_EQUAL(31, lv_tick_elaps(start));
 }

@@ -30,13 +30,13 @@ void test_qrcode_normal(void)
     lv_qrcode_set_dark_color(qr, fg_color);
     lv_qrcode_set_light_color(qr, bg_color);
 
-    /*Set data*/
+    /*Установить данные*/
     const char * data = "https://lvgl.io";
     lv_result_t res = lv_qrcode_update(qr, data, strlen(data));
     TEST_ASSERT_EQUAL(res, LV_RESULT_OK);
     lv_obj_center(qr);
 
-    /*Add a border with bg_color*/
+    /*Добавьте рамку с помощью bg_color*/
     lv_obj_set_style_border_color(qr, bg_color, 0);
     lv_obj_set_style_border_width(qr, 5, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/qrcode_1.png");
@@ -54,7 +54,7 @@ void test_qrcode_quiet_zone(void)
     lv_qrcode_set_light_color(qr, bg_color);
     lv_qrcode_set_quiet_zone(qr, true);
 
-    /*Set data*/
+    /*Установить данные*/
     const char * data = "https://lvgl.io";
     lv_result_t res = lv_qrcode_update(qr, data, strlen(data));
     TEST_ASSERT_EQUAL(res, LV_RESULT_OK);

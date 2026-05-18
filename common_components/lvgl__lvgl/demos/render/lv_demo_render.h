@@ -58,9 +58,9 @@ typedef enum {
  **********************/
 
 /**
- * Run the render verification for a scenario
- * @param id   ID of the scenario to run. Element of `lv_demo_render_scene_t`
- * @param opa  set this opacity for each object
+ * Запустите проверку рендеринга для сценария
+ * @param id   ID сценария для запуска. Элемент `lv_demo_render_scene_t`
+ * @param opa  установите эту непрозрачность для каждого объекта
  */
 void lv_demo_render(lv_demo_render_scene_t id, lv_opa_t opa);
 
@@ -73,7 +73,7 @@ const char * lv_demo_render_get_scene_name(lv_demo_render_scene_t id);
 #endif /*LV_USE_DEMO_RENDER*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_DEMO_RENDER_H*/

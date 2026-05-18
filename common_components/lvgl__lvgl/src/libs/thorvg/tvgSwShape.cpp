@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -27,12 +27,12 @@
 #include "tvgMath.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static bool _outlineBegin(SwOutline& outline)
 {
-    //Make a contour if lineTo/curveTo without calling close or moveTo beforehand.
+    //Создайте контур if lineTo/curveTo без предварительного вызова close или moveTo.
     if (outline.pts.empty()) return false;
     outline.cntrs.push(outline.pts.count - 1);
     outline.closed.push(false);
@@ -53,7 +53,7 @@ static bool _outlineEnd(SwOutline& outline)
 
 static bool _outlineMoveTo(SwOutline& outline, const Point* to, const Matrix& transform, bool closed = false)
 {
-    //make it a contour, if the last contour is not closed yet.
+    //сделайте это контуром, если последний контур еще не закрыт.
     if (!closed) _outlineEnd(outline);
 
     outline.pts.push(mathTransform(to, transform));
@@ -88,10 +88,10 @@ static bool _outlineClose(SwOutline& outline)
     if (outline.cntrs.count > 0) i = outline.cntrs.last() + 1;
     else i = 0;
 
-    //Make sure there is at least one point in the current path
+    //Убедитесь, что на текущем пути есть хотя бы одна точка.
     if (outline.pts.count == i) return false;
 
-    //Close the path
+    //Закрыть путь
     outline.pts.push(outline.pts[i]);
     outline.cntrs.push(outline.pts.count - 1);
     outline.types.push(SW_CURVE_TYPE_POINT);
@@ -108,7 +108,7 @@ static void _dashLineTo(SwDashStroke& dash, const Point* to, const Matrix& trans
 
     if (tvg::zero(len)) {
         _outlineMoveTo(*dash.outline, &dash.ptCur, transform);
-    //draw the current line fully
+    //нарисовать текущую линию полностью
     } else if (len <= dash.curLen) {
         dash.curLen -= len;
         if (!dash.curOpGap) {
@@ -118,7 +118,7 @@ static void _dashLineTo(SwDashStroke& dash, const Point* to, const Matrix& trans
             }
             _outlineLineTo(*dash.outline, to, transform);
         }
-    //draw the current line partially
+    //нарисовать текущую линию частично
     } else {
         while (len - dash.curLen > 0.0001f) {
             Line left, right;
@@ -142,7 +142,7 @@ static void _dashLineTo(SwDashStroke& dash, const Point* to, const Matrix& trans
             dash.ptCur = cur.pt1;
             dash.move = true;
         }
-        //leftovers
+        //остатки
         dash.curLen -= len;
         if (!dash.curOpGap) {
             if (dash.move) {
@@ -152,7 +152,7 @@ static void _dashLineTo(SwDashStroke& dash, const Point* to, const Matrix& trans
             _outlineLineTo(*dash.outline, &cur.pt2, transform);
         }
         if (dash.curLen < 1 && TO_SWCOORD(len) > 1) {
-            //move to next dash
+            //перейти к следующему тире
             dash.curIdx = (dash.curIdx + 1) % dash.cnt;
             dash.curLen = dash.pattern[dash.curIdx];
             dash.curOpGap = !dash.curOpGap;
@@ -167,7 +167,7 @@ static void _dashCubicTo(SwDashStroke& dash, const Point* ctrl1, const Point* ct
     Bezier cur = {dash.ptCur, *ctrl1, *ctrl2, *to};
     auto len = cur.length();
 
-    //draw the current line fully
+    //нарисовать текущую линию полностью
     if (tvg::zero(len)) {
         _outlineMoveTo(*dash.outline, &dash.ptCur, transform);
     } else if (len <= dash.curLen) {
@@ -179,7 +179,7 @@ static void _dashCubicTo(SwDashStroke& dash, const Point* ctrl1, const Point* ct
             }
             _outlineCubicTo(*dash.outline, ctrl1, ctrl2, to, transform);
         }
-    //draw the current line partially
+    //нарисовать текущую линию частично
     } else {
         while ((len - dash.curLen) > 0.0001f) {
             Bezier left, right;
@@ -203,7 +203,7 @@ static void _dashCubicTo(SwDashStroke& dash, const Point* ctrl1, const Point* ct
             dash.ptCur = right.start;
             dash.move = true;
         }
-        //leftovers
+        //остатки
         dash.curLen -= len;
         if (!dash.curOpGap) {
             if (dash.move) {
@@ -213,7 +213,7 @@ static void _dashCubicTo(SwDashStroke& dash, const Point* ctrl1, const Point* ct
             _outlineCubicTo(*dash.outline, &cur.ctrl1, &cur.ctrl2, &cur.end, transform);
         }
         if (dash.curLen < 0.1f && TO_SWCOORD(len) > 1) {
-            //move to next dash
+            //перейти к следующему тире
             dash.curIdx = (dash.curIdx + 1) % dash.cnt;
             dash.curLen = dash.pattern[dash.curIdx];
             dash.curOpGap = !dash.curOpGap;
@@ -252,11 +252,11 @@ static void _trimPattern(SwDashStroke* dash, const RenderShape* rshape, float le
     auto begin = length * trimBegin;
     auto end = length * trimEnd;
 
-    //default
+    //по умолчанию
     if (end > begin) {
         if (begin > 0.0f) dash->cnt = 4;
         else dash->cnt = 2;
-        //looping
+        //зацикливание
     } else dash->cnt = 3;
 
     if (dash->cnt == 2) {
@@ -267,7 +267,7 @@ static void _trimPattern(SwDashStroke* dash, const RenderShape* rshape, float le
         dash->pattern[1] = (begin - end);
         dash->pattern[2] = length - begin;
     } else {
-        dash->pattern[0] = 0;     //zero dash to start with a space.
+        dash->pattern[0] = 0;     //ноль тире, чтобы начать с пробела.
         dash->pattern[1] = begin;
         dash->pattern[2] = end - begin;
         dash->pattern[3] = length - end;
@@ -282,13 +282,13 @@ static float _outlineLength(const RenderShape* rshape, uint32_t shiftPts, uint32
     const Point* pts = rshape->path.pts.data + shiftPts;
     auto ptsCnt = rshape->path.pts.count - shiftPts;
 
-    //No actual shape data
+    //Нет фактических данных о форме
     if (cmdCnt <= 0 || ptsCnt <= 0) return 0.0f;
 
     const Point* close = nullptr;
     auto len = 0.0f;
 
-    //must begin with moveTo
+    //должно начинаться с moveTo
     if (cmds[0] == PathCommand::MoveTo) {
         close = pts;
         cmds++;
@@ -333,7 +333,7 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
     const Point* pts = rshape->path.pts.data;
     auto ptsCnt = rshape->path.pts.count;
 
-    //No actual shape data
+    //Нет фактических данных о форме
     if (cmdCnt == 0 || ptsCnt == 0) return nullptr;
 
     auto startPts = pts;
@@ -357,7 +357,7 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
         trimmed = false;
     }
 
-    //offset
+    //компенсация
     auto patternLength = 0.0f;
     uint32_t offIdx = 0;
     if (!tvg::zero(offset)) {
@@ -377,7 +377,7 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
 
     dash.outline = mpoolReqDashOutline(mpool, tid);
 
-    //must begin with moveTo
+    //должно начинаться с moveTo
     if (cmds[0] == PathCommand::MoveTo) {
         if (trimmed) _trimPattern(&dash, rshape, _outlineLength(rshape, 0, 0, simultaneous), trimBegin, trimEnd);
         _dashMoveTo(dash, offIdx, offset, pts);
@@ -450,14 +450,14 @@ static bool _genOutline(SwShape* shape, const RenderShape* rshape, const Matrix&
     const Point* pts = rshape->path.pts.data;
     auto ptsCnt = rshape->path.pts.count;
 
-    //No actual shape data
+    //Нет фактических данных о форме
     if (cmdCnt == 0 || ptsCnt == 0) return false;
 
     shape->outline = mpoolReqOutline(mpool, tid);
     auto outline = shape->outline;
     auto closed = false;
 
-    //Generate Outlines
+    //Создать контуры
     while (cmdCnt-- > 0) {
         switch (*cmds) {
             case PathCommand::Close: {
@@ -496,7 +496,7 @@ static bool _genOutline(SwShape* shape, const RenderShape* rshape, const Matrix&
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 bool shapePrepare(SwShape* shape, const RenderShape* rshape, const Matrix& transform,  const SwBBox& clipRegion, SwBBox& renderRegion, SwMpool* mpool, unsigned tid, bool hasComposite)
@@ -506,10 +506,10 @@ bool shapePrepare(SwShape* shape, const RenderShape* rshape, const Matrix& trans
 
     shape->bbox = renderRegion;
 
-    //Check valid region
+    //Проверьте действительный регион
     if (renderRegion.max.x - renderRegion.min.x < 1 && renderRegion.max.y - renderRegion.min.y < 1) return false;
 
-    //Check boundary
+    //Проверить границу
     if (renderRegion.min.x >= clipRegion.max.x || renderRegion.min.y >= clipRegion.max.y ||
         renderRegion.max.x <= clipRegion.min.x || renderRegion.max.y <= clipRegion.min.y) return false;
 
@@ -527,12 +527,12 @@ bool shapeGenRle(SwShape* shape, TVG_UNUSED const RenderShape* rshape, bool anti
 {
     //FIXME: Should we draw it?
     //Case: Stroke Line
-    //if (shape.outline->opened) return true;
+    //если (shape.outline->opened) вернуть true;
 
-    //Case A: Fast Track Rectangle Drawing
+    //Случай A: ускоренное рисование прямоугольника
     if (shape->fastTrack) return true;
 
-    //Case B: Normal Shape RLE Drawing
+    //Случай B: Чертеж RLE нормальной формы
     if ((shape->rle = rleRender(shape->rle, shape->outline, shape->bbox, antiAlias))) return true;
 
     return false;
@@ -602,13 +602,13 @@ bool shapeGenStrokeRle(SwShape* shape, const RenderShape* rshape, const Matrix& 
     auto dashStroking = false;
     auto ret = true;
 
-    //Dash style (+trimming)
+    //Стиль штриха (+обрезка)
     auto trimmed = rshape->strokeTrim();
     if (rshape->stroke->dashCnt > 0 || trimmed) {
         shapeOutline = _genDashOutline(rshape, transform, trimmed, mpool, tid);
         if (!shapeOutline) return false;
         dashStroking = true;
-    //Normal style
+    //Нормальный стиль
     } else {
         if (!shape->outline) {
             if (!_genOutline(shape, rshape, transform, mpool, tid, false)) return false;

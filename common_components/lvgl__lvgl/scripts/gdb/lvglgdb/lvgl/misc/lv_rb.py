@@ -10,7 +10,7 @@ class LVRedBlackTree(Value):
     def __init__(
         self, rb: Union[Value, gdb.Value, int], datatype: Union[gdb.Type, str] = None
     ):
-        # Convert to Value first if needed
+        # Если необходимо, сначала преобразуйте в значение.
         if isinstance(rb, int):
             rb = Value(rb).cast("lv_rb_t", ptr=True)
             if rb is None:
@@ -147,7 +147,7 @@ class LVRedBlackTreeIterator:
 
         data = self.tree.get_data(self.current)
 
-        # Move to next node (in-order traversal)
+        # Переход к следующему узлу (обход по порядку)
         if self.current.right:
             self.current = self.tree.minimum_from(self.current.right)
         else:

@@ -13,13 +13,13 @@ class InfoDrawUnit(gdb.Command):
         )
 
     def dump_draw_unit(self, draw_unit: Value):
-        # Dereference to get the string content of the name from draw_unit
+        # Разыменование для получения строкового значения имени изdraw_unit.
         name = draw_unit.name.string()
 
-        # Print draw_unit information and the name
+        # Распечатайте информациюdraw_unitи имя.
         print(f"Draw Unit: {draw_unit}, Name: {name}")
 
-        # Handle different draw_units based on the name
+        # Обрабатывать разныеdraw_unitsв зависимости от имени.
         def lookup_type(name):
             try:
                 return gdb.lookup_type(name)

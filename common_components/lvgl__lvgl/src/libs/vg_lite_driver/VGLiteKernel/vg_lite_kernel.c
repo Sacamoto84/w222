@@ -1,18 +1,18 @@
 /****************************************************************************
 *
-*    The MIT License (MIT)
+*    Лицензия MIT ( MIT )
 *
 *    Copyright (c) 2014 - 2022 Vivante Corporation
 *
-*    Permission is hereby granted, free of charge, to any person obtaining a
-*    copy of this software and associated documentation files (the "Software"),
-*    to deal in the Software without restriction, including without limitation
-*    the rights to use, copy, modify, merge, publish, distribute, sublicense,
-*    and/or sell copies of the Software, and to permit persons to whom the
-*    Software is furnished to do so, subject to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации («Программное обеспечение»),
+*    иметь дело с Программным обеспечением без ограничений, включая, помимо прочего,
+*    права на использование, копирование, изменение, объединение, публикацию, распространение, сублицензирование,
+*    и/или продавать копии Программного обеспечения, а также разрешать лицам, которым
+*    Для этого предоставляется программное обеспечение при соблюдении следующих условий:
 *
-*    The above copyright notice and this permission notice shall be included in
-*    all copies or substantial portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+*    все копии или существенные части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 *    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,31 +24,31 @@
 *
 *****************************************************************************
 *
-*    The GPL License (GPL)
+*    Лицензия GPL ( GPL )
 *
 *    Copyright (C) 2014 - 2022 Vivante Corporation
 *
-*    This program is free software; you can redistribute it and/or
-*    modify it under the terms of the GNU General Public License
-*    as published by the Free Software Foundation; either version 2
-*    of the License, or (at your option) any later version.
+*    Эта программа является бесплатным программным обеспечением; вы можете распространять его и/или
+*    изменить его в соответствии с условиями Стандартной общественной лицензии GNU.
+*    как опубликовано Фондом свободного программного обеспечения; либо версия 2
+*    Лицензии или (по вашему выбору) любой более поздней версии.
 *
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
+*    Данная программа распространяется в надежде, что она будет полезна,
+*    но WITHOUT ANY WARRANTY ; даже без подразумеваемой гарантии
+*    MERCHANTABILITY или FITNESS FOR A PARTICULAR PURPOSE .  См.
+*    Стандартная общественная лицензия GNU для получения более подробной информации.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program; if not, write to the Free Software Foundation,
-*    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*    Вы должны были получить копию Стандартной общественной лицензии GNU.
+*    вместе с этой программой; если нет, напишите в Фонд свободного программного обеспечения,
+*    Inc., Франклин-стрит, 51, пятый этаж, Бостон, MA 02110-1301, USA.
 *
 *****************************************************************************
 *
 *    Note: This software is released under dual MIT and GPL licenses. A
-*    recipient may use this file under the terms of either the MIT license or
-*    GPL License. If you wish to use only one license not the other, you can
-*    indicate your decision by deleting one of the above license notices in your
-*    version of this file.
+*    получатель может использовать этот файл на условиях лицензии MIT или
+*    Лицензия GPL. Если вы хотите использовать только одну лицензию, а не другую, вы можете
+*    сообщите о своем решении, удалив одно из приведенных выше уведомлений о лицензии в своем
+*    версия этого файла.
 *
 *****************************************************************************/
 
@@ -131,7 +131,7 @@ static vg_lite_error_t restore_init_command(uint32_t physical, uint32_t size)
     vg_lite_uint32_t total_suspend_time = 0;
     vg_lite_uint32_t suspend_time_limit = 1000;
 
-    /* flush cache. */
+    /* очистить кэш. */
     vg_lite_hal_barrier();
 
     vg_lite_hal_poke(VG_LITE_HW_CMDBUF_ADDRESS, physical);
@@ -161,7 +161,7 @@ static vg_lite_error_t execute_command(uint32_t physical, uint32_t size, vg_lite
     wait.event_mask = (uint32_t)~0;
     wait.reset_type = reset_type;
 
-    /* flush cache. */
+    /* очистить кэш. */
     vg_lite_hal_barrier();
 
     vg_lite_hal_poke(VG_LITE_HW_CMDBUF_ADDRESS, physical);
@@ -240,13 +240,13 @@ static void gpu(int enable)
 #endif
 
     if(enable) {
-        /* Enable clock gating. */
+        /* Включить стробирование часов. */
         value.data = vg_lite_hal_peek(VG_LITE_HW_CLOCK_CONTROL);
         value.control.clock_gate = 0;
         vg_lite_hal_poke(VG_LITE_HW_CLOCK_CONTROL, value.data);
         vg_lite_hal_delay(1);
 
-        /* Set clock speed. */
+        /* Установите тактовую частоту. */
         value.control.scale = 64;
         value.control.scale_load = 1;
         vg_lite_hal_poke(VG_LITE_HW_CLOCK_CONTROL, value.data);
@@ -260,15 +260,15 @@ static void gpu(int enable)
         vg_lite_hal_poke(VG_LITE_HW_CLOCK_CONTROL, value.data);
 #endif
 
-        /* Perform a soft reset. */
+        /* Выполните программный сброс. */
         soft_reset();
         do {
             vg_lite_hal_delay(reset_timer);
-            reset_timer *= 2;   // If reset failed, try again with a longer wait. Need to check why if dead lopp happens here.
+            reset_timer *= 2;   // Если сброс не удался, повторите попытку, подождав дольше. Нужно проверить, почему здесь происходит мертвый лопп.
         } while(!VG_LITE_KERNEL_IS_GPU_IDLE());
 
 #if gcdVG_ENABLE_AUTO_CLOCK_GATING
-        /* Enable Module Clock gating */
+        /* Включить стробирование часов модуля */
         data = vg_lite_hal_peek(VG_LITE_POWER_CONTROL);
         data |= 0x1;
         vg_lite_hal_poke(VG_LITE_POWER_CONTROL, data);
@@ -292,13 +292,13 @@ static void gpu(int enable)
     }
     else {
         while(!VG_LITE_KERNEL_IS_GPU_IDLE() &&
-              (reset_timer < reset_timer_limit)   // Force shutdown if timeout.
+              (reset_timer < reset_timer_limit)   // Принудительное отключение, если истекло время.
              ) {
             vg_lite_hal_delay(reset_timer);
             reset_timer *= 2;
         }
 
-        /* Set idle speed. */
+        /* Установите скорость холостого хода. */
         value.data = vg_lite_hal_peek(VG_LITE_HW_CLOCK_CONTROL);
         value.control.scale = 1;
         value.control.scale_load = 1;
@@ -308,21 +308,21 @@ static void gpu(int enable)
         vg_lite_hal_poke(VG_LITE_HW_CLOCK_CONTROL, value.data);
         vg_lite_hal_delay(5);
 
-        /* Disable clock gating. */
+        /* Отключить стробирование часов. */
         value.control.clock_gate = 1;
         vg_lite_hal_poke(VG_LITE_HW_CLOCK_CONTROL, value.data);
         vg_lite_hal_delay(1);
     }
 }
 
-/* Initialize some customized modeuls [DDRLess]. */
+/* Инициализируйте некоторые индивидуальные модели [DDRless]. */
 static vg_lite_error_t init_3rd(vg_lite_kernel_initialize_t * data)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
 
     /* TODO: Init the YUV<->RGB converters. Reserved for SOC. */
-    /* vg_lite_hal_poke(0x00514, data->yuv_pre);
-       vg_lite_hal_poke(0x00518, data->yuv_post);
+    /* vg_lite_hal_poke (0x00514, данные-> yuv_pre);
+       vg_lite_hal_poke (0x00518, данные-> yuv_post);
      */
     return error;
 }
@@ -345,7 +345,7 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
         .command_buffer_physical = { 0 },
     };
 
-    // Construct the context.
+    // Постройте контекст.
     context_usr = (vg_lite_kernel_context_t  __user *) data->context;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 0, 0)
     if(!access_ok(VERIFY_READ, context_usr, sizeof(*context_usr)) ||
@@ -354,20 +354,20 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
     if(!access_ok(context_usr, sizeof(*context_usr)) ||
        !access_ok(context_usr, sizeof(*context_usr))) {
 #endif
-        /* Out of memory. */
+        /* Из памяти. */
         return VG_LITE_OUT_OF_MEMORY;
     }
     context = &mycontext;
 #else
-    // Construct the context.
+    // Постройте контекст.
     context = data->context;
     if(context == NULL) {
-        /* Out of memory. */
+        /* Из памяти. */
         return VG_LITE_OUT_OF_MEMORY;
     }
 #endif
 
-    /* Zero out all pointers. */
+    /* Обнулить все указатели. */
     for(i = 0; i < CMDBUF_COUNT; i++) {
         context->command_buffer[i]          = NULL;
         context->command_buffer_logical[i]  = NULL;
@@ -384,22 +384,22 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
     global_power_context.power_context_capacity = 32 << 10;
     global_power_context.power_context_size = 0;
 #endif
-    /* Increment reference counter. */
+    /* Увеличение счетчика ссылок. */
     if(s_reference++ == 0) {
-        /* Initialize the SOC. */
+        /* Инициализируйте SOC. */
         vg_lite_hal_initialize();
 
-        /* Enable the GPU. */
+        /* Включите GPU. */
         gpu(1);
     }
 
-    /* Fill in hardware capabilities. */
+    /* Заполните аппаратные возможности. */
     data->capabilities.data = 0;
 
-    /* Allocate the command buffer. */
+    /* Выделите командный буфер. */
     if(data->command_buffer_size) {
         for(i = 0; i < CMDBUF_COUNT; i ++) {
-            /* Allocate the memory. */
+            /* Выделите память. */
             error = vg_lite_kernel_vidmem_allocate(&data->command_buffer_size,
                                                    flags,
                                                    data->command_buffer_pool,
@@ -408,15 +408,15 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
                                                    &context->command_buffer_physical[i],
                                                    &context->command_buffer[i]);
             if(error != VG_LITE_SUCCESS) {
-                /* Free any allocated memory. */
+                /* Освободите всю выделенную память. */
                 vg_lite_kernel_terminate_t terminate = { context };
                 do_terminate(&terminate);
 
-                /* Out of memory. */
+                /* Из памяти. */
                 ONERROR(error);
             }
 
-            /* Return command buffer logical pointer and GPU address. */
+            /* Вернуть логический указатель буфера команд и адрес GPU. */
             data->command_buffer[i] = context->command_buffer_logical[i];
             data->command_buffer_gpu[i] = context->command_buffer_physical[i];
         }
@@ -424,7 +424,7 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
 
 #if gcdVG_ENABLE_BACKUP_COMMAND
     if(global_power_context.power_context_capacity) {
-        /*  Allocate the backup buffer. */
+        /*  Выделите резервный буфер. */
         error = vg_lite_kernel_vidmem_allocate(&global_power_context.power_context_capacity,
                                                flags,
                                                VG_LITE_POOL_RESERVED_MEMORY1,
@@ -433,15 +433,15 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
                                                &global_power_context.power_context_physical,
                                                &global_power_context.power_context);
         if(error != VG_LITE_SUCCESS) {
-            /* Free any allocated memory. */
+            /* Освободите всю выделенную память. */
             vg_lite_kernel_terminate_t terminate = { &global_power_context };
             do_terminate(&terminate);
 
-            /* Out of memory. */
+            /* Из памяти. */
             ONERROR(error);
         }
 
-        /* Initialize power context buffer */
+        /* Инициализировать буфер контекста питания */
         for(i = 0; i < sizeof(state_map_table) / sizeof(state_map_table[0]); i++)
             state_map_table[i] = -1;
 #if (CHIPID==0x355 || CHIPID==0x255)
@@ -482,7 +482,7 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
         global_power_context.power_context_size = index * 4;
     }
 #endif
-    /* Allocate the tessellation buffer. */
+    /* Выделите буфер тесселяции. */
     if((data->tess_width > 0) && (data->tess_height > 0)) {
         int width = data->tess_width;
         int height = 0;
@@ -497,7 +497,7 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
             data->capabilities.cap.l2_cache = 1;
             width = VG_LITE_ALIGN(width, 128);
 #endif
-            /* Check if we can used tiled tessellation (128x16). */
+            /* Проверьте, можем ли мы использовать тайловую тесселяцию (128x16). */
             if(((width & 127) == 0) && ((height & 15) == 0)) {
                 data->capabilities.cap.tiled = 0x3;
             }
@@ -505,13 +505,13 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
                 data->capabilities.cap.tiled = 0x2;
             }
 
-            /* Compute tessellation buffer size. */
+            /* Вычислить размер буфера тесселяции. */
             stride = VG_LITE_ALIGN(width * 8, 64);
             buffer_size = VG_LITE_ALIGN(stride * height, 64);
-            /* Each bit in the L1 cache represents 64 bytes of tessellation data. */
+            /* Каждый бит в кэше L1 представляет 64 байта данных тесселяции. */
             l1_size = VG_LITE_ALIGN(VG_LITE_ALIGN(buffer_size / 64, 64) / 8, 64);
 #if (CHIPID==0x355)
-            /* Each bit in the L2 cache represents 32 bytes of L1 data. */
+            /* Каждый бит в кэше L2 представляет 32 байта данных L1. */
             l2_size = VG_LITE_ALIGN(VG_LITE_ALIGN(l1_size / 32, 64) / 8, 64);
 #else
             l2_size = 0;
@@ -521,7 +521,7 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
         }
 #else /* (CHIPID==0x355 || CHIPID==0x255) */
         {
-            /* Check if we can used tiled tessellation (128x16). */
+            /* Проверьте, можем ли мы использовать тайловую тесселяцию (128x16). */
             if(((width & 127) == 0) && ((height & 15) == 0)) {
                 data->capabilities.cap.tiled = 0x3;
             }
@@ -538,7 +538,7 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
         }
 #endif /* (CHIPID==0x355 || CHIPID==0x255) */
 
-        /* Allocate the memory. */
+        /* Выделите память. */
         error = vg_lite_kernel_vidmem_allocate((uint32_t *)&total_size,
                                                flags,
                                                data->tess_buffer_pool,
@@ -547,15 +547,15 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
                                                &context->tessbuf_physical,
                                                &context->tess_buffer);
         if(error != VG_LITE_SUCCESS) {
-            /* Free any allocated memory. */
+            /* Освободите всю выделенную память. */
             vg_lite_kernel_terminate_t terminate = { context };
             do_terminate(&terminate);
 
-            /* Out of memory. */
+            /* Из памяти. */
             ONERROR(error);
         }
 
-        /* Return the tessellation buffer pointers and GPU addresses. */
+        /* Верните указатели буфера тесселяции и адреса GPU. */
         data->physical_addr = context->tessbuf_physical;
         data->logical_addr = (uint8_t *)context->tessbuf_logical;
         data->tessbuf_size = ts_buffer_size;
@@ -567,12 +567,12 @@ static vg_lite_error_t init_vglite(vg_lite_kernel_initialize_t * data)
     gpu_reset_count = 0;
 #endif
     vg_lite_set_gpu_execute_state(VG_LITE_GPU_STOP);
-    /* Enable all interrupts. */
+    /* Включите все прерывания. */
     vg_lite_hal_poke(VG_LITE_INTR_ENABLE, 0xFFFFFFFF);
 
 #if defined(__linux__) && !defined(EMULATOR)
     if(copy_to_user(context_usr, context, sizeof(vg_lite_kernel_context_t)) != 0) {
-        // Free any allocated memory.
+        // Освободите всю выделенную память.
         vg_lite_kernel_terminate_t terminate = { context };
         do_terminate(&terminate);
 
@@ -587,7 +587,7 @@ on_error:
 static vg_lite_error_t do_initialize(vg_lite_kernel_initialize_t * data)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
-    /* Free any allocated memory for the context. */
+    /* Освободите любую выделенную память для контекста. */
     do {
         error = init_vglite(data);
         if(error != VG_LITE_SUCCESS)
@@ -619,16 +619,16 @@ static vg_lite_error_t terminate_vglite(vg_lite_kernel_terminate_t * data)
     context = data->context;
 #endif
 
-    /* Free any allocated memory for the context. */
+    /* Освободите любую выделенную память для контекста. */
     if(context->command_buffer[0]) {
-        /* Free the command buffer. */
+        /* Освободите буфер команд. */
         vg_lite_kernel_vidmem_free(context->command_buffer[0]);
         context->command_buffer[0] = NULL;
     }
 
 #if !gcFEATURE_VG_SINGLE_COMMAND_BUFFER
     if(context->command_buffer[1]) {
-        /* Free the command buffer. */
+        /* Освободите буфер команд. */
         vg_lite_kernel_vidmem_free(context->command_buffer[1]);
         context->command_buffer[1] = NULL;
     }
@@ -636,23 +636,23 @@ static vg_lite_error_t terminate_vglite(vg_lite_kernel_terminate_t * data)
 
 #if gcdVG_ENABLE_BACKUP_COMMAND
     if(global_power_context.power_context) {
-        /* Free the power context. */
+        /* Освободите контекст власти. */
         vg_lite_kernel_vidmem_free(global_power_context.power_context);
         global_power_context.power_context = NULL;
     }
 #endif
     if(context->tess_buffer) {
-        /* Free the tessellation buffer. */
+        /* Освободите буфер тесселяции. */
         vg_lite_kernel_vidmem_free(context->tess_buffer);
         context->tess_buffer = NULL;
     }
     vg_lite_hal_free_os_heap();
-    /* Decrement reference counter. */
+    /* Уменьшить счетчик ссылок. */
     if(--s_reference == 0) {
-        /* Disable the GPU. */
+        /* Отключите GPU. */
         gpu(0);
 
-        /* De-initialize the SOC. */
+        /* Деинициализируйте SOC. */
         vg_lite_hal_deinitialize();
     }
 
@@ -748,7 +748,7 @@ static vg_lite_error_t do_submit(vg_lite_kernel_submit_t * data)
         return VG_LITE_NO_CONTEXT;
     }
 #endif
-    /* Perform a memory barrier. */
+    /* Выполните барьер памяти. */
     vg_lite_hal_barrier();
 
     offset = (uint8_t *) data->commands - (uint8_t *)context->command_buffer_logical[data->command_id];
@@ -769,10 +769,10 @@ static vg_lite_error_t do_submit(vg_lite_kernel_submit_t * data)
 #endif
 #endif
 
-    /* set gpu to busy state  */
+    /* переведите графический процессор в состояние занятости  */
     vg_lite_set_gpu_execute_state(VG_LITE_GPU_RUN);
 
-    /* Write the registers to kick off the command execution (CMDBUF_SIZE). */
+    /* Запишите регистры, чтобы начать выполнение команды ( CMDBUF_SIZE ). */
     vg_lite_hal_poke(VG_LITE_HW_CMDBUF_ADDRESS, physical + offset);
     vg_lite_hal_poke(VG_LITE_HW_CMDBUF_SIZE, (data->command_size + 7) / 8);
 
@@ -839,10 +839,10 @@ static vg_lite_error_t do_wait(vg_lite_kernel_wait_t * data)
 #if gcdVG_ENABLE_GPU_RESET && gcdVG_ENABLE_BACKUP_COMMAND
     vg_lite_error_t error = VG_LITE_SUCCESS;
 #endif
-    /* Wait for interrupt. */
+    /* Подождите прерывания. */
 #if gcdVG_DUMP_DEBUG_REGISTER
     if(!vg_lite_hal_wait_interrupt(5000, data->event_mask, &data->event_got)) {
-        /* Timeout. */
+        /* Тайм-аут. */
         unsigned int debug;
         unsigned int iter;
 
@@ -934,7 +934,7 @@ static vg_lite_error_t do_wait(vg_lite_kernel_wait_t * data)
     }
 #else
     if(!vg_lite_hal_wait_interrupt(data->timeout_ms, data->event_mask, &data->event_got)) {
-        /* Timeout. */
+        /* Тайм-аут. */
         unsigned int debug;
         debug = vg_lite_hal_peek(VG_LITE_HW_IDLE);
         if(!VG_LITE_KERNEL_IS_GPU_IDLE()) {
@@ -956,10 +956,10 @@ static vg_lite_error_t do_wait(vg_lite_kernel_wait_t * data)
                 error = VG_LITE_SUCCESS;
             }
             else if(data->reset_type == RESTORE_ALL_COMMAND) {
-                /* reset and enable the GPU interrupt */
+                /* сброс и включение прерывания GPU */
                 gpu(1);
                 vg_lite_hal_poke(VG_LITE_INTR_ENABLE, 0xFFFFFFFF);
-                /* restore gpu state */
+                /* восстановить состояние графического процессора */
                 error = execute_command(global_power_context.power_context_physical, global_power_context.power_context_size + 32,
                                         RESTORE_INIT_COMMAND);
                 error = execute_command(backup_command_buffer_physical, backup_command_buffer_size, RESTORE_LAST_COMMAND);
@@ -984,7 +984,7 @@ static vg_lite_error_t do_wait(vg_lite_kernel_wait_t * data)
         return VG_LITE_FLEXA_HANDSHAKE_FAIL;
 #endif
 
-    /* set gpu to idle state  */
+    /* перевести графический процессор в состояние ожидания  */
     vg_lite_set_gpu_execute_state(VG_LITE_GPU_STOP);
 
     return VG_LITE_SUCCESS;
@@ -1022,15 +1022,15 @@ static vg_lite_error_t restore_gpu_state(void)
     }
     vg_lite_kernel_print("global_power_context size = %d\n", total_size);
 
-    /* submit the backup power context */
+    /* отправить контекст резервного питания */
     error = restore_init_command(global_power_context.power_context_physical, total_size);
     if(error == VG_LITE_SUCCESS)
         vg_lite_kernel_print("Initialize the GPU state success!\n");
 
-    /* submit last frame before suspend */
+    /* отправить последний кадр перед приостановкой */
     /*error = restore_init_command(backup_command_buffer_physical, backup_command_buffer_size);
-    if (error == VG_LITE_SUCCESS)
-        vg_lite_kernel_print("Initialize the GPU state success!\n");*/
+    если (ошибка == VG_LITE_SUCCESS)
+        vg_lite_kernel_print ("Инициализация состояния GPU прошла успешно!\n");*/
 
     return error;
 }
@@ -1040,11 +1040,11 @@ static vg_lite_error_t do_reset(vg_lite_kernel_reset_t * data)
 {
 #if gcdVG_ENABLE_DELAY_RESUME
     if(data->delay_resume_flag == 1) {
-        /* If delay resume is enabled, power and clock should be turned on first.*/
+        /* Если включена функция задержки возобновления, сначала следует включить питание и часы.*/
         vg_lite_hal_initialize();
     }
 #endif
-    /* reset and enable the GPU interrupt */
+    /* сброс и включение прерывания GPU */
     gpu(1);
 
 #if gcdVG_ENABLE_BACKUP_COMMAND
@@ -1099,9 +1099,9 @@ static vg_lite_error_t do_peek(vg_lite_kernel_info_t * data)
 #if gcFEATURE_VG_FLEXA
 static vg_lite_error_t do_flexa_enable(vg_lite_kernel_flexa_info_t * data)
 {
-    /* reset all flexa states */
+    /* сбросить все состояния флекса */
     vg_lite_hal_poke(0x03600, 0x0);
-    /* set sync mode */
+    /* установить режим синхронизации */
     vg_lite_hal_poke(0x03604, data->segment_address);
 
     vg_lite_hal_poke(0x03608, data->segment_count);
@@ -1135,7 +1135,7 @@ static vg_lite_error_t do_flexa_disable(vg_lite_kernel_flexa_info_t * data)
 
     vg_lite_hal_poke(0x03610, data->stream_id | data->sbi_mode);
 
-    /* reset all flexa states */
+    /* сбросить все состояния флекса */
     vg_lite_hal_poke(0x03600, 0x0);
 
     return VG_LITE_SUCCESS;
@@ -1168,7 +1168,7 @@ static vg_lite_error_t set_delay_resume(vg_lite_kernel_delay_resume_t * data)
 static int do_query_delay_resume(void)
 {
     if(delay_resume == 1) {
-        /* Reset delay resume to 0 after query*/
+        /* Сбросить задержку возобновления до 0 после запроса*/
         delay_resume = 0;
         return 1;
     }
@@ -1249,8 +1249,8 @@ vg_lite_error_t record_running_time(void)
     gettimeofday(&end_time, NULL);
     period_time = (end_time.tv_sec - start_time.tv_sec) * 1e6 + end_time.tv_usec - start_time.tv_usec;
     total_time += period_time;
-    //printk("GPU hardware running period time: %f s\n", (float)period_time/1e-6);
-    //printk("GPU hardware running total time: %f s\n", (float)total_time/1e-6);
+    //printk("Время работы оборудования GPU: %f s\n", (float) period_time /1e-6);
+    //printk("Общее время работы оборудования GPU: %f s\n", (float) total_time /1e-6);
 #endif
 
 #endif
@@ -1263,7 +1263,7 @@ static void soft_reset(void)
     vg_lite_hw_clock_control_t value;
     value.data = vg_lite_hal_peek(VG_LITE_HW_CLOCK_CONTROL);
 
-    /* Perform a soft reset. */
+    /* Выполните программный сброс. */
     value.control.isolate = 1;
     vg_lite_hal_poke(VG_LITE_HW_CLOCK_CONTROL, value.data);
     value.control.soft_reset = 1;
@@ -1277,68 +1277,68 @@ static void soft_reset(void)
 
 vg_lite_error_t vg_lite_kernel(vg_lite_kernel_command_t command, void * data)
 {
-    /* Dispatch on command. */
+    /* Отправка по команде. */
     switch(command) {
         case VG_LITE_INITIALIZE:
-            /* Initialize the context. */
+            /* Инициализируйте контекст. */
             return do_initialize(data);
 
         case VG_LITE_TERMINATE:
-            /* Terminate the context. */
+            /* Завершить контекст. */
             return do_terminate(data);
 
         case VG_LITE_ALLOCATE:
-            /* Allocate contiguous memory. */
+            /* Выделить непрерывную память. */
             return do_allocate(data);
 
         case VG_LITE_FREE:
-            /* Free contiguous memory. */
+            /* Свободная непрерывная память. */
             return do_free(data);
 
         case VG_LITE_SUBMIT:
-            /* Submit a command buffer. */
+            /* Отправьте буфер команд. */
             return do_submit(data);
 
         case VG_LITE_WAIT:
-            /* Wait for the GPU. */
+            /* Подождите GPU. */
             return do_wait(data);
 
         case VG_LITE_RESET:
-            /* Reset the GPU. */
+            /* Сбросьте GPU. */
             return do_reset(data);
 
         case VG_LITE_DEBUG:
-            /* Perform debugging features. */
+            /* Выполните функции отладки. */
             return do_debug();
 
         case VG_LITE_MAP:
-            /* Map some memory. */
+            /* Отобразите немного памяти. */
             return do_map(data);
 
         case VG_LITE_UNMAP:
-            /* Unmap some memory. */
+            /* Отобразить часть памяти. */
             return do_unmap(data);
 
-        /* Get register info. */
+        /* Получить регистрационную информацию. */
         case VG_LITE_CHECK:
-            /* Get register value. */
+            /* Получить значение регистра. */
             return do_peek(data);
 
 #if gcFEATURE_VG_FLEXA
         case VG_LITE_FLEXA_DISABLE:
-            /* Write register value. */
+            /* Записать значение регистра. */
             return do_flexa_disable(data);
 
         case VG_LITE_FLEXA_ENABLE:
-            /* Write register value. */
+            /* Записать значение регистра. */
             return do_flexa_enable(data);
 
         case VG_LITE_FLEXA_STOP_FRAME:
-            /* Write register value. */
+            /* Записать значение регистра. */
             return do_flexa_stop_frame(data);
 
         case VG_LITE_FLEXA_SET_BACKGROUND_ADDRESS:
-            /* Write register value. */
+            /* Записать значение регистра. */
             return do_flexa_set_background_address(data);
 #endif
 
@@ -1346,11 +1346,11 @@ vg_lite_error_t vg_lite_kernel(vg_lite_kernel_command_t command, void * data)
             return do_query_mem(data);
 
         case VG_LITE_MAP_MEMORY:
-            /* Map memory to user */
+            /* Сопоставить память пользователю */
             return do_map_memory(data);
 
         case VG_LITE_UNMAP_MEMORY:
-            /* Unmap memory to user */
+            /* Отключить память для пользователя */
             return do_unmap_memory(data);
 
         case VG_LITE_CLOSE:
@@ -1379,7 +1379,7 @@ vg_lite_error_t vg_lite_kernel(vg_lite_kernel_command_t command, void * data)
             break;
     }
 
-    /* Invalid command. */
+    /* Неверная команда. */
     return VG_LITE_INVALID_ARGUMENT;
 }
 

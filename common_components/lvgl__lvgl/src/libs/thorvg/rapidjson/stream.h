@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #include "rapidjson.h"
 
@@ -22,77 +22,77 @@
 RAPIDJSON_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Stream
+//  поток
 
-/*! \class rapidjson::Stream
-    \brief Concept for reading and writing characters.
+/*! \класс RapidJSON::Stream
+    \brief Концепция чтения и написания символов.
 
-    For read-only stream, no need to implement PutBegin(), Put(), Flush() and PutEnd().
+    Для потока только для чтения нет необходимости реализовывать PutBegin() , Put() , Flush() и PutEnd() .
 
-    For write-only stream, only need to implement Put() and Flush().
+    Для потока только для записи необходимо реализовать только Put() и Flush().
 
 \code
-concept Stream {
-    typename Ch;    //!< Character type of the stream.
+концепция потока {
+    имя типа Ch;    //!< Тип символа потока.
 
-    //! Read the current character from stream without moving the read cursor.
+    //! Считайте текущий символ из потока, не перемещая курсор чтения.
     Ch Peek() const;
 
-    //! Read the current character from stream and moving the read cursor to next character.
-    Ch Take();
+    //! Прочитайте текущий символ из потока и переместите курсор чтения на следующий символ.
+    Ч Take() ;
 
-    //! Get the current read cursor.
-    //! \return Number of characters read from start.
-    size_t Tell();
+    //! Получить текущий курсор чтения.
+    //! \return Количество символов, прочитанных с начала.
+    size_t Tell() ;
 
-    //! Begin writing operation at the current read pointer.
-    //! \return The begin writer pointer.
-    Ch* PutBegin();
+    //! Начните операцию записи с текущего указателя чтения.
+    //! \return Указатель начала записи.
+    Ч* PutBegin() ;
 
-    //! Write a character.
-    void Put(Ch c);
+    //! Напишите персонажа.
+    недействительный Put (Ch c);
 
-    //! Flush the buffer.
-    void Flush();
+    //! Промойте буфер.
+    недействителен Flush() ;
 
-    //! End the writing operation.
-    //! \param begin The begin write pointer returned by PutBegin().
-    //! \return Number of characters written.
-    size_t PutEnd(Ch* begin);
+    //! Завершите операцию записи.
+    //! \param Begin Указатель начала записи, возвращаемый PutBegin().
+    //! \return Количество записанных символов.
+    size_t PutEnd(Ch* начало);
 }
 \endcode
 */
 
-//! Provides additional information for stream.
+//! Предоставляет дополнительную информацию для потока.
 /*!
-    By using traits pattern, this type provides a default configuration for stream.
-    For custom stream, this type can be specialized for other configuration.
-    See TEST(Reader, CustomStringStream) in readertest.cpp for example.
+    Используя шаблон признаков, этот тип обеспечивает конфигурацию потока по умолчанию.
+    Для пользовательского потока этот тип может быть специализирован для другой конфигурации.
+    См., например, TEST (Reader, CustomStringStream) в readertest.cpp.
 */
 template<typename Stream>
 struct StreamTraits {
-    //! Whether to make local copy of stream for optimization during parsing.
+    //! Делать ли локальную копию потока для оптимизации во время анализа.
     /*!
-        By default, for safety, streams do not use local copy optimization.
-        Stream that can be copied fast should specialize this, like StreamTraits<StringStream>.
+        По умолчанию в целях безопасности потоки не используют оптимизацию локального копирования.
+        Поток, который можно быстро скопировать, должен специализироваться на этом, например StreamTraits<StringStream>.
     */
     enum { copyOptimization = 0 };
 };
 
-//! Reserve n characters for writing to a stream.
+//! Зарезервируйте n символов для записи в поток.
 template<typename Stream>
 inline void PutReserve(Stream& stream, size_t count) {
     (void)stream;
     (void)count;
 }
 
-//! Write character to a stream, presuming buffer is reserved.
+//! Записать символ в поток, предполагая, что буфер зарезервирован.
 template<typename Stream>
 inline void PutUnsafe(Stream& stream, typename Stream::Ch c) {
     stream.Put(c);
 }
 
-//! Put N copies of a character to a stream.
+//! Поместите N копий символа в поток.
 template<typename Stream, typename Ch>
 inline void PutN(Stream& stream, Ch c, size_t n) {
     PutReserve(stream, n);
@@ -103,16 +103,16 @@ inline void PutN(Stream& stream, Ch c, size_t n) {
 ///////////////////////////////////////////////////////////////////////////////
 // GenericStreamWrapper
 
-//! A Stream Wrapper
-/*! \tThis string stream is a wrapper for any stream by just forwarding any
-    \treceived message to the origin stream.
-    \note implements Stream concept
+//! Обертка потока
+/*! \tЭтот строковый поток является оберткой для любого потока, просто пересылая любой
+    \trecived сообщение в исходный поток.
+    \note реализует концепцию Stream
 */
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(4702)  // unreachable code
-RAPIDJSON_DIAG_OFF(4512)  // assignment operator could not be generated
+RAPIDJSON_DIAG_OFF(4702)  // недостижимый код
+RAPIDJSON_DIAG_OFF(4512)  // не удалось сгенерировать оператор присваивания
 #endif
 
 template <typename InputStream, typename Encoding = UTF8<> >
@@ -129,10 +129,10 @@ public:
     void Flush() { is_.Flush(); }
     size_t PutEnd(Ch* ch) { return is_.PutEnd(ch); }
 
-    // wrapper for MemoryStream
+    // оболочка для MemoryStream
     const Ch* Peek4() const { return is_.Peek4(); }
 
-    // wrapper for AutoUTFInputStream
+    // оболочка для AutoUTFInputStream
     UTFType GetType() const { return is_.GetType(); }
     bool HasBOM() const { return is_.HasBOM(); }
 
@@ -145,10 +145,10 @@ RAPIDJSON_DIAG_POP
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// StringStream
+// Строковый поток
 
-//! Read-only string stream.
-/*! \note implements Stream concept
+//! Строковый поток только для чтения.
+/*! \note реализует концепцию Stream
 */
 template <typename Encoding>
 struct GenericStringStream {
@@ -165,8 +165,8 @@ struct GenericStringStream {
     void Flush() { RAPIDJSON_ASSERT(false); }
     size_t PutEnd(Ch*) { RAPIDJSON_ASSERT(false); return 0; }
 
-    const Ch* src_;     //!< Current read position.
-    const Ch* head_;    //!< Original head of the string.
+    const Ch* src_;     //!< Текущая позиция чтения.
+    const Ch* head_;    //!< Исходный заголовок строки.
 };
 
 template <typename Encoding>
@@ -174,15 +174,15 @@ struct StreamTraits<GenericStringStream<Encoding> > {
     enum { copyOptimization = 1 };
 };
 
-//! String stream with UTF8 encoding.
+//! Строковый поток с кодировкой UTF8.
 typedef GenericStringStream<UTF8<> > StringStream;
 
 ///////////////////////////////////////////////////////////////////////////////
 // InsituStringStream
 
-//! A read-write string stream.
-/*! This string stream is particularly designed for in-situ parsing.
-    \note implements Stream concept
+//! Строковый поток для чтения и записи.
+/*! Этот строковый поток специально разработан для анализа на месте.
+    \note реализует концепцию Stream
 */
 template <typename Encoding>
 struct GenericInsituStringStream {
@@ -190,12 +190,12 @@ struct GenericInsituStringStream {
 
     GenericInsituStringStream(Ch *src) : src_(src), dst_(0), head_(src) {}
 
-    // Read
+    // Читать
     Ch Peek() { return *src_; }
     Ch Take() { return *src_++; }
     size_t Tell() { return static_cast<size_t>(src_ - head_); }
 
-    // Write
+    // Написать
     void Put(Ch c) { RAPIDJSON_ASSERT(dst_ != 0); *dst_++ = c; }
 
     Ch* PutBegin() { return dst_ = src_; }
@@ -215,7 +215,7 @@ struct StreamTraits<GenericInsituStringStream<Encoding> > {
     enum { copyOptimization = 1 };
 };
 
-//! Insitu string stream with UTF8 encoding.
+//! Поток строк Insitu с кодировкой UTF8.
 typedef GenericInsituStringStream<UTF8<> > InsituStringStream;
 
 RAPIDJSON_NAMESPACE_END

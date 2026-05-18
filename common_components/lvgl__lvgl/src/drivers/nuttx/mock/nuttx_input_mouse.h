@@ -20,8 +20,8 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* These definitions provide the meaning of all of the bits that may be
- * reported in the struct mouse_report_s buttons.
+/* Эти определения определяют значение всех битов, которые могут быть
+ * сообщается в структуре кнопок mouse_report_s.
  */
 
 #define MOUSE_BUTTON_1       (1 << 0) /* True: Left mouse button pressed */
@@ -33,11 +33,11 @@ extern "C" {
  **********************/
 
 struct mouse_report_s {
-    uint8_t buttons;  /* See MOUSE_* definitions above */
-    uint8_t dummy;    /* Padded with 1 byte here */
-    int16_t x;        /* X coordinate of the mouse position */
-    int16_t y;        /* Y coordinate of the mouse position */
-    int16_t wheel;    /* Mouse wheel position */
+    uint8_t buttons;  /* См. определения MOUSE_ * выше. */
+    uint8_t dummy;    /* Дополнено 1 байтом здесь */
+    int16_t x;        /* Координата X положения мыши */
+    int16_t y;        /* Координата Y положения мыши */
+    int16_t wheel;    /* Положение колеса мыши */
 };
 
 /**********************
@@ -49,7 +49,7 @@ struct mouse_report_s {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*NUTTX_INPUT_MOUSE_H*/

@@ -1,19 +1,19 @@
 /**
- * MIT License
+ * Лицензия MIT
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2008-24 Think Silicon Single Member PC
  * -----------------------------------------------------------------------------
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice (including the next paragraph)
- * shall be included in all copies or substantial portions of the Software.
+ * Приведенное выше уведомление об авторских правах и данное уведомление о разрешении (включая следующий абзац)
+ * должны быть включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
@@ -115,7 +115,7 @@ extern "C" {
 uintptr_t NEMA_VIRT2PHYS(void * addr);
 #endif
 
-/*Color depth: 1 (1 byte per pixel), 8 (RGB332), 16 (RGB565), 32 (ARGB8888)*/
+/*Глубина цвета: 1 (1 байт на пиксель), 8 ( RGB332 ), 16 ( RGB565 ), 32 ( ARGB8888 )*/
 #if LV_COLOR_DEPTH == 8
 #define LV_NEMA_GFX_COLOR_FORMAT NEMA_L8
 #define LV_NEMA_GFX_FORMAT_MULTIPLIER 1
@@ -129,7 +129,7 @@ uintptr_t NEMA_VIRT2PHYS(void * addr);
 #define LV_NEMA_GFX_COLOR_FORMAT NEMA_BGRA8888
 #define LV_NEMA_GFX_FORMAT_MULTIPLIER 4
 #else
-/*Can't use GPU with other formats*/
+/*Невозможно использовать GPU с другими форматами.*/
 #error Selected Color Depth Not Supported
 #endif
 
@@ -138,23 +138,23 @@ uintptr_t NEMA_VIRT2PHYS(void * addr);
  **********************/
 
 /**
- * Check if  `lv_color_format_t` is supported.
+ * Проверьте, поддерживается ли `lv_color_format_t`.
  * @param     cf  The LVGL color format
  * @return        True/false
  */
 bool lv_nemagfx_is_cf_supported(lv_color_format_t cf);
 
 /**
- * Convert a `lv_color_format_t` to a Nema color format.
+ * Преобразуйте `lv_color_format_t` в цветовой формат Nema.
  * @param     cf  The LVGL color format
  * @return        The Nema color format
  */
 uint32_t lv_nemagfx_cf_to_nema(lv_color_format_t cf);
 
 /**
- * Get NemaGFX blending mode
+ * Получите режим наложения NemaGFX.
  *
- * @param[in] lv_blend_mode The LVGL blend mode
+ * @param [in] lv_blend_mode Режим наложения LVGL
  *
  * @return NemaGFX blending mode
  *
@@ -163,13 +163,13 @@ uint32_t lv_nemagfx_blending_mode(lv_blend_mode_t lv_blend_mode);
 
 
 /**
- * Get NemaGFX blending mode
+ * Получите режим наложения NemaGFX.
  *
- * @param[in] gradient NemaGFX Gradient Buffer
+ * @param [дюйм] градиент Градиентный буфер NemaGFX
  *
- * @param[in] lv_grad Gradient descriptor
+ * @param [in] lv_grad Дескриптор градиента
  *
- * @param[in] opa Descriptor's opacity
+ * @param [in] opa Непрозрачность дескриптора
  *
 */
 void lv_nemagfx_grad_set(NEMA_VG_GRAD_HANDLE gradient, lv_grad_dsc_t lv_grad, lv_opa_t opa);
@@ -181,7 +181,7 @@ void lv_nemagfx_grad_set(NEMA_VG_GRAD_HANDLE gradient, lv_grad_dsc_t lv_grad, lv
 #endif  /*LV_USE_NEMA_GFX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_NEMA_GFX_UTILS_H*/

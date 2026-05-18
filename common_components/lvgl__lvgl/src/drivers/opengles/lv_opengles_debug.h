@@ -54,7 +54,7 @@ void GLLogCall(const char * function, const char * file, int line);
 #endif /* LV_USE_OPENGLES */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_OPENGLES_DEBUG_H */

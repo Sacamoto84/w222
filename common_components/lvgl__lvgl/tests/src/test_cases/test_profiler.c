@@ -31,7 +31,7 @@ void setUp(void)
     lv_profiler_builtin_config_t config;
     lv_profiler_builtin_config_init(&config);
     config.buf_size = 1024;
-    config.tick_per_sec = 1; /* One second is equal to 1000000 microseconds */
+    config.tick_per_sec = 1; /* Одна секунда равна 1000000 микросекунд. */
     config.tick_get_cb = get_tick_cb;
     config.flush_cb = flush_cb;
     lv_profiler_builtin_init(&config);
@@ -44,24 +44,24 @@ void tearDown(void)
 
 void test_profiler_normal(void)
 {
-    /* enable profiler */
+    /* включить профилировщик */
     lv_profiler_builtin_set_enable(true);
 
-    /* reset */
+    /* сброс */
     profiler_tick = 0;
     output_line = 0;
     lv_memzero(output_buf, sizeof(output_buf));
 
-    /* test profiler */
+    /* тестовый профайлер */
     LV_PROFILER_BEGIN;
     LV_PROFILER_END;
     LV_PROFILER_BEGIN_TAG("custom_tag");
     LV_PROFILER_END_TAG("custom_tag");
 
-    /* flush output */
+    /* смывной выход */
     lv_profiler_builtin_flush();
 
-    /* check output */
+    /* проверить вывод */
     TEST_ASSERT_EQUAL_INT(output_line, 4);
     TEST_ASSERT_EQUAL_INT(profiler_tick, 4);
     TEST_ASSERT_EQUAL_STRING(output_buf[0], "   LVGL-1 [0] 0.000000000: tracing_mark_write: B|1|test_profiler_normal\n");
@@ -72,24 +72,24 @@ void test_profiler_normal(void)
 
 void test_profiler_disable(void)
 {
-    /* disable profiler */
+    /* отключить профилировщик */
     lv_profiler_builtin_set_enable(false);
 
-    /* reset */
+    /* сброс */
     profiler_tick = 0;
     output_line = 0;
     lv_memzero(output_buf, sizeof(output_buf));
 
-    /* test profiler */
+    /* тестовый профайлер */
     LV_PROFILER_BEGIN;
     LV_PROFILER_END;
     LV_PROFILER_BEGIN_TAG("custom_tag");
     LV_PROFILER_END_TAG("custom_tag");
 
-    /* flush output */
+    /* смывной выход */
     lv_profiler_builtin_flush();
 
-    /* check output */
+    /* проверить вывод */
     TEST_ASSERT_EQUAL_INT(output_line, 0);
     TEST_ASSERT_EQUAL_INT(profiler_tick, 0);
     TEST_ASSERT_EQUAL_CHAR(output_buf[1][0], '\0');

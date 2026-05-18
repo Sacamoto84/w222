@@ -116,12 +116,12 @@ static lv_wl_egl_display_data_t * egl_create_display_data(lv_display_t * display
         return NULL;
     }
 
-    /* Set the backend display data immediately as we will need it
-     * in the EGL window creation callback */
+    /* Сразу же настройте данные отображения бэкенда, так как они нам понадобятся.
+     * в обратном вызове создания окна EGL */
     lv_wayland_set_backend_display_data(display, ddata);
 
 
-    /* Create EGL context */
+    /* Создать контекст EGL */
     lv_egl_interface_t egl_interface = wl_egl_get_interface(display);
     ddata->egl_ctx = lv_opengles_egl_context_create(&egl_interface);
     if(!ddata->egl_ctx) {
@@ -129,10 +129,10 @@ static lv_wl_egl_display_data_t * egl_create_display_data(lv_display_t * display
         goto egl_ctx_err;
     }
 
-    /* Let the opengles texture driver handle the texture lifetime */
+    /* Пусть драйвер текстуры opengles управляет временем жизни текстуры. */
     ddata->texture.is_texture_owner = true;
 
-    /*Initialize the draw buffers and texture*/
+    /*Инициализируйте буферы отрисовки и текстуру.*/
     lv_result_t res = lv_opengles_texture_reshape(&ddata->texture, display, width, height);
     if(res != LV_RESULT_OK) {
         LV_LOG_ERROR("Failed to create draw buffers");
@@ -200,10 +200,10 @@ static void egl_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
     lv_opengles_render_display_texture(disp, false, true);
 #endif /*LV_USE_DRAW_OPENGLES*/
 
-    /* Swap buffers through EGL */
+    /* Поменять буферы через EGL */
     lv_opengles_egl_update(ddata->egl_ctx);
 
-    /* Request frame callback for vsync */
+    /* Запрос обратного вызова кадра для vsync */
     struct wl_callback * callback = wl_surface_frame(surface);
     wl_callback_add_listener(callback, &frame_listener, disp);
     wl_surface_damage(surface, 0, 0, disp_width, disp_height);
@@ -318,7 +318,7 @@ static void wl_egl_global_handler(void * backend_ctx, struct wl_registry * regis
     LV_UNUSED(interface);
     LV_UNUSED(version);
 
-    /* No specific Wayland globals needed for basic EGL support */
+    /* Для базовой поддержки EGL не требуются специальные глобальные переменные Wayland. */
 }
 
 static lv_egl_interface_t wl_egl_get_interface(lv_display_t * display)
@@ -416,8 +416,8 @@ static void wl_egl_flip_cb(void * driver_data, bool vsync)
     LV_UNUSED(driver_data);
     LV_UNUSED(vsync);
 
-    /* For Wayland, buffer swapping is handled by the compositor
-     * through wl_surface_commit() which is called in the flush callback */
+    /* В Wayland замена буфера осуществляется композитором.
+     * через wl_surface_commit(), который вызывается в обратном вызове флеша */
 }
 
 #endif /*LV_WAYLAND_USE_EGL*/

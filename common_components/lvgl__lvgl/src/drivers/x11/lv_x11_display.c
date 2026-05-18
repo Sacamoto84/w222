@@ -37,9 +37,9 @@
  **********************/
 
 typedef struct {
-    /* header (containing X Display + input user data pointer - keep aligned with x11_input module!) */
+    /* заголовок (содержащий X Display + указатель входных пользовательских данных — сохраняйте соответствие с модулем x11_input!) */
     _x11_user_hdr_t hdr;
-    /* X11 related information */
+    /* Информация, связанная с X11 */
     Window          window;          /**< X11 window object */
     GC              gc;              /**< X11 graphics context object */
     Visual     *    visual;          /**< X11 visual */
@@ -47,11 +47,11 @@ typedef struct {
     XImage     *    ximage;          /**< X11 XImage cache object for updating window content */
     Atom            wmDeleteMessage; /**< X11 atom to window object */
     void      *     xdata;           /**< allocated data for XImage */
-    /* LVGL related information */
+    /* Информация, связанная с LVGL */
     lv_timer_t   *  timer;           /**< timer object for @ref x11_event_handler */
     uint8_t    *    buffer[2];       /**< (double) lv display buffers, depending on @ref LV_X11_RENDER_MODE */
     lv_area_t       flush_area;      /**< integrated area for a display update */
-    /* systemtick by thread related information */
+    /* systemtick по информации, связанной с потоком */
     pthread_t       thr_tick;        /**< pthread for SysTick simulation */
     bool            terminated;      /**< flag to germinate SysTick simulation thread */
 } x11_disp_data_t;
@@ -104,10 +104,10 @@ static inline lv_color32_t get_px(color_t p)
 #endif
 
 /**
- * Flush the content of the internal buffer the specific area on the display.
- * @param[in] disp    the created X11 display object from @lv_x11_window_create
- * @param[in] area    area to be updated
- * @param[in] px_map  contains the rendered image as raw pixel map and it should be copied to `area` on the display.
+ * Сбрасывает содержимое внутреннего буфера в определенную область дисплея.
+ * @param [in] отображает созданный экранный объект X11 из @lv_x 11_window_create
+ * @param [in] область область, подлежащая обновлению
+ * @param [in] px_map содержит визуализированное изображение в виде необработанной карты пикселей, и его следует скопировать в `area` на дисплее.
  * @note              @ref lv_display_flush_ready has to be called when it's finished.
  */
 static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
@@ -121,7 +121,7 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
                                         .y2 = 0
                                       };
 
-    /* build display update area until lv_display_flush_is_last */
+    /* построить область обновления дисплея до lv_display_flush_is_last */
     xd->flush_area.x1 = MIN(xd->flush_area.x1, area->x1);
     xd->flush_area.x2 = MAX(xd->flush_area.x2, area->x2);
     xd->flush_area.y1 = MIN(xd->flush_area.y1, area->y1);
@@ -146,22 +146,22 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
         LV_LOG_TRACE("(%d/%d), %dx%d)", xd->flush_area.x1, xd->flush_area.y1, xd->flush_area.x2 + 1 - xd->flush_area.x1,
                      xd->flush_area.y2 + 1 - xd->flush_area.y1);
 
-        /* refresh collected display update area only */
+        /* обновить собранную область отображения только обновления */
         int16_t upd_w = xd->flush_area.x2 - xd->flush_area.x1 + 1;
         int16_t upd_h = xd->flush_area.y2 - xd->flush_area.y1 + 1;
         XPutImage(xd->hdr.display, xd->window, xd->gc, xd->ximage, xd->flush_area.x1, xd->flush_area.y1, xd->flush_area.x1,
                   xd->flush_area.y1, upd_w, upd_h);
 
-        /* invalidate collected area */
+        /* аннулировать собранную область */
         xd->flush_area = inv_area;
     }
-    /* Inform the graphics library that you are ready with the flushing */
+    /* Сообщите графической библиотеке, что вы готовы к очистке. */
     lv_display_flush_ready(disp);
 }
 
 /**
- * event called by lvgl display if resolution has been changed (@ref lv_display_set_resolution has been called)
- * @param[in] e  event data, containing lv_display_t object
+ * событие, вызываемое lvgl display, если разрешение было изменено (был вызван @ref lv_display_set_resolution)
+ * @param [in] данные события, содержащие объект lv_display_t
  */
 static void x11_resolution_evt_cb(lv_event_t * e)
 {
@@ -173,24 +173,24 @@ static void x11_resolution_evt_cb(lv_event_t * e)
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
 
     if(LV_X11_RENDER_MODE != LV_DISPLAY_RENDER_MODE_PARTIAL) {
-        /* update lvgl full-screen display draw buffers for new display size */
+        /* обновить буферы отрисовки полноэкранного дисплея lvgl для нового размера дисплея */
         int sz_buffers = (hor_res * ver_res * (LV_COLOR_DEPTH + 7) / 8);
         xd->buffer[0] = realloc(xd->buffer[0], sz_buffers);
         xd->buffer[1] = (LV_X11_DOUBLE_BUFFER ?  realloc(xd->buffer[1], sz_buffers) : NULL);
         lv_display_set_buffers(disp, xd->buffer[0], xd->buffer[1], sz_buffers, LV_X11_RENDER_MODE);
     }
 
-    /* re-create cache image with new size */
+    /* заново создать изображение кэша с новым размером */
     XDestroyImage(xd->ximage);
     size_t sz_buffers = hor_res * ver_res * sizeof(lv_color32_t);
-    xd->xdata = malloc(sz_buffers); /* use clib method here, x11 memory not part of device footprint */
+    xd->xdata = malloc(sz_buffers); /* используйте здесь метод clib, память x11 не является частью устройства */
     xd->ximage = XCreateImage(xd->hdr.display, xd->visual, xd->dplanes, ZPixmap, 0, xd->xdata,
                               hor_res, ver_res, lv_color_format_get_bpp(LV_COLOR_FORMAT_ARGB8888), 0);
 }
 
 /**
- * event called by lvgl display if display has been closed (@ref lv_display_delete has been called)
- * @param[in] e  event data, containing lv_display_t object
+ * событие, вызываемое lvgl display, если дисплей был закрыт (был вызван @ref lv_display_delete)
+ * @param [in] данные события, содержащие объект lv_display_t
  */
 static void x11_disp_delete_evt_cb(lv_event_t * e)
 {
@@ -235,15 +235,15 @@ static void x11_hide_cursor(lv_display_t * disp)
 }
 
 /**
- * X11 input event handler, predicated to fetch and handle only display related events
- * (Window changes)
+ * Обработчик входных событий X11, предназначенный для извлечения и обработки только событий, связанных с отображением.
+ * (Окно меняется)
  */
 static int is_disp_event(Display * disp, XEvent * event, XPointer arg)
 {
     LV_UNUSED(disp);
     LV_UNUSED(arg);
     return (event->type == Expose
-            || (event->type >= DestroyNotify && event->type <= CirculateNotify) /* events from StructureNotifyMask */
+            || (event->type >= DestroyNotify && event->type <= CirculateNotify) /* события из StructureNotifyMask */
             ||  event->type == ClientMessage);
 }
 static void x11_event_handler(lv_timer_t * t)
@@ -252,7 +252,7 @@ static void x11_event_handler(lv_timer_t * t)
     x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
-    /* handle all outstanding X events */
+    /* обрабатывать все невыполненные события X */
     XEvent event;
     while(XCheckIfEvent(xd->hdr.display, &event, is_disp_event, NULL)) {
         LV_LOG_TRACE("Display Event %d", event.type);
@@ -279,7 +279,7 @@ static void x11_event_handler(lv_timer_t * t)
                 break;
             case MapNotify:
             case ReparentNotify:
-                /*suppress unhandled warning*/
+                /*подавить необработанное предупреждение*/
                 break;
             default:
                 LV_LOG_WARN("unhandled x11 event: %d", event.type);
@@ -304,16 +304,16 @@ static void x11_window_create(lv_display_t * disp, char const * title)
     x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
-    /* setup display/screen */
+    /* настроить дисплей/экран */
     xd->hdr.display = XOpenDisplay(NULL);
     int screen = XDefaultScreen(xd->hdr.display);
     xd->visual = XDefaultVisual(xd->hdr.display, screen);
 
-    /* create window */
+    /* создать окно */
     int32_t hor_res = lv_display_get_horizontal_resolution(disp);
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
 #if 0
-    /* drawing contexts for an window */
+    /* рисование контекстов для окна */
     unsigned long col_fg = BlackPixel(xd->hdr.display, screen);
     unsigned long col_bg = WhitePixel(xd->hdr.display, screen);
 
@@ -325,11 +325,11 @@ static void x11_window_create(lv_display_t * disp, char const * title)
                                XDefaultDepth(xd->hdr.display, screen), InputOutput,
                                xd->visual, 0, NULL);
 #endif
-    /* window manager properties (yes, use of StdProp is obsolete) */
+    /* свойства оконного менеджера (да, использование StdProp устарело) */
     XSetStandardProperties(xd->hdr.display, xd->window, title, NULL, None, NULL, 0, NULL);
     xd->gc = XCreateGC(xd->hdr.display, xd->window, 0, 0);
 
-    /* allow receiving mouse, keyboard and window change/close events */
+    /* разрешить получение событий мыши, клавиатуры и изменения/закрытия окна */
     XSelectInput(xd->hdr.display, xd->window,
                  PointerMotionMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask | ExposureMask |
                  StructureNotifyMask);
@@ -338,14 +338,14 @@ static void x11_window_create(lv_display_t * disp, char const * title)
 
     x11_hide_cursor(disp);
 
-    /* create cache XImage */
+    /* создать кэш XImage */
     size_t sz_buffers = hor_res * ver_res * sizeof(lv_color32_t);
     xd->dplanes = XDisplayPlanes(xd->hdr.display, screen);
-    xd->xdata = malloc(sz_buffers); /* use clib method here, x11 memory not part of device footprint */
+    xd->xdata = malloc(sz_buffers); /* используйте здесь метод clib, память x11 не является частью устройства */
     xd->ximage = XCreateImage(xd->hdr.display, xd->visual, xd->dplanes, ZPixmap, 0, xd->xdata,
                               hor_res, ver_res, lv_color_format_get_bpp(LV_COLOR_FORMAT_ARGB8888), 0);
 
-    /* finally bring window on top of the other windows */
+    /* наконец поместите окно поверх других окон */
     XMapRaised(xd->hdr.display, xd->window);
 
 #if LV_X11_DIRECT_EXIT
@@ -385,7 +385,7 @@ lv_display_t * lv_x11_window_create(char const * title, int32_t hor_res, int32_t
 
     xd->timer = lv_timer_create(x11_event_handler, 5, disp);
 
-    /* initialize Tick simulation */
+    /* инициализировать симуляцию тиков */
     xd->terminated = false;
     pthread_create(&xd->thr_tick, NULL, x11_tick_thread, xd);
 

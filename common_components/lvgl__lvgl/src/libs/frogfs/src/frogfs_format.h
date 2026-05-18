@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+ * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
+ * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
 #pragma once
 
@@ -24,18 +24,18 @@
 #define FROGFS_IS_COMP(e) (e->u.child_count > 0xFF00)
 
 /**
- * \brief       Filesystem header
+ * \brief Заголовок файловой системы
  */
 typedef struct frogfs_head_t {
     uint32_t magic; /**< filesystem magic */
     uint8_t ver_major; /**< major version */
     uint8_t ver_minor; /**< minor version */
-    uint16_t num_entries; /** entry count */
+    uint16_t num_entries; /** количество входов */
     uint32_t bin_sz; /**< binary length */
 } frogfs_head_t;
 
 /**
- * \brief       Hash table entry
+ * \brief Запись в хеш-таблице
  */
 typedef struct frogfs_hash_t {
     uint32_t hash; /**< path hash */
@@ -43,7 +43,7 @@ typedef struct frogfs_hash_t {
 } frogfs_hash_t;
 
 /**
- * \brief       Entry header
+ * \brief Заголовок записи
  */
 struct frogfs_entry_t {
     uint32_t parent; /**< parent entry offset */
@@ -56,7 +56,7 @@ struct frogfs_entry_t {
 };
 
 /**
- * \brief       Directory object header
+ * \brief Заголовок объекта каталога
  */
 typedef struct frogfs_dir_t {
     const frogfs_entry_t entry;
@@ -64,7 +64,7 @@ typedef struct frogfs_dir_t {
 } frogfs_dir_t;
 
 /**
- * \brief       File object header
+ * \brief Заголовок объекта файла
  */
 typedef struct frogfs_file_t {
     const frogfs_entry_t entry;
@@ -73,7 +73,7 @@ typedef struct frogfs_file_t {
 } frogfs_file_t;
 
 /**
- * \brief       Compressed file object header
+ * \brief Заголовок объекта сжатого файла
  */
 typedef struct frogfs_comp_t {
     const frogfs_entry_t entry;
@@ -83,7 +83,7 @@ typedef struct frogfs_comp_t {
 } frogfs_comp_t;
 
 /**
- * \brief       Filesystem footer
+ * \brief Нижний колонтитул файловой системы
  */
 typedef struct frogfs_foot_t {
     uint32_t crc32; /**< crc32 of entire file without this field */

@@ -1,7 +1,7 @@
 #include "../../lv_examples.h"
 #if LV_USE_SCALE && LV_BUILD_EXAMPLES
 
-#include "../../../lvgl_private.h" /*To expose the fields of lv_draw_task_t*/
+#include "../../../lvgl_private.h" /*Выставить поля lv_draw_task_t*/
 
 static void draw_event_cb(lv_event_t * e)
 {
@@ -23,12 +23,12 @@ static void draw_event_cb(lv_event_t * e)
             uint32_t major_tick = lv_scale_get_major_tick_every(obj);
             label_draw_dsc->color = color_idx[base_dsc->id1 / major_tick];
 
-            /*Free the previously allocated text if needed*/
+            /*При необходимости освободите ранее выделенный текст.*/
             if(label_draw_dsc->text_local) lv_free((void *)label_draw_dsc->text);
 
-            /*Malloc the text and set text_local as 1 to make LVGL automatically free the text.
-             * (Local texts are malloc'd internally by LVGL. Mimic this behavior here too)*/
-            char tmp_buffer[20] = {0}; /* Big enough buffer */
+            /*Выделите текст и установите дляtext_localзначение 1, чтобыLVGLавтоматически освободил текст.
+             * (Локальные тексты распределяются внутри LVGL . Имитируйте это поведение и здесь)*/
+            char tmp_buffer[20] = {0}; /* Достаточно большой буфер */
             lv_snprintf(tmp_buffer, sizeof(tmp_buffer), "%.1f", (double)base_dsc->id2);
             label_draw_dsc->text = lv_strdup(tmp_buffer);
             label_draw_dsc->text_local = 1;
@@ -38,16 +38,16 @@ static void draw_event_cb(lv_event_t * e)
             int32_t new_w = size.x;
             int32_t old_w = lv_area_get_width(&draw_task->area);
 
-            /* Distribute the new size equally on both sides */
+            /* Распределите новый размер поровну с обеих сторон. */
             draw_task->area.x1 -= (new_w - old_w) / 2;
-            draw_task->area.x2 += ((new_w - old_w) + 1) / 2;  /* +1 for rounding */
+            draw_task->area.x2 += ((new_w - old_w) + 1) / 2;  /* +1 за округление */
 
         }
     }
 }
 
 /**
- * Customizing scale major tick label color with `LV_EVENT_DRAW_TASK_ADDED` event
+ * Настройка цвета основной метки шкалы с помощью события `LV_EVENT_DRAW_TASK_ADDED`
  */
 void lv_example_scale_7(void)
 {

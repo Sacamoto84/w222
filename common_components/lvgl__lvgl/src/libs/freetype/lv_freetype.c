@@ -31,7 +31,7 @@
  *      TYPEDEFS
  **********************/
 
-/* Use the pointer storing pathname as the unique request ID of the face */
+/* Используйте указатель для хранения пути в качестве уникального запроса ID лица. */
 typedef struct {
     char * pathname;
     int ref_cnt;
@@ -243,7 +243,7 @@ void lv_freetype_font_delete(lv_font_t * font)
     LV_ASSERT_NULL(font);
     lv_freetype_context_t * ctx = lv_freetype_get_context();
     if(!ctx) {
-        /* Freetype already torn down (e.g. static destruction order). Nothing to release. */
+        /* Freetype уже удален (например, порядок статического уничтожения). Нечего выпускать. */
         return;
     }
     lv_freetype_font_dsc_t * dsc = (lv_freetype_font_dsc_t *)(font->dsc);
@@ -256,7 +256,7 @@ void lv_freetype_font_delete(lv_font_t * font)
 
     lv_freetype_drop_face_id(dsc->context, dsc->face_id);
 
-    /* invalidate magic number */
+    /* сделать недействительным магическое число */
     lv_memzero(dsc, sizeof(lv_freetype_font_dsc_t));
     lv_free(dsc);
 }
@@ -289,9 +289,9 @@ int32_t lv_freetype_italic_transform_on_pos(lv_point_t point)
 static bool freetype_on_font_create(lv_freetype_font_dsc_t * dsc, uint32_t max_glyph_cnt)
 {
     /*
-     * Glyph info uses a small amount of memory, and uses glyph info more frequently,
-     * so it plans to use twice the maximum number of caches here to
-     * get a better info acquisition performance.*/
+     * Информация о глифах использует небольшой объем памяти и использует информацию о глифах чаще.
+     * поэтому он планирует использовать здесь вдвое больше максимального количества кэшей, чтобы
+     * получить лучшую производительность сбора информации.*/
     lv_cache_t * glyph_cache = lv_freetype_create_glyph_cache(max_glyph_cnt * 2);
     if(glyph_cache == NULL) {
         LV_LOG_ERROR("glyph cache creating failed");
@@ -354,7 +354,7 @@ static FTC_FaceID lv_freetype_req_face_id(lv_freetype_context_t * ctx, const cha
     lv_ll_t * ll_p = &ctx->face_id_ll;
     face_id_node_t * node;
 
-    /* search cache */
+    /* кэш поиска */
     LV_LL_READ(ll_p, node) {
         if(strcmp(node->pathname, pathname) == 0) {
             node->ref_cnt++;
@@ -363,7 +363,7 @@ static FTC_FaceID lv_freetype_req_face_id(lv_freetype_context_t * ctx, const cha
         }
     }
 
-    /* insert new cache */
+    /* вставить новый кэш */
     node = lv_ll_ins_tail(ll_p);
     LV_ASSERT_MALLOC(node);
 
@@ -411,7 +411,7 @@ static void lv_freetype_drop_face_id(lv_freetype_context_t * ctx, FTC_FaceID fac
 }
 
 /*-----------------
- * Cache Node Cache Callbacks
+ * Обратные вызовы кэша узла кэша
  *----------------*/
 
 static bool cache_node_cache_create_cb(lv_freetype_cache_node_t * node, void * user_data)
@@ -419,7 +419,7 @@ static bool cache_node_cache_create_cb(lv_freetype_cache_node_t * node, void * u
     LV_UNUSED(user_data);
     lv_freetype_context_t * ctx = lv_freetype_get_context();
 
-    /* Cache miss, load face */
+    /* Промах в кэше, загрузка лица */
     FT_Face face;
     FT_Error error = FT_New_Face(ctx->library, node->pathname, 0, &face);
     if(error) {

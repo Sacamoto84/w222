@@ -32,7 +32,7 @@ struct _lv_imagebutton_src_info_t {
     lv_image_header_t header;
 };
 
-/** Data of image button */
+/** Данные кнопки изображения */
 struct _lv_imagebutton_t {
     lv_obj_t obj;
     lv_imagebutton_src_info_t src_mid[LV_IMAGEBUTTON_STATE_NUM];   /**< Store center images to each state */
@@ -52,7 +52,7 @@ struct _lv_imagebutton_t {
 #endif /* LV_USE_IMAGEBUTTON != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_IMAGEBUTTON_PRIVATE_H*/

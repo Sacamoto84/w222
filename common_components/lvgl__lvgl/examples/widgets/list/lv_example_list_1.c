@@ -13,12 +13,12 @@ static void event_handler(lv_event_t * e)
 }
 void lv_example_list_1(void)
 {
-    /*Create a list*/
+    /*Создать список*/
     list1 = lv_list_create(lv_screen_active());
     lv_obj_set_size(list1, 180, 220);
     lv_obj_center(list1);
 
-    /*Add buttons to the list*/
+    /*Добавляем кнопки в список*/
     lv_obj_t * btn;
     lv_list_add_text(list1, "File");
     btn = lv_list_add_button(list1, LV_SYMBOL_FILE, "New");

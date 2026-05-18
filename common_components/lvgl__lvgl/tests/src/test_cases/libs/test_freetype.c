@@ -15,8 +15,8 @@
 #define OPTION_GENERATE_OUTLINE_DATA 0
 
 /*
- * Generated vector ops string can use https://w-mai.github.io/vegravis/
- * to visualize the outline data.
+ * Сгенерированная строка векторных операций может использовать https://w-mai.github.io/vegravis/.
+ * для визуализации контурных данных.
  **/
 #define OPTION_GENERATE_VECTOR_OPS_STRING 0
 
@@ -27,7 +27,7 @@ static const char * UNIVERSAL_DECLARATION_OF_HUMAN_RIGHTS_EN =
 static const char * UNIVERSAL_DECLARATION_OF_HUMAN_RIGHTS_JP =
     "人間の家族のすべての構成員の固有の尊厳と平等で譲渡不能な権利とを承認することは、自由と正義と平和の基礎である...";
 
-// Outline data for unicode '龘' (U+9F98)
+// Контурные данные для Юникода «龘» (U+9F98)
 static const lv_freetype_outline_event_param_t outline_data_U9F98[] = {
     {NULL, 1, {5888, 6889}, {0, 0}, {0, 0}, {0, 0}},
     {NULL, 2, {6445, 6889}, {0, 0}, {0, 0}, {0, 0}},
@@ -393,7 +393,7 @@ static void vegravis_generate_vector_ops_string(lv_freetype_outline_event_param_
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
@@ -403,7 +403,7 @@ void tearDown(void)
 
 static void test_freetype_with_render_mode(lv_freetype_font_render_mode_t render_mode, const char * screenshot_name)
 {
-    /*Create a font*/
+    /*Создать шрифт*/
     lv_font_t * font_italic = lv_freetype_font_create("./src/test_files/fonts/noto/NotoSansSC-Regular.ttf",
                                                       render_mode,
                                                       24,
@@ -420,7 +420,7 @@ static void test_freetype_with_render_mode(lv_freetype_font_render_mode_t render
                                                             LV_FREETYPE_FONT_STYLE_NORMAL);
     TEST_ASSERT_NOT_NULL(font_normal_small);
 
-    /* Emoji is only supported in bitmap mode */
+    /* Эмодзи поддерживаются только в растровом режиме. */
     lv_font_t * font_emoji = lv_freetype_font_create("../examples/libs/freetype/NotoColorEmoji-32.subset.ttf",
                                                      LV_FREETYPE_FONT_RENDER_MODE_BITMAP,
                                                      12,
@@ -443,7 +443,7 @@ static void test_freetype_with_render_mode(lv_freetype_font_render_mode_t render
                                                           LV_FREETYPE_FONT_STYLE_NORMAL);
     TEST_ASSERT_NULL(font_size_error);
 
-    /*Create style with the new font*/
+    /*Создайте стиль с помощью нового шрифта*/
     static lv_style_t style_italic;
     lv_style_init(&style_italic);
     lv_style_set_text_font(&style_italic, font_italic);
@@ -463,7 +463,7 @@ static void test_freetype_with_render_mode(lv_freetype_font_render_mode_t render
     lv_style_set_text_font(&style_normal_emoji, font_emoji);
     lv_style_set_text_align(&style_normal_emoji, LV_TEXT_ALIGN_CENTER);
 
-    /*Create a label with the new style*/
+    /*Создайте этикетку с новым стилем*/
     lv_obj_t * label0 = lv_label_create(lv_screen_active());
     lv_obj_add_style(label0, &style_italic, 0);
     lv_obj_set_width(label0, lv_obj_get_width(lv_screen_active()) - 20);
@@ -482,8 +482,8 @@ static void test_freetype_with_render_mode(lv_freetype_font_render_mode_t render
     lv_label_set_text(label2, UNIVERSAL_DECLARATION_OF_HUMAN_RIGHTS_JP);
     lv_obj_align_to(label2, label1, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 
-    /* test emoji rendering
-     * emoji font does not contain normal characters, use fallback to render them */
+    /* протестировать рендеринг эмодзи
+     * Шрифт emoji не содержит обычных символов, используйте резервный вариант для их отображения */
     font_emoji->fallback = font_normal;
 
     lv_obj_t * label_emoji = lv_label_create(lv_screen_active());
@@ -513,13 +513,13 @@ void test_freetype_render_bitmap(void)
 void test_freetype_render_outline(void)
 {
 #if LV_USE_DRAW_VG_LITE
-    /* VG-Lite support rendering outline */
+    /* VG -Lite поддержка рендеринга */
     test_freetype_with_render_mode(LV_FREETYPE_FONT_RENDER_MODE_OUTLINE, "libs/freetype_render_outline.png");
     LV_UNUSED(outline_data_U9F98);
     LV_UNUSED(freetype_outline_event_cb);
 #else
-    /* Outline rendering not supported, compare outline data only */
-    /*Create a font*/
+    /* Контурный рендеринг не поддерживается, сравнивайте только контурные данные */
+    /*Создать шрифт*/
     lv_font_t * font_italic = lv_freetype_font_create("./src/test_files/fonts/noto/NotoSansSC-Regular.ttf",
                                                       LV_FREETYPE_FONT_RENDER_MODE_OUTLINE,
                                                       24,
@@ -527,7 +527,7 @@ void test_freetype_render_outline(void)
 
     TEST_ASSERT_NOT_NULL(font_italic);
 
-    /*Setup outline event for generating outline drawing data*/
+    /*Событие настройки контура для создания данных контурного чертежа*/
     lv_freetype_outline_add_event(freetype_outline_event_cb, LV_EVENT_ALL, NULL);
 
     lv_font_glyph_dsc_t g;
@@ -540,7 +540,7 @@ void test_freetype_render_outline(void)
     lv_freetype_outline_event_param_t * param;
     LV_LL_READ(outline_data, param) {
 #if OPTION_GENERATE_OUTLINE_DATA
-        /*FOR Generate outline data*/
+        /*FOR Создать контурные данные*/
 #if OPTION_GENERATE_VECTOR_OPS_STRING
         char buf[1024];
         vegravis_generate_vector_ops_string(param, buf, sizeof(buf));
@@ -625,13 +625,13 @@ static void vegravis_generate_vector_ops_string(lv_freetype_outline_event_param_
 #endif
 
 /**
- * Test kerning functionality with scalable FreeType fonts.
- * This test covers the FT_IS_SCALABLE and FT_Set_Pixel_Sizes code path
- * in freetype_get_glyph_dsc_cb when getting kerning information.
+ * Проверьте функциональность кернинга с помощью масштабируемых шрифтов FreeType.
+ * Этот тест охватывает пути кода FT_IS_SCALABLE и FT_Set_Pixel_Sizes.
+ * в freetype_get_glyph_dsc_cb при получении информации о кернинге.
  */
 void test_freetype_kerning(void)
 {
-    /* Create a font with kerning enabled using font_info */
+    /* Создайте шрифт с включенным кернингом, используя font_info. */
     lv_font_info_t font_info;
     lv_freetype_init_font_info(&font_info);
     font_info.name = "./src/test_files/fonts/noto/NotoSansSC-Regular.ttf";
@@ -643,31 +643,31 @@ void test_freetype_kerning(void)
     lv_font_t * font_kerning = lv_freetype_font_create_with_info(&font_info);
     TEST_ASSERT_NOT_NULL(font_kerning);
 
-    /* Create a font with kerning disabled */
+    /* Создать шрифт с отключенным кернингом */
     font_info.kerning = LV_FONT_KERNING_NONE;
     lv_font_t * font_no_kerning = lv_freetype_font_create_with_info(&font_info);
     TEST_ASSERT_NOT_NULL(font_no_kerning);
 
-    /* Test glyph width with kerning - exercises the FT_Set_Pixel_Sizes code path */
+    /* Проверка ширины глифа с помощью кернинга — проверка пути кода FT_Set_Pixel_Sizes. */
     uint16_t width_kerning = lv_font_get_glyph_width(font_kerning, 'A', 'V');
     uint16_t width_no_kerning = lv_font_get_glyph_width(font_no_kerning, 'A', 'V');
 
-    /* Both should return valid widths */
+    /* Оба должны возвращать допустимую ширину */
     TEST_ASSERT_GREATER_THAN(0, width_kerning);
     TEST_ASSERT_GREATER_THAN(0, width_no_kerning);
 
-    /* Clean up */
+    /* Очистить */
     lv_freetype_font_delete(font_kerning);
     lv_freetype_font_delete(font_no_kerning);
 }
 
 /**
- * Test kerning with multiple font sizes to ensure FT_Set_Pixel_Sizes
- * is called correctly for scalable fonts when kerning is requested.
+ * Проверьте кернинг с несколькими размерами шрифта, чтобы убедиться в том, что FT_Set_Pixel_Sizes
+ * правильно вызывается для масштабируемых шрифтов при запросе кернинга.
  */
 void test_freetype_kerning_scalable_sizes(void)
 {
-    /* Test with multiple sizes to ensure pixel size is set correctly */
+    /* Проверьте несколько размеров, чтобы убедиться, что размер пикселя установлен правильно. */
     const uint32_t sizes[] = {16, 24, 32, 48, 64};
 
     for(int i = 0; i < 5; i++) {
@@ -682,13 +682,13 @@ void test_freetype_kerning_scalable_sizes(void)
         lv_font_t * font = lv_freetype_font_create_with_info(&font_info);
         TEST_ASSERT_NOT_NULL(font);
 
-        /* Test getting glyph width which triggers kerning lookup */
-        /* This exercises the FT_IS_SCALABLE and FT_Set_Pixel_Sizes path */
+        /* Проверьте получение ширины глифа, которая запускает поиск кернинга */
+        /* Это проверяет путь FT_IS_SCALABLE и FT_Set_Pixel_Sizes. */
         uint16_t width_V = lv_font_get_glyph_width(font, 'V', 'A');
         uint16_t width_A = lv_font_get_glyph_width(font, 'A', 'V');
         uint16_t width_T = lv_font_get_glyph_width(font, 'T', 'o');
 
-        /* Width should be non-zero for valid glyphs */
+        /* Ширина должна быть ненулевой для допустимых глифов. */
         TEST_ASSERT_GREATER_THAN(0, width_V);
         TEST_ASSERT_GREATER_THAN(0, width_A);
         TEST_ASSERT_GREATER_THAN(0, width_T);
@@ -698,8 +698,8 @@ void test_freetype_kerning_scalable_sizes(void)
 }
 
 /**
- * Test that font with kerning enabled handles gracefully even if
- * the font has limited kerning data.
+ * Протестируйте этот шрифт с включенным кернингом, даже если
+ * шрифт имеет ограниченные данные кернинга.
  */
 void test_freetype_no_kerning_info(void)
 {
@@ -714,17 +714,17 @@ void test_freetype_no_kerning_info(void)
     lv_font_t * font = lv_freetype_font_create_with_info(&font_info);
     TEST_ASSERT_NOT_NULL(font);
 
-    /* Test glyph width with various character pairs to exercise kerning lookup */
+    /* Проверьте ширину глифа с различными парами символов, чтобы выполнить поиск по кернингу. */
     uint16_t width1 = lv_font_get_glyph_width(font, 'A', 'V');
     uint16_t width2 = lv_font_get_glyph_width(font, 'T', 'o');
     uint16_t width3 = lv_font_get_glyph_width(font, 'W', 'A');
 
-    /* All widths should be valid (greater than 0) */
+    /* Все ширины должны быть действительными (больше 0). */
     TEST_ASSERT_GREATER_THAN(0, width1);
     TEST_ASSERT_GREATER_THAN(0, width2);
     TEST_ASSERT_GREATER_THAN(0, width3);
 
-    /* Clean up */
+    /* Очистить */
     lv_freetype_font_delete(font);
 }
 

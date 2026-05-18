@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 3 dic 2023
+/*  Создано: 3 декабря 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -78,7 +78,7 @@ void lv_draw_eve_set_display_data(lv_display_t * disp, const lv_draw_eve_paramet
     }
 
     lv_draw_eve_unit_g->disp = disp;
-    lv_draw_eve_unit_g->params = *params; /* make a copy */
+    lv_draw_eve_unit_g->params = *params; /* сделать копию */
     lv_draw_eve_unit_g->op_cb = op_cb;
 
     lv_display_add_event_cb(disp, disp_delete_cb, LV_EVENT_DELETE, NULL);
@@ -105,7 +105,7 @@ static int32_t eve_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_eve_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_eve_unit->task_act = NULL;
 
-    /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+    /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
     lv_draw_dispatch_request();
 
 

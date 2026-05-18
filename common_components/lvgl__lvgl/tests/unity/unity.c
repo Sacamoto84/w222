@@ -1,7 +1,7 @@
 /* =========================================================================
-    Unity Project - A Test Framework for C
+    Проект Unity — тестовая среда для C
     Copyright (c) 2007-21 Mike Karlesky, Mark VanderVoord, Greg Williams
-    [Released under MIT License. Please refer to license.txt for details]
+    [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
 ============================================================================ */
 #if LV_BUILD_TEST || LV_BUILD_TEST_PERF
 
@@ -11,12 +11,12 @@
 #define UNITY_PROGMEM
 #endif
 
-/* If omitted from header, declare overridable prototypes here so they're ready for use */
+/* Если этот параметр опущен в заголовке, объявите здесь переопределяемые прототипы, чтобы они были готовы к использованию. */
 #ifdef UNITY_OMIT_OUTPUT_CHAR_HEADER_DECLARATION
 void UNITY_OUTPUT_CHAR(int);
 #endif
 
-/* Helpful macros for us to use here in Assert functions */
+/* Полезные макросы, которые мы можем использовать здесь, в функциях Assert. */
 #define UNITY_FAIL_AND_BAIL         do { Unity.CurrentTestFailed  = 1; UNITY_OUTPUT_FLUSH(); TEST_ABORT(); } while (0)
 #define UNITY_IGNORE_AND_BAIL       do { Unity.CurrentTestIgnored = 1; UNITY_OUTPUT_FLUSH(); TEST_ABORT(); } while (0)
 #define RETURN_IF_FAIL_OR_IGNORE    do { if (Unity.CurrentTestFailed || Unity.CurrentTestIgnored) { TEST_ABORT(); } } while (0)
@@ -70,31 +70,31 @@ static const char UNITY_PROGMEM UnityStrDetail1Name[]            = UNITY_DETAIL1
 static const char UNITY_PROGMEM UnityStrDetail2Name[]            = " " UNITY_DETAIL2_NAME " ";
 #endif
 /*-----------------------------------------------
- * Pretty Printers & Test Result Output Handlers
+ * Принтеры Pretty и обработчики вывода результатов тестов
  *-----------------------------------------------*/
 
 /*-----------------------------------------------*/
-/* Local helper function to print characters. */
+/* Локальная вспомогательная функция для печати символов. */
 static void UnityPrintChar(const char* pch)
 {
-    /* printable characters plus CR & LF are printed */
+    /* печатаются печатные символы плюс CR и LF. */
     if ((*pch <= 126) && (*pch >= 32))
     {
         UNITY_OUTPUT_CHAR(*pch);
     }
-    /* write escaped carriage returns */
+    /* писать экранированный возврат каретки */
     else if (*pch == 13)
     {
         UNITY_OUTPUT_CHAR('\\');
         UNITY_OUTPUT_CHAR('r');
     }
-    /* write escaped line feeds */
+    /* писать экранированные переводы строк */
     else if (*pch == 10)
     {
         UNITY_OUTPUT_CHAR('\\');
         UNITY_OUTPUT_CHAR('n');
     }
-    /* unprintable characters are shown as codes */
+    /* непечатаемые символы отображаются как коды */
     else
     {
         UNITY_OUTPUT_CHAR('\\');
@@ -104,7 +104,7 @@ static void UnityPrintChar(const char* pch)
 }
 
 /*-----------------------------------------------*/
-/* Local helper function to print ANSI escape strings e.g. "\033[42m". */
+/* Локальная вспомогательная функция для печати управляющих строк ANSI, например. "\033[42м". */
 #ifdef UNITY_OUTPUT_COLOR
 static UNITY_UINT UnityPrintAnsiEscapeString(const char* string)
 {
@@ -134,7 +134,7 @@ void UnityPrint(const char* string)
         while (*pch)
         {
 #ifdef UNITY_OUTPUT_COLOR
-            /* print ANSI escape code */
+            /* напечатать escape-код ANSI */
             if ((*pch == 27) && (*(pch + 1) == '['))
             {
                 pch += UnityPrintAnsiEscapeString(pch);
@@ -155,24 +155,24 @@ void UnityPrintLen(const char* string, const UNITY_UINT32 length)
     {
         while (*pch && ((UNITY_UINT32)(pch - string) < length))
         {
-            /* printable characters plus CR & LF are printed */
+            /* печатаются печатные символы плюс CR и LF. */
             if ((*pch <= 126) && (*pch >= 32))
             {
                 UNITY_OUTPUT_CHAR(*pch);
             }
-            /* write escaped carriage returns */
+            /* писать экранированный возврат каретки */
             else if (*pch == 13)
             {
                 UNITY_OUTPUT_CHAR('\\');
                 UNITY_OUTPUT_CHAR('r');
             }
-            /* write escaped line feeds */
+            /* писать экранированные переводы строк */
             else if (*pch == 10)
             {
                 UNITY_OUTPUT_CHAR('\\');
                 UNITY_OUTPUT_CHAR('n');
             }
-            /* unprintable characters are shown as codes */
+            /* непечатаемые символы отображаются как коды */
             else
             {
                 UNITY_OUTPUT_CHAR('\\');
@@ -191,25 +191,25 @@ void UnityPrintNumberByStyle(const UNITY_INT number, const UNITY_DISPLAY_STYLE_T
     {
         if (style == UNITY_DISPLAY_STYLE_CHAR)
         {
-            /* printable characters plus CR & LF are printed */
+            /* печатаются печатные символы плюс CR и LF. */
             UNITY_OUTPUT_CHAR('\'');
             if ((number <= 126) && (number >= 32))
             {
                 UNITY_OUTPUT_CHAR((int)number);
             }
-            /* write escaped carriage returns */
+            /* писать экранированный возврат каретки */
             else if (number == 13)
             {
                 UNITY_OUTPUT_CHAR('\\');
                 UNITY_OUTPUT_CHAR('r');
             }
-            /* write escaped line feeds */
+            /* писать экранированные переводы строк */
             else if (number == 10)
             {
                 UNITY_OUTPUT_CHAR('\\');
                 UNITY_OUTPUT_CHAR('n');
             }
-            /* unprintable characters are shown as codes */
+            /* непечатаемые символы отображаются как коды */
             else
             {
                 UNITY_OUTPUT_CHAR('\\');
@@ -242,7 +242,7 @@ void UnityPrintNumber(const UNITY_INT number_to_print)
 
     if (number_to_print < 0)
     {
-        /* A negative number, including MIN negative */
+        /* Отрицательное число, в том числе отрицательное MIN. */
         UNITY_OUTPUT_CHAR('-');
         number = (~number) + 1;
     }
@@ -250,18 +250,18 @@ void UnityPrintNumber(const UNITY_INT number_to_print)
 }
 
 /*-----------------------------------------------
- * basically do an itoa using as little ram as possible */
+ * в основном делайте это, используя как можно меньше оперативной памяти */
 void UnityPrintNumberUnsigned(const UNITY_UINT number)
 {
     UNITY_UINT divisor = 1;
 
-    /* figure out initial divisor */
+    /* вычислить начальный делитель */
     while (number / divisor > 9)
     {
         divisor *= 10;
     }
 
-    /* now mod and print, then divide divisor */
+    /* теперь модифицируйте и распечатайте, затем разделите делитель */
     do
     {
         UNITY_OUTPUT_CHAR((char)('0' + (number / divisor % 10)));
@@ -325,11 +325,11 @@ void UnityPrintMask(const UNITY_UINT mask, const UNITY_UINT number)
 /*-----------------------------------------------*/
 #ifndef UNITY_EXCLUDE_FLOAT_PRINT
 /*
- * This function prints a floating-point value in a format similar to
- * printf("%.7g") on a single-precision machine or printf("%.9g") on a
- * double-precision machine.  The 7th digit won't always be totally correct
- * in single-precision operation (for that level of accuracy, a more
- * complicated algorithm would be needed).
+ * Эта функция печатает значение с плавающей запятой в формате, аналогичном
+ * printf("%.7g") на машине одинарной точности или printf("%.9g") на машине
+ * станок двойной точности.  7-я цифра не всегда будет полностью правильной.
+ * в режиме одинарной точности (для такого уровня точности более
+ * потребуется сложный алгоритм).
  */
 void UnityPrintFloat(const UNITY_DOUBLE input_number)
 {
@@ -345,14 +345,14 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
 
     UNITY_DOUBLE number = input_number;
 
-    /* print minus sign (does not handle negative zero) */
+    /* вывести знак минус (не обрабатывает отрицательный ноль) */
     if (number < 0.0f)
     {
         UNITY_OUTPUT_CHAR('-');
         number = -number;
     }
 
-    /* handle zero, NaN, and +/- infinity */
+    /* обрабатывать ноль, NaN и +/- бесконечность */
     if (number == 0.0f)
     {
         UnityPrint("0");
@@ -375,11 +375,11 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
         char        buf[16] = {0};
 
         /*
-         * Scale up or down by powers of 10.  To minimize rounding error,
-         * start with a factor/divisor of 10^10, which is the largest
-         * power of 10 that can be represented exactly.  Finally, compute
-         * (exactly) the remaining power of 10 and perform one more
-         * multiplication or division.
+         * Масштабируйте вверх или вниз по степени 10. Чтобы минимизировать ошибку округления,
+         * начните с фактора/делителя 10^10, который является самым большим
+         * степень 10, которую можно представить точно.  Наконец, вычислите
+         * (ровно) оставшуюся мощность 10 и выполняем еще одну
+         * умножение или деление.
          */
         if (number < 1.0f)
         {
@@ -402,9 +402,9 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
         else
         {
             /*
-             * In this range, we can split off the integer part before
-             * doing any multiplications.  This reduces rounding error by
-             * freeing up significant bits in the fractional part.
+             * В этом диапазоне мы можем отделить целую часть перед
+             * делать любые умножения.  Это уменьшает ошибку округления на
+             * освобождение значимых битов в дробной части.
              */
             UNITY_DOUBLE factor = 1.0f;
             n_int = (UNITY_INT32)number;
@@ -415,11 +415,11 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
             number *= factor;
         }
 
-        /* round to nearest integer */
+        /* округлить до ближайшего целого числа */
         n = ((UNITY_INT32)(number + number) + 1) / 2;
 
 #ifndef UNITY_ROUND_TIES_AWAY_FROM_ZERO
-        /* round to even if exactly between two integers */
+        /* округлить до даже если ровно между двумя целыми числами */
         if ((n & 1) && (((UNITY_DOUBLE)n - number) == 0.5f))
             n--;
 #endif
@@ -432,18 +432,18 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
             exponent++;
         }
 
-        /* determine where to place decimal point */
+        /* определить, где поставить десятичную точку */
         decimals = ((exponent <= 0) && (exponent >= -(sig_digits + 3))) ? (-exponent) : (sig_digits - 1);
         exponent += decimals;
 
-        /* truncate trailing zeroes after decimal point */
+        /* обрезать конечные нули после десятичной точки */
         while ((decimals > 0) && ((n % 10) == 0))
         {
             n /= 10;
             decimals--;
         }
 
-        /* build up buffer in reverse order */
+        /* создать буфер в обратном порядке */
         digits = 0;
         while ((n != 0) || (digits <= decimals))
         {
@@ -451,7 +451,7 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
             n /= 10;
         }
 
-        /* print out buffer (backwards) */
+        /* распечатать буфер (назад) */
         while (digits > 0)
         {
             if (digits == decimals)
@@ -461,7 +461,7 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
             UNITY_OUTPUT_CHAR(buf[--digits]);
         }
 
-        /* print exponent if needed */
+        /* напечатайте показатель степени, если необходимо */
         if (exponent != 0)
         {
             UNITY_OUTPUT_CHAR('e');
@@ -650,7 +650,7 @@ static void UnityPrintExpectedAndActualStringsLen(const char* expected,
 }
 
 /*-----------------------------------------------
- * Assertion & Control Helpers
+ * Помощники утверждений и контроля
  *-----------------------------------------------*/
 
 /*-----------------------------------------------*/
@@ -659,10 +659,10 @@ static int UnityIsOneArrayNull(UNITY_INTERNAL_PTR expected,
                                const UNITY_LINE_TYPE lineNumber,
                                const char* msg)
 {
-    /* Both are NULL or same pointer */
+    /* Оба являются NULL или одинаковым указателем. */
     if (expected == actual) { return 0; }
 
-    /* print and return true if just expected is NULL */
+    /* напечатайте и верните true, если ожидается NULL */
     if (expected == NULL)
     {
         UnityTestResultsFailBegin(lineNumber);
@@ -671,7 +671,7 @@ static int UnityIsOneArrayNull(UNITY_INTERNAL_PTR expected,
         return 1;
     }
 
-    /* print and return true if just actual is NULL */
+    /* напечатайте и верните true, если фактическое значение равно NULL */
     if (actual == NULL)
     {
         UnityTestResultsFailBegin(lineNumber);
@@ -680,11 +680,11 @@ static int UnityIsOneArrayNull(UNITY_INTERNAL_PTR expected,
         return 1;
     }
 
-    return 0; /* return false if neither is NULL */
+    return 0; /* верните false, если ни один из них не является NULL */
 }
 
 /*-----------------------------------------------
- * Assertion Functions
+ * Функции утверждения
  *-----------------------------------------------*/
 
 /*-----------------------------------------------*/
@@ -803,7 +803,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
 
     if (expected == actual)
     {
-        return; /* Both are NULL or same pointer */
+        return; /* Оба являются NULL или одинаковым указателем. */
     }
 
     if (UnityIsOneArrayNull(expected, actual, lineNumber, msg))
@@ -848,7 +848,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
                 break;
 #endif
 
-            default: /* default is length 4 bytes */
+            default: /* по умолчанию длина 4 байта */
             case 4:
                 expect_val = *(UNITY_PTR_ATTRIBUTE const UNITY_INT32*)expected;
                 actual_val = *(UNITY_PTR_ATTRIBUTE const UNITY_INT32*)actual;
@@ -867,7 +867,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
         if (expect_val != actual_val)
         {
             if ((style & UNITY_DISPLAY_RANGE_UINT) && (length < (UNITY_INT_WIDTH / 8)))
-            {   /* For UINT, remove sign extension (padding 1's) from signed type casts above */
+            {   /* Для UINT удалите расширение знака (заполнение 1) из приведенных выше приведений знакового типа. */
                 UNITY_INT mask = 1;
                 mask = (mask << 8 * length) - 1;
                 expect_val &= mask;
@@ -883,7 +883,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
             UnityAddMsgIfSpecified(msg);
             UNITY_FAIL_AND_BAIL;
         }
-        /* Walk through array by incrementing the pointers */
+        /* Пройти по массиву, увеличивая указатели */
         if (flags == UNITY_ARRAY_TO_ARRAY)
         {
             expected = (UNITY_INTERNAL_PTR)((const char*)expected + increment);
@@ -894,7 +894,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
 
 /*-----------------------------------------------*/
 #ifndef UNITY_EXCLUDE_FLOAT
-/* Wrap this define in a function with variable types as float or double */
+/* Оберните это определение в функцию с типами переменных как float или double. */
 #define UNITY_FLOAT_OR_DOUBLE_WITHIN(delta, expected, actual, diff)                           \
     if (UNITY_IS_INF(expected) && UNITY_IS_INF(actual) && (((expected) < 0) == ((actual) < 0))) return 1;   \
     if (UNITY_NAN_CHECK) return 1;                                                            \
@@ -902,7 +902,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
     if ((diff) < 0) (diff) = -(diff);                                                         \
     if ((delta) < 0) (delta) = -(delta);                                                      \
     return !(UNITY_IS_NAN(diff) || UNITY_IS_INF(diff) || ((diff) > (delta)))
-    /* This first part of this condition will catch any NaN or Infinite values */
+    /* Эта первая часть этого условия будет улавливать любые значения NaN или Infinite. */
 #ifndef UNITY_NAN_NOT_EQUAL_NAN
   #define UNITY_NAN_CHECK UNITY_IS_NAN(expected) && UNITY_IS_NAN(actual)
 #else
@@ -957,18 +957,18 @@ void UnityAssertWithinFloatArray(const UNITY_FLOAT delta,
 
     if (UNITY_IS_INF(in_delta))
     {
-        return; /* Arrays will be force equal with infinite delta */
+        return; /* Массивы будут равны по силе с бесконечной дельтой. */
     }
 
     if (UNITY_IS_NAN(in_delta))
     {
-        /* Delta must be correct number */
+        /* Дельта должна быть правильным числом */
         UnityPrintPointlessAndBail();
     }
 
     if (expected == actual)
     {
-        return; /* Both are NULL or same pointer */
+        return; /* Оба являются NULL или одинаковым указателем. */
     }
 
     if (UnityIsOneArrayNull((UNITY_INTERNAL_PTR)expected, (UNITY_INTERNAL_PTR)actual, lineNumber, msg))
@@ -976,7 +976,7 @@ void UnityAssertWithinFloatArray(const UNITY_FLOAT delta,
         UNITY_FAIL_AND_BAIL;
     }
 
-    /* fix delta sign if need */
+    /* исправьте знак дельты, если нужно */
     if (in_delta < 0)
     {
         in_delta = -in_delta;
@@ -988,7 +988,7 @@ void UnityAssertWithinFloatArray(const UNITY_FLOAT delta,
 
         if (current_element_delta < 0)
         {
-            /* fix delta sign for correct calculations */
+            /* исправить знак дельты для правильных расчетов */
             current_element_delta = -current_element_delta;
         }
 
@@ -1062,7 +1062,7 @@ void UnityAssertGreaterOrLessFloat(const UNITY_FLOAT threshold,
 
     failed = 0;
 
-    /* Checking for "not success" rather than failure to get the right result for NaN */
+    /* Проверка на «неуспех», а не на неудачу в получении правильного результата для NaN */
     if (!(actual < threshold) && (compare & UNITY_SMALLER_THAN)) { failed = 1; }
     if (!(actual > threshold) && (compare & UNITY_GREATER_THAN)) { failed = 1; }
 
@@ -1111,13 +1111,13 @@ void UnityAssertFloatSpecial(const UNITY_FLOAT actual,
             is_trait = UNITY_IS_NAN(actual) ? 1 : 0;
             break;
 
-        case UNITY_FLOAT_IS_DET: /* A determinate number is non infinite and not NaN. */
+        case UNITY_FLOAT_IS_DET: /* Определенное число не бесконечно и не NaN. */
         case UNITY_FLOAT_IS_NOT_DET:
             is_trait = !UNITY_IS_INF(actual) && !UNITY_IS_NAN(actual);
             break;
 
-        case UNITY_FLOAT_INVALID_TRAIT:  /* Suppress warning */
-        default: /* including UNITY_FLOAT_INVALID_TRAIT */
+        case UNITY_FLOAT_INVALID_TRAIT:  /* Подавить предупреждение */
+        default: /* включая UNITY_FLOAT_INVALID_TRAIT */
             trait_index = 0;
             trait_names[0] = UnityStrInvalidFloatTrait;
             break;
@@ -1147,7 +1147,7 @@ void UnityAssertFloatSpecial(const UNITY_FLOAT actual,
     }
 }
 
-#endif /* not UNITY_EXCLUDE_FLOAT */
+#endif /* не UNITY_EXCLUDE_FLOAT */
 
 /*-----------------------------------------------*/
 #ifndef UNITY_EXCLUDE_DOUBLE
@@ -1185,18 +1185,18 @@ void UnityAssertWithinDoubleArray(const UNITY_DOUBLE delta,
 
     if (UNITY_IS_INF(in_delta))
     {
-        return; /* Arrays will be force equal with infinite delta */
+        return; /* Массивы будут равны по силе с бесконечной дельтой. */
     }
 
     if (UNITY_IS_NAN(in_delta))
     {
-        /* Delta must be correct number */
+        /* Дельта должна быть правильным числом */
         UnityPrintPointlessAndBail();
     }
 
     if (expected == actual)
     {
-        return; /* Both are NULL or same pointer */
+        return; /* Оба являются NULL или одинаковым указателем. */
     }
 
     if (UnityIsOneArrayNull((UNITY_INTERNAL_PTR)expected, (UNITY_INTERNAL_PTR)actual, lineNumber, msg))
@@ -1204,7 +1204,7 @@ void UnityAssertWithinDoubleArray(const UNITY_DOUBLE delta,
         UNITY_FAIL_AND_BAIL;
     }
 
-    /* fix delta sign if need */
+    /* исправьте знак дельты, если нужно */
     if (in_delta < 0)
     {
         in_delta = -in_delta;
@@ -1216,7 +1216,7 @@ void UnityAssertWithinDoubleArray(const UNITY_DOUBLE delta,
 
         if (current_element_delta < 0)
         {
-            /* fix delta sign for correct calculations */
+            /* исправить знак дельты для правильных расчетов */
             current_element_delta = -current_element_delta;
         }
 
@@ -1289,7 +1289,7 @@ void UnityAssertGreaterOrLessDouble(const UNITY_DOUBLE threshold,
 
     failed = 0;
 
-    /* Checking for "not success" rather than failure to get the right result for NaN */
+    /* Проверка на «неуспех», а не на неудачу в получении правильного результата для NaN */
     if (!(actual < threshold) && (compare & UNITY_SMALLER_THAN)) { failed = 1; }
     if (!(actual > threshold) && (compare & UNITY_GREATER_THAN)) { failed = 1; }
 
@@ -1338,13 +1338,13 @@ void UnityAssertDoubleSpecial(const UNITY_DOUBLE actual,
             is_trait = UNITY_IS_NAN(actual) ? 1 : 0;
             break;
 
-        case UNITY_FLOAT_IS_DET: /* A determinate number is non infinite and not NaN. */
+        case UNITY_FLOAT_IS_DET: /* Определенное число не бесконечно и не NaN. */
         case UNITY_FLOAT_IS_NOT_DET:
             is_trait = !UNITY_IS_INF(actual) && !UNITY_IS_NAN(actual);
             break;
 
-        case UNITY_FLOAT_INVALID_TRAIT:  /* Suppress warning */
-        default: /* including UNITY_FLOAT_INVALID_TRAIT */
+        case UNITY_FLOAT_INVALID_TRAIT:  /* Подавить предупреждение */
+        default: /* включая UNITY_FLOAT_INVALID_TRAIT */
             trait_index = 0;
             trait_names[0] = UnityStrInvalidFloatTrait;
             break;
@@ -1374,7 +1374,7 @@ void UnityAssertDoubleSpecial(const UNITY_DOUBLE actual,
     }
 }
 
-#endif /* not UNITY_EXCLUDE_DOUBLE */
+#endif /* не UNITY_EXCLUDE_DOUBLE */
 
 /*-----------------------------------------------*/
 void UnityAssertNumbersWithin(const UNITY_UINT delta,
@@ -1450,7 +1450,7 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
 
     if (expected == actual)
     {
-        return; /* Both are NULL or same pointer */
+        return; /* Оба являются NULL или одинаковым указателем. */
     }
 
     if (UnityIsOneArrayNull(expected, actual, lineNumber, msg))
@@ -1466,7 +1466,7 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
         switch (length)
         {
             case 1:
-                /* fixing problems with signed overflow on unsigned numbers */
+                /* исправление проблем со знаковым переполнением беззнаковых чисел */
                 if ((style & UNITY_DISPLAY_RANGE_INT) == UNITY_DISPLAY_RANGE_INT)
                 {
                     expect_val = *(UNITY_PTR_ATTRIBUTE const UNITY_INT8*)expected;
@@ -1482,7 +1482,7 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
                 break;
 
             case 2:
-                /* fixing problems with signed overflow on unsigned numbers */
+                /* исправление проблем со знаковым переполнением беззнаковых чисел */
                 if ((style & UNITY_DISPLAY_RANGE_INT) == UNITY_DISPLAY_RANGE_INT)
                 {
                     expect_val = *(UNITY_PTR_ATTRIBUTE const UNITY_INT16*)expected;
@@ -1499,7 +1499,7 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
 
 #ifdef UNITY_SUPPORT_64
             case 8:
-                /* fixing problems with signed overflow on unsigned numbers */
+                /* исправление проблем со знаковым переполнением беззнаковых чисел */
                 if ((style & UNITY_DISPLAY_RANGE_INT) == UNITY_DISPLAY_RANGE_INT)
                 {
                     expect_val = *(UNITY_PTR_ATTRIBUTE const UNITY_INT64*)expected;
@@ -1515,9 +1515,9 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
                 break;
 #endif
 
-            default: /* default is length 4 bytes */
+            default: /* по умолчанию длина 4 байта */
             case 4:
-                /* fixing problems with signed overflow on unsigned numbers */
+                /* исправление проблем со знаковым переполнением беззнаковых чисел */
                 if ((style & UNITY_DISPLAY_RANGE_INT) == UNITY_DISPLAY_RANGE_INT)
                 {
                     expect_val = *(UNITY_PTR_ATTRIBUTE const UNITY_INT32*)expected;
@@ -1560,7 +1560,7 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
         if (Unity.CurrentTestFailed)
         {
             if ((style & UNITY_DISPLAY_RANGE_UINT) && (length < (UNITY_INT_WIDTH / 8)))
-            {   /* For UINT, remove sign extension (padding 1's) from signed type casts above */
+            {   /* Для UINT удалите расширение знака (заполнение 1) из приведенных выше приведений знакового типа. */
                 UNITY_INT mask = 1;
                 mask = (mask << 8 * length) - 1;
                 expect_val &= mask;
@@ -1578,7 +1578,7 @@ void UnityAssertNumbersArrayWithin(const UNITY_UINT delta,
             UnityAddMsgIfSpecified(msg);
             UNITY_FAIL_AND_BAIL;
         }
-        /* Walk through array by incrementing the pointers */
+        /* Пройти по массиву, увеличивая указатели */
         if (flags == UNITY_ARRAY_TO_ARRAY)
         {
             expected = (UNITY_INTERNAL_PTR)((const char*)expected + increment);
@@ -1597,7 +1597,7 @@ void UnityAssertEqualString(const char* expected,
 
     RETURN_IF_FAIL_OR_IGNORE;
 
-    /* if both pointers not null compare the strings */
+    /* если оба указателя не равны нулю, сравнить строки */
     if (expected && actual)
     {
         for (i = 0; expected[i] || actual[i]; i++)
@@ -1610,7 +1610,7 @@ void UnityAssertEqualString(const char* expected,
         }
     }
     else
-    { /* fail if either null but not if both */
+    { /* сбой, если любой из них равен нулю, но не если оба */
         if (expected || actual)
         {
             Unity.CurrentTestFailed = 1;
@@ -1637,7 +1637,7 @@ void UnityAssertEqualStringLen(const char* expected,
 
     RETURN_IF_FAIL_OR_IGNORE;
 
-    /* if both pointers not null compare the strings */
+    /* если оба указателя не равны нулю, сравнить строки */
     if (expected && actual)
     {
         for (i = 0; (i < length) && (expected[i] || actual[i]); i++)
@@ -1650,7 +1650,7 @@ void UnityAssertEqualStringLen(const char* expected,
         }
     }
     else
-    { /* fail if either null but not if both */
+    { /* сбой, если любой из них равен нулю, но не если оба */
         if (expected || actual)
         {
             Unity.CurrentTestFailed = 1;
@@ -1681,7 +1681,7 @@ void UnityAssertEqualStringArray(UNITY_INTERNAL_PTR expected,
 
     RETURN_IF_FAIL_OR_IGNORE;
 
-    /* if no elements, it's an error */
+    /* если нет элементов, это ошибка */
     if (num_elements == 0)
     {
 #ifdef UNITY_COMPARE_PTRS_ON_ZERO_ARRAY
@@ -1693,7 +1693,7 @@ void UnityAssertEqualStringArray(UNITY_INTERNAL_PTR expected,
 
     if ((const void*)expected == (const void*)actual)
     {
-        return; /* Both are NULL or same pointer */
+        return; /* Оба являются NULL или одинаковым указателем. */
     }
 
     if (UnityIsOneArrayNull((UNITY_INTERNAL_PTR)expected, (UNITY_INTERNAL_PTR)actual, lineNumber, msg))
@@ -1714,7 +1714,7 @@ void UnityAssertEqualStringArray(UNITY_INTERNAL_PTR expected,
             expd = ((const char* const*)expected)[j];
         }
 
-        /* if both pointers not null compare the strings */
+        /* если оба указателя не равны нулю, сравнить строки */
         if (expd && act)
         {
             for (i = 0; expd[i] || act[i]; i++)
@@ -1727,7 +1727,7 @@ void UnityAssertEqualStringArray(UNITY_INTERNAL_PTR expected,
             }
         }
         else
-        { /* handle case of one pointers being null (if both null, test should pass) */
+        { /* обрабатывать случай, когда один из указателей имеет значение NULL (если оба указателя равны нулю, тест должен пройти) */
             if (expd != act)
             {
                 Unity.CurrentTestFailed = 1;
@@ -1780,7 +1780,7 @@ void UnityAssertEqualMemory(UNITY_INTERNAL_PTR expected,
 
     if (expected == actual)
     {
-        return; /* Both are NULL or same pointer */
+        return; /* Оба являются NULL или одинаковым указателем. */
     }
 
     if (UnityIsOneArrayNull(expected, actual, lineNumber, msg))
@@ -1857,7 +1857,7 @@ UNITY_INTERNAL_PTR UnityNumToPtr(const UNITY_INT num, const UNITY_UINT8 size)
             return (UNITY_INTERNAL_PTR)(&UnityQuickCompare.i64);
 #endif
 
-        default: /* 4 bytes */
+        default: /* 4 байта */
             UnityQuickCompare.i32 = (UNITY_INT32)num;
             return (UNITY_INTERNAL_PTR)(&UnityQuickCompare.i32);
     }
@@ -1884,7 +1884,7 @@ UNITY_INTERNAL_PTR UnityDoubleToPtr(const double num)
 #ifdef UNITY_INCLUDE_PRINT_FORMATTED
 
 /*-----------------------------------------------
- * printf length modifier helpers
+ * Помощники модификатора длины printf
  *-----------------------------------------------*/
 
 enum UnityLengthModifier {
@@ -1937,7 +1937,7 @@ static enum UnityLengthModifier UnityLengthModifierGet(const char *pch, int *len
             }
         case 'h':
             {
-                // short and char are converted to int
+                // short и char преобразуются в int
                 length_mod = UNITY_LENGTH_MODIFIER_NONE;
                 if (pch[1] == 'h')
                 {
@@ -1954,7 +1954,7 @@ static enum UnityLengthModifier UnityLengthModifierGet(const char *pch, int *len
         case 't':
         case 'L':
             {
-                // Not supported, but should gobble up the length specifier anyway
+                // Не поддерживается, но в любом случае должен сожрать спецификатор длины
                 length_mod = UNITY_LENGTH_MODIFIER_NONE;
                 *length = 1;
                 break;
@@ -1969,7 +1969,7 @@ static enum UnityLengthModifier UnityLengthModifierGet(const char *pch, int *len
 }
 
 /*-----------------------------------------------
- * printf helper function
+ * вспомогательная функция printf
  *-----------------------------------------------*/
 static void UnityPrintFVA(const char* format, va_list va)
 {
@@ -1978,7 +1978,7 @@ static void UnityPrintFVA(const char* format, va_list va)
     {
         while (*pch)
         {
-            /* format identification character */
+            /* символ идентификации формата */
             if (*pch == '%')
             {
                 pch++;
@@ -2069,7 +2069,7 @@ static void UnityPrintFVA(const char* format, va_list va)
                             }
                         default:
                             {
-                                /* print the unknown format character */
+                                /* напечатать неизвестный символ формата */
                                 UNITY_OUTPUT_CHAR('%');
                                 UnityPrintChar(pch);
                                 break;
@@ -2078,7 +2078,7 @@ static void UnityPrintFVA(const char* format, va_list va)
                 }
             }
 #ifdef UNITY_OUTPUT_COLOR
-            /* print ANSI escape code */
+            /* напечатать escape-код ANSI */
             else if ((*pch == 27) && (*(pch + 1) == '['))
             {
                 pch += UnityPrintAnsiEscapeString(pch);
@@ -2117,7 +2117,7 @@ void UnityPrintF(const UNITY_LINE_TYPE line, const char* format, ...)
 
 
 /*-----------------------------------------------
- * Control Functions
+ * Функции управления
  *-----------------------------------------------*/
 
 /*-----------------------------------------------*/
@@ -2188,7 +2188,7 @@ void UnityMessage(const char* msg, const UNITY_LINE_TYPE line)
 }
 
 /*-----------------------------------------------*/
-/* If we have not defined our own test runner, then include our default test runner to make life easier */
+/* Если мы не определили свой собственный инструмент для запуска тестов, включите наш инструмент для запуска тестов по умолчанию, чтобы облегчить жизнь. */
 #ifndef UNITY_SKIP_DEFAULT_RUNNER
 void UnityDefaultTestRun(UnityTestFunction Func, const char* FuncName, const int FuncLineNum)
 {
@@ -2264,7 +2264,7 @@ int UnityEnd(void)
 }
 
 /*-----------------------------------------------
- * Command Line Argument Support
+ * Поддержка аргументов командной строки
  *-----------------------------------------------*/
 #ifdef UNITY_USE_COMMAND_LINE_ARGS
 
@@ -2285,10 +2285,10 @@ int UnityParseOptions(int argc, char** argv)
         {
             switch (argv[i][1])
             {
-                case 'l': /* list tests */
+                case 'l': /* список тестов */
                     return -1;
-                case 'n': /* include tests with name including this string */
-                case 'f': /* an alias for -n */
+                case 'n': /* включить тесты с именем, включающим эту строку */
+                case 'f': /* псевдоним для -n */
                     if (argv[i][2] == '=')
                     {
                         UnityOptionIncludeNamed = &argv[i][3];
@@ -2304,13 +2304,13 @@ int UnityParseOptions(int argc, char** argv)
                         return 1;
                     }
                     break;
-                case 'q': /* quiet */
+                case 'q': /* тихий */
                     UnityVerbosity = 0;
                     break;
-                case 'v': /* verbose */
+                case 'v': /* многословный */
                     UnityVerbosity = 2;
                     break;
-                case 'x': /* exclude tests with name including this string */
+                case 'x': /* исключить тесты с именем, включающим эту строку */
                     if (argv[i][2] == '=')
                     {
                         UnityOptionExcludeNamed = &argv[i][3];
@@ -2330,7 +2330,7 @@ int UnityParseOptions(int argc, char** argv)
                     UnityPrint("ERROR: Unknown Option ");
                     UNITY_OUTPUT_CHAR(argv[i][1]);
                     UNITY_PRINT_EOL();
-                    /* Now display help */
+                    /* Теперь отобразить справку */
                     /* FALLTHRU */
                 case 'h':
                     UnityPrint("Options: "); UNITY_PRINT_EOL();
@@ -2366,13 +2366,13 @@ int IsStringInBiggerString(const char* longstring, const char* shortstring)
     {
         lnext = lptr + 1;
 
-        /* If they current bytes match, go on to the next bytes */
+        /* Если текущие байты совпадают, перейдите к следующим байтам. */
         while (*lptr && *sptr && (*lptr == *sptr))
         {
             lptr++;
             sptr++;
 
-            /* We're done if we match the entire string or up to a wildcard */
+            /* Все готово, если мы сопоставляем всю строку или до подстановочного знака. */
             if (*sptr == '*')
                 return 1;
             if (*sptr == ',')
@@ -2387,7 +2387,7 @@ int IsStringInBiggerString(const char* longstring, const char* shortstring)
                 return 1;
         }
 
-        /* Otherwise we start in the long pointer 1 character further and try again */
+        /* В противном случае мы начинаем по длинному указателю на 1 символ дальше и пробуем еще раз. */
         lptr = lnext;
         sptr = shortstring;
     }
@@ -2403,7 +2403,7 @@ int UnityStringArgumentMatches(const char* str)
     const char* ptr2;
     const char* ptrf;
 
-    /* Go through the options and get the substrings for matching one at a time */
+    /* Просмотрите параметры и получите подстроки для соответствия по одной */
     ptr1 = str;
     while (ptr1[0] != 0)
     {
@@ -2412,7 +2412,7 @@ int UnityStringArgumentMatches(const char* str)
             ptr1++;
         }
 
-        /* look for the start of the next partial */
+        /* ищите начало следующей части */
         ptr2 = ptr1;
         ptrf = 0;
         do
@@ -2429,14 +2429,14 @@ int UnityStringArgumentMatches(const char* str)
             ptr2++;
         }
 
-        /* done if complete filename match */
+        /* готово, если полное имя файла совпадает */
         retval = IsStringInBiggerString(Unity.TestFile, ptr1);
         if (retval == 1)
         {
             return retval;
         }
 
-        /* done if testname match after filename partial match */
+        /* выполнено, если тестовое имя совпадает после частичного совпадения имени файла */
         if ((retval == 2) && (ptrf != 0))
         {
             if (IsStringInBiggerString(Unity.CurrentTestName, ptrf))
@@ -2445,7 +2445,7 @@ int UnityStringArgumentMatches(const char* str)
             }
         }
 
-        /* done if complete testname match */
+        /* выполнено, если полное совпадение имени теста */
         if (IsStringInBiggerString(Unity.CurrentTestName, ptr1) == 1)
         {
             return 1;
@@ -2454,14 +2454,14 @@ int UnityStringArgumentMatches(const char* str)
         ptr1 = ptr2;
     }
 
-    /* we couldn't find a match for any substrings */
+    /* нам не удалось найти совпадение ни для одной подстроки */
     return 0;
 }
 
 /*-----------------------------------------------*/
 int UnityTestMatches(void)
 {
-    /* Check if this test name matches the included test pattern */
+    /* Проверьте, соответствует ли это имя теста включенному тестовому шаблону. */
     int retval;
     if (UnityOptionIncludeNamed)
     {
@@ -2472,7 +2472,7 @@ int UnityTestMatches(void)
         retval = 1;
     }
 
-    /* Check if this test name matches the excluded test pattern */
+    /* Проверьте, соответствует ли это имя теста исключенному тестовому шаблону. */
     if (UnityOptionExcludeNamed)
     {
         if (UnityStringArgumentMatches(UnityOptionExcludeNamed))

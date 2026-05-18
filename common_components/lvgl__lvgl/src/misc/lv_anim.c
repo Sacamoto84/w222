@@ -71,7 +71,7 @@ void lv_anim_core_init(void)
 {
     lv_ll_init(anim_ll_p, sizeof(lv_anim_t));
     state.timer = lv_timer_create(anim_timer, LV_DEF_REFR_PERIOD, NULL);
-    anim_mark_list_change(); /*Turn off the animation timer*/
+    anim_mark_list_change(); /*Отключить таймер анимации*/
     state.anim_list_changed = false;
     state.anim_run_round = false;
 }
@@ -84,7 +84,7 @@ void lv_anim_core_deinit(void)
 void lv_anim_enable_vsync_mode(bool enable)
 {
     if(enable) {
-        /* Remove animation timer, use vsync instead */
+        /* Удалить таймер анимации, вместо этого используйте vsync */
         if(state.timer) {
             lv_timer_delete(state.timer);
             state.timer = NULL;
@@ -124,24 +124,24 @@ lv_anim_t * lv_anim_start(const lv_anim_t * a)
 {
     LV_TRACE_ANIM("begin");
 
-    /*Do not let two animations for the same 'var' with the same 'exec_cb'*/
+    /*Не допускайте двух анимаций для одной и того же 'var' с одной и тем же 'exec_cb'.*/
     if(a->early_apply && (a->exec_cb || a->custom_exec_cb)) {
         remove_concurrent_anims(a);
     }
 
-    /*Add the new animation to the animation linked list*/
+    /*Добавьте новую анимацию в связанный список анимаций.*/
     lv_anim_t * new_anim = lv_ll_ins_head(anim_ll_p);
     LV_ASSERT_MALLOC(new_anim);
     if(new_anim == NULL) return NULL;
 
-    /*Initialize the animation descriptor*/
+    /*Инициализировать дескриптор анимации*/
     lv_memcpy(new_anim, a, sizeof(lv_anim_t));
     if(a->var == a) new_anim->var = new_anim;
     new_anim->run_round = state.anim_run_round;
     new_anim->last_timer_run = lv_tick_get();
     new_anim->is_paused = false;
 
-    /*Set the start value*/
+    /*Установите начальное значение*/
     if(new_anim->early_apply) {
         if(new_anim->get_value_cb) {
             int32_t v_ofs = new_anim->get_value_cb(new_anim);
@@ -161,8 +161,8 @@ lv_anim_t * lv_anim_start(const lv_anim_t * a)
         }
     }
 
-    /*Creating an animation changed the linked list.
-     *It's important if it happens in a ready callback. (see `anim_timer`)*/
+    /*Создание анимации изменило связанный список.
+     *Важно, если это происходит при готовом обратном вызове. (см.`anim_timer`)*/
     anim_mark_list_change();
 
     LV_TRACE_ANIM("finished");
@@ -192,14 +192,14 @@ bool lv_anim_delete(void * var, lv_anim_exec_xcb_t exec_cb)
         bool del = false;
         if((a->var == var || var == NULL) && (a->exec_cb == exec_cb || exec_cb == NULL)) {
             remove_anim(a);
-            anim_mark_list_change(); /*Read by `anim_timer`. It need to know if a delete occurred in
-                                       the linked list*/
+            anim_mark_list_change(); /*Читал`anim_timer`. Ему необходимо знать, произошло ли удаление в
+                                       связанный список*/
             del_any = true;
             del = true;
         }
 
-        /*Always start from the head on delete, because we don't know
-         *how `anim_ll_p` was changes in `a->deleted_cb` */
+        /*При удалении всегда начинайте с головы, потому что мы не знаем
+         *как`anim_ll_p`был изменен на `a->deleted_cb` */
         a = del ? lv_ll_get_head(anim_ll_p) : lv_ll_get_next(anim_ll_p, a);
     }
 
@@ -254,7 +254,7 @@ uint32_t lv_anim_speed_clamped(uint32_t speed, uint32_t min_time, uint32_t max_t
         max_time = 10230;
     }
 
-    /*Lower the resolution to fit the 0.1023 range*/
+    /*Уменьшите разрешение, чтобы оно соответствовало диапазону 0,1023.*/
     speed = (speed + 5) / 10;
     min_time = (min_time + 5) / 10;
     max_time = (max_time + 5) / 10;
@@ -285,11 +285,11 @@ void lv_anim_refr_now(void)
 
 int32_t lv_anim_path_linear(const lv_anim_t * a)
 {
-    /*Calculate the current step*/
+    /*Вычислить текущий шаг*/
     int32_t step = lv_map(a->act_time, 0, a->duration, 0, LV_ANIM_RESOLUTION);
 
-    /*Get the new value which will be proportional to `step`
-     *and the `start` and `end` values*/
+    /*Получите новое значение, которое будет балансировать`step`.
+     *и значения`start`и `end`*/
     int32_t new_value;
     new_value = step * (a->end_value - a->start_value);
     new_value = new_value >> LV_ANIM_RES_SHIFT;
@@ -323,40 +323,40 @@ int32_t lv_anim_path_overshoot(const lv_anim_t * a)
 
 int32_t lv_anim_path_bounce(const lv_anim_t * a)
 {
-    /*Calculate the current step*/
+    /*Вычислить текущий шаг*/
     int32_t t = lv_map(a->act_time, 0, a->duration, 0, LV_BEZIER_VAL_MAX);
     int32_t diff = (a->end_value - a->start_value);
 
-    /*3 bounces has 5 parts: 3 down and 2 up. One part is t / 5 long*/
+    /*3 отскока состоят из 5 частей: 3 вниз и 2 вверх. Одна часть длиной t/5*/
 
     if(t < 408) {
-        /*Go down*/
-        t = (t * 2500) >> LV_BEZIER_VAL_SHIFT; /*[0..1024] range*/
+        /*Спуститься*/
+        t = (t * 2500) >> LV_BEZIER_VAL_SHIFT; /*[0..1024] диапазон*/
         t = LV_BEZIER_VAL_MAX - t;
     }
     else if(t >= 408 && t < 614) {
-        /*First bounce back*/
+        /*Первый возврат в норму*/
         t -= 408;
-        t    = t * 5; /*to [0..1024] range*/
+        t    = t * 5; /*до [0..1024] диапазона*/
         diff = diff / 20;
     }
     else if(t >= 614 && t < 819) {
-        /*Fall back*/
+        /*Отступить*/
         t -= 614;
-        t    = t * 5; /*to [0..1024] range*/
+        t    = t * 5; /*до [0..1024] диапазона*/
         t    = LV_BEZIER_VAL_MAX - t;
         diff = diff / 20;
     }
     else if(t >= 819 && t < 921) {
-        /*Second bounce back*/
+        /*Второй отскок*/
         t -= 819;
-        t    = t * 10; /*to [0..1024] range*/
+        t    = t * 10; /*до [0..1024] диапазона*/
         diff = diff / 40;
     }
     else if(t >= 921 && t <= LV_BEZIER_VAL_MAX) {
-        /*Fall back*/
+        /*Отступить*/
         t -= 921;
-        t    = t * 10; /*to [0..1024] range*/
+        t    = t * 10; /*до [0..1024] диапазона*/
         t    = LV_BEZIER_VAL_MAX - t;
         diff = diff / 40;
     }
@@ -521,12 +521,12 @@ lv_anim_t * lv_anim_custom_get(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb)
 
 uint32_t lv_anim_resolve_speed(uint32_t speed_or_time, int32_t start, int32_t end)
 {
-    /*It was a simple time*/
+    /*Это было простое время*/
     if((speed_or_time & LV_ANIM_SPEED_MASK) == 0) return speed_or_time;
 
     uint32_t d    = LV_ABS(start - end);
     uint32_t speed = speed_or_time & 0x3FF;
-    uint32_t time = (d * 100) / speed; /*Speed is in 10 units per sec*/
+    uint32_t time = (d * 100) / speed; /*Скорость в 10 единиц в секунду.*/
     uint32_t max_time = (speed_or_time >> 20) & 0x3FF;
     uint32_t min_time = (speed_or_time >> 10) & 0x3FF;
 
@@ -577,14 +577,14 @@ void lv_anim_set_external_data(lv_anim_t * anim, void * data, void (* free_cb)(v
  **********************/
 
 /**
- * Periodically handle the animations.
- * @param param unused
+ * Периодически обрабатывайте анимации.
+ * @param param неиспользованный
  */
 static void anim_timer(lv_timer_t * param)
 {
     LV_UNUSED(param);
 
-    /*Flip the run round*/
+    /*Переверните бег*/
     state.anim_run_round = state.anim_run_round ? false : true;
 
     lv_anim_t * a = lv_ll_get_head(anim_ll_p);
@@ -607,15 +607,15 @@ static void anim_timer(lv_timer_t * param)
         }
         a->last_timer_run = lv_tick_get();
 
-        /*It can be set by `lv_anim_delete()` typically in `end_cb`. If set then an animation delete
-         * happened in `anim_completed_handler` which could make this linked list reading corrupt
-         * because the list is changed meanwhile
+        /*Его можно установить с помощью `lv_anim_delete()`, обычно в `end_cb`. Если установлено, анимация удаляется.
+         * произошло в`anim_completed_handler`, что могло привести к повреждению чтения этого связанного списка.
+         * потому что список тем временем меняется
          */
         state.anim_list_changed = false;
 
         if(!a->is_paused && a->run_round != state.anim_run_round) {
-            a->run_round = state.anim_run_round; /*The list readying might be reset so need to know which anim has run already*/
-            /*The animation will run now for the first time. Call `start_cb`*/
+            a->run_round = state.anim_run_round; /*Подготовка списка может быть сброшена, поэтому необходимо знать, какая анимация уже запущена.*/
+            /*Анимация запускается впервые. Позвоните `start_cb`*/
             if(!a->start_cb_called && a->act_time >= 0) {
 
                 if(a->early_apply == 0 && a->get_value_cb) {
@@ -629,12 +629,12 @@ static void anim_timer(lv_timer_t * param)
                 if(a->start_cb) a->start_cb(a);
                 a->start_cb_called = 1;
 
-                /*Do not let two animations for the same 'var' with the same 'exec_cb'*/
+                /*Не допускайте двух анимаций для одной и того же 'var' с одной и тем же 'exec_cb'.*/
                 remove_concurrent_anims(a);
             }
 
             if(a->act_time >= 0) {
-                int32_t act_time_original = a->act_time; /*The unclipped version is used later to correctly repeat the animation*/
+                int32_t act_time_original = a->act_time; /*Необрезанная версия используется позже для правильного повтора анимации.*/
                 if(a->act_time > a->duration) a->act_time = a->duration;
 
                 int32_t act_time_before_exec = a->act_time;
@@ -643,19 +643,19 @@ static void anim_timer(lv_timer_t * param)
 
                 if(new_value != a->current_value) {
                     a->current_value = new_value;
-                    /*Apply the calculated value*/
+                    /*Применить рассчитанное значение*/
                     if(a->exec_cb) a->exec_cb(a->var, new_value);
                     if(!state.anim_list_changed && a->custom_exec_cb) a->custom_exec_cb(a, new_value);
                 }
 
                 if(!state.anim_list_changed) {
-                    /*Restore the original time to see if there is over time, ignoring silly values.
-                     *Restore only if it wasn't changed in the `exec_cb` for some special reasons.*/
+                    /*Восстановите исходное время, чтобы увидеть, есть ли оно с течением времени, игнорируя глупые значения.
+                     *Восстановление только в том случае, если оно не было изменено в`exec_cb`по каким-то причинам.*/
                     if(a->act_time == act_time_before_exec && act_time_original < a->duration * 2) {
                         a->act_time = act_time_original;
                     }
 
-                    /*If the time is elapsed the animation is ready*/
+                    /*Если время истекло, анимация готова.*/
                     if(a->act_time >= a->duration) {
                         anim_completed_handler(a);
                     }
@@ -663,8 +663,8 @@ static void anim_timer(lv_timer_t * param)
             }
         }
 
-        /*If the linked list changed due to anim. delete then it's not safe to continue
-         *the reading of the list from here -> start from the head*/
+        /*Если связанный список изменился из-за анима. удалить, затем продолжать небезопасно
+         *чтение списка отсюда -> начнем с головы*/
         if(state.anim_list_changed)
             a = lv_ll_get_head(anim_ll_p);
         else
@@ -674,29 +674,29 @@ static void anim_timer(lv_timer_t * param)
 }
 
 /**
- * Called when an animation is completed to do the necessary things
- * e.g. repeat, play in reverse, delete etc.
- * @param a pointer to an animation descriptor
+ * Вызывается, когда анимация завершена, чтобы выполнить необходимые действия.
+ * например повторить, воспроизвести в обратном направлении, удалить и т. д.
+ * @param a указатель на дескриптор анимации
  */
 static void anim_completed_handler(lv_anim_t * a)
 {
-    /*In the end of a forward anim decrement repeat cnt.*/
+    /*В конце прямого освещения повторите cnt.*/
     if(a->reverse_play_in_progress == 0 && a->repeat_cnt > 0 && a->repeat_cnt != LV_ANIM_REPEAT_INFINITE) {
         a->repeat_cnt--;
     }
 
-    /*Delete animation if
-     * - no repeat left and no reverse play scheduled (simple one shot animation); or
-     * - no repeat, reverse play enabled (reverse_duration != 0) and reverse play is completed. */
+    /*Удалить анимацию, если
+     * - не осталось повтора и не запланировано обратное воспроизведение (простая однокадровая анимация); или
+     * - повтора нет, обратное воспроизведение включено (reverse_duration!= 0) и обратное воспроизведение завершено. */
     if(a->repeat_cnt == 0 && (a->reverse_duration == 0 || a->reverse_play_in_progress == 1)) {
 
-        /*Delete the animation from the list.
-         * This way the `completed_cb` will see the animations like it's animation is already deleted*/
+        /*Удалить анимацию из списка.
+         * Таким образом,`completed_cb`будет видеть анимацию так, как будто она уже удалена.*/
         lv_ll_remove(anim_ll_p, a);
-        /*Flag that the list has changed*/
+        /*Отметить, что список изменился*/
         anim_mark_list_change();
 
-        /*Call the callback function at the end*/
+        /*Вызовите функцию обратного вызова в конце*/
         if(a->completed_cb != NULL) a->completed_cb(a);
         if(a->deleted_cb != NULL) a->deleted_cb(a);
 #if LV_USE_EXT_DATA
@@ -707,25 +707,25 @@ static void anim_completed_handler(lv_anim_t * a)
 #endif
         lv_free(a);
     }
-    /*If the animation is not deleted then restart it*/
+    /*Если анимация не удалена, перезапустите ее.*/
     else {
-        /*Restart the animation. If the time is over a little compensate it.*/
+        /*Перезапустите анимацию. Если время вышло, немного компенсируйте это.*/
         int32_t over_time = 0;
         a->start_cb_called = 0;
         if(a->act_time > a->duration) over_time = a->act_time - a->duration;
         a->act_time = over_time - (int32_t)(a->repeat_delay);
-        /*Swap start and end values in reverse-play mode*/
+        /*Поменяйте местами начальные и конечные значения в режиме обратного воспроизведения.*/
         if(a->reverse_duration != 0) {
-            /*If now now playing in reverse, use the 'reverse_delay'.*/
+            /*Если сейчас играете в обратном порядке, викорируйте «reverse_delay».*/
             if(a->reverse_play_in_progress == 0) a->act_time = -(int32_t)(a->reverse_delay);
 
-            /*Toggle reverse-play state*/
+            /*Переключить режим обратного воспроизведения*/
             a->reverse_play_in_progress = a->reverse_play_in_progress == 0 ? 1 : 0;
-            /*Swap the start and end values*/
+            /*Поменяйте местами начальное и конечное значения.*/
             int32_t tmp    = a->start_value;
             a->start_value = a->end_value;
             a->end_value   = tmp;
-            /*Swap the time and reverse_duration*/
+            /*Поменяйте местами время и reverse_duration*/
             tmp = a->duration;
             a->duration = a->reverse_duration;
             a->reverse_duration = tmp;
@@ -769,7 +769,7 @@ static void anim_mark_list_change(void)
 
 static int32_t lv_anim_path_cubic_bezier(const lv_anim_t * a, int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
-    /*Calculate the current step*/
+    /*Вычислить текущий шаг*/
     uint32_t t = lv_map(a->act_time, 0, a->duration, 0, LV_BEZIER_VAL_MAX);
     int32_t step = lv_cubic_bezier(t, x1, y1, x2, y2);
 
@@ -798,10 +798,10 @@ static void resolve_time(lv_anim_t * a)
 }
 
 /**
- * Remove animations which are animating the same var with the same exec_cb
- * and they are already running or they have early_apply
- * @param a_current     the current animation, use its var and exec_cb as reference to know what to remove
- * @return              true: at least one animation was delete
+ * Удалите анимации, которые анимируют одну и ту же переменную с той же темой exec_cb.
+ * и они уже активированы или у них есть early_apply
+ * @param a_current     текущая анимация, используйте ее var иexec_cbв качестве ссылки, чтобы знать, что удалить
+ * @return              true: по крайней мере одна анимация была удалена
  */
 static bool remove_concurrent_anims(const lv_anim_t * a_current)
 {
@@ -812,14 +812,14 @@ static bool remove_concurrent_anims(const lv_anim_t * a_current)
     a = lv_ll_get_head(anim_ll_p);
     while(a != NULL) {
         bool del = false;
-        /*We can't test for custom_exec_cb equality because in the MicroPython binding
-         *a wrapper callback is used here an the real callback data is stored in the `user_data`.
-         *Therefore equality check would remove all animations.*/
+        /*Мы не можем проверить соответствиеcustom_exec_cb, потому что в привязке MicroPython
+         *Здесь используется обратный вызов-оболочка, реальные данные обратного вызова, сохраняемые в `user_data`.
+         *Поэтому проверка равенства удалит всю анимацию.*/
         if(a != a_current &&
            (a->act_time >= 0 || a->early_apply) &&
            (a->var == a_current->var) &&
            ((a->exec_cb && a->exec_cb == a_current->exec_cb)
-            /*|| (a->custom_exec_cb && a->custom_exec_cb == a_current->custom_exec_cb)*/)) {
+            /*|| (a->custom_exec_cb&& a->custom_exec_cb==a_current->custom_exec_cb)*/)) {
             lv_ll_remove(anim_ll_p, a);
             if(a->deleted_cb != NULL) a->deleted_cb(a);
 #if LV_USE_EXT_DATA
@@ -829,15 +829,15 @@ static bool remove_concurrent_anims(const lv_anim_t * a_current)
             }
 #endif
             lv_free(a);
-            /*Read by `anim_timer`. It need to know if a delete occurred in the linked list*/
+            /*Читал`anim_timer`. Необходимо знать, произошло ли удаление в связанном списке.*/
             anim_mark_list_change();
 
             del_any = true;
             del = true;
         }
 
-        /*Always start from the head on delete, because we don't know
-         *how `anim_ll_p` was changes in `a->deleted_cb` */
+        /*При удалении всегда начинайте с головы, потому что мы не знаем
+         *как`anim_ll_p`был изменен на `a->deleted_cb` */
         a = del ? lv_ll_get_head(anim_ll_p) : lv_ll_get_next(anim_ll_p, a);
     }
 

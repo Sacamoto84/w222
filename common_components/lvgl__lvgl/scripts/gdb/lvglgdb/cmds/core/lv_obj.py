@@ -18,14 +18,14 @@ class DumpObj(gdb.Command):
         if not obj:
             return
 
-        # dump self
+        # сбросить себя
         print("  " * depth, end="")
         dump_obj_info(obj)
 
         if limit is not None and depth >= limit:
             return
 
-        # dump children
+        # бросать детей
         for child in obj.children:
             self.dump_obj(child, depth + 1, limit=limit)
 
@@ -55,7 +55,7 @@ class DumpObj(gdb.Command):
             root = LVObject(Value(root))
             self.dump_obj(root, limit=args.level)
         else:
-            # dump all displays
+            # сбросить все дисплеи
             depth = 0
             for disp in curr_inst().displays():
                 print(f"Display {hex(disp)}")

@@ -91,11 +91,11 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent)
     lv_label_set_text_static(label, "Invite");
     lv_obj_center(label);
 
-    /*Create a keyboard*/
+    /*Создать клавиатуру*/
     lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
     lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
 
-    /*Create the second panel*/
+    /*Создайте вторую панель*/
     lv_obj_t * panel2 = lv_obj_create(parent);
     lv_obj_set_height(panel2, LV_SIZE_CONTENT);
 
@@ -135,7 +135,7 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent)
     lv_textarea_set_one_line(birthdate, true);
     lv_obj_add_event_cb(birthdate, birthday_event_cb, LV_EVENT_ALL, NULL);
 
-    /*Create the third panel*/
+    /*Создайте третью панель*/
     lv_obj_t * panel3 = lv_obj_create(parent);
     lv_obj_t * panel3_title = lv_demo_widgets_title_create(panel3, "Your skills");
 
@@ -165,19 +165,19 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent)
         static int32_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 
-        /*Create the top panel*/
+        /*Создайте верхнюю панель*/
         static int32_t grid_1_col_dsc[] = {LV_GRID_CONTENT, 5, LV_GRID_CONTENT, LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_1_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, 10, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 
         static int32_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_2_row_dsc[] = {
-            LV_GRID_CONTENT,  /*Title*/
-            5,                /*Separator*/
-            LV_GRID_CONTENT,  /*Box title*/
-            30,               /*Boxes*/
-            5,                /*Separator*/
-            LV_GRID_CONTENT,  /*Box title*/
-            30,               /*Boxes*/
+            LV_GRID_CONTENT,  /*Название*/
+            5,                /*Сепаратор*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            30,               /*Коробки*/
+            5,                /*Сепаратор*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            30,               /*Коробки*/
             LV_GRID_TEMPLATE_LAST
         };
 
@@ -222,30 +222,30 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent)
         static int32_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 
-        /*Create the top panel*/
+        /*Создайте верхнюю панель*/
         static int32_t grid_1_col_dsc[] = {LV_GRID_CONTENT, 1, LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_1_row_dsc[] = {
-            LV_GRID_CONTENT, /*Name*/
-            LV_GRID_CONTENT, /*Description*/
-            LV_GRID_CONTENT, /*Email*/
+            LV_GRID_CONTENT, /*Имя*/
+            LV_GRID_CONTENT, /*Описание*/
+            LV_GRID_CONTENT, /*электронная почта*/
             -20,
-            LV_GRID_CONTENT, /*Phone*/
-            LV_GRID_CONTENT, /*Buttons*/
+            LV_GRID_CONTENT, /*Телефон*/
+            LV_GRID_CONTENT, /*Кнопки*/
             LV_GRID_TEMPLATE_LAST
         };
 
         static int32_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_2_row_dsc[] = {
-            LV_GRID_CONTENT,  /*Title*/
-            5,                /*Separator*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
+            LV_GRID_CONTENT,  /*Название*/
+            5,                /*Сепаратор*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
             LV_GRID_TEMPLATE_LAST
         };
 
@@ -293,15 +293,15 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent)
         static int32_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
         lv_obj_set_grid_dsc_array(parent, grid_main_col_dsc, grid_main_row_dsc);
 
-        /*Create the top panel*/
+        /*Создайте верхнюю панель*/
         static int32_t grid_1_col_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-        static int32_t grid_1_row_dsc[] = {LV_GRID_CONTENT, /*Avatar*/
-                                           LV_GRID_CONTENT, /*Name*/
-                                           LV_GRID_CONTENT, /*Description*/
-                                           LV_GRID_CONTENT, /*Email*/
-                                           LV_GRID_CONTENT, /*Phone number*/
-                                           LV_GRID_CONTENT, /*Button1*/
-                                           LV_GRID_CONTENT, /*Button2*/
+        static int32_t grid_1_row_dsc[] = {LV_GRID_CONTENT, /*Аватар*/
+                                           LV_GRID_CONTENT, /*Имя*/
+                                           LV_GRID_CONTENT, /*Описание*/
+                                           LV_GRID_CONTENT, /*электронная почта*/
+                                           LV_GRID_CONTENT, /*Номер телефона*/
+                                           LV_GRID_CONTENT, /*Кнопка1*/
+                                           LV_GRID_CONTENT, /*Кнопка2*/
                                            LV_GRID_TEMPLATE_LAST
                                           };
 
@@ -309,16 +309,16 @@ void lv_demo_widgets_profile_create(lv_obj_t * parent)
 
         static int32_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
         static int32_t grid_2_row_dsc[] = {
-            LV_GRID_CONTENT,  /*Title*/
-            5,                /*Separator*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40,               /*Box*/
-            LV_GRID_CONTENT,  /*Box title*/
-            40, LV_GRID_TEMPLATE_LAST               /*Box*/
+            LV_GRID_CONTENT,  /*Название*/
+            5,                /*Сепаратор*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40,               /*Коробка*/
+            LV_GRID_CONTENT,  /*Название поля*/
+            40, LV_GRID_TEMPLATE_LAST               /*Коробка*/
         };
 
         lv_obj_set_grid_dsc_array(panel2, grid_2_col_dsc, grid_2_row_dsc);
@@ -374,7 +374,7 @@ static void ta_event_cb(lv_event_t * e)
         if(lv_indev_get_type(lv_indev_active()) != LV_INDEV_TYPE_KEYPAD) {
             lv_keyboard_set_textarea(kb, ta);
             lv_obj_set_style_max_height(kb, LV_HOR_RES * 2 / 3, 0);
-            lv_obj_update_layout(tv);   /*Be sure the sizes are recalculated*/
+            lv_obj_update_layout(tv);   /*Убедитесь, что размеры пересчитаны.*/
             lv_obj_set_height(tv, LV_VER_RES - lv_obj_get_height(kb));
             lv_obj_remove_flag(kb, LV_OBJ_FLAG_HIDDEN);
             lv_obj_scroll_to_view_recursive(ta, LV_ANIM_OFF);
@@ -391,7 +391,7 @@ static void ta_event_cb(lv_event_t * e)
     else if(code == LV_EVENT_READY || code == LV_EVENT_CANCEL) {
         lv_obj_set_height(tv, LV_VER_RES);
         lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-        lv_indev_reset(NULL, ta);   /*To forget the last clicked object to make it focusable again*/
+        lv_indev_reset(NULL, ta);   /*Чтобы забыть последний объект, на который щелкнули, чтобы снова сделать его фокусируемым*/
     }
 }
 

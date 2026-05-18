@@ -2,7 +2,7 @@
 #if LV_BUILD_EXAMPLES && LV_USE_LIST
 
 /**
- * Styling the scrollbars
+ * Стилизация полос прокрутки
  */
 void lv_example_scroll_4(void)
 {
@@ -27,21 +27,21 @@ void lv_example_scroll_4(void)
                       "Fusce molestie rhoncus nisi sit amet tincidunt. \n"
                       "Suspendisse a nunc ut magna ornare volutpat.");
 
-    /*Remove the style of scrollbar to have clean start*/
+    /*Удалите стиль полосы прокрутки, чтобы начать с чистого листа.*/
     lv_obj_remove_style(obj, NULL, LV_PART_SCROLLBAR | LV_STATE_ANY);
 
-    /*Create a transition the animate the some properties on state change*/
+    /*Создайте переход, чтобы анимировать некоторые свойства при изменении состояния.*/
     static const lv_style_prop_t props[] = {LV_STYLE_BG_OPA, LV_STYLE_WIDTH, 0};
     static lv_style_transition_dsc_t trans;
     lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 200, 0, NULL);
 
-    /*Create a style for the scrollbars*/
+    /*Создайте стиль для полос прокрутки*/
     static lv_style_t style;
     lv_style_init(&style);
-    lv_style_set_width(&style, 4);      /*Width of the scrollbar*/
-    lv_style_set_length(&style, 20);    /*Length of the scrollbar*/
-    lv_style_set_pad_right(&style, 5);  /*Space from the parallel side*/
-    lv_style_set_pad_top(&style, 5);    /*Space from the perpendicular side*/
+    lv_style_set_width(&style, 4);      /*Ширина полосы прокрутки*/
+    lv_style_set_length(&style, 20);    /*Длина полосы прокрутки*/
+    lv_style_set_pad_right(&style, 5);  /*Пространство с параллельной стороны*/
+    lv_style_set_pad_top(&style, 5);    /*Пространство с перпендикулярной стороны*/
 
     lv_style_set_radius(&style, 2);
     lv_style_set_bg_opa(&style, LV_OPA_70);
@@ -54,7 +54,7 @@ void lv_example_scroll_4(void)
 
     lv_style_set_transition(&style, &trans);
 
-    /*Make the scrollbars wider and use 100% opacity when scrolled*/
+    /*Сделайте полосы прокрутки шире и используйте 100% непрозрачность при прокрутке.*/
     static lv_style_t style_scrolled;
     lv_style_init(&style_scrolled);
     lv_style_set_width(&style_scrolled, 8);

@@ -2,36 +2,36 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 /**
  * @file
- * @brief Vector font rendering
+ * @brief Рендеринг векторного шрифта
  *
- * This file includes the necessary structs and functions that are used for rendering text (strings and single characters),
- * using vector fonts. The accompanying vector font converter utility, converts truetype fonts (ttf files) to instances
- * of the structs defined here. A use case of this module is included in the respective examples (examples/NemaVG/render_vg_font).
+ * Этот файл включает в себя необходимые структуры и функции, которые используются для рендеринга текста (строки и отдельные символы).
+ * с использованием векторных шрифтов. Сопутствующая утилита конвертера векторных шрифтов преобразует шрифты TrueType (файлы TTF) в отдельных экземплярах.
+ * структура, определенная здесь. Вариант использования этого модуля включен в соответствующие примеры (examples/NemaVG/ render_vg_font).
  */
 
 #ifndef NEMA_VG_FONT_H_
@@ -40,7 +40,7 @@
 #include "nema_matrix3x3.h"
 #include "nema_vg.h"
 #include "nema_vg_context.h"
-#include "nema_font.h" //vector to raster conversion
+#include "nema_font.h" //преобразование вектора в растр
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,13 +64,13 @@ extern "C" {
 #define NEMA_VG_CHAR_BTT       (0x02U) /**< Character follows bottom to top orientation */
 
 
-/** NemaVG Kerning pair information data struct */
+/** Структура данных информационной пары NemaVG Кернинга */
 typedef struct {
     const uint32_t   left;     /**< Neighbor character to the left of the current one (Unicode value) */
     const float      x_offset; /**< Kerning offset value (horizontally) */
 } nema_vg_kern_pair_t;
 
-/** NemaVG data struct of a glyph in vector format*/
+/** Структура данных NemaVG глифа в векторном формате*/
 typedef struct {
     const uint32_t  data_offset;    /**< Offset value for the data of the glyph in the respective data array */
     const size_t    data_length;    /**< Length of the data in the respective data array */
@@ -85,14 +85,14 @@ typedef struct {
     const int16_t   bbox_ymax;      /**< Maximum y of the glyph's bounding box */
 } nema_vg_glyph_t;
 
-/** NemaVG vector font range data struct */
+/** Структура данных связанных векторных шрифтов NemaVG */
 typedef struct {
     const uint32_t first;          /**< Unicode value of the first value of the range */
     const uint32_t last;           /**< Unicode value of the last value of the range */
     const nema_vg_glyph_t *glyphs; /**< Pointer to the array of glyphs */
 } nema_vg_font_range_t;
 
-/** NemaVG vector font data struct*/
+/** Структура данных векторного шрифта NemaVG*/
 typedef struct {
     const uint32_t             version;          /**< Font version */
     const nema_vg_font_range_t *ranges;          /**< Pointer to the array of ranges */
@@ -109,98 +109,98 @@ typedef struct {
     const uint32_t              units_per_em;    /**< Font units (points) per EM square*/
 } nema_vg_font_t;
 
-/** \brief Bind the font to use in future nema_vg_print() calls. Sets error code if font is not supported.
+/** \brief Свяжите шрифт, который будет использоваться в последующих вызовах nema_vg_print(). Устанавливает код неправильно, если шрифт не указан.
  *
- * \param font Pointer to the vector font
+ * \param font Указатель векторного шрифта
  *
  */
 void nema_vg_bind_font(nema_vg_font_t *font);
 
-/** \brief Sets the size of the bound font. Future nema_vg_print() and nema_vg_print_char() calls will print using the last set size.
+/** \brief Устанавливает размер связанного шрифта. Будущие вызовыnema_vg_print() иnema_vg_print_char() будут печатать с использованием последнего установленного размера.
  *
- * \param font Pointer to the vector font
+ * \param font Указатель векторного шрифта
  *
  */
 void nema_vg_set_font_size(float size);
 
 
-/** \brief Print pre-formatted text
+/** \brief Распечатать отформатированный текст
  *
- * \param paint Pointer to the current paint object (contains the text color)
- * \param str Pointer to string
- * \param x X coordinate of text-area's top-left corner
- * \param y Y coordinate of text-area's top-left corner
- * \param w Max allowed width
- * \param h Max allowed height
- * \param align Alignment and wrapping mode
- * \param m Transformation matrix
+ * \param Paint Указатель текущего объекта рисования (содержит цвет текста)
+ * \param str Указатель текста
+ * \param x X координата верхнего левого угла текстовой области
+ * \param y Y координата верхнего левого угла текстовой области
+ * \param w Макс. разрешенная ширина
+ * \param h Макс. разрешенная высота
+ * \param align Режим соревнований и переноса
+ * \param m Матрица конвертировать
  *
  */
 void nema_vg_print(NEMA_VG_PAINT_HANDLE paint, const char *str, float x, float y, float w, float h, uint32_t align, nema_matrix3x3_t m);
 
 
-/** \brief Get the bounding box's width and height of a vector string. Prior to calling this function, "nema_vg_set_font_size" must be called first.
+/** \brief Используйте поддержку и высоту, огибающую структуру векторной строки. Перед вызовом этой функции необходимо сначала вызвать «nema_vg_set_font_size».
  *
- * \param str Pointer to string
- * \param w Pointer to variable where width should be written
- * \param h Pointer to variable where height should be written
- * \param max_w Max allowed width
- * \param size font size
- * \param wrap enable text wraping
- * \return Number of carriage returns
+ * \param str Указатель текста
+ * \param w Указатель на переменную, которую следует записать
+ * \param h Указатель на переменную, которую следует записать высоту
+ * \parammax_wМаксимально допустимая ширина
+ * \param size размер шрифта
+ * \param Wrap включить перенос текста
+ * \return Количество возвратов каретки
  *
  */
 int  nema_vg_string_get_bbox(const char *str, float *w, float *h, float max_w, uint32_t wrap);
 
 
-/** \brief Get the text ascender value in point units. Font size must be set pror to calling this function.
+/** \brief Присвойте значение верхнему элементу текста в пунктах. Размер шрифта должен быть установлен перед вызовом этой функции.
  *
- * \return Ascender pt
+ * \return Восходящий пункт
  *
  */
 int nema_vg_get_ascender_pt(void);
 
-/** \brief Print a single character
+/** \brief Печать одного символа
  *
- * \details The position of the character is determined by the 'orientation' argument.
- * x and y arguments define a point on the baseline. If the orientation is left to right (LTR),
- * the character will be placed to the right of the (x, y) point. Right to left (RTL) will place
- * the character to the left of the (x, y) point. Top to bottom (TTB) will have the same effect as
- * RTL and bottom to top (BTT) will place the character higher than the (x, y) point by an offset
- * equal to the font height.
+ * \details Положение символа Определено аргументом «ориентация».
+ * Аргументы x и y определяют точку на базовой линии. Если ориентация слева направо ( LTR ),
+ * символ будет помещен справа от точки (x, y). Справа налево ( RTL ) разместится
+ * символ слева от точки (x, y). Сверху вниз ( TTB ) будет иметь тот же эффект, что и
+ * RTL и снизу вверх ( BTT ) поместят символ выше точки (x, y) на смещение.
+ * равен высоте шрифта.
  *
- * \param paint Pointer to the current paint object (contains the text color)
- * \param ch Character to be printed
- * \param x X coordinate of character's top-left or top-right corner (controlled by the 'orientation' parameter)
- * \param y Y coordinate of character's top-left or bottom-left corner (controlled by the 'orientation' parameter)
- * \param m Transformation matrix
- * \param orientation Character orientation (see NEMA_VG_CHAR_* defines)
- * \return Character width in pixels
+ * \param Paint Указатель текущего объекта рисования (содержит цвет текста)
+ * \param ch Символ для печати
+ * \param x X координата верхнего левого или верхнего правого угла символа (управляется параметром «ориентация»)
+ * \param y Координата Y верхнего левого или нижнего левого угла персонажа (управляется параметром «ориентация»)
+ * \param m Матрица конвертировать
+ * \param ориентация Символы ориентации (см. определениеNEMA_VG_CHAR_*)
+ * \return Символьная ширина в пикселях
  *
  */
 float nema_vg_print_char(NEMA_VG_PAINT_HANDLE paint, char ch, float x, float y, nema_matrix3x3_t m, uint32_t orientation);
 
-/** \brief Generates a raster font from a vector font
+/** \brief Генерирует растровый шрифт из векторного шрифта
  *
- * \details Creates an 8-bpp raster version of the bound vector font. Performs dynamic memory allocation in
- * the graphics memory (for the font bitmaps) and in the heap (for the data structs accessed by the CPU).
- * When the font is no longer needed, function "nema_vg_destroy_raster_font()" can be used to free the allocated
- * memory. The font generation may fail when there is not enough memory to generate the font or when the font
- * size is greater than the height of the framebuffer.
+ * \details Создана растровая версия связанного векторного шрифта с развитием 8 бит на сель пик. Вы выполняете динамическое распределение памяти в
+ * графическая память (для растровых изображений шрифтов) и в куче (для структур данных, к которым обращается CPU ).
+ * Если шрифт большего размера не нужен, можно использовать функцию «nema_vg_destroy_raster_font()» для освобождения выделенного.
+ * память. Генерация шрифта может завершиться неудачно, если для создания шрифта недостаточно памяти или когда шрифт
+ * размер больше высоты фреймбуфера.
  *
- * \param size The size of the font that will be generated
- * \param pool Memory pool to store the font bitmaps
- * \return Pointer to the data struct of generated raster font. If the font was not generated (due to insufficient memory) it returns NULL.
+ * \param size Размер создаваемого шрифта.
+ * \param пул Пул памяти для хранения растровых изображений шрифтов
+ * \return Указатель структуры данных сгенерированного растрового шрифта. Если шрифт не был сгенерирован (из-за нехватки памяти), он возвращаетNULL.
  *
  */
 nema_font_t* nema_vg_generate_raster_font(int size, int pool);
 
-/** \brief Frees the memory that was allocated for a font data struct
+/** \brief Освобождает память, выделенную для структуры данных шрифта.
  *
- * \details This function frees memory that was allocated at runtime. Input must be
- *  a font data struct that was generated by the "nema_vg_generate_raster_font" function.
+ * \details Эта функция освобождает память, выделенную во время выполнения. Ввод должен быть
+ *  структура данных шрифта, созданная упрощенная «nema_vg_generate_raster_font».
  *
- * \param font Pointer to the raster font data struct that will be erased from the memory
+ * \param font Указатель структуры данных растрового шрифта, который будет удален из памяти
  *
  */
 void nema_vg_destroy_raster_font(nema_font_t *font);

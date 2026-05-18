@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -66,7 +66,7 @@ uintptr_t HASH_KEY(const char* data)
 }
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 ColorSpace ImageLoader::cs = ColorSpace::ARGB8888;
@@ -253,7 +253,7 @@ static LoadModule* _findFromCache(const char* data, uint32_t size, const string&
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 
@@ -267,7 +267,7 @@ bool LoaderMgr::term()
 {
     auto loader = _activeLoaders.head;
 
-    //clean up the remained font loaders which is globally used.
+    //почистите оставшиеся загрузчики шрифтов, которые используются глобально.
     while (loader && loader->type == FileType::Ttf) {
         auto ret = loader->close();
         auto tmp = loader;
@@ -320,7 +320,7 @@ LoadModule* LoaderMgr::loader(const string& path, bool* invalid)
         }
         delete(loader);
     }
-    //Unknown MimeType. Try with the candidates in the order
+    //Неизвестный MimeType. Попробуйте с кандидатами в порядке
     for (int i = 0; i < static_cast<int>(FileType::Raw); i++) {
         if (auto loader = _find(static_cast<FileType>(i))) {
             if (loader->open(path)) {
@@ -365,8 +365,8 @@ LoadModule* LoaderMgr::loader(const char* key)
 
 LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mimeType, bool copy)
 {
-    //Note that users could use the same data pointer with the different content.
-    //Thus caching is only valid for shareable.
+    //Обратите внимание, что пользователи могут использовать один и тот же указатель данных с разным содержимым.
+    //Таким образом, кэширование допустимо только для разделяемых файлов.
     auto allowCache = !copy;
 
     //TODO: lottie is not sharable.
@@ -379,7 +379,7 @@ LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mim
         if (auto loader = _findFromCache(data, size, mimeType)) return loader;
     }
 
-    //Try with the given MimeType
+    //Попробуйте использовать данный MimeType
     if (!mimeType.empty()) {
         if (auto loader = _findByType(mimeType)) {
             if (loader->open(data, size, copy)) {
@@ -395,7 +395,7 @@ LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mim
             }
         }
     }
-    //Unknown MimeType. Try with the candidates in the order
+    //Неизвестный MimeType. Попробуйте с кандидатами в порядке
     for (int i = 0; i < static_cast<int>(FileType::Raw); i++) {
         auto loader = _find(static_cast<FileType>(i));
         if (loader) {
@@ -416,14 +416,14 @@ LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mim
 
 LoadModule* LoaderMgr::loader(const uint32_t *data, uint32_t w, uint32_t h, bool copy)
 {
-    //Note that users could use the same data pointer with the different content.
-    //Thus caching is only valid for shareable.
+    //Обратите внимание, что пользователи могут использовать один и тот же указатель данных с разным содержимым.
+    //Таким образом, кэширование допустимо только для разделяемых файлов.
     if (!copy) {
         //TODO: should we check premultiplied??
         if (auto loader = _findFromCache((const char*)(data), w * h, "raw")) return loader;
     }
 
-    //function is dedicated for raw images only
+    //функция предназначена только для необработанных изображений
     auto loader = new RawLoader;
     if (loader->open(data, w, h, copy)) {
         if (!copy) {
@@ -438,14 +438,14 @@ LoadModule* LoaderMgr::loader(const uint32_t *data, uint32_t w, uint32_t h, bool
 }
 
 
-//loads fonts from memory - loader is cached (regardless of copy value) in order to access it while setting font
+//загружает шрифты из памяти — загрузчик кэшируется (независимо от значения копии), чтобы получить к нему доступ при настройке шрифта
 LoadModule* LoaderMgr::loader(const char* name, const char* data, uint32_t size, TVG_UNUSED const string& mimeType, bool copy)
 {
 #ifdef THORVG_TTF_LOADER_SUPPORT
     //TODO: add check for mimetype ?
     if (auto loader = _findFromCache(name)) return loader;
 
-    //function is dedicated for ttf loader (the only supported font loader)
+    //функция предназначена для загрузчика ttf (единственный поддерживаемый загрузчик шрифтов)
     auto loader = new TtfLoader;
     if (loader->open(data, size, copy)) {
         loader->hashpath = lv_strdup(name);

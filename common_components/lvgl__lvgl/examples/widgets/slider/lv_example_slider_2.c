@@ -2,11 +2,11 @@
 #if LV_USE_SLIDER && LV_BUILD_EXAMPLES
 
 /**
- * Show how to style a slider.
+ * Покажите, как оформить слайдер.
  */
 void lv_example_slider_2(void)
 {
-    /*Create a transition*/
+    /*Создать переход*/
     static const lv_style_prop_t props[] = {LV_STYLE_BG_COLOR, 0};
     static lv_style_transition_dsc_t transition_dsc;
     lv_style_transition_dsc_init(&transition_dsc, props, lv_anim_path_linear, 300, 0, NULL);
@@ -19,7 +19,7 @@ void lv_example_slider_2(void)
     lv_style_set_bg_opa(&style_main, LV_OPA_COVER);
     lv_style_set_bg_color(&style_main, lv_color_hex3(0xbbb));
     lv_style_set_radius(&style_main, LV_RADIUS_CIRCLE);
-    lv_style_set_pad_ver(&style_main, -2); /*Makes the indicator larger*/
+    lv_style_set_pad_ver(&style_main, -2); /*Делает индикатор больше*/
 
     lv_style_init(&style_indicator);
     lv_style_set_bg_opa(&style_indicator, LV_OPA_COVER);
@@ -33,15 +33,15 @@ void lv_example_slider_2(void)
     lv_style_set_border_color(&style_knob, lv_palette_darken(LV_PALETTE_CYAN, 3));
     lv_style_set_border_width(&style_knob, 2);
     lv_style_set_radius(&style_knob, LV_RADIUS_CIRCLE);
-    lv_style_set_pad_all(&style_knob, 6); /*Makes the knob larger*/
+    lv_style_set_pad_all(&style_knob, 6); /*Делает ручку больше*/
     lv_style_set_transition(&style_knob, &transition_dsc);
 
     lv_style_init(&style_pressed_color);
     lv_style_set_bg_color(&style_pressed_color, lv_palette_darken(LV_PALETTE_CYAN, 2));
 
-    /*Create a slider and add the style*/
+    /*Создайте слайдер и добавьте стиль*/
     lv_obj_t * slider = lv_slider_create(lv_screen_active());
-    lv_obj_remove_style_all(slider);        /*Remove the styles coming from the theme*/
+    lv_obj_remove_style_all(slider);        /*Удалить стили из темы*/
 
     lv_obj_add_style(slider, &style_main, LV_PART_MAIN);
     lv_obj_add_style(slider, &style_indicator, LV_PART_INDICATOR);

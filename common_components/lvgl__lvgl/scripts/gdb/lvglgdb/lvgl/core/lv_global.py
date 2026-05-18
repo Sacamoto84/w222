@@ -52,7 +52,7 @@ class LVGL:
     def draw_units(self):
         unit = self.lv_global.draw_info.unit_head
 
-        # Iterate through all draw units
+        # Перебрать все единицы рисования
         while unit:
             yield unit
             unit = unit.next

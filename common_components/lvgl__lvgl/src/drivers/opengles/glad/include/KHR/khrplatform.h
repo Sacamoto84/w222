@@ -6,16 +6,16 @@
 /*
 ** Copyright (c) 2008-2018 The Khronos Group Inc.
 **
-** Permission is hereby granted, free of charge, to any person obtaining a
-** copy of this software and/or associated documentation files (the
-** "Materials"), to deal in the Materials without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Materials, and to
-** permit persons to whom the Materials are furnished to do so, subject to
-** the following conditions:
+** Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+** копию этого программного обеспечения и/или связанных с ним файлов документации (файл
+** «Материалы»), распоряжаться Материалами без ограничений, в том числе
+** без ограничений права на использование, копирование, изменение, объединение, публикацию,
+** распространять, сублицензировать и/или продавать копии Материалов, а также
+** разрешить лицам, которым предоставляются Материалы, сделать это при условии, что
+** следующие условия:
 **
-** The above copyright notice and this permission notice shall be included
-** in all copies or substantial portions of the Materials.
+** Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены.
+** во всех копиях или существенных частях Материалов.
 **
 ** THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 ** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -26,70 +26,70 @@
 ** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 */
 
-/* Khronos platform-specific types and definitions.
+/* Типы и определения Khronos, специфичные для платформы.
  *
- * The master copy of khrplatform.h is maintained in the Khronos EGL
- * Registry repository at https://github.com/KhronosGroup/EGL-Registry
- * The last semantic modification to khrplatform.h was at commit ID:
+ * Мастер-копия khrplatform.h хранится в Khronos EGL.
+ * Репозиторий реестра по адресу https://github.com/KhronosGroup/EGL-Registry.
+ * Последняя семантическая модификация khrplatform.h была сделана при фиксации ID:
  *      67a3e0864c2d75ea5287b9f3d2eb74a745936692
  *
- * Adopters may modify this file to suit their platform. Adopters are
- * encouraged to submit platform specific modifications to the Khronos
- * group so that they can be included in future versions of this file.
- * Please submit changes by filing pull requests or issues on
- * the EGL Registry repository linked above.
+ * Усыновители могут изменить этот файл в соответствии со своей платформой. Усыновители
+ * рекомендуется отправлять в Khronos изменения, специфичные для платформы.
+ * группу, чтобы их можно было включить в будущие версии этого файла.
+ * Пожалуйста, отправьте изменения, отправив запросы на включение или проблемы на
+ * репозиторий реестра EGL, указанный выше.
  *
  *
- * See the Implementer's Guidelines for information about where this file
- * should be located on your system and for more details of its use:
+ * Информацию о том, где находится этот файл, см. в Руководстве по внедрению.
+ * должен находиться в вашей системе, а для получения более подробной информации о его использовании:
  *    http://www.khronos.org/registry/implementers_guide.pdf
  *
- * This file should be included as
- *        #include <KHR/khrplatform.h>
- * by Khronos client API header files that use its types and defines.
+ * Этот файл должен быть включен как
+ *        #include < KHR / khrplatform.h >
+ * заголовочные файлы API клиента Khronos, которые используют его типы и определения.
  *
- * The types in khrplatform.h should only be used to define API-specific types.
+ * Типы в khrplatform.h следует использовать только для определения типов, специфичных для API.
  *
- * Types defined in khrplatform.h:
- *    khronos_int8_t              signed   8  bit
- *    khronos_uint8_t             unsigned 8  bit
- *    khronos_int16_t             signed   16 bit
- *    khronos_uint16_t            unsigned 16 bit
- *    khronos_int32_t             signed   32 bit
- *    khronos_uint32_t            unsigned 32 bit
- *    khronos_int64_t             signed   64 bit
- *    khronos_uint64_t            unsigned 64 bit
- *    khronos_intptr_t            signed   same number of bits as a pointer
- *    khronos_uintptr_t           unsigned same number of bits as a pointer
- *    khronos_ssize_t             signed   size
- *    khronos_usize_t             unsigned size
- *    khronos_float_t             signed   32 bit floating point
- *    khronos_time_ns_t           unsigned 64 bit time in nanoseconds
- *    khronos_utime_nanoseconds_t unsigned time interval or absolute time in
- *                                         nanoseconds
- *    khronos_stime_nanoseconds_t signed time interval in nanoseconds
- *    khronos_boolean_enum_t      enumerated boolean type. This should
- *      only be used as a base type when a client API's boolean type is
- *      an enum. Client APIs which use an integer or other type for
- *      booleans cannot use this as the base type for their boolean.
+ * Типы, определенные в khrplatform.h:
+ *    khronos_int8_t подписанный 8 бит
+ *    khronos_uint8_t 8 бит без знака
+ *    khronos_int16_t подписанный 16 бит
+ *    khronos_uint16_t беззнаковый 16 бит
+ *    khronos_int32_t подписанный 32 бит
+ *    khronos_uint32_t беззнаковый 32-битный
+ *    khronos_int64_t подписанный 64 бит
+ *    khronos_uint64_t беззнаковый 64-битный
+ *    khronos_intptr_t подписал то же количество бит, что и указатель.
+ *    khronos_uintptr_t беззнаковое то же количество бит, что и указатель
+ *    khronos_ssize_t подписанный размер
+ *    khronos_usize_t беззнаковый размер
+ *    khronos_float_t 32-битная цифра с плавающей запятой со знаком
+ *    khronos_time_ns_t беззнаковое 64-битное время в наносекундах
+ *    khronos_utime_nanoseconds_t беззнаковый интервал времени или абсолютное время в
+ *                                         наносекунды
+ *    khronos_stime_nanoseconds_t знаковый интервал времени в наносекундах
+ *    khronos_boolean_enum_t перечисляемый логический тип. Это должно
+ *      использоваться в качестве базового типа только в том случае, если логический тип клиента API равен
+ *      перечисление. Клиентские API, которые используют целое число или другой тип для
+ *      логические значения не могут использовать это значение в качестве базового типа для своих логических значений.
  *
- * Tokens defined in khrplatform.h:
+ * Токены, определенные в khrplatform.h:
  *
- *    KHRONOS_FALSE, KHRONOS_TRUE Enumerated boolean false/true values.
+ *    KHRONOS_FALSE , KHRONOS_TRUE Перечисляемые логические значения false/true.
  *
- *    KHRONOS_SUPPORT_INT64 is 1 if 64 bit integers are supported; otherwise 0.
- *    KHRONOS_SUPPORT_FLOAT is 1 if floats are supported; otherwise 0.
+ *    KHRONOS_SUPPORT_INT64 равен 1, если поддерживаются 64-битные целые числа; иначе 0.
+ *    KHRONOS_SUPPORT_FLOAT равен 1, если поддерживаются числа с плавающей запятой; иначе 0.
  *
- * Calling convention macros defined in this file:
+ * Макросы соглашения о вызовах, определенные в этом файле:
  *    KHRONOS_APICALL
  *    KHRONOS_APIENTRY
  *    KHRONOS_APIATTRIBUTES
  *
- * These may be used in function prototypes as:
+ * Их можно использовать в прототипах функций как:
  *
- *      KHRONOS_APICALL void KHRONOS_APIENTRY funcname(
- *                                  int arg1,
- *                                  int arg2) KHRONOS_APIATTRIBUTES;
+ *      KHRONOS_APICALL void KHRONOS_APIENTRY имя_функции(
+ *                                  интервал аргумент1,
+ *                                  int arg2) KHRONOS_APIATTRIBUTES ;
  */
 
 #if defined(__SCITECH_SNAP__) && !defined(KHRONOS_STATIC)
@@ -97,13 +97,13 @@
 #endif
 
 /*-------------------------------------------------------------------------
- * Definition of KHRONOS_APICALL
+ * Определение KHRONOS_APICALL
  *-------------------------------------------------------------------------
- * This precedes the return type of the function in the function prototype.
+ * Он предшествует типу возвращаемого значения функции в прототипе функции.
  */
 #if defined(KHRONOS_STATIC)
-    /* If the preprocessor constant KHRONOS_STATIC is defined, make the
-     * header compatible with static linking. */
+    /* Если константа препроцессора KHRONOS_STATIC определена, сделайте
+     * заголовок, совместимый со статическим связыванием. */
 #   define KHRONOS_APICALL
 #elif defined(_WIN32)
 #   define KHRONOS_APICALL __declspec(dllimport)
@@ -116,22 +116,22 @@
 #endif
 
 /*-------------------------------------------------------------------------
- * Definition of KHRONOS_APIENTRY
+ * Определение KHRONOS_APIENTRY
  *-------------------------------------------------------------------------
- * This follows the return type of the function  and precedes the function
- * name in the function prototype.
+ * Это следует за типом возвращаемого значения функции и предшествует функции.
+ * имя в прототипе функции.
  */
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__SCITECH_SNAP__)
-    /* Win32 but not WinCE */
+    /* Win32, но не WinCE */
 #   define KHRONOS_APIENTRY __stdcall
 #else
 #   define KHRONOS_APIENTRY
 #endif
 
 /*-------------------------------------------------------------------------
- * Definition of KHRONOS_APIATTRIBUTES
+ * Определение KHRONOS_APIATTRIBUTES
  *-------------------------------------------------------------------------
- * This follows the closing parenthesis of the function prototype arguments.
+ * Это следует за закрывающей круглой скобкой аргументов прототипа функции.
  */
 #if defined (__ARMCC_2__)
 #define KHRONOS_APIATTRIBUTES __softfp
@@ -140,13 +140,13 @@
 #endif
 
 /*-------------------------------------------------------------------------
- * basic type definitions
+ * определения основных типов
  *-----------------------------------------------------------------------*/
 #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || defined(__GNUC__) || defined(__SCO__) || defined(__USLC__)
 
 
 /*
- * Using <stdint.h>
+ * Использование <stdint.h>
  */
 #include <stdint.h>
 typedef int32_t                 khronos_int32_t;
@@ -156,13 +156,13 @@ typedef uint64_t                khronos_uint64_t;
 #define KHRONOS_SUPPORT_INT64   1
 #define KHRONOS_SUPPORT_FLOAT   1
 /*
- * To support platform where unsigned long cannot be used interchangeably with
- * inptr_t (e.g. CHERI-extended ISAs), we can use the stdint.h intptr_t.
- * Ideally, we could just use (u)intptr_t everywhere, but this could result in
- * ABI breakage if khronos_uintptr_t is changed from unsigned long to
- * unsigned long long or similar (this results in different C++ name mangling).
- * To avoid changes for existing platforms, we restrict usage of intptr_t to
- * platforms where the size of a pointer is larger than the size of long.
+ * Для поддержки платформы, где unsigned long не может использоваться взаимозаменяемо с
+ * inptr_t (например, CHERI -расширенные ISA), мы можем использовать stdint.h intptr_t .
+ * В идеале мы могли бы просто везде использовать (u)intptr_t, но это может привести к
+ * Поломка ABI, если khronos_uintptr_t изменен с unsigned long на
+ * unsigned long long или подобное (это приводит к искажению имен в C++).
+ * Чтобы избежать изменений для существующих платформ, мы ограничиваем использование intptr_t
+ * платформы, где размер указателя больше размера long.
  */
 #if defined(__SIZEOF_LONG__) && defined(__SIZEOF_POINTER__)
 #if __SIZEOF_POINTER__ > __SIZEOF_LONG__
@@ -173,7 +173,7 @@ typedef uint64_t                khronos_uint64_t;
 #elif defined(__VMS ) || defined(__sgi)
 
 /*
- * Using <inttypes.h>
+ * Использование <inttypes.h>
  */
 #include <inttypes.h>
 typedef int32_t                 khronos_int32_t;
@@ -198,7 +198,7 @@ typedef unsigned __int64        khronos_uint64_t;
 #elif defined(__sun__) || defined(__digital__)
 
 /*
- * Sun or Digital
+ * Солнце или цифровое
  */
 typedef int                     khronos_int32_t;
 typedef unsigned int            khronos_uint32_t;
@@ -215,7 +215,7 @@ typedef unsigned long long int  khronos_uint64_t;
 #elif 0
 
 /*
- * Hypothetical platform with no float or int64 support
+ * Гипотетическая платформа без поддержки float или int64.
  */
 typedef int                     khronos_int32_t;
 typedef unsigned int            khronos_uint32_t;
@@ -225,7 +225,7 @@ typedef unsigned int            khronos_uint32_t;
 #else
 
 /*
- * Generic fallback
+ * Общий запасной вариант
  */
 #include <stdint.h>
 typedef int32_t                 khronos_int32_t;
@@ -239,7 +239,7 @@ typedef uint64_t                khronos_uint64_t;
 
 
 /*
- * Types that are (so far) the same on all platforms
+ * Типы, которые (пока) одинаковы на всех платформах.
  */
 typedef signed   char          khronos_int8_t;
 typedef unsigned char          khronos_uint8_t;
@@ -247,9 +247,9 @@ typedef signed   short int     khronos_int16_t;
 typedef unsigned short int     khronos_uint16_t;
 
 /*
- * Types that differ between LLP64 and LP64 architectures - in LLP64,
- * pointers are 64 bits, but 'long' is still 32 bits. Win64 appears
- * to be the only LLP64 architecture in current use.
+ * Типы, которые различаются между архитектурами LLP64 и LP64 — в LLP64,
+ * Указатели имеют длину 64 бита, но длина «длинных» по-прежнему составляет 32 бита. Win64 появляется
+ * быть единственной архитектурой LLP64, используемой в настоящее время.
  */
 #ifdef KHRONOS_USE_INTPTR_T
 typedef intptr_t               khronos_intptr_t;
@@ -272,37 +272,37 @@ typedef unsigned long  int     khronos_usize_t;
 
 #if KHRONOS_SUPPORT_FLOAT
 /*
- * Float type
+ * Поплавковый тип
  */
 typedef          float         khronos_float_t;
 #endif
 
 #if KHRONOS_SUPPORT_INT64
-/* Time types
+/* Типы времени
  *
- * These types can be used to represent a time interval in nanoseconds or
- * an absolute Unadjusted System Time.  Unadjusted System Time is the number
- * of nanoseconds since some arbitrary system event (e.g. since the last
- * time the system booted).  The Unadjusted System Time is an unsigned
- * 64 bit value that wraps back to 0 every 584 years.  Time intervals
- * may be either signed or unsigned.
+ * Эти типы можно использовать для представления интервала времени в наносекундах или
+ * абсолютное нескорректированное системное время.  Нескорректированное системное время — это число
+ * наносекунд с момента какого-либо произвольного системного события (например, с момента последнего
+ * время загрузки системы).  Нескорректированное системное время — это беззнаковый
+ * 64-битное значение, которое возвращается к 0 каждые 584 года.  Временные интервалы
+ * может быть как подписанным, так и неподписанным.
  */
 typedef khronos_uint64_t       khronos_utime_nanoseconds_t;
 typedef khronos_int64_t        khronos_stime_nanoseconds_t;
 #endif
 
 /*
- * Dummy value used to pad enum types to 32 bits.
+ * Фиктивное значение, используемое для расширения типов перечислений до 32 бит.
  */
 #ifndef KHRONOS_MAX_ENUM
 #define KHRONOS_MAX_ENUM 0x7FFFFFFF
 #endif
 
 /*
- * Enumerated boolean type
+ * Перечисляемый логический тип
  *
- * Values other than zero should be considered to be true.  Therefore
- * comparisons should not be made against KHRONOS_TRUE.
+ * Значения, отличные от нуля, следует считать истинными.  Поэтому
+ * сравнения не следует проводить с KHRONOS_TRUE.
  */
 typedef enum {
     KHRONOS_FALSE = 0,

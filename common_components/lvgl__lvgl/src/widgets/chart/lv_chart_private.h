@@ -28,7 +28,7 @@ extern "C" {
  **********************/
 
 /**
- * Descriptor a chart series
+ * Дескриптор серии диаграмм
  */
 struct _lv_chart_series_t {
     int32_t * x_points;
@@ -79,7 +79,7 @@ struct _lv_chart_t {
 #endif /* LV_USE_CHART != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CHART_PRIVATE_H*/

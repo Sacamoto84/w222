@@ -60,8 +60,8 @@ static void frac_2_event_cb(lv_event_t * e)
 }
 
 /**
- * Play with a simple horizontal gradient.
- * Adjust the stop positions of the gradient.
+ * Поиграйте с простым горизонтальным градиентом.
+ * Отрегулируйте положение остановки градиента.
  */
 void lv_example_grad_1(void)
 {
@@ -87,13 +87,13 @@ void lv_example_grad_1(void)
     lv_grad_init_stops(&grad_dsc, grad_colors, grad_opa, frac, sizeof(grad_colors) / sizeof(lv_color_t));
     lv_grad_horizontal_init(&grad_dsc);
 
-    /*Set gradient as background*/
+    /*Установить градиент в качестве фона*/
     lv_style_set_bg_grad(&style, &grad_dsc);
     lv_style_set_border_width(&style, 2);
     lv_style_set_pad_all(&style, 0);
     lv_style_set_radius(&style, 12);
 
-    /*Create an object with the new style*/
+    /*Создайте объект с новым стилем*/
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
     lv_obj_set_size(obj, lv_pct(80), lv_pct(80));

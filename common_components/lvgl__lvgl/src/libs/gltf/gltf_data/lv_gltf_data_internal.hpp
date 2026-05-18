@@ -23,35 +23,35 @@
 #include <map>
 #include <fastgltf/types.hpp>
 
-// Vector of int32_t's
+// Вектор int32_t
 using UintVector = std::vector<uint32_t>;
-// Vector of int32_t's
+// Вектор int32_t
 using IntVector = std::vector<int32_t>;
-// Vector of int64_t's
+// Вектор int64_t
 using LongVector = std::vector<int64_t>;
-// Pointer to fastgltf::Node
+// Указатель на fastgltf::Node
 using NodePtr = fastgltf::Node *;
-// A standard 4x4 transform matrix
+// Стандартная матрица преобразования 4x4.
 using Transform = fastgltf::math::fmat4x4;
-// Pair of Node pointer and int32_t
+// Пара указателя узла и int32_t
 using NodeIndexPair = std::pair<NodePtr, size_t>;
-// Pair of float and Node/Index pair
+// Пара чисел с плавающей запятой и пара узлов/индексов
 using NodeIndexDistancePair = std::pair<float, NodeIndexPair>;
-// Vector of NodeIndexPair
+// Вектор NodeIndexPair
 using NodePairVector = std::vector<NodeIndexPair>;
-// Vector of NodeIndexDistancePair
+// Вектор NodeIndexDistancePair
 using NodeDistanceVector = std::vector<NodeIndexDistancePair>;
-// Map of uint32_t to NodePairVector
+// Карта uint32_t с NodePairVector
 using MaterialIndexMap = std::map<uint32_t, NodePairVector>;
-// Map of Node Pointers to Transforms
+// Карта указателей узлов на преобразования
 using NodeTransformMap = std::map<NodePtr, Transform>;
-// Map of Nodes by string (name)
+// Карта узлов по строке (имени)
 using StringNodeMap = std::map<std::string, NodePtr>;
-// Map of Nodes by string (name)
+// Карта узлов по строке (имени)
 using NodeIntMap = std::map<NodePtr, uint32_t>;
-// Map of Nodes by string (name)
+// Карта узлов по строке (имени)
 using NodeVector = std::vector<NodePtr>;
-// Map of Node Index to Map of Prim Index to CenterXYZ+RadiusW Vec4
+// Карта индекса узла с картой индекса Prim с CenterXYZ+RadiusW Vec4
 using NodePrimCenterMap = std::map<uint32_t, std::map<uint32_t, fastgltf::math::fvec4> >;
 
 #define LV_GLTF_NODE_CHANNEL_X 0

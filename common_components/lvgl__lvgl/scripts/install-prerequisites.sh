@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Install Linux package prerequisites needed for LVGL development
-# and testing. Some less-common development packages are not included
-# here, such as MicroPython and PC simulator packages.
+# Установите необходимые пакеты Linux, необходимые для разработки LVGL.
+# и тестирование. Некоторые менее распространенные пакеты разработки не включены.
+# здесь, например, пакеты симуляторов MicroPython и PC.
 #
-# Note: This script is run by the CI workflows.
+# Примечание. Этот сценарий запускается рабочими процессами CI.
 SCRIPT_PATH=$(readlink -f $0)
 SCRIPT_DIR=$(dirname $SCRIPT_PATH)
 

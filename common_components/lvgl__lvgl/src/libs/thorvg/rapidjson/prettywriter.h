@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_PRETTYWRITER_H_
 #define RAPIDJSON_PRETTYWRITER_H_
@@ -29,20 +29,20 @@ RAPIDJSON_DIAG_OFF(c++98-compat)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Combination of PrettyWriter format flags.
-/*! \see PrettyWriter::SetFormatOptions
+//! Комбинация флагов формата PrettyWriter.
+/*! \см. PrettyWriter::SetFormatOptions
  */
 enum PrettyFormatOptions {
-    kFormatDefault = 0,         //!< Default pretty formatting.
-    kFormatSingleLineArray = 1  //!< Format arrays on a single line.
+    kFormatDefault = 0,         //!< Красивое форматирование по умолчанию.
+    kFormatSingleLineArray = 1  //!< Форматирует массивы в одну строку.
 };
 
-//! Writer with indentation and spacing.
+//! Writer с отступами и интервалами.
 /*!
-    \tparam OutputStream Type of output os.
-    \tparam SourceEncoding Encoding of source string.
-    \tparam TargetEncoding Encoding of output stream.
-    \tparam StackAllocator Type of allocator for allocating memory of stack.
+    \tparam OutputStream Тип выходной ОС.
+    \tparam SourceEncoding Кодировка исходной строки.
+    \tparam TargetEncoding Кодирование выходного потока.
+    \tparam StackAllocator Тип распределителя для выделения памяти стека.
 */
 template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
 class PrettyWriter : public Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> {
@@ -50,10 +50,10 @@ public:
     typedef Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> Base;
     typedef typename Base::Ch Ch;
 
-    //! Constructor
-    /*! \param os Output stream.
-        \param allocator User supplied allocator. If it is null, it will create a private one.
-        \param levelDepth Initial capacity of stack.
+    //! Конструктор
+    /*! \param os Выходной поток.
+        \param allocator Пользовательский распределитель. Если оно равно нулю, будет создан частный.
+        \param levelDepth Начальная емкость стека.
     */
     explicit PrettyWriter(OutputStream& os, StackAllocator* allocator = 0, size_t levelDepth = Base::kDefaultLevelDepth) :
         Base(os, allocator, levelDepth), indentChar_(' '), indentCharCount_(4), formatOptions_(kFormatDefault) {}
@@ -67,10 +67,10 @@ public:
         Base(std::forward<PrettyWriter>(rhs)), indentChar_(rhs.indentChar_), indentCharCount_(rhs.indentCharCount_), formatOptions_(rhs.formatOptions_) {}
 #endif
 
-    //! Set custom indentation.
-    /*! \param indentChar       Character for indentation. Must be whitespace character (' ', '\\t', '\\n', '\\r').
-        \param indentCharCount  Number of indent characters for each indentation level.
-        \note The default indentation is 4 spaces.
+    //! Установите собственный отступ.
+    /*! \param indentChar Символ отступа. Должен быть символом пробела (' ', '\\t', '\\n', '\\r').
+        \param indentCharCount Число символов отступа для каждого уровня отступа.
+        \note Отступ по умолчанию составляет 4 пробела.
     */
     PrettyWriter& SetIndent(Ch indentChar, unsigned indentCharCount) {
         RAPIDJSON_ASSERT(indentChar == ' ' || indentChar == '\t' || indentChar == '\n' || indentChar == '\r');
@@ -79,16 +79,16 @@ public:
         return *this;
     }
 
-    //! Set pretty writer formatting options.
-    /*! \param options Formatting options.
+    //! Установите красивые параметры форматирования.
+    /*! \param options Параметры форматирования.
     */
     PrettyWriter& SetFormatOptions(PrettyFormatOptions options) {
         formatOptions_ = options;
         return *this;
     }
 
-    /*! @name Implementation of Handler
-        \see Handler
+    /*! @name Реализация обработчика
+        \см. обработчик
     */
     //@{
 
@@ -136,9 +136,9 @@ public:
 
     bool EndObject(SizeType memberCount = 0) {
         (void)memberCount;
-        RAPIDJSON_ASSERT(Base::level_stack_.GetSize() >= sizeof(typename Base::Level)); // not inside an Object
-        RAPIDJSON_ASSERT(!Base::level_stack_.template Top<typename Base::Level>()->inArray); // currently inside an Array, not Object
-        RAPIDJSON_ASSERT(0 == Base::level_stack_.template Top<typename Base::Level>()->valueCount % 2); // Object has a Key without a Value
+        RAPIDJSON_ASSERT(Base::level_stack_.GetSize() >= sizeof(typename Base::Level)); // не внутри объекта
+        RAPIDJSON_ASSERT(!Base::level_stack_.template Top<typename Base::Level>()->inArray); // в настоящее время внутри массива, а не объекта
+        RAPIDJSON_ASSERT(0 == Base::level_stack_.template Top<typename Base::Level>()->valueCount % 2); // Объект имеет ключ без значения
 
         bool empty = Base::level_stack_.template Pop<typename Base::Level>(1)->valueCount == 0;
 
@@ -149,7 +149,7 @@ public:
         bool ret = Base::EndValue(Base::WriteEndObject());
         (void)ret;
         RAPIDJSON_ASSERT(ret == true);
-        if (Base::level_stack_.Empty()) // end of json text
+        if (Base::level_stack_.Empty()) // конец текста JSON
             Base::Flush();
         return true;
     }
@@ -173,7 +173,7 @@ public:
         bool ret = Base::EndValue(Base::WriteEndArray());
         (void)ret;
         RAPIDJSON_ASSERT(ret == true);
-        if (Base::level_stack_.Empty()) // end of json text
+        if (Base::level_stack_.Empty()) // конец текста JSON
             Base::Flush();
         return true;
     }
@@ -183,20 +183,20 @@ public:
     /*! @name Convenience extensions */
     //@{
 
-    //! Simpler but slower overload.
+    //! Более простая, но медленная перегрузка.
     bool String(const Ch* str) { return String(str, internal::StrLen(str)); }
     bool Key(const Ch* str) { return Key(str, internal::StrLen(str)); }
 
     //@}
 
-    //! Write a raw JSON value.
+    //! Запишите необработанное значение JSON.
     /*!
-        For user to write a stringified JSON as a value.
+        Чтобы пользователь мог записать в качестве значения строковое значение JSON.
 
-        \param json A well-formed JSON value. It should not contain null character within [0, length - 1] range.
-        \param length Length of the json.
-        \param type Type of the root of json.
-        \note When using PrettyWriter::RawValue(), the result json may not be indented correctly.
+        \param json Правильно сформированное значение JSON. Он не должен содержать нулевой символ в диапазоне [0, длина – 1].
+        \param length Длина json.
+        \param type Тип корня json.
+        \note При использовании PrettyWriter:: RawValue() отступ в json может быть неправильным.
     */
     bool RawValue(const Ch* json, size_t length, Type type) {
         RAPIDJSON_ASSERT(json != 0);
@@ -207,12 +207,12 @@ public:
 protected:
     void PrettyPrefix(Type type) {
         (void)type;
-        if (Base::level_stack_.GetSize() != 0) { // this value is not at root
+        if (Base::level_stack_.GetSize() != 0) { // это значение не является корневым
             typename Base::Level* level = Base::level_stack_.template Top<typename Base::Level>();
 
             if (level->inArray) {
                 if (level->valueCount > 0) {
-                    Base::os_->Put(','); // add comma if it is not the first element in array
+                    Base::os_->Put(','); // добавьте запятую, если это не первый элемент массива
                     if (formatOptions_ & kFormatSingleLineArray)
                         Base::os_->Put(' ');
                 }
@@ -222,7 +222,7 @@ protected:
                     WriteIndent();
                 }
             }
-            else {  // in object
+            else {  // в объекте
                 if (level->valueCount > 0) {
                     if (level->valueCount % 2 == 0) {
                         Base::os_->Put(',');
@@ -240,11 +240,11 @@ protected:
                     WriteIndent();
             }
             if (!level->inArray && level->valueCount % 2 == 0)
-                RAPIDJSON_ASSERT(type == kStringType);  // if it's in object, then even number should be a name
+                RAPIDJSON_ASSERT(type == kStringType);  // если он находится в объекте, то четное число должно быть именем
             level->valueCount++;
         }
         else {
-            RAPIDJSON_ASSERT(!Base::hasRoot_);  // Should only has one and only one root.
+            RAPIDJSON_ASSERT(!Base::hasRoot_);  // Должно иметь только один и только один корень.
             Base::hasRoot_ = true;
         }
     }
@@ -259,7 +259,7 @@ protected:
     PrettyFormatOptions formatOptions_;
 
 private:
-    // Prohibit copy constructor & assignment operator.
+    // Запретить конструктор копирования и оператор присваивания.
     PrettyWriter(const PrettyWriter&);
     PrettyWriter& operator=(const PrettyWriter&);
 };

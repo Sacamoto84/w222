@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -35,7 +35,7 @@ void test_no_residual_border_on_scale_down(void)
         lv_obj_set_style_transform_scale(obj, scale[i], 0);
         lv_refr_now(NULL);
 
-        /*Should be the same as the original without any artifacts*/
+        /*Должно быть так же, как оригинал, без каких-либо артефактов.*/
         lv_obj_set_style_transform_scale(obj, 256, 0);
         TEST_ASSERT_EQUAL_SCREENSHOT("draw/layer_transform_1.png");
     }

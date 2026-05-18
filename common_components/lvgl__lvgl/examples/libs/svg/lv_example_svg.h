@@ -34,7 +34,7 @@ void lv_example_svg_3(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_SVG_H*/

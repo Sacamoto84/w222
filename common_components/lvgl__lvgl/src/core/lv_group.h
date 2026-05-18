@@ -21,7 +21,7 @@ extern "C" {
 /*********************
  *      DEFINES
  *********************/
-/** Predefined keys to control which Widget has focus via lv_group_send(group, c) */
+/** Предопределенные клавиши для управления темой, какой виджет находится в фокусе, черезlv_group_send(группа, c) */
 typedef enum {
     LV_KEY_UP        = 17,  /*0x11*/
     LV_KEY_DOWN      = 18,  /*0x12*/
@@ -54,216 +54,216 @@ typedef enum {
  **********************/
 
 /**
- * Create new Widget group.
- * @return          pointer to the new Widget group
+ * Создайте новую группу виджетов.
+ * @return          указатель на новую группу виджетов
  */
 lv_group_t * lv_group_create(void);
 
 /**
- * Delete group object.
- * @param group     pointer to a group
+ * Удалить групповой объект.
+ * @param group     указатель на группу
  */
 void lv_group_delete(lv_group_t * group);
 
 /**
- * Set default group. New Widgets will be added to this group if it's enabled in
- * their class with `add_to_def_group = true`.
- * @param group     pointer to a group (can be `NULL`)
+ * Установить группу по умолчанию. В эту группу будут добавлены новые виджеты, если они включены в
+ * их класс с `add_to_def_group = true`.
+ * @param group     указатель на группу (может быть`NULL`)
  */
 void lv_group_set_default(lv_group_t * group);
 
 /**
- * Get default group.
- * @return          pointer to the default group
+ * Получить группу по умолчанию.
+ * @return          указатель на группу по умолчанию
  */
 lv_group_t * lv_group_get_default(void);
 
 /**
- * Add an Widget to group.
- * @param group     pointer to a group
- * @param obj       pointer to a Widget to add
+ * Добавьте виджет в группу.
+ * @param group     указатель на группу
+ * @param obj       указатель на виджет, который нужно добавить
  */
 void lv_group_add_obj(lv_group_t * group, lv_obj_t * obj);
 
 /**
- * Swap 2 Widgets in group.  Widgets must be in the same group.
- * @param obj1  pointer to a Widget
- * @param obj2  pointer to another Widget
+ * Поменяйте местами 2 виджета в группе.  Виджеты должны находиться в одной группе.
+ * @param obj1  указатель на виджет
+ * @param obj2  указатель на другой виджет
  */
 void lv_group_swap_obj(lv_obj_t * obj1, lv_obj_t * obj2);
 
 /**
- * Remove a Widget from its group.
- * @param obj       pointer to Widget to remove
+ * Удалите виджет из группы.
+ * @param obj       указатель на виджет, который нужно удалить
  */
 void lv_group_remove_obj(lv_obj_t * obj);
 
 /**
- * Remove all Widgets from a group.
- * @param group     pointer to a group
+ * Удалить все виджеты из группы.
+ * @param group     указатель на группу
  */
 void lv_group_remove_all_objs(lv_group_t * group);
 
 /**
- * Focus on a Widget (defocus the current).
- * @param obj       pointer to Widget to focus on
+ * Сосредоточьтесь на виджете (расфокусируйте текущий).
+ * @param obj       указатель на виджет, на котором нужно сосредоточиться
  */
 void lv_group_focus_obj(lv_obj_t * obj);
 
 /**
- * Focus on next Widget in a group (defocus the current).
- * @param group     pointer to a group
+ * Сосредоточьтесь на следующем виджете в группе (расфокусируйте текущий).
+ * @param group     указатель на группу
  */
 void lv_group_focus_next(lv_group_t * group);
 
 /**
- * Focus on previous Widget in a group (defocus the current).
- * @param group     pointer to a group
+ * Сосредоточиться на предыдущем виджете в группе (расфокусировать текущий).
+ * @param group     указатель на группу
  */
 void lv_group_focus_prev(lv_group_t * group);
 
 /**
- * Do not allow changing focus from current Widget.
- * @param group     pointer to a group
- * @param en        true: freeze, false: release freezing (normal mode)
+ * Запретить изменение фокуса с текущего виджета.
+ * @param group     указатель на группу
+ * @param en        true: заморозить, false: снять заморозку (обычный режим)
  */
 void lv_group_focus_freeze(lv_group_t * group, bool en);
 
 /**
- * Send a control character to Widget that has focus in a group.
- * @param group     pointer to a group
- * @param c         a character (use LV_KEY_.. to navigate)
- * @return          result of Widget with focus in group.
+ * Отправьте управляющий символ в виджет, который находится в фокусе группы.
+ * @param group     указатель на группу
+ * @param c         символ (используйтеLV_KEY_.. для навигации)
+ * @return          результат виджета с фокусом в группе.
  */
 lv_result_t lv_group_send_data(lv_group_t * group, uint32_t c);
 
 /**
- * Set a function for a group which will be called when a new Widget has focus.
- * @param group         pointer to a group
- * @param focus_cb      the call back function or NULL if unused
+ * Установите функцию для группы, которая будет вызываться, когда новый виджет получит фокус.
+ * @param group         указатель на группу
+ * @param focus_cb      функция обратного вызова или NULL, если не используется
  */
 void lv_group_set_focus_cb(lv_group_t * group, lv_group_focus_cb_t focus_cb);
 
 /**
- * Set a function for a group which will be called when a focus edge is reached
- * @param group         pointer to a group
- * @param edge_cb      the call back function or NULL if unused
+ * Установите функцию для группы, которая будет вызываться при достижении края фокуса.
+ * @param group         указатель на группу
+ * @param edge_cb      функция обратного вызова или NULL, если не используется
  */
 void lv_group_set_edge_cb(lv_group_t * group, lv_group_edge_cb_t edge_cb);
 
 /**
- * Set whether the next or previous Widget in a group gets focus when Widget that has
- * focus is deleted.
- * @param group         pointer to a group
- * @param policy        new refocus policy enum
+ * Установите, будет ли фокусироваться следующий или предыдущий виджет в группе, когда виджет, у которого есть
+ * фокус удаляется.
+ * @param group         указатель на группу
+ * @param policy        новое перечисление политики перефокусировки
  */
 void lv_group_set_refocus_policy(lv_group_t * group, lv_group_refocus_policy_t policy);
 
 /**
- * Manually set the current mode (edit or navigate).
- * @param group         pointer to group
- * @param edit          true: edit mode; false: navigate mode
+ * Вручную установите текущий режим (редактирование или навигация).
+ * @param group         указатель на группу
+ * @param edit          true: режим редактирования; ложь: режим навигации
  */
 void lv_group_set_editing(lv_group_t * group, bool edit);
 
 /**
- * Set whether moving focus to next/previous Widget will allow wrapping from
- * first->last or last->first Widget.
- * @param group         pointer to group
- * @param               en true: wrapping enabled; false: wrapping disabled
+ * Установите, будет ли перемещение фокуса на следующий/предыдущий виджет разрешен перенос с
+ * первый->последний или последний->первый виджет.
+ * @param group         указатель на группу
+ * @param               en true: перенос включен; false: перенос отключен
  */
 void lv_group_set_wrap(lv_group_t * group, bool en);
 
 /**
- * Get Widget that has focus, or NULL if there isn't one.
- * @param group         pointer to a group
- * @return              pointer to Widget with focus
+ * Получите виджет с фокусом или NULL, если его нет.
+ * @param group         указатель на группу
+ * @return              указатель на виджет с фокусом
  */
 lv_obj_t * lv_group_get_focused(const lv_group_t * group);
 
 /**
- * Get focus callback function of a group.
- * @param group pointer to a group
- * @return the call back function or NULL if not set
+ * Получите функцию обратного вызова фокуса группы.
+ * @param group указатель на группу
+ * @return функция обратного вызова или NULL, если не установлено
  */
 lv_group_focus_cb_t lv_group_get_focus_cb(const lv_group_t * group);
 
 /**
- * Get edge callback function of a group.
- * @param group pointer to a group
- * @return the call back function or NULL if not set
+ * Получите функцию обратного вызова группы.
+ * @param group указатель на группу
+ * @return функция обратного вызова или NULL, если не установлено
  */
 lv_group_edge_cb_t lv_group_get_edge_cb(const lv_group_t * group);
 
 /**
- * Get current mode (edit or navigate).
- * @param group         pointer to group
- * @return              true: edit mode; false: navigate mode
+ * Получить текущий режим (редактировать или перемещаться).
+ * @param group         указатель на группу
+ * @return              true: режим редактирования; ложь: режим навигации
  */
 bool lv_group_get_editing(const lv_group_t * group);
 
 /**
- * Get whether moving focus to next/previous Widget will allow wrapping from
- * first->last or last->first Widget.
- * @param group         pointer to group
+ * Узнайте, позволит ли перемещение фокуса на следующий/предыдущий виджет выполнить перенос из
+ * первый->последний или последний->первый виджет.
+ * @param group         указатель на группу
  */
 bool lv_group_get_wrap(lv_group_t * group);
 
 /**
- * Get number of Widgets in group.
- * @param group         pointer to a group
- * @return              number of Widgets in the group
+ * Получить количество виджетов в группе.
+ * @param group         указатель на группу
+ * @return              количество виджетов в группе
  */
 uint32_t lv_group_get_obj_count(lv_group_t * group);
 
 /**
- * Get nth Widget within group.
- * @param group         pointer to a group
- * @param index         index of Widget within the group
- * @return              pointer to Widget
+ * Получите n-й виджет в группе.
+ * @param group         указатель на группу
+ * @param index         индекс виджета внутри группы
+ * @return              указатель на виджет
  */
 lv_obj_t * lv_group_get_obj_by_index(lv_group_t * group, uint32_t index);
 
 /**
- * Get the number of groups.
- * @return              number of groups
+ * Получите количество групп.
+ * @return              количество групп
  */
 uint32_t lv_group_get_count(void);
 
 /**
- * Get a group by its index.
- * @param index         index of the group
- * @return              pointer to the group
+ * Получить группу по ее индексу.
+ * @param index         индекс группы
+ * @return              указатель на группу
  */
 lv_group_t  * lv_group_by_index(uint32_t index);
 
 #if LV_USE_EXT_DATA
 /**
- * @brief Attaches external user data and destructor callback to a group
+ * @brief Прикрепляет внешние пользовательские данные и обратный вызов деструктора к группе.
  *
- * Associates custom user data with an LVGL group and specifies a destructor function
- * that will be automatically invoked when the group is deleted to properly clean up
- * the associated resources.
+ * Связывает пользовательские данные с группой LVGL и определяет функцию деструктора.
+ * который будет автоматически вызываться при удалении группы для правильной очистки.
+ * связанные ресурсы.
  *
- * @param group      Pointer to a group
- * @param data       User-defined data pointer to associate with a group
- * @param free_cb    Callback function for cleaning up ext_data when group is deleted.
- *                   Receives ext_data as parameter. NULL means no cleanup required.
+ * @param group      Указатель на группу
+ * @param data       Пользовательский указатель данных для связи с группой
+ * @param free_cb    Функция обратного вызова для очисткиext_dataпри удалении группы.
+ *                   Получаетext_dataв качестве параметра.  NULLозначает, что очистка не требуется.
  */
 void lv_group_set_external_data(lv_group_t * group, void * data, void (* free_cb)(void * data));
 #endif
 
 /**
- * Set user data to the group
- * @param group pointer to a group
- * @param user_data pointer to user data
+ * Установить данные пользователя в группу
+ * @param group указатель на группу
+ * @param user_data указатель на данные пользователя
  */
 void lv_group_set_user_data(lv_group_t * group, void * user_data);
 
 /**
- * Get a pointer to the user data of the group
- * @param indev pointer to a group
- * @return pointer to the user data or NULL if group is NULL
+ * Получить указатель на данные пользователя группы
+ * @param indev указатель на группу
+ * @return указатель на данные пользователя или NULL, если группа NULL
  */
 void * lv_group_get_user_data(const lv_group_t * group);
 
@@ -272,7 +272,7 @@ void * lv_group_get_user_data(const lv_group_t * group);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_GROUP_H*/

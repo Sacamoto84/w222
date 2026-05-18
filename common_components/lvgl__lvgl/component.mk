@@ -1,4 +1,4 @@
-# ESP-IDF component file for make based commands
+# ESP — файловый компонентIDFдля команды на основе make.
 
 COMPONENT_SRCDIRS := . \
                   src \

@@ -15,7 +15,7 @@ static void event_handler(lv_event_t * e)
 void lv_example_dropdown_1(void)
 {
 
-    /*Create a normal drop down list*/
+    /*Создайте обычный выпадающий список.*/
     lv_obj_t * dd = lv_dropdown_create(lv_screen_active());
     lv_dropdown_set_options(dd, "Apple\n"
                             "Banana\n"

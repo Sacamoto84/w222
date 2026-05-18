@@ -3,7 +3,7 @@
 #include <string.h>
 
 /**
- * Create a QR Code
+ * Создайте код QR
  */
 void lv_example_qrcode_1(void)
 {
@@ -15,12 +15,12 @@ void lv_example_qrcode_1(void)
     lv_qrcode_set_dark_color(qr, fg_color);
     lv_qrcode_set_light_color(qr, bg_color);
 
-    /*Set data*/
+    /*Установить данные*/
     const char * data = "https://lvgl.io";
     lv_qrcode_update(qr, data, strlen(data));
     lv_obj_center(qr);
 
-    /*Add a border with bg_color*/
+    /*добавьте рамку с помощью bg_color*/
     lv_obj_set_style_border_color(qr, bg_color, 0);
     lv_obj_set_style_border_width(qr, 5, 0);
 }

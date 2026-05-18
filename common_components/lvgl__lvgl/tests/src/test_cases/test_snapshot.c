@@ -6,7 +6,7 @@
 
 #define NUM_SNAPSHOTS 10
 
-/* Common color formats used in multiple tests */
+/* Общие цветовые форматы, используемые в нескольких тестах */
 static const lv_color_format_t supported_color_formats[] = {
     LV_COLOR_FORMAT_A8,
     LV_COLOR_FORMAT_L8,
@@ -24,12 +24,12 @@ static const lv_color_format_t supported_color_formats[] = {
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -208,19 +208,19 @@ void test_snapshot_create_draw_buf_with_extended_size(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 50, 40);
 
-    /* Set extended drawing effect (shadow) */
+    /* Установить расширенный эффект рисования (тень) */
     lv_obj_set_style_shadow_width(obj, 5, 0);
     lv_obj_set_style_shadow_spread(obj, 3, 0);
 
     lv_draw_buf_t * draw_buf = lv_snapshot_create_draw_buf(obj, LV_COLOR_FORMAT_ARGB8888);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Get extended size before deleting the object */
+    /* Получите расширенный размер перед удалением объекта */
     int32_t ext_size = lv_obj_get_ext_draw_size(obj);
     int32_t expected_w = 50 + ext_size * 2;
     int32_t expected_h = 40 + ext_size * 2;
 
-    /* Verify draw buffer size matches object size including extended area */
+    /* Убедитесь, что размер буфера прорисовки соответствует размеру объекта, включая расширенную область. */
     TEST_ASSERT_EQUAL_UINT32(expected_w, draw_buf->header.w);
     TEST_ASSERT_EQUAL_UINT32(expected_h, draw_buf->header.h);
 
@@ -234,14 +234,14 @@ void test_snapshot_create_draw_buf_zero_size_object(void)
     lv_draw_buf_t * draw_buf = lv_snapshot_create_draw_buf(obj, LV_COLOR_FORMAT_ARGB8888);
     TEST_ASSERT_NULL(draw_buf);
 
-    /* Width is 0 */
+    /* Ширина 0 */
     lv_obj_t * obj1 = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj1, 0, 50);
     lv_draw_buf_t * buf1 = lv_snapshot_create_draw_buf(obj1, LV_COLOR_FORMAT_ARGB8888);
     TEST_ASSERT_NULL(buf1);
     lv_obj_delete(obj1);
 
-    /* Height is 0 */
+    /* Высота 0 */
     lv_obj_t * obj2 = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj2, 50, 0);
     lv_draw_buf_t * buf2 = lv_snapshot_create_draw_buf(obj2, LV_COLOR_FORMAT_ARGB8888);
@@ -254,15 +254,15 @@ void test_snapshot_reshape_draw_buf_normal_object(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 100, 80);
 
-    /* Create draw buffer with same size as object */
+    /* Создать буфер рисования того же размера, что и объект. */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(100, 80, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Test reshape operation (should succeed because sizes match) */
+    /* Тестовая операция изменения формы (должна пройти успешно, поскольку размеры совпадают) */
     lv_result_t result = lv_snapshot_reshape_draw_buf(obj, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_OK, result);
 
-    /* Verify buffer size remains unchanged */
+    /* Убедитесь, что размер буфера не изменился */
     TEST_ASSERT_EQUAL_UINT32(100, draw_buf->header.w);
     TEST_ASSERT_EQUAL_UINT32(80, draw_buf->header.h);
 
@@ -274,24 +274,24 @@ void test_snapshot_reshape_draw_buf_with_extended_size(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 50, 40);
 
-    /* Set extended drawing effect (shadow) */
+    /* Установить расширенный эффект рисования (тень) */
     lv_obj_set_style_shadow_width(obj, 5, 0);
     lv_obj_set_style_shadow_spread(obj, 3, 0);
 
-    /* Calculate size including extended area */
+    /* Рассчитать размер, включая расширенную площадь */
     int32_t ext_size = lv_obj_get_ext_draw_size(obj);
     int32_t total_w = 50 + ext_size * 2;
     int32_t total_h = 40 + ext_size * 2;
 
-    /* Create draw buffer with extended size */
+    /* Создать буфер прорисовки расширенного размера. */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(total_w, total_h, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Test reshape operation (should succeed because sizes match) */
+    /* Тестовая операция изменения формы (должна пройти успешно, поскольку размеры совпадают) */
     lv_result_t result = lv_snapshot_reshape_draw_buf(obj, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_OK, result);
 
-    /* Verify buffer size remains unchanged */
+    /* Убедитесь, что размер буфера не изменился */
     TEST_ASSERT_EQUAL_UINT32(total_w, draw_buf->header.w);
     TEST_ASSERT_EQUAL_UINT32(total_h, draw_buf->header.h);
 
@@ -303,11 +303,11 @@ void test_snapshot_reshape_draw_buf_zero_size_object(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 0, 0);
 
-    /* Create initial draw buffer */
+    /* Создать начальный буфер отрисовки */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(50, 40, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Test reshape operation should fail */
+    /* Тестовая операция изменения формы должна завершиться неудачей */
     lv_result_t result = lv_snapshot_reshape_draw_buf(obj, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -319,11 +319,11 @@ void test_snapshot_reshape_draw_buf_invalid_params(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 50, 40);
 
-    /* Create initial draw buffer */
+    /* Создать начальный буфер отрисовки */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(50, 40, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Only test NULL buffer, not NULL object (function asserts obj != NULL internally) */
+    /* Проверяйте только буфер NULL, а не объект NULL (функция утверждает obj != NULL внутри) */
     lv_result_t result = lv_snapshot_reshape_draw_buf(obj, NULL);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -335,10 +335,10 @@ void test_snapshot_reshape_draw_buf_reshape_failure(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 100, 80);
 
-    /* Create an invalid draw buffer (e.g., size 0) */
+    /* Создайте недопустимый буфер отрисовки (например, размера 0). */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(0, 0, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
 
-    /* Test reshape operation should fail */
+    /* Тестовая операция изменения формы должна завершиться неудачей */
     lv_result_t result = lv_snapshot_reshape_draw_buf(obj, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -351,9 +351,9 @@ void test_snapshot_take_to_draw_buf_supported_formats(void)
     lv_obj_set_size(obj, 100, 80);
     lv_obj_set_style_bg_color(obj, lv_color_hex(0xFF0000), 0);
 
-    /* Test supported color formats using common definition */
+    /* Тестируйте поддерживаемые цветовые форматы, используя общее определение. */
     for(size_t i = 0; i < NUM_SUPPORTED_FORMATS; i++) {
-        /* Create draw buffer with same size as object */
+        /* Создать буфер рисования того же размера, что и объект. */
         int32_t ext_size = lv_obj_get_ext_draw_size(obj);
         int32_t total_w = 100 + ext_size * 2;
         int32_t total_h = 80 + ext_size * 2;
@@ -361,7 +361,7 @@ void test_snapshot_take_to_draw_buf_supported_formats(void)
         lv_draw_buf_t * draw_buf = lv_draw_buf_create(total_w, total_h, supported_color_formats[i], LV_STRIDE_AUTO);
         TEST_ASSERT_NOT_NULL(draw_buf);
 
-        /* Test take_to_draw_buf operation */
+        /* Проверка работы take_to_draw_buf */
         lv_result_t result = lv_snapshot_take_to_draw_buf(obj, supported_color_formats[i], draw_buf);
         TEST_ASSERT_EQUAL(LV_RESULT_OK, result);
 
@@ -374,11 +374,11 @@ void test_snapshot_take_to_draw_buf_unsupported_format(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 50, 40);
 
-    /* Create draw buffer */
+    /* Создать буфер рисования */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(50, 40, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Test unsupported color format */
+    /* Проверьте неподдерживаемый цветовой формат */
     lv_result_t result = lv_snapshot_take_to_draw_buf(obj, LV_COLOR_FORMAT_UNKNOWN, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -390,10 +390,10 @@ void test_snapshot_take_to_draw_buf_reshape_failure(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 100, 80);
 
-    /* Create an invalid draw buffer (e.g., size 0) */
+    /* Создайте недопустимый буфер отрисовки (например, размера 0). */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(0, 0, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
 
-    /* Test take_to_draw_buf operation should fail (because reshape will fail) */
+    /* Тестовая операция take_to_draw_buf должна завершиться неудачно (поскольку изменение формы не удастся) */
     lv_result_t result = lv_snapshot_take_to_draw_buf(obj, LV_COLOR_FORMAT_ARGB8888, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -405,11 +405,11 @@ void test_snapshot_take_to_draw_buf_zero_size_object(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 0, 0);
 
-    /* Create draw buffer */
+    /* Создать буфер рисования */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(50, 40, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Test take_to_draw_buf operation should fail (because object size is 0) */
+    /* Тестовая операция take_to_draw_buf должна завершиться неудачно (поскольку размер объекта равен 0). */
     lv_result_t result = lv_snapshot_take_to_draw_buf(obj, LV_COLOR_FORMAT_ARGB8888, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -421,7 +421,7 @@ void test_snapshot_take_to_draw_buf_invalid_size(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(obj, 50, 40);
 
-    /* Create draw buffer */
+    /* Создать буфер рисования */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(10, 10, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
@@ -437,7 +437,7 @@ void test_snapshot_refresh_logic_sibling_order(void)
     lv_obj_set_size(parent, 250, 250);
     lv_obj_set_style_bg_color(parent, lv_color_hex(0xCCCCCC), 0);
 
-    /* Create multiple sibling objects */
+    /* Создание нескольких одноуровневых объектов */
     lv_obj_t * siblings[5];
     for(int i = 0; i < 5; i++) {
         siblings[i] = lv_obj_create(parent);
@@ -446,11 +446,11 @@ void test_snapshot_refresh_logic_sibling_order(void)
         lv_obj_set_pos(siblings[i], i * 50, 50);
     }
 
-    /* Test snapshot of middle object, verify sibling refresh logic */
+    /* Проверьте снимок среднего объекта, проверьте логику обновления родственного объекта. */
     lv_draw_buf_t * draw_buf = lv_snapshot_take(siblings[2], LV_COLOR_FORMAT_ARGB8888);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Verify snapshot size is correct */
+    /* Убедитесь, что размер снимка правильный */
     int32_t ext_size = lv_obj_get_ext_draw_size(siblings[2]);
     TEST_ASSERT_EQUAL_UINT32(40 + ext_size * 2, draw_buf->header.w);
     TEST_ASSERT_EQUAL_UINT32(40 + ext_size * 2, draw_buf->header.h);
@@ -461,11 +461,11 @@ void test_snapshot_refresh_logic_sibling_order(void)
 
 void test_snapshot_refresh_logic_edge_cases(void)
 {
-    /* Test object is the screen itself */
+    /* Объект тестирования — сам экран */
     lv_draw_buf_t * draw_buf1 = lv_snapshot_take(lv_screen_active(), LV_COLOR_FORMAT_ARGB8888);
     TEST_ASSERT_NOT_NULL(draw_buf1);
 
-    /* Verify screen snapshot size */
+    /* Проверьте размер снимка экрана */
     int32_t screen_w = lv_display_get_horizontal_resolution(NULL);
     int32_t screen_h = lv_display_get_vertical_resolution(NULL);
     int32_t ext_size = lv_obj_get_ext_draw_size(lv_screen_active());
@@ -474,7 +474,7 @@ void test_snapshot_refresh_logic_edge_cases(void)
 
     lv_draw_buf_destroy(draw_buf1);
 
-    /* Test single-layer object structure */
+    /* Тестирование однослойной структуры объекта */
     lv_obj_t * simple_obj = lv_obj_create(lv_screen_active());
     lv_obj_set_size(simple_obj, 50, 50);
     lv_obj_set_style_bg_color(simple_obj, lv_color_hex(0x00FF00), 0);
@@ -492,9 +492,9 @@ void test_snapshot_refresh_logic_edge_cases(void)
 
 void test_snapshot_extreme_size_objects(void)
 {
-    /* Test extreme size objects */
+    /* Тестирование объектов экстремального размера */
     lv_obj_t * large_obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_size(large_obj, 500, 400);  /* Large size */
+    lv_obj_set_size(large_obj, 500, 400);  /* Большой размер */
     lv_obj_set_style_bg_color(large_obj, lv_palette_main(LV_PALETTE_PURPLE), 0);
 
     lv_draw_buf_t * large_buf = lv_snapshot_take(large_obj, LV_COLOR_FORMAT_RGB565);
@@ -507,9 +507,9 @@ void test_snapshot_extreme_size_objects(void)
     lv_draw_buf_destroy(large_buf);
     lv_obj_delete(large_obj);
 
-    /* Test very small objects */
+    /* Тестируйте очень маленькие объекты */
     lv_obj_t * small_obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_size(small_obj, 5, 5);  /* Very small size */
+    lv_obj_set_size(small_obj, 5, 5);  /* Очень маленький размер */
     lv_obj_set_style_bg_color(small_obj, lv_palette_main(LV_PALETTE_CYAN), 0);
 
     lv_draw_buf_t * small_buf = lv_snapshot_take(small_obj, LV_COLOR_FORMAT_ARGB8888);

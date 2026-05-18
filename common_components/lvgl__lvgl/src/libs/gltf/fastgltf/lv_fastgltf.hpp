@@ -24,7 +24,7 @@ namespace fastgltf
 {
 
 /**
- * Computes the transform matrix for a given node a different way with less total operations
+ * Вычисляет матрицу преобразования для данного узла другим способом с меньшим количеством операций.
  */
 FASTGLTF_EXPORT inline auto getFastLocalTransformMatrix(const Node & node)
 {
@@ -64,8 +64,8 @@ FASTGLTF_EXPORT inline auto getFastLocalTransformMatrix(const Node & node)
 }
 
 /**
- * Attempts to remove the scale component of a 4x4 matrix transform.  Will silently fail if
- * any of the component scales is 0 or near zero (which they should never be).
+ * Пытается удалить компонент масштаба матричного преобразования 4x4.  Тихо потерпит неудачу, если
+ * любой из масштабов компонентов равен 0 или близок к нулю (чего они никогда не должны быть).
  */
 FASTGLTF_EXPORT inline void removeScale(fastgltf::math::fmat4x4 & matrix)
 {

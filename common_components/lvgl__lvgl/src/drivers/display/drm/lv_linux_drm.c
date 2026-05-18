@@ -158,10 +158,10 @@ lv_display_t * lv_linux_drm_create(void)
     return disp;
 }
 
-/* Called by LVGL when there is something that needs redrawing
- * it sets the active buffer. if GBM buffers are used, it issues a DMA_BUF_SYNC
- * ioctl call to lock the buffer for CPU access, the buffer is unlocked just
- * before the atomic commit */
+/* Вызывается LVGL, когда есть что-то, что нужно перерисовать.
+ * он устанавливает активный буфер. если используются буферы GBM, выдается сообщение DMA_BUF_SYNC.
+ * вызов ioctl для блокировки буфера для доступа к CPU, буфер разблокируется только
+ * перед атомным коммитом */
 static void drm_dmabuf_set_active_buf(lv_event_t * event)
 {
     drm_dev_t * drm_dev;
@@ -229,16 +229,16 @@ lv_result_t lv_linux_drm_set_file(lv_display_t * disp, const char * file, int64_
 
     size_t buf_size = LV_MIN(drm_dev->drm_bufs[1].size, drm_dev->drm_bufs[0].size);
     uint32_t stride = drm_dev->drm_bufs[0].pitch;
-    /* Resolution must be set first because if the screen is smaller than the size passed
-     * to lv_display_create then the buffers aren't big enough for LV_DISPLAY_RENDER_MODE_DIRECT.
+    /* Сначала необходимо установить разрешение, потому что если экран меньше переданного размера
+     * до lv_display_create, то буферы недостаточно велики для LV_DISPLAY_RENDER_MODE_DIRECT.
      */
     lv_display_set_resolution(disp, hor_res, ver_res);
     lv_display_set_buffers_with_stride(disp, drm_dev->drm_bufs[1].map, drm_dev->drm_bufs[0].map, buf_size,
                                        stride, LV_DISPLAY_RENDER_MODE_DIRECT);
 
 
-    /* Set the handler that is called before a redraw occurs to set the active buffer/plane
-     * when GBM buffers are used the DMA_BUF_SYNC_START is issued there */
+    /* Установите обработчик, который вызывается перед тем, как происходит перерисовка, чтобы установить активный буфер/плоскость.
+     * при использовании буферов GBM там выдается DMA_BUF_SYNC_START */
     lv_display_add_event_cb(disp, drm_dmabuf_set_active_buf, LV_EVENT_REFR_START, drm_dev);
 
     if(width) {
@@ -459,7 +459,7 @@ static int drm_dmabuf_set_plane(drm_dev_t * drm_dev, drm_buffer_t * buf)
 
     drm_dev->req = drmModeAtomicAlloc();
 
-    /* On first Atomic commit, do a modeset */
+    /* При первом Atomic коммите выполните modeset */
     if(first) {
         drm_add_conn_property(drm_dev, "CRTC_ID", drm_dev->crtc_id);
 
@@ -538,7 +538,7 @@ static int find_plane(drm_dev_t * drm_dev, unsigned int fourcc, uint32_t * plane
 
         LV_LOG_TRACE("found plane %d", *plane_id);
 
-        /* Success */
+        /* Успех */
         goto out;
     }
 
@@ -567,7 +567,7 @@ static int drm_find_connector(drm_dev_t * drm_dev, int64_t connector_id)
         goto free_res;
     }
 
-    /* find all available connectors */
+    /* найти все доступные разъемы */
     for(i = 0; i < res->count_connectors; i++) {
         conn = drmModeGetConnector(drm_dev->fd, res->connectors[i]);
         if(!conn)
@@ -642,7 +642,7 @@ static int drm_find_connector(drm_dev_t * drm_dev, int64_t connector_id)
         enc = NULL;
     }
     else {
-        /* Encoder hasn't been associated yet, look it up */
+        /* Кодировщик еще не подключен, найдите его */
         bool found = false;
         for(i = 0; i < conn->count_encoders; i++) {
             int crtc, crtc_id = -1;
@@ -729,14 +729,14 @@ static int drm_open(const char * path)
         return -1;
     }
 
-    /* set FD_CLOEXEC flag */
+    /* установить флаг FD_CLOEXEC */
     if((flags = fcntl(fd, F_GETFD)) < 0 ||
        fcntl(fd, F_SETFD, flags | FD_CLOEXEC) < 0) {
         LV_LOG_ERROR("fcntl FD_CLOEXEC failed");
         goto err;
     }
 
-    /* check capability */
+    /* проверить возможность */
     ret = drmGetCap(fd, DRM_CAP_DUMB_BUFFER, &has_dumb);
     if(ret < 0 || has_dumb == 0) {
         LV_LOG_ERROR("drmGetCap DRM_CAP_DUMB_BUFFER failed or \"%s\" doesn't have dumb "
@@ -826,7 +826,7 @@ static int drm_setup(drm_dev_t * drm_dev, const char * device_path, int64_t conn
 
 #if LV_USE_LINUX_DRM_GBM_BUFFERS
 
-    /* Create GBM device and buffer */
+    /* Создайте устройство и буфер GBM. */
     drm_dev->gbm_device = gbm_create_device(drm_dev->fd);
 
     if(drm_dev->gbm_device == NULL) {
@@ -874,7 +874,7 @@ static int drm_allocate_dumb(drm_dev_t * drm_dev, drm_buffer_t * buf)
     uint32_t handles[4] = {0}, pitches[4] = {0}, offsets[4] = {0};
     int ret;
 
-    /* create dumb buffer */
+    /* создать тупой буфер */
     lv_memzero(&creq, sizeof(creq));
     creq.width = drm_dev->width;
     creq.height = drm_dev->height;
@@ -889,7 +889,7 @@ static int drm_allocate_dumb(drm_dev_t * drm_dev, drm_buffer_t * buf)
     buf->pitch = creq.pitch;
     buf->size = creq.size;
 
-    /* prepare buffer for memory mapping */
+    /* подготовить буфер для отображения памяти */
     lv_memzero(&mreq, sizeof(mreq));
     mreq.handle = creq.handle;
     ret = drmIoctl(drm_dev->fd, DRM_IOCTL_MODE_MAP_DUMB, &mreq);
@@ -901,17 +901,17 @@ static int drm_allocate_dumb(drm_dev_t * drm_dev, drm_buffer_t * buf)
     buf->offset = mreq.offset;
     LV_LOG_INFO("size %lu pitch %u offset %u", buf->size, buf->pitch, buf->offset);
 
-    /* perform actual memory mapping */
+    /* выполнить фактическое отображение памяти */
     buf->map = mmap(0, creq.size, PROT_READ | PROT_WRITE, MAP_SHARED, drm_dev->fd, mreq.offset);
     if(buf->map == MAP_FAILED) {
         LV_LOG_ERROR("mmap fail");
         return -1;
     }
 
-    /* clear the framebuffer to 0 (= full transparency in ARGB8888) */
+    /* очистить фреймбуфер до 0 (= полная прозрачность в ARGB8888) */
     lv_memzero(buf->map, creq.size);
 
-    /* create framebuffer object for the dumb-buffer */
+    /* создать объект фреймбуфера для тупого буфера */
     handles[0] = creq.handle;
     pitches[0] = creq.pitch;
     offsets[0] = 0;
@@ -936,13 +936,13 @@ static int create_gbm_buffer(drm_dev_t * drm_dev, drm_buffer_t * buf)
     uint32_t n_planes;
     int res;
 
-    /* gbm_bo_format does not define anything other than ARGB8888 or XRGB8888 */
+    /* gbm_bo_format не определяет ничего, кроме ARGB8888 или XRGB8888. */
     if(LV_COLOR_DEPTH != 32) {
         LV_LOG_ERROR("Unsupported color format");
         return -1;
     }
 
-    /* Create a linear GBM buffer object - best practice when modifiers are not used */
+    /* Создайте линейный буферный объект GBM — лучшая практика, когда модификаторы не используются. */
     if(!(gbm_bo = gbm_bo_create(drm_dev->gbm_device,
                                 drm_dev->width, drm_dev->height, GBM_BO_FORMAT_XRGB8888,
                                 GBM_BO_USE_SCANOUT | GBM_BO_USE_LINEAR))) {
@@ -951,9 +951,9 @@ static int create_gbm_buffer(drm_dev_t * drm_dev, drm_buffer_t * buf)
         return -1;
     }
 
-    /* Currently only, one plane per dma-buf/prime fd is supported - but some GPUs feature
-     * several planes (multiple fds or sometimes a single fd for multiple planes).
-     * current implementation is kept simple for now */
+    /* В настоящее время поддерживается только одна плоскость для каждого dma-buf/prime fd, но некоторые графические процессоры имеют функцию
+     * несколько плоскостей (несколько ФД или иногда один ФД для нескольких плоскостей).
+     * текущая реализация пока остается простой */
 
     n_planes = gbm_bo_get_plane_count(gbm_bo);
 
@@ -985,13 +985,13 @@ static int create_gbm_buffer(drm_dev_t * drm_dev, drm_buffer_t * buf)
         return -1;
     }
 
-    /* Used to perform DMA_BUF_SYNC ioctl calls during the rendering cycle */
+    /* Используется для выполнения вызовов ioctl DMA_BUF_SYNC во время цикла рендеринга. */
     buf->handle = prime_fd;
 
-    /* Convert prime fd to a libdrm buffer handle */
+    /* Преобразование prime fd в дескриптор буфера libdrm */
     drmPrimeFDToHandle(drm_dev->fd, buf->handle, &handles[0]);
 
-    /* create libdrm framebuffer */
+    /* создать фреймбуфер libdrm */
     res = drmModeAddFB2(drm_dev->fd, drm_dev->width, drm_dev->height, drm_dev->fourcc,
                         handles, pitches, offsets, &buf->fb_handle, 0);
 
@@ -1027,7 +1027,7 @@ static int drm_setup_buffers(drm_dev_t * drm_dev)
     }
 
 #else
-    /* Use dumb buffers */
+    /* Используйте тупые буферы */
     ret = drm_allocate_dumb(drm_dev, &drm_dev->drm_bufs[0]);
     if(ret)
         return ret;
@@ -1092,7 +1092,7 @@ static void drm_del_event_cb(lv_event_t * e)
     drm_dev_t * drm_dev = lv_display_get_driver_data(disp);
     if(!drm_dev) return;
 
-    /* Restore original CRTC if saved */
+    /* Восстановить исходный CRTC, если он сохранен. */
     if(drm_dev->fd >= 0 && drm_dev->saved_crtc) {
         drmModeCrtc * s_crtc = drm_dev->saved_crtc;
         drmModeSetCrtc(drm_dev->fd, s_crtc->crtc_id, s_crtc->buffer_id, 0, 0,
@@ -1101,7 +1101,7 @@ static void drm_del_event_cb(lv_event_t * e)
         drm_dev->saved_crtc = NULL;
     }
 
-    /* Prevent further flushes & free any pending atomic request */
+    /* Предотвратите дальнейшие сбросы и освободите все ожидающие атомарные запросы. */
     lv_display_set_flush_cb(disp, NULL);
     if(drm_dev->req) {
         drmModeAtomicFree(drm_dev->req);
@@ -1133,7 +1133,7 @@ static void drm_del_event_cb(lv_event_t * e)
         drm_dev->gbm_device = NULL;
     }
 
-#else /* dumb buffers */
+#else /* тупые буферы */
     for(int i = 0; i < BUFFER_CNT; ++i) {
         drm_buffer_t * b = &drm_dev->drm_bufs[i];
 
@@ -1147,14 +1147,14 @@ static void drm_del_event_cb(lv_event_t * e)
         }
         if(b->handle) {
             struct drm_mode_destroy_dumb d = { .handle = b->handle };
-            /* Dumb buffers should be destroyed if they are closed, but might as well use the DRM_IOCTL_MODE_DESTROY_DUMB */
+            /* Тупые буферы должны быть уничтожены, если они закрыты, но с таким же успехом можно использовать DRM_IOCTL_MODE_DESTROY_DUMB. */
             drmIoctl(drm_dev->fd, DRM_IOCTL_MODE_DESTROY_DUMB, &d);
             b->handle = 0;
         }
     }
 #endif
 
-    /* Free DRM properties */
+    /* Бесплатные свойства DRM */
     for(uint32_t i = 0; i < drm_dev->count_plane_props; ++i) {
         if(drm_dev->plane_props[i]) {
             drmModeFreeProperty(drm_dev->plane_props[i]);

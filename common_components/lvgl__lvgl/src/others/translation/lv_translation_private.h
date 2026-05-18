@@ -36,7 +36,7 @@ struct _lv_translation_tag_dsc_t {
 struct _lv_translation_pack_t {
     const char ** languages;
     uint32_t language_cnt;
-    uint32_t is_static; /*In the union translations_p is used*/
+    uint32_t is_static; /*В союзе используется translations_p*/
     const char ** tag_p;
     const char ** translation_p; /*E.g. {{"a", "b"}, {"c", "d"}}*/
     lv_array_t translation_array;
@@ -53,7 +53,7 @@ struct _lv_translation_pack_t {
 #endif /*LV_USE_TRANSLATION*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_TRANSLATION_PRIVATE_H */

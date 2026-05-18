@@ -259,7 +259,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888(lv_draw_sw_blend_f
     LV_UNUSED(mask_stride);
     LV_UNUSED(dest_stride);
 
-    /*Simple fill*/
+    /*Простая заливка*/
     if(mask == NULL && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_ARGB8888(dsc)) {
             uint32_t color32 = lv_color_to_u32(dsc->color);
@@ -294,7 +294,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888(lv_draw_sw_blend_f
             }
         }
     }
-    /*Opacity only*/
+    /*Только непрозрачность*/
     else if(mask == NULL && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_ARGB8888_WITH_OPA(dsc)) {
             lv_color32_t color_argb = lv_color_to_32(dsc->color, opa);
@@ -309,7 +309,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888(lv_draw_sw_blend_f
             }
         }
     }
-    /*Masked with full opacity*/
+    /*Замаскировано с полной непрозрачностью*/
     else if(mask && opa >= LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_ARGB8888_WITH_MASK(dsc)) {
             lv_color32_t color_argb = lv_color_to_32(dsc->color, 0xff);
@@ -325,7 +325,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888(lv_draw_sw_blend_f
             }
         }
     }
-    /*Masked with opacity*/
+    /*Маскировано с непрозрачностью*/
     else {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_ARGB8888_MIX_MASK_OPA(dsc)) {
             lv_color32_t color_argb = lv_color_to_32(dsc->color, opa);
@@ -514,10 +514,10 @@ static void LV_ATTRIBUTE_FAST_MEM al88_image_blend(lv_draw_sw_blend_image_dsc_t 
                 for(y = 0; y < h; y++) {
                     for(dest_x = 0, src_x = 0; src_x < w; dest_x++, src_x++) {
                         /*
-                        dest_buf_c32[dest_x].alpha = src_buf_al88[src_x].alpha;
-                        dest_buf_c32[dest_x].red = src_buf_al88[src_x].lumi;
-                        dest_buf_c32[dest_x].green = src_buf_al88[src_x].lumi;
-                        dest_buf_c32[dest_x].blue = src_buf_al88[src_x].lumi;
+                        dest_buf_c32 [ dest_x ].alpha = src_buf_al88 [ src_x ].alpha;
+                        dest_buf_c32 [ dest_x ].red = src_buf_al88 [ src_x ].lumi;
+                        dest_buf_c32 [ dest_x ].green = src_buf_al88 [ src_x ].lumi;
+                        dest_buf_c32 [ dest_x ].blue = src_buf_al88 [ src_x ].lumi;
                         */
                         lv_color_8_32_mix(src_buf_al88[src_x].lumi, &dest_buf_c32[dest_x], src_buf_al88[src_x].alpha);
                     }
@@ -714,7 +714,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                 color_argb.alpha = opa;
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
-                        color_argb.red = (src_buf_c16[x].red * 2106) >> 8;  /*To make it rounded*/
+                        color_argb.red = (src_buf_c16[x].red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         color_argb.green = (src_buf_c16[x].green * 1037) >> 8;
                         color_argb.blue = (src_buf_c16[x].blue * 2106) >> 8;
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
@@ -729,7 +729,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
                         color_argb.alpha = mask_buf[x];
-                        color_argb.red = (src_buf_c16[x].red * 2106) >> 8;  /*To make it rounded*/
+                        color_argb.red = (src_buf_c16[x].red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         color_argb.green = (src_buf_c16[x].green * 1037) >> 8;
                         color_argb.blue = (src_buf_c16[x].blue * 2106) >> 8;
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
@@ -745,7 +745,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_image_blend(lv_draw_sw_blend_image_dsc_
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
                         color_argb.alpha = LV_OPA_MIX2(mask_buf[x], opa);
-                        color_argb.red = (src_buf_c16[x].red * 2106) >> 8;  /*To make it rounded*/
+                        color_argb.red = (src_buf_c16[x].red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         color_argb.green = (src_buf_c16[x].green * 1037) >> 8;
                         color_argb.blue = (src_buf_c16[x].blue * 2106) >> 8;
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
@@ -816,9 +816,9 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_swapped_image_blend(lv_draw_sw_blend_im
                 color_argb.alpha = opa;
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
-                        raw = lv_color_swap_16(src_buf_u16[x]);                        /* swap byte order */
+                        raw = lv_color_swap_16(src_buf_u16[x]);                        /* поменять порядок байтов */
                         px = lv_color16_from_u16(raw);
-                        color_argb.red = (px.red * 2106) >> 8;  /*To make it rounded*/
+                        color_argb.red = (px.red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         color_argb.green = (px.green * 1037) >> 8;
                         color_argb.blue = (px.blue * 2106) >> 8;
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
@@ -833,9 +833,9 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_swapped_image_blend(lv_draw_sw_blend_im
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
                         color_argb.alpha = mask_buf[x];
-                        raw = lv_color_swap_16(src_buf_u16[x]);                        /* swap byte order */
+                        raw = lv_color_swap_16(src_buf_u16[x]);                        /* поменять порядок байтов */
                         px = lv_color16_from_u16(raw);
-                        color_argb.red = (px.red * 2106) >> 8;  /*To make it rounded*/
+                        color_argb.red = (px.red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         color_argb.green = (px.green * 1037) >> 8;
                         color_argb.blue = (px.blue * 2106) >> 8;
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
@@ -851,9 +851,9 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_swapped_image_blend(lv_draw_sw_blend_im
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
                         color_argb.alpha = LV_OPA_MIX2(mask_buf[x], opa);
-                        raw = lv_color_swap_16(src_buf_u16[x]);                        /* swap byte order */
+                        raw = lv_color_swap_16(src_buf_u16[x]);                        /* поменять порядок байтов */
                         px = lv_color16_from_u16(raw);
-                        color_argb.red = (px.red * 2106) >> 8;  /*To make it rounded*/
+                        color_argb.red = (px.red * 2106) >> 8;  /*Чтобы сделать его закругленным*/
                         color_argb.green = (px.green * 1037) >> 8;
                         color_argb.blue = (px.blue * 2106) >> 8;
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
@@ -869,7 +869,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb565_swapped_image_blend(lv_draw_sw_blend_im
         lv_color32_t src_argb;
         for(y = 0; y < h; y++) {
             for(x = 0; x < w; x++) {
-                raw = lv_color_swap_16(src_buf_u16[x]);                        /* swap byte order */
+                raw = lv_color_swap_16(src_buf_u16[x]);                        /* поменять порядок байтов */
                 px = lv_color16_from_u16(raw);
                 src_argb.red = (px.red * 2106) >> 8;
                 src_argb.green = (px.green * 1037) >> 8;
@@ -912,7 +912,7 @@ static void LV_ATTRIBUTE_FAST_MEM rgb888_image_blend(lv_draw_sw_blend_image_dsc_
     LV_UNUSED(color_argb);
 
     if(dsc->blend_mode == LV_BLEND_MODE_NORMAL) {
-        /*Special case*/
+        /*Особый случай*/
         if(mask_buf == NULL && opa >= LV_OPA_MAX) {
             if(LV_RESULT_INVALID == LV_DRAW_SW_RGB888_BLEND_NORMAL_TO_ARGB8888(dsc, src_px_size)) {
                 if(src_px_size == 4) {
@@ -1115,13 +1115,13 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
     int32_t x;
     int32_t y;
 
-    /* Process the normal blend mode (for premultiplied alpha) */
+    /* Обработать нормальный режим наложения (для предварительно умноженной альфа) */
     if(dsc->blend_mode == LV_BLEND_MODE_NORMAL) {
         if(mask_buf == NULL && opa >= LV_OPA_MAX) {
             if(LV_RESULT_INVALID == LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_ARGB8888(dsc)) {
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         color_argb = src_buf_c32[x];
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
@@ -1129,7 +1129,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                             color_argb.green = (color_argb.green * reciprocal_alpha) >> 8;
                             color_argb.blue = (color_argb.blue * reciprocal_alpha) >> 8;
 
-                            /* Blend with destination */
+                            /* Совместить с пунктом назначения */
                             dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
                         }
                     }
@@ -1142,7 +1142,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
             if(LV_RESULT_INVALID == LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_ARGB8888_WITH_OPA(dsc)) {
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         color_argb = src_buf_c32[x];
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
@@ -1152,7 +1152,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                             color_argb.alpha = LV_OPA_MIX2(color_argb.alpha, opa);
                         }
 
-                        /* Blend with destination */
+                        /* Совместить с пунктом назначения */
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
                     }
                     dest_buf_c32 = drawbuf_next_row(dest_buf_c32, dest_stride);
@@ -1164,7 +1164,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
             if(LV_RESULT_INVALID == LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_ARGB8888_WITH_MASK(dsc)) {
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         color_argb = src_buf_c32[x];
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
@@ -1174,7 +1174,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                             color_argb.alpha = LV_OPA_MIX2(color_argb.alpha, mask_buf[x]);
                         }
 
-                        /* Blend with destination */
+                        /* Совместить с пунктом назначения */
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
                     }
                     dest_buf_c32 = drawbuf_next_row(dest_buf_c32, dest_stride);
@@ -1187,7 +1187,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
             if(LV_RESULT_INVALID == LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_ARGB8888_MIX_MASK_OPA(dsc)) {
                 for(y = 0; y < h; y++) {
                     for(x = 0; x < w; x++) {
-                        /* Unpremultiply the source color by using the reciprocal of the alpha */
+                        /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                         color_argb = src_buf_c32[x];
                         if(color_argb.alpha != 0) {
                             uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
@@ -1197,7 +1197,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                             color_argb.alpha = LV_OPA_MIX3(color_argb.alpha, opa, mask_buf[x]);
                         }
 
-                        /* Blend with destination */
+                        /* Совместить с пунктом назначения */
                         dest_buf_c32[x] = lv_color_32_32_mix(color_argb, dest_buf_c32[x], &cache);
                     }
                     dest_buf_c32 = drawbuf_next_row(dest_buf_c32, dest_stride);
@@ -1210,7 +1210,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
     else {
         for(y = 0; y < h; y++) {
             for(x = 0; x < w; x++) {
-                /* Unpremultiply the source color by using the reciprocal of the alpha */
+                /* Уменьшите умножение исходного цвета, используя обратную величину альфа. */
                 color_argb = src_buf_c32[x];
                 if(color_argb.alpha != 0) {
                     uint16_t reciprocal_alpha = (255 * 256) / color_argb.alpha;
@@ -1225,7 +1225,7 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
                     color_argb.alpha = LV_OPA_MIX3(color_argb.alpha, mask_buf[x], opa);
                 }
 
-                /* Blend with destination using non-normal blend mode */
+                /* Смешайте с местом назначения, используя ненормальный режим наложения. */
                 blend_non_normal_pixel(&dest_buf_c32[x], color_argb, dsc->blend_mode, &cache);
             }
             if(mask_buf) mask_buf += mask_stride;
@@ -1259,25 +1259,25 @@ static inline void LV_ATTRIBUTE_FAST_MEM lv_color_8_32_mix(const uint8_t src, lv
 static inline lv_color32_t LV_ATTRIBUTE_FAST_MEM lv_color_32_32_mix(lv_color32_t fg, lv_color32_t bg,
                                                                     lv_color_mix_alpha_cache_t * cache)
 {
-    /*Pick the foreground if it's fully opaque or the Background is fully transparent*/
+    /*Выберите передний план, если он полностью непрозрачен или фон полностью прозрачен.*/
     if(fg.alpha >= LV_OPA_MAX || bg.alpha <= LV_OPA_MIN) {
         return fg;
     }
-    /*Transparent foreground: use the Background*/
+    /*Прозрачный передний план: используйте фон*/
     else if(fg.alpha <= LV_OPA_MIN) {
         return bg;
     }
-    /*Opaque background: use simple mix*/
+    /*Непрозрачный фон: используйте простой микс*/
     else if(bg.alpha == 255) {
         return lv_color_mix32(fg, bg);
     }
-    /*Both colors have alpha. Expensive calculation need to be applied*/
+    /*Оба цвета имеют альфу. Необходимо применить дорогостоящий расчет*/
     else {
-        /*Save the parameters and the result. If they will be asked again don't compute again*/
+        /*Сохраните параметры и результат. Если их спросят еще раз, больше не вычисляйте.*/
 
-        /*Update the ratio and the result alpha value if the input alpha values change*/
+        /*Обновите соотношение и результирующее альфа-значение, если входные альфа-значения изменяются.*/
         if(bg.alpha != cache->bg_saved.alpha || fg.alpha != cache->fg_saved.alpha) {
-            /*Info:
+            /*Информация:
              * https://en.wikipedia.org/wiki/Alpha_compositing#Analytical_derivation_of_the_over_operator*/
             cache->res_alpha_saved = 255 - LV_OPA_MIX2(255 - fg.alpha, 255 - bg.alpha);
             LV_ASSERT(cache->res_alpha_saved != 0);

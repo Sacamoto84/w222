@@ -31,26 +31,26 @@ extern "C" {
  **********************/
 
 /**
- * Initialize the theme
+ * Инициализировать тему
  * @param disp pointer to display
  * @return a pointer to reference this theme later
  */
 lv_theme_t * lv_theme_simple_init(lv_display_t * disp);
 
 /**
-* Check if the theme is initialized
+* Проверьте, инициализирована ли тема
 * @return true if default theme is initialized, false otherwise
 */
 bool lv_theme_simple_is_inited(void);
 
 /**
- * Get simple theme
+ * Получить простую тему
  * @return a pointer to simple theme, or NULL if this is not initialized
  */
 lv_theme_t * lv_theme_simple_get(void);
 
 /**
- * Deinitialize the simple theme
+ * Деинициализировать простую тему
  */
 void lv_theme_simple_deinit(void);
 
@@ -61,7 +61,7 @@ void lv_theme_simple_deinit(void);
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_THEME_SIMPLE_H*/

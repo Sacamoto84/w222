@@ -91,7 +91,7 @@ uint32_t lv_anim_timeline_start(lv_anim_timeline_t * at)
         }
     }
 
-    /*Apply the delay only if playing from any ends*/
+    /*Применяйте задержку только при игре с любого конца.*/
     uint32_t delay = 0;
     if(!at->reverse && at->act_time == 0) delay = at->delay;
     else if(at->reverse && at->act_time == playtime) delay = at->delay;
@@ -321,7 +321,7 @@ static void anim_timeline_set_act_time(lv_anim_timeline_t * at, uint32_t act_tim
 
 static int32_t anim_timeline_path_cb(const lv_anim_t * a)
 {
-    /* Directly map original timestamps to avoid loss of accuracy */
+    /* Непосредственно сопоставьте исходные временные метки, чтобы избежать потери точности. */
     return lv_map(a->act_time, 0, a->duration, a->start_value, a->end_value);
 }
 

@@ -9,7 +9,7 @@
 
 #ifdef _RENESAS_RA_
     #define USE_FREE_RTOS (BSP_CFG_RTOS == 2)
-#else // RX with SMC code generation
+#else // RX с генерацией кода SMC
     #ifndef _RENESAS_RX_
         #define _RENESAS_RX_ 1
     #endif
@@ -74,7 +74,7 @@ static SemaphoreHandle_t    _SemaphoreVsync = NULL;
 static glcdc_cfg_t          g_config;
 static glcdc_runtime_cfg_t  g_layer_change;
 
-/* A global variable that Dave 2D driver relies on. (Being auto generated on RA platforms)*/
+/* Глобальная переменная, от которой зависит 2D-драйвер Dave. (Автоматически генерируется на платформах RA)*/
 display_t g_display0_cfg;
 #endif /*_RENESAS_RX_*/
 
@@ -101,7 +101,7 @@ lv_display_t * lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t 
     return glcdc_create(buf1, buf2, buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
 }
 
-/*This function is declared in and being used by FSP generated code modules*/
+/*Эта функция объявлена и используется модулями сгенерированного кода FSP.*/
 #ifdef _RENESAS_RA_
 void glcdc_callback(display_callback_args_t * p_args)
 {
@@ -109,10 +109,10 @@ void glcdc_callback(display_callback_args_t * p_args)
         give_vsync_sem_and_yield();
     }
     else if(DISPLAY_EVENT_GR1_UNDERFLOW == p_args->event) {
-        __BKPT(0); /*Layer 1 Underrun*/
+        __BKPT(0); /*Уровень 1*/
     }
     else if(DISPLAY_EVENT_GR2_UNDERFLOW == p_args->event) {
-        __BKPT(0); /*Layer 2 Underrun*/
+        __BKPT(0); /*Уровень 2*/
     }
     else { /*DISPLAY_EVENT_FRAME_END*/
         __BKPT(0);
@@ -125,10 +125,10 @@ void glcdc_callback(glcdc_callback_args_t * p_args)
         give_vsync_sem_and_yield();
     }
     else if(GLCDC_EVENT_GR1_UNDERFLOW == p_args->event) {
-        while(1); /*Layer 1 Underrun*/
+        while(1); /*Уровень 1*/
     }
     else if(GLCDC_EVENT_GR2_UNDERFLOW == p_args->event) {
-        while(1); /*Layer 2 Underrun*/
+        while(1); /*Уровень 2*/
     }
     else {/*DISPLAY_EVENT_FRAME_END*/
         while(1);
@@ -176,10 +176,10 @@ static void give_vsync_sem_and_yield(void)
 #if USE_FREE_RTOS
     BaseType_t context_switch;
 
-    /*Set Vsync semaphore*/
+    /*Установить семафор Vsync*/
     xSemaphoreGiveFromISR(_SemaphoreVsync, &context_switch);
 
-    /*Return to the highest priority available task*/
+    /*Вернуться к доступной задаче с наивысшим приоритетом*/
     portYIELD_FROM_ISR(context_switch);
 #else
 #endif /*USE_FREE_RTOS*/
@@ -187,11 +187,11 @@ static void give_vsync_sem_and_yield(void)
 
 static void glcdc_init(void)
 {
-    /* Fill the Frame buffer with black colour (0x0000 in RGB565), for a clean start after previous runs */
+    /* Заполните буфер кадров черным цветом ( 0x0000 в RGB565 ) для чистого запуска после предыдущих запусков. */
     lv_memzero(fb_background, sizeof(fb_background));
 
 #ifdef _RENESAS_RA_
-    /* Initialize GLCDC driver */
+    /* Инициализируйте драйвер GLCDC */
     uint8_t * p_fb = &fb_background[1][0];
     fsp_err_t err;
 
@@ -242,12 +242,12 @@ static void glcdc_init(void)
 static void flush_direct(lv_display_t * display, const lv_area_t * area, uint8_t * px_map)
 {
     FSP_PARAMETER_NOT_USED(area);
-    /*Display the frame buffer pointed by px_map*/
+    /*Отобразить буфер кадров, на который указывает px_map.*/
 
     if(!lv_display_flush_is_last(display)) return;
 
 #if defined(RENESAS_CORTEX_M85) && (BSP_CFG_DCACHE_ENABLED)
-    /* Invalidate cache - so the HW can access any data written by the CPU */
+    /* Недействительный кеш - чтобы HW мог получить доступ к любым данным, записанным CPU. */
     SCB_CleanInvalidateDCache_by_Addr(px_map, sizeof(fb_background[0]));
 #endif
 
@@ -271,7 +271,7 @@ static void flush_wait_direct(lv_display_t * display)
     if(!lv_display_flush_is_last(display)) return;
 
 #if USE_FREE_RTOS
-    /*If Vsync semaphore has already been set, clear it then wait to avoid tearing*/
+    /*Если семафор Vsync уже установлен, очистите его и подождите, чтобы избежать разрывов.*/
     if(uxSemaphoreGetCount(_SemaphoreVsync)) {
         xSemaphoreTake(_SemaphoreVsync, 10);
     }
@@ -295,7 +295,7 @@ static void flush_partial(lv_display_t * display, const lv_area_t * area, uint8_
         uint32_t w_stride = lv_draw_buf_width_to_stride(w, cf);
         uint32_t h_stride = lv_draw_buf_width_to_stride(h, cf);
 
-        // only allocate if rotation is actually being used
+        // выделять только в том случае, если ротация действительно используется
         if(!rotation_buffer) {
             rotation_buffer = lv_malloc(partial_buffer_size);
             LV_ASSERT_MALLOC(rotation_buffer);
@@ -347,13 +347,13 @@ static void enable_dave2d_drw_interrupt(void)
 {
     bsp_int_ctrl_t grpal1;
 
-    /* Specify the priority of the group interrupt. */
+    /* Укажите приоритет группового прерывания. */
     grpal1.ipl = 5;
 
-    /* Use the BSP API to register the interrupt handler for DRW2D. */
+    /* Используйте BSP API для регистрации обработчика прерываний для DRW2D. */
     R_BSP_InterruptWrite(BSP_INT_SRC_AL1_DRW2D_DRW_IRQ, (bsp_int_cb_t)drw_int_isr);
 
-    /* Use the BSP API to enable the group interrupt. */
+    /* Используйте BSP API, чтобы включить групповое прерывание. */
     R_BSP_InterruptControl(BSP_INT_SRC_AL1_DRW2D_DRW_IRQ, BSP_INT_CMD_GROUP_INTERRUPT_ENABLE, (void *)&grpal1);
 }
 #endif /*_RENESAS_RX_*/

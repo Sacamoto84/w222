@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -36,18 +36,18 @@ extern "C" {
 typedef float nema_matrix4x4_t[4][4];
 
 
-/** \brief Load a 4x4 Identity Matrix
+/** \brief Загрузите матрицу идентичности 4x4
  *
- * \param m Matrix to be loaded
+ * \param m Матрица для загрузки
  *
  */
 void nema_mat4x4_load_identity(nema_matrix4x4_t m);
 
-/** \brief Multiply two 4x4 matrices
+/** \brief Умножение двух матриц 4x4
  *
- * \param m Result Matrix
- * \param m_l Left operand
- * \param m_r Right operand
+ * \param m Матрица результатов
+ * \paramm_lЛевый операнд
+ * \paramm_rПравый операнд
  *
  */
 void nema_mat4x4_mul(nema_matrix4x4_t  m,
@@ -58,105 +58,105 @@ void nema_mat4x4_mul(nema_matrix4x4_t  m,
 void nema_mat4x4_copy(nema_matrix4x4_t m_l,
                  nema_matrix4x4_t m_r);
 
-/** \brief Multiply a 4x1 vector with a 4x4 matrix
+/** \brief Умножение вектора 4x1 на матрицу 4x4
  *
- * \param m Matrix to be multiplied
- * \param x Vector first element
- * \param y Vector second element
- * \param z Vector third element
- * \param w Vector forth element
+ * \param m Матрица, которую нужно умножить
+ * \param x Первый элемент вектора
+ * \param y Второй элемент вектора
+ * \param z Третий элемент вектора
+ * \param w Четвертый элемент вектора
  *
  */
 void nema_mat4x4_mul_vec(nema_matrix4x4_t m, float *x, float *y, float *z, float *w);
 
 // ------------------------------------------------------------------------------------
-// Object Transformation - ModelView Matrix
-// Object Coordinates to Eye Coordinates
+// Преобразование объекта — матрица ModelView
+// Координаты объекта в координатах глаза
 // ------------------------------------------------------------------------------------
 
-/** \brief Apply translate transformation
+/** \brief Изменение преобразования перевода
  *
- * \param m Matrix to apply transformation
- * \param tx X translation factor
- * \param ty Y translation factor
- * \param tz Z translation factor
+ * \param m Матрица для применения конвертировать
+ * \param tx X коэффициент перевода
+ * \param ty Y коэффициент перевода
+ * \param tz Коэффициент перевода Z
  *
  */
 void nema_mat4x4_translate(nema_matrix4x4_t m, float tx, float ty, float tz);
 
-/** \brief Apply scale transformation
+/** \brief Применить масштабное преобразование
  *
- * \param m Matrix to apply transformation
- * \param sx X scaling factor
- * \param sy Y scaling factor
- * \param sz Z scaling factor
+ * \param m Матрица для применения конвертировать
+ * \param sx X коэффициент масштабирования
+ * \param sy Коэффициент масштабирования Y
+ * \param sz Z коэффициент масштабирования
  *
  */
 void nema_mat4x4_scale(nema_matrix4x4_t m, float sx, float sy, float sz);
 
-/** \brief Apply rotate transformation around X axis
+/** \brief Применить преобразование поворота вокруг оси X
  *
- * \param m Matrix to apply transformation
- * \param angle_degrees Angle to rotate in degrees
+ * \param m Матрица для применения конвертировать
+ * \paramangle_degreesУгол поворота в градусах
  *
  */
 void nema_mat4x4_rotate_X    (nema_matrix4x4_t m, float angle_degrees);
 
-/** \brief Apply rotate transformation around Y axis
+/** \brief Применить преобразование поворота вокруг оси Y
  *
- * \param m Matrix to apply transformation
- * \param angle_degrees Angle to rotate in degrees
+ * \param m Матрица для применения конвертировать
+ * \paramangle_degreesУгол поворота в градусах
  *
  */
 void nema_mat4x4_rotate_Y    (nema_matrix4x4_t m, float angle_degrees);
 
-/** \brief Apply rotate transformation around Z axis
+/** \brief Применить преобразование поворота вокруг оси Z
  *
- * \param m Matrix to apply transformation
- * \param angle_degrees Angle to rotate in degrees
+ * \param m Матрица для применения конвертировать
+ * \paramangle_degreesУгол поворота в градусах
  *
  */
 void nema_mat4x4_rotate_Z    (nema_matrix4x4_t m, float angle_degrees);
 
 // ------------------------------------------------------------------------------------
-// Scene Transformation/Frustum - Projection Matrix
-// Eye Coordinates to Clip Coordinates
+// Трансформация сцен/Frustum — матрица проекции
+// Координаты глаза для координат обрезки
 // ------------------------------------------------------------------------------------
 
-/** \brief Set up a perspective projection matrix
+/** \brief Настройка матрицы перспективной проекции
  *
- * \param m A 4x4 Matrix
- * \param fovy_degrees Field of View in degrees
- * \param aspect Aspect ratio that determines the field of view in the x direction.
- * \param nearVal Distance from the viewer to the near clipping plane (always positive)
- * \param farVal Distance from the viewer to the far clipping plane (always positive)
+ * \param m Матрица 4x4
+ * \paramfovy_degreesПоле взгляда в градусах
+ * \param аспект Соотношение сторон, определяющее поле зрения по оси x.
+ * \param closeVal Расстояние от наблюдателя до ближней плоскости отсечения (всегда положительное)
+ * \param FarVal Расстояние от наблюдателя до дальней плоскости отсечения (всегда положительное)
  *
  */
 void nema_mat4x4_load_perspective(nema_matrix4x4_t m, float fovy_degrees, float aspect,
                                   float nearVal, float farVal);
 
 
-/** \brief Set up a Right Hand perspective projection matrix
+/** \brief Настройка матрицы проекции правого взгляда
  *
- * \param m A 4x4 Matrix
- * \param fovy_degrees Field of View in degrees
- * \param aspect Aspect ratio that determines the field of view in the x direction.
- * \param nearVal Distance from the viewer to the near clipping plane (always positive)
- * \param farVal Distance from the viewer to the far clipping plane (always positive)
+ * \param m Матрица 4x4
+ * \paramfovy_degreesПоле взгляда в градусах
+ * \param аспект Соотношение сторон, определяющее поле зрения по оси x.
+ * \param closeVal Расстояние от наблюдателя до ближней плоскости отсечения (всегда положительное)
+ * \param FarVal Расстояние от наблюдателя до дальней плоскости отсечения (всегда положительное)
  *
  */
 void nema_mat4x4_load_perspective_rh(nema_matrix4x4_t m, float fovy_degrees, float aspect,
                                   float nearVal, float farVal);
 
-/** \brief Set up an orthographic projection matrix
+/** \brief Настройка матрицы ортогональной проекции
  *
- * \param m A 4x4 Matrix
- * \param left   Left vertical clipping plane
- * \param right  Right vertical clipping plane
- * \param bottom bottom horizontal clipping plane
- * \param top    Top horizontal clipping plane
- * \param nearVal Distance from the viewer to the near clipping plane (always positive)
- * \param farVal Distance from the viewer to the far clipping plane (always positive)
+ * \param m Матрица 4x4
+ * \param left Левая вертикальная плоскость отсечения
+ * \param right Правая вертикальная плоскость отсечения
+ * \param нижняя нижняя горизонтальная плоскость отсечения
+ * \param top Верхняя горизонтальная плоскость отсечения
+ * \param closeVal Расстояние от наблюдателя до ближней плоскости отсечения (всегда положительное)
+ * \param FarVal Расстояние от наблюдателя до дальней плоскости отсечения (всегда положительное)
  *
  */
 void nema_mat4x4_load_ortho(nema_matrix4x4_t m,
@@ -164,31 +164,31 @@ void nema_mat4x4_load_ortho(nema_matrix4x4_t m,
                             float bottom,  float top,
                             float nearVal, float farVal);
 
-/** \brief Set up a 2D orthographic projection matrix
+/** \brief Настройка матрицы двумерной ортогональной проекции
  *
- * \param m A 4x4 Matrix
- * \param left   Left vertical clipping plane
- * \param right  Right vertical clipping plane
- * \param bottom bottom horizontal clipping plane
- * \param top    Top horizontal clipping plane
+ * \param m Матрица 4x4
+ * \param left Левая вертикальная плоскость отсечения
+ * \param right Правая вертикальная плоскость отсечения
+ * \param нижняя нижняя горизонтальная плоскость отсечения
+ * \param top Верхняя горизонтальная плоскость отсечения
  *
  */
 void nema_mat4x4_load_ortho_2d(nema_matrix4x4_t m,
                                float left,   float right,
                                float bottom, float top);
 
-/** \brief Set up a Right Hand view matrix.
+/** \brief Настроить матрицу правостороннего представления.
  *
- * \param m A 4x4 Matrix
- * \param eye_x   Eye position x.
- * \param eye_y   Eye position y.
- * \param eye_z   Eye position z.
- * \param center_x   Center x to look at
- * \param center_y   Center y to look at
- * \param center_z   Center z to look at
- * \param up_x   Up vector x. (Usually 0)
- * \param up_y   Up vector y. (Usually 1)
- * \param up_z   Up vector z. (Usually 0)
+ * \param m Матрица 4x4
+ * \parameye_xПоложение глаз x.
+ * \parameye_yПоложение глаз y.
+ * \parameye_zПоложение глаз z.
+ * \paramcenter_xЦентр x для просмотра
+ * \paramcenter_yЦентр y для просмотра
+ * \paramcenter_zЦентр z для просмотра
+ * \paramup_xВосходящий вектор x. (Обычно 0)
+ * \paramup_yВектор вверх y. (Обычно 1)
+ * \paramup_zВосходящий вектор z. (Обычно 0)
  *
  */
 void nema_mat4x4_look_at_rh(nema_matrix4x4_t m,
@@ -197,23 +197,23 @@ void nema_mat4x4_look_at_rh(nema_matrix4x4_t m,
                         float up_x, float up_y, float up_z);
 
 // ------------------------------------------------------------------------------------
-// Clip Coordinates to Window Coordinates
+// Прикрепить координаты к координатам окна
 // ------------------------------------------------------------------------------------
 
-/** \brief Convenience Function to calculate window coordinates from object coordinates
+/** \brief Удобная функция для расчета координат окна по координатам объекта
  *
- * \param mvp Model, View and Projection Matrix
- * \param x_orig Window top left X coordinate
- * \param y_orig Window top left Y coordinate
- * \param width Window width
- * \param height Window height
- * \param nearVal Distance from the viewer to the near clipping plane (always positive)
- * \param farVal Distance from the viewer to the far clipping plane (always positive)
- * \param x X object coordinate
- * \param y Y object coordinate
- * \param z Z object coordinate
- * \param w W object coordinate
- * \return 1 if vertex is outside frustum (should be clipped)
+ * \param Модель mvp, матрица вида и проекции
+ * \paramx_origВерхняя левая координата X окна
+ * \paramy_origВерхняя левая координата Y окна
+ * \param width Ширина окна
+ * \param height Высота окна
+ * \param closeVal Расстояние от наблюдателя до ближней плоскости отсечения (всегда положительное)
+ * \param FarVal Расстояние от наблюдателя до дальней плоскости отсечения (всегда положительное)
+ * \param x X координата объекта
+ * \param y координата объекта Y
+ * \param z Координата объекта Z
+ * \param w W координата объекта
+ * \return 1, если вершина находится вне усеченной пирамиды (должна быть обрезана)
  *
  */
 int nema_mat4x4_obj_to_win_coords(nema_matrix4x4_t mvp,

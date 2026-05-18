@@ -51,7 +51,7 @@ typedef struct {
     const char * path;
 } lv_rlottie_create_info_t;
 
-/*Only used in lv_obj_class_create_obj, no affect multiple instances*/
+/*Используется только в lv_obj_class_create_obj, не влияет на несколько экземпляров.*/
 static lv_rlottie_create_info_t create_info;
 
 /**********************
@@ -149,7 +149,7 @@ static void lv_rlottie_constructor(const lv_obj_class_t * class_p, lv_obj_t * ob
     lv_image_set_src(obj, &rlottie->imgdsc);
 
     rlottie->play_ctrl = LV_RLOTTIE_CTRL_FORWARD | LV_RLOTTIE_CTRL_PLAY | LV_RLOTTIE_CTRL_LOOP;
-    rlottie->dest_frame = rlottie->total_frames; /* invalid destination frame so it's possible to pause on frame 0 */
+    rlottie->dest_frame = rlottie->total_frames; /* неверный целевой кадр, поэтому можно сделать паузу на кадре 0 */
 
     rlottie->task = lv_timer_create(next_frame_task_cb, 1000 / rlottie->framerate, obj);
 
@@ -194,7 +194,7 @@ static void next_frame_task_cb(lv_timer_t * t)
 
     if((rlottie->play_ctrl & LV_RLOTTIE_CTRL_PAUSE) == LV_RLOTTIE_CTRL_PAUSE) {
         if(rlottie->current_frame == rlottie->dest_frame) {
-            /* Pause the timer too when it has run once to avoid CPU consumption */
+            /* Также приостановите таймер, когда он сработал один раз, чтобы избежать потребления CPU. */
             lv_timer_pause(t);
             return;
         }

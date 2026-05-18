@@ -3,13 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * Change Logs:
- * Date           Author       Notes
- * 2022-11-20     Meco Man     The first version
+ * Журналы изменений:
+ * Дата Примечания автора
+ * 20.11.2022 Meco Man Первая версия
  */
 
 #ifdef __RTTHREAD__
 
-#include "../../../../../lvgl.h" /* back to the root folder's lvgl.h */
+#include "../../../../../lvgl.h" /* вернуться в корневую фиксацию lvgl.h */
 
 #endif /* __RTTHREAD__ */

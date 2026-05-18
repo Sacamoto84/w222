@@ -52,7 +52,7 @@ static void test_disp_resolution_with_rotation(lv_display_t * disp)
     }
 }
 
-/* Mock functions */
+/* Мок-функции */
 static void lcd_send_cmd_cb(lv_display_t * disp, const uint8_t * cmd, size_t cmd_size, const uint8_t * param,
                             size_t param_size)
 {
@@ -79,7 +79,7 @@ static void lcd_send_cmd_cb(lv_display_t * disp, const uint8_t * cmd, size_t cmd
 static void lcd_send_color_cb(lv_display_t * disp, const uint8_t * cmd, size_t cmd_size, uint8_t * param,
                               size_t param_size)
 {
-    /* Use the same function as for cmd */
+    /* Используйте ту же функцию, что и для cmd */
     lcd_send_cmd_cb(disp, cmd, cmd_size, param, param_size);
 }
 
@@ -234,7 +234,7 @@ static void lcd_ft81x_spi_cb(lv_display_t * disp, lv_ft81x_spi_operation_t opera
 
     static uint32_t reg_addr = 0;
 
-    /* Mocked FT81X registers */
+    /* Имитированные регистры FT81X */
 #define REG_ID               0x302000UL
 #define REG_CPURESET         0x302020UL
 #define REG_CMD_READ         0x3020f8UL

@@ -72,7 +72,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_gstreamer_class;
 #endif /* LV_USE_GSTREAMER != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_GSTREAMER_INTERNAL_H*/

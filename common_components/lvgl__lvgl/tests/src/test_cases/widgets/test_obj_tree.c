@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -42,12 +42,12 @@ void test_obj_tree_2(void)
     lv_obj_set_style_bg_color(lv_screen_active(), lv_color_hex(0x112233), 0);
     lv_obj_set_style_bg_opa(lv_screen_active(), LV_OPA_COVER, 0);
 
-    //TEST_ASSERT_EQUAL_SCREENSHOT("widgets/scr1.png")
+    //TEST_ASSERT_EQUAL_SCREENSHOT ("виджеты/scr1.png")
 }
 
 void test_obj_tree_3(void)
 {
-    /* tests lv_obj_swap */
+    /* тесты lv_obj_swap */
     lv_obj_t * parent1 = lv_obj_create(lv_screen_active());
     lv_obj_t * parent2 = lv_obj_create(lv_screen_active());
     lv_obj_t * child1 = lv_obj_create(parent1);
@@ -69,17 +69,17 @@ void test_obj_tree_3(void)
     TEST_ASSERT_EQUAL(lv_obj_get_index(child2), 0);
     TEST_ASSERT_EQUAL(lv_obj_get_child(parent2, 0), child2);
 
-    /* swap the children */
+    /* поменять детей */
     lv_obj_swap(child1, child2);
 
-    /* test for properly swapped parents */
+    /* тест на правильность замены родителей */
     lv_obj_t * child1_parent_after = lv_obj_get_parent(child1);
     lv_obj_t * child2_parent_after = lv_obj_get_parent(child2);
 
     TEST_ASSERT_EQUAL(child1_parent_after, parent2);
     TEST_ASSERT_EQUAL(child2_parent_after, parent1);
 
-    /* test for correctly set children */
+    /* тест на правильно поставленных детей */
     TEST_ASSERT_EQUAL(lv_obj_get_child_count(parent1), 1);
     TEST_ASSERT_EQUAL(lv_obj_get_index(child2), 0);
     TEST_ASSERT_EQUAL(lv_obj_get_child(parent1, 0), child2);
@@ -98,9 +98,9 @@ void test_obj_move_to_index_move_to_the_background(void)
     lv_obj_t * child2 = NULL;
 
     parent = lv_obj_create(lv_screen_active());
-    /* index is 0 */
+    /* индекс равен 0 */
     child1 = lv_obj_create(parent);
-    /* index is 1 */
+    /* индекс равен 1 */
     child2 = lv_obj_create(parent);
 
     lv_obj_move_to_index(child2, 0);
@@ -116,9 +116,9 @@ void test_obj_move_to_index_move_forward(void)
     lv_obj_t * child2 = NULL;
 
     parent = lv_obj_create(lv_screen_active());
-    /* index is 0 */
+    /* индекс равен 0 */
     child1 = lv_obj_create(parent);
-    /* index is 1 */
+    /* индекс равен 1 */
     child2 = lv_obj_create(parent);
 
     lv_obj_move_to_index(child1, lv_obj_get_index(child1) - 1);
@@ -127,13 +127,13 @@ void test_obj_move_to_index_move_forward(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_index(child2));
 }
 
-/* Tests scenarios when no operation is performed */
+/* Тестирует сценарии, когда никакие операции не выполняются */
 void test_obj_move_to_index_no_operation_when_parent_is_null(void)
 {
     lv_obj_t * parent = NULL;
     lv_obj_t * child1 = NULL;
 
-    /* index is 0 */
+    /* индекс равен 0 */
     child1 = lv_obj_create(parent);
 
     lv_obj_move_to_index(child1, 0);
@@ -147,7 +147,7 @@ void test_obj_move_to_index_no_operation_when_index_is_same_or_bigger_than_paren
     lv_obj_t * child1 = NULL;
 
     parent = lv_obj_create(lv_screen_active());
-    /* index is 0 */
+    /* индекс равен 0 */
     child1 = lv_obj_create(parent);
 
     lv_obj_move_to_index(child1, 3U);
@@ -162,9 +162,9 @@ void test_obj_move_to_index_no_operation_when_new_index_is_the_same_as_previous_
     lv_obj_t * child2 = NULL;
 
     parent = lv_obj_create(lv_screen_active());
-    /* index is 0 */
+    /* индекс равен 0 */
     child1 = lv_obj_create(parent);
-    /* index is 1 */
+    /* индекс равен 1 */
     child2 = lv_obj_create(parent);
 
     lv_obj_move_to_index(child2, 1U);
@@ -180,9 +180,9 @@ void test_obj_move_to_index_no_operation_when_requested_negative_index_is_greate
     lv_obj_t * child2 = NULL;
 
     parent = lv_obj_create(lv_screen_active());
-    /* index is 0 */
+    /* индекс равен 0 */
     child1 = lv_obj_create(parent);
-    /* index is 1 */
+    /* индекс равен 1 */
     child2 = lv_obj_create(parent);
 
     lv_obj_move_to_index(child1, -4);
@@ -223,9 +223,9 @@ void test_obj_get_by_name(void)
 
     lv_obj_t * hello_label = lv_label_create(btn);
     lv_label_set_text(hello_label, "Hello");
-    lv_obj_set_name(hello_label, "my_label"); /*Same name as for the other label*/
+    lv_obj_set_name(hello_label, "my_label"); /*То же имя, что и для другого ярлыка*/
 
-    /*Test auto indexing*/
+    /*Тестирование автоматического индексирования*/
 
     lv_obj_t * label0 = lv_label_create(cont3);
     lv_obj_set_name(label0, "title_#");
@@ -246,7 +246,7 @@ void test_obj_get_by_name(void)
     lv_obj_t * found_obj;
 
     /*-------------
-     * Get by name
+     * Получить по имени
      *------------*/
 
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "first");
@@ -264,23 +264,23 @@ void test_obj_get_by_name(void)
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "first/lv_button_0/my_label");
     TEST_ASSERT_EQUAL(hello_label, found_obj);
 
-    /*"hello" label doesn't have children*/
+    /*У ярлыка «привет» нет дочерних элементов*/
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "first/lv_button_0/my_label/no_child");
     TEST_ASSERT_EQUAL(NULL, found_obj);
 
-    /*Non existing child*/
+    /*Несуществующий ребенок*/
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "first/lv_button_0/other_label");
     TEST_ASSERT_EQUAL(NULL, found_obj);
 
-    /*Extra slash*/
+    /*Дополнительная косая черта*/
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "first//lv_button_0/other_label");
     TEST_ASSERT_EQUAL(NULL, found_obj);
 
-    /*Empty*/
+    /*Пустой*/
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "");
     TEST_ASSERT_EQUAL(NULL, found_obj);
 
-    /* Test auto indexed names*/
+    /* Проверка автоматически индексируемых имен*/
     found_obj = lv_obj_get_child_by_name(lv_screen_active(), "third/title_0");
     TEST_ASSERT_EQUAL(label0, found_obj);
 
@@ -303,7 +303,7 @@ void test_obj_get_by_name(void)
     TEST_ASSERT_EQUAL(found_obj, cont6);
 
     /*-------------
-     * Find by name
+     * Найти по имени
      *------------*/
 
     found_obj = lv_obj_find_by_name(lv_screen_active(), "lv_obj_0");

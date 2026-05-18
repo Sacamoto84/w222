@@ -53,7 +53,7 @@ lv_display_t * lv_tft_espi_create(uint32_t hor_res, uint32_t ver_res, void * buf
     }
 
     dsc->tft = new TFT_eSPI(hor_res, ver_res);
-    dsc->tft->begin();          /* TFT init */
+    dsc->tft->begin();          /* TFT инициализация */
     dsc->tft->setRotation(0);
     lv_display_set_driver_data(disp, (void *)dsc);
     lv_display_set_flush_cb(disp, flush_cb);
@@ -90,19 +90,19 @@ static void resolution_changed_event_cb(lv_event_t * e)
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
     lv_display_rotation_t rot = lv_display_get_rotation(disp);
 
-    /* handle rotation */
+    /* вращение ручки */
     switch(rot) {
         case LV_DISPLAY_ROTATION_0:
-            dsc->tft->setRotation(0);   /* Portrait orientation */
+            dsc->tft->setRotation(0);   /* Портретная ориентация */
             break;
         case LV_DISPLAY_ROTATION_90:
-            dsc->tft->setRotation(1);   /* Landscape orientation */
+            dsc->tft->setRotation(1);   /* Альбомная ориентация */
             break;
         case LV_DISPLAY_ROTATION_180:
-            dsc->tft->setRotation(2);   /* Portrait orientation, flipped */
+            dsc->tft->setRotation(2);   /* Портретная ориентация, перевернутый */
             break;
         case LV_DISPLAY_ROTATION_270:
-            dsc->tft->setRotation(3);   /* Landscape orientation, flipped */
+            dsc->tft->setRotation(3);   /* Альбомная ориентация, перевернутая */
             break;
     }
 }

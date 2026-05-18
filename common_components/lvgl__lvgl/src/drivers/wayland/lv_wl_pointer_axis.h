@@ -34,7 +34,7 @@ extern "C" {
 lv_indev_t * lv_wayland_pointer_axis_create(void);
 
 /**
- * Obtains the input device of the encoder
+ * Получает устройство ввода кодера
  * @note It is used to create an input group on application start
  * @param display Reference to the LVGL display associated to the window
  * @return The input device
@@ -48,7 +48,7 @@ lv_indev_t * lv_wayland_get_pointeraxis(lv_display_t * display);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WL_POINTER_AXIS_H*/

@@ -2,21 +2,21 @@
 #if LV_USE_GRID && LV_BUILD_EXAMPLES
 
 /**
- * Demonstrate grid's "free unit"
+ * Демонстрация «свободной единицы» сетки
  */
 void lv_example_grid_3(void)
 {
-    /*Column 1: fix width 60 px
-     *Column 2: 1 unit from the remaining free space
-     *Column 3: 2 unit from the remaining free space*/
+    /*Столбец 1: исправить ширину 60 пикселей.
+     *Столбец 2: 1 единица из оставшегося свободного места
+     *Столбец 3: 2 единицы из оставшегося свободного места.*/
     static int32_t col_dsc[] = {60, LV_GRID_FR(1), LV_GRID_FR(2), LV_GRID_TEMPLATE_LAST};
 
-    /*Row 1: fix width 50 px
-     *Row 2: 1 unit from the remaining free space
-     *Row 3: fix width 50 px*/
+    /*Строка 1: исправить ширину 50 пикселей.
+     *2 ряд: 1 единица из оставшегося свободного места.
+     *Строка 3: исправить ширину 50 пикселей.*/
     static int32_t row_dsc[] = {50, LV_GRID_FR(1), 50, LV_GRID_TEMPLATE_LAST};
 
-    /*Create a container with grid*/
+    /*Создать контейнер с сеткой*/
     lv_obj_t * cont = lv_obj_create(lv_screen_active());
     lv_obj_set_size(cont, 300, 220);
     lv_obj_center(cont);
@@ -30,8 +30,8 @@ void lv_example_grid_3(void)
         uint8_t row = i / 3;
 
         obj = lv_obj_create(cont);
-        /*Stretch the cell horizontally and vertically too
-         *Set span to 1 to make the cell 1 column/row sized*/
+        /*Растянуть ячейку по горизонтали и по вертикали тоже
+         *Установите диапазон равным 1, чтобы размер ячейки был равен 1 столбцу/строке.*/
         lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, col, 1,
                              LV_GRID_ALIGN_STRETCH, row, 1);
 

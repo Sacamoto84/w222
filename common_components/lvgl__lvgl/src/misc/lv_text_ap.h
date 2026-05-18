@@ -43,7 +43,7 @@ void lv_text_ap_proc(const char * txt, char * txt_out);
 #endif // LV_USE_ARABIC_PERSIAN_CHARS
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEXT_AP_H*/

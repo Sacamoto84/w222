@@ -68,16 +68,16 @@ lv_lru_res_t lv_lru_get(lv_lru_t * cache, const void * key, size_t key_size, voi
 lv_lru_res_t lv_lru_remove(lv_lru_t * cache, const void * key, size_t key_size);
 
 /**
- * remove the least recently used item
+ * удалить элемент, который использовался реже всего
  *
- * @todo we can optimise this by finding the n lru items, where n = required_space / average_length
+ * @todo мы можем изменить это, пройдя n элементов lru, где n =required_space/ average_length
  */
 void lv_lru_remove_lru_item(lv_lru_t * cache);
 /**********************
  *      MACROS
  **********************/
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LRU_H*/

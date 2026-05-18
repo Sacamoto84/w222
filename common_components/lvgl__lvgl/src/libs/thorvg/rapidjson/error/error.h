@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_ERROR_ERROR_H_
 #define RAPIDJSON_ERROR_ERROR_H_
@@ -29,11 +29,11 @@ RAPIDJSON_DIAG_OFF(padded)
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_ERROR_CHARTYPE
 
-//! Character type of error messages.
+//! Тип символов сообщений об ошибках.
 /*! \ingroup RAPIDJSON_ERRORS
-    The default character type is \c char.
-    On Windows, user can define this macro as \c TCHAR for supporting both
-    unicode/non-unicode settings.
+    Тип символа по умолчанию — \c char.
+    В Windows пользователь может определить этот макрос как \c TCHAR для поддержки обоих
+    настройки юникода/не юникода.
 */
 #ifndef RAPIDJSON_ERROR_CHARTYPE
 #define RAPIDJSON_ERROR_CHARTYPE char
@@ -42,11 +42,11 @@ RAPIDJSON_DIAG_OFF(padded)
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_ERROR_STRING
 
-//! Macro for converting string literal to \ref RAPIDJSON_ERROR_CHARTYPE[].
+//! Макрос для преобразования строкового литерала в \ref RAPIDJSON_ERROR_CHARTYPE [].
 /*! \ingroup RAPIDJSON_ERRORS
-    By default this conversion macro does nothing.
-    On Windows, user can define this macro as \c _T(x) for supporting both
-    unicode/non-unicode settings.
+    По умолчанию этот макрос преобразования ничего не делает.
+    В Windows пользователь может определить этот макрос как \c _T(x) для поддержки обоих
+    настройки юникода/не юникода.
 */
 #ifndef RAPIDJSON_ERROR_STRING
 #define RAPIDJSON_ERROR_STRING(x) x
@@ -55,71 +55,71 @@ RAPIDJSON_DIAG_OFF(padded)
 RAPIDJSON_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
-// ParseErrorCode
+// Парсеерроркоде
 
-//! Error code of parsing.
+//! Код ошибки парсинга.
 /*! \ingroup RAPIDJSON_ERRORS
     \see GenericReader::Parse, GenericReader::GetParseErrorCode
 */
 enum ParseErrorCode {
-    kParseErrorNone = 0,                        //!< No error.
+    kParseErrorNone = 0,                        //!< Нет ошибок.
 
-    kParseErrorDocumentEmpty,                   //!< The document is empty.
-    kParseErrorDocumentRootNotSingular,         //!< The document root must not follow by other values.
+    kParseErrorDocumentEmpty,                   //!< Документ пуст.
+    kParseErrorDocumentRootNotSingular,         //!< За корнем документа не должны следовать другие значения.
 
-    kParseErrorValueInvalid,                    //!< Invalid value.
+    kParseErrorValueInvalid,                    //!< Недопустимое значение.
 
-    kParseErrorObjectMissName,                  //!< Missing a name for object member.
-    kParseErrorObjectMissColon,                 //!< Missing a colon after a name of object member.
-    kParseErrorObjectMissCommaOrCurlyBracket,   //!< Missing a comma or '}' after an object member.
+    kParseErrorObjectMissName,                  //!< Отсутствует имя члена объекта.
+    kParseErrorObjectMissColon,                 //!< Отсутствует двоеточие после имени члена объекта.
+    kParseErrorObjectMissCommaOrCurlyBracket,   //!< Отсутствует запятая или '}' после члена объекта.
 
-    kParseErrorArrayMissCommaOrSquareBracket,   //!< Missing a comma or ']' after an array element.
+    kParseErrorArrayMissCommaOrSquareBracket,   //!< Отсутствует запятая или ']' после элемента массива.
 
-    kParseErrorStringUnicodeEscapeInvalidHex,   //!< Incorrect hex digit after \\u escape in string.
-    kParseErrorStringUnicodeSurrogateInvalid,   //!< The surrogate pair in string is invalid.
-    kParseErrorStringEscapeInvalid,             //!< Invalid escape character in string.
-    kParseErrorStringMissQuotationMark,         //!< Missing a closing quotation mark in string.
-    kParseErrorStringInvalidEncoding,           //!< Invalid encoding in string.
+    kParseErrorStringUnicodeEscapeInvalidHex,   //!< Неверная шестнадцатеричная цифра после \\u escape в строке.
+    kParseErrorStringUnicodeSurrogateInvalid,   //!< Недопустимая суррогатная пара в строке.
+    kParseErrorStringEscapeInvalid,             //!< Недопустимый escape-символ в строке.
+    kParseErrorStringMissQuotationMark,         //!< В строке отсутствует закрывающая кавычка.
+    kParseErrorStringInvalidEncoding,           //!< Неверная кодировка в строке.
 
-    kParseErrorNumberTooBig,                    //!< Number too big to be stored in double.
-    kParseErrorNumberMissFraction,              //!< Miss fraction part in number.
-    kParseErrorNumberMissExponent,              //!< Miss exponent in number.
+    kParseErrorNumberTooBig,                    //!< Число слишком велико для хранения в формате double.
+    kParseErrorNumberMissFraction,              //!< Пропущена дробная часть в числе.
+    kParseErrorNumberMissExponent,              //!< Недостающая экспонента в числе.
 
-    kParseErrorTermination,                     //!< Parsing was terminated.
-    kParseErrorUnspecificSyntaxError            //!< Unspecific syntax error.
+    kParseErrorTermination,                     //!< Анализ прекращен.
+    kParseErrorUnspecificSyntaxError            //!< Неопределенная синтаксическая ошибка.
 };
 
-//! Result of parsing (wraps ParseErrorCode)
+//! Результат анализа (обертывает ParseErrorCode)
 /*!
     \ingroup RAPIDJSON_ERRORS
     \code
-        Document doc;
+        Документ-документ;
         ParseResult ok = doc.Parse("[42]");
         if (!ok) {
-            fprintf(stderr, "JSON parse error: %s (%u)",
-                    GetParseError_En(ok.Code()), ok.Offset());
-            exit(EXIT_FAILURE);
+            fprintf(stderr, "Ошибка анализа JSON: %s (%u)",
+                    GetParseError_En (ок. Code()), ок. Offset() );
+            выход(EXIT_FAILURE);
         }
     \endcode
     \see GenericReader::Parse, GenericDocument::Parse
 */
 struct ParseResult {
-    //!! Unspecified boolean type
+    //!! Неопределенный логический тип
     typedef bool (ParseResult::*BooleanType)() const;
 public:
-    //! Default constructor, no error.
+    //! Конструктор по умолчанию, без ошибок.
     ParseResult() : code_(kParseErrorNone), offset_(0) {}
-    //! Constructor to set an error.
+    //! Конструктор для установки ошибки.
     ParseResult(ParseErrorCode code, size_t offset) : code_(code), offset_(offset) {}
 
-    //! Get the error code.
+    //! Получите код ошибки.
     ParseErrorCode Code() const { return code_; }
-    //! Get the error offset, if \ref IsError(), 0 otherwise.
+    //! Получите смещение ошибки, если \ref IsError() , в противном случае 0.
     size_t Offset() const { return offset_; }
 
-    //! Explicit conversion to \c bool, returns \c true, iff !\ref IsError().
+    //! Явное преобразование в \c bool возвращает \c true, iff !\ref IsError() .
     operator BooleanType() const { return !IsError() ? &ParseResult::IsError : NULL; }
-    //! Whether the result is an error.
+    //! Является ли результат ошибкой.
     bool IsError() const { return code_ != kParseErrorNone; }
 
     bool operator==(const ParseResult& that) const { return code_ == that.code_; }
@@ -130,9 +130,9 @@ public:
     bool operator!=(ParseErrorCode code) const { return !(*this == code); }
     friend bool operator!=(ParseErrorCode code, const ParseResult & err) { return err != code; }
 
-    //! Reset error code.
+    //! Сбросьте код ошибки.
     void Clear() { Set(kParseErrorNone); }
-    //! Update error code and offset.
+    //! Обновите код ошибки и смещение.
     void Set(ParseErrorCode code, size_t offset = 0) { code_ = code; offset_ = offset; }
 
 private:
@@ -140,137 +140,137 @@ private:
     size_t offset_;
 };
 
-//! Function pointer type of GetParseError().
+//! Тип указателя функции GetParseError() .
 /*! \ingroup RAPIDJSON_ERRORS
 
-    This is the prototype for \c GetParseError_X(), where \c X is a locale.
-    User can dynamically change locale in runtime, e.g.:
+    Это прототип \c GetParseError_X (), где \c X — локаль.
+    Пользователь может динамически изменять локаль во время выполнения, например:
 \code
-    GetParseErrorFunc GetParseError = GetParseError_En; // or whatever
-    const RAPIDJSON_ERROR_CHARTYPE* s = GetParseError(document.GetParseErrorCode());
+    GetParseErrorFunc GetParseError = GetParseError_En ; // или что-то еще
+    const RAPIDJSON_ERROR_CHARTYPE * s = GetParseError(document. GetParseErrorCode());
 \endcode
 */
 typedef const RAPIDJSON_ERROR_CHARTYPE* (*GetParseErrorFunc)(ParseErrorCode);
 
 ///////////////////////////////////////////////////////////////////////////////
-// ValidateErrorCode
+// Валидатеерроркоде
 
-//! Error codes when validating.
+//! Коды ошибок при проверке.
 /*! \ingroup RAPIDJSON_ERRORS
-    \see GenericSchemaValidator
+    \см. GenericSchemaValidator
 */
 enum ValidateErrorCode {
-    kValidateErrors    = -1,                   //!< Top level error code when kValidateContinueOnErrorsFlag set.
-    kValidateErrorNone = 0,                    //!< No error.
+    kValidateErrors    = -1,                   //!< Код ошибки верхнего уровня, когда установлен kValidateContinueOnErrorsFlag.
+    kValidateErrorNone = 0,                    //!< Нет ошибок.
 
-    kValidateErrorMultipleOf,                  //!< Number is not a multiple of the 'multipleOf' value.
-    kValidateErrorMaximum,                     //!< Number is greater than the 'maximum' value.
-    kValidateErrorExclusiveMaximum,            //!< Number is greater than or equal to the 'maximum' value.
-    kValidateErrorMinimum,                     //!< Number is less than the 'minimum' value.
-    kValidateErrorExclusiveMinimum,            //!< Number is less than or equal to the 'minimum' value.
+    kValidateErrorMultipleOf,                  //!< Число не кратно значению MultipleOf.
+    kValidateErrorMaximum,                     //!< Число больше максимального значения.
+    kValidateErrorExclusiveMaximum,            //!< Число больше или равно максимальному значению.
+    kValidateErrorMinimum,                     //!< Число меньше минимального значения.
+    kValidateErrorExclusiveMinimum,            //!< Число меньше или равно «минимальному» значению.
 
-    kValidateErrorMaxLength,                   //!< String is longer than the 'maxLength' value.
-    kValidateErrorMinLength,                   //!< String is longer than the 'maxLength' value.
-    kValidateErrorPattern,                     //!< String does not match the 'pattern' regular expression.
+    kValidateErrorMaxLength,                   //!< Строка длиннее значения maxLength.
+    kValidateErrorMinLength,                   //!< Строка длиннее значения maxLength.
+    kValidateErrorPattern,                     //!< Строка не соответствует регулярному выражению «шаблон».
 
-    kValidateErrorMaxItems,                    //!< Array is longer than the 'maxItems' value.
-    kValidateErrorMinItems,                    //!< Array is shorter than the 'minItems' value.
-    kValidateErrorUniqueItems,                 //!< Array has duplicate items but 'uniqueItems' is true.
-    kValidateErrorAdditionalItems,             //!< Array has additional items that are not allowed by the schema.
+    kValidateErrorMaxItems,                    //!< Массив длиннее значения maxItems.
+    kValidateErrorMinItems,                    //!< Массив короче значения minItems.
+    kValidateErrorUniqueItems,                 //!< В массиве есть повторяющиеся элементы, но значение «uniqueItems» истинно.
+    kValidateErrorAdditionalItems,             //!< Массив содержит дополнительные элементы, не разрешенные схемой.
 
-    kValidateErrorMaxProperties,               //!< Object has more members than 'maxProperties' value.
-    kValidateErrorMinProperties,               //!< Object has less members than 'minProperties' value.
-    kValidateErrorRequired,                    //!< Object is missing one or more members required by the schema.
-    kValidateErrorAdditionalProperties,        //!< Object has additional members that are not allowed by the schema.
-    kValidateErrorPatternProperties,           //!< See other errors.
-    kValidateErrorDependencies,                //!< Object has missing property or schema dependencies.
+    kValidateErrorMaxProperties,               //!< Объект имеет больше членов, чем значение 'maxProperties'.
+    kValidateErrorMinProperties,               //!< Объект имеет меньше членов, чем значение minProperties.
+    kValidateErrorRequired,                    //!< В объекте отсутствует один или несколько членов, требуемых схемой.
+    kValidateErrorAdditionalProperties,        //!< Объект имеет дополнительные члены, которые не разрешены схемой.
+    kValidateErrorPatternProperties,           //!< См. другие ошибки.
+    kValidateErrorDependencies,                //!< У объекта отсутствуют зависимости свойств или схемы.
 
-    kValidateErrorEnum,                        //!< Property has a value that is not one of its allowed enumerated values.
-    kValidateErrorType,                        //!< Property has a type that is not allowed by the schema.
+    kValidateErrorEnum,                        //!< Свойство имеет значение, не входящее в число допустимых перечислимых значений.
+    kValidateErrorType,                        //!< Тип свойства не разрешен схемой.
 
-    kValidateErrorOneOf,                       //!< Property did not match any of the sub-schemas specified by 'oneOf'.
-    kValidateErrorOneOfMatch,                  //!< Property matched more than one of the sub-schemas specified by 'oneOf'.
-    kValidateErrorAllOf,                       //!< Property did not match all of the sub-schemas specified by 'allOf'.
-    kValidateErrorAnyOf,                       //!< Property did not match any of the sub-schemas specified by 'anyOf'.
-    kValidateErrorNot,                         //!< Property matched the sub-schema specified by 'not'.
+    kValidateErrorOneOf,                       //!< Свойство не соответствует ни одной из подсхем, указанных в параметре oneOf.
+    kValidateErrorOneOfMatch,                  //!< Свойство соответствует более чем одной из подсхем, указанных в параметре oneOf.
+    kValidateErrorAllOf,                       //!< Свойство не соответствует всем подсхемам, указанным в параметре allOf.
+    kValidateErrorAnyOf,                       //!< Свойство не соответствует ни одной из подсхем, указанных в параметре AnyOf.
+    kValidateErrorNot,                         //!< Свойство соответствует подсхеме, указанной в параметре «not».
 
-    kValidateErrorReadOnly,                    //!< Property is read-only but has been provided when validation is for writing
-    kValidateErrorWriteOnly                    //!< Property is write-only but has been provided when validation is for reading
+    kValidateErrorReadOnly,                    //!< Свойство доступно только для чтения, но предоставляется, когда проверка предназначена для записи.
+    kValidateErrorWriteOnly                    //!< Свойство доступно только для записи, но предоставляется, когда проверка предназначена для чтения.
 };
 
-//! Function pointer type of GetValidateError().
+//! Тип указателя функции GetValidateError() .
 /*! \ingroup RAPIDJSON_ERRORS
 
-    This is the prototype for \c GetValidateError_X(), where \c X is a locale.
-    User can dynamically change locale in runtime, e.g.:
+    Это прототип \c GetValidateError_X (), где \c X — локаль.
+    Пользователь может динамически изменять локаль во время выполнения, например:
 \code
-    GetValidateErrorFunc GetValidateError = GetValidateError_En; // or whatever
-    const RAPIDJSON_ERROR_CHARTYPE* s = GetValidateError(validator.GetInvalidSchemaCode());
+    GetValidateErrorFunc GetValidateError = GetValidateError_En ; // или что-то еще
+    const RAPIDJSON_ERROR_CHARTYPE * s = GetValidateError(validator. GetInvalidSchemaCode());
 \endcode
 */
 typedef const RAPIDJSON_ERROR_CHARTYPE* (*GetValidateErrorFunc)(ValidateErrorCode);
 
 ///////////////////////////////////////////////////////////////////////////////
-// SchemaErrorCode
+// СхемаErrorCode
 
-//! Error codes when validating.
+//! Коды ошибок при проверке.
 /*! \ingroup RAPIDJSON_ERRORS
-    \see GenericSchemaValidator
+    \см. GenericSchemaValidator
 */
 enum SchemaErrorCode {
-    kSchemaErrorNone = 0,                      //!< No error.
+    kSchemaErrorNone = 0,                      //!< Нет ошибок.
 
-    kSchemaErrorStartUnknown,                  //!< Pointer to start of schema does not resolve to a location in the document
-    kSchemaErrorRefPlainName,                  //!< $ref fragment must be a JSON pointer
-    kSchemaErrorRefInvalid,                    //!< $ref must not be an empty string
-    kSchemaErrorRefPointerInvalid,             //!< $ref fragment is not a valid JSON pointer at offset
-    kSchemaErrorRefUnknown,                    //!< $ref does not resolve to a location in the target document
-    kSchemaErrorRefCyclical,                   //!< $ref is cyclical
-    kSchemaErrorRefNoRemoteProvider,           //!< $ref is remote but there is no remote provider
-    kSchemaErrorRefNoRemoteSchema,             //!< $ref is remote but the remote provider did not return a schema
-    kSchemaErrorRegexInvalid,                  //!< Invalid regular expression in 'pattern' or 'patternProperties'
-    kSchemaErrorSpecUnknown,                   //!< JSON schema draft or OpenAPI version is not recognized
-    kSchemaErrorSpecUnsupported,               //!< JSON schema draft or OpenAPI version is not supported
-    kSchemaErrorSpecIllegal,                   //!< Both JSON schema draft and OpenAPI version found in document
-    kSchemaErrorReadOnlyAndWriteOnly           //!< Property must not be both 'readOnly' and 'writeOnly'
+    kSchemaErrorStartUnknown,                  //!< Указатель на начало схемы не соответствует местоположению в документе.
+    kSchemaErrorRefPlainName,                  //!< Фрагмент $ref должен быть указателем JSON.
+    kSchemaErrorRefInvalid,                    //!< $ref не должен быть пустой строкой
+    kSchemaErrorRefPointerInvalid,             //!< Фрагмент $ref не является допустимым указателем JSON по смещению.
+    kSchemaErrorRefUnknown,                    //!< $ref не соответствует местоположению в целевом документе.
+    kSchemaErrorRefCyclical,                   //!< $ref является циклическим
+    kSchemaErrorRefNoRemoteProvider,           //!< $ref является удаленным, но удаленного поставщика нет.
+    kSchemaErrorRefNoRemoteSchema,             //!< $ref является удаленным, но удаленный поставщик не вернул схему
+    kSchemaErrorRegexInvalid,                  //!< Недопустимое регулярное выражение в «шаблоне» или «patternProperties».
+    kSchemaErrorSpecUnknown,                   //!< Черновик схемы JSON или версия OpenAPI не распознается
+    kSchemaErrorSpecUnsupported,               //!< Черновик схемы JSON или версия OpenAPI не поддерживается.
+    kSchemaErrorSpecIllegal,                   //!< Как черновик схемы JSON, так и версия OpenAPI найдены в документе.
+    kSchemaErrorReadOnlyAndWriteOnly           //!< Свойство не должно быть одновременно «readOnly» и «writeOnly».
 };
 
-//! Function pointer type of GetSchemaError().
+//! Тип указателя функции GetSchemaError() .
 /*! \ingroup RAPIDJSON_ERRORS
 
-    This is the prototype for \c GetSchemaError_X(), where \c X is a locale.
-    User can dynamically change locale in runtime, e.g.:
+    Это прототип \c GetSchemaError_X (), где \c X — локаль.
+    Пользователь может динамически изменять локаль во время выполнения, например:
 \code
-    GetSchemaErrorFunc GetSchemaError = GetSchemaError_En; // or whatever
-    const RAPIDJSON_ERROR_CHARTYPE* s = GetSchemaError(validator.GetInvalidSchemaCode());
+    GetSchemaErrorFunc GetSchemaError = GetSchemaError_En ; // или что-то еще
+    const RAPIDJSON_ERROR_CHARTYPE * s = GetSchemaError(validator. GetInvalidSchemaCode());
 \endcode
 */
 typedef const RAPIDJSON_ERROR_CHARTYPE* (*GetSchemaErrorFunc)(SchemaErrorCode);
 
 ///////////////////////////////////////////////////////////////////////////////
-// PointerParseErrorCode
+// Поинтерпарсеерркоде
 
-//! Error code of JSON pointer parsing.
+//! Код ошибки анализа указателя JSON.
 /*! \ingroup RAPIDJSON_ERRORS
     \see GenericPointer::GenericPointer, GenericPointer::GetParseErrorCode
 */
 enum PointerParseErrorCode {
-    kPointerParseErrorNone = 0,                     //!< The parse is successful
+    kPointerParseErrorNone = 0,                     //!< Анализ прошел успешно
 
-    kPointerParseErrorTokenMustBeginWithSolidus,    //!< A token must begin with a '/'
-    kPointerParseErrorInvalidEscape,                //!< Invalid escape
-    kPointerParseErrorInvalidPercentEncoding,       //!< Invalid percent encoding in URI fragment
-    kPointerParseErrorCharacterMustPercentEncode    //!< A character must percent encoded in URI fragment
+    kPointerParseErrorTokenMustBeginWithSolidus,    //!< Токен должен начинаться с '/'
+    kPointerParseErrorInvalidEscape,                //!< Неверный escape
+    kPointerParseErrorInvalidPercentEncoding,       //!< Недопустимая процентная кодировка во фрагменте URI.
+    kPointerParseErrorCharacterMustPercentEncode    //!< Символ должен быть закодирован в процентах во фрагменте URI.
 };
 
-//! Function pointer type of GetPointerParseError().
+//! Тип указателя функции GetPointerParseError() .
 /*! \ingroup RAPIDJSON_ERRORS
 
-    This is the prototype for \c GetPointerParseError_X(), where \c X is a locale.
-    User can dynamically change locale in runtime, e.g.:
+    Это прототип \c GetPointerParseError_X (), где \c X — локаль.
+    Пользователь может динамически изменять локаль во время выполнения, например:
 \code
-    GetPointerParseErrorFunc GetPointerParseError = GetPointerParseError_En; // or whatever
-    const RAPIDJSON_ERROR_CHARTYPE* s = GetPointerParseError(pointer.GetParseErrorCode());
+    GetPointerParseErrorFunc GetPointerParseError = GetPointerParseError_En ; // или что-то еще
+    const RAPIDJSON_ERROR_CHARTYPE * s = GetPointerParseError (pointer. GetParseErrorCode());
 \endcode
 */
 typedef const RAPIDJSON_ERROR_CHARTYPE* (*GetPointerParseErrorFunc)(PointerParseErrorCode);

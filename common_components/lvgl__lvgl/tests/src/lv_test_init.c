@@ -14,7 +14,7 @@ void lv_test_init(void)
     lv_log_register_print_cb(test_log_print_cb);
 
 #if LV_USE_PROFILER && LV_USE_PROFILER_BUILTIN
-    /* Disable profiler, to reduce redundant profiler log printing  */
+    /* Отключите профилировщик, чтобы уменьшить избыточную печать журналов профилировщика.  */
     lv_profiler_builtin_set_enable(false);
 #endif
 
@@ -56,10 +56,10 @@ static void test_log_print_cb(lv_log_level_t level, const char * buf)
 
 void lv_test_assert_fail(void)
 {
-    /*Flush the output*/
+    /*Очистка вывода*/
     fflush(stdout);
 
-    /*Handle error on test*/
+    /*Обработка ошибки в тесте*/
     assert(false);
 }
 

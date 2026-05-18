@@ -79,7 +79,7 @@ void lv_draw_fill(lv_layer_t * layer, const lv_draw_fill_dsc_t * dsc, const lv_a
         lv_layer_t * ds_layer = lv_draw_layer_create_drop_shadow(layer, &dsc->base, coords);
         LV_ASSERT_NULL(ds_layer);
         lv_draw_fill_dsc_t ds_dsc = *dsc;
-        ds_dsc.base.drop_shadow_opa = 0; /*Disable drop shadow so rendering below will render plain fill*/
+        ds_dsc.base.drop_shadow_opa = 0; /*Отключите тень, чтобы при рендеринге ниже отображалась простая заливка.*/
         lv_draw_fill(ds_layer, &ds_dsc, coords);
         lv_draw_layer_finish_drop_shadow(ds_layer, &dsc->base);
     }
@@ -115,7 +115,7 @@ void lv_draw_border(lv_layer_t * layer, const lv_draw_border_dsc_t * dsc, const 
         lv_layer_t * ds_layer = lv_draw_layer_create_drop_shadow(layer, &dsc->base, coords);
         LV_ASSERT_NULL(ds_layer);
         lv_draw_border_dsc_t ds_dsc = *dsc;
-        ds_dsc.base.drop_shadow_opa = 0; /*Disable drop shadow so rendering below will render plain border*/
+        ds_dsc.base.drop_shadow_opa = 0; /*Отключите тень, чтобы при рендеринге ниже отображалась простая граница.*/
         lv_draw_border(ds_layer, &ds_dsc, coords);
         lv_draw_layer_finish_drop_shadow(ds_layer, &dsc->base);
     }
@@ -205,7 +205,7 @@ void lv_draw_rect(lv_layer_t * layer, const lv_draw_rect_dsc_t * dsc, const lv_a
         lv_layer_t * ds_layer = lv_draw_layer_create_drop_shadow(layer, &dsc->base, coords);
         LV_ASSERT_NULL(ds_layer);
         lv_draw_rect_dsc_t ds_dsc = *dsc;
-        ds_dsc.base.drop_shadow_opa = 0; /*Disable drop shadow so rendering below will render plain shadow*/
+        ds_dsc.base.drop_shadow_opa = 0; /*Отключите тень, чтобы при рендеринге ниже отображалась простая тень.*/
         ds_dsc.shadow_opa = 0;
         lv_draw_rect(ds_layer, &ds_dsc, coords);
         lv_draw_layer_finish_drop_shadow(ds_layer, &dsc->base);
@@ -213,9 +213,9 @@ void lv_draw_rect(lv_layer_t * layer, const lv_draw_rect_dsc_t * dsc, const lv_a
 
     lv_draw_task_t * t;
 
-    /*Shadow*/
+    /*Тень*/
     if(has_shadow) {
-        /*Check whether the shadow is visible*/
+        /*Проверьте, видна ли тень*/
         t = lv_draw_add_task(layer, coords, LV_DRAW_TASK_TYPE_BOX_SHADOW);
         lv_draw_box_shadow_dsc_t * shadow_dsc = t->draw_dsc;
 
@@ -235,10 +235,10 @@ void lv_draw_rect(lv_layer_t * layer, const lv_draw_rect_dsc_t * dsc, const lv_a
         lv_draw_finalize_task_creation(layer, t);
     }
 
-    /*Background*/
+    /*Фон*/
     if(has_fill) {
         lv_area_t bg_coords = *coords;
-        /*If the border fully covers make the bg area 1px smaller to avoid artifacts on the corners*/
+        /*Если граница полностью закрывает, уменьшите область фона на 1 пиксель, чтобы избежать артефактов в углах.*/
         if(dsc->border_width > 1 && dsc->border_opa >= LV_OPA_MAX && dsc->radius != 0) {
             bg_coords.x1 += (dsc->border_side & LV_BORDER_SIDE_LEFT) ? 1 : 0;
             bg_coords.y1 += (dsc->border_side & LV_BORDER_SIDE_TOP) ? 1 : 0;
@@ -260,7 +260,7 @@ void lv_draw_rect(lv_layer_t * layer, const lv_draw_rect_dsc_t * dsc, const lv_a
         lv_draw_finalize_task_creation(layer, t);
     }
 
-    /*Background image*/
+    /*Фоновое изображение*/
     if(has_bg_img) {
         lv_image_src_t src_type = lv_image_src_get_type(dsc->bg_image_src);
         lv_result_t res = LV_RESULT_OK;
@@ -333,7 +333,7 @@ void lv_draw_rect(lv_layer_t * layer, const lv_draw_rect_dsc_t * dsc, const lv_a
         }
     }
 
-    /*Border*/
+    /*Граница*/
     if(has_border) {
         t = lv_draw_add_task(layer, coords, LV_DRAW_TASK_TYPE_BORDER);
         lv_draw_border_dsc_t * border_dsc = t->draw_dsc;
@@ -348,7 +348,7 @@ void lv_draw_rect(lv_layer_t * layer, const lv_draw_rect_dsc_t * dsc, const lv_a
         lv_draw_finalize_task_creation(layer, t);
     }
 
-    /*Outline*/
+    /*Схема*/
     if(has_outline) {
         lv_area_t outline_coords = *coords;
         lv_area_increase(&outline_coords, dsc->outline_width + dsc->outline_pad, dsc->outline_width + dsc->outline_pad);

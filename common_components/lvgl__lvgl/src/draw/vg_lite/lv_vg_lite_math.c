@@ -39,7 +39,7 @@
 
 float math_fast_inv_sqrtf(float number)
 {
-    /* From https://en.wikipedia.org/wiki/Fast_inverse_square_root#Avoiding_undefined_behavior */
+    /* От https://en.wikipedia.org/wiki/Fast_inverse_square_root#Avoiding_undefined_behavior */
     union {
         float   f;
         int32_t i;

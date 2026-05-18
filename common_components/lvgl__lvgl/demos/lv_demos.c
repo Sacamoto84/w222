@@ -88,7 +88,7 @@ bool lv_demos_create(char * info[], int size)
     }
 
     const demo_entry_info_t * entry_info = NULL;
-    if(size <= 0) { /* default: first demo*/
+    if(size <= 0) { /* default: первая демонстрация*/
         entry_info = &demos_entry_info[0];
     }
     else if(entry_info == NULL && info) {

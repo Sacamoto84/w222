@@ -122,9 +122,9 @@ lv_result_t lv_linux_drm_set_file(lv_display_t * display, const char * file, int
         return LV_RESULT_INVALID;
     }
 
-    /* Let the opengles texture driver handle the texture lifetime */
+    /* Пусть драйвер текстуры opengles управляет временем жизни текстуры. */
     ctx->texture.is_texture_owner = true;
-    /*Initialize the draw buffers and texture*/
+    /*Инициализируйте буферы отрисовки и текстуру.*/
     lv_result_t res = lv_opengles_texture_reshape(&ctx->texture, display, ctx->drm_mode->hdisplay, ctx->drm_mode->vdisplay);
     if(res != LV_RESULT_OK) {
         LV_LOG_ERROR("Failed to create draw buffers");
@@ -244,7 +244,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
 
         GL_CALL(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
         GL_CALL(glPixelStorei(GL_UNPACK_ROW_LENGTH, stride / lv_color_format_get_size(cf)));
-        /*Color depth: 16 (RGB565), 32 (ARGB8888)*/
+        /*Глубина цвета: 16 ( RGB565 ), 32 ( ARGB8888 )*/
 #if LV_COLOR_DEPTH == 16
         GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB565, disp_width, disp_height, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
                              ctx->texture.fb1));
@@ -476,8 +476,8 @@ static void drm_flip_cb(void * driver_data, bool vsync)
         ctx->gbm_bo_pending = NULL;
     }
 
-    /* We need to ensure our surface has a free buffer, otherwise GL will
-     * have no buffer to render on. */
+    /* Нам нужно убедиться, что на нашей поверхности есть свободный буфер, иначе GL
+     * не имеют буфера для рендеринга. */
     while(!gbm_surface_has_free_buffers(ctx->gbm_surface) &&
           drm_do_page_flip(ctx, -1) >= 0) {
         continue;
@@ -550,7 +550,7 @@ get_crtc_err:
     gbm_device_destroy(ctx->gbm_dev);
     ctx->gbm_dev = NULL;
 set_master_err:
-    /* Nothing special to do */
+    /* Ничего особенного, чтобы сделать */
 gbm_create_device_err:
     drmModeFreeEncoder(ctx->drm_encoder);
     ctx->drm_encoder = NULL;
@@ -558,12 +558,12 @@ get_encoder_err:
     drmModeFreeConnector(ctx->drm_connector);
     ctx->drm_connector = NULL;
 get_mode_err:
-    /* Nothing special to do */
+    /* Ничего особенного, чтобы сделать */
 get_connector_err:
     drmModeFreeResources(ctx->drm_resources);
     ctx->drm_resources = NULL;
 get_resources_err:
-    /* Nothing special to do */
+    /* Ничего особенного, чтобы сделать */
 set_client_cap_err:
     close(ctx->fd);
     ctx->fd = 0;
@@ -679,7 +679,7 @@ static drmModeCrtc * drm_get_crtc(lv_drm_ctx_t * ctx)
         return crtc;
     }
 
-    /* if there is no current CRTC, attach a suitable one */
+    /* если актуального CRTC нет, прикрепите подходящий */
     for(int i = 0; i < ctx->drm_resources->count_crtcs; i++) {
         if(ctx->drm_encoder->possible_crtcs & (1 << i)) {
             ctx->drm_encoder->crtc_id = ctx->drm_resources->crtcs[i];

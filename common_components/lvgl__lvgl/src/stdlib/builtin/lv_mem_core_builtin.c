@@ -24,7 +24,7 @@
 /*********************
  *      DEFINES
  *********************/
-/*memset the allocated memories to 0xaa and freed memories to 0xbb (just for testing purposes)*/
+/*memset для выделенной памяти 0xaa, а для освобожденной памяти — 0xbb (только в целях тестирования)*/
 #ifndef LV_MEM_ADD_JUNK
     #define LV_MEM_ADD_JUNK  0
 #endif
@@ -78,7 +78,7 @@ void lv_mem_init(void)
 #ifdef LV_MEM_POOL_ALLOC
     state.tlsf = lv_tlsf_create_with_pool((void *)LV_MEM_POOL_ALLOC(LV_MEM_SIZE), LV_MEM_SIZE);
 #else
-    /*Allocate a large array to store the dynamically allocated data*/
+    /*Выделите большой массив для хранения динамически выделяемых данных.*/
     static MEM_UNIT work_mem_int[LV_MEM_SIZE / sizeof(MEM_UNIT)] LV_ATTRIBUTE_LARGE_RAM_ARRAY;
     state.tlsf = lv_tlsf_create_with_pool((void *)work_mem_int, LV_MEM_SIZE);
 #endif
@@ -88,7 +88,7 @@ void lv_mem_init(void)
 
     lv_ll_init(&state.pool_ll, sizeof(lv_pool_t));
 
-    /*Record the first pool*/
+    /*Запись первого пула*/
     lv_pool_t * pool_p = lv_ll_ins_tail(&state.pool_ll);
     LV_ASSERT_MALLOC(pool_p);
     *pool_p = lv_tlsf_get_pool(state.tlsf);
@@ -196,7 +196,7 @@ void lv_free_core(void * p)
 
 void lv_mem_monitor_core(lv_mem_monitor_t * mon_p)
 {
-    /*Init the data*/
+    /*Инициализировать данные*/
     lv_memzero(mon_p, sizeof(lv_mem_monitor_t));
     LV_TRACE_MEM("begin");
 
@@ -211,7 +211,7 @@ void lv_mem_monitor_core(lv_mem_monitor_t * mon_p)
         mon_p->frag_pct = 100 - mon_p->frag_pct;
     }
     else {
-        mon_p->frag_pct = 0; /*no fragmentation if all the RAM is used*/
+        mon_p->frag_pct = 0; /*нет фрагментации, если используются все RAM*/
     }
 
     mon_p->max_used = state.max_used;

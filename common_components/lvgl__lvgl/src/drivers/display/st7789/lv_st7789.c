@@ -32,17 +32,17 @@
 #define CMD_CSCON       0xF0
 
 #define CMD_RAMCTRL     0xB0
-#define CMD_PORCTRL     0xB2    /* Porch control */
-#define CMD_GCTRL       0xB7    /* Gate control */
-#define CMD_VCOMS       0xBB    /* VCOMS setting */
-#define CMD_LCMCTRL     0xC0    /* LCM control */
-#define CMD_VDVVRHEN    0xC2    /* VDV and VRH command enable */
-#define CMD_VRHS        0xC3    /* VRH set */
-#define CMD_VDVSET      0xC4    /* VDV setting */
-#define CMD_FRCTR2      0xC6    /* FR Control 2 */
-#define CMD_PWCTRL1     0xD0    /* Power control 1 */
-#define CMD_PVGAMCTRL   0xE0    /* Positive Gamma Correction */
-#define CMD_NVGAMCTRL   0xE1    /* Negative Gamma Correction */
+#define CMD_PORCTRL     0xB2    /* Управление крыльцом */
+#define CMD_GCTRL       0xB7    /* Управление воротами */
+#define CMD_VCOMS       0xBB    /* Настройка VCOMS */
+#define CMD_LCMCTRL     0xC0    /* LCM контроль */
+#define CMD_VDVVRHEN    0xC2    /* Включение команд VDV и VRH */
+#define CMD_VRHS        0xC3    /* VRH набор */
+#define CMD_VDVSET      0xC4    /* Настройка VDV */
+#define CMD_FRCTR2      0xC6    /* FR Управление 2 */
+#define CMD_PWCTRL1     0xD0    /* Регулятор мощности 1 */
+#define CMD_PVGAMCTRL   0xE0    /* Положительная гамма-коррекция */
+#define CMD_NVGAMCTRL   0xE1    /* Отрицательная гамма-коррекция */
 
 /**********************
  *      TYPEDEFS
@@ -56,13 +56,13 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* init commands based on LovyanGFX ST7789 driver */
+/* команды инициализации на основе драйвера LovyanGFX ST7789 */
 static const uint8_t init_cmd_list[] = {
-    CMD_GCTRL,      1,  0x44,       /* GCTRL -- panel dependent */
-    CMD_VCOMS,      1,  0x24,       /* VCOMS -- panel dependent */
+    CMD_GCTRL,      1,  0x44,       /* GCTRL — зависит от панели */
+    CMD_VCOMS,      1,  0x24,       /* VCOMS — зависит от панели */
     CMD_VRHS,       1,  0x13,       /* VRHS - panel dependent */
     CMD_PWCTRL1,    2,  0xa4, 0xa1,
-    CMD_RAMCTRL,    2,  0x00, 0xC0, /* controls mapping of RGB565 to RGB666 */
+    CMD_RAMCTRL,    2,  0x00, 0xC0, /* управляет сопоставлением RGB565 с RGB666 */
     CMD_PVGAMCTRL,  14, 0xd0, 0x00, 0x02, 0x07, 0x0a, 0x28, 0x32, 0x44, 0x42, 0x06, 0x0e, 0x12, 0x14, 0x17,
     CMD_NVGAMCTRL,  14, 0xd0, 0x00, 0x02, 0x07, 0x0a, 0x28, 0x31, 0x54, 0x47, 0x0e, 0x1c, 0x17, 0x1b, 0x1e,
     LV_LCD_CMD_SET_GAMMA_CURVE, 1, 0x01,

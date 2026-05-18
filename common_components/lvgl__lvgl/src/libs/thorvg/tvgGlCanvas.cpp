@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -30,12 +30,12 @@
 #else
     class GlRenderer : public RenderMethod
     {
-        //Non Supported. Dummy Class */
+        //Не поддерживается. Фиктивный класс */
     };
 #endif
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 struct GlCanvas::Impl
@@ -44,7 +44,7 @@ struct GlCanvas::Impl
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 #ifdef THORVG_GL_RASTER_SUPPORT
@@ -69,7 +69,7 @@ Result GlCanvas::target(int32_t id, uint32_t w, uint32_t h) noexcept
         return Result::InsufficientCondition;
     }
 
-    //We know renderer type, avoid dynamic_cast for performance.
+    //Мы знаем тип рендерера, избегайте dynamic_cast для повышения производительности.
     auto renderer = static_cast<GlRenderer*>(Canvas::pImpl->renderer);
     if (!renderer) return Result::MemoryCorruption;
 
@@ -77,7 +77,7 @@ Result GlCanvas::target(int32_t id, uint32_t w, uint32_t h) noexcept
     Canvas::pImpl->vport = {0, 0, (int32_t)w, (int32_t)h};
     renderer->viewport(Canvas::pImpl->vport);
 
-    //Paints must be updated again with this new target.
+    //Краски необходимо снова обновить с учетом этой новой цели.
     Canvas::pImpl->status = Status::Damaged;
 
     return Result::Success;

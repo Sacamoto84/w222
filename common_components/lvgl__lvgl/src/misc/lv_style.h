@@ -31,7 +31,7 @@ extern "C" {
 #define LV_STYLE_SENTINEL_VALUE     0xAABBCCDD
 
 /*
- * Flags for style behavior
+ * Флаги поведения стиля
  */
 #define LV_STYLE_PROP_FLAG_NONE                     (0)       /**< No special behavior */
 #define LV_STYLE_PROP_FLAG_INHERITABLE              (1 << 0)  /**< Inherited */
@@ -43,7 +43,7 @@ extern "C" {
 #define LV_STYLE_PROP_FLAG_ALL                      (0x3F)    /**< Indicating all flags */
 
 /*
- * Other constants
+ * Другие константы
  */
 #define LV_SCALE_NONE            256        /**< Value for not zooming the image */
 LV_EXPORT_CONST_INT(LV_SCALE_NONE);
@@ -84,7 +84,7 @@ LV_EXPORT_CONST_INT(LV_SCALE_NONE);
  **********************/
 
 /**
- * Possible options for blending opaque drawings
+ * Возможные варианты растушевки непрозрачных рисунков
  */
 typedef enum {
     LV_BLEND_MODE_NORMAL,     /**< Simply mix according to the opacity value*/
@@ -95,8 +95,8 @@ typedef enum {
 } lv_blend_mode_t;
 
 /**
- * Some options to apply decorations on texts.
- * 'OR'ed values can be used.
+ * Некоторые варианты нанесения украшений на тексты.
+ * Можно использовать значения 'OR'.
  */
 typedef enum {
     LV_TEXT_DECOR_NONE          = 0x00,
@@ -105,8 +105,8 @@ typedef enum {
 } lv_text_decor_t;
 
 /**
- * Selects on which sides border should be drawn
- * 'OR'ed values can be used.
+ * Выбирает, по каким сторонам должна быть нарисована граница
+ * Можно использовать значения 'OR'.
  */
 typedef enum {
     LV_BORDER_SIDE_NONE     = 0x00,
@@ -124,8 +124,8 @@ typedef enum {
     LV_BLUR_QUALITY_PRECISION,  /**< Prefer precision over speed*/
 } lv_blur_quality_t;
 
-/** A image colorkey definition.
- *  The transparency within the color range of [low, high] will be set to LV_OPA_TRANSP If the "enable" flag is set to true.
+/** Определение цветовой клавиши изображения.
+ *  Прозрачность цветов в составе [низкий, высокий] будет установлена ​​наLV_OPA_TRANSP, если флаг «включить установлен» в значении true.
  */
 typedef struct {
     lv_color_t low;
@@ -133,7 +133,7 @@ typedef struct {
 } lv_image_colorkey_t;
 
 /**
- * A common type to handle all the property types in the same way.
+ * Общий тип для одинаковой обработки всех типов свойств.
  */
 typedef union {
     int32_t num;         /**< Number integer number (opacity, enums, booleans or "normal" numbers)*/
@@ -142,33 +142,33 @@ typedef union {
 } lv_style_value_t;
 
 /**
- * Enumeration of all built in style properties
+ * Перечисление всех встроенных свойств стиля.
  *
- * Props are split into groups of 16. When adding a new prop to a group, ensure it does not overflow into the next one.
+ * Реквизиты разделены на группы по 16 штук. Добавляя новый реквизит в группу, убедитесь, что он не переливается в следующий.
  */
 enum _lv_style_id_t {
     LV_STYLE_PROP_INV               = 0,
 
-    /*The properties are listed in a special order to make caching more effective.
-     *Groups are used when LV_OBJ_STYLE_CACHE is enabled.
-     *If a property from a groups is set, a bit will be set in
-     *obj->style_main_prop_is_set and style_other_prop_is_set
-     *to indicate that the property is set.
+    /*Свойства перечислены в специальном порядке, чтобы сделать кэширование более эффективным.
+     *Группы используются, когда включен LV_OBJ_STYLE_CACHE.
+     *Если установлено свойство из группы, бит будет установлен в
+     *obj->style_main_prop_is_setи style_other_prop_is_set
+     *чтобы указать, что свойство установлено.
      *
-     *Strategy 1: group related properties. E.g. if no "border" properties are set
-     *            they will be skipped quickly.
+     *Стратегия 1: группировать связанные свойства. Например. если не установлены свойства «границы»
+     *            они будут быстро пропущены.
      *
-     *Strategy 2: group common property with rarely used properties. This way
-     *            the common property is cached properly and it's rarely affected
-     *            by other props. The other props are cached in an sub-optimal way,
-     *            but they are used rarely.
+     *Стратегия 2: сгруппируйте общее имущество с редко используемыми свойствами. Таким образом
+     *            общее свойство кэшируется правильно и редко затрагивается
+     *            другим реквизитом. Остальные реквизиты кэшируются неоптимальным образом.
+     *            но они используются редко.
      *
-     *Strategy 3: group properties they are used rarely together so that caching doesn't
-     *            interfere
+     *Стратегия 3: сгруппируйте свойства, которые редко используются вместе, чтобы не было кэширования.
+     *            вмешиваться
      *
-     *Each group can have 8 properties. (see STYLE_PROP_SHIFTED)*/
+     *Каждая группа может иметь 8 свойств. (см. STYLE_PROP_SHIFTED )*/
 
-    /* Size related properties*/
+    /* Свойства, связанные с размером*/
     LV_STYLE_WIDTH = 1,
     LV_STYLE_HEIGHT,
     LV_STYLE_LENGTH,
@@ -183,12 +183,12 @@ enum _lv_style_id_t {
     LV_STYLE_TRANSLATE_Y,
     LV_STYLE_RADIAL_OFFSET,
 
-    /*Position related properties */
+    /*Свойства, связанные с позицией */
     LV_STYLE_X = 16,
     LV_STYLE_Y,
     LV_STYLE_ALIGN,
 
-    /*Padding related properties */
+    /*Заполнение связанных свойств */
     LV_STYLE_PAD_TOP = 24,
     LV_STYLE_PAD_BOTTOM,
     LV_STYLE_PAD_LEFT,
@@ -197,13 +197,13 @@ enum _lv_style_id_t {
     LV_STYLE_PAD_ROW,
     LV_STYLE_PAD_COLUMN,
 
-    /*Margin related properties*/
+    /*Свойства, связанные с маржей*/
     LV_STYLE_MARGIN_TOP = 32,
     LV_STYLE_MARGIN_BOTTOM,
     LV_STYLE_MARGIN_LEFT,
     LV_STYLE_MARGIN_RIGHT,
 
-    /*Bg. Gradient*/
+    /*Бг. Градиент*/
     LV_STYLE_BG_GRAD = 40,
     LV_STYLE_BG_GRAD_DIR,
     LV_STYLE_BG_MAIN_OPA,
@@ -212,27 +212,27 @@ enum _lv_style_id_t {
     LV_STYLE_BG_MAIN_STOP,
     LV_STYLE_BG_GRAD_STOP,
 
-    /*Bg image*/
+    /*Фоновое изображение*/
     LV_STYLE_BG_IMAGE_SRC = 48,
     LV_STYLE_BG_IMAGE_OPA,
     LV_STYLE_BG_IMAGE_RECOLOR_OPA,
     LV_STYLE_BG_IMAGE_TILED,
     LV_STYLE_BG_IMAGE_RECOLOR,
 
-    /*Group 3*/
+    /*Группа 3*/
     LV_STYLE_BORDER_WIDTH = 56,
     LV_STYLE_BORDER_COLOR,
     LV_STYLE_BORDER_OPA,
     LV_STYLE_BORDER_POST,
     LV_STYLE_BORDER_SIDE,
 
-    /*Outline */
+    /*Схема */
     LV_STYLE_OUTLINE_WIDTH = 64,
     LV_STYLE_OUTLINE_COLOR,
     LV_STYLE_OUTLINE_OPA,
     LV_STYLE_OUTLINE_PAD,
 
-    /*Image, Shadow, Line, Arc, and Text are rarely used together.*/
+    /*Изображение, Тень, Линия, Дуга и Текст редко используются вместе.*/
     LV_STYLE_BG_OPA = 72,
     LV_STYLE_BG_COLOR,
     LV_STYLE_SHADOW_WIDTH,
@@ -271,7 +271,7 @@ enum _lv_style_id_t {
     LV_STYLE_TEXT_DECOR,
     LV_STYLE_ARC_ROUNDED,
 
-    /*Group unrelated props*/
+    /*Группируйте несвязанный реквизит*/
     LV_STYLE_OPA = 112,
     LV_STYLE_OPA_LAYERED,
     LV_STYLE_COLOR_FILTER_DSC,
@@ -280,26 +280,26 @@ enum _lv_style_id_t {
     LV_STYLE_ANIM_DURATION,
     LV_STYLE_TRANSITION,
 
-    /*Radius is requested a lot, group it with rarely requested ones*/
+    /*Радиус запрашивается часто, группируйте его с редко запрашиваемыми*/
     LV_STYLE_RADIUS = 120,
     LV_STYLE_BITMAP_MASK_SRC,
     LV_STYLE_BLEND_MODE,
     LV_STYLE_ROTARY_SENSITIVITY,
     LV_STYLE_TRANSLATE_RADIAL,
 
-    /*Requested a lot but rarely used*/
+    /*Много просили, но редко использовали*/
     LV_STYLE_CLIP_CORNER = 128,
     LV_STYLE_BASE_DIR,
     LV_STYLE_RECOLOR,
     LV_STYLE_RECOLOR_OPA,
     LV_STYLE_LAYOUT,
 
-    /*Blur*/
+    /*Размытие*/
     LV_STYLE_BLUR_RADIUS = 136,
     LV_STYLE_BLUR_BACKDROP,
     LV_STYLE_BLUR_QUALITY,
 
-    /*Drop shadow*/
+    /*Тень*/
     LV_STYLE_DROP_SHADOW_RADIUS = 144,
     LV_STYLE_DROP_SHADOW_OFFSET_X,
     LV_STYLE_DROP_SHADOW_OFFSET_Y,
@@ -307,7 +307,7 @@ enum _lv_style_id_t {
     LV_STYLE_DROP_SHADOW_OPA,
     LV_STYLE_DROP_SHADOW_QUALITY,
 
-    /*Scale and transform*/
+    /*Масштабируйте и трансформируйте*/
     LV_STYLE_TRANSFORM_SCALE_X = 152,
     LV_STYLE_TRANSFORM_SCALE_Y,
     LV_STYLE_TRANSFORM_PIVOT_X,
@@ -316,7 +316,7 @@ enum _lv_style_id_t {
     LV_STYLE_TRANSFORM_SKEW_X,
     LV_STYLE_TRANSFORM_SKEW_Y,
 
-    /*Flex and basic grid (rarely used together)*/
+    /*Гибкая и базовая сетка (редко используются вместе)*/
     LV_STYLE_FLEX_FLOW = 160,
     LV_STYLE_FLEX_MAIN_PLACE,
     LV_STYLE_FLEX_CROSS_PLACE,
@@ -338,7 +338,7 @@ enum _lv_style_id_t {
     LV_STYLE_NUM_BUILT_IN_PROPS     = LV_STYLE_LAST_BUILT_IN_PROP + 1,
 
     LV_STYLE_PROP_ANY                = 0xFF,
-    LV_STYLE_PROP_CONST             = 0xFF /* magic value for const styles */
+    LV_STYLE_PROP_CONST             = 0xFF /* магическое значение для константных стилей */
 };
 
 typedef enum {
@@ -347,7 +347,7 @@ typedef enum {
 } lv_style_res_t;
 
 /**
- * Descriptor for style transitions
+ * Дескриптор для переходов стилей
  */
 typedef struct {
     const lv_style_prop_t * props; /**< An array with the properties to animate.*/
@@ -358,7 +358,7 @@ typedef struct {
 } lv_style_transition_dsc_t;
 
 /**
- * Descriptor of a constant style property.
+ * Дескриптор свойства постоянного стиля.
  */
 typedef struct {
     lv_style_prop_t prop;
@@ -366,7 +366,7 @@ typedef struct {
 } lv_style_const_prop_t;
 
 /**
- * Descriptor of a style (a collection of properties and values).
+ * Дескриптор стиля (набор свойств и значений).
  */
 typedef struct {
 
@@ -385,51 +385,51 @@ typedef struct {
  **********************/
 
 /**
- * Initialize a style
- * @param style pointer to a style to initialize
- * @note Do not call `lv_style_init` on styles that already have some properties
- *       because this function won't free the used memory, just sets a default state for the style.
- *       In other words be sure to initialize styles only once!
+ * Инициализация стиля
+ * @param style указатель на стиль для инициализации
+ * @note Не вызывайте`lv_style_init`для стилей, у которых уже есть некоторые свойства.
+ *       потому что эта функция не освобождает использованную память, а просто устанавливает для стиля состояние по умолчанию.
+ *       Другими словами, обязательно инициализируйте стили только один раз!
  */
 void lv_style_init(lv_style_t * style);
 
 /**
- * Clear all properties from a style and free all allocated memories.
- * @param style pointer to a style
+ * Очистите все свойства стиля и освободите всю выделенную память.
+ * @param style указатель на стиль
  */
 void lv_style_reset(lv_style_t * style);
 
 /**
- * Copy all properties of a style to an other.
- * It has the same affect callying the same `lv_set_style_...`
- * functions on both styles.
- * It means new memory will be allocated to store the properties in
- * the destination style.
- * After the copy the destination style is fully independent of the source
- * and source can removed without affecting the destination style.
- * @param dst   the destination to copy into (can not the a constant style)
- * @param src   the source style to copy from.
+ * Скопируйте все свойства одного стиля в другой.
+ * Он имеет тот же эффект, называя тот же `lv_set_style_...`.
+ * работает в обоих стилях.
+ * Это означает, что для хранения свойств будет выделена новая память.
+ * стиль назначения.
+ * После копирования целевой стиль полностью независим от исходного.
+ * и источник можно удалить, не затрагивая целевой стиль.
+ * @param dst   место назначения для копирования (не может быть постоянным стилем)
+ * @param src   исходный стиль для копирования.
  */
 void lv_style_copy(lv_style_t * dst, const lv_style_t * src);
 
 /**
- * Copy all properties of a style to an other without resetting the dst style.
- * It has the same effect as calling the same `lv_set_style_...`
- * functions on both styles.
- * It means new memory will be allocated to store the properties in
- * the destination style.
- * After the copy the destination style is fully independent of the source
- * and source can removed without affecting the destination style.
- * @param dst   the destination to copy into (cannot be a constant style)
- * @param src   the source style to copy from.
+ * Скопируйте все свойства одного стиля в другой, не сбрасывая стиль dst.
+ * Это имеет тот же эффект, что и вызов того же `lv_set_style_...`.
+ * работает в обоих стилях.
+ * Это означает, что для хранения свойств будет выделена новая память.
+ * стиль назначения.
+ * После копирования целевой стиль полностью независим от исходного.
+ * и источник можно удалить, не затрагивая целевой стиль.
+ * @param dst   место назначения для копирования (не может быть постоянным стилем)
+ * @param src   исходный стиль для копирования.
  */
 void lv_style_merge(lv_style_t * dst, const lv_style_t * src);
 
 
 /**
- * Check if a style is constant
- * @param style     pointer to a style
- * @return          true: the style is constant
+ * Проверьте, является ли стиль постоянным
+ * @param style     указатель на стиль
+ * @return          правда: стиль постоянный
  */
 static inline bool lv_style_is_const(const lv_style_t * style)
 {
@@ -439,92 +439,92 @@ static inline bool lv_style_is_const(const lv_style_t * style)
 
 
 /**
- * Register a new style property for custom usage
- * @return a new property ID, or LV_STYLE_PROP_INV if there are no more available.
+ * Зарегистрируйте новое свойство стиля для индивидуального использования.
+ * @return новое свойствоIDили LV_STYLE_PROP_INV, если доступных больше нет.
  *
- * Example:
+ * Пример:
  * @code
- * lv_style_prop_t MY_PROP;
- * static inline void lv_style_set_my_prop(lv_style_t * style, lv_color_t value) {
- * lv_style_value_t v = {.color = value}; lv_style_set_prop(style, MY_PROP, v); }
+ * lv_style_prop_tMY_PROP;
+ * static inline voidlv_style_set_my_prop( стильlv_style_t*, значениеlv_color_t) {
+ * lv_style_value_t v = {.color = значение};  lv_style_set_prop(стиль,MY_PROP, v); }
  *
  * ...
- * MY_PROP = lv_style_register_prop();
+ * MY_PROP = lv_style_register_prop ();
  * ...
- * lv_style_set_my_prop(&style1, lv_palette_main(LV_PALETTE_RED));
+ * lv_style_set_my_prop (&style1,lv_palette_main(LV_PALETTE_RED));
  * @endcode
  */
 lv_style_prop_t lv_style_register_prop(uint8_t flag);
 
 /**
- * Get the number of custom properties that have been registered thus far.
+ * Получите количество пользовательских свойств, зарегистрированных на данный момент.
  */
 lv_style_prop_t lv_style_get_num_custom_props(void);
 
 /**
- * Remove a property from a style
- * @param style pointer to a style
- * @param prop  a style property ORed with a state.
- * @return true: the property was found and removed; false: the property wasn't found
+ * Удаление свойства из стиля
+ * @param style указатель на стиль
+ * @param prop  свойство стиля, связанное ИЛИ с состоянием.
+ * @return true: свойство найдено и удалено; ложь: свойство не найдено
  */
 bool lv_style_remove_prop(lv_style_t * style, lv_style_prop_t prop);
 
 /**
- * Set the value of property in a style.
- * This function shouldn't be used directly by the user.
- * Instead use `lv_style_set_<prop_name>()`. E.g. `lv_style_set_bg_color()`
- * @param style pointer to style
- * @param prop the ID of a property (e.g. `LV_STYLE_BG_COLOR`)
- * @param value `lv_style_value_t` variable in which a field is set according to the type of `prop`
+ * Установите значение свойства в стиле.
+ * Эта функция не должна использоваться пользователем напрямую.
+ * Вместо этого воспользуйтесь `lv_style_set_<prop_name>()`. Например.   `lv_style_set_bg_color()`
+ * @param style указатель на стиль
+ * @param prop ID свойства (например,`LV_STYLE_BG_COLOR`)
+ * @param value `lv_style_value_t` переменная, в которой задано поле по типу `prop`
  */
 void lv_style_set_prop(lv_style_t * style, lv_style_prop_t prop, lv_style_value_t value);
 
 /**
- * Get the value of a property
- * @param style pointer to a style
- * @param prop  the ID of a property
- * @param value pointer to a `lv_style_value_t` variable to store the value
- * @return LV_RESULT_INVALID: the property wasn't found in the style (`value` is unchanged)
- *         LV_RESULT_OK: the property was fond, and `value` is set accordingly
- * @note For performance reasons there are no sanity check on `style`
+ * Получить стоимость недвижимости
+ * @param style указатель на стиль
+ * @param prop  ID свойства
+ * @param value указатель на переменную`lv_style_value_t`для хранения значения
+ * @return LV_RESULT_INVALID: свойство не найдено в стиле (`value` не изменено)
+ *         LV_RESULT_OK: свойство было привязано, и`value`установлен соответствующим образом.
+ * @note Из соображений производительности на`style`нет проверки работоспособности.
  */
 lv_style_res_t lv_style_get_prop(const lv_style_t * style, lv_style_prop_t prop, lv_style_value_t * value);
 
 /**
- * Initialize a transition descriptor.
- * @param tr        pointer to a transition descriptor to initialize
- * @param props     an array with the properties to transition. The last element must be zero.
- * @param path_cb   an animation path (ease) callback. If `NULL` liner path will be used.
- * @param time      duration of the transition in [ms]
- * @param delay     delay before the transition in [ms]
- * @param user_data any custom data that will be saved in the transition animation and will be available when `path_cb` is called
+ * Инициализируйте дескриптор перехода.
+ * @param tr        указатель на дескриптор перехода для инициализации
+ * @param props     массив со свойствами для перехода. Последний элемент должен быть нулевым.
+ * @param path_cb   обратный вызов пути анимации (простота). Если будет использоваться путь лайнера `NULL`.
+ * @param time      продолжительность перехода в [мс]
+ * @param delay     задержка перед переходом в [мс]
+ * @param user_data любые пользовательские данные, которые будут сохранены в анимации перехода и будут доступны при вызове `path_cb`
  *
- * Example:
+ * Пример:
  * @code
- * const static lv_style_prop_t trans_props[] = { LV_STYLE_BG_OPA, LV_STYLE_BG_COLOR, 0 };
- * static lv_style_transition_dsc_t trans1;
- * lv_style_transition_dsc_init(&trans1, trans_props, NULL, 300, 0, NULL);
+ * const staticlv_style_prop_ttrans_props [] = { LV_STYLE_BG_OPA, LV_STYLE_BG_COLOR, 0 };
+ * статическийlv_style_transition_dsc_tтранс1;
+ * lv_style_transition_dsc_init (&trans1,trans_props,NULL, 300, 0,NULL);
  * @endcode
  */
 void lv_style_transition_dsc_init(lv_style_transition_dsc_t * tr, const lv_style_prop_t props[],
                                   lv_anim_path_cb_t path_cb, uint32_t time, uint32_t delay, void * user_data);
 
 /**
- * Get the default value of a property
- * @param prop the ID of a property
- * @return the default value
+ * Получить значение свойства по умолчанию
+ * @param prop ID свойства
+ * @return значение по умолчанию
  */
 lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop);
 
 /**
- * Get the value of a property
- * @param style pointer to a style
- * @param prop  the ID of a property
- * @param value pointer to a `lv_style_value_t` variable to store the value
- * @return LV_RESULT_INVALID: the property wasn't found in the style (`value` is unchanged)
- *         LV_RESULT_OK: the property was fond, and `value` is set accordingly
- * @note For performance reasons there are no sanity check on `style`
- * @note This function is the same as ::lv_style_get_prop but inlined. Use it only on performance critical places
+ * Получить стоимость недвижимости
+ * @param style указатель на стиль
+ * @param prop  ID свойства
+ * @param value указатель на переменную`lv_style_value_t`для хранения значения
+ * @return LV_RESULT_INVALID: свойство не найдено в стиле (`value` не изменено)
+ *         LV_RESULT_OK: свойство было привязано, и`value`установлен соответствующим образом.
+ * @note Из соображений производительности на`style`нет проверки работоспособности.
+ * @note Эта функция аналогична :: lv_style_get_prop, но встроена. Используйте его только в местах, критически важных для производительности.
  */
 static inline lv_style_res_t lv_style_get_prop_inlined(const lv_style_t * style, lv_style_prop_t prop,
                                                        lv_style_value_t * value)
@@ -554,41 +554,41 @@ static inline lv_style_res_t lv_style_get_prop_inlined(const lv_style_t * style,
 }
 
 /**
- * Checks if a style is empty (has no properties)
- * @param style pointer to a style
- * @return true if the style is empty
+ * Проверяет, является ли стиль пустым (не имеет свойств)
+ * @param style указатель на стиль
+ * @return true, если стиль пуст
  */
 bool lv_style_is_empty(const lv_style_t * style);
 
 /**
- * Tell the group of a property. If the a property from a group is set in a style the (1 << group) bit of style->has_group is set.
- * It allows early skipping the style if the property is not exists in the style at all.
- * @param prop a style property
- * @return the group [0..30] 30 means all the custom properties with index > 120
+ * Укажите группу объектов. Если в стиле установлено свойство из группы, устанавливается бит (1 << группа) style->has_group.
+ * Это позволяет досрочно пропустить стиль, если свойство вообще не существует в стиле.
+ * @param prop свойство стиля
+ * @return группа [0..30] 30 означает все пользовательские свойства с индексом > 120.
  */
 static inline uint32_t lv_style_get_prop_group(lv_style_prop_t prop)
 {
     uint32_t group = prop >> 2;
-    if(group > 30) group = 31;    /*The MSB marks all the custom properties*/
+    if(group > 30) group = 31;    /*MSB отмечает все пользовательские свойства.*/
     return group;
 
 }
 
 /**
- * Get the flags of a built-in or custom property.
+ * Получите флаги встроенного или настраиваемого свойства.
  *
- * @param prop a style property
- * @return the flags of the property
+ * @param prop свойство стиля
+ * @return флаги объекта недвижимости
  */
 uint8_t lv_style_prop_lookup_flags(lv_style_prop_t prop);
 
 #include "lv_style_gen.h"
 
 /**
- * Set `style`s width and height.
- * @param  style   pointer to style to be modified
- * @param  width   width in pixels
- * @param  height  height in pixels
+ * Установите внешний вид и высоту `style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  width   ширина в пикселях
+ * @param  height  высота в пикселях
  */
 static inline void lv_style_set_size(lv_style_t * style, int32_t width, int32_t height)
 {
@@ -597,9 +597,9 @@ static inline void lv_style_set_size(lv_style_t * style, int32_t width, int32_t 
 }
 
 /**
- * Set all 4 of `style`s padding values.
- * @param  style   pointer to style to be modified
- * @param  value   padding dimension in pixels
+ * Установите все 4 значения заполнения`style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер заполнения в пикселях
  */
 static inline void lv_style_set_pad_all(lv_style_t * style, int32_t value)
 {
@@ -610,9 +610,9 @@ static inline void lv_style_set_pad_all(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set `style`s left and right padding values.
- * @param  style   pointer to style to be modified
- * @param  value   padding dimension in pixels
+ * Установите значения слева и справа для `style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер заполнения в пикселях
  */
 static inline void lv_style_set_pad_hor(lv_style_t * style, int32_t value)
 {
@@ -621,9 +621,9 @@ static inline void lv_style_set_pad_hor(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set `style`s top and bottom padding values.
- * @param  style   pointer to style to be modified
- * @param  value   padding dimension in pixels
+ * Установите значения верхние и нижние заполняющие `style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер заполнения в пикселях
  */
 static inline void lv_style_set_pad_ver(lv_style_t * style, int32_t value)
 {
@@ -632,9 +632,9 @@ static inline void lv_style_set_pad_ver(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set `style`s row and column padding gaps (applies only to Grid and Flex layouts).
- * @param  style   pointer to style to be modified
- * @param  value   gap dimension in pixels
+ * Установите пробелы для заполнения строк и столбцов`style`(применяется только к макетам Grid и Flex).
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер зазора в пикселях
  */
 static inline void lv_style_set_pad_gap(lv_style_t * style, int32_t value)
 {
@@ -643,9 +643,9 @@ static inline void lv_style_set_pad_gap(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set `style`s left and right margin values.
- * @param  style   pointer to style to be modified
- * @param  value   margin dimension in pixels
+ * Установите значения левого и правого полей`style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер поля в пикселях
  */
 static inline void lv_style_set_margin_hor(lv_style_t * style, int32_t value)
 {
@@ -654,9 +654,9 @@ static inline void lv_style_set_margin_hor(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set `style`s top and bottom margin values.
- * @param  style   pointer to style to be modified
- * @param  value   margin dimension in pixels
+ * Установите значения верхних и нижних полей `style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер поля в пикселях
  */
 static inline void lv_style_set_margin_ver(lv_style_t * style, int32_t value)
 {
@@ -665,9 +665,9 @@ static inline void lv_style_set_margin_ver(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set all 4 of `style`s margin values.
- * @param  style   pointer to style to be modified
- * @param  value   margin dimension in pixels
+ * Установите все 4 значения маржи `style`.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   размер поля в пикселях
  */
 static inline void lv_style_set_margin_all(lv_style_t * style, int32_t value)
 {
@@ -678,14 +678,14 @@ static inline void lv_style_set_margin_all(lv_style_t * style, int32_t value)
 }
 
 /**
- * Set `style`s X and Y transform scale values.
- * @param  style   pointer to style to be modified
- * @param  value   scale factor.  Example values:
- *                     - 256 or LV_SCALE_NONE:  no zoom
- *                     - <256:  scale down
- *                     - >256:  scale up
- *                     - 128:  half size
- *                     - 512:  double size
+ * Установите`style`значения масштаба преобразования X и Y.
+ * @param  style   указатель на стиль, который нужно изменить
+ * @param  value   масштабный коэффициент.  Примеры значений:
+ *                     - 256 или LV_SCALE_NONE: без масштабирования.
+ *                     - <256: уменьшить масштаб
+ *                     - >256: увеличить масштаб
+ *                     - 128: половинный размер
+ *                     - 512: двойной размер
  */
 static inline void lv_style_set_transform_scale(lv_style_t * style, int32_t value)
 {
@@ -694,14 +694,14 @@ static inline void lv_style_set_transform_scale(lv_style_t * style, int32_t valu
 }
 
 /**
- * @brief Check if the style property has a specified behavioral flag.
+ * @brief Проверьте, имеет ли свойство стиля указанный поведенческий флаг.
  *
- * Do not pass multiple flags to this function as backwards-compatibility is not guaranteed
- * for that.
+ * Не передавайте этой функции несколько флагов, поскольку обратная совместимость не гарантируется.
+ * для этого.
  *
- * @param prop Property ID
- * @param flag Flag
- * @return true if the flag is set for this property
+ * @param prop Свойство ID
+ * @param flag Флаг
+ * @return true, если для этого свойства установлен флаг
  */
 static inline bool lv_style_prop_has_flag(lv_style_prop_t prop, uint8_t flag)
 {
@@ -729,7 +729,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_style_prop_t lv_style_const_prop_id_inv
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_STYLE_H*/

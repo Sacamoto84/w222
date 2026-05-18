@@ -6,17 +6,17 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
 /**
- * See https://github.com/lvgl/lvgl/issues/6837
+ * См. https://github.com/lvgl/lvgl/issues/6837.
  */
 void test_content_parent_pct_child_pos_1(void)
 {
@@ -31,20 +31,20 @@ void test_content_parent_pct_child_pos_1(void)
 
     lv_obj_t * child2 = lv_obj_create(parent);
 
-    /*Simple case*/
+    /*Простой случай*/
     lv_obj_set_size(child2, 50, 50);
     lv_obj_set_pos(child2, 0, 0);
     lv_obj_update_layout(child2);
     TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_x(child2));
     TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_y(child2));
 
-    /*Simple case*/
+    /*Простой случай*/
     lv_obj_set_pos(child2, 30, 200);
     lv_obj_update_layout(child2);
     TEST_ASSERT_EQUAL_INT32(30, lv_obj_get_x(child2));
     TEST_ASSERT_EQUAL_INT32(200, lv_obj_get_y(child2));
 
-    /*x and y should be 0 to avoid circural dependency*/
+    /*x и y должны быть равны 0, чтобы избежать циклической зависимости*/
     lv_obj_set_pos(child2, LV_PCT(10), LV_PCT(50));
     lv_obj_update_layout(child2);
     TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_x(child2));
@@ -55,12 +55,12 @@ void test_style_min_size(void)
 {
     lv_obj_t * parent = lv_obj_create(lv_screen_active());
     lv_obj_set_size(parent, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-    // lv_obj_set_style_pad_all(parent, 10, 0);
+    // lv_obj_set_style_pad_all (родительский, 10, 0);
 
     lv_obj_t * child = lv_button_create(parent);
     lv_obj_t * label = lv_label_create(child);
     lv_label_set_text(label, "Button");
-    lv_obj_set_size(child, LV_PCT(100), LV_PCT(100)); // will evaluate to 0
+    lv_obj_set_size(child, LV_PCT(100), LV_PCT(100)); // будет оцениваться как 0
     lv_obj_set_size(label, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_pos_no_min_size.png");
     TEST_ASSERT_TRUE(lv_obj_is_width_min(child));
@@ -108,8 +108,8 @@ void test_circular_height_dependency(void)
     lv_obj_set_style_bg_color(item1, lv_palette_main(LV_PALETTE_GREEN), 0);
     lv_obj_set_style_bg_opa(item1, LV_OPA_COVER, 0);
     /**
-     * Because parent is size content this will evaluate after all the fixed/clamped children are sized
-     * This means item1 should size to 100 because of item2
+     * Поскольку родительский элемент является содержимым размера, он будет оцениваться после того, как будут определены размеры всех фиксированных/зафиксированных дочерних элементов.
+     * Это означает, что размер элемента1 должен быть равен 100 из-за элемента2.
      */
     lv_obj_set_height(item1, LV_PCT(100));
     lv_obj_set_flex_grow(item1, 1);
@@ -118,14 +118,14 @@ void test_circular_height_dependency(void)
     lv_obj_set_name(item2, "item2");
     lv_obj_set_style_bg_color(item2, lv_palette_main(LV_PALETTE_BLUE), 0);
     lv_obj_set_style_bg_opa(item2, LV_OPA_COVER, 0);
-    lv_obj_set_height(item2, 100); // fixed size
+    lv_obj_set_height(item2, 100); // фиксированный размер
     lv_obj_set_flex_grow(item2, 1);
 
     lv_obj_t * item3 = lv_obj_create(cont);
     lv_obj_set_name(item3, "item3");
     lv_obj_set_style_bg_color(item3, lv_palette_main(LV_PALETTE_GREEN), 0);
     lv_obj_set_style_bg_opa(item3, LV_OPA_COVER, 0);
-    lv_obj_set_height(item3, LV_PCT(100)); // same as item1 but checking if child order matters
+    lv_obj_set_height(item3, LV_PCT(100)); // то же, что и item1, но проверяется, имеет ли значение дочерний порядок
     lv_obj_set_flex_grow(item3, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_circular_height.png");
@@ -134,7 +134,7 @@ void test_circular_height_dependency(void)
     TEST_ASSERT_EQUAL_INT32(lv_obj_get_height(item2), lv_obj_get_height(item3));
 
     /**
-     * Decreasing item2 height should also decrease item1 and item3 height
+     * Уменьшение высоты элемента 2 должно также уменьшить высоту элемента 1 и элемента 3.
      */
     lv_obj_set_height(item2, 40);
     lv_refr_now(NULL);
@@ -169,8 +169,8 @@ void test_circular_width_dependency(void)
     lv_obj_set_style_bg_color(item1, lv_palette_main(LV_PALETTE_GREEN), 0);
     lv_obj_set_style_bg_opa(item1, LV_OPA_COVER, 0);
     /**
-     * Because parent is size content this will evaluate after all the fixed/clamped children are sized
-     * This means item1 should size to 100 because of item2
+     * Поскольку родительский элемент является содержимым размера, он будет оцениваться после того, как будут определены размеры всех фиксированных/зафиксированных дочерних элементов.
+     * Это означает, что размер элемента1 должен быть равен 100 из-за элемента2.
      */
     lv_obj_set_width(item1, LV_PCT(100));
     lv_obj_set_flex_grow(item1, 1);
@@ -179,14 +179,14 @@ void test_circular_width_dependency(void)
     lv_obj_set_name(item2, "item2");
     lv_obj_set_style_bg_color(item2, lv_palette_main(LV_PALETTE_BLUE), 0);
     lv_obj_set_style_bg_opa(item2, LV_OPA_COVER, 0);
-    lv_obj_set_width(item2, 100); // fixed size
+    lv_obj_set_width(item2, 100); // фиксированный размер
     lv_obj_set_flex_grow(item2, 1);
 
     lv_obj_t * item3 = lv_obj_create(cont);
     lv_obj_set_name(item3, "item3");
     lv_obj_set_style_bg_color(item3, lv_palette_main(LV_PALETTE_GREEN), 0);
     lv_obj_set_style_bg_opa(item3, LV_OPA_COVER, 0);
-    lv_obj_set_width(item3, LV_PCT(100)); // same as item1 but checking if child order matters
+    lv_obj_set_width(item3, LV_PCT(100)); // то же, что и item1, но проверяется, имеет ли значение дочерний порядок
     lv_obj_set_flex_grow(item3, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_circular_width.png");
@@ -195,7 +195,7 @@ void test_circular_width_dependency(void)
     TEST_ASSERT_EQUAL_INT32(lv_obj_get_width(item2), lv_obj_get_width(item3));
 
     /**
-     * Decreasing item2 width should also decrease item1 and item3 width
+     * Уменьшение ширины элемента 2 должно также уменьшить ширину элемента 1 и элемента 3.
      */
     lv_obj_set_width(item2, 40);
     lv_refr_now(NULL);

@@ -2,16 +2,16 @@
 #if LV_USE_GRID && LV_BUILD_EXAMPLES
 
 /**
- * Demonstrate track placement
+ * Демонстрация размещения дорожек
  */
 void lv_example_grid_4(void)
 {
     static int32_t col_dsc[] = {60, 60, 60, LV_GRID_TEMPLATE_LAST};
     static int32_t row_dsc[] = {45, 45, 45, LV_GRID_TEMPLATE_LAST};
 
-    /*Add space between the columns and move the rows to the bottom (end)*/
+    /*Добавьте пространство между столбцами и переместите строки вниз (в конец).*/
 
-    /*Create a container with grid*/
+    /*Создать контейнер с сеткой*/
     lv_obj_t * cont = lv_obj_create(lv_screen_active());
     lv_obj_set_grid_align(cont, LV_GRID_ALIGN_SPACE_BETWEEN, LV_GRID_ALIGN_END);
     lv_obj_set_grid_dsc_array(cont, col_dsc, row_dsc);
@@ -26,8 +26,8 @@ void lv_example_grid_4(void)
         uint8_t row = i / 3;
 
         obj = lv_obj_create(cont);
-        /*Stretch the cell horizontally and vertically too
-         *Set span to 1 to make the cell 1 column/row sized*/
+        /*Растянуть ячейку по горизонтали и по вертикали тоже
+         *Установите диапазон равным 1, чтобы размер ячейки был равен 1 столбцу/строке.*/
         lv_obj_set_grid_cell(obj, LV_GRID_ALIGN_STRETCH, col, 1,
                              LV_GRID_ALIGN_STRETCH, row, 1);
 

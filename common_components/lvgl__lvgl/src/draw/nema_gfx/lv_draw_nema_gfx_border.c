@@ -1,19 +1,19 @@
 /**
- * MIT License
+ * Лицензия MIT
  *
  * -----------------------------------------------------------------------------
  * Copyright (c) 2008-24 Think Silicon Single Member PC
  * -----------------------------------------------------------------------------
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice (including the next paragraph)
- * shall be included in all copies or substantial portions of the Software.
+ * Приведенное выше уведомление об авторских правах и данное уведомление о разрешении (включая следующий абзац)
+ * должны быть включены во все копии или существенные части Программного обеспечения.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
@@ -55,7 +55,7 @@ void lv_draw_nema_gfx_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * ds
     lv_area_t inward_coords;
     int32_t width = dsc->width;
 
-    /* Move border inwards to align with software rendered border */
+    /* Переместите границу внутрь, чтобы совместить ее с границей, отображаемой программным обеспечением. */
     inward_coords.x1 = coords->x1 + ceil(width / 2.0f);
     inward_coords.x2 = coords->x2 - floor(width / 2.0f);
     inward_coords.y1 = coords->y1 + ceil(width / 2.0f);
@@ -71,19 +71,19 @@ void lv_draw_nema_gfx_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * ds
 
     lv_area_t clipped_coords;
     if(!lv_area_intersect(&clipped_coords, &inward_coords, &clip_area))
-        return; /*Fully clipped, nothing to do*/
+        return; /*Полностью обрезан, делать нечего.*/
 
     lv_color_format_t dst_cf = layer->draw_buf->header.cf;
     uint32_t dst_nema_cf = lv_nemagfx_cf_to_nema(dst_cf);
 
-    /* the stride should be computed internally for NEMA_TSC images and images missing a stride value */
+    /* шаг должен рассчитываться внутренне для изображений NEMA_TSC и изображений, в которых отсутствует значение шага */
     int32_t stride = (dst_cf >= LV_COLOR_FORMAT_NEMA_TSC_START && dst_cf <= LV_COLOR_FORMAT_NEMA_TSC_END) ?
                      -1 : lv_area_get_width(&(layer->buf_area)) * lv_color_format_get_size(dst_cf);
 
     nema_bind_dst_tex((uintptr_t)NEMA_VIRT2PHYS(layer->draw_buf->data), lv_area_get_width(&(layer->buf_area)),
                       lv_area_get_height(&(layer->buf_area)), dst_nema_cf, stride);
 
-    /* Recalculate float Dimensions */
+    /* Пересчитать плавающие размеры */
     float x1 = (float)coords->x1 + ((float)width / 2.0f) - (float)layer->buf_area.x1;
     float x2 = (float)coords->x2 - ((float)width / 2.0f) - (float)layer->buf_area.x1;
     float y1 = (float)coords->y1 + ((float)width / 2.0f) - (float)layer->buf_area.y1;
@@ -149,8 +149,8 @@ void lv_draw_nema_gfx_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * ds
             nema_fill_rect_f(x, y, w, h, bg_color);
         }
 
-        /*Draw small corner rectangles
-        Top Left*/
+        /*Нарисуйте маленькие угловые прямоугольники.
+        Вверху слева*/
         if(dsc->side & LV_BORDER_SIDE_TOP || dsc->side & LV_BORDER_SIDE_LEFT) {
             float x = rect_coords.x1;
             float y = rect_coords.y1;
@@ -167,7 +167,7 @@ void lv_draw_nema_gfx_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * ds
             nema_fill_rect_f(x, y, w, h, bg_color);
         }
 
-        /*Top Right*/
+        /*Вверху справа*/
         if(dsc->side & LV_BORDER_SIDE_TOP || dsc->side & LV_BORDER_SIDE_RIGHT) {
             float x = rect_coords.x1 + border_width - width;
             float y = rect_coords.y1;
@@ -184,7 +184,7 @@ void lv_draw_nema_gfx_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * ds
             nema_fill_rect_f(x, y, w, h, bg_color);
         }
 
-        /*Bottom Right*/
+        /*Внизу справа*/
         if(dsc->side & LV_BORDER_SIDE_BOTTOM || dsc->side & LV_BORDER_SIDE_RIGHT) {
             float x = rect_coords.x1 + border_width - width;
             float y = rect_coords.y1 + border_height - width;
@@ -201,7 +201,7 @@ void lv_draw_nema_gfx_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * ds
             nema_fill_rect_f(x, y, w, h, bg_color);
         }
 
-        /*Bottom Left*/
+        /*Внизу слева*/
         if(dsc->side & LV_BORDER_SIDE_BOTTOM || dsc->side & LV_BORDER_SIDE_LEFT) {
             float x = rect_coords.x1;
             float y = rect_coords.y1 + border_height - width;

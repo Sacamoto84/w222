@@ -1,19 +1,19 @@
 /****************************************************************************
 *
 *    Copyright 2012 - 2023 Vivante Corporation, Santa Clara, California.
-*    All Rights Reserved.
+*    Все права защищены.
 *
-*    Permission is hereby granted, free of charge, to any person obtaining
-*    a copy of this software and associated documentation files (the
-*    'Software'), to deal in the Software without restriction, including
-*    without limitation the rights to use, copy, modify, merge, publish,
-*    distribute, sub license, and/or sell copies of the Software, and to
-*    permit persons to whom the Software is furnished to do so, subject
-*    to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации (файл
+*    «Программное обеспечение»), иметь дело с Программным обеспечением без ограничений, включая
+*    без ограничений права на использование, копирование, изменение, объединение, публикацию,
+*    распространять, сублицензировать и/или продавать копии Программного обеспечения, а также
+*    разрешать лицам, которым предоставлено Программное обеспечение, делать это при условии, что
+*    на следующие условия:
 *
-*    The above copyright notice and this permission notice (including the
-*    next paragraph) shall be included in all copies or substantial
-*    portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и данное уведомление о разрешении (включая
+*    следующий абзац) должны быть включены во все копии или существенные
+*    части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 *    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -53,12 +53,12 @@
 /*** Global Context Access ***/
 #define GET_CONTEXT()               &s_context
 
-/*** Default command buffer size is 32KB. Double command buffer is used.
-     App can call vg_lite_set_command_buffer_size(size) before vg_lite_init()
-     to overwrite the default command buffer size.
+/*** Размер буфера команд по умолчанию составляет 32 КБ. Используется двойной буфер команд.
+     Приложение может вызывать vg_lite_set_command_buffer_size (размер) перед vg_lite_init ()
+     чтобы перезаписать размер буфера команд по умолчанию.
 ***/
 #define VG_LITE_COMMAND_BUFFER_SIZE (32 << 10)
-#define VG_LITE_SINGLE_COMMAND_BUFFER_SIZE (64 << 10) /* For only using one command buffer. */
+#define VG_LITE_SINGLE_COMMAND_BUFFER_SIZE (64 << 10) /* Для использования только одного командного буфера. */
 
 #define CMDBUF_BUFFER(context)      (context).command_buffer[(context).command_buffer_current]
 #define CMDBUF_INDEX(context)       (context).command_buffer_current
@@ -123,7 +123,7 @@
     #define VG_SW_BLIT_PRECISION_OPT 0
 #endif
 
-/* Driver implementation internal structures.
+/* Внутренние структуры реализации драйвера.
 */
 typedef struct vg_lite_states {
     uint32_t                    state;
@@ -134,14 +134,14 @@ typedef struct vg_lite_hardware {
     vg_lite_states_t            hw_states[STATES_COUNT];
 } vg_lite_hardware_t;
 
-/* Tessellation buffer information. */
+/* Информация о буфере тесселяции. */
 typedef struct vg_lite_tess_buffer {
     vg_lite_uint32_t            physical_addr;         /*! Physical address for tessellation buffer. */
     vg_lite_uint8_t      *      logical_addr;          /*! Logical address for tessellation buffer. */
     vg_lite_uint32_t            tessbuf_size;          /*! Buffer size for tessellation buffer */
     vg_lite_uint32_t            countbuf_size;         /*! Buffer size for VG count buffer */
     vg_lite_uint32_t            tess_w_h;              /*! Combination of buffer width and height. */
-    /* gc355 Specific fields below */
+    /* gc355 Конкретные поля ниже */
     vg_lite_uint32_t            L1_phyaddr;            /*! L1 physical address. */
     vg_lite_uint32_t            L2_phyaddr;            /*! L2 physical address. */
     vg_lite_uint8_t      *      L1_logical;            /*! L1 Logical address. */
@@ -172,7 +172,7 @@ typedef struct vg_lite_context {
     uint32_t                    scissor_set;
     uint32_t                    scissor_enable;
     uint32_t                    scissor_dirty;
-    int32_t                     scissor[4];                 /* Scissor area: x, y, right, bottom. */
+    int32_t                     scissor[4];                 /* Область ножниц: x, y, справа, внизу. */
     vg_lite_buffer_t      *      scissor_layer;
 
     uint32_t                    src_alpha_mode;
@@ -267,7 +267,7 @@ extern vg_lite_void setup_lvgl_image(vg_lite_buffer_t * dst, vg_lite_buffer_t * 
 #define DUMP_COMMAND                            0
 #define DUMP_IMAGE                              0
 
-/* Enable FC buffer dump if SOC supports fast clear */
+/* Включите дамп буфера FC, если SOC поддерживает быструю очистку. */
 #define VG_TARGET_FC_DUMP                       0
 
 #if DUMP_COMMAND || DUMP_IMAGE

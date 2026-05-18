@@ -6,13 +6,13 @@
 
 void test_screen_load_no_crash(void)
 {
-    /*Delete active screen and load new screen should not crash*/
+    /*Удалить активный экран и загрузить новый экран не должно привести к сбою*/
     lv_obj_t * screen = lv_screen_active();
     lv_obj_delete(screen);
     screen = lv_obj_create(NULL);
     lv_screen_load(screen);
 
-    /*Consecutively loading multiple screens with transition animations should not crash*/
+    /*Последовательная загрузка нескольких экранов с анимацией перехода не должна вызывать сбои.*/
     lv_obj_t * screen_with_anim_1 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_2 = lv_obj_create(NULL);
     lv_screen_load_anim(screen_with_anim_1, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 2000, 0, false);
@@ -21,13 +21,13 @@ void test_screen_load_no_crash(void)
 
 void test_screen_load_with_delete_no_crash(void)
 {
-    /*Delete active screen and load new screen should not crash*/
+    /*Удалить активный экран и загрузить новый экран не должно привести к сбою*/
     lv_obj_t * screen = lv_screen_active();
     lv_obj_delete(screen);
     screen = lv_obj_create(NULL);
     lv_screen_load(screen);
 
-    /*Consecutively loading multiple screens (while deleting one) with transition animations should not crash*/
+    /*Последовательная загрузка нескольких экранов (при удалении одного) с анимацией перехода не должна вызывать сбой.*/
     lv_obj_t * screen_with_anim_1 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_2 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_3 = lv_obj_create(NULL);
@@ -35,17 +35,17 @@ void test_screen_load_with_delete_no_crash(void)
     lv_screen_load_anim(screen_with_anim_1, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 0, 0, false);
     lv_screen_load_anim(screen_with_anim_2, LV_SCREEN_LOAD_ANIM_OVER_RIGHT, 1000, 0, true);
 
-    /*Wait to trigger the animation start callbacks*/
+    /*Подождите, чтобы вызвать обратные вызовы начала анимации*/
     lv_test_wait(100);
 
     lv_screen_load_anim(screen_with_anim_3, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 200, 0, true);
 
-    /*The active screen should be immediately replaced*/
+    /*Активный экран следует немедленно заменить.*/
     TEST_ASSERT_EQUAL(lv_screen_active(), screen_with_anim_2);
 
     lv_test_wait(400);
 
-    /*Check for the screens status after the transition*/
+    /*Проверьте состояние экранов после перехода*/
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_1), false);
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_2), false);
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_3), true);
@@ -53,13 +53,13 @@ void test_screen_load_with_delete_no_crash(void)
 
 void test_screen_load_with_delete_no_crash2(void)
 {
-    /*Delete active screen and load new screen should not crash*/
+    /*Удалить активный экран и загрузить новый экран не должно привести к сбою*/
     lv_obj_t * screen = lv_screen_active();
     lv_obj_delete(screen);
     screen = lv_obj_create(NULL);
     lv_screen_load(screen);
 
-    /*Consecutively loading multiple screens (while deleting one) with transition animations should not crash*/
+    /*Последовательная загрузка нескольких экранов (при удалении одного) с анимацией перехода не должна вызывать сбой.*/
     lv_obj_t * screen_with_anim_1 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_2 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_3 = lv_obj_create(NULL);
@@ -69,17 +69,17 @@ void test_screen_load_with_delete_no_crash2(void)
     lv_screen_load_anim(screen_with_anim_2, LV_SCREEN_LOAD_ANIM_OVER_RIGHT, 1000, 0, true);
     lv_screen_load_anim(screen_with_anim_3, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 0, 0, true);
 
-    /*Wait to trigger the animation start callbacks*/
+    /*Подождите, чтобы вызвать обратные вызовы начала анимации*/
     lv_test_wait(100);
 
     lv_screen_load_anim(screen_with_anim_4, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 200, 0, true);
 
-    /*The active screen should be immediately replaced*/
+    /*Активный экран следует немедленно заменить.*/
     TEST_ASSERT_EQUAL(lv_screen_active(), screen_with_anim_3);
 
     lv_test_wait(400);
 
-    /*Check for the screens status after the transition*/
+    /*Проверьте состояние экранов после перехода*/
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_1), false);
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_2), false);
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_3), false);
@@ -96,13 +96,13 @@ static void screen_with_anim_1_unloaded_cb(lv_event_t * e)
 
 void test_screen_load_with_delete_event(void)
 {
-    /*Delete active screen and load new screen should not crash*/
+    /*Удалить активный экран и загрузить новый экран не должно привести к сбою*/
     lv_obj_t * screen = lv_screen_active();
     lv_obj_delete(screen);
     screen = lv_obj_create(NULL);
     lv_screen_load(screen);
 
-    /*Consecutively loading multiple screens (while deleting one) with transition animations should not crash*/
+    /*Последовательная загрузка нескольких экранов (при удалении одного) с анимацией перехода не должна вызывать сбой.*/
     lv_obj_t * screen_with_anim_1 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_2 = lv_obj_create(NULL);
     lv_obj_t * screen_with_anim_3 = lv_obj_create(NULL);
@@ -113,19 +113,19 @@ void test_screen_load_with_delete_event(void)
     lv_screen_load_anim(screen_with_anim_2, LV_SCREEN_LOAD_ANIM_OVER_RIGHT, 1000, 0, true);
     lv_screen_load_anim(screen_with_anim_3, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 0, 0, true);
 
-    /*Wait to trigger the animation start callbacks*/
+    /*Подождите, чтобы вызвать обратные вызовы начала анимации*/
     lv_test_wait(100);
 
     TEST_ASSERT_EQUAL(screen_1_unloaded_called, true);
 
     lv_screen_load_anim(screen_with_anim_4, LV_SCREEN_LOAD_ANIM_OVER_LEFT, 200, 0, true);
 
-    /*The active screen should be immediately replaced*/
+    /*Активный экран следует немедленно заменить.*/
     TEST_ASSERT_EQUAL(lv_screen_active(), screen_with_anim_3);
 
     lv_test_wait(400);
 
-    /*Check for the screens status after the transition*/
+    /*Проверьте состояние экранов после перехода*/
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_1), false);
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_2), false);
     TEST_ASSERT_EQUAL(lv_obj_is_valid(screen_with_anim_3), false);
@@ -186,7 +186,7 @@ void test_display_receives_screen_load_events(void)
     TEST_ASSERT_EQUAL(1, display_screen_loaded);
     TEST_ASSERT_EQUAL(1, display_screen_load_start);
 
-    /* Loading the same screen doesn't do anything*/
+    /* Загрузка того же экрана ничего не дает*/
     lv_screen_load(screen1);
     TEST_ASSERT_EQUAL(1, display_screen_unloaded);
     TEST_ASSERT_EQUAL(1, display_screen_unload_start);
@@ -204,7 +204,7 @@ static void screen_event_cb(lv_event_t * e)
 }
 
 static size_t display_event_count = 0;
-/* This event handler deletes the display during screen load events*/
+/* Этот обработчик событий удаляет отображение во время событий загрузки экрана.*/
 static void display_event_delete_cb(lv_event_t * e)
 {
     lv_obj_t * screen = lv_event_get_param(e);
@@ -215,7 +215,7 @@ static void display_event_delete_cb(lv_event_t * e)
     lv_display_t * event_display = lv_event_get_target(e);
     TEST_ASSERT_NOT_NULL(event_display);
 
-    /* Screen display and event display should match*/
+    /* Отображение экрана и отображение событий должны совпадать.*/
     TEST_ASSERT_EQUAL(screen_display, event_display);
     lv_display_delete(event_display);
     display_event_count++;
@@ -225,7 +225,7 @@ static void display_event_delete_cb(lv_event_t * e)
 
 void test_display_delete_when_screen_is_loaded(void)
 {
-    /* Check that LVGL correctly handles deleting the display during screen load events*/
+    /* Убедитесь, что LVGL правильно обрабатывает удаление отображения во время событий загрузки экрана.*/
     {
         lv_display_t * display = lv_display_create(100, 100);
         lv_display_set_default(display);
@@ -239,10 +239,10 @@ void test_display_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_event_count, 1);
-        /* No unload event for previous screen as the display was deleted
-         * No load event for new screen as the display was deleted */
+        /* Нет события выгрузки для предыдущего экрана, поскольку дисплей был удален
+         * Нет события загрузки для нового экрана, поскольку дисплей был удален */
         TEST_ASSERT_EQUAL(screen_event_count, 0);
 
         display_event_count = screen_event_count = 0;
@@ -260,10 +260,10 @@ void test_display_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_event_count, 1);
-        /* We should've gotten an unload start event from previous screen before the display got deleted
-         * No load event for new screen as the display was deleted */
+        /* Мы должны были получить событие начала выгрузки с предыдущего экрана до того, как дисплей был удален.
+         * Нет события загрузки для нового экрана, поскольку дисплей был удален */
         TEST_ASSERT_EQUAL(screen_event_count, 1);
 
         display_event_count = screen_event_count = 0;
@@ -281,10 +281,10 @@ void test_display_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_event_count, 1);
-        /* We should've gotten an unload start event from previous screen before the display got deleted
-         * We should've gotten an load_start event for new screen before the display was deleted */
+        /* Мы должны были получить событие начала выгрузки с предыдущего экрана до того, как дисплей был удален.
+         * Мы должны были получить событие load_start для нового экрана до того, как дисплей был удален. */
         TEST_ASSERT_EQUAL(screen_event_count, 2);
 
         display_event_count = screen_event_count = 0;
@@ -301,17 +301,17 @@ void test_display_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_event_count, 1);
-        /* We should've gotten an unload start event from previous screen before the display got deleted
-         * We should've gotten an load_start and loaded events for new screen before the display was deleted */
+        /* Мы должны были получить событие начала выгрузки с предыдущего экрана до того, как дисплей был удален.
+         * Мы должны были получить load_start и загрузить события для нового экрана до того, как дисплей был удален. */
         TEST_ASSERT_EQUAL(screen_event_count, 3);
         display_event_count = screen_event_count = 0;
     }
 }
 
 static size_t screen_delete_event_count = 0;
-/* This event handler deletes the target object during screen load events*/
+/* Этот обработчик событий удаляет целевой объект во время событий загрузки экрана.*/
 static void screen_delete_event_cb(lv_event_t * e)
 {
     lv_obj_delete(lv_event_get_target_obj(e));
@@ -320,13 +320,13 @@ static void screen_delete_event_cb(lv_event_t * e)
 
 void test_new_screen_delete_when_screen_is_loaded(void)
 {
-    /* Check that LVGL correctly handles when the new screen is deleted during screen load events*/
+    /* Убедитесь, что LVGL правильно обрабатывает удаление нового экрана во время событий загрузки экрана.*/
     {
         lv_obj_t * screen = lv_obj_create(NULL);
         lv_obj_add_event_cb(screen, screen_delete_event_cb, LV_EVENT_SCREEN_LOAD_START, NULL);
         lv_screen_load(screen);
 
-        /* New screen deleted during screen load*/
+        /* Новый экран удален во время загрузки экрана*/
         TEST_ASSERT_EQUAL(screen_delete_event_count, 1);
         TEST_ASSERT_NULL(lv_display_get_screen_active(lv_display_get_default()));
         screen_delete_event_count = 0;
@@ -337,7 +337,7 @@ void test_new_screen_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(screen, screen_delete_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* New screen deleted during screen load*/
+        /* Новый экран удален во время загрузки экрана*/
         TEST_ASSERT_EQUAL(screen_delete_event_count, 1);
         TEST_ASSERT_NULL(lv_display_get_screen_active(lv_display_get_default()));
         screen_delete_event_count = 0;
@@ -345,7 +345,7 @@ void test_new_screen_delete_when_screen_is_loaded(void)
 }
 void test_old_screen_delete_when_screen_is_loaded(void)
 {
-    /* Check that LVGL correctly handles when the old screen is deleted during screen load events*/
+    /* Убедитесь, что LVGL правильно обрабатывает удаление старого экрана во время событий загрузки экрана.*/
     lv_obj_t * default_screen = lv_obj_create(NULL);
     lv_screen_load(default_screen);
     {
@@ -353,7 +353,7 @@ void test_old_screen_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(lv_screen_active(), screen_delete_event_cb, LV_EVENT_SCREEN_UNLOAD_START, NULL);
         lv_screen_load(screen);
 
-        /* Old screen deleted during screen load*/
+        /* Старый экран удален во время загрузки экрана*/
         TEST_ASSERT_EQUAL(screen_delete_event_count, 1);
         TEST_ASSERT_EQUAL(screen, lv_display_get_screen_active(lv_display_get_default()));
         screen_delete_event_count = 0;
@@ -363,7 +363,7 @@ void test_old_screen_delete_when_screen_is_loaded(void)
         lv_obj_add_event_cb(lv_screen_active(), screen_delete_event_cb, LV_EVENT_SCREEN_UNLOADED, NULL);
         lv_screen_load(screen);
 
-        /* Old screen deleted during screen load*/
+        /* Старый экран удален во время загрузки экрана*/
         TEST_ASSERT_EQUAL(screen_delete_event_count, 1);
         TEST_ASSERT_EQUAL(screen, lv_display_get_screen_active(lv_display_get_default()));
         screen_delete_event_count = 0;
@@ -374,7 +374,7 @@ void test_old_screen_delete_when_screen_is_loaded(void)
 }
 
 static size_t display_screen_delete_screen_event_count = 0;
-/* Deletes the display passed as a param on a display screen load event*/
+/* Удаляет дисплей, переданный как параметр в событии загрузки экрана дисплея.*/
 static void display_delete_screen_event_cb(lv_event_t * e)
 {
     lv_obj_t * screen = lv_event_get_param(e);
@@ -385,7 +385,7 @@ static void display_delete_screen_event_cb(lv_event_t * e)
 
 void test_screen_is_deleted_when_loaded_in_display_event(void)
 {
-    /* Check that LVGL correctly handles deleting the screens during display screen load events*/
+    /* Убедитесь, что LVGL правильно обрабатывает удаление экранов во время событий загрузки экрана дисплея.*/
     {
         lv_display_t * display = lv_display_create(100, 100);
         lv_display_set_default(display);
@@ -399,10 +399,10 @@ void test_screen_is_deleted_when_loaded_in_display_event(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_screen_delete_screen_event_count, 1);
-        /* No unload events are sent to the previous screen as the old screen was deleted during the display event
-         * Both load events for new screen are sent */
+        /* События выгрузки не отправляются на предыдущий экран, поскольку старый экран был удален во время события отображения.
+         * Оба события загрузки для нового экрана отправляются */
         TEST_ASSERT_EQUAL(screen_event_count, 2);
 
         TEST_ASSERT_EQUAL(screen, lv_screen_active());
@@ -423,10 +423,10 @@ void test_screen_is_deleted_when_loaded_in_display_event(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_screen_delete_screen_event_count, 1);
-        /* Both unload events are sent to the previous screen
-         * No load event for new screen as the screen was deleted during the display event */
+        /* Оба события выгрузки отправляются на предыдущий экран.
+         * Нет события загрузки для нового экрана, поскольку экран был удален во время события отображения. */
         TEST_ASSERT_EQUAL(screen_event_count, 2);
 
         TEST_ASSERT_NULL(lv_screen_active());
@@ -447,10 +447,10 @@ void test_screen_is_deleted_when_loaded_in_display_event(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_screen_delete_screen_event_count, 1);
-        /* Both unload events are sent to the previous screen
-         * loaded event is not sent to the new screen as the screen was deleted during the display event */
+        /* Оба события выгрузки отправляются на предыдущий экран.
+         * загруженное событие не отправляется на новый экран, поскольку экран был удален во время события отображения */
         TEST_ASSERT_EQUAL(screen_event_count, 3);
 
         TEST_ASSERT_NULL(lv_screen_active());
@@ -470,10 +470,10 @@ void test_screen_is_deleted_when_loaded_in_display_event(void)
         lv_obj_add_event_cb(screen, screen_event_cb, LV_EVENT_SCREEN_LOADED, NULL);
         lv_screen_load(screen);
 
-        /* The display screen event was called only once*/
+        /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_screen_delete_screen_event_count, 1);
-        /* unloaded event is not sent to the previous screen as the screen is deleted during display event
-         * Both load events for new screen are sent */
+        /* выгруженное событие не отправляется на предыдущий экран, поскольку экран удаляется во время события отображения
+         * Оба события загрузки для нового экрана отправляются */
         TEST_ASSERT_EQUAL(screen_event_count, 3);
 
         TEST_ASSERT_EQUAL(screen, lv_screen_active());
@@ -504,10 +504,10 @@ void test_screen_mix_event_and_manual_creation(void)
     lv_obj_add_event_cb(screen, unloaded_event_cb, LV_EVENT_SCREEN_UNLOADED, NULL);
     lv_obj_add_screen_create_event(screen_create_trigger, LV_EVENT_CLICKED, screen_create, LV_SCREEN_LOAD_ANIM_NONE, 0, 0);
 
-    /* Load a new screen by pressing the create button. The current screen is deleted in our unloaded event cb*/
+    /* Загрузите новый экран, нажав кнопку «Создать». Текущий экран удаляется в нашем выгруженном событии cb*/
     lv_obj_send_event(screen_create_trigger, LV_EVENT_CLICKED, NULL);
 
-    /* Manually loading a screen with auto delete set to `true` should not lead to a double free */
+    /* Загрузка экрана вручную с автоматическим удалением, установленным на `true`, не должна приводить к двойному освобождению экрана. */
     lv_screen_load_anim(screen, LV_SCREEN_LOAD_ANIM_NONE, 0, 0, true);
     lv_obj_delete(lv_screen_active());
 

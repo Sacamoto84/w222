@@ -38,7 +38,7 @@
 
 void lv_layout_init(void)
 {
-    /*Malloc a list for the built in layouts*/
+    /*Malloc — список встроенных макетов*/
     layout_list_def = lv_malloc(layout_cnt * sizeof(lv_layout_dsc_t));
 
 #if LV_USE_FLEX

@@ -67,7 +67,7 @@ lv_result_t lv_draw_buf_save_to_file(const lv_draw_buf_t * draw_buf, const char 
         return LV_RESULT_INVALID;
     }
 
-    /*Image content modified, invalidate image cache.*/
+    /*Содержимое изображения изменено, кэш изображений становится недействительным.*/
     lv_image_cache_drop(path);
 
     uint32_t bw;

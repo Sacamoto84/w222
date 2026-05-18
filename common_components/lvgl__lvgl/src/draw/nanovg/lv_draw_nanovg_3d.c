@@ -47,27 +47,27 @@ void lv_draw_nanovg_3d(lv_draw_task_t * t, const lv_draw_3d_dsc_t * dsc, const l
 
     lv_draw_nanovg_unit_t * u = (lv_draw_nanovg_unit_t *)t->draw_unit;
 
-    /* End NanoVG frame temporarily to allow direct OpenGL rendering */
+    /* Временно завершите кадр NanoVG, чтобы разрешить прямой рендеринг OpenGL. */
     lv_nanovg_end_frame(u);
 
     lv_layer_t * layer = t->target_layer;
 
-    /* Get target layer info */
+    /* Получить информацию о целевом слое */
     int32_t layer_w = lv_area_get_width(&layer->buf_area);
     int32_t layer_h = lv_area_get_height(&layer->buf_area);
 
-    /* Calculate destination area relative to layer */
+    /* Рассчитать площадь назначения относительно слоя */
     lv_area_t dest_area = *coords;
     lv_area_move(&dest_area, -layer->buf_area.x1, -layer->buf_area.y1);
 
-    /* Calculate clip area relative to layer */
+    /* Рассчитать область обрезки относительно слоя */
     lv_area_t clip_area = t->clip_area;
     lv_area_move(&clip_area, -layer->buf_area.x1, -layer->buf_area.y1);
 
-    /* Reinitialize OpenGL ES driver state after NanoVG modified it */
+    /* Повторно инициализировать состояние драйвера OpenGL ES после того, как NanoVG изменил его */
     lv_opengles_reinit_state();
 
-    /* Use LVGL's OpenGL ES rendering infrastructure */
+    /* Используйте инфраструктуру рендеринга OpenGL ES LVGL. */
     lv_opengles_viewport(0, 0, layer_w, layer_h);
 
     lv_opengles_render_params_t params;

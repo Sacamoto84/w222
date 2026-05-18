@@ -25,13 +25,13 @@
 
 #define LV_SWITCH_IS_ANIMATING(sw) (((sw)->anim_state) != LV_SWITCH_ANIM_STATE_INV)
 
-/** Switch animation start value. (Not the real value of the switch just indicates process animation)*/
+/** Переключить начальное значение анимации. (Не реальное значение переключателя, просто указывает на анимацию процесса)*/
 #define LV_SWITCH_ANIM_STATE_START 0
 
-/** Switch animation end value.  (Not the real value of the switch just indicates process animation)*/
+/** Переключить конечное значение анимации.  (Не реальное значение переключателя, просто указывает на анимацию процесса)*/
 #define LV_SWITCH_ANIM_STATE_END   256
 
-/** Mark no animation is in progress*/
+/** Отметить, что анимация не выполняется*/
 #define LV_SWITCH_ANIM_STATE_INV   -1
 
 /**********************
@@ -94,7 +94,7 @@ lv_obj_t * lv_switch_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_switch_set_orientation(lv_obj_t * obj, lv_switch_orientation_t orientation)
@@ -107,7 +107,7 @@ void lv_switch_set_orientation(lv_obj_t * obj, lv_switch_orientation_t orientati
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_switch_orientation_t lv_switch_get_orientation(lv_obj_t * obj)
@@ -153,7 +153,7 @@ static void lv_switch_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -166,7 +166,7 @@ static void lv_switch_event(const lv_obj_class_t * class_p, lv_event_t * e)
         int32_t knob_top = lv_obj_get_style_pad_top(obj,    LV_PART_KNOB);
         int32_t knob_bottom = lv_obj_get_style_pad_bottom(obj, LV_PART_KNOB);
 
-        /*The smaller size is the knob diameter*/
+        /*Меньший размер-это диаметр ручки.*/
         int32_t knob_size = LV_MAX4(knob_left, knob_right, knob_bottom, knob_top);
         knob_size += LV_SWITCH_KNOB_EXT_AREA_CORRECTION;
         knob_size += lv_obj_calculate_ext_draw_size(obj, LV_PART_KNOB);
@@ -196,9 +196,9 @@ static void draw_main(lv_event_t * e)
 
     lv_layer_t * layer = lv_event_get_layer(e);
 
-    /*Draw the indicator*/
+    /*Нарисуйте индикатор*/
     lv_area_t indic_area;
-    /*Exclude background's padding*/
+    /*Исключить отступы фона*/
     lv_obj_get_content_coords(obj, &indic_area);
 
     lv_draw_rect_dsc_t draw_indic_dsc;
@@ -207,7 +207,7 @@ static void draw_main(lv_event_t * e)
     lv_obj_init_draw_rect_dsc(obj, LV_PART_INDICATOR, &draw_indic_dsc);
     lv_draw_rect(layer, &draw_indic_dsc, &indic_area);
 
-    /*Draw the knob*/
+    /*Нарисуйте ручку*/
     lv_area_t knob_area;
     lv_area_copy(&knob_area, &obj->coords);
 
@@ -233,11 +233,11 @@ static void draw_main(lv_event_t * e)
         int32_t knob_size = lv_obj_get_height(obj);
         int32_t anim_length = lv_area_get_width(&obj->coords) - knob_size;
         if(LV_SWITCH_IS_ANIMATING(sw)) {
-            /* Use the animation's coordinate */
+            /* Используйте координату анимации */
             anim_value_x = (anim_length * sw->anim_state) / LV_SWITCH_ANIM_STATE_END;
         }
         else {
-            /* Use LV_STATE_CHECKED to decide the coordinate */
+            /* Используйте LV_STATE_CHECKED, чтобы определить координату. */
             bool chk = lv_obj_get_state(obj) & LV_STATE_CHECKED;
             anim_value_x = chk ? anim_length : 0;
         }
@@ -253,11 +253,11 @@ static void draw_main(lv_event_t * e)
         int32_t knob_size = lv_obj_get_width(obj);
         int32_t anim_length = lv_area_get_height(&obj->coords) - knob_size;
         if(LV_SWITCH_IS_ANIMATING(sw)) {
-            /* Use the animation's coordinate */
+            /* Используйте координату анимации */
             anim_value_y = (anim_length * sw->anim_state) / LV_SWITCH_ANIM_STATE_END;
         }
         else {
-            /* Use LV_STATE_CHECKED to decide the coordinate */
+            /* Используйте LV_STATE_CHECKED, чтобы определить координату. */
             bool chk = lv_obj_get_state(obj) & LV_STATE_CHECKED;
             anim_value_y = chk ? anim_length : 0;
         }
@@ -275,7 +275,7 @@ static void draw_main(lv_event_t * e)
     int32_t knob_top = lv_obj_get_style_pad_top(obj, LV_PART_KNOB);
     int32_t knob_bottom = lv_obj_get_style_pad_bottom(obj, LV_PART_KNOB);
 
-    /*Apply the paddings on the knob area*/
+    /*Нанесите накладки на область ручки.*/
     knob_area.x1 -= knob_left;
     knob_area.x2 += knob_right;
     knob_area.y1 -= knob_top;
@@ -297,7 +297,7 @@ static void lv_switch_anim_exec_cb(void * var, int32_t value)
 }
 
 /**
- * Resets the switch's animation state to "no animation in progress".
+ * Сбрасывает состояние анимации переключателя на «анимация не выполняется».
  */
 static void lv_switch_anim_completed(lv_anim_t * a)
 {
@@ -307,13 +307,13 @@ static void lv_switch_anim_completed(lv_anim_t * a)
 }
 
 /**
- * Starts an animation for the switch knob. if the anim_time style property is greater than 0
+ * Запускает анимацию ручки переключателя. если свойство стиля anim_time больше 0
  * @param obj the switch to animate
  */
 static void lv_switch_trigger_anim(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    /*If the widget is not rendered yet show state changes immediately*/
+    /*Если виджет еще не визуализируется, немедленно покажите изменения состояния.*/
     if(!obj->rendered) return;
 
     lv_switch_t * sw = (lv_switch_t *)obj;
@@ -324,20 +324,20 @@ static void lv_switch_trigger_anim(lv_obj_t * obj)
         bool chk = lv_obj_get_state(obj) & LV_STATE_CHECKED;
         int32_t anim_start;
         int32_t anim_end;
-        /*No animation in progress -> simply set the values*/
+        /*Анимация не выполняется -> просто установите значения*/
         if(sw->anim_state == LV_SWITCH_ANIM_STATE_INV) {
             anim_start = chk ? LV_SWITCH_ANIM_STATE_START : LV_SWITCH_ANIM_STATE_END;
             anim_end   = chk ? LV_SWITCH_ANIM_STATE_END : LV_SWITCH_ANIM_STATE_START;
         }
-        /*Animation in progress. Start from the animation end value*/
+        /*Анимация в процессе. Начать с конечного значения анимации*/
         else {
             anim_start = sw->anim_state;
             anim_end   = chk ? LV_SWITCH_ANIM_STATE_END : LV_SWITCH_ANIM_STATE_START;
         }
-        /*Calculate actual animation duration*/
+        /*Рассчитать фактическую продолжительность анимации*/
         uint32_t anim_dur = (anim_dur_full * LV_ABS(anim_start - anim_end)) / LV_SWITCH_ANIM_STATE_END;
 
-        /*Stop the previous animation if it exists*/
+        /*Остановить предыдущую анимацию, если она существует.*/
         lv_anim_delete(sw, NULL);
 
         lv_anim_t a;

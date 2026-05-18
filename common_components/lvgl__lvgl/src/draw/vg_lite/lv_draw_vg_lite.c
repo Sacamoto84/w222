@@ -118,12 +118,12 @@ static void draw_execute(lv_draw_vg_lite_unit_t * u)
     lv_draw_task_t * t = u->task_act;
     lv_layer_t * layer = t->target_layer;
 
-    /* remember draw unit for access to unit's context */
+    /* помните о блоке рисования для доступа к контексту модуля */
     t->draw_unit = (lv_draw_unit_t *)u;
 
     lv_vg_lite_buffer_from_draw_buf(&u->target_buffer, layer->draw_buf);
 
-    /* VG-Lite will output premultiplied image, set the flag correspondingly. */
+    /* VG -Lite выведет предварительно умноженное изображение, установите соответствующий флаг. */
     lv_draw_buf_set_flag(layer->draw_buf, LV_IMAGE_FLAGS_PREMULTIPLIED);
 
     vg_lite_identity(&u->global_matrix);
@@ -138,7 +138,7 @@ static void draw_execute(lv_draw_vg_lite_unit_t * u)
 #endif
 
     if(vg_lite_query_feature(gcFEATURE_BIT_VG_SCISSOR)) {
-        /* Crop out extra pixels drawn due to scaling accuracy issues */
+        /* Обрезать лишние пиксели, нарисованные из-за проблем с точностью масштабирования. */
         lv_area_t scissor_area = layer->phy_clip_area;
         lv_area_move(&scissor_area, -layer->buf_area.x1, -layer->buf_area.y1);
         lv_vg_lite_set_scissor_area(u, &scissor_area);
@@ -194,21 +194,21 @@ static int32_t draw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 {
     lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)draw_unit;
 
-    /* Return immediately if it's busy with draw task. */
+    /* Немедленно вернитесь, если он занят задачей рисования. */
     if(u->task_act) {
         return 0;
     }
 
-    /* Try to get an ready to draw. */
+    /* Попробуйте получить готовый рисунок. */
     lv_draw_task_t * t = lv_draw_get_available_task(layer, NULL, VG_LITE_DRAW_UNIT_ID);
 
-    /* Return 0 is no selection, some tasks can be supported by other units. */
+    /* Возврат 0 означает отсутствие выбора, некоторые задачи могут поддерживаться другими устройствами. */
     if(!t || t->preferred_draw_unit_id != VG_LITE_DRAW_UNIT_ID) {
         lv_vg_lite_finish(u);
         return LV_DRAW_UNIT_IDLE;
     }
 
-    /* Return if target buffer format is not supported. */
+    /* Возврат, если формат целевого буфера не поддерживается. */
     if(!lv_vg_lite_is_dest_cf_supported(layer->color_format)) {
         return LV_DRAW_UNIT_IDLE;
     }
@@ -226,7 +226,7 @@ static int32_t draw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     u->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     u->task_act = NULL;
 
-    /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+    /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
     lv_draw_dispatch_request();
 
     return 1;
@@ -236,7 +236,7 @@ static int32_t draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
 {
     LV_UNUSED(draw_unit);
 
-    /* Return if target buffer format is not supported. */
+    /* Возврат, если формат целевого буфера не поддерживается. */
     const lv_draw_dsc_base_t * base_dsc = task->draw_dsc;
     if(!lv_vg_lite_is_dest_cf_supported(base_dsc->layer->color_format)) {
         return -1;
@@ -275,12 +275,12 @@ static int32_t draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
             break;
 
         default:
-            /*The draw unit is not able to draw this task. */
+            /*Блок рисования не может выполнить эту задачу. */
             return 0;
     }
 
     if(task->preference_score > 80) {
-        /* The draw unit is able to draw this task. */
+        /* Блок рисования способен нарисовать эту задачу. */
         task->preference_score = 80;
         task->preferred_draw_unit_id = VG_LITE_DRAW_UNIT_ID;
     }
@@ -311,9 +311,9 @@ static void draw_event_cb(lv_event_t * e)
         case LV_EVENT_CANCEL: {
 #if LV_USE_VECTOR_GRAPHIC
                 /**
-                 * Because VG-Lite will deinitialize the context (including the GPU independent heap)
-                 * before the GPU goes to sleep, it is necessary to first discard and dereference
-                 * all caches that depend on the independent heap.
+                 * Потому что VG -Lite деинициализирует контекст (включая независимую кучу GPU)
+                 * прежде чем GPU уйдет в сон, необходимо сначала отбросить и разыменовать
+                 * все кеши, зависящие от независимой кучи.
                  */
                 lv_draw_vg_lite_unit_t * unit = lv_event_get_current_target(e);
                 lv_cache_drop_all(lv_vg_lite_grad_ctx_get_cache(unit->grad_ctx), NULL);

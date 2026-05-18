@@ -171,22 +171,22 @@ lv_result_t lv_barcode_update(lv_obj_t * obj, const char * data)
         return LV_RESULT_INVALID;
     }
 
-    /* Temporarily disable invalidation to improve the efficiency of lv_canvas_set_px */
+    /* Временно отключите аннулирование, чтобы повысить эффективность lv_canvas_set_px. */
     lv_display_enable_invalidation(lv_obj_get_display(obj), false);
 
     lv_draw_buf_t * draw_buf = lv_canvas_get_draw_buf(obj);
     uint32_t stride = draw_buf->header.stride;
     const lv_color_t color = lv_color_hex(1);
 
-    /* Clear the canvas */
+    /* Очистить холст */
     lv_draw_buf_clear(draw_buf, NULL);
 
-    /* Set the palette */
+    /* Установить палитру */
     lv_canvas_set_palette(obj, 0, lv_color_to_32(barcode->light_color, LV_OPA_COVER));
     lv_canvas_set_palette(obj, 1, lv_color_to_32(barcode->dark_color, LV_OPA_COVER));
 
     for(int32_t x = 0; x < barcode_w; x++) {
-        /*skip empty data*/
+        /*пропускать пустые данные*/
         if(out_buf[x] == 0) {
             continue;
         }
@@ -208,9 +208,9 @@ lv_result_t lv_barcode_update(lv_obj_t * obj, const char * data)
         }
     }
 
-    /* Copy pixels by row */
+    /* Копировать пиксели по строкам */
     if(!barcode->tiled && barcode->direction == LV_DIR_HOR && buf_h > 1) {
-        /* Skip the first row */
+        /* Пропустить первую строку */
         int32_t h = buf_h - 1;
         const uint8_t * src = lv_draw_buf_goto_xy(draw_buf, 0, 0);
         uint8_t * dest = lv_draw_buf_goto_xy(draw_buf, 0, 1);
@@ -220,7 +220,7 @@ lv_result_t lv_barcode_update(lv_obj_t * obj, const char * data)
         }
     }
 
-    /* invalidate the canvas to refresh it */
+    /* сделать холст недействительным, чтобы обновить его */
     lv_display_enable_invalidation(lv_obj_get_display(obj), true);
     lv_obj_invalidate(obj);
 
@@ -286,7 +286,7 @@ static void lv_barcode_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj
     if(draw_buf == NULL) return;
     lv_image_cache_drop(draw_buf);
 
-    /*@fixme destroy buffer in cache free_cb.*/
+    /*@fixme уничтожить буфер в кеше free_cb .*/
     lv_draw_buf_destroy(draw_buf);
 }
 

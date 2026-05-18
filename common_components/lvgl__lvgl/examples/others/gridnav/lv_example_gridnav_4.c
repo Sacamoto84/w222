@@ -5,17 +5,17 @@ static void event_handler(lv_event_t * e)
 {
     lv_obj_t * obj = lv_event_get_target_obj(e);
     lv_obj_t * list = lv_obj_get_parent(obj);
-    LV_UNUSED(list); /*If logging is disabled*/
+    LV_UNUSED(list); /*Если ведение журнала отключено*/
     LV_LOG_USER("Clicked: %s", lv_list_get_button_text(list, obj));
 }
 
 /**
- * Simple navigation on a list widget
+ * Простая навигация по виджету списка
  */
 void lv_example_gridnav_4(void)
 {
-    /*It's assumed that the default group is set and
-     *there is a keyboard indev*/
+    /*Предполагается, что группа по умолчанию установлена и
+     *есть разработка клавиатуры*/
 
     lv_obj_t * list = lv_list_create(lv_screen_active());
     lv_gridnav_add(list, LV_GRIDNAV_CTRL_ROLLOVER);
@@ -26,7 +26,7 @@ void lv_example_gridnav_4(void)
     for(i = 0; i < 20; i++) {
         char buf[32];
 
-        /*Add some separators too, they are not focusable by gridnav*/
+        /*Добавьте также несколько разделителей, они не фокусируются с помощью Gridnav.*/
         if((i % 5) == 0) {
             lv_snprintf(buf, sizeof(buf), "Section %d", i / 5 + 1);
             lv_list_add_text(list, buf);
@@ -35,7 +35,7 @@ void lv_example_gridnav_4(void)
         lv_snprintf(buf, sizeof(buf), "File %d", i + 1);
         lv_obj_t * item = lv_list_add_button(list, LV_SYMBOL_FILE, buf);
         lv_obj_add_event_cb(item, event_handler, LV_EVENT_CLICKED, NULL);
-        lv_group_remove_obj(item);  /*The default group adds it automatically*/
+        lv_group_remove_obj(item);  /*Группа по умолчанию добавляет его автоматически*/
     }
 
     lv_obj_t * btn = lv_button_create(lv_screen_active());

@@ -2,21 +2,21 @@
 #if LV_USE_TILEVIEW && LV_BUILD_EXAMPLES
 
 /**
- * Create a 2x2 tile view and allow scrolling only in an "L" shape.
- * Demonstrate scroll chaining with a long list that
- * scrolls the tile view when it can't be scrolled further.
+ * Создайте мозаичный вид 2x2 и разрешите прокрутку только в форме буквы «L».
+ * Продемонстрируйте цепочку прокрутки с помощью длинного списка, который
+ * прокручивает вид плитки, когда его невозможно прокрутить дальше.
  */
 void lv_example_tileview_1(void)
 {
     lv_obj_t * tv = lv_tileview_create(lv_screen_active());
 
-    /*Tile1: just a label*/
+    /*Tile1: просто ярлык*/
     lv_obj_t * tile1 = lv_tileview_add_tile(tv, 0, 0, LV_DIR_BOTTOM);
     lv_obj_t * label = lv_label_create(tile1);
     lv_label_set_text(label, "Scroll down");
     lv_obj_center(label);
 
-    /*Tile2: a button*/
+    /*Tile2: кнопка*/
     lv_obj_t * tile2 = lv_tileview_add_tile(tv, 0, 1, (lv_dir_t)(LV_DIR_TOP | LV_DIR_RIGHT));
 
     lv_obj_t * btn = lv_button_create(tile2);
@@ -27,7 +27,7 @@ void lv_example_tileview_1(void)
     lv_obj_set_size(btn, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_center(btn);
 
-    /*Tile3: a list*/
+    /*Tile3: список*/
     lv_obj_t * tile3 = lv_tileview_add_tile(tv, 1, 1, LV_DIR_LEFT);
     lv_obj_t * list = lv_list_create(tile3);
     lv_obj_set_size(list, LV_PCT(100), LV_PCT(100));

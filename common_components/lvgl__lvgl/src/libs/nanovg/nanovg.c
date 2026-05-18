@@ -1,18 +1,18 @@
 //
 // Copyright (c) 2013 Mikko Mononen memon@inside.org
 //
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
+// Данное программное обеспечение предоставляется «как есть», без каких-либо явных или подразумеваемых
+// гарантия.  Ни при каких обстоятельствах авторы не несут ответственности за какой-либо ущерб.
+// возникшие в результате использования данного программного обеспечения.
+// Разрешение предоставляется каждому на использование этого программного обеспечения для любых целей,
+// включая коммерческие приложения, а также изменять его и распространять
+// свободно, с соблюдением следующих ограничений:
 // 1. The origin of this software must not be misrepresented; you must not
-//    claim that you wrote the original software. If you use this software
-//    in a product, an acknowledgment in the product documentation would be
-//    appreciated but is not required.
+//    утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
+//    в продукте подтверждение в документации по продукту будет
+//    приветствуется, но не является обязательным.
 // 2. Altered source versions must be plainly marked as such, and must not be
-//    misrepresented as being the original software.
+//    ошибочно представлено как оригинальное программное обеспечение.
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
@@ -28,10 +28,10 @@
 #include "nanovg.h"
 
 #ifdef _MSC_VER
-    #pragma warning(disable: 4100)  // unreferenced formal parameter
-    #pragma warning(disable: 4127)  // conditional expression is constant
-    #pragma warning(disable: 4204)  // nonstandard extension used : non-constant aggregate initializer
-    #pragma warning(disable: 4706)  // assignment within conditional expression
+    #pragma warning(disable: 4100)  // формальный параметр без ссылки
+    #pragma warning(disable: 4127)  // условное выражение является константой
+    #pragma warning(disable: 4204)  // используется нестандартное расширение: непостоянный агрегатный инициализатор
+    #pragma warning(disable: 4706)  // присваивание внутри условного выражения
 #endif
 
 #define NVG_INIT_FONTIMAGE_SIZE  512
@@ -47,13 +47,13 @@
     #define NVG_MAX_STATES 32
 #endif
 
-#define NVG_KAPPA90 0.5522847493f   // Length proportional to radius of a cubic bezier handle for 90deg arcs.
+#define NVG_KAPPA90 0.5522847493f   // Длина пропорциональна радиусу кубической ручки Безье для дуг 90 градусов.
 
 #define NVG_COUNTOF(arr) (sizeof(arr) / sizeof(0[arr]))
 
 /**
- * This value determines the maximum permissible pixel error when a Bézier curve is subdivided into line segments;
- * a smaller value results in smoother lines but also more vertices.
+ * Это значение определяет максимально допустимую ошибку пикселей при разделении кривой Безье на сегменты линий;
+ * меньшее значение приводит к более плавным линиям, но и к большему количеству вершин.
  */
 #define NVG_TESS_TOL_FACTOR 0.5f
 
@@ -386,7 +386,7 @@ void nvgDeleteInternal(NVGcontext * ctx)
 
 void nvgBeginFrame(NVGcontext * ctx, float windowWidth, float windowHeight, float devicePixelRatio)
 {
-    /*  printf("Tris: draws:%d  fill:%d  stroke:%d  text:%d  TOT:%d\n",
+    /*  printf("Трис: рисует:%d заливка:%d обводка:%d текст:%d TOT :%d\n",
             ctx->drawCallCount, ctx->fillTriCount, ctx->strokeTriCount, ctx->textTriCount,
             ctx->fillTriCount+ctx->strokeTriCount+ctx->textTriCount);*/
 
@@ -416,7 +416,7 @@ void nvgEndFrame(NVGcontext * ctx)
         int fontImage = ctx->fontImages[ctx->fontImageIdx];
         ctx->fontImages[ctx->fontImageIdx] = 0;
         int i, j, iw, ih;
-        // delete images that smaller than current one
+        // удалить изображения, которые меньше текущего
         if(fontImage == 0)
             return;
         nvgImageSize(ctx, fontImage, &iw, &ih);
@@ -432,7 +432,7 @@ void nvgEndFrame(NVGcontext * ctx)
                     ctx->fontImages[j++] = image;
             }
         }
-        // make current font image to first
+        // сделать текущее изображение шрифта первым
         ctx->fontImages[j] = ctx->fontImages[0];
         ctx->fontImages[0] = fontImage;
         ctx->fontImageIdx = 0;
@@ -452,7 +452,7 @@ NVGcolor nvgRGBf(float r, float g, float b)
 NVGcolor nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
     NVGcolor color;
-    // Use longer initialization to suppress warning.
+    // Используйте более длительную инициализацию, чтобы подавить предупреждение.
     color.ch.r = r / 255.0f;
     color.ch.g = g / 255.0f;
     color.ch.b = b / 255.0f;
@@ -463,7 +463,7 @@ NVGcolor nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned cha
 NVGcolor nvgRGBAf(float r, float g, float b, float a)
 {
     NVGcolor color;
-    // Use longer initialization to suppress warning.
+    // Используйте более длительную инициализацию, чтобы подавить предупреждение.
     color.ch.r = r;
     color.ch.g = g;
     color.ch.b = b;
@@ -659,7 +659,7 @@ static void nvg__setPaintColor(NVGpaint * p, NVGcolor color)
 }
 
 
-// State handling
+// Обработка состояния
 void nvgSave(NVGcontext * ctx)
 {
     if(ctx->nstates >= NVG_MAX_STATES)
@@ -703,7 +703,7 @@ void nvgReset(NVGcontext * ctx)
     state->fontId = 0;
 }
 
-// State setting
+// Настройка штата
 void nvgShapeAntiAlias(NVGcontext * ctx, int enabled)
 {
     NVGstate * state = nvg__getState(ctx);
@@ -858,7 +858,7 @@ NVGpaint nvgLinearGradient(NVGcontext * ctx,
     NVG_NOTUSED(ctx);
     lv_memzero(&p, sizeof(p));
 
-    // Calculate transform aligned to the line
+    // Вычислить преобразование, выровненное по линии
     dx = ex - sx;
     dy = ey - sy;
     d = sqrtf(dx * dx + dy * dy);
@@ -966,7 +966,7 @@ NVGpaint nvgImagePattern(NVGcontext * ctx,
     return p;
 }
 
-// Scissoring
+// ножницы
 void nvgScissor(NVGcontext * ctx, float x, float y, float w, float h)
 {
     NVGstate * state = nvg__getState(ctx);
@@ -1004,14 +1004,14 @@ void nvgIntersectScissor(NVGcontext * ctx, float x, float y, float w, float h)
     float rect[4];
     float ex, ey, tex, tey;
 
-    // If no previous scissor has been set, set the scissor as current scissor.
+    // Если предыдущие ножницы не были установлены, установите ножницы в качестве текущих.
     if(state->scissor.extent[0] < 0) {
         nvgScissor(ctx, x, y, w, h);
         return;
     }
 
-    // Transform the current scissor rect into current transform space.
-    // If there is difference in rotation, this will be approximation.
+    // Преобразуйте текущий ножничный прямоугольник в текущее пространство преобразования.
+    // Если есть разница во вращении, это будет приближение.
     lv_memcpy(pxform, state->scissor.xform, sizeof(float) * 6);
     ex = state->scissor.extent[0];
     ey = state->scissor.extent[1];
@@ -1020,7 +1020,7 @@ void nvgIntersectScissor(NVGcontext * ctx, float x, float y, float w, float h)
     tex = ex * nvg__absf(pxform[0]) + ey * nvg__absf(pxform[2]);
     tey = ex * nvg__absf(pxform[1]) + ey * nvg__absf(pxform[3]);
 
-    // Intersect rects.
+    // Пересекающиеся прямоугольники.
     nvg__isectRects(rect, pxform[4] - tex, pxform[5] - tey, tex * 2, tey * 2, x, y, w, h);
 
     nvgScissor(ctx, rect[0], rect[1], rect[2], rect[3]);
@@ -1034,7 +1034,7 @@ void nvgResetScissor(NVGcontext * ctx)
     state->scissor.extent[1] = -1.0f;
 }
 
-// Global composite operation.
+// Глобальная композитная операция.
 void nvgGlobalCompositeOperation(NVGcontext * ctx, int op)
 {
     NVGstate * state = nvg__getState(ctx);
@@ -1101,7 +1101,7 @@ static void nvg__appendCommands(NVGcontext * ctx, float * vals, int nvals)
         ctx->commandy = vals[nvals - 1];
     }
 
-    // transform commands
+    // команды преобразования
     i = 0;
     while(i < nvals) {
         int cmd = (int)vals[i];
@@ -1234,7 +1234,7 @@ static NVGvertex * nvg__allocTempVerts(NVGcontext * ctx, int nverts)
 {
     if(nverts > ctx->cache->cverts) {
         NVGvertex * verts;
-        int cverts = (nverts + 0xff) & ~0xff; // Round up to prevent allocations when things change just slightly.
+        int cverts = (nverts + 0xff) & ~0xff; // Округлите в большую сторону, чтобы предотвратить распределение, когда что-то меняется незначительно.
         verts = (NVGvertex *)lv_realloc(ctx->cache->verts, sizeof(NVGvertex) * cverts);
         if(verts == NULL) return NULL;
         ctx->cache->verts = verts;
@@ -1317,9 +1317,9 @@ static void nvg__tesselateBezier(NVGcontext * ctx,
         return;
     }
 
-    /*  if (nvg__absf(x1+x3-x2-x2) + nvg__absf(y1+y3-y2-y2) + nvg__absf(x2+x4-x3-x3) + nvg__absf(y2+y4-y3-y3) < ctx->tessTol) {
-            nvg__addPoint(ctx, x4, y4, type);
-            return;
+    /*  if ( nvg__absf (x1+x3-x2-x2) + nvg__absf (y1+y3-y2-y2) + nvg__absf (x2+x4-x3-x3) + nvg__absf (y2+y4-y3-y3) < ctx->tessTol) {
+            nvg__addPoint (ctx, x4, y4, тип);
+            возврат;
         }*/
 
     x234 = (x23 + x34) * 0.5f;
@@ -1334,7 +1334,7 @@ static void nvg__tesselateBezier(NVGcontext * ctx,
 static void nvg__flattenPaths(NVGcontext * ctx)
 {
     NVGpathCache * cache = ctx->cache;
-    //  NVGstate* state = nvg__getState(ctx);
+    //  Состояние NVGstate* = nvg__getState (ctx);
     NVGpoint * last;
     NVGpoint * p0;
     NVGpoint * p1;
@@ -1349,7 +1349,7 @@ static void nvg__flattenPaths(NVGcontext * ctx)
     if(cache->npaths > 0)
         return;
 
-    // Flatten
+    // Сгладить
     i = 0;
     while(i < ctx->ncommands) {
         int cmd = (int)ctx->commands[i];
@@ -1391,12 +1391,12 @@ static void nvg__flattenPaths(NVGcontext * ctx)
     cache->bounds[0] = cache->bounds[1] = 1e6f;
     cache->bounds[2] = cache->bounds[3] = -1e6f;
 
-    // Calculate the direction and length of line segments.
+    // Вычислите направление и длину отрезков прямой.
     for(j = 0; j < cache->npaths; j++) {
         path = &cache->paths[j];
         pts = &cache->points[path->first];
 
-        // If the first and last points are the same, remove the last, mark as closed path.
+        // Если первая и последняя точки совпадают, удалите последнюю и пометьте ее как закрытый путь.
         p0 = &pts[path->count - 1];
         p1 = &pts[0];
         if(nvg__ptEquals(p0->x, p0->y, p1->x, p1->y, ctx->distTol)) {
@@ -1405,7 +1405,7 @@ static void nvg__flattenPaths(NVGcontext * ctx)
             path->closed = 1;
         }
 
-        // Enforce winding.
+        // Усилить намотку.
         if(path->count > 2) {
             area = nvg__polyArea(pts, path->count);
             if(path->winding == NVG_CCW && area < 0.0f)
@@ -1415,16 +1415,16 @@ static void nvg__flattenPaths(NVGcontext * ctx)
         }
 
         for(i = 0; i < path->count; i++) {
-            // Calculate segment direction and length
+            // Вычислить направление и длину сегмента
             p0->dx = p1->x - p0->x;
             p0->dy = p1->y - p0->y;
             p0->len = nvg__normalize(&p0->dx, &p0->dy);
-            // Update bounds
+            // Обновить границы
             cache->bounds[0] = nvg__minf(cache->bounds[0], p0->x);
             cache->bounds[1] = nvg__minf(cache->bounds[1], p0->y);
             cache->bounds[2] = nvg__maxf(cache->bounds[2], p0->x);
             cache->bounds[3] = nvg__maxf(cache->bounds[3], p0->y);
-            // Advance
+            // заранее
             p0 = p1++;
         }
     }
@@ -1729,7 +1729,7 @@ static void nvg__calculateJoins(NVGcontext * ctx, float w, int lineJoin, float m
 
     if(w > 0.0f) iw = 1.0f / w;
 
-    // Calculate which joins needs extra vertices to append, and gather vertex count.
+    // Вычислите, для каких соединений требуются дополнительные вершины, и соберите количество вершин.
     for(i = 0; i < cache->npaths; i++) {
         NVGpath * path = &cache->paths[i];
         NVGpoint * pts = &cache->points[path->first];
@@ -1745,7 +1745,7 @@ static void nvg__calculateJoins(NVGcontext * ctx, float w, int lineJoin, float m
             dly0 = -p0->dx;
             dlx1 = p1->dy;
             dly1 = -p1->dx;
-            // Calculate extrusions
+            // Рассчитать экструзии
             p1->dmx = (dlx0 + dlx1) * 0.5f;
             p1->dmy = (dly0 + dly1) * 0.5f;
             dmr2 = p1->dmx * p1->dmx + p1->dmy * p1->dmy;
@@ -1758,22 +1758,22 @@ static void nvg__calculateJoins(NVGcontext * ctx, float w, int lineJoin, float m
                 p1->dmy *= scale;
             }
 
-            // Clear flags, but keep the corner.
+            // Уберите флажки, но держите угол.
             p1->flags = (p1->flags & NVG_PT_CORNER) ? NVG_PT_CORNER : 0;
 
-            // Keep track of left turns.
+            // Следите за поворотами налево.
             cross = p1->dx * p0->dy - p0->dx * p1->dy;
             if(cross > 0.0f) {
                 nleft++;
                 p1->flags |= NVG_PT_LEFT;
             }
 
-            // Calculate if we should use bevel or miter for inner join.
+            // Рассчитайте, следует ли нам использовать фаску или угол для внутреннего соединения.
             limit = nvg__maxf(1.01f, nvg__minf(p0->len, p1->len) * iw);
             if((dmr2 * limit * limit) < 1.0f)
                 p1->flags |= NVG_PR_INNERBEVEL;
 
-            // Check to see if the corner needs to be beveled.
+            // Проверьте, нужно ли скосить угол.
             if(p1->flags & NVG_PT_CORNER) {
                 if((dmr2 * miterLimit * miterLimit) < 1.0f || lineJoin == NVG_BEVEL || lineJoin == NVG_ROUND) {
                     p1->flags |= NVG_PT_BEVEL;
@@ -1797,13 +1797,13 @@ static int nvg__expandStroke(NVGcontext * ctx, float w, float fringe, int lineCa
     NVGvertex * verts;
     NVGvertex * dst;
     int cverts, i, j;
-    float aa = fringe;//ctx->fringeWidth;
+    float aa = fringe;//ctx-> fringeWidth;
     float u0 = 0.0f, u1 = 1.0f;
-    int ncap = nvg__curveDivs(w, NVG_PI, ctx->tessTol); // Calculate divisions per half circle.
+    int ncap = nvg__curveDivs(w, NVG_PI, ctx->tessTol); // Рассчитаем деления на полукруг.
 
     w += aa * 0.5f;
 
-    // Disable the gradient used for antialiasing when antialiasing is not used.
+    // Отключите градиент, используемый для сглаживания, если сглаживание не используется.
     if(aa == 0.0f) {
         u0 = 0.5f;
         u1 = 0.5f;
@@ -1811,17 +1811,17 @@ static int nvg__expandStroke(NVGcontext * ctx, float w, float fringe, int lineCa
 
     nvg__calculateJoins(ctx, w, lineJoin, miterLimit);
 
-    // Calculate max vertex usage.
+    // Рассчитайте максимальное использование вершин.
     cverts = 0;
     for(i = 0; i < cache->npaths; i++) {
         NVGpath * path = &cache->paths[i];
         int loop = (path->closed == 0) ? 0 : 1;
         if(lineJoin == NVG_ROUND)
-            cverts += (path->count + path->nbevel * (ncap + 2) + 1) * 2; // plus one for loop
+            cverts += (path->count + path->nbevel * (ncap + 2) + 1) * 2; // плюс один для цикла
         else
-            cverts += (path->count + path->nbevel * 5 + 1) * 2; // plus one for loop
+            cverts += (path->count + path->nbevel * 5 + 1) * 2; // плюс один для цикла
         if(loop == 0) {
-            // space for caps
+            // место для шапок
             if(lineCap == NVG_ROUND) {
                 cverts += (ncap * 2 + 2) * 2;
             }
@@ -1845,20 +1845,20 @@ static int nvg__expandStroke(NVGcontext * ctx, float w, float fringe, int lineCa
         path->fill = 0;
         path->nfill = 0;
 
-        // Calculate fringe or stroke
+        // Рассчитать бахрому или штрих
         loop = (path->closed == 0) ? 0 : 1;
         dst = verts;
         path->stroke = dst;
 
         if(loop) {
-            // Looping
+            // Зацикливание
             p0 = &pts[path->count - 1];
             p1 = &pts[0];
             s = 0;
             e = path->count;
         }
         else {
-            // Add cap
+            // Добавить ограничение
             p0 = &pts[0];
             p1 = &pts[1];
             s = 1;
@@ -1866,7 +1866,7 @@ static int nvg__expandStroke(NVGcontext * ctx, float w, float fringe, int lineCa
         }
 
         if(loop == 0) {
-            // Add cap
+            // Добавить ограничение
             dx = p1->x - p0->x;
             dy = p1->y - p0->y;
             nvg__normalize(&dx, &dy);
@@ -1897,14 +1897,14 @@ static int nvg__expandStroke(NVGcontext * ctx, float w, float fringe, int lineCa
         }
 
         if(loop) {
-            // Loop it
+            // Зациклить это
             nvg__vset(dst, verts[0].x, verts[0].y, u0, 1);
             dst++;
             nvg__vset(dst, verts[1].x, verts[1].y, u1, 1);
             dst++;
         }
         else {
-            // Add cap
+            // Добавить ограничение
             dx = p1->x - p0->x;
             dy = p1->y - p0->y;
             nvg__normalize(&dx, &dy);
@@ -1935,13 +1935,13 @@ static int nvg__expandFill(NVGcontext * ctx, float w, int lineJoin, float miterL
 
     nvg__calculateJoins(ctx, w, lineJoin, miterLimit);
 
-    // Calculate max vertex usage.
+    // Рассчитайте максимальное использование вершин.
     cverts = 0;
     for(i = 0; i < cache->npaths; i++) {
         NVGpath * path = &cache->paths[i];
         cverts += path->count + path->nbevel + 1;
         if(fringe)
-            cverts += (path->count + path->nbevel * 5 + 1) * 2; // plus one for loop
+            cverts += (path->count + path->nbevel * 5 + 1) * 2; // плюс один для цикла
     }
 
     verts = nvg__allocTempVerts(ctx, cverts);
@@ -1957,13 +1957,13 @@ static int nvg__expandFill(NVGcontext * ctx, float w, int lineJoin, float miterL
         float rw, lw, woff;
         float ru, lu;
 
-        // Calculate shape vertices.
+        // Вычисление вершин фигуры.
         woff = 0.5f * aa;
         dst = verts;
         path->fill = dst;
 
         if(fringe) {
-            // Looping
+            // Зацикливание
             p0 = &pts[path->count - 1];
             p1 = &pts[0];
             for(j = 0; j < path->count; ++j) {
@@ -2006,7 +2006,7 @@ static int nvg__expandFill(NVGcontext * ctx, float w, int lineJoin, float miterL
         path->nfill = (int)(dst - verts);
         verts = dst;
 
-        // Calculate fringe
+        // Рассчитать бахрому
         if(fringe) {
             lw = w + woff;
             rw = w - woff;
@@ -2015,14 +2015,14 @@ static int nvg__expandFill(NVGcontext * ctx, float w, int lineJoin, float miterL
             dst = verts;
             path->stroke = dst;
 
-            // Create only half a fringe for convex shapes so that
-            // the shape can be rendered without stenciling.
+            // Для выпуклых форм создайте только половину бахромы, чтобы
+            // форму можно визуализировать без трафарета.
             if(convex) {
-                lw = woff;  // This should generate the same vertex as fill inset above.
-                lu = 0.5f;  // Set outline fade at middle.
+                lw = woff;  // Это должно создать ту же вершину, что и заливка-вставка выше.
+                lu = 0.5f;  // Установите затухание контура посередине.
             }
 
-            // Looping
+            // Зацикливание
             p0 = &pts[path->count - 1];
             p1 = &pts[0];
 
@@ -2039,7 +2039,7 @@ static int nvg__expandFill(NVGcontext * ctx, float w, int lineJoin, float miterL
                 p0 = p1++;
             }
 
-            // Loop it
+            // Зациклить это
             nvg__vset(dst, verts[0].x, verts[0].y, lu, 1);
             dst++;
             nvg__vset(dst, verts[1].x, verts[1].y, ru, 1);
@@ -2058,7 +2058,7 @@ static int nvg__expandFill(NVGcontext * ctx, float w, int lineJoin, float miterL
 }
 
 
-// Draw
+// Ничья
 void nvgBeginPath(NVGcontext * ctx)
 {
     ctx->ncommands = 0;
@@ -2106,7 +2106,7 @@ void nvgArcTo(NVGcontext * ctx, float x1, float y1, float x2, float y2, float ra
         return;
     }
 
-    // Handle degenerate cases.
+    // Работайте с вырожденными случаями.
     if(nvg__ptEquals(x0, y0, x1, y1, ctx->distTol) ||
        nvg__ptEquals(x1, y1, x2, y2, ctx->distTol) ||
        nvg__distPtSeg(x1, y1, x0, y0, x2, y2) < ctx->distTol * ctx->distTol ||
@@ -2115,7 +2115,7 @@ void nvgArcTo(NVGcontext * ctx, float x1, float y1, float x2, float y2, float ra
         return;
     }
 
-    // Calculate tangential circle to lines (x0,y0)-(x1,y1) and (x1,y1)-(x2,y2).
+    // Вычислите касательную окружность к линиям (x0,y0)-(x1,y1) и (x1,y1)-(x2,y2).
     dx0 = x0 - x1;
     dy0 = y0 - y1;
     dx1 = x2 - x1;
@@ -2125,7 +2125,7 @@ void nvgArcTo(NVGcontext * ctx, float x1, float y1, float x2, float y2, float ra
     a = nvg__acosf(dx0 * dx1 + dy0 * dy1);
     d = radius / nvg__tanf(a / 2.0f);
 
-    //  printf("a=%f° d=%f\n", a/NVG_PI*180.0f, d);
+    //  printf("a=%f° d=%f\n", a/ NVG_PI *180.0f, d);
 
     if(d > 10000.0f) {
         nvgLineTo(ctx, x1, y1);
@@ -2138,7 +2138,7 @@ void nvgArcTo(NVGcontext * ctx, float x1, float y1, float x2, float y2, float ra
         a0 = nvg__atan2f(dx0, -dy0);
         a1 = nvg__atan2f(-dx1, dy1);
         dir = NVG_CW;
-        //      printf("CW c=(%f, %f) a0=%f° a1=%f°\n", cx, cy, a0/NVG_PI*180.0f, a1/NVG_PI*180.0f);
+        //      printf(" CW c=(%f, %f) a0=%f° a1=%f°\n", cx, cy, a0/ NVG_PI *180.0f, a1/ NVG_PI *180.0f);
     }
     else {
         cx = x1 + dx0 * d + -dy0 * radius;
@@ -2146,7 +2146,7 @@ void nvgArcTo(NVGcontext * ctx, float x1, float y1, float x2, float y2, float ra
         a0 = nvg__atan2f(-dx0, dy0);
         a1 = nvg__atan2f(dx1, -dy1);
         dir = NVG_CCW;
-        //      printf("CCW c=(%f, %f) a0=%f° a1=%f°\n", cx, cy, a0/NVG_PI*180.0f, a1/NVG_PI*180.0f);
+        //      printf(" CCW c=(%f, %f) a0=%f° a1=%f°\n", cx, cy, a0/ NVG_PI *180.0f, a1/ NVG_PI *180.0f);
     }
 
     nvgArc(ctx, cx, cy, radius, a0, a1, dir);
@@ -2173,7 +2173,7 @@ void nvgArc(NVGcontext * ctx, float cx, float cy, float r, float a0, float a1, i
     int i, ndivs, nvals;
     int move = ctx->ncommands > 0 ? NVG_LINETO : NVG_MOVETO;
 
-    // Clamp angles
+    // Зажимные уголки
     da = a1 - a0;
     if(dir == NVG_CW) {
         if(nvg__absf(da) >= NVG_PI * 2) {
@@ -2192,7 +2192,7 @@ void nvgArc(NVGcontext * ctx, float cx, float cy, float r, float a0, float a1, i
         }
     }
 
-    // Split arc into max 90 degree segments.
+    // Разделите дугу на сегменты по 90 градусов.
     ndivs = nvg__maxi(1, nvg__mini((int)(nvg__absf(da) / (NVG_PI * 0.5f) + 0.5f), 5));
     hda = (da / (float)ndivs) / 2.0f;
     kappa = nvg__absf(4.0f / 3.0f * (1.0f - nvg__cosf(hda)) / nvg__sinf(hda));
@@ -2333,14 +2333,14 @@ void nvgFill(NVGcontext * ctx)
     else
         nvg__expandFill(ctx, 0.0f, NVG_MITER, 2.4f);
 
-    // Apply global alpha
+    // Применить глобальную альфу
     fillPaint.innerColor.ch.a *= state->alpha;
     fillPaint.outerColor.ch.a *= state->alpha;
 
     ctx->params.renderFill(ctx->params.userPtr, &fillPaint, state->compositeOperation, &state->scissor, ctx->fringeWidth,
                            ctx->cache->bounds, ctx->cache->paths, ctx->cache->npaths);
 
-    // Count triangles
+    // Посчитайте треугольники
     for(i = 0; i < ctx->cache->npaths; i++) {
         path = &ctx->cache->paths[i];
         ctx->fillTriCount += path->nfill - 2;
@@ -2360,15 +2360,15 @@ void nvgStroke(NVGcontext * ctx)
 
 
     if(strokeWidth < ctx->fringeWidth) {
-        // If the stroke width is less than pixel size, use alpha to emulate coverage.
-        // Since coverage is area, scale by alpha*alpha.
+        // Если ширина обводки меньше размера пикселя, используйте альфу для имитации покрытия.
+        // Поскольку покрытие представляет собой площадь, масштабируйте его по шкале альфа*альфа.
         float alpha = nvg__clampf(strokeWidth / ctx->fringeWidth, 0.0f, 1.0f);
         strokePaint.innerColor.ch.a *= alpha * alpha;
         strokePaint.outerColor.ch.a *= alpha * alpha;
         strokeWidth = ctx->fringeWidth;
     }
 
-    // Apply global alpha
+    // Применить глобальную альфу
     strokePaint.innerColor.ch.a *= state->alpha;
     strokePaint.outerColor.ch.a *= state->alpha;
 
@@ -2383,7 +2383,7 @@ void nvgStroke(NVGcontext * ctx)
                              ctx->fringeWidth,
                              strokeWidth, ctx->cache->paths, ctx->cache->npaths);
 
-    // Count triangles
+    // Посчитайте треугольники
     for(i = 0; i < ctx->cache->npaths; i++) {
         path = &ctx->cache->paths[i];
         ctx->strokeTriCount += path->nstroke - 2;
@@ -2391,7 +2391,7 @@ void nvgStroke(NVGcontext * ctx)
     }
 }
 
-// Add fonts
+// Добавить шрифты
 int nvgCreateFont(NVGcontext * ctx, const char * name, const char * filename)
 {
     (void)ctx;
@@ -2467,7 +2467,7 @@ void nvgResetFallbackFonts(NVGcontext * ctx, const char * baseFont)
     (void)baseFont;
 }
 
-// State setting
+// Настройка штата
 void nvgFontSize(NVGcontext * ctx, float size)
 {
     NVGstate * state = nvg__getState(ctx);

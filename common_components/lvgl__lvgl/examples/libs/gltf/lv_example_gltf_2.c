@@ -9,7 +9,7 @@ static size_t current_camera;
 static uint32_t current_speed = LV_GLTF_ANIM_SPEED_HALF;
 
 /**
- * Timer callback that updates the current camera and the current animation speed
+ * Обратный вызов таймера, который обновляет текущую камеру и текущую скорость анимации.
  */
 static void timer_cb(lv_timer_t * timer)
 {
@@ -27,7 +27,7 @@ static void timer_cb(lv_timer_t * timer)
 }
 
 /**
- * Open a GLTF from a file and loop through the model cameras and multiple animation speeds
+ * Откройте GLTF из файла и просмотрите камеры модели и несколько скоростей анимации.
  */
 void lv_example_gltf_2(void)
 {
@@ -49,7 +49,7 @@ void lv_example_gltf_2(void)
 void lv_example_gltf_2(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "glTF web support is coming soon");

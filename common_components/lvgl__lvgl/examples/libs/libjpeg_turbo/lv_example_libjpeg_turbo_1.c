@@ -4,15 +4,15 @@
 #if LV_USE_LIBJPEG_TURBO
 
 /**
- * Load a JPG image
+ * Загрузите изображение JPG
  */
 void lv_example_libjpeg_turbo_1(void)
 {
     lv_obj_t * wp;
 
     wp = lv_image_create(lv_screen_active());
-    /* Assuming a File system is attached to letter 'A'
-     * E.g. set LV_USE_FS_STDIO 'A' in lv_conf.h */
+    /* Предполагая, что файловая система прикреплена к букве «А»,
+     * например, установитеLV_USE_FS_STDIO'A' в lv_conf.h */
     lv_image_set_src(wp, "A:lvgl/examples/libs/libjpeg_turbo/flower.jpg");
     lv_obj_center(wp);
 }

@@ -27,7 +27,7 @@
  *  STATIC PROTOTYPES
  **********************/
 
-/* Traverse the list to delete the objects marked for deletion */
+/* Пройдите по списку, чтобы удалить объекты, отмеченные для удаления. */
 static void cleanup_event_list(lv_event_list_t * list);
 static void cleanup_event_list_core(lv_array_t * array);
 
@@ -69,9 +69,9 @@ void lv_event_desc_set_external_data(lv_event_dsc_t * dsc, void * data, void (* 
 
 void lv_event_push(lv_event_t * e)
 {
-    /*Build a simple linked list from the objects used in the events
-     *It's important to know if this object was deleted by a nested event
-     *called from this `event_cb`.*/
+    /*Создайте простой связанный список из объектов, используемых в событиях.
+     *Важно знать, был ли этот объект удален вложенным событием.
+     *возникает из этого`event_cb`.*/
     e->prev = event_head;
     event_head = e;
 
@@ -110,13 +110,13 @@ lv_result_t lv_event_send(lv_event_list_t * list, lv_event_t * e, bool preproces
     if(list == NULL) return LV_RESULT_OK;
     if(e->deleted) return LV_RESULT_INVALID;
 
-    /* When obj is deleted in its own event, it will cause the `list->array` header to be released,
-     * but the content still exists, which leads to memory leakage.
-     * Therefore, back up the header in advance,
-     * which can strive to release the memory and prevent used-after-free. */
+    /* Когда объект удаляется в отдельном событии, это приводит к освобождению заголовка`list->array`,
+     * но контент все еще существует, что приводит к утечке памяти.
+     * Поэтому заранее сделайте резервную копию шапки,
+     * который может стремиться освободить память и предотвратить использование после освобождения. */
     lv_array_t back_array_head = list->array;
 
-    /* Dealing with the problem of nested event deletion event */
+    /* Решение проблемы удаления вложенного события */
     const bool is_traversing = list->is_traversing;
     list->is_traversing = true;
 
@@ -137,7 +137,7 @@ lv_result_t lv_event_send(lv_event_list_t * list, lv_event_t * e, bool preproces
             dsc->cb(e);
             if(e->stop_processing) break;
 
-            /*Stop if the object is deleted*/
+            /*Остановиться, если объект удален*/
             if(e->deleted) {
                 res = LV_RESULT_INVALID;
                 break;
@@ -171,7 +171,7 @@ lv_event_dsc_t * lv_event_add(lv_event_list_t * list, lv_event_cb_t cb, lv_event
 #endif
 
     if(event_array_size(list) == 0) {
-        /*event list hasn't been initialized.*/
+        /*список событий не был инициализирован.*/
         lv_array_init(&list->array, 1, sizeof(lv_event_dsc_t *));
     }
 
@@ -327,7 +327,7 @@ void lv_event_mark_deleted(void * target)
 
 const char * lv_event_code_get_name(lv_event_code_t code)
 {
-    /*Remove the preprocess flag*/
+    /*Удалить флаг предварительной обработки*/
     code &= ~LV_EVENT_PREPROCESS;
 
 #define ENUM_CASE(x) case LV_##x: return #x
@@ -335,7 +335,7 @@ const char * lv_event_code_get_name(lv_event_code_t code)
     switch(code) {
             ENUM_CASE(EVENT_ALL);
 
-            /** Input device events*/
+            /** События устройства ввода*/
             ENUM_CASE(EVENT_PRESSED);
             ENUM_CASE(EVENT_PRESSING);
             ENUM_CASE(EVENT_PRESS_LOST);
@@ -362,7 +362,7 @@ const char * lv_event_code_get_name(lv_event_code_t code)
             ENUM_CASE(EVENT_HOVER_OVER);
             ENUM_CASE(EVENT_HOVER_LEAVE);
 
-            /** Drawing events*/
+            /** Рисование событий*/
             ENUM_CASE(EVENT_COVER_CHECK);
             ENUM_CASE(EVENT_REFR_EXT_DRAW_SIZE);
             ENUM_CASE(EVENT_DRAW_MAIN_BEGIN);
@@ -373,7 +373,7 @@ const char * lv_event_code_get_name(lv_event_code_t code)
             ENUM_CASE(EVENT_DRAW_POST_END);
             ENUM_CASE(EVENT_DRAW_TASK_ADDED);
 
-            /** Special events*/
+            /** Специальные мероприятия*/
             ENUM_CASE(EVENT_VALUE_CHANGED);
             ENUM_CASE(EVENT_INSERT);
             ENUM_CASE(EVENT_REFRESH);
@@ -381,7 +381,7 @@ const char * lv_event_code_get_name(lv_event_code_t code)
             ENUM_CASE(EVENT_CANCEL);
             ENUM_CASE(EVENT_STATE_CHANGED);
 
-            /** Other events*/
+            /** Другие события*/
             ENUM_CASE(EVENT_CREATE);
             ENUM_CASE(EVENT_DELETE);
             ENUM_CASE(EVENT_CHILD_CHANGED);
@@ -397,7 +397,7 @@ const char * lv_event_code_get_name(lv_event_code_t code)
             ENUM_CASE(EVENT_GET_SELF_SIZE);
             ENUM_CASE(EVENT_UPDATE_LAYOUT_COMPLETED);
 
-            /** Events of optional LVGL components*/
+            /** События дополнительных компонентов LVGL*/
             ENUM_CASE(EVENT_INVALIDATE_AREA);
             ENUM_CASE(EVENT_RESOLUTION_CHANGED);
             ENUM_CASE(EVENT_COLOR_FORMAT_CHANGED);
@@ -418,14 +418,14 @@ const char * lv_event_code_get_name(lv_event_code_t code)
             ENUM_CASE(EVENT_TRANSLATION_LANGUAGE_CHANGED);
 #endif /*LV_USE_TRANSLATION*/
 
-        /* Special event flags */
+        /* Флаги особых событий */
         case LV_EVENT_LAST:
         case LV_EVENT_PREPROCESS:
         case LV_EVENT_MARKED_DELETING:
             break;
 
-            /* Note that default is not added here because when adding new event code,
-             * if forget to add case, the compiler will automatically report a warning.
+            /* Обратите внимание, что здесь не добавляется значение по умолчанию, поскольку при добавлении нового кода события
+             * если вы забудете добавить регистр, компилятор автоматически выдаст предупреждение.
              */
     }
 

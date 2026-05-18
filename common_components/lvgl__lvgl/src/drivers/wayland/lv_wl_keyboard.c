@@ -161,7 +161,7 @@ static void keyboard_handle_keymap(void * data, struct wl_keyboard * keyboard, u
         return;
     }
 
-    /* Set up XKB keymap */
+    /* Настройте раскладку клавиатуры XKB */
     struct xkb_keymap * keymap = xkb_keymap_new_from_string(xkb_context, map_str, XKB_KEYMAP_FORMAT_TEXT_V1, 0);
     munmap(map_str, size);
     close(fd);
@@ -171,7 +171,7 @@ static void keyboard_handle_keymap(void * data, struct wl_keyboard * keyboard, u
         return;
     }
 
-    /* Set up XKB state */
+    /* Настройте состояние XKB */
     struct xkb_state * state = xkb_state_new(keymap);
     if(!state) {
         LV_LOG_WARN("Failed to create XKB state");
@@ -243,7 +243,7 @@ static void keyboard_handle_modifiers(void * data, struct wl_keyboard * keyboard
     LV_UNUSED(data);
     lv_wl_seat_keyboard_t * kbdata = wl_keyboard_get_user_data(keyboard);
 
-    /* If we're not using a keymap, then we don't handle PC-style modifiers */
+    /* Если мы не используем раскладку клавиатуры, мы не обрабатываем модификаторы в стиле PC. */
     if(!kbdata->xkb_keymap) {
         return;
     }

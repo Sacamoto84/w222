@@ -7,7 +7,7 @@
  *      INCLUDES
  *********************/
 #include "../lv_theme_private.h"
-#include "../../../lvgl.h" /*To see all the widgets*/
+#include "../../../lvgl.h" /*Чтобы увидеть все виджеты*/
 
 #if LV_USE_THEME_SIMPLE
 
@@ -144,9 +144,9 @@ static void style_init(my_theme_t * theme)
 
 lv_theme_t * lv_theme_simple_init(lv_display_t * disp)
 {
-    /*This trick is required only to avoid the garbage collection of
-     *styles' data if LVGL is used in a binding (e.g. MicroPython)
-     *In a general case styles could be in a simple `static lv_style_t my_style...` variables*/
+    /*Этот трюк нужен только для того, чтобы избежать сборки мусора
+     *данные стилей, если LVGL используется в привязке (например, MicroPython)
+     *В общем случае стили могут быть в простых переменных `static lv_style_t my_style...`.*/
     if(!lv_theme_simple_is_inited()) {
         theme_def = lv_malloc_zeroed(sizeof(my_theme_t));
         LV_ASSERT_MALLOC(theme_def);
@@ -232,12 +232,12 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
 
     if(lv_obj_check_type(obj, &lv_obj_class)) {
 #if LV_USE_TABVIEW
-        /*Tabview content area*/
+        /*Область содержимого Tabview*/
         if(lv_obj_check_type(parent, &lv_tabview_class)) {
             lv_obj_add_style(obj, &theme->styles.scr, 0);
             return;
         }
-        /*Tabview pages*/
+        /*Страницы просмотра вкладок*/
         else if(lv_obj_check_type(lv_obj_get_parent(parent), &lv_tabview_class)) {
             lv_obj_add_style(obj, &theme->styles.scr, 0);
             lv_obj_add_style(obj, &theme->styles.scrollbar, LV_PART_SCROLLBAR);
@@ -246,12 +246,12 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
 #endif
 
 #if LV_USE_WIN
-        /*Header*/
+        /*Заголовок*/
         if(lv_obj_check_type(parent, &lv_win_class) && lv_obj_get_child(parent, 0) == obj) {
             lv_obj_add_style(obj, &theme->styles.light, 0);
             return;
         }
-        /*Content*/
+        /*Содержание*/
         else if(lv_obj_check_type(parent, &lv_win_class) && lv_obj_get_child(parent, 1) == obj) {
             lv_obj_add_style(obj, &theme->styles.light, 0);
             lv_obj_add_style(obj, &theme->styles.scrollbar, LV_PART_SCROLLBAR);

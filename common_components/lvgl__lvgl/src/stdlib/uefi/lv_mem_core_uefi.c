@@ -42,12 +42,12 @@ void lv_mem_init(void)
 {
     LV_ASSERT_NULL(gLvEfiBS);
 
-    return; /*Nothing to init*/
+    return; /*Нечего инициализировать*/
 }
 
 void lv_mem_deinit(void)
 {
-    return; /*Nothing to deinit*/
+    return; /*Нечего деинитизировать*/
 }
 
 void * lv_malloc_core(size_t size)
@@ -69,13 +69,13 @@ void * lv_realloc_core(void * p, size_t new_size)
     void * p_new = NULL;
 
     if(p == NULL) return lv_malloc_core(new_size);
-    // Check for invalid pointers
+    // Проверьте недопустимые указатели
     if(p_address < sizeof(mem_header_t)) return NULL;
 
     p_address -= sizeof(mem_header_t);
     p_header = (mem_header_t *) p_address;
 
-    // UEFI supports no realloc, if the size grows a new memory block has to be allocated
+    // UEFI не поддерживает перераспределение, если размер увеличивается, необходимо выделить новый блок памяти.
     if(p_header->size > new_size) return p;
 
     p_new = lv_malloc_core(new_size);
@@ -97,14 +97,14 @@ void lv_free_core(void * p)
 
 void lv_mem_monitor_core(lv_mem_monitor_t * mon_p)
 {
-    /*Not supported*/
+    /*Не поддерживается*/
     LV_UNUSED(mon_p);
     return;
 }
 
 lv_result_t lv_mem_test_core(void)
 {
-    /*Not supported*/
+    /*Не поддерживается*/
     return LV_RESULT_OK;
 }
 

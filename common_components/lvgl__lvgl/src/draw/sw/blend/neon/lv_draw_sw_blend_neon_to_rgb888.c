@@ -366,7 +366,7 @@ lv_result_t lv_draw_sw_blend_neon_color_to_rgb888_with_opa_mask(lv_draw_sw_blend
     return LV_RESULT_OK;
 }
 
-#ifdef __aarch64__ /* vqtbl1q_u8 is only available on arm64 */
+#ifdef __aarch64__ /* vqtbl1q_u8 доступен только на Arm64. */
 lv_result_t lv_draw_sw_blend_neon_l8_to_rgb888(lv_draw_sw_blend_image_dsc_t * dsc, uint32_t dest_px_size)
 {
     LV_ASSERT(dest_px_size == 3 || dest_px_size == 4);
@@ -586,7 +586,7 @@ lv_result_t lv_draw_sw_blend_neon_rgb565_to_rgb888_with_mask(lv_draw_sw_blend_im
         }
     }
     else if(dest_px_size == 4) {
-        /* The algorithm below might look okay but the demo render test fails with it so it's disabled */
+        /* Алгоритм ниже может выглядеть нормально, но демо-тест рендеринга с ним не удался, поэтому он отключен. */
         return LV_RESULT_INVALID;
 #if 0 /* TODO: Figure out the problem with the algorithm below */
         uint32_t * dest_buf_32 = dsc->dest_buf;
@@ -712,7 +712,7 @@ lv_result_t lv_draw_sw_blend_neon_rgb888_to_rgb888(lv_draw_sw_blend_image_dsc_t 
     const uint8_t * src_buf_u8 = dsc->src_buf;
     int32_t src_stride = dsc->src_stride;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(src_px_size != dest_px_size) {
         return LV_RESULT_INVALID;
     }
@@ -750,7 +750,7 @@ lv_result_t lv_draw_sw_blend_neon_rgb888_to_rgb888_with_opa(lv_draw_sw_blend_ima
     const int32_t src_stride = dsc->src_stride;
     const uint8_t opa = dsc->opa;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size != src_px_size) {
         return LV_RESULT_INVALID;
     }
@@ -826,7 +826,7 @@ lv_result_t lv_draw_sw_blend_neon_rgb888_to_rgb888_with_mask(lv_draw_sw_blend_im
     const int32_t mask_stride = dsc->mask_stride;
     const uint8_t * mask_buf_8 = dsc->mask_buf;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size != src_px_size) {
         return LV_RESULT_INVALID;
     }
@@ -907,7 +907,7 @@ lv_result_t lv_draw_sw_blend_neon_rgb888_to_rgb888_with_opa_mask(lv_draw_sw_blen
     const uint8_t opa = dsc->opa;
     const uint8_t * mask_buf_8 = dsc->mask_buf;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size != src_px_size) {
         return LV_RESULT_INVALID;
     }
@@ -1001,7 +1001,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb888(lv_draw_sw_blend_image_dsc_t
     int32_t dest_stride        = dsc->dest_stride;
     int32_t src_stride         = dsc->src_stride;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size == 3) {
         return LV_RESULT_INVALID;
     }
@@ -1039,7 +1039,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb888_with_opa(lv_draw_sw_blend_im
     const int32_t src_stride = dsc->src_stride;
     const uint8_t opa = dsc->opa;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size == 3) {
         return LV_RESULT_INVALID;
     }
@@ -1079,7 +1079,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb888_with_mask(lv_draw_sw_blend_i
     const uint8_t * mask_buf_8 = dsc->mask_buf;
     const int32_t mask_stride = dsc->mask_stride;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size == 3) {
         return LV_RESULT_INVALID;
     }
@@ -1122,7 +1122,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb888_with_opa_mask(lv_draw_sw_ble
     const uint8_t * mask_buf_8 = dsc->mask_buf;
     const int32_t mask_stride = dsc->mask_stride;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size == 3) {
         return LV_RESULT_INVALID;
     }
@@ -1167,7 +1167,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_premultiplied_to_rgb888(lv_draw_sw_ble
     int32_t dest_stride        = dsc->dest_stride;
     int32_t src_stride         = dsc->src_stride;
 
-    /* Fallback to sw implementation*/
+    /* Откат к реализации ПО*/
     if(dest_px_size == 3) {
         return LV_RESULT_INVALID;
     }

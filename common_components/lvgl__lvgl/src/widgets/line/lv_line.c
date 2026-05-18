@@ -74,7 +74,7 @@ lv_obj_t * lv_line_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_line_set_points(lv_obj_t * obj, const lv_point_precise_t points[], uint32_t point_num)
@@ -100,7 +100,7 @@ void lv_line_set_y_invert(lv_obj_t * obj, bool en)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const lv_point_precise_t * lv_line_get_points(lv_obj_t * obj)
@@ -199,7 +199,7 @@ static void lv_line_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -207,7 +207,7 @@ static void lv_line_event(const lv_obj_class_t * class_p, lv_event_t * e)
     lv_obj_t * obj = lv_event_get_current_target(e);
 
     if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
-        /*The corner of the skew lines is out of the intended area*/
+        /*Угол наклонных линий выходит за пределы намеченной области*/
         int32_t line_width = lv_obj_get_style_line_width(obj, LV_PART_MAIN);
         int32_t * s = lv_event_get_param(e);
         if(*s < line_width) *s = line_width;
@@ -251,7 +251,7 @@ static void lv_line_event(const lv_obj_class_t * class_p, lv_event_t * e)
         line_dsc.base.layer = layer;
         lv_obj_init_draw_line_dsc(obj, LV_PART_MAIN, &line_dsc);
 
-        /*Read all points and draw the lines*/
+        /*Прочтите все пункты и нарисуйте линии.*/
         uint32_t i;
         for(i = 0; i < line->point_num - 1; i++) {
             int32_t w = lv_obj_get_width(obj);
@@ -273,7 +273,7 @@ static void lv_line_event(const lv_obj_class_t * class_p, lv_event_t * e)
             }
 
             lv_draw_line(layer, &line_dsc);
-            line_dsc.round_start = 0;   /*Draw the rounding only on the end points after the first line*/
+            line_dsc.round_start = 0;   /*Нарисуйте закругление только в конечных точках после первой линии.*/
         }
     }
 }

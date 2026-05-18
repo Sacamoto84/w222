@@ -2,8 +2,8 @@
 #include "../../../lvgl.h"
 
 /*******************************************************************************
- * Size: 20 px
- * Bpp: 4
+ * Размер: 20 пикселей
+ * Бпп: 4
  * Opts: --bpp 4 --size 20 --font ../RobotoMono-Regular.ttf -r 0x20-0x7f --format lvgl -o ..\generated_fonts/font_3.c
  ******************************************************************************/
 
@@ -17,7 +17,7 @@
  *    BITMAPS
  *----------------*/
 
-/*Store the image of the glyphs*/
+/*Сохраните изображение глифов*/
 static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+20 " " */
 
@@ -902,7 +902,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
  *  CHARACTER MAPPING
  *--------------------*/
 
-/*Collect the unicode lists and glyph_id offsets*/
+/*Соберите списки Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
@@ -914,7 +914,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *  ALL CUSTOM DATA
  *--------------------*/
 
-/*Store all the custom data of the font*/
+/*Храните все пользовательские данные шрифта*/
 static lv_font_fmt_txt_dsc_t font_dsc = {
     .glyph_bitmap = glyph_bitmap,
     .glyph_dsc = glyph_dsc,
@@ -931,16 +931,16 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
  *  PUBLIC FONT
  *----------------*/
 
-/*Initialize a public general font descriptor*/
+/*Инициализировать общедоступный общий дескриптор шрифта*/
 lv_font_t test_font_3 = {
-    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
-    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
-    .line_height = 22,          /*The maximum line height required by the font*/
-    .base_line = 5,             /*Baseline measured from the bottom of the line*/
+    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Указатель функции для получения данных глифа*/
+    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Указатель функции для получения растрового изображения глифа*/
+    .line_height = 22,          /*Максимальная высота строки, требуемая шрифтом*/
+    .base_line = 5,             /*Базовая линия измеряется от нижней части линии*/
 #if !(LVGL_VERSION_MAJOR == 6 && LVGL_VERSION_MINOR == 0)
     .subpx = LV_FONT_SUBPX_NONE,
 #endif
-    .dsc = &font_dsc           /*The custom font data. Will be accessed by `get_glyph_bitmap/dsc` */
+    .dsc = &font_dsc           /*Данные пользовательского шрифта. Будет доступен `get_glyph_bitmap/dsc` */
 };
 
 #endif /*#if FONT_3*/

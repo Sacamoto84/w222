@@ -2,7 +2,7 @@
 #if LV_BUILD_EXAMPLES && LV_USE_IMAGE
 
 /**
- * Local styles
+ * Местные стили
  */
 void lv_example_style_13(void)
 {
@@ -15,7 +15,7 @@ void lv_example_style_13(void)
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
     lv_obj_add_style(obj, &style, 0);
 
-    /*Overwrite the background color locally*/
+    /*Перезаписать цвет фона локально*/
     lv_obj_set_style_bg_color(obj, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_MAIN);
 
     lv_obj_center(obj);

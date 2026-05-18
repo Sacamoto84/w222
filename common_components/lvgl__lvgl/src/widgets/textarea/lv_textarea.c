@@ -27,7 +27,7 @@
  *********************/
 #define MY_CLASS (&lv_textarea_class)
 
-/*Test configuration*/
+/*Тестовая конфигурация*/
 #ifndef LV_TEXTAREA_DEF_CURSOR_BLINK_TIME
     #define LV_TEXTAREA_DEF_CURSOR_BLINK_TIME 400 /*ms*/
 #endif
@@ -177,7 +177,7 @@ lv_obj_t * lv_textarea_create(lv_obj_t * parent)
 }
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 void lv_textarea_add_char(lv_obj_t * obj, uint32_t c)
@@ -201,14 +201,14 @@ void lv_textarea_add_char(lv_obj_t * obj, uint32_t c)
 #if LV_BIG_ENDIAN_SYSTEM
     if(c != 0) while(*letter_buf == 0) ++letter_buf;
 
-    /*The byte order may or may not need to be swapped here to get correct c_uni below,
-      since lv_textarea_add_text is ordering bytes correctly before calling lv_textarea_add_char.
-      Assume swapping is needed if MSB is zero. May not be foolproof. */
+    /*Здесь может потребоваться поменять порядок байтов, а может и нет, чтобы получить правильный c_uni ниже:
+      поскольку lv_textarea_add_text правильно упорядочивает байты перед вызовом lv_textarea_add_char .
+      Предположим, что замена необходима, если MSB равен нулю. Может быть ненадежным. */
     if((c != 0) && ((c & 0xff000000) == 0)) {
-        c2 = ((c >> 24) & 0xff) | /*move byte 3 to byte 0*/
-             ((c << 8) & 0xff0000) | /*move byte 1 to byte 2*/
-             ((c >> 8) & 0xff00) | /*move byte 2 to byte 1*/
-             ((c << 24) & 0xff000000); /*byte 0 to byte 3*/
+        c2 = ((c >> 24) & 0xff) | /*перенести байт 3 в байт 0*/
+             ((c << 8) & 0xff0000) | /*перенести байт 1 в байт 2*/
+             ((c >> 8) & 0xff00) | /*перенести байт 2 в байт 1*/
+             ((c << 24) & 0xff000000); /*от байта 0 до байта 3*/
     }
 #endif
 
@@ -222,19 +222,19 @@ void lv_textarea_add_char(lv_obj_t * obj, uint32_t c)
         return;
     }
 
-    if(ta->pwd_mode) pwd_char_hider(obj); /*Make sure all the current text contains only '*'*/
+    if(ta->pwd_mode) pwd_char_hider(obj); /*Убедитесь, что весь текущий текст содержит только '*'*/
 
-    /*If the textarea is empty, invalidate it to hide the placeholder*/
+    /*Если текстовое поле пусто, сделайте его недействительным, чтобы скрыть заполнитель.*/
     if(ta->placeholder_txt) {
         const char * txt = lv_label_get_text(ta->label);
         if(txt[0] == '\0') lv_obj_invalidate(obj);
     }
 
-    lv_label_ins_text(ta->label, ta->cursor.pos, letter_buf); /*Insert the character*/
-    lv_textarea_clear_selection(obj); /*Clear selection*/
+    lv_label_ins_text(ta->label, ta->cursor.pos, letter_buf); /*Вставьте символ*/
+    lv_textarea_clear_selection(obj); /*Очистить выбор*/
 
     if(ta->pwd_mode) {
-        /*+2: the new char + \0*/
+        /*+2: новый символ + \0*/
         size_t realloc_size = lv_strlen(ta->pwd_tmp) + lv_strlen(letter_buf) + 1;
         ta->pwd_tmp = lv_realloc(ta->pwd_tmp, realloc_size);
         LV_ASSERT_MALLOC(ta->pwd_tmp);
@@ -242,11 +242,11 @@ void lv_textarea_add_char(lv_obj_t * obj, uint32_t c)
 
         lv_text_ins(ta->pwd_tmp, ta->cursor.pos, (const char *)letter_buf);
 
-        /*Auto hide characters*/
+        /*Автоматическое скрытие символов*/
         auto_hide_characters(obj);
     }
 
-    /*Move the cursor after the new character*/
+    /*Переместите курсор после нового символа*/
     lv_textarea_set_cursor_pos(obj, lv_textarea_get_cursor_pos(obj) + 1);
 
     lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
@@ -259,9 +259,9 @@ void lv_textarea_add_text(lv_obj_t * obj, const char * txt)
 
     lv_textarea_t * ta = (lv_textarea_t *)obj;
 
-    if(ta->pwd_mode) pwd_char_hider(obj); /*Make sure all the current text contains only '*'*/
+    if(ta->pwd_mode) pwd_char_hider(obj); /*Убедитесь, что весь текущий текст содержит только '*'*/
 
-    /*Add the character one-by-one if not all characters are accepted or there is character limit.*/
+    /*Добавляйте символы по одному, если не все символы принимаются или существует ограничение на количество символов.*/
     if(lv_textarea_get_accepted_chars(obj) || lv_textarea_get_max_length(obj)) {
         uint32_t i = 0;
         while(txt[i] != '\0') {
@@ -274,13 +274,13 @@ void lv_textarea_add_text(lv_obj_t * obj, const char * txt)
     lv_result_t res = insert_handler(obj, txt);
     if(res != LV_RESULT_OK) return;
 
-    /*If the textarea is empty, invalidate it to hide the placeholder*/
+    /*Если текстовое поле пусто, сделайте его недействительным, чтобы скрыть заполнитель.*/
     if(ta->placeholder_txt) {
         const char * txt_act = lv_label_get_text(ta->label);
         if(txt_act[0] == '\0') lv_obj_invalidate(obj);
     }
 
-    /*Insert the text*/
+    /*Вставьте текст*/
     lv_label_ins_text(ta->label, ta->cursor.pos, txt);
     lv_textarea_clear_selection(obj);
 
@@ -292,11 +292,11 @@ void lv_textarea_add_text(lv_obj_t * obj, const char * txt)
 
         lv_text_ins(ta->pwd_tmp, ta->cursor.pos, txt);
 
-        /*Auto hide characters*/
+        /*Автоматическое скрытие символов*/
         auto_hide_characters(obj);
     }
 
-    /*Move the cursor after the new text*/
+    /*Переместите курсор после нового текста*/
     lv_textarea_set_cursor_pos(obj, lv_textarea_get_cursor_pos(obj) + lv_text_get_encoded_length(txt));
 
     lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
@@ -318,14 +318,14 @@ void lv_textarea_delete_char(lv_obj_t * obj)
 
     char * label_txt = lv_label_get_text(ta->label);
 
-    /*Delete a character*/
+    /*Удалить персонажа*/
     lv_text_cut(label_txt, ta->cursor.pos - 1, 1);
 
-    /*Refresh the label*/
+    /*Обновить этикетку*/
     lv_label_set_text(ta->label, label_txt);
     lv_textarea_clear_selection(obj);
 
-    /*If the textarea became empty, invalidate it to hide the placeholder*/
+    /*Если текстовое поле стало пустым, сделайте его недействительным, чтобы скрыть заполнитель.*/
     if(ta->placeholder_txt) {
         const char * txt = lv_label_get_text(ta->label);
         if(txt[0] == '\0') lv_obj_invalidate(obj);
@@ -339,7 +339,7 @@ void lv_textarea_delete_char(lv_obj_t * obj)
         if(ta->pwd_tmp == NULL) return;
     }
 
-    /*Move the cursor to the place of the deleted character*/
+    /*Переместите курсор на место удаленного символа*/
     lv_textarea_set_cursor_pos(obj, ta->cursor.pos - 1);
 
     lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
@@ -356,7 +356,7 @@ void lv_textarea_delete_char_forward(lv_obj_t * obj)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_textarea_set_text(lv_obj_t * obj, const char * txt)
@@ -366,15 +366,15 @@ void lv_textarea_set_text(lv_obj_t * obj, const char * txt)
 
     lv_textarea_t * ta = (lv_textarea_t *)obj;
 
-    /*Clear the existing selection*/
+    /*Очистить существующий выбор*/
     lv_textarea_clear_selection(obj);
 
-    /*Add the character one-by-one if not all characters are accepted or there is character limit.*/
+    /*Добавляйте символы по одному, если не все символы принимаются или существует ограничение на количество символов.*/
     if(lv_textarea_get_accepted_chars(obj) || lv_textarea_get_max_length(obj)) {
         lv_label_set_text(ta->label, "");
         lv_textarea_set_cursor_pos(obj, LV_TEXTAREA_CURSOR_LAST);
         if(ta->pwd_mode) {
-            ta->pwd_tmp[0] = '\0'; /*Clear the password too*/
+            ta->pwd_tmp[0] = '\0'; /*Удалить пароль тоже*/
         }
         uint32_t i = 0;
         while(txt[i] != '\0') {
@@ -387,7 +387,7 @@ void lv_textarea_set_text(lv_obj_t * obj, const char * txt)
         lv_textarea_set_cursor_pos(obj, LV_TEXTAREA_CURSOR_LAST);
     }
 
-    /*If the textarea is empty, invalidate it to hide the placeholder*/
+    /*Если текстовое поле пусто, сделайте его недействительным, чтобы скрыть заполнитель.*/
     if(ta->placeholder_txt) {
         const char * txt_act = lv_label_get_text(ta->label);
         if(txt_act[0] == '\0') lv_obj_invalidate(obj);
@@ -418,7 +418,7 @@ void lv_textarea_set_placeholder_text(lv_obj_t * obj, const char * txt)
         ta->placeholder_txt = NULL;
     }
     else {
-        /*Allocate memory for the placeholder_txt text*/
+        /*Выделите память для текста placeholder_txt*/
         /*NOTE: Using special realloc behavior, malloc-like when data_p is NULL*/
         ta->placeholder_txt = lv_realloc(ta->placeholder_txt, txt_len + 1);
         LV_ASSERT_MALLOC(ta->placeholder_txt);
@@ -449,7 +449,7 @@ void lv_textarea_set_cursor_pos(lv_obj_t * obj, int32_t pos)
 
     ta->cursor.pos = pos;
 
-    /*Position the label to make the cursor visible*/
+    /*Расположите метку так, чтобы курсор был виден.*/
     lv_obj_update_layout(obj);
 
     lv_textarea_scroll_to_cusor_pos(obj, pos);
@@ -471,7 +471,7 @@ void lv_textarea_set_password_mode(lv_obj_t * obj, bool en)
     if(ta->pwd_mode == en) return;
 
     ta->pwd_mode = en ? 1U : 0U;
-    /*Pwd mode is now enabled*/
+    /*Режим PWD теперь включен*/
     if(en) {
         char * txt = lv_label_get_text(ta->label);
         lv_free(ta->pwd_tmp);
@@ -483,7 +483,7 @@ void lv_textarea_set_password_mode(lv_obj_t * obj, bool en)
 
         lv_textarea_clear_selection(obj);
     }
-    /*Pwd mode is now disabled*/
+    /*Режим PWD теперь отключен.*/
     else {
         lv_textarea_clear_selection(obj);
         lv_label_set_text(ta->label, ta->pwd_tmp);
@@ -508,7 +508,7 @@ void lv_textarea_set_password_bullet(lv_obj_t * obj, const char * bullet)
     else {
         size_t txt_len = lv_strlen(bullet);
 
-        /*Allocate memory for the pwd_bullet text*/
+        /*Выделите память для текста pwd_bullet*/
         /*NOTE: Using special realloc behavior, malloc-like when data_p is NULL*/
         ta->pwd_bullet = lv_realloc(ta->pwd_bullet, txt_len + 1);
         LV_ASSERT_MALLOC(ta->pwd_bullet);
@@ -605,8 +605,8 @@ void lv_textarea_set_text_selection(lv_obj_t * obj, bool en)
 
     if(!en) lv_textarea_clear_selection(obj);
 #else
-    LV_UNUSED(obj); /*Unused*/
-    LV_UNUSED(en);  /*Unused*/
+    LV_UNUSED(obj); /*Неиспользованный*/
+    LV_UNUSED(en);  /*Неиспользованный*/
 #endif
 }
 
@@ -639,7 +639,7 @@ void lv_textarea_set_align(lv_obj_t * obj, lv_text_align_t align)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const char * lv_textarea_get_text(const lv_obj_t * obj)
@@ -710,7 +710,7 @@ const char * lv_textarea_get_password_bullet(lv_obj_t * obj)
 
     lv_font_glyph_dsc_t g;
 
-    /*If the textarea's font has the bullet character use it else fallback to "*"*/
+    /*Если шрифт текстовой области имеет символ маркера, используйте его, иначе выберите «*».*/
     const lv_font_t * bullet_font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
     if(lv_font_get_glyph_dsc(bullet_font, &g, LV_TEXTAREA_PWD_BULLET_UNICODE, '\0'))
         return LV_SYMBOL_BULLET;
@@ -758,7 +758,7 @@ bool lv_textarea_text_is_selected(const lv_obj_t * obj)
         return false;
     }
 #else
-    LV_UNUSED(obj); /*Unused*/
+    LV_UNUSED(obj); /*Неиспользованный*/
     return false;
 #endif
 }
@@ -771,7 +771,7 @@ bool lv_textarea_get_text_selection(lv_obj_t * obj)
     lv_textarea_t * ta = (lv_textarea_t *)obj;
     return ta->text_sel_en;
 #else
-    LV_UNUSED(obj); /*Unused*/
+    LV_UNUSED(obj); /*Неиспользованный*/
     return false;
 #endif
 }
@@ -799,7 +799,7 @@ uint32_t lv_textarea_get_current_char(lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 void lv_textarea_clear_selection(lv_obj_t * obj)
@@ -815,7 +815,7 @@ void lv_textarea_clear_selection(lv_obj_t * obj)
         lv_label_set_text_selection_end(ta->label, LV_DRAW_LABEL_NO_TXT_SEL);
     }
 #else
-    LV_UNUSED(obj); /*Unused*/
+    LV_UNUSED(obj); /*Неиспользованный*/
 #endif
 }
 
@@ -846,10 +846,10 @@ void lv_textarea_cursor_down(lv_obj_t * obj)
     lv_textarea_t * ta = (lv_textarea_t *)obj;
     lv_point_t pos;
 
-    /*Get the position of the current letter*/
+    /*Получить позицию текущей буквы*/
     lv_label_get_letter_pos(ta->label, lv_textarea_get_cursor_pos(obj), &pos);
 
-    /*Increment the y with one line and keep the valid x*/
+    /*Увеличьте y на одну строку и сохраните действительный x*/
 
     int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
     const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
@@ -857,12 +857,12 @@ void lv_textarea_cursor_down(lv_obj_t * obj)
     pos.y += font_h + line_space + 1;
     pos.x = ta->cursor.valid_x;
 
-    /*Do not go below the last line*/
+    /*Не опускайтесь ниже последней строки*/
     if(pos.y < lv_obj_get_height(ta->label)) {
-        /*Get the letter index on the new cursor position and set it*/
+        /*Получите индекс буквы в новой позиции курсора и установите его.*/
         uint32_t new_cur_pos = lv_label_get_letter_on(ta->label, &pos, true);
 
-        int32_t cur_valid_x_tmp = ta->cursor.valid_x; /*Cursor position set overwrites the valid position*/
+        int32_t cur_valid_x_tmp = ta->cursor.valid_x; /*Установленная позиция курсора перезаписывает действительную позицию*/
         lv_textarea_set_cursor_pos(obj, new_cur_pos);
         ta->cursor.valid_x = cur_valid_x_tmp;
     }
@@ -875,19 +875,19 @@ void lv_textarea_cursor_up(lv_obj_t * obj)
     lv_textarea_t * ta = (lv_textarea_t *)obj;
     lv_point_t pos;
 
-    /*Get the position of the current letter*/
+    /*Получить позицию текущей буквы*/
     lv_label_get_letter_pos(ta->label, lv_textarea_get_cursor_pos(obj), &pos);
 
-    /*Decrement the y with one line and keep the valid x*/
+    /*Уменьшите y одной строкой и сохраните действительный x*/
     int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
     const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
     int32_t font_h              = lv_font_get_line_height(font);
     pos.y -= font_h + line_space - 1;
     pos.x = ta->cursor.valid_x;
 
-    /*Get the letter index on the new cursor position and set it*/
+    /*Получите индекс буквы в новой позиции курсора и установите его.*/
     uint32_t new_cur_pos       = lv_label_get_letter_on(ta->label, &pos, true);
-    int32_t cur_valid_x_tmp = ta->cursor.valid_x; /*Cursor position set overwrites the valid position*/
+    int32_t cur_valid_x_tmp = ta->cursor.valid_x; /*Установленная позиция курсора перезаписывает действительную позицию*/
     lv_textarea_set_cursor_pos(obj, new_cur_pos);
     ta->cursor.valid_x = cur_valid_x_tmp;
 }
@@ -911,7 +911,7 @@ static void lv_textarea_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
     ta->static_accepted_chars = 1;
     ta->max_length        = 0;
     ta->cursor.show      = 1;
-    /*It will be set to zero later (with zero value lv_textarea_set_cursor_pos(obj, 0); wouldn't do anything as there is no difference)*/
+    /*Позже он будет установлен в ноль (с нулевым значением lv_textarea_set_cursor_pos (obj, 0); ничего не изменится, поскольку нет разницы)*/
     ta->cursor.pos        = 1;
     ta->cursor.click_pos  = 1;
     ta->cursor.valid_x    = 0;
@@ -963,7 +963,7 @@ static void lv_textarea_event(const lv_obj_class_t * class_p, lv_event_t * e)
     LV_UNUSED(class_p);
 
     lv_result_t res;
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -974,7 +974,7 @@ static void lv_textarea_event(const lv_obj_class_t * class_p, lv_event_t * e)
         start_cursor_blink(obj);
     }
     else if(code == LV_EVENT_KEY) {
-        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t because can be UTF-8*/
+        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t, потому что может быть UTF -8*/
         if(c == LV_KEY_RIGHT)
             lv_textarea_cursor_right(obj);
         else if(c == LV_KEY_LEFT)
@@ -1027,7 +1027,7 @@ static void label_event_cb(lv_event_t * e)
 }
 
 /**
- * Called to blink the cursor
+ * Вызывается для мигания курсора
  * @param ta pointer to a text area
  * @param hide 1: hide the cursor, 0: show it
  */
@@ -1047,9 +1047,9 @@ static void cursor_blink_anim_cb(void * obj, int32_t show)
 }
 
 /**
- * Dummy function to animate char hiding in pwd mode.
- * Does nothing, but a function is required in car hiding anim.
- * (pwd_char_hider callback do the real job)
+ * Фиктивная функция для анимации скрытия символов в режиме pwd.
+ * Ничего не делает, но требуется функция скрытия автомобиля в анимации.
+ * (Обратный вызов pwd_char_hider делает настоящую работу)
  * @param ta unused
  * @param x unused
  */
@@ -1060,7 +1060,7 @@ static void pwd_char_hider_anim(void * obj, int32_t x)
 }
 
 /**
- * Call when an animation is ready to convert all characters to '*'
+ * Вызовите, когда анимация готова, чтобы преобразовать все символы в «*».
  * @param a pointer to the animation
  */
 static void pwd_char_hider_anim_completed(lv_anim_t * a)
@@ -1070,7 +1070,7 @@ static void pwd_char_hider_anim_completed(lv_anim_t * a)
 }
 
 /**
- * Hide all characters (convert them to '*')
+ * Скрыть все символы (преобразовать их в «*»)
  * @param ta pointer to text area object
  */
 static void pwd_char_hider(lv_obj_t * obj)
@@ -1080,7 +1080,7 @@ static void pwd_char_hider(lv_obj_t * obj)
         return;
     }
 
-    /* When ta->label is empty we get 0 back */
+    /* Когда ta->label пуста, мы возвращаем 0 */
     char * txt = lv_label_get_text(ta->label);
     uint32_t enc_len = lv_text_get_encoded_length(txt);
     if(enc_len == 0) return;
@@ -1104,7 +1104,7 @@ static void pwd_char_hider(lv_obj_t * obj)
 }
 
 /**
- * Test a unicode character if it is accepted or not. Checks max length and accepted char list.
+ * Проверьте символ Юникода, принят он или нет. Проверяет максимальную длину и список принятых символов.
  * @param ta pointer to a test area object
  * @param c a unicode character
  * @return true: accepted; false: rejected
@@ -1124,10 +1124,10 @@ static bool char_is_accepted(lv_obj_t * obj, uint32_t c)
 
     while(ta->accepted_chars[i] != '\0') {
         uint32_t a = lv_text_encoded_next(ta->accepted_chars, &i);
-        if(a == c) return true; /*Accepted*/
+        if(a == c) return true; /*Принято*/
     }
 
-    return false; /*The character wasn't in the list*/
+    return false; /*Персонажа не было в списке*/
 }
 
 static void start_cursor_blink(lv_obj_t * obj)
@@ -1165,9 +1165,9 @@ static void refr_cursor_area(lv_obj_t * obj)
     uint32_t byte_pos = lv_text_encoded_get_byte_id(txt, cur_pos);
     uint32_t letter = lv_text_encoded_next(&txt[byte_pos], NULL);
 
-    /* Letter height and width */
+    /* Высота и ширина буквы */
     const int32_t letter_h = lv_font_get_line_height(font);
-    /*Set letter_w (set not 0 on non printable but valid chars)*/
+    /*Установите letter_w (установите не 0 для непечатаемых, но допустимых символов)*/
     uint32_t letter_space = letter;
     if(is_valid_but_non_printable_char(letter)) {
         letter_space = ' ';
@@ -1179,7 +1179,7 @@ static void refr_cursor_area(lv_obj_t * obj)
 
     lv_text_align_t align = lv_obj_calculate_style_text_align(ta->label, LV_PART_MAIN, lv_label_get_text(ta->label));
 
-    /*If the cursor is out of the text (most right) draw it to the next line*/
+    /*Если курсор находится за пределами текста (самый правый), переведите его на следующую строку.*/
     if(((letter_pos.x + ta->label->coords.x1) + letter_w > ta->label->coords.x2) &&
        (ta->one_line == 0 && align != LV_TEXT_ALIGN_RIGHT)) {
 
@@ -1193,16 +1193,16 @@ static void refr_cursor_area(lv_obj_t * obj)
 
         uint32_t tmp = letter;
         if(is_valid_but_non_printable_char(letter)) {
-            /*If non printable get the letter_w of the space char*/
+            /*Если невозможно распечатать, получите letter_w пробела.*/
             tmp = ' ';
         }
         letter_w = lv_font_get_glyph_width(font, tmp, IGNORE_KERNING);
     }
 
-    /*Save the byte position. It is required to draw `LV_CURSOR_BLOCK`*/
+    /*Сохраните позицию байта. Требуется нарисовать `LV_CURSOR_BLOCK`*/
     ta->cursor.txt_byte_pos = byte_pos;
 
-    /*Calculate the cursor according to its type*/
+    /*Рассчитать курсор по его типу*/
     int32_t border_width = lv_obj_get_style_border_width(obj, LV_PART_CURSOR);
     int32_t top = lv_obj_get_style_pad_top(obj, LV_PART_CURSOR) + border_width;
     int32_t bottom = lv_obj_get_style_pad_bottom(obj, LV_PART_CURSOR) + border_width;
@@ -1216,7 +1216,7 @@ static void refr_cursor_area(lv_obj_t * obj)
     cur_area.x2 = letter_pos.x + right + letter_w - 1 + (letter_space_w + 1) / 2;
     cur_area.y2 = letter_pos.y + bottom + letter_h - 1;
 
-    /*Save the new area*/
+    /*Сохраните новую область*/
     lv_area_t area_tmp;
     lv_area_copy(&area_tmp, &ta->cursor.area);
     area_tmp.x1 += ta->label->coords.x1;
@@ -1256,7 +1256,7 @@ static void update_cursor_position_on_click(lv_event_t * e)
     lv_indev_get_point(click_source, &point_act);
     lv_indev_get_vect(click_source, &vect_act);
 
-    if(point_act.x < 0 || point_act.y < 0) return; /*Ignore event from keypad*/
+    if(point_act.x < 0 || point_act.y < 0) return; /*Игнорировать событие с клавиатуры*/
     lv_point_t rel_pos;
     rel_pos.x = point_act.x - label_coords.x1;
     rel_pos.y = point_act.y - label_coords.y1;
@@ -1269,12 +1269,12 @@ static void update_cursor_position_on_click(lv_event_t * e)
 #if LV_LABEL_TEXT_SELECTION
     lv_label_t * label_data = (lv_label_t *)ta->label;
     bool click_outside_label = false;
-    /*Check if the click happened on the left side of the area outside the label*/
+    /*Проверьте, произошел ли щелчок в левой части области за пределами метки.*/
     if(rel_pos.x < 0) {
         char_id_at_click = 0;
         click_outside_label = true;
     }
-    /*Check if the click happened on the right side of the area outside the label*/
+    /*Проверьте, произошел ли щелчок в правой части области за пределами метки.*/
     else if(rel_pos.x >= label_width) {
         char_id_at_click = LV_TEXTAREA_CURSOR_LAST;
         click_outside_label = true;
@@ -1286,18 +1286,18 @@ static void update_cursor_position_on_click(lv_event_t * e)
 
     if(ta->text_sel_en) {
         if(!ta->text_sel_in_prog && !click_outside_label && code == LV_EVENT_PRESSED) {
-            /*Input device just went down. Store the selection start position*/
+            /*Устройство ввода просто вышло из строя. Сохраните начальную позицию выбора*/
             ta->sel_start    = char_id_at_click;
             ta->sel_end      = LV_LABEL_TEXT_SELECTION_OFF;
             ta->text_sel_in_prog = 1;
             lv_obj_remove_flag(obj, LV_OBJ_FLAG_SCROLL_CHAIN);
         }
         else if(ta->text_sel_in_prog && code == LV_EVENT_PRESSING) {
-            /*Input device may be moving. Store the end position*/
+            /*Устройство ввода может двигаться. Сохраните конечное положение*/
             ta->sel_end = char_id_at_click;
         }
         else if(ta->text_sel_in_prog && (code == LV_EVENT_PRESS_LOST || code == LV_EVENT_RELEASED)) {
-            /*Input device is released. Check if anything was selected.*/
+            /*Устройство ввода освобождено. Проверьте, было ли что-нибудь выбрано.*/
             lv_obj_add_flag(obj, LV_OBJ_FLAG_SCROLL_CHAIN);
         }
     }
@@ -1305,9 +1305,9 @@ static void update_cursor_position_on_click(lv_event_t * e)
     if(ta->text_sel_in_prog || code == LV_EVENT_PRESSED) lv_textarea_set_cursor_pos(obj, char_id_at_click);
 
     if(ta->text_sel_in_prog) {
-        /*If the selected area has changed then update the real values and*/
+        /*Если выбранная область изменилась, обновите реальные значения и*/
 
-        /*Invalidate the text area.*/
+        /*Сделайте текстовую область недействительной.*/
         if(ta->sel_start > ta->sel_end) {
             if(label_data->sel_start != ta->sel_end || label_data->sel_end != ta->sel_start) {
                 label_data->sel_start = ta->sel_end;
@@ -1329,17 +1329,17 @@ static void update_cursor_position_on_click(lv_event_t * e)
                 lv_obj_invalidate(obj);
             }
         }
-        /*Finish selection if necessary*/
+        /*Завершите выбор, если необходимо.*/
         if(code == LV_EVENT_PRESS_LOST || code == LV_EVENT_RELEASED) {
             ta->text_sel_in_prog = 0;
         }
     }
 #else
-    /*Check if the click happened on the left side of the area outside the label*/
+    /*Проверьте, произошел ли щелчок в левой части области за пределами метки.*/
     if(rel_pos.x < 0) {
         char_id_at_click = 0;
     }
-    /*Check if the click happened on the right side of the area outside the label*/
+    /*Проверьте, произошел ли щелчок в правой части области за пределами метки.*/
     else if(rel_pos.x >= label_width) {
         char_id_at_click = LV_TEXTAREA_CURSOR_LAST;
     }
@@ -1351,19 +1351,19 @@ static void update_cursor_position_on_click(lv_event_t * e)
 #endif
 }
 
-/* Returns LV_RESULT_OK when no operation were performed
- * Returns LV_RESULT_INVALID when a user defined text was inserted */
+/* Возвращает LV_RESULT_OK, если не было выполнено ни одной операции.
+ * Возвращает LV_RESULT_INVALID, когда был вставлен пользовательский текст. */
 static lv_result_t insert_handler(lv_obj_t * obj, const char * txt)
 {
     ta_insert_replace = NULL;
     lv_obj_send_event(obj, LV_EVENT_INSERT, (char *)txt);
 
-    /* Drop txt if insert replace is set to '\0' */
+    /* Удалите txt, если для замены вставки установлено значение «\0». */
     if(ta_insert_replace && ta_insert_replace[0] == '\0')
         return LV_RESULT_INVALID;
 
     if(ta_insert_replace) {
-        /*Add the replaced text directly it's different from the original*/
+        /*Добавьте замененный текст, который отличается от оригинала.*/
         if(lv_strcmp(ta_insert_replace, txt)) {
             lv_textarea_add_text(obj, ta_insert_replace);
             return LV_RESULT_INVALID;
@@ -1380,7 +1380,7 @@ static void draw_placeholder(lv_event_t * e)
     lv_layer_t * layer = lv_event_get_layer(e);
     const char * txt = lv_label_get_text(ta->label);
 
-    /*Draw the place holder*/
+    /*Нарисуйте заполнитель*/
     if(txt[0] == '\0' && ta->placeholder_txt && ta->placeholder_txt[0] != 0) {
         lv_draw_label_dsc_t ph_dsc;
         lv_draw_label_dsc_init(&ph_dsc);
@@ -1419,7 +1419,7 @@ static void draw_cursor(lv_event_t * e)
     cur_dsc.base.layer = layer;
     lv_obj_init_draw_rect_dsc(obj, LV_PART_CURSOR, &cur_dsc);
 
-    /*Draw he cursor according to the type*/
+    /*Нарисуйте курсор в соответствии с типом*/
     lv_area_t cur_area;
     lv_area_copy(&cur_area, &ta->cursor.area);
 
@@ -1439,9 +1439,9 @@ static void draw_cursor(lv_event_t * e)
     cur_area.x1 += left;
     cur_area.y1 += top;
 
-    /*Draw the letter over the cursor only if
-     *the cursor has background or the letter has different color than the original.
-     *Else the original letter is drawn twice which makes it look bolder*/
+    /*Рисуйте букву над курсором только в том случае, если
+     *курсор имеет фон или цвет буквы отличается от оригинала.
+     *В противном случае исходная буква будет нарисована дважды, что сделает ее более жирной.*/
     lv_color_t label_color = lv_obj_get_style_text_color(ta->label, LV_PART_MAIN);
     lv_draw_label_dsc_t cur_label_dsc;
     lv_draw_label_dsc_init(&cur_label_dsc);
@@ -1497,24 +1497,24 @@ static void lv_textarea_scroll_to_cusor_pos(lv_obj_t * obj, int32_t pos)
     const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
     lv_label_get_letter_pos(ta->label, pos, &cur_pos);
 
-    /*The text area needs to have it's final size to see if the cursor is out of the area or not*/
+    /*Текстовая область должна иметь окончательный размер, чтобы увидеть, находится ли курсор за пределами области или нет.*/
 
-    /*Check the top*/
+    /*Проверьте верх*/
     int32_t font_h = lv_font_get_line_height(font);
     if(cur_pos.y < lv_obj_get_scroll_top(obj)) {
         lv_obj_scroll_to_y(obj, cur_pos.y, LV_ANIM_ON);
     }
-    /*Check the bottom*/
+    /*Проверьте дно*/
     int32_t h = lv_obj_get_content_height(obj);
     if(cur_pos.y + font_h - lv_obj_get_scroll_top(obj) > h) {
         lv_obj_scroll_to_y(obj, cur_pos.y - h + font_h, LV_ANIM_ON);
     }
 
-    /*Check the left*/
+    /*Проверьте левую*/
     if(cur_pos.x < lv_obj_get_scroll_left(obj)) {
         lv_obj_scroll_to_x(obj, cur_pos.x, LV_ANIM_ON);
     }
-    /*Check the right*/
+    /*Проверьте правильность*/
     int32_t w = lv_obj_get_content_width(obj);
     if(cur_pos.x + font_h > w) {
         lv_obj_scroll_to_x(obj, cur_pos.x - w + font_h, LV_ANIM_ON);

@@ -23,29 +23,29 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/** Use this value to let LVGL calculate stride automatically */
+/** Используйте это значение, чтобы LVGL автоматически рассчитывал шаг. */
 #define LV_STRIDE_AUTO 0
 LV_EXPORT_CONST_INT(LV_STRIDE_AUTO);
 
 /**
- * Stride alignment for draw buffers.
- * It may vary between different color formats and hardware.
- * Refine it to suit your needs.
+ * Выравнивание шага для буферов прорисовки.
+ * Это может варьироваться в зависимости от различных цветовых форматов и оборудования.
+ * Уточните его в соответствии с вашими потребностями.
  */
 
 #define LV_DRAW_BUF_STRIDE(w, cf) \
     LV_ROUND_UP(((w) * LV_COLOR_FORMAT_GET_BPP(cf) + 7) / 8, LV_DRAW_BUF_STRIDE_ALIGN)
 
-/** Allocate a slightly larger buffer, so we can adjust the start address to meet alignment */
+/** Выделите буфер немного большего размера, чтобы мы могли настроить начальный адрес в соответствии с выравниванием. */
 #define LV_DRAW_BUF_SIZE(w, h, cf) \
     (LV_DRAW_BUF_STRIDE(w, cf) * (h) + LV_DRAW_BUF_ALIGN + \
      LV_COLOR_INDEXED_PALETTE_SIZE(cf) * sizeof(lv_color32_t))
 
 /**
- * Define a static draw buffer with the given width, height, and color format.
- * Stride alignment is set to LV_DRAW_BUF_STRIDE_ALIGN.
+ * Определите статический буфер рисования с заданной шириной, высотой и цветовым форматом.
+ * Для выравнивания шага установлено значение LV_DRAW_BUF_STRIDE_ALIGN.
  *
- * For platform that needs special buffer alignment, call LV_DRAW_BUF_INIT_STATIC.
+ * Для платформы, которой требуется специальное выравнивание буфера, вызовите LV_DRAW_BUF_INIT_STATIC.
  */
 #define LV_DRAW_BUF_DEFINE_STATIC(name, _w, _h, _cf) \
     static LV_ATTRIBUTE_MEM_ALIGN uint8_t buf_##name[LV_DRAW_BUF_SIZE(_w, _h, _cf)]; \
@@ -101,23 +101,23 @@ struct _lv_draw_buf_t {
  **********************/
 
 /**
- * Initialize the draw buffer with the default handlers.
+ * Инициализируйте буфер отрисовки с помощью обработчиков по умолчанию.
  *
- * @param handlers  the draw buffer handlers to set
+ * @param handlers  обработчики буфера прорисовки, которые нужно установить
  */
 void lv_draw_buf_init_with_default_handlers(lv_draw_buf_handlers_t * handlers);
 
 /**
- * Initialize the draw buffer with given handlers.
+ * Инициализируйте буфер отрисовки с заданными обработчиками.
  *
- * @param handlers             the draw buffer handlers to set
- * @param buf_malloc_cb        the callback to allocate memory for the buffer
- * @param buf_free_cb          the callback to free memory of the buffer
- * @param buf_copy_cb          the callback to copy a draw buffer to an other
- * @param align_pointer_cb     the callback to align the buffer
- * @param invalidate_cache_cb  the callback to invalidate the cache of the buffer
- * @param flush_cache_cb       the callback to flush buffer
- * @param width_to_stride_cb   the callback to calculate the stride based on the width and color format
+ * @param handlers             обработчики буфера прорисовки, которые нужно установить
+ * @param buf_malloc_cb        обратный вызов для выделения памяти для буфера
+ * @param buf_free_cb          обратный вызов для освобождения памяти буфера
+ * @param buf_copy_cb          обратный вызов для копирования буфера рисования в другой
+ * @param align_pointer_cb     обратный вызов для выравнивания буфера
+ * @param invalidate_cache_cb  обратный вызов для аннулирования кеша буфера
+ * @param flush_cache_cb       обратный вызов для очистки буфера
+ * @param width_to_stride_cb   обратный вызов для расчета шага на основе ширины и формата цвета
  */
 void lv_draw_buf_handlers_init(lv_draw_buf_handlers_t * handlers,
                                lv_draw_buf_malloc_cb_t buf_malloc_cb,
@@ -129,9 +129,9 @@ void lv_draw_buf_handlers_init(lv_draw_buf_handlers_t * handlers,
                                lv_draw_buf_width_to_stride_cb_t width_to_stride_cb);
 
 /**
- * Get the struct which holds the callbacks for draw buf management.
- * Custom callback can be set on the returned value
- * @return                  pointer to the struct of handlers
+ * Получите структуру, содержащую обратные вызовы для управления буфером отрисовки.
+ * Пользовательский обратный вызов может быть установлен для возвращаемого значения.
+ * @return                  указатель на структуру обработчиков
  */
 lv_draw_buf_handlers_t * lv_draw_buf_get_handlers(void);
 lv_draw_buf_handlers_t * lv_draw_buf_get_font_handlers(void);
@@ -139,187 +139,187 @@ lv_draw_buf_handlers_t * lv_draw_buf_get_image_handlers(void);
 
 
 /**
- * Align the address of a buffer. The buffer needs to be large enough for the real data after alignment
- * @param buf           the data to align
- * @param color_format  the color format of the buffer
- * @return              the aligned buffer
+ * Выровняйте адрес буфера. Буфер должен быть достаточно большим для реальных данных после выравнивания.
+ * @param buf           данные для согласования
+ * @param color_format  цветовой формат буфера
+ * @return              выровненный буфер
  */
 void * lv_draw_buf_align(void * buf, lv_color_format_t color_format);
 
 /**
- * Align the address of a buffer with custom draw buffer handlers.
- * The buffer needs to be large enough for the real data after alignment
- * @param handlers      the draw buffer handlers
- * @param buf           the data to align
- * @param color_format  the color format of the buffer
- * @return              the aligned buffer
+ * Согласуйте адрес буфера с пользовательскими обработчиками буфера отрисовки.
+ * Буфер должен быть достаточно большим для реальных данных после выравнивания.
+ * @param handlers      обработчики буфера отрисовки
+ * @param buf           данные для согласования
+ * @param color_format  цветовой формат буфера
+ * @return              выровненный буфер
  */
 void * lv_draw_buf_align_ex(const lv_draw_buf_handlers_t * handlers, void * buf, lv_color_format_t color_format);
 
 /**
- * Invalidate the cache of the buffer
- * @param draw_buf     the draw buffer needs to be invalidated
- * @param area         the area to invalidate in the buffer,
- *                     use NULL to invalidate the whole draw buffer address range
+ * Инвалидировать кеш буфера
+ * @param draw_buf     буфер отрисовки должен быть признан недействительным
+ * @param area         область, которую нужно сделать недействительной в буфере,
+ *                     используйте NULL, чтобы сделать недействительным весь диапазон адресов буфера прорисовки
  */
 void lv_draw_buf_invalidate_cache(const lv_draw_buf_t * draw_buf, const lv_area_t * area);
 
 /**
- * Flush the cache of the buffer
- * @param draw_buf     the draw buffer needs to be flushed
- * @param area         the area to flush in the buffer,
- *                     use NULL to flush the whole draw buffer address range
+ * Очистить кеш буфера
+ * @param draw_buf     буфер отрисовки необходимо очистить
+ * @param area         область для очистки в буфере,
+ *                     используйте NULL, чтобы очистить весь диапазон адресов буфера прорисовки
  */
 void lv_draw_buf_flush_cache(const lv_draw_buf_t * draw_buf, const lv_area_t * area);
 
 /**
- * Calculate the stride in bytes based on a width and color format
- * @param w                 the width in pixels
- * @param color_format      the color format
- * @return                  the stride in bytes
+ * Рассчитайте шаг в байтах на основе ширины и формата цвета.
+ * @param w                 ширина в пикселях
+ * @param color_format      цветовой формат
+ * @return                  шаг в байтах
  */
 uint32_t lv_draw_buf_width_to_stride(uint32_t w, lv_color_format_t color_format);
 
 /**
- * Calculate the stride in bytes based on a width and color format
- * @param handlers          the draw buffer handlers
- * @param w                 the width in pixels
- * @param color_format      the color format
- * @return                  the stride in bytes
+ * Рассчитайте шаг в байтах на основе ширины и формата цвета.
+ * @param handlers          обработчики буфера отрисовки
+ * @param w                 ширина в пикселях
+ * @param color_format      цветовой формат
+ * @return                  шаг в байтах
  */
 uint32_t lv_draw_buf_width_to_stride_ex(const lv_draw_buf_handlers_t * handlers, uint32_t w,
                                         lv_color_format_t color_format);
 
 /**
- * Clear an area on the buffer
- * @param draw_buf          pointer to draw buffer
- * @param a                 the area to clear, or NULL to clear the whole buffer
+ * Очистить область в буфере
+ * @param draw_buf          указатель для рисования буфера
+ * @param a                 область для очистки илиNULLдля очистки всего буфера
  */
 void lv_draw_buf_clear(lv_draw_buf_t * draw_buf, const lv_area_t * a);
 
 
 /**
- * Note: Eventually, lv_draw_buf_malloc/free will be kept as private.
- *       For now, we use `create` to distinguish with malloc.
+ * Note: Со временемlv_draw_buf_malloc/free останется конфиденциальным.
+ *       На данный момент мы используем `create`, чтобы различать malloc.
  *
- * Create an draw buf by allocating struct for `lv_draw_buf_t` and allocating a buffer for it
- * that meets specified requirements.
+ * Сделайте отрисовку буфера, выделите узор для`lv_draw_buf_t`и выделите для нее буфер.
+ * который соответствует заданным требованиям.
  *
- * @param w         the buffer width in pixels
- * @param h         the buffer height in pixels
- * @param cf        the color format for image
- * @param stride    the stride in bytes for image. Use 0 for automatic calculation based on
- *                  w, cf, and global stride alignment configuration.
+ * @param w         ширина буфера в пикселях
+ * @param h         высота буфера в пикселях
+ * @param cf        цветовой формат изображения
+ * @param stride    шаг в байтах для изображения. Используйте 0 для автоматического расчета на основе
+ *                  w, cf и глобальная конфигурация выравнивания шага.
  */
 lv_draw_buf_t * lv_draw_buf_create(uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride);
 
 /**
- * Note: Eventually, lv_draw_buf_malloc/free will be kept as private.
- *       For now, we use `create` to distinguish with malloc.
+ * Note: Со временемlv_draw_buf_malloc/free останется конфиденциальным.
+ *       На данный момент мы используем `create`, чтобы различать malloc.
  *
- * Create an draw buf by allocating struct for `lv_draw_buf_t` and allocating a buffer for it
- * that meets specified requirements.
+ * Сделайте отрисовку буфера, выделите узор для`lv_draw_buf_t`и выделите для нее буфер.
+ * который соответствует заданным требованиям.
  *
- * @param handlers  the draw buffer handlers
- * @param w         the buffer width in pixels
- * @param h         the buffer height in pixels
- * @param cf        the color format for image
- * @param stride    the stride in bytes for image. Use 0 for automatic calculation based on
- *                  w, cf, and global stride alignment configuration.
+ * @param handlers  обработчики буфера отрисовки
+ * @param w         ширина буфера в пикселях
+ * @param h         высота буфера в пикселях
+ * @param cf        цветовой формат изображения
+ * @param stride    шаг в байтах для изображения. Используйте 0 для автоматического расчета на основе
+ *                  w, cf и глобальная конфигурация выравнивания шага.
  */
 lv_draw_buf_t * lv_draw_buf_create_ex(const lv_draw_buf_handlers_t * handlers, uint32_t w, uint32_t h,
                                       lv_color_format_t cf, uint32_t stride);
 
 /**
- * Duplicate a draw buf with same image size, stride and color format. Copy the image data too.
- * @param draw_buf  the draw buf to duplicate
- * @return          the duplicated draw buf on success, NULL if failed
+ * Дублируйте рисунок с тем же размером изображения, шагом и цветовым форматом. Скопируйте также данные изображения.
+ * @param draw_buf  буф для дублирования
+ * @return          дублированный буф отрисовки в случае успеха,NULLв случае неудачи
  */
 lv_draw_buf_t * lv_draw_buf_dup(const lv_draw_buf_t * draw_buf);
 
 /**
- * Duplicate a draw buf with same image size, stride and color format. Copy the image data too.
- * @param handlers  the draw buffer handlers
- * @param draw_buf  the draw buf to duplicate
- * @return          the duplicated draw buf on success, NULL if failed
+ * Дублируйте рисунок с тем же размером изображения, шагом и цветовым форматом. Скопируйте также данные изображения.
+ * @param handlers  обработчики буфера отрисовки
+ * @param draw_buf  буф для дублирования
+ * @return          дублированный буф отрисовки в случае успеха,NULLв случае неудачи
  */
 lv_draw_buf_t * lv_draw_buf_dup_ex(const lv_draw_buf_handlers_t * handlers, const lv_draw_buf_t * draw_buf);
 
 /**
- * Initialize a draw buf with the given buffer and parameters. Clear draw buffer flag to zero.
- * @param draw_buf  the draw buf to initialize
- * @param w         the buffer width in pixels
- * @param h         the buffer height in pixels
- * @param cf        the color format
- * @param stride    the stride in bytes. Use 0 for automatic calculation
- * @param data      the buffer used for drawing. Unaligned `data` will be aligned internally
- * @param data_size the size of the buffer in bytes
- * @return          return LV_RESULT_OK on success, LV_RESULT_INVALID otherwise
+ * Инициализируйте буфер отрисовки с заданным буфером и параметрами. Очистить флаг буфера прорисовки до нуля.
+ * @param draw_buf  буф рисования для инициализации
+ * @param w         ширина буфера в пикселях
+ * @param h         высота буфера в пикселях
+ * @param cf        цветовой формат
+ * @param stride    шаг в байтах. Используйте 0 для автоматического расчета.
+ * @param data      буфер, используемый для рисования. Невыровненный`data`будет выровнен внутри.
+ * @param data_size размер буфера в байтах
+ * @return          вернутьLV_RESULT_OKв случае успеха,LV_RESULT_INVALIDв противном случае
  */
 lv_result_t lv_draw_buf_init(lv_draw_buf_t * draw_buf, uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride,
                              void * data, uint32_t data_size);
 
 /**
- * Keep using the existing memory, reshape the draw buffer to the given width and height.
- * Return NULL if data_size is smaller than the required size.
- * @param draw_buf  pointer to a draw buffer
- * @param cf        the new color format, use 0 or LV_COLOR_FORMAT_UNKNOWN to keep using the original color format.
- * @param w         the new width in pixels
- * @param h         the new height in pixels
- * @param stride    the stride in bytes for image. Use 0 for automatic calculation.
+ * Продолжайте использовать существующую память, измените форму буфера прорисовки до заданной ширины и высоты.
+ * ВозвращайтеNULL, еслиdata_sizeменьше требуемого размера.
+ * @param draw_buf  указатель на буфер рисования
+ * @param cf        новый формат цвета, используйте 0 или LV_COLOR_FORMAT_UNKNOWN, чтобы продолжать использовать исходный формат цвета.
+ * @param w         новая ширина в пикселях
+ * @param h         новая высота в пикселях
+ * @param stride    шаг в байтах для изображения. Используйте 0 для автоматического расчета.
  */
 lv_draw_buf_t * lv_draw_buf_reshape(lv_draw_buf_t * draw_buf, lv_color_format_t cf, uint32_t w, uint32_t h,
                                     uint32_t stride);
 
 /**
- * Destroy a draw buf by freeing the actual buffer if it's marked as LV_IMAGE_FLAGS_ALLOCATED in header.
- * Then free the lv_draw_buf_t struct.
+ * Уничтожьте буфер отрисовки, освободив фактический буфер, если он помечен в заголовке как LV_IMAGE_FLAGS_ALLOCATED.
+ * Затем освободите структуру lv_draw_buf_t.
  *
- * @param draw_buf  the draw buffer to destroy
+ * @param draw_buf  буфер отрисовки для уничтожения
  */
 void lv_draw_buf_destroy(lv_draw_buf_t * draw_buf);
 
 /**
- * Copy an area from a buffer to another
- * @param dest      pointer to the destination draw buffer
- * @param dest_area the area to copy from the destination buffer, if NULL, use the whole buffer
- * @param src       pointer to the source draw buffer
- * @param src_area  the area to copy from the destination buffer, if NULL, use the whole buffer
- * @note `dest_area` and `src_area` should have the same width and height
- * @note  The default copy function required `dest` and `src` to have the same color format.
- * Overwriting dest->handlers->buf_copy_cb can resolve this limitation.
+ * Копирование области из буфера в другой
+ * @param dest      указатель на целевой буфер отрисовки
+ * @param dest_area область для копирования из целевого буфера. Если NULL, используйте весь буфер.
+ * @param src       указатель на исходный буфер отрисовки
+ * @param src_area  область для копирования из целевого буфера. Если NULL, используйте весь буфер.
+ * @note `dest_area` и`src_area`должны иметь одинаковую ширину и высоту.
+ * @note  Функция копирования по умолчанию требовала, чтобы`dest`и`src`имели одинаковый цветовой формат.
+ * Перезапись dest->handlers->buf_copy_cbможет устранить это ограничение.
  */
 void lv_draw_buf_copy(lv_draw_buf_t * dest, const lv_area_t * dest_area,
                       const lv_draw_buf_t * src, const lv_area_t * src_area);
 
 /**
- * Return pointer to the buffer at the given coordinates
+ * Вернуть указатель на буфер по заданным координатам
  */
 void * lv_draw_buf_goto_xy(const lv_draw_buf_t * buf, uint32_t x, uint32_t y);
 
 /**
- * Adjust the stride of a draw buf in place.
- * @param src       pointer to a draw buffer
- * @param stride    the new stride in bytes for image. Use LV_STRIDE_AUTO for automatic calculation.
- * @return          LV_RESULT_OK: success or LV_RESULT_INVALID: failed
+ * Отрегулируйте шаг буфа на месте.
+ * @param src       указатель на буфер рисования
+ * @param stride    новый шаг в байтах для изображения. ИспользуйтеLV_STRIDE_AUTOдля автоматического расчета.
+ * @return          LV_RESULT_OK: успех или LV_RESULT_INVALID: неудача.
  */
 lv_result_t lv_draw_buf_adjust_stride(lv_draw_buf_t * src, uint32_t stride);
 
 /**
- * Premultiply draw buffer color with alpha channel.
- * If it's already premultiplied, return directly.
- * Only color formats with alpha channel will be processed.
+ * Предварительно умножить цвет буфера рисования с альфа-каналом.
+ * Если оно уже предварительно умножено, вернитесь напрямую.
+ * Будут обрабатываться только цветовые форматы с альфа-каналом.
  *
- * @return LV_RESULT_OK: premultiply success
+ * @return LV_RESULT_OK : успех предварительного умножения
  */
 lv_result_t lv_draw_buf_premultiply(lv_draw_buf_t * draw_buf);
 
 
 /**
- * Check if a draw buffer has a given flag.
- * @param draw_buf  pointer to a draw buffer
- * @param flag      the flag to check
- * @return true: the flag is set, false: the flag is not set
+ * Проверьте, имеет ли буфер отрисовки заданный флаг.
+ * @param draw_buf  указатель на буфер рисования
+ * @param flag      флаг для проверки
+ * @return true: флаг установлен, false: флаг не установлен
  */
 static inline bool lv_draw_buf_has_flag(const lv_draw_buf_t * draw_buf, lv_image_flags_t flag)
 {
@@ -327,9 +327,9 @@ static inline bool lv_draw_buf_has_flag(const lv_draw_buf_t * draw_buf, lv_image
 }
 
 /**
- * Set a flag to a draw buffer.
- * @param draw_buf  pointer to a draw buffer
- * @param flag      the flag to set
+ * Установите флаг для буфера рисования.
+ * @param draw_buf  указатель на буфер рисования
+ * @param flag      флаг, который нужно установить
  */
 static inline void lv_draw_buf_set_flag(lv_draw_buf_t * draw_buf, lv_image_flags_t flag)
 {
@@ -337,9 +337,9 @@ static inline void lv_draw_buf_set_flag(lv_draw_buf_t * draw_buf, lv_image_flags
 }
 
 /**
- * Clear a flag from a draw buffer.
- * @param draw_buf  pointer to a draw buffer
- * @param flag      the flag to clear
+ * Очистить флаг из буфера рисования.
+ * @param draw_buf  указатель на буфер рисования
+ * @param flag      флаг, который нужно очистить
  */
 static inline void lv_draw_buf_clear_flag(lv_draw_buf_t * draw_buf, lv_image_flags_t flag)
 {
@@ -347,8 +347,8 @@ static inline void lv_draw_buf_clear_flag(lv_draw_buf_t * draw_buf, lv_image_fla
 }
 
 /**
- * As of now, draw buf share same definition as `lv_image_dsc_t`.
- * And is interchangeable with `lv_image_dsc_t`.
+ * На данный момент draw buf имеет то же определение, что и`lv_image_dsc_t`.
+ * И взаимозаменяем с`lv_image_dsc_t`.
  */
 
 lv_result_t lv_draw_buf_from_image(lv_draw_buf_t * buf, const lv_image_dsc_t * img);
@@ -356,25 +356,25 @@ lv_result_t lv_draw_buf_from_image(lv_draw_buf_t * buf, const lv_image_dsc_t * i
 void lv_draw_buf_to_image(const lv_draw_buf_t * buf, lv_image_dsc_t * img);
 
 /**
- * Set the palette color of an indexed image. Valid only for `LV_COLOR_FORMAT_I1/2/4/8`
- * @param draw_buf pointer to an image descriptor
- * @param index the palette color to set:
- *   - for `LV_COLOR_FORMAT_I1`: 0..1
- *   - for `LV_COLOR_FORMAT_I2`: 0..3
- *   - for `LV_COLOR_FORMAT_I4`: 0..15
- *   - for `LV_COLOR_FORMAT_I8`: 0..255
- * @param color the color to set in lv_color32_t format
+ * Установите цвет палитры индексированного изображения. Действительно только для `LV_COLOR_FORMAT_I1/2/4/8`
+ * @param draw_buf указатель на дескриптор изображения
+ * @param index цвет палитры для установки:
+ *   - для `LV_COLOR_FORMAT_I1`: 0..1
+ *   - для `LV_COLOR_FORMAT_I2`: 0..3
+ *   - для `LV_COLOR_FORMAT_I4`: 0..15
+ *   - для `LV_COLOR_FORMAT_I8`: 0..255
+ * @param color цвет для установки в формате lv_color32_t
  */
 void lv_draw_buf_set_palette(lv_draw_buf_t * draw_buf, uint8_t index, lv_color32_t color);
 
 /**
- * @deprecated Use lv_draw_buf_set_palette instead.
+ * @deprecated Вместо этого используйте lv_draw_buf_set_palette.
  */
 void lv_image_buf_set_palette(lv_image_dsc_t * dsc, uint8_t id, lv_color32_t c);
 
 /**
- * @deprecated Use lv_draw_buffer_create/destroy instead.
- * Free the data pointer and dsc struct of an image.
+ * @deprecated Вместо этого используйтеlv_draw_buffer_create/destroy.
+ * Освободите указатель данных и создайте структуру изображения dsc.
  */
 void lv_image_buf_free(lv_image_dsc_t * dsc);
 
@@ -383,7 +383,7 @@ void lv_image_buf_free(lv_image_dsc_t * dsc);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_BUF_H*/

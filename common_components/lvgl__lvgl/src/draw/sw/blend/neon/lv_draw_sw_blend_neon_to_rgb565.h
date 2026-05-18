@@ -65,7 +65,7 @@ extern "C" {
 #define LV_DRAW_SW_AL88_BLEND_NORMAL_TO_RGB565_WITH_OPA(dsc) lv_draw_sw_blend_neon_al88_to_rgb565_with_opa(dsc)
 #endif
 
-#if 0 /* Disabled as it's not tested */
+#if 0 /* Отключено, так как не проверено */
 #ifndef LV_DRAW_SW_AL88_BLEND_NORMAL_TO_RGB565_WITH_MASK
 #define LV_DRAW_SW_AL88_BLEND_NORMAL_TO_RGB565_WITH_MASK(dsc) lv_draw_sw_blend_neon_al88_to_rgb565_with_mask(dsc)
 
@@ -129,8 +129,8 @@ extern "C" {
 #endif
 
 /*
- * Bleding operations with premultiplied argb8888 require division.
- * As division is not supported for integer values in neon we don't define these functions
+ * Операции очистки с предварительно умноженным argb8888 требуют деления.
+ * Поскольку деление не поддерживается для целочисленных значений в неоне, мы не определяем эти функции.
  */
 #ifndef LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_RGB565_WITH_OPA
 #define LV_DRAW_SW_ARGB8888_PREMULTIPLIED_BLEND_NORMAL_TO_RGB565_WITH_OPA(...) LV_RESULT_INVALID
@@ -184,7 +184,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb565_with_opa_mask(lv_draw_sw_ble
 #endif /* LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_NEON */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_NEON_TO_RGB565_H*/

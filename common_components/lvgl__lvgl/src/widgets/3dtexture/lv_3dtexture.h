@@ -34,23 +34,23 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_3dtexture_class;
  **********************/
 
 /**
- * Create a 3dtexture object
+ * Создайте объект 3D-текстуры
  * @param parent    pointer to an object, it will be the parent of the new 3dtexture
  * @return          pointer to the created 3dtexture
  */
 lv_obj_t * lv_3dtexture_create(lv_obj_t * parent);
 
 /**
- * Set the source texture of the widget.
- * The object size should be manually set to match.
+ * Установите исходную текстуру виджета.
+ * Размер объекта должен быть установлен вручную.
  * @param obj    the 3dtexture widget
  * @param id     the texture handle from the 3D graphics backend.
- *               I.e., an `unsigned int` texture for OpenGL.
+ *               То есть текстура `unsigned int` для OpenGL.
  */
 void lv_3dtexture_set_src(lv_obj_t * obj, lv_3dtexture_id_t id);
 
 /**
- * Set the flipping behavior of the widget.
+ * Установите поведение виджета при переворачивании.
  * @param obj      the 3dtexture widget
  * @param h_flip   true to flip horizontally.
  * @param v_flip   true to flip vertically.
@@ -58,19 +58,19 @@ void lv_3dtexture_set_src(lv_obj_t * obj, lv_3dtexture_id_t id);
 void lv_3dtexture_set_flip(lv_obj_t * obj, bool h_flip, bool v_flip);
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**********************
@@ -80,7 +80,7 @@ void lv_3dtexture_set_flip(lv_obj_t * obj, bool h_flip, bool v_flip);
 #endif /*LV_USE_3DTEXTURE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_3DTEXTURE_H*/

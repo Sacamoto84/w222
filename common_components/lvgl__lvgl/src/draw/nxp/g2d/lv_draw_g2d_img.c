@@ -52,7 +52,7 @@ static void _g2d_set_tmp_surf(struct g2d_surface * tmp_surf, struct g2d_buf * bu
 static void _g2d_set_dst_surf(struct g2d_surface * dst_surf, struct g2d_buf * buf, const lv_area_t * area,
                               lv_draw_buf_t * draw_buf);
 
-/* Blit simple w/ opa and alpha channel */
+/* Простой Blit с opa и альфа-каналом */
 static void _g2d_blit(void * handle, struct g2d_surface * dst_surf, struct g2d_surface * src_surf);
 
 static void _g2d_blit_two_steps(void * handle, struct g2d_surface * dst_surf, struct g2d_surface * src_surf,
@@ -114,7 +114,7 @@ static void _g2d_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
 
     lv_color_format_t src_cf = draw_dsc->header.cf;
 
-    /* G2D takes stride in pixels. */
+    /* G2D делает шаг вперед в пикселях. */
     const uint8_t pixel_size = lv_color_format_get_size(src_cf);
 
     uint32_t src_stride = draw_dsc->header.stride == 0 ?
@@ -123,10 +123,10 @@ static void _g2d_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
     LV_ASSERT(pixel_size != 0);
     src_stride /= pixel_size;
 
-    /* Source image */
+    /* Исходное изображение */
     struct g2d_buf * src_buf = _g2d_handle_src_buf(decoded);
 
-    /* Destination buffer */
+    /* Целевой буфер */
     struct g2d_buf * dst_buf = g2d_search_buf_map(draw_buf->data);
 
 
@@ -141,7 +141,7 @@ static void _g2d_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
     bool has_rotation = (draw_dsc->rotation != 0);
 
     if(has_rotation) {
-        /** If the image has rotation, then blit in two steps:
+        /** Если изображение имеет вращение, то блитирование осуществляется в два этапа:
          *   1. Source with rotation to temporary surface.
          *   2. Temporary with other transformations (if any) to destination (frame buffer).
          */
@@ -154,7 +154,7 @@ static void _g2d_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
         g2d_free(tmp_buf);
     }
     else {
-        // If rotation is not involved, blit in one step.
+        // Если вращение не задействовано, бликуйте за один прием.
         _g2d_blit(handle, &dst_surf, &src_surf);
     }
 }
@@ -295,8 +295,8 @@ static void _g2d_blit_two_steps(void * handle, struct g2d_surface * dst_surf, st
     g2d_disable(handle, G2D_GLOBAL_ALPHA);
     g2d_disable(handle, G2D_BLEND);
 
-    /**After first blit, change blending and global alpha for temporary surface
-     * since the surface now acts as source.
+    /**После первого блитирования измените смешивание и глобальную альфу для временной поверхности.
+     * поскольку поверхность теперь действует как источник.
      */
     tmp_surf->blendfunc = G2D_ONE | G2D_PRE_MULTIPLIED_ALPHA;
     tmp_surf->global_alpha = 0xFF;

@@ -30,11 +30,11 @@ extern "C" {
  **********************/
 
 /**
- * Initialize the theme
+ * Инициализировать тему
  * @param disp pointer to display
  * @param color_primary the primary color of the theme
  * @param color_secondary the secondary color for the theme
- * @param dark
+ * @param темный
  * @param font pointer to a font to use.
  * @return a pointer to reference this theme later
  */
@@ -42,19 +42,19 @@ lv_theme_t * lv_theme_default_init(lv_display_t * disp, lv_color_t color_primary
                                    const lv_font_t * font);
 
 /**
- * Check if default theme is initialized
+ * Проверьте, инициализирована ли тема по умолчанию
  * @return true if default theme is initialized, false otherwise
  */
 bool lv_theme_default_is_inited(void);
 
 /**
- * Get default theme
+ * Получить тему по умолчанию
  * @return a pointer to default theme, or NULL if this is not initialized
  */
 lv_theme_t * lv_theme_default_get(void);
 
 /**
- * Deinitialize the default theme
+ * Деинициализировать тему по умолчанию
  */
 void lv_theme_default_deinit(void);
 
@@ -65,7 +65,7 @@ void lv_theme_default_deinit(void);
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_THEME_DEFAULT_H*/

@@ -2,7 +2,7 @@
 #if LV_USE_BAR && LV_BUILD_EXAMPLES
 
 /**
- * Bar with LTR and RTL base direction
+ * Стержень с базовым направлением LTR и RTL
  */
 void lv_example_bar_5(void)
 {

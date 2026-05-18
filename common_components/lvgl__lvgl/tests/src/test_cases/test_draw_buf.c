@@ -7,12 +7,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_draw_buf_stride_adjust(void)
@@ -23,14 +23,14 @@ void test_draw_buf_stride_adjust(void)
         "I2",
         "I4",
         "I8",
-#if 0   /* Decoder will convert them to A8 anyway.*/
+#if 0   /* Декодер в любом случае преобразует их в A8.*/
         "A1",
         "A2",
         "A4",
 #endif
         "A8",
         "RGB565",
-#if 0   /* RGB565 with alpha is not supported*/
+#if 0   /* RGB565 с альфа-версией не поддерживается.*/
         "RGB565A8",
         "ARGB8565",
 #endif
@@ -53,12 +53,12 @@ void test_draw_buf_stride_adjust(void)
         char img_src[256];
         char ref_image[256];
         snprintf(img_src, sizeof(img_src), "A:test_images/stride_align1/UNCOMPRESSED/test_%s.bin", color_formats[i]);
-        snprintf(ref_image, sizeof(ref_image), "draw/temp_%s.o", color_formats[i]); /*Use .o file name so git ignores it.*/
+        snprintf(ref_image, sizeof(ref_image), "draw/temp_%s.o", color_formats[i]); /*Используйте имя файла .o, чтобы git его игнорировал.*/
 
         lv_image_set_src(img, img_src);
-        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Generate the reference image, use .o so git ignore it*/
+        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Создайте эталонное изображение, используйте .o, чтобы git проигнорировал его.*/
 
-        lv_image_cache_drop(img_src); /* Image could be added to cache during lv_image_set_src*/
+        lv_image_cache_drop(img_src); /* Изображение может быть добавлено в кеш во время lv_image_set_src.*/
 
         lv_image_decoder_dsc_t decoder_dsc;
         lv_result_t res = lv_image_decoder_open(&decoder_dsc, img_src, &args);
@@ -72,39 +72,39 @@ void test_draw_buf_stride_adjust(void)
         uint32_t image_stride = header.stride;
         uint32_t min_stride = (image_width * lv_color_format_get_bpp(header.cf) + 7) >> 3;
 
-        /*Close the decoder since we copied out the decoded draw buffer*/
+        /*Закройте декодер, так как мы скопировали декодированный буфер отрисовки.*/
         lv_image_decoder_close(&decoder_dsc);
 
-        /* Shrink stride to below minimal stride(by -1 in code below) should fail */
+        /* Уменьшить шаг ниже минимального шага (на -1 в коде ниже) должно завершиться неудачно. */
         res = lv_draw_buf_adjust_stride(decoded, min_stride - 1);
         TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res);
 
-        /*Expand the stride should fail if stride is too large that buffer size overflow*/
+        /*Расширение шага должно завершиться неудачно, если шаг слишком велик и размер буфера переполняется.*/
         res = lv_draw_buf_adjust_stride(decoded, image_stride + 1);
         TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res);
 
-        /*Create a larger draw buffer*/
+        /*Создать больший буфер прорисовки*/
         lv_draw_buf_t * larger = lv_draw_buf_create(image_width, image_height, header.cf, min_stride + 100);
 
-        /*Copy draw buffer, it should look same.*/
+        /*Скопируйте буфер рисования, он должен выглядеть так же.*/
         lv_draw_buf_copy(larger, NULL, decoded, NULL);
         lv_image_cache_drop(larger);
         lv_image_set_src(img, larger);
-        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*The image should still looks same*/
+        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Изображение должно выглядеть так же*/
 
-        /* Shrink stride to minimal stride should succeed */
+        /* Сократить шаг до минимального должно добиться успеха. */
         res = lv_draw_buf_adjust_stride(larger, min_stride);
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         lv_image_cache_drop(larger);
         lv_image_set_src(img, larger);
-        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Test against with above reference image*/
+        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Протестируйте с использованием приведенного выше эталонного изображения.*/
 
-        /* Expand the stride should work, use a proper stride value should succeed*/
+        /* Увеличение шага должно работать, используйте правильное значение шага.*/
         res = lv_draw_buf_adjust_stride(larger, min_stride + 20);
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         lv_image_cache_drop(larger);
         lv_image_set_src(img, larger);
-        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*The image should still look same*/
+        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Изображение должно выглядеть так же*/
 
         lv_draw_buf_destroy(larger);
         lv_draw_buf_destroy(decoded);
@@ -133,11 +133,11 @@ void test_draw_buf_premultiply(void)
     lv_draw_buf_t * draw_buf;
     lv_result_t res;
     int i;
-    /* Test ARGB8888 format */
+    /* Тестовый формат ARGB8888 */
     {
         draw_buf = lv_draw_buf_create(2, 2, LV_COLOR_FORMAT_ARGB8888, 2 * 4);
 
-        /* Fill with test data: white with 50% alpha */
+        /* Заполните тестовыми данными: белый цвет с 50% альфа. */
         lv_color32_t * pixel = (lv_color32_t *)draw_buf->data;
         for(i = 0; i < 4; i++) {
             pixel[i] = (lv_color32_t) {
@@ -149,22 +149,22 @@ void test_draw_buf_premultiply(void)
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         TEST_ASSERT(draw_buf->header.flags & LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-        /* Verify premultiplied result: color should be 127 = (255 * 128) >> 8, alpha should be 128 */
+        /* Проверьте результат предварительного умножения: цвет должен быть 127 = (255 * 128) >> 8, альфа должна быть 128. */
         for(i = 0; i < 4; i++) {
             TEST_ASSERT_EQUAL_UINT8(127, pixel[i].red);
             TEST_ASSERT_EQUAL_UINT8(127, pixel[i].green);
             TEST_ASSERT_EQUAL_UINT8(127, pixel[i].blue);
-            TEST_ASSERT_EQUAL_UINT8(128, pixel[i].alpha); /* Alpha should remain unchanged */
+            TEST_ASSERT_EQUAL_UINT8(128, pixel[i].alpha); /* Альфа должна остаться неизменной */
         }
 
         lv_draw_buf_destroy(draw_buf);
     }
 
-    /* Test XRGB8888 format */
+    /* Тестовый формат XRGB8888 */
     {
         draw_buf = lv_draw_buf_create(2, 2, LV_COLOR_FORMAT_XRGB8888, 2 * 4);
 
-        /* Fill with test data: white with 50% alpha */
+        /* Заполните тестовыми данными: белый цвет с 50% альфа. */
         lv_color32_t * pixel = (lv_color32_t *)draw_buf->data;
         for(i = 0; i < 4; i++) {
             pixel[i] = (lv_color32_t) {
@@ -173,47 +173,47 @@ void test_draw_buf_premultiply(void)
         }
 
         res = lv_draw_buf_premultiply(draw_buf);
-        TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res); /* XRGB8888 is not supported */
+        TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res); /* XRGB8888 не поддерживается. */
 
         lv_draw_buf_destroy(draw_buf);
     }
 
-    /* Test RGB565A8 format */
+    /* Тестовый формат RGB565A8 */
     {
         draw_buf = lv_draw_buf_create(2, 2, LV_COLOR_FORMAT_RGB565A8, 2 * 2);
 
-        /* Fill with test data */
+        /* Заполните тестовые данные */
         uint16_t * pixel = (uint16_t *)draw_buf->data;
-        lv_opa_t * alpha = (lv_opa_t *)(draw_buf->data + 2 * 2 * 2); /* RGB565 data size */
+        lv_opa_t * alpha = (lv_opa_t *)(draw_buf->data + 2 * 2 * 2); /* Размер данных RGB565 */
         for(i = 0; i < 4; i++) {
             pixel[i] = lv_color_to_u16(lv_color_white()); /* White: 0xFFFF in RGB565 */
-            alpha[i] = 128; /* 50% alpha */
+            alpha[i] = 128; /* 50% альфа */
         }
 
         res = lv_draw_buf_premultiply(draw_buf);
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         TEST_ASSERT(draw_buf->header.flags & LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-        /* Verify premultiplied result: white (0xFFFF) with 50% alpha should become gray */
+        /* Проверьте результат предварительного умножения: белый ( 0xFFFF ) с альфа 50% должен стать серым. */
         for(i = 0; i < 4; i++) {
             /* RGB565: 5-6-5 bits, white premultiplied by 0.5 should be approximately half intensity */
-            TEST_ASSERT_EQUAL_UINT16(0x7BEF, pixel[i]); /* Approximate half of white in RGB565 */
+            TEST_ASSERT_EQUAL_UINT16(0x7BEF, pixel[i]); /* Примерно половина белого в RGB565 */
         }
 
         lv_draw_buf_destroy(draw_buf);
     }
 
-    /* Test ARGB8565 format */
+    /* Тестовый формат ARGB8565 */
     {
         draw_buf = lv_draw_buf_create(2, 2, LV_COLOR_FORMAT_ARGB8565, 2 * 3);
 
-        /* Fill with test data */
+        /* Заполните тестовые данные */
         uint8_t * pixel = draw_buf->data;
         for(i = 0; i < 4; i++) {
             uint16_t c = lv_color_to_u16(lv_color_white()); /* White: 0xFFFF */
-            pixel[0] = c & 0xFF;         /* Low byte of RGB565 */
-            pixel[1] = (c >> 8) & 0xFF;  /* High byte of RGB565 */
-            pixel[2] = 128;                   /* Alpha */
+            pixel[0] = c & 0xFF;         /* Младший байт RGB565 */
+            pixel[1] = (c >> 8) & 0xFF;  /* Старший байт RGB565 */
+            pixel[2] = 128;                   /* Альфа */
             pixel += 3;
         }
 
@@ -221,20 +221,20 @@ void test_draw_buf_premultiply(void)
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         TEST_ASSERT(draw_buf->header.flags & LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-        /* Verify premultiplied result */
+        /* Проверка предварительно умноженного результата */
         pixel = draw_buf->data;
         for(i = 0; i < 4; i++) {
-            uint16_t c = (pixel[1] << 8) | pixel[0]; /* Reconstruct RGB565 */
-            /* White premultiplied by 0.5 should be approximately half intensity */
-            TEST_ASSERT_EQUAL_UINT16(0x7BEF, c); /* Approximate half of white in RGB565 */
-            TEST_ASSERT_EQUAL_UINT8(128, pixel[2]); /* Alpha should remain unchanged */
+            uint16_t c = (pixel[1] << 8) | pixel[0]; /* Реконструировать RGB565 */
+            /* Белый, предварительно умноженный на 0,5, должен составлять примерно половину интенсивности. */
+            TEST_ASSERT_EQUAL_UINT16(0x7BEF, c); /* Примерно половина белого в RGB565 */
+            TEST_ASSERT_EQUAL_UINT8(128, pixel[2]); /* Альфа должна остаться неизменной */
             pixel += 3;
         }
 
         lv_draw_buf_destroy(draw_buf);
     }
 
-    /* Test indexed format (I1/I2/I4/I8) */
+    /* Тестовый индексированный формат (I1/I2/I4/I8) */
     lv_color_format_t color_formats[] = {
         LV_COLOR_FORMAT_I1,
         LV_COLOR_FORMAT_I2,
@@ -245,7 +245,7 @@ void test_draw_buf_premultiply(void)
     for(unsigned int fmt_i = 0; fmt_i < sizeof(color_formats) / sizeof(color_formats[0]); fmt_i++) {
         draw_buf = lv_draw_buf_create(2, 2, color_formats[fmt_i], 0);
 
-        /* Fill palette with test data */
+        /* Заполните палитру тестовыми данными */
         lv_color32_t * palette = (lv_color32_t *)draw_buf->data;
         int palette_size = LV_COLOR_INDEXED_PALETTE_SIZE(color_formats[fmt_i]);
         for(i = 0; i < palette_size; i++) {
@@ -258,7 +258,7 @@ void test_draw_buf_premultiply(void)
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         TEST_ASSERT(draw_buf->header.flags & LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-        /* Verify palette was premultiplied */
+        /* Убедитесь, что палитра была предварительно умножена */
         for(i = 0; i < palette_size; i++) {
             TEST_ASSERT_EQUAL_UINT8(127, palette[i].red);
             TEST_ASSERT_EQUAL_UINT8(127, palette[i].green);

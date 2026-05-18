@@ -35,27 +35,27 @@ extern "C" {
  **********************/
 
 /**
- * Create an IBL sampler for processing environment images
+ * Создайте сэмплер IBL для обработки изображений среды.
  * @return  pointer to the created sampler, or NULL on failure
  * @note    Can be safely deleted after environments are created
  */
 lv_gltf_ibl_sampler_t * lv_gltf_ibl_sampler_create(void);
 
 /**
- * Set the resolution for each cubemap face
+ * Установите разрешение для каждой грани кубической карты.
  * @param   pointer to a sampler
  * @param   resolution of each cube map face in pixels (recommended: 64-512 for embedded)
  */
 void lv_gltf_ibl_sampler_set_cube_map_pixel_resolution(lv_gltf_ibl_sampler_t * sampler, uint32_t resolution);
 
 /**
- * Delete an IBL sampler
+ * Удалить сэмплер IBL
  * @param   sampler pointer to the sampler to delete
  */
 void lv_gltf_ibl_sampler_delete(lv_gltf_ibl_sampler_t * sampler);
 
 /**
- * Create an environment from an HDR or JPEG panoramic image for IBL rendering
+ * Создайте среду из панорамного изображения HDR или JPEG для рендеринга IBL.
  * @param   sampler IBL sampler defining output resolution (can be deleted after this call)
  * @param   file_path path to equirectangular environment image, or NULL to use default embedded image
  * @return  pointer to the created environment, or NULL on failure
@@ -66,14 +66,14 @@ void lv_gltf_ibl_sampler_delete(lv_gltf_ibl_sampler_t * sampler);
 lv_gltf_environment_t * lv_gltf_environment_create(lv_gltf_ibl_sampler_t * sampler, const char * file_path);
 
 /**
- * Set the rotation angle of the environment map
+ * Установите угол поворота карты окружения
  * @param   env pointer to the environment
  * @param   angle rotation angle in degrees
  */
 void lv_gltf_environment_set_angle(lv_gltf_environment_t * env, float angle);
 
 /**
- * Delete an environment
+ * Удаление среды
  * @param environment pointer to the environment to delete
  */
 void lv_gltf_environment_delete(lv_gltf_environment_t * environment);
@@ -84,7 +84,7 @@ void lv_gltf_environment_delete(lv_gltf_environment_t * environment);
 
 #endif /*LV_USE_GLTF*/
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_GLTF_ENVIRONMENT_H*/

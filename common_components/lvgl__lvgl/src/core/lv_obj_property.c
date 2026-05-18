@@ -185,7 +185,7 @@ lv_prop_id_t lv_style_property_get_id(const char * name)
 {
 #if LV_USE_OBJ_PROPERTY_NAME
     lv_property_name_t * found;
-    /*Check style property*/
+    /*Проверьте свойство стиля*/
     found = lv_utils_bsearch(name, lv_style_property_names, sizeof(lv_style_property_names) / sizeof(lv_property_name_t),
                              sizeof(lv_property_name_t), property_name_compare);
     if(found) return found->id;
@@ -203,7 +203,7 @@ lv_prop_id_t lv_obj_class_property_get_id(const lv_obj_class_t * clz, const char
 
     names = clz->property_names;
     if(names == NULL) {
-        /* try base class*/
+        /* попробуй базовый класс*/
         return LV_PROPERTY_ID_INVALID;
     }
 
@@ -228,7 +228,7 @@ lv_prop_id_t lv_obj_property_get_id(const lv_obj_t * obj, const char * name)
         if(id != LV_PROPERTY_ID_INVALID) return id;
     }
 
-    /*Check style property*/
+    /*Проверьте свойство стиля*/
     id = lv_style_property_get_id(name);
     if(id != LV_PROPERTY_ID_INVALID) return id;
 #else
@@ -254,37 +254,37 @@ static lv_result_t obj_property(lv_obj_t * obj, lv_prop_id_t id, lv_property_t *
     for(clz = obj->class_p ; clz; clz = clz->base_class) {
         properties = clz->properties;
         if(properties == NULL) {
-            /* try base class*/
+            /* попробуй базовый класс*/
             continue;
         }
 
         if(id != LV_PROPERTY_ID_ANY && (index < clz->prop_index_start || index > clz->prop_index_end)) {
-            /* try base class*/
+            /* попробуй базовый класс*/
             continue;
         }
 
-        /*Check if there's setter available for this class*/
+        /*Проверьте, доступен ли установщик для этого класса*/
         for(uint32_t i = 0; i < clz->properties_count; i++) {
             prop = &properties[i];
 
-            /*pass id and value directly to widget's property method*/
+            /*передать идентификатор и значение непосредственно в метод свойства виджета*/
             if(prop->id == LV_PROPERTY_ID_ANY) {
                 value->id = prop->id;
                 if(set) return ((lv_property_setter_t)prop->setter)(obj, id, value);
                 else return ((lv_property_getter_t)prop->getter)(obj, id, value);
             }
 
-            /*Not this id, check next*/
+            /*Не этот идентификатор, проверьте дальше*/
             if(prop->id != id)
                 continue;
 
-            /*id matched but we got null pointer to functions*/
+            /*идентификатор совпал, но мы получили нулевой указатель на функции*/
             if(set ? prop->setter == NULL : prop->getter == NULL) {
                 LV_LOG_WARN("NULL %s provided, id: 0x%" LV_PRIx32, set ? "setter" : "getter", id);
                 return LV_RESULT_INVALID;
             }
 
-            /*Update value id if it's a read*/
+            /*Обновить идентификатор значения, если это чтение*/
             if(!set) value->id = prop->id;
 
             switch(LV_PROPERTY_ID_TYPE(prop->id)) {
@@ -323,7 +323,7 @@ static lv_result_t obj_property(lv_obj_t * obj, lv_prop_id_t id, lv_property_t *
             return LV_RESULT_OK;
         }
 
-        /*If no setter found, try base class then*/
+        /*Если установщик не найден, попробуйте базовый класс, затем*/
     }
 
     LV_LOG_WARN("Unknown property id: 0x%08" LV_PRIx32, id);

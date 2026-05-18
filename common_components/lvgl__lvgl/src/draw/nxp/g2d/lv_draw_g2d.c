@@ -24,9 +24,9 @@
 #define DRAW_UNIT_ID_G2D 8
 
 /**
- * Enum name differs depending on g2d version (breaking API change, not handled in g2d.h)
+ * Имя перечисления различается в зависимости от версии g2d (критическое изменение API, не обрабатывается в g2d.h )
  * Note: enum value is the same in either case
- * See https://github.com/nxp-imx/imx-g2d-pxp/commit/d7af84b5c8ad161b6898ffabe23918cb59fe2fe9
+ * См. https://github.com/nxp-imx/imx-g2d-pxp/commit/d7af84b5c8ad161b6898ffabe23918cb59fe2fe9.
  */
 #if defined(LV_USE_PXP)
     #if (G2D_VERSION_MAJOR >= 2) && (G2D_VERSION_MINOR < 3)
@@ -45,19 +45,19 @@
  **********************/
 
 /**
- * Evaluate a task and set the score and preferred G2D unit.
- * Return 1 if task is preferred, 0 otherwise (task is not supported).
+ * Оцените задачу и установите оценку и предпочитаемый юнит G2D.
+ * Возвращайте 1, если задача предпочтительнее, и 0 в противном случае (задача не поддерживается).
  */
 static int32_t _g2d_evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task);
 
 /**
- * Dispatch a task to the G2D unit.
- * Return 1 if task was dispatched, 0 otherwise (task not supported).
+ * Отправьте задание отряду G2D.
+ * Возвращает 1, если задача была отправлена, и 0 в противном случае (задача не поддерживается).
  */
 static int32_t _g2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer);
 
 /**
- * Delete the G2D draw unit.
+ * Удалите блок рисования G2D.
  */
 static int32_t _g2d_delete(lv_draw_unit_t * draw_unit);
 
@@ -162,11 +162,11 @@ static inline bool _g2d_src_cf_supported(lv_color_format_t cf)
 static bool _g2d_draw_img_supported(const lv_draw_image_dsc_t * draw_dsc)
 {
     bool has_recolor = (draw_dsc->recolor_opa > LV_OPA_MIN);
-    /* Recolor is not supported. */
+    /* Перекрашивание не поддерживается. */
     if(has_recolor)
         return false;
 
-    /* G2D can only rotate at 90x angles. */
+    /* G2D может вращаться только на угол 90x. */
     if(draw_dsc->rotation % 900)
         return false;
 
@@ -190,7 +190,7 @@ static int32_t _g2d_evaluate(lv_draw_unit_t * u, lv_draw_task_t * t)
         case LV_DRAW_TASK_TYPE_FILL: {
                 const lv_draw_fill_dsc_t * draw_dsc = (lv_draw_fill_dsc_t *) t->draw_dsc;
 
-                /* Most simple case: just a plain rectangle (no radius, no gradient). */
+                /* Самый простой случай: простой прямоугольник (без радиуса и градиента). */
                 if((draw_dsc->radius != 0) || (draw_dsc->grad.dir != (lv_grad_dir_t)LV_GRAD_DIR_NONE))
                     return 0;
 
@@ -234,16 +234,16 @@ static int32_t _g2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 #if LV_USE_OS
     lv_draw_sw_thread_dsc_t * thread_dsc = &draw_g2d_unit->thread_dsc;
 
-    /* Return immediately if it's busy with draw task. */
+    /* Немедленно вернитесь, если он занят задачей рисования. */
     if(thread_dsc->task_act)
         return 0;
 #else
-    /* Return immediately if it's busy with draw task. */
+    /* Немедленно вернитесь, если он занят задачей рисования. */
     if(draw_g2d_unit->task_act)
         return 0;
 #endif
 
-    /* Try to get an ready to draw. */
+    /* Попробуйте получить готовый рисунок. */
     lv_draw_task_t * t = lv_draw_get_available_task(layer, NULL, DRAW_UNIT_ID_G2D);
 
     if(t == NULL || t->preferred_draw_unit_id != DRAW_UNIT_ID_G2D)
@@ -258,7 +258,7 @@ static int32_t _g2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 #if LV_USE_G2D_DRAW_THREAD
     thread_dsc->task_act = t;
 
-    /* Let the render thread work. */
+    /* Пусть поток рендеринга работает. */
     if(thread_dsc->inited)
         lv_thread_sync_signal(&thread_dsc->sync);
 #else
@@ -269,7 +269,7 @@ static int32_t _g2d_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
     draw_g2d_unit->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
     draw_g2d_unit->task_act = NULL;
 
-    /* The draw unit is free now. Request a new dispatching as it can get a new task. */
+    /* Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу. */
     lv_draw_dispatch_request();
 #endif
 
@@ -303,7 +303,7 @@ static void _g2d_execute_drawing(lv_draw_task_t * t)
     lv_layer_t * layer = t->target_layer;
     lv_draw_buf_t * draw_buf = layer->draw_buf;
 
-    /* Invalidate only the drawing area */
+    /* Сделать недействительной только область рисования */
     lv_draw_buf_invalidate_cache(draw_buf, NULL);
 
     switch(t->type) {
@@ -327,7 +327,7 @@ static void _g2d_render_thread_cb(void * ptr)
     thread_dsc->inited = true;
 
     while(1) {
-        /* Wait for sync if there is no task set. */
+        /* Дождитесь синхронизации, если задача не задана. */
         while(thread_dsc->task_act == NULL) {
             if(thread_dsc->exit_status)
                 break;
@@ -342,13 +342,13 @@ static void _g2d_render_thread_cb(void * ptr)
 
         _g2d_execute_drawing(thread_dsc->task_act);
 
-        /* Signal the ready state to dispatcher. */
+        /* Сигнализировать о готовности диспетчеру. */
         thread_dsc->task_act->state = LV_DRAW_TASK_STATE_FINISHED;
 
-        /* Cleanup. */
+        /* Уборка. */
         thread_dsc->task_act = NULL;
 
-        /* The draw unit is free now. Request a new dispatching as it can get a new task. */
+        /* Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу. */
         lv_draw_dispatch_request();
     }
 

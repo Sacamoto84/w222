@@ -45,7 +45,7 @@ static void draw_pattern(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_draw_vector_dsc_translate(ctx, 250, 250);
     lv_draw_vector_dsc_rotate(ctx, 25);
     lv_draw_vector_dsc_translate(ctx, -250, -250);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 }
 
 static void draw_gradient(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
@@ -75,7 +75,7 @@ static void draw_gradient(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_draw_vector_dsc_set_fill_linear_gradient(ctx, 200, 200, 400, 400);
     lv_draw_vector_dsc_set_fill_gradient_color_stops(ctx, stops, 2);
     lv_draw_vector_dsc_set_fill_gradient_spread(ctx, LV_VECTOR_GRADIENT_SPREAD_PAD);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 }
 
 static void draw_radial_gradient(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
@@ -102,7 +102,7 @@ static void draw_radial_gradient(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * 
     lv_draw_vector_dsc_set_fill_radial_gradient(ctx, 450, 100, 20);
     lv_draw_vector_dsc_set_fill_gradient_color_stops(ctx, stops, 2);
     lv_draw_vector_dsc_set_fill_gradient_spread(ctx, LV_VECTOR_GRADIENT_SPREAD_REFLECT);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 }
 
 static void draw_shapes(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
@@ -117,7 +117,7 @@ static void draw_shapes(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_vector_path_close(path);
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0xFF, 0x00, 0x00));
     lv_draw_vector_dsc_scale(ctx, 0.5, 0.5);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 
     lv_vector_path_clear(path);
     lv_draw_vector_dsc_identity(ctx);
@@ -126,7 +126,7 @@ static void draw_shapes(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_vector_path_append_rect(path, &rect, 50, 60);
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0x00, 0x80, 0xff));
     lv_draw_vector_dsc_skew(ctx, 5, 0);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 
     lv_vector_path_clear(path);
     lv_draw_vector_dsc_identity(ctx);
@@ -140,7 +140,7 @@ static void draw_shapes(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_vector_path_append_circle(path2, &p, 50, 30);
     lv_vector_path_append_path(path, path2);
 
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 
     lv_vector_path_delete(path2);
 }
@@ -163,7 +163,7 @@ static void draw_lines(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     float dashes[] = {10, 15, 20, 12};
     lv_draw_vector_dsc_set_stroke_dash(ctx, dashes, 4);
 
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 
     lv_draw_vector_dsc_set_stroke_opa(ctx, LV_OPA_0);
     lv_draw_vector_dsc_set_fill_opa(ctx, LV_OPA_COVER);
@@ -182,7 +182,7 @@ static void draw_blend(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_make(0xFF, 0x00, 0xFF));
     lv_draw_vector_dsc_set_blend_mode(ctx, LV_VECTOR_BLEND_SCREEN);
 
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 }
 
 static void draw_arc(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
@@ -192,9 +192,9 @@ static void draw_arc(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
 
     lv_area_t rect = {100, 0, 150, 50};
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_lighten(lv_color_black(), 50));
-    lv_draw_vector_dsc_clear_area(ctx, &rect); // clear screen
+    lv_draw_vector_dsc_clear_area(ctx, &rect); // очистить экран
 
-    lv_fpoint_t p = {100, 50}; /* Center */
+    lv_fpoint_t p = {100, 50}; /* Центр */
     lv_draw_vector_dsc_set_stroke_color(ctx, lv_color_make(0x00, 0xff, 0xff));
     lv_draw_vector_dsc_set_stroke_opa(ctx, LV_OPA_COVER);
     lv_draw_vector_dsc_set_stroke_width(ctx, 2.0f);
@@ -210,10 +210,10 @@ static void draw_arc(lv_draw_vector_dsc_t * ctx, lv_vector_path_t * path)
 
     lv_draw_vector_dsc_add_path(ctx, path);
 
-    /* Below code has same effect as above one. */
+    /* Код ниже имеет тот же эффект, что и выше. */
     lv_vector_path_clear(path);
     lv_vector_path_append_arc(path, &p, 50, 45, 45, true);
-    lv_draw_vector_dsc_add_path(ctx, path); // draw a path
+    lv_draw_vector_dsc_add_path(ctx, path); // нарисовать путь
 }
 
 static void draw_vector(lv_layer_t * layer)
@@ -222,7 +222,7 @@ static void draw_vector(lv_layer_t * layer)
 
     lv_area_t rect = {0, 100, 300, 300};
     lv_draw_vector_dsc_set_fill_color(ctx, lv_color_lighten(lv_color_black(), 50));
-    lv_draw_vector_dsc_clear_area(ctx, &rect); // clear screen
+    lv_draw_vector_dsc_clear_area(ctx, &rect); // очистить экран
 
     lv_vector_path_t * path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
 
@@ -233,7 +233,7 @@ static void draw_vector(lv_layer_t * layer)
     draw_gradient(ctx, path);
     draw_blend(ctx, path);
     draw_arc(ctx, path);
-    lv_draw_vector(ctx); // submit draw
+    lv_draw_vector(ctx); // представить розыгрыш
     lv_vector_path_delete(path);
     lv_draw_vector_dsc_delete(ctx);
 }
@@ -292,7 +292,7 @@ void lv_demo_vector_graphic_buffered(void)
 
 void lv_demo_vector_graphic_not_buffered(void)
 {
-    /*fallback for online examples*/
+    /*запасной вариант для онлайн-примеров*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Vector graphics is not enabled");
     lv_obj_center(label);
@@ -300,7 +300,7 @@ void lv_demo_vector_graphic_not_buffered(void)
 
 void lv_demo_vector_graphic_buffered(void)
 {
-    /*fallback for online examples*/
+    /*запасной вариант для онлайн-примеров*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Vector graphics is not enabled");
     lv_obj_center(label);

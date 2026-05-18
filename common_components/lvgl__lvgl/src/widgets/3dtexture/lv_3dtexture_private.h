@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Data of 3dtexture*/
+/*Данные 3D-текстуры*/
 struct _lv_3dtexture_t {
     lv_obj_t obj;
     lv_3dtexture_id_t id;
@@ -46,7 +46,7 @@ struct _lv_3dtexture_t {
 #endif /*LV_USE_3DTEXTURE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_3DTEXTURE_PRIVATE_H*/

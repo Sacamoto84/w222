@@ -23,26 +23,26 @@
 #endif
 
 /*
-** Architecture-specific bit manipulation routines.
+** Подпрограммы манипуляции с битами, зависящие от архитектуры.
 **
-** TLSF achieves O(1) cost for malloc and free operations by limiting
-** the search for a free block to a free list of guaranteed size
-** adequate to fulfill the request, combined with efficient free list
-** queries using bitmasks and architecture-specific bit-manipulation
-** routines.
+** TLSF достигает стоимости O(1) для операций malloc и free за счет ограничения
+** поиск свободного блока в свободном списке гарантированного размера
+** достаточно для выполнения запроса в сочетании с эффективным списком свободных мест
+** запросы с использованием битовых масок и битовых манипуляций, зависящих от архитектуры.
+** процедуры.
 **
-** Most modern processors provide instructions to count leading zeroes
-** in a word, find the lowest and highest set bit, etc. These
-** specific implementations will be used when available, falling back
-** to a reasonably efficient generic implementation.
+** Большинство современных процессоров предоставляют инструкции для подсчета ведущих нулей.
+** словом, найти младший и старший установленный бит и т. д. Эти
+** конкретные реализации будут использоваться, когда они доступны, с откатом
+** к достаточно эффективной общей реализации.
 **
 ** NOTE: TLSF spec relies on ffs/fls returning value 0..31.
-** ffs/fls return 1-32 by default, returning 0 for error.
+** ffs/fls по умолчанию возвращают значения от 1 до 32, возвращая 0 в случае ошибки.
 */
 
 /*
-** Detect whether or not we are building for a 32- or 64-bit (LP/LLP)
-** architecture. There is no reliable portable method at compile-time.
+** Определите, создаем ли мы 32- или 64-битную версию ( LP / LLP )
+** архитектура. Не существует надежного переносимого метода во время компиляции.
 */
 #if defined (__alpha__) || defined (__ia64__) || defined (__x86_64__) \
     || defined (_WIN64) || defined (__LP64__) || defined (__LLP64__)
@@ -50,8 +50,8 @@
 #endif
 
 /*
-** Returns one plus the index of the most significant 1-bit of n,
-** or if n is zero, returns zero.
+** Возвращает единицу плюс индекс старшего 1 бита n,
+** или, если n равно нулю, возвращает ноль.
 */
 #ifdef TLSF_64BIT
     #define TLSF_FLS(n) ((n) & 0xffffffff00000000ull ? 32 + TLSF_FLS32((size_t)(n) >> 32) : TLSF_FLS32(n))
@@ -67,20 +67,20 @@
 #define TLSF_FLS1(n)  ((n) & 0x1        ?  1 : 0)
 
 /*
-** Returns round up value of log2(n).
+** Возвращает округленное значение log2(n).
 ** Note: it is used at compile time.
 */
 #define TLSF_LOG2_CEIL(n) ((n) & (n - 1) ? TLSF_FLS(n) : TLSF_FLS(n) - 1)
 
 /*
-** gcc 3.4 and above have builtin support, specialized for architecture.
-** Some compilers masquerade as gcc; patchlevel test filters them out.
+** gcc 3.4 и выше имеют встроенную поддержку, специализированную для архитектуры.
+** Некоторые компиляторы маскируются под gcc; Тест уровня исправлений отфильтровывает их.
 */
 #if defined (__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) \
     && defined (__GNUC_PATCHLEVEL__)
 
 #if defined (__SNC__)
-/* SNC for PlayStation 3. */
+/* SNC для PlayStation 3. */
 
 tlsf_decl int tlsf_ffs(unsigned int word)
 {
@@ -105,7 +105,7 @@ tlsf_decl int tlsf_fls(unsigned int word)
 }
 
 #elif defined (_MSC_VER) && (_MSC_VER >= 1400) && (defined (_M_IX86) || defined (_M_X64))
-/* Microsoft Visual C++ support on x86/X64 architectures. */
+/* Поддержка Microsoft Visual C++ в архитектурах x86/X64. */
 
 #include <intrin.h>
 
@@ -125,7 +125,7 @@ tlsf_decl int tlsf_ffs(unsigned int word)
 }
 
 #elif defined (_MSC_VER) && defined (_M_PPC)
-/* Microsoft Visual C++ support on PowerPC architectures. */
+/* Поддержка Microsoft Visual C++ в архитектурах PowerPC. */
 
 #include <ppcintrinsics.h>
 
@@ -143,7 +143,7 @@ tlsf_decl int tlsf_ffs(unsigned int word)
 }
 
 #elif defined (__ARMCC_VERSION)
-/* RealView Compilation Tools for ARM */
+/* Инструменты компиляции RealView для ARM */
 
 tlsf_decl int tlsf_ffs(unsigned int word)
 {
@@ -159,7 +159,7 @@ tlsf_decl int tlsf_fls(unsigned int word)
 }
 
 #elif defined (__ghs__)
-/* Green Hills support for PowerPC */
+/* Поддержка Green Hills для PowerPC */
 
 #include <ppc_ghs.h>
 
@@ -177,9 +177,9 @@ tlsf_decl int tlsf_fls(unsigned int word)
 }
 
 #else
-/* Fall back to generic implementation. */
+/* Вернитесь к общей реализации. */
 
-/* Implement ffs in terms of fls. */
+/* Реализуйте ffs в терминах fls. */
 tlsf_decl int tlsf_ffs(unsigned int word)
 {
     const unsigned int reverse = word & (~word + 1);
@@ -193,7 +193,7 @@ tlsf_decl int tlsf_fls(unsigned int word)
 
 #endif
 
-/* Possibly 64-bit version of tlsf_fls. */
+/* Возможно 64-битная версия tlsf_fls. */
 #if defined (TLSF_64BIT)
 tlsf_decl int tlsf_fls_sizet(size_t size)
 {
@@ -215,38 +215,38 @@ tlsf_decl int tlsf_fls_sizet(size_t size)
 #undef tlsf_decl
 
 /*
-** Constants.
+** Константы.
 */
 
-/* Public constants: may be modified. */
+/* Публичные константы: могут быть изменены. */
 typedef enum {
-    /* log2 of number of linear subdivisions of block sizes. Larger
-    ** values require more memory in the control structure. Values of
-    ** 4 or 5 are typical.
+    /* log2 количества линейных подразделений размеров блоков. Больше
+    ** значения требуют больше памяти в структуре управления. Ценности
+    ** Обычно 4 или 5.
     */
     SL_INDEX_COUNT_LOG2 = 5,
 } tlsf_public;
 
-/* Private constants: do not modify. */
+/* Частные константы: не изменять. */
 typedef enum {
 #if defined (TLSF_64BIT)
-    /* All allocation sizes and addresses are aligned to 8 bytes. */
+    /* Все размеры выделения и адреса выравниваются по 8 байтам. */
     ALIGN_SIZE_LOG2 = 3,
 #else
-    /* All allocation sizes and addresses are aligned to 4 bytes. */
+    /* Все размеры выделения и адреса выравниваются по 4 байтам. */
     ALIGN_SIZE_LOG2 = 2,
 #endif
     ALIGN_SIZE = (1 << ALIGN_SIZE_LOG2),
 
     /*
-    ** We support allocations of sizes up to (1 << FL_INDEX_MAX) bits.
-    ** However, because we linearly subdivide the second-level lists, and
-    ** our minimum size granularity is 4 bytes, it doesn't make sense to
-    ** create first-level lists for sizes smaller than SL_INDEX_COUNT * 4,
-    ** or (1 << (SL_INDEX_COUNT_LOG2 + 2)) bytes, as there we will be
-    ** trying to split size ranges into more slots than we have available.
-    ** Instead, we calculate the minimum threshold size, and place all
-    ** blocks below that size into the 0th first-level list.
+    ** Мы поддерживаем распределение размеров до (1 << FL_INDEX_MAX) бит.
+    ** Однако, поскольку мы линейно подразделяем списки второго уровня, и
+    ** наша минимальная степень детализации составляет 4 байта, нет смысла
+    ** создавать списки первого уровня для размеров меньше SL_INDEX_COUNT * 4,
+    ** или (1 << ( SL_INDEX_COUNT_LOG2 + 2)) байт, как там и будет
+    ** пытаемся разделить диапазоны размеров на большее количество слотов, чем у нас есть.
+    ** Вместо этого мы вычисляем минимальный пороговый размер и помещаем все
+    ** блоки меньше этого размера в нулевой список первого уровня.
     */
 
 #if defined (TLSF_MAX_POOL_SIZE)
@@ -254,7 +254,7 @@ typedef enum {
 #elif defined (TLSF_64BIT)
     /*
     ** TODO: We can increase this to support larger sizes, at the expense
-    ** of more overhead in the TLSF structure.
+    ** дополнительных накладных расходов в структуре TLSF.
     */
     FL_INDEX_MAX = 32,
 #else
@@ -268,7 +268,7 @@ typedef enum {
 } tlsf_private;
 
 /*
-** Cast and min/max macros.
+** Макросы каста и мин/макс.
 */
 
 #define tlsf_cast(t, exp)   ((t) (exp))
@@ -276,7 +276,7 @@ typedef enum {
 #define tlsf_max(a, b)      ((a) > (b) ? (a) : (b))
 
 /*
-** Set assert macro, if it has not been provided by the user.
+** Установите макрос утверждения, если он не был предоставлен пользователем.
 */
 #define tlsf_assert LV_ASSERT
 
@@ -285,7 +285,7 @@ typedef enum {
 #endif
 
 /*
-** Static assertion mechanism.
+** Статический механизм утверждения.
 */
 
 #define _tlsf_glue2(x, y) x ## y
@@ -293,46 +293,46 @@ typedef enum {
 #define tlsf_static_assert(exp) \
     typedef char _tlsf_glue(static_assert, __LINE__) [(exp) ? 1 : -1]
 
-/* This code has been tested on 32- and 64-bit (LP/LLP) architectures. */
+/* Этот код был протестирован на 32- и 64-битной (LP/LLP) архитектурах. */
 tlsf_static_assert(sizeof(int) * CHAR_BIT == 32);
 tlsf_static_assert(sizeof(size_t) * CHAR_BIT >= 32);
 tlsf_static_assert(sizeof(size_t) * CHAR_BIT <= 64);
 
-/* SL_INDEX_COUNT must be <= number of bits in sl_bitmap's storage type. */
+/* SL_INDEX_COUNT должен быть <= количества битов в типе хранения sl_bitmap. */
 tlsf_static_assert(sizeof(unsigned int) * CHAR_BIT >= SL_INDEX_COUNT);
 
-/* Ensure we've properly tuned our sizes. */
+/* Убедитесь, что мы правильно настроили размеры. */
 tlsf_static_assert(ALIGN_SIZE == SMALL_BLOCK_SIZE / SL_INDEX_COUNT);
 
 /*
-** Data structures and associated constants.
+** Структуры данных и связанные с ними константы.
 */
 
 /*
-** Block header structure.
+** Структура заголовка блока.
 **
-** There are several implementation subtleties involved:
+** Есть несколько тонкостей реализации:
 ** - The prev_phys_block field is only valid if the previous block is free.
 ** - The prev_phys_block field is actually stored at the end of the
-**   previous block. It appears at the beginning of this structure only to
-**   simplify the implementation.
+**   предыдущий блок. Оно появляется в начале этой структуры только для того, чтобы
+**   упростить реализацию.
 ** - The next_free / prev_free fields are only valid if the block is free.
 */
 typedef struct block_header_t {
-    /* Points to the previous physical block. */
+    /* Указывает на предыдущий физический блок. */
     struct block_header_t * prev_phys_block;
 
-    /* The size of this block, excluding the block header. */
+    /* Размер этого блока, исключая заголовок блока. */
     size_t size;
 
-    /* Next and previous free blocks. */
+    /* Следующий и предыдущий бесплатные блоки. */
     struct block_header_t * next_free;
     struct block_header_t * prev_free;
 } block_header_t;
 
 /*
-** Since block sizes are always at least a multiple of 4, the two least
-** significant bits of the size field are used to store the block status:
+** Поскольку размеры блоков всегда кратны 4, два наименьших
+** значащие биты поля размера используются для хранения статуса блока:
 ** - bit 0: whether block is busy or free
 ** - bit 1: whether previous block is busy or free
 */
@@ -340,42 +340,42 @@ static const size_t block_header_free_bit = 1 << 0;
 static const size_t block_header_prev_free_bit = 1 << 1;
 
 /*
-** The size of the block header exposed to used blocks is the size field.
-** The prev_phys_block field is stored *inside* the previous free block.
+** Размер заголовка блока, доступного для используемых блоков, — это поле размера.
+** Поле prev_phys_block хранится *внутри* предыдущего свободного блока.
 */
 static const size_t block_header_overhead = sizeof(size_t);
 
-/* User data starts directly after the size field in a used block. */
+/* Пользовательские данные начинаются сразу после поля размера в используемом блоке. */
 static const size_t block_start_offset =
     offsetof(block_header_t, size) + sizeof(size_t);
 
 /*
-** A free block must be large enough to store its header minus the size of
-** the prev_phys_block field, and no larger than the number of addressable
-** bits for FL_INDEX.
+** Свободный блок должен быть достаточно большим, чтобы вместить его заголовок минус размер
+** поле prev_phys_block и не больше количества адресуемых
+** биты для FL_INDEX.
 */
 static const size_t block_size_min =
     sizeof(block_header_t) - sizeof(block_header_t *);
 static const size_t block_size_max = tlsf_cast(size_t, 1) << FL_INDEX_MAX;
 
-/* The TLSF control structure. */
+/* Структура управления TLSF. */
 typedef struct control_t {
-    /* Empty lists point at this block to indicate they are free. */
+    /* Пустые списки указывают на этот блок, указывая на то, что они бесплатны. */
     block_header_t block_null;
 
-    /* Bitmaps for free lists. */
+    /* Растровые изображения для свободных списков. */
     unsigned int fl_bitmap;
     unsigned int sl_bitmap[FL_INDEX_COUNT];
 
-    /* Head of free lists. */
+    /* Руководитель бесплатных списков. */
     block_header_t * blocks[FL_INDEX_COUNT][SL_INDEX_COUNT];
 } control_t;
 
-/* A type used for casting when doing pointer arithmetic. */
+/* Тип, используемый для приведения при выполнении арифметических операций с указателями. */
 typedef ptrdiff_t tlsfptr_t;
 
 /*
-** block_header_t member functions.
+** Функции-члены block_header_t.
 */
 
 static size_t block_size(const block_header_t * block)
@@ -436,20 +436,20 @@ static void * block_to_ptr(const block_header_t * block)
                      tlsf_cast(unsigned char *, block) + block_start_offset);
 }
 
-/* Return location of next block after block of given size. */
+/* Возвращает местоположение следующего блока после блока заданного размера. */
 static block_header_t * offset_to_block(const void * ptr, size_t size)
 {
     return tlsf_cast(block_header_t *, tlsf_cast(tlsfptr_t, ptr) + size);
 }
 
-/* Return location of previous block. */
+/* Возвращает местоположение предыдущего блока. */
 static block_header_t * block_prev(const block_header_t * block)
 {
     tlsf_assert(block_is_prev_free(block) && "previous block must be free");
     return block->prev_phys_block;
 }
 
-/* Return location of next existing block. */
+/* Возвращает местоположение следующего существующего блока. */
 static block_header_t * block_next(const block_header_t * block)
 {
     block_header_t * next = offset_to_block(block_to_ptr(block),
@@ -458,7 +458,7 @@ static block_header_t * block_next(const block_header_t * block)
     return next;
 }
 
-/* Link a new block with its physical neighbor, return the neighbor. */
+/* Свяжите новый блок с его физическим соседом, верните соседа. */
 static block_header_t * block_link_next(block_header_t * block)
 {
     block_header_t * next = block_next(block);
@@ -468,7 +468,7 @@ static block_header_t * block_link_next(block_header_t * block)
 
 static void block_mark_as_free(block_header_t * block)
 {
-    /* Link the block to the next block, first. */
+    /* Сначала свяжите блок со следующим блоком. */
     block_header_t * next = block_link_next(block);
     block_set_prev_free(next);
     block_set_free(block);
@@ -502,8 +502,8 @@ static void * align_ptr(const void * ptr, size_t align)
 }
 
 /*
-** Adjust an allocation size to be aligned to word size, and no smaller
-** than internal minimum.
+** Отрегулируйте размер выделения так, чтобы он соответствовал размеру слова и не был меньше.
+** чем внутренний минимум.
 */
 static size_t adjust_request_size(size_t size, size_t align)
 {
@@ -511,7 +511,7 @@ static size_t adjust_request_size(size_t size, size_t align)
     if(size) {
         const size_t aligned = align_up(size, align);
 
-        /* aligned sized must not exceed block_size_max or we'll go out of bounds on sl_bitmap */
+        /* размер выравнивания не должен превышать block_size_max, иначе мы выйдем за пределы sl_bitmap */
         if(aligned < block_size_max) {
             adjust = tlsf_max(aligned, block_size_min);
         }
@@ -520,15 +520,15 @@ static size_t adjust_request_size(size_t size, size_t align)
 }
 
 /*
-** TLSF utility functions. In most cases, these are direct translations of
-** the documentation found in the white paper.
+** TLSF служебные функции. В большинстве случаев это прямой перевод
+** документацию, содержащуюся в официальном документе.
 */
 
 static void mapping_insert(size_t size, int * fli, int * sli)
 {
     int fl, sl;
     if(size < SMALL_BLOCK_SIZE) {
-        /* Store small blocks in first list. */
+        /* Храните небольшие блоки в первом списке. */
         fl = 0;
         sl = tlsf_cast(int, size) / (SMALL_BLOCK_SIZE / SL_INDEX_COUNT);
     }
@@ -541,7 +541,7 @@ static void mapping_insert(size_t size, int * fli, int * sli)
     *sli = sl;
 }
 
-/* This version rounds up to the next block size (for allocations) */
+/* Эта версия округляется до следующего размера блока (для распределения). */
 static void mapping_search(size_t size, int * fli, int * sli)
 {
     if(size >= SMALL_BLOCK_SIZE) {
@@ -557,15 +557,15 @@ static block_header_t * search_suitable_block(control_t * control, int * fli, in
     int sl = *sli;
 
     /*
-    ** First, search for a block in the list associated with the given
-    ** fl/sl index.
+    ** Сначала найдите блок в списке, связанном с данным
+    ** индекс фл/сл.
     */
     unsigned int sl_map = control->sl_bitmap[fl] & (~0U << sl);
     if(!sl_map) {
-        /* No block exists. Search in the next largest first-level list. */
+        /* Никакого блока не существует. Выполните поиск в следующем по величине списке первого уровня. */
         const unsigned int fl_map = control->fl_bitmap & (~0U << (fl + 1));
         if(!fl_map) {
-            /* No free blocks available, memory has been exhausted. */
+            /* Свободных блоков нет, память исчерпана. */
             return 0;
         }
 
@@ -577,11 +577,11 @@ static block_header_t * search_suitable_block(control_t * control, int * fli, in
     sl = tlsf_ffs(sl_map);
     *sli = sl;
 
-    /* Return the first block in the free list. */
+    /* Вернуть первый блок в свободном списке. */
     return control->blocks[fl][sl];
 }
 
-/* Remove a free block from the free list.*/
+/* Удалить свободный блок из списка свободных.*/
 static void remove_free_block(control_t * control, block_header_t * block, int fl, int sl)
 {
     block_header_t * prev = block->prev_free;
@@ -591,15 +591,15 @@ static void remove_free_block(control_t * control, block_header_t * block, int f
     next->prev_free = prev;
     prev->next_free = next;
 
-    /* If this block is the head of the free list, set new head. */
+    /* Если этот блок является главой свободного списка, установите новый заголовок. */
     if(control->blocks[fl][sl] == block) {
         control->blocks[fl][sl] = next;
 
-        /* If the new head is null, clear the bitmap. */
+        /* Если новая голова имеет нулевое значение, очистите растровое изображение. */
         if(next == &control->block_null) {
             control->sl_bitmap[fl] &= ~(1U << sl);
 
-            /* If the second bitmap is now empty, clear the fl bitmap. */
+            /* Если второе растровое изображение теперь пусто, очистите растровое изображение fl. */
             if(!control->sl_bitmap[fl]) {
                 control->fl_bitmap &= ~(1U << fl);
             }
@@ -607,7 +607,7 @@ static void remove_free_block(control_t * control, block_header_t * block, int f
     }
 }
 
-/* Insert a free block into the free block list. */
+/* Вставьте свободный блок в список свободных блоков. */
 static void insert_free_block(control_t * control, block_header_t * block, int fl, int sl)
 {
     block_header_t * current = control->blocks[fl][sl];
@@ -620,15 +620,15 @@ static void insert_free_block(control_t * control, block_header_t * block, int f
     tlsf_assert(block_to_ptr(block) == align_ptr(block_to_ptr(block), ALIGN_SIZE)
                 && "block not aligned properly");
     /*
-    ** Insert the new block at the head of the list, and mark the first-
-    ** and second-level bitmaps appropriately.
+    ** Вставьте новый блок в начало списка и отметьте первый.
+    ** и растровые изображения второго уровня соответственно.
     */
     control->blocks[fl][sl] = block;
     control->fl_bitmap |= (1U << fl);
     control->sl_bitmap[fl] |= (1U << sl);
 }
 
-/* Remove a given block from the free list. */
+/* Удалить данный блок из списка свободных. */
 static void block_remove(control_t * control, block_header_t * block)
 {
     int fl, sl;
@@ -636,7 +636,7 @@ static void block_remove(control_t * control, block_header_t * block)
     remove_free_block(control, block, fl, sl);
 }
 
-/* Insert a given block into the free list. */
+/* Вставьте данный блок в свободный список. */
 static void block_insert(control_t * control, block_header_t * block)
 {
     int fl, sl;
@@ -649,10 +649,10 @@ static int block_can_split(block_header_t * block, size_t size)
     return block_size(block) >= sizeof(block_header_t) + size;
 }
 
-/* Split a block into two, the second of which is free. */
+/* Разделите блок на два, второй из которых бесплатный. */
 static block_header_t * block_split(block_header_t * block, size_t size)
 {
-    /* Calculate the amount of space left in the remaining block. */
+    /* Рассчитайте количество места, оставшегося в оставшемся блоке. */
     block_header_t * remaining =
         offset_to_block(block_to_ptr(block), size - block_header_overhead);
 
@@ -671,7 +671,7 @@ static block_header_t * block_split(block_header_t * block, size_t size)
     return remaining;
 }
 
-/* Absorb a free block's storage into an adjacent previous free block. */
+/* Поглотите хранилище свободного блока в соседний предыдущий свободный блок. */
 static block_header_t * block_absorb(block_header_t * prev, block_header_t * block)
 {
     tlsf_assert(!block_is_last(prev) && "previous block can't be last");
@@ -681,7 +681,7 @@ static block_header_t * block_absorb(block_header_t * prev, block_header_t * blo
     return prev;
 }
 
-/* Merge a just-freed block with an adjacent previous free block. */
+/* Объединить только что освобожденный блок с соседним предыдущим свободным блоком. */
 static block_header_t * block_merge_prev(control_t * control, block_header_t * block)
 {
     if(block_is_prev_free(block)) {
@@ -695,7 +695,7 @@ static block_header_t * block_merge_prev(control_t * control, block_header_t * b
     return block;
 }
 
-/* Merge a just-freed block with an adjacent free block. */
+/* Объединить только что освобожденный блок с соседним свободным блоком. */
 static block_header_t * block_merge_next(control_t * control, block_header_t * block)
 {
     block_header_t * next = block_next(block);
@@ -710,7 +710,7 @@ static block_header_t * block_merge_next(control_t * control, block_header_t * b
     return block;
 }
 
-/* Trim any trailing block space off the end of a block, return to pool. */
+/* Обрежьте все замыкающие блоки в конце блока и вернитесь в пул. */
 static void block_trim_free(control_t * control, block_header_t * block, size_t size)
 {
     tlsf_assert(block_is_free(block) && "block must be free");
@@ -722,12 +722,12 @@ static void block_trim_free(control_t * control, block_header_t * block, size_t 
     }
 }
 
-/* Trim any trailing block space off the end of a used block, return to pool. */
+/* Обрежьте любое пространство в конце использованного блока и вернитесь в пул. */
 static void block_trim_used(control_t * control, block_header_t * block, size_t size)
 {
     tlsf_assert(!block_is_free(block) && "block must be used");
     if(block_can_split(block, size)) {
-        /* If the next block is free, we must coalesce. */
+        /* Если следующий блок свободен, мы должны объединиться. */
         block_header_t * remaining_block = block_split(block, size);
         block_set_prev_used(remaining_block);
 
@@ -740,7 +740,7 @@ static block_header_t * block_trim_free_leading(control_t * control, block_heade
 {
     block_header_t * remaining_block = block;
     if(block_can_split(block, size)) {
-        /* We want the 2nd block. */
+        /* Нам нужен второй блок. */
         remaining_block = block_split(block, size - block_header_overhead);
         block_set_prev_free(remaining_block);
 
@@ -760,10 +760,10 @@ static block_header_t * block_locate_free(control_t * control, size_t size)
         mapping_search(size, &fl, &sl);
 
         /*
-        ** mapping_search can futz with the size, so for excessively large sizes it can sometimes wind up
-        ** with indices that are off the end of the block array.
-        ** So, we protect against that here, since this is the only callsite of mapping_search.
-        ** Note that we don't need to check sl, since it comes from a modulo operation that guarantees it's always in range.
+        ** mapping_search может возиться с размером, поэтому при чрезмерно больших размерах иногда может слетать
+        ** с индексами, которые находятся за пределами массива блоков.
+        ** Итак, мы защищаемся от этого, поскольку это единственный сайт вызова mapping_search.
+        ** Обратите внимание, что нам не нужно проверять sl, поскольку оно получается в результате операции по модулю, которая гарантирует, что оно всегда находится в пределах диапазона.
         */
         if(fl < FL_INDEX_COUNT) {
             block = search_suitable_block(control, &fl, &sl);
@@ -790,7 +790,7 @@ static void * block_prepare_used(control_t * control, block_header_t * block, si
     return p;
 }
 
-/* Clear structure and point all empty lists at the null block. */
+/* Очистите структуру и укажите все пустые списки на нулевой блок. */
 static void control_constructor(control_t * control)
 {
     int i, j;
@@ -808,7 +808,7 @@ static void control_constructor(control_t * control)
 }
 
 /*
-** Debugging utilities.
+** Отладочные утилиты.
 */
 
 typedef struct integrity_t {
@@ -842,7 +842,7 @@ int lv_tlsf_check(lv_tlsf_t tlsf)
     control_t * control = tlsf_cast(control_t *, tlsf);
     int status = 0;
 
-    /* Check that the free lists and bitmaps are accurate. */
+    /* Проверьте правильность свободных списков и растровых изображений. */
     for(i = 0; i < FL_INDEX_COUNT; ++i) {
         for(j = 0; j < SL_INDEX_COUNT; ++j) {
             const int fl_map = control->fl_bitmap & (1U << i);
@@ -850,7 +850,7 @@ int lv_tlsf_check(lv_tlsf_t tlsf)
             const int sl_map = sl_list & (1U << j);
             const block_header_t * block = control->blocks[i][j];
 
-            /* Check that first- and second-level lists agree. */
+            /* Убедитесь, что списки первого и второго уровня совпадают. */
             if(!fl_map) {
                 tlsf_insist(!sl_map && "second-level map must be null");
             }
@@ -860,7 +860,7 @@ int lv_tlsf_check(lv_tlsf_t tlsf)
                 continue;
             }
 
-            /* Check that there is at least one free block. */
+            /* Убедитесь, что есть хотя бы один свободный блок. */
             tlsf_insist(sl_list && "no free blocks in second-level map");
             tlsf_insist(block != &control->block_null && "block should not be null");
 
@@ -918,7 +918,7 @@ size_t lv_tlsf_block_size(void * ptr)
 
 int lv_tlsf_check_pool(lv_pool_t pool)
 {
-    /* Check that the blocks are physically correct. */
+    /* Убедитесь, что блоки физически правильны. */
     integrity_t integ = { 0, 0 };
     lv_tlsf_walk_pool(pool, integrity_walker, &integ);
 
@@ -926,8 +926,8 @@ int lv_tlsf_check_pool(lv_pool_t pool)
 }
 
 /*
-** Size of the TLSF structures in a given memory block passed to
-** lv_tlsf_create, equal to the size of a control_t
+** Размер структур TLSF в данном блоке памяти, передаваемом в
+** lv_tlsf_create , равен размеру control_t.
 */
 size_t lv_tlsf_size(void)
 {
@@ -950,9 +950,9 @@ size_t lv_tlsf_block_size_max(void)
 }
 
 /*
-** Overhead of the TLSF structures in a given memory block passed to
-** lv_tlsf_add_pool, equal to the overhead of a free block and the
-** sentinel block.
+** Заголовок структур TLSF в данном блоке памяти передается
+** lv_tlsf_add_pool , равный заголовку свободного блока и
+** дозорный блок.
 */
 size_t lv_tlsf_pool_overhead(void)
 {
@@ -992,9 +992,9 @@ lv_pool_t lv_tlsf_add_pool(lv_tlsf_t tlsf, void * mem, size_t bytes)
     }
 
     /*
-    ** Create the main free block. Offset the start of the block slightly
-    ** so that the prev_phys_block field falls outside of the pool -
-    ** it will never be used.
+    ** Создайте основной бесплатный блок. Немного сместите начало блока
+    ** чтобы поле prev_phys_block выпадало за пределы пула —
+    ** он никогда не будет использован.
     */
     block = offset_to_block(mem, -(tlsfptr_t)block_header_overhead);
     block_set_size(block, pool_bytes);
@@ -1002,7 +1002,7 @@ lv_pool_t lv_tlsf_add_pool(lv_tlsf_t tlsf, void * mem, size_t bytes)
     block_set_prev_used(block);
     block_insert(tlsf_cast(control_t *, tlsf), block);
 
-    /* Split the block to create a zero-size sentinel block. */
+    /* Разделите блок, чтобы создать дозорный блок нулевого размера. */
     next = block_link_next(block);
     block_set_size(next, 0);
     block_set_used(next);
@@ -1027,13 +1027,13 @@ void lv_tlsf_remove_pool(lv_tlsf_t tlsf, lv_pool_t pool)
 }
 
 /*
-** TLSF main interface.
+** TLSF основной интерфейс.
 */
 
 #if _DEBUG
 int test_ffs_fls()
 {
-    /* Verify ffs/fls work properly. */
+    /* Убедитесь, что ffs/fls работают правильно. */
     int rv = 0;
     rv += (tlsf_ffs(0) == -1) ? 0 : 0x1;
     rv += (tlsf_fls(0) == -1) ? 0 : 0x2;
@@ -1085,7 +1085,7 @@ lv_tlsf_t lv_tlsf_create_with_pool(void * mem, size_t bytes)
 
 void lv_tlsf_destroy(lv_tlsf_t tlsf)
 {
-    /* Nothing to do. */
+    /* Нечего делать. */
     LV_UNUSED(tlsf);
 }
 
@@ -1108,25 +1108,25 @@ void * lv_tlsf_memalign(lv_tlsf_t tlsf, size_t align, size_t size)
     const size_t adjust = adjust_request_size(size, ALIGN_SIZE);
 
     /*
-    ** We must allocate an additional minimum block size bytes so that if
-    ** our free block will leave an alignment gap which is smaller, we can
-    ** trim a leading free block and release it back to the pool. We must
-    ** do this because the previous physical block is in use, therefore
-    ** the prev_phys_block field is not valid, and we can't simply adjust
-    ** the size of that block.
+    ** Мы должны выделить дополнительные байты минимального размера блока, чтобы, если
+    ** наш свободный блок оставит меньший зазор выравнивания, мы можем
+    ** trim a leading free block and release it back to the pool. Мы должны
+    ** сделайте это, потому что предыдущий физический блок используется, поэтому
+    ** поле prev_phys_block недействительно, и мы не можем просто настроить
+    ** размер этого блока.
     */
     const size_t gap_minimum = sizeof(block_header_t);
     const size_t size_with_gap = adjust_request_size(adjust + align + gap_minimum, align);
 
     /*
-    ** If alignment is less than or equals base alignment, we're done.
-    ** If we requested 0 bytes, return null, as lv_tlsf_malloc(0) does.
+    ** Если выравнивание меньше или равно базовому выравниванию, все готово.
+    ** Если мы запросили 0 байт, верните ноль, как это делает lv_tlsf_malloc (0).
     */
     const size_t aligned_size = (adjust && align > ALIGN_SIZE) ? size_with_gap : adjust;
 
     block_header_t * block = block_locate_free(control, aligned_size);
 
-    /* This can't be a static assert. */
+    /* Это не может быть статическим утверждением. */
     tlsf_assert(sizeof(block_header_t) == block_size_min + block_header_overhead);
 
     if(block) {
@@ -1135,7 +1135,7 @@ void * lv_tlsf_memalign(lv_tlsf_t tlsf, size_t align, size_t size)
         size_t gap = tlsf_cast(size_t,
                                tlsf_cast(tlsfptr_t, aligned) - tlsf_cast(tlsfptr_t, ptr));
 
-        /* If gap size is too small, offset to next aligned boundary. */
+        /* Если размер зазора слишком мал, сместите его до следующей выровненной границы. */
         if(gap && gap < gap_minimum) {
             const size_t gap_remain = gap_minimum - gap;
             const size_t offset = tlsf_max(gap_remain, align);
@@ -1159,7 +1159,7 @@ void * lv_tlsf_memalign(lv_tlsf_t tlsf, size_t align, size_t size)
 size_t lv_tlsf_free(lv_tlsf_t tlsf, const void * ptr)
 {
     size_t size = 0;
-    /* Don't attempt to free a NULL pointer. */
+    /* Не пытайтесь освободить указатель NULL. */
     if(ptr) {
         control_t * control = tlsf_cast(control_t *, tlsf);
         block_header_t * block = block_from_ptr(ptr);
@@ -1175,28 +1175,28 @@ size_t lv_tlsf_free(lv_tlsf_t tlsf, const void * ptr)
 }
 
 /*
-** The TLSF block information provides us with enough information to
-** provide a reasonably intelligent implementation of realloc, growing or
-** shrinking the currently allocated block as required.
+** Информация блока TLSF предоставляет нам достаточно информации, чтобы
+** обеспечить разумную реализацию перераспределения, роста или
+** сокращение текущего выделенного блока по мере необходимости.
 **
 ** This routine handles the somewhat esoteric edge cases of realloc:
 ** - a non-zero size with a null pointer will behave like malloc
 ** - a zero size with a non-null pointer will behave like free
 ** - a request that cannot be satisfied will leave the original buffer
-**   untouched
+**   нетронутый
 ** - an extended buffer size will leave the newly-allocated area with
-**   contents undefined
+**   содержание неопределенное
 */
 void * lv_tlsf_realloc(lv_tlsf_t tlsf, void * ptr, size_t size)
 {
     control_t * control = tlsf_cast(control_t *, tlsf);
     void * p = 0;
 
-    /* Zero-size requests are treated as free. */
+    /* Запросы нулевого размера считаются бесплатными. */
     if(ptr && size == 0) {
         lv_tlsf_free(tlsf, ptr);
     }
-    /* Requests with NULL pointers are treated as malloc. */
+    /* Запросы с указателями NULL рассматриваются как malloc. */
     else if(!ptr) {
         p = lv_tlsf_malloc(tlsf, size);
     }
@@ -1208,15 +1208,15 @@ void * lv_tlsf_realloc(lv_tlsf_t tlsf, void * ptr, size_t size)
         const size_t combined = cursize + block_size(next) + block_header_overhead;
         const size_t adjust = adjust_request_size(size, ALIGN_SIZE);
         if(size > cursize && adjust == 0) {
-            /* The request is probably too large, fail */
+            /* Запрос, вероятно, слишком велик, сбой */
             return NULL;
         }
 
         tlsf_assert(!block_is_free(block) && "block already marked as free");
 
         /*
-        ** If the next block is used, or when combined with the current
-        ** block, does not offer enough space, we must reallocate and copy.
+        ** Если используется следующий блок или в сочетании с текущим
+        ** блок не предлагает достаточно места, мы должны перераспределить и скопировать.
         */
         if(adjust > cursize && (!block_is_free(next) || adjust > combined)) {
             p = lv_tlsf_malloc(tlsf, size);
@@ -1233,7 +1233,7 @@ void * lv_tlsf_realloc(lv_tlsf_t tlsf, void * ptr, size_t size)
                 block_mark_as_used(block);
             }
 
-            /* Trim the resulting block and return the original pointer. */
+            /* Обрежьте полученный блок и верните исходный указатель. */
             block_trim_used(control, block, adjust);
             p = ptr;
         }

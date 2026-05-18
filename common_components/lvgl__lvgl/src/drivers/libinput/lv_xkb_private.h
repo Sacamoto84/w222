@@ -44,10 +44,10 @@ struct _lv_xkb_t {
  *      MACROS
  **********************/
 
-#endif /* defined(LV_LIBINPUT_XKB) && LV_LIBINPUT_XKB */
+#endif /* определено( LV_LIBINPUT_XKB ) && LV_LIBINPUT_XKB */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_XKB_PRIVATE_H*/

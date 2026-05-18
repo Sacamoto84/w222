@@ -84,7 +84,7 @@ struct _lv_draw_vg_lite_unit_t;
  * GLOBAL PROTOTYPES
  **********************/
 
-/* Print info */
+/* Распечатать информацию */
 
 void lv_vg_lite_dump_info(void);
 
@@ -112,7 +112,7 @@ bool lv_vg_lite_is_dest_cf_supported(lv_color_format_t cf);
 
 bool lv_vg_lite_is_src_cf_supported(lv_color_format_t cf);
 
-/* Converter */
+/* Конвертер */
 
 vg_lite_buffer_format_t lv_vg_lite_vg_fmt(lv_color_format_t cf);
 
@@ -159,7 +159,7 @@ static inline void lv_vg_lite_matrix(vg_lite_matrix_t * dest, const lv_matrix_t 
     *(lv_matrix_t *)dest = *src;
 }
 
-/* Param checker */
+/* Проверка параметров */
 
 bool lv_vg_lite_buffer_check(const vg_lite_buffer_t * buffer, bool is_src);
 
@@ -167,7 +167,7 @@ bool lv_vg_lite_path_check(const vg_lite_path_t * path);
 
 bool lv_vg_lite_matrix_check(const vg_lite_matrix_t * matrix);
 
-/* Wrapper */
+/* обертка */
 
 bool lv_vg_lite_support_blend_normal(void);
 
@@ -208,7 +208,7 @@ static inline void lv_vg_lite_draw(vg_lite_buffer_t * target,
                                matrix,
                                blend,
                                color),
-                           /* Dump parameters */
+                           /* Параметры дампа */
     {
         lv_vg_lite_buffer_dump_info(target);
         lv_vg_lite_path_dump_info(path);
@@ -251,7 +251,7 @@ static inline void lv_vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                pattern_color,
                                color,
                                filter),
-                           /* Dump parameters */
+                           /* Параметры дампа */
     {
         lv_vg_lite_buffer_dump_info(target);
         lv_vg_lite_path_dump_info(path);
@@ -289,7 +289,7 @@ static inline void lv_vg_lite_blit_rect(vg_lite_buffer_t * target,
                                blend,
                                color,
                                filter),
-                           /* Dump parameters */
+                           /* Параметры дампа */
     {
         lv_vg_lite_buffer_dump_info(target);
         lv_vg_lite_buffer_dump_info(source);
@@ -324,7 +324,7 @@ static inline void lv_vg_lite_clear(vg_lite_buffer_t * target, const lv_area_t *
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_VG_LITE_UTILS_H*/

@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -30,15 +30,15 @@
 #include "tvgStr.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 void LottieLoader::run(unsigned tid)
 {
-    //update frame
+    //обновить кадр
     if (comp) {
         builder->update(comp, frameNo);
-    //initial loading
+    //первоначальная загрузка
     } else {
         LottieParser parser(content, dirName);
         if (!parser.parse()) return;
@@ -66,7 +66,7 @@ void LottieLoader::release()
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 LottieLoader::LottieLoader() : FrameModule(FileType::Lottie), builder(new LottieBuilder)
@@ -89,7 +89,7 @@ LottieLoader::~LottieLoader()
 
 bool LottieLoader::header()
 {
-    //A single thread doesn't need to perform intensive tasks.
+    //Один поток не должен выполнять интенсивные задачи.
     if (TaskScheduler::threads() == 0) {
         LoadModule::read();
         run(0);
@@ -105,7 +105,7 @@ bool LottieLoader::header()
         }
     }
 
-    //Quickly validate the given Lottie file without parsing in order to get the animation info.
+    //Быстро проверьте данный файл Lottie без его анализа, чтобы получить информацию об анимации.
     auto startFrame = 0.0f;
     auto endFrame = 0.0f;
     uint32_t depth = 0;
@@ -127,13 +127,13 @@ bool LottieLoader::header()
             ++p;
             continue;
         }
-        //version.
+        //версия.
         if (!strncmp(p, "\"v\":", 4)) {
             p += 4;
             continue;
         }
 
-        //framerate
+        //частота кадров
         if (!strncmp(p, "\"fr\":", 5)) {
             p += 5;
             auto e = strstr(p, ",");
@@ -143,7 +143,7 @@ bool LottieLoader::header()
             continue;
         }
 
-        //start frame
+        //начальный кадр
         if (!strncmp(p, "\"ip\":", 5)) {
             p += 5;
             auto e = strstr(p, ",");
@@ -153,7 +153,7 @@ bool LottieLoader::header()
             continue;
         }
 
-        //end frame
+        //конечный кадр
         if (!strncmp(p, "\"op\":", 5)) {
             p += 5;
             auto e = strstr(p, ",");
@@ -163,7 +163,7 @@ bool LottieLoader::header()
             continue;
         }
 
-        //width
+        //ширина
         if (!strncmp(p, "\"w\":", 4)) {
             p += 4;
             auto e = strstr(p, ",");
@@ -172,7 +172,7 @@ bool LottieLoader::header()
             p = e;
             continue;
         }
-        //height
+        //высота
         if (!strncmp(p, "\"h\":", 4)) {
             p += 4;
             auto e = strstr(p, ",");
@@ -259,7 +259,7 @@ bool LottieLoader::resize(Paint* paint, float w, float h)
     Matrix m = {sx, 0, 0, 0, sy, 0, 0, 0, 1};
     paint->transform(m);
 
-    //apply the scale to the base clipper
+    //нанесите чешуйку на базовую машинку для стрижки
     const Paint* clipper;
     paint->composite(&clipper);
     if (clipper) const_cast<Paint*>(clipper)->transform(m);
@@ -270,7 +270,7 @@ bool LottieLoader::resize(Paint* paint, float w, float h)
 
 bool LottieLoader::read()
 {
-    //the loading has been already completed
+    //загрузка уже завершена
     if (!LoadModule::read()) return true;
 
     if (!content || size == 0) return false;
@@ -297,12 +297,12 @@ bool LottieLoader::override(const char* slot)
 
     auto success = true;
 
-    //override slots
+    //переопределить слоты
     if (slot) {
-        //Copy the input data because the JSON parser will encode the data immediately.
+        //Скопируйте входные данные, потому что парсер JSON немедленно закодирует данные.
         auto temp = lv_strdup(slot);
 
-        //parsing slot json
+        //анализ слота json
         LottieParser parser(temp, dirName);
         parser.comp = comp;
 
@@ -319,7 +319,7 @@ bool LottieLoader::override(const char* slot)
         if (idx < 1) success = false;
         lv_free(temp);
         rebuild = overridden = success;
-    //reset slots
+    //сбросить слоты
     } else if (overridden) {
         for (auto s = comp->slots.begin(); s < comp->slots.end(); ++s) {
             (*s)->reset();
@@ -335,12 +335,12 @@ bool LottieLoader::frame(float no)
 {
     auto frameNo = no + startFrame();
 
-    //This ensures that the target frame number is reached.
+    //Это гарантирует достижение целевого номера кадра.
     frameNo *= 10000.0f;
     frameNo = nearbyintf(frameNo);
     frameNo *= 0.0001f;
 
-    //Skip update if frame diff is too small.
+    //Пропустить обновление, если разница кадров слишком мала.
     if (fabsf(this->frameNo - frameNo) <= 0.0009f) return false;
 
     this->done();

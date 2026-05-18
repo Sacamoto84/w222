@@ -76,7 +76,7 @@ void lv_xkb_deinit(lv_xkb_t * dsc)
 
 uint32_t lv_xkb_process_key(lv_xkb_t * dsc, uint32_t scancode, bool down)
 {
-    /* Offset the evdev scancode by 8, see https://xkbcommon.org/doc/current/xkbcommon_8h.html#ac29aee92124c08d1953910ab28ee1997 */
+    /* Сместите скан-код evdev на 8, см. https://xkbcommon.org/doc/current/xkbcommon_8h.html#ac29aee92124c08d1953910ab28ee1997. */
     xkb_keycode_t keycode = scancode + 8;
 
     uint32_t result = 0;
@@ -117,7 +117,7 @@ uint32_t lv_xkb_process_key(lv_xkb_t * dsc, uint32_t scancode, bool down)
         case XKB_KEY_KP_Tab:
             result = LV_KEY_NEXT;
             break;
-        case XKB_KEY_ISO_Left_Tab: /* Sent on SHIFT + TAB */
+        case XKB_KEY_ISO_Left_Tab: /* Отправлено SHIFT + TAB */
             result = LV_KEY_PREV;
             break;
         case XKB_KEY_Home:
@@ -177,4 +177,4 @@ static bool _set_keymap(lv_xkb_t * dsc, struct xkb_rule_names names)
     return true;
 }
 
-#endif /* defined(LV_LIBINPUT_XKB) && LV_LIBINPUT_XKB */
+#endif /* определено( LV_LIBINPUT_XKB ) && LV_LIBINPUT_XKB */

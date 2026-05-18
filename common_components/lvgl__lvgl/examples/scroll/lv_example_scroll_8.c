@@ -3,14 +3,14 @@
 
 
 /*
- * Circular list implementation based on:
- * Reference: https://blog.csdn.net/TQW4321/article/details/145434819
+ * Реализация кругового списка на основе:
+ * Ссылка: https://blog.csdn.net/TQW4321/article/details/145434819
  */
 
-/* Applies to both width (for row items) and height (for column items) */
+/* Применяется как к ширине (для элементов строки), так и к высоте (для элементов столбца). */
 #define ITEM_SIZE     80
 
-/* Function to calculate the total content width of the container */
+/* Функция для расчета общей ширины содержимого контейнера */
 static int32_t get_content_width(lv_obj_t * cont)
 {
     int32_t w = 0;
@@ -25,7 +25,7 @@ static int32_t get_content_width(lv_obj_t * cont)
            + lv_obj_get_style_pad_right(cont, LV_PART_MAIN);
 }
 
-/* Scroll event callback for row layout */
+/* Обратный вызов события прокрутки для макета строки */
 static void cont_row_scroll_event_cb(lv_event_t * e)
 {
     static bool is_adjusting = false;
@@ -37,7 +37,7 @@ static void cont_row_scroll_event_cb(lv_event_t * e)
         int32_t cont_w = lv_obj_get_width(cont);
         int32_t content_w = get_content_width(cont);
 
-        /* Use ITEM_SIZE as horizontal item width */
+        /* Используйте ITEM_SIZE в качестве ширины горизонтального элемента. */
         const int32_t item_width = ITEM_SIZE;
 
         if(scroll_x <= 0) {
@@ -54,7 +54,7 @@ static void cont_row_scroll_event_cb(lv_event_t * e)
     }
 }
 
-/* Function to calculate the total content height of the container */
+/* Функция для расчета общей высоты содержимого контейнера */
 static int32_t get_content_height(lv_obj_t * cont)
 {
     int32_t h = 0;
@@ -69,7 +69,7 @@ static int32_t get_content_height(lv_obj_t * cont)
            + lv_obj_get_style_pad_bottom(cont, LV_PART_MAIN);
 }
 
-/* Scroll event callback for column layout */
+/* Обратный вызов события прокрутки для макета столбца */
 static void cont_col_scroll_event_cb(lv_event_t * e)
 {
     static bool is_adjusting = false;
@@ -81,7 +81,7 @@ static void cont_col_scroll_event_cb(lv_event_t * e)
         int32_t cont_h = lv_obj_get_height(cont);
         int32_t content_h = get_content_height(cont);
 
-        /* Use ITEM_SIZE as vertical item height */
+        /* Используйте ITEM_SIZE в качестве высоты вертикального элемента. */
         const int32_t item_height = ITEM_SIZE;
 
         if(scroll_y <= 0) {
@@ -100,31 +100,31 @@ static void cont_col_scroll_event_cb(lv_event_t * e)
 
 void lv_example_scroll_8(void)
 {
-    /* Create a scroll container with ROW flex direction */
+    /* Создайте контейнер прокрутки с гибким направлением ROW. */
     lv_obj_t * cont_row = lv_obj_create(lv_screen_active());
     lv_obj_set_size(cont_row, 300, 75);
     lv_obj_align(cont_row, LV_ALIGN_TOP_MID, 0, 5);
     lv_obj_set_flex_flow(cont_row, LV_FLEX_FLOW_ROW);
     lv_obj_add_event_cb(cont_row, cont_row_scroll_event_cb, LV_EVENT_SCROLL, NULL);
-    /* Hide scrollbar visuals */
+    /* Скрыть визуальные элементы полосы прокрутки */
     lv_obj_set_scrollbar_mode(cont_row, LV_SCROLLBAR_MODE_OFF);
 
-    /* Create a scroll container with COLUMN flex direction */
+    /* Создайте контейнер прокрутки с гибким направлением COLUMN. */
     lv_obj_t * cont_col = lv_obj_create(lv_screen_active());
     lv_obj_set_size(cont_col, 200, 150);
     lv_obj_align_to(cont_col, cont_row, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
     lv_obj_set_flex_flow(cont_col, LV_FLEX_FLOW_COLUMN);
     lv_obj_add_event_cb(cont_col, cont_col_scroll_event_cb, LV_EVENT_SCROLL, NULL);
-    /* Hide scrollbar visuals */
+    /* Скрыть визуальные элементы полосы прокрутки */
     lv_obj_set_scrollbar_mode(cont_col, LV_SCROLLBAR_MODE_OFF);
 
-    /* If the number of items is less than 3, scrolling may not be needed or may cause unexpected behavior. */
+    /* Если количество элементов меньше трех, прокрутка может не потребоваться или может привести к неожиданному поведению. */
     uint32_t i;
     for(i = 0; i < 10; i++) {
         lv_obj_t * obj;
         lv_obj_t * label;
 
-        /*Add items to the row*/
+        /*Добавить элементы в строку*/
         obj = lv_button_create(cont_row);
         lv_obj_set_size(obj, ITEM_SIZE, LV_PCT(100));
 
@@ -132,7 +132,7 @@ void lv_example_scroll_8(void)
         lv_label_set_text_fmt(label, "Item %" LV_PRIu32, i + 1);
         lv_obj_center(label);
 
-        /*Add items to the column*/
+        /*Добавьте элементы в столбец*/
         obj = lv_button_create(cont_col);
         lv_obj_set_size(obj, LV_PCT(100), ITEM_SIZE);
 

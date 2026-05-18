@@ -22,8 +22,8 @@ extern "C" {
 #define LV_USE_STDLIB_SPRINTF       LV_STDLIB_CLIB
 #define LV_USE_OS                   LV_OS_PTHREAD
 #define LV_OBJ_STYLE_CACHE          0
-#define LV_BIN_DECODER_RAM_LOAD     1   /* Run test with bin image loaded to RAM */
-#define LV_DRAW_BUF_STRIDE_ALIGN    64  /* Use a large value to be sure any issues will cause crash */
+#define LV_BIN_DECODER_RAM_LOAD     1   /* Запустите тест с изображением bin, загруженным в RAM. */
+#define LV_DRAW_BUF_STRIDE_ALIGN    64  /* Используйте большое значение, чтобы быть уверенным, что любые проблемы приведут к сбою. */
 #endif
 
 #ifdef LVGL_CI_USING_DEF_HEAP
@@ -110,17 +110,17 @@ typedef void * lv_user_data_t;
 #undef LV_LOG_PRINTF
 
 #ifndef LV_DRAW_BUF_ALIGN
-/*Use non power of 2 to avoid the case when `malloc` returns aligned pointer by default, and use a large value be sure any issues will cause crash*/
+/*Используйте не степень 2, чтобы избежать случая, когда `malloc` по умолчанию возвращает выровненный указатель, и используйте большое значение, чтобы быть уверенным, что любые проблемы приведут к сбою.*/
 #define LV_DRAW_BUF_ALIGN                       852
 #endif
 
-/*For screenshots*/
+/*Для скриншотов*/
 #undef LV_DPI_DEF
 #define  LV_DPI_DEF         130
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEST_CONF_H*/

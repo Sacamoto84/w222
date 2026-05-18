@@ -7,7 +7,7 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
@@ -42,7 +42,7 @@ static void create_images(void)
 
 void test_tjpgd_1(void)
 {
-    /* Temporarily remove libjpeg_turbo decoder */
+    /* Временно удалите декодер libjpeg_turbo. */
     lv_libjpeg_turbo_deinit();
 
     create_images();
@@ -61,7 +61,7 @@ void test_tjpgd_1(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 32);
 
-    /* Re-add libjpeg_turbo decoder */
+    /* Повторно добавить декодер libjpeg_turbo. */
     lv_libjpeg_turbo_init();
 }
 
@@ -77,7 +77,7 @@ static void create_image_2(void)
 
 void test_jdpgd_align_tile(void)
 {
-    /* Temporarily remove libjpeg_turbo decoder */
+    /* Временно удалите декодер libjpeg_turbo. */
     lv_libjpeg_turbo_deinit();
 
     create_image_2();
@@ -96,7 +96,7 @@ void test_jdpgd_align_tile(void)
     lv_obj_clean(lv_screen_active());
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 0);
 
-    /* Re-add libjpeg_turbo decoder */
+    /* Повторно добавить декодер libjpeg_turbo. */
     lv_libjpeg_turbo_init();
 }
 

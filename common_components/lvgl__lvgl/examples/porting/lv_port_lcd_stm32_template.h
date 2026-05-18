@@ -3,7 +3,7 @@
  *
  */
 
-/*Copy this file as "lv_port_disp.h" and set this value to "1" to enable content*/
+/*Скопируйте этот файл как «lv_port_disp.h» и установите для этого значения значение «1», чтобы отключить контент.*/
 #if 0
 
 #ifndef LV_PORT_LCD_STM32_TEMPL_H
@@ -33,7 +33,7 @@ extern "C" {
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-/* Initialize low level display driver */
+/* Инициализировать драйвер дисплея низкого уровня */
 void lv_port_disp_init(void);
 
 /**********************
@@ -41,9 +41,9 @@ void lv_port_disp_init(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_PORT_LCD_STM32_TEMPL_H*/
 
-#endif /*Disable/Enable content*/
+#endif /*Отключить/включить контент*/

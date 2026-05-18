@@ -14,7 +14,7 @@ import os
 import sys
 
 # =========================================================================
-# Style Property Database
+# База данных свойств стиля
 # =========================================================================
 
 props = [
@@ -562,7 +562,7 @@ props = [
 
 
 # =========================================================================
-# Data
+# Данные
 # =========================================================================
 
 _cfg_this_script = os.path.split(__file__)[-1]
@@ -589,7 +589,7 @@ RST_HEADING = f'''\
 
 
 # =========================================================================
-# Utility Routines
+# Служебные процедуры
 # =========================================================================
 
 def extra_info(p):
@@ -626,8 +626,8 @@ def word_wrapped_description(desc, in_a_comment=False):
         extra = 9
 
     if '\n' in desc:
-        # Newlines are embedded in description.  We assume that the
-        # word wrapping was done by the writer.  Keep default.
+        # Новые строки встроены в описание.  Мы предполагаем, что
+        # перенос слов был выполнен автором.  Оставьте по умолчанию.
         if not in_a_comment:
             result = desc
         else:
@@ -637,27 +637,27 @@ def word_wrapped_description(desc, in_a_comment=False):
             result = '\n'.join(lines)
 
     elif len(desc) <= _cfg_word_wrap_col + extra:
-        # No word-wrapping needed.  Keep default.
+        # Никакого переноса слов не требуется.  Оставьте по умолчанию.
         if not in_a_comment:
             result = desc
         else:
             result = ' * ' + desc
 
     else:
-        # Word wrapping is needed.
+        # Перенос слов необходим.
         lines = []
         working_desc = desc
         one_third_width = _cfg_word_wrap_col // 3
 
         while len(working_desc) > _cfg_word_wrap_col:
-            # Identify word-wrap column if a reasonable one is available.
+            # Определите столбец переноса по словам, если он доступен.
             i = working_desc.rfind(' ', 0, _cfg_word_wrap_col)
             if i >= one_third_width:
                 lines.append(working_desc[0:i])  # Excludes space.
                 working_desc = working_desc[i + 1:]  # Skips space.
             else:
-                # Reasonable word-wrap location not found before `one_third_width`.
-                # Keep what we have and exit loop.
+                # Разумное место переноса слов не найдено до`one_third_width`.
+                # Сохраните то, что имеем, и выйдите из цикла.
                 lines.append(working_desc)
                 working_desc = ''
                 break
@@ -667,7 +667,7 @@ def word_wrapped_description(desc, in_a_comment=False):
             lines.append(working_desc)
 
         if in_a_comment:
-            # Prepend comment prefix.
+            # Добавьте префикс комментария.
             for i, line in enumerate(lines):
                 lines[i] = ' * ' + line
 
@@ -685,7 +685,7 @@ def optionally_append_extra_info(p, dsc):
 
 
 def print_value_param(p, indent='', is_for_const=False):
-    # Compute correct wording for description of `value` argument.
+    # Вычислите правильную формулировку описания аргумента`value`.
     style_type = p['style_type']
     if is_for_const:
         arg_name = 'val'
@@ -693,7 +693,7 @@ def print_value_param(p, indent='', is_for_const=False):
         arg_name = 'value'
 
     if style_type == 'num':
-        # Keep default.  Nothing to do.
+        # Оставьте по умолчанию.  Нечего делать.
         print(f' * @param  {arg_name}   {indent}Value to submit')
     elif style_type == 'color':
         print(f' * @param  {arg_name}   {indent}Color to submit')
@@ -927,7 +927,7 @@ def guard_close():
 
 
 # =========================================================================
-# Actions
+# Действия
 # =========================================================================
 
 # -------------------------------------------------------------------------
@@ -944,7 +944,7 @@ print()
 print('''\
 #ifdef __cplusplus
 extern "C" {
-#endif
+#конец
 ''')
 print('#include "../misc/lv_area.h"')
 print('#include "../misc/lv_style.h"')
@@ -969,7 +969,7 @@ print()
 print('''\
 #ifdef __cplusplus
 } /* extern "C" */
-#endif
+#конец
 ''')
 
 print('#endif /* LV_OBJ_STYLE_GEN_H */')
@@ -1014,7 +1014,7 @@ print()
 print('''\
 #ifdef __cplusplus
 extern "C" {
-#endif
+#конец
 ''')
 
 for prop in props:
@@ -1033,7 +1033,7 @@ print()
 print('''\
 #ifdef __cplusplus
 } /* extern "C" */
-#endif
+#конец
 ''')
 print('#endif /* LV_STYLE_GEN_H */')
 
@@ -1053,7 +1053,7 @@ for prop in props:
     docs(prop)
 
 # -------------------------------------------------------------------------
-# Report
+# Отчет
 # -------------------------------------------------------------------------
 sys.stdout = orig_stdout
 print(f'Total functions commented:  {_total_func_count}.')

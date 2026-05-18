@@ -6,23 +6,23 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_tiny_ttf_rendering_test(void)
 {
 #if LV_USE_TINY_TTF
-    /*Create a font*/
+    /*Создать шрифт*/
     extern const uint8_t test_ubuntu_font[];
     extern size_t test_ubuntu_font_size;
     lv_font_t * font = lv_tiny_ttf_create_data(test_ubuntu_font, test_ubuntu_font_size, 30);
 
-    /*Create style with the new font*/
+    /*Создайте стиль с помощью нового шрифта*/
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_text_font(&style, font);
@@ -30,7 +30,7 @@ void test_tiny_ttf_rendering_test(void)
     lv_style_set_bg_opa(&style, LV_OPA_COVER);
     lv_style_set_bg_color(&style, lv_color_hex(0xffaaaa));
 
-    /*Create a label with the new style*/
+    /*Создайте этикетку с новым стилем*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_add_style(label, &style, 0);
     lv_label_set_text(label, "Hello world\n"

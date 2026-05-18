@@ -85,7 +85,7 @@ lv_obj_t * lv_file_explorer_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 #if LV_FILE_EXPLORER_QUICK_ACCESS
 void lv_file_explorer_set_quick_access_path(lv_obj_t * obj, lv_file_explorer_dir_t dir, const char * path)
@@ -94,7 +94,7 @@ void lv_file_explorer_set_quick_access_path(lv_obj_t * obj, lv_file_explorer_dir
 
     lv_file_explorer_t * explorer = (lv_file_explorer_t *)obj;
 
-    /*If path is unavailable */
+    /*Если путь недоступен */
     if((path == NULL) || (lv_strlen(path) <= 0)) return;
 
     char ** dir_str = NULL;
@@ -123,13 +123,13 @@ void lv_file_explorer_set_quick_access_path(lv_obj_t * obj, lv_file_explorer_dir
             break;
     }
 
-    /*Free the old text*/
+    /*Освободите старый текст*/
     if(*dir_str != NULL) {
         lv_free(*dir_str);
         *dir_str = NULL;
     }
 
-    /*Allocate space for the new text*/
+    /*Выделите место для нового текста*/
     *dir_str = lv_strdup(path);
 }
 
@@ -156,7 +156,7 @@ void lv_file_explorer_show_back_button(lv_obj_t * obj, bool show)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 const char * lv_file_explorer_get_selected_file_name(const lv_obj_t * obj)
 {
@@ -243,7 +243,7 @@ lv_file_explorer_sort_t lv_file_explorer_get_sort(const lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 void lv_file_explorer_open_dir(lv_obj_t * obj, const char * dir)
 {
@@ -285,7 +285,7 @@ static void lv_file_explorer_constructor(const lv_obj_class_t * class_p, lv_obj_
     lv_obj_set_flex_grow(explorer->cont, 1);
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
-    /*Quick access bar area on the left*/
+    /*Панель быстрого доступа слева*/
     explorer->quick_access_area = lv_obj_create(explorer->cont);
     lv_obj_set_size(explorer->quick_access_area, LV_PCT(FILE_EXPLORER_QUICK_ACCESS_AREA_WIDTH), LV_PCT(100));
     lv_obj_set_flex_flow(explorer->quick_access_area, LV_FLEX_FLOW_COLUMN);
@@ -293,7 +293,7 @@ static void lv_file_explorer_constructor(const lv_obj_class_t * class_p, lv_obj_
                         explorer);
 #endif
 
-    /*File table area on the right*/
+    /*Область таблицы файлов справа*/
     explorer->browser_area = lv_obj_create(explorer->cont);
 #if LV_FILE_EXPLORER_QUICK_ACCESS
     lv_obj_set_size(explorer->browser_area, LV_PCT(FILE_EXPLORER_BROWSER_AREA_WIDTH), LV_PCT(100));
@@ -302,15 +302,15 @@ static void lv_file_explorer_constructor(const lv_obj_class_t * class_p, lv_obj_
 #endif
     lv_obj_set_flex_flow(explorer->browser_area, LV_FLEX_FLOW_COLUMN);
 
-    /*The area displayed above the file browse list(head)*/
+    /*Область, отображаемая над списком просмотра файлов (заголовок)*/
     explorer->head_area = lv_obj_create(explorer->browser_area);
     lv_obj_set_size(explorer->head_area, LV_PCT(100), LV_PCT(14));
     lv_obj_remove_flag(explorer->head_area, LV_OBJ_FLAG_SCROLLABLE);
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
-    /*Two lists of quick access bar*/
+    /*Два списка панели быстрого доступа*/
     lv_obj_t * btn;
-    /*list 1*/
+    /*список 1*/
     explorer->list_device = lv_list_create(explorer->quick_access_area);
     lv_obj_set_size(explorer->list_device, LV_PCT(100), LV_SIZE_CONTENT);
     lv_obj_set_style_bg_color(lv_list_add_text(explorer->list_device, "DEVICE"), lv_palette_main(LV_PALETTE_ORANGE), 0);
@@ -318,7 +318,7 @@ static void lv_file_explorer_constructor(const lv_obj_class_t * class_p, lv_obj_
     btn = lv_list_add_button(explorer->list_device, NULL, LV_SYMBOL_DRIVE " File System");
     lv_obj_add_event_cb(btn, quick_access_event_handler, LV_EVENT_CLICKED, obj);
 
-    /*list 2*/
+    /*список 2*/
     explorer->list_places = lv_list_create(explorer->quick_access_area);
     lv_obj_set_size(explorer->list_places, LV_PCT(100), LV_SIZE_CONTENT);
     lv_obj_set_style_bg_color(lv_list_add_text(explorer->list_places, "PLACES"), lv_palette_main(LV_PALETTE_LIME), 0);
@@ -335,22 +335,22 @@ static void lv_file_explorer_constructor(const lv_obj_class_t * class_p, lv_obj_
     lv_obj_add_event_cb(btn, quick_access_event_handler, LV_EVENT_CLICKED, obj);
 #endif
 
-    /*Show current path*/
+    /*Показать текущий путь*/
     explorer->path_label = lv_label_create(explorer->head_area);
     lv_label_set_text(explorer->path_label, LV_SYMBOL_EYE_OPEN"https://lvgl.io");
     lv_obj_center(explorer->path_label);
 
-    /*Table showing the contents of the table of contents*/
+    /*Таблица, показывающая содержание оглавления*/
     explorer->file_table = lv_table_create(explorer->browser_area);
     lv_obj_set_size(explorer->file_table, LV_PCT(100), LV_PCT(86));
     lv_table_set_column_width(explorer->file_table, 0, LV_PCT(100));
     lv_table_set_column_count(explorer->file_table, 1);
     lv_obj_add_event_cb(explorer->file_table, browser_file_event_handler, LV_EVENT_ALL, obj);
 
-    /*only scroll up and down*/
+    /*пролистывать только вверх и вниз*/
     lv_obj_set_scroll_dir(explorer->file_table, LV_DIR_TOP | LV_DIR_BOTTOM);
 
-    /*Initialize style*/
+    /*Инициализировать стиль*/
     init_style(obj);
 
     file_explorer_count++;
@@ -371,11 +371,11 @@ static void init_style(lv_obj_t * obj)
 {
     lv_file_explorer_t * explorer = (lv_file_explorer_t *)obj;
 
-    /*lv_file_explorer obj style*/
+    /*lv_file_explorer стиль объекта*/
     lv_obj_set_style_radius(obj, 0, 0);
     lv_obj_set_style_bg_color(obj, lv_color_hex(0xf2f1f6), 0);
 
-    /*main container style*/
+    /*основной стиль контейнера*/
     lv_obj_set_style_radius(explorer->cont, 0, 0);
     lv_obj_set_style_bg_opa(explorer->cont, LV_OPA_0, 0);
     lv_obj_set_style_border_width(explorer->cont, 0, 0);
@@ -386,13 +386,13 @@ static void init_style(lv_obj_t * obj)
     lv_obj_set_style_pad_all(explorer->cont, 0, 0);
     lv_obj_set_style_layout(explorer->cont, LV_LAYOUT_FLEX, 0);
 
-    /*head cont style*/
+    /*стиль продолжения головы*/
     lv_obj_set_style_radius(explorer->head_area, 0, 0);
     lv_obj_set_style_border_width(explorer->head_area, 0, 0);
     lv_obj_set_style_pad_top(explorer->head_area, 0, 0);
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
-    /*Quick access bar container style*/
+    /*Панель быстрого доступа в стиле контейнера*/
     lv_obj_set_style_pad_all(explorer->quick_access_area, 0, 0);
     lv_obj_set_style_pad_row(explorer->quick_access_area, 20, 0);
     lv_obj_set_style_radius(explorer->quick_access_area, 0, 0);
@@ -401,7 +401,7 @@ static void init_style(lv_obj_t * obj)
     lv_obj_set_style_bg_color(explorer->quick_access_area, lv_color_hex(0xf2f1f6), 0);
 #endif
 
-    /*File browser container style*/
+    /*Стиль контейнера файлового браузера*/
     lv_obj_set_style_pad_all(explorer->browser_area, 0, 0);
     lv_obj_set_style_pad_row(explorer->browser_area, 0, 0);
     lv_obj_set_style_radius(explorer->browser_area, 0, 0);
@@ -409,7 +409,7 @@ static void init_style(lv_obj_t * obj)
     lv_obj_set_style_outline_width(explorer->browser_area, 0, 0);
     lv_obj_set_style_bg_color(explorer->browser_area, lv_color_hex(0xffffff), 0);
 
-    /*Style of the table in the browser container*/
+    /*Стиль таблицы в контейнере браузера*/
     lv_obj_set_style_bg_color(explorer->file_table, lv_color_hex(0xffffff), 0);
     lv_obj_set_style_pad_all(explorer->file_table, 0, 0);
     lv_obj_set_style_radius(explorer->file_table, 0, 0);
@@ -417,7 +417,7 @@ static void init_style(lv_obj_t * obj)
     lv_obj_set_style_outline_width(explorer->file_table, 0, 0);
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
-    /*Style of the list in the quick access bar*/
+    /*Стиль списка в панели быстрого доступа*/
     lv_obj_set_style_border_width(explorer->list_device, 0, 0);
     lv_obj_set_style_outline_width(explorer->list_device, 0, 0);
     lv_obj_set_style_radius(explorer->list_device, 0, 0);
@@ -428,7 +428,7 @@ static void init_style(lv_obj_t * obj)
     lv_obj_set_style_radius(explorer->list_places, 0, 0);
     lv_obj_set_style_pad_all(explorer->list_places, 0, 0);
 
-    /*Style of the quick access list btn in the quick access bar*/
+    /*Стиль кнопки списка быстрого доступа в панели быстрого доступа*/
     if(file_explorer_count == 0) {
         lv_style_init(&quick_access_style);
         lv_style_set_border_width(&quick_access_style, 0);
@@ -535,9 +535,9 @@ static void browser_file_event_handler(lv_event_t * e)
         selected_text = lv_table_get_cell_value(explorer->file_table, row, col);
         file_entry_user_data = lv_table_get_cell_user_data(explorer->file_table, row, col);
 
-        selected_text = selected_text + 5; /* skip table cell format */
+        selected_text = selected_text + 5; /* пропустить формат ячейки таблицы */
 
-        /* Three navigation modes are supported:
+        /* Поддерживаются три режима навигации:
          * - Navigate to current directory
          * - Navigate to parent directory
          * - Navigate to (current directory) child */
@@ -548,10 +548,10 @@ static void browser_file_event_handler(lv_event_t * e)
         if((navigate_to_parent_dir) && (lv_strlen(explorer->current_path) > 3)) {
             lv_strlcpy(file_name, explorer->current_path, sizeof(file_name));
             strip_ext(file_name);
-            /*Remove the last '/' character*/
+            /*Удалить последний символ '/'*/
             strip_ext(file_name);
 
-            /* Append / at the end */
+            /* Добавить/в конце */
             size_t stripped_file_name_length = lv_strlen(file_name);
             *(file_name + stripped_file_name_length) = '/';
             if(stripped_file_name_length + 1 < LV_FILE_EXPLORER_PATH_MAX_LEN) {
@@ -562,13 +562,13 @@ static void browser_file_event_handler(lv_event_t * e)
             if(navigate_to_child) {
                 lv_snprintf((char *)file_name, sizeof(file_name), "%s%s", explorer->current_path, selected_text);
             }
-            else if(navigate_to_parent_dir) { /* We are most likely in the drive letter directory, doesn't have parent directory */
+            else if(navigate_to_parent_dir) { /* Скорее всего, мы находимся в каталоге с буквой диска, родительского каталога нет. */
                 return;
             }
-            else { /* Nothing to do*/ }
+            else { /* Нечего делать*/ }
         }
 
-        /* Navigate to the file path if this is a directory */
+        /* Перейдите к пути к файлу, если это каталог */
         if(file_entry_user_data->file_kind == LV_FILE_EXPLORER_FILE_KIND_DIR) {
             lv_fs_dir_t dir;
             lv_fs_res_t res = lv_fs_dir_open(&dir, file_name);
@@ -640,7 +640,7 @@ static void show_dir(lv_obj_t * obj, const char * path)
             break;
         }
 
-        /*fn is empty, if not more files to read*/
+        /*fn пуст, если нет других файлов для чтения*/
         if(lv_strlen(fn) == 0) {
             LV_LOG_USER("No more files to read!");
             break;
@@ -666,10 +666,10 @@ static void show_dir(lv_obj_t * obj, const char * path)
             file_entry_user_data->file_kind = LV_FILE_EXPLORER_FILE_KIND_VIDEO;
         }
         else if((is_end_with(fn, ".") == true) || (is_end_with(fn, "..") == true)) {
-            /*is dir*/
+            /*это реж.*/
             continue;
         }
-        else if(fn[0] == '/') {/*is dir*/
+        else if(fn[0] == '/') {/*это реж.*/
             lv_table_set_cell_value_fmt(explorer->file_table, index, 0, LV_SYMBOL_DIRECTORY "  %s", fn + 1);
             file_entry_user_data->file_kind = LV_FILE_EXPLORER_FILE_KIND_DIR;
         }
@@ -689,7 +689,7 @@ static void show_dir(lv_obj_t * obj, const char * path)
     file_explorer_sort(obj);
     lv_obj_send_event(obj, LV_EVENT_READY, NULL);
 
-    /*Move the table to the top*/
+    /*Переместить таблицу наверх*/
     lv_obj_scroll_to_y(explorer->file_table, 0, LV_ANIM_OFF);
 
     lv_strncpy(explorer->current_path, path, sizeof(explorer->current_path));
@@ -704,7 +704,7 @@ static void show_dir(lv_obj_t * obj, const char * path)
     }
 }
 
-/*Remove the specified suffix*/
+/*Удалить указанный суффикс*/
 static void strip_ext(char * dir)
 {
     char * end = dir + lv_strlen(dir);
@@ -760,7 +760,7 @@ static void file_explorer_sort(lv_obj_t * obj)
     }
 }
 
-/*Quick sort 3 way*/
+/*Быстрая сортировка 3 способа*/
 static void sort_by_file_kind(lv_obj_t * tb, int16_t lo, int16_t hi)
 {
     if(lo >= hi) return;

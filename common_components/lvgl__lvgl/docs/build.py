@@ -191,13 +191,13 @@ History
 """
 
 # ****************************************************************************
-# IMPORTANT: If you are getting a PDF-lexer error for an example, check
-#            for extra lines at the end of the file. Only a single empty line
-#            is allowed!!! Ask me how long it took me to figure this out.
-#              -- @kdschlosser
+# IMPORTANT: Если вы внесли ошибкуPDF-lexer, например, проверьте
+# для дополнительных строк в конце файла. Только одна пустая строка
+# разрешено!!! Спросите меня, сколько времени мне понадобилось, чтобы это понять.
+# -- @kdschlosser
 # ****************************************************************************
 
-# Python Library
+# Библиотека Python
 import sys
 import os
 import subprocess
@@ -206,21 +206,21 @@ import dirsync
 import argparse
 from datetime import datetime
 
-# LVGL Custom
+# LVGL Пользовательский
 import example_list
 import api_doc_builder
 import config_builder
 from src.lvgl_version import lvgl_version
 from announce import *
 
-# Not Currently Used
-# (Code is kept in case we want to re-implement it later.)
-# import add_translation
+# В настоящее время не используется
+# (Код сохраняется на случай, если мы захотим его повторно реализовать позже.)
+# импорт add_translation
 
 # -------------------------------------------------------------------------
-# Configuration
+# Конфигурация
 # -------------------------------------------------------------------------
-# These are relative paths from the ./docs/ directory.
+# Это соответствующие пути из каталога ./docs/.
 cfg_project_dir = '..'
 cfg_lvgl_src_dir = 'src'
 cfg_doc_src_dir = 'src'
@@ -242,7 +242,7 @@ cfg_target_clean_intermediate = 'clean-intermediate'
 cfg_target_clean_html = 'clean-html'
 cfg_target_clean_latex = 'clean-latex'
 
-# Filename generated in `latex_output_dir` and copied to `pdf_output_dir`.
+# Имя файла, сгенерированное в`latex_output_dir`и скопированное в`pdf_output_dir`.
 cfg_pdf_filename = 'LVGL.pdf'
 
 
@@ -314,7 +314,7 @@ def run():
         This routine has proven useful for verification and validation,
         and is being kept for future debugging purposes.
         """
-        # Targets
+        # Цели
         print_setting("build_html", cfg_target_html in args.targets)
         print_setting("build_latex", cfg_target_latex in args.targets)
         print_setting("build_intermediate", cfg_target_intermediate in args.targets)
@@ -322,7 +322,7 @@ def run():
         print_setting("clean_intermediate", cfg_target_clean_intermediate in args.targets)
         print_setting("clean_html", cfg_target_clean_html in args.targets)
         print_setting("clean_latex", cfg_target_clean_latex in args.targets)
-        # Options
+        # Опции
         print_setting("skip_api", args.skip_api)
         print_setting("fresh_sphinx_env", args.fresh_sphinx_env)
 
@@ -330,7 +330,7 @@ def run():
             exit(0)
 
     # ---------------------------------------------------------------------
-    # Process command-line args.
+    # Обработка аргументов командной строки.
     # ---------------------------------------------------------------------
     ap = argparse.ArgumentParser(description='Build LVGL documents')
     ap.add_argument('targets', nargs='+', choices=[
@@ -358,9 +358,9 @@ def run():
         if cfg_target_clean_latex not in args.targets:
             args.targets.append(cfg_target_clean_latex)
 
-    # '-E' option forces Sphinx to rebuild its environment so all docs are
-    # fully regenerated, even if not changed.
-    # Note:  Sphinx runs in ./docs/, but uses `intermediate_dir` for input.
+    # Опция '-E' заставляет Сфинкса перестроить свою среду, чтобы все документы были
+    # полностью регенерируется, даже если не изменяется.
+    # Примечание. Sphinx работает в ./docs/, но для ввода используется`intermediate_dir`.
     if args.fresh_sphinx_env:
         announce(__file__, "Force-regenerating all files...")
         env_opt = '-E'
@@ -368,26 +368,26 @@ def run():
         env_opt = ''
 
     # ---------------------------------------------------------------------
-    # Start.
+    # Начни.
     # ---------------------------------------------------------------------
     t0 = datetime.now()
 
     # ---------------------------------------------------------------------
-    # Set up paths.
+    # Настройте пути.
     #
-    # Variable Suffixes:
-    # _filename = filename without path
-    # _path     = path leading to a file or directory (absolute or relative)
-    # _file     = path leading to a file              (absolute or relative)
-    # _dir      = path leading to a directory         (absolute or relative)
+    # Суффиксы переменных:
+    # _filename = имя файла без пути
+    # _path = путь, ведущий к файлу или каталогу (абсолютный или относительный)
+    # _file = путь, ведущий к файлу (абсолютный или относительный)
+    # _dir = путь, ведущий к каталогу (абсолютный или относительный)
     # ---------------------------------------------------------------------
     base_dir = os.path.abspath(os.path.dirname(__file__))
     project_dir = os.path.abspath(os.path.join(base_dir, cfg_project_dir))
     examples_dir = os.path.join(project_dir, cfg_examples_dir)
     lvgl_src_dir = os.path.join(project_dir, cfg_lvgl_src_dir)
 
-    # Establish intermediate directory.  The presence of environment variable
-    # `LVGL_DOC_BUILD_INTERMEDIATE_DIR` overrides default in `cfg_default_intermediate_dir`.
+    # Установите промежуточный каталог.  Наличие переменной окружения
+    # `LVGL_DOC_BUILD_INTERMEDIATE_DIR` переопределяет значение по умолчанию в`cfg_default_intermediate_dir`.
     if 'LVGL_DOC_BUILD_INTERMEDIATE_DIR' in os.environ:
         intermediate_dir = os.environ['LVGL_DOC_BUILD_INTERMEDIATE_DIR']
     else:
@@ -405,8 +405,8 @@ def run():
     pdf_relative_file = cfg_static_dir + sphinx_path_sep + cfg_downloads_dir + sphinx_path_sep + cfg_pdf_filename
     pdf_link_ref_str = f'PDF Version: :download:`{cfg_pdf_filename} <{pdf_relative_file}>`'
 
-    # Establish build directory.  The presence of environment variable
-    # `LVGL_DOC_BUILD_OUTPUT_DIR` overrides default in `cfg_default_output_dir`.
+    # Установите каталог сборки.  Наличие переменной окружения
+    # `LVGL_DOC_BUILD_OUTPUT_DIR` переопределяет значение по умолчанию в`cfg_default_output_dir`.
     if 'LVGL_DOC_BUILD_OUTPUT_DIR' in os.environ:
         output_dir = os.environ['LVGL_DOC_BUILD_OUTPUT_DIR']
     else:
@@ -419,17 +419,17 @@ def run():
     pdf_dst_file = os.path.join(pdf_output_dir, cfg_pdf_filename)
     version_src_file = os.path.join(project_dir, cfg_lv_version_filename)
 
-    # Special stuff for right-aligning PDF download link.
-    # Note: this needs to be embedded in a <div> tag because the
-    # Sphinx `:download:` role causes the link to appear in a <p> tag
-    # and in HTML5, <p> tags cannot be nested!
+    # Специальные материалы для выравнивания по правому краю ссылки для скачивания PDF.
+    # Примечание: это необходимо встроить в тег <div>, потому что
+    # Роль Sphinx`:download:`приводит к появлению ссылки в теге <p>.
+    # а в HTML5 теги <p> не могут быть вложенными!
     cfg_right_just_para_text = """.. raw:: html
 
     <div style="text-align: right;">"""
     cfg_end_right_just_para_text = """.. raw:: html
 
     </div>"""
-    # Blank lines are required due to the directives.
+    # Пустые строки необходимы в соответствии с директивами.
     cfg_pdf_link_ref_block_str = \
         cfg_right_just_para_text + os.linesep \
         + os.linesep \
@@ -439,7 +439,7 @@ def run():
         + os.linesep
 
     # ---------------------------------------------------------------------
-    # Change to script directory for consistent run-time environment.
+    # Перейдите в каталог сценария для обеспечения согласованной среды выполнения.
     # ---------------------------------------------------------------------
     os.chdir(base_dir)
     announce(__file__, f'Intermediate dir:  [{intermediate_dir}]')
@@ -477,71 +477,71 @@ def run():
             remove_dir(intermediate_dir)
 
     # ---------------------------------------------------------------------
-    # Populate LVGL_URLPATH and LVGL_GITCOMMIT environment variables:
-    #   - LVGL_URLPATH   <= 'master' or '8.4' '9.2' etc.
-    #   - LVGL_GITCOMMIT <= same (see 03-Oct-2024 note below).
+    # Заполните переменные среды LVGL_URLPATH и LVGL_GITCOMMIT:
+    # - LVGL_URLPATH <= «главный» или «8,4», «9,2» и т. д.
+    # - LVGL_GITCOMMIT <= то же самое (см. примечание от 3 октября 2024 г. ниже).
     #
-    # These supply input later in the doc-generation process as follows:
+    # Эти данные вводятся позже в процессе создания документа следующим образом:
     #
-    # LVGL_URLPATH is used by:
-    #   - `conf.py` to build `html_baseurl` for Sphinx for
-    #       - generated index
-    #       - generated search window
-    #       - establishing canonical page for search engines
-    #   - `link_roles.py` to generate translation links
-    #   - `doxygen_xml.py` to generate links to API pages
+    # LVGL_URLPATH используется:
+    # - `conf.py` для сборки`html_baseurl`для Sphinx для
+    # - сгенерированный индекс
+    # - создано окно поиска
+    # - создание канонической страницы для поисковых систем
+    # - `link_roles.py` для создания ссылок на перевод
+    # - `doxygen_xml.py` для создания ссылок на страницы API.
     #
-    # LVGL_GITCOMMIT is used by:
-    #   - `conf.py` => html_context['github_version'] for
-    #     Sphinx Read-the-Docs theme to add to [Edit on GitHub] links
-    #   - `conf.py` => repo_commit_hash for generated EXAMPLES pages for:
-    #       - [View on GitHub] buttons (view C code examples)
-    #       - [View on GitHub] buttons (view Python code examples)
+    # LVGL_GITCOMMIT используется:
+    # - `conf.py` =>html_context['github_version'] для
+    # Тема Sphinx Read-the-Docs для добавления в ссылки [Редактировать на GitHub]
+    # - `conf.py` =>repo_commit_hashдля сгенерированных страницEXAMPLESдля:
+    # - Кнопки [Просмотреть на GitHub] (просмотреть пример кода C)
+    # - Кнопки [Просмотреть на GitHub] (просмотреть пример кода Python)
     # ---------------------------------------------------------------------
-    # 03-Oct-2024:  Gabor requested LVGL_GITCOMMIT be changed to a branch
-    # name since that will always be current, and it will fix a large
-    # number of broken links on the docs website, since commits that
-    # generated docs can sometimes go away.  This gets used in:
-    # - [Edit on GitHub] links in doc pages (via Sphinx theme), and
-    # - [View on GitHub] links in example pages (via `example_list.py`
-    #   and `lv_example.py`).
-    # Original code:
-    # status, br = subprocess.getstatusoutput("git branch --show-current")
+    # 03 октября 2024 г.: Габор попросил превратить LVGL_GITCOMMIT в ветку.
+    # имя, поскольку оно всегда будет актуальным и исправит большую
+    # количество неработающих ссылок на сайте документации, поскольку это зафиксировано
+    # сгенерированные документы иногда могут исчезнуть.  Это используется в:
+    # - Ссылки [Edit on GitHub] на страницы документации (через тему Sphinx) и
+    # - Ссылки [View on GitHub] на примеры страниц (через `example_list.py`
+    # и `lv_example.py`).
+    # Исходный код:
+    # статус, br = subprocess.getstatusoutput("git Branch --show-current")
     # _, gitcommit = subprocess.getstatusoutput("git rev-parse HEAD")
     # br = re.sub(r'\* ', '', br)
-    #   're' was previously used to remove leading '* ' from current branch
-    #   string when we were parsing output from bare `git branch` output.
-    #   This is no longer needed with `--show-current` option now used.
+    # 're' ранее использовался для удаления начального '*' из текущей ветки
+    # строку, когда мы анализировали вывод чистого вывода`git branch`.
+    # Этого больше не требуется, поскольку теперь используется опция `--show-current`.
     # ---------------------------------------------------------------------
     status, branch = subprocess.getstatusoutput("git branch --show-current")
 
-    # If above failed (i.e. `branch` not valid), default to 'master'.
+    # Если добиться не удалось (т. е.`branch`недействителен), по умолчанию используется «главный».
     if status != 0:
         branch = cfg_default_branch
     elif branch == cfg_default_branch:
-        # Expected in most cases.  Nothing to change.
+        # Ожидаемо в большинстве случаев.  Ничего не изменить.
         pass
     else:
-        # `branch` is valid.  Capture release version if in a 'release/' branch.
+        # `branch` действителен.  Запишите версию выпуска, если она находится в ветке Release/.
         if branch.startswith('release/'):
             branch = branch[8:]
         else:
-            # Default to 'master'.
+            # По умолчанию «мастер».
             branch = cfg_default_branch
 
     os.environ['LVGL_URLPATH'] = branch
     os.environ['LVGL_GITCOMMIT'] = branch
 
     # ---------------------------------------------------------------------
-    # Prep `intermediate_dir` to become the `sphinx-build` source dir.
+    # Подготовьте `intermediate_dir`, чтобы он стал исходным каталогом `sphinx-build`.
     # ---------------------------------------------------------------------
-    # dirsync `exclude_list` = list of regex patterns to exclude.
+    # dirsync`exclude_list`= список шаблонов регулярных выражений, которые требуют аварийной ситуации.
     intermediate_re = r'^' + cfg_default_intermediate_dir + r'.*'
     output_re = r'^' + cfg_default_output_dir + r'.*'
     exclude_list = [r'lv_conf\.h', r'^__pycache__.*', intermediate_re, output_re]
 
     if intermediate_dir_contents_exists(intermediate_dir):
-        # We are just doing an update of the intermediate_dir contents.
+        # Мы просто обновляем криптовалюту intermediate_dir.
         announce(__file__, "Updating intermediate directory...", box=True)
 
         exclude_list.append(r'examples.*')
@@ -552,87 +552,87 @@ def run():
             'purge': False,    # False means DO NOT remove orphan files/dirs in tgt dir (preserving examples/ dir).
             'exclude': exclude_list
         }
-        # action == 'sync' means copy files even when they do not already exist in tgt dir.
-        # action == 'update' means DO NOT copy files when they do not already exist in tgt dir.
+        # action == 'sync' означает копирование файлов, даже если их еще нет в каталоге tgt.
+        # action == «обновление» означает, чтоDONOT копирует файлы, если они еще не существуют в каталоге tgt.
         dirsync.sync(cfg_doc_src_dir, intermediate_dir, 'sync', **options)
         dirsync.sync(examples_dir, os.path.join(intermediate_dir, cfg_examples_dir), 'sync', **options)
     elif cfg_target_intermediate in args.targets or cfg_target_html in args.targets or cfg_target_latex in args.targets:
-        # We are having to create the intermediate_dir contents by copying.
+        # Нам нужно создать атрибутыintermediate_dirпутем копирования.
         announce(__file__, "Building intermediate directory...", box=True)
 
         t1 = datetime.now()
         copy_method = 1
 
-        # Both of these methods work.
+        # Оба эти метода работают.
         if copy_method == 0:
-            # --------- Method 0:
+            # --------- Способ 0:
             ignore_func = shutil.ignore_patterns('tmp*', 'output*')
             announce(__file__, 'Copying docs...')
             shutil.copytree(cfg_doc_src_dir, intermediate_dir, ignore=ignore_func, dirs_exist_ok=True)
             announce(__file__, 'Copying examples...')
             shutil.copytree(examples_dir, os.path.join(intermediate_dir, cfg_examples_dir), dirs_exist_ok=True)
         else:
-            # --------- Method 1:
+            # --------- Способ 1:
             options = {
                 'create': True,    # Create directories if they don't exist.
                 'exclude': exclude_list
             }
-            # action == 'sync' means copy files even when they do not already exist in tgt dir.
-            # action == 'update' means DO NOT copy files when they do not already exist in tgt dir.
+            # action == 'sync' означает копирование файлов, даже если их еще нет в каталоге tgt.
+            # action == «обновление» означает, чтоDONOT копирует файлы, если они еще не существуют в каталоге tgt.
             announce(__file__, 'Copying docs...')
             dirsync.sync(cfg_doc_src_dir, intermediate_dir, 'sync', **options)
             announce(__file__, 'Copying examples...')
             dirsync.sync(examples_dir, os.path.join(intermediate_dir, cfg_examples_dir), 'sync', **options)
 
         # -----------------------------------------------------------------
-        # Build <intermediate_dir>/lv_conf.h from lv_conf_template.h.
+        # Поставьте <intermediate_dir>/lv_conf.hизlv_conf_template.h.
         # -----------------------------------------------------------------
         config_builder.run(lv_conf_file)
-        # Build a temporary version of this file in ../src/ so Doxygen can see it.
-        # Reason:  Doxygen's input is the master `lvgl/src/` directory,
-        # not the intermediate directory.  This file gets deleted later.
+        # Создайте временную версию этого файла в ../src/, чтобы Doxygen мог ее увидеть.
+        # Причина: входные данные Doxygen — это главный каталог`lvgl/src/`,
+        # не промежуточный каталог.  Этот файл будет удален позже.
         config_builder.run(lv_temp_conf_file_for_doxygen)
 
         # -----------------------------------------------------------------
-        # Copy `lv_version.h` into intermediate directory.
+        # Скопируйте`lv_version.h`в промежуточный каталог.
         # -----------------------------------------------------------------
         shutil.copyfile(version_src_file, version_dst_file)
 
         # -----------------------------------------------------------------
-        # Generate examples pages.  Include sub-pages pages that get included
-        # in individual documents where applicable.
+        # Создайте страницы с примерами.  Включить подстраницы, которые будут включены
+        # в отдельных документах, где это применимо.
         # -----------------------------------------------------------------
         announce(__file__, "Generating examples...")
         example_list.make_warnings_into_errors()
         example_list.exec(intermediate_dir)
 
         # -----------------------------------------------------------------
-        # Add translation links.
-        # This is being skipped in favor of a manually-placed
-        # translation link at the top of `./docs/index.rst`.
+        # Добавьте ссылки на перевод.
+        # Это пропускается в пользу размещения вручную
+        # ссылка на перевод вверху`./docs/index.rst`.
         # -----------------------------------------------------------------
-        # Original code:
-        # if True:
-        #     announce(__file__, "Skipping adding translation links.")
-        # else:
-        #     announce(__file__, "Adding translation links...")
-        #     add_translation.exec(intermediate_dir)
+        # Исходный код:
+        # если правда:
+        # анонс(__file__, "Пропуск добавления ссылок на перевод.")
+        # еще:
+        # анонс(__file__, "Добавление ссылок на перевод...")
+        # add_translation .exec(intermediate_dir)
 
         if args.skip_api:
             announce(__file__, "Skipping API generation as requested.")
         else:
             # -------------------------------------------------------------
-            # Generate API pages and links thereto.
+            # Генерируйте страницы API и ссылки на них.
             # -------------------------------------------------------------
             announce(__file__, "API page and link processing...")
             api_doc_builder.EMIT_WARNINGS = False
 
-            # api_doc_builder.run() => doxy_xml_parser.DoxygenXml() now:
-            # - preps and runs Doxygen generating XML,
-            # - loads generated XML.
-            # Then api_doc_builder.run():
-            # - creates .RST files for API pages, and
-            # - adds API hyperlinks to .RST files in the directories in passed array.
+            # api_doc_builder . run()=>doxy_xml_parser. DoxygenXml()сейчас:
+            # - подготавливает и запускает Doxygen, генераторXML,
+            # - загружается сгенерированный XML .
+            # Тогда api_doc_builder. run():
+            # - создает. файлы RST для страниц API и
+            # - добавляет гиперссылки API в файлы . RST файлы в каталогах переданного массива.
             api_doc_builder.build_api_docs(lvgl_src_dir,
                                            intermediate_dir,
                                            doxyfile_src_file,
@@ -650,16 +650,16 @@ def run():
                                            'xml',
                                            )
 
-        # Now that Doxygen has run, this file is no longer needed.
-        # Clean up now rather than later to keep logic clean.
+        # Теперь, когда Doxygen запущен, этот файл больше не нужен.
+        # Выполняйте очистку сейчас, а не позже, чтобы сохранить логику в чистоте.
         os.remove(lv_temp_conf_file_for_doxygen)
 
-        # Note time when this stage completed.
+        # Отметьте время завершения этого этапа.
         t2 = datetime.now()
         announce(__file__, 'Example/API run time:  ' + str(t2 - t1))
 
     # ---------------------------------------------------------------------
-    # Build PDF
+    # Сборка PDF
     # ---------------------------------------------------------------------
     if cfg_target_latex not in args.targets:
         announce(__file__, "Skipping Latex build.")
@@ -667,8 +667,8 @@ def run():
         t1 = datetime.now()
         announce(__file__, "Building Latex output...", box=True)
 
-        # If PDF link is present in top index.rst, remove it so PDF
-        # does not have a link to itself.
+        # Если ссылкаPDFнаходится в верхней частиindex.rst, удалите ее, чтобы PDF
+        # не имеет ссылки на себя.
         with open(top_index_file, 'rb') as f:
             index_data = f.read().decode('utf-8')
 
@@ -682,21 +682,21 @@ def run():
         dst = output_dir
         cpu = os.cpu_count()
 
-        # The -D option correctly replaces (overrides) configuration attribute
-        # values in the `conf.py` module.  Since `conf.py` now correctly
-        # computes its own `version` value, we don't have to override it here
-        # with a -D options.  If it should need to be used in the future,
-        # the value after the '=' MUST NOT have quotation marks around it
-        # or it won't work.  Correct usage:  f'-D version={ver}' .
+        # Опция -D правильно заменяет (переопределяет) атрибут конфигурации.
+        # значения в модуле `conf.py`.  поскольку`conf.py`теперь правильно
+        # вычислите свое собственное значение `version`, нам не нужно его здесь переопределять
+        # с опцией -D.  Если его понадобится использовать в будущем,
+        # значение после '=" MUST NOT заключено в кавычки
+        # или это не сработает.  Правильное использование: f'-D version={ver}' .
         cmd_line = f'sphinx-build -M latex "{src}" "{dst}" -j {cpu} --fail-on-warning --keep-going'
         cmd(cmd_line)
 
-        # Generate PDF.
+        # Сгенерируйте PDF .
         announce(__file__, "Building PDF...", box=True)
         cmd_line = 'latexmk -pdf "LVGL.tex"'
         cmd(cmd_line, latex_output_dir, False)
 
-        # Move resulting PDF to its output directory.
+        # Переместите полученный PDF в выходной каталог.
         if not os.path.exists(pdf_output_dir):
             os.makedirs(pdf_output_dir)
 
@@ -706,7 +706,7 @@ def run():
         announce(__file__, 'Latex gen time:  ' + str(t2 - t1))
 
     # ---------------------------------------------------------------------
-    # Build HTML
+    # Сборка HTML
     # ---------------------------------------------------------------------
     if cfg_target_html not in args.targets:
         announce(__file__, "Skipping HTML build.")
@@ -714,20 +714,20 @@ def run():
         t1 = datetime.now()
         announce(__file__, "Building HTML output...", box=True)
 
-        # If PDF is present in build directory, copy it to
-        # intermediate directory for use by HTML build.
-        # (Sphinx copies it to its HTML output, so it ends
-        # up on the webserver where it can be downloaded).
+        # Если PDF присутствует в каталоге сборки, скопируйте его в
+        # промежуточный каталог для использования сборкой HTML.
+        # (Sphinx копирует его на выходеHTML, поэтому он завершается.
+        # на веб-сервере, где его можно скачать).
         if os.path.isfile(pdf_dst_file):
-            # Create _static/download/ directory if needed.
+            # При необходимости создайте каталог _static/download/.
             if not os.path.exists(pdf_intermediate_dst_dir):
                 os.makedirs(pdf_intermediate_dst_dir)
 
             shutil.copyfile(pdf_dst_file, pdf_intermediate_dst_file)
 
-        # If PDF is present, ensure there is a link to it in the top
-        # index.rst so HTML build will have it.
-        # Support both Windows and Linux platforms with `os.linesep`.
+        # Если PDF присутствует, убедитесь, что ссылка на него находится вверху.
+        # index.rst, поэтому он будет в сборке HTML.
+        # Поддерживает платформы Windows и Linux с помощью `os.linesep`.
         if os.path.isfile(pdf_intermediate_dst_file):
             with open(top_index_file, 'rb') as f:
                 index_data = f.read().decode('utf-8')
@@ -738,14 +738,14 @@ def run():
                 with open(top_index_file, 'wb') as f:
                     f.write(index_data.encode('utf-8'))
 
-        # Note:  While it can be done (e.g. if one needs to set a stop point
-        # in Sphinx code for development purposes), it is NOT a good idea to
-        # run Sphinx from script as
-        #   from sphinx.cmd.build import main as sphinx_build
-        #   sphinx_args = [...]
-        #   sphinx_build(sphinx_args)
-        # because it takes ~10X longer to run than `sphinx_build` executable,
-        # literally > 3 hours.
+        # Примечание. Хотя это можно сделать (например, если нужно установить точку остановки).
+        # в коде Sphinx для целей разработки) рекомендуется использоватьNOT.
+        # запустить Sphinx из скрипта как
+        # из sphinx.cmd.build импортируйте основной как sphinx_build
+        # sphinx_args = [...]
+        # sphinx_build (sphinx_args)
+        # потому что его запуск занимает примерно в 10 раз больше времени, чем исполняемый файл`sphinx_build`,
+        # буквально >3 часа.
 
         ver = lvgl_version(version_src_file)
         src = intermediate_dir
@@ -755,7 +755,7 @@ def run():
         debugging_breathe = 0
         if debugging_breathe:
             from sphinx.cmd.build import main as sphinx_build
-            # Don't allow parallel processing while debugging (the '-j' arg is removed).
+            # Не разрешать параллельную обработку во время отладки (аргумент -j удален).
             sphinx_args = ['-M', 'html', f'{src}', f'{dst}']
 
             if len(env_opt) > 0:
@@ -763,12 +763,12 @@ def run():
 
             sphinx_build(sphinx_args)
         else:
-            # The -D option correctly replaces (overrides) configuration attribute
-            # values in the `conf.py` module.  Since `conf.py` now correctly
-            # computes its own `version` value, we don't have to override it here
-            # with a -D options.  If it should need to be used in the future,
-            # the value after the '=' MUST NOT have quotation marks around it
-            # or it won't work.  Correct usage:  f'-D version={ver}' .
+            # Опция -D правильно заменяет (переопределяет) атрибут конфигурации.
+            # значения в модуле `conf.py`.  поскольку`conf.py`теперь правильно
+            # вычислите свое собственное значение `version`, нам не нужно его здесь переопределять
+            # с опцией -D.  Если его понадобится использовать в будущем,
+            # значение после '=" MUST NOT заключено в кавычки
+            # или это не сработает.  Правильное использование: f'-D version={ver}' .
             cmd_line = f'sphinx-build -M html "{src}" "{dst}" -j {cpu} {env_opt} --fail-on-warning --keep-going'
             cmd(cmd_line)
 
@@ -776,7 +776,7 @@ def run():
         announce(__file__, 'HTML gen time :  ' + str(t2 - t1))
 
     # ---------------------------------------------------------------------
-    # Indicate results.
+    # Укажите результаты.
     # ---------------------------------------------------------------------
     t_end = datetime.now()
     announce(__file__, 'Total run time:  ' + str(t_end - t0))

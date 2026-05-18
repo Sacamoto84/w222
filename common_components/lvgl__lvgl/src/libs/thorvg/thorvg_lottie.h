@@ -7,15 +7,15 @@ namespace tvg
 {
 
 /**
- * @class LottieAnimation
+ * @class ЛоттиАнимация
  *
  * @brief The LottieAnimation class enables control of advanced Lottie features.
  *
- * This class extends the Animation and has additional interfaces.
+ * Этот класс расширяет Animation и имеет дополнительные интерфейсы.
  *
  * @see Animation
  * 
- * @since 0.15
+ * @since 0,15
  */
 
 #include "../../lv_conf_internal.h"
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Override Lottie properties using slot data.
      *
-     * @param[in] slot The Lottie slot data in JSON format to override, or @c nullptr to reset.
+     * @param [in] slot Данные слота Lottie в формате JSON для переопределения или @c nullptr для сброса.
      *
      * @retval Result::Success When succeed.
      * @retval Result::InsufficientCondition In case the animation is not loaded.
@@ -41,12 +41,12 @@ public:
     /**
     * @brief Specifies a segment by marker. 
     * 
-    * Markers are used to control animation playback by specifying start and end points, 
-    * eliminating the need to know the exact frame numbers.
-    * Generally, markers are designated at the design level, 
-    * meaning the callers must know the marker name in advance to use it.
+    * Маркеры используются для управления воспроизведением анимации путем указания начальной и конечной точек. 
+    * устраняя необходимость знать точные номера кадров.
+    * Обычно маркеры обозначаются на уровне проекта. 
+    * это означает, что вызывающие абоненты должны заранее знать имя маркера, чтобы использовать его.
     *
-    * @param[in] marker The name of the segment marker.
+    * @param Маркер [in] Имя маркера сегмента.
     *
     * @retval Result::Success When successful.
     * @retval Result::InsufficientCondition If the animation is not loaded.
@@ -73,7 +73,7 @@ public:
     /**
      * @brief Gets the marker name by a given index.
      *
-     * @param[in] idx The index of the animation marker, starts from 0.
+     * @param [in] idx Индекс маркера анимации начинается с 0.
      *
      * @retval The name of marker when succeed, @c nullptr otherwise.
      * 
@@ -87,12 +87,12 @@ public:
      *
      * @return A new LottieAnimation object.
      *
-     * @since 0.15
+     * @since 0,15
      */
     static std::unique_ptr<LottieAnimation> gen() noexcept;
 };
 
-} //namespace
+} //пространство имен
 
 #endif //_THORVG_LOTTIE_H_
 

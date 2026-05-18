@@ -25,7 +25,7 @@
         #define M_PI 3.14159265358979323846264338327950288
     #endif
 #else
-    /* Use fixed point math for integer only platforms $ M_PI << 8 $ */
+    /* Используйте математику с фиксированной запятой только для целочисленных платформ $ M_PI << 8 $ */
     #define M_PI 804
 #endif
 
@@ -88,15 +88,15 @@ lv_obj_t * lv_arclabel_create(lv_obj_t * parent)
 }
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*
- * New object specific "add" or "remove" functions come here
+ * Сюда входят новые функции «добавить» или «удалить», специфичные для объекта.
  */
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_arclabel_set_text(lv_obj_t * obj, const char * text)
@@ -104,19 +104,19 @@ void lv_arclabel_set_text(lv_obj_t * obj, const char * text)
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arclabel_t * arclabel = (lv_arclabel_t *)obj;
 
-    /*If text is NULL then just refresh with the current text*/
+    /*Если текст NULL, просто обновите текущий текст.*/
     if(text == NULL) text = arclabel->text;
 
     const size_t text_len = lv_strlen(text) + 1;
 
-    /*If set its own text then reallocate it (maybe its size changed)*/
+    /*Если установлен собственный текст, перераспределите его (возможно, его размер изменился)*/
     if(arclabel->text == text && arclabel->static_txt == 0) {
         arclabel->text = lv_realloc(arclabel->text, text_len);
         LV_ASSERT_MALLOC(arclabel->text);
         if(arclabel->text == NULL) return;
     }
     else {
-        /*Free the old text*/
+        /*Освободите старый текст*/
         if(arclabel->text != NULL && arclabel->static_txt == 0) {
             lv_free(arclabel->text);
             arclabel->text = NULL;
@@ -128,7 +128,7 @@ void lv_arclabel_set_text(lv_obj_t * obj, const char * text)
 
         lv_strcpy(arclabel->text, text);
 
-        /*Now the text is dynamically allocated*/
+        /*Теперь текст распределяется динамически*/
         arclabel->static_txt = 0;
     }
 
@@ -142,7 +142,7 @@ void lv_arclabel_set_text_fmt(lv_obj_t * obj, const char * fmt, ...)
 
     lv_arclabel_t * arclabel = (lv_arclabel_t *)obj;
 
-    /*If text is NULL then refresh*/
+    /*Если текст NULL, обновите*/
     if(fmt == NULL) {
         lv_obj_invalidate(obj);
         return;
@@ -157,7 +157,7 @@ void lv_arclabel_set_text_fmt(lv_obj_t * obj, const char * fmt, ...)
     va_start(args, fmt);
     arclabel->text = lv_text_set_text_vfmt(fmt, args);
     va_end(args);
-    arclabel->static_txt = 0; /*Now the text is dynamically allocated*/
+    arclabel->static_txt = 0; /*Теперь текст распределяется динамически*/
 
     lv_obj_invalidate(obj);
 }
@@ -288,7 +288,7 @@ void lv_arclabel_set_end_overlap(lv_obj_t * obj, bool overlap)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 lv_value_precise_t lv_arclabel_get_angle_start(lv_obj_t * obj)
@@ -366,7 +366,7 @@ lv_value_precise_t lv_arclabel_get_text_angle(lv_obj_t * obj)
 }
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**********************
@@ -398,7 +398,7 @@ static void lv_arclabel_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     const lv_result_t res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 

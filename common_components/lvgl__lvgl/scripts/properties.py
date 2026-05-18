@@ -108,7 +108,7 @@ def read_widget_properties(directory):
             properties_by_widget[property.widget].append(property)
 
         for widget, properties in properties_by_widget.items():
-            # sort properties by property name
+            # сортировать свойства по имени свойства
             properties.sort(key=lambda x: x.name)
             properties_by_widget[widget] = properties
 
@@ -116,7 +116,7 @@ def read_widget_properties(directory):
 
 
 def write_widget_properties(output, properties_by_widget):
-    # Open header file for update.
+    # Откройте заголовочный файл для обновления.
     with open(f'{output}/lv_obj_property_names.h', "w") as header:
         header.write(f'''
 /**
@@ -124,9 +124,9 @@ def write_widget_properties(output, properties_by_widget):
  * GENERATED FILE, DO NOT EDIT IT!
  */
 #ifndef LV_OBJ_PROPERTY_NAMES_H
-#define LV_OBJ_PROPERTY_NAMES_H
+#определить LV_OBJ_PROPERTY_NAMES_H
 
-#include "../../misc/lv_types.h"
+#включить "../../misc/lv_types.h"
 
 #if LV_USE_OBJ_PROPERTY && LV_USE_OBJ_PROPERTY_NAME
 
@@ -155,7 +155,7 @@ def write_widget_properties(output, properties_by_widget):
  * @file {file_name}
  */
 
-#include "{include}"
+#включить "{включить}"
 
 #if LV_USE_OBJ_PROPERTY && LV_USE_OBJ_PROPERTY_NAME
 
@@ -197,9 +197,9 @@ def write_style_header(output, properties_by_widget):
  * @file lv_style_properties.h
  */
 #ifndef LV_STYLE_PROPERTIES_H
-#define LV_STYLE_PROPERTIES_H
+#определить LV_STYLE_PROPERTIES_H
 
-#include "../../core/lv_obj_property.h"
+#включить "../../core/lv_obj_property.h "
 #if LV_USE_OBJ_PROPERTY
 
 
@@ -236,14 +236,14 @@ if __name__ == "__main__":
         '-o', '--output', help='Folders to write generated properties for all widgets.')
     args = parser.parse_args()
 
-    # default directory is the lvgl root path of where this script sits
+    # Каталог по умолчанию — это корневой путь lvgl, в котором находится этот скрипт.
     if args.directory is None:
         args.directory = os.path.join(os.path.dirname(__file__), "../")
 
     if args.output is None:
         args.output = os.path.join(args.directory, "src/widgets/property/")
 
-    # create output directory if it doesn't exist
+    # создать выходной каталог, если он не существует
     os.makedirs(args.output, exist_ok=True)
 
     main(args.directory, args.output)

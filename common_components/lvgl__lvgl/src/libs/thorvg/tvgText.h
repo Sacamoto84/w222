@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -72,9 +72,9 @@ struct Text::Impl
 
         fontSize = size;
 
-        //Same resource has been loaded.
+        //Тот же ресурс был загружен.
         if (this->loader == loader) {
-            this->loader->sharing--;  //make it sure the reference counting.
+            this->loader->sharing--;  //убедитесь, что подсчет ссылок.
             return Result::Success;
         } else if (this->loader) {
             LoaderMgr::retrieve(this->loader);
@@ -102,7 +102,7 @@ struct Text::Impl
         if (!loader) return false;
 
         loader->request(shape, utf8);
-        //reload
+        //перезагрузить
         if (changed) {
             loader->read();
             changed = false;
@@ -114,7 +114,7 @@ struct Text::Impl
     {
         if (!load()) return nullptr;
 
-        //transform the gradient coordinates based on the final scaled font.
+        //преобразуйте координаты градиента на основе окончательного масштабированного шрифта.
         auto fill = P(shape)->rs.fill;
         if (fill && P(shape)->flag & RenderUpdateFlag::Gradient) {
             auto scale = 1.0f / loader->scale;

@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -72,16 +72,16 @@ void test_obj_flag_overflow_visible_1(void)
     cnt_1 = 0;
     cnt_2 = 0;
 
-    /*The clipped part of the left button (shouldn't trigger click event)*/
+    /*Обрезанная часть левой кнопки (не должна вызывать событие щелчка)*/
     lv_test_mouse_click_at(100, 220);
 
-    /*The non clipped part of the left button (should trigger click event)*/
+    /*Необрезанная часть левой кнопки (должна вызывать событие щелчка)*/
     lv_test_mouse_click_at(140, 220);
 
-    /*The left part of the right button (should trigger click event)*/
+    /*Левая часть правой кнопки (должна вызывать событие нажатия)*/
     lv_test_mouse_click_at(650, 220);
 
-    /*The outer part of the right button (should trigger click event as obj_child_2 has LV_OBJ_FLAG_OVERFLOW_VISIBLE)*/
+    /*Внешняя часть правой кнопки (должна вызывать событие щелчка, поскольку obj_child_2 имеет LV_OBJ_FLAG_OVERFLOW_VISIBLE )*/
     lv_test_mouse_click_at(690, 220);
 
     TEST_ASSERT_EQUAL_UINT32(1, cnt_1);
@@ -89,14 +89,14 @@ void test_obj_flag_overflow_visible_1(void)
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_flag_overflow_visible_1_1.png");
 
-    /*Test if the overflowing parts are rendered correctly after scrolling too*/
+    /*Проверьте, правильно ли отображаются переполненные части после прокрутки.*/
     lv_obj_scroll_by_bounded(obj_main, -20, 0, LV_ANIM_OFF);
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_flag_overflow_visible_1_2.png");
 
     lv_obj_scroll_by_bounded(obj_child_2, -30, 0, LV_ANIM_OFF);
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_flag_overflow_visible_1_3.png");
 
-    /*Test with rotation*/
+    /*Тест с вращением*/
     lv_obj_set_style_transform_rotation(obj_main, 300, 0);
     lv_obj_set_style_transform_pivot_x(obj_main, 200, 0);
     lv_obj_set_style_transform_pivot_y(obj_main, 150, 0);
@@ -120,19 +120,19 @@ void test_obj_flag_overflow_visible_1(void)
     cnt_1 = 0;
     cnt_2 = 0;
 
-    /*The clipped part of the left button (shouldn't trigger click event)*/
+    /*Обрезанная часть левой кнопки (не должна вызывать событие щелчка)*/
     lv_test_mouse_click_at(185, 40);
 
-    /*The non clipped part of the left button (should trigger click event)*/
+    /*Необрезанная часть левой кнопки (должна вызывать событие щелчка)*/
     lv_test_mouse_click_at(210, 80);
 
-    /*The left part of the right button (should trigger click event)*/
+    /*Левая часть правой кнопки (должна вызывать событие нажатия)*/
     lv_test_mouse_click_at(590, 370);
 
-    /*The outer part of the right button (should trigger click event as obj_child_2 has LV_OBJ_FLAG_OVERFLOW_VISIBLE)*/
+    /*Внешняя часть правой кнопки (должна вызывать событие щелчка, поскольку obj_child_2 имеет LV_OBJ_FLAG_OVERFLOW_VISIBLE )*/
     lv_test_mouse_click_at(600, 430);
 
-    /*The clipped part of the right button (clipped because it's out of the red panel's ext draw size, shouldn't trigger click event)*/
+    /*Обрезанная часть правой кнопки (обрезана, потому что она выходит за пределы внешнего размера красной панели, не должна вызывать событие щелчка)*/
     lv_test_mouse_click_at(645, 430);
 
     TEST_ASSERT_EQUAL_UINT32(1, cnt_1);
@@ -165,7 +165,7 @@ void test_obj_flag_radio_button(void)
         called[i] = 0;
     }
 
-    /*Click the first checkbox*/
+    /*Нажмите на первый флажок*/
     lv_test_mouse_click_at(20, 5);
     TEST_ASSERT_TRUE(lv_obj_has_state(cb[0], LV_STATE_CHECKED));
     TEST_ASSERT_EQUAL_UINT32(called[0], 1);
@@ -174,7 +174,7 @@ void test_obj_flag_radio_button(void)
     TEST_ASSERT_EQUAL_UINT32(called[3], 0);
     TEST_ASSERT_EQUAL_UINT32(called[4], 0);
 
-    /*Click the second checkbox*/
+    /*Нажмите на второй флажок*/
     lv_test_mouse_click_at(20, 55);
     TEST_ASSERT_FALSE(lv_obj_has_state(cb[0], LV_STATE_CHECKED));
     TEST_ASSERT_TRUE(lv_obj_has_state(cb[1], LV_STATE_CHECKED));
@@ -184,7 +184,7 @@ void test_obj_flag_radio_button(void)
     TEST_ASSERT_EQUAL_UINT32(called[3], 0);
     TEST_ASSERT_EQUAL_UINT32(called[4], 0);
 
-    /*Clicking the same checkbox shouldn't change anything*/
+    /*Установка того же флажка ничего не изменит.*/
     lv_test_mouse_click_at(20, 55);
     TEST_ASSERT_FALSE(lv_obj_has_state(cb[0], LV_STATE_CHECKED));
     TEST_ASSERT_TRUE(lv_obj_has_state(cb[1], LV_STATE_CHECKED));
@@ -194,7 +194,7 @@ void test_obj_flag_radio_button(void)
     TEST_ASSERT_EQUAL_UINT32(called[3], 0);
     TEST_ASSERT_EQUAL_UINT32(called[4], 0);
 
-    /*Turn on checkbox 2 with a key*/
+    /*Включаем галочку 2 ключом*/
     lv_group_focus_obj(cb[2]);
     lv_test_key_hit(LV_KEY_UP);
     TEST_ASSERT_FALSE(lv_obj_has_state(cb[1], LV_STATE_CHECKED));
@@ -205,7 +205,7 @@ void test_obj_flag_radio_button(void)
     TEST_ASSERT_EQUAL_UINT32(called[3], 0);
     TEST_ASSERT_EQUAL_UINT32(called[4], 0);
 
-    /*Nothing happen checking checkbox 2 again*/
+    /*Ничего не происходит, проверяем флажок 2 еще раз*/
     lv_test_key_hit(LV_KEY_RIGHT);
     TEST_ASSERT_FALSE(lv_obj_has_state(cb[1], LV_STATE_CHECKED));
     TEST_ASSERT_TRUE(lv_obj_has_state(cb[2], LV_STATE_CHECKED));
@@ -215,7 +215,7 @@ void test_obj_flag_radio_button(void)
     TEST_ASSERT_EQUAL_UINT32(called[3], 0);
     TEST_ASSERT_EQUAL_UINT32(called[4], 0);
 
-    /*Can't check off*/
+    /*Не могу поставить галочку*/
     lv_test_key_hit(LV_KEY_DOWN);
     TEST_ASSERT_FALSE(lv_obj_has_state(cb[1], LV_STATE_CHECKED));
     TEST_ASSERT_TRUE(lv_obj_has_state(cb[2], LV_STATE_CHECKED));
@@ -225,7 +225,7 @@ void test_obj_flag_radio_button(void)
     TEST_ASSERT_EQUAL_UINT32(called[3], 0);
     TEST_ASSERT_EQUAL_UINT32(called[4], 0);
 
-    /*Same with left*/
+    /*То же самое с левым*/
     lv_test_key_hit(LV_KEY_LEFT);
     TEST_ASSERT_FALSE(lv_obj_has_state(cb[1], LV_STATE_CHECKED));
     TEST_ASSERT_TRUE(lv_obj_has_state(cb[2], LV_STATE_CHECKED));

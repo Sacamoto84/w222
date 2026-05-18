@@ -34,10 +34,10 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
     lv_area_move(&buffer_area, x, y);
 
     //
-    // If both angles are equal (e.g. 0 and 0 or 180 and 180) nothing has to be done
+    // Если оба угла равны (например, 0 и 0 или 180 и 180), ничего делать не нужно.
     //
     if(dsc->start_angle == dsc->end_angle) {
-        return;                      // Nothing to do, no angle - no arc
+        return;                      // Ничего не делать, нет угла - нет дуги
     }
 
 #if LV_USE_OS
@@ -47,7 +47,7 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
 #endif
 
     //
-    // Generate render operations
+    // Генерация операций рендеринга
     //
     d2_framebuffer_from_layer(u->d2_handle, t->target_layer);
 
@@ -66,11 +66,11 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
                         (d2_width) D2_FIX4(dsc->radius - dsc->width / 2),
                         (d2_width) D2_FIX4(dsc->width));
     }
-    else { //An ARC, not a full circle
+    else { //ARC, а не полный круг
         //
-        // If the difference between both is larger than 180 degrees we must use the concave flag
+        // Если разница между ними превышает 180 градусов, мы должны использовать вогнутый флаг.
         //
-        /** Set d2_wf_concave flag if the pie object to draw is concave shape. */
+        /** Установите флаг d2_wf_concave, если рисуемый круговой объект имеет вогнутую форму. */
         if((LV_ABS(dsc->start_angle - dsc->end_angle) > 180) || ((dsc->end_angle < dsc->start_angle) &&
                                                                  (LV_ABS(dsc->start_angle - (dsc->end_angle + 360)) > 180))) {
             flags = d2_wf_concave;
@@ -103,24 +103,24 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
         arc_area.x2 = LV_MAX3(start_point.x, end_point.x, arc_centre.x);
         arc_area.y2 = LV_MAX3(start_point.y, end_point.y, arc_centre.y);
 
-        /* 0 degrees */
+        /* 0 градусов */
         if((dsc->end_angle < dsc->start_angle) || ((dsc->start_angle < 360) && (dsc->end_angle > 360))) {
             arc_area.x2 = arc_centre.x + dsc->radius;
         }
 
-        /* 90 degrees */
+        /* 90 градусов */
         if(((dsc->end_angle > 90) && (dsc->start_angle < 90)) || ((dsc->start_angle < 90) &&
                                                                   (dsc->end_angle < dsc->start_angle))) {
             arc_area.y2 = arc_centre.y + dsc->radius;
         }
 
-        /* 180 degrees */
+        /* 180 градусов */
         if(((dsc->end_angle > 180) && (dsc->start_angle < 180)) || ((dsc->start_angle < 180) &&
                                                                     (dsc->end_angle < dsc->start_angle))) {
             arc_area.x1 = arc_centre.x - dsc->radius;
         }
 
-        /* 270 degrees */
+        /* 270 градусов */
         if(((dsc->end_angle > 270) && (dsc->start_angle < 270)) || ((dsc->start_angle < 270) &&
                                                                     (dsc->end_angle < dsc->start_angle))) {
             arc_area.y1 = arc_centre.y - dsc->radius;
@@ -149,7 +149,7 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
                 start_coord.x = arc_centre.x + (int16_t)(((dsc->radius - dsc->width / 2) * cos_start) >> LV_TRIGO_SHIFT);
                 start_coord.y = arc_centre.y + (int16_t)(((dsc->radius - dsc->width / 2) * sin_start) >> LV_TRIGO_SHIFT);
 
-                /** Render a circle. */
+                /** Изобразите круг. */
                 d2_rendercircle(u->d2_handle,
                                 (d2_point) D2_FIX4((uint16_t)(start_coord.x)),
                                 (d2_point) D2_FIX4((uint16_t)(start_coord.y)),
@@ -158,7 +158,7 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
                 end_coord.x = arc_centre.x + (int16_t)(((dsc->radius - dsc->width / 2) * cos_end) >> LV_TRIGO_SHIFT);
                 end_coord.y = arc_centre.y + (int16_t)(((dsc->radius - dsc->width / 2) * sin_end) >> LV_TRIGO_SHIFT);
 
-                /** Render a circle. */
+                /** Изобразите круг. */
                 d2_rendercircle(u->d2_handle,
                                 (d2_point) D2_FIX4((uint16_t)(end_coord.x)),
                                 (d2_point) D2_FIX4((uint16_t)(end_coord.y)),

@@ -1,6 +1,6 @@
 /**
  * @file lv_nxp_elcdif.h
- * Driver for NXP's ELCD
+ * Драйвер для ELCD NXP
  */
 
 #ifndef LV_NXP_ELCDIF_H
@@ -33,8 +33,8 @@ extern "C" {
  **********************/
 
 /**
- * Attach LVGL to ELCDIF using DIRECT rendering mode.
- * ELCDIF should be already initialized.
+ * Присоедините LVGL к ELCDIF, используя режим рендеринга DIRECT.
+ * ELCDIF должен быть уже инициализирован.
  * @param base              The NXP eLCD controller base address
  * @param config            NXP eLCD config object
  * @param frame_buffer1     pointer the first frame buffers
@@ -48,8 +48,8 @@ lv_display_t * lv_nxp_display_elcdif_create_direct(LCDIF_Type * base, const elcd
 
 
 /**
-* Attach LVGL to ELCDIF using PARTIAL rendering mode.
-* ELCDIF should be already initialized.
+* Присоедините LVGL к ELCDIF, используя режим рендеринга PARTIAL.
+* ELCDIF должен быть уже инициализирован.
 * @param base              The NXP eLCD controller base address
 * @param config            NXP eLCD config object
 * @param frame_buffer1     pointer the first frame buffers
@@ -62,13 +62,13 @@ lv_display_t * lv_nxp_display_elcdif_create_partial(LCDIF_Type * base, const elc
                                                     void * frame_buffer2, size_t buf_size);
 
 /**
- * Call this function on the LCD Interrupt Service Routine
- * It tells to LVGL what to do when a framebuffer is transmitted
- * to the LCD panel
+ * Вызовите эту функцию в процедуре обслуживания прерываний LCD.
+ * Он сообщает LVGL, что делать при передаче кадрового буфера.
+ * на панель LCD
  * @param disp              The display instance that contains the eLCD related data
  *
  * @note: the parameter disp is tipycally the return value after
- *        `lv_nxp_display_elcdif_create_direct` has been sucessfully executed
+ *        `lv_nxp_display_elcdif_create_direct` успешно выполнен.
  */
 void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp);
 /**********************
@@ -76,7 +76,7 @@ void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_USE_NXP_ELCDIF*/

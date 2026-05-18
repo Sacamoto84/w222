@@ -1,4 +1,4 @@
-/** * @file lv_conf_kconfig.h * Configs that need special handling when LVGL is used with Kconfig */
+/** * @file lv_conf_kconfig.h * Конфигурации, требующие специальной обработки при использовании LVGL с Kconfig. */
 
 #ifndef LV_CONF_KCONFIG_H
 #define LV_CONF_KCONFIG_H
@@ -19,8 +19,8 @@ extern "C" {
 #  ifdef __NuttX__
 #    include <nuttx/config.h>
 /*
- * Make sure version number in Kconfig file is correctly set.
- * Mismatch can happen when user manually copy lvgl/Kconfig file to their project, like what NuttX does.
+ * Убедитесь, что номер версии в файле Kconfig установлен правильно.
+ * Несоответствие может быть вызвано, когда пользователь вручную копирует файл lvgl/Kconfig в свой проект, как это делает NuttX.
  */
 #    include "../lv_version.h"
 
@@ -186,9 +186,9 @@ extern "C" {
  *******************/
 
 /**
- * NOTE: In Kconfig instead of `LV_DEFAULT_FONT`
- *       `CONFIG_LV_FONT_DEFAULT_<font_name>` is defined
- *       hence the large selection with if-s
+ * NOTE: В Kconfig вместо `LV_DEFAULT_FONT`
+ *       `CONFIG_LV_FONT_DEFAULT_<font_name>` русский
+ *       отсюда большой выбор с if-s
  */
 
 /*------------------
@@ -319,7 +319,7 @@ extern "C" {
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CONF_KCONFIG_H*/

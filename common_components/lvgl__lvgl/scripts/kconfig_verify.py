@@ -24,16 +24,16 @@ def verify_kconfig(kconfig_file):
 def check_kconfig_spaces(file_path):
     """Check for space-based indentation in a Kconfig file"""
     try:
-        # Read file content to check for spaces
+        # Прочитайте содержимое файла, чтобы проверить наличие пробелов
         with open(file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
         space_indent_lines = []
         for line_num, line in enumerate(lines, 1):
-            # Check for leading spaces (skip empty lines)
+            # Проверьте наличие пробелов в начале (пропустите пустые строки)
             stripped_line = line.lstrip()
             if stripped_line and len(line) > len(stripped_line):
-                # Extract the indentation part
+                # Извлеките часть отступа
                 indent = line[: -len(stripped_line)] if stripped_line else line
                 if " " in indent:
                     space_indent_lines.append((line_num, indent))

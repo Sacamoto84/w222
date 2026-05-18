@@ -1,6 +1,6 @@
 /**
  * @file lv_version.h
- * The current version of LVGL
+ * Текущая версия LVGL
  */
 
 #ifndef LV_VERSION_H

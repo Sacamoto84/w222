@@ -160,7 +160,7 @@ void lv_tabview_set_active(lv_obj_t * obj, uint32_t idx, lv_anim_enable_t anim_e
     uint32_t tab_cnt = lv_tabview_get_tab_count(obj);
     if(idx >= tab_cnt) return;
 
-    /*To be sure lv_obj_get_content_width will return valid value*/
+    /*Чтобы быть уверенным, что lv_obj_get_content_width вернет допустимое значение.*/
     if(cont == NULL) return;
 
     lv_obj_update_layout(obj);
@@ -259,7 +259,7 @@ void lv_tabview_set_tab_bar_position(lv_obj_t * obj, lv_dir_t dir)
         }
     }
     tabview->tab_pos = dir;
-    /* Update the tab bar size after the position is changed*/
+    /* Обновить размер панели вкладок после изменения положения*/
     lv_tabview_set_tab_bar_size(obj, tabview->tab_bar_size);
 }
 
@@ -324,7 +324,7 @@ static void lv_tabview_constructor(const lv_obj_class_t * class_p, lv_obj_t * ob
 {
     LV_UNUSED(class_p);
     lv_tabview_t * tabview = (lv_tabview_t *)obj;
-    tabview->tab_pos = LV_DIR_NONE;  /*Invalid value to apply the default TOP direction correctly*/
+    tabview->tab_pos = LV_DIR_NONE;  /*Недопустимое значение для правильного применения направления TOP по умолчанию.*/
 
     lv_obj_set_size(obj, LV_PCT(100), LV_PCT(100));
 
@@ -374,17 +374,17 @@ static void button_clicked_event_cb(lv_event_t * e)
 
     if(tv == NULL) return;
 
-    /* Remember currently active tab before the click */
+    /* Запоминать текущую активную вкладку перед нажатием */
     uint32_t prev_idx = lv_tabview_get_tab_active(tv);
 
-    /* Index of the button that was clicked */
+    /* Индекс кнопки, на которую нажали */
     uint32_t idx = lv_obj_get_index_by_type(button, &lv_button_class);
 
-    /* Switch to the requested tab */
+    /* Переключиться на запрошенную вкладку */
     lv_tabview_set_active(tv, idx, LV_ANIM_OFF);
 
-    /* If the tab really changed, notify listeners just like the
-     * swipe/scroll handler does. */
+    /* Если вкладка действительно изменилась, уведомите слушателей так же, как
+     * обработчик прокрутки/прокрутки делает это. */
     if(prev_idx != idx) {
         lv_obj_send_event(tv, LV_EVENT_VALUE_CHANGED, NULL);
     }
@@ -424,7 +424,7 @@ static void cont_scroll_end_event_cb(lv_event_t * e)
         bool new_tab = false;
         if(t != (int32_t)lv_tabview_get_tab_active(tv)) new_tab = true;
 
-        /*If not scrolled by an indev set the tab immediately*/
+        /*Если индев не прокручивает вкладку, немедленно установите вкладку*/
         if(lv_indev_active()) {
             lv_tabview_set_active(tv, t, LV_ANIM_ON);
         }

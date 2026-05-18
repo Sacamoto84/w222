@@ -30,21 +30,21 @@ extern "C" {
  **********************/
 
 /**
- * Create main font manager.
+ * Создайте главный менеджер шрифтов.
  * @param recycle_cache_size number of fonts that were recently deleted from the cache.
  * @return pointer to main font manager.
  */
 lv_font_manager_t * lv_font_manager_create(uint32_t recycle_cache_size);
 
 /**
- * Delete main font manager.
+ * Удалить основной менеджер шрифтов.
  * @param manager pointer to main font manager.
  * @return return true if the deletion was successful.
  */
 bool lv_font_manager_delete(lv_font_manager_t * manager);
 
 /**
- * Add font resource.
+ * Добавьте ресурс шрифта.
  * @param manager pointer to main font manager.
  * @param name font name.
  * @param src font source. Need to strictly correspond to the font class.
@@ -57,7 +57,7 @@ bool lv_font_manager_add_src(lv_font_manager_t * manager,
                              const lv_font_class_t * class_p);
 
 /**
- * Add font resource with static memory.
+ * Добавьте ресурс шрифта со статической памятью.
  * @param manager pointer to main font manager.
  * @param name font name. It cannot be a local variable.
  * @param src font source. Need to strictly correspond to the font class. And it cannot be a local variable.
@@ -70,7 +70,7 @@ bool lv_font_manager_add_src_static(lv_font_manager_t * manager,
                                     const lv_font_class_t * class_p);
 
 /**
- * Remove font resource.
+ * Удалить ресурс шрифта.
  * @param manager pointer to main font manager.
  * @param name font name.
  * @return return true if the remove was successful.
@@ -78,7 +78,7 @@ bool lv_font_manager_add_src_static(lv_font_manager_t * manager,
 bool lv_font_manager_remove_src(lv_font_manager_t * manager, const char * name);
 
 /**
- * Create font.
+ * Создать шрифт.
  * @param manager pointer to main font manager.
  * @param font_family font family name. Matches the font resource name, using commas to separate different names. E.g. "my_font_1,my_font_2".
  * @param render_mode font render mode. see `lv_freetype_font_render_mode_t`.
@@ -95,7 +95,7 @@ lv_font_t * lv_font_manager_create_font(lv_font_manager_t * manager,
                                         lv_font_kerning_t kerning);
 
 /**
- * Delete font.
+ * Удалить шрифт.
  * @param manager pointer to main font manager.
  * @param font point to the font.
  * @return return true if the deletion was successful.
@@ -109,7 +109,7 @@ void lv_font_manager_delete_font(lv_font_manager_t * manager, lv_font_t * font);
 #endif /* LV_USE_FONT_MANAGER */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_FONT_MANAGER_H */

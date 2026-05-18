@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,91 +24,91 @@
 #if LV_USE_THORVG_INTERNAL
 
 /*
- *                   The FreeType Project LICENSE
+ *                   Проект FreeType LICENSE
  *                   ----------------------------
 
- *                           2006-Jan-27
+ *                           27 января 2006 г.
 
  *                   Copyright 1996-2002, 2006 by
- *         David Turner, Robert Wilhelm, and Werner Lemberg
+ *         Дэвид Тернер, Роберт Вильгельм и Вернер Лемберг
 
 
 
- * Introduction
+ * Введение
  * ============
 
- * The FreeType  Project is distributed in  several archive packages;
- * some of them may contain, in addition to the FreeType font engine,
- * various tools and  contributions which rely on, or  relate to, the
- * FreeType Project.
+ * Проект FreeType распространяется в нескольких архивных пакетах;
+ * некоторые из них могут содержать, помимо шрифтового движка FreeType,
+ * различные инструменты и вклады, которые полагаются на или относятся к
+ * Проект ФриТайп.
 
- * This  license applies  to all  files found  in such  packages, and
- * which do not  fall under their own explicit  license.  The license
- * affects  thus  the  FreeType   font  engine,  the  test  programs,
- * documentation and makefiles, at the very least.
+ * Данная лицензия распространяется на все файлы, находящиеся в таких пакетах, и
+ * на которые не распространяется их собственная явная лицензия.  Лицензия
+ * влияет таким образом на движок шрифтов FreeType, тестовые программы,
+ * документация и make-файлы, по крайней мере.
 
- * This  license   was  inspired  by  the  BSD,   Artistic,  and  IJG
- * (Independent JPEG  Group) licenses, which  all encourage inclusion
- * and  use of  free  software in  commercial  and freeware  products
- * alike.  As a consequence, its main points are that:
+ * Эта лицензия была вдохновлена BSD, Artistic и IJG.
+ * (Независимая группа JPEG), которые поощряют включение
+ * и использование свободного программного обеспечения в коммерческих и бесплатно распространяемых продуктах.
+ * одинаково.  Как следствие, его основные положения заключаются в следующем:
 
- *   o We don't promise that this software works. However, we will be
- *     interested in any kind of bug reports. (`as is' distribution)
+ *   o Мы не обещаем, что это программное обеспечение работает. Однако мы будем
+ *     заинтересованы в любых сообщениях об ошибках. (распространение «как есть»)
 
- *   o You can  use this software for whatever you  want, in parts or
- *      full form, without having to pay us. (`royalty-free' usage)
+ *   o Вы можете использовать это программное обеспечение по своему усмотрению, по частям или
+ *      полную форму, без необходимости платить нам. (использование без лицензионных отчислений)
 
- *    o You may not pretend that  you wrote this software.  If you use
- *      it, or  only parts of it,  in a program,  you must acknowledge
- *     somewhere  in  your  documentation  that  you  have  used  the
- *     FreeType code. (`credits')
+ *    o Вы не имеете права притворяться, что написали это программное обеспечение.  Если вы используете
+ *      его или только его части в программе, вы должны подтвердить
+ *     где-то в вашей документации вы использовали
+ *     Код ФриТайпа. («кредиты»)
 
- * We  specifically  permit  and  encourage  the  inclusion  of  this
- * software, with  or without modifications,  in commercial products.
- * We  disclaim  all warranties  covering  The  FreeType Project  and
- * assume no liability related to The FreeType Project.
+ * Мы специально разрешаем и поощряем включение этого
+ * программное обеспечение с модификациями или без них в коммерческих продуктах.
+ * Мы отказываемся от всех гарантий, касающихся проекта FreeType и
+ * не несет никакой ответственности, связанной с проектом FreeType.
 
 
- *  Finally,  many  people  asked  us  for  a  preferred  form  for  a
- *  credit/disclaimer to use in compliance with this license.  We thus
- * encourage you to use the following text:
+ *  Наконец, многие люди спрашивали нас о предпочтительной форме для
+ *  кредит/отказ от ответственности для использования в соответствии с настоящей лицензией.  Таким образом, мы
+ * рекомендуем вам использовать следующий текст:
 
  *   """
- *    Portions of this software are copyright � <year> The FreeType
- *    Project (www.freetype.org).  All rights reserved.
+ *    Части этого программного обеспечения защищены авторским правом � <год> The FreeType
+ *    Проект ( www.freetype.org). Все права защищены.
  *   """
 
- *  Please replace <year> with the value from the FreeType version you
- *  actually use.
+ *  Пожалуйста, замените <год> значением из версии FreeType, которую вы используете.
+ *  на самом деле использовать.
 
-* Legal Terms
+* Юридические условия
 * ===========
 
 * 0. Definitions
 * --------------
 
-*   Throughout this license,  the terms `package', `FreeType Project',
-*   and  `FreeType  archive' refer  to  the  set  of files  originally
-*   distributed  by the  authors  (David Turner,  Robert Wilhelm,  and
-*   Werner Lemberg) as the `FreeType Project', be they named as alpha,
-*   beta or final release.
+*   В данной лицензии условия `package', ` FreeType Project',
+*   и «Архив FreeType» относятся к первоначальному набору файлов.
+*   распространяется авторами (Дэвид Тернер, Роберт Вильгельм и
+*   Вернер Лемберг) как «Проект FreeType», пусть они и называются альфа,
+*   бета-версия или финальная версия.
 
-*   `You' refers to  the licensee, or person using  the project, where
-*   `using' is a generic term including compiling the project's source
-*   code as  well as linking it  to form a  `program' or `executable'.
-*   This  program is  referred to  as  `a program  using the  FreeType
-*   engine'.
+*   «Вы» относится к лицензиату или лицу, использующему проект, где
+*   «использование» — это общий термин, включающий компиляцию исходного кода проекта.
+*   кода, а также связывание его для формирования исполняемого файла `program' or `».
+*   Эта программа называется «программой, использующей FreeType».
+*   двигатель».
 
-*   This  license applies  to all  files distributed  in  the original
-*   FreeType  Project,   including  all  source   code,  binaries  and
-*   documentation,  unless  otherwise  stated   in  the  file  in  its
-*   original, unmodified form as  distributed in the original archive.
-*   If you are  unsure whether or not a particular  file is covered by
-*   this license, you must contact us to verify this.
+*   Данная лицензия распространяется на все файлы, распространяемые в оригинальном виде.
+*   Проект FreeType, включая весь исходный код, двоичные файлы и
+*   документации, если иное не указано в файле в его
+*   оригинальная, неизмененная форма, распространяемая в оригинальном архиве.
+*   Если вы не уверены, распространяется ли конкретный файл на
+*   этой лицензии, вам необходимо связаться с нами, чтобы убедиться в этом.
 
-*   The FreeType  Project is copyright (C) 1996-2000  by David Turner,
-*   Robert Wilhelm, and Werner Lemberg.  All rights reserved except as
-*   specified below.
+*   Авторские права на проект FreeType (C) 1996–2000 принадлежат Дэвиду Тернеру,
+*   Роберт Вильгельм и Вернер Лемберг.  Все права защищены, за исключением
+*   указано ниже.
 
 * 1. No Warranty
 * --------------
@@ -123,70 +123,70 @@
 * 2. Redistribution
 * -----------------
 
-*   This  license  grants  a  worldwide, royalty-free,  perpetual  and
-*   irrevocable right  and license to use,  execute, perform, compile,
-*   display,  copy,   create  derivative  works   of,  distribute  and
-*   sublicense the  FreeType Project (in  both source and  object code
-*   forms)  and  derivative works  thereof  for  any  purpose; and  to
-*   authorize others  to exercise  some or all  of the  rights granted
-*   herein, subject to the following conditions:
+*   Эта лицензия предоставляет международную, бесплатную, бессрочную и
+*   безотзывное право и лицензия на использование, исполнение, исполнение, компиляцию,
+*   отображать, копировать, создавать производные работы, распространять и
+*   сублицензировать проект FreeType (как в исходном, так и в объектном коде)
+*   формы) и производные от них работы для любых целей; и чтобы
+*   разрешать другим осуществлять некоторые или все предоставленные права
+*   настоящего Соглашения, при соблюдении следующих условий:
 
-*    o Redistribution of  source code  must retain this  license file
-*      (`FTL.TXT') unaltered; any  additions, deletions or changes to
-*      the original  files must be clearly  indicated in accompanying
-*      documentation.   The  copyright   notices  of  the  unaltered,
-*      original  files must  be  preserved in  all  copies of  source
-*      files.
+*    o При повторном распространении исходного кода этот файл лицензии должен сохраняться.
+*      (` FTL . TXT ') без изменений; любые дополнения, удаления или изменения в
+*      исходные файлы должны быть четко указаны в сопроводительном документе.
+*      документация.   Уведомления об авторских правах неизменены,
+*      оригинальные файлы должны быть сохранены во всех копиях исходного кода.
+*      файлы.
 
-*    o Redistribution in binary form must provide a  disclaimer  that
-*      states  that  the software is based in part of the work of the
-*      FreeType Team,  in  the  distribution  documentation.  We also
-*      encourage you to put an URL to the FreeType web page  in  your
-*      documentation, though this isn't mandatory.
+*    o Распространение в двоичной форме должно содержать отказ от ответственности,
+*      утверждает, что программное обеспечение частично основано на работе
+*      FreeType Team, в документации по дистрибутиву.  Мы также
+*      рекомендуем вам разместить URL на веб-странице FreeType в вашем
+*      документации, хотя это не является обязательным.
 
-*  These conditions  apply to any  software derived from or  based on
-*  the FreeType Project,  not just the unmodified files.   If you use
-*  our work, you  must acknowledge us.  However, no  fee need be paid
+*  Эти условия применяются к любому программному обеспечению, полученному на основе или на основе
+*  проект FreeType, а не только неизмененные файлы.   Если вы используете
+*  нашу работу, вы должны признать нас.  Однако комиссию платить не нужно
 *  to us.
 
 * 3. Advertising
 * --------------
 
-*  Neither the  FreeType authors and  contributors nor you  shall use
-*  the name of the  other for commercial, advertising, or promotional
-*  purposes without specific prior written permission.
+*  Ни авторы и участники FreeType, ни вы не должны использовать
+*  имя другого для коммерческих, рекламных или рекламных целей
+*  целях без специального предварительного письменного разрешения.
 
-*  We suggest,  but do not require, that  you use one or  more of the
-*  following phrases to refer  to this software in your documentation
-*  or advertising  materials: `FreeType Project',  `FreeType Engine',
-*  `FreeType library', or `FreeType Distribution'.
+*  Мы предлагаем, но не требуем, чтобы вы использовали один или несколько из
+*  следующие фразы для ссылки на это программное обеспечение в вашей документации
+*  или рекламные материалы: `FreeType Project',  ` FreeType Engine',
+*  `FreeType library', or ` Дистрибутив FreeType».
 
-*  As  you have  not signed  this license,  you are  not  required to
-*  accept  it.   However,  as  the FreeType  Project  is  copyrighted
-*  material, only  this license, or  another one contracted  with the
-*  authors, grants you  the right to use, distribute,  and modify it.
-*  Therefore,  by  using,  distributing,  or modifying  the  FreeType
-*  Project, you indicate that you understand and accept all the terms
-*  of this license.
+*  Поскольку вы не подписали данную лицензию, вы не обязаны
+*  примите это.   Однако, поскольку проект FreeType защищен авторским правом
+*  материал, только эта лицензия или другая лицензия, заключенная с
+*  авторов, предоставляет вам право использовать, распространять и изменять его.
+*  Поэтому, используя, распространяя или изменяя FreeType
+*  Project, вы указываете, что понимаете и принимаете все условия
+*  этой лицензии.
 
 * 4. Contacts
 * -----------
 
-*  There are two mailing lists related to FreeType:
+*  Существует два списка рассылки, связанных с FreeType:
 
-*    o freetype@nongnu.org
+*    o бесплатный тип @nongnu .org
 
-*      Discusses general use and applications of FreeType, as well as
-*      future and  wanted additions to the  library and distribution.
-*      If  you are looking  for support,  start in  this list  if you
-*      haven't found anything to help you in the documentation.
+*      Обсуждается общее использование и применение FreeType, а также
+*      будущее и желанные дополнения к библиотеке и распространению.
+*      Если вам нужна поддержка, начните с этого списка, если вы
+*      в документации не нашел ничего, что могло бы вам помочь.
 
-*    o freetype-devel@nongnu.org
+*    o freetype-devel @nongnu.org
 
-*      Discusses bugs,  as well  as engine internals,  design issues,
-*      specific licenses, porting, etc.
+*      Обсуждаются ошибки, а также внутренности движка, проблемы дизайна,
+*      конкретные лицензии, портирование и т. д.
 
-*  Our home page can be found at
+*  Нашу домашнюю страницу можно найти по адресу
 
 *    http://www.freetype.org
 */
@@ -197,10 +197,10 @@
 #include "tvgSwCommon.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
-constexpr auto PIXEL_BITS = 8;   //must be at least 6 bits!
+constexpr auto PIXEL_BITS = 8;   //должно быть не менее 6 бит!
 constexpr auto ONE_PIXEL = (1L << PIXEL_BITS);
 
 using Area = long;
@@ -289,9 +289,9 @@ static inline SwCoord SUBPIXELS(const SwCoord x)
 }
 
 /*
- *  Approximate sqrt(x*x+y*y) using the `alpha max plus beta min'
- *  algorithm.  We use alpha = 1, beta = 3/8, giving us results with a
- *  largest error less than 7% compared to the exact value.
+ *  Приблизительное sqrt(x*x+y*y) с использованием «альфа-макс плюс бета-мин»
+ *  алгоритм.  Мы используем альфа = 1, бета = 3/8, что дает нам результаты с
+ *  наибольшая ошибка менее 7% по сравнению с точным значением.
  */
 static inline SwCoord HYPOT(SwPoint pt)
 {
@@ -306,12 +306,12 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
     x += rw.cellMin.x;
     y += rw.cellMin.y;
 
-    //Clip Y range
+    //Диапазон клипа Y
     if (y < rw.cellMin.y || y >= rw.cellMax.y) return;
 
-    /* compute the coverage line's coverage, depending on the outline fill rule */
-    /* the coverage percentage is area/(PIXEL_BITS*PIXEL_BITS*2) */
-    auto coverage = static_cast<int>(area >> (PIXEL_BITS * 2 + 1 - 8));    //range 0 - 255
+    /* вычислить покрытие линии покрытия в зависимости от правила заполнения контура */
+    /* процент покрытия равен площади/( PIXEL_BITS * PIXEL_BITS *2) */
+    auto coverage = static_cast<int>(area >> (PIXEL_BITS * 2 + 1 - 8));    //диапазон 0–255
 
     if (coverage < 0) coverage = -coverage;
 
@@ -319,13 +319,13 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
         coverage &= 511;
         if (coverage > 255) coverage = 511 - coverage;
     } else {
-        //normal non-zero winding rule
+        //обычное правило ненулевой обмотки
         if (coverage > 255) coverage = 255;
     }
 
     if (coverage == 0) return;
 
-    //span has ushort coordinates. check limit overflow
+    //span имеет короткие координаты. проверить переполнение лимита
     if (x >= SHRT_MAX) {
         TVGERR("SW_ENGINE", "X-coordinate overflow!");
         return;
@@ -339,11 +339,11 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
 
     if (!rw.antiAlias) coverage = 255;
 
-    //see whether we can add this span to the current list
+    //посмотрим, сможем ли мы добавить этот диапазон в текущий список
     if (rle->size > 0) {
         auto span = rle->spans + rle->size - 1;
         if ((span->coverage == coverage) && (span->y == y) && (span->x + span->len == x)) {
-            //Clip x range
+            //Клип x диапазон
             SwCoord xOver = 0;
             if (x + aCount >= rw.cellMax.x) xOver -= (x + aCount - rw.cellMax.x);
             if (x < rw.cellMin.x) xOver -= (rw.cellMin.x - x);
@@ -354,7 +354,7 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
         }
     }
 
-    //span pool is full, grow it.
+    //пул промежутков заполнен, расширьте его.
     if (rle->size >= rle->alloc) {
         auto newSize = (rle->size > 0) ? (rle->size * 2) : 256;
         if (rle->alloc < newSize) {
@@ -364,7 +364,7 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
         }
     }
 
-    //Clip x range
+    //Клип x диапазон
     SwCoord xOver = 0;
     if (x + aCount >= rw.cellMax.x) xOver -= (x + aCount - rw.cellMax.x);
     if (x < rw.cellMin.x) {
@@ -372,10 +372,10 @@ static void _horizLine(RleWorker& rw, SwCoord x, SwCoord y, SwCoord area, SwCoor
         x = rw.cellMin.x;
     }
 
-    //Nothing to draw
+    //Нечего рисовать
     if (aCount + xOver <= 0) return;
 
-    //add a span to the current list
+    //добавить диапазон в текущий список
     auto span = rle->spans + rle->size;
     span->x = x;
     span->y = y;
@@ -447,17 +447,17 @@ static void _recordCell(RleWorker& rw)
 
 static void _setCell(RleWorker& rw, SwPoint pos)
 {
-    /* Move the cell pointer to a new position.  We set the `invalid'      */
-    /* flag to indicate that the cell isn't part of those we're interested */
-    /* in during the render phase.  This means that:                       */
+    /* Переместите указатель ячейки в новое положение.  Мы устанавливаем «недействительный»      */
+    /* флаг, указывающий, что ячейка не входит в число интересующих нас */
+    /* на этапе рендеринга.  Это означает, что:                       */
     /*                                                                     */
-    /* . the new vertical position must be within min_ey..max_ey-1.        */
-    /* . the new horizontal position must be strictly less than max_ex     */
+    /* . новое вертикальное положение должно находиться в пределах min_ey .. max_ey -1.        */
+    /* . новое горизонтальное положение должно быть строго меньше max_ex     */
     /*                                                                     */
-    /* Note that if a cell is to the left of the clipping region, it is    */
-    /* actually set to the (min_ex-1) horizontal position.                 */
+    /* Обратите внимание: если ячейка находится слева от области отсечения, она    */
+    /* фактически установлен в горизонтальное положение ( min_ex -1).                 */
 
-    /* All cells that are on the left of the clipping region go to the
+    /* Все ячейки, находящиеся слева от области отсечения, переходят в
        min_ex - 1 horizontal position. */
     pos.x -= rw.cellMin.x;
     pos.y -= rw.cellMin.y;
@@ -466,7 +466,7 @@ static void _setCell(RleWorker& rw, SwPoint pos)
 
     //Are we moving to a different cell?
     if (pos != rw.cellPos) {
-        //Record the current one if it is valid
+        //Запишите текущий, если он действителен.
         if (!rw.invalid) _recordCell(rw);
     }
 
@@ -493,10 +493,10 @@ static void _startCell(RleWorker& rw, SwPoint pos)
 
 static void _moveTo(RleWorker& rw, const SwPoint& to)
 {
-    //record current cell, if any */
+    //записать текущую ячейку, если она есть */
     if (!rw.invalid) _recordCell(rw);
 
-    //start to a new position
+    //начать новую должность
     _startCell(rw, TRUNC(to));
 
     rw.pos = to;
@@ -512,7 +512,7 @@ static void _lineTo(RleWorker& rw, const SwPoint& to)
     auto e1 = TRUNC(rw.pos);
     auto e2 = TRUNC(to);
 
-    //vertical clipping
+    //вертикальное отсечение
     if ((e1.y >= rw.cellMax.y && e2.y >= rw.cellMax.y) || (e1.y < rw.cellMin.y && e2.y < rw.cellMin.y)) {
         rw.pos = to;
         return;
@@ -537,15 +537,15 @@ static void _lineTo(RleWorker& rw, const SwPoint& to)
         auto f1 = line[1] - SUBPIXELS(e1);
         SwPoint f2;
 
-        //inside one cell
+        //внутри одной клетки
         if (e1 == e2) {
             ;
-        //any horizontal line
+        //любая горизонтальная линия
         } else if (diff.y == 0) {
             e1.x = e2.x;
             _setCell(rw, e1);
         } else if (diff.x == 0) {
-            //vertical line up
+            //вертикальная линия вверх
             if (diff.y > 0) {
                 do {
                     f2.y = ONE_PIXEL;
@@ -555,7 +555,7 @@ static void _lineTo(RleWorker& rw, const SwPoint& to)
                     ++e1.y;
                     _setCell(rw, e1);
                 } while(e1.y != e2.y);
-            //vertical line down
+            //вертикальная линия вниз
             } else {
                 do {
                     f2.y = 0;
@@ -566,23 +566,23 @@ static void _lineTo(RleWorker& rw, const SwPoint& to)
                     _setCell(rw, e1);
                 } while(e1.y != e2.y);
             }
-        //any other line
+        //любая другая линия
         } else {
             Area prod = diff.x * f1.y - diff.y * f1.x;
 
-            /* These macros speed up repetitive divisions by replacing them
-               with multiplications and right shifts. */
+            /* Эти макросы ускоряют повторяющиеся деления, заменяя их.
+               с умножением и сдвигом вправо. */
             auto dx_r = static_cast<long>(ULONG_MAX >> PIXEL_BITS) / (diff.x);
             auto dy_r = static_cast<long>(ULONG_MAX >> PIXEL_BITS) / (diff.y);
 
-            /* The fundamental value `prod' determines which side and the  */
-            /* exact coordinate where the line exits current cell.  It is  */
-            /* also easily updated when moving from one cell to the next.  */
+            /* Фундаментальное значение «prod» определяет, какая сторона и какая сторона  */
+            /* точная координата выхода линии из текущей ячейки.  Это  */
+            /* также легко обновляется при переходе от одной ячейки к другой.  */
             do {
                 auto px = diff.x * ONE_PIXEL;
                 auto py = diff.y * ONE_PIXEL;
 
-                //left
+                //ушел
                 if (prod <= 0 && prod - px > 0) {
                     f2 = {0, SW_UDIV(-prod, -dx_r)};
                     prod -= py;
@@ -598,7 +598,7 @@ static void _lineTo(RleWorker& rw, const SwPoint& to)
                     rw.area += (f2.y - f1.y) * (f1.x + f2.x);
                     f1 = {f2.x, 0};
                     ++e1.y;
-                //right
+                //правильно
                 } else if (prod - px + py <= 0 && prod + py >= 0) {
                     prod += py;
                     f2 = {ONE_PIXEL, SW_UDIV(prod, dx_r)};
@@ -606,7 +606,7 @@ static void _lineTo(RleWorker& rw, const SwPoint& to)
                     rw.area += (f2.y - f1.y) * (f1.x + f2.x);
                     f1 = {0, f2.y};
                     ++e1.x;
-                //down
+                //вниз
                 } else {
                     f2 = {SW_UDIV(prod, -dy_r), 0};
                     prod += px;
@@ -639,7 +639,7 @@ static void _cubicTo(RleWorker& rw, const SwPoint& ctrl1, const SwPoint& ctrl2, 
     arc[2] = ctrl1;
     arc[3] = rw.pos;
 
-    //Short-cut the arc that crosses the current band
+    //Сократите дугу, пересекающую текущую полосу
     auto min = arc[0].y;
     auto max = arc[0].y;
 
@@ -652,20 +652,20 @@ static void _cubicTo(RleWorker& rw, const SwPoint& ctrl1, const SwPoint& ctrl2, 
 
     if (TRUNC(min) >= rw.cellMax.y || TRUNC(max) < rw.cellMin.y) goto draw;
 
-    /* Decide whether to split or draw. See `Rapid Termination          */
-    /* Evaluation for Recursive Subdivision of Bezier Curves' by Thomas */
-    /* F. Hain, at                                                      */
+    /* Решите, разделять или рисовать. См. «Быстрое прекращение          */
+    /* Оценка рекурсивного подразделения кривых Безье Томаса */
+    /* Ф. Хейн, в                                                      */
     /* http://www.cis.southalabama.edu/~hain/general/Publications/Bezier/Camera-ready%20CISST02%202.pdf */
     while (true) {
         {
-            //diff is the P0 - P3 chord vector
+            //diff — это вектор хорд P0 — P3.
             auto diff = arc[3] - arc[0];
             auto L = HYPOT(diff);
 
-            //avoid possible arithmetic overflow below by splitting
+            //избегайте возможного арифметического переполнения ниже, разделив
             if (L > SHRT_MAX) goto split;
 
-            //max deviation may be as much as (s/L) * 3/4 (if Hain's v = 1)
+            //максимальное отклонение может составлять (s/L) * 3/4 (если v Хейна = 1)
             auto sLimit = L * (ONE_PIXEL / 6);
 
             auto diff1 = arc[1] - arc[0];
@@ -673,20 +673,20 @@ static void _cubicTo(RleWorker& rw, const SwPoint& ctrl1, const SwPoint& ctrl2, 
             if (s < 0) s = -s;
             if (s > sLimit) goto split;
 
-            //s is L * the perpendicular distance from P2 to the line P0 - P3
+            //s – это L * расстояние по перпендикуляру от P2 до линии P0 – P3.
             auto diff2 = arc[2] - arc[0];
             s = diff.y * diff2.x - diff.x * diff2.y;
             if (s < 0) s = -s;
             if (s > sLimit) goto split;
 
-            /* Split super curvy segments where the off points are so far
-            from the chord that the angles P0-P1-P3 or P0-P2-P3 become
-            acute as detected by appropriate dot products */
+            /* Разделите супер-извилистые сегменты там, где находятся нерабочие точки.
+            от хорды, которой становятся углы P0 - P1 - P3 или P0 - P2 - P3
+            острый, как обнаружено с помощью соответствующих скалярных произведений */
             if (diff1.x * (diff1.x - diff.x) + diff1.y * (diff1.y - diff.y) > 0 ||
                 diff2.x * (diff2.x - diff.x) + diff2.y * (diff2.y - diff.y) > 0)
                 goto split;
 
-            //no reason to split
+            //нет причин расставаться
             goto draw;
         }
     split:
@@ -705,7 +705,7 @@ static void _cubicTo(RleWorker& rw, const SwPoint& ctrl1, const SwPoint& ctrl2, 
 static void _decomposeOutline(RleWorker& rw)
 {
     auto outline = rw.outline;
-    auto first = 0;  //index of first point in contour
+    auto first = 0;  //индекс первой точки контура
 
     for (auto cntr = outline->cntrs.begin(); cntr < outline->cntrs.end(); ++cntr) {
         auto last = *cntr;
@@ -718,12 +718,12 @@ static void _decomposeOutline(RleWorker& rw)
         _moveTo(rw, UPSCALE(outline->pts[first]));
 
         while (pt < limit) {
-            //emit a single line_to
+            //испустить одиночный line_to
             if (types[0] == SW_CURVE_TYPE_POINT) {
                 ++pt;
                 ++types;
                 _lineTo(rw, UPSCALE(*pt));
-            //types cubic
+            //типы кубические
             } else {
                 pt += 3;
                 types += 3;
@@ -746,7 +746,7 @@ static int _genRle(RleWorker& rw)
         if (!rw.invalid) _recordCell(rw);
         return 0;
     }
-    return -1;              //lack of cell memory
+    return -1;              //отсутствие клеточной памяти
 }
 
 
@@ -759,7 +759,7 @@ static SwSpan* _intersectSpansRegion(const SwRle *clip, const SwRle *target, SwS
     auto clipEnd = clip->spans + clip->size;
 
     while (spans < end && clipSpans < clipEnd) {
-        //align y-coordinates.
+        //выровнять координаты Y.
         if (clipSpans->y > spans->y) {
             ++spans;
             continue;
@@ -769,7 +769,7 @@ static SwSpan* _intersectSpansRegion(const SwRle *clip, const SwRle *target, SwS
             continue;
         }
 
-        //Try clipping with all clip spans which have a same y-coordinate.
+        //Попробуйте выполнить обрезку со всеми интервалами клипа, имеющими одинаковую координату Y.
         auto temp = clipSpans;
         while(temp < clipEnd && outSpansCnt > 0 && temp->y == clipSpans->y) {
             auto sx1 = spans->x;
@@ -777,13 +777,13 @@ static SwSpan* _intersectSpansRegion(const SwRle *clip, const SwRle *target, SwS
             auto cx1 = temp->x;
             auto cx2 = cx1 + temp->len;
 
-            //The span must be left(x1) to right(x2) direction. Not intersected.
+            //Пролет должен быть направлен слева (x1) направо (x2). Не пересекаются.
             if (cx2 < sx1 || sx2 < cx1) {
                 ++temp;
                 continue;
             }
 
-            //clip span region.
+            //Область охвата клипа.
             auto x = sx1 > cx1 ? sx1 : cx1;
             auto len = (sx2 < cx2 ? sx2 : cx2) - x;
             if (len > 0) {
@@ -850,7 +850,7 @@ void _replaceClipSpan(SwRle *rle, SwSpan* clippedSpans, uint32_t size)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegion, bool antiAlias)
@@ -862,7 +862,7 @@ SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegio
     RleWorker rw;
     Cell buffer[RENDER_POOL_SIZE / sizeof(Cell)];
 
-    //Init Cells
+    //Инициализирующие ячейки
     rw.buffer = buffer;
     rw.bufferSize = sizeof(buffer);
     rw.yCells = reinterpret_cast<Cell**>(buffer);
@@ -877,7 +877,7 @@ SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegio
     rw.cellXCnt = rw.cellMax.x - rw.cellMin.x;
     rw.cellYCnt = rw.cellMax.y - rw.cellMin.y;
     rw.outline = const_cast<SwOutline*>(outline);
-    rw.bandSize = rw.bufferSize / (sizeof(Cell) * 2);  //bandSize: 256
+    rw.bandSize = rw.bufferSize / (sizeof(Cell) * 2);  //Размер группы: 256
     rw.bandShoot = 0;
     rw.antiAlias = antiAlias;
 
@@ -887,11 +887,11 @@ SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegio
     }
     else rw.rle = rle;
 
-    //Generate RLE
+    //Создать RLE
     Band bands[BAND_SIZE];
     Band* band;
 
-    /* set up vertical bands */
+    /* настроить вертикальные полосы */
     auto bandCnt = static_cast<int>((rw.cellMax.y - rw.cellMin.y) / rw.bandSize);
     if (bandCnt == 0) bandCnt = 1;
     else if (bandCnt >= BAND_SIZE) bandCnt = (BAND_SIZE - 1);
@@ -945,13 +945,13 @@ SwRle* rleRender(SwRle* rle, const SwOutline* outline, const SwBBox& renderRegio
             }
 
         reduce_bands:
-            /* render pool overflow: we will reduce the render band by half */
+            /* переполнение пула рендеринга: мы уменьшим полосу рендеринга вдвое */
             auto bottom = band->min;
             auto top = band->max;
             auto middle = bottom + ((top - bottom) >> 1);
 
-            /* This is too complex for a single scanline; there must
-               be some problems */
+            /* Это слишком сложно для одной строки сканирования; должно быть
+               будут некоторые проблемы */
             if (middle == bottom) goto error;
 
             if (bottom - top >= rw.bandSize) ++rw.bandShoot;

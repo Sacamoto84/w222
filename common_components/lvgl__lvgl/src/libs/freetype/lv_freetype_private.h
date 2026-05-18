@@ -94,10 +94,10 @@ struct _lv_freetype_cache_node_t {
     lv_mutex_t face_lock;
     bool face_has_kerning;
 
-    /*glyph cache*/
+    /*кеш глифов*/
     lv_cache_t * glyph_cache;
 
-    /*draw data cache*/
+    /*нарисовать кэш данных*/
     lv_cache_t * draw_data_cache;
 };
 
@@ -130,7 +130,7 @@ typedef struct _lv_freetype_font_dsc_t {
  **********************/
 
 /**
- * Get the FreeType context.
+ * Получите контекст FreeType.
  *
  * @return A pointer to the FreeType context used by LittlevGL.
  */
@@ -155,7 +155,7 @@ void lv_freetype_set_cbs_outline_font(lv_freetype_font_dsc_t * dsc);
 #endif /*LV_USE_FREETYPE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FREETYPE_PRIVATE_H*/

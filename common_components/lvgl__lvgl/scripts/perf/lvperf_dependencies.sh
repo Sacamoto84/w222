@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# This script installs extra dependencies for the lvperf Docker images used in the CI pipeline.
-# The images are based on Alpine Linux and support runtime installation of dependencies,
-# allowing you to extend functionality without rebuilding the image.
+# Этот скрипт устанавливает дополнительные зависимости для образов Docker lvperf, включаемые в конвейерCI.
+# Образы основаны на Alpine Linux и включают установку зависимостей во время выполнения.
+# позволяющий расширить функциональность без пересборки образа.
 #
-# For guidance on how dependencies are typically added, refer to the Dockerfiles:
+# Инструкции по этому поводу обычно приводятся в зависимости от см. в Докерфайлах:
 # - https://github.com/smartobjectoriented/so3/blob/main/docker/Dockerfile.lvperf_32b
 # - https://github.com/smartobjectoriented/so3/blob/main/docker/Dockerfile.lvperf_64b

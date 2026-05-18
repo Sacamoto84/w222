@@ -100,11 +100,11 @@ void lv_sdl_mousewheel_handler(SDL_Event * event)
 
     lv_display_t * disp = lv_sdl_get_disp_from_win_id(win_id);
 
-    /*Find a suitable indev*/
+    /*Найдите подходящего разработчика*/
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         if(lv_indev_get_read_cb(indev) == sdl_mousewheel_read) {
-            /*If disp is NULL for any reason use the first indev with the correct type*/
+            /*Если по какой-либо причине disp равен NULL, используйте первый indev правильного типа.*/
             if(disp == NULL || lv_indev_get_display(indev) == disp) break;
         }
         indev = lv_indev_get_next(indev);
@@ -116,7 +116,7 @@ void lv_sdl_mousewheel_handler(SDL_Event * event)
     switch(event->type) {
         case SDL_MOUSEWHEEL:
 #ifdef __EMSCRIPTEN__
-            /*Emscripten scales it wrong*/
+            /*Emscripten неправильно масштабирует*/
             if(event->wheel.y < 0) dsc->diff++;
             if(event->wheel.y > 0) dsc->diff--;
 #else

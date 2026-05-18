@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_CURSORSTREAMWRAPPER_H_
 #define RAPIDJSON_CURSORSTREAMWRAPPER_H_
@@ -24,16 +24,16 @@ RAPIDJSON_DIAG_OFF(effc++)
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(4702)  // unreachable code
-RAPIDJSON_DIAG_OFF(4512)  // assignment operator could not be generated
+RAPIDJSON_DIAG_OFF(4702)  // недостижимый код
+RAPIDJSON_DIAG_OFF(4512)  // не удалось сгенерировать оператор присваивания
 #endif
 
 RAPIDJSON_NAMESPACE_BEGIN
 
 
-//! Cursor stream wrapper for counting line and column number if error exists.
+//! Оболочка потока курсоров для подсчета количества строк и столбцов в случае возникновения ошибки.
 /*!
-    \tparam InputStream     Any stream that implements Stream Concept
+    \tparam InputStream Любой поток, реализующий концепцию потока.
 */
 template <typename InputStream, typename Encoding = UTF8<> >
 class CursorStreamWrapper : public GenericStreamWrapper<InputStream, Encoding> {
@@ -43,7 +43,7 @@ public:
     CursorStreamWrapper(InputStream& is):
         GenericStreamWrapper<InputStream, Encoding>(is), line_(1), col_(0) {}
 
-    // counting line and column number
+    // подсчет номера строки и столбца
     Ch Take() {
         Ch ch = this->is_.Take();
         if(ch == '\n') {
@@ -55,14 +55,14 @@ public:
         return ch;
     }
 
-    //! Get the error line number, if error exists.
+    //! Получите номер строки ошибки, если ошибка существует.
     size_t GetLine() const { return line_; }
-    //! Get the error column number, if error exists.
+    //! Получите номер столбца ошибки, если ошибка существует.
     size_t GetColumn() const { return col_; }
 
 private:
-    size_t line_;   //!< Current Line
-    size_t col_;    //!< Current Column
+    size_t line_;   //!< Текущая строка
+    size_t col_;    //!< Текущий столбец
 };
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800

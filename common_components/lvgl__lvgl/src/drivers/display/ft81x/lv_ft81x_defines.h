@@ -1,7 +1,7 @@
 /**
  * @file lv_ft81x_defines.h
  *
- * Copied from https://github.com/lvgl/lvgl_esp32_drivers/blob/9fed1cc47b5a45fec6bae08b55d2147d3b50260c/lvgl_tft/EVE.h
+ * Скопировано из https://github.com/lvgl/lvgl_esp32_drivers/blob/9fed1cc47b5a45fec6bae08b55d2147d3b50260c/lvgl_tft/EVE.h
  */
 
 #ifndef LV_FT81X_DEFINES_H
@@ -19,48 +19,48 @@ extern "C" {
  *      DEFINES
  *********************/
 
-/* ft81x and ft80x each define exclusive
- * definitions. Define ft81x for now.
+/* Каждый из ft81x и ft80x определяет эксклюзивные
+ * определения. Определите сейчас ft81x.
  *
- * bt81x is a superset of ft81x and ft80x.
- * Don't define it since its special
- * definitions are not required to use it.
+ * bt81x — это расширенная версия ft81x и ft80x.
+ * Не определяйте это, поскольку оно особенное
+ * определения не требуются для его использования.
  */
 #define FT81X_ENABLE
 /* #define BT81X_ENABLE */
 
 
-#define DL_CLEAR        0x26000000UL /* requires OR'd arguments */
-#define DL_CLEAR_RGB    0x02000000UL /* requires OR'd arguments */
-#define DL_COLOR_RGB    0x04000000UL /* requires OR'd arguments */
-#define DL_POINT_SIZE   0x0D000000UL /* requires OR'd arguments */
+#define DL_CLEAR        0x26000000UL /* требуются аргументы OR */
+#define DL_CLEAR_RGB    0x02000000UL /* требуются аргументы OR */
+#define DL_COLOR_RGB    0x04000000UL /* требуются аргументы OR */
+#define DL_POINT_SIZE   0x0D000000UL /* требуются аргументы OR */
 #define DL_END          0x21000000UL
-#define DL_BEGIN        0x1F000000UL /* requires OR'd arguments */
+#define DL_BEGIN        0x1F000000UL /* требуются аргументы OR */
 #define DL_DISPLAY      0x00000000UL
 
 #define CLR_COL              0x4
 #define CLR_STN              0x2
 #define CLR_TAG              0x1
 
-/* SPI SIO/DIO/QIO transfer widths */
+/* SPI SIO / DIO / QIO Ширина передачи */
 #define SPI_WIDTH_SIO       0x0
 #define SPI_WIDTH_DIO       0x1
 #define SPI_WIDTH_QIO       0x2
 
 
-/* Host commands */
-#define EVE_ACTIVE  0x00  /* place FT8xx in active state */
-#define EVE_STANDBY 0x41  /* place FT8xx in Standby (clk running) */
-#define EVE_SLEEP   0x42  /* place FT8xx in Sleep (clk off) */
-#define EVE_PWRDOWN 0x50  /* place FT8xx in Power Down (core off) */
-#define EVE_CLKEXT  0x44  /* select external clock source */
-#define EVE_CLKINT  0x48  /* select internal clock source */
-#define EVE_CORERST 0x68  /* reset core - all registers default and processors reset */
-#define EVE_CLK48M  0x62  /* select 48MHz PLL output */
-#define EVE_CLK36M  0x61  /* select 36MHz PLL output */
+/* Команды хоста */
+#define EVE_ACTIVE  0x00  /* перевести FT8xx в активное состояние */
+#define EVE_STANDBY 0x41  /* перевести FT8xx в режим ожидания (clk работает) */
+#define EVE_SLEEP   0x42  /* перевести FT8xx в спящий режим (отключить) */
+#define EVE_PWRDOWN 0x50  /* поместите FT8xx в режим Power Down (ядро выключено) */
+#define EVE_CLKEXT  0x44  /* выбрать внешний источник синхронизации */
+#define EVE_CLKINT  0x48  /* выбрать внутренний источник синхронизации */
+#define EVE_CORERST 0x68  /* сброс ядра - все регистры по умолчанию и процессоры сброшены */
+#define EVE_CLK48M  0x62  /* выберите выход PLL 48 МГц */
+#define EVE_CLK36M  0x61  /* выберите выход PLL 36 МГц */
 
 
-/* defines used for graphics commands */
+/* определяет используемые для графических команд */
 #define EVE_NEVER                0UL
 #define EVE_LESS                 1UL
 #define EVE_LEQUAL               2UL
@@ -71,7 +71,7 @@ extern "C" {
 #define EVE_ALWAYS               7UL
 
 
-/* Bitmap formats */
+/* Растровые форматы */
 #define EVE_ARGB1555             0UL
 #define EVE_L1                   1UL
 #define EVE_L4                   2UL
@@ -86,17 +86,17 @@ extern "C" {
 #define EVE_BARGRAPH             11UL
 
 
-/* Bitmap filter types */
+/* Типы растровых фильтров */
 #define EVE_NEAREST              0UL
 #define EVE_BILINEAR             1UL
 
 
-/* Bitmap wrap types */
+/* Типы переноса растровых изображений */
 #define EVE_BORDER               0UL
 #define EVE_REPEAT               1UL
 
 
-/* Stencil defines */
+/* Трафарет определяет */
 #define EVE_KEEP                 1UL
 #define EVE_REPLACE              2UL
 #define EVE_INCR                 3UL
@@ -104,13 +104,13 @@ extern "C" {
 #define EVE_INVERT               5UL
 
 
-/* Graphics display list swap defines */
+/* Перестановка списка графического отображения определяет */
 #define EVE_DLSWAP_DONE          0UL
 #define EVE_DLSWAP_LINE          1UL
 #define EVE_DLSWAP_FRAME         2UL
 
 
-/* Interrupt bits */
+/* Биты прерываний */
 #define EVE_INT_SWAP             0x01
 #define EVE_INT_TOUCH            0x02
 #define EVE_INT_TAG              0x04
@@ -121,14 +121,14 @@ extern "C" {
 #define EVE_INT_CONVCOMPLETE     0x80
 
 
-/* Touch mode */
+/* Сенсорный режим */
 #define EVE_TMODE_OFF           0
 #define EVE_TMODE_ONESHOT       1
 #define EVE_TMODE_FRAME         2
 #define EVE_TMODE_CONTINUOUS    3
 
 
-/* Alpha blending */
+/* Альфа-смешение */
 #define EVE_ZERO                 0UL
 #define EVE_ONE                  1UL
 #define EVE_SRC_ALPHA            2UL
@@ -137,7 +137,7 @@ extern "C" {
 #define EVE_ONE_MINUS_DST_ALPHA  5UL
 
 
-/* Graphics primitives */
+/* Графические примитивы */
 #define EVE_BITMAPS              1UL
 #define EVE_POINTS               2UL
 #define EVE_LINES                3UL
@@ -149,7 +149,7 @@ extern "C" {
 #define EVE_RECTS                9UL
 
 
-/* Widget command */
+/* Команда виджета */
 #define EVE_OPT_MONO             1
 #define EVE_OPT_NODL             2
 #define EVE_OPT_FLAT             256
@@ -166,19 +166,19 @@ extern "C" {
 #define EVE_OPT_SIGNED           256
 
 
-/* Defines related to inbuilt font */
-#define EVE_NUMCHAR_PERFONT         (128L)  /* number of font characters per bitmap handle */
-#define EVE_FONT_TABLE_SIZE         (148L)  /* size of the font table - utilized for lookup by the graphics engine */
-#define EVE_FONT_TABLE_POINTER  (0xFFFFCUL) /* pointer to the inbuilt font tables starting from bitmap handle 16 */
+/* Определяет связанный со встроенным шрифтом */
+#define EVE_NUMCHAR_PERFONT         (128L)  /* количество символов шрифта на дескриптор растрового изображения */
+#define EVE_FONT_TABLE_SIZE         (148L)  /* размер таблицы шрифтов — используется для поиска графическим движком */
+#define EVE_FONT_TABLE_POINTER  (0xFFFFCUL) /* указатель на встроенные таблицы шрифтов, начиная с дескриптора растрового изображения 16 */
 
 
-/* Audio sample type defines */
-#define EVE_LINEAR_SAMPLES       0UL    /* 8bit signed samples */
-#define EVE_ULAW_SAMPLES         1UL    /* 8bit ulaw samples */
-#define EVE_ADPCM_SAMPLES        2UL    /* 4bit ima adpcm samples */
+/* Тип аудиосэмпла определяет */
+#define EVE_LINEAR_SAMPLES       0UL    /* 8-битные подписанные образцы */
+#define EVE_ULAW_SAMPLES         1UL    /* 8-битные образцы Ulaw */
+#define EVE_ADPCM_SAMPLES        2UL    /* 4-битные образцы ima adpcm */
 
 
-/* Synthesized sound */
+/* Синтезированный звук */
 #define EVE_SILENCE              0x00
 #define EVE_SQUAREWAVE           0x01
 #define EVE_SINEWAVE             0x02
@@ -212,7 +212,7 @@ extern "C" {
 #define EVE_UNMUTE               0x61
 
 
-/* Synthesized sound frequencies, midi note */
+/* Синтезированные звуковые частоты, миди-нота */
 #define EVE_MIDI_A0   21
 #define EVE_MIDI_A_0  22
 #define EVE_MIDI_B0   23
@@ -303,18 +303,18 @@ extern "C" {
 #define EVE_MIDI_C8   108
 
 
-/* GPIO bits */
+/* Биты GPIO */
 #define EVE_GPIO0   0
-#define EVE_GPIO1   1   /* default gpio pin for audio shutdown, 1 - enable, 0 - disable */
-#define EVE_GPIO7   7   /* default gpio pin for display enable, 1 - enable, 0 - disable */
+#define EVE_GPIO1   1   /* вывод gpio по умолчанию для отключения звука, 1 — включить, 0 — отключить */
+#define EVE_GPIO7   7   /* PIN-код gpio по умолчанию для включения дисплея, 1 — включить, 0 — отключить */
 
 
-/* Display rotation */
-#define EVE_DISPLAY_0       0   /* 0 degrees rotation */
-#define EVE_DISPLAY_180     1   /* 180 degrees rotation */
+/* Поворот дисплея */
+#define EVE_DISPLAY_0       0   /* вращение 0 градусов */
+#define EVE_DISPLAY_180     1   /* вращение на 180 градусов */
 
 
-/* commands common to EVE/EVE2/EVE3 */
+/* команды, общие для EVE/EVE2/EVE3 */
 #define CMD_APPEND              0xFFFFFF1E
 #define CMD_BGCOLOR             0xFFFFFF09
 #define CMD_BUTTON              0xFFFFFF0D
@@ -362,7 +362,7 @@ extern "C" {
 #define CMD_TRANSLATE           0xFFFFFF27
 
 
-/* the following are undocumented commands that therefore should not be used */
+/* Ниже приведены недокументированные команды, которые поэтому не следует использовать. */
 #if 0
 #define CMD_CRC                 0xFFFFFF03
 #define CMD_HAMMERAUX           0xFFFFFF04
@@ -374,7 +374,7 @@ extern "C" {
 #endif
 
 
-/* FT8xx graphics engine specific macros useful for static display list generation */
+/* Макросы, специфичные для графического движка FT8xx, полезные для создания статического списка отображения. */
 #define ALPHA_FUNC(func,ref) ((9UL<<24)|(((func)&7UL)<<8)|(((ref)&255UL)<<0))
 #define BEGIN(prim) ((31UL<<24)|(((prim)&15UL)<<0))
 #define BITMAP_HANDLE(handle) ((5UL<<24)|(((handle)&31UL)<<0))
@@ -415,14 +415,14 @@ extern "C" {
 #define VERTEX2II(x,y,handle,cell) ((2UL<<30)|(((x)&511UL)<<21)|(((y)&511UL)<<12)|(((handle)&31UL)<<7)|(((cell)&127UL)<<0))
 
 
-/* ----------------- BT81x exclusive definitions -----------------*/
+/* ----------------- Эксклюзивные определения BT81x -----------------*/
 #if defined (BT81X_ENABLE)
 
-#define EVE_GLFORMAT 31UL   /* used with BITMAP_LAYOUT to indicate bitmap-format is specified by BITMAP_EXT_FORMAT */
+#define EVE_GLFORMAT 31UL   /* используется с BITMAP_LAYOUT для указания формата растрового изображения, заданного BITMAP_EXT_FORMAT */
 
-#define DL_BITMAP_EXT_FORMAT    0x2E000000 /* requires OR'd arguments */
+#define DL_BITMAP_EXT_FORMAT    0x2E000000 /* требуются аргументы OR */
 
-/* extended Bitmap formats */
+/* расширенные форматы растровых изображений */
 #define EVE_COMPRESSED_RGBA_ASTC_4x4_KHR   37808UL
 #define EVE_COMPRESSED_RGBA_ASTC_5x4_KHR   37809UL
 #define EVE_COMPRESSED_RGBA_ASTC_5x5_KHR   37810UL
@@ -439,7 +439,7 @@ extern "C" {
 #define EVE_COMPRESSED_RGBA_ASTC_12x12_KHR 37821UL
 
 
-#define EVE_RAM_ERR_REPORT      0x309800UL /* max 128 bytes null terminated string */
+#define EVE_RAM_ERR_REPORT      0x309800UL /* строка длиной не более 128 байт, завершающаяся нулем */
 #define EVE_RAM_FLASH           0x800000UL
 #define EVE_RAM_FLASH_POSTBLOB  0x801000UL
 
@@ -448,24 +448,24 @@ extern "C" {
 #define EVE_OPT_FILL   8192UL
 
 
-/* additional commands for BT81x */
+/* дополнительные команды для BT81x */
 #define CMD_BITMAP_TRANSFORM 0xFFFFFF21
-#define CMD_SYNC             0xFFFFFF42     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_SYNC) */
-#define CMD_FLASHERASE       0xFFFFFF44     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHERASE) */
+#define CMD_SYNC             0xFFFFFF42     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_SYNC ) */
+#define CMD_FLASHERASE       0xFFFFFF44     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHERASE ) */
 #define CMD_FLASHWRITE       0xFFFFFF45
 #define CMD_FLASHREAD        0xFFFFFF46
 #define CMD_FLASHUPDATE      0xFFFFFF47
-#define CMD_FLASHDETACH      0xFFFFFF48     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHDETACH) */
-#define CMD_FLASHATTACH      0xFFFFFF49     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHATTACH) */
+#define CMD_FLASHDETACH      0xFFFFFF48     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHDETACH ) */
+#define CMD_FLASHATTACH      0xFFFFFF49     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHATTACH ) */
 #define CMD_FLASHFAST        0xFFFFFF4A
-#define CMD_FLASHSPIDESEL    0xFFFFFF4B     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_FLASHSPIDESEL) */
+#define CMD_FLASHSPIDESEL    0xFFFFFF4B     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHSPIDESEL ) */
 #define CMD_FLASHSPITX       0xFFFFFF4C
 #define CMD_FLASHSPIRX       0xFFFFFF4D
 #define CMD_FLASHSOURCE      0xFFFFFF4E
-#define CMD_CLEARCACHE       0xFFFFFF4F     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_CLEARCACHE) */
+#define CMD_CLEARCACHE       0xFFFFFF4F     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_CLEARCACHE ) */
 #define CMD_INFLATE2         0xFFFFFF50
 #define CMD_ROTATEAROUND     0xFFFFFF51
-#define CMD_RESETFONTS       0xFFFFFF52     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_RESETFONTS) */
+#define CMD_RESETFONTS       0xFFFFFF52     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_RESETFONTS ) */
 #define CMD_ANIMSTART        0xFFFFFF53
 #define CMD_ANIMSTOP         0xFFFFFF54
 #define CMD_ANIMXY           0xFFFFFF55
@@ -474,10 +474,10 @@ extern "C" {
 #define CMD_FILLWIDTH        0xFFFFFF58
 #define CMD_APPENDF          0xFFFFFF59
 #define CMD_ANIMFRAME        0xFFFFFF5A
-#define CMD_VIDEOSTARTF      0xFFFFFF5F     /* does not need a dedicated function, just use EVE_cmd_dl(CMD_VIDEOSTARTF) */
+#define CMD_VIDEOSTARTF      0xFFFFFF5F     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_VIDEOSTARTF ) */
 
 #if 0
-/* some undocumented commands for BT81x */
+/* некоторые недокументированные команды для BT81x */
 #define CMD_NOP              0xFFFFFF5B
 #define CMD_SHA1             0xFFFFFF5C
 #define CMD_HMAC             0xFFFFFF5D
@@ -486,7 +486,7 @@ extern "C" {
 #endif
 
 
-/* additional registers for BT81x */
+/* дополнительные регистры для BT81x */
 #define REG_ADAPTIVE_FRAMERATE 0x30257cUL
 #define REG_PLAYBACK_PAUSE     0x3025ecUL
 #define REG_FLASH_STATUS       0x3025f0UL
@@ -495,7 +495,7 @@ extern "C" {
 #define REG_COPRO_PATCH_DTR    0x309162UL
 
 
-/* BT81x graphics engine specific macros */
+/* Макросы, специфичные для графического движка BT81x */
 #define BITMAP_EXT_FORMAT(format) ((46UL<<24)|(((format)&65535UL)<<0))
 #define BITMAP_SWIZZLE(r,g,b,a) ((47UL<<24)|(((r)&7UL)<<9)|(((g)&7UL)<<6)|(((b)&7UL)<<3)|(((a)&7UL)<<0))
 #define BITMAP_SOURCE2(flash_or_ram, addr) ((1UL<<24)|((flash_or_ram) << 23)|(((addr)&8388607UL)<<0))
@@ -518,18 +518,18 @@ extern "C" {
 
 #endif
 
-/* ----------------- FT81x / BT81x exclusive definitions -----------------*/
+/* ----------------- Эксклюзивные определения FT81x/BT81x -----------------*/
 #if defined (FT81X_ENABLE)
 
 
-/* Host commands */
-#define EVE_CLKSEL          0x61 /* configure system clock */
-#define EVE_RST_PULSE       0x68 /* reset core - all registers default and processors reset */
-#define EVE_PINDRIVE        0x70 /* setup drive strength for various pins */
-#define EVE_PIN_PD_STATE    0x71 /* setup how pins behave during power down */
+/* Команды хоста */
+#define EVE_CLKSEL          0x61 /* настроить системные часы */
+#define EVE_RST_PULSE       0x68 /* сброс ядра - все регистры по умолчанию и процессоры сброшены */
+#define EVE_PINDRIVE        0x70 /* настройка силы привода для различных контактов */
+#define EVE_PIN_PD_STATE    0x71 /* настроить поведение контактов при отключении питания */
 
 
-/* Memory definitions */
+/* Определения памяти */
 #define EVE_RAM_G           0x000000UL
 #define EVE_ROM_CHIPID      0x0C0000UL
 #define EVE_ROM_FONT        0x1E0000UL
@@ -539,13 +539,13 @@ extern "C" {
 #define EVE_RAM_CMD         0x308000UL
 
 
-/* Memory buffer sizes */
+/* Размеры буфера памяти */
 #define EVE_RAM_G_SIZE      1024*1024L
 #define EVE_CMDFIFO_SIZE    4*1024L
 #define EVE_RAM_DL_SIZE     8*1024L
 
 
-/* various additional defines for FT81x */
+/* различные дополнительные настройки для FT81x */
 #define EVE_ADC_DIFFERENTIAL     1UL
 #define EVE_ADC_SINGLE_ENDED     0UL
 
@@ -564,7 +564,7 @@ extern "C" {
 #define EVE_L2                   17UL
 
 
-/* additional commands for FT81x */
+/* дополнительные команды для FT81x */
 #define CMD_MEDIAFIFO           0xFFFFFF39
 #define CMD_PLAYVIDEO           0xFFFFFF3A
 #define CMD_ROMFONT             0xFFFFFF3F
@@ -578,7 +578,7 @@ extern "C" {
 #define CMD_VIDEOSTART          0xFFFFFF40
 
 
-/* the following are undocumented commands that therefore should not be used */
+/* Ниже приведены недокументированные команды, которые поэтому не следует использовать. */
 #if 0
 #define CMD_CSKETCH             0xFFFFFF35
 #define CMD_INT_RAMSHARED       0xFFFFFF3D
@@ -586,9 +586,9 @@ extern "C" {
 #endif
 
 
-/* Register definitions */
-#define REG_ANA_COMP         0x302184UL /* only listed in datasheet */
-#define REG_BIST_EN          0x302174UL /* only listed in datasheet */
+/* Определения регистров */
+#define REG_ANA_COMP         0x302184UL /* указано только в даташите */
+#define REG_BIST_EN          0x302174UL /* указано только в даташите */
 #define REG_CLOCK            0x302008UL
 #define REG_CMDB_SPACE       0x302574UL
 #define REG_CMDB_WRITE       0x302578UL
@@ -598,14 +598,14 @@ extern "C" {
 #define REG_CPURESET         0x302020UL
 #define REG_CSPREAD          0x302068UL
 #define REG_CTOUCH_EXTENDED  0x302108UL
-#define REG_CTOUCH_TOUCH0_XY 0x302124UL /* only listed in datasheet */
+#define REG_CTOUCH_TOUCH0_XY 0x302124UL /* указано только в даташите */
 #define REG_CTOUCH_TOUCH4_X  0x30216cUL
 #define REG_CTOUCH_TOUCH4_Y  0x302120UL
 #define REG_CTOUCH_TOUCH1_XY 0x30211cUL
 #define REG_CTOUCH_TOUCH2_XY 0x30218cUL
 #define REG_CTOUCH_TOUCH3_XY 0x302190UL
 #define REG_TOUCH_CONFIG     0x302168UL
-#define REG_DATESTAMP        0x302564UL /* only listed in datasheet */
+#define REG_DATESTAMP        0x302564UL /* указано только в даташите */
 #define REG_DITHER           0x302060UL
 #define REG_DLSWAP           0x302054UL
 #define REG_FRAMES           0x302004UL
@@ -625,8 +625,8 @@ extern "C" {
 #define REG_INT_MASK         0x3020b0UL
 #define REG_MACRO_0          0x3020d8UL
 #define REG_MACRO_1          0x3020dcUL
-#define REG_MEDIAFIFO_READ   0x309014UL /* only listed in programmers guide */
-#define REG_MEDIAFIFO_WRITE  0x309018UL /* only listed in programmers guide */
+#define REG_MEDIAFIFO_READ   0x309014UL /* указан только в руководстве для программистов */
+#define REG_MEDIAFIFO_WRITE  0x309018UL /* указан только в руководстве для программистов */
 #define REG_OUTBITS          0x30205cUL
 #define REG_PCLK             0x302070UL
 #define REG_PCLK_POL         0x30206cUL
@@ -640,19 +640,19 @@ extern "C" {
 #define REG_PLAYBACK_START   0x3020b4UL
 #define REG_PWM_DUTY         0x3020d4UL
 #define REG_PWM_HZ           0x3020d0UL
-#define REG_RENDERMODE       0x302010UL /* only listed in datasheet */
+#define REG_RENDERMODE       0x302010UL /* указано только в даташите */
 #define REG_ROTATE           0x302058UL
-#define REG_SNAPFORMAT       0x30201cUL /* only listed in datasheet */
-#define REG_SNAPSHOT         0x302018UL /* only listed in datasheet */
-#define REG_SNAPY            0x302014UL /* only listed in datasheet */
+#define REG_SNAPFORMAT       0x30201cUL /* указано только в даташите */
+#define REG_SNAPSHOT         0x302018UL /* указано только в даташите */
+#define REG_SNAPY            0x302014UL /* указано только в даташите */
 #define REG_SOUND            0x302088UL
-#define REG_SPI_WIDTH        0x302188UL /* listed with false offset in programmers guide V1.1 */
+#define REG_SPI_WIDTH        0x302188UL /* указан с ложным смещением в руководстве для программистов V1 .1 */
 #define REG_SWIZZLE          0x302064UL
 #define REG_TAG              0x30207cUL
 #define REG_TAG_X            0x302074UL
 #define REG_TAG_Y            0x302078UL
-#define REG_TAP_CRC          0x302024UL /* only listed in datasheet */
-#define REG_TAP_MASK         0x302028UL /* only listed in datasheet */
+#define REG_TAP_CRC          0x302024UL /* указано только в даташите */
+#define REG_TAP_MASK         0x302028UL /* указано только в даташите */
 #define REG_TOUCH_ADC_MODE   0x302108UL
 #define REG_TOUCH_CHARGE     0x30210cUL
 #define REG_TOUCH_DIRECT_XY  0x30218cUL
@@ -665,14 +665,14 @@ extern "C" {
 #define REG_TOUCH_SCREEN_XY  0x302124UL
 #define REG_TOUCH_SETTLE     0x302110UL
 #define REG_TOUCH_TAG        0x30212cUL
-#define REG_TOUCH_TAG1       0x302134UL /* only listed in datasheet */
-#define REG_TOUCH_TAG1_XY    0x302130UL /* only listed in datasheet */
-#define REG_TOUCH_TAG2       0x30213cUL /* only listed in datasheet */
-#define REG_TOUCH_TAG2_XY    0x302138UL /* only listed in datasheet */
-#define REG_TOUCH_TAG3       0x302144UL /* only listed in datasheet */
-#define REG_TOUCH_TAG3_XY    0x302140UL /* only listed in datasheet */
-#define REG_TOUCH_TAG4       0x30214cUL /* only listed in datasheet */
-#define REG_TOUCH_TAG4_XY    0x302148UL /* only listed in datasheet */
+#define REG_TOUCH_TAG1       0x302134UL /* указано только в даташите */
+#define REG_TOUCH_TAG1_XY    0x302130UL /* указано только в даташите */
+#define REG_TOUCH_TAG2       0x30213cUL /* указано только в даташите */
+#define REG_TOUCH_TAG2_XY    0x302138UL /* указано только в даташите */
+#define REG_TOUCH_TAG3       0x302144UL /* указано только в даташите */
+#define REG_TOUCH_TAG3_XY    0x302140UL /* указано только в даташите */
+#define REG_TOUCH_TAG4       0x30214cUL /* указано только в даташите */
+#define REG_TOUCH_TAG4_XY    0x302148UL /* указано только в даташите */
 #define REG_TOUCH_TAG_XY     0x302128UL
 #define REG_TOUCH_TRANSFORM_A 0x302150UL
 #define REG_TOUCH_TRANSFORM_B 0x302154UL
@@ -680,11 +680,11 @@ extern "C" {
 #define REG_TOUCH_TRANSFORM_D 0x30215cUL
 #define REG_TOUCH_TRANSFORM_E 0x302160UL
 #define REG_TOUCH_TRANSFORM_F 0x302164UL
-#define REG_TRACKER          0x309000UL /* only listed in programmers guide */
-#define REG_TRACKER_1        0x309004UL /* only listed in programmers guide */
-#define REG_TRACKER_2        0x309008UL /* only listed in programmers guide */
-#define REG_TRACKER_3        0x30900cUL /* only listed in programmers guide */
-#define REG_TRACKER_4        0x309010UL /* only listed in programmers guide */
+#define REG_TRACKER          0x309000UL /* указан только в руководстве для программистов */
+#define REG_TRACKER_1        0x309004UL /* указан только в руководстве для программистов */
+#define REG_TRACKER_2        0x309008UL /* указан только в руководстве для программистов */
+#define REG_TRACKER_3        0x30900cUL /* указан только в руководстве для программистов */
+#define REG_TRACKER_4        0x309010UL /* указан только в руководстве для программистов */
 #define REG_TRIM             0x302180UL
 #define REG_VCYCLE           0x302040UL
 #define REG_VOFFSET          0x302044UL
@@ -695,22 +695,22 @@ extern "C" {
 #define REG_VSYNC1           0x302050UL
 
 #if 0
-#define REG_BUSYBITS         0x3020e8UL /* only listed as "reserved" in datasheet */
-#define REG_CRC              0x302178UL /* only listed as "reserved" in datasheet */
-#define REG_SPI_EARLY_TX     0x30217cUL /* only listed as "reserved" in datasheet */
-#define REG_ROMSUB_SEL       0x3020f0UL /* only listed as "reserved" in datasheet */
-#define REG_TOUCH_FAULT      0x302170UL /* only listed as "reserved" in datasheet */
+#define REG_BUSYBITS         0x3020e8UL /* в таблице данных указан только как «зарезервировано» */
+#define REG_CRC              0x302178UL /* в таблице данных указан только как «зарезервировано» */
+#define REG_SPI_EARLY_TX     0x30217cUL /* в таблице данных указан только как «зарезервировано» */
+#define REG_ROMSUB_SEL       0x3020f0UL /* в таблице данных указан только как «зарезервировано» */
+#define REG_TOUCH_FAULT      0x302170UL /* в таблице данных указан только как «зарезервировано» */
 #endif
 
 
-/* FT81x graphics engine specific macros useful for static display list generation */
+/* Макросы, специфичные для графического движка FT81x, полезные для создания статического списка отображения. */
 
-/* beware, these are different to FTDIs implementation as these take the original values as parameters and not only the upper bits */
+/* будьте осторожны, они отличаются от реализации FTDI, поскольку в качестве параметров принимают исходные значения, а не только старшие биты. */
 #define BITMAP_LAYOUT_H(linestride,height) ((40UL<<24)|((((linestride&0xC00)>>10)&3UL)<<2)|((((height&0x600)>>9)&3UL)<<0))
 #define BITMAP_SIZE_H(width,height) ((41UL<<24)|((((width&0x600)>>9)&3UL)<<2)|((((height&0x600)>>9)&3UL)<<0))
 
 #define BITMAP_SOURCE(addr) ((1UL<<24)|(((addr)&4194303UL)<<0))
-//#define NOP() ((45UL<<24))
+//#define NOP () ((45UL<<24))
 #define PALETTE_SOURCE(addr) ((42UL<<24)|(((addr)&4194303UL)<<0))
 #define SCISSOR_SIZE(width,height) ((28UL<<24)|(((width)&4095UL)<<12)|(((height)&4095UL)<<0))
 #define SCISSOR_XY(x,y) ((27UL<<24)|(((x)&2047UL)<<11)|(((y)&2047UL)<<0))
@@ -720,10 +720,10 @@ extern "C" {
 
 
 
-/* ----------------- FT80x exclusive definitions -----------------*/
+/* ----------------- Эксклюзивные определения FT80x -----------------*/
 #else
 
-/* Memory definitions */
+/* Определения памяти */
 #define EVE_RAM_G           0x000000UL
 #define EVE_ROM_CHIPID      0x0C0000UL
 #define EVE_ROM_FONT        0x0BB23CUL
@@ -734,14 +734,14 @@ extern "C" {
 #define EVE_RAM_SCREENSHOT  0x1C2000UL
 
 
-/* Memory buffer sizes */
+/* Размеры буфера памяти */
 #define EVE_RAM_G_SIZE      256*1024L
 #define EVE_CMDFIFO_SIZE    4*1024L
 #define EVE_RAM_DL_SIZE     8*1024L
 #define EVE_RAM_PAL_SIZE    1*1024L
 
 
-/* Register definitions */
+/* Определения регистров */
 #define REG_ID                  0x102400UL
 #define REG_FRAMES              0x102404UL
 #define REG_CLOCK               0x102408UL
@@ -820,7 +820,7 @@ extern "C" {
 #define REG_TOUCH_DIRECT_Z1Z2   0x102578UL
 #define REG_TRACKER             0x109000UL
 
-/* FT80x graphics engine specific macros useful for static display list generation */
+/* Макросы, специфичные для графического движка FT80x, полезные для создания статического списка отображения. */
 #define BITMAP_SOURCE(addr) ((1UL<<24)|(((addr)&1048575UL)<<0))
 #define SCISSOR_SIZE(width,height) ((28UL<<24)|(((width)&1023UL)<<10)|(((height)&1023UL)<<0))
 #define SCISSOR_XY(x,y) ((27UL<<24)|(((x)&511UL)<<9)|(((y)&511UL)<<0))
@@ -840,7 +840,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FT81X_DEFINES_H*/

@@ -18,7 +18,7 @@
 /*********************
  *      DEFINES
  *********************/
-/*memset the allocated memories to 0xaa and freed memories to 0xbb (just for testing purposes)*/
+/*memset для выделенной памяти 0xaa, а для освобожденной памяти —0xbb(только в процессе тестирования)*/
 #ifndef LV_MEM_ADD_JUNK
     #define LV_MEM_ADD_JUNK  0
 #endif

@@ -17,7 +17,7 @@ extern "C" {
 
 #if LV_USE_SPINBOX
 
-/*Testing of dependencies*/
+/*Тестирование зависимостей*/
 #if LV_USE_TEXTAREA == 0
 #error "lv_spinbox: lv_ta is required. Enable it in lv_conf.h (LV_USE_TEXTAREA  1) "
 #endif
@@ -52,62 +52,62 @@ enum _lv_property_spinbox_id_t {
  **********************/
 
 /**
- * Create a spinbox object
+ * Создайте объект счетчика
  * @param parent    pointer to an object, it will be the parent of the new spinbox
  * @return          pointer to the created spinbox
  */
 lv_obj_t * lv_spinbox_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Set spinbox value
+ * Установить значение счетчика
  * @param obj   pointer to spinbox
  * @param v     value to be set
  */
 void lv_spinbox_set_value(lv_obj_t * obj, int32_t v);
 
 /**
- * Set spinbox rollover function
+ * Установить функцию опрокидывания счетчика
  * @param obj       pointer to spinbox
  * @param rollover  true or false to enable or disable (default)
  */
 void lv_spinbox_set_rollover(lv_obj_t * obj, bool rollover);
 
 /**
- * Set spinbox digit format (digit count and decimal format)
+ * Установить формат цифр счетчика (количество цифр и десятичный формат)
  * @param obj           pointer to spinbox
  * @param digit_count   number of digit excluding the decimal separator and the sign
  * @param sep_pos       number of digit before the decimal point. If 0, decimal point is not
- * shown
+ * показано
  */
 void lv_spinbox_set_digit_format(lv_obj_t * obj, uint32_t digit_count, uint32_t sep_pos);
 
 /**
- * Set the number of digits
+ * Установите количество цифр
  * @param obj           pointer to spinbox
  * @param digit_count   number of digits
  */
 void lv_spinbox_set_digit_count(lv_obj_t * obj, uint32_t digit_count);
 
 /**
- * Set the position of the decimal point
+ * Установите положение десятичной точки
  * @param obj           pointer to spinbox
  * @param dec_point_pos 0: there is no separator, 2: two integer digits
  */
 void lv_spinbox_set_dec_point_pos(lv_obj_t * obj, uint32_t dec_point_pos);
 
 /**
- * Set spinbox step
+ * Установить шаг счетчика
  * @param obj   pointer to spinbox
  * @param step  steps on increment/decrement. Can be 1, 10, 100, 1000, etc the digit that will change.
  */
 void lv_spinbox_set_step(lv_obj_t * obj, uint32_t step);
 
 /**
- * Set spinbox value range
+ * Установить диапазон значений счетчика
  * @param obj       pointer to spinbox
  * @param min_value minimum value, inclusive
  * @param max_value maximum value, inclusive
@@ -115,116 +115,116 @@ void lv_spinbox_set_step(lv_obj_t * obj, uint32_t step);
 void lv_spinbox_set_range(lv_obj_t * obj, int32_t min_value, int32_t max_value);
 
 /**
- * Set the minimum value
+ * Установите минимальное значение
  * @param obj       pointer to spinbox
  * @param min_value the minimum value
  */
 void lv_spinbox_set_min_value(lv_obj_t * obj, int32_t min_value);
 
 /**
- * Set the maximum value
+ * Установите максимальное значение
  * @param obj       pointer to spinbox
  * @param max_value the maximum value
  */
 void lv_spinbox_set_max_value(lv_obj_t * obj, int32_t max_value);
 
 /**
- * Set cursor position to a specific digit for edition
+ * Установите позицию курсора на определенную цифру для редактирования
  * @param obj   pointer to spinbox
  * @param pos   selected position in spinbox
  */
 void lv_spinbox_set_cursor_pos(lv_obj_t * obj, uint32_t pos);
 
 /**
- * Set direction of digit step when clicking an encoder button while in editing mode
+ * Установите направление шага цифр при нажатии кнопки кодировщика в режиме редактирования.
  * @param obj           pointer to spinbox
  * @param direction     the direction (LV_DIR_RIGHT or LV_DIR_LEFT)
  */
 void lv_spinbox_set_digit_step_direction(lv_obj_t * obj, lv_dir_t direction);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get spinbox rollover function status
+ * Получить статус функции опрокидывания счетчика
  * @param obj   pointer to spinbox
  */
 bool lv_spinbox_get_rollover(lv_obj_t * obj);
 
 /**
- * Get the spinbox numeral value (user has to convert to float according to its digit format)
+ * Получите числовое значение счетчика (пользователь должен преобразовать его в число с плавающей запятой в соответствии с его цифровым форматом)
  * @param obj   pointer to spinbox
  * @return      value integer value of the spinbox
  */
 int32_t lv_spinbox_get_value(lv_obj_t * obj);
 
 /**
- * Get the spinbox step value (user has to convert to float according to its digit format)
+ * Получите значение шага счетчика (пользователь должен преобразовать его в число с плавающей запятой в соответствии с его цифровым форматом)
  * @param obj   pointer to spinbox
  * @return      value integer step value of the spinbox
  */
 int32_t lv_spinbox_get_step(lv_obj_t * obj);
 
 /**
- * Get the spinbox digit count
+ * Получить количество цифр счетчика
  * @param obj   pointer to spinbox
  * @return      number of digits
  */
 uint32_t lv_spinbox_get_digit_count(lv_obj_t * obj);
 
 /**
- * Get the decimal point position
+ * Получить позицию десятичной точки
  * @param obj   pointer to spinbox
  * @return      decimal point position
  */
 uint32_t lv_spinbox_get_dec_point_pos(lv_obj_t * obj);
 
 /**
- * Get the spinbox minimum value
+ * Получить минимальное значение счетчика
  * @param obj   pointer to spinbox
  * @return      minimum value
  */
 int32_t lv_spinbox_get_min_value(lv_obj_t * obj);
 
 /**
- * Get the spinbox maximum value
+ * Получить максимальное значение счетчика
  * @param obj   pointer to spinbox
  * @return      maximum value
  */
 int32_t lv_spinbox_get_max_value(lv_obj_t * obj);
 
 /**
- * Get the digit step direction
+ * Получить направление шага цифры
  * @param obj   pointer to spinbox
  * @return      direction (LV_DIR_RIGHT or LV_DIR_LEFT)
  */
 lv_dir_t lv_spinbox_get_digit_step_direction(lv_obj_t * obj);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**
- * Select next lower digit for edition by dividing the step by 10
+ * Выберите следующую младшую цифру для редактирования, разделив шаг на 10.
  * @param obj   pointer to spinbox
  */
 void lv_spinbox_step_next(lv_obj_t * obj);
 
 /**
- * Select next higher digit for edition by multiplying the step by 10
+ * Выберите следующую более старшую цифру для редактирования, умножив шаг на 10.
  * @param obj   pointer to spinbox
  */
 void lv_spinbox_step_prev(lv_obj_t * obj);
 
 /**
- * Increment spinbox value by one step
+ * Увеличение значения счетчика на один шаг
  * @param obj   pointer to spinbox
  */
 void lv_spinbox_increment(lv_obj_t * obj);
 
 /**
- * Decrement spinbox value by one step
+ * Уменьшить значение счетчика на один шаг
  * @param obj   pointer to spinbox
  */
 void lv_spinbox_decrement(lv_obj_t * obj);
@@ -233,7 +233,7 @@ void lv_spinbox_decrement(lv_obj_t * obj);
 
 #if LV_USE_OBSERVER
 /**
- * Bind an integer subject to a Spinbox's value.
+ * Привяжите целое число к значению Spinbox.
  * @param obj       pointer to Spinbox
  * @param subject   pointer to Subject
  * @return          pointer to newly-created Observer
@@ -248,6 +248,6 @@ lv_observer_t * lv_spinbox_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_SPINBOX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 #endif /*LV_SPINBOX_H*/

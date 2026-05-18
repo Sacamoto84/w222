@@ -79,10 +79,10 @@ void lv_image_cache_resize(uint32_t new_size, bool evict_now)
 
 void lv_image_cache_drop(const void * src)
 {
-    /*If user invalidate image, the header cache should be invalidated too.*/
+    /*Если пользователь делает изображение недействительным, кэш заголовков также должен быть признан недействительным.*/
     lv_image_header_cache_drop(src);
 
-    /*Notify draw units to invalidate any cached resources (e.g., GPU textures) for this image source.*/
+    /*Уведомить модули рисования о необходимости аннулировать любые кэшированные ресурсы (например, текстуры GPU) для этого источника изображения.*/
     lv_draw_unit_send_event(NULL, LV_EVENT_INVALIDATE_AREA, (void *)src);
 
     if(src == NULL) {
@@ -154,13 +154,13 @@ static void image_cache_free_cb(lv_image_cache_data_t * entry, void * user_data)
 {
     LV_UNUSED(user_data);
 
-    /* Destroy the decoded draw buffer if necessary. */
+    /* При необходимости уничтожьте декодированный буфер отрисовки. */
     lv_draw_buf_t * decoded = (lv_draw_buf_t *)entry->decoded;
     if(lv_draw_buf_has_flag(decoded, LV_IMAGE_FLAGS_ALLOCATED)) {
         lv_draw_buf_destroy(decoded);
     }
 
-    /*Free the duplicated file name*/
+    /*Освободите дублированное имя файла*/
     if(entry->src_type == LV_IMAGE_SRC_FILE) lv_free((void *)entry->src);
 }
 
@@ -175,7 +175,7 @@ static void iter_inspect_cb(void * elem)
     LV_UNUSED(header);
     LV_UNUSED(entry);
 
-    /*  size    data_size   cf  rc  type    decoded         src*/
+    /*  размер data_size cf rc тип декодированного src*/
 #define IMAGE_CACHE_DUMP_FORMAT "	%4dx%-4d	%9"LV_PRIu32"	%d	%"LV_PRId32"	"
     switch(data->src_type) {
         case LV_IMAGE_SRC_FILE:

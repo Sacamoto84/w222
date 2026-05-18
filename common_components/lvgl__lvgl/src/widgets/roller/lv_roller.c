@@ -29,7 +29,7 @@
  *********************/
 #define MY_CLASS (&lv_roller_class)
 #define MY_CLASS_LABEL &lv_roller_label_class
-#define EXTRA_INF_SIZE      1000 /*[px]: add the options multiple times until getting this height*/
+#define EXTRA_INF_SIZE      1000 /*[px]: добавьте параметры несколько раз, пока не получите эту высоту.*/
 
 /**********************
  *      TYPEDEFS
@@ -118,7 +118,7 @@ lv_obj_t * lv_roller_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_roller_set_options(lv_obj_t * obj, const char * options, lv_roller_mode_t mode)
@@ -132,13 +132,13 @@ void lv_roller_set_options(lv_obj_t * obj, const char * options, lv_roller_mode_
     roller->sel_opt_id     = 0;
     roller->sel_opt_id_ori = 0;
 
-    /*Count the '\n'-s to determine the number of options*/
+    /*Подсчитайте '\n'-s, чтобы определить количество вариантов.*/
     roller->option_cnt = 0;
     uint32_t cnt;
     for(cnt = 0; options[cnt] != '\0'; cnt++) {
         if(options[cnt] == '\n') roller->option_cnt++;
     }
-    roller->option_cnt++; /*Last option has no `\n`*/
+    roller->option_cnt++; /*Последний вариант не имеет `\n`*/
 
     if(mode == LV_ROLLER_MODE_NORMAL) {
         roller->mode = LV_ROLLER_MODE_NORMAL;
@@ -151,13 +151,13 @@ void lv_roller_set_options(lv_obj_t * obj, const char * options, lv_roller_mode_
         int32_t normal_h = roller->option_cnt * (lv_font_get_line_height(font) + lv_obj_get_style_text_letter_space(obj,
                                                                                                                     LV_PART_MAIN));
         roller->inf_page_cnt = LV_CLAMP(3, EXTRA_INF_SIZE / normal_h, 15);
-        if(!(roller->inf_page_cnt & 1)) roller->inf_page_cnt++;   /*Make it odd*/
+        if(!(roller->inf_page_cnt & 1)) roller->inf_page_cnt++;   /*Сделайте это странным*/
         LV_LOG_INFO("Using %" LV_PRIu32 " pages to make the roller look infinite", roller->inf_page_cnt);
 
-        size_t opt_len = lv_strlen(options) + 1; /*+1 to add '\n' after option lists*/
+        size_t opt_len = lv_strlen(options) + 1; /*+1, чтобы добавить '\n' после списков опций*/
         size_t opt_extra_len = opt_len * roller->inf_page_cnt;
         if(opt_extra_len == 0) {
-            /*Prevent write overflow*/
+            /*Предотвратить переполнение записи*/
             opt_extra_len = 1;
         }
 
@@ -179,7 +179,7 @@ void lv_roller_set_options(lv_obj_t * obj, const char * options, lv_roller_mode_
 
     roller->sel_opt_id_ori = roller->sel_opt_id;
 
-    /*If the selected text has larger font the label needs some extra draw padding to draw it.*/
+    /*Если выделенный текст имеет более крупный шрифт, для его рисования метке потребуется дополнительное отступы.*/
     lv_obj_refresh_ext_draw_size(label);
 }
 
@@ -187,18 +187,18 @@ void lv_roller_set_selected(lv_obj_t * obj, uint32_t sel_opt, lv_anim_enable_t a
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    /*Set the value even if it's the same as the current value because
-     *if moving to the next option with an animation which was just deleted in the PRESS Call the ancestor's event handler
-     *nothing will continue the animation.*/
+    /*Установите значение, даже если оно совпадает с текущим значением, потому что
+     *при переходе к следующему варианту с анимацией, которая была только что удалена в PRESS. Вызовите обработчик событий предка.
+     *ничто не продолжит анимацию.*/
 
     lv_roller_t * roller = (lv_roller_t *)obj;
 
-    /*In infinite mode interpret the new ID relative to the currently visible "page"*/
+    /*В бесконечном режиме интерпретируйте новый ID относительно видимой в данный момент «страницы».*/
     if(roller->mode == LV_ROLLER_MODE_INFINITE) {
         uint32_t real_option_cnt = roller->option_cnt / roller->inf_page_cnt;
         uint32_t current_page = roller->sel_opt_id / real_option_cnt;
-        /*Set by the user to e.g. 0, 1, 2, 3...
-         *Upscale the value to the current page*/
+        /*Устанавливается пользователем, например. 0, 1, 2, 3...
+         *Увеличьте значение до текущей страницы*/
         if(sel_opt < real_option_cnt) {
             uint32_t act_opt = roller->sel_opt_id - current_page * real_option_cnt;
             int32_t sel_opt_signed = sel_opt;
@@ -229,7 +229,7 @@ bool lv_roller_set_selected_str(lv_obj_t * obj, const char * sel_opt, lv_anim_en
 
     for(size_t i = 0; i < options_len; i++) {
         if(options[i] == '\n') {
-            /* See if this is the correct option */
+            /* Посмотрите, правильный ли это вариант */
             if(lv_strncmp(&options[line_start], sel_opt, i - line_start) == 0) {
                 lv_roller_set_selected(obj, current_option, anim);
                 option_found = true;
@@ -255,7 +255,7 @@ void lv_roller_set_visible_row_count(lv_obj_t * obj, uint32_t row_cnt)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 uint32_t lv_roller_get_selected(const lv_obj_t * obj)
@@ -281,7 +281,7 @@ void lv_roller_get_selected_str(const lv_obj_t * obj, char * buf, uint32_t buf_s
 }
 
 /**
- * Get the options of a roller
+ * Получить варианты ролика
  * @param roller pointer to roller object
  * @return the options separated by '\n'-s (E.g. "Option1\nOption2\nOption3")
  */
@@ -387,7 +387,7 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -401,7 +401,7 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
     }
     else if(code == LV_EVENT_STYLE_CHANGED) {
         lv_obj_t * label = get_label(obj);
-        /*Be sure the label's style is updated before processing the roller*/
+        /*Перед обработкой ролика убедитесь, что стиль этикетки обновлен.*/
         if(label) lv_obj_send_event(label, LV_EVENT_STYLE_CHANGED, NULL);
         lv_obj_refresh_self_size(obj);
         refr_position(obj, LV_ANIM_OFF);
@@ -442,15 +442,15 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
         lv_group_t * g             = lv_obj_get_group(obj);
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
 
-        /*Encoders need special handling*/
+        /*Энкодеры требуют особого обращения*/
         if(indev_type == LV_INDEV_TYPE_ENCODER) {
             const bool editing = lv_group_get_editing(g);
 
-            /*Save the current state when entered to edit mode*/
+            /*Сохраните текущее состояние при входе в режим редактирования.*/
             if(editing) {
                 roller->sel_opt_id_ori = roller->sel_opt_id;
             }
-            else { /*In navigate mode revert the original value*/
+            else { /*В режиме навигации вернуть исходное значение*/
                 if(roller->sel_opt_id != roller->sel_opt_id_ori) {
                     roller->sel_opt_id = roller->sel_opt_id_ori;
                     refr_position(obj, LV_ANIM_ON);
@@ -458,13 +458,13 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
             }
         }
         else {
-            /*Save the current value. Used to revert this
-             *state if ENTER won't be pressed*/
+            /*Сохраните текущее значение. Используется для возврата этого
+             *указать, не будет ли нажат ENTER*/
             roller->sel_opt_id_ori = roller->sel_opt_id;
         }
     }
     else if(code == LV_EVENT_DEFOCUSED) {
-        /*Revert the original state*/
+        /*Вернуть исходное состояние*/
         if(roller->sel_opt_id != roller->sel_opt_id_ori) {
             roller->sel_opt_id = roller->sel_opt_id_ori;
             refr_position(obj, LV_ANIM_ON);
@@ -476,14 +476,14 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
         uint32_t c = lv_event_get_key(e);
         if(c == LV_KEY_RIGHT || c == LV_KEY_DOWN) {
             if(roller->sel_opt_id + 1 < roller->option_cnt) {
-                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected will overwrite this*/
+                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезапишет это*/
                 lv_roller_set_selected(obj, roller->sel_opt_id + 1, LV_ANIM_ON);
                 roller->sel_opt_id_ori = ori_id;
             }
         }
         else if(c == LV_KEY_LEFT || c == LV_KEY_UP) {
             if(roller->sel_opt_id > 0) {
-                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected will overwrite this*/
+                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезапишет это*/
                 lv_roller_set_selected(obj, roller->sel_opt_id - 1, LV_ANIM_ON);
                 roller->sel_opt_id_ori = ori_id;
             }
@@ -496,7 +496,7 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
         int32_t new_id = roller->sel_opt_id + r;
         new_id = LV_CLAMP(0, new_id, (int32_t)roller->option_cnt - 1);
         if((int32_t)roller->sel_opt_id != new_id) {
-            uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected will overwrite this*/
+            uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезапишет это*/
             lv_roller_set_selected(obj, new_id, LV_ANIM_ON);
             roller->sel_opt_id_ori = ori_id;
         }
@@ -517,16 +517,16 @@ static void lv_roller_label_event(const lv_obj_class_t * class_p, lv_event_t * e
     lv_result_t res;
 
     lv_event_code_t code = lv_event_get_code(e);
-    /*LV_EVENT_DRAW_MAIN will be called in the draw function*/
+    /*LV_EVENT_DRAW_MAIN будет вызываться в функции рисования.*/
     if(code != LV_EVENT_DRAW_MAIN) {
-        /* Call the ancestor's event handler */
+        /* Вызов обработчика событий предка */
         res = lv_obj_event_base(MY_CLASS_LABEL, e);
         if(res != LV_RESULT_OK) return;
     }
 
     lv_obj_t * label = lv_event_get_current_target(e);
     if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
-        /*If the selected text has a larger font it needs some extra space to draw it*/
+        /*Если выделенный текст имеет более крупный шрифт, для его рисования потребуется дополнительное пространство.*/
         int32_t * s = lv_event_get_param(e);
         lv_obj_t * obj = lv_obj_get_parent(label);
         int32_t sel_w = get_selected_label_width(obj);
@@ -546,7 +546,7 @@ static void draw_main(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_current_target(e);
     if(code == LV_EVENT_DRAW_MAIN) {
-        /*Draw the selected rectangle*/
+        /*Нарисуйте выбранный прямоугольник*/
         lv_layer_t * layer = lv_event_get_layer(e);
         lv_area_t sel_area;
         get_sel_area(obj, &sel_area);
@@ -556,7 +556,7 @@ static void draw_main(lv_event_t * e)
         lv_obj_init_draw_rect_dsc(obj, LV_PART_SELECTED, &sel_dsc);
         lv_draw_rect(layer, &sel_dsc, &sel_area);
     }
-    /*Post draw when the children are drawn*/
+    /*Публикуйте розыгрыш, когда дети рисуют*/
     else if(code == LV_EVENT_DRAW_POST) {
         lv_layer_t * layer = lv_event_get_layer(e);
 
@@ -571,7 +571,7 @@ static void draw_main(lv_event_t * e)
         attributes.max_width = lv_obj_get_width(obj);
         attributes.text_flags = LV_TEXT_FLAG_EXPAND;
 
-        /*Redraw the text on the selected area*/
+        /*Перерисовать текст в выбранной области*/
         lv_area_t sel_area;
         get_sel_area(obj, &sel_area);
         lv_area_t mask_sel;
@@ -581,28 +581,28 @@ static void draw_main(lv_event_t * e)
             lv_obj_t * label = get_label(obj);
             if(lv_label_get_recolor(label)) label_dsc.flag |= LV_TEXT_FLAG_RECOLOR;
 
-            /*Get the size of the "selected text"*/
+            /*Получить размер «выделенного текста»*/
             lv_point_t label_sel_size;
             lv_text_get_size_attributes(&label_sel_size, lv_label_get_text(label), label_dsc.font, &attributes);
 
-            /*Move the selected label proportionally with the background label*/
+            /*Переместите выбранную метку пропорционально фоновой метке.*/
             int32_t roller_h = lv_obj_get_height(obj);
             const lv_font_t * normal_label_font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
-            /*label offset from the middle line of the roller*/
+            /*смещение этикетки от средней линии валика*/
             int32_t label_y_prop = (label->coords.y1 + normal_label_font->line_height / 2) - (roller_h / 2 + obj->coords.y1);
 
-            /*Proportional position from the middle line.
-             *Will be 0 for the first option, and 1 for the last option (upscaled by << 14)*/
+            /*Пропорциональное положение от средней линии.
+             *Будет 0 для первого варианта и 1 для последнего варианта (увеличено на << 14)*/
             int32_t remain_h = lv_obj_get_height(label) - normal_label_font->line_height;
             if(remain_h > 0) {
                 label_y_prop = (label_y_prop << 14) / remain_h;
             }
 
-            /*We don't want the selected label start and end exactly where the normal label is as
-             *a larger font won't centered on selected area.*/
+            /*Мы не хотим, чтобы выбранная метка начиналась и заканчивалась точно там, где находится обычная метка.
+             *более крупный шрифт не будет центрироваться в выбранной области.*/
             int32_t corr = label_dsc.font->line_height;
 
-            /*Apply the proportional position to the selected text*/
+            /*Применить пропорциональное положение к выделенному тексту*/
             int32_t label_sel_y = roller_h / 2 + obj->coords.y1;
             label_sel_y += ((label_sel_size.y - corr) * label_y_prop) >> 14;
             label_sel_y -= corr / 2;
@@ -611,7 +611,7 @@ static void draw_main(lv_event_t * e)
             int32_t pleft = lv_obj_get_style_pad_left(obj, LV_PART_MAIN);
             int32_t pright = lv_obj_get_style_pad_right(obj, LV_PART_MAIN);
 
-            /*Draw the selected text*/
+            /*Нарисовать выделенный текст*/
             lv_area_t label_sel_area;
             label_sel_area.x1 = obj->coords.x1 + pleft + bwidth;
             label_sel_area.y1 = label_sel_y;
@@ -630,8 +630,8 @@ static void draw_main(lv_event_t * e)
 
 static void draw_label(lv_event_t * e)
 {
-    /* Split the drawing of the label into  an upper (above the selected area)
-     * and a lower (below the selected area)*/
+    /* Разделить рисунок этикетки на верхний (над выделенной областью)
+     * и нижний (ниже выбранной области)*/
     lv_obj_t * label_obj = lv_event_get_current_target(e);
     lv_obj_t * roller = lv_obj_get_parent(label_obj);
     lv_layer_t * layer = lv_event_get_layer(e);
@@ -641,9 +641,9 @@ static void draw_label(lv_event_t * e)
     lv_obj_init_draw_label_dsc(roller, LV_PART_MAIN, &label_draw_dsc);
     if(lv_label_get_recolor(label_obj)) label_draw_dsc.flag |= LV_TEXT_FLAG_RECOLOR;
 
-    /*If the roller has shadow or outline it has some ext. draw size
-     *therefore the label can overflow the roller's boundaries.
-     *To solve this limit the clip area to the "plain" roller.*/
+    /*Если у ролика есть тень или контур, значит, у него есть какие-то дополнения. размер рисунка
+     *поэтому этикетка может выйти за границы ролика.
+     *Чтобы решить эту проблему, ограничьте область зажима «простым» роликом.*/
     const lv_area_t clip_area_ori = layer->_clip_area;
     lv_area_t roller_clip_area;
     if(!lv_area_intersect(&roller_clip_area, &layer->_clip_area, &roller->coords)) return;
@@ -700,7 +700,7 @@ static void get_sel_area(lv_obj_t * obj, lv_area_t * sel_area)
 }
 
 /**
- * Refresh the position of the roller. It uses the id stored in: roller->ddlist.selected_option_id
+ * Обновите положение ролика. Он использует идентификатор, хранящийся в:roller->ddlist. selected_option_id
  * @param roller pointer to a roller object
  * @param anim_en LV_ANIM_ON: refresh with animation; LV_ANIM_OFF: without animation
  */
@@ -723,7 +723,7 @@ static void refr_position(lv_obj_t * obj, lv_anim_enable_t anim_en)
             x = 0;
             break;
         default:
-            /* Invalid alignment */
+            /* Неверное выравнивание */
             break;
     }
     lv_obj_set_x(label, x);
@@ -734,13 +734,13 @@ static void refr_position(lv_obj_t * obj, lv_anim_enable_t anim_en)
     const int32_t h = lv_obj_get_content_height(obj);
     uint32_t anim_time = lv_obj_get_style_anim_duration(obj, LV_PART_MAIN);
 
-    /*Normally the animation's `end_cb` sets correct position of the roller if infinite.
-     *But without animations we have to do it manually*/
+    /*Обычно `end_cb` анимации устанавливает правильное положение ролика, если он бесконечен.
+     *Но без анимации нам придется делать это вручную.*/
     if(anim_en == LV_ANIM_OFF || anim_time == 0) {
         inf_normalize(obj);
     }
 
-    /* Calculate animation configuration */
+    /* Рассчитать конфигурацию анимации */
     lv_roller_t * roller = (lv_roller_t *)obj;
     int32_t id = roller->sel_opt_id;
     const int32_t sel_y1 = id * (font_h + line_space);
@@ -772,7 +772,7 @@ static lv_result_t release_handler(lv_obj_t * obj)
     lv_indev_t * indev = lv_indev_active();
     lv_roller_t * roller = (lv_roller_t *)obj;
 
-    /*Leave edit mode once a new option is selected*/
+    /*Выйдите из режима редактирования после выбора новой опции.*/
     lv_indev_type_t indev_type = lv_indev_get_type(indev);
     if(indev_type == LV_INDEV_TYPE_ENCODER || indev_type == LV_INDEV_TYPE_KEYPAD) {
         roller->sel_opt_id_ori = roller->sel_opt_id;
@@ -786,7 +786,7 @@ static lv_result_t release_handler(lv_obj_t * obj)
     }
 
     if(lv_indev_get_type(indev) == LV_INDEV_TYPE_POINTER || lv_indev_get_type(indev) == LV_INDEV_TYPE_BUTTON) {
-        /*Search the clicked option (For KEYPAD and ENCODER the new value should be already set)*/
+        /*Найдите выбранную опцию (для KEYPAD и ENCODER новое значение должно быть уже установлено)*/
         int16_t new_opt  = -1;
         if(roller->moved == 0) {
             new_opt = 0;
@@ -805,14 +805,14 @@ static lv_result_t release_handler(lv_obj_t * obj)
             uint32_t letter_cnt = 0;
             for(letter_cnt = 0; letter_cnt < letter_i; letter_cnt++) {
                 uint32_t letter = lv_text_encoded_next(txt, &i);
-                /*Count he lines to reach the clicked letter. But ignore the last '\n' because it
-                 * still belongs to the clicked line*/
+                /*Подсчитайте линии, чтобы добраться до нажатой буквы. Но игнорируйте последний '\n', потому что он
+                 * все еще принадлежит выбранной строке*/
                 if(letter == '\n' && i_prev != letter_i) new_opt++;
                 i_prev = i;
             }
         }
         else {
-            /*If dragged then align the list to have an element in the middle*/
+            /*При перетаскивании выровняйте список так, чтобы элемент находился посередине.*/
             const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
             int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
             int32_t font_h              = lv_font_get_line_height(font);
@@ -845,13 +845,13 @@ static lv_result_t release_handler(lv_obj_t * obj)
         }
     }
 
-    uint32_t id  = roller->sel_opt_id; /*Just to use uint32_t in event data*/
+    uint32_t id  = roller->sel_opt_id; /*Просто использовать uint32_t в данных о событиях*/
     lv_result_t res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, &id);
     return res;
 }
 
 /**
- * Set the middle page for the roller if infinite is enabled
+ * Установите среднюю страницу для ролика, если включена бесконечность
  * @param roller pointer to a roller object
  */
 static void inf_normalize(lv_obj_t * obj)
@@ -861,12 +861,12 @@ static void inf_normalize(lv_obj_t * obj)
     if(roller->mode == LV_ROLLER_MODE_INFINITE) {
         uint32_t real_id_cnt = roller->option_cnt / roller->inf_page_cnt;
         roller->sel_opt_id = roller->sel_opt_id % real_id_cnt;
-        roller->sel_opt_id += (roller->inf_page_cnt / 2) * real_id_cnt; /*Select the middle page*/
+        roller->sel_opt_id += (roller->inf_page_cnt / 2) * real_id_cnt; /*Выберите среднюю страницу*/
 
         roller->sel_opt_id_ori = roller->sel_opt_id % real_id_cnt;
-        roller->sel_opt_id_ori += (roller->inf_page_cnt / 2) * real_id_cnt; /*Select the middle page*/
+        roller->sel_opt_id_ori += (roller->inf_page_cnt / 2) * real_id_cnt; /*Выберите среднюю страницу*/
 
-        /*Move to the new id*/
+        /*Перейти на новый идентификатор*/
         const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
         int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
         int32_t font_h              = lv_font_get_line_height(font);
@@ -905,7 +905,7 @@ static int32_t get_selected_label_width(const lv_obj_t * obj)
 
 static void scroll_anim_completed_cb(lv_anim_t * a)
 {
-    lv_obj_t * obj = lv_obj_get_parent(a->var); /*The label is animated*/
+    lv_obj_t * obj = lv_obj_get_parent(a->var); /*Этикетка анимирована.*/
     inf_normalize(obj);
 }
 
@@ -955,7 +955,7 @@ static void roller_value_changed_event_cb(lv_event_t * e)
 
 static void roller_value_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {
-    /*If the roller is not rendered yet show the new state immediately*/
+    /*Если ролик еще не визуализируется, немедленно покажите новое состояние.*/
     lv_obj_t * obj = lv_observer_get_target_obj(observer);
     lv_anim_enable_t anim_on = obj->rendered ? LV_ANIM_ON : LV_ANIM_OFF;
     if((int32_t)lv_roller_get_selected(observer->target) != subject->value.num) {

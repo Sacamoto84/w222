@@ -42,7 +42,7 @@ void lv_example_scroll_9(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_SCROLL_H*/

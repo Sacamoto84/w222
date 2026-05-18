@@ -24,22 +24,22 @@
  *********************/
 #define MY_CLASS (&lv_bar_class)
 
-/** hor. pad and ver. pad cannot make the indicator smaller than this [px]*/
+/** гор. пэд и вер. Pad не может сделать индикатор меньше этого [пикселей]*/
 #define LV_BAR_SIZE_MIN  4
 
 #define LV_BAR_IS_ANIMATING(anim_struct) (((anim_struct).anim_state) != LV_BAR_ANIM_STATE_INV)
 #define LV_BAR_GET_ANIM_VALUE(orig_value, anim_struct) (LV_BAR_IS_ANIMATING(anim_struct) ? ((anim_struct).anim_end) : (orig_value))
 
-/** Bar animation start value. (Not the real value of the Bar just indicates process animation)*/
+/** Начальное значение анимации панели. (Не реальное значение панели, просто указывает на анимацию процесса)*/
 #define LV_BAR_ANIM_STATE_START 0
 
-/** Bar animation end value.  (Not the real value of the Bar just indicates process animation)*/
+/** Конечное значение полосовой анимации.  (Не реальное значение панели, просто указывает на анимацию процесса)*/
 #define LV_BAR_ANIM_STATE_END   256
 
-/** Mark no animation is in progress*/
+/** Отметить, что анимация не выполняется*/
 #define LV_BAR_ANIM_STATE_INV   -1
 
-/** log2(LV_BAR_ANIM_STATE_END) used to normalize data*/
+/** log2( LV_BAR_ANIM_STATE_END ) используется для нормализации данных*/
 #define LV_BAR_ANIM_STATE_NORM  8
 
 /**********************
@@ -136,7 +136,7 @@ lv_obj_t * lv_bar_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_bar_set_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim)
@@ -147,7 +147,7 @@ void lv_bar_set_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim)
     if(bar->cur_value == value) return;
 
     value = LV_CLAMP(bar->min_value, value, bar->max_value);
-    value = value < bar->start_value ? bar->start_value : value; /*Can't be smaller than the left value*/
+    value = value < bar->start_value ? bar->start_value : value; /*Не может быть меньше левого значения*/
 
     if(bar->cur_value == value) return;
 
@@ -165,7 +165,7 @@ void lv_bar_set_start_value(lv_obj_t * obj, int32_t value, lv_anim_enable_t anim
     }
 
     value = LV_CLAMP(bar->min_value, value, bar->max_value);
-    value = value > bar->cur_value ? bar->cur_value : value; /*Can't be greater than the right value*/
+    value = value > bar->cur_value ? bar->cur_value : value; /*Не может быть больше правильного значения*/
 
     if(bar->start_value == value) return;
 
@@ -235,7 +235,7 @@ void lv_bar_set_orientation(lv_obj_t * obj, lv_bar_orientation_t orientation)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 int32_t lv_bar_get_value(const lv_obj_t * obj)
@@ -370,7 +370,7 @@ static void draw_indic(lv_event_t * e)
     int32_t barh = lv_area_get_height(&bar_coords);
     int32_t range = bar->max_value - bar->min_value;
 
-    /*Prevent division by 0*/
+    /*Запретить деление на 0*/
     if(range == 0) {
         range = 1;
     }
@@ -391,13 +391,13 @@ static void draw_indic(lv_event_t * e)
 
     bool sym = lv_bar_is_symmetrical(obj);
 
-    /*Calculate the indicator area*/
+    /*Рассчитать площадь индикатора*/
     int32_t bg_left = lv_obj_get_style_pad_left(obj,     LV_PART_MAIN);
     int32_t bg_right = lv_obj_get_style_pad_right(obj,   LV_PART_MAIN);
     int32_t bg_top = lv_obj_get_style_pad_top(obj,       LV_PART_MAIN);
     int32_t bg_bottom = lv_obj_get_style_pad_bottom(obj, LV_PART_MAIN);
 
-    /*Respect padding and minimum width/height too*/
+    /*Соблюдайте отступы и минимальную ширину/высоту.*/
     lv_area_copy(&bar->indic_area, &bar_coords);
     bar->indic_area.x1 += bg_left;
     bar->indic_area.x2 -= bg_right;
@@ -415,7 +415,7 @@ static void draw_indic(lv_event_t * e)
     int32_t indic_max_w = lv_area_get_width(&bar->indic_area);
     int32_t indic_max_h = lv_area_get_height(&bar->indic_area);
 
-    /*Calculate the indicator length*/
+    /*Рассчитать длину индикатора*/
     int32_t anim_length = hor ? indic_max_w : indic_max_h;
 
     int32_t anim_cur_value_x, anim_start_value_x;
@@ -464,21 +464,21 @@ static void draw_indic(lv_event_t * e)
     }
 
     /**
-     * The drawing direction of the bar can be reversed only when one of the two conditions(value inversion
-     * or horizontal direction base dir is LV_BASE_DIR_RTL) is met.
+     * Направление рисования бара можно изменить только при выполнении одного из двух условий(инверсия значений
+     * или базовое направление горизонтального направления — LV_BASE_DIR_RTL).
     */
     lv_base_dir_t base_dir = lv_obj_get_style_base_dir(obj, LV_PART_MAIN);
     bool hor_need_reversed = hor && base_dir == LV_BASE_DIR_RTL;
     bool reversed = bar->val_reversed ^ hor_need_reversed;
 
-    /* An area with width 0 is {x1 = 0 x2 = -1} so subtracting 1 from `anim_cur_value_x` causes...
+    /* Область шириной 0 равна {x1 = 0 x2 = -1}, поэтому вычитание 1 из `anim_cur_value_x` приводит к...
      *     anim_start_value_x = 0   anim_cur_value_x = 0   to be {x1 = 0 x2 = -1  } which is width 0
      *     anim_start_value_x = 0   anim_cur_value_x = 300 to be {x1 = 0 x2 =  299} which is width 300
      */
     anim_cur_value_x -= 1;
 
     if(reversed) {
-        /*Swap axes*/
+        /*Поменять оси*/
         int32_t * tmp;
         tmp = axis1;
         axis1 = axis2;
@@ -487,7 +487,7 @@ static void draw_indic(lv_event_t * e)
         anim_start_value_x = -anim_start_value_x;
     }
 
-    /*Set the indicator length*/
+    /*Установите длину индикатора*/
     if(hor) {
         *axis2 = *axis1 + anim_cur_value_x;
         *axis1 += anim_start_value_x;
@@ -537,7 +537,7 @@ static void draw_indic(lv_event_t * e)
         }
     }
 
-    /*Do not draw a zero length indicator but at least call the draw task event*/
+    /*Не рисуйте индикатор нулевой длины, а хотя бы вызовите событие задачи рисования.*/
     if(!sym && indic_length_calc(&bar->indic_area) <= 1) {
         lv_obj_send_event(obj, LV_EVENT_DRAW_TASK_ADDED, NULL);
         return;
@@ -567,25 +567,25 @@ static void draw_indic(lv_event_t * e)
     short_side = LV_MIN(lv_area_get_width(&bar->indic_area), lv_area_get_height(&bar->indic_area));
     if(indic_radius > short_side >> 1) indic_radius = short_side >> 1;
 
-    /*Cases:
-     * Simple:
+    /*Случаи:
+     * Просто:
      *   - indicator area is the same or smaller then the bg
      *   - indicator has the same or larger radius than the bg
      *   - what to do? just draw the indicator
-     * Radius issue:
+     * Проблема с радиусом:
      *   - indicator area is the same or smaller then bg
      *   - indicator has smaller radius than the bg and the indicator overflows on the corners
      *   - what to do? draw the indicator on a layer and clip to bg radius
-     * Larger indicator:
+     * Больший показатель:
      *   - indicator area is the larger then the bg
      *   - radius doesn't matter
      *   - shadow doesn't matter
      *   - what to do? just draw the indicator
-     * Shadow:
+     * Тень:
      *   - indicator area is the same or smaller then the bg
      *   - indicator has the same or larger radius than the bg (shadow needs to be drawn on strange clipped shape)
      *   - what to do? don't draw the shadow if the indicator is too small has strange shape
-     * Gradient:
+     * Градиент:
      *   - the indicator has a gradient
      *   - what to do? draw it on a bg sized layer clip the indicator are from the gradient
      *
@@ -598,14 +598,14 @@ static void draw_indic(lv_event_t * e)
     if(draw_rect_dsc.bg_image_src) mask_needed = true;
 
     bool radius_issue = true;
-    /*The indicator is fully drawn if it's larger than the bg*/
+    /*Индикатор прорисовывается полностью, если он больше фона.*/
     if((bg_left < 0 || bg_right < 0 || bg_top < 0 || bg_bottom < 0)) radius_issue = false;
     else if(indic_radius >= bg_radius) radius_issue = false;
     else if(lv_area_is_in(&indic_area, &bar_coords, bg_radius)) radius_issue = false;
 
     if(radius_issue || mask_needed) {
         if(!radius_issue) {
-            /*Draw only the shadow*/
+            /*Рисуем только тень*/
             lv_draw_rect_dsc_t draw_rect_tmp_dsc = draw_rect_dsc;
             draw_rect_tmp_dsc.border_opa = 0;
             draw_rect_tmp_dsc.outline_opa = 0;
@@ -619,8 +619,8 @@ static void draw_indic(lv_event_t * e)
         }
         draw_rect_dsc.shadow_opa = 0;
 
-        /*If clipped for any reason cannot the border, outline, and shadow
-         *as they would be clipped and looked ugly*/
+        /*Если по какой-либо причине обрезано, граница, контур и тень не могут быть обрезаны.
+         *так как они были бы обрезаны и выглядели бы некрасиво*/
         lv_draw_rect_dsc_t draw_tmp_dsc = draw_rect_dsc;
         draw_tmp_dsc.border_opa = 0;
         draw_tmp_dsc.outline_opa = 0;
@@ -661,8 +661,8 @@ static void draw_indic(lv_event_t * e)
         layer_draw_dsc.src = layer_indic;
         lv_draw_layer(layer, &layer_draw_dsc, &indic_draw_area);
 
-        /*Add the border, outline, and shadow only to the indicator area.
-         *They might have disabled if there is a radius_issue*/
+        /*Добавьте границу, контур и тень только в область индикатора.
+         *Они могли бы отключиться, если бы был radius_issue*/
         draw_tmp_dsc = draw_rect_dsc;
         draw_tmp_dsc.bg_opa = 0;
         draw_tmp_dsc.bg_image_opa = 0;
@@ -682,7 +682,7 @@ static void lv_bar_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -693,11 +693,11 @@ static void lv_bar_event(const lv_obj_class_t * class_p, lv_event_t * e)
         int32_t indic_size;
         indic_size = lv_obj_calculate_ext_draw_size(obj, LV_PART_INDICATOR);
 
-        /*Bg size is handled by lv_obj*/
+        /*Размер фона обрабатывается lv_obj.*/
         int32_t * s = lv_event_get_param(e);
         *s = LV_MAX(*s, indic_size);
 
-        /*Calculate the indicator area*/
+        /*Рассчитать площадь индикатора*/
         int32_t bg_left = lv_obj_get_style_pad_left(obj, LV_PART_MAIN);
         int32_t bg_right = lv_obj_get_style_pad_right(obj, LV_PART_MAIN);
         int32_t bg_top = lv_obj_get_style_pad_top(obj, LV_PART_MAIN);
@@ -747,24 +747,24 @@ static void lv_bar_set_value_with_anim(lv_obj_t * obj, int32_t new_value, int32_
         *value_ptr = new_value;
         lv_obj_invalidate((lv_obj_t *)obj);
 
-        /*Stop the previous animation if it exists*/
+        /*Остановить предыдущую анимацию, если она существует.*/
         lv_anim_delete(anim_info, NULL);
-        /*Reset animation state*/
+        /*Сбросить состояние анимации*/
         lv_bar_init_anim(obj, anim_info);
     }
     else {
-        /*No animation in progress -> simply set the values*/
+        /*Анимация не выполняется -> просто установите значения*/
         if(anim_info->anim_state == LV_BAR_ANIM_STATE_INV) {
             anim_info->anim_start = *value_ptr;
             anim_info->anim_end   = new_value;
         }
-        /*Animation in progress. Start from the animation end value*/
+        /*Анимация в процессе. Начать с конечного значения анимации*/
         else {
             anim_info->anim_start = anim_info->anim_end;
             anim_info->anim_end   = new_value;
         }
         *value_ptr = new_value;
-        /*Stop the previous animation if it exists*/
+        /*Остановить предыдущую анимацию, если она существует.*/
         lv_anim_delete(anim_info, NULL);
 
         lv_anim_t a;
@@ -791,7 +791,7 @@ static void lv_bar_init_anim(lv_obj_t * obj, lv_bar_anim_t * bar_anim)
 static void bar_value_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {
     lv_obj_t * obj = lv_observer_get_target_obj(observer);
-    /*If the bar is not rendered yet show the new state immediately*/
+    /*Если панель еще не отображается, немедленно отобразите новое состояние.*/
     lv_anim_enable_t anim_on = obj->rendered ? LV_ANIM_ON : LV_ANIM_OFF;
     if(subject->type == LV_SUBJECT_TYPE_INT) {
         lv_bar_set_value(observer->target, subject->value.num, anim_on);

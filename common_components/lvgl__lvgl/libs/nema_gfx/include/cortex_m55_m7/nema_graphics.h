@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -130,32 +130,32 @@ typedef uint32_t nema_tex_format_t;
 
 //-----------------------------------------------------------------------------------------------------------------------
 
-// Texture Unit Parameters
+// Параметры текстурного блока
 //-----------------------------------------------------------------------------------------
-    // Filtering - 0:0
+    // Фильтрация - 0:0
     //----------------------
 #define NEMA_FILTER_PS  0x00U /**< Point Sampling. */
 #define NEMA_FILTER_BL  0x01U /**< Bilinear filtering. */
 
-    // Wrapping Mode 3:2
+    // Режим упаковки 3:2
     //----------------------
 #define NEMA_TEX_CLAMP  (0x00U)    /**< Clamp */
 #define NEMA_TEX_REPEAT (0x01U<<2) /**< Repeat */
 #define NEMA_TEX_BORDER (0x02U<<2) /**< Border */
 #define NEMA_TEX_MIRROR (0x03U<<2) /**< Mirror */
 
-    // Texture Coordinates Ordering 4:4
+    // Порядок текстурных координат 4:4
     //----------------------
 #define NEMA_TEX_MORTON_ORDER (0x10U)
 
-    // Texture Coordinates Format 6:5
+    // Формат текстурных координат 6:5
     //----------------------
 #define NEMA_TEX_RANGE_0_1   (0x1U<<5)  /**< Interpolated Coordinates range: 0-1 */
 #define NEMA_TEX_LEFT_HANDED (0x1U<<6)  /**< (0,0) is bottom left corner */
 
 typedef uint8_t nema_tex_mode_t;
 
-// Triangle Culling
+// Отбор треугольников
 //-----------------------------------------------------------------------------------------
 typedef enum {
     NEMA_CULL_NONE = 0      , /**< Disable Triangle/Quadrilateral Culling */
@@ -164,7 +164,7 @@ typedef enum {
     NEMA_CULL_ALL  = NEMA_CULL_CW | NEMA_CULL_CCW   /**< Cull all */
 } nema_tri_cull_t;
 
-// Rotation Modes
+// Режимы вращения
 //-----------------------------------------------------------------------------------------------------------------------
 
 #define NEMA_ROT_000_CCW  (0x0U) /**< No rotation */
@@ -179,56 +179,56 @@ typedef enum {
 #define NEMA_MIR_HOR      (0x8U)  /**< Mirror Horizontally */
 
 
-/** \brief Check if a known GPU is present
+/** \brief проверка, присутствие известных GPU
  *
- * \return -1 if no known GPU is present
+ * \return -1, если известныйGPUне присутствует
  *
  */
 int nema_checkGPUPresence(void);
 
 // ------------------------------ TEXTURES -------------------------------------
 
-/** \brief Program a Texture Unit
+/** \brief Программирование текстурного модуля
  *
- * \param texid    Texture unit to be programmed
- * \param addr_gpu Texture's address as seen by the GPU
- * \param width    Texture's width
- * \param height   Texture's height
- * \param format   Texture's format
- * \param stride   Texture's stride. If stride < 0, it's left to be calculated
- * \param wrap_mode  Wrap/Repeat mode to be used. When using 'repeat' or 'mirror', texture dimensions must be a power of two. Otherwise the behavior is undefined.
+ * \param texid Текстурный блок, который необходимо запрограммировать
+ * \paramaddr_gpuАдрес текстуры, встречается GPU
+ * \param width Ширина текстуры
+ * \param height Высота текстуры
+ * \param format Формат текстур
+ * \param stride Шаг текстуры. Если шаг < 0, его еще предстоит вычислить.
+ * \paramwrap_modeиспользуется режим переноса/повтора. При использовании «повторения» или «зеркала» размеры текстур должны быть двойными. В противном случае поведение не определено.
  *
  */
 void nema_bind_tex(nema_tex_t texid, uintptr_t addr_gpu,
                    uint32_t width, uint32_t height,
                    nema_tex_format_t format, int32_t stride, nema_tex_mode_t wrap_mode);
 
-/** \brief Set Texture Mapping default color
+/** \brief Установить цвет по умолчанию для наложения текстуры
  *
- * \param color default color in 32-bit RGBA format
- * \see nema_rgba()
+ * \param цвет цвета по умолчанию в 32-битном формате RGBA
+ * \см. nema_rgba()
  *
  */
 void nema_set_tex_color(uint32_t color);
 
 // ------------------------------ CONSTREGS ------------------------------------
 
-/** \brief Write a value to a Constant Register of the GPU
+/** \brief Запись значений в регистр константы GPU
  *
- * \param reg Constant Register to be written
- * \param value Value to be written
+ * \param reg Постоянный регистр для записей
+ * Значение \param для записей
  *
  */
 void nema_set_const_reg(int reg, uint32_t value);
 
 // --------------------------------- CLIP --------------------------------------
 
-/** \brief Sets the drawing area's Clipping Rectangle
+/** \brief Установка окружает области рисования.
  *
- * \param x Clip Window top-left x coordinate
- * \param y Clip Window minimum y
- * \param w Clip Window width
- * \param h Clip Window height
+ * \param x Координата x в верхнем нижнем углу окна, клипа
+ * \param y Минимальный оконный клип y
+ * \param w Ширина окна клипа
+ * \param h Высота окна клипа
  *
  */
 void nema_set_clip(int32_t x, int32_t y, uint32_t w, uint32_t h);
@@ -237,102 +237,102 @@ void nema_enable_gradient(int enable);
 
 void nema_enable_depth(int enable);
 
-/** \brief Enables MSAA per edge
+/** \brief ВключаетMSAAдля каждого ребра
  *
- * \param e0 Enable MSAA for edge 0 (vertices 0-1)
- * \param e1 Enable MSAA for edge 1 (vertices 1-2)
- * \param e2 Enable MSAA for edge 2 (vertices 2-3)
- * \param e3 Enable MSAA for edge 3 (vertices 3-0)
- * \return previous AA flags (may be ignored)
+ * \param e0 ВключитьMSAAдля ребра 0 (вершины 0–1)
+ * \param e1 ВключитьMSAAдля ребра 1 (вершины 1-2)
+ * \param e2 ВключитьMSAAдля ребра 2 (вершины 2–3)
+ * \param e3 ВключитьMSAAдля ребра 3 (вершины 3-0)
+ * \вернуть предыдущие флаги AA (можно игнорировать)
  *
  */
 uint32_t nema_enable_aa(uint8_t e0, uint8_t e1, uint8_t e2, uint8_t e3);
 
-/** \brief Enables MSAA per edge
+/** \brief ВключаетMSAAдля каждого ребра
  *
- * \param aa A combination of the flags RAST_AA_E0, RAST_AA_E1, RAST_AA_E2, RAST_AA_E3
- * \return previous AA flags (may be ignored)
+ * \param aa Комбинация флаговRAST_AA_E0,RAST_AA_E1,RAST_AA_E2, RAST_AA_E3
+ * \вернуть предыдущие флаги AA (можно игнорировать)
  *
  */
 uint32_t nema_enable_aa_flags(uint32_t aa);
 
 // ------------------------------- DIRTY REGIONS ------------------------------------
 
-/** \brief  Returns the bounding rectangle of all the pixels that have been modified since its previous call.
- * Available only on Nema|P and Nema|PVG GPUs.
+/** \brief Возвращает ограничение всех изображений, которые были изменены с момента обращения.
+ * Доступно только на Nema|P и Nema| Графические процессоры PVG.
  *
- * \param minx x coordinate of the upper left corner of the dirty region
- * \param miny y coordinate of the upper left corner of the dirty region
- * \param maxx x coordinate of the lower right corner of the dirty region
- * \param maxy y coordinate of the lower right corner of the dirty region
+ * \param minx x координата верхнего левого угла грязной области
+ * \param miny y координата верхнего левого угла грязной области
+ * \param maxx x координата нижнего правого угла загрязненной области
+ * \param maxy координата y нижнего правого угла грязной области
  *
  */
 void nema_get_dirty_region(int *minx, int *miny, int *maxx, int *maxy);
 
-/** \brief Clear dirty region information - runs via the bound command-list
- * Available only on Nema|P and Nema|PVG GPUs.
+/** \brief Очистить информацию о грязной области — результат через связанный список команды.
+ * Доступно только на Nema|P и Nema| Графические процессоры PVG.
  *
- * \see nema_get_dirty_region()
- * \see nema_clear_dirty_region_imm()
+ * \см. nema_get_dirty_region()
+ * \см. nema_clear_dirty_region_imm()
  *
  */
 void nema_clear_dirty_region(void);
 
-/** \brief Clear dirty region information immediately, no command-list involved
- * Available only on Nema|P and Nema|PVG GPUs.
+/** \brief Немедленно ухудшается динамика о грязной области, без использования списка команд.
+ * Доступно только на Nema|P и Nema| Графические процессоры PVG.
  *
- * \see nema_get_dirty_region()
- * \see nema_clear_dirty_region()
+ * \см. nema_get_dirty_region()
+ * \см. nema_clear_dirty_region()
  *
  */
 void nema_clear_dirty_region_imm(void);
 
 // -------------------------------- UTILS --------------------------------------
 
-/** \brief Set triangle/quadrilateral culling mode
+/** \brief Установить режим отсечения треугольников/четырехугольников
  *
- * \param cull Culling mode
+ * \param cull Режим отсеивания
  *
  */
 void nema_tri_cull(nema_tri_cull_t cull);
 
-/** \brief Return pixel size in bytes
+/** \brief Возвращает размер пикселя в байтах
  *
- * \param format Color format
- * \return Pixel size in bytes
+ * \param format Формат цвета
+ * \return Размер пикселя в байтах
  *
  */
 int nema_format_size (nema_tex_format_t format);
 
-/** \brief Return stride in bytes
+/** \brief Возвращаемый шаг в байтах
  *
- * \param format Color format
- * \param wrap_mode  Wrap/Repeat mode to be used. When using 'repeat' or 'mirror', texture dimensions must be a power of two. Otherwise the behavior is undefined.
- * \param width Texture color format
- * \return Stride in bytes
+ * \param format Формат цвета
+ * \paramwrap_modeиспользуется режим переноса/повтора. При использовании «повторения» или «зеркала» размеры текстур должны быть двойными. В противном случае поведение не определено.
+ * \param width Формат цвета текстуры
+ * \return Шаг в байтах
  *
  */
 int nema_stride_size(nema_tex_format_t format, nema_tex_mode_t wrap_mode, int width);
 
 
-/** \brief Return texture size in bytes
+/** \brief Возвращает размер текстур в байтах
  *
- * \param format Texture color format
- * \param wrap_mode  Wrap/Repeat mode to be used. When using 'repeat' or 'mirror', texture dimensions must be a power of two. Otherwise the behavior is undefined.
- * \param width Texture width
- * \param height Texture height
- * \return Texture size in bytes
+ * \param format Формат цвета текстуры
+ * \paramwrap_modeиспользуется режим переноса/повтора. При использовании «повторения» или «зеркала» размеры текстур должны быть двойными. В противном случае поведение не определено.
+ * \param width Ширина текстуры
+ * \param height Высота текстуры
+ * \return Размер текстур в байтах
  *
  */
 int nema_texture_size(nema_tex_format_t format, nema_tex_mode_t wrap_mode, int width, int height);
 
-/** \brief Return Nema internal RGBA color
+/** \brief Возврат внутреннего цвета Nema RGBA
  *
- * \param R Red component
- * \param G Green component
- * \param B Blue component
- * \param A Alpha component
- * \return RGBA value
+ * \param R Красный компонент
+ * \param G Зеленый компонент
+ * \param B Синий компонент
+ * \param Альфа-компонент
+ * \return значение RGBA
  *
  */
 uint32_t nema_rgba(unsigned char R,
@@ -340,86 +340,86 @@ uint32_t nema_rgba(unsigned char R,
                    unsigned char B,
                    unsigned char A);
 
-/** \brief Premultiply RGB channels with Alpha channel
+/** \brief Предварительное умножение каналовRGBс альфа-каналом
  *
- * \param rgba RGBA color
- * \return Premultiplied RGBA color
+ * \param rgbaRGBAцвет
+ * \return Предварительно умноженный цвет RGBA
  *
  */
 uint32_t nema_premultiply_rgba(uint32_t rgba);
 
-/** \brief Initialize NemaGFX library
+/** \brief Инициализация библиотеки NemaGFX
  *
- * \return negative value on error
+ * \вернуть отрицательное значение в случае ошибки
  *
  */
 int nema_init(void);
 
-/** \brief Reinitialize NemaGFX library
+/** \brief Повторная инициализация библиотеки NemaGFX
  *
- * \details This function reinitializes the NemaGFX library after a GPU poweroff
- * No memory allocation for ringbuffer etc is performed.
+ * \details Эта функция повторно реализует оригинальный код NemaGFX после выключенияGPU.
+ * Выделение памяти для кольцевого буфера и т. д. не выполняется.
  *
- * \return negative value on error
+ * \вернуть отрицательное значение в случае ошибки
  *
  */
 int nema_reinit(void);
 
 // ------------------------------- CONTEXT -------------------------------------
 
-/** \brief Program Texture Unit with a foreground (source) texture (NEMA_TEX1)
+/** \brief Программный текстурный модуль с текстурой переднего плана (исходной) (NEMA_TEX1)
  *
- * \param baseaddr_phys Address of the source texture, as seen by the GPU
- * \param width Texture width
- * \param height Texture hight
- * \param format Texture format
- * \param stride Texture stride. If negative, it's calculated internally.
- * \param wrap_mode  Wrap/Repeat mode to be used. When using 'repeat' or 'mirror', texture dimensions must be a power of two. Otherwise the behavior is undefined.
+ * \parambaseaddr_physАдрес исходной текстуры, видимый GPU
+ * \param width Ширина текстуры
+ * \param height Высота текстуры
+ * \param format Формат текстур
+ * \param stride Шаг текстуры. Если значение отрицательное, оно рассчитывается внутри компании.
+ * \paramwrap_modeиспользуется режим переноса/повтора. При использовании «повторения» или «зеркала» размеры текстур должны быть двойными. В противном случае поведение не определено.
  *
  */
 void nema_bind_src_tex(uintptr_t baseaddr_phys,
                        uint32_t width, uint32_t height,
                        nema_tex_format_t format, int32_t stride, nema_tex_mode_t mode);
 
-/** \brief Program Texture Unit with a background texture ((NEMA_TEX2)
+/** \brief Программный текстурный блок с фоновой текстурой ((NEMA_TEX2)
  *
- * \param baseaddr_phys Address of the source2 texture, as seen by the GPU
- * \param width Texture width
- * \param height Texture hight
- * \param format Texture format
- * \param stride Texture stride. If negative, it's calculated internally.
- * \param wrap_mode  Wrap/Repeat mode to be used. When using 'repeat' or 'mirror', texture dimensions must be a power of two. Otherwise the behavior is undefined.
+ * \parambaseaddr_physАдрес текстуры source2, появляется GPU
+ * \param width Ширина текстуры
+ * \param height Высота текстуры
+ * \param format Формат текстур
+ * \param stride Шаг текстуры. Если значение отрицательное, оно рассчитывается внутри компании.
+ * \paramwrap_modeиспользуется режим переноса/повтора. При использовании «повторения» или «зеркала» размеры текстур должны быть двойными. В противном случае поведение не определено.
  *
  */
 void nema_bind_src2_tex(uintptr_t baseaddr_phys,
                        uint32_t width, uint32_t height,
                        nema_tex_format_t format, int32_t stride, nema_tex_mode_t mode);
 
-/** \brief Program Texture Unit with a destination texture (NEMA_TEX0)
+/** \brief Программный текстурный блок с вертикальной текстурой (NEMA_TEX0)
  *
- * \param baseaddr_phys Address of the destination texture, as seen by the GPU
- * \param width Texture width
- * \param height Texture hight
- * \param format Texture format
- * \param stride Texture stride. If negative, it's calculated internally.
+ * \parambaseaddr_physАдрес встроенных текстур, появляется GPU
+ * \param width Ширина текстуры
+ * \param height Высота текстуры
+ * \param format Формат текстур
+ * \param stride Шаг текстуры. Если значение отрицательное, оно рассчитывается внутри компании.
  *
  */
 void nema_bind_dst_tex(uintptr_t baseaddr_phys,
                         uint32_t width, uint32_t height,
                         nema_tex_format_t format, int32_t stride);
 
-/** \brief Program Texture Unit with a lut/palette texture (NEMA_TEX2) and index texture (NEMA_TEX1_)
+/** Программный текстурный блок с текстурой люта/палитры (NEMA_TEX2) и индексной текстурой (NEMA_TEX1_)
  *
- * \param baseaddr_phys Address of the index texture
- * \param width Index texture width
- * \param height Index texture hight
- * \param format Index texture format
- * \param stride Index texture stride. If negative, it's calculated internally.
- * \param mode Index texture sampling mode.  When using 'NEMA_TEX_REPEAT' or 'NEMA_TEX_MIRROR' wrapping mode,
- *             texture dimensions must be a power of two, otherwise the behavior is undefined. NEMA_FILTER_BL is not supported,
- *             texture filtering is always performed using point sampling.
- * \param palette_baseaddr_phys Address of the lut/palette texture
- * \param palette_format lut/palette texture format
+ * \parambaseaddr_physАдрес индексной текстуры
+ * \param width Ширина индексной текстуры
+ * \param height Высота индексной текстуры
+ * \param format Формат индексной текстуры
+ * \param stride Индекс шага текстуры. Если значение отрицательное, оно рассчитывается внутри компании.
+ * \param mode Режим выбора индексной текстуры.  При использовании режима переноски «NEMA_TEX_REPEAT» или «NEMA_TEX_MIRROR»
+ *             размеры текстуры должны быть степенью двойки, иначе поведение не определено.  NEMA_FILTER_BL не поддерживается,
+ *             фильтрация текстур всегда выполняется с использованием точечной выборки.
+ * \parampalette_baseaddr_physАдрес текстуры lut/палитры
+ * \parampalette_formatформат текстуры lut/палитры
  *
  */
 void nema_bind_lut_tex( uintptr_t baseaddr_phys,
@@ -428,11 +428,11 @@ void nema_bind_lut_tex( uintptr_t baseaddr_phys,
                         uintptr_t palette_baseaddr_phys,
                         nema_tex_format_t palette_format);
 
-/** \brief Bind Depth Buffer
+/** \brief Привязка буфера глубины
  *
- * \param baseaddr_phys Address of the depth buffer, as seen by the GPU
- * \param width Buffer width
- * \param height Buffer hight
+ * \parambaseaddr_physАдрес буфера напряжения, видимый GPU
+ * \param width Ширина буфера
+ * \param высота буфера
  *
  */
 void nema_bind_depth_buffer(uintptr_t baseaddr_phys,
@@ -451,229 +451,229 @@ void nema_set_gradient(float r_init, float g_init, float b_init, float a_init,
                        float a_dx, float a_dy);
 
 // ------------------------------- DRAWING -------------------------------------
-/** \brief Clear destination texture with color
+/** \brief Четкая текстура назначения с цветом
  *
- * \param rgba8888 32-bit RGBA color
- * \see nema_rgba()
+ * \param rgba8888 32-битный цвет RGBA
+ * \см. nema_rgba()
  *
  */
 void nema_clear(uint32_t rgba8888);
 
-/** \brief Clear depth buffer with specified value
+/** \brief Очистить буфер с этим значением
  *
- * \param val Clear value
+ * \param val Очистить значение
  *
  */
 void nema_clear_depth(uint32_t val);
 
-/** \brief Draw a colored line
+/** \brief Нарисуйте цветную линию
  *
- * \param x0 x coordinate at the beginning of the line
- * \param y0 y coordinate at the beginning of the line
- * \param x1 x coordinate at the end of the line
- * \param y1 y coordinate at the end of the line
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x0 координата x в начале строки
+ * \param y0 координата y в начале строки
+ * \param x1 координата x в конце строки
+ * \param y1 координата y в конце строки
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_draw_line(int x0, int y0, int x1, int y1, uint32_t rgba8888);
 
 
-/** \brief Draw a line with width. Apply AA if available
+/** \brief Нарисуйте линию диапазона. ЗаменитеAA, если доступно.
  *
- * \param x0 x coordinate at the beginning of the line
- * \param y0 y coordinate at the beginning of the line
- * \param x1 x coordinate at the end of the line
- * \param y1 y coordinate at the end of the line
- * \param w  line width
- * \param rgba8888 Color to be used
- * \see nema_draw_line()
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x0 координата x в начале строки
+ * \param y0 координата y в начале строки
+ * \param x1 координата x в конце строки
+ * \param y1 координата y в конце строки
+ * \param w ширина линии
+ * \param rgba8888 используемый цвет
+ * \см. nema_draw_line()
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void
 nema_draw_line_aa(float x0, float y0, float x1, float y1, float w,
                   uint32_t rgba8888);
 
-/** \brief Draw a colored circle with 1 pixel width
+/** \brief Нарисуйте цветной круг размером 1 пиксель.
  *
- * \param x x coordinate of the circle's center
- * \param y y coordinate of the circle's center
- * \param r circle's radius
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата центра круга
+ * \param y y координата центра круга
+ * \param r радиус круга
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_draw_circle(int x, int y, int r, uint32_t rgba8888);
 
-/** \brief Draw a colored circle with Anti-Aliasing (if available) and specified width
+/** \brief Нарисуйте цветной круг со сглаживанием (если это возможно) и заданной величиной.
  *
- * \param x x coordinate of the circle's center
- * \param y y coordinate of the circle's center
- * \param r circle's radius
- * \param w pencil width
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата центра круга
+ * \param y y координата центра круга
+ * \param r радиус круга
+ * \param w карандаш
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_draw_circle_aa(float x, float y, float r, float w, uint32_t rgba8888);
 
-/** \brief Draw a colored rectangle with rounded edges
+/** \brief Нарисуйте цветной контур с закругленными краями.
  *
- * \param x0 x coordinate of the upper left vertex of the rectangle
- * \param y0 y coordinate at the upper left vertex of the rectangle
- * \param w width of the rectangle
- * \param h height of the rectangle
- * \param r corner radius
- * \param rgba8888
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x0 x координата верхних левых вершин вершины
+ * \param y0 Координата y на верхней левой вершине
+ * \param w ширина стороны
+ * \param h высота стороны
+ * \param r радиус угла
+ * \параметр rgba8888
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_draw_rounded_rect(int x0, int y0, int w, int h, int r, uint32_t rgba8888);
 
-/** \brief Draw a colored rectangle
+/** \brief Нарисуйте цветной контур
  *
- * \param x x coordinate of the upper left vertex of the rectangle
- * \param y y coordinate at the upper left vertex of the rectangle
- * \param w width of the rectangle
- * \param h height of the rectangle
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата верхних левых вершин показана
+ * \param y y координата на верхней левой вершине
+ * \param w ширина стороны
+ * \param h высота стороны
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_draw_rect(int x, int y, int w, int h, uint32_t rgba8888);
 
-/** \brief Fill a circle with color
+/** \brief Залейте круг цветом
  *
- * \param x x coordinate of the circle's center
- * \param y y coordinate of the circle's center
- * \param r circle's radius
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата центра круга
+ * \param y y координата центра круга
+ * \param r радиус круга
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_circle(int x, int y, int r, uint32_t rgba8888);
 
-/** \brief Fill a circle with color, use Anti-Aliasing if available
+/** \brief Залейте круг цвета, воспользуйтесь поглаживанием, если оно доступно.
  *
- * \param x x coordinate of the circle's center
- * \param y y coordinate of the circle's center
- * \param r circle's radius
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата центра круга
+ * \param y y координата центра круга
+ * \param r радиус круга
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_circle_aa(float x, float y, float r, uint32_t rgba8888);
 
-/** \brief Fill a triangle with color
+/** \brief Залейте треугольник цветом
  *
- * \param x0 x coordinate at the first vertex of the triangle
- * \param y0 y coordinate at the first vertex of the triangle
- * \param x1 x coordinate at the second vertex of the triangle
- * \param y1 y coordinate at the second vertex of the triangle
- * \param x2 x coordinate at the third vertex of the triangle
- * \param y2 y coordinate at the third vertex of the triangle
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
+ * \param x0 Координата x в первой вершине треугольника
+ * \param y0 Координата y в первой вершине треугольника
+ * \param x1 Координата x на вершине второго треугольника
+ * \param y1 Координата y во второй вершине треугольника
+ * \param x2 Координата x в вершине треугольника
+ * \param y2 Координата y в вершине треугольника
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
  *
  */
 void nema_fill_triangle(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t rgba8888);
 
-/** \brief Fill a rectangle with rounded edges with color
+/** \brief Залейте цвет контуром с закругленными краями
  *
- * \param x0 x coordinate of the upper left vertex of the rectangle
- * \param y0 y coordinate at the upper left vertex of the rectangle
- * \param w width of the rectangle
- * \param h height of the rectangle
- * \param r corner radius
- * \param rgba8888
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x0 x координата верхних левых вершин вершины
+ * \param y0 Координата y на верхней левой вершине
+ * \param w ширина стороны
+ * \param h высота стороны
+ * \param r радиус угла
+ * \параметр rgba8888
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_rounded_rect(int x0, int y0, int w, int h, int r, uint32_t rgba8888);
 
-/** \brief Fill a rectangle with color
+/** \brief Залейте буквенный цвет
  *
- * \param x x coordinate of the upper left vertex of the rectangle
- * \param y y coordinate at the upper left vertex of the rectangle
- * \param w width of the rectangle
- * \param h height of the rectangle
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата верхних левых вершин показана
+ * \param y y координата на верхней левой вершине
+ * \param w ширина стороны
+ * \param h высота стороны
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_rect(int x, int y, int w, int h, uint32_t rgba8888);
 
-/** \brief Fill a quadrilateral with color
+/** \brief Залейте четырехцветный цвет
  *
- * \param x0 x coordinate at the first vertex of the quadrilateral
- * \param y0 y coordinate at the first vertex of the quadrilateral
- * \param x1 x coordinate at the second vertex of the quadrilateral
- * \param y1 y coordinate at the second vertex of the quadrilateral
- * \param x2 x coordinate at the third vertex of the quadrilateral
- * \param y2 y coordinate at the third vertex of the quadrilateral
- * \param x3 x coordinate at the fourth vertex of the quadrilateral
- * \param y3 y coordinate at the fourth vertex of the quadrilateral
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x0 Координата x в первой вершине четырехугольника
+ * \param y0 Координата y в первой вершине четырёхугольника
+ * \param x1 Координата x на вершине второго четырехугольника
+ * \param y1 Координата y на второй вершине четырёхугольника
+ * \param x2 Координата x в вершине четырехугольника
+ * \param y2 Координата y на вершине четырехугольника
+ * \param x3 Координата x в четвертой вершине четырехугольника
+ * \param y3 Координата y на четвертой вершине четырёхугольника
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_quad(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t rgba8888);
 
 
-/** \brief Fill a rectangle with color (float coordinates)
+/** \brief Залейте буквенный цвет (плавающие координаты)
  *
- * \param x x coordinate of the upper left vertex of the rectangle
- * \param y y coordinate at the upper left vertex of the rectangle
- * \param w width of the rectangle
- * \param h height of the rectangle
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x x координата верхних левых вершин показана
+ * \param y y координата на верхней левой вершине
+ * \param w ширина стороны
+ * \param h высота стороны
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_rect_f(float x, float y, float w, float h, uint32_t rgba8888);
 
 
-/** \brief Fill a quadrilateral with color (float coordinates)
+/** \brief Заливка четырёхугольника цвета (плавающие координаты)
  *
- * \param x0 x coordinate at the first vertex of the quadrilateral
- * \param y0 y coordinate at the first vertex of the quadrilateral
- * \param x1 x coordinate at the second vertex of the quadrilateral
- * \param y1 y coordinate at the second vertex of the quadrilateral
- * \param x2 x coordinate at the third vertex of the quadrilateral
- * \param y2 y coordinate at the third vertex of the quadrilateral
- * \param x3 x coordinate at the fourth vertex of the quadrilateral
- * \param y3 y coordinate at the fourth vertex of the quadrilateral
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
- * \see nema_rgba()
+ * \param x0 Координата x в первой вершине четырехугольника
+ * \param y0 Координата y в первой вершине четырёхугольника
+ * \param x1 Координата x на вершине второго четырехугольника
+ * \param y1 Координата y на второй вершине четырёхугольника
+ * \param x2 Координата x в вершине четырехугольника
+ * \param y2 Координата y на вершине четырехугольника
+ * \param x3 Координата x в четвертой вершине четырехугольника
+ * \param y3 Координата y на четвертой вершине четырёхугольника
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
+ * \см. nema_rgba()
  *
  */
 void nema_fill_quad_f(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, uint32_t rgba8888);
 
 
-/** \brief Fill a triangle with color (float coordinates)
+/** \brief Залейте треугольник цветом (плавающие координаты)
  *
- * \param x0 x coordinate at the first vertex of the triangle
- * \param y0 y coordinate at the first vertex of the triangle
- * \param x1 x coordinate at the second vertex of the triangle
- * \param y1 y coordinate at the second vertex of the triangle
- * \param x2 x coordinate at the third vertex of the triangle
- * \param y2 y coordinate at the third vertex of the triangle
- * \param rgba8888 Color to be used
- * \see nema_set_blend_fill()
+ * \param x0 Координата x в первой вершине треугольника
+ * \param y0 Координата y в первой вершине треугольника
+ * \param x1 Координата x на вершине второго треугольника
+ * \param y1 Координата y во второй вершине треугольника
+ * \param x2 Координата x в вершине треугольника
+ * \param y2 Координата y в вершине треугольника
+ * \param rgba8888 используемый цвет
+ * \см. nema_set_blend_fill()
  *
  */
 void nema_fill_triangle_f(float x0, float y0, float x1, float y1, float x2, float y2, uint32_t rgba8888);
@@ -681,113 +681,113 @@ void nema_fill_triangle_f(float x0, float y0, float x1, float y1, float x2, floa
 
 // ------------------------------- BLITTING ------------------------------------
 
-/** \brief Blit source texture to destination texture
+/** \brief Перенос исходной текстуры в назначении текстуры
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \see nema_set_blend_fill()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \см. nema_set_blend_fill()
  *
  */
 void nema_blit (int x, int y);
 
 
-/** \brief Blit source texture to destination texture with rounded corners
+/** \brief Перенос исходной текстуры в текстуре со скругленными углами
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param r destination corner radius
- * \see nema_set_blend_fill()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param r радиус угла отклонения
+ * \см. nema_set_blend_fill()
  *
  */
 void nema_blit_rounded (int x, int y, int r);
 
-/** \brief Blit source texture to destination's specified rectangle (crop or wrap when needed)
+/** \brief Преобразование исходной текстуры в указанный контур (обрезка или перенос при необходимости)
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param w destination width
- * \param h destination height
- * \see nema_set_blend_blit()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param w ширина назначения
+ * \param h высота назначения
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_rect (int x, int y, int w, int h);
 
-/** \brief Blit part of a source texture to destination's specified rectangle (crop or wrap when needed)
+/** \brief Переместите часть исходной текстуры в указанный контур (скройте или перенесите при необходимости)
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param w destination width
- * \param h destination height
- * \param x source x coordinate
- * \param y source y coordinate
- * \see nema_blit_subrect()
- * \see nema_set_blend_blit()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param w ширина назначения
+ * \param h высота назначения
+ * \param x источник x координата
+ * \param y источник y координата
+ * \см. nema_blit_subrect()
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_subrect(int dst_x, int dst_y, int w, int h, int src_x, int src_y);
 
-/** \brief Blit source texture to destination. Fit (scale) texture to specified rectangle.
+/** \brief Перенесите исходную текстуру в место назначения. Подогнать (масштабировать) текстуру к указанному контуру.
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param w destination width
- * \param h destination height
- * \see nema_set_blend_blit()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param w ширина назначения
+ * \param h высота назначения
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_rect_fit(int x, int y, int w, int h);
 
 
-/** \brief Blit part of source texture to destination. Fit (scale) texture to specified rectangle.
+/** \brief Перенесите часть исходной текстуры в место назначения. Подогнать (масштабировать) текстуру к указанному контуру.
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param w destination width
- * \param h destination height
- * \param x source x coordinate
- * \param y source y coordinate
- * \param w source width
- * \param h source height
- * \see nema_blit_rect_fit()
- * \see nema_set_blend_blit()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param w ширина назначения
+ * \param h высота назначения
+ * \param x источник x координата
+ * \param y источник y координата
+ * \param w исходная ширина
+ * \param h высота источника
+ * \см. nema_blit_rect_fit()
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_subrect_fit( int dst_x, int dst_y, int dst_w, int dst_h,
                             int src_x, int src_y, int src_w, int src_h);
 
-/** \brief Rotate around pivot point and Blit source texture.
+/** \brief Вращение вокруг точек поворота и исходной текстуры Blit.
  *
- * \param cx destination rotation center x coordinate
- * \param cy destination rotation center y coordinate
- * \param px source pivot point x coordinate
- * \param py source pivot point y coordinate
- * \param degrees_cw degrees of clockwise rotation in range [0, 360]
- * \see nema_set_blend_blit()
+ * \param cx координата центра пункта назначения x
+ * \param cy координата центра пункта назначения y
+ * \param px исходная точка поворота x координата
+ * \param py исходная точка поворота координаты y
+ * \paramdegrees_cwградусы включения по часовой стрелке в отдельности [0, 360]
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_rotate_pivot( float cx, float cy,
                              float px, float py, float degrees_cw );
 
-/** \brief Rotate and Blit source texture to destination.
+/** \brief Верните и поместите исходную текстуру в место назначения.
  *
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param rotation Rotation to be done
- * \see nema_set_blend_blit()
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param Ротация требует восстановления поворота
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_rotate(int x, int y, uint32_t rotation);
 
-/** \brief Rotate and Blit partial source texture to destination.
+/** \brief Поворот и блит частичной исходной текстуры в месте назначения.
  *
- * \param sx source upper left x coordinate
- * \param sy source upper left y coordinate
- * \param sw source width of partial region
- * \param sh source height of partial region
- * \param x destination x coordinate
- * \param y destination y coordinate
- * \param rotation Rotation to be done
- * \see nema_set_blend_blit()
+ * \param sx source верхняя левая координата x
+ * \param sy source верхняя левая координата y
+ * \param sw исходная ширина частичной области
+ * \param sh исходная высота частичной области
+ * \param x координаты места назначения x
+ * \param y пункт назначения y координата
+ * \param Ротация требует восстановления поворота
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_rotate_partial(int sx, int sy,
@@ -796,45 +796,45 @@ void nema_blit_rotate_partial(int sx, int sy,
                               uint32_t rotation);
 
 
-/** \brief Blit source texture to destination. Fit texture to specified triangle.
+/** \brief Перенесите исходную текстуру в место назначения. Подогнать текстуру указанному треугольнику.
  *
- * \param dx0 x coordinate at the first vertex of the triangle
- * \param dy0 y coordinate at the first vertex of the triangle
- * \param v0  in [0, 3] indicates the corner of the texture that fits to the first vertex of the triangle
+ * \param dx0 Координата x первой вершины треугольника
+ * \param dy0 координата y первой вершины треугольника
+ * \param v0 в [0, 3] обозначает угол текстуры, соответствующую вершине треугольника.
  *                0 _ _ 1
  *                 |_ _|
  *                3     2
- * \param dx1 x coordinate at the second vertex of the triangle
- * \param dy1 y coordinate at the second vertex of the triangle
- * \param v1  in [0, 3] indicates the corner of the texture that fits to the second vertex of the triangle
- * \param dx2 x coordinate at the third vertex of the triangle
- * \param dy2 y coordinate at the third vertex of the triangle
- * \param v2  in [0, 3] indicates the corner of the texture that fits to the third vertex of the triangle
- * \see nema_set_blend_blit()
+ * \param dx1 Координата x на вершине второго треугольника
+ * \param dy1 Координата у второй вершины треугольника
+ * \param v1 в [0, 3] обозначает угол текстуры, соответствующий второй вершине треугольника.
+ * \param dx2 Координата x в вершине треугольника
+ * \param dy2 Координата и вершина треугольника
+ * \param v2 в [0, 3] обозначает угол текстуры, соответствующие вершине треугольника.
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_tri_fit (float dx0, float dy0, int v0,
                         float dx1, float dy1, int v1,
                         float dx2, float dy2, int v2);
 
-/** \brief Blit a triangular part of the source tecture to a triangular destination area
+/** \brief Преобразовать треугольную часть исходной текстуры в треугольную область назначения.
  *
- * \param dx0 x coordinate at the first vertex of the destination triangle
- * \param dy0 y coordinate at the first vertex of the destination triangle
- * \param dw0 w coordinate at the first vertex of the destination triangle
- * \param dx1 x coordinate at the second vertex of the destination triangle
- * \param dy1 y coordinate at the second vertex of the destination triangle
- * \param dw1 w coordinate at the second vertex of the destination triangle
- * \param dx2 x coordinate at the third vertex of the destination triangle
- * \param dy2 y coordinate at the third vertex of the destination triangle
- * \param dw2 w coordinate at the third vertex of the destination triangle
- * \param sx0 x coordinate at the first vertex of the source triangle
- * \param sy0 y coordinate at the first vertex of the source triangle
- * \param sx1 x coordinate at the second vertex of the source triangle
- * \param sy1 y coordinate at the second vertex of the source triangle
- * \param sx2 x coordinate at the third vertex of the source triangle
- * \param sy2 y coordinate at the third vertex of the source triangle
- * \see nema_set_blend_blit()
+ * \param dx0 Координата x первой в вершине конечного треугольника
+ * \param dy0 координата y первой вершины треугольника назначения
+ * \param dw0 w координата в первой вершине конечного треугольника
+ * \param dx1 Координата x на вершине второго целевого треугольника
+ * \param dy1 Координата и во второй вершине треугольника назначения
+ * \param dw1 координата w на вершине второго треугольника назначения
+ * \param dx2 Координата x в вершине треугольника назначения
+ * \param dy2 Координата и вершина треугольника назначения
+ * \param dw2 координата w в конце вершины треугольника назначения
+ * \param sx0 Координата x первой вершины исходного треугольника
+ * \param sy0 Координата и вершина исходного треугольника
+ * \param sx1 Координата x во второй вершине исходного треугольника
+ * \param sy1 Координата у второй вершины исходного треугольника
+ * \param sx2 Координата x в вершине исходного треугольника
+ * \param sy2 Координата и вершина исходного треугольника
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_tri_uv  (float dx0, float dy0, float dw0,
@@ -845,18 +845,18 @@ void nema_blit_tri_uv  (float dx0, float dy0, float dw0,
                         float sx2, float sy2
                         );
 
-/** \brief Blit source texture to destination. Fit texture to specified quadrilateral.
+/** \brief Перенесите исходную текстуру в место назначения. Подогнать текстуру указанному к четырехугольнику.
  *
- * \param dx0 x coordinate at the first vertex of the quadrilateral
- * \param dy0 y coordinate at the first vertex of the quadrilateral
- * \param dx1 x coordinate at the second vertex of the quadrilateral
- * \param dy1 y coordinate at the second vertex of the quadrilateral
- * \param dx2 x coordinate at the third vertex of the quadrilateral
- * \param dy2 y coordinate at the third vertex of the quadrilateral
- * \param dx3 x coordinate at the fourth vertex of the quadrilateral
- * \param dy3 y coordinate at the fourth vertex of the quadrilateral
- * \see nema_set_blend_blit()
- * \see nema_blit_subrect_quad_fit()
+ * \param dx0 Координата x первой в вершине четырехугольника
+ * \param dy0 координата y первой вершины четырёхугольника
+ * \param dx1 Координата x на вершине второго четырехугольника
+ * \param dy1 координата y на вершине второго четырёхугольника
+ * \param dx2 Координата x в вершине четырехугольника
+ * \param dy2 Координата и вершина четырехугольника
+ * \param dx3 Координата x на четвертой вершине четырехугольника
+ * \param dy3 Координата и на четвертой вершине четырёхугольника
+ * \см. nema_set_blend_blit()
+ * \см. nema_blit_subrect_quad_fit()
  *
  */
 void nema_blit_quad_fit (float dx0, float dy0,
@@ -864,22 +864,22 @@ void nema_blit_quad_fit (float dx0, float dy0,
                          float dx2, float dy2,
                          float dx3, float dy3);
 
-/** \brief Blit source texture to destination. Fit rectangulare area of texture to specified quadrilateral.
+/** \brief Перенесите исходную текстуру в место назначения. Подогнать прямоугольную область текстуры к указанному четырёхугольнику.
  *
- * \param dx0 x coordinate at the first vertex of the quadrilateral
- * \param dy0 y coordinate at the first vertex of the quadrilateral
- * \param dx1 x coordinate at the second vertex of the quadrilateral
- * \param dy1 y coordinate at the second vertex of the quadrilateral
- * \param dx2 x coordinate at the third vertex of the quadrilateral
- * \param dy2 y coordinate at the third vertex of the quadrilateral
- * \param dx3 x coordinate at the fourth vertex of the quadrilateral
- * \param dy3 y coordinate at the fourth vertex of the quadrilateral
- * \param sx x coordinate of the top left corner of the texture's rectangular area to be blitted
- * \param sy y coordinate of the top left corner of the texture's rectangular area to be blitted
- * \param sw width of the texture's rectangular area to be blitted
- * \param sh height of the texture's rectangular area to be blitted
- * \see nema_set_blend_blit()
- * \see nema_blit_quad_fit()
+ * \param dx0 Координата x первой в вершине четырехугольника
+ * \param dy0 координата y первой вершины четырёхугольника
+ * \param dx1 Координата x на вершине второго четырехугольника
+ * \param dy1 координата y на вершине второго четырёхугольника
+ * \param dx2 Координата x в вершине четырехугольника
+ * \param dy2 Координата и вершина четырехугольника
+ * \param dx3 Координата x на четвертой вершине четырехугольника
+ * \param dy3 Координата и на четвертой вершине четырёхугольника
+ * \param sx x координата верхнего левого угла прямоугольной области текстуры, подлежащей копированию
+ * \param sy y координата верхнего левого угла прямоугольной области текстуры, подлежащей копированию
+ * \param sw ширина прямоугольной области текстуры, подлежащей копированию
+ * \param sh высота прямоугольной области текстуры, подлежащей копированию
+ * \см. nema_set_blend_blit()
+ * \см. nema_blit_quad_fit()
  *
  */
 void nema_blit_subrect_quad_fit(float dx0, float dy0,
@@ -889,18 +889,18 @@ void nema_blit_subrect_quad_fit(float dx0, float dy0,
                                 int sx, int sy,
                                 int sw, int sh);
 
-/** \brief Blit source texture to destination. Use the matrix provided by the user.
+/** \brief Перенесите исходную текстуру в место назначения. Используйте матрицу, предоставленную пользователю.
  *
- * \param dx0 x coordinate at the first vertex of the quadrilateral
- * \param dy0 y coordinate at the first vertex of the quadrilateral
- * \param dx1 x coordinate at the second vertex of the quadrilateral
- * \param dy1 y coordinate at the second vertex of the quadrilateral
- * \param dx2 x coordinate at the third vertex of the quadrilateral
- * \param dy2 y coordinate at the third vertex of the quadrilateral
- * \param dx3 x coordinate at the fourth vertex of the quadrilateral
- * \param dy3 y coordinate at the fourth vertex of the quadrilateral
- * \param m 3x3 matrix (screen coordinates to texture coordinates)
- * \see nema_set_blend_blit()
+ * \param dx0 Координата x первой в вершине четырехугольника
+ * \param dy0 координата y первой вершины четырёхугольника
+ * \param dx1 Координата x на вершине второго четырехугольника
+ * \param dy1 координата y на вершине второго четырёхугольника
+ * \param dx2 Координата x в вершине четырехугольника
+ * \param dy2 Координата и вершина четырехугольника
+ * \param dx3 Координата x на четвертой вершине четырехугольника
+ * \param dy3 Координата и на четвертой вершине четырёхугольника
+ * \param m матрица 3x3 (координаты экрана в координатах текстуры)
+ * \см. nema_set_blend_blit()
  *
  */
 void nema_blit_quad_m(float dx0, float dy0,
@@ -911,111 +911,111 @@ void nema_blit_quad_m(float dx0, float dy0,
 
 
 
-/** \brief Enable breakpoints
+/** \brief Включение точек остановки
  *
- * \see nema_brk_disable()
+ * \см. nema_brk_disable()
  *
  */
 void nema_brk_enable(void);
 
-/** \brief Disable breakpoints
+/** \brief Отключить точки остановки
  *
- * \see nema_brk_enable()
+ * \см. nema_brk_enable()
  *
  */
 void nema_brk_disable(void);
 
 
-/** \brief Add a breakpoint to the current Command List
+/** \brief Добавить точку остановки в настоящий список команда
  *
- * \return Breakpoint ID
+ * \return Точка остановки ID
  *
  */
 int  nema_brk_add(void);
 
-/** \brief Add a breakpoint to the current Command List
+/** \brief Добавить точку остановки в настоящий список команда
  *
- * \param brk_id Breakpoint ID to wait for. If zero (0), wait until next Breakpoint
- * \return ID of reached Breakpoint
+ * \param brk_id, которую Точка остановкиID, нужно дождаться. Если ноль (0), дождитесь этой точки остановки.
+ * \returnIDдостигнутой точки остановки
  *
  */
 int  nema_brk_wait(int brk_id);
 
-/** \brief Instruct the GPU to resume execution
+/** \brief УказываемGPUвозобновить выполнение
  *
  *
  */
 void nema_brk_continue(void);
 
-/** \brief Enable external hold signals
+/** \brief Включить внешние сигналы удержания
  *
- * \param hold_id Hold signals to be enabled [0-3]
- * \see nema_ext_hold_disable()
+ * \paramhold_idСигналы удержания должны быть включены [0-3]
+ * \см. nema_ext_hold_disable()
  *
  */
 void nema_ext_hold_enable(uint32_t hold_id);
 
-/** \brief Disable external hold signals
+/** \brief Отключить внешние сигналы удержания
  *
- * \param hold_id Hold signals to be disabled [0-3]
- * \see nema_ext_hold_enable()
+ * \paramhold_idСигналы удержания должны быть отключены [0-3]
+ * \см. nema_ext_hold_enable()
  *
  */
 void nema_ext_hold_disable(uint32_t hold_id);
 
-/** \brief Enable Interrupt Request when GPU reaches hold point
+/** \brief Включите блокировку отключения, когдаGPUдостигает точки удержания
  *
- * \param hold_id Hold signals' IRQ to be enabled [0-3]
- * \see nema_ext_hold_disable()
+ * \paramhold_idУдержание сигналовIRQдолжно быть включено [0-3]
+ * \см. nema_ext_hold_disable()
  *
  */
 void nema_ext_hold_irq_enable(uint32_t hold_id);
 
-/** \brief Disable external hold signals
+/** \brief Отключить внешние сигналы удержания
  *
- * \param hold_id Hold signals' IRQ to be disabled [0-3]
- * \see nema_ext_hold_enable()
+ * \paramhold_idУдержание сигналовIRQдля отключения [0-3]
+ * \см. nema_ext_hold_enable()
  *
  */
 void nema_ext_hold_irq_disable(uint32_t hold_id);
 
 
-/** \brief Assert hold signals internally via a Command List
+/** \brief Внутреннее подтверждение сигналов удержания через команду списка
  *
- * \param hold_id Hold signal to be asserted
- * \param stop If not zero, force Command List Processor to wait for FLAG to be deasserted
- * \see nema_ext_hold_deassert()
+ * \paramhold_idДолжен быть установлен сигнал удержания
+ * \param stop Если не ноль, лучший процессор таблицы команда ожидания подтверждения подтверждения FLAG
+ * \см. nema_ext_hold_deassert()
  *
  */
 void nema_ext_hold_assert(uint32_t hold_id, int stop);
 
-/** \brief Dessert hold signals internally via a Command List
+/** \brief Десерт удерживает внутренние сигналы через список команд
  *
- * \param hold_id Hold signal to be deasserted
- * \see nema_ext_hold_assert()
+ * \paramhold_idСигнал удержания должен быть отключен
+ * \см. nema_ext_hold_assert()
  *
  */
 void nema_ext_hold_deassert(uint32_t hold_id);
 
-/** \brief Assert hold signals from the CPU (no Command List)
+/** \brief Подтвердить сигналы удержания отCPU(без списка команд)
  *
- * \param hold_id Hold signal to be asserted
- * \see nema_ext_hold_deassert()
+ * \paramhold_idДолжен быть установлен сигнал удержания
+ * \см. nema_ext_hold_deassert()
  *
  */
 void nema_ext_hold_assert_imm(uint32_t hold_id);
 
-/** \brief Dessert hold signals from the CPU (no Command List)
+/** \brief Сигналы удержания десерта отCPU(без списка команд)
  *
- * \param hold_id Hold signal to be deasserted
- * \see nema_ext_hold_assert()
+ * \paramhold_idСигнал удержания должен быть отключен
+ * \см. nema_ext_hold_assert()
  *
  */
 void nema_ext_hold_deassert_imm(uint32_t hold_id);
 
-/** \brief Check for which architeture is the library compiled
+/** \brief проверка, для какой конструкции скомпилирована библиотека
  *
- * \return Returns string with the architecture name
+ * \return Возвращает текст с названием конструкции.
  *
  */
 const char* nema_get_sw_device_name(void);

@@ -3,32 +3,32 @@
 #include "../lvgl.h"
 #include "../../src/misc/lv_ll.h"
 #include "unity/unity.h"
-/* Test fixture */
+/* Тестовое приспособление */
 static lv_ll_t test_ll;
 
 #define NODE_SIZE sizeof(int32_t)
 
 void setUp(void)
 {
-    /* Initialize linked list before each test */
+    /* Инициализируйте связанный список перед каждым тестом */
     lv_ll_init(&test_ll, NODE_SIZE);
 }
 
 void tearDown(void)
 {
-    /* Clean up linked list after each test */
+    /* Очищайте связанный список после каждого теста */
     lv_ll_clear(&test_ll);
 }
 
-/* Test cases */
+/* Тестовые случаи */
 void test_ll_init(void)
 {
     uint32_t node_size = NODE_SIZE;
 #ifdef LV_ARCH_64
-    /*Round the size up to 8*/
+    /*Округляем размер до 8.*/
     node_size = (node_size + 7) & (~0x7);
 #else
-    /*Round the size up to 4*/
+    /*Округляем размер до 4.*/
     node_size = (node_size + 3) & (~0x3);
 #endif
     TEST_ASSERT_NULL(test_ll.head);
@@ -43,7 +43,7 @@ void test_ll_ins_head(void)
     TEST_ASSERT_EQUAL_PTR(node, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(node, test_ll.tail);
 
-    /* Insert second node */
+    /* Вставить второй узел */
     int32_t * node2 = lv_ll_ins_head(&test_ll);
     TEST_ASSERT_EQUAL_PTR(node2, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(node, test_ll.tail);
@@ -56,7 +56,7 @@ void test_ll_ins_tail(void)
     TEST_ASSERT_EQUAL_PTR(node, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(node, test_ll.tail);
 
-    /* Insert second node */
+    /* Вставить второй узел */
     int32_t * node2 = lv_ll_ins_tail(&test_ll);
     TEST_ASSERT_EQUAL_PTR(node, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(node2, test_ll.tail);
@@ -67,7 +67,7 @@ void test_ll_ins_prev(void)
     int32_t * head = lv_ll_ins_head(&test_ll);
     int32_t * tail = lv_ll_ins_tail(&test_ll);
 
-    /* Insert before tail */
+    /* Вставить перед хвостом */
     int32_t * middle = lv_ll_ins_prev(&test_ll, tail);
     TEST_ASSERT_EQUAL_PTR(head, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(tail, test_ll.tail);
@@ -122,7 +122,7 @@ void test_ll_move_before(void)
     int32_t * node2 = lv_ll_ins_tail(&test_ll);
     int32_t * node3 = lv_ll_ins_tail(&test_ll);
 
-    /* Move node3 before node2 */
+    /* Переместить узел 3 перед узлом 2. */
     lv_ll_move_before(&test_ll, node3, node2);
     TEST_ASSERT_EQUAL_PTR(node1, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(node2, test_ll.tail);
@@ -171,9 +171,9 @@ void test_ll_is_empty(void)
 
 void test_ll_node_alignment(void)
 {
-    /* Test with different node sizes */
+    /* Тестирование с узлами разных размеров */
     lv_ll_t small_list;
-    lv_ll_init(&small_list, 1); /* 1 byte node */
+    lv_ll_init(&small_list, 1); /* 1-байтовый узел */
 
 #ifdef LV_ARCH_64
     TEST_ASSERT_EQUAL(8, small_list.n_size);
@@ -182,7 +182,7 @@ void test_ll_node_alignment(void)
 #endif
 
     lv_ll_t large_list;
-    lv_ll_init(&large_list, 100); /* 100 byte node */
+    lv_ll_init(&large_list, 100); /* 100-байтовый узел */
 
 #ifdef LV_ARCH_64
     TEST_ASSERT_EQUAL(104, large_list.n_size);
@@ -193,12 +193,12 @@ void test_ll_node_alignment(void)
 
 void test_ll_node_pointer_operations(void)
 {
-    /* Test node pointer set/get operations */
+    /* Операции установки/получения указателя тестового узла */
     int32_t * node1 = lv_ll_ins_head(&test_ll);
     int32_t * node2 = lv_ll_ins_tail(&test_ll);
     int32_t * node3 = lv_ll_ins_tail(&test_ll);
 
-    /* Verify initial links */
+    /* Проверьте первоначальные ссылки */
     TEST_ASSERT_EQUAL_PTR(node2, lv_ll_get_next(&test_ll, node1));
     TEST_ASSERT_EQUAL_PTR(node3, lv_ll_get_next(&test_ll, node2));
     TEST_ASSERT_EQUAL_PTR(node1, lv_ll_get_prev(&test_ll, node2));
@@ -207,24 +207,24 @@ void test_ll_node_pointer_operations(void)
 
 void test_ll_move_before_edge_cases(void)
 {
-    /* Test moving nodes in various positions */
+    /* Тестирование движущихся узлов в различных положениях */
     int32_t * node1 = lv_ll_ins_head(&test_ll);
     int32_t * node2 = lv_ll_ins_tail(&test_ll);
     int32_t * node3 = lv_ll_ins_tail(&test_ll);
 
-    /* Move middle node before head */
+    /* Переместить средний узел перед головой */
     lv_ll_move_before(&test_ll, node2, node1);
     TEST_ASSERT_EQUAL_PTR(node2, test_ll.head);
     TEST_ASSERT_EQUAL_PTR(node1, lv_ll_get_next(&test_ll, node2));
 
-    /* Move tail before NULL (should become new tail) */
+    /* Переместить хвост перед NULL (должен стать новым хвостом) */
     lv_ll_move_before(&test_ll, node3, NULL);
     TEST_ASSERT_EQUAL_PTR(node3, test_ll.tail);
 }
 
 void test_ll_chg_list_middle_node(void)
 {
-    /* Test changing list with middle node */
+    /* Тестовый список изменений со средним узлом */
     lv_ll_t dest_ll;
     lv_ll_init(&dest_ll, NODE_SIZE);
 
@@ -232,7 +232,7 @@ void test_ll_chg_list_middle_node(void)
     int32_t * node2 = lv_ll_ins_tail(&test_ll);
     int32_t * node3 = lv_ll_ins_tail(&test_ll);
 
-    /* Move middle node to new list */
+    /* Переместить средний узел в новый список */
     lv_ll_chg_list(&test_ll, &dest_ll, node2, false);
 
     TEST_ASSERT_EQUAL_PTR(node1, test_ll.head);
@@ -245,9 +245,9 @@ void test_ll_chg_list_middle_node(void)
 
 void test_ll_alignment_edge_cases(void)
 {
-    /* Test node size alignment edge cases */
+    /* Краевые случаи выравнивания размера тестового узла */
 #ifdef LV_ARCH_64
-    /* Test sizes just below and above 8-byte boundary */
+    /* Размеры тестов чуть ниже и выше 8-байтовой границы */
     lv_ll_t list7, list8, list9;
     lv_ll_init(&list7, 7);
     lv_ll_init(&list8, 8);
@@ -257,7 +257,7 @@ void test_ll_alignment_edge_cases(void)
     TEST_ASSERT_EQUAL(8, list8.n_size);
     TEST_ASSERT_EQUAL(16, list9.n_size);
 #else
-    /* Test sizes just below and above 4-byte boundary */
+    /* Размеры тестов чуть ниже и выше 4-байтовой границы */
     lv_ll_t list3, list4, list5;
     lv_ll_init(&list3, 3);
     lv_ll_init(&list4, 4);
@@ -271,11 +271,11 @@ void test_ll_alignment_edge_cases(void)
 
 void test_ll_clear_empty_list(void)
 {
-    /* Clear an empty list */
+    /* Очистить пустой список */
     lv_ll_clear(&test_ll);
     TEST_ASSERT_TRUE(lv_ll_is_empty(&test_ll));
 
-    /* Clear custom with empty list */
+    /* Очистить настройки с пустым списком */
     lv_ll_clear_custom(&test_ll, NULL);
     TEST_ASSERT_TRUE(lv_ll_is_empty(&test_ll));
 }
@@ -285,11 +285,11 @@ void test_ll_chg_list_tail_node(void)
     lv_ll_t dest_ll;
     lv_ll_init(&dest_ll, NODE_SIZE);
 
-    /* Create a list with 2 nodes */
+    /* Создайте список с двумя узлами */
     int32_t * node1 = lv_ll_ins_head(&test_ll);
     int32_t * node2 = lv_ll_ins_tail(&test_ll);
 
-    /* Move tail node to new list */
+    /* Переместить хвостовой узел в новый список */
     lv_ll_chg_list(&test_ll, &dest_ll, node2, false);
 
     TEST_ASSERT_EQUAL_PTR(node1, test_ll.head);
@@ -312,7 +312,7 @@ void test_ll_chg_list_tail_node(void)
 
 void test_ll_get_len_empty_list(void)
 {
-    /* Test length of empty list */
+    /* Длина теста пустого списка */
     TEST_ASSERT_EQUAL(0, lv_ll_get_len(&test_ll));
 }
 

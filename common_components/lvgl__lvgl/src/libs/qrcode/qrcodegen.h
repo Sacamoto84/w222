@@ -1,24 +1,24 @@
 /*
- * QR Code generator library (C)
+ * QR Библиотека генератора кода (C)
  *
  * Copyright (c) Project Nayuki. (MIT License)
  * https://www.nayuki.io/page/qr-code-generator-library
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию
+ * данное программное обеспечение и связанные с ним файлы документации («Программное обеспечение») для решения
+ * Программное обеспечение без ограничений, включая, помимо прочего, права на
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
+ * при соблюдении следующих условий:
  * - The above copyright notice and this permission notice shall be included in
- *   all copies or substantial portions of the Software.
+ *   все копии или существенные части Программного обеспечения.
  * - The Software is provided "as is", without warranty of any kind, express or
- *   implied, including but not limited to the warranties of merchantability,
- *   fitness for a particular purpose and noninfringement. In no event shall the
- *   authors or copyright holders be liable for any claim, damages or other
- *   liability, whether in an action of contract, tort or otherwise, arising from,
- *   out of or in connection with the Software or the use or other dealings in the
- *   Software.
+ *   подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *   пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае
+ *   авторы или правообладатели несут ответственность за любые претензии, ущерб или другие
+ *   ответственность, будь то по договору, правонарушению или иным образом, вытекающая из:
+ *   вне или в связи с Программным обеспечением или использованием или другими сделками в
+ *   Программное обеспечение.
  */
 
 #pragma once
@@ -37,44 +37,44 @@ extern "C" {
 
 
 /*
- * This library creates QR Code symbols, which is a type of two-dimension barcode.
- * Invented by Denso Wave and described in the ISO/IEC 18004 standard.
- * A QR Code structure is an immutable square grid of black and white cells.
- * The library provides functions to create a QR Code from text or binary data.
- * The library covers the QR Code Model 2 specification, supporting all versions (sizes)
- * from 1 to 40, all 4 error correction levels, and 4 character encoding modes.
+ * Эта библиотека создает символы кода QR, которые представляют собой тип двумерного штрих-кода.
+ * Изобретён Denso Wave и описан в стандарте ISO/IEC 18004.
+ * Структура кода QR представляет собой неизменяемую квадратную сетку из черных и белых ячеек.
+ * Библиотека предоставляет функции для создания кода QR из текстовых или двоичных данных.
+ * Библиотека охватывает спецификацию QR Code Model 2, поддерживая все версии (размеры).
+ * от 1 до 40, все 4 уровня исправления ошибок и 4 режима кодировки символов.
  *
- * Ways to create a QR Code object:
+ * Способы создания объекта кода QR:
  * - High level: Take the payload data and call qrcodegen_encodeText() or qrcodegen_encodeBinary().
  * - Low level: Custom-make the list of segments and call
- *   qrcodegen_encodeSegments() or qrcodegen_encodeSegmentsAdvanced().
- * (Note that all ways require supplying the desired error correction level and various byte buffers.)
+ *   qrcodegen_encodeSegments() или qrcodegen_encodeSegmentsAdvanced().
+ * (Обратите внимание, что все способы требуют предоставления желаемого уровня исправления ошибок и различных байтовых буферов.)
  */
 
 
-/*---- Enum and struct types----*/
+/*---- Типы перечислений и структур ----*/
 
 /*
- * The error correction level in a QR Code symbol.
+ * Уровень исправления ошибок в символе кода QR.
  */
 enum qrcodegen_Ecc {
-    // Must be declared in ascending order of error protection
-    // so that an internal qrcodegen function works properly
-    qrcodegen_Ecc_LOW = 0,   // The QR Code can tolerate about  7% erroneous codewords
-    qrcodegen_Ecc_MEDIUM,    // The QR Code can tolerate about 15% erroneous codewords
-    qrcodegen_Ecc_QUARTILE,  // The QR Code can tolerate about 25% erroneous codewords
-    qrcodegen_Ecc_HIGH,      // The QR Code can tolerate about 30% erroneous codewords
+    // Должно быть объявлено в порядке возрастания защиты от ошибок.
+    // чтобы внутренняя функция qrcodegen работала правильно
+    qrcodegen_Ecc_LOW = 0,   // Код QR допускает около 7% ошибочных кодовых слов.
+    qrcodegen_Ecc_MEDIUM,    // Код QR допускает около 15% ошибочных кодовых слов.
+    qrcodegen_Ecc_QUARTILE,  // Код QR допускает около 25% ошибочных кодовых слов.
+    qrcodegen_Ecc_HIGH,      // Код QR допускает около 30% ошибочных кодовых слов.
 };
 
 
 /*
- * The mask pattern used in a QR Code symbol.
+ * Шаблон маски, используемый в символе кода QR.
  */
 enum qrcodegen_Mask {
-    // A special value to tell the QR Code encoder to
-    // automatically select an appropriate mask pattern
+    // Специальное значение, которое нужно указать кодировщику кода QR.
+    // автоматически выбирает подходящий шаблон маски
     qrcodegen_Mask_AUTO = -1,
-    // The eight actual mask patterns
+    // Восемь реальных шаблонов масок
     qrcodegen_Mask_0 = 0,
     qrcodegen_Mask_1,
     qrcodegen_Mask_2,
@@ -87,7 +87,7 @@ enum qrcodegen_Mask {
 
 
 /*
- * Describes how a segment's data bits are interpreted.
+ * Описывает, как интерпретируются биты данных сегмента.
  */
 enum qrcodegen_Mode {
     qrcodegen_Mode_NUMERIC      = 0x1,
@@ -99,221 +99,221 @@ enum qrcodegen_Mode {
 
 
 /*
- * A segment of character/binary/control data in a QR Code symbol.
- * The mid-level way to create a segment is to take the payload data
- * and call a factory function such as qrcodegen_makeNumeric().
- * The low-level way to create a segment is to custom-make the bit buffer
- * and initialize a qrcodegen_Segment struct with appropriate values.
- * Even in the most favorable conditions, a QR Code can only hold 7089 characters of data.
- * Any segment longer than this is meaningless for the purpose of generating QR Codes.
- * Moreover, the maximum allowed bit length is 32767 because
- * the largest QR Code (version 40) has 31329 modules.
+ * Сегмент символьных/двоичных/управляющих данных в символе кода QR.
+ * Промежуточный способ создания сегмента — взять данные полезной нагрузки.
+ * и вызвать фабричную функцию, например qrcodegen_makeNumeric().
+ * Низкоуровневый способ создания сегмента — создание битового буфера по индивидуальному заказу.
+ * и инициализируйте структуру qrcodegen_Segment соответствующими значениями.
+ * Даже в самых благоприятных условиях код QR может содержать только 7089 символов данных.
+ * Любой сегмент длиннее этого значения не имеет смысла для генерации кодов QR.
+ * Более того, максимально допустимая длина бит равна 32767, поскольку
+ * самый большой код QR (версия 40) имеет 31329 модулей.
  */
 struct qrcodegen_Segment {
-    // The mode indicator of this segment.
+    // Индикатор режима этого сегмента.
     enum qrcodegen_Mode mode;
 
-    // The length of this segment's unencoded data. Measured in characters for
-    // numeric/alphanumeric/kanji mode, bytes for byte mode, and 0 for ECI mode.
-    // Always zero or positive. Not the same as the data's bit length.
+    // Длина незакодированных данных этого сегмента. Измеряется в символах для
+    // числовой/буквенно-цифровой/кандзи режим, байты для байтового режима и 0 для режима ECI.
+    // Всегда ноль или положительный. Не то же самое, что битовая длина данных.
     int numChars;
 
-    // The data bits of this segment, packed in bitwise big endian.
-    // Can be null if the bit length is zero.
+    // Биты данных этого сегмента упакованы с побитовым обратным порядком байтов.
+    // Может быть нулевым, если длина бита равна нулю.
     uint8_t * data;
 
-    // The number of valid data bits used in the buffer. Requires
-    // 0 <= bitLength <= 32767, and bitLength <= (capacity of data array) * 8.
-    // The character count (numChars) must agree with the mode and the bit buffer length.
+    // Количество действительных битов данных, используемых в буфере. Требуется
+    // 0 <= bitLength <= 32767 и bitLength <= (емкость массива данных) * 8.
+    // Количество символов (numChars) должно соответствовать режиму и длине битового буфера.
     int bitLength;
 };
 
 
 
-/*---- Macro constants and functions ----*/
+/*---- Макрос-константы и функции ----*/
 
-#define qrcodegen_VERSION_MIN   1  // The minimum version number supported in the QR Code Model 2 standard
-#define qrcodegen_VERSION_MAX  40  // The maximum version number supported in the QR Code Model 2 standard
+#define qrcodegen_VERSION_MIN   1  // Минимальный номер версии, поддерживаемый стандартом QR Code Model 2.
+#define qrcodegen_VERSION_MAX  40  // Максимальный номер версии, поддерживаемый стандартом QR Code Model 2.
 
-// Calculates the number of bytes needed to store any QR Code up to and including the given version number,
-// as a compile-time constant. For example, 'uint8_t buffer[qrcodegen_BUFFER_LEN_FOR_VERSION(25)];'
-// can store any single QR Code from version 1 to 25 (inclusive). The result fits in an int (or int16).
-// Requires qrcodegen_VERSION_MIN <= n <= qrcodegen_VERSION_MAX.
+// Вычисляет количество байтов, необходимых для хранения любого кода QR до заданного номера версии включительно.
+// как константа времени компиляции. Например, 'uint8_t буфер[ qrcodegen_BUFFER_LEN_FOR_VERSION (25)];'
+// может хранить любой одиночный код QR от версии 1 до 25 (включительно). Результат соответствует int (или int16).
+// Требуется qrcodegen_VERSION_MIN <= n <= qrcodegen_VERSION_MAX .
 #define qrcodegen_BUFFER_LEN_FOR_VERSION(n)  ((((n) * 4 + 17) * ((n) * 4 + 17) + 7) / 8 + 1)
 
-// The worst-case number of bytes needed to store one QR Code, up to and including
-// version 40. This value equals 3918, which is just under 4 kilobytes.
-// Use this more convenient value to avoid calculating tighter memory bounds for buffers.
+// Наихудшее количество байтов, необходимое для хранения одного кода QR, до
+// версия 40. Это значение равно 3918, что чуть меньше 4 килобайт.
+// Используйте это более удобное значение, чтобы избежать расчета более жестких границ памяти для буферов.
 #define qrcodegen_BUFFER_LEN_MAX  qrcodegen_BUFFER_LEN_FOR_VERSION(qrcodegen_VERSION_MAX)
 
 
 
-/*---- Functions (high level) to generate QR Codes ----*/
+/*---- Функции (высокого уровня) для генерации кодов QR ----*/
 
 /*
- * Encodes the given text string to a QR Code, returning true if encoding succeeded.
- * If the data is too long to fit in any version in the given range
- * at the given ECC level, then false is returned.
+ * Кодирует данную текстовую строку в код QR, возвращая true, если кодирование прошло успешно.
+ * Если данные слишком длинные, чтобы поместиться в любую версию в заданном диапазоне.
+ * на заданном уровне ECC возвращается false.
  * - The input text must be encoded in UTF-8 and contain no NULs.
  * - The variables ecl and mask must correspond to enum constant values.
  * - Requires 1 <= minVersion <= maxVersion <= 40.
  * - The arrays tempBuffer and qrcode must each have a length
- *   of at least qrcodegen_BUFFER_LEN_FOR_VERSION(maxVersion).
+ *   не ниже qrcodegen_BUFFER_LEN_FOR_VERSION (maxVersion).
  * - After the function returns, tempBuffer contains no useful data.
  * - If successful, the resulting QR Code may use numeric,
- *   alphanumeric, or byte mode to encode the text.
+ *   буквенно-цифровой или байтовый режим кодирования текста.
  * - In the most optimistic case, a QR Code at version 40 with low ECC
- *   can hold any UTF-8 string up to 2953 bytes, or any alphanumeric string
- *   up to 4296 characters, or any digit string up to 7089 characters.
- *   These numbers represent the hard upper limit of the QR Code standard.
+ *   может содержать любую строку UTF -8 длиной до 2953 байт или любую буквенно-цифровую строку.
+ *   до 4296 символов или любая строка цифр до 7089 символов.
+ *   Эти цифры представляют собой жесткий верхний предел стандарта кода QR.
  * - Please consult the QR Code specification for information on
- *   data capacities per version, ECC level, and text encoding mode.
+ *   емкость данных для каждой версии, уровня ECC и режима кодирования текста.
  */
 bool qrcodegen_encodeText(const char * text, uint8_t tempBuffer[], uint8_t qrcode[],
                           enum qrcodegen_Ecc ecl, int minVersion, int maxVersion, enum qrcodegen_Mask mask, bool boostEcl);
 
 
 /*
- * Encodes the given binary data to a QR Code, returning true if encoding succeeded.
- * If the data is too long to fit in any version in the given range
- * at the given ECC level, then false is returned.
+ * Кодирует заданные двоичные данные в код QR, возвращая true, если кодирование прошло успешно.
+ * Если данные слишком длинные, чтобы поместиться в любую версию в заданном диапазоне.
+ * на заданном уровне ECC возвращается false.
  * - The input array range dataAndTemp[0 : dataLen] should normally be
- *   valid UTF-8 text, but is not required by the QR Code standard.
+ *   действительный текст UTF -8, но не требуется стандартом кода QR.
  * - The variables ecl and mask must correspond to enum constant values.
  * - Requires 1 <= minVersion <= maxVersion <= 40.
  * - The arrays dataAndTemp and qrcode must each have a length
- *   of at least qrcodegen_BUFFER_LEN_FOR_VERSION(maxVersion).
+ *   не ниже qrcodegen_BUFFER_LEN_FOR_VERSION (maxVersion).
  * - After the function returns, the contents of dataAndTemp may have changed,
- *   and does not represent useful data anymore.
+ *   и больше не представляет полезных данных.
  * - If successful, the resulting QR Code will use byte mode to encode the data.
  * - In the most optimistic case, a QR Code at version 40 with low ECC can hold any byte
- *   sequence up to length 2953. This is the hard upper limit of the QR Code standard.
+ *   последовательность длиной до 2953. Это жесткий верхний предел стандарта кода QR.
  * - Please consult the QR Code specification for information on
- *   data capacities per version, ECC level, and text encoding mode.
+ *   емкость данных для каждой версии, уровня ECC и режима кодирования текста.
  */
 bool qrcodegen_encodeBinary(uint8_t dataAndTemp[], size_t dataLen, uint8_t qrcode[],
                             enum qrcodegen_Ecc ecl, int minVersion, int maxVersion, enum qrcodegen_Mask mask, bool boostEcl);
 
 
-/*---- Functions (low level) to generate QR Codes ----*/
+/*---- Функции (низкого уровня) для генерации кодов QR ----*/
 
 /*
- * Renders a QR Code representing the given segments at the given error correction level.
- * The smallest possible QR Code version is automatically chosen for the output. Returns true if
- * QR Code creation succeeded, or false if the data is too long to fit in any version. The ECC level
- * of the result may be higher than the ecl argument if it can be done without increasing the version.
- * This function allows the user to create a custom sequence of segments that switches
- * between modes (such as alphanumeric and byte) to encode text in less space.
- * This is a low-level API; the high-level API is qrcodegen_encodeText() and qrcodegen_encodeBinary().
- * To save memory, the segments' data buffers can alias/overlap tempBuffer, and will
- * result in them being clobbered, but the QR Code output will still be correct.
- * But the qrcode array must not overlap tempBuffer or any segment's data buffer.
+ * Отображает код QR, представляющий заданные сегменты на заданном уровне исправления ошибок.
+ * Для вывода автоматически выбирается наименьшая возможная версия кода QR. Возвращает истину, если
+ * QR Создание кода выполнено успешно или неверно, если данные слишком длинные и не помещаются ни в одну версию. Уровень ECC
+ * Результат может быть больше, чем аргумент ecl, если это можно сделать без увеличения версии.
+ * Эта функция позволяет пользователю создавать собственную последовательность сегментов, которая переключает
+ * между режимами (например, буквенно-цифровым и байтовым) для кодирования текста в меньшем пространстве.
+ * Это низкоуровневый API ; API высокого уровня — это qrcodegen_encodeText () и qrcodegen_encodeBinary ().
+ * Для экономии памяти буферы данных сегментов могут использовать псевдоним tempBuffer или перекрывать его.
+ * в результате они будут затерты, но вывод кода QR по-прежнему будет правильным.
+ * Но массив qrcode не должен перекрывать tempBuffer или буфер данных любого сегмента.
  */
 bool qrcodegen_encodeSegments(const struct qrcodegen_Segment segs[], size_t len,
                               enum qrcodegen_Ecc ecl, uint8_t tempBuffer[], uint8_t qrcode[]);
 
 
 /*
- * Renders a QR Code representing the given segments with the given encoding parameters.
- * Returns true if QR Code creation succeeded, or false if the data is too long to fit in the range of versions.
- * The smallest possible QR Code version within the given range is automatically
- * chosen for the output. Iff boostEcl is true, then the ECC level of the result
- * may be higher than the ecl argument if it can be done without increasing the
- * version. The mask number is either between 0 to 7 (inclusive) to force that
- * mask, or -1 to automatically choose an appropriate mask (which may be slow).
- * This function allows the user to create a custom sequence of segments that switches
- * between modes (such as alphanumeric and byte) to encode text in less space.
- * This is a low-level API; the high-level API is qrcodegen_encodeText() and qrcodegen_encodeBinary().
- * To save memory, the segments' data buffers can alias/overlap tempBuffer, and will
- * result in them being clobbered, but the QR Code output will still be correct.
- * But the qrcode array must not overlap tempBuffer or any segment's data buffer.
+ * Отображает код QR, представляющий заданные сегменты с заданными параметрами кодирования.
+ * Возвращает true, если создание кода QR прошло успешно, или false, если данные слишком длинные и не помещаются в диапазон версий.
+ * Наименьшая возможная версия кода QR в пределах заданного диапазона автоматически
+ * выбран для вывода. Если boostEcl имеет значение true, то уровень результата ECC
+ * может быть выше аргумента ecl, если это можно сделать без увеличения
+ * версия. Номер маски может быть от 0 до 7 (включительно).
+ * маска или -1, чтобы автоматически выбрать подходящую маску (что может быть медленным).
+ * Эта функция позволяет пользователю создавать собственную последовательность сегментов, которая переключает
+ * между режимами (например, буквенно-цифровым и байтовым) для кодирования текста в меньшем пространстве.
+ * Это низкоуровневый API ; API высокого уровня — это qrcodegen_encodeText () и qrcodegen_encodeBinary ().
+ * Для экономии памяти буферы данных сегментов могут использовать псевдоним tempBuffer или перекрывать его.
+ * в результате они будут затерты, но вывод кода QR по-прежнему будет правильным.
+ * Но массив qrcode не должен перекрывать tempBuffer или буфер данных любого сегмента.
  */
 bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], size_t len, enum qrcodegen_Ecc ecl,
                                       int minVersion, int maxVersion, int mask, bool boostEcl, uint8_t tempBuffer[], uint8_t qrcode[]);
 
 
 /*
- * Tests whether the given string can be encoded as a segment in alphanumeric mode.
- * A string is encodable iff each character is in the following set: 0 to 9, A to Z
- * (uppercase only), space, dollar, percent, asterisk, plus, hyphen, period, slash, colon.
+ * Проверяет, может ли данная строка быть закодирована как сегмент в буквенно-цифровом режиме.
+ * Строка является кодируемой тогда и только тогда, когда каждый символ находится в следующем наборе: от 0 до 9, от A до Z.
+ * (только заглавные буквы), пробел, доллар, процент, звездочка, плюс, дефис, точка, косая черта, двоеточие.
  */
 bool qrcodegen_isAlphanumeric(const char * text);
 
 
 /*
- * Tests whether the given string can be encoded as a segment in numeric mode.
- * A string is encodable iff each character is in the range 0 to 9.
+ * Проверяет, может ли данная строка быть закодирована как сегмент в числовом режиме.
+ * Строка является кодируемой тогда и только тогда, когда каждый символ находится в диапазоне от 0 до 9.
  */
 bool qrcodegen_isNumeric(const char * text);
 
 
 /*
- * Returns the number of bytes (uint8_t) needed for the data buffer of a segment
- * containing the given number of characters using the given mode. Notes:
+ * Возвращает количество байтов ( uint8_t ), необходимое для буфера данных сегмента.
+ * содержащий заданное количество символов с использованием данного режима. Примечания:
  * - Returns SIZE_MAX on failure, i.e. numChars > INT16_MAX or
- *   the number of needed bits exceeds INT16_MAX (i.e. 32767).
+ *   количество необходимых бит превышает INT16_MAX (т.е. 32767).
  * - Otherwise, all valid results are in the range [0, ceil(INT16_MAX / 8)], i.e. at most 4096.
  * - It is okay for the user to allocate more bytes for the buffer than needed.
  * - For byte mode, numChars measures the number of bytes, not Unicode code points.
  * - For ECI mode, numChars must be 0, and the worst-case number of bytes is returned.
- *   An actual ECI segment can have shorter data. For non-ECI modes, the result is exact.
+ *   Фактический сегмент ECI может содержать более короткие данные. Для режимов, отличных от ECI, результат является точным.
  */
 size_t qrcodegen_calcSegmentBufferSize(enum qrcodegen_Mode mode, size_t numChars);
 
 
 /*
- * Returns a segment representing the given binary data encoded in
- * byte mode. All input byte arrays are acceptable. Any text string
- * can be converted to UTF-8 bytes and encoded as a byte mode segment.
+ * Возвращает сегмент, представляющий заданные двоичные данные, закодированные в
+ * байтовый режим. Все входные массивы байтов приемлемы. Любая текстовая строка
+ * может быть преобразован в UTF -8 байт и закодирован как сегмент байтового режима.
  */
 struct qrcodegen_Segment qrcodegen_makeBytes(const uint8_t data[], size_t len, uint8_t buf[]);
 
 
 /*
- * Returns a segment representing the given string of decimal digits encoded in numeric mode.
+ * Возвращает сегмент, представляющий заданную строку десятичных цифр, закодированную в числовом режиме.
  */
 struct qrcodegen_Segment qrcodegen_makeNumeric(const char * digits, uint8_t buf[]);
 
 
 /*
- * Returns a segment representing the given text string encoded in alphanumeric mode.
- * The characters allowed are: 0 to 9, A to Z (uppercase only), space,
- * dollar, percent, asterisk, plus, hyphen, period, slash, colon.
+ * Возвращает сегмент, представляющий данную текстовую строку, закодированную в буквенно-цифровом режиме.
+ * Допустимые символы: от 0 до 9, от A до Z (только заглавные), пробел,
+ * доллар, процент, звездочка, плюс, дефис, точка, косая черта, двоеточие.
  */
 struct qrcodegen_Segment qrcodegen_makeAlphanumeric(const char * text, uint8_t buf[]);
 
 
 /*
- * Returns a segment representing an Extended Channel Interpretation
- * (ECI) designator with the given assignment value.
+ * Возвращает сегмент, представляющий расширенную интерпретацию канала.
+ * ( ECI ) указатель с заданным значением назначения.
  */
 struct qrcodegen_Segment qrcodegen_makeEci(long assignVal, uint8_t buf[]);
 
 
-/*---- Functions to extract raw data from QR Codes ----*/
+/*---- Функции для извлечения необработанных данных из кодов QR ----*/
 
 /*
- * Returns the side length of the given QR Code, assuming that encoding succeeded.
- * The result is in the range [21, 177]. Note that the length of the array buffer
- * is related to the side length - every 'uint8_t qrcode[]' must have length at least
- * qrcodegen_BUFFER_LEN_FOR_VERSION(version), which equals ceil(size^2 / 8 + 1).
+ * Возвращает длину стороны данного кода QR, предполагая, что кодирование прошло успешно.
+ * Результат находится в диапазоне [21, 177]. Обратите внимание, что длина буфера массива
+ * связано с длиной стороны - каждый ' uint8_t qrcode[]' должен иметь длину не менее
+ * qrcodegen_BUFFER_LEN_FOR_VERSION (версия), что равно ceil(size^2 / 8 + 1).
  */
 int qrcodegen_getSize(const uint8_t qrcode[]);
 
 
 /*
- * Returns the color of the module (pixel) at the given coordinates, which is false
- * for white or true for black. The top left corner has the coordinates (x=0, y=0).
- * If the given coordinates are out of bounds, then false (white) is returned.
+ * Возвращает цвет модуля (пикселя) по заданным координатам, что неверно.
+ * для белого или true для черного. В верхнем левом углу указаны координаты (x=0, y=0).
+ * Если данные координаты выходят за пределы, возвращается false (белый).
  */
 bool qrcodegen_getModule(const uint8_t qrcode[], int x, int y);
 
 /*
- * Returns the qrcode size of the specified version. Returns -1 on failure
+ * Возвращает размер qrcode указанной версии. Возвращает -1 в случае неудачи
  */
 int qrcodegen_version2size(int version);
 /*
- * Returns the min version of the data that can be stored. Returns -1 on failure
+ * Возвращает минимальную версию данных, которые можно сохранить. Возвращает -1 в случае неудачи
  */
 int qrcodegen_getMinFitVersion(enum qrcodegen_Ecc ecl, size_t dataLen);
 

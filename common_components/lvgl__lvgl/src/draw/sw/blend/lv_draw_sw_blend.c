@@ -72,7 +72,7 @@ static inline void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_blend_image(lv_color_f
 
 void lv_draw_sw_blend(lv_draw_task_t * t, const lv_draw_sw_blend_dsc_t * blend_dsc)
 {
-    /*Do not draw transparent things*/
+    /*Не рисуйте прозрачные вещи*/
     if(blend_dsc->opa <= LV_OPA_MIN) return;
     if(blend_dsc->mask_buf && blend_dsc->mask_res == LV_DRAW_SW_MASK_RES_TRANSP) return;
 

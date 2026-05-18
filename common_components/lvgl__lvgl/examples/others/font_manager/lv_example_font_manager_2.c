@@ -11,19 +11,19 @@ static lv_font_manager_t * g_font_manager = NULL;
 
 void lv_example_font_manager_2(void)
 {
-    /* Create font manager, with 8 fonts recycling buffers */
+    /* Создайте менеджер шрифтов с 8 буферами переработки шрифтов. */
     g_font_manager = lv_font_manager_create(8);
 
 #if LV_FONT_MONTSERRAT_14 && LV_FONT_MONTSERRAT_32
 
-    /* Register built-in font sources */
+    /* Регистрация встроенных источников шрифтов */
     static lv_builtin_font_src_t builtin_font_src[3] = { 0 };
     builtin_font_src[0].font_p = &lv_font_montserrat_14;
     builtin_font_src[0].size = 14;
     builtin_font_src[1].font_p = &lv_font_montserrat_32;
     builtin_font_src[1].size = 32;
 
-    /* IMPORTANT! Marking the end of the array */
+    /* IMPORTANT ! Отмечаем конец массива */
     builtin_font_src[2].font_p = NULL;
     builtin_font_src[2].size = 0;
 
@@ -34,7 +34,7 @@ void lv_example_font_manager_2(void)
 #endif
 
 #if LV_USE_FREETYPE
-    /* Register FreeType font source */
+    /* Зарегистрировать исходные шрифты FreeType */
     lv_font_manager_add_src_static(g_font_manager,
                                    "NotoColorEmoji",
                                    PATH_PREFIX "lvgl/examples/libs/freetype/NotoColorEmoji-32.subset.ttf",
@@ -42,7 +42,7 @@ void lv_example_font_manager_2(void)
 #endif
 
 #if LV_USE_TINY_TTF && LV_TINY_TTF_FILE_SUPPORT
-    /* Register TinyTTF font source */
+    /* Зарегистрировать источник шрифта TinyTTF */
     static const lv_tiny_ttf_font_src_t tiny_ttf_font_src = {
         .path = "A:lvgl/examples/libs/tiny_ttf/Ubuntu-Medium.ttf",
         .data = NULL,
@@ -56,7 +56,7 @@ void lv_example_font_manager_2(void)
                                    &lv_tiny_ttf_font_class);
 #endif
 
-    /* Create font from font manager */
+    /* Создать шрифт из диспетчера шрифтов */
     lv_font_t * font = lv_font_manager_create_font(g_font_manager,
                                                    "Ubuntu-Medium,NotoColorEmoji,Montserrat",
                                                    LV_FREETYPE_FONT_RENDER_MODE_BITMAP,
@@ -69,7 +69,7 @@ void lv_example_font_manager_2(void)
         return;
     }
 
-    /* Create label with the font */
+    /* Создать этикетку со шрифтом */
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_set_style_text_font(label, font, 0);
     lv_label_set_text(label, "Hello Font Manager! 😀 " LV_SYMBOL_OK);

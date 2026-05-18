@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_ALLOCATORS_H_
 #define RAPIDJSON_ALLOCATORS_H_
@@ -30,34 +30,34 @@
 RAPIDJSON_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
-// Allocator
+// Распределитель
 
-/*! \class rapidjson::Allocator
-    \brief Concept for allocating, resizing and freeing memory block.
+/*! \class RapidJSON::Распределитель
+    \brief Концепция выделения, изменения размера и освобождения блока памяти.
 
-    Note that Malloc() and Realloc() are non-static but Free() is static.
+    Обратите внимание, что Malloc() и Realloc() нестатические, а Free() — статические.
 
-    So if an allocator need to support Free(), it needs to put its pointer in
-    the header of memory block.
+    Поэтому, если распределителю необходимо поддерживать Free(), ему необходимо поместить свой указатель в
+    заголовок блока памяти.
 
 \code
-concept Allocator {
-    static const bool kNeedFree;    //!< Whether this allocator needs to call Free().
+концепция Распределитель {
+    static const bool kNeedFree;    //!< Нужно ли этому распределителю вызывать Free() .
 
-    // Allocate a memory block.
-    // \param size of the memory block in bytes.
-    // \returns pointer to the memory block.
-    void* Malloc(size_t size);
+    // Выделить блок памяти.
+    // \param размер блока памяти в байтах.
+    // \возвращает указатель на блок памяти.
+    void* Malloc (размер size_t);
 
-    // Resize a memory block.
-    // \param originalPtr The pointer to current memory block. Null pointer is permitted.
-    // \param originalSize The current size in bytes. (Design issue: since some allocator may not book-keep this, explicitly pass to it can save memory.)
-    // \param newSize the new size in bytes.
+    // Изменение размера блока памяти.
+    // \param originalPtr Указатель на текущий блок памяти. Нулевой указатель разрешен.
+    // \param originalSize Текущий размер в байтах. (Проблема проектирования: поскольку какой-то распределитель может не учитывать это, явный переход к нему может сэкономить память.)
+    // \param newSize новый размер в байтах.
     void* Realloc(void* originalPtr, size_t originalSize, size_t newSize);
 
-    // Free a memory block.
-    // \param pointer to the memory block. Null pointer is permitted.
-    static void Free(void *ptr);
+    // Освободите блок памяти.
+    // \param указатель на блок памяти. Нулевой указатель разрешен.
+    статическая недействительность Free (void *ptr);
 };
 \endcode
 */
@@ -65,9 +65,9 @@ concept Allocator {
 
 /*! \def RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY
     \ingroup RAPIDJSON_CONFIG
-    \brief User-defined kDefaultChunkCapacity definition.
+    \brief Пользовательское определение kDefaultChunkCapacity.
 
-    User can define this as any \c size that is a power of 2.
+    Пользователь может определить это как любой размер \c, равный степени 2.
 */
 
 #ifndef RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY
@@ -78,20 +78,20 @@ concept Allocator {
 ///////////////////////////////////////////////////////////////////////////////
 // CrtAllocator
 
-//! C-runtime library allocator.
-/*! This class is just wrapper for standard C library memory routines.
-    \note implements Allocator concept
+//! Распределитель библиотек времени выполнения C.
+/*! Этот класс является просто оболочкой для стандартных процедур работы с памятью библиотеки C.
+    \note реализует концепцию распределителя
 */
 class CrtAllocator {
 public:
     static const bool kNeedFree = true;
     void* Malloc(size_t size) {
-        if (size) { //  behavior of malloc(0) is implementation defined.
+        if (size) { //  поведение malloc(0) определяется реализацией.
             void * p = RAPIDJSON_MALLOC(size);
             LV_ASSERT_MALLOC(p);
             return p;
         } else {
-            return NULL; // standardize to returning NULL.
+            return NULL; // стандартизировать возврат NULL .
         }
     }
     void* Realloc(void* originalPtr, size_t originalSize, size_t newSize) {
@@ -115,38 +115,38 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// MemoryPoolAllocator
+// Распределитель пула памяти
 
-//! Default memory allocator used by the parser and DOM.
-/*! This allocator allocate memory blocks from pre-allocated memory chunks.
+//! Распределитель памяти по умолчанию, используемый анализатором и DOM.
+/*! Этот распределитель выделяет блоки памяти из заранее выделенных фрагментов памяти.
 
-    It does not free memory blocks. And Realloc() only allocate new memory.
+    Он не освобождает блоки памяти. А Realloc() только выделяет новую память.
 
-    The memory chunks are allocated by BaseAllocator, which is CrtAllocator by default.
+    Фрагменты памяти распределяются с помощью BaseAllocator, который по умолчанию является CrtAllocator.
 
-    User may also supply a buffer as the first chunk.
+    Пользователь также может предоставить буфер в качестве первого фрагмента.
 
-    If the user-buffer is full then additional chunks are allocated by BaseAllocator.
+    Если пользовательский буфер заполнен, BaseAllocator выделяет дополнительные фрагменты.
 
-    The user-buffer is not deallocated by this allocator.
+    Пользовательский буфер не освобождается этим распределителем.
 
-    \tparam BaseAllocator the allocator type for allocating memory chunks. Default is CrtAllocator.
-    \note implements Allocator concept
+    \tparam BaseAllocator тип распределителя для выделения фрагментов памяти. По умолчанию — CrtAllocator.
+    \note реализует концепцию распределителя
 */
 template <typename BaseAllocator = CrtAllocator>
 class MemoryPoolAllocator {
-    //! Chunk header for perpending to each chunk.
-    /*! Chunks are stored as a singly linked list.
+    //! Заголовок чанка для каждого чанка.
+    /*! Чанки хранятся в виде односвязного списка.
     */
     struct ChunkHeader {
-        size_t capacity;    //!< Capacity of the chunk in bytes (excluding the header itself).
-        size_t size;        //!< Current size of allocated memory in bytes.
-        ChunkHeader *next;  //!< Next chunk in the linked list.
+        size_t capacity;    //!< Емкость чанка в байтах (исключая сам заголовок).
+        size_t size;        //!< Текущий размер выделенной памяти в байтах.
+        ChunkHeader *next;  //!< Следующий фрагмент в связанном списке.
     };
 
     struct SharedData {
-        ChunkHeader *chunkHead;  //!< Head of the chunk linked-list. Only the head chunk serves allocation.
-        BaseAllocator* ownBaseAllocator; //!< base allocator created by this object.
+        ChunkHeader *chunkHead;  //!< Глава связанного списка чанка. Только головной блок служит для распределения.
+        BaseAllocator* ownBaseAllocator; //!< базовый распределитель, созданный этим объектом.
         size_t refcount;
         bool ownBuffer;
     };
@@ -163,15 +163,15 @@ class MemoryPoolAllocator {
         return reinterpret_cast<uint8_t*>(shared->chunkHead) + SIZEOF_CHUNK_HEADER;
     }
 
-    static const size_t kDefaultChunkCapacity = RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY; //!< Default chunk capacity.
+    static const size_t kDefaultChunkCapacity = RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY; //!< Емкость чанка по умолчанию.
 
 public:
-    static const bool kNeedFree = false;    //!< Tell users that no need to call Free() with this allocator. (concept Allocator)
-    static const bool kRefCounted = true;   //!< Tell users that this allocator is reference counted on copy
+    static const bool kNeedFree = false;    //!< Сообщите пользователям, что с помощью этого распределителя не нужно вызывать Free(). (концепция распределителя)
+    static const bool kRefCounted = true;   //!< Сообщите пользователям, что этот распределитель учитывает ссылки при копировании.
 
-    //! Constructor with chunkSize.
-    /*! \param chunkSize The size of memory chunk. The default is kDefaultChunkSize.
-        \param baseAllocator The allocator for allocating memory chunks.
+    //! Конструктор с chunkSize.
+    /*! \param chunkSize Размер фрагмента памяти. По умолчанию используется kDefaultChunkSize.
+        \param baseAllocator Распределитель для выделения фрагментов памяти.
     */
     explicit
     MemoryPoolAllocator(size_t chunkSize = kDefaultChunkCapacity, BaseAllocator* baseAllocator = 0) :
@@ -195,15 +195,15 @@ public:
         shared_->refcount = 1;
     }
 
-    //! Constructor with user-supplied buffer.
-    /*! The user buffer will be used firstly. When it is full, memory pool allocates new chunk with chunk size.
+    //! Конструктор с буфером, предоставленным пользователем.
+    /*! Пользовательский буфер будет использоваться в первую очередь. Когда он заполнен, пул памяти выделяет новый фрагмент с размером фрагмента.
 
-        The user buffer will not be deallocated when this allocator is destructed.
+        Пользовательский буфер не будет освобожден при разрушении этого распределителя.
 
-        \param buffer User supplied buffer.
-        \param size Size of the buffer in bytes. It must at least larger than sizeof(ChunkHeader).
-        \param chunkSize The size of memory chunk. The default is kDefaultChunkSize.
-        \param baseAllocator The allocator for allocating memory chunks.
+        \param buffer Буфер, предоставленный пользователем.
+        \param size Размер буфера в байтах. Он должен быть как минимум больше sizeof(ChunkHeader).
+        \param chunkSize Размер фрагмента памяти. По умолчанию используется kDefaultChunkSize.
+        \param baseAllocator Распределитель для выделения фрагментов памяти.
     */
     MemoryPoolAllocator(void *buffer, size_t size, size_t chunkSize = kDefaultChunkCapacity, BaseAllocator* baseAllocator = 0) :
         chunk_capacity_(chunkSize),
@@ -260,12 +260,12 @@ public:
     }
 #endif
 
-    //! Destructor.
-    /*! This deallocates all memory chunks, excluding the user-supplied buffer.
+    //! Деструктор.
+    /*! При этом освобождаются все фрагменты памяти, за исключением предоставленного пользователем буфера.
     */
     ~MemoryPoolAllocator() RAPIDJSON_NOEXCEPT {
         if (!shared_) {
-            // do nothing if moved
+            // ничего не делать, если переехали
             return;
         }
         if (shared_->refcount > 1) {
@@ -280,7 +280,7 @@ public:
         RAPIDJSON_DELETE(a);
     }
 
-    //! Deallocates all memory chunks, excluding the first/user one.
+    //! Освобождает все фрагменты памяти, за исключением первого/пользовательского.
     void Clear() RAPIDJSON_NOEXCEPT {
         RAPIDJSON_NOEXCEPT_ASSERT(shared_->refcount > 0);
         for (;;) {
@@ -294,8 +294,8 @@ public:
         shared_->chunkHead->size = 0;
     }
 
-    //! Computes the total capacity of allocated memory chunks.
-    /*! \return total capacity in bytes.
+    //! Вычисляет общую емкость выделенных фрагментов памяти.
+    /*! \возвращает общую емкость в байтах.
     */
     size_t Capacity() const RAPIDJSON_NOEXCEPT {
         RAPIDJSON_NOEXCEPT_ASSERT(shared_->refcount > 0);
@@ -305,8 +305,8 @@ public:
         return capacity;
     }
 
-    //! Computes the memory blocks allocated.
-    /*! \return total used bytes.
+    //! Вычисляет выделенные блоки памяти.
+    /*! \return общее количество использованных байт.
     */
     size_t Size() const RAPIDJSON_NOEXCEPT {
         RAPIDJSON_NOEXCEPT_ASSERT(shared_->refcount > 0);
@@ -316,15 +316,15 @@ public:
         return size;
     }
 
-    //! Whether the allocator is shared.
-    /*! \return true or false.
+    //! Является ли распределитель общим.
+    /*! \вернуть истину или ложь.
     */
     bool Shared() const RAPIDJSON_NOEXCEPT {
         RAPIDJSON_NOEXCEPT_ASSERT(shared_->refcount > 0);
         return shared_->refcount > 1;
     }
 
-    //! Allocates a memory block. (concept Allocator)
+    //! Выделяет блок памяти. (концепция распределителя)
     void* Malloc(size_t size) {
         RAPIDJSON_NOEXCEPT_ASSERT(shared_->refcount > 0);
         if (!size)
@@ -340,7 +340,7 @@ public:
         return buffer;
     }
 
-    //! Resizes a memory block (concept Allocator)
+    //! Изменяет размер блока памяти (концепция Распределитель)
     void* Realloc(void* originalPtr, size_t originalSize, size_t newSize) {
         if (originalPtr == 0)
             return Malloc(newSize);
@@ -352,11 +352,11 @@ public:
         originalSize = RAPIDJSON_ALIGN(originalSize);
         newSize = RAPIDJSON_ALIGN(newSize);
 
-        // Do not shrink if new size is smaller than original
+        // Не уменьшайте размер, если новый размер меньше исходного.
         if (originalSize >= newSize)
             return originalPtr;
 
-        // Simply expand it if it is the last allocation and there is sufficient space
+        // Просто разверните его, если это последнее выделение и достаточно места.
         if (originalPtr == GetChunkBuffer(shared_) + shared_->chunkHead->size - originalSize) {
             size_t increment = static_cast<size_t>(newSize - originalSize);
             if (shared_->chunkHead->size + increment <= shared_->chunkHead->capacity) {
@@ -365,7 +365,7 @@ public:
             }
         }
 
-        // Realloc process: allocate and copy memory, do not free original buffer.
+        // Процесс Realloc: выделять и копировать память, не освобождать исходный буфер.
         if (void* newBuffer = Malloc(newSize)) {
             if (originalSize)
                 std::memcpy(newBuffer, originalPtr, originalSize);
@@ -375,24 +375,24 @@ public:
             return NULL;
     }
 
-    //! Frees a memory block (concept Allocator)
-    static void Free(void *ptr) RAPIDJSON_NOEXCEPT { (void)ptr; } // Do nothing
+    //! Освобождает блок памяти (концепция Распределитель)
+    static void Free(void *ptr) RAPIDJSON_NOEXCEPT { (void)ptr; } // ничего не делать
 
-    //! Compare (equality) with another MemoryPoolAllocator
+    //! Сравнить (равенство) с другим MemoryPoolAllocator
     bool operator==(const MemoryPoolAllocator& rhs) const RAPIDJSON_NOEXCEPT {
         RAPIDJSON_NOEXCEPT_ASSERT(shared_->refcount > 0);
         RAPIDJSON_NOEXCEPT_ASSERT(rhs.shared_->refcount > 0);
         return shared_ == rhs.shared_;
     }
-    //! Compare (inequality) with another MemoryPoolAllocator
+    //! Сравнить (неравенство) с другим MemoryPoolAllocator
     bool operator!=(const MemoryPoolAllocator& rhs) const RAPIDJSON_NOEXCEPT {
         return !operator==(rhs);
     }
 
 private:
-    //! Creates a new chunk.
-    /*! \param capacity Capacity of the chunk in bytes.
-        \return true if success.
+    //! Создает новый чанк.
+    /*! \param емкость Емкость чанка в байтах.
+        \Верните true в случае успеха.
     */
     bool AddChunk(size_t capacity) {
         if (!baseAllocator_)
@@ -422,9 +422,9 @@ private:
         return buf;
     }
 
-    size_t chunk_capacity_;     //!< The minimum capacity of chunk when they are allocated.
-    BaseAllocator* baseAllocator_;  //!< base allocator for allocating memory chunks.
-    SharedData *shared_;        //!< The shared data of the allocator
+    size_t chunk_capacity_;     //!< Минимальная емкость чанка при его выделении.
+    BaseAllocator* baseAllocator_;  //!< базовый распределитель для выделения фрагментов памяти.
+    SharedData *shared_;        //!< Общие данные распределителя
 };
 
 namespace internal {
@@ -459,7 +459,7 @@ inline void Free(A& a, T *p, size_t n = 1)
 
 #ifdef __GNUC__
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(effc++) // std::allocator can safely be inherited
+RAPIDJSON_DIAG_OFF(effc++) // std::allocator можно безопасно унаследовать
 #endif
 
 template <typename T, typename BaseAllocator = CrtAllocator>
@@ -503,7 +503,7 @@ public:
     using propagate_on_container_swap = std::true_type;
 #endif
 
-    /* implicit */
+    /* неявный */
     StdAllocator(const BaseAllocator& allocator) RAPIDJSON_NOEXCEPT :
         allocator_type(),
         baseAllocator_(allocator)
@@ -618,7 +618,7 @@ public:
         return !operator==(rhs);
     }
 
-    //! rapidjson Allocator concept
+    //! Концепция распределителя RapidJSON
     static const bool kNeedFree = BaseAllocator::kNeedFree;
     static const bool kRefCounted = internal::IsRefCounted<BaseAllocator>::Value;
     void* Malloc(size_t size)
@@ -636,12 +636,12 @@ public:
 
 private:
     template <typename, typename>
-    friend class StdAllocator; // access to StdAllocator<!T>.*
+    friend class StdAllocator; // доступ к StdAllocator<!T>.*
 
     BaseAllocator baseAllocator_;
 };
 
-#if !RAPIDJSON_HAS_CXX17 // std::allocator<void> deprecated in C++17
+#if !RAPIDJSON_HAS_CXX17 // std::allocator<void> устарел в C++17
 template <typename BaseAllocator>
 class StdAllocator<void, BaseAllocator> :
     public std::allocator<void>
@@ -667,7 +667,7 @@ public:
         baseAllocator_(rhs.baseAllocator_)
     { }
 
-    /* implicit */
+    /* неявный */
     StdAllocator(const BaseAllocator& baseAllocator) RAPIDJSON_NOEXCEPT :
         allocator_type(),
         baseAllocator_(baseAllocator)
@@ -685,7 +685,7 @@ public:
 
 private:
     template <typename, typename>
-    friend class StdAllocator; // access to StdAllocator<!T>.*
+    friend class StdAllocator; // доступ к StdAllocator<!T>.*
 
     BaseAllocator baseAllocator_;
 };

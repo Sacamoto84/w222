@@ -34,9 +34,9 @@
 
 typedef struct {
     /* w = (-b(xp, yp) + sqrt(sqr(b(xp, yp)) - 4 * a * c(xp, yp))) / (2 * a) */
-    int32_t x0;         /* center of the start circle */
-    int32_t y0;         /* center of the start circle */
-    int32_t r0;         /* radius of the start circle */
+    int32_t x0;         /* центр стартового круга */
+    int32_t y0;         /* центр стартового круга */
+    int32_t r0;         /* радиус стартового круга */
     int32_t inv_dr;     /* 1 / (r1 - r0) */
     int32_t a4;         /* 4 * a */
     int32_t inv_a4;     /* 1 / (4 * a) */
@@ -46,7 +46,7 @@ typedef struct {
     int32_t bpy;
     int32_t bc;
     lv_area_t clip_area;
-    lv_draw_sw_grad_calc_t * cgrad;  /*256 element cache buffer containing the gradient color map*/
+    lv_draw_sw_grad_calc_t * cgrad;  /*Буфер кэша на 256 элементов, содержащий карту цветов градиента.*/
 } lv_grad_radial_state_t;
 
 typedef struct {
@@ -54,7 +54,7 @@ typedef struct {
     int32_t a;
     int32_t b;
     int32_t c;
-    lv_draw_sw_grad_calc_t * cgrad; /*256 element cache buffer containing the gradient color map*/
+    lv_draw_sw_grad_calc_t * cgrad; /*Буфер кэша на 256 элементов, содержащий карту цветов градиента.*/
 } lv_grad_linear_state_t;
 
 typedef struct {
@@ -64,7 +64,7 @@ typedef struct {
     int32_t a;
     int32_t da;
     int32_t inv_da;
-    lv_draw_sw_grad_calc_t * cgrad; /*256 element cache buffer containing the gradient color map*/
+    lv_draw_sw_grad_calc_t * cgrad; /*Буфер кэша на 256 элементов, содержащий карту цветов градиента.*/
 } lv_grad_conical_state_t;
 
 #endif
@@ -144,17 +144,17 @@ static inline int32_t extend_w(int32_t w, lv_grad_extend_t extend)
 
 lv_draw_sw_grad_calc_t * lv_draw_sw_grad_get(const lv_grad_dsc_t * g, int32_t w, int32_t h)
 {
-    /* No gradient, no cache */
+    /* Нет градиента, нет кэша */
     if(g->dir == LV_GRAD_DIR_NONE) return NULL;
 
-    /* Step 1: Search cache for the given key */
+    /* Шаг 1. Найдите в кеше данный ключ. */
     lv_draw_sw_grad_calc_t * item = allocate_item(g, w, h);
     if(item == NULL) {
         LV_LOG_WARN("Failed to allocate item for the gradient");
         return item;
     }
 
-    /* Step 3: Fill it with the gradient, as expected */
+    /* Шаг 3: Заполните его градиентом, как и ожидалось. */
     uint32_t i;
     for(i = 0; i < item->size; i++) {
         lv_draw_sw_grad_color_calculate(g, item->size, i, &item->color_map[i], &item->opa_map[i]);
@@ -166,7 +166,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_color_calculate(const lv_grad_dsc_t *
                                                            int32_t frac, lv_color_t * color_out, lv_opa_t * opa_out)
 {
     lv_color_t tmp;
-    /*Clip out-of-bounds first*/
+    /*Сначала клип выходит за пределы поля*/
     int32_t min = (dsc->stops[0].frac * range) >> 8;
     if(frac <= min) {
         GRAD_CONV(tmp, dsc->stops[0].color);
@@ -183,7 +183,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_color_calculate(const lv_grad_dsc_t *
         return;
     }
 
-    /*Find the 2 closest stop now*/
+    /*Найдите 2 ближайшие остановки прямо сейчас*/
     int32_t d = 0;
     int32_t found_i = 0;
     for(uint8_t i = 1; i < dsc->stops_count; i++) {
@@ -203,7 +203,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_color_calculate(const lv_grad_dsc_t *
     max = (dsc->stops[found_i].frac * range) >> 8;
     d = max - min;
 
-    /*Then interpolate*/
+    /*Затем интерполируйте*/
     frac -= min;
     lv_opa_t mix = (frac * 255) / d;
     lv_opa_t imix = 255 - mix;
@@ -224,46 +224,46 @@ void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad)
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
 
 /*
-    Calculate radial gradient based on the following equation:
+    Рассчитайте радиальный градиент на основе следующего уравнения:
 
-    | P - (C1 - C0)w - C0 | = (r1 - r0)w + r0, where
+    | P - ( C1 - C0 )w - C0 | = (r1 - r0)w + r0, где
 
         P: {xp, yp} is the point of interest
         C0: {x0, y0} is the center of the start circle
         C1: {x1, y1} is the center of the end circle
-        r0 is the radius of the start circle
-        r1 is the radius of the end circle
-        w is the unknown variable
-        || is the length of the vector
+        r0 — радиус стартового круга
+        r1 — радиус конечной окружности
+        w — неизвестная переменная
+        || длина вектора
 
-    The above equation can be rewritten as:
+    Приведенное выше уравнение можно переписать как:
 
     ((r1-r0)^2 - (x1-x0)^2 - (y1-y0)^2) * w^2 + 2*((xp-x0)*(x1-x0) + (yp-y0)*(y1-y0)) * w + (-(xp-x0)^2 - (yp-y0)^) = 0
 
-    The roots of the quadratical equation can be obtained using the well-known formula (-b +- sqrt(b^2 - 4ac)) / 2a
-    We only need the more positive root.
+    Корни квадратного уравнения можно получить по известной формуле (-b +- sqrt(b^2 - 4ac))/2a
+    Нам нужен только более положительный корень.
 
-    Let's denote
+    Обозначим
         dx = x1 - x0
         dy = y1 - y0
         dr = r1 - r0
 
-    Thus:
+    Таким образом:
 
     w = (-b(xp, yp) + sqrt(sqr(b(xp, yp)) - 4 * a * c(xp, yp))) / (2 * a), where
 
         b(xp, yp) = 2dx * xp + 2dy * yp + 2(r0 * dr - x0 * dx - y0 * dy)
         c(xp, yp) = r0^2 - (xp - x0)^2 - (yp - y0)^2
 
-    Rewrite b(xp, yp) as:
+    Перепишите b(xp, yp) как:
 
-    b(xp, yp) = xp * bpx + yp * bpy + bc, where
+    b(xp, yp) = xp * bpx + yp * bpy + bc, где
 
-        bpx = 2dx
-        bpy = 2dy
+        бпх = 2dx
+        бpy = 2dy
         bc = 2(r0 * dr - x0 * dx - y0 * dy)
 
-    We can pre-calculate the constants, because they do not depend on the pixel coordinates.
+    Мы можем заранее рассчитать константы, поскольку они не зависят от координат пикселей.
 
 */
 
@@ -276,7 +276,7 @@ void lv_draw_sw_grad_radial_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
     lv_grad_radial_state_t * state = lv_malloc(sizeof(lv_grad_radial_state_t));
     dsc->state = state;
 
-    /* Convert from percentage coordinates */
+    /* Преобразование из процентных координат */
     int32_t wdt = lv_area_get_width(coords);
     int32_t hgt = lv_area_get_height(coords);
 
@@ -289,12 +289,12 @@ void lv_draw_sw_grad_radial_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
     start_extent.y = lv_pct_to_px(start_extent.y, hgt);
     end_extent.y = lv_pct_to_px(end_extent.y, hgt);
 
-    /* Calculate radii */
+    /* Вычислить радиусы */
     int16_t r_start = lv_sqrt32(lv_sqr(start_extent.x - start.x) + lv_sqr(start_extent.y - start.y));
     int16_t r_end = lv_sqrt32(lv_sqr(end_extent.x - end.x) + lv_sqr(end_extent.y - end.y));
     LV_ASSERT(r_end != 0);
 
-    /* Create gradient color map */
+    /* Создать карту цветов градиента */
     state->cgrad = lv_draw_sw_grad_get(dsc, 256, 0);
 
     state->x0 = start.x;
@@ -313,7 +313,7 @@ void lv_draw_sw_grad_radial_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
     else {
         int32_t dx = end.x - start.x;
         int32_t dy = end.y - start.y;
-        state->dx = dx;    /* needed for incremental calculation */
+        state->dx = dx;    /* необходимо для пошагового расчета */
         state->a4 = (lv_sqr(dr) - lv_sqr(dx) - lv_sqr(dy)) << 2;
         /* b(xp, yp) = xp * bpx + yp * bpy + bc */
         state->bpx = dx << 1;
@@ -321,9 +321,9 @@ void lv_draw_sw_grad_radial_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
         state->bc = (state->r0 * dr - state->x0 * dx - state->y0 * dy) << 1;
     }
     state->inv_a4 = state->a4 != 0 ? (1 << (13 + 16)) / state->a4 : 0;
-    /* check for possible clipping */
+    /* проверьте возможное отсечение */
     if(dsc->extend == LV_GRAD_EXTEND_PAD &&
-       /* if extend mode is 'pad', then we can clip to the end circle's bounding box, if the start circle is entirely within the end circle */
+       /* если режим расширения — «площадка», то мы можем обрезать ограничивающую рамку конечного круга, если начальный круг полностью находится внутри конечного круга */
        (lv_sqr(start.x - end.x) + lv_sqr(start.y - end.y) < lv_sqr(r_end - r_start))) {
         if(r_end > r_start) {
             lv_area_set(&state->clip_area, end.x - r_end, end.y - r_end, end.x  + r_end, end.y + r_end);
@@ -355,12 +355,12 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
     lv_opa_t * opa = result->opa_map;
     lv_draw_sw_grad_calc_t * grad = state->cgrad;
 
-    int32_t w;  /* the result: this is an offset into the 256 element gradient color table */
+    int32_t w;  /* результат: это смещение в таблице цветов градиента из 256 элементов. */
     int32_t b, db, c, dc;
 
-    /* check for possible clipping */
+    /* проверьте возможное отсечение */
     if(state->clip_area.x1 != -0x7fffffff) {
-        /* fill line with end color for pixels outside the clipped region */
+        /* заполнить линию конечным цветом для пикселей за пределами обрезанной области */
         lv_color_t * _buf = buf;
         lv_opa_t * _opa = opa;
         lv_color_t _c = grad->color_map[255];
@@ -377,7 +377,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
            xp + width < state->clip_area.x1) {
             return;
         }
-        else {      /* not fully outside: clip line to the bounding box */
+        else {      /* не полностью снаружи: обрезать линию до ограничивающей рамки */
             int32_t _x1 = LV_MAX(xp, state->clip_area.x1);
             int32_t _x2 = LV_MIN(xp + width, state->clip_area.x2);
             buf += _x1 - xp;
@@ -389,11 +389,11 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
 
     b = xp * state->bpx + yp * state->bpy + state->bc;
     c = lv_sqr(state->r0) - lv_sqr(xp - state->x0) - lv_sqr(yp - state->y0);
-    /* We can save some calculations by using the previous values of b and c */
+    /* Мы можем сэкономить некоторые вычисления, используя предыдущие значения b и c. */
     db = state->dx << 1;
     dc = ((xp - state->x0) << 1) + 1;
 
-    if(state->a4 == 0) {   /* not a quadratic equation: solve linear equation: w = -c/b */
+    if(state->a4 == 0) {   /* не квадратное уравнение: решите линейное уравнение: w = -c/b */
         for(; width > 0; width--) {
             w = extend_w(b == 0 ? 0 : -(c << 8) / b, dsc->extend);
             *buf++ = grad->color_map[w];
@@ -403,15 +403,15 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
             dc += 2;
         }
     }
-    else {                  /* solve quadratical equation */
+    else {                  /* решить квадратное уравнение */
         if(state->bpx ||
-           state->bpy) {    /* general case (circles are not concentric): w = (-b + sqrt(b^2 - 4ac))/2a (we only need the more positive root)*/
+           state->bpy) {    /* общий случай (круги не концентричны): w = (-b + sqrt(b^2 - 4ac))/2a (нам нужен только более положительный корень)*/
             int32_t a4 = state->a4 >> 4;
             for(; width > 0; width--) {
-                int32_t det = lv_sqr(b >> 4) - (a4 * (c >> 4));     /* b^2 shifted down by 2*4=8, 4ac shifted down by 8 */
-                /* check determinant: if negative, then there is no solution: use starting color */
+                int32_t det = lv_sqr(b >> 4) - (a4 * (c >> 4));     /* b^2 смещен вниз на 2*4=8, 4ac смещен вниз на 8 */
+                /* проверьте определитель: если отрицательно, то решения нет: используйте начальный цвет */
                 w = det < 0 ? 0 : extend_w(((lv_sqrt32(det) - (b >> 4)) * state->inv_a4) >>  16,
-                                           dsc->extend);        /* square root shifted down by 4 (includes *256 to set output range) */
+                                           dsc->extend);        /* квадратный корень сдвинут вниз на 4 (включая *256 для установки диапазона вывода) */
                 *buf++ = grad->color_map[w];
                 *opa++ = grad->opa_map[w];
                 b += db;
@@ -419,7 +419,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
                 dc += 2;
             }
         }
-        else {              /* special case: concentric circles: w = (sqrt((xp-x0)^2 + (yx-y0)^2)-r0)/(r1-r0) */
+        else {              /* особый случай: концентрические круги: w = (sqrt((xp-x0)^2 + (yx-y0)^2)-r0)/(r1-r0) */
             c = lv_sqr(xp - state->x0) + lv_sqr(yp - state->y0);
             for(; width > 0; width--) {
                 w = extend_w((((lv_sqrt32(c) - state->r0)) * state->inv_dr) >> 16, dsc->extend);
@@ -433,26 +433,26 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
 }
 
 /*
-    Calculate linear gradient based on the following equation:
+    Рассчитайте линейный градиент на основе следующего уравнения:
 
     w = ((P - C0) x (C1 - C0)) / | C1 - C0 |^2, where
 
         P: {xp, yp} is the point of interest
         C0: {x0, y0} is the start point of the gradient vector
         C1: {x1, y1} is the end point of the gradient vector
-        w is the unknown variable
+        w — неизвестная переменная
 
-        || is the length of the vector
-        x is a dot product
+        || длина вектора
+        x — скалярное произведение
 
-    The above equation can be rewritten as:
+    Приведенное выше уравнение можно переписать как:
 
     w = xp * (dx / (dx^2 + dy^2)) + yp * (dy / (dx^2 + dy^2)) - (x0 * dx + y0 * dy) / (dx^2 + dy^2), where
 
         dx = x1 - x0
         dy = y1 - y0
 
-    We can pre-calculate the constants, because they do not depend on the pixel coordinates.
+    Мы можем заранее рассчитать константы, поскольку они не зависят от координат пикселей.
 
 */
 
@@ -463,10 +463,10 @@ void lv_draw_sw_grad_linear_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
     lv_grad_linear_state_t * state = lv_malloc(sizeof(lv_grad_linear_state_t));
     dsc->state = state;
 
-    /* Create gradient color map */
+    /* Создать карту цветов градиента */
     state->cgrad = lv_draw_sw_grad_get(dsc, 256, 0);
 
-    /* Convert from percentage coordinates */
+    /* Преобразование из процентных координат */
     int32_t wdt = lv_area_get_width(coords);
     int32_t hgt = lv_area_get_height(coords);
 
@@ -475,7 +475,7 @@ void lv_draw_sw_grad_linear_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
     start.y = lv_pct_to_px(start.y, hgt);
     end.y = lv_pct_to_px(end.y, hgt);
 
-    /* Precalculate constants */
+    /* Предварительный расчет констант */
     int32_t dx = end.x - start.x;
     int32_t dy = end.y - start.y;
 
@@ -504,7 +504,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_linear_get_line(lv_grad_dsc_t * dsc, 
     lv_opa_t * opa = result->opa_map;
     lv_draw_sw_grad_calc_t * grad = state->cgrad;
 
-    int32_t w;  /* the result: this is an offset into the 256 element gradient color table */
+    int32_t w;  /* результат: это смещение в таблице цветов градиента из 256 элементов. */
     int32_t x, d;
 
     x = xp * state->a + yp * state->b - state->c;
@@ -519,15 +519,15 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_linear_get_line(lv_grad_dsc_t * dsc, 
 }
 
 /*
-    Calculate conical gradient based on the following equation:
+    Рассчитайте конический градиент на основе следующего уравнения:
 
     w = (atan((yp - y0)/(xp - x0)) - alpha) / (beta - alpha), where
 
         P: {xp, yp} is the point of interest
         C0: {x0, y0} is the center of the gradient
-        alpha is the start angle
-        beta is the end angle
-        w is the unknown variable
+        альфа — начальный угол
+        бета — это конечный угол
+        w — неизвестная переменная
 */
 
 void lv_draw_sw_grad_conical_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords)
@@ -538,17 +538,17 @@ void lv_draw_sw_grad_conical_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords
     lv_grad_conical_state_t * state = lv_malloc(sizeof(lv_grad_conical_state_t));
     dsc->state = state;
 
-    /* Create gradient color map */
+    /* Создать карту цветов градиента */
     state->cgrad = lv_draw_sw_grad_get(dsc, 256, 0);
 
-    /* Convert from percentage coordinates */
+    /* Преобразование из процентных координат */
     int32_t wdt = lv_area_get_width(coords);
     int32_t hgt = lv_area_get_height(coords);
 
     c0.x = lv_pct_to_px(c0.x, wdt);
     c0.y = lv_pct_to_px(c0.y, hgt);
 
-    /* Precalculate constants */
+    /* Предварительный расчет констант */
     if(beta <= alpha)
         beta += 360;
     state->x0 = c0.x;
@@ -576,11 +576,11 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_conical_get_line(lv_grad_dsc_t * dsc,
     lv_opa_t * opa = result->opa_map;
     lv_draw_sw_grad_calc_t * grad = state->cgrad;
 
-    int32_t w;  /* the result: this is an offset into the 256 element gradient color table */
+    int32_t w;  /* результат: это смещение в таблице цветов градиента из 256 элементов. */
     int32_t dx = xp - state->x0;
     int32_t dy = yp - state->y0;
 
-    if(dy == 0) {   /* we will eventually go through the center of the conical: need an extra test in the loop to avoid both dx and dy being zero in atan2 */
+    if(dy == 0) {   /* в конечном итоге мы пройдем через центр конуса: нужна дополнительная проверка в цикле, чтобы избежать того, чтобы dx и dy были равны нулю в atan2 */
         for(; width > 0; width--) {
             if(dx == 0) {
                 w = 0;

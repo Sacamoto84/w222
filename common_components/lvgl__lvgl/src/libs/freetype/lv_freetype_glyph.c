@@ -146,7 +146,7 @@ static bool freetype_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_
 }
 
 /*-----------------
- * Cache Callbacks
+ * Кэшировать обратные вызовы
  *----------------*/
 
 static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void * user_data)
@@ -191,14 +191,14 @@ static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void
     if(dsc->render_mode == LV_FREETYPE_FONT_RENDER_MODE_OUTLINE) {
 
         dsc_out->adv_w = FT_F26DOT6_TO_INT(glyph->metrics.horiAdvance);
-        dsc_out->box_h = FT_F26DOT6_TO_INT(glyph->metrics.height);          /*Height of the bitmap in [px]*/
-        dsc_out->box_w = FT_F26DOT6_TO_INT(glyph->metrics.width);           /*Width of the bitmap in [px]*/
-        dsc_out->ofs_x = FT_F26DOT6_TO_INT(glyph->metrics.horiBearingX);    /*X offset of the bitmap in [pf]*/
+        dsc_out->box_h = FT_F26DOT6_TO_INT(glyph->metrics.height);          /*Высота растрового изображения в [пикселях]*/
+        dsc_out->box_w = FT_F26DOT6_TO_INT(glyph->metrics.width);           /*Ширина растрового изображения в [пикселях]*/
+        dsc_out->ofs_x = FT_F26DOT6_TO_INT(glyph->metrics.horiBearingX);    /*Смещение X растрового изображения в [pf]*/
         dsc_out->ofs_y = FT_F26DOT6_TO_INT(glyph->metrics.horiBearingY -
-                                           glyph->metrics.height);          /*Y offset of the bitmap measured from the as line*/
+                                           glyph->metrics.height);          /*Смещение Y растрового изображения, измеренное от строки as*/
         dsc_out->format = LV_FONT_GLYPH_FORMAT_VECTOR;
 
-        /*Transform the glyph to italic if required */
+        /*При необходимости преобразуйте глиф в курсив. */
         if(dsc->style & LV_FREETYPE_FONT_STYLE_ITALIC) {
             dsc_out->box_w = lv_freetype_italic_transform_on_pos((lv_point_t) {
                 dsc_out->box_w, dsc_out->box_h
@@ -208,12 +208,12 @@ static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void
     else if(dsc->render_mode == LV_FREETYPE_FONT_RENDER_MODE_BITMAP) {
         FT_Bitmap * glyph_bitmap = &face->glyph->bitmap;
 
-        dsc_out->adv_w = FT_F26DOT6_TO_INT(glyph->advance.x);        /*Width of the glyph in [pf]*/
-        dsc_out->box_h = glyph_bitmap->rows;                         /*Height of the bitmap in [px]*/
-        dsc_out->box_w = glyph_bitmap->width;                        /*Width of the bitmap in [px]*/
-        dsc_out->ofs_x = glyph->bitmap_left;                         /*X offset of the bitmap in [pf]*/
+        dsc_out->adv_w = FT_F26DOT6_TO_INT(glyph->advance.x);        /*Ширина глифа в [пф]*/
+        dsc_out->box_h = glyph_bitmap->rows;                         /*Высота растрового изображения в [пикселях]*/
+        dsc_out->box_w = glyph_bitmap->width;                        /*Ширина растрового изображения в [пикселях]*/
+        dsc_out->ofs_x = glyph->bitmap_left;                         /*Смещение X растрового изображения в [pf]*/
         dsc_out->ofs_y = glyph->bitmap_top -
-                         dsc_out->box_h;                             /*Y offset of the bitmap measured from the as line*/
+                         dsc_out->box_h;                             /*Смещение Y растрового изображения, измеренное от строки as*/
         if(glyph->format == FT_GLYPH_FORMAT_BITMAP)
             dsc_out->format = LV_FONT_GLYPH_FORMAT_IMAGE;
         else

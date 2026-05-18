@@ -78,7 +78,7 @@ void test_align(void)
     lv_obj_clean(active_screen);
 }
 
-/*See https://github.com/lvgl/lvgl/issues/7035*/
+/*См. https://github.com/lvgl/lvgl/issues/7035.*/
 void test_wrap_grow_min_width(void)
 {
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
@@ -114,7 +114,7 @@ void test_wrap_grow_min_width_content(void)
         lv_obj_set_style_min_width(obj, LV_SIZE_CONTENT, 0);
         lv_obj_set_style_pad_all(obj, 0, 0);
         lv_obj_set_height(obj, 70 + (i % 3) * 20);
-        lv_obj_set_width(obj, 120); // this width should be ignored if grow != 0
+        lv_obj_set_width(obj, 120); // эту ширину следует игнорировать, если растет != 0
 
         uint8_t grow = (i % 3);
         lv_obj_set_flex_grow(obj, grow);
@@ -238,7 +238,7 @@ void test_col_wrap_grow_size_content(void)
     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(100));
 
     obj = create_col_wrap(12);
-    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(100)); // `LV_SIZE_CONTENT` should be ignored because flex grow is set
+    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(100)); // `LV_SIZE_CONTENT` следует игнорировать, поскольку установлен гибкий рост.
     lv_obj_set_flex_grow(obj, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("flex_col_wrap_grow_size.png");
@@ -253,7 +253,7 @@ void test_col_wrap_grow_size_content_2(void)
     lv_obj_set_size(obj, LV_PCT(100), LV_PCT(50));
 
     obj = create_col_wrap(12);
-    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT); // `LV_SIZE_CONTENT` should be ignored because flex grow is set
+    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT); // `LV_SIZE_CONTENT` следует игнорировать, поскольку установлен гибкий рост.
     lv_obj_set_flex_grow(obj, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("flex_col_wrap_grow_size_2.png");
@@ -289,7 +289,7 @@ void test_row_wrap_grow_size_content(void)
     lv_obj_set_size(obj, LV_PCT(50), LV_PCT(100));
 
     obj = create_row_wrap(12);
-    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(100)); // `LV_SIZE_CONTENT` should be ignored because flex grow is set
+    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(100)); // `LV_SIZE_CONTENT` следует игнорировать, поскольку установлен гибкий рост.
     lv_obj_set_flex_grow(obj, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("flex_row_wrap_grow_size.png");
@@ -304,14 +304,14 @@ void test_row_wrap_grow_size_content_2(void)
     lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
 
     obj = create_row_wrap(12);
-    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT); // `LV_SIZE_CONTENT` should be ignored because flex grow is set
+    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT); // `LV_SIZE_CONTENT` следует игнорировать, поскольку установлен гибкий рост.
     lv_obj_set_flex_grow(obj, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("flex_row_wrap_grow_size_2.png");
 }
 /**
- * When the container is set to LV_SIZE_CONTENT in flex direction and an item is set to grow,
- * the size of the grown item should be equal to the min size of the item
+ * Когда для контейнера установлено значение LV_SIZE_CONTENT в гибком направлении, а элемент настроен на рост,
+ * размер выращенного предмета должен быть равен минимальному размеру предмета
  */
 void test_col_grow_size_content(void)
 {
@@ -327,7 +327,7 @@ void test_col_grow_size_content(void)
     const int32_t space_start = lv_obj_get_style_space_top(cont, LV_PART_MAIN);
     const int32_t space_end = lv_obj_get_style_space_bottom(cont, LV_PART_MAIN);
 
-    /* Redundant but ensures all padding is as expected in case the theme sets different top & bottom padding */
+    /* Избыточно, но гарантирует, что все отступы будут такими, как ожидалось, если тема устанавливает разные верхние и нижние отступы. */
     lv_obj_set_style_pad_all(cont, pad_all, 0);
     lv_obj_set_style_pad_gap(cont, pad_gap, 0);
 
@@ -355,7 +355,7 @@ void test_col_grow_size_content(void)
     int32_t item_max_height = LV_COORD_MAX;
     int32_t cont_max_height = LV_COORD_MAX;
 
-    /* 2 * pad_gap because there are 3 objs in cont */
+    /* 2 * pad_gap, потому что в продолжении 3 объекта */
     const int32_t fixed_size = space_start + header_height + 2 * pad_gap + footer_height + space_end;
 
     TEST_ASSERT_GREATER_THAN_INT32(0, fixed_size);
@@ -369,8 +369,8 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(item_min_height + fixed_size, lv_obj_get_height(cont));
     TEST_ASSERT_EQUAL(item_min_height, lv_obj_get_height(item));
 
-    /* The min size of the cont should "override" the `LV_SIZE_CONTENT` height so item should be visible and grow to
-     * fill space */
+    /* Минимальный размер объекта должен «переопределять» высоту `LV_SIZE_CONTENT`, чтобы элемент был виден и увеличивался до
+     * заполнить пространство */
     item_min_height = 0;
     cont_min_height = 400;
     lv_obj_set_style_min_height(cont, cont_min_height, LV_PART_MAIN);
@@ -380,8 +380,8 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(cont_min_height, lv_obj_get_height(cont));
     TEST_ASSERT_EQUAL(cont_min_height - fixed_size, lv_obj_get_height(item));
 
-    /* The min size of the cont should "override" the `LV_SIZE_CONTENT` height so item should be visible and grow to
-     * fill space up to the max size */
+    /* Минимальный размер объекта должен «переопределять» высоту `LV_SIZE_CONTENT`, чтобы элемент был виден и увеличивался до
+     * заполнить пространство до максимального размера */
     item_max_height = 200;
     lv_obj_set_style_max_height(item, item_max_height, LV_PART_MAIN);
 
@@ -393,8 +393,8 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(cont_min_height, lv_obj_get_height(cont));
     TEST_ASSERT_EQUAL(item_max_height, lv_obj_get_height(item));
 
-    /* item height should be 0 since min size is not set for item or cont, cont should not be max size since max size is
-     * larger than content */
+    /* высота элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont не должен быть максимальным размером, поскольку максимальный размер равен
+     * больше, чем содержание */
     cont_min_height = 0;
     cont_max_height = 500;
     item_max_height = 0;
@@ -410,8 +410,8 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_height(item));
     TEST_ASSERT_EQUAL(fixed_size, lv_obj_get_height(cont));
 
-    /* item height should be 0 since min size is not set for item or cont, cont should be max size since max size is
-     * smaller than content */
+    /* высота элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont должен быть максимальным размером, поскольку максимальный размер равен
+     * меньше, чем содержание */
     item_max_height = 0;
     cont_max_height = 3 * fixed_size / 4;
     lv_obj_set_style_max_height(item, item_max_height, LV_PART_MAIN);
@@ -421,7 +421,7 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_height(item));
     TEST_ASSERT_EQUAL(cont_max_height, lv_obj_get_height(cont));
 
-    /* item should be min height (50) and cont will be max height so cont should be scrollable */
+    /* элемент должен иметь минимальную высоту (50), а cont будет максимальной высоты, поэтому cont должен быть прокручиваемым */
     item_min_height = 50;
     lv_obj_set_style_min_height(item, item_min_height, LV_PART_MAIN);
 
@@ -429,7 +429,7 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(item_min_height, lv_obj_get_height(item));
     TEST_ASSERT_EQUAL(cont_max_height, lv_obj_get_height(cont));
 
-    /* max cont height should be ignored here */
+    /* здесь следует игнорировать максимальную высоту cont */
     cont_max_height = LV_PCT(70);
     TEST_ASSERT_GREATER_THAN_INT32_MESSAGE(fixed_size + item_min_height,
                                            cont_max_height,
@@ -443,8 +443,8 @@ void test_col_grow_size_content(void)
 }
 
 /**
- * When the container is set to LV_SIZE_CONTENT in flex direction and an item is set to grow,
- * the size of the grown item should be equal to the min size of the item
+ * Когда для контейнера установлено значение LV_SIZE_CONTENT в гибком направлении, а элемент настроен на рост,
+ * размер выращенного предмета должен быть равен минимальному размеру предмета
  */
 void test_row_grow_size_content(void)
 {
@@ -460,7 +460,7 @@ void test_row_grow_size_content(void)
     const int32_t space_start = lv_obj_get_style_space_left(cont, LV_PART_MAIN);
     const int32_t space_end = lv_obj_get_style_space_right(cont, LV_PART_MAIN);
 
-    /* Redundant but ensures all padding is as expected in case the theme sets different top & bottom padding */
+    /* Избыточно, но гарантирует, что все отступы будут такими, как ожидалось, если тема устанавливает разные верхние и нижние отступы. */
     lv_obj_set_style_pad_all(cont, pad_all, 0);
     lv_obj_set_style_pad_gap(cont, pad_gap, 0);
 
@@ -488,7 +488,7 @@ void test_row_grow_size_content(void)
     int32_t item_max_width = LV_COORD_MAX;
     int32_t cont_max_width = LV_COORD_MAX;
 
-    /* 2 * pad_gap because there are 3 objs in cont */
+    /* 2 * pad_gap, потому что в продолжении 3 объекта */
     const int32_t fixed_size = space_start + left_width + 2 * pad_gap + right_width + space_end;
 
     TEST_ASSERT_GREATER_THAN_INT32(0, fixed_size);
@@ -502,8 +502,8 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(item_min_width + fixed_size, lv_obj_get_width(cont));
     TEST_ASSERT_EQUAL(item_min_width, lv_obj_get_width(item));
 
-    /* The min size of the cont should "override" the `LV_SIZE_CONTENT` width so item should be visible and grow to
-     * fill space */
+    /* Минимальный размер объекта должен «переопределять» ширину `LV_SIZE_CONTENT`, чтобы элемент был виден и увеличивался до
+     * заполнить пространство */
     item_min_width = 0;
     cont_min_width = 400;
     lv_obj_set_style_min_width(item, item_min_width, LV_PART_MAIN);
@@ -513,8 +513,8 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(cont_min_width, lv_obj_get_width(cont));
     TEST_ASSERT_EQUAL(cont_min_width - fixed_size, lv_obj_get_width(item));
 
-    /* The min size of the cont should "override" the `LV_SIZE_CONTENT` width so item should be visible and grow to
-     * fill space up to the max size */
+    /* Минимальный размер объекта должен «переопределять» ширину `LV_SIZE_CONTENT`, чтобы элемент был виден и увеличивался до
+     * заполнить пространство до максимального размера */
     item_max_width = 200;
     lv_obj_set_style_max_width(item, item_max_width, LV_PART_MAIN);
 
@@ -526,8 +526,8 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(cont_min_width, lv_obj_get_width(cont));
     TEST_ASSERT_EQUAL(item_max_width, lv_obj_get_width(item));
 
-    /* item width should be 0 since min size is not set for item or cont, cont should not be max size since max size is
-     * larger than content */
+    /* Ширина элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont не должен быть максимальным размером, поскольку максимальный размер равен
+     * больше, чем содержание */
     cont_min_width = 0;
     cont_max_width = 500;
     item_max_width = 0;
@@ -543,8 +543,8 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_width(item));
     TEST_ASSERT_EQUAL(fixed_size, lv_obj_get_width(cont));
 
-    /* item width should be 0 since min size is not set for item or cont, cont should be max size since max size is
-     * smaller than content */
+    /* Ширина элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont должен быть максимальным размером, поскольку максимальный размер равен
+     * меньше, чем содержание */
     item_max_width = 0;
     cont_max_width = 3 * fixed_size / 4;
     lv_obj_set_style_max_width(item, item_max_width, LV_PART_MAIN);
@@ -554,7 +554,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_width(item));
     TEST_ASSERT_EQUAL(cont_max_width, lv_obj_get_width(cont));
 
-    /* item should be min width (90) and cont will be max width (70) so cont should be scrollable */
+    /* элемент должен иметь минимальную ширину (90), а cont - максимальную ширину (70), поэтому cont должен быть прокручиваемым. */
     item_min_width = 50;
     lv_obj_set_style_min_width(item, item_min_width, LV_PART_MAIN);
 
@@ -562,7 +562,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(item_min_width, lv_obj_get_width(item));
     TEST_ASSERT_EQUAL(cont_max_width, lv_obj_get_width(cont));
 
-    /* max cont width should be ignored here */
+    /* здесь следует игнорировать максимальную ширину cont */
     cont_max_width = LV_PCT(70);
     TEST_ASSERT_GREATER_THAN_INT32_MESSAGE(fixed_size + item_min_width,
                                            cont_max_width,
@@ -575,7 +575,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(fixed_size + item_min_width, lv_obj_get_width(cont));
 }
 
-/* Test that flex grow still works with min size = LV_SIZE_CONTENT */
+/* Проверьте, работает ли гибкий рост с минимальным размером = LV_SIZE_CONTENT. */
 void test_nested_flex_grow_size_content(void)
 {
     lv_obj_t * cont = lv_obj_create(lv_screen_active());
@@ -591,7 +591,7 @@ void test_nested_flex_grow_size_content(void)
     const int32_t space_start = lv_obj_get_style_space_left(cont, LV_PART_MAIN);
     const int32_t space_end = lv_obj_get_style_space_right(cont, LV_PART_MAIN);
 
-    /* Redundant but ensures all padding is as expected in case the theme sets different top & bottom padding */
+    /* Избыточно, но гарантирует, что все отступы будут такими, как ожидалось, если тема устанавливает разные верхние и нижние отступы. */
     lv_obj_set_style_pad_all(cont, pad_all, 0);
     lv_obj_set_style_pad_gap(cont, pad_gap, 0);
 
@@ -607,7 +607,7 @@ void test_nested_flex_grow_size_content(void)
     lv_obj_set_style_bg_color(sub_cont, lv_color_hex(0x00ff00), 0);
     lv_obj_set_style_bg_opa(sub_cont, LV_OPA_COVER, 0);
 
-    /* Ensures all padding is as expected in case the theme sets different top & bottom padding */
+    /* Гарантирует, что все отступы соответствуют ожиданиям, если в теме установлены разные верхние и нижние отступы. */
     lv_obj_set_style_pad_all(sub_cont, pad_all, 0);
     lv_obj_set_style_pad_gap(sub_cont, pad_gap, 0);
 
@@ -616,7 +616,7 @@ void test_nested_flex_grow_size_content(void)
     const int32_t cont_width = lv_obj_get_width(cont); /* LV_PCT(100) */
     const int32_t fixed_size = space_start + label_width + pad_gap + space_end;
 
-    /* Check sub cont grows to fill expected space */
+    /* Проверьте, растет ли подконтент, чтобы заполнить ожидаемое пространство */
     TEST_ASSERT_EQUAL(cont_width - fixed_size, lv_obj_get_width(sub_cont));
     TEST_ASSERT_EQUAL(0,
                       lv_obj_get_height(sub_cont) - (lv_obj_get_style_space_top(sub_cont, LV_PART_MAIN) +
@@ -638,7 +638,7 @@ void test_nested_flex_grow_size_content(void)
 
     lv_obj_update_layout(cont);
 
-    /* Manual check that the sub container has been clamped to the correct size of the content */
+    /* Вручную проверьте, что дополнительный контейнер закреплен в соответствии с размером содержимого. */
     int32_t content_size = lv_obj_get_style_space_left(sub_cont, LV_PART_MAIN) + total_item_width +
                            (items - 1) * pad_gap + lv_obj_get_style_space_right(sub_cont, LV_PART_MAIN);
     TEST_ASSERT_LESS_THAN_INT32_MESSAGE(cont_width - fixed_size,
@@ -647,8 +647,8 @@ void test_nested_flex_grow_size_content(void)
                                         "space, reduce the number of items or length of text in the items");
     TEST_ASSERT_EQUAL(content_size, lv_obj_get_width(sub_cont));
 
-    /* Add more items to check that when the content size is calculated (which doesn't account for wrapping so max width
-     * should be greater than the available grow space), the width is not clamped */
+    /* Добавьте больше элементов, чтобы убедиться, что при расчете размера контента (который не учитывает перенос, поэтому максимальная ширина
+     * должна быть больше, чем доступное пространство для выращивания), ширина не ограничивается */
 
     const size_t new_items = 20;
     for(size_t i = items; i < new_items; i++) {
@@ -673,8 +673,8 @@ void test_nested_flex_grow_size_content(void)
 
     TEST_ASSERT_EQUAL(cont_width - fixed_size, lv_obj_get_width(sub_cont));
 
-    /* This interaction was previously erroneous behaviour since the sub cont size would remain at the size before the
-     * new items were added. You previously had to manually override the max width to reset it */
+    /* Ранее это взаимодействие было ошибочным, поскольку размер субконтента оставался прежним.
+     * были добавлены новые предметы. Раньше вам приходилось вручную переопределять максимальную ширину, чтобы сбросить ее. */
     lv_obj_set_style_max_width(sub_cont, LV_COORD_MAX, LV_PART_MAIN);
     lv_obj_update_layout(sub_cont);
     lv_obj_set_style_max_width(sub_cont, LV_SIZE_CONTENT, LV_PART_MAIN);

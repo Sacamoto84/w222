@@ -16,7 +16,7 @@ extern "C" {
 #include "../../misc/lv_types.h"
 #if LV_USE_LOTTIE
 
-/*Testing of dependencies*/
+/*Тестирование зависимостей*/
 #if LV_USE_CANVAS == 0
 #error "lv_lottie: lv_canvas is required. Enable it in lv_conf.h (LV_USE_CANVAS 1)"
 #endif
@@ -40,14 +40,14 @@ extern "C" {
  **********************/
 
 /**
- * Create a lottie animation
+ * Создать анимацию лотереи
  * @param parent    pointer to the parent widget
  * @return          pointer to the created Lottie animation widget
  */
 lv_obj_t  * lv_lottie_create(lv_obj_t * parent);
 
 /**
- * Set a buffer for the animation. It also defines the size of the animation
+ * Установите буфер для анимации. Он также определяет размер анимации.
  * @param obj       pointer to a lottie widget
  * @param w         width of the animation and buffer
  * @param h         height of the animation and buffer
@@ -56,14 +56,14 @@ lv_obj_t  * lv_lottie_create(lv_obj_t * parent);
 void lv_lottie_set_buffer(lv_obj_t * obj, int32_t w, int32_t h, void * buf);
 
 /**
- * Set a draw buffer for the animation. It also defines the size of the animation
+ * Установите буфер прорисовки для анимации. Он также определяет размер анимации.
  * @param obj       pointer to a lottie widget
  * @param draw_buf  an initialized draw buffer with ARGB8888 color format
  */
 void lv_lottie_set_draw_buf(lv_obj_t * obj, lv_draw_buf_t * draw_buf);
 
 /**
- * Set the source for the animation as an array
+ * Установите источник анимации в виде массива.
  * @param obj       pointer to a lottie widget
  * @param src       the lottie animation converted to an nul terminated array
  * @param src_size  size of the source array in bytes
@@ -71,15 +71,15 @@ void lv_lottie_set_draw_buf(lv_obj_t * obj, lv_draw_buf_t * draw_buf);
 void lv_lottie_set_src_data(lv_obj_t * obj, const void * src, size_t src_size);
 
 /**
- * Set the source for the animation as a path.
- * Lottie doesn't use LVGL's File System API.
+ * Установите источник анимации в качестве пути.
+ * Лотти не использует файловую систему LVGL API.
  * @param obj       pointer to a lottie widget
  * @param src       path to a json file, e.g. "path/to/file.json"
  */
 void lv_lottie_set_src_file(lv_obj_t * obj, const char * src);
 
 /**
- * Get the LVGL animation which controls the lottie animation
+ * Получите анимацию LVGL, которая управляет анимацией лотереи.
  * @param obj       pointer to a lottie widget
  * @return          the LVGL animation
  */
@@ -96,7 +96,7 @@ lv_anim_t * lv_lottie_get_anim(lv_obj_t * obj);
 #endif /*LV_USE_LOTTIE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LOTTIE_H*/

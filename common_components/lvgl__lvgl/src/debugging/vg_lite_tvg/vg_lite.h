@@ -1,19 +1,19 @@
 /****************************************************************************
 *
 *    Copyright 2012 - 2023 Vivante Corporation, Santa Clara, California.
-*    All Rights Reserved.
+*    Все права защищены.
 *
-*    Permission is hereby granted, free of charge, to any person obtaining
-*    a copy of this software and associated documentation files (the
-*    'Software'), to deal in the Software without restriction, including
-*    without limitation the rights to use, copy, modify, merge, publish,
-*    distribute, sub license, and/or sell copies of the Software, and to
-*    permit persons to whom the Software is furnished to do so, subject
-*    to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации (файл
+*    «Программное обеспечение»), иметь дело с Программным обеспечением без ограничений, включая
+*    без ограничений права на использование, копирование, изменение, объединение, публикацию,
+*    распространять, сублицензировать и/или продавать копии Программного обеспечения, а также
+*    разрешать лицам, которым предоставлено Программное обеспечение, делать это при условии, что
+*    на следующие условия:
 *
-*    The above copyright notice and this permission notice (including the
-*    next paragraph) shall be included in all copies or substantial
-*    portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и данное уведомление о разрешении (включая
+*    следующий абзац) должны быть включены во все копии или существенные
+*    части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 *    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -33,21 +33,21 @@ extern "C" {
 #endif
 
 /**
- * causes MSVC error C1189.
- * Not needed because "The __inline keyword is equivalent to inline."
+ * вызывает ошибку MSVC C1189.
+ * Не требуется, поскольку «Ключевое слово __inline эквивалентно встроенному».
  * See: https://learn.microsoft.com/en-us/cpp/cpp/inline-functions-cpp?view=msvc-170
 */
 /*
-#if defined(_MSC_VER)
-#define inline __inline
-#endif
+#если определено ( _MSC_VER )
+#определить встроенный __inline
+#конец
 */
 
 #include <stddef.h>
 #include <stdint.h>
 
 
-/*  VGLite API Constants *******************************************************************************************************************/
+/*  Константы VGLite API ****************************************************************************************************************/
 
 #define VGLITE_HEADER_VERSION       7
 
@@ -66,7 +66,7 @@ extern "C" {
 #define VGL_FALSE                   0
 #define VGL_TRUE                    1
 
-/* Path command (op code). */
+/* Команда пути (код операции). */
 #define VLC_OP_END                  0x00
 #define VLC_OP_CLOSE                0x01
 #define VLC_OP_MOVE                 0x02
@@ -95,18 +95,18 @@ extern "C" {
 #define VLC_OP_LCWARC               0x19
 #define VLC_OP_LCWARC_REL           0x1A
 
-/* Macros for path manipulating: See path definitions. */
+/* Макросы для управления путями: см. определения путей. */
 #define VLM_PATH_ENABLE_UPLOAD(path)    (path).uploaded.property |= 1
 #define VLM_PATH_DISABLE_UPLOAD(path)   (path).uploaded.property &= (~1)
 #define VLM_PATH_GET_UPLOAD_BIT(path)   ((path).uploaded.property & 1)
 
-/* Gradient constants. */
+/* Градиентные константы. */
 #define VLC_MAX_COLOR_RAMP_STOPS    256             /*! The max number of radial gradient stops. */
 #define VLC_MAX_GRADIENT_STOPS      16              /*! The max number of gradient stops. */
 #define VLC_GRADIENT_BUFFER_WIDTH   1024            /*! The internal gradient buffer width.*/
 
 
-/* API name defines for backward compatibility to VGLite 2.0 APIs */
+/* Имя API определяет обратную совместимость с API VGLite 2.0. */
 #define vg_lite_buffer_upload                   vg_lite_upload_buffer
 #define vg_lite_path_append                     vg_lite_append_path
 #define vg_lite_path_calc_length                vg_lite_get_path_length
@@ -139,7 +139,7 @@ extern "C" {
 #define vg_lite_buffer_transparency_mode_t      vg_lite_transparency_t
 
 
-/* VGLite API Types ***********************************************************************************************************************/
+/* Типы VGLite API ********************************************************************************************************************/
 
 typedef unsigned char       vg_lite_uint8_t;
 typedef char                vg_lite_int8_t;
@@ -157,12 +157,12 @@ typedef void                vg_lite_void;
 typedef unsigned int        vg_lite_color_t;
 
 
-/* VGLite API Enumerations ****************************************************************************************************************/
+/* Перечисления VGLite API **************************************************************************************************************/
 
 #ifndef VG_LITE_ERROR
 #define VG_LITE_ERROR  1
 
-/* Error codes that the vg_lite functions can return. */
+/* Коды ошибок, которые могут возвращать функции vg_lite. */
 typedef enum vg_lite_error {
     VG_LITE_SUCCESS = 0,            /*! Success. */
     VG_LITE_INVALID_ARGUMENT,       /*! An invalid argument was specified. */
@@ -179,7 +179,7 @@ typedef enum vg_lite_error {
 } vg_lite_error_t;
 #endif
 
-/* Chip features bit */
+/* Чип имеет немного функций */
 typedef enum vg_lite_feature {
     gcFEATURE_BIT_VG_IM_INDEX_FORMAT,
     gcFEATURE_BIT_VG_SCISSOR,
@@ -230,7 +230,7 @@ typedef enum vg_lite_feature {
     gcFEATURE_COUNT
 } vg_lite_feature_t;
 
-/* Rendering quality enums. */
+/* Качество рендеринга перечислений. */
 typedef enum vg_lite_quality {
     VG_LITE_HIGH,   /*! High quality 16x anti-aliasing path. */
     VG_LITE_UPPER,  /*! Upper quality 8x anti-aliasing path. */
@@ -238,7 +238,7 @@ typedef enum vg_lite_quality {
     VG_LITE_LOW,    /*! Low quality path without any anti-aliasing. */
 } vg_lite_quality_t;
 
-/* Format of path coordinates. */
+/* Формат координат пути. */
 typedef enum vg_lite_format {
     VG_LITE_S8,     /*! Signed 8-bit coordinates. */
     VG_LITE_S16,    /*! Signed 16-bit coordinates. */
@@ -246,15 +246,15 @@ typedef enum vg_lite_format {
     VG_LITE_FP32,   /*! 32-bit floating point coordinates. */
 } vg_lite_format_t;
 
-/* Format of pixel buffer. */
+/* Формат пиксельного буфера. */
 typedef enum vg_lite_buffer_format {
-    /* OpenVG VGImageFormat enums:
+    /* Перечисления OpenVG VGImageFormat:
      * Note: The bits for each color channel are stored within a machine word
-     * from MSB to LSB in the order indicated by the pixel format name.
-     * This is opposite of VG_LITE_* formats (from LSB to MSB).
+     * от MSB до LSB в порядке, указанном названием формата пикселей.
+     * Это противоположно форматам VG_LITE_* (от LSB до MSB).
      */
 
-    /* RGB{A,X} channel ordering */
+    /* RGB {A,X} порядок каналов */
     VG_sRGBX_8888                               =  0,
     VG_sRGBA_8888                               =  1,
     VG_sRGBA_8888_PRE                           =  2,
@@ -283,7 +283,7 @@ typedef enum vg_lite_buffer_format {
     VG_lRGBA_4444                               = 24,
     VG_lRGBA_4444_PRE                           = 25,
 
-    /* {A,X}RGB channel ordering */
+    /* {A,X} RGB порядок каналов */
     VG_sXRGB_8888                               =  0 | (1 << 6),
     VG_sARGB_8888                               =  1 | (1 << 6),
     VG_sARGB_8888_PRE                           =  2 | (1 << 6),
@@ -293,7 +293,7 @@ typedef enum vg_lite_buffer_format {
     VG_lARGB_8888                               =  8 | (1 << 6),
     VG_lARGB_8888_PRE                           =  9 | (1 << 6),
 
-    /* BGR{A,X} channel ordering */
+    /* BGR {A,X} порядок каналов */
     VG_sBGRX_8888                               =  0 | (1 << 7),
     VG_sBGRA_8888                               =  1 | (1 << 7),
     VG_sBGRA_8888_PRE                           =  2 | (1 << 7),
@@ -304,7 +304,7 @@ typedef enum vg_lite_buffer_format {
     VG_lBGRA_8888                               =  8 | (1 << 7),
     VG_lBGRA_8888_PRE                           =  9 | (1 << 7),
 
-    /* {A,X}BGR channel ordering */
+    /* {A,X} BGR порядок каналов */
     VG_sXBGR_8888                               =  0 | (1 << 6) | (1 << 7),
     VG_sABGR_8888                               =  1 | (1 << 6) | (1 << 7),
     VG_sABGR_8888_PRE                           =  2 | (1 << 6) | (1 << 7),
@@ -314,10 +314,10 @@ typedef enum vg_lite_buffer_format {
     VG_lABGR_8888                               =  8 | (1 << 6) | (1 << 7),
     VG_lABGR_8888_PRE                           =  9 | (1 << 6) | (1 << 7),
 
-    /* Original VGLite API image format enums:
+    /* Перечисления оригинального формата изображения VGLite API:
      * Note: The bits for each color channel are stored within a machine word
-     * from LSB to MSB in the order indicated by the pixel format name.
-     * This is opposite of OPENVG VG_* formats (from MSB to LSB).
+     * от LSB до MSB в порядке, указанном названием формата пикселей.
+     * Это противоположно форматам OPENVG VG_ * (от MSB до LSB).
      */
     VG_LITE_RGBA8888                        =  0 | (1 << 10),
     VG_LITE_BGRA8888                        =  1 | (1 << 10),
@@ -376,27 +376,27 @@ typedef enum vg_lite_buffer_format {
 
 } vg_lite_buffer_format_t;
 
-/* Swizzle of packed YUV format UV channels. */
+/* Набор упакованных каналов YUV формата UV. */
 typedef enum vg_lite_swizzle {
     VG_LITE_SWIZZLE_UV,
     VG_LITE_SWIZZLE_VU,
 } vg_lite_swizzle_t;
 
-/* The YUV<->RGB conversion rule. */
+/* Правило преобразования YUV <-> RGB. */
 typedef enum vg_lite_yuv2rgb {
     VG_LITE_YUV601,
     VG_LITE_YUV709,
 } vg_lite_yuv2rgb_t;
 
-/* The pixel layout in a buffer. */
+/* Расположение пикселей в буфере. */
 typedef enum vg_lite_buffer_layout {
     VG_LITE_LINEAR,
     VG_LITE_TILED,
 } vg_lite_buffer_layout_t;
 
-/* The image (buffer) rendering mode. Match OpenVG enum VGImageMode */
+/* Режим рендеринга изображения (буфера). Соответствие перечислению OpenVG VGImageMode */
 typedef enum vg_lite_image_mode {
-    /* For enum value backward compatibility */
+    /* Для обратной совместимости значений перечисления */
     VG_LITE_ZERO                            = 0,
     VG_LITE_NORMAL_IMAGE_MODE               = 0x1F00,
     VG_LITE_MULTIPLY_IMAGE_MODE             = 0x1F01,
@@ -405,15 +405,15 @@ typedef enum vg_lite_image_mode {
     VG_LITE_RECOLOR_MODE                    = 0x1F04,
 } vg_lite_image_mode_t;
 
-/* The image (buffer) transparency mode. */
+/* Режим прозрачности изображения (буфера). */
 typedef enum vg_lite_transparency {
     VG_LITE_IMAGE_OPAQUE,
     VG_LITE_IMAGE_TRANSPARENT
 } vg_lite_transparency_t;
 
-/* Blending modes. VG_BLEND_* match OpenVG enum VGBlendMode.
- * S and D represent source and destination color channels.
- * Sa and Da represent the source and destination alpha channels.
+/* Режимы смешивания.  VG_BLEND_ * соответствует перечислению OpenVG VGBlendMode.
+ * S и D представляют цветовые каналы источника и назначения.
+ * Sa и Da представляют собой альфа-каналы источника и назначения.
  */
 typedef enum vg_lite_blend {
     VG_LITE_BLEND_NONE                      = 0,        /*! S, No blend, Non-premultiplied */
@@ -445,20 +445,20 @@ typedef enum vg_lite_blend {
     OPENVG_BLEND_ADDITIVE                   = 0x2009,   /*! Porter-Duff ADDITIVE blend, Premultiplied */
 } vg_lite_blend_t;
 
-/* Fill rules. Match OpenVG enum VGFillRule */
+/* Заполните правила. Соответствие перечислению OpenVG VGFillRule */
 typedef enum vg_lite_fill {
     VG_LITE_FILL_EVEN_ODD                   = 0x1900,   /*! A pixel is drawn it it crosses an odd number of path pixels. */
     VG_LITE_FILL_NON_ZERO                   = 0x1901,   /*! A pixel is drawn if it crosses at least one path pixel. */
 } vg_lite_fill_t;
 
-/* Global alpha modes. */
+/* Глобальные альфа-режимы. */
 typedef enum vg_lite_global_alpha {
     VG_LITE_NORMAL = 0,                     /*! Use original src/dst alpha value. */
     VG_LITE_GLOBAL,                         /*! Use global src/dst alpha value to replace original src/dst alpha value. */
     VG_LITE_SCALED,                         /*! Multiply global src/dst alpha value and original src/dst alpha value. */
 } vg_lite_global_alpha_t;
 
-/* Filter modes. */
+/* Режимы фильтров. */
 typedef enum vg_lite_filter {
     VG_LITE_FILTER_POINT     = 0,           /*! Fetch the nearest image pixel. */
     VG_LITE_FILTER_LINEAR    = 0x1000,      /*! Used for linear paint. */
@@ -466,7 +466,7 @@ typedef enum vg_lite_filter {
     VG_LITE_FILTER_GAUSSIAN  = 0x3000,      /*! Perform 3x3 gaussian blur with the convolution for image pixel. */
 } vg_lite_filter_t;
 
-/* Pattern padding mode. Match OpenVG enum VGTilingMode. */
+/* Режим заполнения шаблона. Соответствует перечислению OpenVG VGTilingMode. */
 typedef enum vg_lite_pattern_mode {
     VG_LITE_PATTERN_COLOR   = 0x1D00,       /*! Pixel outside the bounds of sourceimage should be taken as the color */
     VG_LITE_PATTERN_PAD     = 0x1D01,       /*! Pixel outside the bounds of sourceimage should be taken as having the same color as the closest edge pixel */
@@ -474,9 +474,9 @@ typedef enum vg_lite_pattern_mode {
     VG_LITE_PATTERN_REFLECT = 0x1D03,       /*! Pixel outside the bounds of sourceimage should be reflected indefinitely in all directions */
 } vg_lite_pattern_mode_t;
 
-/* Paint type. Match OpenVG enum VGPaintType. */
+/* Тип краски. Соответствует перечислению OpenVG VGPaintType. */
 typedef enum vg_lite_paint_type {
-    /* For enum value backward compatibility */
+    /* Для обратной совместимости значений перечисления */
     VG_LITE_PAINT_ZERO            = 0,
     VG_LITE_PAINT_COLOR           = 0x1B00,
     VG_LITE_PAINT_LINEAR_GRADIENT = 0x1B01,
@@ -484,7 +484,7 @@ typedef enum vg_lite_paint_type {
     VG_LITE_PAINT_PATTERN         = 0x1B03,
 } vg_lite_paint_type_t;
 
-/* Radial gradient padding mode. Match OpenVG enum VGColorRampSpreadMode */
+/* Режим заполнения радиального градиента. Соответствие перечислению OpenVG VGColorRampSpreadMode */
 typedef enum {
     VG_LITE_GRADIENT_SPREAD_FILL     = 0,
     VG_LITE_GRADIENT_SPREAD_PAD      = 0x1C00,
@@ -492,7 +492,7 @@ typedef enum {
     VG_LITE_GRADIENT_SPREAD_REFLECT  = 0x1C02,
 } vg_lite_gradient_spreadmode_t;
 
-/* Decnano Compress mode. */
+/* Режим Decnano Compress. */
 typedef enum vg_lite_compress_mode {
     VG_LITE_DEC_DISABLE = 0,                /*! disable compress */
     VG_LITE_DEC_NON_SAMPLE,                 /*! compress ratio is 1.6 if use ARGB8888, compress ratio is 2 if use XRGB8888 */
@@ -500,30 +500,30 @@ typedef enum vg_lite_compress_mode {
     VG_LITE_DEC_HV_SAMPLE,                  /*! compress ratio is 2.6 if use ARGB8888, compress ratio is 4 if use XRGB8888 */
 } vg_lite_compress_mode_t;
 
-/* Draw path type. Match OpenVG enum VGPaintMode */
+/* Нарисовать тип пути. Соответствие перечислению OpenVG VGPaintMode */
 typedef enum vg_lite_path_type {
-    /* For enum value backward compatibility */
+    /* Для обратной совместимости значений перечисления */
     VG_LITE_DRAW_ZERO                       = 0,
     VG_LITE_DRAW_STROKE_PATH                = (1 << 0),
     VG_LITE_DRAW_FILL_PATH                  = (1 << 1),
     VG_LITE_DRAW_FILL_STROKE_PATH           = (1 << 1 | 1 << 0),
 } vg_lite_path_type_t;
 
-/* End cap style. Match OpenVG enum VGCapStyle */
+/* Стиль торцевой крышки. Соответствие перечислению OpenVG VGCapStyle */
 typedef enum vg_lite_cap_style {
     VG_LITE_CAP_BUTT                        = 0x1700,
     VG_LITE_CAP_ROUND                       = 0x1701,
     VG_LITE_CAP_SQUARE                      = 0x1702,
 } vg_lite_cap_style_t;
 
-/* Line join styles. Match OpenVG enum VGJoinStyle */
+/* Стили соединения линий. Соответствие перечислению OpenVG VGJoinStyle */
 typedef enum vg_lite_join_style {
     VG_LITE_JOIN_MITER                      = 0x1800,
     VG_LITE_JOIN_ROUND                      = 0x1801,
     VG_LITE_JOIN_BEVEL                      = 0x1802,
 } vg_lite_join_style_t;
 
-/* Mask operation mode. Match OpenVG enum VGMaskOperation */
+/* Режим работы маски. Соответствие перечислению OpenVG VGMaskOperation */
 typedef enum vg_lite_mask_operation {
     VG_LITE_CLEAR_MASK                      = 0x1500,   /*! Set all dest mask values to 0 */
     VG_LITE_FILL_MASK                       = 0x1501,   /*! Set all dest mask values to 1 */
@@ -533,48 +533,48 @@ typedef enum vg_lite_mask_operation {
     VG_LITE_SUBTRACT_MASK                   = 0x1505,   /*! Subtract src mask in dest masklayer */
 } vg_lite_mask_operation_t;
 
-/* Mirror orientation mode. */
+/* Режим зеркальной ориентации. */
 typedef enum vg_lite_orientation {
     VG_LITE_ORIENTATION_TOP_BOTTOM,
     VG_LITE_ORIENTATION_BOTTOM_TOP,
 } vg_lite_orientation_t;
 
-/* Gamma conversion mode. */
+/* Режим преобразования гаммы. */
 typedef enum vg_lite_gamma_conversion {
     VG_LITE_GAMMA_NO_CONVERSION,            /*! Leave color as is. */
     VG_LITE_GAMMA_LINEAR,                   /*! Convert from sRGB to linear space. */
     VG_LITE_GAMMA_NON_LINEAR                /*! Convert from linear to sRGB space. */
 } vg_lite_gamma_conversion_t;
 
-/* Index endian */
+/* Порядок байтов индекса */
 typedef enum vg_lite_index_endian {
-    VG_LITE_INDEX_LITTLE_ENDIAN,            /*! Parse the index pixel from low to high,
-                                                 *! when using index1, the parsing order is bit0~bit7.
-                                                 *! when using index2, the parsing order is bit0:1,bit2:3,bit4:5.bit6:7.
-                                                 *! when using index4, the parsing order is bit0:3,bit4:7.
+    VG_LITE_INDEX_LITTLE_ENDIAN,            /*! Разобрать индексный пиксель от низкого к высокому,
+                                                 *! при использовании индекса1 порядок анализа — бит0~бит7.
+                                                 *! при использовании index2 порядок анализа следующий: бит0:1,бит2:3,бит4:5.бит6:7.
+                                                 *! при использовании index4 порядок анализа — бит0:3, бит4:7.
                                                  */
-    VG_LITE_INDEX_BIG_ENDIAN,               /*! Parse the index pixel from low to high,
-                                                 *! when using index1, the parsing order is bit7~bit0.
-                                                 *! when using index2, the parsing order is bit7:6,bit5:4,bit3:2.bit1:0.
-                                                 *! when using index4, the parsing order is bit4:7,bit0:3.
+    VG_LITE_INDEX_BIG_ENDIAN,               /*! Разобрать индексный пиксель от низкого к высокому,
+                                                 *! при использовании индекса1 порядок анализа — бит7~бит0.
+                                                 *! при использовании index2 порядок анализа следующий: бит7:6,бит5:4,бит3:2.бит1:0.
+                                                 *! при использовании index4 порядок анализа — бит4:7, бит0:3.
                                                  */
 } vg_lite_index_endian_t;
 
-/* Map flag*/
+/* Флаг карты*/
 typedef enum vg_lite_map_flag {
     VG_LITE_MAP_USER_MEMORY             = 0,
     VG_LITE_MAP_DMABUF                  = 0x01,
 } vg_lite_map_flag_t;
 
-/*VGLite parameters variable*/
+/*Переменная параметров VGLite*/
 typedef enum vg_lite_param_type {
     VG_LITE_SCISSOR_RECT,                   /*! count must be 4n for x, y, right, bottom */
     VG_LITE_GPU_IDLE_STATE,                 /*! 0: busy, 1: idle */
 } vg_lite_param_type_t;
 
-/* VGLite API Structures ******************************************************************************************************************/
+/* Структуры VGLite API *****************************************************************************************************************/
 
-/* VGLite driver information */
+/* Информация о драйвере VGLite */
 typedef struct vg_lite_info {
     vg_lite_uint32_t api_version;
     vg_lite_uint32_t header_version;
@@ -582,16 +582,16 @@ typedef struct vg_lite_info {
     vg_lite_uint32_t reserved;
 } vg_lite_info_t;
 
-/* A 2D Point definition. */
+/* Определение 2D-точки. */
 typedef struct vg_lite_point {
     vg_lite_int32_t x;
     vg_lite_int32_t y;
 } vg_lite_point_t;
 
-/* Four 2D Point that form a polygon */
+/* Четыре 2D-точки, образующие многоугольник */
 typedef vg_lite_point_t vg_lite_point4_t[4];
 
-/* A rectangle.*/
+/* Прямоугольник.*/
 typedef struct vg_lite_rectangle {
     vg_lite_int32_t x;                      /*! Left coordinate of rectangle. */
     vg_lite_int32_t y;                      /*! Top coordinate of rectangle. */
@@ -625,58 +625,58 @@ typedef struct vg_lite_yuvinfo {
 
 typedef struct vg_lite_path_point * vg_lite_path_point_ptr;
 typedef struct vg_lite_path_point {
-    /* X coordinate. */
+    /* Координата Х. */
     vg_lite_float_t x;
 
-    /* Y coordinate. */
+    /* Координата Y. */
     vg_lite_float_t y;
 
-    /* Flatten flag for flattened path. */
+    /* Флаг Flatten для сплющенного пути. */
     vg_lite_uint8_t flatten_flag;
 
-    /* Curve type for stroke path. */
+    /* Тип кривой для траектории штриха. */
     vg_lite_uint8_t curve_type;
 
-    /* X tangent. */
+    /* касательная X. */
     vg_lite_float_t tangentX;
 
-    /* Y tangent. */
+    /* Y касательная. */
     vg_lite_float_t tangentY;
 
-    /* Length of the line. */
+    /* Длина линии. */
     vg_lite_float_t length;
 
-    /* Pointer to next point node. */
+    /* Указатель на следующий точечный узел. */
     vg_lite_path_point_ptr next;
 
-    /* Pointer to previous point node. */
+    /* Указатель на предыдущий узел точки. */
     vg_lite_path_point_ptr prev;
 
 } vg_lite_path_point_t;
 
 typedef struct vg_lite_sub_path * vg_lite_sub_path_ptr;
 typedef struct vg_lite_sub_path {
-    /* Pointer to next sub path. */
+    /* Указатель на следующий подпуть. */
     vg_lite_sub_path_ptr next;
 
-    /* Number of points. */
+    /* Количество очков. */
     vg_lite_uint32_t point_count;
 
-    /* Point list. */
+    /* Список точек. */
     vg_lite_path_point_ptr point_list;
 
-    /* Last point. */
+    /* Последний пункт. */
     vg_lite_path_point_ptr end_point;
 
-    /* Whether is path is closed. */
+    /* То ли путь закрыт. */
     vg_lite_uint8_t closed;
 
-    /* Sub path length. */
+    /* Длина подпути. */
     vg_lite_float_t length;
 
 } vg_lite_sub_path_t;
 
-/* Save divided path data according to MOVE/MOVE_REL. */
+/* Сохраните данные разделенного пути в соответствии с MOVE/MOVE_REL. */
 typedef struct vg_lite_path_list * vg_lite_path_list_ptr;
 typedef struct vg_lite_path_list {
     vg_lite_path_point_ptr              path_points;
@@ -688,7 +688,7 @@ typedef struct vg_lite_path_list {
 } vg_lite_path_list_t;
 
 typedef struct vg_lite_stroke {
-    /* Stroke parameters */
+    /* Параметры хода */
     vg_lite_cap_style_t                 cap_style;
     vg_lite_join_style_t                join_style;
     vg_lite_float_t                     line_width;
@@ -700,13 +700,13 @@ typedef struct vg_lite_stroke {
     vg_lite_uint32_t                    dash_index;
     vg_lite_float_t                     half_width;
 
-    /* Total length of stroke dash patterns. */
+    /* Общая длина штриховых штрихов. */
     vg_lite_float_t                     pattern_length;
 
-    /* For fast checking. */
+    /* Для быстрой проверки. */
     vg_lite_float_t                     miter_square;
 
-    /* Temp storage of stroke subPath. */
+    /* Временное хранение штриха subPath. */
     vg_lite_path_point_ptr              path_points;
     vg_lite_path_point_ptr              path_end;
     vg_lite_uint32_t                    point_count;
@@ -716,23 +716,23 @@ typedef struct vg_lite_stroke {
     vg_lite_path_point_ptr              stroke_end;
     vg_lite_uint32_t                    stroke_count;
 
-    /* Divide stroke path according to move or move_rel for avoiding implicit closure. */
+    /* Разделите траекторию хода в соответствии с перемещением или move_rel, чтобы избежать неявного закрытия. */
     vg_lite_path_list_ptr               path_list_divide;
 
-    /* pointer to current divided path data. */
+    /* указатель на текущие данные разделенного пути. */
     vg_lite_path_list_ptr               cur_list;
 
-    /* Flag that add end_path in driver. */
+    /* Флаг, добавляющий end_path в драйвер. */
     vg_lite_uint8_t                     add_end;
     vg_lite_uint8_t                     dash_reset;
 
-    /* Sub path list. */
+    /* Список дополнительных путей. */
     vg_lite_sub_path_ptr                stroke_paths;
 
-    /* Last sub path. */
+    /* Последний подпуть. */
     vg_lite_sub_path_ptr                last_stroke;
 
-    /* Swing area handling. */
+    /* Обработка подменной зоны. */
     vg_lite_uint32_t                    swing_handling;
     vg_lite_float_t                     swing_deltax;
     vg_lite_float_t                     swing_deltay;
@@ -747,13 +747,13 @@ typedef struct vg_lite_stroke {
     vg_lite_float_t                     stroke_length;
     vg_lite_uint32_t                    stroke_size;
 
-    /* The stroke line is fat line. */
+    /* Линия штриха жирная. */
     vg_lite_uint8_t                     fattened;
     vg_lite_uint8_t                     closed;
 
 } vg_lite_stroke_t;
 
-/* Fast clear buffer. */
+/* Быстрая очистка буфера. */
 typedef struct vg_lite_fc_buffer {
     vg_lite_int32_t width;                  /*! Width of the buffer in pixels. */
     vg_lite_int32_t height;                 /*! height of the buffer in pixels. */
@@ -765,7 +765,7 @@ typedef struct vg_lite_fc_buffer {
     vg_lite_uint32_t color;                 /*! The fastclear color value. */
 } vg_lite_fc_buffer_t;
 
-/* Structure for any image or render target. */
+/* Структура для любого изображения или цели рендеринга. */
 typedef struct vg_lite_buffer {
     vg_lite_int32_t width;                  /*! Width of the buffer in pixels. */
     vg_lite_int32_t height;                 /*! Height of the buffer in pixels. */
@@ -788,18 +788,18 @@ typedef struct vg_lite_buffer {
     vg_lite_uint8_t premultiplied;          /*! The RGB pixel values are alpha-premultiplied */
 } vg_lite_buffer_t;
 
-/* Memory allocation info by kernel. */
+/* Информация о выделении памяти ядром. */
 typedef struct vg_lite_hw_memory {
     vg_lite_pointer handle;                 /*! gpu memory object handle. */
     vg_lite_pointer memory;                 /*! logical memory address. */
     vg_lite_uint32_t address;               /*! GPU memory address. */
     vg_lite_uint32_t bytes;                 /*! Size of memory. */
-    vg_lite_uint32_t property;              /*! Currently bit0 is used for path upload state:
+    vg_lite_uint32_t property;              /*! В настоящее время бит 0 используется для состояния загрузки пути:
                                                  *!   1 : enable auto path data uploading.
                                                  *!   0 : disable path data uploading. path data is embedded in command buffer. */
 } vg_lite_hw_memory_t;
 
-/* Path info for drawing command. */
+/* Информация о пути для команды рисования. */
 typedef struct vg_lite_path {
     vg_lite_float_t bounding_box[4];        /*! Bounding box specified as left, top, right, and bottom. */
     vg_lite_quality_t quality;              /*! Quality hint for the path. */
@@ -818,7 +818,7 @@ typedef struct vg_lite_path {
     vg_lite_int8_t add_end;                 /*! Flag that add end_path in driver. */
 } vg_lite_path_t;
 
-/* Color ramp definition. */
+/* Определение цветовой шкалы. */
 typedef struct vg_lite_color_ramp {
     vg_lite_float_t stop;                   /*! Value for the color stop. */
     vg_lite_float_t red;                    /*! Red color channel value for the color stop. */
@@ -827,7 +827,7 @@ typedef struct vg_lite_color_ramp {
     vg_lite_float_t alpha;                  /*! Alpha color channel value for the color stop. */
 } vg_lite_color_ramp_t;
 
-/* Linear gradient parameter */
+/* Параметр линейного градиента */
 typedef struct vg_lite_linear_gradient_parameter {
     vg_lite_float_t X0;
     vg_lite_float_t Y0;
@@ -843,7 +843,7 @@ typedef struct vg_lite_radial_gradient_parameter {
     vg_lite_float_t fy;                                 /*! y coordinate of the focal point. */
 } vg_lite_radial_gradient_parameter_t;
 
-/* Linear gradient definition. */
+/* Определение линейного градиента. */
 typedef struct vg_lite_linear_gradient {
     vg_lite_uint32_t colors[VLC_MAX_GRADIENT_STOPS];    /*! Colors for stops. */
     vg_lite_uint32_t count;                             /*! Count of colors, up to 16. */
@@ -852,7 +852,7 @@ typedef struct vg_lite_linear_gradient {
     vg_lite_buffer_t image;                             /*! The image for rendering as gradient pattern. */
 } vg_lite_linear_gradient_t;
 
-/* Extended linear gradient definition. */
+/* Расширенное определение линейного градиента. */
 typedef struct vg_lite_ext_linear_gradient {
     vg_lite_uint32_t count;                             /*! Count of colors, up to 256. */
     vg_lite_matrix_t matrix;                            /*! The matrix to transform the gradient. */
@@ -871,7 +871,7 @@ typedef struct vg_lite_ext_linear_gradient {
     spread_mode;          /*! The spread mode that applied to the pixels out of the image after transformed. */
 } vg_lite_ext_linear_gradient_t;
 
-/* Radial gradient definition. */
+/* Определение радиального градиента. */
 typedef struct vg_lite_radial_gradient {
     vg_lite_uint32_t count;                             /*! Count of colors, up to 256. */
     vg_lite_matrix_t matrix;                            /*! The matrix to transform the gradient. */
@@ -890,7 +890,7 @@ typedef struct vg_lite_radial_gradient {
     spread_mode;          /*! The spread mode that applied to the pixels out of the image after transformed. */
 } vg_lite_radial_gradient_t;
 
-/* Colorkey definition */
+/* Определение цветовой ключа */
 typedef struct vg_lite_color_key {
     vg_lite_uint8_t enable;                 /*! The color key is effective only when "enable" is true, */
     vg_lite_uint8_t low_r;                  /*! The R channel of low_rgb. */
@@ -902,19 +902,19 @@ typedef struct vg_lite_color_key {
     vg_lite_uint8_t high_b;                 /*! The B channel of high_rgb. */
 } vg_lite_color_key_t;
 
-/* Four colorkey definition.
- * rgb_hi_0, rgb_lo_0, alpha_0, enable_0;
- * rgb_hi_1, rgb_lo_1, alpha_1, enable_1;
- * rgb_hi_2, rgb_lo_2, alpha_2, enable_2;
- * rgb_hi_3, rgb_lo_3, alpha_3, enable_3;
- * Priority order: color_key_0 > color_key_1 > color_key_2 > color_key_3.
+/* Определение четырех цветовых клавиш.
+ * rgb_hi_0 , rgb_lo_0 , alpha_0 , enable_0 ;
+ * rgb_hi_1 , rgb_lo_1 , alpha_1 , enable_1 ;
+ * rgb_hi_2 , rgb_lo_2 , alpha_2 , enable_2 ;
+ * rgb_hi_3 , rgb_lo_3 , alpha_3 , enable_3 ;
+ * Приоритетный порядок: color_key_0 > color_key_1 > color_key_2 > color_key_3 .
 */
 typedef vg_lite_color_key_t vg_lite_color_key4_t[4];
 
-/* Pixel matrix values */
+/* Значения пиксельной матрицы */
 typedef vg_lite_float_t vg_lite_pixel_matrix_t[20];
 
-/* HW pixel channel enable flags */
+/* HW Флаги включения пиксельного канала */
 typedef struct vg_lite_pixel_channel_enable {
     vg_lite_uint8_t enable_a;               /*! Enable A channel.*/
     vg_lite_uint8_t enable_b;               /*! Enable B channel. */
@@ -922,7 +922,7 @@ typedef struct vg_lite_pixel_channel_enable {
     vg_lite_uint8_t enable_r;               /*! Enable R channel. */
 } vg_lite_pixel_channel_enable_t;
 
-/* Pixel color transform */
+/* Преобразование цвета пикселей */
 typedef struct vg_lite_color_transform {
     vg_lite_float_t a_scale;
     vg_lite_float_t a_bias;
@@ -934,57 +934,57 @@ typedef struct vg_lite_color_transform {
     vg_lite_float_t b_bias;
 } vg_lite_color_transform_t;
 
-/* VGLite API Functions *******************************************************************************************************************/
+/* Функции VGLite API **************************************************************************************************************/
 
-/* Initialize a vglite context. */
+/* Инициализируйте контекст vglite. */
 vg_lite_error_t vg_lite_init(vg_lite_int32_t tess_width, vg_lite_int32_t tess_height);
 
-/* Destroy a vglite context. */
+/* Уничтожьте контекст vglite. */
 vg_lite_error_t vg_lite_close(void);
 
-/* Get the VGLite driver information. */
+/* Получите информацию о драйвере VGLite. */
 vg_lite_error_t vg_lite_get_info(vg_lite_info_t * info);
 
-/* Get the GPU chip information. */
+/* Получите информацию о чипе GPU. */
 vg_lite_uint32_t vg_lite_get_product_info(vg_lite_char * name, vg_lite_uint32_t * chip_id, vg_lite_uint32_t * chip_rev);
 
-/* Query if a specific feature is supported. */
+/* Запросите, поддерживается ли конкретная функция. */
 vg_lite_uint32_t vg_lite_query_feature(vg_lite_feature_t feature);
 
-/* Flush command buffer and wait for GPU to complete. */
+/* Очистите буфер команд и дождитесь завершения GPU. */
 vg_lite_error_t vg_lite_finish(void);
 
-/* Flush the command buffer without waiting for GPU to complete. */
+/* Очистите буфер команд, не дожидаясь завершения GPU. */
 vg_lite_error_t vg_lite_flush(void);
 
-/* Get the value of register from register's address. */
+/* Получите значение регистра по адресу регистра. */
 vg_lite_error_t vg_lite_get_register(vg_lite_uint32_t address, vg_lite_uint32_t * result);
 
-/* Generate a 3x3 homogeneous matrix to transform 4 source coordinates to 4 target coordinates. */
+/* Создайте однородную матрицу 3x3 для преобразования 4 исходных координат в 4 целевые координаты. */
 vg_lite_error_t vg_lite_get_transform_matrix(vg_lite_point4_t src, vg_lite_point4_t dst, vg_lite_matrix_t * mat);
 
-/* Allocate a buffer from GPU hardware accessible memory. */
+/* Выделите буфер из аппаратно доступной памяти GPU. */
 vg_lite_error_t vg_lite_allocate(vg_lite_buffer_t * buffer);
 
-/* Free a buffer allocated by vg_lite_allocate() */
+/* Освободить буфер, выделенный vg_lite_allocate() */
 vg_lite_error_t vg_lite_free(vg_lite_buffer_t * buffer);
 
-/* Upload RGB or YUV pixel data to an allocated buffer. */
+/* Загрузите данные пикселей RGB или YUV в выделенный буфер. */
 vg_lite_error_t vg_lite_upload_buffer(vg_lite_buffer_t * buffer, vg_lite_uint8_t * data[3], vg_lite_uint32_t stride[3]);
 
-/* Map a buffer into hardware accessible address space. */
+/* Сопоставьте буфер с аппаратно доступным адресным пространством. */
 vg_lite_error_t vg_lite_map(vg_lite_buffer_t * buffer, vg_lite_map_flag_t flag, int32_t fd);
 
-/* Unmap a buffer that is mapped */
+/* Отменить сопоставление буфера, который сопоставлен */
 vg_lite_error_t vg_lite_unmap(vg_lite_buffer_t * buffer);
 
-/* flush cache */
+/* очистить кеш */
 vg_lite_error_t vg_lite_flush_mapped_buffer(vg_lite_buffer_t * buffer);
 
-/* Fill a buffer rectangle area with a specified color. */
+/* Заполните область прямоугольника буфера указанным цветом. */
 vg_lite_error_t vg_lite_clear(vg_lite_buffer_t * target, vg_lite_rectangle_t * rect, vg_lite_color_t color);
 
-/* Copy a source image to target buffer with transformation, blending, color mixing, and filtering. */
+/* Скопируйте исходное изображение в целевой буфер с преобразованием, смешиванием, смешиванием цветов и фильтрацией. */
 vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
                              vg_lite_buffer_t * source,
                              vg_lite_matrix_t * matrix,
@@ -992,7 +992,7 @@ vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
                              vg_lite_color_t   color,
                              vg_lite_filter_t  filter);
 
-/* Copy a rectangle area of source image to target buffer with transformation, blending, color mixing, and filtering. */
+/* Скопируйте прямоугольную область исходного изображения в целевой буфер с преобразованием, смешиванием, смешиванием цветов и фильтрацией. */
 vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
                                   vg_lite_buffer_t * source,
                                   vg_lite_rectangle_t * rect,
@@ -1001,7 +1001,7 @@ vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
                                   vg_lite_color_t   color,
                                   vg_lite_filter_t  filter);
 
-/* Copy two source images to the target buffer with transformation, blending, and filtering. */
+/* Скопируйте два исходных изображения в целевой буфер с преобразованием, смешиванием и фильтрацией. */
 vg_lite_error_t vg_lite_blit2(vg_lite_buffer_t * target,
                               vg_lite_buffer_t * source0,
                               vg_lite_buffer_t * source1,
@@ -1010,7 +1010,7 @@ vg_lite_error_t vg_lite_blit2(vg_lite_buffer_t * target,
                               vg_lite_blend_t blend,
                               vg_lite_filter_t  filter);
 
-/* Copy a rectangle area of source image to target buffer without transformation, blending, color mixing, and filtering. */
+/* Скопируйте прямоугольную область исходного изображения в целевой буфер без преобразования, смешивания, смешивания цветов и фильтрации. */
 vg_lite_error_t vg_lite_copy_image(vg_lite_buffer_t * target,
                                    vg_lite_buffer_t * source,
                                    vg_lite_int32_t   sx,
@@ -1020,7 +1020,7 @@ vg_lite_error_t vg_lite_copy_image(vg_lite_buffer_t * target,
                                    vg_lite_int32_t   width,
                                    vg_lite_int32_t   height);
 
-/* Draw a path to a target buffer with transformation, color, and blending */
+/* Нарисуйте путь к целевому буферу с преобразованием, цветом и смешиванием. */
 vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                              vg_lite_path_t  * path,
                              vg_lite_fill_t    fill_rule,
@@ -1028,7 +1028,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                              vg_lite_blend_t   blend,
                              vg_lite_color_t   color);
 
-/* Set stroke path attributes. */
+/* Установите атрибуты пути обводки. */
 vg_lite_error_t vg_lite_set_stroke(vg_lite_path_t * path,
                                    vg_lite_cap_style_t cap_style,
                                    vg_lite_join_style_t join_style,
@@ -1039,19 +1039,19 @@ vg_lite_error_t vg_lite_set_stroke(vg_lite_path_t * path,
                                    vg_lite_float_t dash_phase,
                                    vg_lite_color_t color);
 
-/* Update stroke path. */
+/* Обновите путь обводки. */
 vg_lite_error_t vg_lite_update_stroke(vg_lite_path_t * path);
 
-/* Set path type. */
+/* Установите тип пути. */
 vg_lite_error_t vg_lite_set_path_type(vg_lite_path_t * path, vg_lite_path_type_t path_type);
 
-/* Clears all attributes of a path. */
+/* Очищает все атрибуты пути. */
 vg_lite_error_t vg_lite_clear_path(vg_lite_path_t * path);
 
-/* Upload a path to GPU memory so GPU can access it directly. */
+/* Загрузите путь к памяти GPU, чтобы GPU мог получить к ней прямой доступ. */
 vg_lite_error_t vg_lite_upload_path(vg_lite_path_t * path);
 
-/* Initialize a path object with attributes. */
+/* Инициализируйте объект пути с атрибутами. */
 vg_lite_error_t vg_lite_init_path(vg_lite_path_t * path,
                                   vg_lite_format_t format,
                                   vg_lite_quality_t quality,
@@ -1062,7 +1062,7 @@ vg_lite_error_t vg_lite_init_path(vg_lite_path_t * path,
                                   vg_lite_float_t max_x,
                                   vg_lite_float_t max_y);
 
-/* Initializes a arc path with attributes. */
+/* Инициализирует путь дуги с атрибутами. */
 vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                                       vg_lite_format_t format,
                                       vg_lite_quality_t quality,
@@ -1073,21 +1073,21 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
                                       vg_lite_float_t max_x,
                                       vg_lite_float_t max_y);
 
-/* Return the size (in bytes) of command buffer for a path opcode array. */
+/* Возвращает размер (в байтах) командного буфера для массива кодов операций пути. */
 vg_lite_uint32_t vg_lite_get_path_length(vg_lite_uint8_t * opcode,
                                          vg_lite_uint32_t count,
                                          vg_lite_format_t format);
 
-/* Generate command buffer for the (path) based on input opcodes (opcode) and coordinates (data). */
+/* Сгенерируйте командный буфер для (пути) на основе входных кодов операций (код операции) и координат (данных). */
 vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
                                     vg_lite_uint8_t * opcode,
                                     vg_lite_pointer data,
                                     vg_lite_uint32_t seg_count);
 
-/* Set CLUT (Color Look Up Table) for index image. The (colors) is in ARGB format. */
+/* Установите CLUT (таблицу поиска цветов) для индексного изображения. (Цвета) имеют формат ARGB. */
 vg_lite_error_t vg_lite_set_CLUT(vg_lite_uint32_t count, vg_lite_uint32_t * colors);
 
-/* Draw a path that is filled by a transformed image pattern. */
+/* Нарисуйте путь, заполненный шаблоном преобразованного изображения. */
 vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                      vg_lite_path_t * path,
                                      vg_lite_fill_t fill_rule,
@@ -1100,25 +1100,25 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                      vg_lite_color_t  color,
                                      vg_lite_filter_t filter);
 
-/* Initialize a linear gradient object with default attributes. */
+/* Инициализируйте объект линейного градиента с атрибутами по умолчанию. */
 vg_lite_error_t vg_lite_init_grad(vg_lite_linear_gradient_t * grad);
 
-/* Reset a linear gradient object attributes. */
+/* Сбросьте атрибуты объекта линейного градиента. */
 vg_lite_error_t vg_lite_clear_grad(vg_lite_linear_gradient_t * grad);
 
-/* Update a linear gradient object. */
+/* Обновите объект линейного градиента. */
 vg_lite_error_t vg_lite_update_grad(vg_lite_linear_gradient_t * grad);
 
-/* Return pointer to a linear gradient object's matrix. */
+/* Возвращает указатель на матрицу объекта линейного градиента. */
 vg_lite_matrix_t * vg_lite_get_grad_matrix(vg_lite_linear_gradient_t * grad);
 
-/* Set attributes for a linear gradient object. */
+/* Установите атрибуты для объекта линейного градиента. */
 vg_lite_error_t vg_lite_set_grad(vg_lite_linear_gradient_t * grad,
                                  vg_lite_uint32_t count,
                                  vg_lite_uint32_t * colors,
                                  vg_lite_uint32_t * stops);
 
-/* Draw a path with a linear gradient object pattern. */
+/* Нарисуйте путь с помощью шаблона объекта с линейным градиентом. */
 vg_lite_error_t vg_lite_draw_grad(vg_lite_buffer_t * target,
                                   vg_lite_path_t * path,
                                   vg_lite_fill_t fill_rule,
@@ -1126,16 +1126,16 @@ vg_lite_error_t vg_lite_draw_grad(vg_lite_buffer_t * target,
                                   vg_lite_linear_gradient_t * grad,
                                   vg_lite_blend_t blend);
 
-/* Reset an extended linear gradient object attributes and free image buffer. */
+/* Сбросьте атрибуты объекта расширенного линейного градиента и освободите буфер изображения. */
 vg_lite_error_t vg_lite_clear_linear_grad(vg_lite_ext_linear_gradient_t * grad);
 
-/* Update an extended linear gradient object. */
+/* Обновите объект расширенного линейного градиента. */
 vg_lite_error_t vg_lite_update_linear_grad(vg_lite_ext_linear_gradient_t * grad);
 
-/* Return pointer to an extended linear gradient object's matrix. */
+/* Возвращает указатель на матрицу объекта расширенного линейного градиента. */
 vg_lite_matrix_t * vg_lite_get_linear_grad_matrix(vg_lite_ext_linear_gradient_t * grad);
 
-/* Set attributes for an extended linear gradient object. */
+/* Установите атрибуты для объекта расширенного линейного градиента. */
 vg_lite_error_t vg_lite_set_linear_grad(vg_lite_ext_linear_gradient_t * grad,
                                         vg_lite_uint32_t count,
                                         vg_lite_color_ramp_t * color_ramp,
@@ -1143,7 +1143,7 @@ vg_lite_error_t vg_lite_set_linear_grad(vg_lite_ext_linear_gradient_t * grad,
                                         vg_lite_gradient_spreadmode_t spread_mode,
                                         vg_lite_uint8_t pre_mult);
 
-/* Draw a path with an extended linear gradient object. */
+/* Нарисуйте путь с помощью объекта расширенного линейного градиента. */
 vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
                                          vg_lite_fill_t fill_rule,
@@ -1153,16 +1153,16 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                                          vg_lite_blend_t blend,
                                          vg_lite_filter_t filter);
 
-/* Reset a radial gradient object attributes and free image buffer. */
+/* Сбросьте атрибуты объекта радиального градиента и освободите буфер изображения. */
 vg_lite_error_t vg_lite_clear_radial_grad(vg_lite_radial_gradient_t * grad);
 
-/* Update a radial gradient object. */
+/* Обновите объект радиального градиента. */
 vg_lite_error_t vg_lite_update_radial_grad(vg_lite_radial_gradient_t * grad);
 
-/* Return pointer to a radial gradient object's matrix. */
+/* Возвращает указатель на матрицу объекта радиального градиента. */
 vg_lite_matrix_t * vg_lite_get_radial_grad_matrix(vg_lite_radial_gradient_t * grad);
 
-/* Set attributes for a radial gradient object. */
+/* Установите атрибуты для объекта радиального градиента. */
 vg_lite_error_t vg_lite_set_radial_grad(vg_lite_radial_gradient_t * grad,
                                         vg_lite_uint32_t count,
                                         vg_lite_color_ramp_t * color_ramp,
@@ -1170,7 +1170,7 @@ vg_lite_error_t vg_lite_set_radial_grad(vg_lite_radial_gradient_t * grad,
                                         vg_lite_gradient_spreadmode_t spread_mode,
                                         vg_lite_uint8_t pre_mult);
 
-/* Draw a path with a radial gradient object pattern. */
+/* Нарисуйте путь с узором объекта радиального градиента. */
 vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
                                          vg_lite_fill_t fill_rule,
@@ -1180,59 +1180,59 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                                          vg_lite_blend_t blend,
                                          vg_lite_filter_t filter);
 
-/* Load an identity matrix. */
+/* Загрузите идентификационную матрицу. */
 vg_lite_error_t vg_lite_identity(vg_lite_matrix_t * matrix);
 
-/* Translate a matrix. */
+/* Перевести матрицу. */
 vg_lite_error_t vg_lite_translate(vg_lite_float_t x, vg_lite_float_t y, vg_lite_matrix_t * matrix);
 
-/* Scale a matrix. */
+/* Масштабируйте матрицу. */
 vg_lite_error_t vg_lite_scale(vg_lite_float_t scale_x, vg_lite_float_t scale_y, vg_lite_matrix_t * matrix);
 
-/* Rotate a matrix. */
+/* Поворот матрицы. */
 vg_lite_error_t vg_lite_rotate(vg_lite_float_t degrees, vg_lite_matrix_t * matrix);
 
-/* Set and enable a scissor rectangle for render target. */
+/* Установите и включите прямоугольник-ножницы для цели рендеринга. */
 vg_lite_error_t vg_lite_set_scissor(vg_lite_int32_t x, vg_lite_int32_t y, vg_lite_int32_t right,
                                     vg_lite_int32_t bottom);
 
-/* Set scissor rectangles on mask layer. Scissor rects are enabled/disabled by following APIs. */
+/* Установите прямоугольники-ножницы на слое маски. Ножничные прямоугольники включаются/отключаются с помощью следующих API. */
 vg_lite_error_t vg_lite_scissor_rects(vg_lite_uint32_t nums, vg_lite_rectangle_t rect[]);
 
-/* Enable scissor rects defined on mask layer. */
+/* Включите ножничные прямоугольники, определенные на слое маски. */
 vg_lite_error_t vg_lite_enable_scissor(void);
 
-/* Disable scissor rects defined on mask layer. */
+/* Отключите ножничные прямоугольники, определенные на слое маски. */
 vg_lite_error_t vg_lite_disable_scissor(void);
 
-/* Query size of available contiguous video memory. */
+/* Запрос размера доступной непрерывной видеопамяти. */
 vg_lite_error_t vg_lite_get_mem_size(vg_lite_uint32_t * size);
 
-/* Set global alpha value for source image */
+/* Установить глобальное значение альфа для исходного изображения */
 vg_lite_error_t vg_lite_source_global_alpha(vg_lite_global_alpha_t alpha_mode, vg_lite_uint8_t alpha_value);
 
-/* Set global alpha value for destination image. */
+/* Установите глобальное значение альфа для конечного изображения. */
 vg_lite_error_t vg_lite_dest_global_alpha(vg_lite_global_alpha_t alpha_mode, vg_lite_uint8_t alpha_value);
 
-/* Set colorkey. */
+/* Установить цветовую клавишу. */
 vg_lite_error_t vg_lite_set_color_key(vg_lite_color_key4_t colorkey);
 
-/* Enable dither function. Dither is OFF by default. */
+/* Включите функцию дизеринга. По умолчанию дизеринг — OFF. */
 vg_lite_error_t vg_lite_enable_dither(void);
 
-/* Disable dither function. Dither is OFF by default. */
+/* Отключите функцию дизеринга. По умолчанию дизеринг — OFF. */
 vg_lite_error_t vg_lite_disable_dither(void);
 
-/* Set a 64-byte aligned memory buffer (physical) as VGLite tessellation buffer. */
+/* Установите 64-байтовый выровненный буфер памяти (физический) в качестве буфера тесселяции VGLite. */
 vg_lite_error_t vg_lite_set_tess_buffer(vg_lite_uint32_t physical, vg_lite_uint32_t size);
 
-/* Can be called before vg_lite_init() to overwrite the default VG_LITE_COMMAND_BUFFER_SIZE */
+/* Может быть вызван перед vg_lite_init(), чтобы перезаписать VG_LITE_COMMAND_BUFFER_SIZE по умолчанию. */
 vg_lite_error_t vg_lite_set_command_buffer_size(vg_lite_uint32_t size);
 
-/* Set a user-defined external memory buffer (physical, 64-byte aligned) as VGLite command buffer. */
+/* Установите определяемый пользователем буфер внешней памяти (физический, выровненный по 64 байта) в качестве командного буфера VGLite. */
 vg_lite_error_t vg_lite_set_command_buffer(vg_lite_uint32_t physical, vg_lite_uint32_t size);
 
-/* Setup a pixel transform matrix m[20] which transforms each pixel as following:
+/* Настройте матрицу преобразования пикселей m[20], которая преобразует каждый пиксель следующим образом:
  *
  *              |a'|   |m0  m1  m2  m3  m4 | |a|
  *              |r'|   |m5  m6  m7  m8  m9 | |r|
@@ -1240,62 +1240,62 @@ vg_lite_error_t vg_lite_set_command_buffer(vg_lite_uint32_t physical, vg_lite_ui
  *              |b'|   |m15 m16 m17 m18 m19| |b|
  *              |1 |   |0   0   0   0   1  | |1|
  *
- *  The pixel transform for A, R, G, B channel can be enabled/disabled individually with (channel) parameter.
+ *  Преобразование пикселей для каналов A, R, G, B можно включить/отключить индивидуально с помощью параметра (канал).
  */
 vg_lite_error_t vg_lite_set_pixel_matrix(vg_lite_pixel_matrix_t matrix, vg_lite_pixel_channel_enable_t * channel);
 
-/* Setup 3x3 gaussian blur weight values to filter image pixels.
+/* Установите значения веса размытия по Гауссу 3x3 для фильтрации пикселей изображения.
  *
- *  Parameters w0, w1, w2 define a 3x3 gaussian blur weight matrix as below
+ *  Параметры w0, w1, w2 определяют матрицу весов размытия по Гауссу 3x3, как показано ниже.
  *
  *                  |  w2   w1   w2 |
  *                  |  w1   w0   w1 |
  *                  |  w2   w1   w2 |
  *
- *  The sum of 9 kernel weights must be 1.0 to avoid convolution overflow ( w0 + 4*w1 + 4*w2 = 1.0 ).
- *  The 3x3 weight matrix applies to a 3x3 pixel block
+ *  Сумма 9 весов ядра должна быть равна 1,0, чтобы избежать переполнения свертки ( w0 + 4*w1 + 4*w2 = 1,0).
+ *  Весовая матрица 3x3 применяется к блоку пикселей 3x3.
  *
- *                  | pixel[i-1][j-1]     pixel[i][j-1]       pixel[i+1][j-1]|
- *                  | pixel[i-1][j]       pixel[i][j]         pixel[i+1][j]  |
- *                  | pixel[i-1][j+1]     pixel[i][j+1]       pixel[i+1][j+1]|
+ *                  | пиксель[i-1][j-1] пиксель[i][j-1] пиксель[i+1][j-1]|
+ *                  | пиксель[i-1][j] пиксель[i][j] пиксель[i+1][j] |
+ *                  | пиксель[i-1][j+1] пиксель[i][j+1] пиксель[i+1][j+1]|
  *
- *  With the following dot product equation:
+ *  Со следующим уравнением скалярного произведения:
  *
- *     color[i][j] = w2*pixel[i-1][j-1] + w1*pixel[i][j-1] + w2*pixel[i+1][j-1]
- *                 + w1*pixel[i-1][j]   + w0*pixel[i][j]   + w1*pixel[i+1][j]
- *                 + w2*pixel[i-1][j+1] + w1*pixel[i][j+1] + w2*pixel[i+1][j+1];
+ *     цвет[i][j] = w2*пиксель[i-1][j-1] + w1*пиксель[i][j-1] + w2*пиксель[i+1][j-1]
+ *                 + w1*пиксель[i-1][j] + w0*пиксель[i][j] + w1*пиксель[i+1][j]
+ *                 + w2*пиксель[i-1][j+1] + w1*пиксель[i][j+1] + w2*пиксель[i+1][j+1];
  */
 vg_lite_error_t vg_lite_gaussian_filter(vg_lite_float_t w0, vg_lite_float_t w1, vg_lite_float_t w2);
 
-/*  Enable masklayer function. Masklayer is OFF by default. */
+/*  Включите функцию маскировки. По умолчанию Masklayer — OFF. */
 vg_lite_error_t vg_lite_enable_masklayer(void);
 
-/*  Disable masklayer function. Masklayer is OFF by default. */
+/*  Отключите функцию маскировки. По умолчанию Masklayer — OFF. */
 vg_lite_error_t vg_lite_disable_masklayer(void);
 
-/* Setup a masklayer. */
+/* Настройте слой-маску. */
 vg_lite_error_t vg_lite_set_masklayer(vg_lite_buffer_t * masklayer);
 
-/* Free a masklayer and disable mask operation. */
+/* Освободите слой маски и отключите операцию маски. */
 vg_lite_error_t vg_lite_destroy_masklayer(vg_lite_buffer_t * masklayer);
 
-/* Create a masklayer with default format A8 and default pixel value 255. */
+/* Создайте слой маски с форматом по умолчанию A8 и значением пикселя по умолчанию 255. */
 vg_lite_error_t vg_lite_create_masklayer(vg_lite_buffer_t * masklayer,
                                          vg_lite_uint32_t width,
                                          vg_lite_uint32_t height);
 
-/* Set pixel values for a rectangle area in a masklayer */
+/* Установите значения пикселей для прямоугольной области в маске */
 vg_lite_error_t vg_lite_fill_masklayer(vg_lite_buffer_t * masklayer,
                                        vg_lite_rectangle_t * rect,
                                        vg_lite_uint8_t value);
 
-/* Blend a rectangle area of src masklayer with dst masklayer according to (operation). */
+/* Смешайте прямоугольную область слоя маски src со слоем маски dst в соответствии с (операцией). */
 vg_lite_error_t vg_lite_blend_masklayer(vg_lite_buffer_t * dst,
                                         vg_lite_buffer_t * src,
                                         vg_lite_mask_operation_t operation,
                                         vg_lite_rectangle_t * rect);
 
-/* Render a (path) with (fill_rule), (color), (matrix) to the masklayer. */
+/* Отобразите (путь) с помощью ( fill_rule ), (цвет), (матрица) в слой маски. */
 vg_lite_error_t vg_lite_render_masklayer(vg_lite_buffer_t * masklayer,
                                          vg_lite_mask_operation_t operation,
                                          vg_lite_path_t * path,
@@ -1303,43 +1303,43 @@ vg_lite_error_t vg_lite_render_masklayer(vg_lite_buffer_t * masklayer,
                                          vg_lite_color_t color,
                                          vg_lite_matrix_t * matrix);
 
-/* Set mirror orientation. */
+/* Установите зеркальную ориентацию. */
 vg_lite_error_t vg_lite_set_mirror(vg_lite_orientation_t orientation);
 
-/* Set gamma value. */
+/* Установите значение гаммы. */
 vg_lite_error_t vg_lite_set_gamma(vg_lite_gamma_conversion_t gamma_value);
 
-/* Enable color transformation, which is OFF by default. */
+/* Включите преобразование цвета, по умолчанию это OFF. */
 vg_lite_error_t vg_lite_enable_color_transform(void);
 
-/* Disable color transformation, which is OFF by default. */
+/* Отключите преобразование цвета, по умолчанию это OFF. */
 vg_lite_error_t vg_lite_disable_color_transform(void);
 
-/* Set pixel color transformation scale and bias values for each pixel channel. */
+/* Установите масштаб преобразования цвета пикселей и значения смещения для каждого пиксельного канала. */
 vg_lite_error_t vg_lite_set_color_transform(vg_lite_color_transform_t * values);
 
-/* Set flexa stream id. */
+/* Установите идентификатор потока Flexa. */
 vg_lite_error_t vg_lite_flexa_set_stream(vg_lite_uint8_t stream_id);
 
-/* set flexa background buffer.*/
+/* установить фоновый буфер Flexa.*/
 vg_lite_error_t vg_lite_flexa_bg_buffer(vg_lite_uint8_t stream_id,
                                         vg_lite_buffer_t * buffer,
                                         vg_lite_uint32_t seg_count,
                                         vg_lite_uint32_t seg_size);
 
-/* Enable flexa. */
+/* Включить флексу. */
 vg_lite_error_t vg_lite_flexa_enable(void);
 
-/* Disable flexa.*/
+/* Отключить флексу.*/
 vg_lite_error_t vg_lite_flexa_disable(void);
 
-/* Set flexa stop flag after the last frame. */
+/* Установите флаг остановки гибкости после последнего кадра. */
 vg_lite_error_t vg_lite_flexa_stop_frame(void);
 
-/* Dump command buffer */
+/* Дамп командного буфера */
 vg_lite_error_t vg_lite_dump_command_buffer(void);
 
-/* Return VGLite parameters in params[] array */
+/* Вернуть параметры VGLite в массив params[] */
 vg_lite_error_t vg_lite_get_parameter(vg_lite_param_type_t type,
                                       vg_lite_int32_t count,
                                       vg_lite_float_t * params);

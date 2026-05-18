@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * Change Logs:
- * Date           Author       Notes
- * 2021-10-15     Meco Man     The first version
+ * Журналы изменений:
+ * Дата Примечания автора
+ * 15.10.2021 Meco Man Первая версия
  */
 
 #ifndef LV_RT_THREAD_CONF_H
@@ -31,7 +31,7 @@
 #endif
 
 /*=========================
-   CPU usage
+   Использование CPU
  *=========================*/
 
 #ifdef PKG_USING_CPU_USAGE
@@ -45,7 +45,7 @@
 #define LV_USE_OS   LV_OS_RTTHREAD
 
 /*-------------
- * Asserts
+ * Утверждает
  *-----------*/
 
 #define LV_ASSERT_HANDLER_INCLUDE LV_RTTHREAD_INCLUDE
@@ -61,7 +61,7 @@
     #define LV_BIG_ENDIAN_SYSTEM 0
 #endif
 
-#ifdef rt_align /* >= RT-Thread v5.0.0 */
+#ifdef rt_align /* >= RT -Тред v5.0.0 */
     #define LV_ATTRIBUTE_MEM_ALIGN rt_align(RT_ALIGN_SIZE)
 #else
     #define LV_ATTRIBUTE_MEM_ALIGN ALIGN(RT_ALIGN_SIZE)

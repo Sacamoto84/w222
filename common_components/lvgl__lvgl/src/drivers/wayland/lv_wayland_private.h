@@ -135,10 +135,10 @@ typedef struct _lv_wl_window_t {
     lv_wayland_display_close_cb_t close_cb;
     lv_wl_window_xdg_t xdg;
 
-    /* The current physical assigned output */
+    /* Текущий физический назначенный выход */
     struct wl_output * physical_output;
 
-    /* The current body surface */
+    /* Текущая поверхность тела */
     struct wl_surface * body;
 
     lv_wl_resize_event_t resize_event;
@@ -160,7 +160,7 @@ typedef struct _lv_wl_window_t {
 extern lv_wl_ctx_t lv_wl_ctx;
 
 /**********************
- *      Driver
+ *      Водитель
  **********************/
 
 lv_result_t lv_wayland_init(void);
@@ -169,7 +169,7 @@ void lv_wayland_deinit(void);
 void lv_wayland_flush(void);
 
 /**********************
- *      Window
+ *      Окно
  **********************/
 
 int32_t lv_wayland_window_get_width(lv_wl_window_t * window);
@@ -192,7 +192,7 @@ void lv_wayland_xdg_delete_window(lv_wl_window_xdg_t * xdg);
 void lv_wayland_xdg_deinit(void);
 
 /**********************
- *      Input
+ *      Ввод
  **********************/
 
 void lv_wayland_seat_init(lv_wl_seat_t * seat, struct wl_registry * registry, uint32_t name, uint32_t version);
@@ -207,13 +207,13 @@ void lv_wayland_seat_touch_delete(lv_wl_seat_touch_t * seat_touch);
 lv_wl_seat_keyboard_t * lv_wayland_seat_keyboard_create(struct wl_seat * seat);
 void lv_wayland_seat_keyboard_delete(lv_wl_seat_keyboard_t * seat_keyboard);
 
-/* Updates indev's driver data with the given 'read_cb' to 'new_driver_data' */
+/* Обновляет данные драйвера indev с заданным «read_cb» на «new_driver_data». */
 void lv_wayland_update_indevs(lv_indev_read_cb_t read_cb, void * new_driver_data);
 
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WAYLAND_PRIVATE_H*/

@@ -88,7 +88,7 @@ def get_coverage_data(root: str) -> Dict[str, Dict[int, int]]:
     Notes:
     - Only lines explicitly present in gcovr JSON are considered "coverable".
         Lines that are missing from the JSON (e.g. preprocessor directives like
-        #include, comments, whitespace, or excluded lines) are treated as
+        #включать, комментарии, пробелы или исключенные строки) рассматриваются как
         non-coverable and will be ignored by the uncovered check.
     Raises: subprocess.CalledProcessError if gcovr fails
     """
@@ -126,7 +126,7 @@ def get_coverage_data(root: str) -> Dict[str, Dict[int, int]]:
     coverage_data: Dict[str, Dict[int, int]] = {}
 
     for file_info in coverage_json.get("files", []):
-        # Normalize path to be relative to repo root with POSIX separators.
+        # Нормализовать путь относительно корня репо с помощью разделителей POSIX.
         filename = file_info["file"]
         rel = os.path.relpath(filename, root)
         rel = rel.replace(os.path.sep, "/")
@@ -134,11 +134,11 @@ def get_coverage_data(root: str) -> Dict[str, Dict[int, int]]:
 
         for line_info in file_info.get("lines", []):
             line_number = line_info.get("line_number")
-            # Only consider lines explicitly listed by gcovr as coverable.
-            # Some gcovr versions may include additional flags like
-            # "gcovr/noncode" or "excluded"; we simply ignore such lines
-            # by relying on their absence from the JSON or by requiring
-            # a numeric execution count.
+            # Считайте потайными только те строки, которые явно указаны в gcovr.
+            # Некоторые версии gcovr могут включать дополнительные флаги, например
+            # «gcovr/noncode» или «исключено»; мы просто игнорируем такие строки
+            # полагаясь на их отсутствие в JSON или требуя
+            # числовое количество выполнений.
             if line_number is None:
                 continue
             count = line_info.get("count")
@@ -157,12 +157,12 @@ def check_commit_coverage(
     """
 
     if "..." in commit:
-        # Handle range format (base...head)
+        # Формат диапазона дескриптора (база...голова)
         base, head = commit.split("...")
-        # Get changes for each commit in the range
+        # Получить изменения для каждого коммита в диапазоне
         commits = run_git_command(["rev-list", f"{base}...{head}"], cwd=root).split()
     else:
-        # Handle single commit
+        # Обработка одиночного коммита
         commits = [commit]
 
     print(f"Found {len(commits)} commits in range:")
@@ -182,24 +182,24 @@ def check_commit_coverage(
     print("Getting coverage data...")
     coverage_data = get_coverage_data(root)
 
-    # Normalize changed file paths to POSIX separators for matching.
+    # Нормализовать измененные пути к файлам с помощью разделителей POSIX для сопоставления.
     normalized_changed: Dict[str, Set[int]] = {
         f.replace(os.path.sep, "/"): lines for f, lines in changed_lines.items()
     }
 
-    # If desired, we could additionally filter by the gcovr filter pattern.
-    # However, by intersecting with coverage_data keys, we inherently ignore
-    # files that are not part of coverage anyway.
+    # При желании мы могли бы дополнительно отфильтровать по шаблону фильтра gcovr.
+    # Однако, пересекаясь с ключами coverage_data, мы по сути своей теряем
+    # файлы, которые в любом случае не являются частью покрытия.
 
     total_new_lines = 0  # total coverable new lines (per gcovr)
     covered_lines = 0
     uncovered_lines: List[Tuple[str, int]] = []
     skipped_noncoverable = 0  # changed lines that gcovr doesn't consider coverable
 
-    # Build quick lookup for filenames present in coverage.
+    # Создайте быстрый поиск имен файлов, присутствующих в покрытии.
     coverage_files: Set[str] = set(coverage_data.keys())
 
-    # Iterate changed files and intersect with gcovr-provided coverable lines.
+    # Перебирайте измененные файлы и пересекайте потайные строки, предоставленные gcovr.
     for filename, line_numbers in normalized_changed.items():
         if filename not in coverage_files:
             # Entire file has no coverable lines in gcovr output; skip all.
@@ -230,16 +230,16 @@ def check_path_coverage(path: str, root: str) -> Tuple[int, int, List[Tuple[str,
     - If PATH is a directory, coverage is aggregated over all coverable files within it.
     - If PATH is a file, coverage is computed only for that file.
     """
-    # Normalize input path
+    # Нормализовать входной путь
     abs_path = os.path.abspath(path)
     if not os.path.exists(abs_path):
         print(f"Error: The specified path does not exist: {abs_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Ensure we operate from repo root to construct relative POSIX paths
+    # Убедитесь, что мы работаем из корня репо для создания относительных путей POSIX.
     root = os.path.abspath(root)
 
-    # Build relative POSIX target(s)
+    # Построить относительные цели POSIX
     rel = os.path.relpath(abs_path, root)
     rel_posix = rel.replace(os.path.sep, "/")
 
@@ -251,12 +251,12 @@ def check_path_coverage(path: str, root: str) -> Tuple[int, int, List[Tuple[str,
     uncovered: List[Tuple[str, int]] = []
 
     if os.path.isdir(abs_path):
-        # Directory scope: include all files under this directory
+        # Область каталога: включить все файлы в этом каталоге.
         scoped_files = {}
         for f, lines in coverage_data.items():
-            # Convert both to absolute paths for comparison
+            # Преобразуйте оба пути в абсолютные для сравнения.
             f_abs = os.path.abspath(os.path.join(root, f.replace("/", os.path.sep)))
-            # If the common path of abs_path and f_abs is abs_path, f is under abs_path
+            # Если общий путьabs_pathиf_abs— abs_path, f находится под abs_path.
             if os.path.commonpath([abs_path, f_abs]) == abs_path:
                 scoped_files[f] = lines
 
@@ -269,7 +269,7 @@ def check_path_coverage(path: str, root: str) -> Tuple[int, int, List[Tuple[str,
                 else:
                     uncovered.append((filename, lineno))
     else:
-        # File scope
+        # Область действия файла
         if rel_posix in coverage_data:
             line_map = coverage_data[rel_posix]
             print(f"Found coverable file: {rel_posix}")
@@ -353,7 +353,7 @@ def main() -> int:
         print(f"Current working directory: {root}")
 
         if args.path:
-            # Path mode: ignore commit, compute coverage for file/dir
+            # Режим пути: игнорировать фиксацию, вычислять покрытие для файла/каталога
             covered, total, uncovered = check_path_coverage(args.path, root)
 
             return report_coverage(
@@ -365,7 +365,7 @@ def main() -> int:
                 total_label="Coverable lines (per gcovr)",
             )
         else:
-            # Commit mode: default behavior
+            # Режим фиксации: поведение по умолчанию
             covered, total, uncovered, skipped_noncoverable = check_commit_coverage(
                 args.commit, root
             )

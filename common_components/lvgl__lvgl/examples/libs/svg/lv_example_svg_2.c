@@ -3,7 +3,7 @@
 #if LV_USE_SVG && LV_USE_VECTOR_GRAPHIC
 
 /**
- * Load an SVG from a file
+ * Загрузите SVG из файла
  */
 void lv_example_svg_2(void)
 {
@@ -15,7 +15,7 @@ void lv_example_svg_2(void)
 void lv_example_svg_2(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "SVG is not enabled");

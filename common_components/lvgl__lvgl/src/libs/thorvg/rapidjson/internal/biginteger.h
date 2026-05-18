@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_BIGINTEGER_H_
 #define RAPIDJSON_BIGINTEGER_H_
@@ -18,7 +18,7 @@
 #include "../rapidjson.h"
 
 #if defined(_MSC_VER) && !defined(__INTEL_COMPILER) && defined(_M_AMD64)
-#include <intrin.h> // for _umul128
+#include <intrin.h> // для _umul128
 #if !defined(_ARM64EC_)
 #pragma intrinsic(_umul128)
 #else
@@ -77,12 +77,12 @@ public:
         digits_[0] += u;
         for (size_t i = 0; i < count_ - 1; i++) {
             if (digits_[i] >= backup)
-                return *this; // no carry
+                return *this; // нет переноски
             backup = digits_[i + 1];
             digits_[i + 1] += 1;
         }
 
-        // Last carry
+        // Последний перенос
         if (digits_[count_ - 1] < backup)
             PushBack(1);
 
@@ -186,12 +186,12 @@ public:
         return *this;
     }
 
-    // Compute absolute difference of this and rhs.
-    // Assume this != rhs
+    // Вычислите абсолютную разницу между этим и rhs.
+    // Предположим, что это != правая сторона
     bool Difference(const BigInteger& rhs, BigInteger* out) const {
         int cmp = Compare(rhs);
         RAPIDJSON_ASSERT(cmp != 0);
-        const BigInteger *a, *b;  // Makes a > b
+        const BigInteger *a, *b;  // Делает a > b
         bool ret;
         if (cmp < 0) { a = &rhs; b = this; ret = true; }
         else         { a = this; b = &rhs; ret = false; }
@@ -233,7 +233,7 @@ private:
             *this = u;
         else {
             unsigned exp = static_cast<unsigned>(end - begin);
-            (MultiplyPow5(exp) <<= exp) += u;   // *this = *this * 10^exp + u
+            (MultiplyPow5(exp) <<= exp) += u;   // *это = *это * 10^exp + u
         }
     }
 
@@ -252,7 +252,7 @@ private:
         return r;
     }
 
-    // Assume a * b + k < 2^128
+    // Предположим, a * b + k < 2^128.
     static uint64_t MulAdd64(uint64_t a, uint64_t b, uint64_t k, uint64_t* outHigh) {
 #if defined(_MSC_VER) && defined(_M_AMD64)
         uint64_t low = _umul128(a, b, outHigh) + k;
@@ -268,7 +268,7 @@ private:
 #else
         const uint64_t a0 = a & 0xFFFFFFFF, a1 = a >> 32, b0 = b & 0xFFFFFFFF, b1 = b >> 32;
         uint64_t x0 = a0 * b0, x1 = a0 * b1, x2 = a1 * b0, x3 = a1 * b1;
-        x1 += (x0 >> 32); // can't give carry
+        x1 += (x0 >> 32); // не могу дать перенос
         x1 += x2;
         if (x1 < x2)
             x3 += (static_cast<uint64_t>(1) << 32);
@@ -283,7 +283,7 @@ private:
 #endif
     }
 
-    static const size_t kBitCount = 3328;  // 64bit * 54 > 10^1000
+    static const size_t kBitCount = 3328;  // 64бит * 54 > 10^1000
     static const size_t kCapacity = kBitCount / sizeof(Type);
     static const size_t kTypeBit = sizeof(Type) * 8;
 
@@ -291,7 +291,7 @@ private:
     size_t count_;
 };
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #endif // RAPIDJSON_BIGINTEGER_H_

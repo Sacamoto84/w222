@@ -29,7 +29,7 @@ extern "C" {
  **********************/
 
 /**
- * Register the WEBP decoder functions in LVGL
+ * Зарегистрируйте функции декодера WEBP в LVGL.
  */
 void lv_libwebp_init(void);
 
@@ -42,7 +42,7 @@ void lv_libwebp_deinit(void);
 #endif /*LV_USE_LIBWEBP*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_LIBWEBP_H*/

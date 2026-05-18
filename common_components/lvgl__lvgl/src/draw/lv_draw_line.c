@@ -113,7 +113,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_line(lv_layer_t * layer, const lv_draw_line_d
         lv_layer_t * ds_layer = lv_draw_layer_create_drop_shadow(layer, &dsc->base, &a);
         LV_ASSERT_NULL(ds_layer);
         lv_draw_line_dsc_t ds_dsc = *dsc;
-        ds_dsc.base.drop_shadow_opa = 0; /*Disable drop shadow so rendering below will render plain line*/
+        ds_dsc.base.drop_shadow_opa = 0; /*Отключите тень, чтобы при рендеринге ниже отображалась простая линия.*/
         lv_draw_line(ds_layer, &ds_dsc);
         lv_draw_layer_finish_drop_shadow(ds_layer, &dsc->base);
     }
@@ -137,7 +137,7 @@ void lv_draw_line_iterate(lv_draw_task_t * t, lv_draw_line_dsc_t * dsc,
         draw_line_cb(t, dsc);
     }
     else {
-        /*Create a temporary dsc where the point array is replaced by 2 points*/
+        /*Создайте временный dsc, в котором точки массива заменяются двумя точками.*/
         lv_draw_line_dsc_t dsc_tmp = *dsc;
         size_t point_cnt = dsc_tmp.point_cnt;
         if(point_cnt <= 1) return;

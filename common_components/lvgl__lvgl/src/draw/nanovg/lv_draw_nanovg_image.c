@@ -65,7 +65,7 @@ void lv_draw_nanovg_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc, c
 
     lv_draw_nanovg_unit_t * u = (lv_draw_nanovg_unit_t *)t->draw_unit;
 
-    /* Use coords as the fallback image width and height */
+    /* Используйте координаты в качестве ширины и высоты резервного изображения. */
     const uint32_t img_w = dsc->header.w ? dsc->header.w : lv_area_get_width(coords);
     const uint32_t img_h = dsc->header.h ? dsc->header.h : lv_area_get_height(coords);
     bool use_repeat_tile = false;
@@ -75,7 +75,7 @@ void lv_draw_nanovg_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc, c
 
         if(dsc->tile) {
 #ifdef NANOVG_GLES2_IMPLEMENTATION
-            /* GLES2 does not support sampling non-power-of-2 textures in repeating mode. */
+            /* GLES2 не поддерживает выборку текстур не степени 2 в режиме повторения. */
             if(!is_power_of_2(img_w) || !is_power_of_2(img_h)) {
                 LV_LOG_TRACE("Unsupported image size %" LV_PRIu32 " x %" LV_PRIu32 ". Skipping for repeat mode.", img_w, img_h);
                 use_repeat_tile = true;
@@ -96,7 +96,7 @@ void lv_draw_nanovg_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc, c
         return;
     }
 
-    /* original image matrix */
+    /* матрица исходного изображения */
     lv_matrix_t image_matrix;
     lv_matrix_identity(&image_matrix);
     image_dsc_to_matrix(&image_matrix, coords->x1, coords->y1, dsc);
@@ -117,7 +117,7 @@ void lv_draw_nanovg_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc, c
         }
 
         if(use_repeat_tile) {
-            /* When alignment requirements are not met, simulate tiles by repeating the texture. */
+            /* Если требования к выравниванию не соблюдаются, имитируйте плитки, повторяя текстуру. */
             fill_repeat_tile_image(u, dsc, coords, tile_area, img_w, img_h, image_handle);
             LV_PROFILER_DRAW_END;
             return;

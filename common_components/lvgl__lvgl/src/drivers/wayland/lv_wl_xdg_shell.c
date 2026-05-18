@@ -60,7 +60,7 @@ static const struct xdg_wm_base_listener xdg_wm_base_listener = {.ping = xdg_wm_
  **********************/
 
 /**********************
- *   Shell
+ *   Ракушка
  **********************/
 
 void lv_wayland_xdg_deinit(void)
@@ -71,7 +71,7 @@ void lv_wayland_xdg_deinit(void)
 }
 
 /**********************
- *   Listeners
+ *   Слушатели
  **********************/
 
 const struct xdg_wm_base_listener * lv_wayland_xdg_get_wm_base_listener(void)
@@ -80,7 +80,7 @@ const struct xdg_wm_base_listener * lv_wayland_xdg_get_wm_base_listener(void)
 }
 
 /**********************
- *   Shell Window
+ *   Окно оболочки
  **********************/
 
 void lv_wayland_xdg_set_fullscreen(lv_wl_window_xdg_t * xdg, bool fullscreen,
@@ -141,9 +141,9 @@ lv_result_t lv_wl_xdg_create_window(struct xdg_wm_base * xdg_wm, lv_wl_window_t 
 
 void lv_wayland_xdg_configure_surface(lv_wl_window_t * window)
 {
-    /* XDG surfaces need to be configured before a buffer can be attached.
-     * An (XDG) surface commit (without an attached buffer) triggers this
-     * configure event */
+    /* Поверхности XDG необходимо настроить перед подключением буфера.
+     * Поверхностная фиксация ( XDG ) (без подключенного буфера) запускает это
+     * настроить событие */
     wl_surface_commit(window->body);
     wl_display_roundtrip(lv_wl_ctx.wl_display);
     LV_ASSERT_MSG(window->resize_event.pending, "Failed to receive the xdg_surface configuration event");
@@ -219,7 +219,7 @@ static void xdg_toplevel_handle_configure(void * data, struct xdg_toplevel * xdg
     }
 
     window->xdg.configured = false;
-    /* Width and height are already ok, don't resize*/
+    /* Ширина и высота уже в порядке, не изменяйте размер.*/
     if(width == lv_wayland_window_get_width(window) &&
        height == lv_wayland_window_get_height(window)) {
         LV_LOG_TRACE("Window's size is already correct. Ignore resize request");

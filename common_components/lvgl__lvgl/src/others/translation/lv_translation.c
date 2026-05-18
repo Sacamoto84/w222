@@ -65,7 +65,7 @@ void lv_translation_deinit(void)
 
                 size_t j;
                 for(j = 0; j < pack->language_cnt; j++) {
-                    lv_free((void *)tag->translations[j]); /*Free each translation of the tag*/
+                    lv_free((void *)tag->translations[j]); /*Освободите каждый перевод тега*/
                 }
                 lv_free(tag->translations);
             }
@@ -97,7 +97,7 @@ lv_translation_pack_t * lv_translation_add_static(const char * const languages[]
     lv_memzero(pack, sizeof(lv_translation_pack_t));
     pack->is_static = 1;
 
-    /*Count the languages*/
+    /*Посчитайте языки*/
     while(languages[pack->language_cnt]) {
         pack->language_cnt++;
     }
@@ -149,18 +149,18 @@ const char * lv_translation_get(const char * tag)
             /*Does this pack contains the language?*/
             if(lv_streq(pack->languages[lang], selected_lang)) {
                 lang_found = true;
-                /*Find the tag*/
+                /*Найдите тег*/
                 if(pack->is_static) {
                     uint32_t t;
                     for(t = 0; pack->tag_p[t]; t++) {
                         if(lv_streq(pack->tag_p[t], tag)) {
-                            /*Find the "row" of the tag */
+                            /*Найдите «строку» тега */
                             const char ** tr_row = pack->translation_p + pack->language_cnt * t;
                             const char * tr = tr_row[lang];
-                            if(tr) return tr; /*Found directly*/
+                            if(tr) return tr; /*Найдено напрямую*/
 
                             LV_LOG_WARN("`%s` tag is not found. Using the tag as translation.", tag);
-                            return tag; /*Return the tag as a fall back*/
+                            return tag; /*Вернуть тег как запасной вариант*/
                         }
                     }
                 }
@@ -171,10 +171,10 @@ const char * lv_translation_get(const char * tag)
                         lv_translation_tag_dsc_t * tag_dsc = lv_array_at(&pack->translation_array, i);
                         if(lv_streq(tag_dsc->tag, tag)) {
                             const char * tr = tag_dsc->translations[lang];
-                            if(tr) return tr; /*Found directly*/
+                            if(tr) return tr; /*Найдено напрямую*/
 
                             LV_LOG_WARN("`%s` tag is not found. Using the tag as translation.", tag);
-                            return tag; /*Return the tag as a worst case option*/
+                            return tag; /*Вернуть тег как вариант наихудшего случая*/
                         }
                     }
                 }
@@ -276,7 +276,7 @@ lv_result_t lv_translation_set_tag_translation(lv_translation_pack_t * pack, lv_
         return LV_RESULT_INVALID;
     }
 
-    lv_free((void *)tag->translations[lang_idx]); /*Free the earlier set language if any*/
+    lv_free((void *)tag->translations[lang_idx]); /*Освободите ранее установленный язык, если таковой имеется.*/
     tag->translations[lang_idx] = lv_strdup(trans);
     if(tag->translations[lang_idx] == NULL) {
         LV_LOG_WARN("Couldn't allocate the new translation in tag `%p` in pack `%p`", (void *)tag, (void *) pack);

@@ -15,81 +15,81 @@ static void test_event_cb(lv_event_t * e)
 
 void test_event_trickle_basic(void)
 {
-    /*Create a parent container*/
+    /*Создать родительский контейнер*/
     lv_obj_t * parent = lv_obj_create(lv_screen_active());
     lv_obj_add_flag(parent, LV_OBJ_FLAG_EVENT_TRICKLE);
     lv_obj_add_event_cb(parent, test_event_cb, LV_EVENT_CLICKED, NULL);
 
-    /*Create children*/
+    /*Создание детей*/
     lv_obj_t * child1 = lv_obj_create(parent);
     lv_obj_add_event_cb(child1, test_event_cb, LV_EVENT_CLICKED, NULL);
 
     lv_obj_t * child2 = lv_obj_create(parent);
     lv_obj_add_event_cb(child2, test_event_cb, LV_EVENT_CLICKED, NULL);
 
-    /*Reset counters*/
+    /*Сбросить счетчики*/
     event_count = 0;
     last_target = NULL;
 
-    /*Send event to parent - should trickle down to children*/
+    /*Отправить событие родителю - должно дойти до детей*/
     lv_obj_send_event(parent, LV_EVENT_CLICKED, NULL);
 
-    /*Should have received 3 events: parent + 2 children*/
+    /*Должно было получить 3 события: родительский + 2 дочерних.*/
     TEST_ASSERT_EQUAL(3, event_count);
 
-    /*Clean up*/
+    /*Очистить*/
     lv_obj_delete(parent);
 }
 
 void test_event_trickle_stop(void)
 {
-    /*Create a parent container*/
+    /*Создать родительский контейнер*/
     lv_obj_t * parent = lv_obj_create(lv_screen_active());
     lv_obj_add_flag(parent, LV_OBJ_FLAG_EVENT_TRICKLE);
 
-    /*Add event handler that stops trickle down*/
+    /*Добавьте обработчик событий, который останавливает просачивание вниз*/
     lv_obj_add_event_cb(parent, test_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_add_event_cb(parent, (lv_event_cb_t)lv_event_stop_trickling, LV_EVENT_CLICKED, NULL);
 
-    /*Create children*/
+    /*Создание детей*/
     lv_obj_t * child1 = lv_obj_create(parent);
     lv_obj_add_event_cb(child1, test_event_cb, LV_EVENT_CLICKED, NULL);
 
-    /*Reset counters*/
+    /*Сбросить счетчики*/
     event_count = 0;
     last_target = NULL;
 
-    /*Send event to parent - should NOT trickle down due to stop*/
+    /*Отправить событие родителю — если NOT уменьшится из-за остановки*/
     lv_obj_send_event(parent, LV_EVENT_CLICKED, NULL);
 
-    /*Should have received only 1 event: parent only*/
-    TEST_ASSERT_EQUAL(1, event_count); /* parent event handler + stop handler */
+    /*Должен был получить только 1 событие: только родительский*/
+    TEST_ASSERT_EQUAL(1, event_count); /* обработчик родительского события + обработчик остановки */
 
-    /*Clean up*/
+    /*Очистить*/
     lv_obj_delete(parent);
 }
 
 void test_event_trickle_disabled(void)
 {
-    /*Create a parent container WITHOUT trickle down flag*/
+    /*Создайте флаг просачивания родительского контейнера WITHOUT.*/
     lv_obj_t * parent = lv_obj_create(lv_screen_active());
     lv_obj_add_event_cb(parent, test_event_cb, LV_EVENT_CLICKED, NULL);
 
-    /*Create children*/
+    /*Создание детей*/
     lv_obj_t * child1 = lv_obj_create(parent);
     lv_obj_add_event_cb(child1, test_event_cb, LV_EVENT_CLICKED, NULL);
 
-    /*Reset counters*/
+    /*Сбросить счетчики*/
     event_count = 0;
     last_target = NULL;
 
-    /*Send event to parent - should NOT trickle down*/
+    /*Отправить событие родителю - если NOT просачивается вниз*/
     lv_obj_send_event(parent, LV_EVENT_CLICKED, NULL);
 
-    /*Should have received only 1 event: parent only*/
+    /*Должен был получить только 1 событие: только родительский*/
     TEST_ASSERT_EQUAL(1, event_count);
 
-    /*Clean up*/
+    /*Очистить*/
     lv_obj_delete(parent);
 }
 

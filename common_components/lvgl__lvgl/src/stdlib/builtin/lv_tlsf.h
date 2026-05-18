@@ -5,29 +5,29 @@
 #define LV_TLSF_H
 
 /*
-** Two Level Segregated Fit memory allocator, version 3.1.
-** Written by Matthew Conte
+** Двухуровневый распределитель памяти Segregated Fit, версия 3.1.
+** Автор Мэтью Конте
 **  http://tlsf.baisoku.org
 **
-** Based on the original documentation by Miguel Masmano:
+** На основе оригинальной документации Мигеля Масмано:
 **  http://www.gii.upv.es/tlsf/main/docs
 **
-** This implementation was written to the specification
-** of the document, therefore no GPL restrictions apply.
+** Эта реализация была написана по спецификации
+** документа, поэтому ограничения GPL не применяются.
 **
 ** Copyright (c) 2006-2016, Matthew Conte
-** All rights reserved.
+** Все права защищены.
 **
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are met:
+** Распространение и использование в исходной и двоичной форме, с или без
+** Модификация допускается при соблюдении следующих условий:
 **     * Redistributions of source code must retain the above copyright
-**       notice, this list of conditions and the following disclaimer.
+**       уведомление, этот список условий и следующий отказ от ответственности.
 **     * Redistributions in binary form must reproduce the above copyright
-**       notice, this list of conditions and the following disclaimer in the
-**       documentation and/or other materials provided with the distribution.
+**       уведомление, этот список условий и следующий отказ от ответственности в
+**       документация и/или другие материалы, поставляемые вместе с дистрибутивом.
 **     * Neither the name of the copyright holder nor the
-**       names of its contributors may be used to endorse or promote products
-**       derived from this software without specific prior written permission.
+**       имена его участников могут использоваться для поддержки или продвижения продуктов.
+**       получены из этого программного обеспечения без специального предварительного письменного разрешения.
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -53,26 +53,26 @@ extern "C" {
 typedef void * lv_tlsf_t;
 typedef void * lv_pool_t;
 
-/* Create/destroy a memory pool. */
+/* Создать/уничтожить пул памяти. */
 lv_tlsf_t lv_tlsf_create(void * mem);
 lv_tlsf_t lv_tlsf_create_with_pool(void * mem, size_t bytes);
 void lv_tlsf_destroy(lv_tlsf_t tlsf);
 lv_pool_t lv_tlsf_get_pool(lv_tlsf_t tlsf);
 
-/* Add/remove memory pools. */
+/* Добавить/удалить пулы памяти. */
 lv_pool_t lv_tlsf_add_pool(lv_tlsf_t tlsf, void * mem, size_t bytes);
 void lv_tlsf_remove_pool(lv_tlsf_t tlsf, lv_pool_t pool);
 
-/* malloc/memalign/realloc/free replacements. */
+/* malloc/memalign/realloc/free замены. */
 void * lv_tlsf_malloc(lv_tlsf_t tlsf, size_t bytes);
 void * lv_tlsf_memalign(lv_tlsf_t tlsf, size_t align, size_t bytes);
 void * lv_tlsf_realloc(lv_tlsf_t tlsf, void * ptr, size_t size);
 size_t lv_tlsf_free(lv_tlsf_t tlsf, const void * ptr);
 
-/* Returns internal block size, not original request size */
+/* Возвращает внутренний размер блока, а не исходный размер запроса */
 size_t lv_tlsf_block_size(void * ptr);
 
-/* Overheads/limits of internal structures. */
+/* Накладные расходы/ограничения внутренних структур. */
 size_t lv_tlsf_size(void);
 size_t lv_tlsf_align_size(void);
 size_t lv_tlsf_block_size_min(void);
@@ -80,10 +80,10 @@ size_t lv_tlsf_block_size_max(void);
 size_t lv_tlsf_pool_overhead(void);
 size_t lv_tlsf_alloc_overhead(void);
 
-/* Debugging. */
+/* Отладка. */
 typedef void (*lv_tlsf_walker)(void * ptr, size_t size, int used, void * user);
 void lv_tlsf_walk_pool(lv_pool_t pool, lv_tlsf_walker walker, void * user);
-/* Returns nonzero if any internal consistency check fails. */
+/* Возвращает ненулевое значение, если какая-либо проверка внутренней согласованности не удалась. */
 int lv_tlsf_check(lv_tlsf_t tlsf);
 int lv_tlsf_check_pool(lv_pool_t pool);
 

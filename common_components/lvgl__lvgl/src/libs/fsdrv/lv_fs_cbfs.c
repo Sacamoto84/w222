@@ -1,4 +1,4 @@
-// this file should not exist
+// этот файл не должен существовать
 #ifdef __GNUC__
     #define IS_NOT_USED __attribute__ ((unused))
 #else
@@ -6,5 +6,5 @@
 #endif
 IS_NOT_USED static void nothing(void)
 {
-    // do nothing
+    // ничего не делать
 }

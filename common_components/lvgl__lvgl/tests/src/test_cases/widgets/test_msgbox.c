@@ -4,9 +4,9 @@
 
 #include "unity/unity.h"
 
-/* This function runs before each test */
+/* Эта функция запускается перед каждым тестом */
 void setUp(void);
-/* This function runs after every test */
+/* Эта функция запускается после каждого теста */
 void tearDown(void);
 
 void test_msgbox_creation_successful_with_close_button(void);
@@ -30,7 +30,7 @@ void setUp(void)
 void tearDown(void)
 {
     lv_obj_clean(active_screen);
-    lv_obj_clean(lv_layer_top()); /*Modal message boxes are created on the top layer*/
+    lv_obj_clean(lv_layer_top()); /*Модальные окна сообщений создаются на верхнем слое.*/
 }
 
 void test_msgbox_creation_successful_with_close_button(void)
@@ -64,7 +64,7 @@ void test_msgbox_creation_successful_no_close_button(void)
 
 void test_msgbox_creation_successful_modal(void)
 {
-    // If parent is NULL the message box will be modal
+    // Если родителем является NULL, окно сообщения будет модальным.
     msgbox = lv_msgbox_create(NULL);
     lv_msgbox_add_title(msgbox, "The title");
     lv_msgbox_add_text(msgbox, "The text");
@@ -76,7 +76,7 @@ void test_msgbox_creation_successful_modal(void)
 
     TEST_ASSERT_NOT_NULL(msgbox);
 
-    // Since msgbox has no parent, it won´t be clean up at tearDown()
+    // Поскольку у msgbox нет родителя, он не будет очищен по адресу tearDown().
     lv_obj_clean(msgbox);
 }
 
@@ -94,7 +94,7 @@ void test_msgbox_get_title(void)
     lv_msgbox_add_header_button(msgbox, LV_SYMBOL_AUDIO);
     lv_msgbox_add_close_button(msgbox);
 
-    // Msgbox title is a lv_label widget
+    // Заголовок Msgbox — это виджет lv_label.
     lbl_title = lv_msgbox_get_title(msgbox);
 
     TEST_ASSERT_EQUAL_STRING(txt_title, lv_label_get_text(lbl_title));
@@ -115,7 +115,7 @@ void test_msgbox_close(void)
 
     lv_msgbox_close(msgbox);
 
-    // lv_msgbox_close deletes the message box
+    // lv_msgbox_close удаляет окно сообщения
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -127,7 +127,7 @@ void test_msgbox_close_modal(void)
 
     lv_msgbox_close(msgbox);
 
-    // lv_msgbox_close deletes the message box
+    // lv_msgbox_close удаляет окно сообщения
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -137,7 +137,7 @@ void test_msgbox_close_async(void)
     lv_msgbox_add_text(msgbox, "The text");
     lv_msgbox_add_text_fmt(msgbox, "The %s text", "fmt");
 
-    // lv_msgbox_close deletes the message box
+    // lv_msgbox_close удаляет окно сообщения
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -147,13 +147,13 @@ void test_msgbox_close_async_modal(void)
     lv_msgbox_add_text(msgbox, "The text");
     lv_msgbox_add_text_fmt(msgbox, "The %s text", "fmt");
 
-    // lv_msgbox_close deletes the message box
+    // lv_msgbox_close удаляет окно сообщения
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
 void test_msgbox_content_auto_height(void)
 {
-    /* If parent is NULL the message box will be modal*/
+    /* Если родителем является NULL, окно сообщения будет модальным.*/
     msgbox = lv_msgbox_create(NULL);
     lv_msgbox_add_title(msgbox, "The title");
     lv_msgbox_add_text(msgbox, "The text");
@@ -178,7 +178,7 @@ void test_msgbox_content_auto_height(void)
 
     int32_t h_obj_content = lv_obj_get_content_height(msgbox);
     int32_t h_msgbox_element_sum  = h_header + h_footer + h_content;
-    /* Default Size : The height of the msgbox's obj-content should be equal to the total height of the msgbox's element. */
+    /* Размер по умолчанию: высота obj-содержимого msgbox должна быть равна общей высоте элемента msgbox. */
     TEST_ASSERT_EQUAL(h_obj_content, h_msgbox_element_sum);
 
     /* Test2 : Now change size of msgbox manually*/
@@ -194,7 +194,7 @@ void test_msgbox_content_auto_height(void)
 
     h_obj_content = lv_obj_get_content_height(msgbox);
     h_msgbox_element_sum  = h_header + h_footer + h_content;
-    /* Manual Size : The height of the msgbox's obj-content should also be equal to the total height of the msgbox's element. */
+    /* Ручной размер: высота obj-содержимого msgbox также должна быть равна общей высоте элемента msgbox. */
     TEST_ASSERT_EQUAL(h_obj_content, h_msgbox_element_sum);
 }
 

@@ -70,7 +70,7 @@ struct _lv_label_t {
 #endif /* LV_USE_LABEL != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_LABEL_PRIVATE_H*/

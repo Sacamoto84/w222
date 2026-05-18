@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 10 ene 2024
+/*  Создано: 10 октября 2024 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 /*********************
@@ -61,7 +61,7 @@ void lv_draw_eve_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc
     if(!is_common) return;
 
     lv_point_t p[3];
-    /*If there is a vertical side use it as p[0] and p[1]*/
+    /*Если есть вертикальная сторона, используйте ее как p[0] и p[1]*/
     if(dsc->p[0].x == dsc->p[1].x) {
         p[0] = lv_point_from_precise(&dsc->p[0]);
         p[1] = lv_point_from_precise(&dsc->p[1]);
@@ -82,15 +82,15 @@ void lv_draw_eve_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc
         p[1] = lv_point_from_precise(&dsc->p[1]);
         p[2] = lv_point_from_precise(&dsc->p[2]);
 
-        /*Set the smallest y as p[0]*/
+        /*Установите наименьшее значение y как p[0]*/
         if(p[0].y > p[1].y) lv_point_swap(&p[0], &p[1]);
         if(p[0].y > p[2].y) lv_point_swap(&p[0], &p[2]);
 
-        /*Set the greatest y as p[1]*/
+        /*Установите наибольший y как p[1]*/
         if(p[1].y < p[2].y) lv_point_swap(&p[1], &p[2]);
     }
 
-    /*Be sure p[0] is on the top*/
+    /*Убедитесь, что p[0] находится вверху*/
     if(p[0].y > p[1].y) lv_point_swap(&p[0], &p[1]);
 
     lv_eve_save_context();

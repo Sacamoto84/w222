@@ -268,7 +268,7 @@ static void perf_dump_info(lv_display_t * disp)
 
     info->calculated.fps = time_since_last_report ? (1000 * info->measured.refr_cnt / time_since_last_report) : 0;
     info->calculated.fps = LV_MIN(info->calculated.fps,
-                                  1000 / disp_refr_period);   /*Limit due to possible off-by-one error*/
+                                  1000 / disp_refr_period);   /*Ограничение из-за возможной ошибки отклонения на единицу*/
 
     info->calculated.cpu = 100 - LV_SYSMON_GET_IDLE();
 #if LV_SYSMON_PROC_IDLE_AVAILABLE
@@ -281,7 +281,7 @@ static void perf_dump_info(lv_display_t * disp)
     info->calculated.flush_avg_time = info->measured.render_cnt ?
                                       ((info->measured.flush_in_render_elaps_sum + info->measured.flush_not_in_render_elaps_sum)
                                        / info->measured.render_cnt) : 0;
-    /*Flush time was measured in rendering time so subtract it*/
+    /*Время очистки измерялось во времени рендеринга, поэтому вычтите его.*/
     info->calculated.render_avg_time = info->measured.render_cnt ? ((info->measured.render_elaps_sum -
                                                                      info->measured.flush_in_render_elaps_sum) /
                                                                     info->measured.render_cnt) : 0;

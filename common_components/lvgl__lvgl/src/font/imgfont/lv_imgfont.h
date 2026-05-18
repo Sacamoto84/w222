@@ -26,7 +26,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/* gets the image path name of this character */
+/* получает путь к изображению этого персонажа */
 typedef const void * (*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
                                                  uint32_t unicode, uint32_t unicode_next,
                                                  int32_t * offset_y, void * user_data);
@@ -36,7 +36,7 @@ typedef const void * (*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
  **********************/
 
 /**
- * Creates a image font with info parameter specified.
+ * Создает графический шрифт с указанным параметром info.
  * @param height font size
  * @param path_cb a function to get the image path name of character.
  * @param user_data pointer to user data
@@ -45,7 +45,7 @@ typedef const void * (*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
 lv_font_t * lv_imgfont_create(uint16_t height, lv_imgfont_get_path_cb_t path_cb, void * user_data);
 
 /**
- * Destroy a image font that has been created.
+ * Уничтожить созданный графический шрифт.
  * @param font pointer to image font handle.
  */
 void lv_imgfont_destroy(lv_font_t * font);
@@ -57,7 +57,7 @@ void lv_imgfont_destroy(lv_font_t * font);
 #endif /*LV_USE_IMGFONT*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_IMGFONT_H */

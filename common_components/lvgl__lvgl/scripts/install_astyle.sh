@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check if the script is being run as root
+# Проверьте, запускается ли скрипт от имени пользователя root
 if [ "$(id -u)" -ne 0 ]; then
   echo "This script must be run as root or with sudo" >&2
   exit 1

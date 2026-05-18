@@ -1,14 +1,14 @@
 // Copyright (c) 2013-15, LKC Technologies, Inc.
-// All rights reserved.
+// Все права защищены.
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+// Распространение и использование в исходной и двоичной форме, с или без
+// Модификация допускается при соблюдении следующих условий:
 //
-// Redistributions of source code must retain the above copyright notice, this
-// list of conditions and the following disclaimer. Redistributions in binary
-// form must reproduce the above copyright notice, this list of conditions and
-// the following disclaimer in the documentation and/or other materials
-// provided with the distribution. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+// При повторном распространении исходного кода должно сохраняться указанное выше уведомление об авторских правах.
+// список условий и следующий отказ от ответственности. Перераспределения в двоичном формате
+// форма должна воспроизводить вышеуказанное уведомление об авторских правах, настоящий список условий и
+// следующий отказ от ответственности в документации и/или других материалах
+// предоставляется вместе с раздачей.  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
 // HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 // FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
@@ -29,8 +29,8 @@
 extern "C" {
 #endif
 
-// Since the FNCn characters are not ASCII, define versions here to
-// simplify encoding strings that include them.
+// Поскольку символы FNCn не являются ASCII , определите здесь версии, чтобы
+// упростить строки кодирования, которые их включают.
 #define CODE128_FNC1 '\xf1'
 #define CODE128_FNC2 '\xf2'
 #define CODE128_FNC3 '\xf3'

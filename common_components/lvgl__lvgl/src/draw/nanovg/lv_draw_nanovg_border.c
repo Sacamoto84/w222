@@ -67,13 +67,13 @@ void lv_draw_nanovg_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc,
 
     nvgBeginPath(u->vg);
 
-    /* outer rect */
+    /* внешний прямоугольник */
     lv_nanovg_path_append_rect(u->vg,
                                coords->x1, coords->y1,
                                w, h,
                                r_out);
 
-    /* inner rect */
+    /* внутренний прямоугольник */
     enum NVGwinding winding = path_append_inner_rect(u->vg, dsc, coords->x1, coords->y1, w, h, r_out);
 
     lv_nanovg_fill(
@@ -101,7 +101,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
     const int32_t border_w = dsc->width;
     const float border_w_max = LV_MIN(half_w, half_h);
 
-    /* normal fill, no inner rect */
+    /* обычная заливка, без внутреннего прямоугольника */
     if(border_w >= border_w_max) {
         LV_PROFILER_DRAW_END;
         return NVG_CCW;
@@ -109,7 +109,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
 
     const float r_in = r - border_w;
 
-    /* full border, simple rect */
+    /* полная граница, простой прямоугольник */
     if(dsc->side == LV_BORDER_SIDE_FULL) {
         lv_nanovg_path_append_rect(ctx,
                                    x + border_w, y + border_w,
@@ -119,10 +119,10 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
         return NVG_CW;
     }
 
-    /* reset outer rect path */
+    /* сбросить внешний прямой путь */
     nvgBeginPath(ctx);
 
-    /* no-radius case */
+    /* случай без радиуса */
     if(dsc->radius <= 0) {
         if(dsc->side & LV_BORDER_SIDE_TOP) {
             lv_nanovg_path_append_rect(ctx,
@@ -161,7 +161,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
         return NVG_CCW;
     }
 
-    /* coordinate reference map: https://github.com/lvgl/lvgl/pull/6796 */
+    /* справочная карта координат: https://github.com/lvgl/lvgl/pull/6796 */
     const float c1_x = x + r;
     const float c1_y = y + r;
     const float c2_x = x + w - r;
@@ -171,7 +171,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
     const float c4_x = c1_x;
     const float c4_y = c3_y;
 
-    /* When border_w > r, No need to calculate the intersection of the arc and the line */
+    /* Когда border_w > r, нет необходимости рассчитывать пересечение дуги и линии. */
     if(r_in <= 0) {
         const float p1_x = x;
         const float p1_y = y + border_w;
@@ -253,9 +253,9 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
         return NVG_CCW;
     }
 
-    /* When border_w < r, Calculate the intersection of an arc and a line */
+    /* Когда border_w < r, вычислите пересечение дуги и линии. */
 
-    /* r^2 - r_in^2 = offset^2 */
+    /* r^2 - r_in ^2 = смещение^2 */
     const float offset = NVG_MATH_SQRTF((2 * r - border_w) * border_w);
     const float sweep_alpha = NVG_MATH_DEGREES(NVG_MATH_ACOSF(r_in / r));
     const float sweep_beta = 90 - sweep_alpha;
@@ -342,7 +342,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
         nvgClosePath(ctx);
     }
 
-    /* Draw the rounded corners adjacent to the border */
+    /* Нарисуйте закругленные углы рядом с границей. */
 
     if(HAS_BORDER_SIDE(dsc->side, LV_BORDER_SIDE_TOP | LV_BORDER_SIDE_LEFT)) {
         nvgMoveTo(ctx, p2_x, p2_y);

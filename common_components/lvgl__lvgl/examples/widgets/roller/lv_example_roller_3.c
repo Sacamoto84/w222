@@ -4,7 +4,7 @@
 
 static void generate_mask(lv_draw_buf_t * mask)
 {
-    /*Create a "8 bit alpha" canvas and clear it*/
+    /*Создайте холст «8 бит альфа» и очистите его.*/
     lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
     lv_canvas_set_draw_buf(canvas, mask);
     lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_TRANSP);
@@ -12,7 +12,7 @@ static void generate_mask(lv_draw_buf_t * mask)
     lv_layer_t layer;
     lv_canvas_init_layer(canvas, &layer);
 
-    /*Draw a label to the canvas. The result "image" will be used as mask*/
+    /*Нарисуйте метку на холсте. Результат «изображение» будет использоваться в качестве маски.*/
     lv_draw_rect_dsc_t rect_dsc;
     lv_draw_rect_dsc_init(&rect_dsc);
     rect_dsc.bg_grad.dir = LV_GRAD_DIR_VER;
@@ -31,12 +31,12 @@ static void generate_mask(lv_draw_buf_t * mask)
 
     lv_canvas_finish_layer(canvas, &layer);
 
-    /*Comment it to make the mask visible*/
+    /*Прокомментируйте это, чтобы сделать маску видимой*/
     lv_obj_delete(canvas);
 }
 
 /**
- * Add a fade mask to roller.
+ * Добавьте маску затухания на валик.
  */
 void lv_example_roller_3(void)
 {
@@ -71,8 +71,8 @@ void lv_example_roller_3(void)
     lv_obj_center(roller1);
     lv_roller_set_visible_row_count(roller1, 4);
 
-    /* Create the mask to make the top and bottom part of roller faded.
-     * The width and height are empirical values for simplicity*/
+    /* Создайте маску, чтобы сделать верхнюю и нижнюю часть валика блеклой.
+     * Ширина и высота являются эмпирическими значениями для простоты.*/
     LV_DRAW_BUF_DEFINE_STATIC(mask, 130, 150, LV_COLOR_FORMAT_L8);
     LV_DRAW_BUF_INIT_STATIC(mask);
 

@@ -51,7 +51,7 @@ struct _lv_msgbox_t {
 #endif /* LV_USE_MSGBOX */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_MSGBOX_PRIVATE_H*/

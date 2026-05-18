@@ -43,32 +43,32 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* init commands based on LovyanGFX */
+/* команды инициализации на основе LovyanGFX */
 static const uint8_t init_cmd_list[] = {
-    CMD_CSCON,      1,  0xC3,                           /* Enable extension command 2 partI */
-    CMD_CSCON,      1,  0x96,                           /* Enable extension command 2 partII */
-    CMD_INVCTR,     1,  0x01,                           /* 1-dot inversion */
-    CMD_DFUNCTR,    3,  0x80,                           /* Display Function Control: Bypass */
-    0x22,                           /* Source Output Scan from S1 to S960, Gate Output scan from G1 to G480, scan cycle = 2 */
-    0x3B,                           /* LCD Drive Line = 8 * (59 + 1) */
+    CMD_CSCON,      1,  0xC3,                           /* Включить команду расширения 2 часть I */
+    CMD_CSCON,      1,  0x96,                           /* Включить команду расширения 2, часть II */
+    CMD_INVCTR,     1,  0x01,                           /* 1-точечная инверсия */
+    CMD_DFUNCTR,    3,  0x80,                           /* Управление функцией дисплея: Байпас */
+    0x22,                           /* Сканирование выхода источника от S1 до S960, сканирование выхода вентиля от G1 до G480, цикл сканирования = 2 */
+    0x3B,                           /* LCD Приводная линия = 8 * (59 + 1) */
     CMD_DOCA,       8,  0x40, 0x8A, 0x00, 0x00,
-    0x29,                           /* Source equalizing period time = 22.5 us */
-    0x19,                           /* Timing for "Gate start" = 25 (Tclk) */
-    0xA5,                           /* Timing for "Gate End" = 37 (Tclk), Gate driver EQ function ON */
+    0x29,                           /* Время периода выравнивания источника = 22,5 мкс. */
+    0x19,                           /* Время для «Начала ворот» = 25 (Tclk) */
+    0xA5,                           /* Время для «Gate End» = 37 (Tclk), функция драйвера ворот EQ ON */
     0x33,
-    CMD_PWCTR2,     1,  0x06,                           /* Power control2: VAP(GVDD) = 3.85 + (vcom + vcom offset), VAN(GVCL) = -3.85 + (vcom + vcom offset) */
-    CMD_PWCTR3,     1,  0xA7,                           /* Power control 3: Source driving current level = low, Gamma driving current level = High */
-    CMD_VMCTR,      1,  0x18,                           /* VCOM Control: VCOM = 0.9 */
-    LV_LCD_CMD_DELAY_MS,    12,                         /* delay 120 ms */
-    CMD_GMCTRP1,    14,                                 /* Gamma */
+    CMD_PWCTR2,     1,  0x06,                           /* Управление мощностью2: VAP ( GVDD ) = 3,85 + (vcom + смещение vcom), VAN ( GVCL ) = -3,85 + (vcom + смещение vcom) */
+    CMD_PWCTR3,     1,  0xA7,                           /* Регулятор мощности 3: Уровень управляющего тока источника = низкий, Уровень управляющего тока гамма = Высокий */
+    CMD_VMCTR,      1,  0x18,                           /* VCOM Управление: VCOM = 0,9 */
+    LV_LCD_CMD_DELAY_MS,    12,                         /* задержка 120 мс */
+    CMD_GMCTRP1,    14,                                 /* Гамма */
     0xF0, 0x09, 0x0B, 0x06, 0x04, 0x15, 0x2F,
     0x54, 0x42, 0x3C, 0x17, 0x14, 0x18, 0x1B,
     CMD_GMCTRN1,    14,
     0xE0, 0x09, 0x0B, 0x06, 0x04, 0x03, 0x2B,
     0x43, 0x42, 0x3B, 0x16, 0x14, 0x17, 0x1B,
-    LV_LCD_CMD_DELAY_MS, 12,                            /* delay 120 ms */
-    CMD_CSCON,      1,  0x3C,                           /* Disable extension command 2 partI */
-    CMD_CSCON,      1,  0x69,                           /* Disable extension command 2 partII */
+    LV_LCD_CMD_DELAY_MS, 12,                            /* задержка 120 мс */
+    CMD_CSCON,      1,  0x3C,                           /* Отключить команду расширения 2 часть I */
+    CMD_CSCON,      1,  0x69,                           /* Отключить команду расширения 2 часть II */
     LV_LCD_CMD_DELAY_MS, LV_LCD_CMD_EOF
 };
 

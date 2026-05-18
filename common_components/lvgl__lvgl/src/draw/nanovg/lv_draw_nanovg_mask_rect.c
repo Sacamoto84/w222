@@ -52,7 +52,7 @@ void lv_draw_nanovg_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t 
 
     nvgBeginPath(u->vg);
 
-    /* Nesting cropping regions using rounded rectangles and normal rectangles */
+    /* Вложение областей обрезки с использованием прямоугольников со скругленными углами и обычных прямоугольников. */
     lv_nanovg_path_append_rect(
         u->vg,
         dsc->area.x1, dsc->area.y1,
@@ -64,7 +64,7 @@ void lv_draw_nanovg_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t 
         lv_area_get_width(&t->clip_area), lv_area_get_height(&t->clip_area),
         0);
 
-    /* Use NVG_DESTINATION_IN (Sa * D) blending mode to make the corners transparent */
+    /* Используйте режим наложения NVG_DESTINATION_IN (Sa*D), чтобы сделать углы прозрачными. */
     lv_nanovg_fill(
         u->vg,
         NVG_CCW,

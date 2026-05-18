@@ -1,8 +1,8 @@
 /**
  * @file lv_draw_nema_gfx_stm32_hal.c
  *
- * Global functions that implement some HAL functionality
- * which Nema will call directly.
+ * Глобальные функции, реализующие некоторые функции HAL.
+ * которому Нема позвонит напрямую.
  */
 
 /*********************
@@ -32,15 +32,15 @@ extern GPU2D_HandleTypeDef hgpu2d;
  *      DEFINES
  *********************/
 
-#define RING_SIZE                      1024 /* Ring Buffer Size in byte */
+#define RING_SIZE                      1024 /* Размер кольцевого буфера в байтах */
 
-/* NemaGFX byte pool size in bytes.
- * One byte per peixel for masking/stencling plus 10240 for additional allocations.
+/* Размер пула байтов NemaGFX в байтах.
+ * Один байт на пиксель для маскировки/стенкинга плюс 10240 для дополнительных выделений.
  */
 #if defined(LV_NEMA_GFX_MAX_RESX) && defined(LV_NEMA_GFX_MAX_RESY)
     #define NEMAGFX_MEM_POOL_SIZE          ((LV_NEMA_GFX_MAX_RESX * LV_NEMA_GFX_MAX_RESY) + 10240)
 #else
-    /* LV_USE_NEMA_VG is 0 so masking/stencling memory is not needed. */
+    /* LV_USE_NEMA_VG равен 0, поэтому память для маскировки/стенкинга не требуется. */
     #define NEMAGFX_MEM_POOL_SIZE          10240
 #endif
 
@@ -60,7 +60,7 @@ extern GPU2D_HandleTypeDef hgpu2d;
  *  STATIC VARIABLES
  **********************/
 
-static uint8_t nemagfx_pool_mem[NEMAGFX_MEM_POOL_SIZE] LV_NEMA_STM32_HAL_ATTRIBUTE_POOL_MEM; /* NemaGFX memory pool */
+static uint8_t nemagfx_pool_mem[NEMAGFX_MEM_POOL_SIZE] LV_NEMA_STM32_HAL_ATTRIBUTE_POOL_MEM; /* Пул памяти NemaGFX */
 
 static nema_ringbuffer_t ring_buffer_str;
 static volatile int last_cl_id = -1;
@@ -92,28 +92,28 @@ int32_t nema_sys_init(void)
 
     lv_thread_sync_init(&sync);
 
-    /* Setup GPU2D Callback */
+    /* Настройка обратного вызова GPU2D */
 #if (USE_HAL_GPU2D_REGISTER_CALLBACKS == 1)
-    /* Register Command List Complete Callback */
+    /* Зарегистрировать список команд, завершить обратный вызов */
     HAL_GPU2D_RegisterCommandListCpltCallback(&hgpu2d, GPU2D_CommandListCpltCallback);
 #endif
 
-    /* Initialise Mem Space */
+    /* Инициализировать пространство памяти */
     error_code = tsi_malloc_init_pool_aligned(0, (void *)nemagfx_pool_mem, (uintptr_t)nemagfx_pool_mem,
                                               NEMAGFX_MEM_POOL_SIZE, 1, 8);
     LV_ASSERT(error_code == 0);
 
-    /* Allocate ring_buffer memory */
+    /* Выделить память ring_buffer */
     ring_buffer_str.bo = nema_buffer_create(RING_SIZE);
     LV_ASSERT(ring_buffer_str.bo.base_virt);
 
-    /* Initialize Ring Buffer */
+    /* Инициализировать кольцевой буфер */
     error_code = nema_rb_init(&ring_buffer_str, 1);
     if(error_code < 0) {
         return error_code;
     }
 
-    /* Reset last_cl_id counter */
+    /* Сбросить счетчик last_cl_id */
     last_cl_id = 0;
 
     return error_code;
@@ -199,7 +199,7 @@ void nema_buffer_unmap(nema_buffer_t * bo)
 void nema_buffer_destroy(nema_buffer_t * bo)
 {
     if(bo->fd == -1) {
-        return; /* Buffer weren't allocated! */
+        return; /* Буфер не был выделен! */
     }
 
     tsi_free(bo->base_virt);
@@ -207,7 +207,7 @@ void nema_buffer_destroy(nema_buffer_t * bo)
     bo->base_virt = (void *)0;
     bo->base_phys = 0;
     bo->size      = 0;
-    bo->fd        = -1; /* Buffer not allocated */
+    bo->fd        = -1; /* Буфер не выделен */
 }
 
 uintptr_t nema_buffer_phys(nema_buffer_t * bo)

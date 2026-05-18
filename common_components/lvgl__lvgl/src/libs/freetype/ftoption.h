@@ -2,16 +2,16 @@
  *
  * ftoption.h
  *
- *   User-selectable configuration macros (specification only).
+ *   Макросы конфигурации, выбираемые пользователем (только в спецификации).
  *
  * Copyright (C) 1996-2022 by
- * David Turner, Robert Wilhelm, and Werner Lemberg.
+ * Дэвид Тернер, Роберт Вильгельм и Вернер Лемберг.
  *
- * This file is part of the FreeType project, and may only be used,
- * modified, and distributed under the terms of the FreeType project
- * license, LICENSE.TXT.  By continuing to use, modify, or distribute
- * this file you indicate that you have read the license and
- * understand and accept it fully.
+ * Этот файл является частью проекта FreeType и может использоваться только
+ * модифицирован и распространяется на условиях проекта FreeType
+ * лицензия LICENSE. TXT .  Продолжая использовать, изменять или распространять
+ * этим файлом вы указываете, что прочитали лицензию и
+ * понять и принять это полностью.
  *
  */
 
@@ -26,41 +26,41 @@ FT_BEGIN_HEADER
  *
  *                USER-SELECTABLE CONFIGURATION MACROS
  *
- * This file contains the default configuration macro definitions for a
- * standard build of the FreeType library.  There are three ways to use
- * this file to build project-specific versions of the library:
+ * Этот файл содержит определения макросов конфигурации по умолчанию для
+ * стандартная сборка библиотеки FreeType.  Есть три способа использования
+ * этот файл для создания версий библиотеки для конкретного проекта:
  *
  * - You can modify this file by hand, but this is not recommended in
- *   cases where you would like to build several versions of the library
- *   from a single source directory.
+ *   случаи, когда вы хотите собрать несколько версий библиотеки
+ *   из одного исходного каталога.
  *
  * - You can put a copy of this file in your build directory, more
- *   precisely in `$BUILD/freetype/config/ftoption.h`, where `$BUILD` is
- *   the name of a directory that is included _before_ the FreeType include
- *   path during compilation.
+ *   именно в `$BUILD/freetype/config/ftoption.h` , где `$BUILD`
+ *   имя включенного каталога _before_, включаемого FreeType
+ *   путь во время компиляции.
  *
- *   The default FreeType Makefiles use the build directory
- *   `builds/<system>` by default, but you can easily change that for your
- *   own projects.
+ *   Makefile FreeType по умолчанию использует каталог сборки.
+ *   `builds/<system>` по умолчанию, но вы можете легко изменить его под себя.
+ *   собственные проекты.
  *
  * - Copy the file <ft2build.h> to `$BUILD/ft2build.h` and modify it
- *   slightly to pre-define the macro `FT_CONFIG_OPTIONS_H` used to locate
- *   this file during the build.  For example,
+ *   немного, чтобы предварительно определить макрос `FT_CONFIG_OPTIONS_H`, используемый для поиска
+ *   этот файл во время сборки.  Например,
  *
  *   ```
- *     #define FT_CONFIG_OPTIONS_H  <myftoptions.h>
- *     #include <freetype/config/ftheader.h>
+ *     #define FT_CONFIG_OPTIONS_H < myftoptions.h >
+ *     #include <freetype/config/ ftheader.h >
  *   ```
  *
- *   will use `$BUILD/myftoptions.h` instead of this file for macro
- *   definitions.
+ *   будет использовать `$BUILD/myftoptions.h` вместо этого файла для макроса
+ *   определения.
  *
- *   Note also that you can similarly pre-define the macro
- *   `FT_CONFIG_MODULES_H` used to locate the file listing of the modules
- *   that are statically linked to the library at compile time.  By
- *   default, this file is `<freetype/config/ftmodule.h>`.
+ *   Также обратите внимание, что вы можете аналогичным образом предварительно определить макрос
+ *   `FT_CONFIG_MODULES_H` используется для поиска файла со списком модулей.
+ *   которые статически связаны с библиотекой во время компиляции.  Автор
+ *   по умолчанию это файл `<freetype/config/ftmodule.h>`.
  *
- * We highly recommend using the third method whenever possible.
+ * Мы настоятельно рекомендуем использовать третий метод, когда это возможно.
  *
  */
 
@@ -74,32 +74,32 @@ FT_BEGIN_HEADER
 
 /*#************************************************************************
  *
- * If you enable this configuration option, FreeType recognizes an
- * environment variable called `FREETYPE_PROPERTIES`, which can be used to
- * control the various font drivers and modules.  The controllable
- * properties are listed in the section @properties.
+ * Если вы включите эту опцию конфигурации, FreeType распознает
+ * переменная среды под названием `FREETYPE_PROPERTIES`, которую можно использовать для
+ * управлять различными драйверами и модулями шрифтов.  Контролируемый
+ * свойства перечислены в разделе @properties.
  *
- * You have to undefine this configuration option on platforms that lack
- * the concept of environment variables (and thus don't have the `getenv`
- * function), for example Windows CE.
+ * Вам необходимо отменить определение этой опции конфигурации на платформах, на которых отсутствует
+ * концепция переменных среды (и, следовательно, не имеет `getenv`
+ * функция), например Windows CE.
  *
- * `FREETYPE_PROPERTIES` has the following syntax form (broken here into
- * multiple lines for better readability).
+ * `FREETYPE_PROPERTIES` имеет следующую синтаксическую форму (здесь она разбита на
+ * несколько строк для лучшей читаемости).
  *
  * ```
- *   <optional whitespace>
- *   <module-name1> ':'
- *   <property-name1> '=' <property-value1>
- *   <whitespace>
- *   <module-name2> ':'
- *   <property-name2> '=' <property-value2>
+ *   <необязательный пробел>
+ *   <имя-модуля1> ':'
+ *   <имя-свойства1> '=' <значение-свойства1>
+ *   <пробел>
+ *   <имя-модуля2> ':'
+ *   <имя-свойства2> '=' <значение-свойства2>
  *   ...
  * ```
  *
- * Example:
+ * Пример:
  *
  * ```
- *   FREETYPE_PROPERTIES=truetype:interpreter-version=35 \
+ *   FREETYPE_PROPERTIES =truetype:версия-интерпретатора=35 \
  *                       cff:no-stem-darkening=1
  * ```
  *
@@ -108,256 +108,256 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Uncomment the line below if you want to activate LCD rendering
- * technology similar to ClearType in this build of the library.  This
- * technology triples the resolution in the direction color subpixels.  To
- * mitigate color fringes inherent to this technology, you also need to
- * explicitly set up LCD filtering.
+ * Раскомментируйте строку ниже, если вы хотите активировать рендеринг LCD.
+ * технология, аналогичная ClearType в данной сборке библиотеки.  Это
+ * Технология утраивает разрешение в направлении цветовых субпикселей.  Чтобы
+ * Чтобы смягчить цветовые полосы, присущие этой технологии, вам также необходимо
+ * явно настройте фильтрацию LCD.
  *
- * When this macro is not defined, FreeType offers alternative LCD
- * rendering technology that produces excellent output.
+ * Если этот макрос не определен, FreeType предлагает альтернативу LCD.
+ * технология рендеринга, обеспечивающая превосходный результат.
  */
 /* #define FT_CONFIG_OPTION_SUBPIXEL_RENDERING */
 
 /**************************************************************************
  *
- * Many compilers provide a non-ANSI 64-bit data type that can be used by
- * FreeType to speed up some computations.  However, this will create some
- * problems when compiling the library in strict ANSI mode.
+ * Многие компиляторы предоставляют 64-битный тип данных, отличный от ANSI, который может использоваться
+ * FreeType для ускорения некоторых вычислений.  Однако это создаст некоторые
+ * проблемы при компиляции библиотеки в строгом режиме ANSI.
  *
- * For this reason, the use of 64-bit integers is normally disabled when
- * the `__STDC__` macro is defined.  You can however disable this by
- * defining the macro `FT_CONFIG_OPTION_FORCE_INT64` here.
+ * По этой причине использование 64-битных целых чисел обычно отключено, когда
+ * определен макрос `__STDC__`.  Однако вы можете отключить это,
+ * определение макроса `FT_CONFIG_OPTION_FORCE_INT64` здесь.
  *
- * For most compilers, this will only create compilation warnings when
- * building the library.
+ * Для большинства компиляторов это создаст предупреждения компиляции только тогда, когда
+ * строительство библиотеки.
  *
  * ObNote: The compiler-specific 64-bit integers are detected in the
- *         file `ftconfig.h` either statically or through the `configure`
- *         script on supported platforms.
+ *         файл `ftconfig.h` либо статически, либо через `configure`
+ *         скрипт на поддерживаемых платформах.
  */
 #undef FT_CONFIG_OPTION_FORCE_INT64
 
 /**************************************************************************
  *
- * If this macro is defined, do not try to use an assembler version of
- * performance-critical functions (e.g., @FT_MulFix).  You should only do
- * that to verify that the assembler function works properly, or to execute
- * benchmark tests of the various implementations.
+ * Если этот макрос определен, не пытайтесь использовать ассемблерную версию
+ * функции, критичные к производительности (например, @FT_MulFix ).  Вам следует делать только
+ * чтобы убедиться, что функция ассемблера работает правильно, или выполнить
+ * тесты производительности различных реализаций.
  */
 /* #define FT_CONFIG_OPTION_NO_ASSEMBLER */
 
 /**************************************************************************
  *
- * If this macro is defined, try to use an inlined assembler version of the
- * @FT_MulFix function, which is a 'hotspot' when loading and hinting
- * glyphs, and which should be executed as fast as possible.
+ * Если этот макрос определен, попробуйте использовать встроенную ассемблерную версию
+ * Функция @FT_MulFix, которая является «горячей точкой» при загрузке и подсказках.
+ * глифы, и которые должны выполняться как можно быстрее.
  *
- * Note that if your compiler or CPU is not supported, this will default to
- * the standard and portable implementation found in `ftcalc.c`.
+ * Обратите внимание: если ваш компилятор или CPU не поддерживается, по умолчанию будет установлено значение
+ * стандартная и переносимая реализация находится в `ftcalc.c`.
  */
 #define FT_CONFIG_OPTION_INLINE_MULFIX
 
 /**************************************************************************
  *
- * LZW-compressed file support.
+ * LZW - поддержка сжатых файлов.
  *
- *   FreeType now handles font files that have been compressed with the
- *   `compress` program.  This is mostly used to parse many of the PCF
- *   files that come with various X11 distributions.  The implementation
- *   uses NetBSD's `zopen` to partially uncompress the file on the fly (see
+ *   FreeType теперь обрабатывает файлы шрифтов, сжатые с помощью
+ *   Программа `compress`.  В основном это используется для анализа многих PCF.
+ *   файлы, поставляемые с различными дистрибутивами X11.  Реализация
+ *   использует `zopen` NetBSD для частичного распаковывания файла на лету (см.
  *   `src/lzw/ftgzip.c`).
  *
- *   Define this macro if you want to enable this 'feature'.
+ *   Определите этот макрос, если вы хотите включить эту «функцию».
  */
 #define FT_CONFIG_OPTION_USE_LZW
 
 /**************************************************************************
  *
- * Gzip-compressed file support.
+ * Поддержка файлов, сжатых Gzip.
  *
- *   FreeType now handles font files that have been compressed with the
- *   `gzip` program.  This is mostly used to parse many of the PCF files
- *   that come with XFree86.  The implementation uses 'zlib' to partially
- *   uncompress the file on the fly (see `src/gzip/ftgzip.c`).
+ *   FreeType теперь обрабатывает файлы шрифтов, сжатые с помощью
+ *   Программа `gzip`.  В основном это используется для анализа многих файлов PCF.
+ *   которые поставляются с XFree86.  Реализация использует zlib для частичного
+ *   разархивируйте файл на лету (см. `src/gzip/ftgzip.c`).
  *
- *   Define this macro if you want to enable this 'feature'.  See also the
- *   macro `FT_CONFIG_OPTION_SYSTEM_ZLIB` below.
+ *   Определите этот макрос, если вы хотите включить эту «функцию».  См. также
+ *   макрос `FT_CONFIG_OPTION_SYSTEM_ZLIB` ниже.
  */
 #define FT_CONFIG_OPTION_USE_ZLIB
 
 /**************************************************************************
  *
- * ZLib library selection
+ * Выбор библиотеки ZLib
  *
- *   This macro is only used when `FT_CONFIG_OPTION_USE_ZLIB` is defined.
- *   It allows FreeType's 'ftgzip' component to link to the system's
- *   installation of the ZLib library.  This is useful on systems like
- *   Unix or VMS where it generally is already available.
+ *   Этот макрос используется только тогда, когда определен `FT_CONFIG_OPTION_USE_ZLIB`.
+ *   Он позволяет компоненту FreeType «ftgzip» связываться с системным файлом.
+ *   установка библиотеки ZLib.  Это полезно в таких системах, как
+ *   Unix или VMS, где он вообще уже доступен.
  *
- *   If you let it undefined, the component will use its own copy of the
- *   zlib sources instead.  These have been modified to be included
- *   directly within the component and **not** export external function
- *   names.  This allows you to link any program with FreeType _and_ ZLib
- *   without linking conflicts.
+ *   Если вы оставите его неопределенным, компонент будет использовать собственную копию
+ *   Вместо этого исходники zlib.  Они были изменены для включения
+ *   непосредственно внутри компонента и **не** экспортировать внешнюю функцию
+ *   имена.  Это позволяет вам связать любую программу с FreeType _and_ ZLib.
+ *   без увязывания конфликтов.
  *
- *   Do not `#undef` this macro here since the build system might define
- *   it for certain configurations only.
+ *   Не используйте здесь этот макрос `#undef`, так как система сборки может определить
+ *   это только для определенных конфигураций.
  *
- *   If you use a build system like cmake or the `configure` script,
- *   options set by those programs have precedence, overwriting the value
- *   here with the configured one.
+ *   Если вы используете систему сборки, например cmake или скрипт `configure`,
+ *   параметры, установленные этими программами, имеют приоритет, перезаписывая значение
+ *   вот с настроенным.
  *
- *   If you use the GNU make build system directly (that is, without the
- *   `configure` script) and you define this macro, you also have to pass
- *   `SYSTEM_ZLIB=yes` as an argument to make.
+ *   Если вы используете систему сборки make GNU напрямую (то есть без
+ *   `configure`) и вы определяете этот макрос, вам также необходимо передать
+ *   `SYSTEM_ZLIB=yes` в качестве аргумента.
  */
 /* #define FT_CONFIG_OPTION_SYSTEM_ZLIB */
 
 /**************************************************************************
  *
- * Bzip2-compressed file support.
+ * Поддержка файлов, сжатых Bzip2.
  *
- *   FreeType now handles font files that have been compressed with the
- *   `bzip2` program.  This is mostly used to parse many of the PCF files
- *   that come with XFree86.  The implementation uses `libbz2` to partially
- *   uncompress the file on the fly (see `src/bzip2/ftbzip2.c`).  Contrary
- *   to gzip, bzip2 currently is not included and need to use the system
- *   available bzip2 implementation.
+ *   FreeType теперь обрабатывает файлы шрифтов, сжатые с помощью
+ *   Программа `bzip2`.  В основном это используется для анализа многих файлов PCF.
+ *   которые поставляются с XFree86.  Реализация использует `libbz2` для частичного
+ *   разархивируйте файл на лету (см. `src/bzip2/ftbzip2.c`).  Вопреки
+ *   для gzip, bzip2 на данный момент не включен и необходимо использовать систему
+ *   доступная реализация bzip2.
  *
- *   Define this macro if you want to enable this 'feature'.
+ *   Определите этот макрос, если вы хотите включить эту «функцию».
  *
- *   If you use a build system like cmake or the `configure` script,
- *   options set by those programs have precedence, overwriting the value
- *   here with the configured one.
+ *   Если вы используете систему сборки, например cmake или скрипт `configure`,
+ *   параметры, установленные этими программами, имеют приоритет, перезаписывая значение
+ *   вот с настроенным.
  */
 /* #define FT_CONFIG_OPTION_USE_BZIP2 */
 
 /**************************************************************************
  *
- * Define to disable the use of file stream functions and types, `FILE`,
- * `fopen`, etc.  Enables the use of smaller system libraries on embedded
- * systems that have multiple system libraries, some with or without file
- * stream support, in the cases where file stream support is not necessary
- * such as memory loading of font files.
+ * Определите, чтобы отключить использование функций и типов файлового потока, `FILE` ,
+ * `fopen` и т. д. Позволяет использовать меньшие системные библиотеки во встроенных
+ * системы, имеющие несколько системных библиотек, некоторые с файлами или без них.
+ * поддержка потока, в тех случаях, когда поддержка файлового потока не требуется
+ * например, загрузка в память файлов шрифтов.
  */
 /* #define FT_CONFIG_OPTION_DISABLE_STREAM_SUPPORT */
 
 /**************************************************************************
  *
- * PNG bitmap support.
+ * Поддержка растровых изображений PNG.
  *
- *   FreeType now handles loading color bitmap glyphs in the PNG format.
- *   This requires help from the external libpng library.  Uncompressed
- *   color bitmaps do not need any external libraries and will be supported
- *   regardless of this configuration.
+ *   FreeType теперь обрабатывает загрузку цветных растровых глифов в формате PNG.
+ *   Для этого требуется помощь внешней библиотеки libpng.  Несжатый
+ *   цветные растровые изображения не требуют каких-либо внешних библиотек и будут поддерживаться
+ *   независимо от этой конфигурации.
  *
- *   Define this macro if you want to enable this 'feature'.
+ *   Определите этот макрос, если вы хотите включить эту «функцию».
  *
- *   If you use a build system like cmake or the `configure` script,
- *   options set by those programs have precedence, overwriting the value
- *   here with the configured one.
+ *   Если вы используете систему сборки, например cmake или скрипт `configure`,
+ *   параметры, установленные этими программами, имеют приоритет, перезаписывая значение
+ *   вот с настроенным.
  */
 #define FT_CONFIG_OPTION_USE_PNG
 
 /**************************************************************************
  *
- * HarfBuzz support.
+ * Поддержка HarfBuzz.
  *
- *   FreeType uses the HarfBuzz library to improve auto-hinting of OpenType
- *   fonts.  If available, many glyphs not directly addressable by a font's
- *   character map will be hinted also.
+ *   FreeType использует библиотеку HarfBuzz для улучшения автоматического подсказки OpenType.
+ *   шрифты.  Многие глифы, если они доступны, не могут быть напрямую адресованы шрифтом.
+ *   Карта персонажей также будет подсвечена.
  *
- *   Define this macro if you want to enable this 'feature'.
+ *   Определите этот макрос, если вы хотите включить эту «функцию».
  *
- *   If you use a build system like cmake or the `configure` script,
- *   options set by those programs have precedence, overwriting the value
- *   here with the configured one.
+ *   Если вы используете систему сборки, например cmake или скрипт `configure`,
+ *   параметры, установленные этими программами, имеют приоритет, перезаписывая значение
+ *   вот с настроенным.
  */
 /* #define FT_CONFIG_OPTION_USE_HARFBUZZ */
 
 /**************************************************************************
  *
- * Brotli support.
+ * Поддержка Бротли.
  *
- *   FreeType uses the Brotli library to provide support for decompressing
- *   WOFF2 streams.
+ *   FreeType использует библиотеку Brotli для поддержки распаковки.
+ *   WOFF2 потоки.
  *
- *   Define this macro if you want to enable this 'feature'.
+ *   Определите этот макрос, если вы хотите включить эту «функцию».
  *
- *   If you use a build system like cmake or the `configure` script,
- *   options set by those programs have precedence, overwriting the value
- *   here with the configured one.
+ *   Если вы используете систему сборки, например cmake или скрипт `configure`,
+ *   параметры, установленные этими программами, имеют приоритет, перезаписывая значение
+ *   вот с настроенным.
  */
 /* #define FT_CONFIG_OPTION_USE_BROTLI */
 
 /**************************************************************************
  *
- * Glyph Postscript Names handling
+ * Обработка имён Postscript Glyph
  *
- *   By default, FreeType 2 is compiled with the 'psnames' module.  This
- *   module is in charge of converting a glyph name string into a Unicode
- *   value, or return a Macintosh standard glyph name for the use with the
- *   TrueType 'post' table.
+ *   По умолчанию FreeType 2 компилируется с модулем «psnames».  Этот
+ *   модуль отвечает за преобразование строки имени глифа в Юникод.
+ *   значение или вернуть стандартное имя глифа Macintosh для использования с
+ *   Таблица сообщений TrueType.
  *
- *   Undefine this macro if you do not want 'psnames' compiled in your
- *   build of FreeType.  This has the following effects:
+ *   Отмените определение этого макроса, если вы не хотите, чтобы в вашем файле компилировались «psnames».
+ *   сборка FreeType.  Это имеет следующие эффекты:
  *
  *   - The TrueType driver will provide its own set of glyph names, if you
- *     build it to support postscript names in the TrueType 'post' table,
- *     but will not synthesize a missing Unicode charmap.
+ *     создайте его для поддержки имен postscript в таблице 'post' TrueType,
+ *     но не будет синтезировать отсутствующую карту символов Юникода.
  *
  *   - The Type~1 driver will not be able to synthesize a Unicode charmap
- *     out of the glyphs found in the fonts.
+ *     из глифов, встречающихся в шрифтах.
  *
- *   You would normally undefine this configuration macro when building a
- *   version of FreeType that doesn't contain a Type~1 or CFF driver.
+ *   Обычно вы отменяете определение этого макроса конфигурации при создании
+ *   версия FreeType, не содержащая драйвера Type~1 или CFF.
  */
 #define FT_CONFIG_OPTION_POSTSCRIPT_NAMES
 
 /**************************************************************************
  *
- * Postscript Names to Unicode Values support
+ * Поддержка имен Postscript для значений Unicode
  *
- *   By default, FreeType~2 is built with the 'psnames' module compiled in.
- *   Among other things, the module is used to convert a glyph name into a
- *   Unicode value.  This is especially useful in order to synthesize on
- *   the fly a Unicode charmap from the CFF/Type~1 driver through a big
- *   table named the 'Adobe Glyph List' (AGL).
+ *   По умолчанию FreeType~2 собирается со скомпилированным модулем «psnames».
+ *   Помимо прочего, модуль используется для преобразования имени глифа в
+ *   Значение Юникода.  Это особенно полезно для синтеза
+ *   использовать Charmap Unicode из драйвера CFF /Type~1 через большой
+ *   таблица под названием «Список глифов Adobe» ( AGL ).
  *
- *   Undefine this macro if you do not want the Adobe Glyph List compiled
- *   in your 'psnames' module.  The Type~1 driver will not be able to
- *   synthesize a Unicode charmap out of the glyphs found in the fonts.
+ *   Отмените определение этого макроса, если вы не хотите, чтобы список Adobe Glyph компилировался.
+ *   в вашем модуле «psnames».  Драйвер типа~1 не сможет
+ *   синтезировать карту символов Юникода из глифов, найденных в шрифтах.
  */
 #define FT_CONFIG_OPTION_ADOBE_GLYPH_LIST
 
 /**************************************************************************
  *
- * Support for Mac fonts
+ * Поддержка шрифтов Mac
  *
- *   Define this macro if you want support for outline fonts in Mac format
- *   (mac dfont, mac resource, macbinary containing a mac resource) on
- *   non-Mac platforms.
+ *   Определите этот макрос, если вам нужна поддержка контурных шрифтов в формате Mac.
+ *   (mac dfont, ресурс mac, macbinary, содержащий ресурс mac) на
+ *   платформы, отличные от Mac.
  *
- *   Note that the 'FOND' resource isn't checked.
+ *   Обратите внимание, что ресурс «FOND» не проверен.
  */
 /* #define FT_CONFIG_OPTION_MAC_FONTS */
 
 /**************************************************************************
  *
- * Guessing methods to access embedded resource forks
+ * Угадывание методов доступа к вилкам встроенных ресурсов
  *
- *   Enable extra Mac fonts support on non-Mac platforms (e.g., GNU/Linux).
+ *   Включите поддержку дополнительных шрифтов Mac на платформах, отличных от Mac (например, GNU/Linux).
  *
- *   Resource forks which include fonts data are stored sometimes in
- *   locations which users or developers don't expected.  In some cases,
- *   resource forks start with some offset from the head of a file.  In
- *   other cases, the actual resource fork is stored in file different from
- *   what the user specifies.  If this option is activated, FreeType tries
- *   to guess whether such offsets or different file names must be used.
+ *   Ветви ресурсов, которые включают данные шрифтов, иногда хранятся в
+ *   места, которые пользователи или разработчики не ожидали.  В некоторых случаях
+ *   Разветвления ресурсов начинаются с некоторого смещения от начала файла.  В
+ *   в других случаях фактическая ветка ресурса хранится в файле, отличном от
+ *   то, что указывает пользователь.  Если эта опция активирована, FreeType пытается
+ *   чтобы угадать, нужно ли использовать такие смещения или другие имена файлов.
  *
- *   Note that normal, direct access of resource forks is controlled via
- *   the `FT_CONFIG_OPTION_MAC_FONTS` option.
+ *   Обратите внимание, что обычный прямой доступ к ветвям ресурсов контролируется через
+ *   опция `FT_CONFIG_OPTION_MAC_FONTS`.
  */
 #ifdef FT_CONFIG_OPTION_MAC_FONTS
     #define FT_CONFIG_OPTION_GUESSING_EMBEDDED_RFORK
@@ -365,18 +365,18 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Allow the use of `FT_Incremental_Interface` to load typefaces that
- * contain no glyph data, but supply it via a callback function.  This is
- * required by clients supporting document formats which supply font data
- * incrementally as the document is parsed, such as the Ghostscript
- * interpreter for the PostScript language.
+ * Разрешить использование `FT_Incremental_Interface` для загрузки шрифтов, которые
+ * не содержат данных глифа, но предоставляют их через функцию обратного вызова.  Это
+ * требуется клиентам, поддерживающим форматы документов, предоставляющие данные шрифтов
+ * постепенно по мере анализа документа, например Ghostscript
+ * интерпретатор языка PostScript.
  */
 #define FT_CONFIG_OPTION_INCREMENTAL
 
 /**************************************************************************
  *
- * The size in bytes of the render pool used by the scan-line converter to
- * do all of its work.
+ * Размер пула рендеринга в байтах, используемый конвертером строк развертки для
+ * сделать всю свою работу.
  */
 #define FT_RENDER_POOL_SIZE  16384L
 
@@ -384,54 +384,54 @@ FT_BEGIN_HEADER
  *
  * FT_MAX_MODULES
  *
- *   The maximum number of modules that can be registered in a single
- *   FreeType library object.  32~is the default.
+ *   Максимальное количество модулей, которые можно зарегистрировать в одном
+ *   Объект библиотеки FreeType.  32~ — значение по умолчанию.
  */
 #define FT_MAX_MODULES  32
 
 /**************************************************************************
  *
- * Debug level
+ * Уровень отладки
  *
- *   FreeType can be compiled in debug or trace mode.  In debug mode,
- *   errors are reported through the 'ftdebug' component.  In trace mode,
- *   additional messages are sent to the standard output during execution.
+ *   FreeType можно скомпилировать в режиме отладки или трассировки.  В режиме отладки
+ *   ошибки сообщаются через компонент «ftdebug».  В режиме трассировки
+ *   дополнительные сообщения отправляются на стандартный вывод во время выполнения.
  *
- *   Define `FT_DEBUG_LEVEL_ERROR` to build the library in debug mode.
- *   Define `FT_DEBUG_LEVEL_TRACE` to build it in trace mode.
+ *   Определите `FT_DEBUG_LEVEL_ERROR` для сборки библиотеки в режиме отладки.
+ *   Определите `FT_DEBUG_LEVEL_TRACE`, чтобы построить его в режиме трассировки.
  *
- *   Don't define any of these macros to compile in 'release' mode!
+ *   Не определяйте ни один из этих макросов для компиляции в режиме выпуска!
  *
- *   Do not `#undef` these macros here since the build system might define
- *   them for certain configurations only.
+ *   Не указывайте здесь эти макросы `#undef`, так как система сборки может определить
+ *   их только для определенных конфигураций.
  */
 /* #define FT_DEBUG_LEVEL_ERROR */
 /* #define FT_DEBUG_LEVEL_TRACE */
 
 /**************************************************************************
  *
- * Logging
+ * Ведение журнала
  *
- *   Compiling FreeType in debug or trace mode makes FreeType write error
- *   and trace log messages to `stderr`.  Enabling this macro
- *   automatically forces the `FT_DEBUG_LEVEL_ERROR` and
- *   `FT_DEBUG_LEVEL_TRACE` macros and allows FreeType to write error and
- *   trace log messages to a file instead of `stderr`.  For writing logs
- *   to a file, FreeType uses an the external `dlg` library (the source
- *   code is in `src/dlg`).
+ *   Компиляция FreeType в режиме отладки или трассировки приводит к ошибке записи FreeType.
+ *   и отслеживать сообщения журнала до `stderr`.  Включение этого макроса
+ *   автоматически форсирует `FT_DEBUG_LEVEL_ERROR` и
+ *   `FT_DEBUG_LEVEL_TRACE` макросы и позволяет FreeType записывать ошибки и
+ *   отслеживать сообщения журнала в файл вместо `stderr` .  Для записи логов
+ *   в файл, FreeType использует внешнюю библиотеку `dlg` (исходный код
+ *   код находится в `src/dlg`).
  *
- *   This option needs a C99 compiler.
+ *   Для этой опции требуется компилятор C99.
  */
 /* #define FT_DEBUG_LOGGING */
 
 /**************************************************************************
  *
- * Autofitter debugging
+ * Отладка автоустановщика
  *
- *   If `FT_DEBUG_AUTOFIT` is defined, FreeType provides some means to
- *   control the autofitter behaviour for debugging purposes with global
- *   boolean variables (consequently, you should **never** enable this
- *   while compiling in 'release' mode):
+ *   Если определен `FT_DEBUG_AUTOFIT`, FreeType предоставляет некоторые средства для
+ *   управлять поведением автоустановщика в целях отладки с помощью глобальных
+ *   логические переменные (следовательно, вам не следует **никогда** включать это
+ *   при компиляции в режиме выпуска):
  *
  *   ```
  *     _af_debug_disable_horz_hints
@@ -439,8 +439,8 @@ FT_BEGIN_HEADER
  *     _af_debug_disable_blue_hints
  *   ```
  *
- *   Additionally, the following functions provide dumps of various
- *   internal autofit structures to stdout (using `printf`):
+ *   Кроме того, следующие функции предоставляют дампы различных
+ *   внутренние структуры автоподбора в стандартный вывод (с использованием `printf` ):
  *
  *   ```
  *     af_glyph_hints_dump_points
@@ -450,75 +450,75 @@ FT_BEGIN_HEADER
  *     af_glyph_hints_get_segment_offset
  *   ```
  *
- *   As an argument, they use another global variable:
+ *   В качестве аргумента они используют еще одну глобальную переменную:
  *
  *   ```
  *     _af_debug_hints
  *   ```
  *
- *   Please have a look at the `ftgrid` demo program to see how those
- *   variables and macros should be used.
+ *   Пожалуйста, взгляните на демонстрационную программу `ftgrid`, чтобы увидеть, как они
+ *   следует использовать переменные и макросы.
  *
- *   Do not `#undef` these macros here since the build system might define
- *   them for certain configurations only.
+ *   Не указывайте здесь эти макросы `#undef`, так как система сборки может определить
+ *   их только для определенных конфигураций.
  */
 /* #define FT_DEBUG_AUTOFIT */
 
 /**************************************************************************
  *
- * Memory Debugging
+ * Отладка памяти
  *
- *   FreeType now comes with an integrated memory debugger that is capable
- *   of detecting simple errors like memory leaks or double deletes.  To
- *   compile it within your build of the library, you should define
- *   `FT_DEBUG_MEMORY` here.
+ *   FreeType теперь поставляется со встроенным отладчиком памяти, способным
+ *   обнаружения простых ошибок, таких как утечки памяти или двойное удаление.  Чтобы
+ *   скомпилируйте его в своей сборке библиотеки, вы должны определить
+ *   `FT_DEBUG_MEMORY` здесь.
  *
- *   Note that the memory debugger is only activated at runtime when when
- *   the _environment_ variable `FT2_DEBUG_MEMORY` is defined also!
+ *   Обратите внимание, что отладчик памяти активируется во время выполнения только тогда, когда
+ *   также определена переменная _environment_ `FT2_DEBUG_MEMORY`!
  *
- *   Do not `#undef` this macro here since the build system might define it
- *   for certain configurations only.
+ *   Не используйте `#undef` здесь этот макрос, поскольку его может определить система сборки.
+ *   только для определенных конфигураций.
  */
 /* #define FT_DEBUG_MEMORY */
 
 /**************************************************************************
  *
- * Module errors
+ * Ошибки модуля
  *
- *   If this macro is set (which is _not_ the default), the higher byte of
- *   an error code gives the module in which the error has occurred, while
- *   the lower byte is the real error code.
+ *   Если этот макрос установлен (по умолчанию _not_), старший байт
+ *   код ошибки указывает модуль, в котором произошла ошибка, а
+ *   младший байт — это реальный код ошибки.
  *
- *   Setting this macro makes sense for debugging purposes only, since it
- *   would break source compatibility of certain programs that use
+ *   Установка этого макроса имеет смысл только в целях отладки, поскольку он
+ *   нарушит совместимость исходного кода некоторых программ, использующих
  *   FreeType~2.
  *
- *   More details can be found in the files `ftmoderr.h` and `fterrors.h`.
+ *   Более подробную информацию можно найти в файлах `ftmoderr.h` и `fterrors.h`.
  */
 #undef FT_CONFIG_OPTION_USE_MODULE_ERRORS
 
 /**************************************************************************
  *
- * OpenType SVG Glyph Support
+ * Поддержка глифов OpenType SVG
  *
- *   Setting this macro enables support for OpenType SVG glyphs.  By
- *   default, FreeType can only fetch SVG documents.  However, it can also
- *   render them if external rendering hook functions are plugged in at
- *   runtime.
+ *   Установка этого макроса включает поддержку глифов OpenType SVG.  Автор
+ *   по умолчанию FreeType может извлекать только документы SVG.  Однако оно также может
+ *   визуализировать их, если внешние функции рендеринга подключены в
+ *   время выполнения.
  *
- *   More details on the hooks can be found in file `otsvg.h`.
+ *   Более подробную информацию о хуках можно найти в файле `otsvg.h`.
  */
 #define FT_CONFIG_OPTION_SVG
 
 /**************************************************************************
  *
- * Error Strings
+ * Строки ошибок
  *
- *   If this macro is set, `FT_Error_String` will return meaningful
- *   descriptions.  This is not enabled by default to reduce the overall
- *   size of FreeType.
+ *   Если этот макрос установлен, `FT_Error_String` вернет осмысленный результат.
+ *   описания.  По умолчанию это не включено, чтобы уменьшить общее
+ *   размер FreeType.
  *
- *   More details can be found in the file `fterrors.h`.
+ *   Более подробную информацию можно найти в файле `fterrors.h`.
  */
 #define FT_CONFIG_OPTION_ERROR_STRINGS
 
@@ -532,53 +532,53 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_EMBEDDED_BITMAPS` if you want to support
- * embedded bitmaps in all formats using the 'sfnt' module (namely
+ * Определите `TT_CONFIG_OPTION_EMBEDDED_BITMAPS`, если вы хотите поддерживать
+ * встроенные растровые изображения во всех форматах с использованием модуля «sfnt» (а именно
  * TrueType~& OpenType).
  */
 #define TT_CONFIG_OPTION_EMBEDDED_BITMAPS
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_COLOR_LAYERS` if you want to support colored
- * outlines (from the 'COLR'/'CPAL' tables) in all formats using the 'sfnt'
- * module (namely TrueType~& OpenType).
+ * Определите `TT_CONFIG_OPTION_COLOR_LAYERS`, если вы хотите поддерживать цветную
+ * контуры (из таблиц 'COLR'/'CPAL') во всех форматах с использованием 'sfnt'
+ * модуль (а именно TrueType~& OpenType).
  */
 #define TT_CONFIG_OPTION_COLOR_LAYERS
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_POSTSCRIPT_NAMES` if you want to be able to
- * load and enumerate the glyph Postscript names in a TrueType or OpenType
- * file.
+ * Определите `TT_CONFIG_OPTION_POSTSCRIPT_NAMES`, если вы хотите иметь возможность
+ * загрузить и перечислить имена глифов Postscript в TrueType или OpenType
+ * файл.
  *
- * Note that when you do not compile the 'psnames' module by undefining the
- * above `FT_CONFIG_OPTION_POSTSCRIPT_NAMES`, the 'sfnt' module will
- * contain additional code used to read the PS Names table from a font.
+ * Обратите внимание: если вы не скомпилировали модуль «psnames», отменив определение
+ * выше `FT_CONFIG_OPTION_POSTSCRIPT_NAMES` модуль 'sfnt' будет
+ * содержат дополнительный код, используемый для чтения таблицы имен PS из шрифта.
  *
- * (By default, the module uses 'psnames' to extract glyph names.)
+ * (По умолчанию модуль использует «psnames» для извлечения имен глифов.)
  */
 #define TT_CONFIG_OPTION_POSTSCRIPT_NAMES
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_SFNT_NAMES` if your applications need to access
- * the internal name table in a SFNT-based format like TrueType or
- * OpenType.  The name table contains various strings used to describe the
- * font, like family name, copyright, version, etc.  It does not contain
- * any glyph name though.
+ * Определите `TT_CONFIG_OPTION_SFNT_NAMES`, если вашим приложениям необходим доступ
+ * внутренняя таблица имен в формате на основе SFNT, например TrueType или
+ * ОпенТип.  Таблица имен содержит различные строки, используемые для описания
+ * шрифт, например фамилия, авторские права, версия и т. д. Он не содержит
+ * хотя любое имя глифа.
  *
- * Accessing SFNT names is done through the functions declared in
- * `ftsnames.h`.
+ * Доступ к именам SFNT осуществляется с помощью функций, объявленных в
+ * `ftsnames.h` .
  */
 #define TT_CONFIG_OPTION_SFNT_NAMES
 
 /**************************************************************************
  *
- * TrueType CMap support
+ * Поддержка TrueType CMap
  *
- *   Here you can fine-tune which TrueType CMap table format shall be
- *   supported.
+ *   Здесь вы можете точно настроить формат таблицы TrueType CMap.
+ *   поддерживается.
  */
 #define TT_CONFIG_CMAP_FORMAT_0
 #define TT_CONFIG_CMAP_FORMAT_2
@@ -600,68 +600,68 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_BYTECODE_INTERPRETER` if you want to compile a
- * bytecode interpreter in the TrueType driver.
+ * Определите `TT_CONFIG_OPTION_BYTECODE_INTERPRETER`, если вы хотите скомпилировать
+ * интерпретатор байт-кода в драйвере TrueType.
  *
- * By undefining this, you will only compile the code necessary to load
- * TrueType glyphs without hinting.
+ * Отменив это определение, вы скомпилируете только код, необходимый для загрузки.
+ * Глифы TrueType без подсказок.
  *
- * Do not `#undef` this macro here, since the build system might define it
- * for certain configurations only.
+ * Не используйте `#undef` здесь этот макрос, поскольку его может определить система сборки.
+ * только для определенных конфигураций.
  */
 #define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_SUBPIXEL_HINTING` if you want to compile
- * subpixel hinting support into the TrueType driver.  This modifies the
- * TrueType hinting mechanism when anything but `FT_RENDER_MODE_MONO` is
- * requested.
+ * Определите `TT_CONFIG_OPTION_SUBPIXEL_HINTING`, если вы хотите скомпилировать
+ * поддержка субпиксельных хинтингов в драйвере TrueType.  Это изменяет
+ * Механизм подсказок TrueType, когда используется что-либо кроме `FT_RENDER_MODE_MONO`.
+ * просил.
  *
- * In particular, it modifies the bytecode interpreter to interpret (or
- * not) instructions in a certain way so that all TrueType fonts look like
- * they do in a Windows ClearType (DirectWrite) environment.  See [1] for a
- * technical overview on what this means.  See `ttinterp.h` for more
- * details on the LEAN option.
+ * В частности, он модифицирует интерпретатор байт-кода для интерпретации (или
+ * нет) инструкции определенным образом, чтобы все шрифты TrueType выглядели так:
+ * они делают это в среде Windows ClearType (DirectWrite).  См. [1] для
+ * технический обзор того, что это означает.  См. `ttinterp.h` для получения дополнительной информации.
+ * Подробности об опции LEAN.
  *
- * There are three possible values.
+ * Есть три возможных значения.
  *
- * Value 1:
- *   This value is associated with the 'Infinality' moniker, contributed by
- *   an individual nicknamed Infinality with the goal of making TrueType
- *   fonts render better than on Windows.  A high amount of configurability
- *   and flexibility, down to rules for single glyphs in fonts, but also
- *   very slow.  Its experimental and slow nature and the original
- *   developer losing interest meant that this option was never enabled in
- *   default builds.
+ * Значение 1:
+ *   Это значение связано с прозвищем «Бесконечность», предоставленным
+ *   человек по прозвищу Infinality с целью создания TrueType
+ *   шрифты отображаются лучше, чем в Windows.  Широкие возможности настройки
+ *   и гибкость, вплоть до правил для одиночных глифов в шрифтах, но и
+ *   очень медленно.  Его экспериментальный и медленный характер и оригинальный
+ *   потеря интереса разработчика означала, что эта опция никогда не была включена в
+ *   сборки по умолчанию.
  *
- *   The corresponding interpreter version is v38.
+ *   Соответствующая версия интерпретатора — v38.
  *
- * Value 2:
- *   The new default mode for the TrueType driver.  The Infinality code
- *   base was stripped to the bare minimum and all configurability removed
- *   in the name of speed and simplicity.  The configurability was mainly
- *   aimed at legacy fonts like 'Arial', 'Times New Roman', or 'Courier'.
- *   Legacy fonts are fonts that modify vertical stems to achieve clean
- *   black-and-white bitmaps.  The new mode focuses on applying a minimal
- *   set of rules to all fonts indiscriminately so that modern and web
- *   fonts render well while legacy fonts render okay.
+ * Значение 2:
+ *   Новый режим по умолчанию для драйвера TrueType.  Код бесконечности
+ *   база была урезана до минимума и удалены все возможности настройки.
+ *   во имя скорости и простоты.  Конфигурация была в основном
+ *   нацелен на устаревшие шрифты, такие как «Arial», «Times New Roman» или «Courier».
+ *   Устаревшие шрифты — это шрифты, которые изменяют вертикальные основы для достижения чистоты.
+ *   черно-белые растровые изображения.  Новый режим ориентирован на применение минимального
+ *   набор правил для всех шрифтов без разбора, чтобы современные и веб-
+ *   шрифты отображаются хорошо, а устаревшие шрифты отображаются нормально.
  *
- *   The corresponding interpreter version is v40.
+ *   Соответствующая версия интерпретатора — v40.
  *
- * Value 3:
- *   Compile both, making both v38 and v40 available (the latter is the
- *   default).
+ * Значение 3:
+ *   Скомпилируйте обе версии, сделав доступными версии v38 и v40 (последняя является
+ *   по умолчанию).
  *
- * By undefining these, you get rendering behavior like on Windows without
- * ClearType, i.e., Windows XP without ClearType enabled and Win9x
- * (interpreter version v35).  Or not, depending on how much hinting blood
- * and testing tears the font designer put into a given font.  If you
- * define one or both subpixel hinting options, you can switch between
- * between v35 and the ones you define (using `FT_Property_Set`).
+ * Отменив их определение, вы получите поведение рендеринга, как в Windows, без
+ * ClearType, т. е. Windows XP без включенного ClearType и Win9x.
+ * (версия переводчика v35).  Или нет, смотря сколько намекает крови
+ * и проверка разрывов, которые дизайнер шрифтов вложил в данный шрифт.  Если ты
+ * определить один или оба параметра подсказки субпикселей, вы можете переключаться между ними
+ * между v35 и теми, которые вы определяете (используя `FT_Property_Set`).
  *
- * This option requires `TT_CONFIG_OPTION_BYTECODE_INTERPRETER` to be
- * defined.
+ * Эта опция требует, чтобы `TT_CONFIG_OPTION_BYTECODE_INTERPRETER` был
+ * определен.
  *
  * [1]
  * https://www.microsoft.com/typography/cleartype/truetypecleartype.aspx
@@ -672,16 +672,16 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_COMPONENT_OFFSET_SCALED` to compile the
- * TrueType glyph loader to use Apple's definition of how to handle
- * component offsets in composite glyphs.
+ * Определите `TT_CONFIG_OPTION_COMPONENT_OFFSET_SCALED` для компиляции
+ * Загрузчик глифов TrueType для использования определения Apple о том, как обрабатывать
+ * смещения компонентов в составных глифах.
  *
- * Apple and MS disagree on the default behavior of component offsets in
- * composites.  Apple says that they should be scaled by the scaling
- * factors in the transformation matrix (roughly, it's more complex) while
- * MS says they should not.  OpenType defines two bits in the composite
- * flags array which can be used to disambiguate, but old fonts will not
- * have them.
+ * Apple и MS расходятся во мнениях относительно поведения смещений компонентов по умолчанию в
+ * композиты.  Apple говорит, что их следует масштабировать с помощью масштабирования
+ * факторы в матрице преобразования (грубо говоря, она более сложная), в то время как
+ * MS говорит, что не следует.  OpenType определяет два бита в составе
+ * массив flags, который можно использовать для устранения неоднозначности, но старые шрифты не будут
+ * они есть.
  *
  *   https://www.microsoft.com/typography/otspec/glyf.htm
  *   https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6glyf.html
@@ -690,32 +690,32 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_GX_VAR_SUPPORT` if you want to include support
- * for Apple's distortable font technology ('fvar', 'gvar', 'cvar', and
- * 'avar' tables).  Tagged 'Font Variations', this is now part of OpenType
- * also.  This has many similarities to Type~1 Multiple Masters support.
+ * Определите `TT_CONFIG_OPTION_GX_VAR_SUPPORT`, если вы хотите включить поддержку.
+ * для технологии искажаемых шрифтов Apple («fvar», «gvar», «cvar» и
+ * «аварские» таблицы).  С пометкой «Вариации шрифтов» теперь это часть OpenType.
+ * также.  Это во многом похоже на поддержку нескольких мастеров типа~1.
  */
 #define TT_CONFIG_OPTION_GX_VAR_SUPPORT
 
 /**************************************************************************
  *
- * Define `TT_CONFIG_OPTION_BDF` if you want to include support for an
- * embedded 'BDF~' table within SFNT-based bitmap formats.
+ * Определите `TT_CONFIG_OPTION_BDF`, если вы хотите включить поддержку
+ * встроенная таблица «BDF ~» в растровых форматах на основе SFNT.
  */
 #define TT_CONFIG_OPTION_BDF
 
 /**************************************************************************
  *
- * Option `TT_CONFIG_OPTION_MAX_RUNNABLE_OPCODES` controls the maximum
- * number of bytecode instructions executed for a single run of the
- * bytecode interpreter, needed to prevent infinite loops.  You don't want
- * to change this except for very special situations (e.g., making a
- * library fuzzer spend less time to handle broken fonts).
+ * Опция `TT_CONFIG_OPTION_MAX_RUNNABLE_OPCODES` управляет максимальным
+ * количество инструкций байт-кода, выполняемых за один запуск
+ * интерпретатор байт-кода, необходимый для предотвращения бесконечных циклов.  Ты не хочешь
+ * изменить это, за исключением очень особых ситуаций (например, создание
+ * фаззер библиотеки тратит меньше времени на обработку сломанных шрифтов).
  *
- * It is not expected that this value is ever modified by a configuring
- * script; instead, it gets surrounded with `#ifndef ... #endif` so that
- * the value can be set as a preprocessor option on the compiler's command
- * line.
+ * Не ожидается, что это значение когда-либо будет изменено конфигуратором.
+ * сценарий; вместо этого он окружен `#ifndef ... #endif`, так что
+ * значение может быть установлено как опция препроцессора по команде компилятора
+ * линия.
  */
 #ifndef TT_CONFIG_OPTION_MAX_RUNNABLE_OPCODES
     #define TT_CONFIG_OPTION_MAX_RUNNABLE_OPCODES  1000000L
@@ -731,50 +731,50 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * `T1_MAX_DICT_DEPTH` is the maximum depth of nest dictionaries and arrays
- * in the Type~1 stream (see `t1load.c`).  A minimum of~4 is required.
+ * `T1_MAX_DICT_DEPTH` — максимальная глубина вложения словарей и массивов.
+ * в потоке Type~1 (см. `t1load.c` ).  Требуется минимум ~4.
  */
 #define T1_MAX_DICT_DEPTH  5
 
 /**************************************************************************
  *
- * `T1_MAX_SUBRS_CALLS` details the maximum number of nested sub-routine
- * calls during glyph loading.
+ * `T1_MAX_SUBRS_CALLS` подробно описывает максимальное количество вложенных подпрограмм.
+ * вызовы во время загрузки глифа.
  */
 #define T1_MAX_SUBRS_CALLS  16
 
 /**************************************************************************
  *
- * `T1_MAX_CHARSTRING_OPERANDS` is the charstring stack's capacity.  A
- * minimum of~16 is required.
+ * `T1_MAX_CHARSTRING_OPERANDS` — емкость стека символьных строк.  А
+ * требуется минимум ~16.
  *
- * The Chinese font 'MingTiEG-Medium' (covering the CNS 11643 character
- * set) needs 256.
+ * Китайский шрифт MingTiEG-Medium (охватывающий символ CNS 11643).
+ * комплект) необходимо 256.
  */
 #define T1_MAX_CHARSTRINGS_OPERANDS  256
 
 /**************************************************************************
  *
- * Define this configuration macro if you want to prevent the compilation
- * of the 't1afm' module, which is in charge of reading Type~1 AFM files
- * into an existing face.  Note that if set, the Type~1 driver will be
- * unable to produce kerning distances.
+ * Определите этот макрос конфигурации, если вы хотите предотвратить компиляцию
+ * модуля 't1afm', который отвечает за чтение файлов AFM Type~1
+ * в существующее лицо.  Обратите внимание, что если он установлен, драйвер типа ~1 будет
+ * неспособен определить кернинговые расстояния.
  */
 #undef T1_CONFIG_OPTION_NO_AFM
 
 /**************************************************************************
  *
- * Define this configuration macro if you want to prevent the compilation
- * of the Multiple Masters font support in the Type~1 driver.
+ * Определите этот макрос конфигурации, если вы хотите предотвратить компиляцию
+ * поддержки шрифтов Multiple Masters в драйвере Type~1.
  */
 #undef T1_CONFIG_OPTION_NO_MM_SUPPORT
 
 /**************************************************************************
  *
- * `T1_CONFIG_OPTION_OLD_ENGINE` controls whether the pre-Adobe Type~1
- * engine gets compiled into FreeType.  If defined, it is possible to
- * switch between the two engines using the `hinting-engine` property of
- * the 'type1' driver module.
+ * `T1_CONFIG_OPTION_OLD_ENGINE` контролирует, будет ли предварительный Adobe Type~1
+ * движок компилируется во FreeType.  Если определено, то можно
+ * переключаться между двумя движками, используя свойство `hinting-engine`
+ * модуль драйвера type1.
  */
 /* #define T1_CONFIG_OPTION_OLD_ENGINE */
 
@@ -788,13 +788,13 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Using `CFF_CONFIG_OPTION_DARKENING_PARAMETER_{X,Y}{1,2,3,4}` it is
- * possible to set up the default values of the four control points that
- * define the stem darkening behaviour of the (new) CFF engine.  For more
- * details please read the documentation of the `darkening-parameters`
- * property (file `ftdriver.h`), which allows the control at run-time.
+ * Используя `CFF_CONFIG_OPTION_DARKENING_PARAMETER_{X,Y}{1,2,3,4}`, это
+ * можно установить значения по умолчанию для четырех контрольных точек, которые
+ * определить поведение затемнения штока (нового) двигателя CFF.  Для более
+ * подробности, пожалуйста, прочитайте документацию `darkening-parameters`
+ * свойство (файл `ftdriver.h`), которое позволяет управлять во время выполнения.
  *
- * Do **not** undefine these macros!
+ * **Не** отменяйте определение этих макросов!
  */
 #define CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1   500
 #define CFF_CONFIG_OPTION_DARKENING_PARAMETER_Y1   400
@@ -810,10 +810,10 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * `CFF_CONFIG_OPTION_OLD_ENGINE` controls whether the pre-Adobe CFF engine
- * gets compiled into FreeType.  If defined, it is possible to switch
- * between the two engines using the `hinting-engine` property of the 'cff'
- * driver module.
+ * `CFF_CONFIG_OPTION_OLD_ENGINE` контролирует, будет ли движок до Adobe CFF
+ * компилируется во FreeType.  Если определено, можно переключить
+ * между двумя движками с использованием свойства `hinting-engine` файла cff.
+ * драйверный модуль.
  */
 /* #define CFF_CONFIG_OPTION_OLD_ENGINE */
 
@@ -827,18 +827,18 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * There are many PCF fonts just called 'Fixed' which look completely
- * different, and which have nothing to do with each other.  When selecting
- * 'Fixed' in KDE or Gnome one gets results that appear rather random, the
- * style changes often if one changes the size and one cannot select some
- * fonts at all.  This option makes the 'pcf' module prepend the foundry
- * name (plus a space) to the family name.
+ * Существует множество шрифтов PCF, называемых «Исправленными», которые выглядят совершенно
+ * разные и не имеющие ничего общего друг с другом.  При выборе
+ * «Исправлено» в KDE или Gnome: результаты кажутся довольно случайными.
+ * стиль часто меняется, если изменить размер и невозможно выбрать некоторые
+ * шрифты вообще.  Эта опция заставляет модуль «pcf» добавлять литейный завод
+ * имя (плюс пробел) к фамилии.
  *
- * We also check whether we have 'wide' characters; all put together, we
- * get family names like 'Sony Fixed' or 'Misc Fixed Wide'.
+ * Мы также проверяем, есть ли у нас «широкие» символы; все вместе мы
+ * получить семейные имена, такие как «SonyFixed» или «MiscFixedWide».
  *
- * If this option is activated, it can be controlled with the
- * `no-long-family-names` property of the 'pcf' driver module.
+ * Если эта опция активирована, ею можно управлять с помощью
+ * Свойство `no-long-family-names` модуля драйвера «pcf».
  */
 /* #define PCF_CONFIG_OPTION_LONG_FAMILY_NAMES */
 
@@ -852,16 +852,16 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Compile 'autofit' module with CJK (Chinese, Japanese, Korean) script
- * support.
+ * Скомпилируйте модуль autofit со скриптом CJK (китайский, японский, корейский).
+ * поддержка.
  */
 #define AF_CONFIG_OPTION_CJK
 
 /**************************************************************************
  *
- * Compile 'autofit' module with fallback Indic script support, covering
- * some scripts that the 'latin' submodule of the 'autofit' module doesn't
- * (yet) handle.  Currently, this needs option `AF_CONFIG_OPTION_CJK`.
+ * Скомпилировать модуль «autofit» с поддержкой резервного индийского сценария, охватывающий
+ * некоторые скрипты, которые не поддерживает «латинский» подмодуль модуля «autofit».
+ * (пока) ручка.  В настоящее время для этого требуется опция `AF_CONFIG_OPTION_CJK`.
  */
 #ifdef AF_CONFIG_OPTION_CJK
     #define AF_CONFIG_OPTION_INDIC
@@ -869,37 +869,37 @@ FT_BEGIN_HEADER
 
 /**************************************************************************
  *
- * Use TrueType-like size metrics for 'light' auto-hinting.
+ * Используйте метрики размера, подобные TrueType, для «легких» автоматических подсказок.
  *
- * It is strongly recommended to avoid this option, which exists only to
- * help some legacy applications retain its appearance and behaviour with
- * respect to auto-hinted TrueType fonts.
+ * Настоятельно рекомендуется избегать этой опции, которая существует только для
+ * помочь некоторым устаревшим приложениям сохранить свой внешний вид и поведение с
+ * уважение к шрифтам TrueType с автоматической подсказкой.
  *
- * The very reason this option exists at all are GNU/Linux distributions
- * like Fedora that did not un-patch the following change (which was
- * present in FreeType between versions 2.4.6 and 2.7.1, inclusive).
+ * Сама причина, по которой эта опция вообще существует, - это дистрибутивы GNU/Linux.
+ * например Fedora, которая не отменила следующее изменение (которое было
+ * присутствует во FreeType между версиями 2.4.6 и 2.7.1 включительно).
  *
  * ```
- *   2011-07-16  Steven Chu  <steven.f.chu@gmail.com>
+ *   16 июля 2011 г. Стивен Чу <steven.f.chu @gmail .com>
  *
- *     [truetype] Fix metrics on size request for scalable fonts.
+ *     [truetype] Исправлены метрики при запросе размера для масштабируемых шрифтов.
  * ```
  *
- * This problematic commit is now reverted (more or less).
+ * Этот проблемный коммит теперь отменен (более или менее).
  */
 /* #define AF_CONFIG_OPTION_TT_SIZE_METRICS */
 
 /* */
 
 /*
- * This macro is obsolete.  Support has been removed in FreeType version
+ * Этот макрос устарел.  Поддержка удалена в версии FreeType.
  * 2.5.
  */
 /* #define FT_CONFIG_OPTION_OLD_INTERNALS */
 
 /*
- * The next three macros are defined if native TrueType hinting is
- * requested by the definitions above.  Don't change this.
+ * Следующие три макроса определяются, если используется встроенная хинтинг TrueType.
+ * требуемых определениями выше.  Не меняйте это.
  */
 #ifdef TT_CONFIG_OPTION_BYTECODE_INTERPRETER
     #define  TT_USE_BYTECODE_INTERPRETER
@@ -916,22 +916,22 @@ FT_BEGIN_HEADER
 #endif
 
 /*
- * The TT_SUPPORT_COLRV1 macro is defined to indicate to clients that this
- * version of FreeType has support for 'COLR' v1 API.  This definition is
- * useful to FreeType clients that want to build in support for 'COLR' v1
- * depending on a tip-of-tree checkout before it is officially released in
- * FreeType, and while the feature cannot yet be tested against using
- * version macros.  Don't change this macro.  This may be removed once the
- * feature is in a FreeType release version and version macros can be used
- * to test for availability.
+ * Макрос TT_SUPPORT_COLRV1 определен, чтобы указать клиентам, что это
+ * Версия FreeType поддерживает «COLR» v1 API.  Это определение
+ * полезно для клиентов FreeType, которые хотят реализовать поддержку «COLR» v1.
+ * в зависимости от предварительной проверки до его официального выпуска в
+ * FreeType, и хотя эта функция пока не может быть протестирована с использованием
+ * версии макросов.  Не меняйте этот макрос.  Это можно будет удалить, как только
+ * эта функция присутствует в релизной версии FreeType, и можно использовать макросы версии.
+ * для проверки доступности.
  */
 #ifdef TT_CONFIG_OPTION_COLOR_LAYERS
     #define  TT_SUPPORT_COLRV1
 #endif
 
 /*
- * Check CFF darkening parameters.  The checks are the same as in function
- * `cff_property_set` in file `cffdrivr.c`.
+ * Проверьте параметры затемнения CFF.  Проверки такие же, как и в функции
+ * `cff_property_set` в файле `cffdrivr.c`.
  */
 #if CFF_CONFIG_OPTION_DARKENING_PARAMETER_X1 < 0   || \
     CFF_CONFIG_OPTION_DARKENING_PARAMETER_X2 < 0   || \

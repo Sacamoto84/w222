@@ -67,7 +67,7 @@ void lv_draw_nanovg_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * 
         LV_LOG_WARN("Gradient fill is not supported without VECTOR_GRAPHIC");
 #endif
     }
-    else { /* normal fill */
+    else { /* нормальная заливка */
         lv_nanovg_fill(
             u->vg,
             NVG_CCW,

@@ -3,7 +3,7 @@
 
 void lv_example_monkey_2(void)
 {
-    /*Create encoder monkey test*/
+    /*Создать тест обезьяны-энкодера*/
     lv_monkey_config_t config;
     lv_monkey_config_init(&config);
     config.type = LV_INDEV_TYPE_ENCODER;
@@ -13,12 +13,12 @@ void lv_example_monkey_2(void)
     config.input_range.max = 5;
     lv_monkey_t * monkey = lv_monkey_create(&config);
 
-    /*Set the default group*/
+    /*Установить группу по умолчанию*/
     lv_group_t * group = lv_group_create();
     lv_indev_set_group(lv_monkey_get_indev(monkey), group);
     lv_group_set_default(group);
 
-    /*Start monkey test*/
+    /*Начать тест на обезьянах*/
     lv_monkey_set_enable(monkey, true);
 }
 

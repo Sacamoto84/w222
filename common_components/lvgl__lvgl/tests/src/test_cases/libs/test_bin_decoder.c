@@ -6,7 +6,7 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
@@ -125,52 +125,52 @@ void test_bin_decoder_image_dsc_error_handling(void)
 {
     lv_image_dsc_t * image_dsc = get_image_dsc();
 
-    /* Valid image */
+    /* Действительное изображение */
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid magic */
+    /* Проверить недействительную магию */
     image_dsc = get_image_dsc();
     image_dsc->header.magic = 0;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid NULL data */
+    /* Проверьте неверные данные NULL */
     image_dsc = get_image_dsc();
     image_dsc->data = NULL;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid data_size */
+    /* Тест недействителен data_size */
     image_dsc = get_image_dsc();
     image_dsc->data_size = 0;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid stride */
+    /* Проверить неверный шаг */
     image_dsc = get_image_dsc();
     image_dsc->header.stride = 0;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid color format */
+    /* Проверить неверный формат цвета */
     image_dsc = get_image_dsc();
     image_dsc->header.cf = LV_COLOR_FORMAT_UNKNOWN;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid image size */
+    /* Проверьте недопустимый размер изображения */
     image_dsc = get_image_dsc();
     image_dsc->header.w++;
     image_dsc->header.h++;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid unaligned data */
+    /* Проверить недействительные невыровненные данные */
     image_dsc = get_image_dsc();
     image_dsc->data = image_dsc->data + 1;
     image_dsc->header.h = 1;
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test invalid flags */
+    /* Проверка недействительных флагов */
     image_dsc = get_image_dsc();
     image_dsc->header.flags = (LV_IMAGE_FLAGS_ALLOCATED | LV_IMAGE_FLAGS_PREMULTIPLIED);
     bin_decoder(image_dsc, "libs/bin_decoder_empty_image.png");
 
-    /* Test NULL image */
+    /* Тестовый образ NULL */
     bin_decoder(NULL, "libs/bin_decoder_empty_image.png");
 }
 
@@ -227,34 +227,34 @@ void test_bin_decoder_decoder_dsc_error_handling(void)
 {
     lv_image_decoder_dsc_t * decoder_dsc = get_image_decoder_dsc();
 
-    /* Test info invalid file exension */
+    /* Информация о тесте: неверное расширение файла. */
     decoder_dsc->src = "test_image.png";
     lv_result_t result = lv_bin_decoder_info(NULL, decoder_dsc, NULL);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
-    /* Test info file read error */
+    /* Ошибка чтения файла тестовой информации */
     decoder_dsc->src = "non_existing.bin";
     result = lv_bin_decoder_info(NULL, decoder_dsc, NULL);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
-    /* Test info unknown src type */
+    /* Информация о тесте: неизвестный тип источника */
     decoder_dsc->src = "A:src/test_files/binimages/cogwheel.ARGB8888.bin";
     decoder_dsc->src_type = LV_IMAGE_SRC_UNKNOWN;
     result = lv_bin_decoder_info(NULL, decoder_dsc, NULL);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
-    /* Test open invalid file extension */
+    /* Проверьте, открыто ли неверное расширение файла. */
     decoder_dsc = get_image_decoder_dsc();
     decoder_dsc->src = "test_image.png";
     result = lv_bin_decoder_open(NULL, decoder_dsc);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
-    /* Test open file failure */
+    /* Ошибка проверки открытого файла */
     decoder_dsc->src = "non_existing.bin";
     result = lv_bin_decoder_open(NULL, decoder_dsc);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
-    /* Test open variable image with NULL data */
+    /* Протестируйте изображение открытой переменной с данными NULL. */
     lv_image_dsc_t * image_dsc = get_image_dsc();
     image_dsc->data = NULL;
     decoder_dsc = get_image_decoder_dsc();
@@ -263,7 +263,7 @@ void test_bin_decoder_decoder_dsc_error_handling(void)
     result = lv_bin_decoder_open(NULL, decoder_dsc);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
-    /* Test open decompress image with LV_BIN_DECODER_RAM_LOAD == 0 */
+    /* Проверьте открытое распакованное изображение с помощью LV_BIN_DECODER_RAM_LOAD == 0. */
 #if LV_BIN_DECODER_RAM_LOAD == 0
     image_dsc = get_image_dsc();
     decoder_dsc = get_image_decoder_dsc();
@@ -274,7 +274,7 @@ void test_bin_decoder_decoder_dsc_error_handling(void)
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 #endif
 
-    /* Test open with user_flags handling */
+    /* Тест открытия с обработкой user_flags */
     image_dsc = get_image_dsc();
     decoder_dsc = get_image_decoder_dsc();
     decoder_dsc->src = image_dsc;
@@ -288,7 +288,7 @@ void test_bin_decoder_decoder_dsc_error_handling(void)
 
 void test_bin_decoder_open_stride_zero_handling(void)
 {
-    /* Test open image with stride zero */
+    /* Тестирование открытого изображения с нулевым шагом */
     lv_image_dsc_t * image_dsc = get_image_dsc();
     image_dsc->header.stride = 0;
     lv_image_decoder_dsc_t * decoder_dsc = get_image_decoder_dsc();
@@ -299,7 +299,7 @@ void test_bin_decoder_open_stride_zero_handling(void)
     lv_result_t result = lv_bin_decoder_open(NULL, decoder_dsc);
     TEST_ASSERT_EQUAL(LV_RESULT_OK, result);
 
-    /* Test open image with stride zero for indexed image */
+    /* Проверьте открытое изображение с нулевым шагом для индексированного изображения. */
     image_dsc = get_image_dsc();
     image_dsc->header.stride = 0;
     image_dsc->header.cf = LV_COLOR_FORMAT_I1;

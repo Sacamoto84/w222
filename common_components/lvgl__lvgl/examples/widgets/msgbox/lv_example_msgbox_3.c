@@ -8,12 +8,12 @@ static void dropdown_value_changed_event_cb(lv_event_t * e)
     lv_obj_t * top_layer = lv_layer_top();
     uint32_t opt = lv_dropdown_get_selected(dropdown);
 
-    /*Blur screen*/
+    /*Размытие экрана*/
     if(opt == 0) {
         lv_obj_set_style_blur_radius(msgbox, 0, 0);
         lv_obj_set_style_blur_radius(top_layer, 24, 0);
     }
-    /*Blur Message box*/
+    /*Размытие окна сообщения*/
     else {
         lv_obj_set_style_blur_radius(msgbox, 24, 0);
         lv_obj_set_style_blur_radius(top_layer, 0, 0);
@@ -48,7 +48,7 @@ void lv_example_msgbox_3(void)
     lv_msgbox_add_text(msgbox1, "Hello!\n\n"
                        "Scroll the text in the background to see how it behaves.");
 
-    /*Just a little styling on the message box*/
+    /*Немного стилизации окна сообщения*/
     lv_obj_set_style_bg_opa(msgbox1, LV_OPA_40, 0);
     lv_obj_set_style_bg_opa(lv_msgbox_get_header(msgbox1), LV_OPA_50, 0);
     lv_obj_set_style_bg_color(lv_msgbox_get_header(msgbox1), lv_color_black(), 0);
@@ -57,17 +57,17 @@ void lv_example_msgbox_3(void)
     lv_obj_set_style_text_color(lv_msgbox_get_header(msgbox1), lv_color_white(), 0);
     lv_obj_set_style_blur_backdrop(msgbox1, true, 0);
 
-    /*A dropdown to select what to blur*/
+    /*Раскрывающийся список для выбора того, что размыть*/
     lv_obj_t * dropdown = lv_dropdown_create(lv_layer_top());
     lv_dropdown_set_options(dropdown, "Blur screen\nBlur msgbox");
     lv_obj_set_pos(dropdown, 5, 5);
     lv_obj_add_event_cb(dropdown, dropdown_value_changed_event_cb, LV_EVENT_VALUE_CHANGED, msgbox1);
-    /*Also make the list blurred*/
+    /*Также сделайте список размытым*/
     lv_obj_set_style_blur_radius(lv_dropdown_get_list(dropdown), 24, 0);
     lv_obj_set_style_blur_backdrop(lv_dropdown_get_list(dropdown), true, 0);
     lv_obj_set_style_bg_opa(lv_dropdown_get_list(dropdown), LV_OPA_50, 0);
 
-    /*Send a value changed event to set the initial state*/
+    /*Отправьте событие изменения значения, чтобы установить исходное состояние.*/
     lv_obj_send_event(dropdown, LV_EVENT_VALUE_CHANGED, NULL);
 
 

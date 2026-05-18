@@ -37,7 +37,7 @@
  **********************/
 
 typedef struct {
-    /* fd should be defined at the beginning */
+    /* fd должен быть определен в начале */
     int fd;
     struct touch_sample_s last_sample;
     bool has_last_sample;
@@ -155,19 +155,19 @@ static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
 
     /*
      * Note: Since it is necessary to avoid multi-processing click events
-     * caused by redundant continue_reading, a two-unit sample sliding window
-     * algorithm is used here. continue_reading is only activated when there
-     * are two points in the window.
+     * вызвано избыточным continue_reading , скользящим окном выборки из двух единиц
+     * Здесь используется алгоритм.  continue_reading активируется только при наличии
+     * две точки в окне.
      */
 
-    /* If has last sample, use it first */
+    /* Если у вас есть последний образец, используйте его первым. */
     if(touchscreen->has_last_sample) {
         conv_touch_sample(drv, data, &touchscreen->last_sample);
     }
     else {
-        /* Read first sample */
+        /* Прочитать первый образец */
         if(!touchscreen_read_sample(touchscreen->fd, &sample)) {
-            /* No sample available, return last state */
+            /* Образец недоступен, верните последнее состояние */
             data->state = touchscreen->last_state;
             return;
         }
@@ -175,15 +175,15 @@ static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
         conv_touch_sample(drv, data, &sample);
     }
 
-    /* Try to read next sample */
+    /* Попробуйте прочитать следующий образец */
     if(touchscreen_read_sample(touchscreen->fd, &sample)) {
-        /* Save last sample and let lvgl continue reading */
+        /* Сохраните последний образец и позвольте lvgl продолжить чтение. */
         touchscreen->last_sample = sample;
         touchscreen->has_last_sample = true;
         data->continue_reading = true;
     }
     else {
-        /* No more sample available, clear last sample flag */
+        /* Нет больше доступной выборки, снимите флаг последней выборки */
         touchscreen->has_last_sample = false;
     }
 

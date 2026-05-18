@@ -7,14 +7,14 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_SPACE_EVENLY);
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -31,7 +31,7 @@ static void small_canvas_render(const char * name_sub, lv_color_format_t cf, voi
     lv_layer_t layer;
     lv_canvas_init_layer(canvas, &layer);
 
-    /*A label in the background*/
+    /*Этикетка на заднем плане*/
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.color = lv_palette_main(LV_PALETTE_RED);
@@ -44,7 +44,7 @@ static void small_canvas_render(const char * name_sub, lv_color_format_t cf, voi
     lv_area_t label1_coords = {10, 10, CANVAS_WIDTH - 10, CANVAS_HEIGHT - 10};
     lv_draw_label(&layer, &label_dsc, &label1_coords);
 
-    /*Blur the middle of the canvas*/
+    /*Размытие середины холста*/
     lv_draw_blur_dsc_t blur_dsc;
     lv_draw_blur_dsc_init(&blur_dsc);
     blur_dsc.corner_radius = corner_radius;
@@ -53,7 +53,7 @@ static void small_canvas_render(const char * name_sub, lv_color_format_t cf, voi
     lv_area_t fill_coords = {25, 20, CANVAS_WIDTH - 25, CANVAS_HEIGHT - 20};
     lv_draw_blur(&layer, &blur_dsc, &fill_coords);
 
-    /*Draw a semi-transparent rectangle on the blurred area*/
+    /*Нарисуйте полупрозрачный прямоугольник на размытой области.*/
     lv_draw_fill_dsc_t fill_dsc;
     lv_draw_fill_dsc_init(&fill_dsc);
     fill_dsc.color = lv_palette_lighten(LV_PALETTE_BLUE, 1);
@@ -62,7 +62,7 @@ static void small_canvas_render(const char * name_sub, lv_color_format_t cf, voi
 
     lv_draw_fill(&layer, &fill_dsc, &fill_coords);
 
-    /*Add label on the blurred area*/
+    /*Добавьте метку в размытую область*/
     char buf[128];
     lv_snprintf(buf, sizeof(buf), "%s\nblur:%d", name_sub, blur_radius);
 

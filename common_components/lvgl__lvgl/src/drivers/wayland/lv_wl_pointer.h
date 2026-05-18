@@ -34,7 +34,7 @@ extern "C" {
 lv_indev_t * lv_wayland_pointer_create(void);
 
 /**
- * Obtains the input device of the mouse pointer
+ * Получает устройство ввода указателя мыши.
  * @note It is used to create an input group on application start
  * @param disp Reference to the LVGL display associated to the window
  * @return The input device
@@ -48,7 +48,7 @@ lv_indev_t * lv_wayland_get_pointer(lv_display_t * disp);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WL_POINTER_H*/

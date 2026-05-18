@@ -34,12 +34,12 @@ static void event_cb(lv_event_t * e)
     lv_obj_get_coords(obj, &indic_area);
     lv_area_set_width(&indic_area, lv_area_get_width(&indic_area) * lv_bar_get_value(obj) / MAX_VALUE);
 
-    /*If the indicator is long enough put the text inside on the right*/
+    /*Если индикатор достаточно длинный, поместите текст внутри справа.*/
     if(lv_area_get_width(&indic_area) > txt_size.x + 20) {
         lv_area_align(&indic_area, &txt_area, LV_ALIGN_RIGHT_MID, -10, 0);
         label_dsc.color = lv_color_white();
     }
-    /*If the indicator is still short put the text out of it on the right*/
+    /*Если индикатор все еще короткий, вынесите текст из него справа.*/
     else {
         lv_area_align(&indic_area, &txt_area, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
         label_dsc.color = lv_color_black();
@@ -51,7 +51,7 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Custom drawer on the bar to display the current value
+ * Пользовательский ящик на панели для отображения текущего значения
  */
 void lv_example_bar_6(void)
 {

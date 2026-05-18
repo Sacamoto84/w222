@@ -26,12 +26,12 @@ static void event_handler(lv_event_t * e)
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
@@ -141,7 +141,7 @@ void test_checkbox_properties(void)
     lv_obj_t * obj = lv_checkbox_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Test TEXT property */
+    /* Тестирование свойства TEXT */
     prop.id = LV_PROPERTY_CHECKBOX_TEXT;
     prop.ptr = "Test Checkbox";
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);

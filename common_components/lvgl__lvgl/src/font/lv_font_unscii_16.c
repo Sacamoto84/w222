@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Size: 16 px
- * Bpp: 1
- * Opts: --no-compress --no-prefilter --bpp 1 --size 16 --font unscii-8.ttf -r 0x20-0x7F --format lvgl -o lv_font_unscii_16.c --force-fast-kern-format
+ * Размер: 16 пикселей
+ * Бпп: 1
+ * Opts: --no-compress --no-prefilter --bpp 1 --size 16 --font unscii-8.ttf -r0x20-0x7F--format lvgl -olv_font_unscii_16.c--force-fast-kern-format
  ******************************************************************************/
 
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
@@ -20,7 +20,7 @@
  *    BITMAPS
  *----------------*/
 
-/*Store the image of the glyphs*/
+/*Сохраните изображение глифов*/
 static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
     0x0,
@@ -480,7 +480,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 256, .box_w = 1, .box_h = 1, .ofs_x = 0, .ofs_y = 16},
     {.bitmap_index = 1, .adv_w = 256, .box_w = 4, .box_h = 14, .ofs_x = 6, .ofs_y = 2},
     {.bitmap_index = 8, .adv_w = 256, .box_w = 12, .box_h = 6, .ofs_x = 2, .ofs_y = 10},
@@ -583,7 +583,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
  *  CHARACTER MAPPING
  *--------------------*/
 
-/*Collect the unicode lists and glyph_id offsets*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 96, .glyph_id_start = 1,
@@ -596,7 +596,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *--------------------*/
 
 #if LVGL_VERSION_MAJOR >= 8
-/*Store all the custom data of the font*/
+/*Храните все пользовательские данные шрифта*/
 
 static const lv_font_fmt_txt_dsc_t font_dsc = {
 #else
@@ -618,16 +618,16 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
  *  PUBLIC FONT
  *----------------*/
 
-/*Initialize a public general font descriptor*/
+/*Инициализировать общедоступный общий дескриптор шрифта*/
 #if LVGL_VERSION_MAJOR >= 8
 const lv_font_t lv_font_unscii_16 = {
 #else
 lv_font_t lv_font_unscii_16 = {
 #endif
-    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
-    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
-    .line_height = 17,          /*The maximum line height required by the font*/
-    .base_line = 0,             /*Baseline measured from the bottom of the line*/
+    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Указатель функции для получения данных глифа*/
+    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Указатель функции для получения растрового изображения глифа*/
+    .line_height = 17,          /*Максимальная высота строки, требуемая шрифтом*/
+    .base_line = 0,             /*Базовая линия измеряется от нижней части линии*/
 #if !(LVGL_VERSION_MAJOR == 6 && LVGL_VERSION_MINOR == 0)
     .subpx = LV_FONT_SUBPX_NONE,
 #endif
@@ -635,7 +635,7 @@ lv_font_t lv_font_unscii_16 = {
     .underline_position = 0,
     .underline_thickness = 0,
 #endif
-    .dsc = &font_dsc           /*The custom font data. Will be accessed by `get_glyph_bitmap/dsc` */
+    .dsc = &font_dsc           /*Данные пользовательского шрифта. Будет доступен `get_glyph_bitmap/dsc` */
 };
 
 #endif /*#if LV_FONT_UNSCII_16*/

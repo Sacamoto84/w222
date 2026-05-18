@@ -6,7 +6,7 @@ static void font_size_observer_cb(lv_observer_t * observer, lv_subject_t * subje
 static lv_subject_t subject_font;
 
 /**
- * Change font size with Tiny_TTF
+ * Изменить размер шрифта с помощью Tiny_TTF
  */
 void lv_example_tiny_ttf_3(void)
 {
@@ -15,7 +15,7 @@ void lv_example_tiny_ttf_3(void)
 
     lv_subject_init_int(&subject_font, 25);
 
-    /*Create style with the new font*/
+    /*Создайте стиль с помощью нового шрифта*/
     static lv_style_t style;
     lv_style_init(&style);
     lv_font_t * font = lv_tiny_ttf_create_data(ubuntu_font, ubuntu_font_size, 25);
@@ -32,7 +32,7 @@ void lv_example_tiny_ttf_3(void)
     lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
     lv_label_bind_text(slider_label, &subject_font, "%d");
 
-    /*Create a label with the new style*/
+    /*Создайте этикетку с новым стилем*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_add_style(label, &style, 0);
     lv_obj_set_size(label, LV_SIZE_CONTENT, LV_SIZE_CONTENT);

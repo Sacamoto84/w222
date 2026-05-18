@@ -1,6 +1,6 @@
 /**
  * @file lv_blend_riscv_v.h
- * RISC-V Vector extension blend header
+ * RISC -V Заголовок смешивания векторного расширения
  */
 
 #ifndef LV_BLEND_RISCV_V_H

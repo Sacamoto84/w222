@@ -31,14 +31,14 @@ extern "C" {
  **********************/
 
 /***
- * Create a dummy display for for the tests
- * @param hor_res   the maximal horizontal resolution
- * @param ver_res   the maximal vertical resolution
- * @return          the created display
+ * Создайте фиктивный дисплей для тестов.
+ * @param hor_res   максимальное горизонтальное разрешение
+ * @param ver_res   максимальное вертикальное разрешение
+ * @return          созданный дисплей
  *
- * @note            The resolution can be changed to any smaller values later
- *                  using `lv_display_set_resolution`
- *                  The color format can be freely changed later using `lv_display_set_color_format`
+ * @note            Разрешение можно изменить на любое меньшее значение позже.
+ *                  с помощью `lv_display_set_resolution`
+ *                  Цветовой формат можно позже свободно изменить с помощью `lv_display_set_color_format`.
  */
 lv_display_t * lv_test_display_create(int32_t hor_res, int32_t ver_res);
 
@@ -49,7 +49,7 @@ lv_display_t * lv_test_display_create(int32_t hor_res, int32_t ver_res);
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEST_DISPLAY_H*/

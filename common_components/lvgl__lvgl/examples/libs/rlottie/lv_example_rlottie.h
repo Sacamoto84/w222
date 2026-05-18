@@ -33,7 +33,7 @@ void lv_example_rlottie_2(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_RLOTTIE_H*/

@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,16 +28,16 @@
 
  * Copyright (C) EFL developers (see AUTHORS)
 
- * All rights reserved.
+ * Все права защищены.
 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Распространение и использование в исходной и двоичной форме, с или без
+ * Модификация допускается при соблюдении следующих условий:
 
  *   1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
+ *      уведомление, этот список условий и следующий отказ от ответственности.
  *   2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
+ *      уведомление, этот список условий и следующий отказ от ответственности в
+ *      документация и/или другие материалы, поставляемые вместе с дистрибутивом.
 
  * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
@@ -51,7 +51,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define _USE_MATH_DEFINES       //Math Constants are not defined in Standard C/C++.
+#define _USE_MATH_DEFINES       //Математические константы не определены в стандарте C/C++.
 
 #include <cstring>
 #include <ctype.h>
@@ -62,7 +62,7 @@
 #include "tvgStr.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static char* _skipComma(const char* content)
@@ -79,9 +79,9 @@ static bool _parseNumber(char** content, float* number)
 {
     char* end = NULL;
     *number = strToFloat(*content, &end);
-    //If the start of string is not number
+    //Если начало строки не число
     if ((*content) == end) return false;
-    //Skip comma if any
+    //Пропустить запятую, если есть
     *content = _skipComma(end);
     return true;
 }
@@ -120,12 +120,12 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
     float cosTheta1, sinTheta1;
     int segments;
 
-    //Some helpful stuff is available here:
+    //Некоторые полезные материалы доступны здесь:
     //http://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes
     sx = cur->x;
     sy = cur->y;
 
-    //Correction of out-of-range radii, see F6.6.1 (step 2)
+    //Коррекция радиусов, выходящих за пределы диапазона, см. F6 .6.1 (шаг 2)
     rx = fabsf(rx);
     ry = fabsf(ry);
 
@@ -142,59 +142,59 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
     ry2 = ry * ry;
     lambda = (x1p2 / rx2) + (y1p2 / ry2);
 
-    //Correction of out-of-range radii, see F6.6.2 (step 4)
+    //Коррекция радиусов, выходящих за пределы диапазона, см. F6 .6.2 (шаг 4)
     if (lambda > 1.0f) {
-        //See F6.6.3
+        //См. F6 .6.3.
         float lambdaRoot = sqrtf(lambda);
 
         rx *= lambdaRoot;
         ry *= lambdaRoot;
-        //Update rx2 and ry2
+        //Обновите rx2 и ry2.
         rx2 = rx * rx;
         ry2 = ry * ry;
     }
 
     c = (rx2 * ry2) - (rx2 * y1p2) - (ry2 * x1p2);
 
-    //Check if there is no possible solution
-    //(i.e. we can't do a square root of a negative value)
+    //Проверьте, нет ли возможного решения
+    //(т.е. мы не можем извлечь квадратный корень из отрицательного значения)
     if (c < 0.0f) {
-        //Scale uniformly until we have a single solution
-        //(see F6.2) i.e. when c == 0.0
+        //Масштабируйте равномерно, пока не получим единственное решение.
+        //(см. F6 .2), т.е. когда c == 0,0
         float scale = sqrtf(1.0f - c / (rx2 * ry2));
         rx *= scale;
         ry *= scale;
-        //Update rx2 and ry2
+        //Обновите rx2 и ry2.
         rx2 = rx * rx;
         ry2 = ry * ry;
 
-        //Step 2 (F6.5.2) - simplified since c == 0.0
+        //Шаг 2 ( F6 .5.2) – упрощен, поскольку c == 0,0
         cxp = 0.0f;
         cyp = 0.0f;
-        //Step 3 (F6.5.3 first part) - simplified since cxp and cyp == 0.0
+        //Шаг 3 (первая часть F6 .5.3) – упрощен, поскольку cxp и cyp == 0.0
         cx = 0.0f;
         cy = 0.0f;
     } else {
-        //Complete c calculation
+        //Полный расчет c
         c = sqrtf(c / ((rx2 * y1p2) + (ry2 * x1p2)));
-        //Inverse sign if Fa == Fs
+        //Обратный знак, если Fa == Fs
         if (largeArc == sweep) c = -c;
 
-        //Step 2 (F6.5.2)
+        //Шаг 2 ( F6 .5.2)
         cxp = c * (rx * y1p / ry);
         cyp = c * (-ry * x1p / rx);
 
-        //Step 3 (F6.5.3 first part)
+        //Шаг 3 (F6 .5.3 первая часть)
         cx = cosPhi * cxp - sinPhi * cyp;
         cy = sinPhi * cxp + cosPhi * cyp;
     }
 
-    //Step 3 (F6.5.3 second part) we now have the center point of the ellipse
+    //Шаг 3 (F6 .5.3 вторая часть) теперь у нас есть центральная точка эллипса.
     cx += (sx + x) / 2.0f;
     cy += (sy + y) / 2.0f;
 
-    //Step 4 (F6.5.4)
-    //We dont' use arccos (as per w3c doc), see
+    //Шаг 4 ( F6 .5.4)
+    //Мы не используем arccos (согласно документу w3c), см.
     //http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/index.htm
     //Note: atan2 (0.0, 1.0) == 0.0
     at = tvg::atan2(((y1p - cyp) / ry), ((x1p - cxp) / rx));
@@ -204,21 +204,21 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
     deltaTheta = (nat < at) ? 2.0f * MATH_PI - at + nat : nat - at;
 
     if (sweep) {
-        //Ensure delta theta < 0 or else add 360 degrees
+        //Убедитесь, что дельта-тета < 0, иначе добавьте 360 градусов.
         if (deltaTheta < 0.0f) deltaTheta += 2.0f * MATH_PI;
     } else {
-        //Ensure delta theta > 0 or else substract 360 degrees
+        //Убедитесь, что дельта-тета > 0, иначе вычтите 360 градусов.
         if (deltaTheta > 0.0f) deltaTheta -= 2.0f * MATH_PI;
     }
 
-    //Add several cubic bezier to approximate the arc
-    //(smaller than 90 degrees)
-    //We add one extra segment because we want something
-    //Smaller than 90deg (i.e. not 90 itself)
+    //Добавьте несколько кубических кривых Безье, чтобы приблизить дугу.
+    //(менее 90 градусов)
+    //Мы добавляем один дополнительный сегмент, потому что нам что-то нужно
+    //Меньше 90 градусов (т.е. не 90 сам по себе)
     segments = static_cast<int>(fabsf(deltaTheta / MATH_PI2) + 1.0f);
     delta = deltaTheta / segments;
 
-    //http://www.stillhq.com/ctpfaq/2001/comp.text.pdf-faq-2001-04.txt (section 2.13)
+    //http://www.stillhq.com/ctpfaq/2001/comp.text.pdf-faq-2001-04.txt (раздел 2.13)
     bcp = 4.0f / 3.0f * (1.0f - cosf(delta / 2.0f)) / sinf(delta / 2.0f);
 
     cosPhiRx = cosPhi * rx;
@@ -230,22 +230,22 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
     sinTheta1 = sinf(theta1);
 
     for (int i = 0; i < segments; ++i) {
-        //End angle (for this segment) = current + delta
+        //Конечный угол (для этого сегмента) = ток + дельта
         float c1x, c1y, ex, ey, c2x, c2y;
         float theta2 = theta1 + delta;
         float cosTheta2 = cosf(theta2);
         float sinTheta2 = sinf(theta2);
         Point p[3];
 
-        //First control point (based on start point sx,sy)
+        //Первая контрольная точка (на основе начальной точки sx,sy)
         c1x = sx - bcp * (cosPhiRx * sinTheta1 + sinPhiRy * cosTheta1);
         c1y = sy + bcp * (cosPhiRy * cosTheta1 - sinPhiRx * sinTheta1);
 
-        //End point (for this segment)
+        //Конечная точка (для этого сегмента)
         ex = cx + (cosPhiRx * cosTheta2 - sinPhiRy * sinTheta2);
         ey = cy + (sinPhiRx * cosTheta2 + cosPhiRy * sinTheta2);
 
-        //Second control point (based on end point ex,ey)
+        //Вторая контрольная точка (на основе конечной точки ex,ey)
         c2x = ex + bcp * (cosPhiRx * sinTheta2 + sinPhiRy * cosTheta2);
         c2y = ey + bcp * (sinPhiRx * sinTheta2 - cosPhiRy * cosTheta2);
         cmds->push(PathCommand::CubicTo);
@@ -258,11 +258,11 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
         *curCtl = p[1];
         *cur = p[2];
 
-        //Next start point is the current end point (same for angle)
+        //Следующая начальная точка — это текущая конечная точка (то же самое для угла).
         sx = ex;
         sy = ey;
         theta1 = theta2;
-        //Avoid recomputations
+        //Избегайте перерасчетов
         cosTheta1 = cosTheta2;
         sinTheta1 = sinTheta2;
     }
@@ -509,7 +509,7 @@ static char* _nextCommand(char* path, char* cmd, float* arr, int* count, bool* c
         }
     }
     if (*count == 7) {
-        //Special case for arc command
+        //Особый случай для команды дуги
         if (_parseNumber(&path, &arr[0])) {
             if (_parseNumber(&path, &arr[1])) {
                 if (_parseNumber(&path, &arr[2])) {
@@ -542,7 +542,7 @@ static char* _nextCommand(char* path, char* cmd, float* arr, int* count, bool* c
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 

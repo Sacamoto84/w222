@@ -117,20 +117,20 @@ void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selecto
         lv_obj_invalidate(obj);
     }
 
-    /*Try removing the style first to be sure it won't be added twice*/
+    /*Попробуйте сначала удалить стиль, чтобы убедиться, что он не будет добавлен дважды.*/
     lv_obj_remove_style(obj, style, selector);
 
     uint32_t i;
-    /*Go after the transition and local styles*/
+    /*Следуйте переходу и местным стилям*/
     for(i = 0; i < obj->style_cnt; i++) {
         if(obj->styles[i].is_trans) continue;
         if(obj->styles[i].is_local) continue;
         break;
     }
 
-    /*Now `i` is at the first normal style. Insert the new style before this*/
+    /*Теперь `i` находится в первом нормальном стиле. Вставьте новый стиль перед этим*/
 
-    /*Allocate space for the new style and shift the rest of the style to the end*/
+    /*Выделите место для нового стиля и сдвиньте остальную часть стиля в конец.*/
     obj->style_cnt++;
     LV_ASSERT(obj->style_cnt != 0);
     obj->styles = lv_realloc(obj->styles, obj->style_cnt * sizeof(lv_obj_style_t));
@@ -170,12 +170,12 @@ bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv
     lv_state_t state = lv_obj_style_get_selector_state(selector);
     lv_part_t part = lv_obj_style_get_selector_part(selector);
 
-    /*All objects must exist*/
+    /*Все объекты должны существовать*/
     if(!obj || !old_style || !new_style || (old_style == new_style)) {
         return false;
     }
 
-    /*Similar to lv_obj_add_style, delete transition*/
+    /*Аналогичноlv_obj_add_style, удалить переход.*/
     trans_delete(obj, selector, LV_STYLE_PROP_ANY, NULL);
 
     bool replaced = false;
@@ -184,12 +184,12 @@ bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv
         lv_state_t state_act = lv_obj_style_get_selector_state(obj->styles[i].selector);
         lv_part_t part_act = lv_obj_style_get_selector_part(obj->styles[i].selector);
 
-        /*Skip local styles and transitions*/
+        /*Пропустить локальные стили и переходы*/
         if(obj->styles[i].is_local || obj->styles[i].is_trans) {
             continue;
         }
 
-        /*Skip non-matching styles*/
+        /*Пропустить несовпадающие стили*/
         if((state != LV_STATE_ANY && state_act != state) ||
            (part != LV_PART_ANY && part_act != part) ||
            (old_style != obj->styles[i].style)) {
@@ -201,7 +201,7 @@ bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv
         obj->styles[i].selector = selector;
 
         replaced = true;
-        /*Don't break and continue replacing other occurrences*/
+        /*Не ломайте и продолжайте заменять другие явления.*/
     }
     if(replaced) {
         full_cache_refresh(obj, part);
@@ -268,7 +268,7 @@ void lv_obj_refresh_style(lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop)
         if(parent) lv_obj_mark_layout_as_dirty(parent);
     }
 
-    /*Cache the layer type*/
+    /*Кэшировать тип слоя*/
     if((part == LV_PART_ANY || part == LV_PART_MAIN) && is_layer_refr) {
         lv_obj_update_layer_type(obj);
     }
@@ -293,7 +293,7 @@ void lv_obj_style_set_disabled(lv_obj_t * obj, const lv_style_t * style, lv_styl
     for(i = 0; i < obj->style_cnt; i++) {
         if(obj->styles[i].style == style && obj->styles[i].selector == selector) {
             if(dis == obj->styles[i].is_disabled) {
-                return; /*Already in the right state*/
+                return; /*Уже в правильном состоянии*/
             }
             obj->styles[i].is_disabled = dis;
             full_cache_refresh(obj, lv_obj_style_get_selector_part(selector));
@@ -355,7 +355,7 @@ void lv_obj_set_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_
 {
     LV_PROFILER_STYLE_BEGIN;
 
-    /*Stop running transitions with this property */
+    /*Остановить выполнение переходов с этим свойством */
     trans_delete(obj, lv_obj_style_get_selector_part(selector), prop, NULL);
 
     lv_style_t * style = get_local_style(obj, selector);
@@ -398,7 +398,7 @@ bool lv_obj_remove_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_sty
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
     uint32_t i;
-    /*Find the style*/
+    /*Найдите стиль*/
     for(i = 0; i < obj->style_cnt; i++) {
         if(obj->styles[i].is_local &&
            obj->styles[i].selector == selector) {
@@ -406,7 +406,7 @@ bool lv_obj_remove_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_sty
         }
     }
 
-    /*The style is not found*/
+    /*Стиль не найден*/
     if(i == obj->style_cnt) return false;
 
     lv_result_t res = lv_style_remove_prop((lv_style_t *)obj->styles[i].style, prop);
@@ -423,7 +423,7 @@ void lv_obj_style_create_transition(lv_obj_t * obj, lv_part_t part, lv_state_t p
 {
     trans_t * tr;
 
-    /*Get the previous and current values*/
+    /*Получить предыдущие и текущие значения*/
     obj->skip_trans = 1;
     obj->state = prev_state;
     lv_style_value_t v1 = lv_obj_get_style_prop(obj, part, tr_dsc->prop);
@@ -437,7 +437,7 @@ void lv_obj_style_create_transition(lv_obj_t * obj, lv_part_t part, lv_state_t p
     obj->state = new_state;
 
     lv_obj_style_t * style_trans = get_trans_style(obj, part);
-    lv_style_set_prop((lv_style_t *)style_trans->style, tr_dsc->prop, v1);  /*Be sure `trans_style` has a valid value*/
+    lv_style_set_prop((lv_style_t *)style_trans->style, tr_dsc->prop, v1);  /*Убедитесь, что`trans_style`имеет допустимое значение.*/
     lv_obj_refresh_style(obj, tr_dsc->selector, tr_dsc->prop);
 
     if(tr_dsc->prop == LV_STYLE_RADIUS) {
@@ -500,13 +500,13 @@ lv_style_state_cmp_t lv_obj_style_state_compare(lv_obj_t * obj, lv_state_t state
         if(obj->styles[i].is_trans) continue;
 
         lv_state_t state_act = lv_obj_style_get_selector_state(obj->styles[i].selector);
-        /*The style is valid for a state but not the other*/
+        /*Стиль действителен для одного состояния, но не для другого.*/
         bool valid1 = state_act & (~state1) ? false : true;
         bool valid2 = state_act & (~state2) ? false : true;
         if(valid1 != valid2) {
             const lv_style_t * style = obj->styles[i].style;
             lv_style_value_t v;
-            /*If there is layout difference on the main part, return immediately. There is no more serious difference*/
+            /*Если в основной части есть разница в макете, немедленно вернитесь. Более серьезной разницы нет*/
             bool layout_diff = false;
             if(lv_style_get_prop(style, LV_STYLE_PAD_TOP, &v))layout_diff = true;
             else if(lv_style_get_prop(style, LV_STYLE_PAD_BOTTOM, &v)) layout_diff = true;
@@ -529,7 +529,7 @@ lv_style_state_cmp_t lv_obj_style_state_compare(lv_obj_t * obj, lv_state_t state
                 return LV_STYLE_STATE_CMP_DIFF_LAYOUT;
             }
 
-            /*Check for draw pad changes*/
+            /*Проверьте изменения площадки рисования*/
             if(lv_style_get_prop(style, LV_STYLE_TRANSFORM_WIDTH, &v)) res = LV_STYLE_STATE_CMP_DIFF_DRAW_PAD;
             else if(lv_style_get_prop(style, LV_STYLE_TRANSFORM_HEIGHT, &v)) res = LV_STYLE_STATE_CMP_DIFF_DRAW_PAD;
             else if(lv_style_get_prop(style, LV_STYLE_TRANSFORM_ROTATION, &v)) res = LV_STYLE_STATE_CMP_DIFF_DRAW_PAD;
@@ -744,11 +744,11 @@ lv_observer_t * lv_obj_bind_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_
  **********************/
 
 /**
- * Get the local style of an object for a given part and for a given state.
- * If the local style for the part-state pair doesn't exist allocate and return it.
- * @param obj pointer to an object
- * @param selector OR-ed value of parts and state for which the style should be get
- * @return pointer to the local style
+ * Получите локальный стиль объекта для данной части и для данного состояния.
+ * Если локальный стиль для пары «часть-состояние» не существует, выделите и верните его.
+ * @param obj указатель на объект
+ * @param selector OR -ed значение деталей и состояние, для которого должен быть получен стиль
+ * @return указатель на местный стиль
  */
 static lv_style_t * get_local_style(lv_obj_t * obj, lv_style_selector_t selector)
 {
@@ -766,8 +766,8 @@ static lv_style_t * get_local_style(lv_obj_t * obj, lv_style_selector_t selector
     LV_ASSERT_MALLOC(obj->styles);
 
     for(i = obj->style_cnt - 1; i > 0 ; i--) {
-        /*Copy only normal styles (not local and transition).
-         *The new local style will be added as the last local style*/
+        /*Копируйте только обычные стили (не локальные и переходные).
+         *Новый локальный стиль будет добавлен как последний локальный стиль.*/
         if(obj->styles[i - 1].is_local || obj->styles[i - 1].is_trans) break;
         obj->styles[i] = obj->styles[i - 1];
     }
@@ -782,11 +782,11 @@ static lv_style_t * get_local_style(lv_obj_t * obj, lv_style_selector_t selector
 }
 
 /**
- * Get the transition style of an object for a given part and for a given state.
- * If the transition style for the part-state pair doesn't exist allocate and return it.
- * @param obj   pointer to an object
- * @param selector OR-ed value of parts and state for which the style should be get
- * @return pointer to the transition style
+ * Получите стиль перехода объекта для данной части и для данного состояния.
+ * Если стиль перехода для пары «часть-состояние» не существует, выделите и верните его.
+ * @param obj   указатель на объект
+ * @param selector OR -ed значение деталей и состояние, для которого должен быть получен стиль
+ * @return указатель на стиль перехода
  */
 static lv_obj_style_t * get_trans_style(lv_obj_t * obj,  lv_style_selector_t selector)
 {
@@ -795,7 +795,7 @@ static lv_obj_style_t * get_trans_style(lv_obj_t * obj,  lv_style_selector_t sel
         if(obj->styles[i].is_trans && obj->styles[i].selector == selector) break;
     }
 
-    /*Already have a transition style for it*/
+    /*Для него уже есть стиль перехода*/
     if(i != obj->style_cnt) return &obj->styles[i];
 
     obj->style_cnt++;
@@ -850,12 +850,12 @@ static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_style_selector_t se
         lv_part_t part_act = lv_obj_style_get_selector_part(obj->styles[i].selector);
         if(part_act != part) continue;
 
-        /*Be sure the style not specifies other state than the requested.
-         *E.g. For HOVER+PRESS object state, HOVER style only is OK, but HOVER+FOCUS style is not*/
+        /*Убедитесь, что стиль не указывает другое состояние, кроме запрошенного.
+         *например Для состояния объекта HOVER + PRESS стиль HOVER — это только OK, а стиль HOVER + FOCUS — нет.*/
         lv_state_t state_act = lv_obj_style_get_selector_state(obj->styles[i].selector);
         if((state_act & state_inv)) continue;
 
-        /*Check only better candidates*/
+        /*Проверяйте только лучших кандидатов*/
         if((int32_t)state_act <= weight) continue;
 
         found = lv_style_get_prop_inlined(obj_style->style, prop, v);
@@ -872,9 +872,9 @@ static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_style_selector_t se
 }
 
 /**
- * Refresh the style of all children of an object. (Called recursively)
- * @param style refresh objects only with this
- * @param obj pointer to an object
+ * Обновите стиль всех дочерних элементов объекта. (Вызывается рекурсивно)
+ * @param style обновлять объекты только с помощью этого
+ * @param obj указатель на объект
  */
 static void report_style_change_core(void * style, lv_obj_t * obj)
 {
@@ -894,9 +894,9 @@ static void report_style_change_core(void * style, lv_obj_t * obj)
 }
 
 /**
- * Recursively refresh the style of the children. Go deeper until a not NULL style is found
- * because the NULL styles are inherited from the parent
- * @param obj pointer to an object
+ * Рекурсивно обновить стиль дочерних элементов. Идите глубже, пока не найдете стиль, отличный от NULL.
+ * потому что стили NULL наследуются от родительского
+ * @param obj указатель на объект
  */
 static void refresh_children_style(lv_obj_t * obj)
 {
@@ -908,18 +908,18 @@ static void refresh_children_style(lv_obj_t * obj)
         lv_obj_send_event(child, LV_EVENT_STYLE_CHANGED, NULL);
         lv_obj_invalidate(child);
 
-        refresh_children_style(child); /*Check children too*/
+        refresh_children_style(child); /*Детей тоже проверьте*/
     }
 }
 
 /**
- * Remove the transition from object's part's property.
- * - Remove the transition from `lv_obj_style_trans_ll` and free it
- * - Delete pending transitions
- * @param obj pointer to an object which transition(s) should be removed
- * @param part a part of object or 0xFF to remove from all parts
- * @param prop a property or 0xFF to remove all properties
- * @param tr_limit delete transitions only "older" than this. `NULL` if not used
+ * Удалить переход из свойства части объекта.
+ * - Удалите переход с`lv_obj_style_trans_ll`и освободите его.
+ * - Удалить ожидающие переходы
+ * @param obj указатель на объект, переход(ы) которого следует удалить
+ * @param part часть объекта или0xFFдля удаления из всех частей
+ * @param prop свойство или 0xFF, чтобы удалить все свойства
+ * @param tr_limit удалять переходы только «старше» этого.  `NULL`, если не используется
  */
 static bool trans_delete(lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop, trans_t * tr_limit)
 {
@@ -930,12 +930,12 @@ static bool trans_delete(lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop, t
     while(tr != NULL) {
         if(tr == tr_limit) break;
 
-        /*'tr' might be deleted, so get the next object while 'tr' is valid*/
+        /*«tr» может быть удален, поэтому получите следующий объект, пока «tr» действителен.*/
         tr_prev = lv_ll_get_prev(style_trans_ll_p, tr);
 
         if(tr->obj == obj && (part == tr->selector || part == LV_PART_ANY) && (prop == tr->prop || prop == LV_STYLE_PROP_ANY)) {
-            /*Remove any transitioned properties from the trans. style
-             *to allow changing it by normal styles*/
+            /*Удалите все перенесенные свойства из файла trans. стиль
+             *чтобы разрешить его изменение обычными стилями*/
             uint32_t i;
             for(i = 0; i < obj->style_cnt; i++) {
                 if(obj->styles[i].is_trans && (part == LV_PART_ANY || obj->styles[i].selector == part)) {
@@ -943,7 +943,7 @@ static bool trans_delete(lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop, t
                 }
             }
 
-            /*Free the transition descriptor too*/
+            /*Также освободите дескриптор перехода*/
             lv_anim_delete(tr, NULL);
             lv_ll_remove(style_trans_ll_p, tr);
             lv_free(tr);
@@ -1027,17 +1027,17 @@ static void trans_anim_start_cb(lv_anim_t * a)
     lv_part_t part = lv_obj_style_get_selector_part(tr->selector);
     tr->start_value = lv_obj_get_style_prop(tr->obj, part, tr->prop);
 
-    /*Init prop to an invalid values to be sure `trans_del` won't delete this added `tr`*/
+    /*Инициализируйте свойство с недопустимыми значениями, чтобы быть уверенным, что`trans_del`не удалит этот добавленный`tr`.*/
     lv_style_prop_t prop_tmp = tr->prop;
     tr->prop = LV_STYLE_PROP_INV;
 
-    /*Delete the related transitions if any*/
+    /*Удалите связанные переходы, если таковые имеются.*/
     trans_delete(tr->obj, part, prop_tmp, tr);
 
     tr->prop = prop_tmp;
 
     lv_obj_style_t * style_trans = get_trans_style(tr->obj, tr->selector);
-    /*Be sure `trans_style` has a valid value*/
+    /*Убедитесь, что`trans_style`имеет допустимое значение.*/
     lv_style_set_prop((lv_style_t *)style_trans->style, tr->prop, tr->start_value);
     lv_obj_refresh_style(tr->obj, tr->selector, tr->prop);
 
@@ -1049,9 +1049,9 @@ static void trans_anim_completed_cb(lv_anim_t * a)
     lv_obj_t * obj = tr->obj;
     lv_style_prop_t prop = tr->prop;
 
-    /*Remove the transitioned property from trans. style
-     *if there no more transitions for this property
-     *It allows changing it by normal styles*/
+    /*Удалите переданное имущество из транс. стиль
+     *если для этого свойства больше нет переходов
+     *Это позволяет изменить его обычными стилями.*/
     bool running = false;
     trans_t * tr_i;
     LV_LL_READ(style_trans_ll_p, tr_i) {
@@ -1189,7 +1189,7 @@ static lv_style_res_t get_selector_style_prop(const lv_obj_t * obj, lv_style_sel
     lv_style_res_t found;
     lv_part_t part = lv_obj_style_get_selector_part(selector);
 
-    /*The happy path*/
+    /*Счастливый путь*/
 #if LV_OBJ_STYLE_CACHE
     const uint32_t prop_shifted = STYLE_PROP_SHIFTED(prop);
     if((part == LV_PART_MAIN ? obj->style_main_prop_is_set : obj->style_other_prop_is_set) & prop_shifted)
@@ -1212,7 +1212,7 @@ static lv_style_res_t get_selector_style_prop(const lv_obj_t * obj, lv_style_sel
     }
 
     if(inheritable) {
-        /*If not found, check the `MAIN` style first, if already on the MAIN part go to the parent*/
+        /*Если он не найден, сначала проверьте стиль `MAIN`, если он уже есть в части MAIN, перейдите к родительскому элементу.*/
         if(part != LV_PART_MAIN) part = LV_PART_MAIN;
         else obj = obj->parent;
 
@@ -1225,13 +1225,13 @@ static lv_style_res_t get_selector_style_prop(const lv_obj_t * obj, lv_style_sel
                 found = get_prop_core(obj, selector, prop, value_act);
                 if(found == LV_STYLE_RES_FOUND) return LV_STYLE_RES_FOUND;
             }
-            /*Check the parent too.*/
+            /*Проверьте родителя тоже.*/
             obj = obj->parent;
         }
     }
     else {
-        /*Get the width and height from the class.
-                * WIDTH and HEIGHT are not inherited so add them in the `else` to skip checking them for inherited properties */
+        /*Получите ширину и высоту из класса.
+                * WIDTH иHEIGHTне наследуются, поэтому заносят их в`else`, чтобы не проверять их наличие унаследованных свойств. */
         if(part == LV_PART_MAIN && (prop == LV_STYLE_WIDTH || prop == LV_STYLE_HEIGHT)) {
             const lv_obj_class_t * cls = obj->class_p;
             while(cls) {
@@ -1292,7 +1292,7 @@ static void remove_style_core(lv_obj_t * obj, const lv_style_t * style, lv_style
             obj->styles[i].style = NULL;
         }
 
-        /*Shift the styles after `i` by one*/
+        /*Сдвиг стилей после `i` на один*/
         uint32_t j;
         for(j = i; j < (uint32_t)obj->style_cnt - 1 ; j++) {
             obj->styles[j] = obj->styles[j + 1];
@@ -1302,8 +1302,8 @@ static void remove_style_core(lv_obj_t * obj, const lv_style_t * style, lv_style
         obj->styles = lv_realloc(obj->styles, obj->style_cnt * sizeof(lv_obj_style_t));
 
         deleted = true;
-        /*The style from the current `i` index is removed, so `i` points to the next style.
-         *Therefore it doesn't needs to be incremented*/
+        /*Стиль из текущего индекса `i` удаляется, поэтому `i` указывает на следующий стиль.
+         *Поэтому его не нужно увеличивать*/
     }
 
     if(deleted && prop != LV_STYLE_PROP_INV) {

@@ -27,10 +27,10 @@
  **********************/
 
 typedef struct {
-    /* key */
+    /* ключ */
     lv_font_glyph_dsc_t g_dsc;
 
-    /* value */
+    /* ценность */
     lv_draw_buf_t * draw_buf;
 } cache_item_t;
 
@@ -106,7 +106,7 @@ lv_draw_buf_t * lv_vg_lite_bitmap_font_cache_get(struct _lv_draw_vg_lite_unit_t 
     lv_cache_entry_t * cache_node_entry = lv_cache_acquire(unit->bitmap_font_cache, &search_key, NULL);
 
     if(cache_node_entry == NULL) {
-        /* check if the cache is full */
+        /* проверьте, заполнен ли кеш */
         size_t free_size = lv_cache_get_free_size(unit->bitmap_font_cache, NULL);
         if(free_size == 0) {
             LV_LOG_INFO("bitmap font cache is full, release all pending cache entries");
@@ -121,7 +121,7 @@ lv_draw_buf_t * lv_vg_lite_bitmap_font_cache_get(struct _lv_draw_vg_lite_unit_t 
         }
     }
 
-    /* Add the new entry to the pending list */
+    /* Добавить новую запись в список ожидания */
     lv_vg_lite_pending_add(unit->bitmap_font_pending, &cache_node_entry);
 
     cache_item_t * cache_item = lv_cache_entry_get_data(cache_node_entry);
@@ -189,7 +189,7 @@ static void cache_free_cb(cache_item_t * item, void * user_data)
 
 static lv_cache_compare_res_t cache_compare_cb(const cache_item_t * lhs, const cache_item_t * rhs)
 {
-    /* Because const font pointers are unique, matching can be performed using only the pointer. */
+    /* Поскольку указатели константных шрифтов уникальны, сопоставление можно выполнить, используя только указатель. */
     if(lhs->g_dsc.resolved_font != rhs->g_dsc.resolved_font) {
         return lhs->g_dsc.resolved_font > rhs->g_dsc.resolved_font ? 1 : -1;
     }

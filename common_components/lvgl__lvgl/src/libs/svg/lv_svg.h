@@ -242,8 +242,8 @@ typedef union {
 } lv_svg_attr_value_t;
 
 /*
- * to simplify list buffer management, allocate enough memory for all data and length.
- * | size | data[0] | data[1] | data[2] | ... |
+ * чтобы упростить управление буфером списка, выделите достаточно памяти для всех данных и их длины.
+ * | размер | данные[0] | данные[1] | данные[2] | ... |
  */
 typedef struct {
     uint32_t length;
@@ -256,13 +256,13 @@ enum _lv_svg_path_cmd_t {
     LV_SVG_PATH_CMD_LINE_TO = 76,
     LV_SVG_PATH_CMD_CURVE_TO = 67,
     LV_SVG_PATH_CMD_QUAD_TO = 81,
-    LV_SVG_PATH_CMD_ARC_TO = 65, /*svg2 extension*/
+    LV_SVG_PATH_CMD_ARC_TO = 65, /*расширение svg2*/
     LV_SVG_PATH_CMD_CLOSE = 90,
 };
 
 /*
- * to simplify list buffer management, allocate enough memory for all path data and cmd.
- * | cmd | data[0] | data[1] | data[2] | ... |
+ * чтобы упростить управление буфером списка, выделите достаточно памяти для всех данных пути и cmd.
+ * | cmd | данные[0] | данные[1] | данные[2] | ... |
  */
 typedef struct {
     uint32_t cmd;
@@ -293,7 +293,7 @@ struct _lv_svg_render_obj;
 
 typedef struct {
     lv_tree_node_t base;
-    char * xml_id; /* xml_id or content */
+    char * xml_id; /* xml_id или контент */
     lv_svg_tag_t type;
     lv_array_t attrs;
     struct _lv_svg_render_obj * render_obj;

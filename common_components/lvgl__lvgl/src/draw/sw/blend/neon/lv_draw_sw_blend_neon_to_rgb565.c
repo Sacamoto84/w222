@@ -173,7 +173,7 @@ lv_result_t lv_draw_sw_blend_neon_color_to_rgb565(lv_draw_sw_blend_fill_dsc_t * 
     for(int32_t y = 0; y < h; y++) {
         uint16_t * row_ptr = dest_buf_u16;
         int32_t x          = 0;
-        /* Handle unaligned pixels at the beginning */
+        /* Обработка невыровненных пикселей в начале */
         const size_t offset = ((size_t)row_ptr) & 0xF;
         if(offset != 0) {
             int32_t pixel_alignment = (16 - offset) >> 1;
@@ -220,7 +220,7 @@ lv_result_t lv_draw_sw_blend_neon_color_to_rgb565_with_opa(lv_draw_sw_blend_fill
     for(int32_t y = 0; y < h; y++) {
         uint16_t * row_ptr = dest_buf_u16;
         int32_t x          = 0;
-        /* Handle unaligned pixels at the beginning */
+        /* Обработка невыровненных пикселей в начале */
         const size_t offset = ((size_t)row_ptr) & 0xF;
         if(offset != 0) {
             int32_t pixel_alignment = (16 - offset) >> 1;
@@ -268,7 +268,7 @@ lv_result_t lv_draw_sw_blend_neon_color_to_rgb565_with_mask(lv_draw_sw_blend_fil
         uint16_t * row_ptr       = dest_buf_u16;
         const uint8_t * mask_row = mask_buf_u8;
         int32_t x                = 0;
-        /* Handle unaligned pixels at the beginning */
+        /* Обработка невыровненных пикселей в начале */
         const size_t offset = ((size_t)row_ptr) & 0xF;
         if(offset != 0) {
             int32_t pixel_alignment = (16 - offset) >> 1;
@@ -325,7 +325,7 @@ lv_result_t lv_draw_sw_blend_neon_color_to_rgb565_with_opa_mask(lv_draw_sw_blend
         uint16_t * row_ptr       = dest_buf_u16;
         const uint8_t * mask_row = mask_buf_u8;
         int32_t x                = 0;
-        /* Handle unaligned pixels at the beginning */
+        /* Обработка невыровненных пикселей в начале */
         const size_t offset = ((size_t)row_ptr) & 0xF;
         if(offset != 0) {
             int32_t pixel_alignment = (16 - offset) >> 1;
@@ -1136,7 +1136,7 @@ static inline uint16x8_t lv_color_8_16_mix_8_with_opa_mask(const uint16_t * src,
     const uint16x8_t mask_vec       = vmovl_u8(vld1_u8(mask));
     const uint16x8_t opa_vec        = vmovq_n_u16(opa);
 
-    /* Use uint32 for intermediate multiplication results to avoid 16bit overflows */
+    /* Используйте uint32 для промежуточных результатов умножения, чтобы избежать 16-битного переполнения. */
     const uint32x4_t mix_pixels_low  = vmovl_u16(vget_low_u16(mix_pixels));
     const uint32x4_t mix_pixels_high = vmovl_u16(vget_high_u16(mix_pixels));
     const uint32x4_t opa_vec_low     = vmovl_u16(vget_low_u16(opa_vec));
@@ -1174,13 +1174,13 @@ static inline uint16x8_t lv_color_8_16_mix_8_internal(uint16x8_t src_pixels, uin
 {
     const uint16x8_t mix_zero_mask = vceqq_u16(mix_pixels, vdupq_n_u16(0));
     const uint16x8_t mix_full_mask = vceqq_u16(mix_pixels, vdupq_n_u16(255));
-    /* Prepare result in case mix == 255 */
+    /* Подготовьте результат для смеси случаев == 255 */
     const uint16x8_t src_r565   = vshlq_n_u16(vandq_u16(src_pixels, vdupq_n_u16(0xF8)), 8);
     const uint16x8_t src_g565   = vshlq_n_u16(vandq_u16(src_pixels, vdupq_n_u16(0xFC)), 3);
     const uint16x8_t src_b565   = vshrq_n_u16(vandq_u16(src_pixels, vdupq_n_u16(0xF8)), 3);
     const uint16x8_t src_rgb565 = vaddq_u16(vaddq_u16(src_r565, src_g565), src_b565);
 
-    /* Do the actual blending */
+    /* Сделайте фактическое смешивание */
     const uint16x8_t mix_inv_16 = vsubq_u16(vdupq_n_u16(255), mix_pixels);
 
     /* Red: ((c1 >> 3) * mix + ((c2 >> 11) & 0x1F) * mix_inv) << 3) & 0xF800 */
@@ -1201,7 +1201,7 @@ static inline uint16x8_t lv_color_8_16_mix_8_internal(uint16x8_t src_pixels, uin
     uint16x8_t blended_b   = vmlaq_u16(src_b, dst_b, mix_inv_16);
     blended_b              = vshrq_n_u16(blended_b, 8);
 
-    /* Select what value to take for each pixel depending on original mix value */
+    /* Выберите, какое значение принять для каждого пикселя в зависимости от исходного значения микса. */
     const uint16x8_t blended_result = vorrq_u16(vorrq_u16(blended_r, blended_g), blended_b);
     const uint16x8_t result         = vbslq_u16(mix_zero_mask, dst_pixels, blended_result);
     return vbslq_u16(mix_full_mask, src_rgb565, result);
@@ -1212,7 +1212,7 @@ static inline uint16x4_t lv_color_8_16_mix_4_internal(uint16x4_t src_pixels, uin
 
     const uint16x4_t mix_zero_mask = vceq_u16(mix_pixels, vdup_n_u16(0));
     const uint16x4_t mix_full_mask = vceq_u16(mix_pixels, vdup_n_u16(255));
-    /* Prepare result in case mix == 255 */
+    /* Подготовьте результат для смеси случаев == 255 */
     const uint16x4_t src_r565   = vshl_n_u16(vand_u16(src_pixels, vdup_n_u16(0xF8)), 8);
     const uint16x4_t src_g565   = vshl_n_u16(vand_u16(src_pixels, vdup_n_u16(0xFC)), 3);
     const uint16x4_t src_b565   = vshr_n_u16(vand_u16(src_pixels, vdup_n_u16(0xF8)), 3);
@@ -1561,7 +1561,7 @@ static inline uint16x8_t lv_color_32_16_mix_8_with_opa_mask(const uint8_t * src,
     const uint16x8_t mask_vec = vmovl_u8(vld1_u8(mask));
     const uint16x8_t opa_vec  = vmovq_n_u16(opa);
 
-    /* Use uint32 for intermediate multiplication results to avoid 16bit overflows */
+    /* Используйте uint32 для промежуточных результатов умножения, чтобы избежать 16-битного переполнения. */
     const uint32x4_t a_pixels_low  = vmovl_u16(vget_low_u16(a_pixels));
     const uint32x4_t a_pixels_high = vmovl_u16(vget_high_u16(a_pixels));
     const uint32x4_t opa_vec_low   = vmovl_u16(vget_low_u16(opa_vec));
@@ -1608,13 +1608,13 @@ static inline uint16x8_t lv_color_32_16_mix_8_internal(uint16x8_t r_pixels, uint
     const uint16x8_t mix_zero_mask = vceqq_u16(a_pixels, vdupq_n_u16(0));
     const uint16x8_t mix_full_mask = vceqq_u16(a_pixels, vdupq_n_u16(255));
 
-    /* Prepare result in case alpha == 255 */
+    /* Подготовьте результат в случае альфа == 255 */
     const uint16x8_t src_r565   = vandq_u16(vshlq_n_u16(r_pixels, 8), vdupq_n_u16(0xF800));
     const uint16x8_t src_g565   = vandq_u16(vshlq_n_u16(g_pixels, 3), vdupq_n_u16(0x07E0));
     const uint16x8_t src_b565   = vshrq_n_u16(b_pixels, 3);
     const uint16x8_t src_rgb565 = vorrq_u16(vorrq_u16(src_r565, src_g565), src_b565);
 
-    /* Do the actual blending */
+    /* Сделайте фактическое смешивание */
     const uint16x8_t mix_inv_16 = vsubq_u16(vdupq_n_u16(255), a_pixels);
 
     /* Red: ((src_r >> 3) * mix + ((dst >> 11) & 0x1F) * mix_inv) << 3) & 0xF800 */
@@ -1645,7 +1645,7 @@ static inline uint16x4_t lv_color_32_16_mix_4_internal(uint16x4_t r_pixels, uint
     const uint16x4_t mix_zero_mask = vceq_u16(a_pixels, vdup_n_u16(0));
     const uint16x4_t mix_full_mask = vceq_u16(a_pixels, vdup_n_u16(255));
 
-    /* Prepare result in case alpha == 255 */
+    /* Подготовьте результат в случае альфа == 255 */
     const uint16x4_t src_r565   = vand_u16(vshl_n_u16(r_pixels, 8), vdup_n_u16(0xF800));
     const uint16x4_t src_g565   = vand_u16(vshl_n_u16(g_pixels, 3), vdup_n_u16(0x07E0));
     const uint16x4_t src_b565   = vshr_n_u16(b_pixels, 3);
@@ -1764,13 +1764,13 @@ static inline uint16x8_t lv_color_24_16_mix_premult_8(const uint8_t * src, const
     const uint16x8_t mix_zero_mask = vceqq_u16(a_pixels, vdupq_n_u16(0));
     const uint16x8_t mix_full_mask = vceqq_u16(a_pixels, vdupq_n_u16(255));
 
-    /* Prepare result in case alpha == 255 */
+    /* Подготовьте результат в случае альфа == 255 */
     const uint16x8_t src_r565   = vandq_u16(vshlq_n_u16(r_pixels, 8), vdupq_n_u16(0xF800));
     const uint16x8_t src_g565   = vandq_u16(vshlq_n_u16(g_pixels, 3), vdupq_n_u16(0x07E0));
     const uint16x8_t src_b565   = vshrq_n_u16(b_pixels, 3);
     const uint16x8_t src_rgb565 = vorrq_u16(vorrq_u16(src_r565, src_g565), src_b565);
 
-    /* Do the actual blending */
+    /* Сделайте фактическое смешивание */
     const uint16x8_t mix_inv_16 = vsubq_u16(vdupq_n_u16(255), a_pixels);
 
     const uint16x8_t src_r = vshrq_n_u16(r_pixels, 3);
@@ -1808,7 +1808,7 @@ static inline uint16x4_t lv_color_24_16_mix_premult_4(const uint8_t * src, const
     const uint16x4_t mix_zero_mask = vceq_u16(a_pixels, vdup_n_u16(0));
     const uint16x4_t mix_full_mask = vceq_u16(a_pixels, vdup_n_u16(255));
 
-    /* Prepare result in case alpha == 255 */
+    /* Подготовьте результат в случае альфа == 255 */
     const uint16x4_t src_r565   = vand_u16(vshl_n_u16(r_pixels, 8), vdup_n_u16(0xF800));
     const uint16x4_t src_g565   = vand_u16(vshl_n_u16(g_pixels, 3), vdup_n_u16(0x07E0));
     const uint16x4_t src_b565   = vshr_n_u16(b_pixels, 3);
@@ -1957,7 +1957,7 @@ static inline uint16x8_t lv_color_16_16_mix_8_internal(uint16x8_t c1_vec, uint16
     const uint16x8_t equal_mask    = vceqq_u16(c1_vec, c2_vec);
 
     mix = vshrq_n_u16(vaddq_u16(mix, vdupq_n_u16(4)), 3);
-    /* Split into low and high parts for 32-bit operations */
+    /* Разделение на младшую и старшую части для 32-битных операций. */
     uint32x4_t c1_low  = vmovl_u16(vget_low_u16(c1_vec));
     uint32x4_t c1_high = vmovl_u16(vget_high_u16(c1_vec));
     uint32x4_t c2_low  = vmovl_u16(vget_low_u16(c2_vec));
@@ -1967,7 +1967,7 @@ static inline uint16x8_t lv_color_16_16_mix_8_internal(uint16x8_t c1_vec, uint16
     uint32x4_t bg_low  = vorrq_u32(c2_low, vshlq_n_u32(c2_low, 16));
     uint32x4_t bg_high = vorrq_u32(c2_high, vshlq_n_u32(c2_high, 16));
 
-    /* Apply mask 0x7E0F81F to extract RGB components */
+    /* Примените маску 0x7E0F81F для извлечения компонентов RGB. */
     const uint32x4_t mask = vdupq_n_u32(0x7E0F81F);
     fg_low                = vandq_u32(fg_low, mask);
     fg_high               = vandq_u32(fg_high, mask);
@@ -1977,7 +1977,7 @@ static inline uint16x8_t lv_color_16_16_mix_8_internal(uint16x8_t c1_vec, uint16
     const uint32x4_t mix_low  = vmovl_u16(vget_low_u16(mix));
     const uint32x4_t mix_high = vmovl_u16(vget_high_u16(mix));
 
-    /* Perform the blend: ((fg - bg) * mix) >> 5 + bg */
+    /* Выполните наложение: ((fg - bg) * mix) >> 5 + bg */
     const uint32x4_t diff_low     = vsubq_u32(fg_low, bg_low);
     const uint32x4_t diff_high    = vsubq_u32(fg_high, bg_high);
     const uint32x4_t scaled_low   = vmulq_u32(diff_low, mix_low);
@@ -1987,11 +1987,11 @@ static inline uint16x8_t lv_color_16_16_mix_8_internal(uint16x8_t c1_vec, uint16
     uint32x4_t result_low         = vaddq_u32(shifted_low, bg_low);
     uint32x4_t result_high        = vaddq_u32(shifted_high, bg_high);
 
-    /* Apply final mask */
+    /* Нанесите финальную маску */
     result_low  = vandq_u32(result_low, mask);
     result_high = vandq_u32(result_high, mask);
 
-    /* Convert back to 16-bit: (result >> 16) | result */
+    /* Преобразовать обратно в 16-битный формат: (результат >> 16) | результат */
     const uint32x4_t final_low  = vorrq_u32(result_low, vshrq_n_u32(result_low, 16));
     const uint32x4_t final_high = vorrq_u32(result_high, vshrq_n_u32(result_high, 16));
 
@@ -2039,27 +2039,27 @@ static inline uint16x4_t lv_color_16_16_mix_4_internal(uint16x4_t c1_vec, uint16
     const uint16x4_t equal_mask    = vceq_u16(c1_vec, c2_vec);
 
     mix = vshr_n_u16(vadd_u16(mix, vdup_n_u16(4)), 3);
-    /* Split into low and high parts for 32-bit operations */
+    /* Разделение на младшую и старшую части для 32-битных операций. */
     uint32x4_t c1 = vmovl_u16(c1_vec);
     uint32x4_t c2 = vmovl_u16(c2_vec);
     uint32x4_t fg = vorrq_u32(c1, vshlq_n_u32(c1, 16));
     uint32x4_t bg = vorrq_u32(c2, vshlq_n_u32(c2, 16));
 
-    /* Apply mask 0x7E0F81F to extract RGB components */
+    /* Примените маску 0x7E0F81F для извлечения компонентов RGB. */
     const uint32x4_t mask = vdupq_n_u32(0x7E0F81F);
     fg                    = vandq_u32(fg, mask);
     bg                    = vandq_u32(bg, mask);
 
     const uint32x4_t mix32 = vmovl_u16(mix);
 
-    /* Perform the blend: ((fg - bg) * mix) >> 5 + bg */
+    /* Выполните наложение: ((fg - bg) * mix) >> 5 + bg */
     const uint32x4_t diff    = vsubq_u32(fg, bg);
     const uint32x4_t scaled  = vmulq_u32(diff, mix32);
     const uint32x4_t shifted = vshrq_n_u32(scaled, 5);
     uint32x4_t result32      = vaddq_u32(shifted, bg);
     result32                 = vandq_u32(result32, mask);
 
-    /* Convert back to 16-bit: (result >> 16) | result */
+    /* Преобразовать обратно в 16-битный формат: (результат >> 16) | результат */
     const uint32x4_t final = vorrq_u32(result32, vshrq_n_u32(result32, 16));
 
     uint16x4_t result = vmovn_u32(final);

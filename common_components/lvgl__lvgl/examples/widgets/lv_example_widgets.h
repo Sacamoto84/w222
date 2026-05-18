@@ -176,7 +176,7 @@ void lv_example_win_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_WIDGETS_H*/

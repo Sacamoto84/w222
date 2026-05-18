@@ -63,7 +63,7 @@ typedef void (*lv_ft81x_spi_cb_t)(lv_display_t * disp, lv_ft81x_spi_operation_t 
  **********************/
 
 /**
- * Create a framebuffer-based ft81x driver display.
+ * Создайте дисплей драйвера ft81x на основе кадрового буфера.
  * @param params      pointer to a struct of display panel properties. does not need to be static.
  * @param partial_buf a single partial buffer
  * @param buf_size    size of the partial buffer
@@ -75,7 +75,7 @@ lv_display_t * lv_ft81x_create(const lv_ft81x_parameters_t * params, void * part
                                lv_ft81x_spi_cb_t spi_cb, void * user_data);
 
 /**
- * Get the `user_data` parameter that was passed to `lv_ft81x_create`. Useful in the SPI callback.
+ * Получите параметр `user_data`, который был передан `lv_ft81x_create`. Полезно при обратном вызове SPI.
  * @param disp      pointer to the ft81x display
  * @return          the `user_data` pointer
  */
@@ -88,7 +88,7 @@ void * lv_ft81x_get_user_data(lv_display_t * disp);
 #endif /*LV_USE_FT81X*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FT81X_H*/

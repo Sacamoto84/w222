@@ -142,7 +142,7 @@ lv_obj_t * lv_image_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_image_set_src(lv_obj_t * obj, const void * src)
@@ -170,7 +170,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
     }
 #endif
 
-    /*If the new source type is unknown free the memories of the old source*/
+    /*Если новый тип источника неизвестен, освободите память старого источника.*/
     if(src_type == LV_IMAGE_SRC_UNKNOWN) {
         if(src) LV_LOG_WARN("unknown image type");
         reset_image_attributes(obj);
@@ -190,7 +190,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
         return;
     }
 
-    /*Save the source*/
+    /*Сохраните источник*/
     if(src_type == LV_IMAGE_SRC_VARIABLE) {
         if(header.flags & LV_IMAGE_FLAGS_ALLOCATED) {
             lv_draw_buf_t * buf = (lv_draw_buf_t *)src;
@@ -201,19 +201,19 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
             }
         }
 
-        /*If memory was allocated because of the previous `src_type` then free it*/
+        /*Если память была выделена из-за предыдущего `src_type`, освободите ее.*/
         if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_free((void *)img->src);
         }
         img->src = src;
     }
     else if(src_type == LV_IMAGE_SRC_FILE || src_type == LV_IMAGE_SRC_SYMBOL) {
-        /*If the new and the old src are the same then it was only a refresh.*/
+        /*Если новый и старый src одинаковы, то это было всего лишь обновление.*/
         if(img->src != src) {
             const void * old_src = NULL;
-            /*If memory was allocated because of the previous `src_type` then save its pointer and free after allocation.
-             *It's important to allocate first to be sure the new data will be on a new address.
-             *Else `img_cache` wouldn't see the change in source.*/
+            /*Если память была выделена из-за предыдущего `src_type`, сохраните ее указатель и освободите после выделения.
+             *Важно сначала выделить память, чтобы быть уверенным, что новые данные будут находиться по новому адресу.
+             *В противном случае `img_cache` не увидит изменения в исходном коде.*/
             if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
                 old_src = img->src;
             }
@@ -227,7 +227,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
     }
 
     if(src_type == LV_IMAGE_SRC_SYMBOL) {
-        /*`lv_image_dsc_get_info` couldn't set the width and height of a font so set it here*/
+        /*`lv_image_dsc_get_info` не смог установить ширину и высоту шрифта, поэтому установите это здесь.*/
         const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
         lv_text_attributes_t attributes = {0};
 
@@ -251,7 +251,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
 
     update_align(obj);
 
-    /*Provide enough room for the rotated corners*/
+    /*Обеспечьте достаточно места для повернутых углов.*/
     if(img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE) {
         lv_obj_refresh_ext_draw_size(obj);
     }
@@ -294,7 +294,7 @@ void lv_image_set_rotation(lv_obj_t * obj, int32_t angle)
 
     if((uint32_t)angle == img->rotation) return;
 
-    lv_obj_update_layout(obj);  /*Be sure the object's size is calculated*/
+    lv_obj_update_layout(obj);  /*Убедитесь, что размер объекта рассчитан*/
     int32_t w = lv_obj_get_width(obj);
     int32_t h = lv_obj_get_height(obj);
     lv_area_t a;
@@ -309,8 +309,8 @@ void lv_image_set_rotation(lv_obj_t * obj, int32_t angle)
 
     img->rotation = angle;
 
-    /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
-     * the whole ext draw area */
+    /* Отключите недействительность, поскольку lv_obj_refresh_ext_draw_size сделает недействительной
+     * вся дополнительная область прорисовки */
     lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
@@ -336,7 +336,7 @@ void lv_image_set_pivot(lv_obj_t * obj, int32_t x, int32_t y)
 
     if(img->pivot.x == x && img->pivot.y == y) return;
 
-    lv_obj_update_layout(obj);  /*Be sure the object's size is calculated*/
+    lv_obj_update_layout(obj);  /*Убедитесь, что размер объекта рассчитан*/
     int32_t w = lv_obj_get_width(obj);
     int32_t h = lv_obj_get_height(obj);
     lv_area_t a;
@@ -351,8 +351,8 @@ void lv_image_set_pivot(lv_obj_t * obj, int32_t x, int32_t y)
 
     lv_point_set(&img->pivot, x, y);
 
-    /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
-     * the whole ext draw area */
+    /* Отключите недействительность, поскольку lv_obj_refresh_ext_draw_size сделает недействительной
+     * вся дополнительная область прорисовки */
     lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
@@ -389,7 +389,7 @@ void lv_image_set_scale(lv_obj_t * obj, uint32_t zoom)
 
     lv_image_t * img = (lv_image_t *)obj;
 
-    /*If scale is set internally, do no overwrite it*/
+    /*Если масштаб установлен внутри, не перезаписывайте его.*/
     if(img->align > _LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
 
     if(zoom == img->scale_x && zoom == img->scale_y) return;
@@ -405,7 +405,7 @@ void lv_image_set_scale_x(lv_obj_t * obj, uint32_t zoom)
 
     lv_image_t * img = (lv_image_t *)obj;
 
-    /*If scale is set internally, do no overwrite it*/
+    /*Если масштаб установлен внутри, не перезаписывайте его.*/
     if(img->align > _LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
 
     if(zoom == img->scale_x) return;
@@ -421,7 +421,7 @@ void lv_image_set_scale_y(lv_obj_t * obj, uint32_t zoom)
 
     lv_image_t * img = (lv_image_t *)obj;
 
-    /*If scale is set internally, do no overwrite it*/
+    /*Если масштаб установлен внутри, не перезаписывайте его.*/
     if(img->align > _LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
 
     if(zoom == img->scale_y) return;
@@ -437,7 +437,7 @@ void lv_image_set_blend_mode(lv_obj_t * obj, lv_blend_mode_t blend_mode)
 
     lv_image_t * img = (lv_image_t *)obj;
 
-    /*If scale is set internally, do no overwrite it*/
+    /*Если масштаб установлен внутри, не перезаписывайте его.*/
     if(img->blend_mode == blend_mode) return;
 
     img->blend_mode = blend_mode;
@@ -463,7 +463,7 @@ void lv_image_set_inner_align(lv_obj_t * obj, lv_image_align_t align)
     lv_image_t * img = (lv_image_t *)obj;
     if(align == img->align) return;
 
-    /*If we're removing STRETCH, reset the scale*/
+    /*Если мы удалим STRETCH, сбросим масштаб.*/
     if(img->align == LV_IMAGE_ALIGN_STRETCH || img->align == LV_IMAGE_ALIGN_CONTAIN ||
        img->align == LV_IMAGE_ALIGN_COVER) {
         lv_image_set_scale(obj, LV_SCALE_NONE);
@@ -484,7 +484,7 @@ void lv_image_set_bitmap_map_src(lv_obj_t * obj, const lv_image_dsc_t * src)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 const void * lv_image_get_src(lv_obj_t * obj)
@@ -687,7 +687,7 @@ static void lv_image_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     img->scale_y      = LV_SCALE_NONE;
     img->antialias = LV_COLOR_DEPTH > 8 ? 1 : 0;
     lv_point_set(&img->offset, 0, 0);
-    lv_point_set(&img->pivot, LV_PCT(50), LV_PCT(50)); /*Default pivot to image center*/
+    lv_point_set(&img->pivot, LV_PCT(50), LV_PCT(50)); /*Поворот по умолчанию в центр изображения*/
     img->align     = LV_IMAGE_ALIGN_CENTER;
 
     lv_obj_remove_flag(obj, LV_OBJ_FLAG_CLICKABLE);
@@ -713,7 +713,7 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_event_code_t code = lv_event_get_code(e);
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     lv_result_t res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 
@@ -723,12 +723,12 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
     lv_image_get_pivot(obj, &pivot_px);
 
     if(code == LV_EVENT_STYLE_CHANGED) {
-        /*Refresh the file name to refresh the symbol text size*/
+        /*Обновите имя файла, чтобы обновить размер текста символа.*/
         if(img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_image_set_src(obj, img->src);
         }
         else {
-            /*With transformation it might change*/
+            /*С трансформацией это может измениться*/
             lv_obj_refresh_ext_draw_size(obj);
         }
     }
@@ -736,7 +736,7 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         int32_t * s = lv_event_get_param(e);
 
-        /*If the image has angle provide enough room for the rotated corners*/
+        /*Если изображение имеет угол, оставьте достаточно места для повернутых углов.*/
         if(img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE) {
             lv_area_t a;
             int32_t w = lv_obj_get_width(obj);
@@ -760,8 +760,8 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
     else if(code == LV_EVENT_HIT_TEST) {
         lv_hit_test_info_t * info = lv_event_get_param(e);
 
-        /*If the object is exactly image sized (not cropped, not mosaic) and transformed
-         *perform hit test on its transformed area*/
+        /*Если объект имеет точный размер изображения (не обрезан, не мозаичен) и преобразован
+         *выполнить проверку попадания в преобразованную область*/
         if(img->w == lv_obj_get_width(obj) && img->h == lv_obj_get_height(obj) &&
            (img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE ||
             img->rotation != 0)) {
@@ -806,13 +806,13 @@ static void draw_image(lv_event_t * e)
             return;
         }
 
-        /*Non true color format might have "holes"*/
+        /*Неправильный формат цвета может иметь «дыры».*/
         if(lv_color_format_has_alpha(img->cf)) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
         }
 
-        /*With not LV_OPA_COVER images can't cover an area */
+        /*Без LV_OPA_COVER изображения не могут покрыть область. */
         if(lv_obj_get_style_image_opa(obj, LV_PART_MAIN) != LV_OPA_COVER) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
@@ -855,7 +855,7 @@ static void draw_image(lv_event_t * e)
         if(img->h == 0 || img->w == 0) return;
         if(img->scale_x == 0 || img->scale_y == 0) return;
         if(img->src == NULL) {
-            /*Do not need to draw image when src is NULL*/
+            /*Не нужно рисовать изображение, если src равен NULL.*/
             LV_LOG_TRACE("image source is NULL");
             return;
         }
@@ -951,7 +951,7 @@ static void draw_image(lv_event_t * e)
             lv_draw_label(layer, &label_dsc, coords);
         }
         else {
-            /*Trigger the error handler of image draw*/
+            /*Запустить обработчик ошибок рисования изображения*/
             LV_LOG_WARN("image source type is unknown");
         }
     }
@@ -961,7 +961,7 @@ static void scale_update(lv_obj_t * obj, int32_t scale_x, int32_t scale_y)
 {
     lv_image_t * img = (lv_image_t *)obj;
 
-    lv_obj_update_layout(obj);  /*Be sure the object's size is calculated*/
+    lv_obj_update_layout(obj);  /*Убедитесь, что размер объекта рассчитан*/
     int32_t w = lv_obj_get_width(obj);
     int32_t h = lv_obj_get_height(obj);
     lv_area_t a;
@@ -977,8 +977,8 @@ static void scale_update(lv_obj_t * obj, int32_t scale_x, int32_t scale_y)
     img->scale_x = scale_x;
     img->scale_y = scale_y;
 
-    /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
-     * the whole ext draw area */
+    /* Отключите недействительность, поскольку lv_obj_refresh_ext_draw_size сделает недействительной
+     * вся дополнительная область прорисовки */
     lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);

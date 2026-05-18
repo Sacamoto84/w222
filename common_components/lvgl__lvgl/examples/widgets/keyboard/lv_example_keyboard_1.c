@@ -19,10 +19,10 @@ static void ta_event_cb(lv_event_t * e)
 
 void lv_example_keyboard_1(void)
 {
-    /*Create a keyboard to use it with an of the text areas*/
+    /*Создайте клавиатуру, чтобы использовать ее с одной из текстовых областей.*/
     lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
 
-    /*Create a text area. The keyboard will write here*/
+    /*Создайте текстовую область. Клавиатура будет писать здесь*/
     lv_obj_t * ta1;
     ta1 = lv_textarea_create(lv_screen_active());
     lv_obj_align(ta1, LV_ALIGN_TOP_LEFT, 10, 10);
@@ -38,7 +38,7 @@ void lv_example_keyboard_1(void)
 
     lv_keyboard_set_textarea(kb, ta1);
 
-    /*The keyboard will show Arabic characters if they are enabled */
+    /*На клавиатуре будут отображаться арабские символы, если они включены. */
 #if LV_USE_ARABIC_PERSIAN_CHARS && LV_FONT_DEJAVU_16_PERSIAN_HEBREW
     lv_obj_set_style_text_font(kb, &lv_font_dejavu_16_persian_hebrew, 0);
     lv_obj_set_style_text_font(ta1, &lv_font_dejavu_16_persian_hebrew, 0);

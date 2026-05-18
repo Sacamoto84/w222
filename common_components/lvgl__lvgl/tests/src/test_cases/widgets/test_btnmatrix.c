@@ -26,7 +26,7 @@ void test_button_matrix_creation(void)
 {
     const char * const * map;
 
-    /* Verify the default map. */
+    /* Проверьте карту по умолчанию. */
     map = lv_buttonmatrix_get_map(btnm);
     TEST_ASSERT_EQUAL_STRING(map[0], "Btn1");
     TEST_ASSERT_EQUAL_STRING(map[1], "Btn2");
@@ -42,7 +42,7 @@ void test_button_matrix_set_map_works(void)
     static const char * exp_map[] = {"A", "B", "\n", "C", "D", ""};
 
     lv_buttonmatrix_set_map(btnm, exp_map);
-    /* Verify if the map was set correctly. */
+    /* Проверьте, правильно ли установлена карта. */
     ret_map = lv_buttonmatrix_get_map(btnm);
     TEST_ASSERT_EQUAL_STRING(exp_map[0], ret_map[0]);
     TEST_ASSERT_EQUAL_STRING(exp_map[1], ret_map[1]);
@@ -138,14 +138,14 @@ void test_button_matrix_set_ctrl_map_works(void)
     ctrl_map[3] = 1 | LV_BUTTONMATRIX_CTRL_CHECKABLE;
     lv_buttonmatrix_set_ctrl_map(btnm, ctrl_map);
 
-    /* Verify if the ctrl map was set correctly. */
+    /* Проверьте, правильно ли установлена карта управления. */
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_DISABLED));
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 1,
                                                      LV_BUTTONMATRIX_CTRL_CHECKABLE | LV_BUTTONMATRIX_CTRL_CHECKED));
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 2, LV_BUTTONMATRIX_CTRL_HIDDEN));
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 3, LV_BUTTONMATRIX_CTRL_CHECKABLE));
 
-    /* Also checking randomly that no other flags are set. */
+    /* Также случайным образом проверяется, не установлены ли другие флаги. */
     TEST_ASSERT_FALSE(lv_buttonmatrix_has_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_CHECKABLE));
     TEST_ASSERT_FALSE(lv_buttonmatrix_has_button_ctrl(btnm, 1, LV_BUTTONMATRIX_CTRL_DISABLED));
     TEST_ASSERT_FALSE(lv_buttonmatrix_has_button_ctrl(btnm, 3, LV_BUTTONMATRIX_CTRL_CHECKED));
@@ -157,20 +157,20 @@ void test_button_matrix_set_button_ctrl_works(void)
     static const char * btn_map[] = {"A", "B", "\n", "C", "D", ""};
     lv_buttonmatrix_set_map(btnm, btn_map);
 
-    /* Set btn control map using individual APIs. */
+    /* Установите карту управления btn, используя отдельные API. */
     lv_buttonmatrix_set_button_ctrl(btnm, 0, 1 | LV_BUTTONMATRIX_CTRL_DISABLED);
     lv_buttonmatrix_set_button_ctrl(btnm, 1, 1 | LV_BUTTONMATRIX_CTRL_CHECKABLE | LV_BUTTONMATRIX_CTRL_CHECKED);
     lv_buttonmatrix_set_button_ctrl(btnm, 2, 1 | LV_BUTTONMATRIX_CTRL_HIDDEN);
     lv_buttonmatrix_set_button_ctrl(btnm, 3, 1 | LV_BUTTONMATRIX_CTRL_CHECKABLE);
 
-    /* Verify if the ctrl map was set correctly. */
+    /* Проверьте, правильно ли установлена карта управления. */
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_DISABLED));
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 1,
                                                      LV_BUTTONMATRIX_CTRL_CHECKABLE | LV_BUTTONMATRIX_CTRL_CHECKED));
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 2, LV_BUTTONMATRIX_CTRL_HIDDEN));
     TEST_ASSERT_TRUE(lv_buttonmatrix_has_button_ctrl(btnm, 3, LV_BUTTONMATRIX_CTRL_CHECKABLE));
 
-    /* Also checking randomly that no other flags are set. */
+    /* Также случайным образом проверяется, не установлены ли другие флаги. */
     TEST_ASSERT_FALSE(lv_buttonmatrix_has_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_CHECKABLE));
     TEST_ASSERT_FALSE(lv_buttonmatrix_has_button_ctrl(btnm, 1, LV_BUTTONMATRIX_CTRL_DISABLED));
     TEST_ASSERT_FALSE(lv_buttonmatrix_has_button_ctrl(btnm, 3, LV_BUTTONMATRIX_CTRL_CHECKED));
@@ -182,7 +182,7 @@ void test_button_matrix_clear_button_ctrl_works(void)
     static const char * btn_map[] = {"A", "B", "\n", "C", "D", ""};
     lv_buttonmatrix_set_map(btnm, btn_map);
 
-    /* Set btn control map using individual APIs. */
+    /* Установите карту управления btn, используя отдельные API. */
     lv_buttonmatrix_set_button_ctrl(btnm, 0, 1 | LV_BUTTONMATRIX_CTRL_DISABLED);
     lv_buttonmatrix_set_button_ctrl(btnm, 1, 1 | LV_BUTTONMATRIX_CTRL_CHECKABLE | LV_BUTTONMATRIX_CTRL_CHECKED);
     lv_buttonmatrix_set_button_ctrl(btnm, 2, 1 | LV_BUTTONMATRIX_CTRL_HIDDEN);
@@ -287,7 +287,7 @@ void test_button_matrix_get_button_text_works(void)
     TEST_ASSERT_EQUAL_STRING("D", lv_buttonmatrix_get_button_text(btnm, 3));
 }
 
-/* Common event handler for all the consecutive test cases. */
+/* Общий обработчик событий для всех последовательных тестовых случаев. */
 static void event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -301,9 +301,9 @@ void test_button_matrix_pressed_event_works(void)
     static const char * btn_map[] = {"A", "B", "\n", "C", "D", ""};
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_PRESSED, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_PRESSED;
-    /* Click button index 0. */
+    /* Нажмите кнопку с индексом 0. */
     lv_test_mouse_click_at(10, 10);
     TEST_ASSERT_TRUE(event_triggered);
 }
@@ -314,17 +314,17 @@ void test_button_matrix_release_event_works(void)
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_RELEASED, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_RELEASED;
 
-    /* Click button index 0. */
+    /* Нажмите кнопку с индексом 0. */
     lv_test_mouse_click_at(65, 35);
     TEST_ASSERT_TRUE(event_triggered);
     event_triggered = false;
-    /* This will increase test coverage by unchecking the
-     same button. */
+    /* Это увеличит охват тестированием, если снять флажок
+     та же кнопка. */
     lv_buttonmatrix_set_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_POPOVER);
-    /* Click button index 0. */
+    /* Нажмите кнопку с индексом 0. */
     lv_test_mouse_click_at(65, 35);
     TEST_ASSERT_TRUE(event_triggered);
 }
@@ -335,13 +335,13 @@ void test_button_matrix_key_event_works(void)
     static const char * btn_map[] = {"A", "B", "\n", "C", "D", ""};
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
-    lv_obj_update_layout(btnm);         /*The force calculating the button areas*/
+    lv_obj_update_layout(btnm);         /*Сила расчета площади кнопок*/
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_KEY, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_KEY;
 
     lv_buttonmatrix_t * btnmObj = (lv_buttonmatrix_t *)btnm;
-    /* Select the first button. */
+    /* Выберите первую кнопку. */
     lv_buttonmatrix_set_selected_button(btnm, 0);
     keyCode = LV_KEY_RIGHT;
     lv_obj_send_event(btnm, LV_EVENT_KEY, &keyCode);
@@ -370,7 +370,7 @@ void test_button_matrix_key_event_works(void)
     btnId = lv_buttonmatrix_get_selected_button(btnm);
     TEST_ASSERT_EQUAL_INT(0, btnId);
 
-    /* Added this code to increase code coverage. */
+    /* Добавлен этот код для увеличения покрытия кода. */
     btnmObj->btn_id_sel = LV_BUTTONMATRIX_BUTTON_NONE;
     lv_buttonmatrix_set_button_ctrl(btnm, 0, LV_BUTTONMATRIX_CTRL_HIDDEN);
     keyCode = LV_KEY_DOWN;
@@ -386,12 +386,12 @@ void test_button_matrix_pressing_event_works(void)
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_PRESSING, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_PRESSING;
-    /* Select a button before raising a simulated event.
-     * This is done to increase code coverage. */
+    /* Нажмите кнопку перед вызовом моделируемого события.
+     * Это сделано для увеличения покрытия кода. */
     btnmObj->btn_id_sel = 3;
-    /* Send a dummy lv_indev_t object as param to avoid crashing during build. */
+    /* Отправьте фиктивный объект lv_indev_t в качестве параметра, чтобы избежать сбоя во время сборки. */
     lv_obj_send_event(btnm, LV_EVENT_PRESSING, lv_test_indev_get_indev(LV_INDEV_TYPE_POINTER));
     TEST_ASSERT_TRUE(event_triggered);
 }
@@ -404,10 +404,10 @@ void test_button_matrix_long_press_repeat_event_works(void)
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_LONG_PRESSED_REPEAT, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_LONG_PRESSED_REPEAT;
-    /* Select a button before raising a simulated event.
-     * This is done to increase code coverage. */
+    /* Нажмите кнопку перед вызовом моделируемого события.
+     * Это сделано для увеличения покрытия кода. */
     btnmObj->btn_id_sel = 0;
     lv_obj_send_event(btnm, LV_EVENT_LONG_PRESSED_REPEAT, NULL);
     TEST_ASSERT_TRUE(event_triggered);
@@ -420,7 +420,7 @@ void test_button_matrix_press_lost_event_works(void)
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_PRESS_LOST, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_PRESS_LOST;
     lv_obj_send_event(btnm, LV_EVENT_PRESS_LOST, NULL);
     TEST_ASSERT_TRUE(event_triggered);
@@ -434,10 +434,10 @@ void test_button_matrix_defocused_event_works(void)
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_DEFOCUSED, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_DEFOCUSED;
-    /* Select a button before raising a simulated event.
-     * This is done to increase code coverage. */
+    /* Нажмите кнопку перед вызовом моделируемого события.
+     * Это сделано для увеличения покрытия кода. */
     btnmObj->btn_id_sel = 0;
     lv_obj_send_event(btnm, LV_EVENT_DEFOCUSED, NULL);
     TEST_ASSERT_TRUE(event_triggered);
@@ -450,7 +450,7 @@ void test_button_matrix_focused_event_works(void)
     lv_buttonmatrix_set_map(btnm, btn_map);
     lv_buttonmatrix_set_button_ctrl_all(btnm, LV_BUTTONMATRIX_CTRL_CHECKABLE);
     lv_obj_add_event_cb(btnm, event_handler, LV_EVENT_FOCUSED, NULL);
-    /* Set expected event code before the event is raised. */
+    /* Установите ожидаемый код события до того, как событие будет вызвано. */
     exp_evt_code = LV_EVENT_FOCUSED;
     lv_obj_send_event(btnm, LV_EVENT_FOCUSED, NULL);
     TEST_ASSERT_TRUE(event_triggered);
@@ -463,13 +463,13 @@ void test_buttonmatrix_properties(void)
 
     lv_property_t prop = { };
 
-    /* Test SELECTED_BUTTON property */
+    /* Тестирование свойства SELECTED_BUTTON */
     prop.id = LV_PROPERTY_BUTTONMATRIX_SELECTED_BUTTON;
     prop.num = 2;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
     TEST_ASSERT_EQUAL_INT(2, lv_obj_get_property(obj, LV_PROPERTY_BUTTONMATRIX_SELECTED_BUTTON).num);
 
-    /* Test ONE_CHECKED property */
+    /* Тестирование свойства ONE_CHECKED */
     lv_buttonmatrix_set_button_ctrl_all(obj, LV_BUTTONMATRIX_CTRL_CHECKABLE);
 
     prop.id = LV_PROPERTY_BUTTONMATRIX_ONE_CHECKED;

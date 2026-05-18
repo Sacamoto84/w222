@@ -28,10 +28,10 @@ static void event_cb(lv_event_t * e)
             int32_t * y_array = lv_chart_get_series_y_array(chart, ser);
             if(y_array[id] != LV_CHART_POINT_NONE && y_array[id] >= 0) {
 
-                /*Accumulate the values to show the rectangles at the top of each segment*/
+                /*Накопите значения, чтобы отобразить прямоугольники вверху каждого сегмента.*/
                 value += y_array[id];
 
-                /*Draw a rectangle above the clicked point*/
+                /*Нарисуйте прямоугольник над точкой щелчка*/
                 lv_layer_t * layer = lv_event_get_layer(e);
                 lv_draw_rect_dsc_t draw_rect_dsc;
                 lv_draw_rect_dsc_init(&draw_rect_dsc);
@@ -48,7 +48,7 @@ static void event_cb(lv_event_t * e)
                 rect_area.y2 = chart_obj_coords.y1 + p.y + 10;
                 lv_draw_rect(layer, &draw_rect_dsc, &rect_area);
 
-                /*Draw the value as label to the center of the rectangle*/
+                /*Нарисуйте значение как метку в центре прямоугольника.*/
                 char buf[16];
                 lv_snprintf(buf, sizeof(buf), LV_SYMBOL_DUMMY"$%d", value);
 
@@ -73,11 +73,11 @@ static void event_cb(lv_event_t * e)
 }
 
 /**
- * Show the value of the pressed points
+ * Показать значение нажатых точек
  */
 void lv_example_chart_3(void)
 {
-    /*Create a chart*/
+    /*Создать диаграмму*/
     lv_obj_t * chart;
     chart = lv_chart_create(lv_screen_active());
     lv_obj_set_size(chart, 280, 180);
@@ -88,7 +88,7 @@ void lv_example_chart_3(void)
     lv_obj_add_event_cb(chart, event_cb, LV_EVENT_ALL, NULL);
     lv_obj_refresh_ext_draw_size(chart);
 
-    /*Add two data series*/
+    /*Добавьте два ряда данных*/
     lv_chart_series_t * ser1 = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
     lv_chart_series_t * ser2 = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_GREEN), LV_CHART_AXIS_PRIMARY_Y);
     lv_chart_series_t * ser3 = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_BLUE), LV_CHART_AXIS_PRIMARY_Y);

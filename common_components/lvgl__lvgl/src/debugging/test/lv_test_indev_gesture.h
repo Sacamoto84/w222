@@ -32,42 +32,42 @@ extern "C" {
  **********************/
 
 /**
- * Create a touch (pointer) indevs.
- * They can be controlled via function calls during the test
+ * Создать тач (указатель) indevs.
+ * Ими можно управлять с помощью вызовов функций во время теста.
  */
 void lv_test_indev_gesture_create(void);
 
 /**
- * Delete the touch (pointer) indevs.
+ * Удалить тач (указатель) индевс.
  */
 void lv_test_indev_gesture_delete(void);
 
 /**
- * Get one of the indev created in `lv_test_indev_gesture_create`
+ * Получите один из разработчиков, созданных в `lv_test_indev_gesture_create`.
  * @param type  type of the indev to get
  * @return      the indev
  */
 lv_indev_t * lv_test_indev_get_gesture_indev(lv_indev_type_t type);
 
 /**
- * Set two touch points data for pinch gesture
+ * Установите данные двух точек касания для жеста сжатия
  * @param point_0 First touch point coordinates
  * @param point_1 Second touch point coordinates
  */
 void lv_test_gesture_set_pinch_data(lv_point_t point_0, lv_point_t point_1);
 
 /**
- * Trigger press state of pinch gesture (both touch points pressed)
+ * Триггерное состояние нажатия жеста сжатия (обе точки касания нажаты)
  */
 void lv_test_gesture_pinch_press(void);
 
 /**
- * Trigger release state of pinch gesture (both touch points released)
+ * Триггерное состояние отпускания жеста сведения (обе точки касания отпущены)
  */
 void lv_test_gesture_pinch_release(void);
 
 /**
- * Simulate a complete pinch gesture operation
+ * Имитация полной операции жеста сжатия
  * @param point_begin_0 Starting coordinates of first touch point
  * @param point_begin_1 Starting coordinates of second touch point
  * @param point_end_0   Ending coordinates of first touch point
@@ -83,7 +83,7 @@ void lv_test_gesture_pinch(lv_point_t point_begin_0, lv_point_t point_begin_1,
 #endif /*LV_USE_TEST && LV_USE_GESTURE_RECOGNITION*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TEST_INDEV_GESTURE_H*/

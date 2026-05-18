@@ -175,31 +175,31 @@ void lv_draw_sw_mask_line_points_init(lv_draw_sw_mask_line_param_t * param, int3
     int32_t dy = p2y - p1y;
 
     if(param->flat) {
-        /*Normalize the steep. Delta x should be relative to delta x = 1024*/
+        /*Нормализуйте крутой. Дельта x должна быть относительно дельты x = 1024.*/
         int32_t m;
 
         if(dx) {
-            m = (1L << 20) / dx;  /*m is multiplier to normalize y (upscaled by 1024)*/
+            m = (1L << 20) / dx;  /*m — множитель для нормализации y (увеличен до 1024)*/
             param->yx_steep = (m * dy) >> 10;
         }
 
         if(dy) {
-            m = (1L << 20) / dy;  /*m is multiplier to normalize x (upscaled by 1024)*/
+            m = (1L << 20) / dy;  /*m — множитель для нормализации x (увеличен до 1024)*/
             param->xy_steep = (m * dx) >> 10;
         }
         param->steep = param->yx_steep;
     }
     else {
-        /*Normalize the steep. Delta y should be relative to delta x = 1024*/
+        /*Нормализуйте крутой. Дельта y должна быть относительно дельты x = 1024.*/
         int32_t m;
 
         if(dy) {
-            m = (1L << 20) / dy;  /*m is multiplier to normalize x (upscaled by 1024)*/
+            m = (1L << 20) / dy;  /*m — множитель для нормализации x (увеличен до 1024)*/
             param->xy_steep = (m * dx) >> 10;
         }
 
         if(dx) {
-            m = (1L << 20) / dx;  /*m is multiplier to normalize x (upscaled by 1024)*/
+            m = (1L << 20) / dx;  /*m — множитель для нормализации x (увеличен до 1024)*/
             param->yx_steep = (m * dy) >> 10;
         }
         param->steep = param->xy_steep;
@@ -223,11 +223,11 @@ void lv_draw_sw_mask_line_points_init(lv_draw_sw_mask_line_param_t * param, int3
 void lv_draw_sw_mask_line_angle_init(lv_draw_sw_mask_line_param_t * param, int32_t p1x, int32_t py, int16_t angle,
                                      lv_draw_sw_mask_line_side_t side)
 {
-    /*Find an optimal degree.
-     *lv_mask_line_points_init will swap the points to keep the smaller y in p1
-     *Theoretically a line with `angle` or `angle+180` is the same only the points are swapped
-     *Find the degree which keeps the origo in place*/
-    if(angle > 180) angle -= 180; /*> 180 will swap the origo*/
+    /*Найдите оптимальную степень.
+     *lv_mask_line_points_init поменяет местами точки, чтобы сохранить меньший y в p1.
+     *Теоретически линия с `angle` или `angle+180` одинакова, только точки поменяны местами.
+     *Найдите степень, при которой ориго остается на месте.*/
+    if(angle > 180) angle -= 180; /*> 180 поменяет ориго*/
 
     int32_t p2x;
     int32_t p2y;
@@ -244,7 +244,7 @@ void lv_draw_sw_mask_angle_init(lv_draw_sw_mask_angle_param_t * param, int32_t v
     lv_draw_sw_mask_line_side_t start_side;
     lv_draw_sw_mask_line_side_t end_side;
 
-    /*Constrain the input angles*/
+    /*Ограничьте входные углы*/
     if(start_angle < 0)
         start_angle = 0;
     else if(start_angle > 359)
@@ -274,7 +274,7 @@ void lv_draw_sw_mask_angle_init(lv_draw_sw_mask_angle_param_t * param, int32_t v
         start_side = LV_DRAW_SW_MASK_LINE_SIDE_LEFT;
     }
     else
-        start_side = LV_DRAW_SW_MASK_LINE_SIDE_RIGHT; /*silence compiler*/
+        start_side = LV_DRAW_SW_MASK_LINE_SIDE_RIGHT; /*компилятор тишины*/
 
     LV_ASSERT_MSG(end_angle >= 0 && start_angle <= 360, "Unexpected end angle");
 
@@ -285,7 +285,7 @@ void lv_draw_sw_mask_angle_init(lv_draw_sw_mask_angle_param_t * param, int32_t v
         end_side = LV_DRAW_SW_MASK_LINE_SIDE_LEFT;
     }
     else
-        end_side = LV_DRAW_SW_MASK_LINE_SIDE_RIGHT; /*silence compiler*/
+        end_side = LV_DRAW_SW_MASK_LINE_SIDE_RIGHT; /*компилятор тишины*/
 
     lv_draw_sw_mask_line_angle_init(&param->start_line, vertex_x, vertex_y, start_angle, start_side);
     lv_draw_sw_mask_line_angle_init(&param->end_line, vertex_x, vertex_y, end_angle, end_side);
@@ -315,7 +315,7 @@ void lv_draw_sw_mask_radius_init(lv_draw_sw_mask_radius_param_t * param, const l
 
     uint32_t i;
 
-    /*Try to reuse a circle cache entry*/
+    /*Попробуйте повторно использовать запись кругового кэша.*/
     for(i = 0; i < LV_DRAW_SW_CIRCLE_CACHE_SIZE; i++) {
         if(_circle_cache[i].radius == radius) {
             _circle_cache[i].used_cnt++;
@@ -326,7 +326,7 @@ void lv_draw_sw_mask_radius_init(lv_draw_sw_mask_radius_param_t * param, const l
         }
     }
 
-    /*If not cached use the free entry with lowest life*/
+    /*Если не кэшировано, используйте бесплатную запись с наименьшим сроком службы.*/
     lv_draw_sw_mask_radius_circle_dsc_t * entry = NULL;
     for(i = 0; i < LV_DRAW_SW_CIRCLE_CACHE_SIZE; i++) {
         if(_circle_cache[i].used_cnt == 0) {
@@ -335,7 +335,7 @@ void lv_draw_sw_mask_radius_init(lv_draw_sw_mask_radius_param_t * param, const l
         }
     }
 
-    /*There is no unused entry. Allocate one temporarily*/
+    /*Неиспользованных записей нет. Выделите один временно*/
     if(!entry) {
         entry = lv_malloc_zeroed(sizeof(lv_draw_sw_mask_radius_circle_dsc_t));
         LV_ASSERT_MALLOC(entry);
@@ -383,15 +383,15 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_line(lv_opa_t * 
                                                                      int32_t abs_y, int32_t len,
                                                                      lv_draw_sw_mask_line_param_t * p)
 {
-    /*Make to points relative to the vertex*/
+    /*Сделать точки относительно вершины*/
     abs_y -= p->origo.y;
     abs_x -= p->origo.x;
 
-    /*Handle special cases*/
+    /*Обработка особых случаев*/
     if(p->steep == 0) {
-        /*Horizontal*/
+        /*Горизонтальный*/
         if(p->flat) {
-            /*Non sense: Can't be on the right/left of a horizontal line*/
+            /*Бессмыслица: не может находиться справа/слева от горизонтальной линии.*/
             if(p->cfg.side == LV_DRAW_SW_MASK_LINE_SIDE_LEFT ||
                p->cfg.side == LV_DRAW_SW_MASK_LINE_SIDE_RIGHT) return LV_DRAW_SW_MASK_RES_FULL_COVER;
             else if(p->cfg.side == LV_DRAW_SW_MASK_LINE_SIDE_TOP && abs_y < 0) return LV_DRAW_SW_MASK_RES_FULL_COVER;
@@ -400,9 +400,9 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_line(lv_opa_t * 
                 return LV_DRAW_SW_MASK_RES_TRANSP;
             }
         }
-        /*Vertical*/
+        /*Вертикальный*/
         else {
-            /*Non sense: Can't be on the top/bottom of a vertical line*/
+            /*Бессмыслица: не может быть сверху/снизу вертикальной линии.*/
             if(p->cfg.side == LV_DRAW_SW_MASK_LINE_SIDE_TOP ||
                p->cfg.side == LV_DRAW_SW_MASK_LINE_SIDE_BOTTOM) return LV_DRAW_SW_MASK_RES_FULL_COVER;
             else if(p->cfg.side == LV_DRAW_SW_MASK_LINE_SIDE_RIGHT && abs_x > 0) return LV_DRAW_SW_MASK_RES_FULL_COVER;
@@ -469,8 +469,8 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM line_mask_flat(lv_opa_t * mas
         }
     }
 
-    /*At the end of the mask if the limit line is smaller than the mask's y.
-     *Then the mask is in the "good" area*/
+    /*В конце маски, если предельная линия меньше, чем y маски.
+     *Тогда маска находится в «хорошей» зоне.*/
     y_at_x = (int32_t)((int32_t)p->yx_steep * (abs_x + len)) >> 10;
     if(p->yx_steep > 0) {
         if(y_at_x < abs_y) {
@@ -563,8 +563,8 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM line_mask_steep(lv_opa_t * ma
 {
     int32_t k;
     int32_t x_at_y;
-    /*At the beginning of the mask if the limit line is greater than the mask's y.
-     *Then the mask is in the "wrong" area*/
+    /*В начале маски, если предельная линия больше, чем y маски.
+     *Тогда маска находится в «неправильной» зоне.*/
     x_at_y = (int32_t)((int32_t)p->xy_steep * abs_y) >> 10;
     if(p->xy_steep > 0) x_at_y++;
     if(x_at_y < abs_x) {
@@ -576,8 +576,8 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM line_mask_steep(lv_opa_t * ma
         }
     }
 
-    /*At the end of the mask if the limit line is smaller than the mask's y.
-     *Then the mask is in the "good" area*/
+    /*В конце маски, если предельная линия меньше, чем y маски.
+     *Тогда маска находится в «хорошей» зоне.*/
     x_at_y = (int32_t)((int32_t)p->xy_steep * (abs_y)) >> 10;
     if(x_at_y > abs_x + len) {
         if(p->inv) {
@@ -588,12 +588,12 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM line_mask_steep(lv_opa_t * ma
         }
     }
 
-    /*X start*/
+    /*X старт*/
     int32_t xs = ((abs_y * 256) * p->xy_steep) >> 10;
     int32_t xsi = xs >> 8;
     int32_t xsf = xs & 0xFF;
 
-    /*X end*/
+    /*Х-конец*/
     int32_t xe = (((abs_y + 1) * 256) * p->xy_steep) >> 10;
     int32_t xei = xe >> 8;
     int32_t xef = xe & 0xFF;
@@ -714,11 +714,11 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_angle(lv_opa_t *
             return LV_DRAW_SW_MASK_RES_FULL_COVER;
         }
 
-        /*Start angle mask can work only from the end of end angle mask*/
+        /*Маска начального угла может работать только с конца маски конечного угла.*/
         int32_t end_angle_first = (rel_y * p->end_line.xy_steep) >> 10;
         int32_t start_angle_last = ((rel_y + 1) * p->start_line.xy_steep) >> 10;
 
-        /*Do not let the line end cross the vertex else it will affect the opposite part*/
+        /*Не позволяйте концу линии пересекать вершину, иначе это повлияет на противоположную часть.*/
         if(p->cfg.start_angle > 270 && p->cfg.start_angle <= 359 && start_angle_last < 0) start_angle_last = 0;
         else if(p->cfg.start_angle > 0 && p->cfg.start_angle <= 90 && start_angle_last < 0) start_angle_last = 0;
         else if(p->cfg.start_angle > 90 && p->cfg.start_angle < 270 && start_angle_last > 0) start_angle_last = 0;
@@ -756,11 +756,11 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_angle(lv_opa_t *
             return LV_DRAW_SW_MASK_RES_FULL_COVER;
         }
 
-        /*Start angle mask can work only from the end of end angle mask*/
+        /*Маска начального угла может работать только с конца маски конечного угла.*/
         int32_t end_angle_first = (rel_y * p->end_line.xy_steep) >> 10;
         int32_t start_angle_last = ((rel_y + 1) * p->start_line.xy_steep) >> 10;
 
-        /*Do not let the line end cross the vertex else it will affect the opposite part*/
+        /*Не позволяйте концу линии пересекать вершину, иначе это повлияет на противоположную часть.*/
         if(p->cfg.start_angle > 270 && p->cfg.start_angle <= 359 && start_angle_last < 0) start_angle_last = 0;
         else if(p->cfg.start_angle > 0 && p->cfg.start_angle <= 90 && start_angle_last < 0) start_angle_last = 0;
         else if(p->cfg.start_angle > 90 && p->cfg.start_angle < 270 && start_angle_last > 0) start_angle_last = 0;
@@ -860,7 +860,7 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_radius(lv_opa_t 
     if((abs_x >= rect.x1 + radius && abs_x + len <= rect.x2 - radius) ||
        (abs_y >= rect.y1 + radius && abs_y <= rect.y2 - radius)) {
         if(outer == false) {
-            /*Remove the edges*/
+            /*Удалите края*/
             int32_t last = rect.x1 - abs_x;
             if(last > len) return LV_DRAW_SW_MASK_RES_TRANSP;
             if(last >= 0) {
@@ -889,7 +889,7 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_radius(lv_opa_t 
         return LV_DRAW_SW_MASK_RES_CHANGED;
     }
 
-    int32_t k = rect.x1 - abs_x; /*First relevant coordinate on the of the mask*/
+    int32_t k = rect.x1 - abs_x; /*Первая соответствующая координата на маске*/
     int32_t w = lv_area_get_width(&rect);
     int32_t h = lv_area_get_height(&rect);
     abs_x -= rect.x1;
@@ -920,11 +920,11 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_radius(lv_opa_t 
             }
         }
 
-        /*Clean the right side*/
+        /*Очистите правую сторону*/
         cir_x_right = LV_CLAMP(0, cir_x_right + i, len);
         lv_memzero(&mask_buf[cir_x_right], len - cir_x_right);
 
-        /*Clean the left side*/
+        /*Очистите левую сторону*/
         cir_x_left = LV_CLAMP(0, cir_x_left - aa_len + 1, len);
         lv_memzero(&mask_buf[0], cir_x_left);
     }
@@ -980,7 +980,7 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_fade(lv_opa_t * 
         return LV_DRAW_SW_MASK_RES_CHANGED;
     }
     else {
-        /*Calculate the opa proportionally*/
+        /*Рассчитайте опа пропорционально*/
         int16_t opa_diff = p->cfg.opa_bottom - p->cfg.opa_top;
         int32_t y_diff = p->cfg.y_bottom - p->cfg.y_top + 1;
         lv_opa_t opa_act = LV_OPA_MIX2(abs_y - p->cfg.y_top, opa_diff) / y_diff;
@@ -997,13 +997,13 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_map(lv_opa_t * m
                                                                     int32_t abs_y, int32_t len,
                                                                     lv_draw_sw_mask_map_param_t * p)
 {
-    /*Handle out of the mask cases*/
+    /*Ручка из чехлов для масок*/
     if(abs_y < p->cfg.coords.y1) return LV_DRAW_SW_MASK_RES_FULL_COVER;
     if(abs_y > p->cfg.coords.y2) return LV_DRAW_SW_MASK_RES_FULL_COVER;
     if(abs_x + len < p->cfg.coords.x1) return LV_DRAW_SW_MASK_RES_FULL_COVER;
     if(abs_x > p->cfg.coords.x2) return LV_DRAW_SW_MASK_RES_FULL_COVER;
 
-    /*Got to the current row in the map*/
+    /*Добрался до текущей строки на карте*/
     const lv_opa_t * map_tmp = p->cfg.map;
     map_tmp += (abs_y - p->cfg.coords.y1) * lv_area_get_width(&p->cfg.coords);
 
@@ -1028,7 +1028,7 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_map(lv_opa_t * m
 }
 
 /**
- * Initialize the circle drawing
+ * Инициализация рисования круга
  * @param c pointer to a point. The coordinates will be calculated here
  * @param tmp point to a variable. It will store temporary data
  * @param radius radius of the circle
@@ -1041,7 +1041,7 @@ static void circ_init(lv_point_t * c, int32_t * tmp, int32_t radius)
 }
 
 /**
- * Test the circle drawing is ready or not
+ * Проверьте, готов ли рисунок круга или нет.
  * @param c same as in circ_init
  * @return true if the circle is not ready yet
  */
@@ -1051,7 +1051,7 @@ static bool circ_cont(lv_point_t * c)
 }
 
 /**
- * Get the next point from the circle
+ * Получить следующую точку из круга
  * @param c same as in circ_init. The next point stored here.
  * @param tmp same as in circ_init.
  */
@@ -1059,10 +1059,10 @@ static void circ_next(lv_point_t * c, int32_t * tmp)
 {
 
     if(*tmp <= 0) {
-        (*tmp) += 2 * c->y + 3; /*Change in decision criterion for y -> y+1*/
+        (*tmp) += 2 * c->y + 3; /*Изменение критерия принятия решения для y -> y+1*/
     }
     else {
-        (*tmp) += 2 * (c->y - c->x) + 5; /*Change for y -> y+1, x -> x-1*/
+        (*tmp) += 2 * (c->y - c->x) + 5; /*Изменение для y -> y+1, x -> x-1*/
         c->x--;
     }
     c->y++;
@@ -1073,16 +1073,16 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
     if(radius == 0) return;
     c->radius = radius;
 
-    /*Allocate buffers*/
+    /*Выделить буферы*/
     if(c->buf) lv_free(c->buf);
 
-    c->buf = lv_malloc(radius * 6 + 6);  /*Use uint16_t for opa_start_on_y and x_start_on_y*/
+    c->buf = lv_malloc(radius * 6 + 6);  /*Используйте uint16_t для opa_start_on_y и x_start_on_y.*/
     LV_ASSERT_MALLOC(c->buf);
     c->cir_opa = c->buf;
     c->opa_start_on_y = (uint16_t *)(c->buf + 2 * radius + 2);
     c->x_start_on_y = (uint16_t *)(c->buf + 4 * radius + 4);
 
-    /*Special case, handle manually*/
+    /*Особый случай, обрабатывать вручную*/
     if(radius == 1) {
         c->cir_opa[0] = 180;
         c->opa_start_on_y[0] = 0;
@@ -1099,7 +1099,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
     uint32_t y_8th_cnt = 0;
     lv_point_t cp;
     int32_t tmp;
-    circ_init(&cp, &tmp, radius * 4);    /*Upscale by 4*/
+    circ_init(&cp, &tmp, radius * 4);    /*Повышение уровня на 4*/
     int32_t i;
 
     uint32_t x_int[4];
@@ -1108,9 +1108,9 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
     x_int[0] = cp.x >> 2;
     x_fract[0] = 0;
 
-    /*Calculate an 1/8 circle*/
+    /*Вычислить 1/8 круга*/
     while(circ_cont(&cp)) {
-        /*Calculate 4 point of the circle */
+        /*Вычислить 4 точку окружности */
         for(i = 0; i < 4; i++) {
             circ_next(&cp, &tmp);
             if(circ_cont(&cp) == false) break;
@@ -1119,7 +1119,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
         }
         if(i != 4) break;
 
-        /*All lines on the same x when downscaled*/
+        /*Все линии на одном и том же x при уменьшении масштаба*/
         if(x_int[0] == x_int[3]) {
             cir_x[cir_size] = x_int[0];
             cir_y[cir_size] = y_8th_cnt;
@@ -1127,7 +1127,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
             c->cir_opa[cir_size] *= 16;
             cir_size++;
         }
-        /*Second line on new x when downscaled*/
+        /*Вторая строка на новом x при уменьшении масштаба*/
         else if(x_int[0] != x_int[1]) {
             cir_x[cir_size] = x_int[0];
             cir_y[cir_size] = y_8th_cnt;
@@ -1141,7 +1141,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
             c->cir_opa[cir_size] *= 16;
             cir_size++;
         }
-        /*Third line on new x when downscaled*/
+        /*Третья строка на новом x при уменьшении масштаба*/
         else if(x_int[0] != x_int[2]) {
             cir_x[cir_size] = x_int[0];
             cir_y[cir_size] = y_8th_cnt;
@@ -1155,7 +1155,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
             c->cir_opa[cir_size] *= 16;
             cir_size++;
         }
-        /*Forth line on new x when downscaled*/
+        /*Четвертая строка на новом x при уменьшении масштаба*/
         else {
             cir_x[cir_size] = x_int[0];
             cir_y[cir_size] = y_8th_cnt;
@@ -1173,7 +1173,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
         y_8th_cnt++;
     }
 
-    /*The point on the 1/8 circle is special, calculate it manually*/
+    /*Точка на круге 1/8 особенная, рассчитывайте ее вручную.*/
     int32_t mid = radius * 723;
     int32_t mid_int = mid >> 10;
     if(cir_x[cir_size - 1] != mid_int || cir_y[cir_size - 1] != mid_int) {
@@ -1196,7 +1196,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
         cir_size++;
     }
 
-    /*Build the second octet by mirroring the first*/
+    /*Постройте второй октет, зеркально отразив первый.*/
     for(i = cir_size - 2; i >= 0; i--, cir_size++) {
         cir_x[cir_size] = cir_y[i];
         cir_y[cir_size] = cir_x[i];

@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_STRINGBUFFER_H_
 #define RAPIDJSON_STRINGBUFFER_H_
@@ -19,7 +19,7 @@
 #include "internal/stack.h"
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-#include <utility> // std::move
+#include <utility> // станд::переместить
 #endif
 
 #include "internal/stack.h"
@@ -31,11 +31,11 @@ RAPIDJSON_DIAG_OFF(c++98-compat)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Represents an in-memory output stream.
+//! Представляет поток вывода в памяти.
 /*!
-    \tparam Encoding Encoding of the stream.
-    \tparam Allocator type for allocating memory buffer.
-    \note implements Stream concept
+    \tparam Кодирование Кодирование потока.
+    \tparam Тип распределителя для выделения буфера памяти.
+    \note реализует концепцию Stream
 */
 template <typename Encoding, typename Allocator = CrtAllocator>
 class GenericStringBuffer {
@@ -59,7 +59,7 @@ public:
 
     void Clear() { stack_.Clear(); }
     void ShrinkToFit() {
-        // Push and pop a null terminator. This is safe.
+        // Нажмите и вытолкните нулевой терминатор. Это безопасно.
         *stack_.template Push<Ch>() = '\0';
         stack_.ShrinkToFit();
         stack_.template Pop<Ch>(1);
@@ -71,29 +71,29 @@ public:
     void Pop(size_t count) { stack_.template Pop<Ch>(count); }
 
     const Ch* GetString() const {
-        // Push and pop a null terminator. This is safe.
+        // Нажмите и вытолкните нулевой терминатор. Это безопасно.
         *stack_.template Push<Ch>() = '\0';
         stack_.template Pop<Ch>(1);
 
         return stack_.template Bottom<Ch>();
     }
 
-    //! Get the size of string in bytes in the string buffer.
+    //! Получите размер строки в байтах в строковом буфере.
     size_t GetSize() const { return stack_.GetSize(); }
 
-    //! Get the length of string in Ch in the string buffer.
+    //! Получите длину строки в Ch в строковом буфере.
     size_t GetLength() const { return stack_.GetSize() / sizeof(Ch); }
 
     static const size_t kDefaultCapacity = 256;
     mutable internal::Stack<Allocator> stack_;
 
 private:
-    // Prohibit copy constructor & assignment operator.
+    // Запретить конструктор копирования и оператор присваивания.
     GenericStringBuffer(const GenericStringBuffer&);
     GenericStringBuffer& operator=(const GenericStringBuffer&);
 };
 
-//! String buffer with UTF8 encoding
+//! Строковый буфер с кодировкой UTF8.
 typedef GenericStringBuffer<UTF8<> > StringBuffer;
 
 template<typename Encoding, typename Allocator>
@@ -106,7 +106,7 @@ inline void PutUnsafe(GenericStringBuffer<Encoding, Allocator>& stream, typename
     stream.PutUnsafe(c);
 }
 
-//! Implement specialized version of PutN() with memset() for better performance.
+//! Внедрите специализированную версию PutN() с memset() для повышения производительности.
 template<>
 inline void PutN(GenericStringBuffer<UTF8<> >& stream, char c, size_t n) {
     std::memset(stream.stack_.Push<char>(n), c, n * sizeof(c));

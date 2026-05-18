@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -34,16 +34,16 @@ struct LoadModule
 {
     INLIST_ITEM(LoadModule);
 
-    //Use either hashkey(data) or hashpath(path)
+    //Используйте либо хеш-ключ (данные), либо хэш-путь (путь).
     union {
         uintptr_t hashkey;
         char* hashpath = nullptr;
     };
 
-    FileType type;                                  //current loader file type
-    uint16_t sharing = 0;                           //reference count
-    bool readied = false;                           //read done already.
-    bool pathcache = false;                         //cached by path
+    FileType type;                                  //текущий тип файла загрузчика
+    uint16_t sharing = 0;                           //счетчик ссылок
+    bool readied = false;                           //прочитал уже готово.
+    bool pathcache = false;                         //кэшируется по пути
 
     LoadModule(FileType type) : type(type) {}
     virtual ~LoadModule()
@@ -54,7 +54,7 @@ struct LoadModule
     virtual bool open(const string& path) { return false; }
     virtual bool open(const char* data, uint32_t size, bool copy) { return false; }
     virtual bool resize(Paint* paint, float w, float h) { return false; }
-    virtual void sync() {};  //finish immediately if any async update jobs.
+    virtual void sync() {};  //завершить немедленно, если есть какие-либо задания асинхронного обновления.
 
     virtual bool read()
     {
@@ -80,14 +80,14 @@ struct LoadModule
 
 struct ImageLoader : LoadModule
 {
-    static ColorSpace cs;                           //desired value
+    static ColorSpace cs;                           //желаемое значение
 
-    float w = 0, h = 0;                             //default image size
+    float w = 0, h = 0;                             //размер изображения по умолчанию
     RenderSurface surface;
 
     ImageLoader(FileType type) : LoadModule(type) {}
 
-    virtual bool animatable() { return false; }  //true if this loader supports animation.
+    virtual bool animatable() { return false; }  //true, если этот загрузчик поддерживает анимацию.
     virtual Paint* paint() { return nullptr; }
 
     virtual RenderSurface* bitmap()

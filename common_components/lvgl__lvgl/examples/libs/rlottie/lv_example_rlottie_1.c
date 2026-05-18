@@ -3,7 +3,7 @@
 #if LV_USE_RLOTTIE
 
 /**
- * Load an lottie animation from flash
+ * Загрузите анимацию лотереи из Flash.
  */
 void lv_example_rlottie_1(void)
 {
@@ -16,7 +16,7 @@ void lv_example_rlottie_1(void)
 void lv_example_rlottie_1(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Rlottie is not installed");

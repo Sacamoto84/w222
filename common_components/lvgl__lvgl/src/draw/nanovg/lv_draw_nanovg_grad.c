@@ -117,7 +117,7 @@ void lv_nanovg_draw_grad_helper(
     grad.stops_count = grad_dsc->stops_count;
     lv_memcpy(grad.stops, grad_dsc->stops, sizeof(lv_grad_stop_t) * grad_dsc->stops_count);
 
-    /*convert to spread mode*/
+    /*перевести в режим распространения*/
     switch(grad_dsc->extend) {
         case LV_GRAD_EXTEND_PAD:
             grad.spread = LV_VECTOR_GRADIENT_SPREAD_PAD;

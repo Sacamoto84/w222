@@ -23,58 +23,58 @@ extern "C" {
 
 #define _FBIOC(x) (x)
 
-/* Color format definitions.  This pretty much defines the color pixel
- * processing organization of the video controller.
+/* Определения цветового формата.  Это в значительной степени определяет цвет пикселя
+ * организация обработки видеоконтроллера.
  */
 
-/* Monochrome Formats *******************************************************/
+/* Монохромные форматы ********************************************************/
 
-#define FB_FMT_Y1             0         /* BPP=1, monochrome */
-#define FB_FMT_Y2             1         /* BPP=2, 2-bit uncompressed greyscale */
-#define FB_FMT_Y4             2         /* BPP=4, 4-bit uncompressed greyscale */
-#define FB_FMT_Y8             3         /* BPP=8, 8-bit uncompressed greyscale */
-#define FB_FMT_Y16            4         /* BPP=16, 16-bit uncompressed greyscale */
+#define FB_FMT_Y1             0         /* BPP =1, монохромный */
+#define FB_FMT_Y2             1         /* BPP =2, 2-битная несжатая шкала серого */
+#define FB_FMT_Y4             2         /* BPP =4, 4-битная несжатая шкала серого */
+#define FB_FMT_Y8             3         /* BPP =8, 8-битная несжатая шкала серого */
+#define FB_FMT_Y16            4         /* BPP =16, 16-битная несжатая шкала серого */
 #define FB_FMT_GREY           FB_FMT_Y8 /* BPP=8 */
 #define FB_FMT_Y800           FB_FMT_Y8 /* BPP=8 */
 
 #define FB_ISMONO(f)          (((f) >= FB_FMT_Y1) && (f) <= FB_FMT_Y16)
 
-/* RGB video formats ********************************************************/
+/* Форматы видео RGB ********************************************************/
 
-/* Standard RGB */
+/* Стандартный RGB */
 
 #define FB_FMT_RGB4           5           /* BPP=4 */
-#define FB_FMT_RGB8           6           /* BPP=8 RGB palette index */
+#define FB_FMT_RGB8           6           /* BPP =8 Индекс палитры RGB */
 #define FB_FMT_RGB8_222       7           /* BPP=8  R=2, G=2, B=2 */
 #define FB_FMT_RGB8_332       8           /* BPP=8  R=3, G=3, B=2 */
 #define FB_FMT_RGB12_444      9           /* BPP=12 R=4, G=4, B=4 */
-#define FB_FMT_RGB16_555      10          /* BPP=16 R=5, G=5, B=5 (1 unused bit) */
+#define FB_FMT_RGB16_555      10          /* BPP =16 R=5, G=5, B=5 (1 неиспользуемый бит) */
 #define FB_FMT_RGB16_565      11          /* BPP=16 R=5, G=6, B=5 */
 #define FB_FMT_RGB24          12          /* BPP=24 */
 #define FB_FMT_RGB32          13          /* BPP=32 */
 
-/* Run length encoded RGB */
+/* Длина серии закодирована RGB */
 
 #define FB_FMT_RGBRLE4        14          /* BPP=4 */
 #define FB_FMT_RGBRLE8        15          /* BPP=8 */
 
-/* Raw RGB */
+/* Сырой RGB */
 
 #define FB_FMT_RGBRAW         16          /* BPP=? */
 
-/* Raw RGB with arbitrary sample packing within a pixel. Packing and
- * precision of R, G and B components is determined by bit masks for each.
+/* Необработанный RGB с произвольной упаковкой сэмпла в пиксель. Упаковка и
+ * точность компонентов R, G и B определяется битовыми масками для каждого из них.
  */
 
 #define FB_FMT_RGBBTFLD16     17          /* BPP=16 */
 #define FB_FMT_RGBBTFLD24     18          /* BPP=24 */
 #define FB_FMT_RGBBTFLD32     19          /* BPP=32 */
-#define FB_FMT_RGBA16         20          /* BPP=16 Raw RGB with alpha */
-#define FB_FMT_RGBA32         21          /* BPP=32 Raw RGB with alpha */
+#define FB_FMT_RGBA16         20          /* BPP =16 Необработанный RGB с альфа-каналом */
+#define FB_FMT_RGBA32         21          /* BPP =32 Необработанный RGB с альфа-каналом */
 
-/* Raw RGB with a transparency field. Layout is as for standard RGB at 16 and
- * 32 bits per pixel but the msb in each pixel indicates whether the pixel is
- * transparent or not.
+/* Необработанный RGB с полем прозрачности. Компоновка аналогична стандартному RGB на 16 и
+ * 32 бита на пиксель, но старший бит в каждом пикселе указывает, является ли пиксель
+ * прозрачный или нет.
  */
 
 #define FB_FMT_RGBT16         22          /* BPP=16 */
@@ -82,29 +82,29 @@ extern "C" {
 
 #define FB_ISRGB(f)           (((f) >= FB_FMT_RGB4) && (f) <= FB_FMT_RGBT32)
 
-/* Packed YUV Formats *******************************************************/
+/* Упакованные форматы YUV ********************************************************/
 
-#define FB_FMT_AYUV           24          /* BPP=32  Combined YUV and alpha */
-#define FB_FMT_CLJR           25          /* BPP=8   4 pixels packed into a uint32_t.
-                                           *         YUV 4:1:1 with l< 8 bits
-                                           *         per YUV sample */
-#define FB_FMT_CYUV           26          /* BPP=16  UYVY except that height is
-                                           *         reversed */
+#define FB_FMT_AYUV           24          /* BPP =32 Комбинация YUV и альфа */
+#define FB_FMT_CLJR           25          /* BPP =8 4 пикселя упакованы в uint32_t.
+                                           *         YUV 4:1:1 с l< 8 бит
+                                           *         за образец YUV */
+#define FB_FMT_CYUV           26          /* BPP =16 UYVY, за исключением того, что высота
+                                           *         перевернутый */
 #define FB_FMT_IRAW           27          /* BPP=?   Intel uncompressed YUV */
-#define FB_FMT_IUYV           28          /* BPP=16  Interlaced UYVY (line order
+#define FB_FMT_IUYV           28          /* BPP =16 Чересстрочный UYVY (порядок строк
                                            *         0,2,4,.., 1,3,5...) */
-#define FB_FMT_IY41           29          /* BPP=12  Interlaced Y41P (line order
+#define FB_FMT_IY41           29          /* BPP =12 Чересстрочный Y41P (порядок строк
                                            *         0,2,4,.., 1,3,5...) */
 #define FB_FMT_IYU2           30          /* BPP=24 */
-#define FB_FMT_HDYC           31          /* BPP=16  UYVY except uses the BT709
-                                           *         color space  */
+#define FB_FMT_HDYC           31          /* BPP =16 UYVY, за исключением использования BT709
+                                           *         цветовое пространство  */
 #define FB_FMT_UYVP           32          /* BPP=24? YCbCr 4:2:2, 10-bits per
-                                           *         component in U0Y0V0Y1 order */
+                                           *         компонент в порядке U0Y0V0Y1 */
 #define FB_FMT_UYVY           33          /* BPP=16  YUV 4:2:2 */
 #define FB_FMT_UYNV           FB_FMT_UYVY /* BPP=16  */
 #define FB_FMT_Y422           FB_FMT_UYVY /* BPP=16  */
-#define FB_FMT_V210           34          /* BPP=32  10-bit 4:2:2 YCrCb */
-#define FB_FMT_V422           35          /* BPP=16  Upside down version of UYVY */
+#define FB_FMT_V210           34          /* BPP =32 10-битный 4:2:2 YCrCb */
+#define FB_FMT_V422           35          /* BPP =16 Перевернутая версия UYVY */
 #define FB_FMT_V655           36          /* BPP=16? 16-bit YUV 4:2:2 */
 #define FB_FMT_VYUY           37          /* BPP=?   ATI Packed YUV Data */
 #define FB_FMT_YUYV           38          /* BPP=16  YUV 4:2:2 */
@@ -114,40 +114,40 @@ extern "C" {
 #define FB_FMT_Y41P           40          /* BPP=12  YUV 4:1:1 */
 #define FB_FMT_Y411           41          /* BPP=12  YUV 4:1:1 */
 #define FB_FMT_Y211           42          /* BPP=8  */
-#define FB_FMT_Y41T           43          /* BPP=12  Y41P LSB for transparency */
-#define FB_FMT_Y42T           44          /* BPP=16  UYVY LSB for transparency */
+#define FB_FMT_Y41T           43          /* BPP =12 Y41P LSB для прозрачности */
+#define FB_FMT_Y42T           44          /* BPP =16 UYVY LSB для прозрачности */
 #define FB_FMT_YUVP           45          /* BPP=24? YCbCr 4:2:2 Y0U0Y1V0 order */
 
 #define FB_ISYUVPACKED(f)     (((f) >= FB_FMT_AYUV) && (f) <= FB_FMT_YUVP)
 
-/* Packed Planar YUV Formats ************************************************/
+/* Упакованные планарные форматы YUV **************************************************/
 
-#define FB_FMT_YVU9           46          /* BPP=9   8-bit Y followed by 8-bit
+#define FB_FMT_YVU9           46          /* BPP =9 8-битный Y, за которым следует 8-битный
                                            *         4x4 VU */
 #define FB_FMT_YUV9           47          /* BPP=9? */
-#define FB_FMT_IF09           48          /* BPP=9.5 YVU9 + 4x4 plane of delta
-                                           *         relative to tframe. */
-#define FB_FMT_YV16           49          /* BPP=16  8-bit Y followed by 8-bit
+#define FB_FMT_IF09           48          /* BPP =9,5 YVU9 + плоскость треугольника 4x4
+                                           *         относительно tframe. */
+#define FB_FMT_YV16           49          /* BPP =16 8-битный Y, за которым следует 8-битный
                                            *         2x1 VU */
-#define FB_FMT_YV12           50          /* BPP=12  8-bit Y followed by 8-bit
+#define FB_FMT_YV12           50          /* BPP =12 8-битный Y, за которым следует 8-битный
                                            *         2x2 VU */
-#define FB_FMT_I420           51          /* BPP=12  8-bit Y followed by 8-bit
+#define FB_FMT_I420           51          /* BPP =12 8-битный Y, за которым следует 8-битный
                                            *         2x2 UV */
 #define FB_FMT_IYUV           FB_FMT_I420 /* BPP=12 */
-#define FB_FMT_NV12           52          /* BPP=12  8-bit Y followed by an
-                                           *         interleaved 2x2 UV */
-#define FB_FMT_NV21           53          /* BPP=12  NV12 with UV reversed */
-#define FB_FMT_IMC1           54          /* BPP=12  YV12 except UV planes same
-                                           *         stride as Y */
-#define FB_FMT_IMC2           55          /* BPP=12  IMC1 except UV lines
-                                           *         interleaved at half stride
-                                           *         boundaries */
-#define FB_FMT_IMC3           56          /* BPP=12  As IMC1 except that UV
-                                           *         swapped */
-#define FB_FMT_IMC4           57          /* BPP=12  As IMC2  except that UV
-                                           *         swapped */
-#define FB_FMT_CLPL           58          /* BPP=12  YV12 but including a level
-                                           *         of indirection. */
+#define FB_FMT_NV12           52          /* BPP = 12 8-битных Y, за которыми следует
+                                           *         чередование 2x2 UV */
+#define FB_FMT_NV21           53          /* BPP =12 NV12 с перевернутым UV */
+#define FB_FMT_IMC1           54          /* BPP =12 YV12, кроме плоскостей UV, то же самое
+                                           *         шагать как Y */
+#define FB_FMT_IMC2           55          /* BPP =12 IMC1 кроме строк UV
+                                           *         чередуются на полшага
+                                           *         границы */
+#define FB_FMT_IMC3           56          /* BPP =12 Как IMC1, за исключением UV
+                                           *         поменяли местами */
+#define FB_FMT_IMC4           57          /* BPP =12 Как IMC2, за исключением UV
+                                           *         поменяли местами */
+#define FB_FMT_CLPL           58          /* BPP =12 YV12 но включая уровень
+                                           *         косвенности. */
 #define FB_FMT_Y41B           59          /* BPP=12?  4:1:1 planar. */
 #define FB_FMT_Y42B           60          /* BPP=16?  YUV 4:2:2 planar. */
 #define FB_FMT_CXY1           61          /* BPP=12 */
@@ -156,148 +156,148 @@ extern "C" {
 #define FB_ISYUVPLANAR(f)     (((f) >= FB_FMT_YVU9) && (f) <= FB_FMT_CXY2)
 #define FB_ISYUV(f)           (FB_ISYUVPACKED(f) || FB_ISYUVPLANAR(f))
 
-/* Hardware cursor control **************************************************/
+/* Аппаратное управление курсором **************************************************/
 
 #ifdef CONFIG_FB_HWCURSOR
-#  define FB_CUR_ENABLE       0x01        /* Enable the cursor */
-#  define FB_CUR_SETIMAGE     0x02        /* Set the cursor image */
-#  define FB_CUR_SETPOSITION  0x04        /* Set the position of the cursor */
-#  define FB_CUR_SETSIZE      0x08        /* Set the size of the cursor */
-#  define FB_CUR_XOR          0x10        /* Use XOR vs COPY ROP on image */
+#  define FB_CUR_ENABLE       0x01        /* Включить курсор */
+#  define FB_CUR_SETIMAGE     0x02        /* Установить изображение курсора */
+#  define FB_CUR_SETPOSITION  0x04        /* Установите положение курсора */
+#  define FB_CUR_SETSIZE      0x08        /* Установите размер курсора */
+#  define FB_CUR_XOR          0x10        /* Используйте XOR против COPY ROP на изображении. */
 #endif
 
-/* Hardware overlay acceleration ********************************************/
+/* Аппаратное ускорение наложения ********************************************/
 
 #define FB_NO_OVERLAY         -1
 
 #ifdef CONFIG_FB_OVERLAY
-#  define FB_ACCL_TRANSP      0x01        /* Hardware tranparency support */
-#  define FB_ACCL_CHROMA      0x02        /* Hardware chromakey support */
-#  define FB_ACCL_COLOR       0x04        /* Hardware color support */
-#  define FB_ACCL_AREA        0x08        /* Hardware support area selection */
+#  define FB_ACCL_TRANSP      0x01        /* Аппаратная поддержка прозрачности */
+#  define FB_ACCL_CHROMA      0x02        /* Аппаратная поддержка хромакея */
+#  define FB_ACCL_COLOR       0x04        /* Аппаратная поддержка цвета */
+#  define FB_ACCL_AREA        0x08        /* Выбор области поддержки оборудования */
 
 #ifdef CONFIG_FB_OVERLAY_BLIT
-#  define FB_ACCL_BLIT        0x10        /* Hardware blit support */
-#  define FB_ACCL_BLEND       0x20        /* Hardware blend support */
+#  define FB_ACCL_BLIT        0x10        /* Аппаратная поддержка блитинга */
+#  define FB_ACCL_BLEND       0x20        /* Поддержка аппаратного сочетания */
 #endif
 
-/* Overlay transparency mode ************************************************/
+/* Режим прозрачности наложения ***********************************************/
 
-#  define FB_CONST_ALPHA      0x00         /* Transparency by alpha value */
-#  define FB_PIXEL_ALPHA      0x01         /* Transparency by pixel alpha value */
+#  define FB_CONST_ALPHA      0x00         /* Прозрачность по значению альфа */
+#  define FB_PIXEL_ALPHA      0x01         /* Прозрачность по значению альфа пикселя */
 
 #endif /* CONFIG_FB_OVERLAY */
 
-/* FB character driver IOCTL commands ***************************************/
+/* Символьный драйвер FB Команды IOCTL *****************************************/
 
 /* ioctls */
 
-#define FBIOGET_VIDEOINFO     _FBIOC(0x0001)  /* Get color plane info */
+#define FBIOGET_VIDEOINFO     _FBIOC(0x0001)  /* Получить информацию о цветовой плоскости */
 /* Argument: writable struct
  *           fb_videoinfo_s */
-#define FBIOGET_PLANEINFO     _FBIOC(0x0002)  /* Get video plane info */
+#define FBIOGET_PLANEINFO     _FBIOC(0x0002)  /* Получить информацию о видеоплане */
 /* Argument: writable struct
  *           fb_planeinfo_s */
 
 #ifdef CONFIG_FB_CMAP
-#  define FBIOGET_CMAP        _FBIOC(0x0003)  /* Get RGB color mapping */
+#  define FBIOGET_CMAP        _FBIOC(0x0003)  /* Получить цветовую карту RGB */
 /* Argument: writable struct
  *           fb_cmap_s */
-#  define FBIOPUT_CMAP        _FBIOC(0x0004)  /* Put RGB color mapping */
+#  define FBIOPUT_CMAP        _FBIOC(0x0004)  /* Поставьте цветовое отображение RGB. */
 /* Argument: read-only struct
  *           fb_cmap_s */
 #endif
 
 #ifdef CONFIG_FB_HWCURSOR
-#  define FBIOGET_CURSOR      _FBIOC(0x0005)  /* Get cursor attributes */
+#  define FBIOGET_CURSOR      _FBIOC(0x0005)  /* Получить атрибуты курсора */
 /* Argument: writable struct
  *           fb_cursorattrib_s */
-#  define FBIOPUT_CURSOR      _FBIOC(0x0006)  /* Set cursor attributes */
+#  define FBIOPUT_CURSOR      _FBIOC(0x0006)  /* Установить атрибуты курсора */
 /* Argument: read-only struct
  *           fb_setcursor_s */
 #endif
 
 #ifdef CONFIG_FB_UPDATE
-#  define FBIO_UPDATE         _FBIOC(0x0007)  /* Update a rectangular region in
-                                               * the framebuffer
+#  define FBIO_UPDATE         _FBIOC(0x0007)  /* Обновите прямоугольную область в
+                                               * фреймбуфер
                                                * Argument: read-only struct
                                                *           fb_area_s */
 #endif
 
 #ifdef CONFIG_FB_SYNC
-#  define FBIO_WAITFORVSYNC   _FBIOC(0x0008)  /* Wait for vertical sync */
+#  define FBIO_WAITFORVSYNC   _FBIOC(0x0008)  /* Дождитесь вертикальной синхронизации */
 #endif
 
 #ifdef CONFIG_FB_OVERLAY
-#  define FBIOGET_OVERLAYINFO _FBIOC(0x0009)  /* Get video overlay info */
+#  define FBIOGET_OVERLAYINFO _FBIOC(0x0009)  /* Получить информацию о наложении видео */
 /* Argument: writable struct
  *           fb_overlayinfo_s */
-#  define FBIO_SELECT_OVERLAY _FBIOC(0x000a)  /* Select overlay */
+#  define FBIO_SELECT_OVERLAY _FBIOC(0x000a)  /* Выбрать наложение */
 /* Argument: read-only
- *           unsigned long */
-#  define FBIOSET_TRANSP      _FBIOC(0x000b)  /* Set opacity or transparency
+ *           беззнаковый длинный */
+#  define FBIOSET_TRANSP      _FBIOC(0x000b)  /* Установите непрозрачность или прозрачность
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
-#  define FBIOSET_CHROMAKEY   _FBIOC(0x000c)  /* Set chroma key
+#  define FBIOSET_CHROMAKEY   _FBIOC(0x000c)  /* Установить хроматический ключ
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
-#  define FBIOSET_COLOR       _FBIOC(0x000d)  /* Set color
+#  define FBIOSET_COLOR       _FBIOC(0x000d)  /* Установить цвет
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
-#  define FBIOSET_BLANK       _FBIOC(0x000e)  /* Blank or unblank
+#  define FBIOSET_BLANK       _FBIOC(0x000e)  /* Пустой или непустой
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
-#  define FBIOSET_AREA        _FBIOC(0x000f)  /* Set active overlay area
+#  define FBIOSET_AREA        _FBIOC(0x000f)  /* Установить активную область наложения
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
-#  define FBIOSET_DESTAREA    _FBIOC(0x0010)  /* Set destination area on
-                                               * primary FB.
+#  define FBIOSET_DESTAREA    _FBIOC(0x0010)  /* Включить зону назначения
+                                               * первичный FB .
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
 
 #ifdef CONFIG_FB_OVERLAY_BLIT
-#  define FBIOSET_BLIT        _FBIOC(0x0011)  /* Blit area between overlays
+#  define FBIOSET_BLIT        _FBIOC(0x0011)  /* Закрашенная область между наложениями
                                                * Argument: read-only struct
                                                *           fb_overlayblit_s */
-#  define FBIOSET_BLEND       _FBIOC(0x0012)  /* Blend area between overlays
+#  define FBIOSET_BLEND       _FBIOC(0x0012)  /* Область смешивания между наложениями
                                                * Argument: read-only struct
                                                *           fb_overlayblend_s */
 #endif
 
-#define FBIOPAN_OVERLAY       _FBIOC(0x0013)  /* Pan display for overlay
+#define FBIOPAN_OVERLAY       _FBIOC(0x0013)  /* Панорамирование дисплея для наложения
                                                * Argument: read-only struct
                                                *           fb_overlayinfo_s */
 
 #endif /* CONFIG_FB_OVERLAY */
 
-/* Specific Controls ********************************************************/
+/* Специальные элементы управления *****************************************************/
 
-#define FBIOSET_POWER         _FBIOC(0x0014)  /* Set panel power
+#define FBIOSET_POWER         _FBIOC(0x0014)  /* Установить мощность панели
                                                * Argument:             int */
-#define FBIOGET_POWER         _FBIOC(0x0015)  /* Get panel current power
+#define FBIOGET_POWER         _FBIOC(0x0015)  /* Получить текущую мощность панели
                                                * Argument:            int* */
-#define FBIOSET_FRAMERATE     _FBIOC(0x0016)  /* Set frame rate
+#define FBIOSET_FRAMERATE     _FBIOC(0x0016)  /* Установить частоту кадров
                                                * Argument:             int */
-#define FBIOGET_FRAMERATE     _FBIOC(0x0017)  /* Get frame rate
+#define FBIOGET_FRAMERATE     _FBIOC(0x0017)  /* Получить частоту кадров
                                                * Argument:            int* */
 
-#define FBIOPAN_DISPLAY       _FBIOC(0x0018)  /* Pan display
+#define FBIOPAN_DISPLAY       _FBIOC(0x0018)  /* Панорамирование дисплея
                                                * Argument: read-only struct
-                                               *           fb_planeinfo_s* */
+                                               *           fb_planeinfo_s * */
 
-#define FBIOPAN_CLEAR         _FBIOC(0x0019)  /* Pan clear */
+#define FBIOPAN_CLEAR         _FBIOC(0x0019)  /* Очистить панораму */
 /* Argument: read-only
- *           unsigned long */
+ *           беззнаковый длинный */
 
-#define FBIOSET_VSYNCOFFSET   _FBIOC(0x001a)  /* Set VSync offset in usec
+#define FBIOSET_VSYNCOFFSET   _FBIOC(0x001a)  /* Установить используемое смещение VSync
                                                * Argument:             int */
 
-/* Linux Support ************************************************************/
+/* Поддержка Linux ***********************************************************/
 
-#define FBIOGET_VSCREENINFO   _FBIOC(0x001b)  /* Get video variable info */
+#define FBIOGET_VSCREENINFO   _FBIOC(0x001b)  /* Получить информацию о видеопеременных */
 /* Argument: writable struct
  *           fb_var_screeninfo */
-#define FBIOGET_FSCREENINFO   _FBIOC(0x001c)  /* Get video fix info */
+#define FBIOGET_FSCREENINFO   _FBIOC(0x001c)  /* Получить информацию об исправлении видео */
 /* Argument: writable struct
  *           fb_fix_screeninfo */
 
@@ -308,24 +308,24 @@ extern "C" {
 typedef uint16_t fb_coord_t;
 
 struct fb_videoinfo_s {
-    uint8_t    fmt;               /* see FB_FMT_*  */
-    fb_coord_t xres;              /* Horizontal resolution in pixel columns */
-    fb_coord_t yres;              /* Vertical resolution in pixel rows */
-    uint8_t    nplanes;           /* Number of color planes supported */
-    uint8_t    noverlays;         /* Number of overlays supported */
-    uint8_t    moduleinfo[128];   /* Module information filled by vendor */
+    uint8_t    fmt;               /* см. FB_FMT_ *  */
+    fb_coord_t xres;              /* Горизонтальное разрешение в столбцах пикселей */
+    fb_coord_t yres;              /* Вертикальное разрешение в строках пикселей */
+    uint8_t    nplanes;           /* Количество поддерживаемых цветовых плоскостей */
+    uint8_t    noverlays;         /* Количество поддерживаемых наложений */
+    uint8_t    moduleinfo[128];   /* Информация о модуле заполняется поставщиком */
 };
 
 struct fb_planeinfo_s {
-    void * fbmem;            /* Start of frame buffer memory */
-    size_t     fblen;        /* Length of frame buffer memory in bytes */
-    fb_coord_t stride;       /* Length of a line in bytes */
-    uint8_t    display;      /* Display number */
-    uint8_t    bpp;          /* Bits per pixel */
-    uint32_t   xres_virtual; /* Virtual Horizontal resolution in pixel columns */
-    uint32_t   yres_virtual; /* Virtual Vertical resolution in pixel rows */
-    uint32_t   xoffset;      /* Offset from virtual to visible resolution */
-    uint32_t   yoffset;      /* Offset from virtual to visible resolution */
+    void * fbmem;            /* Начало памяти кадрового буфера */
+    size_t     fblen;        /* Длина памяти кадрового буфера в байтах */
+    fb_coord_t stride;       /* Длина строки в байтах */
+    uint8_t    display;      /* Номер дисплея */
+    uint8_t    bpp;          /* Биты на пиксель */
+    uint32_t   xres_virtual; /* Виртуальное горизонтальное разрешение в столбцах пикселей */
+    uint32_t   yres_virtual; /* Виртуальное вертикальное разрешение в строках пикселей */
+    uint32_t   xoffset;      /* Смещение от виртуального к видимому разрешению */
+    uint32_t   yoffset;      /* Смещение от виртуального к видимому разрешению */
 };
 
 /**********************
@@ -337,7 +337,7 @@ struct fb_planeinfo_s {
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_NUTTX_VIDEO_FB_H*/

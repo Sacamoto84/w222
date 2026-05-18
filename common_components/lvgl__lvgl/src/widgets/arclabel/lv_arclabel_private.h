@@ -36,17 +36,17 @@ struct _lv_arclabel_t {
     /**
      * @brief The starting angle of the arc in degrees.
      *
-     * This variable represents the beginning of the arc's angular range
-     * in terms of degrees. It is used in conjunction with `angle_size` to define
-     * the section of the circle that the arc covers. Values are normalized
-     * to the range [0, 360), ensuring compatibility with circular representations.
+     * Эта переменная представляет начало углового диапазона дуги.
+     * в плане градусов. Он используется вместе с `angle_size` для определения
+     * часть круга, которую охватывает дуга. Значения нормализованы
+     * в диапазон [0, 360), обеспечивая совместимость с циклическими представлениями.
      *
-     * Modifying this value affects the visual rendering of the arc and its associated
-     * indicators or labels, necessitating a subsequent invalidation or update of the
-     * object's display to reflect the changes.
+     * Изменение этого значения влияет на визуальное отображение дуги и связанных с ней объектов.
+     * индикаторы или метки, что приводит к необходимости последующего признания недействительными или обновления
+     * отображение объекта для отражения изменений.
      *
      * @note When setting this value programmatically, ensure it does not exceed 360 degrees,
-     * as it will be automatically adjusted to fit within the valid range.
+     * поскольку оно будет автоматически скорректировано в соответствии с допустимым диапазоном.
      */
     lv_value_precise_t angle_start;
     lv_value_precise_t angle_size;
@@ -73,7 +73,7 @@ struct _lv_arclabel_t {
 #endif /* LV_USE_ARCLABEL != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_ARCLABEL_PRIVATE_H*/

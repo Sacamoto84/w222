@@ -5,10 +5,10 @@ import os
 import shutil
 import sys
 
-# v10.0.0 -> fail if release/v10.0 is not there
-# v10.0.1 -> update release/v10.0
-# v10.1.0 -> create release/v10.1 from release/v10.0 and update it
-# v10.1.1 -> update release/v10.1
+# v10.0.0 -> ошибка, если релиза/v10.0 нет
+# v10.0.1 -> выпуск обновления/v10.0
+# v10.1.0 -> создайте версию Release/v10.1 из Release/v10.0 и обновите ее.
+# v10.1.1 -> выпуск обновления/v10.1
 
 LOG = "[release_branch_updater.py]"
 
@@ -53,7 +53,7 @@ def main():
         urls = f.read()
     urls = [url for url in map(str.strip, urls.splitlines()) if url]
 
-    # ensure this script creates the directory i.e. it doesn't belong to the user since it will rm -rf at the end
+    # убедитесь, что этот скрипт создает каталог, т. е. он не принадлежит пользователю, поскольку в конце он будет rm -rf
     assert not os.path.exists(port_clone_tmpdir), "the port clone tmpdir should not exist yet"
 
     for url in urls:
@@ -63,8 +63,8 @@ def main():
             port_clone_tmpdir = url[len("https://github.com/lvgl/"): ]
             print("port_clone_tmpdir: " + port_clone_tmpdir)
 
-        # It's very important to not leak the github_token here
-        # So make sure the stdout and stderr are piped here
+        # Очень важно не слить сюда github_token.
+        # Поэтому убедитесь, что сюда передаются стандартный вывод и стандартный вывод stderr.
         subprocess.run(("git", "clone",
                         git_repository(url.replace("https://", ""), args.github_token),
                         port_clone_tmpdir),
@@ -75,16 +75,16 @@ def main():
         print(LOG, "port release branches:", ", ".join(fmt_release(br) for br in port_release_branches) or "(none)")
         print(LOG, "port default branch:", port_default_branch if port_default_branch is not None else "(none)")
 
-        # we want to
-        # 1. create (if necessary) the port's release branch
-        # 2. update the LVGL submodule to match the LVGL's release branch version
-        # 3. update the lv_conf.h based on the lv_conf.defaults
+        # мы хотим
+        # 1. создать (при необходимости) ветку релиза порта
+        # 2. обновите подмодуль LVGL, чтобы он соответствовал версии ветки выпуска LVGL.
+        # 3. обновитеlv_conf.hна основеlv_conf.defaults.
 
         branches_to_update = lvgl_release_branches
         if not skip_master:
             branches_to_update = branches_to_update + [lvgl_default_branch]
 
-        # from oldest to newest release...
+        # от самого старого к новейшему выпуску...
         for lvgl_branch in branches_to_update:
             if isinstance(lvgl_branch, tuple):
                 port_branch = lvgl_branch
@@ -100,8 +100,8 @@ def main():
             port_submodule_was_updated = False
             port_lv_conf_h_was_updated = False
 
-            # if the branch does not exist in the port, create it from
-            # the closest minor of the same major.
+            # если ветка не существует в порту, создайте ее из
+            # ближайший минор того же майора.
             if port_branch in port_release_branches:
                 print(LOG, "... this port has a matching release branch.")
                 subprocess.run(("git", "-C", port_clone_tmpdir, "branch", "--track",
@@ -111,7 +111,7 @@ def main():
                 print(LOG, "... this port does not have this release branch minor ...")
                 port_does_not_have_the_branch = True
 
-                # get the port branch with this major and the next smallest minor
+                # получить ветку порта с этим основным и следующим наименьшим второстепенным
                 create_from = next((
                     br
                     for br in reversed(port_release_branches) # reverse it to get the newest (largest) minor
@@ -119,8 +119,8 @@ def main():
                        and br[1] < port_branch[1]  # smaller minor because exact minor does not exist
                 ), None)
                 if create_from is None:
-                    # there are no branches in the port that are this major
-                    # version. One must be created manually.
+                    # в порту нет таких крупных филиалов
+                    # версия. Его необходимо создать вручную.
                     print(LOG, "... this port has no major from which to create the minor. one must be created manually. continuing to next.")
                     continue
 
@@ -135,11 +135,11 @@ def main():
                 port_release_branches.append(port_branch)
                 port_release_branches.sort()
 
-            # checkout the same release in both LVGL and the port
+            # проверьте один и тот же выпуск как в LVGL, так и в порту
             subprocess.check_call(("git", "-C", lvgl_path, "checkout", f"origin/{fmt_release(lvgl_branch)}"))
             subprocess.check_call(("git", "-C", port_clone_tmpdir, "checkout", fmt_release(port_branch)))
 
-            # update the submodule in the port if it exists
+            # обновить подмодуль в порту, если он существует
             port_lvgl_submodule_path = None
             if os.path.exists(os.path.join(port_clone_tmpdir, ".gitmodules")): 
                 out = subprocess.check_output(("git", "-C", port_clone_tmpdir, "config", "--file",
@@ -151,7 +151,7 @@ def main():
                     if "lvgl.path " in line
                 ), None)
 
-                # check if the submodule is really in the index and not just a leftover in .gitmodules
+                # проверьте, действительно ли подмодуль находится в индексе, а не просто остаток в .gitmodules
                 out = subprocess.check_output(("git", "-C", port_clone_tmpdir, "submodule", "status"))
                 if not any(
                     line.split(maxsplit=1)[1].rsplit(maxsplit=1)[0] == port_lvgl_submodule_path
@@ -165,12 +165,12 @@ def main():
             else:
                 print(LOG, "lvgl submodule found in port at:", port_lvgl_submodule_path)
 
-                # get the SHA of LVGL in this release of LVGL
+                # получите SHA LVGL в этом выпуске LVGL
                 out = subprocess.check_output(("git", "-C", lvgl_path, "rev-parse", "--verify", "HEAD"))
                 lvgl_sha = out.decode().strip()
                 print(LOG, "the SHA of LVGL in this release should be:", lvgl_sha)
 
-                # get the SHA of LVGL this port wants to use in this release
+                # получить SHA LVGL, который этот порт хочет использовать в этом выпуске
                 out = subprocess.check_output(("git", "-C", port_clone_tmpdir, "rev-parse",
                                                "--verify", f"HEAD:{port_lvgl_submodule_path}"))
                 port_lvgl_submodule_sha = out.decode().strip()
@@ -182,13 +182,13 @@ def main():
                     print(LOG, "the submodule's version of LVGL is NOT up to date")
                     port_submodule_was_updated = True
 
-                    # update the version of the submodule in the index. no need to `git submodule update --init` it.
-                    # also no need to `git add .` afterwards because it stages the change.
-                    # 160000 is a git file mode which means submodule.
+                    # версия обновления подмодуля в индексе. Нет необходимости`git submodule update --init`в этом.
+                    # Также нет необходимости впоследствии использовать`git add .`, потому что это инициирует изменение.
+                    # 160000 — это режим файла git, что означает подмодуль.
                     subprocess.check_call(("git", "-C", port_clone_tmpdir, "update-index", "--cacheinfo",
                                            f"160000,{lvgl_sha},{port_lvgl_submodule_path}"))
 
-            # update the lv_conf.h if there's an lv_conf.defaults
+            # обновитеlv_conf.h, если естьlv_conf.defaults
             out = subprocess.check_output(("find", ".", "-name", "lv_conf.defaults", "-print", "-quit"), cwd=port_clone_tmpdir)
             port_lv_conf_defaults = next(iter(out.decode().strip().splitlines()), None)
             if port_lv_conf_defaults is None:
@@ -203,7 +203,7 @@ def main():
                                            "--defaults", os.path.abspath(os.path.join(port_clone_tmpdir, port_lv_conf_defaults)),
                                            "--config", os.path.abspath(os.path.join(port_clone_tmpdir, port_lv_conf_h)), ))
 
-                    # check if lv_conf.h actually changed. it will not detect the submodule change as a false positive.
+                    # проверьте, действительно ли изменилсяlv_conf.h. он не уменьшает изменение субмодуля как ложное внедрение.
                     out = subprocess.check_output(("git", "-C", port_clone_tmpdir, "diff"))
                     diff = out.decode().strip()
                     if not diff:
@@ -218,8 +218,8 @@ def main():
 
             if port_does_not_have_the_branch or port_submodule_was_updated or port_lv_conf_h_was_updated:
                 print(LOG, "changes were made. ready to push.")
-                # keep it brief for commit message 50 character limit suggestion.
-                # max length will be 50 characters in this case: "bot: New branch. Update LVGL submodule. lv_conf.h."
+                # держите его кратким для сообщения о фиксации, предлагая ограничение в 50 символов.
+                # максимальная длина в данном случае будет 50 символов: «bot: Новая ветка. Обновить подмодульLVGL.  lv_conf.h».
                 commit_msg = ("bot:"
                               + (" New branch." if port_does_not_have_the_branch else "")
                               + (" Update LVGL submodule." if port_submodule_was_updated else "")

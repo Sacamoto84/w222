@@ -59,7 +59,7 @@ void lv_matrix_identity(lv_matrix_t * matrix)
 void lv_matrix_translate(lv_matrix_t * matrix, float dx, float dy)
 {
     if(lv_matrix_is_identity_or_translation(matrix)) {
-        /*optimization for matrix translation.*/
+        /*оптимизация для перевода матрицы.*/
         matrix->m[0][2] += dx;
         matrix->m[1][2] += dy;
         return;
@@ -122,7 +122,7 @@ void lv_matrix_skew(lv_matrix_t * matrix, float skew_x, float skew_y)
 
 void lv_matrix_multiply(lv_matrix_t * matrix, const lv_matrix_t * mul)
 {
-    /*TODO: use NEON to optimize this function on ARM architecture.*/
+    /*TODO: используйтеNEONдля оптимизации этой функции в архитектуре ARM.*/
     lv_matrix_t tmp;
 
     for(int y = 0; y < 3; y++) {
@@ -142,7 +142,7 @@ bool lv_matrix_inverse(lv_matrix_t * matrix, const lv_matrix_t * m)
     float d;
     bool is_affine;
 
-    /* Test for identity matrix. */
+    /* Тест на идентификационную матрицу. */
     if(m == NULL) {
         lv_matrix_identity(matrix);
         return true;
@@ -152,17 +152,17 @@ bool lv_matrix_inverse(lv_matrix_t * matrix, const lv_matrix_t * m)
     det01 = (m->m[2][0] * m->m[1][2]) - (m->m[1][0] * m->m[2][2]);
     det02 = (m->m[1][0] * m->m[2][1]) - (m->m[2][0] * m->m[1][1]);
 
-    /* Compute determinant. */
+    /* Вычислить определитель. */
     d = (m->m[0][0] * det00) + (m->m[0][1] * det01) + (m->m[0][2] * det02);
 
-    /* Return 0 if there is no inverse matrix. */
+    /* Верните 0, если обратной матрицы нет. */
     if(d == 0.0f)
         return false;
 
-    /* Compute reciprocal. */
+    /* Вычислить обратную величину. */
     d = 1.0f / d;
 
-    /* Determine if the matrix is affine. */
+    /* Определите, является ли матрица аффинной. */
     is_affine = (m->m[2][0] == 0.0f) && (m->m[2][1] == 0.0f) && (m->m[2][2] == 1.0f);
 
     matrix->m[0][0] = d * det00;
@@ -175,7 +175,7 @@ bool lv_matrix_inverse(lv_matrix_t * matrix, const lv_matrix_t * m)
     matrix->m[2][1] = is_affine ? 0.0f : d * ((m->m[2][0] * m->m[0][1]) - (m->m[0][0] * m->m[2][1]));
     matrix->m[2][2] = is_affine ? 1.0f : d * ((m->m[0][0] * m->m[1][1]) - (m->m[1][0] * m->m[0][1]));
 
-    /* Success. */
+    /* Успех. */
     return true;
 }
 
@@ -203,9 +203,9 @@ lv_area_t lv_matrix_transform_area(const lv_matrix_t * matrix, const lv_area_t *
     }
 
     /**
-     * Since lv_area_t will subtract 1px when calculating width and height,
-     * this will affect the matrix transformation calculation, so +1px is needed as compensation,
-     * and the compensation value is subtracted after the calculation is completed
+     * посколькуlv_area_tвысчитывает 1 пиксель при вычислении высоты и высоты,
+     * это повлияет на расчет преобразования матрицы, поэтому +1 пиксель необходим в качестве компенсации,
+     * и значение компенсации вычитается после завершения расчета
      */
     lv_area_t res;
     lv_point_precise_t p[4] = {
@@ -248,7 +248,7 @@ void lv_matrix_transpose(const lv_matrix_t * src, lv_matrix_t * dst)
     if(src == NULL || dst == NULL) return;
 
     if(src == dst) {
-        /* In-place transposition: 3 swaps, minimal stack usage */
+        /* Транспонирование на месте: 3 замены, минимальное использование стека. */
         float tmp;
 
         tmp = dst->m[0][1];

@@ -42,7 +42,7 @@ lv_display_t * lv_uefi_display_create(void * handle);
 /**
  * @brief Try to find the active display handle.
  * @return The handle or NULL if not found.
- * @remark The active display need interfaces for EFI_GRAPHICS_OUTPUT_PROTOCOL and EFI_EDID_ACTIVE_PROTOCOL
+ * @remark Активному дисплею необходимы интерфейсы для EFI_GRAPHICS_OUTPUT_PROTOCOL и EFI_EDID_ACTIVE_PROTOCOL.
 */
 void * lv_uefi_display_get_active(void);
 

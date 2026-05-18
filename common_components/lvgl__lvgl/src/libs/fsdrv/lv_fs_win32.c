@@ -60,19 +60,19 @@ static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p);
  **********************/
 
 /**
- * Register a driver for the File system interface
+ * Зарегистрируйте драйвер для интерфейса файловой системы.
  */
 void lv_fs_win32_init(void)
 {
     /*---------------------------------------------------
-     * Register the file system interface in LVGL
+     * Зарегистрируйте интерфейс файловой системы в LVGL.
      *--------------------------------------------------*/
 
-    /*Add a simple driver to open images*/
+    /*Добавьте простой драйвер для открытия изображений*/
     lv_fs_drv_t * fs_drv_p = &(LV_GLOBAL_DEFAULT()->win32_fs_drv);
     lv_fs_drv_init(fs_drv_p);
 
-    /*Set up fields...*/
+    /*Настроить поля...*/
     fs_drv_p->letter = LV_FS_WIN32_LETTER;
     fs_drv_p->cache_size = LV_FS_WIN32_CACHE_SIZE;
 
@@ -95,7 +95,7 @@ void lv_fs_win32_init(void)
  **********************/
 
 /**
- * Check the dots name
+ * Проверьте название точек
  * @param name file or dir name
  * @return true if the name is dots name
  */
@@ -105,10 +105,10 @@ static bool is_dots_name(const char * name)
 }
 
 /**
- * Convert Win32 error code to error from lv_fs_res_t enum
+ * Преобразование кода ошибки Win32 в ошибку из перечисления lv_fs_res_t
  * @param error Win32 error code
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_error_from_win32(DWORD error)
 {
@@ -200,7 +200,7 @@ static lv_fs_res_t fs_error_from_win32(DWORD error)
 }
 
 /**
- * Open a file
+ * Открыть файл
  * @param drv   pointer to a driver where this function belongs
  * @param path  path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
  * @param mode  read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
@@ -220,7 +220,7 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
         desired_access |= GENERIC_WRITE;
     }
 
-    /*Make the path relative to the current directory (the projects root folder)*/
+    /*Укажите путь относительно текущего каталога (корневой папки проекта)*/
 
     char buf[MAX_PATH];
     lv_snprintf(buf, sizeof(buf), LV_FS_WIN32_PATH "%s", path);
@@ -236,11 +236,11 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
 /**
- * Close an opened file
+ * Закрыть открытый файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable. (opened with fs_open)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 {
@@ -251,14 +251,14 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * Read data from an opened file
+ * Чтение данных из открытого файла
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable.
  * @param buf       pointer to a memory block where to store the read data
  * @param btr       number of Bytes To Read
  * @param br        the real number of read bytes (Byte Read)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
 {
@@ -269,7 +269,7 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * Write into a file
+ * Записать в файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable
  * @param buf       pointer to a buffer with the bytes to write
@@ -286,12 +286,12 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 }
 
 /**
- * Set the read write pointer. Also expand the file size if necessary.
+ * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable. (opened with fs_open )
  * @param pos       the new position of read write pointer
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
@@ -316,12 +316,12 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * Give the position of the read write pointer
+ * Укажите положение указателя чтения и записи.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable
  * @param pos_p     pointer to store the result
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 {
@@ -355,7 +355,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 }
 
 /**
- * Initialize a 'DIR' or 'HANDLE' variable for directory reading
+ * Инициализируйте переменную «DIR» или «HANDLE» для чтения каталога.
  * @param drv   pointer to a driver where this function belongs
  * @param path  path to a directory
  * @return pointer to an initialized 'DIR' or 'HANDLE' variable
@@ -368,7 +368,7 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
     handle->next_error = LV_FS_RES_OK;
     WIN32_FIND_DATAA fdata;
 
-    /*Make the path relative to the current directory (the projects root folder)*/
+    /*Укажите путь относительно текущего каталога (корневой папки проекта)*/
     char buf[LV_FS_MAX_PATH_LEN];
     lv_snprintf(buf, sizeof(buf), LV_FS_WIN32_PATH "%s\\*", path);
 
@@ -404,8 +404,8 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 }
 
 /**
- * Read the next filename from a directory.
- * The name of the directories will begin with '/'
+ * Прочитать следующее имя файла из каталога.
+ * Название каталогов начинается с '/'
  * @param drv       pointer to a driver where this function belongs
  * @param dir_p     pointer to an initialized 'DIR' or 'HANDLE' variable
  * @param fn        pointer to a buffer to store the filename
@@ -447,7 +447,7 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
 }
 
 /**
- * Close the directory reading
+ * Закройте чтение каталога
  * @param drv   pointer to a driver where this function belongs
  * @param dir_p pointer to an initialized 'DIR' or 'HANDLE' variable
  * @return LV_FS_RES_OK or any error from lv_fs_res_t enum

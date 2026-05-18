@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Size: 20 px
- * Bpp: 3
+ * Размер: 20 пикселей
+ * Бпп: 3
  * Opts: --bpp 3 --size 20 --font Montserrat-Medium.ttf --range 32-127 --format lvgl -o test_font_montserrat_ascii_3bpp_compressed.c
  ******************************************************************************/
 
@@ -17,7 +17,7 @@
  *    BITMAPS
  *----------------*/
 
-/*Store the image of the glyphs*/
+/*Сохраните изображение глифов*/
 static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
 
@@ -820,7 +820,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
 
 
 
-/*Collect the unicode lists and glyph_id offsets*/
+/*Соберите списки Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
@@ -833,7 +833,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *----------------*/
 
 
-/*Map glyph_ids to kern left classes*/
+/*Сопоставьте glyph_ids с левыми классами Керна*/
 static const uint8_t kern_left_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
@@ -849,7 +849,7 @@ static const uint8_t kern_left_class_mapping[] = {
     58, 59, 58, 60, 41, 0, 0, 9
 };
 
-/*Map glyph_ids to kern right classes*/
+/*Сопоставьте glyph_ids с классами керна справа*/
 static const uint8_t kern_right_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
@@ -865,7 +865,7 @@ static const uint8_t kern_right_class_mapping[] = {
     46, 47, 46, 48, 0, 0, 35, 9
 };
 
-/*Kern values between classes*/
+/*Значения Керна между классами*/
 static const int8_t kern_class_values[] = {
     0, 1, 0, 0, 0, 0, 0, 0,
     0, 1, 0, 0, 3, 0, 0, 0,
@@ -1230,7 +1230,7 @@ static const int8_t kern_class_values[] = {
 };
 
 
-/*Collect the kern class' data in one place*/
+/*Соберите данные класса керна в одном месте*/
 static const lv_font_fmt_txt_kern_classes_t kern_classes = {
     .class_pair_values   = kern_class_values,
     .left_class_mapping  = kern_left_class_mapping,
@@ -1244,7 +1244,7 @@ static const lv_font_fmt_txt_kern_classes_t kern_classes = {
  *--------------------*/
 
 #if LVGL_VERSION_MAJOR == 8
-    /*Store all the custom data of the font*/
+    /*Храните все пользовательские данные шрифта*/
     static  lv_font_fmt_txt_glyph_cache_t cache;
 #endif
 
@@ -1273,16 +1273,16 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
  *  PUBLIC FONT
  *----------------*/
 
-/*Initialize a public general font descriptor*/
+/*Инициализировать общедоступный общий дескриптор шрифта*/
 #if LVGL_VERSION_MAJOR >= 8
 const lv_font_t test_font_montserrat_ascii_3bpp_compressed = {
 #else
 lv_font_t test_font_montserrat_ascii_3bpp_compressed = {
 #endif
-    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
-    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
-    .line_height = 22,          /*The maximum line height required by the font*/
-    .base_line = 4,             /*Baseline measured from the bottom of the line*/
+    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Указатель функции для получения данных глифа*/
+    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Указатель функции для получения растрового изображения глифа*/
+    .line_height = 22,          /*Максимальная высота строки, требуемая шрифтом*/
+    .base_line = 4,             /*Базовая линия измеряется от нижней части линии*/
 #if !(LVGL_VERSION_MAJOR == 6 && LVGL_VERSION_MINOR == 0)
     .subpx = LV_FONT_SUBPX_NONE,
 #endif
@@ -1290,7 +1290,7 @@ lv_font_t test_font_montserrat_ascii_3bpp_compressed = {
     .underline_position = -1,
     .underline_thickness = 1,
 #endif
-    .dsc = &font_dsc,          /*The custom font data. Will be accessed by `get_glyph_bitmap/dsc` */
+    .dsc = &font_dsc,          /*Данные пользовательского шрифта. Будет доступен `get_glyph_bitmap/dsc` */
 #if LV_VERSION_CHECK(8, 2, 0) || LVGL_VERSION_MAJOR >= 9
     .fallback = NULL,
 #endif

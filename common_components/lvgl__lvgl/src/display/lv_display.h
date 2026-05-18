@@ -40,21 +40,21 @@ typedef enum {
 
 typedef enum {
     /**
-     * Use the buffer(s) to render the screen is smaller parts.
-     * This way the buffers can be smaller then the display to save RAM. At least 1/10 screen size buffer(s) are recommended.
+     * Используйте буфер(ы) для рендеринга меньших частей экрана.
+     * Таким образом, буферы могут быть меньше, чем дисплей, чтобы сохранить RAM. Рекомендуется использовать буфер(ы) размером не менее 1/10 размера экрана.
      */
     LV_DISPLAY_RENDER_MODE_PARTIAL,
 
     /**
-     * The buffer(s) has to be screen sized and LVGL will render into the correct location of the buffer.
-     * This way the buffer always contain the whole image. Only the changed ares will be updated.
-     * With 2 buffers the buffers' content are kept in sync automatically and in flush_cb only address change is required.
+     * Буфер(ы) должен быть размером с экран, и LVGL будет отображаться в правильном месте буфера.
+     * Таким образом, буфер всегда будет содержать все изображение. Будут обновлены только измененные области.
+     * При наличии двух буферов буферы буферов синхронизируются автоматически, а вflush_cbтребуется только изменение адреса.
      */
     LV_DISPLAY_RENDER_MODE_DIRECT,
 
     /**
-     * Always redraw the whole screen even if only one pixel has been changed.
-     * With 2 buffers in flush_cb only an address change is required.
+     * Всегда перерисовывайте весь экран, даже если был изменен только один пиксель.
+     * При наличии двух буферов вflush_cbтребуется только изменение адреса.
      */
     LV_DISPLAY_RENDER_MODE_FULL,
 } lv_display_render_mode_t;
@@ -70,7 +70,7 @@ typedef enum {
     LV_SCREEN_LOAD_ANIM_MOVE_TOP,
     LV_SCREEN_LOAD_ANIM_MOVE_BOTTOM,
     LV_SCREEN_LOAD_ANIM_FADE_IN,
-    LV_SCREEN_LOAD_ANIM_FADE_ON = LV_SCREEN_LOAD_ANIM_FADE_IN, /*For backward compatibility*/
+    LV_SCREEN_LOAD_ANIM_FADE_ON = LV_SCREEN_LOAD_ANIM_FADE_IN, /*Для обратной совместимости*/
     LV_SCREEN_LOAD_ANIM_FADE_OUT,
     LV_SCREEN_LOAD_ANIM_OUT_LEFT,
     LV_SCREEN_LOAD_ANIM_OUT_RIGHT,
@@ -86,35 +86,35 @@ typedef void (*lv_display_flush_wait_cb_t)(lv_display_t * disp);
  **********************/
 
 /**
- * Create a new display with the given resolution
- * @param hor_res   horizontal resolution in pixels
- * @param ver_res   vertical resolution in pixels
- * @return          pointer to a display object or `NULL` on error
+ * Создать новый дисплей с заданным разрешением.
+ * @param hor_res   горизонтальное разрешение в пикселях
+ * @param ver_res   вертикальное разрешение в пикселях
+ * @return          указатель на экранный объект или`NULL`в случае ошибки
  */
 lv_display_t * lv_display_create(int32_t hor_res, int32_t ver_res);
 
 /**
- * Remove a display
- * @param disp      pointer to display
+ * Удаление дисплея
+ * @param disp      указатель для отображения
  */
 void lv_display_delete(lv_display_t * disp);
 
 /**
- * Set a default display. The new screens will be created on it by default.
- * @param disp      pointer to a display
+ * Установите дисплей по умолчанию. Новые экраны будут создаваться на нем по умолчанию.
+ * @param disp      указатель на дисплей
  */
 void lv_display_set_default(lv_display_t * disp);
 
 /**
- * Get the default display
- * @return          pointer to the default display
+ * Получить отображение по умолчанию
+ * @return          указатель на дисплей по умолчанию
  */
 lv_display_t * lv_display_get_default(void);
 
 /**
- * Get the next display.
- * @param disp      pointer to the current display. NULL to initialize.
- * @return          the next display or NULL if no more. Gives the first display when the parameter is NULL.
+ * Получите следующий дисплей.
+ * @param disp      указатель на текущий дисплей. NULLдля инициализации.
+ * @return          следующий дисплей или NULL, если не более. Дает первое отображение, когда параметр равен NULL.
  */
 lv_display_t * lv_display_get_next(lv_display_t * disp);
 
@@ -123,130 +123,130 @@ lv_display_t * lv_display_get_next(lv_display_t * disp);
  *--------------------*/
 
 /**
- * Sets the resolution of a display. `LV_EVENT_RESOLUTION_CHANGED` event will be sent.
- * Here the native resolution of the device should be set. If the display will be rotated later with
- * `lv_display_set_rotation` LVGL will swap the hor. and ver. resolution automatically.
- * @param disp      pointer to a display
- * @param hor_res   the new horizontal resolution
- * @param ver_res   the new vertical resolution
+ * Устанавливает разрешение дисплея.  Событие `LV_EVENT_RESOLUTION_CHANGED` будет отправлено.
+ * Здесь должно быть установлено родное разрешение устройства. Если позже дисплей будет повернут с помощью
+ * `lv_display_set_rotation`LVGLпоменяет хор. и вер. разрешение автоматически.
+ * @param disp      указатель на дисплей
+ * @param hor_res   новое горизонтальное разрешение
+ * @param ver_res   новое вертикальное разрешение
  */
 void lv_display_set_resolution(lv_display_t * disp, int32_t hor_res, int32_t ver_res);
 
 /**
- * It's not mandatory to use the whole display for LVGL, however in some cases physical resolution is important.
- * For example the touchpad still sees whole resolution and the values needs to be converted
- * to the active LVGL display area.
- * @param disp      pointer to a display
- * @param hor_res   the new physical horizontal resolution, or -1 to assume it's the same as the normal hor. res.
- * @param ver_res   the new physical vertical resolution, or -1 to assume it's the same as the normal hor. res.
+ * Для LVGL не обязательно использовать весь дисплей, однако в некоторых случаях физическое разрешение важно.
+ * Например, тачпад по-прежнему видит полное разрешение, и значения необходимо преобразовать.
+ * в активную область отображения LVGL.
+ * @param disp      указатель на дисплей
+ * @param hor_res   новое физическое горизонтальное разрешение или -1, чтобы предположить, что оно такое же, как обычное горизонтальное разрешение. рез.
+ * @param ver_res   новое физическое вертикальное разрешение или -1, чтобы предположить, что оно такое же, как обычное горизонтальное. рез.
  */
 void lv_display_set_physical_resolution(lv_display_t * disp, int32_t hor_res, int32_t ver_res);
 
 /**
- * If physical resolution is not the same as the normal resolution
- * the offset of the active display area can be set here.
- * @param disp      pointer to a display
- * @param x         X offset
- * @param y         Y offset
+ * Если физическое разрешение не совпадает с нормальным разрешением
+ * Здесь можно установить смещение активной области отображения.
+ * @param disp      указатель на дисплей
+ * @param x         Смещение по оси X
+ * @param y         Смещение по оси Y
  */
 void lv_display_set_offset(lv_display_t * disp, int32_t x, int32_t y);
 
 /**
- * Set the rotation of this display. LVGL will swap the horizontal and vertical resolutions internally.
- * @param disp      pointer to a display (NULL to use the default display)
- * @param rotation  `LV_DISPLAY_ROTATION_0/90/180/270`
+ * Установите поворот этого дисплея.  LVGL внутренне поменяет местами горизонтальное и вертикальное разрешения.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @param вращение `LV_DISPLAY_ROTATION_0/90/180/270`
  */
 void lv_display_set_rotation(lv_display_t * disp, lv_display_rotation_t rotation);
 
 /**
- * Use matrix rotation for the display. This function is depended on `LV_DRAW_TRANSFORM_USE_MATRIX`
- * @param disp      pointer to a display (NULL to use the default display)
- * @param enable    true: enable matrix rotation, false: disable
+ * Используйте вращение матрицы для дисплея. Эта функция зависит от `LV_DRAW_TRANSFORM_USE_MATRIX`
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @param enable    true: включить вращение матрицы, false: отключить
  */
 void lv_display_set_matrix_rotation(lv_display_t * disp, bool enable);
 
 /**
- * Set the DPI (dot per inch) of the display.
- * dpi = sqrt(hor_res^2 + ver_res^2) / diagonal"
- * @param disp      pointer to a display
- * @param dpi       the new DPI
+ * Установите DPI (точек на дюйм) дисплея.
+ * dpi = sqrt(hor_res^2 +ver_res^2) / диагональ"
+ * @param disp      указатель на дисплей
+ * @param dpi       новый DPI
  */
 void lv_display_set_dpi(lv_display_t * disp, int32_t dpi);
 
 /**
- * Get the horizontal resolution of a display.
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the horizontal resolution of the display.
+ * Получите горизонтальное разрешение дисплея.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          горизонтальное разрешение дисплея.
  */
 int32_t lv_display_get_horizontal_resolution(const lv_display_t * disp);
 
 /**
- * Get the vertical resolution of a display
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the vertical resolution of the display
+ * Получить вертикальное разрешение дисплея
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          вертикальное разрешение дисплея
  */
 int32_t lv_display_get_vertical_resolution(const lv_display_t * disp);
 
 /**
- * Get the original horizontal resolution of a display without considering rotation
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the horizontal resolution of the display.
+ * Получите исходное горизонтальное разрешение дисплея без учета вращения.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          горизонтальное разрешение дисплея.
  */
 int32_t lv_display_get_original_horizontal_resolution(const lv_display_t * disp);
 
 /**
- * Get the original vertical resolution of a display without considering rotation
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the vertical resolution of the display
+ * Получите исходное вертикальное разрешение дисплея без учета вращения.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          вертикальное разрешение дисплея
  */
 int32_t lv_display_get_original_vertical_resolution(const lv_display_t * disp);
 
 /**
- * Get the physical horizontal resolution of a display
- * @param disp      pointer to a display (NULL to use the default display)
- * @return the      physical horizontal resolution of the display
+ * Получить физическое горизонтальное разрешение дисплея
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return физическое горизонтальное разрешение дисплея
  */
 int32_t lv_display_get_physical_horizontal_resolution(const lv_display_t * disp);
 
 /**
- * Get the physical vertical resolution of a display
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the physical vertical resolution of the display
+ * Получить физическое вертикальное разрешение дисплея
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          физическое вертикальное разрешение дисплея
  */
 int32_t lv_display_get_physical_vertical_resolution(const lv_display_t * disp);
 
 /**
- * Get the horizontal offset from the full / physical display
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the horizontal offset from the physical display
+ * Получите горизонтальное смещение от полного/физического дисплея.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          горизонтальное смещение от физического дисплея
  */
 int32_t lv_display_get_offset_x(const lv_display_t * disp);
 
 /**
- * Get the vertical offset from the full / physical display
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the horizontal offset from the physical display
+ * Получите вертикальное смещение от полного/физического дисплея.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          горизонтальное смещение от физического дисплея
  */
 int32_t lv_display_get_offset_y(const lv_display_t * disp);
 
 /**
- * Get the current rotation of this display.
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          the current rotation
+ * Получите текущий поворот этого дисплея.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          текущая ротация
  */
 lv_display_rotation_t lv_display_get_rotation(lv_display_t * disp);
 
 /**
- * Get if matrix rotation is enabled for a display or not
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          true: matrix rotation is enabled; false: disabled
+ * Узнайте, включено ли вращение матрицы для дисплея или нет.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          true: вращение матрицы включено; ложь: отключено
  */
 bool lv_display_get_matrix_rotation(lv_display_t * disp);
 
 /**
- * Get the DPI of the display
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          dpi of the display
+ * Получите DPI дисплея.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return          dpi дисплея
  */
 int32_t lv_display_get_dpi(const lv_display_t * disp);
 
@@ -255,144 +255,144 @@ int32_t lv_display_get_dpi(const lv_display_t * disp);
  *--------------------*/
 
 /**
- * Set the buffers for a display, similarly to `lv_display_set_draw_buffers`, but accept the raw buffer pointers.
- * For DIRECT/FULL rending modes, the buffer size must be at least
+ * Установите буферы для отображения символов`lv_display_set_draw_buffers`, но примите необработанные указатели буфера.
+ * Для режимов рендеринга DIRECT/FULL размер буфера должен быть не менее
  * `hor_res * ver_res * lv_color_format_get_size(lv_display_get_color_format(disp))`
- * @param disp              pointer to a display
- * @param buf1              first buffer
- * @param buf2              second buffer (can be `NULL`)
- * @param buf_size          buffer size in byte
- * @param render_mode       LV_DISPLAY_RENDER_MODE_PARTIAL/DIRECT/FULL
+ * @param disp              указатель на дисплей
+ * @param buf1              первый буфер
+ * @param buf2              второй буфер (может быть`NULL`)
+ * @param buf_size          размер буфера в байтах
+ * @param render_mode LV_DISPLAY_RENDER_MODE_PARTIAL / DIRECT / FULL
  */
 void lv_display_set_buffers(lv_display_t * disp, void * buf1, void * buf2, uint32_t buf_size,
                             lv_display_render_mode_t render_mode);
 
 /**
- * Set the frame buffers for a display, similarly to `lv_display_set_buffers`, but allow
- * for a custom stride as required by a display controller.
- * This allows the frame buffers to have a stride alignment different from the rest of
- * the buffers`
- * @param disp              pointer to a display
- * @param buf1              first buffer
- * @param buf2              second buffer (can be `NULL`)
- * @param buf_size          buffer size in byte
- * @param stride            buffer stride in bytes
- * @param render_mode       LV_DISPLAY_RENDER_MODE_PARTIAL/DIRECT/FULL
+ * Установите буферы кадров для дисплея `lv_display_set_buffers`, но это не проблема.
+ * для индивидуального шага в соответствии с требованиями контроллера дисплея.
+ * Это позволяет буферам кадров иметь выравнивание шага, отличное от остальных
+ * буферы`
+ * @param disp              указатель на дисплей
+ * @param buf1              первый буфер
+ * @param buf2              второй буфер (может быть`NULL`)
+ * @param buf_size          размер буфера в байтах
+ * @param stride            шаг буфера в байтах
+ * @param render_mode LV_DISPLAY_RENDER_MODE_PARTIAL / DIRECT / FULL
  */
 void lv_display_set_buffers_with_stride(lv_display_t * disp, void * buf1, void * buf2, uint32_t buf_size,
                                         uint32_t stride, lv_display_render_mode_t render_mode);
 
 /**
- * Set the buffers for a display, accept a draw buffer pointer.
- * Normally use `lv_display_set_buffers` is enough for most cases.
- * Use this function when an existing lv_draw_buf_t is available.
- * @param disp              pointer to a display
- * @param buf1              first buffer
- * @param buf2              second buffer (can be `NULL`)
+ * Установите буферы для отображения, примите указатель на буфер отрисовки.
+ * Обычно для большинства случаев достаточно использовать `lv_display_set_buffers`.
+ * Используйте эту функцию, если доступен существующийlv_draw_buf_t.
+ * @param disp              указатель на дисплей
+ * @param buf1              первый буфер
+ * @param buf2              второй буфер (может быть`NULL`)
  */
 void lv_display_set_draw_buffers(lv_display_t * disp, lv_draw_buf_t * buf1, lv_draw_buf_t * buf2);
 
 /**
- * Set the third draw buffer for a display.
- * @param disp              pointer to a display
- * @param buf3              third buffer
+ * Установите третий буфер прорисовки для дисплея.
+ * @param disp              указатель на дисплей
+ * @param buf3              третий буфер
  */
 void lv_display_set_3rd_draw_buffer(lv_display_t * disp, lv_draw_buf_t * buf3);
 
 /**
- * Set display render mode
- * @param disp              pointer to a display
- * @param render_mode       LV_DISPLAY_RENDER_MODE_PARTIAL/DIRECT/FULL
+ * Установить режим рендеринга дисплея
+ * @param disp              указатель на дисплей
+ * @param render_mode LV_DISPLAY_RENDER_MODE_PARTIAL / DIRECT / FULL
  */
 void lv_display_set_render_mode(lv_display_t * disp, lv_display_render_mode_t render_mode);
 
 /**
- * Set the flush callback which will be called to copy the rendered image to the display.
- * @param disp      pointer to a display
- * @param flush_cb  the flush callback (`px_map` contains the rendered image as raw pixel map and it should be copied to `area` on the display)
+ * Установите обратный вызов сброса, который будет вызываться для копирования визуализированного изображения на дисплей.
+ * @param disp      указатель на дисплей
+ * @param flush_cb  обратный вызов сброса (`px_map` содержит визуализированное изображение в виде необработанной карты пикселей, и его следует скопировать в`area`на дисплее)
  */
 void lv_display_set_flush_cb(lv_display_t * disp, lv_display_flush_cb_t flush_cb);
 
 /**
- * Set a callback to be used while LVGL is waiting flushing to be finished.
- * It can do any complex logic to wait, including semaphores, mutexes, polling flags, etc.
- * If not set the `disp->flushing` flag is used which can be cleared with `lv_display_flush_ready()`
- * @param disp      pointer to a display
- * @param wait_cb   a callback to call while LVGL is waiting for flush ready.
- *                  If NULL `lv_display_flush_ready()` can be used to signal that flushing is ready.
+ * Установите обратный вызов, который будет использоваться, пока LVGL ожидает завершения очистки.
+ * Он может выполнять любую сложную логику ожидания, включая семафоры, мьютексы, флаги опроса и т. д.
+ * Если он не установлен, используется флаг `disp->flushing`, который можно сохранить с помощью `lv_display_flush_ready()`.
+ * @param disp      указатель на дисплей
+ * @param wait_cb   обратный вызов для вызова, покаLVGLожидает готовности к сбросу.
+ *                  ЕслиNULL`lv_display_flush_ready()` можно использовать для сигнализации или помощи промывки.
  */
 void lv_display_set_flush_wait_cb(lv_display_t * disp, lv_display_flush_wait_cb_t wait_cb);
 
 /**
- * Set the color format of the display.
- * @param disp              pointer to a display
- * @param color_format      Possible values are
+ * Установите цветовой формат дисплея.
+ * @param disp              указатель на дисплей
+ * @param color_format      Возможные значения:
  *                          - LV_COLOR_FORMAT_RGB565
  *                          - LV_COLOR_FORMAT_RGB888
  *                          - LV_COLOR_FORMAT_XRGB888
  *                          - LV_COLOR_FORMAT_ARGB888
- *@note To change the endianness of the rendered image in case of RGB565 format
- *      (i.e. swap the 2 bytes) call `lv_draw_sw_rgb565_swap` in the flush_cb
+ *@note Чтобы изменить порядок байтов визуализированного изображения в случае формата RGB565
+ *      (т.е. поменяйте местами 2 байта) вызовите`lv_draw_sw_rgb565_swap`в flush_cb
  */
 void lv_display_set_color_format(lv_display_t * disp, lv_color_format_t color_format);
 
 /**
- * Get the color format of the display
- * @param disp              pointer to a display
- * @return                  the color format
+ * Получить цветовой формат дисплея
+ * @param disp              указатель на дисплей
+ * @return                  цветовой формат
  */
 lv_color_format_t lv_display_get_color_format(lv_display_t * disp);
 
 /**
- * Set the number of tiles for parallel rendering.
- * @param disp              pointer to a display
- * @param tile_cnt          number of tiles (1 =< tile_cnt < 256)
+ * Установите количество тайлов для параллельного рендеринга.
+ * @param disp              указатель на дисплей
+ * @param tile_cnt          количество плиток (1 =<tile_cnt< 256)
  */
 void lv_display_set_tile_cnt(lv_display_t * disp, uint32_t tile_cnt);
 
 /**
- * Get the number of tiles used for parallel rendering
- * @param disp              pointer to a display
- * @return                  number of tiles
+ * Получить количество тайлов, используемых для параллельного рендеринга.
+ * @param disp              указатель на дисплей
+ * @return                  количество плиток
  */
 uint32_t lv_display_get_tile_cnt(lv_display_t * disp);
 
 /**
- * Disabling anti-aliasing is not supported since v9. This function will be removed.
- * Enable anti-aliasing for the render engine
- * @param disp      pointer to a display
- * @param en        true/false
+ * Отключение сглаживания не поддерживается начиная с версии v9. Эта функция будет удалена.
+ * Включить сглаживание для механизма рендеринга
+ * @param disp      указатель на дисплей
+ * @param и правда/ложь
  */
 void lv_display_set_antialiasing(lv_display_t * disp, bool en);
 
 /**
- * Get if anti-aliasing is enabled for a display or not
- * @param disp      pointer to a display (NULL to use the default display)
- * @return          true/false
+ * Узнайте, включено ли сглаживание для дисплея или нет.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return истина/ложь
  */
 bool lv_display_get_antialiasing(lv_display_t * disp);
 
 /**
- * Call from the display driver when the flushing is finished
- * @param disp      pointer to display whose `flush_cb` was called
+ * Вызов драйвера дисплея после завершения очистки
+ * @param disp      указатель для отображения того, чей`flush_cb`был вызван
  */
 LV_ATTRIBUTE_FLUSH_READY void lv_display_flush_ready(lv_display_t * disp);
 
 /**
- * Tell if it's the last area of the refreshing process.
- * Can be called from `flush_cb` to execute some special display refreshing if needed when all areas area flushed.
- * @param disp      pointer to display
- * @return          true: it's the last area to flush;
- *                  false: there are other areas too which will be refreshed soon
+ * Скажите, является ли это последней областью процесса обновления.
+ * Может быть вызван из`flush_cb`для выполнения специального обновления дисплея, если это необходимо, когда все области очищены.
+ * @param disp      указатель для отображения
+ * @return          true: это последняя область, которую нужно очистить;
+ *                  false: есть и другие области, которые скоро будут обновлены
  */
 LV_ATTRIBUTE_FLUSH_READY bool lv_display_flush_is_last(lv_display_t * disp);
 
 bool lv_display_is_double_buffered(lv_display_t * disp);
 
 /**
- * Get display render mode
- * @param disp      pointer to a display
- * @return          display's render mode (LV_DISPLAY_RENDER_MODE_PARTIAL/DIRECT/FULL)
+ * Получить режим рендеринга дисплея
+ * @param disp      указатель на дисплей
+ * @return          режим рендеринга дисплея (LV_DISPLAY_RENDER_MODE_PARTIAL/DIRECT/FULL)
  */
 lv_display_render_mode_t lv_display_get_render_mode(lv_display_t * disp);
 
@@ -401,47 +401,47 @@ lv_display_render_mode_t lv_display_get_render_mode(lv_display_t * disp);
  *--------------------*/
 
 /**
- * Return a pointer to the active screen on a display
- * @param disp      pointer to display which active screen should be get.
- *                  (NULL to use the default screen)
- * @return          pointer to the active screen object (loaded by 'lv_screen_load()')
+ * Возврат указателя на активный экран дисплея
+ * @param disp      указатель для отображения активного экрана, который следует получить.
+ *                  ( NULL для использования экрана по умолчанию)
+ * @return          указатель на активный объект экрана (загружается с помощью 'lv_screen_load()')
  */
 lv_obj_t * lv_display_get_screen_active(lv_display_t * disp);
 
 /**
- * Return with a pointer to the previous screen. Only used during screen transitions.
- * @param disp      pointer to display which previous screen should be get.
- *                  (NULL to use the default screen)
- * @return          pointer to the previous screen object or NULL if not used now
+ * Вернитесь с помощью указателя на предыдущий экран. Используется только во время перехода между экранами.
+ * @param disp      указатель для отображения предыдущего экрана, который следует открыть.
+ *                  ( NULL для использования экрана по умолчанию)
+ * @return          указатель на предыдущий объект экрана или NULL, если сейчас не используется
  */
 lv_obj_t * lv_display_get_screen_prev(lv_display_t * disp);
 
 /**
- * Return the screen that is currently being loaded by the display
- * @param disp      pointer to a display object (NULL to use the default screen)
- * @return          pointer to the screen being loaded or NULL if no screen is currently being loaded
+ * Вернуть экран, который в данный момент загружается дисплеем
+ * @param disp      указатель на объект отображения (NULLдля использования экрана по умолчанию)
+ * @return          указатель на загружаемый экран или NULL, если в данный момент экран не загружается
  */
 lv_obj_t * lv_display_get_screen_loading(lv_display_t * disp);
 
 /**
- * Return the top layer. The top layer is the same on all screens and it is above the normal screen layer.
- * @param disp      pointer to display which top layer should be get. (NULL to use the default screen)
- * @return          pointer to the top layer object
+ * Верните верхний слой. Верхний слой одинаков на всех экранах и находится над обычным слоем экрана.
+ * @param disp      указатель для отображения верхнего слоя, который необходимо получить. (NULLдля использования экрана по умолчанию)
+ * @return          указатель на объект верхнего слоя
  */
 lv_obj_t * lv_display_get_layer_top(lv_display_t * disp);
 
 /**
- * Return the sys. layer. The system layer is the same on all screen and it is above the normal screen and the top layer.
- * @param disp      pointer to display which sys. layer should be retrieved. (NULL to use the default screen)
- * @return          pointer to the sys layer object
+ * Верните сис. слой. Системный уровень одинаков на всех экранах и находится над обычным экраном и верхним слоем.
+ * @param disp      указатель для отображения того, какой sys. слой должен быть восстановлен. (NULLдля использования экрана по умолчанию)
+ * @return          указатель на объект системного слоя
  */
 lv_obj_t * lv_display_get_layer_sys(lv_display_t * disp);
 
 /**
- * Return the bottom layer. The bottom layer is the same on all screen and it is under the normal screen layer.
- * It's visible only if the screen is transparent.
- * @param disp      pointer to display (NULL to use the default screen)
- * @return          pointer to the bottom layer object
+ * Верните нижний слой. Нижний слой одинаков на всех экранах и находится под обычным слоем экрана.
+ * Это видно только в том случае, если экран прозрачный.
+ * @param disp      указатель для отображения (NULLдля использования экрана по умолчанию)
+ * @return          указатель на объект нижнего слоя
  */
 lv_obj_t * lv_display_get_layer_bottom(lv_display_t * disp);
 
@@ -449,54 +449,54 @@ lv_obj_t * lv_display_get_layer_bottom(lv_display_t * disp);
 #if LV_USE_OBJ_NAME
 
 /**
- * Get screen by its name on a display. The name should be set by
- * `lv_obj_set_name()` or `lv_obj_set_name_static()`.
- * @param disp          pointer to a display or NULL to use default display
- * @param screen_name   name of the screen to get
- * @return              pointer to the screen, or NULL if not found.
+ * Получить экран по его имени на дисплее. Имя должно быть установлено
+ * `lv_obj_set_name()` или`lv_obj_set_name_static()`.
+ * @param disp          указатель на дисплей или NULL, чтобы использовать дисплей по умолчанию
+ * @param screen_name   название экрана, на котором нужно получить
+ * @return              указатель на экран или NULL, если не найден.
  */
 lv_obj_t * lv_display_get_screen_by_name(const lv_display_t * disp, const char * screen_name);
 
 #endif /*LV_USE_OBJ_NAME*/
 
 /**
- * Load a screen on the default display
- * @param scr       pointer to a screen
+ * Загрузить экран на дисплее по умолчанию
+ * @param scr       указатель на экран
  */
 void lv_screen_load(struct _lv_obj_t * scr);
 
 /**
- * Switch screen with animation
- * @param scr       pointer to the new screen to load
- * @param anim_type type of the animation from `lv_screen_load_anim_t`, e.g. `LV_SCREEN_LOAD_ANIM_MOVE_LEFT`
- * @param time      time of the animation
- * @param delay     delay before the transition
- * @param auto_del  true: automatically delete the old screen
+ * Переключение экрана с анимацией
+ * @param scr       указатель на новый экран для загрузки
+ * @param anim_type тип анимации из`lv_screen_load_anim_t`, например.  `LV_SCREEN_LOAD_ANIM_MOVE_LEFT`
+ * @param time      время анимации
+ * @param delay     задержка перед переходом
+ * @param auto_del  true: автоматически удалить старый экран
  */
 void lv_screen_load_anim(lv_obj_t * scr, lv_screen_load_anim_t anim_type, uint32_t time, uint32_t delay,
                          bool auto_del);
 
 /**
- * Get the active screen of the default display
- * @return          pointer to the active screen
+ * Получить активный экран дисплея по умолчанию
+ * @return          указатель на активный экран
  */
 lv_obj_t * lv_screen_active(void);
 
 /**
- * Get the top layer  of the default display
- * @return          pointer to the top layer
+ * Получить верхний слой дисплея по умолчанию
+ * @return          указатель на верхний слой
  */
 lv_obj_t * lv_layer_top(void);
 
 /**
- * Get the system layer  of the default display
- * @return          pointer to the sys layer
+ * Получить системный уровень дисплея по умолчанию
+ * @return          указатель на системный слой
  */
 lv_obj_t * lv_layer_sys(void);
 
 /**
- * Get the bottom layer  of the default display
- * @return          pointer to the bottom layer
+ * Получить нижний слой дисплея по умолчанию
+ * @return          указатель на нижний слой
  */
 lv_obj_t * lv_layer_bottom(void);
 
@@ -505,141 +505,141 @@ lv_obj_t * lv_layer_bottom(void);
  *--------------------*/
 
 /**
- * Add an event handler to the display
- * @param disp          pointer to a display
- * @param event_cb      an event callback
- * @param filter        event code to react or `LV_EVENT_ALL`
- * @param user_data     optional user_data
+ * Добавьте обработчик событий на дисплей
+ * @param disp          указатель на дисплей
+ * @param event_cb      обратный вызов события
+ * @param filter        код события для реакции или `LV_EVENT_ALL`
+ * @param user_data     опционально user_data
  */
 void lv_display_add_event_cb(lv_display_t * disp, lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
 
 /**
- * Get the number of event attached to a display
- * @param disp          pointer to a display
- * @return              number of events
+ * Получить количество событий, прикрепленных к дисплею
+ * @param disp          указатель на дисплей
+ * @return              количество событий
  */
 uint32_t lv_display_get_event_count(lv_display_t * disp);
 
 /**
- * Get an event descriptor for an event
- * @param disp          pointer to a display
- * @param index         the index of the event
- * @return              the event descriptor
+ * Получить дескриптор события для события
+ * @param disp          указатель на дисплей
+ * @param index         индекс события
+ * @return              дескриптор события
  */
 lv_event_dsc_t * lv_display_get_event_dsc(lv_display_t * disp, uint32_t index);
 
 /**
- * Remove an event
- * @param disp          pointer to a display
- * @param index         the index of the event to remove
- * @return              true: and event was removed; false: no event was removed
+ * Удалить событие
+ * @param disp          указатель на дисплей
+ * @param index         индекс события, которое нужно удалить
+ * @return              true: и событие было удалено; false: ни одно событие не было удалено
  */
 bool lv_display_delete_event(lv_display_t * disp, uint32_t index);
 
 /**
- * Remove an event_cb with user_data
- * @param disp          pointer to a display
- * @param event_cb      the event_cb of the event to remove
- * @param user_data     user_data
- * @return              the count of the event removed
+ * Удалитеevent_cbс помощью user_data.
+ * @param disp          указатель на дисплей
+ * @param event_cb      event_cb события, которое нужно удалить
+ * @param user_data user_data
+ * @return              количество событий удалено
  */
 uint32_t lv_display_remove_event_cb_with_user_data(lv_display_t * disp, lv_event_cb_t event_cb, void * user_data);
 
 /**
- * Send an event to a display
- * @param disp          pointer to a display
- * @param code          an event code. LV_EVENT_...
- * @param param         optional param
- * @return              LV_RESULT_OK: disp wasn't deleted in the event.
+ * Отправить событие на дисплей
+ * @param disp          указатель на дисплей
+ * @param code          код события.  LV_EVENT_...
+ * @param param         необязательный параметр
+ * @return              LV_RESULT_OK: дисп не был удален в этом событии.
  */
 lv_result_t lv_display_send_event(lv_display_t * disp, lv_event_code_t code, void * param);
 
 /**
- * Get the area to be invalidated. Can be used in `LV_EVENT_INVALIDATE_AREA`
- * @param e     pointer to an event
- * @return      the area to invalidated (can be modified as required)
+ * Получите область, которая будет признана недействительной. Может использоваться в `LV_EVENT_INVALIDATE_AREA`.
+ * @param e     указатель на событие
+ * @return      область, которую следует признать недействительной (может быть изменена по мере необходимости)
  */
 lv_area_t * lv_event_get_invalidated_area(lv_event_t * e);
 
 /**
- * Set the theme of a display. If there are no user created widgets yet the screens' theme will be updated
- * @param disp      pointer to a display
- * @param th        pointer to a theme
+ * Установите тему дисплея. Если созданных пользователем виджетов еще нет, тема экранов будет обновлена.
+ * @param disp      указатель на дисплей
+ * @param th        указатель на тему
  */
 void lv_display_set_theme(lv_display_t * disp, lv_theme_t * th);
 
 /**
- * Get the theme of a display
- * @param disp      pointer to a display
- * @return          the display's theme (can be NULL)
+ * Получить тему дисплея
+ * @param disp      указатель на дисплей
+ * @return          тема дисплея (может бытьNULL)
  */
 lv_theme_t * lv_display_get_theme(lv_display_t * disp);
 
 /**
- * Get elapsed time since last user activity on a display (e.g. click)
- * @param disp      pointer to a display (NULL to get the overall smallest inactivity)
- * @return          elapsed ticks (milliseconds) since the last activity
+ * Получить время, прошедшее с момента последней активности пользователя на дисплее (например, щелчка мышью).
+ * @param disp      указатель на дисплей (NULL, чтобы получить общее минимальное значение бездействия)
+ * @return          прошедшие тики (миллисекунды) с момента последней активности
  */
 uint32_t lv_display_get_inactive_time(const lv_display_t * disp);
 
 /**
- * Manually trigger an activity on a display
- * @param disp      pointer to a display (NULL to use the default display)
+ * Вручную запускать действие на дисплее
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
  */
 void lv_display_trigger_activity(lv_display_t * disp);
 
 /**
- * Temporarily enable and disable the invalidation of the display.
- * @param disp      pointer to a display (NULL to use the default display)
- * @param en        true: enable invalidation; false: invalidation
+ * Временно включите и отключите инвалидацию дисплея.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @param en        true: включить аннулирование; ложь: аннулирование
  */
 void lv_display_enable_invalidation(lv_display_t * disp, bool en);
 
 /**
- * Get display invalidation is enabled.
- * @param disp      pointer to a display (NULL to use the default display)
- * @return return   true if invalidation is enabled
+ * Инвалидация отображения включена.
+ * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
+ * @return вернуть true, если инвалидация включена
  */
 bool lv_display_is_invalidation_enabled(lv_display_t * disp);
 
 /**
- * Get a pointer to the screen refresher timer to
- * modify its parameters with `lv_timer_...` functions.
- * @param disp      pointer to a display
- * @return          pointer to the display refresher timer. (NULL on error)
+ * Получите указатель на таймер обновления экрана, чтобы
+ * измените его параметры с помощью функции `lv_timer_...`.
+ * @param disp      указатель на дисплей
+ * @return          указатель на таймер обновления дисплея. (NULLпри ошибке)
  */
 lv_timer_t * lv_display_get_refr_timer(lv_display_t * disp);
 
 /**
- * Delete screen refresher timer
- * @param disp      pointer to a display
+ * Удалить таймер обновления экрана
+ * @param disp      указатель на дисплей
  */
 void lv_display_delete_refr_timer(lv_display_t * disp);
 
 /**
- * Register vsync event of a display. `LV_EVENT_VSYNC` event will be sent periodically.
- * Please don't use it in display event listeners, as it may cause memory leaks and illegal access issues.
+ * Зарегистрируйте событие vsync видеокарты.  Событие`LV_EVENT_VSYNC`будет периодически отправляться.
+ * Пожалуйста, не используйте его в прослушивателях событий отображения, так как это может вызвать утечки памяти и проблемы несанкционированного доступа.
  *
- * @param disp      pointer to a display
- * @param event_cb      an event callback
- * @param user_data     optional user_data
+ * @param disp      указатель на дисплей
+ * @param event_cb      обратный вызов события
+ * @param user_data     опционально user_data
  */
 bool lv_display_register_vsync_event(lv_display_t * disp, lv_event_cb_t event_cb, void * user_data);
 
 /**
- * Unregister vsync event of a display. `LV_EVENT_VSYNC` event won't be sent periodically.
- * Please don't use it in display event listeners, as it may cause memory leaks and illegal access issues.
- * @param disp      pointer to a display
- * @param event_cb      an event callback
- * @param user_data     optional user_data
+ * Отменить регистрацию событий vsync дисплея.  Событие`LV_EVENT_VSYNC`не будет периодически отправляться.
+ * Пожалуйста, не используйте его в прослушивателях событий отображения, так как это может вызвать утечки памяти и проблемы несанкционированного доступа.
+ * @param disp      указатель на дисплей
+ * @param event_cb      обратный вызов события
+ * @param user_data     опционально user_data
  */
 bool lv_display_unregister_vsync_event(lv_display_t * disp, lv_event_cb_t event_cb, void * user_data);
 
 /**
- * Send an vsync event to a display
- * @param disp          pointer to a display
- * @param param         optional param
- * @return              LV_RESULT_OK: disp wasn't deleted in the event.
+ * Отправить событие vsync на дисплей
+ * @param disp          указатель на дисплей
+ * @param param         необязательный параметр
+ * @return              LV_RESULT_OK: дисп не был удален в этом событии.
  */
 lv_result_t lv_display_send_vsync_event(lv_display_t * disp, void * param);
 
@@ -650,34 +650,34 @@ void * lv_display_get_driver_data(lv_display_t * disp);
 lv_draw_buf_t * lv_display_get_buf_active(lv_display_t * disp);
 
 /**
- * Rotate an area in-place according to the display's rotation
- * @param disp      pointer to a display
- * @param area      pointer to an area to rotate
+ * Поворот области на месте в соответствии с поворотом дисплея
+ * @param disp      указатель на дисплей
+ * @param area      указатель на область для вращения
  */
 void lv_display_rotate_area(lv_display_t * disp, lv_area_t * area);
 
 /**
- * Rotate a point in-place according to the display's rotation
- * @param disp      pointer to a display
- * @param point     pointer to a point to rotate
+ * Поворот точки на месте в соответствии с поворотом дисплея
+ * @param disp      указатель на дисплей
+ * @param point     указатель на точку для вращения
  */
 void lv_display_rotate_point(lv_display_t * disp, lv_point_t * point);
 
 /**
- * Get the size of the draw buffers
- * @param disp      pointer to a display
- * @return          the size of the draw buffer in bytes for valid display, 0 otherwise
+ * Получить размер буферов отрисовки
+ * @param disp      указатель на дисплей
+ * @return          размер буфера отрисовки в байтах для корректного отображения, 0 в противном случае
  */
 uint32_t lv_display_get_draw_buf_size(lv_display_t * disp);
 
 /**
- * Get the size of the invalidated draw buffer. Can be used in the flush callback
- * to get the number of bytes used in the current render buffer.
- * @param disp      pointer to a display
- * @param width     the width of the invalidated area
- * @param height    the height of the invalidated area
- * @return          the size of the invalidated draw buffer in bytes, not accounting for
- *                  any preceding palette information for a valid display, 0 otherwise
+ * Получите размер недействительного буфера отрисовки. Может использоваться в обратном вызове сброса
+ * чтобы получить количество байтов, используемых в текущем буфере рендеринга.
+ * @param disp      указатель на дисплей
+ * @param width     ширина недействительной области
+ * @param height    высота недействительной области
+ * @return          размер недействительного буфера отрисовки в байтах, без учета
+ *                  любая предыдущая информация о палитре для корректного отображения, в противном случае 0
  */
 uint32_t lv_display_get_invalidated_draw_buf_size(lv_display_t * disp, uint32_t width, uint32_t height);
 
@@ -686,77 +686,77 @@ uint32_t lv_display_get_invalidated_draw_buf_size(lv_display_t * disp, uint32_t 
  **********************/
 
 /*------------------------------------------------
- * To improve backward compatibility
- * Recommended only if you have one display
+ * Для улучшения обратной совместимости
+ * Рекомендуется, только если у вас один дисплей
  *------------------------------------------------*/
 
 #ifndef LV_HOR_RES
 /**
- * The horizontal resolution of the currently active display.
+ * Горизонтальное разрешение текущего активного дисплея.
  */
 #define LV_HOR_RES lv_display_get_horizontal_resolution(lv_display_get_default())
 #endif
 
 #ifndef LV_VER_RES
 /**
- * The vertical resolution of the currently active display.
+ * Вертикальное разрешение текущего активного дисплея.
  */
 #define LV_VER_RES lv_display_get_vertical_resolution(lv_display_get_default())
 #endif
 
 /**
- * See `lv_dpx()` and `lv_display_dpx()`.
- * Same as Android's DIP. (Different name is chosen to avoid mistype between LV_DPI and LV_DIP)
+ * См. `lv_dpx()`и`lv_display_dpx()`.
+ * То же самое иDIPдля Android. (Выбрано другое имя, чтобы избежать ошибок при вводе междуLV_DPIиLV_DIP)
  *
- * - 40 dip is 40 px on a 160 DPI screen (distance = 1/4 inch).
- * - 40 dip is 80 px on a 320 DPI screen (distance still = 1/4 inch).
+ * - Угол наклона 40 — это 40 пикселей на экранеDPI160 (расстояние = 1/4 дюйма).
+ * - Угол наклона 40 – это 80 пикселей на экране 320DPI(расстояние по-прежнему = 1/4 дюйма).
  *
  * @sa https://stackoverflow.com/questions/2025282/what-is-the-difference-between-px-dip-dp-and-sp
  */
-#define LV_DPX_CALC(dpi, n)   ((n) == 0 ? 0 :LV_MAX((( (dpi) * (n) + 80) / 160), 1)) /*+80 for rounding*/
+#define LV_DPX_CALC(dpi, n)   ((n) == 0 ? 0 :LV_MAX((( (dpi) * (n) + 80) / 160), 1)) /*+80 за округление*/
 #define LV_DPX(n)   LV_DPX_CALC(lv_display_get_dpi(NULL), n)
 
 /**
- * For default display, computes the number of pixels (a distance or size) as if the
- * display had 160 DPI.  This allows you to specify 1/160-th fractions of an inch to
- * get real distance on the display that will be consistent regardless of its current
- * DPI.  It ensures `lv_dpx(100)`, for example, will have the same physical size
- * regardless to the DPI of the display.
- * @param n     number of 1/160-th-inch units to compute with
- * @return      number of pixels to use to make that distance
+ * Для отображения по умолчанию вычисляет количество пикселей (расстояние или размер), как если бы
+ * на дисплее было 160 DPI.  Это позволяет вам указать 1/160-ю долю дюйма для
+ * получить реальное расстояние на дисплее, которое будет постоянным независимо от его текущего значения
+ * DPI .  Например, это гарантирует, что`lv_dpx(100)`будет иметь одинаковый физический размер.
+ * независимо от DPI дисплея.
+ * @param n     количество единиц размером 1/160 дюйма для вычислений
+ * @return      количество пикселей, которые нужно использовать, чтобы преодолеть это расстояние
  */
 int32_t lv_dpx(int32_t n);
 
 /**
- * For specified display, computes the number of pixels (a distance or size) as if the
- * display had 160 DPI.  This allows you to specify 1/160-th fractions of an inch to
- * get real distance on the display that will be consistent regardless of its current
- * DPI.  It ensures `lv_dpx(100)`, for example, will have the same physical size
- * regardless to the DPI of the display.
- * @param disp  pointer to display whose dpi should be considered
- * @param n     number of 1/160-th-inch units to compute with
- * @return      number of pixels to use to make that distance
+ * Для указанного дисплея вычисляет количество пикселей (расстояние или размер), как если бы
+ * на дисплее было 160 DPI.  Это позволяет вам указать 1/160-ю долю дюйма для
+ * получить реальное расстояние на дисплее, которое будет постоянным независимо от его текущего значения
+ * DPI .  Например, это гарантирует, что`lv_dpx(100)`будет иметь одинаковый физический размер.
+ * независимо от DPI дисплея.
+ * @param disp  указатель для отображения того, чье разрешение следует учитывать
+ * @param n     количество единиц размером 1/160 дюйма для вычислений
+ * @return      количество пикселей, которые нужно использовать, чтобы преодолеть это расстояние
  */
 int32_t lv_display_dpx(const lv_display_t * disp, int32_t n);
 
 #if LV_USE_EXT_DATA
 /**
- * @brief Attaches external user data and destructor callback to a display
+ * @brief Прикрепляет внешние пользовательские данные и обратный вызов деструктора к отображению.
  *
- * Associates custom user data with an LVGL display and specifies a destructor function
- * that will be automatically invoked when the display is deleted to properly clean up
- * the associated resources.
+ * Связывает пользовательские данные с отображением LVGL и определяет функцию деструктора.
+ * который будет автоматически вызываться при удалении дисплея для правильной очистки
+ * связанные ресурсы.
  *
- * @param disp       Pointer to a display
- * @param data       User-defined data pointer to associate with the display
- * @param free_cb    Callback function for cleaning up data when display is deleted.
- *                   Receives data as parameter. NULL means no cleanup required.
+ * @param disp       Указатель на дисплей
+ * @param data       Определяемый пользователем указатель данных для связи с дисплеем
+ * @param free_cb    Функция обратного вызова для очистки данных при удалении дисплея.
+ *                   Получает данные в качестве параметра.  NULL означает, что очистка не требуется.
  */
 void lv_display_set_external_data(lv_display_t * disp, void * data, void (* free_cb)(void * data));
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DISPLAY_H*/

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+ * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
+ * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
 #pragma once
 
@@ -14,7 +14,7 @@
 typedef struct frogfs_decomp_funcs_t frogfs_decomp_funcs_t;
 
 /**
- * \brief       Structure describing a frogfs file entry
+ * \brief Структура, описывающая запись файла frogfs
  */
 struct frogfs_fh_t {
     const frogfs_fs_t *fs; /**< frogfs fs pointer */
@@ -23,13 +23,13 @@ struct frogfs_fh_t {
     const void *data_ptr; /**< current data pointer */
     size_t data_sz; /**< data size */
     size_t real_sz; /**< real (expanded) size */
-    unsigned int flags; /** open flags */
+    unsigned int flags; /** открытые флаги */
     const frogfs_decomp_funcs_t *decomp_funcs; /**< decompresor funcs */
     void *decomp_priv; /**< decompressor private data */
 };
 
 /**
- * \brief       Structure describing a frogfs directory entry
+ * \brief Структура, описывающая запись каталога frogfs
  */
 struct frogfs_dh_t {
     const frogfs_fs_t *fs; /**< frogfs fs pointer */
@@ -38,7 +38,7 @@ struct frogfs_dh_t {
 };
 
 /**
- * \brief       Structure of function pointers that describe a decompressor
+ * \brief Структура указателей на функции, описывающие декомпрессор
  */
 struct frogfs_decomp_funcs_t {
     int (*open)(frogfs_fh_t *f, unsigned int flags);
@@ -49,22 +49,22 @@ struct frogfs_decomp_funcs_t {
 };
 
 /**
- * \brief       Raw decompressor functions
+ * \brief Функции декомпрессора Raw
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_raw;
 
 /**
- * \brief       Heatshrink decompressor functions
+ * \brief Функции термоусадочного декомпрессора
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_heatshrink;
 
 /**
- * \brief       Miniz decompressor functions
+ * \brief Функции декомпрессора Miniz
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_miniz;
 
 /**
- * \brief       Zlib decompressor functions
+ * \brief Функции декомпрессора Zlib
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_zlib;
 

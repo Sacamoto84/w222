@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -32,7 +32,7 @@
 #ifdef THORVG_LOTTIE_EXPRESSIONS_SUPPORT
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 struct ExpContent
@@ -44,7 +44,7 @@ struct ExpContent
 
 static jerry_value_t _content(const jerry_call_info_t* info, const jerry_value_t args[], const jerry_length_t argsCnt);
 
-//reserved expressions specifiers
+//спецификаторы зарезервированных выражений
 static const char* EXP_NAME = "name";
 static const char* EXP_CONTENT = "content";
 static const char* EXP_WIDTH = "width";
@@ -58,7 +58,7 @@ static const char* EXP_VALUE = "value";
 static const char* EXP_INDEX = "index";
 static const char* EXP_EFFECT= "effect";
 
-static LottieExpressions* exps = nullptr;   //singleton instance engine
+static LottieExpressions* exps = nullptr;   //механизм экземпляра Singleton
 
 
 static ExpContent* _expcontent(LottieExpression* exp, float frameNo, LottieObject* obj)
@@ -78,7 +78,7 @@ static void contentFree(void *native_p, struct jerry_object_native_info_t *info_
 }
 
 static jerry_object_native_info_t freeCb {contentFree, 0, 0};
-static uint32_t engineRefCnt = 0;  //Expressions Engine reference count
+static uint32_t engineRefCnt = 0;  //Счетчик ссылок на механизм выражений
 
 
 static char* _name(jerry_value_t args)
@@ -190,7 +190,7 @@ static jerry_value_t _buildGroup(LottieGroup* group, float frameNo)
 {
     auto obj = jerry_function_external(_content);
 
-    //attach a transform
+    //прикрепите преобразование
     for (auto c = group->children.begin(); c < group->children.end(); ++c) {
         if ((*c)->type == LottieObject::Type::Transform) {
             _buildTransform(obj, frameNo, static_cast<LottieTransform*>(*c));
@@ -304,21 +304,21 @@ static void _buildLayer(jerry_value_t context, float frameNo, LottieLayer* layer
     jerry_object_set_sz(context, "audioActive", audioActive);
     jerry_value_free(audioActive);
 
-    //sampleImage(point, radius = [.5, .5], postEffect=true, t=time)
+    //sampleImage (точка, радиус = [.5, .5], postEffect = true, t = время)
 
     _buildTransform(context, frameNo, layer->transform);
 
-    //audioLevels, #the value of the Audio Levels property of the layer in decibels
+    //audioLevels, значение #the свойства Audio Levels слоя в децибелах
 
     auto timeRemap = jerry_object();
     jerry_object_set_native_ptr(timeRemap, nullptr, &layer->timeRemap);
     jerry_object_set_sz(context, "timeRemap", timeRemap);
     jerry_value_free(timeRemap);
 
-    //marker.key(index)
-    //marker.key(name)
-    //marker.nearestKey(t)
-    //marker.numKeys
+    //маркер.ключ(индекс)
+    //маркер.ключ(имя)
+    //маркер.NearestKey(т)
+    //маркер.numKeys
 
     auto name = jerry_string_sz(layer->name);
     jerry_object_set_sz(context, EXP_NAME, name);
@@ -329,7 +329,7 @@ static void _buildLayer(jerry_value_t context, float frameNo, LottieLayer* layer
     jerry_object_set_native_ptr(toComp, nullptr, comp);
     jerry_value_free(toComp);
 
-    //content("name"), #look for the named property from a layer
+    //content("name"), #look для именованного свойства из слоя
     auto content = jerry_function_external(_content);
     jerry_object_set_sz(context, EXP_CONTENT, content);
     jerry_object_set_native_ptr(content, &freeCb, _expcontent(exp, frameNo, layer));
@@ -517,7 +517,7 @@ static jerry_value_t _clamp(const jerry_call_info_t* info, const jerry_value_t a
     auto limit1 = jerry_value_as_number(args[1]);
     auto limit2 = jerry_value_as_number(args[2]);
 
-    //clamping
+    //зажимающий
     if (num < limit1) num = limit1;
     if (num > limit2) num = limit2;
 
@@ -669,12 +669,12 @@ static jerry_value_t _layer(const jerry_call_info_t* info, const jerry_value_t a
     auto comp = static_cast<LottieLayer*>(data->obj);
     LottieLayer* layer;
 
-    //layer index
+    //индекс слоя
     if (jerry_value_is_number(args[0])) {
         auto idx = (uint16_t)jerry_value_as_int32(args[0]);
         layer = comp->layerByIdx(idx);
         jerry_value_free(idx);
-    //layer name
+    //имя слоя
     } else {
         layer = comp->layerById(_idByName(args[0]));
     }
@@ -717,7 +717,7 @@ static jerry_value_t _propertyGroup(const jerry_call_info_t* info, const jerry_v
     auto data = static_cast<ExpContent*>(jerry_object_get_native_ptr(info->function, &freeCb));
     auto level = jerry_value_as_int32(args[0]);
 
-    //intermediate group
+    //промежуточная группа
     if (level == 1) {
         auto group = jerry_function_external(_property);
         jerry_object_set_native_ptr(group, &freeCb, _expcontent(data->exp, data->frameNo, data->obj));
@@ -764,7 +764,7 @@ static jerry_value_t _velocityAtTime(const jerry_call_info_t* info, const jerry_
     auto cframe = exp->property->frameNo(key);
     auto elapsed = (cframe - pframe) / (exp->comp->frameRate);
 
-    //compute the velocity
+    //вычислить скорость
     switch (exp->property->type) {
         case LottieProperty::Type::Point: {
             auto prv = (*static_cast<LottiePoint*>(exp->property))(pframe);
@@ -800,7 +800,7 @@ static jerry_value_t _speedAtTime(const jerry_call_info_t* info, const jerry_val
 
     Point cur, prv;
 
-    //compute the velocity
+    //вычислить скорость
     switch (exp->property->type) {
         case LottieProperty::Type::Point: {
             prv = (*static_cast<LottiePoint*>(exp->property))(pframe);
@@ -940,7 +940,7 @@ static jerry_value_t _key(const jerry_call_info_t* info, const jerry_value_t arg
     jerry_object_set_sz(obj, EXP_INDEX, args[0]);
     jerry_object_set_sz(obj, EXP_VALUE, value);
 
-    //direct access, key[0], key[1]
+    //прямой доступ, ключ[0], ключ[1]
     if (exp->property->type == LottieProperty::Type::Float) {
         jerry_object_set_index(obj, 0, value);
     } else if (exp->property->type == LottieProperty::Type::Point || exp->property->type == LottieProperty::Type::Position) {
@@ -978,7 +978,7 @@ static jerry_value_t _uniformPath(const jerry_call_info_t* info, const jerry_val
     auto pathset = static_cast<LottiePathSet*>(jerry_object_get_native_ptr(info->function, nullptr));
 
     /* TODO: ThorVG prebuilds the path data for performance.
-       It actually need to constructs the Array<Point> for points, inTangents, outTangents and then return here... */
+       На самом деле необходимо создать Array<Point> для точек, inTangents, outTangents, а затем вернуться сюда... */
     auto obj = jerry_object();
     jerry_object_set_native_ptr(obj, nullptr, pathset);
     return obj;
@@ -994,7 +994,7 @@ static jerry_value_t _isClosed(const jerry_call_info_t* info, const jerry_value_
 
 static void _buildPath(jerry_value_t context, LottieExpression* exp)
 {
-    //Trick for fast building path.
+    //Трюк для быстрого построения пути.
     auto points = jerry_function_external(_uniformPath);
     jerry_object_set_native_ptr(points, nullptr, exp->property);
     jerry_object_set_sz(context, "points", points);
@@ -1047,9 +1047,9 @@ static void _buildProperty(float frameNo, jerry_value_t context, LottieExpressio
     jerry_object_set_native_ptr(speedAtTime, nullptr, exp);
     jerry_value_free(speedAtTime);
 
-    //wiggle(freq, amp, octaves=1, amp_mult=.5, t=time)
-    //temporalWiggle(freq, amp, octaves=1, amp_mult=.5, t=time)
-    //smooth(width=.2, samples=5, t=time)
+    //покачивание(частота, усилитель, октавы=1, amp_mult =.5, t=время)
+    //temporalWiggle(частота, усилитель, октавы=1, amp_mult =.5, t=время)
+    //гладкий (ширина = 0,2, выборки = 5, t = время)
 
     auto loopIn = jerry_function_external(_loopIn);
     jerry_object_set_sz(context, "loopIn", loopIn);
@@ -1076,7 +1076,7 @@ static void _buildProperty(float frameNo, jerry_value_t context, LottieExpressio
     jerry_object_set_native_ptr(key, nullptr, exp);
     jerry_value_free(key);
 
-    //key(markerName)
+    //ключ (имя маркера)
 
     auto nearestKey = jerry_function_external(_nearestKey);
     jerry_object_set_native_ptr(nearestKey, nullptr, exp);
@@ -1092,17 +1092,17 @@ static void _buildProperty(float frameNo, jerry_value_t context, LottieExpressio
     jerry_object_set_sz(context, "propertyGroup", propertyGroup);
     jerry_value_free(propertyGroup);
 
-    //propertyIndex
+    //индекс свойства
 
-    //name
+    //имя
 
-    //content("name"), #look for the named property from a layer
+    //content("name"), #look для именованного свойства из слоя
     auto content = jerry_function_external(_content);
     jerry_object_set_sz(context, EXP_CONTENT, content);
     jerry_object_set_native_ptr(content, &freeCb, _expcontent(exp, frameNo, exp->layer));
     jerry_value_free(content);
 
-    //expansions per types
+    //расширения по типам
     if (exp->property->type == LottieProperty::Type::PathSet) _buildPath(context, exp);
 }
 
@@ -1213,7 +1213,7 @@ static void _buildMath(jerry_value_t context)
     jerry_object_set_sz(context, "easeOut", easeOut);
     jerry_value_free(easeOut);
 
-    //lookAt
+    //посмотреть
 }
 
 
@@ -1232,7 +1232,7 @@ void LottieExpressions::buildComp(jerry_value_t context, float frameNo, LottieLa
     data->frameNo = frameNo;
     data->obj = comp;
 
-    //layer(index) / layer(name) / layer(otherLayer, reIndex)
+    //слой (индекс) / слой (имя) / слой (другой слой, reIndex)
     auto layer = jerry_function_external(_layer);
     jerry_object_set_sz(context, "layer", layer);
 
@@ -1249,13 +1249,13 @@ void LottieExpressions::buildComp(LottieComposition* comp, float frameNo, Lottie
 {
     buildComp(this->comp, frameNo, comp->root, exp);
 
-    //marker
-    //marker.key(index)
-    //marker.key(name)
-    //marker.nearestKey(t)
-    //marker.numKeys
+    //маркер
+    //маркер.ключ(индекс)
+    //маркер.ключ(имя)
+    //маркер.NearestKey(т)
+    //маркер.numKeys
 
-    //activeCamera
+    //активная камера
 
     auto width = jerry_number(comp->w);
     jerry_object_set_sz(thisComp, EXP_WIDTH, width);
@@ -1270,16 +1270,16 @@ void LottieExpressions::buildComp(LottieComposition* comp, float frameNo, Lottie
     jerry_value_free(duration);
 
     //ntscDropFrame
-    //displayStartTime
+    //дисплейСтарттиме
 
     auto frameDuration = jerry_number(1.0f / comp->frameRate);
     jerry_object_set_sz(thisComp, "frameDuration", frameDuration);
     jerry_value_free(frameDuration);
 
-    //shutterAngle
-    //shutterPhase
+    //затворУгол
+    //затворФаза
     //bgColor
-    //pixelAspect
+    //пиксельАспект
 
     auto name = jerry_string((jerry_char_t*)comp->name, strlen(comp->name), JERRY_ENCODING_UTF8);
     jerry_object_set_sz(thisComp, EXP_NAME, name);
@@ -1291,12 +1291,12 @@ jerry_value_t LottieExpressions::buildGlobal()
 {
     global = jerry_current_realm();
 
-    //comp(name)
+    //комп (имя)
     comp = jerry_function_external(_comp);
     jerry_object_set_native_ptr(comp, &freeCb, _expcontent(nullptr, 0.0f, nullptr));
     jerry_object_set_sz(global, "comp", comp);
 
-    //footage(name)
+    //кадры (имя)
 
     thisComp = jerry_object();
     jerry_object_set_native_ptr(thisComp, &freeCb, _expcontent(nullptr, 0.0f, nullptr));
@@ -1321,7 +1321,7 @@ jerry_value_t LottieExpressions::buildGlobal()
     jerry_value_free(createPath);
 
     //posterizeTime(framesPerSecond)
-    //value
+    //ценность
 
     return global;
 }
@@ -1333,27 +1333,27 @@ jerry_value_t LottieExpressions::evaluate(float frameNo, LottieExpression* exp)
 
     buildGlobal(exp);
 
-    //main composition
+    //основной состав
     buildComp(exp->comp, frameNo, exp);
 
-    //this composition
+    //эта композиция
     buildComp(thisComp, frameNo, exp->layer->comp, exp);
 
-    //update global context values
+    //обновить значения глобального контекста
     _buildProperty(frameNo, global, exp);
 
-    //this layer
+    //этот слой
     jerry_object_set_native_ptr(thisLayer, nullptr, exp->layer);
     _buildLayer(thisLayer, frameNo, exp->layer, exp->comp->root, exp);
 
-    //this property
+    //это свойство
     jerry_object_set_native_ptr(thisProperty, nullptr, exp->property);
     _buildProperty(frameNo, thisProperty, exp);
 
-    //expansions per object type
+    //расширения для каждого типа объекта
     if (exp->object->type == LottieObject::Transform) _buildTransform(global, frameNo, static_cast<LottieTransform*>(exp->object));
 
-    //evaluate the code
+    //оценить код
     auto eval = jerry_eval((jerry_char_t *) exp->code, strlen(exp->code), JERRY_PARSE_NO_OPTS);
 
     if (jerry_value_is_exception(eval) || jerry_value_is_undefined(eval)) {
@@ -1369,7 +1369,7 @@ jerry_value_t LottieExpressions::evaluate(float frameNo, LottieExpression* exp)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 LottieExpressions::~LottieExpressions()
@@ -1392,7 +1392,7 @@ LottieExpressions::LottieExpressions()
 
 void LottieExpressions::update(float curTime)
 {
-    //time, #current time in seconds
+    //время, #current время в секундах
     auto time = jerry_number(curTime);
     jerry_object_set_sz(global, EXP_TIME, time);
     jerry_value_free(time);

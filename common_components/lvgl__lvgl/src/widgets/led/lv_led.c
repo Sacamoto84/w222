@@ -78,7 +78,7 @@ lv_obj_t * lv_led_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 void lv_led_set_color(lv_obj_t * obj, lv_color_t color)
@@ -99,7 +99,7 @@ void lv_led_set_brightness(lv_obj_t * obj, uint8_t bright)
 
     led->bright = LV_CLAMP(LV_LED_BRIGHT_MIN, bright, LV_LED_BRIGHT_MAX);
 
-    /*Invalidate the object there fore it will be redrawn*/
+    /*Сделайте объект недействительным, поэтому он будет перерисован.*/
     lv_obj_invalidate(obj);
 }
 
@@ -123,7 +123,7 @@ void lv_led_toggle(lv_obj_t * obj)
 }
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 uint8_t lv_led_get_brightness(const lv_obj_t * obj)
@@ -158,7 +158,7 @@ static void lv_led_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /* Call the ancestor's event handler */
+    /* Вызов обработчика событий предка */
     lv_event_code_t code = lv_event_get_code(e);
     if(code != LV_EVENT_DRAW_MAIN && code != LV_EVENT_DRAW_MAIN_END) {
         res = lv_obj_event_base(MY_CLASS, e);
@@ -167,7 +167,7 @@ static void lv_led_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_obj_t * obj = lv_event_get_current_target(e);
     if(code == LV_EVENT_DRAW_MAIN) {
-        /*Make darker colors in a temporary style according to the brightness*/
+        /*Сделайте более темные цвета во временном стиле в зависимости от яркости.*/
         lv_led_t * led = (lv_led_t *)obj;
         lv_layer_t * layer = lv_event_get_layer(e);
 
@@ -176,7 +176,7 @@ static void lv_led_event(const lv_obj_class_t * class_p, lv_event_t * e)
         rect_dsc.base.layer = layer;
         lv_obj_init_draw_rect_dsc(obj, LV_PART_MAIN, &rect_dsc);
 
-        /*Use the original colors brightness to modify color->led*/
+        /*Используйте яркость исходного цвета для изменения цвета->светодиода*/
         rect_dsc.bg_color = lv_color_mix(led->color, lv_color_black(), lv_color_brightness(rect_dsc.bg_color));
         rect_dsc.bg_grad.stops[0].color = lv_color_mix(led->color, lv_color_black(),
                                                        lv_color_brightness(rect_dsc.bg_grad.stops[0].color));
@@ -186,7 +186,7 @@ static void lv_led_event(const lv_obj_class_t * class_p, lv_event_t * e)
         rect_dsc.border_color = lv_color_mix(led->color, lv_color_black(), lv_color_brightness(rect_dsc.border_color));
         rect_dsc.outline_color = lv_color_mix(led->color, lv_color_black(), lv_color_brightness(rect_dsc.outline_color));
 
-        /*Mix. the color with black proportionally with brightness*/
+        /*Перемешать. цвет с черным пропорционально яркости*/
         rect_dsc.bg_color = lv_color_mix(rect_dsc.bg_color, lv_color_black(), led->bright);
         rect_dsc.bg_grad.stops[0].color   = lv_color_mix(rect_dsc.bg_grad.stops[0].color, lv_color_black(), led->bright);
         rect_dsc.bg_grad.stops[1].color   = lv_color_mix(rect_dsc.bg_grad.stops[1].color, lv_color_black(), led->bright);
@@ -194,8 +194,8 @@ static void lv_led_event(const lv_obj_class_t * class_p, lv_event_t * e)
         rect_dsc.shadow_color = lv_color_mix(rect_dsc.shadow_color, lv_color_black(), led->bright);
         rect_dsc.outline_color = lv_color_mix(rect_dsc.outline_color, lv_color_black(), led->bright);
 
-        /*Set the current shadow width according to brightness proportionally between LV_LED_BRIGHT_OFF
-         * and LV_LED_BRIGHT_ON*/
+        /*Установите текущую ширину тени в соответствии с яркостью пропорционально между LV_LED_BRIGHT_OFF
+         * и LV_LED_BRIGHT_ON*/
         rect_dsc.shadow_width = ((led->bright - LV_LED_BRIGHT_MIN) * rect_dsc.shadow_width) /
                                 (LV_LED_BRIGHT_MAX - LV_LED_BRIGHT_MIN);
         rect_dsc.shadow_spread = ((led->bright - LV_LED_BRIGHT_MIN) * rect_dsc.shadow_spread) /

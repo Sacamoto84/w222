@@ -31,19 +31,19 @@ extern "C" {
  **********************/
 
 /**
- * Initialise an XKB descriptor.
+ * Инициализируйте дескриптор XKB.
  * @return true if the initialisation was successful
  */
 bool lv_xkb_init(lv_xkb_t * dsc, struct xkb_rule_names names);
 
 /**
- * De-initialise an XKB descriptor.
+ * Деинициализируйте дескриптор XKB.
  * @param dsc Pointer to descriptor
  */
 void lv_xkb_deinit(lv_xkb_t * dsc);
 
 /**
- * Process an evdev scancode using a specific XKB descriptor.
+ * Обработайте скан-код evdev, используя определенный дескриптор XKB.
  * @param state XKB descriptor to use
  * @param scancode evdev scancode to process
  * @param down true if the key was pressed, false if it was releases
@@ -55,10 +55,10 @@ uint32_t lv_xkb_process_key(lv_xkb_t * dsc, uint32_t scancode, bool down);
  *      MACROS
  **********************/
 
-#endif /* defined(LV_LIBINPUT_XKB) && LV_LIBINPUT_XKB */
+#endif /* определено( LV_LIBINPUT_XKB ) && LV_LIBINPUT_XKB */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_XKB_H */

@@ -1,10 +1,10 @@
 #include "../../lv_examples.h"
 #if LV_USE_TABVIEW && LV_BUILD_EXAMPLES
 
-/*A vertical tab view with disabled scrolling and some styling*/
+/*Вертикальная вкладка с отключенной прокруткой и некоторыми стилями.*/
 void lv_example_tabview_2(void)
 {
-    /*Create a Tab view object*/
+    /*Создайте объект представления вкладки*/
     lv_obj_t * tabview;
     uint32_t tab_count = 0;
     uint32_t i = 0;
@@ -19,7 +19,7 @@ void lv_example_tabview_2(void)
     lv_obj_set_style_bg_color(tab_buttons, lv_palette_darken(LV_PALETTE_GREY, 3), 0);
     lv_obj_set_style_text_color(tab_buttons, lv_palette_lighten(LV_PALETTE_GREY, 5), 0);
 
-    /*Add 5 tabs (the tabs are page (lv_page) and can be scrolled*/
+    /*Добавьте 5 вкладок (вкладки представляют собой страницу (lv_page) и их можно прокрутить.*/
     lv_obj_t * tab1 = lv_tabview_add_tab(tabview, "Tab 1");
     lv_obj_t * tab2 = lv_tabview_add_tab(tabview, "Tab 2");
     lv_obj_t * tab3 = lv_tabview_add_tab(tabview, "Tab 3");
@@ -34,7 +34,7 @@ void lv_example_tabview_2(void)
     lv_obj_set_style_bg_color(tab2, lv_palette_lighten(LV_PALETTE_AMBER, 3), 0);
     lv_obj_set_style_bg_opa(tab2, LV_OPA_COVER, 0);
 
-    /*Add content to the tabs*/
+    /*Добавляйте контент на вкладки*/
     lv_obj_t * label = lv_label_create(tab1);
     lv_label_set_text(label, "First tab");
 

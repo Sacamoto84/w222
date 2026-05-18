@@ -21,9 +21,9 @@
     #error "LV_FS_UEFI_LETTER must be set to a valid value"
 #else
     #if (LV_FS_UEFI_LETTER < 'A') || (LV_FS_UEFI_LETTER > 'Z')
-        #if LV_FS_DEFAULT_DRIVE_LETTER != '\0' /* When using default driver-identifier letter, strict format (X:) is mandatory. */
+        #if LV_FS_DEFAULT_DRIVE_LETTER != '\0' /* При использовании буквы идентификатора драйвера по умолчанию строгий формат (X:) является обязательным. */
             #error "LV_FS_UEFI_LETTER must be an upper case ASCII letter"
-        #else /*Lean rules for backward compatibility*/
+        #else /*Правила бережливости для обратной совместимости*/
             #warning LV_FS_UEFI_LETTER should be an upper case ASCII letter. \
             Using a slash symbol as driver - identifier letter should be replaced with LV_FS_DEFAULT_DRIVE_LETTER mechanism.
         #endif
@@ -82,7 +82,7 @@ static EFI_GUID _uefi_guid_file_info = EFI_FILE_INFO_ID;
  **********************/
 
 /**
- * Register a driver for the File system interface
+ * Зарегистрируйте драйвер для интерфейса файловой системы.
  */
 void lv_fs_uefi_init(void)
 {
@@ -90,7 +90,7 @@ void lv_fs_uefi_init(void)
     EFI_HANDLE fs_handle = NULL;
 
     /*---------------------------------------------------
-     * Register the file system interface in LVGL
+     * Зарегистрируйте интерфейс файловой системы в LVGL.
      *--------------------------------------------------*/
 
     interface_loaded_image = lv_uefi_protocol_open(gLvEfiImageHandle, &_uefi_guid_loaded_image);
@@ -102,7 +102,7 @@ void lv_fs_uefi_init(void)
 
     lv_uefi_protocol_close(gLvEfiImageHandle, &_uefi_guid_loaded_image);
 
-    /*Add a simple driver to open images*/
+    /*Добавьте простой драйвер для открытия изображений*/
     lv_fs_drv_t * fs_drv_p = &(LV_GLOBAL_DEFAULT()->uefi_fs_drv);
     lv_fs_drv_uefi_init(fs_drv_p, LV_FS_UEFI_LETTER, fs_handle);
 
@@ -405,7 +405,7 @@ static lv_fs_res_t lv_fs_uefi_dir_read_cb(lv_fs_drv_t * drv, void * rddir_p, cha
     if(fn == NULL || fn_len == 0) return LV_FS_RES_INV_PARAM;
     if(file_ctx == NULL || file_ctx->interface == NULL) return LV_FS_RES_INV_PARAM;
 
-    // skip . and ..
+    // пропустить. и ..
     do {
         if(info != NULL) lv_free(info);
         info = NULL;
@@ -439,7 +439,7 @@ static lv_fs_res_t lv_fs_uefi_dir_read_cb(lv_fs_drv_t * drv, void * rddir_p, cha
 
     lv_fs_uefi_uefi_path_to_lvgl_path(info->FileName);
 
-    // skip leading \ and /
+    // пропустить ведущие \ и /
     for(fn_ucs2 = info->FileName; *fn_ucs2 != L'\0'; fn_ucs2++) {
         if(*fn_ucs2 != L'\\' && *fn_ucs2 != L'/') {
             break;

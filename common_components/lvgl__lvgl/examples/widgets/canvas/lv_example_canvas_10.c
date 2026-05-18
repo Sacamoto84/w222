@@ -5,15 +5,15 @@
 #define CANVAS_HEIGHT   100
 
 /**
- *Blur an area on the canvas
+ *Размытие области на холсте
  */
 void lv_example_canvas_10(void)
 {
-    /*Create a buffer for the canvas*/
+    /*Создайте буфер для холста*/
     LV_DRAW_BUF_DEFINE_STATIC(draw_buf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_COLOR_FORMAT_RGB565);
     LV_DRAW_BUF_INIT_STATIC(draw_buf);
 
-    /*Create a canvas and initialize its palette*/
+    /*Создайте холст и инициализируйте его палитру.*/
     lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
     lv_canvas_set_draw_buf(canvas, &draw_buf);
     lv_canvas_fill_bg(canvas, lv_color_hex3(0xccc), LV_OPA_COVER);
@@ -22,7 +22,7 @@ void lv_example_canvas_10(void)
     lv_layer_t layer;
     lv_canvas_init_layer(canvas, &layer);
 
-    /*A label in the background*/
+    /*Этикетка на заднем плане*/
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.color = lv_palette_main(LV_PALETTE_RED);
@@ -35,7 +35,7 @@ void lv_example_canvas_10(void)
 
     lv_draw_label(&layer, &label_dsc, &label1_coords);
 
-    /*Blur the middle of the canvas*/
+    /*Размытие середины холста*/
     lv_draw_blur_dsc_t blur_dsc;
     lv_draw_blur_dsc_init(&blur_dsc);
     blur_dsc.corner_radius = 10;
@@ -44,7 +44,7 @@ void lv_example_canvas_10(void)
     lv_area_t fill_coords = {20, 30, 80, 70};
     lv_draw_blur(&layer, &blur_dsc, &fill_coords);
 
-    /*Draw a semi-transparent rectangle on the blurred area*/
+    /*Нарисуйте полупрозрачный прямоугольник на размытой области.*/
     lv_draw_fill_dsc_t fill_dsc;
     lv_draw_fill_dsc_init(&fill_dsc);
     fill_dsc.color = lv_palette_lighten(LV_PALETTE_BLUE, 1);
@@ -53,7 +53,7 @@ void lv_example_canvas_10(void)
 
     lv_draw_fill(&layer, &fill_dsc, &fill_coords);
 
-    /*Add label on the blurred area*/
+    /*Добавьте метку в размытую область*/
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.color = lv_color_black();
     label_dsc.font = &lv_font_montserrat_14;

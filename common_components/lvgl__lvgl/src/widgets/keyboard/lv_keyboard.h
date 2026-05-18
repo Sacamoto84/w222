@@ -26,7 +26,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Current keyboard mode.*/
+/** Текущий режим клавиатуры.*/
 typedef enum {
     LV_KEYBOARD_MODE_TEXT_LOWER,
     LV_KEYBOARD_MODE_TEXT_UPPER,
@@ -58,43 +58,43 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_keyboard_class;
  **********************/
 
 /**
- * Create a Keyboard object
+ * Создайте объект «Клавиатура»
  * @param parent    pointer to an object, it will be the parent of the new keyboard
  * @return          pointer to the created keyboard object
  */
 lv_obj_t * lv_keyboard_create(lv_obj_t * parent);
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /**
- * Assign a text area to the keyboard. Pressed characters will be inserted there.
+ * Назначьте текстовую область на клавиатуру. Туда будут вставлены нажатые символы.
  * @param kb        pointer to a keyboard object
  * @param ta        pointer to a text area object to write into
  */
 void lv_keyboard_set_textarea(lv_obj_t * kb, lv_obj_t * ta);
 
 /**
- * Set a new mode (e.g., text, number, special characters).
+ * Установите новый режим (например, текст, число, специальные символы).
  * @param kb        pointer to a keyboard object
  * @param mode      the desired mode (see 'lv_keyboard_mode_t')
  */
 void lv_keyboard_set_mode(lv_obj_t * kb, lv_keyboard_mode_t mode);
 
 /**
- * Enable or disable popovers showing button titles on press.
+ * Включите или отключите всплывающие окна, показывающие заголовки кнопок при нажатии.
  * @param kb        pointer to a keyboard object
  * @param en        true to enable popovers; false to disable
  */
 void lv_keyboard_set_popovers(lv_obj_t * kb, bool en);
 
 /**
- * Set a custom button map for the keyboard.
+ * Установите пользовательскую схему кнопок для клавиатуры.
  * @param kb        pointer to a keyboard object
  * @param mode      the mode to assign the new map to (see 'lv_keyboard_mode_t')
  * @param map       pointer to a string array describing the button map
- *                  see 'lv_buttonmatrix_set_map()' for more details
+ *                  см. «lv_buttonmatrix_set_map ()» для получения более подробной информации.
  * @param ctrl_map  pointer to the control map. See 'lv_buttonmatrix_set_ctrl_map()'
 
  */
@@ -102,48 +102,48 @@ void lv_keyboard_set_map(lv_obj_t * kb, lv_keyboard_mode_t mode, const char * co
                          const lv_buttonmatrix_ctrl_t ctrl_map[]);
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /**
- * Get the text area currently assigned to the keyboard.
+ * Получите текстовую область, назначенную в данный момент клавиатуре.
  * @param kb        pointer to a keyboard object
  * @return          pointer to the assigned text area object
  */
 lv_obj_t * lv_keyboard_get_textarea(const lv_obj_t * kb);
 
 /**
- * Get the current mode of the keyboard.
+ * Получить текущий режим клавиатуры.
  * @param kb        pointer to a keyboard object
  * @return          the current mode (see 'lv_keyboard_mode_t')
  */
 lv_keyboard_mode_t lv_keyboard_get_mode(const lv_obj_t * kb);
 
 /**
- * Check whether popovers are enabled on the keyboard.
+ * Проверьте, включены ли всплывающие окна на клавиатуре.
  * @param obj       pointer to a keyboard object
  * @return          true if popovers are enabled; false otherwise
  */
 bool lv_keyboard_get_popovers(const lv_obj_t * obj);
 
 /**
- * Get the current button map of the keyboard.
+ * Получите текущую карту кнопок клавиатуры.
  * @param kb        pointer to a keyboard object
  * @return          pointer to the map array
  */
 const char * const * lv_keyboard_get_map_array(const lv_obj_t * kb);
 
 /**
- * Get the index of the last selected button (pressed, released, focused, etc.).
- * Useful in the `event_cb` to retrieve button text or properties.
+ * Получить индекс последней выбранной кнопки (нажатой, отпущенной, сфокусированной и т. д.).
+ * Полезно в `event_cb` для получения текста или свойств кнопки.
  * @param obj       pointer to a keyboard object
  * @return          index of the last interacted button
- *                  returns LV_BUTTONMATRIX_BUTTON_NONE if not set
+ *                  возвращает LV_BUTTONMATRIX_BUTTON_NONE, если не установлено
  */
 uint32_t lv_keyboard_get_selected_button(const lv_obj_t * obj);
 
 /**
- * Get the text of a button by index.
+ * Получить текст кнопки по индексу.
  * @param obj       pointer to a keyboard object
  * @param btn_id    index of the button (excluding newline characters)
  * @return          pointer to the text of the button
@@ -151,13 +151,13 @@ uint32_t lv_keyboard_get_selected_button(const lv_obj_t * obj);
 const char * lv_keyboard_get_button_text(const lv_obj_t * obj, uint32_t btn_id);
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**
- * Default keyboard event callback to handle button presses.
- * Adds characters to the text area and switches map if needed.
- * If a custom `event_cb` is used, this function can be called within it.
+ * Обратный вызов событий клавиатуры по умолчанию для обработки нажатий кнопок.
+ * Добавляет символы в текстовую область и при необходимости переключает карту.
+ * Если используется пользовательский `event_cb`, эту функцию можно вызвать внутри него.
  * @param e         the triggering event
  */
 void lv_keyboard_def_event_cb(lv_event_t * e);
@@ -169,7 +169,7 @@ void lv_keyboard_def_event_cb(lv_event_t * e);
 #endif  /*LV_USE_KEYBOARD*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_KEYBOARD_H*/

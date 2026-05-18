@@ -32,7 +32,7 @@ void lv_example_libpng_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_LIBPNG_H*/

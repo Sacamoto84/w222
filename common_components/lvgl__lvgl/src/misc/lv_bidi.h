@@ -20,8 +20,8 @@ extern "C" {
 /*********************
  *      DEFINES
  *********************/
-/** Special non printable strong characters.
- * They can be inserted to texts to affect the run's direction */
+/** Специальные непечатаемые сильные символы.
+ * Их можно вставлять в тексты, чтобы влиять на направление бега. */
 #define LV_BIDI_LRO  "\xE2\x80\xAD" /*U+202D*/
 #define LV_BIDI_RLO  "\xE2\x80\xAE" /*U+202E*/
 
@@ -43,15 +43,15 @@ typedef enum {
 #if LV_USE_BIDI
 
 /**
- * Get the real text alignment from the a text alignment, base direction and a text.
- * @param align     LV_TEXT_ALIGN_..., write back the calculated align here (LV_TEXT_ALIGN_LEFT/RIGHT/CENTER)
- * @param base_dir  LV_BASE_DIR_..., write the calculated base dir here (LV_BASE_DIR_LTR/RTL)
- * @param txt       a text, used with LV_BASE_DIR_AUTO to determine the base direction
+ * Получите реальное выравнивание текста из выравнивания текста, базового направления и текста.
+ * @param align     LV_TEXT_ALIGN_ ..., запишите сюда вычисленное выравнивание (LV_TEXT_ALIGN_LEFT/RIGHT/CENTER)
+ * @param base_dir  LV_BASE_DIR_ ..., сюда запишите рассчитанную базовую директорию (LV_BASE_DIR_LTR/RTL)
+ * @param txt       текст, используемый сLV_BASE_DIR_AUTOдля определения базового направления
  */
 void lv_bidi_calculate_align(lv_text_align_t * align, lv_base_dir_t * base_dir, const char * txt);
 
 /**
- * Set custom neutrals string
+ * Установить пользовательскую строку нейтральных значений
  * @param neutrals  default " \t\n\r.,:;'\"`!?%/\\-=()[]{}<>@#&$|"
  */
 void lv_bidi_set_custom_neutrals_static(const char * neutrals);
@@ -62,11 +62,11 @@ void lv_bidi_set_custom_neutrals_static(const char * neutrals);
 
 #else /*LV_USE_BIDI*/
 /**
- * For compatibility if LV_USE_BIDI = 0
- * Get the real text alignment from the a text alignment, base direction and a text.
- * @param align     For LV_TEXT_ALIGN_AUTO give LV_TEXT_ALIGN_LEFT else leave unchanged, write back the calculated align here
- * @param base_dir  Unused
- * @param txt       Unused
+ * Для совместимости, если LV_USE_BIDI = 0
+ * Получите реальное выравнивание текста из выравнивания текста, базового направления и текста.
+ * @param align     ДляLV_TEXT_ALIGN_AUTOукажите LV_TEXT_ALIGN_LEFT, иначе оставьте без изменений, запишите сюда вычисленное выравнивание.
+ * @param base_dir  Неиспользованный
+ * @param txt       Неиспользованный
  */
 static inline void lv_bidi_calculate_align(lv_text_align_t * align, lv_base_dir_t * base_dir, const char * txt)
 {
@@ -77,7 +77,7 @@ static inline void lv_bidi_calculate_align(lv_text_align_t * align, lv_base_dir_
 #endif /*LV_USE_BIDI*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BIDI_H*/

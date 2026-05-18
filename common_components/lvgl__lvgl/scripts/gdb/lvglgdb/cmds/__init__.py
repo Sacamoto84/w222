@@ -9,24 +9,24 @@ from .drivers import Lvglobal
 
 __all__ = []
 
-# Set pagination off and python print-stack full
+# Отключить страницы нумерации и заполнить стек печати Python
 gdb.execute("set pagination off")
 gdb.write("set pagination off\n")
 gdb.execute("set python print-stack full")
 gdb.write("set python print-stack full\n")
 
 
-# Debugger
+# Отладчик
 Debugger()
 
-# Dumps
+# Свалки
 DumpObj()
 DumpDisplayBuf()
 DumpCache()
 
-# Infos
+# Информация
 InfoStyle()
 InfoDrawUnit()
 
-# Drivers
+# Драйверы
 Lvglobal()

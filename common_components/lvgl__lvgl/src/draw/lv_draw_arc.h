@@ -36,8 +36,8 @@ typedef struct {
     /**The width (thickness) of the arc */
     int32_t width;
 
-    /**The start angle in 1 degree units (if `LV_USE_FLOAT` is enabled a float number can be also used)
-     * 0° is the 3 o'clock position, 90° is the 6 o'clock, etc. */
+    /**Начальный угол в единицах 1 градус (если `LV_USE_FLOAT` включен, можно также использовать число с плавающей запятой)
+     * 0° — положение «3 часа», 90° — положение «6 часов» и т. д. */
     lv_value_precise_t start_angle;
 
     /**The end angle, similarly to start_angle. */
@@ -52,8 +52,8 @@ typedef struct {
     /**The outer radius of the arc*/
     uint16_t radius;
 
-    /**Opacity of the arc in 0...255 range.
-     * LV_OPA_TRANSP, LV_OPA_10, LV_OPA_20, .. LV_OPA_COVER can be used as well*/
+    /**Непрозрачность дуги в диапазоне 0...255.
+     * LV_OPA_TRANSP , LV_OPA_10 , LV_OPA_20 , .. LV_OPA_COVER также можно использовать*/
     lv_opa_t opa;
 
     /**1: Make the arc ends rounded*/
@@ -65,35 +65,35 @@ typedef struct {
  **********************/
 
 /**
- * Initialize an arc draw descriptor.
- * @param dsc       pointer to a draw descriptor
+ * Инициализируйте дескриптор рисования дуги.
+ * @param dsc       указатель на дескриптор отрисовки
  */
 void lv_draw_arc_dsc_init(lv_draw_arc_dsc_t * dsc);
 
 /**
- * Try to get an arc draw descriptor from a draw task.
- * @param task      draw task
- * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_ARC
+ * Попробуйте получить дескриптор рисования дуги из задачи рисования.
+ * @param task      нарисовать задачу
+ * @return          дескриптор отрисовки задачи или NULL, если задача не относится к типу LV_DRAW_TASK_TYPE_ARC
  */
 lv_draw_arc_dsc_t * lv_draw_task_get_arc_dsc(lv_draw_task_t * task);
 
 /**
- * Create an arc draw task.
- * @param layer         pointer to a layer
- * @param dsc           pointer to an initialized draw descriptor variable
+ * Создайте задачу рисования дуги.
+ * @param layer         указатель на слой
+ * @param dsc           указатель на инициализированную переменную дескриптора отрисовки
  */
 void lv_draw_arc(lv_layer_t * layer, const lv_draw_arc_dsc_t * dsc);
 
 /**
- * Get an area the should be invalidated when the arcs angle changed between start_angle and end_ange
- * @param x             the x coordinate of the center of the arc
- * @param y             the y coordinate of the center of the arc
- * @param radius        the radius of the arc
- * @param start_angle   the start angle of the arc (0 deg on the bottom, 90 deg on the right)
- * @param end_angle     the end angle of the arc
- * @param w             width of the arc
- * @param rounded       true: the arc is rounded
- * @param area          store the area to invalidate here
+ * Получите область, которая должна быть признана недействительной при отклонении угла междуstart_angleи end_ange.
+ * @param x             координата x центра дуги
+ * @param y             координата y центра дуги
+ * @param radius        радиус дуги
+ * @param start_angle   начальный угол дуги (0 градусов внизу, 90 градусов справа)
+ * @param end_angle     конечный угол дуги
+ * @param w             ширина дуги
+ * @param rounded       верно: дуга закруглена
+ * @param area          сохраните здесь область, которую нужно сделать недействительной
  */
 void lv_draw_arc_get_area(int32_t x, int32_t y, uint16_t radius,  lv_value_precise_t start_angle,
                           lv_value_precise_t end_angle,
@@ -104,7 +104,7 @@ void lv_draw_arc_get_area(int32_t x, int32_t y, uint16_t radius,  lv_value_preci
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_ARC_H*/

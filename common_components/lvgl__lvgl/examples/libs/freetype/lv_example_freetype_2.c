@@ -9,8 +9,8 @@
 #endif
 
 /*
- * Load a vector font
- * ThorVG needs to be enabled, LV_USE_VECTOR_GRAPHICS=1
+ * Загрузите векторный шрифт
+ * ThorVG необходимо включить, LV_USE_VECTOR_GRAPHICS=1
  */
 void lv_example_freetype_2_vector_font(uint32_t font_size, uint32_t border_width)
 {
@@ -25,7 +25,7 @@ void lv_example_freetype_2_vector_font(uint32_t font_size, uint32_t border_width
         return;
     }
 
-    /*Create style with the new font*/
+    /*Создайте стиль с помощью нового шрифта*/
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_text_font(&style, font);
@@ -36,11 +36,11 @@ void lv_example_freetype_2_vector_font(uint32_t font_size, uint32_t border_width
     lv_style_set_text_outline_stroke_color(&style, lv_color_hex(0x00FF00));
     lv_style_set_text_outline_stroke_width(&style, border_width);
 
-    /*Avoid overlapping issue when using letter outlines*/
+    /*Избегайте проблем с перекрытием при использовании контуров букв.*/
     lv_style_set_text_letter_space(&style, border_width);
     lv_style_set_text_line_space(&style, border_width);
 
-    /*Create a label with the new style*/
+    /*Создайте этикетку с новым стилем*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_add_style(label, &style, 0);
     lv_label_set_text(label,
@@ -50,19 +50,19 @@ void lv_example_freetype_2_vector_font(uint32_t font_size, uint32_t border_width
 }
 
 /**
- * Load a font with FreeType
+ * Загрузите шрифт с помощью FreeType
  */
 void lv_example_freetype_2(void)
 {
-    /*Create a font*/
+    /*Создать шрифт*/
     lv_font_t * font = lv_freetype_font_create(PATH_PREFIX "lvgl/examples/libs/freetype/Lato-Regular.ttf",
                                                LV_FREETYPE_FONT_RENDER_MODE_BITMAP,
                                                400,
                                                LV_FREETYPE_FONT_STYLE_NORMAL);
 
-    /* this font is created from a downscaled NotoColorEmoji to 34x32px
-     * Subset containing only a single emoji was created using fonttools:
-     * Command: fonttools subset NotoColorEmoji.ttf --text=😀 */
+    /* Этот шрифт создан на основе уменьшения размера NotoColorEmoji до 34x32 пикселей.
+     * Подмножество, содержащее только один смайлик, было создано с помощью Fonttools:
+     * Command: подмножество Fonttools NotoColorEmoji.ttf --text=😀 */
     lv_font_t * font_emoji = lv_freetype_font_create(PATH_PREFIX "lvgl/examples/libs/freetype/NotoColorEmoji-32.subset.ttf",
                                                      LV_FREETYPE_FONT_RENDER_MODE_BITMAP,
                                                      200,
@@ -75,13 +75,13 @@ void lv_example_freetype_2(void)
 
     font->fallback = font_emoji;
 
-    /*Create style with the new font*/
+    /*Создайте стиль с помощью нового шрифта*/
     static lv_style_t style;
     lv_style_init(&style);
     lv_style_set_text_font(&style, font);
     lv_style_set_text_align(&style, LV_TEXT_ALIGN_CENTER);
 
-    /*Create a label with the new style*/
+    /*Создайте этикетку с новым стилем*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_add_style(label, &style, 0);
     lv_label_set_text(label, "Hello world\nI'm a font created with FreeType 😀");
@@ -92,7 +92,7 @@ void lv_example_freetype_2(void)
 void lv_example_freetype_2_vector_font(uint32_t font_size, uint32_t border_width)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
     LV_UNUSED(font_size);
     LV_UNUSED(border_width);
 
@@ -104,7 +104,7 @@ void lv_example_freetype_2_vector_font(uint32_t font_size, uint32_t border_width
 void lv_example_freetype_2(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "FreeType is not installed");

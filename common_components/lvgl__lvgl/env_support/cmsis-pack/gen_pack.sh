@@ -1,20 +1,20 @@
 #!/bin/bash
-# Version: 1.1
-# Date: 2022-01-11
-# This bash script generates a CMSIS Software Pack:
+# Версия: 1.1
+# Дата: 11.01.2022
+# Этот bash-скрипт последовательного пакета программного обеспечения CMSIS:
 #
-# Pre-requisites:
-# - bash shell (for Windows: install git for Windows)
-# - 7z in path (zip archiving utility)
-#   e.g. Ubuntu: sudo apt-get install p7zip-full p7zip-rar)
-# - PackChk in path with execute permission
-#   (see CMSIS-Pack: CMSIS/Utilities/<os>/PackChk)
-# - xmllint in path (XML schema validation)
-#   e.g. Ubuntu: sudo apt-get install libxml2-utils
-#   Windows: download from https://www.zlatkovic.com/pub/libxml/
+# Предварительные требования:
+# - закончите bash (для Windows: установите git для Windows)
+# - 7z в пути (утилита zip-архивирования)
+# например Ubuntu: sudo apt-get install p7zip-full p7zip-rar)
+# - PackChk в пути с технологиями выполнения
+# (см.CMSIS-Pack:CMSIS/Utilities/<os>/PackChk)
+# - xmllint в пути (проверка схемыXML)
+# например Ubuntu: sudo apt-get install libxml2-utils
+# Windows: скачать с https://www.zlatkovic.com/pub/libxml/
 
 ############### EDIT BELOW ###############
-# Extend Path environment variable locally
+# Расширить переменную среду Локальный путь
 #
 if [ `uname -s` = "Linux" ]
   then
@@ -28,20 +28,20 @@ fi
 echo $PATH_TO_ADD appended to PATH
 echo " "
 
-# Pack warehouse directory - destination
+# Каталог склада упаковки – пункт назначения
 PACK_WAREHOUSE=./
 
-# Temporary pack build directory
+# Временный каталог сборки пакета
 PACK_BUILD=build/
 
-# Specify directories included in pack relative to base directory
-# All directories:
+# Укажите каталоги, включенные в пакет, относительно базового каталога.
+# Все каталоги:
 # PACK_DIRS=`ls -d */`
-# Do not include the build directory if it is local
+# Не включайте каталог сборки, если он локальный.
 # PACK_DIRS=${PACK_DIRS//$PACK_BUILD/}
 # PACK_DIRS=${PACK_DIRS//$PACK_WAREHOUSE/}
 
-# alternative: specify directory names to be added to pack base directory
+# альтернатива: укажите имена каталогов, которые будут добавлены в базовый каталог пакета.
 PACK_DIRS="
   ../../src
   ../../libs
@@ -49,7 +49,7 @@ PACK_DIRS="
 "
 
 
-# Specify file names to be added to pack base directory
+# Укажите имена файлов, которые будут добавлены в базовый каталог пакета.
 PACK_BASE_FILES="
   ../../LICENCE.txt
   ../../README.md
@@ -62,7 +62,7 @@ PACK_BASE_FILES="
 
 ############ DO NOT EDIT BELOW ###########
 echo Starting CMSIS-Pack Generation: `date`
-# Zip utility check
+# Проверка утилиты ZIP
 ZIP=7z
 type -a $ZIP
 errorlevel=$?
@@ -74,7 +74,7 @@ if [ $errorlevel -gt 0 ]
   exit
 fi
 
-# Pack checking utility check
+# Проверка утилиты проверки пакета
 PACKCHK=PackChk
 type -a $PACKCHK
 errorlevel=$?
@@ -89,7 +89,7 @@ if [ $errorlevel != 0 ]
 fi
 echo " "
 
-# XML syntax checking utility check
+# Проверка утилиты проверки синтаксиса XML
 XMLLINT=xmllint
 type -a $XMLLINT
 errorlevel=$?
@@ -102,8 +102,8 @@ if [ $errorlevel != 0 ]
 fi
 echo " "
 
-# Locate Package Description file
-# check whether there is more than one pdsc file
+# Найдите файл описания пакета.
+# проверьте, существует ли более одного файла pdsc
 NUM_PDSCS=`ls -1 *.pdsc | wc -l`
 PACK_DESCRIPTION_FILE=`ls *.pdsc`
 if [ $NUM_PDSCS -lt 1 ]
@@ -123,15 +123,15 @@ fi
 SAVEIFS=$IFS
 IFS=.
 set $PACK_DESCRIPTION_FILE
-# Pack Vendor
+# Поставщик пакетов
 PACK_VENDOR=$1
-# Pack Name
+# Название пакета
 PACK_NAME=$2
 echo Generating Pack Version: for $PACK_VENDOR.$PACK_NAME
 echo " "
 IFS=$SAVEIFS
 
-#if $PACK_BUILD directory does not exist, create it.
+#если каталог $PACK_BUILD не существует, создайте его.
 if [ ! -d $PACK_BUILD ]; then
   mkdir -p $PACK_BUILD
 fi
@@ -141,7 +141,7 @@ mkdir -p ${PACK_BUILD}/examples/porting
 
 
 
-# directories
+# каталоги
 echo Adding directories to pack:
 echo $PACK_DIRS
 echo " "
@@ -150,7 +150,7 @@ do
   cp -r "$d" ${PACK_BUILD}
 done
 
-# files for base directory
+# файлы для базового каталога
 echo Adding files to pack:
 echo $PACK_BASE_FILES
 echo " "
@@ -159,8 +159,8 @@ do
   cp -f  "$f" $PACK_BUILD/
 done
 
-# Copy files into build base directory: $PACK_BUILD
-# pdsc file is mandatory in base directory:
+# Скопируйте файлы в базовый каталог сборки: $ PACK_BUILD
+# pdsc является обязательным в базовом каталоге:
 cp -f  ./$PACK_VENDOR.$PACK_NAME.pdsc ${PACK_BUILD}
 cp -f ../../examples/porting/* ${PACK_BUILD}/examples/porting
 cp -f ./lv_os_custom_c.txt ${PACK_BUILD}/src/osal/lv_os_custom.c
@@ -168,8 +168,8 @@ cp -f ./lv_os_custom_h.txt ${PACK_BUILD}/src/osal/lv_os_custom.h
 
 mv "${PACK_BUILD}/lv_cmsis_pack.txt" "${PACK_BUILD}/lv_cmsis_pack.c"
 
-# Run Schema Check (for Linux only):
-# sudo apt-get install libxml2-utils
+# Запустите схемы проверки (только для Linux):
+# sudo apt-get установить libxml2-utils
 
 echo Running schema check for $PACK_VENDOR.$PACK_NAME.pdsc
 $XMLLINT --noout --schema ${CMSIS_PACK_PATH}/CMSIS/Utilities/PACK.xsd $PACK_BUILD/$PACK_VENDOR.$PACK_NAME.pdsc
@@ -180,7 +180,7 @@ if [ $errorlevel -ne 0 ]; then
   exit
 fi
 
-# Run Pack Check and generate PackName file with version
+# Запустите пакет проверки и сгенерируйте файл PackName с маркой.
 $PACKCHK $PACK_BUILD/$PACK_VENDOR.$PACK_NAME.pdsc -n PackName.txt -x M362
 errorlevel=$?
 if [ $errorlevel -ne 0 ]; then
@@ -192,9 +192,9 @@ fi
 PACKNAME=`cat PackName.txt`
 rm -rf PackName.txt
 
-# echo apply patches...
-# rm -rf $PACK_BUILD/demos/lv_demos.h
-# cp -f ./lv_demos.h $PACK_BUILD/demos/
+# эхо применить патчи...
+# rm -rf $PACK_BUILD/демос/ lv_demos.h
+# cp -f ./lv_demos.h$PACK_BUILD/демос/
 
 echo delete files...
 find $PACK_BUILD/demos/ -type f -name "*.png" -delete
@@ -205,10 +205,10 @@ find $PACK_BUILD/demos/ -type f -name "*.otf" -delete
 find $PACK_BUILD/demos/ -type f -name "*.jpg" -delete
 find $PACK_BUILD/demos/ -type f -name "*.fnt" -delete
 
-# Archiving
+# Архивирование
 # $ZIP a $PACKNAME
 echo creating pack file $PACKNAME
-#if $PACK_WAREHOUSE directory does not exist create it
+#если каталог $PACK_WAREHOUSE не существует, создайте его
 if [ ! -d $PACK_WAREHOUSE ]; then
   mkdir -p $PACK_WAREHOUSE
 fi
@@ -228,7 +228,7 @@ fi
 
 
 echo "build of pack succeeded"
-# Clean up
+# Очистить
 echo "cleaning up ..."
 
 rm -rf $PACK_BUILD

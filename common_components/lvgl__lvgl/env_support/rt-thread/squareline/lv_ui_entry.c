@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * Change Logs:
- * Date           Author        Notes
- * 2022-05-13     Meco Man      First version
+ * Журналы изменений:
+ * Дата Примечания автора
+ * 13 мая 2022 г. Meco Man Первая версия
  */
 
 #ifdef __RTTHREAD__

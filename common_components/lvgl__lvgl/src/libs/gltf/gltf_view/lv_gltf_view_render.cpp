@@ -39,7 +39,7 @@
  *      TYPEDEFS
  **********************/
 
-/* This is used to push and pop the viewer matrix during the rendering phase*/
+/* Это используется для перемещения и открытия матрицы просмотра на этапе рендеринга.*/
 struct lv_gltf_matrices_saver_t {
     lv_gltf_t * viewer;
     fastgltf::math::fmat4x4 saved_view_matrix;
@@ -168,30 +168,30 @@ GLuint lv_gltf_view_render(lv_gltf_t * viewer)
 
 static void lv_gltf_view_push_opengl_state(lv_opengl_state_t * state)
 {
-    /* Blend state */
+    /* Состояние смешивания */
     GL_CALL(glGetBooleanv(GL_BLEND, &state->blend_enabled));
     GL_CALL(glGetIntegerv(GL_BLEND_SRC_ALPHA, &state->blend_src));
     GL_CALL(glGetIntegerv(GL_BLEND_DST_ALPHA, &state->blend_dst));
     GL_CALL(glGetIntegerv(GL_BLEND_EQUATION, &state->blend_equation));
 
-    /* Depth state */
+    /* Состояние глубины */
     GL_CALL(glGetBooleanv(GL_DEPTH_TEST, &state->depth_test_enabled));
     GL_CALL(glGetBooleanv(GL_DEPTH_WRITEMASK, &state->depth_mask));
     GL_CALL(glGetIntegerv(GL_DEPTH_FUNC, &state->depth_func));
 
-    /* Face culling state */
+    /* Состояние отсеивания лиц */
     GL_CALL(glGetBooleanv(GL_CULL_FACE, &state->cull_face_enabled));
     GL_CALL(glGetIntegerv(GL_CULL_FACE_MODE, &state->cull_face_mode));
     GL_CALL(glGetIntegerv(GL_FRONT_FACE, &state->front_face));
 
-    /* Stencil state */
+    /* Состояние трафарета */
     GL_CALL(glGetBooleanv(GL_STENCIL_TEST, &state->stencil_test_enabled));
     GL_CALL(glGetIntegerv(GL_STENCIL_WRITEMASK, (GLint *)&state->stencil_mask));
     GL_CALL(glGetIntegerv(GL_STENCIL_FUNC, &state->stencil_func));
     GL_CALL(glGetIntegerv(GL_STENCIL_REF, &state->stencil_ref));
     GL_CALL(glGetIntegerv(GL_STENCIL_VALUE_MASK, (GLint *)&state->stencil_value_mask));
 
-    /* Buffer bindings */
+    /* Привязки буфера */
 #ifndef GL_VERTEX_ARRAY_BINDING
 #ifdef GL_VERTEX_ARRAY_BINDING_OES
 #define GL_VERTEX_ARRAY_BINDING GL_VERTEX_ARRAY_BINDING_OES
@@ -204,23 +204,23 @@ static void lv_gltf_view_push_opengl_state(lv_opengl_state_t * state)
     GL_CALL(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, (GLint *)&state->current_ibo));
     GL_CALL(glGetIntegerv(GL_CURRENT_PROGRAM, (GLint *)&state->current_program));
 
-    /* Texture state */
+    /* Состояние текстуры */
     GL_CALL(glGetIntegerv(GL_ACTIVE_TEXTURE, &state->active_texture));
     GL_CALL(glGetIntegerv(GL_TEXTURE_BINDING_2D, (GLint *)&state->bound_texture_2d));
 
-    /* Viewport and scissor */
+    /* Окно просмотра и ножницы */
     GL_CALL(glGetIntegerv(GL_VIEWPORT, state->viewport));
     GL_CALL(glGetBooleanv(GL_SCISSOR_TEST, &state->scissor_test_enabled));
     GL_CALL(glGetIntegerv(GL_SCISSOR_BOX, state->scissor_box));
 
-    /* Clear values */
+    /* Четкие ценности */
     GL_CALL(glGetFloatv(GL_COLOR_CLEAR_VALUE, state->clear_color));
     GL_CALL(glGetFloatv(GL_DEPTH_CLEAR_VALUE, &state->clear_depth));
 }
 
 static void lv_gltf_view_pop_opengl_state(const lv_opengl_state_t * state)
 {
-    /* Restore blend state */
+    /* Восстановить состояние смешивания */
     if(state->blend_enabled) {
         GL_CALL(glEnable(GL_BLEND));
     }
@@ -230,7 +230,7 @@ static void lv_gltf_view_pop_opengl_state(const lv_opengl_state_t * state)
     GL_CALL(glBlendFunc(state->blend_src, state->blend_dst));
     GL_CALL(glBlendEquation(state->blend_equation));
 
-    /* Restore depth state */
+    /* Восстановить состояние глубины */
     if(state->depth_test_enabled) {
         GL_CALL(glEnable(GL_DEPTH_TEST));
     }
@@ -240,7 +240,7 @@ static void lv_gltf_view_pop_opengl_state(const lv_opengl_state_t * state)
     GL_CALL(glDepthMask(state->depth_mask));
     GL_CALL(glDepthFunc(state->depth_func));
 
-    /* Restore face culling state */
+    /* Восстановить состояние отсечения лиц */
     if(state->cull_face_enabled) {
         GL_CALL(glEnable(GL_CULL_FACE));
     }
@@ -250,7 +250,7 @@ static void lv_gltf_view_pop_opengl_state(const lv_opengl_state_t * state)
     GL_CALL(glCullFace(state->cull_face_mode));
     GL_CALL(glFrontFace(state->front_face));
 
-    /* Restore stencil state */
+    /* Восстановить состояние трафарета */
     if(state->stencil_test_enabled) {
         GL_CALL(glEnable(GL_STENCIL_TEST));
     }
@@ -260,17 +260,17 @@ static void lv_gltf_view_pop_opengl_state(const lv_opengl_state_t * state)
     GL_CALL(glStencilMask(state->stencil_mask));
     GL_CALL(glStencilFunc(state->stencil_func, state->stencil_ref, state->stencil_value_mask));
 
-    /* Restore buffer bindings */
+    /* Восстановить привязки буфера */
     GL_CALL(glBindVertexArray(state->current_vao));
     GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, state->current_vbo));
     GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, state->current_ibo));
     GL_CALL(glUseProgram(state->current_program));
 
-    /* Restore texture state */
+    /* Восстановить состояние текстуры */
     GL_CALL(glActiveTexture(state->active_texture));
     GL_CALL(glBindTexture(GL_TEXTURE_2D, state->bound_texture_2d));
 
-    /* Restore viewport and scissor */
+    /* Восстановить область просмотра и ножницы */
     GL_CALL(glViewport(state->viewport[0], state->viewport[1], state->viewport[2], state->viewport[3]));
     if(state->scissor_test_enabled) {
         GL_CALL(glEnable(GL_SCISSOR_TEST));
@@ -280,7 +280,7 @@ static void lv_gltf_view_pop_opengl_state(const lv_opengl_state_t * state)
     }
     GL_CALL(glScissor(state->scissor_box[0], state->scissor_box[1], state->scissor_box[2], state->scissor_box[3]));
 
-    /* Restore clear values */
+    /* Восстановить четкие ценности */
     GL_CALL(glClearColor(state->clear_color[0], state->clear_color[1], state->clear_color[2], state->clear_color[3]));
     GL_CALL(glClearDepthf(state->clear_depth));
 }
@@ -293,7 +293,7 @@ static GLuint lv_gltf_view_render_model(lv_gltf_t * viewer, lv_gltf_model_t * mo
     bool opt_aa_this_frame = (view_desc->aa_mode == LV_GLTF_AA_MODE_ON) ||
                              (view_desc->aa_mode == LV_GLTF_AA_MODE_DYNAMIC && model->last_frame_no_motion == true);
     if(!is_first_model) {
-        /* If this data object is a secondary render pass, inherit the anti-alias setting for this frame from the first gltf_data drawn*/
+        /* Если этот объект данных является вторичным проходом рендеринга, унаследуйте настройку сглаживания для этого кадра от первого нарисованного gltf_data.*/
         opt_aa_this_frame = view_desc->frame_was_antialiased;
     }
 
@@ -308,7 +308,7 @@ static GLuint lv_gltf_view_render_model(lv_gltf_t * viewer, lv_gltf_model_t * mo
     bool new_size = last_render_h != view_desc->render_height || last_render_w != view_desc->render_width;
 
     if(opt_aa_this_frame != model->last_frame_was_antialiased) {
-        /* Antialiasing state has changed since the last render */
+        /* Состояние сглаживания изменилось с момента последнего рендеринга. */
         if(is_first_model) {
             if(vstate->render_state_ready) {
                 setup_cleanup_opengl_output(&vstate->render_state);
@@ -344,7 +344,7 @@ static GLuint lv_gltf_view_render_model(lv_gltf_t * viewer, lv_gltf_model_t * mo
         lv_gltf_view_recache_all_transforms(model);
     }
     else if(model->last_frame_no_motion && model->_last_frame_no_motion && last_frame_no_motion) {
-        /* Nothing changed at all, return the previous output frame */
+        /* Ничего не изменилось, верните предыдущий выходной кадр */
         setup_finish_frame();
         lv_gltf_view_pop_opengl_state(&opengl_state);
         return vstate->render_state.texture;
@@ -371,13 +371,13 @@ static GLuint lv_gltf_view_render_model(lv_gltf_t * viewer, lv_gltf_model_t * mo
         return a.first > b.first;
     });
 
-    /* Reset the last material index to an unused value once per frame at the start*/
+    /* Сбросьте последний индекс материала на неиспользуемое значение один раз для каждого кадра в начале.*/
     model->last_material_index = 99999;
 
     if(vstate->render_opaque_buffer) {
         std::optional<lv_gltf_matrices_saver_t> saver;
         if(!is_first_model) {
-            /* Cache the current matrices */
+            /* Кэшировать текущие матрицы */
             saver.emplace(viewer);
         }
 
@@ -558,7 +558,7 @@ static bool setup_primitive(int32_t prim_num, lv_gltf_t * viewer, lv_gltf_model_
     lv_gltf_compiled_shader_t * compiled_shader = lv_gltf_get_compiled_shader(model, materialIndex);
     const lv_gltf_uniform_locations_t * uniforms = &compiled_shader->uniforms;
 
-    /* Fast path, primitive setup in the primitive draw render */
+    /* Быстрый путь, настройка примитивов в рендере отрисовки примитивов */
     if((model->last_material_index == materialIndex) && (model->last_pass_was_transmission == is_transmission_pass)) {
         GL_CALL(glUniformMatrix4fv(uniforms->model_matrix, 1, GL_FALSE, &matrix[0][0]));
         return true;
@@ -850,7 +850,7 @@ static void draw_lights(lv_gltf_model_t * model, GLuint program)
     char tag[100];
     char prefix[20];
     for(size_t i = 0; i < max_scene_lights; i++) {
-        // Update each field of the light struct
+        // Обновите каждое поле структуры освещения.
         lv_snprintf(prefix, sizeof(prefix), "u_Lights[%zu]", i + 1);
         auto & lightNode = model->node_by_light_index[i];
         const fastgltf::math::fmat4x4 & light_matrix = lv_gltf_data_get_cached_transform(model, lightNode);
@@ -917,7 +917,7 @@ lv_result_t render_primary_output(lv_gltf_t * viewer, const lv_gltf_renwin_state
     GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, state->renderbuffer, 0));
     GL_CALL(glViewport(0, 0, texture_w, texture_h));
     if(prepare_bg) {
-        /* cast is safe because viewer is a lv_obj_t*/
+        /* приведение безопасно, поскольку зритель — lv_obj_t.*/
         setup_draw_solid_background(viewer, lv_obj_get_style_bg_color((lv_obj_t *)viewer, LV_PART_MAIN),
                                     lv_obj_get_style_bg_opa((lv_obj_t *)viewer, LV_PART_MAIN));
     }
@@ -929,12 +929,12 @@ static fastgltf::math::nvec4 color_convert_to_srgb(fastgltf::math::nvec4 color)
 {
     const float SRGB_GAMMA = 2.4f;
     const float INV_SRGB_GAMMA = 1.0f / SRGB_GAMMA;
-    // Apply the sRGB conversion formula:
-    // sRGB = 12.92 * C, if C <= 0.0031308
-    // sRGB = 1.055 * C^(1/2.4) - 0.055, if C > 0.0031308
+    // Примените формулу преобразования sRGB:
+    // sRGB = 12,92 * C, если C <= 0,0031308
+    // sRGB = 1,055 * C^(1/2,4) - 0,055, если C > 0,0031308
 
     fastgltf::math::nvec4 srgbColor;
-    for(int i = 0; i < 3; i++) {   // Loop through R, G, B channels
+    for(int i = 0; i < 3; i++) {   // Циклическое переключение каналов R, G, B
         float c = color[i];
         if(c <= 0.0031308f) {
             srgbColor[i] = 12.92f * c;
@@ -963,13 +963,13 @@ static uint32_t render_texture(uint32_t tex_unit, uint32_t tex_name, int32_t tex
                                std::unique_ptr<fastgltf::TextureTransform> & tex_transform, GLint sampler, GLint uv_set,
                                GLint uv_transform)
 {
-    /* Activate the texture unit*/
+    /* Активируем текстурный блок*/
     GL_CALL(glActiveTexture(GL_TEXTURE0 + tex_unit));
-    /* Bind the texture (assuming 2D texture) */
+    /* Привяжите текстуру (при условии, что это 2D-текстура) */
     GL_CALL(glBindTexture(GL_TEXTURE_2D, tex_name));
-    /* Set the sampler to use the texture unit */
+    /* Установите сэмплер на использование текстурного блока */
     GL_CALL(glUniform1i(sampler, tex_unit));
-    /* Set the UV set index */
+    /* Установите индекс набора UV */
     GL_CALL(glUniform1i(uv_set, tex_coord_index));
     if(tex_transform != NULL) {
         GL_CALL(glUniformMatrix3fv(uv_transform, 1, GL_FALSE, &(create_texture_transform_matrix(tex_transform)[0][0])));
@@ -1078,12 +1078,12 @@ static lv_gltf_renwin_state_t setup_primary_output(int32_t texture_width, int32_
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1));
-#ifdef __EMSCRIPTEN__ // Check if compiling for Emscripten (WebGL)
-    // For WebGL2
+#ifdef __EMSCRIPTEN__ // Проверьте, компилируется ли для Emscripten (WebGL)
+    // Для WebGL2
     GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, LV_GL_PREFERRED_DEPTH, texture_width, texture_height, 0, GL_DEPTH_COMPONENT,
                          GL_UNSIGNED_INT, NULL));
 #else
-    // For Desktop OpenGL
+    // Для настольного компьютера OpenGL
     GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, LV_GL_PREFERRED_DEPTH, texture_width, texture_height, 0, GL_DEPTH_COMPONENT,
                          GL_UNSIGNED_SHORT, NULL));
 #endif
@@ -1119,7 +1119,7 @@ static void setup_cleanup_opengl_output(lv_gltf_renwin_state_t * state)
 static void setup_view_proj_matrix_from_camera(lv_gltf_t * viewer, uint32_t camera, lv_gltf_view_desc_t * view_desc,
                                                lv_gltf_model_t * model, bool transmission_pass)
 {
-    /* The following matrix math is for the projection matrices as defined by the glTF spec:*/
+    /* Следующая матричная математика предназначена для матриц проекции, определенных спецификацией glTF:*/
     /* https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#projection-matrices*/
 
     fastgltf::math::fmat4x4 projection;
@@ -1127,7 +1127,7 @@ static void setup_view_proj_matrix_from_camera(lv_gltf_t * viewer, uint32_t came
 
     auto width = view_desc->render_width;
     auto height = view_desc->render_height;
-    /* It's possible the transmission pass should simply use the regular passes aspect despite having different metrics itself. */
+    /* Возможно, проход передачи должен просто использовать аспект обычных проходов, несмотря на то, что сам по себе имеет разные метрики. */
     /* TODO: test both ways to see which has less distortion*/
 
     float aspect = (float)width / (float)height;
@@ -1145,14 +1145,14 @@ static void setup_view_proj_matrix_from_camera(lv_gltf_t * viewer, uint32_t came
             projection[2][3] = -1;
 
             if(perspective.zfar.has_value()) {
-                // Finite projection matrix
+                // Конечная матрица проекции
                 projection[2][2] = (*perspective.zfar + perspective.znear) /
                 (perspective.znear - *perspective.zfar);
                 projection[3][2] = (2 * *perspective.zfar * perspective.znear) /
                 (perspective.znear - *perspective.zfar);
             }
             else {
-                // Infinite projection matrix
+                // Бесконечная матрица проекции
                 projection[2][2] = -1;
                 projection[3][2] = -2 * perspective.znear;
             }
@@ -1204,7 +1204,7 @@ static void setup_view_proj_matrix(lv_gltf_t * viewer, lv_gltf_view_desc_t * vie
     fastgltf::math::fmat4x4 view_mat =
         lv_gltf_math_look_at_rh(cam_position, cam_target, fastgltf::math::fvec3(0.0f, 1.0f, 0.0f));
 
-    // Create Projection Matrix
+    // Создайте матрицу проекции
     fastgltf::math::fmat4x4 projection;
     float fov = view_desc->fov;
 
@@ -1212,7 +1212,7 @@ static void setup_view_proj_matrix(lv_gltf_t * viewer, lv_gltf_view_desc_t * vie
     float zfar = b_radius * std::max(4.0, 8.0 * view_desc->distance);
     auto width = view_desc->render_width;
     auto height = view_desc->render_height;
-    // It's possible the transmission pass should simply use the regular passes aspect despite having different metrics itself.  Testing both ways to see which has less distortion
+    // Возможно, проход передачи должен просто использовать аспект обычных проходов, несмотря на то, что сам по себе имеет разные метрики.  Тестирование обоих способов, чтобы увидеть, какой из них имеет меньше искажений.
     float aspect = (float)width / (float)height;
     if(transmission_pass) {
         width = 256;
@@ -1220,8 +1220,8 @@ static void setup_view_proj_matrix(lv_gltf_t * viewer, lv_gltf_view_desc_t * vie
     }
 
     if(fov <= 0.0f) {
-        // Isometric view: create an orthographic projection
-        float orthoSize = view_desc->distance * b_radius; // Adjust as needed
+        // Изометрический вид: создание ортогональной проекции
+        float orthoSize = view_desc->distance * b_radius; // Отрегулируйте по мере необходимости
 
         projection = fastgltf::math::fmat4x4(1.0f);
         projection[0][0] = -(orthoSize * aspect);
@@ -1231,14 +1231,14 @@ static void setup_view_proj_matrix(lv_gltf_t * viewer, lv_gltf_view_desc_t * vie
 
     }
     else {
-        // Perspective view
+        // Перспективный вид
         projection = fastgltf::math::fmat4x4(0.0f);
         LV_ASSERT(width != 0 && height != 0);
         projection[0][0] = 1.f / (aspect * tan(0.5f * fastgltf::math::radians(fov)));
         projection[1][1] = 1.f / (tan(0.5f * fastgltf::math::radians(fov)));
         projection[2][3] = -1;
 
-        // Finite projection matrix
+        // Конечная матрица проекции
         projection[2][2] = (zfar + znear) / (znear - zfar);
         projection[3][2] = (2.f * zfar * znear) / (znear - zfar);
     }
@@ -1261,7 +1261,7 @@ static lv_result_t setup_restore_opaque_output(lv_gltf_t * viewer, const lv_gltf
     GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, renwin_state->renderbuffer, 0));
     GL_CALL(glViewport(0, 0, texture_w, texture_h));
     if(prepare_bg) {
-        /* cast is safe because viewer is a lv_obj_t*/
+        /* приведение безопасно, поскольку зритель — lv_obj_t.*/
         setup_draw_solid_background(viewer, lv_obj_get_style_bg_color((lv_obj_t *)viewer, LV_PART_MAIN),
                                     lv_obj_get_style_bg_opa((lv_obj_t *)viewer, LV_PART_MAIN));
     }
@@ -1279,7 +1279,7 @@ static void setup_draw_environment_background(lv_opengl_shader_manager_t * manag
     GL_CALL(glUniformMatrix4fv(glGetUniformLocation(manager->bg_program, "u_ViewProjectionMatrix"), 1, false,
                                viewer->view_projection_matrix.data()));
 
-    /* Bind the texture to the specified texture unit*/
+    /* Привязать текстуру к указанному текстурному блоку*/
     GL_CALL(glActiveTexture(GL_TEXTURE0 + 0));
     GL_CALL(glBindTexture(GL_TEXTURE_CUBE_MAP, viewer->environment->specular));
 
@@ -1304,8 +1304,8 @@ static void setup_draw_solid_background(lv_gltf_t * viewer, lv_color_t bg_color,
 {
     LV_UNUSED(viewer);
     GL_CALL(glClearDepthf(1.0f));
-    /* Red / blue color order reversed below so they'll end up in the correct order
-     * after the shader swaps the channels again, back to correct. */
+    /* Порядок красного и синего цветов ниже обратный, поэтому они окажутся в правильном порядке.
+     * после того, как шейдер снова поменяет местами каналы, вернемся к исправлению. */
     GL_CALL(glClearColor((float)bg_color.blue / 255.0f, (float)bg_color.green / 255.0f,
                          (float)bg_color.red / 255.0f, (float)bg_opa / 255.0f));
 
@@ -1364,7 +1364,7 @@ static void lv_gltf_view_recache_all_transforms(lv_gltf_model_t * model)
                 }
             }
 
-            /* Rebuild the local matrix after applying all write operations*/
+            /* Перестройте локальную матрицу после применения всех операций записи.*/
             if(made_rotation_changes) local_quat = lv_gltf_math_euler_to_quaternion(local_rot[0], local_rot[1], local_rot[2]);
 
             if(node->fastgltf_node->children.size() == 0) {
@@ -1421,7 +1421,7 @@ static void lv_gltf_view_recache_all_transforms(lv_gltf_model_t * model)
             if(current_camera_count == model->camera) {
                 fastgltf::math::fmat4x4 cammat = worldmatrix_was_inlined ? inlined_worldmatrix : (parentworldmatrix * localmatrix);
                 fastgltf::removeScale(cammat);
-                model->view_pos = cammat.col(3);  /* Implicit conversion from 4 element column to 3 element vector */
+                model->view_pos = cammat.col(3);  /* Неявное преобразование из 4-элементного столбца в 3-элементный вектор */
                 model->view_mat = fastgltf::math::inverse(cammat);
             }
         }
@@ -1433,7 +1433,7 @@ static void setup_environment_rotation_matrix(float env_rotation_angle, uint32_t
     fastgltf::math::fmat3x3 rotmat =
         fastgltf::math::asMatrix(lv_gltf_math_euler_to_quaternion(env_rotation_angle, 0.f, 3.14159f));
 
-    // Get the uniform location and set the uniform
+    // Получите местоположение униформы и установите униформу
     int32_t u_loc;
     GL_CALL(u_loc = glGetUniformLocation(shader_program, "u_EnvRotation"));
     GL_CALL(glUniformMatrix3fv(u_loc, 1, GL_FALSE, (const GLfloat *)rotmat.data()));

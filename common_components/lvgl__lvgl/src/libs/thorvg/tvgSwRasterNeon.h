@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2021 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -96,7 +96,7 @@ static bool neonRasterTranslucentRle(SwSurface* surface, const SwRle* rle, uint8
 {
     auto span = rle->spans;
 
-    //32bit channels
+    //32-битные каналы
     if (surface->channelSize == sizeof(uint32_t)) {
         auto color = surface->join(r, g, b, a);
         uint32_t src;
@@ -111,7 +111,7 @@ static bool neonRasterTranslucentRle(SwSurface* surface, const SwRle* rle, uint8
             auto ialpha = IA(src);
 
             if ((((uintptr_t) dst) & 0x7) != 0) {
-                //fill not aligned byte
+                //заполнить невыровненный байт
                 *dst = src + ALPHA_BLEND(*dst, ialpha);
                 vDst = (uint8x8_t*)(dst + 1);
                 align = 1;
@@ -131,7 +131,7 @@ static bool neonRasterTranslucentRle(SwSurface* surface, const SwRle* rle, uint8
 
             ++span;
         }
-    //8bit grayscale
+    //8-битный оттенок серого
     } else if (surface->channelSize == sizeof(uint8_t)) {
         TVGLOG("SW_ENGINE", "Require Neon Optimization, Channel Size = %d", surface->channelSize);
         uint8_t src;
@@ -154,7 +154,7 @@ static bool neonRasterTranslucentRect(SwSurface* surface, const SwBBox& region, 
     auto h = static_cast<uint32_t>(region.max.y - region.min.y);
     auto w = static_cast<uint32_t>(region.max.x - region.min.x);
 
-    //32bits channels
+    //32-битные каналы
     if (surface->channelSize == sizeof(uint32_t)) {
         auto color = surface->join(r, g, b, a);
         auto buffer = surface->buf32 + (region.min.y * surface->stride) + region.min.x;
@@ -170,7 +170,7 @@ static bool neonRasterTranslucentRect(SwSurface* surface, const SwBBox& region, 
             auto dst = &buffer[y * surface->stride];
 
             if ((((uintptr_t) dst) & 0x7) != 0) {
-                //fill not aligned byte
+                //заполнить невыровненный байт
                 *dst = color + ALPHA_BLEND(*dst, ialpha);
                 vDst = (uint8x8_t*) (dst + 1);
                 align = 1;
@@ -185,7 +185,7 @@ static bool neonRasterTranslucentRect(SwSurface* surface, const SwBBox& region, 
             auto leftovers = (w - align) % 2;
             if (leftovers > 0) dst[w - 1] = color + ALPHA_BLEND(dst[w - 1], ialpha);
         }
-    //8bit grayscale
+    //8-битный оттенок серого
     } else if (surface->channelSize == sizeof(uint8_t)) {
         TVGLOG("SW_ENGINE", "Require Neon Optimization, Channel Size = %d", surface->channelSize);
         auto buffer = surface->buf8 + (region.min.y * surface->stride) + region.min.x;

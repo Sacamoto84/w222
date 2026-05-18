@@ -152,10 +152,10 @@ void lv_gltf_data_animation_matrix_apply(float timestamp, std::size_t anim_num, 
             matrix[2][1] = (yz - wx) * sz;
             matrix[2][2] = (1 - (xx + yy)) * sz;
 
-            /* These entries should not be necessary */
-            //matrix[0][3] = 0.f;
-            //matrix[1][3] = 0.f;
-            //matrix[2][3] = 0.f;
+            /* Эти записи не должны быть необходимы */
+            //матрица[0][3] = 0.f;
+            //матрица[1][3] = 0.f;
+            //матрица[2][3] = 0.f;
         }
 
         if(translation_comp_index > -1) {

@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 8 jun 2023
+/*  Создано: 8 июня 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 #ifndef LV_EVE_H
@@ -37,15 +37,15 @@ extern "C" {
  **********************/
 typedef enum {
     LV_EVE_PRIMITIVE_ZERO_VALUE,
-    LV_EVE_PRIMITIVE_BITMAPS = 1UL,      /* Bitmap drawing primitive */
-    LV_EVE_PRIMITIVE_POINTS = 2UL,       /* Point drawing primitive */
-    LV_EVE_PRIMITIVE_LINES = 3UL,        /* Line drawing primitive */
-    LV_EVE_PRIMITIVE_LINE_STRIP = 4UL,   /* Line strip drawing primitive */
-    LV_EVE_PRIMITIVE_EDGE_STRIP_R = 5UL, /* Edge strip right side drawing primitive */
-    LV_EVE_PRIMITIVE_EDGE_STRIP_L = 6UL, /* Edge strip left side drawing primitive */
-    LV_EVE_PRIMITIVE_EDGE_STRIP_A = 7UL, /* Edge strip above drawing primitive */
-    LV_EVE_PRIMITIVE_EDGE_STRIP_B = 8UL, /* Edge strip below side drawing primitive */
-    LV_EVE_PRIMITIVE_RECTS = 9UL,        /* Rectangle drawing primitive */
+    LV_EVE_PRIMITIVE_BITMAPS = 1UL,      /* Примитив растрового рисунка */
+    LV_EVE_PRIMITIVE_POINTS = 2UL,       /* Примитив рисования точек */
+    LV_EVE_PRIMITIVE_LINES = 3UL,        /* Примитив рисования линий */
+    LV_EVE_PRIMITIVE_LINE_STRIP = 4UL,   /* Примитив рисования полосок линий */
+    LV_EVE_PRIMITIVE_EDGE_STRIP_R = 5UL, /* Примитив рисования правой стороны краевой полосы */
+    LV_EVE_PRIMITIVE_EDGE_STRIP_L = 6UL, /* Примитив рисования левой стороны краевой полосы */
+    LV_EVE_PRIMITIVE_EDGE_STRIP_A = 7UL, /* Краевая полоса над примитивом рисования */
+    LV_EVE_PRIMITIVE_EDGE_STRIP_B = 8UL, /* Краевая полоса под примитивом бокового рисунка */
+    LV_EVE_PRIMITIVE_RECTS = 9UL,        /* Примитив рисования прямоугольника */
 } lv_eve_primitive_t;
 
 
@@ -63,8 +63,8 @@ typedef struct {
     uint16_t scy;
 } lv_eve_drawing_context_t;
 
-/* drawing context that is not saved and restored
- * by SAVE_CONTEXT and RESTORE_CONTEXT
+/* контекст рисования, который не сохраняется и не восстанавливается
+ * от SAVE_CONTEXT и RESTORE_CONTEXT
  */
 typedef struct {
     uint32_t bitmap_source;
@@ -98,15 +98,15 @@ void lv_eve_draw_rect_simple(int16_t coord_x1, int16_t coord_y1, int16_t coord_x
 void lv_eve_mask_round(int16_t coord_x1, int16_t coord_y1, int16_t coord_x2, int16_t coord_y2, int16_t radius);
 
 /**
- * Set the bitmap source to `addr`. SPI transmission will occur unless it is already set to this value.
- * The bitmap source is not part of the saved and restored context.
+ * Установите источник растрового изображения на `addr`.  Передача SPI будет происходить, если для него еще не установлено это значение.
+ * Источник растрового изображения не является частью сохраненного и восстановленного контекста.
  * @param addr    the remote EVE memory address to set as the bitmap source
  */
 void lv_eve_bitmap_source(uint32_t addr);
 
 /**
- * Set the bitmap size and sampling parameters. SPI transmission will occur unless the currently set parameters are already these.
- * The bitmap size is not part of the saved and restored context.
+ * Установите размер растрового изображения и параметры выборки.  Передача SPI будет происходить, если текущие установленные параметры уже не являются такими.
+ * Размер растрового изображения не является частью сохраненного и восстановленного контекста.
  * @param filter   the sampling method. Either EVE_NEAREST or EVE_BILINEAR
  * @param wrapx    the out of bounds sampling behavior in the X direction. Either EVE_BORDER or EVE_REPEAT
  * @param wrapy    the out of bounds sampling behavior in the Y direction. Either EVE_BORDER or EVE_REPEAT
@@ -116,8 +116,8 @@ void lv_eve_bitmap_source(uint32_t addr);
 void lv_eve_bitmap_size(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height);
 
 /**
- * Set the bitmap format/layout parameters. SPI transmission will occur unless the currently set parameters are already these.
- * The bitmap layout is not part of the saved and restored context.
+ * Установите параметры формата/макета растрового изображения.  Передача SPI будет происходить, если текущие установленные параметры уже не являются такими.
+ * Макет растрового изображения не является частью сохраненного и восстановленного контекста.
  * @param format      an eve color format value like EVE_RGB565
  * @param linestride  the stride of the bitmap rows in bytes
  * @param height      the number of rows in the bitmap
@@ -145,7 +145,7 @@ void lv_eve_bitmap_layout(uint8_t format, uint16_t linestride, uint16_t height);
 
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_EVE_H */

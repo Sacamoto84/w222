@@ -331,10 +331,10 @@ static Result vg_lite_grad_matrix_conv(vg_lite_matrix_t * result, const vg_lite_
  *  STATIC VARIABLES
  **********************/
 
-/* color converters */
+/* преобразователи цвета */
 
 static vg_lite_converter<vg_color16_t, vg_color32_t> conv_bgra8888_to_bgr565(
-    [](vg_color16_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color16_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->red * 0x1F / 0xFF;
@@ -346,7 +346,7 @@ static vg_lite_converter<vg_color16_t, vg_color32_t> conv_bgra8888_to_bgr565(
 });
 
 static vg_lite_converter<vg_color16_alpha_t, vg_color32_t> conv_bgra8888_to_bgra5658(
-    [](vg_color16_alpha_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color16_alpha_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->c.red = src->red * 0x1F / 0xFF;
@@ -359,7 +359,7 @@ static vg_lite_converter<vg_color16_alpha_t, vg_color32_t> conv_bgra8888_to_bgra
 });
 
 static vg_lite_converter<vg_color32_t, vg_color16_t> conv_bgr565_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color16_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color16_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->red * 0xFF / 0x1F;
@@ -372,7 +372,7 @@ static vg_lite_converter<vg_color32_t, vg_color16_t> conv_bgr565_to_bgra8888(
 });
 
 static vg_lite_converter<vg_color32_t, vg_color16_alpha_t> conv_bgra5658_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color16_alpha_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color16_alpha_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->c.red * 0xFF / 0x1F;
@@ -385,7 +385,7 @@ static vg_lite_converter<vg_color32_t, vg_color16_alpha_t> conv_bgra5658_to_bgra
 });
 
 static vg_lite_converter<vg_color32_t, vg_color32_t> conv_bgrx8888_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         *dest = *src;
@@ -396,7 +396,7 @@ static vg_lite_converter<vg_color32_t, vg_color32_t> conv_bgrx8888_to_bgra8888(
 });
 
 static vg_lite_converter<vg_color32_t, vg_color24_t> conv_bgr888_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color24_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color24_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->red;
@@ -425,11 +425,11 @@ static vg_lite_converter<vg_color32_t, uint8_t> conv_alpha8_to_bgra8888(
 static vg_lite_converter<vg_color32_t, uint8_t> conv_alpha4_to_bgra8888(
     [](vg_color32_t * dest, const uint8_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t color)
 {
-    /* 1 byte -> 2 px */
+    /* 1 байт -> 2 пикселя */
     px_size /= 2;
 
     while(px_size--) {
-        /* high 4bit */
+        /* высокий 4бит */
         uint8_t alpha = (*src & 0xF0);
         dest->alpha = alpha;
         dest->red = UDIV255(B(color) * alpha);
@@ -437,7 +437,7 @@ static vg_lite_converter<vg_color32_t, uint8_t> conv_alpha4_to_bgra8888(
         dest->blue = UDIV255(R(color) * alpha);
         dest++;
 
-        /* low 4bit */
+        /* низкий 4бит */
         alpha = (*src & 0x0F) << 4;
         dest->alpha = alpha;
         dest->red = UDIV255(B(color) * alpha);
@@ -450,7 +450,7 @@ static vg_lite_converter<vg_color32_t, uint8_t> conv_alpha4_to_bgra8888(
 });
 
 static vg_lite_converter<vg_color32_t, uint8_t> conv_l8_to_bgra8888(
-    [](vg_color32_t * dest, const uint8_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const uint8_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->alpha = 0xFF;
@@ -463,7 +463,7 @@ static vg_lite_converter<vg_color32_t, uint8_t> conv_l8_to_bgra8888(
 });
 
 static vg_lite_converter<vg_color32_t, vg_color_bgra5551_t> conv_bgra5551_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color_bgra5551_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color_bgra5551_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->red * 0xFF / 0x1F;
@@ -476,7 +476,7 @@ static vg_lite_converter<vg_color32_t, vg_color_bgra5551_t> conv_bgra5551_to_bgr
 });
 
 static vg_lite_converter<vg_color32_t, vg_color_bgra4444_t> conv_bgra4444_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color_bgra4444_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color_bgra4444_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->red * 0xFF / 0xF;
@@ -489,7 +489,7 @@ static vg_lite_converter<vg_color32_t, vg_color_bgra4444_t> conv_bgra4444_to_bgr
 });
 
 static vg_lite_converter<vg_color32_t, vg_color_bgra2222_t> conv_bgra2222_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color_bgra2222_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color_bgra2222_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     while(px_size--) {
         dest->red = src->red * 0xFF / 0x3;
@@ -501,9 +501,9 @@ static vg_lite_converter<vg_color32_t, vg_color_bgra2222_t> conv_bgra2222_to_bgr
     }
 });
 
-/* Used to copy images with inconsistent strides but the same color format */
+/* Используется для копирования изображений с непоследовательными шагами, но в том же цветовом формате. */
 static vg_lite_converter<vg_color32_t, vg_color32_t> conv_bgra8888_to_bgra8888(
-    [](vg_color32_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* color */)
+    [](vg_color32_t * dest, const vg_color32_t * src, vg_lite_uint32_t px_size, vg_lite_uint32_t /* цвет */)
 {
     memcpy(dest, src, sizeof(vg_color32_t) * px_size);
 });
@@ -529,10 +529,10 @@ extern "C" {
             return VG_LITE_INVALID_ARGUMENT;
         }
 
-        /* Reset planar. */
+        /* Сброс планарности. */
         buffer->yuv.uv_planar = buffer->yuv.v_planar = buffer->yuv.alpha_planar = 0;
 
-        /* Align height in case format is tiled. */
+        /* Выровнять высоту в случае, если формат плиточный. */
         if(buffer->format >= VG_LITE_YUY2 && buffer->format <= VG_LITE_NV16) {
             buffer->height = VG_LITE_ALIGN(buffer->height, 4);
             buffer->yuv.swizzle = VG_LITE_SWIZZLE_UV;
@@ -550,7 +550,7 @@ extern "C" {
 
         buffer->stride = stride;
 
-        /* Size must be multiple of align, See: https://en.cppreference.com/w/c/memory/aligned_alloc */
+        /* Размер должен быть кратен размеру выравнивания. См.: https://en.cppreference.com/w/c/memory/aligned_alloc. */
         size_t size = VG_LITE_ALIGN(buffer->height * stride, LV_VG_LITE_THORVG_BUF_ADDR_ALIGN);
 #ifndef _WIN32
         buffer->memory = aligned_alloc(LV_VG_LITE_THORVG_BUF_ADDR_ALIGN, size);
@@ -666,7 +666,7 @@ extern "C" {
 
         vg_lite_matrix_t new_matrix = *matrix;
         if(rect->x || rect->y) {
-            /* simulate hardware device clipping behavior */
+            /* имитировать поведение отсечения аппаратного устройства */
             vg_lite_translate(-rect->x, -rect->y, &new_matrix);
         }
 
@@ -689,14 +689,14 @@ extern "C" {
         LV_UNUSED(tessellation_width);
         LV_UNUSED(tessellation_height);
 #if LV_VG_LITE_THORVG_THREAD_RENDER
-        /* Threads Count */
+        /* Число потоков */
         auto threads = std::thread::hardware_concurrency();
         if(threads > 0) {
-            --threads; /* Allow the designated main thread capacity */
+            --threads; /* Разрешить назначенную мощность основного потока */
         }
 #endif
 
-        /* Initialize ThorVG Engine */
+        /* Инициализировать двигатель ThorVG */
         TVG_CHECK_RETURN_VG_ERROR(Initializer::init(TVG_CANVAS_ENGINE, 0));
         return VG_LITE_SUCCESS;
     }
@@ -807,10 +807,10 @@ extern "C" {
         TVG_CHECK_RETURN_VG_ERROR(ctx->canvas->sync());
         TVG_CHECK_RETURN_VG_ERROR(ctx->canvas->clear(true));
 
-        /* make sure target buffer is valid */
+        /* убедитесь, что целевой буфер действителен */
         LV_ASSERT_NULL(ctx->target_buffer);
 
-        /* If target_buffer is not in a format supported by thorvg, software conversion is required. */
+        /* Если формат target_buffer не поддерживается thorvg, требуется преобразование программного обеспечения. */
         switch(ctx->target_format) {
             case VG_LITE_BGR565:
                 picture_bgra8888_to_bgr565(
@@ -859,7 +859,7 @@ extern "C" {
                 break;
             case VG_LITE_BGRA8888:
             case VG_LITE_BGRX8888:
-                /* No conversion required. */
+                /* Никакого преобразования не требуется. */
                 break;
             default:
                 LV_LOG_ERROR("unsupported format: %d", ctx->target_format);
@@ -867,7 +867,7 @@ extern "C" {
                 break;
         }
 
-        /* finish convert, clean target buffer info */
+        /* завершить преобразование, очистить информацию о целевом буфере */
         ctx->target_buffer = nullptr;
         ctx->tvg_target_buffer = nullptr;
         ctx->target_px_size = 0;
@@ -890,9 +890,9 @@ extern "C" {
         auto ctx = vg_lite_ctx::get_instance();
 
         /**
-         * Special handling for DST_IN blend mode using ThorVG's CompositeMethod::InvAlphaMask.
-         * DST_IN (Sa * D): pixels inside the shape are cleared, pixels outside are preserved.
-         * Implementation details:
+         * Специальная обработка режима наложения DST_IN с использованием CompositeMethod::InvAlphaMask от ThorVG.
+         * DST_IN (Sa*D): пиксели внутри фигуры очищаются, пиксели снаружи сохраняются.
+         * Детали реализации:
          *   - The mask shape is filled with (255 - A(color)), used with InvAlphaMask.
          *   - InvAlphaMask formula: dst = dst * (255 - mask_alpha) / 255.
          *   - When color=0, mask alpha=255 inside the shape, so (255-255=0): inside is cleared; outside (255-0=255): preserved.
@@ -900,30 +900,30 @@ extern "C" {
          *   - This simulates the erase effect of VG_LITE_BLEND_DST_IN.
          */
         if(blend == VG_LITE_BLEND_DST_IN) {
-            /* Flush any pending operations first */
+            /* Сначала очистите все ожидающие операции */
             vg_lite_error_t error;
             VG_LITE_RETURN_ERROR(vg_lite_finish());
 
             TVG_CHECK_RETURN_VG_ERROR(canvas_set_target(ctx, target));
 
-            /* Create mask shape with white color (full alpha) */
+            /* Создайте форму маски белого цвета (полная альфа) */
             auto mask = Shape::gen();
             TVG_CHECK_RETURN_VG_ERROR(shape_append_path(mask, path, matrix));
             TVG_CHECK_RETURN_VG_ERROR(mask->transform(matrix_conv(matrix)));
             TVG_CHECK_RETURN_VG_ERROR(mask->fill(fill_rule_conv(fill_rule)));
             TVG_CHECK_RETURN_VG_ERROR(mask->fill(255 - B(color), 255 - G(color), 255 - R(color), 255 - A(color)));
 
-            /* Create a Picture from current target buffer content */
+            /* Создать изображение из текущего содержимого целевого буфера */
             auto picture = Picture::gen();
             TVG_CHECK_RETURN_VG_ERROR(picture_load(ctx, picture, target));
 
             /**
-             * Since the contents of the target buffer have already been copied into the picture,
-             * we can now clean up the target buffer in preparation for rendering the masked image.
+             * Поскольку содержимое целевого буфера уже скопировано в изображение,
+             * теперь мы можем очистить целевой буфер для подготовки к рендерингу замаскированного изображения.
              */
             lv_memzero(target->memory, target->stride * target->height);
 
-            /* Render masked picture back */
+            /* Вернуть замаскированное изображение */
             TVG_CHECK_RETURN_VG_ERROR(picture->composite(std::move(mask), CompositeMethod::InvAlphaMask));
             TVG_CHECK_RETURN_VG_ERROR(ctx->canvas->push(std::move(picture)));
 
@@ -1208,13 +1208,13 @@ extern "C" {
     {
         vg_lite_error_t error = VG_LITE_SUCCESS;
 
-        /* Set the member values according to driver defaults. */
+        /* Установите значения элементов в соответствии со значениями драйвера по умолчанию. */
         grad->image.width = VLC_GRADIENT_BUFFER_WIDTH;
         grad->image.height = 1;
         grad->image.stride = 0;
         grad->image.format = VG_LITE_BGRA8888;
 
-        /* Allocate the image for gradient. */
+        /* Выделите изображение для градиента. */
         error = vg_lite_allocate(&grad->image);
 
         grad->count = 0;
@@ -1246,7 +1246,7 @@ extern "C" {
         vg_lite_color_ramp_t * src_ramp_last;
         vg_lite_color_ramp_t * trg_ramp;
 
-        /* Reset the count. */
+        /* Сбросьте счетчик. */
         trg_count = 0;
 
         if((linear_gradient.X0 == linear_gradient.X1) && (linear_gradient.Y0 == linear_gradient.Y1))
@@ -1263,59 +1263,59 @@ extern "C" {
             grad->color_ramp[i] = color_ramp[i];
         grad->ramp_length = count;
 
-        /* Determine the last source ramp. */
+        /* Определите последнюю исходную рампу. */
         src_ramp_last
             = grad->color_ramp
               + grad->ramp_length;
 
-        /* Set the initial previous stop. */
+        /* Установите начальную предыдущую остановку. */
         prev_stop = -1;
 
-        /* Reset the count. */
+        /* Сбросьте счетчик. */
         trg_count = 0;
 
-        /* Walk through the source ramp. */
+        /* Пройдите через рампу источника. */
         for(
             src_ramp = grad->color_ramp, trg_ramp = grad->converted_ramp;
             (src_ramp < src_ramp_last) && (trg_count < VLC_MAX_COLOR_RAMP_STOPS + 2);
             src_ramp += 1) {
-            /* Must be in increasing order. */
+            /* Должно быть в порядке возрастания. */
             if(src_ramp->stop < prev_stop) {
-                /* Ignore the entire sequence. */
+                /* Игнорируйте всю последовательность. */
                 trg_count = 0;
                 break;
             }
 
-            /* Update the previous stop value. */
+            /* Обновите предыдущее значение остановки. */
             prev_stop = src_ramp->stop;
 
-            /* Must be within [0..1] range. */
+            /* Должно находиться в диапазоне [0..1]. */
             if((src_ramp->stop < 0.0f) || (src_ramp->stop > 1.0f)) {
-                /* Ignore. */
+                /* Игнорировать. */
                 continue;
             }
 
-            /* Clamp color. */
+            /* Цвет зажима. */
             ClampColor(COLOR_FROM_RAMP(src_ramp), COLOR_FROM_RAMP(trg_ramp), 0);
 
             /* First stop greater than zero? */
             if((trg_count == 0) && (src_ramp->stop > 0.0f)) {
-                /* Force the first stop to 0.0f. */
+                /* Принудительно установите первую остановку на 0,0f. */
                 trg_ramp->stop = 0.0f;
 
-                /* Replicate the entry. */
+                /* Повторите запись. */
                 trg_ramp[1] = *trg_ramp;
                 trg_ramp[1].stop = src_ramp->stop;
 
-                /* Advance. */
+                /* Продвижение. */
                 trg_ramp += 2;
                 trg_count += 2;
             }
             else {
-                /* Set the stop value. */
+                /* Установите стоповое значение. */
                 trg_ramp->stop = src_ramp->stop;
 
-                /* Advance. */
+                /* Продвижение. */
                 trg_ramp += 1;
                 trg_count += 1;
             }
@@ -1327,19 +1327,19 @@ extern "C" {
             grad->converted_length = sizeof(default_ramp) / 5;
         }
         else {
-            /* The last stop must be at 1.0. */
+            /* Последняя остановка должна быть на отметке 1,0. */
             if(trg_ramp[-1].stop != 1.0f) {
-                /* Replicate the last entry. */
+                /* Повторите последнюю запись. */
                 *trg_ramp = trg_ramp[-1];
 
-                /* Force the last stop to 1.0f. */
+                /* Принудительно установите последнюю остановку на 1.0f. */
                 trg_ramp->stop = 1.0f;
 
-                /* Update the final entry count. */
+                /* Обновите итоговое количество записей. */
                 trg_count += 1;
             }
 
-            /* Set new length. */
+            /* Установите новую длину. */
             grad->converted_length = trg_count;
         }
         return VG_LITE_SUCCESS;
@@ -1361,7 +1361,7 @@ Empty_sequence_handler:
         vg_lite_float_t x0, y0, x1, y1, length;
         vg_lite_error_t error = VG_LITE_SUCCESS;
 
-        /* Get shortcuts to the color ramp. */
+        /* Получите ярлыки для цветовой шкалы. */
         ramp_length = grad->converted_length;
         color_ramp = grad->converted_ramp;
 
@@ -1373,7 +1373,7 @@ Empty_sequence_handler:
 
         if(length <= 0)
             return VG_LITE_INVALID_ARGUMENT;
-        /* Find the common denominator of the color ramp stops. */
+        /* Найдите общий знаменатель остановок цветовой рампы. */
         if(length < 1) {
             common = 1;
         }
@@ -1385,16 +1385,16 @@ Empty_sequence_handler:
             if(color_ramp[i].stop != 0.0f) {
                 vg_lite_float_t mul = common * color_ramp[i].stop;
                 vg_lite_float_t frac = mul - (vg_lite_float_t)floor(mul);
-                if(frac > 0.00013f) { /* Suppose error for zero is 0.00013 */
+                if(frac > 0.00013f) { /* Предположим, что ошибка для нуля равна 0,00013. */
                     common = MAX(common, (vg_lite_uint32_t)(1.0f / frac + 0.5f));
                 }
             }
         }
 
-        /* Compute the width of the required color array. */
+        /* Вычислите ширину требуемого цветового массива. */
         width = common + 1;
 
-        /* Allocate the color ramp surface. */
+        /* Выделите поверхность цветовой шкалы. */
         memset(&grad->image, 0, sizeof(grad->image));
         grad->image.width = width;
         grad->image.height = 1;
@@ -1402,14 +1402,14 @@ Empty_sequence_handler:
         grad->image.image_mode = VG_LITE_NONE_IMAGE_MODE;
         grad->image.format = VG_LITE_ABGR8888;
 
-        /* Allocate the image for gradient. */
+        /* Выделите изображение для градиента. */
         VG_LITE_RETURN_ERROR(vg_lite_allocate(&grad->image));
         memset(grad->image.memory, 0, grad->image.stride * grad->image.height);
         width = common + 1;
-        /* Set pointer to color array. */
+        /* Установите указатель на массив цветов. */
         bits = (uint8_t *)grad->image.memory;
 
-        /* Start filling the color array. */
+        /* Начните заполнять цветовой массив. */
         stop = 0;
         for(i = 0; i < width; ++i) {
             vg_lite_float_t gradient;
@@ -1420,20 +1420,20 @@ Empty_sequence_handler:
 
             if(i == 241)
                 i = 241;
-            /* Compute gradient for current color array entry. */
+            /* Вычислить градиент для текущей записи массива цветов. */
             gradient = (vg_lite_float_t)i / (vg_lite_float_t)(width - 1);
 
-            /* Find the entry in the color ramp that matches or exceeds this
-            ** gradient. */
+            /* Найдите запись на цветовой шкале, которая соответствует этому значению или превосходит его.
+            ** градиент. */
             while(gradient > color_ramp[stop].stop) {
                 ++stop;
             }
 
             if(gradient == color_ramp[stop].stop) {
-                /* Perfect match weight 1.0. */
+                /* Идеальное соответствие весу 1.0. */
                 weight = 1.0f;
 
-                /* Use color ramp color. */
+                /* Используйте цвет цветовой шкалы. */
                 color1[3] = color_ramp[stop].alpha;
                 color1[2] = color_ramp[stop].blue;
                 color1[1] = color_ramp[stop].green;
@@ -1445,17 +1445,17 @@ Empty_sequence_handler:
                 if(stop == 0) {
                     return VG_LITE_INVALID_ARGUMENT;
                 }
-                /* Compute weight. */
+                /* Вычислить вес. */
                 weight = (color_ramp[stop].stop - gradient)
                          / (color_ramp[stop].stop - color_ramp[stop - 1].stop);
 
-                /* Grab color ramp color of previous stop. */
+                /* Захватите цвет цветовой шкалы предыдущей остановки. */
                 color1[3] = color_ramp[stop - 1].alpha;
                 color1[2] = color_ramp[stop - 1].blue;
                 color1[1] = color_ramp[stop - 1].green;
                 color1[0] = color_ramp[stop - 1].red;
 
-                /* Grab color ramp color of current stop. */
+                /* Захватить цвет цветовой рампы текущей остановки. */
                 color2[3] = color_ramp[stop].alpha;
                 color2[2] = color_ramp[stop].blue;
                 color2[1] = color_ramp[stop].green;
@@ -1463,24 +1463,24 @@ Empty_sequence_handler:
             }
 
             if(grad->pre_multiplied) {
-                /* Pre-multiply the first color. */
+                /* Предварительно умножьте первый цвет. */
                 color1[2] *= color1[3];
                 color1[1] *= color1[3];
                 color1[0] *= color1[3];
 
-                /* Pre-multiply the second color. */
+                /* Предварительно умножьте второй цвет. */
                 color2[2] *= color2[3];
                 color2[1] *= color2[3];
                 color2[0] *= color2[3];
             }
 
-            /* Filter the colors per channel. */
+            /* Фильтруйте цвета по каналам. */
             color[3] = LERP(color1[3], color2[3], weight);
             color[2] = LERP(color1[2], color2[2], weight);
             color[1] = LERP(color1[1], color2[1], weight);
             color[0] = LERP(color1[0], color2[0], weight);
 
-            /* Pack the final color. */
+            /* Упакуйте окончательный цвет. */
             *bits++ = PackColorComponent(color[3]);
             *bits++ = PackColorComponent(color[2]);
             *bits++ = PackColorComponent(color[1]);
@@ -1560,7 +1560,7 @@ Empty_sequence_handler:
         vg_lite_color_ramp_t * srcRampLast;
         vg_lite_color_ramp_t * trgRamp;
 
-        /* Reset the count. */
+        /* Сбросьте счетчик. */
         trgCount = 0;
 
         if(radial_grad.r <= 0)
@@ -1577,59 +1577,59 @@ Empty_sequence_handler:
             grad->color_ramp[i] = color_ramp[i];
         grad->ramp_length = count;
 
-        /* Determine the last source ramp. */
+        /* Определите последнюю исходную рампу. */
         srcRampLast
             = grad->color_ramp
               + grad->ramp_length;
 
-        /* Set the initial previous stop. */
+        /* Установите начальную предыдущую остановку. */
         prevStop = -1;
 
-        /* Reset the count. */
+        /* Сбросьте счетчик. */
         trgCount = 0;
 
-        /* Walk through the source ramp. */
+        /* Пройдите через рампу источника. */
         for(
             srcRamp = grad->color_ramp, trgRamp = grad->converted_ramp;
             (srcRamp < srcRampLast) && (trgCount < VLC_MAX_COLOR_RAMP_STOPS + 2);
             srcRamp += 1) {
-            /* Must be in increasing order. */
+            /* Должно быть в порядке возрастания. */
             if(srcRamp->stop < prevStop) {
-                /* Ignore the entire sequence. */
+                /* Игнорируйте всю последовательность. */
                 trgCount = 0;
                 break;
             }
 
-            /* Update the previous stop value. */
+            /* Обновите предыдущее значение остановки. */
             prevStop = srcRamp->stop;
 
-            /* Must be within [0..1] range. */
+            /* Должно находиться в диапазоне [0..1]. */
             if((srcRamp->stop < 0.0f) || (srcRamp->stop > 1.0f)) {
-                /* Ignore. */
+                /* Игнорировать. */
                 continue;
             }
 
-            /* Clamp color. */
+            /* Цвет зажима. */
             ClampColor(COLOR_FROM_RAMP(srcRamp), COLOR_FROM_RAMP(trgRamp), 0);
 
             /* First stop greater than zero? */
             if((trgCount == 0) && (srcRamp->stop > 0.0f)) {
-                /* Force the first stop to 0.0f. */
+                /* Принудительно установите первую остановку на 0,0f. */
                 trgRamp->stop = 0.0f;
 
-                /* Replicate the entry. */
+                /* Повторите запись. */
                 trgRamp[1] = *trgRamp;
                 trgRamp[1].stop = srcRamp->stop;
 
-                /* Advance. */
+                /* Продвижение. */
                 trgRamp += 2;
                 trgCount += 2;
             }
             else {
-                /* Set the stop value. */
+                /* Установите стоповое значение. */
                 trgRamp->stop = srcRamp->stop;
 
-                /* Advance. */
+                /* Продвижение. */
                 trgRamp += 1;
                 trgCount += 1;
             }
@@ -1641,19 +1641,19 @@ Empty_sequence_handler:
             grad->converted_length = sizeof(defaultRamp) / 5;
         }
         else {
-            /* The last stop must be at 1.0. */
+            /* Последняя остановка должна быть на отметке 1,0. */
             if(trgRamp[-1].stop != 1.0f) {
-                /* Replicate the last entry. */
+                /* Повторите последнюю запись. */
                 *trgRamp = trgRamp[-1];
 
-                /* Force the last stop to 1.0f. */
+                /* Принудительно установите последнюю остановку на 1.0f. */
                 trgRamp->stop = 1.0f;
 
-                /* Update the final entry count. */
+                /* Обновите итоговое количество записей. */
                 trgCount += 1;
             }
 
-            /* Set new length. */
+            /* Установите новую длину. */
             grad->converted_length = trgCount;
         }
         return VG_LITE_SUCCESS;
@@ -1675,14 +1675,14 @@ Empty_sequence_handler:
         vg_lite_error_t error = VG_LITE_SUCCESS;
         vg_lite_uint32_t align, mul, div;
 
-        /* Get shortcuts to the color ramp. */
+        /* Получите ярлыки для цветовой шкалы. */
         ramp_length = grad->converted_length;
         colorRamp = grad->converted_ramp;
 
         if(grad->radial_grad.r <= 0)
             return VG_LITE_INVALID_ARGUMENT;
 
-        /* Find the common denominator of the color ramp stops. */
+        /* Найдите общий знаменатель остановок цветовой рампы. */
         if(grad->radial_grad.r < 1) {
             common = 1;
         }
@@ -1694,17 +1694,17 @@ Empty_sequence_handler:
             if(colorRamp[i].stop != 0.0f) {
                 vg_lite_float_t m = common * colorRamp[i].stop;
                 vg_lite_float_t frac = m - (vg_lite_float_t)floor(m);
-                if(frac > 0.00013f) { /* Suppose error for zero is 0.00013 */
+                if(frac > 0.00013f) { /* Предположим, что ошибка для нуля равна 0,00013. */
                     common = MAX(common, (vg_lite_uint32_t)(1.0f / frac + 0.5f));
                 }
             }
         }
 
-        /* Compute the width of the required color array. */
+        /* Вычислите ширину требуемого цветового массива. */
         width = common + 1;
         width = (width + 15) & (~0xf);
 
-        /* Allocate the color ramp surface. */
+        /* Выделите поверхность цветовой шкалы. */
         memset(&grad->image, 0, sizeof(grad->image));
         grad->image.width = width;
         grad->image.height = 1;
@@ -1712,16 +1712,16 @@ Empty_sequence_handler:
         grad->image.image_mode = VG_LITE_NONE_IMAGE_MODE;
         grad->image.format = VG_LITE_ABGR8888;
 
-        /* Allocate the image for gradient. */
+        /* Выделите изображение для градиента. */
         VG_LITE_RETURN_ERROR(vg_lite_allocate(&grad->image));
 
         get_format_bytes(VG_LITE_ABGR8888, &mul, &div, &align);
         width = grad->image.stride * div / mul;
 
-        /* Set pointer to color array. */
+        /* Установите указатель на массив цветов. */
         bits = (uint8_t *)grad->image.memory;
 
-        /* Start filling the color array. */
+        /* Начните заполнять цветовой массив. */
         stop = 0;
         for(i = 0; i < width; ++i) {
             vg_lite_float_t gradient;
@@ -1730,20 +1730,20 @@ Empty_sequence_handler:
             vg_lite_float_t color2[4];
             vg_lite_float_t weight;
 
-            /* Compute gradient for current color array entry. */
+            /* Вычислить градиент для текущей записи массива цветов. */
             gradient = (vg_lite_float_t)i / (vg_lite_float_t)(width - 1);
 
-            /* Find the entry in the color ramp that matches or exceeds this
-            ** gradient. */
+            /* Найдите запись на цветовой шкале, которая соответствует этому значению или превосходит его.
+            ** градиент. */
             while(gradient > colorRamp[stop].stop) {
                 ++stop;
             }
 
             if(gradient == colorRamp[stop].stop) {
-                /* Perfect match weight 1.0. */
+                /* Идеальное соответствие весу 1.0. */
                 weight = 1.0f;
 
-                /* Use color ramp color. */
+                /* Используйте цвет цветовой шкалы. */
                 color1[3] = colorRamp[stop].alpha;
                 color1[2] = colorRamp[stop].blue;
                 color1[1] = colorRamp[stop].green;
@@ -1752,17 +1752,17 @@ Empty_sequence_handler:
                 color2[3] = color2[2] = color2[1] = color2[0] = 0.0f;
             }
             else {
-                /* Compute weight. */
+                /* Вычислить вес. */
                 weight = (colorRamp[stop].stop - gradient)
                          / (colorRamp[stop].stop - colorRamp[stop - 1].stop);
 
-                /* Grab color ramp color of previous stop. */
+                /* Захватите цвет цветовой шкалы предыдущей остановки. */
                 color1[3] = colorRamp[stop - 1].alpha;
                 color1[2] = colorRamp[stop - 1].blue;
                 color1[1] = colorRamp[stop - 1].green;
                 color1[0] = colorRamp[stop - 1].red;
 
-                /* Grab color ramp color of current stop. */
+                /* Захватить цвет цветовой рампы текущей остановки. */
                 color2[3] = colorRamp[stop].alpha;
                 color2[2] = colorRamp[stop].blue;
                 color2[1] = colorRamp[stop].green;
@@ -1770,24 +1770,24 @@ Empty_sequence_handler:
             }
 
             if(grad->pre_multiplied) {
-                /* Pre-multiply the first color. */
+                /* Предварительно умножьте первый цвет. */
                 color1[2] *= color1[3];
                 color1[1] *= color1[3];
                 color1[0] *= color1[3];
 
-                /* Pre-multiply the second color. */
+                /* Предварительно умножьте второй цвет. */
                 color2[2] *= color2[3];
                 color2[1] *= color2[3];
                 color2[0] *= color2[3];
             }
 
-            /* Filter the colors per channel. */
+            /* Фильтруйте цвета по каналам. */
             color[3] = LERP(color1[3], color2[3], weight);
             color[2] = LERP(color1[2], color2[2], weight);
             color[1] = LERP(color1[1], color2[1], weight);
             color[0] = LERP(color1[0], color2[0], weight);
 
-            /* Pack the final color. */
+            /* Упакуйте окончательный цвет. */
             *bits++ = PackColorComponent(color[3]);
             *bits++ = PackColorComponent(color[2]);
             *bits++ = PackColorComponent(color[1]);
@@ -1804,11 +1804,11 @@ Empty_sequence_handler:
     {
         vg_lite_uint32_t i;
 
-        grad->count = 0; /* Opaque B&W gradient */
+        grad->count = 0; /* Непрозрачный черно-белый градиент */
         if(!count || count > VLC_MAX_GRADIENT_STOPS || colors == NULL || stops == NULL)
             return VG_LITE_SUCCESS;
 
-        /* Check stops validity */
+        /* Проверка прекращает действие */
         for(i = 0; i < count; i++)
             if(stops[i] < VLC_GRADIENT_BUFFER_WIDTH) {
                 if(!grad->count || stops[i] > grad->stops[grad->count - 1]) {
@@ -1817,8 +1817,8 @@ Empty_sequence_handler:
                     grad->count++;
                 }
                 else if(stops[i] == grad->stops[grad->count - 1]) {
-                    /* Equal stops : use the color corresponding to the last stop
-                    in the sequence */
+                    /* Равные остановки: используйте цвет, соответствующий последней остановке.
+                    в последовательности */
                     grad->colors[grad->count - 1] = colors[i];
                 }
             }
@@ -1838,20 +1838,20 @@ Empty_sequence_handler:
         vg_lite_uint32_t * buffer = (vg_lite_uint32_t *)grad->image.memory;
 
         if(grad->count == 0) {
-            /* If no valid stops have been specified (e.g., due to an empty input
-             * array, out-of-range, or out-of-order stops), a stop at 0 with color
-             * 0xFF000000 (opaque black) and a stop at 255 with color 0xFFFFFFFF
-             * (opaque white) are implicitly defined. */
+            /* Если не было указано допустимых остановок (например, из-за пустого ввода
+             * остановки массива, вне диапазона или вне порядка), остановка в 0 с цветом
+             * 0xFF000000 (непрозрачный черный) и остановка на 255 с цветом 0xFFFFFFFF
+             * (непрозрачный белый) определены неявно. */
             grad->stops[0] = 0;
-            grad->colors[0] = 0xFF000000; /* Opaque black */
+            grad->colors[0] = 0xFF000000; /* Непрозрачный черный */
             grad->stops[1] = 255;
-            grad->colors[1] = 0xFFFFFFFF; /* Opaque white */
+            grad->colors[1] = 0xFFFFFFFF; /* Непрозрачный белый */
             grad->count = 2;
         }
         else if(grad->count && grad->stops[0] != 0) {
-            /* If at least one valid stop has been specified, but none has been
-             * defined with an offset of 0, an implicit stop is added with an
-             * offset of 0 and the same color as the first user-defined stop. */
+            /* Если была указана хотя бы одна действительная остановка, но ни одна не была
+             * определено со смещением 0, неявная остановка добавляется с помощью
+             * смещение равно 0 и того же цвета, что и первая определяемая пользователем остановка. */
             for(i = 0; i < grad->stops[0]; i++)
                 buffer[i] = grad->colors[0];
         }
@@ -1860,7 +1860,7 @@ Empty_sequence_handler:
         g0 = G(grad->colors[0]);
         b0 = B(grad->colors[0]);
 
-        /* Calculate the colors for each pixel of the image. */
+        /* Рассчитайте цвета для каждого пикселя изображения. */
         for(i = 0; i < grad->count - 1; i++) {
             buffer[grad->stops[i]] = grad->colors[i];
             ds = grad->stops[i + 1] - grad->stops[i];
@@ -1889,9 +1889,9 @@ Empty_sequence_handler:
             b0 = b1;
         }
 
-        /* If at least one valid stop has been specified, but none has been defined
-         * with an offset of 255, an implicit stop is added with an offset of 255
-         * and the same color as the last user-defined stop. */
+        /* Если была указана хотя бы одна допустимая остановка, но ни одна не была определена
+         * со смещением 255 добавляется неявный стоп со смещением 255
+         * и того же цвета, что и последняя остановка, определенная пользователем. */
         for(i = grad->stops[grad->count - 1]; i < VLC_GRADIENT_BUFFER_WIDTH; i++)
             buffer[i] = grad->colors[grad->count - 1];
 
@@ -1903,7 +1903,7 @@ Empty_sequence_handler:
         vg_lite_error_t error = VG_LITE_SUCCESS;
 
         grad->count = 0;
-        /* Release the image resource. */
+        /* Освободите ресурс изображения. */
         if(grad->image.handle != NULL) {
             error = vg_lite_free(&grad->image);
         }
@@ -1916,7 +1916,7 @@ Empty_sequence_handler:
         vg_lite_error_t error = VG_LITE_SUCCESS;
 
         grad->count = 0;
-        /* Release the image resource. */
+        /* Освободите ресурс изображения. */
         if(grad->image.handle != NULL) {
             error = vg_lite_free(&grad->image);
         }
@@ -1929,7 +1929,7 @@ Empty_sequence_handler:
         vg_lite_error_t error = VG_LITE_SUCCESS;
 
         grad->count = 0;
-        /* Release the image resource. */
+        /* Освободите ресурс изображения. */
         if(grad->image.handle != NULL) {
             error = vg_lite_free(&grad->image);
         }
@@ -2075,7 +2075,7 @@ Empty_sequence_handler:
             return VG_LITE_SUCCESS;
         }
 
-        /*Finish the previous rendering before setting the new scissor*/
+        /*Завершите предыдущий рендеринг, прежде чем устанавливать новые ножницы.*/
         vg_lite_error_t error;
         VG_LITE_RETURN_ERROR(vg_lite_finish());
 
@@ -2206,7 +2206,7 @@ Empty_sequence_handler:
         LV_LOG_USER("@[commit]");
         return VG_LITE_SUCCESS;
     }
-} /* extern "C" */
+} /* внешний "С" */
 
 /**********************
  *   STATIC FUNCTIONS
@@ -2412,7 +2412,7 @@ static Result shape_set_stroke(std::unique_ptr<Shape> & shape, const vg_lite_pat
     switch(path->path_type) {
         case VG_LITE_DRAW_ZERO:
         case VG_LITE_DRAW_FILL_PATH:
-            /* if path is not a stroke, return */
+            /* если путь не является штрихом, верните */
             return Result::Success;
 
         case VG_LITE_DRAW_STROKE_PATH:
@@ -2446,13 +2446,13 @@ static Result shape_append_path(std::unique_ptr<Shape> & shape, vg_lite_path_t *
     uint8_t * end = cur + path->path_length;
 
     while(cur < end) {
-        /* get op code */
+        /* получить код операции */
         uint8_t op_code = VLC_GET_OP_CODE(cur);
 
-        /* get arguments length */
+        /* получить длину аргументов */
         uint8_t arg_len = vlc_op_arg_len(op_code);
 
-        /* skip op code */
+        /* пропустить код операции */
         cur += fmt_len;
 
         switch(op_code) {
@@ -2471,7 +2471,7 @@ static Result shape_append_path(std::unique_ptr<Shape> & shape, vg_lite_path_t *
                 break;
 
             case VLC_OP_QUAD: {
-                    /* hack pre point */
+                    /* взломать предварительную точку */
                     float qcx0 = VLC_GET_ARG(cur, -3);
                     float qcy0 = VLC_GET_ARG(cur, -2);
                     float qcx1 = VLC_GET_ARG(cur, 0);
@@ -2548,7 +2548,7 @@ static Result shape_append_rect(std::unique_ptr<Shape> & shape, const vg_lite_bu
 
 static Result canvas_set_target(vg_lite_ctx * ctx, vg_lite_buffer_t * target)
 {
-    /* if target_buffer needs to be changed, finish current drawing */
+    /* если target_buffer необходимо изменить, завершите текущий рисунок */
     if(ctx->target_buffer && ctx->target_buffer != target->memory) {
         vg_lite_finish();
     }
@@ -2561,21 +2561,21 @@ static Result canvas_set_target(vg_lite_ctx * ctx, vg_lite_buffer_t * target)
     uint32_t stride = 0;
 
     if(TVG_IS_VG_FMT_SUPPORT(target->format)) {
-        /* if target format is supported by VG, use target buffer directly */
+        /* если целевой формат поддерживается VG, используйте целевой буфер напрямую */
         canvas_target_buffer = target->memory;
 
-        /* support target stride */
+        /* поддержка целевого шага */
         LV_ASSERT(target->stride >= target->width);
         LV_ASSERT(VG_LITE_IS_ALIGNED(target->stride, sizeof(uint32_t)));
         stride = target->stride / sizeof(uint32_t);
     }
     else {
-        /* if target format is not supported by VG, use internal buffer */
+        /* если целевой формат не поддерживается VG, используйте внутренний буфер */
         canvas_target_buffer = ctx->get_temp_target_buffer(target->width, target->height);
         stride = target->width;
     }
 
-    /* Prevent repeated target setting */
+    /* Предотвратить повторную установку цели */
     if(ctx->tvg_target_buffer == canvas_target_buffer) {
         return Result::Success;
     }
@@ -2608,24 +2608,24 @@ static bool decode_indexed_line(
     uint8_t px_size;
     uint16_t mask;
 
-    in += stride * y; /*First pixel*/
+    in += stride * y; /*Первый пиксель*/
     out += w_px * y;
 
     int8_t shift = 0;
     switch(color_format) {
         case VG_LITE_INDEX_1:
             px_size = 1;
-            in += x / 8; /*8pixel per byte*/
+            in += x / 8; /*8 пикселей на байт*/
             shift = 7 - (x & 0x7);
             break;
         case VG_LITE_INDEX_2:
             px_size = 2;
-            in += x / 4; /*4pixel per byte*/
+            in += x / 4; /*4 пикселя на байт*/
             shift = 6 - 2 * (x & 0x3);
             break;
         case VG_LITE_INDEX_4:
             px_size = 4;
-            in += x / 2; /*2pixel per byte*/
+            in += x / 2; /*2 пикселя на байт*/
             shift = 4 - 4 * (x & 0x1);
             break;
         case VG_LITE_INDEX_8:
@@ -2638,7 +2638,7 @@ static bool decode_indexed_line(
             return false;
     }
 
-    mask = (1 << px_size) - 1; /*E.g. px_size = 2; mask = 0x03*/
+    mask = (1 << px_size) - 1; /*Например.  px_size = 2; маска = 0x03*/
 
     int32_t i;
     for(i = 0; i < w_px; i++) {
@@ -2659,12 +2659,12 @@ static Result picture_load(vg_lite_ctx * ctx, std::unique_ptr<Picture> & picture
 {
     vg_lite_uint32_t * image_buffer;
 
-    /* At least 8-byte alignment */
+    /* Выравнивание не менее 8 байт */
     LV_ASSERT(VG_LITE_IS_ALIGNED(source->memory, 8));
 
     /**
-     * Since ThorVG's picture->load does not support stride,
-     * reconversion is required when the stride and width do not match.
+     * Поскольку картинка->загрузка ThorVG не поддерживает шаг,
+     * повторное преобразование требуется, когда шаг и ширина не совпадают.
      */
     if(source->format == VG_LITE_BGRA8888
        && source->image_mode == VG_LITE_NORMAL_IMAGE_MODE
@@ -2756,7 +2756,7 @@ static Result picture_load(vg_lite_ctx * ctx, std::unique_ptr<Picture> & picture
 #endif
 
             case VG_LITE_BGRA8888: {
-                    /* For stride conversion */
+                    /* Для преобразования шага */
                     conv_bgra8888_to_bgra8888.convert(&target, source);
                 }
                 break;
@@ -2767,7 +2767,7 @@ static Result picture_load(vg_lite_ctx * ctx, std::unique_ptr<Picture> & picture
                 break;
         }
 
-        /* multiply color */
+        /* умножить цвет */
         if(source->image_mode == VG_LITE_MULTIPLY_IMAGE_MODE && !VG_LITE_IS_ALPHA_FORMAT(source->format)) {
             vg_color32_t * dest = (vg_color32_t *)image_buffer;
             vg_lite_uint32_t px_size = width * height;
@@ -2789,13 +2789,13 @@ static Result picture_load(vg_lite_ctx * ctx, std::unique_ptr<Picture> & picture
 static void ClampColor(FLOATVECTOR4 Source, FLOATVECTOR4 Target, uint8_t Premultiplied)
 {
     vg_lite_float_t colorMax;
-    /* Clamp the alpha channel. */
+    /* Зафиксируйте альфа-канал. */
     Target[3] = CLAMP(Source[3], 0.0f, 1.0f);
 
-    /* Determine the maximum value for the color channels. */
+    /* Определите максимальное значение для цветовых каналов. */
     colorMax = Premultiplied ? Target[3] : 1.0f;
 
-    /* Clamp the color channels. */
+    /* Зажмите цветовые каналы. */
     Target[0] = CLAMP(Source[0], 0.0f, colorMax);
     Target[1] = CLAMP(Source[1], 0.0f, colorMax);
     Target[2] = CLAMP(Source[2], 0.0f, colorMax);
@@ -2803,20 +2803,20 @@ static void ClampColor(FLOATVECTOR4 Source, FLOATVECTOR4 Target, uint8_t Premult
 
 static uint8_t PackColorComponent(vg_lite_float_t value)
 {
-    /* Compute the rounded normalized value. */
+    /* Вычислите округленное нормализованное значение. */
     vg_lite_float_t rounded = value * 255.0f + 0.5f;
 
-    /* Get the integer part. */
+    /* Получите целую часть. */
     int32_t roundedInt = (int32_t)rounded;
 
-    /* Clamp to 0..1 range. */
+    /* Ограничьте диапазон до 0..1. */
     uint8_t clamped = (uint8_t)CLAMP(roundedInt, 0, 255);
 
-    /* Return result. */
+    /* Возврат результата. */
     return clamped;
 }
 
-/* Get the bpp information of a color format. */
+/* Получите информацию bpp о цветовом формате. */
 static void get_format_bytes(vg_lite_buffer_format_t format,
                              vg_lite_uint32_t * mul,
                              vg_lite_uint32_t * div,
@@ -2847,10 +2847,10 @@ static void get_format_bytes(vg_lite_buffer_format_t format,
         case VG_LITE_YUYV:
         case VG_LITE_YUY2:
         case VG_LITE_YUY2_TILED:
-        /* AYUY2 buffer memory = YUY2 + alpha. */
+        /* Буферная память AYUY2 = YUY2 + альфа. */
         case VG_LITE_AYUY2:
         case VG_LITE_AYUY2_TILED:
-        /* ABGR8565_PLANAR buffer memory = RGB565 + alpha. */
+        /* Буферная память ABGR8565_PLANAR = RGB565 + альфа. */
         case VG_LITE_ABGR8565_PLANAR:
         case VG_LITE_ARGB8565_PLANAR:
         case VG_LITE_RGBA5658_PLANAR:
@@ -2914,7 +2914,7 @@ static void get_format_bytes(vg_lite_buffer_format_t format,
             *mul = 3;
             break;
 
-        /* OpenVG format*/
+        /* формат OpenVG*/
         case VG_sRGBX_8888:
         case VG_sRGBA_8888:
         case VG_sRGBA_8888_PRE:
@@ -2985,7 +2985,7 @@ static bool vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matr
     vg_lite_float_t d;
     bool is_affine;
 
-    /* Test for identity matrix. */
+    /* Тест на идентификационную матрицу. */
     if(matrix == NULL) {
         result->m[0][0] = 1.0f;
         result->m[0][1] = 0.0f;
@@ -2997,7 +2997,7 @@ static bool vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matr
         result->m[2][1] = 0.0f;
         result->m[2][2] = 1.0f;
 
-        /* Success. */
+        /* Успех. */
         return true;
     }
 
@@ -3005,17 +3005,17 @@ static bool vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matr
     det01 = (matrix->m[2][0] * matrix->m[1][2]) - (matrix->m[1][0] * matrix->m[2][2]);
     det02 = (matrix->m[1][0] * matrix->m[2][1]) - (matrix->m[2][0] * matrix->m[1][1]);
 
-    /* Compute determinant. */
+    /* Вычислить определитель. */
     d = (matrix->m[0][0] * det00) + (matrix->m[0][1] * det01) + (matrix->m[0][2] * det02);
 
-    /* Return 0 if there is no inverse matrix. */
+    /* Верните 0, если обратной матрицы нет. */
     if(d == 0.0f)
         return false;
 
-    /* Compute reciprocal. */
+    /* Вычислить обратную величину. */
     d = 1.0f / d;
 
-    /* Determine if the matrix is affine. */
+    /* Определите, является ли матрица аффинной. */
     is_affine = (matrix->m[2][0] == 0.0f) && (matrix->m[2][1] == 0.0f) && (matrix->m[2][2] == 1.0f);
 
     result->m[0][0] = d * det00;
@@ -3028,7 +3028,7 @@ static bool vg_lite_matrix_inverse(vg_lite_matrix_t * result, const vg_lite_matr
     result->m[2][1] = is_affine ? 0.0f : d * ((matrix->m[2][0] * matrix->m[0][1]) - (matrix->m[0][0] * matrix->m[2][1]));
     result->m[2][2] = is_affine ? 1.0f : d * ((matrix->m[0][0] * matrix->m[1][1]) - (matrix->m[1][0] * matrix->m[0][1]));
 
-    /* Success. */
+    /* Успех. */
     return true;
 }
 
@@ -3037,18 +3037,18 @@ static void vg_lite_matrix_multiply(vg_lite_matrix_t * matrix, const vg_lite_mat
     vg_lite_matrix_t temp;
     int row, column;
 
-    /* Process all rows. */
+    /* Обработать все строки. */
     for(row = 0; row < 3; row++) {
-        /* Process all columns. */
+        /* Обработать все столбцы. */
         for(column = 0; column < 3; column++) {
-            /* Compute matrix entry. */
+            /* Вычислить запись матрицы. */
             temp.m[row][column] = (matrix->m[row][0] * mult->m[0][column])
                                   + (matrix->m[row][1] * mult->m[1][column])
                                   + (matrix->m[row][2] * mult->m[2][column]);
         }
     }
 
-    /* Copy temporary matrix into result. */
+    /* Скопируйте временную матрицу в результат. */
     lv_memcpy(matrix->m, &temp.m, sizeof(temp.m));
 }
 
@@ -3056,11 +3056,11 @@ static Result vg_lite_grad_matrix_conv(vg_lite_matrix_t * result, const vg_lite_
                                        const vg_lite_matrix_t * path_matrix)
 {
     /**
-     * Since Thorvg internally multiplies the path (shape) matrix with the gradient matrix to produce
-     * the rendering result, and VG-Lite's gradient matrix and path matrix are completely independent,
-     * requiring a previous multiplication to achieve the same rendering result,
-     * for the VG-Lite emulator, it is necessary to offset the gradient matrix to obtain the user's original gradient matrix
-     * to simulate hardware behavior:
+     * Поскольку Торвг внутренне умножает матрицу пути (формы) на матрицу градиента, чтобы получить
+     * результат рендеринга, а матрица градиентов и матрица путей VG -Lite полностью независимы,
+     * требуя предыдущего умножения для достижения того же результата рендеринга,
+     * для эмулятора VG -Lite необходимо сместить матрицу градиента, чтобы получить исходную матрицу градиента пользователя
+     * для имитации поведения оборудования:
      * matrix_out = path_matrix * gradient_matrix
      * =>
      * gradient_matrix = inv(path_matrix) * matrix_out

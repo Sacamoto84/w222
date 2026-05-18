@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 #
-# Generate the cmake variables CONFIG_LV_USE_* or CONFIG_LV_BUILD_* from the
-# preprocessed lv_conf_internal.h
+# Сгенерируйте переменные cmakeCONFIG_LV_USE_* илиCONFIG_LV_BUILD_* из
+# предварительно обработанный lv_conf_internal.h
 #
-# Author: David TRUAN (david.truan@edgemtech.ch)
-# Author: Erik Tagirov (erik.tagirov@edgemtech.ch)
+# Автор: ДэвидTRUAN(david.truan@edgemtech.ch)
+# Автор: Эрик Тагиров (erik.tagiros@edgemtech.ch)
 #
 
 import os
@@ -37,7 +37,7 @@ def get_args():
 
     args = parser.parse_args()
 
-    # The input must exist
+    # Входные данные должны существовать
     if not os.path.exists(args.input):
         fatal(f"Input {args.input} not found")
 
@@ -47,7 +47,7 @@ def write_set_cmd(fout, expr, is_parent_scope):
 
     fout.write(f'set({expr})\n')
 
-    # This makes the variable usable from the top level directory
+    # Это делает переменную доступной для использования из каталога верхнего уровня.
     if is_parent_scope == True:
         fout.write(f'set({expr} PARENT_SCOPE)\n')
 
@@ -55,23 +55,23 @@ def generate_cmake_variables(path_input: str, path_output: str, kconfig: bool, d
     fin = open(path_input)
     fout = open(path_output, "w", newline='')
 
-    # If we use Kconfig, we must check the CONFIG_LV_USE_* and 
-    # CONFIG_LV_BUILD_* defines
+    # Если мы используем Kconfig, мы должны проверитьCONFIG_LV_USE_* и 
+    # CONFIG_LV_BUILD_ * определяет
     if kconfig:
         CONFIG_PATTERN="^#define +(CONFIG_LV_USE|CONFIG_LV_BUILD|CONFIG_LV_[0-9A-Z_]+_USE)"
         CONFIG_PREFIX=""
-    # Otherwise check the LV_USE_* and LV_BUILD_* defines
+    # В противном случае проверьте, что LV_USE_ * и LV_BUILD_ * определяют
     else:
         CONFIG_PATTERN="^#define +(LV_USE|LV_BUILD|LV_[0-9A-Z_]+_USE)"
         CONFIG_PREFIX="CONFIG_"
 
 
-    # Using the expanded lv_conf_internal, we don't have to deal with regexp,
-    # as all the #define will be aligned on the left with a single space before the value
+    # использовать расширенный lv_conf_internal, мы не имеем дело с регулярными выражениями,
+    # поскольку все#defineбудут выровнены слева с одним пробелом перед значением
     for line in fin.read().splitlines():
 
-        # Treat the LV_USE_STDLIB_* configs in a special way, as we need
-        # to convert the define to full config with 1 value when enabled
+        # К конфигам LV_USE_STDLIB_* относимся особым образом, как нам нужно
+        # чтобы преобразовать определение в полную конфигурацию с 1 значением, когда оно включено
         if re.search(f'{CONFIG_PATTERN}_STDLIB', line):
 
             parts = line.split()
@@ -87,8 +87,8 @@ def generate_cmake_variables(path_input: str, path_output: str, kconfig: bool, d
 
             write_set_cmd(fout, f'{CONFIG_PREFIX}{name} 1', is_parent_scope)
 
-        # Treat the LV_USE_OS config in a special way, as we need
-        # to convert the define to full config with 1 value when enabled
+        # Отнеситесь к конфигу LV_USE_OS по-особому, так как нам нужно
+        # чтобы преобразовать определение в полную конфигурацию с 1 значением, когда оно включено
         if re.search(f'{CONFIG_PATTERN}_OS', line):
 
             parts = line.split()
@@ -104,10 +104,10 @@ def generate_cmake_variables(path_input: str, path_output: str, kconfig: bool, d
 
             write_set_cmd(fout, f'{CONFIG_PREFIX}{name} 1', is_parent_scope)
 
-        # For the rest of the configs, simply add CONFIG_ and write the name of the define
-        # all LV_USE_* or LV_BUILD_* configs where the value is 0 or 1,
-        # as these are the ones that are needed in cmake
-        # To detect the configuration of LVGL to perform conditional compilation/linking
+        # Для остальных конфигов просто добавьте CONFIG_ и напишите имя дефайна
+        # все конфиги LV_USE_* или LV_BUILD_*, где значение 0 или 1,
+        # поскольку это те, которые нужны в cmake
+        # Чтобы обнаружить конфигурацию LVGL для выполнения условной компиляции/связывания
         elif re.search(f'{CONFIG_PATTERN}.* +[01] *$', line):
 
             parts = line.split()
@@ -120,8 +120,8 @@ def generate_cmake_variables(path_input: str, path_output: str, kconfig: bool, d
             write_set_cmd(fout, f'{CONFIG_PREFIX}{name} {value}', is_parent_scope)
 
         else:
-            # Useful for debugging expressions that are unhandled,
-            # if the script fails in 'unexpected ways'
+            # Полезно для отладки необработанных выражений.
+            # если сценарий дает сбой «неожиданным образом»
             if debug == True:
                 print(f"DBG: Skipping expression: '{line} - not handled'")
 

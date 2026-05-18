@@ -71,18 +71,18 @@ void lv_log_register_print_cb(lv_log_print_g_cb_t print_cb)
 
 void lv_log_add(lv_log_level_t level, const char * file, int line, const char * func, const char * format, ...)
 {
-    if(level >= LV_LOG_LEVEL_NUM) return; /*Invalid level*/
+    if(level >= LV_LOG_LEVEL_NUM) return; /*Неверный уровень*/
 
     if(level >= LV_LOG_LEVEL) {
         va_list args;
         va_start(args, format);
 
 #if LV_LOG_USE_FILE_LINE
-        /*Use only the file name not the path*/
+        /*Используйте только имя файла, а не путь*/
         size_t p;
         for(p = lv_strlen(file); p > 0; p--) {
             if(file[p] == '/' || file[p] == '\\') {
-                p++;    /*Skip the slash*/
+                p++;    /*Пропустить косую черту*/
                 break;
             }
         }
@@ -123,7 +123,7 @@ void lv_log_add(lv_log_level_t level, const char * file, int line, const char * 
 
 void lv_log(const char * format, ...)
 {
-    if(LV_LOG_LEVEL >= LV_LOG_LEVEL_NONE) return; /* disable log */
+    if(LV_LOG_LEVEL >= LV_LOG_LEVEL_NONE) return; /* отключить журнал */
 
     va_list args;
     va_start(args, format);

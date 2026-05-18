@@ -36,35 +36,35 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_qrcode_class;
  **********************/
 
 /**
- * Create an empty QR code (an `lv_canvas`) object.
+ * Создайте пустой объект кода QR (`lv_canvas`).
  * @param parent point to an object where to create the QR code
  * @return pointer to the created QR code object
  */
 lv_obj_t * lv_qrcode_create(lv_obj_t * parent);
 
 /**
- * Set QR code size.
+ * Установите размер кода QR.
  * @param obj pointer to a QR code object
  * @param size width and height of the QR code
  */
 void lv_qrcode_set_size(lv_obj_t * obj, int32_t size);
 
 /**
- * Set QR code dark color.
+ * Установите темный цвет кода QR.
  * @param obj pointer to a QR code object
  * @param color dark color of the QR code
  */
 void lv_qrcode_set_dark_color(lv_obj_t * obj, lv_color_t color);
 
 /**
- * Set QR code light color.
+ * Установите цвет подсветки кода QR.
  * @param obj pointer to a QR code object
  * @param color light color of the QR code
  */
 void lv_qrcode_set_light_color(lv_obj_t * obj, lv_color_t color);
 
 /**
- * Set the data of a QR code object
+ * Установите данные объекта кода QR.
  * @param obj pointer to a QR code object
  * @param data data to display
  * @param data_len length of data in bytes
@@ -73,15 +73,15 @@ void lv_qrcode_set_light_color(lv_obj_t * obj, lv_color_t color);
 lv_result_t lv_qrcode_update(lv_obj_t * obj, const void * data, uint32_t data_len);
 
 /**
- * Helper function to set the data of a QR code object
+ * Вспомогательная функция для установки данных объекта кода QR
  * @param obj pointer to a QR code object
  * @param data data to display as a string
  */
 void lv_qrcode_set_data(lv_obj_t * obj, const char * data);
 
 /**
- * Enable or disable quiet zone.
- * Quiet zone is the area around the QR code where no data is encoded.
+ * Включить или отключить тихую зону.
+ * Тихая зона — это область вокруг кода QR, где данные не кодируются.
  * @param obj pointer to a QR code object
  * @param enable true: enable quiet zone; false: disable quiet zone
  */
@@ -94,7 +94,7 @@ void lv_qrcode_set_quiet_zone(lv_obj_t * obj, bool enable);
 #endif /*LV_USE_QRCODE*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_QRCODE_H*/

@@ -38,7 +38,7 @@ fastgltf::math::fmat4x4 lv_gltf_math_perspective_rh(float fov, float ratio, floa
 template <typename T>
 [[nodiscard]] fastgltf::math::quat<T> lv_gltf_math_euler_to_quaternion(T P, T Y, T R)
 {
-    // Convert degrees to radians if necessary
+    // При необходимости конвертируйте градусы в радианы.
     // roll = roll * (M_PI / 180.0);
     // pitch = pitch * (M_PI / 180.0);
     // yaw = yaw * (M_PI / 180.0);
@@ -60,12 +60,12 @@ template <typename T>
 [[nodiscard]] fastgltf::math::vec<T, 3> lv_gltf_math_quaternion_to_euler(fastgltf::math::quat<T> q)
 {
     T Q11 = q[1] * q[1];
-    // Roll (Z)
+    // Ролл (Z)
     T sinr_cosp = T(2.0) * (q[3] * q[0] + q[1] * q[2]);
     T cosr_cosp = T(1.0) - T(2.0) * (q[0] * q[0] + Q11);
-    // Pitch (X)
+    // Шаг (X)
     T sinp = T(2.0) * (q[3] * q[1] - q[2] * q[0]);
-    // Yaw (Y)
+    // Отклонение (Y)
     T siny_cosp = T(2.0) * (q[3] * q[2] + q[0] * q[1]);
     T cosy_cosp = T(1.0) - T(2.0) * (Q11 + q[2] * q[2]);
 

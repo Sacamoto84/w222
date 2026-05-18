@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 void test_malloc(void)
@@ -69,7 +69,7 @@ void test_realloc(void)
 
     lv_free(buf);
 
-    /* Should behave like malloc */
+    /* Должно вести себя как malloc */
     buf = lv_realloc(NULL, 16);
     TEST_ASSERT_NOT_NULL(buf);
     lv_free(buf);
@@ -88,7 +88,7 @@ void test_realloc_failed(void)
     void * buf2 = lv_realloc(buf1, LV_MEM_SIZE + 1);
     TEST_ASSERT_NULL(buf2);
 
-    /* Realloc failed, but should free buf1 */
+    /* Realloc не удался, но должен освободить buf1 */
     void * buf3 = lv_reallocf(buf1, LV_MEM_SIZE + 1);
     TEST_ASSERT_NULL(buf3);
 
@@ -117,19 +117,19 @@ void test_mem_test(void)
     uint32_t * zero_mem = lv_malloc_zeroed(0);
     TEST_ASSERT_NOT_NULL(zero_mem);
 
-    /* Test magic value */
+    /* Проверить магическую ценность */
     TEST_ASSERT_EQUAL_UINT32(ZERO_MEM_SENTINEL, *zero_mem);
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_mem_test());
 
-    /* Test wrong memory, test should fail */
+    /* Проверьте неправильную память, тест должен завершиться неудачей */
     *zero_mem = 0;
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, lv_mem_test());
 
-    /* Restore magic value */
+    /* Восстановить магическое значение */
     *zero_mem = ZERO_MEM_SENTINEL;
     lv_free(zero_mem);
 
-    /* Re-verify zero memory */
+    /* Повторно проверьте нулевую память */
     uint32_t * new_zero_mem = lv_malloc_zeroed(0);
     TEST_ASSERT_EQUAL_UINT32(ZERO_MEM_SENTINEL, *new_zero_mem);
     TEST_ASSERT_EQUAL(LV_RESULT_OK, lv_mem_test());
@@ -147,19 +147,19 @@ void test_memcpy_unaligned(void)
         uint32_t dummy_u32;
     } source, destination;
 
-    /* Initialize source with some values */
+    /* Инициализировать источник с некоторыми значениями */
     for(int i = 0; i < 20; i++) {
         source.u8[i] = (uint8_t)(i + 1);
     }
 
-    /* Ensure unaligned addresses */
+    /* Обеспечить невыровненные адреса */
     uint8_t * unaligned_source = source.u8 + 1;
     uint8_t * unaligned_destination = destination.u8 + 1;
 
-    /* Perform lv_memcpy */
+    /* Выполните lv_memcpy */
     lv_memcpy(unaligned_destination, unaligned_source, 19);
 
-    /* Verify that the copied values match the source */
+    /* Убедитесь, что скопированные значения соответствуют исходному. */
     for(int i = 0; i < 19; i++) {
         TEST_ASSERT_EQUAL_UINT8(unaligned_source[i], unaligned_destination[i]);
     }

@@ -46,7 +46,7 @@ struct _lv_ffmpeg_player_t {
 #endif /*LV_USE_FFMPEG*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FFMPEG_PRIVATE_H*/

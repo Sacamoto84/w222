@@ -14,7 +14,7 @@ static lv_key_t last_key;
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     event_cnt_pressed = 0;
     event_cnt_pressing = 0;
     event_cnt_released = 0;
@@ -26,7 +26,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
 }
 
 static void keypad_event_cb(lv_event_t * e)
@@ -64,17 +64,17 @@ void test_indev_keypad_no_group_key_event(void)
     TEST_ASSERT_NOT_NULL(indev);
     lv_indev_set_group(indev, NULL);
 
-    /* Add event callback to the indev */
+    /* Добавьте обратный вызов события в indev */
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_KEY, NULL);
 
-    /* Hit a key */
+    /* Нажмите клавишу */
     lv_test_key_hit('x');
 
-    /* KEY event should be emitted */
+    /* Должно быть создано событие KEY. */
     TEST_ASSERT_GREATER_THAN_UINT32(0, event_cnt_key);
     TEST_ASSERT_EQUAL_UINT32('x', last_key);
 
-    /* Cleanup */
+    /* Очистка */
     lv_indev_remove_event_cb_with_user_data(indev, keypad_event_cb, NULL);
 }
 
@@ -84,18 +84,18 @@ void test_indev_keypad_no_group_press_release(void)
     TEST_ASSERT_NOT_NULL(indev);
     lv_indev_set_group(indev, NULL);
 
-    /* Add event callbacks to the indev */
+    /* Добавьте обратные вызовы событий в indev */
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_PRESSED, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_RELEASED, NULL);
 
-    /* Hit a key (press and release) */
+    /* Нажмите клавишу (нажмите и отпустите) */
     lv_test_key_hit('a');
 
-    /* PRESSED and RELEASED events should be emitted */
+    /* Должны генерироваться события PRESSED и RELEASED. */
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt_pressed);
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt_released);
 
-    /* Cleanup */
+    /* Очистка */
     lv_indev_remove_event_cb_with_user_data(indev, keypad_event_cb, NULL);
 }
 
@@ -105,37 +105,37 @@ void test_indev_keypad_no_group_long_press(void)
     TEST_ASSERT_NOT_NULL(indev);
     lv_indev_set_group(indev, NULL);
 
-    /* Add event callbacks to the indev */
+    /* Добавьте обратные вызовы событий в indev */
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_PRESSED, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_LONG_PRESSED, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_LONG_PRESSED_REPEAT, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_RELEASED, NULL);
 
-    /* Make sure we start in a released state */
+    /* Убедитесь, что мы начинаем в выпущенном состоянии */
     lv_test_key_release();
     lv_test_wait(50);
 
-    /* Press key and hold for long press time (default is 400ms) */
+    /* Нажмите кнопку и удерживайте ее в течение длительного времени (по умолчанию 400 мс). */
     lv_test_key_press('c');
 
-    /* Hold key for a bit (longer than LV_INDEV_DEF_LONG_PRESS_TIME) */
+    /* Удерживайте клавишу немного (дольше, чем LV_INDEV_DEF_LONG_PRESS_TIME ) */
     lv_test_wait(450);
 
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt_pressed);
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt_long_pressed);
 
-    /* Continue holding for repeat */
+    /* Продолжайте удерживать для повтора */
     lv_test_wait(200);
 
     TEST_ASSERT_GREATER_THAN_UINT32(0, event_cnt_long_pressed_repeat);
 
-    /* Release key */
+    /* Ключ отпускания */
     lv_test_key_release();
     lv_test_wait(50);
 
     TEST_ASSERT_EQUAL_UINT32(1, event_cnt_released);
 
-    /* Cleanup */
+    /* Очистка */
     lv_indev_remove_event_cb_with_user_data(indev, keypad_event_cb, NULL);
 }
 

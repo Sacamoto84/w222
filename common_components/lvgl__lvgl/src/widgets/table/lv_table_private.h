@@ -27,14 +27,14 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Cell data */
+/** Данные ячейки */
 struct _lv_table_cell_t {
     lv_table_cell_ctrl_t ctrl;
     void * user_data; /**< Custom user data */
     char txt[1];      /**< Variable length array */
 };
 
-/** Table data */
+/** Табличные данные */
 struct _lv_table_t {
     lv_obj_t obj;
     uint32_t col_cnt;
@@ -58,7 +58,7 @@ struct _lv_table_t {
 #endif /* LV_USE_TABLE != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_TABLE_PRIVATE_H*/

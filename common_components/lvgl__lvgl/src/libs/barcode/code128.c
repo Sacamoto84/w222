@@ -1,14 +1,14 @@
 // Copyright (c) 2013, LKC Technologies, Inc.
-// All rights reserved.
+// Все права защищены.
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+// Распространение и использование в исходной и двоичной форме, с или без
+// Модификация допускается при соблюдении следующих условий:
 //
-// Redistributions of source code must retain the above copyright notice, this
-// list of conditions and the following disclaimer. Redistributions in binary
-// form must reproduce the above copyright notice, this list of conditions and
-// the following disclaimer in the documentation and/or other materials
-// provided with the distribution. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+// При повторном распространении исходного кода должно сохраняться указанное выше уведомление об авторских правах.
+// список условий и следующий отказ от ответственности. Перераспределения в двоичном формате
+// форма должна воспроизводить вышеуказанное уведомление об авторских правах, настоящий список условий и
+// следующий отказ от ответственности в документации и/или других материалах
+// предоставляется вместе с раздачей.  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
 // HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 // INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 // FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
@@ -160,11 +160,11 @@ static const int code128_pattern[] = {
 static const int code128_stop_pattern = 6379; // 1100011101011, 2331112
 
 struct code128_step {
-    int prev_ix;                // Index of previous step, if any
-    const char * next_input;    // Remaining input
-    unsigned short len;         // The length of the pattern so far (includes this step)
-    char mode;                  // State for the current encoding
-    signed char code;           // What code should be written for this step
+    int prev_ix;                // Индекс предыдущего шага, если есть
+    const char * next_input;    // Оставшийся ввод
+    unsigned short len;         // Длина шаблона на данный момент (включая этот шаг)
+    char mode;                  // Состояние текущей кодировки
+    signed char code;           // Какой код нужно написать для этого шага
 };
 
 struct code128_state {
@@ -180,21 +180,21 @@ struct code128_state {
 size_t code128_estimate_len(const char * s)
 {
     return CODE128_QUIET_ZONE_LEN
-           + CODE128_CHAR_LEN // start code
-           + CODE128_CHAR_LEN * (CODE128_STRLEN(s) * 11 / 10) // contents + 10% padding
-           + CODE128_CHAR_LEN // checksum
+           + CODE128_CHAR_LEN // стартовый код
+           + CODE128_CHAR_LEN * (CODE128_STRLEN(s) * 11 / 10) // содержимое + 10% отступы
+           + CODE128_CHAR_LEN // контрольная сумма
            + CODE128_STOP_CODE_LEN
            + CODE128_QUIET_ZONE_LEN;
 }
 
 static void code128_append_pattern(int pattern, int pattern_length, char * out)
 {
-    // All patterns have their first bit set by design
+    // Во всех шаблонах первый бит установлен по дизайну.
     CODE128_ASSERT(pattern & (1 << (pattern_length - 1)));
 
     int i;
     for(i = pattern_length - 1; i >= 0; i--) {
-        // cast avoids warning: implicit conversion from 'int' to 'char' changes value from 255 to -1 [-Wconstant-conversion]
+        // приведение позволяет избежать предупреждения: неявное преобразование из 'int' в 'char' меняет значение с 255 на -1 [-Wconstant-conversion]
         *out++ = (unsigned char)((pattern & (1 << i)) ? 255 : 0);
     }
 }
@@ -245,7 +245,7 @@ static signed char code128_switch_code(char from_mode, char to_mode)
             break;
     }
 
-    CODE128_ASSERT(0); // Invalid mode switch
+    CODE128_ASSERT(0); // Неверный переключатель режима
     return -1;
 }
 
@@ -269,7 +269,7 @@ static signed char code128a_ascii_to_code(signed char value)
 
 static signed char code128b_ascii_to_code(signed char value)
 {
-    if(value >= ' ')  // value <= 127 is implied
+    if(value >= ' ')  // подразумевается значение <= 127
         return (signed char)(value - ' ');
     else if(value == (signed char)CODE128_FNC1)
         return 102;
@@ -316,7 +316,7 @@ static int code128_do_a_step(struct code128_step * base, int prev_ix, int ix)
     step->mode = CODE128_MODE_A;
     step->len = previous_step->len + CODE128_CHAR_LEN;
     if(step->mode != previous_step->mode)
-        step->len += CODE128_CHAR_LEN; // Need to switch modes
+        step->len += CODE128_CHAR_LEN; // Нужно переключать режимы
 
     return 1;
 }
@@ -340,7 +340,7 @@ static int code128_do_b_step(struct code128_step * base, int prev_ix, int ix)
     step->mode = CODE128_MODE_B;
     step->len = previous_step->len + CODE128_CHAR_LEN;
     if(step->mode != previous_step->mode)
-        step->len += CODE128_CHAR_LEN; // Need to switch modes
+        step->len += CODE128_CHAR_LEN; // Нужно переключать режимы
 
     return 1;
 }
@@ -362,14 +362,14 @@ static int code128_do_c_step(struct code128_step * base, int prev_ix, int ix)
     step->prev_ix = prev_ix;
     step->next_input = previous_step->next_input + 1;
 
-    // Mode C consumes 2 characters for codes 0-99
+    // Режим C использует 2 символа для кодов 0–99.
     if(step->code < 100)
         step->next_input++;
 
     step->mode = CODE128_MODE_C;
     step->len = previous_step->len + CODE128_CHAR_LEN;
     if(step->mode != previous_step->mode)
-        step->len += CODE128_CHAR_LEN; // Need to switch modes
+        step->len += CODE128_CHAR_LEN; // Нужно переключать режимы
 
     return 1;
 }
@@ -392,19 +392,19 @@ static void code128_do_step(struct code128_state * state)
 {
     struct code128_step * step = &state->steps[state->current_ix];
     if(*step->next_input == 0) {
-        // Done, so see if we have a new shortest encoding.
+        // Готово, посмотрим, есть ли у нас новая кратчайшая кодировка.
         if((step->len < state->maxlength) ||
            (state->best_ix < 0 && step->len == state->maxlength)) {
             state->best_ix = state->current_ix;
 
-            // Update maxlength to avoid considering anything longer
+            // Обновите максимальную длину, чтобы не рассматривать что-либо более длинное.
             state->maxlength = step->len;
         }
         return;
     }
 
-    // Don't try if we're already at or beyond the max acceptable
-    // length;
+    // Не пытайтесь, если мы уже достигли максимально допустимого уровня или превысили его.
+    // длина;
     if(step->len >= state->maxlength)
         return;
     char mode = step->mode;
@@ -412,7 +412,7 @@ static void code128_do_step(struct code128_state * state)
     code128_alloc_step(state);
     int mode_c_worked = 0;
 
-    // Always try mode C
+    // Всегда пробуйте режим C
     if(code128_do_c_step(state->steps, state->current_ix, state->todo_ix)) {
         state->todo_ix++;
         code128_alloc_step(state);
@@ -420,26 +420,26 @@ static void code128_do_step(struct code128_state * state)
     }
 
     if(mode == CODE128_MODE_A) {
-        // If A works, stick with A. There's no advantage to switching
-        // to B proactively if A still works.
+        // Если вариант А работает, придерживайтесь варианта А. Переключение не принесет никаких преимуществ.
+        // заранее сообщить B, если A все еще работает.
         if(code128_do_a_step(state->steps, state->current_ix, state->todo_ix) ||
            code128_do_b_step(state->steps, state->current_ix, state->todo_ix))
             state->todo_ix++;
     }
     else if(mode == CODE128_MODE_B) {
-        // The same logic applies here. There's no advantage to switching
-        // proactively to A if B still works.
+        // Здесь применима та же логика. Нет никаких преимуществ в переключении
+        // заранее к А, если Б все еще работает.
         if(code128_do_b_step(state->steps, state->current_ix, state->todo_ix) ||
            code128_do_a_step(state->steps, state->current_ix, state->todo_ix))
             state->todo_ix++;
     }
     else if(!mode_c_worked) {
-        // In mode C. If mode C worked and we're in mode C, trying anything
-        // else is pointless since the mode C encoding will be shorter and
-        // there won't be any mode switches.
+        // В режиме C. Если режим C сработал и мы находимся в режиме C, пробуем что-нибудь
+        // иначе бессмысленно, поскольку кодирование в режиме C будет короче и
+        // никаких переключателей режимов не будет.
 
-        // If we're leaving mode C, though, try both in case one ends up
-        // better than the other.
+        // Однако, если мы выходим из режима C, попробуйте оба варианта на случай, если один из них закончится.
+        // лучше, чем другой.
         if(code128_do_a_step(state->steps, state->current_ix, state->todo_ix)) {
             state->todo_ix++;
             code128_alloc_step(state);
@@ -454,12 +454,12 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
     struct code128_state state;
 
     const size_t overhead = CODE128_QUIET_ZONE_LEN
-                            + CODE128_CHAR_LEN // checksum
+                            + CODE128_CHAR_LEN // контрольная сумма
                             + CODE128_STOP_CODE_LEN
                             + CODE128_QUIET_ZONE_LEN;
     if(maxlength < overhead + CODE128_CHAR_LEN + CODE128_CHAR_LEN) {
-        // Need space to encode the start character and one additional
-        // character.
+        // Требуется место для кодирования начального символа и еще одного
+        // персонаж.
         return 0;
     }
 
@@ -470,7 +470,7 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
     state.maxlength = maxlength - overhead;
     state.best_ix = -1;
 
-    // Initialize the first 3 steps for the 3 encoding routes (A, B, C)
+    // Инициализируйте первые 3 шага для 3 маршрутов кодирования (A, B, C).
     state.steps[0].prev_ix = -1;
     state.steps[0].next_input = s;
     state.steps[0].len = CODE128_CHAR_LEN;
@@ -491,19 +491,19 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
 
     state.todo_ix = 3;
 
-    // Keep going until no more work
+    // Продолжайте, пока работа не закончится
     do {
         code128_do_step(&state);
         state.current_ix++;
     } while(state.current_ix != state.todo_ix);
 
-    // If no best_step, then fail.
+    // Если нет best_step , то ошибка.
     if(state.best_ix < 0) {
         CODE128_FREE(state.steps);
         return 0;
     }
 
-    // Determine the list of codes
+    // Определить список кодов
     size_t num_codes = state.maxlength / CODE128_CHAR_LEN;
     char * codes = CODE128_MALLOC(num_codes);
     CODE128_ASSERT(codes);
@@ -521,20 +521,20 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
     }
     codes[0] = step->code;
 
-    // Encode everything up to the checksum
+    // Закодируйте все до контрольной суммы
     size_t actual_length = state.maxlength + overhead;
     CODE128_MEMSET(out, 0, CODE128_QUIET_ZONE_LEN);
     out += CODE128_QUIET_ZONE_LEN;
     for(i = 0; i < num_codes; i++)
         out += code128_append_code(codes[i], out);
 
-    // Compute the checksum
+    // Вычислить контрольную сумму
     int sum = codes[0];
     for(i = 1; i < num_codes; i++)
         sum += (int)(codes[i] * i);
     out += code128_append_code(sum % 103, out);
 
-    // Finalize the code.
+    // Завершите код.
     out += code128_append_stop_code(out);
     CODE128_MEMSET(out, 0, CODE128_QUIET_ZONE_LEN);
 
@@ -546,8 +546,8 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
 /**
  * @brief Encode the GS1 string
  *
- * This converts [FNC1] sequences to raw FNC1 characters and
- * removes spaces before encoding the barcodes.
+ * Это преобразует последовательности [ FNC1 ] в необработанные символы FNC1 и
+ * удаляет пробелы перед кодированием штрих-кодов.
  *
  * @return the length of barcode data in bytes
  */

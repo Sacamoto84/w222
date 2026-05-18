@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,7 +28,7 @@
 #include "tvgSwCommon.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static constexpr auto SW_STROKE_TAG_POINT = 1;
@@ -74,17 +74,17 @@ static void _borderClose(SwStrokeBorder* border, bool reverse)
     auto start = border->start;
     auto count = border->ptsCnt;
 
-    //Don't record empty paths!
+    //Не записывайте пустые пути!
     if (count <= start + 1U) {
         border->ptsCnt = start;
     } else {
-        /* Copy the last point to the start of this sub-path,
-           since it contains the adjusted starting coordinates */
+        /* Скопируйте последнюю точку в начало этого подпути,
+           поскольку он содержит скорректированные начальные координаты */
         border->ptsCnt = --count;
         border->pts[start] = border->pts[count];
 
         if (reverse) {
-            //reverse the points
+            //поменять местами точки
             auto pt1 = border->pts + start + 1;
             auto pt2 = border->pts + count - 1;
 
@@ -96,7 +96,7 @@ static void _borderClose(SwStrokeBorder* border, bool reverse)
                 --pt2;
             }
 
-            //reverse the tags
+            //поменять местами теги
             auto tag1 = border->tags + start + 1;
             auto tag2 = border->tags + count - 1;
 
@@ -161,13 +161,13 @@ static void _borderArcTo(SwStrokeBorder* border, const SwPoint& center, SwFixed 
 
         theta >>= 1;
 
-        //compute end point
+        //вычислить конечную точку
         SwPoint b = {static_cast<SwCoord>(radius), 0};
         mathRotate(b, next);
         SCALE(stroke, b);
         b += center;
 
-        //compute first and second control points
+        //вычислить первую и вторую контрольные точки
         auto length = mathMulDiv(radius, mathSin(theta) * 4, (0x10000L + mathCos(theta)) * 3);
 
         SwPoint a2 = {static_cast<SwCoord>(length), 0};
@@ -180,7 +180,7 @@ static void _borderArcTo(SwStrokeBorder* border, const SwPoint& center, SwFixed 
         SCALE(stroke, b2);
         b2 += b;
 
-        //add cubic arc
+        //добавить кубическую дугу
         _borderCubicTo(border, a2, b2, b);
 
         //process the rest of the arc?
@@ -194,10 +194,10 @@ static void _borderArcTo(SwStrokeBorder* border, const SwPoint& center, SwFixed 
 static void _borderLineTo(SwStrokeBorder* border, const SwPoint& to, bool movable)
 {
     if (border->movable) {
-        //move last point
+        //переместить последнюю точку
         border->pts[border->ptsCnt - 1] = to;
     } else {
-        //don't add zero-length line_to
+        //не добавляйте line_to нулевой длины
         if (border->ptsCnt > 0 && (border->pts[border->ptsCnt - 1] - to).small()) return;
 
         _growBorder(border, 1);
@@ -241,7 +241,7 @@ static void _outside(SwStroke& stroke, int32_t side, SwFixed lineLength)
     if (stroke.join == StrokeJoin::Round) {
         _arcTo(stroke, side);
     } else {
-        //this is a mitered (pointed) or beveled (truncated) corner
+        //это скошенный (заостренный) или скошенный (усеченный) угол
         auto rotate = SIDE_TO_ROTATE(side);
         auto bevel = stroke.join == StrokeJoin::Bevel;
         SwFixed phi = 0;
@@ -264,7 +264,7 @@ static void _outside(SwStroke& stroke, int32_t side, SwFixed lineLength)
             if (sigma < 0x10000L) bevel = true;
         }
 
-        //this is a bevel (broken angle)
+        //это скос (ломанный угол)
         if (bevel) {
             SwPoint delta = {static_cast<SwCoord>(stroke.width), 0};
             mathRotate(delta, stroke.angleOut + rotate);
@@ -272,7 +272,7 @@ static void _outside(SwStroke& stroke, int32_t side, SwFixed lineLength)
             delta += stroke.center;
             border->movable = false;
             _borderLineTo(border, delta, false);
-        //this is a miter (intersection)
+        //это митра (пересечение)
         } else {
             auto length = mathDivide(stroke.width, thcos);
             SwPoint delta = {static_cast<SwCoord>(length), 0};
@@ -281,8 +281,8 @@ static void _outside(SwStroke& stroke, int32_t side, SwFixed lineLength)
             delta += stroke.center;
             _borderLineTo(border, delta, false);
 
-            /* Now add and end point
-               Only needed if not lineto (lineLength is zero for curves) */
+            /* Теперь добавьте и конечную точку
+               Требуется только в том случае, если не lineto (lineLength для кривых равен нулю) */
             if (lineLength == 0) {
                 delta = {static_cast<SwCoord>(stroke.width), 0};
                 mathRotate(delta, stroke.angleOut + rotate);
@@ -302,10 +302,10 @@ static void _inside(SwStroke& stroke, int32_t side, SwFixed lineLength)
     SwPoint delta;
     bool intersect = false;
 
-    /* Only intersect borders if between two line_to's and both
-       lines are long enough (line length is zero for curves). */
+    /* Границы пересекаются только в том случае, если между двумя line_to и обоими
+       линии достаточно длинные (длина линии для кривых равна нулю). */
     if (border->movable && lineLength > 0) {
-        //compute minimum required length of lines
+        //вычислить минимальную необходимую длину строк
         SwFixed minLength = abs(mathMultiply(stroke.width, mathTan(theta)));
         if (stroke.lineLength >= minLength && lineLength >= minLength) intersect = true;
     }
@@ -319,7 +319,7 @@ static void _inside(SwStroke& stroke, int32_t side, SwFixed lineLength)
         delta += stroke.center;
         border->movable = false;
     } else {
-        //compute median angle
+        //вычислить срединный угол
         auto phi = stroke.angleIn + theta;
         auto thcos = mathCos(theta);
         delta = {static_cast<SwCoord>(mathDivide(stroke.width, thcos)), 0};
@@ -336,19 +336,19 @@ void _processCorner(SwStroke& stroke, SwFixed lineLength)
 {
     auto turn = mathDiff(stroke.angleIn, stroke.angleOut);
 
-    //no specific corner processing is required if the turn is 0
+    //никакой специальной обработки углов не требуется, если поворот равен 0
     if (turn == 0) return;
 
-    //when we turn to the right, the inside side is 0
+    //когда мы поворачиваемся вправо, внутренняя сторона равна 0
     int32_t inside = 0;
 
-    //otherwise, the inside is 1
+    //в противном случае внутри будет 1
     if (turn < 0) inside = 1;
 
-    //process the inside
+    //обработать внутреннюю часть
     _inside(stroke, inside, lineLength);
 
-    //process the outside
+    //обработать снаружи
     _outside(stroke, 1 - inside, lineLength);
 }
 
@@ -367,8 +367,8 @@ void _firstSubPath(SwStroke& stroke, SwFixed startAngle, SwFixed lineLength)
     ++border;
     _borderMoveTo(border, pt);
 
-    /* Save angle, position and line length for last join
-       lineLength is zero for curves */
+    /* Сохраните угол, положение и длину линии для последнего соединения.
+       lineLength равен нулю для кривых */
     stroke.subPathAngle = startAngle;
     stroke.firstPt = false;
     stroke.subPathLineLength = lineLength;
@@ -379,13 +379,13 @@ static void _lineTo(SwStroke& stroke, const SwPoint& to)
 {
     auto delta = to - stroke.center;
 
-    //a zero-length lineto is a no-op; avoid creating a spurious corner
+    //строка нулевой длины не является операцией; избегайте создания ложного угла
     if (delta.zero()) return;
 
-    /* The lineLength is used to determine the intersection of strokes outlines.
-       The scale needs to be reverted since the stroke width has not been scaled.
-       An alternative option is to scale the width of the stroke properly by
-       calculating the mixture of the sx/sy rating on the stroke direction. */
+    /* LineLength используется для определения пересечения контуров штрихов.
+       Масштаб необходимо отменить, поскольку ширина штриха не была масштабирована.
+       Альтернативный вариант — правильно масштабировать ширину обводки,
+       расчет смеси рейтингов sx/sy в направлении хода. */
     delta.x = static_cast<SwCoord>(delta.x / stroke.sx);
     delta.y = static_cast<SwCoord>(delta.y / stroke.sy);
     auto lineLength = mathLength(delta);
@@ -395,25 +395,25 @@ static void _lineTo(SwStroke& stroke, const SwPoint& to)
     mathRotate(delta, angle + SW_ANGLE_PI2);
     SCALE(stroke, delta);
 
-    //process corner if necessary
+    //обработать угол при необходимости
     if (stroke.firstPt) {
-        /* This is the first segment of a subpath. We need to add a point to each border
-        at their respective starting point locations. */
+        /* Это первый сегмент подпути. Нам нужно добавить точку к каждой границе
+        в соответствующих начальных точках. */
         _firstSubPath(stroke, angle, lineLength);
     } else {
-        //process the current corner
+        //обработать текущий угол
         stroke.angleOut = angle;
         _processCorner(stroke, lineLength);
     }
 
-    //now add a line segment to both the inside and outside paths
+    //теперь добавьте сегмент линии как к внутреннему, так и к внешнему контуру
     auto border = stroke.borders;
     auto side = 1;
 
     while (side >= 0) {
         auto pt = to + delta;
 
-        //the ends of lineto borders are movable
+        //концы линий и границ подвижны
         _borderLineTo(border, pt, true);
 
         delta.x = -delta.x;
@@ -443,12 +443,12 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
     while (arc >= bezStack) {
         SwFixed angleIn, angleOut, angleMid;
 
-        //initialize with current direction
+        //инициализировать с текущим направлением
         angleIn = angleOut = angleMid = stroke.angleIn;
 
         auto valid = mathCubicAngle(arc, angleIn, angleMid, angleOut);
 
-        //valid size
+        //действительный размер
         if (valid > 0 && arc < limit) {
             if (stroke.firstPt) stroke.angleIn = angleIn;
             mathSplitCubic(arc);
@@ -456,16 +456,16 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
             continue;
         }
 
-        //ignoreable size
+        //игнорируемый размер
         if (valid < 0 && arc == bezStack) {
             stroke.center = to;
             return;
         }
 
-        //small size
+        //маленький размер
         if (firstArc) {
             firstArc = false;
-            //process corner if necessary
+            //обработать угол при необходимости
             if (stroke.firstPt) {
                 _firstSubPath(stroke, angleIn, 0);
             } else {
@@ -473,18 +473,18 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
                 _processCorner(stroke, 0);
             }
         } else if (abs(mathDiff(stroke.angleIn, angleIn)) > (SW_ANGLE_PI / 8) / 4) {
-            //if the deviation from one arc to the next is too great add a round corner
+            //если отклонение от одной дуги к другой слишком велико, добавьте закругленный угол
             stroke.center = arc[3];
             stroke.angleOut = angleIn;
             stroke.join = StrokeJoin::Round;
 
             _processCorner(stroke, 0);
 
-            //reinstate line join style
+            //восстановить стиль соединения строк
             stroke.join = stroke.joinSaved;
         }
 
-        //the arc's angle is small enough; we can add it directly to each border
+        //угол дуги достаточно мал; мы можем добавить его непосредственно к каждой границе
         auto theta1 = mathDiff(angleIn, angleMid) / 2;
         auto theta2 = mathDiff(angleMid, angleOut) / 2;
         auto phi1 = mathMean(angleIn, angleMid);
@@ -493,7 +493,7 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
         auto length2 = mathDivide(stroke.width, mathCos(theta2));
         SwFixed alpha0 = 0;
 
-        //compute direction of original arc
+        //вычислить направление исходной дуги
         if (stroke.handleWideStrokes) {
             alpha0 = mathAtan(arc[0] - arc[3]);
         }
@@ -504,7 +504,7 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
         while (side < 2) {
             auto rotate = SIDE_TO_ROTATE(side);
 
-            //compute control points
+            //вычислять контрольные точки
             SwPoint _ctrl1 = {static_cast<SwCoord>(length1), 0};
             mathRotate(_ctrl1, phi1 + rotate);
             SCALE(stroke, _ctrl1);
@@ -515,22 +515,22 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
             SCALE(stroke, _ctrl2);
             _ctrl2 += arc[1];
 
-            //compute end point
+            //вычислить конечную точку
             SwPoint _end = {static_cast<SwCoord>(stroke.width), 0};
             mathRotate(_end, angleOut + rotate);
             SCALE(stroke, _end);
             _end += arc[0];
 
             if (stroke.handleWideStrokes) {
-                /* determine whether the border radius is greater than the radius of
-                   curvature of the original arc */
+                /* определить, больше ли радиус границы, чем радиус
+                   кривизна исходной дуги */
                 auto _start = border->pts[border->ptsCnt - 1];
                 auto alpha1 = mathAtan(_end - _start);
 
                 //is the direction of the border arc opposite to that of the original arc?
                 if (abs(mathDiff(alpha0, alpha1)) > SW_ANGLE_PI / 2) {
 
-                    //use the sine rule to find the intersection point
+                    //используйте правило синуса, чтобы найти точку пересечения
                     auto beta = mathAtan(arc[3] - _start);
                     auto gamma = mathAtan(arc[0] - _end);
                     auto bvec = _end - _start;
@@ -543,13 +543,13 @@ static void _cubicTo(SwStroke& stroke, const SwPoint& ctrl1, const SwPoint& ctrl
                     mathRotate(delta, beta);
                     delta += _start;
 
-                    //circumnavigate the negative sector backwards
+                    //обойти отрицательный сектор назад
                     border->movable = false;
                     _borderLineTo(border, delta, false);
                     _borderLineTo(border, _end, false);
                     _borderCubicTo(border, _ctrl2, _ctrl1, _start);
 
-                    //and then move to the endpoint
+                    //а затем перейти к конечной точке
                     _borderLineTo(border, _end, false);
 
                     ++side;
@@ -603,7 +603,7 @@ static void _addCap(SwStroke& stroke, SwFixed angle, int32_t side)
         _arcTo(stroke, side);
         return;
 
-    } else {  //Butt
+    } else {  //Задница
         auto rotate = SIDE_TO_ROTATE(side);
         auto border = stroke.borders + side;
 
@@ -646,7 +646,7 @@ static void _addReverseLeft(SwStroke& stroke, bool opened)
         if (opened) {
              dstTag[0] &= ~(SW_STROKE_TAG_BEGIN | SW_STROKE_TAG_END);
         } else {
-            //switch begin/end tags if necessary
+            //при необходимости переключите начальные/конечные теги
             auto ttag = dstTag[0] & (SW_STROKE_TAG_BEGIN | SW_STROKE_TAG_END);
             if (ttag == SW_STROKE_TAG_BEGIN || ttag == SW_STROKE_TAG_END)
               dstTag[0] ^= (SW_STROKE_TAG_BEGIN | SW_STROKE_TAG_END);
@@ -666,19 +666,19 @@ static void _addReverseLeft(SwStroke& stroke, bool opened)
 
 static void _beginSubPath(SwStroke& stroke, const SwPoint& to, bool closed)
 {
-    /* We cannot process the first point because there is not enough
-       information regarding its corner/cap. Later, it will be processed
-       in the _endSubPath() */
+    /* Мы не можем обработать первый пункт, потому что недостаточно
+       информация о его углу/крышке. Позже будет обработано
+       в _endSubPath() */
 
     stroke.firstPt = true;
     stroke.center = to;
     stroke.closedSubPath = closed;
 
-    /* Determine if we need to check whether the border radius is greater
-       than the radius of curvature of a curve, to handle this case specially.
-       This is only required if bevel joins or butt caps may be created because
-       round & miter joins and round & square caps cover the negative sector
-       created with wide strokes. */
+    /* Определите, нужно ли нам проверить, больше ли радиус границы
+       чем радиус кривизны кривой, чтобы специально обработать этот случай.
+       Это требуется только в том случае, если могут быть созданы скосы или стыковые заглушки, поскольку
+       круглые и угловые соединения, а также круглые и квадратные заглушки закрывают отрицательный сектор
+       создан широкими мазками. */
     if ((stroke.join != StrokeJoin::Round) || (!stroke.closedSubPath && stroke.cap == StrokeCap::Butt))
         stroke.handleWideStrokes = true;
     else
@@ -692,24 +692,24 @@ static void _beginSubPath(SwStroke& stroke, const SwPoint& to, bool closed)
 static void _endSubPath(SwStroke& stroke)
 {
     if (stroke.closedSubPath) {
-        //close the path if needed
+        //закройте путь, если нужно
         if (stroke.center != stroke.ptStartSubPath)
             _lineTo(stroke, stroke.ptStartSubPath);
 
-        //process the corner
+        //обработать угол
         stroke.angleOut = stroke.subPathAngle;
         auto turn = mathDiff(stroke.angleIn, stroke.angleOut);
 
-        //No specific corner processing is required if the turn is 0
+        //Никакой специальной обработки углов не требуется, если поворот равен 0.
         if (turn != 0) {
-            //when we turn to the right, the inside is 0
+            //когда мы поворачиваем направо, внутри 0
             int32_t inside = 0;
 
-            //otherwise, the inside is 1
+            //в противном случае внутри будет 1
             if (turn < 0) inside = 1;
 
-            _inside(stroke, inside, stroke.subPathLineLength);        //inside
-            _outside(stroke, 1 - inside, stroke.subPathLineLength);   //outside
+            _inside(stroke, inside, stroke.subPathLineLength);        //внутри
+            _outside(stroke, 1 - inside, stroke.subPathLineLength);   //снаружи
         }
 
         _borderClose(stroke.borders + 0, false);
@@ -717,20 +717,20 @@ static void _endSubPath(SwStroke& stroke)
     } else {
         auto right = stroke.borders;
 
-        /* all right, this is an opened path, we need to add a cap between
-           right & left, add the reverse of left, then add a final cap
-           between left & right */
+        /* ладно, это открытый путь, нужно добавить заглушку между
+           вправо и влево, добавьте обратную сторону левой, затем добавьте последнюю заглушку
+           между левым и правым */
         _addCap(stroke, stroke.angleIn, 0);
 
-        //add reversed points from 'left' to 'right'
+        //добавить перевернутые точки с «слева» на «справа»
         _addReverseLeft(stroke, true);
 
-        //now add the final cap
+        //теперь добавим финальную шапку
         stroke.center = stroke.ptStartSubPath;
         _addCap(stroke, stroke.subPathAngle + SW_ANGLE_PI, 0);
 
-        /* now end the right subpath accordingly. The left one is rewind
-           and doesn't need further processing */
+        /* теперь завершите правый подпуть соответственно. Левый — перемотка назад
+           и не требует дальнейшей обработки */
         _borderClose(right, false);
     }
 }
@@ -800,14 +800,14 @@ static void _exportBorderOutline(const SwStroke& stroke, SwOutline* outline, uin
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 void strokeFree(SwStroke* stroke)
 {
     if (!stroke) return;
 
-    //free borders
+    //свободные границы
     if (stroke->borders[0].pts) lv_free(stroke->borders[0].pts);
     if (stroke->borders[0].tags) lv_free(stroke->borders[0].tags);
     if (stroke->borders[1].pts) lv_free(stroke->borders[1].pts);
@@ -828,7 +828,7 @@ void strokeReset(SwStroke* stroke, const RenderShape* rshape, const Matrix& tran
     stroke->cap = rshape->strokeCap();
     stroke->miterlimit = static_cast<SwFixed>(rshape->strokeMiterlimit() * 65536.0f);
 
-    //Save line join: it can be temporarily changed when stroking curves...
+    //Сохранить соединение линий: его можно временно изменить при обводке кривых...
     stroke->joinSaved = stroke->join = rshape->strokeJoin();
 
     stroke->borders[0].ptsCnt = 0;
@@ -844,10 +844,10 @@ bool strokeParseOutline(SwStroke* stroke, const SwOutline& outline)
     uint32_t i = 0;
 
     for (auto cntr = outline.cntrs.begin(); cntr < outline.cntrs.end(); ++cntr, ++i) {
-        auto last = *cntr;           //index of last point in contour
+        auto last = *cntr;           //индекс последней точки контура
         auto limit = outline.pts.data + last;
 
-        //Skip empty points
+        //Пропускать пустые точки
         if (last <= first) {
             first = last + 1;
             continue;
@@ -858,7 +858,7 @@ bool strokeParseOutline(SwStroke* stroke, const SwOutline& outline)
         auto types = outline.types.data + first;
         auto type = types[0];
 
-        //A contour cannot start with a cubic control point
+        //Контур не может начинаться с кубической контрольной точки.
         if (type == SW_CURVE_TYPE_CUBIC) return false;
         ++types;
 
@@ -867,12 +867,12 @@ bool strokeParseOutline(SwStroke* stroke, const SwOutline& outline)
         _beginSubPath(*stroke, start, closed);
 
         while (pt < limit) {
-            //emit a single line_to
+            //испустить одиночный line_to
             if (types[0] == SW_CURVE_TYPE_POINT) {
                 ++pt;
                 ++types;
                 _lineTo(*stroke, *pt);
-            //types cubic
+            //типы кубические
             } else {
                 pt += 3;
                 types += 3;
@@ -904,8 +904,8 @@ SwOutline* strokeExportOutline(SwStroke* stroke, SwMpool* mpool, unsigned tid)
     outline->types.reserve(ptsCnt);
     outline->cntrs.reserve(cntrsCnt);
 
-    _exportBorderOutline(*stroke, outline, 0);  //left
-    _exportBorderOutline(*stroke, outline, 1);  //right
+    _exportBorderOutline(*stroke, outline, 0);  //ушел
+    _exportBorderOutline(*stroke, outline, 1);  //правильно
 
     return outline;
 }

@@ -39,7 +39,7 @@ lv_obj_t * lv_demo_gltf(const char * path);
 #endif /*LV_USE_DEMO_GLTF*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DEMO_GLTF_H*/

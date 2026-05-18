@@ -1,76 +1,76 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_RAPIDJSON_H_
 #define RAPIDJSON_RAPIDJSON_H_
 
-/*!\file rapidjson.h
-    \brief common definitions and configuration
+/*!\файл rapidjson.h
+    \краткие общие определения и конфигурация
 
-    \see RAPIDJSON_CONFIG
+    \см. RAPIDJSON_CONFIG
  */
 
-/*! \defgroup RAPIDJSON_CONFIG RapidJSON configuration
-    \brief Configuration macros for library features
+/*! \defgroup Конфигурация RAPIDJSON_CONFIG RapidJSON
+    \brief Макросы настройки функций библиотеки
 
-    Some RapidJSON features are configurable to adapt the library to a wide
-    variety of platforms, environments and usage scenarios.  Most of the
-    features can be configured in terms of overridden or predefined
-    preprocessor macros at compile-time.
+    Некоторые функции RapidJSON можно настроить для адаптации библиотеки к широкому кругу пользователей.
+    разнообразие платформ, сред и сценариев использования.  Большая часть
+    функции могут быть настроены с точки зрения переопределения или предопределения
+    макросы препроцессора во время компиляции.
 
-    Some additional customization is available in the \ref RAPIDJSON_ERRORS APIs.
+    Некоторые дополнительные настройки доступны в API \ref RAPIDJSON_ERRORS.
 
-    \note These macros should be given on the compiler command-line
-          (where applicable)  to avoid inconsistent values when compiling
-          different translation units of a single application.
+    \note Эти макросы следует задавать в командной строке компилятора.
+          (где это применимо), чтобы избежать противоречивых значений при составлении
+          различные единицы перевода одного приложения.
  */
 
-#include <cstdlib>  // malloc(), realloc(), free(), size_t
-#include <cstring>  // memset(), memcpy(), memmove(), memcmp()
+#include <cstdlib>  // malloc() , realloc() , free() , size_t
+#include <cstring>  // memset() , memcpy() , memmove() , memcmp()
 
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_VERSION_STRING
 //
-// ALWAYS synchronize the following 3 macros with corresponding variables in /CMakeLists.txt.
+// ALWAYS синхронизирует следующие 3 макроса с соответствующими переменными в /CMakeLists.txt.
 //
 
-//!@cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
-// token stringification
+//! @cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
+// строкирование токена
 #define RAPIDJSON_STRINGIFY(x) RAPIDJSON_DO_STRINGIFY(x)
 #define RAPIDJSON_DO_STRINGIFY(x) #x
 
-// token concatenation
+// конкатенация токенов
 #define RAPIDJSON_JOIN(X, Y) RAPIDJSON_DO_JOIN(X, Y)
 #define RAPIDJSON_DO_JOIN(X, Y) RAPIDJSON_DO_JOIN2(X, Y)
 #define RAPIDJSON_DO_JOIN2(X, Y) X##Y
-//!@endcond
+//! @endcond
 
 /*! \def RAPIDJSON_MAJOR_VERSION
     \ingroup RAPIDJSON_CONFIG
-    \brief Major version of RapidJSON in integer.
+    \brief Основная версия RapidJSON в целочисленном формате.
 */
 /*! \def RAPIDJSON_MINOR_VERSION
     \ingroup RAPIDJSON_CONFIG
-    \brief Minor version of RapidJSON in integer.
+    \brief Младшая версия RapidJSON в целочисленном формате.
 */
 /*! \def RAPIDJSON_PATCH_VERSION
     \ingroup RAPIDJSON_CONFIG
-    \brief Patch version of RapidJSON in integer.
+    \brief Исправление версии RapidJSON в целочисленном формате.
 */
 /*! \def RAPIDJSON_VERSION_STRING
     \ingroup RAPIDJSON_CONFIG
-    \brief Version of RapidJSON in "<major>.<minor>.<patch>" string format.
+    \brief Версия RapidJSON в строковом формате "<major>.<minor>.<patch>".
 */
 #define RAPIDJSON_MAJOR_VERSION 1
 #define RAPIDJSON_MINOR_VERSION 1
@@ -82,37 +82,37 @@
 // RAPIDJSON_NAMESPACE_(BEGIN|END)
 /*! \def RAPIDJSON_NAMESPACE
     \ingroup RAPIDJSON_CONFIG
-    \brief   provide custom rapidjson namespace
+    \brief предоставить собственное пространство имен RapidJSON
 
-    In order to avoid symbol clashes and/or "One Definition Rule" errors
-    between multiple inclusions of (different versions of) RapidJSON in
-    a single binary, users can customize the name of the main RapidJSON
-    namespace.
+    Во избежание конфликтов символов и/или ошибок «одного правила определения».
+    между несколькими включениями (разных версий) RapidJSON в
+    один двоичный файл, пользователи могут настроить имя основного RapidJSON
+    пространство имен.
 
-    In case of a single nesting level, defining \c RAPIDJSON_NAMESPACE
-    to a custom name (e.g. \c MyRapidJSON) is sufficient.  If multiple
-    levels are needed, both \ref RAPIDJSON_NAMESPACE_BEGIN and \ref
-    RAPIDJSON_NAMESPACE_END need to be defined as well:
+    В случае одного уровня вложенности определение \c RAPIDJSON_NAMESPACE
+    на собственное имя (например, \c MyRapidJSON).  Если несколько
+    необходимы уровни, оба \ref RAPIDJSON_NAMESPACE_BEGIN и \ref
+    RAPIDJSON_NAMESPACE_END также необходимо определить:
 
     \code
-    // in some .cpp file
-    #define RAPIDJSON_NAMESPACE my::rapidjson
-    #define RAPIDJSON_NAMESPACE_BEGIN namespace my { namespace rapidjson {
-    #define RAPIDJSON_NAMESPACE_END   } }
-    #include "rapidjson/..."
+    // в каком-то файле .cpp
+    #определить RAPIDJSON_NAMESPACE my::rapidjson
+    #определить пространство имен RAPIDJSON_NAMESPACE_BEGIN my { пространство имен RapidJSON {
+    #определить RAPIDJSON_NAMESPACE_END } }
+    #включить "rapidjson/..."
     \endcode
 
-    \see rapidjson
+    \см. RapidJSON
  */
 /*! \def RAPIDJSON_NAMESPACE_BEGIN
     \ingroup RAPIDJSON_CONFIG
-    \brief   provide custom rapidjson namespace (opening expression)
-    \see RAPIDJSON_NAMESPACE
+    \brief предоставляет собственное пространство имен RapidJSON (открывающее выражение)
+    \см. RAPIDJSON_NAMESPACE
 */
 /*! \def RAPIDJSON_NAMESPACE_END
     \ingroup RAPIDJSON_CONFIG
-    \brief   provide custom rapidjson namespace (closing expression)
-    \see RAPIDJSON_NAMESPACE
+    \brief предоставляет собственное пространство имен RapidJSON (закрывающее выражение)
+    \см. RAPIDJSON_NAMESPACE
 */
 #ifndef RAPIDJSON_NAMESPACE
 #define RAPIDJSON_NAMESPACE rapidjson
@@ -125,9 +125,9 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// __cplusplus macro
+// __cplusplus макрос
 
-//!@cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
+//! @cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
 
 #if defined(_MSC_VER)
 #define RAPIDJSON_CPLUSPLUS _MSVC_LANG
@@ -135,28 +135,28 @@
 #define RAPIDJSON_CPLUSPLUS __cplusplus
 #endif
 
-//!@endcond
+//! @endcond
 
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_HAS_STDSTRING
 
 #ifndef RAPIDJSON_HAS_STDSTRING
 #ifdef RAPIDJSON_DOXYGEN_RUNNING
-#define RAPIDJSON_HAS_STDSTRING 1 // force generation of documentation
+#define RAPIDJSON_HAS_STDSTRING 1 // принудительное оформление документации
 #else
-#define RAPIDJSON_HAS_STDSTRING 0 // no std::string support by default
+#define RAPIDJSON_HAS_STDSTRING 0 // нет поддержки std::string по умолчанию
 #endif
 /*! \def RAPIDJSON_HAS_STDSTRING
     \ingroup RAPIDJSON_CONFIG
-    \brief Enable RapidJSON support for \c std::string
+    \brief Включить поддержку RapidJSON для \c std::string
 
-    By defining this preprocessor symbol to \c 1, several convenience functions for using
-    \ref rapidjson::GenericValue with \c std::string are enabled, especially
-    for construction and comparison.
+    Определив для этого символа препроцессора значение \c 1, можно получить несколько удобных функций для использования.
+    \ref Rapidjson::GenericValue с \c std::string включены, особенно
+    для построения и сравнения.
 
     \hideinitializer
 */
-#endif // !defined(RAPIDJSON_HAS_STDSTRING)
+#endif // !определено( RAPIDJSON_HAS_STDSTRING )
 
 #if RAPIDJSON_HAS_STDSTRING
 #include <string>
@@ -167,17 +167,17 @@
 
 /*! \def RAPIDJSON_USE_MEMBERSMAP
     \ingroup RAPIDJSON_CONFIG
-    \brief Enable RapidJSON support for object members handling in a \c std::multimap
+    \brief Включить поддержку RapidJSON для обработки членов объекта в \c std::multimap
 
-    By defining this preprocessor symbol to \c 1, \ref rapidjson::GenericValue object
-    members are stored in a \c std::multimap for faster lookup and deletion times, a
-    trade off with a slightly slower insertion time and a small object allocat(or)ed
-    memory overhead.
+    Определив этот символ препроцессора в \c 1, объект \ref Rapidjson::GenericValue
+    члены хранятся в \c std::multimap для более быстрого поиска и удаления.
+    компромисс с немного более медленным временем вставки и выделением (или) небольшого объекта
+    накладные расходы на память.
 
     \hideinitializer
 */
 #ifndef RAPIDJSON_USE_MEMBERSMAP
-#define RAPIDJSON_USE_MEMBERSMAP 0 // not by default
+#define RAPIDJSON_USE_MEMBERSMAP 0 // не по умолчанию
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,25 +185,25 @@
 
 /*! \def RAPIDJSON_NO_INT64DEFINE
     \ingroup RAPIDJSON_CONFIG
-    \brief Use external 64-bit integer types.
+    \brief Используйте внешние 64-битные целочисленные типы.
 
-    RapidJSON requires the 64-bit integer types \c int64_t and  \c uint64_t types
-    to be available at global scope.
+    RapidJSON требует 64-битных целочисленных типов \c int64_t и \c uint64_t.
+    быть доступным в глобальном масштабе.
 
-    If users have their own definition, define RAPIDJSON_NO_INT64DEFINE to
-    prevent RapidJSON from defining its own types.
+    Если у пользователей есть собственное определение, определите RAPIDJSON_NO_INT64DEFINE, чтобы
+    запретить RapidJSON определять свои собственные типы.
 */
 #ifndef RAPIDJSON_NO_INT64DEFINE
-//!@cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
-#if defined(_MSC_VER) && (_MSC_VER < 1800) // Visual Studio 2013
+//! @cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
+#if defined(_MSC_VER) && (_MSC_VER < 1800) // Визуальная Студия 2013
 #include "msinttypes/stdint.h"
 #include "msinttypes/inttypes.h"
 #else
-// Other compilers should have this.
+// Другие компиляторы должны иметь это.
 #include <stdint.h>
 #include <inttypes.h>
 #endif
-//!@endcond
+//! @endcond
 #ifdef RAPIDJSON_DOXYGEN_RUNNING
 #define RAPIDJSON_NO_INT64DEFINE
 #endif
@@ -213,7 +213,7 @@
 // RAPIDJSON_FORCEINLINE
 
 #ifndef RAPIDJSON_FORCEINLINE
-//!@cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
+//! @cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
 #if defined(_MSC_VER) && defined(NDEBUG)
 #define RAPIDJSON_FORCEINLINE __forceinline
 #elif defined(__GNUC__) && __GNUC__ >= 4 && defined(NDEBUG)
@@ -221,29 +221,29 @@
 #else
 #define RAPIDJSON_FORCEINLINE
 #endif
-//!@endcond
+//! @endcond
 #endif // RAPIDJSON_FORCEINLINE
 
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_ENDIAN
-#define RAPIDJSON_LITTLEENDIAN  0   //!< Little endian machine
-#define RAPIDJSON_BIGENDIAN     1   //!< Big endian machine
+#define RAPIDJSON_LITTLEENDIAN  0   //!< Машина с прямым порядком байтов
+#define RAPIDJSON_BIGENDIAN     1   //!< Машина с прямым порядком байтов
 
-//! Endianness of the machine.
+//! Endianness машины.
 /*!
     \def RAPIDJSON_ENDIAN
     \ingroup RAPIDJSON_CONFIG
 
-    GCC 4.6 provided macro for detecting endianness of the target machine. But other
-    compilers may not have this. User can define RAPIDJSON_ENDIAN to either
-    \ref RAPIDJSON_LITTLEENDIAN or \ref RAPIDJSON_BIGENDIAN.
+    В GCC 4.6 предоставлен макрос для определения порядка байтов целевой машины. Но другие
+    компиляторы могут этого не иметь. Пользователь может определить RAPIDJSON_ENDIAN либо
+    \ref RAPIDJSON_LITTLEENDIAN или \ref RAPIDJSON_BIGENDIAN .
 
-    Default detection implemented with reference to
+    Обнаружение по умолчанию реализовано со ссылкой на
     \li https://gcc.gnu.org/onlinedocs/gcc-4.6.0/cpp/Common-Predefined-Macros.html
     \li http://www.boost.org/doc/libs/1_42_0/boost/detail/endian.hpp
 */
 #ifndef RAPIDJSON_ENDIAN
-// Detect with GCC 4.6's macro
+// Обнаружение с помощью макроса GCC 4.6.
 #  ifdef __BYTE_ORDER__
 #    if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #      define RAPIDJSON_ENDIAN RAPIDJSON_LITTLEENDIAN
@@ -252,7 +252,7 @@
 #    else
 #      error Unknown machine endianness detected. User needs to define RAPIDJSON_ENDIAN.
 #    endif // __BYTE_ORDER__
-// Detect with GLIBC's endian.h
+// Обнаружение с помощью endian.h GLIBC
 #  elif defined(__GLIBC__)
 #    include <endian.h>
 #    if (__BYTE_ORDER == __LITTLE_ENDIAN)
@@ -262,12 +262,12 @@
 #    else
 #      error Unknown machine endianness detected. User needs to define RAPIDJSON_ENDIAN.
 #   endif // __GLIBC__
-// Detect with _LITTLE_ENDIAN and _BIG_ENDIAN macro
+// Обнаружение с помощью макроса _LITTLE_ENDIAN и _BIG_ENDIAN
 #  elif defined(_LITTLE_ENDIAN) && !defined(_BIG_ENDIAN)
 #    define RAPIDJSON_ENDIAN RAPIDJSON_LITTLEENDIAN
 #  elif defined(_BIG_ENDIAN) && !defined(_LITTLE_ENDIAN)
 #    define RAPIDJSON_ENDIAN RAPIDJSON_BIGENDIAN
-// Detect with architecture macros
+// Обнаружение с помощью архитектурных макросов
 #  elif defined(__sparc) || defined(__sparc__) || defined(_POWER) || defined(__powerpc__) || defined(__ppc__) || defined(__hpux) || defined(__hppa) || defined(_MIPSEB) || defined(_POWER) || defined(__s390__)
 #    define RAPIDJSON_ENDIAN RAPIDJSON_BIGENDIAN
 #  elif defined(__i386__) || defined(__alpha__) || defined(__ia64) || defined(__ia64__) || defined(_M_IX86) || defined(_M_IA64) || defined(_M_ALPHA) || defined(__amd64) || defined(__amd64__) || defined(_M_AMD64) || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64) || defined(__bfin__)
@@ -284,7 +284,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_64BIT
 
-//! Whether using 64-bit architecture
+//! Используете ли 64-битную архитектуру
 #ifndef RAPIDJSON_64BIT
 #if defined(__LP64__) || (defined(__x86_64__) && defined(__ILP32__)) || defined(_WIN64) || defined(__EMSCRIPTEN__)
 #define RAPIDJSON_64BIT 1
@@ -296,12 +296,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_ALIGN
 
-//! Data alignment of the machine.
+//! Согласование данных машины.
 /*! \ingroup RAPIDJSON_CONFIG
-    \param x pointer to align
+    \param x указатель для выравнивания
 
-    Some machines require strict data alignment. The default is 8 bytes.
-    User can customize by defining the RAPIDJSON_ALIGN function macro.
+    Некоторые машины требуют строгого выравнивания данных. По умолчанию — 8 байт.
+    Пользователь может выполнить настройку, определив функциональный макрос RAPIDJSON_ALIGN.
 */
 #ifndef RAPIDJSON_ALIGN
 #define RAPIDJSON_ALIGN(x) (((x) + static_cast<size_t>(7u)) & ~static_cast<size_t>(7u))
@@ -310,11 +310,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_UINT64_C2
 
-//! Construct a 64-bit literal by a pair of 32-bit integer.
+//! Создайте 64-битный литерал по паре 32-битных целых чисел.
 /*!
-    64-bit literal with or without ULL suffix is prone to compiler warnings.
-    UINT64_C() is C macro which cause compilation problems.
-    Use this macro to define 64-bit constants by a pair of 32-bit integer.
+    64-битный литерал с суффиксом ULL или без него подвержен предупреждениям компилятора.
+    UINT64_C () — макрос C, вызывающий проблемы с компиляцией.
+    Используйте этот макрос, чтобы определить 64-битные константы парой 32-битных целых чисел.
 */
 #ifndef RAPIDJSON_UINT64_C2
 #define RAPIDJSON_UINT64_C2(high32, low32) ((static_cast<uint64_t>(high32) << 32) | static_cast<uint64_t>(low32))
@@ -323,13 +323,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_48BITPOINTER_OPTIMIZATION
 
-//! Use only lower 48-bit address for some pointers.
+//! Для некоторых указателей используйте только младший 48-битный адрес.
 /*!
     \ingroup RAPIDJSON_CONFIG
 
-    This optimization uses the fact that current X86-64 architecture only implement lower 48-bit virtual address.
-    The higher 16-bit can be used for storing other data.
-    \c GenericValue uses this optimization to reduce its size form 24 bytes to 16 bytes in 64-bit architecture.
+    Эта оптимизация использует тот факт, что текущая архитектура X86 -64 реализует только младший 48-битный виртуальный адрес.
+    Старшие 16 бит можно использовать для хранения других данных.
+    \c GenericValue использует эту оптимизацию для уменьшения своего размера с 24 байт до 16 байт в 64-битной архитектуре.
 */
 #ifndef RAPIDJSON_48BITPOINTER_OPTIMIZATION
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
@@ -355,29 +355,29 @@
 
 /*! \def RAPIDJSON_SIMD
     \ingroup RAPIDJSON_CONFIG
-    \brief Enable SSE2/SSE4.2/Neon optimization.
+    \brief Включите оптимизацию SSE2 / SSE4 .2/Neon.
 
     RapidJSON supports optimized implementations for some parsing operations
-    based on the SSE2, SSE4.2 or NEon SIMD extensions on modern Intel
-    or ARM compatible processors.
+    на основе расширений SSE2, SSE4.2 или NEon SIMD на современном Intel
+    или процессоры, совместимые с ARM.
 
     To enable these optimizations, three different symbols can be defined;
     \code
-    // Enable SSE2 optimization.
-    #define RAPIDJSON_SSE2
+    // Включите оптимизацию SSE2.
+    #определить RAPIDJSON_SSE2
 
-    // Enable SSE4.2 optimization.
-    #define RAPIDJSON_SSE42
+    // Включите оптимизацию SSE4 .2.
+    #определить RAPIDJSON_SSE42
     \endcode
 
-    // Enable ARM Neon optimization.
-    #define RAPIDJSON_NEON
+    // Включите оптимизацию ARM Neon.
+    #определить RAPIDJSON_NEON
     \endcode
 
-    \c RAPIDJSON_SSE42 takes precedence over SSE2, if both are defined.
+    \c RAPIDJSON_SSE42 имеет приоритет над SSE2 , если оба определены.
 
-    If any of these symbols is defined, RapidJSON defines the macro
-    \c RAPIDJSON_SIMD to indicate the availability of the optimized code.
+    Если какой-либо из этих символов определен, RapidJSON определяет макрос
+    \c RAPIDJSON_SIMD, чтобы указать наличие оптимизированного кода.
 */
 #if defined(RAPIDJSON_SSE2) || defined(RAPIDJSON_SSE42) \
     || defined(RAPIDJSON_NEON) || defined(RAPIDJSON_DOXYGEN_RUNNING)
@@ -390,33 +390,33 @@
 #ifndef RAPIDJSON_NO_SIZETYPEDEFINE
 /*! \def RAPIDJSON_NO_SIZETYPEDEFINE
     \ingroup RAPIDJSON_CONFIG
-    \brief User-provided \c SizeType definition.
+    \brief Предоставленное пользователем \c определение SizeType.
 
-    In order to avoid using 32-bit size types for indexing strings and arrays,
-    define this preprocessor symbol and provide the type rapidjson::SizeType
-    before including RapidJSON:
+    Чтобы избежать использования 32-битных типов размера для индексации строк и массивов,
+    определите этот символ препроцессора и укажите тип Rapidjson::SizeType
+    перед включением RapidJSON:
     \code
-    #define RAPIDJSON_NO_SIZETYPEDEFINE
-    namespace rapidjson { typedef ::std::size_t SizeType; }
-    #include "rapidjson/..."
+    #определить RAPIDJSON_NO_SIZETYPEDEFINE
+    пространство имен RapidJSON { typedef ::std:: size_t SizeType; }
+    #включить "rapidjson/..."
     \endcode
 
-    \see rapidjson::SizeType
+    \см. Rapidjson::SizeType
 */
 #ifdef RAPIDJSON_DOXYGEN_RUNNING
 #define RAPIDJSON_NO_SIZETYPEDEFINE
 #endif
 RAPIDJSON_NAMESPACE_BEGIN
-//! Size type (for string lengths, array sizes, etc.)
-/*! RapidJSON uses 32-bit array/string indices even on 64-bit platforms,
-    instead of using \c size_t. Users may override the SizeType by defining
-    \ref RAPIDJSON_NO_SIZETYPEDEFINE.
+//! Тип размера (для длины строки, размера массива и т. д.)
+/*! RapidJSON использует 32-битные индексы массива/строки даже на 64-битных платформах.
+    вместо использования \c size_t. Пользователи могут переопределить SizeType, определив
+    \ref RAPIDJSON_NO_SIZETYPEDEFINE .
 */
 typedef unsigned SizeType;
 RAPIDJSON_NAMESPACE_END
 #endif
 
-// always import std::size_t to rapidjson namespace
+// всегда импортируйте std::size_t в пространство имен RapidJSON
 RAPIDJSON_NAMESPACE_BEGIN
 using std::size_t;
 RAPIDJSON_NAMESPACE_END
@@ -424,13 +424,13 @@ RAPIDJSON_NAMESPACE_END
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_ASSERT
 
-//! Assertion.
+//! Утверждение.
 /*! \ingroup RAPIDJSON_CONFIG
-    By default, rapidjson uses C \c assert() for internal assertions.
-    User can override it by defining RAPIDJSON_ASSERT(x) macro.
+    По умолчанию Rapidjson использует C \c assert() для внутренних утверждений.
+    Пользователь может переопределить его, указав макрос RAPIDJSON_ASSERT (x).
 
-    \note Parsing errors are handled and can be customized by the
-          \ref RAPIDJSON_ERRORS APIs.
+    \note Ошибки синтаксического анализа обрабатываются и могут быть настроены с помощью
+          \ref API RAPIDJSON_ERRORS.
 */
 #ifndef RAPIDJSON_ASSERT
 #include <cassert>
@@ -440,7 +440,7 @@ RAPIDJSON_NAMESPACE_END
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_STATIC_ASSERT
 
-// Prefer C++11 static_assert, if available
+// Предпочитаю C++11 static_assert , если доступен.
 #ifndef RAPIDJSON_STATIC_ASSERT
 #if RAPIDJSON_CPLUSPLUS >= 201103L || ( defined(_MSC_VER) && _MSC_VER >= 1800 )
 #define RAPIDJSON_STATIC_ASSERT(x) \
@@ -448,10 +448,10 @@ RAPIDJSON_NAMESPACE_END
 #endif // C++11
 #endif // RAPIDJSON_STATIC_ASSERT
 
-// Adopt C++03 implementation from boost
+// Принять реализацию C++03 из boost
 #ifndef RAPIDJSON_STATIC_ASSERT
 #ifndef __clang__
-//!@cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
+//! @cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
 #endif
 RAPIDJSON_NAMESPACE_BEGIN
 template <bool x> struct STATIC_ASSERTION_FAILURE;
@@ -465,12 +465,12 @@ RAPIDJSON_NAMESPACE_END
 #define RAPIDJSON_STATIC_ASSERT_UNUSED_ATTRIBUTE
 #endif
 #ifndef __clang__
-//!@endcond
+//! @endcond
 #endif
 
 /*! \def RAPIDJSON_STATIC_ASSERT
-    \brief (Internal) macro to check for conditions at compile-time
-    \param x compile-time condition
+    \brief (внутренний) макрос для проверки условий во время компиляции
+    \param x условие времени компиляции
     \hideinitializer
  */
 #define RAPIDJSON_STATIC_ASSERT(x) \
@@ -482,10 +482,10 @@ RAPIDJSON_NAMESPACE_END
 ///////////////////////////////////////////////////////////////////////////////
 // RAPIDJSON_LIKELY, RAPIDJSON_UNLIKELY
 
-//! Compiler branching hint for expression with high probability to be true.
+//! Подсказка ветвления компилятора для выражения с высокой вероятностью истинности.
 /*!
     \ingroup RAPIDJSON_CONFIG
-    \param x Boolean expression likely to be true.
+    \param x Логическое выражение, скорее всего, истинно.
 */
 #ifndef RAPIDJSON_LIKELY
 #if defined(__GNUC__) || defined(__clang__)
@@ -495,10 +495,10 @@ RAPIDJSON_NAMESPACE_END
 #endif
 #endif
 
-//! Compiler branching hint for expression with low probability to be true.
+//! Подсказка компилятора ветвления для выражения с низкой вероятностью быть истинным.
 /*!
     \ingroup RAPIDJSON_CONFIG
-    \param x Boolean expression unlikely to be true.
+    \param x Логическое выражение вряд ли будет истинным.
 */
 #ifndef RAPIDJSON_UNLIKELY
 #if defined(__GNUC__) || defined(__clang__)
@@ -509,15 +509,15 @@ RAPIDJSON_NAMESPACE_END
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// Helpers
+// Помощники
 
-//!@cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
+//! @cond RAPIDJSON_HIDDEN_FROM_DOXYGEN
 
 #define RAPIDJSON_MULTILINEMACRO_BEGIN do {
 #define RAPIDJSON_MULTILINEMACRO_END \
 } while((void)0, 0)
 
-// adopted from Boost
+// заимствовано из Boost
 #define RAPIDJSON_VERSION_CODE(x,y,z) \
   (((x)*100000) + ((y)*100) + (z))
 
@@ -542,18 +542,18 @@ RAPIDJSON_NAMESPACE_END
 #define RAPIDJSON_DIAG_OFF(x) \
     RAPIDJSON_DIAG_PRAGMA(ignored RAPIDJSON_STRINGIFY(RAPIDJSON_JOIN(-W,x)))
 
-// push/pop support in Clang and GCC>=4.6
+// Поддержка push/pop в Clang и GCC >=4.6
 #if defined(__clang__) || (defined(RAPIDJSON_GNUC) && RAPIDJSON_GNUC >= RAPIDJSON_VERSION_CODE(4,6,0))
 #define RAPIDJSON_DIAG_PUSH RAPIDJSON_DIAG_PRAGMA(push)
 #define RAPIDJSON_DIAG_POP  RAPIDJSON_DIAG_PRAGMA(pop)
 #else // GCC >= 4.2, < 4.6
-#define RAPIDJSON_DIAG_PUSH /* ignored */
-#define RAPIDJSON_DIAG_POP /* ignored */
+#define RAPIDJSON_DIAG_PUSH /* игнорируется */
+#define RAPIDJSON_DIAG_POP /* игнорируется */
 #endif
 
 #elif defined(_MSC_VER)
 
-// pragma (MSVC specific)
+// прагма (специфическая для MSVC)
 #define RAPIDJSON_PRAGMA(x) __pragma(x)
 #define RAPIDJSON_DIAG_PRAGMA(x) RAPIDJSON_PRAGMA(warning(x))
 
@@ -563,14 +563,14 @@ RAPIDJSON_NAMESPACE_END
 
 #else
 
-#define RAPIDJSON_DIAG_OFF(x) /* ignored */
-#define RAPIDJSON_DIAG_PUSH   /* ignored */
-#define RAPIDJSON_DIAG_POP    /* ignored */
+#define RAPIDJSON_DIAG_OFF(x) /* игнорируется */
+#define RAPIDJSON_DIAG_PUSH   /* игнорируется */
+#define RAPIDJSON_DIAG_POP    /* игнорируется */
 
 #endif // RAPIDJSON_DIAG_*
 
 ///////////////////////////////////////////////////////////////////////////////
-// C++11 features
+// Возможности С++11
 
 #ifndef RAPIDJSON_HAS_CXX11
 #define RAPIDJSON_HAS_CXX11 (RAPIDJSON_CPLUSPLUS >= 201103L)
@@ -597,7 +597,7 @@ RAPIDJSON_NAMESPACE_END
 #endif // RAPIDJSON_HAS_CXX11_RVALUE_REFS
 
 #if RAPIDJSON_HAS_CXX11_RVALUE_REFS
-#include <utility> // std::move
+#include <utility> // станд::переместить
 #endif
 
 #ifndef RAPIDJSON_HAS_CXX11_NOEXCEPT
@@ -621,7 +621,7 @@ RAPIDJSON_NAMESPACE_END
 #endif // RAPIDJSON_HAS_CXX11_NOEXCEPT
 #endif
 
-// no automatic detection, yet
+// автоматического обнаружения пока нет
 #ifndef RAPIDJSON_HAS_CXX11_TYPETRAITS
 #if (defined(_MSC_VER) && _MSC_VER >= 1700)
 #define RAPIDJSON_HAS_CXX11_TYPETRAITS 1
@@ -643,7 +643,7 @@ RAPIDJSON_NAMESPACE_END
 #endif // RAPIDJSON_HAS_CXX11_RANGE_FOR
 
 ///////////////////////////////////////////////////////////////////////////////
-// C++17 features
+// Возможности С++17
 
 #ifndef RAPIDJSON_HAS_CXX17
 #define RAPIDJSON_HAS_CXX17 (RAPIDJSON_CPLUSPLUS >= 201703L)
@@ -663,17 +663,17 @@ RAPIDJSON_NAMESPACE_END
 # define RAPIDJSON_DELIBERATE_FALLTHROUGH
 #endif
 
-//!@endcond
+//! @endcond
 
-//! Assertion (in non-throwing contexts).
+//! Утверждение (в невыдающих контекстах).
  /*! \ingroup RAPIDJSON_CONFIG
-    Some functions provide a \c noexcept guarantee, if the compiler supports it.
-    In these cases, the \ref RAPIDJSON_ASSERT macro cannot be overridden to
-    throw an exception.  This macro adds a separate customization point for
-    such cases.
+    Некоторые функции предоставляют гарантию \c noException, если компилятор поддерживает ее.
+    В этих случаях макрос \ref RAPIDJSON_ASSERT нельзя переопределить на
+    выдать исключение.  Этот макрос добавляет отдельную точку настройки для
+    такие случаи.
 
-    Defaults to C \c assert() (as \ref RAPIDJSON_ASSERT), if \c noexcept is
-    supported, and to \ref RAPIDJSON_ASSERT otherwise.
+    По умолчанию C \c assert() (как \ref RAPIDJSON_ASSERT), если \c noException
+    поддерживается, а в противном случае — \ref RAPIDJSON_ASSERT.
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -692,15 +692,15 @@ RAPIDJSON_NAMESPACE_END
 // malloc/realloc/free
 #include "../../../stdlib/lv_mem.h"
 #ifndef RAPIDJSON_MALLOC
-///! customization point for global \c malloc
+///! точка настройки для глобального \c malloc
 #define RAPIDJSON_MALLOC(size) lv_malloc(size)
 #endif
 #ifndef RAPIDJSON_REALLOC
-///! customization point for global \c realloc
+///! точка настройки для глобального \c realloc
 #define RAPIDJSON_REALLOC(ptr, new_size) lv_realloc(ptr, new_size)
 #endif
 #ifndef RAPIDJSON_FREE
-///! customization point for global \c free
+///! точка настройки для глобального \c бесплатно
 #define RAPIDJSON_FREE(ptr) lv_free(ptr)
 #endif
 
@@ -708,32 +708,32 @@ RAPIDJSON_NAMESPACE_END
 // new/delete
 
 #ifndef RAPIDJSON_NEW
-///! customization point for global \c new
+///! точка настройки для глобального \c new
 #define RAPIDJSON_NEW(TypeName) new TypeName
 #endif
 #ifndef RAPIDJSON_DELETE
-///! customization point for global \c delete
+///! точка настройки для глобального удаления \c
 #define RAPIDJSON_DELETE(x) delete x
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// Type
+// Тип
 
-/*! \namespace rapidjson
-    \brief main RapidJSON namespace
-    \see RAPIDJSON_NAMESPACE
+/*! \namespace RapidJSON
+    \brief основное пространство имен RapidJSON
+    \см. RAPIDJSON_NAMESPACE
 */
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Type of JSON value
+//! Тип значения JSON
 enum Type {
-    kNullType = 0,      //!< null
-    kFalseType = 1,     //!< false
-    kTrueType = 2,      //!< true
-    kObjectType = 3,    //!< object
-    kArrayType = 4,     //!< array
-    kStringType = 5,    //!< string
-    kNumberType = 6     //!< number
+    kNullType = 0,      //!< ноль
+    kFalseType = 1,     //!< ложь
+    kTrueType = 2,      //!< правда
+    kObjectType = 3,    //!< объект
+    kArrayType = 4,     //!< массив
+    kStringType = 5,    //!< строка
+    kNumberType = 6     //!< число
 };
 
 RAPIDJSON_NAMESPACE_END

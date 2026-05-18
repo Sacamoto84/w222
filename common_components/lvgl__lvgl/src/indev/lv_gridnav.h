@@ -28,27 +28,27 @@ typedef enum {
     LV_GRIDNAV_CTRL_NONE = 0x0,
 
     /**
-     * If there is no next/previous object in a direction,
-     * the focus goes to the object in the next/previous row (on left/right keys)
-     * or first/last row (on up/down keys)
+     * Если в направлении нет следующего/предыдущего объекта,
+     * фокус переходит на объект в следующем/предыдущем ряду (на клавишах влево/вправо)
+     * или первая/последняя строка (на клавишах вверх/вниз)
      */
     LV_GRIDNAV_CTRL_ROLLOVER = 0x1,
 
     /**
-     * If an arrow is pressed and the focused object can be scrolled in that direction
-     * then it will be scrolled instead of going to the next/previous object.
-     * If there is no more room for scrolling the next/previous object will be focused normally */
+     * Если нажата стрелка и объект в фокусе можно прокручивать в этом направлении
+     * тогда он будет прокручиваться вместо перехода к следующему/предыдущему объекту.
+     * Если места для прокрутки больше нет, следующий/предыдущий объект будет сфокусирован как обычно. */
     LV_GRIDNAV_CTRL_SCROLL_FIRST = 0x2,
 
     /**
-     * Only use left/right keys for grid navigation. Up/down key events will be sent to the
-     * focused object.
+     * Для навигации по сетке используйте только клавиши «влево/вправо». Ключевые события вверх/вниз будут отправлены на
+     * сфокусированный объект.
     */
     LV_GRIDNAV_CTRL_HORIZONTAL_MOVE_ONLY = 0x4,
 
     /**
-     * Only use up/down keys for grid navigation. Left/right key events will be sent to the
-     * focused object.
+     * Для навигации по сетке используйте только клавиши вверх/вниз. События левой/правой клавиши будут отправлены на
+     * сфокусированный объект.
     */
     LV_GRIDNAV_CTRL_VERTICAL_MOVE_ONLY = 0x8
 
@@ -59,27 +59,27 @@ typedef enum {
  **********************/
 
 /**
- * Add grid navigation feature to an object. It expects the children to be arranged
- * into a grid-like layout. Although it's not required to have pixel perfect alignment.
- * This feature makes possible to use keys to navigate among the children and focus them.
- * The keys other than arrows and press/release related events
- * are forwarded to the focused child.
- * @param obj       pointer to an object on which navigation should be applied.
- * @param ctrl      control flags from `lv_gridnav_ctrl_t`.
+ * Добавьте к объекту функцию навигации по сетке. Он ожидает, что дети будут устроены
+ * в макет в виде сетки. Хотя идеальное выравнивание пикселей не требуется.
+ * Эта функция позволяет использовать клавиши для навигации среди детей и фокусировки на них.
+ * Клавиши, кроме стрелок и событий, связанных с нажатием/отпусканием
+ * передаются сосредоточенному ребенку.
+ * @param obj       указатель на объект, к которому следует применить навигацию.
+ * @param ctrl      флаги управления из `lv_gridnav_ctrl_t`.
  */
 void lv_gridnav_add(lv_obj_t * obj, lv_gridnav_ctrl_t ctrl);
 
 /**
- * Remove the grid navigation support from an object
- * @param obj       pointer to an object
+ * Удаление поддержки навигации по сетке из объекта
+ * @param obj       указатель на объект
  */
 void lv_gridnav_remove(lv_obj_t * obj);
 
 /**
- * Manually focus an object on gridnav container
- * @param cont      pointer to a gridnav container
- * @param to_focus  pointer to an object to focus
- * @param anim_en   LV_ANIM_ON/OFF
+ * Вручную сфокусируйте объект в контейнере Gridnav.
+ * @param cont      указатель на контейнер GridNav
+ * @param to_focus  указатель на объект для фокусировки
+ * @param anim_en LV_ANIM_ON / OFF
  */
 void lv_gridnav_set_focused(lv_obj_t * cont, lv_obj_t * to_focus, lv_anim_enable_t anim_en);
 
@@ -89,7 +89,7 @@ void lv_gridnav_set_focused(lv_obj_t * cont, lv_obj_t * to_focus, lv_anim_enable
 #endif /*LV_USE_GRIDNAV*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_GRIDNAV_H */

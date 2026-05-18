@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_STRTOD_
 #define RAPIDJSON_STRTOD_
@@ -36,7 +36,7 @@ inline double FastPath(double significand, int exp) {
 
 inline double StrtodNormalPrecision(double d, int p) {
     if (p < -308) {
-        // Prevent expSum < -308, making Pow10(p) = 0
+        // Предотвратите expSum < -308, сделав Pow10(p) = 0.
         d = FastPath(d, -308);
         d = FastPath(d, p + 308);
     }
@@ -61,7 +61,7 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
 
     int dS_Exp2 = 0, dS_Exp5 = 0, bS_Exp2 = 0, bS_Exp5 = 0, hS_Exp2 = 0, hS_Exp5 = 0;
 
-    // Adjust for decimal exponent
+    // Поправка на десятичную степень
     if (dExp >= 0) {
         dS_Exp2 += dExp;
         dS_Exp5 += dExp;
@@ -73,7 +73,7 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
         hS_Exp5 -= dExp;
     }
 
-    // Adjust for binary exponent
+    // С поправкой на двоичную экспоненту
     if (bExp >= 0)
         bS_Exp2 += bExp;
     else {
@@ -81,7 +81,7 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
         hS_Exp2 -= bExp;
     }
 
-    // Adjust for half ulp exponent
+    // Скорректировать половинный показатель ulp
     if (hExp >= 0)
         hS_Exp2 += hExp;
     else {
@@ -89,7 +89,7 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
         bS_Exp2 -= hExp;
     }
 
-    // Remove common power of two factor from all three scaled values
+    // Удалите общую степень двух коэффициентов из всех трех масштабированных значений.
     int common_Exp2 = Min3(dS_Exp2, bS_Exp2, hS_Exp2);
     dS_Exp2 -= common_Exp2;
     bS_Exp2 -= common_Exp2;
@@ -111,10 +111,10 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
 }
 
 inline bool StrtodFast(double d, int p, double* result) {
-    // Use fast path for string-to-double conversion if possible
-    // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/
+    // Если возможно, используйте быстрый путь для преобразования строки в двойную строку.
+    // см. http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/
     if (p > 22  && p < 22 + 16) {
-        // Fast Path Cases In Disguise
+        // Замаскированные дела быстрого пути
         d *= internal::Pow10(p - 22);
         p = 22;
     }
@@ -127,7 +127,7 @@ inline bool StrtodFast(double d, int p, double* result) {
         return false;
 }
 
-// Compute an approximation and see if it is within 1/2 ULP
+// Вычислите приближение и посмотрите, находится ли оно в пределах 1/2 ULP.
 template<typename Ch>
 inline bool StrtodDiyFp(const Ch* decimals, int dLen, int dExp, double* result) {
     uint64_t significand = 0;
@@ -139,7 +139,7 @@ inline bool StrtodDiyFp(const Ch* decimals, int dLen, int dExp, double* result) 
         significand = significand * 10u + static_cast<unsigned>(decimals[i] - Ch('0'));
     }
 
-    if (i < dLen && decimals[i] >= Ch('5')) // Rounding
+    if (i < dLen && decimals[i] >= Ch('5')) // Округление
         significand++;
 
     int remaining = dLen - i;
@@ -168,7 +168,7 @@ inline bool StrtodDiyFp(const Ch* decimals, int dLen, int dExp, double* result) 
         int adjustment = dExp - actualExp;
         RAPIDJSON_ASSERT(adjustment >= 1 && adjustment < 8);
         v = v * kPow10[adjustment - 1];
-        if (dLen + adjustment > 19) // has more digits than decimal digits in 64-bit
+        if (dLen + adjustment > 19) // имеет больше цифр, чем десятичных цифр в 64-битной версии
             error += kUlp / 2;
     }
 
@@ -195,7 +195,7 @@ inline bool StrtodDiyFp(const Ch* decimals, int dLen, int dExp, double* result) 
     const uint64_t halfWay = (uint64_t(1) << (precisionSize - 1)) * kUlp;
     if (precisionBits >= halfWay + static_cast<unsigned>(error)) {
         rounded.f++;
-        if (rounded.f & (DiyFp::kDpHiddenBit << 1)) { // rounding overflows mantissa (issue #340)
+        if (rounded.f & (DiyFp::kDpHiddenBit << 1)) { // округление выходит за пределы мантиссы (проблема №340)
             rounded.f >>= 1;
             rounded.e++;
         }
@@ -213,15 +213,15 @@ inline double StrtodBigInteger(double approx, const Ch* decimals, int dLen, int 
     Double a(approx);
     int cmp = CheckWithinHalfULP(a.Value(), dInt, dExp);
     if (cmp < 0)
-        return a.Value();  // within half ULP
+        return a.Value();  // в пределах половины ULP
     else if (cmp == 0) {
-        // Round towards even
+        // Округлить в сторону четности
         if (a.Significand() & 1)
             return a.NextPositiveDouble();
         else
             return a.Value();
     }
-    else // adjustment
+    else // корректировка
         return a.NextPositiveDouble();
 }
 
@@ -244,50 +244,50 @@ inline double StrtodFullPrecision(double d, int p, const Ch* decimals, size_t le
     RAPIDJSON_ASSERT(exp >= INT_MIN + dExpAdjust);
     int dExp = exp - dExpAdjust;
 
-    // Make sure length+dExp does not overflow
+    // Убедитесь, что length+dExp не переполняется.
     RAPIDJSON_ASSERT(dExp <= INT_MAX - dLen);
 
-    // Trim leading zeros
+    // Обрезать ведущие нули
     while (dLen > 0 && *decimals == '0') {
         dLen--;
         decimals++;
     }
 
-    // Trim trailing zeros
+    // Обрезать конечные нули
     while (dLen > 0 && decimals[dLen - 1] == '0') {
         dLen--;
         dExp++;
     }
 
-    if (dLen == 0) { // Buffer only contains zeros.
+    if (dLen == 0) { // Буфер содержит только нули.
         return 0.0;
     }
 
-    // Trim right-most digits
+    // Обрезать крайние правые цифры
     const int kMaxDecimalDigit = 767 + 1;
     if (dLen > kMaxDecimalDigit) {
         dExp += dLen - kMaxDecimalDigit;
         dLen = kMaxDecimalDigit;
     }
 
-    // If too small, underflow to zero.
-    // Any x <= 10^-324 is interpreted as zero.
+    // Если слишком мало, опустошите до нуля.
+    // Любой x <= 10^-324 интерпретируется как ноль.
     if (dLen + dExp <= -324)
         return 0.0;
 
-    // If too large, overflow to infinity.
-    // Any x >= 10^309 is interpreted as +infinity.
+    // Если слишком большое, переполнение до бесконечности.
+    // Любой x >= 10^309 интерпретируется как +бесконечность.
     if (dLen + dExp > 309)
         return std::numeric_limits<double>::infinity();
 
     if (StrtodDiyFp(decimals, dLen, dExp, &result))
         return result;
 
-    // Use approximation from StrtodDiyFp and make adjustment with BigInteger comparison
+    // Используйте аппроксимацию из StrtodDiyFp и внесите коррективы с помощью сравнения BigInteger.
     return StrtodBigInteger(result, decimals, dLen, dExp);
 }
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #endif // RAPIDJSON_STRTOD_

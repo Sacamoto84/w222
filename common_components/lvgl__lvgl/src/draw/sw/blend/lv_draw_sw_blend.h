@@ -33,7 +33,7 @@ extern "C" {
  **********************/
 
 /**
- * Custom draw function for SW rendering.
+ * Пользовательская функция рисования для рендеринга SW.
  * @param t             pointer to a draw task
  * @param dsc           pointer to an initialized blend descriptor
  */
@@ -45,7 +45,7 @@ typedef struct {
 } lv_draw_sw_custom_blend_handler_t;
 
 /**
- * Call the blend function of the `layer`.
+ * Вызовите функцию смешивания `layer`.
  * @param draw_unit     pointer to a draw unit
  * @param dsc           pointer to an initialized blend descriptor
  */
@@ -58,7 +58,7 @@ void lv_draw_sw_blend(lv_draw_task_t * t, const lv_draw_sw_blend_dsc_t * dsc);
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_H*/

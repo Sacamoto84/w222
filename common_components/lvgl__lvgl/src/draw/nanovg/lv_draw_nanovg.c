@@ -55,7 +55,7 @@
 #include "../../libs/nanovg/nanovg_gl.h"
 #include "../../libs/nanovg/nanovg_gl_utils.h"
 
-/* GL_BGRA may not be defined on all platforms */
+/* GL_BGRA может быть определен не на всех платформах. */
 #ifndef GL_BGRA
     #ifdef GL_BGRA_EXT
         #define GL_BGRA GL_BGRA_EXT
@@ -129,7 +129,7 @@ int lv_nanovg_fb_get_image_handle(struct NVGLUframebuffer * fb)
 
 static void draw_execute(lv_draw_nanovg_unit_t * u, lv_draw_task_t * t)
 {
-    /* remember draw unit for access to unit's context */
+    /* помните о блоке рисования для доступа к контексту модуля */
     t->draw_unit = (lv_draw_unit_t *)u;
     lv_layer_t * layer = t->target_layer;
 
@@ -144,7 +144,7 @@ static void draw_execute(lv_draw_nanovg_unit_t * u, lv_draw_task_t * t)
     lv_matrix_multiply(&global_matrix, &layer_matrix);
 #endif
 
-    /* NanoVG will output premultiplied image, set the flag correspondingly. */
+    /* NanoVG выведет предварительно умноженное изображение, установите соответствующий флаг. */
     if(layer->draw_buf) {
         lv_draw_buf_set_flag(layer->draw_buf, LV_IMAGE_FLAGS_PREMULTIPLIED);
     }
@@ -221,7 +221,7 @@ static void on_layer_changed(lv_layer_t * new_layer)
     LV_PROFILER_DRAW_BEGIN;
 
     if(!new_layer->user_data) {
-        /* Bind the default framebuffer for normal rendering */
+        /* Привяжите фреймбуфер по умолчанию для нормального рендеринга. */
         nvgluBindFramebuffer(NULL);
         LV_PROFILER_DRAW_END;
         return;
@@ -231,7 +231,7 @@ static void on_layer_changed(lv_layer_t * new_layer)
     nvgluBindFramebuffer(lv_nanovg_fbo_cache_entry_to_fb(new_layer->user_data));
     LV_PROFILER_END_TAG("nvgBindFramebuffer");
 
-    /* Clear the off-screen framebuffer */
+    /* Очистить внеэкранный фреймбуфер */
     LV_PROFILER_DRAW_BEGIN_TAG("glClear");
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -267,18 +267,18 @@ static void on_layer_readback(lv_draw_nanovg_unit_t * u, lv_layer_t * layer)
         return;
     }
 
-    /* Bind the FBO for reading */
+    /* Привяжите FBO для чтения */
     nvgluBindFramebuffer(fb);
 
     int32_t w = lv_area_get_width(&layer->buf_area);
     int32_t h = lv_area_get_height(&layer->buf_area);
     lv_draw_buf_t * draw_buf = layer->draw_buf;
 
-    /* Read pixels from FBO */
+    /* Чтение пикселей из FBO */
     GLenum format;
     GLenum type;
 
-    /* OpenGL reads bottom-to-top, but LVGL expects top-to-bottom */
+    /* OpenGL читает снизу вверх, но LVGL ожидает сверху вниз. */
     switch(draw_buf->header.cf) {
         case LV_COLOR_FORMAT_ARGB8888:
         case LV_COLOR_FORMAT_XRGB8888:
@@ -304,7 +304,7 @@ static void on_layer_readback(lv_draw_nanovg_unit_t * u, lv_layer_t * layer)
     }
 
     for(int32_t y = 0; y < h; y++) {
-        /* Reverse Y coordinate */
+        /* Обратная координата Y */
         void * row = lv_draw_buf_goto_xy(draw_buf, 0, h - 1 - y);
         LV_PROFILER_DRAW_BEGIN_TAG("glReadPixels");
         glReadPixels(0, y, w, 1, format, type, row);
@@ -322,10 +322,10 @@ static void on_layer_readback(lv_draw_nanovg_unit_t * u, lv_layer_t * layer)
         }
     }
 
-    /* Bind back to default framebuffer */
+    /* Привязать обратно к фреймбуферу по умолчанию */
     nvgluBindFramebuffer(NULL);
 
-    /* Mark draw_buf as modified */
+    /* Отметить draw_buf как измененный */
     lv_draw_buf_flush_cache(draw_buf, NULL);
 
     LV_PROFILER_DRAW_END;
@@ -363,7 +363,7 @@ static int32_t draw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 
     t->state = LV_DRAW_TASK_STATE_FINISHED;
 
-    /*The draw unit is free now. Request a new dispatching as it can get a new task*/
+    /*Блок рисования теперь бесплатен. Запросите новую диспетчеризацию, так как она может получить новую задачу*/
     lv_draw_dispatch_request();
 
     return 1;
@@ -394,12 +394,12 @@ static int32_t draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
             break;
 
         default:
-            /*The draw unit is not able to draw this task. */
+            /*Блок рисования не может выполнить эту задачу. */
             return 0;
     }
 
     if(task->preference_score > 80) {
-        /* The draw unit is able to draw this task. */
+        /* Блок рисования способен нарисовать эту задачу. */
         task->preference_score = 80;
         task->preferred_draw_unit_id = NANOVG_DRAW_UNIT_ID;
     }
@@ -432,7 +432,7 @@ static void draw_event_cb(lv_event_t * e)
             lv_nanovg_clean_up(u);
             break;
         case LV_EVENT_CHILD_CREATED: {
-                /* The internal rendering uses RGBA format, which is switched to LVGL BGRA format during readback. */
+                /* Внутренний рендеринг использует формат RGBA, который при обратном чтении переключается на формат LVGL BGRA. */
                 lv_cache_entry_t * entry = lv_nanovg_fbo_cache_get(u, lv_area_get_width(&layer->buf_area),
                                                                    lv_area_get_height(&layer->buf_area), 0, NVG_TEXTURE_RGBA);
                 layer->user_data = entry;
@@ -446,8 +446,8 @@ static void draw_event_cb(lv_event_t * e)
                 }
 
                 /**
-                 * Clear current_layer if it's being deleted, so next dispatch
-                 * will properly call on_layer_changed even if layer address is reused
+                 * Очистите current_layer, если он удаляется, поэтому следующая отправка
+                 * будет правильно вызывать on_layer_changed, даже если адрес слоя используется повторно
                  */
                 if(u->current_layer == layer) {
                     u->current_layer = NULL;

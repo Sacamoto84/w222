@@ -6,12 +6,12 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_display_set_color_format(NULL, LV_COLOR_FORMAT_XRGB8888);
 }
 
@@ -34,7 +34,7 @@ void test_render_to_i1(void)
         }
     }
 #else
-    /*Without LV_BIN_DECODER_RAM_LOAD can't test rotated images*/
+    /*Без LV_BIN_DECODER_RAM_LOAD невозможно тестировать повернутые изображения.*/
     TEST_PASS();
 #endif
 }

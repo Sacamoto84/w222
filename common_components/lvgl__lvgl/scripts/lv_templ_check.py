@@ -46,18 +46,18 @@ instead, has:
 
 guard_help_f = """\
 '{0}' should have include guards like:
-    #ifndef {1}
-    #define {1}
+    #еслиndef {1}
+    #определить {1}
     ...
-    #endif /*{1}*/
+    #конециф /*{1}*/
 instead, has:
-    #ifndef {2}
-    #define {3}
+    #еслиndef {2}
+    #определить {3}
     ...
-    #endif /*{4}*/
+    #конециф /*{4}*/
 """
 
-# regex, arg parsing and other stuff skipped here.
+# регулярное выражение, анализ аргументов и другие вещи здесь пропущены.
 
 def ignore_file(basename):
     result = False

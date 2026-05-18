@@ -1,8 +1,8 @@
 /**
  * @file lv_blend_riscv_v_private.h
- * Common macros and utilities for RISC-V Vector Extension (RVV 1.0) blend operations
+ * Общие макросы и утилиты для операций смешивания RISC -V Vector Extension (RVV 1.0).
  *
- * This header provides reusable RVV macros for:
+ * Этот заголовок предоставляет повторно используемые макросы RVV для:
  * - Segmented load/store operations (RGB888/XRGB8888/RGB565)
  * - Alpha blending with scalar or vector alpha
  * - Color format conversions (RGB565 <-> RGB888)
@@ -23,11 +23,11 @@ extern "C" {
 #include "../../../../lv_conf_internal.h"
 #if LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_RISCV_V
 
-/* Try to use real RVV, fall back to emulation if not available */
+/* Попробуйте использовать настоящий RVV, вернитесь к эмуляции, если она недоступна. */
 #ifdef __riscv_v
 #include <riscv_vector.h>
 #else
-/* No real RVV available, use emulation */
+/* Настоящего RVV нет, используйте эмуляцию. */
 #include "lv_blend_riscv_vector_emulation.h"
 #endif
 
@@ -38,8 +38,8 @@ extern "C" {
 /**********************
  *  RVV SEGMENTED LOAD/STORE MACROS
  *
- *  Emulate segmented load/store using stride operations.
- *  Compatible with compilers that don't support RVV 1.0 tuple types.
+ *  Эмулируйте сегментированную загрузку/сохранение с помощью операций шага.
+ *  Совместим с компиляторами, которые не поддерживают типы кортежей RVV 1.0.
  **********************/
 
 /* RGB888: 3 channels (B,G,R) with stride=3 */
@@ -57,7 +57,7 @@ extern "C" {
         __riscv_vsse8_v_u8m2((base) + 2, 3, (v_r), (vl)); \
     } while(0)
 
-/* XRGB8888/ARGB8888: 4 channels (B,G,R,X) with stride=4 */
+/* XRGB8888 / ARGB8888: 4 канала (B,G,R,X) с шагом = 4. */
 #define LV_RVV_VLSEG4E8_U8M2(base, vl, v_b, v_g, v_r, v_x) \
     do { \
         (v_b) = __riscv_vlse8_v_u8m2((base) + 0, 4, (vl)); \
@@ -77,14 +77,14 @@ extern "C" {
 /**********************
  *  RGB565 <-> RGB888 CONVERSION MACROS
  *
- *  RGB565 format: RRRRRGGGGGGBBBBB (5-6-5 bits)
- *  Conversion formulas:
+ *  Формат RGB565: RRRRRGGGGGGBBBBB (5-6-5 бит)
+ *  Формулы преобразования:
  *    R8 = (R5 * 2106) >> 8   (2106 ≈ 255/31 * 256)
  *    G8 = (G6 * 1037) >> 8   (1037 ≈ 255/63 * 256)
  *    B8 = (B5 * 2106) >> 8
  **********************/
 
-/* Extract and convert RGB565 to separate R8, G8, B8 channels (16-bit width) */
+/* Извлечение и преобразование RGB565 в отдельные каналы R8, G8, B8 (ширина 16 бит) */
 #define LV_RVV_RGB565_TO_RGB888_U16M2(v_rgb565, v_r8, v_g8, v_b8, vl) \
     do { \
         vuint16m2_t _r5 = __riscv_vand_vx_u16m2(__riscv_vsrl_vx_u16m2((v_rgb565), 11, (vl)), 0x1F, (vl)); \
@@ -95,7 +95,7 @@ extern "C" {
         (v_b8) = __riscv_vsrl_vx_u16m2(__riscv_vmul_vx_u16m2(_b5, 2106, (vl)), 8, (vl)); \
     } while(0)
 
-/* Convert R8, G8, B8 to RGB565 (16-bit) */
+/* Преобразовать R8 , G8 , B8 в RGB565 (16-битный) */
 #define LV_RVV_RGB888_TO_RGB565_U16M2(v_r8, v_g8, v_b8, v_rgb565, vl) \
     do { \
         vuint16m2_t _r5 = __riscv_vsrl_vx_u16m2((v_r8), 3, (vl)); \
@@ -108,19 +108,19 @@ extern "C" {
 /**********************
  *  ALPHA BLENDING MACROS
  *
- *  Standard blend formula: result = (src * alpha + dst * (255 - alpha)) >> 8
+ *  Стандартная формула смешивания: результат = (src * альфа + dst * (255 - альфа)) >> 8
  *
- *  Using vwmaccu (widening multiply-accumulate unsigned):
+ *  Использование vwmaccu (расширение умножения-накопления без знака):
  *    tmp = dst * (255 - alpha)           // Initialize with dst contribution
  *    tmp = tmp + src * alpha             // vwmaccu adds src contribution
  *    result = tmp >> 8
  *
- *  This reduces operations by combining multiply and add.
+ *  Это сокращает количество операций за счет комбинирования умножения и сложения.
  **********************/
 
 /**
- * Blend single channel using vwmaccu (8-bit src/dst -> 16-bit intermediate)
- * LMUL relationship: m1 -> m2, m2 -> m4
+ * Смешайте один канал с помощью vwmaccu (8-битный src/dst -> 16-битный промежуточный)
+ * Связь LMUL: m1 -> m2, m2 -> m4
  */
 #define LV_RVV_BLEND_CHANNEL_U8M1_TO_U16M2(v_src, v_dst, alpha, v_result, vl) \
     do { \
@@ -139,7 +139,7 @@ extern "C" {
     } while(0)
 
 /**
- * Blend single channel with vector alpha (per-pixel mask)
+ * Смешайте одиночный канал с векторной альфа-каналом (попиксельная маска)
  */
 #define LV_RVV_BLEND_CHANNEL_VMASK_U8M1_TO_U16M2(v_src, v_dst, v_alpha, v_result, vl) \
     do { \
@@ -158,8 +158,8 @@ extern "C" {
     } while(0)
 
 /**
- * Blend RGB channels with scalar alpha (all 3 channels at once)
- * Uses m1->m2 widening
+ * Смешайте каналы RGB со скалярной альфой (все 3 канала одновременно)
+ * Использует расширение m1->m2
  */
 #define LV_RVV_BLEND_RGB_U8M1(v_src_r, v_src_g, v_src_b, v_dst_r, v_dst_g, v_dst_b, \
                               alpha, v_out_r, v_out_g, v_out_b, vl) \
@@ -170,8 +170,8 @@ do { \
 } while(0)
 
 /**
- * Blend RGB channels with scalar alpha (all 3 channels at once)
- * Uses m2->m4 widening
+ * Смешайте каналы RGB со скалярной альфой (все 3 канала одновременно)
+ * Использует расширение m2->m4
  */
 #define LV_RVV_BLEND_RGB_U8M2(v_src_r, v_src_g, v_src_b, v_dst_r, v_dst_g, v_dst_b, \
                               alpha, v_out_r, v_out_g, v_out_b, vl) \
@@ -182,11 +182,11 @@ do { \
 } while(0)
 
 /**
- * Blend solid color (pre-multiplied) with destination RGB channels
+ * Смешайте сплошной цвет (предварительно умноженный) с целевыми каналами RGB.
  * fg_color_opa: pre-computed (color * opa) for each channel
  * opa_inv: 255 - opa
  * Formula: result = (dst * opa_inv + fg_color_opa) >> 8
- * Uses m2->m4 widening
+ * Использует расширение m2->m4
  */
 #define LV_RVV_BLEND_SOLID_RGB_U8M2(v_dst_r, v_dst_g, v_dst_b, \
                                     fg_r_opa, fg_g_opa, fg_b_opa, opa_inv, \
@@ -204,11 +204,11 @@ do { \
 } while(0)
 
 /**
- * Blend solid color (scalar) with destination RGB channels using vector alpha mask
- * fg_r/g/b: foreground color scalar values
+ * Смешайте сплошной цвет (скаляр) с целевыми каналами RGB, используя векторную альфа-маску.
+ * fg_r /g/b: скалярные значения цвета переднего плана.
  * v_alpha: per-pixel alpha values (vuint8m2_t)
  * Formula: result = (fg * alpha + dst * (255 - alpha)) >> 8
- * Uses m2->m4 widening with vwmaccu for efficiency
+ * Для повышения эффективности используется расширение m2->m4 с помощью vwmaccu.
  */
 #define LV_RVV_BLEND_SOLID_RGB_VMASK_U8M2(v_dst_r, v_dst_g, v_dst_b, \
                                           fg_r, fg_g, fg_b, v_alpha, \
@@ -227,7 +227,7 @@ do { \
 } while(0)
 
 /**
- * Blend RGB channels with vector alpha (per-pixel mask)
+ * Смешение каналов RGB с векторной альфа-каналом (попиксельная маска)
  */
 #define LV_RVV_BLEND_RGB_VMASK_U8M1(v_src_r, v_src_g, v_src_b, v_dst_r, v_dst_g, v_dst_b, \
                                     v_alpha, v_out_r, v_out_g, v_out_b, vl) \
@@ -238,8 +238,8 @@ do { \
 } while(0)
 
 /**
- * Optimize blend results for zero and full mask cases (u8m1)
- * When mask is 0, use destination; when mask is >= 255, use source
+ * Оптимизация результатов смешивания для случаев нулевой и полной маски (u8m1)
+ * Если маска равна 0, используйте пункт назначения; когда маска >= 255, используйте источник
  */
 #define LV_RVV_BLEND_OPTIMIZE_MASK_U8M1(v_r, v_g, v_b, v_src_r, v_src_g, v_src_b, \
                                         v_dst_r, v_dst_g, v_dst_b, v_mask, vl) \
@@ -255,8 +255,8 @@ do { \
 } while(0)
 
 /**
- * Optimize blend results for zero and full mask cases (u8m2) with scalar source
- * When mask is 0, use destination; when mask is >= 255, use scalar source
+ * Оптимизация результатов смешивания для случаев нулевой и полной маски (u8m2) со скалярным источником
+ * Если маска равна 0, используйте пункт назначения; когда маска >= 255, используйте скалярный источник
  */
 #define LV_RVV_BLEND_OPTIMIZE_MASK_SCALAR_U8M2(v_r, v_g, v_b, src_r, src_g, src_b, \
                                                v_dst_r, v_dst_g, v_dst_b, v_mask, vl) \
@@ -274,17 +274,17 @@ do { \
 /**********************
  *  EFFECTIVE ALPHA CALCULATION MACROS
  *
- *  These macros compute the effective alpha from combinations of:
+ *  Эти макросы вычисляют эффективную альфу на основе комбинаций:
  *    - v_alpha: source alpha channel (per-pixel)
  *    - mask: mask value (per-pixel)
  *    - opa: global opacity (scalar)
  *
  *  Formula: eff_alpha = (alpha * mask * opa) >> 16
- *  Intermediate calculations use 16-bit to prevent overflow.
+ *  В промежуточных вычислениях используется 16-битная разрядность, чтобы предотвратить переполнение.
  **********************/
 
 /**
- * Calculate effective alpha from source alpha and global opa
+ * Рассчитайте эффективную альфу на основе исходной альфа и глобальной opa.
  */
 #define LV_RVV_CALC_EFF_ALPHA_OPA_U8M1(v_src_a, opa, v_eff_a, vl) \
     do { \
@@ -294,7 +294,7 @@ do { \
     } while(0)
 
 /**
- * Calculate effective alpha from source alpha and mask
+ * Рассчитайте эффективную альфу на основе исходной альфа и маски.
  */
 #define LV_RVV_CALC_EFF_ALPHA_MASK_U8M1(v_src_a, v_mask, v_eff_a, vl) \
     do { \
@@ -305,9 +305,9 @@ do { \
     } while(0)
 
 /**
- * Calculate effective alpha from source alpha, mask, and global opa
+ * Рассчитайте эффективную альфу на основе исходной альфа, маски и глобальной прозрачности.
  * Formula: eff_alpha = (alpha * mask * opa) >> 16
- * Widen to u32m4 to avoid precision loss from double shift
+ * Расширьте до u32m4, чтобы избежать потери точности из-за двойной смены.
  */
 #define LV_RVV_CALC_EFF_ALPHA_MASK_OPA_U8M1(v_src_a, v_mask, opa, v_eff_a, vl) \
     do { \
@@ -320,9 +320,9 @@ do { \
     } while(0)
 
 /**********************
- *  RGB/ARGB CHANNEL LOAD/STORE MACROS (for ARGB8888/RGB888/XRGB8888)
+ *  RGB / ARGB CHANNEL LOAD / STORE MACROS (для ARGB8888 / RGB888 / XRGB8888)
  *
- *  Load/Store RGB channels to/from memory in different formats using m1 LMUL.
+ *  Загружайте/сохраняйте каналы RGB в/из памяти в разных форматах с помощью m1 LMUL.
  **********************/
 
 #define LV_RVV_LOAD_ARGB8888_U8M1(ptr, x, v_b, v_g, v_r, v_a, vl) \
@@ -390,7 +390,7 @@ static inline void * LV_ATTRIBUTE_FAST_MEM drawbuf_next_row(const void * buf, ui
 #endif
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_BLEND_RISCV_V_PRIVATE_H*/

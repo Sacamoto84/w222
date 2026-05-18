@@ -12,16 +12,16 @@ static void column_gap_anim(void * obj, int32_t v)
 }
 
 /**
- * Demonstrate column and row gap
+ * Демонстрация разрыва в столбце и строке
  */
 void lv_example_grid_5(void)
 {
 
-    /*60x60 cells*/
+    /*60х60 ячеек*/
     static int32_t col_dsc[] = {60, 60, 60, LV_GRID_TEMPLATE_LAST};
     static int32_t row_dsc[] = {45, 45, 45, LV_GRID_TEMPLATE_LAST};
 
-    /*Create a container with grid*/
+    /*Создать контейнер с сеткой*/
     lv_obj_t * cont = lv_obj_create(lv_screen_active());
     lv_obj_set_size(cont, 300, 220);
     lv_obj_center(cont);

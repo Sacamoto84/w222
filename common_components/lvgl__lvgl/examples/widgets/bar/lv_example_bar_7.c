@@ -2,7 +2,7 @@
 #if LV_USE_BAR && LV_BUILD_EXAMPLES
 
 /**
- * Bar with opposite direction
+ * Бар с противоположным направлением
  */
 void lv_example_bar_7(void)
 {

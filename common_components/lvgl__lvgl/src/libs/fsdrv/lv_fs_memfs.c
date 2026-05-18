@@ -1,39 +1,39 @@
 /**
  * @file lv_fs_memfs.c
  *
- * File System Interface driver for memory-mapped files
+ * Драйвер интерфейса файловой системы для файлов, отображенных в памяти.
  *
- * This driver allows using a memory area as a file that can be read by normal file operations. It can
- * be used, e.g., to store font files in slow flash memory, and load them into RAM on demand.
+ * Этот драйвер позволяет использовать область памяти как файл, который может быть прочитан обычными файловыми операциями. Это может
+ * использоваться, например, для хранения файлов шрифтов в медленной флэш-памяти и загрузки их в RAM по требованию.
  *
- * You can enable it in lv_conf.h:
+ * Вы можете включить его в lv_conf.h:
  *
  * #define LV_USE_FS_MEMFS 1
  *
- * The actual implementation uses the built-in cache mechanism of the file system interface.
+ * Фактическая реализация использует встроенный механизм кэширования интерфейса файловой системы.
  *
- * Since this is not an actual file system, file write and directories are not supported.
+ * Поскольку это не настоящая файловая система, запись в файлы и каталоги не поддерживаются.
  *
- * The default drive letter is 'M', but this can be changed in lv_conf.h:
+ * Буква диска по умолчанию — «M», но ее можно изменить в lv_conf.h:
  *
- * #define LV_FS_MEMFS_LETTER 'M'
+ * #define LV_FS_MEMFS_LETTER 'М'
  *
- * To use it seamlessly with the file system interface a new extended path object has been introduced:
+ * Чтобы беспрепятственно использовать его с интерфейсом файловой системы, был введен новый объект расширенного пути:
  *
- * lv_fs_path_ex_t mempath;
+ * lv_fs_path_ex_t мемпат;
  *
- * This structure can be initialized with the helper function:
+ * Эту структуру можно инициализировать с помощью вспомогательной функции:
  *
- * lv_fs_make_path_ex(&mempath, (const uint8_t *) & my_mem_buffer, sizeof(my_mem_buffer));
+ * lv_fs_make_path_ex (&mempath, (const uint8_t *) & my_mem_buffer , sizeof( my_mem_buffer ));
  *
- * Then the "file" can be opened with:
+ * Затем «файл» можно открыть с помощью:
  *
- * lv_fs_file_t file;
- * lv_fs_res_t res = lv_fs_open(&file, (const char *) & mempath, LV_FS_MODE_RD);
+ * файл lv_fs_file_t;
+ * lv_fs_res_t res = lv_fs_open (&file, (const char *) & mempath, LV_FS_MODE_RD );
  *
- * The path object can be used at any place where a file path is required, e.g.:
+ * Объект пути можно использовать в любом месте, где требуется путь к файлу, например:
  *
- * lv_font_t* my_font = lv_binfont_create((const char *) & mempath);
+ * lv_font_t * my_font = lv_binfont_create ((const char *) & mempath);
  *
  */
 
@@ -70,7 +70,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p);
  *  STATIC VARIABLES
  **********************/
 
-static lv_fs_drv_t fs_drv; /*A driver descriptor*/
+static lv_fs_drv_t fs_drv; /*Дескриптор драйвера*/
 
 /**********************
  *      MACROS
@@ -81,17 +81,17 @@ static lv_fs_drv_t fs_drv; /*A driver descriptor*/
  **********************/
 
 /**
- * Register a driver for the File system interface
+ * Зарегистрируйте драйвер для интерфейса файловой системы.
  */
 void lv_fs_memfs_init(void)
 {
     /*---------------------------------------------------
-     * Register the file system interface in LVGL
+     * Зарегистрируйте интерфейс файловой системы в LVGL.
      *--------------------------------------------------*/
 
     lv_fs_drv_init(&fs_drv);
 
-    /*Set up fields...*/
+    /*Настроить поля...*/
     fs_drv.letter = LV_FS_MEMFS_LETTER;
     fs_drv.cache_size = LV_FS_CACHE_FROM_BUFFER;
 
@@ -114,7 +114,7 @@ void lv_fs_memfs_init(void)
  **********************/
 
 /**
- * Open a file
+ * Открыть файл
  * @param drv   pointer to a driver where this function belongs
  * @param path  pointer to an extended path object containing the memory buffer address and size
  * @param mode  read: FS_MODE_RD (currently only reading from the buffer is supported)
@@ -128,11 +128,11 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 }
 
 /**
- * Close an opened file
+ * Закрыть открытый файл
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable. (opened with fs_open)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 {
@@ -142,14 +142,14 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 }
 
 /**
- * Read data from an opened file
+ * Чтение данных из открытого файла
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable.
  * @param buf       pointer to a memory block where to store the read data
  * @param btr       number of Bytes To Read
  * @param br        the real number of read bytes (Byte Read)
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
 {
@@ -162,12 +162,12 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 }
 
 /**
- * Set the read pointer.
+ * Установите указатель чтения.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable. (opened with fs_open )
  * @param pos       the new position of read pointer
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
@@ -196,12 +196,12 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 }
 
 /**
- * Give the position of the read write pointer
+ * Укажите положение указателя чтения и записи.
  * @param drv       pointer to a driver where this function belongs
  * @param file_p    pointer to a FILE variable
  * @param pos_p     pointer to store the result
  * @return LV_FS_RES_OK: no error, the file is read
- *         any error from lv_fs_res_t enum
+ *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 {

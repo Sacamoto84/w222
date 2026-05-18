@@ -31,14 +31,14 @@ if __name__ == '__main__':
     with open(args.log_file, 'r') as f:
         content = f.read()
 
-    # compile regex pattern
+    # скомпилировать шаблон регулярного выражения
     pattern = re.compile(r'(^.+-[0-9]+\s\[[0-9]]\s[0-9]+\.[0-9]+:\s('
                          + "|".join(MARK_LIST)
                          + r'):\s[B|E]\|[0-9]+\|.+$)', re.M)
 
     matches = pattern.findall(content)
 
-    # write to args.trace_file
+    # напишите в args.  trace_file
     with open(args.trace_file, 'w') as f:
         f.write('# tracer: nop\n#\n')
         for match in matches:

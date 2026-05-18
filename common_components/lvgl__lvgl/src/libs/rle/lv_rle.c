@@ -51,7 +51,7 @@ uint32_t lv_rle_decompress(const uint8_t * input,
             return 0;
 
         if(ctrl_byte & 0x80) {
-            /* copy directly from input to output */
+            /* копировать напрямую со входа на выход */
             uint32_t bytes = blk_size * (ctrl_byte & 0x7f);
             rd_len += bytes;
             if(rd_len > input_buff_len)
@@ -60,7 +60,7 @@ uint32_t lv_rle_decompress(const uint8_t * input,
             wr_len += bytes;
             if(wr_len > output_buff_len) {
                 if(wr_len > output_buff_len + blk_size)
-                    return 0; /* Error */
+                    return 0; /* Ошибка */
                 lv_memcpy(output, input, output_buff_len - (wr_len - bytes));
                 return output_buff_len;
             }
@@ -77,9 +77,9 @@ uint32_t lv_rle_decompress(const uint8_t * input,
             wr_len += blk_size * ctrl_byte;
             if(wr_len > output_buff_len) {
                 if(wr_len > output_buff_len + blk_size)
-                    return 0; /* Error happened */
+                    return 0; /* Произошла ошибка */
 
-                /* Skip the last pixel, which could overflow output buffer.*/
+                /* Пропустить последний пиксель, который может переполнить выходной буфер.*/
                 for(uint32_t i = 0; i < ctrl_byte - 1; i++) {
                     lv_memcpy(output, input, blk_size);
                     output += blk_size;
@@ -88,7 +88,7 @@ uint32_t lv_rle_decompress(const uint8_t * input,
             }
 
             if(blk_size == 1) {
-                /* optimize the most common case. */
+                /* оптимизировать наиболее распространенный случай. */
                 lv_memset(output, input[0], ctrl_byte);
                 output += ctrl_byte;
             }

@@ -12,14 +12,14 @@ lv_obj_t * sw = NULL;
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
     scr = lv_screen_active();
     sw = lv_switch_create(scr);
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     value_changed_event_cnt = 0;
 }
 
@@ -69,9 +69,9 @@ void test_switch_animation(void)
     lv_switch_t * anim_sw = (lv_switch_t *) sw;
     int32_t initial_anim_state = anim_sw->anim_state;
 
-    /* Trigger animation */
+    /* Триггерная анимация */
     mouse_click_on_switch();
-    /* Wait some time  */
+    /* Подожди немного  */
     lv_test_wait(50);
 
     int32_t checked_anim_state = anim_sw->anim_state;
@@ -106,13 +106,13 @@ void test_switch_should_update_extra_draw_size_after_editing_padding(void)
     lv_obj_add_style(sw, &style_knob, LV_PART_KNOB);
     lv_obj_center(sw);
 
-    /* Get extra draw size */
+    /* Получите дополнительный размер розыгрыша */
     actual = lv_obj_get_ext_draw_size(sw);
 
     TEST_ASSERT_EQUAL(expected, actual);
 }
 
-/* See #2330 for context */
+/* См. #2330 для контекста. */
 void test_switch_should_trigger_value_changed_event_only_once(void)
 {
     lv_obj_add_event_cb(sw, event_handler, LV_EVENT_ALL, NULL);
@@ -121,7 +121,7 @@ void test_switch_should_trigger_value_changed_event_only_once(void)
     TEST_ASSERT_EQUAL(1, value_changed_event_cnt);
 }
 
-/* See #2785 for context */
+/* См. #2785 для контекста. */
 void test_switch_should_state_change_when_event_bubbling_is_enabled(void)
 {
     lv_obj_add_flag(sw, LV_OBJ_FLAG_EVENT_BUBBLE);
@@ -156,7 +156,7 @@ void test_screeshots(void)
     lv_obj_add_state(sw, LV_STATE_CHECKED);
     lv_obj_set_size(sw, 50, 100);
 
-    lv_test_wait(1000); /*Wait for the transitions*/
+    lv_test_wait(1000); /*Ждите переходов*/
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/switch_1.png");
 }
@@ -167,7 +167,7 @@ void test_switch_properties(void)
     lv_obj_t * obj = lv_switch_create(lv_screen_active());
     lv_property_t prop = { };
 
-    /* Test ORIENTATION property */
+    /* Тестирование свойства ORIENTATION */
     prop.id = LV_PROPERTY_SWITCH_ORIENTATION;
     prop.num = LV_SWITCH_ORIENTATION_VERTICAL;
     TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);

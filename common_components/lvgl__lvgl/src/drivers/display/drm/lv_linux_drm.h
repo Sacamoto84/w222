@@ -30,7 +30,7 @@ extern "C" {
 typedef drmModeModeInfo lv_linux_drm_mode_t;
 
 /**
- * Callback function type for selecting a DRM display mode
+ * Тип функции обратного вызова для выбора режима отображения DRM
  * @param disp pointer to the display object
  * @param modes array of available DRM modes
  * @param mode_count number of modes in the array
@@ -47,8 +47,8 @@ typedef size_t (*lv_linux_drm_select_mode_cb_t)(lv_display_t * disp,
 /**
  * @brief Create a new Linux DRM display
  *
- * Creates and initializes a new LVGL display using the Linux DRM (Direct Rendering Manager)
- * subsystem for hardware-accelerated graphics output.
+ * Создает и инициализирует новый дисплей LVGL с помощью Linux DRM (Direct Rendering Manager).
+ * подсистема вывода графики с аппаратным ускорением.
  *
  * @return Pointer to the created display object, or NULL on failure
  */
@@ -57,9 +57,9 @@ lv_display_t * lv_linux_drm_create(void);
 /**
  * @brief Configure the DRM device file and connector for a display
  *
- * Sets the DRM device file path and connector ID to use for the specified display.
- * The DRM device file is typically located at /dev/dri/cardN where N is the card number.
- * The connector ID specifies which physical output (HDMI, VGA, etc.) to use.
+ * Задает путь к файлу устройства DRM и разъем ID, которые будут использоваться для указанного дисплея.
+ * Файл устройства DRM обычно находится в каталоге /dev/dri/cardN, где N — номер карты.
+ * Разъем ID указывает, какой физический выход (HDMI, VGA и т. д.) использовать.
  *
  * @param disp         Pointer to the display object created with lv_linux_drm_create()
  * @param file         Path to the DRM device file (e.g., "/dev/dri/card0")
@@ -71,48 +71,48 @@ lv_result_t lv_linux_drm_set_file(lv_display_t * disp, const char * file, int64_
 /**
  * @brief Automatically find a suitable DRM device path
  *
- * Scans the system for available DRM devices and returns the path to a suitable
- * device file that can be used with lv_linux_drm_set_file().
+ * Сканирует систему на наличие доступных устройств DRM и возвращает путь к подходящему
+ * файл устройства, который можно использовать с lv_linux_drm_set_file ().
  *
  * @return Dynamically allocated string containing the device path (must be freed with lv_free()),
- *         or NULL if no suitable device is found
+ *         или NULL, если подходящее устройство не найдено
  */
 char * lv_linux_drm_find_device_path(void);
 
 /**
- * Set a callback function for custom DRM mode selection to override the default mode selection behavior
+ * Установите функцию обратного вызова для выбора пользовательского режима DRM, чтобы переопределить поведение выбора режима по умолчанию.
  *
- * The default mode selection behavior is selecting the native mode
+ * Поведение выбора режима по умолчанию — выбор собственного режима.
  *
  * @param disp pointer to the display object
  * @param callback function to be called when a display mode needs to be selected,
- *                 or NULL to use the default mode selection behavior
+ *                 или NULL, чтобы использовать поведение выбора режима по умолчанию.
  */
 void lv_linux_drm_set_mode_cb(lv_display_t * disp, lv_linux_drm_select_mode_cb_t callback);
 
 /**
- * Get the horizontal resolution of a DRM mode
+ * Получите горизонтальное разрешение режима DRM.
  * @param mode pointer to the DRM mode object
  * @return horizontal resolution in pixels, or 0 if mode is invalid
  */
 int32_t lv_linux_drm_mode_get_horizontal_resolution(const lv_linux_drm_mode_t * mode);
 
 /**
- * Get the vertical resolution of a DRM mode
+ * Получите вертикальное разрешение режима DRM.
  * @param mode pointer to the DRM mode object
  * @return vertical resolution in pixels, or 0 if mode is invalid
  */
 int32_t lv_linux_drm_mode_get_vertical_resolution(const lv_linux_drm_mode_t * mode);
 
 /**
- * Get the refresh rate of a DRM mode
+ * Получите частоту обновления режима DRM.
  * @param mode pointer to the DRM mode object
  * @return refresh rate in Hz, or 0 if mode is invalid
  */
 int32_t lv_linux_drm_mode_get_refresh_rate(const lv_linux_drm_mode_t * mode);
 
 /**
- * Check if a DRM mode is the preferred mode for the display
+ * Проверьте, является ли режим DRM предпочтительным режимом для дисплея.
  * @param mode pointer to the DRM mode object
  * @return true if this is the preferred/native mode, false otherwise
  */
@@ -125,7 +125,7 @@ bool lv_linux_drm_mode_is_preferred(const lv_linux_drm_mode_t * mode);
 #endif /* LV_USE_LINUX_DRM */
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /* LV_LINUX_DRM_H */

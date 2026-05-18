@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Size: 14 px
- * Bpp: 4
+ * Размер: 14 пикселей
+ * Бпп: 4
  * Opts: --no-compress --no-prefilter --bpp 4 --size 14 --font SourceHanSansSC-Normal.otf -r 0x20-0x7f --symbols （），盗提陽帯鼻画輕ッ冊ェル写父ぁフ結想正四O夫源庭場天續鳥れ講猿苦階給了製守8祝己妳薄泣塩帰ぺ吃変輪那着仍嗯爭熱創味保字宿捨準查達肯ァ薬得査障該降察ね網加昼料等図邪秋コ態品屬久原殊候路願楽確針上被怕悲風份重歡っ附ぷ既4黨價娘朝凍僅際洋止右航よ专角應酸師個比則響健昇豐筆歷適修據細忙跟管長令家ザ期般花越ミ域泳通些油乏ラ。營ス返調農叫樹刊愛間包知把ヤ貧橋拡普聞前ジ建当繰ネ送習渇用補ィ覺體法遊宙ョ酔余利壊語くつ払皆時辺追奇そ們只胸械勝住全沈力光ん深溝二類北面社值試9和五勵ゃ貿幾逐打課ゲて領3鼓辦発評１渉詳暇込计駄供嘛郵頃腦反構絵お容規借身妻国慮剛急乗静必議置克土オ乎荷更肉還混古渡授合主離條値決季晴東大尚央州が嗎験流先医亦林田星晩拿60旅婦量為痛テ孫う環友況玩務其ぼち揺坐一肩腰犯タょ希即果ぶ物練待み高九找やヶ都グ去」サ、气仮雑酒許終企笑録形リ銀切ギ快問滿役単黄集森毎實研喜蘇司鉛洲川条媽ノ才兩話言雖媒出客づ卻現異故り誌逮同訊已視本題ぞを横開音第席費持眾怎選元退限ー賽処喝就残無いガ多ケ沒義遠歌隣錢某雪析嬉採自透き側員予ゼ白婚电へ顯呀始均畫似懸格車騒度わ親店週維億締慣免帳電甚來園浴ゅ愈京と杯各海怒ぜ排敗挙老買7極模実紀ヒ携隻告シ並屋這孩讓質ワブ富賃争康由辞マ火於短樣削弟材注節另室ダ招擁ぃ若套底波行勤關著泊背疲狭作念推ぐ民貸祖介說ビ代温契你我レ入描變再札ソ派頭智遅私聽舉灣山伸放直安ト誕煙付符幅ふ絡她届耳飲忘参革團仕様載ど歩獲嫌息の汚交興魚指資雙與館初学年幸史位柱族走括び考青也共腕Lで販擔理病イ今逃當寺猫邊菓係ム秘示解池影ド文例斷曾事茶寫明科桃藝売便え導禁財飛替而亡到し具空寝辛業ウ府セ國何基菜厳市努張缺雲根外だ断万砂ゴ超使台实ぽ礼最慧算軟界段律像夕丈窓助刻月夏政呼ぴざ擇趣除動従涼方勉名線対存請子氏將5少否諸論美感或西者定食御表は參歳緑命進易性錯房も捕皿判中觀戦ニ緩町ピ番ず金千ろ?不た象治関ャ每看徒卒統じ手範訪押座步号ベ旁以母すほ密減成往歲件緒読歯效院种七謂凝濃嵌震喉繼クュ拭死円2積水欲如ポにさ寒道區精啦姐ア聯能足及停思壓２春且メ裏株官答概黒過氷柿戻厚ぱ党祭織引計け委暗複誘港バ失下村較続神ぇ尤強秀膝兒来績十書済化服破新廠1紹您情半式產系好教暑早め樂地休協良な哪常要揮周かエ麗境働避護ンツ香夜太見設非改広聲他検求危清彼經未在起葉控靴所差內造寄南望尺換向展備眠點完約ぎ裡分説申童優伝島机須塊日立拉,鉄軽單気信很転識支布数紙此迎受心輸坊モ處「訳三曇兄野顔戰增ナ伊列又髪両有取左毛至困吧昔赤狀相夠整別士経頼然簡ホ会發隨営需脱ヨば接永居冬迫圍甘醫誰部充消連弱宇會咲覚姉麼的増首统帶糖朋術商担移景功育庫曲總劃牛程駅犬報ロ學責因パ嚴八世後平負公げ曜陸專午之閉ぬ談ご災昨冷職悪謝對它近射敢意運船臉局難什産頗!球真記ま但蔵究制機案湖臺ひ害券男留内木驗雨施種特復句末濟キ色訴依せ百型る石牠討呢时任執飯歐宅組傳配小活ゆべ暖ズ漸站素らボ束価チ浅回女片独妹英目從認生違策僕楚ペ米こ掛む爸六状落漢プ投カ校做啊洗声探あ割体項履触々訓技ハ低工映是標速善点人デ口次可廿节宵植树端阳旦腊妇费愚劳动儿军师庆圣诞闰 --font FontAwesome5-Solid+Brands+Regular.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61507,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61641,61664,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650 --format lvgl -o lv_font_source_han_sans_sc_14_cjk.c --force-fast-kern-format
  ******************************************************************************/
 
@@ -20,7 +20,7 @@
  *    BITMAPS
  *----------------*/
 
-/*Store the image of the glyphs*/
+/*Сохраните изображение глифов*/
 static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
 
@@ -19141,7 +19141,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 50, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 70, .box_w = 3, .box_h = 11, .ofs_x = 1, .ofs_y = 0},
     {.bitmap_index = 17, .adv_w = 102, .box_w = 5, .box_h = 4, .ofs_x = 1, .ofs_y = 7},
@@ -20753,7 +20753,7 @@ static const uint16_t unicode_list_5[] = {
     0xce1d, 0xce22, 0xce23
 };
 
-/*Collect the unicode lists and glyph_id offsets*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
@@ -20786,7 +20786,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *----------------*/
 
 
-/*Map glyph_ids to kern left classes*/
+/*Сопоставьтеglyph_idsс левыми классами Керна*/
 static const uint8_t kern_left_class_mapping[] = {
     0, 0, 0, 1, 0, 0, 0, 0,
     1, 2, 0, 0, 0, 3, 4, 3,
@@ -20970,7 +20970,7 @@ static const uint8_t kern_left_class_mapping[] = {
     0, 0
 };
 
-/*Map glyph_ids to kern right classes*/
+/*Сопоставьтеglyph_idsс классами керна справа*/
 static const uint8_t kern_right_class_mapping[] = {
     0, 0, 1, 2, 0, 0, 0, 0,
     2, 0, 3, 4, 0, 5, 6, 7,
@@ -21154,7 +21154,7 @@ static const uint8_t kern_right_class_mapping[] = {
     0, 0
 };
 
-/*Kern values between classes*/
+/*Значения Керна между классами*/
 static const int8_t kern_class_values[] = {
     0, 0, 0, 0, -28, 0, -28, 0,
     0, 0, 0, -13, 0, -23, -2, 0,
@@ -23833,7 +23833,7 @@ static const int8_t kern_class_values[] = {
 };
 
 
-/*Collect the kern class' data in one place*/
+/*Соберите данные класса керна в одном месте*/
 static const lv_font_fmt_txt_kern_classes_t kern_classes = {
     .class_pair_values   = kern_class_values,
     .left_class_mapping  = kern_left_class_mapping,
@@ -23847,7 +23847,7 @@ static const lv_font_fmt_txt_kern_classes_t kern_classes = {
  *--------------------*/
 
 #if LV_VERSION_CHECK(8, 0, 0)
-/*Store all the custom data of the font*/
+/*Храните все пользовательские данные шрифта*/
 static  lv_font_fmt_txt_glyph_cache_t cache;
 static const lv_font_fmt_txt_dsc_t font_dsc = {
 #else
@@ -23872,16 +23872,16 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
  *  PUBLIC FONT
  *----------------*/
 
-/*Initialize a public general font descriptor*/
+/*Инициализировать общедоступный общий дескриптор шрифта*/
 #if LVGL_VERSION_MAJOR >= 8
 const lv_font_t lv_font_source_han_sans_sc_14_cjk = {
 #else
 lv_font_t lv_font_source_han_sans_sc_14_cjk = {
 #endif
-    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
-    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
-    .line_height = 17,          /*The maximum line height required by the font*/
-    .base_line = 4,             /*Baseline measured from the bottom of the line*/
+    .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Указатель функции для получения данных глифа*/
+    .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Указатель функции для получения растрового изображения глифа*/
+    .line_height = 17,          /*Максимальная высота строки, требуемая шрифтом*/
+    .base_line = 4,             /*Базовая линия измеряется от нижней части линии*/
 #if !(LVGL_VERSION_MAJOR == 6 && LVGL_VERSION_MINOR == 0)
     .subpx = LV_FONT_SUBPX_NONE,
 #endif
@@ -23889,7 +23889,7 @@ lv_font_t lv_font_source_han_sans_sc_14_cjk = {
     .underline_position = -2,
     .underline_thickness = 1,
 #endif
-    .dsc = &font_dsc           /*The custom font data. Will be accessed by `get_glyph_bitmap/dsc` */
+    .dsc = &font_dsc           /*Данные пользовательского шрифта. Будет доступен `get_glyph_bitmap/dsc` */
 };
 
 

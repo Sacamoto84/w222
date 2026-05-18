@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -31,7 +31,7 @@
 
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 #define KEY_AS(name) !strcmp(key, name)
@@ -97,7 +97,7 @@ RGB24 LottieParser::getColor(const char *str)
 
     auto len = strlen(str);
 
-    // some resource has empty color string, return a default color for those cases.
+    // какой-то ресурс имеет пустую строку цвета, для этих случаев верните цвет по умолчанию.
     if (len != 7 || str[0] != '#') return color;
 
     char tmp[3] = {'\0', '\0', '\0'};
@@ -185,8 +185,8 @@ void LottieParser::getValue(PathSet& path)
     Array<Point> outs, ins, pts;
     bool closed = false;
 
-    /* The shape object could be wrapped by a array
-       if its part of the keyframe object */
+    /* Объект формы может быть обернут массивом
+       если это часть объекта ключевого кадра */
     auto arrayWrapper = (peekType() == kArrayType) ? true : false;
     if (arrayWrapper) enterArray();
 
@@ -199,23 +199,23 @@ void LottieParser::getValue(PathSet& path)
         else skip(key);
     }
 
-    //exit properly from the array
+    //правильно выйти из массива
     if (arrayWrapper) nextArrayValue();
 
     //valid path data?
     if (ins.empty() || outs.empty() || pts.empty()) return;
     if (ins.count != outs.count || outs.count != pts.count) return;
 
-    //convert path
+    //конвертировать путь
     auto out = outs.begin();
     auto in = ins.begin();
     auto pt = pts.begin();
 
-    //Store manipulated results
+    //Храните обработанные результаты
     Array<Point> outPts;
     Array<PathCommand> outCmds;
 
-    //Reuse the buffers
+    //Повторное использование буферов
     outPts.data = path.pts;
     outPts.reserved = path.ptsCnt;
     outCmds.data = path.cmds;
@@ -281,7 +281,7 @@ void LottieParser::getValue(int8_t& val)
     if (peekType() == kArrayType) {
         enterArray();
         if (nextArrayValue()) val = getInt();
-        //discard rest
+        //отказаться от отдыха
         while (nextArrayValue()) getInt();
     } else {
         val = getFloat();
@@ -294,7 +294,7 @@ void LottieParser::getValue(uint8_t& val)
     if (peekType() == kArrayType) {
         enterArray();
         if (nextArrayValue()) val = (uint8_t)(getFloat() * 2.55f);
-        //discard rest
+        //отказаться от отдыха
         while (nextArrayValue()) getFloat();
     } else {
         val = (uint8_t)(getFloat() * 2.55f);
@@ -307,7 +307,7 @@ void LottieParser::getValue(float& val)
     if (peekType() == kArrayType) {
         enterArray();
         if (nextArrayValue()) val = getFloat();
-        //discard rest
+        //отказаться от отдыха
         while (nextArrayValue()) getFloat();
     } else {
         val = getFloat();
@@ -399,12 +399,12 @@ LottieInterpolator* LottieParser::getInterpolator(const char* key, Point& in, Po
 
     LottieInterpolator* interpolator = nullptr;
 
-    //get a cached interpolator if it has any.
+    //получить кэшированный интерполятор, если он есть.
     for (auto i = comp->interpolators.begin(); i < comp->interpolators.end(); ++i) {
         if (!strncmp((*i)->key, key, sizeof(buf))) interpolator = *i;
     }
 
-    //new interpolator
+    //новый интерполятор
     if (!interpolator) {
         interpolator = static_cast<LottieInterpolator*>(lv_malloc(sizeof(LottieInterpolator)));
         LV_ASSERT_MALLOC(interpolator);
@@ -447,8 +447,8 @@ void LottieParser::parseKeyFrame(T& prop)
         } else if (KEY_AS("s")) {
             getValue(frame.value);
         } else if (KEY_AS("e")) {
-            //current end frame and the next start frame is duplicated,
-            //We propagate the end value to the next frame to avoid having duplicated values.
+            //дублируется текущий конечный кадр и следующий начальный кадр,
+            //Мы распространяем конечное значение на следующий кадр, чтобы избежать дублирования значений.
             auto& frame2 = prop.nextFrame();
             getValue(frame2.value);
         } else if (parseTangent(key, frame)) {
@@ -466,19 +466,19 @@ void LottieParser::parseKeyFrame(T& prop)
 template<typename T>
 void LottieParser::parsePropertyInternal(T& prop)
 {
-    //single value property
+    //свойство с одним значением
     if (peekType() == kNumberType) {
         getValue(prop.value);
-    //multi value property
+    //многозначное свойство
     } else {
         //TODO: Here might be a single frame.
         //Can we figure out the frame number in advance?
         enterArray();
         while (nextArrayValue()) {
-            //keyframes value
+            //значение ключевых кадров
             if (peekType() == kObjectType) {
                 parseKeyFrame(prop);
-            //multi value property with no keyframes
+            //многозначное свойство без ключевых кадров
             } else {
                 getValue(prop.value);
                 break;
@@ -497,7 +497,7 @@ void LottieParser::parseProperty(T& prop, LottieObject* obj)
         if (KEY_AS("k")) parsePropertyInternal(prop);
         else if (obj && KEY_AS("sid")) {
             auto sid = getStringCopy();
-            //append object if the slot already exists.
+            //добавить объект, если слот уже существует.
             for (auto slot = comp->slots.begin(); slot < comp->slots.end(); ++slot) {
                 if (strcmp((*slot)->sid, sid)) continue;
                 (*slot)->pairs.push({obj, 0});
@@ -530,7 +530,7 @@ bool LottieParser::parseDirection(LottieShape* shape, const char* key)
 {
     if (KEY_AS("d")) {
         if (getInt() == 3) {
-            shape->clockwise = false;       //default is true
+            shape->clockwise = false;       //по умолчанию верно
         }
         return true;
     }
@@ -594,7 +594,7 @@ LottieTransform* LottieParser::parseTransform(bool ddd)
             while (auto key = nextObjectKey()) {
                 if (KEY_AS("k")) parsePropertyInternal(transform->position);
                 else if (KEY_AS("s") && getBool()) transform->coords = new LottieTransform::SeparateCoord;
-                //check separateCoord to figure out whether "x(expression)" / "x(coord)"
+                //проверьте «separateCoord», чтобы выяснить, является ли «x(выражение)» / «x(координата)»
                 else if (transform->coords && KEY_AS("x")) parseProperty<LottieProperty::Type::Float>(transform->coords->x);
                 else if (transform->coords && KEY_AS("y")) parseProperty<LottieProperty::Type::Float>(transform->coords->y);
                 else if (KEY_AS("x")) transform->position.exp = _expression(getStringCopy(), comp, context.layer, context.parent, &transform->position);
@@ -646,9 +646,9 @@ void LottieParser::parseStrokeDash(LottieStroke* stroke)
         while (auto key = nextObjectKey()) {
             if (KEY_AS("n")) {
                 auto style = getString();
-                if (!strcmp("o", style)) idx = 0;           //offset
-                else if (!strcmp("d", style)) idx = 1;      //dash
-                else if (!strcmp("g", style)) idx = 2;      //gap
+                if (!strcmp("o", style)) idx = 0;           //компенсация
+                else if (!strcmp("d", style)) idx = 1;      //рывок
+                else if (!strcmp("g", style)) idx = 2;      //разрыв
             } else if (KEY_AS("v")) {
                 parseProperty<LottieProperty::Type::Float>(stroke->dash(idx));
             } else skip(key);
@@ -928,21 +928,21 @@ void LottieParser::parseObject(Array<LottieObject*>& parent)
 
 LottieImage* LottieParser::parseImage(const char* data, const char* subPath, bool embedded, float width, float height)
 {
-    //Used for Image Asset
+    //Используется для изображения
     auto image = new LottieImage;
 
-    //embedded image resource. should start with "data:"
-    //header look like "data:image/png;base64," so need to skip till ','.
+    //встроенный ресурс изображения. должно начинаться с «data:»
+    //заголовок выглядит как «data:image/png;base64», поэтому его нужно пропустить до «,».
     if (embedded && !strncmp(data, "data:", 5)) {
-        //figure out the mimetype
+        //выяснить mimetype
         auto mimeType = data + 11;
         auto needle = strstr(mimeType, ";");
         image->mimeType = strDuplicate(mimeType, needle - mimeType);
-        //b64 data
+        //данные b64
         auto b64Data = strstr(data, ",") + 1;
         size_t length = strlen(data) - (b64Data - data);
         image->size = b64Decode(b64Data, length, &image->b64Data);
-    //external image resource
+    //внешний ресурс изображения
     } else {
         auto len = strlen(dirName) + strlen(subPath) + strlen(data) + 1;
         image->path = static_cast<char*>(lv_malloc(len));
@@ -965,7 +965,7 @@ LottieObject* LottieParser::parseAsset()
     LottieObject* obj = nullptr;
     unsigned long id = 0;
 
-    //Used for Image Asset
+    //Используется для изображения
     const char* data = nullptr;
     const char* subPath = nullptr;
     float width = 0.0f;
@@ -1052,7 +1052,7 @@ void LottieParser::parseChars(Array<LottieGlyph*>& glyphs)
     enterArray();
     while (nextArrayValue()) {
         enterObject();
-        //a new glyph
+        //новый глиф
         auto glyph = new LottieGlyph;
         while (auto key = nextObjectKey()) {
             if (KEY_AS("ch")) glyph->code = getStringCopy();
@@ -1061,7 +1061,7 @@ void LottieParser::parseChars(Array<LottieGlyph*>& glyphs)
             else if (KEY_AS("w")) glyph->width = getFloat();
             else if (KEY_AS("fFamily")) glyph->family = getStringCopy();
             else if (KEY_AS("data"))
-            {   //glyph shapes
+            {   //формы глифов
                 enterObject();
                 while (auto key = nextObjectKey()) {
                     if (KEY_AS("shapes")) parseShapes(glyph->children);
@@ -1143,7 +1143,7 @@ void LottieParser::parseTextRange(LottieText* text)
         auto selector = new LottieTextRange;
 
         while (auto key = nextObjectKey()) {
-            if (KEY_AS("s")) { // text range selector
+            if (KEY_AS("s")) { // селектор текстового диапазона
                 enterObject();
                 while (auto key = nextObjectKey()) {
                     if (KEY_AS("t")) selector->expressible = (bool) getInt();
@@ -1160,7 +1160,7 @@ void LottieParser::parseTextRange(LottieText* text)
                     else if (KEY_AS("e")) parseProperty<LottieProperty::Type::Float>(selector->end);
                     else skip(key);
                 }
-            } else if (KEY_AS("a")) { // text style
+            } else if (KEY_AS("a")) { // стиль текста
                 enterObject();
                 while (auto key = nextObjectKey()) {
                     if (KEY_AS("t")) parseProperty<LottieProperty::Type::Float>(selector->style.letterSpacing);
@@ -1216,8 +1216,8 @@ void LottieParser::getLayerSize(float& val)
     if (val == 0.0f) {
         val = getFloat();
     } else {
-        //layer might have both w(width) & sw(solid color width)
-        //override one if the a new size is smaller.
+        //слой может иметь как w(ширину), так и sw(ширину сплошного цвета)
+        //переопределить один, если новый размер меньше.
         auto w = getFloat();
         if (w < val) val = w;
     }
@@ -1226,7 +1226,7 @@ void LottieParser::getLayerSize(float& val)
 LottieMask* LottieParser::parseMask()
 {
     auto mask = new LottieMask;
-    auto valid = true;  //skip if the mask mode is none.
+    auto valid = true;  //пропустить, если режим маски отсутствует.
 
     enterObject();
     while (auto key = nextObjectKey()) {
@@ -1264,7 +1264,7 @@ void LottieParser::parseMasks(LottieLayer* layer)
 
 void LottieParser::parseGaussianBlur(LottieGaussianBlur* effect)
 {
-    int idx = 0;  //blurness -> direction -> wrap
+    int idx = 0;  //размытие -> направление -> перенос
     enterArray();
     while (nextArrayValue()) {
         enterObject();
@@ -1307,7 +1307,7 @@ void LottieParser::parseEffects(LottieLayer* layer)
         LottieEffect* effect = nullptr;
         enterObject();
         while (auto key = nextObjectKey()) {
-            //type must be priortized.
+            //тип должен иметь приоритет.
             if (KEY_AS("ty"))
             {
                 effect = getEffect(getInt());
@@ -1345,7 +1345,7 @@ LottieLayer* LottieParser::parseLayer(LottieLayer* precomp)
             layer->name = getStringCopy();
             layer->id = djb2Encode(layer->name);
         }
-        else if (KEY_AS("ddd")) ddd = getInt();  //3d layer
+        else if (KEY_AS("ddd")) ddd = getInt();  //3D слой
         else if (KEY_AS("ind")) layer->idx = getInt();
         else if (KEY_AS("ty")) layer->type = (LottieLayer::Type) getInt();
         else if (KEY_AS("sr")) layer->timeStretch = getFloat();
@@ -1370,7 +1370,7 @@ LottieLayer* LottieParser::parseLayer(LottieLayer* precomp)
         else if (KEY_AS("masksProperties")) parseMasks(layer);
         else if (KEY_AS("hd")) layer->hidden = getBool();
         else if (KEY_AS("refId")) layer->rid = djb2Encode(getString());
-        else if (KEY_AS("td")) layer->matteSrc = getInt();      //used for matte layer
+        else if (KEY_AS("td")) layer->matteSrc = getInt();      //используется для матового слоя
         else if (KEY_AS("t")) parseText(layer->children);
         else if (KEY_AS("ef")) parseEffects(layer);
         else skip(key);
@@ -1401,7 +1401,7 @@ LottieLayer* LottieParser::parseLayers(LottieLayer* root)
 
 void LottieParser::postProcess(Array<LottieGlyph*>& glyphs)
 {
-    //aggregate font characters
+    //совокупность символов шрифта
     for (uint32_t g = 0; g < glyphs.count; ++g) {
         auto glyph = glyphs[g];
         for (uint32_t i = 0; i < comp->fonts.count; ++i) {
@@ -1418,13 +1418,13 @@ void LottieParser::postProcess(Array<LottieGlyph*>& glyphs)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 const char* LottieParser::sid(bool first)
 {
     if (first) {
-        //verify json
+        //проверить JSON
         if (!parseNext()) return nullptr;
         enterObject();
     }
@@ -1437,7 +1437,7 @@ bool LottieParser::apply(LottieSlot* slot)
     enterObject();
 
     //OPTIMIZE: we can create the property directly, without object
-    LottieObject* obj = nullptr;  //slot object
+    LottieObject* obj = nullptr;  //объект-слот
 
     switch (slot->type) {
         case LottieProperty::Type::ColorStop: {
@@ -1473,7 +1473,7 @@ bool LottieParser::apply(LottieSlot* slot)
 
 bool LottieParser::parse()
 {
-    //verify json.
+    //проверьте json.
     if (!parseNext()) return false;
 
     enterObject();

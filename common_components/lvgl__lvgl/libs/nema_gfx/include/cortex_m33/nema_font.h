@@ -2,27 +2,27 @@
 /*******************************************************************************
  * Copyright (c) 2023 Think Silicon Single Member PC
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this header file and/or associated documentation files to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Materials, and to permit persons to whom the Materials are furnished to do
- * so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * этого файла заголовка и/или связанных с ним файлов документации для использования, копирования,
+ * изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
+ * Материалы и разрешать лицам, которым предоставлены Материалы, делать
+ * Итак, при соблюдении следующих условий:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Materials.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+ * все копии или существенные части Материалов.
  *
  * MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS
  * NEMAGFX API. THE UNMODIFIED, NORMATIVE VERSIONS OF THINK-SILICON NEMAGFX
  * SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT:
  *   https://think-silicon.com/products/software/nemagfx-api
  *
- *  The software is provided 'as is', without warranty of any kind, express or
- *  implied, including but not limited to the warranties of merchantability,
- *  fitness for a particular purpose and noninfringement. In no event shall
- *  Think Silicon Single Member PC be liable for any claim, damages or other
- *  liability, whether in an action of contract, tort or otherwise, arising
- *  from, out of or in connection with the software or the use or other dealings
- *  in the software.
+ *  Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
+ *  подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
+ *  пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае нельзя
+ *  Считайте, что Silicon Single MemberPCнесет ответственность за любые претензии, ущерб или другие
+ *  ответственность, будь то по договору, правонарушению или иным образом, возникающая
+ *  из, вне или в связи с программным обеспечением, использованием или другими сделками
+ *  в программном обеспечении.
  ******************************************************************************/
 
 
@@ -82,7 +82,7 @@ typedef struct {
     const int                        bitmap_size;
     const uint8_t                   *bitmap;
     uint32_t                         flags;
-    uint8_t                          xAdvance; //default xAdvance
+    uint8_t                          xAdvance; //по умолчанию xAdvance
     uint8_t                          yAdvance;
     uint8_t                          max_ascender;
     uint8_t                          bpp;
@@ -90,89 +90,89 @@ typedef struct {
     const nema_glyph_indexed_t      *indexed_glyphs;
 } nema_font_t;
 
-/** \brief Bind the font to use in future nema_print() calls
+/** \brief Привяжите шрифт для использования в последующих вызовахnema_print()
  *
- * \param font Pointer to font
+ * \param font Указатель шрифта
  *
  */
 void nema_bind_font(nema_font_t *font);
 
-/** \brief Get the bounding box's width and height of a string.
+/** \brief помочь и поднять ограждающую структуру рамки.
  *
- * \param str Pointer to string
- * \param w Pointer to variable where width should be written
- * \param h Pointer to variable where height should be written
- * \param max_w Max allowed width
- * \return Number of carriage returns
+ * \param str Указатель текста
+ * \param w Указатель на переменную, которую следует записать
+ * \param h Указатель на переменную, которую следует записать высоту
+ * \parammax_wМаксимально допустимая ширина
+ * \return Количество возвратов каретки
  *
  */
 int  nema_string_get_bbox(const char *str, int *w, int *h, int max_w, uint32_t wrap);
 
-/** \brief Print pre-formatted text
+/** \brief Распечатать отформатированный текст
  *
- * \param str Pointer to string
- * \param x X coordinate of text-area's top-left corner
- * \param y Y coordinate of text-area's top-left corner
- * \param w Width of the text area
- * \param h Height of the text area
- * \param fg_col Foreground color of text
- * \param align Alignment and wrapping mode
+ * \param str Указатель текста
+ * \param x X координата верхнего левого угла текстовой области
+ * \param y Y координата верхнего левого угла текстовой области
+ * \param w Ширина текстовой области
+ * \param h Высота текста области
+ * \paramfg_colЦвет текста переднего плана
+ * \param align Режим соревнований и переноса
  *
  */
 void nema_print(const char *str, int x, int y, int w, int h, uint32_t fg_col, uint32_t align);
 
-/** \brief Print pre-formatted text
+/** \brief Распечатать отформатированный текст
  *
- * \param *str Pointer to string
- * \param *cursor_x X position of next character to be drawn. Usually initialized to 0 by the user and then updated internally by the library
- * \param *cursor_y Y position of next character to be drawn. Usually initialized to 0 by the user and then updated internally by the library
- * \param x X coordinate of text-area's top-left corner
- * \param y Y coordinate of text-area's top-left corner
- * \param w Width of the text area
- * \param h Height of the text area
- * \param fg_col Foreground color of text
- * \param align Alignment and wrapping mode
+ * \param *str Указатель текста
+ * \param *cursor_xX-позиция следующего символа, который будет нарисован. Обычно возникает пользовательское значение 0, а затем обновляется внутри библиотеки.
+ * \param *cursor_yПозиция Y следующего символа, который будет нарисован. Обычно возникает пользовательское значение 0, а затем обновляется внутри библиотеки.
+ * \param x X координата верхнего левого угла текстовой области
+ * \param y Y координата верхнего левого угла текстовой области
+ * \param w Ширина текстовой области
+ * \param h Высота текста области
+ * \paramfg_colЦвет текста переднего плана
+ * \param align Режим соревнований и переноса
  *
  */
 void nema_print_to_position(const char *str, int *pos_x, int *pos_y, int x, int y, int w, int h, uint32_t fg_col, uint32_t align);
 
 
-/** \brief Print text (not formated) with indexed glyphs. Text is printed in a single line, from left to right
+/** \brief Распечатать текст (неотформатированный) с индексированными глифами. Текст печатается в одной строке слева направо.
  *
- * \param ids Array with the glyphs indices
- * \param id_count Count of the characters to be drawn
- * \param x X coordinate of the text-area's top-left corner
- * \param y Y coordinate of the text-area's top-left corner
- * \param fg_col Foreground color of text
+ * \param ids Массив с индексами глифов
+ * \paramid_countКоличество символов, которые будут нарисованы
+ * \param x X координата верхнего левого угла текстовой области
+ * \param y Y координата верхнего левого угла текстовой области
+ * \paramfg_colЦвет текста переднего плана
  *
  */
 void nema_print_indexed(const int *ids, int id_count, int x, int y, uint32_t fg_col);
 
-/** \brief Print a single character with indexed glyph
+/** \brief Печать одного символа с индексированным глифом
  *
- * \param id Array with the glyphs indices
- * \param x X coordinate of the character's top-left corner
- * \param y Y coordinate of the character's top-left corner
- * \param fg_col Character's color
+ * \param id Массив с индексами глифов
+ * \param x X координата верхнего левого угла персонажа
+ * \param y координата Y верхнего левого угла символа
+ * \paramfg_colЦвет персонажа
  *
  */
 void nema_print_char_indexed(const int id, int x, int y, uint32_t fg_col);
 
-/** \brief Returns the bounding box's width and height of a string with indexed glyphs
+/** \brief Возвращает нестабильность и высоту возвышающейся рамки строк с индексированными глифами.
  *
- * \details The string must be specified as a single line text, due to the restriction
- * that the characters are described by respective glyph indices. The height of the
- * bounding box will be equal to the height of the bound font.
+ * \details Строка должна быть указана как однострочный текст из-за ограничений
+ * что символы описываются соответствующими индексами глифов. Высота
+ * ограничивающая рамка будет равна высоте связанного шрифта.
  *
- * \param ids Array with the glyphs indices
- * \param id_count Count of the characters contained in the array with the glyphs indices
- * \param w Pointer to variable where width should be written
- * \param h Pointer to variable where height should be written
- * \param max_w Maximum allowed width (if w is greater than this value, it will saturate to this)
+ * \param ids Массив с индексами глифов
+ * \paramid_countКоличество символов, содержащихся в массиве с индексами глифов
+ * \param w Указатель на переменную, которую следует записать
+ * \param h Указатель на переменную, которую следует записать высоту
+ * \parammax_wМаксимально допустимая ширина (если w больше этого значения, оно будет насыщено до этого значения)
  */
 void nema_string_indexed_get_bbox(const int *ids, int id_count, int *w, int *h, int max_w);
 
-/** \brief Returns the horizontal advance (in pixels) of the bound font
+/** \brief Возвращает горизонтальное перемещение (в пикселях) связанного шрифта.
  *
  */
 int nema_font_get_x_advance(void);

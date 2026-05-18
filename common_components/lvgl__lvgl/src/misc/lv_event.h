@@ -29,12 +29,12 @@ extern "C" {
 typedef void (*lv_event_cb_t)(lv_event_t * e);
 
 /**
- * Type of event being sent to Widget
+ * Тип события, отправляемого в виджет
  */
 typedef enum {
     LV_EVENT_ALL = 0,
 
-    /** Input device events*/
+    /** События устройства ввода*/
     LV_EVENT_PRESSED,             /**< Widget has been pressed */
     LV_EVENT_PRESSING,            /**< Widget is being pressed (sent continuously while pressing)*/
     LV_EVENT_PRESS_LOST,          /**< Widget is still being pressed but slid cursor/finger off Widget */
@@ -61,7 +61,7 @@ typedef enum {
     LV_EVENT_HOVER_OVER,          /**< Indev hover over object */
     LV_EVENT_HOVER_LEAVE,         /**< Indev hover leave object */
 
-    /** Drawing events */
+    /** Рисование событий */
     LV_EVENT_COVER_CHECK,         /**< Check if Widget fully covers an area. The event parameter is `lv_cover_check_info_t *`. */
     LV_EVENT_REFR_EXT_DRAW_SIZE,  /**< Get required extra draw area around Widget (e.g. for shadow). The event parameter is `int32_t *` to store the size. */
     LV_EVENT_DRAW_MAIN_BEGIN,     /**< Starting the main drawing phase */
@@ -72,7 +72,7 @@ typedef enum {
     LV_EVENT_DRAW_POST_END,       /**< Finishing the post draw phase (when all children are drawn)*/
     LV_EVENT_DRAW_TASK_ADDED,     /**< Adding a draw task. The `LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS` flag needs to be set */
 
-    /** Special events */
+    /** Специальные мероприятия */
     LV_EVENT_VALUE_CHANGED,       /**< Widget's value has changed (i.e. slider moved)*/
     LV_EVENT_INSERT,              /**< Text has been inserted into Widget. The event data is `char *` being inserted. */
     LV_EVENT_REFRESH,             /**< Notify Widget to refresh something on it (for user)*/
@@ -80,7 +80,7 @@ typedef enum {
     LV_EVENT_CANCEL,              /**< A process has been cancelled */
     LV_EVENT_STATE_CHANGED,       /**< The state of the widget changed*/
 
-    /** Other events */
+    /** Другие события */
     LV_EVENT_CREATE,              /**< Object is being created */
     LV_EVENT_DELETE,              /**< Object is being deleted */
     LV_EVENT_CHILD_CHANGED,       /**< Child was removed, added, or its size, position were changed */
@@ -95,12 +95,12 @@ typedef enum {
     LV_EVENT_LAYOUT_CHANGED,      /**< A child's position position has changed due to a layout recalculation */
     LV_EVENT_GET_SELF_SIZE,       /**< Get internal size of a widget */
 
-    /** Events of optional LVGL components */
-    LV_EVENT_INVALIDATE_AREA,     /**< An area is invalidated (marked for redraw). `lv_event_get_param(e)`
-                                   * returns a pointer to an `lv_area_t` object with the coordinates of the
-                                   * area to be invalidated.  The area can be freely modified if needed to
-                                   * adapt it a special requirement of the display. Usually needed with
-                                   * monochrome displays to invalidate `N x 8` rows or columns in one pass. */
+    /** События дополнительных компонентов LVGL */
+    LV_EVENT_INVALIDATE_AREA,     /**< Область признана недействительной (отмечена для перерисовки).   `lv_event_get_param(e)`
+                                   * вернуть указатель на объект`lv_area_t`с координатами
+                                   * область, которую необходимо признать недействительной.  При необходимости область можно свободно изменять.
+                                   * адаптируйте его к особым требованиям дисплея. Обычно требуется с
+                                   * монохромные дисплеи для аннулирования строк или столбцов `N x 8` за один проход. */
     LV_EVENT_RESOLUTION_CHANGED,  /**< Sent when the resolution changes due to `lv_display_set_resolution()` or `lv_display_set_rotation()`. */
     LV_EVENT_COLOR_FORMAT_CHANGED,/**< Sent as a result of any call to `lv_display_set_color_format()`. */
     LV_EVENT_REFR_REQUEST,        /**< Sent when something happened that requires redraw. */
@@ -120,24 +120,24 @@ typedef enum {
     LV_EVENT_TRANSLATION_LANGUAGE_CHANGED, /**< Sent when the translation language changed. */
 #endif /*LV_USE_TRANSLATION*/
 
-    LV_EVENT_LAST,                 /** Number of default events */
+    LV_EVENT_LAST,                 /** Количество событий по умолчанию */
 
-    LV_EVENT_PREPROCESS = 0x8000,   /** This is a flag that can be set with an event so it's processed
-                                      before the class default event processing */
+    LV_EVENT_PREPROCESS = 0x8000,   /** Это флаг, который можно установить вместе с событием, чтобы оно было обработано.
+                                      перед обработкой событий класса по умолчанию */
     LV_EVENT_MARKED_DELETING = 0x10000,
 } lv_event_code_t;
 
 typedef struct {
     lv_array_t array;
     uint8_t is_traversing: 1;          /**< True: the list is being nested traversed */
-    uint8_t has_marked_deleting: 1;    /**< True: the list has marked deleting objects
-                                         when some of events are marked as deleting */
+    uint8_t has_marked_deleting: 1;    /**< True: в списке отмечены удаляемые объекты
+                                         когда некоторые события помечены как удаляемые */
 } lv_event_list_t;
 
 /**
- * @brief Event callback.
- * Events are used to notify the user of some action being taken on Widget.
- * For details, see ::lv_event_t.
+ * @brief Обратный вызов события.
+ * События используются для уведомления пользователя о некоторых действиях, предпринимаемых с виджетом.
+ * Подробнее см.::lv_event_t.
  */
 
 lv_result_t lv_event_send(lv_event_list_t * list, lv_event_t * e, bool preprocess);
@@ -158,102 +158,102 @@ bool lv_event_remove(lv_event_list_t * list, uint32_t index);
 void lv_event_remove_all(lv_event_list_t * list);
 
 /**
- * Get Widget originally targeted by the event. It's the same even if event was bubbled.
- * @param e     pointer to the event descriptor
- * @return      the target of the event_code
+ * Получите виджет, изначально нацеленный на событие. То же самое, даже если событие было всплывшим.
+ * @param e     указатель на дескриптор события
+ * @return      цель event_code
  */
 void * lv_event_get_target(lv_event_t * e);
 
 /**
- * Get current target of the event. It's the Widget for which the event handler being called.
- * If the event is not bubbled it's the same as "normal" target.
- * @param e     pointer to the event descriptor
- * @return      pointer to the current target of the event_code
+ * Получить текущую цель события. Это виджет, для которого вызывается обработчик событий.
+ * Если событие не всплывает, это то же самое, что и «обычная» цель.
+ * @param e     указатель на дескриптор события
+ * @return      указатель на текущую цель event_code
  */
 void * lv_event_get_current_target(lv_event_t * e);
 
 /**
- * Get event code of an event.
- * @param e     pointer to the event descriptor
- * @return      the event code. (E.g. `LV_EVENT_CLICKED`, `LV_EVENT_FOCUSED`, etc)
+ * Получить код события.
+ * @param e     указатель на дескриптор события
+ * @return      код события. (Например, `LV_EVENT_CLICKED`,`LV_EVENT_FOCUSED`и т. д.)
  */
 lv_event_code_t lv_event_get_code(lv_event_t * e);
 
 /**
- * Get parameter passed when event was sent.
- * @param e     pointer to the event descriptor
- * @return      pointer to the parameter
+ * Получить параметр, переданный при отправке события.
+ * @param e     указатель на дескриптор события
+ * @return      указатель на параметр
  */
 void * lv_event_get_param(lv_event_t * e);
 
 /**
- * Get user_data passed when event was registered on Widget.
- * @param e     pointer to the event descriptor
- * @return      pointer to the user_data
+ * Получите user_data, когда событие было зарегистрировано в виджете.
+ * @param e     указатель на дескриптор события
+ * @return      указатель на user_data
  */
 void * lv_event_get_user_data(lv_event_t * e);
 
 /**
- * Stop event from bubbling.
- * This is only valid when called in the middle of an event processing chain.
- * @param e     pointer to the event descriptor
+ * Остановите событие от всплытия.
+ * Это допустимо только при вызове в середине цепочки обработки событий.
+ * @param e     указатель на дескриптор события
  */
 void lv_event_stop_bubbling(lv_event_t * e);
 
 /**
- * Stop event from trickling down to children.
- * This is only valid when called in the middle of an event processing chain.
- * @param e     pointer to the event descriptor
+ * Не позволяйте событиям дойти до детей.
+ * Это допустимо только при вызове в середине цепочки обработки событий.
+ * @param e     указатель на дескриптор события
  */
 void lv_event_stop_trickling(lv_event_t * e);
 
 /**
- * Stop processing this event.
- * This is only valid when called in the middle of an event processing chain.
- * @param e     pointer to the event descriptor
+ * Прекратите обработку этого события.
+ * Это допустимо только при вызове в середине цепочки обработки событий.
+ * @param e     указатель на дескриптор события
  */
 void lv_event_stop_processing(lv_event_t * e);
 
 /**
- * Helper function typically used in LV_EVENT_DELETE
- * to free the event's user_data
- * @param e     pointer to an event descriptor
+ * Вспомогательная функция, обычно используемая в LV_EVENT_DELETE
+ * посмотретьuser_dataсобытия
+ * @param e     указатель на дескриптор события
  */
 void lv_event_free_user_data_cb(lv_event_t * e);
 
 
 /**
- * Register a new, custom event ID.
- * It can be used the same way as e.g. `LV_EVENT_CLICKED` to send custom events
- * @return      the new event id
+ * Зарегистрируйте новое пользовательское событие ID.
+ * Его можно использовать так же, как, например.  `LV_EVENT_CLICKED` для отправки пользовательских событий
+ * @return      новый идентификатор события
  *
- * Example:
+ * Пример:
  * @code
  * uint32_t LV_EVENT_MINE = 0;
  * ...
- * e = lv_event_register_id();
+ * e = lv_event_register_id ();
  * ...
- * lv_obj_send_event(obj, LV_EVENT_MINE, &some_data);
+ * lv_obj_send_event (obj,LV_EVENT_MINEиsome_data);
  * @endcode
  */
 uint32_t lv_event_register_id(void);
 
 /**
- * Get the name of an event code.
- * @param code  the event code
- * @return      the name of the event code as a string
+ * Получите имя кода события.
+ * @param code  код события
+ * @return      имя кода события в виде строки
  */
 const char * lv_event_code_get_name(lv_event_code_t code);
 
 #if LV_USE_EXT_DATA
 /**
- * Set external data and its destructor for an event descriptor.
- * This allows associating custom data with an event callback that will be automatically cleaned up
- * when the event descriptor is removed or destroyed.
- * @param dsc         pointer to an event descriptor (from lv_obj_add_event_cb)
- * @param data        pointer to the external data to associate with the event descriptor
- * @param free_cb     function pointer to a destructor that will be called to clean up the external data.
- *                    The destructor will receive the data pointer as its parameter.
+ * Установите внешние данные и их деструктор для дескриптора события.
+ * Это позволяет связать пользовательские данные с обратным вызовом события, который будет автоматически очищен.
+ * когда дескриптор события удаляется или уничтожается.
+ * @param dsc         указатель на дескриптор события (из lv_obj_add_event_cb)
+ * @param data        указатель на внешние данные, которые нужно связать с дескриптором события
+ * @param free_cb     указатель функции на деструктор, который будет вызываться для очистки внешних данных.
+ *                    Деструктор получит указатель данных в качестве параметра.
  */
 void lv_event_desc_set_external_data(lv_event_dsc_t * dsc, void * data, void (* free_cb)(void * data));
 #endif
@@ -263,7 +263,7 @@ void lv_event_desc_set_external_data(lv_event_dsc_t * dsc, void * data, void (* 
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_EVENT_H */

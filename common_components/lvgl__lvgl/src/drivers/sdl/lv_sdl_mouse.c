@@ -75,7 +75,7 @@ static void sdl_mouse_read(lv_indev_t * indev, lv_indev_data_t * data)
 {
     lv_sdl_mouse_t * dsc = lv_indev_get_driver_data(indev);
 
-    /*Store the collected data*/
+    /*Храните собранные данные*/
     data->point.x = dsc->last_x;
     data->point.y = dsc->last_y;
     data->state = dsc->left_button_down ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
@@ -130,11 +130,11 @@ void lv_sdl_mouse_handler(SDL_Event * event)
     lv_display_t * disp = lv_sdl_get_disp_from_win_id(win_id);
     if(disp == NULL) return;
 
-    /*Find a suitable indev*/
+    /*Найдите подходящего разработчика*/
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         if(lv_indev_get_read_cb(indev) == sdl_mouse_read) {
-            /*If disp is NULL for any reason use the first indev with the correct type*/
+            /*Если по какой-либо причине disp равен NULL, используйте первый indev правильного типа.*/
             if(disp == NULL || lv_indev_get_display(indev) == disp) break;
         }
         indev = lv_indev_get_next(indev);
@@ -190,7 +190,7 @@ void lv_sdl_mouse_handler(SDL_Event * event)
         case SDL_MOUSEWHEEL:
 #if LV_SDL_MOUSEWHEEL_MODE == LV_SDL_MOUSEWHEEL_MODE_CROWN
 #ifdef __EMSCRIPTEN__
-            /*Emscripten scales it wrong*/
+            /*Emscripten неправильно масштабирует*/
             if(event->wheel.y < 0) dsc->diff++;
             if(event->wheel.y > 0) dsc->diff--;
 #else

@@ -19,12 +19,12 @@ static void roller_key_cb(lv_event_t * e)
 }
 
 /**
- * Grid navigation for only one axis
+ * Навигация по сетке только для одной оси
  */
 void lv_example_gridnav_5(void)
 {
-    /*It's assumed that the default group is set and
-     *there is a keyboard indev*/
+    /*Предполагается, что группа по умолчанию установлена и
+     *есть разработка клавиатуры*/
 
     lv_group_t * group = lv_group_get_default();
     lv_obj_t * cont;
@@ -34,8 +34,8 @@ void lv_example_gridnav_5(void)
     lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_size(cont, lv_pct(100), lv_pct(50));
     lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 0);
-    /* only up/down keys will be used for grid navigation in this container. */
-    /* left/right will be sent to the sliders */
+    /* для навигации по сетке в этом контейнере будут использоваться только клавиши вверх/вниз. */
+    /* влево/вправо будут отправлены на ползунки */
     lv_gridnav_add(cont, LV_GRIDNAV_CTRL_VERTICAL_MOVE_ONLY);
     lv_group_add_obj(group, cont);
     for(uint32_t i = 0; i < 3; i++) {
@@ -52,8 +52,8 @@ void lv_example_gridnav_5(void)
     lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_size(cont, lv_pct(100), lv_pct(50));
     lv_obj_align(cont, LV_ALIGN_BOTTOM_MID, 0, 0);
-    /* only left/right keys will be used for grid navigation in this container. */
-    /* up/down will be sent to the rollers */
+    /* для навигации по сетке в этом контейнере будут использоваться только клавиши «влево/вправо». */
+    /* вверх/вниз будут отправлены на ролики */
     lv_gridnav_add(cont, LV_GRIDNAV_CTRL_HORIZONTAL_MOVE_ONLY);
     lv_group_add_obj(group, cont);
     for(uint32_t i = 0; i < 3; i++) {

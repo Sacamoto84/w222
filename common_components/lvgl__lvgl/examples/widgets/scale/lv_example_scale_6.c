@@ -28,14 +28,14 @@ static void timer_cb(lv_timer_t * timer)
     }
 
     /**
-     * the scale will store the needle line points in the existing
-     * point array if one was set with `lv_line_set_points_mutable`.
-     * Otherwise, it will allocate the needle line points.
+     * весы сохранят точки игольной линии в существующих
+     * массив точек, если он был установлен с помощью`lv_line_set_points_mutable`.
+     * В противном случае будут выделены точки игольной линии.
      */
 
-    /* the scale will store the minute hand line points in `minute_hand_points` */
+    /* весы удерживают точки линии минутной стрелки в `minute_hand_points` */
     lv_scale_set_line_needle_value(scale, minute_hand, 60, minute);
-    /* log the points that were stored in the array */
+    /* записать точки, которые были сохранены в массиве */
     LV_LOG_USER(
         "minute hand points - "
         "0: (%" my_PRIprecise ", %" my_PRIprecise "), "
@@ -44,12 +44,12 @@ static void timer_cb(lv_timer_t * timer)
         minute_hand_points[1].x, minute_hand_points[1].y
     );
 
-    /* the scale will allocate the hour hand line points */
+    /* шкала выделит точки линии часовой стрелки */
     lv_scale_set_line_needle_value(scale, hour_hand, 40, hour * 5 + (minute / 12));
 }
 
 /**
- * A round scale with multiple needles, resembling a clock
+ * Круглая шкала с множеством стрелок, напоминающая часы.
  */
 void lv_example_scale_6(void)
 {
@@ -74,25 +74,25 @@ void lv_example_scale_6(void)
     static lv_style_t indicator_style;
     lv_style_init(&indicator_style);
 
-    /* Label style properties */
+    /* Свойства стиля метки */
     lv_style_set_text_font(&indicator_style, LV_FONT_DEFAULT);
     lv_style_set_text_color(&indicator_style, lv_palette_main(LV_PALETTE_YELLOW));
 
-    /* Major tick properties */
+    /* Основные свойства галочки */
     lv_style_set_line_color(&indicator_style, lv_palette_main(LV_PALETTE_YELLOW));
-    lv_style_set_length(&indicator_style, 8); /* tick length */
-    lv_style_set_line_width(&indicator_style, 2); /* tick width */
+    lv_style_set_length(&indicator_style, 8); /* длина тика */
+    lv_style_set_line_width(&indicator_style, 2); /* ширина деления */
     lv_obj_add_style(scale, &indicator_style, LV_PART_INDICATOR);
 
-    /* Minor tick properties */
+    /* Второстепенные свойства галочки */
     static lv_style_t minor_ticks_style;
     lv_style_init(&minor_ticks_style);
     lv_style_set_line_color(&minor_ticks_style, lv_palette_main(LV_PALETTE_YELLOW));
-    lv_style_set_length(&minor_ticks_style, 6); /* tick length */
-    lv_style_set_line_width(&minor_ticks_style, 2); /* tick width */
+    lv_style_set_length(&minor_ticks_style, 6); /* длина тика */
+    lv_style_set_line_width(&minor_ticks_style, 2); /* ширина деления */
     lv_obj_add_style(scale, &minor_ticks_style, LV_PART_ITEMS);
 
-    /* Main line properties */
+    /* Свойства основной линии */
     static lv_style_t main_line_style;
     lv_style_init(&main_line_style);
     lv_style_set_arc_color(&main_line_style, lv_color_black());

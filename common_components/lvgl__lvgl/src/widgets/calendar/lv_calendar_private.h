@@ -27,10 +27,10 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Data of calendar */
+/** Данные календаря */
 struct _lv_calendar_t {
     lv_obj_t obj;
-    /* New data for this type */
+    /* Новые данные для этого типа */
     lv_obj_t * btnm;
     lv_calendar_date_t today;                /**< Date of today */
     lv_calendar_date_t showed_date;          /**< Currently visible month (day is ignored) */
@@ -40,14 +40,14 @@ struct _lv_calendar_t {
 #ifdef LV_USE_CALENDAR_CHINESE
     bool use_chinese_calendar;
 
-    /** 7 * 6: A week has 7 days, and the calendar displays 6 weeks in total.
+    /** 7 * 6: В неделе 7 дней, а всего в календаре отображается 6 недель.
      * 20: Including the number of dates, line breaks, names for each day,
-     * and reserving several spaces for addresses. */
+     * и резервируя несколько мест для адресов. */
     char nums [7 * 6][20];
 #else
-    /** 7 * 6: A week has 7 days, and the calendar displays 6 weeks in total.
+    /** 7 * 6: В неделе 7 дней, а всего в календаре отображается 6 недель.
      * 6: Including the number of dates, and reserving several spaces for
-     * addresses.*/
+     * адреса.*/
     char nums [7 * 6][4];
 #endif
 };
@@ -64,7 +64,7 @@ struct _lv_calendar_t {
 #endif /* LV_USE_CALENDAR */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CALENDAR_PRIVATE_H*/

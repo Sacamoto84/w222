@@ -7,7 +7,7 @@ static lv_obj_t * kb;
 
 void lv_example_textarea_2(void)
 {
-    /*Create the password box*/
+    /*Создайте поле пароля*/
     lv_obj_t * pwd_ta = lv_textarea_create(lv_screen_active());
     lv_textarea_set_text(pwd_ta, "");
     lv_textarea_set_password_mode(pwd_ta, true);
@@ -16,12 +16,12 @@ void lv_example_textarea_2(void)
     lv_obj_set_pos(pwd_ta, 5, 20);
     lv_obj_add_event_cb(pwd_ta, ta_event_cb, LV_EVENT_ALL, NULL);
 
-    /*Create a label and position it above the text box*/
+    /*Создайте метку и разместите ее над текстовым полем.*/
     lv_obj_t * pwd_label = lv_label_create(lv_screen_active());
     lv_label_set_text(pwd_label, "Password:");
     lv_obj_align_to(pwd_label, pwd_ta, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
 
-    /*Create the one-line mode text area*/
+    /*Создайте текстовую область однострочного режима.*/
     lv_obj_t * text_ta = lv_textarea_create(lv_screen_active());
     lv_textarea_set_one_line(text_ta, true);
     lv_textarea_set_password_mode(text_ta, false);
@@ -29,18 +29,18 @@ void lv_example_textarea_2(void)
     lv_obj_add_event_cb(text_ta, ta_event_cb, LV_EVENT_ALL, NULL);
     lv_obj_align(text_ta, LV_ALIGN_TOP_RIGHT, -5, 20);
 
-    /*Create a label and position it above the text box*/
+    /*Создайте метку и разместите ее над текстовым полем.*/
     lv_obj_t * oneline_label = lv_label_create(lv_screen_active());
     lv_label_set_text(oneline_label, "Text:");
     lv_obj_align_to(oneline_label, text_ta, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
 
-    /*Create a keyboard*/
+    /*Создать клавиатуру*/
     kb = lv_keyboard_create(lv_screen_active());
     lv_obj_set_size(kb,  LV_HOR_RES, LV_VER_RES / 2);
 
-    lv_keyboard_set_textarea(kb, pwd_ta); /*Focus it on one of the text areas to start*/
+    lv_keyboard_set_textarea(kb, pwd_ta); /*Сфокусируйте его на одной из текстовых областей, чтобы начать*/
 
-    /*The keyboard will show Arabic characters if they are enabled */
+    /*На клавиатуре будут отображаться арабские символы, если они включены. */
 #if LV_USE_ARABIC_PERSIAN_CHARS && LV_FONT_DEJAVU_16_PERSIAN_HEBREW
     lv_obj_set_style_text_font(kb, &lv_font_dejavu_16_persian_hebrew, 0);
     lv_obj_set_style_text_font(text_ta, &lv_font_dejavu_16_persian_hebrew, 0);
@@ -54,7 +54,7 @@ static void ta_event_cb(lv_event_t * e)
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * ta = lv_event_get_target_obj(e);
     if(code == LV_EVENT_CLICKED || code == LV_EVENT_FOCUSED) {
-        /*Focus on the clicked text area*/
+        /*Сосредоточьтесь на выбранной текстовой области*/
         if(kb != NULL) lv_keyboard_set_textarea(kb, ta);
     }
 

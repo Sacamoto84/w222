@@ -3,7 +3,7 @@
 
 static void add_static(void)
 {
-    /* Arrays are defined `const` to place them in program space instead of RAM. */
+    /* Массы развивают`const`для размещения их в пространстве программы вместо RAM. */
     static const char * const languages[] = {"en", "de", "es", NULL};
     static const char * const tags[] = {"tiger", "lion", "rabbit", "elephant", NULL};
     static const char * const translations[] = {
@@ -33,7 +33,7 @@ static void add_dynamic(void)
 }
 
 /**
- * Create and use translations
+ * Создавайте и используйте переводы
  */
 void lv_example_translation_1(void)
 {

@@ -8,13 +8,13 @@ static void add_faded_area(lv_event_t * e);
 static void draw_event_cb(lv_event_t * e);
 
 /**
- * Add a faded area effect to the line chart and make some division lines ticker
+ * Добавьте эффект выцветшей области к линейному графику и сделайте несколько линий разделения бегущими.
  */
 void lv_example_chart_5(void)
 {
-    /*Create a chart*/
+    /*Создать диаграмму*/
     lv_obj_t * chart = lv_chart_create(lv_screen_active());
-    lv_chart_set_type(chart, LV_CHART_TYPE_LINE);   /*Show lines and points too*/
+    lv_chart_set_type(chart, LV_CHART_TYPE_LINE);   /*Показывать линии и точки тоже*/
     lv_obj_set_size(chart, 200, 150);
     lv_obj_set_style_pad_all(chart, 0, 0);
     lv_obj_set_style_radius(chart, 0, 0);
@@ -42,7 +42,7 @@ static void draw_event_cb(lv_event_t * e)
         add_faded_area(e);
 
     }
-    /*Hook the division lines too*/
+    /*Зацепите и линии разделения.*/
     if(base_dsc->part == LV_PART_MAIN && lv_draw_task_get_type(draw_task) == LV_DRAW_TASK_TYPE_LINE) {
         hook_division_lines(e);
     }
@@ -60,7 +60,7 @@ static void add_faded_area(lv_event_t * e)
     const lv_chart_series_t * ser = lv_chart_get_series_next(obj, NULL);
     lv_color_t ser_color = lv_chart_get_series_color(obj, ser);
 
-    /*Draw a triangle below the line witch some opacity gradient*/
+    /*Нарисуйте треугольник под линией с некоторым градиентом непрозрачности.*/
     lv_draw_line_dsc_t * draw_line_dsc = lv_draw_task_get_line_dsc(draw_task);
     lv_draw_triangle_dsc_t tri_dsc;
     lv_draw_triangle_dsc_init(&tri_dsc);
@@ -100,7 +100,7 @@ static void add_faded_area(lv_event_t * e)
 
         lv_draw_triangle(base_dsc->layer, &tri_dsc);
 
-        /*Draw rectangle below the triangle*/
+        /*Нарисуйте прямоугольник под треугольником*/
         lv_draw_rect_dsc_t rect_dsc;
         lv_draw_rect_dsc_init(&rect_dsc);
         rect_dsc.bg_grad.dir = LV_GRAD_DIR_VER;
@@ -126,7 +126,7 @@ static void hook_division_lines(lv_event_t * e)
     lv_draw_dsc_base_t * base_dsc = (lv_draw_dsc_base_t *)lv_draw_task_get_draw_dsc(draw_task);
     lv_draw_line_dsc_t * line_dsc = (lv_draw_line_dsc_t *)lv_draw_task_get_draw_dsc(draw_task);
 
-    /*Vertical line*/
+    /*Вертикальная линия*/
     if(line_dsc->p1.x == line_dsc->p2.x) {
         line_dsc->color  = lv_palette_lighten(LV_PALETTE_GREY, 1);
         if(base_dsc->id1 == 3) {
@@ -140,7 +140,7 @@ static void hook_division_lines(lv_event_t * e)
             line_dsc->dash_width = 6;
         }
     }
-    /*Horizontal line*/
+    /*Горизонтальная линия*/
     else {
         if(base_dsc->id1 == 2) {
             line_dsc->width  = 2;

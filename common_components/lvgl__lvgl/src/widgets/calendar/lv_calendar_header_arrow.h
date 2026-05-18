@@ -30,7 +30,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_calendar_header_arrow_cl
  **********************/
 
 /**
- * Create a calendar header with drop-drowns to select the year and month
+ * Создайте заголовок календаря с раскрывающимися списками для выбора года и месяца.
  * @param parent    pointer to a calendar object.
  * @return          the created header
  */
@@ -43,7 +43,7 @@ lv_obj_t * lv_calendar_add_header_arrow(lv_obj_t * parent);
 #endif /*LV_USE_CALENDAR_HEADER_ARROW*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CALENDAR_HEADER_ARROW_H*/

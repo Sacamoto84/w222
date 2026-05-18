@@ -6,12 +6,12 @@ static void ta_event_cb(lv_event_t * e);
 static lv_obj_t * kb;
 
 /**
- * Automatically format text like a clock. E.g. "12:34"
- * Add the ':' automatically.
+ * Автоматически форматируйте текст, как часы. Например. «12:34»
+ * Добавьте «:» автоматически.
  */
 void lv_example_textarea_3(void)
 {
-    /*Create the text area*/
+    /*Создайте текстовую область*/
     lv_obj_t * ta = lv_textarea_create(lv_screen_active());
     lv_obj_add_event_cb(ta, ta_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
     lv_textarea_set_accepted_chars(ta, "0123456789:");
@@ -19,7 +19,7 @@ void lv_example_textarea_3(void)
     lv_textarea_set_one_line(ta, true);
     lv_textarea_set_text(ta, "");
 
-    /*Create a keyboard*/
+    /*Создать клавиатуру*/
     kb = lv_keyboard_create(lv_screen_active());
     lv_obj_set_size(kb,  LV_HOR_RES, LV_VER_RES / 2);
     lv_keyboard_set_mode(kb, LV_KEYBOARD_MODE_NUMBER);

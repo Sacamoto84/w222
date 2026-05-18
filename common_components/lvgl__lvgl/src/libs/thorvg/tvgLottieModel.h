@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2023 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -161,7 +161,7 @@ struct LottieObject
 
 struct LottieGlyph
 {
-    Array<LottieObject*> children;   //glyph shapes.
+    Array<LottieObject*> children;   //глифические формы.
     float width;
     char* code;
     char* family = nullptr;
@@ -318,7 +318,7 @@ struct LottieTrimpath : LottieObject
 
 struct LottieShape : LottieObject, LottieRenderPooler<tvg::Shape>
 {
-    bool clockwise = true;   //clockwise or counter-clockwise
+    bool clockwise = true;   //по часовой стрелке или против часовой стрелки
 
     virtual ~LottieShape() {}
 
@@ -385,7 +385,7 @@ struct LottieRect : LottieShape
 
     LottiePosition position = Point{0.0f, 0.0f};
     LottiePoint size = Point{0.0f, 0.0f};
-    LottieFloat radius = 0.0f;       //rounded corner radius
+    LottieFloat radius = 0.0f;       //радиус закругленного угла
 };
 
 
@@ -488,15 +488,15 @@ struct LottieTransform : LottieObject
     }
 
     LottiePosition position = Point{0.0f, 0.0f};
-    LottieFloat rotation = 0.0f;           //z rotation
+    LottieFloat rotation = 0.0f;           //z вращение
     LottiePoint scale = Point{100.0f, 100.0f};
     LottiePoint anchor = Point{0.0f, 0.0f};
     LottieOpacity opacity = 255;
     LottieFloat skewAngle = 0.0f;
     LottieFloat skewAxis = 0.0f;
 
-    SeparateCoord* coords = nullptr;       //either a position or separate coordinates
-    RotationEx* rotationEx = nullptr;      //extension for 3d rotation
+    SeparateCoord* coords = nullptr;       //либо позиция, либо отдельные координаты
+    RotationEx* rotationEx = nullptr;      //расширение для 3D вращения
 };
 
 
@@ -562,7 +562,7 @@ struct LottieGradient : LottieObject
     bool prepare()
     {
         if (!colorStops.populated) {
-            auto count = colorStops.count;  //colorstop count can be modified after population
+            auto count = colorStops.count;  //количество цветов может быть изменено после заполнения
             if (colorStops.frames) {
                 for (auto v = colorStops.frames->begin(); v < colorStops.frames->end(); ++v) {
                     colorStops.count = populate(v->value, count);
@@ -685,7 +685,7 @@ struct LottieRepeater : LottieObject
     LottieFloat copies = 0.0f;
     LottieFloat offset = 0.0f;
 
-    //Transform
+    //Трансформировать
     LottiePosition position = Point{0.0f, 0.0f};
     LottieFloat rotation = 0.0f;
     LottiePoint scale = Point{100.0f, 100.0f};
@@ -725,7 +725,7 @@ struct LottieGroup : LottieObject, LottieRenderPooler<tvg::Shape>
     {
         if (this->id == id) return this;
 
-        //source has children, find recursively.
+        //у источника есть дочерние элементы, найдите рекурсивно.
         for (auto c = children.begin(); c < children.end(); ++c) {
             auto child = *c;
             if (child->type == LottieObject::Type::Group || child->type == LottieObject::Type::Layer) {
@@ -738,11 +738,11 @@ struct LottieGroup : LottieObject, LottieRenderPooler<tvg::Shape>
     Scene* scene = nullptr;
     Array<LottieObject*> children;
 
-    bool reqFragment : 1;   //requirement to fragment the render context
-    bool buildDone : 1;     //completed in building the composition.
-    bool trimpath : 1;      //this group has a trimpath.
-    bool visible : 1;       //this group has visible contents.
-    bool allowMerge : 1;    //if this group is consisted of simple (transformed) shapes.
+    bool reqFragment : 1;   //требование фрагментировать контекст рендеринга
+    bool buildDone : 1;     //завершено построение композиции.
+    bool trimpath : 1;      //эта группа имеет путь обрезки.
+    bool visible : 1;       //эта группа имеет видимое содержимое.
+    bool allowMerge : 1;    //если эта группа состоит из простых (трансформированных) фигур.
 };
 
 
@@ -754,7 +754,7 @@ struct LottieLayer : LottieGroup
 
     uint8_t opacity(float frameNo)
     {
-        //return zero if the visibility is false.
+        //верните ноль, если видимость ложна.
         if (type == Null) return 255;
         return transform->opacity(frameNo);
     }
@@ -767,23 +767,23 @@ struct LottieLayer : LottieGroup
     char* name = nullptr;
     LottieLayer* parent = nullptr;
     LottieFloat timeRemap = 0.0f;
-    LottieLayer* comp = nullptr;  //Precompositor, current layer is belonges.
+    LottieLayer* comp = nullptr;  //Прекомпозитор, текущий слой принадлежит.
     LottieTransform* transform = nullptr;
     Array<LottieMask*> masks;
     Array<LottieEffect*> effects;
     LottieLayer* matteTarget = nullptr;
 
-    LottieRenderPooler<tvg::Shape> statical;  //static pooler for solid fill and clipper
+    LottieRenderPooler<tvg::Shape> statical;  //статический пулер для сплошной заливки и клипсатор
 
     float timeStretch = 1.0f;
     float w = 0.0f, h = 0.0f;
     float inFrame = 0.0f;
     float outFrame = 0.0f;
     float startFrame = 0.0f;
-    unsigned long rid = 0;      //pre-composition reference id.
-    int16_t mid = -1;           //id of the matte layer.
-    int16_t pidx = -1;          //index of the parent layer.
-    int16_t idx = -1;           //index of the current layer.
+    unsigned long rid = 0;      //Идентификатор ссылки на предварительную композицию.
+    int16_t mid = -1;           //идентификатор матового слоя.
+    int16_t pidx = -1;          //индекс родительского слоя.
+    int16_t idx = -1;           //индекс текущего слоя.
 
     struct {
         float frameNo = -1.0f;
@@ -856,7 +856,7 @@ struct LottieComposition
 
     float duration() const
     {
-        return frameCnt() / frameRate;  // in second
+        return frameCnt() / frameRate;  // во второй
     }
 
     float frameAtTime(float timeInSec) const

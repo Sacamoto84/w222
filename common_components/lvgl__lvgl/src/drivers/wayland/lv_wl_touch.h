@@ -35,7 +35,7 @@ extern "C" {
 lv_indev_t * lv_wayland_touch_create(void);
 
 /**
- * Get touchscreen input device for given LVGL display
+ * Получить устройство ввода с сенсорным экраном для данного дисплея LVGL.
  * @param display LVGL display
  * @return input device connected to touchscreen, or NULL on error
  */
@@ -48,7 +48,7 @@ lv_indev_t * lv_wayland_get_touchscreen(lv_display_t * display);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_WL_TOUCH_H*/

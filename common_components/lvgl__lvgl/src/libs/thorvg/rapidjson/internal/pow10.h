@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_POW10_
 #define RAPIDJSON_POW10_
@@ -20,13 +20,13 @@
 RAPIDJSON_NAMESPACE_BEGIN
 namespace internal {
 
-//! Computes integer powers of 10 in double (10.0^n).
-/*! This function uses lookup table for fast and accurate results.
-    \param n non-negative exponent. Must <= 308.
+//! Вычисляет целые степени 10 в формате double (10,0^n).
+/*! Эта функция использует таблицу поиска для получения быстрых и точных результатов.
+    \param n неотрицательный показатель степени. Должно <= 308.
     \return 10.0^n
 */
 inline double Pow10(int n) {
-    static const double e[] = { // 1e-0...1e308: 309 * 8 bytes = 2472 bytes
+    static const double e[] = { // 1e-0...1e308: 309 * 8 байт = 2472 байта
         1e+0,
         1e+1,  1e+2,  1e+3,  1e+4,  1e+5,  1e+6,  1e+7,  1e+8,  1e+9,  1e+10, 1e+11, 1e+12, 1e+13, 1e+14, 1e+15, 1e+16, 1e+17, 1e+18, 1e+19, 1e+20,
         1e+21, 1e+22, 1e+23, 1e+24, 1e+25, 1e+26, 1e+27, 1e+28, 1e+29, 1e+30, 1e+31, 1e+32, 1e+33, 1e+34, 1e+35, 1e+36, 1e+37, 1e+38, 1e+39, 1e+40,
@@ -49,7 +49,7 @@ inline double Pow10(int n) {
     return e[n];
 }
 
-} // namespace internal
+} // внутреннее пространство имен
 RAPIDJSON_NAMESPACE_END
 
 #endif // RAPIDJSON_POW10_

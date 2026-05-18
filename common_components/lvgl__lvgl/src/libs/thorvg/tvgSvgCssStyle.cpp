@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2022 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,7 +28,7 @@
 #include <cstring>
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 static bool _isImportanceApplicable(SvgStyleFlags &toFlagsImportance, SvgStyleFlags fromFlagsImportance, SvgStyleFlags flag)
@@ -42,7 +42,7 @@ static bool _isImportanceApplicable(SvgStyleFlags &toFlagsImportance, SvgStyleFl
 static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
 {
     if (from == nullptr) return;
-    //Copy the properties of 'from' only if they were explicitly set (not the default ones).
+    //Скопируйте свойства from, только если они были явно установлены (а не по умолчанию).
     if ((from->curColorSet && !(to->flags & SvgStyleFlags::Color)) ||
         _isImportanceApplicable(to->flagsImportance, from->flagsImportance, SvgStyleFlags::Color)) {
         to->color = from->color;
@@ -68,7 +68,7 @@ static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
             to->flagsImportance = (to->flagsImportance | SvgStyleFlags::Display);
         }
     }
-    //Fill
+    //Заполнить
     if (((from->fill.flags & SvgFillFlags::Paint) && !(to->flags & SvgStyleFlags::Fill)) ||
         _isImportanceApplicable(to->flagsImportance, from->flagsImportance, SvgStyleFlags::Fill)) {
         to->fill.paint.color = from->fill.paint.color;
@@ -102,7 +102,7 @@ static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
             to->flagsImportance = (to->flagsImportance | SvgStyleFlags::FillRule);
         }
     }
-    //Stroke
+    //Инсульт
     if (((from->stroke.flags & SvgStrokeFlags::Paint) && !(to->flags & SvgStyleFlags::Stroke)) ||
         _isImportanceApplicable(to->flagsImportance, from->flagsImportance, SvgStyleFlags::Stroke)) {
         to->stroke.paint.color = from->stroke.paint.color;
@@ -169,7 +169,7 @@ static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
             to->flagsImportance = (to->flagsImportance | SvgStyleFlags::StrokeLineJoin);
         }
     }
-    //Opacity
+    //Непрозрачность
     //TODO: it can be set to be 255 and shouldn't be changed by attribute 'opacity'
     if ((from->opacity < 255 && !(to->flags & SvgStyleFlags::Opacity)) ||
         _isImportanceApplicable(to->flagsImportance, from->flagsImportance, SvgStyleFlags::Opacity)) {
@@ -183,12 +183,12 @@ static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 void cssCopyStyleAttr(SvgNode* to, const SvgNode* from)
 {
-    //Copy matrix attribute
+    //Копировать атрибут матрицы
     if (from->transform && !(to->style->flags & SvgStyleFlags::Transform)) {
         to->transform = (Matrix*)lv_malloc(sizeof(Matrix));
         LV_ASSERT_MALLOC(to->transform);
@@ -197,7 +197,7 @@ void cssCopyStyleAttr(SvgNode* to, const SvgNode* from)
             to->style->flags = (to->style->flags | SvgStyleFlags::Transform);
         }
     }
-    //Copy style attribute
+    //Копировать атрибут стиля
     _copyStyle(to->style, from->style);
 
     if (from->style->clipPath.url) {
@@ -258,7 +258,7 @@ void cssApplyStyleToPostponeds(Array<SvgNodeIdPair>& postponeds, SvgNode* style)
     for (uint32_t i = 0; i < postponeds.count; ++i) {
         auto nodeIdPair = postponeds[i];
 
-        //css styling: tag.name has higher priority than .name
+        //Стиль CSS: tag.name имеет более высокий приоритет, чем .name
         if (auto cssNode = cssFindStyleNode(style, nodeIdPair.id, nodeIdPair.node->type)) {
             cssCopyStyleAttr(nodeIdPair.node, cssNode);
         }

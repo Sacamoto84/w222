@@ -27,7 +27,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Data of canvas*/
+/*Данные холста*/
 struct _lv_file_explorer_t {
     lv_obj_t obj;
     lv_obj_t * cont;
@@ -76,7 +76,7 @@ typedef struct {
 #endif /* LV_USE_FILE_EXPLORER != 0 */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FILE_EXPLORER_PRIVATE_H*/

@@ -38,7 +38,7 @@ void lv_example_observer_7(void);
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_EXAMPLE_OBSERVER_H*/

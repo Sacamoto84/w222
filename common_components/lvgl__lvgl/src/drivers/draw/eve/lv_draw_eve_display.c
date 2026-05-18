@@ -51,13 +51,13 @@ static void touch_read_cb(lv_indev_t * indev, lv_indev_data_t * data);
 lv_display_t * lv_draw_eve_display_create(const lv_draw_eve_parameters_t * params, lv_draw_eve_operation_cb_t op_cb,
                                           void * user_data)
 {
-    static uint32_t dummy_buf; /* It won't be used as it will send commands instead of draw pixels. */
+    static uint32_t dummy_buf; /* Он не будет использоваться, поскольку будет отправлять команды вместо рисования пикселей. */
 
     lv_display_t * disp = lv_display_create(params->hor_res, params->ver_res);
     lv_display_set_flush_cb(disp, flush_cb);
     lv_display_set_buffers(disp, &dummy_buf, NULL,
                            params->hor_res * params->ver_res * LV_COLOR_FORMAT_GET_SIZE(LV_COLOR_FORMAT_NATIVE),
-                           LV_DISPLAY_RENDER_MODE_FULL); /* recreate the full display list each refresh */
+                           LV_DISPLAY_RENDER_MODE_FULL); /* воссоздавать полный список отображения при каждом обновлении */
     lv_display_add_event_cb(disp, resolution_changed_cb, LV_EVENT_RESOLUTION_CHANGED, NULL);
     lv_display_add_event_cb(disp, render_start_cb, LV_EVENT_RENDER_START, NULL);
     lv_display_add_event_cb(disp, render_ready_cb, LV_EVENT_RENDER_READY, NULL);
@@ -121,7 +121,7 @@ void lv_draw_eve_pre_upload_font_range(lv_display_t * disp, const lv_font_t * fo
         uint32_t ramg_addr = lv_draw_eve_label_upload_glyph(false, font->dsc, glyph_dsc.gid.index);
         if(ramg_addr == LV_DRAW_EVE_RAMG_OUT_OF_RAMG) {
             LV_LOG_WARN("Could not pre-upload glyph because space could not be allocated in RAM_G.");
-            /* don't return in case there are smaller glyphs that there is space for */
+            /* не возвращайтесь, если есть глифы меньшего размера, для которых есть место */
         }
     }
 }
@@ -148,7 +148,7 @@ void lv_draw_eve_pre_upload_font_text(lv_display_t * disp, const lv_font_t * fon
         uint32_t ramg_addr = lv_draw_eve_label_upload_glyph(false, font->dsc, glyph_dsc.gid.index);
         if(ramg_addr == LV_DRAW_EVE_RAMG_OUT_OF_RAMG) {
             LV_LOG_WARN("Could not pre-upload glyph because space could not be allocated in RAM_G.");
-            /* don't return in case there are smaller glyphs that there is space for */
+            /* не возвращайтесь, если есть глифы меньшего размера, для которых есть место */
         }
     }
 }
@@ -196,8 +196,8 @@ void lv_draw_eve_memwrite32(lv_display_t * disp, uint32_t address, uint32_t data
 static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
     if(lv_display_flush_is_last(disp)) {
-        EVE_cmd_dl_burst(DL_DISPLAY); /* instruct the co-processor to show the list */
-        EVE_cmd_dl_burst(CMD_SWAP);   /* make this list active */
+        EVE_cmd_dl_burst(DL_DISPLAY); /* поручить сопроцессору показать список */
+        EVE_cmd_dl_burst(CMD_SWAP);   /* сделать этот список активным */
         EVE_end_cmd_burst();
 
         EVE_execute_cmd();
@@ -231,8 +231,8 @@ static void resolution_changed_cb(lv_event_t * e)
             return;
     }
 
-    /* no need to rotate the touch coordinates with CMD_SETROTATE, as LVGL
-     * already rotates the input coordinates.
+    /* нет необходимости вращать координаты касания с помощью CMD_SETROTATE, как LVGL
+     * уже вращает входные координаты.
      */
     EVE_memWrite8(REG_ROTATE, cmd_value);
 }
@@ -241,7 +241,7 @@ static void render_start_cb(lv_event_t * e)
 {
     EVE_start_cmd_burst();
 
-    EVE_cmd_dl_burst(CMD_DLSTART); /* start the display list */
+    EVE_cmd_dl_burst(CMD_DLSTART); /* запустить список отображения */
     EVE_cmd_dl_burst(DL_CLEAR_COLOR_RGB | 0x000000);
     EVE_cmd_dl_burst(DL_CLEAR | CLR_COL | CLR_STN | CLR_TAG);
     EVE_cmd_dl_burst(VERTEX_FORMAT(0));

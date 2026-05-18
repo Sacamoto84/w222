@@ -73,7 +73,7 @@ typedef void (*lv_draw_eve_operation_cb_t)(lv_display_t * disp, lv_draw_eve_oper
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_EVE_TARGET_H*/

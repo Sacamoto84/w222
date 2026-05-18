@@ -27,35 +27,35 @@ extern "C" {
  **********************/
 
 /**
- * Fragment states
+ * Состояния фрагмента
  */
 struct _lv_fragment_managed_states_t  {
     /**
-     * Class of the fragment
+     * Класс фрагмента
      */
     const lv_fragment_class_t * cls;
     /**
-     * Manager the fragment attached to
+     * Менеджер фрагмента, прикрепленного к
      */
     lv_fragment_manager_t * manager;
     /**
-     * Container object the fragment adding view to
+     * Объект-контейнер, к которому добавляется представление фрагмента
      */
     lv_obj_t * const * container;
     /**
-     * Fragment instance
+     * Экземпляр фрагмента
      */
     lv_fragment_t * instance;
     /**
-     * true between `create_obj_cb` and `obj_deleted_cb`
+     * истинно между `create_obj_cb` и `obj_deleted_cb`
      */
     bool obj_created;
     /**
-     * true before `lv_fragment_delete_obj` is called. Don't touch any object if this is true
+     * true до вызова `lv_fragment_delete_obj`. Не прикасайтесь ни к какому предмету, если это правда
      */
     bool destroying_obj;
     /**
-     * true if this fragment is in navigation stack that can be popped
+     * true, если этот фрагмент находится в стеке навигации, который можно извлечь
      */
     bool in_stack;
 };
@@ -71,7 +71,7 @@ struct _lv_fragment_managed_states_t  {
 #endif /* LV_USE_FRAGMENT */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_FRAGMENT_PRIVATE_H*/

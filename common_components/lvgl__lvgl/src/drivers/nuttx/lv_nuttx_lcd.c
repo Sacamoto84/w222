@@ -39,7 +39,7 @@
  **********************/
 
 typedef struct {
-    /* fd should be defined at the beginning */
+    /* fd должен быть определен в начале */
     int fd;
     lv_display_t * disp;
     struct lcddev_area_s area;
@@ -173,7 +173,7 @@ static lv_display_t * lcd_init(int fd, int hor_res, int ver_res)
         return NULL;
     }
 
-    lv_color_format_t cf = lv_display_get_color_format(disp);   /* Use default cf */
+    lv_color_format_t cf = lv_display_get_color_format(disp);   /* Использовать ссылку по умолчанию */
 #if LV_NUTTX_LCD_BUFFER_COUNT > 0
     lv_display_render_mode_t render_mode = LV_DISPLAY_RENDER_MODE_FULL;
 #else
@@ -221,7 +221,7 @@ static void display_release_cb(lv_event_t * e)
         lv_display_set_driver_data(disp, NULL);
         lv_display_set_flush_cb(disp, NULL);
 
-        /* clear display buffer */
+        /* очистить буфер дисплея */
         if(disp->buf_1) {
             lv_draw_buf_destroy(disp->buf_1);
             disp->buf_1 = NULL;
@@ -231,7 +231,7 @@ static void display_release_cb(lv_event_t * e)
             disp->buf_2 = NULL;
         }
 
-        /* close device fb */
+        /* закрыть устройство ФБ */
         if(dsc->fd >= 0) {
             close(dsc->fd);
             dsc->fd = -1;

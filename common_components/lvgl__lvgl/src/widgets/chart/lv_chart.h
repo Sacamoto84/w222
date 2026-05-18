@@ -31,7 +31,7 @@ LV_EXPORT_CONST_INT(LV_CHART_POINT_NONE);
  **********************/
 
 /**
- * Chart types
+ * Типы диаграмм
  */
 typedef enum {
     LV_CHART_TYPE_NONE,     /**< Don't draw the series*/
@@ -43,7 +43,7 @@ typedef enum {
 } lv_chart_type_t;
 
 /**
- * Chart update mode for `lv_chart_set_next`
+ * Режим обновления графика для `lv_chart_set_next`
  */
 typedef enum {
     LV_CHART_UPDATE_MODE_SHIFT,     /**< Shift old data to the left and add the new one the right*/
@@ -51,7 +51,7 @@ typedef enum {
 } lv_chart_update_mode_t;
 
 /**
- * Enumeration of the axis'
+ * Нумерация осей'
  */
 typedef enum {
     LV_CHART_AXIS_PRIMARY_Y     = 0x00,
@@ -79,27 +79,27 @@ enum _lv_property_chart_id_t {
  **********************/
 
 /**
- * Create a chart object
+ * Создание объекта диаграммы
  * @param parent    pointer to an object, it will be the parent of the new chart
  * @return          pointer to the created chart
  */
 lv_obj_t * lv_chart_create(lv_obj_t * parent);
 
 /**
- * Set a new type for a chart
+ * Установить новый тип диаграммы
  * @param obj       pointer to a chart object
  * @param type      new type of the chart (from 'lv_chart_type_t' enum)
  */
 void lv_chart_set_type(lv_obj_t * obj, lv_chart_type_t type);
 /**
- * Set the number of points on a data line on a chart
+ * Установите количество точек на линии данных на диаграмме
  * @param obj       pointer to a chart object
  * @param cnt       new number of points on the data lines
  */
 void lv_chart_set_point_count(lv_obj_t * obj, uint32_t cnt);
 
 /**
- * Set the minimal and maximal y values on an axis
+ * Установите минимальное и максимальное значения y на оси
  * @param obj       pointer to a chart object
  * @param axis      `LV_CHART_AXIS_PRIMARY_Y` or `LV_CHART_AXIS_SECONDARY_Y`
  * @param min       minimum value of the y axis
@@ -108,7 +108,7 @@ void lv_chart_set_point_count(lv_obj_t * obj, uint32_t cnt);
 void lv_chart_set_axis_range(lv_obj_t * obj, lv_chart_axis_t axis, int32_t min, int32_t max);
 
 /**
- * Set the minimal values on an axis
+ * Установите минимальные значения на оси
  * @param obj       pointer to a chart object
  * @param axis      `LV_CHART_AXIS_PRIMARY_Y` or `LV_CHART_AXIS_SECONDARY_Y`
  * @param min       minimal value of the y axis
@@ -116,7 +116,7 @@ void lv_chart_set_axis_range(lv_obj_t * obj, lv_chart_axis_t axis, int32_t min, 
 void lv_chart_set_axis_min_value(lv_obj_t * obj, lv_chart_axis_t axis, int32_t min);
 
 /**
- * Set the maximal y values on an axis
+ * Установите максимальные значения y на оси
  * @param obj       pointer to a chart object
  * @param axis      `LV_CHART_AXIS_PRIMARY_Y` or `LV_CHART_AXIS_SECONDARY_Y`
  * @param max       maximum value of the y axis
@@ -125,14 +125,14 @@ void lv_chart_set_axis_max_value(lv_obj_t * obj, lv_chart_axis_t axis, int32_t m
 
 
 /**
- * Set update mode of the chart object. Affects
+ * Установите режим обновления объекта диаграммы. влияет
  * @param obj              pointer to a chart object
  * @param update_mode      the update mode
  */
 void lv_chart_set_update_mode(lv_obj_t * obj, lv_chart_update_mode_t update_mode);
 
 /**
- * Set the number of horizontal and vertical division lines
+ * Установите количество горизонтальных и вертикальных линий разделения.
  * @param obj       pointer to a chart object
  * @param hdiv      number of horizontal division lines
  * @param vdiv      number of vertical division lines
@@ -140,56 +140,56 @@ void lv_chart_set_update_mode(lv_obj_t * obj, lv_chart_update_mode_t update_mode
 void lv_chart_set_div_line_count(lv_obj_t * obj, uint32_t hdiv, uint32_t vdiv);
 
 /**
- * Set the number of horizontal division lines
+ * Установите количество горизонтальных линий разделения.
  * @param obj       pointer to a chart object
  * @param cnt       number of horizontal division lines
  */
 void lv_chart_set_hor_div_line_count(lv_obj_t * obj, uint32_t cnt);
 
 /**
- * Set the number of vertical division lines
+ * Установите количество вертикальных линий разделения.
  * @param obj       pointer to a chart object
  * @param cnt       number of vertical division lines
  */
 void lv_chart_set_ver_div_line_count(lv_obj_t * obj, uint32_t cnt);
 
 /**
- * Get the type of a chart
+ * Получить тип диаграммы
  * @param obj       pointer to chart object
  * @return          type of the chart (from 'lv_chart_t' enum)
  */
 lv_chart_type_t lv_chart_get_type(const lv_obj_t * obj);
 
 /**
- * Get the data point number per data line on chart
+ * Получите номер точки данных для каждой строки данных на диаграмме.
  * @param obj       pointer to chart object
  * @return          point number on each data line
  */
 uint32_t lv_chart_get_point_count(const lv_obj_t * obj);
 
 /**
- * Get the update mode of a chart
+ * Получить режим обновления диаграммы
  * @param obj       pointer to a chart object
  * @return          the update mode
  */
 lv_chart_update_mode_t lv_chart_get_update_mode(const lv_obj_t * obj);
 
 /**
- * Get the number of horizontal division lines
+ * Получить количество горизонтальных линий разделения
  * @param obj       pointer to a chart object
  * @return          the number of horizontal division lines
  */
 uint32_t lv_chart_get_hor_div_line_count(const lv_obj_t * obj);
 
 /**
- * Get the number of vertical division lines
+ * Получить количество вертикальных линий разделения
  * @param obj       pointer to a chart object
  * @return          the number of vertical division lines
  */
 uint32_t lv_chart_get_ver_div_line_count(const lv_obj_t * obj);
 
 /**
- * Get the current index of the x-axis start point in the data array
+ * Получите текущий индекс начальной точки оси X в массиве данных.
  * @param obj       pointer to a chart object
  * @param ser       pointer to a data series on 'chart'
  * @return          the index of the current x start point in the data array
@@ -197,7 +197,7 @@ uint32_t lv_chart_get_ver_div_line_count(const lv_obj_t * obj);
 uint32_t lv_chart_get_x_start_point(const lv_obj_t * obj, lv_chart_series_t * ser);
 
 /**
- * Get the position of a point to the chart.
+ * Получить положение точки на графике.
  * @param obj       pointer to a chart object
  * @param ser       pointer to series
  * @param id        the index.
@@ -206,17 +206,17 @@ uint32_t lv_chart_get_x_start_point(const lv_obj_t * obj, lv_chart_series_t * se
 void lv_chart_get_point_pos_by_id(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t id, lv_point_t * p_out);
 
 /**
- * Refresh a chart if its data line has changed
+ * Обновите диаграмму, если ее строка данных изменилась.
  * @param   obj   pointer to chart object
  */
 void lv_chart_refresh(lv_obj_t * obj);
 
 /*======================
- * Series
+ * Серия
  *=====================*/
 
 /**
- * Allocate and add a data series to the chart
+ * Выделение и добавление ряда данных на диаграмму
  * @param obj       pointer to a chart object
  * @param color     color of the data series
  * @param axis      the y axis to which the series should be attached (::LV_CHART_AXIS_PRIMARY_Y or ::LV_CHART_AXIS_SECONDARY_Y)
@@ -225,14 +225,14 @@ void lv_chart_refresh(lv_obj_t * obj);
 lv_chart_series_t * lv_chart_add_series(lv_obj_t * obj, lv_color_t color, lv_chart_axis_t axis);
 
 /**
- * Deallocate and remove a data series from a chart
+ * Освобождение и удаление ряда данных из диаграммы
  * @param obj       pointer to a chart object
  * @param series    pointer to a data series on 'chart'
  */
 void lv_chart_remove_series(lv_obj_t * obj, lv_chart_series_t * series);
 
 /**
- * Hide/Unhide a single series of a chart.
+ * Скрыть/показать одну серию диаграммы.
  * @param chart     pointer to a chart object.
  * @param series    pointer to a series object
  * @param hide      true: hide the series
@@ -240,7 +240,7 @@ void lv_chart_remove_series(lv_obj_t * obj, lv_chart_series_t * series);
 void lv_chart_hide_series(lv_obj_t * chart, lv_chart_series_t * series, bool hide);
 
 /**
- * Change the color of a series
+ * Изменение цвета серии
  * @param chart     pointer to a chart object.
  * @param series    pointer to a series object
  * @param color     the new color of the series
@@ -248,7 +248,7 @@ void lv_chart_hide_series(lv_obj_t * chart, lv_chart_series_t * series, bool hid
 void lv_chart_set_series_color(lv_obj_t * chart, lv_chart_series_t * series, lv_color_t color);
 
 /**
- * Get the color of a series
+ * Получить цвет серии
  * @param chart     pointer to a chart object.
  * @param series    pointer to a series object
  * @return          the color of the series
@@ -256,8 +256,8 @@ void lv_chart_set_series_color(lv_obj_t * chart, lv_chart_series_t * series, lv_
 lv_color_t lv_chart_get_series_color(lv_obj_t * chart, const lv_chart_series_t * series);
 
 /**
- * Set the index of the x-axis start point in the data array.
- * This point will be considers the first (left) point and the other points will be drawn after it.
+ * Установите индекс начальной точки оси X в массиве данных.
+ * Эта точка будет считаться первой (левой) точкой, а остальные точки будут рисоваться после нее.
  * @param obj       pointer to a chart object
  * @param ser       pointer to a data series on 'chart'
  * @param id        the index of the x point in the data array
@@ -265,7 +265,7 @@ lv_color_t lv_chart_get_series_color(lv_obj_t * chart, const lv_chart_series_t *
 void lv_chart_set_x_start_point(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t id);
 
 /**
- * Get the next series.
+ * Берите следующую серию.
  * @param chart     pointer to a chart
  * @param ser      the previous series or NULL to get the first
  * @return          the next series or NULL if there is no more.
@@ -273,11 +273,11 @@ void lv_chart_set_x_start_point(lv_obj_t * obj, lv_chart_series_t * ser, uint32_
 lv_chart_series_t * lv_chart_get_series_next(const lv_obj_t * chart, const lv_chart_series_t * ser);
 
 /*=====================
- * Cursor
+ * Курсор
  *====================*/
 
 /**
- * Add a cursor with a given color
+ * Добавить курсор заданного цвета
  * @param obj       pointer to chart object
  * @param color     color of the cursor
  * @param dir       direction of the cursor. `LV_DIR_RIGHT/LEFT/TOP/DOWN/HOR/VER/ALL`. OR-ed values are possible
@@ -286,14 +286,14 @@ lv_chart_series_t * lv_chart_get_series_next(const lv_obj_t * chart, const lv_ch
 lv_chart_cursor_t  * lv_chart_add_cursor(lv_obj_t * obj, lv_color_t color, lv_dir_t dir);
 
 /**
- * Remove a cursor
+ * Удалить курсор
  * @param obj       pointer to chart object
  * @param cursor    pointer to the cursor
  */
 void lv_chart_remove_cursor(lv_obj_t * obj, lv_chart_cursor_t * cursor);
 
 /**
- * Set the coordinate of the cursor with respect to the paddings
+ * Установите координату курсора относительно полей
  * @param chart     pointer to a chart object
  * @param cursor    pointer to the cursor
  * @param pos       the new coordinate of cursor relative to the chart
@@ -301,7 +301,7 @@ void lv_chart_remove_cursor(lv_obj_t * obj, lv_chart_cursor_t * cursor);
 void lv_chart_set_cursor_pos(lv_obj_t * chart, lv_chart_cursor_t * cursor, lv_point_t * pos);
 
 /**
- * Set the X coordinate of the cursor with respect to the paddings
+ * Установите координату X курсора относительно полей.
  * @param chart     pointer to a chart object
  * @param cursor    pointer to the cursor
  * @param x         the new X coordinate of cursor relative to the chart
@@ -309,7 +309,7 @@ void lv_chart_set_cursor_pos(lv_obj_t * chart, lv_chart_cursor_t * cursor, lv_po
 void lv_chart_set_cursor_pos_x(lv_obj_t * chart, lv_chart_cursor_t * cursor, int32_t x);
 
 /**
- * Set the coordinate of the cursor with respect to the paddings
+ * Установите координату курсора относительно полей
  * @param chart     pointer to a chart object
  * @param cursor    pointer to the cursor
  * @param y         the new Y coordinate of cursor relative to the chart
@@ -317,7 +317,7 @@ void lv_chart_set_cursor_pos_x(lv_obj_t * chart, lv_chart_cursor_t * cursor, int
 void lv_chart_set_cursor_pos_y(lv_obj_t * chart, lv_chart_cursor_t * cursor, int32_t y);
 
 /**
- * Stick the cursor to a point
+ * Наведите курсор на точку
  * @param chart     pointer to a chart object
  * @param cursor    pointer to the cursor
  * @param ser       pointer to a series
@@ -327,7 +327,7 @@ void lv_chart_set_cursor_point(lv_obj_t * chart, lv_chart_cursor_t * cursor, lv_
                                uint32_t point_id);
 
 /**
- * Get the coordinate of the cursor with respect to the paddings
+ * Получить координату курсора относительно полей
  * @param chart     pointer to a chart object
  * @param cursor    pointer to cursor
  * @return          coordinate of the cursor as lv_point_t
@@ -335,11 +335,11 @@ void lv_chart_set_cursor_point(lv_obj_t * chart, lv_chart_cursor_t * cursor, lv_
 lv_point_t lv_chart_get_cursor_point(lv_obj_t * chart, lv_chart_cursor_t * cursor);
 
 /*=====================
- * Set/Get value(s)
+ * Установить/получить значение(я)
  *====================*/
 
 /**
- * Initialize all data points of a series with a value
+ * Инициализировать все точки данных серии со значением
  * @param obj       pointer to chart object
  * @param ser       pointer to a data series on 'chart'
  * @param value     the new value for all points. `LV_CHART_POINT_NONE` can be used to hide the points.
@@ -347,7 +347,7 @@ lv_point_t lv_chart_get_cursor_point(lv_obj_t * chart, lv_chart_cursor_t * curso
 void lv_chart_set_all_values(lv_obj_t * obj, lv_chart_series_t * ser, int32_t value);
 
 /**
- * Set the next point's Y value according to the update mode policy.
+ * Установите значение Y следующей точки в соответствии с политикой режима обновления.
  * @param obj       pointer to chart object
  * @param ser       pointer to a data series on 'chart'
  * @param value     the new value of the next data
@@ -355,7 +355,7 @@ void lv_chart_set_all_values(lv_obj_t * obj, lv_chart_series_t * ser, int32_t va
 void lv_chart_set_next_value(lv_obj_t * obj, lv_chart_series_t * ser, int32_t value);
 
 /**
- * Set the next point's X and Y value according to the update mode policy.
+ * Установите значения X и Y следующей точки в соответствии с политикой режима обновления.
  * @param obj       pointer to chart object
  * @param ser       pointer to a data series on 'chart'
  * @param x_value   the new X value of the next data
@@ -364,7 +364,7 @@ void lv_chart_set_next_value(lv_obj_t * obj, lv_chart_series_t * ser, int32_t va
 void lv_chart_set_next_value2(lv_obj_t * obj, lv_chart_series_t * ser, int32_t x_value, int32_t y_value);
 
 /**
- * Same as `lv_chart_set_next_value` but set the values from an array
+ * То же, что `lv_chart_set_next_value`, но устанавливает значения из массива.
  * @param obj           pointer to chart object
  * @param ser           pointer to a data series on 'chart'
  * @param values        the new values to set
@@ -373,7 +373,7 @@ void lv_chart_set_next_value2(lv_obj_t * obj, lv_chart_series_t * ser, int32_t x
 void lv_chart_set_series_values(lv_obj_t * obj, lv_chart_series_t * ser, const int32_t values[], size_t values_cnt);
 
 /**
- * Same as `lv_chart_set_next_value2` but set the values from an array
+ * То же, что `lv_chart_set_next_value2`, но устанавливает значения из массива.
  * @param obj           pointer to chart object
  * @param ser           pointer to a data series on 'chart'
  * @param x_values      the new values to set on the X axis
@@ -384,7 +384,7 @@ void lv_chart_set_series_values2(lv_obj_t * obj, lv_chart_series_t * ser, const 
                                  const int32_t y_values[], size_t values_cnt);
 
 /**
- * Set an individual point's y value of a chart's series directly based on its index
+ * Установите значение y отдельной точки серии диаграммы непосредственно на основе ее индекса.
  * @param obj     pointer to a chart object
  * @param ser     pointer to a data series on 'chart'
  * @param id      the index of the x point in the array
@@ -393,8 +393,8 @@ void lv_chart_set_series_values2(lv_obj_t * obj, lv_chart_series_t * ser, const 
 void lv_chart_set_series_value_by_id(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t id, int32_t value);
 
 /**
- * Set an individual point's x and y value of a chart's series directly based on its index
- * Can be used only with `LV_CHART_TYPE_SCATTER`.
+ * Установите значение x и y отдельной точки серии диаграммы непосредственно на основе ее индекса.
+ * Может использоваться только с `LV_CHART_TYPE_SCATTER`.
  * @param obj       pointer to chart object
  * @param ser       pointer to a data series on 'chart'
  * @param id        the index of the x point in the array
@@ -405,7 +405,7 @@ void lv_chart_set_series_value_by_id2(lv_obj_t * obj, lv_chart_series_t * ser, u
                                       int32_t y_value);
 
 /**
- * Set an external array for the y data points to use for the chart
+ * Установите внешний массив для точек данных y, которые будут использоваться для диаграммы.
  * NOTE: It is the users responsibility to make sure the `point_cnt` matches the external array size.
  * @param obj       pointer to a chart object
  * @param ser       pointer to a data series on 'chart'
@@ -414,7 +414,7 @@ void lv_chart_set_series_value_by_id2(lv_obj_t * obj, lv_chart_series_t * ser, u
 void lv_chart_set_series_ext_y_array(lv_obj_t * obj, lv_chart_series_t * ser, int32_t array[]);
 
 /**
- * Set an external array for the x data points to use for the chart
+ * Установите внешний массив для точек данных x, которые будут использоваться для диаграммы.
  * NOTE: It is the users responsibility to make sure the `point_cnt` matches the external array size.
  * @param obj       pointer to a chart object
  * @param ser       pointer to a data series on 'chart'
@@ -423,7 +423,7 @@ void lv_chart_set_series_ext_y_array(lv_obj_t * obj, lv_chart_series_t * ser, in
 void lv_chart_set_series_ext_x_array(lv_obj_t * obj, lv_chart_series_t * ser, int32_t array[]);
 
 /**
- * Get the array of y values of a series
+ * Получить массив значений y серии
  * @param obj   pointer to a chart object
  * @param ser   pointer to a data series on 'chart'
  * @return      the array of values with 'point_count' elements
@@ -431,7 +431,7 @@ void lv_chart_set_series_ext_x_array(lv_obj_t * obj, lv_chart_series_t * ser, in
 int32_t * lv_chart_get_series_y_array(const lv_obj_t * obj, lv_chart_series_t * ser);
 
 /**
- * Get the array of x values of a series
+ * Получить массив значений x серии
  * @param obj   pointer to a chart object
  * @param ser   pointer to a data series on 'chart'
  * @return      the array of values with 'point_count' elements
@@ -439,15 +439,15 @@ int32_t * lv_chart_get_series_y_array(const lv_obj_t * obj, lv_chart_series_t * 
 int32_t * lv_chart_get_series_x_array(const lv_obj_t * obj, lv_chart_series_t * ser);
 
 /**
- * Get the index of the currently pressed point. It's the same for every series.
+ * Получить индекс текущей нажатой точки. И так для каждой серии.
  * @param obj       pointer to a chart object
  * @return          the index of the point [0 .. point count] or LV_CHART_POINT_ID_NONE if no point is being pressed
  */
 uint32_t lv_chart_get_pressed_point(const lv_obj_t * obj);
 
 /**
- * Get the overall offset from the chart's side to the center of the first point.
- * In case of a bar chart it will be the center of the first column group
+ * Получите общее смещение от края диаграммы до центра первой точки.
+ * В случае гистограммы это будет центр первой группы столбцов.
  * @param obj       pointer to a chart object
  * @return          the offset of the center
  */
@@ -460,7 +460,7 @@ int32_t lv_chart_get_first_point_center_offset(lv_obj_t * obj);
 #endif /*LV_USE_CHART*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CHART_H*/

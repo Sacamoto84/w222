@@ -2,7 +2,7 @@
 #if LV_USE_SCALE && LV_BUILD_EXAMPLES
 
 /**
- * A simple horizontal scale with transforms
+ * Простой горизонтальный масштаб с преобразованиями
  */
 void lv_example_scale_9(void)
 {

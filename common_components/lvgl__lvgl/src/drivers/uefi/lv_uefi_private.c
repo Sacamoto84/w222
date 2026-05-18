@@ -154,12 +154,12 @@ void lv_uefi_protocol_close(EFI_HANDLE handle, EFI_GUID * protocol)
 
 /**
  * @brief Convert an UCS-2 string to an ASCII string.
- * The string must contain only characters >= 0x20 and <= 0X7E.
+ * Строка должна содержать только символы >= 0x20 и <= 0X7E.
  * @param ucs2 The UCS-2 string.
  * @param ascii The buffer to store the ASCII string.
  * @param ascii_len The size of the buffer in ASCII characters.
  * @return The number of characters written to the buffer or 0 if
- * there was an error.
+ * произошла ошибка.
 */
 size_t lv_uefi_ucs2_to_ascii(const CHAR16 * ucs2, char * ascii, size_t ascii_len)
 {
@@ -179,7 +179,7 @@ size_t lv_uefi_ucs2_to_ascii(const CHAR16 * ucs2, char * ascii, size_t ascii_len
         ascii[string_index] = (char) ucs2[string_index];
     }
 
-    /* terminate the string even if there was an error */
+    /* завершить строку, даже если произошла ошибка */
     ascii[string_index] = 0x00;
 
     return invalid_character_count == 0 ? string_index : 0;
@@ -187,12 +187,12 @@ size_t lv_uefi_ucs2_to_ascii(const CHAR16 * ucs2, char * ascii, size_t ascii_len
 
 /**
  * @brief Convert an ASCII string to an UCS-2 string.
- * The string must contain only characters >= 0x20 and <= 0X7E.
+ * Строка должна содержать только символы >= 0x20 и <= 0X7E.
  * @param ascii The ASCII string.
  * @param ucs2 The buffer to store the UCS-2 string.
  * @param ucs2_len The size of the buffer in UCS-2 characters.
  * @return The number of bytes written to the buffer or 0 if
- * there was an error.
+ * произошла ошибка.
 */
 size_t lv_uefi_ascii_to_ucs2(const char * ascii, CHAR16 * ucs2, size_t ucs2_len)
 {
@@ -212,7 +212,7 @@ size_t lv_uefi_ascii_to_ucs2(const char * ascii, CHAR16 * ucs2, size_t ucs2_len)
         ucs2[string_index] = (CHAR16) ascii[string_index];
     }
 
-    /* terminate the string even if there was an error */
+    /* завершить строку, даже если произошла ошибка */
     ucs2[string_index] = 0x0000;
 
     return invalid_character_count == 0 ? string_index : 0;

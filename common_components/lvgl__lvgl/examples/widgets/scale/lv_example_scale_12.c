@@ -6,7 +6,7 @@ static lv_obj_t * label;
 
 static const char * heading_to_cardinal(int32_t heading)
 {
-    /* Normalize heading to range [0, 360) */
+    /* Нормализовать заголовок до диапазона [0, 360) */
     while(heading < 0) heading += 360;
     while(heading >= 360) heading -= 360;
 
@@ -50,7 +50,7 @@ static void draw_event_cb(lv_event_t * e)
 }
 
 /**
- * A round scale style simulating a compass
+ * Круглая шкала, имитирующая компас.
  */
 void lv_example_scale_12(void)
 {

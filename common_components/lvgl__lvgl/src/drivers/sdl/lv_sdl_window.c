@@ -4,7 +4,7 @@
  */
 
 /**
- * Modified by NXP in 2025
+ * Изменено NXP в 2025 г.
  */
 
 /*********************
@@ -18,7 +18,7 @@
 #include "../../display/lv_display_private.h"
 #include "../../lv_init.h"
 
-#define SDL_MAIN_HANDLED /*To fix SDL's "undefined reference to WinMain" issue*/
+#define SDL_MAIN_HANDLED /*Чтобы исправить проблему «неопределенной ссылки на WinMain» в SDL.*/
 #include "lv_sdl_private.h"
 
 #if LV_COLOR_DEPTH == 1 && LV_SDL_RENDER_MODE != LV_DISPLAY_RENDER_MODE_PARTIAL
@@ -94,7 +94,7 @@ lv_display_t * lv_sdl_window_create(int32_t hor_res, int32_t ver_res)
     lv_display_add_event_cb(disp, release_disp_cb, LV_EVENT_DELETE, disp);
     lv_display_add_event_cb(disp, res_chg_event_cb, LV_EVENT_RESOLUTION_CHANGED, NULL);
 
-    /*Process the initial events*/
+    /*Обработка первоначальных событий*/
     sdl_event_handler(NULL);
 
     return disp;
@@ -203,7 +203,7 @@ void * lv_sdl_backend_get_display_data(lv_display_t * display)
 
 int32_t lv_sdl_window_get_horizontal_resolution(lv_display_t * display)
 {
-    /* Private function, fine to assert here*/
+    /* Частная функция, можно здесь утверждать*/
     LV_ASSERT_NULL(display);
     lv_sdl_window_t * dsc = lv_display_get_driver_data(display);
     LV_ASSERT_NULL(dsc);
@@ -211,7 +211,7 @@ int32_t lv_sdl_window_get_horizontal_resolution(lv_display_t * display)
 }
 int32_t lv_sdl_window_get_vertical_resolution(lv_display_t * display)
 {
-    /* Private function, fine to assert here*/
+    /* Частная функция, можно здесь утверждать*/
     LV_ASSERT_NULL(display);
     lv_sdl_window_t * dsc = lv_display_get_driver_data(display);
     LV_ASSERT_NULL(dsc);
@@ -228,14 +228,14 @@ static inline int sdl_render_mode(void)
 }
 
 /**
- * SDL main thread. All SDL related task have to be handled here!
- * It initializes SDL, handles drawing and the mouse.
+ * SDL основной поток. Все задачи, связанные с SDL, должны выполняться здесь!
+ * Он инициализирует SDL, управляет рисованием и мышью.
  */
 static void sdl_event_handler(lv_timer_t * t)
 {
     LV_UNUSED(t);
 
-    /*Refresh handling*/
+    /*Обновить обработку*/
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         lv_sdl_mouse_handler(&event);
@@ -299,7 +299,7 @@ static lv_result_t window_create(lv_display_t * disp)
     int32_t ver_res = (int32_t)((float)(disp->ver_res) * dsc->zoom);
     dsc->window = SDL_CreateWindow("LVGL Simulator",
                                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                   hor_res, ver_res, flag);       /*last param. SDL_WINDOW_BORDERLESS to hide borders*/
+                                   hor_res, ver_res, flag);       /*последний параметр.  SDL_WINDOW_BORDERLESS, чтобы скрыть границы*/
     if(!dsc->window) {
         LV_LOG_ERROR("Failed to create SDL window");
         return LV_RESULT_INVALID;
@@ -310,7 +310,7 @@ static lv_result_t window_create(lv_display_t * disp)
         return LV_RESULT_INVALID;
     }
 
-    /*Some platforms (e.g. Emscripten) seem to require setting the size again */
+    /*Некоторые платформы (например, Emscripten), похоже, требуют повторной установки размера. */
     SDL_SetWindowSize(dsc->window, hor_res, ver_res);
     return LV_RESULT_OK;
 }

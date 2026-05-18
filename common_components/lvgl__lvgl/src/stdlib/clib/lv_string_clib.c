@@ -8,7 +8,7 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_STDLIB_STRING == LV_STDLIB_CLIB
 #include "../lv_string.h"
-#include "../lv_mem.h" /*Need lv_malloc*/
+#include "../lv_mem.h" /*Нужен lv_malloc*/
 #include <string.h>
 
 /*********************
@@ -98,12 +98,12 @@ int lv_strncmp(const char * s1, const char * s2, size_t len)
 
 char * lv_strdup(const char * src)
 {
-    /*strdup uses malloc, so use the lv_malloc when LV_USE_STDLIB_MALLOC is not LV_STDLIB_CLIB */
+    /*strdup использует malloc, поэтому используйте lv_malloc, если LV_USE_STDLIB_MALLOC не LV_STDLIB_CLIB. */
     size_t len = lv_strlen(src) + 1;
     char * dst = lv_malloc(len);
     if(dst == NULL) return NULL;
 
-    lv_memcpy(dst, src, len); /*do memcpy is faster than strncpy when length is known*/
+    lv_memcpy(dst, src, len); /*do memcpy работает быстрее, чем strncpy, если известна длина*/
     return dst;
 }
 

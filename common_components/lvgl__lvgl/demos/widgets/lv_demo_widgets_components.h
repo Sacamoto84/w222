@@ -60,7 +60,7 @@ extern const lv_font_t * font_normal;
 #endif /* LV_USE_DEMO_BENCHMARK */
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DEMO_WIDGETS_COMPONENTS_H*/

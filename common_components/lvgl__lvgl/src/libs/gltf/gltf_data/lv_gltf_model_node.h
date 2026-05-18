@@ -105,8 +105,8 @@ lv_event_dsc_t * lv_gltf_model_node_add_event_cb_with_world_position(lv_gltf_mod
 /**
  * @brief Get the number of nodes in the glTF model
  *
- * Nodes form the scene graph hierarchy and can contain transformations, meshes, cameras,
- * or other nodes as children. They define the spatial relationships between objects in the scene.
+ * Узлы образуют иерархию графа сцены и могут содержать преобразования, сетки, камеры,
+ * или другие узлы как дочерние. Они определяют пространственные отношения между объектами сцены.
  *
  * @param model Pointer to the glTF model data structure
  * @return Number of nodes in the model
@@ -197,10 +197,10 @@ lv_result_t lv_gltf_model_node_set_scale_z(lv_gltf_model_node_t * node, float z)
 /**
  * @brief Get the local position of a glTF model node. Must be called from within an LV_EVENT_VALUE_CHANGED callback.
  *
- * Local position is relative to the node's parent.
+ * Локальная позиция определяется относительно родительского узла.
  *
- * This function is only valid when called from an event callback registered.
- * See `lv_gltf_model_node_add_event_cb()` and `lv_gltf_model_node_add_event_cb_with_world_position()`
+ * Эта функция действительна только при вызове из зарегистрированного обратного вызова события.
+ * См. `lv_gltf_model_node_add_event_cb()` и `lv_gltf_model_node_add_event_cb_with_world_position()`.
  *
  * @param e Pointer to the event structure from the callback
  * @param result Pointer to lv_3dpoint_t structure to store the position (x, y, z)
@@ -210,12 +210,12 @@ lv_result_t lv_gltf_model_node_get_local_position(lv_event_t * e, lv_3dpoint_t *
 
 /**
  * @brief Get the world position of a glTF model node. Must be called from within an LV_EVENT_VALUE_CHANGED callback
- * registered with world position enabled.
+ * зарегистрирован с включенной мировой позицией.
  *
- * World position is the absolute position in global scene coordinates.
+ * Мировая позиция — это абсолютная позиция в глобальных координатах сцены.
  *
- * This function requires the event callback to be registered with lv_gltf_model_node_add_event_cb_with_world_position()
- * as it involves complex matrix calculations that are computed on-demand.
+ * Эта функция требует, чтобы обратный вызов события был зарегистрирован с помощью lv_gltf_model_node_add_event_cb_with_world_position().
+ * поскольку он включает в себя сложные матричные вычисления, которые вычисляются по требованию.
  *
  * @param e Pointer to the event structure from the callback
  * @param result Pointer to lv_3dpoint_t structure to store the position (x, y, z)
@@ -226,10 +226,10 @@ lv_result_t lv_gltf_model_node_get_world_position(lv_event_t * e, lv_3dpoint_t *
 /**
  * @brief Get the scale of a glTF model node. Must be called from within an LV_EVENT_VALUE_CHANGED callback.
  *
- * Returns the scale factors for each axis.
+ * Возвращает масштабные коэффициенты для каждой оси.
  *
- * This function is only valid when called from an event callback registered.
- * See `lv_gltf_model_node_add_event_cb()` and `lv_gltf_model_node_add_event_cb_with_world_position()`
+ * Эта функция действительна только при вызове из зарегистрированного обратного вызова события.
+ * См. `lv_gltf_model_node_add_event_cb()` и `lv_gltf_model_node_add_event_cb_with_world_position()`.
  *
  * @param e Pointer to the event structure from the callback
  * @param result Pointer to lv_3dpoint_t structure to store the scale (x, y, z)
@@ -240,10 +240,10 @@ lv_result_t lv_gltf_model_node_get_scale(lv_event_t * e, lv_3dpoint_t * result);
 /**
  * @brief Get the Euler rotation of a glTF model node. Must be called from within an LV_EVENT_VALUE_CHANGED callback.
  *
- * Returns rotation as Euler angles in radians (x, y, z).
+ * Возвращает вращение в виде углов Эйлера в радианах (x, y, z).
  *
- * This function is only valid when called from an event callback registered.
- * See `lv_gltf_model_node_add_event_cb()` and `lv_gltf_model_node_add_event_cb_with_world_position()`
+ * Эта функция действительна только при вызове из зарегистрированного обратного вызова события.
+ * См. `lv_gltf_model_node_add_event_cb()` и `lv_gltf_model_node_add_event_cb_with_world_position()`.
  *
  * @param e Pointer to the event structure from the callback
  * @param result Pointer to lv_3dpoint_t structure to store the rotation in radians (x, y, z)
@@ -258,7 +258,7 @@ lv_result_t lv_gltf_model_node_get_euler_rotation(lv_event_t * e, lv_3dpoint_t *
 #endif /*LV_USE_GLTF*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_GLTF_MODEL_NODE_H*/

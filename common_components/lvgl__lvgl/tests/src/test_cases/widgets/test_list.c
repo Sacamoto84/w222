@@ -84,7 +84,7 @@ void test_list_translation_tag(void)
     lv_translation_set_language("es");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(list_text), "El Tigre");
 
-    /* Unknown language translates to the tag */
+    /* Неизвестный язык переводится на тег */
     lv_translation_set_language("fr");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(list_text), "tiger");
 
@@ -99,7 +99,7 @@ void test_list_translation_tag(void)
     lv_translation_set_language("es");
     TEST_ASSERT_EQUAL_STRING(lv_list_get_button_text(list, list_button), "El León");
 
-    /* Unknown language translates to the tag */
+    /* Неизвестный язык переводится на тег */
     lv_translation_set_language("fr");
     TEST_ASSERT_EQUAL_STRING(lv_list_get_button_text(list, list_button), "lion");
 
@@ -114,7 +114,7 @@ void test_list_translation_tag(void)
     lv_translation_set_language("es");
     TEST_ASSERT_EQUAL_STRING(lv_list_get_button_text(list, list_button), "El Conejo");
 
-    /* Unknown language translates to the tag */
+    /* Неизвестный язык переводится на тег */
     lv_translation_set_language("fr");
     TEST_ASSERT_EQUAL_STRING(lv_list_get_button_text(list, list_button), "rabbit");
 

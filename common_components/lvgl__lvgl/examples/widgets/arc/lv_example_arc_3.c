@@ -147,7 +147,7 @@ static void create_slice(lv_obj_t * parent, int percentage, lv_color_t color)
 
 void lv_example_arc_3(void)
 {
-    /* Root container: flex row */
+    /* Корневой контейнер: гибкая строка */
     lv_obj_t * root = lv_obj_create(lv_screen_active());
     lv_obj_set_size(root, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_center(root);
@@ -160,7 +160,7 @@ void lv_example_arc_3(void)
     lv_obj_set_style_bg_opa(root, LV_OPA_TRANSP, LV_PART_MAIN);
     lv_obj_remove_flag(root, LV_OBJ_FLAG_SCROLLABLE);
 
-    /* Slices container */
+    /* Контейнер для ломтиков */
     lv_obj_t * slices_container = lv_obj_create(root);
     lv_obj_set_size(slices_container, CHART_SIZE + 2 * SLICE_OFFSET, CHART_SIZE + 2 * SLICE_OFFSET);
     lv_obj_set_style_pad_all(slices_container, 0, LV_PART_MAIN);
@@ -170,7 +170,7 @@ void lv_example_arc_3(void)
     lv_obj_set_style_bg_opa(slices_container, LV_OPA_TRANSP, LV_PART_MAIN);
     lv_obj_remove_flag(slices_container, LV_OBJ_FLAG_SCROLLABLE);
 
-    /* Create slices */
+    /* Создание фрагментов */
     angle_accum = 0.0f;
     create_slice(slices_container, 12, lv_palette_main(LV_PALETTE_RED));
     create_slice(slices_container, 18, lv_palette_main(LV_PALETTE_BLUE));

@@ -86,19 +86,19 @@ void lv_3dtexture_set_flip(lv_obj_t * obj, bool h_flip, bool v_flip)
 }
 
 /*======================
- * Add/remove functions
+ * Добавить/удалить функции
  *=====================*/
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /*=====================
- * Getter functions
+ * Геттерные функции
  *====================*/
 
 /*=====================
- * Other functions
+ * Другие функции
  *====================*/
 
 /**********************
@@ -131,7 +131,7 @@ static void lv_3dtexture_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     lv_result_t res;
 
-    /*Call the ancestor's event handler*/
+    /*Вызов обработчика событий предка*/
     res = lv_obj_event_base(MY_CLASS, e);
     if(res != LV_RESULT_OK) return;
 

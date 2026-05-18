@@ -61,7 +61,7 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
     lv_draw_sw_blend_dsc_t blend_dsc = {0};
     blend_dsc.color = bg_color;
 
-    /*Most simple case: just a plain rectangle*/
+    /*Самый простой случай: простой прямоугольник.*/
     if(dsc->radius == 0 && (grad_dir == LV_GRAD_DIR_NONE)) {
         blend_dsc.blend_area = &bg_coords;
         blend_dsc.opa = dsc->opa;
@@ -69,19 +69,19 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
         return;
     }
 
-    /*Complex case: there is gradient, mask, or radius*/
+    /*Сложный случай: есть градиент, маска или радиус.*/
 #if LV_DRAW_SW_COMPLEX == 0
     LV_LOG_WARN("Can't draw complex rectangle because LV_DRAW_SW_COMPLEX = 0");
 #else
     lv_opa_t opa = dsc->opa >= LV_OPA_MAX ? LV_OPA_COVER : dsc->opa;
 
-    /*Get the real radius. Can't be larger than the half of the shortest side */
+    /*Получите реальный радиус. Не может быть больше половины самой короткой стороны. */
     int32_t coords_bg_w = lv_area_get_width(&bg_coords);
     int32_t coords_bg_h = lv_area_get_height(&bg_coords);
     int32_t short_side = LV_MIN(coords_bg_w, coords_bg_h);
     int32_t rout = LV_MIN(dsc->radius, short_side >> 1);
 
-    /*Add a radius mask if there is a radius*/
+    /*Добавьте маску радиуса, если есть радиус*/
     int32_t clipped_w = lv_area_get_width(&clipped_coords);
     lv_opa_t * mask_buf = NULL;
     lv_draw_sw_mask_radius_param_t mask_rout_param;
@@ -103,7 +103,7 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
     blend_dsc.mask_area = &blend_area;
     blend_dsc.opa = LV_OPA_COVER;
 
-    /*Get gradient if appropriate*/
+    /*Получите градиент, если это необходимо.*/
     lv_draw_sw_grad_calc_t * grad = lv_draw_sw_grad_get(&dsc->grad, coords_bg_w, coords_bg_h);
     lv_opa_t * grad_opa_map = NULL;
     bool transp = false;
@@ -125,7 +125,7 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
 
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
 
-    /*Prepare complex gradient*/
+    /*Подготовьте сложный градиент*/
     if(grad_dir >= LV_GRAD_DIR_LINEAR) {
         LV_ASSERT_NULL(grad);
         switch(grad_dir) {
@@ -143,22 +143,22 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
                 return;
         }
         blend_dsc.src_area = &blend_area;
-        /* For complex gradients we reuse the color map buffer for the pixel data */
+        /* Для сложных градиентов мы повторно используем буфер карты цветов для данных пикселей. */
         blend_dsc.src_buf = grad->color_map;
         grad_opa_map = grad->opa_map;
     }
 #endif
 
-    /* Draw the top of the rectangle line by line and mirror it to the bottom. */
+    /* Нарисуйте верхнюю часть прямоугольника по линиям и зеркально отразите ее внизу. */
     for(h = 0; h < rout; h++) {
         int32_t top_y = bg_coords.y1 + h;
         int32_t bottom_y = bg_coords.y2 - h;
-        if(top_y < clipped_coords.y1 && bottom_y > clipped_coords.y2) continue;   /*This line is clipped now*/
+        if(top_y < clipped_coords.y1 && bottom_y > clipped_coords.y2) continue;   /*Эта строка сейчас обрезана*/
 
         bool preblend = false;
 
-        /* Initialize the mask to opa instead of 0xFF and blend with LV_OPA_COVER.
-         * It saves calculating the final opa in lv_draw_sw_blend*/
+        /* Инициализируйте маску opa вместо 0xFF и смешайте ее с LV_OPA_COVER.
+         * Это экономит расчет финальной опы в lv_draw_sw_blend.*/
         lv_memset(mask_buf, opa, clipped_w);
         blend_dsc.mask_res = lv_draw_sw_mask_apply(mask_list, mask_buf, blend_area.x1, top_y, clipped_w);
         if(blend_dsc.mask_res == LV_DRAW_SW_MASK_RES_FULL_COVER) blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;
@@ -195,7 +195,7 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
                 default:
                     break;
             }
-            /* pre-blend the mask */
+            /* предварительно растушуйте маску */
             if(preblend) {
                 int32_t i;
                 for(i = 0; i < clipped_w; i++) {
@@ -239,11 +239,11 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
                 default:
                     break;
             }
-            /* pre-blend the mask */
+            /* предварительно растушуйте маску */
             if(preblend) {
                 int32_t i;
                 if(grad_dir >= LV_GRAD_DIR_LINEAR) {
-                    /*Need to generate the mask again, because we have mixed in the upper part of the gradient*/
+                    /*Нужно сгенерировать маску заново, так как мы перемешали верхнюю часть градиента.*/
                     lv_memset(mask_buf, opa, clipped_w);
                     blend_dsc.mask_res = lv_draw_sw_mask_apply(mask_list, mask_buf, blend_area.x1, top_y, clipped_w);
                     if(blend_dsc.mask_res == LV_DRAW_SW_MASK_RES_FULL_COVER) blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;
@@ -257,9 +257,9 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
         }
     }
 
-    /* Draw the center of the rectangle.*/
+    /* Нарисуйте центр прямоугольника.*/
 
-    /*If no gradient, the center is a simple rectangle*/
+    /*Если градиента нет, центр представляет собой простой прямоугольник.*/
     if(grad_dir == LV_GRAD_DIR_NONE) {
         blend_area.y1 = bg_coords.y1 + rout;
         blend_area.y2 = bg_coords.y2 - rout;
@@ -267,7 +267,7 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
         blend_dsc.mask_buf = NULL;
         lv_draw_sw_blend(t, &blend_dsc);
     }
-    /*With gradient draw line by line*/
+    /*С градиентным рисованием построчно*/
     else {
         blend_dsc.opa = opa;
         switch(grad_dir) {

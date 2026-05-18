@@ -3,10 +3,10 @@
  *
  */
 
-/*  Created on: 19 nov 2023
+/*  Создано: 19 ноября 2023 г.
  *      Author: juanj
  *
- *  Modified by LVGL
+ *  Изменено LVGL
  */
 
 #ifndef LV_DRAW_EVE_RAM_G_H
@@ -42,7 +42,7 @@ bool lv_draw_eve_ramg_get_addr(uint32_t * addr_dst, uintptr_t key,
 #endif/*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /* LV_DRAW_EVE_RAM_G_H */

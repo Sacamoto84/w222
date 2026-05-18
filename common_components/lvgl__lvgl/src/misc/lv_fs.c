@@ -66,9 +66,9 @@ bool lv_fs_is_ready(char letter)
 {
     lv_fs_drv_t * drv = lv_fs_get_drv(letter);
 
-    if(drv == NULL) return false; /*An unknown driver in not ready*/
+    if(drv == NULL) return false; /*Неизвестный водитель не готов*/
 
-    if(drv->ready_cb == NULL) return true; /*Assume the driver is always ready if no handler provided*/
+    if(drv->ready_cb == NULL) return true; /*Предположим, что драйвер всегда готов, если обработчик не предоставлен.*/
 
     return drv->ready_cb(drv);
 }
@@ -105,7 +105,7 @@ lv_fs_res_t lv_fs_open(lv_fs_file_t * file_p, const char * path, lv_fs_mode_t mo
 
     file_p->drv = drv;
 
-    /* For memory-mapped files we set the file handle to our file descriptor so that we can access the cache from the file operations */
+    /* Для файлов, отображаемых в памяти, мы устанавливаем дескриптор файла в наш файловый дескриптор, чтобы мы могли получить доступ к кешу из файловых операций. */
     if(drv->cache_size == LV_FS_CACHE_FROM_BUFFER) {
         file_p->file_d = file_p;
     }
@@ -122,7 +122,7 @@ lv_fs_res_t lv_fs_open(lv_fs_file_t * file_p, const char * path, lv_fs_mode_t mo
         file_p->cache = lv_malloc_zeroed(sizeof(lv_fs_file_cache_t));
         LV_ASSERT_MALLOC(file_p->cache);
 
-        /* If this is a memory-mapped file, then set "cache" to the memory buffer */
+        /* Если это файл, отображенный в памяти, установите «кэш» в буфер памяти. */
         if(drv->cache_size == LV_FS_CACHE_FROM_BUFFER) {
             lv_fs_path_ex_t * path_ex = (lv_fs_path_ex_t *)path;
             lv_result_t res = lv_fs_get_buffer_from_path(path_ex, &file_p->cache->buffer, &file_p->cache->end);
@@ -133,7 +133,7 @@ lv_fs_res_t lv_fs_open(lv_fs_file_t * file_p, const char * path, lv_fs_mode_t mo
             file_p->cache->start = 0;
             file_p->cache->file_position = 0;
         }
-        /*Set an invalid range by default*/
+        /*Установить недопустимый диапазон по умолчанию*/
         else {
             file_p->cache->start = UINT32_MAX;
             file_p->cache->end = UINT32_MAX - 1;
@@ -147,9 +147,9 @@ lv_fs_res_t lv_fs_open(lv_fs_file_t * file_p, const char * path, lv_fs_mode_t mo
 
 void lv_fs_make_path_from_buffer(lv_fs_path_ex_t * path, char letter, const void * buf, uint32_t size, const char * ext)
 {
-    /*Make a path the contains both the address and the size. */
+    /*Создайте путь, содержащий как адрес, так и размер. */
 
-    /*Don't add the '.' and the extension if the extension is NULL*/
+    /*Не добавляйте '.' и расширение, если расширение NULL*/
     if(ext == NULL) {
         lv_snprintf(path->path, sizeof(path->path), "%c:%zu-%" LV_PRIu32, letter, (size_t) buf, size);
     }
@@ -179,7 +179,7 @@ lv_result_t lv_fs_get_buffer_from_path(lv_fs_path_ex_t * path, void ** buffer, u
     }
 
     if(path->path[i] == '\0' || i == sizeof(path->path)) return LV_RESULT_INVALID;
-    i++; /*Skip '-'*/
+    i++; /*Пропустить '-'*/
 
     for(; path->path[i] != '.' && path->path[i] != '\0' && i < sizeof(path->path); i++) {
         *size = (*size) * 10;
@@ -206,7 +206,7 @@ lv_fs_res_t lv_fs_close(lv_fs_file_t * file_p)
     lv_fs_res_t res = file_p->drv->close_cb(file_p->drv, file_p->file_d);
 
     if(file_p->drv->cache_size && file_p->cache) {
-        /* Only free cache if it was pre-allocated (for memory-mapped files it is never allocated) */
+        /* Освободите кеш только в том случае, если он был предварительно выделен (для файлов, отображаемых в памяти, он никогда не выделяется) */
         if(file_p->drv->cache_size != LV_FS_CACHE_FROM_BUFFER && file_p->cache->buffer) {
             lv_free(file_p->cache->buffer);
         }
@@ -542,7 +542,7 @@ void lv_fs_drv_init(lv_fs_drv_t * drv)
 
 void lv_fs_drv_register(lv_fs_drv_t * drv_p)
 {
-    /*Save the new driver*/
+    /*Сохраните новый драйвер*/
     lv_fs_drv_t ** new_drv;
     new_drv = lv_ll_ins_head(fsdrv_ll_p);
     LV_ASSERT_MALLOC(new_drv);
@@ -556,11 +556,11 @@ void lv_fs_remove_drive(char letter)
     lv_fs_drv_t ** drv;
     LV_LL_READ(fsdrv_ll_p, drv) {
         if((*drv)->letter == letter) {
-            lv_ll_remove(fsdrv_ll_p, drv); /* remove the drive from the list of registered drives */
+            lv_ll_remove(fsdrv_ll_p, drv); /* удалить диск из списка зарегистрированных дисков */
             if((*drv)->remove_cb) {
-                (*drv)->remove_cb(*drv); /* call the remove callback if available */
+                (*drv)->remove_cb(*drv); /* вызовите обратный вызов удаления, если он доступен */
             }
-            lv_free(drv); /* free the list node*/
+            lv_free(drv); /* освободить узел списка*/
         }
     }
 }
@@ -601,11 +601,11 @@ const char * lv_fs_get_ext(const char * fn)
             return &fn[i + 1];
         }
         else if(fn[i] == '/' || fn[i] == '\\') {
-            return ""; /*No extension if a '\' or '/' found*/
+            return ""; /*Нет расширения, если найден '\' или '/'*/
         }
     }
 
-    return ""; /*Empty string if no '.' in the file name.*/
+    return ""; /*Пустая строка, если нет '.' в имени файла.*/
 }
 
 char * lv_fs_up(char * path)
@@ -613,9 +613,9 @@ char * lv_fs_up(char * path)
     size_t len = lv_strlen(path);
     if(len == 0) return path;
 
-    len--; /*Go before the trailing '\0'*/
+    len--; /*Идите перед конечным '\0'*/
 
-    /*Ignore trailing '/' or '\'*/
+    /*Игнорировать конечные '/' или '\'*/
     while(path[len] == '/' || path[len] == '\\') {
         path[len] = '\0';
         if(len > 0)
@@ -639,9 +639,9 @@ const char * lv_fs_get_last(const char * path)
     size_t len = lv_strlen(path);
     if(len == 0) return path;
 
-    len--; /*Go before the trailing '\0'*/
+    len--; /*Идите перед конечным '\0'*/
 
-    /*Ignore trailing '/' or '\'*/
+    /*Игнорировать конечные '/' или '\'*/
     while(path[len] == '/' || path[len] == '\\') {
         if(len > 0)
             len--;
@@ -654,7 +654,7 @@ const char * lv_fs_get_last(const char * path)
         if(path[i] == '/' || path[i] == '\\' || path[i] == ':') break;
     }
 
-    /*No '/' or '\' in the path so return with path itself*/
+    /*В пути нет '/' или '\', поэтому возвращайтесь с самим путем.*/
     if(i == 0) return path;
 
     return &path[i + 1];
@@ -689,14 +689,14 @@ int lv_fs_path_join(char * buf, size_t buf_sz, const char * base, const char * e
  **********************/
 
 /**
- * Extract the drive letter and the real path from LVGL's "abstracted file system" path string
- * @param path path string (E.g. S:/folder/file.txt)
+ * Извлеките букву диска и реальный путь из строки пути «абстрактной файловой системы» LVGL.
+ * @param path строка пути (например, S:/folder/file.txt)
  */
 static resolved_path_t lv_fs_resolve_path(const char * path)
 {
     resolved_path_t resolved;
 
-#if LV_FS_DEFAULT_DRIVER_LETTER != '\0' /* When using default driver-identifier letter, strict format (X:) is mandatory */
+#if LV_FS_DEFAULT_DRIVER_LETTER != '\0' /* При использовании буквы идентификатора драйвера по умолчанию строгий формат (X:) является обязательным. */
     bool has_drive_prefix = ('A' <= path[0]) && (path[0] <= 'Z') && (path[1] == ':');
 
     if(has_drive_prefix) {
@@ -707,11 +707,11 @@ static resolved_path_t lv_fs_resolve_path(const char * path)
         resolved.driver_letter = LV_FS_DEFAULT_DRIVER_LETTER;
         resolved.real_path = path;
     }
-# else /*Lean rules for backward compatibility*/
+# else /*Правила бережливости для обратной совместимости*/
     resolved.driver_letter = path[0];
 
     if(*path != '\0') {
-        path++; /*Ignore the driver letter*/
+        path++; /*Не обращайте внимания на письмо водителя*/
         if(*path == ':') path++;
     }
 
@@ -731,23 +731,23 @@ static lv_fs_res_t lv_fs_read_cached(lv_fs_file_t * file_p, void * buf, uint32_t
     uint32_t buffer_size = file_p->drv->cache_size;
 
     if(start <= file_position && file_position <= end) {
-        /* Data can be read from cache buffer */
+        /* Данные могут быть прочитаны из буфера кэша */
         uint32_t buffer_remaining_length = (uint32_t)end - file_position + 1;
         uint32_t buffer_offset = (end - start) - buffer_remaining_length + 1;
 
-        /* Do not allow reading beyond the actual memory block for memory-mapped files */
+        /* Не разрешать чтение за пределы фактического блока памяти для файлов, отображенных в памяти. */
         if(file_p->drv->cache_size == LV_FS_CACHE_FROM_BUFFER) {
             if(btr > buffer_remaining_length)
                 btr = buffer_remaining_length - 1;
         }
 
         if(btr <= buffer_remaining_length) {
-            /*Data is in cache buffer, and buffer end not reached, no need to read from FS*/
+            /*Данные находятся в буфере кэша, и конец буфера не достигнут, нет необходимости читать из FS*/
             lv_memcpy(buf, buffer + buffer_offset, btr);
             *br = btr;
         }
         else {
-            /*First part of data is in cache buffer, but we need to read rest of data from FS*/
+            /*Первая часть данных находится в буфере кэша, но нам нужно прочитать остальные данные из FS.*/
             lv_memcpy(buf, buffer + buffer_offset, buffer_remaining_length);
 
             file_p->drv->seek_cb(file_p->drv, file_p->file_d, file_p->cache->end + 1,
@@ -755,12 +755,12 @@ static lv_fs_res_t lv_fs_read_cached(lv_fs_file_t * file_p, void * buf, uint32_t
 
             uint32_t bytes_read_to_buffer = 0;
             if(btr - buffer_remaining_length > buffer_size) {
-                /*If remaining data chuck is bigger than buffer size, then do not use cache, instead read it directly from FS*/
+                /*Если оставшийся блок данных превышает размер буфера, не используйте кеш, а читайте его непосредственно из FS.*/
                 res = file_p->drv->read_cb(file_p->drv, file_p->file_d, (char *)buf + buffer_remaining_length,
                                            btr - buffer_remaining_length, &bytes_read_to_buffer);
             }
             else {
-                /*If remaining data chunk is smaller than buffer size, then read into cache buffer*/
+                /*Если оставшийся фрагмент данных меньше размера буфера, считывайте его в буфер кэша.*/
                 res = file_p->drv->read_cb(file_p->drv, file_p->file_d, buffer, buffer_size, &bytes_read_to_buffer);
                 file_p->cache->start = file_p->cache->end + 1;
                 file_p->cache->end = file_p->cache->start + bytes_read_to_buffer - 1;
@@ -775,13 +775,13 @@ static lv_fs_res_t lv_fs_read_cached(lv_fs_file_t * file_p, void * buf, uint32_t
         file_p->drv->seek_cb(file_p->drv, file_p->file_d, file_p->cache->file_position,
                              LV_FS_SEEK_SET);
 
-        /*Data is not in cache buffer*/
+        /*Данные отсутствуют в буфере кэша*/
         if(btr > buffer_size) {
-            /*If bigger data is requested, then do not use cache, instead read it directly*/
+            /*Если запрашиваются большие данные, не используйте кеш, а читайте их напрямую.*/
             res = file_p->drv->read_cb(file_p->drv, file_p->file_d, (void *)buf, btr, br);
         }
         else {
-            /*If small data is requested, then read from FS into cache buffer*/
+            /*Если запрашиваются небольшие данные, то читайте из FS в буфер кэша.*/
             if(buffer == NULL) {
                 file_p->cache->buffer = lv_malloc(buffer_size);
                 LV_ASSERT_MALLOC(file_p->cache->buffer);
@@ -810,7 +810,7 @@ static lv_fs_res_t lv_fs_write_cached(lv_fs_file_t * file_p, const void * buf, u
 {
     lv_fs_res_t res = LV_FS_RES_OK;
 
-    /*Need to do FS seek before writing data to FS*/
+    /*Необходимо выполнить поиск FS перед записью данных в FS.*/
     res = file_p->drv->seek_cb(file_p->drv, file_p->file_d, file_p->cache->file_position, LV_FS_SEEK_SET);
     if(res != LV_FS_RES_OK) return res;
 
@@ -863,7 +863,7 @@ static lv_fs_res_t lv_fs_seek_cached(lv_fs_file_t * file_p, uint32_t pos, lv_fs_
                 break;
             }
         case LV_FS_SEEK_END: {
-                /*Because we don't know the file size, we do a little trick: do a FS seek, then get the new file position from FS*/
+                /*Поскольку мы не знаем размер файла, мы делаем небольшой трюк: выполняем поиск по FS, затем получаем новую позицию файла из FS.*/
                 res = file_p->drv->seek_cb(file_p->drv, file_p->file_d, pos, whence);
                 if(res == LV_FS_RES_OK) {
                     uint32_t tmp_position;

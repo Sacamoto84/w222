@@ -17,7 +17,7 @@ static void set_needle_img_value(void * obj, int32_t v)
 }
 
 /**
- * A simple round scale
+ * Простая круглая шкала
  */
 void lv_example_scale_3(void)
 {
@@ -80,7 +80,7 @@ void lv_example_scale_3(void)
     lv_scale_set_angle_range(scale_img, 270);
     lv_scale_set_rotation(scale_img, 135);
 
-    /* image must point to the right. E.g. -O------>*/
+    /* изображение должно указывать вправо. Например. -О------>*/
     needle_img = lv_image_create(scale_img);
     lv_image_set_src(needle_img, &img_hand);
     lv_obj_align(needle_img, LV_ALIGN_CENTER, 47, -2);

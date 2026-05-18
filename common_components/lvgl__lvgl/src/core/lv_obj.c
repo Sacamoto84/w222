@@ -243,22 +243,22 @@ lv_obj_t * lv_obj_create(lv_obj_t * parent)
 }
 
 /*=====================
- * Setter functions
+ * Функции установки
  *====================*/
 
 /*-----------------
- * Attribute set
+ * Набор атрибутов
  *----------------*/
 
 void lv_obj_add_flag(lv_obj_t * obj, lv_obj_flag_t f)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    if(lv_obj_has_flag(obj, f)) /*Check if all flags are set*/
+    if(lv_obj_has_flag(obj, f)) /*Проверьте, установлены ли все флаги*/
         return;
 
     bool was_on_layout = lv_obj_is_layout_positioned(obj);
 
-    /* We must invalidate the area occupied by the object before we hide it as calls to invalidate hidden objects are ignored */
+    /* Мы должны сделать недействительной область, занимаемую объектом, прежде чем скрыть его, поскольку вызовы для аннулирования скрытых объектов игнорируются. */
     if(f & LV_OBJ_FLAG_HIDDEN) lv_obj_invalidate(obj);
 
     obj->flags |= f;
@@ -362,7 +362,7 @@ void lv_obj_set_radio_button(lv_obj_t * obj, bool en)
 }
 
 /*=======================
- * Getter functions
+ * Геттерные функции
  *======================*/
 
 bool lv_obj_has_flag(const lv_obj_t * obj, lv_obj_flag_t f)
@@ -490,7 +490,7 @@ lv_obj_t * lv_obj_find_by_id(const lv_obj_t * obj, const void * id)
         if(lv_obj_id_compare(child->id, id) == 0) return child;
     }
 
-    /*Search children*/
+    /*Поиск детей*/
     for(i = 0; i < child_cnt; i++) {
         lv_obj_t * child = obj->spec_attr->children[i];
         lv_obj_t * found = lv_obj_find_by_id(child, id);
@@ -580,7 +580,7 @@ static void lv_obj_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
         obj->coords.x2  = obj->coords.x1 - 1;
     }
 
-    /*Set attributes*/
+    /*Установить атрибуты*/
     obj->flags = LV_OBJ_FLAG_CLICKABLE;
     obj->flags |= LV_OBJ_FLAG_SNAPPABLE;
     if(parent) obj->flags |= LV_OBJ_FLAG_PRESS_LOCK;
@@ -605,15 +605,15 @@ static void lv_obj_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 
     lv_event_mark_deleted(obj);
 
-    /*Remove all style*/
-    lv_obj_enable_style_refresh(false); /*No need to refresh the style because the object will be deleted*/
+    /*Удалить все стили*/
+    lv_obj_enable_style_refresh(false); /*Нет необходимости обновлять стиль, поскольку объект будет удален.*/
     lv_obj_remove_style_all(obj);
     lv_obj_enable_style_refresh(true);
 
-    /*Remove the animations from this object*/
+    /*Удалить анимацию из этого объекта*/
     lv_anim_delete(obj, NULL);
 
-    /*Delete from the group*/
+    /*Удалить из группы*/
     lv_group_t * group = lv_obj_get_group(obj);
     if(group) lv_group_remove_obj(obj);
 
@@ -724,7 +724,7 @@ static void lv_obj_draw(lv_event_t * e)
         }
 
         lv_obj_init_draw_rect_dsc(obj, LV_PART_MAIN, &draw_dsc);
-        /*If the border is drawn later disable loading its properties*/
+        /*Если граница будет нарисована позже, отключите загрузку ее свойств.*/
         if(lv_obj_get_style_border_post(obj, LV_PART_MAIN)) {
             draw_dsc.border_post = 1;
         }
@@ -733,7 +733,7 @@ static void lv_obj_draw(lv_event_t * e)
         lv_draw_rect(layer, &draw_dsc, &coords);
     }
     else if(code == LV_EVENT_DRAW_MAIN_END) {
-        /*Draw the non backdrop blur when the main content is rendered the the children are not yet */
+        /*Нарисуйте размытие без фона, когда основной контент визуализируется, а дочерние элементы еще не визуализированы. */
         lv_layer_t * layer = lv_event_get_layer(e);
         bool backdrop_blur = lv_obj_get_style_blur_backdrop(obj, LV_PART_MAIN);
         if(!backdrop_blur) {
@@ -755,7 +755,7 @@ static void lv_obj_draw(lv_event_t * e)
         lv_layer_t * layer = lv_event_get_layer(e);
         draw_scrollbar(obj, layer);
 
-        /*If the border is drawn later disable loading other properties*/
+        /*Если граница будет нарисована позже, отключите загрузку других свойств.*/
         if(lv_obj_get_style_border_width(obj, LV_PART_MAIN) &&
            lv_obj_get_style_border_post(obj, LV_PART_MAIN)) {
             lv_draw_rect_dsc_t draw_dsc;
@@ -819,10 +819,10 @@ static void draw_scrollbar(lv_obj_t * obj, lv_layer_t * layer)
 }
 
 /**
- * Initialize the draw descriptor for the scrollbar
- * @param obj pointer to an object
- * @param dsc the draw descriptor to initialize
- * @return LV_RESULT_OK: the scrollbar is visible; LV_RESULT_INVALID: the scrollbar is not visible
+ * Инициализировать дескриптор отрисовки для полосы прокрутки
+ * @param obj указатель на объект
+ * @param dsc дескриптор отрисовки для инициализации
+ * @return LV_RESULT_OK: полоса прокрутки видна;  LV_RESULT_INVALID: полоса прокрутки не видна.
  */
 static lv_result_t scrollbar_init_draw_dsc(lv_obj_t * obj, lv_draw_rect_dsc_t * dsc)
 {
@@ -884,14 +884,14 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
     else if(code == LV_EVENT_RELEASED) {
         lv_obj_remove_state(obj, LV_STATE_PRESSED);
         void * param = lv_event_get_param(e);
-        /*Go the checked state if enabled*/
+        /*Перейти в проверенное состояние, если оно включено*/
         if(lv_indev_get_scroll_obj(param) == NULL && lv_obj_has_flag(obj, LV_OBJ_FLAG_CHECKABLE)) {
 
             bool was_checked = lv_obj_has_state(obj, LV_STATE_CHECKED);
             if(!(lv_obj_get_state(obj) & LV_STATE_CHECKED)) {
                 lv_obj_add_state(obj, LV_STATE_CHECKED);
             }
-            /*Radio buttons can't be checked off directly*/
+            /*Радиокнопки нельзя отключить напрямую.*/
             else if(!lv_obj_is_radio_button(obj)) {
                 lv_obj_remove_state(obj, LV_STATE_CHECKED);
             }
@@ -938,40 +938,40 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
                 lv_obj_add_state(obj, LV_STATE_CHECKED);
             }
             else if(c == LV_KEY_LEFT || c == LV_KEY_DOWN) {
-                /*Radio buttons can't be checked off directly*/
+                /*Радиокнопки нельзя отключить напрямую.*/
                 if(!lv_obj_is_radio_button(obj)) {
                     lv_obj_remove_state(obj, LV_STATE_CHECKED);
                 }
             }
 
-            /*With Enter LV_EVENT_RELEASED will send VALUE_CHANGE event*/
+            /*При поддержке EnterLV_EVENT_RELEASEDорганизовал событиеVALUE_CHANGE.*/
             if(c != LV_KEY_ENTER && was_checked != lv_obj_has_state(obj, LV_STATE_CHECKED)) {
                 lv_result_t res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
                 if(res != LV_RESULT_OK) return;
             }
         }
         else if(lv_obj_has_flag(obj, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_WITH_ARROW) && !lv_obj_is_editable(obj)) {
-            /*scroll by keypad or encoder*/
+            /*прокрутка с помощью клавиатуры или кодера*/
             lv_anim_enable_t anim_enable = LV_ANIM_OFF;
             int32_t sl = lv_obj_get_scroll_left(obj);
             int32_t sr = lv_obj_get_scroll_right(obj);
             uint32_t c = lv_event_get_key(e);
             if(c == LV_KEY_DOWN) {
-                /*use scroll_to_x/y functions to enforce scroll limits*/
+                /*функцияscroll_to_x/y для обеспечения блокировки прокрутки*/
                 lv_obj_scroll_to_y(obj, lv_obj_get_scroll_y(obj) + lv_obj_get_height(obj) / 4, anim_enable);
             }
             else if(c == LV_KEY_UP) {
                 lv_obj_scroll_to_y(obj, lv_obj_get_scroll_y(obj) - lv_obj_get_height(obj) / 4, anim_enable);
             }
             else if(c == LV_KEY_RIGHT) {
-                /*If the object can't be scrolled horizontally then scroll it vertically*/
+                /*Если объект нельзя прокручивать по горизонтали, прокрутите его по вертикали.*/
                 if(!((lv_obj_get_scroll_dir(obj) & LV_DIR_HOR) && (sl > 0 || sr > 0)))
                     lv_obj_scroll_to_y(obj, lv_obj_get_scroll_y(obj) + lv_obj_get_height(obj) / 4, anim_enable);
                 else
                     lv_obj_scroll_to_x(obj, lv_obj_get_scroll_x(obj) + lv_obj_get_width(obj) / 4, anim_enable);
             }
             else if(c == LV_KEY_LEFT) {
-                /*If the object can't be scrolled horizontally then scroll it vertically*/
+                /*Если объект нельзя прокручивать по горизонтали, прокрутите его по вертикали.*/
                 if(!((lv_obj_get_scroll_dir(obj) & LV_DIR_HOR) && (sl > 0 || sr > 0)))
                     lv_obj_scroll_to_y(obj, lv_obj_get_scroll_y(obj) - lv_obj_get_height(obj) / 4, anim_enable);
                 else
@@ -988,9 +988,9 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
         editing = lv_group_get_editing(lv_obj_get_group(obj));
         lv_state_t state = LV_STATE_FOCUSED;
 
-        /* Use the indev for then indev handler.
-         * But if the obj was focused manually it returns NULL so try to
-         * use the indev from the event*/
+        /* Используйте обработчик indev, а затем indev.
+         * Но если объект был сфокусирован вручную, он возвращает NULL, поэтому попробуйте
+         * вскормить индев из событий*/
         lv_indev_t * indev = lv_indev_active();
         if(indev == NULL) indev = lv_event_get_indev(e);
 
@@ -1068,10 +1068,10 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
 }
 
 /**
- * Set the state (fully overwrite) of an object.
- * If specified in the styles, transition animations will be started from the previous state to the current.
- * @param obj       pointer to an object
- * @param state     the new state
+ * Установите состояние (полная перезапись) объекта.
+ * Если указано в стилях, анимация перехода будет запущена из предыдущего состояния в текущее.
+ * @param obj       указатель на объект
+ * @param state     новое государство
  */
 static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
 {
@@ -1082,20 +1082,20 @@ static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
     lv_state_t prev_state = obj->state;
 
     lv_style_state_cmp_t cmp_res = lv_obj_style_state_compare(obj, prev_state, new_state);
-    /*If there is no difference in styles there is nothing else to do*/
+    /*Если нет разницы в стилях, то делать больше нечего.*/
     if(cmp_res == LV_STYLE_STATE_CMP_SAME) {
         obj->state = new_state;
         lv_obj_send_event(obj, LV_EVENT_STATE_CHANGED, &prev_state);
         return;
     }
 
-    /*Invalidate the object in their current state*/
+    /*Сделать объект недействительным в его текущем состоянии*/
     lv_obj_invalidate(obj);
 
     obj->state = new_state;
     lv_obj_update_layer_type(obj);
 
-    /*Skip transitions if the widget is not rendered yet. */
+    /*Пропускать переходы, если виджет еще не отрендерен. */
     if(!obj->rendered) {
         lv_obj_invalidate(obj);
         if(cmp_res == LV_STYLE_STATE_CMP_DIFF_DRAW_PAD) {
@@ -1113,14 +1113,14 @@ static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
         lv_obj_style_t * obj_style = &obj->styles[i];
         lv_state_t state_act = lv_obj_style_get_selector_state(obj->styles[i].selector);
         lv_part_t part_act = lv_obj_style_get_selector_part(obj->styles[i].selector);
-        if(state_act & (~new_state)) continue; /*Skip unrelated styles*/
+        if(state_act & (~new_state)) continue; /*Пропустить несвязанные стили*/
         if(obj_style->is_trans) continue;
 
         lv_style_value_t v;
         if(lv_style_get_prop_inlined(obj_style->style, LV_STYLE_TRANSITION, &v) != LV_STYLE_RES_FOUND) continue;
         const lv_style_transition_dsc_t * tr = v.ptr;
 
-        /*Add the props to the set if not added yet or added but with smaller weight*/
+        /*Добавьте в комплект реквизит, если он еще не добавлен или добавлен, но с меньшим весом.*/
         uint32_t j;
         for(j = 0; tr->props[j] != 0 && tsi < STYLE_TRANSITION_MAX; j++) {
             uint32_t t;
@@ -1131,7 +1131,7 @@ static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
                 if(ts[t].prop == tr->props[j] && part_ts == part_act && state_ts >= state_act) break;
             }
 
-            /*If not found  add it*/
+            /*Если не найден, добавьте*/
             if(t == tsi) {
                 ts[tsi].time = tr->time;
                 ts[tsi].delay = tr->delay;
@@ -1152,7 +1152,7 @@ static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
     lv_free(ts);
 
     if(cmp_res == LV_STYLE_STATE_CMP_DIFF_REDRAW) {
-        /*Invalidation is not enough, e.g. layer type needs to be updated too*/
+        /*Инвалидации недостаточно, например. тип слоя также необходимо обновить*/
         lv_obj_refresh_style(obj, LV_PART_ANY, LV_STYLE_PROP_ANY);
     }
     else if(cmp_res == LV_STYLE_STATE_CMP_DIFF_LAYOUT) {
@@ -1167,9 +1167,9 @@ static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
 }
 
 /**
- * Apply the state to the children of the object
- * @param obj pointer to an object
- * @param state the state to apply
+ * Применить состояние к дочерним элементам объекта
+ * @param obj указатель на объект
+ * @param state штат для подачи заявления
  */
 static void lv_obj_children_add_state(lv_obj_t * obj, lv_state_t state)
 {
@@ -1184,9 +1184,9 @@ static void lv_obj_children_add_state(lv_obj_t * obj, lv_state_t state)
 }
 
 /**
- * Remove the state from the children of the object
- * @param obj pointer to an object
- * @param state the state to remove
+ * Удалить состояние дочерних элементов объекта
+ * @param obj указатель на объект
+ * @param state государство, чтобы удалить
  */
 static void lv_obj_children_remove_state(lv_obj_t * obj, lv_state_t state)
 {
@@ -1202,7 +1202,7 @@ static void lv_obj_children_remove_state(lv_obj_t * obj, lv_state_t state)
 
 static bool obj_valid_child(const lv_obj_t * parent, const lv_obj_t * obj_to_find)
 {
-    /*Check all children of `parent`*/
+    /*Проверьте все дочерние элементы`parent`.*/
     uint32_t child_cnt = 0;
     if(parent->spec_attr) child_cnt = parent->spec_attr->child_cnt;
     uint32_t i;
@@ -1212,7 +1212,7 @@ static bool obj_valid_child(const lv_obj_t * parent, const lv_obj_t * obj_to_fin
             return true;
         }
 
-        /*Check the children*/
+        /*Проверьте детей*/
         bool found = obj_valid_child(child, obj_to_find);
         if(found) {
             return true;
@@ -1249,7 +1249,7 @@ static void play_timeline_on_trigger_event_cb(lv_event_t * e)
     timeline_play_dsc_t * dsc = lv_event_get_user_data(e);
     LV_ASSERT_NULL(dsc);
 
-    /*Reset the progress only if the animation was finished*/
+    /*Сбрасывать прогресс только в том случае, если анимация закончилась*/
     uint16_t progress = lv_anim_timeline_get_progress(dsc->at);
     if(dsc->reverse) {
         if(progress == 0) {

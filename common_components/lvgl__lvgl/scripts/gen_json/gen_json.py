@@ -191,7 +191,7 @@ def run(output_path, lv_conf_file, output_to_stdout, target_header, filter_priva
             return ast
 
         elif output_to_stdout:
-            # stdout.reset()
+            # стандартный вывод.  reset()
             print(json.dumps(ast.to_dict(), indent=4))
         else:
             if not os.path.exists(output_path):

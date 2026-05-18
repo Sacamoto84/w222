@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -67,8 +67,8 @@ struct Scene::Impl
     Scene* scene = nullptr;
     RenderRegion vport = {0, 0, INT32_MAX, INT32_MAX};
     Array<RenderEffect*>* effects = nullptr;
-    uint8_t opacity;         //for composition
-    bool needComp = false;   //composite or not
+    uint8_t opacity;         //для композиции
+    bool needComp = false;   //композитный или нет
 
     Impl(Scene* s) : scene(s)
     {
@@ -91,20 +91,20 @@ struct Scene::Impl
     {
         if (opacity == 0 || paints.empty()) return false;
 
-        //post effects requires composition
+        //постэффекты требуют композиции
         if (effects) return true;
 
-        //Masking may require composition (even if opacity == 255)
+        //Для маскировки может потребоваться композиция (даже если непрозрачность == 255).
         auto compMethod = scene->composite(nullptr);
         if (compMethod != CompositeMethod::None && compMethod != CompositeMethod::ClipPath) return true;
 
-        //Blending may require composition (even if opacity == 255)
+        //Для смешивания может потребоваться композиция (даже если непрозрачность == 255).
         if (PP(scene)->blendMethod != BlendMethod::Normal) return true;
 
-        //Half translucent requires intermediate composition.
+        //Полупрозрачный требует промежуточного состава.
         if (opacity == 255) return false;
 
-        //If scene has several children or only scene, it may require composition.
+        //Если у сцены есть несколько дочерних элементов или только сцена, возможно, потребуется композиция.
         //OPTIMIZE: the bitmap type of the picture would not need the composition.
         //OPTIMIZE: a single paint of a scene would not need the composition.
         if (paints.size() == 1 && paints.front()->type() == Type::Shape) return false;
@@ -117,8 +117,8 @@ struct Scene::Impl
         this->vport = renderer->viewport();
 
         if ((needComp = needComposition(opacity))) {
-            /* Overriding opacity value. If this scene is half-translucent,
-               It must do intermediate composition with that opacity value. */
+            /* Переопределение значения непрозрачности. Если эта сцена полупрозрачна,
+               Он должен создать промежуточную композицию с этим значением непрозрачности. */
             this->opacity = opacity;
             opacity = 255;
         }
@@ -146,7 +146,7 @@ struct Scene::Impl
         }
 
         if (cmp) {
-            //Apply post effects if any.
+            //Примените пост-эффекты, если таковые имеются.
             if (effects) {
                 for (auto e = effects->begin(); e < effects->end(); ++e) {
                     renderer->effect(cmp, *e);
@@ -170,14 +170,14 @@ struct Scene::Impl
         for (auto paint : paints) {
             auto region = paint->pImpl->bounds(renderer);
 
-            //Merge regions
+            //Объединить регионы
             if (region.x < x1) x1 = region.x;
             if (x2 < region.x + region.w) x2 = (region.x + region.w);
             if (region.y < y1) y1 = region.y;
             if (y2 < region.y + region.h) y2 = (region.y + region.h);
         }
 
-        //Extends the render region if post effects require
+        //Расширяет область рендеринга, если этого требуют пост-эффекты.
         int32_t ex = 0, ey = 0, ew = 0, eh = 0;
         if (effects) {
             for (auto e = effects->begin(); e < effects->end(); ++e) {
@@ -213,7 +213,7 @@ struct Scene::Impl
 
             if (!P(paint)->bounds(&x, &y, &w, &h, true, stroking)) continue;
 
-            //Merge regions
+            //Объединить регионы
             if (x < x1) x1 = x;
             if (x2 < x + w) x2 = (x + w);
             if (y < y1) y1 = y;

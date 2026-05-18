@@ -6,7 +6,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../../lvgl.h" /*To see all the widgets*/
+#include "../../../lvgl.h" /*Чтобы увидеть все виджеты*/
 
 #if LV_USE_THEME_DEFAULT
 
@@ -54,7 +54,7 @@ typedef struct {
     lv_style_t card;
     lv_style_t btn;
 
-    /*Utility*/
+    /*Утилита*/
     lv_style_t bg_color_primary;
     lv_style_t bg_color_primary_muted;
     lv_style_t bg_color_secondary;
@@ -84,7 +84,7 @@ typedef struct {
     lv_style_t anim;
     lv_style_t anim_fast;
 
-    /*Parts*/
+    /*Части*/
     lv_style_t knob;
 
 #if LV_USE_ARC
@@ -221,9 +221,9 @@ static void style_init(my_theme_t * theme)
     lv_style_transition_dsc_init(&theme->trans_normal, trans_props, lv_anim_path_linear, TRANSITION_TIME, 0, NULL);
 
     lv_style_set_transition(&theme->styles.transition_delayed,
-                            &theme->trans_delayed); /*Go back to default state with delay*/
+                            &theme->trans_delayed); /*Вернуться к состоянию по умолчанию с задержкой*/
 
-    lv_style_set_transition(&theme->styles.transition_normal, &theme->trans_normal); /*Go back to default state with delay*/
+    lv_style_set_transition(&theme->styles.transition_normal, &theme->trans_normal); /*Вернуться к состоянию по умолчанию с задержкой*/
 #endif
 
     style_init_reset(&theme->styles.scrollbar);
@@ -625,9 +625,9 @@ static void style_init(my_theme_t * theme)
 lv_theme_t * lv_theme_default_init(lv_display_t * disp, lv_color_t color_primary, lv_color_t color_secondary, bool dark,
                                    const lv_font_t * font)
 {
-    /*This trick is required only to avoid the garbage collection of
-     *styles' data if LVGL is used in a binding (e.g. MicroPython)
-     *In a general case styles could be in a simple `static lv_style_t my_style...` variables*/
+    /*Этот трюк нужен только для того, чтобы избежать сборки мусора
+     *данные стилей, если LVGL используется в привязке (например, MicroPython)
+     *В общем случае стили могут быть в простых переменных `static lv_style_t my_style...`.*/
 
     if(!lv_theme_default_is_inited()) {
         theme_def = lv_malloc_zeroed(sizeof(my_theme_t));
@@ -647,7 +647,7 @@ lv_theme_t * lv_theme_default_init(lv_display_t * disp, lv_color_t color_primary
     else if(greater_res < 720) new_size = DISP_MEDIUM;
     else new_size = DISP_LARGE;
 
-    /* check theme information whether will change or not*/
+    /* проверьте информацию о теме, изменится она или нет*/
     if(theme->inited && theme->disp_dpi == new_dpi &&
        theme->disp_size == new_size &&
        lv_color_eq(theme->base.color_primary, color_primary) &&
@@ -680,8 +680,8 @@ lv_theme_t * lv_theme_default_init(lv_display_t * disp, lv_color_t color_primary
 
     theme->inited = true;
 
-    /*Re-initialize the styles if the resolution changes as a different display size might
-     *result in different paddings */
+    /*Повторно инициализируйте стили, если разрешение изменится, поскольку может измениться размер дисплея.
+     *результатом будут разные отступы */
     lv_display_remove_event_cb_with_user_data(new_disp, resolution_change_event_cb, theme);
     lv_display_add_event_cb(new_disp, resolution_change_event_cb, LV_EVENT_RESOLUTION_CHANGED, theme);
 
@@ -746,18 +746,18 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
 
     if(lv_obj_check_type(obj, &lv_obj_class)) {
 #if LV_USE_TABVIEW
-        /*Tabview content area*/
+        /*Область содержимого Tabview*/
         if(lv_obj_check_type(parent, &lv_tabview_class) && lv_obj_get_child(parent, 1) == obj) {
             return;
         }
-        /*Tabview button container*/
+        /*Контейнер кнопки Tabview*/
         else if(lv_obj_check_type(parent, &lv_tabview_class) && lv_obj_get_child(parent, 0) == obj) {
             lv_obj_add_style(obj, &theme->styles.bg_color_white, 0);
             lv_obj_add_style(obj, &theme->styles.outline_primary, LV_STATE_FOCUS_KEY);
             lv_obj_add_style(obj, &theme->styles.tab_bg_focus, LV_STATE_FOCUS_KEY);
             return;
         }
-        /*Tabview pages*/
+        /*Страницы просмотра вкладок*/
         else if(lv_obj_check_type(lv_obj_get_parent(parent), &lv_tabview_class)) {
             lv_obj_add_style(obj, &theme->styles.pad_normal, 0);
             lv_obj_add_style(obj, &theme->styles.rotary_scroll, 0);
@@ -768,13 +768,13 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
 #endif
 
 #if LV_USE_WIN
-        /*Header*/
+        /*Заголовок*/
         if(lv_obj_check_type(parent, &lv_win_class) && lv_obj_get_child(parent, 0) == obj) {
             lv_obj_add_style(obj, &theme->styles.bg_color_grey, 0);
             lv_obj_add_style(obj, &theme->styles.pad_tiny, 0);
             return;
         }
-        /*Content*/
+        /*Содержание*/
         else if(lv_obj_check_type(parent, &lv_win_class) && lv_obj_get_child(parent, 1) == obj) {
             lv_obj_add_style(obj, &theme->styles.scr, 0);
             lv_obj_add_style(obj, &theme->styles.pad_normal, 0);
@@ -786,7 +786,7 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
 
 #if LV_USE_CALENDAR
         if(lv_obj_check_type(parent, &lv_calendar_class)) {
-            /*No style*/
+            /*Нет стиля*/
             return;
         }
 #endif
@@ -799,8 +799,8 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
     else if(lv_obj_check_type(obj, &lv_button_class)) {
 
 #if LV_USE_TABVIEW
-        lv_obj_t * tv = lv_obj_get_parent(parent); /*parent is the tabview header*/
-        if(tv && lv_obj_get_child(tv, 0) == parent) { /*The button is on the tab view header*/
+        lv_obj_t * tv = lv_obj_get_parent(parent); /*родительский элемент — это заголовок tabview*/
+        if(tv && lv_obj_get_child(tv, 0) == parent) { /*Кнопка находится в заголовке представления вкладки.*/
             if(lv_obj_check_type(tv, &lv_tabview_class)) {
                 lv_obj_add_style(obj, &theme->styles.pressed, LV_STATE_PRESSED);
                 lv_obj_add_style(obj, &theme->styles.bg_color_primary_muted, LV_STATE_CHECKED);

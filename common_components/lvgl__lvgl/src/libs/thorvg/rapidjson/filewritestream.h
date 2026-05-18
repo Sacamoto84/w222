@@ -1,16 +1,16 @@
-// Tencent is pleased to support the open source community by making RapidJSON available.
+// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
-// Licensed under the MIT License (the "License"); you may not use this file except
-// in compliance with the License. You may obtain a copy of the License at
+// Лицензия MIT («Лицензия»); вы не можете использовать этот файл, за исключением
+// в соответствии с Лицензией. Вы можете получить копию Лицензии по адресу
 //
 // http://opensource.org/licenses/MIT
 //
-// Unless required by applicable law or agreed to in writing, software distributed
-// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
+// Если это не требуется действующим законодательством или не согласовано в письменной форме, распространяемое программное обеспечение
+// по Лицензии распространяется на " AS IS " BASIS , WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
+// конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
 #ifndef RAPIDJSON_FILEWRITESTREAM_H_
 #define RAPIDJSON_FILEWRITESTREAM_H_
@@ -25,13 +25,13 @@ RAPIDJSON_DIAG_OFF(unreachable-code)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Wrapper of C file stream for output using fwrite().
+//! Обертка потока файлов C для вывода с использованием fwrite().
 /*!
-    \note implements Stream concept
+    \note реализует концепцию Stream
 */
 class FileWriteStream {
 public:
-    typedef char Ch;    //!< Character type. Only support char.
+    typedef char Ch;    //!< Тип символа. Поддержка только char.
 
     FileWriteStream(std::FILE* fp, char* buffer, size_t bufferSize) : fp_(fp), buffer_(buffer), bufferEnd_(buffer + bufferSize), current_(buffer_) {
         RAPIDJSON_ASSERT(fp_ != 0);
@@ -64,14 +64,14 @@ public:
         if (current_ != buffer_) {
             size_t result = std::fwrite(buffer_, 1, static_cast<size_t>(current_ - buffer_), fp_);
             if (result < static_cast<size_t>(current_ - buffer_)) {
-                // failure deliberately ignored at this time
-                // added to avoid warn_unused_result build errors
+                // отказ намеренно игнорируется в настоящее время
+                // добавлено, чтобы избежать ошибок сборки warn_unused_result
             }
             current_ = buffer_;
         }
     }
 
-    // Not implemented
+    // Не реализовано
     char Peek() const { RAPIDJSON_ASSERT(false); return 0; }
     char Take() { RAPIDJSON_ASSERT(false); return 0; }
     size_t Tell() const { RAPIDJSON_ASSERT(false); return 0; }
@@ -79,7 +79,7 @@ public:
     size_t PutEnd(char*) { RAPIDJSON_ASSERT(false); return 0; }
 
 private:
-    // Prohibit copy constructor & assignment operator.
+    // Запретить конструктор копирования и оператор присваивания.
     FileWriteStream(const FileWriteStream&);
     FileWriteStream& operator=(const FileWriteStream&);
 
@@ -89,7 +89,7 @@ private:
     char *current_;
 };
 
-//! Implement specialized version of PutN() with memset() for better performance.
+//! Внедрите специализированную версию PutN() с memset() для повышения производительности.
 template<>
 inline void PutN(FileWriteStream& stream, char c, size_t n) {
     stream.PutN(c, n);

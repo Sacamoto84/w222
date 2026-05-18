@@ -80,8 +80,8 @@ typedef struct {
     /**The base direction. Used when type setting Right-to-left (e.g. Arabic) texts*/
     lv_base_dir_t bidi_dir;
 
-    /**Opacity of the text in 0...255 range.
-     * LV_OPA_TRANSP, LV_OPA_10, LV_OPA_20, .. LV_OPA_COVER can be used as well*/
+    /**Непрозрачность текста в диапазоне 0...255.
+     * LV_OPA_TRANSP , LV_OPA_10 , LV_OPA_20 , .. LV_OPA_COVER также можно использовать*/
     lv_opa_t opa;
 
     /**Letter outline stroke opacity */
@@ -93,21 +93,21 @@ typedef struct {
     /**Some flags to control type setting*/
     lv_text_flag_t flag : 5;
 
-    /**1: malloc a buffer and copy `text` there.
-     * 0: `text` will be valid during rendering.*/
+    /**1: malloc буфер и скопируйте туда `text`.
+     * 0: `text` будет действителен во время рендеринга.*/
     uint8_t text_local : 1;
 
     /**Indicate that the text is constant and its pointer can be safely saved e.g. in a cache.*/
     uint8_t text_static : 1;
 
-    /**1: already executed lv_bidi_process_paragraph.
-     * 0: has not been executed lv_bidi_process_paragraph.*/
+    /**1: уже выполненlv_bidi_process_paragraph.
+     * 0: не был выполненlv_bidi_process_paragraph.*/
     uint8_t has_bided : 1;
 
     /**Pointer to an externally stored struct where some data can be cached to speed up rendering*/
     lv_draw_label_hint_t * hint;
 
-    /* Properties of the letter outlines */
+    /* Свойства контуров букв */
     lv_color_t outline_stroke_color;
     int32_t outline_stroke_width;
 
@@ -131,7 +131,7 @@ typedef struct {
     lv_text_decor_t decor : 3;
     lv_blend_mode_t blend_mode : 4;
 
-    /* Properties of the letter outlines */
+    /* Свойства контуров букв */
     lv_opa_t outline_stroke_opa;
     int32_t outline_stroke_width;
     lv_color_t outline_stroke_color;
@@ -139,16 +139,16 @@ typedef struct {
 } lv_draw_letter_dsc_t;
 
 /**
- * Passed as a parameter to `lv_draw_label_iterate_characters` to
- * draw the characters one by one
- * @param t             pointer to a draw task
- * @param dsc           pointer to `lv_draw_glyph_dsc_t` to describe the character to draw
- *                      if NULL don't draw character
- * @param fill_dsc      pointer to a fill descriptor to draw a background for the character or
- *                      underline or strike through
- *                      if NULL do not fill anything
- * @param fill_area     the area to fill
- *                      if NULL do not fill anything
+ * Передано в качестве параметра`lv_draw_label_iterate_characters`для
+ * рисуй персонажей один за другим
+ * @param t             указатель на задачу рисования
+ * @param dsc           указатель на`lv_draw_glyph_dsc_t`для описания рисуемого символа
+ *                      если NULL не рисует персонажа
+ * @param fill_dsc      указатель на дескриптор заливки для рисования фона персонажа или
+ *                      подчеркнуть или зачеркнуть
+ *                      если NULL ничего не заполняем
+ * @param fill_area     область для заполнения
+ *                      если NULL ничего не заполняем
  */
 typedef void(*lv_draw_glyph_cb_t)(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc, lv_draw_fill_dsc_t * fill_dsc,
                                   const lv_area_t * fill_area);
@@ -160,79 +160,79 @@ typedef void(*lv_draw_glyph_cb_t)(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_letter_dsc_init(lv_draw_letter_dsc_t * dsc);
 
 /**
- * Initialize a label draw descriptor
- * @param dsc       pointer to a draw descriptor
+ * Инициализировать дескриптор рисования метки
+ * @param dsc       указатель на дескриптор отрисовки
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_label_dsc_init(lv_draw_label_dsc_t * dsc);
 
 /**
- * Try to get a label draw descriptor from a draw task.
- * @param task      draw task
- * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_LABEL
+ * Попробуйте получить дескриптор отрисовки метки из задачи рисования.
+ * @param task      нарисовать задачу
+ * @return          дескриптор отрисовки задачи или NULL, если задача не относится к типу LV_DRAW_TASK_TYPE_LABEL
  */
 lv_draw_label_dsc_t * lv_draw_task_get_label_dsc(lv_draw_task_t * task);
 
 /**
- * Initialize a glyph draw descriptor.
- * Used internally.
- * @param dsc       pointer to a draw descriptor
+ * Инициализируйте дескриптор отрисовки глифа.
+ * Используется внутренне.
+ * @param dsc       указатель на дескриптор отрисовки
  */
 void lv_draw_glyph_dsc_init(lv_draw_glyph_dsc_t * dsc);
 
 /**
- * Create a draw task to render a text
- * @param layer         pointer to a layer
- * @param dsc           pointer to draw descriptor
- * @param coords        coordinates of the character
+ * Создайте задачу рисования для визуализации текста.
+ * @param layer         указатель на слой
+ * @param dsc           указатель для рисования дескриптора
+ * @param coords        координаты персонажа
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_label(lv_layer_t * layer, const lv_draw_label_dsc_t * dsc,
                                                const lv_area_t * coords);
 
 /**
- * Create a draw task to render a single character
- * @param layer          pointer to a layer
- * @param dsc            pointer to draw descriptor
- * @param point          position of the label
- * @param unicode_letter the letter to draw
+ * Создайте задачу рисования для визуализации одного символа.
+ * @param layer          указатель на слой
+ * @param dsc            указатель для рисования дескриптора
+ * @param point          положение этикетки
+ * @param unicode_letter письмо, которое нужно нарисовать
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_character(lv_layer_t * layer, lv_draw_label_dsc_t * dsc,
                                                    const lv_point_t * point, uint32_t unicode_letter);
 
 /**
- * Draw a single letter
- * @param layer          pointer to a layer
- * @param dsc            pointer to draw descriptor
- * @param point          position of the label
+ * Нарисуй одну букву
+ * @param layer          указатель на слой
+ * @param dsc            указатель для рисования дескриптора
+ * @param point          положение этикетки
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_letter(lv_layer_t * layer, lv_draw_letter_dsc_t * dsc,
                                                 const lv_point_t * point);
 
 /**
- * Should be used during rendering the characters to get the position and other
- * parameters of the characters
- * @param t             pointer to a draw task
- * @param dsc           pointer to draw descriptor
- * @param coords        coordinates of the label
- * @param cb            a callback to call to draw each glyphs one by one
+ * Следует использовать во время рендеринга символов для получения положения и других
+ * параметры персонажей
+ * @param t             указатель на задачу рисования
+ * @param dsc           указатель для рисования дескриптора
+ * @param coords        координаты метки
+ * @param cb            обратный вызов для вызова для рисования каждого глифа один за другим
  */
 void lv_draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_label_dsc_t * dsc,
                                       const lv_area_t * coords, lv_draw_glyph_cb_t cb);
 
 /**
- * @brief Draw a single letter using the provided draw unit, glyph descriptor, position, font, and callback.
+ * @brief Нарисуйте одну букву, используя предоставленный блок рисования, дескриптор глифа, положение, шрифт и обратный вызов.
  *
- * This function is responsible for rendering a single character from a text string,
- * applying the necessary styling described by the glyph descriptor (`dsc`). It handles
- * the retrieval of the glyph's description, checks its visibility within the clipping area,
- * and invokes the callback (`cb`) to render the glyph at the specified position (`pos`)
- * using the given font (`font`).
+ * Эта функция отвечает за рендеринг одного символа из текстовой строки.
+ * Применение необходимого стиля, описанного дескриптором глифа (`dsc`). Он обрабатывает
+ * при получении описания глифа проверяется его видимость в области обрезки,
+ * и вызов обратного вызова (`cb`) для отображения глифа в указанной позиции (`pos`)
+ * с помощью данного шрифта (`font`).
  *
- * @param t             Pointer to the drawing task.
- * @param dsc           Pointer to the descriptor containing styling for the glyph to be drawn.
- * @param pos           Pointer to the point coordinates where the letter should be drawn.
- * @param font          Pointer to the font containing the glyph.
- * @param letter        The Unicode code point of the letter to be drawn.
- * @param cb            Callback function to execute the actual rendering of the glyph.
+ * @param t             Указатель на задачу рисования.
+ * @param dsc           Указатель на дескриптор, содержащий стиль рисуемого глифа.
+ * @param pos           Указатель на координаты точки, где должна быть нарисована буква.
+ * @param font          Указатель на шрифт, содержащий глиф.
+ * @param letter        Код Unicode для рисуемой буквы.
+ * @param cb            Функция обратного вызова для выполнения фактического рендеринга глифа.
  */
 void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const lv_point_t * pos,
                               const lv_font_t * font, uint32_t letter, lv_draw_glyph_cb_t cb);
@@ -246,7 +246,7 @@ void lv_draw_unit_draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  co
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_LABEL_H*/

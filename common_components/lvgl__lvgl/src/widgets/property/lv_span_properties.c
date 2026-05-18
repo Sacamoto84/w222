@@ -10,8 +10,8 @@
 
 #if LV_USE_SPAN
 /**
- * Span widget property names, name must be in order.
- * Generated code from properties.py
+ * Объедините имена свойств виджетов, имена должны быть в порядке.
+ * Сгенерированный код из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_span_property_names[5] = {

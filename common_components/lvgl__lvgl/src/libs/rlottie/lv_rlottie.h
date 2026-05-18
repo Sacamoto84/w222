@@ -27,7 +27,7 @@ typedef enum {
     LV_RLOTTIE_CTRL_FORWARD  = 0,
     LV_RLOTTIE_CTRL_BACKWARD = 1,
     LV_RLOTTIE_CTRL_PAUSE    = 2,
-    LV_RLOTTIE_CTRL_PLAY     = 0, /* Yes, play = 0 is the default mode */
+    LV_RLOTTIE_CTRL_PLAY     = 0, /* Да, play = 0 — это режим по умолчанию. */
     LV_RLOTTIE_CTRL_LOOP     = 8,
 } lv_rlottie_ctrl_t;
 
@@ -52,7 +52,7 @@ void lv_rlottie_set_current_frame(lv_obj_t * rlottie, const size_t goto_frame);
 #endif /*LV_USE_RLOTTIE*/
 
 #ifdef __cplusplus
-} /* extern "C" */
+} /* внешний "С" */
 #endif
 
 #endif /*LV_RLOTTIE_H*/

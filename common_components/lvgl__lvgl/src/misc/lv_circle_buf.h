@@ -32,147 +32,147 @@ typedef bool (*lv_circle_buf_fill_cb_t)(void * buf, uint32_t buff_len, int32_t i
  **********************/
 
 /**
- * Create a circle buffer
- * @param capacity the maximum number of elements in the buffer
- * @param element_size the size of an element in bytes
- * @return pointer to the created buffer
+ * Создайте круговой буфер
+ * @param capacity максимальное количество элементов в буфере
+ * @param element_size размер элемента в байтах
+ * @return указатель на созданный буфер
  */
 lv_circle_buf_t * lv_circle_buf_create(uint32_t capacity, uint32_t element_size);
 
 /**
- * Create a circle buffer from an existing buffer
- * @param buf pointer to a buffer
- * @param capacity the maximum number of elements in the buffer
- * @param element_size the size of an element in bytes
- * @return pointer to the created buffer
+ * Создайте круговой буфер из существующего буфера
+ * @param buf указатель на буфер
+ * @param capacity максимальное количество элементов в буфере
+ * @param element_size размер элемента в байтах
+ * @return указатель на созданный буфер
  */
 lv_circle_buf_t * lv_circle_buf_create_from_buf(void * buf, uint32_t capacity, uint32_t element_size);
 
 /**
- * Create a circle buffer from an existing array
- * @param array pointer to an array
- * @return pointer to the created buffer
+ * Создайте круговой буфер из существующего массива
+ * @param array указатель на массив
+ * @return указатель на созданный буфер
  */
 lv_circle_buf_t * lv_circle_buf_create_from_array(const lv_array_t * array);
 
 /**
- * Resize the buffer
- * @param circle_buf pointer to a buffer
- * @param capacity the new capacity of the buffer
- * @return LV_RESULT_OK: the buffer is resized; LV_RESULT_INVALID: the buffer is not resized
+ * Изменить размер буфера
+ * @param circle_buf указатель на буфер
+ * @param capacity новая емкость буфера
+ * @return LV_RESULT_OK : размер буфера изменен;  LV_RESULT_INVALID: размер буфера не изменяется.
  */
 lv_result_t lv_circle_buf_resize(lv_circle_buf_t * circle_buf, uint32_t capacity);
 
 /**
- * Destroy a circle buffer
- * @param circle_buf pointer to buffer
+ * Уничтожить буфер круга
+ * @param circle_buf указатель на буфер
  */
 void lv_circle_buf_destroy(lv_circle_buf_t * circle_buf);
 
 /**
- * Get the size of the buffer
- * @param circle_buf pointer to buffer
- * @return the number of elements in the buffer
+ * Получить размер буфера
+ * @param circle_buf указатель на буфер
+ * @return количество элементов в буфере
  */
 uint32_t lv_circle_buf_size(const lv_circle_buf_t * circle_buf);
 
 /**
- * Get the capacity of the buffer
- * @param circle_buf pointer to buffer
- * @return the maximum number of elements in the buffer
+ * Получить емкость буфера
+ * @param circle_buf указатель на буфер
+ * @return максимальное количество элементов в буфере
  */
 uint32_t lv_circle_buf_capacity(const lv_circle_buf_t * circle_buf);
 
 /**
- * Get the remaining space in the buffer
- * @param circle_buf pointer to buffer
- * @return the number of elements that can be written to the buffer
+ * Получить оставшееся место в буфере
+ * @param circle_buf указатель на буфер
+ * @return количество элементов, которые можно записать в буфер
  */
 uint32_t lv_circle_buf_remain(const lv_circle_buf_t * circle_buf);
 
 /**
- * Check if the buffer is empty
- * @param circle_buf pointer to buffer
- * @return true: the buffer is empty; false: the buffer is not empty
+ * Проверьте, пуст ли буфер
+ * @param circle_buf указатель на буфер
+ * @return true: буфер пуст; false: буфер не пуст
  */
 bool lv_circle_buf_is_empty(const lv_circle_buf_t * circle_buf);
 
 /**
- * Check if the buffer is full
- * @param circle_buf pointer to buffer
- * @return true: the buffer is full; false: the buffer is not full
+ * Проверьте, заполнен ли буфер
+ * @param circle_buf указатель на буфер
+ * @return true: буфер заполнен; false: буфер не заполнен
  */
 bool lv_circle_buf_is_full(const lv_circle_buf_t * circle_buf);
 
 /**
- * Reset the buffer
- * @param circle_buf pointer to buffer
- * @return LV_RESULT_OK: the buffer is reset; LV_RESULT_INVALID: the buffer is not reset
+ * Сбросить буфер
+ * @param circle_buf указатель на буфер
+ * @return LV_RESULT_OK : буфер сбрасывается;  LV_RESULT_INVALID: буфер не сбрасывается
  */
 void lv_circle_buf_reset(lv_circle_buf_t * circle_buf);
 
 /**
- * Get the head of the buffer
- * @param circle_buf pointer to buffer
- * @return pointer to the head of the buffer
+ * Получить голову буфера
+ * @param circle_buf указатель на буфер
+ * @return указатель на заголовок буфера
  */
 void * lv_circle_buf_head(const lv_circle_buf_t * circle_buf);
 
 /**
- * Get the tail of the buffer
- * @param circle_buf pointer to buffer
- * @return pointer to the tail of the buffer
+ * Получить хвост буфера
+ * @param circle_buf указатель на буфер
+ * @return указатель на конец буфера
  */
 void * lv_circle_buf_tail(const lv_circle_buf_t * circle_buf);
 
 /**
- * Read a value
- * @param circle_buf pointer to buffer
- * @param data pointer to a variable to store the read value
- * @return LV_RESULT_OK: the value is read; LV_RESULT_INVALID: the value is not read
+ * Чтение значения
+ * @param circle_buf указатель на буфер
+ * @param data указатель на переменную для хранения прочитанного значения
+ * @return LV_RESULT_OK : значение считывается;  LV_RESULT_INVALID: значение не читается
  */
 lv_result_t lv_circle_buf_read(lv_circle_buf_t * circle_buf, void * data);
 
 /**
- * Write a value
- * @param circle_buf pointer to buffer
- * @param data pointer to the value to write
- * @return LV_RESULT_OK: the value is written; LV_RESULT_INVALID: the value is not written
+ * Напишите значение
+ * @param circle_buf указатель на буфер
+ * @param data указатель на значение для записи
+ * @return LV_RESULT_OK: значение записывается;  LV_RESULT_INVALID: значение не записано
  */
 lv_result_t lv_circle_buf_write(lv_circle_buf_t * circle_buf, const void * data);
 
 /**
- * Fill the buffer with values
- * @param circle_buf pointer to buffer
- * @param count the number of values to fill
- * @param fill_cb the callback function to fill the buffer
+ * Заполните буфер значениями
+ * @param circle_buf указатель на буфер
+ * @param count количество значений для заполнения
+ * @param fill_cb функция обратного вызова для заполнения буфера
  * @param user_data
- * @return the number of values filled
+ * @return количество заполненных значений
  */
 uint32_t lv_circle_buf_fill(lv_circle_buf_t * circle_buf, uint32_t count, lv_circle_buf_fill_cb_t fill_cb,
                             void * user_data);
 
 /**
- * Skip a value
- * @param circle_buf pointer to buffer
- * @return LV_RESULT_OK: the value is skipped; LV_RESULT_INVALID: the value is not skipped
+ * Пропустить значение
+ * @param circle_buf указатель на буфер
+ * @return LV_RESULT_OK : значение пропускается;  LV_RESULT_INVALID: значение не пропускается
  */
 lv_result_t lv_circle_buf_skip(lv_circle_buf_t * circle_buf);
 
 /**
- * Peek a value
- * @param circle_buf pointer to buffer
- * @param data pointer to a variable to store the peeked value
- * @return LV_RESULT_OK: the value is peeked; LV_RESULT_INVALID: the value is not peeked
+ * Посмотреть значение
+ * @param circle_buf указатель на буфер
+ * @param data указатель на переменную для хранения просмотренного значения
+ * @return LV_RESULT_OK : значение просматривается;  LV_RESULT_INVALID: значение не просматривается
  */
 lv_result_t lv_circle_buf_peek(const lv_circle_buf_t * circle_buf, void * data);
 
 /**
- * Peek a value at an index
- * @param circle_buf pointer to buffer
- * @param index the index of the value to peek, if the index is greater than the size of the buffer, it will return looply.
- * @param data pointer to a variable to store the peeked value
- * @return LV_RESULT_OK: the value is peeked; LV_RESULT_INVALID: the value is not peeked
+ * Просмотр значения по индексу
+ * @param circle_buf указатель на буфер
+ * @param index индекс значения для просмотра. Если индекс больше размера буфера, он будет возвращаться циклически.
+ * @param data указатель на переменную для хранения просмотренного значения
+ * @return LV_RESULT_OK : значение просматривается;  LV_RESULT_INVALID: значение не просматривается
  */
 lv_result_t lv_circle_buf_peek_at(const lv_circle_buf_t * circle_buf, uint32_t index, void * data);
 
@@ -185,7 +185,7 @@ lv_result_t lv_circle_buf_peek_at(const lv_circle_buf_t * circle_buf, uint32_t i
  **********************/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_CIRCLE_BUF_H*/

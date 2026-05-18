@@ -42,21 +42,21 @@ struct _lv_draw_sw_mask_common_dsc_t {
 };
 
 struct _lv_draw_sw_mask_line_param_t {
-    /** The first element must be the common descriptor */
+    /** Первый элемент должен быть общим дескриптором */
     lv_draw_sw_mask_common_dsc_t dsc;
 
     struct {
-        /*First point*/
+        /*Первый пункт*/
         lv_point_t p1;
 
-        /*Second point*/
+        /*Второй пункт*/
         lv_point_t p2;
 
         /*Which side to keep?*/
         lv_draw_sw_mask_line_side_t side : 3;
     } cfg;
 
-    /** A point of the line */
+    /** Точка линии */
     lv_point_t origo;
 
     /** X / (1024*Y) steepness (X is 0..1023 range). What is the change of X in 1024 Y? */
@@ -65,22 +65,22 @@ struct _lv_draw_sw_mask_line_param_t {
     /** Y / (1024*X) steepness (Y is 0..1023 range). What is the change of Y in 1024 X? */
     int32_t yx_steep;
 
-    /** Helper which stores yx_steep for flat lines and xy_steep for steep (non flat) lines */
+    /** Помощник, который хранит yx_steep для плоских линий и xy_steep для крутых (неплоских) линий. */
     int32_t steep;
 
-    /** Steepness in 1 px in 0..255 range. Used only by flat lines. */
+    /** Крутизна в 1 пиксель в диапазоне 0..255. Используется только для плоских линий. */
     int32_t spx;
 
     /** 1: It's a flat line? (Near to horizontal) */
     uint8_t flat : 1;
 
-    /** Invert the mask. The default is: Keep the left part.
-     *It is used to select left/right/top/bottom */
+    /** Инвертируйте маску. По умолчанию: оставить левую часть.
+     *Используется для выбора левого/правого/верхнего/нижнего */
     uint8_t inv: 1;
 };
 
 struct _lv_draw_sw_mask_angle_param_t {
-    /** The first element must be the common descriptor */
+    /** Первый элемент должен быть общим дескриптором */
     lv_draw_sw_mask_common_dsc_t dsc;
 
     struct {
@@ -95,13 +95,13 @@ struct _lv_draw_sw_mask_angle_param_t {
 };
 
 struct _lv_draw_sw_mask_radius_param_t {
-    /** The first element must be the common descriptor */
+    /** Первый элемент должен быть общим дескриптором */
     lv_draw_sw_mask_common_dsc_t dsc;
 
     struct {
         lv_area_t rect;
         int32_t radius;
-        /** Invert the mask. 0: Keep the pixels inside. */
+        /** Инвертируйте маску. 0: Оставлять пиксели внутри. */
         uint8_t outer: 1;
     } cfg;
 
@@ -109,7 +109,7 @@ struct _lv_draw_sw_mask_radius_param_t {
 };
 
 struct _lv_draw_sw_mask_fade_param_t {
-    /** The first element must be the common descriptor */
+    /** Первый элемент должен быть общим дескриптором */
     lv_draw_sw_mask_common_dsc_t dsc;
 
     struct {
@@ -123,7 +123,7 @@ struct _lv_draw_sw_mask_fade_param_t {
 };
 
 struct _lv_draw_sw_mask_map_param_t {
-    /** The first element must be the common descriptor */
+    /** Первый элемент должен быть общим дескриптором */
     lv_draw_sw_mask_common_dsc_t dsc;
 
     struct {
@@ -139,8 +139,8 @@ typedef lv_draw_sw_mask_radius_circle_dsc_t lv_draw_sw_mask_radius_circle_dsc_ar
  **********************/
 
 /**
- * Called by LVGL the rendering of a screen is ready to clean up
- * the temporal (cache) data of the masks
+ * Вызывается LVGL, рендеринг экрана готов к очистке.
+ * временные (кэшированные) данные масок
  */
 void lv_draw_sw_mask_cleanup(void);
 
@@ -151,7 +151,7 @@ void lv_draw_sw_mask_cleanup(void);
 #endif  /*LV_DRAW_SW_COMPLEX*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_DRAW_SW_MASK_PRIVATE_H*/

@@ -1,47 +1,47 @@
 #ifndef LV_TEST_CONF_VG_LITE_H
 #define LV_TEST_CONF_VG_LITE_H
 
-/* Use VG-Lite GPU. */
+/* Используйте VG -Lite GPU. */
 #define LV_USE_DRAW_VG_LITE 1
 
-/* Enable VG-Lite custom external 'gpu_init()' function */
+/* Включить пользовательскую внешнюю функцию VG -Lite «gpu_init ()» */
 #define LV_VG_LITE_USE_GPU_INIT 1
 
-/* Enable VG-Lite assert. */
+/* Включите утверждение VG -Lite. */
 #define LV_VG_LITE_USE_ASSERT 1
 
-/* VG-Lite flush commit trigger threshold. GPU will try to batch these many draw tasks. */
+/* VG - Порог срабатывания облегченного сброса.  GPU попытается группировать эти многочисленные задачи по рисованию. */
 #define LV_VG_LITE_FLUSH_MAX_COUNT 0
 
-/* Enable border to simulate shadow
+/* Включить границу для имитации тени
  * NOTE: which usually improves performance,
- * but does not guarantee the same rendering quality as the software. */
+ * но не гарантирует того же качества рендеринга, что и программное обеспечение. */
 #define LV_VG_LITE_USE_BOX_SHADOW 1
 
-/* VG-Lite gradient maximum cache number.
+/* VG - Максимальный номер кэша облегченного градиента.
  * NOTE: The memory usage of a single gradient image is 4K bytes.
  */
 #define LV_VG_LITE_GRAD_CACHE_CNT 32
 
-/* Disable 16 pixels alignment */
+/* Отключить выравнивание по 16 пикселей */
 #define LV_VG_LITE_THORVG_16PIXELS_ALIGN 0
 
-/* Enable ThorVG internal rendering engine */
+/* Включить внутренний механизм рендеринга ThorVG */
 #define LV_USE_THORVG_INTERNAL      1
 
-/* Simulate VG-Lite hardware using ThorVG */
+/* Имитация оборудования VG -Lite с помощью ThorVG */
 #define LV_USE_VG_LITE_THORVG       1
 
-/* Enable performance monitor log mode for build test */
+/* Включить режим журнала монитора производительности для теста сборки */
 #define LV_USE_PERF_MONITOR_LOG_MODE 1
 
-/*Using matrix for transformations.
- *Requirements:
+/*Использование матрицы для преобразований.
+ *Требования:
     `LV_USE_MATRIX = 1`.
-    The rendering engine needs to support 3x3 matrix transformations.*/
+    Механизм рендеринга должен поддерживать матричные преобразования 3x3.*/
 #define LV_DRAW_TRANSFORM_USE_MATRIX            1
 
-/* Used to test coverage of different configuration combinations */
+/* Используется для тестирования покрытия различных комбинаций конфигураций. */
 #ifdef NON_AMD64_BUILD
     #define LV_VG_LITE_DISABLE_BLIT_RECT_OFFSET  1
 #else

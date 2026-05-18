@@ -4,7 +4,7 @@
 
 #if LV_USE_GLTF
 /**
- * Timer callback to continuously rotate the model
+ * Обратный вызов таймера для непрерывного вращения модели
  */
 static void spin_timer_cb(lv_timer_t * timer)
 {
@@ -19,7 +19,7 @@ static void spin_timer_cb(lv_timer_t * timer)
 }
 
 /**
- * Open a GLTF from a file and make it spin forever like a platter
+ * Откройте GLTF из файла и заставьте его вращаться вечно, как тарелку.
  */
 void lv_example_gltf_1(void)
 {
@@ -38,7 +38,7 @@ void lv_example_gltf_1(void)
 void lv_example_gltf_1(void)
 {
     /*TODO
-     *fallback for online examples*/
+     *запасной вариант для онлайн-примеров*/
 
     lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "glTF web support is coming soon");

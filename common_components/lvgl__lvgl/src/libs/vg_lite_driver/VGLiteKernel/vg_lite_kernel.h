@@ -1,18 +1,18 @@
 /****************************************************************************
 *
-*    The MIT License (MIT)
+*    Лицензия MIT ( MIT )
 *
 *    Copyright (c) 2014 - 2022 Vivante Corporation
 *
-*    Permission is hereby granted, free of charge, to any person obtaining a
-*    copy of this software and associated documentation files (the "Software"),
-*    to deal in the Software without restriction, including without limitation
-*    the rights to use, copy, modify, merge, publish, distribute, sublicense,
-*    and/or sell copies of the Software, and to permit persons to whom the
-*    Software is furnished to do so, subject to the following conditions:
+*    Разрешение настоящим предоставляется бесплатно любому лицу, получившему
+*    копию этого программного обеспечения и связанных с ним файлов документации («Программное обеспечение»),
+*    иметь дело с Программным обеспечением без ограничений, включая, помимо прочего,
+*    права на использование, копирование, изменение, объединение, публикацию, распространение, сублицензирование,
+*    и/или продавать копии Программного обеспечения, а также разрешать лицам, которым
+*    Для этого предоставляется программное обеспечение при соблюдении следующих условий:
 *
-*    The above copyright notice and this permission notice shall be included in
-*    all copies or substantial portions of the Software.
+*    Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
+*    все копии или существенные части Программного обеспечения.
 *
 *    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 *    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,31 +24,31 @@
 *
 *****************************************************************************
 *
-*    The GPL License (GPL)
+*    Лицензия GPL ( GPL )
 *
 *    Copyright (C) 2014 - 2022 Vivante Corporation
 *
-*    This program is free software; you can redistribute it and/or
-*    modify it under the terms of the GNU General Public License
-*    as published by the Free Software Foundation; either version 2
-*    of the License, or (at your option) any later version.
+*    Эта программа является бесплатным программным обеспечением; вы можете распространять его и/или
+*    изменить его в соответствии с условиями Стандартной общественной лицензии GNU.
+*    как опубликовано Фондом свободного программного обеспечения; либо версия 2
+*    Лицензии или (по вашему выбору) любой более поздней версии.
 *
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
+*    Данная программа распространяется в надежде, что она будет полезна,
+*    но WITHOUT ANY WARRANTY ; даже без подразумеваемой гарантии
+*    MERCHANTABILITY или FITNESS FOR A PARTICULAR PURPOSE .  См.
+*    Стандартная общественная лицензия GNU для получения более подробной информации.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program; if not, write to the Free Software Foundation,
-*    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*    Вы должны были получить копию Стандартной общественной лицензии GNU.
+*    вместе с этой программой; если нет, напишите в Фонд свободного программного обеспечения,
+*    Inc., Франклин-стрит, 51, пятый этаж, Бостон, MA 02110-1301, USA.
 *
 *****************************************************************************
 *
 *    Note: This software is released under dual MIT and GPL licenses. A
-*    recipient may use this file under the terms of either the MIT license or
-*    GPL License. If you wish to use only one license not the other, you can
-*    indicate your decision by deleting one of the above license notices in your
-*    version of this file.
+*    получатель может использовать этот файл на условиях лицензии MIT или
+*    Лицензия GPL. Если вы хотите использовать только одну лицензию, а не другую, вы можете
+*    сообщите о своем решении, удалив одно из приведенных выше уведомлений о лицензии в своем
+*    версия этого файла.
 *
 *****************************************************************************/
 
@@ -61,7 +61,7 @@
 #include "../VGLite/vg_lite_options.h"
 #include "vg_lite_option.h"
 
-/* Interrupt IDs from GPU. */
+/* Идентификаторы прерываний из GPU. */
 #define EVENT_UNEXPECTED_MESH  0x80000000
 #define EVENT_CMD_BAD_WRITE    0x40000000
 #define EVENT_ERROR_RECOVER    0x20000000
@@ -90,17 +90,17 @@
 #define VG_LITE_KERNEL_IS_GPU_IDLE() \
     ((vg_lite_hal_peek(VG_LITE_HW_IDLE) & VG_LITE_HW_IDLE_STATE) == VG_LITE_HW_IDLE_STATE)
 
-/* Hardware chip Ids */
+/* Идентификаторы аппаратных чипов */
 #define GPU_CHIP_ID_GCNANOLITEV         0x255
 #define GPU_CHIP_ID_GC355               0x355
 #define GPU_CHIP_ID_GCNANOULTRAV        0x265
 
-/* vg_lite_kernel_map_t flag type */
+/* Тип флага vg_lite_kernel_map_t */
 #define VG_LITE_HAL_MAP_DMABUF          0x00000004
 #define VG_LITE_HAL_MAP_USER_MEMORY     0x00000008
 #define VG_LITE_HAL_ALLOC_4G            0x00000010
 
-/* vg_lite_kernel_allocate_t flag type */
+/* Тип флага vg_lite_kernel_allocate_t */
 #define VG_LITE_RESERVED_ALLOCATOR      0x10000000
 #define VG_LITE_GFP_ALLOCATOR           0x20000000
 #define VG_LITE_DMA_ALLOCATOR           0x40000000
@@ -113,11 +113,11 @@ extern "C" {
 #ifndef VG_LITE_ERROR
 #define VG_LITE_ERROR  1
 /*!
-    @abstract Error codes that the vg_lite functions can return.
+    @abstract Коды ошибок, которые могут возвращать функции vg_lite.
 
     @discussion
-    All API functions return a status code. On success, VG_LITE_SUCCESS will be returned when a function is
-    successful. This value is set to zero, so if any function returns a non-zero value, an error has occurred.
+    Все функции API возвращают код состояния. В случае успеха VG_LITE_SUCCESS будет возвращен, когда функция будет выполнена.
+    успешный. Это значение установлено равным нулю, поэтому, если какая-либо функция возвращает ненулевое значение, произошла ошибка.
     */
 typedef enum vg_lite_error {
     VG_LITE_SUCCESS = 0,          /*! Success.                                         */
@@ -138,94 +138,94 @@ vg_lite_error_t;
 #endif
 
 typedef enum vg_lite_kernel_counter {
-    /* Dont't touch the counter. */
+    /* Не прикасайтесь к стойке. */
     VG_LITE_NONE,
 
-    /* Turn the counter on. */
+    /* Включите счетчик. */
     VG_LITE_ON,
 
-    /* Turn the counter off. */
+    /* Выключите счетчик. */
     VG_LITE_OFF,
 
-    /* Query the counter and reset its values. */
+    /* Запросите счетчик и сбросьте его значения. */
     VG_LITE_QUERY,
 }
 vg_lite_kernel_counter_t;
 
 typedef enum vg_lite_kernel_command {
-    /* Initialize the GPU. */
+    /* Инициализируйте GPU. */
     VG_LITE_INITIALIZE,
 
-    /* Terminate the GPU. */
+    /* Завершите GPU . */
     VG_LITE_TERMINATE,
 
-    /* Allocate memory. */
+    /* Выделить память. */
     VG_LITE_ALLOCATE,
 
-    /* Free memory. */
+    /* Свободная память. */
     VG_LITE_FREE,
 
-    /* Submit a command buffer to the GPU. */
+    /* Отправьте буфер команд в GPU. */
     VG_LITE_SUBMIT,
 
-    /* Wait for the GPU to be completed. */
+    /* Подождите, пока GPU завершится. */
     VG_LITE_WAIT,
 
-    /* Reset the GPU. */
+    /* Сбросьте GPU. */
     VG_LITE_RESET,
 
-    /* Debug commands. */
+    /* Команды отладки. */
     VG_LITE_DEBUG,
 
-    /* Map memory. */
+    /* Карта памяти. */
     VG_LITE_MAP,
 
-    /* Unmap memory. */
+    /* Отключить память. */
     VG_LITE_UNMAP,
 
-    /* Check info. */
+    /* Проверьте информацию. */
     VG_LITE_CHECK,
 
-    /* Query mem. */
+    /* Запросить память. */
     VG_LITE_QUERY_MEM,
 
-    /* Flexa disable */
+    /* Флекса отключить */
     VG_LITE_FLEXA_DISABLE,
 
-    /* Flexa enable */
+    /* Flexa включить */
     VG_LITE_FLEXA_ENABLE,
 
-    /* Flexa stop frame */
+    /* Флекса стопорная рамка */
     VG_LITE_FLEXA_STOP_FRAME,
 
-    /* Set background address */
+    /* Установить фоновый адрес */
     VG_LITE_FLEXA_SET_BACKGROUND_ADDRESS,
 
-    /* Map memory to user */
+    /* Сопоставить память пользователю */
     VG_LITE_MAP_MEMORY,
 
-    /* Unmap memory to user */
+    /* Отключить память для пользователя */
     VG_LITE_UNMAP_MEMORY,
 
-    /* Close gpu */
+    /* Закрыть графический процессор */
     VG_LITE_CLOSE,
 
-    /* Operation cache */
+    /* Кэш операций */
     VG_LITE_CACHE,
 
-    /* Export memory */
+    /* Экспортировать память */
     VG_LITE_EXPORT_MEMORY,
 
-    /* Record GPU hardware running time */
+    /* Запись времени работы оборудования GPU */
     VG_LITE_RECORD_RUNNING_TIME,
 
-    /* Set delay resume state */
+    /* Установить состояние задержки возобновления */
     VG_LITE_SET_DELAY_RESUME,
 
-    /* Query delay resume state */
+    /* Состояние возобновления задержки запроса */
     VG_LITE_QUERY_DELAY_RESUME,
 
-    /* Set GPU clock state */
+    /* Установите состояние часов GPU */
     VG_LITE_SET_GPU_CLOCK_STATE,
 
 }
@@ -250,22 +250,22 @@ typedef enum vg_lite_gpu_execute_state {
 }
 vg_lite_gpu_execute_state_t;
 
-/* Context structure. */
+/* Структура контекста. */
 typedef struct vg_lite_kernel_context {
-    /* Command buffer. */
+    /* Буфер команд. */
     void           *          command_buffer[CMDBUF_COUNT];
     void           *          command_buffer_logical[CMDBUF_COUNT];
     void           *          command_buffer_klogical[CMDBUF_COUNT];
     uint32_t                  command_buffer_physical[CMDBUF_COUNT];
     uint32_t                  end_of_frame;
 
-    /* Tessellation buffer. */
+    /* Буфер тесселяции. */
     void           *          tess_buffer;
     void           *          tessbuf_logical;
     void           *          tessbuf_klogical;
     uint32_t                  tessbuf_physical;
 
-    /* power context buffer  */
+    /* буфер контекста мощности  */
     void           *          power_context;
     void           *          power_context_logical;
     void           *          power_context_klogical;
@@ -290,54 +290,54 @@ vg_lite_capabilities_t;
 typedef struct vg_lite_kernel_initialize {
     /* INPUT */
 
-    /* Command buffer size. */
+    /* Размер буфера команд. */
     uint32_t command_buffer_size;
 
-    /* Tessellation buffer width. */
+    /* Ширина буфера тесселяции. */
     int32_t tess_width;
 
-    /* Tessellation buffer height. */
+    /* Высота буфера тесселяции. */
     int32_t tess_height;
 
-    /* Memory pool for command buffer. */
+    /* Пул памяти для буфера команд. */
     vg_lite_vidmem_pool_t command_buffer_pool;
 
-    /* Memory pool for tessellation buffer. */
+    /* Пул памяти для буфера тесселяции. */
     vg_lite_vidmem_pool_t tess_buffer_pool;
 
     /* OUTPUT */
 
-    /* Context pointer. */
+    /* Указатель контекста. */
     vg_lite_kernel_context_t * context;
 
-    /* Capabilities. */
+    /* Возможности. */
     vg_lite_capabilities_t capabilities;
 
-    /* Allocated command buffer. */
+    /* Выделенный командный буфер. */
     void * command_buffer[CMDBUF_COUNT];
 
-    /* GPU address for command buffer. */
+    /* GPU адрес буфера команд. */
     uint32_t command_buffer_gpu[CMDBUF_COUNT];
 
-    /* GPU addresses for tesselation buffers. */
+    /* GPU адреса для буферов тесселяции. */
     uint32_t physical_addr;
 
-    /* Logic addresses for tessellation buffers: used by SW Tessellator. */
+    /* Логические адреса для буферов тесселяции: используются SW Tesselator. */
     uint8_t * logical_addr;
 
-    /* Size of each level of the tesselation buffer. */
+    /* Размер каждого уровня буфера тесселяции. */
     uint32_t tessbuf_size;
 
-    /* Size of each level of the vg count buffer. */
+    /* Размер каждого уровня буфера счетчика vg. */
     uint32_t countbuf_size;
 
-    /* Width and height of tessellation buffer. */
+    /* Ширина и высота буфера тесселяции. */
     uint32_t tess_w_h;
 }
 vg_lite_kernel_initialize_t;
 
 typedef struct vg_lite_kernel_terminate {
-    /* Context to terminate. */
+    /* Контекст для завершения. */
     vg_lite_kernel_context_t * context;
 }
 vg_lite_kernel_terminate_t;
@@ -345,51 +345,51 @@ vg_lite_kernel_terminate_t;
 typedef struct vg_lite_kernel_allocate {
     /* INPUT */
 
-    /* Number of bytes to allocate. */
+    /* Количество байтов, которые необходимо выделить. */
     uint32_t bytes;
 
-    /* Flag to indicate whether the allocated memory is contiguous or not. */
+    /* Флаг, указывающий, является ли выделенная память непрерывной или нет. */
     int32_t contiguous;
 
-    /* Flag to indicate where to allocate memory  */
+    /* Флаг, указывающий, где выделить память.  */
     uint32_t flags;
 
-    /* select reserved memory pool */
+    /* выбрать пул зарезервированной памяти */
     vg_lite_vidmem_pool_t pool;
 
     /* OUTPUT */
 
-    /* Memory handle. */
+    /* Ручка памяти. */
     void * memory_handle;
 
-    /* Allocated memory. */
+    /* Выделенная память. */
     void * memory;
 
-    /* kernel memory */
+    /* память ядра */
     void * kmemory;
 
-    /* GPU address of allocated memory. */
+    /* GPU адрес выделенной памяти. */
     uint32_t memory_gpu;
 }
 vg_lite_kernel_allocate_t;
 
 typedef struct vg_lite_kernel_free {
-    /* Memory handle to free. */
+    /* Дескриптор памяти для освобождения. */
     void * memory_handle;
 }
 vg_lite_kernel_free_t;
 
 typedef struct vg_lite_kernel_submit {
-    /* Context to submit to. */
+    /* Контекст для отправки. */
     vg_lite_kernel_context_t * context;
 
-    /* Pointer to command buffer. */
+    /* Указатель на буфер команд. */
     void * commands;
 
-    /* Number of bytes in command buffer. */
+    /* Количество байтов в буфере команд. */
     uint32_t command_size;
 
-    /* Command Buffer ID. */
+    /* Буфер команд ID . */
     uint32_t command_id;
 }
 vg_lite_kernel_submit_t;
@@ -403,54 +403,54 @@ typedef enum vg_lite_gpu_reset_type {
 vg_lite_gpu_reset_type_t;
 
 typedef struct vg_lite_kernel_wait {
-    /* Context to wait for. */
+    /* Контекст ожидания. */
     vg_lite_kernel_context_t * context;
 
-    /* Timeout in milliseconds. */
+    /* Тайм-аут в миллисекундах. */
     uint32_t timeout_ms;
 
-    /* The event to wait. */
+    /* Событие, которое стоит подождать. */
     uint32_t event_mask;
 
-    /* The event(s) got after waiting. */
+    /* Событие(я) получено после ожидания. */
     uint32_t event_got;
 
-    /* After GPU reset, select submit command */
+    /* После сброса GPU выберите команду отправки. */
     vg_lite_gpu_reset_type_t reset_type;
 }
 vg_lite_kernel_wait_t;
 
 typedef struct vg_lite_kernel_reset {
-    /* Context to reset. */
+    /* Контекст для сброса. */
     vg_lite_kernel_context_t * context;
     uint32_t delay_resume_flag;
 }
 vg_lite_kernel_reset_t;
 
 typedef struct vg_lite_kernel_debug {
-    /* Context to debug. */
+    /* Контекст для отладки. */
     vg_lite_kernel_context_t * context;
 
-    /* Bandwidth counter enabler. */
+    /* Включение счетчика пропускной способности. */
     vg_lite_kernel_counter_t bandwidth_counter;
 
-    /* Pixel counter enabler. */
+    /* Включатель счетчика пикселей. */
     vg_lite_kernel_counter_t pixel_counters;
 
     /* OUTPUT */
 
-    /* Bandwidth counters:
-     *  [0] - burst of 8.
-     *  [1] - burst of 16.
-     *  [2] - burst of 32.
-     *  [3] - burst of 64.
+    /* Счетчики пропускной способности:
+     *  [0] — пакет из 8.
+     *  [1] - серия из 16.
+     *  [2] - очередь из 32.
+     *  [3] - взрыв 64.
      */
     uint32_t bandwidth[4];
 
-    /* Pixel counters:.
-     *  [0] - Number of tessellated pixels.
-     *  [1] - Number of imaged pixels.
-     *  [2] - Number of rendered pixels.
+    /* Счетчики пикселей:.
+     *  [0] — количество мозаичных пикселей.
+     *  [1] - Количество отображаемых пикселей.
+     *  [2] — Количество отображаемых пикселей.
      */
     uint32_t pixels[3];
 }
@@ -460,31 +460,31 @@ typedef struct vg_lite_kernel_map {
     /* INPUT */
     uint32_t flags;
 
-    /* user memory */
-    /* Number of bytes to map. */
+    /* пользовательская память */
+    /* Количество байтов для сопоставления. */
     uint32_t bytes;
 
-    /* Logical memory address or NULL. */
+    /* Адрес логической памяти или NULL. */
     void * logical;
 
-    /* Physical memory address or 0. */
+    /* Адрес физической памяти или 0. */
     uint32_t physical;
 
     /* dma_buf */
-    /* dma_buf fd */
+    /* dma_buf фд */
     int32_t dma_buf_fd;
 
     /* OUTPUT */
-    /* Memory handle for mapped memory. */
+    /* Дескриптор отображаемой памяти. */
     void * memory_handle;
 
-    /* GPU address of mapped memory. */
+    /* GPU адрес отображаемой памяти. */
     uint32_t memory_gpu;
 }
 vg_lite_kernel_map_t;
 
 typedef struct vg_lite_kernel_unmap {
-    /* Memory handle to unmap. */
+    /* Дескриптор памяти для отмены сопоставления. */
     void * memory_handle;
 }
 vg_lite_kernel_unmap_t;
@@ -492,16 +492,16 @@ vg_lite_kernel_unmap_t;
 typedef struct vg_lite_kernel_cache {
     vg_lite_cache_op_t cache_op;
 
-    /* Memory handle to operation. */
+    /* Дескриптор памяти для операции. */
     void * memory_handle;
 }
 vg_lite_kernel_cache_t;
 
 typedef struct vg_lite_kernel_info {
-    /* Register's address. */
+    /* Адрес регистратуры. */
     uint32_t addr;
 
-    /* Check register info. */
+    /* Проверьте регистрационную информацию. */
     uint32_t reg;
 }
 vg_lite_kernel_info_t;
@@ -528,22 +528,22 @@ typedef struct vg_lite_kernel_mem {
 vg_lite_kernel_mem_t;
 
 typedef struct vg_lite_kernel_map_memory {
-    /* Number of bytes to map. */
+    /* Количество байтов для сопоставления. */
     uint32_t bytes;
 
-    /* Physical memory address. */
+    /* Адрес физической памяти. */
     uint32_t physical;
 
-    /* Logical memory address. */
+    /* Адрес логической памяти. */
     void * logical;
 }
 vg_lite_kernel_map_memory_t;
 
 typedef struct vg_lite_kernel_unmap_memory {
-    /* Number of bytes to map. */
+    /* Количество байтов для сопоставления. */
     uint32_t bytes;
 
-    /* Logical memory address. */
+    /* Адрес логической памяти. */
     void * logical;
 }
 vg_lite_kernel_unmap_memory_t;

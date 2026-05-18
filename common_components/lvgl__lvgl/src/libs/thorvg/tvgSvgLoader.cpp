@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2020 - 2024 the ThorVG project. All rights reserved.
 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
+ * данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
+ * в Программном обеспечении без ограничений, включая, помимо прочего, права
+ * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать
+ * копий Программного обеспечения и разрешать лицам, которым Программное обеспечение
+ * предоставлено для этого при соблюдении следующих условий:
 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены во все
+ * копии или существенные части Программного обеспечения.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -28,16 +28,16 @@
 
  * Copyright (C) EFL developers (see AUTHORS)
 
- * All rights reserved.
+ * Все права защищены.
 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
+ * Распространение и использование в исходной и двоичной форме, с или без
+ * Модификация допускается при соблюдении следующих условий:
 
  *   1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
+ *      уведомление, этот список условий и следующий отказ от ответственности.
  *   2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
+ *      уведомление, этот список условий и следующий отказ от ответственности в
+ *      документация и/или другие материалы, поставляемые вместе с дистрибутивом.
 
  * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
@@ -63,11 +63,11 @@
 #include "tvgMath.h"
 
 /************************************************************************/
-/* Internal Class Implementation                                        */
+/* Реализация внутреннего класса                                        */
 /************************************************************************/
 
 /*
- * According to: https://www.w3.org/TR/SVG2/coords.html#Units
+ * По данным: https://www.w3.org/TR/SVG2/coords.html#Units
  * and: https://www.w3.org/TR/css-values-4/#absolute-lengths
  */
 #define PX_PER_IN 96        //1 in = 96 px
@@ -111,12 +111,12 @@ static bool _parseNumber(const char** content, const char** end, float* number)
     const char* _end = end ? *end : nullptr;
 
     *number = strToFloat(*content, (char**)&_end);
-    //If the start of string is not number
+    //Если начало строки не число
     if ((*content) == _end) {
         if (end) *end = _end;
         return false;
     }
-    //Skip comma if any
+    //Пропустить запятую, если есть
     *content = _skipComma(_end);
     if (end) *end = _end;
 
@@ -166,7 +166,7 @@ static void _parseAspectRatio(const char** content, AspectRatioAlign* align, Asp
 
 
 /**
- * According to https://www.w3.org/TR/SVG/coords.html#Units
+ * По данным https://www.w3.org/TR/SVG/coords.html#Units
  */
 static float _toFloat(const SvgParser* svgParse, const char* str, SvgParserLengthType type)
 {
@@ -181,7 +181,7 @@ static float _toFloat(const SvgParser* svgParse, const char* str, SvgParserLengt
         if (type == SvgParserLengthType::Vertical) parsedValue = (parsedValue / 100.0f) * svgParse->global.h;
         else if (type == SvgParserLengthType::Horizontal) parsedValue = (parsedValue / 100.0f) * svgParse->global.w;
         else if (type == SvgParserLengthType::Diagonal) parsedValue = (sqrtf(powf(svgParse->global.w, 2) + powf(svgParse->global.h, 2)) / sqrtf(2.0f)) * (parsedValue / 100.0f);
-        else //if other than it's radius
+        else //если кроме его радиуса
         {
             float max = svgParse->global.w;
             if (max < svgParse->global.h)
@@ -257,8 +257,8 @@ static SvgMaskType _toMaskType(const char* str)
 }
 
 
-//The default rendering order: fill, stroke, markers
-//If any is omitted, will be rendered in its default order after the specified ones.
+//Порядок рендеринга по умолчанию: заливка, обводка, маркеры.
+//Если какой-либо из них опущен, он будет отображаться в порядке по умолчанию после указанных.
 static bool _toPaintOrder(const char* str)
 {
     uint8_t position = 1;
@@ -299,7 +299,7 @@ static bool _toPaintOrder(const char* str)
     }
 
 
-/* parse the line cap used during stroking a path.
+/* проанализировать конец строки, используемый при обводке пути.
  * Value:    butt | round | square | inherit
  * Initial:    butt
  * https://www.w3.org/TR/SVG/painting.html
@@ -318,7 +318,7 @@ static constexpr struct
 _PARSE_TAG(StrokeCap, lineCap, LineCap, lineCapTags, StrokeCap::Butt)
 
 
-/* parse the line join used during stroking a path.
+/* проанализировать соединение строк, используемое при обводке пути.
  * Value:   miter | round | bevel | inherit
  * Initial:    miter
  * https://www.w3.org/TR/SVG/painting.html
@@ -337,7 +337,7 @@ static constexpr struct
 _PARSE_TAG(StrokeJoin, lineJoin, LineJoin, lineJoinTags, StrokeJoin::Miter)
 
 
-/* parse the fill rule used during filling a path.
+/* проанализировать правило заполнения, используемое при заполнении пути.
  * Value:   nonzero | evenodd | inherit
  * Initial:    nonzero
  * https://www.w3.org/TR/SVG/painting.html
@@ -354,7 +354,7 @@ static constexpr struct
 _PARSE_TAG(FillRule, fillRule, FillRule, fillRuleTags, FillRule::Winding)
 
 
-/* parse the dash pattern used during stroking a path.
+/* проанализировать образец штриха, используемый при обводке пути.
  * Value:   none | <dasharray> | inherit
  * Initial:    none
  * https://www.w3.org/TR/SVG/painting.html
@@ -372,14 +372,14 @@ static void _parseDashArray(SvgLoaderData* loader, const char *str, SvgDash* das
         if (parsedValue <= 0.0f) break;
         if (*end == '%') {
             ++end;
-            //Refers to the diagonal length of the viewport.
+            //Относится к длине диагонали области просмотра.
             //https://www.w3.org/TR/SVG2/coords.html#Units
             parsedValue = (sqrtf(powf(loader->svgParse->global.w, 2) + powf(loader->svgParse->global.h, 2)) / sqrtf(2.0f)) * (parsedValue / 100.0f);
         }
         (*dash).array.push(parsedValue);
         str = end;
     }
-    //If dash array size is 1, it means that dash and gap size are the same.
+    //Если размер штрихового массива равен 1, это означает, что размер штриха и пробела одинаковы.
     if ((*dash).array.count == 1) (*dash).array.push((*dash).array[0]);
 }
 
@@ -396,10 +396,10 @@ static char* _idFromUrl(const char* url)
     ++open;
     --close;
 
-    //trim the rest of the spaces if any
+    //обрежьте остальные пробелы, если они есть
     while (open < close && *close == ' ') --close;
 
-    //quick verification
+    //быстрая проверка
     for (auto id = open; id < close; id++) {
         if (*id == ' ' || *id == '\'') return nullptr;
     }
@@ -671,7 +671,7 @@ static bool _toColor(const char* str, uint8_t* r, uint8_t* g, uint8_t* b, char**
     unsigned char tr, tg, tb;
 
     if (len == 4 && str[0] == '#') {
-        //Case for "#456" should be interpreted as "#445566"
+        //Регистр «#456» следует интерпретировать как «#445566».
         if (isxdigit(str[1]) && isxdigit(str[2]) && isxdigit(str[3])) {
             char tmp[3] = { '\0', '\0', '\0' };
             tmp[0] = str[1];
@@ -742,7 +742,7 @@ static bool _toColor(const char* str, uint8_t* r, uint8_t* g, uint8_t* b, char**
             }
         }
     } else {
-        //Handle named color
+        //Обрабатывать названный цвет
         for (unsigned int i = 0; i < (sizeof(colors) / sizeof(colors[0])); i++) {
             if (!strcasecmp(colors[i].name, str)) {
                 *r = (((uint8_t*)(&(colors[i].value)))[2]);
@@ -767,7 +767,7 @@ static char* _parseNumbersArray(char* str, float* points, int* ptCount, int len)
         str = end;
         str = _skipSpace(str, nullptr);
         if (*str == ',') ++str;
-        //Eat the rest of space
+        //Съешь остальное пространство
         str = _skipSpace(str, nullptr);
     }
     *ptCount = count;
@@ -807,7 +807,7 @@ static constexpr struct
 };
 
 
-/* parse transform attribute
+/* анализировать атрибут преобразования
  * https://www.w3.org/TR/SVG/coords.html#TransformAttribute
  */
 static Matrix* _parseTransformationMatrix(const char* value)
@@ -861,7 +861,7 @@ static Matrix* _parseTransformationMatrix(const char* value)
                 *matrix *= tmp;
             } else goto error;
         } else if (state == MatrixState::Rotate) {
-            //Transform to signed.
+            //Преобразовать в подписанный.
             points[0] = fmodf(points[0], 360.0f);
             if (points[0] < 0) points[0] += 360.0f;
             auto c = cosf(deg2rad(points[0]));
@@ -919,32 +919,32 @@ static void _postpone(Array<SvgNodeIdPair>& nodes, SvgNode *node, char* id)
 
 /*
 // TODO - remove?
-static constexpr struct
+статическая структура constexpr
 {
-    const char* tag;
-    int sz;
-    SvgLengthType type;
+    константный тег char*;
+    интервал сз;
+    Тип SvgLengthType;
 } lengthTags[] = {
-    LENGTH_DEF(%, SvgLengthType::Percent),
-    LENGTH_DEF(px, SvgLengthType::Px),
-    LENGTH_DEF(pc, SvgLengthType::Pc),
-    LENGTH_DEF(pt, SvgLengthType::Pt),
-    LENGTH_DEF(mm, SvgLengthType::Mm),
-    LENGTH_DEF(cm, SvgLengthType::Cm),
-    LENGTH_DEF(in, SvgLengthType::In)
+    LENGTH_DEF (%, SvgLengthType::Процент),
+    LENGTH_DEF (px, SvgLengthType::Px),
+    LENGTH_DEF (ПК, SvgLengthType::Pc),
+    LENGTH_DEF (пт, SvgLengthType::Pt),
+    LENGTH_DEF (мм, SvgLengthType::Мм),
+    LENGTH_DEF (см, SvgLengthType::Cm),
+    LENGTH_DEF (in, SvgLengthType::In)
 };
 
-static float _parseLength(const char* str, SvgLengthType* type)
+static float _parseLength(const char* str, тип SvgLengthType*)
 {
-    float value;
-    int sz = strlen(str);
+    плавающее значение;
+    INT SZ = Strlen (СТР);
 
     *type = SvgLengthType::Px;
     for (unsigned int i = 0; i < sizeof(lengthTags) / sizeof(lengthTags[0]); i++) {
         if (lengthTags[i].sz - 1 == sz && !strncmp(lengthTags[i].tag, str, sz)) *type = lengthTags[i].type;
     }
     value = svgUtilStrtof(str, nullptr);
-    return value;
+    возвращаемое значение;
 }
 */
 
@@ -1013,7 +1013,7 @@ static bool _attrParseSvgNode(void* data, const char* key, const char* value)
 static void _handlePaintAttr(SvgPaint* paint, const char* value)
 {
     if (!strcmp(value, "none")) {
-        //No paint property
+        //Нет свойств краски
         paint->none = true;
         return;
     }
@@ -1164,9 +1164,9 @@ static void _handleMaskTypeAttr(TVG_UNUSED SvgLoaderData* loader, SvgNode* node,
 static void _handleDisplayAttr(TVG_UNUSED SvgLoaderData* loader, SvgNode* node, const char* value)
 {
     //TODO : The display attribute can have various values as well as "none".
-    //       The default is "inline" which means visible and "none" means invisible.
-    //       Depending on the type of node, additional functionality may be required.
-    //       refer to https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/display
+    //       По умолчанию установлено значение «встроенный», что означает видимый, а «нет» означает невидимый.
+    //       В зависимости от типа узла может потребоваться дополнительная функциональность.
+    //       обратитесь к https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/display
     node->style->flags = (node->style->flags | SvgStyleFlags::Display);
     if (!strcmp(value, "none")) node->style->display = false;
     else node->style->display = true;
@@ -1189,7 +1189,7 @@ static void _handleCssClassAttr(SvgLoaderData* loader, SvgNode* node, const char
 
     bool cssClassFound = false;
 
-    //css styling: tag.name has higher priority than .name
+    //Стиль CSS: tag.name имеет более высокий приоритет, чем .name
     if (auto cssNode = cssFindStyleNode(loader->cssStyle, *cssClass, node->type)) {
         cssClassFound = true;
         cssCopyStyleAttr(node, cssNode);
@@ -1244,7 +1244,7 @@ static bool _parseStyleAttr(void* data, const char* key, const char* value, bool
     int sz;
     if (!key || !value) return false;
 
-    //Trim the white space
+    //Обрезать пустое пространство
     key = _skipSpace(key, nullptr);
     value = _skipSpace(value, nullptr);
 
@@ -1286,7 +1286,7 @@ static bool _parseStyleAttr(void* data, const char* key, const char* value)
 }
 
 
-/* parse g node
+/* анализировать узел G
  * https://www.w3.org/TR/SVG/struct.html#Groups
  */
 static bool _attrParseGNode(void* data, const char* key, const char* value)
@@ -1314,7 +1314,7 @@ static bool _attrParseGNode(void* data, const char* key, const char* value)
 }
 
 
-/* parse clipPath node
+/* анализ узла clipPath
  * https://www.w3.org/TR/SVG/struct.html#Groups
  */
 static bool _attrParseClipPathNode(void* data, const char* key, const char* value)
@@ -1417,7 +1417,7 @@ static SvgNode* _createNode(SvgNode* parent, SvgNodeType type)
 
     if (!node) return nullptr;
 
-    //Default fill property
+    //Свойство заполнения по умолчанию
     node->style = (SvgStyleProperty*)lv_zalloc(sizeof(SvgStyleProperty));
     LV_ASSERT_MALLOC(node->style);
 
@@ -1426,36 +1426,36 @@ static SvgNode* _createNode(SvgNode* parent, SvgNodeType type)
         return nullptr;
     }
 
-    //Update the default value of stroke and fill
+    //Обновите значение обводки и заливки по умолчанию.
     //https://www.w3.org/TR/SVGTiny12/painting.html#SpecifyingPaint
     node->style->fill.paint.none = false;
-    //Default fill opacity is 1
+    //Непрозрачность заливки по умолчанию равна 1.
     node->style->fill.opacity = 255;
     node->style->opacity = 255;
-    //Default current color is not set
+    //Текущий цвет по умолчанию не установлен
     node->style->fill.paint.curColor = false;
     node->style->curColorSet = false;
-    //Default fill rule is nonzero
+    //Правило заполнения по умолчанию не равно нулю
     node->style->fill.fillRule = FillRule::Winding;
 
-    //Default stroke is none
+    //Обводка по умолчанию — нет
     node->style->stroke.paint.none = true;
-    //Default stroke opacity is 1
+    //Непрозрачность обводки по умолчанию равна 1.
     node->style->stroke.opacity = 255;
-    //Default stroke current color is not set
+    //Текущий цвет обводки по умолчанию не установлен.
     node->style->stroke.paint.curColor = false;
-    //Default stroke width is 1
+    //Ширина обводки по умолчанию равна 1.
     node->style->stroke.width = 1;
-    //Default line cap is butt
+    //Конец линии по умолчанию — впритык.
     node->style->stroke.cap = StrokeCap::Butt;
-    //Default line join is miter
+    //Соединение линий по умолчанию — под углом
     node->style->stroke.join = StrokeJoin::Miter;
     node->style->stroke.miterlimit = 4.0f;
     node->style->stroke.scale = 1.0;
 
     node->style->paintOrder = _toPaintOrder("fill stroke");
 
-    //Default display is true("inline").
+    //По умолчанию отображается true («встроенный»).
     node->style->display = true;
 
     node->parent = parent;
@@ -1626,7 +1626,7 @@ static constexpr struct
 };
 
 
-/* parse the attributes for a circle element.
+/* проанализировать атрибуты элемента круга.
  * https://www.w3.org/TR/SVG/shapes.html#CircleElement
  */
 static bool _attrParseCircleNode(void* data, const char* key, const char* value)
@@ -1688,7 +1688,7 @@ static constexpr struct
 };
 
 
-/* parse the attributes for an ellipse element.
+/* проанализировать атрибуты элемента эллипса.
  * https://www.w3.org/TR/SVG/shapes.html#EllipseElement
  */
 static bool _attrParseEllipseNode(void* data, const char* key, const char* value)
@@ -1747,7 +1747,7 @@ static bool _attrParsePolygonPoints(const char* str, SvgPolygonNode* polygon)
 }
 
 
-/* parse the attributes for a polygon element.
+/* проанализировать атрибуты многоугольного элемента.
  * https://www.w3.org/TR/SVG/shapes.html#PolylineElement
  */
 static bool _attrParsePolygonNode(void* data, const char* key, const char* value)
@@ -1816,7 +1816,7 @@ static constexpr struct
 };
 
 
-/* parse the attributes for a rect element.
+/* проанализировать атрибуты прямоугольного элемента.
  * https://www.w3.org/TR/SVG/shapes.html#RectElement
  */
 static bool _attrParseRectNode(void* data, const char* key, const char* value)
@@ -1833,7 +1833,7 @@ static bool _attrParseRectNode(void* data, const char* key, const char* value)
         if (rectTags[i].sz - 1 == sz && !strncmp(rectTags[i].tag, key, sz)) {
             *((float*)(array + rectTags[i].offset)) = _toFloat(loader->svgParse, value, rectTags[i].type);
 
-            //Case if only rx or ry is declared
+            //Случай, когда объявлены только rx или ry
             if (!strncmp(rectTags[i].tag, "rx", sz)) rect->hasRx = true;
             if (!strncmp(rectTags[i].tag, "ry", sz)) rect->hasRy = true;
 
@@ -1889,7 +1889,7 @@ static constexpr struct
 };
 
 
-/* parse the attributes for a line element.
+/* проанализировать атрибуты линейного элемента.
  * https://www.w3.org/TR/SVG/shapes.html#LineElement
  */
 static bool _attrParseLineNode(void* data, const char* key, const char* value)
@@ -1959,7 +1959,7 @@ static constexpr struct
 };
 
 
-/* parse the attributes for a image element.
+/* проанализировать атрибуты элемента изображения.
  * https://www.w3.org/TR/SVG/embedded.html#ImageElement
  */
 static bool _attrParseImageNode(void* data, const char* key, const char* value)
@@ -2106,9 +2106,9 @@ static bool _attrParseUseNode(void* data, const char* key, const char* value)
             }
             lv_free(id);
         } else {
-            //some svg export software include <defs> element at the end of the file
-            //if so the 'from' element won't be found now and we have to repeat finding
-            //after the whole file is parsed
+            //некоторые программы для экспорта SVG включают элемент <defs> в конце файла
+            //если да, то элемент from сейчас не будет найден, и нам придется повторить поиск
+            //после анализа всего файла
             _postpone(loader->cloneNodes, node, id);
         }
     } else {
@@ -2339,14 +2339,14 @@ static void _recalcRadialFyAttr(SvgLoaderData* loader, SvgRadialGradient* radial
 
 static void _recalcRadialFrAttr(SvgLoaderData* loader, SvgRadialGradient* radial, bool userSpace)
 {
-    // scaling factor based on the Units paragraph from : https://www.w3.org/TR/2015/WD-SVG2-20150915/coords.html
+    // коэффициент масштабирования, основанный на параграфе «Единицы измерения»: https://www.w3.org/TR/2015/WD-SVG2-20150915/coords.html
     if (userSpace && !radial->isFrPercentage) radial->fr = radial->fr / (sqrtf(powf(loader->svgParse->global.h, 2) + powf(loader->svgParse->global.w, 2)) / sqrtf(2.0));
 }
 
 
 static void _recalcRadialRAttr(SvgLoaderData* loader, SvgRadialGradient* radial, bool userSpace)
 {
-    // scaling factor based on the Units paragraph from : https://www.w3.org/TR/2015/WD-SVG2-20150915/coords.html
+    // коэффициент масштабирования, основанный на параграфе «Единицы измерения»: https://www.w3.org/TR/2015/WD-SVG2-20150915/coords.html
     if (userSpace && !radial->isRPercentage) radial->r = radial->r / (sqrtf(powf(loader->svgParse->global.h, 2) + powf(loader->svgParse->global.w, 2)) / sqrtf(2.0));
 }
 
@@ -2537,7 +2537,7 @@ static SvgStyleGradient* _createRadialGradient(SvgLoaderData* loader, const char
         return nullptr;
     }
     /**
-    * Default values of gradient transformed into global percentage
+    * Значения градиента по умолчанию преобразованы в глобальные проценты
     */
     grad->radial->cx = 0.5f;
     grad->radial->cy = 0.5f;
@@ -2807,7 +2807,7 @@ static SvgStyleGradient* _createLinearGradient(SvgLoaderData* loader, const char
         return nullptr;
     }
     /**
-    * Default value of x2 is 100% - transformed to the global percentage
+    * Значение x2 по умолчанию — 100% — преобразуется в глобальный процент.
     */
     grad->linear->x2 = 1.0f;
     grad->linear->isX2Percentage = true;
@@ -2829,9 +2829,9 @@ static SvgStyleGradient* _createLinearGradient(SvgLoaderData* loader, const char
 
 
 /**
- * In the case when the gradients lengths are given as numbers (not percentages)
- * in the current user coordinate system, they are recalculated into percentages
- * related to the canvas width and height.
+ * В случае, когда длины градиентов указаны в числах (а не в процентах)
+ * в текущей пользовательской системе координат они пересчитываются в проценты
+ * относительно ширины и высоты холста.
  */
 static constexpr struct
 {
@@ -2892,11 +2892,11 @@ static void _inheritGradient(SvgLoaderData* loader, SvgStyleGradient* to, SvgSty
                 linear_tags[i].tagInheritHandler(to, from);
             }
 
-            //GradUnits not set directly, coord set
+            //GradUnits не задается напрямую, набор координат
             if (!gradUnitSet && coordSet) {
                 linear_tags[i].tagRecalc(loader, to->linear, to->userSpace);
             }
-            //GradUnits set, coord not set directly
+            //Установлены GradUnits, координата не задана напрямую
             if (to->userSpace == from->userSpace) continue;
             if (gradUnitSet && !coordSet) {
                 linear_tags[i].tagInheritedRecalc(loader, to->linear, to->userSpace);
@@ -2909,17 +2909,17 @@ static void _inheritGradient(SvgLoaderData* loader, SvgStyleGradient* to, SvgSty
                 radialTags[i].tagInheritHandler(to, from);
             }
 
-            //GradUnits not set directly, coord set
+            //GradUnits не задается напрямую, набор координат
             if (!gradUnitSet && coordSet) {
                 radialTags[i].tagRecalc(loader, to->radial, to->userSpace);
-                //If fx and fy are not set, set cx and cy.
+                //Если fx и fy не установлены, установите cx и cy.
                 if (!strcmp(radialTags[i].tag, "cx") && !(to->flags & SvgGradientFlags::Fx)) to->radial->fx = to->radial->cx;
                 if (!strcmp(radialTags[i].tag, "cy") && !(to->flags & SvgGradientFlags::Fy)) to->radial->fy = to->radial->cy;
             }
-            //GradUnits set, coord not set directly
+            //Установлены GradUnits, координата не задана напрямую
             if (to->userSpace == from->userSpace) continue;
             if (gradUnitSet && !coordSet) {
-                //If fx and fx are not set, do not call recalc.
+                //Если fx и fx не установлены, не вызывайте recalc.
                 if (!strcmp(radialTags[i].tag, "fx") && !(to->flags & SvgGradientFlags::Fx)) continue;
                 if (!strcmp(radialTags[i].tag, "fy") && !(to->flags & SvgGradientFlags::Fy)) continue;
                 radialTags[i].tagInheritedRecalc(loader, to->radial, to->userSpace);
@@ -2980,7 +2980,7 @@ static SvgStyleGradient* _cloneGradient(SvgStyleGradient* from)
 static void _styleInherit(SvgStyleProperty* child, const SvgStyleProperty* parent)
 {
     if (parent == nullptr) return;
-    //Inherit the property of parent if not present in child.
+    //Наследовать свойство родителя, если оно не присутствует в дочернем элементе.
     if (!child->curColorSet) {
         child->color = parent->color;
         child->curColorSet = parent->curColorSet;
@@ -2988,7 +2988,7 @@ static void _styleInherit(SvgStyleProperty* child, const SvgStyleProperty* paren
     if (!(child->flags & SvgStyleFlags::PaintOrder)) {
         child->paintOrder = parent->paintOrder;
     }
-    //Fill
+    //Заполнить
     if (!(child->fill.flags & SvgFillFlags::Paint)) {
         child->fill.paint.color = parent->fill.paint.color;
         child->fill.paint.none = parent->fill.paint.none;
@@ -3004,7 +3004,7 @@ static void _styleInherit(SvgStyleProperty* child, const SvgStyleProperty* paren
     if (!(child->fill.flags & SvgFillFlags::FillRule)) {
         child->fill.fillRule = parent->fill.fillRule;
     }
-    //Stroke
+    //Инсульт
     if (!(child->stroke.flags & SvgStrokeFlags::Paint)) {
         child->stroke.paint.color = parent->stroke.paint.color;
         child->stroke.paint.none = parent->stroke.paint.none;
@@ -3047,7 +3047,7 @@ static void _styleInherit(SvgStyleProperty* child, const SvgStyleProperty* paren
 static void _styleCopy(SvgStyleProperty* to, const SvgStyleProperty* from)
 {
     if (from == nullptr) return;
-    //Copy the properties of 'from' only if they were explicitly set (not the default ones).
+    //Скопируйте свойства from, только если они были явно установлены (а не по умолчанию).
     if (from->curColorSet) {
         to->color = from->color;
         to->curColorSet = true;
@@ -3061,7 +3061,7 @@ static void _styleCopy(SvgStyleProperty* to, const SvgStyleProperty* from)
     if (from->flags & SvgStyleFlags::Display) {
         to->display = from->display;
     }
-    //Fill
+    //Заполнить
     to->fill.flags = (to->fill.flags | from->fill.flags);
     if (from->fill.flags & SvgFillFlags::Paint) {
         to->fill.paint.color = from->fill.paint.color;
@@ -3078,7 +3078,7 @@ static void _styleCopy(SvgStyleProperty* to, const SvgStyleProperty* from)
     if (from->fill.flags & SvgFillFlags::FillRule) {
         to->fill.fillRule = from->fill.fillRule;
     }
-    //Stroke
+    //Инсульт
     to->stroke.flags = (to->stroke.flags | from->stroke.flags);
     if (from->stroke.flags & SvgStrokeFlags::Paint) {
         to->stroke.paint.color = from->stroke.paint.color;
@@ -3121,13 +3121,13 @@ static void _styleCopy(SvgStyleProperty* to, const SvgStyleProperty* from)
 
 static void _copyAttr(SvgNode* to, const SvgNode* from)
 {
-    //Copy matrix attribute
+    //Копировать атрибут матрицы
     if (from->transform) {
         to->transform = (Matrix*)lv_malloc(sizeof(Matrix));
         LV_ASSERT_MALLOC(to->transform);
         if (to->transform) *to->transform = *from->transform;
     }
-    //Copy style attribute
+    //Копировать атрибут стиля
     _styleCopy(to->style, from->style);
     to->style->flags = (to->style->flags | from->style->flags);
     if (from->style->clipPath.url) {
@@ -3139,7 +3139,7 @@ static void _copyAttr(SvgNode* to, const SvgNode* from)
         to->style->mask.url = lv_strdup(from->style->mask.url);
     }
 
-    //Copy node attribute
+    //Копировать атрибут узла
     switch (from->type) {
         case SvgNodeType::Circle: {
             to->node.circle.cx = from->node.circle.cx;
@@ -3235,8 +3235,8 @@ static void _copyAttr(SvgNode* to, const SvgNode* from)
 
 static void _cloneNode(SvgNode* from, SvgNode* parent, int depth)
 {
-    /* Exception handling: Prevent invalid SVG data input.
-       The size is the arbitrary value, we need an experimental size. */
+    /* Обработка исключений: предотвращение ввода неверных данных SVG.
+       Размер — произвольная величина, нам нужен экспериментальный размер. */
     if (depth == 8192) {
         TVGERR("SVG", "Infinite recursive call - stopped after %d calls! Svg file may be incorrectly formatted.", depth);
         return;
@@ -3330,14 +3330,14 @@ static void _svgLoaderParserXmlOpen(SvgLoaderData* loader, const char* content, 
     attrs = simpleXmlFindAttributesTag(content, length);
 
     if (!attrs) {
-        //Parse the empty tag
+        //Разобрать пустой тег
         attrs = content;
         while ((attrs != nullptr) && *attrs != '>') attrs++;
         if (empty) attrs--;
     }
 
     if (attrs) {
-        //Find out the tag name starting from content till sz length
+        //Узнайте имя тега, начиная с содержимого и заканчивая длиной sz.
         sz = attrs - content;
         while ((sz > 0) && (isspace(content[sz - 1]))) sz--;
         if ((unsigned)sz >= sizeof(tagName)) return;
@@ -3347,19 +3347,19 @@ static void _svgLoaderParserXmlOpen(SvgLoaderData* loader, const char* content, 
     }
 
     if ((method = _findGroupFactory(tagName))) {
-        //Group
+        //Группа
         if (empty) return;
         if (!loader->doc) {
-            if (strcmp(tagName, "svg")) return; //Not a valid svg document
+            if (strcmp(tagName, "svg")) return; //Недопустимый документ SVG.
             node = method(loader, nullptr, attrs, attrsLength, simpleXmlParseAttributes);
             loader->doc = node;
         } else {
-            if (!strcmp(tagName, "svg")) return; //Already loaded <svg>(SvgNodeType::Doc) tag
+            if (!strcmp(tagName, "svg")) return; //Тег <svg>(SvgNodeType::Doc) уже загружен.
             if (loader->stack.count > 0) parent = loader->stack.last();
             else parent = loader->doc;
             if (!strcmp(tagName, "style")) {
                 // TODO: For now only the first style node is saved. After the css id selector
-                // is introduced this if condition shouldn't be necessary any more
+                // вводится, если условие больше не требуется
                 if (!loader->cssStyle) {
                     node = method(loader, nullptr, attrs, attrsLength, simpleXmlParseAttributes);
                     loader->cssStyle = node;
@@ -3389,11 +3389,11 @@ static void _svgLoaderParserXmlOpen(SvgLoaderData* loader, const char* content, 
         SvgStyleGradient* gradient;
         gradient = gradientMethod(loader, attrs, attrsLength);
         //FIXME: The current parsing structure does not distinguish end tags.
-        //       There is no way to know if the currently parsed gradient is in defs.
-        //       If a gradient is declared outside of defs after defs is set, it is included in the gradients of defs.
-        //       But finally, the loader has a gradient style list regardless of defs.
-        //       This is only to support this when multiple gradients are declared, even if no defs are declared.
-        //       refer to: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs
+        //       Невозможно узнать, находится ли анализируемый в данный момент градиент в defs.
+        //       Если градиент объявлен вне defs после установки defs, он включается в градиенты defs.
+        //       Но, наконец, загрузчик имеет список стилей градиента независимо от определений.
+        //       Это сделано только для поддержки этого, когда объявлено несколько градиентов, даже если не объявлены никакие определения.
+        //       см.: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs
         if (loader->def && loader->doc->node.doc.defs) {
             loader->def->node.defs.gradients.push(gradient);
         } else {
@@ -3405,7 +3405,7 @@ static void _svgLoaderParserXmlOpen(SvgLoaderData* loader, const char* content, 
             TVGLOG("SVG", "Stop element is used outside of the Gradient element");
             return;
         }
-        /* default value for opacity */
+        /* значение по умолчанию для непрозрачности */
         loader->svgParse->gradStop = {0.0f, 0, 0, 0, 255};
         loader->svgParse->flags = SvgStopStyleFlags::StopDefault;
         simpleXmlParseAttributes(attrs, attrsLength, _attrParseStops, loader);
@@ -3636,7 +3636,7 @@ static void _freeNodeStyle(SvgStyleProperty* style)
 {
     if (!style) return;
 
-    //style->clipPath.node and style->mask.node has only the addresses of node. Therefore, node is released from _freeNode.
+    //style->clipPath.node и style->mask.node содержат только адреса узлов. Таким образом, узел освобождается от _freeNode.
     lv_free(style->clipPath.url);
     lv_free(style->mask.url);
     lv_free(style->cssClass);
@@ -3726,7 +3726,7 @@ static bool _svgLoaderParserForValidCheckXmlOpen(SvgLoaderData* loader, const ch
     attrs = simpleXmlFindAttributesTag(content, length);
 
     if (!attrs) {
-        //Parse the empty tag
+        //Разобрать пустой тег
         attrs = content;
         while ((attrs != nullptr) && *attrs != '>') attrs++;
     }
@@ -3742,7 +3742,7 @@ static bool _svgLoaderParserForValidCheckXmlOpen(SvgLoaderData* loader, const ch
 
     if ((method = _findGroupFactory(tagName))) {
         if (!loader->doc) {
-            if (strcmp(tagName, "svg")) return true; //Not a valid svg document
+            if (strcmp(tagName, "svg")) return true; //Недопустимый документ SVG.
             node = method(loader, nullptr, attrs, attrsLength, simpleXmlParseAttributes);
             loader->doc = node;
             loader->stack.push(node);
@@ -3761,7 +3761,7 @@ static bool _svgLoaderParserForValidCheck(void* data, SimpleXMLType type, const 
     switch (type) {
         case SimpleXMLType::Open:
         case SimpleXMLType::OpenEmpty: {
-            //If 'res' is false, it means <svg> tag is found.
+            //Если 'res' имеет значение false, это означает, что тег <svg> найден.
             res = _svgLoaderParserForValidCheckXmlOpen(loader, content, length);
             break;
         }
@@ -3776,7 +3776,7 @@ static bool _svgLoaderParserForValidCheck(void* data, SimpleXMLType type, const 
 
 void SvgLoader::clear(bool all)
 {
-    //flush out the intermediate data
+    //очистить промежуточные данные
     lv_free(loaderData.svgParse);
     loaderData.svgParse = nullptr;
 
@@ -3809,7 +3809,7 @@ void SvgLoader::clear(bool all)
 
 
 /************************************************************************/
-/* External Class Implementation                                        */
+/* Реализация внешнего класса                                        */
 /************************************************************************/
 
 SvgLoader::SvgLoader() : ImageLoader(FileType::Svg)
@@ -3826,7 +3826,7 @@ SvgLoader::~SvgLoader()
 
 void SvgLoader::run(unsigned tid)
 {
-    //According to the SVG standard the value of the width/height of the viewbox set to 0 disables rendering
+    //Согласно стандарту SVG значение ширины/высоты окна просмотра, равное 0, отключает рендеринг.
     if ((viewFlag & SvgViewFlag::Viewbox) && (fabsf(vw) <= FLOAT_EPSILON || fabsf(vh) <= FLOAT_EPSILON)) {
         TVGLOG("SVG", "The <viewBox> width and/or height set to 0 - rendering disabled.");
         root = Scene::gen().release();
@@ -3854,10 +3854,10 @@ void SvgLoader::run(unsigned tid)
     }
     root = svgSceneBuild(loaderData, {vx, vy, vw, vh}, w, h, align, meetOrSlice, svgPath, viewFlag);
 
-    //In case no viewbox and width/height data is provided the completion of loading
-    //has to be forced, in order to establish this data based on the whole picture.
+    //Если поле просмотра и данные о ширине/высоте не предоставлены, загрузка завершена.
+    //приходится принуждать, чтобы на основе всей картины установить эти данные.
     if (!(viewFlag & SvgViewFlag::Viewbox)) {
-        //Override viewbox & size again after svg loading.
+        //Снова переопределить поле просмотра и размер после загрузки SVG.
         vx = loaderData.doc->node.doc.vx;
         vy = loaderData.doc->node.doc.vy;
         vw = loaderData.doc->node.doc.vw;
@@ -3872,9 +3872,9 @@ void SvgLoader::run(unsigned tid)
 
 bool SvgLoader::header()
 {
-    //For valid check, only <svg> tag is parsed first.
-    //If the <svg> tag is found, the loaded file is valid and stores viewbox information.
-    //After that, the remaining content data is parsed in order with async.
+    //Для проверки правильности сначала анализируется только тег <svg>.
+    //Если тег <svg> найден, загруженный файл действителен и хранит информацию о поле просмотра.
+    //После этого оставшиеся данные контента анализируются по порядку с помощью асинхронного анализа.
     loaderData.svgParse = (SvgParser*)lv_malloc(sizeof(SvgParser));
     LV_ASSERT_MALLOC(loaderData.svgParse);
     if (!loaderData.svgParse) return false;
@@ -3913,10 +3913,10 @@ bool SvgLoader::header()
                 }
                 viewFlag = (viewFlag | SvgViewFlag::Height);
             }
-        //In case no viewbox and width/height data is provided the completion of loading
-        //has to be forced, in order to establish this data based on the whole picture.
+        //Если поле просмотра и данные о ширине/высоте не предоставлены, загрузка завершена.
+        //приходится принуждать, чтобы на основе всей картины установить эти данные.
         } else {
-            //Before loading, set default viewbox & size if they are empty
+            //Перед загрузкой установите поле просмотра и размер по умолчанию, если они пусты.
             vx = vy = 0.0f;
             if (viewFlag & SvgViewFlag::Width) {
                 vw = w = loaderData.doc->node.doc.w;
@@ -4005,7 +4005,7 @@ bool SvgLoader::read()
 {
     if (!content || size == 0) return false;
 
-    //the loading has been already completed in header()
+    //загрузка уже завершена в header()
     if (root || !LoadModule::read()) return true;
 
     TaskScheduler::request(this);

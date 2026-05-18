@@ -1,21 +1,21 @@
-// ISO C9x  compliant stdint.h for Microsoft Visual Studio
-// Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124
+// ISO C9x-совместимый stdint.h для Microsoft Visual Studio
+// На основе ISO / IEC 9899: Проект комитета TC2 (6 мая 2005 г.) WG14 / N1124
 //
 //  Copyright (c) 2006-2013 Alexander Chemeris
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
+// Распространение и использование в исходной и двоичной форме, с или без
+// Модификация допускается при соблюдении следующих условий:
 //
 //   1. Redistributions of source code must retain the above copyright notice,
-//      this list of conditions and the following disclaimer.
+//      этот список условий и следующий отказ от ответственности.
 //
 //   2. Redistributions in binary form must reproduce the above copyright
-//      notice, this list of conditions and the following disclaimer in the
-//      documentation and/or other materials provided with the distribution.
+//      уведомление, этот список условий и следующий отказ от ответственности в
+//      документация и/или другие материалы, поставляемые вместе с дистрибутивом.
 //
 //   3. Neither the name of the product nor the names of its contributors may
-//      be used to endorse or promote products derived from this software
-//      without specific prior written permission.
+//      использоваться для одобрения или продвижения продуктов, созданных на основе этого программного обеспечения.
+//      без специального предварительного письменного разрешения.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
 // WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -30,8 +30,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-// The above software in this distribution may have been modified by
-// THL A29 Limited ("Tencent Modifications").
+// Вышеуказанное программное обеспечение в этом дистрибутиве могло быть изменено
+// THL A29 Limited («Модификации Tencent»).
 // All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.
 
 #ifndef _MSC_VER // [
@@ -49,7 +49,7 @@
 #if _MSC_VER >= 1600 // [
 #include <stdint.h>
 
-#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS) // [   See footnote 224 at page 260
+#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS) // [См. сноску 224 на стр. 260.
 
 #undef INT8_C
 #undef INT16_C
@@ -60,7 +60,7 @@
 #undef UINT32_C
 #undef UINT64_C
 
-// 7.18.4.1 Macros for minimum-width integer constants
+// 7.18.4.1 Макросы для целочисленных констант минимальной ширины
 
 #define INT8_C(val)  val##i8
 #define INT16_C(val) val##i16
@@ -72,9 +72,9 @@
 #define UINT32_C(val) val##ui32
 #define UINT64_C(val) val##ui64
 
-// 7.18.4.2 Macros for greatest-width integer constants
-// These #ifndef's are needed to prevent collisions with <boost/cstdint.hpp>.
-// Check out Issue 9 for the details.
+// 7.18.4.2 Макросы для целочисленных констант наибольшей ширины
+// Эти #ifndef необходимы для предотвращения коллизий с <boost/cstdint.hpp>.
+// Подробности смотрите в выпуске 9.
 #ifndef INTMAX_C //   [
 #  define INTMAX_C   INT64_C
 #endif // INTMAX_C    ]
@@ -88,10 +88,10 @@
 
 #include <limits.h>
 
-// For Visual Studio 6 in C++ mode and for many Visual Studio versions when
-// compiling for ARM we have to wrap <wchar.h> include with 'extern "C++" {}'
-// or compiler would give many errors like this:
-//   error C2733: second C linkage of overloaded function 'wmemchr' not allowed
+// Для Visual Studio 6 в режиме C++ и для многих версий Visual Studio, когда
+// при компиляции для ARM нам нужно обернуть < wchar.h > include с помощью 'extern "C++" {}'
+// или компилятор выдал бы много таких ошибок:
+//   ошибка C2733: вторая связь C перегруженной функции wmemchr не разрешена
 #if defined(__cplusplus) && !defined(_M_ARM)
 extern "C" {
 #endif
@@ -100,7 +100,7 @@ extern "C" {
 }
 #endif
 
-// Define _W64 macros to mark types changing their size, like intptr_t.
+// Определите макросы _W64, чтобы отмечать типы, меняющие свой размер, например intptr_t .
 #ifndef _W64
 #  if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
 #     define _W64 __w64
@@ -110,13 +110,13 @@ extern "C" {
 #endif
 
 
-// 7.18.1 Integer types
+// 7.18.1 Целочисленные типы
 
-// 7.18.1.1 Exact-width integer types
+// 7.18.1.1 Целочисленные типы точной ширины
 
-// Visual Studio 6 and Embedded Visual C++ 4 doesn't
-// realize that, e.g. char has the same size as __int8
-// so we give up on __intX for them.
+// Visual Studio 6 и Embedded Visual C++ 4 этого не делают.
+// осознать это, например char имеет тот же размер, что и __int8
+// поэтому мы отказываемся от __intX ради них.
 #if (_MSC_VER < 1300)
    typedef signed char       int8_t;
    typedef signed short      int16_t;
@@ -136,7 +136,7 @@ typedef signed __int64       int64_t;
 typedef unsigned __int64     uint64_t;
 
 
-// 7.18.1.2 Minimum-width integer types
+// 7.18.1.2 Целочисленные типы минимальной ширины
 typedef int8_t    int_least8_t;
 typedef int16_t   int_least16_t;
 typedef int32_t   int_least32_t;
@@ -146,7 +146,7 @@ typedef uint16_t  uint_least16_t;
 typedef uint32_t  uint_least32_t;
 typedef uint64_t  uint_least64_t;
 
-// 7.18.1.3 Fastest minimum-width integer types
+// 7.18.1.3 Самые быстрые целочисленные типы минимальной ширины
 typedef int8_t    int_fast8_t;
 typedef int16_t   int_fast16_t;
 typedef int32_t   int_fast32_t;
@@ -156,7 +156,7 @@ typedef uint16_t  uint_fast16_t;
 typedef uint32_t  uint_fast32_t;
 typedef uint64_t  uint_fast64_t;
 
-// 7.18.1.4 Integer types capable of holding object pointers
+// 7.18.1.4 Целочисленные типы, способные хранить указатели на объекты
 #ifdef _WIN64 // [
    typedef signed __int64    intptr_t;
    typedef unsigned __int64  uintptr_t;
@@ -165,16 +165,16 @@ typedef uint64_t  uint_fast64_t;
    typedef _W64 unsigned int uintptr_t;
 #endif // _WIN64 ]
 
-// 7.18.1.5 Greatest-width integer types
+// 7.18.1.5 Целочисленные типы наибольшей ширины
 typedef int64_t   intmax_t;
 typedef uint64_t  uintmax_t;
 
 
-// 7.18.2 Limits of specified-width integer types
+// 7.18.2 Ограничения целочисленных типов заданной ширины
 
-#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS) // [   See footnote 220 at page 257 and footnote 221 at page 259
+#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS) // [См. сноску 220 на стр. 257 и сноску 221 на стр. 259.
 
-// 7.18.2.1 Limits of exact-width integer types
+// 7.18.2.1 Ограничения целочисленных типов точной ширины
 #define INT8_MIN     ((int8_t)_I8_MIN)
 #define INT8_MAX     _I8_MAX
 #define INT16_MIN    ((int16_t)_I16_MIN)
@@ -188,7 +188,7 @@ typedef uint64_t  uintmax_t;
 #define UINT32_MAX   _UI32_MAX
 #define UINT64_MAX   _UI64_MAX
 
-// 7.18.2.2 Limits of minimum-width integer types
+// 7.18.2.2 Ограничения целочисленных типов минимальной ширины
 #define INT_LEAST8_MIN    INT8_MIN
 #define INT_LEAST8_MAX    INT8_MAX
 #define INT_LEAST16_MIN   INT16_MIN
@@ -202,7 +202,7 @@ typedef uint64_t  uintmax_t;
 #define UINT_LEAST32_MAX  UINT32_MAX
 #define UINT_LEAST64_MAX  UINT64_MAX
 
-// 7.18.2.3 Limits of fastest minimum-width integer types
+// 7.18.2.3 Ограничения самых быстрых целочисленных типов минимальной ширины
 #define INT_FAST8_MIN    INT8_MIN
 #define INT_FAST8_MAX    INT8_MAX
 #define INT_FAST16_MIN   INT16_MIN
@@ -216,7 +216,7 @@ typedef uint64_t  uintmax_t;
 #define UINT_FAST32_MAX  UINT32_MAX
 #define UINT_FAST64_MAX  UINT64_MAX
 
-// 7.18.2.4 Limits of integer types capable of holding object pointers
+// 7.18.2.4 Ограничения целочисленных типов, способных хранить указатели на объекты
 #ifdef _WIN64 // [
 #  define INTPTR_MIN   INT64_MIN
 #  define INTPTR_MAX   INT64_MAX
@@ -227,12 +227,12 @@ typedef uint64_t  uintmax_t;
 #  define UINTPTR_MAX  UINT32_MAX
 #endif // _WIN64 ]
 
-// 7.18.2.5 Limits of greatest-width integer types
+// 7.18.2.5 Пределы целочисленных типов наибольшей ширины
 #define INTMAX_MIN   INT64_MIN
 #define INTMAX_MAX   INT64_MAX
 #define UINTMAX_MAX  UINT64_MAX
 
-// 7.18.3 Limits of other integer types
+// 7.18.3 Ограничения других целочисленных типов
 
 #ifdef _WIN64 // [
 #  define PTRDIFF_MIN  _I64_MIN
@@ -253,7 +253,7 @@ typedef uint64_t  uintmax_t;
 #  endif // _WIN64 ]
 #endif // SIZE_MAX ]
 
-// WCHAR_MIN and WCHAR_MAX are also defined in <wchar.h>
+// WCHAR_MIN и WCHAR_MAX также определены в <wchar.h>.
 #ifndef WCHAR_MIN // [
 #  define WCHAR_MIN  0
 #endif  // WCHAR_MIN ]
@@ -267,11 +267,11 @@ typedef uint64_t  uintmax_t;
 #endif // __STDC_LIMIT_MACROS ]
 
 
-// 7.18.4 Limits of other integer types
+// 7.18.4 Ограничения других целочисленных типов
 
-#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS) // [   See footnote 224 at page 260
+#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS) // [См. сноску 224 на стр. 260.
 
-// 7.18.4.1 Macros for minimum-width integer constants
+// 7.18.4.1 Макросы для целочисленных констант минимальной ширины
 
 #define INT8_C(val)  val##i8
 #define INT16_C(val) val##i16
@@ -283,9 +283,9 @@ typedef uint64_t  uintmax_t;
 #define UINT32_C(val) val##ui32
 #define UINT64_C(val) val##ui64
 
-// 7.18.4.2 Macros for greatest-width integer constants
-// These #ifndef's are needed to prevent collisions with <boost/cstdint.hpp>.
-// Check out Issue 9 for the details.
+// 7.18.4.2 Макросы для целочисленных констант наибольшей ширины
+// Эти #ifndef необходимы для предотвращения коллизий с <boost/cstdint.hpp>.
+// Подробности смотрите в выпуске 9.
 #ifndef INTMAX_C //   [
 #  define INTMAX_C   INT64_C
 #endif // INTMAX_C    ]

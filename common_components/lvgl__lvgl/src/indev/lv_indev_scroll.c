@@ -15,7 +15,7 @@
 /*********************
  *      DEFINES
  *********************/
-#define ELASTIC_SLOWNESS_FACTOR 4   /*Scrolling on elastic parts are slower by this factor*/
+#define ELASTIC_SLOWNESS_FACTOR 4   /*Прокрутка эластичных деталей в этом отношении медленнее.*/
 
 /**********************
  *      TYPEDEFS
@@ -51,7 +51,7 @@ void lv_indev_scroll_handler(lv_indev_t * indev)
     }
 
     lv_obj_t * scroll_obj = indev->pointer.scroll_obj;
-    /*If there is no scroll object yet try to find one*/
+    /*Если объекта прокрутки еще нет, попробуйте найти его.*/
     if(scroll_obj == NULL) {
         scroll_obj = lv_indev_find_scroll_obj(indev);
         if(scroll_obj == NULL) return;
@@ -63,7 +63,7 @@ void lv_indev_scroll_handler(lv_indev_t * indev)
         if(indev->reset_query) return;
     }
 
-    /*Set new position or scroll if the vector is not zero*/
+    /*Установите новую позицию или прокрутите, если вектор не равен нулю.*/
     int16_t angle = 0;
     int16_t scale_x = 256;
     int16_t scale_y = 256;
@@ -112,7 +112,7 @@ void lv_indev_scroll_handler(lv_indev_t * indev)
     if((scroll_dir & LV_DIR_TOP)    == 0 && diff_y > 0) diff_y = 0;
     if((scroll_dir & LV_DIR_BOTTOM) == 0 && diff_y < 0) diff_y = 0;
 
-    /*Respect the scroll limit area*/
+    /*Соблюдайте область ограничения прокрутки*/
     scroll_limit_diff(indev, &diff_x, &diff_y);
 
     lv_obj_scroll_by_raw(scroll_obj, diff_x, diff_y);
@@ -139,7 +139,7 @@ void lv_indev_scroll_throw_handler(lv_indev_t * indev)
 
     if(indev->pointer.scroll_dir == LV_DIR_VER) {
         indev->pointer.scroll_throw_vect.x = 0;
-        /*If no snapping "throw"*/
+        /*Если нет щелчка "бросай"*/
         if(align_y == LV_SCROLL_SNAP_NONE) {
             indev->pointer.scroll_throw_vect.y =
                 indev->pointer.scroll_throw_vect.y * (100 - scroll_throw) / 100;
@@ -153,7 +153,7 @@ void lv_indev_scroll_throw_handler(lv_indev_t * indev)
             lv_obj_scroll_by_raw(scroll_obj, 0,  indev->pointer.scroll_throw_vect.y);
             if(indev->reset_query) return;
         }
-        /*With snapping find the nearest snap point and scroll there*/
+        /*С помощью привязки найдите ближайшую точку привязки и прокрутите туда.*/
         else {
             int32_t diff_y = lv_indev_scroll_throw_predict(indev, LV_DIR_VER);
             indev->pointer.scroll_throw_vect.y = 0;
@@ -165,7 +165,7 @@ void lv_indev_scroll_throw_handler(lv_indev_t * indev)
     }
     else if(indev->pointer.scroll_dir == LV_DIR_HOR) {
         indev->pointer.scroll_throw_vect.y = 0;
-        /*If no snapping "throw"*/
+        /*Если нет щелчка "бросай"*/
         if(align_x == LV_SCROLL_SNAP_NONE) {
             indev->pointer.scroll_throw_vect.x =
                 indev->pointer.scroll_throw_vect.x * (100 - scroll_throw) / 100;
@@ -179,7 +179,7 @@ void lv_indev_scroll_throw_handler(lv_indev_t * indev)
             lv_obj_scroll_by_raw(scroll_obj, indev->pointer.scroll_throw_vect.x, 0);
             if(indev->reset_query) return;
         }
-        /*With snapping find the nearest snap point and scroll there*/
+        /*С помощью привязки найдите ближайшую точку привязки и прокрутите туда.*/
         else {
             int32_t diff_x = lv_indev_scroll_throw_predict(indev, LV_DIR_HOR);
             indev->pointer.scroll_throw_vect.x = 0;
@@ -190,10 +190,10 @@ void lv_indev_scroll_throw_handler(lv_indev_t * indev)
         }
     }
 
-    /*Check if the scroll has finished*/
+    /*Проверьте, завершилась ли прокрутка*/
     if(indev->pointer.scroll_throw_vect.x == 0 && indev->pointer.scroll_throw_vect.y == 0) {
-        /*Revert if scrolled in*/
-        /*If vertically scrollable and not controlled by snap*/
+        /*Вернуться при прокрутке*/
+        /*Если вертикально прокручивается и не контролируется привязкой*/
         if(align_y == LV_SCROLL_SNAP_NONE) {
             int32_t st = lv_obj_get_scroll_top(scroll_obj);
             int32_t sb = lv_obj_get_scroll_bottom(scroll_obj);
@@ -209,7 +209,7 @@ void lv_indev_scroll_throw_handler(lv_indev_t * indev)
             }
         }
 
-        /*If horizontally scrollable and not controlled by snap*/
+        /*Если прокручивается по горизонтали и не контролируется привязкой*/
         if(align_x == LV_SCROLL_SNAP_NONE) {
             int32_t sl = lv_obj_get_scroll_left(scroll_obj);
             int32_t sr = lv_obj_get_scroll_right(scroll_obj);
@@ -270,23 +270,23 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
     lv_dir_t dir_candidate = LV_DIR_NONE;
     int32_t scroll_limit = indev->scroll_limit;
 
-    /*Go until find a scrollable object in the current direction
-     *More precisely:
-     * 1. Check the pressed object and all of its ancestors and try to find an object which is scrollable
-     * 2. Scrollable means it has some content out of its area
-     * 3. If an object can be scrolled into the current direction then use it ("real match"")
-     * 4. If can be scrolled on the current axis (hor/ver) save it as candidate (at least show an elastic scroll effect)
-     * 5. Use the last candidate. Always the "deepest" parent or the object from point 3*/
+    /*Идите, пока не найдете прокручиваемый объект в текущем направлении.
+     *Точнее:
+     * 1. Проверьте нажатый объект и всех его предков и попытайтесь найти объект, который можно прокручивать.
+     * 2. Прокручиваемый означает, что некоторый контент находится за пределами его области.
+     * 3. Если объект можно прокручивать в текущем направлении, используйте его («реальное совпадение»)
+     * 4. Если можно прокручивать по текущей оси (hor/ver), сохраните его как кандидата (по крайней мере, покажите эффект эластичной прокрутки)
+     * 5. Используйте последнего кандидата. Всегда самый «глубокий» родитель или объект из пункта 3.*/
     lv_obj_t * obj_act = indev->pointer.act_obj;
 
-    /*Decide if it's a horizontal or vertical scroll*/
+    /*Решите, горизонтальная это или вертикальная прокрутка.*/
     bool hor_en = false;
     bool ver_en = false;
     indev->pointer.scroll_sum.x += indev->pointer.vect.x;
     indev->pointer.scroll_sum.y += indev->pointer.vect.y;
 
     while(obj_act) {
-        /*Get the transformed scroll_sum with this object*/
+        /*Получите преобразованныйscroll_sumс помощью этого объекта.*/
         int16_t angle = 0;
         int32_t scale_x = 256;
         int32_t scale_y = 256;
@@ -325,7 +325,7 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
         }
 
         if(lv_obj_has_flag(obj_act, LV_OBJ_FLAG_SCROLLABLE) == false) {
-            /*If this object don't want to chain the scroll to the parent stop searching*/
+            /*Если этот объект не хочет связывать прокрутку с родителем, прекратите поиск.*/
             if(lv_obj_has_flag(obj_act, LV_OBJ_FLAG_SCROLL_CHAIN_HOR) == false && hor_en) break;
             if(lv_obj_has_flag(obj_act, LV_OBJ_FLAG_SCROLL_CHAIN_VER) == false && ver_en) break;
 
@@ -333,20 +333,20 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
             continue;
         }
 
-        /*Consider both up-down or left/right scrollable according to the current direction*/
+        /*Рассмотрите возможность прокрутки вверх-вниз или влево/вправо в соответствии с текущим направлением.*/
         bool up_en = ver_en;
         bool down_en = ver_en;
         bool left_en = hor_en;
         bool right_en = hor_en;
 
-        /*The object might have disabled some directions.*/
+        /*Возможно, объект отключил некоторые направления.*/
         lv_dir_t scroll_dir = lv_obj_get_scroll_dir(obj_act);
         if((scroll_dir & LV_DIR_LEFT) == 0) left_en = false;
         if((scroll_dir & LV_DIR_RIGHT) == 0) right_en = false;
         if((scroll_dir & LV_DIR_TOP) == 0) up_en = false;
         if((scroll_dir & LV_DIR_BOTTOM) == 0) down_en = false;
 
-        /*Horizontal scroll*/
+        /*Горизонтальная прокрутка*/
         int32_t sl = 0;
         int32_t sr = 0;
         lv_scroll_snap_t snap_x = lv_obj_get_scroll_snap_x(obj_act);
@@ -359,13 +359,13 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
             bool has_end_snap;
             has_more_snap_points(obj_act, LV_DIR_HOR, &has_start_snap, &has_end_snap);
 
-            /*Assume scrolling is there are more snap point
-             *Assumed scroll in if there are NO more nap points*/
+            /*Предположим, что прокрутка содержит больше точек привязки.
+             *Предполагаемая прокрутка, если есть еще NO точек сна.*/
             sl = has_start_snap ? 1 : -1;
             sr = has_end_snap ? 1 : -1;
         }
 
-        /*Vertical scroll*/
+        /*Вертикальная прокрутка*/
         int32_t st = 0;
         int32_t sb = 0;
         lv_scroll_snap_t snap_y = lv_obj_get_scroll_snap_y(obj_act);
@@ -378,16 +378,16 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
             bool has_end_snap;
             has_more_snap_points(obj_act, LV_DIR_VER, &has_start_snap, &has_end_snap);
 
-            /*Assume scrolling is there are more snap point
-             *Assumed scroll in if there are NO more nap points*/
+            /*Предположим, что прокрутка содержит больше точек привязки.
+             *Предполагаемая прокрутка, если есть еще NO точек сна.*/
             st = has_start_snap ? 1 : -1;
             sb = has_end_snap ? 1 : -1;
         }
 
-        /*If this object is scrollable into the current scroll direction then save it as a candidate.
-         *It's important only to be scrollable on the current axis (hor/ver) because if the scroll
-         *is propagated to this object it can show at least elastic scroll effect.
-         *But if not hor/ver scrollable do not scroll it at all (so it's not a good candidate)*/
+        /*Если этот объект можно прокручивать в текущем направлении прокрутки, сохраните его как кандидата.
+         *Важно только обеспечить возможность прокрутки по текущей оси (гор/вер), потому что если прокрутка
+         *распространяется на этот объект, он может показать, по крайней мере, эффект эластичной прокрутки.
+         *Но если его нельзя прокручивать по горизонтали/вере, вообще не прокручивайте его (так что это не лучший кандидат)*/
         if((st > 0 || sb > 0)  &&
            ((up_en    && obj_scroll_sum.y >=   scroll_limit) ||
             (down_en  && obj_scroll_sum.y <= - scroll_limit))) {
@@ -407,7 +407,7 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
         if(sl <= 0) left_en = false;
         if(sr <= 0) right_en = false;
 
-        /*If the object really can be scrolled into the current direction then use it.*/
+        /*Если объект действительно можно прокручивать в текущем направлении, используйте его.*/
         if((left_en  && obj_scroll_sum.x >=   scroll_limit) ||
            (right_en && obj_scroll_sum.x <= - scroll_limit) ||
            (up_en    && obj_scroll_sum.y >=   scroll_limit) ||
@@ -416,15 +416,15 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
             break;
         }
 
-        /*If this object don't want to chain the scroll to the parent stop searching*/
+        /*Если этот объект не хочет связывать прокрутку с родителем, прекратите поиск.*/
         if(lv_obj_has_flag(obj_act, LV_OBJ_FLAG_SCROLL_CHAIN_HOR) == false && hor_en) break;
         if(lv_obj_has_flag(obj_act, LV_OBJ_FLAG_SCROLL_CHAIN_VER) == false && ver_en) break;
 
-        /*Try the parent*/
+        /*Попробуйте родительский*/
         obj_act = lv_obj_get_parent(obj_act);
     }
 
-    /*Use the last candidate*/
+    /*Используйте последнего кандидата*/
     if(obj_candidate) {
         indev->pointer.scroll_dir = dir_candidate;
         indev->pointer.scroll_obj = obj_candidate;
@@ -442,11 +442,11 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev)
 static void init_scroll_limits(lv_indev_t * indev)
 {
     lv_obj_t * obj = indev->pointer.scroll_obj;
-    /*If there no STOP allow scrolling anywhere*/
+    /*Если нет STOP, разрешите прокрутку в любом месте.*/
     if(lv_obj_has_flag(obj, LV_OBJ_FLAG_SCROLL_ONE) == false) {
         lv_area_set(&indev->pointer.scroll_area, LV_COORD_MIN, LV_COORD_MIN, LV_COORD_MAX, LV_COORD_MAX);
     }
-    /*With STOP limit the scrolling to the perv and next snap point*/
+    /*С помощью STOP ограничьте прокрутку до начальной точки и следующей точки привязки.*/
     else {
         switch(lv_obj_get_scroll_snap_y(obj)) {
             case LV_SCROLL_SNAP_START:
@@ -491,12 +491,12 @@ static void init_scroll_limits(lv_indev_t * indev)
         }
     }
 
-    /*`find_snap_point_x/y()` return LV_COORD_MAX is not snap point was found,
-     *but x1/y1 should be small. */
+    /*`find_snap_point_x/y()` returnLV_COORD_MAX— точка привязки не найдена,
+     *но x1/y1 должно быть небольшим. */
     if(indev->pointer.scroll_area.x1 == LV_COORD_MAX) indev->pointer.scroll_area.x1 = LV_COORD_MIN;
     if(indev->pointer.scroll_area.y1 == LV_COORD_MAX) indev->pointer.scroll_area.y1 = LV_COORD_MIN;
 
-    /*Allow scrolling on the edges. It will be reverted to the edge due to snapping anyway*/
+    /*Разрешить прокрутку по краям. В любом случае он будет возвращен к краю из-за привязки.*/
     if(indev->pointer.scroll_area.x1 == 0) indev->pointer.scroll_area.x1 = LV_COORD_MIN;
     if(indev->pointer.scroll_area.x2 == 0) indev->pointer.scroll_area.x2 = LV_COORD_MAX;
     if(indev->pointer.scroll_area.y1 == 0) indev->pointer.scroll_area.y1 = LV_COORD_MIN;
@@ -504,14 +504,14 @@ static void init_scroll_limits(lv_indev_t * indev)
 }
 
 /**
- * Search for snap point in the min..max range.
- * @param obj the object on which snap point should be found
- * @param min ignore snap points smaller than this. (Absolute coordinate)
- * @param max ignore snap points greater than this. (Absolute coordinate)
- * @param ofs offset to snap points. Useful the get a snap point in an imagined case
- *            what if children are already moved by this value
- * @return the absolute x coordinate of the nearest snap point
- *         or `LV_COORD_MAX` if there is no snap point in the min..max range
+ * Найдите точку привязки в диапазоне мин..макс.
+ * @param obj объект, на котором должна быть найдена точка привязки
+ * @param min игнорировать точки привязки, меньшие этого. (Абсолютная координата)
+ * @param max игнорировать точки привязки, превышающие это значение. (Абсолютная координата)
+ * @param ofs смещение для точек привязки. Полезно получить точку привязки в воображаемом случае.
+ *            что, если дети уже перемещены этим значением
+ * @return абсолютная координата X ближайшей точки привязки
+ *         или `LV_COORD_MAX`, если в диапазоне мин..макс нет точки привязки.
  */
 static int32_t find_snap_point_x(const lv_obj_t * obj, int32_t min, int32_t max, int32_t ofs)
 {
@@ -560,14 +560,14 @@ static int32_t find_snap_point_x(const lv_obj_t * obj, int32_t min, int32_t max,
 }
 
 /**
- * Search for snap point in the min..max range.
- * @param obj the object on which snap point should be found
- * @param min ignore snap points smaller than this. (Absolute coordinate)
- * @param max ignore snap points greater than this. (Absolute coordinate)
- * @param ofs offset to snap points. Useful to get a snap point in an imagined case
- *            what if children are already moved by this value
- * @return the absolute y coordinate of the nearest snap point
- *         or `LV_COORD_MAX` if there is no snap point in the min..max range
+ * Найдите точку привязки в диапазоне мин..макс.
+ * @param obj объект, на котором должна быть найдена точка привязки
+ * @param min игнорировать точки привязки, меньшие этого. (Абсолютная координата)
+ * @param max игнорировать точки привязки, превышающие это значение. (Абсолютная координата)
+ * @param ofs смещение для точек привязки. Полезно для получения точки привязки в воображаемом случае.
+ *            что, если дети уже перемещены этим значением
+ * @return абсолютная координата Y ближайшей точки привязки
+ *         или `LV_COORD_MAX`, если в диапазоне мин..макс нет точки привязки.
  */
 static int32_t find_snap_point_y(const lv_obj_t * obj, int32_t min, int32_t max, int32_t ofs)
 {
@@ -643,28 +643,28 @@ static int32_t elastic_diff(lv_obj_t * scroll_obj, int32_t diff, int32_t scroll_
 {
     if(diff == 0) return 0;
 
-    /*Scroll back to the edge if required*/
+    /*Прокрутите назад до края, если необходимо.*/
     if(!lv_obj_has_flag(scroll_obj, LV_OBJ_FLAG_SCROLL_ELASTIC)) {
         /*
-         * If the scrolling object does not set the `LV_OBJ_FLAG_SCROLL_ELASTIC` flag,
-         * make sure that `diff` will not cause the scroll to exceed the `start` or `end` boundary of the content.
-         * If the content has exceeded the boundary due to external factors like `LV_SCROLL_SNAP_CENTER`,
-         * then respect the current position instead of going straight back to 0.
+         * Если объект прокрутки не устанавливает флаг `LV_OBJ_FLAG_SCROLL_ELASTIC`,
+         * Убедитесь, что`diff`не приведет к выходу прокрутки по величине границы`start`или`end`.
+         * Если содержимое превысило границу из-за внешних факторов, таких как `LV_SCROLL_SNAP_CENTER` ,
+         * затем соблюдайте текущую позицию вместо того, чтобы сразу возвращаться к 0.
          */
         const int32_t scroll_ended = diff > 0 ? scroll_start : scroll_end;
         if(scroll_ended <= 0) diff = 0;
         else if(scroll_ended - diff < 0) diff = scroll_ended;
     }
-    /*Handle elastic scrolling*/
+    /*Обработка эластичной прокрутки*/
     else {
 
         lv_scroll_snap_t snap;
         snap = dir == LV_DIR_HOR ? lv_obj_get_scroll_snap_x(scroll_obj) : lv_obj_get_scroll_snap_y(scroll_obj);
 
-        /*Without snapping just scale down the diff when scrolled out*/
+        /*Не привязываясь, просто уменьшите разницу при прокрутке.*/
         if(snap == LV_SCROLL_SNAP_NONE) {
             if(scroll_end < 0 || scroll_start < 0) {
-                /*Rounding*/
+                /*Округление*/
                 if(diff < 0) diff -= ELASTIC_SLOWNESS_FACTOR / 2;
                 if(diff > 0) diff += ELASTIC_SLOWNESS_FACTOR / 2;
                 return diff / ELASTIC_SLOWNESS_FACTOR;
@@ -674,14 +674,14 @@ static int32_t elastic_diff(lv_obj_t * scroll_obj, int32_t diff, int32_t scroll_
             }
         }
 
-        /*With snapping the widget is scrolled out if there are no more snap points
-         *at least in one direction (start or end)*/
+        /*При привязке виджет прокручивается, если точек привязки больше нет.
+         *хотя бы в одном направлении (начало или конец)*/
         bool has_start_snap;
         bool has_end_snap;
         has_more_snap_points(scroll_obj, dir, &has_start_snap, &has_end_snap);
 
         if(!has_start_snap || !has_end_snap) {
-            /*Rounding*/
+            /*Округление*/
             if(diff < 0) diff -= ELASTIC_SLOWNESS_FACTOR / 2;
             if(diff > 0) diff += ELASTIC_SLOWNESS_FACTOR / 2;
             return diff / ELASTIC_SLOWNESS_FACTOR;
@@ -695,16 +695,16 @@ static int32_t elastic_diff(lv_obj_t * scroll_obj, int32_t diff, int32_t scroll_
 }
 
 /**
- * Tell is there are more snap point in a given direction considering snap position.
- * There is a snap point if there is a snapanble object in the given direction
- * @param scroll_obj        the object on which snap points should be found
- * @param dir               LV_DIR_HOR or LV_DIR_VER
- * @param has_start_snap    true: there is snap point in the start direction (top or left depending on dir)
- * @param has_end_snap      true: there is snap point in the end direction (bottom or right depending on dir)
- * @note snap points will be searched relative to the
- *       center point in case of LV_SCROLL_SNAP_CENTER
- *       start point (top or left) in case of LV_SCROLL_SNAP_START
- *       end point (bottom or right) in case of LV_SCROLL_SNAP_END
+ * Скажите, есть ли больше точек привязки в данном направлении, учитывая положение привязки.
+ * Точка привязки существует, если в заданном направлении есть объект, который можно привязать.
+ * @param scroll_obj        объект, на котором должны быть найдены точки привязки
+ * @param реж. LV_DIR_HOR или LV_DIR_VER
+ * @param has_start_snap    true: в начальном направлении есть точка привязки (сверху или слева в зависимости от направления)
+ * @param has_end_snap      true: в конечном направлении есть точка привязки (внизу или справа, в зависимости от направления)
+ * @note точки привязки будут искаться относительно
+ *       центральная точка в случае LV_SCROLL_SNAP_CENTER
+ *       начальная точка (сверху или слева) в случае LV_SCROLL_SNAP_START
+ *       конечная точка (внизу или справа) в случае LV_SCROLL_SNAP_END
  */
 static void has_more_snap_points(lv_obj_t * scroll_obj, lv_dir_t dir, bool * has_start_snap, bool * has_end_snap)
 {

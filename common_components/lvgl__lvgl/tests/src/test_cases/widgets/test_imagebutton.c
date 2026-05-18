@@ -5,26 +5,26 @@
 
 void setUp(void)
 {
-    /* Function run before every test */
+    /* Функция запускается перед каждым тестом */
 }
 
 void tearDown(void)
 {
-    /* Function run after every test */
+    /* Функция запускается после каждого теста */
     lv_obj_clean(lv_screen_active());
 }
 
 void test_imagebutton_basic_appearance(void)
 {
     /**
-     * from lv_example_imagebutton_1
+     * от lv_example_imagebutton_1
     */
 
     LV_IMAGE_DECLARE(imagebutton_left);
     LV_IMAGE_DECLARE(imagebutton_right);
     LV_IMAGE_DECLARE(imagebutton_mid);
 
-    /*Create an image button*/
+    /*Создать кнопку изображения*/
     lv_obj_t * imagebutton1 = lv_imagebutton_create(lv_screen_active());
     lv_imagebutton_set_src(imagebutton1, LV_IMAGEBUTTON_STATE_RELEASED, &imagebutton_left, &imagebutton_mid,
                            &imagebutton_right);
@@ -33,13 +33,13 @@ void test_imagebutton_basic_appearance(void)
     lv_obj_set_width(imagebutton1, 100);
     lv_obj_align(imagebutton1, LV_ALIGN_CENTER, -150, 0);
 
-    /*Create a label on the image button*/
+    /*Создайте метку на кнопке изображения*/
     lv_obj_t * label = lv_label_create(imagebutton1);
     lv_label_set_text(label, "Button");
     lv_obj_align(label, LV_ALIGN_CENTER, 0, -4);
 
     /**
-     * from lv_demo_music
+     * от lv_demo_music
     */
 
     LV_IMAGE_DECLARE(music_button_play);
@@ -49,7 +49,7 @@ void test_imagebutton_basic_appearance(void)
     lv_obj_align(play_button, LV_ALIGN_CENTER, 100, 0);
 
     /**
-     * compare screenshot
+     * сравнить скриншот
     */
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/imagebutton_1.png");

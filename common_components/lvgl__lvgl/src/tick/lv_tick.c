@@ -1,6 +1,6 @@
 /**
  * @file lv_tick.c
- * Provide access to the system tick with 1 millisecond resolution
+ * Обеспечить доступ к системному тику с разрешением 1 миллисекунду
  */
 
 /*********************
@@ -50,16 +50,16 @@ uint32_t lv_tick_get(void)
     if(state_p->tick_get_cb)
         return state_p->tick_get_cb();
 
-    /*If `lv_tick_inc` is called from an interrupt while `sys_time` is read
-     *the result might be corrupted.
-     *This loop detects if `lv_tick_inc` was called while reading `sys_time`.
-     *If `tick_irq_flag` was cleared in `lv_tick_inc` try to read again
-     *until `tick_irq_flag` remains `1`.*/
+    /*Если`lv_tick_inc`возникает из-за прерывания во время чтения `sys_time`
+     *результат может быть испорчен.
+     *Этот цикл был вызван`lv_tick_inc`во время чтения `sys_time`.
+     *Если`tick_irq_flag`был очищен в`lv_tick_inc`, форма была прочтена еще раз.
+     *пока`tick_irq_flag`не останется`1`.*/
     uint32_t result;
     do {
         state_p->sys_irq_flag = 1;
         result        = state_p->sys_time;
-    } while(!state_p->sys_irq_flag); /*Continue until see a non interrupted cycle*/
+    } while(!state_p->sys_irq_flag); /*Продолжайте, пока не увидите непрерывный цикл.*/
 
     return result;
 }
@@ -71,7 +71,7 @@ uint32_t lv_tick_elaps(uint32_t prev_tick)
 
 uint32_t lv_tick_diff(uint32_t tick, uint32_t prev_tick)
 {
-    /*Unsigned overflow is well-defined and works for a single wrap around*/
+    /*Беззнаковое переполнение четко определено и работает для одного переноса.*/
     return tick - prev_tick;
 }
 
@@ -83,7 +83,7 @@ void lv_delay_ms(uint32_t ms)
     else {
         uint32_t t = lv_tick_get();
         while(lv_tick_elaps(t) < ms) {
-            /*Do something to no call `lv_tick_elaps` too often as it might interfere with interrupts*/
+            /*Сделайте что-нибудь, чтобы не открывать`lv_tick_elaps`слишком часто, так как это может спровоцировать прерывания.*/
             volatile uint32_t i;
             volatile uint32_t x = ms;
             for(i = 0; i < 100; i++) {

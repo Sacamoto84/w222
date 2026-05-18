@@ -48,7 +48,7 @@ typedef struct {
 #endif /*LV_USE_OS == LV_OS_RTTHREAD*/
 
 #ifdef __cplusplus
-} /*extern "C"*/
+} /*внешний "С"*/
 #endif
 
 #endif /*LV_RTTHREAD_H*/

@@ -10,6 +10,7 @@
 #include "esp_check.h"
 #include "esp_event.h"
 #include "esp_system.h"
+#include "dirent.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/uart.h"
@@ -29,6 +30,25 @@
 extern void ui_init(void);
 
 static const char *TAG = "app";
+
+static void log_sdcard_root(void)
+{
+    DIR *dir = opendir(BSP_SD_MOUNT_POINT);
+    if (dir == NULL) {
+        ESP_LOGE("!!! SDCARD", "Failed to open %s", BSP_SD_MOUNT_POINT);
+        return;
+    }
+
+    ESP_LOGI("!!! SDCARD", "Root directory: %s", BSP_SD_MOUNT_POINT);
+
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        const char *type = (entry->d_type == DT_DIR) ? "DIR " : "FILE";
+        ESP_LOGI("SDCARD", "%s %s", type, entry->d_name);
+    }
+
+    closedir(dir);
+}
 
 static void show_startup_screen(void)
 {
@@ -54,7 +74,10 @@ void app_main(void)
 
     int res = bsp_sdcard_mount();
 
-    ESP_LOGI("SDCARD", "SDCARD %d", res);
+    ESP_LOGI("!!! SDCARD", "SDCARD %d", res);
+    if (res == ESP_OK) {
+        log_sdcard_root();
+    }
 
     ESP_ERROR_CHECK(bsp_extra_codec_init());
 
@@ -67,6 +90,7 @@ void app_main(void)
             .buff_spiram = false,
         }
     };
+    cfg.lvgl_port_cfg.task_stack = 24 * 1024;
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);
     ESP_ERROR_CHECK(bsp_display_backlight_on());

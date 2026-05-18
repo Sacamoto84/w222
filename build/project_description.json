@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "w222",
-    "project_version":    "cb16f086-dirty",
+    "project_version":    "c97e6cfa-dirty",
     "project_path":       "G:/w222/w222",
     "idf_path":           "D:/Espressif5/frameworks/esp-idf-v5.4.4",
     "build_dir":          "G:/w222/w222/build",

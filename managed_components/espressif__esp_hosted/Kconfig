@@ -10,6 +10,36 @@ config ESP_HOSTED_ENABLED
 menu "ESP-Hosted config"
 	depends on ESP_HOSTED_ENABLED
 
+	choice SLAVE_IDF_TARGET
+		bool "Choose the Wi-Fi Remote co-processor target"
+		default SLAVE_IDF_TARGET_ESP32C6 if IDF_TARGET_ESP32P4
+		default SLAVE_IDF_TARGET_ESP32
+
+		config SLAVE_IDF_TARGET_ESP32
+			bool "ESP32"
+
+		config SLAVE_IDF_TARGET_ESP32S2
+			bool "ESP32-S2"
+
+		config SLAVE_IDF_TARGET_ESP32S3
+			bool "ESP32-S3"
+
+		config SLAVE_IDF_TARGET_ESP32C2
+			bool "ESP32-C2"
+
+		config SLAVE_IDF_TARGET_ESP32C3
+			bool "ESP32-C3"
+
+		config SLAVE_IDF_TARGET_ESP32C6
+			bool "ESP32-C6"
+
+		config SLAVE_IDF_TARGET_ESP32C5
+			bool "ESP32-C5"
+
+		config SLAVE_IDF_TARGET_ESP32C61
+			bool "ESP32-C61"
+	endchoice
+
 	choice ESP_HOSTED_CP_TARGET
 		bool "Choose the Co-processor to use"
 

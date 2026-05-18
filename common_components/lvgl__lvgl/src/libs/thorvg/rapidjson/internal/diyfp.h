@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -12,9 +12,9 @@
 // CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
 // конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
-// Это реализация алгоритма Grisu2 на C++ из публикации:
+// Этот алгоритм реализации Grisu2 на C++ опубликован:
 // Лойч, Флориан. «Быстрая и точная печать чисел с плавающей запятой с помощью
-// целые числа».  ACM Уведомления Sigplan 45.6 (2010 г.): 233–243.
+// целые числа».  ACMУведомления Sigplan 45.6 (2010 г.): 233–243.
 
 #ifndef RAPIDJSON_DIYFP_H_
 #define RAPIDJSON_DIYFP_H_
@@ -227,7 +227,7 @@ inline DiyFp GetCachedPowerByIndex(size_t index) {
 
 inline DiyFp GetCachedPower(int e, int* K) {
 
-    //int k = static_cast <int>(ceil((-61 - e) * 0,30102999566398114)) + 374;
+    //int k =static_cast<int>(ceil((-61 - e) * 0,30102999566398114)) + 374;
     double dk = (-61 - e) * 0.30102999566398114 + 347;  // dk должно быть положительным, поэтому потолок может быть положительным
     int k = static_cast<int>(dk);
     if (dk - k > 0.0)

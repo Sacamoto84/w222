@@ -140,7 +140,7 @@ void test_style_copy(void)
 
     lv_style_init(&copied_style);
     lv_style_copy(&copied_style, &style1);
-    lv_style_copy(&copied_style, &style2); // Это должно сбросить `copied_style`, а затем продублировать свойства `style2`.
+    lv_style_copy(&copied_style, &style2); // Это следует сбросить `copied_style`, а затем продублировать свойства `style2`.
 
     lv_style_value_t value;
 
@@ -245,7 +245,7 @@ void test_style_remove_theme(void)
     /*Местный стиль сохранен на ручке*/
     TEST_ASSERT_EQUAL_COLOR(lv_color_hex(0xff0000), lv_obj_get_style_bg_color(sw, LV_PART_KNOB));
 
-    /*Бг. opa вернулся к значению по умолчанию 0*/
+    /*Бг. опа вернулась к результату по умолчанию 0*/
     TEST_ASSERT_EQUAL(0, lv_obj_get_style_bg_opa(sw, LV_PART_KNOB));
 }
 

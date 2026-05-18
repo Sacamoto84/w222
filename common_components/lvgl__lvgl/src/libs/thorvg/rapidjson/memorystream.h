@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -27,15 +27,15 @@ RAPIDJSON_NAMESPACE_BEGIN
 
 //! Представляет поток входных байтов в памяти.
 /*!
-    Этот класс в основном предназначен для оболочки EncodedInputStream или AutoUTFInputStream.
+    Этот класс предназначен для обработки EncodedInputStream или AutoUTFInputStream.
 
-    Он похож на FileReadBuffer, но источником является буфер в памяти, а не файл.
+    Это похоже на FileReadBuffer, но это буфер в памяти, а не файл.
 
-    Различия между MemoryStream и StringStream:
-    1. StringStream has encoding but MemoryStream is a byte stream.
-    2. MemoryStream needs size of the source buffer and the buffer don't need to be null terminated. StringStream assume null-terminated string as source.
-    3. MemoryStream supports Peek4() for encoding detection. StringStream is specified with an encoding so it should not have Peek4().
-    \note реализует концепцию Stream
+    Получение между MemoryStream и StringStream:
+    1. StringStream имеет кодировку, но MemoryStream представляет собой поток байтов.
+    2. MemoryStream требуется размер исходного буфера, и буфер не обязательно должен иметь нулевое завершение. StringStream принимает в качестве источника строку, завершающуюся нулем.
+    3. MemoryStream поддерживаетPeek4()для обнаружения кодировки. StringStream указан с кодировкой, поэтому он не должен иметь Peek4().
+    \note реализации соглашения Stream
 */
 struct MemoryStream {
     typedef char Ch; // байт

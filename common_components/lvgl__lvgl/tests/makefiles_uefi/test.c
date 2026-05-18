@@ -7,7 +7,7 @@ int efi_main(void * image_handle, void * system_table)
     return 0;
 }
 
-// memcpy требуется как символ для компилятора clang.
+// memcpy требует символа, подобного компилятору clang.
 void * memcpy(void * s, const void * ct, size_t n)
 {
     const uint8_t * ct_8 = (const uint8_t *) ct;

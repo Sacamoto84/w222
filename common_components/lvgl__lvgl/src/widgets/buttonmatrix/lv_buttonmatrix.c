@@ -267,7 +267,7 @@ const char * lv_buttonmatrix_get_button_text(const lv_obj_t * obj, uint32_t btn_
     uint32_t txt_i = 0;
     uint32_t btn_i = 0;
 
-    /*Поиск по тексту btnm-> btn_pr по тексту кнопок на карте
+    /*Поиск по тексту btnm->btn_prпо тексту кнопок на карте
      *Пропустить "\n"-s*/
     while(btn_i != btn_id) {
         btn_i++;
@@ -774,8 +774,8 @@ static void draw_main(lv_event_t * e)
 }
 /**
  * Создайте необходимое количество кнопок и управляющих байтов согласно карте
- * @param obj pointer to button matrix object
- * @param map_p pointer to a string array
+ * @param obj указатель на объект матрицы кнопок
+ * @param map указатель на массив строк
  */
 static void allocate_button_areas_and_controls(const lv_obj_t * obj, const char * const * map)
 {
@@ -819,8 +819,8 @@ static void allocate_button_areas_and_controls(const lv_obj_t * obj, const char 
 
 /**
  * Получите ширину кнопки в единицах (по умолчанию — 1).
- * @param ctrl_bits least significant 3 bits used (1..7 valid values)
- * @return the width of the button in units
+ * @param ctrl_bits используются наименее значимые 3 бита (1–7 допустимых значений)
+ * @return ширина кнопки в единицах
  */
 static uint32_t get_button_width(lv_buttonmatrix_ctrl_t ctrl_bits)
 {
@@ -870,9 +870,9 @@ static bool button_get_checked(lv_buttonmatrix_ctrl_t ctrl_bits)
 
 /**
  * Дает идентификатор кнопки под заданной точкой
- * @param obj pointer to a button matrix object
- * @param p a point with absolute coordinates
- * @return the id of the button or LV_BUTTONMATRIX_BUTTON_NONE.
+ * @param obj указатель на объект матрицы кнопки
+ * @param p точка с абсолютными координатами
+ * @return идентификатор кнопки илиLV_BUTTONMATRIX_BUTTON_NONE.
  */
 static uint32_t get_button_from_point(lv_obj_t * obj, lv_point_t * p)
 {
@@ -945,7 +945,7 @@ static void invalidate_button_area(const lv_obj_t * obj, uint32_t btn_idx)
     int32_t row_gap = lv_obj_get_style_pad_row(obj, LV_PART_MAIN);
     int32_t col_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
 
-    /*Обязательно оставьте минимальное дополнительное пространство, если строка / col_gap мала.*/
+    /*Обязательно оставьте минимальное пространство, если строка /col_gapмала.*/
     int32_t dpi = lv_display_get_dpi(lv_obj_get_display(obj));
     row_gap = LV_MAX(row_gap, dpi / 10);
     col_gap = LV_MAX(col_gap, dpi / 10);
@@ -967,8 +967,8 @@ static void invalidate_button_area(const lv_obj_t * obj, uint32_t btn_idx)
 /**
  * Обеспечивает переключение одной кнопки на матрице кнопок.
  * Он просто очищает флаг переключения на других кнопках.
- * @param obj Button matrix object
- * @param btn_idx Button that should remain toggled
+ * @param obj Объект матрицы кнопок
+ * @param btn_idx Кнопка, которая должна оставаться включенной
  */
 static void make_one_button_checked(lv_obj_t * obj, uint32_t btn_idx)
 {
@@ -982,8 +982,8 @@ static void make_one_button_checked(lv_obj_t * obj, uint32_t btn_idx)
 
 /**
  * Проверьте, установлен ли на какой-либо из кнопок в первом ряду флаг управления LV_BUTTONMATRIX_CTRL_POPOVER.
- * @param obj Button matrix object
- * @return true if at least one button has the flag, false otherwise
+ * @param obj Объект матрицы кнопок
+ * @return true, если хотя бы одна кнопка имеет этот флаг, в противном случае — false
  */
 static bool has_popovers_in_top_row(lv_obj_t * obj)
 {
@@ -1031,7 +1031,7 @@ static void update_map(lv_obj_t * obj)
 
     /*Подсчитайте единицы и кнопки в строке
      *(Кнопка может иметь ширину 1,2,3... единицу)*/
-    uint32_t txt_tot_i = 0; /*Действуйте. индекс на карте str*/
+    uint32_t txt_tot_i = 0; /*Действуйте. индекс на карте ул.*/
     uint32_t btn_tot_i = 0; /*Действуйте. индекс областей кнопок*/
     const char * const * map_row = btnm->map_p;
 

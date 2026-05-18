@@ -59,12 +59,12 @@ static void gridnav_one_axis_move_only(uint32_t key_grid_axis_next,
 
     TEST_ASSERT(lv_obj_get_state(objs[0]) & LV_STATE_FOCUSED);
 
-    /* Клавиша направления Gridnav перемещает фокус */
+    /* Клавиша направляет Gridnav перемещает фокусы */
     lv_test_key_hit(key_grid_axis_next);
     TEST_ASSERT(lv_obj_get_state(objs[1]) & LV_STATE_FOCUSED);
     TEST_ASSERT_FALSE(g_key_data.press_happened);
 
-    /* Клавиша направления без Gridnav не перемещает фокус. */
+    /* Клавиша направляется без Gridnav и не перемещает фокус. */
     /* вместо этого ключ отправляется объекту */
     lv_test_key_hit(key_obj_axis_next);
     TEST_ASSERT(lv_obj_get_state(objs[1]) & LV_STATE_FOCUSED);

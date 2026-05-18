@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //

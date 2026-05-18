@@ -35,15 +35,15 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_calendar_header_dropdown
 
 /**
  * Создайте заголовок календаря с раскрывающимися списками для выбора года и месяца.
- * @param parent    pointer to a calendar object.
- * @return          the created header
+ * @param parent    указатель на объект календаря.
+ * @return          созданный заголовок
  */
 lv_obj_t * lv_calendar_add_header_dropdown(lv_obj_t * parent);
 
 /**
  * Устанавливает собственный список календарных лет
- * @param parent        pointer to a calendar object
- * @param years_list    pointer to an const char array with the years list, see lv_dropdown set_options for more information.
+ * @param parent        указатель на объект календаря
+ * @param years_list    указатель на константный массив символов со списком лет, дополнительную информацию см. вlv_dropdownset_options.
  *                      например `const char *years = "2023\n2022\n2021\n2020\n2019"
  *                      Будет сохранен только указатель, поэтому эта переменная не может быть локальной и позже будет уничтожена.
  */

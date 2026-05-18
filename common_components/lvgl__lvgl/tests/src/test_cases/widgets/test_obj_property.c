@@ -36,7 +36,7 @@ void test_obj_property_set_get_should_match(void)
     lv_property_t prop = { };
     lv_color_t color = {.red = 0x11, .green = 0x22, .blue = 0x33};
 
-    /* Свойство Style должно работать */
+    /* Свой стиль должен работать */
     /* тип int */
     prop.id = LV_PROPERTY_STYLE_X;
     prop.num = 0xaabb;
@@ -279,7 +279,7 @@ void test_obj_class_property(void)
     lv_obj_t * img = lv_image_create(lv_screen_active());
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_ALIGN, lv_obj_property_get_id(img, "align"));
 
-    /* Класс obj имеет свойство align, а изображение — нет. */
+    /* Класс obj имеет свойство align, изображение — нет. */
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_OBJ_ALIGN, lv_obj_class_property_get_id(&lv_obj_class, "align"));
     TEST_ASSERT_EQUAL_UINT32(LV_PROPERTY_ID_INVALID, lv_obj_class_property_get_id(&lv_image_class, "align"));
 

@@ -436,7 +436,7 @@ lv_span_t * lv_spangroup_get_child(const lv_obj_t * obj, int32_t id)
     int32_t cur_idx = 0;
     lv_ll_node_t * cur_node = linked_list->head;
 
-    /*Если вы используете отрицательный индекс, начните с хвоста и используйте cur -1, чтобы указать конец.*/
+    /*Если вы используете отрицательный индекс, начните с хвоста и подтвердите cur -1, чтобы обозначить конец.*/
     if(!traverse_forwards) {
         cur_idx = -1;
         cur_node = linked_list->tail;
@@ -593,7 +593,7 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
     const char * cur_txt = cur_span->txt;
     span_text_check(&cur_txt);
     uint32_t cur_txt_ofs = 0;
-    lv_snippet_t snippet;   /* используйте, чтобы сохранить информацию cur_span и поместить ее в стек */
+    lv_snippet_t snippet;   /* воспользуйтесь, чтобы сохранить информациюcur_spanи поместить ее в стек */
     lv_memset(&snippet, 0, sizeof(snippet));
 
     lv_span_t * prev_span = cur_span;
@@ -615,7 +615,7 @@ int32_t lv_spangroup_get_expand_height(lv_obj_t * obj, int32_t width)
                 cur_txt = cur_span->txt;
                 span_text_check(&cur_txt);
                 cur_txt_ofs = 0;
-                /* возможно также cur_txt [ cur_txt_ofs ] == '\0' */
+                /* возможно такжеcur_txt[cur_txt_ofs] == '\0' */
                 continue;
             }
 
@@ -921,7 +921,7 @@ static void draw_main(lv_event_t * e)
 }
 
 /**
- * @return true for txt fill the max_width.
+ * @return true для txt, заполните max_width.
  */
 static bool lv_text_get_snippet(const char * txt, const lv_font_t * font,
                                 int32_t letter_space, int32_t max_width, lv_text_flag_t flag,
@@ -1076,9 +1076,9 @@ static int32_t convert_indent_pct(lv_obj_t * obj, int32_t width)
 
 /**
  * нарисовать группу промежутков
- * @param spans obj handle
- * @param coords coordinates of the label
- * @param mask the label will be drawn only in this area
+ * @param obj дескриптор объекта
+ * @param layer координаты метки
+ * @param mask метка будет нарисована только в этой области
  */
 static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
 {
@@ -1138,7 +1138,7 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
 #endif
 
     uint32_t cur_txt_ofs = 0;
-    lv_snippet_t snippet;   /* используйте, чтобы сохранить информацию cur_span и поместить ее в стек */
+    lv_snippet_t snippet;   /* воспользуйтесь, чтобы сохранить информациюcur_spanи поместить ее в стек */
     lv_memzero(&snippet, sizeof(snippet));
 
     lv_draw_label_dsc_t label_draw_dsc;
@@ -1162,7 +1162,7 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
                 cur_txt = cur_span->txt;
                 span_text_check(&cur_txt);
                 cur_txt_ofs = 0;
-                /* возможно также cur_txt [ cur_txt_ofs ] == '\0' */
+                /* возможно такжеcur_txt[cur_txt_ofs] == '\0' */
                 continue;
             }
 
@@ -1186,8 +1186,8 @@ static void lv_draw_span(lv_obj_t * obj, lv_layer_t * layer)
                     if(lv_ll_get_next(&spans->child_ll, cur_span) == NULL) {
                         drawn_width -= snippet.letter_space;
                     }
-                    /* Чтобы предотвратить бесконечные циклы, lv_text_get_next_line() может возвращать неполные слова, */
-                    /* Этого явления следует избегать, когда lv_get_snippet_count () > 0. */
+                    /* Чтобы предотвратить бесконечные циклы,lv_text_get_next_line() может вернуть неполные слова, */
+                    /* Данное явление следует соблюдать, когдаlv_get_snippet_count() > 0. */
                     if(max_w < drawn_width) {
                         break;
                     }

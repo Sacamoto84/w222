@@ -250,7 +250,7 @@ lv_color_hsv_t lv_color_rgb_to_hsv(uint8_t r8, uint8_t g8, uint8_t b8)
 
 /**
  * Преобразовать цвет в HSV
- * @param color цвет
+ * @param c цвет
  * @return данный цвет в HSV
  */
 lv_color_hsv_t lv_color_to_hsv(lv_color_t c)

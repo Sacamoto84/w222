@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -29,7 +29,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 
 //! Поток байтов файла для ввода с использованием fread().
 /*!
-    \note реализует концепцию Stream
+    \note реализации соглашения Stream
 */
 class FileReadStream {
 public:
@@ -37,9 +37,9 @@ public:
 
     //! Конструктор.
     /*!
-        \param fp Указатель файла открыт для чтения.
+        \param fp Указатель открытия файла для чтения.
         \param buffer Буфер, предоставляемый пользователем.
-        \paramufferSize размер буфера в байтах. Должно >= 4 байта.
+        \paramufferSize размер буфера в байтах. Должность >= 4 байта.
     */
     FileReadStream(std::FILE* fp, char* buffer, size_t bufferSize) : fp_(fp), buffer_(buffer), bufferSize_(bufferSize), bufferLast_(0), current_(buffer_), readCount_(0), count_(0), eof_(false) {
         RAPIDJSON_ASSERT(fp_ != 0);

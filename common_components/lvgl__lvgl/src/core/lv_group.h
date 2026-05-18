@@ -262,7 +262,7 @@ void lv_group_set_user_data(lv_group_t * group, void * user_data);
 
 /**
  * Получить указатель на данные пользователя группы
- * @param indev указатель на группу
+ * @param group указатель на группу
  * @return указатель на данные пользователя или NULL, если группа NULL
  */
 void * lv_group_get_user_data(const lv_group_t * group);

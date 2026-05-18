@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -22,16 +22,16 @@ RAPIDJSON_NAMESPACE_BEGIN
 
 //! Представляет поток выходных байтов в памяти.
 /*!
-    Этот класс в основном предназначен для оболочки EncodedOutputStream или AutoUTFOutputStream.
+    Этот класс предназначен для обработки EncodedOutputStream или AutoUTFOutputStream.
 
-    Он похож на FileWriteBuffer, но местом назначения является буфер в памяти, а не файл.
+    Это похоже на FileWriteBuffer, но определением является буфер в памяти, а не файл.
 
-    Различия между MemoryBuffer и StringBuffer:
-    1. StringBuffer has Encoding but MemoryBuffer is only a byte buffer.
-    2. StringBuffer::GetString() returns a null-terminated string. MemoryBuffer::GetBuffer() returns a buffer without terminator.
+    Получения между MemoryBuffer и StringBuffer:
+    1. StringBuffer имеет кодировку, но MemoryBuffer — это всего лишь байтовый буфер.
+    2. StringBuffer::GetString() возвращает строку, завершающуюся нулем. MemoryBuffer::GetBuffer() возвращает буфер без терминатора.
 
     \tparam Тип распределителя для выделения буфера памяти.
-    \note реализует концепцию Stream
+    \note реализации соглашения Stream
 */
 template <typename Allocator = CrtAllocator>
 struct GenericMemoryBuffer {
@@ -59,7 +59,7 @@ struct GenericMemoryBuffer {
 
 typedef GenericMemoryBuffer<> MemoryBuffer;
 
-//! Внедрите специализированную версию PutN() с memset() для повышения производительности.
+//! Внедрите специализированную версиюPutN()сmemset()для повышения производительности.
 template<>
 inline void PutN(MemoryBuffer& memoryBuffer, char c, size_t n) {
     std::memset(memoryBuffer.stack_.Push<char>(n), c, n * sizeof(c));

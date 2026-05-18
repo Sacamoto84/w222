@@ -39,7 +39,7 @@ typedef enum {
 
 /**
  * Получить информацию из изображения и сохраниться в `header`.
- * @param decoder  указатель на объект декодера
+ * @param header  указатель на объект декодера
  * @param dsc      указатель на дескриптор декодера
  * @param header   хранить информацию здесь
  * @return LV_RESULT_OK: информация написана правильно;  LV_RESULT_INVALID: не удалось
@@ -49,7 +49,7 @@ typedef lv_result_t (*lv_image_decoder_info_f_t)(lv_image_decoder_t * decoder, l
 
 /**
  * Откройте изображение для декодирования. Подготовьте его, так как он понадобится для прочтения позже.
- * @param decoder  указатель на декодер, функцию, связанную с
+ * @param dsc  указатель на декодер, функцию, связанную с
  * @param dsc      указатель на дескриптор декодера.  В нем уже инициализированы `src`, `color`.
  */
 typedef lv_result_t (*lv_image_decoder_open_f_t)(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc);
@@ -57,7 +57,7 @@ typedef lv_result_t (*lv_image_decoder_open_f_t)(lv_image_decoder_t * decoder, l
 /**
  * Декодируйте пиксели`full_area`постепенно, вызывая цикл. Установите значения`decoded_area`на`LV_COORD_MIN`при первом вызове.
  * Требуется только в том случае, если функция открытия не может вернуть весь декодированный массив пикселей.
- * @param decoder указатель на декодер, функцию, связанную с
+ * @param decoded_area указатель на декодер, функцию, связанную с
  * @param dsc указатель на дескриптор декодера
  * @param full_area входной параметр. вся область для декодирования после достаточного количества последующих вызовов
  * @param decoded_area входной+выходной параметр. установите значения`LV_COORD_MIN`для первого вызова и сброса декодирования.
@@ -70,14 +70,14 @@ typedef lv_result_t (*lv_image_decoder_get_area_cb_t)(lv_image_decoder_t * decod
 
 /**
  * Закройте ожидающее декодирование. Бесплатные ресурсы и т. д.
- * @param decoder указатель на декодер, функцию, связанную с
+ * @param dsc указатель на декодер, функцию, связанную с
  * @param dsc указатель на дескриптор декодера
  */
 typedef void (*lv_image_decoder_close_f_t)(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc);
 
 /**
  * Пользовательские функции рисования для специальных форматов изображений.
- * @param layer указатель на слой
+ * @param clip_area указатель на слой
  * @param dsc указатель на дескриптор декодера
  * @param coords координаты изображения
  * @param draw_dsc дескриптор изображения рисования

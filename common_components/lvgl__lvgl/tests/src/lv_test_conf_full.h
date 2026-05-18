@@ -80,7 +80,7 @@
 #define LV_USE_TJPGD        1
 #ifndef _WIN32
     #define LV_USE_LIBJPEG_TURBO       1
-    #ifndef LV_USE_LIBWEBP /* Если библиотека WebP не найдена, значение по умолчанию равно 0 в CMakeLists.txt. */
+    #ifndef LV_USE_LIBWEBP /* Если библиотека WebP не найдена, значение по умолчанию равно 0 вCMakeLists.txt. */
         #define LV_USE_LIBWEBP             1
     #endif
 #endif

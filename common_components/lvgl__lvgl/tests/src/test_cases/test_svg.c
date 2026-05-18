@@ -179,7 +179,7 @@ void testSvgElement(void)
     lv_svg_render_delete(draw_list);
     lv_svg_node_delete(svg_node_wh6);
 
-    /* сохранитьAspectRatio */
+    /* сохранитьСоотношение сторон */
 
     const char * svg_ar0 = \
                            "<svg preserveAspectRatio=\"none meet\"></svg>";

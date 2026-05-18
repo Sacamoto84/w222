@@ -56,7 +56,7 @@ void test_draw_buf_stride_adjust(void)
         snprintf(ref_image, sizeof(ref_image), "draw/temp_%s.o", color_formats[i]); /*Используйте имя файла .o, чтобы git его игнорировал.*/
 
         lv_image_set_src(img, img_src);
-        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Создайте эталонное изображение, используйте .o, чтобы git проигнорировал его.*/
+        TEST_ASSERT_EQUAL_SCREENSHOT(ref_image); /*Создайте эталонное изображение, воспользуйтесь .o, чтобы git проигнорировал его.*/
 
         lv_image_cache_drop(img_src); /* Изображение может быть добавлено в кеш во время lv_image_set_src.*/
 
@@ -186,7 +186,7 @@ void test_draw_buf_premultiply(void)
         uint16_t * pixel = (uint16_t *)draw_buf->data;
         lv_opa_t * alpha = (lv_opa_t *)(draw_buf->data + 2 * 2 * 2); /* Размер данных RGB565 */
         for(i = 0; i < 4; i++) {
-            pixel[i] = lv_color_to_u16(lv_color_white()); /* White: 0xFFFF in RGB565 */
+            pixel[i] = lv_color_to_u16(lv_color_white()); /* White: 0xFFFF в RGB565 */
             alpha[i] = 128; /* 50% альфа */
         }
 
@@ -194,9 +194,9 @@ void test_draw_buf_premultiply(void)
         TEST_ASSERT_EQUAL(LV_RESULT_OK, res);
         TEST_ASSERT(draw_buf->header.flags & LV_IMAGE_FLAGS_PREMULTIPLIED);
 
-        /* Проверьте результат предварительного умножения: белый ( 0xFFFF ) с альфа 50% должен стать серым. */
+        /* Проверьте результат перед умножением: белый (0xFFFF) с альфа 50% должен стать серым. */
         for(i = 0; i < 4; i++) {
-            /* RGB565: 5-6-5 bits, white premultiplied by 0.5 should be approximately half intensity */
+            /* RGB565: 5-6-5 бит, белый цвет, умноженный на 0,5, должен составлять примерно половину интенсивности */
             TEST_ASSERT_EQUAL_UINT16(0x7BEF, pixel[i]); /* Примерно половина белого в RGB565 */
         }
 

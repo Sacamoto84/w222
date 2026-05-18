@@ -28,7 +28,7 @@ void test_render_to_argb8888_premultiplied(void)
 
             /*
              * Пропустить тест с преобразованными индексированными изображениями, если они не загружены в RAM.
-             * также пропустите normal_3 и recolor_3 на VGLite
+             * также пропуститеnormal_3иrecolor_3на VGLite
              * потому что RGB565A8 и I8 не поддерживаются
              */
             if((LV_BIN_DECODER_RAM_LOAD == 0 || LV_USE_DRAW_VG_LITE) &&

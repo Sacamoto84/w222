@@ -169,7 +169,7 @@ fastgltf::math::fvec3 lv_gltf_data_get_bounds_min(const lv_gltf_model_t * data);
 /**
  * @brief Получите максимальные границы (X/Y/Z) модели из данных GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @return Указатель на трехэлементный массив с плавающей запятой, представляющий максимальные границы.
  */
 fastgltf::math::fvec3 lv_gltf_data_get_bounds_max(const lv_gltf_model_t * data);
@@ -177,7 +177,7 @@ fastgltf::math::fvec3 lv_gltf_data_get_bounds_max(const lv_gltf_model_t * data);
 /**
  * @brief Получите координаты центра объекта данных GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, из которого можно получить центр.
+ * @param data Указатель на объект lv_gltf_data_t, из которого можно получить центр.
  * @return Указатель на массив, содержащий координаты центра (x, y, z).
  */
 fastgltf::math::fvec3 lv_gltf_data_get_center(const lv_gltf_model_t * data);
@@ -185,7 +185,7 @@ fastgltf::math::fvec3 lv_gltf_data_get_center(const lv_gltf_model_t * data);
 /**
  * @brief Получите имя файла модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @return Указатель на постоянную строку символов, представляющую имя файла.
  */
 const char * lv_gltf_get_filename(const lv_gltf_model_t * data);
@@ -212,7 +212,7 @@ lv_gltf_primitive_t * lv_gltf_data_get_primitive_from_mesh(lv_gltf_mesh_data_t *
 /**
  * @brief Получите актив, связанный с данными модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @return Указатель на данные актива.
  */
 fastgltf::Asset * lv_gltf_data_get_asset(lv_gltf_model_t * data);
@@ -220,8 +220,8 @@ fastgltf::Asset * lv_gltf_data_get_asset(lv_gltf_model_t * data);
 /**
  * @brief Получите данные сетки для определенного индекса из данных модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param I Индекс данных сетки, которые нужно получить.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс данных сетки, которые нужно получить.
  * @return Указатель на структуру MeshData, содержащую данные сетки.
  */
 lv_gltf_mesh_data_t * lv_gltf_data_get_mesh(lv_gltf_model_t * data, size_t index);
@@ -255,10 +255,10 @@ void lv_gltf_data_validate_skin(lv_gltf_model_t * data, size_t index);
 /**
  * @brief Добавьте непрозрачный примитив узла к данным модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param I Индекс добавляемого примитива.
- * @param N Указатель на NodePtr, представляющий добавляемый узел.
- * @param P Конкретный параметр, связанный с примитивом.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс добавляемого примитива.
+ * @param node Указатель на NodePtr, представляющий добавляемый узел.
+ * @param primitive_index Конкретный параметр, связанный с примитивом.
  */
 void lv_gltf_data_add_opaque_node_primitive(lv_gltf_model_t * data, size_t index, fastgltf::Node * node,
                                             size_t primitive_index);
@@ -266,10 +266,10 @@ void lv_gltf_data_add_opaque_node_primitive(lv_gltf_model_t * data, size_t index
 /**
  * @brief Добавьте примитив смешанного узла к данным модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param I Индекс добавляемого примитива.
- * @param N Указатель на NodePtr, представляющий добавляемый узел.
- * @param P Конкретный параметр, связанный с примитивом.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param mesh_index Индекс добавляемого примитива.
+ * @param node Указатель на NodePtr, представляющий добавляемый узел.
+ * @param primitive_index Конкретный параметр, связанный с примитивом.
  */
 void lv_gltf_data_add_blended_node_primitive(lv_gltf_model_t * data, size_t mesh_index, fastgltf::Node * node,
                                              size_t primitive_index);
@@ -277,8 +277,8 @@ void lv_gltf_data_add_blended_node_primitive(lv_gltf_model_t * data, size_t mesh
 /**
  * @brief Установите кэшированную матрицу преобразования для определенного узла в данных модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param N Указатель на NodePtr, представляющий узел, для которого необходимо задать преобразование.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param node Указатель на NodePtr, представляющий узел, для которого необходимо задать преобразование.
  * @param M Матрица преобразования для кэширования.
  */
 void lv_gltf_data_set_cached_transform(lv_gltf_model_t * data, fastgltf::Node * node, fastgltf::math::fmat4x4 M);
@@ -286,15 +286,15 @@ void lv_gltf_data_set_cached_transform(lv_gltf_model_t * data, fastgltf::Node * 
 /**
  * @brief Очистите кэш преобразования для данных модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  */
 void lv_gltf_data_clear_transform_cache(lv_gltf_model_t * data);
 
 /**
  * @brief Получите кэшированную матрицу преобразования для определенного узла в данных модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param N Указатель на NodePtr, представляющий узел, для которого требуется получить преобразование.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param node Указатель на NodePtr, представляющий узел, для которого требуется получить преобразование.
  * @return Кэшированная матрица преобразования.
  */
 fastgltf::math::fmat4x4 lv_gltf_data_get_cached_transform(lv_gltf_model_t * data, fastgltf::Node * node);
@@ -302,8 +302,8 @@ fastgltf::math::fmat4x4 lv_gltf_data_get_cached_transform(lv_gltf_model_t * data
 /**
  * @brief Проверьте, существует ли кэшированная матрица преобразования для данного узла.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param N Указатель на NodePtr, представляющий узел, для которого требуется получить преобразование.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param node Указатель на NodePtr, представляющий узел, для которого требуется получить преобразование.
  * @return true, если элемент кэша существует, в противном случае — false
  int32_t*/
 bool lv_gltf_data_has_cached_transform(lv_gltf_model_t * data, fastgltf::Node * node);
@@ -311,7 +311,7 @@ bool lv_gltf_data_has_cached_transform(lv_gltf_model_t * data, fastgltf::Node * 
 /**
  * @brief Проверьте, пуст ли кэш преобразований.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @return True, если кэш преобразования пуст, в противном случае — false.
  */
 bool lv_gltf_data_transform_cache_is_empty(lv_gltf_model_t * data);
@@ -319,7 +319,7 @@ bool lv_gltf_data_transform_cache_is_empty(lv_gltf_model_t * data);
 /**
  * @brief Получите размер скинов в данных модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @return Размер шкур.
  */
 size_t lv_gltf_data_get_skins_size(lv_gltf_model_t * data);
@@ -327,8 +327,8 @@ size_t lv_gltf_data_get_skins_size(lv_gltf_model_t * data);
 /**
  * @brief Получите конкретный скин из данных модели GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
- * @param I Индекс скина для получения.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс скина для получения.
  * @return Кожный индекс.
  */
 size_t lv_gltf_data_get_skin(lv_gltf_model_t * data, size_t index);
@@ -336,7 +336,7 @@ size_t lv_gltf_data_get_skin(lv_gltf_model_t * data, size_t index);
 /**
  * @brief Прием и обнаружение определяют для конкретного узла и примитива в данных модели GLTF.
  *
- * @param data_obj Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @param node Указатель на узел, для которого необходимо принять определения.
  * @param prim Указатель на примитив, который определяет для приема.
  */
@@ -347,7 +347,7 @@ void lv_gltf_data_injest_discover_defines(lv_gltf_model_t * data, fastgltf::Node
  *
  * @param gltf_data Указатель на объект lv_gltf_data_t, содержащий данные модели.
  * @param matrix Матрица преобразования, применяемая при вычислении центральной точки.
- * @param meshIndex Индекс сетки, из которой извлекается центральная точка.
+ * @param mesh_index Индекс сетки, из которой извлекается центральная точка.
  * @param elem Конкретный индекс элемента внутри сетки.
  * @return Центральная точка как структура fastgltf::math::fvec3.
  */

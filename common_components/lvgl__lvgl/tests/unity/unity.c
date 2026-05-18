@@ -1,7 +1,7 @@
 /* =========================================================================
     Проект Unity — тестовая среда для C
     Copyright (c) 2007-21 Mike Karlesky, Mark VanderVoord, Greg Williams
-    [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
+    [Выпущено под лицензиейMIT. Пожалуйста, обратитесь кlicense.txtдля получения подробной информации]
 ============================================================================ */
 #if LV_BUILD_TEST || LV_BUILD_TEST_PERF
 
@@ -70,7 +70,7 @@ static const char UNITY_PROGMEM UnityStrDetail1Name[]            = UNITY_DETAIL1
 static const char UNITY_PROGMEM UnityStrDetail2Name[]            = " " UNITY_DETAIL2_NAME " ";
 #endif
 /*-----------------------------------------------
- * Принтеры Pretty и обработчики вывода результатов тестов
+ * Принтеры Pretty и обработчики подводят итоги тестов
  *-----------------------------------------------*/
 
 /*-----------------------------------------------*/
@@ -352,7 +352,7 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number)
         number = -number;
     }
 
-    /* обрабатывать ноль, NaN и +/- бесконечность */
+    /* обработка ноль, NaN и +/- бесконечность */
     if (number == 0.0f)
     {
         UnityPrint("0");
@@ -662,7 +662,7 @@ static int UnityIsOneArrayNull(UNITY_INTERNAL_PTR expected,
     /* Оба являются NULL или одинаковым указателем. */
     if (expected == actual) { return 0; }
 
-    /* напечатайте и верните true, если ожидается NULL */
+    /* напечатайте и верните true, если мастер NULL */
     if (expected == NULL)
     {
         UnityTestResultsFailBegin(lineNumber);
@@ -671,7 +671,7 @@ static int UnityIsOneArrayNull(UNITY_INTERNAL_PTR expected,
         return 1;
     }
 
-    /* напечатайте и верните true, если фактическое значение равно NULL */
+    /* напечатайте и верните истину, если фактическое значение равно NULL */
     if (actual == NULL)
     {
         UnityTestResultsFailBegin(lineNumber);
@@ -680,7 +680,7 @@ static int UnityIsOneArrayNull(UNITY_INTERNAL_PTR expected,
         return 1;
     }
 
-    return 0; /* верните false, если ни один из них не является NULL */
+    return 0; /* вернуть false, если ни один из них не является NULL */
 }
 
 /*-----------------------------------------------
@@ -894,7 +894,7 @@ void UnityAssertEqualIntArray(UNITY_INTERNAL_PTR expected,
 
 /*-----------------------------------------------*/
 #ifndef UNITY_EXCLUDE_FLOAT
-/* Оберните это определение в функцию с типами переменных как float или double. */
+/* Определите это определение в функции с такими типами использования, как float или double. */
 #define UNITY_FLOAT_OR_DOUBLE_WITHIN(delta, expected, actual, diff)                           \
     if (UNITY_IS_INF(expected) && UNITY_IS_INF(actual) && (((expected) < 0) == ((actual) < 0))) return 1;   \
     if (UNITY_NAN_CHECK) return 1;                                                            \
@@ -1062,7 +1062,7 @@ void UnityAssertGreaterOrLessFloat(const UNITY_FLOAT threshold,
 
     failed = 0;
 
-    /* Проверка на «неуспех», а не на неудачу в получении правильного результата для NaN */
+    /* Проверка на «неуспех», а не на неудачу в получении результата для NaN */
     if (!(actual < threshold) && (compare & UNITY_SMALLER_THAN)) { failed = 1; }
     if (!(actual > threshold) && (compare & UNITY_GREATER_THAN)) { failed = 1; }
 
@@ -1289,7 +1289,7 @@ void UnityAssertGreaterOrLessDouble(const UNITY_DOUBLE threshold,
 
     failed = 0;
 
-    /* Проверка на «неуспех», а не на неудачу в получении правильного результата для NaN */
+    /* Проверка на «неуспех», а не на неудачу в получении результата для NaN */
     if (!(actual < threshold) && (compare & UNITY_SMALLER_THAN)) { failed = 1; }
     if (!(actual > threshold) && (compare & UNITY_GREATER_THAN)) { failed = 1; }
 

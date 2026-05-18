@@ -225,7 +225,7 @@ static void grid_update(lv_obj_t * cont, void * user_data)
 /**
  * Вычислить координаты ячеек сетки
  * @param cont объект, имеющий сетку
- * @param calc сохраните здесь рассчитанные размеры ячеек
+ * @param calc_out сохраните здесь рассчитанные размеры ячеек
  * @note `lv_grid_calc_free(calc_out)` необходимо вызывать, когда`calc_out`больше не нужен.
  */
 static lv_result_t calc(lv_obj_t * cont, lv_grid_calc_t * calc_out)
@@ -464,8 +464,8 @@ static lv_result_t calc_rows(lv_obj_t * cont, lv_grid_calc_t * c)
 /**
  * Перемещение элемента сетки в его ячейке
  * @param item элемент сетки для изменения положения
- * @param calc расчетная сетка `cont`
- * @param child_id_ext вспомогательное значение, еслиIDдочернего элемента известен (в порядке от самого старшего), иначе -1
+ * @param c расчетная сетка `cont`
+ * @param hint вспомогательное значение, еслиIDдочернего элемента известен (в порядке от самого старшего), иначе -1
  * @param grid_abs вспомогательное значение, абсолютное положение сетки, NULL, если неизвестно
  */
 static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * hint)

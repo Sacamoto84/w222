@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // (C) Copyright IBM Corporation 2021
 //
@@ -80,7 +80,7 @@ public:
     //! Оператор присваивания
     GenericUri& operator=(const GenericUri& rhs) {
         if (this != &rhs) {
-            // Не удаляйте ownAllocator
+            // Не удалять ownAllocator
             Free();
             Allocate(rhs.GetStringLength());
             auth_ = CopyPart(scheme_, rhs.scheme_, rhs.GetSchemeStringLength());
@@ -150,9 +150,9 @@ public:
     }
 
     //! Сопоставьте этот URI с другим (базовым) URI в соответствии с правилами разрешения URI.
-    // См. https://tools.ietf.org/html/rfc3986.
-    // Используйте для разрешения идентификатора или $ref с идентификатором в области видимости.
-    // Возвращает новый GenericUri для разрешенного URI.
+    // См.  https://tools.ietf.org/html/rfc3986.
+    // Используйте для входа идентификатор или $ref с идентификатором в области видимости.
+    // Возвращает новый GenericUri для разрешенногоURI.
     GenericUri Resolve(const GenericUri& baseuri, Allocator* allocator = 0) {
         GenericUri resuri;
         resuri.allocator_ = allocator;
@@ -218,14 +218,14 @@ public:
         // Всегда используйте этот фрагмент
         resuri.base_ = CopyPart(resuri.frag_, frag_, GetFragStringLength());
 
-        // Восстановите base_ и uri_.
+        // Восстановитеbase_иuri_.
         resuri.SetBase();
         resuri.uri_ = resuri.base_ + resuri.GetBaseStringLength() + 1;
         resuri.SetUri();
         return resuri;
     }
 
-    //! Получите распределитель этого GenericUri.
+    //! Получите доставку этого GenericUri.
     Allocator& GetAllocator() { return *allocator_; }
 
 private:
@@ -237,7 +237,7 @@ private:
             ownAllocator_ =  allocator_ = RAPIDJSON_NEW(Allocator)();
 
         // Выделите один блок, содержащий каждую часть URI (5) плюс базовый плюс полный URI , все с нулевым завершением.
-        // Order: scheme, auth, path, query, frag, base, uri
+        // Order: схема, аутентификация, путь, запрос, фрагмент, база, uri
         // Обратите внимание, что необходимо устанавливать, увеличивать и назначать в три этапа, чтобы избежать ошибки предупреждения компилятора.
         size_t total = (3 * len + 7) * sizeof(Ch);
         scheme_ = static_cast<Ch*>(allocator_->Malloc(total));
@@ -363,7 +363,7 @@ private:
             frag_[len - start] = '\0';
         }
 
-        // Восстановите base_ и uri_.
+        // Восстановитеbase_иuri_.
         base_ = frag_ + GetFragStringLength() + 1;
         SetBase();
         uri_ = base_ + GetBaseStringLength() + 1;
@@ -405,7 +405,7 @@ private:
         return next;
     }
 
-    // Удалить. и .. сегменты участника path_.
+    // Удалить. и .. сегменты участниковpath_.
     // https://tools.ietf.org/html/rfc3986
     // Это делается на месте, поскольку мы удаляем только сегменты.
     void RemoveDotSegments() {
@@ -413,7 +413,7 @@ private:
         std::size_t pathpos = 0;  // Позиция в path_
         std::size_t newpos = 0;   // Позиция в новом path_
 
-        // Прокрутите каждый сегмент в исходном path_.
+        // Прокрутите каждый сегмент в исходномpath_.
         while (pathpos < pathlen) {
             // Получить следующий сегмент, ограниченный '/' или концом
             size_t slashpos = 0;
@@ -439,9 +439,9 @@ private:
                     newpos = lastslashpos;
                 }
             } else if (slashpos == 1 && path_[pathpos] == '.') {
-                // Отбросить. сегмент, оставляет новый path_ без изменений
+                // Отбросить. сегмент, оставить новыйpath_без изменений
             } else {
-                // Переместите сегмент любого другого типа в новый path_.
+                // Переместите сегмент любого другого типа в новыйpath_.
                 RAPIDJSON_ASSERT(newpos <= pathpos);
                 std::memmove(&path_[newpos], &path_[pathpos], slashpos * sizeof(Ch));
                 newpos += slashpos;
@@ -465,11 +465,11 @@ private:
     Ch* query_;  // Includes the ?
     Ch* frag_;   // Включает #
 
-    Allocator* allocator_;      //!< Текущий распределитель. Он либо предоставляется пользователем, либо равен ownAllocator_ .
-    Allocator* ownAllocator_;   //!< Распределитель, принадлежащий этому Uri.
+    Allocator* allocator_;      //!< Текущий распределитель. Он либо пользуется пользователем, либо равенownAllocator_.
+    Allocator* ownAllocator_;   //!< Распределитель, последствия этого Ури.
 };
 
-//! GenericUri для значения ( UTF -8, распределитель по умолчанию).
+//! GenericUri для значений (UTF-8, распределитель по умолчанию).
 typedef GenericUri<Value> Uri;
 
 RAPIDJSON_NAMESPACE_END

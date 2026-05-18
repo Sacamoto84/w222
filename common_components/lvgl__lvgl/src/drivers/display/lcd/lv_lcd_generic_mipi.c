@@ -246,7 +246,7 @@ static void set_swap_xy(lv_lcd_generic_mipi_driver_t * drv, bool swap)
 /**
  * Сбросить буфер дисплея в LCD.
  * @param disp          объект отображения
- * @param hor_res       горизонтальное разрешение
+ * @param area       горизонтальное разрешение
  * @param area          область, хранящаяся в буфере
  * @param px_map        буфер, содержащий данные пикселей
  * @note                передает данные пикселей на контроллер LCD, используя обратные вызовы 'send_cmd' и 'send_color', которые были

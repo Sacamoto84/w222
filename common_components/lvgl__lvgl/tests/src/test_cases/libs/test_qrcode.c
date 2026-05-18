@@ -36,7 +36,7 @@ void test_qrcode_normal(void)
     TEST_ASSERT_EQUAL(res, LV_RESULT_OK);
     lv_obj_center(qr);
 
-    /*Добавьте рамку с помощью bg_color*/
+    /*добавьте рамку с помощью bg_color*/
     lv_obj_set_style_border_color(qr, bg_color, 0);
     lv_obj_set_style_border_width(qr, 5, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/qrcode_1.png");

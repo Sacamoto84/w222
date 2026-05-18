@@ -1,4 +1,4 @@
-// ISO C9x-совместимый inttypes.h для Microsoft Visual Studio
+// ISO C9x-совместимыйinttypes.hдля Microsoft Visual Studio
 // На основе ISO / IEC 9899: Проект комитета TC2 (6 мая 2005 г.) WG14 / N1124
 //
 //  Copyright (c) 2006-2013 Alexander Chemeris
@@ -31,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // Вышеуказанное программное обеспечение в этом дистрибутиве могло быть изменено
-// THL A29 Limited («Модификации Tencent»).
+// THLA29Limited («Модификации Tencent»).
 // All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.
 
 #ifndef _MSC_VER // [
@@ -47,7 +47,7 @@
 
 #include "stdint.h"
 
-// miloyip: VC supports inttypes.h since VC2013
+// miloyip: VC поддерживает inttypes.h, начиная с VC2013.
 #if _MSC_VER >= 1800
 #include <inttypes.h>
 #else
@@ -275,13 +275,13 @@ typedef struct {
 
 // 7.8.2 Функции для целочисленных типов наибольшей ширины
 
-// 7.8.2.1 Функция imaxabs
+// 7.8.2.1 Функция имаксабс
 #define imaxabs _abs64
 
 // 7.8.2.2 Функция imaxdiv
 
-// Это модифицированная версия функции div() из найденного Microsoft div.c.
-// в % MSVC. NET %\crt\src\ div.c
+// Это модифицированная версия функцииdiv()из найденного Microsoft div.c.
+// в %MSVC. NET%\crt\src\ div.c
 #ifdef STATIC_IMAXDIV // [
 static
 #else // STATIC_IMAXDIV ][

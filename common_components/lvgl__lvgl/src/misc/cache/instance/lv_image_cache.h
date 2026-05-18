@@ -30,34 +30,34 @@ extern "C" {
 
 /**
  * Инициализируйте кэш изображений.
- * @param  size size of the cache in bytes.
- * @return LV_RESULT_OK: initialization succeeded, LV_RESULT_INVALID: failed.
+ * @param  size размер кэша в байтах.
+ * @return LV_RESULT_OK: инициализация прошла успешно, LV_RESULT_INVALID: не удалось.
  */
 lv_result_t lv_image_cache_init(uint32_t size);
 
 /**
  * Изменить размер кэша изображений.
  * Если установлено значение 0, кэш будет отключен.
- * @param new_size  new size of the cache in bytes.
- * @param evict_now true: evict the images should be removed by the eviction policy, false: wait for the next cache cleanup.
+ * @param new_size  новый размер кэша в байтах.
+ * @param evict_now true: вытеснить изображения должны быть удалены политикой вытеснения, false: дождаться следующей очистки кэша.
  */
 void lv_image_cache_resize(uint32_t new_size, bool evict_now);
 
 /**
  * Недействительный кеш изображений. Используйте NULL, чтобы сделать все изображения недействительными.
- * @param src pointer to an image source.
+ * @param src указатель на источник изображения.
  */
 void lv_image_cache_drop(const void * src);
 
 /**
- * Возвращайте true, если кэш изображений включен.
- * @return true: enabled, false: disabled.
+ * Возвращаете true, если кэш изображений включен.
+ * @return true: включено, false: отключено.
  */
 bool lv_image_cache_is_enabled(void);
 
 /**
  * Создайте итератор для перебора кэша изображений.
- * @return an iterator to iterate over the image cache.
+ * @return итератор для перебора кэша изображений.
  */
 lv_iter_t * lv_image_cache_iter_create(void);
 

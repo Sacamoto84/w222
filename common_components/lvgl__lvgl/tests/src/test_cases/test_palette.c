@@ -14,7 +14,7 @@ void tearDown(void)
     /* Функция запускается после каждого теста */
 }
 
-/* Протестируйте lv_palette_main со всеми цветами палитры. */
+/* Протестируйтеlv_palette_mainсо всеми цветочными палитрами. */
 void test_palette_main_all_colors(void)
 {
     for(lv_palette_t p = LV_PALETTE_RED; p < LV_PALETTE_LAST; p++) {
@@ -23,7 +23,7 @@ void test_palette_main_all_colors(void)
     }
 }
 
-/* Проверьте lv_palette_main с недопустимой палитрой. */
+/* Проверьтеlv_palette_mainс недопустимой палитрой. */
 void test_palette_main_invalid(void)
 {
     lv_color_t color = lv_palette_main(LV_PALETTE_LAST);
@@ -33,7 +33,7 @@ void test_palette_main_invalid(void)
     TEST_ASSERT_EQUAL_COLOR(lv_color_black(), color);
 }
 
-/* Проверьте lv_palette_lighten на всех уровнях. */
+/* Проверьтеlv_palette_lightenна всех уровнях. */
 void test_palette_lighten_all_levels(void)
 {
     for(lv_palette_t p = LV_PALETTE_RED; p < LV_PALETTE_LAST; p++) {
@@ -44,7 +44,7 @@ void test_palette_lighten_all_levels(void)
     }
 }
 
-/* Проверьте lv_palette_lighten с недопустимыми уровнями. */
+/* Проверьтеlv_palette_lightenс недопустимыми уровнями. */
 void test_palette_lighten_invalid(void)
 {
     lv_color_t color = lv_palette_lighten(LV_PALETTE_RED, 0);
@@ -54,7 +54,7 @@ void test_palette_lighten_invalid(void)
     TEST_ASSERT_EQUAL_COLOR(lv_color_black(), color);
 }
 
-/* Проверьте lv_palette_darken на всех уровнях. */
+/* Проверьтеlv_palette_darkenна всех уровнях. */
 void test_palette_darken_all_levels(void)
 {
     for(lv_palette_t p = LV_PALETTE_RED; p < LV_PALETTE_LAST; p++) {
@@ -65,7 +65,7 @@ void test_palette_darken_all_levels(void)
     }
 }
 
-/* Проверьте lv_palette_darken с недопустимыми уровнями. */
+/* Проверьтеlv_palette_darkenс недопустимыми уровнями. */
 void test_palette_darken_invalid(void)
 {
     lv_color_t color = lv_palette_darken(LV_PALETTE_RED, 0);
@@ -87,21 +87,21 @@ void test_palette_specific_values(void)
     TEST_ASSERT_EQUAL_HEX32(0x81D4FA, lv_color_to_int(light_blue));
 }
 
-/* Тест lv_palette_main с индексом палитры, выходящим за пределы допустимого диапазона. */
+/* Тестlv_palette_mainс индексом палитры, выходящим за пределы допустимого соединения. */
 void test_palette_main_out_of_range(void)
 {
     lv_color_t color = lv_palette_main(LV_PALETTE_LAST + 1);
     TEST_ASSERT_EQUAL_COLOR(lv_color_black(), color);
 }
 
-/* Тест lv_palette_lighten с индексом палитры, выходящим за пределы допустимого диапазона. */
+/* Тестlv_palette_lightenс индексом палитры, выходящим за пределы допустимого соединения. */
 void test_palette_lighten_out_of_range(void)
 {
     lv_color_t color = lv_palette_lighten(LV_PALETTE_LAST + 1, 1);
     TEST_ASSERT_EQUAL_COLOR(lv_color_black(), color);
 }
 
-/* Тест lv_palette_darken с индексом палитры, выходящим за пределы допустимого диапазона. */
+/* Тестlv_palette_darkenс индексом палитры, выходящим за пределы допустимого соединения. */
 void test_palette_darken_out_of_range(void)
 {
     lv_color_t color = lv_palette_darken(LV_PALETTE_LAST + 1, 1);

@@ -323,7 +323,7 @@ void test_snapshot_reshape_draw_buf_invalid_params(void)
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(50, 40, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Проверяйте только буфер NULL, а не объект NULL (функция утверждает obj != NULL внутри) */
+    /* Проверяйте только буферNULL, а не объектNULL(функция утверждает obj !=NULLвнутри) */
     lv_result_t result = lv_snapshot_reshape_draw_buf(obj, NULL);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -393,7 +393,7 @@ void test_snapshot_take_to_draw_buf_reshape_failure(void)
     /* Создайте недопустимый буфер отрисовки (например, размера 0). */
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(0, 0, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
 
-    /* Тестовая операция take_to_draw_buf должна завершиться неудачно (поскольку изменение формы не удастся) */
+    /* Тестовая операцияtake_to_draw_bufдолжна завершиться неудачно (поскольку изменение формы не спасти) */
     lv_result_t result = lv_snapshot_take_to_draw_buf(obj, LV_COLOR_FORMAT_ARGB8888, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 
@@ -409,7 +409,7 @@ void test_snapshot_take_to_draw_buf_zero_size_object(void)
     lv_draw_buf_t * draw_buf = lv_draw_buf_create(50, 40, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     TEST_ASSERT_NOT_NULL(draw_buf);
 
-    /* Тестовая операция take_to_draw_buf должна завершиться неудачно (поскольку размер объекта равен 0). */
+    /* Тестовая операцияtake_to_draw_bufдолжна завершиться неудачно (поскольку размер объекта равен 0). */
     lv_result_t result = lv_snapshot_take_to_draw_buf(obj, LV_COLOR_FORMAT_ARGB8888, draw_buf);
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, result);
 

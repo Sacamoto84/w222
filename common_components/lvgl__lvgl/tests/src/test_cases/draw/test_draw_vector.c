@@ -393,13 +393,13 @@ static void draw_during_rendering(const char * name, draw_cb_t draw_cb, lv_opa_t
 
 void test_draw_during_rendering(void)
 {
-    /* Включить параметры дампа Draw Unit */
+    /* Включить параметры дампы Вытяжной блок */
     lv_draw_unit_send_event(NULL, LV_EVENT_FOCUSED, NULL);
 
     draw_during_rendering("shapes", draw_shapes, LV_OPA_COVER);
     draw_during_rendering("lines", draw_lines, LV_OPA_COVER);
 
-    /* Отключить параметры дампа Draw Unit */
+    /* Отключить параметры дампы Вытяжной блок */
     lv_draw_unit_send_event(NULL, LV_EVENT_DEFOCUSED, NULL);
 
     draw_during_rendering("shapes_opa_50", draw_shapes, LV_OPA_50);

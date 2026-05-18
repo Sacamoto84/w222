@@ -49,7 +49,7 @@ extern vg_lite_error_t srcbuf_align_check(vg_lite_buffer_t * source);
 
 extern vg_lite_matrix_t identity_mtx;
 
-/* Преобразуйте формат данных VGLite в значение HW. */
+/* Преобразуйте формат данных VGLite в значениеHW. */
 static uint32_t convert_path_format(vg_lite_format_t format)
 {
     switch(format) {
@@ -70,7 +70,7 @@ static uint32_t convert_path_format(vg_lite_format_t format)
     }
 }
 
-/* Преобразуйте перечисления качества VGLite в значения HW. */
+/* Преобразуйте перечисления качества VGLite в значенияHW. */
 static uint32_t convert_path_quality(vg_lite_quality_t quality)
 {
     switch(quality) {
@@ -193,7 +193,7 @@ vg_lite_error_t vg_lite_init_path(vg_lite_path_t * path,
     path->bounding_box[2] = max_x;
     path->bounding_box[3] = max_y;
 
-    /* Данные пути не могут заканчиваться операцией CLOSE. Замените CLOSE на END для path_data. */
+    /* Данные пути не могут закончиться операцией CLOSE. ЗаменитеCLOSEнаENDна path_data. */
     data_size = get_data_size(data_format);
     num = path_length / data_size;
 
@@ -462,7 +462,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
             return VG_LITE_INVALID_ARGUMENT;
     }
 
-    /* Поддержка NULL путь->путь для OpenVG */
+    /* ПоддержкаNULLпуть->путь для OpenVG */
     if(!path->path) {
         data_size = vg_lite_get_path_length(cmd, seg_count, path->format);
         path->path = (vg_lite_pointer)vg_lite_os_malloc(data_size);
@@ -529,7 +529,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
         }
 
         dataCount = get_data_count(cmd[i]);
-        /* вычислите bounding_box . */
+        /* вычислитеbounding_box. */
         if(dataCount >= 0) {
             offset = CDALIGN(offset, data_size);
             if((cmd[i] > VLC_OP_CLOSE) &&
@@ -864,7 +864,7 @@ vg_lite_error_t vg_lite_append_path(vg_lite_path_t * path,
     return error;
 }
 
-#if (CHIPID==0x355 || CHIPID==0x255) /* GC355 / GC255 vg_lite_draw функции */
+#if (CHIPID==0x355 || CHIPID==0x255) /* GC355 /GC255vg_lite_draw функция */
 
 #define UPDATE_BOUNDING_BOX(bbx, point)                                 \
     do {                                                                \
@@ -1065,7 +1065,7 @@ static vg_lite_error_t set_interpolation_steps_draw_paint(vg_lite_buffer_t * tar
     return VG_LITE_SUCCESS;
 }
 
-/* GC355 / GC255 vg_lite_draw API реализация
+/* GC355 /GC255vg_lite_drawAPIпродажа
  */
 vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                              vg_lite_path_t * path,
@@ -1130,7 +1130,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     target->apply_premult = 0;
     premul_flag = (s_context.blend_mode >= OPENVG_BLEND_SRC_OVER && s_context.blend_mode <= OPENVG_BLEND_ADDITIVE);
     if(target->premultiplied == 0 && premul_flag == 0) {
@@ -1281,7 +1281,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     return error;
 }
 
-/* GC355 / GC255 vg_lite_draw_pattern API реализация
+/* GC355 /GC255vg_lite_draw_patternAPIпродажа
  */
 vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                      vg_lite_path_t * path,
@@ -1396,7 +1396,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     s_context.blend_mode = blend;
     in_premult = 0x00000000;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -1419,7 +1419,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -1678,7 +1678,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     return error;
 }
 
-/* GC355 / GC255 vg_lite_draw_linear_grad API реализация
+/* GC355 /GC255vg_lite_draw_linear_gradAPIпродажа
  */
 vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -1792,7 +1792,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -2130,7 +2130,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
     return error;
 }
 
-/* GC355 / GC255 vg_lite_draw_radial_grad API реализация
+/* GC355 /GC255vg_lite_draw_radial_gradAPIпродажа
  */
 vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -2267,7 +2267,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -2434,7 +2434,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **
     **  Таким образом, dx может быть учтено в
     **
-    **      dx = (x + 0.5) m00 + (y + 0.5) m01 + m02 - focalX
+    **      dx = (x + 0,5) m00 + (y + 0,5) m01 + m02 - фокусX
     **         = x m00 + y m01 + 0,5 m00 + 0,5 m01 + m02 - фокус X
     **
     **         = x m00 + y m01 + cx
@@ -2828,7 +2828,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
 #else /* (CHIPID==0x355 || CHIPID==0x255) */
 
-/* GC555 vg_lite_draw API реализация
+/* GC555vg_lite_drawAPI реализация
  */
 vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
                              vg_lite_path_t * path,
@@ -2911,7 +2911,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     /*смешивать вводимые данные с контекстом*/
     s_context.blend_mode = blend;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     target->apply_premult = 0;
     premul_flag = (s_context.blend_mode >= OPENVG_BLEND_SRC_OVER && s_context.blend_mode <= OPENVG_BLEND_ADDITIVE)
                   || (s_context.blend_mode >= VG_LITE_BLEND_NORMAL_LVGL && s_context.blend_mode <= VG_LITE_BLEND_MULTIPLY_LVGL);
@@ -3217,7 +3217,7 @@ vg_lite_error_t vg_lite_draw(vg_lite_buffer_t * target,
     return error;
 }
 
-/* GC555 vg_lite_draw_pattern API реализация
+/* GC555vg_lite_draw_patternAPI реализация
  */
 vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
                                      vg_lite_path_t * path,
@@ -3424,7 +3424,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
     s_context.blend_mode = blend;
     in_premult = 0x00000000;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -3448,7 +3448,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -3920,7 +3920,7 @@ vg_lite_error_t vg_lite_draw_pattern(vg_lite_buffer_t * target,
 #endif
 }
 
-/* GC555 vg_lite_draw_linear_grad API реализация
+/* GC555vg_lite_draw_linear_gradAPI реализация
  */
 vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -4071,7 +4071,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -4569,7 +4569,7 @@ vg_lite_error_t vg_lite_draw_linear_grad(vg_lite_buffer_t * target,
 #endif
 }
 
-/* GC555 vg_lite_draw_radial_grad API реализация
+/* GC555vg_lite_draw_radial_gradAPI реализация
  */
 vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
                                          vg_lite_path_t * path,
@@ -4740,7 +4740,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -4937,7 +4937,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
     **
     **  Таким образом, dx может быть учтено в
     **
-    **      dx = (x + 0.5) m00 + (y + 0.5) m01 + m02 - focalX
+    **      dx = (x + 0,5) m00 + (y + 0,5) m01 + m02 - фокусX
     **         = x m00 + y m01 + 0,5 m00 + 0,5 m01 + m02 - фокус X
     **
     **         = x m00 + y m01 + cx
@@ -5474,7 +5474,7 @@ vg_lite_error_t vg_lite_draw_radial_grad(vg_lite_buffer_t * target,
 
 #endif /* (CHIPID==0x355 || CHIPID==0x255) */
 
-/* GC555 / GC355 / GC255 vg_lite_draw_grad API реализация
+/* GC555 /GC355/GC255vg_lite_draw_gradAPIреализация
  */
 vg_lite_error_t vg_lite_draw_grad(vg_lite_buffer_t * target,
                                   vg_lite_path_t * path,

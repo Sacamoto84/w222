@@ -258,7 +258,7 @@ static lv_draw_buf_t * decode_png_data(const void * png_data, size_t png_data_si
 
 /**
  * Если дисплей не в 32-битном формате ( ARGB888 ), преобразуйте изображение в текущую глубину цвета.
- * @param img изображение ARGB888
+ * @param img_p изображение ARGB888
  * @param px_cnt количество пикселей в `img`
  */
 static void convert_color_depth(uint8_t * img_p, uint32_t px_cnt)

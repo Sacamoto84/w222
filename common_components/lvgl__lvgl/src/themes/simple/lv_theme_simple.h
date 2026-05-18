@@ -32,20 +32,20 @@ extern "C" {
 
 /**
  * Инициализировать тему
- * @param disp pointer to display
- * @return a pointer to reference this theme later
+ * @param disp указатель для отображения
+ * @return указатель для ссылки на эту тему позже
  */
 lv_theme_t * lv_theme_simple_init(lv_display_t * disp);
 
 /**
 * Проверьте, инициализирована ли тема
-* @return true if default theme is initialized, false otherwise
+* @return true, если инициализирована тема по умолчанию, в противном случае — false
 */
 bool lv_theme_simple_is_inited(void);
 
 /**
  * Получить простую тему
- * @return a pointer to simple theme, or NULL if this is not initialized
+ * @return указатель на простую тему или NULL, если она не инициализирована
  */
 lv_theme_t * lv_theme_simple_get(void);
 

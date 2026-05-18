@@ -94,7 +94,7 @@ uint32_t lv_os_get_proc_idle_percent(void);
  * @param thread        переменная, в которой будет храниться поток
  * @param name          название темы
  * @param prio          приоритет потока
- * @param callback      функция нити
+ * @param stack_size      функция нити
  * @param stack_size    размер стека в байтах
  * @param user_data     произвольные данные, будут доступны в обратном вызове
  * @return              LV_RESULT_OK: успех; LV_RESULT_INVALID: сбой

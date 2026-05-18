@@ -409,8 +409,8 @@ static void draw_task_added_event_cb(lv_event_t * e)
 
 /**
  * Получить количество дней в месяце
- * @param year a year
- * @param month a month. The range is basically [1..12] but [-11..0] or [13..24] is also
+ * @param year год
+ * @param month в месяц. Диапазон в основном [1..12], но также [-11..0] или [13..24].
  *              поддерживается обработка следующего/предыдущего. год
  * @return [28..31]
  */
@@ -432,8 +432,8 @@ static uint8_t get_month_length(int32_t year, int32_t month)
 
 /**
  * Сообщает, является ли год високосным или нет.
- * @param year a year
- * @return 0: not leap year; 1: leap year
+ * @param year год
+ * @return 0: не високосный год; 1: високосный год
  */
 static uint8_t is_leap_year(uint32_t year)
 {
@@ -442,10 +442,10 @@ static uint8_t is_leap_year(uint32_t year)
 
 /**
  * Получить день недели
- * @param year a year
- * @param month a  month [1..12]
- * @param day a day [1..32]
- * @return [0..6] which means [Sun..Sat] or [Mon..Sun] depending on LV_CALENDAR_WEEK_STARTS_MONDAY
+ * @param year год
+ * @param month в месяц [1..12]
+ * @param day в день [1..32]
+ * @return [0..6] что означает [Вс..Сб] или [Пн..Вс] в зависимости от LV_CALENDAR_WEEK_STARTS_MONDAY
  */
 static uint8_t get_day_of_week(uint32_t year, uint32_t month, uint32_t day)
 {

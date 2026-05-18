@@ -29,7 +29,7 @@ void tearDown(void)
     lv_obj_clean(active_screen);
 }
 
-/* NOTE: Default chart type is LV_CHART_TYPE_LINE */
+/* NOTE: Тип диаграммы по умолчанию — LV_CHART_TYPE_LINE. */
 void test_chart_add_series(void)
 {
     lv_chart_series_t * red_series;

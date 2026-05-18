@@ -155,7 +155,7 @@ void lv_area_move(lv_area_t * area, int32_t x_ofs, int32_t y_ofs);
  * Выровнять область относительно другой
  * @param base область, где другой будет выровнен
  * @param to_align область для выравнивания
- * @param выровнять `LV_ALIGN_...`
+ * @param align `LV_ALIGN_...`
  * @param ofs_x Смещение по оси X
  * @param ofs_y Смещение по оси Y
  */

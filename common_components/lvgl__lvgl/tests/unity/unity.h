@@ -1,7 +1,7 @@
 /* ==========================================
     Проект Unity — тестовая среда для C
     Copyright (c) 2007-21 Mike Karlesky, Mark VanderVoord, Greg Williams
-    [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
+    [Выпущено под лицензиейMIT. Пожалуйста, обратитесь кlicense.txtдля получения подробной информации]
 ========================================== */
 #if LV_BUILD_TEST || LV_BUILD_TEST_PERF
 #define UNITY_INCLUDE_PRINT_FORMATTED 1
@@ -27,17 +27,17 @@ extern "C"
  *-------------------------------------------------------*/
 
 /* Эти функции предназначены для вызова до и после каждого теста.
- * Если вы используете Unity напрямую, их необходимо будет предоставить для каждого теста.
+ * Если вы используете Unity напрямую, их необходимо будет рассчитать для каждого теста.
  * исполняемый файл построен. Если вы используете генератор тестового запуска и/или
  * Конечно, это необязательно. */
 void setUp(void);
 void tearDown(void);
 
 /* Эти функции предназначены для вызова в начале и конце
- * весь набор тестов.   suiteTearDown() пройдено количество тестов, которые
- * не удалось, и его возвращаемое значение становится кодом завершения main(). Если вы используете
- * Непосредственно Unity, вы отвечаете за их вызов, если они желательны.
- * Если вы используете Ceedling или генератор тестового запуска, они будут называться
+ * весь набор тестов.   suiteTearDown()пройдено количество тестов, которые
+ * не удалось, и его возвращаемое значение становится кодом, содержащимmain(). Если вы используете
+ * Непосредственно Unity, вы ответите на их вызов, если они пожелают.
+ * Если вы используете Ceedling или генератор испытательного запуска, они будут звонить.
  * автоматически, если они существуют. */
 void suiteSetUp(void);
 int suiteTearDown(int num_failures);
@@ -47,9 +47,9 @@ int suiteTearDown(int num_failures);
  *-------------------------------------------------------*/
 
 /* Эти функции предназначены для вызова до начала тестов, чтобы
- * для поддержки сложных тестовых циклов и т. д. Оба NOT встроены в Unity. Вместо этого
- * генератор тестового запуска создаст их. resetTest запустит демонтаж и
- * повторите настройку, проверив между ними любые потребности в конце теста. verifyTest будет только
+ * для сложной поддержки тестовых циклов и т. д. д. ОбаNOTвстроены в Unity. Вместо этого
+ * генератор тестового запуска создаст их. resetTest запустить демонтаж и
+ * Повторите переход, проверив между ними любые изделия в конце теста. verifyTest будет только
  * запустите проверку. */
 void resetTest(void);
 void verifyTest(void);
@@ -57,44 +57,44 @@ void verifyTest(void);
 /*-------------------------------------------------------
  * Параметры конфигурации
  *-------------------------------------------------------
- * Все параметры, описанные ниже, следует передавать в качестве флага компилятора всем файлам, использующим Unity. Если вам необходимо добавить #defines , поместите их BEFORE в #include выше.
+ * Все параметры, описанные ниже, следует передать в качестве флага компилятора всем файлам, использующим Unity. Если вам необходимо добавить#defines, поместите ихBEFOREв#includeвыше.
 
  * Integers/longs/pointers
- *     - Unity attempts to automatically discover your integer sizes
- *       - define UNITY_EXCLUDE_STDINT_H to stop attempting to look in <stdint.h>
- *       - define UNITY_EXCLUDE_LIMITS_H to stop attempting to look in <limits.h>
- *     - If you cannot use the automatic methods above, you can force Unity by using these options:
- *       - define UNITY_SUPPORT_64
- *       - set UNITY_INT_WIDTH
- *       - set UNITY_LONG_WIDTH
- *       - set UNITY_POINTER_WIDTH
+ *     - Unity пытается автоматически определить целочисленные размеры
+ *       - определите UNITY_EXCLUDE_STDINT_H, чтобы прекратить попытки поиска в <stdint.h>
+ *       - определите UNITY_EXCLUDE_LIMITS_H, чтобы прекратить попытки поиска в <limits.h>
+ *     - Если вы не можете использовать описанные выше автоматические методы, вы можете принудительно использовать Unity, используя следующие параметры:
+ *       - определить UNITY_SUPPORT_64
+ *       - установить UNITY_INT_WIDTH
+ *       - установить UNITY_LONG_WIDTH
+ *       - установить UNITY_POINTER_WIDTH
 
  * Плавает
- *     - define UNITY_EXCLUDE_FLOAT to disallow floating point comparisons
- *     - define UNITY_FLOAT_PRECISION to specify the precision to use when doing TEST_ASSERT_EQUAL_FLOAT
- *     - define UNITY_FLOAT_TYPE to specify doubles instead of single precision floats
- *     - define UNITY_INCLUDE_DOUBLE to allow double floating point comparisons
- *     - define UNITY_EXCLUDE_DOUBLE to disallow double floating point comparisons (default)
- *     - define UNITY_DOUBLE_PRECISION to specify the precision to use when doing TEST_ASSERT_EQUAL_DOUBLE
- *     - define UNITY_DOUBLE_TYPE to specify something other than double
- *     - define UNITY_EXCLUDE_FLOAT_PRINT to trim binary size, won't print floating point values in errors
+ *     - определите UNITY_EXCLUDE_FLOAT, чтобы запретить сравнения с плавающей запятой
+ *     - определите UNITY_FLOAT_PRECISION, чтобы указать точность, используемую при выполнении TEST_ASSERT_EQUAL_FLOAT
+ *     - определите UNITY_FLOAT_TYPE, чтобы указать двойные числа вместо чисел с плавающей запятой одинарной точности
+ *     - определите UNITY_INCLUDE_DOUBLE, чтобы разрешить двойное сравнение с плавающей запятой
+ *     - определите UNITY_EXCLUDE_DOUBLE, чтобы запретить двойное сравнение с плавающей запятой (по умолчанию)
+ *     - определите UNITY_DOUBLE_PRECISION, чтобы указать точность, используемую при выполнении TEST_ASSERT_EQUAL_DOUBLE
+ *     - определите UNITY_DOUBLE_TYPE, чтобы указать что-то кроме double
+ *     - определитеUNITY_EXCLUDE_FLOAT_PRINTдля обрезки двоичного размера, не будет печатать значения с плавающей запятой при ошибках
 
  * Выход
- *     - by default, Unity prints to standard out with putchar.  define UNITY_OUTPUT_CHAR(a) with a different function if desired
- *     - define UNITY_DIFFERENTIATE_FINAL_FAIL to print FAILED (vs. FAIL) at test end summary - for automated search for failure
+ *     - по умолчанию Unity печатает в стандартный формат с помощью putchar.  при необходимости определитеUNITY_OUTPUT_CHAR(a) с другой функцией
+ *     - определитеUNITY_DIFFERENTIATE_FINAL_FAILдля печатиFAILED(по сравнению с FAIL) в сводке завершения теста - для автоматического поиска сбоя
 
  * Оптимизация
- *     - by default, line numbers are stored in unsigned shorts.  Define UNITY_LINE_TYPE with a different type if your files are huge
- *     - by default, test and failure counters are unsigned shorts.  Define UNITY_COUNTER_TYPE with a different type if you want to save space or have more than 65535 Tests.
+ *     - по умолчанию номера строк хранятся в беззнаковых шортах.  ОпределитеUNITY_LINE_TYPEс другим типом, если ваши файлы огромны.
+ *     - по умолчанию счетчики тестов и неудач представляют собой беззнаковые шорты.  ОпределитеUNITY_COUNTER_TYPEдругого типа, если вы хотите сэкономить место или иметь более 65535 тестов.
 
  * Тестовые случаи
- *     - define UNITY_SUPPORT_TEST_CASES to include the TEST_CASE macro, though really it's mostly about the runner generator script
+ *     - определите UNITY_SUPPORT_TEST_CASES, чтобы включить макрос TEST_CASE, хотя на самом деле речь идет в основном о скрипте генератора бегунов
 
  * Параметризованные тесты
- *     - you'll want to create a define of TEST_CASE(...), TEST_RANGE(...) and/or TEST_MATRIX(...) which basically evaluates to nothing
+ *     - вы захотите создать определениеTEST_CASE(...),TEST_RANGE(...) и/илиTEST_MATRIX(...), которое в основном ничего не оценивает
 
  * Тесты с аргументами
- *     - you'll want to define UNITY_USE_COMMAND_LINE_ARGS if you have the test runner passing arguments to Unity
+ *     - вы захотите определить UNITY_USE_COMMAND_LINE_ARGS, если у вас есть средство запуска тестов, передающее аргументы Unity
 
  *-------------------------------------------------------
  * Базовый отказ и игнорирование
@@ -121,12 +121,12 @@ void verifyTest(void);
 
  * Эти макросы ничего не делают, но они полезны для дополнительного контекста сборки.
  * Инструменты (например, Ceedling) могут сканировать эти директивы и использовать их для
- * Пути поиска и связывание для каждого исполняемого файла #include. */
+ * Пути поиска и связывания для каждого исполняемого файла#include. */
 
-/* Добавьте исходные файлы в компиляцию и компоновку тестового исполняемого файла. Пример: TEST_SOURCE_FILE («sandwiches.c») */
+/* Добавьте исходные файлы в компиляцию и компоновку тестового исполняемого файла. Пример:TEST_SOURCE_FILE(«sandwiches.c») */
 #define TEST_SOURCE_FILE(a)
 
-/* Настройте пути поиска #include для компиляции тестового исполняемого файла. Пример: TEST_INCLUDE_PATH («источник/module_a /inc») */
+/* Настройте путь поиска#includeдля компиляции тестового исполняемого файла. Пример:TEST_INCLUDE_PATH(«источник/module_a/inc») */
 #define TEST_INCLUDE_PATH(a)
 
 /*-------------------------------------------------------

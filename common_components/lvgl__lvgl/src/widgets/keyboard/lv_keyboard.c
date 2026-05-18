@@ -459,7 +459,7 @@ static void lv_keyboard_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
 
 /**
  * Обновите карту клавиш и элементов управления для текущего режима.
- * @param obj pointer to a keyboard object
+ * @param obj указатель на объект клавиатуры
  */
 static void lv_keyboard_update_map(lv_obj_t * obj)
 {
@@ -470,7 +470,7 @@ static void lv_keyboard_update_map(lv_obj_t * obj)
 
 /**
  * Обновить карту управления для текущего режима
- * @param obj pointer to a keyboard object
+ * @param obj указатель на объект клавиатуры
  */
 static void lv_keyboard_update_ctrl_map(lv_obj_t * obj)
 {

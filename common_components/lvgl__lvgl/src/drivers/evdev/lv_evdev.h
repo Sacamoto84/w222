@@ -29,7 +29,7 @@ typedef enum {
 } lv_evdev_type_t;
 
 /**
- * @param indev      indev, созданный для недавно обнаруженного evdev
+ * @param user_data      indev, созданный для недавно обнаруженного evdev
  * @param type       тип evdev
  * @param user_data  специальный параметр
  */
@@ -41,7 +41,7 @@ typedef void (*lv_evdev_discovery_cb_t)(lv_indev_t * indev, lv_evdev_type_t type
 
 /**
  * Создать устройство ввода evdev по заданному пути.
- * @param типа LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
+ * @param indev_type LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
  * @param dev_path путь к устройству, например, /dev/input/event0
  * @return указатель на устройство ввода или NULL, если открытие не удалось
  */
@@ -49,7 +49,7 @@ lv_indev_t * lv_evdev_create(lv_indev_type_t indev_type, const char * dev_path);
 
 /**
  * Создайте устройство ввода evdev, взяв на себя требования к данным дескриптором файла.
- * @param типа LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
+ * @param indev_type LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
  * @param fd файловый дескриптор устройства evdev
  * @return указатель на устройство ввода или NULL, если открытие не удалось
  */

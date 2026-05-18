@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -78,7 +78,7 @@ inline char* u32toa(uint32_t value, char* buffer) {
         *buffer++ = cDigitsLut[d4 + 1];
     }
     else {
-        // value = aabbbbcccc in decimal
+        // value = aabbbcccc в десятичном формате
 
         const uint32_t a = value / 100000000; // 1 to 42
         value %= 100000000;

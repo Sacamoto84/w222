@@ -11,7 +11,7 @@
 #if LV_USE_ROLLER
 /**
  * Имена свойств виджета ролика, имя должно быть в порядке.
- * Сгенерированный код из properties.py
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_roller_property_names[3] = {

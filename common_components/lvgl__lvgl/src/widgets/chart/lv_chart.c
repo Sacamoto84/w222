@@ -474,7 +474,7 @@ lv_chart_series_t * lv_chart_add_series(lv_obj_t * obj, lv_color_t color, lv_cha
     if(ser == NULL) return NULL;
     lv_memzero(ser, sizeof(lv_chart_series_t));
 
-    /* Выделите память для точек point_cnt, обработайте ошибку ниже. */
+    /* Выделите память для точекpoint_cntи обработайте ошибку ниже. */
     ser->y_points = lv_malloc(sizeof(int32_t) * chart->point_cnt);
     LV_ASSERT_MALLOC(ser->y_points);
 
@@ -1247,8 +1247,8 @@ static void draw_series_curve(lv_obj_t * obj, lv_layer_t * layer)
 
         lv_fpoint_t scaled_points[3];
         int32_t raw_points[3];
-        int32_t s_prev = 0; /*Предыдущая крутизна вокруг N-1 (y_diff N-2 и N) */
-        int32_t s_act = 0; /*Крутизна вокруг N (y_diff N-1 и N+1)*/
+        int32_t s_prev = 0; /*Предыдущая крутизна вокруг N-1 (y_diffN-2 и N) */
+        int32_t s_act = 0; /*Крутизна вокруг N (y_diffN-1 и N+1)*/
         int32_t min_v = chart->ymin[ser->y_axis_sec];
         int32_t max_v = chart->ymax[ser->y_axis_sec];
 
@@ -1493,7 +1493,7 @@ static void draw_series_bar(lv_obj_t * obj, lv_layer_t * layer)
     col_dsc.bg_grad.dir = LV_GRAD_DIR_NONE;
     col_dsc.bg_opa = LV_OPA_COVER;
 
-    /*Удлините столбцы с помощью `radius`, чтобы обрезать закругления снизу.*/
+    /*Удлините столбцы с помощью `radius`, чтобы обрезать закругления обычно.*/
     col_a.y2 = obj->coords.y2 + col_dsc.radius;
 
     /*Пройти все пункты*/
@@ -1612,7 +1612,7 @@ static void draw_series_stacked(lv_obj_t * obj, lv_layer_t * layer)
         /*Уже вне зоны клипа*/
         if(bar_full_area.x1 > clip_area_ori.x2) break;
 
-        /*Нарисуйте full_bar_area и установите область обрезки для обрезки сегментов.*/
+        /*Нарисуйтеfull_bar_areaи установите область обрезки для обрезки сегментов.*/
         bar_full_area.y2 = obj->coords.y2 + col_dsc.radius;
         bar_full_area.y1 = obj->coords.y2 - y_ofs - total_bar_height + 1;
 
@@ -1746,9 +1746,9 @@ static void draw_cursors(lv_obj_t * obj, lv_layer_t * layer)
 
 /**
  * Получить ближайший индекс к координате X
- * @param chart pointer to a chart object
- * @param coord the coordination of the point relative to the series area.
- * @return the found index
+ * @param obj указатель на объект диаграммы
+ * @param x координация точки относительно площади серии.
+ * @return найденный индекс
  */
 static uint32_t get_index_from_x(lv_obj_t * obj, int32_t x)
 {
@@ -1895,11 +1895,11 @@ static void new_points_alloc(lv_obj_t * obj, lv_chart_series_t * ser, uint32_t c
 
 /**
  * Сопоставьте значение с высотой
- * @param obj   pointer to a chart
- * @param ser   pointer to the series
- * @param v     the value to map
- * @param h     the height to which the value needs to be mapped
- * @return      the mapped y-coordinate value corresponding to the input value
+ * @param obj   указатель на график
+ * @param ser   указатель на серию
+ * @param v     значение для сопоставления
+ * @param h     высота, на которую необходимо сопоставить значение
+ * @return      сопоставленное значение координаты Y, соответствующее входному значению
  */
 static int32_t value_to_y(lv_obj_t * obj, lv_chart_series_t * ser, int32_t v, int32_t h)
 {

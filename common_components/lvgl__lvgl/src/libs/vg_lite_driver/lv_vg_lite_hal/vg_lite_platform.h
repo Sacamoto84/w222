@@ -38,12 +38,12 @@ typedef struct vg_module_parameters {
 vg_module_parameters_t;
 
 /*!
-@brief Initialize the hardware mem setting.
+@brief Инициализируйте настройку аппаратной памяти.
 */
 void vg_lite_init_mem(vg_module_parameters_t * param);
 
 /*!
-@brief The hardware IRQ handler.
+@brief Аппаратный обработчик IRQ.
 */
 void vg_lite_IRQHandler(void);
 

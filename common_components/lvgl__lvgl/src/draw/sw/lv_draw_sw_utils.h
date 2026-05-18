@@ -88,7 +88,7 @@ void lv_draw_sw_i1_convert_to_vtiled(const void * buf, uint32_t buf_size, uint32
  * @param src_height    высота источника в пикселях
  * @param src_stride     исходный шаг в байтах (количество байтов в строке)
  * @param dest_stride   шаг назначения в байтах (количество байтов в строке)
- * @param вращение LV_DISPLAY_ROTATION_0 /90/180/270
+ * @param rotation LV_DISPLAY_ROTATION_0 /90/180/270
  * @param color_format LV_COLOR_FORMAT_RGB565 / RGB888 / XRGB8888 / ARGB8888
  */
 void lv_draw_sw_rotate(const void * src, void * dest, int32_t src_width, int32_t src_height, int32_t src_stride,

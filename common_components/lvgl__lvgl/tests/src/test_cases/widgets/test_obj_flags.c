@@ -81,7 +81,7 @@ void test_obj_flag_overflow_visible_1(void)
     /*Левая часть правой кнопки (должна вызывать событие нажатия)*/
     lv_test_mouse_click_at(650, 220);
 
-    /*Внешняя часть правой кнопки (должна вызывать событие щелчка, поскольку obj_child_2 имеет LV_OBJ_FLAG_OVERFLOW_VISIBLE )*/
+    /*Внешняя часть правой кнопки (должна быть видима, посколькуobj_child_2имеетLV_OBJ_FLAG_OVERFLOW_VISIBLE)*/
     lv_test_mouse_click_at(690, 220);
 
     TEST_ASSERT_EQUAL_UINT32(1, cnt_1);
@@ -129,7 +129,7 @@ void test_obj_flag_overflow_visible_1(void)
     /*Левая часть правой кнопки (должна вызывать событие нажатия)*/
     lv_test_mouse_click_at(590, 370);
 
-    /*Внешняя часть правой кнопки (должна вызывать событие щелчка, поскольку obj_child_2 имеет LV_OBJ_FLAG_OVERFLOW_VISIBLE )*/
+    /*Внешняя часть правой кнопки (должна быть видима, посколькуobj_child_2имеетLV_OBJ_FLAG_OVERFLOW_VISIBLE)*/
     lv_test_mouse_click_at(600, 430);
 
     /*Обрезанная часть правой кнопки (обрезана, потому что она выходит за пределы внешнего размера красной панели, не должна вызывать событие щелчка)*/

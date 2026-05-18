@@ -28,18 +28,18 @@ void test_bar_should_have_valid_default_attributes(void)
 /*
  * Бар состоит из двух частей: основной и индикаторной, координаты последней
  * рассчитывается на основе:
- * - Bar size
- * - Bar (main part) padding
- * - Bar value
- * - Bar coordinates
- * - Bar base direction
+ * - Размер бара
+ * - Набивка стержня (основной части)
+ * - Стоимость бара
+ * - Координаты бара
+ * - Направление основания стержня
  * См. Модель бокса в документации.
  *
  * Предполагаемые свойства бара:
- * - mode: LV_BAR_MODE_NORMAL
- * - min value: 0
- * - max value: 100
- * - base direction: LTR
+ * - режим: LV_BAR_MODE_NORMAL
+ * - минимальное значение: 0
+ * - максимальное значение: 100
+ * - базовое направление: LTR
  */
 void test_bar_should_update_indicator_right_coordinate_based_on_bar_value(void)
 {
@@ -63,7 +63,7 @@ void test_bar_should_update_indicator_right_coordinate_based_on_bar_value(void)
     lv_obj_set_size(g_bar, bar_width, bar_height);
     lv_bar_set_value(g_bar, bar_value, LV_ANIM_OFF);
 
-    /* FIXME: Remove wait */
+    /* FIXME: Удалить ожидание */
     lv_test_wait(50);
 
     int32_t actual_coord = lv_area_get_width(&bar_ptr->indic_area);
@@ -80,17 +80,17 @@ void test_bar_should_update_indicator_right_coordinate_based_on_bar_value(void)
 /*
  * Бар состоит из двух частей: основной и индикаторной, координаты последней
  * рассчитывается на основе:
- * - Bar size
- * - Bar (main part) padding
- * - Bar value
- * - Bar coordinates
- * - Bar base direction
+ * - Размер бара
+ * - Набивка стержня (основной части)
+ * - Стоимость бара
+ * - Координаты бара
+ * - Направление основания стержня
  * См. Модель бокса в документации.
  *
  * Предполагаемые свойства бара:
- * - mode: LV_BAR_MODE_NORMAL
- * - min value: 0
- * - max value: 100
+ * - режим: LV_BAR_MODE_NORMAL
+ * - минимальное значение: 0
+ * - максимальное значение: 100
  */
 void test_bar_rtl_should_update_indicator_left_coordinate_based_on_bar_value(void)
 {
@@ -115,7 +115,7 @@ void test_bar_rtl_should_update_indicator_left_coordinate_based_on_bar_value(voi
     lv_bar_set_value(g_bar, bar_value, LV_ANIM_OFF);
     lv_obj_set_style_base_dir(g_bar, LV_BASE_DIR_RTL, 0);
 
-    /* FIXME: Remove wait */
+    /* FIXME: Удалить ожидание */
     lv_test_wait(50);
 
     int32_t actual_coord = bar_ptr->indic_area.x1;
@@ -203,7 +203,7 @@ void test_bar_normal(void)
 }
 
 /**
- * То же, что test_bar_normal , но с установленными минимальным и максимальным значениями.
+ * То же самое, чтоtest_bar_normal, но с установленными звуками и максимальными значениями.
  */
 void test_bar_normal_empty_and_full(void)
 {
@@ -416,7 +416,7 @@ void test_bar_current_value_should_be_truncated_to_min_value_when_it_is_below_it
  * ценность.
  *
  * Предполагаемые свойства бара:
- * - base direction: LTR
+ * - базовое направление: LTR
  */
 void test_bar_indicator_should_be_drawn_towards_the_min_range_side_after_setting_a_more_negative_value(void)
 {

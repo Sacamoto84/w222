@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -32,7 +32,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 
 //! Оболочка входного потока байтов со статически связанной кодировкой.
 /*!
-    \tparam Кодирование Интерпретация кодирования потока. Либо UTF8, UTF16LE, UTF16BE, UTF32LE, UTF32BE.
+    \tparam Кодирование Интерпретация кодирования потока. ЛибоUTF8,UTF16LE,UTF16BE,UTF32LE,UTF32BE.
     \tparam InputByteStream Тип входного потока байтов. Например, FileReadStream.
 */
 template <typename Encoding, typename InputByteStream>
@@ -63,7 +63,7 @@ private:
     Ch current_;
 };
 
-//! Специально для UTF8 MemoryStream.
+//! Специально дляUTF8MemoryStream.
 template <>
 class EncodedInputStream<UTF8<>, MemoryStream> {
 public:
@@ -93,7 +93,7 @@ private:
 
 //! Оболочка выходного потока байтов со статически связанной кодировкой.
 /*!
-    \tparam Кодирование Интерпретация кодирования потока. Либо UTF8, UTF16LE, UTF16BE, UTF32LE, UTF32BE.
+    \tparam Кодирование Интерпретация кодирования потока. ЛибоUTF8,UTF16LE,UTF16BE,UTF32LE,UTF32BE.
     \tparam OutputByteStream Тип входного потока байтов. Например, FileWriteStream.
 */
 template <typename Encoding, typename OutputByteStream>
@@ -140,7 +140,7 @@ public:
     //! Конструктор.
     /*!
         \param — входной поток, который нужно обернуть.
-        \param type Тип кодировки UTF, если он не обнаружен в потоке.
+        \param type Тип кодировкиUTF, если он не обнаружен в потоке.
     */
     AutoUTFInputStream(InputByteStream& is, UTFType type = kUTF8) : is_(&is), type_(type), hasBOM_(false) {
         RAPIDJSON_ASSERT(type >= kUTF8 && type <= kUTF32BE);
@@ -238,8 +238,8 @@ public:
     //! Конструктор.
     /*!
         \param os выходной поток, который нужно обернуть.
-        \param type Тип кодировки UTF.
-        \param putBOM Записывать ли BOM в начале потока.
+        \param type Тип кодировкиUTF.
+        \param putBOM Запишите лиBOMв начале потока.
     */
     AutoUTFOutputStream(OutputByteStream& os, UTFType type, bool putBOM) : os_(&os), type_(type) {
         RAPIDJSON_ASSERT(type >= kUTF8 && type <= kUTF32BE);

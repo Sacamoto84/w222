@@ -1025,16 +1025,16 @@ vg_lite_error_t vg_lite_set_gamma(vg_lite_gamma_conversion_t gamma_value)
 #endif
 }
 
-/* Установите s_context. gamma_value базируется на целевом буфере */
+/* Установите s_context. gamma_valueбазируется на целевом буфере */
 vg_lite_void set_gamma_dest_only(vg_lite_buffer_t * target, vg_lite_int32_t stencil)
 {
     uint32_t gamma_value = 0;
 
     /* Установить конфигурацию гаммы исходного буфера */
-    /* Цвет краски Openvg по умолчанию равен SRGB. */
+    /* Цвет краски Openvg по умолчанию равенSRGB. */
     s_context.gamma_src = 1;
 
-    /* Установить конфигурацию гаммы буфера dst */
+    /* Настроить конфигурацию гамма-буфера dst */
     if((target->format >= OPENVG_lRGBX_8888 && target->format <= OPENVG_A_4) ||
        (target->format >= OPENVG_lXRGB_8888 && target->format <= OPENVG_lARGB_8888_PRE) ||
        (target->format >= OPENVG_lBGRX_8888 && target->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1067,7 +1067,7 @@ vg_lite_void set_gamma_dest_only(vg_lite_buffer_t * target, vg_lite_int32_t sten
     }
 }
 
-/* Установите s_context. gamma_value основан на исходном и целевом буферах */
+/* Установите s_context. gamma_valueоснован на исходном и целевом буферах */
 vg_lite_void get_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t * target)
 {
     uint32_t gamma_value = 0;
@@ -1083,7 +1083,7 @@ vg_lite_void get_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t *
     else {
         s_context.gamma_src = 1;
     }
-    /* Установить конфигурацию гаммы буфера dst */
+    /* Настроить конфигурацию гамма-буфера dst */
     if((target->format >= OPENVG_lRGBX_8888 && target->format <= OPENVG_A_4) ||
        (target->format >= OPENVG_lXRGB_8888 && target->format <= OPENVG_lARGB_8888_PRE) ||
        (target->format >= OPENVG_lBGRX_8888 && target->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -1125,7 +1125,7 @@ vg_lite_void get_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t *
     }
 }
 
-/* Установите s_context. gamma_value основан на исходном и целевом буферах */
+/* Установите s_context. gamma_valueоснован на исходном и целевом буферах */
 vg_lite_void save_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t * target)
 {
     uint32_t gamma_value = 0;
@@ -1141,7 +1141,7 @@ vg_lite_void save_st_gamma_src_dest(vg_lite_buffer_t * source, vg_lite_buffer_t 
     else {
         s_context.gamma_src = 1;
     }
-    /* Установить конфигурацию гаммы буфера dst */
+    /* Настроить конфигурацию гамма-буфера dst */
     if((target->format >= OPENVG_lRGBX_8888 && target->format <= OPENVG_A_4) ||
        (target->format >= OPENVG_lXRGB_8888 && target->format <= OPENVG_lARGB_8888_PRE) ||
        (target->format >= OPENVG_lBGRX_8888 && target->format <= OPENVG_lBGRA_8888_PRE) ||
@@ -2144,7 +2144,7 @@ static vg_lite_error_t convert_color(vg_lite_buffer_format_t format, uint32_t va
     return error;
 }
 
-/* Заполните целевой буфер буфером FC. Используется только в cmodel/fpga для проверки. */
+/* Заполните держатель буфера FC. Используется только в cmodel/fpga для проверок. */
 #if defined(DEBUG) || defined(_DEBUG)
 static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_t * fcb)
 {
@@ -2233,7 +2233,7 @@ static vg_lite_error_t fill_fc_target(vg_lite_buffer_t * target, vg_lite_buffer_
 }
 #endif
 
-/* Обновите буфер fast_clear при переключении цели рендеринга. */
+/* Обновите буферfast_clearпри переключении целей рендеринга. */
 static vg_lite_error_t update_fc_buffer(vg_lite_buffer_t * target)
 {
     int rt_bytes;

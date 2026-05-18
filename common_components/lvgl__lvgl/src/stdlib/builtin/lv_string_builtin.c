@@ -182,7 +182,7 @@ int lv_memcmp(const void * p1, const void * p2, size_t len)
     return *s1 - *s2;
 }
 
-/* См. https://en.cppreference.com/w/c/string/byte/strlen для справки. */
+/* См. https://en.cppreference.com/w/c/string/byte/strlenдля справки. */
 size_t lv_strlen(const char * str)
 {
     size_t i = 0;
@@ -262,7 +262,7 @@ char * lv_strdup(const char * src)
     char * dst = lv_malloc(len);
     if(dst == NULL) return NULL;
 
-    lv_memcpy(dst, src, len); /*memcpy работает быстрее, чем strncpy, если известна длина*/
+    lv_memcpy(dst, src, len); /*memcpy работает быстрее, чем strncpy, если сохраняется длина*/
     return dst;
 }
 

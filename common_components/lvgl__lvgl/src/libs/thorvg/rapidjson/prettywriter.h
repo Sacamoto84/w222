@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -29,7 +29,7 @@ RAPIDJSON_DIAG_OFF(c++98-compat)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Комбинация флагов формата PrettyWriter.
+//! Комбинация флагов образует PrettyWriter.
 /*! \см. PrettyWriter::SetFormatOptions
  */
 enum PrettyFormatOptions {
@@ -37,12 +37,12 @@ enum PrettyFormatOptions {
     kFormatSingleLineArray = 1  //!< Форматирует массивы в одну строку.
 };
 
-//! Writer с отступами и интервалами.
+//! Писатель с отступами и интервалами.
 /*!
     \tparam OutputStream Тип выходной ОС.
     \tparam SourceEncoding Кодировка исходной строки.
     \tparam TargetEncoding Кодирование выходного потока.
-    \tparam StackAllocator Тип распределителя для выделения памяти стека.
+    \tparam StackAllocator Тип распределения для выделения памяти стека.
 */
 template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
 class PrettyWriter : public Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> {
@@ -52,7 +52,7 @@ public:
 
     //! Конструктор
     /*! \param os Выходной поток.
-        \param allocator Пользовательский распределитель. Если оно равно нулю, будет создан частный.
+        \param allocator Пользовательский распределитель. Если оно равно, будет создано в частном порядке.
         \param levelDepth Начальная емкость стека.
     */
     explicit PrettyWriter(OutputStream& os, StackAllocator* allocator = 0, size_t levelDepth = Base::kDefaultLevelDepth) :
@@ -68,9 +68,9 @@ public:
 #endif
 
     //! Установите собственный отступ.
-    /*! \param indentChar Символ отступа. Должен быть символом пробела (' ', '\\t', '\\n', '\\r').
+    /*! \param indentChar Символ отступа. Должен быть символьным пробелом (' ', '\\t', '\\n', '\\r').
         \param indentCharCount Число символов отступа для каждого уровня отступа.
-        \note Отступ по умолчанию составляет 4 пробела.
+        \note Отступление по умолчанию состоит из 4 пробелов.
     */
     PrettyWriter& SetIndent(Ch indentChar, unsigned indentCharCount) {
         RAPIDJSON_ASSERT(indentChar == ' ' || indentChar == '\t' || indentChar == '\n' || indentChar == '\r');
@@ -193,10 +193,10 @@ public:
     /*!
         Чтобы пользователь мог записать в качестве значения строковое значение JSON.
 
-        \param json Правильно сформированное значение JSON. Он не должен содержать нулевой символ в диапазоне [0, длина – 1].
-        \param length Длина json.
-        \param type Тип корня json.
-        \note При использовании PrettyWriter:: RawValue() отступ в json может быть неправильным.
+        \param json Правильно сформированное значениеJSON. Он не должен сохранять нулевой символ в отдельности [0, длина – 1].
+        \param длина Длина json.
+        \param type Тип обработки json.
+        \note При использовании PrettyWriter::RawValue()отступ в json может быть неправильным.
     */
     bool RawValue(const Ch* json, size_t length, Type type) {
         RAPIDJSON_ASSERT(json != 0);

@@ -208,7 +208,7 @@ void test_spangroup_get_max_line_h(void)
     (void)lv_spangroup_add_span(spangroup);
     max_line = lv_spangroup_get_max_line_height(spangroup);
 
-    // TODO: find out why this magic numberdd
+    // TODO: узнай, почему это волшебное числоdd
     TEST_ASSERT_EQUAL(16, (uint32_t)max_line);
 }
 

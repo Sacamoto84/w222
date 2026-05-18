@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Размер: 20 пикселей
  * Бпп: 3
- * Opts: --bpp 3 --size 20 --font Montserrat-Medium.ttf --range 32-127 --format lvgl -o test_font_montserrat_ascii_3bpp_compressed.c
+ * Opts: --bpp 3 --size 20 --font Montserrat-Medium.ttf --диапазон 32–127 --format lvgl -o test_font_montserrat_ascii_3bpp_compressed.c
  ******************************************************************************/
 
 #include "../../../lvgl.h"
@@ -716,7 +716,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 86, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 86, .box_w = 3, .box_h = 14, .ofs_x = 1, .ofs_y = 0},
     {.bitmap_index = 14, .adv_w = 125, .box_w = 6, .box_h = 6, .ofs_x = 1, .ofs_y = 8},
@@ -820,7 +820,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
 
 
 
-/*Соберите списки Юникода и смещения glyph_id.*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
@@ -833,7 +833,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *----------------*/
 
 
-/*Сопоставьте glyph_ids с левыми классами Керна*/
+/*Сопоставьтеglyph_idsс левыми классами Керна*/
 static const uint8_t kern_left_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
@@ -849,7 +849,7 @@ static const uint8_t kern_left_class_mapping[] = {
     58, 59, 58, 60, 41, 0, 0, 9
 };
 
-/*Сопоставьте glyph_ids с классами керна справа*/
+/*Сопоставьтеglyph_idsс классами керна справа*/
 static const uint8_t kern_right_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,

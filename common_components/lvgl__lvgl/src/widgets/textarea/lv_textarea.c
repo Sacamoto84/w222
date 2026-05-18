@@ -201,8 +201,8 @@ void lv_textarea_add_char(lv_obj_t * obj, uint32_t c)
 #if LV_BIG_ENDIAN_SYSTEM
     if(c != 0) while(*letter_buf == 0) ++letter_buf;
 
-    /*Здесь может потребоваться поменять порядок байтов, а может и нет, чтобы получить правильный c_uni ниже:
-      поскольку lv_textarea_add_text правильно упорядочивает байты перед вызовом lv_textarea_add_char .
+    /*Здесь может неожиданно поменяться порядок байтов, а может и нет, чтобы получить правильныйc_uniниже:
+      посколькуlv_textarea_add_textправильно упорядочивает байты перед вызовомlv_textarea_add_char.
       Предположим, что замена необходима, если MSB равен нулю. Может быть ненадежным. */
     if((c != 0) && ((c & 0xff000000) == 0)) {
         c2 = ((c >> 24) & 0xff) | /*перенести байт 3 в байт 0*/
@@ -419,7 +419,7 @@ void lv_textarea_set_placeholder_text(lv_obj_t * obj, const char * txt)
     }
     else {
         /*Выделите память для текста placeholder_txt*/
-        /*NOTE: Using special realloc behavior, malloc-like when data_p is NULL*/
+        /*NOTE: Использование специального поведения realloc, похожего на malloc, когдаdata_pравен NULL.*/
         ta->placeholder_txt = lv_realloc(ta->placeholder_txt, txt_len + 1);
         LV_ASSERT_MALLOC(ta->placeholder_txt);
         if(ta->placeholder_txt == NULL) {
@@ -509,7 +509,7 @@ void lv_textarea_set_password_bullet(lv_obj_t * obj, const char * bullet)
         size_t txt_len = lv_strlen(bullet);
 
         /*Выделите память для текста pwd_bullet*/
-        /*NOTE: Using special realloc behavior, malloc-like when data_p is NULL*/
+        /*NOTE: Использование специального поведения realloc, похожего на malloc, когдаdata_pравен NULL.*/
         ta->pwd_bullet = lv_realloc(ta->pwd_bullet, txt_len + 1);
         LV_ASSERT_MALLOC(ta->pwd_bullet);
         if(ta->pwd_bullet == NULL) {
@@ -911,7 +911,7 @@ static void lv_textarea_constructor(const lv_obj_class_t * class_p, lv_obj_t * o
     ta->static_accepted_chars = 1;
     ta->max_length        = 0;
     ta->cursor.show      = 1;
-    /*Позже он будет установлен в ноль (с нулевым значением lv_textarea_set_cursor_pos (obj, 0); ничего не изменится, поскольку нет разницы)*/
+    /*Позже он будет установлен в ноль (с нулевым значениемlv_textarea_set_cursor_pos(obj, 0); ничего не меняется, поскольку нет разницы)*/
     ta->cursor.pos        = 1;
     ta->cursor.click_pos  = 1;
     ta->cursor.valid_x    = 0;
@@ -974,7 +974,7 @@ static void lv_textarea_event(const lv_obj_class_t * class_p, lv_event_t * e)
         start_cursor_blink(obj);
     }
     else if(code == LV_EVENT_KEY) {
-        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t, потому что может быть UTF -8*/
+        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t , потому что может бытьUTF-8*/
         if(c == LV_KEY_RIGHT)
             lv_textarea_cursor_right(obj);
         else if(c == LV_KEY_LEFT)
@@ -1028,8 +1028,8 @@ static void label_event_cb(lv_event_t * e)
 
 /**
  * Вызывается для мигания курсора
- * @param ta pointer to a text area
- * @param hide 1: hide the cursor, 0: show it
+ * @param obj указатель на текстовую область
+ * @param show 1: скрыть курсор, 0: показать его
  */
 static void cursor_blink_anim_cb(void * obj, int32_t show)
 {
@@ -1047,11 +1047,11 @@ static void cursor_blink_anim_cb(void * obj, int32_t show)
 }
 
 /**
- * Фиктивная функция для анимации скрытия символов в режиме pwd.
+ * Фиктивная функция для анимированных экранов с символами в режиме pwd.
  * Ничего не делает, но требуется функция скрытия автомобиля в анимации.
- * (Обратный вызов pwd_char_hider делает настоящую работу)
- * @param ta unused
- * @param x unused
+ * (Обратный вызовpwd_char_hiderделает правильную работу)
+ * @param obj неиспользованный
+ * @param x неиспользованный
  */
 static void pwd_char_hider_anim(void * obj, int32_t x)
 {
@@ -1061,7 +1061,7 @@ static void pwd_char_hider_anim(void * obj, int32_t x)
 
 /**
  * Вызовите, когда анимация готова, чтобы преобразовать все символы в «*».
- * @param a pointer to the animation
+ * @param a указатель на анимацию
  */
 static void pwd_char_hider_anim_completed(lv_anim_t * a)
 {
@@ -1071,7 +1071,7 @@ static void pwd_char_hider_anim_completed(lv_anim_t * a)
 
 /**
  * Скрыть все символы (преобразовать их в «*»)
- * @param ta pointer to text area object
+ * @param obj указатель на объект текстовой области
  */
 static void pwd_char_hider(lv_obj_t * obj)
 {
@@ -1080,7 +1080,7 @@ static void pwd_char_hider(lv_obj_t * obj)
         return;
     }
 
-    /* Когда ta->label пуста, мы возвращаем 0 */
+    /* Когда ta->label пуста, мы возвращаемся 0 */
     char * txt = lv_label_get_text(ta->label);
     uint32_t enc_len = lv_text_get_encoded_length(txt);
     if(enc_len == 0) return;
@@ -1105,9 +1105,9 @@ static void pwd_char_hider(lv_obj_t * obj)
 
 /**
  * Проверьте символ Юникода, принят он или нет. Проверяет максимальную длину и список принятых символов.
- * @param ta pointer to a test area object
- * @param c a unicode character
- * @return true: accepted; false: rejected
+ * @param obj указатель на объект тестовой области
+ * @param c символ Юникода
+ * @return правда: принято; ложь: отклонено
  */
 static bool char_is_accepted(lv_obj_t * obj, uint32_t c)
 {
@@ -1167,7 +1167,7 @@ static void refr_cursor_area(lv_obj_t * obj)
 
     /* Высота и ширина буквы */
     const int32_t letter_h = lv_font_get_line_height(font);
-    /*Установите letter_w (установите не 0 для непечатаемых, но допустимых символов)*/
+    /*Установитеletter_w(установите не 0 для непечатаемых, но допустимых символов)*/
     uint32_t letter_space = letter;
     if(is_valid_but_non_printable_char(letter)) {
         letter_space = ' ';
@@ -1193,7 +1193,7 @@ static void refr_cursor_area(lv_obj_t * obj)
 
         uint32_t tmp = letter;
         if(is_valid_but_non_printable_char(letter)) {
-            /*Если невозможно распечатать, получите letter_w пробела.*/
+            /*Если невозможно распечатать, дайте пробел letter_w.*/
             tmp = ' ';
         }
         letter_w = lv_font_get_glyph_width(font, tmp, IGNORE_KERNING);
@@ -1358,7 +1358,7 @@ static lv_result_t insert_handler(lv_obj_t * obj, const char * txt)
     ta_insert_replace = NULL;
     lv_obj_send_event(obj, LV_EVENT_INSERT, (char *)txt);
 
-    /* Удалите txt, если для замены вставки установлено значение «\0». */
+    /* Удалите txt, если для замены вставок установлено значение «\0». */
     if(ta_insert_replace && ta_insert_replace[0] == '\0')
         return LV_RESULT_INVALID;
 

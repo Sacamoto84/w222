@@ -81,7 +81,7 @@ void lv_matrix_skew(lv_matrix_t * matrix, float skew_x, float skew_y);
 /**
  * Умножьте две матрицы и сохраните результат в первой
  * @param matrix           указатель на матрицу
- * @param matrix2          указатель на другую матрицу
+ * @param mul          указатель на другую матрицу
  */
 void lv_matrix_multiply(lv_matrix_t * matrix, const lv_matrix_t * mul);
 

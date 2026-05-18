@@ -74,7 +74,7 @@ struct _lv_subject_t {
 
 /**
   * Обратный вызов, вызываемый для уведомления наблюдателя об изменении значения субъекта.
-  * @param observer     указатель на наблюдателя
+  * @param subject     указатель на наблюдателя
   * @param subject      указатель на наблюдаемый субъект
   */
 typedef void (*lv_observer_cb_t)(lv_observer_t * observer, lv_subject_t * subject);

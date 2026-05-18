@@ -61,7 +61,7 @@ void test_tjpgd_1(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 32);
 
-    /* Повторно добавить декодер libjpeg_turbo. */
+    /* Повторно добавляем декодерlibjpeg_turbo. */
     lv_libjpeg_turbo_init();
 }
 
@@ -96,7 +96,7 @@ void test_jdpgd_align_tile(void)
     lv_obj_clean(lv_screen_active());
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 0);
 
-    /* Повторно добавить декодер libjpeg_turbo. */
+    /* Повторно добавляем декодерlibjpeg_turbo. */
     lv_libjpeg_turbo_init();
 }
 

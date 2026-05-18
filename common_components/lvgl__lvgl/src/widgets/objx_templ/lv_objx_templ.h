@@ -5,7 +5,7 @@
 
 /**
  * TODO Удалить эти инструкции
- * Поиск и замена: templ -> короткое имя объекта в нижнем регистре (например, btn, label и т. д.)
+ * Поиск и замена: templ -> короткое имя объекта в регистре памяти (например, btn, label и т. д.)
  *                    TEMPL -> короткое имя объекта в верхнем регистре (например, BTN , LABEL и т. д.)
  *
  */
@@ -47,8 +47,8 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_templ_class;
 
 /**
  * Создать объект templ
- * @param parent    pointer to an object, it will be the parent of the new templ
- * @return          pointer to the created bar
+ * @param parent    указатель на объект, он будет родителем нового темпла
+ * @return          указатель на созданный бар
  */
 lv_obj_t * lv_templ_create(lv_obj_t * parent);
 

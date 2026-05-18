@@ -54,7 +54,7 @@
 #define GET_CONTEXT()               &s_context
 
 /*** Размер буфера команд по умолчанию составляет 32 КБ. Используется двойной буфер команд.
-     Приложение может вызывать vg_lite_set_command_buffer_size (размер) перед vg_lite_init ()
+     Приложение может измененияvg_lite_set_command_buffer_size(размер) передvg_lite_init()
      чтобы перезаписать размер буфера команд по умолчанию.
 ***/
 #define VG_LITE_COMMAND_BUFFER_SIZE (32 << 10)
@@ -164,7 +164,7 @@ typedef struct vg_lite_context {
     vg_lite_tess_buffer_t       tessbuf;
     vg_lite_memory_pool_t       tess_buffer_pool;
 
-    vg_lite_buffer_t      *     rtbuffer;                   /* DDRLess: this is used as composing buffer. */
+    vg_lite_buffer_t      *     rtbuffer;                   /* DDRLess: он используется в качестве составного буфера. */
     vg_lite_memory_pool_t       render_buffer_pool;
 
     vg_lite_float_t             path_lastX;

@@ -244,7 +244,7 @@ static void item_delete_obj(lv_fragment_managed_states_t * item)
 
 /**
  * Отсоединить, затем уничтожить фрагмент
- * @param item fragment states
+ * @param item состояния фрагмента
  */
 static void item_delete_fragment(lv_fragment_managed_states_t * item)
 {

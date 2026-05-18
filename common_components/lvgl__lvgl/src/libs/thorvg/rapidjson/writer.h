@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -56,7 +56,7 @@ RAPIDJSON_NAMESPACE_BEGIN
     \ingroup RAPIDJSON_CONFIG
     \brief Определяемое пользователем определение kwriteDefaultFlags.
 
-    Пользователь может определить это как любую комбинацию \c WriteFlag.
+    Пользователь может определить это как любое событие \c WriteFlag.
 */
 #ifndef RAPIDJSON_WRITE_DEFAULT_FLAGS
 #define RAPIDJSON_WRITE_DEFAULT_FLAGS kWriteNoFlags
@@ -66,12 +66,12 @@ RAPIDJSON_NAMESPACE_BEGIN
 enum WriteFlag {
     kWriteNoFlags = 0,              //!< Флаги не установлены.
     kWriteValidateEncodingFlag = 1, //!< Проверка кодировки строк JSON.
-    kWriteNanAndInfFlag = 2,        //!< Разрешить запись Infinity, -Infinity и NaN.
+    kWriteNanAndInfFlag = 2,        //!< Разрешить записи Infinity, -Infinity и NaN.
     kWriteDefaultFlags = RAPIDJSON_WRITE_DEFAULT_FLAGS  //!< Флаги записи по умолчанию. Можно настроить, определив RAPIDJSON_WRITE_DEFAULT_FLAGS.
 };
 
 //!  JSON писатель
-/*! Writer реализует концепцию Handler.
+/*! Writer реализует представление Handler.
     Он генерирует текст JSON по событиям в выходную систему.
 
     Пользователь может программно вызывать функции записи для генерации текста JSON.
@@ -83,8 +83,8 @@ enum WriteFlag {
     \tparam OutputStream Тип выходного потока.
     \tparam SourceEncoding Кодировка исходной строки.
     \tparam TargetEncoding Кодирование выходного потока.
-    \tparam StackAllocator Тип распределителя для выделения памяти стека.
-    \note реализует концепцию Handler
+    \tparam StackAllocator Тип распределения для выделения памяти стека.
+    \note реализация реализации Handler
 */
 template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
 class Writer {
@@ -95,7 +95,7 @@ public:
 
     //! Конструктор
     /*! \param os Выходной поток.
-        \param stackAllocator Пользовательский распределитель. Если оно равно нулю, будет создан частный.
+        \param stackAllocator Пользовательский распределитель. Если оно равно, будет создано в частном порядке.
         \param levelDepth Начальная емкость стека.
     */
     explicit
@@ -116,19 +116,19 @@ public:
     //! Сбросьте писатель с новым потоком.
     /*!
         Эта функция сбрасывает записывающее устройство с использованием нового потока и настроек по умолчанию.
-        чтобы сделать объект Writer пригодным для повторного использования для вывода нескольких JSON.
+        чтобы сделать объект Writer пригодным для повторного использования для вывода несколькихJSON.
 
         \param os Новый выходной поток.
         \code
         Writer<OutputStream> Writer(os1);
-        писатель. StartObject() ;
+        писатель. StartObject();
         // ...
-        писатель. EndObject() ;
+        писатель. EndObject();
 
         писатель.Сброс (os2);
-        писатель. StartObject() ;
+        писатель. StartObject();
         // ...
-        писатель. EndObject() ;
+        писатель. EndObject();
         \endcode
     */
     void Reset(OutputStream& os) {
@@ -157,12 +157,12 @@ public:
 
         \code
         писатель.SetMaxDecimalPlaces(3);
-        писатель. StartArray() ;
+        писатель. StartArray();
         писатель.Двойной(0.12345);                 // "0,123"
         писатель.Двойной(0.0001);                  // "0.0"
         писатель.Double(1.234567890123456e30);    // "1.234567890123456e30" (не обрезать значащее число для положительного показателя)
         писатель.Дабл(1.23e-4);                 // "0.0" (обрезаем значащее значение для отрицательного показателя)
-        писатель. EndArray() ;
+        писатель. EndArray();
         \endcode
 
         Настройка по умолчанию не усекает десятичные знаки. Вы можете восстановить эту настройку, позвонив
@@ -186,9 +186,9 @@ public:
     bool Int64(int64_t i64)     { Prefix(kNumberType); return EndValue(WriteInt64(i64)); }
     bool Uint64(uint64_t u64)   { Prefix(kNumberType); return EndValue(WriteUint64(u64)); }
 
-    //! Записывает заданное значение \c double в поток.
+    //! Записывает заданное значение \c double в потоке.
     /*!
-        \param d Значение, которое нужно записать.
+        \param d, значение которого нужно записать.
         \return Удалось ли это.
     */
     bool Double(double d)       { Prefix(kNumberType); return EndValue(WriteDouble(d)); }
@@ -265,9 +265,9 @@ public:
     /*!
         Чтобы пользователь мог записать в качестве значения строковое значение JSON.
 
-        \param json Правильно сформированное значение JSON. Он не должен содержать нулевой символ в диапазоне [0, длина – 1].
-        \param length Длина json.
-        \param type Тип корня json.
+        \param json Правильно сформированное значениеJSON. Он не должен сохранять нулевой символ в отдельности [0, длина – 1].
+        \param длина Длина json.
+        \param type Тип обработки json.
     */
     bool RawValue(const Ch* json, size_t length, Type type) {
         RAPIDJSON_ASSERT(json != 0);
@@ -545,7 +545,7 @@ inline bool Writer<StringBuffer>::WriteUint64(uint64_t u) {
 template<>
 inline bool Writer<StringBuffer>::WriteDouble(double d) {
     if (internal::Double(d).IsNanOrInf()) {
-        // Note: This code path can only be reached if (RAPIDJSON_WRITE_DEFAULT_FLAGS & kWriteNanAndInfFlag).
+        // Note: Этот путь кода доступен только в том случае, если (RAPIDJSON_WRITE_DEFAULT_FLAGS& kwriteNanAndInfFlag).
         if (!(kWriteDefaultFlags & kWriteNanAndInfFlag))
             return false;
         if (internal::Double(d).IsNan()) {
@@ -606,7 +606,7 @@ inline bool Writer<StringBuffer>::ScanWriteUnescapedString(StringStream& is, siz
         const __m128i s = _mm_load_si128(reinterpret_cast<const __m128i *>(p));
         const __m128i t1 = _mm_cmpeq_epi8(s, dq);
         const __m128i t2 = _mm_cmpeq_epi8(s, bs);
-        const __m128i t3 = _mm_cmpeq_epi8(_mm_max_epu8(s, sp), sp); // s < 0x20 <=> max(s, 0x1F ) == 0x1F
+        const __m128i t3 = _mm_cmpeq_epi8(_mm_max_epu8(s, sp), sp); // s <0x20<=> max(s,0x1F) == 0x1F
         const __m128i x = _mm_or_si128(_mm_or_si128(t1, t2), t3);
         unsigned short r = static_cast<unsigned short>(_mm_movemask_epi8(x));
         if (RAPIDJSON_UNLIKELY(r != 0)) {   // некоторые символы экранированы

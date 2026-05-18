@@ -49,13 +49,13 @@ typedef lv_cache_compare_res_t (*lv_cache_compare_cb_t)(const void * a, const vo
 
 /**
  * Функция выделения экземпляра кэша, используемая классом кэша для выделения памяти для экземпляров кэша.
- * @return It should return a pointer to the allocated instance.
+ * @return Он должен вернуть указатель на выделенный экземпляр.
  */
 typedef void * (*lv_cache_alloc_cb_t)(void);
 
 /**
  * Функция инициализации экземпляра кэша, используемая классом кэша для инициализации экземпляра кэша.
- * @return It should return true if the initialization is successful, false otherwise.
+ * @return Он должен возвращать true, если инициализация прошла успешно, и false в противном случае.
  */
 typedef bool (*lv_cache_init_cb_t)(lv_cache_t * cache);
 
@@ -66,14 +66,14 @@ typedef void (*lv_cache_destroy_cb_t)(lv_cache_t * cache, void * user_data);
 
 /**
  * Функция получения кэша, используемая классом кэша для получения записи кэша по его ключу.
- * @return `NULL` if the key is not found.
+ * @return `NULL`, если ключ не найден.
  */
 typedef lv_cache_entry_t * (*lv_cache_get_cb_t)(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
  * Функция добавления кэша, используемая классом кэша для добавления записи кэша с заданным ключом.
  * Эта функция заботится только о том, как добавить запись, она не проверяет, существует ли запись, и не заботится о том, является ли она жертвой или нет.
- * @return the added cache entry, or NULL if the entry is not added.
+ * @return добавленная запись кэша или NULL, если запись не добавлена.
  */
 typedef lv_cache_entry_t * (*lv_cache_add_cb_t)(lv_cache_t * cache, const void * key, void * user_data);
 
@@ -107,7 +107,7 @@ typedef lv_cache_reserve_cond_res_t (*lv_cache_reserve_cond_cb)(lv_cache_t * cac
 
 /**
  * Функция создания итератора кэша, используемая классом кэша для создания итератора для кэша.
- * @return A pointer to the created iterator, or NULL if the iterator cannot be created.
+ * @return Указатель на созданный итератор или NULL, если итератор невозможно создать.
  */
 typedef lv_iter_t * (*lv_cache_iter_create_cb)(lv_cache_t * cache);
 
@@ -125,8 +125,8 @@ struct _lv_cache_ops_t {
  */
 struct _lv_cache_t {
     const lv_cache_class_t * clz;     /**<Класс кэша. Есть два встроенных класса:
-                                       * - lv_cache_class_lru_rb_count for LRU-based cache with count-based eviction policy.
-                                       * - lv_cache_class_lru_rb_size for LRU-based cache with size-based eviction policy. */
+                                       * - lv_cache_class_lru_rb_count для кэша на основеLRUс политикой вытеснения на основе подсчета.
+                                       * - lv_cache_class_lru_rb_size для кеша на основеLRUс политикой вытеснения на основе размера. */
 
     uint32_t node_size;               /**< Size of a node */
 
@@ -144,8 +144,8 @@ struct _lv_cache_t {
  * Структура класса кэша для создания пользовательских классов кэша
  *
  * Примеры:
- * - lv_cache_class_lru_rb_count for LRU-based cache with count-based eviction policy.
- * - lv_cache_class_lru_rb_size for LRU-based cache with size-based eviction policy.
+ * - lv_cache_class_lru_rb_count для кэша на основеLRUс политикой вытеснения на основе подсчета.
+ * - lv_cache_class_lru_rb_size для кеша на основеLRUс политикой вытеснения на основе размера.
  */
 struct _lv_cache_class_t {
     lv_cache_alloc_cb_t alloc_cb;                 /**< The allocation function for cache entries */

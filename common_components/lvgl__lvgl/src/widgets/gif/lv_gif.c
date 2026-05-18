@@ -321,8 +321,8 @@ static inline void gif_blend_to_rgb565(GIFDRAW * pDraw, lv_draw_buf_t * draw_buf
             }
         }
         else {
-            /* Disposal 0,1,3: замените прозрачные пиксели цветом фона, чтобы сохранить положение.
-             * Функция gif_disposal_last_frame занимается фактической очисткой фона.
+            /* Удаление 0,1,3: замените прозрачные пиксели цвета фона, чтобы сохранить положение.
+             * Функцияgif_disposal_last_frameвыполняет фактическую очистку фонаря.
             */
             uint16_t bg_color = pal[pDraw->ucBackground];
             while(src < end) {
@@ -371,7 +371,7 @@ static inline void gif_blend_to_rgb888(GIFDRAW * pDraw, lv_draw_buf_t * draw_buf
             }
         }
         else {
-            /* Disposal 0,1,3: замените прозрачные пиксели цветом фона, чтобы сохранить положение. */
+            /* Удаление 0,1,3: замените прозрачные пиксели цвета фона, чтобы сохранить положение. */
             uint8_t bg_r = pal[(pDraw->ucBackground * 3) + 2];
             uint8_t bg_g = pal[(pDraw->ucBackground * 3) + 1];
             uint8_t bg_b = pal[(pDraw->ucBackground * 3) + 0];
@@ -432,7 +432,7 @@ static inline void gif_blend_to_argb8888(GIFDRAW * pDraw, lv_draw_buf_t * draw_b
             }
         }
         else {
-            /* Disposal 0,1,3: прозрачные пиксели получают альфа=0, непрозрачные пиксели получают альфа=255. */
+            /* Расположение 0,1,3: прозрачные пиксели получают альфа=0, непрозрачные пиксели получают альфа=255. */
             while(src < end) {
                 pixel = *src++;
                 if(pixel != pDraw->ucTransparent) {
@@ -578,18 +578,18 @@ static void gif_initialize(lv_gif_t * gifobj)
  *
  * Эта функция обрабатывает удаление области предыдущего кадра в изображении GIF, как указано в методе удаления.
  * Значения метода утилизации:
- *   0: No disposal specified (do nothing)
- *   1: Do not dispose (leave as is)
- *   2: Restore to background color (the affected area is filled with the background color)
- *   3: Restore to previous (not implemented here)
+ *   0: Удаление не указано (ничего не делать)
+ *   1: Не выбрасывать (оставить как есть)
+ *   2: Восстановить цвет фона (пораженная область заполняется цветом фона)
+ *   3: Восстановить предыдущее состояние (здесь не реализовано)
  * В этой функции обрабатывается только метод удаления 2 («восстановление в фоновый режим»).
  *
- * @param gif      Pointer to the GIFIMAGE structure representing the current GIF frame.
- * @param drawbuf  Pointer to the draw buffer where the frame is rendered.
+ * @param gif      Указатель на структуру GIFIMAGE, представляющую текущий кадр GIF.
+ * @param drawbuf  Указатель на буфер отрисовки, в котором отображается кадр.
  *
  * Предположения:
- *   - The coordinates and dimensions (iX, iY, iWidth, iHeight) are within the bounds of the draw buffer.
- *   - The palette type and background color are valid for the current GIF frame.
+ *   - Координаты и размеры (iX, iY, iWidth, iHeight) находятся в пределах буфера отрисовки.
+ *   - Тип палитры и цвет фона действительны для текущего кадра GIF.
  */
 static void gif_disposal_last_frame(GIFIMAGE * gif, lv_draw_buf_t * drawbuf)
 {
@@ -656,7 +656,7 @@ static void gif_disposal_last_frame(GIFIMAGE * gif, lv_draw_buf_t * drawbuf)
         }
     }
     /* disposal_method 0 и 1: ничего не делать, оставить существующий контент */
-    /* disposal_method 3: не поддерживается, ничего не делать */
+    /* disposal_method 3: ничего не делать */
 
     LV_PROFILER_DECODER_END;
 }

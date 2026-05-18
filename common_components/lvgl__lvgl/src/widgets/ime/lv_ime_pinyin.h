@@ -60,22 +60,22 @@ lv_obj_t * lv_ime_pinyin_create(lv_obj_t * parent);
 
 /**
  * Установите клавиатуру для метода ввода пиньинь.
- * @param obj  pointer to a Pinyin input method object
- * @param kb pointer to a Pinyin input method keyboard
+ * @param obj  указатель на объект метода ввода пиньинь
+ * @param kb указатель на клавиатуру метода ввода пиньинь
  */
 void lv_ime_pinyin_set_keyboard(lv_obj_t * obj, lv_obj_t * kb);
 
 /**
  * Установите словарь метода ввода пиньинь.
- * @param obj  pointer to a Pinyin input method object
- * @param dict pointer to a Pinyin input method dictionary
+ * @param obj  указатель на объект метода ввода пиньинь
+ * @param dict указатель на словарь методов ввода пиньинь
  */
 void lv_ime_pinyin_set_dict(lv_obj_t * obj, lv_pinyin_dict_t * dict);
 
 /**
  * Режим установки: 26-кнопочный ввод (k26) или 9-кнопочный ввод (k9).
- * @param obj  pointer to a Pinyin input method object
- * @param mode   the mode from 'lv_ime_pinyin_mode_t'
+ * @param obj  указатель на объект метода ввода пиньинь
+ * @param mode   режим из 'lv_ime_pinyin_mode_t'
  */
 void lv_ime_pinyin_set_mode(lv_obj_t * obj, lv_ime_pinyin_mode_t mode);
 
@@ -85,22 +85,22 @@ void lv_ime_pinyin_set_mode(lv_obj_t * obj, lv_ime_pinyin_mode_t mode);
 
 /**
  * Установите словарь метода ввода пиньинь.
- * @param obj  pointer to a Pinyin IME object
- * @return     pointer to the Pinyin IME keyboard
+ * @param obj  указатель на объект Пиньинь IME
+ * @return     указатель на клавиатуру пиньинь IME
  */
 lv_obj_t * lv_ime_pinyin_get_kb(lv_obj_t * obj);
 
 /**
  * Установите словарь метода ввода пиньинь.
- * @param obj  pointer to a Pinyin input method object
- * @return     pointer to the Pinyin input method candidate panel
+ * @param obj  указатель на объект метода ввода пиньинь
+ * @return     указатель на панель вариантов метода ввода пиньинь
  */
 lv_obj_t * lv_ime_pinyin_get_cand_panel(lv_obj_t * obj);
 
 /**
  * Установите словарь метода ввода пиньинь.
- * @param obj  pointer to a Pinyin input method object
- * @return     pointer to the Pinyin input method dictionary
+ * @param obj  указатель на объект метода ввода пиньинь
+ * @return     указатель на словарь методов ввода пиньинь
  */
 const lv_pinyin_dict_t * lv_ime_pinyin_get_dict(lv_obj_t * obj);
 

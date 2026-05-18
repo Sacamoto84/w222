@@ -1177,8 +1177,8 @@ static void indev_encoder_proc(lv_indev_t * i, lv_indev_data_t * data)
 
 /**
  * Обработка новых точек ввода устройства. indev->state.pressed должен быть установлен
- * @param indev указатель на состояние устройства ввода
- * @param x координата x следующей точки
+ * @param i указатель на состояние устройства ввода
+ * @param data координата x следующей точки
  * @param y координата y следующей точки
  */
 static void indev_button_proc(lv_indev_t * i, lv_indev_data_t * data)
@@ -1450,7 +1450,7 @@ static void indev_proc_press(lv_indev_t * indev)
 
 /**
  * Обработка выпущенного состояния устройств ввода LV_INDEV_TYPE_POINTER
- * @param proc указатель на устройство ввода «proc»
+ * @param indev указатель на устройство ввода «proc»
  */
 static void indev_proc_release(lv_indev_t * indev)
 {
@@ -1669,7 +1669,7 @@ static lv_obj_t * pointer_search_obj(lv_display_t * disp, lv_point_t * p)
 
 /**
  * Обработка новой точки с устройства ввода LV_INDEV_TYPE_BUTTON
- * @param i указатель на устройство ввода
+ * @param indev указатель на устройство ввода
  * @param data указатель на данные, считанные с устройства ввода
  * Сбросить устройство ввода, если на него был отправлен запрос на сброс
  * @param indev указатель на устройство ввода
@@ -1700,7 +1700,7 @@ static void indev_proc_reset_query_handler(lv_indev_t * indev)
 
 /**
  * Обработка фокусировки/расфокусировки при нажатии для устройств ввода POINTER
- * @param proc указатель на состояние indev
+ * @param indev указатель на состояние indev
  */
 static void indev_click_focus(lv_indev_t * indev)
 {
@@ -1822,7 +1822,7 @@ void indev_gesture(lv_indev_t * indev)
 
 /**
  * Проверяет, установлен ли флагreset_query. Если да, выполните необходимые глобальные действия по очистке индев.
- * @param proc указатель на устройство ввода «proc»
+ * @param indev указатель на устройство ввода «proc»
  * @return true, если запрос indev должен быть немедленно усечен.
  */
 static bool indev_reset_check(lv_indev_t * indev)

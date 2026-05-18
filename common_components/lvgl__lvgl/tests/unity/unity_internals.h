@@ -1,7 +1,7 @@
 /* ==========================================
     Проект Unity — тестовая среда для C
     Copyright (c) 2007-21 Mike Karlesky, Mark VanderVoord, Greg Williams
-    [Выпущено под лицензией MIT. Пожалуйста, обратитесь к license.txt для получения подробной информации]
+    [Выпущено под лицензиейMIT. Пожалуйста, обратитесь кlicense.txtдля получения подробной информации]
 ========================================== */
 #if LV_BUILD_TEST || LV_BUILD_TEST_PERF
 
@@ -29,8 +29,8 @@
 #endif
 
 /* Unity пытается автоматически определять целочисленные типы
- * Попытка 1: UINT_MAX , ULONG_MAX в <limits.h > или по умолчанию 32 бита.
- * Попытка 2: UINTPTR_MAX в <stdint.h> или по умолчанию тот же размер, что и длинный
+ * Опыт 1:UINT_MAX,ULONG_MAXв <limits.h > или по умолчанию 32 бита.
+ * Опыт 2:UINTPTR_MAXв <stdint.h > или по умолчанию тот же размер, что и длинный
  * Пользователь может переопределить любую из этих производных констант:
  * UNITY_INT_WIDTH, UNITY_LONG_WIDTH, UNITY_POINTER_WIDTH */
 #ifndef UNITY_EXCLUDE_STDINT_H
@@ -54,24 +54,24 @@
     #endif
   #elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
     #if defined(_WIN32) && defined(_MSC_VER)
-      /* Мы используем компилятор MSVC на платформе Windows. */
-      /* Не все Windows SDK поддерживают <stdnoreturn.h>, но компилятор может поддерживать C11: */
+      /* Мы используем компиляторMSVCна платформе Windows. */
+      /* Не все WindowsSDKиспользуют <stdnoreturn.h>, но компилятор может поддерживать C11: */
       /* https://devblogs.microsoft.com/cppblog/c11-and-c17-standard-support-arriving-in-msvc/ */
       /* Не уверен, что компиляторы Mingw вообще имеют заголовки Windows SDK. */
       #include <sdkddkver.h>
     #endif
 
-    /* Использование предопределенного макроса Windows SDK для обнаружения поддерживаемого SDK с помощью компилятора MSVC. */
-    /* Mingw GCC должен работать и без этих исправлений. */
+    /* Использование предопределенного макроса WindowsSDKдля обнаружения прикладногоSDKс помощью компилятора MSVC. */
+    /* MingwGCCдолжен работать и без этих исправлений. */
     /* На основе: */
     /* https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170 */
-    /* NTDDI_WIN10_FE равен Windows 10 SDK 2104. */
+    /* NTDDI_WIN10_FE соответствует Windows 10SDK2104. */
     #if defined(_MSC_VER) && ((!defined(NTDDI_WIN10_FE)) || WDK_NTDDI_VERSION < NTDDI_WIN10_FE)
       /* На основе тестов и: */
       /* https://docs.microsoft.com/en-us/cpp/c-language/noreturn?view=msvc-170 */
       /* https://en.cppreference.com/w/c/language/_Noreturn */
       #define UNITY_NORETURN _Noreturn
-    #else /* Использование более новой версии Windows SDK или компилятора без MSVC. */
+    #else /* Использование более новой версии WindowsSDKили компилятора без MSVC. */
       #include <stdnoreturn.h>
       #define UNITY_NORETURN noreturn
     #endif
@@ -242,10 +242,10 @@
 #endif
 typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 
-/* макрос isnan должен быть предоставлен math.h. Переопределить, если не макрос */
+/* макрос isnan должен быть предоставленmath.h. Переопределить, если не макрос */
 #ifndef UNITY_IS_NAN
 #ifndef isnan
-/* NaN — единственное значение с плавающей запятой, которое NOT равно самому себе.
+/* NaN — величина значения с плавающей запятой, котораяNOTравна самому себе.
  * Следовательно, если n != n, то это NaN. */
 #define UNITY_IS_NAN(n) ((n != n) ? 1 : 0)
 #else
@@ -269,7 +269,7 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
  * Двойная поплавковая поддержка
  *-------------------------------------------------------*/
 
-/* в отличие от float, мы DON 'T включаем по умолчанию */
+/* в отличие от float, мыDON'T включаем по умолчанию */
 #if defined(UNITY_EXCLUDE_DOUBLE) || !defined(UNITY_INCLUDE_DOUBLE)
 
   /* Нет поддержки чисел с плавающей запятой */
@@ -284,7 +284,7 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
     #define UNITY_DOUBLE_TYPE double
     #endif
   typedef UNITY_FLOAT UNITY_DOUBLE;
-  /* Для параметра в UnityPrintFloat( UNITY_DOUBLE ), который является псевдонимом double или float. */
+  /* Для параметра в UnityPrintFloat(UNITY_DOUBLE), который является псевдонимом double или float. */
   #endif
 
 #else
@@ -305,7 +305,7 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
  * Метод вывода: стандартный вывод ( DEFAULT )
  *-------------------------------------------------------*/
 #ifndef UNITY_OUTPUT_CHAR
-  /* По умолчанию используется putchar, определенный в stdio.h. */
+  /* По умолчанию используется putchar, на данный момент в stdio.h. */
   #include <stdio.h>
   #define UNITY_OUTPUT_CHAR(a) (void)putchar(a)
 #else
@@ -317,7 +317,7 @@ typedef UNITY_FLOAT_TYPE UNITY_FLOAT;
 
 #ifndef UNITY_OUTPUT_FLUSH
   #ifdef UNITY_USE_FLUSH_STDOUT
-    /* Мы хотим использовать утилиту очистки stdout. */
+    /* Мы хотим использовать стандартную утилиту очистки. */
     #include <stdio.h>
     #define UNITY_OUTPUT_FLUSH()    (void)fflush(stdout)
   #else
@@ -798,7 +798,7 @@ extern const char UnityStrErrShorthand[];
   #endif
 #endif
 
-/* Эта хитрая серия макросов дает нам необязательный аргумент строки, который будет обрабатывать ее как RUN_TEST (func, num= __LINE__). */
+/* Эта хитрая серия макросов дает нам необязательный аргумент строки, который будет обрабатывать ее какRUN_TEST(func, num=__LINE__). */
 #ifndef RUN_TEST
 #ifdef UNITY_SUPPORT_VARIADIC_MACROS
 #define RUN_TEST(...) RUN_TEST_AT_LINE(__VA_ARGS__, __LINE__, throwaway)

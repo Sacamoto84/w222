@@ -10,8 +10,8 @@
 
 #if LV_USE_SPINBOX
 /**
- * Имена свойств виджета Spinbox, имя должно быть в порядке.
- * Сгенерированный код из properties.py
+ * Имя свойства виджета Spinbox, имя должно быть в порядке.
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_spinbox_property_names[8] = {

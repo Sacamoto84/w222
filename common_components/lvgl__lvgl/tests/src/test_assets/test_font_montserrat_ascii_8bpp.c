@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Размер: 20 пикселей
  * Бпп: 8
- * Opts: --bpp 8 --size 20 --no-compress --font Montserrat-Medium.ttf --range 32-127 --format lvgl -o test_font_montserrat_ascii_8bpp.c
+ * Opts: --bpp 8 --size 20 --no-compress --font Montserrat-Medium.ttf --диапазон 32–127 --format lvgl -o test_font_montserrat_ascii_8bpp.c
  ******************************************************************************/
 
 #include "../../../lvgl.h"
@@ -1921,7 +1921,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 86, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 86, .box_w = 3, .box_h = 14, .ofs_x = 1, .ofs_y = 0},
     {.bitmap_index = 42, .adv_w = 125, .box_w = 6, .box_h = 6, .ofs_x = 1, .ofs_y = 8},
@@ -2025,7 +2025,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
 
 
 
-/*Соберите списки Юникода и смещения glyph_id.*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] =
 {
     {

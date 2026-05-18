@@ -10,8 +10,8 @@
 
 
 /**
- * Имена свойств виджета Obj, имя должно быть в порядке.
- * Сгенерированный код из properties.py
+ * Имя свойства виджета Obj, имя должно быть в порядке.
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_obj_property_names[76] = {

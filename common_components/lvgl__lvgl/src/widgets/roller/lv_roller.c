@@ -282,8 +282,8 @@ void lv_roller_get_selected_str(const lv_obj_t * obj, char * buf, uint32_t buf_s
 
 /**
  * Получить варианты ролика
- * @param roller pointer to roller object
- * @return the options separated by '\n'-s (E.g. "Option1\nOption2\nOption3")
+ * @param obj указатель на объект ролика
+ * @return параметры, разделенные символом '\n'-s (например, «Option1\nOption2\nOption3»)
  */
 const char * lv_roller_get_options(const lv_obj_t * obj)
 {
@@ -476,14 +476,14 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
         uint32_t c = lv_event_get_key(e);
         if(c == LV_KEY_RIGHT || c == LV_KEY_DOWN) {
             if(roller->sel_opt_id + 1 < roller->option_cnt) {
-                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезапишет это*/
+                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезаписывает это*/
                 lv_roller_set_selected(obj, roller->sel_opt_id + 1, LV_ANIM_ON);
                 roller->sel_opt_id_ori = ori_id;
             }
         }
         else if(c == LV_KEY_LEFT || c == LV_KEY_UP) {
             if(roller->sel_opt_id > 0) {
-                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезапишет это*/
+                uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезаписывает это*/
                 lv_roller_set_selected(obj, roller->sel_opt_id - 1, LV_ANIM_ON);
                 roller->sel_opt_id_ori = ori_id;
             }
@@ -496,7 +496,7 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
         int32_t new_id = roller->sel_opt_id + r;
         new_id = LV_CLAMP(0, new_id, (int32_t)roller->option_cnt - 1);
         if((int32_t)roller->sel_opt_id != new_id) {
-            uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезапишет это*/
+            uint32_t ori_id = roller->sel_opt_id_ori; /*lv_roller_set_selected перезаписывает это*/
             lv_roller_set_selected(obj, new_id, LV_ANIM_ON);
             roller->sel_opt_id_ori = ori_id;
         }
@@ -700,9 +700,9 @@ static void get_sel_area(lv_obj_t * obj, lv_area_t * sel_area)
 }
 
 /**
- * Обновите положение ролика. Он использует идентификатор, хранящийся в:roller->ddlist. selected_option_id
- * @param roller pointer to a roller object
- * @param anim_en LV_ANIM_ON: refresh with animation; LV_ANIM_OFF: without animation
+ * Обновите положение ролика. Он использует идентификатор, хранящийся в:roller->ddlist.  selected_option_id
+ * @param obj указатель на объект ролика
+ * @param anim_en LV_ANIM_ON : обновление с анимацией;  LV_ANIM_OFF: без анимации
  */
 static void refr_position(lv_obj_t * obj, lv_anim_enable_t anim_en)
 {
@@ -734,7 +734,7 @@ static void refr_position(lv_obj_t * obj, lv_anim_enable_t anim_en)
     const int32_t h = lv_obj_get_content_height(obj);
     uint32_t anim_time = lv_obj_get_style_anim_duration(obj, LV_PART_MAIN);
 
-    /*Обычно `end_cb` анимации устанавливает правильное положение ролика, если он бесконечен.
+    /*Обычно`end_cb`анимация устанавливает правильное положение ролика, если он бесконечен.
      *Но без анимации нам придется делать это вручную.*/
     if(anim_en == LV_ANIM_OFF || anim_time == 0) {
         inf_normalize(obj);
@@ -845,14 +845,14 @@ static lv_result_t release_handler(lv_obj_t * obj)
         }
     }
 
-    uint32_t id  = roller->sel_opt_id; /*Просто использовать uint32_t в данных о событиях*/
+    uint32_t id  = roller->sel_opt_id; /*Просто используйтеuint32_tв данных о событиях*/
     lv_result_t res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, &id);
     return res;
 }
 
 /**
  * Установите среднюю страницу для ролика, если включена бесконечность
- * @param roller pointer to a roller object
+ * @param obj указатель на объект ролика
  */
 static void inf_normalize(lv_obj_t * obj)
 {

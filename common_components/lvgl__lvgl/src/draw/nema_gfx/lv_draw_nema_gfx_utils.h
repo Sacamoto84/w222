@@ -165,7 +165,7 @@ uint32_t lv_nemagfx_blending_mode(lv_blend_mode_t lv_blend_mode);
 /**
  * Получите режим приложения NemaGFX.
  *
- * @param [дюйм] градиент Градиентный буфер NemaGFX
+ * @param [дюйм] gradient Градиентный буфер NemaGFX
  *
  * @param [in] lv_grad Дескриптор градиента
  *

@@ -78,7 +78,7 @@ void test_align(void)
     lv_obj_clean(active_screen);
 }
 
-/*См. https://github.com/lvgl/lvgl/issues/7035.*/
+/*См.  https://github.com/lvgl/lvgl/issues/7035.*/
 void test_wrap_grow_min_width(void)
 {
     lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
@@ -355,7 +355,7 @@ void test_col_grow_size_content(void)
     int32_t item_max_height = LV_COORD_MAX;
     int32_t cont_max_height = LV_COORD_MAX;
 
-    /* 2 * pad_gap, потому что в продолжении 3 объекта */
+    /* 2 *pad_gap, потому что в продолжении 3 объекта */
     const int32_t fixed_size = space_start + header_height + 2 * pad_gap + footer_height + space_end;
 
     TEST_ASSERT_GREATER_THAN_INT32(0, fixed_size);
@@ -393,7 +393,7 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(cont_min_height, lv_obj_get_height(cont));
     TEST_ASSERT_EQUAL(item_max_height, lv_obj_get_height(item));
 
-    /* высота элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont не должен быть максимальным размером, поскольку максимальный размер равен
+    /* высота элемента должна быть равна 0, поскольку расчет размера не установлен для элемента или продолжения, cont не должен быть максимальным размером, поскольку максимальный размер равен
      * больше, чем содержание */
     cont_min_height = 0;
     cont_max_height = 500;
@@ -410,7 +410,7 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_height(item));
     TEST_ASSERT_EQUAL(fixed_size, lv_obj_get_height(cont));
 
-    /* высота элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont должен быть максимальным размером, поскольку максимальный размер равен
+    /* элемент высоты должен быть равен 0, поскольку расчет размера не установлен для элемента или продолжения, cont должен быть максимальным размером, поскольку максимальный размер равен
      * меньше, чем содержание */
     item_max_height = 0;
     cont_max_height = 3 * fixed_size / 4;
@@ -421,7 +421,7 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_height(item));
     TEST_ASSERT_EQUAL(cont_max_height, lv_obj_get_height(cont));
 
-    /* элемент должен иметь минимальную высоту (50), а cont будет максимальной высоты, поэтому cont должен быть прокручиваемым */
+    /* элемент должен иметь минимальную высоту (50), а cont будет большей высоты, поэтому cont должен быть прокручиваемым */
     item_min_height = 50;
     lv_obj_set_style_min_height(item, item_min_height, LV_PART_MAIN);
 
@@ -429,7 +429,7 @@ void test_col_grow_size_content(void)
     TEST_ASSERT_EQUAL(item_min_height, lv_obj_get_height(item));
     TEST_ASSERT_EQUAL(cont_max_height, lv_obj_get_height(cont));
 
-    /* здесь следует игнорировать максимальную высоту cont */
+    /* здесь следует внешний вид высоты (продолжение) */
     cont_max_height = LV_PCT(70);
     TEST_ASSERT_GREATER_THAN_INT32_MESSAGE(fixed_size + item_min_height,
                                            cont_max_height,
@@ -488,7 +488,7 @@ void test_row_grow_size_content(void)
     int32_t item_max_width = LV_COORD_MAX;
     int32_t cont_max_width = LV_COORD_MAX;
 
-    /* 2 * pad_gap, потому что в продолжении 3 объекта */
+    /* 2 *pad_gap, потому что в продолжении 3 объекта */
     const int32_t fixed_size = space_start + left_width + 2 * pad_gap + right_width + space_end;
 
     TEST_ASSERT_GREATER_THAN_INT32(0, fixed_size);
@@ -526,7 +526,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(cont_min_width, lv_obj_get_width(cont));
     TEST_ASSERT_EQUAL(item_max_width, lv_obj_get_width(item));
 
-    /* Ширина элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont не должен быть максимальным размером, поскольку максимальный размер равен
+    /* Ширина элемента должна быть равна 0, поскольку расчет размера не установлен для элемента или продолжения, cont не должен быть максимальным размером, поскольку максимальный размер равен.
      * больше, чем содержание */
     cont_min_width = 0;
     cont_max_width = 500;
@@ -543,7 +543,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_width(item));
     TEST_ASSERT_EQUAL(fixed_size, lv_obj_get_width(cont));
 
-    /* Ширина элемента должна быть равна 0, поскольку минимальный размер не установлен для элемента или продолжения, cont должен быть максимальным размером, поскольку максимальный размер равен
+    /* Ширина элемента должна быть равна 0, поскольку расчет размера не установлен для элемента или продолжения, cont должен быть максимальным размером, поскольку максимальный размер равен
      * меньше, чем содержание */
     item_max_width = 0;
     cont_max_width = 3 * fixed_size / 4;
@@ -554,7 +554,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(0, lv_obj_get_width(item));
     TEST_ASSERT_EQUAL(cont_max_width, lv_obj_get_width(cont));
 
-    /* элемент должен иметь минимальную ширину (90), а cont - максимальную ширину (70), поэтому cont должен быть прокручиваемым. */
+    /* Элемент должен иметь минимальную опасность (90), а также предохранительный разрыв (70), поэтому cont должен быть прокручиваемым. */
     item_min_width = 50;
     lv_obj_set_style_min_width(item, item_min_width, LV_PART_MAIN);
 
@@ -562,7 +562,7 @@ void test_row_grow_size_content(void)
     TEST_ASSERT_EQUAL(item_min_width, lv_obj_get_width(item));
     TEST_ASSERT_EQUAL(cont_max_width, lv_obj_get_width(cont));
 
-    /* здесь следует игнорировать максимальную ширину cont */
+    /* здесь следует за защитой от замыкания, продолжение */
     cont_max_width = LV_PCT(70);
     TEST_ASSERT_GREATER_THAN_INT32_MESSAGE(fixed_size + item_min_width,
                                            cont_max_width,

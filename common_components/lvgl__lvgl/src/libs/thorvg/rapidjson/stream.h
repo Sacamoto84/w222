@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -27,9 +27,9 @@ RAPIDJSON_NAMESPACE_BEGIN
 /*! \класс RapidJSON::Stream
     \brief Концепция чтения и написания символов.
 
-    Для потока только для чтения нет необходимости реализовывать PutBegin() , Put() , Flush() и PutEnd() .
+    Для потока только для чтения нет необходимости реализовыватьPutBegin(),Put(),Flush()иPutEnd().
 
-    Для потока только для записи необходимо реализовать только Put() и Flush().
+    Для потока только для записей необходимо реализовать толькоPut()иFlush().
 
 \code
 концепция потока {
@@ -39,25 +39,25 @@ RAPIDJSON_NAMESPACE_BEGIN
     Ch Peek() const;
 
     //! Прочитайте текущий символ из потока и переместите курсор чтения на следующий символ.
-    Ч Take() ;
+    ЧTake();
 
     //! Получить текущий курсор чтения.
     //! \return Количество символов, прочитанных с начала.
-    size_t Tell() ;
+    size_tTell();
 
     //! Начните операцию записи с текущего указателя чтения.
     //! \return Указатель начала записи.
-    Ч* PutBegin() ;
+    Ч*PutBegin();
 
     //! Напишите персонажа.
-    недействительный Put (Ch c);
+    недействительный Пут (Ch c);
 
     //! Промойте буфер.
-    недействителен Flush() ;
+    недействителенFlush();
 
     //! Завершите операцию записи.
-    //! \param Begin Указатель начала записи, возвращаемый PutBegin().
-    //! \return Количество записанных символов.
+    //! \param Begin Указатель начала записи, возвращаемыйPutBegin().
+    //! \return Количество названных символов.
     size_t PutEnd(Ch* начало);
 }
 \endcode
@@ -67,7 +67,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 /*!
     Используя шаблон признаков, этот тип обеспечивает конфигурацию потока по умолчанию.
     Для пользовательского потока этот тип может быть специализирован для другой конфигурации.
-    См., например, TEST (Reader, CustomStringStream) в readertest.cpp.
+    См., например,TEST(Reader, CustomStringStream) вreadertest.cpp.
 */
 template<typename Stream>
 struct StreamTraits {
@@ -106,7 +106,7 @@ inline void PutN(Stream& stream, Ch c, size_t n) {
 //! Обертка потока
 /*! \tЭтот строковый поток является оберткой для любого потока, просто пересылая любой
     \trecived сообщение в исходный поток.
-    \note реализует концепцию Stream
+    \note реализации соглашения Stream
 */
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800
@@ -148,7 +148,7 @@ RAPIDJSON_DIAG_POP
 // Строковый поток
 
 //! Строковый поток только для чтения.
-/*! \note реализует концепцию Stream
+/*! \note реализации соглашения Stream
 */
 template <typename Encoding>
 struct GenericStringStream {
@@ -182,7 +182,7 @@ typedef GenericStringStream<UTF8<> > StringStream;
 
 //! Строковый поток для чтения и записи.
 /*! Этот строковый поток специально разработан для анализа на месте.
-    \note реализует концепцию Stream
+    \note реализации соглашения Stream
 */
 template <typename Encoding>
 struct GenericInsituStringStream {
@@ -215,7 +215,7 @@ struct StreamTraits<GenericInsituStringStream<Encoding> > {
     enum { copyOptimization = 1 };
 };
 
-//! Поток строк Insitu с кодировкой UTF8.
+//! Поток строк Insitu с кодировкойUTF8.
 typedef GenericInsituStringStream<UTF8<> > InsituStringStream;
 
 RAPIDJSON_NAMESPACE_END

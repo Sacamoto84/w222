@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -36,7 +36,7 @@ inline double FastPath(double significand, int exp) {
 
 inline double StrtodNormalPrecision(double d, int p) {
     if (p < -308) {
-        // Предотвратите expSum < -308, сделав Pow10(p) = 0.
+        // Предотвратите expSum < -308, выполнено Pow10(p) = 0.
         d = FastPath(d, -308);
         d = FastPath(d, p + 308);
     }
@@ -112,7 +112,7 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
 
 inline bool StrtodFast(double d, int p, double* result) {
     // Если возможно, используйте быстрый путь для преобразования строки в двойную строку.
-    // см. http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/
+    // см.  http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/
     if (p > 22  && p < 22 + 16) {
         // Замаскированные дела быстрого пути
         d *= internal::Pow10(p - 22);
@@ -283,7 +283,7 @@ inline double StrtodFullPrecision(double d, int p, const Ch* decimals, size_t le
     if (StrtodDiyFp(decimals, dLen, dExp, &result))
         return result;
 
-    // Используйте аппроксимацию из StrtodDiyFp и внесите коррективы с помощью сравнения BigInteger.
+    // Используйте аппроксимацию из StrtodDiyFp и внесите коррективы в сравнение с помощью BigInteger.
     return StrtodBigInteger(result, decimals, dLen, dExp);
 }
 

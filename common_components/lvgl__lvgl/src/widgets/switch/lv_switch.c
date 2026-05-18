@@ -307,8 +307,8 @@ static void lv_switch_anim_completed(lv_anim_t * a)
 }
 
 /**
- * Запускает анимацию ручки переключателя. если свойство стиля anim_time больше 0
- * @param obj the switch to animate
+ * Запускает анимацию ручки переключателя. если свойство стиляanim_timeбольше 0
+ * @param obj переключение на анимацию
  */
 static void lv_switch_trigger_anim(lv_obj_t * obj)
 {

@@ -31,22 +31,22 @@ extern "C" {
 
 /**
  * Инициализировать тему
- * @param disp pointer to display
+ * @param disp указатель для отображения
  * @param dark_bg
- * @param font pointer to a font to use.
- * @return a pointer to reference this theme later
+ * @param font указатель на шрифт, который нужно использовать.
+ * @return указатель для ссылки на эту тему позже
  */
 lv_theme_t * lv_theme_mono_init(lv_display_t * disp, bool dark_bg, const lv_font_t * font);
 
 /**
 * Проверьте, инициализирована ли тема
-* @return true if default theme is initialized, false otherwise
+* @return true, если инициализирована тема по умолчанию, в противном случае — false
 */
 bool lv_theme_mono_is_inited(void);
 
 /**
  * Получить моно тему
- * @return a pointer to mono theme, or NULL if this is not initialized
+ * @return указатель на моно-тему или NULL, если она не инициализирована
  */
 lv_theme_t * lv_theme_mono_get(void);
 

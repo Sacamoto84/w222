@@ -11,7 +11,7 @@
 #if LV_USE_SWITCH
 /**
  * Переключите имена свойств виджета, имена должны быть в порядке.
- * Сгенерированный код из properties.py
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_switch_property_names[1] = {

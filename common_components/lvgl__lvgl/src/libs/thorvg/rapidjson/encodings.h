@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -39,11 +39,11 @@ RAPIDJSON_NAMESPACE_BEGIN
 концепция Кодировка {
     имя типа Ch;    //! Тип персонажа. «Символ» на самом деле является единицей кода в определении Юникода.
 
-    перечисление {supportUnicode = 1}; // или 0, если не поддерживается юникод
+    чтение {supportUnicode = 1}; // или 0, если не происходит юникод
 
-    //! \brief Кодирование кодовой точки Unicode в выходной поток.
+    //! \brief Кодирование кодовой точки Unicode в выходном потоке.
     //! \param os Выходной поток.
-    //! \param codepoint Код Юникода в диапазоне от 0x0 до 0x10FFFF включительно.
+    //! \param codepoint Код Юникода в зависимости от0x0до 0x10FFFF.
     шаблон<имя типа OutputStream>
     static void Encode (OutputStream& os, беззнаковый код);
 
@@ -56,9 +56,9 @@ RAPIDJSON_NAMESPACE_BEGIN
 
     //! \brief Проверка одного кода Юникода из закодированного потока.
     //! \param — входной поток для получения кода.
-    //! \param os Вывод для копирования одной кодовой точки.
-    //! \ return true, если оно действительно.
-    //! \note Эта функция просто проверяет и копирует кодовую точку, не декодируя ее.
+    //! \param os Вывод для копирования кода одной точки.
+    //! \ возвращаем true, если оно действительно.
+    //! \note Эта функция просто копирует кодовую точку, не декодируя ее.
     шаблон <имя типа InputStream, имя типа OutputStream>
     static bool Validate(InputStream& is, OutputStream& os);
 
@@ -74,7 +74,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 
     //! Поместите BOM в выходной поток байтов.
     шаблон <имя типа OutputByteStream>
-    статическая недействительность PutBOM (OutputByteStream& os);
+    статическая неактивность PutBOM (OutputByteStream& os);
 
     //! Поместите символ в выходной поток байтов.
     шаблон <имя типа OutputByteStream>
@@ -89,8 +89,8 @@ RAPIDJSON_NAMESPACE_BEGIN
 //!  Кодировка UTF -8.
 /*! http://en.wikipedia.org/wiki/UTF-8
     http://tools.ietf.org/html/rfc3629
-    \tparam CharType Кодовая единица для хранения 8-битных данных UTF -8. По умолчанию — символ.
-    \note реализует концепцию кодирования
+    \tparam CharType Кодовая единица для хранения 8-битных данныхUTF-8. По умолчанию — символ.
+    \note представляет код реализации
 */
 template<typename CharType = char>
 struct UTF8 {
@@ -202,7 +202,7 @@ struct UTF8 {
     }
 
     static unsigned char GetRange(unsigned char c) {
-        // Ссылаясь на DFA из http://bjoern.hoehrmann.de/utf-8/decoder/dfa/
+        // Ссылаясь наDFAиз http://bjoern.hoehrmann.de/utf-8/decoder/dfa/
         // С новым сопоставлением 1 -> 0x10 , 7 -> 0x20 , 9 -> 0x40 , так что операция AND может проверять несколько типов.
         static const unsigned char type[] = {
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -259,10 +259,10 @@ struct UTF8 {
 //!  Кодировка UTF -16.
 /*! http://en.wikipedia.org/wiki/UTF-16
     http://tools.ietf.org/html/rfc2781
-    \tparam CharType Тип для хранения 16-битных данных UTF -16. По умолчанию — wchar_t. Вместо этого C++11 может использовать char16_t.
-    \note реализует концепцию кодирования
+    \tparam CharType Тип для хранения 16-битных данныхUTF-16. По умолчанию —wchar_t. Вместо этого C++11 может использоватьchar16_t.
+    \note представляет код реализации
 
-    \note Для доступа в памяти не нужно беспокоиться о порядке байтов. Кодовые единицы и кодовые точки представлены порядком байтов CPU.
+    \note Для доступа к памяти не нужно беспокоиться о порядке байтов. Кодовые значения кода и точки представляют собой порядок байтов CPU.
     Для потоковой передачи используйте UTF16LE и UTF16BE, которые обрабатывают порядок байтов.
 */
 template<typename CharType = wchar_t>
@@ -408,10 +408,10 @@ struct UTF16BE : UTF16<CharType> {
 
 //!  Кодировка UTF -32.
 /*! http://en.wikipedia.org/wiki/UTF-32
-    \tparam CharType Тип для хранения 32-битных данных UTF -32. По умолчанию без знака. Вместо этого C++11 может использовать char32_t.
-    \note реализует концепцию кодирования
+    \tparam CharType Тип для хранения 32-битных данныхUTF-32. По умолчанию без знака. Вместо этого C++11 может использоватьchar32_t.
+    \note представляет код реализации
 
-    \note Для доступа в памяти не нужно беспокоиться о порядке байтов. Кодовые единицы и кодовые точки представлены порядком байтов CPU.
+    \note Для доступа к памяти не нужно беспокоиться о порядке байтов. Кодовые значения кода и точки представляют собой порядок байтов CPU.
     Для потоковой передачи используйте UTF32LE и UTF32BE, которые обрабатывают порядок байтов.
 */
 template<typename CharType = unsigned>
@@ -535,8 +535,8 @@ struct UTF32BE : UTF32<CharType> {
 
 //!  Кодировка ASCII.
 /*! http://en.wikipedia.org/wiki/ASCII
-    \tparam CharType Кодовая единица для хранения 7-битных данных ASCII. По умолчанию — символ.
-    \note реализует концепцию кодирования
+    \tparam CharType Кодовая единица для хранения 7-битных данныхASCII. По умолчанию — символ.
+    \note представляет код реализации
 */
 template<typename CharType = char>
 struct ASCII {
@@ -609,7 +609,7 @@ enum UTFType {
 };
 
 //! Динамический выбор кодировки в соответствии с типом кодировки UTF, указанным во время выполнения потока.
-/*! \note Этот класс можно использовать с AutoUTFInputStream и AutoUTFOutputStream, которые предоставляют GetType().
+/*! \note Этот класс можно использовать с AutoUTFInputStream и AutoUTFOutputStream, которые предоставляютGetType().
 */
 template<typename CharType>
 struct AutoUTF {
@@ -656,7 +656,7 @@ struct AutoUTF {
 //! Преобразование кодировки.
 template<typename SourceEncoding, typename TargetEncoding>
 struct Transcoder {
-    //! Возьмите одну кодовую точку Unicode из исходной кодировки, преобразуйте ее в целевую кодировку и поместите в выходной поток.
+    //! Возьмите кодовую точку Unicode из исходной кодировки, преобразуйте ее в целевую кодировку и поместите в выходной поток.
     template<typename InputStream, typename OutputStream>
     static RAPIDJSON_FORCEINLINE bool Transcode(InputStream& is, OutputStream& os) {
         unsigned codepoint;

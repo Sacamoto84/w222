@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -30,7 +30,7 @@ RAPIDJSON_NAMESPACE_BEGIN
     \ingroup RAPIDJSON_ERRORS
     \param parseErrorCode Код ошибки, полученный при разборе.
     \вернуть сообщение об ошибке.
-    \note Пользователь может сделать копию этой функции для локализации.
+    \note Пользователь может сделать эту функцию для локализации.
         Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
 inline const RAPIDJSON_ERROR_CHARTYPE* GetParseError_En(ParseErrorCode parseErrorCode) {
@@ -70,7 +70,7 @@ inline const RAPIDJSON_ERROR_CHARTYPE* GetParseError_En(ParseErrorCode parseErro
     \ingroup RAPIDJSON_ERRORS
     \param validateErrorCode Код ошибки, полученный от валидатора.
     \вернуть сообщение об ошибке.
-    \note Пользователь может сделать копию этой функции для локализации.
+    \note Пользователь может сделать эту функцию для локализации.
         Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
 inline const RAPIDJSON_ERROR_CHARTYPE* GetValidateError_En(ValidateErrorCode validateErrorCode) {
@@ -121,7 +121,7 @@ inline const RAPIDJSON_ERROR_CHARTYPE* GetValidateError_En(ValidateErrorCode val
     \ingroup RAPIDJSON_ERRORS
     \param SchemaErrorCode Код ошибки, полученный при компиляции документа схемы.
     \вернуть сообщение об ошибке.
-    \note Пользователь может сделать копию этой функции для локализации.
+    \note Пользователь может сделать эту функцию для локализации.
         Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
   inline const RAPIDJSON_ERROR_CHARTYPE* GetSchemaError_En(SchemaErrorCode schemaErrorCode) {
@@ -151,7 +151,7 @@ inline const RAPIDJSON_ERROR_CHARTYPE* GetValidateError_En(ValidateErrorCode val
     \ingroup RAPIDJSON_ERRORS
     \param pointerParseErrorCode Код ошибки, полученный при анализе указателя.
     \вернуть сообщение об ошибке.
-    \note Пользователь может сделать копию этой функции для локализации.
+    \note Пользователь может сделать эту функцию для локализации.
         Использование переключателя безопаснее для будущей модификации кодов ошибок.
 */
 inline const RAPIDJSON_ERROR_CHARTYPE* GetPointerParseError_En(PointerParseErrorCode pointerParseErrorCode) {

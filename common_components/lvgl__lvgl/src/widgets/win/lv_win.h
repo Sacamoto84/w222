@@ -28,39 +28,39 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_win_class;
 
 /**
  * Создать виджет окна
- * @param parent    pointer to a parent widget
- * @return          the created window
+ * @param parent    указатель на родительский виджет
+ * @return          созданное окно
  */
 lv_obj_t * lv_win_create(lv_obj_t * parent);
 
 /**
  * Добавьте заголовок в окно
- * @param obj       pointer to a window widget
- * @param txt       the text of the title
- * @return          the widget where the content of the title can be created
+ * @param win       указатель на виджет окна
+ * @param txt       текст заголовка
+ * @return          виджет, в котором можно создать содержимое заголовка
  */
 lv_obj_t * lv_win_add_title(lv_obj_t * win, const char * txt);
 
 /**
  * Добавляем кнопку в окно
- * @param obj       pointer to a window widget
- * @param icon      an icon to be displayed on the button
- * @param btn_w     width of the button
- * @return          the widget where the content of the button can be created
+ * @param win       указатель на виджет окна
+ * @param icon      значок, который будет отображаться на кнопке
+ * @param btn_w     ширина кнопки
+ * @return          виджет, в котором можно создать содержимое кнопки
  */
 lv_obj_t * lv_win_add_button(lv_obj_t * win, const void * icon, int32_t btn_w);
 
 /**
  * Получить заголовок окна
- * @param win       pointer to a window widget
- * @return          the header of the window
+ * @param win       указатель на виджет окна
+ * @return          заголовок окна
  */
 lv_obj_t * lv_win_get_header(lv_obj_t * win);
 
 /**
  * Получить содержимое окна
- * @param win       pointer to a window widget
- * @return          the content of the window
+ * @param win       указатель на виджет окна
+ * @return          содержимое окна
  */
 lv_obj_t * lv_win_get_content(lv_obj_t * win);
 /**********************

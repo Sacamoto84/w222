@@ -30,35 +30,35 @@ extern "C" {
 
 /**
  * Инициализируйте кеш заголовка изображения.
- * @param  count initial size of the cache in count of image headers.
- * @return LV_RESULT_OK: initialization succeeded, LV_RESULT_INVALID: failed.
+ * @param  count начальный размер кэша по количеству заголовков изображений.
+ * @return LV_RESULT_OK: инициализация прошла успешно, LV_RESULT_INVALID: не удалось.
  */
 lv_result_t lv_image_header_cache_init(uint32_t count);
 
 /**
  * Изменить размер кеша заголовка изображения.
  * Если установлено значение 0, кэш отключен.
- * @param count  new max count of cached image headers.
- * @param evict_now true: evict the image headers should be removed by the eviction policy, false: wait for the next cache cleanup.
+ * @param count  новое максимальное количество заголовков кэшированных изображений.
+ * @param evict_now true: вытеснить заголовки изображений должны быть удалены политикой вытеснения, false: дождаться следующей очистки кэша.
  */
 void lv_image_header_cache_resize(uint32_t count, bool evict_now);
 
 /**
  * Недействительный кеш заголовка изображения. Используйте NULL, чтобы сделать недействительными все заголовки изображений.
  * Он также автоматически вызывается, когда изображение становится недействительным.
- * @param src pointer to an image source.
+ * @param src указатель на источник изображения.
  */
 void lv_image_header_cache_drop(const void * src);
 
 /**
- * Возвращайте true, если кэш заголовка изображения включен.
- * @return true: enabled, false: disabled.
+ * Возвращает true, если кэш заголовка изображения включен.
+ * @return true: включено, false: отключено.
  */
 bool lv_image_header_cache_is_enabled(void);
 
 /**
  * Создайте итератор для перебора кеша заголовка изображения.
- * @return an iterator to iterate over the image header cache.
+ * @return итератор для перебора кэша заголовка изображения.
  */
 lv_iter_t * lv_image_header_cache_iter_create(void);
 

@@ -29,7 +29,7 @@ void test_textarea_should_have_valid_documented_default_values(void)
     TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_text(textarea));
 }
 
-/* В режиме пароля функция lv_textarea_get_text возвращает значение.
+/* В режиме использования функцияlv_textarea_get_textвозвращает значение.
  * фактический текст, а не символы маркера. */
 void test_textarea_should_return_actual_text_when_password_mode_is_enabled(void)
 {

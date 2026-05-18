@@ -190,8 +190,8 @@ lv_gltf_compiled_shader_t * lv_gltf_get_compiled_shader(lv_gltf_model_t * data, 
 /**
  * @brief Загрузите файл gltf по указанному пути.
  *
- * @param gltf_path Имя файла gltf
- * @param ret_data Указатель на контейнер данных, который будет заполнен.
+ * @param file_path Имя файла gltf
+ * @param shader_manager Указатель на контейнер данных, который будет заполнен.
  * @param shaders Указатель на объект кэша шейдера, который использует этот файл.
  */
 lv_gltf_model_t *
@@ -201,9 +201,9 @@ lv_gltf_data_load_from_file(const char * file_path,
 /**
  * @brief Загрузите файл gltf, закодированный в предоставленном массиве байтов.
  *
- * @param gltf_path Имя файла gltf
- * @param gltf_data_size еслиgltf_pathпредставляет собой массив байтов, передайте размер этого массива через эту переменную (или 0, если это путь к файлу).
- * @param ret_data Указатель на контейнер данных, который будет заполнен.
+ * @param data Имя файла gltf
+ * @param data_size еслиgltf_pathпредставляет собой массив байтов, передайте размер этого массива через эту переменную (или 0, если это путь к файлу).
+ * @param shader_manager Указатель на контейнер данных, который будет заполнен.
  * @param shaders Указатель на объект кэша шейдера, который использует этот файл.
  */
 
@@ -215,7 +215,7 @@ lv_gltf_data_load_from_bytes(const uint8_t * data, size_t data_size,
 /**
  * @brief Получите радиус объекта данных GLTF.
  *
- * @param D Указатель на объект lv_gltf_data_t, из которого можно получить радиус.
+ * @param model Указатель на объект lv_gltf_data_t, из которого можно получить радиус.
  * @return Радиус объекта данных GLTF.
  */
 double lv_gltf_data_get_radius(const lv_gltf_model_t * model);

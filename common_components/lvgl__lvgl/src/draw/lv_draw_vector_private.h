@@ -124,7 +124,7 @@ typedef struct {
  * @param task_list     указатель на связанный список в `lv_draw_vector_dsc_t`, в котором хранятся
  *                      формы пути и их атрибуты.
  * @param cb            обратный вызов, используемый для итерации задачи
- * @param user_data     пользовательский указатель, который будет передан в обратный вызов
+ * @param used_data     пользовательский указатель, который будет передан в обратный вызов
  */
 void lv_vector_for_each_destroy_tasks(lv_ll_t * task_list, vector_draw_task_cb cb, void * used_data);
 

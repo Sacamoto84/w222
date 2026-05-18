@@ -50,54 +50,54 @@ enum _lv_property_led_id_t {
 
 /**
  * Создать светодиодный объект
- * @param parent    pointer to an object, it will be the parent of the new led
- * @return          pointer to the created led
+ * @param parent    указатель на объект, он будет родителем нового светодиода
+ * @return          указатель на созданный светодиод
  */
 lv_obj_t * lv_led_create(lv_obj_t * parent);
 
 /**
  * Установите цвет LED
- * @param led       pointer to a LED object
- * @param color     the color of the LED
+ * @param led       указатель на объект LED
+ * @param color     цвет LED
  */
 void lv_led_set_color(lv_obj_t * led, lv_color_t color);
 
 /**
  * Установите яркость объекта LED
- * @param led       pointer to a LED object
- * @param bright    LV_LED_BRIGHT_MIN (max. dark) ... LV_LED_BRIGHT_MAX (max. light)
+ * @param led       указатель на объект LED
+ * @param bright    LV_LED_BRIGHT_MIN (макс. темный) ...LV_LED_BRIGHT_MAX(макс. светлый)
  */
 void lv_led_set_brightness(lv_obj_t * led, uint8_t bright);
 
 /**
  * Свет на LED
- * @param led       pointer to a LED object
+ * @param led       указатель на объект LED
  */
 void lv_led_on(lv_obj_t * led);
 
 /**
  * Выключите LED
- * @param led       pointer to a LED object
+ * @param led       указатель на объект LED
  */
 void lv_led_off(lv_obj_t * led);
 
 /**
  * Переключить состояние LED
- * @param led       pointer to a LED object
+ * @param led       указатель на объект LED
  */
 void lv_led_toggle(lv_obj_t * led);
 
 /**
  * Получите яркость объекта LED.
- * @param obj       pointer to LED object
- * @return bright   0 (max. dark) ... 255 (max. light)
+ * @param obj       указатель на объект LED
+ * @return яркий 0 (макс. темный) ... 255 (макс. светлый)
  */
 uint8_t lv_led_get_brightness(const lv_obj_t * obj);
 
 /**
  * Получить цвет объекта LED
- * @param obj       pointer to LED object
- * @return color    color of the LED
+ * @param obj       указатель на объект LED
+ * @return цвет цвет LED
  */
 lv_color_t lv_led_get_color(const lv_obj_t * obj);
 

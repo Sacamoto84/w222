@@ -16,7 +16,7 @@ void tearDown(void)
 }
 
 /**
- * См. https://github.com/lvgl/lvgl/issues/6837.
+ * См.  https://github.com/lvgl/lvgl/issues/6837.
  */
 void test_content_parent_pct_child_pos_1(void)
 {
@@ -125,7 +125,7 @@ void test_circular_height_dependency(void)
     lv_obj_set_name(item3, "item3");
     lv_obj_set_style_bg_color(item3, lv_palette_main(LV_PALETTE_GREEN), 0);
     lv_obj_set_style_bg_opa(item3, LV_OPA_COVER, 0);
-    lv_obj_set_height(item3, LV_PCT(100)); // то же, что и item1, но проверяется, имеет ли значение дочерний порядок
+    lv_obj_set_height(item3, LV_PCT(100)); // то же, что и п.1, но после этого имеет значение дочерний порядок
     lv_obj_set_flex_grow(item3, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_circular_height.png");
@@ -186,7 +186,7 @@ void test_circular_width_dependency(void)
     lv_obj_set_name(item3, "item3");
     lv_obj_set_style_bg_color(item3, lv_palette_main(LV_PALETTE_GREEN), 0);
     lv_obj_set_style_bg_opa(item3, LV_OPA_COVER, 0);
-    lv_obj_set_width(item3, LV_PCT(100)); // то же, что и item1, но проверяется, имеет ли значение дочерний порядок
+    lv_obj_set_width(item3, LV_PCT(100)); // то же, что и п.1, но после этого имеет значение дочерний порядок
     lv_obj_set_flex_grow(item3, 1);
 
     TEST_ASSERT_EQUAL_SCREENSHOT("widgets/obj_circular_width.png");

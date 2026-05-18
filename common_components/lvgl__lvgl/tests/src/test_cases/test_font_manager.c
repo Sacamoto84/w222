@@ -9,7 +9,7 @@
     && LV_USE_TINY_TTF && LV_TINY_TTF_FILE_SUPPORT
 
 /**
- * Существуют некоторые различия между рендерингом FreeType в 64-битной и 32-битной версиях.
+ * сохранять разницу между некоторыми рендерингами FreeType в 64-битной и 32-битной версиях.
  * поэтому мы сравниваем их здесь отдельно.
  */
 #ifndef NON_AMD64_BUILD
@@ -63,7 +63,7 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
                                 &lv_builtin_font_class);
     TEST_ASSERT_FALSE(add_src_result);
 
-    /* Зарегистрировать источник шрифтов FreeType */
+    /* Зарегистрировать исходные шрифты FreeType */
     add_src_result = add_src_cb(g_font_manager,
                                 "NotoSansSC-Regular",
                                 "./src/test_files/fonts/noto/NotoSansSC-Regular.ttf",
@@ -186,7 +186,7 @@ static void test_font_manager_src(add_src_cb_t add_src_cb)
     lv_obj_set_style_text_font(label, font_40, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/font_manager_3" EXT_NAME);
 
-    /* Шрифты Freetype не тестировались, поэтому различать и обрабатывать изображения нет необходимости. */
+    /* Шрифты Freetype не тестировались, поэтому для отображения и обработки изображений нет необходимости. */
     lv_obj_set_style_text_font(label, font_file_20, 0);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/font_manager_4.png");
 

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// \автор (с) Марко Паланд (info @paland .com)
+// \автор(с) Марко Паланд (info@paland.com)
 //             2014-2019, PALANDesign Ганновер, Германия
 //
-// \license Лицензия MIT ( MIT )
+// \license ЛицензияMIT(MIT)
 //
 // Разрешение настоящим предоставляется бесплатно любому лицу, получившему копию.
 // данного программного обеспечения и связанных с ним файлов документации («Программное обеспечение») для решения
@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-// \brief Реализация Tiny printf, sprintf и (v)snprintf, оптимизированная для скорости
+// \brief Реализация Tiny printf, sprintf и (v)snprintf, консервативная для скорости
 //        встроенные системы с очень ограниченными ресурсами. Эти процедуры являются потоками
 //        безопасный и реентерабельный!
 //        Используйте это вместо раздутого стандарта/newlib printf, потому что они используют
@@ -43,32 +43,32 @@
 
 // Размер буфера преобразования 'ntoa', он должен быть достаточно большим, чтобы вместить один преобразованный
 // числовое число, включая дополненные нули (динамически создается в стеке)
-// default: 32 byte
+// default: 32 байта
 #ifndef PRINTF_NTOA_BUFFER_SIZE
     #define PRINTF_NTOA_BUFFER_SIZE    32U
 #endif
 
 // Размер буфера преобразования 'ftoa', он должен быть достаточно большим, чтобы вместить один преобразованный
 // число с плавающей запятой, включая дополненные нули (динамически создается в стеке)
-// default: 32 byte
+// default: 32 байта
 #ifndef PRINTF_FTOA_BUFFER_SIZE
     #define PRINTF_FTOA_BUFFER_SIZE    32U
 #endif
 
 // поддержка типа с плавающей запятой (%f)
-// default: activated
+// default: активирован
 #if !PRINTF_DISABLE_SUPPORT_FLOAT
     #define PRINTF_SUPPORT_FLOAT
 #endif
 
 // поддержка экспоненциальной записи с плавающей запятой (%e/%g)
-// default: activated
+// default: активирован
 #ifndef PRINTF_DISABLE_SUPPORT_EXPONENTIAL
     #define PRINTF_SUPPORT_EXPONENTIAL
 #endif
 
 // определить точность с плавающей запятой по умолчанию
-// default: 6 digits
+// default: 6 цифр
 #ifndef PRINTF_DEFAULT_FLOAT_PRECISION
     #define PRINTF_DEFAULT_FLOAT_PRECISION 6U
 #endif
@@ -79,15 +79,15 @@
     #define PRINTF_MAX_FLOAT 1e9
 #endif
 
-// поддержка типов long long (%llu или %p)
-// default: activated
+// поддержка типа long long (%llu или %p)
+// default: активирован
 #ifndef PRINTF_DISABLE_SUPPORT_LONG_LONG
     #define PRINTF_SUPPORT_LONG_LONG
 #endif
 
-// поддержка типа ptrdiff_t (%t)
-// ptrdiff_t обычно определяется в <stddef.h> как тип long или long long.
-// default: activated
+// поддержка типаptrdiff_t(%t)
+// ptrdiff_t обычно определяется <stddef.h> как тип long или long long.
+// default: активирован
 #ifndef PRINTF_DISABLE_SUPPORT_PTRDIFF_T
     #define PRINTF_SUPPORT_PTRDIFF_T
 #endif
@@ -113,7 +113,7 @@ typedef struct {
     va_list * va;
 } lv_vaformat_t;
 
-// импортировать float.h для DBL_MAX
+// импортироватьfloat.hдля DBL_MAX
 #if defined(PRINTF_SUPPORT_FLOAT)
     #include <float.h>
 #endif
@@ -144,7 +144,7 @@ static inline void _out_null(char character, void * buffer, size_t idx, size_t m
     LV_UNUSED(maxlen);
 }
 
-// внутренняя проверка, является ли char цифрой (0-9)
+// внутренняя проверка, представляет собой цифру (0-9)
 // \return true, если char — цифра
 static inline bool _is_digit(char ch)
 {
@@ -268,7 +268,7 @@ static size_t _ntoa_long(out_fct_type out, char * buffer, size_t idx, size_t max
     return _ntoa_format(out, buffer, idx, maxlen, buf, len, negative, (unsigned int)base, prec, width, flags);
 }
 
-// внутренний itoa для типа «long long»
+// внутренний itoa типа «длинный длинный»
 #if defined(PRINTF_SUPPORT_LONG_LONG)
 static size_t _ntoa_long_long(out_fct_type out, char * buffer, size_t idx, size_t maxlen, unsigned long long value,
                               bool negative, unsigned long long base, unsigned int prec, unsigned int width, unsigned int flags)
@@ -297,12 +297,12 @@ static size_t _ntoa_long_long(out_fct_type out, char * buffer, size_t idx, size_
 #if defined(PRINTF_SUPPORT_FLOAT)
 
 #if defined(PRINTF_SUPPORT_EXPONENTIAL)
-// предварительное объявление, чтобы _ftoa мог переключиться на обозначение exp для значений > PRINTF_MAX_FLOAT
+// объявление, чтобы _ftoa могло перейти на обозначенные премии exp для отзывов > PRINTF_MAX_FLOAT
 static size_t _etoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, double value, unsigned int prec,
                     unsigned int width, unsigned int flags);
 #endif
 
-// внутренний ftoa для фиксированной десятичной с плавающей запятой
+// внутренняя ftoa для фиксированной десятичной с плавающей запятой
 static size_t _ftoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, double value, unsigned int prec,
                     unsigned int width, unsigned int flags)
 {
@@ -323,7 +323,7 @@ static size_t _ftoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, 
                         flags);
 
     // тест на очень большие значения
-    // стандартное поведение printf заключается в печати целой цифры EVERY, которая может состоять из сотен символов, переполняющих ваши буферы == плохо
+    // стандартное поведение printf заключается в целой цифреEVERY, которая может состоять из сотен символов, переполняя ваши буферы == плохо
     if((value > PRINTF_MAX_FLOAT) || (value < -PRINTF_MAX_FLOAT)) {
 #if defined(PRINTF_SUPPORT_EXPONENTIAL)
         return _etoa(out, buffer, idx, maxlen, value, prec, width, flags);
@@ -343,7 +343,7 @@ static size_t _ftoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, 
     if(!(flags & FLAGS_PRECISION)) {
         prec = PRINTF_DEFAULT_FLOAT_PRECISION;
     }
-    // ограничьте точность до 9, потому что prec >= 10 может привести к ошибкам переполнения
+    // ограничьте точность до 9, потому что prec >= 10 может привести к ошибкам затруднения
     while((len < PRINTF_FTOA_BUFFER_SIZE) && (prec > 9U)) {
         buf[len++] = '0';
         prec--;
@@ -356,7 +356,7 @@ static size_t _ftoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, 
 
     if(diff > 0.5) {
         ++frac;
-        // ручка опрокидывания, например случай 0,99 с prec 1 равен 1,0
+        // ручка прокидывания, например случай 0,99 с точностью 1 равно 1,0
         if(frac >= pow10[prec]) {
             frac = 0;
             ++whole;
@@ -431,7 +431,7 @@ static size_t _ftoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, 
 }
 
 #if defined(PRINTF_SUPPORT_EXPONENTIAL)
-// внутренний вариант ftoa для экспоненциального типа с плавающей запятой, предоставлен Мартейном Джасперсом <m.jasperse @gmail .com>
+// внутренний вариант ftoa для экспоненциального типа с плавающей запятой, предоставлен Мартейном Джасперсом <m.jasperse@gmail.com>
 static size_t _etoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, double value, unsigned int prec,
                     unsigned int width, unsigned int flags)
 {
@@ -461,14 +461,14 @@ static size_t _etoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, 
     conv.F = value;
     int exp2 = (int)((conv.U >> 52U) & 0x07FFU) - 1023;           // эффективно log2
     conv.U = (conv.U & ((1ULL << 52U) - 1U)) | (1023ULL << 52U);  // отбросьте показатель степени, чтобы conv.F теперь находился в [1,2)
-    // теперь аппроксимируйте log10 из целочисленной части log2 и разложите ln около 1,5
+    // теперь аппроксимируйте log10 из целочисленной части log2 и разложите ln около 1,5.
     int expval = (int)(0.1760912590558 + exp2 * 0.301029995663981 + (conv.F - 1.5) * 0.289529654602168);
     // теперь мы хотим вычислить 10^expval, но хотим быть уверены, что оно не переполнится
     exp2 = (int)(expval * 3.321928094887362 + 0.5);
     const double z  = expval * 2.302585092994046 - exp2 * 0.6931471805599453;
     const double z2 = z * z;
     conv.U = (uint64_t)(exp2 + 1023) << 52U;
-    // вычислить exp(z), используя цепные дроби, см. https://en.wikipedia.org/wiki/Exponential_function#Continued_fractions_for_ex
+    // вычислить exp(z), используя цепные дроби, см.  https://en.wikipedia.org/wiki/Exponential_function#Continued_fractions_for_ex
     conv.F *= 1 + 2 * z / (2 - z + (z2 / (6 + (z2 / (10 + z2 / 14)))));
     // исправить ошибки округления
     if(value < conv.F) {
@@ -479,7 +479,7 @@ static size_t _etoa(out_fct_type out, char * buffer, size_t idx, size_t maxlen, 
     // формат экспоненты — «%+03d», а наибольшее значение — «307», поэтому отложите 4–5 символов.
     unsigned int minwidth = ((expval < 100) && (expval > -100)) ? 4U : 5U;
 
-    // в режиме «%g» «prec» — это количество *значащих цифр*, а не десятичных дробей.
+    // в режиме «%g» «prec» — это количество *значающих цифр*, а не десятичных дробей.
     if(flags & FLAGS_ADAPT_EXP) {
         // do we want to fall-back to "%f" mode?
         if((value >= 1e-4) && (value < 1e6)) {
@@ -707,7 +707,7 @@ static int lv_vsnprintf_inner(out_fct_type out, char * buffer, const size_t maxl
                     }
                     else {
                         base = 10U;
-                        flags &= ~FLAGS_HASH;   // нет хеша для dec формата
+                        flags &= ~FLAGS_HASH;   // нет хеша для декабрьской формы
                     }
                     // верхний регистр
                     if(*format == 'X' || *format == 'P') {

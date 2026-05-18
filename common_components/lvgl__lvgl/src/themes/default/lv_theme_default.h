@@ -31,25 +31,25 @@ extern "C" {
 
 /**
  * Инициализировать тему
- * @param disp pointer to display
- * @param color_primary the primary color of the theme
- * @param color_secondary the secondary color for the theme
- * @param темный
- * @param font pointer to a font to use.
- * @return a pointer to reference this theme later
+ * @param disp указатель для отображения
+ * @param color_primary основной цвет темы
+ * @param color_secondary дополнительный цвет темы
+ * @param dark
+ * @param font указатель на шрифт, который нужно использовать.
+ * @return указатель для ссылки на эту тему позже
  */
 lv_theme_t * lv_theme_default_init(lv_display_t * disp, lv_color_t color_primary, lv_color_t color_secondary, bool dark,
                                    const lv_font_t * font);
 
 /**
  * Проверьте, инициализирована ли тема по умолчанию
- * @return true if default theme is initialized, false otherwise
+ * @return true, если инициализирована тема по умолчанию, в противном случае — false
  */
 bool lv_theme_default_is_inited(void);
 
 /**
  * Получить тему по умолчанию
- * @return a pointer to default theme, or NULL if this is not initialized
+ * @return указатель на тему по умолчанию или NULL, если она не инициализирована
  */
 lv_theme_t * lv_theme_default_get(void);
 

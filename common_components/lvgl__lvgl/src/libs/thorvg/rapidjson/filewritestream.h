@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -25,13 +25,13 @@ RAPIDJSON_DIAG_OFF(unreachable-code)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Обертка потока файлов C для вывода с использованием fwrite().
+//! Обертка потоков файлов C для вывода с использованиемfwrite().
 /*!
-    \note реализует концепцию Stream
+    \note реализации соглашения Stream
 */
 class FileWriteStream {
 public:
-    typedef char Ch;    //!< Тип символа. Поддержка только char.
+    typedef char Ch;    //!< Тип символа. Поддержка только символов.
 
     FileWriteStream(std::FILE* fp, char* buffer, size_t bufferSize) : fp_(fp), buffer_(buffer), bufferEnd_(buffer + bufferSize), current_(buffer_) {
         RAPIDJSON_ASSERT(fp_ != 0);
@@ -89,7 +89,7 @@ private:
     char *current_;
 };
 
-//! Внедрите специализированную версию PutN() с memset() для повышения производительности.
+//! Внедрите специализированную версиюPutN()сmemset()для повышения производительности.
 template<>
 inline void PutN(FileWriteStream& stream, char c, size_t n) {
     stream.PutN(c, n);

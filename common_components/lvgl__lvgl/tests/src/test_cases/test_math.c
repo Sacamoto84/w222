@@ -15,12 +15,12 @@ static float do_cubic_bezier_f(float t, float a, float b, float c)
 
 /**
  * Вычислите значение y функции кубического Безье (x1, y1, x2, y2), как указано x.
- * @param x time in range of [0..1]
- * @param x1 x of control point 1 in range of [0..1]
- * @param y1 y of control point 1 in range of [0..1]
- * @param x2 x of control point 2 in range of [0..1]
- * @param y2 y of control point 2 in range of [0..1]
- * @return the value calculated
+ * @param x время в диапазоне [0..1]
+ * @param x1 x контрольной точки 1 в диапазоне [0..1]
+ * @param y1 y контрольной точки 1 в диапазоне [0..1]
+ * @param x2 x контрольной точки 2 в диапазоне [0..1]
+ * @param y2 y контрольной точки 2 в диапазоне [0..1]
+ * @return рассчитанное значение
  */
 static float lv_cubic_bezier_f(float x, float x1, float y1, float x2, float y2)
 {
@@ -349,10 +349,10 @@ void test_math_sqrt32_midrange_buckets(void)
 }
 
 /* Проверка функции lv_atan2 */
-/* Note: lv_atan2(x, y) returns angle for vector (x, y) where x is horizontal, y is vertical */
+/* Note: lv_atan2 (x, y) возвращает угол для вектора (x, y), где x — горизонтально, y — вертикально. */
 void test_math_atan2_quadrants(void)
 {
-    /* Проверьте все четыре квадранта — lv_atan2 (x, y) */
+    /* Проверить все четыре квадранта —lv_atan2(x, y) */
     TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1, 0));      /* Положительная ось X (x=1, y=0) */
     TEST_ASSERT_EQUAL_INT32(0, lv_atan2(0, 1));       /* Положительная ось Y (x=0, y=1) */
     TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1, 0));    /* Отрицательная ось X (x=-1, y=0) */
@@ -361,7 +361,7 @@ void test_math_atan2_quadrants(void)
 
 void test_math_atan2_diagonal(void)
 {
-    /* Проверка диагональных углов - lv_atan2 (x, y) */
+    /* Проверка диагональных углов -lv_atan2(x, y) */
     TEST_ASSERT_EQUAL_INT32(45, lv_atan2(100, 100));    /* Q1: (100, 100) */
     TEST_ASSERT_EQUAL_INT32(135, lv_atan2(100, -100));  /* Q2: (100, -100) */
     TEST_ASSERT_EQUAL_INT32(225, lv_atan2(-100, -100)); /* Q3: (-100, -100) */
@@ -370,7 +370,7 @@ void test_math_atan2_diagonal(void)
 
 void test_math_atan2_edge_cases(void)
 {
-    /* Краевые случаи теста — lv_atan2 (x, y) */
+    /* Краевые случаи теста —lv_atan2(x, y) */
     TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1000, 0));   /* (1000, 0) = положительная ось X */
     TEST_ASSERT_EQUAL_INT32(0, lv_atan2(0, 1000));    /* (0, 1000) = положительная ось Y */
     TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1000, 0)); /* (-1000, 0) = отрицательная ось X */
@@ -379,7 +379,7 @@ void test_math_atan2_edge_cases(void)
 
 void test_math_atan2_large_values(void)
 {
-    /* Тест с большими значениями — lv_atan2 (x, y) */
+    /* Тест со значениями значениями —lv_atan2(x, y) */
     TEST_ASSERT_EQUAL_INT32(90, lv_atan2(1456, 1));    /* (1456, 1) ≈ положительная ось X */
     TEST_ASSERT_EQUAL_INT32(270, lv_atan2(-1456, 1));  /* (-1456, 1) ≈ отрицательная ось X */
     TEST_ASSERT_EQUAL_INT32(0, lv_atan2(1, 1456));     /* (1, 1456) ≈ положительная ось Y */
@@ -470,7 +470,7 @@ void test_math_map_out_of_bounds(void)
     TEST_ASSERT_EQUAL_INT32(0, lv_map(-50, 0, 100, 0, 100));   /* Ниже min_in */
 }
 
-/* Тест lv_rand и lv_rand_set_seed */
+/* Тестlv_randи lv_rand_set_seed */
 void test_math_rand_set_seed(void)
 {
     /* Проверка настройки семян */
@@ -509,7 +509,7 @@ void test_math_rand_distribution(void)
     TEST_ASSERT_LESS_OR_EQUAL_UINT32(1000, r2);
 }
 
-/* Тест lv_sqr (встроенная функция) */
+/* Тестlv_sqr(встроенная функция) */
 void test_math_sqr(void)
 {
     struct {

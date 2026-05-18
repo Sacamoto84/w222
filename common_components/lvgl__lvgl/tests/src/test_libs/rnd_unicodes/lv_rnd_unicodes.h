@@ -33,12 +33,12 @@ extern const uint32_t LV_RND_UNICODE_ALPHANUM_AND_CJK_TABLE_LEN;
 
 /**
  * Генерировать случайные символы UTF -8 в заданных диапазонах.
- * @param buf         buffer to store the generated characters
- * @param buf_len     length of the buffer
- * @param ranges      array of ranges to choose from
- * @param range_num   number of ranges
- * @param char_num    number of characters to generate
- * @return number of generated characters in bytes
+ * @param buf         буфер для хранения сгенерированных символов
+ * @param buf_len     длина буфера
+ * @param ranges      массив диапазонов на выбор
+ * @param range_num   количество диапазонов
+ * @param char_num    количество символов для генерации
+ * @return количество сгенерированных символов в байтах
  */
 int lv_random_utf8_chars(uint8_t * buf, int buf_len, const uint32_t * ranges, uint32_t range_num, int char_num);
 

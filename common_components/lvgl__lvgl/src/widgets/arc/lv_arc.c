@@ -633,7 +633,7 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         /*Не допускайте больших прыжков (прыжков на угол более 280°).
          *В основном это делается для того, чтобы избежать прыжка на противоположный конец, если «мертвый» диапазон находится в пределах мин. и макс. пересекается.
-         *Проверьте, какой конец был ближе при последнем действительном нажатии (arc-> min_close) и отдайте предпочтение этому концу*/
+         *Проверьте, какой конец был ближе к последнему действительному уровню (arc->min_close) и отдайте предпочтение этому концу*/
         if(LV_ABS(delta_angle) > 280) {
             if(arc->min_close == CLICK_CLOSER_TO_MIN_END) angle = 0;
             else angle = deg_range;
@@ -663,7 +663,7 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         delta_angle = angle - last_angle_rel;
 
         uint32_t delta_tick = lv_tick_elaps(arc->last_tick);
-        /* delta_angle_max никогда не может быть подписан.  delta_tick всегда имеет знак, то же самое и для ch_rate. */
+        /* delta_angle_max никогда не может быть подписан.  delta_tickвсегда имеет знак, то же самое и для ch_rate. */
         const lv_value_precise_t delta_angle_max = (arc->chg_rate * delta_tick) / 1000;
 
         if(delta_angle > delta_angle_max) {
@@ -693,7 +693,7 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         if(new_value != lv_arc_get_value(obj)) {
             arc->last_tick = lv_tick_get(); /*Временная метка кэша для следующей итерации*/
-            lv_arc_set_value(obj, new_value); /*set_value кэширует last_angle для следующей итерации.*/
+            lv_arc_set_value(obj, new_value); /*set_value кэшируетlast_angleдля следующей итерации.*/
             if(new_value != old_value) {
                 res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
                 if(res != LV_RESULT_OK) return;
@@ -985,7 +985,7 @@ static void get_knob_area(lv_obj_t * obj, const lv_point_t * center, int32_t r, 
 
 /**
  * Используется внутренне для обновления углов дуги после изменения значения.
- * @param arc pointer to an arc object
+ * @param obj указатель на объект дуги
  */
 static void value_update(lv_obj_t * obj)
 {
@@ -1060,14 +1060,14 @@ static int32_t knob_get_extra_size(lv_obj_t * obj)
  * В этом диапазоне от 90° до 360° фон невидим. Щелчок на 150° не должен обновляться.
  * значение дуги, щелкните в пределах диапазона угла дуги.
  *
- * IMPORTANT NOTE : угол всегда относительно bg_angle_start , например. если bg_angle_start равно 30
+ * IMPORTANTNOTE: угол всегда относительноbg_angle_start, например. еслиbg_angle_startравно 30
  * и нажимаем чуть левее, угол 10, а не ожидаемые 40.
  *
- * @param obj   Pointer to lv_arc
- * @param angle Angle to be checked. Is 0<=angle<=360 and relative to bg_angle_start
- * @param tolerance_deg Tolerance
+ * @param obj   Указатель на lv_arc
+ * @param angle Угол, подлежащий проверке. Имеет значение 0<=угол<=360 и относительно bg_angle_start.
+ * @param tolerance_deg Толерантность
  *
- * @return true if angle is within arc background bounds, false otherwise
+ * @return true, если угол находится в пределах границ фона дуги, в противном случае — false
  */
 static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle,
                                           const lv_value_precise_t tolerance_deg)

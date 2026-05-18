@@ -181,7 +181,7 @@ static void x11_inp_event_handler(lv_timer_t * t)
 
 /**
  * событие, вызывающее отображение lvgl, если индикатор был закрыт (был вызван@reflv_display_delete )
- * @param [in] данные событий, содержащие объект lv_display_t
+ * @param [in] e событий, содержащие объект lv_display_t
  */
 static void x11_inp_delete_evt_cb(lv_event_t * e)
 {
@@ -194,7 +194,7 @@ static void x11_inp_delete_evt_cb(lv_event_t * e)
 /**
  * создайте локальные данные/таймеры для функции ввода X11.
  * извлекает информацию о контроле данных из объектаlv_display_tи инициализирует входной пользовательский объект при первом использовании.
- * @param [in] отображает созданный экранный объектX11из@lv_x11_window_create
+ * @param [in] disp созданный экранный объектX11из@lv_x11_window_create
  * @return           указатель на локальный объект данных пользователя@x11_inp_data_t
  */
 static x11_inp_data_t * x11_input_get_user_data(lv_display_t * disp)

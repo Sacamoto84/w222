@@ -37,8 +37,8 @@ enum _lv_property_checkbox_id_t {
 
 /**
  * Создайте объект флажка
- * @param parent    pointer to an object, it will be the parent of the new button
- * @return          pointer to the created check box
+ * @param parent    указатель на объект, он будет родителем новой кнопки
+ * @return          указатель на созданный флажок
  */
 lv_obj_t * lv_checkbox_create(lv_obj_t * parent);
 
@@ -47,18 +47,18 @@ lv_obj_t * lv_checkbox_create(lv_obj_t * parent);
  *====================*/
 
 /**
- * Установите текст флажка.  `txt` будет скопирован и может быть освобожден.
+ * Установите текст флажка.  `txt`будет скопирован и может быть освобожден.
  * после того, как эта функция вернется.
- * @param obj   pointer to a check box
- * @param txt   the text of the check box. NULL to refresh with the current text.
+ * @param obj   указатель на флажок
+ * @param txt   текст флажка.  NULL, чтобы обновить текущий текст.
  */
 void lv_checkbox_set_text(lv_obj_t * obj, const char * txt);
 
 /**
- * Установите текст флажка.  `txt` не должен быть освобожден в течение жизни
+ * Установите текст флажки.  `txt`не должен быть освобожден на всю жизнь
  * этого флажка.
- * @param obj   pointer to a check box
- * @param txt   the text of the check box.
+ * @param obj   указатель на флажок
+ * @param txt   текст флажка.
  */
 void lv_checkbox_set_text_static(lv_obj_t * obj, const char * txt);
 
@@ -68,8 +68,8 @@ void lv_checkbox_set_text_static(lv_obj_t * obj, const char * txt);
 
 /**
  * Получить текст флажка
- * @param obj   pointer to check box object
- * @return      pointer to the text of the check box
+ * @param obj   указатель на объект флажка
+ * @return      указатель на текст флажка
  */
 const char * lv_checkbox_get_text(const lv_obj_t * obj);
 

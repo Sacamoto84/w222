@@ -79,7 +79,7 @@ void lv_calendar_header_dropdown_set_year_list(lv_obj_t * parent, const char * y
     }
 
     /* Найдите раскрывающийся список года
-     * Индекс равен 0, потому что в конструкторе раскрывающегося списка заголовков раскрывающийся список года ( year_dd )
+     * Индекс равен 0, потому что в конструкторе раскрывающегося списка заголовков раскрывающегося года (year_dd)
      * является первым созданным дочерним элементом заголовка */
     const int32_t year_dropdown_index = 0;
     lv_obj_t * year_dropdown = lv_obj_get_child_by_type(header, year_dropdown_index, &lv_dropdown_class);
@@ -150,7 +150,7 @@ static void year_event_cb(lv_event_t * e)
 
     LV_ASSERT(3 + sel * 5 < lv_strlen(year_p));
 
-    /* NOTE: Assumes YYYY format */
+    /* NOTE: Предполагает формат YYYY. */
     const uint32_t year = (year_p[0 + sel * 5] - '0') * 1000 +
                           (year_p[1 + sel * 5] - '0') * 100 +
                           (year_p[2 + sel * 5] - '0') * 10 +
@@ -172,7 +172,7 @@ static void value_changed_event_cb(lv_event_t * e)
     lv_obj_t * year_dd = lv_obj_get_child(header, 0);
     lv_obj_t * month_dd = lv_obj_get_child(header, 1);
     const char * year_p = lv_dropdown_get_options(year_dd);
-    /* NOTE: Assumes YYYY format */
+    /* NOTE: Предполагает формат YYYY. */
     const int32_t first_year = (year_p[0] - '0') * 1000 +
                                (year_p[1] - '0') * 100 +
                                (year_p[2] - '0') * 10 + (year_p[3] - '0');

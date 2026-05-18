@@ -270,7 +270,7 @@ static void draw_event_cb(lv_event_t * e)
             /*При необходимости освободите ранее выделенный текст.*/
             if(label_draw_dsc->text_local) lv_free((void *)label_draw_dsc->text);
 
-            /*Выделите текст и установите для text_local значение 1, чтобы LVGL автоматически освободил текст.
+            /*Выделите текст и установите дляtext_localзначение 1, чтобыLVGLавтоматически освободил текст.
              * (Локальные тексты распределяются внутри LVGL . Имитируйте это поведение и здесь)*/
             char tmp_buffer[20] = {0}; /* Достаточно большой буфер */
             lv_snprintf(tmp_buffer, sizeof(tmp_buffer), "%.1f", base_dsc->id2 * 1.0f);

@@ -105,7 +105,7 @@ char * lv_strdup(const char * src)
     char * dst = lv_malloc(len);
     if(dst == NULL) return NULL;
 
-    lv_memcpy(dst, src, len); /*memcpy работает быстрее, чем strncpy, если известна длина*/
+    lv_memcpy(dst, src, len); /*memcpy работает быстрее, чем strncpy, если сохраняется длина*/
     return dst;
 }
 
@@ -122,7 +122,7 @@ char * lv_strndup(const char * src, size_t max_len)
 
 char * lv_strcat(char * dst, const char * src)
 {
-    /*Поскольку RT -thread не имеет rt_strcat ,
+    /*посколькуRT-нить не имеетrt_strcat,
     Вместо этого используется следующий код.*/
     lv_strcpy(dst + lv_strlen(dst), src);
     return dst;

@@ -41,8 +41,8 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_imagebutton_class;
 
 /**
  * Создайте объект кнопки изображения
- * @param parent pointer to an object, it will be the parent of the new image button
- * @return pointer to the created image button
+ * @param parent указатель на объект, он будет родителем кнопки нового изображения
+ * @return указатель на кнопку созданного изображения
  */
 lv_obj_t * lv_imagebutton_create(lv_obj_t * parent);
 
@@ -56,13 +56,13 @@ lv_obj_t * lv_imagebutton_create(lv_obj_t * parent);
 
 /**
  * Установка изображений для состояния кнопки изображения
- * @param obj           pointer to an image button object
- * @param state         for which state set the new image
- * @param src_left      pointer to an image source for the left side of the button (a C array or path to
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         для какого штата установлено новое изображение
+ * @param src_left      указатель на источник изображения для левой стороны кнопки (массив C или путь к
  * файл)
- * @param src_mid       pointer to an image source for the middle of the button (ideally 1px wide) (a C
+ * @param src_mid       указатель на источник изображения для середины кнопки (в идеале шириной 1 пиксель) (C
  * массив или путь к файлу)
- * @param src_right     pointer to an image source for the right side of the button (a C array or path
+ * @param src_right     указатель на источник изображения для правой стороны кнопки (массив C или путь
  * в файл)
  */
 void lv_imagebutton_set_src(lv_obj_t * obj, lv_imagebutton_state_t state, const void * src_left,
@@ -71,35 +71,35 @@ void lv_imagebutton_set_src(lv_obj_t * obj, lv_imagebutton_state_t state, const 
 
 /**
  * Установите левое изображение для состояния кнопки изображения.
- * @param obj           pointer to an image button object
- * @param state         for which state set the new image
- * @param src_left      pointer to an image source for the left side of the button
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         для какого штата установлено новое изображение
+ * @param src_left      указатель на источник изображения для левой стороны кнопки
  *                      (массив C или путь к файлу)
  */
 void lv_imagebutton_set_src_left(lv_obj_t * obj, lv_imagebutton_state_t state, const void * src_left);
 
 /**
  * Установите правильное изображение для состояния кнопки изображения.
- * @param obj           pointer to an image button object
- * @param state         for which state set the new image
- * @param src_right      pointer to an image source for the right side of the button
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         для какого штата установлено новое изображение
+ * @param src_right      указатель на источник изображения для правой стороны кнопки
  *                      (массив C или путь к файлу)
  */
 void lv_imagebutton_set_src_right(lv_obj_t * obj, lv_imagebutton_state_t state, const void * src_right);
 
 /**
  * Установите среднее изображение для состояния кнопки изображения.
- * @param obj           pointer to an image button object
- * @param state         for which state set the new image
- * @param src_mid       pointer to an image source for the middle of the button
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         для какого штата установлено новое изображение
+ * @param src_mid       указатель на источник изображения для середины кнопки
  *                      (массив C или путь к файлу)
  */
 void lv_imagebutton_set_src_mid(lv_obj_t * obj, lv_imagebutton_state_t state, const void * src_mid);
 
 /**
  * Используйте эту функцию вместо `lv_obj_add/remove_state`, чтобы установить состояние вручную.
- * @param obj           pointer to an image button object
- * @param state         the new state
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         новое государство
  */
 void lv_imagebutton_set_state(lv_obj_t * obj, lv_imagebutton_state_t state);
 
@@ -109,25 +109,25 @@ void lv_imagebutton_set_state(lv_obj_t * obj, lv_imagebutton_state_t state);
 
 /**
  * Получить левое изображение в заданном состоянии
- * @param obj           pointer to an image button object
- * @param state         the state where to get the image (from `lv_button_state_t`) `
- * @return              pointer to the left image source (a C array or path to a file)
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         состояние, где получить изображение (из `lv_button_state_t`) `
+ * @return              указатель на левый источник изображения (массив C или путь к файлу)
  */
 const void * lv_imagebutton_get_src_left(lv_obj_t * obj, lv_imagebutton_state_t state);
 
 /**
  * Получить среднее изображение в заданном состоянии
- * @param obj           pointer to an image button object
- * @param state         the state where to get the image (from `lv_button_state_t`) `
- * @return              pointer to the middle image source (a C array or path to a file)
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         состояние, где получить изображение (из `lv_button_state_t`) `
+ * @return              указатель на средний источник изображения (массив C или путь к файлу)
  */
 const void * lv_imagebutton_get_src_middle(lv_obj_t * obj, lv_imagebutton_state_t state);
 
 /**
  * Получить правильное изображение в заданном состоянии
- * @param obj           pointer to an image button object
- * @param state         the state where to get the image (from `lv_button_state_t`) `
- * @return              pointer to the left image source (a C array or path to a file)
+ * @param obj           указатель на объект кнопки изображения
+ * @param state         состояние, где получить изображение (из `lv_button_state_t`) `
+ * @return              указатель на левый источник изображения (массив C или путь к файлу)
  */
 const void * lv_imagebutton_get_src_right(lv_obj_t * obj, lv_imagebutton_state_t state);
 

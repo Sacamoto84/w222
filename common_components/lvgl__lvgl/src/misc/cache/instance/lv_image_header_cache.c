@@ -161,7 +161,7 @@ static void iter_inspect_cb(void * elem)
     LV_UNUSED(header);
     LV_UNUSED(entry);
 
-    /*  размер data_size cf rc тип декодированного src*/
+    /*  размерdata_sizecf rc тип декодированного src*/
 #define IMAGE_CACHE_DUMP_FORMAT "	%4dx%-4d	%9"LV_PRIu32"	%d	%" LV_PRId32 "	"
     switch(data->src_type) {
         case LV_IMAGE_SRC_FILE:

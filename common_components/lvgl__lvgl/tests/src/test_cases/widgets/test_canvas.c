@@ -184,7 +184,7 @@ void test_canvas_triangles(void)
     lv_canvas_fill_bg(canvas, lv_color_hex(0xAFAFAF), LV_OPA_COVER);
 
     {
-        /* 1. Right-angled with vertical side on left (bottom-left corner at right angle) */
+        /* 1. Под прямым углом, вертикальная сторона слева (левый нижний угол под прямым углом) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0xff0000);
@@ -198,7 +198,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 2. Right-angled with vertical side on right (bottom-right corner at right angle) */
+        /* 2. Прямоугольный, вертикальная сторона справа (правый нижний угол под прямым углом) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x00ff00);
@@ -212,7 +212,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 3. Pointing up (no vertical sides) */
+        /* 3. Направление вверх (без вертикальных сторон) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x0000ff);
@@ -226,7 +226,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 4. Pointing down (no vertical sides) */
+        /* 4. Направление вниз (без вертикальных сторон) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0xffff00);
@@ -240,7 +240,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 5. Pointing left (no vertical sides) */
+        /* 5. Направление влево (без вертикальных сторон) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0xff00ff);
@@ -254,7 +254,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 6. Pointing right (no vertical sides) */
+        /* 6. Направление вправо (без вертикальных сторон) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x00ffff);
@@ -268,7 +268,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 7. Obtuse triangle (one angle > 90°) */
+        /* 7. Тупоугольный треугольник (один угол > 90°) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x800080);
@@ -282,7 +282,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 8. Acute equilateral-ish triangle */
+        /* 8. Острый равносторонний треугольник */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0xffa500);
@@ -296,7 +296,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 9. Very flat wide triangle (horizontal base) */
+        /* 9. Очень плоский широкий треугольник (горизонтальное основание) */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x008000);
@@ -310,7 +310,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 10. Tall thin triangle */
+        /* 10. Высокий тонкий треугольник */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x000080);
@@ -324,7 +324,7 @@ void test_canvas_triangles(void)
     }
 
     {
-        /* 11. Y value of last point is the biggest one */
+        /* 11. Значение Y последней точки является самым большим */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x800000);
@@ -339,7 +339,7 @@ void test_canvas_triangles(void)
         lv_draw_triangle(&layer, &tri_dsc);
     }
     {
-        /* 12. Y value of last point is the smallest one */
+        /* 12. Значение Y последней точки — наименьшее */
         lv_draw_triangle_dsc_t tri_dsc;
         lv_draw_triangle_dsc_init(&tri_dsc);
         tri_dsc.color = lv_color_hex(0x808000);
@@ -541,7 +541,7 @@ void test_canvas_layer_complex_drawing(void)
     label_dsc.color = lv_color_white();
     lv_point_t label_pos = {20, 20};
     lv_area_t label_area = {label_pos.x, label_pos.y, label_pos.x + 100, label_pos.y + 50};
-    /* label_dsc уже объявлен выше, просто инициализируйте и используйте */
+    /* label_dsc уже объявил выше, просто фундаментизируйте и викорифицируйте */
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.text = "Test";
     lv_draw_label(&layer, &label_dsc, &label_area);
@@ -788,7 +788,7 @@ void test_line_bigger_than_display_resolution(void)
     lv_canvas_finish_layer(canvas, &layer);
 
     /* Тест считается пройденным, если при рисовании линии с конечной точкой не происходит сбоя.
-     * at ( hor_res +1, ver_res +1) в буфере размера ( hor_res +1)x( ver_res +1)*/
+     * at (hor_res+1,ver_res+1) в буфере размера (hor_res+1)x(ver_res+1)*/
 }
 
 #endif

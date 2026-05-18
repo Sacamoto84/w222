@@ -59,7 +59,7 @@ static void create_images(void)
 
 void test_jpg_2(void)
 {
-    /* Временно удалите декодер tjpgd */
+    /* Временно удалить декодер tjpgd */
     lv_tjpgd_deinit();
 
     create_images();
@@ -78,13 +78,13 @@ void test_jpg_2(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 64);
 
-    /* Повторно добавить декодер tjpgd */
+    /* Повторно добавлен декодер tjpgd */
     lv_tjpgd_init();
 }
 
 void test_jpg_cmyk(void)
 {
-    /* Временно удалите декодер tjpgd */
+    /* Временно удалить декодер tjpgd */
     lv_tjpgd_deinit();
 
     lv_obj_clean(lv_screen_active());
@@ -94,13 +94,13 @@ void test_jpg_cmyk(void)
 
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/jpg_cmyk.png");
 
-    /* Повторно добавить декодер tjpgd */
+    /* Повторно добавлен декодер tjpgd */
     lv_tjpgd_init();
 }
 
 void test_jpg_sign_error(void)
 {
-    /* Временно удалите декодер tjpgd */
+    /* Временно удалить декодер tjpgd */
     lv_tjpgd_deinit();
 
     lv_obj_clean(lv_screen_active());
@@ -110,13 +110,13 @@ void test_jpg_sign_error(void)
 
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/jpg_sign_error.png");
 
-    /* Повторно добавить декодер tjpgd */
+    /* Повторно добавлен декодер tjpgd */
     lv_tjpgd_init();
 }
 
 void test_jpg_decode_failed(void)
 {
-    /* Временно удалите декодер tjpgd */
+    /* Временно удалить декодер tjpgd */
     lv_tjpgd_deinit();
 
     lv_image_decoder_dsc_t decoder_dsc;
@@ -128,7 +128,7 @@ void test_jpg_decode_failed(void)
     /* Должен произойти сбой при удалении декодера */
     TEST_ASSERT_EQUAL(LV_RESULT_INVALID, res);
 
-    /* Повторно добавить декодер tjpgd */
+    /* Повторно добавлен декодер tjpgd */
     lv_tjpgd_init();
 }
 

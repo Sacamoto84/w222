@@ -298,7 +298,7 @@ static vg_lite_error_t _add_point_to_point_list_wdelta(
     point->y = Y;
     point->flatten_flag = flatten_flag;
 
-    /* Вычислить тангенс для last_point. */
+    /* Вычислить тангенсы дляlast_point. */
     VG_LITE_ERROR_HANDLER(_set_point_tangent(last_point, DX, DY));
 
     last_point->next = point;
@@ -780,7 +780,7 @@ static vg_lite_error_t _flatten_quad_bezier(
         }
         if(level == 0) {
             /* Добавьте дополнительный P2 для выходящей касательной. */
-            /* Сначала измените координаты P2 (point0) на P1. */
+            /* Сначала замените координатыP2(point0) на P1. */
             point0 = stroke_conversion->path_end;
             point0->x = v1[0];
             point0->y = v1[1];
@@ -806,7 +806,7 @@ static vg_lite_error_t _flatten_quad_bezier(
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_END));
 
         /* Добавьте дополнительный P2 для выходящей касательной. */
-        /* Сначала измените координаты P2 (point0) на P1. */
+        /* Сначала замените координатыP2(point0) на P1. */
         point0 = stroke_conversion->path_end;
         point0->x = v1[0];
         point0->y = v1[1];
@@ -898,7 +898,7 @@ static vg_lite_error_t _flatten_quad_bezier_original(
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v2[0], v2[1], vgcFLATTEN_NO));
 
         /* Добавьте дополнительный P2 для выходящей касательной. */
-        /* Сначала измените координаты P2 (point0) на P1. */
+        /* Сначала замените координатыP2(point0) на P1. */
         point0 = stroke_conversion->path_end;
         point0->x = v1[0];
         point0->y = v1[1];
@@ -1088,7 +1088,7 @@ static vg_lite_error_t _flatten_cubic_bezier(
         }
 
         /* Добавьте дополнительный P3 для выходящей касательной. */
-        /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
+        /* Сначала замените координатыP3(point0) наP0/P1/P2. */
         if(level == 0) {
             point0 = stroke_conversion->path_end;
             if(v3[0] != v2[0] || v3[1] != v2[1]) {
@@ -1125,7 +1125,7 @@ static vg_lite_error_t _flatten_cubic_bezier(
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_END));
 
         /* Добавьте дополнительный P3 для выходящей касательной. */
-        /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
+        /* Сначала замените координатыP3(point0) наP0/P1/P2. */
         point0 = stroke_conversion->path_end;
         if(v3[0] != v2[0] || v3[1] != v2[1]) {
             point0->x = v2[0];
@@ -1261,7 +1261,7 @@ static vg_lite_error_t _flatten_cubic_bezier_original(
         VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, v3[0], v3[1], vgcFLATTEN_NO));
 
         /* Добавьте дополнительный P3 для выходящей касательной. */
-        /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
+        /* Сначала замените координатыP3(point0) наP0/P1/P2. */
         point0 = stroke_conversion->path_end;
         if(v3[0] != v2[0] || v3[1] != v2[1]) {
             point0->x = v2[0];
@@ -1331,10 +1331,10 @@ _flatten_quad_bezier(
     /* расстояние(т) = ...
     * t2 = ...
     * if 0 <= t2 <= 1
-    *    upper_bound = dist(t2)
+    *    upper_bound = расстояние (т2)
     * еще
-    *    upper_bound = max(dist(0), dist(1))
-    * N = ceil(sqrt(upper_bound / epsilon / 8))
+    *    upper_bound = Макс (расстояние (0), расстояние (1))
+    * N = ячейка(sqrt(upper_bound/эпсилон/8))
     */
     /* Подготовьте dist(t). */
     f1 = a1x * a2y - a2x * a1y;
@@ -1344,7 +1344,7 @@ _flatten_quad_bezier(
         /* Рассчитайте t2. */
         t1 = a2x * a2x + a2y * a2y;
         t2 = -(x * a2x + y * a2y) / t1;
-        /* Вычислите upper_bound . */
+        /* Вычислитеupper_bound. */
         if(t2 >= 0.0f && t2 <= 1.0f) {
             f2 = x + a2x * t2;
             f2 *= f2;
@@ -1453,7 +1453,7 @@ _flatten_quad_bezier(
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X2, Y2, vgcFLATTEN_END));
 
     /* Добавьте дополнительный P2 для выходящей касательной. */
-    /* Сначала измените координаты P2 (point0) на P1. */
+    /* Сначала замените координатыP2(point0) на P1. */
     point0 = stroke_conversion->path_end;
     point0->x = X1;
     point0->y = Y1;
@@ -1516,7 +1516,7 @@ _flatten_cubic_bezier(
     /* Метод Лефана. */
     /*  df(t)/dt  = a1 + 2 * a2 * t + 3 * a3 * t^2
     * d2f(t)/dt2 = 2 * a2 + 6 * a3 * t
-    * N = ceil(sqrt(max(ddfx(0)^2 + ddfy(0)^2, ddfx(1)^2 + ddyf(1)^2) / epsilon / 8))
+    * N = ceil(sqrt(max(ddfx(0)^2 + ddfy(0)^2, ddfx(1)^2 + ddyf(1)^2) / эпсилон / 8))
     */
 
     ddf0 = a2x * a2x + a2y * a2y;
@@ -1627,7 +1627,7 @@ _flatten_cubic_bezier(
     VG_LITE_ERROR_HANDLER(_add_point_to_point_list(stroke_conversion, X3, Y3, vgcFLATTEN_END));
 
     /* Добавьте дополнительный P3 для выходящей касательной. */
-    /* Сначала измените координаты P3 (point0) на P0/P1/P2. */
+    /* Сначала замените координатыP3(point0) наP0/P1/P2. */
     point0 = stroke_conversion->path_end;
     if(X3 != X2 || Y3 != Y2) {
         point0->x = X2;
@@ -1735,7 +1735,7 @@ static vg_lite_error_t _flatten_path(
 
     if((path->path_type == VG_LITE_DRAW_FILL_PATH) || (path->path_type == VG_LITE_DRAW_FILL_STROKE_PATH)) {
         if(path->path_length % (3 * data_type_size) == 0) {
-            /* добавьте END_PATH, если у path_data нет END_PATH */
+            /* меткиEND_PATH, если уpath_dataнет END_PATH */
             stroke_conversion->add_end = 1;
             path->path_length = path->path_length + data_type_size;
             data_pointer_use = (int8_t *)vg_lite_os_malloc(path->path_length);
@@ -1761,7 +1761,7 @@ static vg_lite_error_t _flatten_path(
     /* Определите начало данных пути. */
     data_pointer = (int8_t *)path->path;
 
-    /* Добавьте дополнительный gcvVGCMD_MOVE 0.0 0.0 для обработки случая, когда первая команда не gcvVGCMD_MOVE . */
+    /* Добавьте дополнительныйgcvVGCMD_MOVE0.0 0.0 для обработки в случае, когда первая команда неgcvVGCMD_MOVE. */
     if((*data_pointer & 0xfe) != VLC_OP_MOVE) {
         /* Добавьте первую точку в подпуть. */
         VG_LITE_ERROR_HANDLER(_create_new_point_list(stroke_conversion, 0.f, 0.f, vgcFLATTEN_NO));
@@ -1780,7 +1780,7 @@ static vg_lite_error_t _flatten_path(
                 size -= 1;
 
                 if(prev_command == VLC_OP_END) {
-                    /* Непрерывный gcvVGCMD_CLOSE - ничего не делать. */
+                    /* НепрерывныйgcvVGCMD_CLOSE- ничего не делать. */
                     break;
                 }
 
@@ -1838,7 +1838,7 @@ static vg_lite_error_t _flatten_path(
                 SKIPTODATA(data_pointer, data_type_size, size);
 
                 if(prev_command == VLC_OP_CLOSE) {
-                    /* Непрерывный gcvVGCMD_CLOSE - ничего не делать. */
+                    /* НепрерывныйgcvVGCMD_CLOSE- ничего не делать. */
                     break;
                 }
 
@@ -1880,12 +1880,12 @@ static vg_lite_error_t _flatten_path(
                 VGSL_GETCOORDXY(x0, y0);
 
                 if((prev_command & 0xfe) == VLC_OP_MOVE) {
-                    /* Непрерывный gcvVGCMD_MOVE ничего не рисует */
+                    /* НепрерывныйgcvVGCMD_MOVEничего не рисует */
                     stroke_conversion->path_points->x = x0;
                     stroke_conversion->path_points->y = y0;
                 }
                 else {
-                    /* Первая команда — gcvVGCMD_MOVE. */
+                    /* Первая — команда gcvVGCMD_MOVE. */
                     /* Добавьте первую точку в подпуть. */
                     VG_LITE_ERROR_HANDLER(_create_new_point_list(stroke_conversion, x0, y0, vgcFLATTEN_NO));
                 }
@@ -2113,7 +2113,7 @@ _add_zero_length_stroke_sub_path(
     half_width = stroke_conversion->half_width;
     Point = stroke_conversion->path_points;
     if(stroke_conversion->cap_style == VG_LITE_CAP_BUTT) {
-        /* Нет необходимости рисовать subPath нулевой длины для gcvCAP_BUTT . */
+        /* Нет необходимости рисовать нулевой длину subPath дляgcvCAP_BUTT. */
         error = VG_LITE_SUCCESS;
         goto ErrorHandler;
     }
@@ -2211,7 +2211,7 @@ static vg_lite_float_t _Asin(
     return s;
 }
 
-/* Специальный cos(x) для быстрого расчета, когда - PI <= x <= PI . */
+/* Специальный cos(x) для быстрого расчета, когда -PI<= x <=PI. */
 static vg_lite_float_t _Cos(
     vg_lite_float_t X
 )
@@ -2231,7 +2231,7 @@ static vg_lite_float_t _Cos(
     return s;
 }
 
-/* Специальный sin(x) для быстрого расчета, когда - PI <= x <= PI . */
+/* Специальный sin(x) для быстрого расчета, когда -PI<= x <=PI. */
 static vg_lite_float_t _Sine(
     vg_lite_float_t X
 )
@@ -2328,7 +2328,7 @@ _convert_circle_arc(
         }
 
         /* Вычислите количество квадратичных кривых Безье. */
-        /* Assumption: most of angles are small angles. */
+        /* Assumption: большинство углов - малые. */
         if(theta_span <= FLOAT_PI_QUARTER)         segs = 1;
         else if(theta_span <= FLOAT_PI_HALF)            segs = 2;
         else if(theta_span <= FLOAT_PI_THREE_QUARTER)   segs = 3;
@@ -2340,7 +2340,7 @@ _convert_circle_arc(
     }
 
     /* Определите команду сегмента. */
-    /*egmentCommand = gcvVGCMD_ARC_QUAD;*/
+    /*egmentCommand = gcvVGCMD_ARC_QUAD ;*/
 
     /* Сгенерируйте квадратичные кривые Безье. */
     start_point = last_point = NULL;
@@ -2548,7 +2548,7 @@ _draw_swing_pie_area(
 
         {
             if(end_at_prev_point) {
-                /* Отсоедините конечную точку от leftStrokePoint. */
+                /* Соедините конечную точку с leftStrokePoint. */
                 /* Конечная точка будет добавлена позже. */
                 real_end_point = stroke_conversion->left_point;
                 stroke_conversion->left_point = real_end_point->next;
@@ -2599,7 +2599,7 @@ _draw_swing_pie_area(
 
         {
             if(end_at_prev_point) {
-                /* Отсоедините конечную точку от leftStrokePoint. */
+                /* Соедините конечную точку с leftStrokePoint. */
                 /* Конечная точка будет добавлена позже. */
                 real_end_point = stroke_conversion->right_point;
                 stroke_conversion->right_point = real_end_point->prev;
@@ -2766,7 +2766,7 @@ _process_line_joint(
            && ! handle_short_line
            && min_length_square <= Length * Length
            && min_length_square <= prev_length * prev_length) {
-            /* Отрегулируйте leftStrokePoint до точки пересечения. */
+            /* Отрегулируйте leftStrokePoint до точек пересечения. */
             _adjust_joint_point(Point, stroke_conversion->left_point, X2, Y2, ratio);
         }
         else if(stroke_conversion->swing_handling == SWING_NO && Point->flatten_flag == vgcFLATTEN_NO) {
@@ -2832,11 +2832,11 @@ _process_line_joint(
                 break;
             case VG_LITE_JOIN_MITER:
                 if(ratio <= stroke_conversion->miter_square) {
-                    /* Настройте LastRightStrokePoint на внешнюю точку пересечения. */
+                    /* Настройте LastRightStrokePoint на внешней точке пересечения. */
                     _adjust_joint_point(Point, stroke_conversion->right_point, X1, Y1, ratio);
                     break;
                 }
-            /* В противном случае используйте стиль соединения Bevel. */
+            /* В противном случае используйте стиль соединений Bevel. */
             case VG_LITE_JOIN_BEVEL:
                 VG_LITE_ERROR_HANDLER(_add_point_to_right_stroke_point_list_tail(stroke_conversion, X1, Y1));
                 break;
@@ -2936,11 +2936,11 @@ _process_line_joint(
                 break;
             case VG_LITE_JOIN_MITER:
                 if(ratio <= stroke_conversion->miter_square) {
-                    /* Настройте leftStrokePoint на внешнюю точку пересечения. */
+                    /* Настройте leftStrokePoint на внешней точке пересечения. */
                     _adjust_joint_point(Point, stroke_conversion->left_point, X2, Y2, ratio);
                     break;
                 }
-            /* В противном случае используйте стиль соединения Bevel. */
+            /* В противном случае используйте стиль соединений Bevel. */
             case VG_LITE_JOIN_BEVEL:
                 VG_LITE_ERROR_HANDLER(_add_point_to_left_point_list_head(stroke_conversion, X2, Y2));
                 break;
@@ -3012,7 +3012,7 @@ _close_stroke_sub_path(
     stroke_conversion->right_point->next = stroke_conversion->left_point;
     stroke_conversion->left_point->prev = stroke_conversion->right_point;
 
-    /*gcmERROR_RETURN (_CheckStrokeSubPath( stroke_conversion ->lastStrokeSubPath));*/
+    /*gcmERROR_RETURN (_CheckStrokeSubPath(stroke_conversion->lastStrokeSubPath));*/
 
 ErrorHandler:
     return error;
@@ -3058,7 +3058,7 @@ static vg_lite_error_t _end_stroke_sub_path(
     stroke_conversion->right_point->next = stroke_conversion->left_point;
     stroke_conversion->left_point->prev = stroke_conversion->right_point;
 
-    /*gcmERROR_RETURN (_CheckStrokeSubPath( stroke_conversion ->lastStrokeSubPath));*/
+    /*gcmERROR_RETURN (_CheckStrokeSubPath(stroke_conversion->lastStrokeSubPath));*/
     return error;
 }
 
@@ -3096,7 +3096,7 @@ _create_stroke_path(
     uint32_t dash_index;
     uint8_t dashing;
     uint8_t add_end_cap;
-    uint8_t need_to_handle_swing = 1 /* ( stroke_conversion ->strokeCapStyle == gcvCAP_BUTT ) */;
+    uint8_t need_to_handle_swing = 1 /* (stroke_conversion->strokeCapStyle ==gcvCAP_BUTT) */;
     vg_lite_uint8_t dash_phase_reset;
 
     vg_lite_path_point_ptr first_right_point = NULL;
@@ -3116,7 +3116,7 @@ _create_stroke_path(
     dash_length = stroke_conversion->dash_length;
     dash_phase_reset = stroke_conversion->dash_reset;
 
-    /* VIV: [todo] Need to check/debug closed stroke path. */
+    /* VIV: [todo] Необходимо проверить/отладить замкнутый путь обводки. */
     need_to_handle_swing = (stroke_conversion->cap_style == VG_LITE_CAP_BUTT || stroke_conversion->closed);
     if(need_to_handle_swing) {
         uint8_t reallyneed_to_handle_swing = 0;
@@ -3145,7 +3145,7 @@ _create_stroke_path(
     if(next_point == NULL) {
         if(!dashing || ((dash_index & 0x1) == 0)) {
             /* Одноточечный подпуть (нулевой длины). */
-            /* Обратите внимание, что подпути one-MOVE_TO удаляются во время анализа. */
+            /* Обратите внимание, что подпути один-MOVE_TOудаляются во время анализа. */
             VG_LITE_ERROR_HANDLER(_add_zero_length_stroke_sub_path(stroke_conversion, &stroke_sub_path));
         }
         goto ErrorHandler;
@@ -3197,7 +3197,7 @@ _create_stroke_path(
 
             delta_length = first_length - dash_length;
             if(delta_length >= FLOAT_EPSILON) {
-                /* Переместить (x, y) вперед по линии на dash_length. */
+                /* Переместить (x, y) вперед по линии наdash_length. */
                 x += ux * dash_length;
                 y += uy * dash_length;
 
@@ -3319,7 +3319,7 @@ _create_stroke_path(
             do {
                 delta_length = length - dash_length;
                 if(delta_length >= FLOAT_EPSILON) {
-                    /* Переместить (x, y) вперед по линии на dash_length. */
+                    /* Переместить (x, y) вперед по линии наdash_length. */
                     x += ux * dash_length;
                     y += uy * dash_length;
 
@@ -3876,7 +3876,7 @@ vg_lite_error_t vg_lite_update_stroke(
 
     VG_LITE_RETURN_ERROR(_copy_stroke_path(stroke_conversion, path));
 
-    /* добавьте VLC_OP_END, если stroke_path пуст. */
+    /* символыVLC_OP_END, еслиstroke_pathпуст. */
     if(path->stroke_size == 0) {
         path->stroke_path = vg_lite_os_malloc(_commandSize_float[VLC_OP_END]);
         if(!path->stroke_path)
@@ -4414,7 +4414,7 @@ vg_lite_error_t _convert_squad(
     Радиус главной оси.
     @param ВерРадиус
     радиус малой оси.
-    @param РотАнгле
+    @param РотУгол
     Угол поворота.
     @param EndX
     Конечная координата х.
@@ -4431,8 +4431,8 @@ vg_lite_error_t _convert_squad(
     и конечная точка последнего сегмента пути.
     @param path_data
     Данные пути используются для внутреннего преобразования.
-    Смещение @param
-    Смещение path_data .
+    Размещение @param
+    Размещениеpath_data.
     @param last_size
     Оставшийся непреобразованный размер исходных данных пути.
     @result
@@ -4709,7 +4709,7 @@ vg_lite_error_t vg_lite_init_arc_path(vg_lite_path_t * path,
     if(path == NULL || path_data == NULL)
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Данные пути не могут заканчиваться операцией CLOSE. Замените CLOSE на END для path_data. */
+    /* Данные пути не могут закончиться операцией CLOSE. ЗаменитеCLOSEнаENDна path_data. */
     data_size = get_data_size(data_format);
     num = path_length / data_size;
 

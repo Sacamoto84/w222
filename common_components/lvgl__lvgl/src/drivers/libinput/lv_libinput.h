@@ -66,7 +66,7 @@ char * lv_libinput_find_dev(lv_libinput_capability capabilities, bool force_resc
 /**
  * Найдите подключенные устройства ввода с конкретными возможностями
  * @param capabilities необходимые возможности устройства
- * @param devices предварительно выделенный массив для хранения путей к найденным узлам устройств (например, /dev/input/event0). Указатели
+ * @param found предварительно выделенный массив для хранения путей к найденным узлам устройств (например, /dev/input/event0). Указатели
  *                безопасно использовать до следующего принудительного поиска устройства.
  * @param count максимальное количество устройств для поиска (массив устройств должен быть как минимум такой длины)
  * @param force_rescan сотрите кэш устройства (если есть) и повторно просканируйте файловую систему на наличие доступных устройств.
@@ -76,7 +76,7 @@ size_t lv_libinput_find_devs(lv_libinput_capability capabilities, char ** found,
 
 /**
  * Создайте новое устройство ввода libinput.
- * @param типа LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
+ * @param indev_type LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
  * @param dev_path путь к устройству, например. /dev/input/event0
  * @return указатель на устройство ввода или NULL, если открытие не удалось
  */

@@ -48,46 +48,46 @@ enum _lv_property_spinner_id_t {
 
 /**
  * Создайте виджет-спиннер
- * @param parent    pointer to an object, it will be the parent of the new spinner.
- * @return          the created spinner
+ * @param parent    указатель на объект, он будет родителем нового счетчика.
+ * @return          созданный спиннер
  */
 lv_obj_t * lv_spinner_create(lv_obj_t * parent);
 
 /**
  * Установите время анимации и длину дуги спиннера.
  * Анимация подходит для значений угла от 180 до 360.
- * @param obj       pointer to a spinner
- * @param t         the animation time in milliseconds
- * @param angle     the angle of the arc in degrees
+ * @param obj       указатель на счетчик
+ * @param t         время анимации в миллисекундах
+ * @param angle     угол дуги в градусах
  */
 void lv_spinner_set_anim_params(lv_obj_t * obj, uint32_t t, uint32_t angle);
 
 /**
  * Установите время анимации спиннера
- * @param obj       pointer to a spinner
- * @param t         the animation time in milliseconds
+ * @param obj       указатель на счетчик
+ * @param t         время анимации в миллисекундах
  */
 void lv_spinner_set_anim_duration(lv_obj_t * obj, uint32_t t);
 
 /**
  * Установите длину дуги анимации спиннера.
  * Анимация подходит для значений от 180 до 360.
- * @param obj       pointer to a spinner
- * @param angle     the angle of the arc in degrees
+ * @param obj       указатель на счетчик
+ * @param angle     угол дуги в градусах
  */
 void lv_spinner_set_arc_sweep(lv_obj_t * obj, uint32_t angle);
 
 /**
  * Получить продолжительность анимации счетчика
- * @param obj       pointer to a spinner
- * @return          the animation time in milliseconds
+ * @param obj       указатель на счетчик
+ * @return          время анимации в миллисекундах
  */
 uint32_t lv_spinner_get_anim_duration(lv_obj_t * obj);
 
 /**
  * Получить длину дуги анимации спиннера
- * @param obj       pointer to a spinner
- * @return          the angle of the arc in degrees
+ * @param obj       указатель на счетчик
+ * @return          угол дуги в градусах
  */
 uint32_t lv_spinner_get_arc_sweep(lv_obj_t * obj);
 

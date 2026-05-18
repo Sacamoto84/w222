@@ -40,11 +40,11 @@
 *
 *    Вы должны были получить копию Стандартной общественной лицензии GNU.
 *    вместе с этой программой; если нет, напишите в Фонд свободного программного обеспечения,
-*    Inc., Франклин-стрит, 51, пятый этаж, Бостон, MA 02110-1301, USA.
+*    Inc., Франклин-стрит, 51, пятый этаж, Бостон,MA02110-1301,USA.
 *
 *****************************************************************************
 *
-*    Note: This software is released under dual MIT and GPL licenses. A
+*    Note: Это программное обеспечение выпускается под двойными лицензиямиMITи GPL. А
 *    получатель может использовать этот файл на условиях лицензии MIT или
 *    Лицензия GPL. Если вы хотите использовать только одну лицензию, а не другую, вы можете
 *    сообщите о своем решении, удалив одно из приведенных выше уведомлений о лицензии в своем
@@ -315,14 +315,14 @@ static void gpu(int enable)
     }
 }
 
-/* Инициализируйте некоторые индивидуальные модели [DDRless]. */
+/* Инициализируйте некоторые модели [DDRless]. */
 static vg_lite_error_t init_3rd(vg_lite_kernel_initialize_t * data)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
 
-    /* TODO: Init the YUV<->RGB converters. Reserved for SOC. */
-    /* vg_lite_hal_poke (0x00514, данные-> yuv_pre);
-       vg_lite_hal_poke (0x00518, данные-> yuv_post);
+    /* TODO: Инициализируйте преобразователиYUV<-> RGB. Зарезервировано для SOC. */
+    /* vg_lite_hal_poke (0x00514, данные->yuv_pre);
+       vg_lite_hal_poke (0x00518, данные->yuv_post);
      */
     return error;
 }
@@ -667,7 +667,7 @@ static vg_lite_error_t terminate_vglite(vg_lite_kernel_terminate_t * data)
 
 static vg_lite_error_t terminate_3rd(vg_lite_kernel_terminate_t * data)
 {
-    /* TODO: Terminate the converters. */
+    /* TODO: Отключите преобразователи. */
 
     return VG_LITE_SUCCESS;
 }
@@ -1028,9 +1028,9 @@ static vg_lite_error_t restore_gpu_state(void)
         vg_lite_kernel_print("Initialize the GPU state success!\n");
 
     /* отправить последний кадр перед приостановкой */
-    /*error = restore_init_command(backup_command_buffer_physical, backup_command_buffer_size);
+    /*error = restore_init_command (backup_command_buffer_physical,backup_command_buffer_size);
     если (ошибка == VG_LITE_SUCCESS)
-        vg_lite_kernel_print ("Инициализация состояния GPU прошла успешно!\n");*/
+        vg_lite_kernel_print ("Инициализация состоянияGPUпрошла успешно!\n");*/
 
     return error;
 }
@@ -1249,8 +1249,8 @@ vg_lite_error_t record_running_time(void)
     gettimeofday(&end_time, NULL);
     period_time = (end_time.tv_sec - start_time.tv_sec) * 1e6 + end_time.tv_usec - start_time.tv_usec;
     total_time += period_time;
-    //printk("Время работы оборудования GPU: %f s\n", (float) period_time /1e-6);
-    //printk("Общее время работы оборудования GPU: %f s\n", (float) total_time /1e-6);
+    //printk("Время работы оборудованияGPU: %f s\n", (float)period_time/1e-6);
+    //printk("Общее время работы оборудованияGPU: %f s\n", (float)total_time/1e-6);
 #endif
 
 #endif

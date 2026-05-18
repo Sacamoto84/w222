@@ -336,14 +336,14 @@ def create_ui():
 @test_func_wrapper
 def chart_type_observer_cb(chart, subject):
     v = subject.get_int()
-    # диаграмма = наблюдатель. get_target ()
+    # Диаграмма = наблюдатель. get_target()
     chart.set_type(lv.chart.TYPE.LINE if v == 0 else lv.chart.TYPE.BAR)
 
 
 @test_func_wrapper
 def buttonmatrix_event_cb(buttonmatrix, label):
-    # метка = е. get_user_data ()
-    # кнопкаматрица = e. get_target ()
+    # метка = е. get_user_data()
+    # кнопкаматрица = e. get_target()
     idx = buttonmatrix.get_selected_button()
     text = buttonmatrix.get_button_text(idx)
     label.set_text(text)

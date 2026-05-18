@@ -147,7 +147,7 @@ void test_lv_text_encoded_letter_next_2_should_handle_null_pointer(void)
 
     lv_text_encoded_letter_next_2(txt, &letter, &letter_next, &ofs);
 
-    /* Ожидайте, что и буква, и letter_next будут равны 0, поскольку входная строка — NULL. */
+    /* Ожидайте, что и буква, иletter_nextбудут равны 0, поскольку входная строка —NULL. */
     TEST_ASSERT_EQUAL_UINT32(0, letter);
     TEST_ASSERT_EQUAL_UINT32(0, letter_next);
     TEST_ASSERT_EQUAL_UINT32(0, ofs);
@@ -160,7 +160,7 @@ void test_lv_text_encoded_letter_next_2_should_handle_empty_string(void)
 
     lv_text_encoded_letter_next_2(txt, &letter, &letter_next, &ofs);
 
-    /* Ожидайте, что и буква, и letter_next будут равны 0, поскольку входная строка пуста. */
+    /* Ожидайте, что и буква, иletter_nextбудут равны 0, поскольку входная строка пуста. */
     TEST_ASSERT_EQUAL_UINT32(0, letter);
     TEST_ASSERT_EQUAL_UINT32(0, letter_next);
     TEST_ASSERT_EQUAL_UINT32(0, ofs);
@@ -173,7 +173,7 @@ void test_lv_text_encoded_letter_next_2_should_handle_single_ascii_character(voi
 
     lv_text_encoded_letter_next_2(txt, &letter, &letter_next, &ofs);
 
-    /* Ожидается, что буква будет «A» ( ASCII 65), letter_next будет 0 (нет следующего символа), а OFS будет указывать на конец строки. */
+    /* Ожидается, что буква будет «A» (ASCII65),letter_nextбудет 0 (нет следующего символа), аOFSбудет вестись в конце строки. */
     TEST_ASSERT_EQUAL_UINT32('A', letter);
     TEST_ASSERT_EQUAL_UINT32(0, letter_next);
     TEST_ASSERT_EQUAL_UINT32(1, ofs);
@@ -186,7 +186,7 @@ void test_lv_text_encoded_letter_next_2_should_handle_utf8_multibyte_character(v
 
     lv_text_encoded_letter_next_2(txt, &letter, &letter_next, &ofs);
 
-    /* Ожидается, что буква будет декодировать «é», letter_next будет 0 (нет следующего символа), а OFS будет указывать на конец строки. */
+    /* Ожидается, что буква будет декодировать «é»,letter_nextбудет 0 (нет следующего символа), аOFSбудет отображаться в конце строки. */
     TEST_ASSERT_EQUAL_UINT32(0xE9, letter); /* Кодовая точка Unicode для 'é' */
     TEST_ASSERT_EQUAL_UINT32(0, letter_next);
     TEST_ASSERT_EQUAL_UINT32(2, ofs); /* 'é' имеет длину 2 байта в UTF -8. */
@@ -199,7 +199,7 @@ void test_lv_text_encoded_letter_next_2_should_handle_two_utf8_characters(void)
 
     lv_text_encoded_letter_next_2(txt, &letter, &letter_next, &ofs);
 
-    /* Ожидайте, что буква будет декодировать «é», letter_next будет «A», а OFS будет указывать после «é». */
+    /* Ожидайте, что буква будет декодировать «é»,letter_nextбудет «A», аOFSбудет следовать после «é». */
     TEST_ASSERT_EQUAL_UINT32(0xE9, letter);      /* Кодовая точка Unicode для 'é' */
     TEST_ASSERT_EQUAL_UINT32('A', letter_next); /* Значение ASCII для 'A' */
     TEST_ASSERT_EQUAL_UINT32(2, ofs);           /* Смещение после 'é' */

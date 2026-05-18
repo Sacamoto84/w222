@@ -1,4 +1,4 @@
-/* stb_image - v2.30 - public domain image loader - http://nothings.org/stb
+/* stb_image - v2.30 — общедоступный загрузчик изображений — http://nothings.org/stb
                                   никакая гарантия не подразумевается; используйте на свой страх и риск
 
    Сделайте это:
@@ -12,8 +12,8 @@
    #определить STB_IMAGE_IMPLEMENTATION
    #включить "stb_image.h"
 
-   Вы можете использовать #define STBI_ASSERT (x) перед #include, чтобы избежать использования assert.h .
-   И #define STBI_MALLOC , STBI_REALLOC и STBI_FREE, чтобы избежать использования malloc,realloc,free.
+   Вы можете использовать#defineSTBI_ASSERT (x) перед#include, чтобы избежать использованияassert.h.
+   И#defineSTBI_MALLOC ,STBI_REALLOCиSTBI_FREE, чтобы избежать использования malloc,realloc,free.
 
 
    QUICK NOTES:
@@ -35,9 +35,9 @@
       Анимированному GIF по-прежнему нужен правильный API, но есть один из способов сделать это:
           http://gist.github.com/urraka/685d9a6340b26b830d49
 
-      - decode from memory or through FILE (define STBI_NO_STDIO to remove code)
-      - decode from arbitrary I/O callbacks
-      - SIMD acceleration on x86/x64 (SSE2) and ARM (NEON)
+      - декодировать из памяти или черезFILE(определитеSTBI_NO_STDIOдля удаления кода)
+      - декодировать произвольные обратные вызовы ввода-вывода
+      - УскорениеSIMDна x86/x64 (SSE2) иARM(NEON)
 
    Полная документация в разделе «DOCUMENTATION» ниже.
 
@@ -48,26 +48,26 @@ LICENSE
 
 RECENT REVISION HISTORY:
 
-      2.30 (31 мая 2024 г.) избегайте ошибочного предупреждения gcc
+      2.30 (31 мая 2024 г.) избегайте ошибочного мнения gcc
       2.29 (2023-05-xx) оптимизация
       2.28 (29 января 2023 г.) множество исправлений ошибок, ошибок безопасности и просто куча всего.
-      2.27 (11 июля 2021 г.) документ stbi_info улучшен, поддержка 16-битного PNM, исправления ошибок
+      2.27 (11 июля 2021 г.) Улучшение документа stbi_info, поддержка 16-битногоPNM, исправления ошибок
       2.26 (13 июля 2020 г.) множество мелких исправлений.
       2.25 (02.02.2020) исправлены предупреждения
-      2.24 (02.02.2020) исправлены предупреждения; локальные для потока failure_reason и flip_vertically
+      2.24 (02.02.2020) исправлены замечания; локальные для потокаfailure_reasonи flip_vertically
       2.23 (11 августа 2019 г.) исправлено предупреждение статического анализа clang.
       2.22 (04.03.2019) исправления gif, исправления предупреждений
       2.21 (25 февраля 2019 г.) исправлена опечатка в комментарии
-      2.20 (07.02.2019) поддерживает имена файлов utf8 в Windows; исправить предупреждения и ifdef платформы
+      2.20 (07.02.2019) Поддержка имен файлов utf8 в Windows; Исправление платформы и ifdef
       2.19 (11 февраля 2018 г.) исправлено предупреждение
       2.18 (30 января 2018 г.) исправлены предупреждения.
       2.17 (29 января 2018 г.) исправление ошибки, 1-битный BMP, 16-битный запрос, исправление предупреждений
       2.16 (23 июля 2017 г.) все функции имеют 16-битные варианты; оптимизации; исправления ошибок
-      2.15 (18.03.2017) исправление png-1,2,4; все файлы Imagenet в формате JPG; нет обнаружения времени выполнения SSE на GCC
-      2.14 (03.03.2017) удален устаревший STBI_JPEG_OLD ; исправления для изображений Imagenet JPG
+      2.15 (18.03.2017) исправления png-1,2,4; все файлы Imagenet в форматеJPG; нет обнаружения времени выполненияSSEна GCC
+      14.03.2017 (03.03.2017) удален конфиденциальийSTBI_JPEG_OLD; исправления для изображений Imagenet JPG
       2.13 (04.12.2016) экспериментальный 16-битный API, пока только для PNG; исправления
       2.12 (02.04.2016) исправлена опечатка в исправлении 2.11 PSD, приводившая к сбоям
-      2.11 (02.04.2016) 16-битный PNGS ; включить SSE2 в x64 без gcc
+      2.11 (02.04.2016) 16-битныйPNGS; включитьSSE2в x64 без gcc
                          RGB -формат JPEG ; убрать белое матирование в PSD ;
                          выделять в стеке большие структуры;
                          правильное количество каналов для PNG и BMP
@@ -81,16 +81,16 @@ RECENT REVISION HISTORY:
 
  Форматы изображений Расширения, возможности
     Шон Барретт (jpeg, png, bmp) Джетро Лауха (stbi_info)
-    Николас Шульц (hdr, psd) Мартин "SpartanJ" Голини ( stbi_info )
-    Джонатан Даммер (tga) Джеймс «moose2000» Браун (iPhone PNG)
+    Николас Шульц (hdr, psd) Мартин "SpartanJ" Голини (stbi_info)
+    Джонатан Даммер (tga) Джеймс «moose2000» Браун (iPhonePNG)
     Жан-Марк Лиенер (гифка) Бен «Диш» Венгер (обратные вызовы io)
     Том Седдон (рис.) Омар Корнут (1/2/4-битный PNG)
     Тэтчер Ульрих (psd) Николя Гиймо (вертикальный флип)
-    Кен Миллер (pgm, ppm) Ричард Миттон (16-битный PSD )
-    github:urraka (анимационный gif) Джунггон Ким (комментарии PNM)
-    Кристофер Форсет (анимационный gif) Дэниел Гибсон (16-бит TGA)
+    Кен Миллер (pgm, ppm) Ричард Миттон (16-битныйPSD)
+    github:urraka (анимационный gif) Джунггон Ким (комментарииPNM)
+    Кристофер Форсет (анимационный gif) Дэниел Гибсон (16-битTGA)
                                            носки-лиса (16-битный PNG )
-                                           Джереми Савики (обрабатывает все файлы JPG ImageNet)
+                                           Джереми Савики (обработка всех файловJPGImageNet)
  Оптимизации и исправления Михаил Морозов (1-бит BMP )
     Фабиан «ryg» Гизен Анаэль Сегецци (16-битный запрос)
     Арсений Капулькин Саймон Бреусс (16-бит PNM )
@@ -109,11 +109,11 @@ RECENT REVISION HISTORY:
     Евгений Голушков Лоран Гомила Корт Страттон github:snagar
     Аруэльен Пошевиль Серджио Гонсалес Тибо Рей github:Zelex
     Касс Эверитт Раймонд Барбьеро github:grim210
-    Поль Дюбуа Энгин Манап Альдо Калкикондор github: sammyhw
+    Пол Дюбуа Энгин Манап Альдо Калкикондор github: sammyhw
     Филипп Виземанн Дейл Вейлер Ориол Феррер Месия github:phprus
     Джош Тобин Нил Бикфорд Мэтью Греган github:poppolopoppo
-    Джулиан Рашке Грегори Маллен Кристиан Флуазан и github: darealshinji
-    Бальдур Карлссон Кевин Шмидт JR Смит github: Michaelangel007
+    Джулиан Рашке Грегори Маллен Кристиан Флуазан и github: Daralhinji
+    Бальдур Карлссон Кевин ШмидтJRСмит github: Michaelangel007
                             Брэд Вайнбергер Матвей Черевко github:mosra
     Лука Сас Александр Веселов Зак Миддлтон [в резерве]
     Райан С. Гордон [зарезервировано] [зарезервировано]
@@ -122,7 +122,7 @@ RECENT REVISION HISTORY:
                      Джеко Диркс
 
   Чтобы добавить свое имя в титры, выберите случайное пустое место посередине и заполните его.
-  80% конфликтов слияний в PR-записях stb происходят из-за того, что люди добавляют свое имя в конце.
+  80% слияний вPR-записях stb постоянно из-за того, что люди приводят свое имя в конце.
   кредитов.
 */
 
@@ -157,11 +157,11 @@ RECENT REVISION HISTORY:
 // при этом каждый пиксель состоит из N чередующихся 8-битных компонентов; первый
 // пиксель, на который указывает, находится в верхнем левом углу изображения. Между ними нет прокладки
 // развертки изображения или между пикселями, независимо от формата. Количество
-// компоненты N равны ' desired_channels ', если desired_channels не равен нулю, или
-// * channels_in_file иначе. Если desired_channels не равен нулю,
-// * channels_in_file содержит то же количество компонентов, что и _would_.
-// вывод в противном случае. Например. если вы установите desired_channels на 4, вы всегда будете
-// получите вывод RGBA, но вы можете проверить * channels_in_file, чтобы убедиться, что это тривиально
+// компоненты N равенства 'desired_channels', еслиdesired_channelsне включается, или
+// * channels_in_file иначе. Еслиdesired_channelsне ошибочен,
+// * channels_in_file содержит такое же количество компонентов, что и _would_.
+// вывод в неудачном случае. Например. если вы установитеdesired_channelsна 4, вы всегда будете ждать
+// выведите выводRGBA, но вы можете проверить *channels_in_file, чтобы убедиться, что это тривиально
 // непрозрачный, потому что, например в исходном изображении было всего 3 канала.
 //
 // Выходное изображение с N компонентами имеет чередующиеся следующие компоненты:
@@ -174,8 +174,8 @@ RECENT REVISION HISTORY:
 //       4 красных, зеленых, синих, альфа
 //
 // Если по какой-либо причине загрузка изображения не удалась, возвращаемое значение будет NULL ,
-// и *x, *y, * channels_in_file останутся без изменений. Функция
-// stbi_failure_reason() можно запросить для получения очень краткой информации для конечного пользователя.
+// и *x, *y, *channels_in_fileостанется без изменений. Функция
+// stbi_failure_reason () можно запросить для получения очень краткой информации для конечного пользователя.
 // недружелюбное объяснение того, почему загрузка не удалась. Определите STBI_NO_FAILURE_STRINGS
 // чтобы вообще не компилировать эти строки, и STBI_FAILURE_USERMSG, чтобы немного получить
 // более удобные для пользователя.
@@ -183,22 +183,22 @@ RECENT REVISION HISTORY:
 // Изображения PNG , BMP , GIF и PIC с палитрой автоматически депалитируются.
 //
 // Чтобы запросить ширину, высоту и количество компонентов изображения без необходимости
-// декодировать полный файл, вы можете использовать семейство функций stbi_info:
+// декодировать полный файл, вы можете использовать функции семейства stbi_info:
 //
 //   int х, у, п, ок;
 //   ok = stbi_info(filename, &x, &y, &n);
 //   // возвращает ok=1 и устанавливает x, y, n, если формат изображения поддерживается,
 //   // 0 иначе.
 //
-// Обратите внимание, что stb_image повсеместно использует целые числа в своем публичном API для размеров.
+// Обратите внимание, чтоstb_imageсохраняет целые числа в своем публичномAPIдля размеров.
 // включая размеры буферов памяти. Теперь это часть API и, следовательно,
 // трудно изменить, не вызывая поломки. В результате различные изображения
 // все загрузчики имеют определенные ограничения на размер изображения; они несколько отличаются
 // по формату, но обычно сводится к размеру чуть менее 2 ГБ или чуть меньше
-// 1 ГБ. Если декодированное изображение будет больше этого значения, декодирование stb_image
+// 1 ГБ. Если декодированное изображение будет большего значения, декодирование stb_image
 // потерпит неудачу.
 //
-// Кроме того, stb_image отклоняет файлы изображений, у которых есть какие-либо из их
+// Кроме того,stb_imageотклоняет файлы, в которых есть что-либо из них.
 // для размеров установлено большее значение, чем настраиваемое STBI_MAX_DIMENSIONS ,
 // по умолчанию 2**24 = 16777216 пикселей. Из-за вышеуказанного ограничения памяти,
 // единственный способ правильно загрузить изображение с такими размерами
@@ -206,7 +206,7 @@ RECENT REVISION HISTORY:
 // предположение здесь заключается в том, что такие большие изображения, скорее всего, будут искажены.
 // или злонамеренный. Если вам нужно загрузить изображение с отдельными размерами
 // больше этого размера, и он по-прежнему соответствует общему ограничению размера, вы можете
-// #define STBI_MAX_DIMENSIONS самостоятельно стать чем-то большим.
+// #defineSTBI_MAX_DIMENSIONSсамостоятельно становятся чем-то большим.
 //
 // ===========================================================================
 //
@@ -222,7 +222,7 @@ RECENT REVISION HISTORY:
 //
 // Философия
 //
-// stb библиотеки разработаны со следующими приоритетами:
+// Рекомендации stb разработаны с учетом приоритетов:
 //
 //    1. easy to use
 //    2. easy to maintain
@@ -232,7 +232,7 @@ RECENT REVISION HISTORY:
 // и для лучшей производительности я могу предоставить менее простые в использовании API, которые дают более высокую производительность.
 // производительность, в дополнение к простым в использовании. Тем не менее, это важно
 // иметь в виду, что с точки зрения вас, клиента этой библиотеки,
-// все, что вас волнует, это №1 и №3, а библиотеки stb DO NOT прежде всего подчеркивают №3.
+// все, что вас волнует, это №1 и №3, библиотеку stbDONOT прежде всего выделяют №3.
 //
 // Некоторые второстепенные приоритеты вытекают непосредственно из первых двух, некоторые из которых
 // укажите более явные причины, по которым производительность не может быть подчеркнута.
@@ -258,7 +258,7 @@ RECENT REVISION HISTORY:
 // Поддержка SIMD
 //
 // Декодер JPEG попытается автоматически использовать ядра SIMD на x86, когда
-// поддерживается компилятором. Для поддержки ARM Neon вы должны явно
+// работы компилятором. Для поддержкиARMNeon необходимо явно
 // запросите это.
 //
 // (Старый самодельный SIMD API больше не поддерживается в текущей
@@ -278,7 +278,7 @@ RECENT REVISION HISTORY:
 //
 // Поддержка изображений HDR (отключите, определив STBI_NO_HDR )
 //
-// stb_image поддерживает загрузку изображений HDR в целом, и в настоящее время Radiance
+// stb_image поддерживает загрузку изображенийHDRв целом и в настоящее время Radiance
 // . В частности, формат файла HDR. Вы по-прежнему можете загрузить любой файл через существующий
 // интерфейс; если вы попытаетесь загрузить файл HDR, он будет автоматически переназначен
 // до LDR , предполагая гамму 2,2 и произвольный масштабный коэффициент, равный по умолчанию 1;
@@ -287,7 +287,7 @@ RECENT REVISION HISTORY:
 //     stbi_hdr_to_ldr_gamma (2.2f);
 //     stbi_hdr_to_ldr_scale (1.0f);
 //
-// (обратите внимание: не используйте константы _inverse_; stbi_image инвертирует их.
+// (обратите внимание: не воспользуйтесь константами_inverse_;stbi_imageинвертирует их.
 // соответственно).
 //
 // Кроме того, имеется новый параллельный интерфейс для загрузки файлов в виде
@@ -313,15 +313,15 @@ RECENT REVISION HISTORY:
 //
 // Поддержка iPhone PNG:
 //
-// Мы дополнительно поддерживаем преобразование PNG-файлов в формате iPhone (которые хранят
+// Мы альтернативно осуществляем преобразованиеPNG-файлов в формат iPhone (которые хранятся
 // предварительно умноженные BGRA) обратно в RGB, даже если они закодированы внутри
 // по-другому. Чтобы включить это преобразование, позвоните
 // stbi_convert_iphone_png_to_rgb (1).
 //
-// Также вызовите stbi_set_unpremultiply_on_load (1), чтобы принудительно разделить
+// Также вызовитеstbi_set_unpremultiply_on_load(1), чтобы обеспечить участие участников.
 // пиксель для удаления любой предварительно умноженной альфа *только*, если файл изображения явно
 // говорит, что есть предварительно умноженные данные (пока это происходит только с изображениями iPhone,
-// и только если на iPhone включена обработка преобразования в RGB).
+// и только если на iPhone включена обработка конвертировать вRGB).
 //
 // ===========================================================================
 //
@@ -428,7 +428,7 @@ STBIDEF stbi_uc * stbi_load_from_callbacks(stbi_io_callbacks const * clbk, void 
 #ifndef STBI_NO_STDIO
 STBIDEF stbi_uc * stbi_load(char const * filename, int * x, int * y, int * channels_in_file, int desired_channels);
 STBIDEF stbi_uc * stbi_load_from_file(FILE * f, int * x, int * y, int * channels_in_file, int desired_channels);
-// для stbi_load_from_file указатель файла остается сразу после изображения
+// дляstbi_load_from_fileуказатель файла остается сразу после изображения
 #endif
 
 #ifndef STBI_NO_GIF
@@ -494,7 +494,7 @@ STBIDEF int      stbi_is_hdr_from_file(FILE * f);
 // на большинстве компиляторов (и современных основных компиляторах ALL) это потокобезопасно
 STBIDEF const char * stbi_failure_reason(void);
 
-// освободите загруженное изображение -- это просто free()
+// Освободите загруженное изображение -- это просто free()
 STBIDEF void     stbi_image_free(void * retval_from_stbi_load);
 
 // получить размеры и компоненты изображения без полного декодирования
@@ -517,7 +517,7 @@ STBIDEF int      stbi_is_16_bit_from_file(FILE * f);
 // непредумножение. результаты не определены, если переполнение без предварительного умножения.
 STBIDEF void stbi_set_unpremultiply_on_load(int flag_true_if_should_unpremultiply);
 
-// указать, следует ли нам обрабатывать изображения iPhone обратно в канонический формат,
+// Значение, следует ли нам обработать изображение iPhone обратно в стандартном формате,
 // или просто передать их «как есть»
 STBIDEF void stbi_convert_iphone_png_to_rgb(int flag_true_if_should_convert);
 
@@ -593,13 +593,13 @@ STBIDEF int   stbi_zlib_decode_noheader_buffer(char * obuffer, int olen, const c
 
 
 #include <stdarg.h>
-#include <stddef.h> // ptrdiff_t на OS X
+#include <stddef.h> // ptrdiff_t наOSX
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
 
 #if !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
-    #include <math.h>  // ldexp, пау
+    #include <math.h>  // ldexp, оплата
 #endif
 
 #ifndef STBI_NO_STDIO
@@ -708,8 +708,8 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32) == 4 ? 1 : -1];
     // что, в свою очередь, означает, что SSE2 можно будет использовать повсюду. Это прискорбно,
     // но предыдущие попытки предоставить функциям SSE2 среду выполнения
     // обнаружение вызвало множество проблем. Способы расширения архитектуры
-    // К сожалению, представленный в GCC /Clang, не совсем подходит для однофайловых библиотек.
-    // Новое поведение: при компиляции с параметром -msse2 мы используем SSE2 без каких-либо
+    // К сожалению, представленный вGCC/Clang, не совсем подходит для однофайловых библиотек.
+    // Новое поведение: при компиляции с параметром -msse2 мы используемSSE2без каких-либо
     // обнаружение; если нет, то мы его вообще не используем.
     #define STBI_NO_SIMD
 #endif
@@ -717,15 +717,15 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32) == 4 ? 1 : -1];
 #if defined(__MINGW32__) && defined(STBI__X86_TARGET) && !defined(STBI_MINGW_ENABLE_SSE2) && !defined(STBI_NO_SIMD)
     // Обратите внимание, что __MINGW32__ на самом деле не означает 32-битность, поэтому нам следует избегать STBI__X64_TARGET.
     //
-    // 32-битный MinGW хочет, чтобы ESP был выровнен по 16 байтам, но это не в
-    // Windows ABI и VC ++, а также библиотеки Windows DLL не поддерживают этот инвариант.
-    // В результате включение SSE2 на 32-битном MinGW опасно, если не
+    // 32-битный MinGW хочет, чтобыESPбыл выровнен по 16 байтам, но это не в
+    // WindowsABIи VC++, а также библиотеки WindowsDLLне требуют этого инварианта.
+    // В результате включениеSSE2на 32-битный MinGW опасно, если не
     // одновременно включив «-mstackrealign».
     //
-    // См. https://github.com/nothings/stb/issues/81 для получения дополнительной информации.
+    // См. https://github.com/nothings/stb/issues/81для получения дополнительной информации.
     //
-    // Поэтому по умолчанию SSE2 на 32-битном MinGW отсутствует. Если вы дочитали до этого места и добавили
-    // -mstackrealign к настройкам вашей сборки, смело используйте #define STBI_MINGW_ENABLE_SSE2 .
+    // Поэтому по умолчаниюSSE2на 32-битном MinGW отсутствует. Если вы дочитали до этого места и добавили
+    // -mstackrealign к настройкам вашей сборки, смело воспользуйтесь#defineSTBI_MINGW_ENABLE_SSE2 .
     #define STBI_NO_SIMD
 #endif
 
@@ -772,8 +772,8 @@ static int stbi__sse2_available(void)
 #if !defined(STBI_NO_JPEG) && defined(STBI_SSE2)
 static int stbi__sse2_available(void)
 {
-    // Если мы даже попытаемся скомпилировать это на GCC /Clang, это означает, что
-    // -msse2 включен, что означает, что компилятору разрешено использовать SSE2.
+    // Если мы даже попытаемся скомпилировать это наGCC/Clang, это означает, что
+    // -msse2 включено, что означает, что компилятору разрешено использоватьSSE2.
     // инструкции по своему желанию, и мы тоже.
     return 1;
 }
@@ -808,7 +808,7 @@ static int stbi__sse2_available(void)
 //
 //  Структура stbi__context и функции start_xxx
 
-// Структура stbi__context — это наш базовый контекст, используемый всеми изображениями, поэтому она
+// Структураstbi__context— это наш базовый контекст, учитывающий все изображения, поэтому она
 // содержит весь контекст IO, а также некоторую базовую информацию об изображении.
 typedef struct {
     stbi__uint32 img_x, img_y;
@@ -885,7 +885,7 @@ static void stbi__start_file(stbi__context * s, FILE * f)
     stbi__start_callbacks(s, &stbi__stdio_callbacks, (void *) f);
 }
 
-//статическая пустота stop_file ( stbi__context *s) { }
+//статическая пустотаstop_file(stbi__context*s) { }
 
 #endif // !STBI_NO_STDIO
 
@@ -993,7 +993,7 @@ static void * stbi__malloc(size_t size)
     return STBI_MALLOC(size);
 }
 
-// stb_image повсеместно использует целые числа, в том числе для вычислений смещения.
+// stb_image последовательно использует целые числа, в том числе для связывания.
 // поэтому наибольший размер декодированного изображения, который мы можем поддерживать с помощью
 // текущий код, даже для 64-битных целей, — INT_MAX. это не
 // существенное ограничение для предполагаемого варианта использования.
@@ -1026,7 +1026,7 @@ static int stbi__mul2sizes_valid(int a, int b)
 }
 
 #if !defined(STBI_NO_JPEG) || !defined(STBI_NO_PNG) || !defined(STBI_NO_TGA) || !defined(STBI_NO_HDR)
-// возвращает 1, если «a*b + add» не имеет отрицательных членов/факторов и не переполняется
+// возвращает 1, если «a*b+add» не имеет отрицательных чисел/факторов и не перевыполняется
 static int stbi__mad2sizes_valid(int a, int b, int add)
 {
     return stbi__mul2sizes_valid(a, b) && stbi__addsizes_valid(a * b, add);
@@ -1040,7 +1040,7 @@ static int stbi__mad3sizes_valid(int a, int b, int c, int add)
            stbi__addsizes_valid(a * b * c, add);
 }
 
-// возвращает 1, если "a*b*c*d + add" не имеет отрицательных членов/факторов и не переполняется
+// возвращает 1, если "a*b*c*d + add" не имеет отрицательных элементов/факторов и не переполняется.
 #if !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR) || !defined(STBI_NO_PNM)
 static int stbi__mad4sizes_valid(int a, int b, int c, int d, int add)
 {
@@ -1050,7 +1050,7 @@ static int stbi__mad4sizes_valid(int a, int b, int c, int d, int add)
 #endif
 
 #if !defined(STBI_NO_JPEG) || !defined(STBI_NO_PNG) || !defined(STBI_NO_TGA) || !defined(STBI_NO_HDR)
-// mallocs с проверкой переполнения размера
+// mallocs с проверкой увеличения размера
 static void * stbi__malloc_mad2(int a, int b, int add)
 {
     if(!stbi__mad2sizes_valid(a, b, add)) return NULL;
@@ -1090,8 +1090,8 @@ static int stbi__mul2shorts_valid(int a, int b)
 }
 
 // stbi__err - ошибка
-// stbi__errpf - error returning pointer to float
-// stbi__errpuc - error returning pointer to unsigned char
+// stbi__errpf - ошибка возврата указателя в число с плавающей запятой
+// stbi__errpuc - ошибка при возврате указателя на беззнаковый символ
 
 #ifdef STBI_NO_FAILURE_STRINGS
     #define stbi__err(x,y)  0
@@ -1280,7 +1280,7 @@ static unsigned char * stbi__load_and_postprocess_8bit(stbi__context * s, int * 
         ri.bits_per_channel = 8;
     }
 
-    // @TODO: move stbi__convert_format to here
+    // @TODO : переместитеstbi__convert_formatсюда.
 
     if(stbi__vertically_flip_on_load) {
         int channels = req_comp ? req_comp : *comp;
@@ -1306,8 +1306,8 @@ static stbi__uint16 * stbi__load_and_postprocess_16bit(stbi__context * s, int * 
         ri.bits_per_channel = 16;
     }
 
-    // @TODO: move stbi__convert_format16 to here
-    // @TODO: special case RGB-to-Y (and RGBA-to-YA) for 8-bit-to-16-bit case to keep more precision
+    // @TODO : переместитеstbi__convert_format16сюда.
+    // @TODO : специальный случайRGB-to-Y (иRGBA-to-YA) для случая преобразования 8-бит в 16-бит, чтобы сохранить большую точность.
 
     if(stbi__vertically_flip_on_load) {
         int channels = req_comp ? req_comp : *comp;
@@ -1524,7 +1524,7 @@ STBIDEF float * stbi_loadf_from_file(FILE * f, int * x, int * y, int * comp, int
 
 #endif // !STBI_NO_LINEAR
 
-// эти параметры «is-hdr-or-not» не зависят от того, является ли STBI_NO_LINEAR
+// эти параметры «есть-hdr-или-нет» не определены от того, являются ли STBI_NO_LINEAR
 // определено для простоты API; если STBI_NO_LINEAR определен, он всегда
 // сообщает ложь!
 
@@ -1625,7 +1625,7 @@ static void stbi__refill_buffer(stbi__context * s)
     s->callback_already_read += (int)(s->img_buffer - s->img_buffer_original);
     if(n == 0) {
         // в конце файла действовать так же, как если бы из памяти, но нужно обрабатывать регистр
-        // где s-> img_buffer не указывает на безопасную память, например. 0-байтовый файл
+        // где s->img_bufferне указывает на безопасную память, например. 0-байтовый файл
         s->read_from_callbacks = 0;
         s->img_buffer = s->buffer_start;
         s->img_buffer_end = s->buffer_start + 1;
@@ -1655,7 +1655,7 @@ stbi_inline static int stbi__at_eof(stbi__context * s)
 {
     if(s->io.read) {
         if(!(s->io.eof)(s->io_user_data)) return 0;
-        // если feof() истинно, проверьте, имеет ли буфер = конец
+        // еслиfeof()прав, проверьте, имеет ли буфер = конец
         // особый случай: у нас есть только специальный символ 0 в конце
         if(s->read_from_callbacks == 0) return 1;
     }
@@ -1800,7 +1800,7 @@ static unsigned char * stbi__convert_format(unsigned char * data, int img_n, int
 
 #define STBI__COMBO(a,b)  ((a)*8+(b))
 #define STBI__CASE(a,b)   case STBI__COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
-        // преобразовать исходное изображение с компонентами img_n в изображение с компонентами req_comp;
+        // измененное исходное изображение с компонентамиimg_nв изображение с компонентамиreq_comp;
         // избегайте переключения попиксельно, поэтому используйте переключение по строке сканирования и массивные макросы
         switch(STBI__COMBO(img_n, req_comp)) {
                 STBI__CASE(1, 2) {
@@ -1908,7 +1908,7 @@ static stbi__uint16 * stbi__convert_format16(stbi__uint16 * data, int img_n, int
 
 #define STBI__COMBO(a,b)  ((a)*8+(b))
 #define STBI__CASE(a,b)   case STBI__COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
-        // преобразовать исходное изображение с компонентами img_n в изображение с компонентами req_comp;
+        // измененное исходное изображение с компонентамиimg_nв изображение с компонентамиreq_comp;
         // избегайте переключения попиксельно, поэтому используйте переключение по строке сканирования и массивные макросы
         switch(STBI__COMBO(img_n, req_comp)) {
                 STBI__CASE(1, 2) {
@@ -2094,7 +2094,7 @@ typedef struct {
     int img_mcu_x, img_mcu_y;
     int img_mcu_w, img_mcu_h;
 
-    // определение компонента изображения jpeg
+    // определение компонента изображения в формате JPEG
     struct {
         int id;
         int h, v;
@@ -2148,7 +2148,7 @@ static int stbi__build_huffman(stbi__huffman * h, int * count)
     }
     h->size[k] = 0;
 
-    // вычислить фактические символы (из спецификации jpeg)
+    // вычислить фактические символы (из характеристик jpeg)
     code = 0;
     k = 0;
     for(j = 1; j <= 16; ++j) {
@@ -2195,7 +2195,7 @@ static void stbi__build_fast_ac(stbi__int16 * fast_ac, stbi__huffman * h)
             int len = h->size[fast];
 
             if(magbits && len + magbits <= FAST_BITS) {
-                // код величины, за которым следует код receive_extend
+                // код размера, за которым следует код receive_extend
                 int k = ((i << len) & ((1 << FAST_BITS) - 1)) >> (FAST_BITS - magbits);
                 int m = 1 << (magbits - 1);
                 if(k < m) k += (~0U << magbits) + 1;
@@ -2249,7 +2249,7 @@ stbi_inline static int stbi__jpeg_huff_decode(stbi__jpeg * j, stbi__huffman * h)
         return h->values[k];
     }
 
-    // наивный тест состоит в том, чтобы сдвинуть code_buffer вниз, чтобы k бит были
+    // наивный тестовый состав в том, чтобы сдвинутьcode_bufferвниз, чтобы k бит были
     // действительный, затем проверьте его на соответствие maxcode. Чтобы ускорить это, мы
     // предварительно сдвинутый maxcode влево, чтобы в его начале было (16-k) 0
     // конец; другими словами, независимо от количества битов, это
@@ -2557,7 +2557,7 @@ static int stbi__jpeg_decode_block_prog_ac(stbi__jpeg * j, short data[64], stbi_
     return 1;
 }
 
-// возьмите значение -128..127, stbi__clamp и преобразуйте его в 0..255.
+// Возьмите значение -128..127,stbi__clampи преобразуйте его в 0..255.
 stbi_inline static stbi_uc stbi__clamp(int x)
 {
     // трюк, позволяющий использовать один тест для выявления обоих случаев
@@ -2571,7 +2571,7 @@ stbi_inline static stbi_uc stbi__clamp(int x)
 #define stbi__f2f(x)  ((int) (((x) * 4096 + 0.5)))
 #define stbi__fsh(x)  ((x) * 4096)
 
-// получено из jidctint -- DCT_ISLOW
+// получено из юрисдикции -- DCT_ISLOW
 #define STBI__IDCT_1D(s0,s1,s2,s3,s4,s5,s6,s7) \
     int t0,t1,t2,t3,p1,p2,p3,p4,p5,x0,x1,x2,x3; \
     p2 = s2;                                    \
@@ -2673,7 +2673,7 @@ static void stbi__idct_block(stbi_uc * out, int out_stride, short data[64])
 }
 
 #ifdef STBI_SSE2
-// sse2 целое число IDCT . не самая быстрая возможная реализация, но это
+// sse2 определяет числоIDCT. не самая быстрая возможная доставка, но это
 // выдает результаты, идентичные общей версии C, поэтому
 // полностью «прозрачный».
 static void stbi__idct_simd(stbi_uc * out, int out_stride, short data[64])
@@ -2686,7 +2686,7 @@ static void stbi__idct_simd(stbi_uc * out, int out_stride, short data[64])
 #define dct_const(x,y)  _mm_setr_epi16((x),(y),(x),(y),(x),(y),(x),(y))
 
     // out(0) = c0[чётный]*x + c0[нечетный]*y (c0, x, y 16 бит, out 32 бита)
-    // out(1) = c1[чётный]*x + c1[нечетный]*y
+    // out(1) = c1[чётный]*x + c1[нечётный]*y
 #define dct_rot(out0,out1, x,y,c0,c1) \
     __m128i c0##lo = _mm_unpacklo_epi16((x),(y)); \
     __m128i c0##hi = _mm_unpackhi_epi16((x),(y)); \
@@ -2695,7 +2695,7 @@ static void stbi__idct_simd(stbi_uc * out, int out_stride, short data[64])
     __m128i out1##_l = _mm_madd_epi16(c0##lo, c1); \
     __m128i out1##_h = _mm_madd_epi16(c0##hi, c1)
 
-    // out = in << 12  (in 16-bit, out 32-bit)
+    // out = вход << 12 (вход 16 бит, выход 32 бит)
 #define dct_widen(out, in) \
     __m128i out##_l = _mm_srai_epi32(_mm_unpacklo_epi16(_mm_setzero_si128(), (in)), 4); \
     __m128i out##_h = _mm_srai_epi32(_mm_unpackhi_epi16(_mm_setzero_si128(), (in)), 4)
@@ -2770,7 +2770,7 @@ static void stbi__idct_simd(stbi_uc * out, int out_stride, short data[64])
     __m128i rot3_0 = dct_const(stbi__f2f(-0.390180644f) + stbi__f2f(2.053119869f), stbi__f2f(-0.390180644f));
     __m128i rot3_1 = dct_const(stbi__f2f(-0.390180644f), stbi__f2f(-0.390180644f) + stbi__f2f(1.501321110f));
 
-    // смещения округления при проходах по столбцу/строке, пояснения см. в stbi__idct_block.
+    // смещения округлений при проходах по столбцу/удару, пояснения см. в stbi__idct_block.
     __m128i bias_0 = _mm_set1_epi32(512);
     __m128i bias_1 = _mm_set1_epi32(65536 + (128 << 17));
 
@@ -3000,8 +3000,8 @@ static void stbi__idct_simd(stbi_uc * out, int out_stride, short data[64])
     }
 
     // пропуск по ряду
-    // vrshrn_n_s32 поддерживает только смены до 16, нам нужно
-    // 17. so do a non-rounding shift of 16 first then follow
+    // vrshrn_n_s32 поддерживает только смены до 16 лет, нам нужно
+    // 17. поэтому сначала сделайте сдвиг без округления на 16, а затем следуйте
     // вверх с округлением на 1.
     dct_pass(vshrn_n_s32, 16);
 
@@ -3078,7 +3078,7 @@ static void stbi__idct_simd(stbi_uc * out, int out_stride, short data[64])
 #define STBI__MARKER_none  0xff
 // если из потока энтропии есть ожидающий маркер, верните его
 // в противном случае извлеките данные из потока и получите маркер. если нет
-// маркер, верните 0xff, который никогда не является допустимым значением маркера
+// маркер, верните0xff, который никогда не является допустимым значением маркера
 static stbi_uc stbi__get_marker(stbi__jpeg * j)
 {
     stbi_uc x;
@@ -3090,15 +3090,15 @@ static stbi_uc stbi__get_marker(stbi__jpeg * j)
     x = stbi__get8(j->s);
     if(x != 0xff) return STBI__MARKER_none;
     while(x == 0xff)
-        x = stbi__get8(j->s); // использовать повторяющиеся байты заполнения 0xff
+        x = stbi__get8(j->s); // использовать повторяющиеся байты 0xff
     return x;
 }
 
 // в каждом сканировании у нас будут компоненты scan_n, и порядок
-// компонентов указывается order[]
+// порядок компонентов устройства[]
 #define STBI__RESTART(x)     ((x) >= 0xd0 && (x) <= 0xd7)
 
-// после интервала перезапуска stbi__jpeg_reset энтропийный декодер и
+// после интервала перезапускаstbi__jpeg_resetэнтропийный декодер и
 // предсказание постоянного тока
 static void stbi__jpeg_reset(stbi__jpeg * j)
 {
@@ -3150,7 +3150,7 @@ static int stbi__parse_entropy_coded_data(stbi__jpeg * z)
             STBI_SIMD_ALIGN(short, data[64]);
             for(j = 0; j < z->img_mcu_y; ++j) {
                 for(i = 0; i < z->img_mcu_x; ++i) {
-                    // сканировать чередующийся микроконтроллер... обрабатывать компоненты scan_n по порядку
+                    // сканировать очередность микроконтроллера... обработка компонентовscan_nпо порядку
                     for(k = 0; k < z->scan_n; ++k) {
                         int n = z->order[k];
                         // отсканируйте стоимость этого компонента в микроконтроллере; это только что определено
@@ -3214,7 +3214,7 @@ static int stbi__parse_entropy_coded_data(stbi__jpeg * z)
             int i, j, k, x, y;
             for(j = 0; j < z->img_mcu_y; ++j) {
                 for(i = 0; i < z->img_mcu_x; ++i) {
-                    // сканировать чередующийся микроконтроллер... обрабатывать компоненты scan_n по порядку
+                    // сканировать очередность микроконтроллера... обработка компонентовscan_nпо порядку
                     for(k = 0; k < z->scan_n; ++k) {
                         int n = z->order[k];
                         // отсканируйте стоимость этого компонента в микроконтроллере; это только что определено
@@ -3276,12 +3276,12 @@ static int stbi__process_marker(stbi__jpeg * z, int m)
         case STBI__MARKER_none: // маркер не найден
             return stbi__err("expected marker", "Corrupt JPEG");
 
-        case 0xDD: // DRI - specify restart interval
+        case 0xDD: // DRI - указать интервал перезапуска
             if(stbi__get16be(z->s) != 4) return stbi__err("bad DRI len", "Corrupt JPEG");
             z->restart_interval = stbi__get16be(z->s);
             return 1;
 
-        case 0xDB: // DQT - define quantization table
+        case 0xDB: // DQT - определить таблицу квантования
             L = stbi__get16be(z->s) - 2;
             while(L > 0) {
                 int q = stbi__get8(z->s);
@@ -3296,7 +3296,7 @@ static int stbi__process_marker(stbi__jpeg * z, int m)
             }
             return L == 0;
 
-        case 0xC4: // DHT - define huffman table
+        case 0xC4: // DHT - определить таблицу Хаффмана
             L = stbi__get16be(z->s) - 2;
             while(L > 0) {
                 stbi_uc * v;
@@ -3511,10 +3511,10 @@ static int stbi__process_frame_header(stbi__jpeg * z, int scan)
         z->img_comp[i].y = (s->img_y * z->img_comp[i].v + v_max - 1) / v_max;
         // чтобы упростить генерацию, мы выделим достаточно памяти для декодирования
         // фиктивные данные большого размера из-за использования чередующихся микроконтроллеров и их
-        // большие блоки (например, iMCU 16x16 на изображении шириной 33); мы не будем
+        // большие блоки (например, iMCU 16x16 на изображении конфигурации 33); мы не будем
         // отбросить лишние данные до преобразования цветового пространства
         //
-        // img_mcu_x , img_mcu_y : <= 17 бит; comp[i].h and .v are <=4 (checked earlier)
+        // img_mcu_x ,img_mcu_y: <= 17 бит; comp[i].h и .v имеют значение <=4 (проверено ранее)
         // поэтому эти мулы не могут переполняться 32-битными целыми числами (которые нам нужны)
         z->img_comp[i].w2 = z->img_mcu_x * z->img_comp[i].h * 8;
         z->img_comp[i].h2 = z->img_mcu_y * z->img_comp[i].v * 8;
@@ -3589,7 +3589,7 @@ static stbi_uc stbi__skip_jpeg_junk_at_end(stbi__jpeg * j)
             }
             // заполненный ноль теперь имеет x=0, что завершает цикл, то есть мы идем
             // вернуться к обычному циклу сканирования.
-            // повторяющийся 0xff продолжает попытки прочитать следующий байт маркера.
+            // Повторяющийся0xffпродолжает попытку прочитать следующий байт-маркера.
         }
     }
     return STBI__MARKER_none;
@@ -3612,7 +3612,7 @@ static int stbi__decode_jpeg_image(stbi__jpeg * j)
             if(!stbi__parse_entropy_coded_data(j)) return 0;
             if(j->marker == STBI__MARKER_none) {
                 j->marker = stbi__skip_jpeg_junk_at_end(j);
-                // если мы достигнем eof, не коснувшись маркера, stbi__get_marker() ниже завершится неудачно, и в конечном итоге мы вернем 0
+                // если мы достигли eof, не коснувшись маркера,stbi__get_marker() ниже завершится неудачно, и в конечном итоге мы вернем 0
             }
             m = stbi__get_marker(j);
             if(STBI__RESTART(m))
@@ -3744,7 +3744,7 @@ static stbi_uc * stbi__resample_row_hv_2_simd(stbi_uc * out, stbi_uc * in_near, 
         __m128i curr  = _mm_add_epi16(nears, diff); // текущая строка
 
         // горизонтальный фильтр работает так же, основываясь на смещенной версии тока
-        // ряд. «prev» — текущая строка, сдвинутая вправо на 1 пиксель; нам нужно
+        // ряд. «prev» — текущая строка, смещенная вправо на 1 пиксель; нам нужно
         // вставьте предыдущее значение пикселя (из t1).
         // «следующий» — текущая строка, сдвинутая влево на 1 пиксель, причем первый пиксель
         // следующего блока из 8 пикселей.
@@ -3784,7 +3784,7 @@ static stbi_uc * stbi__resample_row_hv_2_simd(stbi_uc * out, stbi_uc * in_near, 
         int16x8_t curr  = vaddq_s16(nears, diff); // текущая строка
 
         // горизонтальный фильтр работает так же, основываясь на смещенной версии тока
-        // ряд. «prev» — текущая строка, сдвинутая вправо на 1 пиксель; нам нужно
+        // ряд. «prev» — текущая строка, смещенная вправо на 1 пиксель; нам нужно
         // вставьте предыдущее значение пикселя (из t1).
         // «следующий» — текущая строка, сдвинутая влево на 1 пиксель, причем первый пиксель
         // следующего блока из 8 пикселей.
@@ -3843,7 +3843,7 @@ static stbi_uc * stbi__resample_row_generic(stbi_uc * out, stbi_uc * in_near, st
     return out;
 }
 
-// this is a reduced-precision calculation of YCbCr-to- RGB  introduced
+// это представленный расчет YCbCr-RGB с пониженной точностью.
 // чтобы убедиться, что код дает одинаковые результаты как в SIMD, так и в скалярном
 #define stbi__float2fixed(x)  (((int) ((x) * 4096.0f + 0.5f)) << 8)
 static void stbi__YCbCr_to_RGB_row(stbi_uc * out, const stbi_uc * y, const stbi_uc * pcb, const stbi_uc * pcr,
@@ -4073,12 +4073,12 @@ static stbi_uc stbi__blinn_8x8(stbi_uc x, stbi_uc y)
 static stbi_uc * load_jpeg_image(stbi__jpeg * z, int * out_x, int * out_y, int * comp, int req_comp)
 {
     int n, decode_n, is_rgb;
-    z->s->img_n = 0; // сделать stbi__cleanup_jpeg безопасным
+    z->s->img_n = 0; // сделатьstbi__cleanup_jpegбезопасным
 
-    // подтвердить req_comp
+    // услуги req_comp
     if(req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal error");
 
-    // загрузите изображение jpeg из любого источника, но оставьте в формате YCbCr
+    // Загрузите изображение в формате JPEG из любого источника, но оставьте в формате YCbCr
     if(!stbi__decode_jpeg_image(z)) {
         stbi__cleanup_jpeg(z);
         return NULL;
@@ -4095,7 +4095,7 @@ static stbi_uc * load_jpeg_image(stbi__jpeg * z, int * out_x, int * out_y, int *
         decode_n = z->s->img_n;
 
     // ничего делать, если никакие компоненты не запрошены; проверьте это сейчас, чтобы избежать
-    // доступ к неинициализированному coutput[0] позже
+    // доступ к неинициализированному выходу[0] позже
     if(decode_n <= 0) {
         stbi__cleanup_jpeg(z);
         return NULL;
@@ -4319,13 +4319,13 @@ static int stbi__jpeg_info(stbi__context * s, int * x, int * y, int * comp)
 
 #ifndef STBI_NO_ZLIB
 
-// быстрый способ проверить быстрее, чем jpeg Huffman, но медленный способ медленнее
+// быстрый способ проверки быстрее, чем jpeg Huffman, но медленный метод медленнее
 #define STBI__ZFAST_BITS  9 // ускорить все случаи в таблицах по умолчанию
 #define STBI__ZFAST_MASK  ((1 << STBI__ZFAST_BITS) - 1)
 #define STBI__ZNSYMS 288 // количество символов в буквенном/длинном алфавите
 
 // Кодирование Хаффмана в стиле zlib
-// (пакеты jpegs слева, zlib справа, поэтому нельзя поделиться кодом)
+// (пакеты jpegs слева, zlib справа, поэтому поделиться кодом нельзя)
 typedef struct {
     stbi__uint16 fast[1 << STBI__ZFAST_BITS];
     stbi__uint16 firstcode[16];
@@ -4455,7 +4455,7 @@ static int stbi__zhuffman_decode_slowpath(stbi__zbuf * a, stbi__zhuffman * z)
 {
     int b, s, k;
     // не разрешается с помощью быстрой таблицы, поэтому вычисляйте ее медленным способом
-    // используйте подход jpeg, который требует MSbits сверху
+    // подход jpeg, который требует MSbits сверху
     k = stbi__bit_reverse(a->code_buffer, 16);
     for(s = STBI__ZFAST_BITS + 1; ; ++s)
         if(k < z->maxcode[s])
@@ -4484,7 +4484,7 @@ stbi_inline static int stbi__zhuffman_decode(stbi__zbuf * a, stbi__zhuffman * z)
             }
             else {
                 // Мы уже вставили дополнительные 16 бит заполнения и снова
-                // out, этот поток фактически преждевременно завершается.
+                // наружу, этот поток фактически преждевременно завершается.
                 return -1;
             }
         }
@@ -4561,7 +4561,7 @@ static int stbi__parse_huffman_block(stbi__zbuf * a)
                 if(a->hit_zeof_once && a->num_bits < 16) {
                     // Когда мы впервые нажали zeof, мы вставили в наш бит 16 дополнительных нулевых битов.
                     // буфер, чтобы декодер мог просто выполнить спекулятивное декодирование. Но если мы
-                    // фактически потребляет любой из этих битов (это тот случай, когда num_bits < 16),
+                    // фактически потребляет любой из этих битов (это тот случай, когдаnum_bits< 16),
                     // поток на самом деле читается дальше конца, поэтому он искажен.
                     return stbi__err("unexpected end", "Corrupt PNG");
                 }
@@ -4693,7 +4693,7 @@ static int stbi__parse_zlib_header(stbi__zbuf * a)
     if((cmf * 256 + flg) % 31 != 0) return stbi__err("bad zlib header", "Corrupt PNG"); // спецификация zlib
     if(flg & 32) return stbi__err("no preset dict", "Corrupt PNG"); // предустановленный словарь не разрешен в формате png
     if(cm != 8) return stbi__err("bad compression", "Corrupt PNG"); // Для png требуется DEFLATE
-    // window = 1 << (8 + cinfo)... but who cares, we fully buffer output
+    // window = 1 << (8 + cinfo)... но кого это волнует, мы полностью буферизуем вывод
     return 1;
 }
 
@@ -4715,12 +4715,12 @@ static const stbi_uc stbi__zdefault_distance[32] = {
 Алгоритм инициализации:
 {
    интервал я;   // используйте <= для четкого соответствия спецификации
-   для (i=0; i <= 143; ++i) stbi__zdefault_length [i] = 8;
-   для ( ; i <= 255; ++i) stbi__zdefault_length [i] = 9;
-   для ( ; i <= 279; ++i) stbi__zdefault_length [i] = 7;
-   для ( ; i <= 287; ++i) stbi__zdefault_length [i] = 8;
+   для (i=0; i <= 143; ++i)stbi__zdefault_length[i] = 8;
+   для ( ; i <= 255; ++i)stbi__zdefault_length[i] = 9;
+   для ( ; i <= 279; ++i)stbi__zdefault_length[i] = 7;
+   для ( ; i <= 287; ++i)stbi__zdefault_length[i] = 8;
 
-   для (i=0; i <= 31; ++i) stbi__zdefault_distance [i] = 5;
+   для (i=0; i <= 31; ++i)stbi__zdefault_distance[i] = 5;
 }
 */
 
@@ -4919,13 +4919,13 @@ static int stbi__paeth(int a, int b, int c)
 
 static const stbi_uc stbi__depth_scale_table[9] = { 0, 0xff, 0x55, 0, 0x11, 0, 0, 0, 0x01 };
 
-// добавляет дополнительный альфа-канал all-255
-// dest == src допустимо
+// добавить дополнительный альфа-канал all-255
+// dest == источник допустимо
 // img_n должно быть 1 или 3.
 static void stbi__create_png_alpha_expand8(stbi_uc * dest, stbi_uc * src, stbi__uint32 x, int img_n)
 {
     int i;
-    // должен обрабатывать данные в обратном порядке, поскольку мы разрешаем dest==src
+    // должны обрабатывать данные в обратном порядке, поскольку мы разрешаем dest==src
     if(img_n == 1) {
         for(i = x - 1; i >= 0; --i) {
             dest[i * 2 + 1] = 255;
@@ -4964,16 +4964,16 @@ static int stbi__create_png_image_raw(stbi__png * a, stbi_uc * raw, stbi__uint32
     a->out = (stbi_uc *) stbi__malloc_mad3(x, y, output_bytes, 0); // дополнительные байты для списания конца в
     if(!a->out) return stbi__err("outofmem", "Out of memory");
 
-    // note: error exits here don't need to clean up a->out individually,
-    // stbi__do_png всегда делает это при ошибке.
+    // note: ошибки выходят здесь, не нужно очищать a->out индивидуально,
+    // stbi__do_png всегда делает это когда нужны деньги.
     if(!stbi__mad3sizes_valid(img_n, x, depth, 7)) return stbi__err("too large", "Corrupt PNG");
     img_width_bytes = (((img_n * x * depth) + 7) >> 3);
     if(!stbi__mad2sizes_valid(img_width_bytes, y, img_width_bytes)) return stbi__err("too large", "Corrupt PNG");
     img_len = (img_width_bytes + 1) * y;
 
-    // раньше мы проверяли точное совпадение между raw_len и img_len в нечересстрочных PNG-файлах,
+    // раньше мы проверяли точное совпадение междуraw_lenиimg_lenв нечересстрочныхPNG-файлах,
     // но проблема № 276 сообщала о PNG в дикой природе, у которого в конце были дополнительные данные (все нули),
-    // так что просто всегда проверяйте raw_len < img_len.
+    // так что просто всегда проверяйтеraw_len<img_len.
     if(raw_len < img_len) return stbi__err("not enough pixels", "Corrupt PNG");
 
     // Выделите две строки сканирования в буфере рабочей области фильтра.
@@ -5025,7 +5025,7 @@ static int stbi__create_png_image_raw(stbi__png * a, stbi_uc * raw, stbi__uint32
                 break;
             case STBI__F_paeth:
                 for(k = 0; k < filter_bytes; ++k)
-                    cur[k] = STBI__BYTECAST(raw[k] + prior[k]); // предшествующий[k] == stbi__paeth (0,предыдущий[k],0)
+                    cur[k] = STBI__BYTECAST(raw[k] + prior[k]); // предшествующий[k] ==stbi__paeth(0,предыдущий[k],0)
                 for(k = filter_bytes; k < nk; ++k)
                     cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k - filter_bytes], prior[k], prior[k - filter_bytes]));
                 break;
@@ -5038,7 +5038,7 @@ static int stbi__create_png_image_raw(stbi__png * a, stbi_uc * raw, stbi__uint32
 
         raw += nk;
 
-        // расширить декодированные биты в cur до dest, а также добавить дополнительный альфа-канал, если это необходимо
+        // увеличить декодированные биты в данный момент, а также добавить дополнительный альфа-канал, если это необходимо
         if(depth < 8) {
             stbi_uc scale = (color == 0) ? stbi__depth_scale_table[depth] : 1; // масштабировать значения оттенков серого в диапазоне 0..255
             stbi_uc * in = cur;
@@ -5135,7 +5135,7 @@ static int stbi__create_png_image(stbi__png * a, stbi_uc * image_data, stbi__uin
         int xspc[]  = { 8, 8, 4, 4, 2, 2, 1 };
         int yspc[]  = { 8, 8, 8, 4, 4, 2, 2 };
         int i, j, x, y;
-        // pass1_x [4] = 0, pass1_x [5] = 1, pass1_x [12] = 1
+        // pass1_x [4] = 0,pass1_x[5] = 1,pass1_x[12] = 1
         x = (a->s->img_x - xorig[p] + xspc[p] - 1) / xspc[p];
         y = (a->s->img_y - yorig[p] + yspc[p] - 1) / yspc[p];
         if(x && y) {
@@ -5298,7 +5298,7 @@ static void stbi__de_iphone(stbi__png * z)
     stbi__uint32 i, pixel_count = s->img_x * s->img_y;
     stbi_uc * p = z->out;
 
-    if(s->img_out_n == 3) {   // конвертировать bgr в rgb
+    if(s->img_out_n == 3) {   // конвертировать BGR в RGB
         for(i = 0; i < pixel_count; ++i) {
             stbi_uc t = p[0];
             p[0] = p[2];
@@ -5327,7 +5327,7 @@ static void stbi__de_iphone(stbi__png * z)
             }
         }
         else {
-            // конвертировать bgr в rgb
+            // конвертировать BGR в RGB
             for(i = 0; i < pixel_count; ++i) {
                 stbi_uc t = p[0];
                 p[0] = p[2];
@@ -5393,12 +5393,12 @@ static int stbi__parse_png_file(stbi__png * z, int scan, int req_comp)
                         if((1 << 30) / s->img_x / s->img_n < s->img_y) return stbi__err("too large", "Image too large to decode");
                     }
                     else {
-                        // если палитра, то pal_n — наши конечные компоненты, и
+                        // если палитра, тоpal_n— наши конечные компоненты, и
                         // img_n — # компонентов для распаковки/фильтрации.
                         s->img_n = 1;
                         if((1 << 30) / s->img_x / 4 < s->img_y) return stbi__err("too large", "Corrupt PNG");
                     }
-                    // даже с SCAN_header придется сканировать, чтобы увидеть, есть ли у нас tRNS
+                    // даже сSCAN_headerпандемии сканировать, чтобы увидеть, есть ли у нас tRNS
                     break;
                 }
 
@@ -5434,7 +5434,7 @@ static int stbi__parse_png_file(stbi__png * z, int scan, int req_comp)
                         if(!(s->img_n & 1)) return stbi__err("tRNS with alpha", "Corrupt PNG");
                         if(c.length != (stbi__uint32) s->img_n * 2) return stbi__err("bad tRNS len", "Corrupt PNG");
                         has_trans = 1;
-                        // без палитры с tRNS = константа альфа. если сканирование заголовков, мы можем остановиться сейчас.
+                        // без палитры с tRNS = константа альфа. если диагноз заголовков, мы можем остановиться сейчас.
                         if(scan == STBI__SCAN_header) {
                             ++s->img_n;
                             return 1;
@@ -5739,7 +5739,7 @@ static int stbi__bmp_set_mask_defaults(stbi__bmp_data * info, int compress)
             info->mg = 0xffu <<  8;
             info->mb = 0xffu <<  0;
             info->ma = 0xffu << 24;
-            info->all_a = 0; // если all_a в конце равен 0, то мы загрузили альфа-канал, но все было 0
+            info->all_a = 0; // еслиall_aв конце равно 0, то мы загрузили альфа-канал, но все было 0
         }
         else {
             // в противном случае используйте значения по умолчанию, то есть все-0.
@@ -5783,9 +5783,9 @@ static void * stbi__bmp_parse_header(stbi__context * s, stbi__bmp_data * info)
                                                   "BMP type not supported: unsupported compression");  // сюда входят режимы PNG/JPEG
         if(compress == 3 && info->bpp != 16 &&
            info->bpp != 32) return stbi__errpuc("bad BMP", "bad BMP");  // битовые поля требуют 16 или 32 бит/пиксель
-        stbi__get32le(s); // отказаться от sizeof
+        stbi__get32le(s); // победа от sizeof
         stbi__get32le(s); // отказаться от часов
-        stbi__get32le(s); // отказаться от vres
+        stbi__get32le(s); // победа от vres
         stbi__get32le(s); // отказаться от использованных цветов
         stbi__get32le(s); // отбросить максимально важное
         if(hsz == 40 || hsz == 56) {
@@ -5878,14 +5878,14 @@ static void * stbi__bmp_load(stbi__context * s, int * x, int * y, int * comp, in
         // принять некоторое количество дополнительных байтов после заголовка, но если смещение указывает либо на перед
         // заголовок заканчивается или подразумевает большое количество дополнительных данных, отклонить файл как некорректный
         int bytes_read_so_far = s->callback_already_read + (int)(s->img_buffer - s->img_buffer_original);
-        int header_limit = 1024; // max, который мы на самом деле читаем, в настоящее время составляет менее 256 байт.
+        int header_limit = 1024; // Макс, который мы на самом деле читаем, в настоящее время составляет менее 256 байт.
         int extra_data_limit = 256 * 4; // обычно здесь идет палитра; 256 записей*4 байта — максимальный размер.
         if(bytes_read_so_far <= 0 || bytes_read_so_far > header_limit) {
             return stbi__errpuc("bad header", "Corrupt BMP");
         }
-        // мы установили, что bytes_read_so_far положителен и разумен.
+        // мы установили, чтоbytes_read_so_farположен и разумен.
         // первая половина этого теста отклоняет смещения, которые являются либо слишком маленькими положительными, либо
-        // отрицательный и гарантирует, что info.offset >= bytes_read_so_far > 0. это, в свою очередь,
+        // отрицательный и уверенный, что info.offset >=bytes_read_so_far> 0. это, в свою очередь,
         // гарантирует, что число, вычисленное во второй половине теста, не сможет переполниться.
         if(info.offset < bytes_read_so_far || info.offset - bytes_read_so_far > extra_data_limit) {
             return stbi__errpuc("bad offset", "Corrupt BMP");
@@ -5980,7 +5980,7 @@ static void * stbi__bmp_load(stbi__context * s, int * x, int * y, int * comp, in
         stbi__skip(s, info.offset - info.extra_read - info.hsz);
         if(info.bpp == 24) width = 3 * s->img_x;
         else if(info.bpp == 16) width = 2 * s->img_x;
-        else /* bpp = 32 and pad = 0 */ width = 0;
+        else /* bpp = 32 и площадка = 0 */ width = 0;
         pad = (-width) & 3;
         if(info.bpp == 24) {
             easy = 1;
@@ -6071,7 +6071,7 @@ static void * stbi__bmp_load(stbi__context * s, int * x, int * y, int * comp, in
 // Тарга Truevision — TGA
 // Джонатан Даммер
 #ifndef STBI_NO_TGA
-// возвращает STBI_rgb или что-то еще, 0 в случае ошибки
+// вернутьSTBI_rgbили что-то еще, 0 в случае ошибки
 static int stbi__tga_get_comp(int bits_per_pixel, int is_grey, int * is_rgb16)
 {
     // разрешены только RGB или RGBA (включая 16 бит) или серый цвет
@@ -6140,7 +6140,7 @@ static int stbi__tga_info(stbi__context * s, int * x, int * y, int * comp)
     stbi__get8(s); // игнорировать альфа-биты
     if(tga_colormap_bpp != 0) {
         if((tga_bits_per_pixel != 8) && (tga_bits_per_pixel != 16)) {
-            // при использовании карты цветов tga_bits_per_pixel — это размер индексов
+            // при использовании карты цветовtga_bits_per_pixel— это размер индексов
             // Я не думаю, что что-либо, кроме 8- или 16-битных индексов, имеет смысл.
             stbi__rewind(s);
             return 0;
@@ -6183,7 +6183,7 @@ static int stbi__tga_test(stbi__context * s)
     if(stbi__get16le(s) < 1) goto errorEnd;         //   высота испытания
     sz = stbi__get8(s);   //   бит на пиксель
     if((tga_color_type == 1) && (sz != 8) &&
-       (sz != 16)) goto errorEnd;    // для изображений с цветовой картой bpp — это размер индекса
+       (sz != 16)) goto errorEnd;    // для изображений с цветной картой bpp — это индекс размера
     if((sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32)) goto errorEnd;
 
     res = 1; // если мы зашли так далеко, все хорошо и мы можем вернуть 1 вместо 0
@@ -6257,7 +6257,7 @@ static void * stbi__tga_load(stbi__context * s, int * x, int * y, int * comp, in
     if(tga_indexed) tga_comp = stbi__tga_get_comp(tga_palette_bits, 0, &tga_rgb16);
     else tga_comp = stbi__tga_get_comp(tga_bits_per_pixel, (tga_image_type == 3), &tga_rgb16);
 
-    if(!tga_comp) // на самом деле не должно было случиться, stbi__tga_test() должен был обеспечить базовую согласованность
+    if(!tga_comp) // на самом деле не должно было случиться,stbi__tga_test() должен был обеспечить базовую договоренность
         return stbi__errpuc("bad format", "Can't find out TGA pixelformat");
 
     //   информация о ТГА
@@ -6385,7 +6385,7 @@ static void * stbi__tga_load(stbi__context * s, int * x, int * y, int * comp, in
         }
     }
 
-    // swap RGB — если исходные данные были RGB16, они уже в правильном порядке
+    // swapRGB— если исходные данные былиRGB16, они уже в правильном порядке
     if(tga_comp >= 3 && !tga_rgb16) {
         unsigned char * tga_pixel = tga_data;
         for(i = 0; i < tga_width * tga_height; ++i) {
@@ -6411,7 +6411,7 @@ static void * stbi__tga_load(stbi__context * s, int * x, int * y, int * comp, in
 #endif
 
 // *************************************************************************************************
-// Загрузчик Photoshop PSD — PD Тэтчер Ульрих, интеграция Николаса Шульца, настройка STB
+// Загрузчик PhotoshopPSD—PDТэтчер Ульрих, интеграция Николаса Шульца, настройка STB
 
 #ifndef STBI_NO_PSD
 static int stbi__psd_test(stbi__context * s)
@@ -6445,7 +6445,7 @@ static int stbi__psd_decode_rle(stbi__context * s, stbi_uc * p, int pixelCount)
         else if(len > 128) {
             stbi_uc   val;
             // Следующие -len+1 байты в dest реплицируются из следующего исходного байта.
-            // (Интерпретируйте len как отрицательное 8-битное целое число.)
+            // (Интерпретируйте len как отрицательное 8-битное число.)
             len = 257 - len;
             if(len > nleft) return 0;  // поврежденные данные
             val = stbi__get8(s);
@@ -6676,8 +6676,8 @@ static void * stbi__psd_load(stbi__context * s, int * x, int * y, int * comp, in
 // Загрузчик Softimage PIC
 // Том Седдон
 //
-// См. http://softimage.wiki.softimage.com/index.php/INFO:_PIC_file_format.
-// См. http://ozviz.wasp.uwa.edu.au/~pbourke/dataformats/softimagepic/.
+// См.  http://softimage.wiki.softimage.com/index.php/INFO:_PIC_file_format.
+// См.  http://ozviz.wasp.uwa.edu.au/~pbourke/dataformats/softimagepic/.
 
 #ifndef STBI_NO_PIC
 static int stbi__pic_is4(stbi__context * s, const char * str)
@@ -6893,7 +6893,7 @@ static int stbi__pic_test(stbi__context * s)
 #endif
 
 // *************************************************************************************************
-// Загрузчик GIF – общественное достояние Жана-Марка Лиенера – упрощено/уменьшено stb
+// ЗагрузчикGIF– Общественное достояние Жана-Марка Лиенера – упрощено/уменьшено stb
 
 #ifndef STBI_NO_GIF
 typedef struct {
@@ -7122,7 +7122,7 @@ static stbi_uc * stbi__process_gif_raster(stbi__context * s, stbi__gif * g)
     }
 }
 
-// эта функция предназначена для поддержки анимированных изображений gif, хотя stb_image ее не поддерживает.
+// Эта функция предназначена для поддержки анимированных изображений gif, хотяstb_imageее не поддерживает.
 // два назад — это изображение двух кадров назад, используемое для очень специфического формата удаления.
 static stbi_uc * stbi__gif_load_next(stbi__context * s, stbi__gif * g, int * comp, int req_comp, stbi_uc * two_back)
 {
@@ -7180,8 +7180,8 @@ static stbi_uc * stbi__gif_load_next(stbi__context * s, stbi__gif * g, int * com
         else {
             // В любом случае это случай, когда нельзя утилизировать, так что просто
             // оставьте пиксели как есть, и они станут новым фоном
-            // 1: do not dispose
-            // 0:  not specified.
+            // 1: не выбрасывать
+            // 0:  не указано.
         }
 
         // фон — это то, что осталось после отмены предыдущего кадра;
@@ -7216,7 +7216,7 @@ static stbi_uc * stbi__gif_load_next(stbi__context * s, stbi__gif * g, int * com
                     // если ширина указанного прямоугольника равна 0, это означает
                     // мы можем не видеть *никаких* пикселей или изображение искажено;
                     // чтобы убедиться, что это уловлено, переместите текущий y вниз на
-                    // max_y (что и проверяет out_gif_code).
+                    // max_y (что и позднееout_gif_code).
                     if(w == 0)
                         g->cur_y = g->max_y;
 
@@ -7266,7 +7266,7 @@ static stbi_uc * stbi__gif_load_next(stbi__context * s, stbi__gif * g, int * com
                         len = stbi__get8(s);
                         if(len == 4) {
                             g->eflags = stbi__get8(s);
-                            g->delay = 10 * stbi__get16le(s); // delay - 1/100th of a second, saving as 1/1000ths.
+                            g->delay = 10 * stbi__get16le(s); // delay - 1/100 секунды, сохранение как 1/1000 секунды.
 
                             // сбросить старый прозрачный
                             if(g->transparent >= 0) {
@@ -7295,7 +7295,7 @@ static stbi_uc * stbi__gif_load_next(stbi__context * s, stbi__gif * g, int * com
                     break;
                 }
 
-            case 0x3B: // код завершения потока gif
+            case 0x3B: // завершить код потока gif
                 return (stbi_uc *) s; // использование '1' вызывает предупреждение в некоторых компиляторах
 
             default:
@@ -7439,7 +7439,7 @@ static int stbi__gif_info(stbi__context * s, int * x, int * y, int * comp)
 #endif
 
 // *************************************************************************************************
-// Загрузчик Radiance RGBE HDR
+// Загрузчик RadianceRGBEHDR
 // первоначально Николас Шульц
 #ifndef STBI_NO_HDR
 static int stbi__hdr_test_core(stbi__context * s, const char * signature)
@@ -8141,38 +8141,38 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const * c, void * us
 
 /*
    история изменений:
-      2.20 (07.02.2019) поддерживает имена файлов utf8 в Windows; исправить предупреждения и ifdef платформы
+      2.20 (07.02.2019) Поддержка имен файлов utf8 в Windows; Исправление платформы и ifdef
       2.19 (11 февраля 2018 г.) исправлено предупреждение
       2.18 (30 января 2018 г.) исправлены предупреждения.
-      2.17 (29 января 2018 г.) изменен sbti__shiftsigned, чтобы избежать лязга - ошибка O2
+      2.17 (29 января 2018 г.) Измененияsbti__shiftsigned, чтобы избежать лязга - ошибка O2
                          1 бит BMP
                          *_is_16_bit API
                          избегать предупреждений
       2.16 (23 июля 2017 г.) все функции имеют 16-битные варианты;
                          STBI_NO_STDIO снова работает;
                          исправления компиляции;
-                         исправить округление в unpremultiply;
+                         Исправить округление в непредварительном порядке;
                          оптимизировать вертикальный переворот;
-                         отключить проверку raw_len;
+                         включить проверкуraw_len;
                          исправления документации
-      2.15 (18.03.2017) исправлена ошибка png-1,2,4; теперь все файлы Imagenet JPG декодируются;
-                         исправления предупреждений; отключить обнаружение SSE во время выполнения на gcc;
+      2.15 (18.03.2017) исправлена ошибка png-1,2,4; теперь все файлы ImagenetJPGдекодируются;
+                         исправления предупреждений; ОбнаружениеSSEво время выполнения gcc;
                          унифицированная обработка необязательных «возвращаемых» значений;
                          потокобезопасная инициализация таблиц zlib
-      2.14 (03.03.2017) удален устаревший STBI_JPEG_OLD ; исправления для изображений Imagenet JPG
+      14.03.2017 (03.03.2017) удален конфиденциальийSTBI_JPEG_OLD; исправления для изображений Imagenet JPG
       2.13 (29.11.2016) добавлен 16-битный API, сейчас поддерживается только для PNG.
       2.12 (02.04.2016) исправлена опечатка в исправлении 2.11 PSD, приводившая к сбоям
       2.11 (02.04.2016) размещение больших структур в стеке
                          удалить белое матирование для прозрачного PSD
                          исправлено количество сообщаемых каналов для PNG и BMP
-                         повторно включить SSE2 в 64-битной версии, отличной от gcc
+                         повторно включитьSSE2в 64-битной версии, отличной от gcc
                          поддержка RGB - в формате JPEG
                          читать 16-битные PNG (только как 8-битные)
       2.10 (22 января 2016 г.) избегать предупреждений, введенных в версии 2.09 STBI_REALLOC_SIZED
       2.09 (16 января 2016 г.) разрешает комментарии в файлах PNM.
                          16 бит на пиксель TGA (не бит на компонент)
-                         info() для TGA мог сломаться из-за обработки .hdr.
-                         info() для BMP для совместного использования кода вместо небрежного анализа
+                         info() дляTGAмог сломаться из-за обработки .hdr.
+                         info() дляBMPдля совместного использования кода вместо небрежного анализа
                          можно использовать STBI_REALLOC_SIZED, если распределитель не поддерживает перераспределение
                          очистка кода
       2.08 (13 сентября 2015 г.) исправление очистки версии 2.07, чтение RGB PSD как RGBA.
@@ -8181,29 +8181,29 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const * c, void * us
                          ограниченная поддержка PSD 16 бит на канал
                          #ifdef неиспользуемые функции
                          ошибка с <92 байтами PIC, PNM, HDR, TGA
-      2.06 (19 апреля 2015 г.) исправлена ошибка, из-за которой PSD возвращал неправильное значение '*comp'.
+      2.06 (19 апреля 2015 г.) исправлена ошибка, из-за которойPSDвозвращал неправильное значение '*comp'.
       2.05 (19 апреля 2015 г.) исправлена ошибка в обработке прогрессивного JPEG, исправлено предупреждение.
-      2.04 (15 апреля 2015 г.) попробуйте повторно включить SIMD на 64-разрядной версии MinGW.
-      2.03 (12 апреля 2015 г.) дополнительная проверка на наличие повреждений (mmozeiko)
+      2.04 (15 апреля 2015 г.) Форма повторно включитеSIMDна 64-разрядной версии MinGW.
+      2.03 (12 апреля 2015 г.) Дополнительная проверка на наличие повреждений (mmozeiko)
                          stbi_set_flip_vertically_on_load (нгильмот)
-                         исправлена поддержка NEON; исправить поддержку mingw
+                         исправлена поддержкаNEON; исправить поддержку mingw
       2.02 (19 января 2015 г.) исправлено неправильное утверждение, исправлено предупреждение
-      2.01 (17 января 2015 г.) исправлены различные предупреждения; подавить SIMD в 32-битной версии gcc без -msse2
+      2.01 (17 января 2015 г.) исправлены различные отличия; подавитьSIMDв 32-битной версии gcc без -msse2
       2.00b (25 декабря 2014 г.) исправление STBI_MALLOC в прогрессивном JPEG
-      2.00 (25 декабря 2014 г.) оптимизация JPG, включая x86 SSE2 и NEON SIMD (ryg)
-                         прогрессивный JPEG (stb)
+      2.00 (25 декабря 2014 г.) оптимизацияJPG, включая x86SSE2иNEONSIMD (ryg)
+                         прогрессивныйJPEG(stb)
                          Поддержка PGM / PPM (Кен Миллер)
                          STBI_MALLOC,STBI_REALLOC,STBI_FREE
                          Исправление GIF - похоже, никогда не работало
                          STBI_NO_*, STBI_ONLY_*
-      1.48 (14 декабря 2014 г.) исправлено неправильное имя assert().
-      1.47 (14 декабря 2014 г.) Поддержка 1/2/4-битного PNG, как прямая, так и с палитрой (Омар Корнут и stb)
+      1.48 (14 декабря 2014 г.) исправлено неправильное имяassert().
+      1.47 (14 декабря 2014 г.) Поддержка 1/2/4-битногоPNG, как прямого, так и с палитрой (Омар Корнут и stb)
                          оптимизировать PNG (рыг)
-                         исправить ошибку в чересстрочном формате PNG с заданным пользователем количеством каналов (stb)
+                         Исправить ошибку в чересстрочном форматеPNGс заданным пользователем канала (stb)
       1.46  (2014-08-26)
-              исправить сломанный фрагмент tRNS (прозрачность в стиле цветового ключа) в PNG без палитры
+              Исправить сломанный фрагмент tRNS (прозрачность в стиле цветного ключа) вPNGбез палитры
       1.45  (2014-08-16)
-              исправить внутреннюю ошибку компилятора MSVC - ARM путем переноса malloc
+              Исправьте внутреннюю ошибку компилятораMSVC-ARMпутем переноса malloc.
       1.44  (2014-08-07)
               различные исправления предупреждений от Ронни Шевалье
       1.43  (2014-07-15)
@@ -8211,13 +8211,13 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const * c, void * us
       1.42  (2014-07-09)
               не определять _CRT_SECURE_NO_WARNINGS (влияет на пользовательский код)
               исправления в пути stbi__cleanup_jpeg
-              добавлен STBI_ASSERT, чтобы не требовать assert.h
+              добавленSTBI_ASSERT, чтобы не требовать assert.h
       1.41  (2014-06-25)
               исправлен поиск и замена из версии 1.36, из-за которого искажались комментарии/сообщения об ошибках
       1.40  (2014-06-22)
-              исправить предупреждение об инициализации структуры gcc
+              Исправить изобретение об организации структуры gcc
       1.39  (2014-06-15)
-              исправление оптимизации TGA, когда req_comp != количество компонентов в TGA ;
+              исправление оптимизацииTGA, когдаreq_comp!= количество компонентов вTGA;
               исправлена загрузка GIF, потому что BMP не перематывалась (упс, в моем наборе тестов нет GIF-файлов)
               добавить поддержку BMP версии 5 (больше игнорируемых полей)
       1.38  (2014-06-06)
@@ -8227,96 +8227,96 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const * c, void * us
               удалить дубликат typedef
       1.36  (2014-06-03)
               конвертировать в заголовочный файл однофайловую библиотеку
-              если de-iphone не установлен, загрузите изображения iphone с измененным цветом вместо возврата NULL
+              если de-iphone не выбран, загрузите изображение iphone с измененным цветом вместо возврата NULL
       1.35  (2014-05-27)
               различные предупреждения
               исправить сломанный путь STBI_SIMD
-              исправлена ошибка, из-за которой stbi_load_from_file больше не оставлял указатель файла в правильном месте
+              исправлена ошибка, из-за которойstbi_load_from_fileбольше не оставлял указатель файла в правильном месте
               исправить сломанный непростой путь для 32-битного BMP (возможно, никогда не использовался)
               Оптимизация TGA от Арсения Капулькина
       1,34 (неизвестно)
-              используйте STBI_NOTUSED в stbi__resample_row_generic(), исправьте еще одну утечку в случае сбоя tga
+              STBI_NOTUSED вstbi__resample_row_generic(), исправьте еще одну утечку в случае сбоя tga
       1.33  (2011-07-14)
-              заставить stbi_is_hdr работать в STBI_NO_HDR (как указано), небольшие улучшения для компилятора
+              заставитьstbi_is_hdrработать вSTBI_NO_HDR(как указано), небольшое улучшение для компилятора
       1.32  (2011-07-13)
-              поддержка функции «информация» для всех поддерживаемых типов файлов (SpartanJ)
+              поддержка функции «информация» для всех прикладных типов файлов (SpartanJ)
       1.31  (2011-06-20)
-              еще несколько исправлений утечек, ошибка в обработке PNG (SpartanJ)
+              еще несколько исправлений утечек, ошибка в обработкеPNG(SpartanJ)
       1.30  (2011-06-11)
               добавлена возможность загружать файлы с помощью обратных вызовов для соответствия пользовательским потокам ввода (Бен Венгер)
               удалены устаревшие функции тестирования/загрузки, специфичные для формата.
-              удалена поддержка устанавливаемых форматов файлов ( stbi_loader ) - в любом случае она была бы сломана для обратных вызовов IO
-              случаи ошибок в bmp и tga выдают сообщения и не просачиваются (Раймонд Барбьеро, Гриша)
+              удалена поддержка встроенных форматов файлов (stbi_loader) - в любом случае она была бы сломана для обратных вызовов IO
+              бывают ошибки в bmp и tga, выдают сообщения и не просачиваются (Раймонд Барбьеро, Гриша)
               исправление неэффективности декодирования 32-битного BMP (Дэвид Ву)
       1.29  (2010-08-16)
               различные исправления предупреждений от Орельена Пошевиля
       1.28  (2010-08-01)
-              исправить ошибку в прозрачности палитры GIF (SpartanJ)
+              Исправить ошибку в прозрачности палитрыGIF(SpartanJ)
       1.27  (2010-08-01)
-              приведение к stbi_uc для исправления предупреждений
+              введение кstbi_ucдля исправления предупреждений
       1.26  (2010-07-24)
-              исправить ошибку в буферизации файлов для PNG, о которой сообщил SpartanJ
+              Исправьте ошибку в буферизации файлов для PNG, о которой сообщил SpartanJ.
       1.25  (2010-07-17)
-              исправить предупреждение trans_data (Вон Чун)
+              Исправить предупреждениеtrans_data(Вон Чун)
       1.24  (2010-07-12)
-              улучшения производительности при чтении файлов на платформах с тяжелыми блокировками fgetc()
+              улучшения производительности при чтении файлов на платформах со сбитыми блокировками fgetc()
               небольшие улучшения производительности для JPEG
               устаревшие функции, специфичные для типа, поэтому мы получим обратную связь, если они понадобятся
-              попытка исправить предупреждение trans_data (Вон Чун)
+              попытка исправить предупреждениеtrans_data(Вон Чун)
       1.23 исправлена ошибка в поддержке iPhone
       1.22  (2010-07-10)
               удалено изображение *пишу* поддержка
-              Поддержка stbi_info от Jetro Lauha
+              Поддержкаstbi_infoот Jetro Lauha
               Поддержка GIF от Жана-Марка Лиенера
-              iPhone PNG – расширения от Джеймса Брауна
-              исправления предупреждений от Николаса Шульца и Янеза Земвы (т. е. stbi__err . Janez (U+017D)emva)
+              iPhonePNG– расширение от Джеймса Брауна
+              исправления предупреждения от Николаса Шульца и Янеза Земвы (т. е.stbi__err. Janez (U+017D)emva)
       1.21 исправлено использование «stbi_uc» в заголовке (сообщил Джон Блоу)
-      В версии 1.20 добавлена поддержка Softimage PIC от Тома Седдона.
-      1.19 ошибка в проверке целостности чересстрочного PNG (найдена ryg)
+      В версии 1.20 добавлена поддержка SoftimagePICот Тома Седдона.
+      1.19 ошибка в ресторане чересстрочногоPNG(найдена ryg)
       1.18  (2008-08-02)
               исправить ошибку многопоточности (локальная изменяемая статика)
       1.17 поддерживает чересстрочную развертку PNG
-      Основное исправление версии 1.16: stbi__convert_format преобразовывал слишком много пикселей.
+      Основное исправление версии 1.16:stbi__convert_formatпреобразовывал слишком много изображений.
       1.15 инициализировать некоторые поля для обеспечения потокобезопасности
       1.14 исправлена ошибка потокобезопасного преобразования
-              версия только для заголовочного файла (#define STBI_HEADER_FILE_ONLY перед включением)
+              версия только для заголовочного файла (#defineSTBI_HEADER_FILE_ONLY перед включением)
       1.13 потокобезопасный
       1.12 константные квалификаторы в API
       1.11 Поддержка устанавливаемого IDCT, процедур преобразования цветового пространства.
-      1.10 Исправления для 64-битной версии (не используйте «unsigned long»)
-              оптимизированная повышающая дискретизация Фабиана «ryg» Гизена
+      1.10 Исправления для 64-битной версии (не викор «unsigned long»)
+              надежная повышение устойчивости Фабиана «ryg» Гизена
       1.09 Исправлено преобразование формата для кода PSD (неправильные глобальные переменные!)
       1.08 Код PSD Тэтчер Ульрих, интегрированный Николасом Шульцем
       1.07 снова попытайтесь исправить предупреждения/ошибки C++.
       1.06 снова попытайтесь исправить предупреждения/ошибки C++.
-      1.05 исправлена загрузка TGA, чтобы вернуть правильный *comp и использовать хороший расчет яркости
-      В версии 1.04 альфа-версия по умолчанию равна 1, а не 255; используйте «void *» для stbi_image_free
+      1.05 исправлена загрузка TGA, чтобы вернуть правильный *comp и использовать хороший расчет статистики.
+      В версии 1.04 альфа-версия по умолчанию равна 1, а не 255; викор «void *» для stbi_image_free
       1.03 исправления ошибок в STBI_NO_STDIO, STBI_NO_HDR
       1.02 поддержка (подмножества) файлов HDR, плавающий интерфейс для предпочтительного доступа к ним.
       1.01 исправлена ошибка: возможная ошибка при обработке BMP с правой стороны... не уверен
-              исправить ошибку: функции stbi__bmp_load() и stbi__tga_load() вообще не работали
+              Исправить ошибку: функции stbi__bmp_load() и stbi__tga_load() вообще не работали
       1.00 интерфейс для zlib, который пропускает заголовок zlib
       0.99 правильная обработка альфы в палитре
-      0.98 Загрузчик TGA от Lonesock; динамически добавлять загрузчики (непроверено)
+      0.98 ЗагрузчикTGAот Lonesock; Разъем-загрузчик (непроверено)
       0,97 ошибок jpeg в слишком большом файле; также поймать еще один сбой malloc
       0.96 исправлено обнаружение неверного значения v - форум Particleman @mollyrocket
       0,95 во время сканирования заголовка, поиск маркеров в случае заполнения
-      0.94 STBI_NO_STDIO для отключения использования stdio; переименуйте все #defines одинаково
-      0.93 обрабатывает вывод jpegtran; подробные ошибки
+      0.94STBI_NO_STDIOдля отключения использования stdio; переименуйте все#definesодинаково
+      0,93 обрабатывает вывод jpegtran; ошибка
       0.92 читает 4,8,16,24,32-битные файлы BMP нескольких форматов.
       0.91 выходные 24-битные файлы Windows 3.0 BMP
       0.90 исправляет еще несколько предупреждений; увеличить номер версии, чтобы он приблизился к 1.0
       Исправления ошибок 0.61 благодаря Марку Леблану и Кристоферу Ллойду.
       0.60 исправлена компиляция как C++
-      Предупреждения об исправлениях версии 0.59: объедините исправления Дэйва Мура -Wall
+      Предупреждения об исправлениях версии 0.59: Условия исправления Дэйва Мура -Wall
       0.58 исправлена ошибка: в несжатом режиме zlib len/nlen был неправильный порядок байтов
       0.57 исправлена ошибка: последний символ Хаффмана в формате jpg перед маркером был >9 бит, но доступно менее 16.
       0.56 исправлена ошибка: несжатый режим zlib len vs. nlen
-      0.55 исправлена ошибка: restart_interval не инициализировался до 0.
-      0.54 позволяет использовать NULL для 'int *comp'
+      0.55 исправлена ошибка:restart_intervalне инициализировался до 0.
+      0.54 Позволяет использоватьNULLдля 'int *comp'
       0.53 исправлена ошибка в png 3->4; ускорение декодирования png
-      0.52 png обрабатывает req_comp =3,4 напрямую; мелкая уборка; комментарии в формате JPEG
-      0.51 подчиняются запросам req_comp, 1-компонентные jpeg возвращаются как 1-компонентные,
+      0,52 png обрабатываетreq_comp=3,4 напрямую; мелкая уборка; комментарии в формате JPEG
+      0.51 подчиняются запросамreq_comp, 1-компонентные jpeg возвращаются как 1-компонентные,
               в «тесте» проверяется только тип, а не поддерживаем ли мы этот вариант
       0.50  (2006-11-19)
               первая выпущенная версия
@@ -8345,7 +8345,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ------------------------------------------------------------------------------
-ALTERNATIVE B - общественное достояние ( www.unlicense.org)
+ALTERNATIVE B - общественное состояние ( www.unlicense.org)
 Это бесплатное и ничем не обремененное программное обеспечение, общедоступное.
 Любой может свободно копировать, изменять, публиковать, использовать, компилировать, продавать или распространять это
 программное обеспечение в виде исходного кода или в виде скомпилированного двоичного файла для любых целей,

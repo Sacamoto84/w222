@@ -233,7 +233,7 @@ class MicroPython_Test(unittest.TestCase):
 
             time.sleep(0.002)
 
-        # сам. read_until (b'# конец\n')
+        # сам. read_until(b'# конец\n')
 
         def _do(td: TestData):
             self.send(CTRL_D)
@@ -292,7 +292,7 @@ class MicroPython_Test(unittest.TestCase):
 
         if not test_data.event.is_set():
             self.__class__.exit_event.set()
-            # сам. read_until ( REPL_PROMPT )
+            # сам. read_until(REPL_PROMPT)
 
         self.send(CTRL_C)
         self.send(CTRL_C)

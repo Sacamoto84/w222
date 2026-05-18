@@ -1,4 +1,4 @@
-/* Тест производительности функций lv_text и lv_font_* */
+/* Тест производительности функцийlv_textиlv_font_* */
 #if LV_BUILD_TEST_PERF
 #include "unity/unity.h"
 

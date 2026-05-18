@@ -31,8 +31,8 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_calendar_header_arrow_cl
 
 /**
  * Создайте заголовок календаря с раскрывающимися списками для выбора года и месяца.
- * @param parent    pointer to a calendar object.
- * @return          the created header
+ * @param parent    указатель на объект календаря.
+ * @return          созданный заголовок
  */
 lv_obj_t * lv_calendar_add_header_arrow(lv_obj_t * parent);
 

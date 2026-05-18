@@ -63,8 +63,8 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_textarea_class;
 
 /**
  * Создание объекта текстовой области
- * @param parent    pointer to an object, it will be the parent of the new text area
- * @return          pointer to the created text area
+ * @param parent    указатель на объект, он будет родителем новой текстовой области
+ * @return          указатель на созданную текстовую область
  */
 lv_obj_t * lv_textarea_create(lv_obj_t * parent);
 
@@ -74,28 +74,28 @@ lv_obj_t * lv_textarea_create(lv_obj_t * parent);
 
 /**
  * Вставьте символ в текущую позицию курсора.
- * Чтобы добавить широкий символ, например. 'Á' используйте `lv_text_encoded_conv_wc('Á')`
- * @param obj       pointer to a text area object
- * @param c         a character (e.g. 'a')
+ * Чтобы добавить широкий символ, например. 'Á' викор `lv_text_encoded_conv_wc('Á')`
+ * @param obj       указатель на объект текстовой области
+ * @param c         символ (например, «а»)
  */
 void lv_textarea_add_char(lv_obj_t * obj, uint32_t c);
 
 /**
  * Вставить текст в текущую позицию курсора
- * @param obj       pointer to a text area object
- * @param txt       a '\0' terminated string to insert
+ * @param obj       указатель на объект текстовой области
+ * @param txt       строка, завершающаяся '\0' для вставки
  */
 void lv_textarea_add_text(lv_obj_t * obj, const char * txt);
 
 /**
  * Удалить левый символ из текущей позиции курсора
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_delete_char(lv_obj_t * obj);
 
 /**
  * Удалить правый символ из текущей позиции курсора
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_delete_char_forward(lv_obj_t * obj);
 
@@ -105,106 +105,106 @@ void lv_textarea_delete_char_forward(lv_obj_t * obj);
 
 /**
  * Установить текст текстовой области
- * @param obj       pointer to a text area object
- * @param txt       pointer to the text
+ * @param obj       указатель на объект текстовой области
+ * @param txt       указатель на текст
  */
 void lv_textarea_set_text(lv_obj_t * obj, const char * txt);
 
 /**
  * Установите текст-заполнитель текстовой области
- * @param obj       pointer to a text area object
- * @param txt       pointer to the text
+ * @param obj       указатель на объект текстовой области
+ * @param txt       указатель на текст
  */
 void lv_textarea_set_placeholder_text(lv_obj_t * obj, const char * txt);
 
 /**
  * Установите положение курсора
- * @param obj       pointer to a text area object
- * @param pos       the new cursor position in character index
+ * @param obj       указатель на объект текстовой области
+ * @param pos       новая позиция курсора в индексе символов
  *                  <0: индекс с конца текста
- *                  LV_TEXTAREA_CURSOR_LAST: go after the last character
+ *                  LV_TEXTAREA_CURSOR_LAST: идти за последним символом
  */
 void lv_textarea_set_cursor_pos(lv_obj_t * obj, int32_t pos);
 
 /**
  * Включите/выключите позиционирование курсора, щелкнув текст в текстовой области.
- * @param obj       pointer to a text area object
- * @param en        true: enable click positions; false: disable
+ * @param obj       указатель на объект текстовой области
+ * @param en        true: включить позиции кликов; ложь: отключить
  */
 void lv_textarea_set_cursor_click_pos(lv_obj_t * obj, bool en);
 
 /**
  * Включить/отключить режим пароля
- * @param obj       pointer to a text area object
- * @param en        true: enable, false: disable
+ * @param obj       указатель на объект текстовой области
+ * @param en        true: включить, false: отключить
  */
 void lv_textarea_set_password_mode(lv_obj_t * obj, bool en);
 
 /**
  * Установите символы замены для отображения в режиме пароля
- * @param obj       pointer to a text area object
- * @param bullet    pointer to the replacement text
+ * @param obj       указатель на объект текстовой области
+ * @param bullet    указатель на текст замены
  */
 void lv_textarea_set_password_bullet(lv_obj_t * obj, const char * bullet);
 
 /**
  * Настройте текстовую область на одну строку или верните ее в нормальное состояние.
- * @param obj       pointer to a text area object
- * @param en        true: one line, false: normal
+ * @param obj       указатель на объект текстовой области
+ * @param en        true: одна строка, false: нормально
  */
 void lv_textarea_set_one_line(lv_obj_t * obj, bool en);
 
 /**
  * Установите список персонажей. Только эти символы будут приняты текстовой областью.
- * @param obj       pointer to a text area object
- * @param list      list of characters. A copy is saved. Example: "+-.,0123456789"
+ * @param obj       указатель на объект текстовой области
+ * @param list      список персонажей. Копия сохранена. Пример: «+-.,0123456789»
  */
 void lv_textarea_set_accepted_chars(lv_obj_t * obj, const char * list);
 
 /**
  * Установите список персонажей. Только эти символы будут приняты текстовой областью.
- * @param obj       pointer to a text area object
- * @param list      list of characters. Only the pointer is saved. Example: "+-.,0123456789"
+ * @param obj       указатель на объект текстовой области
+ * @param list      список персонажей. Сохраняется только указатель. Пример: «+-.,0123456789»
  */
 void lv_textarea_set_accepted_chars_static(lv_obj_t * obj, const char * list);
 
 /**
  * Установите максимальную длину текстовой области.
- * @param obj       pointer to a text area object
- * @param num       the maximal number of characters can be added (`lv_textarea_set_text` ignores it)
+ * @param obj       указатель на объект текстовой области
+ * @param num       можно добавить максимальное количество символов (`lv_textarea_set_text` игнорирует это)
  */
 void lv_textarea_set_max_length(lv_obj_t * obj, uint32_t num);
 
 /**
  * В `LV_EVENT_INSERT` текст, который планировалось вставить, можно заменить другим текстом.
  * Его можно использовать для добавления автоматического форматирования в текстовую область.
- * @param obj       pointer to a text area object
- * @param txt       pointer to a new string to insert. If `""` no text will be added.
- *                  Переменная должна быть активной после существования `event_cb`. (Должно быть `global` или `static` )
+ * @param obj       указатель на объект текстовой области
+ * @param txt       указатель на новую строку для вставки. Если `""`, текст не будет добавлен.
+ *                  Переменная должна быть активна после запуска`event_cb`. (Должно быть`global`или`static`)
  */
 void lv_textarea_set_insert_replace(lv_obj_t * obj, const char * txt);
 
 /**
  * Включить/отключить режим выбора.
- * @param obj       pointer to a text area object
- * @param en        true or false to enable/disable selection mode
+ * @param obj       указатель на объект текстовой области
+ * @param en        true или false, чтобы включить/отключить режим выбора
  */
 void lv_textarea_set_text_selection(lv_obj_t * obj, bool en);
 
 /**
  * Установите, как долго будет отображаться пароль, прежде чем изменить его на «*».
- * @param obj       pointer to a text area object
- * @param time      show time in milliseconds. 0: hide immediately.
+ * @param obj       указатель на объект текстовой области
+ * @param time      показывать время в миллисекундах. 0: немедленно скрыть.
  */
 void lv_textarea_set_password_show_time(lv_obj_t * obj, uint32_t time);
 
 /**
- * @deprecated Use the normal text_align style property instead
+ * @deprecated Вместо этого используйте обычное свойство стиля text_align.
  * Установите выравнивание метки.
  * Он устанавливает, где выравнивается метка (в однострочном режиме она может быть меньше текстовой области)
  * и как выравниваются линии области в случае многострочной текстовой области
- * @param obj       pointer to a text area object
- * @param align     the align mode from ::lv_text_align_t
+ * @param obj       указатель на объект текстовой области
+ * @param align     режим выравнивания из :: lv_text_align_t
  */
 void lv_textarea_set_align(lv_obj_t * obj, lv_text_align_t align);
 
@@ -214,99 +214,99 @@ void lv_textarea_set_align(lv_obj_t * obj, lv_text_align_t align);
 
 /**
  * Получить текст текстовой области. В режиме пароля он дает реальный текст (а не *).
- * @param obj       pointer to a text area object
- * @return          pointer to the text
+ * @param obj       указатель на объект текстовой области
+ * @return          указатель на текст
  */
 const char * lv_textarea_get_text(const lv_obj_t * obj);
 
 /**
  * Получить текст-заполнитель текстовой области
- * @param obj       pointer to a text area object
- * @return          pointer to the text
+ * @param obj       указатель на объект текстовой области
+ * @return          указатель на текст
  */
 const char * lv_textarea_get_placeholder_text(lv_obj_t * obj);
 
 /**
  * Получить метку текстовой области
- * @param obj       pointer to a text area object
- * @return          pointer to the label object
+ * @param obj       указатель на объект текстовой области
+ * @return          указатель на объект метки
  */
 lv_obj_t * lv_textarea_get_label(const lv_obj_t * obj);
 
 /**
  * Получить текущую позицию курсора в индексе символов
- * @param obj       pointer to a text area object
- * @return          the cursor position
+ * @param obj       указатель на объект текстовой области
+ * @return          позиция курсора
  */
 uint32_t lv_textarea_get_cursor_pos(const lv_obj_t * obj);
 
 /**
  * Узнайте, включено или нет позиционирование щелчка курсора.
- * @param obj       pointer to a text area object
- * @return          true: enable click positions; false: disable
+ * @param obj       указатель на объект текстовой области
+ * @return          true: включить позиции кликов; ложь: отключить
  */
 bool lv_textarea_get_cursor_click_pos(lv_obj_t * obj);
 
 /**
  * Получить атрибут режима пароля
- * @param obj       pointer to a text area object
- * @return          true: password mode is enabled, false: disabled
+ * @param obj       указатель на объект текстовой области
+ * @return          true: режим пароля включен, false: отключен
  */
 bool lv_textarea_get_password_mode(const lv_obj_t * obj);
 
 /**
  * Получить замещающие символы для отображения в режиме пароля
- * @param obj       pointer to a text area object
- * @return          pointer to the replacement text
+ * @param obj       указатель на объект текстовой области
+ * @return          указатель на текст замены
  */
 const char * lv_textarea_get_password_bullet(lv_obj_t * obj);
 
 /**
  * Получите однострочный атрибут конфигурации
- * @param obj       pointer to a text area object
- * @return          true: one line configuration is enabled, false: disabled
+ * @param obj       указатель на объект текстовой области
+ * @return          true: однострочная конфигурация включена, false: отключена
  */
 bool lv_textarea_get_one_line(const lv_obj_t * obj);
 
 /**
  * Получите список принятых символов.
- * @param obj       pointer to a text area object
- * @return          list of accented characters.
+ * @param obj       указатель на объект текстовой области
+ * @return          список акцентированных символов.
  */
 const char * lv_textarea_get_accepted_chars(lv_obj_t * obj);
 
 /**
  * Получить максимальную длину текстовой области.
- * @param obj       pointer to a text area object
- * @return          the maximal number of characters to be add
+ * @param obj       указатель на объект текстовой области
+ * @return          максимальное количество добавляемых символов
  */
 uint32_t lv_textarea_get_max_length(lv_obj_t * obj);
 
 /**
  * Узнайте, выделен ли текст или нет.
- * @param obj       pointer to a text area object
- * @return          whether text is selected or not
+ * @param obj       указатель на объект текстовой области
+ * @return          выделен ли текст или нет
  */
 bool lv_textarea_text_is_selected(const lv_obj_t * obj);
 
 /**
  * Проверьте, включен ли режим выбора.
- * @param obj       pointer to a text area object
- * @return          true: selection mode is enabled, false: disabled
+ * @param obj       указатель на объект текстовой области
+ * @return          true: режим выбора включен, false: отключен
  */
 bool lv_textarea_get_text_selection(lv_obj_t * obj);
 
 /**
  * Установите, как долго будет отображаться пароль, прежде чем изменить его на «*».
- * @param obj       pointer to a text area object
- * @return          show time in milliseconds. 0: hide immediately.
+ * @param obj       указатель на объект текстовой области
+ * @return          показывать время в миллисекундах. 0: немедленно скрыть.
  */
 uint32_t lv_textarea_get_password_show_time(lv_obj_t * obj);
 
 /**
  * Получить символ из текущей позиции курсора
- * @param obj       pointer to a text area object
- * @return          a the character or 0
+ * @param obj       указатель на объект текстовой области
+ * @return          символ или 0
  */
 uint32_t lv_textarea_get_current_char(lv_obj_t * obj);
 
@@ -316,31 +316,31 @@ uint32_t lv_textarea_get_current_char(lv_obj_t * obj);
 
 /**
  * Снимите выделение в текстовой области.
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_clear_selection(lv_obj_t * obj);
 
 /**
  * Переместить курсор на один символ вправо
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_cursor_right(lv_obj_t * obj);
 
 /**
  * Переместить курсор на один символ влево
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_cursor_left(lv_obj_t * obj);
 
 /**
  * Переместить курсор на одну строку вниз
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_cursor_down(lv_obj_t * obj);
 
 /**
  * Переместить курсор на одну строку вверх
- * @param obj       pointer to a text area object
+ * @param obj       указатель на объект текстовой области
  */
 void lv_textarea_cursor_up(lv_obj_t * obj);
 

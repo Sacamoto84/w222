@@ -105,8 +105,8 @@ static inline lv_color32_t get_px(color_t p)
 
 /**
  * Сбрасывает содержимое внутреннего буфера в определенную область дисплея.
- * @param [in] отображает созданный экранный объектX11из@lv_x11_window_create
- * @param [in] область область, подлежащая обновлению
+ * @param [in] disp созданный экранный объектX11из@lv_x11_window_create
+ * @param [in] area область, подлежащая обновлению
  * @param [in] px_map содержит визуализированное изображение в виде необработанной карты изображения, и его следует скопировать в`area`на дисплей.
  * @note              @reflv_display_flush_readyдолжен быть вызван по завершении.
  */
@@ -161,7 +161,7 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
 
 /**
  * событие, вызывающее отображение уровня, если разрешение было изменено (был вызван@reflv_display_set_resolution )
- * @param [in] данные событий, содержащие объект lv_display_t
+ * @param [in] e событий, содержащие объект lv_display_t
  */
 static void x11_resolution_evt_cb(lv_event_t * e)
 {
@@ -190,7 +190,7 @@ static void x11_resolution_evt_cb(lv_event_t * e)
 
 /**
  * событие, вызывающее отображение lvgl, если индикатор был закрыт (был вызван@reflv_display_delete )
- * @param [in] данные событий, содержащие объект lv_display_t
+ * @param [in] e событий, содержащие объект lv_display_t
  */
 static void x11_disp_delete_evt_cb(lv_event_t * e)
 {

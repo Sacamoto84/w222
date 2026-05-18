@@ -39,7 +39,7 @@
 /** Отметить, что анимация не выполняется*/
 #define LV_BAR_ANIM_STATE_INV   -1
 
-/** log2( LV_BAR_ANIM_STATE_END ) используется для нормализации данных*/
+/** log2(LV_BAR_ANIM_STATE_END) используется для нормализации данных.*/
 #define LV_BAR_ANIM_STATE_NORM  8
 
 /**********************
@@ -471,9 +471,9 @@ static void draw_indic(lv_event_t * e)
     bool hor_need_reversed = hor && base_dir == LV_BASE_DIR_RTL;
     bool reversed = bar->val_reversed ^ hor_need_reversed;
 
-    /* Область шириной 0 равна {x1 = 0 x2 = -1}, поэтому вычитание 1 из `anim_cur_value_x` приводит к...
-     *     anim_start_value_x = 0   anim_cur_value_x = 0   to be {x1 = 0 x2 = -1  } which is width 0
-     *     anim_start_value_x = 0   anim_cur_value_x = 300 to be {x1 = 0 x2 =  299} which is width 300
+    /* Область распространения 0 равна {x1 = 0 x2 = -1}, поэтому вычитание 1 из`anim_cur_value_x`приводит к...
+     *     anim_start_value_x = 0anim_cur_value_x= 0 будет {x1 = 0 x2 = -1 }, что соответствует ширине 0
+     *     anim_start_value_x = 0anim_cur_value_x= 300 будет равно {x1 = 0 x2 = 299}, что соответствует ширине 300.
      */
     anim_cur_value_x -= 1;
 
@@ -569,24 +569,24 @@ static void draw_indic(lv_event_t * e)
 
     /*Случаи:
      * Просто:
-     *   - indicator area is the same or smaller then the bg
-     *   - indicator has the same or larger radius than the bg
+     *   - Площадь индикатора равна или меньше фона
+     *   - индикатор имеет такой же или больший радиус, чем задний фон
      *   - what to do? just draw the indicator
      * Проблема с радиусом:
-     *   - indicator area is the same or smaller then bg
-     *   - indicator has smaller radius than the bg and the indicator overflows on the corners
+     *   - площадь индикатора равна или меньше заднего фона
+     *   - индикатор имеет меньший радиус, чем задний фон, и индикатор выходит за пределы по углам
      *   - what to do? draw the indicator on a layer and clip to bg radius
      * Больший показатель:
-     *   - indicator area is the larger then the bg
-     *   - radius doesn't matter
-     *   - shadow doesn't matter
+     *   - площадь индикатора больше, чем фон
+     *   - радиус не имеет значения
+     *   - тень не имеет значения
      *   - what to do? just draw the indicator
      * Тень:
-     *   - indicator area is the same or smaller then the bg
-     *   - indicator has the same or larger radius than the bg (shadow needs to be drawn on strange clipped shape)
+     *   - Площадь индикатора равна или меньше фона
+     *   - индикатор имеет такой же или больший радиус, чем фоновый фон (тень нужно рисовать на странной обрезанной форме)
      *   - what to do? don't draw the shadow if the indicator is too small has strange shape
      * Градиент:
-     *   - the indicator has a gradient
+     *   - индикатор имеет градиент
      *   - what to do? draw it on a bg sized layer clip the indicator are from the gradient
      *
      */
@@ -693,7 +693,7 @@ static void lv_bar_event(const lv_obj_class_t * class_p, lv_event_t * e)
         int32_t indic_size;
         indic_size = lv_obj_calculate_ext_draw_size(obj, LV_PART_INDICATOR);
 
-        /*Размер фона обрабатывается lv_obj.*/
+        /*Размер фонаря обрабатываетсяlv_obj.*/
         int32_t * s = lv_event_get_param(e);
         *s = LV_MAX(*s, indic_size);
 

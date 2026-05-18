@@ -374,7 +374,7 @@ lv_gltf_aa_mode_t lv_gltf_get_antialiasing_mode(const lv_obj_t * obj);
 /**
  * Получить точку, в которой данный луч пересекается с указанной плоскостью, если таковая имеется.
  * @param ray тестовый луч пересечения
- * @param screen_y плоскость для проверки пересечения лучей с
+ * @param plane плоскость для проверки пересечения лучей с
  * @param collision_point выходной держатель lv_3dpoint_t, значения действительны только в том случае, если возвращаемое значение равно true
  * @return LV_RESULT_OK, если пересечение, LV_RESULT_INVALID, если пересечения нет.
  */
@@ -402,7 +402,7 @@ lv_3dray_t lv_gltf_get_ray_from_2d_coordinate(lv_obj_t * obj, const lv_point_t *
  * Получить положение на экране трехмерной точки
  * @param obj указатель на объект просмотра GLTF
  * @param world_pos мировое положение для конвертации
- * @param lv_point_t результирующая точка в пикселях. допустимо только в том случае, если возвращаемое значение истинно
+ * @param screen_pos результирующая точка в пикселях. допустимо только в том случае, если возвращаемое значение истинно
  * @return LV_RESULT_OK, если преобразование действительно, LV_RESULT_INVALID, если преобразование недействительно.
  */
 lv_result_t lv_gltf_world_to_screen(lv_obj_t * obj, const lv_3dpoint_t world_pos, lv_point_t * screen_pos);

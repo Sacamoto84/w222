@@ -31,7 +31,7 @@ void test_memmove(void)
         TEST_ASSERT_EQUAL_INT(i, buf[i]);
     }
 
-    /* Случай dst < src */
+    /* Случай dst < источник */
     dst = &buf[0];
     src = &buf[1];
     lv_memmove(dst, src, 4);
@@ -39,7 +39,7 @@ void test_memmove(void)
         TEST_ASSERT_EQUAL_INT(i + 1, buf[i]);
     }
 
-    /* Случай dst > src */
+    /* Случайный день > источник */
     for(int i = 0; i < 5; i++) buf[i] = i;
     dst = &buf[1];
     src = &buf[0];

@@ -51,8 +51,8 @@ typedef enum {
 
 /**
  * Создайте объект переключателя
- * @param parent    pointer to an object, it will be the parent of the new switch
- * @return          pointer to the created switch
+ * @param parent    указатель на объект, он будет родителем нового переключателя
+ * @return          указатель на созданный переключатель
  */
 lv_obj_t * lv_switch_create(lv_obj_t * parent);
 
@@ -62,8 +62,8 @@ lv_obj_t * lv_switch_create(lv_obj_t * parent);
 
 /**
  * Установите ориентацию переключателя.
- * @param obj           pointer to switch object
- * @param orientation   switch orientation from `lv_switch_orientation_t`
+ * @param obj           указатель для переключения объекта
+ * @param orientation   переключить ориентацию с `lv_switch_orientation_t`
  */
 void lv_switch_set_orientation(lv_obj_t * obj, lv_switch_orientation_t orientation);
 
@@ -73,8 +73,8 @@ void lv_switch_set_orientation(lv_obj_t * obj, lv_switch_orientation_t orientati
 
 /**
  * Получите ориентацию переключателя.
- * @param obj       pointer to switch object
- * @return          switch orientation from ::lv_switch_orientation_t
+ * @param obj       указатель для переключения объекта
+ * @return          переключить ориентацию с :: lv_switch_orientation_t
  */
 lv_switch_orientation_t lv_switch_get_orientation(lv_obj_t * obj);
 

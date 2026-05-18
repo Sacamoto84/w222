@@ -47,7 +47,7 @@ struct _lv_fragment_managed_states_t  {
      */
     lv_fragment_t * instance;
     /**
-     * истинно между `create_obj_cb` и `obj_deleted_cb`
+     * существует между`create_obj_cb`и `obj_deleted_cb`
      */
     bool obj_created;
     /**
@@ -55,7 +55,7 @@ struct _lv_fragment_managed_states_t  {
      */
     bool destroying_obj;
     /**
-     * true, если этот фрагмент находится в стеке навигации, который можно извлечь
+     * правда, если этот фрагмент находится в стеке навигации, который можно потерять
      */
     bool in_stack;
 };

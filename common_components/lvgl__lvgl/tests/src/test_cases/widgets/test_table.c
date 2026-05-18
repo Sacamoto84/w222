@@ -136,7 +136,7 @@ void test_table_should_wrap_long_texts(void)
 
 static void draw_part_event_cb(lv_event_t * e)
 {
-    /* Проверьте обработку ошибок lv_event_get_invalidated_area. */
+    /* проверить обработку ошибокlv_event_get_invalidated_area. */
     TEST_ASSERT_NULL(lv_event_get_invalidated_area(e));
 
     lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
@@ -234,7 +234,7 @@ void test_table_rendering(void)
     /**
      * От `lv_obj_pos`:
      *
-     * При использовании глобальной матрицы координаты вершин clip_area теряют точность после преобразования.
+     * При использовании координат вершины глобальной матрицыclip_areaдостигается точность после преобразования.
      * которую можно решить расширением области перерисовки.
      * lv_area_increase (& area_tmp, 5, 5);
      *

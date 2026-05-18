@@ -41,12 +41,12 @@ struct _lv_calendar_t {
     bool use_chinese_calendar;
 
     /** 7 * 6: В неделе 7 дней, а всего в календаре отображается 6 недель.
-     * 20: Including the number of dates, line breaks, names for each day,
+     * 20: Включая количество дат, разрывы строк, названия для каждого дня,
      * и резервируя несколько мест для адресов. */
     char nums [7 * 6][20];
 #else
     /** 7 * 6: В неделе 7 дней, а всего в календаре отображается 6 недель.
-     * 6: Including the number of dates, and reserving several spaces for
+     * 6: Включая количество дат и резервируя несколько мест для
      * адреса.*/
     char nums [7 * 6][4];
 #endif

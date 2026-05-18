@@ -174,22 +174,22 @@ void test_arc_click_area_with_adv_hittest(void)
     lv_test_mouse_click_at(50, 50);
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);
 
-    /*Нет щелчка вблизи радиуса - bg_arc - ext_click_area*/
+    /*Нет открытия вблизи -bg_arc- ext_click_area*/
     event_cnt = 0;
     lv_test_mouse_click_at(83, 50);
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);
 
-    /*Нажмите на радиус — bg_arc — ext_click_area.*/
+    /*Нажмите в радиусе —bg_arc— ext_click_area.*/
     event_cnt = 0;
     lv_test_mouse_click_at(86, 50);
     TEST_ASSERT_GREATER_THAN(0, event_cnt);
 
-    /*Нажмите на радиус + ext_click_area*/
+    /*Нажмите в радиусе + ext_click_area*/
     event_cnt = 0;
     lv_test_mouse_click_at(104, 50);
     TEST_ASSERT_GREATER_THAN(0, event_cnt);
 
-    /*Никаких щелчков за пределами радиуса + ext_click_area*/
+    /*Никаких экспертов за пределами радиуса + ext_click_area*/
     event_cnt = 0;
     lv_test_mouse_click_at(106, 50);
     TEST_ASSERT_EQUAL_UINT32(0, event_cnt);

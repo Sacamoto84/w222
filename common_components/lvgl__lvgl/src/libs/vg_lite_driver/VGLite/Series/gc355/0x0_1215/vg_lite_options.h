@@ -109,8 +109,8 @@
     #define gcFEATURE_VG_SINGLE_COMMAND_BUFFER      0
 
     /***
-    #определить gcFEATURE_VG_RESOLUTION_8K 1
-    #определить gcFEATURE_VG_IMAGE_16K 0
+    #gcFEATURE_VG_RESOLUTION_8K 1
+    #gcFEATURE_VG_IMAGE_16K 0
     ***/
 #endif /* LV_USE_VG_LITE_DRIVER */
 

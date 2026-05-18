@@ -87,7 +87,7 @@ void test_pct(void)
 
     /**
      * Поведение, выходящее за рамки.
-     * Значение pct будет ограничено значением max/min, если оно выходит за пределы.
+     * Значение pct будет ограничено значением макс/мин, если оно выходит за пределы.
     */
 
     pct_val = PCT_MAX_VALUE + 1;
@@ -267,7 +267,7 @@ void test_area_diff_property(void)
         grid_mark(grid_simple, &everything, ' ', false);
         grid_mark_area_diff_simple(grid_simple, &outer, &remove);
 
-        /*Отметьте оставшуюся область, используя более эффективный lv_area_diff ()*/
+        /*Учитывая оставшуюся область, используя более эффективныйlv_area_diff()*/
         grid_mark(grid, &everything, ' ', false);
         grid_mark_area_diff(grid, &outer, &remove);
 
@@ -525,7 +525,7 @@ void test_area_align(void)
 
     /* Тестовый случай по умолчанию с неверным выравниванием */
     lv_area_align(&base, &to_align, (lv_align_t)100, 10, 20);
-    TEST_ASSERT_EQUAL_INT32(10, to_align.x1);  /* база.x1 + ofs_x = 0 + 10 */
+    TEST_ASSERT_EQUAL_INT32(10, to_align.x1);  /* база.x1 +ofs_x= 0 + 10 */
     TEST_ASSERT_EQUAL_INT32(20, to_align.y1);  /* base.y1 + ofs_y = 0 + 20 */
     TEST_ASSERT_EQUAL_INT32(60, to_align.x2);  /* х1 + ширина – 1 = 10 + 51 – 1 */
     TEST_ASSERT_EQUAL_INT32(70, to_align.y2);  /* y1 + высота - 1 = 20 + 51 - 1 */

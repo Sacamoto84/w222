@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -30,14 +30,14 @@ RAPIDJSON_DIAG_OFF(4512) // не удалось сгенерировать оп�
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-static const SizeType kPointerInvalidIndex = ~SizeType(0);  //!< Представляет недопустимый индекс в GenericPointer::Token.
+static const SizeType kPointerInvalidIndex = ~SizeType(0);  //!< содержит недопустимый индекс в GenericPointer::Token.
 
 ///////////////////////////////////////////////////////////////////////////////
 // Общий указатель
 
 //! Представляет указатель JSON. Используйте указатель для кодировки UTF8 и распределителя по умолчанию.
 /*!
-    Этот класс реализует RFC 6901 «Указатель нотации объекта JavaScript ( JSON )»
+    Этот класс реализуетRFC6901 «Указатель нотации объекта JavaScript (JSON)»
     ( https://tools.ietf.org/html/rfc6901).
 
     Указатель JSON предназначен для идентификации определенного значения в документе JSON.
@@ -45,7 +45,7 @@ static const SizeType kPointerInvalidIndex = ~SizeType(0);  //!< Предста�
     может получить доступ к многоуровневой глубине дерева DOM с помощью одного вызова API.
 
     После анализа строкового представления (например, фрагмента "/foo/0" или URI
-    представление (например, «#/foo/0») во внутреннее представление (токены),
+    представление (например, «#/foo/0») в области представления (токены),
     его можно использовать для разрешения определенного значения в нескольких документах или поддереве
     документов.
 
@@ -58,11 +58,11 @@ static const SizeType kPointerInvalidIndex = ~SizeType(0);  //!< Предста�
 
     GenericPointer зависит от GenericDocument и GenericValue.
 
-    \tparam ValueType Тип значения дерева DOM. например GenericValue< UTF8 <> >
+    \tparam ValueType Тип значения дереваDOM. например GenericValue<UTF8<> >
     \tparam Распределитель Тип распределителя для выделения памяти для внутреннего представления.
 
     \note GenericPointer использует ту же кодировку, что и ValueType.
-    Однако распределитель GenericPointer не зависит от распределителя значений.
+    Однако распределение GenericPointer не зависит от распределения результатов.
 */
 template <typename ValueType, typename Allocator = CrtAllocator>
 class GenericPointer {
@@ -74,13 +74,13 @@ public:
 
   //! Токен — это базовая единица внутреннего представления.
     /*!
-        Строковое представление указателя JSON "/foo/123" анализируется до двух токенов:
+        Строковое представление указателяJSON"/foo/123" анализируется до двух токенов:
         «foo» и 123. 123 будет представлено как в числовой, так и в строковой форме.
         Они разрешаются в соответствии с фактическим типом значения (объект или массив).
 
         Для токенов, которые не являются числами, или числовое значение выходит за пределы
-        (больше, чем пределы SizeType), они рассматриваются только как строковая форма.
-        (т.е. индекс токена будет равен kPointerInvalidIndex).
+        (больше, чем размер SizeType), они рассматривают только как строковую форму.
+        (т.е. токена индекса будет равна kPointerInvalidIndex).
 
         Эта структура является общедоступной, поэтому пользователь может создать указатель без синтаксического анализа и
         выделение с помощью специального конструктора.
@@ -91,7 +91,7 @@ public:
         SizeType index;             //!< Действительный индекс массива, если он не равен kPointerInvalidIndex.
     };
 
-    //! @name Конструкторы и деструктор.
+    //! @nameКонструкторы и деструкторы.
     //@{
 
     //! Конструктор по умолчанию.
@@ -99,8 +99,8 @@ public:
 
     //! Конструктор, который анализирует строку или представление фрагмента URI.
     /*!
-        \param source Строковое представление указателя JSON с нулевым завершением или фрагментное представление URI.
-        \param allocator Пользовательский распределитель для этого указателя. Если распределитель не указан, он создает собственный.
+        \param source Строковое представление указателяJSONс нулевым завершением фрагмента или представлениеURI.
+        \param allocator Пользовательский распределитель для этого указателя. Если распределитель не указан, он производит большие размеры.
     */
     explicit GenericPointer(const Ch* source, Allocator* allocator = 0) : allocator_(allocator), ownAllocator_(), nameBuffer_(), tokens_(), tokenCount_(), parseErrorOffset_(), parseErrorCode_(kPointerParseErrorNone) {
         Parse(source, internal::StrLen(source));
@@ -109,9 +109,9 @@ public:
 #if RAPIDJSON_HAS_STDSTRING
     //! Конструктор, который анализирует строку или представление фрагмента URI.
     /*!
-        \param source Строковое представление или фрагмент URI указателя JSON.
-        \param allocator Пользовательский распределитель для этого указателя. Если распределитель не указан, он создает собственный.
-        \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
+        \param source Строковое представление или фрагментURIуказателяJSON.
+        \param allocator Пользовательский распределитель для этого указателя. Если распределитель не указан, он производит большие размеры.
+        \note Требуется определение символа препроцессора \refRAPIDJSON_HAS_STDSTRING.
     */
     explicit GenericPointer(const std::basic_string<Ch>& source, Allocator* allocator = 0) : allocator_(allocator), ownAllocator_(), nameBuffer_(), tokens_(), tokenCount_(), parseErrorOffset_(), parseErrorCode_(kPointerParseErrorNone) {
         Parse(source.c_str(), source.size());
@@ -120,9 +120,9 @@ public:
 
     //! Конструктор, который анализирует строку или представление фрагмента URI с длиной исходной строки.
     /*!
-        \param source Строковое представление или фрагмент URI указателя JSON.
+        \param source Строковое представление или фрагментURIуказателяJSON.
         \param length Длина источника.
-        \param allocator Пользовательский распределитель для этого указателя. Если распределитель не указан, он создает собственный.
+        \param allocator Пользовательский распределитель для этого указателя. Если распределитель не указан, он производит большие размеры.
         \note Немного быстрее, чем перегрузка без длины.
     */
     GenericPointer(const Ch* source, size_t length, Allocator* allocator = 0) : allocator_(allocator), ownAllocator_(), nameBuffer_(), tokens_(), tokenCount_(), parseErrorOffset_(), parseErrorCode_(kPointerParseErrorNone) {
@@ -135,15 +135,15 @@ public:
         Это предотвращает процесс синтаксического анализа и исключает выделение.
         Это предпочтительно для сред с ограниченной памятью.
 
-        \param tokens Постоянный массив токенов, представляющий указатель JSON.
+        \param tokens Постоянный массив токенов, представляющий указательJSON.
         \param tokenCount Количество токенов.
 
         \b Пример
         \code
-        #define NAME (s) { s, sizeof(s) / sizeof(s[0]) - 1, kPointerInvalidIndex }
-        #определить INDEX (i) { #i, sizeof( #i) - 1, i }
+        #defineNAME(s) { s, sizeof(s) / sizeof(s[0]) - 1, kPointerInvalidIndex }
+        #INDEX (i) {#i, sizeof(#i) - 1, i }
 
-        static const Pointer::Token kTokens[] = { NAME ("foo"), INDEX (123) };
+        static const Pointer::Token kTokens[] = {NAME("foo"),INDEX(123) };
         static const Pointer p(kTokens, sizeof(kTokens) / sizeof(kTokens[0]));
         // Эквивалентно static const Pointer p("/foo/123");
 
@@ -165,7 +165,7 @@ public:
 
     //! Деструктор.
     ~GenericPointer() {
-        if (nameBuffer_)    // Если используется конструктор токенов, предоставленный пользователем, nameBuffer_ имеет значение nullptr, а tokens_ не освобождается.
+        if (nameBuffer_)    // Если используется конструктор токенов, предоставленный пользователем,nameBuffer_имеет значение nullptr, аtokens_не освобождается.
             Allocator::Free(tokens_);
         RAPIDJSON_DELETE(ownAllocator_);
     }
@@ -173,7 +173,7 @@ public:
     //! Оператор присваивания.
     GenericPointer& operator=(const GenericPointer& rhs) {
         if (this != &rhs) {
-            // Не удаляйте ownAllocator
+            // Не удалять ownAllocator
             if (nameBuffer_)
                 Allocator::Free(tokens_);
 
@@ -209,27 +209,27 @@ public:
 
     //! отдельно стоящий помощник функции подкачки
     /*!
-        Вспомогательная функция для включения поддержки общего шаблона реализации подкачки на основе \c std::swap:
+        Вспомогательная функция для включения поддержки реализации общего шаблона подкачки на основе \c std::swap:
         \code
         void swap(MyClass& a, MyClass& b) {
-            используя std::swap;
+            с помощью станд::своп;
             swap(a.pointer, b.pointer);
             // ...
         }
         \endcode
-        \см. Swap()
+        \см.  Swap()
      */
     friend inline void swap(GenericPointer& a, GenericPointer& b) RAPIDJSON_NOEXCEPT { a.Swap(b); }
 
     //@}
 
-    //! @name Добавить токен
+    //! @nameДобавить токен
     //@{
 
     //! Добавить токен и вернуть новый указатель
     /*!
         \param token Добавляемый токен.
-        \param allocator Распределитель вновь возвращаемого указателя.
+        \param allocator Распределитель вновь возвращающегося указателя.
         \return Новый указатель с добавленным токеном.
     */
     GenericPointer Append(const Token& token, Allocator* allocator = 0) const {
@@ -247,7 +247,7 @@ public:
     /*!
         \param name Добавляемое имя.
         \param length Длина имени.
-        \param allocator Распределитель вновь возвращаемого указателя.
+        \param allocator Распределитель вновь возвращающегося указателя.
         \return Новый указатель с добавленным токеном.
     */
     GenericPointer Append(const Ch* name, SizeType length, Allocator* allocator = 0) const {
@@ -258,7 +258,7 @@ public:
     //! Добавьте токен имени без длины и верните новый указатель.
     /*!
         \param name Имя (const Ch*), которое нужно добавить.
-        \param allocator Распределитель вновь возвращаемого указателя.
+        \param allocator Распределитель вновь возвращающегося указателя.
         \return Новый указатель с добавленным токеном.
     */
     template <typename T>
@@ -271,7 +271,7 @@ public:
     //! Добавьте токен имени и верните новый указатель.
     /*!
         \param name Добавляемое имя.
-        \param allocator Распределитель вновь возвращаемого указателя.
+        \param allocator Распределитель вновь возвращающегося указателя.
         \return Новый указатель с добавленным токеном.
     */
     GenericPointer Append(const std::basic_string<Ch>& name, Allocator* allocator = 0) const {
@@ -282,7 +282,7 @@ public:
     //! Добавьте токен индекса и верните новый указатель.
     /*!
         \param index Добавляемый индекс.
-        \param allocator Распределитель вновь возвращаемого указателя.
+        \param allocator Распределитель вновь возвращающегося указателя.
         \return Новый указатель с добавленным токеном.
     */
     GenericPointer Append(SizeType index, Allocator* allocator = 0) const {
@@ -307,7 +307,7 @@ public:
     //! Добавить токен по значению и вернуть новый указатель
     /*!
         \param token Токен, который нужно добавить.
-        \param allocator Распределитель вновь возвращаемого указателя.
+        \param allocator Распределитель вновь возвращающегося указателя.
         \return Новый указатель с добавленным токеном.
     */
     GenericPointer Append(const ValueType& token, Allocator* allocator = 0) const {
@@ -320,7 +320,7 @@ public:
         }
     }
 
-    //! @name Обработка ошибки синтаксического анализа
+    //! @nameОбработка ошибок синтаксического анализа
     //@{
 
     //! Проверьте, является ли это действительным указателем.
@@ -348,7 +348,7 @@ public:
 
     //@}
 
-    //! @name Операторы равенства/неравенства
+    //! @nameОператоры равенства/неравенства
     //@{
 
     //! Оператор равенства.
@@ -379,7 +379,7 @@ public:
 
     //! Меньше, чем оператор.
     /*!
-        \note Неверные указатели всегда больше действительных.
+        \note Неверные указатели всегда более существенны.
     */
     bool operator<(const GenericPointer& rhs) const {
         if (!IsValid())
@@ -406,7 +406,7 @@ public:
 
     //@}
 
-    //! @name Stringify
+    //! @nameStringify
     //@{
 
     //! Преобразование указателя в строковое представление.
@@ -431,7 +431,7 @@ public:
 
     //@}
 
-    //! @name Создать ценность
+    //! @nameСоздать стоимость
     //@{
 
     //! Создайте значение в поддереве.
@@ -441,13 +441,13 @@ public:
 
         Напоминаем, что он может менять типы родителей в зависимости от токенов, поэтому он
         потенциально удаляет ранее сохраненные значения. Например, если документ
-        был массивом, а "/foo" используется для создания значения, тогда документ
+        был массивом, а "/foo" используется для создания значений, тогда документ
         будет изменен на объект, и все существующие элементы массива будут потеряны.
 
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
-        \param allocator Распределитель для создания значений, если указанное значение или его родительские элементы не существуют.
-        \param ужеExist Если значение не равно нулю, сохраняется информация о том, существует ли уже разрешенное значение.
-        \return Разрешенное вновь созданное значение (нулевое значение JSON) или уже существующее значение.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
+        \param allocator Распределитель для создания отсчетов, если указанное значение или его родительские элементы не существуют.
+        \param ужеExist Если значение не равнозначно, сохраняется информация о том, что существует уже разрешенное значение.
+        \return Разрешенное вновь созданное значение (нулевое значениеJSON) или уже существующее значение.
     */
     ValueType& Create(ValueType& root, typename ValueType::AllocatorType& allocator, bool* alreadyExist = 0) const {
         RAPIDJSON_ASSERT(IsValid());
@@ -483,7 +483,7 @@ public:
                     if (m == v->MemberEnd()) {
                         v->AddMember(ValueType(t->name, t->length, allocator).Move(), ValueType().Move(), allocator);
                         m = v->MemberEnd();
-                        v = &(--m)->value; // Предполагается, что AddMember() добавляется в конце.
+                        v = &(--m)->value; // Предполагается, чтоAddMember()будет добавлен в конце.
                         exist = false;
                     }
                     else
@@ -501,7 +501,7 @@ public:
     //! Создает значение в документе.
     /*!
         \param document Документ, который необходимо разрешить.
-        \param ужеExist Если значение не равно нулю, сохраняется информация о том, существует ли уже разрешенное значение.
+        \param ужеExist Если значение не равнозначно, сохраняется информация о том, что существует уже разрешенное значение.
         \return Разрешенное вновь созданное или уже существующее значение.
     */
     template <typename stackAllocator>
@@ -511,23 +511,23 @@ public:
 
     //@}
 
-    //! @name Вычислить URI
+    //! @nameВычислить URI
     //@{
 
     //! Вычислите URI в области видимости для поддерева.
     //  Для использования с указателями JSON в документах схемы JSON.
     /*!
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
         \param rootUri Корень URI
         \param unsolvedTokenIndex Если указатель не может разрешить токен в указателе, этот параметр может получить индекс неразрешенного токена.
         \param allocator Распределитель для Uris
-        \return Uri, если это можно решить. В противном случае ноль.
+        \return Ури, если это можно решить. В противном случае ноль.
 
         \note
         Есть только 3 ситуации, когда проблема URI не может быть решена:
-        1. A value in the path is neither an array nor object.
-        2. An object value does not contain the token.
-        3. A token is out of range of an array value.
+        1. Значение в пути не является ни массивом, ни объектом.
+        2. Значение объекта не содержит токена.
+        3. Токен находится вне диапазона значения массива.
 
         Используйте unsolvedTokenIndex для получения индекса токена.
     */
@@ -562,7 +562,7 @@ public:
                     break;
             }
 
-            // Error: unresolved token
+            // Error: неразрешенный токен
             if (unresolvedTokenIndex)
                 *unresolvedTokenIndex = static_cast<size_t>(t - tokens_);
             return UriType(allocator);
@@ -575,20 +575,20 @@ public:
     }
 
 
-    //! @name Значение запроса
+    //! @nameЗначение запроса
     //@{
 
     //! Запросить значение в поддереве.
     /*!
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
         \param unsolvedTokenIndex Если указатель не может разрешить токен в указателе, этот параметр может получить индекс неразрешенного токена.
-        \return Указатель на значение, если его можно разрешить. В противном случае ноль.
+        \return Указатель значения, если его можно разрешить. В противном случае ноль.
 
         \note
         Есть только 3 ситуации, когда значение не может быть разрешено:
-        1. A value in the path is neither an array nor object.
-        2. An object value does not contain the token.
-        3. A token is out of range of an array value.
+        1. Значение в пути не является ни массивом, ни объектом.
+        2. Значение объекта не содержит токена.
+        3. Токен находится вне диапазона значения массива.
 
         Используйте unsolvedTokenIndex для получения индекса токена.
     */
@@ -614,7 +614,7 @@ public:
                 break;
             }
 
-            // Error: unresolved token
+            // Error: неразрешенный токен
             if (unresolvedTokenIndex)
                 *unresolvedTokenIndex = static_cast<size_t>(t - tokens_);
             return 0;
@@ -624,8 +624,8 @@ public:
 
     //! Запросить константное значение в константном поддереве.
     /*!
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
-        \return Указатель на значение, если его можно разрешить. В противном случае ноль.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
+        \return Указатель значения, если его можно разрешить. В противном случае ноль.
     */
     const ValueType* Get(const ValueType& root, size_t* unresolvedTokenIndex = 0) const {
         return Get(const_cast<ValueType&>(root), unresolvedTokenIndex);
@@ -633,18 +633,18 @@ public:
 
     //@}
 
-    //! @name Запросить значение по умолчанию
+    //! @nameЗапросить значение по умолчанию
     //@{
 
     //! Запросить значение в поддереве со значением по умолчанию.
     /*!
-        Аналогично Get(), но если указанное значение не существует, создаются все родительские элементы и клонируется значение по умолчанию.
+        АналогичноGet(), но если указанное значение не существует, определение всех родительских элементов и клонируется значением по умолчанию.
         Так что эта функция всегда выполняется.
 
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
         \param defaultValue Значение по умолчанию, которое будет клонировано, если значение не существует.
-        \param allocator Распределитель для создания значений, если указанное значение или его родительские элементы не существуют.
-        \см. Create()
+        \param allocator Распределитель для создания отсчетов, если указанное значение или его родительские элементы не существуют.
+        \см.  Create()
     */
     ValueType& GetWithDefault(ValueType& root, const ValueType& defaultValue, typename ValueType::AllocatorType& allocator) const {
         bool alreadyExist;
@@ -670,7 +670,7 @@ public:
 
     //! Запросите значение в поддереве с примитивным значением по умолчанию.
     /*!
-        \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t , \c bool
+        \tparam T Либо \ref Type, \c int, \c unsigned, \cint64_t, \cuint64_t, \c bool
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (ValueType&))
@@ -700,7 +700,7 @@ public:
 
     //! Запросите значение в документе с примитивным значением по умолчанию.
     /*!
-        \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t , \c bool
+        \tparam T Либо \ref Type, \c int, \c unsigned, \cint64_t, \cuint64_t, \c bool
     */
     template <typename T, typename stackAllocator>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (ValueType&))
@@ -710,7 +710,7 @@ public:
 
     //@}
 
-    //! @name Установить значение
+    //! @nameУстановить значение
     //@{
 
     //! Установите значение в поддереве с семантикой перемещения.
@@ -718,10 +718,10 @@ public:
         Он создает всех родителей, если они не существуют или типы отличаются от токенов.
         Таким образом, эта функция всегда завершается успешно, но потенциально удаляет существующие значения.
 
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
         \param value Устанавливаемое значение.
-        \param allocator Распределитель для создания значений, если указанное значение или его родительские элементы не существуют.
-        \см. Create()
+        \param allocator Распределитель для создания отсчетов, если указанное значение или его родительские элементы не существуют.
+        \см.  Create()
     */
     ValueType& Set(ValueType& root, ValueType& value, typename ValueType::AllocatorType& allocator) const {
         return Create(root, allocator) = value;
@@ -746,7 +746,7 @@ public:
 
     //! Установите примитивное значение в поддереве.
     /*!
-        \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t , \c bool
+        \tparam T Либо \ref Type, \c int, \c unsigned, \cint64_t, \cuint64_t, \c bool
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (ValueType&))
@@ -773,7 +773,7 @@ public:
     }
 
 #if RAPIDJSON_HAS_STDSTRING
-    //! Устанавливает std::basic_string в документе.
+    //! Устанавливает std::basic_string в документ.
     template <typename stackAllocator>
     ValueType& Set(GenericDocument<EncodingType, typename ValueType::AllocatorType, stackAllocator>& document, const std::basic_string<Ch>& value) const {
         return Create(document) = ValueType(value, document.GetAllocator()).Move();
@@ -782,7 +782,7 @@ public:
 
     //! Установите примитивное значение в документе.
     /*!
-    \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t , \c bool
+    \tparam T Либо \ref Type, \c int, \c unsigned, \cint64_t, \cuint64_t, \c bool
     */
     template <typename T, typename stackAllocator>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (ValueType&))
@@ -792,7 +792,7 @@ public:
 
     //@}
 
-    //! @name Поменять значение
+    //! @nameПоменять значение
     //@{
 
     //! Поменяйте местами значение на значение в поддереве.
@@ -800,10 +800,10 @@ public:
         Он создает всех родителей, если они не существуют или типы отличаются от токенов.
         Таким образом, эта функция всегда завершается успешно, но потенциально удаляет существующие значения.
 
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
-        \param value Значение для замены.
-        \param allocator Распределитель для создания значений, если указанное значение или его родительские элементы не существуют.
-        \см. Create()
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
+        Значение \param для замены.
+        \param allocator Распределитель для создания отсчетов, если указанное значение или его родительские элементы не существуют.
+        \см.  Create()
     */
     ValueType& Swap(ValueType& root, ValueType& value, typename ValueType::AllocatorType& allocator) const {
         return Create(root, allocator).Swap(value);
@@ -819,10 +819,10 @@ public:
 
     //! Удалить значение в поддереве.
     /*!
-        \param root Корневое значение поддерева DOM, которое необходимо разрешить. Это может быть любое значение, кроме корня документа.
+        \param root Корневое значение поддереваDOM, которое необходимо разрешить. Это может быть любое значение, кроме основного документа.
         \return Будет ли найдено и удалено разрешенное значение.
 
-        \note Стирание с пустым указателем \c Pointer(""), т.е. корнем, всегда завершается неудачно и возвращает false.
+        \note Стирание с пустым указателем \c Pointer(""), т.е. в корне всегда завершается неудачно и возвращает ложь.
     */
     bool Erase(ValueType& root) const {
         RAPIDJSON_ASSERT(IsValid());
@@ -865,11 +865,11 @@ public:
     }
 
 private:
-    //! Клонируйте содержимое из rhs сюда.
+    //! Клонируйте сюда критерии Rhs.
     /*!
         \param rhs Указатель источника.
         \param extraToken Дополнительные токены, которые необходимо выделить.
-        \param extraNameBufferSize Размер дополнительного буфера имен (в количестве каналов), который будет выделен.
+        \param extraNameBufferSize Размер дополнительного буфера имен (во многих каналах), который будет выделен.
         \return Начало незанятого буфера имен для хранения дополнительных имен.
     */
     Ch* CopyFromRaw(const GenericPointer& rhs, size_t extraToken = 0, size_t extraNameBufferSize = 0) {
@@ -910,9 +910,9 @@ private:
     //! Разберите строку JSON или ее представление фрагмента URI на токены.
 #ifndef __clang__ // -Документация
     /*!
-        \param source Либо строка указателя JSON, либо ее фрагментное представление URI. Не обязательно иметь нулевое завершение.
+        \param source Либо строка указателяJSON, либо ее фрагментное представлениеURI. Не обязательно иметь нулевое завершение.
         \param length Длина исходной строки.
-        \note Источник не может быть строковым представлением JSON указателя JSON, например. В "/\u0000" \u0000 не будет неэкранированным.
+        \note Источник не может быть строковым представлениемJSONуказателяJSON, например. В "/\u0000" \u0000 не будет неэкранированным.
     */
 #endif
     void Parse(const Ch* source, size_t length) {
@@ -924,7 +924,7 @@ private:
         if (!allocator_)
             ownAllocator_ = allocator_ = RAPIDJSON_NEW(Allocator)();
 
-        // Подсчитайте количество '/' как tokenCount
+        // Подпишите количество '/' как tokenCount
         tokenCount_ = 0;
         for (const Ch* s = source; s != source + length; s++)
             if (*s == '/')
@@ -1017,7 +1017,7 @@ private:
             if (isNumber && token->length > 1 && token->name[0] == '0')
                 isNumber = false;
 
-            // Преобразование строки в SizeType
+            // Преобразование строк в SizeType
             SizeType n = 0;
             if (isNumber) {
                 for (size_t j = 0; j < token->length; j++) {
@@ -1049,7 +1049,7 @@ private:
 
     //! Преобразование в строку или представление фрагмента URI.
     /*!
-        \tparam uriFragment True для преобразования в строку представления фрагмента URI. Ложь для строкового представления.
+        \tparam uriFragment True для преобразования в код представления фрагментаURI. Ложь для строкового представления.
         \tparam OutputStream — тип выходного потока.
         \param os Выходной поток.
     */
@@ -1091,7 +1091,7 @@ private:
     /*!
         Этот поток декодирует триплет % XY в кодовую единицу (0–255).
         Если он встречает недопустимые символы, он устанавливает единицу выходного кода как 0 и
-        пометить как недействительный и должен быть проверен IsValid() .
+        пометить как недействительный и должен быть проверенIsValid().
     */
     class PercentDecodeStream {
     public:
@@ -1152,19 +1152,19 @@ private:
         OutputStream& os_;
     };
 
-    Allocator* allocator_;                  //!< Текущий распределитель. Он либо предоставляется пользователем, либо равен ownAllocator_ .
+    Allocator* allocator_;                  //!< Текущий распределитель. Он либо пользуется пользователем, либо равенownAllocator_.
     Allocator* ownAllocator_;               //!< Распределитель, принадлежащий этому указателю.
     Ch* nameBuffer_;                        //!< Буфер, содержащий все имена в токенах.
     Token* tokens_;                         //!< Список токенов.
-    size_t tokenCount_;                     //!< Количество токенов в tokens_ .
+    size_t tokenCount_;                     //!< Количество токенов вtokens_.
     size_t parseErrorOffset_;               //!< Смещение в единице кода при сбое синтаксического анализа.
     PointerParseErrorCode parseErrorCode_;  //!< Код ошибки синтаксического анализа.
 };
 
-//! GenericPointer для значения ( UTF -8, распределитель по умолчанию).
+//! GenericPointer для значений (UTF-8, распределитель по умолчанию).
 typedef GenericPointer<Value> Pointer;
 
-//! @name Вспомогательные функции для GenericPointer
+//! @nameСправочные функции для GenericPointer
 //@{
 
 //////////////////////////////////////////////////////////////////////////////

@@ -81,7 +81,7 @@ static void read_dir(void)
         }
     }
 
-    /* Так как таблица по умолчанию->col_act=LV_TABLE_CELL_NONE, то необходимо указать file_table -> col_act=0 */
+    /* Так как таблица по умолчанию->col_act=LV_TABLE_CELL_NONE, необходимо указатьfile_table->col_act=0 */
     file_table->col_act = 0;
     file_table->row_act = dev_row;
     lv_obj_send_event(file_explorer->file_table, LV_EVENT_CLICKED, NULL);

@@ -846,7 +846,7 @@ static void lv_menu_back_event_cb(lv_event_t * e)
             lv_free(act_hist);
             menu->cur_depth--;
             /* Создайте предыдущее меню.
-            *  Удалите его из истории, потому что `lv_menu_set_page` добавит его снова. */
+            *  Удалите его из истории, потому что`lv_menu_set_page`добавит его снова. */
             lv_ll_remove(history_ll, prev_hist);
             menu->cur_depth--;
             lv_menu_set_page(&(menu->obj), prev_hist->page);

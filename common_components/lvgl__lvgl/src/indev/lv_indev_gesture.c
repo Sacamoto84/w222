@@ -832,7 +832,7 @@ static void process_touch_event(lv_indev_touch_data_t * touch, lv_indev_gesture_
 /**
  * Вычисление центральной точки жеста, вызываемого при наличии
  * вероятность того, что жест произойдет
- * @param touch             указатель на структуру данных касания
+ * @param gesture             указатель на структуру данных касания
  * @param touch_points_nb   Количество контактных лиц, которые следует учитывать
  */
 static void gesture_update_center_point(lv_indev_gesture_t * gesture, int touch_points_nb)

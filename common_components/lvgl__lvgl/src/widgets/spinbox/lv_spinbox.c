@@ -486,7 +486,7 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
             }
         }
         /*Курсор установлен на цифру.
-         * Установите `step` соответственно.*/
+         * Установите`step`соответственно.*/
         else {
             const char * txt = lv_textarea_get_text(obj);
             const size_t txt_len = lv_strlen(txt);
@@ -500,12 +500,12 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
             else if(spinbox->ta.cursor.pos == (uint32_t)txt_len) {
                 lv_textarea_set_cursor_pos(obj, txt_len - 1);
             }
-            /* Курсор уже находится в самой левой цифре. AND range_min имеет отрицательное значение. */
+            /* Курсор уже находится в самой последней цифре. ANDrange_min имеет отрицательное значение. */
             else if(spinbox->ta.cursor.pos == 0 && spinbox->range_min < 0) {
                 lv_textarea_set_cursor_pos(obj, 1);
             }
 
-            /* Обработка счетчика с десятичной точкой (счетчик-> dec_point_pos != 0) */
+            /* Обработка счетчика с десятичной точкой (счетчик->dec_point_pos!= 0) */
             uint32_t cp = spinbox->ta.cursor.pos;
             if(spinbox->ta.cursor.pos > spinbox->dec_point_pos && spinbox->dec_point_pos != 0) cp--;
 
@@ -524,7 +524,7 @@ static void lv_spinbox_event(const lv_obj_class_t * class_p, lv_event_t * e)
     else if(code == LV_EVENT_KEY) {
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_active());
 
-        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t, потому что может быть UTF -8*/
+        uint32_t c = *((uint32_t *)lv_event_get_param(e)); /*uint32_t , потому что может бытьUTF-8*/
         if(c == LV_KEY_RIGHT) {
             if(indev_type == LV_INDEV_TYPE_ENCODER)
                 lv_spinbox_increment(obj);
@@ -553,7 +553,7 @@ static void lv_spinbox_updatevalue(lv_obj_t * obj)
 {
     lv_spinbox_t * spinbox = (lv_spinbox_t *)obj;
 
-    /* LV_SPINBOX_MAX_DIGIT_COUNT_WITH_8BYTES (18): Максимально возможное значение digit_count (15) + знак + десятичная точка + знак завершения NULL */
+    /* LV_SPINBOX_MAX_DIGIT_COUNT_WITH_8BYTES (18): Максимально возможное значениеdigit_count(15) + знак + десятичная точка + знак завершения NULL */
     char textarea_txt[LV_SPINBOX_MAX_DIGIT_COUNT_WITH_8BYTES] = {0U};
     char * buf_p = textarea_txt;
 

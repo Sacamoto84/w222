@@ -38,41 +38,41 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_list_button_class;
 
 /**
  * Создать объект списка
- * @param parent    pointer to an object, it will be the parent of the new list
- * @return          pointer to the created list
+ * @param parent    указатель на объект, он будет родителем нового списка
+ * @return          указатель на созданный список
  */
 lv_obj_t * lv_list_create(lv_obj_t * parent);
 
 /**
  * Добавить текст в список
- * @param list      pointer to a list, it will be the parent of the new label
- * @param txt       text of the new label
- * @return          pointer to the created label
+ * @param list      указатель на список, он будет родительским элементом новой метки
+ * @param txt       текст новой этикетки
+ * @return          указатель на созданную метку
  */
 lv_obj_t * lv_list_add_text(lv_obj_t * list, const char * txt);
 
 /**
  * Добавить кнопку в список
- * @param list      pointer to a list, it will be the parent of the new button
- * @param icon      icon for the button, when NULL it will have no icon
- * @param txt       text of the new button, when NULL no text will be added
- * @return          pointer to the created button
+ * @param list      указатель на список, он будет родителем новой кнопки
+ * @param icon      значок для кнопки, когдаNULLу него не будет значка
+ * @param txt       текст новой кнопки, приNULLтекст не будет добавлен
+ * @return          указатель на созданную кнопку
  */
 lv_obj_t * lv_list_add_button(lv_obj_t * list, const void * icon, const char * txt);
 
 /**
  * Получить текст данной кнопки списка
- * @param list      pointer to a list
- * @param btn       pointer to the button
- * @return          text of btn, if btn doesn't have text "" will be returned
+ * @param list      указатель на список
+ * @param btn       указатель на кнопку
+ * @return          текст кнопки, если у кнопки нет текста, будет возвращен текст ""
  */
 const char * lv_list_get_button_text(lv_obj_t * list, lv_obj_t * btn);
 
 /**
  * Установить текст данной кнопки списка
- * @param list      pointer to a list
- * @param btn       pointer to the button
- * @param txt       pointer to the text
+ * @param list      указатель на список
+ * @param btn       указатель на кнопку
+ * @param txt       указатель на текст
  */
 void lv_list_set_button_text(lv_obj_t * list, lv_obj_t * btn, const char * txt);
 
@@ -80,26 +80,26 @@ void lv_list_set_button_text(lv_obj_t * list, lv_obj_t * btn, const char * txt);
 
 /**
  * Добавить текст тега перевода в список
- * @param list      pointer to a list, it will be the parent of the new label
- * @param tag       translation tag of the new label
- * @return          pointer to the created label
+ * @param list      указатель на список, он будет родительским элементом новой метки
+ * @param tag       тег перевода новой метки
+ * @return          указатель на созданную метку
  */
 lv_obj_t * lv_list_add_translation_tag(lv_obj_t * list, const char * tag);
 
 /**
  * Добавить кнопку тега перевода в список
- * @param list      pointer to a list, it will be the parent of the new button
- * @param icon      icon for the button, when NULL it will have no icon
- * @param tag       translation tag of the new button, when NULL no translation tag will be added
- * @return          pointer to the created button
+ * @param list      указатель на список, он будет родителем новой кнопки
+ * @param icon      значок для кнопки, когдаNULLу него не будет значка
+ * @param tag       тег перевода новой кнопки, приNULLтег перевода не будет добавлен
+ * @return          указатель на созданную кнопку
  */
 lv_obj_t * lv_list_add_button_translation_tag(lv_obj_t * list, const void * icon, const char * tag);
 
 /**
  * Установить текст тега перевода для данной кнопки списка
- * @param list      pointer to a list
- * @param btn       pointer to the button
- * @param tag       pointer to the translation tag
+ * @param list      указатель на список
+ * @param btn       указатель на кнопку
+ * @param tag       указатель на тег перевода
  */
 void lv_list_set_button_translation_tag(lv_obj_t * list, lv_obj_t * btn, const char * tag);
 

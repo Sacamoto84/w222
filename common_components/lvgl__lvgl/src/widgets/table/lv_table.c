@@ -163,7 +163,7 @@ void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint32_t row, uint32_t col, con
 
     void * user_data = NULL;
 
-    /*Сохраните user_data.*/
+    /*Сохранитеuser_data.*/
     if(table->cell_data[cell]) user_data = table->cell_data[cell]->user_data;
 
     va_list ap, ap2;
@@ -274,7 +274,7 @@ void lv_table_set_column_count(lv_obj_t * obj, uint32_t col_cnt)
 
     lv_memzero(new_cell_data, new_cell_cnt * sizeof(table->cell_data[0]));
 
-    /*Новые столбцы портят отображение `cell_data`.*/
+    /*Новые столбцы портят управление`cell_data`.*/
     uint32_t old_col_start;
     uint32_t new_col_start;
     uint32_t min_col_cnt = LV_MIN(old_col_cnt, col_cnt);
@@ -872,7 +872,7 @@ static void draw_main(lv_event_t * e)
     layer->_clip_area = clip_area_ori;
 }
 
-/* Обновляет размер таблицы, начиная со строки @start_row. */
+/* Обновляет таблицу размеров, начиная со строк@start_row. */
 static void refr_size_form_row(lv_obj_t * obj, uint32_t start_row)
 {
     const int32_t cell_pad_left = lv_obj_get_style_pad_left(obj, LV_PART_ITEMS);
@@ -940,7 +940,7 @@ static int32_t get_row_height(lv_obj_t * obj, uint32_t row_id, const lv_font_t *
     lv_table_t * table = (lv_table_t *)obj;
 
     int32_t h_max = lv_font_get_line_height(font) + cell_top + cell_bottom;
-    /* Рассчитать индекс cell_data, с чего начать */
+    /* Рассчитать индексcell_data, с чего начать */
     uint32_t row_start = row_id * table->col_cnt;
 
     lv_text_attributes_t attributes = {0};
@@ -1082,7 +1082,7 @@ static size_t get_cell_txt_len(const char * txt)
     return retval;
 }
 
-/* Скопируйте txt в dst, пропуская байт формата. */
+/* Скопируйте txt в dst, пропуская байтовую форму. */
 static void copy_cell_txt(lv_table_cell_t * dst, const char * txt)
 {
 #if LV_USE_ARABIC_PERSIAN_CHARS

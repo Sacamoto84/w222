@@ -4,7 +4,7 @@
 /*******************************************************************************
  * Размер: 8 пикселей
  * Бпп: 4
- * Opts: --bpp 4 --size 8 --font ../Montserrat-Medium.ttf -r 0x20-0x7F,0xB0,0x2022 --font ../FontAwesome5-Solid+Brands+Regular.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61480,61502,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61671,61674,61683,61724,61732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650 --format lvgl -o ..\generated_fonts/font_1.c
+ * Opts: --bpp 4 --size 8 --font ../Montserrat-Medium.ttf -r0x20-0x7F,0xB0,0x2022--font ../FontAwesome5-Solid+Brands+Regular.woff -r 61441,61448,61451,61452,61452,61453,61457,61459,61461,61465,61468,61473,61478,61479,61 480,61502,61512,61515,61516,61517,61521,61522,61523,61524,61543,61544,61550,61552,61553 ,61556,61559,61560,61561,61563,61587,61589,61636,61637,61639,61671,61674,61683,61724,61 732,61787,61931,62016,62017,62018,62019,62020,62087,62099,62212,62189,62810,63426,63650 --format lvgl -o ..\ generated_fonts/font_1.c
  ******************************************************************************/
 
 #ifndef FONT_1
@@ -715,7 +715,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 34, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 34, .box_w = 2, .box_h = 5, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 6, .adv_w = 50, .box_w = 3, .box_h = 3, .ofs_x = 0, .ofs_y = 2},
@@ -887,7 +887,7 @@ static const uint16_t unicode_list_1[] = {
     0xf4aa, 0xf712, 0xf7f2
 };
 
-/*Соберите списки Юникода и смещения glyph_id.*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
@@ -903,7 +903,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] = {
  *    KERNING
  *----------------*/
 
-/*Сопоставьте glyph_ids с левыми классами Керна*/
+/*Сопоставьтеglyph_idsс левыми классами Керна*/
 static const uint8_t kern_left_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
@@ -927,7 +927,7 @@ static const uint8_t kern_left_class_mapping[] = {
     0, 0, 0
 };
 
-/*Сопоставьте glyph_ids с классами керна справа*/
+/*Сопоставьтеglyph_idsс классами керна справа*/
 static const uint8_t kern_right_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,

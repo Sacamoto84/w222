@@ -74,7 +74,7 @@ void test_circle_buf_read_write_peek_values(void)
     }
 
     /**
-     * Считайте значения из кругового буфера. Максимальный размер буфера — circle_buf_CAPACITY.
+     * Прочтите значение круглого буфера. Максимальный размер буфера — circle_buf_CAPACITY.
      * Когда буфер пуст, операция чтения должна вернуть LV_RESULT_INVALID.
      */
     for(int32_t i = 1; i < circle_buf_CAPACITY * 2; i++) {
@@ -155,7 +155,7 @@ void test_circle_buf_read_after_read_and_write(void)
     TEST_ASSERT_EQUAL_INT32_ARRAY(expected, ((lv_array_t *)circle_buf)->data, 4);
 
     /**
-     * Считайте значения из кругового буфера. Максимальный размер буфера — circle_buf_CAPACITY.
+     * Прочтите значение круглого буфера. Максимальный размер буфера — circle_buf_CAPACITY.
      * Когда буфер пуст, операция чтения должна вернуть LV_RESULT_INVALID.
      */
     for(int32_t i = 1; i < circle_buf_CAPACITY * 2; i++) {
@@ -175,7 +175,7 @@ void test_circle_buf_read_after_read_and_write(void)
 void test_circle_buf_reset(void)
 {
     /**
-     * Сбросьте буфер круга, теперь буфер должен быть пустым, как и lv_circle_buf_create.
+     * Сбросьте буфер круга, теперь буфер должен быть пустым, как иlv_circle_buf_create.
      */
     lv_circle_buf_reset(circle_buf);
 
@@ -199,7 +199,7 @@ void test_circle_buf_reset(void)
     TEST_ASSERT_EQUAL_UINT32(lv_circle_buf_size(circle_buf), circle_buf_CAPACITY);
 
     /**
-     * Считайте значения из кругового буфера. Максимальный размер буфера — circle_buf_CAPACITY.
+     * Прочтите значение круглого буфера. Максимальный размер буфера — circle_buf_CAPACITY.
      * Когда буфер пуст, операция чтения должна вернуть LV_RESULT_INVALID.
      */
     for(int32_t i = 0; i < circle_buf_CAPACITY * 2; i++) {

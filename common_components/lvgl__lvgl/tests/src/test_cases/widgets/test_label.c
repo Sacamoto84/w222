@@ -450,7 +450,7 @@ void test_label_is_char_under_pos_align_left(void)
     result = lv_label_is_char_under_pos(label, &last_letter_point);
     TEST_ASSERT_EQUAL(expected_result, result);
 
-    /* Если мы проверим отход от последней буквы, мы должны получить false */
+    /* Если мы проверим отход от нижних цифр, мы должны получить false */
     expected_result = false;
     last_letter_point.x += 50;
 
@@ -473,7 +473,7 @@ void test_label_is_char_under_pos_align_right(void)
     result = lv_label_is_char_under_pos(label, &last_letter_point);
     TEST_ASSERT_EQUAL(expected_result, result);
 
-    /* Если мы проверим отход от последней буквы, мы должны получить false */
+    /* Если мы проверим отход от нижних цифр, мы должны получить false */
     expected_result = false;
     last_letter_point.x -= 50;
 
@@ -496,7 +496,7 @@ void test_label_is_char_under_pos_align_center(void)
     result = lv_label_is_char_under_pos(label, &last_letter_point);
     TEST_ASSERT_EQUAL(expected_result, result);
 
-    /* Если мы проверим отход от последней буквы, мы должны получить false */
+    /* Если мы проверим отход от нижних цифр, мы должны получить false */
     expected_result = false;
     last_letter_point.x -= 50;
 
@@ -646,7 +646,7 @@ void test_label_dots(void)
     lv_label_set_long_mode(label3, LV_LABEL_LONG_MODE_DOTS);
     lv_label_set_long_mode(label4, LV_LABEL_LONG_MODE_DOTS);
 
-    /* Установка текста с помощью _fmt, когда в длинном режиме были точки, приведет к отображению неправильного текста. */
+    /* Установка текста с помощью _fmt, когда в длинном режиме были точки, приводила к отображению неправильного текста. */
     lv_label_set_text(label2, long_text);
     lv_label_set_text_fmt(label4, "%.*s", (int)strlen(long_text), long_text);
 
@@ -791,7 +791,7 @@ void test_label_wrap_mode_clip(void)
 }
 void test_label_translation_tag(void)
 {
-    /* Массивы определяются `const` для размещения их в пространстве программы вместо RAM. */
+    /* Массы развивают`const`для размещения их в пространстве программы вместо RAM. */
     static const char * const tags[] = {"tiger", NULL};
     static const char * const languages[]    = {"en", "de", "es", NULL};
     static const char * const translations[] = { "The Tiger", "Der Tiger", "El Tigre" };
@@ -815,7 +815,7 @@ void test_label_translation_tag(void)
 
 void test_label_setting_text_disables_translation(void)
 {
-    /* Массивы определяются `const` для размещения их в пространстве программы вместо RAM. */
+    /* Массы развивают`const`для размещения их в пространстве программы вместо RAM. */
     static const char * const tags[] = {"tiger", NULL};
     static const char * const languages[]    = {"en", "de", "es", NULL};
     static const char * const translations[] = { "The Tiger", "Der Tiger", "El Tigre" };
@@ -837,7 +837,7 @@ void test_label_setting_text_disables_translation(void)
     lv_label_set_translation_tag(label, "tiger");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Der Tiger");
 
-    /* Использование set text static должно отменить привязку тега перевода.*/
+    /* Использование set text static необходимо отменить привязку тега перевода.*/
     lv_label_set_text_static(label, "Hello world");
     lv_translation_set_language("en");
     TEST_ASSERT_EQUAL_STRING(lv_label_get_text(label), "Hello world");

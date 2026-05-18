@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -43,9 +43,9 @@ RAPIDJSON_DIAG_OFF(effc++)
 #endif // __GNUC__
 
 #ifdef GetObject
-// см. https://github.com/Tencent/rapidjson/issues/1448
-// предыдущий включенный windows.h мог определять макрос GetObject, который влияет
-// GetObject определен здесь. Это гарантирует, что макрос не будет применен.
+// см.  https://github.com/Tencent/rapidjson/issues/1448
+// предыдущий включенныйwindows.hмог определять макрос GetObject, который влияет
+// GetObject определение здесь. Это гарантирует, что макросы не будут применяться.
 #pragma push_macro("GetObject")
 #define RAPIDJSON_WINDOWS_GETOBJECT_WORKAROUND_APPLIED
 #undef GetObject
@@ -70,7 +70,7 @@ class GenericDocument;
 
 /*! \def RAPIDJSON_DEFAULT_ALLOCATOR
     \ingroup RAPIDJSON_CONFIG
-    \brief Позволяет выбрать распределитель по умолчанию.
+    \brief Выбор управления по умолчанию.
 
     Пользователь может определить это для использования CrtAllocator или MemoryPoolAllocator.
 */
@@ -80,7 +80,7 @@ class GenericDocument;
 
 /*! \def RAPIDJSON_DEFAULT_STACK_ALLOCATOR
     \ingroup RAPIDJSON_CONFIG
-    \brief Позволяет выбрать распределитель стека по умолчанию для документа.
+    \brief Выбор блока управления по умолчанию для документа.
 
     Пользователь может определить это для использования CrtAllocator или MemoryPoolAllocator.
 */
@@ -90,29 +90,29 @@ class GenericDocument;
 
 /*! \def RAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY
     \ingroup RAPIDJSON_CONFIG
-    \brief Определяемое пользователем значение kDefaultObjectCapacity.
+    \brief Определяемое пользовательское значение kDefaultObjectCapacity.
 
     Пользователь может определить это как любое натуральное число.
 */
 #ifndef RAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY
-// количество объектов, для которых Rapidjson::Value выделяет память по умолчанию
+// количество объектов, для которых Rapidjson::Value применяется память по умолчанию
 #define RAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY 16
 #endif
 
 /*! \def RAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY
     \ingroup RAPIDJSON_CONFIG
-    \brief Определяемое пользователем значение kDefaultArrayCapacity.
+    \brief Определяемое пользовательское значение kDefaultArrayCapacity.
 
     Пользователь может определить это как любое натуральное число.
 */
 #ifndef RAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY
-// количество элементов массива, для которых Rapidjson::Value выделяет память по умолчанию
+// количество элементов массива, для которых Rapidjson::Value применяется память по умолчанию
 #define RAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY 16
 #endif
 
 //! Пара имя-значение в значении объекта JSON.
 /*!
-    Этот класс был внутренним для GenericValue. Раньше это была внутренняя структура.
+    Этот класс был для GenericValue. Раньше это была внутренняя структура.
     Но компилятор ( IBM XL C/C++ для AIX ) сообщил о проблеме с этим, поэтому он был перемещен как структура области пространства имен.
     https://code.google.com/p/rapidjson/issues/detail?id=64
 */
@@ -137,7 +137,7 @@ public:
 #endif
 
     //! Задание с семантикой перемещения.
-    /*! \param rhs Источник задания. Его имя и значение после присвоения станут нулевым значением.
+    /*! \param rhs Источник задания. Его имя и значение после применения становятся нулевыми значениями.
     */
     GenericMember& operator=(GenericMember& rhs) RAPIDJSON_NOEXCEPT {
         if (RAPIDJSON_LIKELY(this != &rhs)) {
@@ -147,7 +147,7 @@ public:
         return *this;
     }
 
-    // swap() для std::sort() и другое потенциальное использование в STL.
+    // swap() для std::sort() и другое безопасное использование вSTL.
     friend inline void swap(GenericMember& a, GenericMember& b) RAPIDJSON_NOEXCEPT {
         a.name.Swap(b.name);
         a.value.Swap(b.value);
@@ -167,16 +167,16 @@ private:
 /*!
     \tparam Const Is this a constant iterator?
     \tparam Кодировка Кодировка значения. (Даже нестроковые значения должны иметь одинаковую кодировку в документе)
-    \tparam Allocator Тип распределителя для выделения памяти для объекта, массива и строки.
+    \tparam Тип распределителя для выделения памяти для объекта, массива и строки.
 
-    Этот класс реализует итератор произвольного доступа для элементов GenericMember.
-    GenericValue см. в разделе ISO/IEC 14882:2003(E) стандарт C++, 24.1 [lib.iterator.requirements].
+    Этот класс реализует итератор дополнительного доступа к элементам GenericMember.
+    GenericValue см. в разделеISO/IEC14882:2003(E) стандарт C++, 24.1 [lib.iterator.requirements].
 
-    \note Эта реализация итератора в основном предназначена для того, чтобы избежать неявного
+    \note Эта реализация итератора в основном создана для того, чтобы избежать неявного
         преобразования значений итератора в \c NULL ,
         например из GenericValue::FindMember.
 
-    \note Определите \c RAPIDJSON_NOMEMBERITERATORCLASS, чтобы вернуться к
+    \note Определите \cRAPIDJSON_NOMEMBERITERATORCLASS, чтобы вернуться к
         реализация на основе указателей, если ваша платформа не предоставляет
         заголовок <итератор> C++.
 
@@ -199,7 +199,7 @@ public:
     //! Непостоянный тип итератора
     typedef GenericMemberIterator<false,Encoding,Allocator> NonConstIterator;
 
-    /** \name std:: Поддержка iterator_traits */
+    /** \name стандарт: Поддержка iterator_traits */
     //@{
     typedef ValueType      value_type;
     typedef ValueType *    pointer;
@@ -212,12 +212,12 @@ public:
     typedef pointer         Pointer;
     //! Ссылка на (const) GenericMember
     typedef reference       Reference;
-    //! Целочисленный тип со знаком (например, \c ptrdiff_t )
+    //! Целочисленный тип со знаком (например, \cptrdiff_t)
     typedef difference_type DifferenceType;
 
     //! Конструктор по умолчанию (единственное значение)
     /*! Создает итератор, не указывающий ни на один элемент.
-        \note Все операции, кроме сравнения, для таких значений не определены.
+        \note Все операции, кроме сравнения, для подобных результатов не удалось.
      */
     GenericMemberIterator() : ptr_() {}
 
@@ -225,7 +225,7 @@ public:
     /*!
         \param it (неконстантный) итератор для копирования
 
-        Позволяет создавать итератор из другого GenericMemberIterator.
+        будет создан итератор из другого GenericMemberIterator.
         это «меньше константы».  В частности, создание непостоянного итератора
         из постоянного итератора отключены:
         \li const -> неконстантный (не ок)
@@ -240,7 +240,7 @@ public:
     GenericMemberIterator(const NonConstIterator & it) : ptr_(it.ptr_) {}
     Iterator& operator=(const NonConstIterator & it) { ptr_ = it.ptr_; return *this; }
 
-    //!  @name степпинг
+    //!  @nameстеппинг
     //@{
     Iterator& operator++(){ ++ptr_; return *this; }
     Iterator& operator--(){ --ptr_; return *this; }
@@ -248,7 +248,7 @@ public:
     Iterator  operator--(int){ Iterator old(*this); --ptr_; return old; }
     //@}
 
-    //!  @name приращение/уменьшение
+    //!  @nameприращение/уменьшение
     //@{
     Iterator operator+(DifferenceType n) const { return Iterator(ptr_+n); }
     Iterator operator-(DifferenceType n) const { return Iterator(ptr_-n); }
@@ -257,7 +257,7 @@ public:
     Iterator& operator-=(DifferenceType n) { ptr_-=n; return *this; }
     //@}
 
-    //!  @name отношения
+    //!  @nameотношения
     //@{
     template <bool Const_> bool operator==(const GenericMemberIterator<Const_, Encoding, Allocator>& that) const { return ptr_ == that.ptr_; }
     template <bool Const_> bool operator!=(const GenericMemberIterator<Const_, Encoding, Allocator>& that) const { return ptr_ != that.ptr_; }
@@ -317,27 +317,27 @@ public:
 
 //! Ссылка на константную строку (без копирования)
 /*!
-    \tparam CharType тип символа строки
+    \tparam CharType символьный тип строки
 
     Этот вспомогательный класс используется для автоматического вывода постоянной строки.
     ссылки на строковые литералы, особенно из \c const \b (!)
     массивы символов.
 
     Основное использование — создание строковых значений JSON без копирования
-    исходная строка через распределитель \ref.  Для этого необходимо, чтобы упомянутый
+    исходная строка через распределитель \ref.  Для этого необходимо, упомянутый
     строковые указатели имеют достаточное время жизни, которое превышает время жизни
     связанного GenericValue.
 
     \b Пример
     \code
-    Значение v("foo");   // ок, не нужно копировать и вычислять длину
+    Значение v("фу");   // ок, не нужно копировать и вычислять размер
     const char foo[] = "foo";
     v.SetString(фу); // ок
 
     const char* bar = foo;
     // Значение х(бар); // не ок, нельзя полагаться на время жизни бара
-    Значение x(StringRef(bar)); // время жизни явно гарантировано пользователем
-    Значение y(StringRef(bar, 3));  // ок, явно передаем длину
+    Значение x(StringRef(bar)); // время жизни гарантировано пользователю
+    Значение y(StringRef(bar, 3));  // ок, явно передаем взгляд
     \endcode
 
     \см. StringRef, GenericValue::SetString
@@ -346,27 +346,27 @@ template<typename CharType>
 struct GenericStringRef {
     typedef CharType Ch; //!< тип символа строки
 
-    //! Создать ссылку на строку из массива символов \c const
+    //! Создать ссылку на текст из массива символов \c const
 #ifndef __clang__ // -Документация
     /*!
         Этот конструктор неявно создает ссылку на константную строку из
         константный массив символов \c.  Он имеет лучшую производительность, чем
-        \ref StringRef(const CharType*) путем определения длины строки \ref
+        \ref StringRef(const CharType*) посредством определения длины строки \ref
         от длины массива, а также поддерживает строки, содержащие ноль
         персонажи.
 
-        \tparam N длина строки, определяемая автоматически
+        \tparam N длина строки, определяется автоматически
 
-        \param str Постоянный массив символов, предполагается, что время жизни больше
+        \param str Постоянный массив символов, спасибо, что время жизни больше
             чем использование строки, например. универсальное значение
 
         \post \ref s == ул
 
         \note Постоянная сложность.
-        \note Существует скрытая частная перегрузка, запрещающая ссылки на
+        \note Существует скрытая частная перегрузка, запрещающие ссылки на
             неконстантные массивы символов, которые будут созданы с помощью этого конструктора.
             При этом, напр. Массивы области функций раньше заполнялись через
-            \c snprintf исключены из рассмотрения.
+            \c snprintf исключен из рассмотрения.
             В таких случаях указанную строку следует скопировать \b в файл
             Вместо этого GenericValue.
      */
@@ -375,7 +375,7 @@ struct GenericStringRef {
     GenericStringRef(const CharType (&str)[N]) RAPIDJSON_NOEXCEPT
         : s(str), length(N-1) {}
 
-    //! Явно создать ссылку на строку из указателя символа \c const
+    //! Обязательно создайте ссылку на строку из символа указателя \c const
 #ifndef __clang__ // -Документация
     /*!
         Этот конструктор можно использовать для явного создания ссылки на \b.
@@ -383,15 +383,15 @@ struct GenericStringRef {
 
         \see StringRef(const CharType*)
 
-        \param str Указатель постоянного символа, предполагается, что время жизни больше
+        \param str Указатель постоянного символа, свидетельствующего о том, что время жизни больше
             чем использование строки, например. универсальное значение
 
         \post \ref s == ул
 
-        \note Существует скрытая частная перегрузка, запрещающая ссылки на
+        \note Существует скрытая частная перегрузка, запрещающие ссылки на
             неконстантные массивы символов, которые будут созданы с помощью этого конструктора.
             При этом, напр. Массивы области функций раньше заполнялись через
-            \c snprintf исключены из рассмотрения.
+            \c snprintf исключен из рассмотрения.
             В таких случаях указанную строку следует скопировать \b в файл
             Вместо этого GenericValue.
      */
@@ -401,8 +401,8 @@ struct GenericStringRef {
 
     //! Создать постоянную ссылку на строку из указателя и длины
 #ifndef __clang__ // -Документация
-    /*! \param str константная строка, предполагается, что время жизни больше, чем использование строки, например. универсальное значение
-        \param len длина строки, исключая завершающий терминатор NULL
+    /*! \param str константная строка, что время жизни больше, чем использование строки, например. универсальное значение
+        \param len длина строки, завершающий терминатор NULL
 
         \post \ref s == str && \ref length == len
         \note Постоянная сложность.
@@ -441,11 +441,11 @@ const CharType GenericStringRef<CharType>::emptyString[] = { CharType() };
 //! Пометить указатель символа как константную строку
 /*! Пометьте простой указатель символа как «строковый литерал».  Эта функция
     можно использовать, чтобы избежать копирования строки символов, на которую будет ссылаться как на
-    значение в объекте JSON GenericValue, если известно время жизни строки
+    значение в объектеJSONGenericValue, если известно время жизни строки
     быть действительным достаточно долго.
-    \tparam CharType Тип символа строки
-    \param str Константная строка, срок жизни которой предполагается больше, чем использование строки, например. универсальное значение
-    \return Объект ссылки на строку GenericStringRef
+    \tparam CharType Тип символьной строки
+    \param str Константная строка, срок жизни которой обеспечен больше, чем использование строк, например. универсальное значение
+    \return Объект ссылки на текст GenericStringRef
     \relatesalso GenericStringRef
 
     \see GenericValue::GenericValue(StringRefType), GenericValue::operator=(StringRefType), GenericValue::SetString(StringRefType), GenericValue::PushBack(StringRefType, Allocator&), GenericValue::AddMember
@@ -458,16 +458,16 @@ inline GenericStringRef<CharType> StringRef(const CharType* str) {
 //! Пометить указатель символа как константную строку
 /*! Пометьте простой указатель символа как «строковый литерал».  Эта функция
     можно использовать, чтобы избежать копирования строки символов, на которую будет ссылаться как на
-    значение в объекте JSON GenericValue, если известно время жизни строки
+    значение в объектеJSONGenericValue, если известно время жизни строки
     быть действительным достаточно долго.
 
     Эта версия имеет лучшую производительность при указанной длине, а также
     поддерживает строку, содержащую нулевые символы.
 
-    \tparam CharType тип символа строки
-    \param str Константная строка, срок жизни которой предполагается больше, чем использование строки, например. универсальное значение
+    \tparam CharType символьный тип строки
+    \param str Константная строка, срок жизни которой обеспечен больше, чем использование строк, например. универсальное значение
     \param length Длина исходной строки.
-    \return Объект ссылки на строку GenericStringRef
+    \return Объект ссылки на текст GenericStringRef
     \relatesalso GenericStringRef
 */
 template<typename CharType>
@@ -477,16 +477,16 @@ inline GenericStringRef<CharType> StringRef(const CharType* str, size_t length) 
 
 #if RAPIDJSON_HAS_STDSTRING
 //! Пометить строковый объект как константную строку
-/*! Отметьте строковый объект (например, \c std::string) как «строковый литерал».
+/*! Относительно строковый объект (например, \c std::string) как «строковый литерал».
     Эту функцию можно использовать, чтобы избежать копирования строки, на которую будет ссылаться как на
-    значение в объекте JSON GenericValue, если известно время жизни строки
+    значение в объектеJSONGenericValue, если известно время жизни строки
     быть действительным достаточно долго.
 
-    \tparam CharType тип символа строки
-    \param str Константная строка, срок жизни которой предполагается больше, чем использование строки, например. универсальное значение
-    \return Объект ссылки на строку GenericStringRef
+    \tparam CharType символьный тип строки
+    \param str Константная строка, срок жизни которой обеспечен больше, чем использование строк, например. универсальное значение
+    \return Объект ссылки на текст GenericStringRef
     \relatesalso GenericStringRef
-    \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
+    \note Требуется определение символа препроцессора \refRAPIDJSON_HAS_STDSTRING.
 */
 template<typename CharType>
 inline GenericStringRef<CharType> StringRef(const std::basic_string<CharType>& str) {
@@ -505,7 +505,7 @@ struct IsGenericValueImpl : FalseType {};
 template <typename T> struct IsGenericValueImpl<T, typename Void<typename T::EncodingType>::Type, typename Void<typename T::AllocatorType>::Type>
     : IsBaseOf<GenericValue<typename T::EncodingType, typename T::AllocatorType>, T>::Type {};
 
-// помощник для сопоставления произвольных экземпляров GenericValue, включая производные классы
+// помощник парламента произвольных экземпляров GenericValue, включая производные классы
 template <typename T> struct IsGenericValue : IsGenericValueImpl<T>::Type {};
 
 } // внутреннее пространство имен
@@ -654,7 +654,7 @@ template <bool, typename> class GenericObject;
 ///////////////////////////////////////////////////////////////////////////////
 // GenericValue
 
-//! Представляет значение JSON. Используйте Value для кодировки UTF8 и распределителя по умолчанию.
+//! имеет значение JSON. Используйте Value для кодировкиUTF8и дистрибутива по умолчанию.
 /*!
     Значение JSON может быть одного из 7 типов. Этот класс представляет собой вариантный тип, поддерживающий
     эти типы.
@@ -662,7 +662,7 @@ template <bool, typename> class GenericObject;
     Используйте значение if UTF8 и распределитель по умолчанию.
 
     \tparam Кодировка Кодировка значения. (Даже нестроковые значения должны иметь одинаковую кодировку в документе)
-    \tparam Allocator Тип распределителя для выделения памяти для объекта, массива и строки.
+    \tparam Тип распределителя для выделения памяти для объекта, массива и строки.
 */
 template <typename Encoding, typename Allocator = RAPIDJSON_DEFAULT_ALLOCATOR >
 class GenericValue {
@@ -671,7 +671,7 @@ public:
     typedef GenericMember<Encoding, Allocator> Member;
     typedef Encoding EncodingType;                  //!< Тип кодировки из параметра шаблона.
     typedef Allocator AllocatorType;                //!< Тип распределителя из параметра шаблона.
-    typedef typename Encoding::Ch Ch;               //!< Тип символа, полученный из Encoding.
+    typedef typename Encoding::Ch Ch;               //!< Тип символа, полученный в результате кодирования.
     typedef GenericStringRef<Ch> StringRefType;     //!< Ссылка на константную строку
     typedef typename GenericMemberIterator<false,Encoding,Allocator>::Iterator MemberIterator;  //!< Итератор-член для итерации по объекту.
     typedef typename GenericMemberIterator<true,Encoding,Allocator>::Iterator ConstMemberIterator;  //!< Итератор постоянного члена для итерации по объекту.
@@ -683,7 +683,7 @@ public:
     typedef GenericObject<false, ValueType> Object;
     typedef GenericObject<true, ValueType> ConstObject;
 
-    //! @name Конструкторы и деструктор.
+    //! @nameКонструкторы и деструкторы.
     //@{
 
     //! Конструктор по умолчанию создает нулевое значение.
@@ -715,7 +715,7 @@ public:
     //! Конструктор с типом значения JSON.
     /*! При этом создается значение указанного типа с содержимым по умолчанию.
         \param type Тип значения.
-        \note Содержимое номера по умолчанию равно нулю.
+        \note Содержимое номера по умолчанию равнозначно.
     */
     explicit GenericValue(Type type) RAPIDJSON_NOEXCEPT : data_() {
         static const uint16_t defaultFlags[] = {
@@ -734,9 +734,9 @@ public:
     /*! Создает копию значения, используя данный распределитель.
         \tparam SourceAllocator распределитель \c rhs
         \param rhs Значение для копирования (только для чтения)
-        \param allocator Распределитель для распределения скопированных элементов и буферов. Обычно используйте GenericDocument::GetAllocator() .
+        \param allocator Распределитель для распределения скопированных элементов и буферов. Обычно GenericDocument::GetAllocator() .
         \param copyConstStrings Принудительное копирование константных строк (например, ссылка на локальный буфер)
-        \см. CopyFrom()
+        \см.  CopyFrom()
     */
     template <typename SourceAllocator>
     GenericValue(const GenericValue<Encoding,SourceAllocator>& rhs, Allocator& allocator, bool copyConstStrings = false) {
@@ -772,11 +772,11 @@ public:
 
     //! Конструктор для логического значения.
     /*! \param b Логическое значение
-        \note Этот конструктор \em ограничен реальными логическими значениями и отклоняет
+        \note Этот конструктор \em ограничивает реальные логические значения и отклоняет
             неявно преобразованные типы, такие как произвольные указатели.  Используйте явное приведение типов
-            в \c bool, если в таких случаях вы хотите создать логическое значение JSON.
+            в \c bool, если в таких случаях вы хотите создать логическое значениеJSON.
      */
-#ifndef RAPIDJSON_DOXYGEN_RUNNING // скрыть SFINAE от Doxygen
+#ifndef RAPIDJSON_DOXYGEN_RUNNING // скрытьSFINAEот Doxygen
     template <typename T>
     explicit GenericValue(T b, RAPIDJSON_ENABLEIF((internal::IsSame<bool, T>))) RAPIDJSON_NOEXCEPT  // См. № 472.
 #else
@@ -788,7 +788,7 @@ public:
             data_.f.flags = b ? kTrueFlag : kFalseFlag;
     }
 
-    //! Конструктор для значения int.
+    //! Конструктор значений int.
     explicit GenericValue(int i) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.i64 = i;
         data_.f.flags = (i >= 0) ? (kNumberIntFlag | kUintFlag | kUint64Flag) : kNumberIntFlag;
@@ -800,7 +800,7 @@ public:
         data_.f.flags = (u & 0x80000000) ? kNumberUintFlag : (kNumberUintFlag | kIntFlag | kInt64Flag);
     }
 
-    //! Конструктор для значения int64_t.
+    //! Конструктор значений int64_t.
     explicit GenericValue(int64_t i64) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.i64 = i64;
         data_.f.flags = kNumberInt64Flag;
@@ -815,7 +815,7 @@ public:
             data_.f.flags |= kIntFlag;
     }
 
-    //! Конструктор для значения uint64_t.
+    //! Конструктор значений uint64_t.
     explicit GenericValue(uint64_t u64) RAPIDJSON_NOEXCEPT : data_() {
         data_.n.u64 = u64;
         data_.f.flags = kNumberUint64Flag;
@@ -847,16 +847,16 @@ public:
 
 #if RAPIDJSON_HAS_STDSTRING
     //! Конструктор для копирования строки из строкового объекта (т.е. создания копии строки)
-    /*! \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
+    /*! \note Требуется определение символа препроцессора \refRAPIDJSON_HAS_STDSTRING.
      */
     GenericValue(const std::basic_string<Ch>& s, Allocator& allocator) : data_() { SetStringRaw(StringRef(s), allocator); }
 #endif
 
     //! Конструктор массива.
     /*!
-        \param a Массив, полученный с помощью \c GetArray().
-        \note \c Массив всегда передается по значению.
-        \note исходный массив перемещается в это значение, и исходный массив становится пустым.
+        \param Массив, полученный с помощью \cGetArray().
+        \note \c Массив всегда возникает из-за обстоятельств.
+        \note исходный массив изменяется в этом значении, и исходный массив становится пустым.
     */
     GenericValue(Array a) RAPIDJSON_NOEXCEPT : data_(a.value_.data_) {
         a.value_.data_ = Data();
@@ -865,9 +865,9 @@ public:
 
     //! Конструктор объекта.
     /*!
-        \param o Объект, полученный с помощью \c GetObject().
-        \note \c Объект всегда передается по значению.
-        \note исходный объект перемещается в это значение, и исходный объект становится пустым.
+        \param o Объект, полученный с помощью \cGetObject().
+        \note \c Объект всегда возникает по причине.
+        \note исходный объект изменяется в этом значении, и исходный объект становится пустым.
     */
     GenericValue(Object o) RAPIDJSON_NOEXCEPT : data_(o.value_.data_) {
         o.value_.data_ = Data();
@@ -888,7 +888,7 @@ public:
                     GenericValue* e = GetElementsPointer();
                     for (GenericValue* v = e; v != e + data_.a.size; ++v)
                         v->~GenericValue();
-                    if (Allocator::kNeedFree) { // Ярлык по признаку Allocator
+                    if (Allocator::kNeedFree) { // Ярлык по признаку Распределитель
                         Allocator::Free(e);
                     }
                 }
@@ -899,7 +899,7 @@ public:
                 break;
 
             case kCopyStringFlag:
-                if (Allocator::kNeedFree) { // Ярлык по признаку Allocator
+                if (Allocator::kNeedFree) { // Ярлык по признаку Распределитель
                     Allocator::Free(const_cast<Ch*>(GetStringPointer()));
                 }
                 break;
@@ -912,16 +912,16 @@ public:
 
     //@}
 
-    //! @name Операторы присваивания
+    //! @nameОператоры соответствия
     //@{
 
     //! Задание с семантикой перемещения.
-    /*! \param rhs Источник задания. После присвоения оно станет нулевым значением.
+    /*! \param rhs Источник задания. После произнесения оно станет нулевым значением.
     */
     GenericValue& operator=(GenericValue& rhs) RAPIDJSON_NOEXCEPT {
         if (RAPIDJSON_LIKELY(this != &rhs)) {
-            // Невозможно уничтожить «this» перед присвоением «rhs», иначе — «rhs».
-            // можно использовать после free, если это подзначение «this»,
+            // Невозможно удалить «this» перед присвоением «rhs», иначе — «rhs».
+            // можно использовать после бесплатного, если это подзначение «this»,
             // отсюда и временный танец.
             GenericValue temp;
             temp.RawAssign(rhs);
@@ -939,8 +939,8 @@ public:
 #endif
 
     //! Присвоение ссылки на константную строку (без копирования)
-    /*! \param str Ссылка на константную строку, которая будет назначена
-        \note Эта перегрузка необходима во избежание конфликтов с приведенной ниже общей перегрузкой назначения примитивного типа.
+    /*! \param str Ссылка на константный текст, который будет назначен
+        \note Эта перегрузка необходима во избежание последствий с приведенной ниже общей перегрузкой примитивного типа.
         \см. GenericStringRef, оператор=(T)
     */
     GenericValue& operator=(StringRefType str) RAPIDJSON_NOEXCEPT {
@@ -949,16 +949,16 @@ public:
     }
 
     //! Присваивание с примитивными типами.
-    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+    /*! \tparam T Либо \ref Тип, \c int, \c unsigned, \cint64_t, \c uint64_t
         \param value Назначаемое значение.
 
         \note Исходный тип \c T явно запрещает все типы указателей,
             особенно (\c const) \ref Ch*.  Это помогает избежать неявного
             для ссылки на строки символов с недостаточным временем жизни используйте
             \ref SetString(const Ch*, Allocator&) (для копирования) или
-            Вместо этого \ref StringRef() (чтобы явно пометить указатель как константу).
+            Вместо этого \refStringRef()(чтобы явно пометить указатель как константу).
             Все остальные типы указателей будут неявно преобразованы в \c bool,
-            вместо этого используйте \ref SetBool().
+            вместо этого воспользуйтесь \refSetBool().
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::IsPointer<T>), (GenericValue&))
@@ -969,9 +969,9 @@ public:
 
     //! Назначение глубокого копирования из Value
     /*! Назначает копию \b значения текущему объекту значения.
-        \tparam SourceAllocator Тип распределителя \c rhs
+        \tparam SourceAllocator Тип распределения \c rhs
         \param rhs Значение для копирования (только для чтения)
-        \param allocator Распределитель, используемый для копирования
+        \param allocator Распределитель, источник для копирования
         \param copyConstStrings Принудительное копирование константных строк (например, ссылка на локальный буфер)
      */
     template <typename SourceAllocator>
@@ -997,15 +997,15 @@ public:
 
     //! отдельно стоящий помощник функции подкачки
     /*!
-        Вспомогательная функция для включения поддержки общего шаблона реализации подкачки на основе \c std::swap:
+        Вспомогательная функция для включения поддержки реализации общего шаблона подкачки на основе \c std::swap:
         \code
         void swap(MyClass& a, MyClass& b) {
-            используя std::swap;
-            своп(a.value, b.value);
+            с помощью станд::своп;
+            своп(a.значение, b.значение);
             // ...
         }
         \endcode
-        \см. Swap()
+        \см.  Swap()
      */
     friend inline void swap(GenericValue& a, GenericValue& b) RAPIDJSON_NOEXCEPT { a.Swap(b); }
 
@@ -1014,12 +1014,12 @@ public:
     GenericValue& Move() RAPIDJSON_NOEXCEPT { return *this; }
     //@}
 
-    //! @name Операторы равенства и не равно
+    //! @nameОператоры равны и не равно
     //@{
     //! Оператор равенства
     /*!
-        \note Если объект содержит повторяющийся именованный элемент, сравнение равенства с любым объектом всегда \c ложно.
-        \note Сложность квадратична по количеству членов объекта и линейна по всем остальным значениям (числу всех значений в поддереве и общей длине всех строк).
+        \note Если объект содержит повторяющийся именованный элемент, сравнение сравнения с любым объектом всегда \c ложно.
+        \note Сложность квадратичности по количеству членов объекта и линейной по всем параметрам штата (количество всех результатов в поддереве и длина всех строк).
     */
     template <typename SourceAllocator>
     bool operator==(const GenericValue<Encoding, SourceAllocator>& rhs) const {
@@ -1028,7 +1028,7 @@ public:
             return false;
 
         switch (GetType()) {
-        case kObjectType: // Warning: O(n^2) inner-loop
+        case kObjectType: // Warning: O(n^2) внутренний цикл
             if (data_.o.size != rhs.data_.o.size)
                 return false;
             for (ConstMemberIterator lhsMemberItr = MemberBegin(); lhsMemberItr != MemberEnd(); ++lhsMemberItr) {
@@ -1068,13 +1068,13 @@ public:
 
 #if RAPIDJSON_HAS_STDSTRING
     //! Оператор равенства со строковым объектом
-    /*! \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
+    /*! \note Требуется определение символа препроцессора \refRAPIDJSON_HAS_STDSTRING.
      */
     bool operator==(const std::basic_string<Ch>& rhs) const { return *this == GenericValue(StringRef(rhs)); }
 #endif
 
     //! Оператор равенства с примитивными типами
-    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t, \c uint64_t, \c double, \c true, \c false
+    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \cint64_t, \cuint64_t, \c double, \c true, \c false
     */
     template <typename T> RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>,internal::IsGenericValue<T> >), (bool)) operator==(const T& rhs) const { return *this == GenericValue(rhs); }
 
@@ -1163,14 +1163,14 @@ public:
 
     //@}
 
-    //! @name Нуль
+    //! @nameНуль
     //@{
 
     GenericValue& SetNull() { this->~GenericValue(); new (this) GenericValue(); return *this; }
 
     //@}
 
-    //! @name Бул
+    //! @nameБул
     //@{
 
     bool GetBool() const { RAPIDJSON_ASSERT(IsBool()); return data_.f.flags == kTrueFlag; }
@@ -1198,11 +1198,11 @@ public:
 
     //! Получите значение из объекта, связанного с именем.
     /*! \pre IsObject() == true
-        \tparam T Либо \c Ch, либо \c const \c Ch (шаблон, используемый для устранения неоднозначности с помощью \ref оператора[](SizeType))
+        \tparam T Либо \c Ch, либо \c const \c Ch (шаблон, эффект для затруднения неоднозначности с помощью \ref оператора[](SizeType))
         \note В версии 0.1x, если элемент не найден, эта функция возвращает нулевое значение. Это создает проблему 7.
         Начиная с версии 0.2, если имя неверное, оно будет утверждаться.
-        Если пользователь не уверен, существует ли элемент, ему следует сначала использовать HasMember().
-        Лучшим подходом является использование FindMember() .
+        Если пользователь не уверен, что этот элемент существует, ему следует сначала использоватьHasMember().
+        Лучшим подходом является использование FindMember().
         \note Линейная временная сложность.
     */
     template <typename T>
@@ -1215,9 +1215,9 @@ public:
 
     //! Получите значение из объекта, связанного с именем.
     /*! \pre IsObject() == true
-        \tparam SourceAllocator Распределитель значения имени \c
+        \tparam SourceAllocator Распределение значений имени \c
 
-        \note По сравнению с \refoperator[](T*) эта версия работает быстрее, поскольку ей не требуется StrLen().
+        \note По сравнению с \refoperator[](T*) эта версия работает быстрее, поскольку ей не требуетсяStrLen().
         И он также может обрабатывать строки со встроенными нулевыми символами.
 
         \note Линейная временная сложность.
@@ -1233,7 +1233,7 @@ public:
 #if RAPIDJSON_HAS_CXX11
             // Используйте локальное хранилище потоков, чтобы предотвратить гонки между потоками.
             // Используйте статический буфер и новое размещение, чтобы предотвратить разрушение, с
-            // alignas(), чтобы обеспечить правильное выравнивание.
+            // alignas() , чтобы обеспечить правильное соревнование.
             alignas(GenericValue) thread_local static char buffer[sizeof(GenericValue)];
             return *new (buffer) GenericValue();
 #elif defined(_MSC_VER) && _MSC_VER < 1900
@@ -1277,9 +1277,9 @@ public:
     MemberIterator MemberEnd()              { RAPIDJSON_ASSERT(IsObject()); return MemberIterator(GetMembersPointer() + data_.o.size); }
 
     //! Запросите у объекта достаточную емкость для хранения участников.
-    /*! \param newCapacity Емкость, которую по крайней мере должен иметь объект.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+    /*! \param newCapacity Эмкость того, что по мере должно иметь объект.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \note Линейная временная сложность.
     */
     GenericValue& MemberReserve(SizeType newCapacity, Allocator &allocator) {
@@ -1293,7 +1293,7 @@ public:
         \param name Имя элемента для поиска.
         \pre IsObject() == true
         \return Существует ли элемент с таким именем.
-        \note Лучше использовать FindMember() напрямую, если вам также нужно получить значение.
+        \note Лучше использоватьFindMember()напрямую, если вам также необходимо получить значение.
         \note Линейная временная сложность.
     */
     bool HasMember(const Ch* name) const { return FindMember(name) != MemberEnd(); }
@@ -1304,7 +1304,7 @@ public:
         \param name Имя элемента для поиска.
         \pre IsObject() == true
         \return Существует ли элемент с таким именем.
-        \note Лучше использовать FindMember() напрямую, если вам также нужно получить значение.
+        \note Лучше использоватьFindMember()напрямую, если вам также необходимо получить значение.
         \note Линейная временная сложность.
     */
     bool HasMember(const std::basic_string<Ch>& name) const { return FindMember(name) != MemberEnd(); }
@@ -1312,11 +1312,11 @@ public:
 
     //! Проверьте, существует ли в объекте член с именем GenericValue.
     /*!
-        Эта версия работает быстрее, поскольку ей не требуется StrLen(). Он также может обрабатывать строку с нулевым символом.
+        Эта версия работает быстрее, поскольку ей не требуется StrLen(). Он также может обрабатывать обращение нулевым символом.
         \param name Имя элемента для поиска.
         \pre IsObject() == true
         \return Существует ли элемент с таким именем.
-        \note Лучше использовать FindMember() напрямую, если вам также нужно получить значение.
+        \note Лучше использоватьFindMember()напрямую, если вам также необходимо получить значение.
         \note Линейная временная сложность.
     */
     template <typename SourceAllocator>
@@ -1329,9 +1329,9 @@ public:
         \return Итератор к члену, если он существует.
             В противном случае возвращается \ref MemberEnd().
 
-        \note Более ранние версии Rapidjson возвращали указатель \c NULL на случай, если
+        \note Более ранняя версия Rapidjson возвращаемые указатели \cNULLна случай, если
             запрошенный член не существует. Для согласованности, например.
-            \c std::map, теперь это было изменено на MemberEnd().
+            \c std::map, теперь это было изменено наMemberEnd().
         \note Линейная временная сложность.
     */
     MemberIterator FindMember(const Ch* name) {
@@ -1343,15 +1343,15 @@ public:
 
     //! Найдите участника по имени.
     /*!
-        Эта версия работает быстрее, поскольку ей не требуется StrLen(). Он также может обрабатывать строку с нулевым символом.
+        Эта версия работает быстрее, поскольку ей не требуется StrLen(). Он также может обрабатывать обращение нулевым символом.
         \param name Имя элемента для поиска.
         \pre IsObject() == true
         \return Итератор к члену, если он существует.
             В противном случае возвращается \ref MemberEnd().
 
-        \note Более ранние версии Rapidjson возвращали указатель \c NULL на случай, если
+        \note Более ранняя версия Rapidjson возвращаемые указатели \cNULLна случай, если
             запрошенный член не существует. Для согласованности, например.
-            \c std::map, теперь это было изменено на MemberEnd().
+            \c std::map, теперь это было изменено наMemberEnd().
         \note Линейная временная сложность.
     */
     template <typename SourceAllocator>
@@ -1377,12 +1377,12 @@ public:
     //! Добавьте член (пару имя-значение) к объекту.
     /*! \param name Строковое значение в качестве имени члена.
         \param value Значение любого типа.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \note В случае успеха право собственности на имя \c и значение \c будет передано этому объекту.
-        \pre IsObject() && имя. IsString()
-        \имя сообщения. IsNull() && значение. IsNull()
-        \note Амортизированная постоянная временная сложность.
+        \preIsObject()&& имя.  IsString()
+        \имя сообщения. IsNull()&& значение.  IsNull()
+        \note Амортизированная постоянная временная характеристика.
     */
     GenericValue& AddMember(GenericValue& name, GenericValue& value, Allocator& allocator) {
         RAPIDJSON_ASSERT(IsObject());
@@ -1393,12 +1393,12 @@ public:
 
     //! Добавьте к объекту постоянное строковое значение в качестве члена (пара имя-значение).
     /*! \param name Строковое значение в качестве имени члена.
-        \param value — ссылка на константную строку как значение члена.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+        \param value — ссылка на константный текст как значение члена.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \pre IsObject()
-        \note Эта перегрузка необходима во избежание конфликтов с перегрузкой универсального примитивного типа AddMember(GenericValue&,T,Allocator&), приведенной ниже.
-        \note Амортизированная постоянная временная сложность.
+        \note Эта перегрузка необходима во избежание ошибок с перегрузкой универсального примитивного типа AddMember(GenericValue&,T,Allocator&), приведенного ниже.
+        \note Амортизированная постоянная временная характеристика.
     */
     GenericValue& AddMember(GenericValue& name, StringRefType value, Allocator& allocator) {
         GenericValue v(value);
@@ -1408,12 +1408,12 @@ public:
 #if RAPIDJSON_HAS_STDSTRING
     //! Добавьте к объекту строковый объект в качестве члена (пара имя-значение).
     /*! \param name Строковое значение в качестве имени члена.
-        \param value — ссылка на константную строку как значение члена.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+        \param value — ссылка на константный текст как значение члена.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \pre IsObject()
-        \note Эта перегрузка необходима во избежание конфликтов с перегрузкой универсального примитивного типа AddMember(GenericValue&,T,Allocator&), приведенной ниже.
-        \note Амортизированная постоянная временная сложность.
+        \note Эта перегрузка необходима во избежание ошибок с перегрузкой универсального примитивного типа AddMember(GenericValue&,T,Allocator&), приведенного ниже.
+        \note Амортизированная постоянная временная характеристика.
     */
     GenericValue& AddMember(GenericValue& name, std::basic_string<Ch>& value, Allocator& allocator) {
         GenericValue v(value, allocator);
@@ -1422,11 +1422,11 @@ public:
 #endif
 
     //! Добавьте любое примитивное значение в качестве члена (пара имя-значение) к объекту.
-    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+    /*! \tparam T Либо \ref Тип, \c int, \c unsigned, \cint64_t, \c uint64_t
         \param name Строковое значение в качестве имени члена.
         \param value Значение примитивного типа \c T как значение члена
-        \param allocator Распределитель для перераспределения памяти. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+        \param allocator Распределитель для перераспределения памяти. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \pre IsObject()
 
         \note Исходный тип \c T явно запрещает все типы указателей,
@@ -1436,7 +1436,7 @@ public:
             AddMember(StringRefType, StringRefType, Распределитель&).
             Все остальные типы указателей будут неявно преобразованы в \c bool,
             вместо этого используйте явное приведение, если необходимо.
-        \note Амортизированная постоянная временная сложность.
+        \note Амортизированная постоянная временная характеристика.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (GenericValue&))
@@ -1463,14 +1463,14 @@ public:
 
 
     //! Добавьте член (пару имя-значение) к объекту.
-    /*! \param name Ссылка на константную строку как имя члена.
+    /*! \param name Ссылка на константную букву имени члена.
         \param value Значение любого типа.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \note В случае успеха право собственности на значение \c будет передано этому объекту.
         \pre IsObject()
-        \ опубликовать значение. IsNull()
-        \note Амортизированная постоянная временная сложность.
+        \ опубликовать значение.  IsNull()
+        \note Амортизированная постоянная временная характеристика.
     */
     GenericValue& AddMember(StringRefType name, GenericValue& value, Allocator& allocator) {
         GenericValue n(name);
@@ -1478,13 +1478,13 @@ public:
     }
 
     //! Добавьте к объекту постоянное строковое значение в качестве члена (пара имя-значение).
-    /*! \param name Ссылка на константную строку как имя члена.
-        \param value — ссылка на константную строку как значение члена.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+    /*! \param name Ссылка на константную букву имени члена.
+        \param value — ссылка на константный текст как значение члена.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \pre IsObject()
-        \note Эта перегрузка необходима во избежание конфликтов с перегрузкой универсального примитивного типа AddMember(StringRefType,T,Allocator&), приведенной ниже.
-        \note Амортизированная постоянная временная сложность.
+        \note Эта перегрузка необходима во избежание ошибок при перегрузке универсального примитивного типа AddMember(StringRefType,T,Allocator&), приведенного ниже.
+        \note Амортизированная постоянная временная характеристика.
     */
     GenericValue& AddMember(StringRefType name, StringRefType value, Allocator& allocator) {
         GenericValue v(value);
@@ -1492,11 +1492,11 @@ public:
     }
 
     //! Добавьте любое примитивное значение в качестве члена (пара имя-значение) к объекту.
-    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
-        \param name Ссылка на константную строку как имя члена.
+    /*! \tparam T Либо \ref Тип, \c int, \c unsigned, \cint64_t, \c uint64_t
+        \param name Ссылка на константную букву имени члена.
         \param value Значение примитивного типа \c T как значение члена
-        \param allocator Распределитель для перераспределения памяти. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+        \param allocator Распределитель для перераспределения памяти. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \pre IsObject()
 
         \note Исходный тип \c T явно запрещает все типы указателей,
@@ -1506,7 +1506,7 @@ public:
             AddMember(StringRefType, StringRefType, Распределитель&).
             Все остальные типы указателей будут неявно преобразованы в \c bool,
             вместо этого используйте явное приведение, если необходимо.
-        \note Амортизированная постоянная временная сложность.
+        \note Амортизированная постоянная временная характеристика.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (GenericValue&))
@@ -1527,7 +1527,7 @@ public:
     //! Удалить член объекта по его имени.
     /*! \param name Имя удаляемого участника.
         \return Существовал ли этот член.
-        \note Эта функция может изменить порядок членов объекта. Используйте \ref
+        \note Эта функция может изменить порядок сотрудников объекта. Используйте \ref
             EraseMember(ConstMemberIterator), если вам нужно сохранить
             относительный порядок остальных членов.
         \note Линейная временная сложность.
@@ -1553,9 +1553,9 @@ public:
     }
 
     //! Удалить член объекта с помощью итератора.
-    /*! Итератор-член \param m (полученный FindMember() или MemberBegin()).
+    /*! Итератор-член \param m (полученныйFindMember()илиMemberBegin()).
         \вернуть новый итератор после удаления.
-        \note Эта функция может изменить порядок членов объекта. Используйте \ref
+        \note Эта функция может изменить порядок сотрудников объекта. Используйте \ref
             EraseMember(ConstMemberIterator), если вам нужно сохранить
             относительный порядок остальных членов.
         \note Постоянная временная сложность.
@@ -1572,9 +1572,9 @@ public:
     /*! \param pos итератор для удаляемого элемента
         \pre IsObject() == true && \ref MemberBegin() <= \c pos < \ref MemberEnd()
         \return Итератор, следующий за удаленным элементом.
-            Если итератор \c pos ссылается на последний элемент, возвращается итератор \ref MemberEnd().
-        \note Эта функция сохраняет относительный порядок оставшегося объекта.
-            члены. Если вам это не нужно, используйте более эффективный метод \ref RemoveMember(MemberIterator).
+            Если итератор \c pos ссылается на последний элемент, возвращается итератор \refMemberEnd().
+        \note Эта функция сохраняет соответствующий порядок на территории.
+            член. Если вам это не нужно, используйте более эффективный метод \ref RemoveMember(MemberIterator).
         \note Линейная временная сложность.
     */
     MemberIterator EraseMember(ConstMemberIterator pos) {
@@ -1582,11 +1582,11 @@ public:
     }
 
     //! Удалить элементы в диапазоне [первый, последний) из объекта.
-    /*! \param первый итератор для первого удаляемого члена
+    /*! \param первый итератор для первого удаленного члена
         \param последний итератор, следующий за последним удаляемым элементом
-        \pre IsObject() == true && \ref MemberBegin() <= \c первый <= \c последний <= \ref MemberEnd()
+        \preIsObject()== true && \refMemberBegin()<= \c первый <= \c последний <= \ref MemberEnd()
         \return Итератор, следующий за последним удаленным элементом.
-        \note Эта функция сохраняет относительный порядок оставшегося объекта.
+        \note Эта функция сохраняет соответствующий порядок на территории.
             члены.
         \note Линейная временная сложность.
     */
@@ -1632,7 +1632,7 @@ public:
 
     //@}
 
-    //! @name Массив
+    //! @nameМассив
     //@{
 
     //! Установите это значение как пустой массив.
@@ -1686,9 +1686,9 @@ public:
     ConstValueIterator End() const { return const_cast<GenericValue&>(*this).End(); }
 
     //! Запросите у массива достаточную емкость для хранения элементов.
-    /*! \param newCapacity Емкость, которую по крайней мере должен иметь массив.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
+    /*! \param newCapacity Емкость, которая по мере мере должна иметь массив.
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
         \note Линейная временная сложность.
     */
     GenericValue& Reserve(SizeType newCapacity, Allocator &allocator) {
@@ -1702,13 +1702,13 @@ public:
 
     //! Добавьте GenericValue в конец массива.
     /*! \param value Добавляемое значение.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
         \pre IsArray() == true
-        \ опубликовать значение. IsNull() == правда
-        \return Само значение для беглого API .
+        \ опубликовать значение. IsNull()== правда
+        \return Само значение для беглогоAPI.
         \note В случае успеха право собственности на значение \c будет передано этому массиву.
-        \note Если количество добавляемых элементов известно, то вызов Reserve() один раз может быть более эффективным.
-        \note Амортизированная постоянная временная сложность.
+        \note Если известно количество добавленных элементов, вызовReserve()один раз может оказаться более эффективным.
+        \note Амортизированная постоянная временная характеристика.
     */
     GenericValue& PushBack(GenericValue& value, Allocator& allocator) {
         RAPIDJSON_ASSERT(IsArray());
@@ -1725,12 +1725,12 @@ public:
 #endif // RAPIDJSON_HAS_CXX11_RVALUE_REFS
 
     //! Добавьте ссылку на константную строку в конец массива.
-    /*! \param value Ссылка на константную строку, которая будет добавлена.
-        \param allocator Распределитель для перераспределения памяти. Это должен быть тот же самый вариант, который использовался ранее. Обычно используйте GenericDocument::GetAllocator() .
+    /*! \param value Ссылка на константный текст, который будет добавлен.
+        \param allocator Распределитель для перераспределения памяти. Это должен быть тот самый вариант, который использовался ранее. Обычно GenericDocument::GetAllocator() .
         \pre IsArray() == true
-        \return Само значение для беглого API .
-        \note Если количество добавляемых элементов известно, то вызов Reserve() один раз может быть более эффективным.
-        \note Амортизированная постоянная временная сложность.
+        \return Само значение для беглогоAPI.
+        \note Если известно количество добавленных элементов, вызовReserve()один раз может оказаться более эффективным.
+        \note Амортизированная постоянная временная характеристика.
         \см. GenericStringRef
     */
     GenericValue& PushBack(StringRefType value, Allocator& allocator) {
@@ -1738,12 +1738,12 @@ public:
     }
 
     //! Добавьте примитивное значение в конец массива.
-    /*! \tparam T Либо \ref Type, \c int, \c unsigned, \c int64_t , \c uint64_t
+    /*! \tparam T Либо \ref Тип, \c int, \c unsigned, \cint64_t, \c uint64_t
         \param value Добавляемое значение примитивного типа T.
-        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно используйте GenericDocument::GetAllocator() .
+        \param allocator Распределитель для перераспределения памяти. Он должен быть таким же, как и раньше. Обычно GenericDocument::GetAllocator() .
         \pre IsArray() == true
-        \return Само значение для беглого API .
-        \note Если количество добавляемых элементов известно, то вызов Reserve() один раз может быть более эффективным.
+        \return Само значение для беглогоAPI.
+        \note Если известно количество добавленных элементов, вызовReserve()один раз может оказаться более эффективным.
 
         \note Исходный тип \c T явно запрещает все типы указателей,
             особенно (\c const) \ref Ch*.  Это помогает избежать неявного
@@ -1752,7 +1752,7 @@ public:
             PushBack(StringRefType, Распределитель&).
             Все остальные типы указателей будут неявно преобразованы в \c bool,
             вместо этого используйте явное приведение, если необходимо.
-        \note Амортизированная постоянная временная сложность.
+        \note Амортизированная постоянная временная характеристика.
     */
     template <typename T>
     RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>, internal::IsGenericValue<T> >), (GenericValue&))
@@ -1776,7 +1776,7 @@ public:
     /*!
         \param pos итератор элемента, который нужно удалить
         \pre IsArray() == true && \ref Begin() <= \c pos < \ref End()
-        \return Итератор, следующий за удаленным элементом. Если итератор pos ссылается на последний элемент, возвращается итератор End().
+        \return Итератор, следующий за удаленным элементом. Если итератор pos ссылается на последний элемент, возвращается итераторEnd().
         \note Линейная временная сложность.
     */
     ValueIterator Erase(ConstValueIterator pos) {
@@ -1787,7 +1787,7 @@ public:
     /*!
         \param первый итератор первого удаляемого элемента
         \param последний итератор, следующий за последним удаляемым элементом
-        \pre IsArray() == true && \ref Begin() <= \c первый <= \c последний <= \ref End()
+        \preIsArray()== true && \refBegin()<= \c первый <= \c последний <= \ref End()
         \return Итератор, следующий за последним удаленным элементом.
         \note Линейная временная сложность.
     */
@@ -1811,7 +1811,7 @@ public:
 
     //@}
 
-    //! @name Номер
+    //! @nameНомер
     //@{
 
     int GetInt() const          { RAPIDJSON_ASSERT(data_.f.flags & kIntFlag);   return data_.n.i.i;   }
@@ -1820,19 +1820,19 @@ public:
     uint64_t GetUint64() const  { RAPIDJSON_ASSERT(data_.f.flags & kUint64Flag); return data_.n.u64; }
 
     //! Получите значение как двойной тип.
-    /*! \note Если значение представляет собой 64-битное целое число, оно может потерять точность. Используйте \c IsLosslessDouble(), чтобы проверить, происходит ли преобразование без потерь.
+    /*! \note Если значение представляет собой 64-битное число, оно может потерять точность. Используйте \cIsLosslessDouble(), чтобы проверить, происходит ли преобразование без потерь.
     */
     double GetDouble() const {
         RAPIDJSON_ASSERT(IsNumber());
         if ((data_.f.flags & kDoubleFlag) != 0)                return data_.n.d;   // точный тип, без преобразования.
         if ((data_.f.flags & kIntFlag) != 0)                   return data_.n.i.i; // интервал -> двойной
         if ((data_.f.flags & kUintFlag) != 0)                  return data_.n.u.u; // без знака -> двойной
-        if ((data_.f.flags & kInt64Flag) != 0)                 return static_cast<double>(data_.n.i64); // int64_t -> double (может потерять точность)
-        RAPIDJSON_ASSERT((data_.f.flags & kUint64Flag) != 0);  return static_cast<double>(data_.n.u64); // uint64_t -> double (может потерять точность)
+        if ((data_.f.flags & kInt64Flag) != 0)                 return static_cast<double>(data_.n.i64); // int64_t -> двойной (может потерять точность)
+        RAPIDJSON_ASSERT((data_.f.flags & kUint64Flag) != 0);  return static_cast<double>(data_.n.u64); // uint64_t -> двойной (может потерять точность)
     }
 
-    //! Получите значение как тип float.
-    /*! \note Если значение представляет собой 64-битное целое число, оно может потерять точность. Используйте \c IsLosslessFloat(), чтобы проверить, происходит ли преобразование без потерь.
+    //! Получите значение типа float.
+    /*! \note Если значение представляет собой 64-битное число, оно может потерять точность. Используйте \cIsLosslessFloat(), чтобы проверить, происходит ли преобразование без потерь.
     */
     float GetFloat() const {
         return static_cast<float>(GetDouble());
@@ -1847,29 +1847,29 @@ public:
 
     //@}
 
-    //! @name Строка
+    //! @nameСтрока
     //@{
 
     const Ch* GetString() const { RAPIDJSON_ASSERT(IsString()); return DataString(data_); }
 
     //! Получить длину строки.
-    /*! Поскольку Rapidjson допускает использование "\\u0000" в строке json, strlen(v. GetString() ) может не равняться v. GetStringLength() .
+    /*! поскольку Rapidjson допускает использование "\\u0000" в строке json, strlen(v.GetString()) может не равняться v.GetStringLength().
     */
     SizeType GetStringLength() const { RAPIDJSON_ASSERT(IsString()); return DataStringLength(data_); }
 
     //! Установите это значение как строку, не копируя исходную строку.
     /*! Эта версия имеет лучшую производительность с указанной длиной, а также поддерживает строку, содержащую нулевой символ.
         \param указатель исходной строки.
-        \param length Длина исходной строки, исключая завершающий нулевой признак.
-        \return Само значение для беглого API .
-        \post IsString() == true && GetString() == s && GetStringLength() == длина
+        \param length Длина исходной строки, завершающая нулевой признак.
+        \return Само значение для беглогоAPI.
+        \postIsString()== true &&GetString()== s &&GetStringLength()== длина
         \см. SetString(StringRefType)
     */
     GenericValue& SetString(const Ch* s, SizeType length) { return SetString(StringRef(s, length)); }
 
     //! Установите это значение как строку, не копируя исходную строку.
-    /*! Ссылка на исходную строку \param s
-        \return Само значение для беглого API .
+    /*! Ссылка на исходный текст \param s
+        \return Само значение для беглогоAPI.
         \post IsString() == true && GetString() == s && GetStringLength() == s.length
     */
     GenericValue& SetString(StringRefType s) { this->~GenericValue(); SetStringRaw(s); return *this; }
@@ -1877,48 +1877,48 @@ public:
     //! Установите это значение как строку, скопировав исходную строку.
     /*! Эта версия имеет лучшую производительность с указанной длиной, а также поддерживает строку, содержащую нулевой символ.
         Исходная строка \param s.
-        \param length Длина исходной строки, исключая завершающий нулевой признак.
-        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
-        \post IsString() == true && GetString() != s && strcmp( GetString() ,s) == 0 && GetStringLength() == длина
+        \param length Длина исходной строки, завершающая нулевой признак.
+        \param allocator Распределитель для выделения скопированного буфера. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
+        \postIsString()== true &&GetString()!= s && strcmp(GetString(),s) == 0 &&GetStringLength()== длина
     */
     GenericValue& SetString(const Ch* s, SizeType length, Allocator& allocator) { return SetString(StringRef(s, length), allocator); }
 
     //! Установите это значение как строку, скопировав исходную строку.
     /*! Исходная строка \param s.
-        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
-        \post IsString() == true && GetString() != s && strcmp( GetString() ,s) == 0 && GetStringLength() == длина
+        \param allocator Распределитель для выделения скопированного буфера. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
+        \postIsString()== true &&GetString()!= s && strcmp(GetString(),s) == 0 &&GetStringLength()== длина
     */
     GenericValue& SetString(const Ch* s, Allocator& allocator) { return SetString(StringRef(s), allocator); }
 
     //! Установите это значение как строку, скопировав исходную строку.
-    /*! Ссылка на исходную строку \param s
-        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
-        \post IsString() == true && GetString() != s.s && strcmp( GetString() ,s) == 0 && GetStringLength() == длина
+    /*! Ссылка на исходный текст \param s
+        \param allocator Распределитель для выделения скопированного буфера. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
+        \postIsString()== true &&GetString()!= s.s && strcmp(GetString(),s) == 0 &&GetStringLength()== длина
     */
     GenericValue& SetString(StringRefType s, Allocator& allocator) { this->~GenericValue(); SetStringRaw(s, allocator); return *this; }
 
 #if RAPIDJSON_HAS_STDSTRING
     //! Установите это значение как строку, скопировав исходную строку.
     /*! Исходная строка \param s.
-        \param allocator Распределитель для выделения скопированного буфера. Обычно используйте GenericDocument::GetAllocator() .
-        \return Само значение для беглого API .
-        \post IsString() == true && GetString() != s. data() && strcmp( GetString() ,s. data() == 0 && GetStringLength() == s. size()
-        \note Требуется определение символа препроцессора \ref RAPIDJSON_HAS_STDSTRING .
+        \param allocator Распределитель для выделения скопированного буфера. Обычно GenericDocument::GetAllocator() .
+        \return Само значение для беглогоAPI.
+        \postIsString()== true &&GetString()!= s. data()&& strcmp(GetString(),s.data()== 0 &&GetStringLength()== s. size()
+        \note Требуется определение символа препроцессора \refRAPIDJSON_HAS_STDSTRING.
     */
     GenericValue& SetString(const std::basic_string<Ch>& s, Allocator& allocator) { return SetString(StringRef(s), allocator); }
 #endif
 
     //@}
 
-    //! @name Массив
+    //! @nameМассив
     //@{
 
     //! Шаблонная версия для проверки того, является ли это значение типом T.
     /*!
-        \tparam T Либо \c bool, \c int, \c unsigned, \c int64_t , \c uint64_t , \c double, \c float, \c const \c char*, \c std:: basic_string <Ch>
+        \tparam T Либо \c bool, \c int, \c unsigned, \cint64_t, \cuint64_t, \c double, \c float, \c const \c char*, \c std::basic_string<Ch>
     */
     template <typename T>
     bool Is() const { return internal::TypeHelper<ValueType, T>::Is(*this); }
@@ -1939,10 +1939,10 @@ public:
 
     //! Генерируйте события этого значения для обработчика.
     /*! Эта функция использует шаблон посетителя GoF.
-        Типичное использование — вывод этого значения JSON в виде текста JSON через Writer, который является обработчиком.
+        Типичное использование — выведите это значениеJSONв виде текстаJSONчерез Writer, который является обработчиком.
         Его также можно использовать для глубокого клонирования этого значения через GenericDocument, который также является обработчиком.
         \tparam Handler Тип обработчика.
-        \param handler Объект, реализующий концепцию Handler.
+        \param handler Объект, реализующий создание Handler.
     */
     template <typename Handler>
     bool Accept(Handler& handler) const {
@@ -2040,12 +2040,12 @@ private:
         const Ch* str;
     };  // 12 байт в 32-битном режиме, 16 байт в 64-битном режиме.
 
-    // деталь реализации: ShortString может представлять строки с нулевым завершением до символов MaxSize.
+    // Деталь реализации: ShortString может возглавить строку с нулевым завершением до символов MaxSize.
     // (исключая завершающий ноль) и сохраните значение, чтобы определить длину содержащегося
-    // строку в последнем символе str[LenPos], сохранив там «MaxSize — длина». Если строка
-    // для хранения имеет максимальную длину MaxSize, тогда str[LenPos] будет равно 0 и, следовательно, будет действовать как
+    // В последнем символе str[LenPos] сохранился текст «MaxSize — длина». Если строка
+    // для хранения имеет высоту MaxSize, тогда str[LenPos] будет равно 0 и, следовательно, будет действовать как
     // терминатор строки, а также. Чтобы получить длину строки из этого значения, просто используйте
-    // «MaxSize — str[LenPos]».
+    // «MaxSize — str[ЛенПос]».
     // Это позволяет хранить строки длиной 13 символов в 32-битном режиме, строки из 21 символа в 64-битном режиме.
     // Строки из 13 символов для встроенного RAPIDJSON_48BITPOINTER_OPTIMIZATION =1 (для строк в кодировке `UTF8`).
     struct ShortString {
@@ -2142,7 +2142,7 @@ private:
     //
     //    {Map*}<>{capacity}<>{Member[capacity]}<>{MapIterator[capacity]}
     //
-    // (где <> означает RAPIDJSON_ALIGN -ment, если необходимо)
+    // (где <> означаетRAPIDJSON_ALIGN-ment, если необходимо)
     //
 
     static RAPIDJSON_FORCEINLINE size_t GetMapLayoutSize(SizeType capacity) {
@@ -2255,7 +2255,7 @@ private:
             for (SizeType i = 0; i < data_.o.size; i++) {
                 members[i].~Member();
             }
-            if (Allocator::kNeedFree) { // Ярлык по признаку Allocator
+            if (Allocator::kNeedFree) { // Ярлык по признаку Распределитель
                 Map** map = &GetMap(members);
                 Allocator::Free(*map);
                 Allocator::Free(map);
@@ -2458,7 +2458,7 @@ private:
     //! Присвоение без вызова деструктора
     void RawAssign(GenericValue& rhs) RAPIDJSON_NOEXCEPT {
         data_ = rhs.data_;
-        // data_ .f.flags = rhs. data_ .f.флаги;
+        // data_ .f.flags = rhs. data_.f.флаги;
         rhs.data_.f.flags = kNullFlag;
     }
 
@@ -2489,16 +2489,16 @@ typedef GenericValue<UTF8<> > Value;
 
 //! Документ для анализа текста JSON как DOM.
 /*!
-    \note реализует концепцию Handler
+    \note реализация реализации Handler
     \tparam Кодировка Кодировка для синтаксического анализа и хранения строк.
     \tparam Распределитель Распределитель для выделения памяти для DOM
-    \tparam StackAllocator Распределитель для выделения памяти для стека во время синтаксического анализа.
-    \warning Хотя GenericDocument наследует от GenericValue, API \b не предоставляет никаких виртуальных функций, особенно виртуального деструктора.  Чтобы избежать утечек памяти, не \c ​​удаляйте объект GenericDocument с помощью указателя на GenericValue.
+    \tparam StackAllocator Распределитель выделения памяти для стека во время синтаксического анализа.
+    \warning Хотя GenericDocument наследует GenericValue,API\b не обеспечивает никаких виртуальных функций, особенно виртуального деструктора.  Чтобы избежать утечек памяти, не \c удаляйте объект GenericDocument с помощью указателя на GenericValue.
 */
 template <typename Encoding, typename Allocator = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator = RAPIDJSON_DEFAULT_STACK_ALLOCATOR >
 class GenericDocument : public GenericValue<Encoding, Allocator> {
 public:
-    typedef typename Encoding::Ch Ch;                       //!< Тип символа, полученный из Encoding.
+    typedef typename Encoding::Ch Ch;                       //!< Тип символа, полученный в результате кодирования.
     typedef GenericValue<Encoding, Allocator> ValueType;    //!< Тип значения документа.
     typedef Allocator AllocatorType;                        //!< Тип распределителя из параметра шаблона.
     typedef StackAllocator StackAllocatorType;              //!< Тип StackAllocator из параметра шаблона.
@@ -2546,7 +2546,7 @@ public:
 #endif
 
     ~GenericDocument() {
-        // Очистите ::ValueType перед уничтожением ownAllocator, ~ ValueType()
+        // Очистите ::ValueType перед использованием ownAllocator, ~ ValueType()
         // запускается последним и может получить доступ к своим элементам или членам, которые будут освобождены
         // с распределителем, например MemoryPoolAllocator (CrtAllocator не
         // освобождает свои данные при уничтожении, но это делает MemoryPoolAllocator).
@@ -2560,11 +2560,11 @@ public:
     //! Переместить назначение в C++11
     GenericDocument& operator=(GenericDocument&& rhs) RAPIDJSON_NOEXCEPT
     {
-        // Здесь необходимо приведение к ValueType, поскольку в противном случае
-        // попытайтесь вызвать шаблонный оператор присваивания GenericValue.
+        // Здесь необходимо приведение к ValueType, на случай неудачного случая.
+        // Попытка вызвать шаблонный оператор использования GenericValue.
         ValueType::operator=(std::forward<ValueType>(rhs));
 
-        // Вызов деструктора здесь приведет к преждевременному вызову деструктора stack_.
+        // Вызов деструктора здесь приведет к прежнему вызову деструктора stack_.
         Destroy();
 
         allocator_ = rhs.allocator_;
@@ -2595,28 +2595,28 @@ public:
         return *this;
     }
 
-    // Разрешить обмен с ValueType.
+    // Разрешить обмен на ValueType.
     // См. «Эффективное C++, 3-е издание», пункт 33: Не скрывайте унаследованные имена.
     using ValueType::Swap;
 
     //! отдельно стоящий помощник функции подкачки
     /*!
-        Вспомогательная функция для включения поддержки общего шаблона реализации подкачки на основе \c std::swap:
+        Вспомогательная функция для включения поддержки реализации общего шаблона подкачки на основе \c std::swap:
         \code
         void swap(MyClass& a, MyClass& b) {
-            используя std::swap;
+            с помощью станд::своп;
             своп(а.док, б.док);
             // ...
         }
         \endcode
-        \см. Swap()
+        \см.  Swap()
      */
     friend inline void swap(GenericDocument& a, GenericDocument& b) RAPIDJSON_NOEXCEPT { a.Swap(b); }
 
     //! Заполните этот документ генератором, который генерирует события SAX.
-    /*! \tparam Генератор Функтор с прототипом <tt>bool f(Handler)</tt>.
-        \param g Функтор-генератор, который отправляет события SAX в параметр.
-        \return Сам документ для беглого API .
+    /*! \tparam Генератор функтор с прототипом <tt>bool f(Handler)</tt>.
+        \param g Функтор-генератор, который отправляет событияSAXв параметр.
+        \return Сам документ для беглогоAPI.
     */
     template <typename Generator>
     GenericDocument& Populate(Generator& g) {
@@ -2628,15 +2628,15 @@ public:
         return *this;
     }
 
-    //! @name Анализ потока
+    //! @nameАнализ потока
     //!@{
 
     //! Анализ текста JSON из входного потока (с преобразованием кодировки)
     /*! \tparam parseFlags Комбинация \ref ParseFlag.
         \tparam SourceEncoding Кодирование входного потока
-        \tparam InputStream Тип входного потока, реализующий концепцию потока
+        \tparam InputStream Тип входного потока, реализующий образующий поток
         \param — входной поток для анализа.
-        \return Сам документ для беглого API .
+        \return Сам документ для беглогоAPI.
     */
     template <unsigned parseFlags, typename SourceEncoding, typename InputStream>
     GenericDocument& ParseStream(InputStream& is) {
@@ -2653,19 +2653,19 @@ public:
 
     //! Разобрать текст JSON из входного потока
     /*! \tparam parseFlags Комбинация \ref ParseFlag.
-        \tparam InputStream Тип входного потока, реализующий концепцию потока
+        \tparam InputStream Тип входного потока, реализующий образующий поток
         \param — входной поток для анализа.
-        \return Сам документ для беглого API .
+        \return Сам документ для беглогоAPI.
     */
     template <unsigned parseFlags, typename InputStream>
     GenericDocument& ParseStream(InputStream& is) {
         return ParseStream<parseFlags, Encoding, InputStream>(is);
     }
 
-    //! Анализировать текст JSON из входного потока (с помощью \ref kParseDefaultFlags)
-    /*! \tparam InputStream Тип входного потока, реализующий концепцию потока
+    //! Анализировать текстJSONиз входного потока (с помощью \ref kParseDefaultFlags)
+    /*! \tparam InputStream Тип входного потока, реализующий образующий поток
         \param — входной поток для анализа.
-        \return Сам документ для беглого API .
+        \return Сам документ для беглогоAPI.
     */
     template <typename InputStream>
     GenericDocument& ParseStream(InputStream& is) {
@@ -2673,13 +2673,13 @@ public:
     }
     //!@}
 
-    //! @name Анализ изменяемой строки на месте
+    //! @nameАнализ изменяемой строки на месте
     //!@{
 
     //! Анализировать текст JSON из изменяемой строки
     /*! \tparam parseFlags Комбинация \ref ParseFlag.
         \param str Изменяемая строка с нулевым завершением, подлежащая анализу.
-        \return Сам документ для беглого API .
+        \return Сам документ для беглогоAPI.
     */
     template <unsigned parseFlags>
     GenericDocument& ParseInsitu(Ch* str) {
@@ -2687,22 +2687,22 @@ public:
         return ParseStream<parseFlags | kParseInsituFlag>(s);
     }
 
-    //! Анализировать текст JSON из изменяемой строки (с помощью \ref kParseDefaultFlags)
+    //! Анализировать текстJSONиз изменяемой строки (с помощью \ref kParseDefaultFlags)
     /*! \param str Изменяемая строка с нулевым завершением, подлежащая анализу.
-        \return Сам документ для беглого API .
+        \return Сам документ для беглогоAPI.
     */
     GenericDocument& ParseInsitu(Ch* str) {
         return ParseInsitu<kParseDefaultFlags>(str);
     }
     //!@}
 
-    //! @name Анализ строки, доступной только для чтения.
+    //! @nameАнализ строк, доступен только для чтения.
     //!@{
 
     //! Анализ текста JSON из строки, доступной только для чтения (с преобразованием кодировки)
-    /*! \tparam parseFlags Комбинация \ref ParseFlag (не должна содержать \ref kParseInsituFlag).
+    /*! \tparam parseFlags Комбинация \ref ParseFlag (не следует поддерживать \ref kParseInsituFlag).
         \tparam SourceEncoding Транскодирование из входной кодировки
-        \param str Строка с нулевым завершением, доступная только для чтения и подлежащая синтаксическому анализу.
+        \param str Строка с нулевым завершением, доступна только для чтения и подлежащая синтаксическому анализу.
     */
     template <unsigned parseFlags, typename SourceEncoding>
     GenericDocument& Parse(const typename SourceEncoding::Ch* str) {
@@ -2712,16 +2712,16 @@ public:
     }
 
     //! Анализировать текст JSON из строки, доступной только для чтения.
-    /*! \tparam parseFlags Комбинация \ref ParseFlag (не должна содержать \ref kParseInsituFlag).
-        \param str Строка с нулевым завершением, доступная только для чтения и подлежащая синтаксическому анализу.
+    /*! \tparam parseFlags Комбинация \ref ParseFlag (не следует поддерживать \ref kParseInsituFlag).
+        \param str Строка с нулевым завершением, доступна только для чтения и подлежащая синтаксическому анализу.
     */
     template <unsigned parseFlags>
     GenericDocument& Parse(const Ch* str) {
         return Parse<parseFlags, Encoding>(str);
     }
 
-    //! Анализировать текст JSON из строки, доступной только для чтения (с помощью \ref kParseDefaultFlags)
-    /*! \param str Строка с нулевым завершением, доступная только для чтения и подлежащая синтаксическому анализу.
+    //! Анализировать текстJSONиз строк, доступный только для чтения (с помощью \ref kParseDefaultFlags)
+    /*! \param str Строка с нулевым завершением, доступна только для чтения и подлежащая синтаксическому анализу.
     */
     GenericDocument& Parse(const Ch* str) {
         return Parse<kParseDefaultFlags>(str);
@@ -2748,7 +2748,7 @@ public:
 #if RAPIDJSON_HAS_STDSTRING
     template <unsigned parseFlags, typename SourceEncoding>
     GenericDocument& Parse(const std::basic_string<typename SourceEncoding::Ch>& str) {
-        // c_str() — постоянная сложность по стандарту. Должно быть быстрее, чем Parse(const char*, size_t )
+        // c_str () — постоянная форма по стандарту. Должно быть быстрее, чем Parse(const char*,size_t)
         return Parse<parseFlags, SourceEncoding>(str.c_str());
     }
 
@@ -2764,13 +2764,13 @@ public:
 
     //!@}
 
-    //! @name Обработка ошибок синтаксического анализа
+    //! @nameОбработка ошибок синтаксического анализа
     //!@{
 
     //! Произошла ли ошибка синтаксического анализа при последнем синтаксическом анализе.
     bool HasParseError() const { return parseResult_.IsError(); }
 
-    //! Получите \ref ParseErrorCode последнего синтаксического анализа.
+    //! Получите \ref ParseErrorCode последний синтаксический анализ.
     ParseErrorCode GetParseError() const { return parseResult_.Code(); }
 
     //! Получите позицию последней ошибки синтаксического анализа во входных данных, в противном случае — 0.
@@ -2778,13 +2778,13 @@ public:
 
     //! Неявное преобразование для получения последнего результата анализа
 #ifndef __clang // -Документация
-    /*! \return \ref ParseResult последней операции анализа
+    /*! \return \ref ParseResult анализа высшей операции
 
         \code
           Документ-документ;
           ParseResult ок = doc.Parse(json);
           if (!ok)
-            printf( "Ошибка анализа JSON: %s (%u)\n", GetParseError_En (ок. Code()), ок. Offset() );
+            printf( "Ошибка анализаJSON: %s (%u)\n",GetParseError_En(ок.Code()), ок.Offset());
         \endcode
      */
 #endif
@@ -2801,7 +2801,7 @@ public:
     size_t GetStackCapacity() const { return stack_.GetCapacity(); }
 
 private:
-    // очистить стек при любом выходе из ParseStream, например. из-за исключения
+    // стойкий стек при любом выходе из ParseStream, например. из-за исключения
     struct ClearStackOnExit {
         explicit ClearStackOnExit(GenericDocument& d) : d_(d) {}
         ~ClearStackOnExit() { d_.ClearStack(); }
@@ -2891,8 +2891,8 @@ typedef GenericDocument<UTF8<> > Document;
 
 //! Вспомогательный класс для доступа к значению типа массива.
 /*!
-    Экземпляр этого вспомогательного класса получается с помощью \c GenericValue:: GetArray() .
-    В дополнение ко всем API-интерфейсам для типа массива он обеспечивает цикл for на основе диапазона, если \c RAPIDJSON_HAS_CXX11_RANGE_FOR =1.
+    Экземпляр этого вспомогательного класса создается с помощью \c GenericValue::GetArray() .
+    В дополнении ко всемAPI-интерфейсам для типа массива он обеспечивает цикл для основы соединения, если \cRAPIDJSON_HAS_CXX11_RANGE_FOR=1.
 */
 template <bool Const, typename ValueT>
 class GenericArray {
@@ -2945,8 +2945,8 @@ private:
 
 //! Вспомогательный класс для доступа к значению типа объекта.
 /*!
-    Экземпляр этого вспомогательного класса получается с помощью \c GenericValue:: GetObject() .
-    В дополнение ко всем API-интерфейсам для типа массива он обеспечивает цикл for на основе диапазона, если \c RAPIDJSON_HAS_CXX11_RANGE_FOR =1.
+    Экземпляр этого вспомогательного класса создается с помощью \c GenericValue::GetObject() .
+    В дополнении ко всемAPI-интерфейсам для типа массива он обеспечивает цикл для основы соединения, если \cRAPIDJSON_HAS_CXX11_RANGE_FOR=1.
 */
 template <bool Const, typename ValueT>
 class GenericObject {

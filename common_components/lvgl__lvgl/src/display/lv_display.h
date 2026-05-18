@@ -154,7 +154,7 @@ void lv_display_set_offset(lv_display_t * disp, int32_t x, int32_t y);
 /**
  * Установите поворот этого дисплея.  LVGL внутренне поменяет местами горизонтальное и вертикальное разрешения.
  * @param disp      указатель на дисплей (NULLдля использования дисплея по умолчанию)
- * @param вращение `LV_DISPLAY_ROTATION_0/90/180/270`
+ * @param rotation `LV_DISPLAY_ROTATION_0/90/180/270`
  */
 void lv_display_set_rotation(lv_display_t * disp, lv_display_rotation_t rotation);
 
@@ -361,7 +361,7 @@ uint32_t lv_display_get_tile_cnt(lv_display_t * disp);
  * Отключение сглаживания не поддерживается начиная с версии v9. Эта функция будет удалена.
  * Включить сглаживание для механизма рендеринга
  * @param disp      указатель на дисплей
- * @param и правда/ложь
+ * @param en правда/ложь
  */
 void lv_display_set_antialiasing(lv_display_t * disp, bool en);
 

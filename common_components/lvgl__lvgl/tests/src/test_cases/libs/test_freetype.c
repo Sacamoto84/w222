@@ -483,7 +483,7 @@ static void test_freetype_with_render_mode(lv_freetype_font_render_mode_t render
     lv_obj_align_to(label2, label1, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 
     /* протестировать рендеринг эмодзи
-     * Шрифт emoji не содержит обычных символов, используйте резервный вариант для их отображения */
+     * Шрифт emoji не содержит обычных символов, используйте резервный вариант для их отображения. */
     font_emoji->fallback = font_normal;
 
     lv_obj_t * label_emoji = lv_label_create(lv_screen_active());
@@ -625,13 +625,13 @@ static void vegravis_generate_vector_ops_string(lv_freetype_outline_event_param_
 #endif
 
 /**
- * Проверьте функциональность кернинга с помощью масштабируемых шрифтов FreeType.
- * Этот тест охватывает пути кода FT_IS_SCALABLE и FT_Set_Pixel_Sizes.
- * в freetype_get_glyph_dsc_cb при получении информации о кернинге.
+ * Проверьте работоспособность кернинга с помощью масштабируемых шрифтов FreeType.
+ * Этот тест сравнивает пути кодовFT_IS_SCALABLEи FT_Set_Pixel_Sizes.
+ * вfreetype_get_glyph_dsc_cbпри получении информации о кернинге.
  */
 void test_freetype_kerning(void)
 {
-    /* Создайте шрифт с включенным кернингом, используя font_info. */
+    /* Создайте шрифт с включенным кернингом, с помощью font_info. */
     lv_font_info_t font_info;
     lv_freetype_init_font_info(&font_info);
     font_info.name = "./src/test_files/fonts/noto/NotoSansSC-Regular.ttf";
@@ -648,7 +648,7 @@ void test_freetype_kerning(void)
     lv_font_t * font_no_kerning = lv_freetype_font_create_with_info(&font_info);
     TEST_ASSERT_NOT_NULL(font_no_kerning);
 
-    /* Проверка ширины глифа с помощью кернинга — проверка пути кода FT_Set_Pixel_Sizes. */
+    /* Проверка диапазона глифа с помощью кернинга — проверка пути кодаFT_Set_Pixel_Sizes. */
     uint16_t width_kerning = lv_font_get_glyph_width(font_kerning, 'A', 'V');
     uint16_t width_no_kerning = lv_font_get_glyph_width(font_no_kerning, 'A', 'V');
 
@@ -683,7 +683,7 @@ void test_freetype_kerning_scalable_sizes(void)
         TEST_ASSERT_NOT_NULL(font);
 
         /* Проверьте получение ширины глифа, которая запускает поиск кернинга */
-        /* Это проверяет путь FT_IS_SCALABLE и FT_Set_Pixel_Sizes. */
+        /* Это предыдущий путьFT_IS_SCALABLEи FT_Set_Pixel_Sizes. */
         uint16_t width_V = lv_font_get_glyph_width(font, 'V', 'A');
         uint16_t width_A = lv_font_get_glyph_width(font, 'A', 'V');
         uint16_t width_T = lv_font_get_glyph_width(font, 'T', 'o');

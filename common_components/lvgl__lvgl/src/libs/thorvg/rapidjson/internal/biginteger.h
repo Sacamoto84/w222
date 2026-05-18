@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -186,7 +186,7 @@ public:
         return *this;
     }
 
-    // Вычислите абсолютную разницу между этим и rhs.
+    // Вычислите абсолютную разницу между этим и правым.
     // Предположим, что это != правая сторона
     bool Difference(const BigInteger& rhs, BigInteger* out) const {
         int cmp = Compare(rhs);

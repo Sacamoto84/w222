@@ -218,7 +218,7 @@ static void draw_main(lv_event_t * e)
     lv_imagebutton_t * imagebutton = (lv_imagebutton_t *)obj;
     lv_layer_t * layer = lv_event_get_layer(e);
 
-    /*Просто draw_main изображение*/
+    /*Простоdraw_mainизображение*/
     lv_imagebutton_state_t state  = suggest_state(obj, get_state(obj));
 
     /*Просто нарисуйте средний источник, если он не выложен плиткой.*/
@@ -295,11 +295,11 @@ static void refr_image(lv_obj_t * obj)
 }
 
 /**
- * Если `src` не определен для текущего состояния, попытайтесь получить состояние, связанное с текущим, но имеющее `src`.
+ * Если`src`не определен для текущего состояния, попробуйте получить состояние, связанное с текущим, но имеющее`src`.
  * например если источник PRESSED не установлен, а RELEASED установлен, используйте RELEASED .
- * @param imagebutton pointer to an image button
- * @param state the state to convert
- * @return the suggested state
+ * @param obj указатель на кнопку изображения
+ * @param state государство, чтобы преобразовать
+ * @return предлагаемое состояние
  */
 static lv_imagebutton_state_t suggest_state(lv_obj_t * obj, lv_imagebutton_state_t state)
 {

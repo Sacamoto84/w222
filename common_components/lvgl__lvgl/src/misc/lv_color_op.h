@@ -50,7 +50,7 @@ lv_color_t LV_ATTRIBUTE_FAST_MEM lv_color_mix(lv_color_t c1, lv_color_t c2, uint
 
 /**
  *
- * @param фг
+ * @param fg
  * @param бг
  * @return
  * @note Используйте bg.alpha в возвращаемом значении

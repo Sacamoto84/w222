@@ -425,7 +425,7 @@ lv_scale_section_t * lv_scale_add_section(lv_obj_t * obj)
     section->first_tick_idx_in_section = LV_SCALE_TICK_IDX_DEFAULT_ID;
     section->last_tick_idx_in_section = LV_SCALE_TICK_IDX_DEFAULT_ID;
     /* Начальный диапазон — [0..-1], что делает его «нейтральным» (т. е. не будет отображаться до тех пор, пока пользователь не
-     * устанавливает другой диапазон).   `range_min` уже равен 0, начиная с `lv_memzero()` выше. */
+     * установить другой диапазон).   `range_min`уже равен 0, начиная с`lv_memzero()`выше. */
     section->range_max = -1;
 
     return section;
@@ -713,7 +713,7 @@ static void lv_scale_event(const lv_obj_class_t * class_p, lv_event_t * event)
         }
     }
     else if(event_code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
-        /* NOTE: Extend scale draw size so the first tick label can be shown */
+        /* NOTE: Увеличьте размер изображения шкалы, чтобы можно было отобразить первую метку деления. */
         lv_event_set_ext_draw_size(event, 100);
     }
     else if(event_code == LV_EVENT_STYLE_CHANGED) {
@@ -769,7 +769,7 @@ static void scale_draw_indicator(lv_obj_t * obj, lv_event_t * event)
     lv_obj_init_draw_line_dsc(obj, LV_PART_MAIN, &main_line_dsc);
 
     /* Эти два значения должны быть подписаны, поскольку они передаются.
-     * до `lv_map()`, который ожидает целые числа со знаком. */
+     * до `lv_map()`, который ожидает целые числа со знакомым. */
     const int32_t total_tick_count = scale->total_tick_count;
     int32_t tick_idx = 0;
     uint32_t major_tick_idx = 0U;
@@ -1141,7 +1141,7 @@ static void scale_draw_main(lv_obj_t * obj, lv_event_t * event)
         int32_t arc_radius;
         scale_get_center(obj, &arc_center, &arc_radius);
 
-        /* TODO: Add compensation for the width of the first and last tick over the arc */
+        /* TODO: Добавьте компенсацию ширины первого и последнего тика по дуге. */
         const int32_t start_angle = lv_map(scale->range_min, scale->range_min, scale->range_max, scale->rotation,
                                            scale->rotation + scale->angle_range);
         const int32_t end_angle = lv_map(scale->range_max, scale->range_min, scale->range_max, scale->rotation,
@@ -1165,7 +1165,7 @@ static void scale_draw_main(lv_obj_t * obj, lv_event_t * event)
             int32_t section_arc_radius;
             scale_get_center(obj, &section_arc_center, &section_arc_radius);
 
-            /* TODO: Add compensation for the width of the first and last tick over the arc */
+            /* TODO: Добавьте компенсацию ширины первого и последнего тика по дуге. */
             const int32_t section_start_angle = lv_map(section->range_min, scale->range_min, scale->range_max, scale->rotation,
                                                        scale->rotation + scale->angle_range);
             const int32_t section_end_angle = lv_map(section->range_max, scale->range_min, scale->range_max, scale->rotation,
@@ -1186,9 +1186,9 @@ static void scale_draw_main(lv_obj_t * obj, lv_event_t * event)
 
 /**
  * Получить центральную точку и радиус масштабной дуги
- * @param obj       pointer to a scale object
- * @param center    pointer to center
- * @param arc_r     pointer to arc radius
+ * @param obj       указатель на масштабируемый объект
+ * @param center    указатель на центр
+ * @param arc_r     указатель радиуса дуги
  */
 static void scale_get_center(const lv_obj_t * obj, lv_point_t * center, int32_t * arc_r)
 {
@@ -1210,11 +1210,11 @@ static void scale_get_center(const lv_obj_t * obj, lv_point_t * center, int32_t 
  *
  * Для рисования делений нам нужны две точки, этот интерфейс возвращает обе точки для всех режимов масштабирования.
  *
- * @param obj       pointer to a scale object
- * @param tick_idx  index of the current tick
- * @param is_major_tick true if tick_idx is a major tick
- * @param tick_point_a  pointer to point 'a' of the tick
- * @param tick_point_b  pointer to point 'b' of the tick
+ * @param obj       указатель на масштабируемый объект
+ * @param tick_idx  индекс текущего тика
+ * @param is_major_tick true, еслиtick_idxявляется основным тиком
+ * @param tick_point_a  указатель на точку «а» галочки
+ * @param tick_point_b  указатель на точку «b» галочки
  */
 static void scale_get_tick_points(lv_obj_t * obj, const uint32_t tick_idx, bool is_major_tick,
                                   lv_point_t * tick_point_a, lv_point_t * tick_point_b)
@@ -1378,10 +1378,10 @@ static void scale_get_tick_points(lv_obj_t * obj, const uint32_t tick_idx, bool 
 /**
  * Получить координаты для метки
  *
- * @param obj       pointer to a scale object
- * @param label_dsc pointer to label descriptor
- * @param tick_point    pointer to reference tick
- * @param label_coords  pointer to label coordinates output
+ * @param obj       указатель на масштабируемый объект
+ * @param label_dsc указатель на дескриптор метки
+ * @param tick_point    указатель на ссылочный тик
+ * @param label_coords  указатель на вывод координат метки
  */
 static void scale_get_label_coords(lv_obj_t * obj, lv_draw_label_dsc_t * label_dsc, lv_point_t * tick_point,
                                    lv_area_t * label_coords)
@@ -1446,10 +1446,10 @@ static void scale_get_label_coords(lv_obj_t * obj, lv_draw_label_dsc_t * label_d
  *
  * Проверяет, имеет ли линия конфигурацию настраиваемого раздела или нет, и соответствующим образом устанавливает свойства.
  *
- * @param obj       pointer to a scale object
- * @param line_dsc  pointer to line descriptor
- * @param items_section_style  pointer to indicator section style
- * @param part      line part, example: LV_PART_INDICATOR, LV_PART_ITEMS, LV_PART_MAIN
+ * @param obj       указатель на масштабируемый объект
+ * @param line_dsc  указатель на дескриптор строки
+ * @param section_style  указатель на стиль раздела индикатора
+ * @param part      часть линии, пример:LV_PART_INDICATOR,LV_PART_ITEMS, LV_PART_MAIN
  */
 static void scale_set_line_properties(lv_obj_t * obj, lv_draw_line_dsc_t * line_dsc, const lv_style_t * section_style,
                                       lv_part_t part)
@@ -1497,9 +1497,9 @@ static void scale_set_line_properties(lv_obj_t * obj, lv_draw_line_dsc_t * line_
  *
  * Проверяет, имеет ли дуга пользовательскую конфигурацию сечения, и соответствующим образом устанавливает свойства.
  *
- * @param obj       pointer to a scale object
- * @param arc_dsc  pointer to arc descriptor
- * @param items_section_style  pointer to indicator section style
+ * @param obj       указатель на масштабируемый объект
+ * @param arc_dsc  указатель на дескриптор дуги
+ * @param section_style  указатель на стиль раздела индикатора
  */
 static void scale_set_arc_properties(lv_obj_t * obj, lv_draw_arc_dsc_t * arc_dsc, const lv_style_t * section_style)
 {
@@ -1566,9 +1566,9 @@ static void scale_set_arc_properties(lv_obj_t * obj, lv_draw_arc_dsc_t * arc_dsc
  *
  * Проверяет, имеет ли индикатор пользовательскую конфигурацию раздела или нет, и соответствующим образом устанавливает свойства.
  *
- * @param obj       pointer to a scale object
- * @param label_dsc  pointer to label descriptor
- * @param items_section_style  pointer to indicator section style
+ * @param obj       указатель на масштабируемый объект
+ * @param label_dsc  указатель на дескриптор метки
+ * @param indicator_section_style  указатель на стиль раздела индикатора
  */
 static void scale_set_indicator_label_properties(lv_obj_t * obj, lv_draw_label_dsc_t * label_dsc,
                                                  const lv_style_t * indicator_section_style)
@@ -1649,7 +1649,7 @@ static void scale_find_section_tick_idx(lv_obj_t * obj)
                     section->last_tick_idx_in_section = tick_idx;
                     section->last_tick_idx_is_major = is_major_tick;
                 }
-                /* Теперь продолжайте устанавливать значения `last_tick_idx_...`, как мы
+                /* Теперь продолжайте сохранять значение`last_tick_idx_...`, как мы.
                  * пройдите через цикл `for`, чтобы он остался с
                  * фактическое значение последнего тика, находящееся в пределах диапазона шкалы. */
                 else if(section->first_tick_idx_in_section != tick_idx) {
@@ -1658,7 +1658,7 @@ static void scale_find_section_tick_idx(lv_obj_t * obj)
                 }
             }
             else {
-                /* `tick_value` находится за пределами зоны действия Секции.
+                /* `tick_value` находится за пределами зоны действия раздела.
                  * Нечего делать. */
             }
         }
@@ -1670,11 +1670,11 @@ static void scale_find_section_tick_idx(lv_obj_t * obj)
  *
  * Эта ширина используется для компенсации рисования основной линии с учетом ширины обеих делений.
  *
- * @param obj       pointer to a scale object
- * @param tick_idx  index of the current tick
- * @param is_major_tick true if tick_idx is a major tick
- * @param major_tick_width width of the major tick
- * @param minor_tick_width width of the minor tick
+ * @param obj       указатель на масштабируемый объект
+ * @param tick_idx  индекс текущего тика
+ * @param is_major_tick true, еслиtick_idxявляется основным тиком
+ * @param major_tick_width ширина основного тика
+ * @param minor_tick_width ширина второстепенного тика
  */
 static void scale_store_main_line_tick_width_compensation(lv_obj_t * obj, const uint32_t tick_idx,
                                                           const bool is_major_tick, const int32_t major_tick_width, const int32_t minor_tick_width)
@@ -1684,7 +1684,7 @@ static void scale_store_main_line_tick_width_compensation(lv_obj_t * obj, const 
     const bool is_last_tick = scale->total_tick_count == tick_idx;
     const int32_t tick_width = is_major_tick ? major_tick_width : minor_tick_width;
 
-    /* Выходим раньше, если tick_idx не является ни первым, ни последним тиком на основной линии. */
+    /* Выходит раньше, еслиtick_idxне является ни первым, ни последним тиком на основной линии. */
     if(((!is_last_tick) && (!is_first_tick))
        /* Выйдите раньше, если режим масштабирования круглый. Он не поддерживает компенсацию основной линии. */
        || ((LV_SCALE_MODE_ROUND_INNER == scale->mode) || (LV_SCALE_MODE_ROUND_OUTER == scale->mode))) {
@@ -1719,9 +1719,9 @@ static void scale_store_main_line_tick_width_compensation(lv_obj_t * obj, const 
  *
  * Устанавливает текстовый указатель, если доступна действующая пользовательская метка, в противном случае установите для него значение NULL .
  *
- * @param obj       pointer to a scale object
- * @param label_dsc pointer to the label descriptor
- * @param major_tick_idx  index of the current major tick
+ * @param obj       указатель на масштабируемый объект
+ * @param label_dsc указатель на дескриптор метки
+ * @param major_tick_idx  индекс текущего основного тика
  */
 static void scale_build_custom_label_text(lv_obj_t * obj, lv_draw_label_dsc_t * label_dsc,
                                           const uint16_t major_tick_idx)
@@ -1729,7 +1729,7 @@ static void scale_build_custom_label_text(lv_obj_t * obj, lv_draw_label_dsc_t * 
     lv_scale_t * scale = (lv_scale_t *) obj;
 
     /* Проверьте, имеются ли на весах допустимые пользовательские этикетки.
-     * это позволяет избежать чтения массива txt_src, когда для шкалы требуется больше меток деления, чем доступно */
+     * это позволяет избежать чтения массиваtxt_src, когда для измерения требуется больше меток деления, чем доступно */
     if(major_tick_idx <= scale->custom_label_cnt) {
         if(scale->txt_src[major_tick_idx - 1U]) {
             label_dsc->text = scale->txt_src[major_tick_idx - 1U];
@@ -1747,13 +1747,13 @@ static void scale_build_custom_label_text(lv_obj_t * obj, lv_draw_label_dsc_t * 
 /**
  * Сохраняет информацию о компенсации ширины деления для основных участков строки.
  *
- * @param obj       pointer to a scale object
- * @param is_major_tick Indicates if tick is major or not
- * @param major_tick_dsc pointer to the major_tick_dsc
- * @param minor_tick_dsc pointer to the minor_tick_dsc
- * @param tick_value Current tick value, used to know if tick_idx belongs to a section or not
- * @param tick_idx Current tick index
- * @param tick_point_a Pointer to tick point a
+ * @param obj       указатель на масштабируемый объект
+ * @param is_major_tick Указывает, является ли галочка основной или нет
+ * @param major_tick_dsc указатель на major_tick_dsc
+ * @param minor_tick_dsc указатель на minor_tick_dsc
+ * @param tick_value Текущее значение тика, используемое для определения того, принадлежит лиtick_idxразделу или нет.
+ * @param tick_idx Текущий тиковый индекс
+ * @param tick_point_a Указатель для отметки точки a
  */
 static void scale_store_section_line_tick_width_compensation(lv_obj_t * obj, const bool is_major_tick,
                                                              lv_draw_line_dsc_t * major_tick_dsc, lv_draw_line_dsc_t * minor_tick_dsc,
@@ -1783,7 +1783,7 @@ static void scale_store_section_line_tick_width_compensation(lv_obj_t * obj, con
             }
 
             section->first_tick_in_section = *tick_point_a;
-            /* Добавьте 1 пиксель в качестве корректировки, если tmp_width нечетное значение. */
+            /* Добавьте 1 пиксель в качестве корректировки, еслиtmp_widthнечетное значение. */
             if(tmp_width & 0x01U) {
                 if(LV_SCALE_MODE_VERTICAL_LEFT == scale->mode || LV_SCALE_MODE_VERTICAL_RIGHT == scale->mode) {
                     tmp_width += 1;
@@ -1796,7 +1796,7 @@ static void scale_store_section_line_tick_width_compensation(lv_obj_t * obj, con
         }
 
         /* Это также может применяться, когда
-         * ( tick_idx == раздел-> first_tick_idx_in_section ), когда
+         * (tick_idx== раздел->first_tick_idx_in_section), когда
          * начальное и конечное значения диапазона одинаковы. */
         if(tick_idx == section->last_tick_idx_in_section) {
             if(section->last_tick_idx_is_major) {
@@ -1807,7 +1807,7 @@ static void scale_store_section_line_tick_width_compensation(lv_obj_t * obj, con
             }
 
             section->last_tick_in_section = *tick_point_a;
-            /* Добавьте 1 пиксель в качестве корректировки, если tmp_width нечетное значение. */
+            /* Добавьте 1 пиксель в качестве корректировки, еслиtmp_widthнечетное значение. */
             if(tmp_width & 0x01U) {
                 if(LV_SCALE_MODE_VERTICAL_LEFT == scale->mode || LV_SCALE_MODE_VERTICAL_RIGHT == scale->mode) {
                     tmp_width -= 1;

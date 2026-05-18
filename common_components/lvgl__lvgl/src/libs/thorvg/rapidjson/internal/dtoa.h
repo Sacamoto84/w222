@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -12,9 +12,9 @@
 // CONDITIONS OF ANY KIND , явный или подразумеваемый. См. Лицензию на
 // конкретный язык, регулирующий разрешения и ограничения по Лицензии.
 
-// Это реализация алгоритма Grisu2 на C++ из публикации:
+// Этот алгоритм реализации Grisu2 на C++ опубликован:
 // Лойч, Флориан. «Быстрая и точная печать чисел с плавающей запятой с помощью
-// целые числа».  ACM Уведомления Sigplan 45.6 (2010 г.): 233–243.
+// целые числа».  ACMУведомления Sigplan 45.6 (2010 г.): 233–243.
 
 #ifndef RAPIDJSON_DTOA_
 #define RAPIDJSON_DTOA_
@@ -42,7 +42,7 @@ inline void GrisuRound(char* buffer, int len, uint64_t delta, uint64_t rest, uin
 }
 
 inline int CountDecimalDigit32(uint32_t n) {
-    // В этой ситуации простая реализация на чистом C++ оказалась быстрее, чем версия __builtin_clz.
+    // В этой простой ситуации реализация на чистоте C++ оказалась быстрее, чем версия __builtin_clz.
     if (n < 10) return 1;
     if (n < 100) return 2;
     if (n < 1000) return 3;
@@ -51,7 +51,7 @@ inline int CountDecimalDigit32(uint32_t n) {
     if (n < 1000000) return 6;
     if (n < 10000000) return 7;
     if (n < 100000000) return 8;
-    // Не достигнет 10 цифр в DigitGen()
+    // Не получите 10 цифр в DigitGen()
     //если (n < 1000000000) вернуть 9;
     //вернуть 10;
     return 9;

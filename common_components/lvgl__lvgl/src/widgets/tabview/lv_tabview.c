@@ -160,7 +160,7 @@ void lv_tabview_set_active(lv_obj_t * obj, uint32_t idx, lv_anim_enable_t anim_e
     uint32_t tab_cnt = lv_tabview_get_tab_count(obj);
     if(idx >= tab_cnt) return;
 
-    /*Чтобы быть уверенным, что lv_obj_get_content_width вернет допустимое значение.*/
+    /*Чтобы быть уверенным, чтоlv_obj_get_content_widthвернет допустимое значение.*/
     if(cont == NULL) return;
 
     lv_obj_update_layout(obj);

@@ -104,12 +104,12 @@ void test_spinbox_set_range(void)
     lv_spinbox_set_range(tmp, 0, 100);
     lv_spinbox_set_value(tmp, 50);
 
-    /* Значение проверки обновляется, когда range_max меньше. */
+    /* Значение проверки обновляется, когдаrange_maxменьше. */
     lv_spinbox_set_range(tmp, 0, range_max);
 
     TEST_ASSERT_EQUAL(range_max, lv_spinbox_get_value(tmp));
 
-    /* Значение проверки обновляется, когда range_min больше. */
+    /* Значение проверки обновляется, когдаrange_minбольше. */
     lv_spinbox_set_value(tmp, 5);
     lv_spinbox_set_range(tmp, range_min, range_max);
 
@@ -134,7 +134,7 @@ void test_spinbox_step_prev(void)
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(tmp));
 
     lv_spinbox_step_next(tmp);
-    /* Когда следующий шаг меньше абс ( range_min ) */
+    /* Когда следующий шаг меньше абсурда (range_min) */
     lv_spinbox_set_range(tmp, -25, 5);
     lv_spinbox_step_prev(tmp);
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(tmp));
@@ -164,7 +164,7 @@ void test_spinbox_event_key(void)
 
     TEST_ASSERT_EQUAL(1, lv_spinbox_get_value(spinbox_events));
 
-    /* Spinbox должен уменьшить свое значение на единицу после получения события LV_KEY_DOWN. */
+    /* Spinbox должен уменьшить значение единицы после получения события LV_KEY_DOWN. */
     key = LV_KEY_DOWN;
     lv_obj_send_event(spinbox_events, LV_EVENT_KEY, (void *) &key);
 
@@ -177,7 +177,7 @@ void test_spinbox_event_key(void)
 
     TEST_ASSERT_EQUAL(step * 10, lv_spinbox_get_step(spinbox_events));
 
-    /* Spinbox должен разделить значение шага на 10 после получения события LV_KEY_RIGHT. */
+    /* Spinbox должен учитывать значение шага 10 после получения события LV_KEY_RIGHT. */
     step = lv_spinbox_get_step(spinbox_events);
     key = LV_KEY_RIGHT;
     lv_obj_send_event(spinbox_events, LV_EVENT_KEY, (void *) &key);
@@ -228,10 +228,10 @@ void test_spinbox_event_key_encoder_indev_editing_group(void)
     lv_test_encoder_click();
     lv_test_encoder_turn(-1);
     TEST_ASSERT_EQUAL(0, lv_spinbox_get_value(spinbox_events));
-    /* digit_count равен 5, поэтому мы ожидаем, что он будет находиться в позиции цифры MSB. */
+    /* digit_count равен 5, поэтому мы ожидаем, что он будет находиться в позиции цифрыMSB. */
     TEST_ASSERT_EQUAL(1000, lv_spinbox_get_step(spinbox_events));
 
-    /* Тест с digit_count == 1 */
+    /* Тест сdigit_count== 1 */
     lv_spinbox_set_digit_format(spinbox_events, 1, 2);
     lv_spinbox_set_cursor_pos(spinbox_events, 0);
 
@@ -260,7 +260,7 @@ void test_spinbox_event_key_encoder_indev_editing_group_left_step_direction(void
     /* digit_count равен 5, мы ожидаем, что окажемся в позиции слева */
     TEST_ASSERT_EQUAL(10, lv_spinbox_get_step(spinbox_events));
 
-    /* Тест с digit_count == 1 */
+    /* Тест сdigit_count== 1 */
     lv_spinbox_set_digit_format(spinbox_events, 2, 2);
     lv_spinbox_set_cursor_pos(spinbox_events, 1);
 

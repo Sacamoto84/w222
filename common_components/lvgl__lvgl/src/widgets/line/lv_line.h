@@ -39,8 +39,8 @@ enum _lv_property_line_id_t {
 
 /**
  * Создать объект линии
- * @param parent pointer to an object, it will be the parent of the new line
- * @return pointer to the created line
+ * @param parent указатель на объект, он будет родителем новой строки
+ * @return указатель на созданную строку
  */
 lv_obj_t * lv_line_create(lv_obj_t * parent);
 
@@ -50,17 +50,17 @@ lv_obj_t * lv_line_create(lv_obj_t * parent);
 
 /**
  * Задайте массив точек. Линейный объект соединит эти точки.
- * @param obj           pointer to a line object
- * @param points        an array of points. Only the address is saved, so the array needs to be alive while the line exists
- * @param point_num     number of points in 'point_a'
+ * @param obj           указатель на линейный объект
+ * @param points        массив точек. Сохраняется только адрес, поэтому массив должен быть активным, пока существует строка.
+ * @param point_num     количество очков в 'point_a'
  */
 void lv_line_set_points(lv_obj_t * obj, const lv_point_precise_t points[], uint32_t point_num);
 
 /**
- * Установите неконстантный массив точек. Идентичен `lv_line_set_points`, за исключением того, что массив можно получить с помощью `lv_line_get_points_mutable`.
- * @param obj           pointer to a line object
- * @param points        a non-const array of points. Only the address is saved, so the array needs to be alive while the line exists.
- * @param point_num     number of points in 'point_a'
+ * Установите непостоянный массив массива. Идентичен `lv_line_set_points`, за исключением того, что массив можно получить с помощью `lv_line_get_points_mutable`.
+ * @param obj           указатель на линейный объект
+ * @param points        неконстантный массив точек. Сохраняется только адрес, поэтому массив должен быть активным, пока существует строка.
+ * @param point_num     количество очков в 'point_a'
  */
 void lv_line_set_points_mutable(lv_obj_t * obj, lv_point_precise_t points[], uint32_t point_num);
 
@@ -68,8 +68,8 @@ void lv_line_set_points_mutable(lv_obj_t * obj, lv_point_precise_t points[], uin
  * Включите (или отключите) инверсию координаты y.
  * Если этот параметр включен, то y будет вычитаться из высоты объекта.
  * поэтому координата y = 0 будет внизу.
- * @param obj       pointer to a line object
- * @param en        true: enable the y inversion, false:disable the y inversion
+ * @param obj       указатель на линейный объект
+ * @param en        true: включить инверсию y, false: отключить инверсию y
  */
 void lv_line_set_y_invert(lv_obj_t * obj, bool en);
 
@@ -79,36 +79,36 @@ void lv_line_set_y_invert(lv_obj_t * obj, bool en);
 
 /**
  * Получите указатель на массив точек.
- * @param obj           pointer to a line object
- * @return              const pointer to the array of points
+ * @param obj           указатель на линейный объект
+ * @return              константный указатель на массив точек
  */
 const lv_point_precise_t * lv_line_get_points(lv_obj_t * obj);
 
 /**
  * Получите количество точек в массиве точек.
- * @param obj           pointer to a line object
- * @return              number of points in array of points
+ * @param obj           указатель на линейный объект
+ * @return              количество точек в массиве точек
  */
 uint32_t lv_line_get_point_count(lv_obj_t * obj);
 
 /**
  * Проверьте изменчивость указателя сохраненного массива точек.
- * @param obj           pointer to a line object
- * @return              true: the point array pointer is mutable, false: constant
+ * @param obj           указатель на линейный объект
+ * @return              true: указатель массива точек изменчив, false: константа
  */
 bool lv_line_is_point_array_mutable(lv_obj_t * obj);
 
 /**
  * Получите указатель на изменяемый массив точек или NULL, если он не является изменяемым.
- * @param obj           pointer to a line object
- * @return              pointer to the array of points. NULL if not mutable.
+ * @param obj           указатель на линейный объект
+ * @return              указатель на массив точек.  NULL, если не изменяемо.
  */
 lv_point_precise_t * lv_line_get_points_mutable(lv_obj_t * obj);
 
 /**
  * Получить атрибут инверсии y
- * @param obj       pointer to a line object
- * @return          true: y inversion is enabled, false: disabled
+ * @param obj       указатель на линейный объект
+ * @return          true: инверсия y включена, false: отключена
  */
 bool lv_line_get_y_invert(const lv_obj_t * obj);
 

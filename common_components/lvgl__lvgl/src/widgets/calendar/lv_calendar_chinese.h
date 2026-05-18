@@ -36,22 +36,22 @@ typedef struct {
 
 /**
  * Включите китайский календарь.
- * @param obj   pointer to a calendar object.
- * @param en    true: enable chinese calendar; false: disable
+ * @param obj   указатель на объект календаря.
+ * @param en    true: включить китайский календарь; ложь: отключить
  */
 void lv_calendar_set_chinese_mode(lv_obj_t * obj, bool en);
 
 /**
  * Узнайте название дня
- * @param gregorian   to obtain the gregorian time for the name
- * @return            return the name of the day
+ * @param gregorian   чтобы получить григорианское время для имени
+ * @return            вернуть название дня
  */
 const char * lv_calendar_get_day_name(lv_calendar_date_t * gregorian);
 
 /**
  * Получите китайское время по григорианскому времени (ссылка: https://www.cnblogs.com/liyang31tg/p/4123171.html)
- * @param gregorian_time   need to convert to chinese time in gregorian time
- * @param chinese_time     the chinese time convert from gregorian time
+ * @param gregorian_time   нужно перевести китайское время в григорианское время
+ * @param chinese_time     китайское время конвертируется из григорианского времени
  */
 void lv_calendar_gregorian_to_chinese(lv_calendar_date_t * gregorian_time, lv_calendar_chinese_t * chinese_time);
 

@@ -145,8 +145,8 @@ static void style_init(my_theme_t * theme)
 lv_theme_t * lv_theme_simple_init(lv_display_t * disp)
 {
     /*Этот трюк нужен только для того, чтобы избежать сборки мусора
-     *данные стилей, если LVGL используется в привязке (например, MicroPython)
-     *В общем случае стили могут быть в простых переменных `static lv_style_t my_style...`.*/
+     *данные стилей, если в привязке используетсяLVGL(например, MicroPython)
+     *В общем случае стили могут быть в виде простых функций `static lv_style_t my_style...`.*/
     if(!lv_theme_simple_is_inited()) {
         theme_def = lv_malloc_zeroed(sizeof(my_theme_t));
         LV_ASSERT_MALLOC(theme_def);
@@ -232,7 +232,7 @@ static void theme_apply(lv_theme_t * th, lv_obj_t * obj)
 
     if(lv_obj_check_type(obj, &lv_obj_class)) {
 #if LV_USE_TABVIEW
-        /*Область содержимого Tabview*/
+        /*Просмотр области вкладки*/
         if(lv_obj_check_type(parent, &lv_tabview_class)) {
             lv_obj_add_style(obj, &theme->styles.scr, 0);
             return;

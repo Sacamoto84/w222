@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON->
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON->
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip-> All rights reserved->
 //
@@ -172,7 +172,7 @@ RAPIDJSON_MULTILINEMACRO_END
     \ingroup RAPIDJSON_CONFIG
     \brief Определяемое пользователем определение kValidateDefaultFlags.
 
-    Пользователь может определить это как любую комбинацию \c ValidateFlag.
+    Пользователь может определить это как любое событие \c ValidateFlag.
 */
 #ifndef RAPIDJSON_VALIDATE_DEFAULT_FLAGS
 #define RAPIDJSON_VALIDATE_DEFAULT_FLAGS kValidateNoFlags
@@ -369,7 +369,7 @@ public:
         uint64_t h = Hash(0, kObjectType);
         uint64_t* kv = stack_.template Pop<uint64_t>(memberCount * 2);
         for (SizeType i = 0; i < memberCount; i++)
-            h ^= Hash(kv[i * 2], kv[i * 2 + 1]);  // Используйте xor для достижения нечувствительности к порядку членов
+            h ^= Hash(kv[i * 2], kv[i * 2 + 1]);  // Используйте xor для достижения нечувствительности к порядку мужчин
         *stack_.template Push<uint64_t>() = h;
         return true;
     }
@@ -583,9 +583,9 @@ public:
         typedef typename ValueType::ConstMemberIterator ConstMemberIterator;
 
         // PR #1393
-        // Заранее добавьте эту схему и ее $ref(ы) в карту SchemaDocument, чтобы избежать бесконечности.
-        // рекурсия (с рекурсивными схемами), поскольку схемаDocument->getSchema() всегда
-        // проверено перед созданием нового. Однако не кэшируйте typeless_ .
+        // Заранее укажите эту схему и ее $ref(ы) в карте SchemaDocument, чтобы избежать бесконечности.
+        // рекурсия (с рекурсивными схемами), поскольку схемаDocument->getSchema()всегда
+        // проверено перед созданием нового. Однако не кэшируйтеtypeless_.
         if (this != typeless_) {
           typedef typename SchemaDocumentType::SchemaEntry SchemaEntry;
           SchemaEntry *entry = schemaDocument->schemaMap_.template Push<SchemaEntry>();
@@ -633,7 +633,7 @@ public:
         if (schemaDocument)
             AssignIfExist(allOf_, *schemaDocument, p, value, GetAllOfString(), document);
 
-        // AnyOf, OneOf, не поддерживается для открытого API 2.0.
+        // AnyOf, OneOf, не являются переходами для открытогоAPI2.0.
         if (schemaDocument && spec_.oapi != kVersion20) {
             AssignIfExist(anyOf_, *schemaDocument, p, value, GetAnyOfString(), document);
             AssignIfExist(oneOf_, *schemaDocument, p, value, GetOneOfString(), document);
@@ -663,7 +663,7 @@ public:
                     if (itr->IsString())
                         AddUniqueElement(allProperties, *itr);
 
-            // Зависимости не поддерживаются для open API 2.0 и 3.0.
+            // Зависимости не применяются для открытыхAPI2.0 и 3.0.
             if (spec_.oapi != kVersion20 && spec_.oapi != kVersion30)
             if (dependencies && dependencies->IsObject())
                 for (ConstMemberIterator itr = dependencies->MemberBegin(); itr != dependencies->MemberEnd(); ++itr) {
@@ -720,7 +720,7 @@ public:
                     }
                 }
 
-        // Зависимости не поддерживаются для open API 2.0 и 3.0.
+        // Зависимости не применяются для открытыхAPI2.0 и 3.0.
         if (spec_.oapi != kVersion20 && spec_.oapi != kVersion30)
         if (dependencies && dependencies->IsObject()) {
             PointerType q = p.Append(GetDependenciesString(), allocator_);
@@ -773,7 +773,7 @@ public:
         AssignIfExist(minItems_, value, GetMinItemsString());
         AssignIfExist(maxItems_, value, GetMaxItemsString());
 
-        // Дополнительные элементы не поддерживаются для openapi 2.0 и 3.0.
+        // Дополнительные элементы не требуются для openapi 2.0 и 3.0.
         if (spec_.oapi != kVersion20 && spec_.oapi != kVersion30)
         if (const ValueType* v = GetMember(value, GetAdditionalItemsString())) {
             if (v->IsBool())
@@ -812,8 +812,8 @@ public:
             if (v->IsString())
                 defaultValueLength_ = v->GetStringLength();
 
-        // ReadOnly - open api only (until draft 7 supported)
-        // WriteOnly - open api 3 only (until draft 7 supported)
+        // ReadOnly - только открытый API (до поддержки проекта 7)
+        // WriteOnly - только открытый API 3 (до тех пор, пока не будет поддерживаться проект 7)
         // И то и другое не может быть правдой
         if (spec_.oapi != kVersionNone)
             AssignIfExist(readOnly_, value, GetReadOnlyString());
@@ -822,8 +822,8 @@ public:
         if (readOnly_ && writeOnly_)
             schemaDocument->SchemaError(kSchemaErrorReadOnlyAndWriteOnly, p);
 
-        // Nullable - open api 3 only
-        // Если true, добавьте «null» в качестве допустимого типа.
+        // Nullable - открыть только API 3
+        // Если это правда, то разделы «null» должны быть допустимого типа.
         if (spec_.oapi >= kVersion30) {
             AssignIfExist(nullable_, value, GetNullableString());
             if (nullable_)
@@ -885,7 +885,7 @@ public:
                     context.valueSchema = typeless_;
                 else {
                     context.error_handler.DisallowedItem(context.arrayElementIndex);
-                    // Необходимо установить valueSchema, если установлен kValidateContinueOnErrorFlag, иначе сообщается о ложной ошибке типа.
+                    // Необходимо установить valueSchema, если установлен kValidateContinueOnErrorFlag, иначе сообщается о ложной форме типа Dragon.
                     context.valueSchema = typeless_;
                     // Необходимо увеличить arrayElementIndex, когда установлен kValidateContinueOnErrorFlag.
                     context.arrayElementIndex++;
@@ -945,7 +945,7 @@ public:
             foundEnum:;
         }
 
-        // Проверяйте allOf и т. д. только в том случае, если у нас есть валидаторы.
+        // Проверяйте allOf и т. д. д. только в том случае, если у нас есть валидаторы.
         if (context.validatorCount > 0) {
             if (allOf_.schemas)
                 for (SizeType i = allOf_.begin; i < allOf_.begin + allOf_.count; i++)
@@ -1148,8 +1148,8 @@ public:
             return true;
         }
 
-        if (context.patternPropertiesSchemaCount == 0) { // PatternProperties не являются дополнительными свойствами.
-            // Необходимо установить valueSchema, если установлен kValidateContinueOnErrorFlag, иначе сообщается о ложной ошибке типа.
+        if (context.patternPropertiesSchemaCount == 0) { // PatternProperties не производятся вручную.
+            // Необходимо установить valueSchema, если установлен kValidateContinueOnErrorFlag, иначе сообщается о ложной форме типа Dragon.
             context.valueSchema = typeless_;
             context.error_handler.DisallowedProperty(str, len);
             RAPIDJSON_INVALID_KEYWORD_RETURN(kValidateErrorAdditionalProperties);
@@ -1458,7 +1458,7 @@ private:
         else if (type == GetNumberString() ) type_ |= (1 << kNumberSchemaType) | (1 << kIntegerSchemaType);
     }
 
-    // При необходимости создает параллельные валидаторы для зависимостей allOf, AnyOf, oneOf, not и схемы.
+    // При необходимости создаются параллельные валидаторы для зависимостей allOf, AnyOf, oneOf, not и схемы.
     // Также при необходимости создает хеш для перечислений и уникальности массива.
     // Также полезное место для добавления независимых от типа проверок ошибок.
     bool CreateParallelValidator(Context& context) const {
@@ -1546,7 +1546,7 @@ private:
             }
             else if (minimum_.IsUint64()) {
                 context.error_handler.BelowMinimum(i, minimum_, exclusiveMinimum_);
-                RAPIDJSON_INVALID_KEYWORD_RETURN(exclusiveMinimum_ ? kValidateErrorExclusiveMinimum : kValidateErrorMinimum); // я <= макс ( int64_t ) < минимум. GetUint64()
+                RAPIDJSON_INVALID_KEYWORD_RETURN(exclusiveMinimum_ ? kValidateErrorExclusiveMinimum : kValidateErrorMinimum); // я <= макс (int64_t) < минимум.  GetUint64()
             }
             else if (!CheckDoubleMinimum(context, static_cast<double>(i)))
                 return false;
@@ -1560,7 +1560,7 @@ private:
                 }
             }
             else if (maximum_.IsUint64()) { }
-                /* ничего не делать */ // я <= max( int64_t ) < maximum_ . GetUint64()
+                /* ничего не делать */ // я <= max(int64_t) <maximum_.  GetUint64()
             else if (!CheckDoubleMaximum(context, static_cast<double>(i)))
                 return false;
         }
@@ -1593,7 +1593,7 @@ private:
                 }
             }
             else if (minimum_.IsInt64())
-                /* ничего не делать */; // я >= 0 > минимум. Getint64()
+                /* ничего не делать */; // я >= 0 > минимум.  Getint64()
             else if (!CheckDoubleMinimum(context, static_cast<double>(i)))
                 return false;
         }
@@ -1758,7 +1758,7 @@ struct TokenHelper {
     }
 };
 
-// Частичная специализированная версия для char для предотвращения копирования буфера.
+// Частная специализированная версия для char для предотвращения копирования буфера.
 template <typename Stack>
 struct TokenHelper<Stack, char> {
     RAPIDJSON_FORCEINLINE static void AppendIndexToken(Stack& documentStack, SizeType index) {
@@ -1809,8 +1809,8 @@ public:
     По сути, это дерево внутренней::Схемы.
 
     \note Это неизменяемый класс (т. е. его экземпляр не может быть изменен после создания).
-    \tparam ValueT Тип значения JSON (например, \c Value), которое также определяет кодировку.
-    \tparam Распределитель Тип распределителя для выделения памяти для этого документа.
+    \tparam ValueT Тип значенияJSON(например, \c Value), а также указана кодировка.
+    \tparam Распределитель типа распределителя для выделения памяти для этого документа.
 */
 template <typename ValueT, typename Allocator = CrtAllocator>
 class GenericSchemaDocument {
@@ -1833,13 +1833,13 @@ public:
     /*!
         Скомпилируйте документ JSON в документ схемы.
 
-        \param document Документ JSON в качестве источника.
-        \param uri Базовый URI этого документа схемы для целей отчетности о нарушениях.
+        \param document ДокументJSONв качестве источника.
+        \param uri БазовыйURIсхемы этого документа для целей отчетности о нарушениях.
         \param uriLength Длина имени \c в кодовых точках.
         \param RemoteProvider Необязательный поставщик документов удаленной схемы для разрешения удаленных ссылок. Может быть нулевым.
         \param allocator Необязательный экземпляр распределителя для выделения памяти. Может быть нулевым.
-        \param pointer Необязательный указатель JSON на начало документа схемы.
-        \param spec Необязательный черновик схемы или версия OpenAPI. Используется, если в документе нет спецификации. По умолчанию черновик-04.
+        \param pointer Необязательный указательJSONв начало схемы документа.
+        \param spec Необязательный черновик схемы или версия OpenAPI. Используется, если в документе нет характеристик. По умолчанию черновик-04.
     */
     explicit GenericSchemaDocument(const ValueType& document, const Ch* uri = 0, SizeType uriLength = 0,
         IRemoteSchemaDocumentProviderType* remoteProvider = 0, Allocator* allocator = 0,
@@ -1871,8 +1871,8 @@ public:
         // Мы всегда ищем только «$schema», «swagger» или «openapi» в корне документа.
         SetSchemaSpecification(document);
 
-        // Создайте корневую схему, она вызовет CreateSchema() для создания подсхем,
-        // И вызовите HandleRefSchema(), если есть $ref.
+        // Создайте корневую схему, она вызываетCreateSchema()для создания схемы под,
+        // ВызовитеHandleRefSchema(), если есть $ref.
         // PR #1393 использовать указатель ввода, если он есть.
         root_ = typeless_;
         if (pointer.GetTokenCount() == 0) {
@@ -1925,7 +1925,7 @@ public:
             Allocator::Free(typeless_);
         }
 
-        // они могут содержать некоторые данные распределителя, поэтому очистите их перед удалением ownAllocator_.
+        // они могут сохранить некоторые данные распределителя, поэтому очистите их перед удалениемownAllocator_.
         uri_.SetNull();
         error_.SetNull();
         currentError_.SetNull();
@@ -2091,7 +2091,7 @@ public:
             return kDraftNone;
         }
 
-        // Получите черновик схемы по ключевому слову $schema в указанном месте.
+        // Получите схему черновика по ключевому слову $schema, указанному в месте.
         typename ValueType::ConstMemberIterator itr = document.FindMember(SchemaType::GetSchemaString());
         if (itr != document.MemberEnd()) {
             if (!itr->value.IsString()) return kDraftUnknown;
@@ -2122,7 +2122,7 @@ public:
             return kVersionNone;
         }
 
-        // Получите версию открытого API, используя ключевое слово swagger/openapi в указанном месте.
+        // Получите открытую версию API, используя ключевое слово swagger/openapi в указанном месте.
         typename ValueType::ConstMemberIterator itr = document.FindMember(SchemaType::GetSwaggerString());
         if (itr == document.MemberEnd()) itr = document.FindMember(SchemaType::GetOpenApiString());
         if (itr != document.MemberEnd()) {
@@ -2135,7 +2135,7 @@ public:
             if (itr->value.GetStringLength() > len && kVersion31Value == ValueType(itr->value.GetString(), len)) return kVersion31; // должно соответствовать версии 3.1.x
             return kVersionUnknown;
         }
-        // swagger или openapi не найдены
+        // чванство или openapi не найдены
         return kVersionNone;
     }
 
@@ -2186,7 +2186,7 @@ public:
                 AddSchemaRefs(const_cast<SchemaType*>(sc));
             }
             else if (!HandleRefSchema(pointer, schema, v, document, id)) {
-                // Новый конструктор схемы добавляет себя и свои $ref(ы) в schemaMap_.
+                // Новый конструктор схем включает себя и свои $ref(ы) вschemaMap_.
                 SchemaType* s = new (allocator_->Malloc(sizeof(SchemaType))) SchemaType(this, pointer, v, document, allocator_, id);
                 if (schema)
                     *schema = s;
@@ -2211,7 +2211,7 @@ public:
         GenericStringBuffer<EncodingType> sb;
         source.StringifyUriFragment(sb);
         RAPIDJSON_SCHEMA_PRINT(Method, "GenericSchemaDocument::HandleRefSchema", sb.GetString(), id.GetString());
-        // Разрешить указатель источника на схему $ref (наконец)
+        // Разрешить указатель источника на схеме $ref (наконец)
         new (schemaRef_.template Push<SchemaRefPtr>()) SchemaRefPtr(&source);
 
         if (itr->value.IsString()) {
@@ -2219,11 +2219,11 @@ public:
             if (len == 0)
                 SchemaError(kSchemaErrorRefInvalid, source);
             else {
-                // Сначала разрешите $ref по идентификатору в области действия.
+                // Сначала разрешите $ref по идентификатору в данной области.
                 UriType scopeId = UriType(id, allocator_);
                 UriType ref = UriType(itr->value, allocator_).Resolve(scopeId, allocator_);
                 RAPIDJSON_SCHEMA_PRINT(SchemaIds, id.GetString(), itr->value.GetString(), ref.GetString());
-                // Посмотрите, соответствует ли разрешенный $ref минус фрагмент разрешенному идентификатору в этом документе.
+                // Таким образом, соответствует ли разрешенный фрагмент $ref минус разрешенному идентификатору в этом документе.
                 // Поиск от корня. Возвращает подсхему в документе и ее абсолютный указатель JSON.
                 PointerType basePointer = PointerType();
                 const ValueType *base = FindId(document, ref, basePointer, docId_, false);
@@ -2276,7 +2276,7 @@ public:
                                     SchemaErrorValue(kSchemaErrorRefCyclical, source, ref.GetString(), ref.GetStringLength());
                                 else {
                                     // Вызовите CreateSchema рекурсивно, но сначала вычислите идентификатор в области действия для цели $ref, когда мы туда перешли.
-                                    // TODO: cache pointer <-> id mapping
+                                    // TODO: указатель кэша <-> сопоставление идентификаторов
                                     size_t unresolvedTokenIndex;
                                     scopeId = pointer.GetUri(document, docId_, &unresolvedTokenIndex, allocator_);
                                     CreateSchema(schema, pointer, *pv, document, scopeId);
@@ -2287,7 +2287,7 @@ public:
                         }
                     } else {
                         // Фрагмент простого имени относительно разрешенного URI
-                        // Не поддерживается в open API 2.0 и 3.0.
+                        // Не открываетсяAPI2.0 и 3.0.
                         PointerType pointer(allocator_);
                         if (spec_.oapi == kVersion20 || spec_.oapi == kVersion30)
                             SchemaErrorValue(kSchemaErrorRefPlainName, source, s, len);
@@ -2298,7 +2298,7 @@ public:
                                 SchemaErrorValue(kSchemaErrorRefCyclical, source, ref.GetString(), ref.GetStringLength());
                             else {
                                 // Вызовите CreateSchema рекурсивно, но сначала вычислите идентификатор в области действия для цели $ref, когда мы туда перешли.
-                                // TODO: cache pointer <-> id mapping
+                                // TODO: указатель кэша <-> сопоставление идентификаторов
                                 size_t unresolvedTokenIndex;
                                 scopeId = pointer.GetUri(document, docId_, &unresolvedTokenIndex, allocator_);
                                 CreateSchema(schema, pointer, *pv, document, scopeId);
@@ -2425,11 +2425,11 @@ typedef IGenericRemoteSchemaDocumentProvider<SchemaDocument> IRemoteSchemaDocume
     Он использует \c GenericSchemaDocument для проверки событий SAX.
     Он делегирует входящие события SAX обработчику вывода.
     Обработчик вывода по умолчанию ничего не делает.
-    Его можно использовать повторно несколько раз, вызвав \c Reset().
+    Его можно использовать повторно несколько раз, вызвав \cReset().
 
     \tparam SchemaDocumentType Тип документа схемы.
-    \tparam OutputHandler Тип обработчика вывода. Обработчик по умолчанию ничего не делает.
-    \tparam StateAllocator Распределитель для хранения внутренних состояний проверки.
+    \tparam OutputHandler Тип обработчика результата. Обработчик по умолчанию ничего не делает.
+    \tparam StateAllocator Распределитель для хранения внутренних проверок.
 */
 template <
     typename SchemaDocumentType,
@@ -2450,9 +2450,9 @@ public:
 
     //! Конструктор без обработчика вывода.
     /*!
-        \param SchemaDocument Документ схемы, которому необходимо соответствовать.
-        \param allocator Необязательный распределитель для хранения внутренних состояний проверки.
-        \param SchemaStackCapacity Необязательная начальная емкость стека путей схемы.
+        \param SchemaDocument Документ схемы, который необходимо соблюдать.
+        \param allocator Необязательный распределитель для хранения внутренних проверок.
+        \param SchemaStackCapacity Необязательная начальная емкость схемы путей стека.
         \param documentStackCapacity Необязательная начальная емкость стека путей к документу.
     */
     GenericSchemaValidator(
@@ -2480,9 +2480,9 @@ public:
 
     //! Конструктор с обработчиком вывода.
     /*!
-        \param SchemaDocument Документ схемы, которому необходимо соответствовать.
-        \param allocator Необязательный распределитель для хранения внутренних состояний проверки.
-        \param SchemaStackCapacity Необязательная начальная емкость стека путей схемы.
+        \param SchemaDocument Документ схемы, который необходимо соблюдать.
+        \param allocator Необязательный распределитель для хранения внутренних проверок.
+        \param SchemaStackCapacity Необязательная начальная емкость схемы путей стека.
         \param documentStackCapacity Необязательная начальная емкость стека путей к документу.
     */
     GenericSchemaValidator(
@@ -2743,7 +2743,7 @@ public:
         AddCurrentError(kValidateErrorType);
     }
     void NotAllOf(ISchemaValidator** subvalidators, SizeType count) {
-        // Рассматривать allOf как oneOf и AnyOf для соответствия https://rapidjson.org/md_doc_schema.html#allOf-anyOf-oneOf
+        // Рассматриваем allOf как oneOf и AnyOf для соответствия https://rapidjson.org/md_doc_schema.html#allOf-anyOf-oneOf
         AddErrorArray(kValidateErrorAllOf, subvalidators, count);
         //for (SizeType я = 0; я <количество; ++i) {
         //    MergeError( static_cast <GenericSchemaValidator*>(субвалидаторы[i])-> GetError() );
@@ -3003,7 +3003,7 @@ private:
                 va = static_cast<ISchemaValidator**>(MallocState(sizeof(ISchemaValidator*) * count));
                 std::memset(va, 0, sizeof(ISchemaValidator*) * count);
                 for (SizeType i = 0; i < count; i++)
-                    va[validatorCount++] = CreateSchemaValidator(*sa[i], true);  // Наследовать continueOnError
+                    va[validatorCount++] = CreateSchemaValidator(*sa[i], true);  // Наблюдение за continueOnError
             }
 
             CurrentContext().arrayUniqueness = valueUniqueness;
@@ -3183,13 +3183,13 @@ typedef GenericSchemaValidator<SchemaDocument> SchemaValidator;
 
 //! Вспомогательный класс для анализа с проверкой.
 /*!
-    Этот вспомогательный класс представляет собой функтор, созданный как параметр \ref GenericDocument:: Populate() .
+    Этот вспомогательный класс представляет собой функтор, созданный как параметр \ref GenericDocument::Populate().
 
     \tparam parseFlags Комбинация \ref ParseFlag.
-    \tparam InputStream Тип входного потока, реализующий концепцию потока.
+    \tparam InputStream Тип входного потока, реализующий образующий поток.
     \tparam SourceEncoding Кодирование входного потока.
     \tparam SchemaDocumentType Тип документа схемы.
-    \tparam StackAllocator Тип распределителя для стека.
+    \tparam StackAllocator Тип распределения для стека.
 */
 template <
     unsigned parseFlags,
@@ -3206,7 +3206,7 @@ public:
     //! Конструктор
     /*!
         \param — входной поток.
-        \param sd Документ схемы.
+        \param sd Схема документа.
     */
     SchemaValidatingReader(InputStream& is, const SchemaDocumentType& sd) : is_(is), sd_(sd), invalidSchemaKeyword_(), invalidSchemaCode_(kValidateErrorNone), error_(kObjectType), isValid_(true) {}
 

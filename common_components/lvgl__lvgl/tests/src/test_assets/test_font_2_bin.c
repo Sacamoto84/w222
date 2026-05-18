@@ -1,4 +1,4 @@
-/*  таблица, экспортированная крошечным шестнадцатеричным инструментом mirkes.de
+/*  таблица, экспортированная крошечным шестнадцатеричным, составила mirkes.de
     имя файла: D:\lvgl\test\lv_port_pc_visual_studio\LvglPlatform\lvgl\tests\src\test_assets\font_2.fnt
     позиция 0, 7252 байта   */
 #if LV_BUILD_TEST

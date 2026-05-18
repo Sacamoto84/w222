@@ -46,7 +46,7 @@ typedef void(*lv_x11_close_cb)(void * user_data);
  * - создать клавиатуру (lv_x11_keyboard_create)
  * - создать мышь (с колесиком прокруткиlv_x11_mouse_createlv_x11_mousewheel_create )
  *
- * @param [in] отображает созданный экранный объектX11из@reflv_x11_window_create .
+ * @param [in] disp созданный экранный объектX11из@reflv_x11_window_create .
  * @param [in] mouse_img дополнительное описание изображения для курсора мыши (NULL для отсутствия/невидимого курсора мыши)
  */
 void lv_x11_inputs_create(lv_display_t * disp, lv_image_dsc_t const * mouse_img);

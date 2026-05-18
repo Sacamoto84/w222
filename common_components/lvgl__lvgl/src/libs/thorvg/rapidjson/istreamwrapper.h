@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -24,23 +24,23 @@ RAPIDJSON_DIAG_PUSH
 RAPIDJSON_DIAG_OFF(padded)
 #elif defined(_MSC_VER)
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(4351) // новое поведение: элементы массива «array» будут инициализированы по умолчанию.
+RAPIDJSON_DIAG_OFF(4351) // новое поведение: элементы массива «массив» будут инициализированы по умолчанию.
 #endif
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Обертка \c std::basic_istream в концепцию RapidJSON Stream.
+//! Обертка \c std::basic_istream в формате RapidJSON Stream.
 /*!
     Классы могут быть обернуты, включая, помимо прочего:
 
-    - \c std::istringstream
-    - \c std::stringstream
-    - \c std::wistringstream
-    - \c std::wstringstream
-    - \c std::ifstream
-    - \c std::fstream
-    - \c std::wifstream
-    - \c std::wfstream
+    - \c станд::istringstream
+    - \c станд::stringstream
+    - \c std::wistingstream
+    - \c станд::wstringstream
+    - \c станд::ifstream
+    - \c станд::fstream
+    - \c станд::wifstream
+    - \c станд::wfstream
 
     \tparam Класс StreamType, производный от \c std::basic_istream .
 */
@@ -62,7 +62,7 @@ public:
     /*!
         \param поток поток, открытый для чтения.
         \param buffer Буфер, предоставляемый пользователем.
-        \paramufferSize размер буфера в байтах. Должно >= 4 байта.
+        \paramufferSize размер буфера в байтах. Должность >= 4 байта.
     */
     BasicIStreamWrapper(StreamType &stream, char* buffer, size_t bufferSize) : stream_(stream), buffer_(buffer), bufferSize_(bufferSize), bufferLast_(0), current_(buffer_), readCount_(0), count_(0), eof_(false) {
         RAPIDJSON_ASSERT(bufferSize >= 4);

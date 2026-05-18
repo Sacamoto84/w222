@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -68,7 +68,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // GenericRegex
 
-static const SizeType kRegexInvalidState = ~SizeType(0);  //!< Представляет недопустимый индекс в GenericRegex::State::out, out1.
+static const SizeType kRegexInvalidState = ~SizeType(0);  //!< показывает недопустимый индекс в GenericRegex::State::out, out1.
 static const SizeType kRegexInvalidRange = ~SizeType(0);
 
 template <typename Encoding, typename Allocator>
@@ -77,32 +77,32 @@ class GenericRegexSearch;
 //! Механизм регулярных выражений с подмножеством грамматики ECMAscript.
 /*!
     Поддерживаемый синтаксис регулярных выражений:
-    - \c ab     Concatenation
-    - \c a|b    Alternation
+    - \c ab Конкатенация
+    - \c a|b Чередование
     - \c a?     Zero or one
-    - \c a*     Zero or more
-    - \c a+     One or more
-    - \c a{3}   Exactly 3 times
-    - \c a{3,}  At least 3 times
-    - \c a{3,5} 3 to 5 times
-    - \c (ab)   Grouping
-    - \c ^a     At the beginning
-    - \c a$     At the end
-    - \c .      Any character
-    - \c [abc]  Character classes
-    - \c [a-c]  Character class range
-    - \c [a-z0-9_] Character class combination
-    - \c [^abc] Negated character classes
-    - \c [^a-c] Negated character class range
-    - \c [\b]   Backspace (U+0008)
-    - \c \\| \\\\ ...  Escape characters
-    - \c \\f Form feed (U+000C)
-    - \c \\n Line feed (U+000A)
-    - \c \\r Carriage return (U+000D)
-    - \c \\t Tab (U+0009)
-    - \c \\v Vertical tab (U+000B)
+    - \c a* Ноль или больше
+    - \c a+ Один или несколько
+    - \c a{3} Ровно 3 раза
+    - \c a{3,} Не менее 3 раз
+    - \c a{3,5} от 3 до 5 раз
+    - \c (ab) Группировка
+    - \c ^a В начале
+    - \c a$ В конце
+    - \с.      Любой персонаж
+    - \c [abc] Классы символов
+    - \c [a-c] Диапазон классов символов
+    - \c [a-z0-9_] Комбинация классов символов
+    - \c [^abc] Отрицательные классы символов
+    - \c [^a-c] Отрицательный диапазон классов символов
+    - \c [\b] Пробел (U+0008)
+    - \с \\| \\\\ ... Escape-символы
+    - \c \\f Подача страницы (U+000C)
+    - \c \\n Перевод строки (U+000A)
+    - \c \\r Возврат каретки (U+000D)
+    - \c \\t Вкладка (U+0009)
+    - \c \\v Вертикальная вкладка (U+000B)
 
-    \note Это движок Thompson NFA, реализованный со ссылкой на
+    \note Это движок Thompson NFA, реализованный по ссылке на
         Кокс, Расс. «Сопоставление регулярных выражений может быть простым и быстрым (но медленным в Java, Perl, PHP, Python, Ruby,...).»,
         https://swtch.com/~rsc/regexp/regexp1.html
 */
@@ -153,8 +153,8 @@ private:
     };
 
     struct State {
-        SizeType out;     //!< Равно kInvalid для соответствующего состояния
-        SizeType out1;    //!< Равно не-kInvalid для разделения
+        SizeType out;     //!< Равно kНедействительно для соответствующего состояния
+        SizeType out1;    //!< Равно не-kНедопустимо для разделения
         SizeType rangeStart;
         unsigned codepoint;
     };
@@ -451,7 +451,7 @@ private:
 
     void CloneTopOperand(Stack<Allocator>& operandStack) {
         const Frag src = *operandStack.template Top<Frag>(); // Скопируйте конструктор, чтобы предотвратить аннулирование
-        SizeType count = stateCount_ - src.minIndex; // Предполагается, что верхний операнд содержит состояния в [src->minIndex, stateCount_ )
+        SizeType count = stateCount_ - src.minIndex; // Предполагается, что верхний операнд отображает состояние в [src->minIndex,stateCount_)
         State* s = states_.template Push<State>(count);
         memcpy(s, &GetState(src.minIndex), count * sizeof(State));
         for (SizeType j = 0; j < count; j++) {
@@ -498,7 +498,7 @@ private:
             switch (codepoint) {
             case ']':
                 if (start == kRegexInvalidRange)
-                    return false;   // Error: nothing inside []
+                    return false;   // Error: ничего внутри []
                 if (step == 2) { // Добавьте завершающий '-'
                     SizeType r = NewRange('-');
                     RAPIDJSON_ASSERT(current != kRegexInvalidRange);
@@ -700,7 +700,7 @@ private:
             stateSet_[index >> 5] |= (1u << (index & 31));
             *l.template PushUnsafe<SizeType>() = index;
         }
-        return s.out == kRegexInvalidState; // используя PushUnsafe() выше, мы можем гарантировать, что s не будет проверен из-за перераспределения.
+        return s.out == kRegexInvalidState; // ИспользуяPushUnsafe()выше, мы можем доказать, что это не будет проверено из-за перераспределения.
     }
 
     bool MatchRange(SizeType rangeIndex, unsigned codepoint) const {

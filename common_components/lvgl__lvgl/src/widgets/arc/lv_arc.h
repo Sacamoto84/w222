@@ -62,8 +62,8 @@ enum _lv_property_arc_id_t {
 
 /**
  * Создайте объект дуги
- * @param parent    pointer to an object, it will be the parent of the new arc
- * @return          pointer to the created arc
+ * @param parent    указатель на объект, он будет родителем новой дуги
+ * @return          указатель на созданную дугу
  */
 lv_obj_t * lv_arc_create(lv_obj_t * parent);
 
@@ -77,102 +77,102 @@ lv_obj_t * lv_arc_create(lv_obj_t * parent);
 
 /**
  * Установите начальный угол дуги. 0 градусов: вправо, 90 вниз и т. д.
- * @param obj       pointer to an arc object
- * @param start     the start angle. (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @param start     начальный угол. (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 void lv_arc_set_start_angle(lv_obj_t * obj, lv_value_precise_t start);
 
 /**
  * Установите конечный угол дуги. 0 градусов: вправо, 90 вниз и т. д.
- * @param obj       pointer to an arc object
- * @param end       the end angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @param end       конечный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 void lv_arc_set_end_angle(lv_obj_t * obj, lv_value_precise_t end);
 
 /**
  * Установите начальный и конечный углы
- * @param obj       pointer to an arc object
- * @param start     the start angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
- * @param end       the end angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @param start     начальный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
+ * @param end       конечный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 void lv_arc_set_angles(lv_obj_t * obj, lv_value_precise_t start, lv_value_precise_t end);
 
 /**
  * Установите начальный угол фона дуги. 0 градусов: вправо, 90 вниз и т.д.
- * @param obj       pointer to an arc object
- * @param start     the start angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @param start     начальный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 void lv_arc_set_bg_start_angle(lv_obj_t * obj, lv_value_precise_t start);
 
 /**
  * Установите начальный угол фона дуги. 0 градусов: вправо, 90 вниз и т. д.
- * @param obj       pointer to an arc object
- * @param end       the end angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @param end       конечный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 void lv_arc_set_bg_end_angle(lv_obj_t * obj, lv_value_precise_t end);
 
 /**
  * Установите начальный и конечный углы фона дуги.
- * @param obj       pointer to an arc object
- * @param start     the start angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
- * @param end       the end angle  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @param start     начальный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
+ * @param end       конечный угол (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 void lv_arc_set_bg_angles(lv_obj_t * obj, lv_value_precise_t start, lv_value_precise_t end);
 
 /**
  * Установите вращение для всей дуги
- * @param obj           pointer to an arc object
- * @param rotation      rotation angle
+ * @param obj           указатель на объект дуги
+ * @param rotation      угол поворота
  */
 void lv_arc_set_rotation(lv_obj_t * obj, int32_t rotation);
 
 /**
  * Установите, в каком направлении должен расти индикатор.
- * @param obj       pointer to arc object
- * @param type      arc's mode
+ * @param obj       указатель на объект дуги
+ * @param type      режим дуги
  */
 void lv_arc_set_mode(lv_obj_t * obj, lv_arc_mode_t type);
 
 /**
  * Установите новое значение дуги
- * @param obj       pointer to an arc object
- * @param value     new value
+ * @param obj       указатель на объект дуги
+ * @param value     новое значение
  */
 void lv_arc_set_value(lv_obj_t * obj, int32_t value);
 
 /**
  * Установите минимальное и максимальное значения дуги
- * @param obj       pointer to the arc object
- * @param min       minimum value
- * @param max       maximum value
+ * @param obj       указатель на объект дуги
+ * @param min       минимальное значение
+ * @param max       максимальное значение
  */
 void lv_arc_set_range(lv_obj_t * obj, int32_t min, int32_t max);
 
 /**
  * Установите минимальные значения дуги
- * @param obj       pointer to the arc object
- * @param min       minimum value
+ * @param obj       указатель на объект дуги
+ * @param min       минимальное значение
  */
 void lv_arc_set_min_value(lv_obj_t * obj, int32_t min);
 
 /**
  * Установите максимальные значения дуги
- * @param obj       pointer to the arc object
- * @param max       maximum value
+ * @param obj       указатель на объект дуги
+ * @param max       максимальное значение
  */
 void lv_arc_set_max_value(lv_obj_t * obj, int32_t max);
 
 /**
  * Установите скорость изменения, чтобы ограничить скорость, с которой дуга должна достигать нажатой точки.
- * @param obj       pointer to an arc object
- * @param rate      the change rate
+ * @param obj       указатель на объект дуги
+ * @param rate      скорость изменения
  */
 void lv_arc_set_change_rate(lv_obj_t * obj, uint32_t rate);
 
 /**
  * Установите угол смещения ручки
- * @param obj       pointer to an arc object
- * @param offset    knob offset from main arc in degrees
+ * @param obj       указатель на объект дуги
+ * @param offset    смещение ручки от основной дуги в градусах
  */
 void lv_arc_set_knob_offset(lv_obj_t * obj, int32_t offset);
 
@@ -182,78 +182,78 @@ void lv_arc_set_knob_offset(lv_obj_t * obj, int32_t offset);
 
 /**
  * Получите начальный угол дуги.
- * @param obj       pointer to an arc object
- * @return          the start angle [0..360]  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @return          начальный угол [0..360] (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 lv_value_precise_t lv_arc_get_angle_start(lv_obj_t * obj);
 
 /**
  * Получите конечный угол дуги.
- * @param obj       pointer to an arc object
- * @return          the end angle [0..360]  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @return          конечный угол [0..360] (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 lv_value_precise_t lv_arc_get_angle_end(lv_obj_t * obj);
 
 /**
  * Получите начальный угол фона дуги.
- * @param obj       pointer to an arc object
- * @return          the  start angle [0..360]  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @return          начальный угол [0..360] (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 lv_value_precise_t lv_arc_get_bg_angle_start(lv_obj_t * obj);
 
 /**
  * Получите конечный угол фона дуги.
- * @param obj       pointer to an arc object
- * @return          the end angle [0..360]  (if `LV_USE_FLOAT` is enabled it can be fractional too.)
+ * @param obj       указатель на объект дуги
+ * @return          конечный угол [0..360] (если`LV_USE_FLOAT`включен, он также может быть дробным.)
  */
 lv_value_precise_t lv_arc_get_bg_angle_end(lv_obj_t * obj);
 
 /**
  * Получить значение дуги
- * @param obj       pointer to an arc object
- * @return          the value of the arc
+ * @param obj       указатель на объект дуги
+ * @return          значение дуги
  */
 int32_t lv_arc_get_value(const lv_obj_t * obj);
 
 /**
  * Получить минимальное значение дуги
- * @param obj       pointer to an arc object
- * @return          the minimum value of the arc
+ * @param obj       указатель на объект дуги
+ * @return          минимальное значение дуги
  */
 int32_t lv_arc_get_min_value(const lv_obj_t * obj);
 
 /**
  * Получить максимальное значение дуги
- * @param obj       pointer to an arc object
- * @return          the maximum value of the arc
+ * @param obj       указатель на объект дуги
+ * @return          максимальное значение дуги
  */
 int32_t lv_arc_get_max_value(const lv_obj_t * obj);
 
 /**
  * Узнайте, является ли дуга типом или нет.
- * @param obj       pointer to an arc object
- * @return          arc's mode
+ * @param obj       указатель на объект дуги
+ * @return          режим дуги
  */
 lv_arc_mode_t lv_arc_get_mode(const lv_obj_t * obj);
 
 /**
  * Получить вращение для всей дуги
- * @param obj       pointer to an arc object
- * @return          arc's current rotation
+ * @param obj       указатель на объект дуги
+ * @return          текущее вращение дуги
  */
 int32_t lv_arc_get_rotation(const lv_obj_t * obj);
 
 /**
  * Получить текущее смещение угла ручки
- * @param obj       pointer to an arc object
- * @return          arc's current knob offset
+ * @param obj       указатель на объект дуги
+ * @return          смещение ручки тока дуги
  */
 int32_t lv_arc_get_knob_offset(const lv_obj_t * obj);
 
 /**
  * Получить скорость изменения дуги
- * @param obj       pointer to an arc object
- * @return          the change rate
+ * @param obj       указатель на объект дуги
+ * @return          скорость изменения
  */
 uint32_t lv_arc_get_change_rate(lv_obj_t * obj);
 
@@ -263,10 +263,10 @@ uint32_t lv_arc_get_change_rate(lv_obj_t * obj);
 
 #if LV_USE_OBSERVER
 /**
- * Привяжите целое число к значению Arc.
- * @param obj       pointer to Arc
- * @param subject   pointer to Subject
- * @return          pointer to newly-created Observer
+ * Привяжите значения к последствиям Arc.
+ * @param obj       указатель на дугу
+ * @param subject   указатель на тему
+ * @return          указатель на вновь созданный наблюдатель
  */
 lv_observer_t * lv_arc_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif
@@ -274,17 +274,17 @@ lv_observer_t * lv_arc_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 
 /**
  * Выровняйте объект по текущему положению дуги (ручки)
- * @param obj           pointer to an arc object
- * @param obj_to_align  pointer to an object to align
- * @param r_offset      consider the radius larger with this value (< 0: for smaller radius)
+ * @param obj           указатель на объект дуги
+ * @param obj_to_align  указатель на объект для выравнивания
+ * @param r_offset      считайте радиус большим с этим значением (< 0: для меньшего радиуса)
  */
 void lv_arc_align_obj_to_angle(const lv_obj_t * obj, lv_obj_t * obj_to_align, int32_t r_offset);
 
 /**
  * Поворот объекта в текущее положение дуги (ручка)
- * @param obj            pointer to an arc object
- * @param obj_to_rotate  pointer to an object to rotate
- * @param r_offset       consider the radius larger with this value (< 0: for smaller radius)
+ * @param obj            указатель на объект дуги
+ * @param obj_to_rotate  указатель на объект, который нужно повернуть
+ * @param r_offset       считайте радиус большим с этим значением (< 0: для меньшего радиуса)
  */
 void lv_arc_rotate_obj_to_angle(const lv_obj_t * obj, lv_obj_t * obj_to_rotate, int32_t r_offset);
 

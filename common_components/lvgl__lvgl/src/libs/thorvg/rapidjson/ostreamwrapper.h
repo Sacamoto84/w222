@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -25,18 +25,18 @@ RAPIDJSON_DIAG_OFF(padded)
 
 RAPIDJSON_NAMESPACE_BEGIN
 
-//! Обертка \c std::basic_ostream в концепцию RapidJSON Stream.
+//! Обертка \c std::basic_ostream в формате RapidJSON Stream.
 /*!
     Классы могут быть обернуты, включая, помимо прочего:
 
-    - \c std::ostringstream
-    - \c std::stringstream
-    - \c std::wpstringstream
-    - \c std::wstringstream
-    - \c std::ifstream
-    - \c std::fstream
-    - \c std::wofstream
-    - \c std::wfstream
+    - \c станд::ostringstream
+    - \c станд::stringstream
+    - \c станд::wpstingstream
+    - \c станд::wstringstream
+    - \c станд::ifstream
+    - \c станд::fstream
+    - \c станд::wofstream
+    - \c станд::wfstream
 
     \tparam Класс StreamType, производный от \c std::basic_ostream .
 */

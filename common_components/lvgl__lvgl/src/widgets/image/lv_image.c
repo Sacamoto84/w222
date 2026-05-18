@@ -201,19 +201,19 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
             }
         }
 
-        /*Если память была выделена из-за предыдущего `src_type`, освободите ее.*/
+        /*Если память была выделена из-за формы `src_type`, освободите ее.*/
         if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_free((void *)img->src);
         }
         img->src = src;
     }
     else if(src_type == LV_IMAGE_SRC_FILE || src_type == LV_IMAGE_SRC_SYMBOL) {
-        /*Если новый и старый src одинаковы, то это было всего лишь обновление.*/
+        /*Если новый и старый источники совпадают, то это было всего лишь обновление.*/
         if(img->src != src) {
             const void * old_src = NULL;
-            /*Если память была выделена из-за предыдущего `src_type`, сохраните ее указатель и освободите после выделения.
+            /*Если память была выделена из-за формы `src_type`, сохраните ее указатель и освободите после выделения.
              *Важно сначала выделить память, чтобы быть уверенным, что новые данные будут находиться по новому адресу.
-             *В противном случае `img_cache` не увидит изменения в исходном коде.*/
+             *В противном случае`img_cache`не увидит изменений в исходном коде.*/
             if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
                 old_src = img->src;
             }
@@ -227,7 +227,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
     }
 
     if(src_type == LV_IMAGE_SRC_SYMBOL) {
-        /*`lv_image_dsc_get_info` не смог установить ширину и высоту шрифта, поэтому установите это здесь.*/
+        /*`lv_image_dsc_get_info` не смог установить элементы и высоту шрифта, поэтому установите их здесь.*/
         const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
         lv_text_attributes_t attributes = {0};
 
@@ -309,7 +309,7 @@ void lv_image_set_rotation(lv_obj_t * obj, int32_t angle)
 
     img->rotation = angle;
 
-    /* Отключите недействительность, поскольку lv_obj_refresh_ext_draw_size сделает недействительной
+    /* Отключите недействительность, посколькуlv_obj_refresh_ext_draw_sizeделает недействительную
      * вся дополнительная область прорисовки */
     lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
@@ -351,7 +351,7 @@ void lv_image_set_pivot(lv_obj_t * obj, int32_t x, int32_t y)
 
     lv_point_set(&img->pivot, x, y);
 
-    /* Отключите недействительность, поскольку lv_obj_refresh_ext_draw_size сделает недействительной
+    /* Отключите недействительность, посколькуlv_obj_refresh_ext_draw_sizeделает недействительную
      * вся дополнительная область прорисовки */
     lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
@@ -855,7 +855,7 @@ static void draw_image(lv_event_t * e)
         if(img->h == 0 || img->w == 0) return;
         if(img->scale_x == 0 || img->scale_y == 0) return;
         if(img->src == NULL) {
-            /*Не нужно рисовать изображение, если src равен NULL.*/
+            /*Не нужно рисовать изображение, если src равенNULL.*/
             LV_LOG_TRACE("image source is NULL");
             return;
         }
@@ -977,7 +977,7 @@ static void scale_update(lv_obj_t * obj, int32_t scale_x, int32_t scale_y)
     img->scale_x = scale_x;
     img->scale_y = scale_y;
 
-    /* Отключите недействительность, поскольку lv_obj_refresh_ext_draw_size сделает недействительной
+    /* Отключите недействительность, посколькуlv_obj_refresh_ext_draw_sizeделает недействительную
      * вся дополнительная область прорисовки */
     lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);

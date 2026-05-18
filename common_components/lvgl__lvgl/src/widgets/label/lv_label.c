@@ -798,7 +798,7 @@ static void lv_label_event(const lv_obj_class_t * class_p, lv_event_t * e)
     }
     else if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
         /* Курсив или другие нетипичные буквы могут быть нарисованы за пределами объекта.
-         * Это происходит, если в глифе box_w + ofs_x > adw_w.
+         * Это происходит, если в глифеbox_w+ofs_x>adw_w.
          * Чтобы избежать этого, добавьте дополнительную область рисования.
          * font_h/4 – эмпирическое значение. */
         const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
@@ -1086,7 +1086,7 @@ static void update_layout_completed_cb(lv_event_t * e)
 
 /**
  * Обновите метку, сохранив ее текст в расширенных данных.
- * @param label pointer to a label object
+ * @param obj указатель на объект метки
  */
 static void lv_label_refr_text(lv_obj_t * obj)
 {

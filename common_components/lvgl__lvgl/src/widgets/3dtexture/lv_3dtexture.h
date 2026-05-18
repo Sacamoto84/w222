@@ -35,25 +35,25 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_3dtexture_class;
 
 /**
  * Создайте объект 3D-текстуры
- * @param parent    pointer to an object, it will be the parent of the new 3dtexture
- * @return          pointer to the created 3dtexture
+ * @param parent    указатель на объект, он будет родителем новой 3D-текстуры
+ * @return          указатель на созданную 3dтекстуру
  */
 lv_obj_t * lv_3dtexture_create(lv_obj_t * parent);
 
 /**
  * Установите исходную текстуру виджета.
  * Размер объекта должен быть установлен вручную.
- * @param obj    the 3dtexture widget
- * @param id     the texture handle from the 3D graphics backend.
- *               То есть текстура `unsigned int` для OpenGL.
+ * @param obj    виджет 3D-текстуры
+ * @param id     дескриптор текстуры из серверной части 3D-графики.
+ *               То есть текстура`unsigned int`для OpenGL.
  */
 void lv_3dtexture_set_src(lv_obj_t * obj, lv_3dtexture_id_t id);
 
 /**
  * Установите поведение виджета при переворачивании.
- * @param obj      the 3dtexture widget
- * @param h_flip   true to flip horizontally.
- * @param v_flip   true to flip vertically.
+ * @param obj      виджет 3D-текстуры
+ * @param h_flip   true для переворота по горизонтали.
+ * @param v_flip   true для переворота по вертикали.
  */
 void lv_3dtexture_set_flip(lv_obj_t * obj, bool h_flip, bool v_flip);
 

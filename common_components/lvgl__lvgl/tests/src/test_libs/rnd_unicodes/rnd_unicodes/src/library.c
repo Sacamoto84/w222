@@ -27,7 +27,7 @@
 
 __attribute__((weak)) uint32_t RANDOM_CALL_PROCESS(void)
 {
-    /*Алгоритм «xor» из п. 4 Марсальи, «Ксоршифт ГСЧ»*/
+    /*Алгоритм «xor» из п. 4 Марсали, «Ксоршифт ГСЧ»*/
     static uint32_t x = 0x114514;
     x ^= x << 13;
     x ^= x >> 17;

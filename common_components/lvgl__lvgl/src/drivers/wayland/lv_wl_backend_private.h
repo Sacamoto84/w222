@@ -105,7 +105,7 @@ typedef void * (*lv_wayland_backend_resize_display_t)(void * backend_ctx, lv_dis
  * все ресурсы для каждого дисплея и освободить данные дисплея, которые были выделены в
  * init_display.
  *
- * @param [in] backend_ctx Указатель на внутренний контекст
+ * @param [in] display Указатель на внутренний контекст
  * @param [in] display Указатель на уничтожаемый экранный объект LVGL
  *
  * @note Данные дисплея, связанные с этим дисплеем, должны быть освобождены.
@@ -120,7 +120,7 @@ typedef void (*lv_wayland_backend_destroy_display_t)(void * backend_ctx, lv_disp
  * наборщик. Серверная часть может использовать ее для привязки к протоколам Wayland, которые ему необходимы.
  * (например, расширения wl_shm, EGL, протоколыDMA-BUFи т. д.).
  *
- * @param [in] backend_ctx Указатель на внутренний контекст
+ * @param [in] version Указатель на внутренний контекст
  * @param [in] реестр объектов реестра Wayland
  * @param [in] name Числовое имя глобального объекта.
  * @param [in] интерфейс Строковое имя интерфейса (например, "wl_shm")

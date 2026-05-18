@@ -60,8 +60,8 @@ enum _lv_property_table_id_t {
 
 /**
  * Создать объект таблицы
- * @param parent        pointer to an object, it will be the parent of the new table
- * @return              pointer to the created table
+ * @param parent        указатель на объект, он будет родителем новой таблицы
+ * @return              указатель на созданную таблицу
  */
 lv_obj_t * lv_table_create(lv_obj_t * parent);
 
@@ -71,72 +71,72 @@ lv_obj_t * lv_table_create(lv_obj_t * parent);
 
 /**
  * Установите значение ячейки.
- * @param obj           pointer to a Table object
- * @param row           id of the row [0 .. row_cnt -1]
- * @param col           id of the column [0 .. col_cnt -1]
- * @param txt           text to display in the cell. It will be copied and saved so this variable is not required after this function call.
- * @note                New roes/columns are added automatically if required
+ * @param obj           указатель на объект таблицы
+ * @param row           идентификатор строки [0 ..row_cnt-1]
+ * @param col           идентификатор столбца [0 ..col_cnt-1]
+ * @param txt           текст, который будет отображаться в ячейке. Она будет скопирована и сохранена, поэтому эта переменная не требуется после вызова этой функции.
+ * @note                При необходимости новые строки/столбцы добавляются автоматически.
  */
 void lv_table_set_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col, const char * txt);
 
 /**
  * Установите значение ячейки.  Для хранения текста по таблице будет выделена память.
- * @param obj           pointer to a Table object
- * @param row           id of the row [0 .. row_cnt -1]
- * @param col           id of the column [0 .. col_cnt -1]
- * @param fmt           `printf`-like format
- * @note                New roes/columns are added automatically if required
+ * @param obj           указатель на объект таблицы
+ * @param row           идентификатор строки [0 ..row_cnt-1]
+ * @param col           идентификатор столбца [0 ..col_cnt-1]
+ * @param fmt           `printf`-подобный формат
+ * @note                При необходимости новые строки/столбцы добавляются автоматически.
  */
 void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint32_t row, uint32_t col, const char * fmt,
                                  ...) LV_FORMAT_ATTRIBUTE(4, 5);
 
 /**
  * Установите количество строк
- * @param obj           table pointer to a Table object
- * @param row_cnt       number of rows
+ * @param obj           указатель таблицы на объект Table
+ * @param row_cnt       количество строк
  */
 void lv_table_set_row_count(lv_obj_t * obj, uint32_t row_cnt);
 
 /**
  * Установите количество столбцов
- * @param obj       table pointer to a Table object
- * @param col_cnt   number of columns.
+ * @param obj       указатель таблицы на объект Table
+ * @param col_cnt   количество столбцов.
  */
 void lv_table_set_column_count(lv_obj_t * obj, uint32_t col_cnt);
 
 /**
  * Установить ширину столбца
- * @param obj       table pointer to a Table object
- * @param col_id    id of the column [0 .. LV_TABLE_COL_MAX -1]
- * @param w         width of the column
+ * @param obj       указатель таблицы на объект Table
+ * @param col_id    идентификатор столбца [0 ..LV_TABLE_COL_MAX-1]
+ * @param w         ширина столбца
  */
 void lv_table_set_column_width(lv_obj_t * obj, uint32_t col_id, int32_t w);
 
 /**
  * Добавьте управляющие биты в ячейку.
- * @param obj       pointer to a Table object
- * @param row       id of the row [0 .. row_cnt -1]
- * @param col       id of the column [0 .. col_cnt -1]
- * @param ctrl      OR-ed values from ::lv_table_cell_ctrl_t
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки [0 ..row_cnt-1]
+ * @param col       идентификатор столбца [0 ..col_cnt-1]
+ * @param ctrl      OR -ed значения из :: lv_table_cell_ctrl_t
  */
 void lv_table_set_cell_ctrl(lv_obj_t * obj, uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
 
 /**
  * Очистить управляющие биты ячейки.
- * @param obj       pointer to a Table object
- * @param row       id of the row [0 .. row_cnt -1]
- * @param col       id of the column [0 .. col_cnt -1]
- * @param ctrl      OR-ed values from ::lv_table_cell_ctrl_t
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки [0 ..row_cnt-1]
+ * @param col       идентификатор столбца [0 ..col_cnt-1]
+ * @param ctrl      OR -ed значения из :: lv_table_cell_ctrl_t
  */
 void lv_table_clear_cell_ctrl(lv_obj_t * obj, uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
 
 /**
  * Добавьте в ячейку пользовательские данные.
- * @param obj       pointer to a Table object
- * @param row       id of the row [0 .. row_cnt -1]
- * @param col       id of the column [0 .. col_cnt -1]
- * @param user_data pointer to the new user_data.
- *                  Должно быть выделено `lv_malloc` ,
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки [0 ..row_cnt-1]
+ * @param col       идентификатор столбца [0 ..col_cnt-1]
+ * @param user_data указатель на новый user_data.
+ *                  Должность быть выделено`lv_malloc`,
  *                  и он будет освобожден автоматически при удалении таблицы или
  *                  когда ячейка удаляется из-за меньшего количества строк или столбцов.
  */
@@ -144,9 +144,9 @@ void lv_table_set_cell_user_data(lv_obj_t * obj, uint16_t row, uint16_t col, voi
 
 /**
  * Установить выбранную ячейку
- * @param obj       pointer to a table object
- * @param row       id of the cell row to select
- * @param col       id of the cell column to select
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки ячейки, которую нужно выбрать
+ * @param col       идентификатор столбца ячейки, который нужно выбрать
  */
 void lv_table_set_selected_cell(lv_obj_t * obj, uint16_t row, uint16_t col);
 
@@ -156,58 +156,58 @@ void lv_table_set_selected_cell(lv_obj_t * obj, uint16_t row, uint16_t col);
 
 /**
  * Получить значение ячейки.
- * @param obj       pointer to a Table object
- * @param row       id of the row [0 .. row_cnt -1]
- * @param col       id of the column [0 .. col_cnt -1]
- * @return          text in the cell
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки [0 ..row_cnt-1]
+ * @param col       идентификатор столбца [0 ..col_cnt-1]
+ * @return          текст в ячейке
  */
 const char * lv_table_get_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col);
 
 /**
  * Получите количество строк.
- * @param obj       table pointer to a Table object
- * @return          number of rows.
+ * @param obj       указатель таблицы на объект Table
+ * @return          количество рядов.
  */
 uint32_t lv_table_get_row_count(lv_obj_t * obj);
 
 /**
  * Получите количество столбцов.
- * @param obj       table pointer to a Table object
- * @return          number of columns.
+ * @param obj       указатель таблицы на объект Table
+ * @return          количество столбцов.
  */
 uint32_t lv_table_get_column_count(lv_obj_t * obj);
 
 /**
  * Получить ширину столбца
- * @param obj       table pointer to a Table object
- * @param col       id of the column [0 .. LV_TABLE_COL_MAX -1]
- * @return          width of the column
+ * @param obj       указатель таблицы на объект Table
+ * @param col       идентификатор столбца [0 ..LV_TABLE_COL_MAX-1]
+ * @return          ширина столбца
  */
 int32_t lv_table_get_column_width(lv_obj_t * obj, uint32_t col);
 
 /**
  * Узнайте, есть ли в ячейке управляющие биты
- * @param obj       pointer to a Table object
- * @param row       id of the row [0 .. row_cnt -1]
- * @param col       id of the column [0 .. col_cnt -1]
- * @param ctrl      OR-ed values from ::lv_table_cell_ctrl_t
- * @return          true: all control bits are set; false: not all control bits are set
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки [0 ..row_cnt-1]
+ * @param col       идентификатор столбца [0 ..col_cnt-1]
+ * @param ctrl      OR -ed значения из :: lv_table_cell_ctrl_t
+ * @return          true: все управляющие биты установлены; false: не все биты управления установлены
  */
 bool lv_table_has_cell_ctrl(lv_obj_t * obj, uint32_t row, uint32_t col, lv_table_cell_ctrl_t ctrl);
 
 /**
  * Получить выбранную ячейку (нажатую и/или сфокусированную)
- * @param obj       pointer to a table object
- * @param row       pointer to variable to store the selected row (LV_TABLE_CELL_NONE: if no cell selected)
- * @param col       pointer to variable to store the selected column  (LV_TABLE_CELL_NONE: if no cell selected)
+ * @param obj       указатель на объект таблицы
+ * @param row       указатель на переменную для хранения выбранной строки (LV_TABLE_CELL_NONE: если ячейка не выбрана)
+ * @param col       указатель на переменную для хранения выбранного столбца (LV_TABLE_CELL_NONE: если ячейка не выбрана)
  */
 void lv_table_get_selected_cell(lv_obj_t * obj, uint32_t * row, uint32_t * col);
 
 /**
  * Получите пользовательские данные в ячейку.
- * @param obj       pointer to a Table object
- * @param row       id of the row [0 .. row_cnt -1]
- * @param col       id of the column [0 .. col_cnt -1]
+ * @param obj       указатель на объект таблицы
+ * @param row       идентификатор строки [0 ..row_cnt-1]
+ * @param col       идентификатор столбца [0 ..col_cnt-1]
  */
 void * lv_table_get_cell_user_data(lv_obj_t * obj, uint16_t row, uint16_t col);
 

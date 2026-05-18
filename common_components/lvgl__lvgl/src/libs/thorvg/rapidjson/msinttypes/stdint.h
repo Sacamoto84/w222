@@ -1,4 +1,4 @@
-// ISO C9x-совместимый stdint.h для Microsoft Visual Studio
+// ISO C9x-совместимыйstdint.hдля Microsoft Visual Studio
 // На основе ISO / IEC 9899: Проект комитета TC2 (6 мая 2005 г.) WG14 / N1124
 //
 //  Copyright (c) 2006-2013 Alexander Chemeris
@@ -31,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // Вышеуказанное программное обеспечение в этом дистрибутиве могло быть изменено
-// THL A29 Limited («Модификации Tencent»).
+// THLA29Limited («Модификации Tencent»).
 // All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.
 
 #ifndef _MSC_VER // [
@@ -45,7 +45,7 @@
 #pragma once
 #endif
 
-// miloyip: Originally Visual Studio 2010 uses its own stdint.h. However it generates warning with INT64_C(), so change to use this file for vs2010.
+// miloyip: Изначально Visual Studio 2010 использует собственный stdint.h. Однако он генерирует предупреждение с помощьюINT64_C(), поэтому измените его на использование этого файла для vs2010.
 #if _MSC_VER >= 1600 // [
 #include <stdint.h>
 
@@ -73,7 +73,7 @@
 #define UINT64_C(val) val##ui64
 
 // 7.18.4.2 Макросы для целочисленных констант наибольшей ширины
-// Эти #ifndef необходимы для предотвращения коллизий с <boost/cstdint.hpp>.
+// Эти#ifndefнеобходимы для предотвращения коллизий с <boost/cstdint.hpp>.
 // Подробности смотрите в выпуске 9.
 #ifndef INTMAX_C //   [
 #  define INTMAX_C   INT64_C
@@ -89,7 +89,7 @@
 #include <limits.h>
 
 // Для Visual Studio 6 в режиме C++ и для многих версий Visual Studio, когда
-// при компиляции для ARM нам нужно обернуть < wchar.h > include с помощью 'extern "C++" {}'
+// при компиляции дляARMнам нужно обернуть <wchar.h> include с помощью 'extern "C++" {}'
 // или компилятор выдал бы много таких ошибок:
 //   ошибка C2733: вторая связь C перегруженной функции wmemchr не разрешена
 #if defined(__cplusplus) && !defined(_M_ARM)
@@ -100,7 +100,7 @@ extern "C" {
 }
 #endif
 
-// Определите макросы _W64, чтобы отмечать типы, меняющие свой размер, например intptr_t .
+// Определите макросы _W64, чтобы отмечать типы, меняющие свой размер, напримерintptr_t.
 #ifndef _W64
 #  if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
 #     define _W64 __w64
@@ -115,8 +115,8 @@ extern "C" {
 // 7.18.1.1 Целочисленные типы точной ширины
 
 // Visual Studio 6 и Embedded Visual C++ 4 этого не делают.
-// осознать это, например char имеет тот же размер, что и __int8
-// поэтому мы отказываемся от __intX ради них.
+// поймите это, например, char имеет тот же размер, что и __int8
+// поэтому мы отказываемся от__intXих ради.
 #if (_MSC_VER < 1300)
    typedef signed char       int8_t;
    typedef signed short      int16_t;
@@ -253,7 +253,7 @@ typedef uint64_t  uintmax_t;
 #  endif // _WIN64 ]
 #endif // SIZE_MAX ]
 
-// WCHAR_MIN и WCHAR_MAX также определены в <wchar.h>.
+// WCHAR_MIN иWCHAR_MAXтакже победили в <wchar.h>.
 #ifndef WCHAR_MIN // [
 #  define WCHAR_MIN  0
 #endif  // WCHAR_MIN ]
@@ -284,7 +284,7 @@ typedef uint64_t  uintmax_t;
 #define UINT64_C(val) val##ui64
 
 // 7.18.4.2 Макросы для целочисленных констант наибольшей ширины
-// Эти #ifndef необходимы для предотвращения коллизий с <boost/cstdint.hpp>.
+// Эти#ifndefнеобходимы для предотвращения коллизий с <boost/cstdint.hpp>.
 // Подробности смотрите в выпуске 9.
 #ifndef INTMAX_C //   [
 #  define INTMAX_C   INT64_C

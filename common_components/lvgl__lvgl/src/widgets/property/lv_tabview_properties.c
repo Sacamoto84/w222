@@ -10,8 +10,8 @@
 
 #if LV_USE_TABVIEW
 /**
- * Имена свойств виджета Tabview, имя должно быть в порядке.
- * Сгенерированный код из properties.py
+ * Имя свойства виджета Tabview, имя должно быть в порядке.
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_tabview_property_names[2] = {

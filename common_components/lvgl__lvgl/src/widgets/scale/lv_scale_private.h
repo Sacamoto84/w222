@@ -50,9 +50,9 @@ struct _lv_scale_section_t {
     int32_t last_tick_in_section_width;    /**< Internal (set during drawing) */
     lv_point_t first_tick_in_section;      /**< Internal (set during drawing) */
     lv_point_t last_tick_in_section;       /**< Internal (set during drawing) */
-    uint32_t first_tick_idx_is_major : 1;  /**< Внутренний (устанавливается во время рисования): true, если
+    uint32_t first_tick_idx_is_major : 1;  /**< Внутренний (устанавливается во время рисования): правда, если
                                             * `first_tick_idx_in_section` представляет собой основной тик. */
-    uint32_t last_tick_idx_is_major  : 1;  /**< Внутренний (устанавливается во время рисования): true, если
+    uint32_t last_tick_idx_is_major  : 1;  /**< Внутренний (устанавливается во время рисования): правда, если
                                             * `last_tick_idx_in_section` представляет собой основной тик. */
 };
 typedef struct {
@@ -72,8 +72,8 @@ struct _lv_scale_t {
     uint32_t total_tick_count   : 15;  /**< Total number of ticks (major and minor) */
     uint32_t major_tick_every   : 15;  /**< Frequency of major ticks to minor ticks */
     uint32_t label_enabled      : 1;   /**< Draw labels for major ticks? */
-    uint32_t post_draw          : 1;   /**< false: рисование происходит во время LV_EVENT_DRAW_MAIN ;
-                                        *   true : drawing occurs during LV_EVENT_DRAW_POST. */
+    uint32_t post_draw          : 1;   /**< false: рисование происходит во времяLV_EVENT_DRAW_MAIN;
+                                        *   true : рисование происходит во время LV_EVENT_DRAW_POST. */
     uint32_t draw_ticks_on_top  : 1;   /**< Draw ticks on top of main line? */
     /* Круглая шкала */
     uint32_t angle_range;              /**< Degrees between low end and high end of scale */

@@ -428,7 +428,7 @@ static void draw_knob(lv_event_t * e)
         lv_draw_rect(layer, &knob_rect_dsc, &slider->right_knob_area);
     }
     else {
-        /*Сохраните розыгрыш part_draw_dsc. потому что его можно изменить в случае*/
+        /*Сохраните розыгрышpart_draw_dsc. потому что его можно изменить в случае чего*/
         lv_draw_rect_dsc_t knob_rect_dsc_tmp;
         lv_memcpy(&knob_rect_dsc_tmp, &knob_rect_dsc, sizeof(lv_draw_rect_dsc_t));
         /* Нарисуйте правую ручку */
@@ -436,7 +436,7 @@ static void draw_knob(lv_event_t * e)
 
         /*Вычисляем площадь второй ручки*/
         if(is_horizontal) {
-            /*используйте! is_reversed, чтобы получить другую ручку*/
+            /*викорируйте! is_reversed, чтобы получить другую команду*/
             knob_area.x1 = LV_SLIDER_KNOB_COORD(!is_reversed, slider->bar.indic_area);
         }
         else {

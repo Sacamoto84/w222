@@ -81,7 +81,7 @@ void lv_wayland_window_set_fullscreen(lv_display_t * disp, bool fullscreen);
 /**
  * Устанавливает максимальное состояние окна
  * @param disp Ссылка на дисплей LVGL, связанный с окном.
- * @param fullscreen Если это правда, окно развернуто до максимума.
+ * @param maximize Если это правда, окно развернуто до максимума.
  */
 void lv_wayland_window_set_maximized(lv_display_t * disp, bool maximize);
 

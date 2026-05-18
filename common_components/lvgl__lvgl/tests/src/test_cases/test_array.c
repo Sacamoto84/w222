@@ -23,7 +23,7 @@ void test_array_append_values(void)
     for(int32_t i = 0; i < new_size; i++) {
         lv_array_push_back(&array, &i);
     }
-    /*push back автоматически увеличит размер массива.*/
+    /*отодвинуть назад автоматически увеличить размер массива.*/
     TEST_ASSERT_EQUAL_UINT32(new_size, lv_array_size(&array));
 }
 

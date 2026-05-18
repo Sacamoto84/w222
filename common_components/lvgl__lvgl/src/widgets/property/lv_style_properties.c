@@ -11,7 +11,7 @@
 
 /**
  * Имена свойств стиля, имена должны быть в порядке.
- * Сгенерированный код из properties.py
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_style_property_names[130] = {

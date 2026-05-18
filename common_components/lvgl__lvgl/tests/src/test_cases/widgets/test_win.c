@@ -48,7 +48,7 @@ void test_win_should_have_valid_documented_default_values(void)
 
 void test_win_add_title_single(void)
 {
-    // Создайте объект win, получите заголовок и обновите макет.
+    // Создайте объект win, создайте заголовок и обновите макет.
     win = lv_win_create(active_screen);
     header = lv_win_get_header(win);
     lv_obj_update_layout(win);
@@ -56,7 +56,7 @@ void test_win_add_title_single(void)
     // Добавьте заголовок в окно
     lv_win_add_title(win, dummy_text);
 
-    // Убедитесь, что под командой win не было создано никаких дополнительных дочерних элементов.
+    // Убедитесь, что под одной победой не было создано никаких дополнительных дочерних элементов.
     // Вместо этого дочерний элемент должен быть создан под заголовком
     TEST_ASSERT_EQUAL(2, lv_obj_get_child_count(win));
     TEST_ASSERT_EQUAL(1, lv_obj_get_child_count(header));
@@ -69,7 +69,7 @@ void test_win_add_title_single(void)
 
 void test_win_add_title_multiple(void)
 {
-    // Создайте объект win, получите заголовок и обновите макет.
+    // Создайте объект win, создайте заголовок и обновите макет.
     win = lv_win_create(active_screen);
     header = lv_win_get_header(win);
     lv_obj_update_layout(win);
@@ -78,7 +78,7 @@ void test_win_add_title_multiple(void)
     lv_win_add_title(win, dummy_text);
     lv_win_add_title(win, dummy_text);
 
-    // Убедитесь, что под командой win не было создано никаких дополнительных дочерних элементов.
+    // Убедитесь, что под одной победой не было создано никаких дополнительных дочерних элементов.
     // Вместо этого дочерний элемент должен быть создан под заголовком
     TEST_ASSERT_EQUAL(2, lv_obj_get_child_count(win));
     TEST_ASSERT_EQUAL(2, lv_obj_get_child_count(header));
@@ -88,7 +88,7 @@ void test_win_add_button(void)
 {
     int win_button_width = 50;
 
-    // Создайте объект win, получите заголовок и обновите макет.
+    // Создайте объект win, создайте заголовок и обновите макет.
     win = lv_win_create(active_screen);
     header = lv_win_get_header(win);
     lv_obj_update_layout(win);
@@ -97,7 +97,7 @@ void test_win_add_button(void)
     lv_win_add_button(win, LV_SYMBOL_OK, win_button_width);
     lv_obj_update_layout(win);
 
-    // Убедитесь, что под командой win не было создано никаких дополнительных дочерних элементов.
+    // Убедитесь, что под одной победой не было создано никаких дополнительных дочерних элементов.
     // Вместо этого дочерний элемент должен быть создан под заголовком
     TEST_ASSERT_EQUAL(2, lv_obj_get_child_count(win));
     TEST_ASSERT_EQUAL(1, lv_obj_get_child_count(header));
@@ -119,7 +119,7 @@ void test_win_add_multiple_elements(void)
     int win_button_width = 50;
     int win_button_close_width = 60;
 
-    // Создайте объект win, получите заголовок и обновите макет.
+    // Создайте объект win, создайте заголовок и обновите макет.
     win = lv_win_create(active_screen);
     lv_win_add_button(win, LV_SYMBOL_LEFT, win_button_width);
     lv_win_add_title(win, dummy_text);
@@ -129,7 +129,7 @@ void test_win_add_multiple_elements(void)
     header = lv_win_get_header(win);
     lv_obj_update_layout(win);
 
-    // Убедитесь, что под командой win не было создано никаких дополнительных дочерних элементов.
+    // Убедитесь, что под одной победой не было создано никаких дополнительных дочерних элементов.
     // Вместо этого дочерний элемент должен быть создан под заголовком
     TEST_ASSERT_EQUAL(2, lv_obj_get_child_count(win));
     TEST_ASSERT_EQUAL(4, lv_obj_get_child_count(header));

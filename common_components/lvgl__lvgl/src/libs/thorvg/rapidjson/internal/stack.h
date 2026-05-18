@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -36,8 +36,8 @@ namespace internal {
 template <typename Allocator>
 class Stack {
 public:
-    // Примечание по оптимизации: не выделяйте память для stack_ в конструкторе.
-    // Делайте это лениво, когда сначала Push() -> Expand() -> Resize() .
+    // Примечание по оптимизации: не используйте память дляstack_в конструкторе.
+    // Сделайте это лениво, когда сначалаPush()->Expand()->Resize().
     Stack(Allocator* allocator, size_t stackCapacity) : allocator_(allocator), ownAllocator_(0), stack_(0), stackTop_(0), stackEnd_(0), initialCapacity_(stackCapacity) {
     }
 

@@ -211,7 +211,7 @@ static bool init_cnt_cb(lv_cache_t * cache)
         return false;
     }
 
-    /*добавьте void* для хранения указателя узла ll*/
+    /*метка void* для хранения указателя узла ll*/
     if(!lv_rb_init(&lru->rb, lru->cache.ops.compare_cb, lv_cache_entry_get_size(lru->cache.node_size) + sizeof(void *))) {
         return false;
     }
@@ -234,7 +234,7 @@ static bool init_size_cb(lv_cache_t * cache)
         return false;
     }
 
-    /*добавьте void* для хранения указателя узла ll*/
+    /*метка void* для хранения указателя узла ll*/
     if(!lv_rb_init(&lru->rb, lru->cache.ops.compare_cb, lv_cache_entry_get_size(lru->cache.node_size) + sizeof(void *))) {
         return false;
     }

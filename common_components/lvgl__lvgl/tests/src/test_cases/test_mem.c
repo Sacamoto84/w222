@@ -88,7 +88,7 @@ void test_realloc_failed(void)
     void * buf2 = lv_realloc(buf1, LV_MEM_SIZE + 1);
     TEST_ASSERT_NULL(buf2);
 
-    /* Realloc не удался, но должен освободить buf1 */
+    /* Realloc не удался, но следует уменьшить buf1 */
     void * buf3 = lv_reallocf(buf1, LV_MEM_SIZE + 1);
     TEST_ASSERT_NULL(buf3);
 

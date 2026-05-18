@@ -30,8 +30,8 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_button_class;
 
 /**
  * Создайте объект кнопки
- * @param parent    pointer to an object, it will be the parent of the new button
- * @return          pointer to the created button
+ * @param parent    указатель на объект, он будет родителем новой кнопки
+ * @return          указатель на созданную кнопку
  */
 lv_obj_t * lv_button_create(lv_obj_t * parent);
 

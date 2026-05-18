@@ -55,8 +55,8 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_roller_class;
 
 /**
  * Создайте объект ролика
- * @param parent    pointer to an object, it will be the parent of the new roller.
- * @return          pointer to the created roller
+ * @param parent    указатель на объект, он будет родительским для нового ролика.
+ * @return          указатель на созданный ролик
  */
 lv_obj_t * lv_roller_create(lv_obj_t * parent);
 
@@ -66,33 +66,33 @@ lv_obj_t * lv_roller_create(lv_obj_t * parent);
 
 /**
  * Установите параметры на ролике
- * @param obj       pointer to roller object
- * @param options   a string with '\n' separated options. E.g. "One\nTwo\nThree"
- * @param mode      `LV_ROLLER_MODE_NORMAL` or `LV_ROLLER_MODE_INFINITE`
+ * @param obj       указатель на объект ролика
+ * @param options   строка с опциями, разделенными '\n'. Например. «Один\nДва\nТри»
+ * @param mode      `LV_ROLLER_MODE_NORMAL` или `LV_ROLLER_MODE_INFINITE`
  */
 void lv_roller_set_options(lv_obj_t * obj, const char * options, lv_roller_mode_t mode);
 
 /**
  * Установить выбранный вариант
- * @param obj       pointer to a roller object
- * @param sel_opt   index of the selected option (0 ... number of option - 1);
- * @param anim   LV_ANIM_ON: set with animation; LV_ANIM_OFF set immediately
+ * @param obj       указатель на объект ролика
+ * @param sel_opt   индекс выбранной опции (0...номер опции - 1);
+ * @param anim   LV_ANIM_ON: набор с анимацией; LV_ANIM_OFFустанавливается сразу
  */
 void lv_roller_set_selected(lv_obj_t * obj, uint32_t sel_opt, lv_anim_enable_t anim);
 
 /**
  * Устанавливает данную строку в качестве выделенной на ролике. Не изменяет текущий выбор в случае сбоя.
- * @param obj               pointer to roller object
- * @param sel_opt   pointer to the string you want to set as an option
- * @param anim          LV_ANIM_ON: set with animation; LV_ANIM_OFF set immediately
- * @return                  `true` if set successfully and `false` if the given string does not exist as an option in the roller
+ * @param obj               указатель на объект ролика
+ * @param sel_opt   указатель на строку, которую вы хотите установить в качестве опции
+ * @param anim          LV_ANIM_ON: набор с анимацией; LV_ANIM_OFFустанавливается сразу
+ * @return                  `true`, если установлена успешно, и `false`, если данная строка не существует в качестве опции в ролике.
  */
 bool lv_roller_set_selected_str(lv_obj_t * obj, const char * sel_opt, lv_anim_enable_t anim);
 
 /**
  * Установите высоту для отображения заданного количества строк (варианты)
- * @param obj       pointer to a roller object
- * @param row_cnt   number of desired visible rows
+ * @param obj       указатель на объект ролика
+ * @param row_cnt   количество желаемых видимых строк
  */
 void lv_roller_set_visible_row_count(lv_obj_t * obj, uint32_t row_cnt);
 
@@ -102,49 +102,49 @@ void lv_roller_set_visible_row_count(lv_obj_t * obj, uint32_t row_cnt);
 
 /**
  * Получить индекс выбранного варианта
- * @param obj       pointer to a roller object
- * @return          index of the selected option (0 ... number of option - 1);
+ * @param obj       указатель на объект ролика
+ * @return          индекс выбранной опции (0...номер опции - 1);
  */
 uint32_t lv_roller_get_selected(const lv_obj_t * obj);
 
 /**
  * Получить текущий выбранный вариант в виде строки.
- * @param obj       pointer to roller object
- * @param buf       pointer to an array to store the string
- * @param buf_size  size of `buf` in bytes. 0: to ignore it.
+ * @param obj       указатель на объект ролика
+ * @param buf       указатель на массив для хранения строки
+ * @param buf_size  размер`buf`в байтах. 0: игнорировать это.
  */
 void lv_roller_get_selected_str(const lv_obj_t * obj, char * buf, uint32_t buf_size);
 
 /**
  * Получить варианты ролика
- * @param obj       pointer to roller object
- * @return          the options separated by '\n'-s (E.g. "Option1\nOption2\nOption3")
+ * @param obj       указатель на объект ролика
+ * @return          параметры, разделенные символом '\n'-s (например, «Option1\nOption2\nOption3»)
  */
 const char * lv_roller_get_options(const lv_obj_t * obj);
 
 /**
  * Получить общее количество вариантов
- * @param obj   pointer to a roller object
- * @return      the total number of options
+ * @param obj   указатель на объект ролика
+ * @return      общее количество вариантов
  */
 uint32_t lv_roller_get_option_count(const lv_obj_t * obj);
 
 /**
  * Получите опцию в виде строки.
- * @param obj       pointer to roller object
- * @param option    index of chosen option
- * @param buf       pointer to an array to store the string
- * @param buf_size  size of `buf` in bytes. 0: to ignore it.
- * @return          LV_RESULT_OK if option found
+ * @param obj       указатель на объект ролика
+ * @param option    индекс выбранного варианта
+ * @param buf       указатель на массив для хранения строки
+ * @param buf_size  размер`buf`в байтах. 0: игнорировать это.
+ * @return          LV_RESULT_OK, если вариант найден
  */
 lv_result_t lv_roller_get_option_str(const lv_obj_t * obj, uint32_t option, char * buf, uint32_t buf_size);
 
 #if LV_USE_OBSERVER
 /**
  * Привяжите целое число к значению ролика.
- * @param obj       pointer to Roller
- * @param subject   pointer to Subject
- * @return          pointer to newly-created Observer
+ * @param obj       указатель на ролик
+ * @param subject   указатель на тему
+ * @return          указатель на вновь созданный наблюдатель
  */
 lv_observer_t * lv_roller_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif

@@ -11,7 +11,7 @@
 #if LV_USE_LED
 /**
  * Имена свойств светодиодных виджетов, имя должно быть в порядке.
- * Сгенерированный код из properties.py
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_led_property_names[2] = {

@@ -1166,7 +1166,7 @@ static lv_result_t btn_release_handler(lv_obj_t * obj)
             if(dropdown->sel_opt_id_orig != dropdown->sel_opt_id) {
                 dropdown->sel_opt_id_orig = dropdown->sel_opt_id;
                 lv_result_t res;
-                uint32_t id  = dropdown->sel_opt_id; /*Просто использовать uint32_t в данных о событиях*/
+                uint32_t id  = dropdown->sel_opt_id; /*Просто используйтеuint32_tв данных о событиях*/
                 res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, &id);
                 if(res != LV_RESULT_OK) return res;
                 lv_obj_invalidate(obj);
@@ -1189,8 +1189,8 @@ static lv_result_t btn_release_handler(lv_obj_t * obj)
 
 /**
  * Вызывается, когда открывается раскрывающийся список, чтобы открыть его или установить новую опцию.
- * @param list pointer to the drop down list's list
- * @return LV_RESULT_INVALID if the list is not being deleted in the user callback. Else LV_RESULT_OK
+ * @param list_obj указатель на список раскрывающегося списка
+ * @return LV_RESULT_INVALID, если список не удаляется при обратном вызове пользователя. Остальное LV_RESULT_OK
  */
 static lv_result_t list_release_handler(lv_obj_t * list_obj)
 {
@@ -1221,7 +1221,7 @@ static lv_result_t list_release_handler(lv_obj_t * list_obj)
     /*Недействительно, чтобы обновить текст*/
     if(dropdown->text == NULL) lv_obj_invalidate(dropdown_obj);
 
-    uint32_t id  = dropdown->sel_opt_id; /*Просто использовать uint32_t в данных о событиях*/
+    uint32_t id  = dropdown->sel_opt_id; /*Просто используйтеuint32_tв данных о событиях*/
     lv_result_t res = lv_obj_send_event(dropdown_obj, LV_EVENT_VALUE_CHANGED, &id);
     if(res != LV_RESULT_OK) return res;
 
@@ -1265,7 +1265,7 @@ static uint32_t get_id_on_point(lv_obj_t * dropdown_obj, int32_t y)
 
 /**
  * Установите положение списка, когда он закрыт, чтобы показать выбранный элемент.
- * @param ddlist pointer to a drop down list
+ * @param dropdown_obj указатель на раскрывающийся список
  */
 static void position_to_selected(lv_obj_t * dropdown_obj, lv_anim_enable_t anim_en)
 {

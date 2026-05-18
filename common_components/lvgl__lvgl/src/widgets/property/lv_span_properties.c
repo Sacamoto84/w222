@@ -11,7 +11,7 @@
 #if LV_USE_SPAN
 /**
  * Объедините имена свойств виджетов, имена должны быть в порядке.
- * Сгенерированный код из properties.py
+ * Сгенерировано закодировано из properties.py
  */
 /* *INDENT-OFF* */
 const lv_property_name_t lv_span_property_names[5] = {

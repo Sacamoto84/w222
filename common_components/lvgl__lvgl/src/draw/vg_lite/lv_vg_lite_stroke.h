@@ -67,7 +67,7 @@ struct _lv_vg_lite_path_t * lv_vg_lite_stroke_get_path(lv_cache_entry_t * cache_
 /**
  * Удалить запись кэша штрихов
  * @param unit указатель на единицу
- * @param stroke указатель на штрих
+ * @param cache_entry указатель на штрих
  */
 void lv_vg_lite_stroke_drop(struct _lv_draw_vg_lite_unit_t * unit, lv_cache_entry_t * cache_entry);
 

@@ -671,7 +671,7 @@ static uint32_t rgb_to_l(uint32_t color)
     return l | (l << 24);
 }
 
-/* Получите информацию bpp о цветовом формате. */
+/* Получите информацию в формате bpp о цветах. */
 void get_format_bytes(vg_lite_buffer_format_t format,
                       uint32_t * mul,
                       uint32_t * div,
@@ -837,7 +837,7 @@ void get_format_bytes(vg_lite_buffer_format_t format,
     }
 }
 
-/* Преобразуйте целевой формат цвета VGLite в значение HW. */
+/* Преобразуйте формат цвета VGLite в значениеHW. */
 static uint32_t convert_target_format(vg_lite_buffer_format_t format, vg_lite_capabilities_t caps)
 {
     switch(format) {
@@ -1809,7 +1809,7 @@ vg_lite_error_t dstbuf_align_check(vg_lite_buffer_t * target)
 }
 
 
-/* Преобразуйте исходный формат цвета VGLite в значения HW. */
+/* Преобразуйте исходный формат цвета VGLite в значенияHW. */
 uint32_t convert_source_format(vg_lite_buffer_format_t format)
 {
     switch(format) {
@@ -2148,7 +2148,7 @@ uint32_t convert_source_format(vg_lite_buffer_format_t format)
     }
 }
 
-/* Преобразуйте режимы наложения VGLite в значения HW. */
+/* Преобразуйте режимы наложения VGLite в значенияHW. */
 uint32_t convert_blend(vg_lite_blend_t blend)
 {
     switch(blend) {
@@ -2223,7 +2223,7 @@ uint32_t convert_uv_swizzle(vg_lite_swizzle_t swizzle)
     }
 }
 
-/* Преобразуйте стандартные перечисления VGLite yuv в значения HW. */
+/* Преобразуйте стандартные перечисления VGLite yuv в значенияHW. */
 uint32_t convert_yuv2rgb(vg_lite_yuv2rgb_t yuv)
 {
     switch(yuv) {
@@ -2307,15 +2307,15 @@ vg_lite_error_t push_state(vg_lite_context_t * context, uint32_t address, uint32
         return VG_LITE_NO_CONTEXT;
 
     /* TODO дождитесь завершения разработки. */
-    /* if (адрес == 0x0A1B || контекст->hw. hw_states [адрес & 0xff ].state != данные || !context->hw. hw_states [адрес & 0xff ].init) */
+    /* if (адрес ==0x0A1B|| контекст->hw.hw_states[адрес &0xff].state != данные || !context->hw.hw_states[адрес &0xff].init) */
     {
         if(CMDBUF_OFFSET(*context) + 16 >= CMDBUF_SIZE(*context)) {
             VG_LITE_RETURN_ERROR(submit(context));
             VG_LITE_RETURN_ERROR(stall(context, 0, (uint32_t)~0));
         }
 
-        /* TODO контекст->hw. hw_states [адрес & 0xff].state = данные;
-        контекст->хч. hw_states [адрес & 0xff ].init = 1;*/
+        /* TODO контекст->hw. hw_states[адрес &0xff].state = данные;
+        контекст->хч. hw_states[адрес &0xff].init = 1;*/
 
         ((uint32_t *)(CMDBUF_BUFFER(*context) + CMDBUF_OFFSET(*context)))[0] = VG_LITE_STATE(address);
         ((uint32_t *)(CMDBUF_BUFFER(*context) + CMDBUF_OFFSET(*context)))[1] = data;
@@ -2353,15 +2353,15 @@ vg_lite_error_t push_state_ptr(vg_lite_context_t * context, uint32_t address, vo
         return VG_LITE_NO_CONTEXT;
 
     /* TODO дождитесь завершения разработки. */
-    /* if (адрес == 0x0A1B || контекст->hw. hw_states [адрес & 0xff ].state != данные || !context->hw. hw_states [адрес & 0xff ].init) */
+    /* if (адрес ==0x0A1B|| контекст->hw.hw_states[адрес &0xff].state != данные || !context->hw.hw_states[адрес &0xff].init) */
     {
         if(CMDBUF_OFFSET(*context) + 16 >= CMDBUF_SIZE(*context)) {
             VG_LITE_RETURN_ERROR(submit(context));
             VG_LITE_RETURN_ERROR(stall(context, 0, (uint32_t)~0));
         }
 
-        /* TODO контекст->hw. hw_states [адрес & 0xff].state = данные;
-        контекст->хч. hw_states [адрес & 0xff ].init = 1;*/
+        /* TODO контекст->hw. hw_states[адрес &0xff].state = данные;
+        контекст->хч. hw_states[адрес &0xff].init = 1;*/
 
         ((uint32_t *)(CMDBUF_BUFFER(*context) + CMDBUF_OFFSET(*context)))[0] = VG_LITE_STATE(address);
         ((uint32_t *)(CMDBUF_BUFFER(*context) + CMDBUF_OFFSET(*context)))[1] = data;
@@ -2634,7 +2634,7 @@ static vg_lite_error_t submit(vg_lite_context_t * context)
         return VG_LITE_INVALID_ARGUMENT;
 
 #if 0
-    /* Этот случай безопасен, поскольку буфер команд выделяется (command_buffer_size + 8) байтами. */
+    /* Этот случай безопасен, поскольку буфер команды разделен (command_buffer_size + 8) байтами. */
     if(CMDBUF_OFFSET(*context) + 8 >= CMDBUF_SIZE(*context)) {
         /* Сбросить смещение буфера команд. */
         CMDBUF_OFFSET(*context) = 0;
@@ -3017,7 +3017,7 @@ vg_lite_error_t set_render_target(vg_lite_buffer_t * target)
     VGLITE_LOG("    set_render_target %p (%d, %d)\n", target, target->width, target->height);
 #endif
 
-    /* Скопируйте текущие параметры цели рендеринга в s_context .rtbuffer. */
+    /* Скопируйте текущие параметры целей рендеринга вs_context.rtbuffer. */
     if(rt_changed) {
         memcpy(s_context.rtbuffer, target, sizeof(vg_lite_buffer_t));
     }
@@ -3138,7 +3138,7 @@ vg_lite_error_t vg_lite_clear(vg_lite_buffer_t * target,
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A02, color32));
 
         /* На четкость изображения не влияет преобразование цвета и матрица пикселей.
-         * Таким образом, PEclear и push_rectangle()clear имеют одинаковый чистый цвет результата.
+         * Таким образом, PEclear иpush_rectangle()clear имеют одинаковый чистый цвет результата.
          */
 #if gcFEATURE_VG_PE_CLEAR
         VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A39, 0));
@@ -3381,7 +3381,7 @@ vg_lite_error_t vg_lite_blit2(vg_lite_buffer_t * target,
     if(!inverse(&inverse_matrix, matrix0))
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Вычислите шаги интерполяции для изображения image1 (изображение). */
+    /* Вычислите шаги интерполяции изображения image1 (изображение). */
     x_step[1][0] = inverse_matrix.m[0][0] / source0->width;
     x_step[1][1] = inverse_matrix.m[1][0] / source0->height;
     x_step[1][2] = inverse_matrix.m[2][0];
@@ -3392,7 +3392,7 @@ vg_lite_error_t vg_lite_blit2(vg_lite_buffer_t * target,
     c_step[1][1] = (0.5f * (inverse_matrix.m[1][0] + inverse_matrix.m[1][1]) + inverse_matrix.m[1][2]) / source0->height;
     c_step[1][2] = 0.5f * (inverse_matrix.m[2][0] + inverse_matrix.m[2][1]) + inverse_matrix.m[2][2];
 
-    /* Image0 (Краска в качестве фона). */
+    /* Image0 (Краска в качестве фонаря). */
     /* Преобразуйте изображение (0,0) в экран. */
     if(!transform(&temp, 0.0f, 0.0f, matrix1))
         return VG_LITE_INVALID_ARGUMENT;
@@ -3453,7 +3453,7 @@ vg_lite_error_t vg_lite_blit2(vg_lite_buffer_t * target,
     if(!inverse(&inverse_matrix, matrix1))
         return VG_LITE_INVALID_ARGUMENT;
 
-    /* Вычислите шаги интерполяции для изображения image1 (изображение). */
+    /* Вычислите шаги интерполяции изображения image1 (изображение). */
     x_step[0][0] = inverse_matrix.m[0][0] / source1->width;
     x_step[0][1] = inverse_matrix.m[1][0] / source1->height;
     x_step[0][2] = inverse_matrix.m[2][0];
@@ -3529,7 +3529,7 @@ vg_lite_error_t vg_lite_blit2(vg_lite_buffer_t * target,
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2D, 0));
     VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A2F, source0->width | (source0->height << 16)));
 
-    /* Программа image0 (Рисование в качестве фона). */
+    /* Программа image0 (Изображение в качестве фонаря). */
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A84, (void *) &c_step[0][0]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A85, (void *) &c_step[0][1]));
     VG_LITE_RETURN_ERROR(push_state_ptr(&s_context, 0x0A86, (void *) &c_step[0][2]));
@@ -3765,7 +3765,7 @@ vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
     }
 #endif
 #if !gcFEATURE_VG_STRIPE_MODE
-    /* Включите функцию fifo для совместного использования буфера между vg и ts, чтобы улучшить производительность вращения. */
+    /* Включите функцию fifo для совместного использования буфера между vg и ts, чтобы повысить производительность сети. */
     eco_fifo = 1 << 7;
 #endif
 
@@ -3887,7 +3887,7 @@ vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
     s_context.blend_mode = blend;
     in_premult = 0x00000000;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -3911,7 +3911,7 @@ vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -3964,7 +3964,7 @@ vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
         //нам нужно дать некоторое смещение, чтобы оно соответствовало фактическому переводу
         matrixOffsetX = addressOffset * div / mul;
 
-        //обновите new_target и установите его в качестве цели
+        //обновитеnew_targetи установите его в качестве цели
         memcpy(&new_target, target, sizeof(vg_lite_buffer_t));
         new_target.address = bufferAlignAddress;
         new_target.memory = bufferPointer;
@@ -3976,7 +3976,7 @@ vg_lite_error_t vg_lite_blit(vg_lite_buffer_t * target,
         matrix->m[0][2] = (vg_lite_float_t)(point0_0_afterTransform.x - point_min.x + matrixOffsetX);
         matrix->m[1][2] = (vg_lite_float_t)(point0_0_afterTransform.y - point_min.y);
 
-        //измените point_min и point_max, чтобы они начинались с (0, 0)
+        //заменитеpoint_minиpoint_max, чтобы они начали писаться с (0, 0)
         point_max.x = point_max.x - point_min.x;
         point_max.y = point_max.y - point_min.y;
         point_min.x = 0;
@@ -4497,7 +4497,7 @@ vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
     }
 #endif
 #if !gcFEATURE_VG_STRIPE_MODE
-    /* Включите функцию fifo для совместного использования буфера между vg и ts, чтобы улучшить производительность вращения. */
+    /* Включите функцию fifo для совместного использования буфера между vg и ts, чтобы повысить производительность сети. */
     eco_fifo = 1 << 7;
 #endif
 
@@ -4642,7 +4642,7 @@ vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
     s_context.blend_mode = blend;
     in_premult = 0x00000000;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -4666,7 +4666,7 @@ vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x00000100;
         in_premult = 0x00000000;
@@ -4719,7 +4719,7 @@ vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
         //нам нужно дать некоторое смещение, чтобы оно соответствовало фактическому переводу
         matrixOffsetX = addressOffset * div / mul;
 
-        //обновите new_target и установите его в качестве цели
+        //обновитеnew_targetи установите его в качестве цели
         memcpy(&new_target, target, sizeof(vg_lite_buffer_t));
         new_target.address = bufferAlignAddress;
         new_target.memory = bufferPointer;
@@ -4731,7 +4731,7 @@ vg_lite_error_t vg_lite_blit_rect(vg_lite_buffer_t * target,
         matrix->m[0][2] = (vg_lite_float_t)(point0_0_afterTransform.x - point_min.x + matrixOffsetX);
         matrix->m[1][2] = (vg_lite_float_t)(point0_0_afterTransform.y - point_min.y);
 
-        //измените point_min и point_max, чтобы они начинались с (0, 0)
+        //заменитеpoint_minиpoint_max, чтобы они начали писаться с (0, 0)
         point_max.x = point_max.x - point_min.x;
         point_max.y = point_max.y - point_min.y;
         point_min.x = 0;
@@ -5074,7 +5074,7 @@ static vg_lite_error_t program_tessellation(vg_lite_context_t * context)
 
     /* Вычислить размер буфера тесселяции. */
     uint32_t width = (context->tessbuf.tess_w_h & 0xFFFF);
-    /* uint32_t высота = (контекст->tessbuf. tess_w_h >> 16); */
+    /* uint32_t высота = (контекст->tessbuf.tess_w_h>> 16); */
 
     context->tessbuf.tess_stride = VG_LITE_ALIGN(width * 8, 64);
 
@@ -5146,7 +5146,7 @@ vg_lite_error_t vg_lite_init(vg_lite_uint32_t tess_width, vg_lite_uint32_t tess_
 
     if(s_context.rtbuffer) {
         if(s_context.tess_width >= tess_width && s_context.tess_height >= tess_height) {
-            /* VGLite уже инициализирован правильно. Возврат */
+            /* VGLite задуман уже правильно. Возврат */
             return VG_LITE_SUCCESS;
         }
         else {
@@ -5199,7 +5199,7 @@ vg_lite_error_t vg_lite_init(vg_lite_uint32_t tess_width, vg_lite_uint32_t tess_
         s_context.tessbuf.countbuf_size = initialize.countbuf_size;
 
         VG_LITE_RETURN_ERROR(program_tessellation(&s_context));
-        /* Регистр инициализации gcregVGPEColorKey. */
+        /* Регистрация организации gcregVGPEColorKey. */
         for(i = 0; i < 8; i++) {
             VG_LITE_RETURN_ERROR(push_state(&s_context, 0x0A90 + i, 0));
         }
@@ -5434,7 +5434,7 @@ vg_lite_error_t vg_lite_get_mem_size(vg_lite_uint32_t * size)
     return error;
 }
 
-/* Управляйте распределением плиток и yuv. В настоящее время включая NV12, ANV12, YV12, YV16, NV16, YV24, NV24. */
+/* Управляйте распределением плиток и юв. В настоящее время включая NV12, ANV12, YV12, YV16, NV16, YV24, NV24. */
 static  vg_lite_error_t _allocate_tiled_yuv_planar(vg_lite_buffer_t * buffer)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
@@ -5448,7 +5448,7 @@ static  vg_lite_error_t _allocate_tiled_yuv_planar(vg_lite_buffer_t * buffer)
     }
 
     /* Для NV12 есть 2 плоскости (Y, UV);
-     Для ANV12 существует 3 плоскости (Y, UV, Alpha).
+     ДляANV12существует 3 плоскости (Y, UV, Alpha).
      Каждая плоскость должна быть выровнена по (4, 8).
      Тогда плоскость Y должна быть выровнена по (8, 8).
      Для YVxx имеется 3 плоскости (Y, U, V).
@@ -5577,7 +5577,7 @@ vg_lite_error_t vg_lite_allocate(vg_lite_buffer_t * buffer)
 
     /* Установите буфер-> предварительное умножение правильно в соответствии с форматом буфера-> */
     if(buffer->format < VG_LITE_RGBA8888) {
-        /* Для всех форматов OpenVG VG_* */
+        /* Для всех форматов OpenVGVG_* */
 #if gcFEATURE_VG_HW_PREMULTIPLY
         switch(buffer->format) {
             case OPENVG_sRGBA_8888_PRE:
@@ -5603,7 +5603,7 @@ vg_lite_error_t vg_lite_allocate(vg_lite_buffer_t * buffer)
                 break;
         };
 #else
-        /* Невозможно поддерживать формат OpenVG VG_ *, если HW не поддерживает предварительное умножение. */
+        /* Невозможно поддерживать формат OpenVGVG_*, еслиHWне поддерживает умножение. */
         return VG_LITE_INVALID_ARGUMENT;
 #endif
     }
@@ -7078,7 +7078,7 @@ vg_lite_error_t vg_lite_copy_image(vg_lite_buffer_t * target, vg_lite_buffer_t *
     }
 #endif
 #if !gcFEATURE_VG_STRIPE_MODE
-    /* Включите функцию fifo для совместного использования буфера между vg и ts, чтобы улучшить производительность вращения. */
+    /* Включите функцию fifo для совместного использования буфера между vg и ts, чтобы повысить производительность сети. */
     eco_fifo = 1 << 7;
 #endif
 
@@ -7188,7 +7188,7 @@ vg_lite_error_t vg_lite_copy_image(vg_lite_buffer_t * target, vg_lite_buffer_t *
     /*смешивать вводимые данные с контекстом*/
     in_premult = 0x00000000;
 
-    /* Отрегулируйте настройку предварительного умножения в соответствии с условием openvg */
+    /* Отрегулируйте коэффициент переднего умножения в соответствии с условиями openvg */
     src_premultiply_enable = 0x01000100;
     if(s_context.color_transform == 0 && s_context.gamma_dst == s_context.gamma_src && s_context.matrix_enable == 0 &&
        s_context.dst_alpha_mode == 0 && s_context.src_alpha_mode == 0 &&
@@ -7204,7 +7204,7 @@ vg_lite_error_t vg_lite_copy_image(vg_lite_buffer_t * target, vg_lite_buffer_t *
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;
     }
-    /* когда src и dst предварительно форматируются, im pre_out устанавливается в 0, чтобы выполнить усечение данных и предотвратить их переполнение. */
+    /* Когда src и dst предварительно форматируются, impre_outустанавливается в 0, чтобы выполнить укрупнение данных и предотвратить их переполнение. */
     else if(source->premultiplied == 1 && target->premultiplied == 1 && prediv_flag == 0) {
         src_premultiply_enable = 0x01000100;
         in_premult = 0x10000000;

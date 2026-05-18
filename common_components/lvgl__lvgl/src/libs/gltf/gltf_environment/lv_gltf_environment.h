@@ -43,7 +43,7 @@ lv_gltf_ibl_sampler_t * lv_gltf_ibl_sampler_create(void);
 
 /**
  * Установите разрешение для каждой грани кубической карты.
- * @param   pointer к сэмплеру
+ * @param   sampler к сэмплеру
  * @param   resolution каждой грани карты куба в пикселях (рекомендуется: 64–512 для встроенных)
  */
 void lv_gltf_ibl_sampler_set_cube_map_pixel_resolution(lv_gltf_ibl_sampler_t * sampler, uint32_t resolution);

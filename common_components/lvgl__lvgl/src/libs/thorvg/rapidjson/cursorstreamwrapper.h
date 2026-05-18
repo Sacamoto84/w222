@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -33,7 +33,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 
 //! Оболочка потока курсоров для подсчета количества строк и столбцов в случае возникновения ошибки.
 /*!
-    \tparam InputStream Любой поток, реализующий концепцию потока.
+    \tparam InputStream Любой поток, реализующий формирование потока.
 */
 template <typename InputStream, typename Encoding = UTF8<> >
 class CursorStreamWrapper : public GenericStreamWrapper<InputStream, Encoding> {

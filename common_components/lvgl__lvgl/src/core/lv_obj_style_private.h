@@ -61,7 +61,7 @@ void lv_obj_style_deinit(void);
 
 /**
  * Используется внутри для создания перехода стиля.
- * @param объект
+ * @param obj
  * @param часть
  * @param prev_state
  * @param new_state
@@ -72,9 +72,9 @@ void lv_obj_style_create_transition(lv_obj_t * obj, lv_part_t part, lv_state_t p
 
 /**
  * Используется внутри компании для сравнения внешнего вида объекта в двух состояниях.
- * @param объект
+ * @param obj
  * @param состояние1
- * @param состояние2
+ * @param state1
  * @return
  */
 lv_style_state_cmp_t lv_obj_style_state_compare(lv_obj_t * obj, lv_state_t state1, lv_state_t state2);

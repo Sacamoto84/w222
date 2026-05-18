@@ -79,7 +79,7 @@ int32_t lv_bezier3(int32_t t, int32_t u0, uint32_t u1, int32_t u2, int32_t u3);
 
 /**
  * Вычислите вектор atan2.
- * @param х
+ * @param x
  * @param y
  * @return угол в градусах, рассчитанный по заданным параметрам в диапазоне [0..360]
  */
@@ -116,7 +116,7 @@ static inline int32_t lv_sqr(int32_t x)
 /**
  * Вычислите целочисленные показатели.
  * База @param
- * @param опыт
+ * @param base
  * @return основание возведено в степень
  */
 int64_t lv_pow(int64_t base, int8_t exp);

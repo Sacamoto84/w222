@@ -1071,7 +1071,7 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
  * Установите состояние (полная перезапись) объекта.
  * Если указано в стилях, анимация перехода будет запущена из предыдущего состояния в текущее.
  * @param obj       указатель на объект
- * @param state     новое государство
+ * @param new_state     новое государство
  */
 static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
 {

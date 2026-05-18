@@ -64,7 +64,7 @@ void test_indev_keypad_no_group_key_event(void)
     TEST_ASSERT_NOT_NULL(indev);
     lv_indev_set_group(indev, NULL);
 
-    /* Добавьте обратный вызов события в indev */
+    /* Добавьте события обратного вызова в indev */
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_KEY, NULL);
 
     /* Нажмите клавишу */
@@ -84,7 +84,7 @@ void test_indev_keypad_no_group_press_release(void)
     TEST_ASSERT_NOT_NULL(indev);
     lv_indev_set_group(indev, NULL);
 
-    /* Добавьте обратные вызовы событий в indev */
+    /* Добавить обратные вызовы событий в indev */
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_PRESSED, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_RELEASED, NULL);
 
@@ -105,7 +105,7 @@ void test_indev_keypad_no_group_long_press(void)
     TEST_ASSERT_NOT_NULL(indev);
     lv_indev_set_group(indev, NULL);
 
-    /* Добавьте обратные вызовы событий в indev */
+    /* Добавить обратные вызовы событий в indev */
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_PRESSED, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_LONG_PRESSED, NULL);
     lv_indev_add_event_cb(indev, keypad_event_cb, LV_EVENT_LONG_PRESSED_REPEAT, NULL);

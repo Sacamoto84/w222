@@ -538,9 +538,9 @@ static void browser_file_event_handler(lv_event_t * e)
         selected_text = selected_text + 5; /* пропустить формат ячейки таблицы */
 
         /* Поддерживаются три режима навигации:
-         * - Navigate to current directory
-         * - Navigate to parent directory
-         * - Navigate to (current directory) child */
+         * - Перейти в текущий каталог
+         * - Перейдите в родительский каталог
+         * - Перейти к дочернему каталогу (текущий каталог) */
         navigate_to_parent_dir = (lv_strcmp(selected_text, LV_FILE_NAVIGATION_PARENT_DIR) == 0);
         navigate_to_child = !navigate_to_parent_dir;
 

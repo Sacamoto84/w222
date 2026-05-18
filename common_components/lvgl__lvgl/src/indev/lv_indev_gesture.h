@@ -185,7 +185,7 @@ void lv_indev_set_gesture_data(lv_indev_data_t * data, lv_indev_gesture_recogniz
 
 /**
  * Получает центральную точку жеста
- * @param gesture_event     указатель на событие распознавания жестов
+ * @param recognizer     указатель на событие распознавания жестов
  * @param point             указатель на точку
  */
 void lv_indev_get_gesture_center_point(lv_indev_gesture_recognizer_t * recognizer, lv_point_t * point);

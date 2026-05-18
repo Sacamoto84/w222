@@ -53,7 +53,7 @@ static void create_images(void)
 
 void test_libpng_1(void)
 {
-    /* Временно удалите декодер lodepng */
+    /* Временно удалить декодер lodepng */
     lv_lodepng_deinit();
 
     create_images();
@@ -72,7 +72,7 @@ void test_libpng_1(void)
 
     TEST_ASSERT_MEM_LEAK_LESS_THAN(mem_before, 128);
 
-    /* Повторно добавить декодер lodepng */
+    /* Повторно добавлен декодер lodepng */
     lv_lodepng_init();
 }
 

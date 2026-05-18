@@ -53,7 +53,7 @@ static void create_images(void)
 
 void test_lodepng_1(void)
 {
-    /* Временно удалите декодер libpng */
+    /* Временно удалить декодер libpng */
     lv_libpng_deinit();
 
     create_images();

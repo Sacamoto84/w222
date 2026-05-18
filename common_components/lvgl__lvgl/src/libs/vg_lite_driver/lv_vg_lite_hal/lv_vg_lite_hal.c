@@ -119,7 +119,7 @@ struct vg_lite_device {
     struct memory_heap heap[VG_SYSTEM_RESERVE_COUNT];
     int irq_enabled;
     volatile uint32_t int_flags;
-    /* wait_queue_head_t int_queue ; */
+    /* wait_queue_head_tint_queue; */
     lv_thread_sync_t int_queue;
     void * device;
     int registered;
@@ -146,7 +146,7 @@ vg_lite_error_t vg_lite_hal_allocate(unsigned long size, void ** memory)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
 
-    /* TODO: Allocate some memory. No more kernel mode in RTOS. */
+    /* TODO: Выделите немного памяти. ВRTOSбольше нет режима ядра. */
     *memory = lv_malloc(size);
     if(NULL == *memory)
         error = VG_LITE_OUT_OF_MEMORY;
@@ -319,7 +319,7 @@ vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidm
 
 void vg_lite_hal_free_contiguous(void * memory_handle)
 {
-    /* TODO: no list available in RTOS. */
+    /* TODO: список не доступен в RTOS. */
     heap_node_t * pos, * node;
     vg_lite_vidmem_pool_t pool;
 
@@ -402,14 +402,14 @@ void vg_lite_hal_free_os_heap(void)
     }
 }
 
-/* Portable: read register value. */
+/* Portable: прочитать значение регистра. */
 uint32_t vg_lite_hal_peek(uint32_t address)
 {
     /* Считайте данные из регистра GPU. */
     return (uint32_t)(*(volatile uint32_t *)(device->register_base + address));
 }
 
-/* Portable: write register. */
+/* Portable: напишите регистр. */
 void vg_lite_hal_poke(uint32_t address, uint32_t data)
 {
     /* Запишите данные в регистр GPU. */
@@ -523,7 +523,7 @@ static void vg_lite_exit(void)
 
     /* Проверьте действительное устройство. */
     if(device != NULL) {
-        /* TODO: unmap register mem should be unnecessary. */
+        /* TODO: unmap регистровую память должна быть ненужной. */
         device->register_base = 0;
 
         for(i = 0; i < VG_SYSTEM_RESERVE_COUNT; i++) {

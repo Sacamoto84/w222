@@ -4,7 +4,7 @@
 /*******************************************************************************
  * Размер: 20 пикселей
  * Бпп: 4
- * Opts: --bpp 4 --size 20 --font ../RobotoMono-Regular.ttf -r 0x20-0x7f --format lvgl -o ..\generated_fonts/font_3.c
+ * Opts: --bpp 4 --size 20 --font ../RobotoMono-Regular.ttf -r0x20-0x7f--format lvgl -o ..\generated_fonts/ font_3.c
  ******************************************************************************/
 
 #ifndef FONT_3
@@ -800,7 +800,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
  *--------------------*/
 
 static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
-    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
+    {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 зарезервировано */,
     {.bitmap_index = 0, .adv_w = 192, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 192, .box_w = 3, .box_h = 15, .ofs_x = 4, .ofs_y = 0},
     {.bitmap_index = 13, .adv_w = 192, .box_w = 6, .box_h = 5, .ofs_x = 3, .ofs_y = 10},
@@ -902,7 +902,7 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
  *  CHARACTER MAPPING
  *--------------------*/
 
-/*Соберите списки Юникода и смещения glyph_id.*/
+/*Соберите комбинацию Юникода и смещения glyph_id.*/
 static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,

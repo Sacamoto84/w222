@@ -1086,8 +1086,8 @@ static void refr_configured_layer(lv_layer_t * layer)
 
 /**
  * Сделайте обновление с объекта. Нарисуйте всех его детей и младших тоже.
- * @param top_p указатель на объекты. Начните рисунок с него.
- * @param mask_p указатель на область, объекты будут рисоваться только здесь
+ * @param layer указатель на объекты. Начните рисунок с него.
+ * @param top_obj указатель на область, объекты будут рисоваться только здесь
  */
 static void refr_obj_and_children(lv_layer_t * layer, lv_obj_t * top_obj)
 {

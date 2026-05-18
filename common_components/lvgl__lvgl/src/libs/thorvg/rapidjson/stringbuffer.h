@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -35,7 +35,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 /*!
     \tparam Кодирование Кодирование потока.
     \tparam Тип распределителя для выделения буфера памяти.
-    \note реализует концепцию Stream
+    \note реализации соглашения Stream
 */
 template <typename Encoding, typename Allocator = CrtAllocator>
 class GenericStringBuffer {
@@ -106,7 +106,7 @@ inline void PutUnsafe(GenericStringBuffer<Encoding, Allocator>& stream, typename
     stream.PutUnsafe(c);
 }
 
-//! Внедрите специализированную версию PutN() с memset() для повышения производительности.
+//! Внедрите специализированную версиюPutN()сmemset()для повышения производительности.
 template<>
 inline void PutN(GenericStringBuffer<UTF8<> >& stream, char c, size_t n) {
     std::memset(stream.stack_.Push<char>(n), c, n * sizeof(c));

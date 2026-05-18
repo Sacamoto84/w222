@@ -60,9 +60,9 @@ lv_obj_t * lv_file_explorer_create(lv_obj_t * parent);
 #if LV_FILE_EXPLORER_QUICK_ACCESS
 /**
  * Установить file_explorer
- * @param obj   pointer to a label object
- * @param dir   the dir from 'lv_file_explorer_dir_t' enum.
- * @param path   path
+ * @param obj   указатель на объект метки
+ * @param dir   каталог из перечисления lv_file_explorer_dir_t.
+ * @param path   путь
 
  */
 void lv_file_explorer_set_quick_access_path(lv_obj_t * obj, lv_file_explorer_dir_t dir, const char * path);
@@ -70,15 +70,15 @@ void lv_file_explorer_set_quick_access_path(lv_obj_t * obj, lv_file_explorer_dir
 
 /**
  * Установить сортировку file_explorer
- * @param obj   pointer to a file explorer object
- * @param sort  the sort from 'lv_file_explorer_sort_t' enum.
+ * @param obj   указатель на объект проводника
+ * @param sort  сортировка из перечисления «lv_file_explorer_sort_t».
  */
 void lv_file_explorer_set_sort(lv_obj_t * obj, lv_file_explorer_sort_t sort);
 
 /**
  * Настройте видимость кнопки «<Назад»
- * @param obj   pointer to a file explorer object
- * @param show  bool true/false, enable or disable button
+ * @param obj   указатель на объект проводника
+ * @param show  bool true/false, кнопка включения или отключения
  */
 void lv_file_explorer_show_back_button(lv_obj_t * obj, bool show);
 
@@ -88,66 +88,66 @@ void lv_file_explorer_show_back_button(lv_obj_t * obj, bool show);
 
 /**
  * Получить файловый менеджер Выбранный файл
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer selected file name
+ * @param obj   указатель на объект проводника
+ * @return      указатель на выбранное имя файла в проводнике
  */
 const char * lv_file_explorer_get_selected_file_name(const lv_obj_t * obj);
 
 /**
  * Получить путь к файловому проводнику
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer cur path
+ * @param obj   указатель на объект проводника
+ * @return      указатель на путь к проводнику файлов
  */
 const char * lv_file_explorer_get_current_path(const lv_obj_t * obj);
 
 /**
  * Получить список файлов в проводнике (lv_table)
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer file table obj(lv_table)
+ * @param obj   указатель на объект проводника
+ * @return      указатель на таблицу файлов в проводнике obj (lv_table)
  */
 lv_obj_t * lv_file_explorer_get_file_table(lv_obj_t * obj);
 
 /**
  * Получить объект области головы в проводнике
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer head area obj(lv_obj)
+ * @param obj   указатель на объект проводника
+ * @return      указатель на область заголовка файлового проводника obj (lv_obj)
  */
 lv_obj_t * lv_file_explorer_get_header(lv_obj_t * obj);
 
 /**
  * Получить путь к файлу в проводнике obj (метка)
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer path obj(lv_label)
+ * @param obj   указатель на объект проводника
+ * @return      указатель на путь к файловому проводнику obj (lv_label)
  */
 lv_obj_t * lv_file_explorer_get_path_label(lv_obj_t * obj);
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
 /**
  * Получить объект области головы в проводнике
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer quick access area obj(lv_obj)
+ * @param obj   указатель на объект проводника
+ * @return      указатель на объект области быстрого доступа файлового менеджера (lv_obj)
  */
 lv_obj_t * lv_file_explorer_get_quick_access_area(lv_obj_t * obj);
 
 /**
- * Получить объект списка мест в проводнике (lv_list)
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer places list obj(lv_list)
+ * Получить список мест в проводнике (lv_list)
+ * @param obj   указатель на объект проводника
+ * @return      указатель на объект списка мест в проводнике (lv_list)
  */
 lv_obj_t * lv_file_explorer_get_places_list(lv_obj_t * obj);
 
 /**
  * Получить объект списка устройств в проводнике (lv_list)
- * @param obj   pointer to a file explorer object
- * @return      pointer to the file explorer device list obj(lv_list)
+ * @param obj   указатель на объект проводника
+ * @return      указатель на объект списка устройств проводника (lv_list)
  */
 lv_obj_t * lv_file_explorer_get_device_list(lv_obj_t * obj);
 #endif
 
 /**
  * Установить сортировку file_explorer
- * @param obj   pointer to a file explorer object
- * @return the current mode from 'lv_file_explorer_sort_t'
+ * @param obj   указатель на объект проводника
+ * @return текущий режим из 'lv_file_explorer_sort_t'
  */
 lv_file_explorer_sort_t lv_file_explorer_get_sort(const lv_obj_t * obj);
 
@@ -157,8 +157,8 @@ lv_file_explorer_sort_t lv_file_explorer_get_sort(const lv_obj_t * obj);
 
 /**
  * Открыть указанный путь
- * @param obj   pointer to a file explorer object
- * @param dir   pointer to the path
+ * @param obj   указатель на объект проводника
+ * @param dir   указатель пути
  */
 void lv_file_explorer_open_dir(lv_obj_t * obj, const char * dir);
 

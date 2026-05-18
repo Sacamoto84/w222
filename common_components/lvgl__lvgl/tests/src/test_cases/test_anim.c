@@ -225,7 +225,7 @@ void test_anim_vsync_mode(void)
 {
     lv_anim_enable_vsync_mode(true);
 
-    /* таймер анимации должен быть NULL, когда включен режим vsync. */
+    /* таймер анимации должен бытьNULL, когда включен режим vsync. */
     TEST_ASSERT_NULL(lv_anim_get_timer());
 
     int32_t var;
@@ -239,7 +239,7 @@ void test_anim_vsync_mode(void)
     lv_anim_set_duration(&a, 1000);
     lv_anim_start(&a);
 
-    /*Используйте события vsync для уведомления об обновлениях анимации.*/
+    /*Используйте события vsync для уведомлений об обновлениях анимации.*/
     lv_tick_inc(10);
     lv_display_send_vsync_event(NULL, NULL);
     TEST_ASSERT_EQUAL(9, var);

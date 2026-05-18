@@ -157,7 +157,7 @@ void test_button_matrix_set_button_ctrl_works(void)
     static const char * btn_map[] = {"A", "B", "\n", "C", "D", ""};
     lv_buttonmatrix_set_map(btnm, btn_map);
 
-    /* Установите карту управления btn, используя отдельные API. */
+    /* Установите карту управления кнопкой с помощью приложения API. */
     lv_buttonmatrix_set_button_ctrl(btnm, 0, 1 | LV_BUTTONMATRIX_CTRL_DISABLED);
     lv_buttonmatrix_set_button_ctrl(btnm, 1, 1 | LV_BUTTONMATRIX_CTRL_CHECKABLE | LV_BUTTONMATRIX_CTRL_CHECKED);
     lv_buttonmatrix_set_button_ctrl(btnm, 2, 1 | LV_BUTTONMATRIX_CTRL_HIDDEN);
@@ -182,7 +182,7 @@ void test_button_matrix_clear_button_ctrl_works(void)
     static const char * btn_map[] = {"A", "B", "\n", "C", "D", ""};
     lv_buttonmatrix_set_map(btnm, btn_map);
 
-    /* Установите карту управления btn, используя отдельные API. */
+    /* Установите карту управления кнопкой с помощью приложения API. */
     lv_buttonmatrix_set_button_ctrl(btnm, 0, 1 | LV_BUTTONMATRIX_CTRL_DISABLED);
     lv_buttonmatrix_set_button_ctrl(btnm, 1, 1 | LV_BUTTONMATRIX_CTRL_CHECKABLE | LV_BUTTONMATRIX_CTRL_CHECKED);
     lv_buttonmatrix_set_button_ctrl(btnm, 2, 1 | LV_BUTTONMATRIX_CTRL_HIDDEN);
@@ -391,7 +391,7 @@ void test_button_matrix_pressing_event_works(void)
     /* Нажмите кнопку перед вызовом моделируемого события.
      * Это сделано для увеличения покрытия кода. */
     btnmObj->btn_id_sel = 3;
-    /* Отправьте фиктивный объект lv_indev_t в качестве параметра, чтобы избежать сбоя во время сборки. */
+    /* Отправьте в качестве параметра вымышленный объект lv_indev_t, чтобы избежать сбоя во время сборки. */
     lv_obj_send_event(btnm, LV_EVENT_PRESSING, lv_test_indev_get_indev(LV_INDEV_TYPE_POINTER));
     TEST_ASSERT_TRUE(event_triggered);
 }

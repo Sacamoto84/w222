@@ -321,7 +321,7 @@ void test_slider_scroll_chain_horizontal(void)
     lv_test_mouse_release();
     lv_obj_send_event(slider, LV_EVENT_RELEASED, NULL);
 
-    /* Горизонтальный ptr должен позволять вертикальную цепочку прокрутки */
+    /* Горизонтальный ПТР должен предпочтительнее вертикальную цепочку прокрутки. */
     TEST_ASSERT_TRUE(lv_obj_has_flag(slider, LV_OBJ_FLAG_SCROLL_CHAIN_VER));
 }
 
@@ -334,7 +334,7 @@ void test_slider_scroll_chain_vertical(void)
     lv_test_mouse_release();
     lv_obj_send_event(slider, LV_EVENT_RELEASED, NULL);
 
-    /* Вертикальный ptr должен позволять горизонтальную цепочку прокрутки */
+    /* Вертикальный PTR должен предпочтительнее горизонтальную цепочку прокрутки. */
     TEST_ASSERT_TRUE(lv_obj_has_flag(slider, LV_OBJ_FLAG_SCROLL_CHAIN_HOR));
 }
 
@@ -385,7 +385,7 @@ void test_slider_rotary_event_handling(void)
     lv_slider_set_mode(sliderRangeMode, LV_SLIDER_MODE_RANGE);
     lv_group_add_obj(g, sliderRangeMode);
 
-    /* Вручную сфокусируйте левую ручку, чтобы попасть в ветку else. */
+    /* Вручную сфокусируйте ручку ручки, чтобы попасть в ветку еще раз. */
     lv_slider_t * ptr = (lv_slider_t *) sliderRangeMode;
     ptr->left_knob_focus = 1;
 
@@ -471,7 +471,7 @@ static void assert_slider_drag_start_selection(lv_obj_t * obj, int32_t x, int32_
     lv_test_mouse_press();
     lv_test_wait(50);
 
-    /* Слегка переместите, чтобы вызвать перетаскивание (превышает scroll_limit ) */
+    /* Слегка обращенте, чтобы вызвать перетаскивание (превышаетscroll_limit) */
     lv_test_mouse_move_by(10, 10);
     lv_test_wait(50);
 

@@ -543,7 +543,7 @@ static void lv_ime_pinyin_constructor(const lv_obj_class_t * class_p, lv_obj_t *
     init_pinyin_dict(obj, lv_ime_pinyin_def_dict);
 #endif
 
-    /* Инициализировать pinyin_ime -> cand_panel */
+    /* Инициализироватьpinyin_ime-> cand_panel */
     pinyin_ime->cand_panel = lv_buttonmatrix_create(lv_obj_get_parent(obj));
     lv_buttonmatrix_set_map(pinyin_ime->cand_panel, (const char **)lv_btnm_def_pinyin_sel_map);
     lv_obj_set_size(pinyin_ime->cand_panel, LV_PCT(100), LV_PCT(5));
@@ -653,7 +653,7 @@ static void lv_ime_pinyin_kb_event(lv_event_t * e)
             lv_obj_add_flag(pinyin_ime->cand_panel, LV_OBJ_FLAG_HIDDEN);
         }
         else if(lv_strcmp(txt, LV_SYMBOL_BACKSPACE) == 0) {
-            // del входной символ
+            // входной символ
             if(pinyin_ime->ta_count > 0) {
                 if(pinyin_ime->mode == LV_IME_PINYIN_MODE_K26)
                     pinyin_ime->input_char[pinyin_ime->ta_count - 1] = '\0';
@@ -1051,7 +1051,7 @@ static void pinyin_k9_get_legal_py(lv_obj_t * obj, char * k9_input, const char *
     }
 }
 
-/*true: visible; false: not visible*/
+/*true: видимый; ложь: не видно*/
 static bool pinyin_k9_is_valid_py(lv_obj_t * obj, char * py_str)
 {
     lv_ime_pinyin_t * pinyin_ime = (lv_ime_pinyin_t *)obj;

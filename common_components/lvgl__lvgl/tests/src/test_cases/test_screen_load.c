@@ -284,7 +284,7 @@ void test_display_delete_when_screen_is_loaded(void)
         /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_event_count, 1);
         /* Мы должны были получить событие начала выгрузки с предыдущего экрана до того, как дисплей был удален.
-         * Мы должны были получить событие load_start для нового экрана до того, как дисплей был удален. */
+         * Мы должны были увидеть событиеload_startдля нового экрана до того, как дисплей был удален. */
         TEST_ASSERT_EQUAL(screen_event_count, 2);
 
         display_event_count = screen_event_count = 0;
@@ -304,7 +304,7 @@ void test_display_delete_when_screen_is_loaded(void)
         /* Событие экрана дисплея вызывалось только один раз*/
         TEST_ASSERT_EQUAL(display_event_count, 1);
         /* Мы должны были получить событие начала выгрузки с предыдущего экрана до того, как дисплей был удален.
-         * Мы должны были получить load_start и загрузить события для нового экрана до того, как дисплей был удален. */
+         * Мы должны были получитьload_startи загрузить события для нового экрана до того, как индикатор был удален. */
         TEST_ASSERT_EQUAL(screen_event_count, 3);
         display_event_count = screen_event_count = 0;
     }
@@ -507,7 +507,7 @@ void test_screen_mix_event_and_manual_creation(void)
     /* Загрузите новый экран, нажав кнопку «Создать». Текущий экран удаляется в нашем выгруженном событии cb*/
     lv_obj_send_event(screen_create_trigger, LV_EVENT_CLICKED, NULL);
 
-    /* Загрузка экрана вручную с автоматическим удалением, установленным на `true`, не должна приводить к двойному освобождению экрана. */
+    /* Загрузка экрана вручную с автоматическим удалением, установленным на`true`, не должна приводить к двойному освобождению экрана. */
     lv_screen_load_anim(screen, LV_SCREEN_LOAD_ANIM_NONE, 0, 0, true);
     lv_obj_delete(lv_screen_active());
 

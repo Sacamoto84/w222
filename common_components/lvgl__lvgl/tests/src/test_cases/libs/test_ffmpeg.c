@@ -93,7 +93,7 @@ void test_ffmpeg_player_1(void)
     lv_ffmpeg_player_set_cmd(player, LV_FFMPEG_PLAYER_CMD_START);
     TEST_ASSERT_EQUAL_SCREENSHOT("libs/ffmpeg_player_error_file.png");
 
-    /* Video: test_video_birds.mp4 Update frame rate 25FPS */
+    /* Video: test_video_birds .mp4 Обновление частоты кадров 25 кадров в секунду */
     lv_ffmpeg_player_set_src(player, "A:src/test_assets/test_video_birds.mp4");
 
     /* Не запускается, должен быть черный экран  */

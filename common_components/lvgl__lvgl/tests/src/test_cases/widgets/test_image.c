@@ -739,7 +739,7 @@ void test_image_set_src_null(void)
 
 void test_image_raw_data_as_file(void)
 {
-    /* Hex сбрасывается как:
+    /* Шестигранник сбрасывается как:
      * xxd -p -c32 test_images/stride_align1/UNCOMPRESSED/test_RGB565 .bin | \
      * awk '{for(i=1;i<=length($0);i+=2) printf "0x%s%s", substr($0,i,2), (i<length($0)?", ":"\n") }'
      */
@@ -950,7 +950,7 @@ void test_image_hit_test_else_branch(void)
     lv_obj_set_pos(img, 100, 100);
     lv_obj_update_layout(img);
 
-    /* Это должно вызвать ветку else, потому что размер изображения! = размер объекта. */
+    /* Это должно было вызвать ветку еще, потому что размер изображения! = размер объекта. */
     lv_point_t point = {
         .x = 110,
         .y = 110
@@ -1123,7 +1123,7 @@ void test_image_set_src_with_rotation(void)
 
 void test_image_draw_main_src_null(void)
 {
-    /* Тестовый рисунок с NULL src */
+    /* Тестовый рисунок сNULLsrc */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, &test_img_lvgl_logo_png);
     lv_obj_update_layout(img);
@@ -1136,7 +1136,7 @@ void test_image_draw_main_src_null(void)
 
 void test_image_draw_main_unknown_src_type(void)
 {
-    /* Тестовый розыгрыш основного с неизвестным src_type */
+    /* Тестовый розыгрыш базовый с неизвестным src_type */
     lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_image_set_src(img, &test_img_lvgl_logo_png);
     lv_obj_update_layout(img);

@@ -76,7 +76,7 @@ void test_msgbox_creation_successful_modal(void)
 
     TEST_ASSERT_NOT_NULL(msgbox);
 
-    // Поскольку у msgbox нет родителя, он не будет очищен по адресу tearDown().
+    // поскольку в msgbox нет родителя, он не будет очистки по адресуtearDown().
     lv_obj_clean(msgbox);
 }
 
@@ -94,7 +94,7 @@ void test_msgbox_get_title(void)
     lv_msgbox_add_header_button(msgbox, LV_SYMBOL_AUDIO);
     lv_msgbox_add_close_button(msgbox);
 
-    // Заголовок Msgbox — это виджет lv_label.
+    // Заголовок Msgbox — это виджетlv_label.
     lbl_title = lv_msgbox_get_title(msgbox);
 
     TEST_ASSERT_EQUAL_STRING(txt_title, lv_label_get_text(lbl_title));
@@ -115,7 +115,7 @@ void test_msgbox_close(void)
 
     lv_msgbox_close(msgbox);
 
-    // lv_msgbox_close удаляет окно сообщения
+    // lv_msgbox_close сохранить окно сообщений
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -127,7 +127,7 @@ void test_msgbox_close_modal(void)
 
     lv_msgbox_close(msgbox);
 
-    // lv_msgbox_close удаляет окно сообщения
+    // lv_msgbox_close сохранить окно сообщений
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -137,7 +137,7 @@ void test_msgbox_close_async(void)
     lv_msgbox_add_text(msgbox, "The text");
     lv_msgbox_add_text_fmt(msgbox, "The %s text", "fmt");
 
-    // lv_msgbox_close удаляет окно сообщения
+    // lv_msgbox_close сохранить окно сообщений
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -147,7 +147,7 @@ void test_msgbox_close_async_modal(void)
     lv_msgbox_add_text(msgbox, "The text");
     lv_msgbox_add_text_fmt(msgbox, "The %s text", "fmt");
 
-    // lv_msgbox_close удаляет окно сообщения
+    // lv_msgbox_close сохранить окно сообщений
     TEST_ASSERT_NOT_NULL(msgbox);
 }
 
@@ -163,7 +163,7 @@ void test_msgbox_content_auto_height(void)
     lv_msgbox_add_header_button(msgbox, LV_SYMBOL_AUDIO);
     lv_msgbox_add_close_button(msgbox);
 
-    /* Test1 : msgbox's height is LV_SIZE_CONTENT by default */
+    /* Test1 : высота msgbox по умолчанию равна LV_SIZE_CONTENT. */
     bool is_height_size_content = (lv_obj_get_style_height(msgbox, LV_PART_MAIN) == LV_SIZE_CONTENT);
     TEST_ASSERT_EQUAL(is_height_size_content, 1);
 
@@ -178,10 +178,10 @@ void test_msgbox_content_auto_height(void)
 
     int32_t h_obj_content = lv_obj_get_content_height(msgbox);
     int32_t h_msgbox_element_sum  = h_header + h_footer + h_content;
-    /* Размер по умолчанию: высота obj-содержимого msgbox должна быть равна общей высоте элемента msgbox. */
+    /* Размер по умолчанию: высота obj-содержимого msgbox должна быть равной высоте общей высоты элемента msgbox. */
     TEST_ASSERT_EQUAL(h_obj_content, h_msgbox_element_sum);
 
-    /* Test2 : Now change size of msgbox manually*/
+    /* Test2 : Теперь измените размер msgbox вручную.*/
     lv_obj_set_size(msgbox, lv_pct(80), lv_pct(80));
 
     is_height_size_content = (lv_obj_get_style_height(msgbox, LV_PART_MAIN) == LV_SIZE_CONTENT);
@@ -194,7 +194,7 @@ void test_msgbox_content_auto_height(void)
 
     h_obj_content = lv_obj_get_content_height(msgbox);
     h_msgbox_element_sum  = h_header + h_footer + h_content;
-    /* Ручной размер: высота obj-содержимого msgbox также должна быть равна общей высоте элемента msgbox. */
+    /* Ручной размер: высота объекта, содержимого msgbox, также должна быть одинаковой высоты общего элемента msgbox. */
     TEST_ASSERT_EQUAL(h_obj_content, h_msgbox_element_sum);
 }
 

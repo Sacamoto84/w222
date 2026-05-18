@@ -261,7 +261,7 @@ lv_fs_res_t lv_fs_load_to_buf(void * buf, uint32_t buf_size, const char * path);
 
 /**
  * Загрузите файл в буфер памяти.
- * @param filename  путь к файлу
+ * @param path  путь к файлу
  * @param size      указатель для хранения размера загруженного файла
  * @return          указатель на загруженный файловый буфер или NULL, если произошла ошибка
  */

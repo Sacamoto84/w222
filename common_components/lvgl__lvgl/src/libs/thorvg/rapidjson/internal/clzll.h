@@ -1,4 +1,4 @@
-// Tencent рада поддержать сообщество открытого исходного кода, сделав доступным RapidJSON.
+// Tencent рада поддержать сообщество открытого исходного кода, созданного доступным RapidJSON.
 //
 // Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
@@ -30,7 +30,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 namespace internal {
 
 inline uint32_t clzll(uint64_t x) {
-    // Передача 0 в __builtin_clzll означает UB в GCC и приводит к
+    // Передача 0 в__builtin_clzllозначаетUBвGCCи приводит к
     // бесконечный цикл в реализации программного обеспечения.
     RAPIDJSON_ASSERT(x != 0);
 

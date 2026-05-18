@@ -244,7 +244,7 @@ static inline void * /* LV_ATTRIBUTE_FAST_MEM */ drawbuf_next_row(const void * b
  * Поддерживает обычную заливку, заливку с непрозрачностью, заливку с маской и заливку с маской и непрозрачностью.
  * dest_buf и цвет имеют собственные элементы цвета. (RGB565,RGB888,XRGB8888)
  * Фон (dest_buf) не может иметь альфа-канал.
- * @param dest_buf
+ * @param dsc
  * @param dest_area
  * @param dest_stride
  * Цвет @param

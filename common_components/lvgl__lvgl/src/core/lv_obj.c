@@ -944,7 +944,7 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
                 }
             }
 
-            /*При поддержке EnterLV_EVENT_RELEASEDорганизовал событиеVALUE_CHANGE.*/
+            /*При поддержке `Enter` формирует событие `LV_EVENT_RELEASED`, а затем `VALUE_CHANGE`.*/
             if(c != LV_KEY_ENTER && was_checked != lv_obj_has_state(obj, LV_STATE_CHECKED)) {
                 lv_result_t res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
                 if(res != LV_RESULT_OK) return;
@@ -957,7 +957,7 @@ static void lv_obj_event(const lv_obj_class_t * class_p, lv_event_t * e)
             int32_t sr = lv_obj_get_scroll_right(obj);
             uint32_t c = lv_event_get_key(e);
             if(c == LV_KEY_DOWN) {
-                /*функцияscroll_to_x/y для обеспечения блокировки прокрутки*/
+                /*функция `scroll_to_x/y` для обеспечения блокировки прокрутки*/
                 lv_obj_scroll_to_y(obj, lv_obj_get_scroll_y(obj) + lv_obj_get_height(obj) / 4, anim_enable);
             }
             else if(c == LV_KEY_UP) {

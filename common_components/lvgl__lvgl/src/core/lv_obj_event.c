@@ -80,7 +80,7 @@ lv_result_t lv_obj_event_base(const lv_obj_class_t * class_p, lv_event_t * e)
     if(class_p == NULL) base = ((lv_obj_t *)e->current_target)->class_p;
     else base = class_p->base_class;
 
-    /*Найдите источники, в которых произошло событие предкаhandler_cb, если оно установлено*/
+    /*Найдите источники, в которых произошло событие предка `handler_cb`, если оно установлено*/
     while(base && base->event_cb == NULL) base = base->base_class;
 
     if(base == NULL) return LV_RESULT_OK;

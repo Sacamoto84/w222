@@ -157,35 +157,35 @@ void lv_subject_set_max_value_int(lv_subject_t * subject, int32_t max_value);
 void lv_subject_init_float(lv_subject_t * subject, float value);
 
 /**
- * Установите значение плавающей субъекта и уведомите об этом наблюдателей.
+ * Установите значение субъекта с плавающей точкой и уведомите об этом наблюдателей.
  * @param subject   указатель на субъект
  * @param value     новое значение
  */
 void lv_subject_set_float(lv_subject_t * subject, float value);
 
 /**
- * Получить текущее значение объекта с плавающей запятой.
+ * Получить текущее значение субъекта с плавающей точкой.
  * @param subject   указатель на субъект
  * @return          текущая стоимость
  */
 float lv_subject_get_float(lv_subject_t * subject);
 
 /**
- * Получить предыдущее значение плавающей субъекта.
+ * Получить предыдущее значение субъекта с плавающей точкой.
  * @param subject   указатель на субъект
  * @return          текущая стоимость
  */
 float lv_subject_get_previous_float(lv_subject_t * subject);
 
 /**
- * Установите минимальное значение для плавающей субъекта
+ * Установите минимальное значение для субъекта с плавающей точкой
  * @param subject   указатель на субъект
  * @param min_value минимальное значение
  */
 void lv_subject_set_min_value_float(lv_subject_t * subject, float min_value);
 
 /**
- * Установите максимальное значение для плавающей субъекта
+ * Установите максимальное значение для субъекта с плавающей точкой
  * @param subject   указатель на субъект
  * @param max_value максимальное значение
  */
@@ -219,17 +219,17 @@ void lv_subject_copy_string(lv_subject_t * subject, const char * buf);
 void lv_subject_snprintf(lv_subject_t * subject, const char * format, ...) LV_FORMAT_ATTRIBUTE(2, 3);
 
 /**
- * Получить текущее значение строки Субъект.
+ * Получить текущее значение строкового субъекта.
  * @param subject   указатель на субъект
  * @return          указатель на буфер, содержащий текущее значение
  */
 const char * lv_subject_get_string(lv_subject_t * subject);
 
 /**
- * Получить предыдущее значение строки Субъект.
+ * Получить предыдущее значение строкового субъекта.
  * @param subject   указатель на субъект
  * @return          указатель на буфер, содержащий предыдущее значение
- * @note            NULL будет возвращен, еслиNULLбыл передан в `lv_subject_init_string()`.
+ * @note            NULL будет возвращен, если `NULL` был передан в `lv_subject_init_string()`.
  *                  как`prev_buf`.
  */
 const char * lv_subject_get_previous_string(lv_subject_t * subject);
@@ -242,21 +242,21 @@ const char * lv_subject_get_previous_string(lv_subject_t * subject);
 void lv_subject_init_pointer(lv_subject_t * subject, void * value);
 
 /**
- * Установите значение указателя Субъект и уведомите об этом Наблюдателей (независимо от того, изменилось ли оно).
+ * Установите значение указателя субъекта и уведомите об этом Наблюдателей (независимо от того, изменилось ли оно).
  * @param subject   указатель на субъект
  * @param ptr       новое значение
  */
 void lv_subject_set_pointer(lv_subject_t * subject, void * ptr);
 
 /**
- * Получить текущее значение указателя Субъект.
+ * Получить текущее значение указателя субъекта.
  * @param subject   указатель на субъект
  * @return          текущая стоимость
  */
 const void * lv_subject_get_pointer(lv_subject_t * subject);
 
 /**
- * Получить предыдущее значение указателя Субъект.
+ * Получить предыдущее значение указателя субъекта.
  * @param subject   указатель на субъект
  * @return          предыдущее значение
  */
@@ -270,7 +270,7 @@ const void * lv_subject_get_previous_pointer(lv_subject_t * subject);
 void lv_subject_init_color(lv_subject_t * subject, lv_color_t color);
 
 /**
- * Установите значение цвета Субъекта и уведомите наблюдателей, если оно изменилось.
+ * Установите значение цветового субъекта и уведомите наблюдателей, если оно изменилось.
  * @param subject   указатель на субъект
  * @param color     новое значение
  */
@@ -293,7 +293,7 @@ lv_color_t lv_subject_get_previous_color(lv_subject_t * subject);
 /**
  * Инициализируйте субъект типа группы.
  * @param group_subject  указатель на субъект типа группы
- * @param list           список адресов других Субъектов; когда любой из них имеет значения
+ * @param list           список адресов других субъектов; когда любой из них имеет значения
                              обновлено, наблюдатели`group_subject`будут уведомлены.
  * @param list_len       количество элементов в `list[]`
  */
@@ -311,15 +311,15 @@ void lv_subject_init_group(lv_subject_t * group_subject, lv_subject_t * list[], 
 void lv_subject_deinit(lv_subject_t * subject);
 
 /**
- * Получите элемент из списка субъекттической группы.
+ * Получите элемент из списка субъекта-группы.
  * @param subject   указатель на субъект типа группы
  * @param index     индекс элемента, который нужно получить
- * @return          указатель на проиндексированную субъект из списка или NULL, если индекс выходит за пределы
+ * @return          указатель на субъект с указанным индексом из списка или NULL, если индекс выходит за пределы
  */
 lv_subject_t * lv_subject_get_group_element(lv_subject_t * subject, int32_t index);
 
 /**
- * посетить наблюдателя к субъекту. Когда значение субъекта изменится, будет вызвано`observer_cb`.
+ * посетить наблюдателя к субъекту. Когда значение субъекта изменится, будет вызван `observer_cb`.
  * @param subject       указатель на субъект
  * @param observer_cb   обратный вызов уведомления
  * @param user_data     дополнительные пользовательские данные
@@ -329,7 +329,7 @@ lv_observer_t * lv_subject_add_observer(lv_subject_t * subject, lv_observer_cb_t
 
 /**
  * Добавьте наблюдателя в субъект для виджета.
- * Когда виджет будет удален, Observer автоматически отпишется от Темы.
+ * Когда виджет будет удален, наблюдатель автоматически отпишется от субъекта.
  * @param subject       указатель на субъект
  * @param observer_cb   обратный вызов уведомления
  * @param obj           указатель на виджет
@@ -364,9 +364,9 @@ void lv_observer_remove(lv_observer_t * observer);
 /**
  * Удалить наблюдателей, связанных с виджетом`obj`, из указанных`subject`или всех субъектов.
  * @param obj       указатель на виджет, наблюдатели которого следует удалить
- * @param subject   Субъект для удаления виджета илиNULLдля удаления из всех тем
- * @note            Эту функцию можно использовать, например. когда субъект(ы) виджета должны
- *                  быть заменен другим субъектом(ами)
+ * @param subject   Субъект, из которого нужно удалить виджет, или `NULL` для удаления из всех субъектов
+ * @note            Эту функцию можно использовать, например, когда субъект(ы) виджета должны
+ *                  быть заменены другими субъектами
  */
 void lv_obj_remove_from_subject(lv_obj_t * obj, lv_subject_t * subject);
 
@@ -378,7 +378,7 @@ void lv_obj_remove_from_subject(lv_obj_t * obj, lv_subject_t * subject);
 void * lv_observer_get_target(lv_observer_t * observer);
 
 /**
- * Подключите виджет Observer.
+ * Получить виджет наблюдателя.
  * Это то же самое, что и `lv_observer_get_target()`, за исключением того, что возвращает `target`.
  * как`lv_obj_t *`.
  * @param observer      указатель на наблюдателя
@@ -387,7 +387,7 @@ void * lv_observer_get_target(lv_observer_t * observer);
 lv_obj_t * lv_observer_get_target_obj(lv_observer_t * observer);
 
 /**
- * Получите пользовательские данные Observer.
+ * Получите пользовательские данные наблюдателя.
  * @param observer      указатель на наблюдателя
  * @return              void указатель на сохраненные пользовательские данные
 */
@@ -436,7 +436,7 @@ void lv_obj_set_subject_increment_event_max_value(lv_obj_t * obj, lv_subject_inc
 void lv_obj_set_subject_increment_event_rollover(lv_obj_t * obj, lv_subject_increment_dsc_t * dsc, bool rollover);
 
 /**
-* Переключить значение целочисленной субъекта в событии. Если было != 0, то будет 0.
+* Переключить значение целочисленного субъекта в событии. Если было != 0, то будет 0.
 * Если было 0, будет 1.
 * @param obj       указатель на виджет
 * @param subject   указатель на субъект для переключения
@@ -456,7 +456,7 @@ void lv_obj_add_subject_set_int_event(lv_obj_t * obj, lv_subject_t * subject, lv
 
 #if LV_USE_FLOAT
 /**
- * Установите значение плавающей субъекта.
+ * Установите значение субъекта с плавающей точкой.
  * @param obj       указатель на виджет
  * @param subject   указатель на субъект изменения
  * @param trigger   триггер, по которому следует сменить субъект
@@ -486,7 +486,7 @@ void lv_obj_add_subject_set_string_event(lv_obj_t * obj, lv_subject_t * subject,
 lv_observer_t * lv_obj_bind_flag_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv_obj_flag_t flag, int32_t ref_value);
 
 /**
- * Установите флаг(и) виджета, если целочисленное значение субъекта не равно ссылочному значению, в противном случае снимите флаг.
+ * Установите флаг(и) виджета, если целочисленное значение субъекта не равно эталонному значению, в противном случае снимите флаг.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param flag          флаг(и) (может быть побитовыйобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_OBJ_FLAG_HIDDEN`)
@@ -497,7 +497,7 @@ lv_observer_t * lv_obj_bind_flag_if_not_eq(lv_obj_t * obj, lv_subject_t * subjec
                                            int32_t ref_value);
 
 /**
- * Установите флаг(и) виджета, если целочисленное значение субъекта больше ссылочного значения, в противном случае снимите флаг.
+ * Установите флаг(и) виджета, если целочисленное значение субъекта больше эталонного значения, в противном случае снимите флаг.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param flag          флаг(и) (может быть побитовыйобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_OBJ_FLAG_HIDDEN`)
@@ -538,7 +538,7 @@ lv_observer_t * lv_obj_bind_flag_if_le(lv_obj_t * obj, lv_subject_t * subject, l
 
 
 /**
- * Установите состояние(я) виджета, если целое значение субъекта равно эталонному значению, в противном случае снимите флаг.
+ * Установите состояние(я) виджета, если целочисленное значение субъекта равно эталонному значению, в противном случае снимите флаг.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param state         состояние(я) (может быть побитовоеобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_STATE_CHECKED`)
@@ -548,7 +548,7 @@ lv_observer_t * lv_obj_bind_flag_if_le(lv_obj_t * obj, lv_subject_t * subject, l
 lv_observer_t * lv_obj_bind_state_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
 
 /**
- * Установите состояние(я) виджета, если целочисленное значение субъекта не равно ссылочному значению, в противном случае снимите флаг.
+ * Установите состояние(я) виджета, если целочисленное значение субъекта не равно эталонному значению, в противном случае снимите флаг.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param state         состояние(я) (может быть побитовоеобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_STATE_CHECKED`)
@@ -559,7 +559,7 @@ lv_observer_t * lv_obj_bind_state_if_not_eq(lv_obj_t * obj, lv_subject_t * subje
                                             int32_t ref_value);
 
 /**
- * Установите состояние(я) виджета, если целочисленное значение субъекта больше опорного значения, в противном случае снимите флаг.
+ * Установите состояние(я) виджета, если целочисленное значение субъекта больше эталонного значения, в противном случае снимите флаг.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param state         состояние(я) (может быть побитовоеобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_STATE_CHECKED`)
@@ -569,7 +569,7 @@ lv_observer_t * lv_obj_bind_state_if_not_eq(lv_obj_t * obj, lv_subject_t * subje
 lv_observer_t * lv_obj_bind_state_if_gt(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
 
 /**
- * Установите состояние(я) виджета, если целочисленное значение субъекта больше или равно опорному значению, в противном случае снимите флаг.
+ * Установить состояние(я) виджета, если целочисленное значение субъекта больше или равно эталонному значению, иначе снять состояние.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param state         состояние(я) (может быть побитовоеобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_STATE_CHECKED`)
@@ -579,7 +579,7 @@ lv_observer_t * lv_obj_bind_state_if_gt(lv_obj_t * obj, lv_subject_t * subject, 
 lv_observer_t * lv_obj_bind_state_if_ge(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
 
 /**
- * Установите состояние(я) виджета, если целочисленное значение субъекта меньше опорного значения, в противном случае снимите флаг.
+ * Установите состояние(я) виджета, если целочисленное значение субъекта меньше эталонного значения, в противном случае снимите флаг.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param state         состояние(я) (может быть побитовоеобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_STATE_CHECKED`)
@@ -589,7 +589,7 @@ lv_observer_t * lv_obj_bind_state_if_ge(lv_obj_t * obj, lv_subject_t * subject, 
 lv_observer_t * lv_obj_bind_state_if_lt(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
 
 /**
- * Установите состояние(я) виджета, если целочисленное значение субъекта меньше или равно опорному значению, в противном случае снимите флаг.
+ * Установить состояние(я) виджета, если целочисленное значение субъекта меньше или равно эталонному значению, иначе снять состояние.
  * @param obj           указатель на виджет
  * @param subject       указатель на субъект
  * @param state         состояние(я) (может быть побитовоеобъединенные побитовым ИЛИ) для установки или очистки (например,`LV_STATE_CHECKED`)
@@ -599,7 +599,7 @@ lv_observer_t * lv_obj_bind_state_if_lt(lv_obj_t * obj, lv_subject_t * subject, 
 lv_observer_t * lv_obj_bind_state_if_le(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
 
 /**
- * Установите для целочисленного субъекта значение 1, когда виджет отмечен, и установите его 0, если флажок снят, и
+ * Установите для целочисленного субъекта значение 1, когда виджет отмечен флажком, и установите его 0, когда флажок снят, и
  * очистить проверенное состояние виджета, когда значение субъекта изменится на 0, и установить его, если оно не равно нулю.
  * @param obj       указатель на виджет
  * @param subject   указатель на субъект

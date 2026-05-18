@@ -307,7 +307,7 @@ lv_result_t lv_inv_area(lv_display_t * disp, const lv_area_t * area_p)
         /*Убедитесь, что координаты X начинаются и заканчиваются на границе байта.
          *например преобразовать 11;27 в 8;31*/
         com_area.x1 &= ~0x7; /*Округление вниз: Nx8*/
-        com_area.x2 |= 0x7;    /*Округление вверх: Кx8 - 1*/
+        com_area.x2 |= 0x7;    /*Округление вверх: к x8 - 1*/
     }
 
     /*Если в режиме полного обновления была хотя бы одна недопустимая область, перерисуйте весь экран.*/
@@ -504,7 +504,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj)
     const lv_opa_t layer_opa_ori = layer->opa;
     const lv_color32_t layer_recolor = layer->recolor;
 
-    /*Обычный`opa`(немногослойный) просто уменьшит`bg_opa`,`text_opa`и т. д. д. на следующих рисунках.*/
+    /*Обычный `opa` (без слоя) просто уменьшит `bg_opa`, `text_opa` и т. д. при следующих операциях рисования.*/
     const lv_opa_t opa_main = lv_obj_get_style_opa(obj, LV_PART_MAIN);
     if(opa_main < LV_OPA_MAX) {
         layer->opa = LV_OPA_MIX2(layer_opa_ori, opa_main);
@@ -733,7 +733,7 @@ static void refr_sync_areas(void)
     for(sync_area = lv_ll_get_head(&disp_refr->sync_areas); sync_area != NULL;
         sync_area = lv_ll_get_next(&disp_refr->sync_areas, sync_area)) {
         /**
-         * @todo Изменение размера окнаSDLприческа к себе, посколькуsync_areaбольше, чем disp_area
+         * @todo Изменение размера окна SDL само по себе непростое, так как `sync_area` больше, чем `disp_area`
          */
         if(!lv_area_intersect(sync_area, sync_area, &disp_area)) {
             continue;
@@ -886,7 +886,7 @@ static void refr_area(const lv_area_t * area_p, int32_t y_offset)
         layer_reshape_draw_buf(layer, disp_refr->stride_is_auto ? LV_STRIDE_AUTO : layer->draw_buf->header.stride);
     }
 
-    /*Попробуйте разделить площадь на более мелкие плитки.*/
+    /*Попробовать разделить область на более мелкие плитки.*/
     uint32_t tile_cnt = 1;
     int32_t tile_h = lv_area_get_height(area_p);
     if(LV_COLOR_FORMAT_IS_INDEXED(layer->color_format) == false) {
@@ -1091,7 +1091,7 @@ static void refr_configured_layer(lv_layer_t * layer)
  */
 static void refr_obj_and_children(lv_layer_t * layer, lv_obj_t * top_obj)
 {
-    /*Обычно всегда будетtop_obj(по крайней мере, экран)
+    /*Обычно всегда будет `top_obj`(по крайней мере, экран)
      *но в особых случаях (например, если на экране есть альфа) этого не произойдет.
      *В этом случае используйте экран напрямую*/
     if(top_obj == NULL) top_obj = lv_display_get_screen_active(disp_refr);
@@ -1229,7 +1229,7 @@ static bool obj_get_matrix(lv_obj_t * obj, lv_matrix_t * matrix)
     int32_t skew_y = lv_obj_get_style_transform_skew_y(obj, LV_PART_MAIN);
 
     if(scale_x <= 0 || scale_y <= 0) {
-        /* NOT рисует, если масштаб отрицательный или нулевой */
+        /* Не рисовать, если масштаб отрицательный или нулевой */
         return false;
     }
 
@@ -1260,14 +1260,14 @@ static void refr_obj_matrix(lv_layer_t * layer, lv_obj_t * obj)
     LV_PROFILER_REFR_BEGIN;
     lv_matrix_t obj_matrix;
     if(!obj_get_matrix(obj, &obj_matrix)) {
-        /* NOT нарисовать, если матрица obj недоступна */
+        /* Не рисовать, если матрица obj недоступна */
         LV_PROFILER_REFR_END;
         return;
     }
 
     lv_matrix_t matrix_inv;
     if(!lv_matrix_inverse(&matrix_inv, &obj_matrix)) {
-        /* NOT рисует, если матрица не обратима */
+        /* Не рисовать, если матрица не обратима */
         LV_PROFILER_REFR_END;
         return;
     }
@@ -1340,7 +1340,7 @@ static uint32_t get_max_row(lv_display_t * disp, int32_t area_w, int32_t area_h)
 
     if(max_row > area_h) max_row = area_h;
 
-    /*Округлите строкиdraw_buf, если добавлено округление.*/
+    /*Округлите строки `draw_buf`, если добавлено округление.*/
     lv_area_t tmp;
     tmp.x1 = 0;
     tmp.x2 = 0;

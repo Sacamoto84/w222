@@ -49,13 +49,13 @@ struct _lv_obj_style_transition_dsc_t {
 
 /**
  * Инициализируйте модуль менеджера стилей, связанных с объектами.
- * ВызываетсяLVGLв `lv_init()`
+ * Вызывается LVGL в `lv_init()`
  */
 void lv_obj_style_init(void);
 
 /**
  * Деинициализируйте модуль менеджера стилей, связанных с объектами.
- * ВызываетсяLVGLв `lv_deinit()`
+ * Вызывается LVGL в `lv_deinit()`
  */
 void lv_obj_style_deinit(void);
 

@@ -48,14 +48,14 @@ lv_result_t lv_obj_send_event(lv_obj_t * obj, lv_event_code_t event_code, void *
 
 /**
  * Используется виджетами внутри для вызова обработчика событий родительских типов виджетов.
- * @param class_p   указатель на класс виджета (NOTкласс-предок)
+ * @param class_p   указатель на класс виджета (не класс-предок)
  * @param e         указатель на дескриптор события
  * @return          LV_RESULT_OK: целевой объект не был удален в событии;  LV_RESULT_INVALID: он был удален в event_code.
  */
 lv_result_t lv_obj_event_base(const lv_obj_class_t * class_p, lv_event_t * e);
 
 /**
- * Получите текущую цель события. Это объект, обработчик которого вызывается.
+ * Получить текущую цель события. Это объект, для которого вызывается обработчик.
  * Если событие не всплывает, оно совпадает с «исходной» целью.
  * @param e     указатель на дескриптор события
  * @return      цель event_code
@@ -90,7 +90,7 @@ bool lv_obj_remove_event(lv_obj_t * obj, uint32_t index);
 bool lv_obj_remove_event_dsc(lv_obj_t * obj, lv_event_dsc_t * dsc);
 
 /**
- * Удалитьevent_cbиз объекта
+ * Удалить `event_cb` из объекта
  * @param obj           указатель на объект
  * @param event_cb      event_cb события, которое нужно удалить
  * @return              количество событий удалено
@@ -98,7 +98,7 @@ bool lv_obj_remove_event_dsc(lv_obj_t * obj, lv_event_dsc_t * dsc);
 uint32_t lv_obj_remove_event_cb(lv_obj_t * obj, lv_event_cb_t event_cb);
 
 /**
- * Удалитеevent_cbс помощью user_data.
+ * Удалить `event_cb` с помощью user_data.
  * @param obj           указатель на объект
  * @param event_cb      event_cb события, которое нужно удалить
  * @param user_data user_data
@@ -107,14 +107,14 @@ uint32_t lv_obj_remove_event_cb(lv_obj_t * obj, lv_event_cb_t event_cb);
 uint32_t lv_obj_remove_event_cb_with_user_data(lv_obj_t * obj, lv_event_cb_t event_cb, void * user_data);
 
 /**
- * Получите устройство ввода, переданное в качестве параметра для событий, связанных с разработкой.
+ * Получить устройство ввода, переданное как параметр событий, связанных с вводом.
  * @param e     указатель на событие
  * @return      индев, вызвавший событие, или NULL, если вызывается событие, не связанное с индевом
  */
 lv_indev_t * lv_event_get_indev(lv_event_t * e);
 
 /**
- * Получите контекст рисования, который должен быть первым параметром функций рисования.
+ * Получить контекст рисования, который должен передаваться первым параметром в функции рисования.
  * А именно: `LV_EVENT_DRAW_MAIN/POST`, `LV_EVENT_DRAW_MAIN/POST_BEGIN`, `LV_EVENT_DRAW_MAIN/POST_END`
  * @param e     указатель на событие
  * @return      указатель на контекст отрисовки или NULL, если вызывается несвязанное событие
@@ -122,9 +122,9 @@ lv_indev_t * lv_event_get_indev(lv_event_t * e);
 lv_layer_t * lv_event_get_layer(lv_event_t * e);
 
 /**
- * Получите старую площадь объекта до изменения его размера. Может использоваться в `LV_EVENT_SIZE_CHANGED`.
+ * Получить прежнюю область объекта до изменения его размера. Может использоваться в `LV_EVENT_SIZE_CHANGED`.
  * @param e     указатель на событие
- * @return      старая абсолютная площадь объекта или NULL, если вызывается несвязанное событие
+ * @return      прежняя абсолютная область объекта или NULL, если событие не связано с изменением размера
  */
 const lv_area_t * lv_event_get_old_size(lv_event_t * e);
 
@@ -136,7 +136,7 @@ const lv_area_t * lv_event_get_old_size(lv_event_t * e);
 uint32_t lv_event_get_key(lv_event_t * e);
 
 /**
- * Получите подписанный дифф поворотного энкодера. передается в качестве параметра событию. Может использоваться в `LV_EVENT_ROTARY`.
+ * Получить знаковое изменение поворотного энкодера, переданное как параметр события. Может использоваться в `LV_EVENT_ROTARY`.
  * @param e     указатель на событие
  * @return      триггерная клавиша или NULL, если вызывается несвязанное событие
  */
@@ -150,14 +150,14 @@ int32_t lv_event_get_rotary_diff(lv_event_t * e);
 lv_anim_t * lv_event_get_scroll_anim(lv_event_t * e);
 
 /**
- * Установите новый дополнительный размер рисунка. Может использоваться в `LV_EVENT_REFR_EXT_DRAW_SIZE`.
+ * Установить новый дополнительный размер области отрисовки. Может использоваться в `LV_EVENT_REFR_EXT_DRAW_SIZE`.
  * @param e     указатель на событие
  * @param size  Новый дополнительный размер розыгрыша
  */
 void lv_event_set_ext_draw_size(lv_event_t * e, int32_t size);
 
 /**
- * Получите указатель на переменную`lv_point_t`, в которой должна быть сохранена небольшая величина (ширина в`point->x`и высота`point->y`).
+ * Получить указатель на переменную `lv_point_t`, в которую нужно сохранить размер (ширину в `point->x` и высоту в `point->y`).
  * Может использоваться в `LV_EVENT_GET_SELF_SIZE`.
  * @param e     указатель на событие
  * @return      указатель на`lv_point_t`или NULL, если вызывается несвязанное событие
@@ -165,7 +165,7 @@ void lv_event_set_ext_draw_size(lv_event_t * e, int32_t size);
 lv_point_t * lv_event_get_self_size_info(lv_event_t * e);
 
 /**
- * Получите указатель на переменную`lv_hit_test_info_t`, в котором должен быть сохранен результат проверки проверки. Может использоваться в `LV_EVENT_HIT_TEST`.
+ * Получить указатель на переменную `lv_hit_test_info_t`, в которую нужно сохранить результат проверки попадания. Может использоваться в `LV_EVENT_HIT_TEST`.
  * @param e     указатель на событие
  * @return      указатель на`lv_hit_test_info_t`или NULL, если вызывается несвязанное событие
  */

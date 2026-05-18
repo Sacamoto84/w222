@@ -77,7 +77,7 @@ lv_group_t * lv_group_create(void)
 
 void lv_group_delete(lv_group_t * group)
 {
-    /*Расфокусировать текущий сфокусированный объект*/
+    /*Снять фокус с текущего объекта*/
     LV_ASSERT_NULL(group);
     if(group->obj_focus != NULL) {
         lv_obj_send_event(*group->obj_focus, LV_EVENT_DEFOCUSED, get_indev(group));
@@ -90,7 +90,7 @@ void lv_group_delete(lv_group_t * group)
         if((*obj)->spec_attr)(*obj)->spec_attr->group_p = NULL;
     }
 
-    /*Удалите группу со всех устройств разработки. */
+    /*Удалить группу из всех устройств ввода. */
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         if(lv_indev_get_group(indev) == group) {
@@ -180,18 +180,18 @@ void lv_group_remove_obj(lv_obj_t * obj)
     if(g->obj_focus && *g->obj_focus == obj) {
         if(g->frozen) g->frozen = 0;
 
-        /*Если это единственный объект в группе, фокусируйтесь ни на чем.*/
+        /*Если это единственный объект в группе, снять фокус полностью.*/
         if(lv_ll_get_head(&g->obj_ll) == g->obj_focus && lv_ll_get_tail(&g->obj_ll) == g->obj_focus) {
             lv_obj_send_event(*g->obj_focus, LV_EVENT_DEFOCUSED, get_indev(g));
         }
-        /*Если в группе больше объектов, сосредоточьтесь на следующем/предыдущем объекте.*/
+        /*Если в группе есть другие объекты, перевести фокус на следующий/предыдущий объект.*/
         else {
             lv_group_refocus(g);
         }
     }
 
     /*Если объект фокуса остался прежним, то это был единственный объект в группе, но он будет
-     *быть удалены. Установите для`obj_focus`значениеNULL, чтобы вернуться в исходное состояние группы с помощью
+     *быть удалены. Установите для`obj_focus`значение `NULL`, чтобы вернуться в исходное состояние группы с помощью
      *ноль объектов*/
     if(g->obj_focus && *g->obj_focus == obj) {
         g->obj_focus = NULL;
@@ -214,7 +214,7 @@ void lv_group_remove_all_objs(lv_group_t * group)
 {
     LV_ASSERT_NULL(group);
 
-    /*Расфокусировать текущий сфокусированный объект*/
+    /*Снять фокус с текущего объекта*/
     if(group->obj_focus != NULL) {
         lv_obj_send_event(*group->obj_focus, LV_EVENT_DEFOCUSED, get_indev(group));
         lv_obj_invalidate(*group->obj_focus);
@@ -238,13 +238,13 @@ void lv_group_focus_obj(lv_obj_t * obj)
 
     if(g->frozen != 0) return;
 
-    /*Режим редактирования при расфокусировке необходимо оставить*/
+    /*При потере фокуса нужно выйти из режима редактирования*/
     lv_group_set_editing(g, false);
 
     lv_obj_t ** i;
     LV_LL_READ(&g->obj_ll, i) {
         if(*i == obj) {
-            if(g->obj_focus != NULL && obj != *g->obj_focus) {  /*Не расфокусируйте, если тот же объект необходимо снова сфокусировать.*/
+            if(g->obj_focus != NULL && obj != *g->obj_focus) {  /*Не снимать фокус, если тот же объект должен получить его снова.*/
                 lv_result_t res = lv_obj_send_event(*g->obj_focus, LV_EVENT_DEFOCUSED, get_indev(g));
                 if(res != LV_RESULT_OK) return;
                 lv_obj_invalidate(*g->obj_focus);
@@ -452,7 +452,7 @@ void * lv_group_get_user_data(const lv_group_t * group)
 
 static void lv_group_refocus(lv_group_t * g)
 {
-    /*Перефокусировка должна временно разрешить правильную работу переноса.*/
+    /*При смене фокуса временно разрешить перенос, чтобы он работал корректно.*/
     uint8_t temp_wrap = g->wrap;
     g->wrap           = 1;
 
@@ -484,7 +484,7 @@ static bool focus_next_core(lv_group_t * group, void * (*begin)(const lv_ll_t *)
                 can_begin = false;
             }
             else {
-                /*Объект, сфокусированный в данный момент, является последним/первым в группе, оставьте его в таком положении.*/
+                /*Текущий сфокусированный объект уже последний/первый в группе, оставить фокус на нем.*/
                 return focus_changed;
             }
         }
@@ -520,7 +520,7 @@ static bool focus_next_core(lv_group_t * group, void * (*begin)(const lv_ll_t *)
         break;
     }
 
-    if(obj_next == group->obj_focus) return focus_changed; /*Виден только один объект, и он уже сфокусирован.*/
+    if(obj_next == group->obj_focus) return focus_changed; /*Виден только один объект, и он уже в фокусе.*/
 
     if(group->obj_focus) {
         lv_result_t res = lv_obj_send_event(*group->obj_focus, LV_EVENT_DEFOCUSED, get_indev(group));
@@ -541,9 +541,9 @@ static bool focus_next_core(lv_group_t * group, void * (*begin)(const lv_ll_t *)
 }
 
 /**
- * Найдите indev-зависимость типаPOINTER(потому что он наиболее общий), который использует данную группу.
+ * Найдите indev-зависимость типа `POINTER`(потому что он наиболее общий), который использует данную группу.
  * Другими словами, найдите индев, относящийся к данной группе.
- * В худшем случае просто верните последнюю версию разработки.
+ * В худшем случае вернуть последнее устройство ввода.
  * @param g     группа находка в индевс
  * @return      предлагаемый индев
  */

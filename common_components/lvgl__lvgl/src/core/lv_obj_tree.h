@@ -117,7 +117,7 @@ lv_display_t * lv_obj_get_display(const lv_obj_t * obj);
 /**
  * Получить родителя объекта
  * @param obj       указатель на объект
- * @return          родитель объекта. ( NULL, если`obj`был экраном)
+ * @return          родитель объекта. ( NULL, если `obj`был экраном)
  */
 lv_obj_t * lv_obj_get_parent(const lv_obj_t * obj);
 

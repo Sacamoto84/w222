@@ -26,15 +26,15 @@ extern "C" {
 /*Все возможные типы значений свойств*/
 #define LV_PROPERTY_TYPE_INVALID        0   /*Используйте значение по умолчанию 0 как недействительное для обнаружения выбросов программы.*/
 #define LV_PROPERTY_TYPE_INT            1   /*Тип int32_t*/
-#define LV_PROPERTY_TYPE_PRECISE        2   /*lv_value_precise_t ,int32_tили плавающее число в зависимости от LV_USE_FLOAT*/
+#define LV_PROPERTY_TYPE_PRECISE        2   /*`lv_value_precise_t`, `int32_t` или число с плавающей точкой в зависимости от LV_USE_FLOAT*/
 #define LV_PROPERTY_TYPE_COLOR          3   /*Тип ARGB8888*/
 #define LV_PROPERTY_TYPE_POINT          4   /*lv_point_t */
 #define LV_PROPERTY_TYPE_POINTER        5   /*пустота * указатель*/
 #define LV_PROPERTY_TYPE_IMGSRC         6   /*Специальный указатель для изображения*/
 #define LV_PROPERTY_TYPE_TEXT           7   /*Специальный указатель char* */
-#define LV_PROPERTY_TYPE_OBJ            8   /*Специальный указательlv_obj_t* */
-#define LV_PROPERTY_TYPE_DISPLAY        9   /*Специальный указательlv_display_t* */
-#define LV_PROPERTY_TYPE_FONT           10  /*Специальный указательlv_font_t* */
+#define LV_PROPERTY_TYPE_OBJ            8   /*Специальный указатель `lv_obj_t *` */
+#define LV_PROPERTY_TYPE_DISPLAY        9   /*Специальный указатель `lv_display_t *` */
+#define LV_PROPERTY_TYPE_FONT           10  /*Специальный указатель `lv_font_t *` */
 #define LV_PROPERTY_TYPE_BOOL           11  /*Тип int32_t*/
 
 #define LV_PROPERTY_TYPE_SHIFT          28
@@ -91,7 +91,7 @@ extern "C" {
 enum _lv_prop_id_range_boundary_t {
     LV_PROPERTY_ID_INVALID      = 0,
 
-    /*ID от0x01до0xffимеют стиль ID, от примеров lv_style_prop_t.*/
+    /*ID от 0x01 до 0xff являются ID стилей из `lv_style_prop_t`.*/
     LV_PROPERTY_STYLE_START     = 0x00,
 
     LV_PROPERTY_ID_START        = 0x0100, /*ID меньше, чем 0xff, — это стиль ID.*/
@@ -122,7 +122,7 @@ enum _lv_prop_id_range_boundary_t {
     LV_PROPERTY_CHART_START     = 0x1800, /* lv_chart.c */
 
     /*Специальный ID, используйте его для расширения ID и убедитесь, что он уникален и определяет время компиляции.*/
-    LV_PROPERTY_ID_BUILTIN_LAST = 0xffff, /*ID из0x10000~0xfffffffзарезервировано для пользователя.*/
+    LV_PROPERTY_ID_BUILTIN_LAST = 0xffff, /*ID в диапазоне 0x10000~0xfffffff зарезервированы для пользователя.*/
 
     LV_PROPERTY_ID_ANY          = 0x7ffffffe, /*Специальный ID, интеллектуальный уровень для перехвата всех вызовов сеттера/геттера.*/
 };
@@ -139,7 +139,7 @@ typedef struct {
         uint32_t num_u;             /**< Беззнаковое целое: непрозрачность или bool  */
         bool enable;                /**< Логические значения */
         const void * ptr;           /**< Константные указатели: шрифт, текст и т. п. */
-        lv_color_t color;           /**< Цветs */
+        lv_color_t color;           /**< Цвет */
         lv_value_precise_t precise; /**< float или int для точного значения */
         lv_point_t point;           /**< Точка из двух int32_t */
 
@@ -151,14 +151,14 @@ typedef struct {
              *
              * E.g.
              *
-             * статическая константаlv_property_tobj_pos_x = {
+             * static const lv_property_t obj_pos_x = {
              *      .id = LV_PROPERTY_STYLE_X,
              *      .номер = 123,
              *      .селектор = LV_STATE_PRESSED,
              * }
              *
              * вместо:
-             * статическая константаlv_property_tobj_pos_x = {
+             * static const lv_property_t obj_pos_x = {
              *      .id = LV_PROPERTY_STYLE_X,
              *      .style.num = 123, // обратите внимание на этот символ.
              *      .селектор = LV_STATE_PRESSED,
@@ -226,7 +226,7 @@ lv_result_t lv_obj_set_properties(lv_obj_t * obj, const lv_property_t * value, u
  * Если id является свойством стиля, вычисляет стиль PART_MAIN.
  * @param obj       указатель на виджет
  * @param id        ID свойства для чтения
- * @return          вернуть прочитанное значение свойства. Возвращаемое свойствоIDустанавливается в `LV_PROPERTY_ID_INVALID`, если чтение не удалось.
+ * @return          прочитанное значение свойства. ID возвращаемого свойства устанавливается в `LV_PROPERTY_ID_INVALID`, если чтение не удалось.
  */
 lv_property_t lv_obj_get_property(lv_obj_t * obj, lv_prop_id_t id);
 
@@ -235,7 +235,7 @@ lv_property_t lv_obj_get_property(lv_obj_t * obj, lv_prop_id_t id);
  * @param obj       указатель на виджет
  * @param id        ID свойства стиля
  * @param part      часть, для которой должно быть вычислено свойство стиля
- * @return          вернуть прочитанное значение свойства. Возвращаемое свойствоIDустанавливается в `LV_PROPERTY_ID_INVALID`, если чтение не удалось.
+ * @return          прочитанное значение свойства. ID возвращаемого свойства устанавливается в `LV_PROPERTY_ID_INVALID`, если чтение не удалось.
  */
 lv_property_t lv_obj_get_style_property(lv_obj_t * obj, lv_prop_id_t id, lv_part_t part);
 
@@ -245,7 +245,7 @@ lv_property_t lv_obj_get_style_property(lv_obj_t * obj, lv_prop_id_t id, lv_part
  * Требуется включить `LV_USE_OBJ_PROPERTY_NAME` .
  * @param obj       указатель на виджет, чей класс и иерархию базовых классов нужно искать.
  * @param name      имя свойства
- * @return          свойствоIDнайдено или `LV_PROPERTY_ID_INVALID`, если не найдено.
+ * @return          найденный ID свойства или `LV_PROPERTY_ID_INVALID`, если свойство не найдено.
  */
 lv_prop_id_t lv_obj_property_get_id(const lv_obj_t * obj, const char * name);
 
@@ -254,14 +254,14 @@ lv_prop_id_t lv_obj_property_get_id(const lv_obj_t * obj, const char * name);
  * Требуется включить `LV_USE_OBJ_PROPERTY_NAME`.
  * @param clz       указатель на класс виджета, имеющий указанное свойство.
  * @param name      имя свойства
- * @return          свойствоIDнайдено или `LV_PROPERTY_ID_INVALID`, если не найдено.
+ * @return          найденный ID свойства или `LV_PROPERTY_ID_INVALID`, если свойство не найдено.
  */
 lv_prop_id_t lv_obj_class_property_get_id(const lv_obj_class_t * clz, const char * name);
 
 /**
  * Получите свойство стиля ID по имени. Требуется включить `LV_USE_OBJ_PROPERTY_NAME`.
  * @param name      имя свойства
- * @return          свойствоIDнайдено или `LV_PROPERTY_ID_INVALID`, если не найдено.
+ * @return          найденный ID свойства или `LV_PROPERTY_ID_INVALID`, если свойство не найдено.
  */
 lv_prop_id_t lv_style_property_get_id(const char * name);
 

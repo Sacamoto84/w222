@@ -468,7 +468,7 @@ lv_observer_t * lv_subject_add_observer_obj(lv_subject_t * subject, lv_observer_
         lv_obj_add_event_cb(obj, unsubscribe_on_delete_cb, LV_EVENT_DELETE, observer);
     }
 
-    /* Немедленно обновите Observer. */
+    /* Немедленно обновить наблюдателя. */
     if(observer->cb) observer->cb(observer, subject);
 
     return observer;
@@ -493,7 +493,7 @@ lv_observer_t * lv_subject_add_observer_with_target(lv_subject_t * subject, lv_o
     observer->user_data = user_data;
     observer->target = target;
 
-    /* Немедленно обновите Observer. */
+    /* Немедленно обновить наблюдателя. */
     if(observer->cb) observer->cb(observer, subject);
 
     return observer;
@@ -532,7 +532,7 @@ void lv_obj_remove_from_subject(lv_obj_t * obj, lv_subject_t * subject)
     /*
      * Найдите `observer`, который соединяет`obj`и `subject`.
      * Поскольку объект связан с субъектом,
-     *  `obj` будет иметь событиеLV_EVENT_REMOVEс обратным вызовом `unsubscribe_on_delete_cb`
+     *  `obj` будет иметь событие `LV_EVENT_REMOVE` с обратным вызовом `unsubscribe_on_delete_cb`
      *  связанный.
      * Затем из событий мы можем найти наблюдателя в поле событий `user_data`.
      */

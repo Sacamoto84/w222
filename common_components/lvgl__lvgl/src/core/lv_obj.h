@@ -305,7 +305,7 @@ lv_group_t * lv_obj_get_group(const lv_obj_t * obj);
 /**
  * Получить поле user_data объекта.
  * @param obj   указатель на объект
- * @return      указатель наuser_dataобъекта
+ * @return      указатель на `user_data` объекта
  */
 void * lv_obj_get_user_data(lv_obj_t * obj);
 
@@ -432,7 +432,7 @@ lv_obj_t * lv_obj_find_by_id(const lv_obj_t * obj, const void * id);
  * В противном случае эти функции, включая`lv_obj_[set|assign|free|stringify]_id`и
  * `lv_obj_id_compare` должен быть реализован извне.
  *
- * @param class_p   класс, к которому принадлежит этот объект. Обратите внимание, что obj->class_p— это класс, который создается в данный момент.
+ * @param class_p   класс, к которому принадлежит этот объект. Обратите внимание, что obj->class_p — это класс, который создается в данный момент.
  * @param obj   указатель на объект
  */
 void lv_obj_assign_id(const lv_obj_class_t * class_p, lv_obj_t * obj);

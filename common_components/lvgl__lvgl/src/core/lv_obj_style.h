@@ -79,7 +79,7 @@ typedef enum {
 } lv_style_state_cmp_t;
 
 /**
- * Тип соединения для`lv_part_t`и `lv_state_t`. Примеры результатов
+ * Комбинация `lv_part_t` и `lv_state_t`. Примеры результатов
  * - `0` : означает `LV_PART_MAIN | LV_STATE_DEFAULT`
  * - `LV_STATE_PRSSED`
  * - `LV_PART_KNOB`
@@ -111,7 +111,7 @@ void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selecto
  * @param obj           указатель на объект
  * @param old_style     указатель на стиль, который необходимо заменить.
  * @param new_style     указатель на стиль, которым нужно заменить старый стиль.
- * @param selector      объединенные побитовым ИЛИ значения состояний и часть для замены только стилей соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
+ * @param selector      объединенные побитовым ИЛИ значения состояний и часть для замены только стилей соответствующими селекторами.  Можно использовать `LV_STATE_ANY` и LV_PART_ANY.
  *
  * Примеры:
  * @code
@@ -127,7 +127,7 @@ bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv
  * Удаление стиля из объекта.
  * @param obj       указатель на объект
  * @param style     указатель на стиль, который нужно удалить. Может быть NULL, чтобы проверить только селектор
- * @param selector  объединенные побитовым ИЛИ значения состояний и часть для удаления только стилей с соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
+ * @param selector  объединенные побитовым ИЛИ значения состояний и часть для удаления только стилей с соответствующими селекторами.  Можно использовать `LV_STATE_ANY` и LV_PART_ANY.
  *
  * Примеры:
  * @code
@@ -398,10 +398,10 @@ lv_opa_t lv_obj_get_style_opa_recursive(const lv_obj_t * obj, lv_part_t part);
 lv_color32_t lv_obj_style_apply_recolor(const lv_obj_t * obj, lv_part_t part, lv_color32_t color);
 
 /**
- * Получите свойство стиля`recolor`от всех родительских элементов и рекурсивно подключите их.
+ * Получить свойство стиля `recolor` у всех родительских элементов и рекурсивно объединить их.
  * @param obj       объект, значение перекрашивания которого должно быть получено
  * @param part      целевую часть для проверки. Детали, отличные от MAIN, также будут рассмотрены.
- *                  значение`recolor`из частиMAINво время расчета
+ *                  значение `recolor` из части `MAIN` во время расчета
  * @return          окончательное смешанное значение перекрашивания, объединяющее значения перекрашивания всех родительских элементов
  */
 lv_color32_t lv_obj_get_style_recolor_recursive(const lv_obj_t * obj, lv_part_t part);
@@ -424,7 +424,7 @@ lv_observer_t * lv_obj_bind_style(lv_obj_t * obj, const lv_style_t * style, lv_s
  * @param obj       указатель на виджет
  * @param prop      свойство стиля
  * @param selector  селектор, для которого следует добавить свойство, например.  `LV_PART_KNOB | LV_STATE_PRESSED`
- * @param subject   указатель Субъект, к которому должно быть привязано свойство
+ * @param subject   указатель на субъект, к которому должно быть привязано свойство
  * @return              указатель на вновь созданный наблюдатель
  */
 lv_observer_t * lv_obj_bind_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_selector_t selector,

@@ -25,17 +25,17 @@ extern "C" {
  **********************/
 
 /**
- * Опишите общие методы каждого объекта.
- * Аналогично классу C++.
+ * Описывает общие методы для каждого объекта.
+ * Аналог класса C++.
  */
 struct _lv_obj_class_t {
     const lv_obj_class_t * base_class;
-    /** class_p — это последний класс, а obj->class_p— это класс, который в настоящее время [де] создан. */
+    /** class_p — конечный класс, а obj->class_p — класс, который сейчас создается или уничтожается. */
     void (*constructor_cb)(const lv_obj_class_t * class_p, lv_obj_t * obj);
     void (*destructor_cb)(const lv_obj_class_t * class_p, lv_obj_t * obj);
 
     /** class_p — класс, в котором обрабатывается событие. */
-    void (*event_cb)(const lv_obj_class_t * class_p, lv_event_t * e);  /**< Функция событий, специфичная для типа виджета*/
+    void (*event_cb)(const lv_obj_class_t * class_p, lv_event_t * e);  /**< Обработчик событий, специфичный для типа виджета*/
 
 #if LV_USE_OBJ_PROPERTY
     uint32_t prop_index_start;
@@ -44,7 +44,7 @@ struct _lv_obj_class_t {
     uint32_t properties_count;
 
 #if LV_USE_OBJ_PROPERTY_NAME
-    /* Массив свойства ID и имени. */
+    /* Массив идентификаторов и имен свойств. */
     const lv_property_name_t * property_names;
     uint32_t names_count;
 #endif

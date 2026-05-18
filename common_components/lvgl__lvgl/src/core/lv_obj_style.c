@@ -175,7 +175,7 @@ bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv
         return false;
     }
 
-    /*Аналогичноlv_obj_add_style, удалить переход.*/
+    /*Аналогично `lv_obj_add_style`, удалить переход.*/
     trans_delete(obj, selector, LV_STYLE_PROP_ANY, NULL);
 
     bool replaced = false;
@@ -917,7 +917,7 @@ static void refresh_children_style(lv_obj_t * obj)
  * - Удалите переход с`lv_obj_style_trans_ll`и освободите его.
  * - Удалить ожидающие переходы
  * @param obj указатель на объект, переход(ы) которого следует удалить
- * @param part часть объекта или0xFFдля удаления из всех частей
+ * @param part часть объекта или `0xFF` для удаления из всех частей
  * @param prop свойство или 0xFF, чтобы удалить все свойства
  * @param tr_limit удалять переходы только «старше» этого.  `NULL`, если не используется
  */
@@ -1231,7 +1231,7 @@ static lv_style_res_t get_selector_style_prop(const lv_obj_t * obj, lv_style_sel
     }
     else {
         /*Получите ширину и высоту из класса.
-                * WIDTH иHEIGHTне наследуются, поэтому заносят их в`else`, чтобы не проверять их наличие унаследованных свойств. */
+                * `WIDTH` и `HEIGHT`не наследуются, поэтому заносят их в`else`, чтобы не проверять их наличие унаследованных свойств. */
         if(part == LV_PART_MAIN && (prop == LV_STYLE_WIDTH || prop == LV_STYLE_HEIGHT)) {
             const lv_obj_class_t * cls = obj->class_p;
             while(cls) {

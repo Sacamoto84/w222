@@ -31,21 +31,21 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/** Сохраните тип слоя, необходимый для рендеринга виджета.*/
+/** Хранит тип слоя, необходимый для рендеринга виджета.*/
 typedef enum {
     /**Отдельный слой не нужен */
     LV_LAYER_TYPE_NONE,
 
-    /**Простой слой означает, что слой можно визуализировать частями.
-     * Например, приopa_layered= 140 можно отобразить только 10 строк.
+    /**Простой слой можно рендерить по частям.
+     * Например, при `opa_layered = 140` можно вывести только 10 строк
      * из слоя. Когда он будет готов, перейдите к следующим 10 строкам.
      * Это позволяет избежать выделения большого количества памяти для буфера слоя.
-     * Размер буфера для фрагмента можно установить с помощью`LV_DRAW_LAYER_SIMPLE_BUF_SIZE`в lv_conf.h.*/
+     * Размер буфера для фрагмента можно установить через `LV_DRAW_LAYER_SIMPLE_BUF_SIZE` в lv_conf.h.*/
     LV_LAYER_TYPE_SIMPLE,
 
     /**Виджет трансформируется и не может отображаться частями.
-     * Это потому, что из-за преобразований пиксель за пределами
-     * данная область также будет способствовать формированию окончательного изображения.
+     * Это нужно потому, что из-за преобразований пиксели за пределами
+     * заданной области тоже могут влиять на итоговое изображение.
      * В этом случае ограничений на размер буфера нет.
      * LVGL выделит буфер настолько большого размера, насколько необходимо для рендеринга преобразованной области.*/
     LV_LAYER_TYPE_TRANSFORM,
@@ -58,22 +58,22 @@ typedef enum {
 /**
  * Инициализировать дескриптор рисования прямоугольника из стилей объекта в его текущем состоянии.
  * @param obj       указатель на объект
- * @param part      часть объекта, напр.  `LV_PART_MAIN`, `LV_PART_SCROLLBAR`,`LV_PART_KNOB`и т. д.
+ * @param part      часть объекта, например `LV_PART_MAIN`, `LV_PART_SCROLLBAR`, `LV_PART_KNOB` и т. д.
  * @param draw_dsc  дескриптор для инициализации.
- *                  Если для поля`..._opa`установлено значение`LV_OPA_TRANSP`, связанные свойства не будут инициализированы.
- *                  Должен быть инициализирован с помощью `lv_draw_rect_dsc_init(draw_dsc)`.
+ *                  Если поле `..._opa` равно `LV_OPA_TRANSP`, связанные свойства не будут инициализированы.
+ *                  Должен быть предварительно инициализирован через `lv_draw_rect_dsc_init(draw_dsc)`.
  * @note Будут установлены только соответствующие поля.
- *       например, если`border width == 0`, другие свойства границ не будут оцениваться.
+ *       Например, если `border width == 0`, остальные свойства границы не будут учитываться.
  */
 void lv_obj_init_draw_rect_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_rect_dsc_t * draw_dsc);
 
 /**
  * Инициализировать дескриптор рисования метки из стилей объекта в его текущем состоянии.
  * @param obj       указатель на объект
- * @param part      часть объекта, напр.  `LV_PART_MAIN`, `LV_PART_SCROLLBAR`,`LV_PART_KNOB`и т. д.
+ * @param part      часть объекта, например `LV_PART_MAIN`, `LV_PART_SCROLLBAR`, `LV_PART_KNOB` и т. д.
  * @param draw_dsc  дескриптор для инициализации.
- *                  Если в поле`opa`установлено значение или свойство, равное`LV_OPA_TRANSP`, остальное не будет обосновано.
- *                  Должен быть инициализирован с помощью `lv_draw_label_dsc_init(draw_dsc)`.
+ *                  Если поле `opa` или соответствующее свойство равно `LV_OPA_TRANSP`, остальные поля не будут заполняться.
+ *                  Должен быть предварительно инициализирован через `lv_draw_label_dsc_init(draw_dsc)`.
  */
 void lv_obj_init_draw_label_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_label_dsc_t * draw_dsc);
 
@@ -82,7 +82,7 @@ void lv_obj_init_draw_label_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_label_ds
  * @param obj       указатель на объект
  * @param part      часть объекта, напр.  `LV_PART_MAIN`, `LV_PART_SCROLLBAR`,`LV_PART_KNOB`и т. д.
  * @param draw_dsc  дескриптор для инициализации.
- *                  Должен быть инициализирован с помощью `lv_draw_image_dsc_init(draw_dsc)`.
+ *                  Должен быть предварительно инициализирован через `lv_draw_image_dsc_init(draw_dsc)`.
  */
 void lv_obj_init_draw_image_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_image_dsc_t * draw_dsc);
 
@@ -91,7 +91,7 @@ void lv_obj_init_draw_image_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_image_ds
  * @param obj указатель на объект
  * @param part      часть объекта, напр.  `LV_PART_MAIN`, `LV_PART_SCROLLBAR`,`LV_PART_KNOB`и т. д.
  * @param draw_dsc  дескриптор для инициализации.
- *                  Должен быть инициализирован с помощью `lv_draw_line_dsc_init(draw_dsc)`.
+ *                  Должен быть предварительно инициализирован через `lv_draw_line_dsc_init(draw_dsc)`.
  */
 void lv_obj_init_draw_line_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_line_dsc_t * draw_dsc);
 
@@ -100,7 +100,7 @@ void lv_obj_init_draw_line_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_line_dsc_
  * @param obj       указатель на объект
  * @param part      часть объекта, напр.  `LV_PART_MAIN`, `LV_PART_SCROLLBAR`,`LV_PART_KNOB`и т. д.
  * @param draw_dsc  дескриптор для инициализации.
- *                  Должен быть инициализирован с помощью `lv_draw_arc_dsc_init(draw_dsc)`.
+ *                  Должен быть предварительно инициализирован через `lv_draw_arc_dsc_init(draw_dsc)`.
  */
 void lv_obj_init_draw_arc_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_arc_dsc_t * draw_dsc);
 
@@ -112,12 +112,12 @@ void lv_obj_init_draw_arc_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_arc_dsc_t 
  * @param obj       указатель на объект
  * @param part      часть объекта, напр.  `LV_PART_MAIN`, `LV_PART_SCROLLBAR`,`LV_PART_KNOB`и т. д.
  * @param draw_dsc  дескриптор для инициализации.
- *                  Должен быть инициализирован с помощью `lv_draw_blur_dsc_init(draw_dsc)`.
+ *                  Должен быть предварительно инициализирован через `lv_draw_blur_dsc_init(draw_dsc)`.
  */
 void lv_obj_init_draw_blur_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_blur_dsc_t * draw_dsc);
 
 /**
- * Получите необходимый дополнительный размер (вокруг части объекта), чтобы нарисовать тень, контур, значение и т. д.
+ * Получить дополнительную область вокруг части объекта, нужную для тени, контура, текста и т. д.
  * @param obj       указатель на объект
  * @param part      часть объекта
  * @return          дополнительный размер, необходимый вокруг объекта
@@ -125,7 +125,7 @@ void lv_obj_init_draw_blur_dsc(lv_obj_t * obj, lv_part_t part, lv_draw_blur_dsc_
 int32_t lv_obj_calculate_ext_draw_size(lv_obj_t * obj, lv_part_t part);
 
 /**
- * Отправьте ' LV_EVENT_REFR_EXT_DRAW_SIZE ' Вызовите обработчик событий предка для объекта, чтобы обновить значение расширенного размера отрисовки.
+ * Отправить `LV_EVENT_REFR_EXT_DRAW_SIZE` объекту, чтобы обновить значение расширенной области отрисовки.
  * Результат будет сохранен в `obj`.
  * @param obj       указатель на объект
  */

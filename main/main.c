@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-FileCopyrightText: 2025 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -26,8 +26,6 @@
 
 #include "examples/event/lv_example_event.h"
 
-
-
 extern void ui_init(void);
 
 static const char *TAG = "app";
@@ -51,9 +49,13 @@ static void show_startup_screen(void)
     lv_obj_align(subtitle, LV_ALIGN_CENTER, 0, 24);
 }
 
-
 void app_main(void)
 {
+
+    int res = bsp_sdcard_mount();
+
+    ESP_LOGI("SDCARD", "SDCARD %d", res);
+
     ESP_ERROR_CHECK(bsp_extra_codec_init());
 
     bsp_display_cfg_t cfg = {
@@ -76,6 +78,7 @@ void app_main(void)
         ESP_LOGE(TAG, "LVGL lock timeout");
         return;
     }
+
     //show_startup_screen();
     
     //ui_init();

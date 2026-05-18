@@ -96,4 +96,8 @@ G:/w222/w222/build/esp-idf/espressif__esp_lcd_touch/libespressif__esp_lcd_touch.
 G:/w222/w222/build/esp-idf/espressif__esp_lcd_touch_gt911/libespressif__esp_lcd_touch_gt911.a
 G:/w222/w222/build/esp-idf/espressif__esp32_p4_function_ev_board/libespressif__esp32_p4_function_ev_board.a
 G:/w222/w222/build/esp-idf/bsp_extra/libbsp_extra.a
+G:/w222/w222/build/esp-idf/espressif__esp_hosted/libespressif__esp_hosted.a
+G:/w222/w222/build/esp-idf/espressif__esp_serial_slave_link/libespressif__esp_serial_slave_link.a
+G:/w222/w222/build/esp-idf/espressif__eppp_link/libespressif__eppp_link.a
+G:/w222/w222/build/esp-idf/espressif__esp_wifi_remote/libespressif__esp_wifi_remote.a
 G:/w222/w222/build/esp-idf/main/libmain.a

@@ -9,10 +9,12 @@ idf_component_register(
         esp_common
         esp_event
         esp_hw_support
+        fatfs
         espressif__esp32_p4_function_ev_board
         log
         lvgl__lvgl
-        nvs_flash)
+        nvs_flash
+        sdmmc)
 
 idf_component_get_property(LVGL_LIB lvgl__lvgl COMPONENT_LIB)
 target_compile_definitions(

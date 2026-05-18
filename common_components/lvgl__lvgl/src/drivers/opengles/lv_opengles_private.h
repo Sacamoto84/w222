@@ -85,7 +85,7 @@ extern "C" {
 #define GL_RGBA8 0x8058
 #endif
 
-/* В Desktop GL GL_RGB565 не поддерживается. Вместо этого используйте RGB */
+/* На рабочем столеGLGL_RGB565 не происходит. Вместо этого воспользуйтесь RGB */
 #if !LV_USE_EGL
 #define GL_RGB565 GL_RGB
 #endif
@@ -99,7 +99,7 @@ extern "C" {
 #define LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT24
 #else
 /*
- * Это пока не работает правильно, компилируется нормально, но не отображается на RPi3B.  Работа продолжается.
+ * Это пока не работает правильно, нормально компилируется, но не отображается на RPi3B.  Работа продолжается.
  *
 #ifdef GL_DEPTH_COMPONENT24_OES
 #определить LV_GL_PREFERRED_DEPTH GL_DEPTH_COMPONENT24_OES
@@ -135,36 +135,36 @@ typedef struct {
 
 /**
  * Инициализируйте параметры рендеринга значениями по умолчанию.
- * @param params pointer to an initialized `lv_opengles_render_params_t` struct
+ * @param params указатель на инициализированную структуру `lv_opengles_render_params_t`
  */
 void lv_opengles_render_params_init(lv_opengles_render_params_t * params);
 
 /**
- * Отобразите содержимое окна/фреймбуфера с помощью OpenGL.
- * @param params pointer to an initialized `lv_opengles_render_params_t` struct
+ * Отобразите критерии окна/фреймбуфера с помощью OpenGL.
+ * @param params указатель на инициализированную структуру `lv_opengles_render_params_t`
  */
 void lv_opengles_render(const lv_opengles_render_params_t * params);
 
 /**
  * Отрисуйте текстуру, используя альтернативный режим наложения, с красным и синим каналами, перевернутыми в шейдере.
- * @param texture        OpenGL texture ID
- * @param texture_area   the area in the window to render the texture in
- * @param opa            opacity to blend the texture with existing contents
- * @param disp_w         width of the window/framebuffer being rendered to
- * @param disp_h         height of the window/framebuffer being rendered to
- * @param h_flip         horizontal flip
- * @param v_flip         vertical flip
+ * @param texture        Текстура OpenGL ID
+ * @param texture_area   область в окне для рендеринга текстуры
+ * @param opa            непрозрачность, чтобы смешать текстуру с существующим содержимым
+ * @param disp_w         ширина окна/кадрового буфера, в который отображается
+ * @param disp_h         высота отображаемого окна/фреймбуфера
+ * @param h_flip         горизонтальный флип
+ * @param v_flip         вертикальный флип
  */
 void lv_opengles_render_texture_rbswap(unsigned int texture, const lv_area_t * texture_area, lv_opa_t opa,
                                        int32_t disp_w, int32_t disp_h, const lv_area_t * texture_clip_area,
                                        bool h_flip, bool v_flip);
 
 /**
- * Установите область просмотра OpenGL с преобразованием вертикальных координат.
- * @param x        x position of the viewport
- * @param y        y position of the viewport
- * @param w        width of the viewport
- * @param h        height of the viewport
+ * Установить область просмотра OpenGL с преобразованием вертикальных координат.
+ * @param x        положение x области просмотра
+ * @param y        положение окна просмотра по оси y
+ * @param w        ширина области просмотра
+ * @param h        высота видового экрана
  */
 void lv_opengles_regular_viewport(int32_t x, int32_t y, int32_t w, int32_t h);
 

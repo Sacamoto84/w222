@@ -48,7 +48,7 @@
 #define CODE128_MIN_ENCODE_LEN (CODE128_QUIET_ZONE_LEN * 2 + CODE128_CHAR_LEN * 2 + CODE128_STOP_CODE_LEN)
 
 static const int code128_pattern[] = {
-    // value: pattern,     bar/space widths
+    // value: узор, ширина полос/пробелов
     1740, //   0: 11011001100, 212222
     1644, //   1: 11001101100, 222122
     1638, //   2: 11001100110, 222221
@@ -194,7 +194,7 @@ static void code128_append_pattern(int pattern, int pattern_length, char * out)
 
     int i;
     for(i = pattern_length - 1; i >= 0; i--) {
-        // приведение позволяет избежать предупреждения: неявное преобразование из 'int' в 'char' меняет значение с 255 на -1 [-Wconstant-conversion]
+        // Приведение позволяет избежать референции: неявное преобразование из 'int' в 'char' меняет значение с 255 на -1 [-Wconstant-conversion]
         *out++ = (unsigned char)((pattern & (1 << i)) ? 255 : 0);
     }
 }
@@ -303,7 +303,7 @@ static int code128_do_a_step(struct code128_step * base, int prev_ix, int ix)
     struct code128_step * step = &base[ix];
 
     char value = *previous_step->next_input;
-    // NOTE: Currently we can't encode NULL
+    // NOTE: В настоящее время мы не можем кодировать NULL.
     if(value == 0)
         return 0;
 
@@ -327,7 +327,7 @@ static int code128_do_b_step(struct code128_step * base, int prev_ix, int ix)
     struct code128_step * step = &base[ix];
 
     char value = *previous_step->next_input;
-    // NOTE: Currently we can't encode NULL
+    // NOTE: В настоящее время мы не можем кодировать NULL.
     if(value == 0)
         return 0;
 
@@ -351,7 +351,7 @@ static int code128_do_c_step(struct code128_step * base, int prev_ix, int ix)
     struct code128_step * step = &base[ix];
 
     char value = *previous_step->next_input;
-    // NOTE: Currently we can't encode NULL
+    // NOTE: В настоящее время мы не можем кодировать NULL.
     if(value == 0)
         return 0;
 
@@ -497,7 +497,7 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
         state.current_ix++;
     } while(state.current_ix != state.todo_ix);
 
-    // Если нет best_step , то ошибка.
+    // Если нетbest_step, то ошибка.
     if(state.best_ix < 0) {
         CODE128_FREE(state.steps);
         return 0;
@@ -544,12 +544,12 @@ size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
 }
 
 /**
- * @brief Encode the GS1 string
+ * @brief Закодируйте строку GS1
  *
  * Это преобразует последовательности [ FNC1 ] в необработанные символы FNC1 и
  * удаляет пробелы перед кодированием штрих-кодов.
  *
- * @return the length of barcode data in bytes
+ * @return длина данных штрих-кода в байтах
  */
 size_t code128_encode_gs1(const char * s, char * out, size_t maxlength)
 {

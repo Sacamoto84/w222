@@ -37,8 +37,8 @@
 #define FIXPT_SIZE (1<<FIXPT_BITS)
 
 /*
- * квадратное уравнение со следующими коэффициентами (rx и ry определены в _calculateCoefficients()):
- * A = a  // fill->radial.a
+ * квадратное уравнение с учетом коэффициентов (rx и ry) можно использовать в_calculateCoefficients():
+ * A = а // заливка->радиал.а
  * B = 2 * (dr * fr + rx * dx + ry * dy)
  * C = fr^2 - rx^2 - ry^2
  * Производные вычисляются по dx.
@@ -280,14 +280,14 @@ bool _prepareRadial(SwFill* fill, const RadialGradient* radial, const Matrix& tr
 
     //Это условие соответствует стандарту SVG 1.1:
     //точка фокуса, если она находится за пределами конечного круга, перемещается в конечный круг
-    //See: the SVG 2 std requirements: https://www.w3.org/TR/SVG2/pservers.html#RadialGradientNotes
+    //See: стандартные требованияSVG2: https://www.w3.org/TR/SVG2/pservers.html#RadialGradientNotes
     if (fill->radial.a < 0) {
         auto dist = sqrtf(fill->radial.dx * fill->radial.dx + fill->radial.dy * fill->radial.dy);
         fill->radial.fx = cx + r * (fx - cx) / dist;
         fill->radial.fy = cy + r * (fy - cy) / dist;
         fill->radial.dx = cx - fill->radial.fx;
         fill->radial.dy = cy - fill->radial.fy;
-        // Предотвратите потерю точности Apple Silicon, когда dr=dy и dx=0 из-за FMA
+        // Предотвратите определения точности Apple Silicon, когда dr=dy и dx=0 из-за FMA
         // https://github.com/thorvg/thorvg/issues/2014
         auto dr2 = fill->radial.dr * fill->radial.dr;
         auto dx2 = fill->radial.dx * fill->radial.dx;

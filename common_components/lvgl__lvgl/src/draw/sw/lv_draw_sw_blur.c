@@ -85,7 +85,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         else skip_cnt = 2;
     }
 
-    /*Размытие должно быть кратно skip_cnt, чтобы размытие происходило во всех направлениях.
+    /*Размытие должно быть кратно skip_cnt, чтобы размытие головы во всех направлениях.
      * размыть одни и те же пиксели, если некоторые пиксели пропущены*/
     clipped_coords.x1 = ((clipped_coords.x1 + (skip_cnt - 1)) / skip_cnt) * skip_cnt;
     clipped_coords.x2 = ((clipped_coords.x2 - (skip_cnt - 1)) / skip_cnt) * skip_cnt;
@@ -98,7 +98,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
 
     /*Мы будем использовать фильтр нижних частот IIR во всех 4 направлениях: сверху вниз, снизу вверх, слева направо, справа налево.
      *Аппроксимируйте коэффициент фильтра по радиусу.
-     *Фильтр выглядит так: this_px = mix( prev_px , this_px , интенсивность)
+     *Фильтр выглядит так:this_px= mix(prev_px,this_px, впереди)
      */
     uint32_t intensity = (BLUR_INTENSITY_MAX * blur_radius) / (blur_radius + 4);
 
@@ -125,7 +125,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         int32_t y_start = LV_CLAMP(clipped_coords.y1, coords->y1 - layer_y_ofs + cir_y, clipped_coords.y2);
         int32_t y_end = LV_CLAMP(clipped_coords.y1, coords->y2  - layer_y_ofs - cir_y, clipped_coords.y2);
 
-        /*Убедитесь, что ширина и высота кратны skip_cnt, чтобы обеспечить размытие вперед и назад.
+        /*Убедитесь, что ширина и высотаskip_cntуменьшены, чтобы обеспечить размытие вперед и назад.
          *наверняка влияет на те же пиксели */
         y_start = (y_start / skip_cnt) * skip_cnt;
         y_end = (y_end / skip_cnt) * skip_cnt;
@@ -209,7 +209,7 @@ void lv_draw_sw_blur(lv_draw_task_t * t, const lv_draw_blur_dsc_t * dsc, const l
         int32_t x_start = LV_CLAMP(clipped_coords.x1, coords->x1  - layer_x_ofs + cir_x, clipped_coords.x2);
         int32_t x_end = LV_CLAMP(clipped_coords.x1, coords->x2  - layer_x_ofs - cir_x, clipped_coords.x2);
 
-        /*Убедитесь, что ширина и высота кратны skip_cnt, чтобы обеспечить размытие вперед и назад.
+        /*Убедитесь, что ширина и высотаskip_cntуменьшены, чтобы обеспечить размытие вперед и назад.
          *наверняка влияет на те же пиксели */
         x_start = (x_start / skip_cnt) * skip_cnt;
         x_end = (x_end / skip_cnt) * skip_cnt;
@@ -485,11 +485,11 @@ static inline void blur_3_bytes(uint32_t * sum, volatile uint8_t * buf, uint32_t
  * Получите точку X или Y для закругленного края.
  * Если используются координаты X, будет возвращен Y, и наоборот.
  * Вычисляет левый или верхний край
- * @param p_start   the edge's X1 or Y1 coordinate
- * @param p_end     the edge's X2 or Y2 coordinate
- * @param p         the X or Y coordinate on the edge for which the related X or X should be returned
- * @param r         the radius of the corner
- * @return          the X or Y coordinate corresponding to the provided coordinates
+ * @param p_start   координата краяX1или Y1
+ * @param p_end     координата краяX2или Y2
+ * @param p         координата X или Y на ребре, для которой должны быть возвращены соответствующие X или X
+ * @param r         радиус угла
+ * @return          координата X или Y, соответствующая предоставленным координатам
  */
 static int32_t get_rounded_edge_point(int32_t p_start, int32_t p_end, int32_t p, int32_t r)
 {

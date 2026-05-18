@@ -32,22 +32,22 @@ extern "C" {
 
 /**
  * Инициализируйте дескриптор XKB.
- * @return true if the initialisation was successful
+ * @return true, если инициализация прошла успешно
  */
 bool lv_xkb_init(lv_xkb_t * dsc, struct xkb_rule_names names);
 
 /**
  * Деинициализируйте дескриптор XKB.
- * @param dsc Pointer to descriptor
+ * @param dsc Указатель на дескриптор
  */
 void lv_xkb_deinit(lv_xkb_t * dsc);
 
 /**
- * Обработайте скан-код evdev, используя определенный дескриптор XKB.
- * @param state XKB descriptor to use
- * @param scancode evdev scancode to process
- * @param down true if the key was pressed, false if it was releases
- * @return the (first) UTF-8 character produced by the event or 0 if no output was produced
+ * Обработайте скан-код evdev, используя текущий дескриптор XKB.
+ * @param state ДескрипторXKBдля использования
+ * @param scancode скан-код evdev для обработки
+ * @param down true, если клавиша была нажата, false, если она была отпущена
+ * @return (первый) символUTF-8, созданный событием, или 0, если вывод не производился
  */
 uint32_t lv_xkb_process_key(lv_xkb_t * dsc, uint32_t scancode, bool down);
 

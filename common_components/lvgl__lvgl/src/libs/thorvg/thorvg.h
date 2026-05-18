@@ -80,15 +80,15 @@ class Animation;
 
 /**
  * @defgroup ТорВГ ТорВГ
- * @brief ThorVG classes and enumerations providing C++ APIs.
+ * @brief Классы и перечисления ThorVG, предоставляющие API C++.
  */
 
 /**@{*/
 
 /**
- * @brief Enumeration specifying the result from the APIs.
+ * @brief Перечисление, определяющее результат API.
  *
- * Все API ThorVG потенциально могут возвращать одно из значений в списке.
+ * ВсеAPIThorVG могут возвращать одни результаты измерений в список.
  * Обратите внимание, что некоторые API могут дополнительно указывать причины, по которым возвращаются их значения.
  *
  */
@@ -105,9 +105,9 @@ enum class Result
 
 
 /**
- * @brief Enumeration specifying the values of the path commands accepted by TVG.
+ * @brief Перечисление, указывающее значения команд пути, принимаемых TVG.
  *
- * Не путать с командами пути из элемента пути svg (например, M, L, Q, H и многими другими).
+ * Не путать с командами пути из элемента пути svg (например, M, L, Q, H и другими).
  * TVG интерпретирует их все и преобразует в значения PathCommand.
  */
 enum class PathCommand
@@ -120,7 +120,7 @@ enum class PathCommand
 
 
 /**
- * @brief Enumeration determining the ending type of a stroke in the open sub-paths.
+ * @brief Перечисление, определяющее тип окончания штриха в открытых подпутях.
  */
 enum class StrokeCap
 {
@@ -131,7 +131,7 @@ enum class StrokeCap
 
 
 /**
- * @brief Enumeration determining the style used at the corners of joined stroked path segments.
+ * @brief Перечисление, определяющее стиль, используемый в углах соединенных сегментов обведенного контура.
  */
 enum class StrokeJoin
 {
@@ -142,7 +142,7 @@ enum class StrokeJoin
 
 
 /**
- * @brief Enumeration specifying how to fill the area outside the gradient bounds.
+ * @brief Перечисление, указывающее, как заполнить область за пределами границ градиента.
  */
 enum class FillSpread
 {
@@ -153,7 +153,7 @@ enum class FillSpread
 
 
 /**
- * @brief Enumeration specifying the algorithm used to establish which parts of the shape are treated as the inside of the shape.
+ * @brief Перечисление, определяющее алгоритм, используемый для определения того, какие части фигуры считаются внутренней частью фигуры.
  */
 enum class FillRule
 {
@@ -163,35 +163,35 @@ enum class FillRule
 
 
 /**
- * @brief Enumeration indicating the method used in the composition of two objects - the target and the source.
+ * @brief Перечисление, указывающее метод, используемый в составе двух объектов — целевого и исходного.
  *
- * Notation: S(Source), T(Target), SA(Source Alpha), TA(Target Alpha)
+ * Notation: S (Источник), T (Цель),SA(Источник альфа),TA(Цель альфа)
  *
- * @see Paint::composite()
+ * @see Краска:: composite()
  */
 enum class CompositeMethod
 {
     None = 0,           ///< Композиция не применяется.
-    ClipPath,           ///< Определяется пересечение источника и цели, и визуализируются только результирующие пиксели из источника. Обратите внимание, что ClipPath поддерживает только тип Shape.  @deprecated Вместо этого используйте Paint:: clip().
+    ClipPath,           ///< Определяется пересечение источника и цели, и визуализируются только результирующие пиксели из источника. Обратите внимание, что ClipPath поддерживает только тип Shape.  @deprecatedВместо этого воспользуйтесь Paint::clip().
     AlphaMask,          ///< Альфа-маскирование с использованием пикселей цели композиции в качестве значения альфа.
     InvAlphaMask,       ///< Альфа-маскирование с использованием дополнения к пикселям цели композиции в качестве значения альфа.
-    LumaMask,           ///< Альфа-маскирование с использованием оттенков серого (0,2125R + 0,7154G + 0,0721*B) пикселей цели композитинга.  @since 0.9
-    InvLumaMask,        ///< Альфа-маскирование с использованием оттенков серого (0,2125R + 0,7154G + 0,0721*B) дополнения к пикселям цели композиции.  @since 0.11
+    LumaMask,           ///< Альфа-маскирование с использованием оттенков серого (0,2125R + 0,7154G + 0,0721*B) цели композитинга.  @since0.9
+    InvLumaMask,        ///< Альфа-маскирование с использованием оттенков серого (0,2125R + 0,7154G + 0,0721*B) соответствует пикселям композиции цели.  @since0.11
     AddMask,            ///< Объединяет пиксели целевого и исходного объектов с использованием целевой альфа. (T*TA) + (S*(255 - TA)) (Экспериментальный API)
     SubtractMask,       ///< Вычитает исходный цвет из целевого цвета, учитывая соответствующую целевую альфу. (T*TA) — (S*(255 — TA)) (Экспериментальный API)
-    IntersectMask,      ///< Вычисляет результат, беря минимальное значение между целевой альфа и исходной альфа и умножая его на целевой цвет. (T * min( TA , SA )) (Экспериментальный API )
-    DifferenceMask,     ///< Вычисляет абсолютную разницу между целевым цветом и исходным цветом, умноженную на дополнение целевой альфа. abs(T - S * (255 - TA )) (Экспериментальный API )
+    IntersectMask,      ///< Вычисляете результаты, беря минимальное значение между предельным альфа и исходной альфа и умножая его на верхний цвет. (T * min(TA,SA)) (ЭкспериментальныйAPI)
+    DifferenceMask,     ///< Вычисляется абсолютная разница между целевым цветом и исходным цветом, умноженная на дополнение альфа. abs(T - S * (255 -TA)) (ЭкспериментальныйAPI)
     LightenMask,        ///< При пересечении нескольких масок используется наибольшее значение прозрачности. (Экспериментальный API)
     DarkenMask          ///< При пересечении нескольких масок используется наименьшее значение прозрачности. (Экспериментальный API)
 };
 
 
 /**
- * @brief Enumeration indicates the method used for blending paint. Please refer to the respective formulas for each method.
+ * @brief Нумерация указывает метод, используемый для смешивания краски. Пожалуйста, обратитесь к соответствующим формулам для каждого метода.
  *
- * Notation: S(source paint as the top layer), D(destination as the bottom layer), Sa(source paint alpha), Da(destination alpha)
+ * Notation: S (исходная краска в качестве верхнего слоя), D (назначение в качестве нижнего слоя), Sa (исходная краска альфа), Da (назначенная альфа)
  *
- * @see Paint::blend()
+ * @see Краска:: blend()
  *
  * @since 0,15
  */
@@ -203,7 +203,7 @@ enum class BlendMethod : uint8_t
     Overlay,           ///< Сочетает режимы наложения «Умножение» и «Экран». (2*С*Д), если (2*Д<Да), иначе (Са*Да) — 2*(Да — С)*(Са — Д)
     SrcOver,           ///< Заменить нижний слой верхним.
     Darken,            ///< Создает пиксель, который сохраняет наименьшие компоненты пикселей верхнего и нижнего слоев. мин(С, Д)
-    Lighten,           ///< Only имеет действие, противоположное «Только затемнить». макс(С, Д)
+    Lighten,           ///< Только имеет действие, противоположное «Только потомнить». макс(С, Д)
     ColorDodge,        ///< Делит нижний слой на инвертированный верхний слой. Д/(255 - С)
     ColorBurn,         ///< Делит инвертированный нижний слой на верхний слой, а затем инвертирует результат. 255 - (255 - Д)/С
     HardLight,         ///< То же, что и Overlay, но с обратным расположением цветов. (2*С*Д), если (С<Са), иначе (Са*Да)-2*(Да-С)*(Са-Д)
@@ -220,42 +220,42 @@ enum class BlendMethod : uint8_t
 
 
 /**
- * @brief Enumeration that defines methods used for Scene Effects.
+ * @brief Перечисление, определяющее методы, используемые для эффектов сцены.
  *
  * Это перечисление предоставляет возможности применения к сцене различных эффектов постобработки.
  * Эффекты сцены обычно применяются для изменения окончательного внешнего вида визуализированной сцены, например, для размытия.
  *
- * @see Scene::push(SceneEffect effect, ...)
+ * @see Scene::push(эффект SceneEffect, ...)
  *
- * @note Experimental API
+ * @note Экспериментальный API
  */
 enum class SceneEffect : uint8_t
 {
     ClearAll = 0,      ///< Сброс всех ранее примененных эффектов сцены, возвращая сцену в исходное состояние.
-    GaussianBlur       ///< Примените эффект размытия с помощью фильтра Гаусса. Param(3) = {sigma(float)[> 0], направление(int)[оба: 0 / по горизонтали: 1 / по вертикали: 2], граница (int)[дубликат: 0 / перенос: 1], качество (int)[0 - 100]}
+    GaussianBlur       ///< Применить эффект размытия с помощью фильтра Гаусса. Param(3) = {sigma(float)[> 0], направление(int)[оба: 0 / по горизонтали: 1 / по вертикали: 2], граница (int)[дубликат: 0 / перенос: 1], качество (int)[0 - 100]}
 };
 
 
 /**
- * @brief Enumeration specifying the engine type used for the graphics backend. For multiple backends bitwise operation is allowed.
+ * @brief Перечисление, определяющее тип механизма, используемого для графического процессора. Для нескольких серверов разрешены побитовые операции.
  */
 enum class CanvasEngine
 {
     Sw = (1 << 1), ///< Растеризатор CPU.
     Gl = (1 << 2), ///< Растеризатор OpenGL.
-    Wg = (1 << 3), ///< Растеризатор WebGPU.  @since 0,15
+    Wg = (1 << 3), ///< Растеризатор WebGPU.  @since0,15
 };
 
 
 /**
- * @brief Enumeration specifying the ThorVG class type value.
+ * @brief Перечисление, указывающее значение типа класса ThorVG.
  *
- * Объекты рисования ThorVG могут возвращать значения типа класса, что позволяет вам идентифицировать конкретный класс каждого объекта.
+ * Объекты рисования ThorVG могут возвращать значения типа класса, что позволяет вам определять конкретный класс каждого объекта.
  *
- * @see Paint::type()
- * @see Fill::type()
+ * @see Краска:: type()
+ * @see Заполнить:: type()
  *
- * @note Experimental API
+ * @note Экспериментальный API
  */
 enum class Type : uint8_t
 {
@@ -270,7 +270,7 @@ enum class Type : uint8_t
 
 
 /**
- * @brief A data structure representing a point in two-dimensional space.
+ * @brief Структура данных, представляющая точку в двумерном пространстве.
  */
 struct Point
 {
@@ -279,7 +279,7 @@ struct Point
 
 
 /**
- * @brief A data structure representing a three-dimensional matrix.
+ * @brief Структура данных, представляющая трехмерную матрицу.
  *
  * Элементы e11, e12, e21 и e22 представляют матрицу вращения, включая коэффициент масштабирования.
  * Элементы e13 и e23 определяют перемещение объекта по осям x и y соответственно.
@@ -296,11 +296,11 @@ struct Matrix
 /**
  * @class Краска
  *
- * @brief An abstract class for managing graphical elements.
+ * @brief Абстрактный класс для управления графическими элементами.
  *
- * Графический элемент в TVG — это любой объект, составленный в Canvas.
+ * Графический элемент вTVG— это любой объект, составленный в Canvas.
  * Paint представляет собой такой графический объект и его поведение, такое как дублирование, преобразование и композиция.
- * TVG рекомендует пользователю рассматривать покраску как набор нестабильных команд. Они могут подготовить Paint, а затем запросить Canvas для их запуска.
+ * TVG рекомендует пользователю рассматривать набор портативных команд. Они могут подготовить Paint, а затем запросить Canvas для их запуска.
  */
 class TVG_API Paint
 {
@@ -308,30 +308,30 @@ public:
     virtual ~Paint();
 
     /**
-     * @brief Sets the angle by which the object is rotated.
+     * @brief Устанавливает угол, на который поворачивается объект.
      *
      * Угол измеряется по часовой стрелке от горизонтальной оси.
      * Ось вращения проходит через точку на объекте с нулевыми координатами.
      *
      * @param [in] градус Значение угла в градусах.
      *
-     * @retval Result::InsufficientCondition in case a custom transform is applied.
-     * @see Paint::transform()
+     * @retval Result::InsufficientCondition в случае применения пользовательского преобразования.
+     * @see Краска:: transform()
      */
     Result rotate(float degree) noexcept;
 
     /**
-     * @brief Sets the scale value of the object.
+     * @brief Устанавливает значение масштаба объекта.
      *
      * @param Коэффициент [in] Значение коэффициента масштабирования. Значение по умолчанию — 1.
      *
-     * @retval Result::InsufficientCondition in case a custom transform is applied.
-     * @see Paint::transform()
+     * @retval Result::InsufficientCondition в случае применения пользовательского преобразования.
+     * @see Краска:: transform()
      */
     Result scale(float factor) noexcept;
 
     /**
-     * @brief Sets the values by which the object is moved in a two-dimensional space.
+     * @brief Устанавливает значения, на которые объект перемещается в двумерном пространстве.
      *
      * Начало системы координат находится в верхнем левом углу холста.
      * Горизонтальная и вертикальная оси указывают вправо и вниз соответственно.
@@ -339,13 +339,13 @@ public:
      * @param [in] x Значение горизонтального сдвига.
      * @param [in] y Значение вертикального смещения.
      *
-     * @retval Result::InsufficientCondition in case a custom transform is applied.
-     * @see Paint::transform()
+     * @retval Result::InsufficientCondition в случае применения пользовательского преобразования.
+     * @see Краска:: transform()
      */
     Result translate(float x, float y) noexcept;
 
     /**
-     * @brief Sets the matrix of the affine transformation for the object.
+     * @brief Устанавливает матрицу аффинного преобразования для объекта.
      *
      * Ожидается получение расширенной матрицы преобразования.
      *
@@ -354,122 +354,122 @@ public:
     Result transform(const Matrix& m) noexcept;
 
     /**
-     * @brief Gets the matrix of the affine transformation of the object.
+     * @brief Получает матрицу аффинного преобразования объекта.
      *
-     * Значения матрицы могут быть установлены с помощью transform() API , а также с помощью translate() ,
-     * scale() и rotate() . Если преобразование не применялось, возвращается единичная матрица.
+     * Значения матрицы могут быть установлены с помощьюtransform()API, а также с помощью translate(),
+     * scale() иrotate(). Если преобразование не было применено, возвращается единственная матрица.
      *
-     * @return The augmented transformation matrix.
+     * @return Расширенная матрица преобразования.
      *
      * @since 0.4
      */
     Matrix transform() noexcept;
 
     /**
-     * @brief Sets the opacity of the object.
+     * @brief Устанавливает непрозрачность объекта.
      *
      * @param [in] o Значение непрозрачности в диапазоне [0 ~ 255], где 0 — полная прозрачность, а 255 — непрозрачность.
      *
-     * @note Setting the opacity with this API may require multiple render pass for composition. It is recommended to avoid changing the opacity if possible.
+     * @note Установка непрозрачности с помощью этогоAPIможет потребовать нескольких проходов рендеринга для композиции. По возможности рекомендуется избегать изменения непрозрачности.
      */
     Result opacity(uint8_t o) noexcept;
 
     /**
-     * @brief Sets the composition target object and the composition method.
+     * @brief Устанавливает целевой объект композиции и метод композиции.
      *
      * @param [in] target Краска целевого объекта.
-     * @param [in] метод Метод, используемый для объединения исходного объекта с целевым.
+     * @param [in] метод Метод, используемый для объединения исходного объекта с целевыми.
      */
     Result composite(std::unique_ptr<Paint> target, CompositeMethod method) noexcept;
 
     /**
-     * @brief Clip the drawing region of the paint object.
+     * @brief Вырежьте область рисования объекта рисования.
      *
      * Эта функция ограничивает область рисования объекта рисования путями указанной фигуры.
      *
      * @param [in] Clipper Объект формы в качестве обрезки.
      *
-     * @retval Result::NonSupport If the @p clipper type is not Shape.
+     * @retval Результат::NonSupport Если тип клиппера@pотличается от Shape.
      *
-     * @note @p clipper only supports the Shape type.
-     * @note Experimental API
+     * @note Машинка для стрижки@pподдерживает только тип Shape.
+     * @note Экспериментальный API
      */
     Result clip(std::unique_ptr<Paint> clipper) noexcept;
 
     /**
-     * @brief Sets the blending method for the paint object.
+     * @brief Устанавливает метод смешивания для объекта рисования.
      *
      * Функция смешивания позволяет комбинировать цвета для создания визуально привлекательных эффектов, включая, среди прочего, прозрачность, освещение, затенение и смешивание цветов.
      * его процесс включает в себя сочетание цветов или изображений исходного объекта рисования с целевым (изображением нижнего слоя) с использованием операций смешивания.
-     * Операция смешивания определяется выбранным @p BlendMethod, который определяет, как комбинируются цвета или изображения.
+     * Операция определения определяется выбранным@pBlendMethod, который определяет, как комбинируются цвета или изображения.
      *
-     * @param [in] метод Устанавливаемый метод смешивания.
+     * @param [in] метод Устанавливаемый метод колебания.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result blend(BlendMethod method) noexcept;
 
     /**
-     * @deprecated Use bounds(float* x, float* y, float* w, float* h, bool transformed) instead
+     * @deprecated Вместо этого используйте границы (float* x, float* y, float* w, float* h, bool преобразованный)
      */
     TVG_DEPRECATED Result bounds(float* x, float* y, float* w, float* h) const noexcept;
 
     /**
-     * @brief Gets the axis-aligned bounding box of the paint object.
+     * @brief Получает выровненную по оси ограничивающую рамку объекта рисования.
      *
      * @param [out] x Координата X верхнего левого угла объекта.
      * @param [out] y Координата Y верхнего левого угла объекта.
      * @param [out] w Ширина объекта.
      * @param [out] h Высота объекта.
-     * @param [in] Transformed Если @c true, преобразования краски учитываются в сцене, к которой она принадлежит. В противном случае это не так.
+     * @param [in] Transformed Если@ctrue, конвертировать сцены будут на сцене, к которой она принадлежит. В противном случае это не так.
      *
-     * @note This is useful when you need to figure out the bounding box of the paint in the canvas space.
-     * @note The bounding box doesn't indicate the actual drawing region. It's the smallest rectangle that encloses the object.
-     * @note If @p transformed is @c true, the paint needs to be pushed into a canvas and updated before this api is called.
-     * @see Canvas::update()
+     * @note Это полезно, когда вам нужно определить ограничивающую рамку краски в пространстве холста.
+     * @note Ограничивающая рамка не указывает фактическую область рисования. Это наименьший прямоугольник, заключающий объект.
+     * @note Если преобразование@pимеет значение@ctrue, краску необходимо перенести на холст и обновить перед вызовом этого API.
+     * @see Холст:: update()
      */
     Result bounds(float* x, float* y, float* w, float* h, bool transformed) const noexcept;
 
     /**
-     * @brief Duplicates the object.
+     * @brief Дублирует объект.
      *
      * Создает новый объект и устанавливает все его свойства как в исходном объекте.
      *
-     * @return The created object when succeed, @c nullptr otherwise.
+     * @return Созданный объект в случае успеха, в противном случае@cnullptr.
      */
     Paint* duplicate() const noexcept;
 
     /**
-     * @brief Gets the opacity value of the object.
+     * @brief Получает значение непрозрачности объекта.
      *
-     * @return The opacity value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque.
+     * @return Значение непрозрачности в диапазоне [0 ~ 255], где 0 — полностью прозрачный, а 255 — непрозрачный.
      */
     uint8_t opacity() const noexcept;
 
     /**
-     * @brief Gets the composition target object and the composition method.
+     * @brief Получает целевой объект композиции и метод композиции.
      *
      * @param [out] target Краска целевого объекта.
      *
-     * @return The method used to composite the source object with the target.
+     * @return Метод, используемый для объединения исходного объекта с целевым.
      *
      * @since 0,5
      */
     CompositeMethod composite(const Paint** target) const noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the Paint instance.
+     * @return Тип классаIDэкземпляра Paint.
      *
      * @since Экспериментальный API
      */
     virtual Type type() const noexcept = 0;
 
     /**
-     * @brief Unique ID of this instance.
+     * @brief УникальныйIDэтого экземпляра.
      *
      * Это зарезервировано для указания экземпляра рисования в сцене.
      *
@@ -478,7 +478,7 @@ public:
     uint32_t id = 0;
 
     /**
-     * @see Paint::type()
+     * @see Краска:: type()
      */
     TVG_DEPRECATED uint32_t identifier() const noexcept;
 
@@ -489,10 +489,10 @@ public:
 /**
  * @class Заполнить
  *
- * @brief An abstract class representing the gradient fill of the Shape object.
+ * @brief Абстрактный класс, представляющий градиентную заливку объекта Shape.
  *
  * Содержит информацию о цветах градиента и их расположении.
- * внутри границ градиента. Границы градиентов определяются в LinearGradient.
+ * внутри границ градиента. Границы градиентов науки в LinearGradient.
  * или класс RadialGradient, в зависимости от типа используемого градиента.
  * Он определяет поведение градиента в случае, если область, определяемая границами градиента,
  * меньше площади, подлежащей заполнению.
@@ -501,7 +501,7 @@ class TVG_API Fill
 {
 public:
     /**
-     * @brief A data structure storing the information about the color and its relative position inside the gradient bounds.
+     * @brief Структура данных, хранящая информацию о цвете и его относительном положении внутри границ градиента.
      */
     struct ColorStop
     {
@@ -515,22 +515,22 @@ public:
     virtual ~Fill();
 
     /**
-     * @brief Sets the parameters of the colors of the gradient and their position.
+     * @brief Устанавливает параметры цветов градиента и их положение.
      *
-     * @param [in] colorStops Массив структуры данных ColorStop.
-     * @param [in] cnt Счетчик массива colorStops @p, равный количеству цветов, используемых в градиенте.
+     * @param [in] colorStops Массивная структура данных ColorStop.
+     * @param [in] cnt Счетчик массива colorStops@p, необходимое количество цветов, эффект в градиенте.
      */
     Result colorStops(const ColorStop* colorStops, uint32_t cnt) noexcept;
 
     /**
-     * @brief Sets the FillSpread value, which specifies how to fill the area outside the gradient bounds.
+     * @brief Устанавливает значение FillSpread, которое определяет, как заполнить область за пределами границ градиента.
      *
      * @param [in] s Значение FillSpread.
      */
     Result spread(FillSpread s) noexcept;
 
     /**
-     * @brief Sets the matrix of the affine transformation for the gradient fill.
+     * @brief Устанавливает матрицу аффинного преобразования для градиентной заливки.
      *
      * Ожидается получение расширенной матрицы преобразования.
      *
@@ -539,52 +539,52 @@ public:
     Result transform(const Matrix& m) noexcept;
 
     /**
-     * @brief Gets the parameters of the colors of the gradient, their position and number.
+     * @brief Получает параметры цветов градиента, их положение и количество.
      *
-     * @param [out] colorStops Указатель на ячейку памяти, где хранится массив ColorStop градиента.
+     * @param [out] colorStops Указатель на ячейку памяти, где сохраняется массив градиента ColorStop.
      *
-     * @return The number of colors used in the gradient. This value corresponds to the length of the @p colorStops array.
+     * @return Количество цветов, используемых в градиенте. Это значение соответствует длине массива colorStops @p.
      */
     uint32_t colorStops(const ColorStop** colorStops) const noexcept;
 
     /**
-     * @brief Gets the FillSpread value of the fill.
+     * @brief Получает значение FillSpread заливки.
      *
-     * @return The FillSpread value of this Fill.
+     * @return Значение FillSpread этого Fill.
      */
     FillSpread spread() const noexcept;
 
     /**
-     * @brief Gets the matrix of the affine transformation of the gradient fill.
+     * @brief Получает матрицу аффинного преобразования градиентной заливки.
      *
      * Если преобразование не применялось, возвращается единичная матрица.
      *
-     * @return The augmented transformation matrix.
+     * @return Расширенная матрица преобразования.
      */
     Matrix transform() const noexcept;
 
     /**
-     * @brief Creates a copy of the Fill object.
+     * @brief Создает копию объекта Fill.
      *
-     * Верните вновь созданный объект Fill со свойствами, скопированными из оригинала.
+     * Верните вновь созданный объект. Заполните его, скопировав из оригинала.
      *
-     * @return A copied Fill object when succeed, @c nullptr otherwise.
+     * @return Скопированный объект Fill в случае успеха, в противном случае@cnullptr.
      */
     Fill* duplicate() const noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the Fill instance.
+     * @return Тип классаIDэкземпляра Fill.
      *
      * @since Экспериментальный API
      */
     virtual Type type() const noexcept = 0;
 
     /**
-     * @see Fill::type()
+     * @see Заполнить:: type()
      */
     TVG_DEPRECATED uint32_t identifier() const noexcept;
 
@@ -595,12 +595,12 @@ public:
 /**
  * @class Холст
  *
- * @brief An abstract class for drawing graphical elements.
+ * @brief Абстрактный класс для рисования графических элементов.
  *
- * Холст — это объект, отвечающий за рисование цели. Он настраивает механизм рисования и буфер, который можно рисовать на экране. Он также управляет заданными объектами Paint.
+ * Холст — это объект, связанный с рисованием цели. Он настраивает механизм рисования и буфер, которым можно рисовать на экране. Он также управляет заданными объектами Paint.
  *
- * @note A Canvas behavior depends on the raster engine though the final content of the buffer is expected to be identical.
- * @warning The Paint objects belonging to one Canvas can't be shared among multiple Canvases.
+ * @note Поведение Canvas зависит от растрового движка, хотя ожидается, что окончательное содержимое буфера будет идентичным.
+ * @warning Объекты Paint, принадлежащие одному холсту, не могут использоваться несколькими холстами.
  */
 class TVG_API Canvas
 {
@@ -611,70 +611,70 @@ public:
     TVG_DEPRECATED Result reserve(uint32_t n) noexcept;
 
     /**
-     * @brief Returns the list of the paints that currently held by the Canvas.
+     * @brief Возвращает список красок, которые в данный момент хранятся на Canvas.
      *
      * Эта функция предоставляет список узлов рисования, предоставляя пользователям прямую возможность изменять дерево сцены.
      *
-     * @warning Please avoid accessing the paints during Canvas update/draw. You can access them after calling sync().
-     * @see Canvas::sync()
+     * @warning Пожалуйста, избегайте доступа к краскам во время обновления/рисования Canvas. Вы можете получить к ним доступ после вызова sync().
+     * @see Холст:: sync()
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     std::list<Paint*>& paints() noexcept;
 
     /**
-     * @brief Passes drawing elements to the Canvas using Paint objects.
+     * @brief Передает элементы рисования на холст с помощью объектов Paint.
      *
      * Только нарисованные на холсте краски будут целями рисования.
-     * Они сохраняются в холсте до тех пор, пока вы не вызовете Canvas::clear().
+     * Они расположены на заднем плане до тех пор, пока вы не вызовете Canvas::clear().
      *
      * @param [in] Paint Объект Paint, который нужно нарисовать.
      *
-     * @retval Result::MemoryCorruption In case a @c nullptr is passed as the argument.
+     * @retval Result::MemoryCorruption В случае, если в качестве аргумента передается нулевой параметр @c.
      *
-     * @note The rendering order of the paints is the same as the order as they were pushed into the canvas. Consider sorting the paints before pushing them if you intend to use layering.
-     * @see Canvas::paints()
-     * @see Canvas::clear()
+     * @note Порядок нанесения красок такой же, как и порядок их нанесения на холст. Если вы собираетесь использовать слои, рассмотрите возможность сортировки красок перед тем, как их раскладывать.
+     * @see Холст:: paints()
+     * @see Холст:: clear()
      */
     virtual Result push(std::unique_ptr<Paint> paint) noexcept;
 
     /**
-     * @brief Clear the internal canvas resources that used for the drawing.
+     * @brief Очистите внутренние ресурсы холста, использованные для рисунка.
      *
      * Этот API устанавливает общее количество красок, помещенных на холст, в ноль.
-     * В зависимости от значения аргумента free @p краски либо освобождаются, либо сохраняются.
-     * Поэтому, если вам нужно обновить свойства рисования, сохраняя при этом существующую структуру сцены, вы можете установить @p free = false.
+     * В зависимости от значений аргумента свободные@pкраски либо освобождаются, либо используются.
+     * Поэтому, если вам необходимо обновить свойства рисования, сохраняя эту модель сцены, вы можете установить@pfree = false.
      *
-     * @param [in] free Если @c true, память, занятая красками, освобождается, в противном случае — нет.
+     * @param [in] free Если@ctrue, память, занятая красками, освобождается, в противном случае — нет.
      *
      *
-     * @see Canvas::push()
-     * @see Canvas::paints()
+     * @see Холст:: push()
+     * @see Холст:: paints()
      */
     virtual Result clear(bool free = true) noexcept;
 
     /**
-     * @brief Request the canvas to update the paint objects.
+     * @brief Запросите холст для обновления объектов рисования.
      *
-     * Если передается нулевой параметр @c, все объекты рисования, сохраняемые Canvas, обновляются.
+     * Если применяется нулевой параметр@c, все объекты рисования, сохраняющие Canvas, обновляются.
      * в противном случае только краска, на которую указывает данная краска @p.
      *
-     * @param [in] Paint Указатель на объект Paint или @c nullptr.
+     * @param [in] Paint Указатель на объект Paint или@cnullptr.
      *
-     * @note The Update behavior can be asynchronous if the assigned thread number is greater than zero.
+     * @note Поведение обновления может быть асинхронным, если назначенный номер потока больше нуля.
      */
     virtual Result update(Paint* paint = nullptr) noexcept;
 
     /**
-     * @brief Requests the canvas to draw the Paint objects.
+     * @brief Запрашивает холст для рисования объектов Paint.
      *
-     * @note Drawing can be asynchronous if the assigned thread number is greater than zero. To guarantee the drawing is done, call sync() afterwards.
-     * @see Canvas::sync()
+     * @note Рисование может быть асинхронным, если назначенный номер потока больше нуля. Чтобы гарантировать, что рисунок готов, после этого позвоните sync().
+     * @see Холст:: sync()
      */
     virtual Result draw() noexcept;
 
     /**
-     * @brief Sets the drawing region in the canvas.
+     * @brief Устанавливает область рисования на холсте.
      *
      * Эта функция определяет прямоугольную область холста, которая будет использоваться для операций рисования.
      * Указанный область просмотра используется для обрезки вывода рендеринга по границам прямоугольника.
@@ -684,26 +684,26 @@ public:
      * @param [in] w Ширина прямоугольника.
      * @param [in] h Высота прямоугольника.
      *
-     * @see SwCanvas::target()
-     * @see GlCanvas::target()
-     * @see WgCanvas::target()
+     * @see Свканвас:: target()
+     * @see Глканвас:: target()
+     * @see Вгканвас:: target()
      *
-     * @warning It's not allowed to change the viewport during Canvas::push() - Canvas::sync() or Canvas::update() - Canvas::sync().
+     * @warning Не разрешается менять область просмотра во время Canvas::push()- Canvas::sync()или Canvas::update()- Canvas::sync().
      *
-     * @note When resetting the target, the viewport will also be reset to the target size.
+     * @note При сбросе цели область просмотра также будет сброшена до целевого размера.
      * @since 0,15
      */
     virtual Result viewport(int32_t x, int32_t y, int32_t w, int32_t h) noexcept;
 
     /**
-     * @brief Guarantees that drawing task is finished.
+     * @brief Гарантирует, что задача рисования завершена.
      *
      * Рендеринг Canvas может выполняться асинхронно. Чтобы убедиться, что рендеринг завершен,
-     * sync() должен вызываться после draw() независимо от потока.
+     * sync() должен перейти послеdraw()независимо от потока.
      *
-     * @retval Result::InsufficientCondition: The canvas is either already in sync condition or in a damaged condition (a draw is required before syncing).
+     * @retval Result::InsufficientCondition: холст либо уже находится в состоянии синхронизации, либо поврежден (перед синхронизацией требуется отрисовка).
      *
-     * @see Canvas::draw()
+     * @see Холст:: draw()
      */
     virtual Result sync() noexcept;
 
@@ -714,9 +714,9 @@ public:
 /**
  * @class Линейный градиент
  *
- * @brief A class representing the linear gradient fill of the Shape object.
+ * @brief Класс, представляющий линейную градиентную заливку объекта Shape.
  *
- * Помимо API, унаследованных от класса Fill, он позволяет устанавливать и получать границы линейного градиента.
+ * ПомимоAPI, независимо от класса Fill, он позволяет сохранять и получать границы линейного градиента.
  * Поведение за пределами границ градиента зависит от значения, указанного в разбросе API.
  */
 class TVG_API LinearGradient final : public Fill
@@ -725,7 +725,7 @@ public:
     ~LinearGradient();
 
     /**
-     * @brief Sets the linear gradient bounds.
+     * @brief Устанавливает границы линейного градиента.
      *
      * Границы линейного градиента определяются как поверхность, ограниченная двумя параллельными линиями, пересекающими
      * заданные точки ( @p x1, @p y1) и ( @p x2, @p y2) соответственно. Обе линии перпендикулярны линии, соединяющей
@@ -736,13 +736,13 @@ public:
      * @param [in] x2 Горизонтальная координата второй точки, используемая для определения границ градиента.
      * @param [in] y2 Вертикальная координата второй точки, используемая для определения границ градиента.
      *
-     * @note In case the first and the second points are equal, an object is filled with a single color using the last color specified in the colorStops().
-     * @see Fill::colorStops()
+     * @note Если первая и вторая точки равны, объект заполняется одним цветом, используя последний цвет, указанный в colorStops().
+     * @see Заполнить:: colorStops()
      */
     Result linear(float x1, float y1, float x2, float y2) noexcept;
 
     /**
-     * @brief Gets the linear gradient bounds.
+     * @brief Получает границы линейного градиента.
      *
      * Границы линейного градиента определяются как поверхность, ограниченная двумя параллельными линиями, пересекающими
      * заданные точки ( @p x1, @p y1) и ( @p x2, @p y2) соответственно. Обе линии перпендикулярны линии, соединяющей
@@ -756,25 +756,25 @@ public:
     Result linear(float* x1, float* y1, float* x2, float* y2) const noexcept;
 
     /**
-     * @brief Creates a new LinearGradient object.
+     * @brief Создает новый объект LinearGradient.
      *
-     * @return A new LinearGradient object.
+     * @return Новый объект LinearGradient.
      */
     static std::unique_ptr<LinearGradient> gen() noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the LinearGradient instance.
+     * @return Тип классаIDэкземпляра LinearGradient.
      *
      * @since Экспериментальный API
      */
     Type type() const noexcept override;
 
     /**
-     * @see LinearGradient::type()
+     * @see ЛинейарГрадиент:: type()
      */
     TVG_DEPRECATED static uint32_t identifier() noexcept;
 
@@ -785,7 +785,7 @@ public:
 /**
  * @class Радиальный градиент
  *
- * @brief A class representing the radial gradient fill of the Shape object.
+ * @brief Класс, представляющий радиальную градиентную заливку объекта Shape.
  *
  */
 class TVG_API RadialGradient final : public Fill
@@ -794,7 +794,7 @@ public:
     ~RadialGradient();
 
     /**
-     * @brief Sets the radial gradient bounds.
+     * @brief Устанавливает границы радиального градиента.
      *
      * Границы радиального градиента определяются как окружность с центром в заданной точке ( @p cx, @p cy) заданного радиуса.
      *
@@ -802,14 +802,14 @@ public:
      * @param [in] cy Вертикальная координата центра ограничивающего круга.
      * @param [дюйм] радиус Радиус ограничивающего круга.
      *
-     * @retval Result::InvalidArguments in case the @p radius value is zero or less.
+     * @retval Result::InvalidArguments в случае, если значение радиуса@pравно нулю или меньше.
      *
-     * @note In case the @p radius is zero, an object is filled with a single color using the last color specified in the colorStops().
+     * @note Если радиус@pравен нулю, объект заполняется одним цветом, используя последний цвет, указанный в colorStops().
      */
     Result radial(float cx, float cy, float radius) noexcept;
 
     /**
-     * @brief Gets the radial gradient bounds.
+     * @brief Получает границы радиального градиента.
      *
      * Границы радиального градиента определяются как окружность с центром в заданной точке ( @p cx, @p cy) заданного радиуса.
      *
@@ -821,25 +821,25 @@ public:
     Result radial(float* cx, float* cy, float* radius) const noexcept;
 
     /**
-     * @brief Creates a new RadialGradient object.
+     * @brief Создает новый объект RadialGradient.
      *
-     * @return A new RadialGradient object.
+     * @return Новый объект RadialGradient.
      */
     static std::unique_ptr<RadialGradient> gen() noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the LinearGradient instance.
+     * @return Тип классаIDэкземпляра LinearGradient.
      *
      * @since Экспериментальный API
      */
     Type type() const noexcept override;
 
     /**
-     * @see RadialGradient::type()
+     * @see РадиалГрадиент:: type()
      */
     TVG_DEPRECATED static uint32_t identifier() noexcept;
 
@@ -850,13 +850,13 @@ public:
 /**
  * Форма @class
  *
- * @brief A class representing two-dimensional figures and their properties.
+ * @brief Класс, представляющий двумерные фигуры и их свойства.
  *
  * Форма имеет три основных свойства: контур фигуры, обводка, заполнение. Контур фигуры сохраняется как путь.
- * Путь может быть составлен путем накопления примитивных команд, таких как moveTo(), lineTo(), cubicTo(), или полных интерфейсов формы, таких как appendRect(), appendCircle() и т. д.
+ * Путь может быть составлен путем сбора примитивных команд, таких как moveTo(), lineTo(), cubicTo(), или полных форм интерфейсов, таких как appendRect(),appendCircle()и т. д. д.
  * Путь может состоять из подпутей. Один подпуть определяется командой закрытия.
  *
- * Обводка Shape — это необязательное свойство, если фигуру необходимо представить с контурными границами или без них.
+ * Обводка Форма — это необязательное свойство, если фигуру необходимо представить с контурными границами или без них.
  * Это эффективно, поскольку путь формы и путь обводки можно использовать совместно. Это также удобно при управлении обоими в одном контексте.
  */
 class TVG_API Shape final : public Paint
@@ -865,16 +865,16 @@ public:
     ~Shape();
 
     /**
-     * @brief Resets the shape path.
+     * @brief Сбрасывает путь фигуры.
      *
      * Свойства матрицы преобразования, цвета, заливки и обводки сохраняются.
      *
-     * @note The memory where the path data is stored is not deallocated at this stage to allow for caching.
+     * @note Память, в которой хранятся данные пути, на этом этапе не освобождается для обеспечения кэширования.
      */
     Result reset() noexcept;
 
     /**
-     * @brief Sets the initial point of the sub-path.
+     * @brief Устанавливает начальную точку подпути.
      *
      * Значение текущей точки устанавливается в данную точку.
      *
@@ -884,19 +884,19 @@ public:
     Result moveTo(float x, float y) noexcept;
 
     /**
-     * @brief Adds a new point to the sub-path, which results in drawing a line from the current point to the given end-point.
+     * @brief Добавляет новую точку к подпути, в результате чего рисуется линия от текущей точки до заданной конечной точки.
      *
      * Значение текущей точки устанавливается в заданную конечную точку.
      *
      * @param [in] x Горизонтальная координата конечной точки линии.
      * @param [in] y Вертикальная координата конечной точки линии.
      *
-     * @note In case this is the first command in the path, it corresponds to the moveTo() call.
+     * @note Если это первая команда в пути, она соответствует вызову moveTo().
      */
     Result lineTo(float x, float y) noexcept;
 
     /**
-     * @brief Adds new points to the sub-path, which results in drawing a cubic Bezier curve starting
+     * @brief Добавляет новые точки к подпути, в результате чего начинается рисование кубической кривой Безье.
      * в текущей точке и заканчивая в заданной конечной точке ( @p x, @p y) с использованием контрольных точек ( @p cx1, @p cy1) и ( @p cx2, @p cy2).
      *
      * Значение текущей точки устанавливается в заданную конечную точку.
@@ -908,21 +908,21 @@ public:
      * @param [in] x Горизонтальная координата конечной точки кривой.
      * @param [in] y Вертикальная координата конечной точки кривой.
      *
-     * @note In case this is the first command in the path, no data from the path are rendered.
+     * @note Если это первая команда в пути, данные из пути не отображаются.
      */
     Result cubicTo(float cx1, float cy1, float cx2, float cy2, float x, float y) noexcept;
 
     /**
-     * @brief Closes the current sub-path by drawing a line from the current point to the initial point of the sub-path.
+     * @brief Закрывает текущий вложенный путь, рисуя линию от текущей точки до начальной точки вложенного пути.
      *
      * Значение текущей точки устанавливается в начальную точку замкнутого подпути.
      *
-     * @note In case the sub-path does not contain any points, this function has no effect.
+     * @note Если подпуть не содержит точек, эта функция не действует.
      */
     Result close() noexcept;
 
     /**
-     * @brief Appends a rectangle to the path.
+     * @brief Добавляет прямоугольник к пути.
      *
      * Прямоугольник с закругленными углами можно получить, установив ненулевые значения для аргументов @p rx и @p ry.
      * Значения @p rx и @p ry определяют радиусы эллипса, определяющие скругление углов.
@@ -941,12 +941,12 @@ public:
      * @param [in] rx Радиус эллипса по оси X, определяющий закругленные углы прямоугольника.
      * @param [in] ry Радиус эллипса по оси Y, определяющий закругленные углы прямоугольника.
      *
-     * @note For @p rx and @p ry greater than or equal to the half of @p w and the half of @p h, respectively, the shape become an ellipse.
+     * @note Если@prx и@pry больше или равны половине@pw и половине@ph соответственно, форма становится эллипсом.
      */
     Result appendRect(float x, float y, float w, float h, float rx = 0, float ry = 0) noexcept;
 
     /**
-     * @brief Appends an ellipse to the path.
+     * @brief Добавляет эллипс к пути.
      *
      * Положение эллипса задается координатами его центра — аргументами @p cx и @p cy.
      *
@@ -963,48 +963,48 @@ public:
     Result appendCircle(float cx, float cy, float rx, float ry) noexcept;
 
     /**
-     * @brief Appends a circular arc to the path.
+     * @brief Добавляет к пути дугу окружности.
      *
      * Дуга рассматривается как новый подпуть - она не связана с предыдущим подпутем.
-     * Текущее значение точки устанавливается в конечную точку дуги, если круговая диаграмма @p имеет значение @c false, и в центр дуги в противном случае.
+     * Текущее значение точки задается в конечных точках дуги, если круговая диаграмма@pимеет значение@cfalse, и в центре дуги в случае отказа.
      *
      * @param [in] cx Горизонтальная координата центра дуги.
      * @param [in] cy Вертикальная координата центра дуги.
      * @param [дюймы] радиус Радиус дуги.
      * @param [in] startAngle Начальный угол дуги, заданный в градусах и измеренный против часовой стрелки от горизонтальной линии.
-     * @param [in] развертка Центральный угол дуги, заданный в градусах и измеренный против часовой стрелки от @p startAngle.
-     * @param [in] круговая диаграмма Определяет, следует ли рисовать радиусы от центра дуги до обеих ее конечных точек — рисуется, если @c истинно.
+     * @param [in] развертка Центрального угла дуги, заданного в градусах и направленного против часовой стрелки от@pstartAngle.
+     * @param [in] круговая диаграмма Определяет, следует ли рисовать радиусы от центра дуги до ее конечных точек — рисуется, если@cистинно.
      *
-     * @note Setting @p sweep value greater than 360 degrees, is equivalent to calling appendCircle(cx, cy, radius, radius).
+     * @note Установка значения развертки@pболее 360 градусов эквивалентна вызову addCircle(cx, cy, radius, radius).
      */
     Result appendArc(float cx, float cy, float radius, float startAngle, float sweep, bool pie) noexcept;
 
     /**
-     * @brief Appends a given sub-path to the path.
+     * @brief Добавляет заданный подпуть к пути.
      *
      * Текущее значение точки устанавливается на последнюю точку подпути.
-     * Для каждой команды из cmds-массива @p необходимо указать соответствующее количество точек в массиве @p pts.
-     * Если количество точек в массиве точек @p отличается от количества, требуемого массивом cmds @p, фигура с этим подпутем не будет отображаться на экране.
+     * Для каждой команды из cmds-массива@pнеобходимо указать количество точек в массиве@ppts.
+     * Если количество точек в массиве точек@pотличается от количества, требуемого массивом cmds@p, фигура с этим подпутем не будет находиться на экране Google.
      *
      * @param [in] cmds Массив команд в подпути.
      * @param [in] cmdCnt Количество команд подпути.
      * @param [in] pts Массив двумерных точек.
-     * @param [in] ptsCnt Число точек в массиве @p pts.
+     * @param [in] ptsCnt Число точек в массиве@ppts.
      *
-     * @note The interface is designed for optimal path setting if the caller has a completed path commands already.
+     * @note Интерфейс разработан для оптимальной настройки пути, если у вызывающего объекта уже есть завершенные команды пути.
      */
     Result appendPath(const PathCommand* cmds, uint32_t cmdCnt, const Point* pts, uint32_t ptsCnt) noexcept;
 
     /**
-     * @brief Sets the stroke width for all of the figures from the path.
+     * @brief Устанавливает ширину обводки для всех фигур контура.
      *
-     * @param [дюймы] ширина Ширина обводки. Значение по умолчанию — 0.
+     * @param [дюймы] Ширина Ширина обводки. Значение по умолчанию — 0.
      *
      */
     Result stroke(float width) noexcept;
 
     /**
-     * @brief Sets the color of the stroke for all of the figures from the path.
+     * @brief Устанавливает цвет обводки для всех фигур на пути.
      *
      * @param [in] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
      * @param [in] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
@@ -1015,72 +1015,72 @@ public:
     Result stroke(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) noexcept;
 
     /**
-     * @brief Sets the gradient fill of the stroke for all of the figures from the path.
+     * @brief Устанавливает градиентную заливку обводки для всех фигур контура.
      *
      * @param [in] f Градиентная заливка.
      *
-     * @retval Result::MemoryCorruption In case a @c nullptr is passed as the argument.
+     * @retval Result::MemoryCorruption В случае, если в качестве аргумента передается нулевой параметр @c.
      */
     Result stroke(std::unique_ptr<Fill> f) noexcept;
 
     /**
-     * @brief Sets the dash pattern of the stroke.
+     * @brief Устанавливает штриховой рисунок обводки.
      *
      * @param [in] DashPattern Массив последовательных парных значений длины штриха и длины пробела.
-     * @param [in] cnt Длина массива DashPattern @p.
+     * @param [in] cnt Длина массива DashPattern@p.
      *
-     * @retval Result::InvalidArguments In case @p dashPattern is @c nullptr and @p cnt > 0, @p cnt is zero, any of the dash pattern values is zero or less.
+     * @retval Result::InvalidArguments Если@pDashPattern имеет значение@cnullptr и@pcnt > 0,@pcnt равен нулю, любое из значений шаблона штриха равно нулю или меньше.
      *
-     * @note To reset the stroke dash pattern, pass @c nullptr to @p dashPattern and zero to @p cnt.
-     * @warning @p cnt must be greater than 1 if the dash pattern is valid.
+     * @note Чтобы сбросить образец штрихового штриха, передайте@cnullptr в@pDashPattern и ноль в@pcnt.
+     * @warning @p cnt должно быть больше 1, если образец штриха действителен.
      */
     Result stroke(const float* dashPattern, uint32_t cnt) noexcept;
 
     /**
-     * @brief Sets the cap style of the stroke in the open sub-paths.
+     * @brief Устанавливает стиль окончания обводки в открытых подпутях.
      *
-     * @param [in] cap Значение стиля шапки. Значение по умолчанию — @c StrokeCap::Square.
+     * @param [in] cap Значение стиля шапки. Значение по умолчанию —@cStrokeCap::Square.
      *
      */
     Result stroke(StrokeCap cap) noexcept;
 
     /**
-     * @brief Sets the join style for stroked path segments.
+     * @brief Задает стиль соединения для обведенных сегментов пути.
      *
      * Стиль соединения используется для соединения двух сегментов линии при обводке пути.
      *
-     * @param [in] join Значение стиля соединения. Значение по умолчанию — @c StrokeJoin::Bevel.
+     * @param [in] join Значение стиля соединений. Значение по умолчанию —@cStrokeJoin::Bevel.
      *
      */
     Result stroke(StrokeJoin join) noexcept;
 
     /**
-     * @brief Sets the stroke miterlimit.
+     * @brief Устанавливает предел хода.
      *
-     * @param [in] miterlimit Miterlimit накладывает ограничение на размер соединения штрихов, когда установлен стиль соединения @c StrokeJoin::Miter. Значение по умолчанию — 4.
+     * @param [in] miterlimit Miterlimit накладывает ограничение на размер соединений штрихов, когда установлен стиль соединения@cStrokeJoin::Miter. Значение по умолчанию — 4.
      *
-     * @retval Result::InvalidArgument for @p miterlimit values less than zero.
+     * @retval Result::InvalidArgument для значений предела скоса@pменьше нуля.
      *
      * @since 0.11
      */
     Result strokeMiterlimit(float miterlimit) noexcept;
 
     /**
-     * @brief Sets the trim of the stroke along the defined path segment, allowing control over which part of the stroke is visible.
+     * @brief Устанавливает обрезку обводки вдоль определенного сегмента пути, позволяя контролировать, какая часть обводки будет видна.
      *
-     * Если значения аргументов @p Begin и @p End превышают диапазон 0–1, они переносятся аналогично переносу углов, эффективно рассматривая диапазон как круговой.
+     * Если значения аргументов@pBegin и@pEnd превышают диапазон 0–1, они переносятся соответственно переносу под углом, эффективно рассматривая диапазон как круговой.
      *
      * @param [in] начало Указывает начало сегмента, отображаемого по пути.
      * @param [in] end Указывает конец сегмента, отображаемого вдоль пути.
-     * @param [in] одновременно Определяет, как обрезать несколько контуров внутри одной фигуры. Если установлено значение @c true (по умолчанию), обрезка применяется одновременно ко всем путям;
+     * @param [in] одновременно определяет, как обрезать несколько контуров внутри одной фигуры. Если установлено значение@ctrue (по умолчанию), обрезка применяется одновременно ко всем путям;
      * В противном случае все пути рассматриваются как единый объект с общей длиной, равной сумме их отдельных длин, и обрезаются как таковые.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result strokeTrim(float begin, float end, bool simultaneous = true) noexcept;
 
     /**
-     * @brief Sets the solid color for all of the figures from the path.
+     * @brief Устанавливает сплошной цвет для всех фигур на пути.
      *
      * Части фигуры, определенные как внутренние, окрашены.
      *
@@ -1089,64 +1089,64 @@ public:
      * @param [in] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
      * @param [in] a Значение альфа-канала в диапазоне [0 ~ 255], где 0 — полностью прозрачный, а 255 — непрозрачный. Значение по умолчанию — 0.
      *
-     * @note Either a solid color or a gradient fill is applied, depending on what was set as last.
+     * @note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
      */
     Result fill(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) noexcept;
 
     /**
-     * @brief Sets the gradient fill for all of the figures from the path.
+     * @brief Устанавливает градиентную заливку для всех фигур контура.
      *
      * Части фигуры, определенные как внутренние, заполняются.
      *
      * @param [in] f Уникальный указатель на градиентную заливку.
      *
-     * @note Either a solid color or a gradient fill is applied, depending on what was set as last.
+     * @note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
      */
     Result fill(std::unique_ptr<Fill> f) noexcept;
 
     /**
-     * @brief Sets the fill rule for the Shape object.
+     * @brief Устанавливает правило заливки для объекта Shape.
      *
-     * @param [in] r Значение правила заполнения. Значение по умолчанию — @c FillRule::Winding.
+     * @param [in] r Значение правил помогает. Значение по умолчанию —@cFillRule::Winding.
      */
     Result fill(FillRule r) noexcept;
 
     /**
-     * @brief Sets the rendering order of the stroke and the fill.
+     * @brief Устанавливает порядок отрисовки обводки и заливки.
      *
-     * @param [in]strokeFirst Если @c true, обводка отображается перед заливкой, в противном случае обводка отображается как вторая (параметр по умолчанию).
+     * @param [in]strokeFirst Если@ctrue, обводка отображается перед заливкой, в противном случае обводка отображается как вторая (параметр по умолчанию).
      *
      * @since 0.10
      */
     Result order(bool strokeFirst) noexcept;
 
     /**
-     * @brief Gets the commands data of the path.
+     * @brief Получает данные команд пути.
      *
      * @param [out] cmds Указатель на массив команд из пути.
      *
-     * @return The length of the @p cmds array when succeed, zero otherwise.
+     * @return Длина массива cmds@pв случае успеха, в противном случае — ноль.
      */
     uint32_t pathCommands(const PathCommand** cmds) const noexcept;
 
     /**
-     * @brief Gets the points values of the path.
+     * @brief Получает значения точек пути.
      *
      * @param [out] pts Указатель на массив двумерных точек пути.
      *
-     * @return The length of the @p pts array when succeed, zero otherwise.
+     * @return Длина массива точек@pв случае успеха, в противном случае равна нулю.
      */
     uint32_t pathCoords(const Point** pts) const noexcept;
 
     /**
-     * @brief Gets the pointer to the gradient fill of the shape.
+     * @brief Получает указатель на градиентную заливку фигуры.
      *
-     * @return The pointer to the gradient fill of the stroke when succeed, @c nullptr in case no fill was set.
+     * @return Указатель на градиентную заливку обводки в случае успеха,@cnullptr в случае, если заливка не была установлена.
      */
     const Fill* fill() const noexcept;
 
     /**
-     * @brief Gets the solid color of the shape.
+     * @brief Получает сплошной цвет фигуры.
      *
      * @param [out] r Значение канала красного цвета в диапазоне [0 ~ 255].
      * @param [out] g Значение канала зеленого цвета в диапазоне [0 ~ 255].
@@ -1157,21 +1157,21 @@ public:
     Result fillColor(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a = nullptr) const noexcept;
 
     /**
-     * @brief Gets the fill rule value.
+     * @brief Получает значение правила заполнения.
      *
-     * @return The fill rule value of the shape.
+     * @return Значение правила заливки фигуры.
      */
     FillRule fillRule() const noexcept;
 
     /**
-     * @brief Gets the stroke width.
+     * @brief Получает ширину штриха.
      *
-     * @return The stroke width value when succeed, zero if no stroke was set.
+     * @return Значение ширины обводки в случае успеха, ноль, если обводка не была установлена.
      */
     float strokeWidth() const noexcept;
 
     /**
-     * @brief Gets the color of the shape's stroke.
+     * @brief Получает цвет обводки фигуры.
      *
      * @param [out] r Значение канала красного цвета в диапазоне [0 ~ 255].
      * @param [out] g Значение канала зеленого цвета в диапазоне [0 ~ 255].
@@ -1182,64 +1182,64 @@ public:
     Result strokeColor(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a = nullptr) const noexcept;
 
     /**
-     * @brief Gets the pointer to the gradient fill of the stroke.
+     * @brief Получает указатель на градиентную заливку обводки.
      *
-     * @return The pointer to the gradient fill of the stroke when succeed, @c nullptr otherwise.
+     * @return Указатель на градиентную заливку обводки в случае успеха, в противном случае@cnullptr.
      */
     const Fill* strokeFill() const noexcept;
 
     /**
-     * @brief Gets the dash pattern of the stroke.
+     * @brief Получает штриховой образец обводки.
      *
      * @param [out] DashPattern Указатель на память, где хранится массив образцов штрихов.
      *
-     * @return The length of the @p dashPattern array.
+     * @return Длина массива DashPattern @p.
      */
     uint32_t strokeDash(const float** dashPattern) const noexcept;
 
     /**
-     * @brief Gets the cap style used for stroking the path.
+     * @brief Получает стиль окончания, используемый для обводки пути.
      *
-     * @return The cap style value of the stroke.
+     * @return Значение стиля штриха.
      */
     StrokeCap strokeCap() const noexcept;
 
     /**
-     * @brief Gets the join style value used for stroking the path.
+     * @brief Получает значение стиля соединения, используемое для обводки пути.
      *
-     * @return The join style value of the stroke.
+     * @return Значение стиля соединения обводки.
      */
     StrokeJoin strokeJoin() const noexcept;
 
     /**
-     * @brief Gets the stroke miterlimit.
+     * @brief Получает предел хода митры.
      *
-     * @return The stroke miterlimit value when succeed, 4 if no stroke was set.
+     * @return Значение ограничения хода в случае успеха, 4, если ход не был установлен.
      *
      * @since 0.11
      */
     float strokeMiterlimit() const noexcept;
 
     /**
-     * @brief Creates a new Shape object.
+     * @brief Создает новый объект Shape.
      *
-     * @return A new Shape object.
+     * @return Новый объект Shape.
      */
     static std::unique_ptr<Shape> gen() noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the Shape instance.
+     * @return Тип классаIDэкземпляра Shape.
      *
      * @since Экспериментальный API
      */
     Type type() const noexcept override;
 
     /**
-     * @see Shape::type()
+     * @see Форма:: ЗСК0КСЗ
      */
     TVG_DEPRECATED static uint32_t identifier() noexcept;
 
@@ -1250,11 +1250,11 @@ public:
 /**
  * @class Изображение
  *
- * @brief A class representing an image read in one of the supported formats: raw, svg, png, jpg, lottie(json) and etc.
+ * @brief Класс, представляющий изображение, прочитанное в одном из поддерживаемых форматов: raw, svg, png, jpg, lottie(json) и т. д.
  * Помимо методов, унаследованных от Paint, он предоставляет методы для загрузки и рисования изображений на холсте.
  *
- * @note Supported formats are depended on the available TVG loaders.
- * @note See Animation class if the picture data is animatable.
+ * @note Поддерживаемые форматы зависят от доступных загрузчиков TVG.
+ * @note См. Класс анимации, если данные изображения можно анимировать.
  */
 class TVG_API Picture final : public Paint
 {
@@ -1262,51 +1262,51 @@ public:
     ~Picture();
 
     /**
-     * @brief Loads a picture data directly from a file.
+     * @brief Загружает данные изображения непосредственно из файла.
      *
-     * ThorVG эффективно кэширует загруженные данные, используя указанный путь @p в качестве ключа.
+     * ThorVG эффективно кэширует загруженные данные, используя указанный путь@pв качестве ключа.
      * Это означает, что повторная загрузка того же файла не приведет к дублированию операций;
      * вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
      *
      * @param [in] путь Путь к файлу изображения.
      *
-     * @retval Result::InvalidArguments In case the @p path is invalid.
-     * @retval Result::NonSupport When trying to load a file with an unknown extension.
+     * @retval Result::InvalidArguments В случае, если путь@pнедействителен.
+     * @retval Результат::NonSupport При попытке загрузить файл с неизвестным расширением.
      *
-     * @note The Load behavior can be asynchronous if the assigned thread number is greater than zero.
-     * @see Initializer::init()
+     * @note Поведение загрузки может быть асинхронным, если назначенный номер потока больше нуля.
+     * @see Инициализатор:: init()
      */
     Result load(const std::string& path) noexcept;
 
     /**
-     * @deprecated Use load(const char* data, uint32_t size, const std::string& mimeType, bool copy) instead.
+     * @deprecated Вместо этого используйте load(const char* data, размер uint32_t, const std::string& mimeType, bool copy).
      */
     TVG_DEPRECATED Result load(const char* data, uint32_t size, bool copy = false) noexcept;
 
     /**
-     * @brief Loads a picture data from a memory block of a given size.
+     * @brief Загружает данные изображения из блока памяти заданного размера.
      *
-     * ThorVG эффективно кэширует загруженные данные, используя указанный адрес данных @p в качестве ключа.
-     * когда копия @p имеет @c false. Это означает, что повторная загрузка тех же данных не приведет к дублированию операций.
-     * для общих данных @p. Вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
+     * ThorVG эффективно кэширует загруженные данные, используя указанный адрес данных@pв качестве ключа.
+     * когда копия@pимеет@cfalse. Это означает, что повторная загрузка тех же данных не приводит к дублированию операций.
+     * для общих данных@p. Вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
      *
-     * @param [in] data Указатель на ячейку памяти, где хранится содержимое файла изображения. Для недвоичных данных ожидается строка с нулевым завершением, если копия @p имеет значение @c false.
+     * @param [in] data Указатель на ячейку памяти, где хранятся стандартные файлы изображений. Для недвоичных данных выведите строку с нулевым завершением, если копия@pимеет значение@cfalse.
      * @param [in] size Размер в байтах памяти, занимаемой данными @p.
-     * @param [in] mimeType Mimetype или расширение данных, например «jpg», «jpeg», «lottie», «svg», «svg+xml», «png» и т. д. Если указана пустая строка или неизвестный тип, загрузчики будут проверены один за другим.
-     * @param [in] copy Если @c true, данные копируются в локальный буфер механизма, в противном случае — нет.
+     * @param [in] mimeType Mimetype или расширение данных, например «jpg», «jpeg», «lottie», «svg», «svg+xml», «png» и т. д. д. Если указана пустая строка или неизвестный тип, загрузчики будут проверены один за другим.
+     * @param [in] copy Если@ctrue, данные копируются в локальный буферный механизм, в противном случае — нет.
      *
-     * @retval Result::InvalidArguments In case no data are provided or the @p size is zero or less.
-     * @retval Result::NonSupport When trying to load a file with an unknown extension.
+     * @retval Result::InvalidArguments В случае, если данные не предоставлены или размер@pравен нулю или меньше.
+     * @retval Результат::NonSupport При попытке загрузить файл с неизвестным расширением.
      *
-     * @warning It's the user responsibility to release the @p data memory.
+     * @warning Пользователь несет ответственность за освобождение памяти данных @p.
      *
-     * @note If you are unsure about the MIME type, you can provide an empty value like @c "", and thorvg will attempt to figure it out.
+     * @note Если вы не уверены в типе MIME, вы можете указать пустое значение, например@c"", и thorvg попытается его выяснить.
      * @since 0,5
      */
     Result load(const char* data, uint32_t size, const std::string& mimeType, bool copy = false) noexcept;
 
     /**
-     * @brief Resizes the picture content to the given width and height.
+     * @brief Изменяет размер содержимого изображения до заданной ширины и высоты.
      *
      * Размер содержимого изображения изменяется с сохранением соотношения сторон размера по умолчанию.
      * Коэффициент масштабирования устанавливается для каждого из измерений, и к обоим из них применяется меньшее значение.
@@ -1318,7 +1318,7 @@ public:
     Result size(float w, float h) noexcept;
 
     /**
-     * @brief Gets the size of the image.
+     * @brief Получает размер изображения.
      *
      * @param [out] w Ширина изображения в пикселях.
      * @param [out] h Высота изображения в пикселях.
@@ -1327,57 +1327,57 @@ public:
     Result size(float* w, float* h) const noexcept;
 
     /**
-     * @brief Loads raw data in ARGB8888 format from a memory block of the given size.
+     * @brief Загружает необработанные данные в форматеARGB8888из блока памяти заданного размера.
      *
-     * ThorVG эффективно кэширует загруженные данные, используя указанный адрес данных @p в качестве ключа.
-     * когда копия @p имеет @c false. Это означает, что повторная загрузка тех же данных не приведет к дублированию операций.
-     * для общих данных @p. Вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
+     * ThorVG эффективно кэширует загруженные данные, используя указанный адрес данных@pв качестве ключа.
+     * когда копия@pимеет@cfalse. Это означает, что повторная загрузка тех же данных не приводит к дублированию операций.
+     * для общих данных@p. Вместо этого ThorVG будет повторно использовать ранее загруженные данные изображения.
      *
      * @param [in] data Указатель на ячейку памяти, где хранится содержимое необработанных данных изображения.
      * @param [in] w Ширина данных @p изображения в пикселях.
      * @param [in] h Высота изображения, данные @p, в пикселях.
-     * @param [in] с предварительным умножением Если @c true, данные изображения предварительно умножаются в альфа-канале.
-     * @param [in] copy Если @c true, данные копируются в локальный буфер механизма, в противном случае — нет.
+     * @param [in] с предварительным умножением. Если@ctrue, данные изображения умножаются в альфа-канале.
+     * @param [in] copy Если@ctrue, данные копируются в локальный буферный механизм, в противном случае — нет.
      *
      * @since 0.9
      */
     Result load(uint32_t* data, uint32_t w, uint32_t h, bool copy) noexcept;
 
     /**
-     * @brief Retrieve a paint object from the Picture scene by its Unique ID.
+     * @brief Получите объект рисования из сцены Picture по его уникальномуID.
      *
      * Эта функция ищет объект рисования в сцене изображения, соответствующий предоставленному идентификатору @p.
      *
      * @param [in] id Уникальный ID объекта рисования.
      *
-     * @return A pointer to the paint object that matches the given identifier, or @c nullptr if no matching paint object is found.
+     * @return Указатель на объект рисования, соответствующий заданному идентификатору, или@cnullptr, если соответствующий объект рисования не найден.
      *
-     * @see Accessor::id()
+     * @see Аксессор:: id()
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     const Paint* paint(uint32_t id) noexcept;
 
     /**
-     * @brief Creates a new Picture object.
+     * @brief Создает новый объект Picture.
      *
-     * @return A new Picture object.
+     * @return Новый объект изображения.
      */
     static std::unique_ptr<Picture> gen() noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the Picture instance.
+     * @return Тип классаIDэкземпляра Picture.
      *
      * @since Экспериментальный API
      */
     Type type() const noexcept override;
 
     /**
-     * @see Picture::type()
+     * @see Изображение:: type()
      */
     TVG_DEPRECATED static uint32_t identifier() noexcept;
 
@@ -1389,7 +1389,7 @@ public:
 /**
  * @class Сцена
  *
- * @brief A class to composite children paints.
+ * @brief Занятие по составлению детских красок.
  *
  * В качестве традиционного метода рендеринга графики TVG также включает механизм графа сцены.
  * Эта функция поддерживает функцию массива для управления несколькими отрисовками как одной групповой отрисовкой.
@@ -1403,81 +1403,81 @@ public:
     ~Scene();
 
     /**
-     * @brief Passes drawing elements to the Scene using Paint objects.
+     * @brief Передает элементы рисования в сцену с помощью объектов Paint.
      *
      * Нарисованными целями будут только краски, попавшие в сцену.
-     * Краски сохраняются в сцене до тех пор, пока не будет вызвана Scene::clear().
+     * Краски представлены на сцене до тех пор, пока не будет вызвана Scene::clear().
      *
      * @param [in] Paint Объект Paint, который нужно нарисовать.
      *
-     * @note The rendering order of the paints is the same as the order as they were pushed. Consider sorting the paints before pushing them if you intend to use layering.
-     * @see Scene::paints()
-     * @see Scene::clear()
+     * @note Порядок рендеринга красок такой же, как и порядок их нажатия. Если вы собираетесь использовать слои, рассмотрите возможность сортировки красок перед тем, как их раскладывать.
+     * @see Сцена:: paints()
+     * @see Сцена:: clear()
      */
     Result push(std::unique_ptr<Paint> paint) noexcept;
 
     TVG_DEPRECATED Result reserve(uint32_t size) noexcept;
 
     /**
-     * @brief Returns the list of the paints that currently held by the Scene.
+     * @brief Возвращает список красок, которые в данный момент хранятся в сцене.
      *
      * Эта функция предоставляет список узлов рисования, предоставляя пользователям прямую возможность изменять дерево сцены.
      *
-     * @warning Please avoid accessing the paints during Scene update/draw. You can access them after calling Canvas::sync().
-     * @see Canvas::sync()
-     * @see Scene::push(std::unique_ptr<Paint> paint)
-     * @see Scene::clear()
+     * @warning Пожалуйста, избегайте доступа к краскам во время обновления/отрисовки сцены. Вы можете получить к ним доступ после вызова Canvas::sync().
+     * @see Холст:: sync()
+     * @see Scene::push(std::unique_ptr<Paint> краска)
+     * @see Сцена:: clear()
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     std::list<Paint*>& paints() noexcept;
 
     /**
-     * @brief Sets the total number of the paints pushed into the scene to be zero.
-     * В зависимости от значения аргумента free @p краски освобождаются или нет.
+     * @brief Устанавливает общее количество красок, помещенных в сцену, равным нулю.
+     * В зависимости от значений аргумента свободные@pлампы отключаются или нет.
      *
-     * @param [in] free Если @c true, память, занятая красками, освобождается, в противном случае — нет.
+     * @param [in] free Если@ctrue, память, занятая красками, освобождается, в противном случае — нет.
      *
-     * @warning If you don't free the paints they become dangled. They are supposed to be reused, otherwise you are responsible for their lives. Thus please use the @p free argument only when you know how it works, otherwise it's not recommended.
+     * @warning Если не освободить краски, они будут болтаться. Их предполагается использовать повторно, иначе вы несете ответственность за их жизнь. Поэтому используйте свободный аргумент@pтолько в том случае, если вы знаете, как он работает, в противном случае это не рекомендуется.
      *
      * @since 0.2
      */
     Result clear(bool free = true) noexcept;
 
     /**
-     * @brief Apply a post-processing effect to the scene.
+     * @brief Примените к сцене эффект постобработки.
      *
      * Эта функция добавляет указанный эффект сцены, например очистку всех эффектов или применение размытия по Гауссу.
      * на сцену после ее рендеринга. Несколько эффектов могут применяться последовательно.
      *
-     * @param [in] effect Применяемый эффект сцены. Параметры определяются в перечислении SceneEffect.
-     *                   Например, используйте SceneEffect::GaussianBlur, чтобы применить размытие с определенными параметрами.
+     * @param [in] effect Применяемый эффект сцены. Параметры применяются в процедурах SceneEffect.
+     *                   Например, воспользуйтесь SceneEffect::GaussianBlur, чтобы применить размытие с настройками параметров.
      * @param [in] ... Дополнительные переменные параметры, необходимые для определенных эффектов (например, сигма и направление для GaussianBlur).
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result push(SceneEffect effect, ...) noexcept;
 
     /**
-     * @brief Creates a new Scene object.
+     * @brief Создает новый объект сцены.
      *
-     * @return A new Scene object.
+     * @return Новый объект сцены.
      */
     static std::unique_ptr<Scene> gen() noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the Scene instance.
+     * @return Тип классаIDэкземпляра сцены.
      *
      * @since Экспериментальный API
      */
     Type type() const noexcept override;
 
     /**
-     * @see Scene::type()
+     * @see Сцена:: type()
      */
     TVG_DEPRECATED static uint32_t identifier() noexcept;
 
@@ -1488,7 +1488,7 @@ public:
 /**
  * @class Текст
  *
- * @brief A class to represent text objects in a graphical context, allowing for rendering and manipulation of unicode text.
+ * @brief Класс для представления текстовых объектов в графическом контексте, позволяющий отображать и манипулировать текстом в Юникоде.
  *
  * @since 0,15
  */
@@ -1498,7 +1498,7 @@ public:
     ~Text();
 
     /**
-     * @brief Sets the font properties for the text.
+     * @brief Устанавливает свойства шрифта для текста.
      *
      * Эта функция позволяет вам определить характеристики шрифта, используемые для рендеринга текста.
      * Он устанавливает имя шрифта, его размер и, при необходимости, стиль.
@@ -1508,62 +1508,62 @@ public:
      * @param [in] style Стиль шрифта. Его можно использовать для установки шрифта «курсив».
      *                  Если не указано, используется стиль по умолчанию. В настоящее время поддерживается только курсив.
      *
-     * @retval Result::InsufficientCondition when the specified @p name cannot be found.
+     * @retval Result::InsufficientCondition, когда указанное имя@pне может быть найдено.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result font(const char* name, float size, const char* style = nullptr) noexcept;
 
     /**
-     * @brief Assigns the given unicode text to be rendered.
+     * @brief Назначает данный текст в Юникоде для отображения.
      *
      * Эта функция устанавливает строку Юникода, которая будет отображаться системой рендеринга.
      * Текст задается в соответствии с указанным методом кодирования UTF, который по умолчанию равен UTF -8.
      *
-     * @param [in] текст Многобайтовый текст, закодированный строкой utf8 для отображения.
+     * @param [in] Многотекстовый байтовый текст, закодированный строкой utf8 для отображения.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result text(const char* text) noexcept;
 
     /**
-     * @brief Sets the text color.
+     * @brief Устанавливает цвет текста.
      *
      * @param [in] r Значение канала красного цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
      * @param [in] g Значение канала зеленого цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
      * @param [in] b Значение канала синего цвета в диапазоне [0 ~ 255]. Значение по умолчанию — 0.
      *
-     * @see Text::font()
+     * @see Текст:: font()
      *
      * @since 0,15
      */
     Result fill(uint8_t r, uint8_t g, uint8_t b) noexcept;
 
     /**
-     * @brief Sets the gradient fill for all of the figures from the text.
+     * @brief Устанавливает градиентную заливку для всех фигур из текста.
      *
      * Части текста, определенные как внутренние, заполняются.
      *
      * @param [in] f Уникальный указатель на градиентную заливку.
      *
-     * @note Either a solid color or a gradient fill is applied, depending on what was set as last.
-     * @see Text::font()
+     * @note Применяется либо сплошной цвет, либо градиентная заливка, в зависимости от того, что было установлено последним.
+     * @see Текст:: font()
      *
      * @since 0,15
      */
     Result fill(std::unique_ptr<Fill> f) noexcept;
 
     /**
-     * @brief Loads a scalable font data (ttf) from a file.
+     * @brief Загружает данные масштабируемого шрифта (ttf) из файла.
      *
-     * ThorVG эффективно кэширует загруженные данные, используя указанный путь @p в качестве ключа.
+     * ThorVG эффективно кэширует загруженные данные, используя указанный путь@pв качестве ключа.
      * Это означает, что повторная загрузка того же файла не приведет к дублированию операций;
-     * вместо этого ThorVG будет повторно использовать ранее загруженные данные шрифта.
+     * вместо этого ThorVG будет повторно использовать ранее загруженный шрифт данных.
      *
      * @param [in] путь Путь к файлу шрифта.
      *
-     * @retval Result::InvalidArguments In case the @p path is invalid.
-     * @retval Result::NonSupport When trying to load a file with an unknown extension.
+     * @retval Result::InvalidArguments В случае, если путь@pнедействителен.
+     * @retval Результат::NonSupport При попытке загрузить файл с неизвестным расширением.
      *
      * @see Text::unload(const std::string& path)
      *
@@ -1572,63 +1572,63 @@ public:
     static Result load(const std::string& path) noexcept;
 
     /**
-     * @brief Loads a scalable font data (ttf) from a memory block of a given size.
+     * @brief Загружает данные масштабируемого шрифта (ttf) из блока памяти заданного размера.
      *
-     * ThorVG эффективно кэширует загруженные данные шрифта, используя указанное имя @p в качестве ключа.
+     * ThorVG эффективно кэширует загруженные данные шрифта, используя указанное имя@pв качестве переключателя.
      * Это означает, что повторная загрузка тех же шрифтов не приведет к дублированию операций.
-     * Вместо этого ThorVG будет повторно использовать ранее загруженные данные шрифта.
+     * Вместо этого ThorVG будет повторно использовать ранее загруженный шрифт данных.
      *
-     * @param [in] name Имя, под которым шрифт будет храниться и доступен (например, в @p font() API ).
+     * @param [in] name Имя, под которым шрифт будет храниться и доступен (например, в@pfont()API).
      * @param [in] data Указатель на ячейку памяти, где хранится содержимое данных шрифта.
      * @param [in] size Размер в байтах памяти, занимаемой данными @p.
-     * @param [in] mimeType Mime-тип или расширение данных шрифта. В случае указания пустой строки загрузчик будет определен автоматически.
-     * @param [in] copy Если @c true, данные копируются в локальный буфер механизма, в противном случае они не копируются (по умолчанию).
+     * @param [in] mimeType Mime-тип или расширение шрифта данных. В случае указания пустые строки загрузчик будут определены автоматически.
+     * @param [in] copy Если@ctrue, данные копируются в локальный буферный механизм, в противном случае они не копируются (по умолчанию).
      *
-     * @retval Result::InvalidArguments If no name is provided or if @p size is zero while @p data points to a valid memory location.
-     * @retval Result::NonSupport When trying to load a file with an unsupported extension.
-     * @retval Result::InsufficientCondition If attempting to unload the font data that has not been previously loaded.
+     * @retval Result::InvalidArguments Если имя не указано или размер@pравен нулю, а данные@pуказывают на допустимую ячейку памяти.
+     * @retval Результат::NonSupport При попытке загрузить файл с неподдерживаемым расширением.
+     * @retval Result::InsufficientCondition При попытке выгрузить данные шрифта, которые не были загружены ранее.
      *
-     * @warning It's the user responsibility to release the @p data memory.
+     * @warning Пользователь несет ответственность за освобождение памяти данных @p.
      *
-     * @note To unload the font data loaded using this API, pass the proper @p name and @c nullptr as @p data.
-     * @note If you are unsure about the MIME type, you can provide an empty value like @c "", and thorvg will attempt to figure it out.
-     * @see Text::font(const char* name, float size, const char* style)
+     * @note Чтобы выгрузить данные шрифта, загруженные с помощью этогоAPI, передайте правильное имя@pи нуль-птр@cв качестве данных @p.
+     * @note Если вы не уверены в типе MIME, вы можете указать пустое значение, например@c"", и thorvg попытается его выяснить.
+     * @see Text::font(имя const char*, размер float, стиль const char*)
      *
-     * @note 0.15
+     * @note 0,15
      */
     static Result load(const char* name, const char* data, uint32_t size, const std::string& mimeType = "ttf", bool copy = false) noexcept;
 
     /**
-     * @brief Unloads the specified scalable font data (TTF) that was previously loaded.
+     * @brief Выгружает указанные данные масштабируемого шрифта (TTF), которые были загружены ранее.
      *
      * Эта функция используется для освобождения ресурсов, связанных с файлом шрифта, загруженным в память.
      *
-     * @param [in] путь Путь к файлу загруженного шрифта.
+     * @param [in] Путь к файлу установленного шрифта.
      *
-     * @retval Result::InsufficientCondition Fails if the loader is not initialized.
+     * @retval Result::InsufficientCondition Ошибка, если загрузчик не инициализирован.
      *
-     * @note If the font data is currently in use, it will not be immediately unloaded.
-     * @see Text::load(const std::string& path)
+     * @note Если данные шрифта в данный момент используются, они не будут немедленно выгружены.
+     * @see Текст::load(const std::string& путь)
      *
      * @since 0,15
      */
     static Result unload(const std::string& path) noexcept;
 
     /**
-     * @brief Creates a new Text object.
+     * @brief Создает новый текстовый объект.
      *
-     * @return A new Text object.
+     * @return Новый текстовый объект.
      *
      * @since 0,15
      */
     static std::unique_ptr<Text> gen() noexcept;
 
     /**
-     * @brief Returns the ID value of this class.
+     * @brief Возвращает значениеIDэтого класса.
      *
      * Этот метод можно использовать для проверки текущего конкретного типа экземпляра.
      *
-     * @return The class type ID of the Text instance.
+     * @return Тип классаIDэкземпляра Text.
      *
      * @since Экспериментальный API
      */
@@ -1641,7 +1641,7 @@ public:
 /**
  * @class SwCanvas
  *
- * @brief A class for the rendering graphical elements with a software raster engine.
+ * @brief Класс для рендеринга графических элементов с помощью программного растрового движка.
  */
 class TVG_API SwCanvas final : public Canvas
 {
@@ -1649,76 +1649,76 @@ public:
     ~SwCanvas();
 
     /**
-     * @brief Enumeration specifying the methods of combining the 8-bit color channels into 32-bit color.
+     * @brief Перечисление, определяющее методы объединения 8-битных цветовых каналов в 32-битный цвет.
      */
     enum Colorspace
     {
         ABGR8888 = 0,      ///< Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета предварительно умножаются на альфа-канал. (а << 24 | б << 16 | г << 8 | г)
         ARGB8888,          ///< Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета предварительно умножаются на альфа-канал. (а << 24 | г << 16 | г << 8 | б)
-        ABGR8888S,         ///< Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета не умножаются по альфа-каналу.  @since 0.12
-        ARGB8888S,         ///< Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета не умножаются по альфа-каналу.  @since 0.12
+        ABGR8888S,         ///< Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета не умножаются по альфа-каналу.  @since0.12
+        ARGB8888S,         ///< Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета не умножаются по альфа-каналу.  @since0.12
     };
 
     /**
-     * @brief Enumeration specifying the methods of Memory Pool behavior policy.
+     * @brief Перечисление, определяющее методы политики поведения пула памяти.
      * @since 0.4
      */
     enum MempoolPolicy
     {
         Default = 0, ///< Поведение по умолчанию, для которого предназначен ThorVG.
-        Shareable,   ///< Пул памяти является общим для SwCanvas.
+        Shareable,   ///< Пульная память является общей для SwCanvas.
         Individual   ///< Выделить назначенный пул памяти, который будет использоваться только текущим экземпляром.
     };
 
     /**
-     * @brief Sets the drawing target for the rasterization.
+     * @brief Устанавливает цель рисования для растеризации.
      *
      * Буфер желаемого размера должен быть выделен и принадлежать вызывающей стороне.
      *
-     * Буфер @param [in] Указатель на блок памяти размером @p шаг x @p h, где хранятся растровые данные.
-     * @param [in] шаг Шаг растрового изображения – больше или равен @p w.
+     * Буфер@param[in] Указатель блока памяти размером@pшаг x@ph, где хранятся растровые данные.
+     * @param [in] шаг Шаг растрового изображения – больше или равен@pw.
      * @param [in] w Ширина растрового изображения.
      * @param [in] h Высота растрового изображения.
      * @param [in] cs Значение, определяющее способ чтения/записи 32-битных цветов.
      *
-     * @retval Result::InvalidArguments In case no valid pointer is provided or the width, or the height or the stride is zero.
-     * @retval Result::InsufficientCondition if the canvas is performing rendering. Please ensure the canvas is synced.
-     * @retval Result::NonSupport In case the software engine is not supported.
+     * @retval Result::InvalidArguments В случае, если не указан допустимый указатель или ширина, высота или шаг равны нулю.
+     * @retval Result::InsufficientCondition, если холст выполняет рендеринг. Убедитесь, что холст синхронизирован.
+     * @retval Результат::NonSupport В случае, если программный движок не поддерживается.
      *
-     * @warning Do not access @p buffer during Canvas::push() - Canvas::sync(). It should not be accessed while the engine is writing on it.
+     * @warning Не обращайтесь к буферу@pво время Canvas::push()- Canvas::sync(). К нему не следует обращаться, пока движок пишет на нем.
      *
-     * @see Canvas::viewport()
-     * @see Canvas::sync()
+     * @see Холст:: viewport()
+     * @see Холст:: sync()
     */
     Result target(uint32_t* buffer, uint32_t stride, uint32_t w, uint32_t h, Colorspace cs) noexcept;
 
     /**
-     * @brief Set sw engine memory pool behavior policy.
+     * @brief Установите политику поведения пула памяти механизма SW.
      *
-     * По сути, ThorVG рисует множество фигур, выделяет/освобождает часть памяти.
+     * По сути, ThorVG рисует множество фигур, популярных/освобождает часть памяти.
      * во время обработки рендеринга. Он внутренне использует один общий пул памяти.
      * который можно повторно использовать среди холстов, чтобы избежать накладных расходов на память.
      *
      * Таким образом, ThorVG предлагает использовать политику пула памяти для удовлетворения требований пользователей.
      * если ему необходимо гарантировать потокобезопасность доступа к внутренним данным.
      *
-     * @param [in] policy Метод, определяющий поведение пула памяти. Значение по умолчанию — @c MempoolPolicy::Default.
+     * @param [in] policy Метод, определяющий поведение пула памяти. Значение по умолчанию —@cMempoolPolicy::Default.
      *
-     * @retval Result::InsufficientCondition If the canvas contains some paints already.
-     * @retval Result::NonSupport In case the software engine is not supported.
+     * @retval Result::InsufficientCondition Если холст уже содержит краски.
+     * @retval Результат::NonSupport В случае, если программный движок не поддерживается.
      *
-     * @note When @c policy is set as @c MempoolPolicy::Individual, the current instance of canvas uses its own individual
+     * @note Если для политики@cустановлено значение@cMempoolPolicy::Individual, текущий экземпляр холста использует свой собственный
      *       данные памяти, которые не используются совместно с другими. Это необходимо, когда доступ к холсту осуществляется через рабочий поток.
      *
-     * @warning It's not allowed after pushing any paints.
+     * @warning Не допускается после нажатия каких-либо красок.
      *
      * @since 0.4
     */
     Result mempool(MempoolPolicy policy) noexcept;
 
     /**
-     * @brief Creates a new SwCanvas object.
-     * @return A new SwCanvas object.
+     * @brief Создает новый объект SwCanvas.
+     * @return Новый объект SwCanvas.
      */
     static std::unique_ptr<SwCanvas> gen() noexcept;
 
@@ -1729,7 +1729,7 @@ public:
 /**
  * @class GlCanvas
  *
- * @brief A class for the rendering graphic elements with a GL raster engine.
+ * @brief Класс для рендеринга графических элементов с помощью растрового движка GL.
  *
  * @since 0.14
  */
@@ -1739,7 +1739,7 @@ public:
     ~GlCanvas();
 
     /**
-     * @brief Sets the drawing target for rasterization.
+     * @brief Устанавливает цель рисования для растеризации.
      *
      * Эта функция определяет цель рисования, в которой будет происходить растеризация. Он может быть нацелен
      * конкретный объект кадрового буфера ( FBO ) или основную поверхность.
@@ -1748,21 +1748,21 @@ public:
      * @param [in] w Ширина (в пикселях) растрового изображения.
      * @param [in] h Высота (в пикселях) растрового изображения.
      *
-     * @retval Result::InsufficientCondition if the canvas is performing rendering. Please ensure the canvas is synced.
-     * @retval Result::NonSupport In case the gl engine is not supported.
+     * @retval Result::InsufficientCondition, если холст выполняет рендеринг. Убедитесь, что холст синхронизирован.
+     * @retval Result::NonSupport В случае, если движок gl не поддерживается.
      *
-     * @see Canvas::viewport()
-     * @see Canvas::sync()
+     * @see Холст:: viewport()
+     * @see Холст:: sync()
      *
-     * @note Currently, this only allows the GL_RGBA8 color space format.
-     * @note Experimental API
+     * @note В настоящее время поддерживается только формат цветового пространства GL_RGBA8.
+     * @note Экспериментальный API
     */
     Result target(int32_t id, uint32_t w, uint32_t h) noexcept;
 
     /**
-     * @brief Creates a new GlCanvas object.
+     * @brief Создает новый объект GlCanvas.
      *
-     * @return A new GlCanvas object.
+     * @return Новый объект GlCanvas.
      *
      * @since 0.14
      */
@@ -1775,9 +1775,9 @@ public:
 /**
  * @class WgCanvas
  *
- * @brief A class for the rendering graphic elements with a WebGPU raster engine.
+ * @brief Класс для рендеринга графических элементов с помощью растрового движка WebGPU.
  *
- * @warning Please do not use it. This class is not fully supported yet.
+ * @warning Пожалуйста, не используйте его. Этот класс еще не полностью поддерживается.
  *
  * @since 0,15
  */
@@ -1787,28 +1787,28 @@ public:
     ~WgCanvas();
 
     /**
-     * @brief Sets the drawing target for the rasterization.
+     * @brief Устанавливает цель рисования для растеризации.
      *
      * @param [in] экземпляр WGPUInstance, контекст для всех остальных объектов wgpu.
      * @param [in] поверхность WGPUSurface, дескриптор презентабельной поверхности.
      * @param [дюймы] w Ширина поверхности.
      * @param [дюймы] ч Высота поверхности.
-     * @param [in] устройство WGPDevice, желаемый дескриптор устройства wgpu. Если это @c nullptr, ThorVG внутренне назначит соответствующее устройство.
+     * @param [in] устройство WGPDevice, желаемый дескриптор устройства wgpu. Если это@cnullptr, ThorVG внутренне назначит наличие устройства.
      *
-     * @retval Result::InsufficientCondition if the canvas is performing rendering. Please ensure the canvas is synced.
-     * @retval Result::NonSupport In case the wg engine is not supported.
+     * @retval Result::InsufficientCondition, если холст выполняет рендеринг. Убедитесь, что холст синхронизирован.
+     * @retval Result::NonSupport В случае, если движок wg не поддерживается.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      *
-     * @see Canvas::viewport()
-     * @see Canvas::sync()
+     * @see Холст:: viewport()
+     * @see Холст:: sync()
      */
     Result target(void* instance, void* surface, uint32_t w, uint32_t h, void* device = nullptr) noexcept;
 
     /**
-     * @brief Creates a new WgCanvas object.
+     * @brief Создает новый объект WgCanvas.
      *
-     * @return A new WgCanvas object.
+     * @return Новый объект WgCanvas.
      *
      * @since 0,15
      */
@@ -1821,50 +1821,50 @@ public:
 /**
  * @class Инициализатор
  *
- * @brief A class that enables initialization and termination of the TVG engines.
+ * @brief Класс, который позволяет инициализировать и завершать работу механизмов TVG.
  */
 class TVG_API Initializer final
 {
 public:
     /**
-     * @brief Initializes TVG engines.
+     * @brief Инициализирует двигатели TVG.
      *
      * TVG требует среды работающего двигателя.
      * TVG использует собственный планировщик задач для эффективного распараллеливания задач рендеринга.
      * Вы можете указать количество потоков, количество которых обозначается потоками @p.
      * На этапе инициализации TVG будет генерировать/создавать потоки в соответствии с количеством потоков @p.
      *
-     * @param [in] engine Типы механизмов, подлежащие инициализации. Это относится к типам Canvas, в которых он будет использоваться. Для нескольких серверов разрешены побитовые операции.
+     * @param [in] engine Типы соглашений, беспричинные обоснования. Это относится к типам Canvas, в которых он будет использоваться. Для нескольких серверов разрешены побитовые операции.
      * @param [in] threads Количество дополнительных потоков. Ноль указывает, что будет использоваться только основной поток.
      *
-     * @retval Result::NonSupport In case the engine type is not supported on the system.
+     * @retval Result::NonSupport В случае, если тип ядра не поддерживается системой.
      *
-     * @note The Initializer keeps track of the number of times it was called. Threads count is fixed at the first init() call.
-     * @see Initializer::term()
+     * @note Инициализатор отслеживает количество вызовов. Количество потоков фиксируется при первом вызове init().
+     * @see Инициализатор:: term()
      */
     static Result init(CanvasEngine engine, uint32_t threads) noexcept;
 
     /**
-     * @brief Terminates TVG engines.
+     * @brief Завершает работу двигателей TVG.
      *
-     * @param [in] engine Типы механизмов, которые необходимо завершить. Это относится к типам Canvas, в которых он будет использоваться. Для нескольких серверов разрешены побитовые операции.
+     * @param [in] engine Типы критериев, которые необходимо разработать. Это относится к типам Canvas, в которых он будет использоваться. Для нескольких серверов разрешены побитовые операции.
      *
-     * @retval Result::InsufficientCondition In case there is nothing to be terminated.
-     * @retval Result::NonSupport In case the engine type is not supported on the system.
+     * @retval Result::InsufficientCondition Если нечего завершать.
+     * @retval Result::NonSupport В случае, если тип ядра не поддерживается системой.
      *
-     * @note Initializer does own reference counting for multiple calls.
-     * @see Initializer::init()
+     * @note Инициализатор самостоятельно подсчитывает ссылки для нескольких вызовов.
+     * @see Инициализатор:: init()
      */
     static Result term(CanvasEngine engine) noexcept;
 
     /**
-     * @brief Retrieves the version of the TVG engine.
+     * @brief Получает версию движка TVG.
      *
      * @param [out] major Основной номер версии.
      * @param [out] второстепенный номер версии.
      * @param [out] micro Номер микро-версии.
      *
-     * @return The version of the engine in the format major.minor.micro, or a @p nullptr in case of an internal error.
+     * @return Версия движка в формате major.minor.micro или nullptr@pв случае внутренней ошибки.
      *
      * @since 0,15
      */
@@ -1877,7 +1877,7 @@ public:
 /**
  * @class Анимация
  *
- * @brief The Animation class enables manipulation of animatable images.
+ * @brief Класс Animation позволяет манипулировать анимационными изображениями.
  *
  * Этот класс поддерживает отображение и управление кадрами анимации.
  *
@@ -1890,15 +1890,15 @@ public:
     ~Animation();
 
     /**
-     * @brief Specifies the current frame in the animation.
+     * @brief Указывает текущий кадр анимации.
      *
-     * @param [in] нет Индекс кадра анимации, который будет отображаться. Индекс должен быть меньше totalFrame().
+     * @param [in] нет Индекс кадровой анимации, который будет находиться в базе данных Bluetooth. Индекс должен быть меньшеtotalFrame().
      *
-     * @retval Result::InsufficientCondition if the given @p no is the same as the current frame value.
-     * @retval Result::NonSupport The current Picture data does not support animations.
+     * @retval Result::InsufficientCondition, если заданный номер@pсовпадает со значением текущего кадра.
+     * @retval Result::NonSupport Текущие данные изображения не поддерживают анимацию.
      *
-     * @note For efficiency, ThorVG ignores updates to the new frame value if the difference from the current frame value
-     *       меньше 0,001. В таких случаях он возвращает @c Result::InsufficientCondition.
+     * @note В целях эффективности ThorVG игнорирует обновления нового значения кадра, если оно отличается от текущего значения кадра.
+     *       меньше 0,001. В таких случаях он получает@cResult::InsufficientCondition.
      *       Значения меньше 0,001 могут быть проигнорированы и не могут быть точно сохранены анимацией.
      *
      * @see totalFrame()
@@ -1907,55 +1907,55 @@ public:
     Result frame(float no) noexcept;
 
     /**
-     * @brief Retrieves a picture instance associated with this animation instance.
+     * @brief Получает экземпляр изображения, связанный с этим экземпляром анимации.
      *
-     * Эта функция обеспечивает доступ к экземпляру изображения, который можно использовать для загрузки форматов анимации, таких как Lottie(json).
+     * Эта функция обеспечивает доступ к экземпляру изображения, которое можно использовать для загрузки форматов анимации, таких как Lottie(json).
      * После настройки изображения его можно переместить на назначенный холст, что позволит управлять кадрами анимации.
      * с этим экземпляром анимации.
      *
-     * @return A picture instance that is tied to this animation.
+     * @return Экземпляр изображения, привязанный к этой анимации.
      *
-     * @warning The picture instance is owned by Animation. It should not be deleted manually.
+     * @warning Экземпляр изображения принадлежит компании Animation. Его не следует удалять вручную.
      *
      */
     Picture* picture() const noexcept;
 
     /**
-     * @brief Retrieves the current frame number of the animation.
+     * @brief Получает текущий номер кадра анимации.
      *
-     * @return The current frame number of the animation, between 0 and totalFrame() - 1.
+     * @return Текущий номер кадра анимации от 0 доtotalFrame()– 1.
      *
-     * @note If the Picture is not properly configured, this function will return 0.
+     * @note Если изображение настроено неправильно, эта функция вернет 0.
      *
-     * @see Animation::frame(float no)
-     * @see Animation::totalFrame()
+     * @see Анимация::frame(номер с плавающей запятой)
+     * @see Анимация:: totalFrame()
      *
      */
     float curFrame() const noexcept;
 
     /**
-     * @brief Retrieves the total number of frames in the animation.
+     * @brief Получает общее количество кадров в анимации.
      *
-     * @return The total number of frames in the animation.
+     * @return Общее количество кадров в анимации.
      *
-     * @note Frame numbering starts from 0.
-     * @note If the Picture is not properly configured, this function will return 0.
+     * @note Нумерация кадров начинается с 0.
+     * @note Если изображение настроено неправильно, эта функция вернет 0.
      *
      */
     float totalFrame() const noexcept;
 
     /**
-     * @brief Retrieves the duration of the animation in seconds.
+     * @brief Получает продолжительность анимации в секундах.
      *
-     * @return The duration of the animation in seconds.
+     * @return Продолжительность анимации в секундах.
      *
-     * @note If the Picture is not properly configured, this function will return 0.
+     * @note Если изображение настроено неправильно, эта функция вернет 0.
      *
      */
     float duration() const noexcept;
 
     /**
-     * @brief Specifies the playback segment of the animation.
+     * @brief Указывает сегмент воспроизведения анимации.
      *
      * Установленный сегмент обозначается как игровая область анимации.
      * Это полезно для воспроизведения определенного сегмента всей анимации.
@@ -1965,34 +1965,34 @@ public:
      * @param [in] начало сегмента.
      * @param [in] конец сегмента конец.
      *
-     * @retval Result::InsufficientCondition In case the animation is not loaded.
-     * @retval Result::NonSupport When it's not animatable.
+     * @retval Result::InsufficientCondition Если анимация не загружена.
+     * @retval Result::NonSupport Когда его нельзя анимировать.
      *
-     * @note Animation allows a range from 0.0 to 1.0. @p end should not be higher than @p begin.
-     * @note If a marker has been specified, its range will be disregarded.
-     * @see LottieAnimation::segment(const char* marker)
+     * @note Анимация допускает диапазон от 0,0 до 1,0.  Конец@pне должен быть выше начала @p.
+     * @note Если был указан маркер, его диапазон будет игнорироваться.
+     * @see LottieAnimation::segment(const char* маркер)
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result segment(float begin, float end) noexcept;
 
     /**
-     * @brief Gets the current segment.
+     * @brief Получает текущий сегмент.
      *
      * @param [out] начало сегмента.
      * @param [out] конец сегмента конец.
      *
-     * @retval Result::InsufficientCondition In case the animation is not loaded.
-     * @retval Result::NonSupport When it's not animatable.
+     * @retval Result::InsufficientCondition Если анимация не загружена.
+     * @retval Result::NonSupport Когда его нельзя анимировать.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result segment(float* begin, float* end = nullptr) noexcept;
 
     /**
-     * @brief Creates a new Animation object.
+     * @brief Создает новый объект Animation.
      *
-     * @return A new Animation object.
+     * @return Новый объект анимации.
      *
      */
     static std::unique_ptr<Animation> gen() noexcept;
@@ -2004,17 +2004,17 @@ public:
 /**
  * @class Заставка
  *
- * @brief A class for exporting a paint object into a specified file, from which to recover the paint data later.
+ * @brief Класс для экспорта объекта рисования в указанный файл, из которого можно позже восстановить данные рисования.
  *
- * ThorVG предоставляет функцию экспорта и импорта данных о красках. Роль Saver заключается в экспорте данных рисования в файл.
+ * ThorVG обеспечивает функцию экспорта и импорта данных о красках. Роль Saver заключается в экспорте данных рисования в файле.
  * Это полезно, когда вам нужно сохранить созданную сцену или изображение из объекта рисования и воссоздать его позже.
  *
- * Формат файла определяется именем расширения (например, «*.tvg»), а поддерживаемые форматы зависят от среды упаковки TVG.
- * Если формат файла не поддерживается, метод save() возвращает результат @c Result::NonSupport.
+ * Формат файла Определенное имя расширения (например, «*.tvg»), применимые формы, соответствующие стандарту упаковкиTVG.
+ * Если формат файла не соответствует, методsave()возвращает результат@cResult::NonSupport.
  *
- * После успешного экспорта краски в файл вы можете воссоздать ее с помощью класса Picture.
+ * После получения экспорта краски в файл вы можете отправить ее в регион с помощью изображения класса.
  *
- * @see Picture::load()
+ * @see Изображение:: load()
  *
  * @since 0,5
  */
@@ -2024,77 +2024,77 @@ public:
     ~Saver();
 
     /**
-     * @brief Sets the base background content for the saved image.
+     * @brief Устанавливает базовое фоновое содержимое для сохраненного изображения.
      *
-     * @param [in] краска Краска, которая будет отображаться в качестве фонового изображения для сохраняемой краски.
+     * @param [in] краска Краска, которая будет использоваться в качестве фонового изображения для сохранения красок.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result background(std::unique_ptr<Paint> paint) noexcept;
 
     /**
-     * @brief Exports the given @p paint data to the given @p path
+     * @brief Экспортирует данные краски@pв заданный путь @p.
      *
      * Если модуль сохранения поддерживает какой-либо механизм сжатия, он оптимизирует размер данных.
      * В некоторых случаях это может повлиять на время кодирования/декодирования. Вы можете отключить сжатие
      * если вы хотите оптимизировать скорость.
      *
-     * @param [in] краска Краска, которую необходимо сохранить, со всеми связанными с ней свойствами.
+     * @param [in] краска Краска, которую необходимо сохранить, со всеми переменами с ней следствием.
      * @param [in] путь Путь к файлу, в котором должны быть сохранены данные рисования.
-     * @param [in] compress Если @c true, то сжимайте данные, если это возможно.
+     * @param [in] compress Если@ctrue, сжимайте данные, если это возможно.
      *
-     * @retval Result::InsufficientCondition If currently saving other resources.
-     * @retval Result::NonSupport When trying to save a file with an unknown extension or in an unsupported format.
-     * @retval Result::Unknown In case an empty paint is to be saved.
+     * @retval Result::InsufficientCondition Если в данный момент сохраняются другие ресурсы.
+     * @retval Результат::NonSupport При попытке сохранить файл с неизвестным расширением или в неподдерживаемом формате.
+     * @retval Результат::Неизвестно В случае, если необходимо сохранить пустую краску.
      *
-     * @note Saving can be asynchronous if the assigned thread number is greater than zero. To guarantee the saving is done, call sync() afterwards.
-     * @see Saver::sync()
+     * @note Сохранение может быть асинхронным, если назначенный номер потока больше нуля. Чтобы гарантировать, что сохранение выполнено, после этого вызовите sync().
+     * @see Заставка:: sync()
      *
      * @since 0,5
      */
     Result save(std::unique_ptr<Paint> paint, const std::string& path, bool compress = true) noexcept;
 
     /**
-     * @brief Export the provided animation data to the specified file path.
+     * @brief Экспортируйте предоставленные данные анимации в указанный путь к файлу.
      *
-     * Эта функция экспортирует данные анимации по указанному пути к файлу. Вы также можете указать желаемую частоту кадров в кадрах в секунду ( FPS ), указав параметр fps.
+     * Эта функция экспортирует данные анимации по указанному пути к файлу. Вы также можете указать желаемую скорость кадров в секундах (FPS), указав параметр fps.
      *
      * @param [in] анимация Сохраняемая анимация, включая все связанные свойства.
      * @param [in] путь Путь к файлу, в котором будет сохранена анимация.
-     * @param [in] качество Уровень качества кодирования.  @c 0 — минимальное значение, @c 100 — максимальное значение (рекомендуется).
+     * @param [in] качество Уровень качества кодирования.  @c0 — минимальное значение,@c100 — максимальное значение (рекомендуется).
      * @param [in] fps Желаемое количество кадров в секунду ( FPS ). Например, чтобы закодировать данные по адресу 60 FPS, передайте 60. Передайте 0, чтобы сохранить исходные данные кадра.
      *
-     * @retval Result::InsufficientCondition if there are ongoing resource-saving operations.
-     * @retval Result::NonSupport if an attempt is made to save the file with an unknown extension or in an unsupported format.
-     * @retval Result::Unknown if attempting to save an empty paint.
+     * @retval Result::InsufficientCondition, если выполняются текущие операции по экономии ресурсов.
+     * @retval Result::NonSupport, если предпринята попытка сохранить файл с неизвестным расширением или в неподдерживаемом формате.
+     * @retval Результат::Неизвестно при попытке сохранить пустую краску.
      *
-     * @note A higher frames per second (FPS) would result in a larger file size. It is recommended to use the default value.
-     * @note Saving can be asynchronous if the assigned thread number is greater than zero. To guarantee the saving is done, call sync() afterwards.
+     * @note Более высокое количество кадров в секунду (FPS) приведет к увеличению размера файла. Рекомендуется использовать значение по умолчанию.
+     * @note Сохранение может быть асинхронным, если назначенный номер потока больше нуля. Чтобы гарантировать, что сохранение выполнено, после этого вызовите sync().
      *
-     * @see Saver::sync()
+     * @see Заставка:: sync()
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result save(std::unique_ptr<Animation> animation, const std::string& path, uint32_t quality = 100, uint32_t fps = 0) noexcept;
 
     /**
-     * @brief Guarantees that the saving task is finished.
+     * @brief Гарантирует, что задача сохранения завершена.
      *
-     * Поведение Saver работает на основе синхронизации/асинхронности, в зависимости от настроек потоков инициализатора.
-     * Таким образом, если вы хотите получить от этого выгоду, вы должны вызвать sync() после save() в нужное время задержки.
+     * Поведение Saver работает на основе синхронизации/асинхронности, в зависимости от настроек исходника потоков.
+     * Таким образом, если вы хотите получить эту выгоду, вам нужно вызватьsync()послеsave()в нужное время задержки.
      * В противном случае вы можете немедленно позвонить sync().
      *
-     * @note The asynchronous tasking is dependent on the Saver module implementation.
-     * @see Saver::save()
+     * @note Асинхронное выполнение задач зависит от реализации модуля Saver.
+     * @see Заставка:: save()
      *
      * @since 0,5
      */
     Result sync() noexcept;
 
     /**
-     * @brief Creates a new Saver object.
+     * @brief Создает новый объект Saver.
      *
-     * @return A new Saver object.
+     * @return Новый объект Saver.
      *
      * @since 0,5
      */
@@ -2107,11 +2107,11 @@ public:
 /**
  * @class Аксессуар
  *
- * @brief The Accessor is a utility class to debug the Scene structure by traversing the scene-tree.
+ * @brief Accessor — это служебный класс для отладки структуры сцены путем обхода дерева сцены.
  *
  * Аксессор помогает вам искать определенные узлы, читать информацию о свойствах, определять структуру дерева сцены и его размер.
  *
- * @warning We strongly warn you not to change the paints of a scene unless you really know the design-structure.
+ * @warning Мы настоятельно предупреждаем вас не менять краски сцены, если вы действительно не знаете структуру дизайна.
  *
  * @since 0.10
  */
@@ -2123,38 +2123,38 @@ public:
     TVG_DEPRECATED std::unique_ptr<Picture> set(std::unique_ptr<Picture> picture, std::function<bool(const Paint* paint)> func) noexcept;
 
     /**
-     * @brief Set the access function for traversing the Picture scene tree nodes.
+     * @brief Установите функцию доступа для обхода узлов дерева сцены Picture.
      *
      * @param [in] image Узел изображения для обхода внутреннего дерева сцены.
      * @param [in] func Функция обратного вызова, вызывающая все узлы рисования изображения.
      * @param [in] data Данные, передаваемые в функцию @p в качестве аргумента.
      *
-     * @note The bitmap based picture might not have the scene-tree.
+     * @note Растровое изображение может не иметь дерева сцены.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result set(const Picture* picture, std::function<bool(const Paint* paint, void* data)> func, void* data) noexcept;
 
     /**
-     * @brief Generate a unique ID (hash key) from a given name.
+     * @brief Создайте уникальныйID(хеш-ключ) по заданному имени.
      *
      * Эта функция вычисляет уникальное значение идентификатора на основе предоставленной строки.
-     * Вы можете использовать это, чтобы назначить уникальный ID объекту Paint.
+     * Вы можете использовать это, чтобы назначить уникальный объектIDPaint.
      *
      * @param [in] name Входная строка, на основе которой создается уникальный идентификатор.
      *
-     * @return The generated unique identifier value.
+     * @return Сгенерированное значение уникального идентификатора.
      *
-     * @see Paint::id
+     * @see Краска::id
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     static uint32_t id(const char* name) noexcept;
 
     /**
-     * @brief Creates a new Accessor object.
+     * @brief Создает новый объект Accessor.
      *
-     * @return A new Accessor object.
+     * @return Новый объект Accessor.
      */
     static std::unique_ptr<Accessor> gen() noexcept;
 
@@ -2163,7 +2163,7 @@ public:
 
 
 /**
- * @brief The cast() function is a utility function used to cast a 'Paint' to type 'T'.
+ * @brief Функцияcast()— это служебная функция, используемая для приведения «Paint» к типу «T».
  * @since 0.11
  */
 template<typename T = tvg::Paint>
@@ -2174,7 +2174,7 @@ std::unique_ptr<T> cast(Paint* paint)
 
 
 /**
- * @brief The cast() function is a utility function used to cast a 'Fill' to type 'T'.
+ * @brief Функцияcast()— это служебная функция, используемая для приведения «Заливки» к типу «Т».
  * @since 0.11
  */
 template<typename T = tvg::Fill>

@@ -155,7 +155,7 @@ static void lv_draw_dma2d_opaque_image_core(lv_draw_task_t * t, const lv_draw_im
         conf.bg_cf = output_cf_dma2d;
     }
 
-    /* Альфа-канал следует рассматривать как 0xFF, если cf равен XRGB. */
+    /* Альфа-канал следует рассматривать как0xFF, если cf соответствуетXRGB. */
     if(image_cf == LV_COLOR_FORMAT_XRGB8888) {
         conf.fg_alpha_mode = LV_DRAW_DMA2D_ALPHA_MODE_REPLACE_ALPHA_CHANNEL;
         conf.fg_alpha = 0xff;
@@ -247,7 +247,7 @@ static void lv_draw_dma2d_image_core(lv_draw_task_t * t, const lv_draw_image_dsc
         .bg_cf = output_cf_dma2d,
     };
 
-    /* Альфа-канал следует рассматривать как 0xFF, если cf равен XRGB. */
+    /* Альфа-канал следует рассматривать как0xFF, если cf соответствуетXRGB. */
     if(image_cf == LV_COLOR_FORMAT_XRGB8888) {
         conf.fg_alpha_mode = LV_DRAW_DMA2D_ALPHA_MODE_REPLACE_ALPHA_CHANNEL;
     }

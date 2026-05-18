@@ -312,9 +312,9 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 /**
  * Декодируйте изображение с помощью библиотеки ffmpeg.
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -430,7 +430,7 @@ static int ffmpeg_output_video_frame(struct ffmpeg_context_s * ffmpeg_ctx)
        || frame->height != height
        || frame->format != ffmpeg_ctx->video_dec_ctx->pix_fmt) {
 
-        /* Чтобы обработать это изменение, можно снова вызвать av_image_alloc и
+        /* Чтобы обработать это изменение, можно снова вызватьav_image_allocи
          * декодируйте следующие кадры в другой файл rawvideo.
          */
         LV_LOG_ERROR("Width, height and pixel format have to be "
@@ -747,7 +747,7 @@ static int ffmpeg_lvfs_read(void * ptr, uint8_t * buf, int buf_size)
     uint32_t bytesRead = 0;
     lv_fs_res_t res = lv_fs_read(file, buf, buf_size, &bytesRead);
     if(bytesRead == 0)
-        return AVERROR_EOF;  /* Сообщите FFmpeg, что мы достигли eof */
+        return AVERROR_EOF;  /* Сообщите FFmpeg, что мы соблюдаем eof */
     if(res != LV_FS_RES_OK)
         return AVERROR_EOF;
     return bytesRead;
@@ -867,11 +867,11 @@ static int ffmpeg_image_allocate(struct ffmpeg_context_s * ffmpeg_ctx, int align
 {
     int ret;
 
-    /* Выделите video_dst_data как отдельный буфер для целевого изображения.
+    /* Выделитеvideo_dst_dataкак отдельный буфер для целевого изображения.
      * Это необходимо, поскольку для места назначения может потребоваться другой формат пикселей.
      * или макет, чем исходный (декодированный) кадр, поэтому мы не всегда можем использовать исходный
      * данные кадра напрямую. В отличие от video_src_data, который больше не выделяется,
-     * video_dst_data по-прежнему необходим для преобразования формата или копирования. */
+     * video_dst_data по-прежнему необходим для преобразования формы или копирования. */
     ret = av_image_alloc(
               ffmpeg_ctx->video_dst_data,
               ffmpeg_ctx->video_dst_linesize,

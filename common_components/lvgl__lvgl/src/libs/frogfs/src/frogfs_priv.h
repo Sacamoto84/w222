@@ -1,4 +1,4 @@
-/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+/* Данная форма регулирования исходного кода является публичной лицензией Mozilla.
  * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
  * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
@@ -38,7 +38,7 @@ struct frogfs_dh_t {
 };
 
 /**
- * \brief Структура указателей на функции, описывающие декомпрессор
+ * \brief Структура указателей на функции, описывающий декомпрессор
  */
 struct frogfs_decomp_funcs_t {
     int (*open)(frogfs_fh_t *f, unsigned int flags);
@@ -49,22 +49,22 @@ struct frogfs_decomp_funcs_t {
 };
 
 /**
- * \brief Функции декомпрессора Raw
+ * \краткие функции декомпрессора Raw
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_raw;
 
 /**
- * \brief Функции термоусадочного декомпрессора
+ * \краткие функции термоусадочного декомпрессора
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_heatshrink;
 
 /**
- * \brief Функции декомпрессора Miniz
+ * \краткие функции декомпрессора Miniz
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_miniz;
 
 /**
- * \brief Функции декомпрессора Zlib
+ * \краткие функции декомпрессора Zlib
  */
 extern const frogfs_decomp_funcs_t frogfs_decomp_zlib;
 

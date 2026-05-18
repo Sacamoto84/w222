@@ -30,7 +30,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-/*Невозможно включить lv_obj.h, поскольку он включает этот заголовочный файл.*/
+/*Невозможно включитьlv_obj.h, так как он включает этот заголовочный файл.*/
 
 typedef enum {
     LV_FLEX_ALIGN_START,
@@ -67,25 +67,25 @@ void lv_flex_init(void);
 
 /**
  * Установите, как элемент должен течь
- * @param obj pointer to an object. The parent must have flex layout else nothing will happen.
- * @param flow an element of `lv_flex_flow_t`.
+ * @param obj указатель на объект. Родительский элемент должен иметь гибкий макет, иначе ничего не произойдет.
+ * @param flow элемент `lv_flex_flow_t`.
  */
 void lv_obj_set_flex_flow(lv_obj_t * obj, lv_flex_flow_t flow);
 
 /**
  * Установите, как размещать (где выравнивать) элементы и дорожки.
- * @param obj pointer to an object. The parent must have flex layout else nothing will happen.
- * @param main_place where to place the items on main axis (in their track). Any value of `lv_flex_align_t`.
- * @param cross_place where to place the item in their track on the cross axis. `LV_FLEX_ALIGN_START/END/CENTER`
- * @param track_cross_place where to place the tracks in the cross direction. Any value of `lv_flex_align_t`.
+ * @param obj указатель на объект. Родительский элемент должен иметь гибкий макет, иначе ничего не произойдет.
+ * @param main_place где разместить элементы на главной оси (по их дорожке). Любое значение `lv_flex_align_t`.
+ * @param cross_place где разместить элемент на их дорожке по поперечной оси.  `LV_FLEX_ALIGN_START/END/CENTER`
+ * @param track_cross_place где разместить дорожки в поперечном направлении. Любое значение `lv_flex_align_t`.
  */
 void lv_obj_set_flex_align(lv_obj_t * obj, lv_flex_align_t main_place, lv_flex_align_t cross_place,
                            lv_flex_align_t track_cross_place);
 
 /**
  * Устанавливает ширину или высоту (по главной оси) для увеличения объекта, чтобы заполнить свободное пространство.
- * @param obj pointer to an object. The parent must have flex layout else nothing will happen.
- * @param grow a value to set how much free space to take proportionally to other growing items.
+ * @param obj указатель на объект. Родительский элемент должен иметь гибкий макет, иначе ничего не произойдет.
+ * @param grow значение, определяющее, сколько свободного места нужно занять пропорционально другим растущим объектам.
  */
 void lv_obj_set_flex_grow(lv_obj_t * obj, uint8_t grow);
 

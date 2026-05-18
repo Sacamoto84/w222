@@ -36,29 +36,29 @@
  *      TYPEDEFS
  **********************/
 /**
-* согласно спецификации Exif( http://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)
+* согласно характеристикам Exif( http://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)
 * Связь между данными изображения и ориентацией на экране дисплея в соответствии с тегом ориентации
 */
 typedef enum {
-    /* Orientation = 0 is created when the image data in the Exif is not rotated */
+    /* Orientation = 0 создается, когда данные изображения в Exif не поворачиваются */
     IMAGE_CLOCKWISE_NONE    = 0,
-    /* Orientation = 1 is created when Oth row of the coded image data stored in the Exif image file
+    /* Orientation = 1 создается, когда вторая строка данных кодированного изображения хранится в файле изображения Exif.
      * и визуальная верхняя часть экрана дисплея, а также столбец «Другие» и визуальная левая часть будут совпадать для отображения.
      */
     IMAGE_CLOCKWISE_0       = 1,
-    /* Orientation = 2 is equivalent to an arrangement that is reversed Orientation = 1 horizontally */
+    /* Orientation = 2 эквивалентно перевернутой ориентации. Ориентация = 1 по горизонтали. */
     IMAGE_FLIP_HOR          = 2,
-    /* Orientation = 3 is equivalent to an arrangement that is turned Orientation = 6 90 degrees clockwise */
+    /* Orientation = 3 соответствует повернутой схеме. Ориентация = 6 90 градусов по часовой стрелке. */
     IMAGE_CLOCKWISE_180     = 3,
-    /* Orientation = 4 is equivalent to an arrangement that is reversed Orientation = 3 horizontally */
+    /* Orientation = 4 эквивалентно перевернутой ориентации. Ориентация = 3 по горизонтали. */
     IMAGE_FLIP_VER          = 4,
-    /* Orientation = 5 is equivalent to an arrangement that is reversed Orientation = 6 horizontally */
+    /* Orientation = 5 эквивалентно перевернутой ориентации. Ориентация = 6 по горизонтали. */
     IMAGE_TRANSPOSE         = 5,
-    /* Orientation = 6 is equivalent to an arrangement that is turned Orientation = 1 90 degrees clockwise */
+    /* Orientation = 6 соответствует повернутой схеме. Ориентация = 1 90 градусов по часовой стрелке. */
     IMAGE_CLOCKWISE_90      = 6,
-    /* Orientation = 7 is equivalent to an arrangement that is reversed Orientation = 8 horizontally */
+    /* Orientation = 7 эквивалентно перевернутой ориентации. Ориентация = 8 по горизонтали. */
     IMAGE_TRANSVERSE        = 7,
-    /* Orientation = 8 is equivalent to an arrangement that is turned Orientation = 3 90 degrees clockwise */
+    /* Orientation = 8 соответствует повернутой схеме. Ориентация = 3 90 градусов по часовой стрелке. */
     IMAGE_CLOCKWISE_270     = 8,
 } image_orientation_t;
 
@@ -132,9 +132,9 @@ void lv_libjpeg_turbo_deinit(void)
 
 /**
  * Получить информацию об изображении JPEG
- * @param dsc image descriptor containing the source and type of the image and other info.
- * @param header store the info here
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
+ * @param dsc Дескриптор изображения, содержащий источник и тип изображения, а также другую информацию.
+ * @param header хранить информацию здесь
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу получить информацию
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
@@ -184,9 +184,9 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 /**
  * Откройте изображение JPEG и верните выбранное изображение.
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -259,7 +259,7 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     struct jpeg_decompress_struct cinfo;
     /* Мы используем наше частное расширение обработчика ошибок JPEG.
      * Обратите внимание, что эта структура должна существовать до тех пор, пока основной параметр JPEG.
-     * struct, чтобы избежать проблем с висячими указателями.
+     * структуру, чтобы избежать проблем с высячими указателями.
      */
     error_mgr_t jerr;
 
@@ -271,8 +271,8 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     lv_draw_buf_t * decoded = NULL;
 
     /* В этом примере мы хотим открыть входной файл, прежде чем делать что-либо еще.
-     * так что приведенное ниже восстановление ошибки setjmp() может предполагать, что файл открыт.
-     * VERY IMPORTANT: используйте опцию «b» для fopen(), если вы находитесь на машине, которая
+     * так что приведенная ниже ошибка восстановленияsetjmp()может предполагать, что файл открыт.
+     * VERYIMPORTANT: воспользуйтесь опцией «b» для fopen(), если вы находитесь на машине, которая
      * требуется это для чтения двоичных файлов.
      */
 
@@ -291,7 +291,7 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     /* Мы устанавливаем обычные процедуры обработки ошибок JPEG, а затем переопределяем error_exit. */
     cinfo.err = jpeg_std_error(&jerr.pub);
     jerr.pub.error_exit = error_exit;
-    /* Установите контекст возврата setjmp, который будет использовать my_error_exit. */
+    /* Укажите контекст возврата setjmp, который будет использовать my_error_exit. */
     if(setjmp(jerr.jb)) {
         LV_LOG_WARN("decoding error");
         if(decoded) {
@@ -312,11 +312,11 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     /* указать источник данных (например, файл или буфер) */
     jpeg_mem_src(&cinfo, data, data_size);
 
-    /* прочитать параметры файла с помощью jpeg_read_header () */
+    /* прочитать параметры файла с помощью jpeg_read_header() */
     jpeg_read_header(&cinfo, TRUE);
 
-    /* Мы можем игнорировать возвращаемое значение из jpeg_read_header, поскольку
-     *   (a) приостановка невозможна при использовании источника данных stdio, и
+    /* Мы можем принять возвращаемое значение из jpeg_read_header, поскольку
+     *   (a) приостановка невозможна при использовании источника данных stdio и
      *   (б) мы передали TRUE, чтобы отклонить файл JPEG, содержащий только таблицы, как ошибку.
      * Дополнительную информацию см. в libjpeg.doc.
      */
@@ -330,14 +330,14 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     }
 
     /* В этом примере нам не нужно менять какие-либо значения по умолчанию, установленные
-     * jpeg_read_header(), поэтому здесь ничего не делаем.
+     * jpeg_read_header(), поэтому здесь ничего не происходит.
      */
 
     /* Запустить декомпрессор */
     jpeg_start_decompress(&cinfo);
 
     /* Мы можем игнорировать возвращаемое значение, поскольку приостановка невозможна.
-     * с источником данных stdio.
+     * с доказательством данных stdio.
      */
 
     /* Возможно, на этом этапе нам придется выполнить некоторые собственные настройки, прежде чем читать.
@@ -370,14 +370,14 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, width, height, fm, LV_STRIDE_AUTO);
     if(decoded != NULL) {
         uint32_t line_index = 0;
-        /* while (строки сканирования еще предстоит прочитать) */
+        /* пока (строки помощника еще предстоит прочитать) */
         /* jpeg_read_scanlines (...); */
 
-        /* Здесь мы используем переменную состояния библиотеки cinfo. output_scanline как
+        /* Здесь мы используем переменную библиотеку состояния cinfo. output_scanlineкак
          * счетчик циклов, чтобы нам не приходилось отслеживать их самостоятельно.
          */
         while(cinfo.output_scanline < cinfo.output_height) {
-            /* jpeg_read_scanlines ожидает массив указателей на строки сканирования.
+            /* jpeg_read_scanlines ожидает массив указателей по строкам.
              * Здесь массив состоит всего из одного элемента, но вы можете попросить
              * более одной строки сканирования за раз, если это удобнее.
              */
@@ -387,7 +387,7 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
                 jpeg_cmyk_to_bgrx(buffer[0], decoded->header.w);
             }
 
-            /* Предположим, put_scanline_someplace хочет получить указатель и количество выборок. */
+            /* Предполагается, чтоput_scanline_someplaceхочет получить указатель и количество выборок. */
             process_buffer_orientation(image_orientation, decoded->data, &image_header, line_index, buffer[0],
                                        decoded->header.stride);
             line_index++;
@@ -399,7 +399,7 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     jpeg_finish_decompress(&cinfo);
 
     /* Мы можем игнорировать возвращаемое значение, поскольку приостановка невозможна.
-     * с источником данных stdio.
+     * с доказательством данных stdio.
      */
 
     /* Освободить объект распаковки JPEG */
@@ -407,10 +407,10 @@ static lv_draw_buf_t * decode_jpeg_file(const char * filename)
     /* Это важный шаг, поскольку он освободит большой объем памяти. */
     jpeg_destroy_decompress(&cinfo);
 
-    /* После finish_decompress мы можем закрыть входной файл.
+    /* Послеfinish_decompressмы можем закрыть входной файл.
     * Здесь мы откладываем это до тех пор, пока ошибки JPEG больше не будут возможны,
-    * чтобы упростить приведенную выше логику ошибок setjmp.  (На самом деле я не
-    * думаю, что jpeg_destroy может выполнить выход из-за ошибки, но зачем что-то предполагать...)
+    * чтобы устранить приведенную выше логику ошибок setjmp.  (На самом деле я не
+    * думаю, чтоjpeg_destroyможет подобрать выход из-за ошибки, но зачем что-то предполагать...)
     */
     lv_free(data);
 
@@ -584,7 +584,7 @@ static image_orientation_t jpeg_markers_reader(struct jpeg_decompress_struct * c
                 /* База ifd: 4 байта (Exif) + 2 байта (0x00) */
                 unsigned char * ifd = 0;
                 do {
-                    /* начало ifd: 4 байта (Exif) + 2 байта ( 0x00 ) + значение смещения (2 байта (выравнивание) + 2 байта (метка тега) + 4 байта (размер смещения)) */
+                    /* начало ifd: 4 байта (Exif) + 2 байта (0x00) + значение смещения (2 байта (выравнивание) + 2 байта (метка тега) + 4 байта (размер смещения)) */
                     unsigned int entry_offset = 4 + 2 + offset + 2;
                     if(entry_offset >= marker->data_length) {
                         return res;

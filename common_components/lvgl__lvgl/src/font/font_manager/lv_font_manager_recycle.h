@@ -38,37 +38,37 @@ typedef struct _lv_font_manager_recycle_t lv_font_manager_recycle_t;
 
 /**
  * Создайте менеджер переработки шрифтов.
- * @param max_size recycle size.
- * @return pointer to font recycle manager.
+ * @param max_size размер переработки.
+ * @return указатель на диспетчер переработки шрифтов.
  */
 lv_font_manager_recycle_t * lv_font_manager_recycle_create(uint32_t max_size);
 
 /**
  * Удалить менеджер переработки шрифтов.
- * @param manager pointer to font recycle manager.
+ * @param manager указатель на диспетчер переработки шрифтов.
  */
 void lv_font_manager_recycle_delete(lv_font_manager_recycle_t * manager);
 
 /**
  * Приобретите многоразовый шрифт.
- * @param manager pointer to font recycle manager.
- * @param ft_info font info.
- * @return returns true on success.
+ * @param manager указатель на диспетчер переработки шрифтов.
+ * @param ft_info информация о шрифте.
+ * @return возвращает true в случае успеха.
  */
 lv_font_t * lv_font_manager_recycle_get_reuse(lv_font_manager_recycle_t * manager, const lv_font_info_t * ft_info);
 
 /**
  * Установите шрифты для повторного использования.
- * @param manager pointer to font recycle manager.
- * @param ft_info font info.
+ * @param manager указатель на диспетчер переработки шрифтов.
+ * @param ft_info информация о шрифте.
  */
 void lv_font_manager_recycle_set_reuse(lv_font_manager_recycle_t * manager, lv_font_t * font,
                                        const lv_font_info_t * ft_info);
 
 /**
  * Удалите шрифты с именем из диспетчера переработки.
- * @param manager pointer to font recycle manager.
- * @param name font name.
+ * @param manager указатель на диспетчер переработки шрифтов.
+ * @param name название шрифта.
  */
 void lv_font_recycle_remove_fonts(lv_font_manager_recycle_t * manager, const char * name);
 

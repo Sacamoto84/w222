@@ -1,6 +1,6 @@
 /**
  * @file lv_blend_riscv_vector_emulation.h
- * Программная эмуляция встроенных функций RISC -V Vector Extension (RVV 1.0).
+ * Программная эмуляция встроенных функцийRISC-V Vector Extension (RVV 1.0).
  *
  * Этот заголовок предоставляет чистую реализацию встроенных функций RVV на языке C, позволяющую
  * тестирование и проверка на платформах, отличных от RVV. Реализации следуют
@@ -8,15 +8,15 @@
  * https://dzaima.github.io/intrinsics-viewer/
  *
  * Использование:
- * 1. On systems without RVV support, include this header BEFORE <riscv_vector.h>
- * 2. Or define RISCV_VECTOR_EMULATION before including actual <riscv_vector.h>
- * 3. All __riscv_* functions will be emulated in software
+ * 1. В системах без поддержкиRVVвключите этот заголовокBEFORE<riscv_vector.h>
+ * 2. Или определитеRISCV_VECTOR_EMULATIONперед включением фактического <riscv_vector.h>
+ * 3. Все функции __riscv_* будут эмулироваться в программном обеспечении.
  *
  * Ограничения:
- * - No performance optimization (this is software emulation)
- * - Vector length (vl) is tracked but all operations work on single elements in a loop
- * - Predication and masking are simplified but functionally correct
- * - LMUL < 1 (fractional multipliers) are not supported
+ * - Никакой оптимизации производительности (это программная эмуляция)
+ * - Длина вектора (vl) отслеживается, но все операции выполняются с отдельными элементами в цикле.
+ * - Предикация и маскирование упрощены, но функционально корректны.
+ * - LMUL < 1 (дробные множители) не поддерживаются.
  */
 
 #ifndef LV_BLEND_RISCV_VECTOR_EMULATION_H
@@ -39,19 +39,19 @@ extern "C" {
  * Для эмуляции мы используем структуры, содержащие данные и текущую длину вектора.
  * Реальный RVV гораздо сложнее, но это позволяет нам проверять логику.
  *
- * Assumption: VLEN = 128 bits (a common RVV configuration)
- * - e8m1:  128 bits / 8 bits  = 16 elements
- * - e8m2:  256 bits / 8 bits  = 32 elements
- * - e8m4:  512 bits / 8 bits  = 64 elements
- * - e16m1: 128 bits / 16 bits = 8 elements
- * - e16m2: 256 bits / 16 bits = 16 elements
- * - e16m4: 512 bits / 16 bits = 32 elements
- * - e32m1: 128 bits / 32 bits = 4 elements
- * - e32m2: 256 bits / 32 bits = 8 elements
- * - e32m4: 512 bits / 32 bits = 16 elements
+ * Assumption: VLEN = 128 бит (обычная конфигурация RVV)
+ * - e8m1: 128 бит/8 бит = 16 элементов
+ * - e8m2: 256 бит/8 бит = 32 элемента
+ * - e8m4: 512 бит/8 бит = 64 элемента
+ * - e16m1: 128 бит/16 бит = 8 элементов
+ * - e16m2: 256 бит/16 бит = 16 элементов
+ * - e16m4: 512 бит/16 бит = 32 элемента
+ * - e32m1: 128 бит/32 бита = 4 элемента
+ * - e32m2: 256 бит/32 бита = 8 элементов
+ * - e32m4: 512 бит/32 бита = 16 элементов
  */
 
-/* LMUL = 1 (1 vector register, VLEN=128 bits) */
+/* LMUL = 1 (1 векторный регистр,VLEN=128 бит) */
 typedef struct {
     uint8_t data[16];   /* 128 бит/8 бит на элемент = 16 элементов */
     size_t vl;          /* Текущая длина вектора */
@@ -72,7 +72,7 @@ typedef struct {
     size_t vl;
 } vuint64m1_t;
 
-/* LMUL = 2 (2 vector registers, total 256 bits) */
+/* LMUL = 2 (2 векторных регистра, всего 256 бит) */
 typedef struct {
     uint8_t data[32];   /* 256 бит/8 бит на элемент = 32 элемента */
     size_t vl;
@@ -93,7 +93,7 @@ typedef struct {
     size_t vl;
 } vuint64m2_t;
 
-/* LMUL = 4 (4 vector registers, total 512 bits) */
+/* LMUL = 4 (4 векторных регистра, всего 512 бит) */
 typedef struct {
     uint32_t data[16];  /* 512 бит/32 бита на элемент = 16 элементов */
     size_t vl;
@@ -104,13 +104,13 @@ typedef struct {
     size_t vl;
 } vuint16m4_t;
 
-/* LMUL = 8 (8 vector registers, total 1024 bits) */
+/* LMUL = 8 (8 векторных регистров, всего 1024 бита) */
 typedef struct {
     uint8_t data[128];  /* 1024 бита/8 бит на элемент = 128 элементов */
     size_t vl;
 } vuint8m8_t;
 
-/* Логические типы/типы масок (vbool4 означает SEW / LMUL =4, для e8m2 -> 8/2=4) */
+/* Логические типы/типы масок (vbool4 означаетSEW/LMUL=4, для e8m2 -> 8/2=4) */
 typedef struct {
     uint8_t data[32];   /* Тот же размер, что и вектор, который он маскирует (e8m2 = 32 элемента) */
     size_t vl;
@@ -126,8 +126,8 @@ typedef struct {
  * ============================================================================
  *
  * Операции:
- * - __riscv_vsetvl_* : Set vector length for given element type and LMUL
- * - __riscv_vsetvlmax_* : Get maximum vector length
+ * - __riscv_vsetvl_ * : Установить длину вектора для данного типа элемента и LMUL.
+ * - __riscv_vsetvlmax_ *: получить максимальную длину вектора.
  */
 
 /**
@@ -245,7 +245,7 @@ static inline size_t __riscv_vsetvl_e8m8(size_t avl)
 }
 
 /* ============================================================================
- * Операции векторной инициализации (vmv.v.x — широковещательная передача)
+ * Операции векторной инициализации (vmv.v.x — широковещательная связь)
  * ============================================================================
  */
 
@@ -308,7 +308,7 @@ static inline vuint32m4_t __riscv_vmv_v_x_u32m4(uint32_t src, size_t vl)
  */
 
 /**
- * vle8: Load vector of 8-bit elements with unit stride
+ * vle8: Вектор загрузки 8-битных элементов с единичным шагом
  */
 static inline vuint8m1_t __riscv_vle8_v_u8m1(const uint8_t * base, size_t vl)
 {
@@ -341,7 +341,7 @@ static inline vuint8m8_t __riscv_vle8_v_u8m8(const uint8_t * base, size_t vl)
 }
 
 /**
- * vlse8: Load vector with stride
+ * vlse8: Вектор нагрузки с шагом
  * Загрузка из базы адресов + i * шаг для каждого элемента i
  */
 static inline vuint8m2_t __riscv_vlse8_v_u8m2(const uint8_t * base, ptrdiff_t stride, size_t vl)
@@ -365,7 +365,7 @@ static inline vuint8m1_t __riscv_vlse8_v_u8m1(const uint8_t * base, ptrdiff_t st
 }
 
 /**
- * vle16: Load 16-bit vector
+ * vle16: Загрузить 16-битный вектор
  */
 static inline vuint16m2_t __riscv_vle16_v_u16m2(const uint16_t * base, size_t vl)
 {
@@ -378,7 +378,7 @@ static inline vuint16m2_t __riscv_vle16_v_u16m2(const uint16_t * base, size_t vl
 }
 
 /**
- * vlse16: Load 16-bit vector with stride
+ * vlse16: Загрузите 16-битный вектор с шагом
  */
 static inline vuint16m2_t __riscv_vlse16_v_u16m2(const uint16_t * base, ptrdiff_t stride, size_t vl)
 {
@@ -391,12 +391,12 @@ static inline vuint16m2_t __riscv_vlse16_v_u16m2(const uint16_t * base, ptrdiff_
 }
 
 /* ============================================================================
- * Операции векторного хранилища (vse, vsse)
+ * Операции векторного хранилища (все, все)
  * ============================================================================
  */
 
 /**
- * vse8: Store vector of 8-bit elements with unit stride
+ * vse8: Сохраните вектор 8-битных элементов с единичным шагом
  */
 static inline void __riscv_vse8_v_u8m1(uint8_t * base, vuint8m1_t v, size_t vl)
 {
@@ -420,8 +420,8 @@ static inline void __riscv_vse8_v_u8m8(uint8_t * base, vuint8m8_t v, size_t vl)
 }
 
 /**
- * vsse8: Store vector with stride
- * Сохранение по адресу base + i * шаг для каждого элемента i
+ * vsse8: Сохраняйте вектор с легкостью
+ * Сохранение по адресу base +i *шаг для каждого элемента i
  */
 static inline void __riscv_vsse8_v_u8m2(uint8_t * base, ptrdiff_t stride, vuint8m2_t v, size_t vl)
 {
@@ -438,7 +438,7 @@ static inline void __riscv_vsse8_v_u8m1(uint8_t * base, ptrdiff_t stride, vuint8
 }
 
 /**
- * vse16: Store 16-bit vector
+ * vse16: Сохраните 16-битный вектор
  */
 static inline void __riscv_vse16_v_u16m2(uint16_t * base, vuint16m2_t v, size_t vl)
 {
@@ -455,7 +455,7 @@ static inline void __riscv_vse16_v_u16m4(uint16_t * base, vuint16m4_t v, size_t 
 }
 
 /**
- * vsse16: Store 16-bit vector with stride
+ * vsse16: Храните 16-битный вектор с легкостью
  */
 static inline void __riscv_vsse16_v_u16m2(uint16_t * base, ptrdiff_t stride, vuint16m2_t v, size_t vl)
 {
@@ -465,7 +465,7 @@ static inline void __riscv_vsse16_v_u16m2(uint16_t * base, ptrdiff_t stride, vui
 }
 
 /**
- * vse32: Store 32-bit vector
+ * vse32: Хранить 32-битный вектор
  */
 static inline void __riscv_vse32_v_u32m4(uint32_t * base, vuint32m4_t v, size_t vl)
 {
@@ -480,7 +480,7 @@ static inline void __riscv_vse32_v_u32m4(uint32_t * base, vuint32m4_t v, size_t 
  */
 
 /**
- * vmul: Vector multiply (scalar * vector)
+ * vmul: Векторное умножение (скаляр * вектор)
  */
 static inline vuint16m2_t __riscv_vmul_vx_u16m2(vuint16m2_t v, uint16_t x, size_t vl)
 {
@@ -503,7 +503,7 @@ static inline vuint16m2_t __riscv_vmul_vv_u16m2(vuint16m2_t v1, vuint16m2_t v2, 
 }
 
 /**
- * vwmulu: Vector widening multiply unsigned (scalar * vector, 8-bit -> 16-bit)
+ * vwmulu: Векторное расширение умножения без знака (скаляр * вектор, 8-битный -> 16-битный)
  */
 static inline vuint16m4_t __riscv_vwmulu_vx_u16m4(vuint8m2_t v, uint8_t x, size_t vl)
 {
@@ -587,7 +587,7 @@ static inline vuint16m4_t __riscv_vwmaccu_vv_u16m4(vuint16m4_t acc, vuint8m2_t v
  */
 
 /**
- * vsrl: Vector shift right logical (scalar shift amount)
+ * vsrl: Векторный сдвиг вправо, логический (величина скалярного сдвига)
  */
 static inline vuint16m2_t __riscv_vsrl_vx_u16m2(vuint16m2_t v, uint32_t x, size_t vl)
 {
@@ -620,7 +620,7 @@ static inline vuint8m1_t __riscv_vnsrl_wx_u8m1(vuint16m2_t v, uint32_t x, size_t
 }
 
 /**
- * vnsrl: Vector narrow shift right logical
+ * vnsrl: Векторный узкий сдвиг вправо логический
  * Сужение от 16-битного до 8-битного со сдвигом
  */
 static inline vuint8m2_t __riscv_vnsrl_wx_u8m2(vuint16m4_t v, uint32_t x, size_t vl)
@@ -639,7 +639,7 @@ static inline vuint8m2_t __riscv_vnsrl_wx_u8m2(vuint16m4_t v, uint32_t x, size_t
  */
 
 /**
- * vand: Vector bitwise AND (scalar)
+ * vand: Вектор побитовыйAND(скаляр)
  */
 static inline vuint16m2_t __riscv_vand_vx_u16m2(vuint16m2_t v, uint16_t x, size_t vl)
 {
@@ -652,7 +652,7 @@ static inline vuint16m2_t __riscv_vand_vx_u16m2(vuint16m2_t v, uint16_t x, size_
 }
 
 /**
- * vor: Vector bitwise OR (vector)
+ * vor: Вектор побитовыйOR(вектор)
  */
 static inline vuint16m2_t __riscv_vor_vv_u16m2(vuint16m2_t v1, vuint16m2_t v2, size_t vl)
 {
@@ -670,7 +670,7 @@ static inline vuint16m2_t __riscv_vor_vv_u16m2(vuint16m2_t v1, vuint16m2_t v2, s
  */
 
 /**
- * vsll: Vector shift left logical (scalar shift amount)
+ * vsll: Векторный сдвиг влево, логический (величина скалярного сдвига)
  */
 static inline vuint16m2_t __riscv_vsll_vx_u16m2(vuint16m2_t v, uint32_t x, size_t vl)
 {
@@ -698,7 +698,7 @@ static inline vbool8_t __riscv_vmseq_vx_u8m1_b8(vuint8m1_t v, uint8_t x, size_t 
 }
 
 /**
- * vmseq: Vector equal comparison (scalar)
+ * vmseq: Векторное сравнение равенства (скалярное)
  * Возвращает логическую маску (1, если равно, 0, если нет)
  */
 static inline vbool4_t __riscv_vmseq_vx_u8m2_b4(vuint8m2_t v, uint8_t x, size_t vl)
@@ -712,7 +712,7 @@ static inline vbool4_t __riscv_vmseq_vx_u8m2_b4(vuint8m2_t v, uint8_t x, size_t 
 }
 
 /**
- * vmsgeu: Vector greater or equal comparison (scalar)
+ * vmsgeu: Векторное сравнение больше или равно (скаляр)
  * Возвращает логическую маску
  */
 static inline vbool8_t __riscv_vmsgeu_vx_u8m1_b8(vuint8m1_t v, uint8_t x, size_t vl)
@@ -741,7 +741,7 @@ static inline vbool4_t __riscv_vmsgeu_vx_u8m2_b4(vuint8m2_t v, uint8_t x, size_t
  */
 
 /**
- * vmerge: Merge vector under predicate mask (vector paths)
+ * vmerge: Объединить вектор под маской предиката (векторные пути)
  * Result = mask ? v2 : v1
  */
 static inline vuint8m1_t __riscv_vmerge_vvm_u8m1(vuint8m1_t v1, vuint8m1_t v2, vbool8_t mask, size_t vl)
@@ -765,7 +765,7 @@ static inline vuint8m2_t __riscv_vmerge_vvm_u8m2(vuint8m2_t v1, vuint8m2_t v2, v
 }
 
 /**
- * vmerge: Merge scalar under predicate mask (scalar path)
+ * vmerge: Объединить скаляр под маской предиката (скалярный путь)
  * Result = mask ? scalar : vector
  */
 static inline vuint8m1_t __riscv_vmerge_vxm_u8m1(vuint8m1_t v, uint8_t x, vbool8_t mask, size_t vl)

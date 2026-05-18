@@ -118,7 +118,7 @@ static uint64_t tick_get_cb(void)
     uint32_t act_time = up_perf_gettime();
     uint64_t elaps;
 
-    /*Если в sys_time нет переполнения, простое вычитание*/
+    /*Если вsys_timeнет затруднения, простое вычитание*/
     if(act_time >= prev_tick) {
         elaps = act_time - prev_tick;
     }

@@ -14,9 +14,9 @@
  *
  * Поскольку это не настоящая файловая система, запись в файлы и каталоги не поддерживаются.
  *
- * Буква диска по умолчанию — «M», но ее можно изменить в lv_conf.h:
+ * Буква диска по умолчанию — «M», но ее можно изменить вlv_conf.h:
  *
- * #define LV_FS_MEMFS_LETTER 'М'
+ * #defineLV_FS_MEMFS_LETTER'М'
  *
  * Чтобы беспрепятственно использовать его с интерфейсом файловой системы, был введен новый объект расширенного пути:
  *
@@ -24,16 +24,16 @@
  *
  * Эту структуру можно инициализировать с помощью вспомогательной функции:
  *
- * lv_fs_make_path_ex (&mempath, (const uint8_t *) & my_mem_buffer , sizeof( my_mem_buffer ));
+ * lv_fs_make_path_ex (&mempath, (constuint8_t*) &my_mem_buffer, sizeof(my_mem_buffer));
  *
  * Затем «файл» можно открыть с помощью:
  *
- * файл lv_fs_file_t;
- * lv_fs_res_t res = lv_fs_open (&file, (const char *) & mempath, LV_FS_MODE_RD );
+ * файлlv_fs_file_t;
+ * lv_fs_res_t res =lv_fs_open(&file, (const char *) & mempath,LV_FS_MODE_RD);
  *
  * Объект пути можно использовать в любом месте, где требуется путь к файлу, например:
  *
- * lv_font_t * my_font = lv_binfont_create ((const char *) & mempath);
+ * lv_font_t *my_font=lv_binfont_create((const char *) & mempath);
  *
  */
 
@@ -115,10 +115,10 @@ void lv_fs_memfs_init(void)
 
 /**
  * Открыть файл
- * @param drv   pointer to a driver where this function belongs
- * @param path  pointer to an extended path object containing the memory buffer address and size
- * @param mode  read: FS_MODE_RD (currently only reading from the buffer is supported)
- * @return pointer to FIL struct or NULL in case of fail
+ * @param drv   указатель на драйвер, которому принадлежит эта функция
+ * @param path  указатель на объект расширенного пути, содержащий адрес и размер буфера памяти
+ * @param mode  чтение:FS_MODE_RD(на данный момент поддерживается только чтение из буфера)
+ * @return указатель на структуруFILилиNULLв случае неудачи
  */
 static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 {
@@ -129,9 +129,9 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 
 /**
  * Закрыть открытый файл
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FILE variable. (opened with fs_open)
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FILE. (открывается с помощьюfs_open)
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
@@ -143,12 +143,12 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 
 /**
  * Чтение данных из открытого файла
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FILE variable.
- * @param buf       pointer to a memory block where to store the read data
- * @param btr       number of Bytes To Read
- * @param br        the real number of read bytes (Byte Read)
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FILE.
+ * @param buf       указатель на блок памяти, в котором хранятся считанные данные
+ * @param btr       количество байтов для чтения
+ * @param br        реальное количество прочитанных байт (Byte Read)
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
@@ -163,15 +163,15 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 
 /**
  * Установите указатель чтения.
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FILE variable. (opened with fs_open )
- * @param pos       the new position of read pointer
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FILE. (открывается с помощьюfs_open)
+ * @param pos       новое положение указателя чтения
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
-    /* NOTE: this function is only called to determine the end of the buffer when LV_FS_SEEK_END was given to lv_fs_seek() */
+    /* NOTE: эта функция вызывается только для определения конца буфера, когдаLV_FS_SEEK_ENDбыл переданlv_fs_seek() */
     LV_UNUSED(drv);
     lv_fs_file_t * fp = (lv_fs_file_t *)file_p;
     switch(whence) {
@@ -197,10 +197,10 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 
 /**
  * Укажите положение указателя чтения и записи.
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FILE variable
- * @param pos_p     pointer to store the result
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FILE
+ * @param pos_p     указатель для сохранения результата
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)

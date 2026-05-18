@@ -93,8 +93,8 @@ lv_test_screenshot_result_t lv_test_screenshot_compare(const char * fn_ref)
 
 /**
  * Сравните содержимое буфера кадра с эталонным изображением.
- * @param fn_ref    reference image path
- * @return          An element of lv_test_screenshot_result_t
+ * @param fn_ref    путь к опорному изображению
+ * @return          Элемент lv_test_screenshot_result_t
  */
 static lv_test_screenshot_result_t screenshot_compare(const char * fn_ref, uint8_t tolerance)
 {

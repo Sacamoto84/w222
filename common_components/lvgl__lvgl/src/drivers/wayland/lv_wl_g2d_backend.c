@@ -228,7 +228,7 @@ static void init_buffer(lv_wl_g2d_ctx_t * ctx, lv_wl_buffer_t * buffer, uint32_t
     buffer->offset = 0;
     buffer->busy = false;
 
-    /* Будет установлен в обратном вызове dmabuf, если создание прошло успешно.*/
+    /* Будет установлен обратным вызовом dmabuf, если создание прошло успешно.*/
     buffer->wl_buffer = NULL;
 
     struct zwp_linux_buffer_params_v1 * params = zwp_linux_dmabuf_v1_create_params(ctx->handler);
@@ -388,7 +388,7 @@ static void create_succeeded(void * data, struct zwp_linux_buffer_params_v1 * pa
     lv_wl_buffer_t * buffer = data;
     buffer->wl_buffer = new_buffer;
 
-    /* Если не используется явная синхронизация, слушайте wl_buffer .release.
+    /* Если не используется явная синхронизация, прослушайтеwl_buffer.release.
      * для уведомлений о выпуске, в противном случае мы будем использовать
      * zwp_linux_buffer_release_v1. */
     wl_buffer_add_listener(buffer->wl_buffer, &buffer_listener, buffer);
@@ -458,7 +458,7 @@ static void dmabuf_format_table(void * data, struct zwp_linux_dmabuf_feedback_v1
     uint32_t * formats = (uint32_t *)table;
 
     for(size_t i = 0; i < num_formats; i++) {
-        /* Каждая запись состоит из 4 слов uint32_t. */
+        /* каждая запись состоит из 4 словuint32_t. */
         uint32_t format = formats[i * 4];
         if(format == DRM_FORMAT_RGB565) {
             ctx->supports_rgb565 = true;
@@ -537,7 +537,7 @@ static void dmabuf_tranche_formats(void * data, struct zwp_linux_dmabuf_feedback
     if(indices->size > 0) {
         /* Если у нас еще нет формата, мы могли бы проанализировать индексы здесь.
          * найти подходящий формат из таблицы форматов, а пока
-         * мы полагаемся на обратный вызов format_table для прямой установки формата */
+         * мы предлагаем обратный вызовformat_tableдля прямой установки формы */
         LV_LOG_TRACE("Format indices received");
     }
 }

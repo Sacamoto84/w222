@@ -44,7 +44,7 @@ enum class SimpleXMLType
     Doctype,      //!< \<!doctype html
     Comment,      //!< \<!-- что-то --\>
     Ignored,      //!< все, что игнорируется парсером, например пробелы
-    DoctypeChild  //!< \<! doctype_child
+    DoctypeChild  //!< \<!  doctype_child
 };
 
 typedef bool (*simpleXMLCb)(void* data, SimpleXMLType type, const char* content, unsigned int length);

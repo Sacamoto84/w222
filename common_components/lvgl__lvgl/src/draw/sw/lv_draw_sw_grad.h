@@ -39,11 +39,11 @@ typedef struct {
 
 /** Вычислить цвет в заданном градиенте и дроби
  *  Градиент указан в виртуальном диапазоне [0–255], поэтому эта функция масштабирует виртуальный диапазон до заданного диапазона.
- * @param dsc       The gradient descriptor to use
- * @param range     The range to use in computation.
- * @param frac      The current part used in the range. frac is in [0; range]
- * @param color_out Calculated gradient color
- * @param opa_out   Calculated opacity
+ * @param dsc       Дескриптор градиента, который нужно использовать
+ * @param range     Диапазон, используемый в вычислениях.
+ * @param frac      Текущая часть, используемая в диапазоне. фракция находится в [0; диапазон]
+ * @param color_out Рассчитанный цвет градиента
+ * @param opa_out   Расчетная непрозрачность
  */
 
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_color_calculate(const lv_grad_dsc_t * dsc, int32_t range,
@@ -54,7 +54,7 @@ lv_draw_sw_grad_calc_t * lv_draw_sw_grad_get(const lv_grad_dsc_t * gradient, int
 
 /**
  * Очистите элемент градиента после того, как он был получен с помощью `lv_grad_get_from_cache`.
- * @param grad      pointer to a gradient
+ * @param grad      указатель на градиент
  */
 void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad);
 
@@ -63,24 +63,24 @@ void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad);
 
 /**
  * Вычислить константы по заданным параметрам, которые используются во время рендеринга.
- * @param dsc      gradient descriptor
- * @param coords    the area where to draw the gradient
+ * @param dsc      дескриптор градиента
+ * @param coords    область, где рисовать градиент
  */
 void lv_draw_sw_grad_linear_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords);
 
 /**
  * Освободите выделенную память для расчета градиента.
- * @param dsc      gradient descriptor
+ * @param dsc      дескриптор градиента
  */
 void lv_draw_sw_grad_linear_cleanup(lv_grad_dsc_t * dsc);
 
 /**
  * Вычислить отрезок линейного градиента
- * @param dsc       gradient descriptor
- * @param xp        starting point x coordinate in gradient space
- * @param yp        starting point y coordinate in gradient space
- * @param width     width of the line segment in pixels
- * @param result    color buffer for the resulting line segment
+ * @param dsc       дескриптор градиента
+ * @param xp        Координата начальной точки x в градиентном пространстве
+ * @param yp        Координата начальной точки y в градиентном пространстве
+ * @param width     ширина отрезка линии в пикселях
+ * @param result    буфер цвета для результирующего сегмента линии
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_linear_get_line(lv_grad_dsc_t * dsc, int32_t xp, int32_t yp,
                                                                  int32_t width,
@@ -88,24 +88,24 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_linear_get_line(lv_grad_dsc_t *
 
 /**
  * Вычислить константы по заданным параметрам, которые используются во время рендеринга.
- * @param dsc       gradient descriptor
- * @param coords    the area where to draw the gradient
+ * @param dsc       дескриптор градиента
+ * @param coords    область, где рисовать градиент
  */
 void lv_draw_sw_grad_radial_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords);
 
 /**
  * Освободите выделенную память для расчета градиента.
- * @param dsc      gradient descriptor
+ * @param dsc      дескриптор градиента
  */
 void lv_draw_sw_grad_radial_cleanup(lv_grad_dsc_t * dsc);
 
 /**
  * Вычислить отрезок радиального градиента
- * @param dsc       gradient descriptor
- * @param xp        starting point x coordinate in gradient space
- * @param yp        starting point y coordinate in gradient space
- * @param width     width of the line segment in pixels
- * @param result    color buffer for the resulting line segment
+ * @param dsc       дескриптор градиента
+ * @param xp        Координата начальной точки x в градиентном пространстве
+ * @param yp        Координата начальной точки y в градиентном пространстве
+ * @param width     ширина отрезка линии в пикселях
+ * @param result    буфер цвета для результирующего сегмента линии
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, int32_t xp, int32_t yp,
                                                                  int32_t width,
@@ -113,24 +113,24 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t *
 
 /**
  * Вычислить константы по заданным параметрам, которые используются во время рендеринга.
- * @param dsc      gradient descriptor
- * @param coords    the area where to draw the gradient
+ * @param dsc      дескриптор градиента
+ * @param coords    область, где рисовать градиент
  */
 void lv_draw_sw_grad_conical_setup(lv_grad_dsc_t * dsc, const lv_area_t * coords);
 
 /**
  * Освободите выделенную память для расчета градиента.
- * @param dsc      gradient descriptor
+ * @param dsc      дескриптор градиента
  */
 void lv_draw_sw_grad_conical_cleanup(lv_grad_dsc_t * dsc);
 
 /**
  * Вычислить отрезок линии конического градиента
- * @param dsc       gradient descriptor
- * @param xp        starting point x coordinate in gradient space
- * @param yp        starting point y coordinate in gradient space
- * @param width     width of the line segment in pixels
- * @param result    color buffer for the resulting line segment
+ * @param dsc       дескриптор градиента
+ * @param xp        Координата начальной точки x в градиентном пространстве
+ * @param yp        Координата начальной точки y в градиентном пространстве
+ * @param width     ширина отрезка линии в пикселях
+ * @param result    буфер цвета для результирующего сегмента линии
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_conical_get_line(lv_grad_dsc_t * dsc, int32_t xp, int32_t yp,
                                                                   int32_t width,

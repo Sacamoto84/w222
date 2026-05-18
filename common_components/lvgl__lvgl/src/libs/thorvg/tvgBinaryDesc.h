@@ -26,7 +26,7 @@
 #ifndef _TVG_BINARY_DESC_H_
 #define _TVG_BINARY_DESC_H_
 
-/* TODO: Need to consider whether uin8_t is enough size for extension...
+/* TODO: Необходимо подумать, достаточно ли размераuin8_tдля расширения...
    Rather than optimal data, we can use enough size and data compress? */
 
 using TvgBinByte = uint8_t;
@@ -63,7 +63,7 @@ using TvgBinFlag = TvgBinByte;
 #define TVG_TAG_PAINT_CMP_METHOD                    (TvgBinTag)0x20
 
 
-//TODO: Keep this for the compatibility, Remove in TVG 1.0 release
+//TODO: Сохраните это для совместимости. Удалите в версииTVG1.0.
 //Сцена
  #define TVG_TAG_SCENE_RESERVEDCNT                   (TvgBinTag)0x30
 

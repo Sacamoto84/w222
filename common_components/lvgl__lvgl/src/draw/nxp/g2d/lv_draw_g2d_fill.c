@@ -35,7 +35,7 @@
  *  STATIC PROTOTYPES
  **********************/
 
-/* Простой Blit с opa и альфа-каналом */
+/* Простой Блит с опа и альфа-каналом */
 static void _g2d_fill(void * handle, struct g2d_surface * dst_surf);
 static void _g2d_fill_with_opa(void * handle, struct g2d_surface * dst_surf, struct g2d_surface * src_surf);
 

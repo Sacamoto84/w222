@@ -923,9 +923,9 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_image_blend(lv_draw_sw_blend_image_ds
 
 /**
  * Проверьте, равны ли два цвета AL88
- * @param c1    the first color
- * @param c2    the second color
- * @return      true: equal
+ * @param c1    первый цвет
+ * @param c2    второй цвет
+ * @return      правда: равно
  */
 static inline bool lv_color16a_eq(lv_color16a_t c1, lv_color16a_t c2)
 {

@@ -41,7 +41,7 @@ using NodeIndexDistancePair = std::pair<float, NodeIndexPair>;
 using NodePairVector = std::vector<NodeIndexPair>;
 // Вектор NodeIndexDistancePair
 using NodeDistanceVector = std::vector<NodeIndexDistancePair>;
-// Карта uint32_t с NodePairVector
+// Картаuint32_tс NodePairVector
 using MaterialIndexMap = std::map<uint32_t, NodePairVector>;
 // Карта указателей узлов на преобразования
 using NodeTransformMap = std::map<NodePtr, Transform>;
@@ -149,207 +149,207 @@ struct _lv_gltf_model_t {
 };
 
 /**
- * @brief Retrieve a specific texture from the GLTF model data.
+ * @brief Получите определенную текстуру из данных модели GLTF.
  *
- * @param data Pointer to the lv_gltf_data_t object containing the model data.
- * @param index The index of the texture to retrieve.
- * @return Pointer to the texture object.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс текстуры, которую нужно получить.
+ * @return Указатель на объект текстуры.
  */
 GLuint lv_gltf_data_get_texture(lv_gltf_model_t * data, size_t index);
 
 
 /**
- * @brief Retrieve the minimum bounds (X/Y/Z) of the model from the GLTF data.
+ * @brief Получите минимальные границы (X/Y/Z) модели из данных GLTF.
  *
- * @param data Pointer to the lv_gltf_data_t object containing the model data.
- * @return Pointer to a 3-element float array representing the minimum bounds.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @return Указатель на трехэлементный массив с плавающей запятой, представляющий минимальные границы.
  */
 fastgltf::math::fvec3 lv_gltf_data_get_bounds_min(const lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve the maximum bounds (X/Y/Z) of the model from the GLTF data.
+ * @brief Получите максимальные границы (X/Y/Z) модели из данных GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @return Pointer to a 3-element float array representing the maximum bounds.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @return Указатель на трехэлементный массив с плавающей запятой, представляющий максимальные границы.
  */
 fastgltf::math::fvec3 lv_gltf_data_get_bounds_max(const lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve the center coordinates of the GLTF data object.
+ * @brief Получите координаты центра объекта данных GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object from which to get the center.
- * @return Pointer to an array containing the center coordinates (x, y, z).
+ * @param D Указатель на объект lv_gltf_data_t, из которого можно получить центр.
+ * @return Указатель на массив, содержащий координаты центра (x, y, z).
  */
 fastgltf::math::fvec3 lv_gltf_data_get_center(const lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve the filename of the GLTF model.
+ * @brief Получите имя файла модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @return Pointer to a constant character string representing the filename.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @return Указатель на постоянную строку символов, представляющую имя файла.
  */
 const char * lv_gltf_get_filename(const lv_gltf_model_t * data);
 
 /**
- * @brief Check if the centerpoint cache contains a specific entry.
+ * @brief Проверьте, содержит ли кэш центральной точки определенную запись.
  *
- * @param data Pointer to the lv_gltf_data_t object containing the model data.
- * @param index The index of the entry to check.
- * @param element The specific parameter to check within the cache.
- * @return True if the cache contains the entry, false otherwise.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс записи для проверки.
+ * @param element Конкретный параметр для проверки в кеше.
+ * @return True, если кеш содержит запись, в противном случае — false.
  */
 bool lv_gltf_data_centerpoint_cache_contains(lv_gltf_model_t * data, size_t index, int32_t element);
 
 /**
- * @brief Retrieve a specific primitive from a mesh.
+ * @brief Извлеките конкретный примитив из сетки.
  *
- * @param M Pointer to the MeshData structure containing the mesh data.
- * @param I The index of the primitive to retrieve.
- * @return Pointer to the primitive data.
+ * @param M Указатель на структуру MeshData, содержащую данные сетки.
+ * @param I Индекс примитива, который требуется получить.
+ * @return Указатель на примитивные данные.
  */
 lv_gltf_primitive_t * lv_gltf_data_get_primitive_from_mesh(lv_gltf_mesh_data_t * M, size_t I);
 
 /**
- * @brief Retrieve the asset associated with the GLTF model data.
+ * @brief Получите актив, связанный с данными модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @return Pointer to the asset data.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @return Указатель на данные актива.
  */
 fastgltf::Asset * lv_gltf_data_get_asset(lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve mesh data for a specific index from the GLTF model data.
+ * @brief Получите данные сетки для определенного индекса из данных модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param I The index of the mesh data to retrieve.
- * @return Pointer to the MeshData structure containing the mesh data.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param I Индекс данных сетки, которые нужно получить.
+ * @return Указатель на структуру MeshData, содержащую данные сетки.
  */
 lv_gltf_mesh_data_t * lv_gltf_data_get_mesh(lv_gltf_model_t * data, size_t index);
 
 /**
- * @brief Retrieve the skin texture index for a specific entry in the GLTF model data.
+ * @brief Получите индекс текстуры кожи для определенной записи в данных модели GLTF.
  *
- * @param data Pointer to the lv_gltf_data_t object containing the model data.
- * @param index The index of the entry for which to retrieve the skin texture index.
- * @return The skin texture index.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс записи, для которой нужно получить индекс текстуры кожи.
+ * @return Индекс текстуры кожи.
  */
 GLuint lv_gltf_data_get_skin_texture_at(lv_gltf_model_t * data, size_t index);
 
 /**
- * @brief Check if the validated skins contain a specific entry.
+ * @brief Проверьте, содержат ли проверенные скины определенную запись.
  *
- * @param data Pointer to the lv_gltf_data_t object containing the model data.
- * @param index The index of the skin to check.
- * @return True if the validated skins contain the entry, false otherwise.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс скина для проверки.
+ * @return True, если проверенные темы оформления содержат запись, в противном случае — false.
  */
 bool lv_gltf_data_validated_skins_contains(lv_gltf_model_t * data, size_t index);
 
 /**
- * @brief Validate a specific skin in the GLTF model data.
+ * @brief Проверьте конкретный скин в данных модели GLTF.
  *
- * @param data Pointer to the lv_gltf_data_t object containing the model data.
- * @param index The index of the skin to validate.
+ * @param data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param index Индекс скина для проверки.
  */
 void lv_gltf_data_validate_skin(lv_gltf_model_t * data, size_t index);
 
 /**
- * @brief Add an opaque node primitive to the GLTF model data.
+ * @brief Добавьте непрозрачный примитив узла к данным модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param I The index of the primitive to add.
- * @param N Pointer to the NodePtr representing the node to add.
- * @param P The specific parameter associated with the primitive.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param I Индекс добавляемого примитива.
+ * @param N Указатель на NodePtr, представляющий добавляемый узел.
+ * @param P Конкретный параметр, связанный с примитивом.
  */
 void lv_gltf_data_add_opaque_node_primitive(lv_gltf_model_t * data, size_t index, fastgltf::Node * node,
                                             size_t primitive_index);
 
 /**
- * @brief Add a blended node primitive to the GLTF model data.
+ * @brief Добавьте примитив смешанного узла к данным модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param I The index of the primitive to add.
- * @param N Pointer to the NodePtr representing the node to add.
- * @param P The specific parameter associated with the primitive.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param I Индекс добавляемого примитива.
+ * @param N Указатель на NodePtr, представляющий добавляемый узел.
+ * @param P Конкретный параметр, связанный с примитивом.
  */
 void lv_gltf_data_add_blended_node_primitive(lv_gltf_model_t * data, size_t mesh_index, fastgltf::Node * node,
                                              size_t primitive_index);
 
 /**
- * @brief Set the cached transformation matrix for a specific node in the GLTF model data.
+ * @brief Установите кэшированную матрицу преобразования для определенного узла в данных модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param N Pointer to the NodePtr representing the node for which to set the transformation.
- * @param M The transformation matrix to cache.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param N Указатель на NodePtr, представляющий узел, для которого необходимо задать преобразование.
+ * @param M Матрица преобразования для кэширования.
  */
 void lv_gltf_data_set_cached_transform(lv_gltf_model_t * data, fastgltf::Node * node, fastgltf::math::fmat4x4 M);
 
 /**
- * @brief Clear the transformation cache for the GLTF model data.
+ * @brief Очистите кэш преобразования для данных модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
  */
 void lv_gltf_data_clear_transform_cache(lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve the cached transformation matrix for a specific node in the GLTF model data.
+ * @brief Получите кэшированную матрицу преобразования для определенного узла в данных модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param N Pointer to the NodePtr representing the node for which to retrieve the transformation.
- * @return The cached transformation matrix.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param N Указатель на NodePtr, представляющий узел, для которого требуется получить преобразование.
+ * @return Кэшированная матрица преобразования.
  */
 fastgltf::math::fmat4x4 lv_gltf_data_get_cached_transform(lv_gltf_model_t * data, fastgltf::Node * node);
 
 /**
- * @brief Check if a cached transformation matrix exists for a given node.
+ * @brief Проверьте, существует ли кэшированная матрица преобразования для данного узла.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param N Pointer to the NodePtr representing the node for which to retrieve the transformation.
- * @return true if a cache item exists, false otherwise
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param N Указатель на NodePtr, представляющий узел, для которого требуется получить преобразование.
+ * @return true, если элемент кэша существует, в противном случае — false
  int32_t*/
 bool lv_gltf_data_has_cached_transform(lv_gltf_model_t * data, fastgltf::Node * node);
 
 /**
- * @brief Check if the transformation cache is empty.
+ * @brief Проверьте, пуст ли кэш преобразований.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @return True if the transformation cache is empty, false otherwise.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @return True, если кэш преобразования пуст, в противном случае — false.
  */
 bool lv_gltf_data_transform_cache_is_empty(lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve the size of the skins in the GLTF model data.
+ * @brief Получите размер скинов в данных модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @return The size of the skins.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @return Размер шкур.
  */
 size_t lv_gltf_data_get_skins_size(lv_gltf_model_t * data);
 
 /**
- * @brief Retrieve a specific skin from the GLTF model data.
+ * @brief Получите конкретный скин из данных модели GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object containing the model data.
- * @param I The index of the skin to retrieve.
- * @return The skin index.
+ * @param D Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param I Индекс скина для получения.
+ * @return Кожный индекс.
  */
 size_t lv_gltf_data_get_skin(lv_gltf_model_t * data, size_t index);
 
 /**
- * @brief Ingest and discover defines for a specific node and primitive in the GLTF model data.
+ * @brief Прием и обнаружение определяют для конкретного узла и примитива в данных модели GLTF.
  *
- * @param data_obj Pointer to the lv_gltf_data_t object containing the model data.
- * @param node Pointer to the node for which to ingest defines.
- * @param prim Pointer to the primitive for which to ingest defines.
+ * @param data_obj Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param node Указатель на узел, для которого необходимо принять определения.
+ * @param prim Указатель на примитив, который определяет для приема.
  */
 void lv_gltf_data_injest_discover_defines(lv_gltf_model_t * data, fastgltf::Node * node, fastgltf::Primitive * prim);
 
 /**
- * @brief Retrieve the center point of a specific mesh element from the GLTF model data.
+ * @brief Получите центральную точку определенного элемента сетки из данных модели GLTF.
  *
- * @param gltf_data Pointer to the lv_gltf_data_t object containing the model data.
- * @param matrix The transformation matrix to apply when calculating the center point.
- * @param meshIndex The index of the mesh from which to retrieve the center point.
- * @param elem The specific element index within the mesh.
- * @return The center point as a fastgltf::math::fvec3 structure.
+ * @param gltf_data Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param matrix Матрица преобразования, применяемая при вычислении центральной точки.
+ * @param meshIndex Индекс сетки, из которой извлекается центральная точка.
+ * @param elem Конкретный индекс элемента внутри сетки.
+ * @return Центральная точка как структура fastgltf::math::fvec3.
  */
 fastgltf::math::fvec3 lv_gltf_data_get_centerpoint(lv_gltf_model_t * gltf_data, fastgltf::math::fmat4x4 matrix,
                                                    size_t mesh_index,
@@ -378,16 +378,16 @@ void lv_gltf_model_node_init(lv_gltf_model_t * model, lv_gltf_model_node_t * nod
 void lv_gltf_model_node_deinit(lv_gltf_model_node_t * node);
 
 /**
- * @brief Retrieve the pixel data for a specific texture in a GLTF model.
+ * @brief Получите данные пикселей для определенной текстуры в модели GLTF.
  *
- * @param pixels Pointer to the memory where the pixel data will be stored.
- * @param data_obj Pointer to the lv_gltf_data_t object containing the model data.
- * @param model_texture_index The index of the texture in the model.
- * @param mipmapnum The mipmap level to retrieve pixel data for.
- * @param width The width of the texture.
- * @param height The height of the texture.
- * @param has_alpha Flag indicating whether the texture includes an alpha channel.
- * @return True if the pixel data was successfully retrieved, false otherwise.
+ * @param pixels Указатель на память, в которой будут храниться данные пикселей.
+ * @param data_obj Указатель на объект lv_gltf_data_t, содержащий данные модели.
+ * @param model_texture_index Индекс текстуры в модели.
+ * @param mipmapnum Уровень MIP-карты, для которого нужно получить пиксельные данные.
+ * @param width Ширина текстуры.
+ * @param height Высота текстуры.
+ * @param has_alpha Флаг, указывающий, включает ли текстура альфа-канал.
+ * @return True, если данные пикселей были успешно получены, в противном случае — false.
  */
 bool lv_gltf_data_get_texture_pixels(void * pixels, lv_gltf_model_t * data_obj, uint32_t model_texture_index,
                                      uint32_t mipmapnum,

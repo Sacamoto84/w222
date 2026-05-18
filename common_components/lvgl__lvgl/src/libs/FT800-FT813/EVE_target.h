@@ -92,7 +92,7 @@ static inline void spi_transmit_burst(uint32_t data)
 
 static inline uint8_t spi_receive(uint8_t data)
 {
-    /* `data` равен 0 везде, где `spi_receive` вызывается в библиотеке FT800 - FT813. */
+    /* `data` равен 0 везде, где`spi_receive`присутствует в библиотекеFT800-FT813. */
     LV_UNUSED(data);
 
     lv_eve_target_flush_write_buf();

@@ -39,7 +39,7 @@ extern "C" {
 #define LV_DRAW_SW_COLOR_BLEND_TO_RGB888_MIX_MASK_OPA(dsc, dest_px_size) lv_draw_sw_blend_neon_color_to_rgb888_with_opa_mask(dsc, dest_px_size)
 #endif
 
-#ifdef __aarch64__ /* Эта функция использует специальную встроенную функцию, доступную только для Arm64. */
+#ifdef __aarch64__ /* Эта функция использует встроенную функцию, доступную только для Arm64. */
 #ifndef LV_DRAW_SW_L8_BLEND_NORMAL_TO_RGB888
 #define LV_DRAW_SW_L8_BLEND_NORMAL_TO_RGB888(dsc, dest_px_size) lv_draw_sw_blend_neon_l8_to_rgb888(dsc, dest_px_size)
 #endif

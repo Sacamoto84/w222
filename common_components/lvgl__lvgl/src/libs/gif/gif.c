@@ -1,7 +1,7 @@
 //
 // GIF Аниматор
 // автор Ларри Бэнк
-// битбанк @pobox .com
+// битбанк@pobox.com
 // Порт Arduino запущен 05.07.2020
 // Оригинальный код GIF, написанный более 20 лет назад :)
 // Цель этого кода — декодировать изображения размером до 480x320.
@@ -106,8 +106,8 @@ void GIF_reset(GIFIMAGE *pGIF)
 
 //
 // Возвращаемое значение:
-// 1 = good decode, more frames exist
-// 0 = good decode, no more frames
+// 1 = хорошее декодирование, существует больше кадров
+// 0 = хорошее декодирование, больше нет кадров
 // -1 = ошибка
 //
 int GIF_playFrame(GIFIMAGE *pGIF, int *delayMilliseconds, void *pUser)
@@ -255,7 +255,7 @@ static int GIFInit(GIFIMAGE *pGIF)
 
 //
 // Разберите заголовок GIF, соберите информацию о размере и палитре.
-// Если вызывается с параметром bInfoOnly, установленным в true, он проверит действительный файл.
+// Если возникает параметр bInfoOnly, установленный в true, он проверяет достоверность файла.
 // и вернуть только размер холста
 // Возвращает 1 в случае успеха, 0 в случае неудачи.
 //
@@ -270,7 +270,7 @@ static int GIFParseInfo(GIFIMAGE *pPage, int bInfoOnly)
 
     pPage->bUseLocalPalette = 0; // предполагать отсутствие локальной палитры
     pPage->bEndOfFrame = 0; // мы только начинаем
-    pPage->iFrameDelay = 0; // может не иметь блока расширения gfx
+    pPage->iFrameDelay = 0; // не может блокировать расширение GFX
     pPage->iRepeatCount = -1; // предположим, что количество циклов NETSCAPE не указано
     iReadSize = MAX_CHUNK_SIZE;
     // Если вы попытаетесь прочитать EOF, библиотека SD вернет мусорные данные.
@@ -294,7 +294,7 @@ static int GIFParseInfo(GIFIMAGE *pPage, int bInfoOnly)
         pPage->iCanvasWidth = pPage->iWidth = INTELSHORT(&p[6]);
         pPage->iCanvasHeight = pPage->iHeight = INTELSHORT(&p[8]);
         pPage->iBpp = ((p[10] & 0x70) >> 4) + 1;
-        iColorTableBits = (p[10] & 7) + 1; // Log2 (размер) таблицы цветов
+        iColorTableBits = (p[10] & 7) + 1; // Таблицы цветов Log2 (размер)
         pPage->ucBackground = p[11]; // цвет фона
         pPage->ucGIFBits = 0;
         iOffset = 13;
@@ -564,7 +564,7 @@ int GIF_getInfo(GIFIMAGE *pPage, GIFINFO *pInfo)
         c &= 7;  /* Получить количество определенных цветов */
         iOff += (2<<c)*3; /* пропустить таблицу цветов */
     }
-    while (!bDone) // && iNumFrames < MAX_FRAMES )
+    while (!bDone) // && iNumFrames <MAX_FRAMES)
     {
         bExt = 1; /* пропускать блоки расширения */
         while (bExt && iOff < iDataAvailable)
@@ -585,14 +585,14 @@ int GIF_getInfo(GIFIMAGE *pPage, GIFINFO *pInfo)
                     /* мы обманулись, думая, что страниц больше */
                     iNumFrames--;
                     goto gifpagesz;
-    // F9 = Graphic Control Extension (fixed length of 4 bytes)
-    // FE = Comment Extension
-    // FF = Application Extension
-    // 01 = Plain Text Extension
+    // F9 = Расширение графического управления (фиксированная длина 4 байта)
+    // FE = Расширение комментариев
+    // FF = Расширение приложения
+    // 01 = Простое текстовое расширение
                 case 0x21: /* Блок расширения */
                     if (cBuf[iOff+1] == 0xf9 && cBuf[iOff+2] == 4) // Расширение графического управления
                     {
-                       //cBuf[iOff+3]; // флаги расположения страницы
+                       //cBuf[iOff+3]; // флаги расположение страницы
                         iDelay = cBuf[iOff+4]; // задержка младшего байта
                         iDelay |= ((uint16_t)(cBuf[iOff+5]) << 8); // задержка старшего байта
                         if (iDelay < 2) // слишком быстро, укажите значение по умолчанию
@@ -714,7 +714,7 @@ int GIF_getInfo(GIFIMAGE *pPage, GIFINFO *pInfo)
                // lFileOff += iReadAmount;
             }
         }
-    } /* пока !bDone */
+    } /* пока !bГотово */
 gifpagesz:
     pInfo->iFrameCount = iNumFrames;
     pInfo->iMaxDelay = iMaxDelay;
@@ -741,7 +741,7 @@ static int GIFGetMoreData(GIFIMAGE *pPage)
         return 1; // кадр завершен или буфер уже заполнен; нет необходимости читать больше данных
     if (pPage->iLZWOff != 0)
     {
-// NB: memcpy() fails on some systems because the src and dest ptrs overlap
+// NB: memcpy() не работает в некоторых системах, поскольку параметры src и dest перекрываются.
 // поэтому копируйте байты в простом цикле, чтобы избежать проблем
       for (int i=0; i<pPage->iLZWSize - pPage->iLZWOff; i++) {
          pPage->ucLZW[i] = pPage->ucLZW[i + pPage->iLZWOff];
@@ -895,7 +895,7 @@ static void DrawCooked(GIFIMAGE *pPage, GIFDRAW *pDraw, void *pDest)
          }
     } else if (pPage->ucPaletteType == GIF_PALETTE_RGB565_LE || pPage->ucPaletteType == GIF_PALETTE_RGB565_BE) {
         uint16_t *d, *pPal = (uint16_t *)pActivePalette;
-        d = (uint16_t *)pDest; // указатель dest на приготовленные пиксели
+        d = (uint16_t *)pDest; // указатель на приготовленные пиксели
         // Примените новые пиксели к основному изображению.
         if (pDraw->ucHasTransparency) { // если используется прозрачность
             uint8_t ucTransparent = pDraw->ucTransparent;
@@ -932,7 +932,7 @@ static void DrawCooked(GIFIMAGE *pPage, GIFDRAW *pDraw, void *pDest)
                 uint16_t d1, d2, d3;
                 *(uint32_t *)d8 = *(uint32_t *)s; // просто скопируйте новые непрозрачные пиксели поверх старых
                 s0 = s[0]; s1 = s[1]; s2 = s[2]; s3 = s[3];
-                bu = pPal[s0]; // особой разницы с Apple M1 нет
+                bu = pPal[s0]; // особая разница с AppleM1нет
                 d1 = pPal[s1]; // но другие процессоры могут выиграть
                 d2 = pPal[s2]; // от развертывания чтения
                 d3 = pPal[s3];
@@ -1052,7 +1052,7 @@ static void DrawNewPixels(GIFIMAGE *pPage, GIFDRAW *pDraw)
     int x, iPitch = pPage->iCanvasWidth;
 
     s = pDraw->pPixels;
-    d = &pPage->pFrameBuffer[pDraw->iX + (pDraw->y + pDraw->iY)  * iPitch]; // указатель dest в нашем полном буфере холста
+    d = &pPage->pFrameBuffer[pDraw->iX + (pDraw->y + pDraw->iY)  * iPitch]; // указатель места в нашем полном буфере холста
 
     // Примените новые пиксели к основному изображению.
     if (pDraw->ucHasTransparency) { // если используется прозрачность
@@ -1147,7 +1147,7 @@ uint32_t u32Offset;
 // набор кодов в 64-битной локальной переменной для минимизации операций чтения из памяти.
 //
 // Эти два изменения приводят к значительно более быстрому декодеру. Для плохо сжатых изображений
-// Прирост скорости примерно в 2,5 раза по сравнению с giflib. Для хорошо сжатых изображений (длинные тиражи)
+// Прирост скорости примерно в 2,5 раза по сравнению с giflib. Для сильно сжатых образов (длинные тиражи)
 // скорость может быть в 30 раз выше. Это потому, что ему не нужно ходить
 // назад по связанному списку кодов при выводе пикселей. Это также не
 // придется копировать пиксели в обратном порядке, а потом их раскручивать.
@@ -1187,7 +1187,7 @@ uint16_t *pLengths;
     iOffset = 0; // смещение выходных данных
     p = pImage->ucLZW; // нефрагментированные данные LZW
     ulBits = INTELLONG(p); // начните с чтения некоторых данных LZW
-    // установите символы по умолчанию (0..iColors-1)
+    // установить символы по умолчанию (0..iColors-1)
    for (i = 0; i<iColors; i++) {
        pSymbols[i] = iUncompressedLen + i; // корневые символы
        pLengths[i] = 1;
@@ -1211,7 +1211,7 @@ init_codetable:
            goto init_codetable;
         }
         if (code != eoi) {
-            if (nextcode < nextlim) { // в случае отложенной копии не позволяйте ей перезаписывать последнюю запись (fff)
+            if (nextcode < nextlim) { // в случае отложенной копии не позволяйте ей перезаписывать всю запись (fff)
                 if (code != nextcode) { // наиболее вероятный случай
                     iLen = LZWCopyBytes(buf, iOffset, &pSymbols[code], &pLengths[code]);
                     pSymbols[nextcode] = (pSymbols[oldcode] | 0x800000 | (buf[iOffset] << 24));
@@ -1276,7 +1276,7 @@ init_codetable:
             gd.ucHasTransparency = pImage->ucGIFBits & 1;
             gd.ucBackground = pImage->ucBackground;
             gd.iCanvasWidth = pImage->iCanvasWidth;
-            DrawCooked(pImage, &gd, &buf[pImage->iCanvasHeight * pImage->iCanvasWidth]); // dest = past end of canvas
+            DrawCooked(pImage, &gd, &buf[pImage->iCanvasHeight * pImage->iCanvasWidth]); // dest = прошлый конец холста
             gd.pPixels = &buf[pImage->iCanvasHeight * pImage->iCanvasWidth]; // укажите на строку, которую мы только что преобразовали
             (*pImage->pfnDraw)(&gd); // обратный вызов для обработки этой строки
         }
@@ -1489,14 +1489,14 @@ init_codetable:
     c = oldcode = code;
     GIFMakePels(pImage, code); // первый код выводится как первый пиксель
     // Основной цикл декодирования
-    while (code != eoi && pImage->iYCount > 0) // && y < pImage->iHeight+1) /* Проходим по всем строкам изображения (или полосы) */
+    while (code != eoi && pImage->iYCount > 0) // && y < pImage->iHeight+1) /* Проходим по всем строкам изображения (или полосам) */
     {
         GET_CODE
         if (code == cc) /* Clear code?, and not first code */
             goto init_codetable;
         if (code != eoi)
         {
-                if (nextcode < nextlim) // в случае отложенной копии не позволяйте ей перезаписывать последнюю запись (fff)
+                if (nextcode < nextlim) // в случае отложенной копии не позволяйте ей перезаписывать всю запись (fff)
                 {
                     giftabs[nextcode] = oldcode;
                     gifpels[PIXEL_FIRST + nextcode] = c; // значение пикселя старого кода

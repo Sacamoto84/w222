@@ -42,36 +42,36 @@ typedef struct {
  **********************/
 
 /**
- * @brief Initialize the SVG parser
- * @param parser pointer to a parser object
+ * @brief Инициализируйте парсер SVG
+ * @param parser указатель на объект парсера
  */
 void _lv_svg_parser_init(_lv_svg_parser_t * parser);
 
 /**
- * @brief Deinitialize the SVG parser
- * @param parser pointer to a parser object
+ * @brief Деинициализируйте парсер SVG.
+ * @param parser указатель на объект парсера
  */
 void _lv_svg_parser_deinit(_lv_svg_parser_t * parser);
 
 /**
- * @brief Parse an SVG document
- * @param parser pointer to a parser object
- * @param token pointer to a token object
- * @return true: the parsing is finished, false: the parsing is not finished yet.
+ * @brief Разобрать документ SVG
+ * @param parser указатель на объект парсера
+ * @param token указатель на объект-токен
+ * @return true: анализ завершен, false: анализ еще не завершен.
  */
 bool _lv_svg_parser_token(_lv_svg_parser_t * parser, const _lv_svg_token_t * token);
 
 /**
- * @brief Check if the parsing is finished
- * @param parser pointer to a parser object
- * @return true: the parsing is finished, false: the parsing is not finished yet.
+ * @brief Проверьте, завершен ли разбор
+ * @param parser указатель на объект парсера
+ * @return true: анализ завершен, false: анализ еще не завершен.
  */
 bool _lv_svg_parser_is_finish(_lv_svg_parser_t * parser);
 
 /**
- * @brief Dump the SVG tree
- * @param root pointer to the root of the SVG tree
- * @param depth the depth of the current node in the tree
+ * @brief Дамп дерева SVG
+ * @param root указатель на корень дерева SVG
+ * @param depth глубина текущего узла в дереве
  */
 void _lv_svg_dump_tree(lv_svg_node_t * root, int depth);
 

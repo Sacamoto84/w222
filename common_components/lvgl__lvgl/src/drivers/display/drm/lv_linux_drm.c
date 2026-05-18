@@ -160,7 +160,7 @@ lv_display_t * lv_linux_drm_create(void)
 
 /* Вызывается LVGL, когда есть что-то, что нужно перерисовать.
  * он устанавливает активный буфер. если используются буферы GBM, выдается сообщение DMA_BUF_SYNC.
- * вызов ioctl для блокировки буфера для доступа к CPU, буфер разблокируется только
+ * вызов ioctl для блокировки буфера для доступа кCPU, буфер разблокируется только
  * перед атомным коммитом */
 static void drm_dmabuf_set_active_buf(lv_event_t * event)
 {
@@ -230,7 +230,7 @@ lv_result_t lv_linux_drm_set_file(lv_display_t * disp, const char * file, int64_
     size_t buf_size = LV_MIN(drm_dev->drm_bufs[1].size, drm_dev->drm_bufs[0].size);
     uint32_t stride = drm_dev->drm_bufs[0].pitch;
     /* Сначала необходимо установить разрешение, потому что если экран меньше переданного размера
-     * до lv_display_create, то буферы недостаточно велики для LV_DISPLAY_RENDER_MODE_DIRECT.
+     * доlv_display_createбуферов недостаточно для LV_DISPLAY_RENDER_MODE_DIRECT.
      */
     lv_display_set_resolution(disp, hor_res, ver_res);
     lv_display_set_buffers_with_stride(disp, drm_dev->drm_bufs[1].map, drm_dev->drm_bufs[0].map, buf_size,
@@ -459,7 +459,7 @@ static int drm_dmabuf_set_plane(drm_dev_t * drm_dev, drm_buffer_t * buf)
 
     drm_dev->req = drmModeAtomicAlloc();
 
-    /* При первом Atomic коммите выполните modeset */
+    /* При первом Atomic коммите выполнил модемет */
     if(first) {
         drm_add_conn_property(drm_dev, "CRTC_ID", drm_dev->crtc_id);
 
@@ -936,7 +936,7 @@ static int create_gbm_buffer(drm_dev_t * drm_dev, drm_buffer_t * buf)
     uint32_t n_planes;
     int res;
 
-    /* gbm_bo_format не определяет ничего, кроме ARGB8888 или XRGB8888. */
+    /* gbm_bo_format не установлено ничего, кромеARGB8888илиXRGB8888. */
     if(LV_COLOR_DEPTH != 32) {
         LV_LOG_ERROR("Unsupported color format");
         return -1;
@@ -951,7 +951,7 @@ static int create_gbm_buffer(drm_dev_t * drm_dev, drm_buffer_t * buf)
         return -1;
     }
 
-    /* В настоящее время поддерживается только одна плоскость для каждого dma-buf/prime fd, но некоторые графические процессоры имеют функцию
+    /* В настоящее время для каждого dma-buf/prime fd используется только одна плоскость, но некоторые графические процессоры имеют функцию функции.
      * несколько плоскостей (несколько ФД или иногда один ФД для нескольких плоскостей).
      * текущая реализация пока остается простой */
 
@@ -985,7 +985,7 @@ static int create_gbm_buffer(drm_dev_t * drm_dev, drm_buffer_t * buf)
         return -1;
     }
 
-    /* Используется для выполнения вызовов ioctl DMA_BUF_SYNC во время цикла рендеринга. */
+    /* Используется для выполнения вызовов ioctlDMA_BUF_SYNCво время цикла рендеринга. */
     buf->handle = prime_fd;
 
     /* Преобразование prime fd в дескриптор буфера libdrm */

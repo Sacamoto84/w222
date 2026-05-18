@@ -55,7 +55,7 @@ fastgltf::math::fmat4x4 lv_gltf_math_look_at_rh(const fastgltf::math::fvec3 & ey
 
 /**
  * Создает правостороннюю матрицу перспективы с ближним и дальним клипами со значениями -1 и +1 соответственно.
- * @param fov The FOV in radians
+ * @param fov FOV в радианах
  */
 [[nodiscard]] fastgltf::math::fmat4x4 lv_gltf_math_perspective_rh(float fov, float ratio, float z_near,
                                                                   float z_far) noexcept

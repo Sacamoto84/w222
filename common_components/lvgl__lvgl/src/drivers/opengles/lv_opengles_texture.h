@@ -32,37 +32,37 @@ extern "C" {
  **********************/
 
 /**
- * Создайте дисплей, который сливается с текстурой OpenGL.
+ * Создайте светильник, который сливается с текстурой OpenGL.
  * Если у вас уже есть текстура и вы хотите привязать ее к дисплею,
- *    см. `lv_opengles_texture_create_from_texture_id`
- * @param w    width in pixels of the texture
- * @param h    height in pixels of the texture
- * @return     the new display or NULL on failure
+ *    см.  `lv_opengles_texture_create_from_texture_id`
+ * @param w    ширина текстуры в пикселях
+ * @param h    высота текстуры в пикселях
+ * @return     новый дисплей илиNULLв случае неисправности
  */
 lv_display_t * lv_opengles_texture_create(int32_t w, int32_t h);
 
 /**
- * Создайте отображение, которое будет соответствовать предоставленной текстуре OpenGL.
+ * Создайте материал, который будет соответствовать предоставленной текстуре OpenGL.
  * Если у вас нет текстуры для привязки ее к дисплею,
- *    см. `lv_opengles_texture_create`
- * @param w         width in pixels of the texture
- * @param h         height in pixels of the texture
- * @param texture_id    the texture LVGL will render to
- * @return     the new display or NULL on failure
+ *    см.  `lv_opengles_texture_create`
+ * @param w         ширина текстуры в пикселях
+ * @param h         высота текстуры в пикселях
+ * @param texture_id    текстураLVGLбудет отображаться
+ * @return     новый дисплей илиNULLв случае неисправности
  */
 lv_display_t * lv_opengles_texture_create_from_texture_id(int32_t w, int32_t h, unsigned int texture_id);
 
 /**
- * Получите текстуру OpenGL ID дисплея.
- * @param disp    display
- * @return        texture ID
+ * Получите текстуру дисплея OpenGL ID.
+ * @param disp    дисплей
+ * @return        текстура ID
  */
 unsigned int lv_opengles_texture_get_texture_id(lv_display_t * disp);
 
 /**
- * Получить отображение текстуры OpenGL, если она связана с ней.
- * @param texture_id   OpenGL texture ID
- * @return             display or `NULL` if there no display with that texture ID
+ * Получите текстуры OpenGL, если она беспокоится о ней.
+ * @param texture_id   Текстура OpenGL ID
+ * @return             display или `NULL`, если дисплея с такой текстурой нет ID
  */
 lv_display_t * lv_opengles_texture_get_from_texture_id(unsigned int texture_id);
 

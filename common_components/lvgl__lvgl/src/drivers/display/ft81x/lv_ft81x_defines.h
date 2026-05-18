@@ -50,7 +50,7 @@ extern "C" {
 
 /* Команды хоста */
 #define EVE_ACTIVE  0x00  /* перевести FT8xx в активное состояние */
-#define EVE_STANDBY 0x41  /* перевести FT8xx в режим ожидания (clk работает) */
+#define EVE_STANDBY 0x41  /* переведен FT8xx в режим ожидания (clk работает) */
 #define EVE_SLEEP   0x42  /* перевести FT8xx в спящий режим (отключить) */
 #define EVE_PWRDOWN 0x50  /* поместите FT8xx в режим Power Down (ядро выключено) */
 #define EVE_CLKEXT  0x44  /* выбрать внешний источник синхронизации */
@@ -174,8 +174,8 @@ extern "C" {
 
 /* Тип аудиосэмпла определяет */
 #define EVE_LINEAR_SAMPLES       0UL    /* 8-битные подписанные образцы */
-#define EVE_ULAW_SAMPLES         1UL    /* 8-битные образцы Ulaw */
-#define EVE_ADPCM_SAMPLES        2UL    /* 4-битные образцы ima adpcm */
+#define EVE_ULAW_SAMPLES         1UL    /* 8-битные фрагменты Улав */
+#define EVE_ADPCM_SAMPLES        2UL    /* 4-битные файлы ima adpcm */
 
 
 /* Синтезированный звук */
@@ -305,8 +305,8 @@ extern "C" {
 
 /* Биты GPIO */
 #define EVE_GPIO0   0
-#define EVE_GPIO1   1   /* вывод gpio по умолчанию для отключения звука, 1 — включить, 0 — отключить */
-#define EVE_GPIO7   7   /* PIN-код gpio по умолчанию для включения дисплея, 1 — включить, 0 — отключить */
+#define EVE_GPIO1   1   /* вывод gpio по умолчанию для отключения звука, 1 — выключить, 0 — выключить */
+#define EVE_GPIO7   7   /* PIN -код gpio по умолчанию для включения дисплеев, 1 — включить, 0 — выключить */
 
 
 /* Поворот дисплея */
@@ -450,22 +450,22 @@ extern "C" {
 
 /* дополнительные команды для BT81x */
 #define CMD_BITMAP_TRANSFORM 0xFFFFFF21
-#define CMD_SYNC             0xFFFFFF42     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_SYNC ) */
-#define CMD_FLASHERASE       0xFFFFFF44     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHERASE ) */
+#define CMD_SYNC             0xFFFFFF42     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_SYNC) */
+#define CMD_FLASHERASE       0xFFFFFF44     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHERASE) */
 #define CMD_FLASHWRITE       0xFFFFFF45
 #define CMD_FLASHREAD        0xFFFFFF46
 #define CMD_FLASHUPDATE      0xFFFFFF47
-#define CMD_FLASHDETACH      0xFFFFFF48     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHDETACH ) */
-#define CMD_FLASHATTACH      0xFFFFFF49     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHATTACH ) */
+#define CMD_FLASHDETACH      0xFFFFFF48     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHDETACH) */
+#define CMD_FLASHATTACH      0xFFFFFF49     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHATTACH) */
 #define CMD_FLASHFAST        0xFFFFFF4A
-#define CMD_FLASHSPIDESEL    0xFFFFFF4B     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHSPIDESEL ) */
+#define CMD_FLASHSPIDESEL    0xFFFFFF4B     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHSPIDESEL) */
 #define CMD_FLASHSPITX       0xFFFFFF4C
 #define CMD_FLASHSPIRX       0xFFFFFF4D
 #define CMD_FLASHSOURCE      0xFFFFFF4E
-#define CMD_CLEARCACHE       0xFFFFFF4F     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_CLEARCACHE ) */
+#define CMD_CLEARCACHE       0xFFFFFF4F     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_CLEARCACHE) */
 #define CMD_INFLATE2         0xFFFFFF50
 #define CMD_ROTATEAROUND     0xFFFFFF51
-#define CMD_RESETFONTS       0xFFFFFF52     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_RESETFONTS ) */
+#define CMD_RESETFONTS       0xFFFFFF52     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_RESETFONTS) */
 #define CMD_ANIMSTART        0xFFFFFF53
 #define CMD_ANIMSTOP         0xFFFFFF54
 #define CMD_ANIMXY           0xFFFFFF55
@@ -474,7 +474,7 @@ extern "C" {
 #define CMD_FILLWIDTH        0xFFFFFF58
 #define CMD_APPENDF          0xFFFFFF59
 #define CMD_ANIMFRAME        0xFFFFFF5A
-#define CMD_VIDEOSTARTF      0xFFFFFF5F     /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_VIDEOSTARTF ) */
+#define CMD_VIDEOSTARTF      0xFFFFFF5F     /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_VIDEOSTARTF) */
 
 #if 0
 /* некоторые недокументированные команды для BT81x */
@@ -710,7 +710,7 @@ extern "C" {
 #define BITMAP_SIZE_H(width,height) ((41UL<<24)|((((width&0x600)>>9)&3UL)<<2)|((((height&0x600)>>9)&3UL)<<0))
 
 #define BITMAP_SOURCE(addr) ((1UL<<24)|(((addr)&4194303UL)<<0))
-//#define NOP () ((45UL<<24))
+//#defineNOP() ((45UL<<24))
 #define PALETTE_SOURCE(addr) ((42UL<<24)|(((addr)&4194303UL)<<0))
 #define SCISSOR_SIZE(width,height) ((28UL<<24)|(((width)&4095UL)<<12)|(((height)&4095UL)<<0))
 #define SCISSOR_XY(x,y) ((27UL<<24)|(((x)&2047UL)<<11)|(((y)&2047UL)<<0))

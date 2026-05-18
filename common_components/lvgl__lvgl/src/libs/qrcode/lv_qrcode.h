@@ -36,54 +36,54 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_qrcode_class;
  **********************/
 
 /**
- * Создайте пустой объект кода QR (`lv_canvas`).
- * @param parent point to an object where to create the QR code
- * @return pointer to the created QR code object
+ * Создайте пустой объект-кодQR(`lv_canvas`).
+ * @param parent указать на объект, где создать код QR
+ * @return указатель на созданный объект кода QR
  */
 lv_obj_t * lv_qrcode_create(lv_obj_t * parent);
 
 /**
  * Установите размер кода QR.
- * @param obj pointer to a QR code object
- * @param size width and height of the QR code
+ * @param obj указатель на объект кода QR
+ * @param size ширина и высота кода QR
  */
 void lv_qrcode_set_size(lv_obj_t * obj, int32_t size);
 
 /**
  * Установите темный цвет кода QR.
- * @param obj pointer to a QR code object
- * @param color dark color of the QR code
+ * @param obj указатель на объект кода QR
+ * @param color темный цвет кода QR
  */
 void lv_qrcode_set_dark_color(lv_obj_t * obj, lv_color_t color);
 
 /**
  * Установите цвет подсветки кода QR.
- * @param obj pointer to a QR code object
- * @param color light color of the QR code
+ * @param obj указатель на объект кода QR
+ * @param color светлый цвет кода QR
  */
 void lv_qrcode_set_light_color(lv_obj_t * obj, lv_color_t color);
 
 /**
  * Установите данные объекта кода QR.
- * @param obj pointer to a QR code object
- * @param data data to display
- * @param data_len length of data in bytes
- * @return LV_RESULT_OK: if no error; LV_RESULT_INVALID: on error
+ * @param obj указатель на объект кода QR
+ * @param data данные для отображения
+ * @param data_len длина данных в байтах
+ * @return LV_RESULT_OK : если нет ошибок; LV_RESULT_INVALID: при ошибке
  */
 lv_result_t lv_qrcode_update(lv_obj_t * obj, const void * data, uint32_t data_len);
 
 /**
  * Вспомогательная функция для установки данных объекта кода QR
- * @param obj pointer to a QR code object
- * @param data data to display as a string
+ * @param obj указатель на объект кода QR
+ * @param data данные для отображения в виде строки
  */
 void lv_qrcode_set_data(lv_obj_t * obj, const char * data);
 
 /**
  * Включить или отключить тихую зону.
  * Тихая зона — это область вокруг кода QR, где данные не кодируются.
- * @param obj pointer to a QR code object
- * @param enable true: enable quiet zone; false: disable quiet zone
+ * @param obj указатель на объект кода QR
+ * @param enable true: включить тихую зону; false: отключить тихую зону
  */
 void lv_qrcode_set_quiet_zone(lv_obj_t * obj, bool enable);
 

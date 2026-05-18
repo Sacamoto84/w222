@@ -67,7 +67,7 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
                     border_draw_dsc.opa = glyph_draw_dsc->opa;
                     border_draw_dsc.color = glyph_draw_dsc->color;
                     border_draw_dsc.width = 1;
-                    //lv_draw_sw_border (u, & border_draw_dsc , glyph_draw_dsc -> bg_coords );
+                    //lv_draw_sw_border (u, &border_draw_dsc,glyph_draw_dsc->bg_coords);
                     lv_draw_dave2d_border(t, &border_draw_dsc, glyph_draw_dsc->bg_coords);
 #endif
                 }
@@ -84,7 +84,7 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
                     //            blend_dsc . mask_area = & mask_area ;
                     //            blend_dsc . blend_area = glyph_draw_dsc -> letter_coords ;
                     //            blend_dsc . mask_res = LV_DRAW_SW_MASK_RES_CHANGED ;
-                    //lv_draw_sw_blend (u, & blend_dsc );
+                    //lv_draw_sw_blend (u, &blend_dsc);
 
                     const lv_draw_buf_t * draw_buf = glyph_draw_dsc->glyph_data;
 
@@ -128,7 +128,7 @@ static void lv_draw_dave2d_draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_
                     img_dsc.scale_y = LV_SCALE_NONE;
                     img_dsc.opa = glyph_draw_dsc->opa;
                     img_dsc.src = glyph_draw_dsc->glyph_data;
-                    //lv_draw_sw_image (t, & img_dsc , glyph_draw_dsc -> letter_coords );
+                    //lv_draw_sw_image (t, &img_dsc,glyph_draw_dsc->letter_coords);
 #endif
                 }
                 break;

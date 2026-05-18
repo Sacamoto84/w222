@@ -588,7 +588,7 @@ lv_result_t lv_draw_sw_blend_neon_rgb565_to_rgb888_with_mask(lv_draw_sw_blend_im
     else if(dest_px_size == 4) {
         /* Алгоритм ниже может выглядеть нормально, но демо-тест рендеринга с ним не удался, поэтому он отключен. */
         return LV_RESULT_INVALID;
-#if 0 /* TODO: Figure out the problem with the algorithm below */
+#if 0 /* TODO: Решите проблему с помощью алгоритма ниже */
         uint32_t * dest_buf_32 = dsc->dest_buf;
         const uint16_t * src_buf_u16 = dsc->src_buf;
 

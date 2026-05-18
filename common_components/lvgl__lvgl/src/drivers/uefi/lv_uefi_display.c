@@ -62,9 +62,9 @@ static EFI_GUID _uefi_guid_edid_active = EFI_EDID_ACTIVE_PROTOCOL_GUID;
  **********************/
 
 /**
- * @brief Create a LVGL display object.
- * @param handle The handle on which an instance of the EFI_GRAPHICS_OUTPUT_PROTOCOL protocol is installed.
- * @return The created LVGL display object.
+ * @brief Создайте экранный объект LVGL.
+ * @param handle Дескриптор, на котором установлен экземпляр протокола EFI_GRAPHICS_OUTPUT_PROTOCOL.
+ * @return Созданный экранный объект LVGL.
  */
 lv_display_t * lv_uefi_display_create(void * handle)
 {
@@ -113,9 +113,9 @@ finish:
 }
 
 /**
- * @brief Try to find the active display handle.
- * @return The handle or NULL if not found.
- * @remark Активному дисплею необходимы интерфейсы для EFI_GRAPHICS_OUTPUT_PROTOCOL и EFI_EDID_ACTIVE_PROTOCOL.
+ * @brief Попробуйте найти активный дескриптор дисплея.
+ * @return Дескриптор или NULL, если не найден.
+ * @remark Активному дисплею необходимы интерфейсы дляEFI_GRAPHICS_OUTPUT_PROTOCOLи EFI_EDID_ACTIVE_PROTOCOL.
 */
 void * lv_uefi_display_get_active(void)
 {
@@ -151,8 +151,8 @@ finish:
 }
 
 /**
- * @brief Try to find any display handle.
- * @return The handle or NULL if not found.
+ * @brief Попробуйте найти любой дескриптор дисплея.
+ * @return Дескриптор или NULL, если не найден.
 */
 void * lv_uefi_display_get_any(void)
 {

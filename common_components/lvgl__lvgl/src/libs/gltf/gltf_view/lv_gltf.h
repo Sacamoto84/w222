@@ -47,7 +47,7 @@ typedef enum {
 } lv_gltf_aa_mode_t;
 
 typedef enum {
-    LV_GLTF_BG_MODE_SOLID = 0, /** Сплошной фон. Используйте `lv_obj_set_style_bg_color`, чтобы установить цвет фона.*/
+    LV_GLTF_BG_MODE_SOLID = 0, /** Сплошной фон. Используйте `lv_obj_set_style_bg_color`, чтобы установить цветной фонарь.*/
     LV_GLTF_BG_MODE_ENVIRONMENT = 1, /** Фон окружающей среды*/
 } lv_gltf_bg_mode_t;
 
@@ -57,109 +57,109 @@ typedef enum {
  **********************/
 
 /**
- * Создайте объект glTF
- * @param parent pointer to the parent object
- * @return pointer to the created glTF object
+ * создать объект glTF
+ * @param parent указатель на родительский объект
+ * @return указатель на созданный объект glTF
  */
 lv_obj_t * lv_gltf_create(lv_obj_t * parent);
 
 /**
- * Назначьте среду объекту glTF для рендеринга IBL.
- * @param obj pointer to a glTF viewer object
- * @param environment pointer to the environment to use
- * @note The environment can be shared across multiple glTF objects
- * @note If no environment is set before attempting to load a file,
+ * Назначьте объект среды glTF для рендеринга IBL.
+ * @param obj указатель на объект просмотра glTF
+ * @param environment указатель на среду для использования
+ * @note Среда может использоваться несколькими объектами glTF.
+ * @note Если перед попыткой загрузки файла не задана среда,
  *       для вас будет создан вариант по умолчанию
  */
 void lv_gltf_set_environment(lv_obj_t * obj, lv_gltf_environment_t * environment);
 
 /**
  * Загрузите модель glTF из файла в программу просмотра.
- * @param obj pointer to a glTF viewer object
- * @param path file path to the glTF model to load
- * @return pointer to the loaded glTF model, or NULL on failure
+ * @param obj указатель на объект просмотра glTF
+ * @param path путь к файлу модели glTF для загрузки
+ * @return указатель на загруженную модель glTF илиNULLв случае сбоя
  */
 lv_gltf_model_t * lv_gltf_load_model_from_file(lv_obj_t * obj, const char * path);
 
 /**
  * Загрузите модель glTF из массива байтов в программу просмотра.
- * @param obj pointer to a glTF viewer object
- * @param bytes glTF raw data
- * @param len glTF raw data length in bytes
- * @return pointer to the loaded glTF model, or NULL on failure
+ * @param obj указатель на объект просмотра glTF
+ * @param bytes необработанные данные glTF
+ * @param len Длина необработанных данных glTF в байтах
+ * @return указатель на загруженную модель glTF илиNULLв случае сбоя
  */
 lv_gltf_model_t * lv_gltf_load_model_from_bytes(lv_obj_t * obj, const uint8_t * bytes, size_t len);
 
 /**
  * Получите количество моделей, загруженных в средство просмотра glTF.
- * @param obj pointer to a glTF viewer object
- * @return the total number of models in the viewer
+ * @param obj указатель на объект просмотра glTF
+ * @return общее количество моделей в просмотрщике
  */
 size_t lv_gltf_get_model_count(lv_obj_t * obj);
 
 /**
  * Получить конкретную модель по ее индексу
- * @param obj pointer to a glTF viewer object
- * @param id index of the model to retrieve (0-based)
- * @return pointer to the model at the specified index, or NULL if index is invalid
+ * @param obj указатель на объект просмотра glTF
+ * @param id индекс модели для извлечения (отсчитывается от 0)
+ * @return указатель на модель по указанному индексу или NULL, если индекс недействителен.
  */
 lv_gltf_model_t * lv_gltf_get_model_by_index(lv_obj_t * obj, size_t id);
 
 /**
- * Получите основную модель из средства просмотра glTF.
+ * Получите основную модель из средств просмотра glTF.
  * Основная модель — это первая модель, добавленная в средство просмотра, и ее можно использовать.
  * для выбора камеры и других основных операций
- * @param obj pointer to a glTF viewer object
- * @return pointer to the primary model, or NULL if no models are loaded
+ * @param obj указатель на объект просмотра glTF
+ * @return указатель на основную модель или NULL, если модели не загружены
  */
 lv_gltf_model_t * lv_gltf_get_primary_model(lv_obj_t * obj);
 
 /**
  * Установите рыскание (горизонтальное вращение) камеры.
- * @param obj pointer to a glTF viewer object
- * @param yaw yaw angle in degrees
+ * @param obj указатель на объект просмотра glTF
+ * @param yaw угол отклонения от курса в градусах
  */
 void lv_gltf_set_yaw(lv_obj_t * obj, float yaw);
 
 /**
  * Получите отклонение (горизонтальное вращение) камеры.
- * @param obj pointer to a glTF viewer object
- * @return yaw angle in degrees
+ * @param obj указатель на объект просмотра glTF
+ * @return угол отклонения от курса в градусах
  */
 float lv_gltf_get_yaw(const lv_obj_t * obj);
 
 /**
  * Установите шаг (вертикальное вращение) камеры.
- * @param obj pointer to a glTF viewer object
- * @param pitch pitch angle in degrees
+ * @param obj указатель на объект просмотра glTF
+ * @param pitch угол наклона в градусах
  */
 void lv_gltf_set_pitch(lv_obj_t * obj, float pitch);
 
 /**
  * Получите шаг (вертикальное вращение) камеры.
- * @param obj pointer to a glTF viewer object
- * @return pitch angle in degrees
+ * @param obj указатель на объект просмотра glTF
+ * @return угол наклона в градусах
  */
 float lv_gltf_get_pitch(const lv_obj_t * obj);
 
 /**
  * Установите расстояние камеры от точки фокусировки
- * @param obj pointer to a glTF viewer object
- * @param value distance value
+ * @param obj указатель на объект просмотра glTF
+ * @param value значение расстояния
  */
 void lv_gltf_set_distance(lv_obj_t * obj, float value);
 
 /**
  * Получите масштабный коэффициент расстояния камеры от фокусной точки.
- * @param obj pointer to a glTF viewer object
- * @return distance scaling factor value
+ * @param obj указатель на объект просмотра glTF
+ * @return значение коэффициента масштабирования расстояния
  */
 float lv_gltf_get_distance(const lv_obj_t * obj);
 
 /**
  * Получите расстояние камеры от фокуса в мировых единицах измерения.
- * @param obj pointer to a GLTF viewer object
- * @return world unit distance value
+ * @param obj указатель на объект просмотра GLTF
+ * @return Значение расстояния в мировой единице измерения
  */
 float lv_gltf_get_world_distance(const lv_obj_t * obj);
 
@@ -169,15 +169,15 @@ float lv_gltf_get_world_distance(const lv_obj_t * obj);
 
 /**
  * Установите поле зрения
- * @param obj pointer to a glTF viewer object
- * @param value vertical FOV in degrees. If zero, the view will be orthographic (non-perspective)
+ * @param obj указатель на объект просмотра glTF
+ * @param value вертикальныйFOVв градусах. Если ноль, вид будет ортогональным (неперспективным).
  */
 void lv_gltf_set_fov(lv_obj_t * obj, float value);
 
 /**
  * Получить поле зрения
- * @param obj pointer to a glTF viewer object
- * @return vertical FOV in degrees
+ * @param obj указатель на объект просмотра glTF
+ * @return вертикальныйFOVв градусах
  */
 float lv_gltf_get_fov(const lv_obj_t * obj);
 
@@ -187,50 +187,50 @@ float lv_gltf_get_fov(const lv_obj_t * obj);
 
 /**
  * Установите координату X фокуса камеры.
- * @param obj pointer to a glTF viewer object
- * @param value X coordinate
+ * @param obj указатель на объект просмотра glTF
+ * @param value координата X
  */
 void lv_gltf_set_focal_x(lv_obj_t * obj, float value);
 
 /**
  * Получите координату X фокуса камеры.
- * @param obj pointer to a glTF viewer object
- * @return X coordinate
+ * @param obj указатель на объект просмотра glTF
+ * @return координата X
  */
 float lv_gltf_get_focal_x(const lv_obj_t * obj);
 
 /**
  * Установите координату Y фокуса камеры.
- * @param obj pointer to a glTF viewer object
- * @param value Y coordinate
+ * @param obj указатель на объект просмотра glTF
+ * @param value координата Y
  */
 void lv_gltf_set_focal_y(lv_obj_t * obj, float value);
 
 /**
  * Получите координату Y фокуса камеры.
- * @param obj pointer to a glTF viewer object
- * @return Y coordinate
+ * @param obj указатель на объект просмотра glTF
+ * @return координата Y
  */
 float lv_gltf_get_focal_y(const lv_obj_t * obj);
 
 /**
  * Установите координату Z фокуса камеры.
- * @param obj pointer to a glTF viewer object
- * @param value Z coordinate
+ * @param obj указатель на объект просмотра glTF
+ * @param value координата Z
  */
 void lv_gltf_set_focal_z(lv_obj_t * obj, float value);
 
 /**
  * Получите координату Z фокуса камеры.
- * @param obj pointer to a glTF viewer object
- * @return Z coordinate
+ * @param obj указатель на объект просмотра glTF
+ * @return координата Z
  */
 float lv_gltf_get_focal_z(const lv_obj_t * obj);
 
 /**
  * Установите координаты фокуса в центральную точку объекта модели.
- * @param obj pointer to a glTF viewer object
- * @param model a model attached to this viewer or NULL for the first model
+ * @param obj указатель на объект просмотра glTF
+ * @param model модель, прикрепленная к этому средству просмотра, илиNULLдля первой модели
  */
 void lv_gltf_recenter(lv_obj_t * obj, lv_gltf_model_t * model);
 
@@ -242,29 +242,29 @@ void lv_gltf_recenter(lv_obj_t * obj, lv_gltf_model_t * model);
  * Установите индекс активной камеры
  * Камера выбирается из первой модели glTF, добавленной во вьювер.
  *
- * @param obj pointer to a glTF viewer object
- * @param value camera index (0 for default camera, 1+ for scene camera index)
- * @note Values higher than the scene's camera count will be clamped to the maximum available camera index
+ * @param obj указатель на объект просмотра glTF
+ * @param value индекс камеры (0 для камеры по умолчанию, 1+ для индекса камеры сцены)
+ * @note Значения, превышающие количество камер в сцене, будут ограничены максимально доступным индексом камеры.
  */
 void lv_gltf_set_camera(lv_obj_t * obj, uint32_t value);
 
 /**
  * Получить индекс активной камеры
- * @param obj pointer to a glTF viewer object
- * @return active camera index
+ * @param obj указатель на объект просмотра glTF
+ * @return индекс активной камеры
  */
 uint32_t lv_gltf_get_camera(const lv_obj_t * obj);
 
 /**
  * Получите количество камер в первой модели glTF, добавленной в средство просмотра.
  * Это количество представляет собой допустимый диапазон для параметра индекса камеры.
- * используется с lv_gltf_set_camera ()
+ * используется сlv_gltf_set_camera()
  *
  * Чтобы узнать количество камер других моделей, позвоните по телефону
- * lv_gltf_model_get_camera_count (модель) напрямую с конкретной моделью
+ * lv_gltf_model_get_camera_count (модель) непосредственно с конкретной моделью
  *
- * @param obj pointer to a glTF viewer object
- * @return number of available cameras
+ * @param obj указатель на объект просмотра glTF
+ * @return количество доступных камер
  */
 uint32_t lv_gltf_get_camera_count(const lv_obj_t * obj);
 
@@ -275,8 +275,8 @@ uint32_t lv_gltf_get_camera_count(const lv_obj_t * obj);
  * Значения больше LV_GLTF_ANIM_SPEED_NORMAL ускорят анимацию.
  * Значения меньше LV_GLTF_ANIM_SPEED_NORMAL замедлят анимацию.
  *
- * @param obj pointer to a glTF viewer object
- * @param value speed-up ratio of the animation
+ * @param obj указатель на объект просмотра glTF
+ * @param value коэффициент ускорения анимации
  */
 void lv_gltf_set_animation_speed(lv_obj_t * obj, uint32_t value);
 
@@ -285,7 +285,7 @@ void lv_gltf_set_animation_speed(lv_obj_t * obj, uint32_t value);
  *
  * Фактическое соотношение — это возвращаемое значение / LV_GLTF_ANIM_SPEED_NORMAL.
  *
- * @param obj pointer to a glTF viewer object
+ * @param obj указатель на объект просмотра glTF
  */
 uint32_t lv_gltf_get_animation_speed(const lv_obj_t * obj);
 
@@ -295,57 +295,57 @@ uint32_t lv_gltf_get_animation_speed(const lv_obj_t * obj);
 
 /**
  * Установите фоновый режим
- * @param obj pointer to a glTF viewer object
- * @param value background mode
+ * @param obj указатель на объект просмотра glTF
+ * @param value фоновый режим
  */
 void lv_gltf_set_background_mode(lv_obj_t * obj, lv_gltf_bg_mode_t value);
 
 /**
  * Получить фоновый режим
- * @param obj pointer to a glTF viewer object
- * @return background mode
+ * @param obj указатель на объект просмотра glTF
+ * @return фоновый режим
  */
 lv_gltf_bg_mode_t lv_gltf_get_background_mode(const lv_obj_t * obj);
 
 /**
  * Установите степень размытия фона
- * @param obj pointer to a glTF viewer object
- * @param value blur amount between 0 and 100
+ * @param obj указатель на объект просмотра glTF
+ * @param value степень размытия от 0 до 100
  */
 void lv_gltf_set_background_blur(lv_obj_t * obj, uint32_t value);
 
 /**
  * Получить степень размытия фона
- * @param obj pointer to a glTF viewer object
- * @return blur amount between 0 and 100
+ * @param obj указатель на объект просмотра glTF
+ * @return степень размытия от 0 до 100
  */
 uint32_t lv_gltf_get_background_blur(const lv_obj_t * obj);
 
 /**
  * Установите яркость/мощность окружающей среды
- * @param obj pointer to a glTF viewer object
- * @param value brightness multiplier
+ * @param obj указатель на объект просмотра glTF
+ * @param value множитель яркости
  */
 void lv_gltf_set_env_brightness(lv_obj_t * obj, uint32_t value);
 
 /**
  * Получите окружающую яркость/мощность
- * @param obj pointer to a glTF viewer object
- * @return brightness multiplier
+ * @param obj указатель на объект просмотра glTF
+ * @return множитель яркости
  */
 uint32_t lv_gltf_get_env_brightness(const lv_obj_t * obj);
 
 /**
  * Установите уровень экспозиции изображения
- * @param obj pointer to a glTF viewer object
- * @param value exposure level (1.0 is default)
+ * @param obj указатель на объект просмотра glTF
+ * @param value уровень воздействия (по умолчанию 1,0)
  */
 void lv_gltf_set_image_exposure(lv_obj_t * obj, float value);
 
 /**
  * Получить уровень экспозиции изображения
- * @param obj pointer to a glTF viewer object
- * @return exposure level
+ * @param obj указатель на объект просмотра glTF
+ * @return уровень воздействия
  */
 float lv_gltf_get_image_exposure(const lv_obj_t * obj);
 
@@ -355,15 +355,15 @@ float lv_gltf_get_image_exposure(const lv_obj_t * obj);
 
 /**
  * Установите режим сглаживания
- * @param obj pointer to a glTF viewer object
- * @param value anti-aliasing mode
+ * @param obj указатель на объект просмотра glTF
+ * @param value режим сглаживания
  */
 void lv_gltf_set_antialiasing_mode(lv_obj_t * obj, lv_gltf_aa_mode_t value);
 
 /**
  * Получить режим сглаживания
- * @param obj pointer to a glTF viewer object
- * @return anti-aliasing mode
+ * @param obj указатель на объект просмотра glTF
+ * @return режим сглаживания
  */
 lv_gltf_aa_mode_t lv_gltf_get_antialiasing_mode(const lv_obj_t * obj);
 
@@ -373,37 +373,37 @@ lv_gltf_aa_mode_t lv_gltf_get_antialiasing_mode(const lv_obj_t * obj);
 
 /**
  * Получить точку, в которой данный луч пересекается с указанной плоскостью, если таковая имеется.
- * @param ray the intersection test ray
- * @param screen_y the plane to test ray intersection with
- * @param collision_point output lv_3dpoint_t holder, values are only valid if true is the return value
- * @return LV_RESULT_OK if intersection, LV_RESULT_INVALID if no intersection
+ * @param ray тестовый луч пересечения
+ * @param screen_y плоскость для проверки пересечения лучей с
+ * @param collision_point выходной держатель lv_3dpoint_t, значения действительны только в том случае, если возвращаемое значение равно true
+ * @return LV_RESULT_OK, если пересечение, LV_RESULT_INVALID, если пересечения нет.
  */
 lv_result_t lv_intersect_ray_with_plane(const lv_3dray_t * ray, const lv_3dplane_t * plane,
                                         lv_3dpoint_t * collision_point);
 
 /**
  * Получите плоскость, обращенную к текущей камере обзора, по центру некоторых юнитов перед ней.
- * @param obj pointer to a GLTF viewer object
- * @param distance distance in front of the camera to set the plane, in world units. see lv_gltf_get_world_distance to get the auto-distance
- * @return camera facing plane
+ * @param obj указатель на объект просмотра GLTF
+ * @param distance расстояние перед камерой для установки самолета, в мировых единицах. см. lv_gltf_get_world_distance, чтобы получить автоматическое расстояние
+ * @return камера обращена к плоскости
  */
 lv_3dplane_t lv_gltf_get_current_view_plane(lv_obj_t * obj, float distance);
 
 /**
  * Вычисляет луч, исходящий из камеры и проходящий через указанное положение мыши на экране.
- * @param obj pointer to a GLTF viewer object
- * @param screen_pos screen co-ordinate, in pixels
- * @return mouse point ray
+ * @param obj указатель на объект просмотра GLTF
+ * @param screen_pos координаты экрана в пикселях
+ * @return луч мыши
  */
 lv_3dray_t lv_gltf_get_ray_from_2d_coordinate(lv_obj_t * obj, const lv_point_t * screen_pos);
 
 
 /**
  * Получить положение на экране трехмерной точки
- * @param obj pointer to a GLTF viewer object
- * @param world_pos world position to convert
- * @param lv_point_t the resulting point, in pixels. only valid if return value is true
- * @return LV_RESULT_OK if conversion valid, LV_RESULT_INVALID if no valid conversion
+ * @param obj указатель на объект просмотра GLTF
+ * @param world_pos мировое положение для конвертации
+ * @param lv_point_t результирующая точка в пикселях. допустимо только в том случае, если возвращаемое значение истинно
+ * @return LV_RESULT_OK, если преобразование действительно, LV_RESULT_INVALID, если преобразование недействительно.
  */
 lv_result_t lv_gltf_world_to_screen(lv_obj_t * obj, const lv_3dpoint_t world_pos, lv_point_t * screen_pos);
 

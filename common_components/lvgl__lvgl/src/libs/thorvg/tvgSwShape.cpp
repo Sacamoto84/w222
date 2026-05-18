@@ -288,7 +288,7 @@ static float _outlineLength(const RenderShape* rshape, uint32_t shiftPts, uint32
     const Point* close = nullptr;
     auto len = 0.0f;
 
-    //должно начинаться с moveTo
+    //должен начаться с moveTo
     if (cmds[0] == PathCommand::MoveTo) {
         close = pts;
         cmds++;
@@ -353,7 +353,7 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
         }
         else return nullptr;
     } else {
-        //TODO: handle dash + trim - for now trimming ignoring is forced
+        //TODO: дескриптор тире + обрезка - на данный момент обрезка игнорируется принудительно
         trimmed = false;
     }
 
@@ -377,7 +377,7 @@ static SwOutline* _genDashOutline(const RenderShape* rshape, const Matrix& trans
 
     dash.outline = mpoolReqDashOutline(mpool, tid);
 
-    //должно начинаться с moveTo
+    //должен начаться с moveTo
     if (cmds[0] == PathCommand::MoveTo) {
         if (trimmed) _trimPattern(&dash, rshape, _outlineLength(rshape, 0, 0, simultaneous), trimBegin, trimEnd);
         _dashMoveTo(dash, offIdx, offset, pts);
@@ -526,7 +526,7 @@ bool shapePrepared(const SwShape* shape)
 bool shapeGenRle(SwShape* shape, TVG_UNUSED const RenderShape* rshape, bool antiAlias)
 {
     //FIXME: Should we draw it?
-    //Case: Stroke Line
+    //Case: Линия обводки
     //если (shape.outline->opened) вернуть true;
 
     //Случай A: ускоренное рисование прямоугольника

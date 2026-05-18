@@ -4,7 +4,7 @@
  */
 
 /*  Создано: 8 июня 2023 г.
- *      Author: juanj
+ *      Author: Хуандж
  *
  *  Изменено LVGL
  */
@@ -98,29 +98,29 @@ void lv_eve_draw_rect_simple(int16_t coord_x1, int16_t coord_y1, int16_t coord_x
 void lv_eve_mask_round(int16_t coord_x1, int16_t coord_y1, int16_t coord_x2, int16_t coord_y2, int16_t radius);
 
 /**
- * Установите источник растрового изображения на `addr`.  Передача SPI будет происходить, если для него еще не установлено это значение.
+ * Установите источник растрового изображения на `addr`.  ПередачаSPIбудет осуществляться, если для него еще не установлено это значение.
  * Источник растрового изображения не является частью сохраненного и восстановленного контекста.
- * @param addr    the remote EVE memory address to set as the bitmap source
+ * @param addr    адрес удаленной памяти EVE, который нужно установить в качестве источника растрового изображения
  */
 void lv_eve_bitmap_source(uint32_t addr);
 
 /**
  * Установите размер растрового изображения и параметры выборки.  Передача SPI будет происходить, если текущие установленные параметры уже не являются такими.
  * Размер растрового изображения не является частью сохраненного и восстановленного контекста.
- * @param filter   the sampling method. Either EVE_NEAREST or EVE_BILINEAR
- * @param wrapx    the out of bounds sampling behavior in the X direction. Either EVE_BORDER or EVE_REPEAT
- * @param wrapy    the out of bounds sampling behavior in the Y direction. Either EVE_BORDER or EVE_REPEAT
- * @param width    the width of the bitmap in pixels
- * @param height   the height of the bitmap in pixels
+ * @param filter   метод выборки. Либо EVE_NEAREST, либо EVE_BILINEAR.
+ * @param wrapx    поведение выборки за пределами границ в направлении X. Либо EVE_BORDER, либо EVE_REPEAT.
+ * @param wrapy    поведение выборки за пределами границ в направлении Y. Либо EVE_BORDER, либо EVE_REPEAT.
+ * @param width    ширина растрового изображения в пикселях
+ * @param height   высота растрового изображения в пикселях
  */
 void lv_eve_bitmap_size(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height);
 
 /**
  * Установите параметры формата/макета растрового изображения.  Передача SPI будет происходить, если текущие установленные параметры уже не являются такими.
  * Макет растрового изображения не является частью сохраненного и восстановленного контекста.
- * @param format      an eve color format value like EVE_RGB565
- * @param linestride  the stride of the bitmap rows in bytes
- * @param height      the number of rows in the bitmap
+ * @param format      значение формата цвета eve, например EVE_RGB565
+ * @param linestride  шаг строк растрового изображения в байтах
+ * @param height      количество строк в растровом изображении
  */
 void lv_eve_bitmap_layout(uint8_t format, uint16_t linestride, uint16_t height);
 

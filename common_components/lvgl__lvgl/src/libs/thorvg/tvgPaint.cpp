@@ -78,7 +78,7 @@ static Result _clipRect(RenderMethod* renderer, const Point* pts, const Matrix& 
 
 static Result _compFastTrack(RenderMethod* renderer, Paint* cmpTarget, const Matrix& pm, RenderRegion& before)
 {
-    /* Доступ к классу Shape с помощью Paint плох... но все в порядке, но это внутреннее использование. */
+    /* Доступ к классу Shape с помощью Paint плох... но все в порядке, но это использование технологий. */
     auto shape = static_cast<Shape*>(cmpTarget);
 
     //Rectangle Candidates?
@@ -246,7 +246,7 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
 
     if (renderFlag & RenderUpdateFlag::Transform) tr.update();
 
-    /* 1. Composition Pre Processing */
+    /* 1. Предварительная обработка композиции */
     RenderData trd = nullptr;                 //данные рендеринга составной цели
     RenderRegion viewport;
     Result compFastTrack = Result::InsufficientCondition;
@@ -256,8 +256,8 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
         auto method = compData->method;
         P(target)->ctxFlag &= ~ContextFlag::FastTrack;   //сброс
 
-        /* Если преобразование не имеет коэффициентов вращения и маска Alpha(InvAlpha) включает простой прямоугольник,
-           мы можем оптимизировать, используя область просмотра вместо обычной последовательности AlphaMasking для повышения производительности. */
+        /* Если преобразование не имеет коэффициентов маршрутизатора и маска Alpha(InvAlpha), включает простую валюту,
+           мы можем модифицировать, используя просмотр области вместо обычной последовательности AlphaMasking для повышения производительности. */
         if (target->type() == Type::Shape) {
             auto shape = static_cast<Shape*>(target);
             uint8_t a;
@@ -277,12 +277,12 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
         }
     }
 
-    /* 2. Clipping */
+    /* 2. Обрезка */
     if (this->clipper) {
         P(this->clipper)->ctxFlag &= ~ContextFlag::FastTrack;   //сброс
         viewport = renderer->viewport();
-        /* TODO: Intersect the clipper's clipper, if both are FastTrack.
-           Сначала обновите следующий клиппер и проверьте его ctxFlag. */
+        /* TODO: Пересеките клипер клипера, если оба поддерживают FastTrack.
+           Сначала обновите следующий клипер и проверьте его ctxFlag. */
         if (!P(this->clipper)->clipper && (compFastTrack = _compFastTrack(renderer, this->clipper, pm, viewport)) == Result::Success) {
             P(this->clipper)->ctxFlag |= ContextFlag::FastTrack;
         }
@@ -292,7 +292,7 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
         }
     }
 
-    /* 3. Main Update */
+    /* 3. Основное обновление */
     auto newFlag = static_cast<RenderUpdateFlag>(pFlag | renderFlag);
     renderFlag = RenderUpdateFlag::None;
     opacity = MULTIPLY(opacity, this->opacity);
@@ -302,7 +302,7 @@ RenderData Paint::Impl::update(RenderMethod* renderer, const Matrix& pm, Array<R
     tr.cm = pm * tr.m;
     PAINT_METHOD(rd, update(renderer, tr.cm, clips, opacity, newFlag, clipper));
 
-    /* 4. Composition Post Processing */
+    /* 4. Постобработка композиции */
     if (compFastTrack == Result::Success) renderer->viewport(viewport);
     else if (this->clipper) clips.pop();
 
@@ -315,13 +315,13 @@ bool Paint::Impl::bounds(float* x, float* y, float* w, float* h, bool transforme
     bool ret;
     const auto& m = this->transform(origin);
 
-    //Case: No transformed, quick return!
+    //Case: Никаких трансформаций, быстрый возврат!
     if (!transformed || identity(&m)) {
         PAINT_METHOD(ret, bounds(x, y, w, h, stroking));
         return ret;
     }
 
-    //Case: Transformed
+    //Case: Преобразованный
     auto tx = 0.0f;
     auto ty = 0.0f;
     auto tw = 0.0f;
@@ -466,7 +466,7 @@ Result Paint::clip(std::unique_ptr<Paint> clipper) noexcept
 
 Result Paint::composite(std::unique_ptr<Paint> target, CompositeMethod method) noexcept
 {
-    //TODO: remove. Keep this for the backward compatibility
+    //TODO: удалить. Сохраните это для обратной совместимости.
     if (target && method == CompositeMethod::ClipPath) return clip(std::move(target));
 
     auto p = target.release();
@@ -483,7 +483,7 @@ CompositeMethod Paint::composite(const Paint** target) const noexcept
         if (target) *target = pImpl->compData->target;
         return pImpl->compData->method;
     } else {
-        //TODO: remove. Keep this for the backward compatibility
+        //TODO: удалить. Сохраните это для обратной совместимости.
         if (pImpl->clipper) {
             if (target) *target = pImpl->clipper;
             return CompositeMethod::ClipPath;
@@ -519,7 +519,7 @@ TVG_DEPRECATED uint32_t Paint::identifier() const noexcept
 
 Result Paint::blend(BlendMethod method) noexcept
 {
-    //TODO: Remove later
+    //TODO: Удалить позже
     if (method == BlendMethod::Hue || method == BlendMethod::Saturation || method == BlendMethod::Color || method == BlendMethod::Luminosity || method == BlendMethod::HardMix) return Result::NonSupport;
 
     if (pImpl->blendMethod != method) {

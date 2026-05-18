@@ -7,13 +7,13 @@
 // Разрешение предоставляется каждому на использование этого программного обеспечения для любых целей,
 // включая коммерческие приложения, а также изменять его и распространять
 // свободно, с соблюдением следующих ограничений:
-// 1. The origin of this software must not be misrepresented; you must not
+// 1. Происхождение этого программного обеспечения не должно искажаться; ты не должен
 //    утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
 //    в продукте подтверждение в документации по продукту будет
 //    приветствуется, но не является обязательным.
-// 2. Altered source versions must be plainly marked as such, and must not be
+// 2. Измененные исходные версии должны быть четко отмечены как таковые и не должны быть
 //    ошибочно представлено как оригинальное программное обеспечение.
-// 3. This notice may not be removed or altered from any source distribution.
+// 3. Это уведомление не может быть удалено или изменено из любого исходного дистрибутива.
 //
 #ifndef NANOVG_GL_H
 #define NANOVG_GL_H
@@ -58,7 +58,7 @@ enum NVGcreateFlags {
 
 #define NANOVG_GL_USE_STATE_FILTER (1)
 
-// Создает контексты NanoVG для разных версий OpenGL ( ES ).
+// Создает контексты NanoVG для разных версий OpenGL (ES).
 // Флаги должны представлять собой комбинацию флагов создания, указанных выше.
 
 #if defined NANOVG_GL2
@@ -101,7 +101,7 @@ GLuint nvglImageHandleGLES3(NVGcontext * ctx, int image);
 
 #endif
 
-// Это дополнительные флаги поверх NVGimageFlags.
+// Это дополнительные флаги над поверхностью NVGimageFlags.
 enum NVGimageFlagsGL {
     NVG_IMAGE_NODELETE          = 1 << 16,  // Не удаляйте дескриптор текстуры GL.
 };
@@ -218,7 +218,7 @@ struct GLNVGfragUniforms {
 };
 typedef struct GLNVGfragUniforms GLNVGfragUniforms;
 #else
-// note: after modifying layout or size of uniform array,
+// note: после изменения макета или размера однородного массива,
 // не забудьте также обновить исходный код фрагментного шейдера!
 #define NANOVG_GL_UNIFORMARRAY_SIZE 11
 union GLNVGfragUniforms {
@@ -529,7 +529,7 @@ static int glnvg__renderCreate(void * uptr)
     GLNVGcontext * gl = (GLNVGcontext *)uptr;
     int align = 4;
 
-    // TODO: mediump float may not be enough for GLES2 in iOS.
+    // TODO: mediump float может быть недостаточно дляGLES2в iOS.
     // см. следующее обсуждение: https://github.com/memononen/nanovg/issues/46
     static const char * shaderHeader =
 #if defined NANOVG_GL2
@@ -722,7 +722,7 @@ static int glnvg__renderCreate(void * uptr)
         "#endif\n"
         "		if (texType == 1) color = vec4(color.xyz*color.w,color.w);"
         "		else if (texType == 2) color = vec4(color.x);"
-        "		else if (texType == 3) color.rgb = color.bgr;"  // BGR -> RGB swizzle (с предварительным умножением)
+        "		else if (texType == 3) color.rgb = color.bgr;"  // BGR ->RGBswizzle (с предварительным умножением)
         "		else if (texType == 4) color = vec4(color.bgr, 1.0);"  // BGRX -> RGB с альфа=1
         "		else if (texType == 5) color = vec4(color.bgr*color.a, color.a);"  // BGR swizzle + предварительное умножение
         "		// Apply color tint and alpha.\n"
@@ -740,7 +740,7 @@ static int glnvg__renderCreate(void * uptr)
         "#endif\n"
         "		if (texType == 1) color = vec4(color.xyz*color.w,color.w);"
         "		else if (texType == 2) color = vec4(color.x);"
-        "		else if (texType == 3) color.rgb = color.bgr;"  // BGR -> RGB swizzle (с предварительным умножением)
+        "		else if (texType == 3) color.rgb = color.bgr;"  // BGR ->RGBswizzle (с предварительным умножением)
         "		else if (texType == 4) color = vec4(color.bgr, 1.0);"  // BGRX -> RGB с альфа=1
         "		else if (texType == 5) color = vec4(color.bgr*color.a, color.a);"  // BGR swizzle + предварительное умножение
         "		color *= scissor;\n"
@@ -829,7 +829,7 @@ static int glnvg__renderCreateTexture(void * uptr, int type, int w, int h, int i
 #endif
 
 #if defined (NANOVG_GL2)
-    // GL 1.4 и более поздних версий поддерживает создание MIP-карт с использованием параметра tex.
+    // GL 1.4 и более поздних версий создания поддержкиMIP-карта с использованием параметра tex.
     if(imageFlags & NVG_IMAGE_GENERATE_MIPMAPS) {
         glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
     }
@@ -841,10 +841,10 @@ static int glnvg__renderCreateTexture(void * uptr, int type, int w, int h, int i
     else if(type == NVG_TEXTURE_RGBA)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     else if(type == NVG_TEXTURE_BGR)
-        /* BGR888: upload as RGB, shader will swizzle BGR->RGB */
+        /* BGR888: загрузите как RGB, шейдер будет использоватьBGR-> RGB */
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     else if(type == NVG_TEXTURE_RGB565)
-        /* RGB565: directly compatible with GL */
+        /* RGB565: напрямую совместим с GL */
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
     else
 #if defined(NANOVG_GLES2) || defined (NANOVG_GL2)
@@ -1059,9 +1059,9 @@ static int glnvg__convertPaint(GLNVGcontext * gl, GLNVGfragUniforms * frag, NVGp
         if(tex->type == NVG_TEXTURE_RGBA)
             frag->s.texType = (tex->flags & NVG_IMAGE_PREMULTIPLIED) ? 0 : 1;
         else if(tex->type == NVG_TEXTURE_BGRA)
-            frag->s.texType = (tex->flags & NVG_IMAGE_PREMULTIPLIED) ? 3 : 5;  // BGR swizzle, опционально предварительное умножение
+            frag->s.texType = (tex->flags & NVG_IMAGE_PREMULTIPLIED) ? 3 : 5;  // BGR swizzle, опциональное предварительное умножение
         else if(tex->type == NVG_TEXTURE_BGR)
-            frag->s.texType = 3;  // BGR -> RGB swizzle (без альфа-канала)
+            frag->s.texType = 3;  // BGR ->RGBswizzle (без альфа-канала)
         else if(tex->type == NVG_TEXTURE_BGRX)
             frag->s.texType = 4;  // BGRX -> RGB с альфа=1 в шейдере
         else if(tex->type == NVG_TEXTURE_RGB565)
@@ -1072,9 +1072,9 @@ static int glnvg__convertPaint(GLNVGcontext * gl, GLNVGfragUniforms * frag, NVGp
         if(tex->type == NVG_TEXTURE_RGBA)
             frag->s.texType = (tex->flags & NVG_IMAGE_PREMULTIPLIED) ? 0.0f : 1.0f;
         else if(tex->type == NVG_TEXTURE_BGRA)
-            frag->s.texType = (tex->flags & NVG_IMAGE_PREMULTIPLIED) ? 3.0f : 5.0f;  // BGR swizzle, опционально предварительное умножение
+            frag->s.texType = (tex->flags & NVG_IMAGE_PREMULTIPLIED) ? 3.0f : 5.0f;  // BGR swizzle, опциональное предварительное умножение
         else if(tex->type == NVG_TEXTURE_BGR)
-            frag->s.texType = 3.0f;  // BGR -> RGB swizzle (без альфа-канала)
+            frag->s.texType = 3.0f;  // BGR ->RGBswizzle (без альфа-канала)
         else if(tex->type == NVG_TEXTURE_BGRX)
             frag->s.texType = 4.0f;  // BGRX -> RGB с альфа=1 в шейдере
         else if(tex->type == NVG_TEXTURE_RGB565)
@@ -1117,7 +1117,7 @@ static void glnvg__setUniforms(GLNVGcontext * gl, int uniformOffset, int image, 
 #if NANOVG_GL_USE_UNIFORMBUFFER
     glBindBufferRange(GL_UNIFORM_BUFFER, GLNVG_FRAG_BINDING, gl->fragBuf, uniformOffset, sizeof(GLNVGfragUniforms));
 #else
-    // Optimization: NSVG_SHADER_SIMPLE doesn't use any uniforms in the fragment shader,
+    // Optimization: NSVG_SHADER_SIMPLE не использует никаких униформ во фрагментном шейдере.
     // поэтому мы можем пропустить их загрузку.
     if(shaderType != NSVG_SHADER_SIMPLE) {
         GLNVGfragUniforms * frag = nvg__fragUniformPtr(gl, uniformOffset);
@@ -1359,7 +1359,7 @@ static void glnvg__renderFlush(void * uptr)
         LV_PROFILER_DRAW_END_TAG("setup_gl_state");
 
 #if NANOVG_GL_USE_UNIFORMBUFFER
-        // Загрузите ubo для фраг-шейдеров
+        // Загрузите убо для фраг-шейдеров
         LV_PROFILER_DRAW_BEGIN_TAG("glBindBuffer");
         glBindBuffer(GL_UNIFORM_BUFFER, gl->fragBuf);
         LV_PROFILER_DRAW_END_TAG("glBindBuffer");
@@ -1599,7 +1599,7 @@ static void glnvg__renderFill(void * uptr, NVGpaint * paint, NVGcompositeOperati
     return;
 
 error:
-    // Мы попадаем сюда, если вызов alloc прошел нормально, а что-то еще — нет.
+    // Мы едем сюда, если вызов все попадание пройдет нормально, а что-то еще — нет.
     // Откатите последний вызов, чтобы предотвратить его прорисовку.
     if(gl->ncalls > 0) gl->ncalls--;
 }
@@ -1663,7 +1663,7 @@ static void glnvg__renderStroke(void * uptr, NVGpaint * paint, NVGcompositeOpera
     return;
 
 error:
-    // Мы попадаем сюда, если вызов alloc прошел нормально, а что-то еще — нет.
+    // Мы едем сюда, если вызов все попадание пройдет нормально, а что-то еще — нет.
     // Откатите последний вызов, чтобы предотвратить его прорисовку.
     if(gl->ncalls > 0) gl->ncalls--;
 }
@@ -1700,7 +1700,7 @@ static void glnvg__renderTriangles(void * uptr, NVGpaint * paint, NVGcompositeOp
     return;
 
 error:
-    // Мы попадаем сюда, если вызов alloc прошел нормально, а что-то еще — нет.
+    // Мы едем сюда, если вызов все попадание пройдет нормально, а что-то еще — нет.
     // Откатите последний вызов, чтобы предотвратить его прорисовку.
     if(gl->ncalls > 0) gl->ncalls--;
 }

@@ -36,22 +36,22 @@ struct _lv_draw_vg_lite_unit_t;
 
 /**
  * Инициализируйте модуль хода
- * @param unit pointer to the unit
+ * @param unit указатель на единицу
  */
 void lv_vg_lite_stroke_init(struct _lv_draw_vg_lite_unit_t * unit, uint32_t cache_cnt);
 
 /**
  * Деинициализировать модуль хода
- * @param unit pointer to the unit
+ * @param unit указатель на единицу
  */
 void lv_vg_lite_stroke_deinit(struct _lv_draw_vg_lite_unit_t * unit);
 
 /**
  * Получить запись в кэше штрихов
- * @param unit pointer to the unit
- * @param path pointer to the path
- * @param dsc pointer to the stroke descriptor
- * @return pointer to the stroke cache entry
+ * @param unit указатель на единицу
+ * @param path указатель пути
+ * @param dsc указатель на дескриптор штриха
+ * @return указатель на запись кэша штрихов
  */
 lv_cache_entry_t * lv_vg_lite_stroke_get(struct _lv_draw_vg_lite_unit_t * unit,
                                          struct _lv_vg_lite_path_t * path,
@@ -59,15 +59,15 @@ lv_cache_entry_t * lv_vg_lite_stroke_get(struct _lv_draw_vg_lite_unit_t * unit,
 
 /**
  * Получить путь инсульта
- * @param cache_entry pointer to the stroke cache entry
- * @return pointer to the path
+ * @param cache_entry указатель на запись кэша штрихов
+ * @return указатель пути
  */
 struct _lv_vg_lite_path_t * lv_vg_lite_stroke_get_path(lv_cache_entry_t * cache_entry);
 
 /**
  * Удалить запись кэша штрихов
- * @param unit pointer to the unit
- * @param stroke pointer to the stroke
+ * @param unit указатель на единицу
+ * @param stroke указатель на штрих
  */
 void lv_vg_lite_stroke_drop(struct _lv_draw_vg_lite_unit_t * unit, lv_cache_entry_t * cache_entry);
 

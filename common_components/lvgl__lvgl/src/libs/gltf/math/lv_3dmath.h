@@ -53,8 +53,8 @@ typedef lv_3dplane_t lv_3dray_t;
 
 /**
  * Получите плоскость, обращенную вверх, с центром на заданной высоте.
- * @param elevation elevation of the ground plane, in world units. this is usually zero
- * @return ground plane
+ * @param elevation Высота наземной плоскости в мировых единицах. обычно это ноль
+ * @return наземная плоскость
  */
 lv_3dplane_t lv_get_ground_plane(float elevation);
 

@@ -11,15 +11,15 @@ Copyright (c) 2005-2023 Lode Vandevenne
 включая коммерческие приложения, а также изменять его и распространять
 свободно, с соблюдением следующих ограничений:
 
-    1. The origin of this software must not be misrepresented; you must not
+    1. Происхождение этого программного обеспечения не должно искажаться; ты не должен
     утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
     в продукте подтверждение в документации по продукту будет
     приветствуется, но не является обязательным.
 
-    2. Altered source versions must be plainly marked as such, and must not be
+    2. Измененные исходные версии должны быть четко отмечены как таковые и не должны быть
     ошибочно представлено как оригинальное программное обеспечение.
 
-    3. This notice may not be removed or altered from any source
+    3. Это уведомление не может быть удалено или изменено из любого источника.
     распространение.
 */
 
@@ -43,19 +43,19 @@ Copyright (c) 2005-2023 Lode Vandevenne
     #include <stdlib.h> /* ассигнования */
 #endif /* LODEPNG_COMPILE_ALLOCATORS */
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1310) /*Visual Studio: здесь нежелательны некоторые типы предупреждений.*/
-    #pragma warning( disable : 4244 ) /*неявные преобразования: не предупреждаются gcc -Wall -Wextra и требуют слишком большого количества приведения*/
-    #pragma warning( disable : 4996 ) /*VS не любит fopen, но fopen_s не является стандартом C, поэтому здесь его нельзя использовать.*/
+#if defined(_MSC_VER) && (_MSC_VER >= 1310) /*Visual Studio: здесь нежелательны некоторые типичные предупреждения.*/
+    #pragma warning( disable : 4244 ) /*неявные конвертации: не предупреждаются gcc -Wall -Wextra и требуют слишком большого количества приведений*/
+    #pragma warning( disable : 4996 ) /*VS не любит fopen, ноfopen_sне является стандартом C, поэтому здесь его нельзя использовать.*/
 #endif /*_MSC_VER */
 
 const char * LODEPNG_VERSION_STRING = "20230410";
 
 /*
 Этот исходный файл разделен на следующие большие части. Разделы кода
-с помощью " LODEPNG_COMPILE_ " #defines разделите это дальше смешанным способом.
--Инструменты для C и общий код для PNG и Zlib.
+с помощью "LODEPNG_COMPILE_"#definesразделите это дальше смешанным способом.
+-Инструменты для C и общий код дляPNGи Zlib.
 -C код для Zlib (huffman, deflate,...)
--C Код для PNG (куски формата файла, фильтры adam7, PNG, преобразования цветов,...)
+-C Код дляPNG(оформление файла, фильтры adam7, PNG, преобразование цветов,...)
 — Обертка C++ вокруг всего вышеперечисленного.
 */
 
@@ -65,13 +65,13 @@ const char * LODEPNG_VERSION_STRING = "20230410";
 /* ////////////////////////////////////////////////////////////////////////// */
 /* ////////////////////////////////////////////////////////////////////////// */
 
-/*Функции malloc, realloc и free, определенные здесь с помощью «lodepng_» впереди.
+/*Функции malloc, realloc и free, настройки здесь с помощью «lodepng_» впереди.
 имени, чтобы вы могли легко изменить их на другие, связанные с вашим
 платформу при необходимости. Все остальное в коде вызывает их. Пройти
 - DLODEPNG_NO_COMPILE_ALLOCATORS в компилятор или закомментируйте
 #определите LODEPNG_COMPILE_ALLOCATORS в заголовке, чтобы отключить те, что здесь и
 определите их в исходных файлах вашего собственного проекта без необходимости изменения
-исходный код lodepng. Не забудьте удалить «статические», если копируете их.
+исходный код lodepng. Не забудьте удалить «статические», если их копируете.
 отсюда.*/
 
 #ifdef LODEPNG_COMPILE_ALLOCATORS
@@ -83,7 +83,7 @@ static void * lodepng_malloc(size_t size)
     return lv_malloc(size);
 }
 
-/* NOTE: when realloc returns NULL, it leaves the original memory untouched */
+/* NOTE: когда realloc возвращает NULL, исходная память остается нетронутой */
 static void * lodepng_realloc(void * ptr, size_t new_size)
 {
 #ifdef LODEPNG_MAX_ALLOC
@@ -97,14 +97,14 @@ static void lodepng_free(void * ptr)
     lv_free(ptr);
 }
 #else /*LODEPNG_COMPILE_ALLOCATORS*/
-/* TODO: support giving additional void* payload to the custom allocators */
+/* TODO: поддержка предоставления дополнительной полезной нагрузки void* пользовательским распределителям */
 void * lodepng_malloc(size_t size);
 void * lodepng_realloc(void * ptr, size_t new_size);
 void lodepng_free(void * ptr);
 #endif /*LODEPNG_COMPILE_ALLOCATORS*/
 
 /* убедить компилятор встроить функцию для использования, когда это заметно улучшит производительность */
-/* inline недоступен в C90, но используйте его, если он поддерживается компилятором. */
+/* встроенный недоступен в C90, но воспользуйтесь им, если он отправится компилятором. */
 #if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || (defined(__cplusplus) && (__cplusplus >= 199711L))
     #define LODEPNG_INLINE inline
 #else
@@ -120,7 +120,7 @@ void lodepng_free(void * ptr);
     #define LODEPNG_RESTRICT /* не доступен */
 #endif
 
-/* Замены функций библиотеки C, таких как memcpy и strlen, для поддержки платформ.
+/* Замены функций библиотеки C, таких как memcpy и strlen, для поддержки платформы.
 где полная библиотека C недоступна. Компилятор может распознать их и скомпилировать
 к чему-то столь же быстрому. */
 
@@ -185,17 +185,17 @@ static int lodepng_gtofl(size_t a, size_t b, size_t c)
 выход из цикла (для перехода к этапу очистки функции). Этот макрос делает это.
 Это делает код обработки ошибок короче и читабельнее.
 
-Example: if(!uivector_resize(&lz77_encoded, datasize)) ERROR_BREAK(83);
+Example: if(!uivector_resize(&lz77_encoded, размер данных))ERROR_BREAK(83);
 */
 #define CERROR_BREAK(errorvar, code){\
         errorvar = code;\
         break;\
     }
 
-/*версия CERROR_BREAK, которая предполагает общий случай, когда переменная ошибки называется «error».*/
+/*версияCERROR_BREAK, которая включает общий случай, когда переменная ошибка называется «ошибка».*/
 #define ERROR_BREAK(code) CERROR_BREAK(error, code)
 
-/*Установите error var в код ошибки и верните его.*/
+/*Введите ошибку var в код ошибки и верните его.*/
 #define CERROR_RETURN_ERROR(errorvar, code){\
         errorvar = code;\
         return code;\
@@ -207,19 +207,19 @@ Example: if(!uivector_resize(&lz77_encoded, datasize)) ERROR_BREAK(83);
         if(error) return error;\
     }
 
-/*Установите error var в код ошибки и вернитесь из функции void.*/
+/*Введите ошибку var в код ошибки и вернитесь из функции void.*/
 #define CERROR_RETURN(errorvar, code){\
         errorvar = code;\
         return;\
     }
 
 /*
-О uivector, ucvector и строке:
+О uivector, ucvector и строка:
 -Все они оборачивают динамические массивы или текстовые строки одинаковым образом.
 -LodePNG изначально был написан на C++. Векторы заменяют std::vectors, которые использовались в версии C++.
-- Строковые инструменты созданы для того, чтобы избежать проблем с компиляторами, которые объявляют такие вещи, как strncat, устаревшими.
+- Строковые инструменты созданы для того, чтобы избежать проблем с компиляторами, которые объявляют такие вещи, как strncat, в открытом доступе.
 -Они не используются в интерфейсе, только внутри этого файла как статические функции.
--Как и во многих других структурах в этом файле, функции init и очистки выполняют функции ctor и dtor.
+-Как и во многих других структурах в этом файле, функции инициализации и обработки включают функции ctor и dtor.
 */
 
 #ifdef LODEPNG_COMPILE_ZLIB
@@ -249,7 +249,7 @@ static unsigned uivector_resize(uivector * p, size_t size)
             p->allocsize = newsize;
             p->data = (unsigned *)data;
         }
-        else return 0; /*error: not enough memory*/
+        else return 0; /*error: недостаточно памяти*/
     }
     p->size = size;
     return 1; /*успех*/
@@ -290,7 +290,7 @@ static unsigned ucvector_reserve(ucvector * p, size_t size)
             p->allocsize = newsize;
             p->data = (unsigned char *)data;
         }
-        else return 0; /*error: not enough memory*/
+        else return 0; /*error: недостаточно памяти*/
     }
     return 1; /*успех*/
 }
@@ -368,7 +368,7 @@ static void lodepng_set32bitInt(unsigned char * buffer, unsigned value)
 
 #ifdef LODEPNG_COMPILE_DISK
 
-/* возвращает отрицательное значение в случае ошибки. Это должно быть совместимо с чистым C, поэтому без fstat. */
+/* отмените отрицательное значение в случае ошибки. Это должно быть совместимо с чистым C, поэтому без fstat. */
 static long lodepng_filesize(const char * filename)
 {
     lv_fs_file_t f;
@@ -409,7 +409,7 @@ unsigned lodepng_load_file(unsigned char ** out, size_t * outsize, const char * 
     *outsize = (size_t)size;
 
     *out = (unsigned char *)lodepng_malloc((size_t)size);
-    if(!(*out) && size > 0) return 83; /*вышеуказанный malloc не удался*/
+    if(!(*out) && size > 0) return 83; /*полученный malloc не удался*/
 
     return lodepng_buffer_file(*out, (size_t)size, filename);
 }
@@ -449,7 +449,7 @@ static void LodePNGBitWriter_init(LodePNGBitWriter * writer, ucvector * data)
     writer->bp = 0;
 }
 
-/*TODO: this ignores potential out of memory errors*/
+/*TODO: это игнорирует потенциальные ошибки нехватки памяти*/
 #define WRITEBIT(writer, bit){\
         /* добавить новый байт */\
         if(((writer->bp) & 7u) == 0) {\
@@ -467,7 +467,7 @@ static void writeBits(LodePNGBitWriter * writer, unsigned value, size_t nbits)
         WRITEBIT(writer, value);
     }
     else {
-        /* TODO: increase output size only once here rather than in each WRITEBIT */
+        /* TODO: увеличивайте размер вывода только один раз здесь, а не в каждом WRITEBIT */
         size_t i;
         for(i = 0; i != nbits; ++i) {
             WRITEBIT(writer, (unsigned char)((value >> i) & 1));
@@ -480,7 +480,7 @@ static void writeBitsReversed(LodePNGBitWriter * writer, unsigned value, size_t 
 {
     size_t i;
     for(i = 0; i != nbits; ++i) {
-        /* TODO: increase output size only once here rather than in each WRITEBIT */
+        /* TODO: увеличивайте размер вывода только один раз здесь, а не в каждом WRITEBIT */
         WRITEBIT(writer, (unsigned char)((value >> (nbits - 1u - i)) & 1u));
     }
 }
@@ -502,7 +502,7 @@ static unsigned LodePNGBitReader_init(LodePNGBitReader * reader, const unsigned 
     size_t temp;
     reader->data = data;
     reader->size = size;
-    /* размер в битах, при переполнении возвращается ошибка (если size_t 32-битный, поддерживается до 500 МБ)  */
+    /* размер в битах, при обсчете возвращается ошибка (еслиsize_t32-битный, перехода до 500 МБ)  */
     if(lodepng_mulofl(size, 8u, &reader->bitsize)) return 105;
     /*обеспечить, чтобы увеличенный бит можно было сравнить с битовым размером без переполнения, даже если он будет увеличен на 32 слишком сильно, и
     пытаюсь обеспечить еще 32 бита*/
@@ -514,13 +514,13 @@ static unsigned LodePNGBitReader_init(LodePNGBitReader * reader, const unsigned 
 
 /*
 Функции обеспечения битов:
-Гарантирует, что читатель может прочитать как минимум nbits битов за один или несколько вызовов readBits.
+Гарантирует, что читатель может прочитать как минимум nbit битов за один или несколько вызовов readBits.
 безопасно, даже если доступно недостаточно битов.
-Параметр nbits не используется, но указан для целей документации, ошибка
+Параметр nbits не используется, но указан в документации, ошибка
 проверка количества бит должна быть сделана заранее.
 */
 
-/*См. документацию обеспеченияBits выше. Этот обеспечивает до 9 бит */
+/*См. документацияBits выше. Это обеспечивает до 9 бит */
 static LODEPNG_INLINE void ensureBits9(LodePNGBitReader * reader, size_t nbits)
 {
     size_t start = reader->bp >> 3u;
@@ -537,7 +537,7 @@ static LODEPNG_INLINE void ensureBits9(LodePNGBitReader * reader, size_t nbits)
     (void)nbits;
 }
 
-/*См. документацию обеспеченияBits выше. Этот обеспечивает до 17 бит */
+/*См. документацияBits выше. Это обеспечивает до 17 бит */
 static LODEPNG_INLINE void ensureBits17(LodePNGBitReader * reader, size_t nbits)
 {
     size_t start = reader->bp >> 3u;
@@ -556,7 +556,7 @@ static LODEPNG_INLINE void ensureBits17(LodePNGBitReader * reader, size_t nbits)
     (void)nbits;
 }
 
-/*См. документацию обеспеченияBits выше. Этот обеспечивает до 25 бит */
+/*См. документацияBits выше. Это обеспечивает до 25 бит */
 static LODEPNG_INLINE void ensureBits25(LodePNGBitReader * reader, size_t nbits)
 {
     size_t start = reader->bp >> 3u;
@@ -576,7 +576,7 @@ static LODEPNG_INLINE void ensureBits25(LodePNGBitReader * reader, size_t nbits)
     (void)nbits;
 }
 
-/*См. документацию обеспеченияBits выше. Этот обеспечивает до 32 бит */
+/*См. документацияBits выше. Это обеспечивает до 32 бит */
 static LODEPNG_INLINE void ensureBits32(LodePNGBitReader * reader, size_t nbits)
 {
     size_t start = reader->bp >> 3u;
@@ -598,21 +598,21 @@ static LODEPNG_INLINE void ensureBits32(LodePNGBitReader * reader, size_t nbits)
     (void)nbits;
 }
 
-/* Получите биты, не перемещая указатель бита. Должно быть достаточно битов, доступных с помощью обеспечения битов. Максимальное количество nbit — 31. */
+/* Получите биты, не перемещая указатель бита. Должно быть достаточно битов, доступно программное обеспечение с помощью битов. Максимальное количество nbit — 31. */
 static LODEPNG_INLINE unsigned peekBits(LodePNGBitReader * reader, size_t nbits)
 {
-    /* Сдвиг позволяет nbits быть только до 31. */
+    /* Сдвиг Позволяет nbits быть только до 31. */
     return reader->buffer & ((1u << nbits) - 1u);
 }
 
-/* Должно быть достаточно битов, доступных с обеспечениемBits */
+/* Должно быть достаточно битов, доступных с помощью программного обеспечения Bits. */
 static LODEPNG_INLINE void advanceBits(LodePNGBitReader * reader, size_t nbits)
 {
     reader->buffer >>= nbits;
     reader->bp += nbits;
 }
 
-/* Должно быть достаточно битов, доступных с обеспечениемBits */
+/* Должно быть достаточно битов, доступных с помощью программного обеспечения Bits. */
 static LODEPNG_INLINE unsigned readBits(LodePNGBitReader * reader, size_t nbits)
 {
     unsigned result = peekBits(reader, nbits);
@@ -623,7 +623,7 @@ static LODEPNG_INLINE unsigned readBits(LodePNGBitReader * reader, size_t nbits)
 
 static unsigned reverseBits(unsigned bits, unsigned num)
 {
-    /*TODO: implement faster lookup table based version when needed*/
+    /*TODO: при необходимости реализовать более быструю версию на основе таблицы поиска*/
     unsigned i, result = 0;
     for(i = 0; i < num; i++) result |= ((bits >> (num - i - 1u)) & 1u) << i;
     return result;
@@ -666,7 +666,7 @@ static const unsigned DISTANCEEXTRA[30]
        8,    9,    9,   10,   10,   11,   11,   12,    12,    13,    13
       };
 
-/*порядок, в котором «длины кодов алфавита длины кода» сохраняются, как указано в deflate, из этого Хаффман
+/*порядок, в котором «длины кодов алфавита длины кода» определяют, как указано в deflate, из этого Хаффман
 генерируется дерево длин динамического дерева Хаффмана*/
 static const unsigned CLCL_ORDER[NUM_CODE_LENGTH_CODES]
     = {16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
@@ -702,7 +702,7 @@ static void HuffmanTree_cleanup(HuffmanTree * tree)
     lodepng_free(tree->table_value);
 }
 
-/* количество битов для первого поиска в таблице Хаффмана (также известное как корневые биты), см. HuffmanTree_makeTable и huffmanDecodeSymbol.*/
+/* количество битов для первого поиска в таблице Хаффмана (также известно как корневые биты), см. HuffmanTree_makeTableи huffmanDecodeSymbol.*/
 /* значения 8u и 9u работают быстрее всего */
 #define FIRSTBITS 9u
 
@@ -719,7 +719,7 @@ static unsigned HuffmanTree_makeTable(HuffmanTree * tree)
     unsigned * maxlens = (unsigned *)lodepng_malloc(headsize * sizeof(unsigned));
     if(!maxlens) return 83; /*выделить неудачно*/
 
-    /* вычислить maxlens: максимальная общая длина символов, разделяющих префикс в первой таблице.*/
+    /* вычислить maxlens: максимальную общую длину символов, разделяющих префикс в первой таблице.*/
     lodepng_memset(maxlens, 0, headsize * sizeof(*maxlens));
     for(i = 0; i < tree->numcodes; i++) {
         unsigned symbol = tree->codes[i];
@@ -785,14 +785,14 @@ static unsigned HuffmanTree_makeTable(HuffmanTree * tree)
             /*старшие биты FIRSTBITS символа являются первым индексом таблицы.*/
             unsigned index = reverse & mask;
             unsigned maxlen = tree->table_len[index];
-            /*log2 длины вторичной таблицы должен быть >= l - FIRSTBITS*/
+            /*log2, обратная длина таблицы должна быть >= l - FIRSTBITS*/
             unsigned tablelen = maxlen - FIRSTBITS;
             unsigned start = tree->table_value[index]; /*начальный индекс во вторичной таблице*/
             unsigned num = 1u << (tablelen - (l - FIRSTBITS)); /*количество записей этого символа во вторичной таблице*/
             unsigned j;
             if(maxlen < l) return 55; /*недопустимое дерево: длинный символ имеет общий префикс с коротким символом*/
             for(j = 0; j < num; ++j) {
-                unsigned reverse2 = reverse >> FIRSTBITS; /* l - FIRSTBITS bits */
+                unsigned reverse2 = reverse >> FIRSTBITS; /* l - Биты FIRSTBITS */
                 unsigned index2 = start + (reverse2 | (j << (l - FIRSTBITS)));
                 tree->table_len[index2] = l;
                 tree->table_value[index2] = (unsigned short)i;
@@ -806,7 +806,7 @@ static unsigned HuffmanTree_makeTable(HuffmanTree * tree)
         вообще появляются, но такое дерево Хаффмана все еще может существовать (например, если расстояние
         коды никогда не используются). В обоих случаях не все символы таблицы будут
         заполнены. Заполните их недопустимым значением символа, чтобы вернуть их из
-        huffmanDecodeSymbol вызовет ошибку. */
+        huffmanDecodeSymbol вызывает ошибку. */
         for(i = 0; i < size; ++i) {
             if(tree->table_len[i] == 16) {
                 /* В качестве длины используйте значение меньше FIRSTBITS для таблицы заголовков.
@@ -874,7 +874,7 @@ static unsigned HuffmanTree_makeFromLengths2(HuffmanTree * tree)
 
 /*
 учитывая длину кода (хранящуюся в файле PNG), сгенерируйте дерево, как определено
-от Deflate. maxbitlen — максимальное количество битов, которые может иметь код в дереве.
+от Дефлята. maxbitlen — максимальное количество битов, которые могут иметь код в деревенском языке.
 возвращаемое значение является ошибкой.
 */
 static unsigned HuffmanTree_makeFromLengths(HuffmanTree * tree, const unsigned * bitlen,
@@ -891,7 +891,7 @@ static unsigned HuffmanTree_makeFromLengths(HuffmanTree * tree, const unsigned *
 
 #ifdef LODEPNG_COMPILE_ENCODER
 
-/*BPM: Boundary Package Merge, see "A Fast and Space-Economical Algorithm for Length-Limited Coding",
+/*BPM: Слияние граничных пакетов, см. «Быстрый и экономичный алгоритм для кодирования с ограниченной длиной»,
 Юрки Катахайнен, Алистер Моффат, Эндрю Терпин, 1995 год.*/
 
 /*узел цепочки для слияния граничных пакетов*/
@@ -970,7 +970,7 @@ static void bpmnode_sort(BPMNode * leaves, size_t num)
     lodepng_free(mem);
 }
 
-/*Шаг слияния граничного пакета, numpresent — количество листьев, а c — текущая цепочка.*/
+/*Шаг слияния граничного пакета, число — количество листьев, а c — текущая цепочка.*/
 static void boundaryPM(BPMLists * lists, BPMNode * leaves, size_t numpresent, int c, int num)
 {
     unsigned lastindex = lists->chains1[c]->index;
@@ -1006,8 +1006,8 @@ unsigned lodepng_huffman_code_lengths(unsigned * lengths, const unsigned * frequ
     size_t numpresent = 0; /*количество символов с ненулевой частотой*/
     BPMNode * leaves; /*символы, только те, у которых частота > 0*/
 
-    if(numcodes == 0) return 80; /*error: a tree of 0 symbols is not supposed to be made*/
-    if((1u << maxbitlen) < (unsigned)numcodes) return 80; /*error: represent all symbols*/
+    if(numcodes == 0) return 80; /*error: дерево из 0 символов создавать не предполагается*/
+    if((1u << maxbitlen) < (unsigned)numcodes) return 80; /*error: представлять все символы*/
 
     leaves = (BPMNode *)lodepng_malloc(numcodes * sizeof(*leaves));
     if(!leaves) return 83; /*выделить неудачно*/
@@ -1026,7 +1026,7 @@ unsigned lodepng_huffman_code_lengths(unsigned * lengths, const unsigned * frequ
     согласно RFC 1951 г., раздел 3.2.7. Некоторые декодеры ошибочно требуют два. Чтобы
     заставьте это работать, а также убедитесь, что есть как минимум два символа.
     Код Package-Merge ниже также работает неправильно, если есть только один
-    символ, теоретически это даст 0 бит, но на практике zlib требует 1 бит*/
+    символ, это даст 0 бит, но для примера zlib требуется 1 бит*/
     if(numpresent == 0) {
         lengths[0] = lengths[1] = 1; /*обратите внимание, что для RFC 1951, раздел 3.2.7, необходимы только длины [0] = 1*/
     }
@@ -1061,7 +1061,7 @@ unsigned lodepng_huffman_code_lengths(unsigned * lengths, const unsigned * frequ
                 lists.chains1[i] = &lists.memory[1];
             }
 
-            /*каждый вызов borderPM добавляет в последний список одну цепочку, а нам нужно 2*numpresent — 2 цепочки.*/
+            /*Каждый вызов borderPM добавляется в последнюю одну цепочку списка, а нам нужно 2*numpresent — 2 цепочки.*/
             for(i = 2; i != 2 * numpresent - 2; ++i) boundaryPM(&lists, leaves, numpresent, (int)maxbitlen - 1, (int)i);
 
             for(node = lists.chains1[maxbitlen - 1]; node; node = node->tail) {
@@ -1115,7 +1115,7 @@ static unsigned generateFixedLitLenTree(HuffmanTree * tree)
     return error;
 }
 
-/*получить дерево кодов расстояний сдутого блока с фиксированным деревом, как указано в спецификации deflate*/
+/*получить коды дерева расстояний сдутого блока с фиксированным деревом, как указано в характеристиках, сдуть*/
 static unsigned generateFixedDistanceTree(HuffmanTree * tree)
 {
     unsigned i, error = 0;
@@ -1159,7 +1159,7 @@ static unsigned huffmanDecodeSymbol(LodePNGBitReader * reader, const HuffmanTree
 /* / Inflator (Decompressor)                                                / */
 /* ////////////////////////////////////////////////////////////////////////// */
 
-/*получить дерево дефлированного блока с фиксированным деревом, как указано в спецификации deflate
+/*получить дефлированный блок с фиксированным деревом, как указано в характеристиках, сдуть
 Возвращает код ошибки.*/
 static unsigned getTreeInflateFixed(HuffmanTree * tree_ll, HuffmanTree * tree_d)
 {
@@ -1176,14 +1176,14 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
     unsigned error = 0;
     unsigned n, HLIT, HDIST, HCLEN, i;
 
-    /*см. комментарии в deflateDynamic для объяснения контекста и этих переменных, это аналогично*/
+    /*см. комментарии в deflateDynamic для пояснений контекста и этих категорий, это рисунок*/
     unsigned * bitlen_ll = 0; /*горит, длина кода Len*/
-    unsigned * bitlen_d = 0; /*длины кода dist*/
-    /*длина кода длины кода («clcl»), длина в битах дерева Хаффмана, используемого для сжатия bitlen_ll и bitlen_d.*/
+    unsigned * bitlen_d = 0; /*длина кода расст.*/
+    /*длина кода длина кода («clcl»), длина в битах дерева Хаффмана, используемого для сжатияbitlen_llиbitlen_d.*/
     unsigned * bitlen_cl = 0;
     HuffmanTree tree_cl; /*дерево кодов для кодов длины кода (дерево Хаффмана для сжатых деревьев Хаффмана)*/
 
-    if(reader->bitsize - reader->bp < 14) return 49; /*error: the bit pointer is or will go past the memory*/
+    if(reader->bitsize - reader->bp < 14) return 49; /*error: указатель бита проходит или пройдет мимо памяти*/
     ensureBits17(reader, 14);
 
     /*количество литералов/кодов длины + 257. В отличие от спецификации, здесь уже добавлено значение 257*/
@@ -1201,7 +1201,7 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
     while(!error) {
         /*прочитать коды длины кода из 3 * (количество кодов длины кода) битов*/
         if(lodepng_gtofl(reader->bp, HCLEN * 3, reader->bitsize)) {
-            ERROR_BREAK(50); /*error: the bit pointer is or will go past the memory*/
+            ERROR_BREAK(50); /*error: указатель бита проходит или пройдет мимо памяти*/
         }
         for(i = 0; i != HCLEN; ++i) {
             ensureBits9(reader, 3); /*за пределами уже проверено выше */
@@ -1221,7 +1221,7 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
         lodepng_memset(bitlen_ll, 0, NUM_DEFLATE_CODE_SYMBOLS * sizeof(*bitlen_ll));
         lodepng_memset(bitlen_d, 0, NUM_DISTANCE_SYMBOLS * sizeof(*bitlen_d));
 
-        /*i — текущий символ, который мы читаем в той части, которая содержит длины кода кодовlit/len и dist.*/
+        /*i — текущий символ, который мы читаем в этой части, который содержит длину кода codeovlit/len и dist.*/
         i = 0;
         while(i < HLIT + HDIST) {
             unsigned code;
@@ -1244,7 +1244,7 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
                 else value = bitlen_d[i - HLIT - 1];
                 /*повторите это значение в следующих длинах*/
                 for(n = 0; n < replength; ++n) {
-                    if(i >= HLIT + HDIST) ERROR_BREAK(13); /*error: i is larger than the amount of codes*/
+                    if(i >= HLIT + HDIST) ERROR_BREAK(13); /*error: я больше, чем количество кодов*/
                     if(i < HLIT) bitlen_ll[i] = value;
                     else bitlen_d[i - HLIT] = value;
                     ++i;
@@ -1256,7 +1256,7 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
 
                 /*повторите это значение в следующих длинах*/
                 for(n = 0; n < replength; ++n) {
-                    if(i >= HLIT + HDIST) ERROR_BREAK(14); /*error: i is larger than the amount of codes*/
+                    if(i >= HLIT + HDIST) ERROR_BREAK(14); /*error: я больше, чем количество кодов*/
 
                     if(i < HLIT) bitlen_ll[i] = 0;
                     else bitlen_d[i - HLIT] = 0;
@@ -1269,7 +1269,7 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
 
                 /*повторите это значение в следующих длинах*/
                 for(n = 0; n < replength; ++n) {
-                    if(i >= HLIT + HDIST) ERROR_BREAK(15); /*error: i is larger than the amount of codes*/
+                    if(i >= HLIT + HDIST) ERROR_BREAK(15); /*error: я больше, чем количество кодов*/
 
                     if(i < HLIT) bitlen_ll[i] = 0;
                     else bitlen_d[i - HLIT] = 0;
@@ -1277,13 +1277,13 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
                 }
             }
             else { /*если (код == INVALIDSYMBOL )*/
-                ERROR_BREAK(16); /*error: tried to read disallowed huffman symbol*/
+                ERROR_BREAK(16); /*error: пытался прочитать запрещенный символ Хаффмана*/
             }
             /*проверьте, не вышел ли какой-либо из указанных выше гарантийных битов за пределы*/
             if(reader->bp > reader->bitsize) {
-                /*вернуть код ошибки 10 или 11 в зависимости от ситуации, произошедшей в huffmanDecodeSymbol
+                /*вернуть код ошибки 10 или 11 в зависимости от ситуации, в huffmanDecodeSymbol
                 (10=нет конечного кода, 11=неправильный прыжок за пределы дерева)*/
-                /* TODO: revise error codes 10,11,50: the above comment is no longer valid */
+                /* TODO: пересмотрите коды ошибок 10,11,50: комментарий выше больше не действителен */
                 ERROR_BREAK(50); /*ошибка, указатель бита выходит за пределы памяти*/
             }
         }
@@ -1307,7 +1307,7 @@ static unsigned getTreeInflateDynamic(HuffmanTree * tree_ll, HuffmanTree * tree_
     return error;
 }
 
-/*раздуть блок с динамикой фиксированного дерева Хаффмана. btype должен быть 1 или 2.*/
+/*раздуть блок с динамикой неподвижного дерева Хаффмана. btype должен быть 1 или 2.*/
 static unsigned inflateHuffmanBlock(ucvector * out, LodePNGBitReader * reader,
                                     unsigned btype, size_t max_output_size)
 {
@@ -1328,7 +1328,7 @@ static unsigned inflateHuffmanBlock(ucvector * out, LodePNGBitReader * reader,
 
 
     while(!error && !done) { /*декодировать все символы до достижения конца, прерывается на конечном коде*/
-        /*code_ll — буквальный, длинный или конечный код.*/
+        /*code_ll — буквенный, длинный или конечный код.*/
         unsigned code_ll;
         /* убедитесь, что достаточно бит для двух чтений кода Хаффмана (по 15 бит каждый): если первый литерал, второй литерал считывается сразу. Это
         Кажется, это немного быстрее, чем обеспечение здесь 20 бит для 1 символа Хаффмана и потенциальных 5 дополнительных бит для символа длины.*/
@@ -1363,10 +1363,10 @@ static unsigned inflateHuffmanBlock(ucvector * out, LodePNGBitReader * reader,
             code_d = huffmanDecodeSymbol(reader, &tree_d);
             if(code_d > 29) {
                 if(code_d <= 31) {
-                    ERROR_BREAK(18); /*error: invalid distance code (30-31 are never used)*/
+                    ERROR_BREAK(18); /*error: неверный код расстояния (30-31 никогда не используются)*/
                 }
-                else { /* если( code_d == INVALIDSYMBOL ) */
-                    ERROR_BREAK(16); /*error: tried to read disallowed huffman symbol*/
+                else { /* если(code_d==INVALIDSYMBOL) */
+                    ERROR_BREAK(16); /*error: пытался прочитать запрещенный символ Хаффмана*/
                 }
             }
             distance = DISTANCEBASE[code_d];
@@ -1378,7 +1378,7 @@ static unsigned inflateHuffmanBlock(ucvector * out, LodePNGBitReader * reader,
                 distance += readBits(reader, numextrabits_d);
             }
 
-            /*часть 5: заполните все значения out[n] в зависимости от длины и расстояния*/
+            /*часть 5: заполнить все значения out[n] в зависимости от длины и расстояния*/
             start = out->size;
             if(distance > start) ERROR_BREAK(52); /*слишком большое расстояние назад*/
             backward = start - distance;
@@ -1399,17 +1399,17 @@ static unsigned inflateHuffmanBlock(ucvector * out, LodePNGBitReader * reader,
         else if(code_ll == 256) {
             done = 1; /*конечный код, завершить цикл*/
         }
-        else { /*если( code_ll == INVALIDSYMBOL )*/
-            ERROR_BREAK(16); /*error: tried to read disallowed huffman symbol*/
+        else { /*если(code_ll==INVALIDSYMBOL)*/
+            ERROR_BREAK(16); /*error: пытался прочитать запрещенный символ Хаффмана*/
         }
         if(out->allocsize - out->size < reserved_size) {
             if(!ucvector_reserve(out, out->size + reserved_size)) ERROR_BREAK(83); /*выделить неудачно*/
         }
         /*проверьте, не вышел ли какой-либо из указанных выше гарантийных битов за пределы*/
         if(reader->bp > reader->bitsize) {
-            /*вернуть код ошибки 10 или 11 в зависимости от ситуации, произошедшей в huffmanDecodeSymbol
+            /*вернуть код ошибки 10 или 11 в зависимости от ситуации, в huffmanDecodeSymbol
             (10=нет конечного кода, 11=неправильный прыжок за пределы дерева)*/
-            /* TODO: revise error codes 10,11,50: the above comment is no longer valid */
+            /* TODO: пересмотрите коды ошибок 10,11,50: комментарий выше больше не действителен */
             ERROR_BREAK(51); /*ошибка, указатель бита выходит за пределы памяти*/
         }
         if(max_output_size && out->size > max_output_size) {
@@ -1442,15 +1442,15 @@ static unsigned inflateNoCompression(ucvector * out, LodePNGBitReader * reader,
 
     /*проверьте, действительно ли 16-битный NLEN является дополнением LEN до единицы*/
     if(!settings->ignore_nlen && LEN + NLEN != 65535) {
-        return 21; /*error: NLEN is not one's complement of LEN*/
+        return 21; /*error: NLEN не является дополнением LEN.*/
     }
 
     if(!ucvector_resize(out, out->size + LEN)) return 83; /*выделить неудачно*/
 
     /*прочитайте литеральные данные: байты LEN теперь хранятся в выходном буфере*/
-    if(bytepos + LEN > size) return 23; /*error: reading outside of in buffer*/
+    if(bytepos + LEN > size) return 23; /*error: чтение за пределами буфера*/
 
-    /*out->data может быть NULL (когда LEN равен нулю), а арифметика в NULL ptr не определена.*/
+    /*out->data может бытьNULL(когдаLENозначает символ), арифметика вNULLptr не определена.*/
     if(LEN) {
         lodepng_memcpy(out->data + out->size - LEN, reader->data + bytepos, LEN);
         bytepos += LEN;
@@ -1478,7 +1478,7 @@ static unsigned lodepng_inflatev(ucvector * out,
         BFINAL = readBits(&reader, 1);
         BTYPE = readBits(&reader, 2);
 
-        if(BTYPE == 3) return 20; /*error: invalid BTYPE*/
+        if(BTYPE == 3) return 20; /*error: неверный BTYPE*/
         else if(BTYPE == 0) error = inflateNoCompression(out, &reader, settings); /*без сжатия*/
         else error = inflateHuffmanBlock(out, &reader, BTYPE, settings->max_output_size); /*сжатие, BTYPE 01 или 10*/
         if(!error && settings->max_output_size && out->size > settings->max_output_size) error = 109;
@@ -1508,7 +1508,7 @@ static unsigned inflatev(ucvector * out, const unsigned char * in, size_t insize
         if(error) {
             /*пользовательское надувание может иметь свои собственные коды ошибок, однако мы переводим его в код 110*/
             error = 110;
-            /*если указан максимальный размер вывода и пользовательский zlib вернул ошибку, вместо этого укажите эту ошибку*/
+            /*если максимальный указан размер вывода и пользователь zlib вернул ошибку, вместо этого укажите эту ошибку*/
             if(settings->max_output_size && out->size > settings->max_output_size) error = 109;
         }
         return error;
@@ -1532,7 +1532,7 @@ static const unsigned MAX_SUPPORTED_DEFLATE_LENGTH = 258;
 данный массив должен быть отсортирован (если ни одно значение не меньше, возвращается размер данного массива)*/
 static size_t searchCodeIndex(const unsigned * array, size_t array_size, size_t value)
 {
-    /*binary search (only small gain over linear). TODO: use CPU log2 instruction for getting symbols instead*/
+    /*бинарный поиск (лишь небольшой выигрыш по сравнению с линейным).  TODO: вместо этого используйте инструкциюCPUlog2 для получения символов.*/
     size_t left = 1;
     size_t right = array_size - 1;
 
@@ -1547,9 +1547,9 @@ static size_t searchCodeIndex(const unsigned * array, size_t array_size, size_t 
 
 static void addLengthDistance(uivector * values, size_t length, size_t distance)
 {
-    /*значения в закодированном векторе — это те, которые используются функцией deflate:
+    /*значения в закодированном векторе — это те, которые использовались в режиме замедленного выкачивания:
     0–255: буквальные байты
-    256: end
+    256: конец
     257–285: пара длина/расстояние (код длины, за которым следуют биты дополнительной длины, код расстояния, биты дополнительного расстояния)
     286-287: недействительно*/
 
@@ -1559,7 +1559,7 @@ static void addLengthDistance(uivector * values, size_t length, size_t distance)
     unsigned extra_distance = (unsigned)(distance - DISTANCEBASE[dist_code]);
 
     size_t pos = values->size;
-    /*TODO: return error when this fails (out of memory)*/
+    /*TODO: ошибка возврата в случае сбоя (недостаточно памяти)*/
     unsigned ok = uivector_resize(values, values->size + 4);
     if(ok) {
         values->data[pos + 0] = length_code + FIRST_LENGTH_CODE_INDEX;
@@ -1572,7 +1572,7 @@ static void addLengthDistance(uivector * values, size_t length, size_t distance)
 /*3 байта данных кодируются в два байта. Хэш не может использовать более 3
 байт в качестве входных данных, поскольку 3 — минимальная длина совпадения для дефляции.*/
 static const unsigned HASH_NUM_VALUES = 65536;
-static const unsigned HASH_BIT_MASK = 65535; /*HASH_NUM_VALUES - 1, but C90 does not like that as initializer*/
+static const unsigned HASH_BIT_MASK = 65535; /*HASH_NUM_VALUES - 1, ноC90не нравится это в качестве инициализатора*/
 
 typedef struct Hash {
     int * head; /*хеш-значение для заголовка круговой позиции — может устареть, если обойти окно*/
@@ -1580,9 +1580,9 @@ typedef struct Hash {
     unsigned short * chain;
     int * val; /*циклическая позиция для хэш-значения*/
 
-    /*TODO: do this not only for zeros but for any repeated byte. However for PNG
+    /*TODO: делайте это не только для нулей, но и для любого повторяющегося байта. Однако для PNG
     всегда будут доминировать нули, поэтому для PNG это не важно*/
-    int * headz; /*похоже на голову, но для Chainz*/
+    int * headz; /*Похоже на голову, но для Чейнз*/
     unsigned short * chainz; /*те, у которых одинаковое количество нулей*/
     unsigned short * zeros; /*длина серии нулей, используемая в качестве второй хэш-цепочки*/
 } Hash;
@@ -1630,7 +1630,7 @@ static unsigned getHash(const unsigned char * data, size_t size, size_t pos)
 {
     unsigned result = 0;
     if(pos + 2 < size) {
-        /*Используется простой сдвиг и xor-хэш. Поскольку данные PNG преобладают
+        /*Использован простой оператор и xor-хэш. поскольку данныеPNGпреобладают
         нулями из-за фильтров, лучший хеш не имеет существенного значения
         влияет на скорость перемещения по цепи и приводит к увеличению затрат времени на
         вычисление хеша.*/
@@ -1658,7 +1658,7 @@ static unsigned countZeros(const unsigned char * data, size_t size, size_t pos)
     return (unsigned)(data - start);
 }
 
-/*wpos = pos & (windowsize - 1)*/
+/*wpos = поз & (размер окна - 1)*/
 static void updateHashChain(Hash * hash, size_t wpos, unsigned hashval, unsigned short numzeros)
 {
     hash->val[wpos] = (int)hashval;
@@ -1702,8 +1702,8 @@ static unsigned encodeLZ77(uivector * out, Hash * hash,
     const unsigned char * lastptr, * foreptr, * backptr;
     unsigned hashpos;
 
-    if(windowsize == 0 || windowsize > 32768) return 60; /*error: windowsize smaller/larger than allowed*/
-    if((windowsize & (windowsize - 1)) != 0) return 90; /*error: must be power of two*/
+    if(windowsize == 0 || windowsize > 32768) return 60; /*error: размер окна меньше/больше разрешенного*/
+    if((windowsize & (windowsize - 1)) != 0) return 90; /*error: должна быть степенью двойки*/
 
     if(nicematch > MAX_SUPPORTED_DEFLATE_LENGTH) nicematch = MAX_SUPPORTED_DEFLATE_LENGTH;
 
@@ -1872,9 +1872,9 @@ static unsigned deflateNoCompression(ucvector * out, const unsigned char * data,
 }
 
 /*
-запишите данные, закодированные в lz77, которые имеют кодыlit, len и dist, в сжатый поток с использованием деревьев Хаффмана.
-tree_ll: the tree for lit and len codes.
-tree_d: the tree for distance codes.
+запишите данные, закодированные в lz77, которые имеют кодыlit, len и dist, в сжатом потоке с использованием деревьев Хаффмана.
+tree_ll: дерево для кодов освещений и лен.
+tree_d: дерево дистанционных кодов.
 */
 static void writeLZ77data(LodePNGBitWriter * writer, const uivector * lz77_encoded,
                           const HuffmanTree * tree_ll, const HuffmanTree * tree_d)
@@ -1911,33 +1911,33 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
     /*
     Блок сжимается следующим образом: данные PNG кодируются lz77, в результате чего
     литеральные байты и пары длина/расстояние. Затем это Хаффман сжимает
-    два дерева Хаффмана. Для значений освещений и len используется одно дерево Хаффмана («ll»),
-    другое дерево Хаффмана используется для значений dist («d»). Эти два дерева
+    два дерева Хаффмана. Для памятников влиятельных лиц и лен используется одно дерево Хаффмана («II»),
+    другое дерево Хаффмана используется для оценки dist («d»). Эти два дерева
     храниться с использованием длины кода и еще больше сжимать эту длину кода.
     также кодируются по длине и сжимаются по методу Хаффмана. Это дает дерево Хаффмана
     длин кода «cl». Длины кода, используемые для описания этого третьего дерева, равны
-    длины кода длины кода («clcl»).
+    длина кода длина кода («clcl»).
     */
 
     /*Данные в кодировке lz77, представленные целыми числами, поскольку в них также будут коды длины и расстояния.*/
     uivector lz77_encoded;
     HuffmanTree tree_ll; /*дерево значений освещенности и длины*/
     HuffmanTree tree_d; /*дерево кодов расстояний*/
-    HuffmanTree tree_cl; /*дерево для кодирования длин кода, представляющих tree_ll и tree_d*/
-    unsigned * frequencies_ll = 0; /*частота горящих кодов len*/
+    HuffmanTree tree_cl; /*дерево для кодирования длин кода, представляющихtree_llи tree_d*/
+    unsigned * frequencies_ll = 0; /*частота горящих кодировок лен*/
     unsigned * frequencies_d = 0; /*частота кодов расстояний*/
     unsigned * frequencies_cl = 0; /*частота кодов длины кода*/
-    unsigned * bitlen_lld = 0; /*lit,len,dist длины кода (целые биты), буквально (без повторяющихся кодов).*/
-    unsigned * bitlen_lld_e = 0; /*bitlen_lld, закодированный повторными кодами (это элементарное сжатие длины серии)*/
+    unsigned * bitlen_lld = 0; /*lit,len,dist длина кода (целые биты), буквально (без повторяющихся кодов).*/
+    unsigned * bitlen_lld_e = 0; /*bitlen_lld , закодированный повторными кодами (это элементарное удлинение серии)*/
     size_t datasize = dataend - datapos;
 
     /*
-    Если бы мы могли назвать «bitlen_cl» длину кода длины кода («clcl»), то есть битовую длину кодов, которые представляют
-    tree_cl в CLCL_ORDER , то из-за сжатия Хаффмана представлений дерева Хаффмана («два уровня») возникают
+    Если бы мы могли назвать «bitlen_cl» длину кода длины кода («clcl»), то есть битовая длина кода, которая представлена
+    tree_cl вCLCL_ORDER, то есть из-за сокращения Хаффмана представленного дерева Хаффмана («два уровня») направления
     некоторые аналогии:
-    bitlen_lld для tree_cl соответствует данным для tree_ll и tree_d.
-    bitlen_lld_e относится к bitlen_lld то же самое, что lz77_encoded к данным.
-    bitlen_cl соответствует bitlen_lld_e то же самое, что bitlen_lld соответствует lz77_encoded.
+    bitlen_lld дляtree_clсоответствует данным дляtree_llи tree_d.
+    bitlen_lld_e относится кbitlen_lldто же самое, чтоlz77_encodedк данным.
+    bitlen_cl соответствуетbitlen_lld_eто же самое, чтоbitlen_lldсоответствуетlz77_encoded.
     */
 
     unsigned BFINAL = final;
@@ -1956,7 +1956,7 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
 
     if(!frequencies_ll || !frequencies_d || !frequencies_cl) error = 83; /*выделить неудачно*/
 
-    /*Этот цикл while никогда не зацикливается из-за разрыва в конце.
+    /*Этот цикл пока не зацикливается из-за разрыва в конце.
     разрешить выход из него на этап очистки при возникновении ошибок.*/
     while(!error) {
         lodepng_memset(frequencies_ll, 0, 286 * sizeof(*frequencies_ll));
@@ -1974,7 +1974,7 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
                 ++i) lz77_encoded.data[i - datapos] = data[i]; /*нет LZ77, но все равно будет сжато по методу Хаффмана*/
         }
 
-        /*Подсчитайте частоты кодовlit, len и dist.*/
+        /*Подскажите код частоты, len и dist.*/
         for(i = 0; i != lz77_encoded.size; ++i) {
             unsigned symbol = lz77_encoded.data[i];
             ++frequencies_ll[symbol];
@@ -1986,19 +1986,19 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
         }
         frequencies_ll[256] = 1; /*в конце блока будет ровно 1 конечный код*/
 
-        /*Создайте оба дерева Хаффмана: одно для кодов освещенности и len, другое для кодов dist.*/
+        /*Создайте оба дерева Хаффмана: одно для кодов яркости и длины, другое для кодов расст.*/
         error = HuffmanTree_makeFromFrequencies(&tree_ll, frequencies_ll, 257, 286, 15);
         if(error) break;
-        /*Для минкодов выбрано 2, а не 1: некоторые глючные декодеры PNG требуют как минимум 2 символа в дереве dist.*/
+        /*Для минкодов выбрано 2, а не 1: некоторые глючные декодерыPNGтребуют как минимум 2 символа в деревенском регионе.*/
         error = HuffmanTree_makeFromFrequencies(&tree_d, frequencies_d, 2, 30, 15);
         if(error) break;
 
         numcodes_ll = LODEPNG_MIN(tree_ll.numcodes, 286);
         numcodes_d = LODEPNG_MIN(tree_d.numcodes, 30);
-        /*сохраните длины кода обоих сгенерированных деревьев в bitlen_lld*/
+        /*сохраните длину кода нижних сгенерированных деревьев в bitlen_lld*/
         numcodes_lld = numcodes_ll + numcodes_d;
         bitlen_lld = (unsigned *)lodepng_malloc(numcodes_lld * sizeof(*bitlen_lld));
-        /*numcodes_lld_e никогда не требует большего размера, чем bitlen_lld.*/
+        /*numcodes_lld_e никогда не требует большего размера, чемbitlen_lld.*/
         bitlen_lld_e = (unsigned *)lodepng_malloc(numcodes_lld * sizeof(*bitlen_lld_e));
         if(!bitlen_lld || !bitlen_lld_e) ERROR_BREAK(83); /*выделить неудачно*/
         numcodes_lld_e = 0;
@@ -2006,7 +2006,7 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
         for(i = 0; i != numcodes_ll; ++i) bitlen_lld[i] = tree_ll.lengths[i];
         for(i = 0; i != numcodes_d; ++i) bitlen_lld[numcodes_ll + i] = tree_d.lengths[i];
 
-        /*сжатие bitlen_ldd по длине серии в bitlen_lld_e с использованием кодов повторения 16 (длина копирования 3-6 раз),
+        /*удлинениеbitlen_lddпо более длинным сериямbitlen_lld_eс использованием кодов повторения 16 (длина соединения 3-6 раз),
         17 (3–10 нулей), 18 (11–138 нулей)*/
         for(i = 0; i != numcodes_lld; ++i) {
             unsigned j = 0; /*количество повторений*/
@@ -2045,11 +2045,11 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
             }
         }
 
-        /*сгенерировать tree_cl , дерево хаффмантри*/
+        /*сгенерироватьtree_cl, дерево хаффмантри*/
         for(i = 0; i != numcodes_lld_e; ++i) {
             ++frequencies_cl[bitlen_lld_e[i]];
             /*после кода повторения идут биты, задающие количество повторений,
-            они не обязательно должны присутствовать в расчете frequencies_cl*/
+            они не обязательно должны учитываться в расчете frequencies_cl*/
             if(bitlen_lld_e[i] >= 16) ++i;
         }
 
@@ -2068,14 +2068,14 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
         Запишите все в вывод
 
         После BFINAL и BTYPE динамический блок состоит из следующего:
-        - 5 bits HLIT, 5 bits HDIST, 4 bits HCLEN
-        - (HCLEN+4)*3 bits code lengths of code length alphabet
-        - HLIT + 257 code lengths of lit/length alphabet (encoded using the code length
+        - 5 бит HLIT, 5 бит HDIST, 4 бита HCLEN
+        - (HCLEN+4)*3 бита длины кода алфавита длины кода
+        - HLIT + 257 длин кода буквенного/длинного алфавита (закодировано с использованием длины кода
           алфавит, + возможные коды повторения 16, 17, 18)
-        - HDIST + 1 code lengths of distance alphabet (encoded using the code length
+        - HDIST + 1 длина кода алфавита расстояний (кодируется с использованием длины кода
           алфавит, + возможные коды повторения 16, 17, 18)
-        - compressed data
-        - 256 (end code)
+        - сжатые данные
+        - 256 (конечный код)
         */
 
         /*Тип блока записи*/
@@ -2084,8 +2084,8 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
         writeBits(writer, 1, 1); /*второй бит BTYPE "динамический"*/
 
         /*напишите значения HLIT , HDIST и HCLEN*/
-        /*все три размера учитывают обрезанные конечные нули, выполняемые HuffmanTree_makeFromFrequencies
-        или в цикле для numcodes_cl выше, что экономит место. */
+        /*все три размера наблюдают обрезанные конические нули, выполняют HuffmanTree_makeFromFrequencies
+        или в цикле дляnumcodes_clвыше, что экономит место. */
         HLIT = (unsigned)(numcodes_ll - 257);
         HDIST = (unsigned)(numcodes_d - 1);
         HCLEN = (unsigned)(numcodes_cl - 4);
@@ -2093,10 +2093,10 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
         writeBits(writer, HDIST, 5);
         writeBits(writer, HCLEN, 4);
 
-        /*напишите длины кода алфавита длины кода ("bitlen_cl")*/
+        /*напишите длину кода алфавита длины кода ("bitlen_cl")*/
         for(i = 0; i != numcodes_cl; ++i) writeBits(writer, tree_cl.lengths[CLCL_ORDER[i]], 3);
 
-        /*напишите длины лит/лен AND алфавита dist*/
+        /*напишите длину лит/ленANDалфавита dist*/
         for(i = 0; i != numcodes_lld_e; ++i) {
             writeBitsReversed(writer, tree_cl.codes[bitlen_lld_e[i]], tree_cl.lengths[bitlen_lld_e[i]]);
             /*дополнительные биты повторяющихся кодов*/
@@ -2107,7 +2107,7 @@ static unsigned deflateDynamic(LodePNGBitWriter * writer, Hash * hash,
 
         /*записать символы сжатых данных*/
         writeLZ77data(writer, &lz77_encoded, &tree_ll, &tree_d);
-        /*error: длина конечного кода 256 должна быть больше 0*/
+        /*ошибка: длина конечного кода 256 должна быть больше 0*/
         if(tree_ll.lengths[256] == 0) ERROR_BREAK(64);
 
         /*напиши конечный код*/
@@ -2291,9 +2291,9 @@ static unsigned lodepng_zlib_decompressv(ucvector * out,
     unsigned CM, CINFO, FDICT;
 
     if(insize < 2) return 53; /*ошибка, размер данных zlib слишком мал*/
-    /*прочитать информацию из заголовка zlib*/
+    /*прочитал информацию из заголовка zlib*/
     if((in[0] * 256 + in[1]) % 31 != 0) {
-        /*error: 256 * in[0] + in[1] must be a multiple of 31, the FCHECK value is supposed to be made that way*/
+        /*error: 256 * in[0] + in[1] должно быть кратно 31, значениеFCHECKпредполагается сделать таким*/
         return 24;
     }
 
@@ -2304,11 +2304,11 @@ static unsigned lodepng_zlib_decompressv(ucvector * out,
     /*FLEVEL = (in[1] >> 6) & 3;*/ /*FLEVEL здесь не используется.*/
 
     if(CM != 8 || CINFO > 7) {
-        /*error: only compression method 8: inflate with sliding window of 32k is supported by the PNG spec*/
+        /*error: только метод сжатия 8: наполнение со скользящим окном 32 КБ поддерживается спецификацией PNG*/
         return 25;
     }
     if(FDICT != 0) {
-        /*error: the specification of PNG says about the zlib stream:
+        /*error: спецификацияPNGговорит о потоке zlib:
           «Дополнительные флаги не должны указывать предустановленный словарь».*/
         return 26;
     }
@@ -2319,7 +2319,7 @@ static unsigned lodepng_zlib_decompressv(ucvector * out,
     if(!settings->ignore_adler32) {
         unsigned ADLER32 = lodepng_read32bitInt(&in[insize - 4]);
         unsigned checksum = adler32(out->data, (unsigned)(out->size));
-        if(checksum != ADLER32) return 58; /*ошибка, контрольная сумма Adler неверна, данные должны быть повреждены*/
+        if(checksum != ADLER32) return 58; /*ошибка, контрольная информация Адлер неверна, данные должны быть повреждены*/
     }
 
     return 0; /*нет ошибки*/
@@ -2336,7 +2336,7 @@ unsigned lodepng_zlib_decompress(unsigned char ** out, size_t * outsize, const u
     return error;
 }
 
-/*expected_size — ожидаемый размер вывода, чтобы избежать промежуточных выделений. Установите 0, если неизвестно. */
+/*expected_size — ожидаемый размер результата, чтобы избежать промежуточных выделений. Установите 0, если неизвестно. */
 static unsigned zlib_decompress(unsigned char ** out, size_t * outsize, size_t expected_size,
                                 const unsigned char * in, size_t insize, const LodePNGDecompressSettings * settings)
 {
@@ -2344,9 +2344,9 @@ static unsigned zlib_decompress(unsigned char ** out, size_t * outsize, size_t e
     if(settings->custom_zlib) {
         error = settings->custom_zlib(out, outsize, in, insize, settings);
         if(error) {
-            /*пользовательская zlib может иметь свои собственные коды ошибок, однако мы переводим ее в код 110*/
+            /*Пользовательская zlib может иметь свои коды ошибок, однако мы переводим ее в код 110.*/
             error = 110;
-            /*если указан максимальный размер вывода и пользовательский zlib вернул ошибку, вместо этого укажите эту ошибку*/
+            /*если максимальный указан размер вывода и пользователь zlib вернул ошибку, вместо этого укажите эту ошибку*/
             if(settings->max_output_size && *outsize > settings->max_output_size) error = 109;
         }
     }
@@ -2388,8 +2388,8 @@ unsigned lodepng_zlib_compress(unsigned char ** out, size_t * outsize, const uns
 
     if(!error) {
         unsigned ADLER32 = adler32(in, (unsigned)insize);
-        /*Данные zlib: 1 байт CMF ( CM + CINFO ), 1 байт FLG , выкачивание данных, 4 байта ADLER32 контрольная сумма распакованных данных.*/
-        unsigned CMF = 120; /*0b01111000: CM 8, CINFO 7. With CINFO 7, any window size up to 32768 can be used.*/
+        /*Данные zlib: 1 байтCMF(CM+CINFO), 1 байтFLG, выкачивание данных, 4 байтаADLER32контрольная длина распакованных данных.*/
+        unsigned CMF = 120; /*0b01111000: CM 8,CINFO7. СCINFO7 можно использовать любой размер окна до 32768.*/
         unsigned FLEVEL = 0;
         unsigned FDICT = 0;
         unsigned CMFFLG = 256 * CMF + FDICT * 32 + FLEVEL * 64;
@@ -2406,13 +2406,13 @@ unsigned lodepng_zlib_compress(unsigned char ** out, size_t * outsize, const uns
     return error;
 }
 
-/* сжать, используя функцию zlib по умолчанию или пользовательскую функцию zlib */
+/* сжать,используя функцию zlib по умолчанию или пользовательскую функцию zlib */
 static unsigned zlib_compress(unsigned char ** out, size_t * outsize, const unsigned char * in,
                               size_t insize, const LodePNGCompressSettings * settings)
 {
     if(settings->custom_zlib) {
         unsigned error = settings->custom_zlib(out, outsize, in, insize, settings);
-        /*пользовательская zlib может иметь свои собственные коды ошибок, однако мы переводим ее в код 111*/
+        /*Пользовательская zlib может иметь свои собственные коды ошибок, однако мы переводим ее в код 111.*/
         return error ? 111 : 0;
     }
     else {
@@ -2811,15 +2811,15 @@ unsigned lodepng_crc32(const unsigned char * data, size_t length)
 
 Пример реализации, которая использует гораздо меньшую таблицу поиска для случаев с ограниченной памятью:
 
-unsigned lodepng_crc32 (const unsigned char* данные, длина size_t) {
+unsignedlodepng_crc32(const unsigned char* данные, длинаsize_t) {
   беззнаковый г = 0xffffffffu;
   статическая константная беззнаковая таблица[16] = {
     0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac, 0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
-    0xedb88320 , 0xf00f9344 , 0xd6d6a3e8 , 0xcb61b38c , 0x9b64c2b0 , 0x86d3d2d4 , 0xa00ae278 , 0xbdbdf21c
+    0xedb88320 ,0xf00f9344,0xd6d6a3e8,0xcb61b38c,0x9b64c2b0,0x86d3d2d4,0xa00ae278, 0xbdbdf21c
   };
   в то время как (длина--) {
-    r = table[(r ^ *data) & 0xf] ^ (r >> 4);
-    r = table[(r ^ (*data >> 4)) & 0xf] ^ (r >> 4);
+    r = таблица[(r ^ *данные) &0xf] ^ (r >> 4);
+    r = таблица[(r ^ (*данные >> 4)) &0xf] ^ (r >> 4);
     данные++;
   }
   вернуть р ^ 0xffffffffu;
@@ -2842,7 +2842,7 @@ static unsigned char readBitFromReversedStream(size_t * bitpointer, const unsign
     return result;
 }
 
-/* TODO: make this faster */
+/* TODO: сделай это быстрее */
 static unsigned readBitsFromReversedStream(size_t * bitpointer, const unsigned char * bitstream, size_t nbits)
 {
     unsigned result = 0;
@@ -2999,7 +2999,7 @@ unsigned lodepng_chunk_append(unsigned char ** out, size_t * outsize, const unsi
     return 0;
 }
 
-/*Устанавливает длину и имя и выделяет место для данных и crc, но не
+/*Устанавливает размер и имя и популярное место для данных и crc, но не
 установите данные или crc. Возвращает начало фрагмента в чанке. Начало
 данные находятся в блоке + 8. Чтобы завершить блок, добавьте данные, затем используйте
 lodepng_chunk_generate_crc */
@@ -3013,31 +3013,31 @@ static unsigned lodepng_chunk_init(unsigned char ** chunk,
     if(!ucvector_resize(out, new_length)) return 83; /*выделить неудачно*/
     *chunk = out->data + new_length - length - 12u;
 
-    /*1: length*/
+    /*1: длина*/
     lodepng_set32bitInt(*chunk, (unsigned)length);
 
-    /*2: chunk name (4 letters)*/
+    /*2: имя чанка (4 буквы)*/
     lodepng_memcpy(*chunk + 4, type, 4);
 
     return 0;
 }
 
-/* как lodepng_chunk_create, но с пользовательским размером выделения */
+/* какlodepng_chunk_create, но с пользовательским размером выделения */
 static unsigned lodepng_chunk_createv(ucvector * out,
                                       size_t length, const char * type, const unsigned char * data)
 {
     unsigned char * chunk;
     CERROR_TRY_RETURN(lodepng_chunk_init(&chunk, out, length, type));
 
-    /* 3: the data
-     * LVGL: In the upstream lodepng code, lodepng_memcpy doesn't use memcpy and instead uses a simple `for` loop to copy the data into its destination
-     * `lv_memcpy` , с другой стороны, может скрыто вызывать `memcpy`, а `src` не может быть NULL.
-     * Функция `addChunk_IEND` является примером функции, которая вызывает эту функцию с данными == NULL.*/
+    /* 3: данные
+     * LVGL: В исходном коде lodepnglodepng_memcpyне использует memcpy, а вместо этого использует простой цикл`for`для копирования данных в пункт назначения.
+     * `lv_memcpy` , с другой стороны, можно закрыть дверь`memcpy`, а`src`не может бытьNULL.
+     * Функция`addChunk_IEND`является встроенной функцией, которая обеспечивает эту функцию с данными ==NULL.*/
     if(data) {
     	lodepng_memcpy(chunk + 8, data, length);
     }
 
-    /*4: CRC (of the chunkname characters and the data)*/
+    /*4: CRC (символов имени фрагмента и данных)*/
     lodepng_chunk_generate_crc(chunk);
 
     return 0;
@@ -3268,23 +3268,23 @@ size_t lodepng_get_raw_size(unsigned w, unsigned h, const LodePNGColorMode * col
 
 #ifdef LODEPNG_COMPILE_PNG
 
-/*в фрагменте idat каждая строка сканирования кратна 8 битам, в отличие от выходного буфера lodepng,
+/*во фрагменте idat используется кратная строка на 8 бит, в отличие от выходного буфера lodepng,
 и, кроме того, имеет один дополнительный байт на строку: байт фильтра. Таким образом, это дает больший
-результат, чем lodepng_get_raw_size. Установите h равным 1, чтобы получить размер 1 строки, включая байт фильтра. */
+результат, чемlodepng_get_raw_size. Установите h условием 1, чтобы получить размер 1 строки, включая байтовый фильтр. */
 static size_t lodepng_get_raw_size_idat(unsigned w, unsigned h, unsigned bpp)
 {
     /* + 1 для байта фильтра и, возможно, плюс биты заполнения в строке. */
-    /* Игнорируя приведения, выражение равно (w*bpp+7)/8+1, но позволяет избежать переполнения w*bpp */
+    /* Игнорируя приведение, выражение равно (w*bpp+7)/8+1, но позволяет избежать затруднения w*bpp */
     size_t line = ((size_t)(w / 8u) * bpp) + 1u + ((w & 7u) * bpp + 7u) / 8u;
     return (size_t)h * line;
 }
 
 #ifdef LODEPNG_COMPILE_DECODER
-/*Безопасно проверяет, может ли переполнение size_t быть вызвано количеством пикселей.
+/*Безопасно впоследствии переполнениеsize_tможет быть вызвано количеством требований.
 Эта проверка является скорее излишне осторожной, чем точной. Если эта проверка указывает на отсутствие переполнения,
-вы можете безопасно вычислять size_t (но не беззнаковый):
--( size_t )w * ( size_t )h * 8
--количество байтов в IDAT (включая фильтр, заполнение и байты Adam7)
+Вы можете безопасно хранитьsize_t(но не беззнаковый):
+-(size_t)w * (size_t)h * 8
+-количество байтов вIDAT(включая фильтр, заполнение и байты Adam7)
 -количество байтов в необработанной цветовой модели
 Возвращает 1, если переполнение возможно, и 0, если нет.
 */
@@ -3298,11 +3298,11 @@ static int lodepng_pixel_overflow(unsigned w, unsigned h,
     if(lodepng_mulofl((size_t)w, (size_t)h, &numpixels)) return 1;
     if(lodepng_mulofl(numpixels, 8, &total)) return 1; /* битовый указатель с 8-битным цветом или 8 байтов на цвет канала */
 
-    /* Байтов на строку сканирования с выражением «(w/8u)*bpp) + ((w & 7u)*bpp + 7u)/8u» */
+    /* Байтов на обращение с выражением «(w/8u)*bpp) + ((w & 7u)*bpp + 7u)/8u» */
     if(lodepng_mulofl((size_t)(w / 8u), bpp, &line)) return 1;
     if(lodepng_addofl(line, ((w & 7u) * bpp + 7u) / 8u, &line)) return 1;
 
-    if(lodepng_addofl(line, 5, &line)) return 1; /* 5 байтов накладных расходов на строку: 1 байт фильтра, 4 для худшего случая Adam7. */
+    if(lodepng_addofl(line, 5, &line)) return 1; /* 5 байт кладовых расходов на символы: 1 байт для фильтра, 4 для более простого случая Adam7. */
     if(lodepng_mulofl(line, h, &total)) return 1; /* Всего байт в худшем случае */
 
     return 0; /* нет переполнения */
@@ -3581,11 +3581,11 @@ unsigned lodepng_info_copy(LodePNGInfo * dest, const LodePNGInfo * source)
 
 /* ////////////////////////////////////////////////////////////////////////// */
 
-/*index: bitgroup index, bits: bitgroup size(1, 2 or 4), in: bitgroup value, out: octet array to add bits to*/
+/*index: индекс битовой группы, биты: размер битовой группы (1, 2 или 4), вход: значение битовой группы, выход: массив октетов, к которому добавляются биты.*/
 static void addColorBits(unsigned char * out, size_t index, unsigned bits, unsigned in)
 {
     unsigned m = bits == 1 ? 7 : bits == 2 ? 3 : 1; /*8 / бит - 1*/
-    /*p = the partial index in the byte, e.g. with 4 palettebits it is 0 for first half or 1 for second half*/
+    /*p = частичный индекс в байте, например. с 4 битами палитры это 0 для первой половины или 1 для второй половины*/
     unsigned p = index & m;
     in &= (1u << bits) - 1u; /*отфильтровать любые другие биты входного значения*/
     in = in << (bits * (m - p));
@@ -3812,7 +3812,7 @@ static void getPixelColorRGBA8(unsigned char * r, unsigned char * g,
             size_t j = i * mode->bitdepth;
             index = readBitsFromReversedStream(&j, in, mode->bitdepth);
         }
-        /*за пределами палитры не отмечено: см. lodepng_color_mode_alloc_palette .*/
+        /*за особенность палитры не отмечено: см. lodepng_color_mode_alloc_palette.*/
         *r = mode->palette[index * 4 + 0];
         *g = mode->palette[index * 4 + 1];
         *b = mode->palette[index * 4 + 2];
@@ -3844,7 +3844,7 @@ static void getPixelColorRGBA8(unsigned char * r, unsigned char * g,
     }
 }
 
-/*Похож на getPixelColorRGBA8, но со всеми циклами for внутри цвета.
+/*Похож на getPixelColorRGBA8, но со всеми циклами для внутрицвета.
 тестовые примеры режима, оптимизированные для гораздо более быстрого преобразования цветов при преобразовании
 к обычному случаю RGBA с 8 битами на канал. буфер должен быть RGBA с
 достаточно памяти.*/
@@ -3912,7 +3912,7 @@ static void getPixelColorsRGBA8(unsigned char * LODEPNG_RESTRICT buffer, size_t 
         if(mode->bitdepth == 8) {
             for(i = 0; i != numpixels; ++i, buffer += num_channels) {
                 unsigned index = in[i];
-                /*за пределами палитры не отмечено: см. lodepng_color_mode_alloc_palette .*/
+                /*за особенность палитры не отмечено: см. lodepng_color_mode_alloc_palette.*/
                 lodepng_memcpy(buffer, &mode->palette[index * 4], 4);
             }
         }
@@ -3920,7 +3920,7 @@ static void getPixelColorsRGBA8(unsigned char * LODEPNG_RESTRICT buffer, size_t 
             size_t j = 0;
             for(i = 0; i != numpixels; ++i, buffer += num_channels) {
                 unsigned index = readBitsFromReversedStream(&j, in, mode->bitdepth);
-                /*за пределами палитры не отмечено: см. lodepng_color_mode_alloc_palette .*/
+                /*за особенность палитры не отмечено: см. lodepng_color_mode_alloc_palette.*/
                 lodepng_memcpy(buffer, &mode->palette[index * 4], 4);
             }
         }
@@ -3954,7 +3954,7 @@ static void getPixelColorsRGBA8(unsigned char * LODEPNG_RESTRICT buffer, size_t 
     }
 }
 
-/*Аналогичен getPixelColorsRGBA8, но с 3-канальным выходом RGB.*/
+/*Аналогичен getPixelColorsRGBA8, но с 3-канальным выходомRGB.*/
 static void getPixelColorsRGB8(unsigned char * LODEPNG_RESTRICT buffer, size_t numpixels,
                                const unsigned char * LODEPNG_RESTRICT in,
                                const LodePNGColorMode * mode)
@@ -3997,7 +3997,7 @@ static void getPixelColorsRGB8(unsigned char * LODEPNG_RESTRICT buffer, size_t n
         if(mode->bitdepth == 8) {
             for(i = 0; i != numpixels; ++i, buffer += num_channels) {
                 unsigned index = in[i];
-                /*за пределами палитры не отмечено: см. lodepng_color_mode_alloc_palette .*/
+                /*за особенность палитры не отмечено: см. lodepng_color_mode_alloc_palette.*/
                 lodepng_memcpy(buffer, &mode->palette[index * 4], 3);
             }
         }
@@ -4005,7 +4005,7 @@ static void getPixelColorsRGB8(unsigned char * LODEPNG_RESTRICT buffer, size_t n
             size_t j = 0;
             for(i = 0; i != numpixels; ++i, buffer += num_channels) {
                 unsigned index = readBitsFromReversedStream(&j, in, mode->bitdepth);
-                /*за пределами палитры не отмечено: см. lodepng_color_mode_alloc_palette .*/
+                /*за особенность палитры не отмечено: см. lodepng_color_mode_alloc_palette.*/
                 lodepng_memcpy(buffer, &mode->palette[index * 4], 3);
             }
         }
@@ -4080,7 +4080,7 @@ unsigned lodepng_convert(unsigned char * out, const unsigned char * in,
     unsigned error = 0;
 
     if(mode_in->colortype == LCT_PALETTE && !mode_in->palette) {
-        return 107; /* error: must provide palette if input mode is palette */
+        return 107; /* error: необходимо предоставить палитру, если режим ввода — палитра */
     }
 
     if(lodepng_color_mode_equal(mode_out, mode_in)) {
@@ -4152,8 +4152,8 @@ unsigned lodepng_convert(unsigned char * out, const unsigned char * in,
 /* Преобразует один цвет RGB без альфы из одного типа в другой, биты цвета усекаются до
 их битовая глубина. В случае одного канала (серого или палитры) используется только канал r. Медленно
 не используйте для обработки всех пикселей изображения. Альфа-канал не поддерживается намеренно:
-это для bKGD, поддержка альфа может помешать ему найти цвет в палитре, из
-спецификации похоже, что bKGD должен игнорировать альфа-значения палитры, поскольку он может использовать
+это для bKGD, поддержка альфа может побудить его найти цвет в палитре, из
+признаки кажутся, что bKGD должен менять альфа-значения палитры, поскольку он может использовать
 любой индекс палитры, но не имеет альфа-канала. То же самое с игнорированием цветового ключа. */
 static unsigned lodepng_convert_rgb(
     unsigned * r_out, unsigned * g_out, unsigned * b_out,
@@ -4233,9 +4233,9 @@ void lodepng_color_stats_init(LodePNGColorStats * stats)
 /*void printColorStats(LodePNGColorStats* p) {
   std::cout << "colored: " << (int)p->colored << ", ";
   std::cout << "key: " << (int)p->key << ", ";
-  std::cout << " key_r : " << (int)p-> key_r << ", ";
-  std::cout << " key_g : " << (int)p-> key_g << ", ";
-  std::cout << " key_b : " << (int)p-> key_b << ", ";
+  std::cout << "key_r: " << (int)p->key_r<< ", ";
+  std::cout << "key_g: " << (int)p->key_g<< ", ";
+  std::cout << "key_b: " << (int)p->key_b<< ", ";
   std::cout << "alpha: " << (int)p->alpha << ", ";
   std::cout << "numcolors: " << (int)p->numcolors << ", ";
   std::cout << "bits: " << (int)p->bits << std::endl;
@@ -4468,11 +4468,11 @@ static unsigned lodepng_color_stats_add(LodePNGColorStats * stats,
 #endif /*LODEPNG_COMPILE_ANCILLARY_CHUNKS*/
 
 /*Вычисляет минимальную цветовую модель PNG, которая может содержать все цвета, указанные в статистике.
-Статистику следует рассчитывать с помощью lodepng_compute_color_stats .
-mode_in — это необработанный цветовой профиль изображения, на котором рассчитывалась статистика, для копирования порядка палитры, когда это необходимо.
+Статистику следует сохранять с помощьюlodepng_compute_color_stats.
+mode_in — это необработанный цветной профиль изображения, на котором рассчитывалась статистика, для редактирования порядка палитры, когда это необходимо.
 Минимальная цветовая модель PNG означает тип цвета и разрядность, которые дают наименьшее количество битов в выходном изображении.
 например серый, если только пиксели в оттенках серого, палитра, если менее 256 цветов, цветовой ключ, если только один прозрачный цвет, ...
-Используется, если auto_convert включен (по умолчанию).
+Используется, еслиauto_convertвключен (по умолчанию).
 */
 static unsigned auto_choose_color(LodePNGColorMode * mode_out,
                                   const LodePNGColorMode * mode_in,
@@ -4491,7 +4491,7 @@ static unsigned auto_choose_color(LodePNGColorMode * mode_out,
     mode_out->key_defined = 0;
 
     if(key && numpixels <= 16) {
-        alpha = 1; /*слишком мало пикселей, чтобы оправдать накладные расходы на фрагмент tRNS*/
+        alpha = 1; /*слишком мало внимания, чтобы оправдать накладные расходы на фрагмент tRNS*/
         key = 0;
         if(bits < 8) bits = 8; /*PNG не имеет режимов альфа-канала с глубиной менее 8 бит на канал.*/
     }
@@ -4543,7 +4543,7 @@ static unsigned auto_choose_color(LodePNGColorMode * mode_out,
 
 #endif /* #ifdef LODEPNG_COMPILE_ENCODER */
 
-/*Предиктор Paeth, используемый фильтром PNG типа 4*/
+/*Предиктор Paeth, ожидаемый фильтромPNGтипа 4*/
 static unsigned char paethPredictor(unsigned char a, unsigned char b, unsigned char c)
 {
     /* вычитание беззнакового символа приводит его к знаковому типу.
@@ -4560,7 +4560,7 @@ static unsigned char paethPredictor(unsigned char a, unsigned char b, unsigned c
     return (pc < pa) ? c : a;
 }
 
-/*общие значения, используемые несколькими функциями, связанными с Adam7*/
+/*общие значения, использование некоторых сторон, связи с Адамом7*/
 
 static const unsigned ADAM7_IX[7] = { 0, 4, 0, 2, 0, 1, 0 }; /*начальные значения x*/
 static const unsigned ADAM7_IY[7] = { 0, 0, 4, 0, 2, 0, 1 }; /*начальные значения*/
@@ -4569,23 +4569,23 @@ static const unsigned ADAM7_DY[7] = { 8, 8, 8, 4, 4, 2, 2 }; /*y-значени�
 
 /*
 Выводит различные размеры и положения изображения, связанного с уменьшенными изображениями Adam7.
-passw: output containing the width of the 7 passes
-passh: output containing the height of the 7 passes
-filter_passstart: output containing the index of the start and end of each
+passw: вывод, содержащий ширину 7 проходов
+passh: выходные данные, содержащие высоту 7 проходов
+filter_passstart: вывод, содержащий индекс начала и конца каждого
  уменьшенное изображение с байтами фильтра
-Вывод padded_passstart, содержащий индекс начала и конца каждого
+Выводpadded_passstart, независимо индекс начала и конца каждого
  уменьшенное изображение без байтов фильтра, но с дополненными строками развертки
-passstart: output containing the index of the start and end of each reduced
+passstart: вывод, содержащий индекс начала и конца каждого сокращенного
  изображение без заполнения между строками развертки, но с заполнением между изображениями
 w, h: ширина и высота нечересстрочного изображения.
-bpp: bits per pixel
+bpp: бит на пиксель
 «Дополненный» актуален только в том случае, если бит/пиксель меньше 8, а строка сканирования или изображение не
  заканчиваться полным байтом
 */
 static void Adam7_getpassvalues(unsigned passw[7], unsigned passh[7], size_t filter_passstart[8],
                                 size_t padded_passstart[8], size_t passstart[8], unsigned w, unsigned h, unsigned bpp)
 {
-    /*значения passstart имеют 8 значений: 8-е указывает на байт после окончания 7-го (= последнего) прохода*/
+    /*значения passstart имеют 8 результатов: 8-е указывает на байт после окончания 7-го (= последнего) прохода*/
     unsigned i;
 
     /*рассчитать ширину и высоту в пикселях каждого прохода*/
@@ -4621,32 +4621,32 @@ unsigned lodepng_inspect(unsigned * w, unsigned * h, LodePNGState * state,
     unsigned width, height;
     LodePNGInfo * info = &state->info_png;
     if(insize == 0 || in == 0) {
-        CERROR_RETURN_ERROR(state->error, 48); /*error: the given data is empty*/
+        CERROR_RETURN_ERROR(state->error, 48); /*error: данные данные пусты*/
     }
     if(insize < 33) {
-        CERROR_RETURN_ERROR(state->error, 27); /*error: the data length is smaller than the length of a PNG header*/
+        CERROR_RETURN_ERROR(state->error, 27); /*error: длина данных меньше длины заголовка PNG*/
     }
 
     /*при декодировании нового изображения PNG убедитесь, что все параметры, созданные после предыдущего декодирования, сброшены*/
-    /* TODO: remove this. One should use a new LodePNGState for new sessions */
+    /* TODO: удалите это. Для новых сеансов следует использовать новый LodePNGState. */
     lodepng_info_cleanup(info);
     lodepng_info_init(info);
 
     if(in[0] != 137 || in[1] != 80 || in[2] != 78 || in[3] != 71
        || in[4] != 13 || in[5] != 10 || in[6] != 26 || in[7] != 10) {
-        CERROR_RETURN_ERROR(state->error, 28); /*error: the first 8 bytes are not the correct PNG signature*/
+        CERROR_RETURN_ERROR(state->error, 28); /*error: первые 8 байт не являются правильной подписью PNG*/
     }
     if(lodepng_chunk_length(in + 8) != 13) {
-        CERROR_RETURN_ERROR(state->error, 94); /*error: header size must be 13 bytes*/
+        CERROR_RETURN_ERROR(state->error, 94); /*error: размер заголовка должен быть 13 байт*/
     }
     if(!lodepng_chunk_type_equals(in + 8, "IHDR")) {
-        CERROR_RETURN_ERROR(state->error, 29); /*error: it doesn't start with a IHDR chunk!*/
+        CERROR_RETURN_ERROR(state->error, 29); /*error: он не начинается с чанка IHDR!*/
     }
 
     /*прочитайте значения, указанные в шапке*/
     width = lodepng_read32bitInt(&in[16]);
     height = lodepng_read32bitInt(&in[20]);
-    /*TODO: remove the undocumented feature that allows to give null pointers to width or height*/
+    /*TODO: удалите недокументированную функцию, которая позволяет давать нулевые указатели на ширину или высоту*/
     if(w) *w = width;
     if(h) *h = height;
     info->color.bitdepth = in[24];
@@ -4657,16 +4657,16 @@ unsigned lodepng_inspect(unsigned * w, unsigned * h, LodePNGState * state,
 
     /*ошибки возвращаются только после синтаксического анализа, поэтому другие значения все равно выводятся*/
 
-    /*error: invalid image size*/
+    /*error: неверный размер изображения*/
     if(width == 0 || height == 0) CERROR_RETURN_ERROR(state->error, 93);
-    /*error: invalid colortype or bitdepth combination*/
+    /*error: неверный тип цвета или комбинация битовой глубины*/
     state->error = checkColorValidity(info->color.colortype, info->color.bitdepth);
     if(state->error) return state->error;
-    /*error: only compression method 0 is allowed in the specification*/
+    /*error: в спецификации разрешен только метод сжатия 0*/
     if(info->compression_method != 0) CERROR_RETURN_ERROR(state->error, 32);
-    /*error: only filter method 0 is allowed in the specification*/
+    /*error: в спецификации разрешен только метод фильтра 0*/
     if(info->filter_method != 0) CERROR_RETURN_ERROR(state->error, 33);
-    /*error: only interlace methods 0 and 1 exist in the specification*/
+    /*error: в спецификации существуют только методы чересстрочной развертки 0 и 1*/
     if(info->interlace_method > 1) CERROR_RETURN_ERROR(state->error, 34);
 
     if(!state->decoder.ignore_crc) {
@@ -4687,9 +4687,9 @@ static unsigned unfilterScanline(unsigned char * recon, const unsigned char * sc
     Для метода фильтра PNG 0
     отменить фильтрацию строки сканирования изображения PNG за строкой сканирования. когда пиксели меньше 1 байта,
     фильтр работает побайтно (bytewidth = 1)
-    precon — предыдущая нефильтрованная строка сканирования, повторный результат, строка сканирования текущей
-    входящие строки сканирования NOT включают байт типа фильтра, который вместо этого задается в параметре filterType
-    recon и строка сканирования MAY должны быть одним и тем же адресом памяти! precon должен быть непересекающимся.
+    precon — предыдущая нефильтрованная строка последовательно, повторный результат, строка плавно текущей
+    входящие строки сигналовNOTвключают байт типа фильтра, который вместо этого задается в параметре filterType
+    recon и строка программного обеспеченияMAYдолжны быть одним и тем же адресом памяти! прекон должен быть непересекающимся.
     */
 
     size_t i;
@@ -4941,7 +4941,7 @@ static unsigned unfilterScanline(unsigned char * recon, const unsigned char * sc
             }
             break;
         default:
-            return 36; /*error: указан неверный тип фильтра*/
+            return 36; /*ошибка: указан неверный тип фильтра*/
     }
     return 0;
 }
@@ -4950,7 +4950,7 @@ static unsigned unfilter(unsigned char * out, const unsigned char * in, unsigned
 {
     /*
     Для метода фильтра PNG 0
-    эта функция снимает фильтрацию одного изображения (например, без чересстрочной развертки она вызывается один раз, а Adam7 — семь раз)
+    эта функция снимает фильтрацию одного изображения (например, без чересстрочной развертки она появляется один раз, а Adam7 — семь раз)
     На выходе уже должно быть выделено достаточно байтов, на входе должны быть строки сканирования + 1 байт типа фильтра на строку сканирования.
     w и h — размеры изображения или размеры уменьшенного изображения, bpp — количество бит на пиксель.
     вход и выход могут иметь один и тот же адрес памяти (но не одинаковый размер, поскольку in имеет дополнительные байты фильтра)
@@ -4978,15 +4978,15 @@ static unsigned unfilter(unsigned char * out, const unsigned char * in, unsigned
 }
 
 /*
-in: Adam7 interlaced image, with no padding bits between scanlines, but between
+in: Чересстрочное изображение Adam7, без битов заполнения между строками развертки, но между
  уменьшенные изображения, так что каждое уменьшенное изображение начинается с байта.
-out: the same pixels, but re-ordered so that they're now a non-interlaced image with size w*h
-bpp: bits per pixel
+out: те же пиксели, но переупорядоченные так, что теперь они представляют собой нечересстрочное изображение размера w*h
+bpp: бит на пиксель
 out имеет следующий размер в битах: w * h * bpp.
 in возможно больше из-за заполнения битов между уменьшенными изображениями.
-out должен быть достаточно большим. AND должен быть равен 0 везде, если bpp < 8 в текущей реализации.
+выход должен быть достаточно большим. ANDдолжен быть равен 0 везде, если bpp < 8 в текущей реализации.
 (потому что это, вероятно, немного быстрее)
-NOTE: comments about padding bits are only relevant if bpp < 8
+NOTE: комментарии о битах заполнения актуальны только в том случае, если bpp < 8
 */
 static void Adam7_deinterlace(unsigned char * out, const unsigned char * in, unsigned w, unsigned h, unsigned bpp)
 {
@@ -5035,12 +5035,12 @@ static void removePaddingBits(unsigned char * out, const unsigned char * in,
 {
     /*
     После фильтрации все еще остаются биты заполнения, если количество строк развертки не кратно 8 битам. Им нужно
-    быть удалено (за исключением последней строки сканирования (уменьшенного Adam7) изображения) перед работой с чистыми буферами изображений
+    быть удалено (за исключением последней строки (уменьшенного Adam7)) изображения) перед работой с чистыми буферами изображений
     для кода Adam7 — код преобразования цвета и вывод для пользователя.
-    in и out могут быть одним и тем же буфером, in также может быть выше, но все равно перекрываться; в обязательном порядке
-    иметь >= битов ilinebits*h, out должен иметь бит >= olinebits*h, olinebits должен быть <= ilinebits
-    также используется для перемещения битов после того, как ранее произошли такие операции, например. в последовательности уменьшенных изображений от Adam7
-    полезно только в том случае, если (ilinebits - olinebits) представляет собой значение в диапазоне 1..7.
+    вход и выход могут быть одним и тем же буфером, вход также может быть выше, но все равно перекрывается; в обязательном порядке
+    иметь >= битов ilinebits*h, out должен иметь бит >= olinebits*h, olinebits должно быть <= ilinebits
+    Также используется для перемещения битов после того, как ранее происходили такие операции, например. в последовательности уменьшенных изображений от Adam7
+    полезно только в том случае, если (ilinebits - olinebits) имеет значение в контексте 1..7.
     */
     unsigned y;
     size_t diff = ilinebits - olinebits;
@@ -5064,12 +5064,12 @@ static unsigned postProcessScanlines(unsigned char * out, unsigned char * in,
     /*
     Эта функция преобразует отфильтрованные, дополненные и чересстрочные данные в чистый буфер 2D-изображения с цветовым типом PNG.
     Шаги:
-    *) если нет Adam7: 1) отменить фильтрацию 2) удалить биты заполнения (= возможные дополнительные биты на строку развертки, если bpp < 8)
-    *) если adam7: 1) 7x снять фильтр 2) 7x удалить биты заполнения 3) Adam7_deinterlace
-    NOTE: the in buffer will be overwritten with intermediate data!
+    *) если нет Adam7: 1) отменить фильтрацию 2) удалить биты заполнения (= можно добавить дополнительные биты в текст развертки, если bpp < 8)
+    *) если adam7: 1) 7x снять фильтр 2) 7x удалить биты бутылки 3) Adam7_deinterlace
+    NOTE: входной буфер будет перезаписан промежуточными данными!
     */
     unsigned bpp = lodepng_get_bpp(&info_png->color);
-    if(bpp == 0) return 31; /*error: invalid colortype*/
+    if(bpp == 0) return 31; /*error: неверный цветотип*/
 
     if(info_png->interlace_method == 0) {
         if(bpp < 8 && w * bpp != ((w * bpp + 7u) / 8u) * 8u) {
@@ -5088,7 +5088,7 @@ static unsigned postProcessScanlines(unsigned char * out, unsigned char * in,
 
         for(i = 0; i != 7; ++i) {
             CERROR_TRY_RETURN(unfilter(&in[padded_passstart[i]], &in[filter_passstart[i]], passw[i], passh[i], bpp));
-            /*TODO: possible efficiency improvement: if in this reduced image the bits fit nicely in 1 scanline,
+            /*TODO: возможное повышение эффективности: если в этом уменьшенном изображении биты хорошо умещаются в 1 строку развертки,
             перемещать байты вместо битов или не перемещать вообще*/
             if(bpp < 8) {
                 /*удалить биты заполнения в строках сканирования; после этого все еще может быть заполнение
@@ -5108,7 +5108,7 @@ static unsigned readChunk_PLTE(LodePNGColorMode * color, const unsigned char * d
 {
     unsigned pos = 0, i;
     color->palettesize = chunkLength / 3u;
-    if(color->palettesize == 0 || color->palettesize > 256) return 38; /*error: palette too small or big*/
+    if(color->palettesize == 0 || color->palettesize > 256) return 38; /*error: палитра слишком маленькая или большая*/
     lodepng_color_mode_alloc_palette(color);
     if(!color->palette && color->palettesize) {
         color->palettesize = 0;
@@ -5129,20 +5129,20 @@ static unsigned readChunk_tRNS(LodePNGColorMode * color, const unsigned char * d
 {
     unsigned i;
     if(color->colortype == LCT_PALETTE) {
-        /*error: more alpha values given than there are palette entries*/
+        /*error: задано больше альфа-значений, чем записей палитры*/
         if(chunkLength > color->palettesize) return 39;
 
         for(i = 0; i != chunkLength; ++i) color->palette[4 * i + 3] = data[i];
     }
     else if(color->colortype == LCT_GREY) {
-        /*error: this chunk must be 2 bytes for grayscale image*/
+        /*error: этот фрагмент должен иметь размер 2 байта для изображения в оттенках серого*/
         if(chunkLength != 2) return 30;
 
         color->key_defined = 1;
         color->key_r = color->key_g = color->key_b = 256u * data[0] + data[1];
     }
     else if(color->colortype == LCT_RGB) {
-        /*error: this chunk must be 6 bytes for RGB image*/
+        /*error: этот фрагмент должен иметь размер 6 байт для образа RGB*/
         if(chunkLength != 6) return 41;
 
         color->key_defined = 1;
@@ -5150,28 +5150,28 @@ static unsigned readChunk_tRNS(LodePNGColorMode * color, const unsigned char * d
         color->key_g = 256u * data[2] + data[3];
         color->key_b = 256u * data[4] + data[5];
     }
-    else return 42; /*error: tRNS chunk not allowed for other color models*/
+    else return 42; /*error: Чанк tRNS не разрешен для других цветовых моделей.*/
 
     return 0; /* OK */
 }
 
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-/*Блок цвета фона (bKGD)*/
+/*Блок цвета фонаря (бКГД)*/
 static unsigned readChunk_bKGD(LodePNGInfo * info, const unsigned char * data, size_t chunkLength)
 {
     if(info->color.colortype == LCT_PALETTE) {
-        /*error: this chunk must be 1 byte for indexed color image*/
+        /*error: этот фрагмент должен иметь размер 1 байт для индексированного цветного изображения*/
         if(chunkLength != 1) return 43;
 
-        /*error: invalid palette index, or maybe this chunk appeared before PLTE*/
+        /*error: неверный индекс палитры, или, возможно, этот чанк появился до PLTE*/
         if(data[0] >= info->color.palettesize) return 103;
 
         info->background_defined = 1;
         info->background_r = info->background_g = info->background_b = data[0];
     }
     else if(info->color.colortype == LCT_GREY || info->color.colortype == LCT_GREY_ALPHA) {
-        /*error: this chunk must be 2 bytes for grayscale image*/
+        /*error: этот фрагмент должен иметь размер 2 байта для изображения в оттенках серого*/
         if(chunkLength != 2) return 44;
 
         /*значения усекаются до разрядности в файле PNG*/
@@ -5179,7 +5179,7 @@ static unsigned readChunk_bKGD(LodePNGInfo * info, const unsigned char * data, s
         info->background_r = info->background_g = info->background_b = 256u * data[0] + data[1];
     }
     else if(info->color.colortype == LCT_RGB || info->color.colortype == LCT_RGBA) {
-        /*error: this chunk must be 6 bytes for grayscale image*/
+        /*error: этот фрагмент должен иметь размер 6 байт для изображения в оттенках серого*/
         if(chunkLength != 6) return 45;
 
         /*значения усекаются до разрядности в файле PNG*/
@@ -5265,10 +5265,10 @@ static unsigned readChunk_zTXt(LodePNGInfo * info, const LodePNGDecoderSettings 
 
         length = (unsigned)chunkLength - string2_begin;
         zlibsettings.max_output_size = decoder->max_text_size;
-        /*произойдет сбой, если ошибка zlib, например. если длина слишком мала*/
+        /*Произойдет сбой, если, например, ошибка zlib. если слишком мала длина*/
         error = zlib_decompress(&str, &size, 0, &data[string2_begin],
                                 length, &zlibsettings);
-        /*error: compressed text larger than  decoder->max_text_size*/
+        /*error: сжатый текст размером больше декодера-> max_text_size*/
         if(error && size > zlibsettings.max_output_size) error = 112;
         if(error) break;
         error = lodepng_add_text_sized(info, key, (char *)str, size);
@@ -5348,10 +5348,10 @@ static unsigned readChunk_iTXt(LodePNGInfo * info, const LodePNGDecoderSettings 
             unsigned char * str = 0;
             size_t size = 0;
             zlibsettings.max_output_size = decoder->max_text_size;
-            /*произойдет сбой, если ошибка zlib, например. если длина слишком мала*/
+            /*Произойдет сбой, если, например, ошибка zlib. если слишком мала длина*/
             error = zlib_decompress(&str, &size, 0, &data[begin],
                                     length, &zlibsettings);
-            /*error: compressed text larger than  decoder->max_text_size*/
+            /*error: сжатый текст размером больше декодера-> max_text_size*/
             if(error && size > zlibsettings.max_output_size) error = 112;
             if(!error) error = lodepng_add_itext_sized(info, key, langtag, transkey, (char *)str, size);
             lodepng_free(str);
@@ -5468,7 +5468,7 @@ static unsigned readChunk_iCCP(LodePNGInfo * info, const LodePNGDecoderSettings 
     error = zlib_decompress(&info->iccp_profile, &size, 0,
                             &data[string2_begin],
                             length, &zlibsettings);
-    /*error: ICC profile larger than  decoder->max_icc_size*/
+    /*error: ПрофильICCбольше, чем декодер-> max_icc_size*/
     if(error && size > zlibsettings.max_output_size) error = 113;
     info->iccp_profile_size = (unsigned)size;
     if(!error && !info->iccp_profile_size) error = 100; /*неверный размер профиля ICC*/
@@ -5480,14 +5480,14 @@ static unsigned readChunk_sBIT(LodePNGInfo * info, const unsigned char * data, s
 {
     unsigned bitdepth = (info->color.colortype == LCT_PALETTE) ? 8 : info->color.bitdepth;
     if(info->color.colortype == LCT_GREY) {
-        /*error: this chunk must be 1 bytes for grayscale image*/
+        /*error: этот фрагмент должен иметь размер 1 байт для изображения в оттенках серого*/
         if(chunkLength != 1) return 114;
         if(data[0] == 0 || data[0] > bitdepth) return 115;
         info->sbit_defined = 1;
         info->sbit_r = info->sbit_g = info->sbit_b = data[0]; /*настройка g и b не обязательна, но разумна*/
     }
     else if(info->color.colortype == LCT_RGB || info->color.colortype == LCT_PALETTE) {
-        /*error: this chunk must be 3 bytes for RGB and palette image*/
+        /*error: этот фрагмент должен иметь размер 3 байта дляRGBи изображения палитры.*/
         if(chunkLength != 3) return 114;
         if(data[0] == 0 || data[1] == 0 || data[2] == 0) return 115;
         if(data[0] > bitdepth || data[1] > bitdepth || data[2] > bitdepth) return 115;
@@ -5497,7 +5497,7 @@ static unsigned readChunk_sBIT(LodePNGInfo * info, const unsigned char * data, s
         info->sbit_b = data[2];
     }
     else if(info->color.colortype == LCT_GREY_ALPHA) {
-        /*error: this chunk must be 2 byte for grayscale with alpha image*/
+        /*error: этот фрагмент должен быть 2 байта для оттенков серого с альфа-изображением*/
         if(chunkLength != 2) return 114;
         if(data[0] == 0 || data[1] == 0) return 115;
         if(data[0] > bitdepth || data[1] > bitdepth) return 115;
@@ -5506,7 +5506,7 @@ static unsigned readChunk_sBIT(LodePNGInfo * info, const unsigned char * data, s
         info->sbit_a = data[1];
     }
     else if(info->color.colortype == LCT_RGBA) {
-        /*error: this chunk must be 4 bytes for grayscale image*/
+        /*error: этот фрагмент должен иметь размер 4 байта для изображения в оттенках серого*/
         if(chunkLength != 4) return 114;
         if(data[0] == 0 || data[1] == 0 || data[2] == 0 || data[3] == 0) return 115;
         if(data[0] > bitdepth || data[1] > bitdepth || data[2] > bitdepth || data[3] > bitdepth) return 115;
@@ -5596,7 +5596,7 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
 {
     unsigned char IEND = 0;
     const unsigned char * chunk; /*указывает на начало следующего фрагмента*/
-    unsigned char * idat; /*данные из фрагментов idat, сжатые zlib*/
+    unsigned char * idat; /*данные из фрагментов IDAT, сжатые zlib*/
     size_t idatsize = 0;
     unsigned char * scanlines = 0;
     size_t scanlines_size = 0, expected_size = 0;
@@ -5605,7 +5605,7 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
     /*для неизвестного порядка фрагментов*/
     unsigned unknown = 0;
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-    unsigned critical_pos = 1; /*1 = after IHDR, 2 = after PLTE, 3 = after IDAT*/
+    unsigned critical_pos = 1; /*1 = после IHDR, 2 = после PLTE, 3 = после IDAT*/
 #endif /*LODEPNG_COMPILE_ANCILLARY_CHUNKS*/
 
 
@@ -5620,7 +5620,7 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
         CERROR_RETURN(state->error, 92); /*возможно переполнение из-за количества пикселей*/
     }
 
-    /*входной размер файла является безопасной верхней границей суммы размеров фрагментов idat*/
+    /*входной размер файла является безопасной верхней границей размеров фрагментов idat*/
     idat = (unsigned char *)lodepng_malloc(insize);
     if(!idat) CERROR_RETURN(state->error, 83); /*выделить неудачно*/
 
@@ -5633,7 +5633,7 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
         const unsigned char * data; /*данные в куске*/
         size_t pos = (size_t)(chunk - in);
 
-        /*error: next chunk out of bounds of the in buffer*/
+        /*error: следующий фрагмент выходит за пределы входного буфера*/
         if(chunk < in || pos + 12 > insize) {
             if(state->decoder.ignore_end) break; /*хотя другие ошибки все равно могут произойти*/
             CERROR_BREAK(state->error, 30);
@@ -5641,14 +5641,14 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
 
         /*длина данных фрагмента, исключая 12 байт для длины, типа фрагмента и CRC*/
         chunkLength = lodepng_chunk_length(chunk);
-        /*error: chunk length larger than the max PNG chunk size*/
+        /*error: длина чанка больше максимального размера чанка PNG*/
         if(chunkLength > 2147483647) {
             if(state->decoder.ignore_end) break; /*хотя другие ошибки все равно могут произойти*/
             CERROR_BREAK(state->error, 63);
         }
 
         if(pos + (size_t)chunkLength + 12 > insize || pos + (size_t)chunkLength + 12 < pos) {
-            CERROR_BREAK(state->error, 64); /*error: size of the in buffer too small to contain next chunk (or int overflow)*/
+            CERROR_BREAK(state->error, 64); /*error: размер входного буфера слишком мал, чтобы содержать следующий фрагмент (или переполнение целого числа)*/
         }
 
         data = lodepng_chunk_data_const(chunk);
@@ -5679,13 +5679,13 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
 #endif /*LODEPNG_COMPILE_ANCILLARY_CHUNKS*/
         }
         else if(lodepng_chunk_type_equals(chunk, "tRNS")) {
-            /*Блок прозрачности палитры (tRNS). Несмотря на то, что это вспомогательный чанк, он все равно компилируется.
+            /*Блокировать прозрачность палитры (tRNS). Несмотря на то, что это вспомогательный чанк, он все равно компилируется.
             без «LODEPNG_COMPILE_ANCILLARY_CHUNKS», поскольку он содержит важную информацию о цвете, которая
             влияет на альфа-канал пикселей. */
             state->error = readChunk_tRNS(&state->info_png.color, data, chunkLength);
             if(state->error) break;
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-            /*Блок цвета фона (bKGD)*/
+            /*Блок цвета фонаря (бКГД)*/
         }
         else if(lodepng_chunk_type_equals(chunk, "bKGD")) {
             state->error = readChunk_bKGD(&state->info_png, data, chunkLength);
@@ -5742,7 +5742,7 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
 #endif /*LODEPNG_COMPILE_ANCILLARY_CHUNKS*/
         }
         else /*это не реализованный тип фрагмента, поэтому игнорируйте его: пропустите данные*/ {
-            /*error: unknown critical chunk (5th bit of first byte of chunk type is 0)*/
+            /*error: неизвестный критический фрагмент (5-й бит первого байта типа фрагмента равен 0)*/
             if(!state->decoder.ignore_critical && !lodepng_chunk_ancillary(chunk)) {
                 CERROR_BREAK(state->error, 69);
             }
@@ -5765,7 +5765,7 @@ static void decodeGeneric(unsigned char ** out, unsigned * w, unsigned * h,
     }
 
     if(!state->error && state->info_png.color.colortype == LCT_PALETTE && !state->info_png.color.palette) {
-        state->error = 106; /* error: PNG file must have PLTE chunk if color type is palette */
+        state->error = 106; /* error: ФайлPNGдолжен содержать фрагмент PLTE, если тип цвета — палитра. */
     }
 
     if(!state->error) {
@@ -5819,7 +5819,7 @@ unsigned lodepng_decode(unsigned char ** out, unsigned * w, unsigned * h,
     if(state->error) return state->error;
     if(!state->decoder.color_convert || lodepng_color_mode_equal(&state->info_raw, &state->info_png.color)) {
         /*тот же тип цвета, копирование или преобразование данных не требуется*/
-        /*сохраните настройки цвета info_png на info_raw, чтобы info_raw по-прежнему отражал цветотип
+        /*сохраните настройки цветаinfo_pngна info_raw, чтобыinfo_rawпо-прежнему отображал цветотип.
         необработанное изображение должно быть передано конечному пользователю*/
         if(!state->decoder.color_convert) {
             state->error = lodepng_color_mode_copy(&state->info_raw, &state->info_png.color);
@@ -5829,7 +5829,7 @@ unsigned lodepng_decode(unsigned char ** out, unsigned * w, unsigned * h,
     else {   /*необходимо преобразование цвета*/
         lv_draw_buf_t * old_buf = (lv_draw_buf_t *)*out;
 
-        /*TODO: check if this works according to the statement in the documentation: "The converter can convert
+        /*TODO: проверьте, работает ли это, согласно утверждению в документации: «Конвертер может конвертировать
         от типа входного цвета в оттенках серого до 8-битных оттенков серого или оттенков серого с альфа-каналом.*/
         if(!(state->info_raw.colortype == LCT_RGB || state->info_raw.colortype == LCT_RGBA)
            && !(state->info_raw.bitdepth == 8)) {
@@ -6089,7 +6089,7 @@ static unsigned addChunk_tEXt(ucvector * out, const char * keyword, const char *
     unsigned char * chunk = 0;
     size_t keysize = lodepng_strlen(keyword), textsize = lodepng_strlen(textstring);
     size_t size = keysize + 1 + textsize;
-    if(keysize < 1 || keysize > 79) return 89; /*error: invalid keyword size*/
+    if(keysize < 1 || keysize > 79) return 89; /*error: недопустимый размер ключевого слова*/
     CERROR_TRY_RETURN(lodepng_chunk_init(&chunk, out, size, "tEXt"));
     lodepng_memcpy(chunk + 8, keyword, keysize);
     chunk[8 + keysize] = 0; /*нулевой символ завершения*/
@@ -6107,7 +6107,7 @@ static unsigned addChunk_zTXt(ucvector * out, const char * keyword, const char *
     size_t compressedsize = 0;
     size_t textsize = lodepng_strlen(textstring);
     size_t keysize = lodepng_strlen(keyword);
-    if(keysize < 1 || keysize > 79) return 89; /*error: invalid keyword size*/
+    if(keysize < 1 || keysize > 79) return 89; /*error: недопустимый размер ключевого слова*/
 
     error = zlib_compress(&compressed, &compressedsize,
                           (const unsigned char *)textstring, textsize, zlibsettings);
@@ -6137,7 +6137,7 @@ static unsigned addChunk_iTXt(ucvector * out, unsigned compress, const char * ke
     size_t textsize = lodepng_strlen(textstring);
     size_t keysize = lodepng_strlen(keyword), langsize = lodepng_strlen(langtag), transsize = lodepng_strlen(transkey);
 
-    if(keysize < 1 || keysize > 79) return 89; /*error: invalid keyword size*/
+    if(keysize < 1 || keysize > 79) return 89; /*error: недопустимый размер ключевого слова*/
 
     if(compress) {
         error = zlib_compress(&compressed, &compressedsize,
@@ -6263,7 +6263,7 @@ static unsigned addChunk_iCCP(ucvector * out, const LodePNGInfo * info, LodePNGC
     size_t compressedsize = 0;
     size_t keysize = lodepng_strlen(info->iccp_name);
 
-    if(keysize < 1 || keysize > 79) return 89; /*error: invalid keyword size*/
+    if(keysize < 1 || keysize > 79) return 89; /*error: недопустимый размер ключевого слова*/
     error = zlib_compress(&compressed, &compressedsize,
                           info->iccp_profile, info->iccp_profile_size, zlibsettings);
     if(!error) {
@@ -6433,20 +6433,20 @@ static unsigned filter(unsigned char * out, const unsigned char * in, unsigned w
     /*
     Существует эвристика, называемая эвристикой минимальной суммы абсолютных разностей, предложенная стандартом PNG:
      *  Если тип изображения — Палитра или разрядность меньше 8, не фильтруйте изображение (т.
-        используйте фиксированную фильтрацию с фильтром None).
+        Фиксированную фильтрацию с фильтром Нет).
      * (Другой случай) Если тип изображения — оттенки серого или RGB (с альфа-каналом или без него), а битовая глубина —
        не меньше 8, то используйте эвристику адаптивной фильтрации следующим образом: независимо для каждой строки примените
        все пять фильтров и выберите фильтр, который дает наименьшую сумму абсолютных значений в каждой строке.
-    Эта эвристика используется, если стратегия фильтрации равна LFS_MINSUM и filter_palette_zero имеет значение true.
+    Эта эвристика используется, если стратегия фильтра равнаLFS_MINSUMи filter_palette_zero, имеет значение true.
 
-    Если filter_palette_zero истинно, а filter_strategy не LFS_MINSUM, выполняется приведенная выше эвристика:
-    но для «другого случая», какая бы стратегия ни была установлена вместо минимальной суммы filter_strategy
+    Еслиfilter_palette_zeroистинно, аfilter_strategyнеLFS_MINSUM, то результат выше эвристики:
+    но для «другого случая», какая бы стратегия не была установлена вместо минимальной суммы filter_strategy
     используется эвристика.
     */
     if(settings->filter_palette_zero &&
        (color->colortype == LCT_PALETTE || color->bitdepth < 8)) strategy = LFS_ZERO;
 
-    if(bpp == 0) return 31; /*error: неверный тип цвета*/
+    if(bpp == 0) return 31; /*ошибка: неверный тип цвета*/
 
     if(strategy >= LFS_ZERO && strategy <= LFS_FOUR) {
         unsigned char type = (unsigned char)strategy;
@@ -6573,7 +6573,7 @@ static unsigned filter(unsigned char * out, const unsigned char * in, unsigned w
         в любом случае лучший результат с динамическим деревом. Использование фиксированного дерева иногда дает худшие результаты, но в редких случаях.
         случаях лучшее сжатие. Это делает это немного менее медленным, так что это стоит сделать.*/
         zlibsettings.btype = 1;
-        /*пользовательский кодировщик, скорее всего, не считывает настройку btype и оптимизирован для полного PNG
+        /*Пользовательский кодировщик, скорее всего, не считывает значения btype и применяется для полного PNG
         только изображения, поэтому отключите его*/
         zlibsettings.custom_zlib = 0;
         zlibsettings.custom_deflate = 0;
@@ -6613,7 +6613,7 @@ static unsigned filter(unsigned char * out, const unsigned char * in, unsigned w
 static void addPaddingBits(unsigned char * out, const unsigned char * in,
                            size_t olinebits, size_t ilinebits, unsigned h)
 {
-    /*Противоположность функции removePaddingBits.
+    /*Противоположность функции RemovePaddingBits.
     olinebits должно быть >= ilinebits*/
     unsigned y;
     size_t diff = olinebits - ilinebits;
@@ -6631,15 +6631,15 @@ static void addPaddingBits(unsigned char * out, const unsigned char * in,
 }
 
 /*
-in: non-interlaced image with size w*h
-out: the same pixels, but re-ordered according to PNG's Adam7 interlacing, with
+in: нечересстрочное изображение размером w*h
+out: те же пиксели, но переупорядоченные в соответствии с чересстрочной разверткой Adam7 PNG, с
  нет битов заполнения между строками сканирования, но между уменьшенными изображениями, так что каждое
  уменьшенное изображение начинается с байта.
-bpp: bits per pixel
+bpp: бит на пиксель
 нет битов заполнения ни между строками сканирования, ни между уменьшенными изображениями
-in имеет следующий размер в битах: w * h * bpp.
-out возможно больше из-за заполнения битов между уменьшенными изображениями
-NOTE: comments about padding bits are only relevant if bpp < 8
+in имеет следующий размер в битах: w*h*bpp.
+возможно больше из-за заполнения битов между уменьшенными изображениями
+NOTE: комментарии о битах заполнения актуальны только в том случае, если bpp < 8
 */
 static void Adam7_interlace(unsigned char * out, const unsigned char * in, unsigned w, unsigned h, unsigned bpp)
 {
@@ -6682,7 +6682,7 @@ static void Adam7_interlace(unsigned char * out, const unsigned char * in, unsig
     }
 }
 
-/*Буфер out должен быть достаточно большим, чтобы содержать несжатые данные фрагмента IDAT, а in должен содержать полное изображение.
+/*Выходной буфер должен быть достаточно большим, чтобы сохранить несжатые данные фрагментаIDAT, а внутренний должен сохранять полное изображение.
 возвращаемое значение — ошибка**/
 static unsigned preProcessScanlines(unsigned char ** out, size_t * outsize, const unsigned char * in,
                                     unsigned w, unsigned h,
@@ -6690,8 +6690,8 @@ static unsigned preProcessScanlines(unsigned char ** out, size_t * outsize, cons
 {
     /*
     Эта функция преобразует чистое 2D-изображение с цветовым типом PNG в отфильтрованные, дополненные и чересстрочные данные. Шаги:
-    *), если нет Adam7: 1) добавить биты заполнения (= возможные дополнительные биты на строку развертки, если bpp < 8) 2) фильтровать
-    *) если adam7: 1) Adam7_interlace 2) 7x добавить биты заполнения 3) 7x фильтровать
+    *), если нет Adam7: 1) добавить биты заполнения (= дополнительные биты для развертки текста, если bpp < 8) 2) фильтровать
+    *) если adam7: 1)Adam7_interlace2) 7x добавить бит заполнения 3) 7x фильтровать
     */
     unsigned bpp = lodepng_get_bpp(&info_png->color);
     unsigned error = 0;
@@ -6782,7 +6782,7 @@ static unsigned isGrayICCProfile(const unsigned char * profile, unsigned size)
     профиль не проверен. Это необходимо только потому, что спецификация PNG
     требует использования модели несерого цвета, если существует профиль ICC с «RGB»
     (к сожалению, возможности сжатия ограничены, если входные данные имеют оттенки серого RGB
-    data) и требует использования модели серого цвета, если это «GRAY».
+    данные) и требует использования модели серого цвета, если это «GRAY».
     */
     if(size < 20) return 0;
     return profile[16] == 'G' &&  profile[17] == 'R' &&  profile[18] == 'A' &&  profile[19] == 'Y';
@@ -6818,7 +6818,7 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
     /*проверить достоверность входных значений*/
     if((info_png->color.colortype == LCT_PALETTE || state->encoder.force_palette)
        && (info_png->color.palettesize == 0 || info_png->color.palettesize > 256)) {
-        /*эта ошибка возвращается, даже если auto_convert включен и, таким образом, кодер может
+        /*эта ошибка возвращается, даже еслиauto_convertвключен и, таким образом, кодер может
         сгенерировать палитру самостоятельно: хотя это теоретически возможно,
         это может усложнить код или пограничные случаи и всегда требовать предоставления палитры
         при установке этого типа цвета - более простой контракт*/
@@ -6826,17 +6826,17 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
         goto cleanup;
     }
     if(state->encoder.zlibsettings.btype > 2) {
-        state->error = 61; /*error: invalid btype*/
+        state->error = 61; /*error: неверный btype*/
         goto cleanup;
     }
     if(info_png->interlace_method > 1) {
-        state->error = 71; /*error: invalid interlace mode*/
+        state->error = 71; /*error: неверный режим чересстрочной развертки*/
         goto cleanup;
     }
     state->error = checkColorValidity(info_png->color.colortype, info_png->color.bitdepth);
-    if(state->error) goto cleanup; /*error: invalid color type given*/
+    if(state->error) goto cleanup; /*error: указан неверный тип цвета*/
     state->error = checkColorValidity(state->info_raw.colortype, state->info_raw.bitdepth);
-    if(state->error) goto cleanup; /*error: invalid color type given*/
+    if(state->error) goto cleanup; /*error: указан неверный тип цвета*/
 
     /* преобразование цвета и вычисление типов фильтров развертки */
     lodepng_info_copy(&info, &state->info_png);
@@ -6874,10 +6874,10 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
         if(state->error) goto cleanup;
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
         if(info_png->sbit_defined) {
-            /*если sbit определен, из-за строгих требований, какие значения sbit могут присутствовать для каких цветовых режимов,
-            auto_convert во многих случаях выполнить невозможно. Тем не менее, поддержите несколько случаев здесь.
-            TODO: more conversions may be possible, and it may also be possible to get a more appropriate color type out of
-                  auto_choose_color, если знания о сбите используются заранее
+            /*если сбит определение, то из-за строгих требований, какие значения сбит могут иметь место для каких-либо цветовых режимов,
+            auto_convert во многих случаях обнаруживает невозможность восстановления. Тем не менее, здесь зафиксировано несколько случаев.
+            TODO: возможно большее количество преобразований, а также возможно получение более подходящего цветового типа из
+                  auto_choose_color , если знания о сбите использовались заранее
             */
             unsigned sbit_max = LODEPNG_MAX(LODEPNG_MAX(LODEPNG_MAX(info_png->sbit_r, info_png->sbit_g),
                                                         info_png->sbit_b), info_png->sbit_a);
@@ -6888,16 +6888,16 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
             if(info.color.colortype == LCT_PALETTE &&
                auto_color.colortype == LCT_PALETTE) {
                 /* входные и выходные данные являются палитрой, и в этом случае может случиться так, что данные палитры
-                ожидается копирование из info_raw в info_png */
+                копирование изinfo_rawв info_png */
                 allow_convert = 1;
             }
-            /*возможен переход от 8-битного RGB к палитре (или 16-битному, если sbit_max <= 8)
-            поскольку оба являются 8-битными RGB для целей sBIT*/
+            /*возможен переход с 8-битногоRGBна палитру (или 16-битное, еслиsbit_max<= 8)
+            поскольку оба являются 8-битнымиRGBдля целей sBIT*/
             if(info.color.colortype == LCT_RGB &&
                auto_color.colortype == LCT_PALETTE && sbit_max <= 8) {
                 allow_convert = 1;
             }
-            /*переход от 8-битного RGBA к палитре также возможен, но только если sbit_a равен ровно 8*/
+            /*переход от 8-битногоRGBAк палитре также возможен, но только еслиsbit_aровно 8*/
             if(info.color.colortype == LCT_RGBA && auto_color.colortype == LCT_PALETTE &&
                info_png->sbit_a == 8 && sbit_max <= 8) {
                 allow_convert = 1;
@@ -6908,14 +6908,14 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
                sbit_max <= 8) {
                 allow_convert = 1;
             }
-            /*переход на меньшее количество каналов возможен, если все значения бит равны (все возможные значения в sbit,
-              а также выбранную разрядность результата). В связи с тем, как работает auto_convert,
-              мы уже знаем, что auto_color .colortype имеет меньшее или равное количество каналов, чем
+            /*переход на меньшее количество возможностей возможен, если все значения равны (все возможные значения в бите,
+              а также выбранную разрядность результата). В связи с тем, как работаетauto_convert,
+              мы уже знаем, чтоauto_color.colortype имеет меньшее или равное количество каналов, чем
               информация.цветовой тип. Палитра здесь не используется. Это преобразование не допускается, если
-              info_png -> sbit_r < auto_color .bitlength, потому что специально для альфы отсутствие
-              значение sbit в значительной степени подразумевает, что разрядность альфа равна разрядности PNG (скорее
-              чем разрядность, установленная в значениях r, g и b sbit, в зависимости от того, как описывает спецификация PNG.
-              обработка случая фрагмента tRNS с помощью sBIT), поэтому будьте осторожны в отношении игнорирования ввода пользователя.*/
+              info_png ->sbit_r<auto_color.bitlength, потому что специально для альфы отсутствует
+              Значение сбит в степени эквивалентности предполагает, что разрядность альфа равна разрядностиPNG(скорее
+              чем разряд, установленная в значениях r, g и b sbit, в зависимости от того, как указано в спецификацииPNG.
+              обработка фрагмента tRNS с помощью sBIT), поэтому соблюдайте осторожность в отношении игнорирования ввода пользователя.*/
             if(info.color.colortype != LCT_PALETTE && auto_color.colortype != LCT_PALETTE &&
                equal && info_png->sbit_r == auto_color.bitdepth) {
                 allow_convert = 1;
@@ -6955,7 +6955,7 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
         }
         if(gray_icc != gray_png) {
             /*Не разрешено использовать RGB/RGBA/палитру с профилем GRAY ICC или наоборот,
-            или в случае auto_convert не удалось найти подходящую модель*/
+            или в случаеauto_convertне удалось найти подходящую модель*/
             state->error = state->encoder.auto_convert ? 102 : 101;
             goto cleanup;
         }
@@ -7025,20 +7025,20 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
             if(state->error) goto cleanup;
         }
         if(state->encoder.force_palette && (info.color.colortype == LCT_RGB || info.color.colortype == LCT_RGBA)) {
-            /*force_palette означает: записать предлагаемую палитру для истинного цвета в чанк PLTE.*/
+            /*force_palette означает: записать полученную палитру для истинного цвета в чанкPLTE.*/
             state->error = addChunk_PLTE(&outv, &info.color);
             if(state->error) goto cleanup;
         }
-        /*tRNS (добавится только при необходимости) */
+        /*tRNS (добавляется только при необходимости) */
         state->error = addChunk_tRNS(&outv, &info.color);
         if(state->error) goto cleanup;
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-        /*bKGD (должен находиться между PLTE и фрагментами IDAT).*/
+        /*bKGD (должен находиться междуPLTEи фрагментами IDAT).*/
         if(info.background_defined) {
             state->error = addChunk_bKGD(&outv, &info);
             if(state->error) goto cleanup;
         }
-        /*pHY (должны идти перед фрагментами IDAT)*/
+        /*pHY (должны идти перед фрагментамиIDAT)*/
         if(info.phys_defined) {
             state->error = addChunk_pHYs(&outv, &info);
             if(state->error) goto cleanup;
@@ -7091,7 +7091,7 @@ unsigned lodepng_encode(unsigned char ** out, size_t * outsize,
                 }
             }
             if(already_added_id_text == 0) {
-                state->error = addChunk_tEXt(&outv, "LodePNG", LODEPNG_VERSION_STRING); /*в формате tEXt он короче, чем в виде фрагмента zTXt*/
+                state->error = addChunk_tEXt(&outv, "LodePNG", LODEPNG_VERSION_STRING); /*в формате tEXt он короче, чем в видеофрагменте zTXt*/
                 if(state->error) goto cleanup;
             }
         }
@@ -7320,7 +7320,7 @@ const char * lodepng_error_text(unsigned code)
             return "invalid window size given in the settings of the encoder (must be 0-32768)";
         case 61:
             return "invalid BTYPE given in the settings of the encoder (only 0, 1 and 2 are allowed)";
-        /*LodePNG оставляет пользователю выбор формулы преобразования RGB в оттенки серого.*/
+        /*LodePNG оставляет пользователю выбор формулы преобразоватьRGBв преобразование серого.*/
         case 62:
             return "conversion from color to grayscale not supported";
         /*(2^31-1)*/
@@ -7374,7 +7374,7 @@ const char * lodepng_error_text(unsigned code)
             return "invalid filter strategy given for LodePNGEncoderSettings.filter_strategy";
         case 89:
             return "text chunk keyword too short or long: must have size 1-79";
-        /*размер окна в LodePNGCompressSettings. Требование POT (==> & вместо %) ускоряет кодирование на 12%.*/
+        /*Размер окна в LodePNGCompressSettings. ТребованиеPOT(==> вместо %) увеличивает кодирование на 12%.*/
         case 90:
             return "windowsize must be a power of two";
         case 91:
@@ -7420,11 +7420,11 @@ const char * lodepng_error_text(unsigned code)
             return "custom zlib or inflate decompression failed";
         case 111:
             return "custom zlib or deflate compression failed";
-        /*Максимальный размер текста можно настроить в LodePNGDecoderSettings. Эта ошибка предотвращает
+        /*Максимальный размер текста можно настроить в LodePNGDecoderSettings. Эта ошибка твоя
         неоправданное потребление памяти при декодировании из-за невозможно больших размеров текста.*/
         case 112:
             return "compressed text unreasonably large";
-        /*Максимальный размер ICC можно настроить в LodePNGDecoderSettings. Эта ошибка предотвращает
+        /*Максимальный размерICCможно настроить в LodePNGDecoderSettings. Эта ошибка твоя
         необоснованное потребление памяти при декодировании из-за невозможно большого профиля ICC*/
         case 113:
             return "ICC profile unreasonably large";

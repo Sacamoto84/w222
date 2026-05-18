@@ -56,50 +56,50 @@ typedef struct _lv_nuttx_ctx_t {
  **********************/
 
 /**
- * Инициализируйте структуру lv_nuttx_dsc_t значениями по умолчанию для порта NuttX LVGL.
- * @param dsc Pointer to the lv_nuttx_dsc_t structure to be initialized.
+ * Инициализируйте структуруlv_nuttx_dsc_tзначениями по умолчанию для порта NuttXLVGL.
+ * @param dsc Указатель на структуру lv_nuttx_dsc_t, которую необходимо инициализировать.
  */
 void lv_nuttx_dsc_init(lv_nuttx_dsc_t * dsc);
 
 /**
- * Инициализируйте драйвер дисплея LVGL для NuttX, используя предоставленную информацию о конфигурации.
- * @param dsc Pointer to the lv_nuttx_dsc_t structure containing the configuration information for the display driver.
- * @param result Pointer to the lv_nuttx_result_t structure containing display and input device handler.
+ * Инициализируйте драйвер видеокартыLVGLдля NuttX, используя предоставленную информацию о конфигурации.
+ * @param dsc Указатель на структуру lv_nuttx_dsc_t, содержащую информацию о конфигурации драйвера дисплея.
+ * @param result Указатель на структуру lv_nuttx_result_t, содержащую обработчик устройства отображения и ввода.
  */
 void lv_nuttx_init(const lv_nuttx_dsc_t * dsc, lv_nuttx_result_t * result);
 
 /**
- * Деинициализируйте драйвер дисплея LVGL для NuttX.
- * @param result Pointer to the lv_nuttx_result_t structure containing display and input device handler.
+ * Деинициализируйте драйвер видеокартыLVGLдля NuttX.
+ * @param result Указатель на структуру lv_nuttx_result_t, содержащую обработчик устройства отображения и ввода.
  */
 void lv_nuttx_deinit(lv_nuttx_result_t * result);
 
 #if LV_USE_NUTTX_CUSTOM_INIT
 /**
- * Инициализируйте драйвер дисплея LVGL для NuttX, используя предоставленную информацию о пользовательской конфигурации.
- * @param dsc Pointer to the lv_nuttx_dsc_t structure containing the custom configuration for the display driver.
- * @param result Pointer to the lv_nuttx_result_t structure containing display and input device handler.
+ * Инициализируйте драйвер видеокартыLVGLдля NuttX, используя предоставленную информацию о пользовательской конфигурации.
+ * @param dsc Указатель на структуру lv_nuttx_dsc_t, содержащую пользовательскую конфигурацию драйвера дисплея.
+ * @param result Указатель на структуру lv_nuttx_result_t, содержащую обработчик устройства отображения и ввода.
  */
 void lv_nuttx_init_custom(const lv_nuttx_dsc_t * dsc, lv_nuttx_result_t * result);
 
 /**
- * Деинициализируйте драйвер дисплея LVGL для NuttX, используя предоставленную информацию о пользовательской конфигурации.
- * @param result Pointer to the lv_nuttx_result_t structure containing display and input device handler.
+ * Деинициализируйте драйвер видеокартыLVGLдля NuttX, используя предоставленную информацию о пользовательской конфигурации.
+ * @param result Указатель на структуру lv_nuttx_result_t, содержащую обработчик устройства отображения и ввода.
  */
 void lv_nuttx_deinit_custom(lv_nuttx_result_t * result);
 #endif /* LV_USE_NUTTX_CUSTOM_INIT */
 
 /**
- * Вызов `lv_timer_handler()` (суперцикл LVGL) в бесконечном цикле.
+ * Вызов`lv_timer_handler()`(суперциклLVGL) в бесконечном цикле.
  * Если LV_USE_NUTTX_LIBUV включен, будет создан таймер UV.
- * иначе `lv_timer_handler()` будет вызываться в цикле с некоторым спящим режимом.
- * @param result pointer to a variable initialized by `lv_nuttx_init()` or `lv_nuttx_init_custom()`
+ * В противном случае`lv_timer_handler()`будет переходить в цикл с некоторым спойлерным режимом.
+ * @param result указатель на переменную, инициализированную`lv_nuttx_init()`или `lv_nuttx_init_custom()`
  */
 void lv_nuttx_run(lv_nuttx_result_t * result);
 
 /**
  * Получите процент простоя системы.
- * @return The idle percentage of the system.
+ * @return Процент простоя системы.
  */
 uint32_t lv_nuttx_get_idle(void);
 

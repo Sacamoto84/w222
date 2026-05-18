@@ -52,7 +52,7 @@
 
 #define font_draw_buf_handlers &(LV_GLOBAL_DEFAULT()->font_draw_buf_handlers)
 
-/** После преобразования эталонного размера шрифта также необходимо масштабировать данные 26dot6.
+/** После преобразования эталонного размера шрифта также необходимо масштабировать данные до 26dot6.
  * на пути к реальному физическому размеру
  */
 #define FT_F26DOT6_TO_PATH_SCALE(x) (LV_FREETYPE_F26DOT6_TO_FLOAT(x) / (1 << FT_F26DOT6_SHIFT))
@@ -109,7 +109,7 @@ static bool is_raw_bitmap;
 void lv_draw_nema_gfx_label_init(lv_draw_unit_t * draw_unit)
 {
 #if LV_USE_FREETYPE
-    /*Настройте событие Freetype Outline*/
+    /*Оформление мероприятия Freetype Outline*/
     lv_freetype_outline_add_event(freetype_outline_event_cb, LV_EVENT_ALL, draw_unit);
 #else
     LV_UNUSED(draw_unit);
@@ -262,8 +262,8 @@ static void lv_nema_outline_event_alloc(const lv_freetype_outline_event_param_t 
 
 /**
  * Преобразование шестнадцатеричных символов в число (0..15)
- * @param hex Pointer to a hexadecimal character (0..9, A..F)
- * @return the numerical value of `hex` or 0 on error
+ * @param hex Указатель на шестнадцатеричный символ (0..9, A..F)
+ * @return числовое значение`hex`или 0 в случае ошибки
  */
 static uint8_t hex_char_to_num(char hex)
 {
@@ -592,7 +592,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
                         recolor_cmd_state = RECOLOR_CMD_STATE_PARAMETER;
                         continue;
                     }
-                    /*Другой начальный символ в параметре экранирован cmd. голец*/
+                    /*Другой начальный символ в параметре cmd. голец*/
                     else if(recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) {
                         recolor_cmd_state = RECOLOR_CMD_STATE_WAIT_FOR_PARAMETER;
                     }
@@ -613,7 +613,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
 
                 /* Пропустите параметр цвета и подождите пробел после него.
                  * Как только мы достигнем пробела ' ', мы извлечем информацию о цвете.
-                 * и сохраните его в переменной recolor */
+                 * и сохраните его в переменной перекраске */
                 if(recolor_cmd_state == RECOLOR_CMD_STATE_PARAMETER) {
                     /* Not an space? Continue with the next character */
                     if(letter != ' ') {
@@ -657,7 +657,7 @@ static void _draw_label_iterate_characters(lv_draw_task_t * t, const lv_draw_lab
 
             letter_w = lv_font_get_glyph_width(font, letter, letter_next);
 
-            /*Всегда устанавливайте bg_coordinates для рисования-заполнителя.*/
+            /*Всегда устанавливайтеbg_coordinatesдля рисования-заполнителя.*/
             bg_coords.x1 = pos.x;
             bg_coords.y1 = pos.y;
             bg_coords.x2 = pos.x + letter_w - 1;
@@ -799,7 +799,7 @@ static void _draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const l
     if(g.resolved_font) {
         lv_draw_buf_t * draw_buf = NULL;
         if(LV_FONT_GLYPH_FORMAT_NONE < g.format && g.format < LV_FONT_GLYPH_FORMAT_IMAGE) {
-            /*Проверьте только рисование buff для растрового глифа*/
+            /*Проверьте только усиление рисования для растрового глифа*/
             draw_buf = lv_draw_buf_reshape(dsc->_draw_buf, 0, g.box_w, g.box_h, LV_STRIDE_AUTO);
             if(draw_buf == NULL) {
                 if(dsc->_draw_buf) lv_draw_buf_destroy(dsc->_draw_buf);
@@ -812,7 +812,7 @@ static void _draw_letter(lv_draw_task_t * t, lv_draw_glyph_dsc_t * dsc,  const l
             }
         }
 
-        /* Оптимизация производительности для шрифтов lv_font_fmt_txt_dsc_t: всегда запрашивать необработанные растровые изображения. */
+        /* Оптимизация производительности шрифтов lv_font_fmt_txt_dsc_t: всегда интересны необработанные растровые изображения. */
         /*Исключение для w*h >= NEMA_COORD_LIMIT из-за ограничения HW на обработку данных.*/
         is_raw_bitmap = false;
         if(g.box_h * g.box_w <= NEMA_COORD_LIMIT) {

@@ -188,7 +188,7 @@ static bool calc_min_size(lv_obj_t * cont, int32_t * req_size, bool width, void 
 
     *req_size += (cont_space_start + cont_space_end);
 
-    // (* req_size )++;
+    // (*req_size)++;
     return true;
 }
 

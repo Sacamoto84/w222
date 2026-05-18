@@ -208,7 +208,7 @@ SwFixed mathLength(const SwPoint& pt)
     if (pt.y == 0) return abs(pt.x);
 
     auto v = pt.toPoint();
-    //return static_cast <SwFixed>(sqrtf(v.x * v.x + v.y * v.y) * 65536.0f);
+    //returnstatic_cast<SwFixed>(sqrtf(v.x * v.x + v.y * v.y) * 65536.0f);
 
     /* приблизительное sqrt(x*x + y*y) с использованием алгоритма альфа-макс плюс бета-мин.
        При альфа = 1, бета = 3/8, что дает результаты с наибольшей ошибкой меньше.

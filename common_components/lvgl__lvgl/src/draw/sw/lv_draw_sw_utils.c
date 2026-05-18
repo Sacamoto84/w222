@@ -129,7 +129,7 @@ static void rotate270_l8(const uint8_t * src, uint8_t * dst, int32_t src_width, 
 void lv_draw_sw_i1_to_argb8888(const void * buf_i1, void * buf_argb8888, uint32_t width, uint32_t height,
                                uint32_t buf_i1_stride, uint32_t buf_argb8888_stride, uint32_t index0_color, uint32_t index1_color)
 {
-    /*Извлеките биты I1 px_map и преобразуйте их в ARGB8888.*/
+    /*Извлеките битыI1px_map и преобразуйте их в ARGB8888.*/
     const uint8_t * src = buf_i1;
     uint32_t * dst = buf_argb8888;
     uint32_t i1_row_byte_count = width / 8;

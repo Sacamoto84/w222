@@ -193,7 +193,7 @@ static void draw_letter_bitmap(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * d
         nvgFill(u->vg);
     }
     else {
-        /* TODO: draw rotated bitmap */
+        /* TODO: нарисовать повернутое растровое изображение */
     }
 
     LV_PROFILER_DRAW_END;
@@ -319,7 +319,7 @@ static void draw_letter_cb(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_draw_
                             return;
                         }
 
-                        /* TODO: draw_letter_outline(t, glyph_draw_dsc); */
+                        /* TODO: draw_letter_outline (т,glyph_draw_dsc); */
                     }
                 }
                 break;

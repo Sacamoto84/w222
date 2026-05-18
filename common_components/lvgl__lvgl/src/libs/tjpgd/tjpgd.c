@@ -1,22 +1,22 @@
 /*----------------------------------------------------------------------------/
-/ TJpgDec - Tiny JPEG Decompressor R0.03                      (C)ChaN, 2021
+/ TJpgDec - Крошечный декомпрессорJPEGR0 .03 (C)ChaN, 2021 г.
 /-----------------------------------------------------------------------------/
-/ TJpgDec — это универсальный модуль распаковки JPEG для небольших встроенных систем.
+/ TJpgDec — это универсальный модуль распаковкиJPEGдля небольших встроенных систем.
 / Это бесплатное программное обеспечение, открытое для образования, исследований и коммерческой деятельности.
 /  разработки в рамках лицензионной политики следующих условий.
 /
 /  Copyright (C) 2021, ChaN, all right reserved.
 /
-/ * The TJpgDec module is a free software and there is NO WARRANTY.
-/ * No restriction on use. You can use, modify and redistribute it for
+/ * Модуль TJpgDec — бесплатное программное обеспечение, существуетNOWARRANTY.
+/ * Никаких ограничений в использовании. Вы можете использовать, изменять и распространять его для
 /   личные, некоммерческие или коммерческие продукты UNDER YOUR RESPONSIBILITY .
-/ * Redistributions of source code must retain the above copyright notice.
+/ * При повторном распространении исходного кода должно сохраняться указанное выше уведомление об авторских правах.
 /
 /-----------------------------------------------------------------------------/
 / 4 октября 2011 г. R0 .01 Первый выпуск.
-/ 19 февраля 2012 г. R0 .01a Исправлена ошибка распаковки, когда сканирование начинается с escape-последовательности.
+/ 19 февраля 2012 г. R0.01a Исправлена ​​ошибка распаковки, когда сканирование начинается с escape-последовательности.
 / 3 сентября 2012 г. R0 .01b Добавлена опция JD_TBLCLIP.
-/ 16 марта 2019 г. · R0 .01c Поддерживается stdint.h .
+/ 16 марта 2019 г. ·R0.01c Поддерживаетсяstdint.h.
 / 1 июля 2020 г. · R0 .01d Исправлено неправильное использование целочисленного типа.
 / 8 мая 2021 г. · R0 .02 Поддерживается изображение в оттенках серого. Отдельные параметры конфигурации.
 / 11 июня 2021 г. · R0 .02a Некоторое улучшение производительности.
@@ -53,7 +53,7 @@ static const uint8_t Zig[64] = {    /* Таблица преобразовани
 /* (увеличено до 16 бит для операций с фиксированной запятой)  */
 /*-------------------------------------------------*/
 
-static const uint16_t Ipsf[64] = {  /* См. также aa_idct .png. */
+static const uint16_t Ipsf[64] = {  /* См. такжеaa_idct.png. */
     (uint16_t)(1.00000 * 8192), (uint16_t)(1.38704 * 8192), (uint16_t)(1.30656 * 8192), (uint16_t)(1.17588 * 8192), (uint16_t)(1.00000 * 8192), (uint16_t)(0.78570 * 8192), (uint16_t)(0.54120 * 8192), (uint16_t)(0.27590 * 8192),
     (uint16_t)(1.38704 * 8192), (uint16_t)(1.92388 * 8192), (uint16_t)(1.81226 * 8192), (uint16_t)(1.63099 * 8192), (uint16_t)(1.38704 * 8192), (uint16_t)(1.08979 * 8192), (uint16_t)(0.75066 * 8192), (uint16_t)(0.38268 * 8192),
     (uint16_t)(1.30656 * 8192), (uint16_t)(1.81226 * 8192), (uint16_t)(1.70711 * 8192), (uint16_t)(1.53636 * 8192), (uint16_t)(1.30656 * 8192), (uint16_t)(1.02656 * 8192), (uint16_t)(0.70711 * 8192), (uint16_t)(0.36048 * 8192),
@@ -168,13 +168,13 @@ static JRESULT create_qt_tbl(   /* 0: OK, !0: Ошибка */
 
 
     while(ndata) {  /* Обработать все таблицы в сегменте */
-        if(ndata < 65) return JDR_FMT1;     /* Err: table size is unaligned */
+        if(ndata < 65) return JDR_FMT1;     /* Err: размер таблицы не выровнен */
         ndata -= 65;
         d = *data++;                            /* Получить свойство таблицы */
-        if(d & 0xF0) return JDR_FMT1;           /* Err: not 8-bit resolution */
+        if(d & 0xF0) return JDR_FMT1;           /* Err: не 8-битное разрешение */
         i = d & 3;                              /* Получить таблицу ID */
         pb = alloc_pool(jd, 64 * sizeof(int32_t)); /* Выделить блок памяти для таблицы */
-        if(!pb) return JDR_MEM1;                /* Err: not enough memory */
+        if(!pb) return JDR_MEM1;                /* Err: недостаточно памяти */
         jd->qttbl[i] = pb;                      /* Зарегистрируйте стол */
         for(i = 0; i < 64; i++) {               /* Загрузите таблицу */
             zi = Zig[i];                        /* Преобразование зигзагообразного порядка в растровый */
@@ -205,20 +205,20 @@ static JRESULT create_huffman_tbl(  /* 0: OK, !0: Ошибка */
 
 
     while(ndata) {  /* Обработать все таблицы в сегменте */
-        if(ndata < 17) return JDR_FMT1;     /* Err: wrong data size */
+        if(ndata < 17) return JDR_FMT1;     /* Err: неправильный размер данных */
         ndata -= 17;
         d = *data++;                        /* Получить номер и класс стола */
-        if(d & 0xEE) return JDR_FMT1;       /* Err: invalid class/number */
+        if(d & 0xEE) return JDR_FMT1;       /* Err: неверный класс/номер */
         cls = d >> 4;
-        num = d & 0x0F;       /* class = dc(0)/ac(1), table number = 0/1 */
+        num = d & 0x0F;       /* class = dc(0)/ac(1), номер таблицы = 0/1 */
         pb = alloc_pool(jd, 16);            /* Выделить блок памяти для таблицы распределения битов */
-        if(!pb) return JDR_MEM1;            /* Err: not enough memory */
+        if(!pb) return JDR_MEM1;            /* Err: недостаточно памяти */
         jd->huffbits[num][cls] = pb;
         for(np = i = 0; i < 16; i++) {      /* Загрузить количество шаблонов для кода длиной от 1 до 16 бит. */
             np += (pb[i] = *data++);        /* Получить сумму кодовых слов для каждого кода */
         }
         ph = alloc_pool(jd, np * sizeof(uint16_t)); /* Выделить блок памяти для таблицы кодовых слов */
-        if(!ph) return JDR_MEM1;            /* Err: not enough memory */
+        if(!ph) return JDR_MEM1;            /* Err: недостаточно памяти */
         jd->huffcode[num][cls] = ph;
         hc = 0;
         for(j = i = 0; i < 16; i++) {       /* Восстановить таблицу кодовых слов Хаффмана */
@@ -227,10 +227,10 @@ static JRESULT create_huffman_tbl(  /* 0: OK, !0: Ошибка */
             hc <<= 1;
         }
 
-        if(ndata < np) return JDR_FMT1;     /* Err: wrong data size */
+        if(ndata < np) return JDR_FMT1;     /* Err: неправильный размер данных */
         ndata -= np;
         pd = alloc_pool(jd, np);            /* Выделить блок памяти для декодированных данных */
-        if(!pd) return JDR_MEM1;            /* Err: not enough memory */
+        if(!pd) return JDR_MEM1;            /* Err: недостаточно памяти */
         jd->huffdata[num][cls] = pd;
         for(i = 0; i < np; i++) {           /* Загрузка декодированных данных соответствует каждому кодовому слову */
             d = *data++;
@@ -245,15 +245,15 @@ static JRESULT create_huffman_tbl(  /* 0: OK, !0: Ошибка */
 
             if(cls) {
                 tbl_ac = alloc_pool(jd, HUFF_LEN * sizeof(uint16_t));   /* LUT для элементов AC */
-                if(!tbl_ac) return JDR_MEM1;        /* Err: not enough memory */
+                if(!tbl_ac) return JDR_MEM1;        /* Err: недостаточно памяти */
                 jd->hufflut_ac[num] = tbl_ac;
-                memset(tbl_ac, 0xFF, HUFF_LEN * sizeof(uint16_t));      /* Значение по умолчанию ( 0xFFFF : может быть длинным кодом) */
+                memset(tbl_ac, 0xFF, HUFF_LEN * sizeof(uint16_t));      /* Значение по умолчанию (0xFFFF: может быть длинным кодом) */
             }
             else {
                 tbl_dc = alloc_pool(jd, HUFF_LEN * sizeof(uint8_t));    /* LUT для элементов AC */
-                if(!tbl_dc) return JDR_MEM1;        /* Err: not enough memory */
+                if(!tbl_dc) return JDR_MEM1;        /* Err: недостаточно памяти */
                 jd->hufflut_dc[num] = tbl_dc;
-                memset(tbl_dc, 0xFF, HUFF_LEN * sizeof(uint8_t));       /* Значение по умолчанию ( 0xFF : может быть длинным кодом) */
+                memset(tbl_dc, 0xFF, HUFF_LEN * sizeof(uint8_t));       /* Значение по умолчанию (0xFF: может быть длинным кодом) */
             }
             for(i = b = 0; b < HUFF_BIT; b++) {     /* Создать LUT */
                 for(j = pb[b]; j; j--) {
@@ -308,7 +308,7 @@ static int huffext(     /* >=0: декодированные данные, <0: �
             if(!dc) {   /* Входные данные недоступны, повторно заполните входной буфер. */
                 dp = jd->inbuf; /* Верхняя часть входного буфера */
                 dc = jd->infunc(jd, dp, JD_SZBUF);
-                if(!dc) return 0 - (int)JDR_INP;    /* Err: read error or wrong stream termination */
+                if(!dc) return 0 - (int)JDR_INP;    /* Err: ошибка чтения или неправильное завершение потока */
             }
             else {
                 dp++;   /* Следующая точка данных */
@@ -316,7 +316,7 @@ static int huffext(     /* >=0: декодированные данные, <0: �
             dc--;       /* Уменьшить количество доступных байтов */
             if(flg) {       /* In flag sequence? */
                 flg = 0;    /* Последовательность флагов выхода */
-                if(*dp != 0) return 0 - (int)JDR_FMT1;  /* Err: unexpected flag is detected (may be corrupted data) */
+                if(*dp != 0) return 0 - (int)JDR_FMT1;  /* Err: обнаружен неожиданный флаг (могут быть повреждены данные) */
                 *dp = 0xFF;             /* Флаг представляет собой данные 0xFF. */
             }
             else {
@@ -358,13 +358,13 @@ static int huffext(     /* >=0: декодированные данные, <0: �
             if(!dc) {   /* Буфер пуст, повторно заполните входной буфер */
                 dp = jd->inbuf;                     /* Верхняя часть входного буфера */
                 dc = jd->infunc(jd, dp, JD_SZBUF);
-                if(!dc) return 0 - (int)JDR_INP;    /* Err: read error or wrong stream termination */
+                if(!dc) return 0 - (int)JDR_INP;    /* Err: ошибка чтения или неправильное завершение потока */
             }
             d = *dp++;
             dc--;
             if(flg) {       /* In flag sequence? */
                 flg = 0;    /* Последовательность флагов выхода */
-                if(d != 0) jd->marker = d;  /* Не побег 0xFF, а маркер */
+                if(d != 0) jd->marker = d;  /* Не побег0xFF, маркер */
                 d = 0xFF;
             }
             else {
@@ -426,7 +426,7 @@ static int huffext(     /* >=0: декодированные данные, <0: �
     }
 #endif
 
-    return 0 - (int)JDR_FMT1;   /* Err: code not found (may be corrupted data) */
+    return 0 - (int)JDR_FMT1;   /* Err: код не найден (возможно, повреждены данные) */
 }
 
 
@@ -454,7 +454,7 @@ static int bitext(  /* >=0: извлеченные данные, <0: код ош
             if(!dc) {           /* Входные данные недоступны, повторно заполните входной буфер. */
                 dp = jd->inbuf; /* Верхняя часть входного буфера */
                 dc = jd->infunc(jd, dp, JD_SZBUF);
-                if(!dc) return 0 - (int)JDR_INP;    /* Err: read error or wrong stream termination */
+                if(!dc) return 0 - (int)JDR_INP;    /* Err: ошибка чтения или неправильное завершение потока */
             }
             else {
                 dp++;           /* Следующая точка данных */
@@ -462,7 +462,7 @@ static int bitext(  /* >=0: извлеченные данные, <0: код ош
             dc--;               /* Уменьшить количество доступных байтов */
             if(flg) {           /* In flag sequence? */
                 flg = 0;        /* Последовательность флагов выхода */
-                if(*dp != 0) return 0 - (int)JDR_FMT1;  /* Err: unexpected flag is detected (may be corrupted data) */
+                if(*dp != 0) return 0 - (int)JDR_FMT1;  /* Err: обнаружен неожиданный флаг (могут быть повреждены данные) */
                 *dp = 0xFF;     /* Флаг представляет собой данные 0xFF. */
             }
             else {
@@ -489,7 +489,7 @@ static int bitext(  /* >=0: извлеченные данные, <0: код ош
     uint32_t w = jd->wreg & ((1UL << wbit) - 1);
 
 
-    while(wbit < nbit) {    /* Подготовьте nbit битов в рабочий регистр. */
+    while(wbit < nbit) {    /* Подготовьте несколько битов в рабочем регистре. */
         if(jd->marker) {
             d = 0xFF;   /* Входной поток остановлен, сгенерируйте дополнительные биты */
         }
@@ -497,13 +497,13 @@ static int bitext(  /* >=0: извлеченные данные, <0: код ош
             if(!dc) {   /* Буфер пуст, повторно заполните входной буфер */
                 dp = jd->inbuf; /* Верхняя часть входного буфера */
                 dc = jd->infunc(jd, dp, JD_SZBUF);
-                if(!dc) return 0 - (int)JDR_INP;    /* Err: read error or wrong stream termination */
+                if(!dc) return 0 - (int)JDR_INP;    /* Err: ошибка чтения или неправильное завершение потока */
             }
             d = *dp++;
             dc--;
             if(flg) {       /* In flag sequence? */
                 flg = 0;    /* Последовательность флагов выхода */
-                if(d != 0) jd->marker = d;  /* Не побег 0xFF, а маркер */
+                if(d != 0) jd->marker = d;  /* Не побег0xFF, маркер */
                 d = 0xFF;
             }
             else {
@@ -563,7 +563,7 @@ JRESULT jd_restart(
 
     /* Проверьте маркер */
     if((d & 0xFFD8) != 0xFFD0 || (d & 7) != (rstn & 7)) {
-        return JDR_FMT1;    /* Err: expected RSTn marker is not detected (may be corrupted data) */
+        return JDR_FMT1;    /* Err: ожидаемый маркер RSTn не обнаружен (возможно, данные повреждены) */
     }
 
 #else
@@ -591,7 +591,7 @@ JRESULT jd_restart(
 
     /* Проверьте маркер */
     if((marker & 0xFFD8) != 0xFFD0 || (marker & 7) != (rstn & 7)) {
-        return JDR_FMT1;    /* Err: expected RSTn marker was not detected (may be corrupted data) */
+        return JDR_FMT1;    /* Err: ожидаемый маркер RSTn не обнаружен (возможно, данные повреждены) */
     }
 
     jd->dbit = 0;           /* Отбросить биты вещей */
@@ -605,7 +605,7 @@ JRESULT jd_restart(
 
 
 /*-----------------------------------------------------------------------*/
-/* Примените Inverse-DCT в алгоритме Arai (см. также aa_idct.png)            */
+/* Примените Inverse-DCTв алгоритме Arai (см. такжеaa_idct.png)            */
 /*-----------------------------------------------------------------------*/
 
 static void block_idct(
@@ -759,12 +759,12 @@ JRESULT jd_mcu_load(
 
             /* Извлеките элемент DC из входного потока. */
             d = huffext(jd, id, 0);                 /* Извлеките данные, закодированные Хаффманом (длина в битах) */
-            if(d < 0) return (JRESULT)(0 - d);      /* Err: invalid code or input */
+            if(d < 0) return (JRESULT)(0 - d);      /* Err: неверный код или ввод */
             bc = (unsigned int)d;
             d = jd->dcv[cmp];                       /* Значение DC предыдущего блока */
             if(bc) {                                /* Если есть отличия от предыдущего блока */
                 e = bitext(jd, bc);                 /* Извлечь биты данных */
-                if(e < 0) return (JRESULT)(0 - e);  /* Err: input */
+                if(e < 0) return (JRESULT)(0 - e);  /* Err: ввод */
                 bc = 1 << (bc - 1);                 /* Позиция MSB */
                 if(!(e & bc)) e -= (bc << 1) - 1;   /* При необходимости восстановите отрицательное значение. */
                 d += e;                             /* Получить текущую стоимость */
@@ -779,13 +779,13 @@ JRESULT jd_mcu_load(
             do {
                 d = huffext(jd, id, 1);             /* Извлеките значение, закодированное Хаффманом (нулевые серии и длина в битах) */
                 if(d == 0) break;                   /* EOB? */
-                if(d < 0) return (JRESULT)(0 - d);  /* Err: invalid code or input error */
+                if(d < 0) return (JRESULT)(0 - d);  /* Err: неверный код или ошибка ввода */
                 bc = (unsigned int)d;
                 z += bc >> 4;                       /* Пропустить начальный нулевой пробег */
                 if(z >= 64) return JDR_FMT1;        /* Слишком длинный нулевой пробег */
                 if(bc &= 0x0F) {                    /* Bit length? */
                     d = bitext(jd, bc);             /* Извлечь биты данных */
-                    if(d < 0) return (JRESULT)(0 - d);  /* Err: input device */
+                    if(d < 0) return (JRESULT)(0 - d);  /* Err: устройство ввода */
                     bc = 1 << (bc - 1);             /* Позиция MSB */
                     if(!(d & bc)) d -= (bc << 1) - 1;   /* При необходимости восстановите отрицательное значение. */
                     i = Zig[z];                     /* Получить индекс порядка растра */
@@ -821,7 +821,7 @@ JRESULT jd_mcu_load(
 
 
 /*-----------------------------------------------------------------------*/
-/* Выведите MCU: преобразуйте YCrCb в RGB и выведите его в форме RGB.         */
+/* Вы создаете MCU: преобразуете YCrCb вRGBи вводите его в форму RGB.         */
 /*-----------------------------------------------------------------------*/
 
 JRESULT jd_mcu_output(
@@ -966,7 +966,7 @@ JRESULT jd_prepare(
 
     ofs = marker = 0;       /* Найдите маркер SOI. */
     do {
-        if(jd->infunc(jd, seg, 1) != 1) return JDR_INP;     /* Err: SOI was not detected */
+        if(jd->infunc(jd, seg, 1) != 1) return JDR_INP;     /* Err: SOI не обнаружен */
         ofs++;
         marker = marker << 8 | seg[0];
     } while(marker != 0xFFD8);
@@ -988,34 +988,34 @@ JRESULT jd_prepare(
                 jd->width = LDB_WORD(&seg[3]);      /* Ширина изображения в пикселях */
                 jd->height = LDB_WORD(&seg[1]);     /* Высота изображения в пикселях */
                 jd->ncomp = seg[5];                 /* Количество цветовых компонентов */
-                if(jd->ncomp != 3 && jd->ncomp != 1) return JDR_FMT3;   /* Err: Supports only Grayscale and Y/Cb/Cr */
+                if(jd->ncomp != 3 && jd->ncomp != 1) return JDR_FMT3;   /* Err: Поддерживает только оттенки серого и Y/Cb/Cr. */
 
                 /* Проверьте каждый компонент изображения */
                 for(i = 0; i < jd->ncomp; i++) {
                     b = seg[7 + 3 * i];                         /* Получить коэффициент выборки */
                     if(i == 0) {    /* Y-компонент */
                         if(b != 0x11 && b != 0x22 && b != 0x21) {   /* Проверьте коэффициент выборки */
-                            return JDR_FMT3;                    /* Err: Supports only 4:4:4, 4:2:0 or 4:2:2 */
+                            return JDR_FMT3;                    /* Err: Поддерживает только 4:4:4, 4:2:0 или 4:2:2. */
                         }
                         jd->msx = b >> 4;
                         jd->msy = b & 15;     /* Размер MCU [блоков] */
                     }
                     else {          /* Компонент Cb/Cr */
-                        if(b != 0x11) return JDR_FMT3;          /* Err: Sampling factor of Cb/Cr must be 1 */
+                        if(b != 0x11) return JDR_FMT3;          /* Err: Коэффициент выборки Cb/Cr должен быть равен 1. */
                     }
                     jd->qtid[i] = seg[8 + 3 * i];               /* Получите таблицу деквантизатора ID для этого компонента. */
-                    if(jd->qtid[i] > 3) return JDR_FMT3;        /* Err: Invalid ID */
+                    if(jd->qtid[i] > 3) return JDR_FMT3;        /* Err: Неверный ID */
                 }
                 break;
 
-            case 0xDD:  /* DRI - Define Restart Interval */
+            case 0xDD:  /* DRI - Определить интервал перезапуска */
                 if(len > JD_SZBUF) return JDR_MEM2;
                 if(jd->infunc(jd, seg, len) != len) return JDR_INP;     /* Загрузить данные сегмента */
 
                 jd->nrst = LDB_WORD(seg);   /* Получить интервал перезапуска (MCU) */
                 break;
 
-            case 0xC4:  /* DHT - Define Huffman Tables */
+            case 0xC4:  /* DHT - Определите таблицы Хаффмана */
                 if(len > JD_SZBUF) return JDR_MEM2;
                 if(jd->infunc(jd, seg, len) != len) return JDR_INP;     /* Загрузить данные сегмента */
 
@@ -1023,7 +1023,7 @@ JRESULT jd_prepare(
                 if(rc) return rc;
                 break;
 
-            case 0xDB:  /* DQT - Define Quantizer Tables */
+            case 0xDB:  /* DQT - Определите таблицы квантователя */
                 if(len > JD_SZBUF) return JDR_MEM2;
                 if(jd->infunc(jd, seg, len) != len) return JDR_INP;     /* Загрузить данные сегмента */
 
@@ -1031,36 +1031,36 @@ JRESULT jd_prepare(
                 if(rc) return rc;
                 break;
 
-            case 0xDA:  /* SOS - Start of Scan */
+            case 0xDA:  /* SOS - Начало сканирования */
                 if(len > JD_SZBUF) return JDR_MEM2;
                 if(jd->infunc(jd, seg, len) != len) return JDR_INP;     /* Загрузить данные сегмента */
 
-                if(!jd->width || !jd->height) return JDR_FMT1;  /* Err: Invalid image size */
-                if(seg[0] != jd->ncomp) return JDR_FMT3;        /* Err: Wrong color components */
+                if(!jd->width || !jd->height) return JDR_FMT1;  /* Err: Неверный размер изображения */
+                if(seg[0] != jd->ncomp) return JDR_FMT3;        /* Err: Неправильные цветовые компоненты */
 
                 /* Проверьте, загружены ли все таблицы, соответствующие каждому компоненту. */
                 for(i = 0; i < jd->ncomp; i++) {
                     b = seg[2 + 2 * i]; /* Получите таблицу Хаффмана ID */
-                    if(b != 0x00 && b != 0x11) return JDR_FMT3;     /* Err: Different table number for DC/AC element */
+                    if(b != 0x00 && b != 0x11) return JDR_FMT3;     /* Err: Другой номер таблицы для элемента DC/AC */
                     n = i ? 1 : 0;                          /* Класс компонента */
                     if(!jd->huffbits[n][0] || !jd->huffbits[n][1]) {    /* Проверьте таблицу Хаффмана для этого компонента */
-                        return JDR_FMT1;                    /* Err: Not loaded */
+                        return JDR_FMT1;                    /* Err: Не загружено */
                     }
                     if(!jd->qttbl[jd->qtid[i]]) {           /* Проверьте таблицу деквантайзера для этого компонента. */
-                        return JDR_FMT1;                    /* Err: Not loaded */
+                        return JDR_FMT1;                    /* Err: Не загружено */
                     }
                 }
 
                 /* Выделите рабочий буфер для MCU и вывода пикселей. */
                 n = jd->msy * jd->msx;                      /* Количество блоков Y в MCU */
-                if(!n) return JDR_FMT1;                     /* Err: SOF0 has not been loaded */
+                if(!n) return JDR_FMT1;                     /* Err: SOF0 не был загружен */
                 len = n * 64 * 2 + 64;                      /* Выделить буфер для вывода IDCT и RGB */
                 if(len < 256) len = 256;                    /* но для IDCT требуется не менее 256 байт */
                 jd->workbuf = alloc_pool(jd,
                                          len);          /* и он может занимать часть следующего рабочего буфера MCU для вывода RGB. */
-                if(!jd->workbuf) return JDR_MEM1;           /* Err: not enough memory */
+                if(!jd->workbuf) return JDR_MEM1;           /* Err: недостаточно памяти */
                 jd->mcubuf = alloc_pool(jd, (n + 2) * 64 * sizeof(jd_yuv_t));   /* Выделить рабочий буфер MCU */
-                if(!jd->mcubuf) return JDR_MEM1;            /* Err: not enough memory */
+                if(!jd->mcubuf) return JDR_MEM1;            /* Err: недостаточно памяти */
 
                 /* Выровнять смещение чтения потока по JD_SZBUF. */
                 if(ofs %= JD_SZBUF) {
@@ -1129,7 +1129,7 @@ JRESULT jd_decomp(
             }
             rc = jd_mcu_load(jd);                  /* Загрузите MCU (распакуйте закодированный поток Хаффмана, деквантуйте и примените IDCT ) */
             if(rc != JDR_OK) return rc;
-            rc = jd_mcu_output(jd, outfunc, x, y); /* Выведите MCU (от YCbCr до RGB, масштабирование и вывод) */
+            rc = jd_mcu_output(jd, outfunc, x, y); /* Вы создаетеMCU(от YCbCr до RGB, масштабирование и выводы) */
             if(rc != JDR_OK) return rc;
         }
     }

@@ -60,7 +60,7 @@ static void _growBorder(SwStrokeBorder* border, uint32_t newPts)
 
     while (maxCur < maxNew)
         maxCur += (maxCur >> 1) + 16;
-    //OPTIMIZE: use mempool!
+    //OPTIMIZE: используйте мемпул!
     border->pts = static_cast<SwPoint*>(lv_realloc(border->pts, maxCur * sizeof(SwPoint)));
     LV_ASSERT_MALLOC(border->pts);
     border->tags = static_cast<uint8_t*>(lv_realloc(border->tags, maxCur * sizeof(uint8_t)));
@@ -197,7 +197,7 @@ static void _borderLineTo(SwStrokeBorder* border, const SwPoint& to, bool movabl
         //переместить последнюю точку
         border->pts[border->ptsCnt - 1] = to;
     } else {
-        //не добавляйте line_to нулевой длины
+        //не добавляйтеline_toнулевой длины
         if (border->ptsCnt > 0 && (border->pts[border->ptsCnt - 1] - to).small()) return;
 
         _growBorder(border, 1);
@@ -282,7 +282,7 @@ static void _outside(SwStroke& stroke, int32_t side, SwFixed lineLength)
             _borderLineTo(border, delta, false);
 
             /* Теперь добавьте и конечную точку
-               Требуется только в том случае, если не lineto (lineLength для кривых равен нулю) */
+               Требуется только в том случае, если не lineto (lineLength для кривых ошибок) */
             if (lineLength == 0) {
                 delta = {static_cast<SwCoord>(stroke.width), 0};
                 mathRotate(delta, stroke.angleOut + rotate);
@@ -302,7 +302,7 @@ static void _inside(SwStroke& stroke, int32_t side, SwFixed lineLength)
     SwPoint delta;
     bool intersect = false;
 
-    /* Границы пересекаются только в том случае, если между двумя line_to и обоими
+    /* Границы пересекаются только в том случае, если между двумяline_toи обоями
        линии достаточно длинные (длина линии для кривых равна нулю). */
     if (border->movable && lineLength > 0) {
         //вычислить минимальную необходимую длину строк
@@ -368,7 +368,7 @@ void _firstSubPath(SwStroke& stroke, SwFixed startAngle, SwFixed lineLength)
     _borderMoveTo(border, pt);
 
     /* Сохраните угол, положение и длину линии для последнего соединения.
-       lineLength равен нулю для кривых */
+       lineLength учитывает кривые */
     stroke.subPathAngle = startAngle;
     stroke.firstPt = false;
     stroke.subPathLineLength = lineLength;

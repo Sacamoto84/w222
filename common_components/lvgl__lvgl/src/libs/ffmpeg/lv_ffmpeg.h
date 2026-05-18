@@ -51,44 +51,44 @@ void lv_ffmpeg_deinit(void);
 
 /**
  * Получить количество кадров, содержащихся в файле
- * @param path image or video file name
- * @return Number of frames, less than 0 means failed
+ * @param path имя изображения или видеофайла
+ * @return Количество кадров меньше 0 означает неудачу.
  */
 int lv_ffmpeg_get_frame_num(const char * path);
 
 /**
  * Создать объект ffmpeg_player
- * @param parent pointer to an object, it will be the parent of the new player
- * @return pointer to the created ffmpeg_player
+ * @param parent указатель на объект, он будет родителем нового игрока
+ * @return указатель на созданный ffmpeg_player
  */
 lv_obj_t * lv_ffmpeg_player_create(lv_obj_t * parent);
 
 /**
  * Установите путь к файлу, который будет воспроизводиться.
- * @param obj pointer to a ffmpeg_player object
- * @param path video file path
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info.
+ * @param obj указатель на объект ffmpeg_player
+ * @param path путь к видеофайлу
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу получить информацию.
  */
 lv_result_t lv_ffmpeg_player_set_src(lv_obj_t * obj, const char * path);
 
 /**
  * Установить командное управление видеоплеером
- * @param obj pointer to a ffmpeg_player object
- * @param cmd control commands
+ * @param obj указатель на объект ffmpeg_player
+ * @param cmd команды управления
  */
 void lv_ffmpeg_player_set_cmd(lv_obj_t * obj, lv_ffmpeg_player_cmd_t cmd);
 
 /**
  * Установите автоматическое воспроизведение видео
- * @param obj pointer to a ffmpeg_player object
- * @param en true: enable the auto restart
+ * @param obj указатель на объект ffmpeg_player
+ * @param en true: включить автоматический перезапуск
  */
 void lv_ffmpeg_player_set_auto_restart(lv_obj_t * obj, bool en);
 
 /**
  * Установите видеодекодер
- * @param obj pointer to a ffmpeg_player object
- * @param decoder_name decoder name
+ * @param obj указатель на объект ffmpeg_player
+ * @param decoder_name имя декодера
  */
 void lv_ffmpeg_player_set_decoder(lv_obj_t * obj, const char * decoder_name);
 /*=====================

@@ -141,11 +141,11 @@ void lv_lcd_generic_mipi_send_cmd_list(lv_display_t * disp, const uint8_t * cmd_
  **********************/
 
 /**
- * Вспомогательная функция для вызова предоставленной пользователем функции send_cmd.
- * @param drv           LCD driver object
- * @param cmd           command byte
- * @param param         parameter buffer
- * @param param_size    number of bytes of the parameters
+ * Вспомогательная функция для вызова предоставленной пользовательской функции send_cmd.
+ * @param drv           Объект драйвера LCD
+ * @param cmd           командный байт
+ * @param param         буфер параметров
+ * @param param_size    количество байтов параметров
  */
 static void send_cmd(lv_lcd_generic_mipi_driver_t * drv, uint8_t cmd, uint8_t * param, size_t param_size)
 {
@@ -154,22 +154,22 @@ static void send_cmd(lv_lcd_generic_mipi_driver_t * drv, uint8_t cmd, uint8_t * 
 }
 
 /**
- * Вспомогательная функция для вызова предоставленной пользователем функции send_color.
- * @param drv           LCD driver object
- * @param cmd           command byte
- * @param param         parameter buffer
- * @param param_size    number of bytes of the parameters
+ * Вспомогательная функция для вызова предоставленной пользовательской функции send_color.
+ * @param drv           Объект драйвера LCD
+ * @param cmd           командный байт
+ * @param param         буфер параметров
+ * @param param_size    количество байтов параметров
  */
 static void send_color(lv_lcd_generic_mipi_driver_t * drv, uint8_t cmd, uint8_t * param, size_t param_size)
 {
     uint8_t cmdbuf = cmd;       /* MIPI использует 8-битные команды. */
     drv->send_color(drv->disp, &cmdbuf, 1, param, param_size);
-    /* note: LVGL waits for your callback to call `lv_display_flush_ready` to know when the transfer has finished. */
+    /* note: LVGL ожидает вашего обратного вызова для вызова `lv_display_flush_ready`, чтобы узнать, когда передача завершилась. */
 }
 
 /**
  * Инициализируйте драйвер LCD после аппаратного сброса
- * @param drv           LCD driver object
+ * @param drv           Объект драйвера LCD
  */
 static void init(lv_lcd_generic_mipi_driver_t * drv, lv_lcd_flag_t flags)
 {
@@ -213,9 +213,9 @@ static void init(lv_lcd_generic_mipi_driver_t * drv, lv_lcd_flag_t flags)
 
 /**
  * Установить направления считывания (используется для вращения дисплея)
- * @param drv           LCD driver object
- * @param mirror_x      false: normal, true: mirrored
- * @param mirror_y      false: normal, true: mirrored
+ * @param drv           Объект драйвера LCD
+ * @param mirror_x      false: нормально, true: зеркально
+ * @param mirror_y      false: нормально, true: зеркально
  */
 static void set_mirror(lv_lcd_generic_mipi_driver_t * drv, bool mirror_x, bool mirror_y)
 {
@@ -231,8 +231,8 @@ static void set_mirror(lv_lcd_generic_mipi_driver_t * drv, bool mirror_x, bool m
 
 /**
  * Поменяйте местами горизонтальное и вертикальное показания (используется для поворота дисплея)
- * @param drv           LCD driver object
- * @param swap          false: normal, true: swapped
+ * @param drv           Объект драйвера LCD
+ * @param swap          false: нормально, true: заменено
  */
 static void set_swap_xy(lv_lcd_generic_mipi_driver_t * drv, bool swap)
 {
@@ -245,12 +245,12 @@ static void set_swap_xy(lv_lcd_generic_mipi_driver_t * drv, bool swap)
 
 /**
  * Сбросить буфер дисплея в LCD.
- * @param disp          display object
- * @param hor_res       horizontal resolution
- * @param area          area stored in the buffer
- * @param px_map        buffer containing pixel data
- * @note                transfers pixel data to the LCD controller using the callbacks 'send_cmd' and 'send_color', which were
- *                      передается в функцию 'lv_st7789_create()'
+ * @param disp          объект отображения
+ * @param hor_res       горизонтальное разрешение
+ * @param area          область, хранящаяся в буфере
+ * @param px_map        буфер, содержащий данные пикселей
+ * @note                передает данные пикселей на контроллер LCD, используя обратные вызовы 'send_cmd' и 'send_color', которые были
+ *                      значение в функции 'lv_st7789_create()'
  */
 static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
@@ -288,8 +288,8 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
 
 /**
  * Установите вращение с учетом текущих настроек зеркала и подкачки
- * @param drv           LCD driver object
- * @param rot           rotation
+ * @param drv           Объект драйвера LCD
+ * @param rot           вращение
  */
 static void set_rotation(lv_lcd_generic_mipi_driver_t * drv, lv_display_rotation_t rot)
 {
@@ -318,7 +318,7 @@ static void set_rotation(lv_lcd_generic_mipi_driver_t * drv, lv_display_rotation
 
 /**
  * Обработка события LV_EVENT_RESOLUTION_CHANGED (обрабатывает изменение разрешения и поворота)
- * @param e             LV_EVENT_RESOLUTION_CHANGED event
+ * @param e             Событие LV_EVENT_RESOLUTION_CHANGED
  */
 static void res_chg_event_cb(lv_event_t * e)
 {
@@ -329,7 +329,7 @@ static void res_chg_event_cb(lv_event_t * e)
     uint16_t ver_res = lv_display_get_vertical_resolution(disp);
     lv_display_rotation_t rot = lv_display_get_rotation(disp);
 
-    /* TODO: implement resolution change */
+    /* TODO: реализовать изменение разрешения */
     LV_UNUSED(hor_res);
     LV_UNUSED(ver_res);
 

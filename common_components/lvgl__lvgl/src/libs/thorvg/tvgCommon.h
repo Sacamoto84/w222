@@ -30,7 +30,7 @@
 #include "thorvg.h"
 #include <mutex>
 
-// использование пространства имен std;
+// использование пространства имен стандартно;
 using std::string;
 
 using std::lock_guard;

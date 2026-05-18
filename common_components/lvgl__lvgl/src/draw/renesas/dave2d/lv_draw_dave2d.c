@@ -156,7 +156,7 @@ static void _dave2d_buf_invalidate_cache_cb(const lv_draw_buf_t * draw_buf, cons
 
 /**
  * @todo
- * LVGL должен использовать аппаратное ускорение для buf_copy и не влиять на рендеринг GPU.
+ * LVGL должен использовать аппаратное ускорение дляbuf_copyи не влиять на рендеринг GPU.
  */
 #if 0
 static void _dave2d_buf_copy(void * dest_buf, uint32_t dest_w, uint32_t dest_h, const lv_area_t * dest_area,
@@ -455,12 +455,12 @@ static int32_t _dave2d_wait_finish(lv_draw_unit_t * draw_unit)
 {
     /* Если конвейер рисования ожидает, это означает, что давление для рисования
      * исчерпан, отложите блок задач, которые должны быть выполнены
-     * Дэйв и дождись его прерывания. (Драйвер Dave2D поддерживает RTOS, семафоры не нужны);
+     * Дэйв и дождались его отключения. (Драйвер Dave2D поддержки RTOS, семафоры не нужны);
      */
     lv_draw_dave2d_unit_t * draw_dave2d_unit = (lv_draw_dave2d_unit_t *) draw_unit;
 
     if(!draw_pressure) {
-        /* Оно дошло сюда, потому что Dave2D Draw Unit не подходил для выполнения задачи.
+        /* Оно дошло сюда, потому что Dave2D Draw Unit не подошел для выполнения задачи.
          * Пока ничего не рендерится, предотвратите мертвую блокировку
          * очистив пустой буфер команд GPU и просто вернувшись.
          */
@@ -507,11 +507,11 @@ static void execute_drawing(lv_draw_dave2d_unit_t * u)
             lv_draw_dave2d_border(t, t->draw_dsc, &t->area);
             break;
         case LV_DRAW_TASK_TYPE_BOX_SHADOW:
-            //lv_draw_dave2d_box_shadow (t, t-> draw_dsc , &t->площадь);
+            //lv_draw_dave2d_box_shadow (t, t->draw_dsc, &t->площадь);
             break;
 #if 0
         case LV_DRAW_TASK_TYPE_BG_IMG:
-            //lv_draw_dave2d_bg_image (t, t-> draw_dsc , &t->площадь);
+            //lv_draw_dave2d_bg_image (t, t->draw_dsc, &t->площадь);
             break;
 #endif
         case LV_DRAW_TASK_TYPE_LABEL:
@@ -530,10 +530,10 @@ static void execute_drawing(lv_draw_dave2d_unit_t * u)
             lv_draw_dave2d_triangle(t, t->draw_dsc);
             break;
         case LV_DRAW_TASK_TYPE_LAYER:
-            //lv_draw_dave2d_layer (t, t-> draw_dsc , &t->площадь);
+            //lv_draw_dave2d_layer (t, t->draw_dsc, &t->площадь);
             break;
         case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
-            //lv_draw_dave2d_mask_rect (t, t-> draw_dsc , &t->площадь);
+            //lv_draw_dave2d_mask_rect (t, t->draw_dsc, &t->площадь);
             break;
         default:
             break;

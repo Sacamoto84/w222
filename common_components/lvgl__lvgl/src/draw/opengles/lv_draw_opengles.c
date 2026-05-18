@@ -229,7 +229,7 @@ static int32_t evaluate(lv_draw_unit_t * draw_unit, lv_draw_task_t * task)
     }
 
     /*Если не обновлять дисплей, возможно, это рендеринг холста.
-     *который не поддерживается в OpenGL, поскольку это не текстура.*/
+     *который не переходит в OpenGL, потому что это не текстура.*/
     if(lv_refr_get_disp_refreshing() == NULL) return 0;
 
     if(((lv_draw_dsc_base_t *)task->draw_dsc)->user_data == NULL) {
@@ -361,7 +361,7 @@ static bool draw_to_texture(lv_draw_opengles_unit_t * u, cache_data_t * cache_da
                 break;
             }
         default:
-            /*Malloced cache_data -> draw_dsc будет автоматически освобожден в случае сбоя.
+            /*Mallocedcache_data->draw_dscбудет автоматически отключен в случае сбоя.
             *в opengles_texture_cache_free_cb*/
             LV_PROFILER_DRAW_END;
             return false;
@@ -459,12 +459,12 @@ static void draw_from_cached_texture(lv_draw_task_t * t)
     data_to_find.h = lv_area_get_height(&t->_real_area);
     data_to_find.texture = 0;
 
-    /*user_data сохраняет средство рендеринга, чтобы отличать его от задач рендеринга SW.
-     *Однако кэшированная текстура не зависит от средства рендеринга, поэтому используйте NULL user_data.*/
+    /*user_data сохранит средство рендеринга, чтобы выделить его среди задач рендерингаSW.
+     *Однако кэшированная текстура не зависит от средства рендеринга, поэтому воспользуйтесьNULLuser_data .*/
     void * user_data_saved = data_to_find.draw_dsc->user_data;
     data_to_find.draw_dsc->user_data = NULL;
 
-    /*img_dsc -> image_area — абсолютная координата, поэтому она другая.
+    /*img_dsc ->image_area— абсолютная координата, поэтому она другая.
      *для того же изображения в другой позиции. Поэтому сделайте его относительным, прежде чем использовать для кеша. */
     lv_area_t a = t->area;
     if(t->type == LV_DRAW_TASK_TYPE_IMAGE) {
@@ -544,14 +544,14 @@ static void draw_from_cached_texture(lv_draw_task_t * t)
         }
     }
     /*Не кэшируйте нестатические (константные) тексты, поскольку указатель текста может быть освобожден/перераспределен.
-     *в любой момент, что приведет к появлению дикого указателя в кэшированном dsc отрисовки. */
+     *в любой момент, что приведет к появлению дикого указателя в кэшированном dsc-отрисовке. */
     if(t->type == LV_DRAW_TASK_TYPE_LABEL) {
         lv_draw_label_dsc_t * label_dsc = t->draw_dsc;
         if(!label_dsc->text_static) {
             lv_cache_drop(u->texture_cache, &data_to_find, u);
         }
     }
-    /*Не кэшировать строки, отображаемые из точек в dsc->points, будут освобождены*/
+    /*Не кэшировать строки, отображаемые из точек в dsc->points, которые будут освобождены*/
     else if(t->type == LV_DRAW_TASK_TYPE_LINE) {
         lv_draw_line_dsc_t * line_dsc = t->draw_dsc;
         if(line_dsc->points) {
@@ -656,7 +656,7 @@ static unsigned int create_texture(int32_t w, int32_t h, const void * data)
     GL_CALL(glGenerateMipmap(GL_TEXTURE_2D));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 20));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-    /* GL_CALL (glTexParameteri( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST_MIPMAP_NEAREST ));
+    /* GL_CALL (glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST_MIPMAP_NEAREST));
      * В качестве альтернативы в некоторых случаях можно использовать приведенную выше форму для немного более высокой производительности, но
      * визуальное качество при использовании масштабов изображения, не являющихся точно 1:1 (или 2:1, или какое-либо другое приращение)
      * будет не так хорошо.

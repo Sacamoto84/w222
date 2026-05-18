@@ -64,20 +64,20 @@ typedef void (*lv_ft81x_spi_cb_t)(lv_display_t * disp, lv_ft81x_spi_operation_t 
 
 /**
  * Создайте дисплей драйвера ft81x на основе кадрового буфера.
- * @param params      pointer to a struct of display panel properties. does not need to be static.
- * @param partial_buf a single partial buffer
- * @param buf_size    size of the partial buffer
- * @param spi_cb      a callback called by the driver to perform SPI operations
- * @param user_data   use `lv_ft81x_get_user_data` to get this pointer inside the SPI callback
- * @return pointer to the display
+ * @param params      указатель на структуру свойств панели отображения. не обязательно должен быть статичным.
+ * @param partial_buf один частичный буфер
+ * @param buf_size    размер частичного буфера
+ * @param spi_cb      обратный вызов, вызываемый драйвером для выполнения операций SPI
+ * @param user_data   используйте `lv_ft81x_get_user_data`, чтобы получить этот указатель внутри обратного вызова SPI
+ * @return указатель на дисплей
  */
 lv_display_t * lv_ft81x_create(const lv_ft81x_parameters_t * params, void * partial_buf, uint32_t buf_size,
                                lv_ft81x_spi_cb_t spi_cb, void * user_data);
 
 /**
- * Получите параметр `user_data`, который был передан `lv_ft81x_create`. Полезно при обратном вызове SPI.
- * @param disp      pointer to the ft81x display
- * @return          the `user_data` pointer
+ * Введите параметр `user_data`, который был передан `lv_ft81x_create`. Полезно при обратном вызове SPI.
+ * @param disp      указатель на дисплей ft81x
+ * @return          указатель `user_data`
  */
 void * lv_ft81x_get_user_data(lv_display_t * disp);
 

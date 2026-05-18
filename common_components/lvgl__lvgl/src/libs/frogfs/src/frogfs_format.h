@@ -1,4 +1,4 @@
-/* Данная форма исходного кода регулируется условиями публичной лицензии Mozilla.
+/* Данная форма регулирования исходного кода является публичной лицензией Mozilla.
  * Лицензия, версия 2.0. Если копия MPL не распространялась вместе с этим
  * файл, вы можете получить его по адресу http://mozilla.org/MPL/2.0/.. */
 
@@ -56,7 +56,7 @@ struct frogfs_entry_t {
 };
 
 /**
- * \brief Заголовок объекта каталога
+ * \brief Заголовок каталога объектов
  */
 typedef struct frogfs_dir_t {
     const frogfs_entry_t entry;
@@ -73,7 +73,7 @@ typedef struct frogfs_file_t {
 } frogfs_file_t;
 
 /**
- * \brief Заголовок объекта сжатого файла
+ * \brief Заголовок удлиненного файла
  */
 typedef struct frogfs_comp_t {
     const frogfs_entry_t entry;

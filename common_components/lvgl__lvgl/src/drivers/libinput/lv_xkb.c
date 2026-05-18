@@ -76,7 +76,7 @@ void lv_xkb_deinit(lv_xkb_t * dsc)
 
 uint32_t lv_xkb_process_key(lv_xkb_t * dsc, uint32_t scancode, bool down)
 {
-    /* Сместите скан-код evdev на 8, см. https://xkbcommon.org/doc/current/xkbcommon_8h.html#ac29aee92124c08d1953910ab28ee1997. */
+    /* Сместите скан-код evdev на 8, см.  https://xkbcommon.org/doc/current/xkbcommon_8h.html#ac29aee92124c08d1953910ab28ee1997. */
     xkb_keycode_t keycode = scancode + 8;
 
     uint32_t result = 0;

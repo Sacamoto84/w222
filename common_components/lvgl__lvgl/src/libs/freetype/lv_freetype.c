@@ -243,7 +243,7 @@ void lv_freetype_font_delete(lv_font_t * font)
     LV_ASSERT_NULL(font);
     lv_freetype_context_t * ctx = lv_freetype_get_context();
     if(!ctx) {
-        /* Freetype уже удален (например, порядок статического уничтожения). Нечего выпускать. */
+        /* Фритайп уже удален (например, порядок статического уничтожения). Нечего выпускать. */
         return;
     }
     lv_freetype_font_dsc_t * dsc = (lv_freetype_font_dsc_t *)(font->dsc);

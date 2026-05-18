@@ -1,6 +1,6 @@
 /*
 @file EVE.h
-@brief   Contains FT80x/FT81x/BT81x API definitions
+@brief   Содержит определения FT80x/FT81x/BT81x API.
 @version 5.0
 @date 28 января 2024 г.
 @author Рудольф Ридель
@@ -31,44 +31,44 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 История @section
 
 5.0
-- started to add BT817 / BT818 defines
-- cleanup: removed FT80x defines
-- replaced BT81X_ENABLE with "EVE_GEN > 2"
-- removed FT81X_ENABLE as FT81x already is the lowest supported chip revision now
-- added more BT817 / BT818 defines
-- removed undocumented registers and commands
-- merged FT80x and FT81x definitions as FT81x is baseline now
-- removed the history from before 4.0
-- fixed typo: REG_AH_CYCLE_MAX -> REG_AH_HCYCLE_MAX
-- re-arranged the host commands, removed EVE_CLKINT for BT817/BT818,
+- начал добавлять BT817/BT818 определяет
+- очистка: удалены определения FT80x
+- заменилBT81X_ENABLEна "EVE_GEN> 2"
+- удален FT81X_ENABLE, поскольку FT81x уже сейчас является самой низкой поддерживаемой ревизией чипа
+- добавлено больше определенийBT817/ BT818
+- удалены недокументированные регистры и команды
+- определения FT80x и FT81x объединены, поскольку FT81x теперь является базовым
+- удалена история до версии 4.0
+- исправлена опечатка:REG_AH_CYCLE_MAX-> REG_AH_HCYCLE_MAX
+- переставил команды хоста, удалилEVE_CLKINTдля BT817/BT818,
     удалены FT80x EVE_CLK36M и EVE_CLK48M
-- added EVE_OPT_OVERLAY
-- removed the 4.0 history
-- fixed some MISRA-C issues
-- removed macro BEGIN(prim) - use (DL_BEGIN | EVE_BITMAPS) for example
-- removed macro END() - use define DL_END
-- removed macro RESTORE_CONTEXT() - use define DL_RESTORE_CONTEXT
-- removed macro RETURN() - use define DL_RETURN
-- removed macro SAVE_CONTEXT() - use define DL_SAVE_CONTEXT
-- basic maintenance: checked for violations of white space and indent rules
-- more linter fixes
-- changed EVE_COMPRESSED_RGBA_ASTC_nxn_KHR to EVE_ASTC_nXn to fix linter
+- добавлен EVE_OPT_OVERLAY
+- удалил историю версии 4.0
+- исправлены некоторые проблемы сMISRA-C
+- удален макросBEGIN(prim) - используйте (DL_BEGIN|EVE_BITMAPS) например
+- удален макрос END() - используйте define DL_END
+- удален макрос RESTORE_CONTEXT() - используйте define DL_RESTORE_CONTEXT
+- удален макрос RETURN() - используйте define DL_RETURN
+- удален макрос SAVE_CONTEXT() - используйте define DL_SAVE_CONTEXT
+- базовое обслуживание: проверяется на наличие нарушений правил использования пробелов и отступов.
+- еще исправления линтера
+- измененEVE_COMPRESSED_RGBA_ASTC_nxn_KHRна EVE_ASTC_nXn, чтобы исправить линтер
     предупреждения и воспользовались возможностью сделать их короче
-- added DL_COLOR_A as alternative to the COLOR_A macro
-- added defines for all DL_ display list commands
-- cleaned up the macros
-- fix: changed DL_CLEAR_RGB to DL_CLEAR_COLOR_RGB
+- добавленDL_COLOR_Aв качестве альтернативы макросу COLOR_A
+- добавлены определения для всех команд списка отображения DL_
+- почистил макросы
+- исправлено: измененDL_CLEAR_RGBна DL_CLEAR_COLOR_RGB
     поскольку это то, что использует руководство по программированию
-- fix: renamed EVE_ROM_FONT_ADDR to EVE_ROM_FONTROOT
-- added #ifdef __cplusplus / extern "C" to allow
+- исправлено: переименованEVE_ROM_FONT_ADDRв EVE_ROM_FONTROOT
+- добавлен#ifdef__cplusplus /extern "C", чтобы разрешить
     добавление функций EVE_ в код C++
-- fix: typo REG_COPRO_PATCH_DTR -> REG_COPRO_PATCH_PTR
-- started to convert the function-like macros to static inline functions to be
+- исправлено: опечаткаREG_COPRO_PATCH_DTR-> REG_COPRO_PATCH_PTR
+- начали преобразовывать функциональные макросы в статические встроенные функции, чтобы их можно было
     немного более дружелюбен по отношению к C++ в отношении безопасности типов
-- added type-casts to all simple macros
-- converted some more function-like macros to static inline functions
-- converted the rest of the function-like macros to static inline functions
-- fix: forgot to comment out the EVE2 BITMAP_TRANSFORM_E when converting it to an inline function
+- добавлено приведение типов ко всем простым макросам
+- преобразовал еще несколько функциональных макросов в статические встроенные функции
+- преобразовал остальную часть функциональных макросов в статические встроенные функции
+- исправлено: забыл закомментироватьEVE2BITMAP_TRANSFORM_E при преобразовании во встроенную функцию
 
 */
 
@@ -99,7 +99,7 @@ extern "C"
 #define EVE_CMDFIFO_SIZE ((uint32_t) 4U*1024UL)
 #define EVE_RAM_DL_SIZE  ((uint32_t) 8U*1024UL)
 
-/* команды списка списка diplay, большинству из них нужны аргументы OR */
+/* список команд списка, большинство из них нужны аргументы OR */
 #define DL_DISPLAY       ((uint32_t) 0x00000000UL)
 #define DL_BITMAP_SOURCE ((uint32_t) 0x01000000UL)
 #define DL_CLEAR_COLOR_RGB ((uint32_t) 0x02000000UL)
@@ -156,11 +156,11 @@ extern "C"
 
 /* Команды хоста */
 #define EVE_ACTIVE       ((uint8_t) 0x00U) /* перевести EVE в активное состояние */
-#define EVE_STANDBY      ((uint8_t) 0x41U) /* перевести EVE в режим ожидания (clk работает) */
+#define EVE_STANDBY      ((uint8_t) 0x41U) /* переведенEVEв режим ожидания (clk работает) */
 #define EVE_SLEEP        ((uint8_t) 0x42U) /* перевести EVE в спящий режим (выключить) */
 #define EVE_CLKEXT       ((uint8_t) 0x44U) /* выбрать внешний источник синхронизации */
 #define EVE_CLKINT       ((uint8_t) 0x48U) /* выберите внутренний источник синхронизации, недопустимый вариант для BT817 / BT818 */
-#define EVE_PWRDOWN      ((uint8_t) 0x50U) /* поместите EVE в Power Down (ядро выключено) */
+#define EVE_PWRDOWN      ((uint8_t) 0x50U) /* поместитеEVEв Power Down (ядро выключено) */
 #define EVE_CLKSEL       ((uint8_t) 0x61U) /* настроить системные часы */
 #define EVE_RST_PULSE    ((uint8_t) 0x68U) /* сброс ядра - все регистры по умолчанию и процессоры сброшены */
 #define EVE_CORERST      ((uint8_t) 0x68U) /* сброс ядра - все регистры по умолчанию и процессоры сброшены */
@@ -285,8 +285,8 @@ extern "C"
 
 /* Тип аудиосэмпла определяет */
 #define EVE_LINEAR_SAMPLES       ((uint32_t) 0UL) /* 8-битные подписанные образцы */
-#define EVE_ULAW_SAMPLES         ((uint32_t) 1UL) /* 8-битные образцы Ulaw */
-#define EVE_ADPCM_SAMPLES        ((uint32_t) 2UL) /* 4-битные образцы ima adpcm */
+#define EVE_ULAW_SAMPLES         ((uint32_t) 1UL) /* 8-битные фрагменты Улав */
+#define EVE_ADPCM_SAMPLES        ((uint32_t) 2UL) /* 4-битные файлы ima adpcm */
 
 /* Синтезированный звук */
 #define EVE_SILENCE      ((uint8_t) 0x00U)
@@ -413,8 +413,8 @@ extern "C"
 
 /* Биты GPIO */
 #define EVE_GPIO0  ((uint8_t) 0U)
-#define EVE_GPIO1  ((uint8_t) 1U) /* вывод gpio по умолчанию для отключения звука, 1 — включить, 0 — отключить */
-#define EVE_GPIO7  ((uint8_t) 7U) /* PIN-код gpio по умолчанию для включения дисплея, 1 — включить, 0 — отключить */
+#define EVE_GPIO1  ((uint8_t) 1U) /* вывод gpio по умолчанию для отключения звука, 1 — выключить, 0 — выключить */
+#define EVE_GPIO7  ((uint8_t) 7U) /* PIN -код gpio по умолчанию для включения дисплеев, 1 — включить, 0 — выключить */
 
 /* Поворот дисплея */
 #define EVE_DISPLAY_0   ((uint8_t) 0U) /* вращение 0 градусов */
@@ -589,11 +589,11 @@ extern "C"
 
 /* Макросы для создания статического списка отображения */
 
-//#define ALPHA_FUNC (func,ref) (( DL_ALPHA_FUNC ) | (((func) & 7UL) << 8U) | ((ref) & 0xFFUL))
+//#defineALPHA_FUNC(func,ref) ((DL_ALPHA_FUNC) | (((func) & 7UL) << 8U) | ((ref) & 0xFFUL))
 /**
- * @brief Set the alpha test function.
+ * @brief Установите функцию альфа-тестирования.
  *
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t ALPHA_FUNC(uint8_t func, uint8_t ref)
 {
@@ -601,20 +601,20 @@ static inline uint32_t ALPHA_FUNC(uint8_t func, uint8_t ref)
     return (DL_ALPHA_FUNC | funcv | ref);
 }
 
-//#define BITMAP_HANDLE (дескриптор) (( DL_BITMAP_HANDLE ) | ((дескриптор) & 0x1FUL))
+//#defineBITMAP_HANDLE(дескриптор) ((DL_BITMAP_HANDLE) | ((дескриптор) & 0x1FUL))
 /**
- * @brief Set the bitmap handle.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите дескриптор растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_HANDLE(uint8_t handle)
 {
     return (DL_BITMAP_HANDLE | ((handle) & 0x1FUL));
 }
 
-//#define BITMAP_LAYOUT (формат,линейный шаг,высота) (( DL_BITMAP_LAYOUT ) | (((формат) & 0x1FUL) << 19U) | (((линейный шаг) & 0x3FFUL) << 9U) | ((высота) & 0x1FFUL))
+//#defineBITMAP_LAYOUT(формат,линейный шаг,высота) ((DL_BITMAP_LAYOUT) | (((формат) & 0x1FUL) << 19U) | (((линейный шаг) & 0x3FFUL) << 9U) | ((высота) & 0x1FFUL))
 /**
- * @brief Set the source bitmap memory format and layout for the current handle.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите исходный формат памяти растрового изображения и макет для текущего дескриптора.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_LAYOUT(uint8_t format, uint16_t linestride, uint16_t height)
 {
@@ -624,10 +624,10 @@ static inline uint32_t BITMAP_LAYOUT(uint8_t format, uint16_t linestride, uint16
     return (DL_BITMAP_LAYOUT | formatv | linestridev | heightv);
 }
 
-//#define BITMAP_SIZE (filter,wrapx,wrapy,width,height) (( DL_BITMAP_SIZE ) | (((filter) & 1UL) << 20U) | (((wrapx) & 1UL) << 19U) | (((wrapy) & 1UL) << 18U) | (((ширина) & 0x1FFUL) << 9U) | ((высота) и 0x1FFUL))
+//#defineBITMAP_SIZE(filter,wrapx,wrapy,width,height) ((DL_BITMAP_SIZE) | (((фильтр) & 1UL) << 20U) | (((wrapx) & 1UL) << 19U) | (((wrapy) & 1UL) << 18U) | (((ширина) & 0x1FFUL) << 9U) | ((высота) и 0x1FFUL))
 /**
- * @brief Set the source bitmap memory format and layout for the current handle.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите исходный формат памяти растрового изображения и макет для текущего дескриптора.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_SIZE(uint8_t filter, uint8_t wrapx, uint8_t wrapy, uint16_t width, uint16_t height)
 {
@@ -639,13 +639,13 @@ static inline uint32_t BITMAP_SIZE(uint8_t filter, uint8_t wrapx, uint8_t wrapy,
     return (DL_BITMAP_SIZE | filterv | wrapxv | wrapyv | widthv | heightv);
 }
 
-//#define BITMAP_LAYOUT_H (линейный шаг, высота) (( DL_BITMAP_LAYOUT_H ) | (((((линейный шаг) & 0xC00U) >> 10U)&3UL) << 2U) | ((((высота) & 0x600U) >> 9U) & 3UL))
+//#defineBITMAP_LAYOUT_H(линейный шаг, высота) ((DL_BITMAP_LAYOUT_H) | (((((линейный шаг) & 0xC00U) >> 10U)&3UL) << 2U) | ((((высота) & 0x600U) >> 9U) & 3UL))
 /**
- * @brief Set the 2 most significant bits of the source bitmap memory format and layout for the current handle.
- * @param linestride 12-bit value specified to BITMAP_LAYOUT
- * @param height 11-bit value specified to BITMAP_LAYOUT
- * @note this is different to FTDIs implementation as this takes the original values as parameters and not only the upper bits
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите 2 старших бита формата и макета памяти исходного растрового изображения для текущего дескриптора.
+ * @param linestride 12-битное значение, указанное в BITMAP_LAYOUT
+ * @param height 11-битное значение, указанное для BITMAP_LAYOUT
+ * @note это отличается от реализации FTDI, поскольку в качестве параметров принимаются исходные значения, а не только старшие биты.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_LAYOUT_H(uint16_t linestride, uint16_t height)
 {
@@ -654,13 +654,13 @@ static inline uint32_t BITMAP_LAYOUT_H(uint16_t linestride, uint16_t height)
     return (DL_BITMAP_LAYOUT_H | linestridev | heightv);
 }
 
-//#define BITMAP_SIZE_H (ширина,высота) (( DL_BITMAP_SIZE_H ) | (((((ширина) & 0x600U) >> 9U) & 3UL) << 2U) | ((((высота) & 0x600U) >> 9U) & 3UL))
+//#defineBITMAP_SIZE_H(ширина,высота) ((DL_BITMAP_SIZE_H) | (((((ширина) & 0x600U) >> 9U) & 3UL) << 2U) | ((((высота) & 0x600U) >> 9U) & 3UL))
 /**
- * @brief Set the 2 most significant bits of bitmaps dimension for the current handle.
- * @param linestride 11-bit value of bitmap width, the 2 most significant bits are used
- * @param height 11-bit value of bitmap width, the 2 most significant bits are used
- * @note this is different to FTDIs implementation as this takes the original values as parameters and not only the upper bits
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите 2 старших бита размера растрового изображения для текущего дескриптора.
+ * @param linestride 11-битное значение ширины растрового изображения, используются 2 старших бита.
+ * @param height 11-битное значение ширины растрового изображения, используются 2 старших бита.
+ * @note это отличается от реализации FTDI, поскольку в качестве параметров принимаются исходные значения, а не только старшие биты.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_SIZE_H(uint16_t width, uint16_t height)
 {
@@ -669,10 +669,10 @@ static inline uint32_t BITMAP_SIZE_H(uint16_t width, uint16_t height)
     return ((DL_BITMAP_SIZE_H) | widthv | heightv);
 }
 
-//#define BITMAP_SOURCE (адрес) (( DL_BITMAP_SOURCE ) | ((адрес) & 0x3FFFFFUL))
+//#defineBITMAP_SOURCE(адрес) ((DL_BITMAP_SOURCE) | ((адрес) & 0x3FFFFFUL))
 /**
- * @brief Set the source address of bitmap data in RAM_G or flash memory.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите исходный адрес растровых данных вRAM_Gили флэш-памяти.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_SOURCE(uint32_t addr)
 {
@@ -680,40 +680,40 @@ static inline uint32_t BITMAP_SOURCE(uint32_t addr)
 }
 
 #if EVE_GEN < 3 /* определите их только для FT81x */
-//#define BITMAP_TRANSFORM_A (a) (( DL_BITMAP_TRANSFORM_A ) | ((a) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_A(a) ((DL_BITMAP_TRANSFORM_A) | ((a) & 0x1FFFFUL))
 /**
- * @brief Set the A coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент A матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_A(uint32_t val)
 {
     return (DL_BITMAP_TRANSFORM_A | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_B (b) (( DL_BITMAP_TRANSFORM_B ) | ((b) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_B(b) ((DL_BITMAP_TRANSFORM_B) | ((b) & 0x1FFFFUL))
 /**
- * @brief Set the B coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент B матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_B(uint32_t val)
 {
     return (DL_BITMAP_TRANSFORM_B | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_D (d) (( DL_BITMAP_TRANSFORM_D ) | ((d) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_D(d) ((DL_BITMAP_TRANSFORM_D) | ((d) & 0x1FFFFUL))
 /**
- * @brief Set the D coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент D матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_D(uint32_t val)
 {
     return (DL_BITMAP_TRANSFORM_D | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_E (e) (( DL_BITMAP_TRANSFORM_E ) | ((e) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_E(e) ((DL_BITMAP_TRANSFORM_E) | ((e) & 0x1FFFFUL))
 /**
- * @brief Set he E coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент E матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_E(uint32_t val)
 {
@@ -722,30 +722,30 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint32_t val)
 
 #endif
 
-//#define BITMAP_TRANSFORM_C (c) (( DL_BITMAP_TRANSFORM_C ) | ((c) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_C(c) ((DL_BITMAP_TRANSFORM_C) | ((c) & 0x1FFFFUL))
 /**
- * @brief Set the C coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент C матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_C(uint32_t val)
 {
     return (DL_BITMAP_TRANSFORM_C | (val & 0x1FFFFUL));
 }
 
-//#define BITMAP_TRANSFORM_F (f) (( DL_BITMAP_TRANSFORM_F ) | ((f) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_F(f) ((DL_BITMAP_TRANSFORM_F) | ((f) & 0x1FFFFUL))
 /**
- * @brief Set the F coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент F матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_F(uint32_t val)
 {
     return (DL_BITMAP_TRANSFORM_F | (val & 0x1FFFFUL));
 }
 
-//#define BLEND_FUNC (src,dst) (( DL_BLEND_FUNC ) | (((источник) & 7UL) << 3U) | ((dst) & 7UL))
+//#defineBLEND_FUNC(src,dst) ((DL_BLEND_FUNC) | (((источник) & 7UL) << 3U) | ((dst) & 7UL))
 /**
- * @brief Execute a sequence of commands at another location in the display list.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Выполните последовательность команд в другом месте списка отображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BLEND_FUNC(uint8_t src, uint8_t dst)
 {
@@ -754,42 +754,42 @@ static inline uint32_t BLEND_FUNC(uint8_t src, uint8_t dst)
     return (DL_BLEND_FUNC | srcv | dstv);
 }
 
-//#define CALL (назначение) (( DL_CALL ) | ((назначение) & 0xFFFFUL))
+//#defineCALL(назначение) ((DL_CALL) | ((назначение) & 0xFFFFUL))
 /**
- * @brief Execute a sequence of commands at another location in the display list.
- * @note valid range for dest is from zero to 2047
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Выполните последовательность команд в другом месте списка отображения.
+ * @note допустимый диапазон для dest — от нуля до 2047.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CALL(uint16_t dest)
 {
     return (DL_CALL | (dest & 0x7FFUL));
 }
 
-//#define JUMP (назначение) (( DL_JUMP ) | ((назначение) & 0xFFFFUL))
+//#defineJUMP(назначение) ((DL_JUMP) | ((назначение) & 0xFFFFUL))
 /**
- * @brief Execute commands at another location in the display list.
- * @note valid range for dest is from zero to 2047
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Выполнять команды в другом месте списка отображения.
+ * @note допустимый диапазон для dest — от нуля до 2047.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t JUMP(uint16_t dest)
 {
     return (DL_JUMP | (dest & 0x7FFUL));
 }
 
-//#define CELL (ячейка) (( DL_CELL ) | ((ячейка) & 0x7FUL))
+//#defineCELL(ячейка) ((DL_CELL) | ((ячейка) & 0x7FUL))
 /**
- * @brief Set the bitmap cell number for the VERTEX2F command.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите номер ячейки растрового изображения для команды VERTEX2F.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CELL(uint8_t cell)
 {
     return (DL_CELL | (cell & 0x7FUL));
 }
 
-//#define CLEAR (c,s,t) (( DL_CLEAR ) | (((c) & 1UL) << 2U) | (((s) & 1UL) << 1U) | ((t) & 1UL))
+//#defineCLEAR(c,s,t) ((DL_CLEAR) | (((c) & 1UL) << 2U) | (((s) & 1UL) << 1U) | ((t) & 1UL))
 /**
- * @brief Clear buffers to preset values.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Очистите буферы до заданных значений.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CLEAR(uint8_t color, uint8_t stencil, uint8_t tag)
 {
@@ -799,20 +799,20 @@ static inline uint32_t CLEAR(uint8_t color, uint8_t stencil, uint8_t tag)
     return (DL_CLEAR | colorv | stencilv | tagv);
 }
 
-//#define CLEAR_COLOR_A (альфа) (( DL_CLEAR_COLOR_A ) | ((альфа) & 0xFFUL))
+//#defineCLEAR_COLOR_A(альфа) ((DL_CLEAR_COLOR_A) | ((альфа) & 0xFFUL))
 /**
- * @brief Set clear value for the alpha channel.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите четкое значение для альфа-канала.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CLEAR_COLOR_A(uint8_t alpha)
 {
     return (DL_CLEAR_COLOR_A | alpha);
 }
 
-//#define CLEAR_COLOR_RGB (красный,зеленый,синий) (( DL_CLEAR_COLOR_RGB ) | (((красный) & 0xFFUL) << 16U) | (((зеленый) & 0xFFUL) << 8U) | ((синий) & 0xFFUL))
+//#defineCLEAR_COLOR_RGB(красный,зеленый,синий) ((DL_CLEAR_COLOR_RGB) | (((красный) & 0xFFUL) << 16U) | (((зеленый) & 0xFFUL) << 8U) | ((синий) & 0xFFUL))
 /**
- * @brief Set clear values for red, green and blue channels.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите четкие значения для красного, зеленого и синего каналов.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CLEAR_COLOR_RGB(uint8_t red, uint8_t green, uint8_t blue)
 {
@@ -822,40 +822,40 @@ static inline uint32_t CLEAR_COLOR_RGB(uint8_t red, uint8_t green, uint8_t blue)
     return (DL_CLEAR_COLOR_RGB | redv | greenv | bluev);
 }
 
-//#define CLEAR_STENCIL (s) (( DL_CLEAR_STENCIL ) | ((s) & 0xFFUL))
+//#defineCLEAR_STENCIL(s) ((DL_CLEAR_STENCIL) | ((s) & 0xFFUL))
 /**
- * @brief Set clear value for the stencil buffer.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите значение очистки для буфера трафарета.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CLEAR_STENCIL(uint8_t val)
 {
     return (DL_CLEAR_STENCIL | val);
 }
 
-//#define CLEAR_TAG (s) (( DL_CLEAR_TAG ) | ((s) & 0xFFUL))
+//#defineCLEAR_TAG(s) ((DL_CLEAR_TAG) | ((s) & 0xFFUL))
 /**
- * @brief Set clear value for the tag buffer.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите значение очистки для буфера тегов.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t CLEAR_TAG(uint8_t val)
 {
     return (DL_CLEAR_TAG | val);
 }
 
-//#define COLOR_A (альфа) (( DL_COLOR_A ) | ((альфа) & 0xFFUL))
+//#defineCOLOR_A(альфа) ((DL_COLOR_A) | ((альфа) & 0xFFUL))
 /**
- * @brief Set the current color alpha.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите текущий цвет альфа.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t COLOR_A(uint8_t alpha)
 {
     return (DL_COLOR_A | alpha);
 }
 
-//#define COLOR_MASK (r,g,b,a) (( DL_COLOR_MASK ) | (((r) & 1UL) << 3U) | (((g) & 1UL) << 2U) | (((b) & 1UL) << 1U) | ((a) & 1UL))
+//#defineCOLOR_MASK(r,g,b,a) ((DL_COLOR_MASK) | (((r) & 1UL) << 3U) | (((g) & 1UL) << 2U) | (((b) & 1UL) << 1U) | ((a) & 1UL))
 /**
- * @brief Enable or disable writing of color components.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Включить или отключить запись компонентов цвета.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t COLOR_MASK(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
@@ -866,10 +866,10 @@ static inline uint32_t COLOR_MASK(uint8_t red, uint8_t green, uint8_t blue, uint
     return (DL_COLOR_MASK | redv | greenv | bluev | alphav);
 }
 
-//#define COLOR_RGB (красный,зеленый,синий) (( DL_COLOR_RGB ) | (((красный) & 0xFFUL) << 16U) | (((зеленый) & 0xFFUL) << 8U) | ((синий) & 0xFFUL))
+//#defineCOLOR_RGB(красный,зеленый,синий) ((DL_COLOR_RGB) | (((красный) & 0xFFUL) << 16U) | (((зеленый) & 0xFFUL) << 8U) | ((синий) & 0xFFUL))
 /**
- * @brief Set the current color red, green and blue.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите текущий цвет: красный, зеленый и синий.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t COLOR_RGB(uint8_t red, uint8_t green, uint8_t blue)
 {
@@ -879,52 +879,52 @@ static inline uint32_t COLOR_RGB(uint8_t red, uint8_t green, uint8_t blue)
     return (DL_COLOR_RGB | redv | greenv | bluev);
 }
 
-//#define LINE_WIDTH (ширина) (( DL_LINE_WIDTH ) | ((( uint32_t ) (ширина)) & 0xFFFUL))
+//#defineLINE_WIDTH(ширина) ((DL_LINE_WIDTH) | (((uint32_t) (ширина)) & 0xFFFUL))
 /**
- * @brief Set the width of lines to be drawn with primitive LINES in 1/16 pixel precision.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите ширину рисуемых линий с помощью примитиваLINESс точностью до 1/16 пикселя.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t LINE_WIDTH(uint16_t width)
 {
     return (DL_LINE_WIDTH | (width & 0xFFFUL));
 }
 
-//#define MACRO (м) (( DL_MACRO ) | ((м) & 1UL))
+//#defineMACRO(м) ((DL_MACRO) | ((м) & 1UL))
 /**
- * @brief Execute a single command from a macro register.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Выполнить одну команду из макрорегистра.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t MACRO(uint8_t macro)
 {
     return (DL_MACRO | (macro & 0x1UL));
 }
 
-//#define PALETTE_SOURCE (адрес) (( DL_PALETTE_SOURCE ) | ((адрес) & 0x3FFFFF3UL))
+//#definePALETTE_SOURCE(адрес) ((DL_PALETTE_SOURCE) | ((адрес) & 0x3FFFFF3UL))
 /**
- * @brief Set the base address of the palette.
- * @note 2-byte alignment is required if pixel format is PALETTE4444 or PALETTE565.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите базовый адрес палитры.
+ * @note Выравнивание по 2 байтам требуется, если формат пикселя —PALETTE4444или PALETTE565.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t PALETTE_SOURCE(uint32_t addr)
 {
     return (DL_PALETTE_SOURCE | (addr & 0x3FFFFFUL));
 }
 
-//#define POINT_SIZE (размер) (( DL_POINT_SIZE ) | ((размер) & 0x1FFFUL))
+//#definePOINT_SIZE(размер) ((DL_POINT_SIZE) | ((размер) & 0x1FFFUL))
 /**
- * @brief Set the radius of points to be drawn with primitive POINTS in 1/16 pixel precision.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Задайте радиус рисуемых точек с помощью примитиваPOINTSс точностью до 1/16 пикселя.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t POINT_SIZE(uint16_t size)
 {
     return (DL_POINT_SIZE | (size & 0x1FFFUL));
 }
 
-//#define SCISSOR_SIZE (ширина,высота) (( DL_SCISSOR_SIZE ) | (((ширина) & 0xFFFUL) << 12U) | ((высота) & 0xFFFUL))
+//#defineSCISSOR_SIZE(ширина,высота) ((DL_SCISSOR_SIZE) | (((ширина) & 0xFFFUL) << 12U) | ((высота) & 0xFFFUL))
 /**
- * @brief Set the size of the scissor clip rectangle.
- * @note valid range for width and height is from zero to 2048
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите размер прямоугольника ножничного зажима.
+ * @note допустимый диапазон ширины и высоты от нуля до 2048.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t SCISSOR_SIZE(uint16_t width, uint16_t height)
 {
@@ -933,11 +933,11 @@ static inline uint32_t SCISSOR_SIZE(uint16_t width, uint16_t height)
     return (DL_SCISSOR_SIZE | widthv | heightv);
 }
 
-//#define SCISSOR_XY (x,y) (( DL_SCISSOR_XY ) | (((x) & 0x7FFUL) << 11U) | ((y) & 0x7FFUL))
+//#defineSCISSOR_XY(x,y) ((DL_SCISSOR_XY) | (((x) & 0x7FFUL) << 11U) | ((y) & 0x7FFUL))
 /**
- * @brief Set the top left corner of the scissor clip rectangle.
- * @note valid range for width and height is from zero to 2047
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите верхний левый угол прямоугольника ножничного зажима.
+ * @note допустимый диапазон ширины и высоты — от нуля до 2047.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t SCISSOR_XY(uint16_t xc0, uint16_t yc0)
 {
@@ -946,10 +946,10 @@ static inline uint32_t SCISSOR_XY(uint16_t xc0, uint16_t yc0)
     return (DL_SCISSOR_XY | xc0v | yc0v);
 }
 
-//#define STENCIL_FUNC (func,ref,mask) (( DL_STENCIL_FUNC ) | (((func) & 7UL) << 16U) | (((ref) & 0xFFUL) << 8U)|((маска) & 0xFFUL))
+//#defineSTENCIL_FUNC(func,ref,mask) ((DL_STENCIL_FUNC) | (((func) & 7UL) << 16U) | (((ref) & 0xFFUL) << 8U)|((маска) & 0xFFUL))
 /**
- * @brief Set function and reference value for stencil testing.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите функцию и опорное значение для тестирования трафарета.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t STENCIL_FUNC(uint8_t func, uint8_t ref, uint8_t mask)
 {
@@ -959,20 +959,20 @@ static inline uint32_t STENCIL_FUNC(uint8_t func, uint8_t ref, uint8_t mask)
     return (DL_STENCIL_FUNC | funcv | refv | maskv);
 }
 
-//#define STENCIL_MASK (маска) (( DL_STENCIL_MASK ) | ((маска) & 0xFFUL))
+//#defineSTENCIL_MASK(маска) ((DL_STENCIL_MASK) | ((маска) & 0xFFUL))
 /**
- * @brief Control the writing of individual bits in the stencil planes.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Управляйте записью отдельных битов в плоскостях трафарета.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t STENCIL_MASK(uint8_t mask)
 {
     return (DL_STENCIL_MASK | mask);
 }
 
-//#define STENCIL_OP (sfail,spass) (( DL_STENCIL_OP ) | (((sfail) & 7UL) << 3U) | ((spass) & 7UL))
+//#defineSTENCIL_OP(sfail,spass) ((DL_STENCIL_OP) | (((sfail) & 7UL) << 3U) | ((spass) & 7UL))
 /**
- * @brief Set stencil test actions.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите действия по тестированию трафарета.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t STENCIL_OP(uint8_t sfail, uint8_t spass)
 {
@@ -981,30 +981,30 @@ static inline uint32_t STENCIL_OP(uint8_t sfail, uint8_t spass)
     return (DL_STENCIL_OP | sfailv | spassv);
 }
 
-//#define TAG (s) (( DL_TAG ) | ((s) & 0xFFUL))
+//#defineTAG(s) ((DL_TAG) | ((s) & 0xFFUL))
 /**
- * @brief Attach the tag value for the following graphics objects drawn on the screen.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Прикрепите значение тега для следующих графических объектов, отображаемых на экране.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t TAG(uint8_t tagval)
 {
     return (DL_TAG | tagval);
 }
 
-//#define TAG_MASK (маска) (( DL_TAG_MASK ) | ((маска) & 1UL))
+//#defineTAG_MASK(маска) ((DL_TAG_MASK) | ((маска) & 1UL))
 /**
- * @brief Control the writing of the tag buffer.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Управляйте записью буфера тегов.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t TAG_MASK(uint8_t mask)
 {
     return (DL_TAG_MASK | ((mask) & 1UL));
 }
 
-//#define VERTEX2F (x,y) (( DL_VERTEX2F ) | (((( uint32_t ) (x)) & 0x7FFFUL) << 15U) | ((( uint32_t ) (y)) & 0x7FFFUL))
+//#defineVERTEX2F(x,y) ((DL_VERTEX2F) | ((((uint32_t) (x)) & 0x7FFFUL) << 15U) | (((uint32_t) (y)) & 0x7FFFUL))
 /**
- * @brief Set coordinates for graphics primitves.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите координаты для графических примитивов.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t VERTEX2F(int16_t xc0, int16_t yc0)
 {
@@ -1013,10 +1013,10 @@ static inline uint32_t VERTEX2F(int16_t xc0, int16_t yc0)
     return (DL_VERTEX2F | xc0v | yc0v);
 }
 
-//#define VERTEX2II (x,y,дескриптор,ячейка) (( DL_VERTEX2II ) | (((x) & 0x1FFUL) << 21U) | (((y) & 0x1FFUL) << 12U) | (((дескриптор) & 0x1FUL) << 7U) | ((ячейка) & 0x7FUL))
+//#defineVERTEX2II(x,y,дескриптор,ячейка) ((DL_VERTEX2II) | (((x) & 0x1FFUL) << 21U) | (((y) & 0x1FFUL) << 12U) | (((дескриптор) & 0x1FUL) << 7U) | ((ячейка) & 0x7FUL))
 /**
- * @brief Set coordinates, bitmap-handle and cell-number for graphics primitves.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите координаты, дескриптор растрового изображения и номер ячейки для графических примитивов.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t VERTEX2II(uint16_t xc0, uint16_t yc0, uint8_t handle, uint8_t cell)
 {
@@ -1027,30 +1027,30 @@ static inline uint32_t VERTEX2II(uint16_t xc0, uint16_t yc0, uint8_t handle, uin
     return (DL_VERTEX2II | xc0v | yc0v | handlev | cellv);
 }
 
-//#define VERTEX_FORMAT (ГРП) (( DL_VERTEX_FORMAT ) | ((ГРП) & 7UL))
+//#defineVERTEX_FORMAT(ГРП) ((DL_VERTEX_FORMAT) | ((ГРП) & 7UL))
 /**
- * @brief Set the precision of VERTEX2F coordinates.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите точность координат VERTEX2F.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t VERTEX_FORMAT(uint8_t frac)
 {
     return (DL_VERTEX_FORMAT | ((frac) & 7UL));
 }
 
-//#define VERTEX_TRANSLATE_X (x) (( DL_VERTEX_TRANSLATE_X ) | ((x) & 0x1FFFFUL))
+//#defineVERTEX_TRANSLATE_X(x) ((DL_VERTEX_TRANSLATE_X) | ((x) & 0x1FFFFUL))
 /**
- * @brief Set the vertex transformations X translation component.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите компонент преобразования X преобразований вершин.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t VERTEX_TRANSLATE_X(int32_t xco)
 {
     return (DL_VERTEX_TRANSLATE_X | (((uint32_t) xco) & 0x1FFFFUL));
 }
 
-//#define VERTEX_TRANSLATE_Y (y) (( DL_VERTEX_TRANSLATE_Y ) | ((y) & 0x1FFFFUL))
+//#defineVERTEX_TRANSLATE_Y(y) ((DL_VERTEX_TRANSLATE_Y) | ((y) & 0x1FFFFUL))
 /**
- * @brief Set the vertex transformations Y translation component.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите компонент преобразования вершин Y преобразования.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 {
@@ -1102,22 +1102,22 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 
 /* Команды для BT815/BT816 */
 #define CMD_BITMAP_TRANSFORM ((uint32_t) 0xFFFFFF21UL)
-#define CMD_SYNC             ((uint32_t) 0xFFFFFF42UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_SYNC ) */
-#define CMD_FLASHERASE       ((uint32_t) 0xFFFFFF44UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHERASE ) */
+#define CMD_SYNC             ((uint32_t) 0xFFFFFF42UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_SYNC) */
+#define CMD_FLASHERASE       ((uint32_t) 0xFFFFFF44UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHERASE) */
 #define CMD_FLASHWRITE       ((uint32_t) 0xFFFFFF45UL)
 #define CMD_FLASHREAD        ((uint32_t) 0xFFFFFF46UL)
 #define CMD_FLASHUPDATE      ((uint32_t) 0xFFFFFF47UL)
-#define CMD_FLASHDETACH      ((uint32_t) 0xFFFFFF48UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHDETACH ) */
-#define CMD_FLASHATTACH      ((uint32_t) 0xFFFFFF49UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHATTACH ) */
+#define CMD_FLASHDETACH      ((uint32_t) 0xFFFFFF48UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHDETACH) */
+#define CMD_FLASHATTACH      ((uint32_t) 0xFFFFFF49UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHATTACH) */
 #define CMD_FLASHFAST        ((uint32_t) 0xFFFFFF4AUL)
-#define CMD_FLASHSPIDESEL    ((uint32_t) 0xFFFFFF4BUL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_FLASHSPIDESEL ) */
+#define CMD_FLASHSPIDESEL    ((uint32_t) 0xFFFFFF4BUL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_FLASHSPIDESEL) */
 #define CMD_FLASHSPITX       ((uint32_t) 0xFFFFFF4CUL)
 #define CMD_FLASHSPIRX       ((uint32_t) 0xFFFFFF4DUL)
 #define CMD_FLASHSOURCE      ((uint32_t) 0xFFFFFF4EUL)
-#define CMD_CLEARCACHE       ((uint32_t) 0xFFFFFF4FUL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_CLEARCACHE ) */
+#define CMD_CLEARCACHE       ((uint32_t) 0xFFFFFF4FUL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_CLEARCACHE) */
 #define CMD_INFLATE2         ((uint32_t) 0xFFFFFF50UL)
 #define CMD_ROTATEAROUND     ((uint32_t) 0xFFFFFF51UL)
-#define CMD_RESETFONTS       ((uint32_t) 0xFFFFFF52UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_RESETFONTS ) */
+#define CMD_RESETFONTS       ((uint32_t) 0xFFFFFF52UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_RESETFONTS) */
 #define CMD_ANIMSTART        ((uint32_t) 0xFFFFFF53UL)
 #define CMD_ANIMSTOP         ((uint32_t) 0xFFFFFF54UL)
 #define CMD_ANIMXY           ((uint32_t) 0xFFFFFF55UL)
@@ -1126,7 +1126,7 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 #define CMD_FILLWIDTH        ((uint32_t) 0xFFFFFF58UL)
 #define CMD_APPENDF          ((uint32_t) 0xFFFFFF59UL)
 #define CMD_ANIMFRAME        ((uint32_t) 0xFFFFFF5AUL)
-#define CMD_VIDEOSTARTF      ((uint32_t) 0xFFFFFF5FUL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_VIDEOSTARTF ) */
+#define CMD_VIDEOSTARTF      ((uint32_t) 0xFFFFFF5FUL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_VIDEOSTARTF) */
 
 /* Регистры для BT815/BT816 */
 #define REG_ADAPTIVE_FRAMERATE ((uint32_t) 0x0030257cUL)
@@ -1138,20 +1138,20 @@ static inline uint32_t VERTEX_TRANSLATE_Y(int32_t yco)
 
 /* Макросы для BT815/BT816 */
 
-//#define BITMAP_EXT_FORMAT (формат) (( DL_BITMAP_EXT_FORMAT ) | ((формат) & 0xFFFFUL))
+//#defineBITMAP_EXT_FORMAT(формат) ((DL_BITMAP_EXT_FORMAT) | ((формат) & 0xFFFFUL))
 /**
- * @brief Set the extended format of the bitmap.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите расширенный формат растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_EXT_FORMAT(uint16_t format)
 {
     return (DL_BITMAP_EXT_FORMAT | format);
 }
 
-//#define BITMAP_SWIZZLE (r,g,b,a) (( DL_BITMAP_SWIZZLE ) | (((r) & 7UL) << 9U) | (((g) & 7UL) << 6U) | (((b) & 7UL) << 3U) | ((a) & 7UL))
+//#defineBITMAP_SWIZZLE(r,g,b,a) ((DL_BITMAP_SWIZZLE) | (((r) & 7UL) << 9U) | (((g) & 7UL) << 6U) | (((b) & 7UL) << 3U) | ((a) & 7UL))
 /**
- * @brief Set the source for the red, green, blue and alpha channels of a bitmap.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите источник красного, зеленого, синего и альфа-каналов растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_SWIZZLE(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 {
@@ -1162,10 +1162,10 @@ static inline uint32_t BITMAP_SWIZZLE(uint8_t red, uint8_t green, uint8_t blue, 
     return (DL_BITMAP_SWIZZLE | redv | greenv | bluev | alphav);
 }
 
-//#define BITMAP_TRANSFORM_A_EXT (p,v) (( DL_BITMAP_TRANSFORM_A ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_A_EXT(p,v) ((DL_BITMAP_TRANSFORM_A) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
- * @brief Set the A coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент A матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_A(uint8_t prc, uint32_t val)
 {
@@ -1174,10 +1174,10 @@ static inline uint32_t BITMAP_TRANSFORM_A(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_A | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_B_EXT (p,v) (( DL_BITMAP_TRANSFORM_B ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_B_EXT(p,v) ((DL_BITMAP_TRANSFORM_B) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
- * @brief Set the B coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент B матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_B(uint8_t prc, uint32_t val)
 {
@@ -1186,10 +1186,10 @@ static inline uint32_t BITMAP_TRANSFORM_B(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_B | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_D_EXT (p,v) (( DL_BITMAP_TRANSFORM_D ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_D_EXT(p,v) ((DL_BITMAP_TRANSFORM_D) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
- * @brief Set the D coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент D матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_D(uint8_t prc, uint32_t val)
 {
@@ -1198,10 +1198,10 @@ static inline uint32_t BITMAP_TRANSFORM_D(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_D | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_E_EXT (p,v) (( DL_BITMAP_TRANSFORM_E ) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
+//#defineBITMAP_TRANSFORM_E_EXT(p,v) ((DL_BITMAP_TRANSFORM_E) | (((p) & 1UL) << 17U) | ((v) & 0x1FFFFUL))
 /**
- * @brief Set the E coefficient of the bitmap transform matrix.
- * @return a 32 bit word for use with EVE_cmd_dl()
+ * @brief Установите коэффициент E матрицы преобразования растрового изображения.
+ * @return 32-битное слово для использования сEVE_cmd_dl()
  */
 static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
 {
@@ -1210,10 +1210,10 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
     return (DL_BITMAP_TRANSFORM_E | prcv | valv);
 }
 
-//#define BITMAP_TRANSFORM_A (а) BITMAP_TRANSFORM_A_EXT (0UL,(а))
-//#define BITMAP_TRANSFORM_B (б) BITMAP_TRANSFORM_B_EXT (0UL,(б))
-//#define BITMAP_TRANSFORM_D (д) BITMAP_TRANSFORM_D_EXT (0UL,(д))
-//#define BITMAP_TRANSFORM_E (e) BITMAP_TRANSFORM_E_EXT (0UL,(e))
+//#defineBITMAP_TRANSFORM_A(а)BITMAP_TRANSFORM_A_EXT(0UL,(а))
+//#defineBITMAP_TRANSFORM_B(б)BITMAP_TRANSFORM_B_EXT(0UL,(б))
+//#defineBITMAP_TRANSFORM_D(д)BITMAP_TRANSFORM_D_EXT(0UL,(д))
+//#defineBITMAP_TRANSFORM_E(e)BITMAP_TRANSFORM_E_EXT(0UL,(e))
 
 #endif  /* EVE_GEN > 2 */
 
@@ -1227,7 +1227,7 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
 #define CMD_APILEVEL       ((uint32_t) 0xFFFFFF63UL)
 #define CMD_CALIBRATESUB   ((uint32_t) 0xFFFFFF60UL)
 #define CMD_CALLLIST       ((uint32_t) 0xFFFFFF67UL)
-#define CMD_ENDLIST        ((uint32_t) 0xFFFFFF69UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_ENDLIST ) */
+#define CMD_ENDLIST        ((uint32_t) 0xFFFFFF69UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_ENDLIST) */
 #define CMD_FLASHPROGRAM   ((uint32_t) 0xFFFFFF70UL)
 #define CMD_FONTCACHE      ((uint32_t) 0xFFFFFF6BUL)
 #define CMD_FONTCACHEQUERY ((uint32_t) 0xFFFFFF6CUL)
@@ -1236,9 +1236,9 @@ static inline uint32_t BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
 #define CMD_LINETIME       ((uint32_t) 0xFFFFFF5EUL)
 #define CMD_NEWLIST        ((uint32_t) 0xFFFFFF68UL)
 #define CMD_PCLKFREQ       ((uint32_t) 0xFFFFFF6AUL)
-#define CMD_RETURN         ((uint32_t) 0xFFFFFF66UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_RETURN ) */
+#define CMD_RETURN         ((uint32_t) 0xFFFFFF66UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_RETURN) */
 #define CMD_RUNANIM        ((uint32_t) 0xFFFFFF6FUL)
-#define CMD_TESTCARD       ((uint32_t) 0xFFFFFF61UL) /* не нужна специальная функция, просто используйте EVE_cmd_dl ( CMD_TESTCARD ) */
+#define CMD_TESTCARD       ((uint32_t) 0xFFFFFF61UL) /* не нужна специальная функция, просто воспользуйтесьEVE_cmd_dl(CMD_TESTCARD) */
 #define CMD_WAIT           ((uint32_t) 0xFFFFFF65UL)
 
 /* Регистры для BT817/BT818 */

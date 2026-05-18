@@ -74,7 +74,7 @@ static SemaphoreHandle_t    _SemaphoreVsync = NULL;
 static glcdc_cfg_t          g_config;
 static glcdc_runtime_cfg_t  g_layer_change;
 
-/* Глобальная переменная, от которой зависит 2D-драйвер Dave. (Автоматически генерируется на платформах RA)*/
+/* Глобальная переменная, от которой зависит 2D-драйвер Дейва. (Автоматически подключается на платформахRA)*/
 display_t g_display0_cfg;
 #endif /*_RENESAS_RX_*/
 

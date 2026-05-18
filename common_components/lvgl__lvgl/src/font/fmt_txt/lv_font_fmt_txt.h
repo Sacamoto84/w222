@@ -52,19 +52,19 @@ typedef enum {
 } lv_font_fmt_txt_cmap_type_t;
 
 /**
- * Сопоставьте кодовые точки с `glyph_dsc` s
+ * Сопоставьте кодовые точки с`glyph_dsc`s
  * Поддерживается несколько форматов для оптимизации использования памяти.
- * См. https://github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md.
+ * См.  https://github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md.
  */
 typedef struct {
     /** Первый символ Юникода для этого диапазона*/
     uint32_t range_start;
 
     /** Количество символов Юникода, относящихся к этому диапазону.
-     * Последний символ Юникода = range_start + range_length - 1*/
+     * Последний символ Юникода =range_start+range_length- 1*/
     uint16_t range_length;
 
-    /** Первый глиф ID (индекс массива `glyph_dsc`) для этого диапазона.*/
+    /** Первый глифID(индекс массива`glyph_dsc`) для этой карты.*/
     uint16_t glyph_id_start;
 
     /*
@@ -72,36 +72,36 @@ typedef struct {
         https://github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md
 
     Для простоты введите «относительную кодовую точку»:
-        rcp = codepoint - range_start
+        rcp = код — range_start
 
     и функция поиска:
         выполните поиск «значения» в «массиве» и вернет индекс «значения».
 
     Формат 0 крошечный
         unicode_list == NULL && glyph_id_ofs_list == NULL
-        glyph_id = glyph_id_start + rcp
+        glyph_id = glyph_id_start + ркп
 
     Формат 0 полный
         unicode_list == NULL && glyph_id_ofs_list != NULL
-        glyph_id = glyph_id_start + glyph_id_ofs_list[rcp]
+        glyph_id = glyph_id_start +glyph_id_ofs_list[rcp]
 
     Редкий крошечный
         unicode_list != NULL && glyph_id_ofs_list == NULL
-        glyph_id = glyph_id_start + search(unicode_list, rcp)
+        glyph_id = glyph_id_start + поиск(unicode_list, rcp)
 
     Редкий полный
         unicode_list != NULL && glyph_id_ofs_list != NULL
-        glyph_id = glyph_id_start + glyph_id_ofs_list[search(unicode_list, rcp)]
+        glyph_id = glyph_id_start +glyph_id_ofs_list[поиск(unicode_list, rcp)]
     */
 
     const uint16_t * unicode_list;
 
-    /** if(type == LV_FONT_FMT_TXT_CMAP_FORMAT0_ ...) это `uint8_t *`
-     * if(type == LV_FONT_FMT_TXT_CMAP_SPARSE_ ...) это `uint16_t *`
+    /** if(type ==LV_FONT_FMT_TXT_CMAP_FORMAT0_...) это `uint8_t *`
+     * if(type ==LV_FONT_FMT_TXT_CMAP_SPARSE_...) это `uint16_t *`
      */
     const void * glyph_id_ofs_list;
 
-    /** Длина `unicode_list` и/или `glyph_id_ofs_list`*/
+    /** Длина`unicode_list`и/или `glyph_id_ofs_list`*/
     uint16_t list_length;
 
     /** Тип этой карты символов*/
@@ -111,10 +111,10 @@ typedef struct {
 /** Простое сопоставление значений керна из пар*/
 typedef struct {
     /*Чтобы получить значение керна из двух кодовых точек:
-       1. Get the `glyph_id_left` and `glyph_id_right` from `lv_font_fmt_txt_cmap_t
-       2. for(i = 0; i < pair_cnt * 2; i += 2)
-             if( glyph_ids [i] == glyph_id_left &&
-                glyph_ids [i+1] == glyph_id_right )
+       1. Получите`glyph_id_left`и`glyph_id_right`из ` lv_font_fmt_txt_cmap_t
+       2. for(i = 0; я <pair_cnt* 2; я += 2)
+             if(glyph_ids[i] ==glyph_id_left&&
+                glyph_ids [i+1] ==glyph_id_right)
                  возвращаемые значения[i/2];
      */
     const void * glyph_ids;
@@ -126,11 +126,11 @@ typedef struct {
 /** Более сложное, но более оптимальное хранилище значений керна на основе классов.*/
 typedef struct {
     /*Чтобы получить значение керна из двух кодовых точек:
-          1. Get the `glyph_id_left` and `glyph_id_right` from `lv_font_fmt_txt_cmap_t
-          2. Get the class of the left and right glyphs as `left_class` and `right_class`
-              left_class = left_class_mapping[glyph_id_left];
-              right_class = right_class_mapping[glyph_id_right];
-          3. value = class_pair_values[(left_class-1)*right_class_cnt + (right_class-1)]
+          1. Получите`glyph_id_left`и`glyph_id_right`из ` lv_font_fmt_txt_cmap_t
+          2. Получите класс левого и правого глифов как`left_class`и `right_class`.
+              left_class = left_class_mapping [glyph_id_left];
+              right_class = right_class_mapping [glyph_id_right];
+          3. значение =class_pair_values[(left_class-1)*right_class_cnt+ (right_class-1)]
         */
 
     const int8_t * class_pair_values;     /**< left_class_cnt * right_class_cnt value */
@@ -156,12 +156,12 @@ typedef struct {
     const lv_font_fmt_txt_glyph_dsc_t * glyph_dsc;
 
     /** Сопоставьте глифы с символами Юникода.
-     *Массив переменных `lv_font_cmap_fmt_txt_t` */
+     *Массивная поддержка `lv_font_cmap_fmt_txt_t` */
     const lv_font_fmt_txt_cmap_t * cmaps;
 
     /**
      * Сохраните значения кернинга.
-     * Может быть `lv_font_fmt_txt_kern_pair_t *  or ` lv_font_kern_classes_fmt_txt_t *`
+     * Может быть`lv_font_fmt_txt_kern_pair_t *  or `lv_font_kern_classes_fmt_txt_t *`
      * в зависимости от `kern_classes`
      */
     const void * kern_dsc;
@@ -186,8 +186,8 @@ typedef struct {
 
     /**
      * Байты, до которых дополняется каждая строка.
-     * 0: means no align and padding
-     * 1: e.g. with bpp=4 lines are aligned to 1 byte, so there can be a 4 bits of padding
+     * 0: означает отсутствие выравнивания и заполнения
+     * 1: например с bpp=4 строки выравниваются по 1 байту, поэтому может быть 4 бита заполнения.
      * 4, 8, 16, 32, 64: каждая строка дополняется до заданных границ байта.
      */
     uint8_t stride;
@@ -205,21 +205,21 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_font_class_t lv_builtin_font_class;
  **********************/
 
 /**
- * Используется как обратный вызов `get_glyph_bitmap` в собственном формате шрифта lvgl, если шрифт несжат.
- * @param g_dsc         the glyph descriptor including which font to use, which supply the glyph_index and format.
- * @param draw_buf      a draw buffer that can be used to store the bitmap of the glyph, it's OK not to use it.
- * @return pointer to an A8 bitmap (not necessarily bitmap_out) or NULL if `unicode_letter` not found
+ * Используется как обратный вызов`get_glyph_bitmap`в собственном формате шрифта lvgl, если шрифт несжат.
+ * @param g_dsc         дескриптор глифа, включая используемый шрифт, который предоставляетglyph_indexи формат.
+ * @param draw_buf      буфер отрисовки, который можно использовать для хранения растрового изображения глифа,OKне использовать его.
+ * @return указатель на растровое изображениеA8(не обязательно bitmap_out) или NULL, если`unicode_letter`не найден
  */
 const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t * draw_buf);
 
 /**
- * Используется как обратный вызов `get_glyph_dsc` в собственном формате шрифта lvgl, если шрифт несжат.
- * @param font pointer to font
- * @param dsc_out store the result descriptor here
- * @param unicode_letter a UNICODE letter code
- * @param unicode_letter_next the unicode letter succeeding the letter under test
- * @return true: descriptor is successfully loaded into `dsc_out`.
- *         false: the letter was not found, no data is loaded to `dsc_out`
+ * Используется как обратный вызов`get_glyph_dsc`в собственном формате шрифта lvgl, если шрифт несжат.
+ * @param font указатель на шрифт
+ * @param dsc_out сохраните дескриптор результата здесь
+ * @param unicode_letter буквенный код UNICODE
+ * @param unicode_letter_next буква Юникода, следующая за тестируемой буквой
+ * @return true: дескриптор успешно загружен в `dsc_out`.
+ *         false: письмо не найдено, в`dsc_out`данные не загружаются
  */
 bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t * dsc_out, uint32_t unicode_letter,
                                    uint32_t unicode_letter_next);

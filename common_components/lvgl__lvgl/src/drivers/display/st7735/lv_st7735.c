@@ -49,7 +49,7 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* команды инициализации для buydisplay.com ER - TFTM018 -3 */
+/* команда создания для buydisplay.comER-TFTM018-3 */
 static const uint8_t init_cmd_list[] = {
     0xB1,       3,  0x05, 0x3C, 0x3C,
     0xB2,       3,  0x05, 0x3C, 0x3C,

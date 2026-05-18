@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------/
-/ TJpgDec - Tiny JPEG Decompressor R0.03 include file         (C)ChaN, 2021
+/ TJpgDec - TinyJPEGДекомпрессорR0.03, включаемый файл (C)ChaN, 2021 г.
 /----------------------------------------------------------------------------*/
 #ifndef DEF_TJPGDEC
 #define DEF_TJPGDEC
@@ -25,15 +25,15 @@ typedef uint8_t jd_yuv_t;
 
 /* Код ошибки */
 typedef enum {
-    JDR_OK = 0, /* 0: Succeeded */
-    JDR_INTR,   /* 1: Interrupted by output function */
-    JDR_INP,    /* 2: Device error or wrong termination of input stream */
-    JDR_MEM1,   /* 3: Insufficient memory pool for the image */
-    JDR_MEM2,   /* 4: Insufficient stream input buffer */
-    JDR_PAR,    /* 5: Parameter error */
-    JDR_FMT1,   /* 6: Data format error (may be broken data) */
-    JDR_FMT2,   /* 7: Right format but not supported */
-    JDR_FMT3    /* 8: Not supported JPEG standard */
+    JDR_OK = 0, /* 0: Удалось */
+    JDR_INTR,   /* 1: Прервано функцией вывода */
+    JDR_INP,    /* 2: Ошибка устройства или неправильное завершение входного потока */
+    JDR_MEM1,   /* 3: Недостаточно памяти для изображения */
+    JDR_MEM2,   /* 4: Недостаточно входного буфера потока */
+    JDR_PAR,    /* 5: Ошибка параметра */
+    JDR_FMT1,   /* 6: Ошибка формата данных (могут быть повреждены данные) */
+    JDR_FMT2,   /* 7: Правильный формат, но не поддерживается */
+    JDR_FMT3    /* 8: Не поддерживается стандарт JPEG */
 } JRESULT;
 
 
@@ -54,7 +54,7 @@ struct JDEC {
     size_t dctr;                /* Количество байтов, доступных во входном буфере */
     uint8_t * dptr;             /* Текущий параметр чтения данных */
     uint8_t * inbuf;            /* Входной буфер битового потока */
-    uint8_t dbit;               /* Количество бит, доступных в wreg или битовой маске чтения */
+    uint8_t dbit;               /* Количество битов, доступное в wreg или битовой маске чтения */
     uint8_t scale;              /* Коэффициент масштабирования вывода */
     uint8_t msx, msy;           /* Размер MCU в единицах блока (ширина, высота) */
     uint8_t qtid[3];            /* Таблица квантования ID каждого компонента, Y, Cb, Cr */
@@ -72,7 +72,7 @@ struct JDEC {
     uint32_t wreg;              /* Регистр рабочей смены */
     uint8_t marker;             /* Обнаруженный маркер (0:Нет) */
 #if JD_FASTDECODE == 2
-    uint8_t longofs[2][2];      /* Смещение таблицы длинного кода [id][dcac] */
+    uint8_t longofs[2][2];      /* Размещение таблицы длинного кода [id][dcac] */
     uint16_t * hufflut_ac[2];   /* Таблицы быстрого декодирования Хаффмана для короткого кода AC [id] */
     uint8_t * hufflut_dc[2];    /* Таблицы быстрого декодирования Хаффмана для короткого кода DC [id] */
 #endif
@@ -82,7 +82,7 @@ struct JDEC {
     void * pool;                /* Указатель на доступный пул памяти */
     void * pool_original;       /* Указатель на исходный пул */
     size_t sz_pool;             /* Размер пула памяти (доступно в байтах) */
-    size_t (*infunc)(JDEC *, uint8_t *, size_t); /* Указатель на функцию ввода потока jpeg */
+    size_t (*infunc)(JDEC *, uint8_t *, size_t); /* Указатель функции ввода потока jpeg */
     void * device;              /* Указатель на идентификатор устройства ввода-вывода для сеанса */
 };
 

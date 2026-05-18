@@ -315,7 +315,7 @@ static void task_draw_cb(void * user_data, const lv_vector_path_t * path, const 
         }
 
         /**
-         * Используйте lv_matrix для единой обработки преобразований областей отсечения.
+         * Используйтеlv_matrixдля единой обработки преобразований областей выделения.
          * и получить преобразованный ограничивающий прямоугольник.
          */
         const lv_area_t bounding_box_area = lv_matrix_transform_area((lv_matrix_t *)&result, &scissor_area);

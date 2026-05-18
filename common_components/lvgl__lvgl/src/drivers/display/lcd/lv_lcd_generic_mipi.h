@@ -54,8 +54,8 @@ extern "C" {
 #define LV_LCD_CMD_SET_DISPLAY_ON           0x29    /* Показать изображение на устройстве отображения */
 #define LV_LCD_CMD_SET_COLUMN_ADDRESS       0x2A    /* Установите размер столбца */
 #define LV_LCD_CMD_SET_PAGE_ADDRESS         0x2B    /* Установите экстент страницы */
-#define LV_LCD_CMD_WRITE_MEMORY_START       0x2C    /* Перенесите данные изображения с хост-процессора на периферийное устройство, начиная с местоположения, указанного set_column_address и set_page_address. */
-#define LV_LCD_CMD_READ_MEMORY_START        0x2E    /* Передача данных изображения с периферийного устройства на интерфейс хост-процессора, начиная с местоположения, указанного set_column_address и set_page_address. */
+#define LV_LCD_CMD_WRITE_MEMORY_START       0x2C    /* Перенесите данные изображения с хост-процессора на периферийное устройство, исходя из местоположения, указанногоset_column_addressиset_page_address. */
+#define LV_LCD_CMD_READ_MEMORY_START        0x2E    /* Передача данных с периферийного устройства на интерфейс хост-процессора, начиная с местоположения, указанногоset_column_addressиset_page_address. */
 #define LV_LCD_CMD_SET_PARTIAL_ROWS         0x30    /* Определяет количество строк в частичной области отображения на устройстве отображения. */
 #define LV_LCD_CMD_SET_PARTIAL_COLUMNS      0x31    /* Определяет количество столбцов в частичной области отображения на устройстве отображения. */
 #define LV_LCD_CMD_SET_SCROLL_AREA          0x33    /* Определяет вертикальную прокрутку и фиксированную область на устройстве отображения. */
@@ -67,7 +67,7 @@ extern "C" {
 #define LV_LCD_CMD_ENTER_IDLE_MODE          0x39    /* На панели дисплея используется уменьшенная глубина цвета. */
 #define LV_LCD_CMD_SET_PIXEL_FORMAT         0x3A    /* Определяет, сколько бит на пиксель используется в интерфейсе. */
 #define LV_LCD_CMD_WRITE_MEMORY_CONTINUE    0x3C    /* Передача информации изображения из интерфейса хост-процессора на периферийное устройство из последнего записанного места. */
-#define LV_LCD_CMD_READ_MEMORY_CONTINUE     0x3E    /* Считайте данные изображения с периферийного устройства, продолжая после последнего read_memory_continue или read_memory_start. */
+#define LV_LCD_CMD_READ_MEMORY_CONTINUE     0x3E    /* Считайте данные изображения с периферийного устройства, продолжающегося после последнегоread_memory_continueили read_memory_start. */
 #define LV_LCD_CMD_SET_TEAR_SCANLINE        0x44    /* Информация о синхронизации отправляется с модуля дисплея на главный процессор, когда обновление устройства отображения достигает предоставленной строки развертки. */
 #define LV_LCD_CMD_GET_SCANLINE             0x45    /* Получить текущую строку сканирования */
 #define LV_LCD_CMD_READ_DDB_CONTINUE        0xA8    /* Продолжить чтение DDB с места последнего чтения. */
@@ -107,10 +107,10 @@ extern "C" {
 #define LV_LCD_GAMMA_1_0                                0x08    /* 1.0 */
 
 /* распространенные форматы пикселей */
-#define LV_LCD_PIXEL_FORMAT_RGB565                      0x55    /* bus: 16 bits, pixel: 16 bits */
-#define LV_LCD_PIXEL_FORMAT_RGB666                      0x66    /* bus: 18 bits, pixel: 18 bits */
+#define LV_LCD_PIXEL_FORMAT_RGB565                      0x55    /* bus: 16 бит, пиксель: 16 бит */
+#define LV_LCD_PIXEL_FORMAT_RGB666                      0x66    /* bus: 18 бит, пиксель: 18 бит */
 
-/* флаги для lv_lcd_xxx_create () */
+/* флаги дляlv_lcd_xxx_create() */
 #define LV_LCD_FLAG_NONE                                0x00000000UL
 #define LV_LCD_FLAG_MIRROR_X                            0x00000001UL
 #define LV_LCD_FLAG_MIRROR_Y                            0x00000002UL
@@ -126,29 +126,29 @@ extern "C" {
  **********************/
 
 /**
- *  Флаги конфигурации для lv_lcd_xxx_create ()
+ *  Флаги конфигурации дляlv_lcd_xxx_create()
  *
  */
 typedef uint32_t lv_lcd_flag_t;
 
 /**
  * Прототип платформозависимого обратного вызова для передачи команд и данных контроллеру LCD.
- * @param disp          display object
- * @param cmd           command buffer (can handle 16 bit commands as well)
- * @param cmd_size      number of bytes of the command
- * @param param         parameter buffer
- * @param param_size    number of bytes of the parameters
+ * @param disp          объект отображения
+ * @param cmd           командный буфер (также может обрабатывать 16-битные команды)
+ * @param cmd_size      количество байтов команды
+ * @param param         буфер параметров
+ * @param param_size    количество байтов параметров
  */
 typedef void (*lv_lcd_send_cmd_cb_t)(lv_display_t * disp, const uint8_t * cmd, size_t cmd_size, const uint8_t * param,
                                      size_t param_size);
 
 /**
  * Прототип платформозависимого обратного вызова для передачи данных пикселей в контроллер LCD.
- * @param disp          display object
- * @param cmd           command buffer (can handle 16 bit commands as well)
- * @param cmd_size      number of bytes of the command
- * @param param         parameter buffer
- * @param param_size    number of bytes of the parameters
+ * @param disp          объект отображения
+ * @param cmd           командный буфер (также может обрабатывать 16-битные команды)
+ * @param cmd_size      количество байтов команды
+ * @param param         буфер параметров
+ * @param param_size    количество байтов параметров
  */
 typedef void (*lv_lcd_send_color_cb_t)(lv_display_t * disp, const uint8_t * cmd, size_t cmd_size, uint8_t * param,
                                        size_t param_size);
@@ -175,53 +175,53 @@ typedef struct {
 
 /**
  * Создайте MIPI DCS-совместимый дисплей LCD.
- * @param hor_res       horizontal resolution
- * @param ver_res       vertical resolution
- * @param flags         default configuration settings (mirror, RGB ordering, etc.)
- * @param send_cmd      platform-dependent function to send a command to the LCD controller (usually uses polling transfer)
- * @param send_color    platform-dependent function to send pixel data to the LCD controller (usually uses DMA transfer).
+ * @param hor_res       горизонтальное разрешение
+ * @param ver_res       вертикальное разрешение
+ * @param flags         настройки конфигурации по умолчанию (зеркало, порядокRGBи т. д.)
+ * @param send_cmd      платформо-зависимая функция для отправки команды контроллеруLCD(обычно используется передача по опросу)
+ * @param send_color    платформо-зависимая функция для отправки данных пикселей на контроллерLCD(обычно используется передача DMA).
  *                      `lv_display_flush_ready` должен быть вызван после завершения передачи.
- * @return              pointer to the created display
+ * @return              указатель на созданный дисплей
  */
 lv_display_t * lv_lcd_generic_mipi_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
                                           lv_lcd_send_cmd_cb_t send_cmd_cb, lv_lcd_send_color_cb_t send_color_cb);
 
 /**
  * Установите зазор, то есть смещение пикселя (0,0) в VRAM.
- * @param disp          display object
- * @param x             x offset
- * @param y             y offset
+ * @param disp          объект отображения
+ * @param x             смещение по оси x
+ * @param y             смещение по оси y
  */
 void lv_lcd_generic_mipi_set_gap(lv_display_t * disp, uint16_t x, uint16_t y);
 
 /**
  * Установить инверсию цвета
- * @param disp          display object
- * @param invert        false: normal, true: invert
+ * @param disp          объект отображения
+ * @param invert        false: нормально, true: инвертировать
  */
 void lv_lcd_generic_mipi_set_invert(lv_display_t * disp, bool invert);
 
 /**
  * Установить режим адреса
- * @param disp          display object
- * @param mirror_x      horizontal mirror (false: normal, true: mirrored)
- * @param mirror_y      vertical mirror (false: normal, true: mirrored)
- * @param swap_xy       swap axes (false: normal, true: swap)
- * @param bgr           RGB/BGR order (false: RGB, true: BGR)
+ * @param disp          объект отображения
+ * @param mirror_x      горизонтальное зеркало (false: нормальное, true: зеркальное)
+ * @param mirror_y      вертикальное зеркало (false: нормальное, true: зеркальное)
+ * @param swap_xy       поменять местами оси (false: нормально, true: поменять местами)
+ * @param bgr           ПорядокRGB/BGR(ложь: RGB, правда: BGR)
  */
 void lv_lcd_generic_mipi_set_address_mode(lv_display_t * disp, bool mirror_x, bool mirror_y, bool swap_xy, bool bgr);
 
 /**
  * Установить гамма-кривую
- * @param disp          display object
- * @param gamma         gamma curve
+ * @param disp          объект отображения
+ * @param gamma         гамма-кривая
  */
 void lv_lcd_generic_mipi_set_gamma_curve(lv_display_t * disp, uint8_t gamma);
 
 /**
  * Отправить список команд.
- * @param disp          display object
- * @param cmd_list      controller and panel-specific commands
+ * @param disp          объект отображения
+ * @param cmd_list      команды контроллера и панели
  */
 void lv_lcd_generic_mipi_send_cmd_list(lv_display_t * disp, const uint8_t * cmd_list);
 

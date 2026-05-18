@@ -64,10 +64,10 @@ void lv_draw_nanovg_3d(lv_draw_task_t * t, const lv_draw_3d_dsc_t * dsc, const l
     lv_area_t clip_area = t->clip_area;
     lv_area_move(&clip_area, -layer->buf_area.x1, -layer->buf_area.y1);
 
-    /* Повторно инициализировать состояние драйвера OpenGL ES после того, как NanoVG изменил его */
+    /* Повторно придумать состояние драйвера OpenGLESпосле того, как NanoVG изменил его */
     lv_opengles_reinit_state();
 
-    /* Используйте инфраструктуру рендеринга OpenGL ES LVGL. */
+    /* Используйте инфраструктуру рендеринга OpenGLESLVGL. */
     lv_opengles_viewport(0, 0, layer_w, layer_h);
 
     lv_opengles_render_params_t params;

@@ -48,7 +48,7 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* команды инициализации на основе драйвера LovyanGFX ILI9341 */
+/* создание команды на основе драйвера LovyanGFX ILI9341 */
 static const uint8_t init_cmd_list[] = {
     CMD_PWCTRB,     3,  0x00, 0xC1, 0x30,
     CMD_PONSEQ,     4,  0x64, 0x03, 0x12, 0x81,

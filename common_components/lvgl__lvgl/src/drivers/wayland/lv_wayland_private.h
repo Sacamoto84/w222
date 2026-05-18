@@ -207,7 +207,7 @@ void lv_wayland_seat_touch_delete(lv_wl_seat_touch_t * seat_touch);
 lv_wl_seat_keyboard_t * lv_wayland_seat_keyboard_create(struct wl_seat * seat);
 void lv_wayland_seat_keyboard_delete(lv_wl_seat_keyboard_t * seat_keyboard);
 
-/* Обновляет данные драйвера indev с заданным «read_cb» на «new_driver_data». */
+/* Обновляет данные драйвера драйвера с заданным «read_cb» на «new_driver_data». */
 void lv_wayland_update_indevs(lv_indev_read_cb_t read_cb, void * new_driver_data);
 
 #endif /* LV_USE_WAYLAND */

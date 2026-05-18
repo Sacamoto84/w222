@@ -34,8 +34,8 @@ lv_indev_t * lv_wayland_keyboard_create(void);
 
 /**
  * Получить устройство ввода с клавиатуры для данного дисплея LVGL.
- * @param display LVGL display
- * @return input device connected to keyboard, or NULL on error
+ * @param display LVGL дисплей
+ * @return устройство ввода, подключенное к клавиатуре, илиNULLпри ошибке
  */
 lv_indev_t * lv_wayland_get_keyboard(lv_display_t * display);
 

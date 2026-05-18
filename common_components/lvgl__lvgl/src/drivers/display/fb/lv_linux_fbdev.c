@@ -146,7 +146,7 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
     /* Убедитесь, что дисплей включен.*/
     if(ioctl(dsc->fbfd, FBIOBLANK, FB_BLANK_UNBLANK) != 0) {
         perror("ioctl(FBIOBLANK)");
-        /* Не возвращайся. Некоторые драйверы фреймбуфера, такие как efifb или simplefb, не реализуют FBIOBLANK.*/
+        /* Не вернись. Некоторые драйверы-фреймбуферы, такие как efifb или simplefb, не реализуют FBIOBLANK.*/
     }
 
 #if LV_LINUX_FBDEV_BSD
@@ -190,7 +190,7 @@ lv_result_t lv_linux_fbdev_set_file(lv_display_t * disp, const char * file)
     LV_LOG_INFO("%dx%d, %dbpp", dsc->vinfo.xres, dsc->vinfo.yres, dsc->vinfo.bits_per_pixel);
 
     /* Вычислить размер экрана в байтах*/
-    dsc->screensize =  dsc->finfo.smem_len;/*финфо. line_length *винфо.yres;*/
+    dsc->screensize =  dsc->finfo.smem_len;/*финфо. line_length*винфо.yres;*/
 
 #if LV_LINUX_FBDEV_MMAP
     /* Сопоставьте устройство с памятью*/
@@ -406,7 +406,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
         }
     }
     else {
-        /* Вычислить смещение в буфере color_p на основе исходной площади. */
+        /* Вычислить размещение в буфереcolor_pна основе исходной площади. */
         const int32_t x_offset = clipped_area.x1 - area->x1;
         const int32_t y_offset = clipped_area.y1 - area->y1;
         const int32_t stride = lv_draw_buf_width_to_stride(lv_area_get_width(area), cf);

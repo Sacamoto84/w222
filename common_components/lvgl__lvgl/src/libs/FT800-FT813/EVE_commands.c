@@ -2,14 +2,14 @@
 #if LV_USE_DRAW_EVE
 /*
 @file EVE_commands.c
-@brief   contains FT8xx / BT8xx functions
+@brief   содержит функции FT8xx/BT8xx
 @version 5.0
 @date 29 декабря 2023 г.
 @author Рудольф Ридель
 
 @section информация
 
-По крайней мере, для Arm Cortex- M0 и Cortex- M4 у меня самое быстрое исполнение с - O2.
+На самом деле, для Arm Cortex-M0и Cortex-M4у меня самое быстрое исполнение с -O2.
 C-стандарт — C99.
 
 
@@ -40,127 +40,127 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 История @section
 
 5.0
-- added EVE_cmd_pclkfreq()
-- put back writing of REG_CSSPREAD as it needs to be deactivated for higher frequencies
-- added the configuration of the second PLL for the pixel clock in BT817/BT818 to EVE_init() in case the display config
+- добавленEVE_cmd_pclkfreq()
+- верните запись REG_CSSPREAD, так как для более высоких частот ее необходимо деактивировать
+- добавлена конфигурация второгоPLLдля часов пикселей в BT817/BT818 в EVE_init() на случай, если конфиг дисплея
 определен EVE_PCLK_FREQ
-- replaced BT81X_ENABLE with "EVE_GEN > 2"
-- removed FT81X_ENABLE as FT81x already is the lowest supported chip revision now
-- removed the formerly as deprected marked EVE_get_touch_tag()
-- changed EVE_color_rgb() to use a 32 bit value like the rest of the color commands
-- removed the meta-commands EVE_cmd_point(), EVE_cmd_line() and EVE_cmd_rect()
-- split all display-list commands into two functions: EVE_cmd_XXX() and EVE_cmd_XXX_burst()
-- switched from using EVE_RAM_CMD + cmdOffset to REG_CMDB_WRITE
-- as a side effect from switching to REG_CMDB_WRITE, every coprocessor command is automatically executed now
-- renamed EVE_LIB_GetProps() back to EVE_cmd_getprops() since it does not do anything special to justify a special name
-- added helper function EVE_memWrite_sram_buffer()
-- added EVE_cmd_bitmap_transform() and EVE_cmd_bitmap_transform_burst()
-- added zero-pointer protection to commands using block_transfer()
-- added EVE_cmd_playvideo()
-- changed EVE_cmd_setfont() to a display-list command and added EVE_cmd_setfont_burst()
-- changed EVE_cmd_setfont2() to a display-list command and added EVE_cmd_setfont2_burst()
-- added EVE_cmd_videoframe()
-- restructured: functions are sorted by chip-generation and within their group in alphabetical order
-- reimplementedEVE_cmd_getmatrix() again, it needs to read values, not write them
-- added EVE_cmd_fontcache() and EVE_cmd_fontcachequery()
-- added EVE_cmd_calibratesub()
-- added EVE_cmd_animframeram(), EVE_cmd_animframeram_burst(), EVE_cmd_animstartram(), EVE_cmd_animstartram_burst()
-- added EVE_cmd_apilevel(), EVE_cmd_apilevel_burst()
-- added EVE_cmd_calllist(), EVE_cmd_calllist_burst()
-- added EVE_cmd_hsf(), EVE_cmd_hsf_burst()
-- added EVE_cmd_linetime()
-- added EVE_cmd_newlist(), EVE_cmd_newlist_burst()
-- added EVE_cmd_runanim(), EVE_cmd_runanim_burst()
-- added a safeguard to EVE_start_cmd_burst() to protect it from overlapping transfers with DMA and segmented lists
-- used spi_transmit_32() to shorten this file by around 600 lines with no functional change
-- removed the history from before 4.0
-- removed a couple of spi_transmit_32() calls from EVE_cmd_getptr() to make it work again
-- Bugfix: EVE_cmd_setfont2_burst() was using CMD_SETFONT instead of CMD_SETFONT2
-- removed a check for cmd_burst from EVE_cmd_getimage() as it is in the group of commands that are not used for display
+- заменилBT81X_ENABLEна "EVE_GEN> 2"
+- удален FT81X_ENABLE, поскольку FT81x уже сейчас является самой низкой поддерживаемой ревизией чипа
+- удалил ранее устаревшую пометкуEVE_get_touch_tag()
+- изменен EVE_color_rgb() для использования 32-битного значения, как и остальные команды цвета
+- удалены метакоманды EVE_cmd_point(), EVE_cmd_line() и EVE_cmd_rect()
+- разделить все команды списка отображения на две функции:EVE_cmd_XXX() иEVE_cmd_XXX_burst()
+- переключился с использованияEVE_RAM_CMD+ cmdOffset на REG_CMDB_WRITE
+- как побочный эффект от перехода на REG_CMDB_WRITE, каждая команда сопроцессора теперь выполняется автоматически
+- переименовал EVE_LIB_GetProps() обратно в EVE_cmd_getprops(), поскольку он не делает ничего особенного для оправдания специального имени
+- добавлена вспомогательная функция EVE_memWrite_sram_buffer()
+- добавлены EVE_cmd_bitmap_transform() и EVE_cmd_bitmap_transform_burst()
+- добавлена защита от нулевого указателя для команд, использующихblock_transfer()
+- добавленEVE_cmd_playvideo()
+- изменил EVE_cmd_setfont() на команду отображения списка и добавил EVE_cmd_setfont_burst()
+- изменил EVE_cmd_setfont2() на команду отображения списка и добавил EVE_cmd_setfont2_burst()
+- добавленEVE_cmd_videoframe()
+- реструктуризировано: функции сортируются по поколениям чипов и внутри своей группы в алфавитном порядке
+- reimplementedEVE_cmd_getmatrix() опять же, ему нужно читать значения, а не записывать их
+- добавлены EVE_cmd_fontcache() и EVE_cmd_fontcachequery()
+- добавленEVE_cmd_calibratesub()
+- добавлены EVE_cmd_animframeram(), EVE_cmd_animframeram_burst(), EVE_cmd_animstartram(), EVE_cmd_animstartram_burst()
+- добавлены EVE_cmd_apilevel(), EVE_cmd_apilevel_burst()
+- добавлены EVE_cmd_calllist(), EVE_cmd_calllist_burst()
+- добавлены EVE_cmd_hsf(), EVE_cmd_hsf_burst()
+- добавленEVE_cmd_linetime()
+- добавлены EVE_cmd_newlist(), EVE_cmd_newlist_burst()
+- добавлены EVE_cmd_runanim(), EVE_cmd_runanim_burst()
+- добавлена защита для EVE_start_cmd_burst() для защиты от перекрытия передач сDMAи сегментированных списков
+- использовал spi_transmit_32(), чтобы сократить этот файл примерно на 600 строк без каких-либо функциональных изменений
+- удалена история до версии 4.0
+- удалил пару вызовов spi_transmit_32() из EVE_cmd_getptr(), чтобы он снова заработал
+- Исправление:EVE_cmd_setfont2_burst() использовалCMD_SETFONTвместо CMD_SETFONT2.
+- убрал проверку наcmd_burstиз EVE_cmd_getimage() так как он есть в группе команд, не используемых для отображения
 списки
-- moved EVE_cmd_newlist() to the group of commands that are not used for display lists
-- removed EVE_cmd_newlist_burst()
-- renamed spi_flash_write() to private_block_write() and made it static
-- renamed EVE_write_string() to private_string_write() and made it static
-- made EVE_start_command() static
-- Bugfix: ESP8266 needs 32 bit alignment for 32 bit pointers,
-    изменен private_string_write() для пакетного режима для чтения 8-битных значений
-- Bugfix: somehow messed up private_string_write() for burst-mode
+- перенес EVE_cmd_newlist() в группу команд, не используемых для отображения списков
+- удаленEVE_cmd_newlist_burst()
+- переименовал spi_flash_write() в private_block_write() и сделал его статическим
+- переименовал EVE_write_string() в private_string_write() и сделал его статическим
+- сделал EVE_start_command() статическим
+- Исправление:ESP8266требует 32-битного выравнивания для 32-битных указателей.
+    Изменение private_string_write() для пакетного режима для чтения 8-битных результатов
+- Исправление: как-то перепутал private_string_write() для пакетного режима
     но только для 8-битных контроллеров
-- changed EVE_memRead8(), EVE_memRead16() and EVE_memRead32() to use
-    spi_transmit_32() для начального адреса+передача нулевого байта
+- изменены EVE_memRead8(), EVE_memRead16() и EVE_memRead32() для использования
+    spi_transmit_32 () для начального адреса+передача нулевого байта
     Это ускоряет ESP32/ESP8266 на несколько человек, но не имеет заметного эффекта.
     для ATSAMD51 и немного медленнее для AVR.
-- Bugfix: not sure why but setting private_block_write() to static broke it, without "static" it works
-- Bugfix: EVE_cmd_flashspirx() was using CMD_FLASHREAD
-- fixed a warning in EVE_init() when compiling for EVE4
-- renamed internal function EVE_begin_cmd() to eve_begin_cmd() and made it static
-- changed all the EVE_start_command() calls to eve_begin_cmd() calls following the report on Github from
+- Исправление: не знаю почему, но установка статического значения дляprivate_block_write() сломала его, без «статического» все работает.
+- Исправление:EVE_cmd_flashspirx() использовал CMD_FLASHREAD.
+- исправлено предупреждение в EVE_init() при компиляции под EVE4
+- переименовал внутреннюю функцию EVE_begin_cmd() в eve_begin_cmd() и сделал ее статической
+- изменил все вызовы EVE_start_command() на вызовы eve_begin_cmd() после отчета на Github от
   Майкл Вакс, они идентичны, их не было до V5.
-- removed EVE_start_command()
-- Bugfix: EVE_init() was only checking the first two bits of REG_CPURESET and ignored the bit for the audio-engine, not
+- удаленEVE_start_command()
+- Исправление: EVE_init() проверял только первые два битаREG_CPURESETи игнорировал бит для аудио-движка, а не
 проблема, но не правильная.
-- fixed a few clang-tidy warnings
-- fixed a few cppcheck warnings
-- fixed a few CERT warnings
-- converted all TABs to SPACEs
-- made EVE_TOUCH_RZTHRESH in EVE_init() optional to a) remove it from EVE_config.h and b) make it configureable
+- исправлено несколько неприятных предупреждений
+- исправлено несколько предупреждений cppcheck
+- исправлено несколько предупреждений CERT
+- преобразовал все TAB в пробелы
+- сделалEVE_TOUCH_RZTHRESHв EVE_init() необязательным, чтобы а) удалить его изEVE_config.hи б) сделать его настраиваемым
 внешне
-- changed EVE_init() to write 1200U to REG_TOUCH_RZTHRESH if EVE_TOUCH_RZTHRESH is not defined
-- changed EVE_init() to return E_OK = 0x00 in case of success and more meaningfull values in case of failure
-- changed EVE_busy() to return EVE_IS_BUSY if EVE is busy and E_OK = 0x00 if EVE is not busy - no real change in
+- изменен EVE_init() для записи 1200U в REG_TOUCH_RZTHRESH, еслиEVE_TOUCH_RZTHRESHне определен
+- изменен EVE_init() для возвратаE_OK=0x00в случае успеха и более значимых значений в случае неудачи
+- изменен EVE_busy(), чтобы он возвращал EVE_IS_BUSY, еслиEVEзанят, иE_OK= 0x00, еслиEVEне занят - никаких реальных изменений в
 функциональность
-- finally removed EVE_cmd_start() after setting it to deprecatd with the first 5.0 release
-- renamed EVE_cmd_execute() to EVE_execute_cmd() to be more consistent, this is is not an EVE command
-- changed EVE_init_flash() to return E_OK in case of success and more meaningfull values in case of failure
-- added the return-value of EVE_FIFO_HALF_EMPTY to EVE_busy() to indicate there is more than 2048 bytes available
-- minor cleanup, less break and else statements
-- added the burst code back into all the functions for which there is a _burst version, this allows to use the version
-без traling _burst в имени, когда скорость выполнения не является проблемой - например. со всеми целями, поддерживающими DMA
-- removed the 4.0 history
-- added the optional parameter EVE_ROTATE as define to EVE_init() to allow for screen rotation during init
+- наконец удаленEVE_cmd_start() после того, как он стал устаревшим в первой версии 5.0
+- переименованEVE_cmd_execute() вEVE_execute_cmd() для большей согласованности, это не команда EVE
+- изменен EVE_init_flash(), чтобы он возвращалE_OKв случае успеха и более значимые значения в случае неудачи
+- добавлено возвращаемое значениеEVE_FIFO_HALF_EMPTYв EVE_busy(), чтобы указать, что доступно более 2048 байт
+- незначительная очистка, меньше перерывов и операторов else
+- добавил пакетный код обратно во все функции, для которых есть версия _burst, это позволяет использовать версию
+без отслеживания _burst в имени, когда скорость выполнения не является проблемой - например. со всеми странами, поддерживающими DMA
+- удалил историю версии 4.0
+- добавлен дополнительный параметр EVE_ROTATE, как определено в EVE_init(), чтобы разрешить поворот экрана во время инициализации.
     спасибо за идею Андрею Валанду на Github!
-- added the optional parameter EVE_BACKLIGHT_PWM to EVE_init() to allow setting the backlight during init
-- modified EVE_calibrate_manual() to work better with bar type displays
-- fixed a large number of MISRA-C issues - mostly more casts for explicit type conversion and more brackets
-- changed the varargs versions of cmd_button, cmd_text and cmd_toggle to use an array of uint32_t values to comply with MISRA-C
-- basic maintenance: checked for violations of white space and indent rules
-- more linter fixes for minor issues like variables shorter than 3 characters
-- added EVE_color_a() / EVE_color_a_burst()
-- more minor tweaks and fixes to make the static analyzer happy
-- changed the burst variant of private_string_write() back to the older and faster version
-- refactoring of EVE_init() to single return
-- added prototype for EVE_write_display_parameters()
-- added EVE_memRead_sram_buffer()
-- Bugfix issue #81: neither DISP or the pixel clock are enabled for EVE4 configurations not using EVE_PCLK_FREQ.
+- добавлен необязательный параметрEVE_BACKLIGHT_PWMв EVE_init(), позволяющий устанавливать подсветку во время инициализации
+- модифицированEVE_calibrate_manual() для лучшей работы с дисплеями типа гистограммы
+- исправлено большое количество проблем сMISRA-C - в основном больше приведений для явного преобразования типов и больше скобок
+- изменены версииcmd_buttonс переменным числом аргументовcmd_button,cmd_textиcmd_toggleдля использования массива значенийuint32_tдля соответствияMISRA-C
+- базовое обслуживание: проверяется на наличие нарушений правил использования пробелов и отступов.
+- больше исправлений линтера для мелких проблем, таких как переменные короче 3 символов.
+- добавлен EVE_color_a()/EVE_color_a_burst()
+- больше мелких настроек и исправлений, чтобы статический анализатор был доволен
+- изменил пакетный вариантprivate_string_write() обратно на более старую и быструю версию
+- рефакторинг EVE_init() для одиночного возврата
+- добавлен прототип дляEVE_write_display_parameters()
+- добавленEVE_memRead_sram_buffer()
+- Исправление ошибки № 81: ни DISP, ни частота пикселей не включены для конфигураций EVE4, не использующих EVE_PCLK_FREQ.
     спасибо за отчет grados73 на Github!
-- added a few support lines for the Gameduino GD3X to EVE_init()
-- switched from using CMD_PCLKFREQ to writing to REG_PCLK_FREQ directly
-- added define EVE_SET_REG_PCLK_2X to set REG_PCLK_2X to 1 when necessary
-- Bugfix: EVE_init() did not set the audio engine to "mute" as intended, but to "silent"
-- Bugfix: EVE_busy() returns E_NOT_OK now on coprocessor faults.
+- добавлено несколько строк поддержки GameduinoGD3XвEVE_init()
+- переключился с использованияCMD_PCLKFREQна запись напрямую в REG_PCLK_FREQ
+- добавлено определениеEVE_SET_REG_PCLK_2Xдля установкиREG_PCLK_2Xв 1 при необходимости
+- Исправление:EVE_init() устанавливал звуковой движок не в «отключенный звук», как предполагалось, а в «тихий» режим.
+- Исправление: EVE_busy() теперь возвращаетE_NOT_OKпри ошибках сопроцессора.
     спасибо за отчет Z0ld3n на Github!
-- Fix: reworked EVE_busy() to return EVE_FAULT_RECOVERED on deteced coprocessor faults,
+- Исправлено: переработан EVE_busy() для возвратаEVE_FAULT_RECOVEREDпри обнаружении ошибок сопроцессора,
     удалены флэш-команды из последовательности восстановления после сбоя, поскольку они зависят от проекта.
-- added EVE_get_and_reset_fault_state() to check if EVE_busy() triggered a fault recovery
-- added notes on how to use to EVE_cmd_setfont2() and EVE_cmd_romfont()
-- new optional parameter in EVE_init(): EVE_BACKLIGHT_FREQ
-- fixed a couple of minor issues from static code analysis
-- reworked the burst part of private_string_write() to be less complex
-- renamed chipid references to regid as suggested by #93 on github
-- Bugfix: broke transfers of buffers larger than 3840 when fixing issues from static code analysis
-- changed a number of function parameters from signed to unsigned following the
+- добавлен EVE_get_and_reset_fault_state(), чтобы проверить, вызвал ли EVE_busy() восстановление после сбоя
+- добавлены примечания по использованию EVE_cmd_setfont2() и EVE_cmd_romfont()
+- новый необязательный параметр в EVE_init(): EVE_BACKLIGHT_FREQ
+- исправлено несколько незначительных проблем статического анализа кода
+- переработана пакетная часть private_string_write(), чтобы она стала менее сложной
+- переименованы ссылки на чипид в regid, как предложено № 93 на github
+- Исправление: прерывалась передача буферов размером более 3840 при устранении проблем статического анализа кода.
+- изменил ряд параметров функции со знаковых на беззнаковые после
     обновленное руководство по программированию серии BT81x V2 .4
-- did another linter pass and fixed some things
-- started to improve the embedded documentation
-- added more documentation
-- removed EVE_cmd_hsf_burst()
+- сделал еще один линтер и исправил кое-что
+- начал улучшать встроенную документацию
+- добавлено больше документации
+- удаленEVE_cmd_hsf_burst()
 
 */
 
 #include "EVE_commands.h"
 
-/* Команды памяти EVE — используются с EVE_memWritexx и EVE_memReadxx. */
+/* Команды памятиEVE— используются сEVE_memWritexxи EVE_memReadxx. */
 #define MEM_WRITE 0x80U /* EVE Запись в память хоста */
 /* #define MEM_READ 0x00U */ /* EVE Чтение памяти хоста */
 
@@ -170,14 +170,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 static volatile uint8_t cmd_burst = 0U; /* флаг, указывающий, что cmd-burst активен */
-static volatile uint8_t fault_recovered = E_OK; /* флаг, указывающий, вызвал ли EVE_busy восстановление после сбоя */
+static volatile uint8_t fault_recovered = E_OK; /* флаг, указывающий, вызвал лиEVE_busyвосстановление после сбоя */
 
 /* ##################################################################
     вспомогательные функции
 ##################################################################### */
 
 /**
- * @brief Send a host command.
+ * @brief Отправьте команду хоста.
  */
 void EVE_cmdWrite(uint8_t const command, uint8_t const parameter)
 {
@@ -189,7 +189,7 @@ void EVE_cmdWrite(uint8_t const command, uint8_t const parameter)
 }
 
 /**
- * @brief Implementation of rd8() function, reads 8 bits.
+ * @brief Реализация функции rd8(), читает 8 бит.
  */
 uint8_t EVE_memRead8(uint32_t const ft_address)
 {
@@ -202,7 +202,7 @@ uint8_t EVE_memRead8(uint32_t const ft_address)
 }
 
 /**
- * @brief Implementation of rd16() function, reads 16 bits.
+ * @brief Реализация функции rd16(), читает 16 бит.
  */
 uint16_t EVE_memRead16(uint32_t const ft_address)
 {
@@ -218,7 +218,7 @@ uint16_t EVE_memRead16(uint32_t const ft_address)
 }
 
 /**
- * @brief Implementation of rd32() function, reads 32 bits.
+ * @brief Реализация функции rd32(), читает 32 бита.
  */
 uint32_t EVE_memRead32(uint32_t const ft_address)
 {
@@ -234,7 +234,7 @@ uint32_t EVE_memRead32(uint32_t const ft_address)
 }
 
 /**
- * @brief Implementation of wr8() function, writes 8 bits.
+ * @brief Реализация функции wr8(), записывает 8 бит.
  */
 void EVE_memWrite8(uint32_t const ft_address, uint8_t const ft_data)
 {
@@ -247,7 +247,7 @@ void EVE_memWrite8(uint32_t const ft_address, uint8_t const ft_data)
 }
 
 /**
- * @brief Implementation of wr16() function, writes 16 bits.
+ * @brief Реализация функции wr16(), записывает 16 бит.
  */
 void EVE_memWrite16(uint32_t const ft_address, uint16_t const ft_data)
 {
@@ -261,7 +261,7 @@ void EVE_memWrite16(uint32_t const ft_address, uint16_t const ft_data)
 }
 
 /**
- * @brief Implementation of wr32() function, writes 32 bits.
+ * @brief Реализация функции wr32(), записывает 32 бита.
  */
 void EVE_memWrite32(uint32_t const ft_address, uint32_t const ft_data)
 {
@@ -274,7 +274,7 @@ void EVE_memWrite32(uint32_t const ft_address, uint32_t const ft_data)
 }
 
 /**
- * @brief Helper function, write a block of memory from the FLASH of the host controller to EVE.
+ * @brief Вспомогательная функция, записывает блок памяти изFLASHхост-контроллера в EVE.
  */
 void EVE_memWrite_flash_buffer(uint32_t const ft_address, const uint8_t *p_data, uint32_t const len)
 {
@@ -292,7 +292,7 @@ void EVE_memWrite_flash_buffer(uint32_t const ft_address, const uint8_t *p_data,
 }
 
 /**
- * @brief Helper function, write a block of memory from the SRAM of the host controller to EVE.
+ * @brief Вспомогательная функция, записывает блок памяти изSRAMхост-контроллера в EVE.
  */
 void EVE_memWrite_sram_buffer(uint32_t const ft_address, const uint8_t *p_data, uint32_t const len)
 {
@@ -310,7 +310,7 @@ void EVE_memWrite_sram_buffer(uint32_t const ft_address, const uint8_t *p_data, 
 }
 
 /**
- * @brief Helper function, read a block of memory from EVE to the SRAM of the host controller.
+ * @brief Вспомогательная функция: чтение блока памяти изEVEвSRAMхост-контроллера.
  */
 void EVE_memRead_sram_buffer(uint32_t const ft_address, uint8_t *p_data, uint32_t const len)
 {
@@ -357,12 +357,12 @@ static void CoprocessorFaultRecover(void)
 }
 
 /**
- * @brief Check if the coprocessor completed executing the current command list.
- * @return - E_OK - if EVE is not busy (no DMA transfer active and REG_CMDB_SPACE has the value 0xffc, meaning the CMD-FIFO is empty
- * @return - EVE_IS_BUSY - if a DMA transfer is active or REG_CMDB_SPACE has a value smaller than 0xffc
- * @return - EVE_FIFO_HALF_EMPTY - if no DMA transfer is active and REG_CMDB_SPACE shows more than 2048 bytes available
- * @return - E_NOT_OK - if there was a coprocessor fault and the recovery sequence was executed
- * @note - if there is a coprocessor fault the external flash is not reinitialized by EVE_busy()
+ * @brief Проверьте, завершил ли сопроцессор выполнение текущего списка команд.
+ * @return -E_OK- еслиEVEне занят (передачаDMAне активна иREG_CMDB_SPACEимеет значение 0xffc, что означает, чтоCMD-FIFOпуст
+ * @return -EVE_IS_BUSY- если активна передачаDMAилиREG_CMDB_SPACEимеет значение меньше 0xffc
+ * @return -EVE_FIFO_HALF_EMPTY- если передачаDMAне активна иREG_CMDB_SPACEпоказывает, что доступно более 2048 байт.
+ * @return -E_NOT_OK- если произошел сбой сопроцессора и была выполнена последовательность восстановления
+ * @note - при неисправности сопроцессора внешняя вспышка не инициализируется повторно по EVE_busy()
  */
 uint8_t EVE_busy(void)
 {
@@ -407,10 +407,10 @@ uint8_t EVE_busy(void)
 }
 
 /**
- * @brief Helper function to check if EVE_busy() tried to recover from a coprocessor fault.
- * Индикатор внутренней неисправности очищается, и его можно снова установить с помощью EVE_busy().
- * @return - EVE_FAULT_RECOVERED - if EVE_busy() detected a coprocessor fault
- * @return - E_OK - if EVE_busy() did not detect a coprocessor fault
+ * @brief Вспомогательная функция для проверки того, пытался ли EVE_busy() восстановиться после сбоя сопроцессора.
+ * Внутренний индикатор очищается, и его можно снова установить с помощью EVE_busy().
+ * @return -EVE_FAULT_RECOVERED- если EVE_busy() обнаружил неисправность сопроцессора
+ * @return -E_OK- если EVE_busy() не обнаружил неисправность сопроцессора
  */
 uint8_t EVE_get_and_reset_fault_state(void)
 {
@@ -425,7 +425,7 @@ uint8_t EVE_get_and_reset_fault_state(void)
 }
 
 /**
- * @brief Helper function, wait for the coprocessor to complete the FIFO queue.
+ * @brief Вспомогательная функция: дождитесь, пока сопроцессор завершит очередь FIFO.
  */
 void EVE_execute_cmd(void)
 {
@@ -501,14 +501,14 @@ static void block_transfer(const uint8_t *p_data, uint32_t len)
 #if EVE_GEN > 3
 
 /**
- * @brief Write "num" bytes from src in RAM_G to the previously erased external flash of a BT81x at address dest.
- * @note - dest must be 4096-byte aligned, src must be 4-byte aligned, num must be a multiple of 4096
- * @note - EVE will not do anything if the alignment requirements are not met
- * @note - the address ptr is relative to the flash so the first address is 0x000000 not 0x800000
- * @note - this looks exactly the same as EVE_cmd_flashupdate() but it needs the flash to be empty
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запишите «num» байтов из src вRAM_Gв ранее стертую внешнюю флэш-память BT81x по адресу dest.
+ * @note - dest должен быть выровнен по 4096 байт, src должен быть выровнен по 4 байта, num должно быть кратно 4096
+ * @note -EVEничего не будет делать, если требования выравнивания не будут выполнены.
+ * @note — адрес ptr относится к флэш-памяти, поэтому первый адрес — 0x000000, а не 0x800000.
+ * @note - это выглядит точно так же, как EVE_cmd_flashupdate(), но для него нужно, чтобы флэш был пуст
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashprogram(uint32_t dest, uint32_t src, uint32_t num)
 {
@@ -521,10 +521,10 @@ void EVE_cmd_flashprogram(uint32_t dest, uint32_t src, uint32_t num)
 }
 
 /**
- * @brief Enable the font cache.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Включите кеш шрифтов.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_fontcache(uint32_t font, uint32_t ptr, uint32_t num)
 {
@@ -537,10 +537,10 @@ void EVE_cmd_fontcache(uint32_t font, uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Queries the capacity and utilization of the font cache.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запрашивает емкость и использование кэша шрифтов.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_fontcachequery(uint32_t *p_total, uint32_t *p_used)
 {
@@ -565,10 +565,10 @@ void EVE_cmd_fontcachequery(uint32_t *p_total, uint32_t *p_used)
 }
 
 /**
- * @brief Returns all the attributes of the bitmap made by the previous CMD_LOADIMAGE, CMD_PLAYVIDEO, CMD_VIDEOSTART or CMD_VIDEOSTARTF.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Возвращает все атрибуты растрового изображения, созданные предыдущими CMD_LOADIMAGE, CMD_PLAYVIDEO,CMD_VIDEOSTARTили CMD_VIDEOSTARTF.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_getimage(uint32_t *p_source, uint32_t *p_fmt, uint32_t *p_width, uint32_t *p_height, uint32_t *p_palette)
 {
@@ -608,10 +608,10 @@ void EVE_cmd_getimage(uint32_t *p_source, uint32_t *p_fmt, uint32_t *p_width, ui
 }
 
 /**
- * @brief Undocumented command.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Недокументированная команда.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_linetime(uint32_t dest)
 {
@@ -622,10 +622,10 @@ void EVE_cmd_linetime(uint32_t dest)
 }
 
 /**
- * @brief Starts the compilation of a command list into RAM_G. 
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запускает компиляцию списка команд в RAM_G. 
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_newlist(uint32_t adr)
 {
@@ -636,12 +636,12 @@ void EVE_cmd_newlist(uint32_t adr)
 }
 
 /**
- * @brief Sets REG_PCLK_FREQ to generate the closest possible frequency to the one requested.
- * @return - the frequency achieved or zero if no frequency was found
- * @note - When using this command, the flash BLOB is required.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief УстанавливаетREG_PCLK_FREQдля генерации максимально близкой к запрошенной частоте.
+ * @return - достигнутая частота или ноль, если частота не найдена
+ * @note - При использовании этой команды требуется прошивка BLOB.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 uint32_t EVE_cmd_pclkfreq(uint32_t ftarget, int32_t rounding)
 {
@@ -660,10 +660,10 @@ uint32_t EVE_cmd_pclkfreq(uint32_t ftarget, int32_t rounding)
 }
 
 /**
- * @brief Waits for a specified number of microseconds.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Ожидает указанное количество микросекунд.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_wait(uint32_t usec)
 {
@@ -679,11 +679,11 @@ void EVE_cmd_wait(uint32_t usec)
 #if EVE_GEN > 2
 
 /**
- * @brief Clears the graphics engine’s internal flash cache.
- * @note - This function includes clearing out the display list.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Очищает внутренний флэш-кэш графического движка.
+ * @note - Эта функция включает очистку списка отображения.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_clearcache(void)
 {
@@ -700,10 +700,10 @@ void EVE_cmd_clearcache(void)
 }
 
 /**
- * @brief Re-connect to the attached SPI flash storage.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Повторно подключитесь к подключенному флэш-накопителю SPI.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashattach(void)
 {
@@ -713,10 +713,10 @@ void EVE_cmd_flashattach(void)
 }
 
 /**
- * @brief Dis-connect from the attached SPI flash storage.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Отключитесь от подключенного флэш-накопителя SPI.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashdetach(void)
 {
@@ -726,10 +726,10 @@ void EVE_cmd_flashdetach(void)
 }
 
 /**
- * @brief Erases the attached SPI flash storage.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Удаляет подключенную флэш-память SPI.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flasherase(void)
 {
@@ -739,12 +739,12 @@ void EVE_cmd_flasherase(void)
 }
 
 /**
- * @brief Drive the attached SPI flash storage in full-speed mode, if possible.
- * @return - Zero on success, error code on failure
- * @note - When using this command, the flash BLOB is required.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Если возможно, используйте подключенный флэш-накопительSPIна полной скорости.
+ * @return - Ноль в случае успеха, код ошибки в случае неудачи
+ * @note - При использовании этой команды требуется прошивка BLOB.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 uint32_t EVE_cmd_flashfast(void)
 {
@@ -761,11 +761,11 @@ uint32_t EVE_cmd_flashfast(void)
 }
 
 /**
- * @brief De-asserts the SPI CS signal of the attached SPI flash storage.
- * @note - Only works when the attached SPI flash storage has been detached.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Отменяет сигналSPICS подключенного флэш-накопителя SPI.
+ * @note - Работает только в том случае, если подключенная флэш-памятьSPIотсоединена.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashspidesel(void)
 {
@@ -775,13 +775,13 @@ void EVE_cmd_flashspidesel(void)
 }
 
 /**
- * @brief Copies "num" bytes from "src" in attached SPI flash storage to "dest" in RAM_G.
- * @note - src must be 64-byte aligned, dest must be 4-byte aligned, num must be a multiple of 4
- * @note - EVE will not do anything if the alignment requirements are not met
- * @note - The src pointer is relative to the flash so the first address is 0x000000 not 0x800000.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Копирует «num» байтов из «src» подключенной флэш-памятиSPIв «dest» вRAM_G.
+ * @note - src должен быть выровнен по 64 байта, dest должен быть выровнен по 4 байта, число должно быть кратно 4
+ * @note -EVEничего не будет делать, если требования выравнивания не будут выполнены.
+ * @note — Указатель src относится к флэш-памяти, поэтому первый адрес — 0x000000, а не 0x800000.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashread(uint32_t dest, uint32_t src, uint32_t num)
 {
@@ -794,13 +794,13 @@ void EVE_cmd_flashread(uint32_t dest, uint32_t src, uint32_t num)
 }
 
 /**
- * @brief Set the source address for flash data loaded by the CMD_LOADIMAGE, CMD_PLAYVIDEO, CMD_VIDEOSTARTF and CMD_INFLATE2 commands with the OPT_FLASH option.
- * @note - Address must be 64-byte aligned.
- * @note - EVE will not do anything if the alignment requirements are not met.
- * @note - The pointer is relative to the flash, so the first address is 0x000000 not 0x800000.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Установите адрес источника для флэш-данных, загружаемых командами CMD_LOADIMAGE, CMD_PLAYVIDEO,CMD_VIDEOSTARTFи CMD_INFLATE2, с помощью опции OPT_FLASH.
+ * @note - Адрес должен быть выровнен по 64 байта.
+ * @note -EVEне будет ничего делать, если требования выравнивания не будут выполнены.
+ * @note — Указатель относится к флэш-памяти, поэтому первый адрес — 0x000000, а не 0x800000.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashsource(uint32_t ptr)
 {
@@ -811,11 +811,11 @@ void EVE_cmd_flashsource(uint32_t ptr)
 }
 
 /**
- * @brief Receives bytes from the flash SPI interface and writes them to main memory.
- * @note - Only works when the attached SPI flash storage has been detached.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Получает байты от флэш-интерфейсаSPIи записывает их в основную память.
+ * @note - Работает только в том случае, если подключенная флэш-памятьSPIотсоединена.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashspirx(uint32_t dest, uint32_t num)
 {
@@ -827,11 +827,11 @@ void EVE_cmd_flashspirx(uint32_t dest, uint32_t num)
 }
 
 /**
- * @brief Transmits bytes over the flash SPI interface.
- * @note - Only works when the attached SPI flash storage has been detached.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Передаёт байты через интерфейс флэш-памяти SPI.
+ * @note - Работает только в том случае, если подключенная флэш-памятьSPIотсоединена.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashspitx(uint32_t num, const uint8_t *p_data)
 {
@@ -842,13 +842,13 @@ void EVE_cmd_flashspitx(uint32_t num, const uint8_t *p_data)
 }
 
 /**
- * @brief Write "num" bytes from src in RAM_G to the attached SPI flash storage at address dest.
- * @note - dest must be 4096-byte aligned, src must be 4-byte aligned, num must be a multiple of 4096
- * @note - EVE will not do anything if the alignment requirements are not met.
- * @note - The address ptr is relative to the flash so the first address is 0x000000 not 0x800000.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запишите «num» байтов из src вRAM_Gв подключенную флэш-памятьSPIпо адресу dest.
+ * @note - dest должен быть выровнен по 4096 байт, src должен быть выровнен по 4 байта, num должно быть кратно 4096
+ * @note -EVEне будет ничего делать, если требования выравнивания не будут выполнены.
+ * @note — Адрес ptr относится к флэш-памяти, поэтому первый адрес — 0x000000, а не 0x800000.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashupdate(uint32_t dest, uint32_t src, uint32_t num)
 {
@@ -861,13 +861,13 @@ void EVE_cmd_flashupdate(uint32_t dest, uint32_t src, uint32_t num)
 }
 
 /**
- * @brief Write "num" bytes to the attached SPI flash storage at address dest.
- * @note - dest must be 256-byte aligned, num must be a multiple of 256
- * @note - EVE will not do anything if the alignment requirements are not met.
- * @note - The address ptr is relative to the flash so the first address is 0x000000 not 0x800000.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запишите «число» байтов в подключенную флэш-памятьSPIпо адресу dest.
+ * @note - dest должно быть выровнено по 256 байт, num должно быть кратно 256
+ * @note -EVEне будет ничего делать, если требования выравнивания не будут выполнены.
+ * @note — Адрес ptr относится к флэш-памяти, поэтому первый адрес — 0x000000, а не 0x800000.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_flashwrite(uint32_t ptr, uint32_t num, const uint8_t *p_data)
 {
@@ -882,11 +882,11 @@ void EVE_cmd_flashwrite(uint32_t ptr, uint32_t num, const uint8_t *p_data)
 }
 
 /**
- * @brief Decompress data into RAM_G.
- * @note - The data must be correct and complete.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Распакуйте данные в RAM_G.
+ * @note - Данные должны быть верными и полными.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_inflate2(uint32_t ptr, uint32_t options, const uint8_t *p_data, uint32_t len)
 {
@@ -895,7 +895,7 @@ void EVE_cmd_inflate2(uint32_t ptr, uint32_t options, const uint8_t *p_data, uin
     spi_transmit_32(options);
     EVE_cs_clear();
 
-    if (0UL == options) /* прямые данные, а не через Media- FIFO или Flash */
+    if (0UL == options) /* прямые данные, а не через Media-FIFOили Flash */
     {
         if (p_data != NULL)
         {
@@ -907,10 +907,10 @@ void EVE_cmd_inflate2(uint32_t ptr, uint32_t options, const uint8_t *p_data, uin
 #endif /* EVE_GEN > 2 */
 
 /**
- * @brief Returns the source address and size of the bitmap loaded by the previous CMD_LOADIMAGE.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Возвращает исходный адрес и размер растрового изображения, загруженного предыдущим CMD_LOADIMAGE.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_getprops(uint32_t *p_pointer, uint32_t *p_width, uint32_t *p_height)
 {
@@ -939,10 +939,10 @@ void EVE_cmd_getprops(uint32_t *p_pointer, uint32_t *p_width, uint32_t *p_height
 }
 
 /**
- * @brief Returns the next address after a CMD_INFLATE and other commands.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Возвращает следующий адрес послеCMD_INFLATEи других команд.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 uint32_t EVE_cmd_getptr(void)
 {
@@ -959,11 +959,11 @@ uint32_t EVE_cmd_getptr(void)
 }
 
 /**
- * @brief Decompress data into RAM_G.
- * @note - The data must be correct and complete.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Распакуйте данные в RAM_G.
+ * @note - Данные должны быть верными и полными.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_inflate(uint32_t ptr, const uint8_t *p_data, uint32_t len)
 {
@@ -977,10 +977,10 @@ void EVE_cmd_inflate(uint32_t ptr, const uint8_t *p_data, uint32_t len)
 }
 
 /**
- * @brief Trigger interrupt INT_CMDFLAG.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Вызов прерывания INT_CMDFLAG.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_interrupt(uint32_t msec)
 {
@@ -991,13 +991,13 @@ void EVE_cmd_interrupt(uint32_t msec)
 }
 
 /**
- * @brief Loads and decodes a JPEG/PNG image into RAM_G.
- * @note - Decoding PNG images takes significantly more time than decoding JPEG images.
- * @note - In doubt use the EVE Asset Builder to check if PNG/JPEG files are compatible.
- * @note - If the image is in PNG format, the top 42kiB of RAM_G will be overwritten.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Загружает и декодирует изображение JPEG/PNG в RAM_G.
+ * @note - Декодирование изображенийPNGзанимает значительно больше времени, чем декодирование изображений JPEG.
+ * @note - При возникновении сомнений используйтеEVEAsset Builder, чтобы проверить совместимость файлов PNG/JPEG.
+ * @note - Если образ имеет формат PNG, верхние 42 КБRAM_Gбудут перезаписаны.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_loadimage(uint32_t ptr, uint32_t options, const uint8_t *p_data, uint32_t len)
 {
@@ -1021,10 +1021,10 @@ void EVE_cmd_loadimage(uint32_t ptr, uint32_t options, const uint8_t *p_data, ui
 }
 
 /**
- * @brief Set up a streaming media FIFO in RAM_G.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Настройте потоковое мультимедиаFIFOв RAM_G.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_mediafifo(uint32_t ptr, uint32_t size)
 {
@@ -1036,10 +1036,10 @@ void EVE_cmd_mediafifo(uint32_t ptr, uint32_t size)
 }
 
 /**
- * @brief Copy a block of RAM_G.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Скопируйте блок RAM_G.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_memcpy(uint32_t dest, uint32_t src, uint32_t num)
 {
@@ -1052,10 +1052,10 @@ void EVE_cmd_memcpy(uint32_t dest, uint32_t src, uint32_t num)
 }
 
 /**
- * @brief Compute a CRC-32 for RAM_G.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief ВычислитеCRC-32 дляRAM_G.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 uint32_t EVE_cmd_memcrc(uint32_t ptr, uint32_t num)
 {
@@ -1074,10 +1074,10 @@ uint32_t EVE_cmd_memcrc(uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Fill RAM_G with a byte value.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief ЗаполнитеRAM_Gзначением байта.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_memset(uint32_t ptr, uint8_t value, uint32_t num)
 {
@@ -1090,24 +1090,24 @@ void EVE_cmd_memset(uint32_t ptr, uint8_t value, uint32_t num)
 }
 
 /**
- * @brief Write bytes into RAM_G using the coprocessor.
- * @note - Commented out, just use one of the EVE_memWrite* helper functions to directly write to EVEs memory.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запишите байты вRAM_Gс помощью сопроцессора.
+ * @note - Закомментировано, просто используйте одну из вспомогательных функцийEVE_memWrite* для прямой записи в память EVE.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 /*
-void EVE_cmd_memwrite ( uint32_t назначение, uint32_t число, const uint8_t * p_data )
+voidEVE_cmd_memwrite(обозначение uint32_t, число uint32_t, constuint8_t* p_data)
 {
-    eve_begin_cmd ( CMD_MEMWRITE );
+    eve_begin_cmd (CMD_MEMWRITE);
     spi_transmit_32 (адресат);
     spi_transmit_32 (число);
 
-    num = (num + 3U) & (~3U);
+    num = (число + 3U) и (~3U);
 
-    for ( uint32_t count = 0U; count<len; count++)
+    for (uint32_tcount = 0U; count<len; count++)
     {
-        spi_transmit ( pgm_read_byte_far ( p_data + счет));
+        spi_transmit (pgm_read_byte_far(p_data+ счет));
     }
 
     EVE_cs_clear ();
@@ -1116,34 +1116,34 @@ void EVE_cmd_memwrite ( uint32_t назначение, uint32_t число, cons
 */
 
 /**
- * @brief Read a register value using the coprocessor.
- * @note - Commented out, just read the register directly.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Считайте значение регистра с помощью сопроцессора.
+ * @note - Закомментировано, просто прочитайте реестр напрямую.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 /*
-uint32_t EVE_cmd_regread ( uint32_t точка)
+uint32_tEVE_cmd_regread(точка uint32_t)
 {
     uint16_t cmdoffset;
 
-    eve_begin_cmd ( CMD_REGREAD );
+    eve_begin_cmd (CMD_REGREAD);
     spi_transmit_32 (птр);
     spi_transmit_32 (0UL);
     EVE_cs_clear ();
     EVE_execute_cmd ();
-    cmdoffset = EVE_memRead16(REG_CMD_WRITE); // read the coprocessor write pointer
+    cmdoffset = EVE_memRead16 (REG_CMD_WRITE); // читаем указатель записи сопроцессора
     cmdoffset -= 4U;
     cmdoffset &= 0x0fffU;
-    return ( EVE_memRead32 ( EVE_RAM_CMD + cmdoffset));
+    return (EVE_memRead32(EVE_RAM_CMD+ cmdoffset));
 }
 */
 
 /**
- * @brief Write zero to RAM_G.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Запишите ноль в RAM_G.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_memzero(uint32_t ptr, uint32_t num)
 {
@@ -1155,11 +1155,11 @@ void EVE_cmd_memzero(uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Play back motion-JPEG encoded AVI video.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command.
- * @note - Does not support burst-mode.
- * @note - Does not wait for completion in order to allow the video to be paused or terminated by REG_PLAY_CONTROL
+ * @brief Воспроизведение видео в форматеJPEGв кодировке AVI.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды.
+ * @note - Не поддерживает пакетный режим.
+ * @note - Не ждет завершения, чтобы позволить приостановить или завершить видео с помощью REG_PLAY_CONTROL.
  */
 void EVE_cmd_playvideo(uint32_t options, const uint8_t *p_data, uint32_t len)
 {
@@ -1182,10 +1182,10 @@ void EVE_cmd_playvideo(uint32_t options, const uint8_t *p_data, uint32_t len)
 }
 
 /**
- * @brief Rotate the screen and set up transform matrix accordingly.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Поверните экран и соответствующим образом настройте матрицу преобразования.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_setrotate(uint32_t rotation)
 {
@@ -1196,10 +1196,10 @@ void EVE_cmd_setrotate(uint32_t rotation)
 }
 
 /**
- * @brief Take a snapshot of the current screen.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Сделайте снимок текущего экрана.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_snapshot(uint32_t ptr)
 {
@@ -1210,10 +1210,10 @@ void EVE_cmd_snapshot(uint32_t ptr)
 }
 
 /**
- * @brief Take a snapshot of part of the current screen with format option.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Сделайте снимок части текущего экрана с возможностью форматирования.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_snapshot2(uint32_t fmt, uint32_t ptr, int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt)
 {
@@ -1236,10 +1236,10 @@ void EVE_cmd_snapshot2(uint32_t fmt, uint32_t ptr, int16_t xc0, int16_t yc0, uin
 }
 
 /**
- * @brief Track touches for a graphics object.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Отслеживание касаний графического объекта.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_track(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt, uint16_t tag)
 {
@@ -1265,10 +1265,10 @@ void EVE_cmd_track(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt, uint16_
 }
 
 /**
- * @brief Load the next frame of a video.
- * @note - Meant to be called outside display-list building.
- * @note - Includes executing the command and waiting for completion.
- * @note - Does not support burst-mode.
+ * @brief Загрузите следующий кадр видео.
+ * @note - Предназначен для вызова за пределами здания списка отображения.
+ * @note - Включает выполнение команды и ожидание завершения.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_videoframe(uint32_t dest, uint32_t result_ptr)
 {
@@ -1286,10 +1286,10 @@ void EVE_cmd_videoframe(uint32_t dest, uint32_t result_ptr)
 #if EVE_GEN > 2
 
 /**
- * @brief EVE flash initialization for BT81x, switches the FLASH attached to a BT81x to full-speed mode
- * @return Returns E_OK in case of success, EVE_FAIL_FLASH_STATUS_INIT if the status remains init,
+ * @brief Инициализация флэш-памятиEVEдля BT81x переключает FLASH, подключенный к BT81x, в полноскоростной режим.
+ * @return ВозвращаетE_OKв случае успеха, EVE_FAIL_FLASH_STATUS_INIT, если статус остается начальным,
  * EVE_FAIL_FLASH_STATUS_DETACHED, если флэш-чип не найден, ряд различных значений для ошибок с
- * cmd_flashfast и E_NOT_OK, если в REG_FLASH_STATUS возвращается статус «не поддерживается».
+ * cmd_flashfast иE_NOT_OK, если вREG_FLASH_STATUSвозвращается статус «не отключено».
  */
 uint8_t EVE_init_flash(void)
 {
@@ -1389,7 +1389,7 @@ static void use_gt911(void)
     EVE_memWrite16(REG_TOUCH_CONFIG, 0x05d0U); /* переключиться на сенсорный контроллер Goodix */
 #else
 
-/* FT811/FT813 бинарный объект от FTDIs AN_336 для патча тач-движка для сенсорных контроллеров Goodix GT911/GT9271 */
+/* Бинарный объектFT811/FT813от FTDIsAN_336для патча тач-движка для сенсорных контроллеров GoodixGT911/ GT9271 */
 const uint8_t eve_gt911_data[1184U] PROGMEM =
 {
     26,  255, 255, 255, 32,  32,  48,  0,   4,   0,   0,   0,   2,   0,   0,   0,   34,  255, 255, 255, 0,   176, 48,
@@ -1455,10 +1455,10 @@ const uint8_t eve_gt911_data[1184U] PROGMEM =
     EVE_execute_cmd();
 
     EVE_memWrite8(REG_TOUCH_OVERSAMPLE, 0x0fU); /* настроить передискретизацию для 0x0f как «скрытую» в двоичном объекте для AN_336 */
-    EVE_memWrite16(REG_TOUCH_CONFIG, 0x05D0U);  /* напишите волшебный cookie по запросу AN_336 */
+    EVE_memWrite16(REG_TOUCH_CONFIG, 0x05D0U);  /* напишите волшебное печенье по запросу AN_336 */
 
-    /* специально для модулей EVE2 от Matrix-Orbital, мы должны использовать GPIO3 для сброса GT911 */
-    EVE_memWrite16(REG_GPIOX_DIR, 0x8008U); /* Reset-Value — 0x8000 , добавление 0x08 устанавливает GPIO3 на выход, значение по умолчанию.
+    /* специально для модулейEVE2от Matrix-Orbital, для сбросаGT911нужно использовать GPIO3 */
+    EVE_memWrite16(REG_GPIOX_DIR, 0x8008U); /* Reset-Value —0x8000, добавление0x08устанавливаетGPIO3на выходе, значение по умолчанию.
                                               для REG_GPIOX это 0x8000 -> Низкий выход на GPIO3 */
     DELAY_MS(1U);                           /* подожди больше 100 нас */
     EVE_memWrite8(REG_CPURESET, 0U);        /* очистить все сбросы */
@@ -1469,9 +1469,9 @@ const uint8_t eve_gt911_data[1184U] PROGMEM =
 }
 
 /**
- * @brief Waits for either reading REG_ID with a value of 0x7c, indicating that
+ * @brief Ожидает чтенияREG_IDсо значением 0x7c, указывая, что
  *  чип EVE присутствует и готов к обмену данными или пока не пройдет тайм-аут 400 мс.
- * @return Returns E_OK in case of success, EVE_FAIL_REGID_TIMEOUT if the
+ * @return ВозвращаетE_OKв случае успеха, EVE_FAIL_REGID_TIMEOUT, если
  * значение 0x7c не удалось прочитать.
  */
 static uint8_t wait_regid(void)
@@ -1495,10 +1495,10 @@ static uint8_t wait_regid(void)
 }
 
 /**
- * @brief Waits for either REG_CPURESET to indicate that the audio, touch and
+ * @brief Ожидает, покаREG_CPURESETукажет, что звук, сенсорный и
  * сопроцессоры завершили соответствующие циклы сброса,
  * или пока не пройдет таймаут 50 мс.
- * @return Returns E_OK in case of success, EVE_FAIL_RESET_TIMEOUT if either the
+ * @return ВозвращаетE_OKв случае успеха, EVE_FAIL_RESET_TIMEOUT, если
  * аудио, сенсорный или сопроцессорный блок указывает на неисправность, не возвращаясь после сброса.
  */
 static uint8_t wait_reset(void)
@@ -1522,9 +1522,9 @@ static uint8_t wait_reset(void)
 }
 
 /**
- * @brief Writes all parameters defined for the display selected in EVE_config.h.
+ * @brief Записывает все параметры, определенные для дисплея, выбранного в EVE_config.h.
  * в соответствующие регистры.
- * Он используется EVE_init() и при необходимости может использоваться для обновления значений регистра.
+ * Он использует EVE_init() и при необходимости может использоваться для обновления результатов регистра.
  */
 void EVE_write_display_parameters(void)
 {
@@ -1552,7 +1552,7 @@ void EVE_write_display_parameters(void)
 #endif
 
 #if defined (EVE_ROTATE)
-    EVE_memWrite8(REG_ROTATE, EVE_ROTATE & 7U); /* bit0 = invert, bit2 = portrait, bit3 = mirrored */
+    EVE_memWrite8(REG_ROTATE, EVE_ROTATE & 7U); /* bit0 = инвертировать, бит2 = книжная ориентация, бит3 = зеркальное отображение */
     /* значение по умолчанию для сброса: 0x0 — не инвертировано, горизонтально, не зеркально. */
 #endif
 }
@@ -1575,15 +1575,15 @@ static void enable_pixel_clock(void)
 }
 
 /**
- * @brief Initializes EVE according to the selected configuration from EVE_config.h.
- * @return E_OK in case of success
- * @note - Has to be executed with the SPI setup to 11 MHz or less as required by FT8xx / BT8xx!
- * @note - Additional settings can be made through extra macros.
- * @note - EVE_TOUCH_RZTHRESH - configure the sensitivity of resistive touch, defaults to 1200.
- * @note - EVE_ROTATE - set the screen rotation: bit0 = invert, bit1 = portrait, bit2 = mirrored.
- * @note - needs a set of calibration values for the selected rotation since this rotates before calibration!
- * @note - EVE_BACKLIGHT_FREQ - configure the backlight frequency, default is not writing it which results in 250Hz.
- * @note - EVE_BACKLIGHT_PWM - configure the backlight pwm, defaults to 0x20 / 25%.
+ * @brief ИнициализируетEVEв соответствии с выбранной конфигурацией из EVE_config.h.
+ * @return E_OK в случае успеха
+ * @note - Должно быть выполнено с настройкойSPIна 11 МГц или меньше, как того требует FT8xx/BT8xx!
+ * @note - Дополнительные настройки можно выполнить с помощью дополнительных макросов.
+ * @note -EVE_TOUCH_RZTHRESH- настройка чувствительности резистивного касания, по умолчанию 1200.
+ * @note -EVE_ROTATE- установить поворот экрана: бит0 = инвертировать, бит1 = книжная, бит2 = зеркальный.
+ * @note - требуется набор калибровочных значений для выбранного вращения, поскольку оно вращается перед калибровкой!
+ * @note -EVE_BACKLIGHT_FREQ- настроить частоту подсветки, по умолчанию ее не пишет, получается 250Гц.
+ * @note -EVE_BACKLIGHT_PWM- настройка ШИМ подсветки, по умолчанию 0x20/25%.
  */
 uint8_t EVE_init(void)
 {
@@ -1623,21 +1623,21 @@ uint8_t EVE_init(void)
             EVE_memWrite32(REG_FREQUENCY, 72000000UL);
 #endif
 
-/* у нас есть дисплей с сенсорным контроллером Goodix GT911/GT9271,
+/* у нас есть дисплей с сенсорным контроллером GoodixGT911/GT9271,
  поэтому мы исправляем наши FT811 или FT813 в соответствии с AN_336 или настраиваем BT815 / BT817 соответственно. */
             if(EVE_HAS_GT911) {
                 use_gt911();
             }
 
 #if defined (EVE_ADAM101)
-            EVE_memWrite8(REG_PWM_DUTY, 0x80U); /* отключить подсветку модуля Glyn ADAM101, он использует инвертированные значения */
+            EVE_memWrite8(REG_PWM_DUTY, 0x80U); /* Включена подсветка модуля Glyn ADAM101, он использует инвертированные значения. */
 #else
             EVE_memWrite8(REG_PWM_DUTY, 0U); /* отключить подсветку для любого другого модуля */
 #endif
             EVE_write_display_parameters();
 
             /* отключить звук сейчас */
-            EVE_memWrite8(REG_VOL_PB, 0U);      /* уменьшите громкость записанного звука, сброс по умолчанию — 0xff */
+            EVE_memWrite8(REG_VOL_PB, 0U);      /* уменьшите громкость произнесенного звука, сброс по умолчанию — 0xff */
             EVE_memWrite8(REG_VOL_SOUND, 0U);   /* уменьшите громкость синтезатора, сброс по умолчанию — 0xff */
             EVE_memWrite16(REG_SOUND, EVE_MUTE); /* отключить звук синтезатора */
 
@@ -1674,10 +1674,10 @@ uint8_t EVE_init(void)
 ##################################################################### */
 
 /**
- * @brief Begin a sequence of commands or prepare a DMA transfer if applicable.
- * @note - Needs to be used with EVE_end_cmd_burst().
- * @note - Do not use any functions in the sequence that do not address the command-fifo as for example any of EVE_mem...() functions.
- * @note - Do not use any of the functions that do not support burst-mode.
+ * @brief Начните последовательность команд или подготовьте передачу DMA, если это применимо.
+ * @note - Необходимо использовать с EVE_end_cmd_burst().
+ * @note - Не используйте в последовательности какие-либо функции, которые не обращаются к командному Fifo, как, например, любую из функцийEVE_mem...().
+ * @note - Не используйте функции, не поддерживающие пакетный режим.
  */
 void EVE_start_cmd_burst(void)
 {
@@ -1704,8 +1704,8 @@ void EVE_start_cmd_burst(void)
 }
 
 /**
- * @brief End a sequence of commands or trigger a prepared DMA transfer if applicable.
- * @note - Needs to be used with EVE_start_cmd_burst().
+ * @brief Завершите последовательность команд или запустите подготовленную передачу DMA, если это применимо.
+ * @note - Необходимо использовать с EVE_start_cmd_burst().
  */
 void EVE_end_cmd_burst(void)
 {
@@ -1780,7 +1780,7 @@ static void private_string_write(const char *p_text)
 #if EVE_GEN > 3
 
 /**
- * @brief Render one frame in RAM_G of an animation.
+ * @brief Рендеринг одного кадра анимации в формате RAM_G.
  */
 void EVE_cmd_animframeram(int16_t xc0, int16_t yc0, uint32_t aoptr, uint32_t frame)
 {
@@ -1805,7 +1805,7 @@ void EVE_cmd_animframeram(int16_t xc0, int16_t yc0, uint32_t aoptr, uint32_t fra
 }
 
 /**
- * @brief Render one frame in RAM_G of an animation, only works in burst-mode.
+ * @brief Рендеринг одного кадра вRAM_Gанимации, работает только в серийном режиме.
  */
 void EVE_cmd_animframeram_burst(int16_t xc0, int16_t yc0, uint32_t aoptr,
                                 uint32_t frame)
@@ -1817,7 +1817,7 @@ void EVE_cmd_animframeram_burst(int16_t xc0, int16_t yc0, uint32_t aoptr,
 }
 
 /**
- * @brief Start an animation in RAM_G.
+ * @brief Запустите анимацию в RAM_G.
  */
 void EVE_cmd_animstartram(int32_t chnl, uint32_t aoptr, uint32_t loop)
 {
@@ -1839,7 +1839,7 @@ void EVE_cmd_animstartram(int32_t chnl, uint32_t aoptr, uint32_t loop)
 }
 
 /**
- * @brief Start an animation in RAM_G, only works in burst-mode.
+ * @brief Запустите анимацию в RAM_G, работает только в пакетном режиме.
  */
 void EVE_cmd_animstartram_burst(int32_t chnl, uint32_t aoptr, uint32_t loop)
 {
@@ -1850,7 +1850,7 @@ void EVE_cmd_animstartram_burst(int32_t chnl, uint32_t aoptr, uint32_t loop)
 }
 
 /**
- * @brief Sets the API level used by the coprocessor.
+ * @brief Устанавливает уровень API, используемый сопроцессором.
  */
 void EVE_cmd_apilevel(uint32_t level)
 {
@@ -1868,7 +1868,7 @@ void EVE_cmd_apilevel(uint32_t level)
 }
 
 /**
- * @brief Sets the API level used by the coprocessor, only works in burst-mode.
+ * @brief Устанавливает уровень API, используемый сопроцессором, работает только в пакетном режиме.
  */
 void EVE_cmd_apilevel_burst(uint32_t level)
 {
@@ -1877,8 +1877,8 @@ void EVE_cmd_apilevel_burst(uint32_t level)
 }
 
 /**
- * @brief Execute the touch screen calibration routine for a sub-window.
- * @note - Does not support burst-mode.
+ * @brief Выполните процедуру калибровки сенсорного экрана для дополнительного окна.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_calibratesub(uint16_t xc0, uint16_t yc0, uint16_t width, uint16_t height)
 {
@@ -1898,7 +1898,7 @@ void EVE_cmd_calibratesub(uint16_t xc0, uint16_t yc0, uint16_t width, uint16_t h
 }
 
 /**
- * @brief Calls a command list in RAM_G.
+ * @brief Вызывает список команд в RAM_G.
  */
 void EVE_cmd_calllist(uint32_t adr)
 {
@@ -1916,7 +1916,7 @@ void EVE_cmd_calllist(uint32_t adr)
 }
 
 /**
- * @brief Calls a command list in RAM_G, only works in burst-mode.
+ * @brief Вызывает список команд в RAM_G, работает только в пакетном режиме.
  */
 void EVE_cmd_calllist_burst(uint32_t adr)
 {
@@ -1925,8 +1925,8 @@ void EVE_cmd_calllist_burst(uint32_t adr)
 }
 
 /**
- * @brief Setup the Horizontal Scan out Filter for non-square pixel LCD support.
- * @note - Does not support burst-mode.
+ * @brief Настройте фильтр горизонтальной развертки для поддержки неквадратных пикселей LCD.
+ * @note - Не поддерживает пакетный режим.
  */
 void EVE_cmd_hsf(uint32_t hsf)
 {
@@ -1939,7 +1939,7 @@ void EVE_cmd_hsf(uint32_t hsf)
 }
 
 /**
- * @brief Play/run animations until complete.
+ * @brief Воспроизводите/запускайте анимацию до завершения.
  */
 void EVE_cmd_runanim(uint32_t waitmask, uint32_t play)
 {
@@ -1959,7 +1959,7 @@ void EVE_cmd_runanim(uint32_t waitmask, uint32_t play)
 }
 
 /**
- * @brief Play/run animations until complete, only works in burst-mode.
+ * @brief Воспроизведение/запуск анимации до завершения, работает только в пакетном режиме.
  */
 void EVE_cmd_runanim_burst(uint32_t waitmask, uint32_t play)
 {
@@ -1974,7 +1974,7 @@ void EVE_cmd_runanim_burst(uint32_t waitmask, uint32_t play)
 #if EVE_GEN > 2
 
 /**
- * @brief Draw one or more active animations.
+ * @brief Нарисуйте одну или несколько активных анимаций.
  */
 void EVE_cmd_animdraw(int32_t chnl)
 {
@@ -1992,7 +1992,7 @@ void EVE_cmd_animdraw(int32_t chnl)
 }
 
 /**
- * @brief Draw one or more active animations, only works in burst-mode.
+ * @brief Нарисуйте одну или несколько активных анимаций, работает только в серийном режиме.
  */
 void EVE_cmd_animdraw_burst(int32_t chnl)
 {
@@ -2001,7 +2001,7 @@ void EVE_cmd_animdraw_burst(int32_t chnl)
 }
 
 /**
- * @brief Draw the specified frame of an animation.
+ * @brief Нарисуйте указанный кадр анимации.
  */
 void EVE_cmd_animframe(int16_t xc0, int16_t yc0, uint32_t aoptr, uint32_t frame)
 {
@@ -2026,7 +2026,7 @@ void EVE_cmd_animframe(int16_t xc0, int16_t yc0, uint32_t aoptr, uint32_t frame)
 }
 
 /**
- * @brief Draw the specified frame of an animation, only works in burst-mode.
+ * @brief Нарисовать указанный кадр анимации, работает только в серийном режиме.
  */
 void EVE_cmd_animframe_burst(int16_t xc0, int16_t yc0, uint32_t aoptr,
                                 uint32_t frame)
@@ -2038,7 +2038,7 @@ void EVE_cmd_animframe_burst(int16_t xc0, int16_t yc0, uint32_t aoptr,
 }
 
 /**
- * @brief Start an animation.
+ * @brief Запустите анимацию.
  */
 void EVE_cmd_animstart(int32_t chnl, uint32_t aoptr, uint32_t loop)
 {
@@ -2060,7 +2060,7 @@ void EVE_cmd_animstart(int32_t chnl, uint32_t aoptr, uint32_t loop)
 }
 
 /**
- * @brief Start an animation, only works in burst-mode.
+ * @brief Запуск анимации, работает только в пакетном режиме.
  */
 void EVE_cmd_animstart_burst(int32_t chnl, uint32_t aoptr, uint32_t loop)
 {
@@ -2071,7 +2071,7 @@ void EVE_cmd_animstart_burst(int32_t chnl, uint32_t aoptr, uint32_t loop)
 }
 
 /**
- * @brief Stops one or more active animations.
+ * @brief Останавливает одну или несколько активных анимаций.
  */
 void EVE_cmd_animstop(int32_t chnl)
 {
@@ -2089,7 +2089,7 @@ void EVE_cmd_animstop(int32_t chnl)
 }
 
 /**
- * @brief Stops one or more active animations, only works in burst-mode.
+ * @brief Останавливает одну или несколько активных анимаций, работает только в серийном режиме.
  */
 void EVE_cmd_animstop_burst(int32_t chnl)
 {
@@ -2098,7 +2098,7 @@ void EVE_cmd_animstop_burst(int32_t chnl)
 }
 
 /**
- * @brief Sets the coordinates of an animation.
+ * @brief Устанавливает координаты анимации.
  */
 void EVE_cmd_animxy(int32_t chnl, int16_t xc0, int16_t yc0)
 {
@@ -2121,7 +2121,7 @@ void EVE_cmd_animxy(int32_t chnl, int16_t xc0, int16_t yc0)
 }
 
 /**
- * @brief Sets the coordinates of an animation, only works in burst-mode.
+ * @brief Устанавливает координаты анимации, работает только в серийном режиме.
  */
 void EVE_cmd_animxy_burst(int32_t chnl, int16_t xc0, int16_t yc0)
 {
@@ -2131,7 +2131,7 @@ void EVE_cmd_animxy_burst(int32_t chnl, int16_t xc0, int16_t yc0)
 }
 
 /**
- * @brief Append flash data to the display list.
+ * @brief Добавьте флэш-данные в список отображения.
  */
 void EVE_cmd_appendf(uint32_t ptr, uint32_t num)
 {
@@ -2151,7 +2151,7 @@ void EVE_cmd_appendf(uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Append flash data to the display list, only works in burst-mode.
+ * @brief Добавление флэш-данных в список отображения, работает только в пакетном режиме.
  */
 void EVE_cmd_appendf_burst(uint32_t ptr, uint32_t num)
 {
@@ -2161,7 +2161,7 @@ void EVE_cmd_appendf_burst(uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Computes a bitmap transform and appends commands BITMAP_TRANSFORM_A...BITMAP_TRANSFORM_F to the display list.
+ * @brief Вычисляет преобразование растрового изображения и добавляет командыBITMAP_TRANSFORM_A...BITMAP_TRANSFORM_Fв список отображения.
  */
 uint16_t EVE_cmd_bitmap_transform(int32_t xc0, int32_t yc0, int32_t xc1,
                                 int32_t yc1, int32_t xc2, int32_t yc2,
@@ -2195,7 +2195,7 @@ uint16_t EVE_cmd_bitmap_transform(int32_t xc0, int32_t yc0, int32_t xc1,
         cmdoffset &= 0x0fffU;
         ret_val = (uint16_t) EVE_memRead32(EVE_RAM_CMD + cmdoffset);
     }
-    else /* note: the result parameter is ignored in burst mode */
+    else /* note: параметр результата игнорируется в пакетном режиме */
     {
         spi_transmit_burst(CMD_BITMAP_TRANSFORM);
         spi_transmit_burst((uint32_t) xc0);
@@ -2216,8 +2216,8 @@ uint16_t EVE_cmd_bitmap_transform(int32_t xc0, int32_t yc0, int32_t xc1,
 }
 
 /**
- * @brief Computes a bitmap transform and appends commands BITMAP_TRANSFORM_A...BITMAP_TRANSFORM_F to the display list.
- * @note - Only works in burst-mode, the result parameter is ignored.
+ * @brief Вычисляет преобразование растрового изображения и добавляет командыBITMAP_TRANSFORM_A...BITMAP_TRANSFORM_Fв список отображения.
+ * @note - Работает только в пакетном режиме, параметр result игнорируется.
  */
 void EVE_cmd_bitmap_transform_burst(int32_t xc0, int32_t yc0, int32_t xc1,
                                 int32_t yc1, int32_t xc2, int32_t yc2,
@@ -2241,7 +2241,7 @@ void EVE_cmd_bitmap_transform_burst(int32_t xc0, int32_t yc0, int32_t xc1,
 }
 
 /**
- * @brief Sets the pixel fill width for CMD_TEXT,CMD_BUTTON,CMD_BUTTON with the OPT_FILL option.
+ * @brief Устанавливает ширину заливки пикселей дляCMD_TEXT,CMD_BUTTON,CMD_BUTTONс помощью опции OPT_FILL.
  */
 void EVE_cmd_fillwidth(uint32_t pixel)
 {
@@ -2259,8 +2259,8 @@ void EVE_cmd_fillwidth(uint32_t pixel)
 }
 
 /**
- * @brief Sets the pixel fill width for CMD_TEXT,CMD_BUTTON,CMD_BUTTON with the OPT_FILL option.
- * @note - Only works in burst-mode.
+ * @brief Устанавливает ширину заливки пикселей дляCMD_TEXT,CMD_BUTTON,CMD_BUTTONс помощью опции OPT_FILL.
+ * @note - Работает только в пакетном режиме.
  */
 void EVE_cmd_fillwidth_burst(uint32_t pixel)
 {
@@ -2269,7 +2269,7 @@ void EVE_cmd_fillwidth_burst(uint32_t pixel)
 }
 
 /**
- * @brief Draw a smooth color gradient with transparency.
+ * @brief Нарисуйте плавный цветовой градиент с прозрачностью.
  */
 void EVE_cmd_gradienta(int16_t xc0, int16_t yc0, uint32_t argb0, int16_t xc1, int16_t yc1, uint32_t argb1)
 {
@@ -2299,7 +2299,7 @@ void EVE_cmd_gradienta(int16_t xc0, int16_t yc0, uint32_t argb0, int16_t xc1, in
 }
 
 /**
- * @brief Draw a smooth color gradient with transparency, only works in burst-mode.
+ * @brief Нарисуйте плавный цветовой градиент с прозрачностью, работает только в серийном режиме.
  */
 void EVE_cmd_gradienta_burst(int16_t xc0, int16_t yc0, uint32_t argb0, int16_t xc1, int16_t yc1, uint32_t argb1)
 {
@@ -2311,7 +2311,7 @@ void EVE_cmd_gradienta_burst(int16_t xc0, int16_t yc0, uint32_t argb0, int16_t x
 }
 
 /**
- * @brief Apply a rotation and scale around a specified coordinate.
+ * @brief Примените поворот и масштабирование вокруг указанной координаты.
  */
 void EVE_cmd_rotatearound(int32_t xc0, int32_t yc0, uint32_t angle, int32_t scale)
 {
@@ -2335,7 +2335,7 @@ void EVE_cmd_rotatearound(int32_t xc0, int32_t yc0, uint32_t angle, int32_t scal
 }
 
 /**
- * @brief Apply a rotation and scale around a specified coordinate, only works in burst-mode.
+ * @brief Примените вращение и масштабирование вокруг указанной координаты, работает только в пакетном режиме.
  */
 void EVE_cmd_rotatearound_burst(int32_t xc0, int32_t yc0, uint32_t angle,
                                 int32_t scale)
@@ -2348,9 +2348,9 @@ void EVE_cmd_rotatearound_burst(int32_t xc0, int32_t yc0, uint32_t angle,
 }
 
 /**
- * @brief Draw a button with a label, varargs version.
- * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
- * @param num_args the number of elements provided in p_arguments[]
+ * @brief Нарисуйте кнопку с меткой, версия с переменным числом аргументов.
+ * @param p_arguments [] указатель на массив массивов, преобразованных вuint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
+ * @param num_args количество элементов, указанное вp_arguments[]
  */
 void EVE_cmd_button_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                         uint16_t font, uint16_t options, const char *p_text,
@@ -2407,9 +2407,9 @@ void EVE_cmd_button_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a button with a label, varargs version, only works in burst-mode.
- * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
- * @param num_args the number of elements provided in p_arguments[]
+ * @brief Нарисуйте кнопку с меткой, версия с varargs работает только в пакетном режиме.
+ * @param p_arguments [] указатель на массив массивов, преобразованных вuint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
+ * @param num_args количество элементов, указанное вp_arguments[]
  */
 void EVE_cmd_button_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                               uint16_t font, uint16_t options, const char *p_text,
@@ -2434,9 +2434,9 @@ void EVE_cmd_button_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t h
 }
 
 /**
- * @brief Draw a text string, varargs version.
- * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
- * @param num_args the number of elements provided in p_arguments[]
+ * @brief Нарисуйте текстовую строку, версия с переменным числом аргументов.
+ * @param p_arguments [] указатель на массив массивов, преобразованных вuint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
+ * @param num_args количество элементов, указанное вp_arguments[]
  */
 void EVE_cmd_text_var(int16_t xc0, int16_t yc0, uint16_t font,
                         uint16_t options, const char *p_text,
@@ -2488,9 +2488,9 @@ void EVE_cmd_text_var(int16_t xc0, int16_t yc0, uint16_t font,
 }
 
 /**
- * @brief Draw a text string, varargs version.
- * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
- * @param num_args the number of elements provided in p_arguments[]
+ * @brief Нарисуйте текстовую строку, версия с переменным числом аргументов.
+ * @param p_arguments [] указатель на массив массивов, преобразованных вuint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
+ * @param num_args количество элементов, указанное вp_arguments[]
  */
 void EVE_cmd_text_var_burst(int16_t xc0, int16_t yc0, uint16_t font,
                             uint16_t options, const char *p_text,
@@ -2514,9 +2514,9 @@ void EVE_cmd_text_var_burst(int16_t xc0, int16_t yc0, uint16_t font,
 }
 
 /**
- * @brief Draw a toggle switch with labels, varargs version.
- * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
- * @param num_args the number of elements provided in p_arguments[]
+ * @brief Нарисуйте тумблер с метками, версия с переменным количеством аргументов.
+ * @param p_arguments [] указатель на массив массивов, преобразованных вuint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
+ * @param num_args количество элементов, указанное вp_arguments[]
  */
 void EVE_cmd_toggle_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
                         uint16_t options, uint16_t state, const char *p_text,
@@ -2573,9 +2573,9 @@ void EVE_cmd_toggle_var(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
 }
 
 /**
- * @brief Draw a toggle switch with labels, varargs version, only works in burst-mode.
- * @param p_arguments [] указатель на массив значений, преобразованных в uint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
- * @param num_args the number of elements provided in p_arguments[]
+ * @brief Нарисуйте тумблер с метками, версия с varargs, работает только в пакетном режиме.
+ * @param p_arguments [] указатель на массив массивов, преобразованных вuint32_t, который будет использоваться при использовании EVE_OPT_FORMAT
+ * @param num_args количество элементов, указанное вp_arguments[]
  */
 void EVE_cmd_toggle_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
                             uint16_t options, uint16_t state, const char *p_text,
@@ -2602,12 +2602,12 @@ void EVE_cmd_toggle_var_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t f
 #endif /* EVE_GEN > 2 */
 
 /**
- * @brief Generic function for display-list and coprocessor commands with no arguments, only works in burst-mode.
- * @note - EVE_cmd_dl(CMD_DLSTART);
- * @note - EVE_cmd_dl(CMD_SWAP);
- * @note - EVE_cmd_dl(CMD_SCREENSAVER);
- * @note - EVE_cmd_dl(VERTEX2F(0,0));
- * @note - EVE_cmd_dl(DL_BEGIN | EVE_RECTS);
+ * @brief Общая функция для команд списка отображения и сопроцессора без аргументов, работает только в пакетном режиме.
+ * @note -EVE_cmd_dl(CMD_DLSTART);
+ * @note -EVE_cmd_dl(CMD_SWAP);
+ * @note -EVE_cmd_dl(CMD_SCREENSAVER);
+ * @note -EVE_cmd_dl(VERTEX2F(0,0));
+ * @note -EVE_cmd_dl(DL_BEGIN|EVE_RECTS);
  */
 void EVE_cmd_dl(uint32_t command)
 {
@@ -2623,7 +2623,7 @@ void EVE_cmd_dl(uint32_t command)
 }
 
 /**
- * @brief Generic function for display-list and coprocessor commands with no arguments, only works in burst-mode.
+ * @brief Общая функция для команд списка отображения и сопроцессора без аргументов, работает только в пакетном режиме.
  */
 void EVE_cmd_dl_burst(uint32_t command)
 {
@@ -2631,7 +2631,7 @@ void EVE_cmd_dl_burst(uint32_t command)
 }
 
 /**
- * @brief Appends commands from RAM_G to the display list.
+ * @brief Добавляет команды изRAM_Gв список отображения.
  */
 void EVE_cmd_append(uint32_t ptr, uint32_t num)
 {
@@ -2651,7 +2651,7 @@ void EVE_cmd_append(uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Appends commands from RAM_G to the display list, only works in burst-mode.
+ * @brief Добавляет команды изRAM_Gв список отображения, работает только в пакетном режиме.
  */
 void EVE_cmd_append_burst(uint32_t ptr, uint32_t num)
 {
@@ -2661,7 +2661,7 @@ void EVE_cmd_append_burst(uint32_t ptr, uint32_t num)
 }
 
 /**
- * @brief Set the background color.
+ * @brief Установите цвет фона.
  */
 void EVE_cmd_bgcolor(uint32_t color)
 {
@@ -2682,7 +2682,7 @@ void EVE_cmd_bgcolor(uint32_t color)
 }
 
 /**
- * @brief Set the background color, only works in burst-mode.
+ * @brief Установите цвет фона, работает только в серийном режиме.
  */
 void EVE_cmd_bgcolor_burst(uint32_t color)
 {
@@ -2691,7 +2691,7 @@ void EVE_cmd_bgcolor_burst(uint32_t color)
 }
 
 /**
- * @brief Draw a button with a label.
+ * @brief Нарисуйте кнопку с надписью.
  */
 void EVE_cmd_button(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                     uint16_t font, uint16_t options, const char *p_text)
@@ -2725,7 +2725,7 @@ void EVE_cmd_button(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a button with a label, only works in burst-mode.
+ * @brief Нарисуйте кнопку с меткой, работает только в пакетном режиме.
  */
 void EVE_cmd_button_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                             uint16_t font, uint16_t options, const char *p_text)
@@ -2738,8 +2738,8 @@ void EVE_cmd_button_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Execute the touch screen calibration routine.
- * @note - does not support burst-mode
+ * @brief Выполните процедуру калибровки сенсорного экрана.
+ * @note - не поддерживает пакетный режим
  */
 void EVE_cmd_calibrate(void)
 {
@@ -2752,7 +2752,7 @@ void EVE_cmd_calibrate(void)
 }
 
 /**
- * @brief Draw an analog clock.
+ * @brief Нарисуйте аналоговые часы.
  */
 void EVE_cmd_clock(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options,
                     uint16_t hours, uint16_t mins, uint16_t secs, uint16_t msecs)
@@ -2789,7 +2789,7 @@ void EVE_cmd_clock(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options,
 }
 
 /**
- * @brief Draw an analog clock, only works in burst-mode.
+ * @brief Нарисуйте аналоговые часы, работают только в пакетном режиме.
  */
 void EVE_cmd_clock_burst(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options, uint16_t hours,
                             uint16_t mins, uint16_t secs, uint16_t msecs)
@@ -2802,7 +2802,7 @@ void EVE_cmd_clock_burst(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t option
 }
 
 /**
- * @brief Draw a rotary dial control.
+ * @brief Нарисуйте поворотный диск управления.
  */
 void EVE_cmd_dial(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options, uint16_t val)
 {
@@ -2833,7 +2833,7 @@ void EVE_cmd_dial(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options, uint
 }
 
 /**
- * @brief Draw a rotary dial control, only works in burst-mode.
+ * @brief Нарисуйте поворотный диск управления, работает только в серийном режиме.
  */
 void EVE_cmd_dial_burst(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options,
                         uint16_t val)
@@ -2845,7 +2845,7 @@ void EVE_cmd_dial_burst(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options
 }
 
 /**
- * @brief Set the foreground color.
+ * @brief Установите цвет переднего плана.
  */
 void EVE_cmd_fgcolor(uint32_t color)
 {
@@ -2866,7 +2866,7 @@ void EVE_cmd_fgcolor(uint32_t color)
 }
 
 /**
- * @brief Set the foreground color, only works in burst-mode.
+ * @brief Установите цвет переднего плана, работает только в серийном режиме.
  */
 void EVE_cmd_fgcolor_burst(uint32_t color)
 {
@@ -2875,7 +2875,7 @@ void EVE_cmd_fgcolor_burst(uint32_t color)
 }
 
 /**
- * @brief Draw a gauge.
+ * @brief Нарисуйте датчик.
  */
 void EVE_cmd_gauge(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options,
                     uint16_t major, uint16_t minor, uint16_t val, uint16_t range)
@@ -2912,7 +2912,7 @@ void EVE_cmd_gauge(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options,
 }
 
 /**
- * @brief Draw a gauge, only works in burst-mode.
+ * @brief Нарисуйте датчик, работает только в пакетном режиме.
  */
 void EVE_cmd_gauge_burst(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t options,
                             uint16_t major, uint16_t minor, uint16_t val, uint16_t range)
@@ -2925,9 +2925,9 @@ void EVE_cmd_gauge_burst(int16_t xc0, int16_t yc0, uint16_t rad, uint16_t option
 }
 
 /**
- * @brief Retrieves the current matrix within the context of the coprocessor engine.
- * @note - waits for completion and reads values from RAM_CMD after completion
- * @note - can not be used with cmd-burst
+ * @brief Извлекает текущую матрицу в контексте механизма сопроцессора.
+ * @note - ждет завершения и после завершения считывает значения из RAM_CMD
+ * @note - нельзя использовать с cmd-burst
  */
 void EVE_cmd_getmatrix(int32_t *p_a, int32_t *p_b, int32_t *p_c,
                         int32_t *p_d, int32_t *p_e, int32_t *p_f)
@@ -2982,7 +2982,7 @@ void EVE_cmd_getmatrix(int32_t *p_a, int32_t *p_b, int32_t *p_c,
 }
 
 /**
- * @brief Set up the highlight color used in 3D effects for CMD_BUTTON and CMD_KEYS.
+ * @brief Настройте цвет выделения, используемый в 3D-эффектах дляCMD_BUTTONи CMD_KEYS.
  */
 void EVE_cmd_gradcolor(uint32_t color)
 {
@@ -3003,7 +3003,7 @@ void EVE_cmd_gradcolor(uint32_t color)
 }
 
 /**
- * @brief Set up the highlight color used in 3D effects for CMD_BUTTON and CMD_KEYS, only works in burst-mode.
+ * @brief Настройте цвет подсветки, используемый в 3D-эффектах дляCMD_BUTTONи CMD_KEYS, работает только в серийном режиме.
  */
 void EVE_cmd_gradcolor_burst(uint32_t color)
 {
@@ -3012,7 +3012,7 @@ void EVE_cmd_gradcolor_burst(uint32_t color)
 }
 
 /**
- * @brief Draw a smooth color gradient.
+ * @brief Нарисуйте плавный цветовой градиент.
  */
 void EVE_cmd_gradient(int16_t xc0, int16_t yc0, uint32_t rgb0, int16_t xc1,
                         int16_t yc1, uint32_t rgb1)
@@ -3049,7 +3049,7 @@ void EVE_cmd_gradient(int16_t xc0, int16_t yc0, uint32_t rgb0, int16_t xc1,
 }
 
 /**
- * @brief Draw a smooth color gradient, only works in burst-mode.
+ * @brief Нарисуйте плавный цветовой градиент, работает только в серийном режиме.
  */
 void EVE_cmd_gradient_burst(int16_t xc0, int16_t yc0, uint32_t rgb0, int16_t xc1,
                             int16_t yc1, uint32_t rgb1)
@@ -3062,9 +3062,9 @@ void EVE_cmd_gradient_burst(int16_t xc0, int16_t yc0, uint32_t rgb0, int16_t xc1
 }
 
 /**
- * @brief Draw a row of key buttons with labels.
- * @note - The tag value of each button is set to the ASCII value of its label.
- * @note - Does not work with UTF-8.
+ * @brief Нарисуйте ряд кнопок с надписями.
+ * @note - Значение тега каждой кнопки устанавливается равным значениюASCIIее метки.
+ * @note - Не работает с UTF-8.
  */
 void EVE_cmd_keys(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                     uint16_t font, uint16_t options, const char *p_text)
@@ -3098,9 +3098,9 @@ void EVE_cmd_keys(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a row of key buttons with labels, only works in burst-mode.
- * @note - The tag value of each button is set to the ASCII value of its label.
- * @note - Does not work with UTF-8.
+ * @brief Нарисуйте ряд кнопок с надписями, работает только в пакетном режиме.
+ * @note - Значение тега каждой кнопки устанавливается равным значениюASCIIее метки.
+ * @note - Не работает с UTF-8.
  */
 void EVE_cmd_keys_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                         uint16_t font, uint16_t options, const char *p_text)
@@ -3113,7 +3113,7 @@ void EVE_cmd_keys_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a number.
+ * @brief Нарисуйте число.
  */
 void EVE_cmd_number(int16_t xc0, int16_t yc0, uint16_t font,
                     uint16_t options, int32_t number)
@@ -3142,7 +3142,7 @@ void EVE_cmd_number(int16_t xc0, int16_t yc0, uint16_t font,
 }
 
 /**
- * @brief Draw a number, only works in burst-mode.
+ * @brief Нарисуйте число, работает только в пакетном режиме.
  */
 void EVE_cmd_number_burst(int16_t xc0, int16_t yc0, uint16_t font,
                             uint16_t options, int32_t number)
@@ -3154,7 +3154,7 @@ void EVE_cmd_number_burst(int16_t xc0, int16_t yc0, uint16_t font,
 }
 
 /**
- * @brief Draw a progress bar.
+ * @brief Нарисуйте индикатор выполнения.
  */
 void EVE_cmd_progress(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                         uint16_t options, uint16_t val, uint16_t range)
@@ -3191,7 +3191,7 @@ void EVE_cmd_progress(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a progress bar, only works in burst-mode.
+ * @brief Нарисуйте индикатор выполнения, работает только в пакетном режиме.
  */
 void EVE_cmd_progress_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                             uint16_t options, uint16_t val, uint16_t range)
@@ -3204,8 +3204,8 @@ void EVE_cmd_progress_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt
 }
 
 /**
- * @brief Load a ROM font into bitmap handle.
- * @note - generates display list commands, so it needs to be put in a display list
+ * @brief Загрузите шрифтROMв дескриптор растрового изображения.
+ * @note - генерирует команды списка отображения, поэтому его необходимо поместить в список отображения
  */
 void EVE_cmd_romfont(uint32_t font, uint32_t romslot)
 {
@@ -3225,8 +3225,8 @@ void EVE_cmd_romfont(uint32_t font, uint32_t romslot)
 }
 
 /**
- * @brief Load a ROM font into bitmap handle, only works in burst-mode.
- * @note - generates display list commands, so it needs to be put in a display list
+ * @brief Загрузите шрифтROMв дескриптор растрового изображения, работает только в пакетном режиме.
+ * @note - генерирует команды списка отображения, поэтому его необходимо поместить в список отображения
  */
 void EVE_cmd_romfont_burst(uint32_t font, uint32_t romslot)
 {
@@ -3236,7 +3236,7 @@ void EVE_cmd_romfont_burst(uint32_t font, uint32_t romslot)
 }
 
 /**
- * @brief Apply a rotation to the current matrix.
+ * @brief Примените поворот к текущей матрице.
  */
 void EVE_cmd_rotate(uint32_t angle)
 {
@@ -3254,7 +3254,7 @@ void EVE_cmd_rotate(uint32_t angle)
 }
 
 /**
- * @brief Apply a rotation to the current matrix, only works in burst-mode.
+ * @brief Применить вращение к текущей матрице, работает только в пакетном режиме.
  */
 void EVE_cmd_rotate_burst(uint32_t angle)
 {
@@ -3263,7 +3263,7 @@ void EVE_cmd_rotate_burst(uint32_t angle)
 }
 
 /**
- * @brief Apply a scale to the current matrix.
+ * @brief Примените масштаб к текущей матрице.
  */
 void EVE_cmd_scale(int32_t scx, int32_t scy)
 {
@@ -3283,7 +3283,7 @@ void EVE_cmd_scale(int32_t scx, int32_t scy)
 }
 
 /**
- * @brief Apply a scale to the current matrix, only works in burst-mode.
+ * @brief Применить масштаб к текущей матрице, работает только в пакетном режиме.
  */
 void EVE_cmd_scale_burst(int32_t scx, int32_t scy)
 {
@@ -3293,7 +3293,7 @@ void EVE_cmd_scale_burst(int32_t scx, int32_t scy)
 }
 
 /**
- * @brief Draw a scroll bar.
+ * @brief Нарисуйте полосу прокрутки.
  */
 void EVE_cmd_scrollbar(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
             uint16_t options, uint16_t val, uint16_t size, uint16_t range)
@@ -3330,7 +3330,7 @@ void EVE_cmd_scrollbar(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a scroll bar, only works in burst-mode.
+ * @brief Нарисуйте полосу прокрутки, работает только в пакетном режиме.
  */
 void EVE_cmd_scrollbar_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                 uint16_t options, uint16_t val, uint16_t size, uint16_t range)
@@ -3343,7 +3343,7 @@ void EVE_cmd_scrollbar_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hg
 }
 
 /**
- * @brief Set the base for number output.
+ * @brief Установите базу для вывода чисел.
  */
 void EVE_cmd_setbase(uint32_t base)
 {
@@ -3361,7 +3361,7 @@ void EVE_cmd_setbase(uint32_t base)
 }
 
 /**
- * @brief Set the base for number output, only works in burst-mode.
+ * @brief Установите базу для вывода чисел, работает только в пакетном режиме.
  */
 void EVE_cmd_setbase_burst(uint32_t base)
 {
@@ -3370,7 +3370,7 @@ void EVE_cmd_setbase_burst(uint32_t base)
 }
 
 /**
- * @brief Generate the corresponding display list commands for given bitmap information.
+ * @brief Сгенерируйте соответствующие команды списка отображения для заданной информации о растровом изображении.
  */
 void EVE_cmd_setbitmap(uint32_t addr, uint16_t fmt, uint16_t width,
                         uint16_t height)
@@ -3399,7 +3399,7 @@ void EVE_cmd_setbitmap(uint32_t addr, uint16_t fmt, uint16_t width,
 }
 
 /**
- * @brief Generate the corresponding display list commands for given bitmap information, only works in burst-mode.
+ * @brief Сгенерируйте соответствующие команды списка отображения для заданной растровой информации. Работает только в пакетном режиме.
  */
 void EVE_cmd_setbitmap_burst(uint32_t addr, uint16_t fmt, uint16_t width,
                                 uint16_t height)
@@ -3411,8 +3411,8 @@ void EVE_cmd_setbitmap_burst(uint32_t addr, uint16_t fmt, uint16_t width,
 }
 
 /**
- * @brief Register one custom font into the coprocessor engine.
- * @note - does not set up the bitmap parameters of the font
+ * @brief Зарегистрируйте один собственный шрифт в механизме сопроцессора.
+ * @note - не настраиваются параметры растрового изображения шрифта
  */
 void EVE_cmd_setfont(uint32_t font, uint32_t ptr)
 {
@@ -3432,8 +3432,8 @@ void EVE_cmd_setfont(uint32_t font, uint32_t ptr)
 }
 
 /**
- * @brief Register one custom font into the coprocessor engine, only works in burst-mode.
- * @note - does not set up the bitmap parameters of the font
+ * @brief Зарегистрируйте один собственный шрифт в механизме сопроцессора, работает только в пакетном режиме.
+ * @note - не настраиваются параметры растрового изображения шрифта
  */
 void EVE_cmd_setfont_burst(uint32_t font, uint32_t ptr)
 {
@@ -3443,8 +3443,8 @@ void EVE_cmd_setfont_burst(uint32_t font, uint32_t ptr)
 }
 
 /**
- * @brief Set up a custom for use by the coprocessor engine.
- * @note - generates display list commands, so it needs to be put in a display list
+ * @brief Настройте пользовательскую настройку для использования движком сопроцессора.
+ * @note - генерирует команды списка отображения, поэтому его необходимо поместить в список отображения
  */
 void EVE_cmd_setfont2(uint32_t font, uint32_t ptr, uint32_t firstchar)
 {
@@ -3466,8 +3466,8 @@ void EVE_cmd_setfont2(uint32_t font, uint32_t ptr, uint32_t firstchar)
 }
 
 /**
- * @brief Set up a custom for use by the coprocessor engine, only works in burst-mode.
- * @note - generates display list commands, so it needs to be put in a display list
+ * @brief Настроил кастом для использования движком сопроцессора, работает только в пакетном режиме.
+ * @note - генерирует команды списка отображения, поэтому его необходимо поместить в список отображения
  */
 void EVE_cmd_setfont2_burst(uint32_t font, uint32_t ptr, uint32_t firstchar)
 {
@@ -3478,7 +3478,7 @@ void EVE_cmd_setfont2_burst(uint32_t font, uint32_t ptr, uint32_t firstchar)
 }
 
 /**
- * @brief Set the scratch bitmap for widget use.
+ * @brief Установите черновое растровое изображение для использования виджета.
  */
 void EVE_cmd_setscratch(uint32_t handle)
 {
@@ -3496,7 +3496,7 @@ void EVE_cmd_setscratch(uint32_t handle)
 }
 
 /**
- * @brief Set the scratch bitmap for widget use, only works in burst-mode.
+ * @brief Установите чистое растровое изображение для использования виджетами, работает только в пакетном режиме.
  */
 void EVE_cmd_setscratch_burst(uint32_t handle)
 {
@@ -3505,7 +3505,7 @@ void EVE_cmd_setscratch_burst(uint32_t handle)
 }
 
 /**
- * @brief Start a continuous sketch update.
+ * @brief Запустите постоянное обновление эскиза.
  */
 void EVE_cmd_sketch(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                     uint32_t ptr, uint16_t format)
@@ -3539,7 +3539,7 @@ void EVE_cmd_sketch(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Start a continuous sketch update, only works in burst-mode.
+ * @brief Запуск непрерывного обновления эскиза, работает только в пакетном режиме.
  */
 void EVE_cmd_sketch_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                             uint32_t ptr, uint16_t format)
@@ -3552,7 +3552,7 @@ void EVE_cmd_sketch_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a slider.
+ * @brief Нарисуйте ползунок.
  */
 void EVE_cmd_slider(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                     uint16_t options, uint16_t val, uint16_t range)
@@ -3589,7 +3589,7 @@ void EVE_cmd_slider(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Draw a slider, only works in burst-mode.
+ * @brief Нарисуйте ползунок, работает только в пакетном режиме.
  */
 void EVE_cmd_slider_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
                             uint16_t options, uint16_t val, uint16_t range)
@@ -3602,7 +3602,7 @@ void EVE_cmd_slider_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt,
 }
 
 /**
- * @brief Start an animated spinner.
+ * @brief Запустите анимированный спиннер.
  */
 void EVE_cmd_spinner(int16_t xc0, int16_t yc0, uint16_t style, uint16_t scale)
 {
@@ -3628,7 +3628,7 @@ void EVE_cmd_spinner(int16_t xc0, int16_t yc0, uint16_t style, uint16_t scale)
 }
 
 /**
- * @brief Start an animated spinner, only works in burst-mode.
+ * @brief Запустите анимированный счетчик, работает только в пакетном режиме.
  */
 void EVE_cmd_spinner_burst(int16_t xc0, int16_t yc0, uint16_t style,
                             uint16_t scale)
@@ -3639,7 +3639,7 @@ void EVE_cmd_spinner_burst(int16_t xc0, int16_t yc0, uint16_t style,
 }
 
 /**
- * @brief Draw a text string.
+ * @brief Нарисуйте текстовую строку.
  */
 void EVE_cmd_text(int16_t xc0, int16_t yc0, uint16_t font, uint16_t options,
                     const char *p_text)
@@ -3668,7 +3668,7 @@ void EVE_cmd_text(int16_t xc0, int16_t yc0, uint16_t font, uint16_t options,
 }
 
 /**
- * @brief Draw a text string, only works in burst-mode.
+ * @brief Нарисуйте текстовую строку, работает только в пакетном режиме.
  */
 void EVE_cmd_text_burst(int16_t xc0, int16_t yc0, uint16_t font,
                         uint16_t options, const char *p_text)
@@ -3680,7 +3680,7 @@ void EVE_cmd_text_burst(int16_t xc0, int16_t yc0, uint16_t font,
 }
 
 /**
- * @brief Draw a toggle switch with labels.
+ * @brief Нарисуйте тумблер с метками.
  */
 void EVE_cmd_toggle(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
                     uint16_t options, uint16_t state, const char *p_text)
@@ -3714,7 +3714,7 @@ void EVE_cmd_toggle(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
 }
 
 /**
- * @brief Draw a toggle switch with labels, only works in burst-mode.
+ * @brief Нарисуйте тумблер с метками, работает только в пакетном режиме.
  */
 void EVE_cmd_toggle_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
                             uint16_t options, uint16_t state, const char *p_text)
@@ -3727,7 +3727,7 @@ void EVE_cmd_toggle_burst(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t font,
 }
 
 /**
- * @brief Apply a translation to the current matrix.
+ * @brief Примените перевод к текущей матрице.
  */
 void EVE_cmd_translate(int32_t tr_x, int32_t tr_y)
 {
@@ -3747,7 +3747,7 @@ void EVE_cmd_translate(int32_t tr_x, int32_t tr_y)
 }
 
 /**
- * @brief Apply a translation to the current matrix, only works in burst-mode.
+ * @brief Применить преобразование к текущей матрице, работает только в пакетном режиме.
  */
 void EVE_cmd_translate_burst(int32_t tr_x, int32_t tr_y)
 {
@@ -3757,7 +3757,7 @@ void EVE_cmd_translate_burst(int32_t tr_x, int32_t tr_y)
 }
 
 /**
- * @brief Set the current color red, green and blue.
+ * @brief Установите текущий цвет: красный, зеленый и синий.
  */
 void EVE_color_rgb(uint32_t color)
 {
@@ -3765,7 +3765,7 @@ void EVE_color_rgb(uint32_t color)
 }
 
 /**
- * @brief Set the current color red, green and blue, only works in burst-mode.
+ * @brief Установите текущий цвет: красный, зеленый и синий, работает только в пакетном режиме.
  */
 void EVE_color_rgb_burst(uint32_t color)
 {
@@ -3773,7 +3773,7 @@ void EVE_color_rgb_burst(uint32_t color)
 }
 
 /**
- * @brief Set the current color alpha, green and blue.
+ * @brief Установите текущий цвет альфа, зеленый и синий.
  */
 void EVE_color_a(uint8_t alpha)
 {
@@ -3781,7 +3781,7 @@ void EVE_color_a(uint8_t alpha)
 }
 
 /**
- * @brief Set the current color alpha, green and blue, only works in burst-mode.
+ * @brief Установите текущий цвет альфа, зеленый и синий, работает только в серийном режиме.
  */
 void EVE_color_a_burst(uint8_t alpha)
 {
@@ -3796,14 +3796,14 @@ void EVE_color_a_burst(uint8_t alpha)
 /* Это должно называться построением вне списка отображения. */
 /* Эта функция отображает интерактивный экран калибровки, рассчитывает значения калибровки. */
 /* и записывает новые значения в регистры сенсорной матрицы EVE.*/
-/* В отличие от встроенного cmd_calibrate() у EVE это работает и с дисплеями, урезанными из более крупных, например
+/* В отличие от встроенного cmd_calibrate() вEVEон работает и с дисплеями, вырезанными из более крупных, например
  * EVE2-38A / EVE2-38G. */
 /* Размеры необходимы в качестве параметра, так как EVE_VSIZE для EVE2 -38 равен 272, но видимый размер составляет только 116. */
-/* Таким образом, вызов будет EVE_calibrate_manual ( EVE_HSIZE , 116); для EVE2 -38A и EVE2 -38G, а для большинства других
+/* Таким образом, вызов будетEVE_calibrate_manual(EVE_HSIZE, 116); дляEVE2-38A иEVE2-38G, а также для большинства других
  * дисплеи */
-/* использование EVE_calibrate_manual ( EVE_VSIZE , EVE_VSIZE ) будет работать, но для обычных дисплеев встроенный cmd_calibrate
+/* использованиеEVE_calibrate_manual(EVE_VSIZE,EVE_VSIZE) будет работать, но для обычного встроенного дисплея cmd_calibrate
  * в любом случае будет работать так, как ожидалось */
-/* Этот код был взят из библиотеки MatrixOrbital EVE2 на Github, адаптирован и модифицирован. */
+/* Этот код был взят из библиотеки MatrixOrbitalEVE2на Github, адаптирован и модифицирован. */
 void EVE_calibrate_manual(uint16_t width, uint16_t height)
 {
     int32_t display_x[3U];

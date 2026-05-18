@@ -7,8 +7,8 @@
  * https://github.com/lovyan03/LovyanGFX/blob/master/examples/HowToUse/2_user_setting/2_user_setting.ino */
 
 /**
- * Если вы используете другие драйверы дисплея, кроме LovyanGFX
- * Создайте класс-оболочку LGFX, реализующий функции, используемые в lv_lovyan_gfx.cpp. */
+ * Если вы используете другие драйверы видеокарт, кроме LovyanGFX
+ * Создайте класс-оболочку LGFX, реализующую функции, используемые в lv_lovyan_gfx.cpp. */
 class LGFX
 {
 public:

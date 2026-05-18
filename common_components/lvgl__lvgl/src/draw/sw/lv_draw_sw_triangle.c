@@ -93,7 +93,7 @@ void lv_draw_sw_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc)
     if(p[0].y > p[1].y) lv_point_swap(&p[0], &p[1]);
     if(p[1].y < p[2].y) lv_point_swap(&p[1], &p[2]);
 
-    /*Если right == true, p[2] находится на правой стороне линии p[0] p[1]*/
+    /*Если правильно == true, p[2] находится на правой стороне линии p[0] p[1]*/
     bool right = ((p[1].x - p[0].x) * (p[2].y - p[0].y) - (p[1].y - p[0].y) * (p[2].x - p[0].x)) < 0;
 
     void * masks[4] = {0};

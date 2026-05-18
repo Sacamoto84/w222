@@ -70,7 +70,7 @@ void lv_draw_dave2d_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const
         //
         // Если разница между ними превышает 180 градусов, мы должны использовать вогнутый флаг.
         //
-        /** Установите флаг d2_wf_concave, если рисуемый круговой объект имеет вогнутую форму. */
+        /** Установите флагd2_wf_concave, если рисуемый круглый объект имеет вогнутую форму. */
         if((LV_ABS(dsc->start_angle - dsc->end_angle) > 180) || ((dsc->end_angle < dsc->start_angle) &&
                                                                  (LV_ABS(dsc->start_angle - (dsc->end_angle + 360)) > 180))) {
             flags = d2_wf_concave;

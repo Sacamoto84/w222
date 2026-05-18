@@ -28,8 +28,8 @@
  *      DEFINES
  *********************/
 constexpr auto SUPPORTED_EXTENSIONS =
-    //fastgltf::Расширения:: KHR_draco_mesh_compression |
-    //fastgltf::Расширения:: EXT_meshopt_compression |
+    //fastgltf::Расширения::KHR_draco_mesh_compression|
+    //fastgltf::Расширения::EXT_meshopt_compression|
     fastgltf::Extensions::KHR_mesh_quantization | fastgltf::Extensions::KHR_texture_transform |
     fastgltf::Extensions::KHR_lights_punctual | fastgltf::Extensions::KHR_materials_anisotropy |
     fastgltf::Extensions::KHR_materials_clearcoat | fastgltf::Extensions::KHR_materials_dispersion |
@@ -42,7 +42,7 @@ constexpr auto SUPPORTED_EXTENSIONS =
     fastgltf::Extensions::KHR_materials_transmission |
     fastgltf::Extensions::KHR_materials_volume | fastgltf::Extensions::KHR_materials_unlit |
     fastgltf::Extensions::EXT_texture_webp |
-    //fastgltf::Расширения:: KHR_materials_diffuse_transmission |
+    //fastgltf::Расширения::KHR_materials_diffuse_transmission|
     fastgltf::Extensions::KHR_materials_variants;
 
 constexpr auto GLTF_OPTIONS = fastgltf::Options::DontRequireValidAssetMember | fastgltf::Options::AllowDouble |
@@ -105,9 +105,9 @@ static inline GLsizei get_level_count(int32_t width, int32_t height)
 }
 
 /**
- * @brief Allocate immutable texture storage with fallback for GLES2
+ * @brief Выделить неизменяемое хранилище текстур с запасным вариантом для GLES2
  *
- * glTexStorage2D ( GL_EXT_texture_storage ) может быть доступен не для всех драйверов GLES2.
+ * glTexStorage2D (GL_EXT_texture_storage) может быть доступен не для всех драйверов GLES2.
  * Эта функция возвращается к glTexImage2D, когда расширение недоступно.
  */
 static inline void tex_storage_2d_compat(GLenum target, GLsizei levels, GLenum internalformat,
@@ -119,7 +119,7 @@ static inline void tex_storage_2d_compat(GLenum target, GLsizei levels, GLenum i
         return;
     }
 #endif
-    /* Fallback: use glTexImage2D for each mipmap level */
+    /* Fallback: используйте glTexImage2D для каждого уровня MIP-карты */
     GLenum format = GL_RGBA;
     if(internalformat == GL_RGB8) {
         format = GL_RGB;
@@ -195,7 +195,7 @@ lv_gltf_model_t * lv_gltf_data_load_internal(const void * data_source, size_t da
 
     /* Зарезервируйте достаточно места для узлов модели. */
     lv_array_init(&model->nodes, model->asset.nodes.size(), sizeof(lv_gltf_model_node_t));
-    /*Виртуально установите размер, чтобы lv_array_assign работал.*/
+    /*Виртуально установите размер, чтобы работал lv_array_assign.*/
     model->nodes.size = model->asset.nodes.size();
 
     fastgltf::namegen_iterate_scene_nodes(model->asset, scene_index,
@@ -206,7 +206,7 @@ lv_gltf_model_t * lv_gltf_data_load_internal(const void * data_source, size_t da
         lv_gltf_model_node_init(model, &model_node, &node, node_path.c_str(), node_num_path.c_str());
 
         /* Сохраняйте узлы в том же порядке, что и в fastgltf.
-         * Это обходной путь, поскольку мы не можем назначить какой-либо тип пользовательских данных типам fastgltf.*/
+         * Это обходной путь, поскольку мы не можем назначить какой-либо тип основания данных типами fastgltf.*/
         lv_array_assign(&model->nodes, node_index, & model_node);
     });
 
@@ -647,7 +647,7 @@ static void injest_light(lv_gltf_model_t * data, size_t light_index, fastgltf::L
 
 static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
 {
-    /*const auto &asset = GET_ASSET (данные);*/
+    /*const auto &asset =GET_ASSET(данные);*/
     const auto & outMesh = lv_gltf_get_new_meshdata(data);
     outMesh->primitives.resize(mesh.primitives.size());
 
@@ -805,7 +805,7 @@ static bool injest_mesh(lv_gltf_model_t * data, fastgltf::Mesh & mesh)
         }
         else {
             primitive.indexType = GL_UNSIGNED_INT;
-            //std:: uint32_t tempIndices[indexAccessor.count];
+            //std::uint32_ttempIndices[indexAccessor.count];
             std::uint32_t * tempIndices = new std::uint32_t[indexAccessor.count];
             fastgltf::copyFromAccessor<std::uint32_t>(data->asset, indexAccessor, tempIndices);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER,

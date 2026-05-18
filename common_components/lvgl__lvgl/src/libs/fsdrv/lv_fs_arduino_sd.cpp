@@ -52,10 +52,10 @@ extern "C" void lv_fs_arduino_sd_init(void)
 
 /**
  * Открыть файл
- * @param drv       pointer to a driver where this function belongs
- * @param path      path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
- * @param mode      read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
- * @return          a file descriptor or NULL on error
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param path      путь к файлу, начинающийся с буквы драйвера (например, S:/folder/file.txt)
+ * @param mode      читать: FS_MODE_RD, писать: FS_MODE_WR, оба:FS_MODE_RD|  FS_MODE_WR
+ * @return          дескриптор файла илиNULLв случае ошибки
  */
 static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 {
@@ -84,9 +84,9 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 
 /**
  * Закрыть открытый файл
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a file_t variable. (opened with fs_open)
- * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную file_t. (открывается с помощьюfs_open)
+ * @return          LV_FS_RES_OK: нет ошибок или ошибок из перечисления @lv_fs_res_t.
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 {
@@ -100,12 +100,12 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 
 /**
  * Чтение данных из открытого файла
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a file_t variable.
- * @param buf       pointer to a memory block where to store the read data
- * @param btr       number of Bytes To Read
- * @param br        the real number of read bytes (Byte Read)
- * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную file_t.
+ * @param buf       указатель на блок памяти, в котором хранятся считанные данные
+ * @param btr       количество байтов для чтения
+ * @param br        реальное количество прочитанных байт (Byte Read)
+ * @return          LV_FS_RES_OK: нет ошибок или ошибок из перечисления @lv_fs_res_t.
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
 {
@@ -118,12 +118,12 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 
 /**
  * Записать в файл
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a file_t variable
- * @param buf       pointer to a buffer with the bytes to write
- * @param btw       Bytes To Write
- * @param bw        the number of real written bytes (Bytes Written)
- * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную file_t
+ * @param buf       указатель на буфер с байтами для записи
+ * @param btw       Байты для записи
+ * @param bw        количество реальных записанных байт (Bytes Written)
+ * @return          LV_FS_RES_OK: нет ошибок или ошибок из перечисления @lv_fs_res_t.
  */
 static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, uint32_t btw, uint32_t * bw)
 {
@@ -136,11 +136,11 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 
 /**
  * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a file_t variable. (opened with fs_open )
- * @param pos       the new position of read write pointer
- * @param whence    tells from where to interpret the `pos`. See @lv_fs_whence_t
- * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную file_t. (открывается с помощьюfs_open)
+ * @param pos       новая позиция указателя чтения и записи
+ * @param whence    сообщает, откуда интерпретировать `pos`. См. @lv_fs_whence_t.
+ * @return          LV_FS_RES_OK: нет ошибок или ошибок из перечисления @lv_fs_res_t.
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
 {
@@ -162,10 +162,10 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 
 /**
  * Укажите положение указателя чтения и записи.
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a file_p variable
- * @param pos_p     pointer to store the result
- * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную file_p
+ * @param pos_p     указатель для сохранения результата
+ * @return          LV_FS_RES_OK: нет ошибок или ошибок из перечисления @lv_fs_res_t.
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 {

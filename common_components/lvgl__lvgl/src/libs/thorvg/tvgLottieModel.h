@@ -40,7 +40,7 @@ struct LottieStroke
 {
     struct DashAttr
     {
-        //0: offset, 1: dash, 2: gap
+        //0: смещение, 1: тире, 2: пробел
         LottieFloat value[3] = {0.0f, 0.0f, 0.0f};
     };
 
@@ -597,7 +597,7 @@ struct LottieGradient : LottieObject
     LottieFloat angle = 0.0f;
     LottieOpacity opacity = 255;
     LottieColorStop colorStops;
-    uint8_t id = 0;    //1: linear, 2: radial
+    uint8_t id = 0;    //1: линейный, 2: радиальный
 };
 
 
@@ -692,7 +692,7 @@ struct LottieRepeater : LottieObject
     LottiePoint anchor = Point{0.0f, 0.0f};
     LottieOpacity startOpacity = 255;
     LottieOpacity endOpacity = 255;
-    bool inorder = true;        //true: higher,  false: lower
+    bool inorder = true;        //true: выше, ложь: ниже
 };
 
 

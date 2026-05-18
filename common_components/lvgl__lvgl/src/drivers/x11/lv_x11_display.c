@@ -37,7 +37,7 @@
  **********************/
 
 typedef struct {
-    /* заголовок (содержащий X Display + указатель входных пользовательских данных — сохраняйте соответствие с модулем x11_input!) */
+    /* заголовок (содержащий X Display + указатель входных данных базы данных — сохраняйте соответствие с модулемx11_input!) */
     _x11_user_hdr_t hdr;
     /* Информация, связанная с X11 */
     Window          window;          /**< X11 window object */
@@ -105,10 +105,10 @@ static inline lv_color32_t get_px(color_t p)
 
 /**
  * Сбрасывает содержимое внутреннего буфера в определенную область дисплея.
- * @param [in] отображает созданный экранный объект X11 из @lv_x 11_window_create
+ * @param [in] отображает созданный экранный объектX11из@lv_x11_window_create
  * @param [in] область область, подлежащая обновлению
- * @param [in] px_map содержит визуализированное изображение в виде необработанной карты пикселей, и его следует скопировать в `area` на дисплее.
- * @note              @ref lv_display_flush_ready has to be called when it's finished.
+ * @param [in] px_map содержит визуализированное изображение в виде необработанной карты изображения, и его следует скопировать в`area`на дисплей.
+ * @note              @reflv_display_flush_readyдолжен быть вызван по завершении.
  */
 static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
@@ -121,7 +121,7 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
                                         .y2 = 0
                                       };
 
-    /* построить область обновления дисплея до lv_display_flush_is_last */
+    /* увеличить область обновлений дисплея до lv_display_flush_is_last */
     xd->flush_area.x1 = MIN(xd->flush_area.x1, area->x1);
     xd->flush_area.x2 = MAX(xd->flush_area.x2, area->x2);
     xd->flush_area.y1 = MIN(xd->flush_area.y1, area->y1);
@@ -160,8 +160,8 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
 }
 
 /**
- * событие, вызываемое lvgl display, если разрешение было изменено (был вызван @ref lv_display_set_resolution)
- * @param [in] данные события, содержащие объект lv_display_t
+ * событие, вызывающее отображение уровня, если разрешение было изменено (был вызван@reflv_display_set_resolution )
+ * @param [in] данные событий, содержащие объект lv_display_t
  */
 static void x11_resolution_evt_cb(lv_event_t * e)
 {
@@ -173,7 +173,7 @@ static void x11_resolution_evt_cb(lv_event_t * e)
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
 
     if(LV_X11_RENDER_MODE != LV_DISPLAY_RENDER_MODE_PARTIAL) {
-        /* обновить буферы отрисовки полноэкранного дисплея lvgl для нового размера дисплея */
+        /* обновление буферов отрисовки полноэкранного монитора lvgl для мониторов нового размера */
         int sz_buffers = (hor_res * ver_res * (LV_COLOR_DEPTH + 7) / 8);
         xd->buffer[0] = realloc(xd->buffer[0], sz_buffers);
         xd->buffer[1] = (LV_X11_DOUBLE_BUFFER ?  realloc(xd->buffer[1], sz_buffers) : NULL);
@@ -183,14 +183,14 @@ static void x11_resolution_evt_cb(lv_event_t * e)
     /* заново создать изображение кэша с новым размером */
     XDestroyImage(xd->ximage);
     size_t sz_buffers = hor_res * ver_res * sizeof(lv_color32_t);
-    xd->xdata = malloc(sz_buffers); /* используйте здесь метод clib, память x11 не является частью устройства */
+    xd->xdata = malloc(sz_buffers); /* здесь воспользуйтесь методом clib, память x11 не является частью устройства */
     xd->ximage = XCreateImage(xd->hdr.display, xd->visual, xd->dplanes, ZPixmap, 0, xd->xdata,
                               hor_res, ver_res, lv_color_format_get_bpp(LV_COLOR_FORMAT_ARGB8888), 0);
 }
 
 /**
- * событие, вызываемое lvgl display, если дисплей был закрыт (был вызван @ref lv_display_delete)
- * @param [in] данные события, содержащие объект lv_display_t
+ * событие, вызывающее отображение lvgl, если индикатор был закрыт (был вызван@reflv_display_delete )
+ * @param [in] данные событий, содержащие объект lv_display_t
  */
 static void x11_disp_delete_evt_cb(lv_event_t * e)
 {
@@ -341,7 +341,7 @@ static void x11_window_create(lv_display_t * disp, char const * title)
     /* создать кэш XImage */
     size_t sz_buffers = hor_res * ver_res * sizeof(lv_color32_t);
     xd->dplanes = XDisplayPlanes(xd->hdr.display, screen);
-    xd->xdata = malloc(sz_buffers); /* используйте здесь метод clib, память x11 не является частью устройства */
+    xd->xdata = malloc(sz_buffers); /* здесь воспользуйтесь методом clib, память x11 не является частью устройства */
     xd->ximage = XCreateImage(xd->hdr.display, xd->visual, xd->dplanes, ZPixmap, 0, xd->xdata,
                               hor_res, ver_res, lv_color_format_get_bpp(LV_COLOR_FORMAT_ARGB8888), 0);
 

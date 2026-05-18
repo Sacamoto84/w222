@@ -53,8 +53,8 @@ extern "C" {
 
 /**
  * Проверьте, равно ли число с плавающей запятой нулю
- * @param a the number to check
- * @return true if the number is zero, false otherwise
+ * @param a номер для проверки
+ * @return true, если число равно нулю, false в противном случае
  */
 static inline bool nvg_math_is_zero(float a)
 {
@@ -63,9 +63,9 @@ static inline bool nvg_math_is_zero(float a)
 
 /**
  * Проверьте, равны ли два числа с плавающей запятой
- * @param a the first number
- * @param b the second number
- * @return true if the numbers are equal, false otherwise
+ * @param a первый номер
+ * @param b второй номер
+ * @return true, если числа равны, false в противном случае
  */
 static inline bool nvg_math_is_equal(float a, float b)
 {
@@ -74,8 +74,8 @@ static inline bool nvg_math_is_equal(float a, float b)
 
 /**
  * Вычислить обратный квадратный корень (1/sqrt(x))
- * @param number the input number
- * @return the inverse square root
+ * @param number входной номер
+ * @return обратный квадратный корень
  */
 static inline float nvg_math_inv_sqrtf(float number)
 {

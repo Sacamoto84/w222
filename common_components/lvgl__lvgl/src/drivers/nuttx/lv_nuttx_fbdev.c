@@ -370,7 +370,7 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
     if((ret = fbdev_get_pinfo(dsc->fd, &pinfo)) < 0) return ret;
     phy_mem1 = pinfo.fbmem;
 
-    /* Получить display[1] planeinfo */
+    /* Получить дисплей[1] planeinfo */
     lv_memzero(&pinfo, sizeof(pinfo));
     pinfo.display = dsc->pinfo.display + 1;
     if((ret = fbdev_get_pinfo(dsc->fd, &pinfo)) < 0) return ret;
@@ -387,7 +387,7 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
     }
 
     /* Проверьте смещение адреса буфера,
-     * Оно должно делиться на pinfo.stride.
+     * Оно должно поделиться на pinfo.stride.
      */
 
     if((offset % dsc->pinfo.stride) != 0) {
@@ -397,7 +397,7 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
                     offset, dsc->pinfo.stride);
     }
 
-    /* Вычислить адрес и смещение по оси mem2 */
+    /* Вычислить адрес и размещение по оси mem2 */
 
     if(is_consecutive) {
         dsc->mem2_yoffset = dsc->vinfo.yres;
@@ -429,7 +429,7 @@ static int fbdev_init_mem3(lv_nuttx_fb_t * dsc)
 
     lv_memzero(&pinfo, sizeof(pinfo));
 
-    /* Получить display[2] planeinfo */
+    /* Получить дисплей[2] planeinfo */
 
     pinfo.display = dsc->pinfo.display + 2;
 
@@ -445,7 +445,7 @@ static int fbdev_init_mem3(lv_nuttx_fb_t * dsc)
     }
 
     /* Проверьте смещение адреса буфера,
-     * Оно должно делиться на pinfo.stride.
+     * Оно должно поделиться на pinfo.stride.
      */
 
     buf_offset = (uintptr_t)pinfo.fbmem - (uintptr_t)dsc->mem;
@@ -457,7 +457,7 @@ static int fbdev_init_mem3(lv_nuttx_fb_t * dsc)
                     buf_offset, dsc->pinfo.stride);
     }
 
-    /* Вычислить адрес и смещение по оси mem3 */
+    /* Вычислить адрес и размещение по оси mem3 */
 
     if(buf_offset == 0) {
         dsc->mem3_yoffset = dsc->vinfo.yres * 2;

@@ -1,6 +1,6 @@
 /*
 @file EVE_supplemental.h
-@brief   prototypes for supplemental functions
+@brief   прототипы дополнительных функций
 @version 5.0
 @date 23 декабря 2023 г.
 @author Рудольф Ридель
@@ -31,7 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 История @section
 
 5.0
-- added EVE_polar_cartesian()
+- добавленEVE_polar_cartesian()
 
 */
 

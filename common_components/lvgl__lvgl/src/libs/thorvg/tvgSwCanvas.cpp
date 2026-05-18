@@ -66,7 +66,7 @@ SwCanvas::~SwCanvas()
 Result SwCanvas::mempool(MempoolPolicy policy) noexcept
 {
 #ifdef THORVG_SW_RASTER_SUPPORT
-    //Мы знаем тип рендерера, избегайте dynamic_cast для повышения производительности.
+    //Мы знаем тип рендерера, избегайтеdynamic_castдля повышения производительности.
     auto renderer = static_cast<SwRenderer*>(Canvas::pImpl->renderer);
     if (!renderer) return Result::MemoryCorruption;
 
@@ -89,7 +89,7 @@ Result SwCanvas::target(uint32_t* buffer, uint32_t stride, uint32_t w, uint32_t 
         return Result::InsufficientCondition;
     }
 
-    //Мы знаем тип рендерера, избегайте dynamic_cast для повышения производительности.
+    //Мы знаем тип рендерера, избегайтеdynamic_castдля повышения производительности.
     auto renderer = static_cast<SwRenderer*>(Canvas::pImpl->renderer);
     if (!renderer) return Result::MemoryCorruption;
 
@@ -97,7 +97,7 @@ Result SwCanvas::target(uint32_t* buffer, uint32_t stride, uint32_t w, uint32_t 
     Canvas::pImpl->vport = {0, 0, (int32_t)w, (int32_t)h};
     renderer->viewport(Canvas::pImpl->vport);
 
-    //FIXME: The value must be associated with an individual canvas instance.
+    //FIXME: Значение должно быть связано с отдельным экземпляром холста.
     ImageLoader::cs = static_cast<ColorSpace>(cs);
 
     //Краски необходимо снова обновить с учетом этой новой цели.

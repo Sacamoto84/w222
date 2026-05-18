@@ -52,7 +52,7 @@
 
 #if LV_USE_OS
 /**
- * Структура ожидающей задачи розыгрыша nema_gfx
+ * Структура ожидаемой задачи розыгрыша nema_gfx
  */
 typedef struct _nema_gfx_draw_task_t {
     lv_draw_task_t * task;
@@ -109,7 +109,7 @@ void lv_draw_nema_gfx_init(void)
     draw_nema_gfx_unit->paint = nema_vg_paint_create();
     draw_nema_gfx_unit->gradient = nema_vg_grad_create();
     draw_nema_gfx_unit->path = nema_vg_path_create();
-    /*Инициализация поддержки Freetype*/
+    /*Поддержка инициализации Freetype*/
     lv_draw_nema_gfx_label_init(&(draw_nema_gfx_unit->base_unit));
 #endif
     /*Создать список команд GPU*/

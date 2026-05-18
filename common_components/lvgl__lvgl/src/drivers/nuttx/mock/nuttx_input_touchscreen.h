@@ -24,53 +24,53 @@ extern "C" {
 
 /* Общие команды TSC IOCTL */
 
-#define TSIOC_SETXRCAL       _TSIOC(0x0001) /* arg: Pointer to
+#define TSIOC_SETXRCAL       _TSIOC(0x0001) /* arg: Указатель на
                                              * int Xplate R калибровочное значение
                                              */
-#define TSIOC_GETXRCAL       _TSIOC(0x0002) /* arg: Pointer to
+#define TSIOC_GETXRCAL       _TSIOC(0x0002) /* arg: Указатель на
                                              * int Xplate R калибровочное значение
                                              */
-#define TSIOC_SETFREQUENCY   _TSIOC(0x0003) /* arg: Pointer to
-                                             * Значение частоты uint32_t
+#define TSIOC_SETFREQUENCY   _TSIOC(0x0003) /* arg: Указатель на
+                                             * Значение цикла uint32_t
                                              */
-#define TSIOC_GETFREQUENCY   _TSIOC(0x0004) /* arg: Pointer to
-                                             *  Значение частоты uint32_t
+#define TSIOC_GETFREQUENCY   _TSIOC(0x0004) /* arg: Указатель на
+                                             *  Значение цикла uint32_t
                                              */
-#define TSIOC_GETFWVERSION   _TSIOC(0x0005) /* arg: Pointer to
+#define TSIOC_GETFWVERSION   _TSIOC(0x0005) /* arg: Указатель на
                                              * Версия прошивки uint32_t
                                              * ценность
                                              * */
-#define TSIOC_ENABLEGESTURE  _TSIOC(0x0006) /* arg: Pointer to
+#define TSIOC_ENABLEGESTURE  _TSIOC(0x0006) /* arg: Указатель на
                                              * int для включения функции жестов
                                              */
-#define TSIOC_DOACALIB       _TSIOC(0x0007) /* arg: none.
+#define TSIOC_DOACALIB       _TSIOC(0x0007) /* arg: нет.
                                              * Запустить автоматическую калибровку TS
                                              */
-#define TSIOC_CALDATA        _TSIOC(0x0008) /* arg: Pointer to
+#define TSIOC_CALDATA        _TSIOC(0x0008) /* arg: Указатель на
                                              * структура g_tscaldata_s
                                              */
-#define TSIOC_USESCALED      _TSIOC(0x0009) /* arg: bool, yes/no */
-#define TSIOC_GETOFFSETX     _TSIOC(0x000a) /* arg: Pointer to
+#define TSIOC_USESCALED      _TSIOC(0x0009) /* arg: блин, да/нет */
+#define TSIOC_GETOFFSETX     _TSIOC(0x000a) /* arg: Указатель на
                                              * int значение смещения X
                                              */
-#define TSIOC_GETOFFSETY     _TSIOC(0x000b) /* arg: Pointer to
+#define TSIOC_GETOFFSETY     _TSIOC(0x000b) /* arg: Указатель на
                                              * int значение смещения Y
                                              */
-#define TSIOC_GETTHRESHX     _TSIOC(0x000c) /* arg: Pointer to
+#define TSIOC_GETTHRESHX     _TSIOC(0x000c) /* arg: Указатель на
                                              * int X пороговое значение
                                              */
-#define TSIOC_GETTHRESHY     _TSIOC(0x000d) /* arg: Pointer to
+#define TSIOC_GETTHRESHY     _TSIOC(0x000d) /* arg: Указатель на
                                              * int Y пороговое значение
                                              */
 
-#define TSIOC_GRAB           _TSIOC(0x000e) /* arg: Pointer to
+#define TSIOC_GRAB           _TSIOC(0x000e) /* arg: Указатель на
                                              * int для включения захвата
                                              */
 
-#define TSIOC_GETMAXPOINTS   _TSIOC(0x000f) /* arg: Pointer to
+#define TSIOC_GETMAXPOINTS   _TSIOC(0x000f) /* arg: Указатель на
                                              * uint8_t максимальная точка касания
                                              */
-#define TSIOC_GETRESOLUTION  _TSIOC(0x0010) /* arg: Pointer to
+#define TSIOC_GETRESOLUTION  _TSIOC(0x0010) /* arg: Указатель на
                                              * структура touch_resolution_s
                                              */
 

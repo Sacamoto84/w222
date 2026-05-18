@@ -40,7 +40,7 @@ using pixel_t = uint32_t;
 
 enum RenderUpdateFlag : uint8_t {None = 0, Path = 1, Color = 2, Gradient = 4, Stroke = 8, Transform = 16, Image = 32, GradientStroke = 64, Blend = 128, All = 255};
 
-//TODO: Move this in public header unifying with SwCanvas::Colorspace
+//TODO: Переместите это в публичный заголовок, объединив его с SwCanvas::Colorspace.
 enum ColorSpace : uint8_t
 {
     ABGR8888 = 0,      //Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета предварительно умножаются на альфа-канал.
@@ -48,7 +48,7 @@ enum ColorSpace : uint8_t
     ABGR8888S,         //Каналы соединяются в порядке: альфа, синий, зеленый, красный. Цвета не умножаются по альфа-каналу.
     ARGB8888S,         //Каналы соединяются в порядке: альфа, красный, зеленый, синий. Цвета не умножаются по альфа-каналу.
     Grayscale8,        //Данные одного канала.
-    Unsupported        //TODO: Change to the default, At the moment, we put it in the last to align with SwCanvas::Colorspace.
+    Unsupported        //TODO: Измените значение по умолчанию. На данный момент мы поместили его последним для согласования с SwCanvas::Colorspace.
 };
 
 struct RenderSurface
@@ -283,8 +283,8 @@ struct RenderEffect
 struct RenderEffectGaussian : RenderEffect
 {
     float sigma;
-    uint8_t direction; //0: both, 1: horizontal, 2: vertical
-    uint8_t border;    //0: duplicate, 1: wrap
+    uint8_t direction; //0: оба, 1: горизонтально, 2: вертикально
+    uint8_t border;    //0: дубликат, 1: обернуть
     uint8_t quality;   //0 ~ 100 (необязательно)
 
     static RenderEffectGaussian* gen(va_list& args)
@@ -389,7 +389,7 @@ static inline ColorSpace COMPOSITE_TO_COLORSPACE(RenderMethod* renderer, Composi
         case CompositeMethod::LightenMask:
         case CompositeMethod::DarkenMask:
             return ColorSpace::Grayscale8;
-        //TODO: Optimize Luma/InvLuma colorspace to Grayscale8
+        //TODO: Оптимизировать цветовое пространство Luma/InvLuma до оттенков серого8.
         case CompositeMethod::LumaMask:
         case CompositeMethod::InvLumaMask:
             return renderer->colorSpace();

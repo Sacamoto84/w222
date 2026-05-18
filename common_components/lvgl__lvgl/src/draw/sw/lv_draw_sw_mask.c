@@ -224,8 +224,8 @@ void lv_draw_sw_mask_line_angle_init(lv_draw_sw_mask_line_param_t * param, int32
                                      lv_draw_sw_mask_line_side_t side)
 {
     /*Найдите оптимальную степень.
-     *lv_mask_line_points_init поменяет местами точки, чтобы сохранить меньший y в p1.
-     *Теоретически линия с `angle` или `angle+180` одинакова, только точки поменяны местами.
+     *lv_mask_line_points_init меняет местами точки, чтобы сохранить меньший y в p1.
+     *Теоретически линия с`angle`или`angle+180`одинакова, только точки поменяны местами.
      *Найдите степень, при которой ориго остается на месте.*/
     if(angle > 180) angle -= 180; /*> 180 поменяет ориго*/
 
@@ -1029,9 +1029,9 @@ static lv_draw_sw_mask_res_t LV_ATTRIBUTE_FAST_MEM lv_draw_mask_map(lv_opa_t * m
 
 /**
  * Инициализация рисования круга
- * @param c pointer to a point. The coordinates will be calculated here
- * @param tmp point to a variable. It will store temporary data
- * @param radius radius of the circle
+ * @param c указатель на точку. Координаты будут рассчитаны здесь
+ * @param tmp указать на переменную. Он будет хранить временные данные
+ * @param radius радиус круга
  */
 static void circ_init(lv_point_t * c, int32_t * tmp, int32_t radius)
 {
@@ -1042,8 +1042,8 @@ static void circ_init(lv_point_t * c, int32_t * tmp, int32_t radius)
 
 /**
  * Проверьте, готов ли рисунок круга или нет.
- * @param c same as in circ_init
- * @return true if the circle is not ready yet
+ * @param c то же, что и в circ_init
+ * @return правда, если круг еще не готов
  */
 static bool circ_cont(lv_point_t * c)
 {
@@ -1052,8 +1052,8 @@ static bool circ_cont(lv_point_t * c)
 
 /**
  * Получить следующую точку из круга
- * @param c same as in circ_init. The next point stored here.
- * @param tmp same as in circ_init.
+ * @param c то же, что и в circ_init. Следующий пункт хранится здесь.
+ * @param tmp то же, что и в circ_init.
  */
 static void circ_next(lv_point_t * c, int32_t * tmp)
 {
@@ -1076,7 +1076,7 @@ static void circ_calc_aa4(lv_draw_sw_mask_radius_circle_dsc_t * c, int32_t radiu
     /*Выделить буферы*/
     if(c->buf) lv_free(c->buf);
 
-    c->buf = lv_malloc(radius * 6 + 6);  /*Используйте uint16_t для opa_start_on_y и x_start_on_y.*/
+    c->buf = lv_malloc(radius * 6 + 6);  /*Используйтеuint16_tдляopa_start_on_yи x_start_on_y.*/
     LV_ASSERT_MALLOC(c->buf);
     c->cir_opa = c->buf;
     c->opa_start_on_y = (uint16_t *)(c->buf + 2 * radius + 2);

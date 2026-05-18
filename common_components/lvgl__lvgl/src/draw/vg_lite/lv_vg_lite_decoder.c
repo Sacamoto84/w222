@@ -137,7 +137,7 @@ static void image_decode_to_index8_line(uint8_t * dest, const uint8_t * src, int
             return;
     }
 
-    mask = (1 << px_size) - 1; /*Например.  px_size = 2; маска = 0x03*/
+    mask = (1 << px_size) - 1; /*Например.  px_size= 2; маска = 0x03*/
 
     for(int32_t i = 0; i < w_px; i++) {
         uint8_t val_act = (*src >> shift) & mask;
@@ -169,7 +169,7 @@ static lv_color_format_t get_converted_cf(lv_color_format_t cf)
 
         /**
          * Если GPU не поддерживает 24-битный формат, преобразуйте его в ARGB8888;
-         * в противном случае используйте обычный поток обработки bin_decoder.
+         * в противном случае воспользуйтесь обычным потоком обработки bin_decoder.
          */
         case LV_COLOR_FORMAT_RGB888:
             return vg_lite_query_feature(gcFEATURE_BIT_VG_24BIT) ? LV_COLOR_FORMAT_UNKNOWN : LV_COLOR_FORMAT_XRGB8888;
@@ -224,8 +224,8 @@ static lv_result_t decoder_open_variable_index(lv_draw_buf_t * dest_buf, const l
                                                bool premultiply)
 {
     LV_PROFILER_DECODER_BEGIN;
-    /* Поскольку для dsc->header.cf одинаково установлено значение I8 ,
-     * исходный формат получается из src для преобразования.
+    /* поскольку для dsc->header.cf одинаковое значение было установленоI8,
+     * исходный формат получается из src для конвертации.
      */
 
     /*В случае несжатых форматов изображение сохраняется в ROM/RAM.
@@ -706,9 +706,9 @@ static lv_draw_buf_t * create_dest_buf(uint32_t width, uint32_t height, lv_color
 
 /**
  * Декодируйте изображение с помощью графического процессора vg_lite.
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -726,7 +726,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
                 const bool premultiply = src_premultiplied ? false : dsc->args.premultiply;
 
                 /**
-                 * Поскольку lv_draw_buf_from_image автоматически рассчитывает шаг,
+                 * посколькуlv_draw_buf_from_imageавтоматически рассчитывает шаг,
                  * нам нужно получить исходную информацию о шаге.
                  */
                 src_buf.header.stride = get_image_stride(&((lv_image_dsc_t *)dsc->src)->header);
@@ -783,7 +783,7 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
                     return LV_RESULT_INVALID;
                 }
 
-                /* получить реальный заголовок src */
+                /* получить исходный заголовок src */
                 lv_image_header_t src_header;
                 uint32_t header_br = 0;
                 fs_res = lv_fs_read(&file, &src_header, sizeof(src_header), &header_br);

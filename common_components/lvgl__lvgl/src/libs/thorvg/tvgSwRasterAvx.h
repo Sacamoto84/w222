@@ -32,35 +32,35 @@
 
 static inline __m128i ALPHA_BLEND(__m128i c, __m128i a)
 {
-    //1. set the masks for the A/G and R/B channels
+    //1. установите маски для каналов A/G и R/B
     auto AG = _mm_set1_epi32(0xff00ff00);
     auto RB = _mm_set1_epi32(0x00ff00ff);
 
-    //2. mask the alpha vector - originally quartet [a, a, a, a]
+    //2. замаскировать альфа-вектор — изначально квартет [a, a, a, a]
     auto aAG = _mm_and_si128(a, AG);
     auto aRB = _mm_and_si128(a, RB);
 
-    //3. calculate the alpha blending of the 2nd and 4th channel
-    //- mask the color vector
-    //- multiply it by the masked alpha vector
-    //- add the correction to compensate bit shifting used instead of dividing by 255
-    //- shift bits - corresponding to division by 256
+    //3. рассчитать альфа-смешение 2-го и 4-го каналов
+    //- замаскировать цветовой вектор
+    //- умножьте его на замаскированный альфа-вектор
+    //- добавьте коррекцию для компенсации сдвига битов, используемого вместо деления на 255
+    //- бит сдвига - соответствует делению на 256
     auto even = _mm_and_si128(c, RB);
     even = _mm_mullo_epi16(even, aRB);
     even =_mm_add_epi16(even, RB);
     even = _mm_srli_epi16(even, 8);
 
-    //4. calculate the alpha blending of the 1st and 3rd channel:
-    //- mask the color vector
-    //- multiply it by the corresponding masked alpha vector and store the high bits of the result
-    //- add the correction to compensate division by 256 instead of by 255 (next step)
-    //- remove the low 8 bits to mimic the division by 256
+    //4. вычислите альфа-смешение 1-го и 3-го каналов:
+    //- замаскировать цветовой вектор
+    //- умножьте его на соответствующий замаскированный альфа-вектор и сохраните старшие биты результата
+    //- добавьте поправку для компенсации деления на 256 вместо 255 (следующий шаг)
+    //- удалите младшие 8 бит, чтобы имитировать деление на 256
     auto odd = _mm_and_si128(c, AG);
     odd = _mm_mulhi_epu16(odd, aAG);
     odd = _mm_add_epi16(odd, RB);
     odd = _mm_and_si128(odd, AG);
 
-    //5. the final result
+    //5. окончательный результат
     return _mm_or_si128(odd, even);
 }
 
@@ -84,19 +84,19 @@ static void avxRasterGrayscale8(uint8_t* dst, uint8_t val, uint32_t offset, int3
 
 static void avxRasterPixel32(uint32_t *dst, uint32_t val, uint32_t offset, int32_t len)
 {
-    //1. calculate how many iterations we need to cover the length
+    //1. подсчитайте, сколько итераций нам нужно, чтобы покрыть длину
     uint32_t iterations = len / N_32BITS_IN_256REG;
     uint32_t avxFilled = iterations * N_32BITS_IN_256REG;
 
-    //2. set the beginning of the array
+    //2. установить начало массива
     dst += offset;
 
-    //3. fill the octets
+    //3. заполнить октеты
     for (uint32_t i = 0; i < iterations; ++i, dst += N_32BITS_IN_256REG) {
         _mm256_storeu_si256((__m256i*)dst, _mm256_set1_epi32(val));
     }
 
-    //4. fill leftovers (in the first step we have to set the pointer to the place where the avx job is done)
+    //4. заполнить остатки (на первом этапе нам нужно установить указатель на место, где выполняется задание avx)
     int32_t leftovers = len - avxFilled;
     while (leftovers--) *dst++ = val;
 }
@@ -120,7 +120,7 @@ static bool avxRasterTranslucentRect(SwSurface* surface, const SwBBox& region, u
         for (uint32_t y = 0; y < h; ++y) {
             auto dst = &buffer[y * surface->stride];
 
-            //1. fill the not aligned memory (for 128-bit registers a 16-bytes alignment is required)
+            //1. заполнить невыровненную память (для 128-битных регистров требуется выравнивание по 16 байт)
             auto notAligned = ((uintptr_t)dst & 0xf) / 4;
             if (notAligned) {
                 notAligned = (N_32BITS_IN_128REG - notAligned > w ? w : N_32BITS_IN_128REG - notAligned);
@@ -129,7 +129,7 @@ static bool avxRasterTranslucentRect(SwSurface* surface, const SwBBox& region, u
                 }
             }
 
-            //2. fill the aligned memory - N_32BITS_IN_128REG pixels processed at once
+            //2. заполнить выровненную память — пикселиN_32BITS_IN_128REGобрабатываются сразу
             uint32_t iterations = (w - notAligned) / N_32BITS_IN_128REG;
             uint32_t avxFilled = iterations * N_32BITS_IN_128REG;
             auto avxDst = (__m128i*)dst;
@@ -137,7 +137,7 @@ static bool avxRasterTranslucentRect(SwSurface* surface, const SwBBox& region, u
                 *avxDst = _mm_add_epi32(avxColor, ALPHA_BLEND(*avxDst, avxIalpha));
             }
 
-            //3. fill the remaining pixels
+            //3. заполнить оставшиеся пиксели
             int32_t leftovers = w - notAligned - avxFilled;
             dst += avxFilled;
             while (leftovers--) {
@@ -178,7 +178,7 @@ static bool avxRasterTranslucentRle(SwSurface* surface, const SwRle* rle, uint8_
 
         auto ialpha = IA(src);
 
-            //1. fill the not aligned memory (for 128-bit registers a 16-bytes alignment is required)
+            //1. заполнить невыровненную память (для 128-битных регистров требуется выравнивание по 16 байт)
             auto notAligned = ((uintptr_t)dst & 0xf) / 4;
             if (notAligned) {
                 notAligned = (N_32BITS_IN_128REG - notAligned > span->len ? span->len : N_32BITS_IN_128REG - notAligned);
@@ -187,8 +187,8 @@ static bool avxRasterTranslucentRle(SwSurface* surface, const SwRle* rle, uint8_
                 }
             }
 
-            //2. fill the aligned memory using avx - N_32BITS_IN_128REG pixels processed at once
-            //Чтобы избежать ненужных объявлений переменных avx, производится проверка, есть ли вообще какие-либо итерации.
+            //2. заполнить выровненную память, используя avx — пикселиN_32BITS_IN_128REGобрабатываются одновременно
+            //Чтобы избежать ненужных бесплатных запросов avx, производя проверку, есть ли вообще какие-либо итерации.
             uint32_t iterations = (span->len - notAligned) / N_32BITS_IN_128REG;
             uint32_t avxFilled = 0;
             if (iterations > 0) {
@@ -202,7 +202,7 @@ static bool avxRasterTranslucentRle(SwSurface* surface, const SwRle* rle, uint8_
                 }
             }
 
-            //3. fill the remaining pixels
+            //3. заполнить оставшиеся пиксели
             int32_t leftovers = span->len - notAligned - avxFilled;
             dst += avxFilled;
             while (leftovers--) {

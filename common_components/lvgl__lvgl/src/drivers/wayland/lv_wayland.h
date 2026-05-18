@@ -37,9 +37,9 @@ extern "C" {
 
 /**
  * Обертка вокруг lv_timer_handler
- * @note Must be called in the application run loop instead of the
- * обычный lv_timer_handler предоставлен LVGL
- * @return time till it needs to be run next (in ms)
+ * @note Должен вызываться в цикле выполнения приложения вместо
+ * обычныйlv_timer_handlerпредоставлен LVGL
+ * @return время до следующего запуска (в мс)
  */
 uint32_t lv_wayland_timer_handler(void);
 

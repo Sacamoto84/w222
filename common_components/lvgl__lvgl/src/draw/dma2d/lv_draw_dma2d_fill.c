@@ -117,7 +117,7 @@ void lv_draw_dma2d_fill(lv_draw_task_t * t, void * first_pixel, int32_t w, int32
         .bg_cf = (lv_draw_dma2d_fgbg_cf_t) output_cf
     };
 
-    /* Фоновый альфа-канал следует рассматривать как 0xFF, если cf равен XRGB. */
+    /* Фоновый альфа-канал следует рассматривать как0xFF, если cf равенXRGB. */
     if(cf == LV_COLOR_FORMAT_XRGB8888) {
         conf.bg_alpha_mode = LV_DRAW_DMA2D_ALPHA_MODE_REPLACE_ALPHA_CHANNEL;
         conf.bg_alpha = 0xff;

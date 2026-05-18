@@ -232,7 +232,7 @@ static void * sdl_draw_buf_realloc_aligned(void * ptr, size_t new_size)
 
     /* Нет необходимости копировать для буфера рисования */
 #ifndef _WIN32
-    /* Размер должен быть кратен размеру выравнивания. См.: https://en.cppreference.com/w/c/memory/aligned_alloc. */
+    /* Размер соревнований должен быть уменьшен. См.: https://en.cppreference.com/w/c/memory/aligned_alloc. */
 #define BUF_ALIGN (LV_DRAW_BUF_ALIGN < sizeof(void *) ? sizeof(void *) : LV_DRAW_BUF_ALIGN)
     return aligned_alloc(BUF_ALIGN, LV_ALIGN_UP(new_size, BUF_ALIGN));
 #else

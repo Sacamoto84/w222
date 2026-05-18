@@ -178,7 +178,7 @@ void lv_draw_dma2d_configure_and_start_transfer(const lv_draw_dma2d_configuratio
     DMA2D->FGMAR = (uint32_t)(uintptr_t) conf->fg_address;
     /* регистр смещения переднего плана */
     DMA2D->FGOR = conf->fg_offset;
-    /* цвет переднего плана. только для mem-to-mem со смешиванием и фиксированным цветом переднего плана */
+    /* цвет переднего плана. только для mem-to-mem с изменением и фиксированным цветом переднего плана */
     DMA2D->FGCOLR = conf->fg_color;
     /* Регистр управления преобразователем формата пикселей переднего плана */
     DMA2D->FGPFCCR = (((uint32_t) conf->fg_cf) << DMA2D_FGPFCCR_CM_Pos)

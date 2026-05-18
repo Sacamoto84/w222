@@ -25,12 +25,12 @@ extern "C" {
 
 
 /* Используя «фабрику» `URI`, мы можем указать различные схемы URI в качестве источников мультимедиа, включая
- * - local files (file://)
- * - web streams (http://, https://)
- * - RTSP streams (rtsp://)
- * - UDP streams (udp://)
+ * - локальные файлы (файл://)
+ * - веб-потоки (http://,https://)
+ * - ПотокиRTSP(rtsp://)
+ * - ПотокиUDP(udp://)
  * и многие другие.
- * Uridecodebin GStreamer автоматически выбирает соответствующий
+ * Uridecodebin GStreamer автоматически выбирает подходящий
  * исходный элемент и декодер на основе схемы URI и медиаформата. */
 #define LV_GSTREAMER_FACTORY_URI_DECODE      "uridecodebin"
 #define LV_GSTREAMER_PROPERTY_URI_DECODE      "uri"
@@ -86,93 +86,93 @@ typedef enum {
  **********************/
 
 /**
- * Создайте объект gstreamer
- * @param parent    pointer to an object, it will be the parent of the new gstreamer
- * @return          pointer to the created gstreamer
+ * создать объект gstreamer
+ * @param parent    указатель на объект, он будет родителем нового gstreamer
+ * @return          указатель на созданный gstreamer
  */
 lv_obj_t * lv_gstreamer_create(lv_obj_t * parent);
 
 /**
- * Добавьте источник к этому объекту gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @param factory_name  the factory name for the source of this gstreamer object.
+ * добавьте источник к этому объекту gstreamer
+ * @param gstreamer     указатель на объект gstreamer
+ * @param factory_name  заводское имя источника этого объекта gstreamer.
  *                      для общих заводских имен проверьте, что `LV_GSTREAMER_FACTORY_XXX` определяет
- * @param property      the property name for the gstreamer source object
+ * @param property      имя свойства исходного объекта gstreamer
  *                      общие свойства см. в разделе `LV_GSTREAMER_PROPERTY_XXX`, определяет
  *                      Передача NULL создаст исходный объект, но не установит его источник.
- * @param source        the property value for the gstreamer source object
+ * @param source        значение свойства для исходного объекта gstreamer
  *                      Передача NULL создаст исходный объект, но не установит его источник.
- * @return LV_RESULT_OK if the source was correctly set else LV_RESULT_INVALID
+ * @return LV_RESULT_OK, если источник был установлен правильно, иначе LV_RESULT_INVALID
  */
 lv_result_t lv_gstreamer_set_src(lv_obj_t * gstreamer, const char * factory_name, const char * property,
                                  const char * source);
 
 /**
  * Включи этот gstreamer
- * @param gstreamer     pointer to a gstreamer object
+ * @param gstreamer     указатель на объект gstreamer
  */
 void lv_gstreamer_play(lv_obj_t * gstreamer);
 
 /**
  * Приостановить этот gstreamer
- * @param gstreamer     pointer to a gstreamer object
+ * @param gstreamer     указатель на объект gstreamer
  */
 void lv_gstreamer_pause(lv_obj_t * gstreamer);
 
 /**
  * Останови этот gstreamer
- * @param gstreamer     pointer to a gstreamer object
+ * @param gstreamer     указатель на объект gstreamer
  */
 void lv_gstreamer_stop(lv_obj_t * gstreamer);
 
 /**
  * Ищите позицию в этом gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @param position      position to seek to
+ * @param gstreamer     указатель на объект gstreamer
+ * @param position      положение, чтобы стремиться
  */
 void lv_gstreamer_set_position(lv_obj_t * gstreamer, uint32_t position);
 
 /**
  * Получить продолжительность этого gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @return              the duration (in ms) of the gstreamer object
+ * @param gstreamer     указатель на объект gstreamer
+ * @return              продолжительность (в мс) объекта gstreamer
  */
 uint32_t lv_gstreamer_get_duration(lv_obj_t * gstreamer);
 
 /**
  * Получить позицию этого gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @return              the position (in ms) of the gstreamer object
+ * @param gstreamer     указатель на объект gstreamer
+ * @return              позиция (в мс) объекта gstreamer
  */
 uint32_t lv_gstreamer_get_position(lv_obj_t * gstreamer);
 
 /**
  * Получить состояние этого gstreamer
- * @param gstreamer     pointer to a gstreamer object
+ * @param gstreamer     указатель на объект gstreamer
  */
 lv_gstreamer_state_t lv_gstreamer_get_state(lv_obj_t * gstreamer);
 
 /**
- * Установите громкость этого gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @param volume         the value to set in the range [0..100]. Higher values are clamped
+ * Установить громкость этого gstreamer
+ * @param gstreamer     указатель на объект gstreamer
+ * @param volume         значение, которое необходимо установить в диапазоне [0..100]. Более высокие значения фиксируются
  */
 void lv_gstreamer_set_volume(lv_obj_t * gstreamer, uint8_t volume);
 
 /**
- * Получить объем этого gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @return      the volume for this gstreamer
+ * Получить громкость этого gstreamer
+ * @param gstreamer     указатель на объект gstreamer
+ * @return      громкость для этого gstreamer
  */
 uint8_t lv_gstreamer_get_volume(lv_obj_t * gstreamer);
 
 /**
  * Установите скорость этого gstreamer
- * @param gstreamer     pointer to a gstreamer object
- * @param rate      the rate factor.  Example values:
+ * @param gstreamer     указатель на объект gstreamer
+ * @param rate      коэффициент ставки.  Примеры значений:
  *                      - 256:   1x
- *                      - <256:  slow down
- *                      - >256:  speed up
+ *                      - <256: замедлить
+ *                      - >256: ускориться
  *                      - 128:   0.5x
  *                      - 512:   2x
  */
@@ -180,8 +180,8 @@ void lv_gstreamer_set_rate(lv_obj_t * gstreamer, uint32_t rate);
 
 /**
  * Получите состояние потока из обратного вызова события STATE_CHANGED.
- * @param e     pointer to the event
- * @return the stream state or -1 if `e` is invalid (i.e. NULL or does not match expected event)
+ * @param e     указатель на событие
+ * @return состояние потока или -1, если`e`недействителен (т. е.NULLили не соответствует ожидаемому событию)
  */
 lv_gstreamer_stream_state_t lv_gstreamer_get_stream_state(lv_event_t * e);
 

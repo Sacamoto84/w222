@@ -2,7 +2,7 @@
 #if LV_USE_DRAW_EVE
 /*
 @file EVE_supplemental.h
-@brief   supplemental functions
+@brief   дополнительные функции
 @version 5.0
 @date 23 декабря 2023 г.
 @author Рудольф Ридель
@@ -33,7 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 История @section
 
 5.0
-- added EVE_polar_cartesian()
+- добавленEVE_polar_cartesian()
 
 */
 
@@ -51,7 +51,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 /*
- * @brief widget function to draw a circle
+ * @brief функция виджета для рисования круга
  */
 void EVE_widget_circle(int16_t xc0, int16_t yc0, uint16_t radius, uint16_t border, uint32_t bgcolor)
 {
@@ -67,7 +67,7 @@ void EVE_widget_circle(int16_t xc0, int16_t yc0, uint16_t radius, uint16_t borde
 }
 
 /*
- * @brief widget function to draw a rectangle
+ * @brief функция виджета для рисования прямоугольника
  */
 void EVE_widget_rectangle(int16_t xc0, int16_t yc0, int16_t wid, int16_t hgt, int16_t border, uint16_t linewidth, uint32_t bgcolor)
 {
@@ -112,12 +112,12 @@ static const int8_t sine_table[360] PROGMEM =
 };
 
 /**
- * @brief Calculate coordinates from an angle and a length.
- * @param length distance from coordinate origin (0,0)
- * @param angle rotation in degrees
- * @return signed X/Y coordinates for use with VERTEX2F
- * @note - resolution for angle is 1° and rotation is clockwise
- * @note - angle should be limited to a (n*360)-1
+ * @brief Вычислить координаты по углу и длине.
+ * @param length расстояние от начала координат (0,0)
+ * @param angle вращение в градусах
+ * @return подписанные координаты X/Y для использования с VERTEX2F
+ * @note - разрешение угла 1° и вращение по часовой стрелке
+ * @note - угол должен быть ограничен (n*360)-1
  */
 void EVE_polar_cartesian(uint16_t length, uint16_t angle, int16_t *p_xc0, int16_t *p_yc0)
 {

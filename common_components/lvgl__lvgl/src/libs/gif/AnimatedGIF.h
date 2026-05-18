@@ -23,7 +23,7 @@
 // GIF Аниматор
 // Автор Ларри Бэнк
 // Copyright (c) 2020 BitBank Software, Inc.
-// битбанк @pobox .com
+// битбанк@pobox.com
 //
 // Предназначен для декодирования изображений размером до 480х320 на микроконтроллерах.
 // использование менее 22 КБ RAM
@@ -68,7 +68,7 @@
 #define LINK_UNUSED 5911 // 0x1717 для использования memset
 #define LINK_END 5912
 #define MAX_HASH 5003
-// расширенный буфер LZW для режима Turbo
+// расширенный буферLZWдля режима Turbo
 #define LZW_BUF_SIZE_TURBO (LZW_BUF_SIZE + (2<<MAX_CODE_SIZE) + (PIXEL_LAST*2) + MAX_WIDTH)
 #define LZW_HIGHWATER_TURBO ((LZW_BUF_SIZE_TURBO * 14) / 16)
 
@@ -79,7 +79,7 @@ enum {
    GIF_PALETTE_RGB565_LE = 0, // с прямым порядком байтов (по умолчанию)
    GIF_PALETTE_RGB565_BE,     // с прямым порядком байтов
    GIF_PALETTE_RGB888,        // исходные записи в формате 24 бит/с
-   GIF_PALETTE_RGB8888,       // 32-битный (альфа = 0xff или 0x00 )
+   GIF_PALETTE_RGB8888,       // 32-битный (альфа =0xffили0x00)
    GIF_PALETTE_1BPP,          // 1 бит на пиксель (по горизонтали, MSB слева)
    GIF_PALETTE_1BPP_OLED      // 1 бит на пиксель (вертикально, LSB сверху)
 };
@@ -89,11 +89,11 @@ enum {
 //
 // Типы рисования
 //
-// RAW = 8-bit palettized pixels requiring transparent pixel handling and conversion through the palette.
+// RAW = 8-битные пиксели с палитрой, требующие прозрачной обработки пикселей и преобразования с помощью палитры.
 //       Каждая строка отправляется обратному вызову GIFDraw в виде 8-битных пикселей. Если кадровый буфер существует, строки будут
 //       там тоже написано. Обратный вызов GIFDraw не является обязательным, если выделен кадровый буфер.
 //
-// COOKED = 16/24/32-bpp fully rendered pixels ready for display. This requires a full frame buffer with extra
+// COOKED = Полностью визуализированные пиксели с разрешением 16/24/32 бит/пиксель готовы к отображению. Для этого требуется полный буфер кадра с дополнительными
 //          место для полностью визуализированных пикселей в конце 8-битного пиксельного буфера. Например, 160х120.
 //          Размер холста с 24-битным выводом потребует (160*120 + 3*160) байт.
 //          Каждая подготовленная строка отправляется обратному вызову GIFDraw как строка из 16/24/32-битных пикселей.
@@ -189,10 +189,10 @@ typedef struct gif_image_tag
     unsigned char *pTurboBuffer;
     unsigned char *pPixels, *pOldPixels;
     unsigned char ucFileBuf[FILE_BUF_SIZE]; // хранит временные данные и стек пикселей
-    unsigned short pPalette[(MAX_COLORS * 3)/2]; // может содержать RGB565 или RGB888 — устанавливается в begin()
+    unsigned short pPalette[(MAX_COLORS * 3)/2]; // может сохранитьRGB565илиRGB888— настроено в begin()
     unsigned short pLocalPalette[(MAX_COLORS * 3)/2]; // цветовые палитры для изображений GIF
     unsigned char ucLZW[LZW_BUF_SIZE]; // содержит разделенные на части данные LZW
-    // Следующие 3 используются в режиме Turbo для увеличения буфера ucLZW.
+    // Следующие 3 использовались в режиме Турбо для увеличения буфера ucLZW.
     unsigned short usGIFTable[1<<MAX_CODE_SIZE];
     unsigned char ucGIFPixels[(PIXEL_LAST*2)];
     unsigned char ucLineBuf[MAX_WIDTH]; // текущая строка

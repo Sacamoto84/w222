@@ -1,6 +1,6 @@
 /*
 @file EVE_commands.h
-@brief   contains FT8xx / BT8xx function prototypes
+@brief   содержит прототипы функций FT8xx/BT8xx
 @version 5.0
 @date 29 декабря 2023 г.
 @author Рудольф Ридель
@@ -31,59 +31,59 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 История @section
 
 5.0
-- added prototype for EVE_cmd_plkfreq()
-- replaced BT81X_ENABLE with "EVE_GEN > 2"
-- removed FT81X_ENABLE as FT81x already is the lowest supported chip revision now
-- removed the formerly as deprected marked EVE_get_touch_tag()
-- changed EVE_color_rgb() to use a 32 bit value like the rest of the color commands
-- removed the meta-commands EVE_cmd_point(), EVE_cmd_line() and EVE_cmd_rect()
-- removed obsolete functions EVE_get_cmdoffset(void) and EVE_report_cmdoffset(void) - cmdoffset is gone
-- renamed EVE_LIB_GetProps() back to EVE_cmd_getprops() since it does not do anything special to justify a special name
-- added prototype for helper function EVE_memWrite_sram_buffer()
-- added prototypes for EVE_cmd_bitmap_transform() and EVE_cmd_bitmap_transform_burst()
-- added prototype for EVE_cmd_playvideo()
-- added prototypes for EVE_cmd_setfont_burst() and EVE_cmd_setfont2_burst()
-- added prototype for EVE_cmd_videoframe()
-- restructured: functions are sorted by chip-generation and within their group in alphabetical order
-- reimplementedEVE_cmd_getmatrix() again, it needs to read values, not write them
-- added prototypes for EVE_cmd_fontcache() and EVE_cmd_fontcachequery()
-- added prototype for EVE_cmd_flashprogram()
-- added prototype for EVE_cmd_calibratesub()
-- added prototypes for EVE_cmd_animframeram(), EVE_cmd_animframeram_burst(), EVE_cmd_animstartram(),
+- добавлен прототип дляEVE_cmd_plkfreq()
+- заменилBT81X_ENABLEна "EVE_GEN> 2"
+- удален FT81X_ENABLE, поскольку FT81x уже сейчас является самой низкой поддерживаемой ревизией чипа
+- удалил ранее устаревшую пометкуEVE_get_touch_tag()
+- изменен EVE_color_rgb() для использования 32-битного значения, как и остальные команды цвета
+- удалены метакоманды EVE_cmd_point(), EVE_cmd_line() и EVE_cmd_rect()
+- удалены устаревшие функцииEVE_get_cmdoffset(void) иEVE_report_cmdoffset(void) - cmdoffset пропал
+- переименовал EVE_LIB_GetProps() обратно в EVE_cmd_getprops(), поскольку он не делает ничего особенного для оправдания специального имени
+- добавлен прототип вспомогательной функцииEVE_memWrite_sram_buffer()
+- добавлены прототипы для EVE_cmd_bitmap_transform() и EVE_cmd_bitmap_transform_burst()
+- добавлен прототип дляEVE_cmd_playvideo()
+- добавлены прототипы для EVE_cmd_setfont_burst() и EVE_cmd_setfont2_burst()
+- добавлен прототип дляEVE_cmd_videoframe()
+- реструктуризировано: функции сортируются по поколениям чипов и внутри своей группы в алфавитном порядке
+- reimplementedEVE_cmd_getmatrix() опять же, ему нужно читать значения, а не записывать их
+- добавлены прототипы для EVE_cmd_fontcache() и EVE_cmd_fontcachequery()
+- добавлен прототип дляEVE_cmd_flashprogram()
+- добавлен прототип дляEVE_cmd_calibratesub()
+- добавлены прототипы для EVE_cmd_animframeram(), EVE_cmd_animframeram_burst(), EVE_cmd_animstartram(),
 EVE_cmd_animstartram_burst ()
-- added prototypes for EVE_cmd_apilevel(), EVE_cmd_apilevel_burst()
-- added prototypes for EVE_cmd_calllist(), EVE_cmd_calllist_burst()
-- added prototype for EVE_cmd_getimage()
-- added prototypes for EVE_cmd_hsf(), EVE_cmd_hsf_burst()
-- added prototype for EVE_cmd_linetime()
-- added prototypes for EVE_cmd_newlist(), EVE_cmd_newlist_burst()
-- added prototypes for EVE_cmd_runanim(), EVE_cmd_runanim_burst()
-- added prototype for EVE_cmd_wait()
-- removed the history from before 4.0
-- added an enum with return codes to have the functions return something more meaningfull
-- finally removed EVE_cmd_start() after setting it to deprecatd with the first 5.0 release
-- renamed EVE_cmd_execute() to EVE_execute_cmd() to be more consistent, this is is not an EVE command
-- added the return-value of EVE_FIFO_HALF_EMPTY to EVE_busy() to indicate there is more than 2048 bytes available
-- removed the 4.0 history
-- added parameter width to EVE_calibrate_manual()
-- changed the varargs versions of cmd_button, cmd_text and cmd_toggle to use an array of uint32_t values to comply with MISRA-C
-- fixed some MISRA-C issues
-- basic maintenance: checked for violations of white space and indent rules
-- more linter fixes for minor issues like variables shorter than 3 characters
-- added EVE_color_a() / EVE_color_a_burst()
-- removed EVE_cmd_newlist_burst() prototype as the function got removed earlier
-- added prototype for EVE_write_display_parameters()
-- added EVE_memRead_sram_buffer()
-- added EVE_FAULT_RECOVERED to the list of return codes
-- added defines for the state of the external flash
-- added protype for EVE_get_and_reset_fault_state()
-- put E_OK and E_NOT_OK in #ifndef/#endif guards as these are usually defined
+- добавлены прототипы для EVE_cmd_apilevel(), EVE_cmd_apilevel_burst()
+- добавлены прототипы для EVE_cmd_calllist(), EVE_cmd_calllist_burst()
+- добавлен прототип дляEVE_cmd_getimage()
+- добавлены прототипы для EVE_cmd_hsf(), EVE_cmd_hsf_burst()
+- добавлен прототип дляEVE_cmd_linetime()
+- добавлены прототипы для EVE_cmd_newlist(), EVE_cmd_newlist_burst()
+- добавлены прототипы для EVE_cmd_runanim(), EVE_cmd_runanim_burst()
+- добавлен прототип дляEVE_cmd_wait()
+- удалена история до версии 4.0
+- добавлено перечисление с кодами возврата, чтобы функции возвращали что-то более значимое
+- наконец удаленEVE_cmd_start() после того, как он стал устаревшим в первой версии 5.0
+- переименованEVE_cmd_execute() вEVE_execute_cmd() для большей согласованности, это не команда EVE
+- добавлено возвращаемое значениеEVE_FIFO_HALF_EMPTYв EVE_busy(), чтобы указать, что доступно более 2048 байт
+- удалил историю версии 4.0
+- добавлена ширина параметра вEVE_calibrate_manual()
+- изменены версииcmd_buttonс переменным числом аргументовcmd_button,cmd_textиcmd_toggleдля использования массива значенийuint32_tдля соответствияMISRA-C
+- исправлены некоторые проблемы сMISRA-C
+- базовое обслуживание: проверяется на наличие нарушений правил использования пробелов и отступов.
+- больше исправлений линтера для мелких проблем, таких как переменные короче 3 символов.
+- добавлен EVE_color_a()/EVE_color_a_burst()
+- удален прототип EVE_cmd_newlist_burst(), так как функция была удалена ранее
+- добавлен прототип дляEVE_write_display_parameters()
+- добавленEVE_memRead_sram_buffer()
+- добавленEVE_FAULT_RECOVEREDв список кодов возврата
+- добавлено определение состояния внешней флэш-памяти
+- добавлен прототип дляEVE_get_and_reset_fault_state()
+- поместитеE_OKиE_NOT_OKв охранники #ifndef/#endif, как они обычно определяются
   уже в проектах AUTOSAR
-- renamed EVE_FAIL_CHIPID_TIMEOUT to EVE_FAIL_REGID_TIMEOUT as suggested by #93 on github
-- changed a number of function parameters from signed to unsigned following the
+- переименованEVE_FAIL_CHIPID_TIMEOUTв EVE_FAIL_REGID_TIMEOUT, как было предложено № 93 на github.
+- изменил ряд параметров функции со знаковых на беззнаковые после
     обновленное руководство по программированию серии BT81x V2 .4
-- commented out EVE_cmd_regread() prototype
-- removed prototype for EVE_cmd_hsf_burst()
+- закомментировал прототип EVE_cmd_regread()
+- удален прототип дляEVE_cmd_hsf_burst()
 
 */
 
@@ -191,8 +191,8 @@ void EVE_cmd_snapshot(uint32_t ptr);
 void EVE_cmd_snapshot2(uint32_t fmt, uint32_t ptr, int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt);
 void EVE_cmd_track(int16_t xc0, int16_t yc0, uint16_t wid, uint16_t hgt, uint16_t tag);
 void EVE_cmd_videoframe(uint32_t dest, uint32_t result_ptr);
-/*void EVE_cmd_memwrite ( uint32_t dest, uint32_t число, const uint8_t * p_data );*/
-/*uint32_t EVE_cmd_regread ( uint32_t ptr);*/
+/*voidEVE_cmd_memwrite(uint32_tdest,uint32_tчисло, constuint8_t*p_data);*/
+/*uint32_tEVE_cmd_regread(uint32_tptr);*/
 
 /* ##################################################################
     исправление и инициализация

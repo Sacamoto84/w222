@@ -36,8 +36,8 @@ lv_indev_t * lv_wayland_touch_create(void);
 
 /**
  * Получить устройство ввода с сенсорным экраном для данного дисплея LVGL.
- * @param display LVGL display
- * @return input device connected to touchscreen, or NULL on error
+ * @param display LVGL дисплей
+ * @return устройство ввода подключено к сенсорному экрану илиNULLпри ошибке
  */
 lv_indev_t * lv_wayland_get_touchscreen(lv_display_t * display);
 

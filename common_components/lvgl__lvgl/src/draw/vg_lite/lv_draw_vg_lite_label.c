@@ -37,7 +37,7 @@
 
 #define FT_F26DOT6_SHIFT 6
 
-/** После преобразования эталонного размера шрифта также необходимо масштабировать данные 26dot6.
+/** После преобразования эталонного размера шрифта также необходимо масштабировать данные до 26dot6.
  * на пути к реальному физическому размеру
  */
 #define FT_F26DOT6_TO_PATH_SCALE(x) (LV_FREETYPE_F26DOT6_TO_FLOAT(x) / (1 << FT_F26DOT6_SHIFT))
@@ -80,7 +80,7 @@ void lv_draw_vg_lite_label_init(struct _lv_draw_vg_lite_unit_t * u)
     LV_ASSERT_NULL(u);
 
 #if LV_USE_FREETYPE
-    /*Настройте событие Freetype Outline*/
+    /*Оформление мероприятия Freetype Outline*/
     lv_freetype_outline_add_event(freetype_outline_event_cb, LV_EVENT_ALL, u);
 #endif /* LV_USE_FREETYPE */
 
@@ -328,8 +328,8 @@ static void draw_letter_bitmap(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * d
     if(!dsc->rotation
 #if LV_VG_LITE_DISABLE_BLIT_RECT_OFFSET
        /**
-        * На некотором оборудовании параметры rect.x/y vg_lite_blit_rect работают неправильно.
-        * поэтому резервным вариантом для обработки является vg_lite_draw_pattern.
+        * При неправильном оснащении параметров rect.x/yvg_lite_blit_rectработают неправильно.
+        * поэтому резервным процессом обработки является vg_lite_draw_pattern.
         */
        && (clip_offset_x == 0 && clip_offset_y == 0)
 #endif
@@ -415,7 +415,7 @@ static void draw_letter_outline(lv_draw_task_t * t, const lv_draw_glyph_dsc_t * 
 
     lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)t->draw_unit;
 
-    /* vg-lite bounding_box обрежет пиксели по краям, поэтому здесь нужен +1 пиксель */
+    /* vg-litebounding_boxобрежет пиксели по краям, поэтому здесь нужен +1 пиксель */
     path_clip_area.x2++;
     path_clip_area.y2++;
 

@@ -58,7 +58,7 @@ static const char* EXP_VALUE = "value";
 static const char* EXP_INDEX = "index";
 static const char* EXP_EFFECT= "effect";
 
-static LottieExpressions* exps = nullptr;   //механизм экземпляра Singleton
+static LottieExpressions* exps = nullptr;   //экземпляр механизма Синглтон
 
 
 static ExpContent* _expcontent(LottieExpression* exp, float frameNo, LottieObject* obj)
@@ -308,7 +308,7 @@ static void _buildLayer(jerry_value_t context, float frameNo, LottieLayer* layer
 
     _buildTransform(context, frameNo, layer->transform);
 
-    //audioLevels, значение #the свойства Audio Levels слоя в децибелах
+    //audioLevels, значение свойств#theУровень звука в децибелах
 
     auto timeRemap = jerry_object();
     jerry_object_set_native_ptr(timeRemap, nullptr, &layer->timeRemap);
@@ -329,7 +329,7 @@ static void _buildLayer(jerry_value_t context, float frameNo, LottieLayer* layer
     jerry_object_set_native_ptr(toComp, nullptr, comp);
     jerry_value_free(toComp);
 
-    //content("name"), #look для именованного свойства из слоя
+    //content("name"),#lookдля именованного свойства слоя
     auto content = jerry_function_external(_content);
     jerry_object_set_sz(context, EXP_CONTENT, content);
     jerry_object_set_native_ptr(content, &freeCb, _expcontent(exp, frameNo, layer));
@@ -957,7 +957,7 @@ static jerry_value_t _key(const jerry_call_info_t* info, const jerry_value_t arg
 
 static jerry_value_t _createPath(const jerry_call_info_t* info, const jerry_value_t args[], const jerry_length_t argsCnt)
 {
-    //TODO: arg1: points, arg2: inTangents, arg3: outTangents, arg4: isClosed
+    //TODO: arg1: точки, arg2: inTangents, arg3: outTangents, arg4: isClosed
     auto arg1 = jerry_value_to_object(args[0]);
     auto pathset = jerry_object_get_native_ptr(arg1, nullptr);
     if (!pathset) {
@@ -977,7 +977,7 @@ static jerry_value_t _uniformPath(const jerry_call_info_t* info, const jerry_val
 {
     auto pathset = static_cast<LottiePathSet*>(jerry_object_get_native_ptr(info->function, nullptr));
 
-    /* TODO: ThorVG prebuilds the path data for performance.
+    /* TODO: ThorVG предварительно создает данные пути для повышения производительности.
        На самом деле необходимо создать Array<Point> для точек, inTangents, outTangents, а затем вернуться сюда... */
     auto obj = jerry_object();
     jerry_object_set_native_ptr(obj, nullptr, pathset);
@@ -987,7 +987,7 @@ static jerry_value_t _uniformPath(const jerry_call_info_t* info, const jerry_val
 
 static jerry_value_t _isClosed(const jerry_call_info_t* info, const jerry_value_t args[], const jerry_length_t argsCnt)
 {
-    //TODO: Not used
+    //TODO: Не используется
     return jerry_boolean(true);
 }
 
@@ -1047,8 +1047,8 @@ static void _buildProperty(float frameNo, jerry_value_t context, LottieExpressio
     jerry_object_set_native_ptr(speedAtTime, nullptr, exp);
     jerry_value_free(speedAtTime);
 
-    //покачивание(частота, усилитель, октавы=1, amp_mult =.5, t=время)
-    //temporalWiggle(частота, усилитель, октавы=1, amp_mult =.5, t=время)
+    //покачивание(частота, усилитель, октавы=1, amp_mult=.5, t=время)
+    //temporalWiggle(частота, усилитель, октавы=1,amp_mult=.5, t=время)
     //гладкий (ширина = 0,2, выборки = 5, t = время)
 
     auto loopIn = jerry_function_external(_loopIn);
@@ -1096,7 +1096,7 @@ static void _buildProperty(float frameNo, jerry_value_t context, LottieExpressio
 
     //имя
 
-    //content("name"), #look для именованного свойства из слоя
+    //content("name"),#lookдля именованного свойства слоя
     auto content = jerry_function_external(_content);
     jerry_object_set_sz(context, EXP_CONTENT, content);
     jerry_object_set_native_ptr(content, &freeCb, _expcontent(exp, frameNo, exp->layer));
@@ -1392,19 +1392,19 @@ LottieExpressions::LottieExpressions()
 
 void LottieExpressions::update(float curTime)
 {
-    //время, #current время в секундах
+    //время,#currentвремя в секундах
     auto time = jerry_number(curTime);
     jerry_object_set_sz(global, EXP_TIME, time);
     jerry_value_free(time);
 }
 
 
-//FIXME: Threads support
+//FIXME: Поддержка потоков
 #include "tvgTaskScheduler.h"
 
 LottieExpressions* LottieExpressions::instance()
 {
-    //FIXME: Threads support
+    //FIXME: Поддержка потоков
     if (TaskScheduler::threads() > 1) {
         TVGLOG("LOTTIE", "Lottie Expressions are not supported with tvg threads");
         return nullptr;

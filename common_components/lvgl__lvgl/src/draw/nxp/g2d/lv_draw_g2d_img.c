@@ -52,7 +52,7 @@ static void _g2d_set_tmp_surf(struct g2d_surface * tmp_surf, struct g2d_buf * bu
 static void _g2d_set_dst_surf(struct g2d_surface * dst_surf, struct g2d_buf * buf, const lv_area_t * area,
                               lv_draw_buf_t * draw_buf);
 
-/* Простой Blit с opa и альфа-каналом */
+/* Простой Блит с опа и альфа-каналом */
 static void _g2d_blit(void * handle, struct g2d_surface * dst_surf, struct g2d_surface * src_surf);
 
 static void _g2d_blit_two_steps(void * handle, struct g2d_surface * dst_surf, struct g2d_surface * src_surf,
@@ -142,8 +142,8 @@ static void _g2d_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
 
     if(has_rotation) {
         /** Если изображение имеет вращение, то блитирование осуществляется в два этапа:
-         *   1. Source with rotation to temporary surface.
-         *   2. Temporary with other transformations (if any) to destination (frame buffer).
+         *   1. Источник с вращением к временной поверхности.
+         *   2. Временно с другими преобразованиями (если таковые имеются) в пункт назначения (буфер кадра).
          */
         struct g2d_buf * tmp_buf = g2d_alloc(lv_area_get_width(&src_area) * lv_area_get_height(
                                                  &src_area) *  lv_color_format_get_size(src_cf), 1);

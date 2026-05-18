@@ -43,10 +43,10 @@ typedef void(*lv_x11_close_cb)(void * user_data);
  * создавать и добавлять объекты клавиатуры, мыши и колеса прокрутки и подключать их к дисплею x11.
  *
  * Это удобный метод, обрабатывающий типичную инициализацию ввода окна X11:
- * - create keyboard (lv_x11_keyboard_create)
- * - create mouse (with scrollwheel, lv_x11_mouse_create lv_x11_mousewheel_create)
+ * - создать клавиатуру (lv_x11_keyboard_create)
+ * - создать мышь (с колесиком прокруткиlv_x11_mouse_createlv_x11_mousewheel_create )
  *
- * @param [in] отображает созданный экранный объект X11 из @ref lv_x11_window_create.
+ * @param [in] отображает созданный экранный объектX11из@reflv_x11_window_create .
  * @param [in] mouse_img дополнительное описание изображения для курсора мыши (NULL для отсутствия/невидимого курсора мыши)
  */
 void lv_x11_inputs_create(lv_display_t * disp, lv_image_dsc_t const * mouse_img);
@@ -56,20 +56,20 @@ void lv_x11_inputs_create(lv_display_t * disp, lv_image_dsc_t const * mouse_img)
  *
  * Минимальная инициализация драйвера дисплея X11 с поддержкой клавиатуры/мыши:
  * @code
- * lv_display_t * disp = lv_x11_window_create («Заголовок моего окна», window_width , window_width );
- * lv_x11_inputs_create (дисп, NULL );
+ * lv_display_t * disp =lv_x11_window_create(«Заголовок моего окна»,window_width,window_width);
+ * lv_x11_inputs_create (дисп,NULL);
  * @endcode
  * или с помощью значка курсора мыши:
  * @code
  * lv_image_dsc_t mouse_symbol = {.....};
- * lv_display_t * disp = lv_x11_window_create («Заголовок моего окна», window_width , window_width );
- * lv_x11_inputs_create (дисп, & mouse_symbol );
+ * lv_display_t * disp =lv_x11_window_create(«Заголовок моего окна»,window_width,window_width);
+ * lv_x11_inputs_create (дисп, &mouse_symbol);
  * @endcode
  *
  * @param [in] title заголовок созданного окна X11
  * @param [дюймы] hor_res горизонтальное разрешение (=ширина) окна X11
  * @param [дюймы] ver_res вертикальное разрешение (=высота) окна X11
- * @return             pointer to the display object
+ * @return             указатель на отображаемый объект
  */
 lv_display_t * lv_x11_window_create(char const * title, int32_t hor_res, int32_t ver_res);
 

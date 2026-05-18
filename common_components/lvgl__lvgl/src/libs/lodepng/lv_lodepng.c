@@ -77,10 +77,10 @@ void lv_lodepng_deinit(void)
 
 /**
  * Получить информацию об изображении PNG
- * @param decoder   pointer to the decoder where this function belongs
- * @param dsc       image descriptor containing the source and type of the image and other info.
- * @param header    image information is set in header parameter
- * @return          LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
+ * @param decoder   указатель на декодер, которому принадлежит эта функция
+ * @param dsc       Дескриптор изображения, содержащий источник и тип изображения, а также другую информацию.
+ * @param header    информация об изображении задается в параметре заголовка
+ * @return          LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу получить информацию
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
@@ -131,10 +131,10 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 }
 
 /**
- * Откройте изображение PNG и декодируйте его в dsc.decoded.
- * @param decoder   pointer to the decoder where this function belongs
- * @param dsc       decoded image descriptor
- * @return          LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * Откройте изображениеPNGи декодируйте его в dsc.decoded.
+ * @param decoder   указатель на декодер, которому принадлежит эта функция
+ * @param dsc       дескриптор декодированного изображения
+ * @return          LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -225,9 +225,9 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 /**
  * Закрыть изображение PNG и бесплатные данные
- * @param decoder   pointer to the decoder where this function belongs
- * @param dsc       decoded image descriptor
- * @return          LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder   указатель на декодер, которому принадлежит эта функция
+ * @param dsc       дескриптор декодированного изображения
+ * @return          LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -258,8 +258,8 @@ static lv_draw_buf_t * decode_png_data(const void * png_data, size_t png_data_si
 
 /**
  * Если дисплей не в 32-битном формате ( ARGB888 ), преобразуйте изображение в текущую глубину цвета.
- * @param img the ARGB888 image
- * @param px_cnt number of pixels in `img`
+ * @param img изображение ARGB888
+ * @param px_cnt количество пикселей в `img`
  */
 static void convert_color_depth(uint8_t * img_p, uint32_t px_cnt)
 {

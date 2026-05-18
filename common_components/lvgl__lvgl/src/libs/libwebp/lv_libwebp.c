@@ -79,9 +79,9 @@ void lv_libwebp_deinit(void)
 
 /**
  * Получить информацию об изображении WEBP
- * @param dsc can be file name or pointer to a C array
- * @param header store the info here
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
+ * @param dsc может быть именем файла или указателем на массив C
+ * @param header хранить информацию здесь
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу получить информацию
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
@@ -97,11 +97,11 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         lv_fs_res_t res = lv_fs_read(&dsc->file, buf, sizeof(buf), &rn);
 
         /* Максимальный размер заголовка = RIFF + VP8X + (необязательные фрагменты) + VP8 (L), 64 байта достаточно для получения ширины и высоты.
-         * Если размер файла меньше 64 байт, возможно, это действительный файл WebP.
+         * Если размер файла меньше 64 байт, возможно, это реальный файл WebP.
          * поэтому мы не проверяем здесь длину результата.
-         * VP8X : RIFF(12) + VP8X(18) = 30bytes;
+         * VP8X : RIFF (12) +VP8X(18) = 30 байт;
          * VP8 (L): RIFF (12) + VP8 (L) заголовок фрагмента (8) + VP8 (L) заголовок кадра (5) = 23 байта;
-         * VP8: RIFF(12) + VP8(L) chunk header(8) + VP8(L) frame header(10) = 28bytes;
+         * VP8: RIFF (12) +VP8(L) заголовок фрагмента (8) +VP8(L) заголовок кадра (10) = 28 байт;
          */
         if(res != LV_FS_RES_OK) return LV_RESULT_INVALID;
 
@@ -122,9 +122,9 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 /**
  * Откройте изображение WEBP и верните декодированное изображение.
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {

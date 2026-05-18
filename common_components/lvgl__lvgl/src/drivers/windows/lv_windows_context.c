@@ -148,7 +148,7 @@ static void lv_windows_check_display_existence_timer_callback(
 {
     LV_UNUSED(timer);
     if(!lv_display_get_next(NULL)) {
-        // Не используйте lv_deinit(), поскольку при параллельном выполнении это вызовет исключение.
+        // Не воспользуйтесьlv_deinit(), поскольку при параллельном выполнении этот вызов вызывает запись.
         // рендеринг включен.
         exit(0);
     }
@@ -420,7 +420,7 @@ static BOOL lv_windows_register_touch_window(
 static BOOL lv_windows_enable_child_window_dpi_message(
     HWND WindowHandle)
 {
-    // Расширение поддержки частного мониторинга DPI Awareness — Windows 10.
+    // Расширение частной поддержки ДиптихиDPIAwareness — Windows 10.
     // только. Нам не нужна частная поддержка осведомленности DPI для каждого монитора.
     // расширение, если существует информация для каждого монитора ( V2 ) DPI.
     OSVERSIONINFOEXW os_version_info_ex = { 0 };
@@ -469,7 +469,7 @@ static bool lv_windows_window_message_callback_nolock(
 {
     switch(uMsg) {
         case WM_CREATE: {
-                // Note: Return -1 directly because WM_DESTROY message will be sent
+                // Note: Верните -1 напрямую, потому что будет отправлено сообщение WM_DESTROY.
                 // при автоматическом уничтожении окна. Мы освобождаем ресурс, когда
                 // обработка сообщения WM_DESTROY этого окна.
 

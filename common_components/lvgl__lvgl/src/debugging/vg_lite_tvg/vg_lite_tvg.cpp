@@ -550,7 +550,7 @@ extern "C" {
 
         buffer->stride = stride;
 
-        /* Размер должен быть кратен размеру выравнивания. См.: https://en.cppreference.com/w/c/memory/aligned_alloc. */
+        /* Размер соревнований должен быть уменьшен. См.: https://en.cppreference.com/w/c/memory/aligned_alloc. */
         size_t size = VG_LITE_ALIGN(buffer->height * stride, LV_VG_LITE_THORVG_BUF_ADDR_ALIGN);
 #ifndef _WIN32
         buffer->memory = aligned_alloc(LV_VG_LITE_THORVG_BUF_ADDR_ALIGN, size);
@@ -696,7 +696,7 @@ extern "C" {
         }
 #endif
 
-        /* Инициализировать двигатель ThorVG */
+        /* Инициализация двигателя ThorVG */
         TVG_CHECK_RETURN_VG_ERROR(Initializer::init(TVG_CANVAS_ENGINE, 0));
         return VG_LITE_SUCCESS;
     }
@@ -810,7 +810,7 @@ extern "C" {
         /* убедитесь, что целевой буфер действителен */
         LV_ASSERT_NULL(ctx->target_buffer);
 
-        /* Если формат target_buffer не поддерживается thorvg, требуется преобразование программного обеспечения. */
+        /* Если форматtarget_bufferне соответствует требованиям, необходимо преобразовать программное обеспечение. */
         switch(ctx->target_format) {
             case VG_LITE_BGR565:
                 picture_bgra8888_to_bgr565(
@@ -890,14 +890,14 @@ extern "C" {
         auto ctx = vg_lite_ctx::get_instance();
 
         /**
-         * Специальная обработка режима наложения DST_IN с использованием CompositeMethod::InvAlphaMask от ThorVG.
+         * Специальная обработка режима приложенияDST_INс использованием CompositeMethod::InvAlphaMask от ThorVG.
          * DST_IN (Sa*D): пиксели внутри фигуры очищаются, пиксели снаружи сохраняются.
          * Детали реализации:
-         *   - The mask shape is filled with (255 - A(color)), used with InvAlphaMask.
-         *   - InvAlphaMask formula: dst = dst * (255 - mask_alpha) / 255.
-         *   - When color=0, mask alpha=255 inside the shape, so (255-255=0): inside is cleared; outside (255-0=255): preserved.
-         *   - The target buffer is cleared with lv_memzero before rendering, ensuring inside pixels are zeroed.
-         *   - This simulates the erase effect of VG_LITE_BLEND_DST_IN.
+         *   - Форма маски заполнена (255 - A(цвет)), используемым с InvAlphaMask.
+         *   - Формула InvAlphaMask: dst = dst * (255 — mask_alpha) / 255.
+         *   - Когда цвет = 0, маска альфа = 255 внутри фигуры, поэтому (255-255 = 0): внутренняя часть очищается; снаружи (255-0=255): сохранено.
+         *   - Целевой буфер очищается с помощьюlv_memzeroперед рендерингом, обеспечивая обнуление внутренних пикселей.
+         *   - Это имитирует эффект стирания VG_LITE_BLEND_DST_IN.
          */
         if(blend == VG_LITE_BLEND_DST_IN) {
             /* Сначала очистите все ожидающие операции */
@@ -2548,7 +2548,7 @@ static Result shape_append_rect(std::unique_ptr<Shape> & shape, const vg_lite_bu
 
 static Result canvas_set_target(vg_lite_ctx * ctx, vg_lite_buffer_t * target)
 {
-    /* если target_buffer необходимо изменить, завершите текущий рисунок */
+    /* еслиtarget_bufferнеобходимо изменить, завершите данный рисунок */
     if(ctx->target_buffer && ctx->target_buffer != target->memory) {
         vg_lite_finish();
     }
@@ -2638,7 +2638,7 @@ static bool decode_indexed_line(
             return false;
     }
 
-    mask = (1 << px_size) - 1; /*Например.  px_size = 2; маска = 0x03*/
+    mask = (1 << px_size) - 1; /*Например.  px_size= 2; маска = 0x03*/
 
     int32_t i;
     for(i = 0; i < w_px; i++) {
@@ -2663,7 +2663,7 @@ static Result picture_load(vg_lite_ctx * ctx, std::unique_ptr<Picture> & picture
     LV_ASSERT(VG_LITE_IS_ALIGNED(source->memory, 8));
 
     /**
-     * Поскольку картинка->загрузка ThorVG не поддерживает шаг,
+     * поскольку картинка->загрузка ThorVG не поддерживает шаг,
      * повторное преобразование требуется, когда шаг и ширина не совпадают.
      */
     if(source->format == VG_LITE_BGRA8888
@@ -2816,7 +2816,7 @@ static uint8_t PackColorComponent(vg_lite_float_t value)
     return clamped;
 }
 
-/* Получите информацию bpp о цветовом формате. */
+/* Получите информацию в формате bpp о цветах. */
 static void get_format_bytes(vg_lite_buffer_format_t format,
                              vg_lite_uint32_t * mul,
                              vg_lite_uint32_t * div,
@@ -3057,13 +3057,13 @@ static Result vg_lite_grad_matrix_conv(vg_lite_matrix_t * result, const vg_lite_
 {
     /**
      * Поскольку Торвг внутренне умножает матрицу пути (формы) на матрицу градиента, чтобы получить
-     * результат рендеринга, а матрица градиентов и матрица путей VG -Lite полностью независимы,
+     * результат рендеринга, матрица градиентов и матрица путейVG-Lite полностью независимы,
      * требуя предыдущего умножения для достижения того же результата рендеринга,
-     * для эмулятора VG -Lite необходимо сместить матрицу градиента, чтобы получить исходную матрицу градиента пользователя
+     * для эмулятораVG-Lite необходимо переместить матрицу градиента, чтобы получить исходную матрицу градиента пользователя
      * для имитации поведения оборудования:
      * matrix_out = path_matrix * gradient_matrix
      * =>
-     * gradient_matrix = inv(path_matrix) * matrix_out
+     * gradient_matrix = инв(path_matrix) * matrix_out
      */
     if(!vg_lite_matrix_inverse(result, path_matrix)) {
         return Result::InvalidArguments;

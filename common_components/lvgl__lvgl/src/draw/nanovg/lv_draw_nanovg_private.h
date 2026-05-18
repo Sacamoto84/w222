@@ -87,142 +87,142 @@ typedef struct _lv_draw_nanovg_unit_t {
 
 #if LV_USE_3DTEXTURE
 /**
- * Нарисуйте 3D-текстуру в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a 3D draw descriptor
- * @param coords the coordinates of the 3D texture
+ * Нарисуйте 3D-текстуру в двадцати NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор трехмерной отрисовки
+ * @param coords координаты 3D текстуры
  */
 void lv_draw_nanovg_3d(lv_draw_task_t * t, const lv_draw_3d_dsc_t * dsc, const lv_area_t * coords);
 #endif
 
 /**
- * Нарисуйте дугу в контексте NanoVG
- * @param t pointer to a drawing task
- * @param dsc pointer to an arc descriptor
- * @param coords the coordinates of the arc
+ * Нарисуйте дугу в двадцатикратном NanoVG
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор дуги
+ * @param coords координаты дуги
  */
 void lv_draw_nanovg_arc(lv_draw_task_t * t, const lv_draw_arc_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Нарисуйте границу в контексте NanoVG
- * @param t pointer to a drawing task
- * @param dsc pointer to a border descriptor
- * @param coords the coordinates of the border
+ * Нарисуйте границу в четвертом NanoVG
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор границы
+ * @param coords координаты границы
  */
 void lv_draw_nanovg_border(lv_draw_task_t * t, const lv_draw_border_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Нарисуйте рамку в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a box descriptor
- * @param coords the coordinates of the box
+ * Нарисуйте рамку в двадцати NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор блока
+ * @param coords координаты коробки
  */
 void lv_draw_nanovg_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Заполните прямоугольник в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a fill descriptor
- * @param coords the coordinates of the rectangle
+ * Заполните контур в десятки NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор заполнения
+ * @param coords координаты прямоугольника
  */
 void lv_draw_nanovg_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Нарисуйте изображение в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to an image descriptor
- * @param coords the coordinates of the image
- * @param image_handle the handle of the image to draw
+ * Нарисуйте изображение в двадцатом году NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор изображения
+ * @param coords координаты изображения
+ * @param image_handle дескриптор изображения для рисования
  */
 void lv_draw_nanovg_image(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc, const lv_area_t * coords,
                           int image_handle);
 
 /**
- * Инициализируйте метку рисования в контексте NanoVG.
- * @param u pointer to a NanoVG unit
+ * Инициализируйте метку рисования в двадцатых NanoVG.
+ * @param u указатель на блок NanoVG
  */
 void lv_draw_nanovg_label_init(lv_draw_nanovg_unit_t * u);
 
 /**
- * Деинициализировать метку рисования в контексте NanoVG
- * @param u pointer to a NanoVG unit
+ * Деинициализировать метку рисования в двадцатых NanoVG
+ * @param u указатель на блок NanoVG
  */
 void lv_draw_nanovg_label_deinit(lv_draw_nanovg_unit_t * u);
 
 /**
- * Нарисуйте письмо в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a letter descriptor
- * @param coords the coordinates of the letter
+ * Нарисуйте письмо в двадцатом NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор буквы
+ * @param coords координаты письма
  */
 void lv_draw_nanovg_letter(lv_draw_task_t * t, const lv_draw_letter_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Нарисуйте метку в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a label descriptor
- * @param coords the coordinates of the label
+ * Нарисуйте метку в двадцати NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор метки
+ * @param coords координаты этикетки
  */
 void lv_draw_nanovg_label(lv_draw_task_t * t, const lv_draw_label_dsc_t * dsc, const lv_area_t * coords);
 
 /**
- * Нарисуйте слой в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param draw_dsc pointer to an image descriptor
- * @param coords the coordinates of the layer
+ * Нарисуйте слой в несколько десятков NanoVG.
+ * @param t указатель на задачу рисования
+ * @param draw_dsc указатель на дескриптор изображения
+ * @param coords координаты слоя
  */
 void lv_draw_nanovg_layer(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc, const lv_area_t * coords);
 
 /**
- * Нарисуйте линию в контексте NanoVG
- * @param t pointer to a drawing task
- * @param dsc pointer to a line descriptor
+ * Нарисуйте строку в двадцати NanoVG
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор строки
  */
 void lv_draw_nanovg_line(lv_draw_task_t * t, const lv_draw_line_dsc_t * dsc);
 
 /**
- * Нарисуйте треугольник в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a triangle descriptor
+ * Нарисуйте треугольник в несколько десятков NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор треугольника
  */
 void lv_draw_nanovg_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc);
 
 /**
- * Нарисуйте прямоугольники маски в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a mask descriptor
+ * Нарисуйте контурные маски в двадцати размерах NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на дескриптор маски
  */
 void lv_draw_nanovg_mask_rect(lv_draw_task_t * t, const lv_draw_mask_rect_dsc_t * dsc);
 
 /**
  * Получить дескриптор изображения из фреймбуфера
- * @param fb the framebuffer to get the image handle from
- * @return the image handle
+ * @param fb фреймбуфер, из которого нужно получить дескриптор изображения
+ * @return дескриптор изображения
  */
 int lv_nanovg_fb_get_image_handle(struct NVGLUframebuffer * fb);
 
 #if LV_USE_VECTOR_GRAPHIC
 /**
- * Рисование векторной графики в контексте NanoVG.
- * @param t pointer to a drawing task
- * @param dsc pointer to a vector descriptor
+ * Рисование векторной графики в двадцатых NanoVG.
+ * @param t указатель на задачу рисования
+ * @param dsc указатель на векторный дескриптор
  */
 void lv_draw_nanovg_vector(lv_draw_task_t * t, const lv_draw_vector_dsc_t * dsc);
 
 /**
- * @brief Convert a gradient to a paint
- * @param ctx the nanovg context
- * @param grad the gradient descriptor
- * @param paint the paint to store the result
+ * @brief Преобразование градиента в краску
+ * @param ctx контекст нановг
+ * @param grad дескриптор градиента
+ * @param paint краска для сохранения результата
  */
 bool lv_nanovg_grad_to_paint(NVGcontext * ctx, const lv_vector_gradient_t * grad, NVGpaint * paint);
 
 /**
- * @brief Draw a gradient
- * @param ctx the nanovg context
- * @param grad the gradient descriptor
- * @param winding the fill rule
- * @param composite_operation the blend mode
+ * @brief Нарисуйте градиент
+ * @param ctx контекст нановг
+ * @param grad дескриптор градиента
+ * @param winding правило заполнения
+ * @param composite_operation режим наложения
  */
 void lv_nanovg_draw_grad(
     NVGcontext * ctx,
@@ -231,12 +231,12 @@ void lv_nanovg_draw_grad(
     enum NVGcompositeOperation composite_operation);
 
 /**
- * @brief Draw a gradient with helper
- * @param ctx the nanovg context
- * @param area the area to draw the gradient on
- * @param grad_dsc the gradient descriptor
- * @param winding the fill rule
- * @param composite_operation the blend mode
+ * @brief Нарисуйте градиент с помощью помощника
+ * @param ctx контекст нановг
+ * @param area область для рисования градиента
+ * @param grad_dsc дескриптор градиента
+ * @param winding правило заполнения
+ * @param composite_operation режим наложения
  */
 void lv_nanovg_draw_grad_helper(
     NVGcontext * ctx,

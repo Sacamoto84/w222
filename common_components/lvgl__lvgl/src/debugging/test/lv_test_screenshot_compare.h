@@ -54,14 +54,14 @@ typedef enum {
 
 /**
  * Сравните текущее содержимое тестового экрана с эталонным изображением PNG.
- * - If the reference image is not found it will be created automatically from the rendered screen.
- * - If the compare fails an `<image_name>_err.png` file will be created with the rendered content next to the reference image.
+ * - Если эталонное изображение не найдено, оно будет создано автоматически из визуализированного экрана.
+ * - Если сравнение не удалось, будет создан файл`<image_name>_err.png`с визуализированным содержимым рядом с эталонным изображением.
  *
  * Требуется lodepng.
  *
- * @param fn_ref    path to the reference image. Will be appended to REF_IMGS_PATH if set.
- * @return          An element of `lv_test_screenshot_result_t`
- * @note            This function assumes that the default display is the test display that was created by
+ * @param fn_ref    путь к эталонному изображению. Будет добавлен к REF_IMGS_PATH, если установлено.
+ * @return          Элемент `lv_test_screenshot_result_t`
+ * @note            Эта функция предполагает, что дисплеем по умолчанию является тестовый дисплей, созданный
  *                  `lv_test_display_create()`
  */
 lv_test_screenshot_result_t lv_test_screenshot_compare(const char * fn_ref);

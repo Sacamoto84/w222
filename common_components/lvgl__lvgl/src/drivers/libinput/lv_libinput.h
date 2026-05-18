@@ -48,43 +48,43 @@ struct libinput_device;
  **********************/
 
 /**
- * Определите возможности конкретного устройства ввода lib.
- * @param device the libinput device to query
- * @return the supported input capabilities
+ * Определите возможности ввода библиотеки устройства.
+ * @param device устройство libinput для запроса
+ * @return поддерживаемые возможности ввода
  */
 lv_libinput_capability lv_libinput_query_capability(struct libinput_device * device);
 
 /**
  * Найдите подключенное устройство ввода с конкретными возможностями
- * @param capabilities required device capabilities
- * @param force_rescan erase the device cache (if any) and rescan the file system for available devices
- * @return device node path (e.g. /dev/input/event0) for the first matching device or NULL if no device was found.
+ * @param capabilities необходимые возможности устройства
+ * @param force_rescan сотрите кэш устройства (если есть) и повторно просканируйте файловую систему на наличие доступных устройств.
+ * @return путь узла устройства (например, /dev/input/event0) для первого соответствующего устройства или NULL, если устройство не найдено.
  *         Указатель можно безопасно использовать до следующего принудительного поиска устройства.
  */
 char * lv_libinput_find_dev(lv_libinput_capability capabilities, bool force_rescan);
 
 /**
  * Найдите подключенные устройства ввода с конкретными возможностями
- * @param capabilities required device capabilities
- * @param devices pre-allocated array to store the found device node paths (e.g. /dev/input/event0). The pointers are
+ * @param capabilities необходимые возможности устройства
+ * @param devices предварительно выделенный массив для хранения путей к найденным узлам устройств (например, /dev/input/event0). Указатели
  *                безопасно использовать до следующего принудительного поиска устройства.
- * @param count maximum number of devices to find (the devices array should be at least this long)
- * @param force_rescan erase the device cache (if any) and rescan the file system for available devices
- * @return number of devices that were found
+ * @param count максимальное количество устройств для поиска (массив устройств должен быть как минимум такой длины)
+ * @param force_rescan сотрите кэш устройства (если есть) и повторно просканируйте файловую систему на наличие доступных устройств.
+ * @return количество найденных устройств
  */
 size_t lv_libinput_find_devs(lv_libinput_capability capabilities, char ** found, size_t count, bool force_rescan);
 
 /**
  * Создайте новое устройство ввода libinput.
- * @param type LV_INDEV_TYPE_POINTER or LV_INDEV_TYPE_KEYPAD
- * @param dev_path device path, e.g. /dev/input/event0
- * @return pointer to input device or NULL if opening failed
+ * @param типа LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
+ * @param dev_path путь к устройству, например. /dev/input/event0
+ * @return указатель на устройство ввода или NULL, если открытие не удалось
  */
 lv_indev_t * lv_libinput_create(lv_indev_type_t indev_type, const char * dev_path);
 
 /**
  * Удаление устройства ввода libinput
- * @param indev pointer to input device
+ * @param indev указатель на устройство ввода
  */
 void lv_libinput_delete(lv_indev_t * indev);
 

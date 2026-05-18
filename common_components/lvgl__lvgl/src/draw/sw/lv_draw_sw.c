@@ -255,9 +255,9 @@ static int32_t dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 #if LV_USE_OS
     uint32_t i;
     uint32_t taken_cnt = 0;
-    /* Все простаивает (не может выполнять никаких задач): return LV_DRAW_UNIT_IDLE ;
+    /* Все простаивает (не может выполнить никаких задач): returnLV_DRAW_UNIT_IDLE;
      * Все занято: вернуть 0; так как было принято 0 задач
-     * В противном случае верните taken_cnt ;
+     * В противном случае вернитеtaken_cnt;
      */
 
     /*Если хотя бы один занят, значит, не все простаивают*/

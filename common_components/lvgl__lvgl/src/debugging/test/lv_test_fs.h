@@ -38,19 +38,19 @@ void lv_test_fs_init(void);
 
 /**
  * Установите, готова ли тестовая файловая система
- * @param ready true: ready, false: not ready
+ * @param ready true: готов, false: не готов
  */
 void lv_test_fs_set_ready(bool ready);
 
 /**
  * Установите, очищается ли обратный вызов открытия тестовой файловой системы.
- * @param is_clear true: clear, false: not clear
+ * @param is_clear правда: ясно, ложь: не ясно
  */
 void lv_test_fs_clear_open_cb(bool is_clear);
 
 /**
  * Установите, очищается ли обратный вызов закрытия тестовой файловой системы.
- * @param is_clear true: clear, false: not clear
+ * @param is_clear правда: ясно, ложь: не ясно
  */
 void lv_test_fs_clear_close_cb(bool is_clear);
 

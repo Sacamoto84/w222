@@ -37,8 +37,8 @@ extern "C" {
  **********************/
 
 /**
- * Инициализировать indev с указанным устройством ввода.
- * @param dev_path      path of input device
+ * Инициализируйте indev с помощью обычного ввода.
+ * @param dev_path      путь устройства ввода
  */
 lv_indev_t * lv_nuttx_touchscreen_create(const char * dev_path);
 

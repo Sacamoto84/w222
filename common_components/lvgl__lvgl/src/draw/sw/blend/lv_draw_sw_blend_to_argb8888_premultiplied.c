@@ -1,6 +1,6 @@
 /**
  * @file lv_draw_sw_blend_to_argb8888_premultiplied.c
- * @brief Implementation of ARGB8888 Premultiplied blending for LVGL.
+ * @brief РеализацияARGB8888предварительного умножения для LVGL.
  */
 
 /*********************
@@ -119,13 +119,13 @@ static inline void * /* LV_ATTRIBUTE_FAST_MEM */ drawbuf_next_row(const void * b
  *   GLOBAL FUNCTIONS
  **********************/
 /**
- * @brief Blend a solid color into an ARGB8888 premultiplied buffer.
+ * @brief Смешайте сплошной цвет с предварительно умноженным буфером ARGB8888.
  *
  * Эта функция применяет сплошной цвет к буферу назначения с дополнительным
  * непрозрачность и маскировка. Входной цвет сначала преобразуется в предварительно умноженный
  * альфа-формат перед смешиванием.
  *
- * @param dsc Blending descriptor containing destination buffer, color, and opacity
+ * @param dsc Дескриптор смешивания, содержащий буфер назначения, цвет и непрозрачность.
  */
 void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_draw_sw_blend_fill_dsc_t * dsc)
 {
@@ -224,12 +224,12 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888_premultiplied(lv_d
 }
 
 /**
- * @brief Blend an image into an ARGB8888 premultiplied buffer.
+ * @brief Смешайте изображение с предварительно умноженным буфером ARGB8888.
  *
  * Эта функция смешивает изображение, хранящееся в предварительно умноженном формате ARGB8888.
  * в буфер назначения. Он учитывает непрозрачность и дополнительную маскировку.
  *
- * @param dsc Blending descriptor containing source and destination buffer information
+ * @param dsc Дескриптор смешивания, содержащий информацию об исходном и целевом буфере.
  */
 void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_image_to_argb8888_premultiplied(lv_draw_sw_blend_image_dsc_t * dsc)
 {
@@ -721,15 +721,15 @@ static void LV_ATTRIBUTE_FAST_MEM argb8888_premultiplied_image_blend(lv_draw_sw_
 }
 
 /**
- * @brief Mix two ARGB8888 premultiplied colors.
+ * @brief Смешайте два предварительно умноженных цвета ARGB8888.
  *
  * Эта функция смешивает цвета переднего плана ( `fg` ) и фона ( `bg` ).
  * Предполагается, что цвет переднего плана предварительно умножается.
  *
- * @param fg Foreground color (premultiplied alpha)
- * @param bg Background color
- * @param cache Alpha blending cache for optimization
- * @return lv_color32_t Blended color result
+ * @param fg Цвет переднего плана (предварительно умноженная альфа)
+ * @param bg Цвет фона
+ * @param cache Кэш альфа-смешивания для оптимизации
+ * @return lv_color32_t Результат смешанного цвета
  */
 static inline lv_color32_t lv_color_32_32_mix_premul(lv_color32_t fg, lv_color32_t bg,
                                                      lv_color_mix_alpha_cache_t * cache)

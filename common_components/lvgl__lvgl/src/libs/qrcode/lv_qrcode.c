@@ -148,7 +148,7 @@ lv_result_t lv_qrcode_update(lv_obj_t * obj, const void * data, uint32_t data_le
     lv_color_t c = lv_color_hex(1);
 
     /* Скопируйте холст qr-кода:
-     * Простой `lv_canvas_set_px` будет работать, но для такого количества пикселей он будет медленным.
+     * Простой`lv_canvas_set_px`будет работать, но для такого количества требований он будет медленным.
      * Итак, буферизируйте 1 байт (8 пикселей) из qr-кода и установите его в изображение холста. */
     uint32_t row_byte_cnt = draw_buf->header.stride;
     int y;
@@ -240,7 +240,7 @@ static void lv_qrcode_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     if(draw_buf == NULL) return;
     lv_image_cache_drop(draw_buf);
 
-    /*@fixme уничтожить буфер в кеше free_cb .*/
+    /*@fixme удалить буфер в кешеfree_cb.*/
     lv_draw_buf_destroy(draw_buf);
 }
 

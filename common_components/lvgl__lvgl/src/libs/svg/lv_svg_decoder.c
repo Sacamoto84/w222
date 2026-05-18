@@ -354,7 +354,7 @@ static void svg_draw(lv_layer_t * layer, const lv_image_decoder_dsc_t * decoder_
 
     lv_draw_vector_dsc_t * dsc = lv_draw_vector_dsc_create(layer);
 
-    /*Сохраните виджет, чтобы на него можно было отправить `LV_EVENT_DRAW_TASK_ADDED` в `lv_draw_vector`.*/
+    /*Сохраните виджет, чтобы на него можно было отправить`LV_EVENT_DRAW_TASK_ADDED`в `lv_draw_vector`.*/
     dsc->base.obj = image_dsc->base.obj;
 
     lv_matrix_t matrix;

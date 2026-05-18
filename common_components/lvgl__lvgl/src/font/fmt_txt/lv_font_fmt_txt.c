@@ -239,7 +239,7 @@ bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t *
         }
     }
 
-    /*Соберите глиф dsc*/
+    /*Возьмите глиф dsc*/
     const lv_font_fmt_txt_glyph_dsc_t * gdsc = &fdsc->glyph_dsc[gid];
 
     int32_t kv = ((int32_t)((int32_t)kvalue * fdsc->kern_scale) >> 4);
@@ -258,12 +258,12 @@ bool lv_font_get_glyph_dsc_fmt_txt(const lv_font_t * font, lv_font_glyph_dsc_t *
 
     if(fdsc->stride == 0) dsc_out->stride = 0;
     else {
-        /*например w = 5, bpp = 2, означает 2 байта/строку*/
+        /*например, w = 5, bpp = 2, что означает 2 байта/строку*/
         uint32_t bit_count = dsc_out->box_w * fdsc->bpp;
         uint32_t width_in_bytes = (bit_count + 7) >> 3; /*Без округления делений*/
 
-        /*например  font_dsc шаг == 4 означает выравнивание по границе 4 байта.
-         *В glyph_dsc сохраните фактическую длину строки в байтах.*/
+        /*напримерfont_dscшаг == 4 означает спортивные соревнования на границе 4 байта.
+         *Вglyph_dscсохраняется фактическая длина строки в байтах.*/
         dsc_out->stride = LV_ROUND_UP(width_in_bytes, fdsc->stride);
     }
 
@@ -344,12 +344,12 @@ static int8_t get_kern_value(const lv_font_t * font, uint32_t gid_left, uint32_t
         const lv_font_fmt_txt_kern_pair_t * kdsc = fdsc->kern_dsc;
         if(kdsc->glyph_ids_size == 0) {
             /*Используйте двоичный поиск, чтобы найти значение керна.
-             *Сначала пары располагаются в порядке left_id, затем right_id.*/
+             *Сначала пара США в порядке left_id, затем right_id.*/
             const uint16_t * g_ids = kdsc->glyph_ids;
             kern_pair_ref_t g_id_both = {gid_left, gid_right};
             uint16_t * kid_p = lv_utils_bsearch(&g_id_both, g_ids, kdsc->pair_cnt, 2, kern_pair_8_compare);
 
-            /*Если `g_id_both` был найден, получите его индекс из указателя.*/
+            /*Если`g_id_both`был найден, получите его индекс из указателя.*/
             if(kid_p) {
                 lv_uintptr_t ofs = kid_p - g_ids;
                 value = kdsc->values[ofs];
@@ -357,12 +357,12 @@ static int8_t get_kern_value(const lv_font_t * font, uint32_t gid_left, uint32_t
         }
         else if(kdsc->glyph_ids_size == 1) {
             /*Используйте двоичный поиск, чтобы найти значение керна.
-             *Сначала пары располагаются в порядке left_id, затем right_id.*/
+             *Сначала пара США в порядке left_id, затем right_id.*/
             const uint32_t * g_ids = kdsc->glyph_ids;
             kern_pair_ref_t g_id_both = {gid_left, gid_right};
             uint32_t * kid_p = lv_utils_bsearch(&g_id_both, g_ids, kdsc->pair_cnt, 4, kern_pair_16_compare);
 
-            /*Если `g_id_both` был найден, получите его индекс из указателя.*/
+            /*Если`g_id_both`был найден, получите его индекс из указателя.*/
             if(kid_p) {
                 lv_uintptr_t ofs = kid_p - g_ids;
                 value = kdsc->values[ofs];
@@ -380,7 +380,7 @@ static int8_t get_kern_value(const lv_font_t * font, uint32_t gid_left, uint32_t
         uint8_t right_class = kdsc->right_class_mapping[gid_right];
 
         /*Если класс = 0, для этого глифа не существует кернинга.
-         *иначе получено значение в форме 2D-массива `class_pair_values`.*/
+         *иначе получено значение в виде 2D-массива`class_pair_values`.*/
         if(left_class > 0 && right_class > 0) {
             value = kdsc->class_pair_values[(left_class - 1) * kdsc->right_class_cnt + (right_class - 1)];
         }
@@ -413,11 +413,11 @@ static int kern_pair_16_compare(const void * ref, const void * element)
 
 /**
  * Сжать растровое изображение глифа
- * @param in the compressed bitmap
- * @param out buffer to store the result
- * @param px_num number of pixels in the glyph (width * height)
- * @param bpp bit per pixel (bpp = 3 will be converted to bpp = 4)
- * @param prefilter true: the lines are XORed
+ * @param in сжатое растровое изображение
+ * @param out буфер для хранения результата
+ * @param px_num количество пикселей в глифе (ширина * высота)
+ * @param bpp бит на пиксель (bpp = 3 будет преобразовано в bpp = 4)
+ * @param prefilter true: строки подвергаются операции XOR
  */
 static void decompress(const uint8_t * in, uint8_t * out, int32_t w, int32_t h, uint8_t bpp, bool prefilter)
 {
@@ -483,8 +483,8 @@ static void decompress(const uint8_t * in, uint8_t * out, int32_t w, int32_t h, 
 
 /**
  * Распакуйте одну строку. Храните один пиксель на байт
- * @param out output buffer
- * @param w width of the line in pixel count
+ * @param out выходной буфер
+ * @param w ширина линии в пикселях
  */
 static inline void decompress_line(uint8_t * out, int32_t w)
 {
@@ -496,10 +496,10 @@ static inline void decompress_line(uint8_t * out, int32_t w)
 
 /**
  * Считайте биты из входного буфера. Чтение может пересекать границу байта.
- * @param in the input buffer to read from.
- * @param bit_pos index of the first bit to read.
- * @param len number of bits to read (must be <= 8).
- * @return the read bits
+ * @param in входной буфер для чтения.
+ * @param bit_pos индекс первого бита для чтения.
+ * @param len количество бит для чтения (должно быть <= 8).
+ * @return биты чтения
  */
 static inline uint8_t get_bits(const uint8_t * in, uint32_t bit_pos, uint8_t len)
 {
@@ -613,10 +613,10 @@ static inline uint8_t rle_next(void)
  *  @param [in] pRef Указатель на ссылку.
  *  @param [in] pElement Указатель на элемент для сравнения.
  *
- *  @return Result of comparison.
- *  @retval < 0   Reference is less than element.
- *  @retval = 0   Reference is equal to element.
- *  @retval > 0   Reference is greater than element.
+ *  @return Результат сравнения.
+ *  @retval < 0 Ссылка меньше элемента.
+ *  @retval = 0 Ссылка равна элементу.
+ *  @retval > 0 Ссылка больше элемента.
  *
  */
 static int unicode_list_compare(const void * ref, const void * element)
@@ -630,7 +630,7 @@ static lv_font_t * builtin_font_create_cb(const lv_font_info_t * info, const voi
 
     /**
      * Если здесь произошел сбой, проверьте, используется ли последний шрифт в
-     * массиву lv_builtin_font_src присвоено значение NULL, что необходимо для обозначения конца массива.
+     * массивуlv_builtin_font_srcприсваивается значениеNULL, необходимое для обозначения конца массива.
      */
     while(font_src->font_p) {
         if(info->size == font_src->size) {
@@ -658,7 +658,7 @@ static void * builtin_font_dup_src_cb(const void * src)
 
     /**
      * Если здесь произошел сбой, проверьте, используется ли последний шрифт в
-     * массиву lv_builtin_font_src присвоено значение NULL, что необходимо для обозначения конца массива.
+     * массивуlv_builtin_font_srcприсваивается значениеNULL, необходимое для обозначения конца массива.
      */
     while(font_src->font_p) {
         len++;

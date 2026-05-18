@@ -384,7 +384,7 @@ Result Shape::stroke(StrokeJoin join) noexcept
 Result Shape::strokeMiterlimit(float miterlimit) noexcept
 {
     // https://www.w3.org/TR/SVG2/painting.html#LineJoin
-    // - A negative value for stroke-miterlimit must be treated as an illegal value.
+    // - Отрицательное значение для предела хода-митры должно рассматриваться как недопустимое значение.
     if (miterlimit < 0.0f) return Result::InvalidArguments;
     // TODO Найдите разумное максимальное значение.
     pImpl->strokeMiterlimit(miterlimit);

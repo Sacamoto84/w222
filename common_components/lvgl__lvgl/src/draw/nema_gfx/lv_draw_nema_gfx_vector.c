@@ -98,7 +98,7 @@ static void task_draw_cb(void * ctx, const lv_vector_path_t * path, const lv_vec
     matrix.m[1][2] += c->rel_translate_y;
     nema_vg_path_set_matrix(c->u->path, (void *) &matrix);
 
-    /* массив операций пути необходимо преобразовать в коды операций Nema */
+    /* пути массива операций необходимо преобразовать в коды операций Nema */
     lv_vector_path_op_t * ops = lv_array_front(&path->ops);
     uint32_t op_count = lv_array_size(&path->ops);
     uint8_t * nema_ops = lv_malloc(op_count * sizeof(*nema_ops));
@@ -111,7 +111,7 @@ static void task_draw_cb(void * ctx, const lv_vector_path_t * path, const lv_vec
                       /*LV_VECTOR_PATH_OP_CLOSE*/            NEMA_VG_PRIM_CLOSE;
     }
 
-    /* массив точек пути имеет правильный формат, чтобы Nema могла использовать его как есть. */
+    /* Очки массива пути имеют подходящую форму, чтобы Нема могла использовать его как есть. */
     uint32_t point_count = lv_array_size(&path->points);
     float * points = lv_array_front(&path->points);
 

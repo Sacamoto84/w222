@@ -35,9 +35,9 @@ lv_indev_t * lv_wayland_pointer_create(void);
 
 /**
  * Получает устройство ввода указателя мыши.
- * @note It is used to create an input group on application start
- * @param disp Reference to the LVGL display associated to the window
- * @return The input device
+ * @note Используется для создания группы ввода при запуске приложения.
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
+ * @return Устройство ввода
  */
 lv_indev_t * lv_wayland_get_pointer(lv_display_t * disp);
 

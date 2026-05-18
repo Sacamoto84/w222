@@ -408,7 +408,7 @@ void lv_vg_lite_stroke_dump_info(const vg_lite_stroke_t * stroke)
     /* Для быстрой проверки. */
     LV_LOG_USER("miter_square: %f", stroke->miter_square);
 
-    /* Временное хранение штриха subPath. */
+    /* Временное проведение штриха subPath. */
     LV_LOG_USER("path_points: %p", (void *)stroke->path_points);
     LV_LOG_USER("path_end: %p", (void *)stroke->path_end);
     LV_LOG_USER("point_count: %d", (int)stroke->point_count);
@@ -419,13 +419,13 @@ void lv_vg_lite_stroke_dump_info(const vg_lite_stroke_t * stroke)
     LV_LOG_USER("stroke_end: %p", (void *)stroke->stroke_end);
     LV_LOG_USER("stroke_count: %d", (int)stroke->stroke_count);
 
-    /* Разделите траекторию хода в соответствии с перемещением или move_rel, чтобы избежать неявного закрытия. */
+    /* Разделите траекторию движения в соответствии с перемещением илиmove_rel, чтобы избежать неявного закрытия. */
     LV_LOG_USER("path_list_divide: %p", (void *)stroke->path_list_divide);
 
     /* указатель на текущие данные разделенного пути. */
     LV_LOG_USER("cur_list: %p", (void *)stroke->cur_list);
 
-    /* Флаг, добавляющий end_path в драйвер. */
+    /* Флаг, добавляющийend_pathв драйвер. */
     LV_LOG_USER("add_end: %d", (int)stroke->add_end);
     LV_LOG_USER("dash_reset: %d", (int)stroke->dash_reset);
 
@@ -592,7 +592,7 @@ vg_lite_buffer_format_t lv_vg_lite_vg_fmt(lv_color_format_t cf)
             return VG_LITE_BGR888;
 
         /**
-         * Функция lv_vg_lite_blend_mode автоматически выберет подходящий режим наложения.
+         * Функцияlv_vg_lite_blend_modeавтоматически выбирает нужный режим наложения.
          * который здесь равномерно сопоставлен с VG_LITE_BGRA8888.
          */
         case LV_COLOR_FORMAT_ARGB8888:
@@ -623,7 +623,7 @@ void lv_vg_lite_buffer_format_bytes(
     uint32_t * div,
     uint32_t * bytes_align)
 {
-    /* Получите информацию bpp о цветовом формате. */
+    /* Получите информацию в формате bpp о цветах. */
     *mul = *div = 1;
     *bytes_align = 4;
     switch(format) {
@@ -846,7 +846,7 @@ vg_lite_color_t lv_vg_lite_image_recolor(vg_lite_buffer_t * buffer, const lv_dra
     }
     else if(dsc->recolor_opa > LV_OPA_TRANSP) {
         buffer->image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
-        /** Значение 0xff в цветовом канале (R/G/B) поддерживает максимальную интенсивность этого канала,
+        /** Значение0xffв цветном канале (R/G/B) поддержки поддержки включения этого канала,
          *  эффективно сохраняя свой первоначальный цвет при использовании в операциях смешивания.*/
         lv_color_t recolor = lv_color_mix(dsc->recolor, lv_color_make(0xff, 0xff, 0xff), dsc->recolor_opa);
         return lv_vg_lite_color(recolor, dsc->opa, true);
@@ -1309,13 +1309,13 @@ void lv_vg_lite_set_scissor_area(struct _lv_draw_vg_lite_unit_t * u, const lv_ar
 
 #if VGLITE_RELEASE_VERSION <= VGLITE_MAKE_VERSION(4,0,57)
     /**
-     * В новой версии VG -Lite vg_lite_set_scissor больше не нужно вызывать vg_lite_enable_scissor и
-     * vg_lite_disable_scissor API.
+     * В новой версииVG-Litevg_lite_set_scissorбольше не требуется сохраненияvg_lite_enable_scissorи
+     * vg_lite_disable_scissorAPI.
      *
      * Оригинальное описание в инструкции:
-     * Description: This is a legacy scissor API function that can be used to set and enable a single scissor rectangle
+     * Description: Это устаревшая функция ножниц API, которую можно использовать для установки и включения одного ножничного прямоугольника.
      * для цели рендеринга. Этот ножничный API поддерживается другим аппаратным механизмом, отличным от слоя маски.
-     * и он не включается/отключается API-интерфейсами vg_lite_enable_scissor и vg_lite_disable_scissor.
+     * и он не включается/отключаетсяAPI-интерфейсамиvg_lite_enable_scissorи vg_lite_disable_scissor.
      */
     LV_VG_LITE_CHECK_ERROR(vg_lite_enable_scissor(), {});
 #endif
@@ -1402,10 +1402,10 @@ void lv_vg_lite_finish(struct _lv_draw_vg_lite_unit_t * u)
     lv_vg_lite_pending_remove_all(lv_vg_lite_grad_ctx_get_pending(u->grad_ctx));
 #endif
 
-    /* Справочник по декодеру четкого изображения dsc */
+    /* Справочник по декодированию четкого изображения dsc */
     lv_vg_lite_pending_remove_all(u->image_dsc_pending);
 
-    /* Очистить ссылку на dsc растрового шрифта */
+    /* Очистить ссылку на растровый шрифт dsc */
     lv_vg_lite_pending_remove_all(u->bitmap_font_pending);
     lv_vg_lite_pending_remove_all(u->letter_pending);
 

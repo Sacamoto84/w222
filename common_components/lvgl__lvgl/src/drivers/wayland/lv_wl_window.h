@@ -35,59 +35,59 @@ typedef bool (*lv_wayland_display_close_cb_t)(lv_display_t * disp);
 
 /**
  * Создает окно
- * @param hor_res The width of the window in pixels
- * @param ver_res The height of the window in pixels
- * @param title The title of the window
- * @param close_cb The callback that will be execute when the user closes the window
- * @return The LVGL display associated to the window
+ * @param hor_res Ширина окна в пикселях
+ * @param ver_res Высота окна в пикселях
+ * @param title Название окна
+ * @param close_cb Обратный вызов, который будет выполнен, когда пользователь закроет окно.
+ * @return Дисплей LVGL, связанный с окном
  */
 lv_display_t * lv_wayland_window_create(uint32_t hor_res, uint32_t ver_res, char * title,
                                         lv_wayland_display_close_cb_t close_cb);
 
 /**
  * Закрывает окно программно
- * @param disp Reference to the LVGL display associated to the window
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
  */
 void lv_wayland_window_close(lv_display_t * disp);
 
 /**
  * Проверьте, открыто ли окно
- * @param disp Reference to the LVGL display associated to the window
- * @return true: The window is open
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
+ * @return правда: окно открыто
  */
 bool lv_wayland_window_is_open(lv_display_t * disp);
 
 /**
  * Назначает окно конкретному физическому дисплею
- * @param disp Reference to the LVGL display associated to the window
- * @param display Physical display number
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
+ * @param display Физический номер дисплея
  */
 void lv_wayland_assign_physical_display(lv_display_t * disp, uint8_t display);
 
 /**
  * Отменяет назначение текущего физического дисплея, прикрепленного к окну.
- * @param disp Reference to the LVGL display associated to the window
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
  */
 void lv_wayland_unassign_physical_display(lv_display_t * disp);
 
 /**
  * Устанавливает полноэкранное состояние окна
- * @param disp Reference to the LVGL display associated to the window
- * @param fullscreen If true the window enters fullscreen
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
+ * @param fullscreen Если это правда, окно переходит в полноэкранный режим.
  */
 
 void lv_wayland_window_set_fullscreen(lv_display_t * disp, bool fullscreen);
 
 /**
  * Устанавливает максимальное состояние окна
- * @param disp Reference to the LVGL display associated to the window
- * @param fullscreen If true the window is maximized
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
+ * @param fullscreen Если это правда, окно развернуто до максимума.
  */
 void lv_wayland_window_set_maximized(lv_display_t * disp, bool maximize);
 
 /**
  * Сворачивает окно
- * @param disp Reference to the LVGL display associated to the window
+ * @param disp Ссылка на дисплей LVGL, связанный с окном.
  */
 void lv_wayland_window_set_minimized(lv_display_t * disp);
 

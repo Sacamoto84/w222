@@ -156,7 +156,7 @@ struct SwFill
     uint32_t* ctable;
     FillSpread spread;
 
-    bool solid = false; //сплошная заливка последним цветом из colorStops
+    bool solid = false; //сплошная заливка последнего цвета из colorStops
     bool translucent;
 };
 
@@ -167,7 +167,7 @@ struct SwStrokeBorder
     SwPoint* pts;
     uint8_t* tags;
     int32_t start;     //индекс начальной точки текущего подпути
-    bool movable;      //true: for ends of lineto borders
+    bool movable;      //true: для концов линиидо границ
 };
 
 struct SwStroke
@@ -257,7 +257,7 @@ struct SwSurface : RenderSurface
 
     SwAlpha alpha(CompositeMethod method)
     {
-        auto idx = (int)(method) - 2;       //0: None, 1: ClipPath
+        auto idx = (int)(method) - 2;       //0: Нет, 1: ClipPath
         return alphas[idx > 3 ? 0 : idx];   //CompositeMethod имеет только четыре метода Matting.
     }
 
@@ -369,7 +369,7 @@ static inline uint32_t opBlendSrcOver(uint32_t s, TVG_UNUSED uint32_t d, TVG_UNU
     return s;
 }
 
-//TODO: BlendMethod could remove the alpha parameter.
+//TODO: BlendMethod может удалить параметр альфа.
 static inline uint32_t opBlendDifference(uint32_t s, uint32_t d, TVG_UNUSED uint8_t a)
 {
     //if (s > d) => s - d
@@ -532,7 +532,7 @@ const Fill::ColorStop* fillFetchSolid(const SwFill* fill, const Fill* fdata);
 void fillReset(SwFill* fill);
 void fillFree(SwFill* fill);
 
-//OPTIMIZE_ME: Skip the function pointer access
+//OPTIMIZE_ME: Пропустить доступ к указателю функции
 void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, SwMask maskOp, uint8_t opacity);                                   //композитная маскировка вер.
 void fillLinear(const SwFill* fill, uint8_t* dst, uint32_t y, uint32_t x, uint32_t len, uint8_t* cmp, SwMask maskOp, uint8_t opacity);                     //прямая маскировка вер.
 void fillLinear(const SwFill* fill, uint32_t* dst, uint32_t y, uint32_t x, uint32_t len, SwBlender op, uint8_t a);                                         //смешивание вер.

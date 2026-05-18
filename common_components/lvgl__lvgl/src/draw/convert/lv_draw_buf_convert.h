@@ -26,8 +26,8 @@ extern "C" {
  **********************/
 
 /**
- * Преобразование draw_buf в формат предварительного умножения
- * @param buf     pointer to a draw buf
+ * Преобразованиеdraw_bufв формате первого умножения
+ * @param buf     указатель на буфер рисования
  */
 lv_result_t lv_draw_buf_convert_premultiply(lv_draw_buf_t * buf);
 

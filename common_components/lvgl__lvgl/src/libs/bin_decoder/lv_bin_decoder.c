@@ -146,7 +146,7 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
             header->magic = LV_IMAGE_HEADER_MAGIC;
         }
 
-        /*Файл всегда читается в buf, поэтому данные могут быть изменены.*/
+        /*Файл всегда читается в формате buf, поэтому данные могут быть изменены.*/
         header->flags |= LV_IMAGE_FLAGS_MODIFIABLE;
     }
     else if(src_type == LV_IMAGE_SRC_SYMBOL) {
@@ -155,7 +155,7 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
         header->w = 1;
         header->h = 1;
         /*Символы всегда имеют прозрачные части. Важно, так как в розыгрыше проверяется обложка.
-         *функция. Фактическое значение не имеет значения, потому что lv_draw_label нарисует его.*/
+         *Функция. Фактическое значение не имеет значения, потому чтоlv_draw_labelего нарисует.*/
         header->cf = LV_COLOR_FORMAT_A8;
     }
     else {
@@ -178,9 +178,9 @@ lv_result_t lv_bin_decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 /**
  * Декодировать изображение из двоичного файла
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -216,7 +216,7 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
             return LV_RESULT_INVALID;
         }
 
-        decoder_data->f = f;    /*Теперь free_decoder_data позаботится о файле.*/
+        decoder_data->f = f;    /*Теперьfree_decoder_dataпозаботится о файле.*/
 
         lv_color_format_t cf = dsc->header.cf;
 
@@ -315,7 +315,7 @@ lv_result_t lv_bin_decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
                 dsc->decoded = decoded;
 
                 if(decoded->header.stride == 0) {
-                    /*Используйте автоматически рассчитанное значение из обратного вызова decoder_info.*/
+                    /*Используйте автоматически рассчитанное значение обратного вызова decoder_info.*/
                     decoded->header.stride = dsc->header.stride;
                 }
 
@@ -739,7 +739,7 @@ static lv_result_t load_indexed(lv_image_decoder_t * decoder, lv_image_decoder_d
         dsc->decoded = decoded;
 
         if(decoded->header.stride == 0) {
-            /*Используйте автоматически рассчитанное значение из обратного вызова decoder_info.*/
+            /*Используйте автоматически рассчитанное значение обратного вызова decoder_info.*/
             decoded->header.stride = dsc->header.stride;
         }
 
@@ -901,12 +901,12 @@ static lv_result_t decode_alpha_only(lv_image_decoder_t * decoder, lv_image_deco
         for(uint32_t i = 0; i < buf_len; i++) {
             /**
              * Ошибка округления:
-             * Возьмем, к примеру, bpp = 4, альфа-значение от 0x0 до 0x0F должно быть
-             * сопоставлен с 0x00 до 0xFF. Используя приведенное ниже уравнение, мы получим от 0x00 до 0xF0.
+             * Возьмем, к примеру, bpp = 4, альфа-значение от0x0до0x0Fдолжно быть
+             * конференция с0x00до0xFF. Выполнив приведенное ниже уравнение, мы получаем от0x00до0xF0.
              * таким образом вызывает ошибку. Мы можем просто интерполировать значение, чтобы исправить это.
              *
-             * Equation: *out = ((*in >> shift) & mask) << (8 - bpp);
-             * Ideal: *out = ((*in >> shift) & mask) * 255 / ((1L << bpp) - 1)
+             * Equation: *out = ((*in >> сдвиг) & маска) << (8 - bpp);
+             * Ideal: *out = ((*in >> сдвиг) & маска) * 255 / ((1L << bpp) - 1)
              */
             uint8_t value = ((*in >> shift) & mask);
             *out = bit_extend(value, bpp);
@@ -1075,7 +1075,7 @@ static lv_result_t decode_indexed_line(lv_color_format_t color_format, const lv_
             return LV_RESULT_INVALID;
     }
 
-    mask   = (1 << px_size) - 1; /*Например.  px_size = 2; маска = 0x03*/
+    mask   = (1 << px_size) - 1; /*Например.  px_size= 2; маска = 0x03*/
 
     int32_t i;
     for(i = 0; i < w_px; i++) {

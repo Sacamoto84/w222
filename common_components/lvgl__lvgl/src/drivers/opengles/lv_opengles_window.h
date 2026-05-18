@@ -32,18 +32,18 @@ extern "C" {
  **********************/
 
 /**
- * Удалите окно OpenGL. Если это последний, процесс завершится
- * @param window    OpenGL window to delete
+ * Удалите окно OpenGL. Если это последнее, процесс завершится
+ * @param window    Окно OpenGL, которое нужно удалить
  */
 void lv_opengles_window_delete(lv_opengles_window_t * window);
 
 /**
- * Добавьте текстуру в окно OpenGL. Это может быть текстура дисплея LVGL или любая текстура OpenGL.
- * @param window        OpenGL window
- * @param texture_id    OpenGL texture ID
- * @param w             width in pixels of the texture
- * @param h             height in pixels of the texture
- * @return              the new texture handle
+ * Добавьте текстуру в окно OpenGL. Это может быть текстура дисплеяLVGLили любая текстура OpenGL.
+ * @param window        окно OpenGL
+ * @param texture_id    Текстура OpenGL ID
+ * @param w             ширина текстуры в пикселях
+ * @param h             высота текстуры в пикселях
+ * @return              новый дескриптор текстуры
  */
 lv_opengles_window_texture_t * lv_opengles_window_add_texture(lv_opengles_window_t * window, unsigned int texture_id,
                                                               int32_t w, int32_t h);
@@ -53,37 +53,37 @@ lv_display_t * lv_opengles_window_display_create(lv_opengles_window_t * window, 
 lv_opengles_window_texture_t * lv_opengles_window_display_get_window_texture(lv_display_t * window_display);
 
 /**
- * Удалите текстуру из окна OpenGL и удалите ее.
- * @param texture    handle of an OpenGL window texture
+ * Удалите текстуру окна OpenGL и удалите ее.
+ * @param texture    дескриптор текстуры окна OpenGL
  */
 void lv_opengles_window_texture_remove(lv_opengles_window_texture_t * texture);
 
 /**
  * Установите положение x текстуры в ее окне OpenGL.
- * @param texture    handle of an OpenGL window texture
- * @param x          new x position of the texture
+ * @param texture    дескриптор текстуры окна OpenGL
+ * @param x          новое положение текстуры по оси X
  */
 void lv_opengles_window_texture_set_x(lv_opengles_window_texture_t * texture, int32_t x);
 
 /**
- * Установите положение текстуры по оси Y в ее окне OpenGL.
- * @param texture    handle of an OpenGL window texture
- * @param y          new y position of the texture
+ * Установите положение текстуры по оси Y в окне OpenGL.
+ * @param texture    дескриптор текстуры окна OpenGL
+ * @param y          новое положение текстуры по оси Y
  */
 void lv_opengles_window_texture_set_y(lv_opengles_window_texture_t * texture, int32_t y);
 
 /**
- * Установите непрозрачность текстуры в окне OpenGL.
- * @param texture    handle of an OpenGL window texture
- * @param opa        new opacity of the texture
+ * Настройте непрозрачность текстур в окне OpenGL.
+ * @param texture    дескриптор текстуры окна OpenGL
+ * @param opa        новая непрозрачность текстуры
  */
 void lv_opengles_window_texture_set_opa(lv_opengles_window_texture_t * texture, lv_opa_t opa);
 
 /**
- * Получите индекс мыши, связанный с текстурой в окне OpenGL, если он существует.
- * @param texture    handle of an OpenGL window texture
- * @return           the indev or `NULL`
- * @note             there will only be an indev if the texture is based on an
+ * Получите индекс мыши, связанный с текстурой в окне OpenGL, если она существует.
+ * @param texture    дескриптор текстуры окна OpenGL
+ * @return           индев или `NULL`
+ * @note             indev будет только в том случае, если текстура основана на
  *                   LVGL отображает текстуру и окно создано с помощью
  *                   `use_mouse_indev` как `true`
  */

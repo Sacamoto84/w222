@@ -38,14 +38,14 @@ extern "C" {
  **********************/
 
 /**
- * Преобразование индексированного draw_buf в формат с предварительным умножением с оптимизацией, специфичной для гелия.
- * @param buf     pointer to a draw buf
+ * Преобразование индексированногоdraw_bufв формате с предварительным умножением с оптимизацией, специфичной для гелия.
+ * @param buf     указатель на буфер рисования
  */
 lv_result_t _lv_draw_buf_convert_premultiply_indexed_helium(lv_draw_buf_t * buf);
 
 /**
- * Преобразование argb8888 draw_buf в формат предварительного умножения с оптимизацией, специфичной для гелия.
- * @param buf     pointer to a draw buf
+ * Преобразование argb8888draw_bufв форме передового умножения с оптимизацией, специфичной для гелия.
+ * @param buf     указатель на буфер рисования
  */
 lv_result_t _lv_draw_buf_convert_premultiply_argb8888_helium(lv_draw_buf_t * buf);
 

@@ -7,13 +7,13 @@
 // Разрешение предоставляется каждому на использование этого программного обеспечения для любых целей,
 // включая коммерческие приложения, а также изменять его и распространять
 // свободно, с соблюдением следующих ограничений:
-// 1. The origin of this software must not be misrepresented; you must not
+// 1. Происхождение этого программного обеспечения не должно искажаться; ты не должен
 //    утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
 //    в продукте подтверждение в документации по продукту будет
 //    приветствуется, но не является обязательным.
-// 2. Altered source versions must be plainly marked as such, and must not be
+// 2. Измененные исходные версии должны быть четко отмечены как таковые и не должны быть
 //    ошибочно представлено как оригинальное программное обеспечение.
-// 3. This notice may not be removed or altered from any source distribution.
+// 3. Это уведомление не может быть удалено или изменено из любого исходного дистрибутива.
 //
 
 #include "../../lv_conf_internal.h"
@@ -386,7 +386,7 @@ void nvgDeleteInternal(NVGcontext * ctx)
 
 void nvgBeginFrame(NVGcontext * ctx, float windowWidth, float windowHeight, float devicePixelRatio)
 {
-    /*  printf("Трис: рисует:%d заливка:%d обводка:%d текст:%d TOT :%d\n",
+    /*  printf("Трис: рисует:%d заливка:%d обводка:%d текст:%dTOT:%d\n",
             ctx->drawCallCount, ctx->fillTriCount, ctx->strokeTriCount, ctx->textTriCount,
             ctx->fillTriCount+ctx->strokeTriCount+ctx->textTriCount);*/
 
@@ -1317,7 +1317,7 @@ static void nvg__tesselateBezier(NVGcontext * ctx,
         return;
     }
 
-    /*  if ( nvg__absf (x1+x3-x2-x2) + nvg__absf (y1+y3-y2-y2) + nvg__absf (x2+x4-x3-x3) + nvg__absf (y2+y4-y3-y3) < ctx->tessTol) {
+    /*  if (nvg__absf(x1+x3-x2-x2) +nvg__absf(y1+y3-y2-y2) +nvg__absf(x2+x4-x3-x3) +nvg__absf(y2+y4-y3-y3) < ctx->tessTol) {
             nvg__addPoint (ctx, x4, y4, тип);
             возврат;
         }*/

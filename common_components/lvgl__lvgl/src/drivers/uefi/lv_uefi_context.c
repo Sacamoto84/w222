@@ -43,10 +43,10 @@
  **********************/
 
 /**
- * @brief Initialize the UEFI cache variables.
- * @param image_handle The handle of the current image
- * @param system_table Pointer to the system table
- * @remark Это должно быть вызвано перед lv_init ().
+ * @brief Инициализируйте переменные кэша UEFI.
+ * @param image_handle Дескриптор текущего изображения
+ * @param system_table Указатель на системную таблицу
+ * @remark Это должно быть вызвано передlv_init().
 */
 void lv_uefi_init(EFI_HANDLE image_handle, EFI_SYSTEM_TABLE * system_table)
 {
@@ -60,8 +60,8 @@ void lv_uefi_init(EFI_HANDLE image_handle, EFI_SYSTEM_TABLE * system_table)
 }
 
 /**
- * @brief Initialize the LVGL UEFI backend.
- * @remark Это частный API, который используется для бэкэнда LVGL UEFI.
+ * @brief Инициализируйте серверную частьLVGLUEFI.
+ * @remark Это частный API, который используется для бэкэндаLVGLUEFI.
  *         реализация.  Пользователям LVGL не следует использовать это, потому что
  *         LVGL уже использовал его в lv_init.
  */
@@ -74,8 +74,8 @@ void lv_uefi_platform_init(void)
 }
 
 /**
- * @brief Cleanup the LVGL UEFI backend.
- * @remark Это частный API, который используется для бэкэнда LVGL UEFI.
+ * @brief Очистите серверную частьLVGLUEFI.
+ * @remark Это частный API, который используется для бэкэндаLVGLUEFI.
  *         реализация.  Пользователям LVGL не следует использовать это, потому что
  *         LVGL уже использовал его в lv_deinit.
 */

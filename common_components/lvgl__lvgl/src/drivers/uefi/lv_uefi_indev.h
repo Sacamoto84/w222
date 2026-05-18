@@ -33,65 +33,65 @@ extern "C" {
  **********************/
 
 /**
- * @brief Create an indev object.
- * @param display_res The resolution of the display in pixels, needed to scale the input.
+ * @brief Создайте объект indev.
+ * @param display_res Разрешение дисплея в пикселях, необходимое для масштабирования ввода.
  * Если NULL, будет использоваться разрешение текущего дисплея по умолчанию.
- * @return The created LVGL indev object.
+ * @return Созданный объект разработки LVGL.
 */
 lv_indev_t * lv_uefi_simple_pointer_indev_create(lv_point_t * display_res);
 
 /**
- * @brief Add an EFI_SIMPLE_POINTER_PROTOCOL interface to the indev.
- * @param indev Indev that was created with lv_uefi_simple_pointer_indev_create.
- * @param handle The handle on which an instance of the EFI_SIMPLE_POINTER_PROTOCOL protocol is installed.
- * @return True if the interface was added.
+ * @brief Добавьте интерфейсEFI_SIMPLE_POINTER_PROTOCOLв файл indev.
+ * @param indev Indev, созданный с помощью lv_uefi_simple_pointer_indev_create.
+ * @param handle Дескриптор, на котором установлен экземпляр протокола EFI_SIMPLE_POINTER_PROTOCOL.
+ * @return True, если интерфейс был добавлен.
 */
 bool lv_uefi_simple_pointer_indev_add_handle(lv_indev_t * indev, EFI_HANDLE handle);
 
 /**
- * @brief Add all available EFI_SIMPLE_POINTER_PROTOCOL interfaces to the indev.
- * @param indev Indev that was created with lv_uefi_simple_pointer_indev_create.
+ * @brief Добавьте все доступные интерфейсыEFI_SIMPLE_POINTER_PROTOCOLв файл indev.
+ * @param indev Indev, созданный с помощью lv_uefi_simple_pointer_indev_create.
 */
 void lv_uefi_simple_pointer_indev_add_all(lv_indev_t * indev);
 
 /**
- * @brief Create a LVGL indev object.
- * @param display_res The resolution of the display in pixels, needed to scale the input.
- * @return The created LVGL indev object.
+ * @brief Создайте объект indev LVGL.
+ * @param display_res Разрешение дисплея в пикселях, необходимое для масштабирования ввода.
+ * @return Созданный объект разработки LVGL.
 */
 lv_indev_t * lv_uefi_absolute_pointer_indev_create(lv_point_t * display_res);
 
 /**
- * @brief Add an EFI_ABSOLUTE_POINTER_PROTOCOL interface to the indev.
- * @param indev Indev that was created with lv_uefi_absolute_pointer_indev_create.
- * @param handle The handle on which an instance of the EFI_ABSOLUTE_POINTER_PROTOCOL protocol is installed.
- * @return True if the interface was added.
+ * @brief Добавьте интерфейсEFI_ABSOLUTE_POINTER_PROTOCOLв файл indev.
+ * @param indev Indev, созданный с помощью lv_uefi_absolute_pointer_indev_create.
+ * @param handle Дескриптор, на котором установлен экземпляр протокола EFI_ABSOLUTE_POINTER_PROTOCOL.
+ * @return True, если интерфейс был добавлен.
 */
 bool lv_uefi_absolute_pointer_indev_add_handle(lv_indev_t * indev, EFI_HANDLE handle);
 
 /**
- * @brief Add all available EFI_ABSOLUTE_POINTER_PROTOCOL interfaces to the indev.
- * @param indev Indev that was created with lv_uefi_absolute_pointer_indev_create.
+ * @brief Добавьте все доступные интерфейсыEFI_ABSOLUTE_POINTER_PROTOCOLв файл indev.
+ * @param indev Indev, созданный с помощью lv_uefi_absolute_pointer_indev_create.
 */
 void lv_uefi_absolute_pointer_indev_add_all(lv_indev_t * indev);
 
 /**
- * @brief Create an indev object.
- * @return The created LVGL indev object.
+ * @brief Создайте объект indev.
+ * @return Созданный объект разработки LVGL.
 */
 lv_indev_t * lv_uefi_simple_text_input_indev_create(void);
 
 /**
- * @brief Add an EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL interface to the indev.
- * @param indev Indev that was created with lv_uefi_simple_text_input_indev_create.
- * @param handle The handle on which an instance of the EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL protocol is installed.
- * @return True if the interface was added.
+ * @brief Добавьте интерфейсEFI_SIMPLE_TEXT_INPUT_EX_PROTOCOLв файл indev.
+ * @param indev Indev, созданный с помощью lv_uefi_simple_text_input_indev_create.
+ * @param handle Дескриптор, на котором установлен экземпляр протокола EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL.
+ * @return True, если интерфейс был добавлен.
 */
 bool lv_uefi_simple_text_input_indev_add_handle(lv_indev_t * indev, EFI_HANDLE handle);
 
 /**
- * @brief Add all available EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL interfaces to the indev.
- * @param indev Indev that was created with lv_uefi_simple_text_input_indev_create.
+ * @brief Добавьте все доступные интерфейсыEFI_SIMPLE_TEXT_INPUT_EX_PROTOCOLв файл indev.
+ * @param indev Indev, созданный с помощью lv_uefi_simple_text_input_indev_create.
 */
 void lv_uefi_simple_text_input_indev_add_all(lv_indev_t * indev);
 

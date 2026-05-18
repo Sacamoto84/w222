@@ -95,7 +95,7 @@ void lv_gltf_data_delete(lv_gltf_model_t * data)
     lv_array_deinit(&data->nodes);
     lv_array_deinit(&data->compiled_shaders);
 
-    /* Явно вызывать деструкторы для объектов C++, инициализированных размещением new. */
+    /* Явно добавлены деструкторы для объектов C++, принципиально оптимизированных размещений. */
     data->textures.~vector();
     data->meshes.~vector();
     data->node_by_light_index.~vector();

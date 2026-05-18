@@ -33,9 +33,9 @@
  * Распространение и использование в исходной и двоичной форме, с или без
  * Модификация допускается при соблюдении следующих условий:
 
- *   1. Redistributions of source code must retain the above copyright
+ *   1. При повторном распространении исходного кода необходимо сохранять вышеуказанные авторские права.
  *      уведомление, этот список условий и следующий отказ от ответственности.
- *   2. Redistributions in binary form must reproduce the above copyright
+ *   2. При распространении в двоичной форме необходимо воспроизводить вышеуказанные авторские права.
  *      уведомление, этот список условий и следующий отказ от ответственности в
  *      документация и/или другие материалы, поставляемые вместе с дистрибутивом.
 
@@ -171,7 +171,7 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
         //Шаг 2 ( F6 .5.2) – упрощен, поскольку c == 0,0
         cxp = 0.0f;
         cyp = 0.0f;
-        //Шаг 3 (первая часть F6 .5.3) – упрощен, поскольку cxp и cyp == 0.0
+        //Шаг 3 (первая частьF6.5.3) – упрощен, поскольку cxp и cyp == 0.0
         cx = 0.0f;
         cy = 0.0f;
     } else {
@@ -196,7 +196,7 @@ void _pathAppendArcTo(Array<PathCommand>* cmds, Array<Point>* pts, Point* cur, P
     //Шаг 4 ( F6 .5.4)
     //Мы не используем arccos (согласно документу w3c), см.
     //http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/index.htm
-    //Note: atan2 (0.0, 1.0) == 0.0
+    //Note: атан2 (0,0, 1,0) == 0,0
     at = tvg::atan2(((y1p - cyp) / ry), ((x1p - cxp) / rx));
     theta1 = (at < 0.0f) ? 2.0f * MATH_PI + at : at;
 

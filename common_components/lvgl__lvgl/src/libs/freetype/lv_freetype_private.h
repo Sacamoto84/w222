@@ -132,7 +132,7 @@ typedef struct _lv_freetype_font_dsc_t {
 /**
  * Получите контекст FreeType.
  *
- * @return A pointer to the FreeType context used by LittlevGL.
+ * @return Указатель на контекст FreeType, используемый LittlevGL.
  */
 lv_freetype_context_t * lv_freetype_get_context(void);
 

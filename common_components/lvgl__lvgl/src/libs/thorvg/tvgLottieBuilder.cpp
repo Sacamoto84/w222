@@ -197,7 +197,7 @@ void LottieBuilder::updateTransform(LottieGroup* parent, LottieObject** child, f
     ctx->propagator->transform(PP(ctx->propagator)->transform() * matrix);
     ctx->propagator->opacity(MULTIPLY(opacity, PP(ctx->propagator)->opacity));
 
-    //FIXME: preserve the stroke width. too workaround, need a better design.
+    //FIXME: сохранить ширину штриха. слишком обходной путь, нужен лучший дизайн.
     if (P(ctx->propagator)->rs.strokeWidth() > 0.0f) {
         auto denominator = sqrtf(matrix.e11 * matrix.e11 + matrix.e12 * matrix.e12);
         if (denominator > 1.0f) ctx->propagator->stroke(ctx->propagator->strokeWidth() / denominator);
@@ -1008,7 +1008,7 @@ void LottieBuilder::updateText(LottieLayer* layer, float frameNo)
     int idx = 0;
     auto totalChars = strlen(p);
     while (true) {
-        //TODO: remove nested scenes.
+        //TODO: удалить вложенные сцены.
         //конец текста, новая строка позиции курсора
         if (*p == 13 || *p == 3 || *p == '\0') {
             //положение макета текста
@@ -1152,7 +1152,7 @@ void LottieBuilder::updateMaskings(LottieLayer* layer, float frameNo)
     if (expand == 0.0f) {
         pMask->pathset(frameNo, P(pShape)->rs.path.cmds, P(pShape)->rs.path.pts, nullptr, nullptr, nullptr, exps);
     } else {
-        //TODO: Once path direction support is implemented, ensure that the direction is ignored here
+        //TODO: После реализации поддержки направления пути убедитесь, что направление здесь игнорируется.
         auto offset = LottieOffsetModifier(pMask->expand(frameNo));
         pMask->pathset(frameNo, P(pShape)->rs.path.cmds, P(pShape)->rs.path.pts, nullptr, nullptr, &offset, exps);
     }
@@ -1341,7 +1341,7 @@ static void _buildHierarchy(LottieGroup* parent, LottieLayer* child)
 
 static void _attachFont(LottieComposition* comp, LottieLayer* parent)
 {
-    //TODO: Consider to migrate this attachment to the frame update time.
+    //TODO: Рассмотрите возможность переноса этого вложения во время обновления кадра.
     for (auto c = parent->children.begin(); c < parent->children.end(); ++c) {
         auto text = static_cast<LottieText*>(*c);
         auto& doc = text->doc(0);

@@ -137,14 +137,14 @@ static void read_touch(lv_indev_t * indev, lv_indev_data_t * data)
     else {
         data->state = LV_INDEV_STATE_PRESSED;
 
-        /* LovyanGFX возвращает координаты относительно текущего вращения программного обеспечения.
+        /* LovyanGFX получает координаты текущего программного обеспечения компьютера.
          * LVGL также будет вращать входные координаты в зависимости от поворота дисплея.
-         * Чтобы избежать «двойной ротации», мы должны обратить вспять ротацию LovyanGFX.
-         * и передайте необработанные координаты (Physical/Rotation 0) в LVGL .
+         * Чтобы избежать «двойной ротации», мы должны изменить вспять ротацию LovyanGFX.
+         * и передайте необработанные координаты (Physical/Rotation 0) вLVGL.
          */
         uint8_t rotation = dsc->tft->getRotation();
 
-        /* Note: width() and height() return dimensions for the *current* rotation */
+        /* Note: width() иheight()возвращают размеры для *текущего* вращения. */
         int32_t w = dsc->tft->width();
         int32_t h = dsc->tft->height();
 

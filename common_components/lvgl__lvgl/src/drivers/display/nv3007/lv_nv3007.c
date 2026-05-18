@@ -34,7 +34,7 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* команды инициализации на основе драйвера ArduinoGFX NV3007 */
+/* идеи создания команды на основе драйвера ArduinoGFX NV3007 */
 static const uint8_t init_cmd_list[] = {
     0x9a, 1, 0x08,
     0x9b, 1, 0x08,

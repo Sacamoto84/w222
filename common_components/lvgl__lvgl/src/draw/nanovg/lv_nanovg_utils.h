@@ -38,21 +38,21 @@ struct _lv_draw_nanovg_unit_t;
  **********************/
 
 /**
- * Инициализация утилит NanoVG
- * @param u pointer to the nanovg unit
+ * Инициализация утилиты NanoVG
+ * @param u указатель на блок nanovg
  */
 void lv_nanovg_utils_init(struct _lv_draw_nanovg_unit_t * u);
 
 /**
- * Деинициализация утилит NanoVG
- * @param u pointer to the nanovg unit
+ * Деинициализация утилиты NanoVG
+ * @param u указатель на блок nanovg
  */
 void lv_nanovg_utils_deinit(struct _lv_draw_nanovg_unit_t * u);
 
 /**
- * Преобразование матрицы LVGL в преобразование NanoVG (матрица 3x2)
- * @param xform the NanoVG transform array (6 floats)
- * @param matrix the LVGL matrix
+ * Преобразование матрицыLVGLв преобразование NanoVG (матрица 3x2)
+ * @param xform массив преобразования NanoVG (6 чисел с плавающей запятой)
+ * @param matrix матрица LVGL
  */
 static inline void lv_nanovg_matrix_convert(float * xform, const lv_matrix_t * matrix)
 {
@@ -67,10 +67,10 @@ static inline void lv_nanovg_matrix_convert(float * xform, const lv_matrix_t * m
 }
 
 /**
- * Преобразование цвета LVGL в цвет NanoVG.
- * @param color the LVGL color
- * @param opa the opacity
- * @return the NanoVG color
+ * Преобразование цветаLVGLв цвет NanoVG.
+ * @param color цвет LVGL
+ * @param opa непрозрачность
+ * @return цвет НаноВГ
  */
 static inline NVGcolor lv_nanovg_color_convert(lv_color_t color, lv_opa_t opa)
 {
@@ -78,46 +78,46 @@ static inline NVGcolor lv_nanovg_color_convert(lv_color_t color, lv_opa_t opa)
 }
 
 /**
- * Примените матрицу преобразования к контексту NanoVG
- * @param ctx the NanoVG context
- * @param matrix the transform matrix
+ * Преобразование матрицы в контекст NanoVG
+ * @param ctx контекст НаноВГ
+ * @param matrix матрица преобразования
  */
 void lv_nanovg_transform(NVGcontext * ctx, const lv_matrix_t * matrix);
 
 /**
  * Установите область отсечения
- * @param ctx the NanoVG context
- * @param area the clipping area
+ * @param ctx контекст НаноВГ
+ * @param area область обрезки
  */
 void lv_nanovg_set_clip_area(NVGcontext * ctx, const lv_area_t * area);
 
 /**
  * Добавить прямоугольник к пути
- * @param ctx the NanoVG context
- * @param x the x coordinate of the rectangle
- * @param y the y coordinate of the rectangle
- * @param w the width of the rectangle
- * @param h the height of the rectangle
- * @param r the radius of the rectangle (0 for no rounding)
+ * @param ctx контекст НаноВГ
+ * @param x координата x прямоугольника
+ * @param y координата y прямоугольника
+ * @param w ширина прямоугольника
+ * @param h высота прямоугольника
+ * @param r радиус прямоугольника (0 — без округления)
  */
 void lv_nanovg_path_append_rect(NVGcontext * ctx, float x, float y, float w, float h, float r);
 
 /**
  * Добавить область к пути
- * @param ctx the NanoVG context
- * @param area the area
+ * @param ctx контекст НаноВГ
+ * @param area область
  */
 void lv_nanovg_path_append_area(NVGcontext * ctx, const lv_area_t * area);
 
 /**
  * Добавить дугу под прямым углом к пути
- * @param ctx the NanoVG context
- * @param start_x the starting x coordinate
- * @param start_y the starting y coordinate
- * @param center_x the center x coordinate
- * @param center_y the center y coordinate
- * @param end_x the ending x coordinate
- * @param end_y the ending y coordinate
+ * @param ctx контекст НаноВГ
+ * @param start_x начальная координата x
+ * @param start_y начальная координата y
+ * @param center_x координата центра x
+ * @param center_y координата центра y
+ * @param end_x конечная координата x
+ * @param end_y конечная координата y
  */
 void lv_nanovg_path_append_arc_right_angle(NVGcontext * ctx,
                                            float start_x, float start_y,
@@ -126,13 +126,13 @@ void lv_nanovg_path_append_arc_right_angle(NVGcontext * ctx,
 
 /**
  * Добавить дугу к пути
- * @param ctx the NanoVG context
- * @param cx the center x coordinate
- * @param cy the center y coordinate
- * @param radius the radius
- * @param start_angle the starting angle in radians
- * @param sweep the sweep angle in radians
- * @param pie whether to draw a pie slice (connected to center)
+ * @param ctx контекст НаноВГ
+ * @param cx координата центра x
+ * @param cy координата центра y
+ * @param radius радиус
+ * @param start_angle начальный угол в радианах
+ * @param sweep угол стреловидности в радианах
+ * @param pie рисовать ли кусок пирога (подключенный к центру)
  */
 void lv_nanovg_path_append_arc(NVGcontext * ctx,
                                float cx, float cy,
@@ -143,33 +143,33 @@ void lv_nanovg_path_append_arc(NVGcontext * ctx,
 
 /**
  * Заполните текущий путь
- * @param ctx the NanoVG context
- * @param winding the winding rule
- * @param composite_operation the blend mode
- * @param color the fill color
+ * @param ctx контекст НаноВГ
+ * @param winding правило намотки
+ * @param composite_operation режим наложения
+ * @param color цвет заливки
  */
 void lv_nanovg_fill(NVGcontext * ctx, enum NVGwinding winding, enum NVGcompositeOperation composite_operation,
                     NVGcolor color);
 
 /**
  * Завершить текущий кадр
- * @param u pointer to the nanovg unit
+ * @param u указатель на блок nanovg
  */
 void lv_nanovg_end_frame(struct _lv_draw_nanovg_unit_t * u);
 
 /**
  * Очистите блок NanoVG (например, в конце задания).
- * @param u pointer to the nanovg unit
+ * @param u указатель на блок nanovg
  */
 void lv_nanovg_clean_up(struct _lv_draw_nanovg_unit_t * u);
 
 /**
  * Измените форму глобального буфера изображения
- * @param u pointer to the nanovg unit
- * @param cf the color format
- * @param w the new width
- * @param h the new height
- * @return pointer to the resized draw buffer
+ * @param u указатель на блок nanovg
+ * @param cf цветовой формат
+ * @param w новая ширина
+ * @param h новая высота
+ * @return указатель на буфер отрисовки измененного размера
  */
 lv_draw_buf_t * lv_nanovg_reshape_global_image(struct _lv_draw_nanovg_unit_t * u,
                                                lv_color_format_t cf,

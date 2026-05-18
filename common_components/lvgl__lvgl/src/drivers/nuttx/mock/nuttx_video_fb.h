@@ -85,7 +85,7 @@ extern "C" {
 /* Упакованные форматы YUV ********************************************************/
 
 #define FB_FMT_AYUV           24          /* BPP =32 Комбинация YUV и альфа */
-#define FB_FMT_CLJR           25          /* BPP =8 4 пикселя упакованы в uint32_t.
+#define FB_FMT_CLJR           25          /* BPP =8 4 пикселя вставлены вuint32_t.
                                            *         YUV 4:1:1 с l< 8 бит
                                            *         за образец YUV */
 #define FB_FMT_CYUV           26          /* BPP =16 UYVY, за исключением того, что высота
@@ -193,34 +193,34 @@ extern "C" {
 /* ioctls */
 
 #define FBIOGET_VIDEOINFO     _FBIOC(0x0001)  /* Получить информацию о цветовой плоскости */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_videoinfo_s */
 #define FBIOGET_PLANEINFO     _FBIOC(0x0002)  /* Получить информацию о видеоплане */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_planeinfo_s */
 
 #ifdef CONFIG_FB_CMAP
 #  define FBIOGET_CMAP        _FBIOC(0x0003)  /* Получить цветовую карту RGB */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_cmap_s */
 #  define FBIOPUT_CMAP        _FBIOC(0x0004)  /* Поставьте цветовое отображение RGB. */
-/* Argument: read-only struct
+/* Argument: структура только для чтения
  *           fb_cmap_s */
 #endif
 
 #ifdef CONFIG_FB_HWCURSOR
 #  define FBIOGET_CURSOR      _FBIOC(0x0005)  /* Получить атрибуты курсора */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_cursorattrib_s */
 #  define FBIOPUT_CURSOR      _FBIOC(0x0006)  /* Установить атрибуты курсора */
-/* Argument: read-only struct
+/* Argument: структура только для чтения
  *           fb_setcursor_s */
 #endif
 
 #ifdef CONFIG_FB_UPDATE
 #  define FBIO_UPDATE         _FBIOC(0x0007)  /* Обновите прямоугольную область в
                                                * фреймбуфер
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_area_s */
 #endif
 
@@ -230,42 +230,42 @@ extern "C" {
 
 #ifdef CONFIG_FB_OVERLAY
 #  define FBIOGET_OVERLAYINFO _FBIOC(0x0009)  /* Получить информацию о наложении видео */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_overlayinfo_s */
 #  define FBIO_SELECT_OVERLAY _FBIOC(0x000a)  /* Выбрать наложение */
-/* Argument: read-only
+/* Argument: только для чтения
  *           беззнаковый длинный */
 #  define FBIOSET_TRANSP      _FBIOC(0x000b)  /* Установите непрозрачность или прозрачность
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 #  define FBIOSET_CHROMAKEY   _FBIOC(0x000c)  /* Установить хроматический ключ
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 #  define FBIOSET_COLOR       _FBIOC(0x000d)  /* Установить цвет
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 #  define FBIOSET_BLANK       _FBIOC(0x000e)  /* Пустой или непустой
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 #  define FBIOSET_AREA        _FBIOC(0x000f)  /* Установить активную область наложения
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 #  define FBIOSET_DESTAREA    _FBIOC(0x0010)  /* Включить зону назначения
                                                * первичный FB .
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 
 #ifdef CONFIG_FB_OVERLAY_BLIT
 #  define FBIOSET_BLIT        _FBIOC(0x0011)  /* Закрашенная область между наложениями
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayblit_s */
 #  define FBIOSET_BLEND       _FBIOC(0x0012)  /* Область смешивания между наложениями
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayblend_s */
 #endif
 
 #define FBIOPAN_OVERLAY       _FBIOC(0x0013)  /* Панорамирование дисплея для наложения
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_overlayinfo_s */
 
 #endif /* CONFIG_FB_OVERLAY */
@@ -273,32 +273,32 @@ extern "C" {
 /* Специальные элементы управления *****************************************************/
 
 #define FBIOSET_POWER         _FBIOC(0x0014)  /* Установить мощность панели
-                                               * Argument:             int */
+                                               * Argument:             интервал */
 #define FBIOGET_POWER         _FBIOC(0x0015)  /* Получить текущую мощность панели
-                                               * Argument:            int* */
+                                               * Argument:            интервал* */
 #define FBIOSET_FRAMERATE     _FBIOC(0x0016)  /* Установить частоту кадров
-                                               * Argument:             int */
+                                               * Argument:             интервал */
 #define FBIOGET_FRAMERATE     _FBIOC(0x0017)  /* Получить частоту кадров
-                                               * Argument:            int* */
+                                               * Argument:            интервал* */
 
 #define FBIOPAN_DISPLAY       _FBIOC(0x0018)  /* Панорамирование дисплея
-                                               * Argument: read-only struct
+                                               * Argument: структура только для чтения
                                                *           fb_planeinfo_s * */
 
 #define FBIOPAN_CLEAR         _FBIOC(0x0019)  /* Очистить панораму */
-/* Argument: read-only
+/* Argument: только для чтения
  *           беззнаковый длинный */
 
-#define FBIOSET_VSYNCOFFSET   _FBIOC(0x001a)  /* Установить используемое смещение VSync
-                                               * Argument:             int */
+#define FBIOSET_VSYNCOFFSET   _FBIOC(0x001a)  /* Установить используемое размещение VSync
+                                               * Argument:             интервал */
 
-/* Поддержка Linux ***********************************************************/
+/* Linux ********************************************************** Поддержка*/
 
 #define FBIOGET_VSCREENINFO   _FBIOC(0x001b)  /* Получить информацию о видеопеременных */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_var_screeninfo */
 #define FBIOGET_FSCREENINFO   _FBIOC(0x001c)  /* Получить информацию об исправлении видео */
-/* Argument: writable struct
+/* Argument: записываемая структура
  *           fb_fix_screeninfo */
 
 /**********************

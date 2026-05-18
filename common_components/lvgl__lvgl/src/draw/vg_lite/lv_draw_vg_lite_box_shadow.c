@@ -41,7 +41,7 @@
 void lv_draw_vg_lite_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc,
                                 const lv_area_t * coords)
 {
-    /*Вычислите размытый прямоугольник, чтобы получить тень в `shadow_area`.*/
+    /*Вычислите размытый контур, чтобы получить тень в `shadow_area`.*/
     lv_area_t core_area;
     core_area.x1 = coords->x1  + dsc->ofs_x - dsc->spread;
     core_area.x2 = coords->x2  + dsc->ofs_x + dsc->spread;

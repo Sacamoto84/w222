@@ -29,9 +29,9 @@ typedef enum {
 } lv_evdev_type_t;
 
 /**
- * @param indev      the indev created for the newly discovered evdev
- * @param type       the type of the evdev
- * @param user_data  a custom parameter
+ * @param indev      indev, созданный для недавно обнаруженного evdev
+ * @param type       тип evdev
+ * @param user_data  специальный параметр
  */
 typedef void (*lv_evdev_discovery_cb_t)(lv_indev_t * indev, lv_evdev_type_t type, void * user_data);
 
@@ -41,59 +41,59 @@ typedef void (*lv_evdev_discovery_cb_t)(lv_indev_t * indev, lv_evdev_type_t type
 
 /**
  * Создать устройство ввода evdev по заданному пути.
- * @param type LV_INDEV_TYPE_POINTER or LV_INDEV_TYPE_KEYPAD
- * @param dev_path device path, e.g., /dev/input/event0
- * @return pointer to input device or NULL if opening failed
+ * @param типа LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
+ * @param dev_path путь к устройству, например, /dev/input/event0
+ * @return указатель на устройство ввода или NULL, если открытие не удалось
  */
 lv_indev_t * lv_evdev_create(lv_indev_type_t indev_type, const char * dev_path);
 
 /**
- * Создайте устройство ввода evdev, взяв на себя владение данным дескриптором файла.
- * @param type LV_INDEV_TYPE_POINTER or LV_INDEV_TYPE_KEYPAD
- * @param fd file descriptor of the evdev device
- * @return pointer to input device or NULL if opening failed
+ * Создайте устройство ввода evdev, взяв на себя требования к данным дескриптором файла.
+ * @param типа LV_INDEV_TYPE_POINTER или LV_INDEV_TYPE_KEYPAD
+ * @param fd файловый дескриптор устройства evdev
+ * @return указатель на устройство ввода или NULL, если открытие не удалось
  */
 lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd);
 
 /**
- * Начните автоматически создавать файлы evdev для всех новых и существующих
+ * включить автоматическое создание файлов evdev для всех новых и существующих
  * Устройства evdev найдены в /dev/input/
- * @param cb         function to call when a new evdev indev is discovered, or `NULL`
- * @param user_data  parameter to pass to the callback
- * @return           the success or failure status. It will fail if it's
+ * @param cb         функция для вызова при обнаружении нового evdev indev или `NULL`
+ * @param user_data  параметр для передачи в обратный вызов
+ * @return           статус успеха или неудачи. Это потерпит неудачу, если это
  *                   уже запущен или ресурсы не удалось инициализировать.
  */
 lv_result_t lv_evdev_discovery_start(lv_evdev_discovery_cb_t cb, void * user_data);
 
 /**
- * Прекратите автоматическое создание evdev indev. Безопасно звонить из
+ * Прекратите создание evdev indev. Безопасно звонить из
  * обратный вызов обнаружения.
- * @return  the success or failure status. It will fail if it's already running.
+ * @return  статус успеха или неудачи. Он потерпит неудачу, если он уже запущен.
  */
 lv_result_t lv_evdev_discovery_stop(void);
 
 /**
  * Установите, следует ли менять местами координаты указателя. По умолчанию
  * ложь.
- * @param indev evdev input device
- * @param swap_axes whether to swap x and y axes
+ * @param indev устройство ввода evdev
+ * @param swap_axes стоит ли менять местами оси x и y
  */
 void lv_evdev_set_swap_axes(lv_indev_t * indev, bool swap_axes);
 
 /**
  * Настройте преобразование координат для указателей. Применяется после
  * замена осей, если таковая имеется. По умолчанию трансформация не применяется.
- * @param indev evdev input device
- * @param min_x pointer coordinate mapped to min x of display
- * @param min_y pointer coordinate mapped to min y of display
- * @param max_x pointer coordinate mapped to max x of display
- * @param max_y pointer coordinate mapped to max y of display
+ * @param indev устройство ввода evdev
+ * @param min_x Координата указателя сопоставлена с min x дисплея
+ * @param min_y координата указателя, сопоставленная с min y дисплея
+ * @param max_x Координата указателя сопоставлена с максимальным x дисплея
+ * @param max_y координата указателя сопоставлена с максимальным значением y дисплея
  */
 void lv_evdev_set_calibration(lv_indev_t * indev, int min_x, int min_y, int max_x, int max_y);
 
 /**
  * Удалите устройство ввода evdev.
- * @param indev evdev input device to close and free
+ * @param indev устройство ввода evdev, чтобы закрыть и освободить
  */
 void lv_evdev_delete(lv_indev_t * indev);
 

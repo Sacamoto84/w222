@@ -42,11 +42,11 @@ typedef struct {
  **********************/
 /**
  * Преобразуйте точку с точностью 1/256 (выходные координаты масштабируются на 256).
- * @param t         pointer to n initialized `point_transform_dsc_t` structure
- * @param xin       X coordinate to rotate
- * @param yin       Y coordinate to rotate
- * @param xout      upscaled, transformed X
- * @param yout      upscaled, transformed Y
+ * @param t         указатель на инициализированную структуру `point_transform_dsc_t`
+ * @param xin       Координата X для вращения
+ * @param yin       Координата Y для вращения
+ * @param xout      масштабированный, преобразованный X
+ * @param yout      масштабированный, преобразованный Y
  */
 static void transform_point_upscaled(point_transform_dsc_t * t, int32_t xin, int32_t yin, int32_t * xout,
                                      int32_t * yout);
@@ -187,7 +187,7 @@ void lv_draw_sw_transform(const lv_area_t * dest_area, const void * src_buf,
      *Поскольку оно больше 99,5, LVGL начнет смешивать следующую координату.
      *который находится за пределами изображения, поэтому пиксель станет более прозрачным.
      *Чтобы избежать этого, в случае масштабирования ограничьте координаты только диапазоном 0..297,
-     *то есть до 0..( src_w -1)*zoom */
+     *то есть до 0..(src_w-1)*zoom */
     if(is_rotated == false) {
         int32_t xs1_ups, ys1_ups, xs2_ups, ys2_ups;
 
@@ -351,7 +351,7 @@ static void transform_rgb888(const uint8_t * src, int32_t src_w, int32_t src_h, 
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -451,7 +451,7 @@ static void transform_argb8888(const uint8_t * src, int32_t src_w, int32_t src_h
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -561,7 +561,7 @@ static void transform_argb8888_premultiplied(const uint8_t * src, int32_t src_w,
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -680,7 +680,7 @@ static void transform_rgb565a8(const uint8_t * src, int32_t src_w, int32_t src_h
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -795,7 +795,7 @@ static void transform_rgb565a8_swapped(const uint8_t * src, int32_t src_w, int32
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -906,7 +906,7 @@ static void transform_a8(const uint8_t * src, int32_t src_w, int32_t src_h, int3
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 
@@ -985,7 +985,7 @@ static void transform_al88(const uint8_t * src, int32_t src_w, int32_t src_h, in
         }
 
         /*Получите направление к соседу Хор и Вер
-         *`fract` будет находиться в диапазоне 0x00. 0xFF и `next` (+/-1) указывают направление.*/
+         *`fract` будет находиться в аспекте0x00. 0xFFи`next`(+/-1) указывают направление.*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
 

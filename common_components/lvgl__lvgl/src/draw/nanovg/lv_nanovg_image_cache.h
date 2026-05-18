@@ -35,25 +35,25 @@ struct _lv_draw_nanovg_unit_t;
  **********************/
 
 /**
- * @brief Initialize the image cache
- * @param u pointer to the nanovg unit
+ * @brief Инициализируйте кэш изображений
+ * @param u указатель на блок nanovg
  */
 void lv_nanovg_image_cache_init(struct _lv_draw_nanovg_unit_t * u);
 
 /**
- * @brief Deinitialize the image cache
- * @param u pointer to the nanovg unit
+ * @brief Деинициализировать кэш изображений
+ * @param u указатель на блок nanovg
  */
 void lv_nanovg_image_cache_deinit(struct _lv_draw_nanovg_unit_t * u);
 
 /**
- * @brief Get the image handle from the cache, create a new one if not found
- * @param u pointer to the nanovg unit
- * @param src the source image data
- * @param color the color to apply
- * @param image_flags the image flags
- * @param header the image header to fill (can be NULL)
- * @return the image handle, or -1 on failure
+ * @brief Получите дескриптор изображения из кеша, создайте новый, если не найден.
+ * @param u указатель на блок nanovg
+ * @param src исходные данные изображения
+ * @param color цвет для нанесения
+ * @param image_flags флаги изображений
+ * @param header заголовок изображения для заполнения (может бытьNULL)
+ * @return дескриптор изображения или -1 в случае неудачи
  */
 int lv_nanovg_image_cache_get_handle(struct _lv_draw_nanovg_unit_t * u,
                                      const void * src,
@@ -62,9 +62,9 @@ int lv_nanovg_image_cache_get_handle(struct _lv_draw_nanovg_unit_t * u,
                                      lv_image_header_t * header);
 
 /**
- * @brief Drop the image from the cache
- * @param u pointer to the nanovg unit
- * @param src the source image data
+ * @brief Удалить изображение из кеша
+ * @param u указатель на блок nanovg
+ * @param src исходные данные изображения
  */
 void lv_nanovg_image_cache_drop(struct _lv_draw_nanovg_unit_t * u, const void * src);
 

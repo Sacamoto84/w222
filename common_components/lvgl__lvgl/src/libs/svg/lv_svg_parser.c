@@ -504,7 +504,7 @@ static const char * _parse_length(const char * str, const char * str_end, int32_
                     *val = *val / 2.54f * (float)dpi;
                 }
                 else if(str[0] == 'e' && str[1] == 'm') {   // em
-                    *val = *val * 16.0f; // FIXME: browser default font size
+                    *val = *val * 16.0f; // FIXME: размер шрифта браузера по умолчанию
                 }
                 else if(str[0] == 'e' && str[1] == 'x') {   // ex
                     *val = *val * 16.0f * 0.52f;
@@ -630,7 +630,7 @@ static const char * _parse_color(const char * str, const char * str_end, uint32_
 
 static void _multiply_matrix(lv_svg_matrix_t * matrix, const lv_svg_matrix_t * mul)
 {
-    // TODO: use NEON to optimize this function on ARM architecture.
+    // TODO: используйтеNEONдля оптимизации этой функции в архитектуре ARM.
     lv_svg_matrix_t tmp;
 
     for(int y = 0; y < 3; y++) {
@@ -2056,8 +2056,8 @@ static void _anim_begin_end_cb(lv_svg_node_t * node, lv_svg_attr_t * attr, const
     GET_NEXT_VALUE_PTR(val_number, ctx, float);
     val_start = _parse_clock_time(val_start, val_end, val_number);
 
-    //FIXME: not support begin-end type
-    // значение syncbase
+    //FIXME: не поддерживает тип начала и конца
+    // база синхронизации значений
     // значение события
     // повторяющееся значение
     // доступКлюч-значение
@@ -2114,7 +2114,7 @@ static void create_tokens_from_style_attr(lv_array_t * result, _lv_svg_token_att
     LV_ASSERT(type == LV_SVG_ATTR_STYLE);
     tok_attr->value_start = _skip_space(tok_attr->value_start, tok_attr->value_end);
 
-    /*Создайте дополнительные токены из атрибута стиля (например: style="fill:none;stroke-width:6;")*/
+    /*Создайте дополнительные токены из атрибутов стиля (например: style="fill:none;stroke-width:6;")*/
     while(tok_attr->value_end - tok_attr->value_start > 0) {
         const char * name_start = tok_attr->value_start;
         /*двоеточие отделяет имя атрибута от значения*/
@@ -2154,7 +2154,7 @@ static void _process_attr_tag(_lv_svg_parser_t * parser, lv_svg_node_t * node, _
     lv_svg_attr_type_t type = _get_svg_attr_type(tok_attr->name_start, tok_attr->name_end);
 
     /* Атрибуты стиля обрабатываются отдельно и расширяются до отдельных
-     * атрибуты свойств (например, style="fill:red;stroke:blue" становятся отдельными
+     * атрибуты свойства (например, style="fill:red;stroke:blue" становятся активными
      * атрибуты заливки и обводки). Пропустить обработку самого атрибута стиля
      * поскольку его составляющие свойства уже добавлены в массив токенов */
     if(type == LV_SVG_ATTR_STYLE) {
@@ -2368,7 +2368,7 @@ static bool _process_begin_tag(_lv_svg_parser_t * parser, lv_svg_tag_t tag, cons
     if(!parser->doc_root) { // корневой узел
         parser->doc_root = node;
     }
-    if(!token->flat) { // FIXME: not leaf node
+    if(!token->flat) { // FIXME: не листовой узел
         parser->cur_node = node;
     }
     return true;

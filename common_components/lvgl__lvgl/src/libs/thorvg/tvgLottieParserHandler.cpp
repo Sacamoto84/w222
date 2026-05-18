@@ -77,7 +77,7 @@ bool LookaheadParserHandler::nextArrayValue()
         parseNext();
         return false;
     }
-    //SPECIAL CASE: то же, что nextObjectKey()
+    //SPECIALCASE: то же самое, что nextObjectKey()
     if (state == kExitingObject) return false;
     if (state == kError || state == kHasKey) {
         Error();
@@ -207,8 +207,8 @@ const char* LookaheadParserHandler::nextObjectKey()
     }
 
     /* SPECIAL CASE : Парсер работает по предопределенному правилу, согласно которому он будет
-       while ( nextObjectKey() ) для каждого объекта, но в случае нашей вложенной группы
-       объект, который мы можем вызвать несколько раз nextObjectKey() при выходе из объекта
+       while (nextObjectKey()) для каждого объекта, но в случае нашей вложенной группы
+       объект, который мы могли вызвать несколько разnextObjectKey()при выходе из объекта
        поэтому игнорируйте их и не переводите парсер в состояние ошибки. */
     if (state == kExitingArray || state == kEnteringObject) return nullptr;
 

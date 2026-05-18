@@ -326,7 +326,7 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
         lv_strlcpy(fn, name, fn_len);
     }
 
-    lv_free(name); /* frogfs `malloc` сделал это */
+    lv_free(name); /* frogfs`malloc`сделал это */
 
     return LV_FS_RES_OK;
 }

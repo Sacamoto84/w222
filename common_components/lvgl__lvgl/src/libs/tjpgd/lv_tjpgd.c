@@ -146,9 +146,9 @@ static size_t input_func(JDEC * jd, uint8_t * buff, size_t ndata)
 
 /**
  * Декодируйте изображение JPG и верните декодированные данные.
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
@@ -276,7 +276,7 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
     rc = jd_mcu_load(jd);
     if(rc != JDR_OK) return LV_RESULT_INVALID;
 
-    /* Выведите MCU (от YCbCr до RGB, масштабирование и вывод) */
+    /* Вы создаетеMCU(от YCbCr до RGB, масштабирование и выводы) */
     rc = jd_mcu_output(jd, NULL, decoded_area->x1, decoded_area->y1);
     if(rc != JDR_OK) return LV_RESULT_INVALID;
 
@@ -285,8 +285,8 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 
 /**
  * Освободите выделенные ресурсы
- * @param decoder pointer to the decoder where this function belongs
- * @param dsc pointer to a descriptor which describes this decoding session
+ * @param decoder указатель на декодер, которому принадлежит эта функция
+ * @param dsc указатель на дескриптор, который описывает этот сеанс декодирования
  */
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {

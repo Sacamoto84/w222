@@ -615,7 +615,7 @@ RenderCompositor* SwRenderer::target(const RenderRegion& region, ColorSpace cs)
     cmp->compositor->bbox.max.x = x + w;
     cmp->compositor->bbox.max.y = y + h;
 
-    /* TODO: Currently, only blending might work.
+    /* TODO: В настоящее время может работать только смешивание.
        Смешивание и композицию следует рассматривать вместе. */
     auto color = (surface->blender && !surface->compositor) ? 0x00ffffff : 0x00000000;
     rasterClear(cmp, x, y, w, h, color);
@@ -693,7 +693,7 @@ void* SwRenderer::prepareCommon(SwTask* task, const Matrix& transform, const Arr
     if (!surface) return task;
     if (flags == RenderUpdateFlag::None) return task;
 
-    //TODO: Failed threading them. It would be better if it's possible.
+    //TODO: Не удалось их закрепить. Было бы лучше, если бы это было возможно.
     //См.: https://github.com/thorvg/thorvg/issues/1409
     //Цели гарантийного состава готовятся.
     for (auto clip = clips.begin(); clip < clips.end(); ++clip) {

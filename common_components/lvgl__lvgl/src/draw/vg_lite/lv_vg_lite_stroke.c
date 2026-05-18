@@ -25,11 +25,11 @@
 
 
 /**
- * Поскольку структура данных «ключ-значение» lv_cache интегрирована, структура данных kv
+ * поскольку структура данных «ключ-значение»lv_cacheинтегрирована, структура данных kv
  * будут сохранены одновременно с успешным созданием кэша.
  * Чтобы обеспечить эффективность процесса сопоставления, первичный ключ (lv), используемый для сопоставления,
- * не будет дублировать вторичный указатель dash_pattern, поэтому в случае успешного создания dash_pattern необходимо
- * для дублирования дочернего ключа (vg), поэтому сюда добавляется тип, чтобы определить, где находятся реальные данные dash_pattern.
+ * не будет дублировать вторичный указатель dash_pattern, поэтому в случае получения прибыли необходимо создание dash_pattern.
+ * для дублирования дочернего ключа (vg), поэтому сюда добавляется тип, чтобы определить, где находятся реальные данныеdash_pattern.
  */
 typedef enum {
     DASH_PATTERN_TYPE_LV,
@@ -344,7 +344,7 @@ static lv_cache_compare_res_t dash_pattern_compare(const stroke_item_t * lhs, co
 
 static lv_cache_compare_res_t path_compare(const stroke_item_t * lhs, const stroke_item_t * rhs)
 {
-    /* Отдайте приоритет использованию dup vg.path */
+    /* Отдать приоритет использованию dup vg.path */
     const vg_lite_path_t * lhs_path = lhs->vg.path ?
                                       lv_vg_lite_path_get_path(lhs->vg.path) :
                                       lv_vg_lite_path_get_path(lhs->lv.path);

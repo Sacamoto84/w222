@@ -1,6 +1,6 @@
 /**
  * @file lv_gltf_math.hpp
- * @brief GLTF math utilities and helper functions
+ * @brief GLTF математические утилиты и вспомогательные функции
  */
 
 #ifndef LV_GLTF_MATH_HPP
@@ -39,9 +39,9 @@ template <typename T>
 [[nodiscard]] fastgltf::math::quat<T> lv_gltf_math_euler_to_quaternion(T P, T Y, T R)
 {
     // При необходимости конвертируйте градусы в радианы.
-    // roll = roll * (M_PI / 180.0);
-    // pitch = pitch * (M_PI / 180.0);
-    // yaw = yaw * (M_PI / 180.0);
+    // roll = бросок * (M_PI/180,0);
+    // pitch = шаг * (M_PI/180,0);
+    // yaw = рыскание * (M_PI/180,0);
     T H = T(0.5);
     Y *= H;
     P *= H;

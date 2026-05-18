@@ -34,38 +34,38 @@ extern "C" {
  **********************/
 
 /**
- * @brief Get the window handle from specific LVGL input device object.
- * @param indev The specific LVGL input device object.
- * @return The window handle from specific LVGL input device object.
+ * @brief Получите дескриптор окна из конкретного объекта устройства ввода LVGL.
+ * @param indev Конкретный объект устройства ввода LVGL.
+ * @return Дескриптор окна конкретного объекта устройства ввода LVGL.
 */
 HWND lv_windows_get_indev_window_handle(lv_indev_t * indev);
 
 /**
- * @brief Open a LVGL pointer input device object for the specific LVGL
+ * @brief Откройте объект устройства ввода указателяLVGLдля конкретного LVGL.
  *        отображаемый объект или создайте его, если устройство ввода указателя LVGL
  *        объект не создавался и не удалялся ранее.
- * @param display The specific LVGL display object.
- * @return The LVGL pointer input device object for the specific LVGL
+ * @param display Конкретный экранный объект LVGL.
+ * @return Объект устройства ввода указателяLVGLдля конкретного LVGL.
  *         объект отображения.
 */
 lv_indev_t * lv_windows_acquire_pointer_indev(lv_display_t * display);
 
 /**
- * @brief Open a LVGL keypad input device object for the specific LVGL
+ * @brief Откройте объект устройства ввода клавиатурыLVGLдля конкретного LVGL.
  *        объект отображения или создайте его, если устройство ввода с клавиатуры LVGL
  *        объект не создавался и не удалялся ранее.
- * @param display The specific LVGL display object.
- * @return The LVGL keypad input device object for the specific LVGL
+ * @param display Конкретный экранный объект LVGL.
+ * @return Объект устройства ввода с клавиатурыLVGLдля конкретного LVGL
  *         объект отображения.
 */
 lv_indev_t * lv_windows_acquire_keypad_indev(lv_display_t * display);
 
 /**
- * @brief Open a LVGL encoder input device object for the specific LVGL
+ * @brief Откройте объект устройства ввода кодировщикаLVGLдля конкретного LVGL.
  *        отображаемый объект или создайте его, если устройство ввода кодировщика LVGL
  *        объект не создавался и не удалялся ранее.
- * @param display The specific LVGL display object.
- * @return The LVGL encoder input device object for the specific LVGL
+ * @param display Конкретный экранный объект LVGL.
+ * @return Объект устройства ввода энкодераLVGLдля конкретного LVGL
  *         объект отображения.
 */
 lv_indev_t * lv_windows_acquire_encoder_indev(lv_display_t * display);

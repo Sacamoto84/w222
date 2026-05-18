@@ -297,7 +297,7 @@ LoadModule* LoaderMgr::loader(const string& path, bool* invalid)
 {
     *invalid = false;
 
-    //TODO: svg & lottie is not sharable.
+    //TODO: SVG и Lottie не подлежат совместному использованию.
     auto allowCache = true;
     auto ext = path.substr(path.find_last_of(".") + 1);
     if (!ext.compare("svg") || !ext.compare("json")) allowCache = false;
@@ -320,7 +320,7 @@ LoadModule* LoaderMgr::loader(const string& path, bool* invalid)
         }
         delete(loader);
     }
-    //Неизвестный MimeType. Попробуйте с кандидатами в порядке
+    //Неизвестный MimeType. попробуй с кандидатами в порядке
     for (int i = 0; i < static_cast<int>(FileType::Raw); i++) {
         if (auto loader = _find(static_cast<FileType>(i))) {
             if (loader->open(path)) {
@@ -369,7 +369,7 @@ LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mim
     //Таким образом, кэширование допустимо только для разделяемых файлов.
     auto allowCache = !copy;
 
-    //TODO: lottie is not sharable.
+    //TODO: Лотти не подлежит совместному использованию.
     if (allowCache) {
         auto type = _convert(mimeType);
         if (type == FileType::Lottie) allowCache = false;
@@ -379,7 +379,7 @@ LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mim
         if (auto loader = _findFromCache(data, size, mimeType)) return loader;
     }
 
-    //Попробуйте использовать данный MimeType
+    //попробуйте использовать данный MimeType
     if (!mimeType.empty()) {
         if (auto loader = _findByType(mimeType)) {
             if (loader->open(data, size, copy)) {
@@ -395,7 +395,7 @@ LoadModule* LoaderMgr::loader(const char* data, uint32_t size, const string& mim
             }
         }
     }
-    //Неизвестный MimeType. Попробуйте с кандидатами в порядке
+    //Неизвестный MimeType. попробуй с кандидатами в порядке
     for (int i = 0; i < static_cast<int>(FileType::Raw); i++) {
         auto loader = _find(static_cast<FileType>(i));
         if (loader) {
@@ -445,7 +445,7 @@ LoadModule* LoaderMgr::loader(const char* name, const char* data, uint32_t size,
     //TODO: add check for mimetype ?
     if (auto loader = _findFromCache(name)) return loader;
 
-    //функция предназначена для загрузчика ttf (единственный поддерживаемый загрузчик шрифтов)
+    //Функции для загрузчика ttf (единственный прикладной загрузчик шрифтов)
     auto loader = new TtfLoader;
     if (loader->open(data, size, copy)) {
         loader->hashpath = lv_strdup(name);

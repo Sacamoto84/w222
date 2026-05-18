@@ -7,13 +7,13 @@
 // Разрешение предоставляется каждому на использование этого программного обеспечения для любых целей,
 // включая коммерческие приложения, а также изменять его и распространять
 // свободно, с соблюдением следующих ограничений:
-// 1. The origin of this software must not be misrepresented; you must not
+// 1. Происхождение этого программного обеспечения не должно искажаться; ты не должен
 //    утверждайте, что вы написали оригинальное программное обеспечение. Если вы используете это программное обеспечение
 //    в продукте подтверждение в документации по продукту будет
 //    приветствуется, но не является обязательным.
-// 2. Altered source versions must be plainly marked as such, and must not be
+// 2. Измененные исходные версии должны быть четко отмечены как таковые и не должны быть
 //    ошибочно представлено как оригинальное программное обеспечение.
-// 3. This notice may not be removed or altered from any source distribution.
+// 3. Это уведомление не может быть удалено или изменено из любого исходного дистрибутива.
 //
 #ifndef NANOVG_GL_UTILS_H
 #define NANOVG_GL_UTILS_H
@@ -37,7 +37,7 @@ struct NVGLUframebuffer {
 typedef struct NVGLUframebuffer NVGLUframebuffer;
 
 // Вспомогательная функция для создания буфера кадра GL для рендеринга.
-// format: see NVGtexture
+// format: см. текстуру ПНВ
 void nvgluBindFramebuffer(NVGLUframebuffer * fb);
 NVGLUframebuffer * nvgluCreateFramebuffer(NVGcontext * ctx, int w, int h, int imageFlags, int format);
 void nvgluDeleteFramebuffer(NVGLUframebuffer * fb);
@@ -50,7 +50,7 @@ void nvgluDeleteFramebuffer(NVGLUframebuffer * fb);
     // FBO является ядром OpenGL 3>.
     #define NANOVG_FBO_VALID 1
 #elif defined(NANOVG_GL2)
-    // В OS X, включая glext, определяет FBO и в GL2.
+    // ВOSX, включая glext, определеныFBOи GL2.
     #ifdef __APPLE__
         #include <OpenGL/glext.h>
         #define NANOVG_FBO_VALID 1

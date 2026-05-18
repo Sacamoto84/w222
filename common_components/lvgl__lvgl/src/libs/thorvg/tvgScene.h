@@ -105,8 +105,8 @@ struct Scene::Impl
         if (opacity == 255) return false;
 
         //Если у сцены есть несколько дочерних элементов или только сцена, возможно, потребуется композиция.
-        //OPTIMIZE: the bitmap type of the picture would not need the composition.
-        //OPTIMIZE: a single paint of a scene would not need the composition.
+        //OPTIMIZE: растровый тип изображения не нуждается в композиции.
+        //OPTIMIZE: одна краска сцены не нуждалась бы в композиции.
         if (paints.size() == 1 && paints.front()->type() == Type::Shape) return false;
 
         return true;

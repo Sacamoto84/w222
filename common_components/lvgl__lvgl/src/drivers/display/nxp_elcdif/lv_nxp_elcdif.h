@@ -35,12 +35,12 @@ extern "C" {
 /**
  * Присоедините LVGL к ELCDIF, используя режим рендеринга DIRECT.
  * ELCDIF должен быть уже инициализирован.
- * @param base              The NXP eLCD controller base address
- * @param config            NXP eLCD config object
- * @param frame_buffer1     pointer the first frame buffers
- * @param frame_buffer2     pointer the second frame buffers
- * @param buf_size          size of a buffer in bytes (must be at least as large as the screen)
- * @return                  a display object initialized and registerd on the LVGL runtime
+ * @param base              Базовый адрес контроллера eLCD NXP
+ * @param config            NXP Объект конфигурации eLCD
+ * @param frame_buffer1     указатель на буферы первых кадров
+ * @param frame_buffer2     указатель на второй буфер кадров
+ * @param buf_size          размер буфера в байтах (должен быть не меньше экрана)
+ * @return                  объект отображения, инициализированный и зарегистрированный в среде выполнения LVGL
  */
 lv_display_t * lv_nxp_display_elcdif_create_direct(LCDIF_Type * base, const elcdif_rgb_mode_config_t * config,
                                                    void * frame_buffer1,
@@ -50,12 +50,12 @@ lv_display_t * lv_nxp_display_elcdif_create_direct(LCDIF_Type * base, const elcd
 /**
 * Присоедините LVGL к ELCDIF, используя режим рендеринга PARTIAL.
 * ELCDIF должен быть уже инициализирован.
-* @param base              The NXP eLCD controller base address
-* @param config            NXP eLCD config object
-* @param frame_buffer1     pointer the first frame buffers
-* @param frame_buffer2     pointer the second frame buffers
-* @param buf_size          size of a buffer in bytes
-* @return                  a display object initialized and registerd on the LVGL runtime
+* @param base              Базовый адрес контроллера eLCD NXP
+* @param config            NXP Объект конфигурации eLCD
+* @param frame_buffer1     указатель на буферы первых кадров
+* @param frame_buffer2     указатель на второй буфер кадров
+* @param buf_size          размер буфера в байтах
+* @return                  объект отображения, инициализированный и зарегистрированный в среде выполнения LVGL
 */
 lv_display_t * lv_nxp_display_elcdif_create_partial(LCDIF_Type * base, const elcdif_rgb_mode_config_t * config,
                                                     void * frame_buffer1,
@@ -65,9 +65,9 @@ lv_display_t * lv_nxp_display_elcdif_create_partial(LCDIF_Type * base, const elc
  * Вызовите эту функцию в процедуре обслуживания прерываний LCD.
  * Он сообщает LVGL, что делать при передаче кадрового буфера.
  * на панель LCD
- * @param disp              The display instance that contains the eLCD related data
+ * @param disp              Экземпляр дисплея, содержащий данные, связанные с eLCD.
  *
- * @note: the parameter disp is tipycally the return value after
+ * @note: параметр disp обычно является возвращаемым значением после
  *        `lv_nxp_display_elcdif_create_direct` успешно выполнен.
  */
 void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp);

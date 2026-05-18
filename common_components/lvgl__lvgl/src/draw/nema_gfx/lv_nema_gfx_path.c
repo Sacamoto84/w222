@@ -149,7 +149,7 @@ void lv_nema_gfx_path_cubic_to(lv_nema_gfx_path_t * path, float cx1, float cy1, 
 
 void lv_nema_gfx_path_end(lv_nema_gfx_path_t * path)
 {
-    /* Завершить работу Path....что угодно*/
+    /* Завершить работу Путь....что угодно*/
     seg_point = 0;
     data_point = 0;
 

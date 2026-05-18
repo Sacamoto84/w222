@@ -157,8 +157,8 @@ void lv_draw_sw_fill(lv_draw_task_t * t, lv_draw_fill_dsc_t * dsc, const lv_area
 
         bool preblend = false;
 
-        /* Инициализируйте маску opa вместо 0xFF и смешайте ее с LV_OPA_COVER.
-         * Это экономит расчет финальной опы в lv_draw_sw_blend.*/
+        /* Инициализируйте маску opa вместо0xFFи подключите ее к LV_OPA_COVER.
+         * Это экономит окончательный расчет в lv_draw_sw_blend.*/
         lv_memset(mask_buf, opa, clipped_w);
         blend_dsc.mask_res = lv_draw_sw_mask_apply(mask_list, mask_buf, blend_area.x1, top_y, clipped_w);
         if(blend_dsc.mask_res == LV_DRAW_SW_MASK_RES_FULL_COVER) blend_dsc.mask_res = LV_DRAW_SW_MASK_RES_CHANGED;

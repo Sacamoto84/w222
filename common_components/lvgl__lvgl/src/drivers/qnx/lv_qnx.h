@@ -1,6 +1,6 @@
 /**
  * @file lv_qnx.h
- * @brief   LVGL driver for the QNX Screen compositing window manager
+ * @brief   ДрайверLVGLдля оконного менеджера компоновки экранаQNXScreen
  */
 
 #ifndef LV_QNX_H
@@ -36,40 +36,40 @@ extern "C" {
 
 /**
  * Создайте окно для отображения LVGL.
- * @param   hor_res     The horizontal resolution (size) of the window
- * @param   ver_res     The vertical resolution (size) of the window
- * @return  A pointer to a new display object if successful, NULL otherwise
+ * @param   hor_res     Горизонтальное разрешение (размер) окна
+ * @param   ver_res     Вертикальное разрешение (размер) окна
+ * @return  Указатель на новый экранный объект в случае успеха, в противном случае NULL.
  */
 lv_display_t * lv_qnx_window_create(int32_t hor_res, int32_t ver_res);
 
 /**
  * Установите заголовок окна, идентифицируемого данным дисплеем.
- * @param   disp    The display object for the window
- * @param   title   The new title to set
+ * @param   disp    Объект отображения для окна
+ * @param   title   Новый заголовок для установки
  */
 void lv_qnx_window_set_title(lv_display_t * disp, const char * title);
 
 /**
  * Создайте устройство ввода указателя для дисплея.
  * В настоящее время поддерживается только один объект-указатель.
- * @param   disp    The display object associated with the device
- * @return  true if successful, false otherwise
+ * @param   disp    Объект отображения, связанный с устройством
+ * @return  true в случае успеха, false в противном случае
  */
 bool lv_qnx_add_pointer_device(lv_display_t * disp);
 
 /**
  * Создайте устройство ввода с клавиатуры для дисплея.
  * В настоящее время поддерживается только один объект клавиатуры.
- * @param   disp    The display object associated with the device
- * @return  true if successful, false otherwise
+ * @param   disp    Объект отображения, связанный с устройством
+ * @return  true в случае успеха, false в противном случае
  */
 bool lv_qnx_add_keyboard_device(lv_display_t * disp);
 
 /**
  * Запускает цикл событий для дисплея.
  * Функция возвращает значение только в ответ на событие закрытия.
- * @param   disp    The display for the event loop
- * @return  Exit code
+ * @param   disp    Отображение цикла событий
+ * @return  Код выхода
  */
 int lv_qnx_event_loop(lv_display_t * disp);
 

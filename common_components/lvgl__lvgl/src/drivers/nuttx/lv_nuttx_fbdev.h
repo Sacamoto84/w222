@@ -31,14 +31,14 @@ extern "C" {
  **********************/
 
 /**
- * Создайте новый дисплей с помощью бэкэнда NuttX.
+ * Создаем новый дисплей с помощью бэкэнда NuttX.
  */
 lv_display_t * lv_nuttx_fbdev_create(void);
 
 /**
  * Инициализировать отображение с указанным устройством кадрового буфера
- * @param disp      pointer to display with NuttX backend
- * @param file      the name of framebuffer device
+ * @param disp      указатель для отображения с помощью бэкэнда NuttX
+ * @param file      имя устройства кадрового буфера
  */
 int lv_nuttx_fbdev_set_file(lv_display_t * disp, const char * file);
 

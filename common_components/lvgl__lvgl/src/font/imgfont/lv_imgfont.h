@@ -36,17 +36,17 @@ typedef const void * (*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
  **********************/
 
 /**
- * Создает графический шрифт с указанным параметром info.
- * @param height font size
- * @param path_cb a function to get the image path name of character.
- * @param user_data pointer to user data
- * @return pointer to the new imgfont or NULL if create error.
+ * Создает графический шрифт с указанием параметра info.
+ * @param height размер шрифта
+ * @param path_cb функция для получения пути к изображению персонажа.
+ * @param user_data указатель на данные пользователя
+ * @return указатель на новый imgfont или NULL, если возникла ошибка.
  */
 lv_font_t * lv_imgfont_create(uint16_t height, lv_imgfont_get_path_cb_t path_cb, void * user_data);
 
 /**
  * Уничтожить созданный графический шрифт.
- * @param font pointer to image font handle.
+ * @param font указатель на дескриптор шрифта изображения.
  */
 void lv_imgfont_destroy(lv_font_t * font);
 

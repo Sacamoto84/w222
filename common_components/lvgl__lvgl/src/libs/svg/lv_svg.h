@@ -261,7 +261,7 @@ enum _lv_svg_path_cmd_t {
 };
 
 /*
- * чтобы упростить управление буфером списка, выделите достаточно памяти для всех данных пути и cmd.
+ * Чтобы уменьшить управление буфером таблицы, выделите достаточно памяти для всех данных path и cmd.
  * | cmd | данные[0] | данные[1] | данные[2] | ... |
  */
 typedef struct {
@@ -304,22 +304,22 @@ typedef struct {
  **********************/
 
 /**
- * @brief Loading SVG data and creating the DOM tree
- * @param svg_data pointer to the SVG data
- * @param data_len the SVG data length
+ * @brief Загрузка данныхSVGи создание дерева DOM
+ * @param svg_data указатель на данные SVG
+ * @param data_len длина данных SVG
  */
 lv_svg_node_t * lv_svg_load_data(const char * svg_data, uint32_t data_len);
 
 /**
- * @brief Create an SVG DOM node
- * @param parent pointer to the parent node
- * @return true: an new SVG DOM node, false: NULL
+ * @brief Создайте узелSVGDOM.
+ * @param parent указатель на родительский узел
+ * @return true: новый узелSVGDOM, false: NULL
  */
 lv_svg_node_t * lv_svg_node_create(lv_svg_node_t * parent);
 
 /**
- * @brief Delete an SVG DOM subtree
- * @param node pointer to an SVG DOM subtree
+ * @brief Удалить поддеревоSVGDOM
+ * @param node указатель на поддеревоSVGDOM
  */
 void lv_svg_node_delete(lv_svg_node_t * node);
 

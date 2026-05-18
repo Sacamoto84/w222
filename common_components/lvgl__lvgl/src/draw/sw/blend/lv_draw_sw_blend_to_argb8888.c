@@ -514,10 +514,10 @@ static void LV_ATTRIBUTE_FAST_MEM al88_image_blend(lv_draw_sw_blend_image_dsc_t 
                 for(y = 0; y < h; y++) {
                     for(dest_x = 0, src_x = 0; src_x < w; dest_x++, src_x++) {
                         /*
-                        dest_buf_c32 [ dest_x ].alpha = src_buf_al88 [ src_x ].alpha;
-                        dest_buf_c32 [ dest_x ].red = src_buf_al88 [ src_x ].lumi;
-                        dest_buf_c32 [ dest_x ].green = src_buf_al88 [ src_x ].lumi;
-                        dest_buf_c32 [ dest_x ].blue = src_buf_al88 [ src_x ].lumi;
+                        dest_buf_c32 [dest_x].alpha =src_buf_al88[src_x].alpha;
+                        dest_buf_c32 [dest_x].red =src_buf_al88[src_x].lumi;
+                        dest_buf_c32 [dest_x].green =src_buf_al88[src_x].lumi;
+                        dest_buf_c32 [dest_x].blue =src_buf_al88[src_x].lumi;
                         */
                         lv_color_8_32_mix(src_buf_al88[src_x].lumi, &dest_buf_c32[dest_x], src_buf_al88[src_x].alpha);
                     }

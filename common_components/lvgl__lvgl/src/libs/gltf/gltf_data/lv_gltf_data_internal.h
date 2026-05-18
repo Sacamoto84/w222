@@ -188,23 +188,23 @@ void lv_gltf_store_compiled_shader(lv_gltf_model_t * data, size_t identifier, lv
 lv_gltf_compiled_shader_t * lv_gltf_get_compiled_shader(lv_gltf_model_t * data, size_t identifier);
 
 /**
- * @brief Load the gltf file at the specified filepath
+ * @brief Загрузите файл gltf по указанному пути.
  *
- * @param gltf_path The gltf filename
- * @param ret_data Pointer to the data container that will be populated.
- * @param shaders Pointer to the shader cache object this file uses.
+ * @param gltf_path Имя файла gltf
+ * @param ret_data Указатель на контейнер данных, который будет заполнен.
+ * @param shaders Указатель на объект кэша шейдера, который использует этот файл.
  */
 lv_gltf_model_t *
 lv_gltf_data_load_from_file(const char * file_path,
                             lv_opengl_shader_manager_t * shader_manager);
 
 /**
- * @brief Load the gltf file encoded within the supplied byte array
+ * @brief Загрузите файл gltf, закодированный в предоставленном массиве байтов.
  *
- * @param gltf_path The gltf filename
- * @param gltf_data_size if gltf_path is instead a byte array, pass the size of that array in through this variable (or 0 if it's a file path).
- * @param ret_data Pointer to the data container that will be populated.
- * @param shaders Pointer to the shader cache object this file uses.
+ * @param gltf_path Имя файла gltf
+ * @param gltf_data_size еслиgltf_pathпредставляет собой массив байтов, передайте размер этого массива через эту переменную (или 0, если это путь к файлу).
+ * @param ret_data Указатель на контейнер данных, который будет заполнен.
+ * @param shaders Указатель на объект кэша шейдера, который использует этот файл.
  */
 
 lv_gltf_model_t *
@@ -213,35 +213,35 @@ lv_gltf_data_load_from_bytes(const uint8_t * data, size_t data_size,
 
 
 /**
- * @brief Retrieve the radius of the GLTF data object.
+ * @brief Получите радиус объекта данных GLTF.
  *
- * @param D Pointer to the lv_gltf_data_t object from which to get the radius.
- * @return The radius of the GLTF data object.
+ * @param D Указатель на объект lv_gltf_data_t, из которого можно получить радиус.
+ * @return Радиус объекта данных GLTF.
  */
 double lv_gltf_data_get_radius(const lv_gltf_model_t * model);
 
 
 /**
- * @brief Destroy a GLTF data object and free associated resources.
+ * @brief Уничтожьте объект данныхGLTFи освободите связанные ресурсы.
  *
- * @param _data Pointer to the lv_gltf_data_t object to be destroyed.
+ * @param _data Указатель на объект lv_gltf_data_t, который необходимо уничтожить.
  */
 void lv_gltf_data_delete(lv_gltf_model_t * _data);
 
 /**
- * @brief Copy the bounds information from one GLTF data object to another.
+ * @brief Скопируйте информацию о границах из одного объекта данныхGLTFв другой.
  *
- * @param to Pointer to the destination lv_gltf_data_t object.
- * @param from Pointer to the source lv_gltf_data_t object.
+ * @param to Указатель на целевой объект lv_gltf_data_t.
+ * @param from Указатель на исходный объект lv_gltf_data_t.
  */
 void lv_gltf_data_copy_bounds_info(lv_gltf_model_t * to, lv_gltf_model_t * from);
 
 /**
- * @brief Swap the red and blue channels in a pixel buffer.
+ * @brief Поменяйте местами красный и синий каналы в буфере пикселей.
  *
- * @param pixel_buffer Pointer to the pixel buffer containing the image data.
- * @param byte_total_count The total number of bytes in the pixel buffer.
- * @param has_alpha Flag indicating whether the pixel buffer includes an alpha channel.
+ * @param pixel_buffer Указатель на буфер пикселей, содержащий данные изображения.
+ * @param byte_total_count Общее количество байтов в буфере пикселей.
+ * @param has_alpha Флаг, указывающий, содержит ли буфер пикселей альфа-канал.
  */
 void lv_gltf_data_rgb_to_bgr(uint8_t * pixel_buffer,
                              size_t byte_total_count,

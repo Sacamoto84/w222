@@ -129,7 +129,7 @@ static lv_wl_egl_display_data_t * egl_create_display_data(lv_display_t * display
         goto egl_ctx_err;
     }
 
-    /* Пусть драйвер текстуры opengles управляет временем жизни текстуры. */
+    /* Пусть драйверы текстур откроют управление временем жизни текстур. */
     ddata->texture.is_texture_owner = true;
 
     /*Инициализируйте буферы отрисовки и текстуру.*/
@@ -318,7 +318,7 @@ static void wl_egl_global_handler(void * backend_ctx, struct wl_registry * regis
     LV_UNUSED(interface);
     LV_UNUSED(version);
 
-    /* Для базовой поддержки EGL не требуются специальные глобальные переменные Wayland. */
+    /* Для установления поддержкиEGLне требуются специальные глобальные переменные Wayland. */
 }
 
 static lv_egl_interface_t wl_egl_get_interface(lv_display_t * display)
@@ -416,8 +416,8 @@ static void wl_egl_flip_cb(void * driver_data, bool vsync)
     LV_UNUSED(driver_data);
     LV_UNUSED(vsync);
 
-    /* В Wayland замена буфера осуществляется композитором.
-     * через wl_surface_commit(), который вызывается в обратном вызове флеша */
+    /* В Вэйланде заменили буфера композитора.
+     * через wl_surface_commit(), который возникает при обратном вызове флешки */
 }
 
 #endif /*LV_WAYLAND_USE_EGL*/

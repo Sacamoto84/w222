@@ -39,7 +39,7 @@ static void _pxp_draw_core_cb(lv_draw_task_t * t, const lv_draw_image_dsc_t * dr
                               const lv_image_decoder_dsc_t * decoder_dsc, lv_draw_image_sup_t * sup,
                               const lv_area_t * img_coords, const lv_area_t * clipped_img_area);
 
-/* Blit с перекрашиванием для изображений без opa и альфа-канала */
+/* Блит с перекрашиванием для изображений без опа и альфа-канала */
 static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t dest_stride,
                               lv_color_format_t dest_cf, const uint8_t * src_buf, const lv_area_t * src_area,
                               int32_t src_stride, lv_color_format_t src_cf, const lv_draw_image_dsc_t * dsc);
@@ -49,7 +49,7 @@ static void _pxp_blit_transform(uint8_t * dest_buf, const lv_area_t * dest_area,
                                 lv_color_format_t dest_cf, const uint8_t * src_buf, const lv_area_t * src_area,
                                 int32_t src_stride, lv_color_format_t src_cf, const lv_draw_image_dsc_t * dsc);
 
-/* Простой Blit с opa и альфа-каналом */
+/* Простой Блит с опа и альфа-каналом */
 static void _pxp_blit(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t dest_stride,
                       lv_color_format_t dest_cf, const uint8_t * src_buf, const lv_area_t * src_area,
                       int32_t src_stride, lv_color_format_t src_cf, lv_opa_t opa);
@@ -171,7 +171,7 @@ static void _pxp_blit_recolor(uint8_t * dest_buf, const lv_area_t * dest_area, i
     /**
      * Настройте смешивание Портера-Даффа.
      *
-     * Note: srcFactorMode and dstFactorMode are inverted in fsl_pxp.h:
+     * Note: srcFactorMode и dstFactorMode инвертируются в fsl_pxp.h:
      * srcFactorMode фактически применяется к альфа-значению PS.
      * dstFactorMode фактически применяется к альфа-значению AS.
      */

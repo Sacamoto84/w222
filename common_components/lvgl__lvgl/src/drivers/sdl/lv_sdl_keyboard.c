@@ -126,7 +126,7 @@ void lv_sdl_keyboard_handler(SDL_Event * event)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         if(lv_indev_get_read_cb(indev) == sdl_keyboard_read) {
-            /*Если по какой-либо причине disp равен NULL, используйте первый indev правильного типа.*/
+            /*Если по какой-либо причине disp равенNULL, используйте первый тип indev.*/
             if(disp == NULL || lv_indev_get_display(indev) == disp) break;
         }
         indev = lv_indev_get_next(indev);
@@ -170,8 +170,8 @@ void lv_sdl_keyboard_handler(SDL_Event * event)
 
 /**
  * Преобразуйте код клавиши SDL в его аналог LV_KEY_ * или верните '\0', если это не управляющий символ.
- * @param sdl_key the key code
- * @return LV_KEY_* control character or '\0'
+ * @param sdl_key ключевой код
+ * @return LV_KEY_ * управляющий символ или '\0'
  */
 static uint32_t keycode_to_ctrl_key(SDL_Keycode sdl_key)
 {

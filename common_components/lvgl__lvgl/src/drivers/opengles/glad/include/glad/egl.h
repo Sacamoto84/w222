@@ -1,25 +1,25 @@
 /**
- * Загрузчик создан Glad 2.0.8 в пятницу, 28 ноября, 10:05:15, 2025 г.
+ * Загрузчик создан Рад 2.0.8 в пятницу, 28 ноября, 10:05:15, 2025 г.
  *
  * SPDX-License-Identifier: (WTFPL OR CC0-1.0) AND Apache-2.0
  *
  * Генератор: C/С++
- * Specification: egl
+ * Specification: например
  * Расширения: 10
  *
  * API:
- *  - egl=1.5
+ *  - например=1,5
  *
  * Опции:
- *  - ALIAS = True
- *  - DEBUG = False
- *  - HEADER_ONLY = False
- *  - LOADER = False
- *  - MX = False
- *  - ON_DEMAND = False
+ *  - ALIAS = Истина
+ *  - DEBUG = Ложь
+ *  - HEADER_ONLY = Ложь
+ *  - LOADER = Ложь
+ *  - MX = Ложь
+ *  - ON_DEMAND = Ложь
  *
  * Командная строка:
- *    --api='egl=1.5' --extensions=' EGL_EXT_image_dma_buf_import , EGL_EXT_image_dma_buf_import_modifiers , EGL_EXT_platform_base , EGL_EXT_platform_wayland , EGL_KHR_cl_event2 , EGL_KHR_fence_sync , EGL_KHR_image , EGL_KHR_image_base , EGL_KHR_platform_gbm , EGL_KHR_reusable_sync ' c --alias
+ *    --api='egl=1.5' --extensions='EGL_EXT_image_dma_buf_import,EGL_EXT_image_dma_buf_import_modifiers,EGL_EXT_platform_base,EGL_EXT_platform_wayland,EGL_KHR_cl_event2,EGL_KHR_fence_sync,EGL_KHR_image,EGL_KHR_image_base,EGL_KHR_platform_gbm,EGL_KHR_reusable_sync' c --alias
  *
  * Онлайн:
  *    http://glad.sh/#api=egl%3D1.5&extensions=EGL_EXT_image_dma_buf_import%2CEGL_EXT_image_dma_buf_import_modifiers%2CEGL_EXT_platform_base%2CEGL_EXT_platform_wayland%2CEGL_KHR_cl_event2%2CEGL_KHR_fence_sync%2CEGL_KHR_image%2CEGL_KHR_image_base%2CEGL_KHR_platform_gbm%2CEGL_KHR_reusable_sync&generator=c&options=ALIAS

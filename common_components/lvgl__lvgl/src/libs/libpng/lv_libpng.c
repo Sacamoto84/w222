@@ -77,9 +77,9 @@ void lv_libpng_deinit(void)
 
 /**
  * Получить информацию об изображении PNG
- * @param dsc can be file name or pointer to a C array
- * @param header store the info here
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't get the info
+ * @param dsc может быть именем файла или указателем на массив C
+ * @param header хранить информацию здесь
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу получить информацию
  */
 static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc, lv_image_header_t * header)
 {
@@ -131,9 +131,9 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
 /**
  * Откройте изображение PNG и верните декодированное изображение.
- * @param decoder pointer to the decoder
- * @param dsc     pointer to the decoder descriptor
- * @return LV_RESULT_OK: no error; LV_RESULT_INVALID: can't open the image
+ * @param decoder указатель на декодер
+ * @param dsc     указатель на дескриптор декодера
+ * @return LV_RESULT_OK: нет ошибок;  LV_RESULT_INVALID: не могу открыть изображение
  */
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {

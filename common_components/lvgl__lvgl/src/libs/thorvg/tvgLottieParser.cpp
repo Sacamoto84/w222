@@ -471,7 +471,7 @@ void LottieParser::parsePropertyInternal(T& prop)
         getValue(prop.value);
     //многозначное свойство
     } else {
-        //TODO: Here might be a single frame.
+        //TODO: Здесь может быть один кадр.
         //Can we figure out the frame number in advance?
         enterArray();
         while (nextArrayValue()) {
@@ -594,7 +594,7 @@ LottieTransform* LottieParser::parseTransform(bool ddd)
             while (auto key = nextObjectKey()) {
                 if (KEY_AS("k")) parsePropertyInternal(transform->position);
                 else if (KEY_AS("s") && getBool()) transform->coords = new LottieTransform::SeparateCoord;
-                //проверьте «separateCoord», чтобы выяснить, является ли «x(выражение)» / «x(координата)»
+                //Чтобы выяснить, «separateCoord» — это «x(выражение)» / проверьте «x(координата)»
                 else if (transform->coords && KEY_AS("x")) parseProperty<LottieProperty::Type::Float>(transform->coords->x);
                 else if (transform->coords && KEY_AS("y")) parseProperty<LottieProperty::Type::Float>(transform->coords->y);
                 else if (KEY_AS("x")) transform->position.exp = _expression(getStringCopy(), comp, context.layer, context.parent, &transform->position);
@@ -931,10 +931,10 @@ LottieImage* LottieParser::parseImage(const char* data, const char* subPath, boo
     //Используется для изображения
     auto image = new LottieImage;
 
-    //встроенный ресурс изображения. должно начинаться с «data:»
+    //встроенный ресурс изображения. должен открыться с «данными:»
     //заголовок выглядит как «data:image/png;base64», поэтому его нужно пропустить до «,».
     if (embedded && !strncmp(data, "data:", 5)) {
-        //выяснить mimetype
+        //узнать миметип
         auto mimeType = data + 11;
         auto needle = strstr(mimeType, ";");
         image->mimeType = strDuplicate(mimeType, needle - mimeType);
@@ -1318,7 +1318,7 @@ void LottieParser::parseEffects(LottieLayer* layer)
             else if (effect && KEY_AS("ef")) parseEffect(effect);
             else skip(key);
         }
-        //TODO: remove when all effects were guaranteed.
+        //TODO: удалить, когда все эффекты были гарантированы.
         if (invalid) {
             TVGLOG("LOTTIE", "Not supported Layer Effect = %d", effect ? (int)effect->type : -1);
             while (auto key = nextObjectKey()) skip(key);
@@ -1436,7 +1436,7 @@ bool LottieParser::apply(LottieSlot* slot)
 {
     enterObject();
 
-    //OPTIMIZE: we can create the property directly, without object
+    //OPTIMIZE: мы можем создать свойство напрямую, без объекта
     LottieObject* obj = nullptr;  //объект-слот
 
     switch (slot->type) {
@@ -1473,7 +1473,7 @@ bool LottieParser::apply(LottieSlot* slot)
 
 bool LottieParser::parse()
 {
-    //проверьте json.
+    //Пожалуйста, JSON.
     if (!parseNext()) return false;
 
     enterObject();

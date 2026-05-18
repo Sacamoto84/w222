@@ -116,7 +116,7 @@ bool lv_font_manager_delete(lv_font_manager_t * manager)
         return false;
     }
 
-    /* очистить recycle_manager */
+    /* использовать recycle_manager */
     lv_font_manager_recycle_delete(manager->recycle_manager);
 
     /* чистая карта пути */
@@ -586,7 +586,7 @@ static const lv_font_refer_node_t * lv_font_manager_get_font(lv_font_manager_t *
         return refer_node;
     }
 
-    /* не найден refer_node, начните создавать шрифт */
+    /* не найденrefer_node, начните создавать шрифт */
 
     lv_font_t * font = lv_font_manager_create_font_wrapper(manager, ft_info);
 
@@ -594,7 +594,7 @@ static const lv_font_refer_node_t * lv_font_manager_get_font(lv_font_manager_t *
         return NULL;
     }
 
-    /* добавить refer_node к refer_ll */
+    /* добавитьrefer_nodeк refer_ll */
     refer_node = lv_ll_ins_head(&manager->refer_ll);
     LV_ASSERT_MALLOC(refer_node);
     lv_memzero(refer_node, sizeof(lv_font_refer_node_t));
@@ -620,7 +620,7 @@ static bool lv_font_manager_drop_font(lv_font_manager_t * manager, const lv_font
     LV_ASSERT_NULL(manager);
     LV_ASSERT_NULL(node);
 
-    /* Проверьте, существует ли refer_node. */
+    /* Проверьте, существует лиrefer_node. */
     lv_font_refer_node_t * refer_node = lv_font_manager_search_refer_node(manager, &node->ft_info);
     if(!refer_node) {
         LV_LOG_WARN("NO record found for font: %s(%d),"
@@ -631,13 +631,13 @@ static bool lv_font_manager_drop_font(lv_font_manager_t * manager, const lv_font
 
     refer_node->ref_cnt--;
 
-    /* Если ref_cnt > 0, шрифт удалять не нужно. */
+    /* Еслиref_cnt> 0, шрифт удалять не нужно. */
     if(refer_node->ref_cnt > 0) {
         LV_LOG_INFO("refer_node existed, ref_cnt-- = %d", refer_node->ref_cnt);
         return true;
     }
 
-    /* если ref_cnt скоро будет равен 0, бесплатный ресурс шрифта */
+    /* еслиref_cntскоро будет равен 0, бесплатный ресурсный шрифт */
     lv_font_manager_delete_font_wrapper(manager, refer_node);
 
     /* бесплатно */

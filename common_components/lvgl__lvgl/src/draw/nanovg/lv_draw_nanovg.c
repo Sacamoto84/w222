@@ -144,7 +144,7 @@ static void draw_execute(lv_draw_nanovg_unit_t * u, lv_draw_task_t * t)
     lv_matrix_multiply(&global_matrix, &layer_matrix);
 #endif
 
-    /* NanoVG выведет предварительно умноженное изображение, установите соответствующий флаг. */
+    /* NanoVG выведет предварительное умноженное изображение, установив соответствующий флаг. */
     if(layer->draw_buf) {
         lv_draw_buf_set_flag(layer->draw_buf, LV_IMAGE_FLAGS_PREMULTIPLIED);
     }
@@ -278,7 +278,7 @@ static void on_layer_readback(lv_draw_nanovg_unit_t * u, lv_layer_t * layer)
     GLenum format;
     GLenum type;
 
-    /* OpenGL читает снизу вверх, но LVGL ожидает сверху вниз. */
+    /* OpenGL смотрит вверх, аLVGLожидает сверху вниз. */
     switch(draw_buf->header.cf) {
         case LV_COLOR_FORMAT_ARGB8888:
         case LV_COLOR_FORMAT_XRGB8888:
@@ -325,7 +325,7 @@ static void on_layer_readback(lv_draw_nanovg_unit_t * u, lv_layer_t * layer)
     /* Привязать обратно к фреймбуферу по умолчанию */
     nvgluBindFramebuffer(NULL);
 
-    /* Отметить draw_buf как измененный */
+    /* Отметитьdraw_bufкак измененный */
     lv_draw_buf_flush_cache(draw_buf, NULL);
 
     LV_PROFILER_DRAW_END;
@@ -446,8 +446,8 @@ static void draw_event_cb(lv_event_t * e)
                 }
 
                 /**
-                 * Очистите current_layer, если он удаляется, поэтому следующая отправка
-                 * будет правильно вызывать on_layer_changed, даже если адрес слоя используется повторно
+                 * Очиститеcurrent_layer, если он удалился, поэтому следующая отправка
+                 * будет правильно оставитьon_layer_changed, даже если адресный слой будет использоваться повторно
                  */
                 if(u->current_layer == layer) {
                     u->current_layer = NULL;

@@ -1,5 +1,5 @@
 /*
-   LZ4 - Fast LZ compression algorithm
+   LZ4 - Быстрый алгоритм сжатия LZ
    Copyright (C) 2011-2023, Yann Collet.
 
    BSD Лицензия из 2 пунктов ( http://www.opensource.org/licenses/bsd-license.php)
@@ -28,8 +28,8 @@
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    Связаться с автором можно по адресу:
-    - LZ4 homepage : http://www.lz4.org
-    - LZ4 source repository : https://github.com/lz4/lz4
+    - Домашняя страница LZ4: http://www.lz4.org
+    - Репозиторий исходного кода LZ4: https://github.com/lz4/lz4
 */
 
 #include "../../lv_conf_internal.h"
@@ -40,9 +40,9 @@
 **************************************/
 /*
  * LZ4_HEAPMODE :
- * Выберите, как будет работать сжатие без сохранения состояния, например `LZ4_compress_default()`.
+ * Выберите, например, как будет работать сжатие без сохранения состояния,`LZ4_compress_default()`.
  * выделить память для своей хэш-таблицы,
- * в стеке памяти (0: по умолчанию, самый быстрый) или в куче памяти (1: требуется malloc() ).
+ * в стеке памяти (0: по умолчанию, самый быстрый) или в куче памяти (1: требуетсяmalloc()).
  */
 #ifndef LZ4_HEAPMODE
 #  define LZ4_HEAPMODE 0
@@ -50,7 +50,7 @@
 
 /*
  * LZ4_ACCELERATION_DEFAULT :
- * Выберите «ускорение» для LZ4_compress_fast (), когда значение параметра <= 0.
+ * Выберите «ускорение» дляLZ4_compress_fast(), когда значение параметра <= 0.
  */
 #define LZ4_ACCELERATION_DEFAULT 1
 /*
@@ -65,15 +65,15 @@
 *  CPU Обнаружение функций
 **************************************/
 /* LZ4_FORCE_MEMORY_ACCESS
- * По умолчанию доступ к невыровненной памяти контролируется `memcpy()`, который является безопасным и переносимым.
+ * По умолчанию доступ к невыровненной памяти контролируется `memcpy()`, что является безопасным и переносимым.
  * К сожалению, в некоторых комбинациях целевой системы и компилятора сгенерированная сборка оказывается неоптимальной.
  * Переключатель ниже позволяет выбрать другой метод доступа для повышения производительности.
- * Метод 0 (по умолчанию): используйте `memcpy()`. Безопасный и портативный.
- * Способ 1: оператор `__packed`. Это зависит от расширения компилятора (т. е. непереносимости).
- *            Этот метод безопасен, если ваш компилятор поддерживает его и *обычно* так же быстр или быстрее, чем `memcpy`.
+ * Метод 0 (по умолчанию): викор`memcpy()`. Безопасный и портативный.
+ * Способ 1: оператор `__packed`. Это зависит от расширения компилятора (т.е. непереносимости).
+ *            Этот метод безопасен, если ваш компилятор поддерживает его и *обычно* так же быстрее или быстрее, чем`memcpy`.
  * Способ 2: прямой доступ. Этот метод переносим, но нарушает стандарт C.
  *            Он может генерировать код с ошибками на целях, генерация сборки которых зависит от выравнивания.
- *            Но в некоторых случаях это единственный известный способ добиться максимальной производительности (например, GCC + ARMv6).
+ *            Но в некоторых случаях это единственный известный способ достижения максимальной производительности (например,GCC+ ARMv6).
  * Подробности см. в https://fastcompression.blogspot.fr/2015/08/accessing-unaligned-memory.html.
  * Предпочитайте эти методы в порядке приоритета (0 > 1 > 2)
  */
@@ -125,11 +125,11 @@
 **************************************/
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)  /* Визуальная Студия 2005+ */
 #  include <intrin.h>               /* присутствует только в VS2005 + */
-#  pragma warning(disable : 4127)   /* disable: C4127: conditional expression is constant */
-#  pragma warning(disable : 6237)   /* disable: C6237: conditional expression is always 0 */
-#  pragma warning(disable : 6239)   /* disable: C6239: (<non-zero constant> && <expression>) always evaluates to the result of <expression> */
-#  pragma warning(disable : 6240)   /* disable: C6240: (<expression> && <non-zero constant>) always evaluates to the result of <expression> */
-#  pragma warning(disable : 6326)   /* disable: C6326: Potential comparison of a constant with another constant */
+#  pragma warning(disable : 4127)   /* disable: C4127: условное выражение является константой */
+#  pragma warning(disable : 6237)   /* disable: C6237: условное выражение всегда равно 0 */
+#  pragma warning(disable : 6239)   /* disable: C6239 : (<ненулевая константа> && <выражение>) всегда оценивается как результат <выражение> */
+#  pragma warning(disable : 6240)   /* disable: C6240 : (<выражение> && <ненулевая константа>) всегда возвращает результат <выражение> */
+#  pragma warning(disable : 6326)   /* disable: C6326 : Возможное сравнение константы с другой константой. */
 #endif  /* _MSC_VER */
 
 #ifndef LZ4_FORCE_INLINE
@@ -149,7 +149,7 @@
 #endif /* LZ4_FORCE_INLINE */
 
 /* LZ4_FORCE_O2 и LZ4_FORCE_INLINE
- * gcc на ppc64le генерирует развернутый цикл SIMDized для LZ4_wildCopy8,
+ * gcc на ppc64le последовательный цикл SIMDized дляLZ4_wildCopy8,
  * вместе с простым 8-байтовым циклом копирования в качестве резервного пути.
  * Однако эта оптимизация снижает скорость распаковки более чем на 30%.
  * потому что выполнение не переходит в оптимизированный цикл
@@ -157,9 +157,9 @@
  * прежде чем перейти на запасной путь, накладные расходы становятся бесполезными.
  * Эта оптимизация происходит только с флагом - O3, а - O2 генерирует
  * простой 8-байтовый цикл копирования.
- * При использовании gcc на ppc64le все LZ4_decompress_* и LZ4_wildCopy8
- * функции аннотированы __attribute__ ((optimize(" O2 "))),
- * а также LZ4_wildCopy8 принудительно встраивается, так что атрибут O2
+ * При использовании gcc на ppc64le всеLZ4_decompress_* и LZ4_wildCopy8
+ * функция аннотирована__attribute__((optimize("O2"))),
+ * а такжеLZ4_wildCopy8в качестве значения, так что атрибут O2
  * LZ4_wildCopy8 не влияет на скорость сжатия.
  */
 #if defined(__PPC64__) && defined(__LITTLE_ENDIAN__) && defined(__GNUC__) && !defined(__clang__)
@@ -196,18 +196,18 @@
 
 /*! LZ4_STATIC_LINKING_ONLY_DISABLE_MEMORY_ALLOCATION :
  *  Отключите функции LZ4/HC относительно высокого уровня, использующие динамическую память.
- *  функции распределения ( malloc() , calloc() , free() ).
+ *  распределение функций (malloc(),calloc(),free()).
  *
  *  Обратите внимание, что это переключатель времени компиляции. И поскольку он отключает
  *  общедоступные/стабильные функции LZ4 v1 API, мы не рекомендуем использовать это
  *  символ для создания библиотеки для распространения.
  *
  *  Следующие общедоступные функции удаляются при определении этого символа.
- *  - lz4   : LZ4_createStream, LZ4_freeStream,
- *            LZ4_createStreamDecode , LZ4_freeStreamDecode , LZ4_create (устарело)
- *  - lz4hc : LZ4_createStreamHC, LZ4_freeStreamHC,
- *            LZ4_createHC (устарело), LZ4_freeHC (устарело)
- *  - lz4frame, lz4file : All LZ4F_* functions
+ *  - lz4: LZ4_createStream, LZ4_freeStream,
+ *            LZ4_createStreamDecode ,LZ4_freeStreamDecode,LZ4_create(устарело)
+ *  - lz4hc :LZ4_createStreamHC,LZ4_freeStreamHC,
+ *            LZ4_createHC (устарело),LZ4_freeHC(устарело)
+ *  - lz4frame, lz4file: все функцииLZ4F_*
  */
 #if defined(LZ4_STATIC_LINKING_ONLY_DISABLE_MEMORY_ALLOCATION)
 #  define ALLOC(s)          lz4_error_memory_allocation_is_disabled
@@ -245,9 +245,9 @@ void  LZ4_free(void* p);
 #define MINMATCH 4
 
 #define WILDCOPYLENGTH 8
-#define LASTLITERALS   5   /* см. ../doc/ lz4_Block_format.md #parsing -restrictions */
-#define MFLIMIT       12   /* см. ../doc/ lz4_Block_format.md #parsing -restrictions */
-#define MATCH_SAFEGUARD_DISTANCE  ((2*WILDCOPYLENGTH) - MINMATCH)   /* убедитесь, что можно записать 2 x wildcopyLength без переполнения выходного буфера */
+#define LASTLITERALS   5   /* см. ../doc/lz4_Block_format.md#parsing - ограничения */
+#define MFLIMIT       12   /* см. ../doc/lz4_Block_format.md#parsing - ограничения */
+#define MATCH_SAFEGUARD_DISTANCE  ((2*WILDCOPYLENGTH) - MINMATCH)   /* убедитесь, что можно записать 2 x wildcopyLength без ограничения выходного буфера */
 #define FASTLOOP_SAFE_DISTANCE 64
 static const int LZ4_minLength = (MFLIMIT+1);
 
@@ -256,7 +256,7 @@ static const int LZ4_minLength = (MFLIMIT+1);
 #define GB *(1U<<30)
 
 #define LZ4_DISTANCE_ABSOLUTE_MAX 65535
-#if (LZ4_DISTANCE_MAX > LZ4_DISTANCE_ABSOLUTE_MAX)   /* max поддерживается форматом LZ4 */
+#if (LZ4_DISTANCE_MAX > LZ4_DISTANCE_ABSOLUTE_MAX)   /* Макс. формат формата LZ4 */
 #  error "LZ4_DISTANCE_MAX is too big : must be <= 65535"
 #endif
 
@@ -340,12 +340,12 @@ typedef enum {
 **************************************/
 
 /**
- * LZ4 использует memcpy с встроенным встроенным размером постоянного размера. Отдельно стоящий
- * средах компилятор не может предполагать, что реализация memcpy() является
- * соответствует стандарту, поэтому он не может применять специализированную встраивание memcpy()
- * логика. Если возможно, используйте __builtin_memcpy(), чтобы указать компилятору проанализировать
- * memcpy(), как если бы он соответствовал стандарту, поэтому его можно встроить в отдельно стоящее место.
- * среды. Это необходимо, например, при распаковке ядра Linux.
+ * LZ4 использует memcpy с блоком постоянного размера. Отдельно стоящий
+ * Компилятор среды не может предположить, что продукцияmemcpy()является
+ * соответствует стандарту, поэтому он не может применять специализированную установку memcpy()
+ * логика. Если возможно, воспользуйтесь__builtin_memcpy(), чтобы указать компилятору внимание.
+ * memcpy() , как если бы он назывался стандартом, поэтому его можно встроить в отдельно стоящее место.
+ * конец. Это необходимо, например, при распаковке ядра Linux.
  */
 #if !defined(LZ4_memcpy)
 #  if defined(__GNUC__) && (__GNUC__ >= 4)
@@ -387,7 +387,7 @@ static void LZ4_write32(void* memPtr, U32 value) { *(U32*)memPtr = value; }
 
 #elif defined(LZ4_FORCE_MEMORY_ACCESS) && (LZ4_FORCE_MEMORY_ACCESS==1)
 
-/* Инструкции __pack более безопасны, но специфичны для компилятора, поэтому потенциально проблематичны для некоторых компиляторов. */
+/* Инструкции__packболее безопасны, но специфичны для компиляторов, поэтому решают проблемы для некоторых компиляторов. */
 /* в настоящее время определено только для gcc и icc */
 LZ4_PACK(typedef struct { U16 u16; }) LZ4_unalign16;
 LZ4_PACK(typedef struct { U32 u32; }) LZ4_unalign32;
@@ -463,7 +463,7 @@ static void LZ4_writeLE16(void* memPtr, U16 value)
     }
 }
 
-/* индивидуальный вариант memcpy, который может перезаписывать до 8 байтов за пределами dstEnd */
+/* индивидуальный вариант memcpy, который может перезаписать до 8 байтов за свойство dstEnd */
 LZ4_FORCE_INLINE
 void LZ4_wildCopy8(void* dstPtr, const void* srcPtr, void* dstEnd)
 {
@@ -486,7 +486,7 @@ static const int      dec64table[8] = {0, 0, 0, -1, -4,  1, 2, 3};
 #  elif defined(__aarch64__) && !defined(__clang__)
      /* В aarch64, отличном от Apple, мы отключаем эту оптимизацию для clang, потому что
       * на некоторых мобильных чипсетах производительность снижается из-за лязга. Для
-      * дополнительную информацию см. в https://github.com/lz4/lz4/pull/707. */
+      * дополнительная информация см. в https://github.com/lz4/lz4/pull/707. */
 #    define LZ4_FAST_DEC_LOOP 1
 #  else
 #    define LZ4_FAST_DEC_LOOP 0
@@ -500,7 +500,7 @@ LZ4_memcpy_using_offset_base(BYTE* dstPtr, const BYTE* srcPtr, BYTE* dstEnd, con
 {
     assert(srcPtr + offset == dstPtr);
     if (offset < 8) {
-        LZ4_write32(dstPtr, 0);   /* отключить предупреждение msan при смещении == 0 */
+        LZ4_write32(dstPtr, 0);   /* Внимание, msan при смещении == 0 */
         dstPtr[0] = srcPtr[0];
         dstPtr[1] = srcPtr[1];
         dstPtr[2] = srcPtr[2];
@@ -518,7 +518,7 @@ LZ4_memcpy_using_offset_base(BYTE* dstPtr, const BYTE* srcPtr, BYTE* dstEnd, con
     LZ4_wildCopy8(dstPtr, srcPtr, dstEnd);
 }
 
-/* индивидуальный вариант memcpy, который может перезаписывать до 32 байтов за пределами dstEnd
+/* индивидуальный вариант memcpy, который может перезаписать до 32 байтов за свойство dstEnd
  * эта версия копирует два раза по 16 байт (вместо одного раза по 32 байта)
  * потому что он должен быть совместим со смещениями >= 16. */
 LZ4_FORCE_INLINE void
@@ -531,9 +531,9 @@ LZ4_wildCopy32(void* dstPtr, const void* srcPtr, void* dstEnd)
     do { LZ4_memcpy(d,s,16); LZ4_memcpy(d+16,s+16,16); d+=32; s+=32; } while (d<e);
 }
 
-/* LZ4_memcpy_using_offset () предполагает:
+/* LZ4_memcpy_using_offset() включает:
  * - dstEnd >= dstPtr + MINMATCH
- * - there is at least 12 bytes available to write after dstEnd */
+ * - после dstEnd доступно как минимум 12 байт для записи */
 LZ4_FORCE_INLINE void
 LZ4_memcpy_using_offset(BYTE* dstPtr, const BYTE* srcPtr, BYTE* dstEnd, const size_t offset)
 {
@@ -586,12 +586,12 @@ static unsigned LZ4_NbCommonBytes (reg_t val)
         if (sizeof(val) == 8) {
 #       if defined(_MSC_VER) && (_MSC_VER >= 1800) && (defined(_M_AMD64) && !defined(_M_ARM64EC)) && !defined(LZ4_FORCE_SW_BITCOUNT)
 /*-*************************************************************************************************
-* ARM64EC — это разработанный Microsoft ARM64 ABI, совместимый с приложениями AMD64 в ARM64 Windows 11.
+* ARM64EC — это разработанный MicrosoftARM64ABI, совместимый с приложениямиAMD64вARM64Windows 11.
 * ARM64EC ABI не поддерживает инструкции AVX/AVX2/AVX512, а также их соответствующие встроенные функции.
-* включая _tzcnt_u64. Поэтому нам необходимо нейтрализовать путь кода _tzcnt_u64 для ARM64EC.
+* включая_tzcnt_u64. Поэтому нам необходимо нейтрализовать путь кода_tzcnt_u64для ARM64EC.
 ****************************************************************************************************/
 #         if defined(__clang__) && (__clang_major__ < 10)
-            /* Избегайте неопределенной проблемы с внутренними функциями clang-cl.
+            /* Избегайте неопределенностей проблем с внутренними функциями clang-cl.
              * Подробности см. в https://github.com/lz4/lz4/pull/1017. */
             return (unsigned)__builtin_ia32_tzcnt_u64(val) >> 3;
 #         else
@@ -723,23 +723,23 @@ typedef enum { clearedTable = 0, byPtr, byU32, byU16 } tableType_t;
  * Это перечисление различает несколько различных режимов доступа к предыдущим
  * контент в потоке.
  *
- * - noDict        : There is no preceding content.
- * - withPrefix64k : Table entries up to ctx->dictSize before the current blob
+ * - noDict : предшествующего содержимого нет.
+ * - withPrefix64k: записи таблицы до ctx->dictSize перед текущим большим двоичным объектом.
  *                   сжимаемый большой двоичный объект действительны и относятся к предыдущему
  *                   контент (длиной ctx->dictSize), который доступен
  *                   непрерывно предшествующий в памяти контент в данный момент
  *                   сжимается.
- * - usingExtDict  : Like withPrefix64k, but the preceding content is somewhere
- *                   else в памяти, начиная с ctx->словарь с длиной
+ * - usingExtDict: как и withPrefix64k, но предыдущий контент где-то находится.
+ *                   else в памяти, начиная с ctx->словарь с четверти
  *                   ctx->dictSize.
- * - usingDictCtx  : Everything concerning the preceding content is
- *                   в отдельном контексте, на который указывает ctx->dictCtx.
- *                   ctx->словарь, ctx->dictSize и записи таблицы
+ * - usingDictCtx: все, что касается предыдущего содержимого,
+ *                   В отдельном двадцатом случае указывается ctx->dictCtx.
+ *                   ctx->словарь, ctx->dictSize и записи таблиц
  *                   в текущем контексте, которые относятся к позициям
  *                   предшествующие началу текущего сжатия
- *                   игнорируется. Вместо этого ctx->dictCtx->словарь и ctx->dictCtx.
- *                   ->dictSize описывает расположение и размер предыдущего
- *                   содержимое, а совпадения можно найти, просмотрев файл ctx
+ *                   теряется. Вместо этого ctx->dictCtx->словарь и ctx->dictCtx.
+ *                   ->dictSize определяет расположение и размер позиции
+ *                   совпадение, совпадение можно найти, просмотр файла ctx
  *                   ->dictCtx->hashTable.
  */
 typedef enum { noDict = 0, withPrefix64k, usingExtDict, usingDictCtx } dict_directive;
@@ -850,7 +850,7 @@ LZ4_FORCE_INLINE void LZ4_putPosition(const BYTE* p, void* tableBase, tableType_
 /* LZ4_getIndexOnHash () :
  * Индекс позиции совпадения, зарегистрированный в хеш-таблице.
  * хэш-позиция должна рассчитываться с использованием base+index или dictBase+index.
- * Предположение 1: действительно только в том случае, если tableType == byU32 или byU16.
+ * Предложение 1: действительно только в том случае, если tableType == byU32 или byU16.
  * Допущение 2: h считается действительным (в пределах хеш-таблицы).
  */
 LZ4_FORCE_INLINE U32 LZ4_getIndexOnHash(U32 h, const void* tableBase, tableType_t tableType)
@@ -927,8 +927,8 @@ LZ4_prepareTable(LZ4_stream_t_internal* const cctx,
 /** LZ4_compress_generic_validated () :
  *  встроен, чтобы обеспечить выбор ветвей во время компиляции.
  *  Предполагается, что следующие условия уже подтверждены:
- *  - source != NULL
- *  - inputSize > 0
+ *  - источник != NULL
+ *  - входной размер > 0
  */
 LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
                  LZ4_stream_t_internal* const cctx,
@@ -956,7 +956,7 @@ LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
     const U32 dictSize =
         dictDirective == usingDictCtx ? dictCtx->dictSize : cctx->dictSize;
     const U32 dictDelta =
-        (dictDirective == usingDictCtx) ? startIndex - dictCtx->currentOffset : 0;   /* сделать индексы в dictCtx сопоставимыми с индексами в текущем контексте */
+        (dictDirective == usingDictCtx) ? startIndex - dictCtx->currentOffset : 0;   /* сделать индексы в dictCtx третьими с индексами в текущих числах */
 
     int const maybe_extMem = (dictDirective == usingExtDict) || (dictDirective == usingDictCtx);
     U32 const prefixIdxLimit = startIndex - dictSize;   /* используется, когда dictDirective == dictSmall */
@@ -966,8 +966,8 @@ LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
     const BYTE* const mflimitPlusOne = iend - MFLIMIT + 1;
     const BYTE* const matchlimit = iend - LASTLITERALS;
 
-    /* dictCtx currentOffset индексируется в начале словаря,
-     * в то время как словарь в текущем контексте предшествует currentOffset */
+    /* Индекс dictCtx currentOffset указывается в начале словаря,
+     * в то время как словарь в настоящем предшествует currentOffset */
     const BYTE* dictBase = (dictionary == NULL) ? NULL :
                            (dictDirective == usingDictCtx) ?
                             dictionary + dictSize - dictCtx->currentOffset :
@@ -982,7 +982,7 @@ LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
     DEBUGLOG(5, "LZ4_compress_generic_validated: srcSize=%i, tableType=%u", inputSize, tableType);
     assert(ip != NULL);
     if (tableType == byU16) assert(inputSize<LZ4_64Klimit);  /* Размер слишком велик (не в пределах 64 КБ) */
-    if (tableType == byPtr) assert(dictDirective==noDict);   /* поддерживается только вариант использования с byPtr */
+    if (tableType == byPtr) assert(dictDirective==noDict);   /* действия только вариант использования с byPtr */
     /* Если условия инициализации не выполнены, нам не нужно отмечать поток.
      * как имеющий грязный контекст, поскольку никаких действий еще не было предпринято */
     if (outputDirective == fillOutput && maxOutputSize < 1) { return 0; } /* невозможно ничего хранить */
@@ -1064,7 +1064,7 @@ LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
                         assert(tableType == byU32);
                         matchIndex = LZ4_getIndexOnHash(h, dictCtx->hashTable, byU32);
                         match = dictBase + matchIndex;
-                        matchIndex += dictDelta;   /* сделать индекс dictCtx сопоставимым с текущим контекстом */
+                        matchIndex += dictDelta;   /* сделать индекс dictCtx сжатым с текущим контекстом */
                         lowLimit = dictionary;
                     } else {
                         match = base + matchIndex;
@@ -1116,7 +1116,7 @@ LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
             token = op++;
             if ((outputDirective == limitedOutput) &&  /* Проверьте переполнение выходного буфера */
                 (unlikely(op + litLength + (2 + 1 + LASTLITERALS) + (litLength/255) > olimit)) ) {
-                return 0;   /* невозможно сжать в рамках бюджета `dst`. Сохраненные индексы в хеш-таблице, тем не менее, в порядке. */
+                return 0;   /* невозможно сжать в рамках бюджета`dst`. Сохраненные индексы в хеш-таблице, тем не менее, в порядке. */
             }
             if ((outputDirective == fillOutput) &&
                 (unlikely(op + (litLength+240)/255 /* маленький */ + litLength /* литералы */ + 2 /* компенсация */ + 1 /* жетон */ + MFLIMIT - MINMATCH /* минимум последних литералов, поэтому последнее совпадение <= end - MFLIMIT */ > olimit))) {
@@ -1140,11 +1140,11 @@ LZ4_FORCE_INLINE int LZ4_compress_generic_validated(
 
 _next_match:
         /* на этом этапе должны быть правильно установлены следующие переменные:
-         * - ip : at start of LZ operation
-         * - match : at start of previous pattern occurrence; can be within current prefix, or within extDict
-         * - offset : if maybe_ext_memSegment==1 (constant)
-         * - lowLimit : must be == dictionary to mean "match is within extDict"; must be == source otherwise
-         * - token and *token : position to write 4-bits for match length; higher 4-bits for literal length supposed already written
+         * - ip: в начале операции LZ
+         * - match : в начале появления предыдущего шаблона; может находиться в текущем префиксе или в extDict
+         * - смещение: еслиmaybe_ext_memSegment== 1 (постоянная)
+         * - lowLimit : должен быть словарем ==, чтобы означать «совпадение находится в пределах extDict»; должен быть == источник в противном случае
+         * - token и *token: позиция для записи 4-х битов длины совпадения; старшие 4 бита для буквальной длины, предположительно уже записанные
          */
 
         if ((outputDirective == fillOutput) &&
@@ -1196,7 +1196,7 @@ _next_match:
                     assert(newMatchCode < matchCode);
                     matchCode = newMatchCode;
                     if (unlikely(ip <= filledIp)) {
-                        /* Мы уже заполнили fillIp, поэтому, если ip окажется меньше fillIp
+                        /* Мы уже заполнили fillIp, поэтому если ip появится меньше fillIp
                          * у нас есть позиции в хеш-таблице, выходящие за пределы текущей позиции. Это
                          * проблема, если мы повторно используем хеш-таблицу. Поэтому нам придется удалить эти позиции.
                          * из хеш-таблицы.
@@ -1210,7 +1210,7 @@ _next_match:
                     }
                 } else {
                     assert(outputDirective == limitedOutput);
-                    return 0;   /* невозможно сжать в рамках бюджета `dst`. Сохраненные индексы в хеш-таблице, тем не менее, в порядке. */
+                    return 0;   /* невозможно сжать в рамках бюджета`dst`. Сохраненные индексы в хеш-таблице, тем не менее, в порядке. */
                 }
             }
             if (matchCode >= ML_MASK) {
@@ -1314,7 +1314,7 @@ _last_literals:
                 lastRun -= (lastRun + 256 - RUN_MASK) / 256;  /*дополнительные жетоны длины*/
             } else {
                 assert(outputDirective == limitedOutput);
-                return 0;   /* невозможно сжать в рамках бюджета `dst`. Сохраненные индексы в хеш-таблице, тем не менее, в порядке. */
+                return 0;   /* невозможно сжать в рамках бюджета`dst`. Сохраненные индексы в хеш-таблице, тем не менее, в порядке. */
             }
         }
         DEBUGLOG(6, "Final literal run : %i literals", (int)lastRun);
@@ -1342,7 +1342,7 @@ _last_literals:
 
 /** LZ4_compress_generic () :
  *  встроенный, чтобы обеспечить выбор ветвей во время компиляции;
- *  заботится о src == ( NULL , 0)
+ *  заботится о src == (NULL, 0)
  *  и пересылаем остальное на LZ4_compress_generic_validated */
 LZ4_FORCE_INLINE int LZ4_compress_generic(
                  LZ4_stream_t_internal* const cctx,
@@ -1361,7 +1361,7 @@ LZ4_FORCE_INLINE int LZ4_compress_generic(
                 srcSize, dstCapacity);
 
     if ((U32)srcSize > (U32)LZ4_MAX_INPUT_SIZE) { return 0; }  /* Неподдерживаемый srcSize, слишком большой (или отрицательный). */
-    if (srcSize == 0) {   /* src == NULL поддерживается, если srcSize == 0 */
+    if (srcSize == 0) {   /* src ==NULLпереходов, если srcSize == 0 */
         if (outputDirective != notLimited && dstCapacity <= 0) return 0;  /* нет вывода, ничего не могу написать */
         DEBUGLOG(5, "Generating an empty block");
         assert(outputDirective == notLimited || dstCapacity >= 1);
@@ -1407,11 +1407,11 @@ int LZ4_compress_fast_extState(void* state, const char* source, char* dest, int 
 
 /**
  * LZ4_compress_fast_extState_fastReset () :
- * Вариант LZ4_compress_fast_extState().
+ * ВариантLZ4_compress_fast_extState().
  *
  * Использование этого варианта позволяет избежать дорогостоящего этапа инициализации. Это только безопасно
  * для вызова, если известно, что буфер состояния уже правильно инициализирован
- * (см. комментарий в lz4.h к LZ4_resetStream_fast () для определения
+ * (см. комментарий вlz4.hкLZ4_resetStream_fast() для определения
  * «правильно инициализирован»).
  */
 int LZ4_compress_fast_extState_fastReset(void* state, const char* src, char* dst, int srcSize, int dstCapacity, int acceleration)
@@ -1479,7 +1479,7 @@ int LZ4_compress_default(const char* src, char* dst, int srcSize, int dstCapacit
 
 
 /* Примечание! Эта функция оставляет поток в нечистом/испорченном состоянии!
- * Небезопасно впоследствии использовать то же состояние с _fastReset() или
+ * Небезопасно впоследствии использовать то же состояние с_fastReset()или
  * _continue() вызов без его сброса. */
 static int LZ4_compress_destSize_extState_internal(LZ4_stream_t* state, const char* src, char* dst, int* srcSizePtr, int targetDstSize, int acceleration)
 {
@@ -1562,8 +1562,8 @@ LZ4_stream_t* LZ4_initStream (void* buffer, size_t size)
     return (LZ4_stream_t*)buffer;
 }
 
-/* resetStream больше не поддерживается,
- * предпочитаю initStream(), который является более общим */
+/* resetStream больше не требует,
+ * предпочитаюinitStream(), который является более распространенным */
 void LZ4_resetStream (LZ4_stream_t* LZ4_stream)
 {
     DEBUGLOG(5, "LZ4_resetStream (ctx:%p)", LZ4_stream);
@@ -1601,11 +1601,11 @@ static int LZ4_loadDict_internal(LZ4_stream_t* LZ4_dict,
 
     /* Необходимо сбросить контекст,
      * а не просто продолжить с prepareTable()
-     * чтобы избежать риска создания переполнения matchIndex
+     * чтобы избежать риска возникновения препятствия matchIndex
      * при сжатии с использованием этого словаря */
     LZ4_resetStream(LZ4_dict);
 
-    /* Мы всегда увеличиваем смещение на 64 KB, поскольку, если dict длиннее,
+    /* Мы всегда увеличиваем размещение на 64KB, потому что, если диктовать длиннее,
      * мы урезаем его до последних 64 тысяч, и если оно короче, мы все равно хотим
      * вперед на всю длину окна, чтобы мы могли гарантировать, что
      * в окне есть только действительные смещения, что позволяет оптимизировать
@@ -1625,7 +1625,7 @@ static int LZ4_loadDict_internal(LZ4_stream_t* LZ4_dict,
 
     while (p <= dictEnd-HASH_UNIT) {
         U32 const h = LZ4_hashPosition(p, tableType);
-        /* Note: overwriting => favors positions end of dictionary */
+        /* Note: перезапись => отдает предпочтение концу словаря */
         LZ4_putIndexOnHash(idx32, h, dict->hashTable, tableType);
         p+=3; idx32+=3;
     }
@@ -1638,7 +1638,7 @@ static int LZ4_loadDict_internal(LZ4_stream_t* LZ4_dict,
             U32 const h = LZ4_hashPosition(p, tableType);
             U32 const limit = dict->currentOffset - 64 KB;
             if (LZ4_getIndexOnHash(h, dict->hashTable, tableType) <= limit) {
-                /* Note: not overwriting => favors positions beginning of dictionary */
+                /* Note: не перезаписывать => отдает предпочтение позициям в начале словаря */
                 LZ4_putIndexOnHash(idx32, h, dict->hashTable, tableType);
             }
             p++; idx32++;
@@ -1690,7 +1690,7 @@ void LZ4_attach_dictionary(LZ4_stream_t* workingStream, const LZ4_stream_t* dict
 static void LZ4_renormDictT(LZ4_stream_t_internal* LZ4_dict, int nextSize)
 {
     assert(nextSize >= 0);
-    if (LZ4_dict->currentOffset + (unsigned)nextSize > 0x80000000) {   /* потенциальное переполнение ptrdiff_t (32-битный режим) */
+    if (LZ4_dict->currentOffset + (unsigned)nextSize > 0x80000000) {   /* надежное переполнениеptrdiff_t(32-битный режим) */
         /* масштабировать хеш-таблицу */
         U32 const delta = LZ4_dict->currentOffset - 64 KB;
         const BYTE* dictEnd = LZ4_dict->dictionary + LZ4_dict->dictSize;
@@ -1725,7 +1725,7 @@ int LZ4_compress_fast_continue (LZ4_stream_t* LZ4_stream,
     /* аннулировать крошечные словари */
     if ( (streamPtr->dictSize < 4)     /* крошечный словарь: недостаточно для хеша */
       && (dictEnd != source)           /* префиксный режим */
-      && (inputSize > 0)               /* tolerance : don't lose history, in case next invocation would use prefix mode */
+      && (inputSize > 0)               /* tolerance : не теряйте историю, если при следующем вызове будет использоваться префиксный режим */
       && (streamPtr->dictCtx == NULL)  /* использованиеDictCtx */
       ) {
         DEBUGLOG(5, "LZ4_compress_fast_continue: dictSize(%u) at addr:%p is too small", streamPtr->dictSize, streamPtr->dictionary);
@@ -1757,10 +1757,10 @@ int LZ4_compress_fast_continue (LZ4_stream_t* LZ4_stream,
     {   int result;
         if (streamPtr->dictCtx) {
             /* Здесь мы зависим от того, что dictCtx'es (произведенный
-             * LZ4_loadDict ) гарантируют, что их таблицы не содержат ссылок.
-             * для смещений между dictCtx->currentOffset - 64 KB и
+             * LZ4_loadDict ) отмечают, что их таблицы не содержат ссылок.
+             * для смещения между dictCtx->currentOffset - 64KBи
              * dictCtx->currentOffset — dictCtx->dictSize. Это делает его безопасным
-             * использовать noDictIssue, даже если dict не является полным 64 KB .
+             * используйте noDictIssue, даже если dict не является полным 64KB.
              */
             if (inputSize > 4 KB) {
                 /* Для сжатия больших двоичных объектов быстрее заплатить за установку.
@@ -1810,9 +1810,9 @@ int LZ4_compress_forceExtDict (LZ4_stream_t* LZ4_dict, const char* source, char*
 /*! LZ4_saveDict () :
  *  Если ранее сжатый блок данных не гарантированно останется доступным в своей памяти,
  *  сохраните его в более безопасном месте (char*safeBuffer).
- *  Note : no need to call LZ4_loadDict() afterwards, dictionary is immediately usable,
+ *  Note : не нужно после этого вызывать LZ4_loadDict(), словарь можно использовать сразу,
  *         поэтому можно сразу после этого вызвать LZ4_compress_fast_continue().
- * @return : saved dictionary size in bytes (necessarily <= dictSize), or 0 if error.
+ * @return : размер сохраненного словаря в байтах (обязательно <= dictSize) или 0 в случае ошибки.
  */
 int LZ4_saveDict (LZ4_stream_t* LZ4_dict, char* safeBuffer, int dictSize)
 {
@@ -1848,10 +1848,10 @@ typedef enum { decode_full_block = 0, partial_decode = 1 } earlyEnd_directive;
 #define MIN(a,b)    ( (a) < (b) ? (a) : (b) )
 
 
-/* вариант для decompress_unsafe ()
+/* вариант дляdecompress_unsafe()
  * не знает окончания ввода
  * предполагает, что ввод правильно сформирован
- * note : will consume at least one byte */
+ * note : будет занимать хотя бы один байт */
 static size_t read_long_length_no_check(const BYTE** pp)
 {
     size_t b, l = 0;
@@ -1860,14 +1860,14 @@ static size_t read_long_length_no_check(const BYTE** pp)
     return l;
 }
 
-/* вариант основного декодера для LZ4_decompress_fast *()
+/* вариант базового декодера дляLZ4_decompress_fast*()
  * только для поддержки устаревших версий: эти точки входа устарели.
- * - Presumes input is correctly formed (no defense vs malformed inputs)
+ * - Предполагается, что входные данные сформированы правильно (нет защиты от искаженных входных данных)
  * - Does not know input size (presume input buffer is "large enough")
- * - Decompress a full block (only)
- * @return : nb of bytes read from input.
- * Note : this variant is not optimized for speed, just for maintenance.
- *        цель состоит в том, чтобы удалить поддержку вариантов decompress_fast *() в версии 2.0.
+ * - Распаковать полный блок (только)
+ * @return : количество байтов, прочитанных из ввода.
+ * Note : этот вариант оптимизирован не по скорости, а только по обслуживанию.
+ *        цель состоит в том, чтобы удалить поддержку версийdecompress_fast*() в версии 2.0.
 **/
 LZ4_FORCE_INLINE int
 LZ4_decompress_unsafe_generic(
@@ -1877,7 +1877,7 @@ LZ4_decompress_unsafe_generic(
 
                  size_t prefixSize,
                  const BYTE* const dictStart,  /* только если dict==usingExtDict */
-                 const size_t dictSize         /* note: =0 if dictStart==NULL */
+                 const size_t dictSize         /* note: =0, если dictStart== NULL */
                  )
 {
     const BYTE* ip = istart;
@@ -1938,12 +1938,12 @@ LZ4_decompress_unsafe_generic(
                     const BYTE* extMatch = dictEnd - (offset - (size_t)(op-prefixStart));
                     size_t const extml = (size_t)(dictEnd - extMatch);
                     if (extml > ml) {
-                        /* полностью совпадать с extDict */
+                        /* полностью совпасть с extDict */
                         LZ4_memmove(op, extMatch, ml);
                         op += ml;
                         ml = 0;
                     } else {
-                        /* совпадение разделения между extDict и префиксом */
+                        /* совпадение различий между extDict и префиксом */
                         LZ4_memmove(op, extMatch, extml);
                         op += extml;
                         ml -= extml;
@@ -1973,7 +1973,7 @@ LZ4_decompress_unsafe_generic(
  *
  * @ip : указатель ввода
  * @ilimit : позиция, после которой, если длина не декодирована, входные данные обязательно будут повреждены.
- * @initial_check — проверьте ip >= ipmax перед началом цикла.  Если да, возвращает initial_error.
+ * @initial_check — перед запуском цикла проверьте ip >= ipmax.  Если да, возвращаетinitial_error.
  * @error (выход) — код ошибки.  Перед вызовом необходимо установить значение 0.
 **/
 typedef size_t Rvl_t;
@@ -2027,13 +2027,13 @@ LZ4_decompress_generic(
                  const char* const src,
                  char* const dst,
                  int srcSize,
-                 int outputSize,         /* Если endOnInput==endOnInputSize, это значение равно `dstCapacity`. */
+                 int outputSize,         /* Если endOnInput==endOnInputSize, это значение равно`dstCapacity`. */
 
                  earlyEnd_directive partialDecoding,  /* полный, частичный */
                  dict_directive dict,                 /* noDict, withPrefix64k, usingExtDict */
                  const BYTE* const lowPrefix,  /* всегда <= dst, == dst, если нет префикса */
                  const BYTE* const dictStart,  /* только если dict==usingExtDict */
-                 const size_t dictSize         /* note : = 0 if noDict */
+                 const size_t dictSize         /* note : = 0, если noDict */
                  )
 {
     if ((src == NULL) || (outputSize < 0)) { return -1; }
@@ -2074,14 +2074,14 @@ LZ4_decompress_generic(
     /* LZ4_FAST_DEC_LOOP:
      * разработан для современных процессоров высокой производительности,
      * где надежное копирование 32-байт предпочтительнее непредсказуемой ветви.
-     * note : fast loop may show a regression for some client arm chips. */
+     * note : быстрый цикл может показывать регресс для некоторых чипов клиентского плеча. */
 #if LZ4_FAST_DEC_LOOP
         if ((oend - op) < FASTLOOP_SAFE_DISTANCE) {
             DEBUGLOG(6, "move to safe decode loop");
             goto safe_decode;
         }
 
-        /* Быстрый цикл: декодируйте последовательности, пока выход < oend- FASTLOOP_SAFE_DISTANCE */
+        /* Быстрый цикл: декодируйте последовательность, пока выход < oend- FASTLOOP_SAFE_DISTANCE */
         DEBUGLOG(6, "using fast decode loop");
         while (1) {
             /* Основное утверждение быстрого цикла: мы всегда можем скопировать FASTLOOP_SAFE_DISTANCE в произвольном порядке. */
@@ -2107,8 +2107,8 @@ LZ4_decompress_generic(
                 if ((op+length>oend-32) || (ip+length>iend-32)) { goto safe_literal_copy; }
                 LZ4_wildCopy32(op, ip, op+length);
                 ip += length; op += length;
-            } else if (ip <= iend-(16 + 1/*максимальное освещение + смещение + nextToken*/)) {
-                /* Нам не нужно проверять oend, поскольку мы проверяем его один раз для каждого цикла ниже. */
+            } else if (ip <= iend-(16 + 1/*максимальное освещение + размещение + nextToken*/)) {
+                /* Нам не нужно проверять результат, поскольку мы проверяем его один раз для каждого цикла ниже. */
                 DEBUGLOG(7, "copy %u bytes in a 16-bytes stripe", (unsigned)length);
                 /* Литералы могут быть только <= 14, но мы надеемся, что компиляторы оптимизируют лучше при копировании по размеру регистра. */
                 LZ4_memcpy(op, ip, 16);
@@ -2147,7 +2147,7 @@ LZ4_decompress_generic(
                     goto safe_match_copy;
                 }
 
-                /* Проверка Fastpath: пропустить LZ4_wildCopy32, если это правда */
+                /* Проверка Fastpath: пропуститьLZ4_wildCopy32, если это правда */
                 if ((dict == withPrefix64k) || (match >= lowPrefix)) {
                     if (offset >= 8) {
                         assert(match >= lowPrefix);
@@ -2222,10 +2222,10 @@ LZ4_decompress_generic(
             DEBUGLOG(7, "blockPos%6u: litLength token = %u", (unsigned)(op-(BYTE*)dst), (unsigned)length);
 
             /* Двухэтапный ярлык для наиболее распространенного случая:
-             * 1) If the literal length is 0..14, and there is enough space,
+             * 1) Если литеральная длина равна 0..14 и достаточно места,
              * введите ярлык и скопируйте 16 байт от имени литералов
              * (в быстром режиме таким образом можно безопасно скопировать только 8 байт).
-             * 2) Further if the match length is 4..18, copy 18 bytes in a similar
+             * 2) Далее, если длина совпадения 4..18, скопируйте 18 байт аналогичным образом.
              * манера; но мы гарантируем, что в выводе достаточно места для
              * те 18 байтов ранее, при вводе ярлыка (другими словами,
              * для обоих этапов предусмотрена комбинированная проверка).
@@ -2323,7 +2323,7 @@ LZ4_decompress_generic(
                 LZ4_memmove(op, ip, length);  /* поддерживает перекрывающиеся области памяти для сценариев распаковки на месте */
                 ip += length;
                 op += length;
-                /* Обязательно EOF при !partialDecoding.
+                /* ОбязательноEOFпри !partialDecoding.
                  * При частичном декодировании это EOF, если у нас есть либо
                  * заполнил выходной буфер или
                  * не могу продолжить чтение смещения для следующего совпадения.
@@ -2332,7 +2332,7 @@ LZ4_decompress_generic(
                     break;
                 }
             } else {
-                LZ4_wildCopy8(op, ip, cpy);   /* может перезаписать до 8 байтов за пределы cpy */
+                LZ4_wildCopy8(op, ip, cpy);   /* может перезаписать до 8 байт за пределы cpy */
                 ip += length; op = cpy;
             }
 
@@ -2356,7 +2356,7 @@ LZ4_decompress_generic(
 #if LZ4_FAST_DEC_LOOP
         safe_match_copy:
 #endif
-            if ((checkOffset) && (unlikely(match + dictSize < lowPrefix))) goto _output_error;   /* Error : offset outside buffers */
+            if ((checkOffset) && (unlikely(match + dictSize < lowPrefix))) goto _output_error;   /* Error : смещение вне буферов */
             /* совпадение, начиная с внешнего словаря */
             if ((dict==usingExtDict) && (match < lowPrefix)) {
                 assert(dictEnd != NULL);
@@ -2390,7 +2390,7 @@ LZ4_decompress_generic(
             /* копировать совпадение внутри блока */
             cpy = op + length;
 
-            /* partialDecoding : may end anywhere within the block */
+            /* partialDecoding : может закончиться где угодно внутри блока */
             assert(op<=oend);
             if (partialDecoding && (cpy > oend-MATCH_SAFEGUARD_DISTANCE)) {
                 size_t const mlen = MIN(length, (size_t)(oend-op));
@@ -2407,7 +2407,7 @@ LZ4_decompress_generic(
             }
 
             if (unlikely(offset<8)) {
-                LZ4_write32(op, 0);   /* отключить предупреждение msan при смещении == 0 */
+                LZ4_write32(op, 0);   /* Внимание, msan при смещении == 0 */
                 op[0] = match[0];
                 op[1] = match[1];
                 op[2] = match[2];
@@ -2423,7 +2423,7 @@ LZ4_decompress_generic(
 
             if (unlikely(cpy > oend-MATCH_SAFEGUARD_DISTANCE)) {
                 BYTE* const oCopyLimit = oend - (WILDCOPYLENGTH-1);
-                if (cpy > oend-LASTLITERALS) { goto _output_error; } /* Error : last LASTLITERALS bytes must be literals (uncompressed) */
+                if (cpy > oend-LASTLITERALS) { goto _output_error; } /* Error : последние байтыLASTLITERALSдолжны быть литералами (несжатыми) */
                 if (op < oCopyLimit) {
                     LZ4_wildCopy8(op, match, oCopyLimit);
                     match += oCopyLimit - op;
@@ -2554,8 +2554,8 @@ static int LZ4_decompress_fast_extDict(const char* source, char* dest, int origi
 }
 
 /* Режим «двойного словаря», например, для использования с кольцевые буферы: первая часть
- * словаря передается как префикс, а второй через dictStart + dictSize.
- * Эти процедуры используются только один раз, в LZ4_decompress_ * _continue().
+ * словарь применяется как префикс, второй через dictStart + dictSize.
+ * Эти процедуры использовались только один раз, вLZ4_decompress_* _continue().
  */
 LZ4_FORCE_INLINE
 int LZ4_decompress_safe_doubleDict(const char* source, char* dest, int compressedSize, int maxOutputSize,
@@ -2587,7 +2587,7 @@ int LZ4_freeStreamDecode (LZ4_streamDecode_t* LZ4_stream)
  *  Используйте эту функцию, чтобы указать, где найти словарь.
  *  Эта функция не требуется, если предыдущие данные все еще доступны там, где они были декодированы.
  *  Разрешена загрузка размера 0 (тот же эффект, что и при отсутствии словаря).
- * @return : 1 if OK, 0 if error
+ * @return : 1, если OK, 0, если ошибка
  */
 int LZ4_setStreamDecode (LZ4_streamDecode_t* LZ4_streamDecode, const char* dictionary, int dictSize)
 {
@@ -2607,12 +2607,12 @@ int LZ4_setStreamDecode (LZ4_streamDecode_t* LZ4_streamDecode, const char* dicti
 /*! LZ4_decoderRingBufferSize () :
  *  при настройке кольцевого буфера для потоковой декомпрессии (необязательный сценарий),
  *  обеспечивает минимальный размер этого кольцевого буфера
- *  быть совместимым с любым источником, соблюдающим условие maxBlockSize.
- *  Note : in a ring buffer scenario,
+ *  быть совместимым с любыми методами, соблюдающими условие maxBlockSize.
+ *  Note : в сценарии кольцевого буфера,
  *  блоки считаются распакованными рядом друг с другом.
  *  Когда недостаточно места для следующего блока (remainingSize < maxBlockSize),
  *  декодирование возобновляется с начала кольцевого буфера.
- * @return : minimum ring buffer size,
+ * @return : минимальный размер кольцевого буфера,
  *           или 0, если произошла ошибка (неверный maxBlockSize).
  */
 int LZ4_decoderRingBufferSize(int maxBlockSize)
@@ -2792,8 +2792,8 @@ int LZ4_compress_continue (LZ4_stream_t* LZ4_stream, const char* source, char* d
 /*
 Эти функции распаковки устарели и больше не должны использоваться.
 Они представлены здесь только для совместимости со старыми пользовательскими программами.
-- LZ4_uncompress is totally equivalent to LZ4_decompress_fast
-- LZ4_uncompress_unknownOutputSize is totally equivalent to LZ4_decompress_safe
+- LZ4_uncompress полностью эквивалентен LZ4_decompress_fast.
+- LZ4_uncompress_unknownOutputSize полностью эквивалентен LZ4_decompress_safe.
 */
 int LZ4_uncompress (const char* source, char* dest, int outputSize)
 {
@@ -2825,7 +2825,7 @@ void* LZ4_create (char* inputBuffer)
 
 char* LZ4_slideInputBuffer (void* state)
 {
-    /* избегайте предупреждения о преобразовании const char * -> char * */
+    /* избегайте отражения о преобразовании const char * -> char * */
     return (char *)(uptrval)((LZ4_stream_t*)state)->internal_donotuse.dictionary;
 }
 

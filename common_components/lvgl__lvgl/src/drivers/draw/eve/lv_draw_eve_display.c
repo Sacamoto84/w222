@@ -66,7 +66,7 @@ lv_display_t * lv_draw_eve_display_create(const lv_draw_eve_parameters_t * param
     lv_draw_eve_set_display_data(disp, params, op_cb);
 
     EVE_init();
-    EVE_memWrite8(REG_PWM_DUTY, EVE_BACKLIGHT_PWM); /* 0 = off, 0x80 = max */
+    EVE_memWrite8(REG_PWM_DUTY, EVE_BACKLIGHT_PWM); /* 0 = выключено,0x80= макс. */
 
     return disp;
 }

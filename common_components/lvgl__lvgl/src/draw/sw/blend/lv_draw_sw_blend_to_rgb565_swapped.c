@@ -238,8 +238,8 @@ static inline void * /* LV_ATTRIBUTE_FAST_MEM */ drawbuf_next_row(const void * b
 /**
  * Залейте область цветом.
  * Поддерживает обычную заливку, заливку с непрозрачностью, заливку с маской и заливку с маской и непрозрачностью.
- * dest_buf и цвет имеют собственную глубину цвета. ( RGB565 , RGB888 , XRGB8888 )
- * Фон ( dest_buf ) не может иметь альфа-канал.
+ * dest_buf и цвет имеют собственные элементы цвета. (RGB565,RGB888,XRGB8888)
+ * Фон (dest_buf) не может иметь альфа-канал.
  * @param dest_buf
  * @param dest_area
  * @param dest_stride
@@ -318,7 +318,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_rgb565_swapped(lv_draw_sw_b
     else if(mask == NULL && opa < LV_OPA_MAX) {
         if(LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_RGB565_SWAPPED_WITH_OPA(dsc)) {
             for(y = 0; y < h; y++) {
-                /*Убедитесь, что последний dest_color не соответствует первому, чтобы он был рассчитан.*/
+                /*Убедитесь, что последнийdest_colorне соответствует тому, как он был рассчитан.*/
                 uint16_t last_dest_color =  dest_buf_u16[0] - 1;
                 uint16_t last_res_color = 0;
                 for(x = 0; x < w; x++) {

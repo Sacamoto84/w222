@@ -295,7 +295,7 @@ static void _evdev_read(lv_indev_t * indev, lv_indev_data_t * data)
                         dsc->touch_data[i].point.x = 0;
                         dsc->touch_data[i].point.y = 0;
                         dsc->touch_data[i].id = -1; /* Отметить как недействительный */
-                        /* Note: We keep the RELEASED state for this frame, it will be naturally
+                        /* Note: Сохраняем для этого кадра состояние RELEASED, оно естественно будет
                          * очищается, когда приходят новые события касания или когда все касания заканчиваются */
                         LV_LOG_TRACE("Cleared released touch point slot %d", i);
                     }
@@ -373,9 +373,9 @@ static void _evdev_discovery_indev_try_create(const char * file_name)
      * Если совпадение найдено, это означает, что пользователь уже добавил его и дубликат.
      * не следует добавлять автоматически, хотя это справедливо для `lv_evdev_create`
      * быть явно вызван пользователем по тому же пути - или в крайнем случае
-     * произошло, когда Discovery только что был запущен и было установлено новое устройство.
-     * связано между созданием наблюдателя inotify и первоначальным полным
-     * сканирование каталога с помощью `readdir`.
+     * произошло, когда Discovery только что был запущен и обнаружил новое устройство.
+     * связаны между созданием наблюдателя inotify и первоначальным полным
+     * скан каталога с помощью `readdir`.
      */
     lv_indev_t * ex_indev = NULL;
     while(NULL != (ex_indev = lv_indev_get_next(ex_indev))) {
@@ -450,7 +450,7 @@ static void _evdev_discovery_timer_cb(lv_timer_t * tim)
             in_data_buf_p += sizeof(struct inotify_event) + in_ev_p->len) {
             in_ev_p = (struct inotify_event *)in_data_buf_p;
             if(in_ev_p->mask & IN_IGNORED) {
-                /* /dev/input/ был удален, поскольку было удалено последнее устройство.
+                /* /dev/input/ был удален последним, поскольку было удалено устройство.
                  * Часы были сняты безоговорочно. Он попытается быть
                  * воссоздается при следующем запуске таймера.
                  */
@@ -493,7 +493,7 @@ lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd)
     if(indev_type == LV_INDEV_TYPE_NONE) {
         uint32_t rel_bits = 0;
         if(ioctl(dsc->fd, EVIOCGBIT(EV_REL, sizeof(rel_bits)), &rel_bits) >= 0) {
-            /* если это устройство может генерировать относительные события X и Y, это должен быть указатель indev */
+            /* если это устройство может ограничивать относительные события X и Y, это должно быть указателем indev */
             if((rel_bits & REL_XY_MASK) == REL_XY_MASK) {
                 indev_type = LV_INDEV_TYPE_POINTER;
                 dsc->type = LV_EVDEV_TYPE_REL;
@@ -507,7 +507,7 @@ lv_indev_t * lv_evdev_create_fd(lv_indev_type_t indev_type, int fd)
     if(indev_type == LV_INDEV_TYPE_NONE) {
         uint32_t abs_bits = 0;
         if(ioctl(dsc->fd, EVIOCGBIT(EV_ABS, sizeof(abs_bits)), &abs_bits) >= 0) {
-            /* если это устройство может генерировать абсолютные события X и Y, это должен быть указатель indev */
+            /* если это устройство может ограничивать абсолютные события X и Y, это должно быть указатель indev */
             if((abs_bits & ABS_XY_MASK) == ABS_XY_MASK) {
                 indev_type = LV_INDEV_TYPE_POINTER;
                 dsc->type = LV_EVDEV_TYPE_ABS;

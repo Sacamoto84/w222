@@ -23,8 +23,8 @@ extern "C" {
  *********************/
 /**
  * Можно использовать размер дорожки, чтобы дорожка заполняла свободное пространство.
- * @param x how much space to take proportionally to other FR tracks
- * @return a special track size
+ * @param x сколько места занять пропорционально другим трекам FR
+ * @return специальный размер дорожки
  */
 #define LV_GRID_FR(x)          (LV_COORD_MAX - 100 + x)
 
@@ -38,7 +38,7 @@ LV_EXPORT_CONST_INT(LV_GRID_TEMPLATE_LAST);
  *      TYPEDEFS
  **********************/
 
-/*Невозможно включить lv_obj.h, поскольку он включает этот заголовочный файл.*/
+/*Невозможно включитьlv_obj.h, так как он включает этот заголовочный файл.*/
 
 typedef enum {
     LV_GRID_ALIGN_START,
@@ -66,13 +66,13 @@ void lv_obj_set_grid_align(lv_obj_t * obj, lv_grid_align_t column_align, lv_grid
 
 /**
  * Установите ячейку объекта. Родитель объекта должен иметь сетку, иначе ничего не произойдет.
- * @param obj pointer to an object
- * @param column_align the vertical alignment in the cell. `LV_GRID_START/END/CENTER/STRETCH`
- * @param col_pos column ID
- * @param col_span number of columns to take (>= 1)
- * @param row_align the horizontal alignment in the cell. `LV_GRID_START/END/CENTER/STRETCH`
- * @param row_pos row ID
- * @param row_span number of rows to take (>= 1)
+ * @param obj указатель на объект
+ * @param column_align вертикальное выравнивание в ячейке.  `LV_GRID_START/END/CENTER/STRETCH`
+ * @param col_pos столбец ID
+ * @param col_span количество столбцов, которые нужно взять (>= 1)
+ * @param row_align горизонтальное выравнивание в ячейке.  `LV_GRID_START/END/CENTER/STRETCH`
+ * @param row_pos строка ID
+ * @param row_span количество строк (>= 1)
  */
 void lv_obj_set_grid_cell(lv_obj_t * obj, lv_grid_align_t column_align, int32_t col_pos, int32_t col_span,
                           lv_grid_align_t row_align, int32_t row_pos, int32_t row_span);

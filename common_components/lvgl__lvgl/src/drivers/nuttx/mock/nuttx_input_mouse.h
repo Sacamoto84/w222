@@ -21,12 +21,12 @@ extern "C" {
  *********************/
 
 /* Эти определения определяют значение всех битов, которые могут быть
- * сообщается в структуре кнопок mouse_report_s.
+ * сообщается в функциональных функциях mouse_report_s.
  */
 
-#define MOUSE_BUTTON_1       (1 << 0) /* True: Left mouse button pressed */
-#define MOUSE_BUTTON_2       (1 << 1) /* True: Right mouse button pressed */
-#define MOUSE_BUTTON_3       (1 << 2) /* True: Middle mouse button pressed */
+#define MOUSE_BUTTON_1       (1 << 0) /* True: Нажата левая кнопка мыши */
+#define MOUSE_BUTTON_2       (1 << 1) /* True: Нажата правая кнопка мыши */
+#define MOUSE_BUTTON_3       (1 << 2) /* True: Средняя кнопка мыши нажата */
 
 /**********************
  *      TYPEDEFS

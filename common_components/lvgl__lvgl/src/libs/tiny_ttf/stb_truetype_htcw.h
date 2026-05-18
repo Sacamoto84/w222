@@ -1,6 +1,6 @@
-// stb_truetype.h — v1.26htcw (вилка для включения потоковой передачи и сред с низким объемом памяти)
-// stb_truetype.h - v1.26 - общественное достояние
-// автор: Шон Барретт / RAD Game Tools, 2009–2021 гг.
+// stb_truetype.h — v1.26htcw (вилка для включения потоковой передачи и средства с ограниченным определением памяти)
+// stb_truetype.h - v1.26 - общественное состояние
+// автор: Шон Барретт /RADGame Tools, 2009–2021 гг.
 //
 // =======================================================================
 //
@@ -289,11 +289,11 @@ void my_stbtt_initfont(void)
 {
     fread(ttf_buffer, 1, 1 << 20, fopen("c:/windows/fonts/times.ttf", "rb"));
     stbtt_BakeFontBitmap(ttf_buffer, 0, 32.0, temp_bitmap, 512, 512, 32, 96, cdata); // нет гарантии, что это подойдет!
-    // можно освободить ttf_buffer на этом этапе
+    // можно уменьшитьttf_bufferна этом этапе
     glGenTextures(1, &ftex);
     glBindTexture(GL_TEXTURE_2D, ftex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, 512, 512, 0, GL_ALPHA, GL_UNSIGNED_BYTE, temp_bitmap);
-    // можно освободить temp_bitmap на этом этапе
+    // можно уменьшитьtemp_bitmapна этом этапе
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
@@ -371,7 +371,7 @@ int main(int argc, char ** argv)
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-// Полная программа: напечатайте «Hello World!» баннер, с ошибками
+// Полная программа: напечатайте «Hello World!» баннер, сюми
 //
 #if 0
 char buffer[24 << 20];
@@ -424,11 +424,11 @@ int main(int arg, char ** argv)
 ////   INTEGRATION WITH YOUR CODEBASE
 ////
 //// Следующие разделы позволяют вам предоставлять альтернативные определения
-//// функций библиотеки C, используемых stb_truetype, например. если ты этого не сделаешь
+//// функции библиотеки C, использованиеstb_truetype, например. если ты этого не сделаешь
 //// связь с библиотекой времени выполнения C.
 
 #ifdef STB_TRUETYPE_IMPLEMENTATION
-// #define свой собственный (u) stbtt_int8 /16/32, прежде чем включать его, чтобы переопределить это
+// #define свой участок (u)stbtt_int8/16/32, прежде чем включить его, чтобы переопределить это
 #ifndef stbtt_uint8
     typedef unsigned char   stbtt_uint8;
     typedef signed   char   stbtt_int8;
@@ -467,7 +467,7 @@ typedef char stbtt__check_size16[sizeof(stbtt_int16) == 2 ? 1 : -1];
     #define STBTT_HEAP_FACTOR_SIZE_DEFAULT 100
 #endif
 
-// например  #define свой собственный STBTT_ifloor/STBTT_iceil (), чтобы избежать math.h
+// например#defineсвой собственныйSTBTT_ifloor/STBTT_iceil(), чтобы избежать math.h
 #ifndef STBTT_ifloor
     #include <math.h>
     #define STBTT_ifloor(x)   ((int) floor(x))
@@ -496,7 +496,7 @@ typedef char stbtt__check_size16[sizeof(stbtt_int16) == 2 ? 1 : -1];
     #define STBTT_fabs(x)      (float)fabs(x)
 #endif
 
-// #define ваши собственные функции «STBTT_malloc» / «STBTT_free», чтобы избежать malloc.h
+// #define ваша собственная функция «STBTT_malloc» / «STBTT_free», чтобы избежать malloc.h
 #ifndef STBTT_malloc
     #include <stdlib.h>
     #define STBTT_malloc(x,u)  ((void)(u),malloc(x))
@@ -577,9 +577,9 @@ typedef struct {
 STBTT_DEF void stbtt_GetBakedQuad(const stbtt_bakedchar * chardata, int pw, int ph, // те же данные, что и выше
                                   int char_index,             // символ для отображения
                                   float * xpos, float * ypos, // указатели на текущую позицию в пространстве пикселей экрана
-                                  stbtt_aligned_quad * q,     // output: quad to draw
-                                  int opengl_fillrule);       // true, если правило заполнения opengl; false, если DX9 или более ранняя версия
-// Вызовите GetBakedQuad с char_index = 'character - first_char ', и он
+                                  stbtt_aligned_quad * q,     // output: четырехугольник для рисования
+                                  int opengl_fillrule);       // true, если правило заполнения opengl; false, еслиDX9или более ранняя версия
+// Вызовите GetBakedQuad сchar_index= 'персонаж -first_char', и он
 // создает квадрат, который вам нужно нарисовать, и перемещает текущую позицию.
 //
 // Используемая система координат предполагает, что y увеличивается вниз.
@@ -604,7 +604,7 @@ typedef struct {
 
 /// @cond
 /**
- *  Сообщает Doxygen игнорировать дублирующее объявление.
+ *  Сообщает Doxygen сторона дублирующего объявления.
  */
 typedef struct stbtt_pack_context stbtt_pack_context;
 typedef struct stbtt_fontinfo stbtt_fontinfo;
@@ -613,7 +613,7 @@ typedef struct stbtt_fontinfo stbtt_fontinfo;
 #ifndef STB_RECT_PACK_VERSION
 /// @cond
 /**
- *  Сообщает Doxygen игнорировать дублирующее объявление.
+ *  Сообщает Doxygen сторона дублирующего объявления.
  */
 typedef struct stbrp_rect stbrp_rect;
 /// @endcond
@@ -622,9 +622,9 @@ typedef struct stbrp_rect stbrp_rect;
 STBTT_DEF int  stbtt_PackBegin(stbtt_pack_context * spc, unsigned char * pixels, int width, int height,
                                int stride_in_bytes, int padding, void * alloc_context);
 
-// Инициализирует контекст упаковки, хранящийся в переданном stbtt_pack_context .
+// Инициализирует упаковку контекста, хранящегося в передаваемомstbtt_pack_context.
 // Будущие вызовы, использующие этот контекст, будут упаковывать символы в переданное растровое изображение.
-// здесь: одноканальное растровое изображение шириной * высотой.  stride_in_bytes это
+// здесь: одноканальное растровое изображение угла * высоты.  stride_in_bytesэто
 // расстояние от одного ряда до другого (или 0, чтобы означать, что они плотно упакованы).
 // вместе). «отступ» — это количество отступов, которое нужно оставить между каждым
 // символ (обычно вам нужно «1» для растровых изображений, которые вы будете использовать в качестве текстур с
@@ -652,19 +652,19 @@ STBTT_DEF void stbtt_PackSetOversampling(stbtt_pack_context * spc, unsigned int 
 // позиционирования и особенно ценен при небольших размерах текста.
 //
 // Эта функция устанавливает величину передискретизации для всех последующих вызовов.
-// stbtt_PackFontRange(s) или stbtt_PackFontRangesGatherRects для данного
-// контекст пакета. Значение по умолчанию (без передискретизации) достигается h_oversample =1.
-// и v_oversample =1. Общее количество требуемых пикселей равно
-// h_oversample * v_oversample больше, чем по умолчанию; например, 2х2
+// stbtt_PackFontRange(s) илиstbtt_PackFontRangesGatherRectsдля данного
+// контекстный пакет. Значение по умолчанию (без передискретизации) равноh_oversample=1.
+// иv_oversample=1. Общее количество требуемых требований равно
+// h_oversample *v_oversampleбольше, чем по умолчанию; например, 2х2
 // передискретизация требует в 4 раза больше памяти, чем 1x1. Для достижения наилучших результатов выполните рендеринг
-// текстуры с передискретизацией и билинейной фильтрацией. Посмотрите readme в
-// stb/tests/oversample для получения информации о шрифтах с избыточной выборкой.
+// текстуры с передискретизацией и билинейной фильтрацией. Посмотрите ридми в
+// stb/tests/oversample получение информации о шрифтах с избыточной выборкой.
 //
-// Чтобы использовать PackFontRangesGather и т. д., вы должны установить его перед вызовами.
+// Чтобы использовать PackFontRangesGather и т. д. д., вы должны установить его перед вызовами.
 // вызов PackFontRangesGatherRects.
 
 STBTT_DEF void stbtt_PackSetSkipMissingCodepoints(stbtt_pack_context * spc, int skip);
-// Если Skip != 0, это говорит stb_truetype пропускать любые кодовые точки, для которых
+// Если Skip != 0, это означает, чтоstb_truetypeпропускает любые кодовые точки, для которых
 // соответствующего глифа нет. Если пропуск=0 (это значение по умолчанию), то
 // кодовые точки без глифа получили глиф «отсутствующий символ» шрифта,
 // обычно это пустая коробка по соглашению.
@@ -672,7 +672,7 @@ STBTT_DEF void stbtt_PackSetSkipMissingCodepoints(stbtt_pack_context * spc, int 
 STBTT_DEF void stbtt_GetPackedQuad(const stbtt_packedchar * chardata, int pw, int ph, // те же данные, что и выше
                                    int char_index,             // символ для отображения
                                    float * xpos, float * ypos, // указатели на текущую позицию в пространстве пикселей экрана
-                                   stbtt_aligned_quad * q,     // output: quad to draw
+                                   stbtt_aligned_quad * q,     // output: четырехугольник для рисования
                                    int align_to_integer);
 
 STBTT_DEF int  stbtt_PackFontRangesGatherRects(stbtt_pack_context * spc, const stbtt_fontinfo * info,
@@ -683,15 +683,15 @@ STBTT_DEF int  stbtt_PackFontRangesRenderIntoRects(stbtt_pack_context * spc, con
 // Последовательный вызов этих функций примерно эквивалентен вызову
 // stbtt_PackFontRanges (). Если у вас больше контроля над упаковкой нескольких
 // шрифты или если вы хотите упаковать пользовательские данные в текстуру шрифта, взгляните
-// в исходном коде stbtt_PackFontRanges() и создайте собственную версию
-// используя эти функции, например. вызвать GatherRects несколько раз,
-// создаем один массив прямоугольников, затем один раз вызываем PackRects,
+// в исходном кодеstbtt_PackFontRanges() и создайте собственную версию
+// с помощью этих функций, например. вызывать GatherRects несколько раз,
+// создаем один массив контуров, затем один раз вызываем PackRects,
 // затем повторно вызовите RenderIntoRects. Это может привести к
 // лучшая упаковка, чем многократный вызов PackFontRanges
 // (а может и нет).
 
 // это непрозрачная структура, с которой не стоит связываться, которая держится
-// весь необходимый контекст от PackBegin до PackEnd.
+// весь выбор контекста от PackBegin до PackEnd.
 struct stbtt_pack_context {
     void * user_allocator_context;
     void * pack_info;
@@ -715,9 +715,9 @@ STBTT_DEF int stbtt_GetNumberOfFonts(STBTT_STREAM_TYPE data);
 #else
 STBTT_DEF int stbtt_GetNumberOfFonts(const unsigned char * data);
 #endif
-// Эта функция определит количество шрифтов в файле шрифтов.  TrueType
-// Файлы коллекции (.ttc) могут содержать несколько шрифтов, а шрифт TrueType
-// Файлы (.ttf) содержат только один шрифт. Количество шрифтов можно использовать для
+// Эта функция определяет количество шрифтов в файле шрифтов.  TrueType
+// Коллекция файлов (.ttc) может сохранять несколько шрифтов, включая шрифт TrueType.
+// Файлы (.ttf) содержат только один шрифт. Количество шрифтов, которые можно использовать для
 // индексация с помощью предыдущей функции, где индекс находится между нулем и единицей
 // меньше, чем общее количество шрифтов. В случае возникновения ошибки возвращается -1.
 #ifdef STBTT_STREAM_TYPE
@@ -728,7 +728,7 @@ STBTT_DEF int stbtt_GetFontOffsetForIndex(const unsigned char * data, int index)
 
 // Каждый файл .ttf/.ttc может содержать более одного шрифта. Каждый шрифт имеет последовательный
 // индексный номер, начиная с 0. Вызовите эту функцию, чтобы получить смещение шрифта для
-// заданный индекс; он возвращает -1, если индекс выходит за пределы диапазона. Обычный .ttf
+// заданный индекс; он возвращает -1, если индекс выходит за пределы страны. Обычный .ttf
 // файл будет определять только один шрифт, и он всегда будет со смещением 0, поэтому он будет
 // верните «0» для индекса 0 и -1 для всех остальных индексов.
 
@@ -745,11 +745,11 @@ struct stbtt_fontinfo {
 
     int numGlyphs;                     // количество глифов, необходимое для проверки диапазона
 
-    int loca, head, glyf, hhea, hmtx, kern, gpos, svg; // расположение таблиц как смещение от начала .ttf
-    int index_map;                     // отображение cmap для выбранной нами кодировки символов
+    int loca, head, glyf, hhea, hmtx, kern, gpos, svg; // расположение таблицы как размещение с начала .ttf
+    int index_map;                     // использование cmap для выбранной нами кодировки символов
     int indexToLocFormat;              // формат, необходимый для сопоставления индекса глифа с глифом
 
-    stbtt__buf cff;                    // данные шрифта cff
+    stbtt__buf cff;                    // шрифт данных cff
     stbtt__buf charstrings;            // индекс символьной строки
     stbtt__buf gsubrs;                 // Глобальный индекс функций символьной строки
     stbtt__buf subrs;                  // индекс подпрограмм частной символьной строки
@@ -763,7 +763,7 @@ STBTT_DEF int stbtt_InitFont(stbtt_fontinfo * info, const unsigned char * data, 
 #endif
 // Учитывая смещение в файле, определяющем шрифт, эта функция строит
 // необходимая кэшированная информация для остальной части системы. Вы должны выделить
-// stbtt_fontinfo самостоятельно, а stbtt_InitFont заполнит его. Вы не
+// stbtt_fontinfo самостоятельно, аstbtt_InitFontзаполнит его. Вы не
 // нужно сделать что-то особенное, чтобы освободить его, потому что содержимое чистое
 // значения данных без каких-либо дополнительных структур данных. Возвращает 0 в случае неудачи.
 
@@ -786,7 +786,7 @@ STBTT_DEF int stbtt_FindGlyphIndex(const stbtt_fontinfo * info, int unicode_code
 STBTT_DEF float stbtt_ScaleForPixelHeight(const stbtt_fontinfo * info, float pixels);
 // вычисляет коэффициент масштабирования для создания шрифта, «высота» которого равна высоте «пикселей».
 // Высота измеряется как расстояние от самого высокого человека до самого нижнего.
-// спусковое устройство; другими словами, это эквивалентно вызову stbtt_GetFontVMetrics
+// спусковое устройство; другие слова, это эквивалентный вызов stbtt_GetFontVMetrics
 // и вычисления:
 //       scale = pixels / (ascent - descent)
 // поэтому, если вы предпочитаете измерять высоту только по подъему, используйте аналогичный расчет.
@@ -799,15 +799,15 @@ STBTT_DEF float stbtt_ScaleForMappingEmToPixels(const stbtt_fontinfo * info, flo
 STBTT_DEF void stbtt_GetFontVMetrics(const stbtt_fontinfo * info, int * ascent, int * descent, int * lineGap);
 // восхождение — это координата над базовой линией, на которую простирается шрифт; спуск
 // — это координата ниже базовой линии, на которую расширяется шрифт (т. е. обычно она отрицательна)
-// lineGap — это расстояние между спуском одной строки и подъемом следующей строки...
-// поэтому вам следует увеличить вертикальное положение на "*ascent - *descent + *lineGap"
+// lineGap — это расстояние между спуском одной строки и подъемом этой строки...
+// поэтому вам следует увеличить вертикальное положение на "*подъем - *спуск + *lineGap"
 //   они выражены в немасштабированных координатах, поэтому вам необходимо умножить на
 //   масштабный коэффициент для данного размера
 
 STBTT_DEF int  stbtt_GetFontVMetricsOS2(const stbtt_fontinfo * info, int * typoAscent, int * typoDescent,
                                         int * typoLineGap);
-// аналогичен GetFontVMetrics, но возвращает «типографские» значения из OS/2.
-// таблица (специфична для файлов MS/Windows TTF).
+// аналогичный GetFontVMetrics, но возвращает «типографские» значения изOS/2.
+// таблица (специально для файлов MS/Windows TTF).
 //
 // Возвращает 1 в случае успеха (таблица присутствует), 0 в случае неудачи.
 
@@ -816,8 +816,8 @@ STBTT_DEF void stbtt_GetFontBoundingBox(const stbtt_fontinfo * info, int * x0, i
 
 STBTT_DEF void stbtt_GetCodepointHMetrics(const stbtt_fontinfo * info, int codepoint, int * advanceWidth,
                                           int * leftSideBearing);
-// leftSideBearing — это смещение от текущего горизонтального положения до левого края символа.
-// заранееWidth — это смещение от текущей горизонтальной позиции до следующей горизонтальной позиции.
+// leftSideBearing — это перемещение от текущего горизонтального положения к символу левого края.
+// AwardWidth — это перемещение от текущей горизонтальной позиции к следующей горизонтальной позиции.
 //   они выражены в немасштабированных координатах
 
 STBTT_DEF int  stbtt_GetCodepointKernAdvance(const stbtt_fontinfo * info, int ch1, int ch2);
@@ -833,7 +833,7 @@ STBTT_DEF int  stbtt_GetGlyphBox(const stbtt_fontinfo * info, int glyph_index, i
 // как указано выше, но для большей эффективности принимает один или несколько индексов глифа.
 
 typedef struct _stbtt_kerningentry {
-    int glyph1; // используйте stbtt_FindGlyphIndex
+    int glyph1; // stbtt_FindGlyphIndex
     int glyph2;
     int advance;
 } stbtt_kerningentry;
@@ -861,7 +861,7 @@ enum {
 
 #ifndef stbtt_vertex // вы можете предопределить это, чтобы использовать разные значения
 // (мы разделяем это с другим кодом в RAD)
-#define stbtt_vertex_type short // не могу использовать stbtt_int16, потому что он не отображается в заголовочном файле
+#define stbtt_vertex_type short // не могу использовать stbtt_int16, потому что он не отображается в заголовочном файле.
 typedef struct {
     stbtt_vertex_type x, y, cx, cy, cx1, cy1;
     unsigned char type, padding;
@@ -873,12 +873,12 @@ STBTT_DEF int stbtt_IsGlyphEmpty(const stbtt_fontinfo * info, int glyph_index);
 
 STBTT_DEF int stbtt_GetCodepointShape(const stbtt_fontinfo * info, int unicode_codepoint, stbtt_vertex ** vertices);
 STBTT_DEF int stbtt_GetGlyphShape(const stbtt_fontinfo * info, int glyph_index, stbtt_vertex ** vertices);
-// возвращает количество вершин и заполняет *vertices указателем на них
+// возвращает количество вершин и выполняет *указатель вершин на них
 //   они выражены в «немасштабированных» координатах
 //
 // Форма представляет собой серию контуров. Каждый из них начинается с
-// STBTT_moveto, то состоит из серии смешанных
-// Сегменты STBTT_lineto и STBTT_curveto. линиято
+// STBTT_moveto , составитель из смешанных серий
+// СегментыSTBTT_linetoиSTBTT_curveto. линиято
 // рисует линию от предыдущей конечной точки до ее x,y; кривая
 // рисует квадратичную кривую Безье от предыдущей конечной точки до
 // это x,y, используя cx,cy в качестве контрольной точки Безье.
@@ -889,7 +889,7 @@ STBTT_DEF void stbtt_FreeShape(const stbtt_fontinfo * info, stbtt_vertex * verti
 STBTT_DEF stbtt_uint32 stbtt_FindSVGDoc(const stbtt_fontinfo * info, int gl);
 STBTT_DEF int stbtt_GetCodepointSVG(const stbtt_fontinfo * info, int unicode_codepoint, stbtt_uint32 * svgOfs);
 STBTT_DEF int stbtt_GetGlyphSVG(const stbtt_fontinfo * info, int gl, stbtt_uint32 * svgOfs);
-// заполняет svg данными SVG персонажа.
+// Заполняет svg-данные персонажа SVG.
 // возвращает размер данных или 0, если SVG не найден.
 
 //////////////////////////////////////////////////////////////////////////////
@@ -908,46 +908,46 @@ STBTT_DEF unsigned char * stbtt_GetCodepointBitmap(const stbtt_fontinfo * info, 
 // *ширина и *высота заполняются шириной и высотой растрового изображения,
 // который хранится слева направо и сверху вниз.
 //
-// xoff/yoff — это смещение в пикселях от начала координат глифа до верхнего левого угла растрового изображения.
+// xoff/yoff — это перемещение в пикселях от начала координат глифа до верхнего левого угла растрового изображения.
 
 STBTT_DEF unsigned char * stbtt_GetCodepointBitmapSubpixel(const stbtt_fontinfo * info, float scale_x, float scale_y,
                                                            float shift_x, float shift_y, int codepoint, int * width, int * height, int * xoff, int * yoff);
-// то же, что stbtt_GetCodepointBitmap, но вы можете указать субпиксель
+// то же самое, чтоstbtt_GetCodepointBitmap, но вы можете указать субпиксель
 // сдвиг для персонажа
 
 STBTT_DEF void stbtt_MakeCodepointBitmap(const stbtt_fontinfo * info, unsigned char * output, int out_w, int out_h,
                                          int out_stride, float scale_x, float scale_y, int codepoint);
-// то же, что stbtt_GetCodepointBitmap, но вы передаете память для растрового изображения
+// то же самое, чтоstbtt_GetCodepointBitmap, но вы передаете память для растрового изображения
 // в виде «вывода» с интервалом между строками «out_stride» байт. растровое изображение
-// обрезается до байтов out_w/out_h. Позвоните stbtt_GetCodepointBitmapBox, чтобы получить
+// обрезается до байтовout_w/out_h. Позвоните stbtt_GetCodepointBitmapBox, чтобы получить
 // ширина и высота, а также информация о их расположении в первую очередь.
 
 STBTT_DEF void stbtt_MakeCodepointBitmapSubpixel(const stbtt_fontinfo * info, unsigned char * output, int out_w,
                                                  int out_h, int out_stride, float scale_x, float scale_y, float shift_x, float shift_y, int codepoint);
-// то же, что stbtt_MakeCodepointBitmap, но вы можете указать субпиксель
+// то же самое, чтоstbtt_MakeCodepointBitmap, но вы можете указать субпиксель
 // сдвиг для персонажа
 
 STBTT_DEF void stbtt_MakeCodepointBitmapSubpixelPrefilter(const stbtt_fontinfo * info, unsigned char * output,
                                                           int out_w, int out_h, int out_stride, float scale_x, float scale_y, float shift_x, float shift_y, int oversample_x,
                                                           int oversample_y, float * sub_x, float * sub_y, int codepoint);
-// то же, что stbtt_MakeCodepointBitmapSubpixel, но с предварительной фильтрацией
-// выполняется (см. stbtt_PackSetOversampling )
+// то же самое, чтоstbtt_MakeCodepointBitmapSubpixel, но с предварительной фильтрацией
+// успеваемость (см.stbtt_PackSetOversampling)
 
 STBTT_DEF void stbtt_GetCodepointBitmapBox(const stbtt_fontinfo * font, int codepoint, float scale_x, float scale_y,
                                            int * ix0, int * iy0, int * ix1, int * iy1);
-// получить bbox растрового изображения, центрированный вокруг начала координат глифа; так что
+// получить bbox растрового изображения, центрированный с начала вокруг координат глифа; так что
 // ширина растрового изображения — ix1-ix0, высота — iy1-iy0 и место для размещения.
 // растровое изображение вверху слева — (leftSideBearing*scale,iy0).
-// (Обратите внимание, что растровое изображение использует y-increases-down, а фигура использует
+// (Обратите внимание, что растровое изображение использует y-увеличение-вниз, а фигура использует
 // y-увеличивается вверх, поэтому CodepointBitmapBox и CodepointBox инвертируются.)
 
 STBTT_DEF void stbtt_GetCodepointBitmapBoxSubpixel(const stbtt_fontinfo * font, int codepoint, float scale_x,
                                                    float scale_y, float shift_x, float shift_y, int * ix0, int * iy0, int * ix1, int * iy1);
-// то же, что stbtt_GetCodepointBitmapBox, но вы можете указать субпиксель
+// то же самое, чтоstbtt_GetCodepointBitmapBox, но вы можете указать субпиксель
 // сдвиг для персонажа
 
 // следующие функции эквивалентны вышеуказанным функциям, но работают
-// на индексах глифов вместо кодовых точек Unicode (для эффективности)
+// в индексах глифов вместо кодовых точек Unicode (для эффективности)
 STBTT_DEF unsigned char * stbtt_GetGlyphBitmap(const stbtt_fontinfo * info, float scale_x, float scale_y, int glyph,
                                                int * width, int * height, int * xoff, int * yoff);
 STBTT_DEF unsigned char * stbtt_GetGlyphBitmapSubpixel(const stbtt_fontinfo * info, float scale_x, float scale_y,
@@ -964,7 +964,7 @@ STBTT_DEF void stbtt_GetGlyphBitmapBox(const stbtt_fontinfo * font, int glyph, f
 STBTT_DEF void stbtt_GetGlyphBitmapBoxSubpixel(const stbtt_fontinfo * font, int glyph, float scale_x, float scale_y,
                                                float shift_x, float shift_y, int * ix0, int * iy0, int * ix1, int * iy1);
 
-// @TODO: don't expose this structure
+// @TODO: не раскрывайте эту структуру.
 typedef struct {
     int w, h, stride;
     unsigned char * pixels;
@@ -1007,7 +1007,7 @@ STBTT_DEF unsigned char * stbtt_GetCodepointSDF(const stbtt_fontinfo * info, flo
 //        xoff,yoff — начало координат символа
 //        возвращаемое значение — двумерный массив байтов 0..255, ширина*высота по размеру.
 //
-// pixel_dist_scale и onedge_value — это масштаб и смещение, которые позволяют вам делать
+// pixel_dist_scale иonedge_value— это масштабирование и смещение, которые позволяют вам делать
 // оптимальное использование ограниченного диапазона 0..255 для вашего приложения, компромисс между точностью
 // и спецэффекты.  Значения SDF вне диапазона 0..255 фиксируются до 0..255.
 //
@@ -1082,16 +1082,16 @@ STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char * s1, int len1, STBT
 STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char * s1, int len1, const char * s2, stbtt_uint32 s2offs,
                                                  int len2);
 #endif
-// возвращает 1/0, идентична ли первая строка, интерпретируемая как utf8, идентична
-// вторая строка интерпретируется как utf16 с прямым порядком байтов... полезна для строк из следующей функции
+// возвращает 1/0, идентична первой строке, интерпретируемая как utf8, идентична
+// вторая строка интерпретируется как utf16 с указанием порядка байтов... полезно для строки из этой функции
 
 STBTT_DEF stbtt_uint32 stbtt_GetFontNameString(const stbtt_fontinfo * font, int * length, int platformID,
                                                int encodingID, int languageID, int nameID);
 
 // возвращает строку (которая может быть двухбайтовой с обратным порядком байтов, например, для Юникода)
-// и помещает длину в байтах в *length.
+// и сохраняет размер в байтах в *длине.
 //
-// некоторые значения идентификаторов приведены ниже; подробнее см. спецификацию truetype:
+// значения идентификаторов приведены ниже; подробнее см. спецификация truetype:
 //     http://developer.apple.com/textfonts/TTRefMan/RM06/Chap6name.html
 //     http://www.microsoft.com/typography/otspec/name.htm
 
@@ -1181,7 +1181,7 @@ typedef int stbtt__test_oversample_pow2[(STBTT_MAX_OVERSAMPLE & (STBTT_MAX_OVERS
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Помощники stbtt__buf для анализа данных из файла
+// Помощникиstbtt__bufдля анализа данных из файла
 //
 
 static stbtt_uint8 stbtt__buf_get8(stbtt__buf * b)
@@ -1365,7 +1365,7 @@ static stbtt__buf stbtt__cff_index_get(stbtt__buf b, int i)
 //
 
 // на платформах, которые не допускают невыровненного чтения, если мы хотим разрешить
-// шрифты truetype, которые не дополняются для выравнивания, определяют ALLOW_UNALIGNED_TRUETYPE
+// шрифты truetype, которые не дорисовываются для спорта, определяют ALLOW_UNALIGNED_TRUETYPE
 
 #ifdef STBTT_STREAM_TYPE
 static stbtt_uint8 ttBYTE(STBTT_STREAM_TYPE s, stbtt_uint32 offset)
@@ -1443,10 +1443,10 @@ static stbtt_int32 ttLONG(const stbtt_uint8 * p, stbtt_uint32 offset)
 #endif
     // проверьте номер версии
     if(stbtt_tag4(font, '1', 0, 0, 0))  return 1;  // TrueType 1
-    if(stbtt_tag(font, "typ1"))   return 1;  // TrueType со шрифтом типа 1 — мы не поддерживаем это!
+    if(stbtt_tag(font, "typ1"))   return 1;  // TrueType со шрифтом типа 1 — мы не применяем это!
     if(stbtt_tag(font, "OTTO"))   return 1;  // OpenType с CFF
     if(stbtt_tag4(font, 0, 1, 0, 0)) return 1;  // ОпенТайп 1.0
-    if(stbtt_tag(font, "true"))   return 1;  // Спецификация Apple для шрифтов TrueType
+    if(stbtt_tag(font, "true"))   return 1;  // Спецификации Apple для шрифтов TrueType
     return 0;
 }
 
@@ -1589,7 +1589,7 @@ static int stbtt__get_svg(stbtt_fontinfo * info)
         if(!info->loca) return 0;
     }
     else {
-        // инициализация для шрифтов CFF/Type2 (OTF)
+        // Инициализация шрифтовCFF/Type2 (OTF)
         stbtt__buf b, topdict, topdictidx;
         stbtt_uint32 cstype = 2, charstrings = 0, fdarrayoff = 0, fdselectoff = 0;
         stbtt_uint32 cff;
@@ -1652,8 +1652,8 @@ static int stbtt__get_svg(stbtt_fontinfo * info)
 
     info->svg = -1;
 
-    // найдите таблицу кодировки cmap, которую мы понимаем *теперь*, чтобы избежать поиска
-    // позже. (todo: можно сделать это устанавливаемым)
+    // находим таблицу кодировок cmap, которую мы понимаем *теперь*, чтобы избежать поиска
+    // позже. (задание: можно сделать это установленным)
     // то же самое, независимо от глифа.
     numTables = ttUSHORT(data, cmap + 2);
     info->index_map = 0;
@@ -1672,7 +1672,7 @@ static int stbtt__get_svg(stbtt_fontinfo * info)
                 break;
             case STBTT_PLATFORM_ID_UNICODE:
                 // Mac/iOS имеет эти
-                // все кодировки имеют кодировку Unicode, поэтому мы не проверяем их.
+                // все кодировки кода имеют Unicode, поэтому мы не проверяем их.
                 info->index_map = cmap + ttULONG(data, encoding_record + 4);
                 break;
         }
@@ -1708,10 +1708,10 @@ STBTT_DEF int stbtt_FindGlyphIndex(const stbtt_fontinfo * info, int unicode_code
         return 0;
     }
     else if(format == 2) {
-        STBTT_assert(0); // @TODO: high-byte mapping for japanese/chinese/korean
+        STBTT_assert(0); // @TODO : сопоставление старших байтов для японского/китайского/корейского языков.
         return 0;
     }
-    else if(format == 4) {  // стандартное сопоставление для шрифтов Windows: набор диапазонов двоичного поиска
+    else if(format == 4) {  // стандартное распределение для шрифтов Windows: набор диапазонов двойного определения
         stbtt_uint16 segcount = ttUSHORT(data, index_map + 6) >> 1;
         stbtt_uint16 searchRange = ttUSHORT(data, index_map + 8) >> 1;
         stbtt_uint16 entrySelector = ttUSHORT(data, index_map + 10);
@@ -1724,7 +1724,7 @@ STBTT_DEF int stbtt_FindGlyphIndex(const stbtt_fontinfo * info, int unicode_code
         if(unicode_codepoint > 0xffff)
             return 0;
 
-        // они лежат от endCount.. endCount+segCount
+        // они остались от endCount.. endCount+segCount
         // но searchRange — это ближайшая степень двойки, так что...
         if(unicode_codepoint >= ttUSHORT(data, search + rangeShift * 2))
             search += rangeShift * 2;
@@ -2255,7 +2255,7 @@ static int stbtt__run_charstring(const stbtt_fontinfo * info, int glyph_index, s
 
 #define STBTT__CSERR(s) (0)
 
-    // в настоящее время это игнорирует начальное значение ширины, которое не требуется, если у нас есть hmtx
+    // в настоящее время это игнорирует начальное значение, которое не требуется, если у нас есть hmtx
     b = stbtt__cff_index_get(info->charstrings, glyph_index);
     while(b.cursor < b.size) {
         i = 0;
@@ -2402,7 +2402,7 @@ hvcurveto:
                 stbtt__csctx_close_shape(c);
                 return 1;
 
-            case 0x0C: { // двухбайтовый escape
+            case 0x0C: { // двухбайтовый побег
                     float dx1, dx2, dx3, dx4, dx5, dx6, dy1, dy2, dy3, dy4, dy5, dy6;
                     float dx, dy;
                     int b1 = stbtt__buf_get8(&b);
@@ -2616,7 +2616,7 @@ static int stbtt__GetGlyphKernInfoAdvance(const stbtt_fontinfo * info, int glyph
     needle = glyph1 << 16 | glyph2;
     while(l <= r) {
         m = (l + r) >> 1;
-        straw = ttULONG(info->data, info->kern + 18 + (m * 6)); // note: unaligned read
+        straw = ttULONG(info->data, info->kern + 18 + (m * 6)); // note: невыровненное чтение
         if(needle < straw)
             r = m - 1;
         else if(needle > straw)
@@ -2733,11 +2733,11 @@ static int stbtt__GetGlyphKernInfoAdvance(const stbtt_fontinfo * info, int glyph
             return -1; // Неподдерживаемый тип определения, возврат ошибки.
     }
 
-    // «Все глифы, не отнесенные к классу, попадают в класс 0». (спецификация OpenType)
+    // «Все глифы, не отнесенные к классу, рассмотрены в классе 0». (спецификация OpenType)
     return 0;
 }
 
-// Определите STBTT_assert (x), если вы хотите использовать нереализованные форматы.
+// ОпределитеSTBTT_assert(x), если вы хотите использовать нереализованные форматы.
 #define STBTT_GPOS_TODO_assert(x)
 
 static stbtt_int32 stbtt__GetGlyphGPOSInfoAdvance(const stbtt_fontinfo * info, int glyph1, int glyph2)
@@ -3158,7 +3158,7 @@ static stbtt__active_edge * stbtt__new_active(stbtt__hheap * hh, stbtt__edge * e
     stbtt__active_edge * z = (stbtt__active_edge *)stbtt__hheap_alloc(hh, sizeof(*z), userdata);
     float dxdy = (e->x1 - e->x0) / (e->y1 - e->y0);
     STBTT_assert(z != NULL);
-    //STBTT_assert (e->y0 <= start_point );
+    //STBTT_assert (e->y0 <=start_point);
     if(!z) return z;
     z->fdx = dxdy;
     z->fdy = dxdy != 0.0f ? (1.0f / dxdy) : 0.0f;
@@ -3175,8 +3175,8 @@ static stbtt__active_edge * stbtt__new_active(stbtt__hheap * hh, stbtt__edge * e
 #endif
 
 #if STBTT_RASTERIZER_VERSION == 1
-// note: this routine clips fills that extend off the edges... ideally this
-// этого бы не произошло, но это могло бы произойти, если бы ограничительные рамки глифа truetype
+// note: это обычные заливки клипов, выходящие за края... в идеале это
+// этого бы не произошло, но это можно было бы сказать, если бы были строгие рамки глифа truetype
 // неверны или если пользователь предоставляет слишком маленькое растровое изображение.
 static void stbtt__fill_active_edges(unsigned char * scanline, int len, stbtt__active_edge * e, int max_weight)
 {
@@ -3302,7 +3302,7 @@ static void stbtt__rasterize_sorted_edges(stbtt__bitmap * result, stbtt__edge * 
                             stbtt__active_edge * p = active;
                             while(p->next && p->next->x < z->x)
                                 p = p->next;
-                            // в этот момент p->next->x равно NOT < z->x
+                            // в этот момент p->next->x равноNOT< z->x
                             z->next = p->next;
                             p->next = z;
                         }
@@ -3366,7 +3366,7 @@ static void stbtt__handle_clipped_edge(float * scanline, int x, stbtt__active_ed
     }
     else {
         STBTT_assert(x0 >= x && x0 <= x + 1 && x1 >= x && x1 <= x + 1);
-        scanline[x] += e->direction * (y1 - y0) * (1 - ((x0 - x) + (x1 - x)) / 2); // coverage = 1 - average x position
+        scanline[x] += e->direction * (y1 - y0) * (1 - ((x0 - x) + (x1 - x)) / 2); // coverage = 1 - средняя позиция x
     }
 }
 
@@ -3421,7 +3421,7 @@ static void stbtt__fill_active_edges_new(float * scanline, float * scanline_fill
 
             // вычислить конечные точки сегмента линии, обрезанного до этой строки сканирования (если
             // сегмент линии начинается на этой строке развертки. x0 — пересечение
-            // линия с y_top , но она может находиться за пределами сегмента линии.
+            // сy_top, но она может располагаться за сегментом линии линии.
             if(e->sy > y_top) {
                 x_top = x0 + dx * (e->sy - y_top);
                 sy0 = e->sy;
@@ -3482,7 +3482,7 @@ static void stbtt__fill_active_edges_new(float * scanline, float * scanline_fill
                     //            |            |            |            |            |            |
                     //            |            |            |            |            |            |
                     //       си0 |      Тххххх|............|...........|...........|............|
-                    // y_crossing |            *xxxxxx.......|...........|...........|............|
+                    // y_crossing |            *xxxxxx.......|...........|...........|...........|
                     //            |            |     ххххх..|............|............|............|
                     //            |            |     /- xx*xxxx........|............|.....|
                     //            |            | ды < |    xxxxxx..|............|............|
@@ -3494,7 +3494,7 @@ static void stbtt__fill_active_edges_new(float * scanline, float * scanline_fill
                     //
                     // Цель состоит в том, чтобы измерить площадь, покрытую '.' в каждом пикселе
 
-                    // если x2 находится прямо у правого края x1, y_crossing может взорваться, github #1057
+                    // если x2 находится прямо у правого края x1,y_crossingможет взорваться, github #1057
                     // @TODO: maybe test against sy1 rather than y_bottom?
                     if(y_crossing > y_bottom)
                         y_crossing = y_bottom;
@@ -3504,13 +3504,13 @@ static void stbtt__fill_active_edges_new(float * scanline, float * scanline_fill
                     // площадь прямоугольника, закрытая от sy0.. y_crossing
                     area = sign * (y_crossing - sy0);
 
-                    // площадь треугольника ( x_top ,sy0), (x1+1,sy0), (x1+1, y_crossing )
+                    // квадрат треугольника (x_top,sy0), (x1+1,sy0), (x1+1,y_crossing)
                     scanline[x1] += stbtt__sized_triangle_area(area, x1 + 1 - x_top);
 
-                    // проверить, не взорван ли финальный y_crossing; нет тестового примера для этого
+                    // проверить, не взорван ли окончательныйy_crossing; нет тестового сценария для этого
                     if(y_final > y_bottom) {
                         y_final = y_bottom;
-                        dy = (y_final - y_crossing) / (x2 - (x1 + 1)); // если denom=0, y_final = y_crossing , поэтому y_final <= y_bottom
+                        dy = (y_final - y_crossing) / (x2 - (x1 + 1)); // если denom=0,y_final=y_crossing, поэтомуy_final<= y_bottom
                     }
 
                     // во втором пикселе, область, покрытая сегментом линии, найденным в первом пикселе
@@ -3548,7 +3548,7 @@ static void stbtt__fill_active_edges_new(float * scanline, float * scanline_fill
                 // этой библиотеки мы используем другой, очень медленный брут
                 // применение силы
                 // однако обратите внимание, что иногда это случается, потому что
-                // x_top и x_bottom можно экстраполировать вверх и вниз.
+                // x_top иx_bottomможно экстраполировать вверх и вниз.
                 // форма и фактически лежат за пределами ограничивающей рамки
                 int x;
                 for(x = 0; x < len; ++x) {
@@ -3573,7 +3573,7 @@ static void stbtt__fill_active_edges_new(float * scanline, float * scanline_fill
                     float y3 = y_bottom;
 
                     // x = e->x + e->dx * (y-y_top)
-                    // (y- y_top ) = (x - e->x) / e->dx
+                    // (y-y_top) = (x - e->x) / e->dx
                     // y = (x - e->x) / e->dx + y_top
                     float y1 = (x - x0) / dx + y_top;
                     float y2 = (x + 1 - x0) / dx + y_top;
@@ -3823,7 +3823,7 @@ static void stbtt__rasterize(stbtt__bitmap * result, stbtt__point * pts, int * w
 #else
 #error "Unrecognized value of STBTT_RASTERIZER_VERSION"
 #endif
-    // vssubsample должен делить 255 поровну; иначе мы не достигнем полной непрозрачности
+    // vssubsample должен поделиться 255 поровну; иначе мы не достигли полной непрозрачности
 
     // теперь нам нужно разбить обмотки на явные списки ребер
     n = 0;
@@ -3859,10 +3859,10 @@ static void stbtt__rasterize(stbtt__bitmap * result, stbtt__point * pts, int * w
     }
 
     // теперь отсортируйте края по их самой высокой точке (должно быть привязано к целому числу, а затем по x)
-    //STBTT_sort (e, n, sizeof(e[0]), stbtt__edge_compare );
+    //STBTT_sort (e, n, sizeof(e[0]),stbtt__edge_compare);
     stbtt__sort_edges(e, n);
 
-    // теперь пройдите по строкам сканирования и найдите пересечения на каждой строке сканирования, используйте правило обмотки xor
+    // теперь пройдите по строкам последовательно и перейдите к пересечениям каждой строки, используя правило проводов xor
     stbtt__rasterize_sorted_edges(result, e, n, vsubsample, off_x, off_y, userdata);
 
     STBTT_free(e, userdata);
@@ -4251,7 +4251,7 @@ typedef int stbrp_coord;
 //                                                                                //
 //                                                                                //
 // если вы получите предупреждение компиляции из-за того, что эти символы определены более //
-// один раз переместите #include " stb_rect_pack.h " перед #include " stb_truetype.h " //
+// один раз противоте#include"stb_rect_pack.h" перед#include"stb_truetype.h" //
 //                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -4306,8 +4306,8 @@ static void stbrp_pack_rects(stbrp_context * con, stbrp_rect * rects, int num_re
 //
 // запекание растровых изображений
 //
-// Это упаковка SUPER — AWESOME (tm Ryan Gordon) с использованием stb_rect_pack.h. Если
-// stb_rect_pack.h недоступен, он использует стратегию BakeFontBitmap.
+// Это упаковкаSUPER—AWESOME(tm Ryan Gordon) с использованиемstb_rect_pack.h. Если
+// stb_rect_pack.h недоступен, он использует недостатки BakeFontBitmap.
 
 STBTT_DEF int stbtt_PackBegin(stbtt_pack_context * spc, unsigned char * pixels, int pw, int ph, int stride_in_bytes,
                               int padding, void * alloc_context)
@@ -4370,7 +4370,7 @@ static void stbtt__h_prefilter(unsigned char * pixels, int w, int h, int stride_
     unsigned char buffer[STBTT_MAX_OVERSAMPLE];
     int safe_w = w - kernel_width;
     int j;
-    STBTT_memset(buffer, 0, STBTT_MAX_OVERSAMPLE); // подавить ложное предупреждение от VS2013 -analyze
+    STBTT_memset(buffer, 0, STBTT_MAX_OVERSAMPLE); // подавить ложное предупреждение отVS2013-analyze
     for(j = 0; j < h; ++j) {
         int i;
         unsigned int total;
@@ -4378,7 +4378,7 @@ static void stbtt__h_prefilter(unsigned char * pixels, int w, int h, int stride_
 
         total = 0;
 
-        // в общих случаях сделайте kernel_width константой, чтобы компилятор мог оптимизировать деление
+        // в приведенных примерах сделайтеkernel_widthконстантой, чтобы компилятор мог настроить разделение
         switch(kernel_width) {
             case 2:
                 for(i = 0; i <= safe_w; ++i) {
@@ -4432,7 +4432,7 @@ static void stbtt__v_prefilter(unsigned char * pixels, int w, int h, int stride_
     unsigned char buffer[STBTT_MAX_OVERSAMPLE];
     int safe_h = h - kernel_width;
     int j;
-    STBTT_memset(buffer, 0, STBTT_MAX_OVERSAMPLE); // подавить ложное предупреждение от VS2013 -analyze
+    STBTT_memset(buffer, 0, STBTT_MAX_OVERSAMPLE); // подавить ложное предупреждение отVS2013-analyze
     for(j = 0; j < w; ++j) {
         int i;
         unsigned int total;
@@ -4440,7 +4440,7 @@ static void stbtt__v_prefilter(unsigned char * pixels, int w, int h, int stride_
 
         total = 0;
 
-        // в общих случаях сделайте kernel_width константой, чтобы компилятор мог оптимизировать деление
+        // в приведенных примерах сделайтеkernel_widthконстантой, чтобы компилятор мог настроить разделение
         switch(kernel_width) {
             case 2:
                 for(i = 0; i <= safe_h; ++i) {
@@ -4501,7 +4501,7 @@ static float stbtt__oversample_shift(int oversample)
     return (float) - (oversample - 1) / (2.0f * (float)oversample);
 }
 
-// Массив rects должен быть достаточно большим, чтобы вместить все символы в заданных диапазонах.
+// Массивные прямоугольники должны быть достаточно большими, чтобы вместить все символы в заданных партиях.
 STBTT_DEF int stbtt_PackFontRangesGatherRects(stbtt_pack_context * spc, const stbtt_fontinfo * info,
                                               stbtt_pack_range * ranges, int num_ranges, stbrp_rect * rects)
 {
@@ -4565,7 +4565,7 @@ STBTT_DEF void stbtt_MakeGlyphBitmapSubpixelPrefilter(const stbtt_fontinfo * inf
     *sub_y = stbtt__oversample_shift(prefilter_y);
 }
 
-// Массив rects должен быть достаточно большим, чтобы вместить все символы в заданных диапазонах.
+// Массивные прямоугольники должны быть достаточно большими, чтобы вместить все символы в заданных партиях.
 STBTT_DEF int stbtt_PackFontRangesRenderIntoRects(stbtt_pack_context * spc, const stbtt_fontinfo * info,
                                                   stbtt_pack_range * ranges, int num_ranges, stbrp_rect * rects)
 {
@@ -4682,7 +4682,7 @@ STBTT_DEF int stbtt_PackFontRanges(stbtt_pack_context * spc, const unsigned char
 {
     stbtt_fontinfo info;
     int i, j, n, return_value = 1;
-    //stbrp_context *context = ( stbrp_context *) spc-> pack_info ;
+    //stbrp_context *context = (stbrp_context*) spc->pack_info;
     stbrp_rect * rects;
 
     // пометить все символы как упакованные NOT
@@ -4981,8 +4981,8 @@ static int stbtt__solve_cubic(float a, float b, float c, float * r)
         r[2] = s - u * (m - n);
 
         //STBTT_assert( STBTT_fabs(((r[0]+a)*r[0]+b)*r[0]+c) < 0.05f);  // these asserts may not be safe at all scales, though they're in bezier t parameter units so maybe?
-        //STBTT_assert ( STBTT_fabs (((r[1]+a)*r[1]+b)*r[1]+c) < 0,05f);
-        //STBTT_assert ( STBTT_fabs (((r[2]+a)*r[2]+b)*r[2]+c) < 0,05f);
+        //STBTT_assert (STBTT_fabs(((r[1]+a)*r[1]+b)*r[1]+c) < 0,05f);
+        //STBTT_assert (STBTT_fabs(((r[2]+a)*r[2]+b)*r[2]+c) < 0,05f);
         return 3;
     }
 }
@@ -5072,7 +5072,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo * info, float s
                             min_dist = (float)STBTT_sqrt(dist2);
 
                         // грубая отбраковка против bbox
-                        //if (sx > STBTT_min (x0,x1)- min_dist && sx < STBTT_max (x0,x1)+ min_dist &&
+                        //if (sx >STBTT_min(x0,x1)-min_dist&& sx <STBTT_max(x0,x1)+min_dist&&
                         //    sy > STBTT_min (y0,y1)- min_dist && sy < STBTT_max (y0,y1)+ min_dist )
                         dist = (float)STBTT_fabs((x1 - x0) * (y0 - sy) - (y1 - y0) * (x0 - sx)) * precompute[i];
                         STBTT_assert(i != 0);
@@ -5083,7 +5083,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo * info, float s
                             float dx = x1 - x0, dy = y1 - y0;
                             float px = x0 - sx, py = y0 - sy;
                             // минимизировать (px+t*dx)^2 + (py+t*dy)^2 = px*px + 2*px*dx*t + t^2*dx*dx + py*py + 2*py*dy*t + t^2*dy*dy
-                            // derivative: 2*px*dx + 2*py*dy + (2*dx*dx+2*dy*dy)*t, set to 0 and solve
+                            // derivative: 2*px*dx + 2*py*dy + (2*dx*dx+2*dy*dy)*t, установите значение 0 и решите
                             float t = -(px * dx + py * dy) / (dx * dx + dy * dy);
                             if(t >= 0.0f && t <= 1.0f)
                                 min_dist = dist;
@@ -5096,7 +5096,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo * info, float s
                         float box_y0 = STBTT_min(STBTT_min(y0, y1), y2);
                         float box_x1 = STBTT_max(STBTT_max(x0, x1), x2);
                         float box_y1 = STBTT_max(STBTT_max(y0, y1), y2);
-                        // грубая отсечка по bbox, чтобы избежать ненужных кубических вычислений
+                        // грубая отсечка по bbox, чтобы избежать ненужных кубических компьютеров
                         if(sx > box_x0 - min_dist && sx < box_x1 + min_dist && sy > box_y0 - min_dist && sy < box_y1 + min_dist) {
                             int num = 0;
                             float ax = x1 - x0, ay = y1 - y0;
@@ -5105,7 +5105,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo * info, float s
                             float res[3] = { 0.f, 0.f, 0.f };
                             float px, py, t, it, dist2;
                             float a_inv = precompute[i];
-                            if(a_inv == 0.0f) {  // если a_inv равен 0, это 2-я степень, поэтому используйте квадратичную формулу
+                            if(a_inv == 0.0f) {  // еслиa_invравно 0, это 2-я степень, поэтому воспользуйтесь квадратичной формулой
                                 float a = 3 * (ax * bx + ay * by);
                                 float b = 2 * (ax * ax + ay * ay) + (mx * bx + my * by);
                                 float c = mx * ax + my * ay;
@@ -5196,7 +5196,7 @@ STBTT_DEF void stbtt_FreeSDF(unsigned char * bitmap, void * userdata)
 // соответствие имени шрифта – рекомендуется не использовать это
 //
 
-// проверьте, содержит ли строка utf8 префикс, который является строкой utf16; если да, то верните длину соответствующей строки utf8
+// проверьте, содержит ли строку префикса utf8, которая является строкой utf16; если да, то вернуть длину строки utf8
 #ifdef STBTT_STREAM_TYPE
 static stbtt_int32 stbtt__CompareUTF8toUTF16_bigendian_prefix(stbtt_uint8 * s1, stbtt_int32 len1, STBTT_STREAM_TYPE s2,
                                                               stbtt_uint32 s2offs, stbtt_int32 len2)
@@ -5258,7 +5258,7 @@ static int stbtt_CompareUTF8toUTF16_bigendian_internal(char * s1, int len1, char
 }
 #endif
 // возвращает результаты в любой запрошенной вами кодировке... но обратите внимание, что 2-байтовые кодировки
-// будет BIG - ENDIAN... используйте stbtt_CompareUTF8toUTF16_bigendian() для сравнения
+// будетBIG-ENDIAN... викорstbtt_CompareUTF8toUTF16_bigendian() для сравнения
 STBTT_DEF stbtt_uint32 stbtt_GetFontNameString(const stbtt_fontinfo * font, int * length, int platformID,
                                                int encodingID, int languageID, int nameID)
 {
@@ -5306,7 +5306,7 @@ static int stbtt__matchpair(stbtt_uint8 * fc, stbtt_uint32 nm, stbtt_uint8 * nam
                 // проверьте, есть ли совпадение префикса
                 stbtt_int32 matchlen = stbtt__CompareUTF8toUTF16_bigendian_prefix(name, nlen, fc, stringOffset + off, slen);
                 if(matchlen >= 0) {
-                    // проверьте наличие target_id +1 сразу после него с той же кодировкой и языком
+                    // проверьте наличиеtarget_id+1 сразу после него с той же кодировкой и языком
                     if(i + 1 < count && ttUSHORT(fc, loc + 12 + 6) == next_id && ttUSHORT(fc, loc + 12) == platform &&
                        ttUSHORT(fc, loc + 12 + 2) == encoding && ttUSHORT(fc, loc + 12 + 4) == language) {
                         slen = ttUSHORT(fc, loc + 12 + 8);
@@ -5351,7 +5351,7 @@ static int stbtt__matchpair(stbtt_uint8 * fc, stbtt_uint32 nm, stbtt_uint8 * nam
     stbtt_uint32 nm, hd;
     if(!stbtt__isfont(fc, offset)) return 0;
 
-    // проверьте флаги курсива/жирного шрифта/подчеркивания в macStyle...
+    // проверьте флаги курса/жирного шрифта/подчеркивания в macStyle...
     if(flags) {
         hd = stbtt__find_table(fc, offset, "head");
         if((ttUSHORT(fc, hd + 44) & 7) != (flags & 7)) return 0;
@@ -5577,7 +5577,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ------------------------------------------------------------------------------
-ALTERNATIVE B - общественное достояние ( www.unlicense.org)
+ALTERNATIVE B - общественное состояние ( www.unlicense.org)
 Это бесплатное и ничем не обремененное программное обеспечение, общедоступное.
 Любой может свободно копировать, изменять, публиковать, использовать, компилировать, продавать или распространять это
 программное обеспечение в виде исходного кода или в виде скомпилированного двоичного файла для любых целей,

@@ -124,7 +124,7 @@ extern void arm_2d_helper_swap_rgb16(uint16_t * phwBuffer, uint32_t wCount);
                     lv_color_to_u16(draw_dsc->recolor),                         \
                     draw_dsc->recolor_opa);                                     \
                                                                                 \
-                /* замените src_buf для следующей операции */               \
+                /* заменитеsrc_bufдля текущей операции */               \
                 src_buf = (const uint8_t *)rgb_tmp_buf;                         \
             }                                                                   \
             else if(LV_COLOR_FORMAT_XRGB8888 == des_cf) {                       \
@@ -151,7 +151,7 @@ extern void arm_2d_helper_swap_rgb16(uint16_t * phwBuffer, uint32_t wCount);
                     lv_color_to_u32(draw_dsc->recolor),                         \
                     draw_dsc->recolor_opa);                                     \
                                                                                 \
-                /* замените src_buf для следующей операции */               \
+                /* заменитеsrc_bufдля текущей операции */               \
                 src_buf = (const uint8_t *)rgb_tmp_buf;                         \
             }                                                                   \
         }                                                                       \
@@ -225,7 +225,7 @@ static inline lv_result_t lv_draw_sw_image_helium(
         }
     #endif
 
-        /* ------------- подготовка параметров для API Arm-2d - BEGIN --------- */
+        /* ------------- параметры подготовки дляAPIArm-2d -BEGIN--------- */
 
         lv_area_t blend_area;
         if(!lv_area_intersect(&blend_area, des_area, &t->clip_area)) {
@@ -268,7 +268,7 @@ static inline lv_result_t lv_draw_sw_image_helium(
         uint8_t *des_buf = (uint8_t *)lv_draw_layer_go_to_xy(layer, 0, 0);
         uint8_t opa = draw_dsc->opa;
 
-        /* ------------- подготовка параметров для API Arm-2d - END ----------- */
+        /* ------------- параметры подготовки дляAPIArm-2d -END----------- */
         __RECOLOUR_BEGIN()
 
         static arm_2d_tile_t target_tile_origin;
@@ -417,7 +417,7 @@ static inline lv_result_t lv_draw_sw_image_helium(
         else if(LV_COLOR_FORMAT_RGB565A8 == src_cf) {
             LV_ASSERT(LV_COLOR_FORMAT_RGB565 == des_cf);
 
-            /* mask_buf = src_buf + src_stride * src_w / header->w * src_h; */
+            /* mask_buf = src_buf +src_stride*src_w/ header->w *src_h; */
             const uint8_t *mask_buf = src_buf + src_stride * src_h;
             int32_t mask_stride = src_stride / 2;
 

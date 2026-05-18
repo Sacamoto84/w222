@@ -104,7 +104,7 @@ void lv_sdl_mousewheel_handler(SDL_Event * event)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     while(indev) {
         if(lv_indev_get_read_cb(indev) == sdl_mousewheel_read) {
-            /*Если по какой-либо причине disp равен NULL, используйте первый indev правильного типа.*/
+            /*Если по какой-либо причине disp равенNULL, используйте первый тип indev.*/
             if(disp == NULL || lv_indev_get_display(indev) == disp) break;
         }
         indev = lv_indev_get_next(indev);

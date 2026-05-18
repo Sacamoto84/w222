@@ -18,7 +18,7 @@
 #include "../../display/lv_display_private.h"
 #include "../../lv_init.h"
 
-#define SDL_MAIN_HANDLED /*Чтобы исправить проблему «неопределенной ссылки на WinMain» в SDL.*/
+#define SDL_MAIN_HANDLED /*Чтобы исправить проблему «неопределенной ссылки на WinMain» вSDL.*/
 #include "lv_sdl_private.h"
 
 #if LV_COLOR_DEPTH == 1 && LV_SDL_RENDER_MODE != LV_DISPLAY_RENDER_MODE_PARTIAL
@@ -310,7 +310,7 @@ static lv_result_t window_create(lv_display_t * disp)
         return LV_RESULT_INVALID;
     }
 
-    /*Некоторые платформы (например, Emscripten), похоже, требуют повторной установки размера. */
+    /*Какая-то платформа (например, Emscripten), кажется, требует повторной установки размера. */
     SDL_SetWindowSize(dsc->window, hor_res, ver_res);
     return LV_RESULT_OK;
 }

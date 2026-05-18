@@ -117,7 +117,7 @@ void lv_draw_sw_layer(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_dsc, 
         if(!visible) return;
     }
 
-    /*Источником должен быть draw_buf, а не слой.*/
+    /*Источником должен бытьdraw_buf, а не слой.*/
     lv_draw_image_dsc_t new_draw_dsc = *draw_dsc;
     new_draw_dsc.src = layer_to_draw->draw_buf;
 
@@ -279,7 +279,7 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
         blend_dsc.src_color_format = cf;
         lv_draw_sw_blend(t, &blend_dsc);
     }
-    /*Самый простой случай — просто скопировать пиксели в draw_buf. Смешивание преобразует цвета при необходимости.*/
+    /*Самый простой случай — просто скопировать пиксели в draw_buf. Смешивание преобразует цвета по мере необходимости.*/
     else if(!transformed && !radius && draw_dsc->recolor_opa <= LV_OPA_MIN && draw_dsc->colorkey == NULL) {
         blend_dsc.src_area = img_coords;
         blend_dsc.src_buf = src_buf;
@@ -300,11 +300,11 @@ static void img_draw_core(lv_draw_task_t * t, const lv_draw_image_dsc_t * draw_d
     else if(LV_RESULT_INVALID == LV_DRAW_SW_IMAGE(transformed,      /* требуется ли преобразование */
                                                   cf,               /* формат изображения */
                                                   src_buf,          /* буфер изображения */
-                                                  img_coords,       /* src_h , src_w , src_x1 , src_y1 */
+                                                  img_coords,       /* src_h ,src_w,src_x1, src_y1 */
                                                   img_stride,       /* шаг изображения */
                                                   clipped_img_area, /* область смешивания */
                                                   t,                /* целевой буфер, ширина буфера, высота буфера, шаг буфера */
-                                                  draw_dsc)) {      /* опа, recolour_opa и цвет */
+                                                  draw_dsc)) {      /* опа,recolour_opaи цвет */
         /*В остальных случаях необходимо проверять каждый пиксель по отдельности.*/
         transform_and_recolor(t, draw_dsc, decoder_dsc, sup, img_coords, clipped_img_area);
 

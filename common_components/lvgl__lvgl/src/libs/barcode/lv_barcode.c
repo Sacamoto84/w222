@@ -286,7 +286,7 @@ static void lv_barcode_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj
     if(draw_buf == NULL) return;
     lv_image_cache_drop(draw_buf);
 
-    /*@fixme уничтожить буфер в кеше free_cb .*/
+    /*@fixme удалить буфер в кешеfree_cb.*/
     lv_draw_buf_destroy(draw_buf);
 }
 

@@ -55,7 +55,7 @@ static void delete_cb(lv_event_t * e);
 static void lv_ft81x_cmd(lv_display_t * disp, uint8_t command, uint8_t parameter);
 static uint8_t lv_ft81x_read_8(lv_display_t * disp, uint32_t address);
 static uint16_t lv_ft81x_read_16(lv_display_t * disp, uint32_t address);
-/* статический uint32_t lv_ft81x_read_32 (lv_display_t *disp, uint32_t адрес); */
+/* статическийuint32_tlv_ft81x_read_32 (lv_display_t*disp,uint32_tадрес); */
 static void lv_ft81x_write_8(lv_display_t * disp, uint32_t address, uint8_t val);
 static void lv_ft81x_write_16(lv_display_t * disp, uint32_t address, uint16_t val);
 static void lv_ft81x_write_32(lv_display_t * disp, uint32_t address, uint32_t val);

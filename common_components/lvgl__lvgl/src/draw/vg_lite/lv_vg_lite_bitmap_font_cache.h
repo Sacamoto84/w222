@@ -35,23 +35,23 @@ struct _lv_draw_vg_lite_unit_t;
  **********************/
 
 /**
- * @brief Initialize the bitmap font cache for VG-Lite draw unit
- * @param unit pointer to the VG-Lite draw unit
- * @param cache_cnt number of cache entries to allocate
+ * @brief Инициализируйте кэш растровых шрифтов для блока рисованияVG-Lite.
+ * @param unit указатель на блок рисованияVG-Lite
+ * @param cache_cnt количество записей кэша для выделения
  */
 void lv_vg_lite_bitmap_font_cache_init(struct _lv_draw_vg_lite_unit_t * unit, uint32_t cache_cnt);
 
 /**
- * @brief Deinitialize the bitmap font cache for VG-Lite draw unit
- * @param unit pointer to the VG-Lite draw unit
+ * @brief Деинициализируйте кэш растровых шрифтов для модуля рисованияVG-Lite.
+ * @param unit указатель на блок рисованияVG-Lite
  */
 void lv_vg_lite_bitmap_font_cache_deinit(struct _lv_draw_vg_lite_unit_t * unit);
 
 /**
- * @brief Get the bitmap font cache entry for a given font and letter
- * @param unit pointer to the VG-Lite draw unit
- * @param g_dsc pointer to the glyph descriptor
- * @return pointer to the draw buffer containing the cached bitmap font glyph, or NULL if the glyph ID is 0 or if cache creation fails
+ * @brief Получить запись кэша растровых шрифтов для данного шрифта и буквы.
+ * @param unit указатель на блок рисованияVG-Lite
+ * @param g_dsc указатель на дескриптор глифа
+ * @return указатель на буфер прорисовки, содержащий глиф кэшированного растрового шрифта, или NULL, если глифIDравен 0 или если создание кэша не удалось
  */
 lv_draw_buf_t * lv_vg_lite_bitmap_font_cache_get(struct _lv_draw_vg_lite_unit_t * unit,
                                                  const lv_font_glyph_dsc_t * g_dsc);

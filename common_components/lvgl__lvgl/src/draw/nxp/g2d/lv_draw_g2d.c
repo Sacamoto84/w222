@@ -25,8 +25,8 @@
 
 /**
  * Имя перечисления различается в зависимости от версии g2d (критическое изменение API, не обрабатывается в g2d.h )
- * Note: enum value is the same in either case
- * См. https://github.com/nxp-imx/imx-g2d-pxp/commit/d7af84b5c8ad161b6898ffabe23918cb59fe2fe9.
+ * Note: значение перечисления одинаково в любом случае
+ * См.  https://github.com/nxp-imx/imx-g2d-pxp/commit/d7af84b5c8ad161b6898ffabe23918cb59fe2fe9.
  */
 #if defined(LV_USE_PXP)
     #if (G2D_VERSION_MAJOR >= 2) && (G2D_VERSION_MINOR < 3)
@@ -201,7 +201,7 @@ static int32_t _g2d_evaluate(lv_draw_unit_t * u, lv_draw_task_t * t)
                 return 1;
             }
         case LV_DRAW_TASK_TYPE_IMAGE: {
-                /* TODO: Fix issue where images rendered to a different layer don't render in the final layer.*/
+                /* TODO: Исправлена проблема, из-за которой изображения, отображаемые на другом слое, не отображались на последнем слое.*/
                 return 0;
 #if 0
                 const lv_draw_image_dsc_t * draw_dsc = (lv_draw_image_dsc_t *) t->draw_dsc;

@@ -72,7 +72,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_font_class_t lv_freetype_font_class;
 
 /**
  * Инициализируйте библиотеку свободных типов.
- * @return LV_RESULT_OK on success, otherwise LV_RESULT_INVALID.
+ * @return LV_RESULT_OK в случае успеха, в противном случаеLV_RESULT_INVALID.
  */
 lv_result_t lv_freetype_init(uint32_t max_glyph_cnt);
 
@@ -83,56 +83,56 @@ void lv_freetype_uninit(void);
 
 /**
  * Инициализируйте информационную структуру шрифта.
- * @param font_info font info structure to be initialized.
+ * @param font_info Структура информации о шрифте, которую необходимо инициализировать.
  */
 void lv_freetype_init_font_info(lv_font_info_t * font_info);
 
 /**
  * Создайте шрифт произвольного типа со структурой информации о шрифте.
- * @param font_info font info structure.
- * @return Created font, or NULL on failure.
+ * @param font_info информационная структура шрифта.
+ * @return Созданный шрифт илиNULLв случае сбоя.
  */
 lv_font_t * lv_freetype_font_create_with_info(const lv_font_info_t * font_info);
 
 /**
  * Создайте произвольный шрифт.
- * @param pathname font file path.
- * @param render_mode font render mode(see @lv_freetype_font_render_mode_t for details).
- * @param size font size.
- * @param style font style(see lv_freetype_font_style_t for details).
- * @return Created font, or NULL on failure.
+ * @param pathname путь к файлу шрифта.
+ * @param render_mode режим рендеринга шрифтов (подробности см. в @lv_freetype_font_render_mode_t).
+ * @param size размер шрифта.
+ * @param style стиль шрифта (подробности см. в lv_freetype_font_style_t).
+ * @return Созданный шрифт илиNULLв случае сбоя.
  */
 lv_font_t * lv_freetype_font_create(const char * pathname, lv_freetype_font_render_mode_t render_mode, uint32_t size,
                                     lv_freetype_font_style_t style);
 
 /**
  * Удалить произвольный шрифт.
- * @param font freetype font to be deleted.
+ * @param font произвольный шрифт, который нужно удалить.
  */
 void lv_freetype_font_delete(lv_font_t * font);
 
 /**
  * Зарегистрируйте функцию обратного вызова для создания контуров для шрифтов FreeType.
  *
- * @param cb The callback function to be registered.
- * @param user_data User data to be passed to the callback function.
- * @return The ID of the registered callback function, or a negative value on failure.
+ * @param cb Функция обратного вызова, которую необходимо зарегистрировать.
+ * @param user_data Пользовательские данные, которые будут переданы в функцию обратного вызова.
+ * @return ID зарегистрированной функции обратного вызова или отрицательное значение в случае сбоя.
  */
 void lv_freetype_outline_add_event(lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
 
 /**
- * Получите масштаб шрифта FreeType.
+ * Получите масштабный шрифт FreeType.
  *
- * @param font The FreeType font to get the scale of.
- * @return The scale of the FreeType font.
+ * @param font Шрифт FreeType, масштаб которого требуется получить.
+ * @return Масштаб шрифта FreeType.
  */
 uint32_t lv_freetype_outline_get_scale(const lv_font_t * font);
 
 /**
  * Проверьте, является ли шрифт контурным.
  *
- * @param font The FreeType font.
- * @return Is outline font on success, otherwise false.
+ * @param font Шрифт FreeType.
+ * @return Контурный шрифт в случае успеха, в противном случае — значение false.
  */
 bool lv_freetype_is_outline_font(const lv_font_t * font);
 

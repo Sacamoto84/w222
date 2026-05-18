@@ -102,7 +102,7 @@ typedef struct _lv_windows_create_display_data_t {
  **********************/
 
 /**
- * @brief Initialize the LVGL Windows backend.
+ * @brief Инициализируйте серверную часть Windows LVGL.
  * @remark Это частный API, который используется для серверной части Windows LVGL.
  *         реализация.  Пользователям LVGL не следует использовать это, потому что
  *         LVGL уже использовал его в lv_init.
@@ -110,9 +110,9 @@ typedef struct _lv_windows_create_display_data_t {
 void lv_windows_platform_init(void);
 
 /**
- * @brief Get the window context from specific LVGL display window.
- * @param window_handle The window handle of specific LVGL display window.
- * @return The window context from specific LVGL display window.
+ * @brief Получите контекст окна из конкретного окна отображения LVGL.
+ * @param window_handle Дескриптор конкретного окна отображения LVGL.
+ * @return Контекст окна из конкретного окна отображения LVGL.
  * @remark Это частный API, который используется для серверной части Windows LVGL.
  *         реализация.  Пользователям LVGL не следует использовать это, потому что
  *         сопровождающий не обещает бинарный интерфейс приложения

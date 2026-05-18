@@ -42,7 +42,7 @@ static bool _isImportanceApplicable(SvgStyleFlags &toFlagsImportance, SvgStyleFl
 static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
 {
     if (from == nullptr) return;
-    //Скопируйте свойства from, только если они были явно установлены (а не по умолчанию).
+    //Скопируйте имущество из, только если они были установлены (а не по умолчанию).
     if ((from->curColorSet && !(to->flags & SvgStyleFlags::Color)) ||
         _isImportanceApplicable(to->flagsImportance, from->flagsImportance, SvgStyleFlags::Color)) {
         to->color = from->color;
@@ -170,7 +170,7 @@ static void _copyStyle(SvgStyleProperty* to, const SvgStyleProperty* from)
         }
     }
     //Непрозрачность
-    //TODO: it can be set to be 255 and shouldn't be changed by attribute 'opacity'
+    //TODO: его можно установить равным 255, и его нельзя изменять атрибутом «непрозрачность».
     if ((from->opacity < 255 && !(to->flags & SvgStyleFlags::Opacity)) ||
         _isImportanceApplicable(to->flagsImportance, from->flagsImportance, SvgStyleFlags::Opacity)) {
         to->opacity = from->opacity;
@@ -258,7 +258,7 @@ void cssApplyStyleToPostponeds(Array<SvgNodeIdPair>& postponeds, SvgNode* style)
     for (uint32_t i = 0; i < postponeds.count; ++i) {
         auto nodeIdPair = postponeds[i];
 
-        //Стиль CSS: tag.name имеет более высокий приоритет, чем .name
+        //СтильCSS: tag.name имеет более высокий приоритет, чем .name
         if (auto cssNode = cssFindStyleNode(style, nodeIdPair.id, nodeIdPair.node->type)) {
             cssCopyStyleAttr(nodeIdPair.node, cssNode);
         }

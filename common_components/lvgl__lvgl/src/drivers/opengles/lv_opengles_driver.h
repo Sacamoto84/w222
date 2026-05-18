@@ -33,45 +33,45 @@ extern "C" {
  **********************/
 
 /**
- * Инициализировать OpenGL
- * @note    it is not necessary to call this if you use `lv_opengles_glfw_window_create`
+ * Инициализация OpenGL
+ * @note    нет необходимости вызывать это, если вы используете `lv_opengles_glfw_window_create`
  */
 void lv_opengles_init(void);
 
 /**
  * Деинициализировать OpenGL
- * @note    it is not necessary to call this if you use `lv_opengles_glfw_window_create`
+ * @note    нет необходимости вызывать это, если вы используете `lv_opengles_glfw_window_create`
  */
 void lv_opengles_deinit(void);
 
 /**
- * Рендеринг текстуры с использованием альтернативного режима наложения для более плавных полупрозрачных материалов и правильного сглаживания элементов glTF при использовании прозрачного фона.
- * @param texture        OpenGL texture ID
- * @param texture_area   the area in the window to render the texture in
- * @param opa            opacity to blend the texture with existing contents
- * @param disp_w         width of the window/framebuffer being rendered to
- * @param disp_h         height of the window/framebuffer being rendered to
- * @param h_flip         horizontal flip
- * @param v_flip         vertical flip
+ * Рендеринг текстур с использованием альтернативного режима наложения для более плавных полупрозрачных материалов и с плавным плавлением элементов glTF при использовании прозрачного фонаря.
+ * @param texture        Текстура OpenGL ID
+ * @param texture_area   область в окне для рендеринга текстуры
+ * @param opa            непрозрачность, чтобы смешать текстуру с существующим содержимым
+ * @param disp_w         ширина окна/кадрового буфера, в который отображается
+ * @param disp_h         высота отображаемого окна/фреймбуфера
+ * @param h_flip         горизонтальный флип
+ * @param v_flip         вертикальный флип
  */
 void lv_opengles_render_texture(unsigned int texture, const lv_area_t * texture_area, lv_opa_t opa, int32_t disp_w,
                                 int32_t disp_h, const lv_area_t * texture_clip_area, bool h_flip, bool v_flip);
 
 /**
  * Рендеринг текстуры дисплея. Поддержка вращения. Переключение красного и синего каналов.
- * @param display           LVGL Texture display. Created with the `lv_opengles_texture` module
- * @param h_flip            horizontal flip
- * @param v_flip            vertical flip
+ * @param display           LVGL Отображение текстур. Создано с помощью модуля `lv_opengles_texture`.
+ * @param h_flip            горизонтальный флип
+ * @param v_flip            вертикальный флип
  */
 void lv_opengles_render_display_texture(lv_display_t * display, bool h_flip, bool v_flip);
 
 /**
  * Рендеринг заливки
- * @param color          the color of the fill
- * @param area           the area in the window to render the fill
- * @param opa            opacity to blend the fill with existing contents
- * @param disp_w         width of the window/framebuffer being rendered to
- * @param disp_h         height of the window/framebuffer being rendered to
+ * @param color          цвет заливки
+ * @param area           область в окне для визуализации заливки
+ * @param opa            непрозрачность, чтобы смешать заливку с существующим содержимым
+ * @param disp_w         ширина окна/кадрового буфера, в который отображается
+ * @param disp_h         высота отображаемого окна/фреймбуфера
  */
 void lv_opengles_render_fill(lv_color_t color, const lv_area_t * area, lv_opa_t opa, int32_t disp_w, int32_t disp_h);
 
@@ -81,16 +81,16 @@ void lv_opengles_render_fill(lv_color_t color, const lv_area_t * area, lv_opa_t 
 void lv_opengles_render_clear(void);
 
 /**
- * Установите область просмотра OpenGL
- * @param x        x position of the viewport
- * @param y        y position of the viewport
- * @param w        width of the viewport
- * @param h        height of the viewport
+ * Выбрать область просмотра OpenGL
+ * @param x        положение x области просмотра
+ * @param y        положение окна просмотра по оси y
+ * @param w        ширина области просмотра
+ * @param h        высота видового экрана
  */
 void lv_opengles_viewport(int32_t x, int32_t y, int32_t w, int32_t h);
 
 /**
- * Повторно инициализировать состояние OpenGL после внешних операций GL (например, NanoVG)
+ * Повторно создавать состояние OpenGL после смены операцийGL(например, NanoVG)
  * Это перепривязывает VAO , VBO , IBO и сбрасывает атрибуты вершин.
  */
 void lv_opengles_reinit_state(void);

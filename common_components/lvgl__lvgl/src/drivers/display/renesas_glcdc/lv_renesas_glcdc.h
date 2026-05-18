@@ -30,17 +30,17 @@ extern "C" {
  **********************/
 
 /**
- * Создайте дисплей с помощью периферийного устройства Renesas GLCDC в режиме рендеринга DIRECT.
- * @return  pointer to the created display
+ * Создайте дисплей с помощью периферийного устройства RenesasGLCDCв режиме рендеринга DIRECT.
+ * @return  указатель на созданный дисплей
  */
 lv_display_t * lv_renesas_glcdc_direct_create(void);
 
 /**
- * Создайте дисплей с помощью периферийного устройства Renesas GLCDC в режиме рендеринга PARTIAL.
- * @param buf1      first buffer
- * @param buf2      second buffer (can be `NULL`)
- * @param buf_size  buffer size in byte
- * @return          pointer to the created display
+ * Создайте дисплей с помощью периферийного устройства RenesasGLCDCв режиме рендеринга PARTIAL.
+ * @param buf1      первый буфер
+ * @param buf2      второй буфер (может быть`NULL`)
+ * @param buf_size  размер буфера в байтах
+ * @return          указатель на созданный дисплей
  */
 lv_display_t * lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t buf_size);
 

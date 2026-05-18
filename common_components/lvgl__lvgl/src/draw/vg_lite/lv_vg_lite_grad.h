@@ -33,41 +33,41 @@ extern "C" {
  **********************/
 
 /**
- * @brief Create a gradient context
- * @param cache_cnt number of cache entries
- * @param unit the draw unit
+ * @brief Создайте контекст градиента
+ * @param cache_cnt количество записей кэша
+ * @param unit блок рисования
  */
 struct _lv_vg_lite_grad_ctx_t * lv_vg_lite_grad_ctx_create(uint32_t cache_cnt, struct _lv_draw_vg_lite_unit_t * unit);
 
 /**
- * @brief Delete a gradient context
- * @param ctx the gradient context to delete
+ * @brief Удаление контекста градиента
+ * @param ctx контекст градиента, который нужно удалить
  */
 void lv_vg_lite_grad_ctx_delete(struct _lv_vg_lite_grad_ctx_t * ctx);
 
 /**
- * @brief Get the pending list of gradient items
- * @param ctx the gradient context
+ * @brief Получить ожидающий список элементов градиента
+ * @param ctx контекст градиента
  */
 struct _lv_vg_lite_pending_t * lv_vg_lite_grad_ctx_get_pending(struct _lv_vg_lite_grad_ctx_t * ctx);
 
 /**
- * @brief Get the cache of gradient items
- * @param ctx the gradient context
+ * @brief Получить кеш элементов градиента
+ * @param ctx контекст градиента
  */
 struct _lv_cache_t * lv_vg_lite_grad_ctx_get_cache(struct _lv_vg_lite_grad_ctx_t * ctx);
 
 /**
- * @brief Draw a gradient
- * @param ctx the gradient context
- * @param buffer the target buffer
- * @param path the path to draw the gradient on
- * @param grad the gradient descriptor
- * @param grad_matrix the gradient matrix
- * @param matrix the matrix to apply to the gradient
- * @param fill the fill rule
- * @param blend the blend mode
- * @return true: success, false: failed
+ * @brief Нарисуйте градиент
+ * @param ctx контекст градиента
+ * @param buffer целевой буфер
+ * @param path путь для рисования градиента
+ * @param grad дескриптор градиента
+ * @param grad_matrix матрица градиента
+ * @param matrix матрица, применяемая к градиенту
+ * @param fill правило заполнения
+ * @param blend режим наложения
+ * @return true: успех, false: неудача
  */
 bool lv_vg_lite_draw_grad(
     struct _lv_vg_lite_grad_ctx_t * ctx,
@@ -80,16 +80,16 @@ bool lv_vg_lite_draw_grad(
     vg_lite_blend_t blend);
 
 /**
- * @brief Draw a gradient helper
- * @param ctx the gradient context
- * @param buffer the target buffer
- * @param path the path to draw the gradient on
- * @param area the area to draw the gradient on
- * @param grad_dsc the gradient descriptor
- * @param matrix the matrix to apply to the gradient
- * @param fill the fill rule
- * @param blend the blend mode
- * @return true: success, false: failed
+ * @brief Нарисуйте помощник по градиенту
+ * @param ctx контекст градиента
+ * @param buffer целевой буфер
+ * @param path путь для рисования градиента
+ * @param area область для рисования градиента
+ * @param grad_dsc дескриптор градиента
+ * @param matrix матрица, применяемая к градиенту
+ * @param fill правило заполнения
+ * @param blend режим наложения
+ * @return true: успех, false: неудача
  */
 bool lv_vg_lite_draw_grad_helper(
     struct _lv_vg_lite_grad_ctx_t * ctx,

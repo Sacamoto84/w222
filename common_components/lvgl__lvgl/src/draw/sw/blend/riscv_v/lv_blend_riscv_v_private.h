@@ -1,12 +1,12 @@
 /**
  * @file lv_blend_riscv_v_private.h
- * Общие макросы и утилиты для операций смешивания RISC -V Vector Extension (RVV 1.0).
+ * Общие макросы и утилиты для операций переключенияRISC-V Vector Extension (RVV 1.0).
  *
  * Этот заголовок предоставляет повторно используемые макросы RVV для:
- * - Segmented load/store operations (RGB888/XRGB8888/RGB565)
- * - Alpha blending with scalar or vector alpha
- * - Color format conversions (RGB565 <-> RGB888)
- * - Effective alpha calculations (alpha, mask, opa combinations)
+ * - Сегментированные операции загрузки/сохранения (RGB888/XRGB8888/RGB565)
+ * - Альфа-смешение со скалярной или векторной альфа-каналом
+ * - Преобразование цветового формата (RGB565<->RGB888)
+ * - Эффективные расчеты альфа (комбинации альфа, маски, опы)
  */
 
 #ifndef LV_BLEND_RISCV_V_PRIVATE_H
@@ -42,7 +42,7 @@ extern "C" {
  *  Совместим с компиляторами, которые не поддерживают типы кортежей RVV 1.0.
  **********************/
 
-/* RGB888: 3 channels (B,G,R) with stride=3 */
+/* RGB888: 3 канала (B,G,R) с шагом = 3 */
 #define LV_RVV_VLSEG3E8_U8M2(base, vl, v_b, v_g, v_r) \
     do { \
         (v_b) = __riscv_vlse8_v_u8m2((base) + 0, 3, (vl)); \
@@ -108,18 +108,18 @@ extern "C" {
 /**********************
  *  ALPHA BLENDING MACROS
  *
- *  Стандартная формула смешивания: результат = (src * альфа + dst * (255 - альфа)) >> 8
+ *  Стандартная формула сочетания: результат = (src * альфа + dst * (255 - альфа)) >> 8
  *
  *  Использование vwmaccu (расширение умножения-накопления без знака):
- *    tmp = dst * (255 - alpha)           // Initialize with dst contribution
- *    tmp = tmp + src * alpha             // vwmaccu adds src contribution
- *    result = tmp >> 8
+ *    tmp = dst * (255 - альфа) // Инициализация с использованием dst
+ *    tmp = tmp + src * альфа // vwmaccu добавляет вклад src
+ *    result = ТМП >> 8
  *
  *  Это сокращает количество операций за счет комбинирования умножения и сложения.
  **********************/
 
 /**
- * Смешайте один канал с помощью vwmaccu (8-битный src/dst -> 16-битный промежуточный)
+ * Включить один канал с помощью vwmaccu (8-битный src/dst -> 16-битный промежуточный)
  * Связь LMUL: m1 -> m2, m2 -> m4
  */
 #define LV_RVV_BLEND_CHANNEL_U8M1_TO_U16M2(v_src, v_dst, alpha, v_result, vl) \
@@ -183,9 +183,9 @@ do { \
 
 /**
  * Смешайте сплошной цвет (предварительно умноженный) с целевыми каналами RGB.
- * fg_color_opa: pre-computed (color * opa) for each channel
- * opa_inv: 255 - opa
- * Formula: result = (dst * opa_inv + fg_color_opa) >> 8
+ * fg_color_opa: предварительно вычисленный (цвет * opa) для каждого канала
+ * opa_inv: 255 - опа
+ * Formula: результат = (dst *opa_inv+fg_color_opa) >> 8
  * Использует расширение m2->m4
  */
 #define LV_RVV_BLEND_SOLID_RGB_U8M2(v_dst_r, v_dst_g, v_dst_b, \
@@ -206,8 +206,8 @@ do { \
 /**
  * Смешайте сплошной цвет (скаляр) с целевыми каналами RGB, используя векторную альфа-маску.
  * fg_r /g/b: скалярные значения цвета переднего плана.
- * v_alpha: per-pixel alpha values (vuint8m2_t)
- * Formula: result = (fg * alpha + dst * (255 - alpha)) >> 8
+ * v_alpha: попиксельные альфа-значения (vuint8m2_t)
+ * Formula: результат = (fg * альфа + dst * (255 - альфа)) >> 8
  * Для повышения эффективности используется расширение m2->m4 с помощью vwmaccu.
  */
 #define LV_RVV_BLEND_SOLID_RGB_VMASK_U8M2(v_dst_r, v_dst_g, v_dst_b, \
@@ -275,16 +275,16 @@ do { \
  *  EFFECTIVE ALPHA CALCULATION MACROS
  *
  *  Эти макросы вычисляют эффективную альфу на основе комбинаций:
- *    - v_alpha: source alpha channel (per-pixel)
- *    - mask: mask value (per-pixel)
- *    - opa: global opacity (scalar)
+ *    - v_alpha : исходный альфа-канал (на пиксель)
+ *    - маска: значение маски (на пиксель)
+ *    - opa: глобальная непрозрачность (скаляр)
  *
- *  Formula: eff_alpha = (alpha * mask * opa) >> 16
+ *  Formula: eff_alpha = (альфа * маска * опа) >> 16
  *  В промежуточных вычислениях используется 16-битная разрядность, чтобы предотвратить переполнение.
  **********************/
 
 /**
- * Рассчитайте эффективную альфу на основе исходной альфа и глобальной opa.
+ * Рассчитайте баланс альфу на основе исходной альфа и глобальной опа.
  */
 #define LV_RVV_CALC_EFF_ALPHA_OPA_U8M1(v_src_a, opa, v_eff_a, vl) \
     do { \
@@ -306,7 +306,7 @@ do { \
 
 /**
  * Рассчитайте эффективную альфу на основе исходной альфа, маски и глобальной прозрачности.
- * Formula: eff_alpha = (alpha * mask * opa) >> 16
+ * Formula: eff_alpha = (альфа * маска * опа) >> 16
  * Расширьте до u32m4, чтобы избежать потери точности из-за двойной смены.
  */
 #define LV_RVV_CALC_EFF_ALPHA_MASK_OPA_U8M1(v_src_a, v_mask, opa, v_eff_a, vl) \

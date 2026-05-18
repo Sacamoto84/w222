@@ -122,9 +122,9 @@ static void _pxp_fill(uint8_t * dest_buf, const lv_area_t * dest_area, int32_t d
     PXP_SetProcessSurfaceBackGroundColor(PXP_ID, lv_color_to_u32(dsc->color));
 
     /**
-     * Настройте смешивание Портера-Даффа — настройки src не используются для заливки без непрозрачности (opa = 0xff).
+     * Настройте перемещение Портера-Даффа — настройки src не используются для заливки без непрозрачности (opa = 0xff).
      *
-     * Note: srcFactorMode and dstFactorMode are inverted in fsl_pxp.h:
+     * Note: srcFactorMode и dstFactorMode инвертируются в fsl_pxp.h:
      * srcFactorMode фактически применяется к альфа-значению PS.
      * dstFactorMode фактически применяется к альфа-значению AS.
      */

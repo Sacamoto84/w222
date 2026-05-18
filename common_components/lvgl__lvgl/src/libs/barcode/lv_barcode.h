@@ -47,86 +47,86 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_barcode_class;
 
 /**
  * Создайте пустой объект штрих-кода (`lv_canvas`).
- * @param parent point to an object where to create the barcode
- * @return pointer to the created barcode object
+ * @param parent указать на объект, где создать штрих-код
+ * @return указатель на созданный объект штрих-кода
  */
 lv_obj_t * lv_barcode_create(lv_obj_t * parent);
 
 /**
  * Установите темный цвет объекта штрих-кода
- * @param obj pointer to barcode object
- * @param color dark color of the barcode
+ * @param obj указатель на объект штрих-кода
+ * @param color темный цвет штрих-кода
  */
 void lv_barcode_set_dark_color(lv_obj_t * obj, lv_color_t color);
 
 /**
  * Установите цвет света объекта штрих-кода
- * @param obj pointer to barcode object
- * @param color light color of the barcode
+ * @param obj указатель на объект штрих-кода
+ * @param color светлый цвет штрих-кода
  */
 void lv_barcode_set_light_color(lv_obj_t * obj, lv_color_t color);
 
 /**
  * Установите масштаб объекта штрих-кода
- * @param obj pointer to barcode object
- * @param scale scale factor
+ * @param obj указатель на объект штрих-кода
+ * @param scale масштабный коэффициент
  */
 void lv_barcode_set_scale(lv_obj_t * obj, uint16_t scale);
 
 /**
  * Задайте направление объекта штрих-кода
- * @param obj pointer to barcode object
- * @param direction draw direction (`LV_DIR_HOR` or `LB_DIR_VER`)
+ * @param obj указатель на объект штрих-кода
+ * @param direction направление рисования (`LV_DIR_HOR`или`LB_DIR_VER`)
  */
 void lv_barcode_set_direction(lv_obj_t * obj, lv_dir_t direction);
 
 /**
  * Установите мозаичный режим объекта штрих-кода
- * @param obj pointer to barcode object
- * @param tiled true: tiled mode, false: normal mode (default)
+ * @param obj указатель на объект штрих-кода
+ * @param tiled true: мозаичный режим, false: обычный режим (по умолчанию)
  */
 void lv_barcode_set_tiled(lv_obj_t * obj, bool tiled);
 
 /**
  * Установите кодировку объекта штрих-кода
- * @param obj pointer to barcode object
- * @param encoding encoding (default is `LV_BARCODE_CODE128_GS1`)
+ * @param obj указатель на объект штрих-кода
+ * @param encoding кодировка (по умолчанию `LV_BARCODE_CODE128_GS1`)
  */
 void lv_barcode_set_encoding(lv_obj_t * obj, lv_barcode_encoding_t encoding);
 
 /**
  * Установите данные объекта штрих-кода
- * @param obj pointer to barcode object
- * @param data data to display
- * @return LV_RESULT_OK: if no error; LV_RESULT_INVALID: on error
+ * @param obj указатель на объект штрих-кода
+ * @param data данные для отображения
+ * @return LV_RESULT_OK : если нет ошибок; LV_RESULT_INVALID: при ошибке
  */
 lv_result_t lv_barcode_update(lv_obj_t * obj, const char * data);
 
 /**
  * Получить темный цвет объекта штрих-кода
- * @param obj pointer to barcode object
- * @return dark color of the barcode
+ * @param obj указатель на объект штрих-кода
+ * @return темный цвет штрих-кода
  */
 lv_color_t lv_barcode_get_dark_color(lv_obj_t * obj);
 
 /**
  * Получить светлый цвет объекта штрих-кода
- * @param obj pointer to barcode object
- * @return light color of the barcode
+ * @param obj указатель на объект штрих-кода
+ * @return светлый цвет штрих-кода
  */
 lv_color_t lv_barcode_get_light_color(lv_obj_t * obj);
 
 /**
  * Получить масштаб объекта штрих-кода
- * @param obj pointer to barcode object
- * @return scale factor
+ * @param obj указатель на объект штрих-кода
+ * @return масштабный коэффициент
  */
 uint16_t lv_barcode_get_scale(lv_obj_t * obj);
 
 /**
  * Получить кодировку объекта штрих-кода
- * @param obj pointer to barcode object
- * @return encoding
+ * @param obj указатель на объект штрих-кода
+ * @return кодирование
  */
 lv_barcode_encoding_t lv_barcode_get_encoding(const lv_obj_t * obj);
 

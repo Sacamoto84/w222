@@ -250,7 +250,7 @@ void lv_opengles_render_display(lv_display_t * display, const lv_opengles_render
 
 void lv_opengles_render_display_texture(lv_display_t * display, bool h_flip, bool v_flip)
 {
-    /*TODO: Deprecate this function and make lv_opengles_render_display public instead*/
+    /*TODO: Отмените поддержку этой функции и вместо этого сделайтеlv_opengles_render_displayобщедоступной.*/
 
     lv_opengles_render_params_t params = {
         .v_flip = v_flip,
@@ -278,12 +278,12 @@ void lv_opengles_reinit_state(void)
 {
     LV_PROFILER_DRAW_BEGIN;
 
-    /* Перепривязываем VAO , VBO , IBO для восстановления состояния после NanoVG или других внешних операций GL. */
+    /* Перепривязываем VAO, VBO,IBOдля восстановления состояния после NanoVG или других внешних операций GL. */
     lv_opengles_vertex_array_bind();
     lv_opengles_vertex_buffer_bind();
     lv_opengles_index_buffer_bind();
 
-    /* Перенастройте атрибуты вершин, поскольку NanoVG мог их изменить. */
+    /* Перенастройте атрибуты вершины, поскольку NanoVG мог их изменить. */
     for(unsigned int i = 0; i < 2; i++) {
         GL_CALL(glEnableVertexAttribArray(i));
         GL_CALL(glVertexAttribPointer(i, 2, GL_FLOAT, GL_FALSE, 16, (const void *)(intptr_t)(i * 2 * 4)));
@@ -646,7 +646,7 @@ static void lv_opengles_render_draw(void)
 }
 
 /**
- * Скопировано из `lv_map` в lv_math.h для работы с числами с плавающей запятой.
+ * Скопировано из`lv_map`вlv_math.hдля работы с числами с плавающей запятой.
  */
 static float lv_opengles_map_float(float x, float min_in, float max_in, float min_out, float max_out)
 {
@@ -658,9 +658,9 @@ static float lv_opengles_map_float(float x, float min_in, float max_in, float mi
 
     /**
      * Уравнение должно быть:
-     *   ((x - min_in ) * delta_out ) / дельта вход) + min_out
+     *   ((x -min_in) *delta_out) / дельта входа) + min_out
      * Чтобы избежать ошибки округления, измените порядок операций:
-     *   (x - min_in) * ( delta_out / delta_min ) + min_out
+     *   (x - min_in) * (delta_out/delta_min) + min_out
      */
 
     float delta_in = max_in - min_in;

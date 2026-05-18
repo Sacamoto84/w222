@@ -9,11 +9,11 @@ namespace tvg
 /**
  * @class ЛоттиАнимация
  *
- * @brief The LottieAnimation class enables control of advanced Lottie features.
+ * @brief Класс LottieAnimation позволяет управлять расширенными функциями Lottie.
  *
- * Этот класс расширяет Animation и имеет дополнительные интерфейсы.
+ * Этот класс расширяет анимацию и имеет дополнительные интерфейсы.
  *
- * @see Animation
+ * @see Анимация
  * 
  * @since 0,15
  */
@@ -26,20 +26,20 @@ public:
     ~LottieAnimation();
 
     /**
-     * @brief Override Lottie properties using slot data.
+     * @brief Переопределить свойства Lottie, используя данные слота.
      *
-     * @param [in] slot Данные слота Lottie в формате JSON для переопределения или @c nullptr для сброса.
+     * @param [in] slot Данные слота Lottie в форматеJSONдля переопределения или@cnullptr для сброса.
      *
-     * @retval Result::Success When succeed.
-     * @retval Result::InsufficientCondition In case the animation is not loaded.
-     * @retval Result::InvalidArguments When the given parameter is invalid.
+     * @retval Результат::Успех При успехе.
+     * @retval Result::InsufficientCondition Если анимация не загружена.
+     * @retval Result::InvalidArguments Когда данный параметр недействителен.
      *
-     * @note Experimental API
+     * @note Экспериментальный API
      */
     Result override(const char* slot) noexcept;
 
     /**
-    * @brief Specifies a segment by marker. 
+    * @brief Указывает сегмент по маркеру. 
     * 
     * Маркеры используются для управления воспроизведением анимации путем указания начальной и конечной точек. 
     * устраняя необходимость знать точные номера кадров.
@@ -48,44 +48,44 @@ public:
     *
     * @param Маркер [in] Имя маркера сегмента.
     *
-    * @retval Result::Success When successful.
-    * @retval Result::InsufficientCondition If the animation is not loaded.
-    * @retval Result::InvalidArguments When the given parameter is invalid.
-    * @retval Result::NonSupport When it's not animatable.
+    * @retval Result::Success При успехе.
+    * @retval Result::InsufficientCondition Если анимация не загружена.
+    * @retval Result::InvalidArguments Когда данный параметр недействителен.
+    * @retval Result::NonSupport Когда его нельзя анимировать.
     *
-    * @note If a @c marker is specified, the previously set segment will be disregarded.
-    * @note Set @c nullptr to reset the specified segment.
-    * @see Animation::segment(float begin, float end)
-    * @note Experimental API
+    * @note Если указан маркер @c, ранее установленный сегмент будет игнорироваться.
+    * @note Установите@cnullptr для сброса указанного сегмента.
+    * @see Анимация::сегмент(начало с плавающей запятой, конец с плавающей запятой)
+    * @note Экспериментальный API
     */
     Result segment(const char* marker) noexcept;
 
     /**
-     * @brief Gets the marker count of the animation.
+     * @brief Получает количество маркеров анимации.
      *
-     * @retval The count of the markers, zero if there is no marker.
+     * @retval Количество маркеров, ноль, если маркера нет.
      * 
-     * @see LottieAnimation::marker()
-     * @note Experimental API
+     * @see ЛоттиАнимация:: marker()
+     * @note Экспериментальный API
      */
     uint32_t markersCnt() noexcept;
     
     /**
-     * @brief Gets the marker name by a given index.
+     * @brief Получает имя маркера по заданному индексу.
      *
      * @param [in] idx Индекс маркера анимации начинается с 0.
      *
-     * @retval The name of marker when succeed, @c nullptr otherwise.
+     * @retval Имя маркера в случае успеха, в противном случае@cnullptr.
      * 
-     * @see LottieAnimation::markersCnt()
-     * @note Experimental API
+     * @see ЛоттиАнимация:: markersCnt()
+     * @note Экспериментальный API
      */
     const char* marker(uint32_t idx) noexcept;
 
     /**
-     * @brief Creates a new LottieAnimation object.
+     * @brief Создает новый объект LottieAnimation.
      *
-     * @return A new LottieAnimation object.
+     * @return Новый объект LottieAnimation.
      *
      * @since 0,15
      */

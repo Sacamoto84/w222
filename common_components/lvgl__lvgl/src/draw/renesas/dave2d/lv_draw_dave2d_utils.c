@@ -100,7 +100,7 @@ d2_u32 lv_draw_dave2d_lv_colour_fmt_to_d2_fmt(lv_color_format_t colour_format)
             d2_lvgl_mode = d2_mode_argb8888;
             break;
 
-        case(LV_COLOR_FORMAT_RGB888): //LV_COLOR_FORMAT_RGB888 — 3-байтовый формат, d2_mode_rgb888 — 4-байтовый формат, не поддерживается.
+        case(LV_COLOR_FORMAT_RGB888): //LV_COLOR_FORMAT_RGB888 — 3-байтовый формат,d2_mode_rgb888— 4-байтовый формат, без переходов.
         default:
             LV_ASSERT(0);
             break;

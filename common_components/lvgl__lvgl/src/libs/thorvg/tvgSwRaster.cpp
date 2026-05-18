@@ -153,7 +153,7 @@ static inline bool _blending(const SwSurface* surface)
 }
 
 
-/* OPTIMIZE_ME: Probably, we can separate masking(8bits) / composition(32bits)
+/* OPTIMIZE_ME: Наверное, можно разделить маскировку(8бит)/композицию(32бита)
    Это поможет повысить производительность, избежав ненужного матирования состава. */
 static inline bool _compositing(const SwSurface* surface)
 {
@@ -263,7 +263,7 @@ static inline uint32_t _sampleSize(float scale)
 
 
 //Билинейная интерполяция
-//OPTIMIZE_ME: Skip the function pointer access
+//OPTIMIZE_ME: Пропустить доступ к указателю функции
 static uint32_t _interpUpScaler(const uint32_t *img, TVG_UNUSED uint32_t stride, uint32_t w, uint32_t h, float sx, float sy, TVG_UNUSED int32_t miny, TVG_UNUSED int32_t maxy, TVG_UNUSED int32_t n)
 {
     auto rx = (size_t)(sx);
@@ -286,7 +286,7 @@ static uint32_t _interpUpScaler(const uint32_t *img, TVG_UNUSED uint32_t stride,
 
 
 //2n x 2n среднее ядро
-//OPTIMIZE_ME: Skip the function pointer access
+//OPTIMIZE_ME: Пропустить доступ к указателю функции
 static uint32_t _interpDownScaler(const uint32_t *img, uint32_t stride, uint32_t w, uint32_t h, float sx, TVG_UNUSED float sy, int32_t miny, int32_t maxy, int32_t n)
 {
     size_t c[4] = {0, 0, 0, 0};
@@ -1433,7 +1433,7 @@ static bool _rasterRadialGradientRect(SwSurface* surface, const SwBBox& region, 
 
 
 /************************************************************************/
-/* Градиент Rle                                                         */
+/* Градиент Рле                                                         */
 /************************************************************************/
 
 template<typename fillMethod>
@@ -1628,7 +1628,7 @@ void rasterPixel32(uint32_t *dst, uint32_t val, uint32_t offset, int32_t len)
 
 bool rasterCompositor(SwSurface* surface)
 {
-    //См. CompositeMethod, Alpha:3, InvAlpha:4, Luma:5, InvLuma:6.
+    //См. КомпозитМетод, Альфа:3, ИнвАльфа:4, Люма:5, ИнвЛума:6.
     surface->alphas[0] = _alpha;
     surface->alphas[1] = _ialpha;
 
@@ -1806,7 +1806,7 @@ bool rasterConvertCS(RenderSurface* surface, ColorSpace to)
     ScopedLock lock(surface->key);
     if (surface->cs == to) return true;
 
-    //TODO: Support SIMD accelerations
+    //TODO: Поддержка ускорений SIMD
     auto from = surface->cs;
 
     if (((from == ColorSpace::ABGR8888) || (from == ColorSpace::ABGR8888S)) && ((to == ColorSpace::ARGB8888) || (to == ColorSpace::ARGB8888S))) {

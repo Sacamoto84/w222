@@ -389,12 +389,12 @@ static void draw_from_cached_texture(lv_draw_sdl_unit_t * u)
     data_to_find.h = lv_area_get_height(&t->_real_area);
     data_to_find.texture = NULL;
 
-    /*user_data сохраняет средство рендеринга, чтобы отличать его от задач рендеринга SW.
-     *Однако кэшированная текстура не зависит от средства рендеринга, поэтому используйте NULL user_data.*/
+    /*user_data сохранит средство рендеринга, чтобы выделить его среди задач рендерингаSW.
+     *Однако кэшированная текстура не зависит от средства рендеринга, поэтому воспользуйтесьNULLuser_data .*/
     void * user_data_saved = data_to_find.draw_dsc->user_data;
     data_to_find.draw_dsc->user_data = NULL;
 
-    /*Абсолютные координаты разные для одного и того же draw_dsc в другой позиции.
+    /*Абсолютные координаты разные для одной и той жеdraw_dscв другой позиции.
      *Поэтому перед кэшированием сделайте все относительно 0;0.*/
     lv_area_t a = t->area;
     if(t->type == LV_DRAW_TASK_TYPE_IMAGE) {
@@ -466,14 +466,14 @@ static void draw_from_cached_texture(lv_draw_sdl_unit_t * u)
     lv_cache_release(u->texture_cache, entry_cached, u);
 
     /*Не кэшируйте нестатические (константные) тексты, поскольку указатель текста может быть освобожден/перераспределен.
-     *в любой момент, что приведет к появлению дикого указателя в кэшированном dsc отрисовки. */
+     *в любой момент, что приведет к появлению дикого указателя в кэшированном dsc-отрисовке. */
     if(t->type == LV_DRAW_TASK_TYPE_LABEL) {
         lv_draw_label_dsc_t * label_dsc = t->draw_dsc;
         if(!label_dsc->text_static) {
             lv_cache_drop(u->texture_cache, &data_to_find, NULL);
         }
     }
-    /*Не кэшировать строки, отображаемые из точек в dsc->points, будут освобождены*/
+    /*Не кэшировать строки, отображаемые из точек в dsc->points, которые будут освобождены*/
     else if(t->type == LV_DRAW_TASK_TYPE_LINE) {
         lv_draw_line_dsc_t * line_dsc = t->draw_dsc;
         if(line_dsc->points) {

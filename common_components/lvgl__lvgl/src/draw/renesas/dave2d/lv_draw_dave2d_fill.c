@@ -161,7 +161,7 @@ void lv_draw_dave2d_fill(lv_draw_task_t * t, const lv_draw_fill_dsc_t * dsc, con
                 d2_cliprect(u->d2_handle, (d2_border)clip_arc.x1, (d2_border)clip_arc.y1, (d2_border)clip_arc.x2,
                             (d2_border)clip_arc.y2);
 
-                // d2_renderwedge внутренне изменяет прямоугольник клипа, рисует его только в том случае, если он находится внутри текущего прямоугольника клипа.
+                // d2_renderwedge внутренне изменяет контур клипа, рисует его только в том случае, если он находится внутри текущего контура клипа.
                 result = d2_renderwedge(u->d2_handle,
                                         (d2_point)D2_FIX4(arc_centre.x),
                                         (d2_point) D2_FIX4(arc_centre.y),

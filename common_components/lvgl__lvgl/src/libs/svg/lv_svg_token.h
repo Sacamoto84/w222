@@ -53,12 +53,12 @@ typedef bool (*svg_token_process)(_lv_svg_token_t * token, void * user_data);
  **********************/
 
 /**
- * @brief Parse SVG data and call a callback for each token
- * @param svg_data pointer to SVG data
- * @param len length of the SVG data
- * @param cb callback function to be called for each token
- * @param user_data custom data to be passed to the callback function
- * @return true: SVG data successfully parsed, false: error occurred
+ * @brief Разберите данныеSVGи вызовите обратный вызов для каждого токена.
+ * @param svg_data указатель на данные SVG
+ * @param len длина данных SVG
+ * @param cb функция обратного вызова, которая будет вызываться для каждого токена
+ * @param user_data пользовательские данные для передачи в функцию обратного вызова
+ * @return true: данныеSVGуспешно проанализированы, false: произошла ошибка
  */
 bool _lv_svg_tokenizer(const char * svg_data, uint32_t len, svg_token_process cb, void * user_data);
 

@@ -87,7 +87,7 @@ struct ImageLoader : LoadModule
 
     ImageLoader(FileType type) : LoadModule(type) {}
 
-    virtual bool animatable() { return false; }  //true, если этот загрузчик поддерживает анимацию.
+    virtual bool animatable() { return false; }  //правда, если этот загрузчик поддерживает анимацию.
     virtual Paint* paint() { return nullptr; }
 
     virtual RenderSurface* bitmap()

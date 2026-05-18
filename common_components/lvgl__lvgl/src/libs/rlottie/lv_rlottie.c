@@ -51,7 +51,7 @@ typedef struct {
     const char * path;
 } lv_rlottie_create_info_t;
 
-/*Используется только в lv_obj_class_create_obj, не влияет на несколько экземпляров.*/
+/*Используется только в lv_obj_class_create_obj, не влияет на некоторые экземпляры.*/
 static lv_rlottie_create_info_t create_info;
 
 /**********************

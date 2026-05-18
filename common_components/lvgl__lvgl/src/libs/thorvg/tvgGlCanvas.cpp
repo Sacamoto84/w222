@@ -69,7 +69,7 @@ Result GlCanvas::target(int32_t id, uint32_t w, uint32_t h) noexcept
         return Result::InsufficientCondition;
     }
 
-    //Мы знаем тип рендерера, избегайте dynamic_cast для повышения производительности.
+    //Мы знаем тип рендерера, избегайтеdynamic_castдля повышения производительности.
     auto renderer = static_cast<GlRenderer*>(Canvas::pImpl->renderer);
     if (!renderer) return Result::MemoryCorruption;
 

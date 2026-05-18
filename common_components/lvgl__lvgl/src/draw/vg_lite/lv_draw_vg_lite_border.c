@@ -166,7 +166,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
     /* сбросить внешний прямой путь */
     lv_vg_lite_path_reset(path, VG_LITE_FP32);
 
-    /* справочная карта координат: https://github.com/lvgl/lvgl/pull/6796 */
+    /* Координат справочной карты: https://github.com/lvgl/lvgl/pull/6796 */
     const float c1_x = x + r;
     const float c1_y = y + r;
     const float c2_x = x + w - r;
@@ -176,7 +176,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
     const float c4_x = c1_x;
     const float c4_y = c3_y;
 
-    /* Когда border_w > r, нет необходимости рассчитывать пересечение дуги и линии. */
+    /* Когдаborder_w> r, нет необходимости рассчитывать на пересечение дуги и линии. */
     if(r_in <= 0) {
         const float p1_x = x;
         const float p1_y = y + border_w;
@@ -258,7 +258,7 @@ static vg_lite_fill_t path_append_inner_rect(lv_vg_lite_path_t * path,
         return VG_LITE_FILL_NON_ZERO;
     }
 
-    /* Когда border_w < r, вычислите пересечение дуги и линии. */
+    /* Когдаborder_w< r, вычислите пересечение дуги и линии. */
 
     /* r^2 - r_in ^2 = смещение^2 */
     const float offset = MATH_SQRTF((2 * r - border_w) * border_w);

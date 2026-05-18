@@ -224,9 +224,9 @@ static void grid_update(lv_obj_t * cont, void * user_data)
 
 /**
  * Вычислить координаты ячеек сетки
- * @param cont an object that has a grid
- * @param calc store the calculated cells sizes here
- * @note `lv_grid_calc_free(calc_out)` needs to be called when `calc_out` is not needed anymore
+ * @param cont объект, имеющий сетку
+ * @param calc сохраните здесь рассчитанные размеры ячеек
+ * @note `lv_grid_calc_free(calc_out)` необходимо вызывать, когда`calc_out`больше не нужен.
  */
 static lv_result_t calc(lv_obj_t * cont, lv_grid_calc_t * calc_out)
 {
@@ -267,7 +267,7 @@ static lv_result_t calc(lv_obj_t * cont, lv_grid_calc_t * calc_out)
 
 /**
  * Освободите данные расчета сетки
- * @param calc pointer to the calculated grid cell coordinates
+ * @param calc указатель на рассчитанные координаты ячейки сетки
  */
 static void calc_free(lv_grid_calc_t * calc)
 {
@@ -357,7 +357,7 @@ static lv_result_t calc_cols(lv_obj_t * cont, lv_grid_calc_t * c)
         if(IS_FR(x)) {
             int32_t f = GET_FR(x);
             c->w[i] = lv_div_round_closest(free_w * f, col_fr_cnt);
-            /*Обновляя оставшиеся fr и ширину, мы гарантируем f == col_fr_cnt
+            /*Обновляя поведение fr и прерывание, мы гарантируем f == col_fr_cnt
              *в последней итерации цикла. Это означает, что последняя итерация будет
              *не иметь ошибок округления и использовать все оставшееся пространство.*/
             col_fr_cnt -= f;
@@ -447,7 +447,7 @@ static lv_result_t calc_rows(lv_obj_t * cont, lv_grid_calc_t * c)
         if(IS_FR(x)) {
             int32_t f = GET_FR(x);
             c->h[i] = lv_div_round_closest(free_h * f, row_fr_cnt);
-            /*Обновляя оставшиеся fr и высоту, мы гарантируем f == row_fr_cnt
+            /*Обновляя внешний вид fr и высоту, мы гарантируем f == row_fr_cnt
              *в последней итерации цикла. Это означает, что последняя итерация будет
              *не иметь ошибок округления и использовать все оставшееся пространство.*/
             row_fr_cnt -= f;
@@ -463,10 +463,10 @@ static lv_result_t calc_rows(lv_obj_t * cont, lv_grid_calc_t * c)
 
 /**
  * Перемещение элемента сетки в его ячейке
- * @param item a grid item to reposition
- * @param calc the calculated grid of `cont`
- * @param child_id_ext helper value if the ID of the child is know (order from the oldest) else -1
- * @param grid_abs helper value, the absolute position of the grid, NULL if unknown
+ * @param item элемент сетки для изменения положения
+ * @param calc расчетная сетка `cont`
+ * @param child_id_ext вспомогательное значение, еслиIDдочернего элемента известен (в порядке от самого старшего), иначе -1
+ * @param grid_abs вспомогательное значение, абсолютное положение сетки, NULL, если неизвестно
  */
 static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * hint)
 {
@@ -598,14 +598,14 @@ static void item_repos(lv_obj_t * item, lv_grid_calc_t * c, item_repos_hint_t * 
 /**
  * Разместите дорожку сетки в соответствии с методами выравнивания. Он сохраняет размеры дорожек, но устанавливает их положение.
  * Он может обрабатывать как столбцы, так и строки в соответствии с переданными параметрами.
- * @param cont_size size of the containers content area (width/height)
- * @param auto_size true: the container has auto size in the current direction
- * @param align align method
- * @param gap grid gap
- * @param track_num number of tracks
- * @param size_array array with the track sizes
- * @param pos_array write the positions of the tracks here
- * @return the total size of the grid
+ * @param cont_size размер области содержимого контейнеров (ширина/высота)
+ * @param auto_size true: контейнер имеет автоматический размер в текущем направлении
+ * @param align метод выравнивания
+ * @param gap разрыв в сетке
+ * @param track_num количество треков
+ * @param size_array массив с размерами дорожек
+ * @param pos_array напишите здесь положения треков
+ * @return общий размер сетки
  */
 static int32_t grid_align(int32_t cont_size,  bool auto_size, lv_grid_align_t align, int32_t gap,
                           uint32_t track_num,

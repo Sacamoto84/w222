@@ -57,7 +57,7 @@ static void /* LV_ATTRIBUTE_FAST_MEM */ shadow_blur_corner(int32_t size, int32_t
 
 void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * dsc, const lv_area_t * coords)
 {
-    /*Вычислите размытый прямоугольник, чтобы получить тень в `shadow_area`.*/
+    /*Вычислите размытый контур, чтобы получить тень в `shadow_area`.*/
     lv_area_t core_area;
     core_area.x1 = coords->x1  + dsc->ofs_x - dsc->spread;
     core_area.x2 = coords->x2  + dsc->ofs_x + dsc->spread;
@@ -201,7 +201,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
     }
 
     /*Нижний правый угол.
-     *Почти то же самое, что и вверху справа, просто прочитайте строки `sh_buf` с конца.*/
+     *Почти то же самое, что и вверху справа, просто прочитайте строки`sh_buf`с конца.*/
     blend_area.x2 = shadow_area.x2;
     blend_area.x1 = shadow_area.x2 - corner_size + 1;
     blend_area.y1 = shadow_area.y2 - corner_size + 1;
@@ -484,7 +484,7 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
     }
 
     /*Нижний левый угол.
-     *Почти то же самое, что и внизу справа, просто прочитайте строки `sh_buf` с конца.*/
+     *Почти то же самое, что и внизу справа, просто прочитайте строки`sh_buf`с конца.*/
     blend_area.x1 = shadow_area.x1 ;
     blend_area.x2 = shadow_area.x1 + corner_size - 1;
     blend_area.y1 = shadow_area.y2 - corner_size + 1;
@@ -565,10 +565,10 @@ void lv_draw_sw_box_shadow(lv_draw_task_t * t, const lv_draw_box_shadow_dsc_t * 
 
 /**
  * Вычислить размытый угол
- * @param coords Coordinates of the shadow
- * @param sh_buf a buffer to store the result. Its size should be `(sw + r)^2 * 2`
- * @param sw shadow width
- * @param r radius
+ * @param coords Координаты тени
+ * @param sh_buf буфер для хранения результата. Его размер должен быть `(sw + r)^2 * 2`.
+ * @param sw ширина тени
+ * @param r радиус
  */
 static void LV_ATTRIBUTE_FAST_MEM shadow_draw_corner_buf(const lv_area_t * coords, uint16_t * sh_buf, int32_t sw,
                                                          int32_t r)
@@ -720,7 +720,7 @@ static void LV_ATTRIBUTE_FAST_MEM shadow_blur_corner(int32_t size, int32_t sw, u
             v += bottom_val;
         }
 
-        /*Запишите результат в `sh_ups_buf`.*/
+        /*Запишите результат в`sh_ups_buf`.*/
         sh_ups_tmp_buf = &sh_ups_buf[x];
         for(y = 0; y < size; y++, sh_ups_tmp_buf += size) {
             (*sh_ups_tmp_buf) = sh_ups_blur_buf[y];

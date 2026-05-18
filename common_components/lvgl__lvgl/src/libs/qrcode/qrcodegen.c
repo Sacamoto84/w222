@@ -10,9 +10,9 @@
  * использовать, копировать, изменять, объединять, публиковать, распространять, сублицензировать и/или продавать копии
  * Программное обеспечение и разрешать лицам, которым предоставлено Программное обеспечение, делать это,
  * при соблюдении следующих условий:
- * - The above copyright notice and this permission notice shall be included in
+ * - Вышеупомянутое уведомление об авторских правах и настоящее уведомление о разрешении должны быть включены в
  *   все копии или существенные части Программного обеспечения.
- * - The Software is provided "as is", without warranty of any kind, express or
+ * - Программное обеспечение предоставляется «как есть», без каких-либо явных или явных гарантий.
  *   подразумеваемые, включая, помимо прочего, гарантии товарной пригодности,
  *   пригодность для конкретной цели и отсутствие нарушений. Ни в коем случае
  *   авторы или правообладатели несут ответственность за любые претензии, ущерб или другие
@@ -39,19 +39,19 @@
 /*---- Предварительные объявления для частных функций ----*/
 
 // Что касается всех общедоступных и частных функций, определенных в этом исходном файле:
-// - They require all pointer/array arguments to be not null unless the array length is zero.
-// - They only read input scalar/array arguments, write to output pointer/array
+// - Они требуют, чтобы все аргументы указателя/массива были ненулевыми, если длина массива не равна нулю.
+// - Они только читают входные аргументы скаляра/массива, записывают в выходной указатель/массив.
 //   аргументы и возвращаемые скалярные значения; это «чистые» функции.
-// - They don't read mutable global variables or write to any global variables.
-// - They don't perform I/O, read the clock, print to console, etc.
-// - They allocate a small and constant amount of stack memory.
-// - They don't allocate or free any memory on the heap.
-// - They don't recurse or mutually recurse. All the code
+// - Они не читают изменяемые глобальные переменные и не записывают данные в глобальные переменные.
+// - Они не выполняют ввод-вывод, не читают часы, не печатают на консоли и т. д.
+// - Они выделяют небольшой и постоянный объем стековой памяти.
+// - Они не выделяют и не освобождают память в куче.
+// - Они не рекурсивны или взаимно рекурсивны. Весь код
 //   может быть встроен в публичные функции верхнего уровня.
-// - They run in at most quadratic time with respect to input arguments.
+// - Они выполняются не более чем за квадратичное время относительно входных аргументов.
 //   Большинство функций выполняются за линейное время, а некоторые — за постоянное.
 //   Здесь нет неограниченных циклов или неочевидных условий завершения.
-// - They are completely thread-safe if the caller does not give the
+// - Они полностью потокобезопасны, если вызывающая сторона не передает
 //   тот же записываемый буфер для одновременных вызовов этих функций.
 
 testable void appendBitsToBuffer(unsigned int val, int numBits, uint8_t buffer[], int * bitLen);
@@ -96,7 +96,7 @@ static const char * ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 // Для генерации кодов исправления ошибок.
 testable const int8_t ECC_CODEWORDS_PER_BLOCK[4][41] = {
-    // Version: (note that index 0 is for padding, and is set to an illegal value)
+    // Version: (обратите внимание, что индекс 0 предназначен для заполнения и имеет недопустимое значение)
     //0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 Уровень коррекции ошибок
     {-1,  7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},  // Низкий
     {-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28},  // Средний
@@ -108,7 +108,7 @@ testable const int8_t ECC_CODEWORDS_PER_BLOCK[4][41] = {
 
 // Для генерации кодов исправления ошибок.
 testable const int8_t NUM_ERROR_CORRECTION_BLOCKS[4][41] = {
-    // Version: (note that index 0 is for padding, and is set to an illegal value)
+    // Version: (обратите внимание, что индекс 0 предназначен для заполнения и имеет недопустимое значение)
     //0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 Уровень коррекции ошибок
     {-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4,  4,  4,  4,  4,  6,  6,  6,  6,  7,  8,  8,  9,  9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25},  // Низкий
     {-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5,  5,  8,  9,  9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49},  // Средний
@@ -186,7 +186,7 @@ bool qrcodegen_encodeBinary(uint8_t dataAndTemp[], size_t dataLen, uint8_t qrcod
 
 
 // Добавляет заданное количество младших бит заданного значения к заданному байтовому значению.
-// битовый буфер, увеличивающий длину бита. Требуется 0 <= numBits <= 16 и val < 2^numBits.
+// битовый буфер, увеличивающий размер бита. Требуется 0 <= numBits <= 16 и val < 2^numBits.
 testable void appendBitsToBuffer(unsigned int val, int numBits, uint8_t buffer[], int * bitLen)
 {
     LV_ASSERT(0 <= numBits && numBits <= 16 && (unsigned long)val >> numBits == 0);
@@ -294,9 +294,9 @@ bool qrcodegen_encodeSegmentsAdvanced(const struct qrcodegen_Segment segs[], siz
 /*---- Функции генерации кода коррекции ошибок ----*/
 
 // Добавляет байты исправления ошибок к каждому блоку данного массива данных, затем чередует
-// байты из блоков и сохраняет их в массиве результатов. data[0 : dataLen] содержит
+// байты из блоков и сохраняйте их в массиве результатов. data[0 : dataLen]содержит
 // входные данные. data[dataLen : rawCodewords] используется как временная рабочая область и будет
-// быть забиты этой функцией. Окончательный ответ сохраняется в result[0 : rawCodewords].
+// быть забито этим ограничением. Окончательный ответ сохраняется в result[0 : rawCodewords].
 testable void addEccAndInterleave(uint8_t data[], int version, enum qrcodegen_Ecc ecl, uint8_t result[])
 {
     // Рассчитать номера параметров
@@ -361,7 +361,7 @@ testable int getNumRawDataModules(int ver)
 
 /*---- Функции генератора Рида-Соломона ECC ----*/
 
-// Вычисляет полином генератора Рида-Соломона заданной степени, сохраняя в result[0 : степень].
+// Вычисляете полином генератора Рида-Соломона заданной степени, сохраняя результат[0 :степень].
 testable void calcReedSolomonGenerator(int degree, uint8_t result[])
 {
     // Начните с монома x^0
@@ -385,8 +385,8 @@ testable void calcReedSolomonGenerator(int degree, uint8_t result[])
 }
 
 
-// Вычисляет остаток полинома data[0 : dataLen] при делении на генератор[0 : степень], где все
-// полиномы имеют обратный порядок байтов, а генератор имеет неявный ведущий член 1, сохраняющий результат в result[0 : степень].
+// Вычислите остаток полинома data[0 : dataLen] при делении на генератор[0 : степень], где все
+// Полиномы имеют обратный порядок байтов, генератор имеет неявный ведущий член 1, сохраняющий результат в result[0 : степень].
 testable void calcReedSolomonRemainder(const uint8_t data[], int dataLen,
                                        const uint8_t generator[], int degree, uint8_t result[])
 {
@@ -462,7 +462,7 @@ testable void initializeFunctionModules(int version, uint8_t qrcode[])
 
 // Рисует белые функциональные модули и, возможно, некоторые черные модули в заданном коде QR без изменений.
 // нефункциональные модули. Это не рисует биты формата. Для этого необходимо, чтобы все функциональные модули были предварительно
-// помечены черным (а именно initializeFunctionModules() ), поскольку при этом можно пропустить перерисовку черных функциональных модулей.
+// помечены черными (именно initializeFunctionModules()), поскольку при этом можно пропустить перерисовку черных модулей.
 static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
 {
     // Нарисуйте горизонтальные и вертикальные временные шаблоны
@@ -503,7 +503,7 @@ static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
     // Нарисовать блоки версий
     if(version >= 7) {
         // Вычислить код исправления ошибок и упаковать биты
-        int rem = version;  // версия — uint6, в диапазоне [7, 40]
+        int rem = version;  // версия — uint6, в отдельности [7, 40]
         for(int i = 0; i < 12; i++)
             rem = (rem << 1) ^ ((rem >> 11) * 0x1F25);
         long bits = (long)version << 12 | rem;  // uint18
@@ -524,7 +524,7 @@ static void drawWhiteFunctionModules(uint8_t qrcode[], int version)
 
 // Рисует две копии битов формата (со своим собственным кодом исправления ошибок) на основе
 // по заданной маске и уровню коррекции ошибок. Это всегда рисует все модули
-// биты формата, в отличие от drawWhiteFunctionModules(), который может пропускать черные модули.
+// биты, в отличие от drawWhiteFunctionModules(), который может пропускать черные модули.
 static void drawFormatBits(enum qrcodegen_Ecc ecl, enum qrcodegen_Mask mask, uint8_t qrcode[])
 {
     // Вычислить код исправления ошибок и упаковать биты
@@ -608,7 +608,7 @@ static void drawCodewords(const uint8_t data[], int dataLen, uint8_t qrcode[])
                     i++;
                 }
                 // Если этот код QR имеет какие-либо оставшиеся биты (от 0 до 7), они были назначены как
-                // 0/false/white конструктором и этим методом не изменяется.
+                // 0/false/white конструктором и этот метод не меняется.
             }
         }
     }
@@ -618,7 +618,7 @@ static void drawCodewords(const uint8_t data[], int dataLen, uint8_t qrcode[])
 
 // Выполняет XOR модулей кодовых слов в этом коде QR с заданным шаблоном маски.
 // Функциональные модули должны быть отмечены и биты кодового слова должны быть нарисованы.
-// перед маскировкой. Из-за арифметики XOR вызов applyMask() с помощью
+// перед маскировкой. Из-за арифметикиXORвызовapplyMask()с помощью
 // то же значение маски во второй раз приведет к отмене маски. Окончательный хорошо сформированный
 // Для кода QR требуется применить ровно одну (а не ноль, две и т. д.) маску.
 static void applyMask(const uint8_t functionModules[], uint8_t qrcode[], enum qrcodegen_Mask mask)
@@ -748,7 +748,7 @@ static long getPenaltyScore(const uint8_t qrcode[])
         }
     }
     int total = qrsize * qrsize;  // Обратите внимание, что размер нечетный, поэтому черный/всего!= 1/2.
-    // Вычислите наименьшее целое число k >= 0 такое, что (45-5k)% <= black/total <= (55+5k)%
+    // Вычислите наименьшее число k >= 0 такое, что (45-5k)% <= black/total <= (55+5k)%
     int k = (int)((labs(black * 20L - total * 10L) + total - 1) / total) - 1;
     result += k * PENALTY_N4;
     return result;
@@ -756,7 +756,7 @@ static long getPenaltyScore(const uint8_t qrcode[])
 
 
 // Вставляет заданное значение в начало данного массива, который смещается по
-// существующие значения и удаляет последнее значение. Вспомогательная функция для getPenaltyScore().
+// наличие значения и последнее значение. Вспомогательная функция для getPenaltyScore().
 static void addRunToHistory(unsigned char run, unsigned char history[7])
 {
     memmove(&history[1], &history[0], 6 * sizeof(history[0]));
@@ -765,7 +765,7 @@ static void addRunToHistory(unsigned char run, unsigned char history[7])
 
 
 // Проверяет, имеет ли данная история выполнения шаблон соотношения 1:1:3:1:1 в середине, и
-// окружен как минимум 4 на одном или обоих концах. Вспомогательная функция для getPenaltyScore().
+// окружены как минимум 4 на одном или обоих концах. Вспомогательная функция для getPenaltyScore().
 // Должен вызываться только сразу после завершения выполнения белых модулей.
 static bool hasFinderLikePattern(const unsigned char runHistory[7])
 {
@@ -881,11 +881,11 @@ size_t qrcodegen_calcSegmentBufferSize(enum qrcodegen_Mode mode, size_t numChars
 
 // Возвращает количество битов данных, необходимых для представления сегмента.
 // содержащий заданное количество символов с использованием данного режима. Примечания:
-// - Returns -1 on failure, i.e. numChars > INT16_MAX or
+// - Возвращает -1 в случае ошибки, т.е. numChars >INT16_MAXили
 //   количество необходимых бит превышает INT16_MAX (т.е. 32767).
-// - Otherwise, all valid results are in the range [0, INT16_MAX].
-// - For byte mode, numChars measures the number of bytes, not Unicode code points.
-// - For ECI mode, numChars must be 0, and the worst-case number of bits is returned.
+// - В противном случае все действительные результаты находятся в диапазоне [0, INT16_MAX].
+// - В байтовом режиме numChars измеряет количество байтов, а не кодовых точек Юникода.
+// - Для режимаECInumChars должен быть равен 0, и возвращается наихудшее количество битов.
 //   Фактический сегмент ECI может содержать более короткие данные. Для режимов, отличных от ECI, результат является точным.
 testable int calcSegmentBitLength(enum qrcodegen_Mode mode, size_t numChars)
 {

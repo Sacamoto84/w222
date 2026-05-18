@@ -351,7 +351,7 @@ static bool ttf_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_t * d
     }
 
     dsc_out->entry = NULL;
-    return true; /*true: glyph found; false: glyph was not found*/
+    return true; /*true: глиф найден; ложь: глиф не найден*/
 }
 
 static const void * ttf_get_glyph_bitmap_cb(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t * draw_buf)

@@ -122,7 +122,7 @@ lv_result_t lv_linux_drm_set_file(lv_display_t * display, const char * file, int
         return LV_RESULT_INVALID;
     }
 
-    /* Пусть драйвер текстуры opengles управляет временем жизни текстуры. */
+    /* Пусть драйверы текстур откроют управление временем жизни текстур. */
     ctx->texture.is_texture_owner = true;
     /*Инициализируйте буферы отрисовки и текстуру.*/
     lv_result_t res = lv_opengles_texture_reshape(&ctx->texture, display, ctx->drm_mode->hdisplay, ctx->drm_mode->vdisplay);

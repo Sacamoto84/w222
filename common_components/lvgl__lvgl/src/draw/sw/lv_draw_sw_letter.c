@@ -227,7 +227,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_letter_cb(lv_draw_task_t * t, lv_draw_gly
 #if LV_USE_FREETYPE && LV_USE_VECTOR_GRAPHIC && LV_USE_THORVG
 
 /*
- * Рендерит векторные пути, представляющие глиф, с помощью ThorVG.
+ * Рендерит векторные пути, представляющие глифы, с помощью ThorVG.
  * результат затем смешивается с буфером отрисовки
  */
 static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_dsc)
@@ -282,7 +282,7 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
     offset_x = (int32_t)((float) glyph_dsc->g->ofs_x - glyph_dsc->outline_stroke_width * scale);
     offset_y = (int32_t)((float) glyph_dsc->g->ofs_y - glyph_dsc->outline_stroke_width * scale);
 
-    /*Инвертировать ось Y — исходная точка Freetype находится в левом нижнем углу.*/
+    /*Инвертировать ось Y — исходная точка Freetype находится в мягком пульте.*/
     lv_matrix_scale(&matrix, 1, -1);
     lv_matrix_translate(&matrix, -offset_x, -h - offset_y);
     lv_matrix_scale(&matrix, scale, scale);
@@ -314,7 +314,7 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
     lv_memcpy(&old_area, &t->clip_area, sizeof(lv_area_t));
     lv_memcpy(&t->clip_area, &buf_area, sizeof(lv_area_t));
 
-    /*Невозможно вызвать lv_draw_vector(), так как при этом будет создана новая задача рисования.
+    /*Невозможно вызватьlv_draw_vector(), так как при этом будет создана новая задача рисования.
      *основной поток также может создавать задачи рисования. Итак, создайте фиктивную задачу рисования.
      *вручную, чтобы нарисовать контур*/
     if(vector_dsc->task_list) {
@@ -353,7 +353,7 @@ static void draw_letter_outline(lv_draw_task_t * t, lv_draw_glyph_dsc_t * glyph_
 }
 
 /* Постройте внутренние и внешние векторные пути для глифа.
- * о полученных событиях структуры, излучаемых lv_freetype_outline.c */
+ * озвучивание событий структуры, излучаемых lv_freetype_outline.c */
 static void freetype_outline_event_cb(lv_event_t * e)
 {
 

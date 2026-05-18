@@ -32,7 +32,7 @@
 struct SvgNode;
 struct SvgStyleGradient;
 
-//NOTE: Please update simpleXmlNodeTypeToString() as well.
+//NOTE: Пожалуйста, обновите также simpleXmlNodeTypeToString().
 enum class SvgNodeType
 {
     Doc,
@@ -270,8 +270,8 @@ enum class AspectRatioMeetOrSlice
 
 struct SvgDocNode
 {
-    float w;       //unit: point or in percentage see: SvgViewFlag
-    float h;       //unit: point or in percentage see: SvgViewFlag
+    float w;       //unit: пункт или в процентах см.: SvgViewFlag
+    float h;       //unit: пункт или в процентах см.: SvgViewFlag
     float vx;
     float vy;
     float vw;
@@ -499,9 +499,9 @@ struct SvgStyleProperty
     SvgColor color;
     char* cssClass;
     SvgStyleFlags flags;
-    SvgStyleFlags flagsImportance; //указывает на важность флага — если установлен, применяется более высокий приоритет ( https://drafts.csswg.org/css-cascade-4/#importance)
+    SvgStyleFlags flagsImportance; //указывает на наклонный флаг — если установлен, применяется более высокий приоритет ( https://drafts.csswg.org/css-cascade-4/#importance)
     bool curColorSet;
-    bool paintOrder; //true, если по умолчанию (заливка, обводка), в противном случае — false
+    bool paintOrder; //правда, если по умолчанию (заливка, обводка), в пропущенном случае — ложь
     bool display;
 };
 

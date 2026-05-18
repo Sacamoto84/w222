@@ -69,7 +69,7 @@ Result WgCanvas::target(void* instance, void* surface, uint32_t w, uint32_t h, v
 
     if (!instance || !surface || (w == 0) || (h == 0)) return Result::InvalidArguments;
 
-    //Мы знаем тип рендерера, избегайте dynamic_cast для повышения производительности.
+    //Мы знаем тип рендерера, избегайтеdynamic_castдля повышения производительности.
     auto renderer = static_cast<WgRenderer*>(Canvas::pImpl->renderer);
     if (!renderer) return Result::MemoryCorruption;
 

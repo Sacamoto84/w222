@@ -38,15 +38,15 @@ extern "C" {
  **********************/
 
 /**
- * Преобразование индексированного draw_buf в формат с предварительным умножением с оптимизацией, специфичной для неона.
- * @param buf     pointer to a draw buf
+ * Преобразование индексированногоdraw_bufв формате с предварительным умножением с оптимизацией, специфичной для неона.
+ * @param buf     указатель на буфер рисования
  */
 
 lv_result_t _lv_draw_buf_convert_premultiply_indexed_neon(lv_draw_buf_t * buf);
 
 /**
- * Преобразование argb8888 draw_buf в формат предварительного умножения с оптимизацией, специфичной для неона.
- * @param buf     pointer to a draw buf
+ * Преобразование argb8888draw_bufв формате передового умножения с оптимизацией, специфичной для неона.
+ * @param buf     указатель на буфер рисования
  */
 lv_result_t _lv_draw_buf_convert_premultiply_argb8888_neon(lv_draw_buf_t * buf);
 #endif /*LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_NEON*/

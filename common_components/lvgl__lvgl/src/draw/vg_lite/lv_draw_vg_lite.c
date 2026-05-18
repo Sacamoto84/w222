@@ -123,7 +123,7 @@ static void draw_execute(lv_draw_vg_lite_unit_t * u)
 
     lv_vg_lite_buffer_from_draw_buf(&u->target_buffer, layer->draw_buf);
 
-    /* VG -Lite выведет предварительно умноженное изображение, установите соответствующий флаг. */
+    /* VG -Lite предварительно выведет умноженное изображение, установив соответствующий флаг. */
     lv_draw_buf_set_flag(layer->draw_buf, LV_IMAGE_FLAGS_PREMULTIPLIED);
 
     vg_lite_identity(&u->global_matrix);
@@ -311,7 +311,7 @@ static void draw_event_cb(lv_event_t * e)
         case LV_EVENT_CANCEL: {
 #if LV_USE_VECTOR_GRAPHIC
                 /**
-                 * Потому что VG -Lite деинициализирует контекст (включая независимую кучу GPU)
+                 * ЧтоVG-Lite деинициализирует контекст (включая независимую информациюGPU)
                  * прежде чем GPU уйдет в сон, необходимо сначала отбросить и разыменовать
                  * все кеши, зависящие от независимой кучи.
                  */

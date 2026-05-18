@@ -67,7 +67,7 @@ static char * find_by_class(void)
         if(lv_strcmp(ent->d_name, ".") == 0 || lv_strcmp(ent->d_name, "..") == 0) {
             continue;
         }
-        /* Каталоги разъемов выглядят как card0- HDMI -A-1, card0-eDP-1 и т. д. */
+        /* Каталоги разъемов выглядят как card0-HDMI-A-1, card0-eDP-1 и т. д. д. */
         bool is_card = lv_strncmp(ent->d_name, "card", 4) == 0;
         bool is_connected = lv_strchr(ent->d_name, '-') != NULL;
 

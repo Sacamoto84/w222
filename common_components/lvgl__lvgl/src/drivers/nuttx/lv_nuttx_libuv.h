@@ -41,13 +41,13 @@ typedef struct {
 
 /**
  * Инициализируйте uv_loop, используя предоставленную информацию о конфигурации.
- * @param uv_info Pointer to the lv_nuttx_uv_t structure to be initialized.
+ * @param uv_info Указатель на структуру lv_nuttx_uv_t, которую необходимо инициализировать.
  */
 void * lv_nuttx_uv_init(lv_nuttx_uv_t * uv_info);
 
 /**
- * Деинициализируйте конфигурацию uv_loop для уровня портирования NuttX.
- * @param data Pointer to user data.
+ * Деинициализируйте конфигурациюuv_loopдля уровня портирования NuttX.
+ * @param data Указатель на пользовательские данные.
  */
 void lv_nuttx_uv_deinit(void ** data);
 

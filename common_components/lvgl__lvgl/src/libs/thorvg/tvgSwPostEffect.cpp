@@ -39,7 +39,7 @@ struct SwGaussianBlur
 
 static void _gaussianExtendRegion(RenderRegion& region, int extra, int8_t direction)
 {
-    //Расширение региона bbox для растушевки
+    //Расширение региона bbox для растушёвки
     if (direction != 2) {
         region.x = -extra;
         region.w = extra * 2;

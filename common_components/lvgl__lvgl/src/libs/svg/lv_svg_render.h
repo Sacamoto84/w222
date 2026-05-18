@@ -68,51 +68,51 @@ typedef struct _lv_svg_render_hal {
  **********************/
 
 /**
- * @brief Initialize the SVG render
- * @param hal pointer to a structure with rendering functions
+ * @brief Инициализируйте рендер SVG
+ * @param hal указатель на структуру с функциями рендеринга
  */
 void lv_svg_render_init(const lv_svg_render_hal_t * hal);
 
 /**
- * @brief Create a new SVG render from an SVG document
- * @param svg_doc pointer to the SVG document
- * @return pointer to the new SVG render object
+ * @brief Создайте новый рендерSVGиз документа SVG.
+ * @param svg_doc указатель на документ SVG
+ * @return указатель на новый объект рендеринга SVG
  */
 lv_svg_render_obj_t * lv_svg_render_create(const lv_svg_node_t * svg_doc);
 
 /**
- * @brief Delete an SVG render object
- * @param render pointer to the SVG render object to delete
+ * @brief Удалить объект рендеринга SVG
+ * @param render указатель на объект рендеринга SVG, который нужно удалить
  */
 void lv_svg_render_delete(lv_svg_render_obj_t * render);
 
 /**
- * @brief Get size of render objects
- * @param render pointer to the SVG render object
- * @return the bytes of SVG render objects
+ * @brief Получить размер объектов рендеринга
+ * @param render указатель на объект рендеринга SVG
+ * @return байты объектов рендеринга SVG
  */
 uint32_t lv_svg_render_get_size(const lv_svg_render_obj_t * render);
 
 /**
- * @brief Get viewport's width and height of the render object
- * @param render pointer to the SVG render object
- * @param width pointer to save the width of the viewport of the SVG render object
- * @param height pointer to save the height of the viewport of the SVG render object
- * @return lv_result_t, LV_RESULT_OK if success, LV_RESULT_INVALID if fail
+ * @brief Получить ширину и высоту области просмотра объекта рендеринга.
+ * @param render указатель на объект рендеринга SVG
+ * @param width указатель для сохранения ширины области просмотра объекта рендеринга SVG
+ * @param height указатель для сохранения высоты области просмотра объекта рендеринга SVG
+ * @return lv_result_t ,LV_RESULT_OKв случае успеха,LV_RESULT_INVALIDв случае неудачи.
  */
 lv_result_t lv_svg_render_get_viewport_size(const lv_svg_render_obj_t * render, float * width, float * height);
 
 /**
- * @brief Render an SVG object to a vector graphics
- * @param dsc pointer to the vector graphics descriptor
- * @param render pointer to the SVG render object to render
+ * @brief Преобразуйте объектSVGв векторную графику.
+ * @param dsc указатель на дескриптор векторной графики
+ * @param render указатель на объект рендерингаSVGдля рендеринга
  */
 void lv_draw_svg_render(lv_draw_vector_dsc_t * dsc, const lv_svg_render_obj_t * render);
 
 /**
- * @brief Draw an SVG document to a layer
- * @param layer pointer to the target layer
- * @param svg_doc pointer to the SVG document to draw
+ * @brief Нарисуйте документSVGна слое.
+ * @param layer указатель на целевой слой
+ * @param svg_doc указатель на документSVGдля рисования
  */
 void lv_draw_svg(lv_layer_t * layer, const lv_svg_node_t * svg_doc);
 

@@ -410,7 +410,7 @@ static void shm_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
         }
     }
 
-    /* Если у нас есть вращение, копируем из rotated_buf в буфер Wayland. */
+    /* Если у нас есть вращение, копируем изrotated_bufв буфер Wayland. */
     if(rotation != LV_DISPLAY_ROTATION_0) {
         const int32_t hor_res = lv_display_get_horizontal_resolution(disp);
         const int32_t ver_res = lv_display_get_vertical_resolution(disp);

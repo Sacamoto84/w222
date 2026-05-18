@@ -161,7 +161,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
         return NVG_CCW;
     }
 
-    /* справочная карта координат: https://github.com/lvgl/lvgl/pull/6796 */
+    /* Координат справочной карты: https://github.com/lvgl/lvgl/pull/6796 */
     const float c1_x = x + r;
     const float c1_y = y + r;
     const float c2_x = x + w - r;
@@ -171,7 +171,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
     const float c4_x = c1_x;
     const float c4_y = c3_y;
 
-    /* Когда border_w > r, нет необходимости рассчитывать пересечение дуги и линии. */
+    /* Когдаborder_w> r, нет необходимости рассчитывать на пересечение дуги и линии. */
     if(r_in <= 0) {
         const float p1_x = x;
         const float p1_y = y + border_w;
@@ -253,7 +253,7 @@ static enum NVGwinding path_append_inner_rect(NVGcontext * ctx,
         return NVG_CCW;
     }
 
-    /* Когда border_w < r, вычислите пересечение дуги и линии. */
+    /* Когдаborder_w< r, вычислите пересечение дуги и линии. */
 
     /* r^2 - r_in ^2 = смещение^2 */
     const float offset = NVG_MATH_SQRTF((2 * r - border_w) * border_w);

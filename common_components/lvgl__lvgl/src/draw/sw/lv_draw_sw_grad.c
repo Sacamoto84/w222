@@ -228,9 +228,9 @@ void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad)
 
     | P - ( C1 - C0 )w - C0 | = (r1 - r0)w + r0, где
 
-        P: {xp, yp} is the point of interest
-        C0: {x0, y0} is the center of the start circle
-        C1: {x1, y1} is the center of the end circle
+        P: {xp, yp} — точка интереса
+        C0: {x0, y0} — центр начального круга.
+        C1: {x1, y1} — центр конечного круга
         r0 — радиус стартового круга
         r1 — радиус конечной окружности
         w — неизвестная переменная
@@ -240,7 +240,7 @@ void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad)
 
     ((r1-r0)^2 - (x1-x0)^2 - (y1-y0)^2) * w^2 + 2*((xp-x0)*(x1-x0) + (yp-y0)*(y1-y0)) * w + (-(xp-x0)^2 - (yp-y0)^) = 0
 
-    Корни квадратного уравнения можно получить по известной формуле (-b +- sqrt(b^2 - 4ac))/2a
+    Корни квадратного уравнения можно получить по формуле (-b +- sqrt(b^2 - 4ac))/2a
     Нам нужен только более положительный корень.
 
     Обозначим
@@ -250,7 +250,7 @@ void lv_draw_sw_grad_cleanup(lv_draw_sw_grad_calc_t * grad)
 
     Таким образом:
 
-    w = (-b(xp, yp) + sqrt(sqr(b(xp, yp)) - 4 * a * c(xp, yp))) / (2 * a), where
+    w = (-b(xp, yp) + sqrt(sqr(b(xp, yp)) - 4 * a * c(xp, yp))) / (2 * a), где
 
         b(xp, yp) = 2dx * xp + 2dy * yp + 2(r0 * dr - x0 * dx - y0 * dy)
         c(xp, yp) = r0^2 - (xp - x0)^2 - (yp - y0)^2
@@ -405,7 +405,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
     }
     else {                  /* решить квадратное уравнение */
         if(state->bpx ||
-           state->bpy) {    /* общий случай (круги не концентричны): w = (-b + sqrt(b^2 - 4ac))/2a (нам нужен только более положительный корень)*/
+           state->bpy) {    /* общий случай (круги не концентричны): w = (-b + sqrt(b^2 - 4ac))/2a (нам нужны только более положительные корень)*/
             int32_t a4 = state->a4 >> 4;
             for(; width > 0; width--) {
                 int32_t det = lv_sqr(b >> 4) - (a4 * (c >> 4));     /* b^2 смещен вниз на 2*4=8, 4ac смещен вниз на 8 */
@@ -419,7 +419,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
                 dc += 2;
             }
         }
-        else {              /* особый случай: концентрические круги: w = (sqrt((xp-x0)^2 + (yx-y0)^2)-r0)/(r1-r0) */
+        else {              /* Особый случай: концентрические круги: w = (sqrt((xp-x0)^2 + (yx-y0)^2)-r0)/(r1-r0) */
             c = lv_sqr(xp - state->x0) + lv_sqr(yp - state->y0);
             for(; width > 0; width--) {
                 w = extend_w((((lv_sqrt32(c) - state->r0)) * state->inv_dr) >> 16, dsc->extend);
@@ -435,11 +435,11 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
 /*
     Рассчитайте линейный градиент на основе следующего уравнения:
 
-    w = ((P - C0) x (C1 - C0)) / | C1 - C0 |^2, where
+    w = ((P -C0) x (C1-C0)) / | C1-C0|^2, где
 
-        P: {xp, yp} is the point of interest
-        C0: {x0, y0} is the start point of the gradient vector
-        C1: {x1, y1} is the end point of the gradient vector
+        P: {xp, yp} — точка интереса
+        C0: {x0, y0} — начальная точка вектора градиента.
+        C1: {x1, y1} — конечная точка вектора градиента.
         w — неизвестная переменная
 
         || длина вектора
@@ -447,7 +447,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_radial_get_line(lv_grad_dsc_t * dsc, 
 
     Приведенное выше уравнение можно переписать как:
 
-    w = xp * (dx / (dx^2 + dy^2)) + yp * (dy / (dx^2 + dy^2)) - (x0 * dx + y0 * dy) / (dx^2 + dy^2), where
+    w = xp * (dx / (dx^2 + dy^2)) + yp * (dy / (dx^2 + dy^2)) - (x0 * dx + y0 * dy) / (dx^2 + dy^2), где
 
         dx = x1 - x0
         dy = y1 - y0
@@ -521,10 +521,10 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_linear_get_line(lv_grad_dsc_t * dsc, 
 /*
     Рассчитайте конический градиент на основе следующего уравнения:
 
-    w = (atan((yp - y0)/(xp - x0)) - alpha) / (beta - alpha), where
+    w = (atan((yp - y0)/(xp - x0)) - альфа) / (бета - альфа), где
 
-        P: {xp, yp} is the point of interest
-        C0: {x0, y0} is the center of the gradient
+        P: {xp, yp} — точка интереса
+        C0: {x0, y0} — центр градиента
         альфа — начальный угол
         бета — это конечный угол
         w — неизвестная переменная
@@ -580,7 +580,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_grad_conical_get_line(lv_grad_dsc_t * dsc,
     int32_t dx = xp - state->x0;
     int32_t dy = yp - state->y0;
 
-    if(dy == 0) {   /* в конечном итоге мы пройдем через центр конуса: нужна дополнительная проверка в цикле, чтобы избежать того, чтобы dx и dy были равны нулю в atan2 */
+    if(dy == 0) {   /* в конце концов мы проходим через центр конуса: нужна дополнительная проверка в цикле, чтобы избежать того, что dx и dy были равными условиями в atan2 */
         for(; width > 0; width--) {
             if(dx == 0) {
                 w = 0;

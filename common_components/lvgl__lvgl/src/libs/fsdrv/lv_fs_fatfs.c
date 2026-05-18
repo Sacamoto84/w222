@@ -94,16 +94,16 @@ void lv_fs_fatfs_init(void)
 /*Инициализируйте устройство хранения и файловую систему.*/
 static void fs_init(void)
 {
-    /*Инициализируйте карту SD и саму FatFS.
+    /*Инициализируйте картуSDи саму FatFS.
      *Лучше сделать это в своем коде, чтобы сохранить эту библиотеку нетронутой и упростить обновление.*/
 }
 
 /**
  * Открыть файл
- * @param drv   pointer to a driver where this function belongs
- * @param path  path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
- * @param mode  read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
- * @return pointer to FIL struct or NULL in case of fail
+ * @param drv   указатель на драйвер, которому принадлежит эта функция
+ * @param path  путь к файлу, начинающийся с буквы драйвера (например, S:/folder/file.txt)
+ * @param mode  читать: FS_MODE_RD, писать: FS_MODE_WR, оба:FS_MODE_RD|  FS_MODE_WR
+ * @return указатель на структуруFILилиNULLв случае неудачи
  */
 static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 {
@@ -132,9 +132,9 @@ static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 
 /**
  * Закрыть открытый файл
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FIL variable. (opened with fs_open)
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FIL. (открывается с помощьюfs_open)
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
@@ -147,12 +147,12 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 
 /**
  * Чтение данных из открытого файла
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FIL variable.
- * @param buf       pointer to a memory block where to store the read data
- * @param btr       number of Bytes To Read
- * @param br        the real number of read bytes (Byte Read)
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FIL.
+ * @param buf       указатель на блок памяти, в котором хранятся считанные данные
+ * @param btr       количество байтов для чтения
+ * @param br        реальное количество прочитанных байт (Byte Read)
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br)
@@ -165,12 +165,12 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 
 /**
  * Записать в файл
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FIL variable
- * @param buf       pointer to a buffer with the bytes to write
- * @param btw       Bytes To Write
- * @param bw        the number of real written bytes (Bytes Written). NULL if unused.
- * @return LV_FS_RES_OK or any error from lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FIL
+ * @param buf       указатель на буфер с байтами для записи
+ * @param btw       Байты для записи
+ * @param bw        количество реальных записанных байт (Bytes Written).  NULL, если не используется.
+ * @return LV_FS_RES_OK или любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, uint32_t btw, uint32_t * bw)
 {
@@ -182,11 +182,11 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 
 /**
  * Установите указатель чтения и записи. Также увеличьте размер файла, если необходимо.
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FIL variable. (opened with fs_open )
- * @param pos       the new position of read write pointer
- * @param whence    only LV_SEEK_SET is supported
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FIL. (открывается с помощьюfs_open)
+ * @param pos       новая позиция указателя чтения и записи
+ * @param whence    поддерживается только LV_SEEK_SET
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence)
@@ -210,10 +210,10 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 
 /**
  * Укажите положение указателя чтения и записи.
- * @param drv       pointer to a driver where this function belongs
- * @param file_p    pointer to a FIL variable
- * @param pos_p     pointer to store the result
- * @return LV_FS_RES_OK: no error, the file is read
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param file_p    указатель на переменную FIL
+ * @param pos_p     указатель для сохранения результата
+ * @return LV_FS_RES_OK: ошибок нет, файл прочитан
  *         любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
@@ -225,9 +225,9 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 
 /**
  * Инициализируйте переменную DIR для чтения каталога.
- * @param drv   pointer to a driver where this function belongs
- * @param path  path to a directory
- * @return pointer to an initialized 'DIR' variable
+ * @param drv   указатель на драйвер, которому принадлежит эта функция
+ * @param path  путь к каталогу
+ * @return указатель на инициализированную переменную DIR
  */
 static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 {
@@ -249,11 +249,11 @@ static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 /**
  * Прочитать следующее имя файла из каталога.
  * Название каталогов начинается с '/'
- * @param drv       pointer to a driver where this function belongs
- * @param dir_p     pointer to an initialized 'DIR' variable
- * @param fn        pointer to a buffer to store the filename
- * @param fn_len    length of the buffer to store the filename
- * @return LV_FS_RES_OK or any error from lv_fs_res_t enum
+ * @param drv       указатель на драйвер, которому принадлежит эта функция
+ * @param dir_p     указатель на инициализированную переменную DIR
+ * @param fn        указатель на буфер для хранения имени файла
+ * @param fn_len    длина буфера для хранения имени файла
+ * @return LV_FS_RES_OK или любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint32_t fn_len)
 {
@@ -282,9 +282,9 @@ static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint3
 
 /**
  * Закройте чтение каталога
- * @param drv   pointer to a driver where this function belongs
- * @param dir_p pointer to an initialized 'DIR' variable
- * @return LV_FS_RES_OK or any error from lv_fs_res_t enum
+ * @param drv   указатель на драйвер, которому принадлежит эта функция
+ * @param dir_p указатель на инициализированную переменную DIR
+ * @return LV_FS_RES_OK или любая ошибка из перечисления lv_fs_res_t
  */
 static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p)
 {

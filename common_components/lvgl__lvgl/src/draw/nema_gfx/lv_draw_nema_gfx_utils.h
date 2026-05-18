@@ -138,32 +138,32 @@ uintptr_t NEMA_VIRT2PHYS(void * addr);
  **********************/
 
 /**
- * Проверьте, поддерживается ли `lv_color_format_t`.
- * @param     cf  The LVGL color format
- * @return        True/false
+ * Проверьте, имеются ли`lv_color_format_t`.
+ * @param     cf  Цветовой формат LVGL
+ * @return Правда/ложь
  */
 bool lv_nemagfx_is_cf_supported(lv_color_format_t cf);
 
 /**
- * Преобразуйте `lv_color_format_t` в цветовой формат Nema.
- * @param     cf  The LVGL color format
- * @return        The Nema color format
+ * Преобразуйте`lv_color_format_t`в цветовой формат Nema.
+ * @param     cf  Цветовой формат LVGL
+ * @return        Цветовой формат Nema
  */
 uint32_t lv_nemagfx_cf_to_nema(lv_color_format_t cf);
 
 /**
- * Получите режим наложения NemaGFX.
+ * Получите режим приложения NemaGFX.
  *
  * @param [in] lv_blend_mode Режим наложения LVGL
  *
- * @return NemaGFX blending mode
+ * @return Режим наложения NemaGFX
  *
  */
 uint32_t lv_nemagfx_blending_mode(lv_blend_mode_t lv_blend_mode);
 
 
 /**
- * Получите режим наложения NemaGFX.
+ * Получите режим приложения NemaGFX.
  *
  * @param [дюйм] градиент Градиентный буфер NemaGFX
  *

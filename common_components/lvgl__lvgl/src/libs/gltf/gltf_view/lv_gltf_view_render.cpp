@@ -293,7 +293,7 @@ static GLuint lv_gltf_view_render_model(lv_gltf_t * viewer, lv_gltf_model_t * mo
     bool opt_aa_this_frame = (view_desc->aa_mode == LV_GLTF_AA_MODE_ON) ||
                              (view_desc->aa_mode == LV_GLTF_AA_MODE_DYNAMIC && model->last_frame_no_motion == true);
     if(!is_first_model) {
-        /* Если этот объект данных является вторичным проходом рендеринга, унаследуйте настройку сглаживания для этого кадра от первого нарисованного gltf_data.*/
+        /* Если этот объект данных является вторичным проходом рендеринга, унаследуйте постепенность сглаживания для этого кадра от первого нарисованного gltf_data.*/
         opt_aa_this_frame = view_desc->frame_was_antialiased;
     }
 
@@ -917,7 +917,7 @@ lv_result_t render_primary_output(lv_gltf_t * viewer, const lv_gltf_renwin_state
     GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, state->renderbuffer, 0));
     GL_CALL(glViewport(0, 0, texture_w, texture_h));
     if(prepare_bg) {
-        /* приведение безопасно, поскольку зритель — lv_obj_t.*/
+        /* безопасное приведение, с учетом обзора —lv_obj_t.*/
         setup_draw_solid_background(viewer, lv_obj_get_style_bg_color((lv_obj_t *)viewer, LV_PART_MAIN),
                                     lv_obj_get_style_bg_opa((lv_obj_t *)viewer, LV_PART_MAIN));
     }
@@ -929,7 +929,7 @@ static fastgltf::math::nvec4 color_convert_to_srgb(fastgltf::math::nvec4 color)
 {
     const float SRGB_GAMMA = 2.4f;
     const float INV_SRGB_GAMMA = 1.0f / SRGB_GAMMA;
-    // Примените формулу преобразования sRGB:
+    // Введите формулу преобразования sRGB:
     // sRGB = 12,92 * C, если C <= 0,0031308
     // sRGB = 1,055 * C^(1/2,4) - 0,055, если C > 0,0031308
 
@@ -1078,7 +1078,7 @@ static lv_gltf_renwin_state_t setup_primary_output(int32_t texture_width, int32_
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
     GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1));
-#ifdef __EMSCRIPTEN__ // Проверьте, компилируется ли для Emscripten (WebGL)
+#ifdef __EMSCRIPTEN__ // Проверяется, компилируется для Emscripten (WebGL)
     // Для WebGL2
     GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, LV_GL_PREFERRED_DEPTH, texture_width, texture_height, 0, GL_DEPTH_COMPONENT,
                          GL_UNSIGNED_INT, NULL));
@@ -1119,7 +1119,7 @@ static void setup_cleanup_opengl_output(lv_gltf_renwin_state_t * state)
 static void setup_view_proj_matrix_from_camera(lv_gltf_t * viewer, uint32_t camera, lv_gltf_view_desc_t * view_desc,
                                                lv_gltf_model_t * model, bool transmission_pass)
 {
-    /* Следующая матричная математика предназначена для матриц проекции, определенных спецификацией glTF:*/
+    /* Следующая матричная математика составлена для матриц проекции, определенная спецификация glTF:*/
     /* https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#projection-matrices*/
 
     fastgltf::math::fmat4x4 projection;
@@ -1128,7 +1128,7 @@ static void setup_view_proj_matrix_from_camera(lv_gltf_t * viewer, uint32_t came
     auto width = view_desc->render_width;
     auto height = view_desc->render_height;
     /* Возможно, проход передачи должен просто использовать аспект обычных проходов, несмотря на то, что сам по себе имеет разные метрики. */
-    /* TODO: test both ways to see which has less distortion*/
+    /* TODO: протестируйте оба способа, чтобы увидеть, какой из них имеет меньше искажений*/
 
     float aspect = (float)width / (float)height;
     if(transmission_pass) {
@@ -1261,7 +1261,7 @@ static lv_result_t setup_restore_opaque_output(lv_gltf_t * viewer, const lv_gltf
     GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, renwin_state->renderbuffer, 0));
     GL_CALL(glViewport(0, 0, texture_w, texture_h));
     if(prepare_bg) {
-        /* приведение безопасно, поскольку зритель — lv_obj_t.*/
+        /* безопасное приведение, с учетом обзора —lv_obj_t.*/
         setup_draw_solid_background(viewer, lv_obj_get_style_bg_color((lv_obj_t *)viewer, LV_PART_MAIN),
                                     lv_obj_get_style_bg_opa((lv_obj_t *)viewer, LV_PART_MAIN));
     }

@@ -102,7 +102,7 @@ void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp)
     ELCDIF_ClearInterruptStatus(base, intStatus);
 
     if(intStatus & kELCDIF_CurFrameDone) {
-        /* Flush Ready — это ISR безопасно и атомарно, поэтому вызов внутри
+        /* Готовность к промывке — этоISRбезопасно и атомарно, поэтому вызовите внутри
          * Прерывание кадрового буфера безопасно и приводит к очистке цепочки
          * неблокируется даже в голых металлических системах.
          */

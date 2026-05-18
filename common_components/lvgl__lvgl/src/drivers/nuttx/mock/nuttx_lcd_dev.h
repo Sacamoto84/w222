@@ -22,19 +22,19 @@ extern "C" {
 
 #define _LCDIOC(x) (x)
 
-#define LCDDEVIO_PUTRUN       _LCDIOC(0)  /* Arg: const struct lcddev_run_s* */
-#define LCDDEVIO_PUTAREA      _LCDIOC(1)  /* Arg: const struct lcddev_area_s* */
-#define LCDDEVIO_GETRUN       _LCDIOC(2)  /* Arg: struct lcddev_run_s* */
-#define LCDDEVIO_GETAREA      _LCDIOC(3)  /* Arg: struct lcddev_area_s* */
-#define LCDDEVIO_GETPOWER     _LCDIOC(4)  /* Arg: int* */
-#define LCDDEVIO_SETPOWER     _LCDIOC(5)  /* Arg: int */
-#define LCDDEVIO_GETCONTRAST  _LCDIOC(6)  /* Arg: int* */
-#define LCDDEVIO_SETCONTRAST  _LCDIOC(7)  /* Arg: unsigned int */
-#define LCDDEVIO_GETPLANEINFO _LCDIOC(8)  /* Arg: struct lcd_planeinfo_s* */
-#define LCDDEVIO_GETVIDEOINFO _LCDIOC(9)  /* Arg: struct fb_videoinfo_s* */
-#define LCDDEVIO_SETPLANENO   _LCDIOC(10) /* Arg: int */
+#define LCDDEVIO_PUTRUN       _LCDIOC(0)  /* Arg: константная структураlcddev_run_s* */
+#define LCDDEVIO_PUTAREA      _LCDIOC(1)  /* Arg: константная структураlcddev_area_s* */
+#define LCDDEVIO_GETRUN       _LCDIOC(2)  /* Arg: структураlcddev_run_s* */
+#define LCDDEVIO_GETAREA      _LCDIOC(3)  /* Arg: структураlcddev_area_s* */
+#define LCDDEVIO_GETPOWER     _LCDIOC(4)  /* Arg: интервал* */
+#define LCDDEVIO_SETPOWER     _LCDIOC(5)  /* Arg: интервал */
+#define LCDDEVIO_GETCONTRAST  _LCDIOC(6)  /* Arg: интервал* */
+#define LCDDEVIO_SETCONTRAST  _LCDIOC(7)  /* Arg: беззнаковое целое число */
+#define LCDDEVIO_GETPLANEINFO _LCDIOC(8)  /* Arg: структураlcd_planeinfo_s* */
+#define LCDDEVIO_GETVIDEOINFO _LCDIOC(9)  /* Arg: структураfb_videoinfo_s* */
+#define LCDDEVIO_SETPLANENO   _LCDIOC(10) /* Arg: интервал */
 
-#define LCDDEVIO_GETAREAALIGN _LCDIOC(17) /* Arg: struct lcddev_area_align_s* */
+#define LCDDEVIO_GETAREAALIGN _LCDIOC(17) /* Arg: структураlcddev_area_align_s* */
 
 /**********************
  *      TYPEDEFS
@@ -62,7 +62,7 @@ struct lcddev_area_align_s {
 /* Эта структура описывает одну цветовую плоскость.  Некоторые форматы YUV могут поддерживать
  * до 4 плоскостей (хотя они, вероятно, не будут использоваться на оборудовании LCD).
  * Драйвер кадрового буфера предоставляет адрес видеопамяти в своем
- * соответствующая структура fb_planeinfo_s.  Вместо этого драйвер LCD предоставляет
+ * соответствующая структураfb_planeinfo_s.  Вместо этого драйверLCDобеспечивает
  * методы для передачи данных в/из цветовой плоскости LCD.
  */
 
@@ -70,7 +70,7 @@ struct lcd_planeinfo_s {
     /* Это рабочая память, выделяемая драйвером LCD для каждого устройства LCD.
     * и для каждой цветовой плоскости.  Эта память будет содержать одну растровую строку
     * данные. Поэтому размер выделенного буфера выполнения должен быть не менее
-    * (бпп*xres/8).  Фактическое выравнивание буфера должно соответствовать
+    * (бпп*xres/8).  Фактическое соревнование буфера должно соответствовать
     * разрядность базового типа пикселя.
     *
     * Если существует несколько плоскостей, они могут использовать один и тот же рабочий буфер.

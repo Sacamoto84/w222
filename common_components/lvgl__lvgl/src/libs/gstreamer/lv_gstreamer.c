@@ -138,7 +138,7 @@ lv_result_t lv_gstreamer_set_src(lv_obj_t * obj, const char * factory_name, cons
         g_object_set(G_OBJECT(head), property, source, NULL);
     }
 
-    /* Исходный элемент uri decode автоматически выполнит для нас синтаксический анализ и декодирование.
+    /* Исходный элемент uri decode автоматически выполняет для нас синтаксический анализ и декодирование.
      * для других типов источников нам необходимо добавить элемент синтаксического анализатора и декодера*/
     if(!lv_streq(LV_GSTREAMER_FACTORY_URI_DECODE, factory_name)) {
         GstElement * decodebin = gst_element_factory_make("decodebin", "lv_gstreamer_decodebin");
@@ -591,7 +591,7 @@ static void on_decode_pad_added(GstElement * element, GstPad * pad, gpointer use
             }
 
             /* Здесь мы устанавливаем частоту кадров в секунду, которую мы хотим, чтобы конвейер выдавал, и формат цвета.
-             * Это достигается с помощью элементов video_convert и video_rate, которые автоматически дросселируют и
+             * Это осуществляется с помощью элементовvideo_convertи video_rate, которые автоматически дросселируют и
              * конвертируем изображение в желаемый формат*/
             uint32_t target_fps = 1000 / LV_DEF_REFR_PERIOD;
             char caps_str[128];

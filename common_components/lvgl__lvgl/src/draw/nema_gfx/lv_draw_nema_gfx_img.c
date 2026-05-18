@@ -196,7 +196,7 @@ static void _draw_nema_gfx_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * d
 
 }
 
-/*NemaGFX выполняет операции маски с форматами A8, A4, A2 и A1.*/
+/*NemaGFX осуществляет операции маски с форматами A8, A4,A2и A1.*/
 static uint32_t lv_nemagfx_mask_cf_to_nema(lv_color_format_t cf)
 {
     switch(cf) {

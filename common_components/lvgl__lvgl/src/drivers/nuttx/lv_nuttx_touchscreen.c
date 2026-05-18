@@ -154,9 +154,9 @@ static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
     struct touch_sample_s sample;
 
     /*
-     * Note: Since it is necessary to avoid multi-processing click events
-     * вызвано избыточным continue_reading , скользящим окном выборки из двух единиц
-     * Здесь используется алгоритм.  continue_reading активируется только при наличии
+     * Note: Поскольку необходимо избегать многократной обработки событий кликов
+     * вызвано избыточнымcontinue_reading, перемещаем окно выбора из двух единиц
+     * Здесь используется алгоритм.  continue_readingактивируется только в наличии
      * две точки в окне.
      */
 

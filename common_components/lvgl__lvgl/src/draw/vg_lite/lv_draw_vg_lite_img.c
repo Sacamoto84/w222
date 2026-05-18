@@ -60,7 +60,7 @@ void lv_draw_vg_lite_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc,
     vg_lite_buffer_t src_buf;
     lv_image_decoder_dsc_t decoder_dsc;
 
-    /* если не поддерживается смесь Normal, предварительно умножьте альфа */
+    /* Если не приготовить смесь «Нормально», преумножьте альфа. */
     bool premultiply = !lv_vg_lite_support_blend_normal();
     if(!lv_vg_lite_buffer_open_image(&src_buf, &decoder_dsc, dsc->src, no_cache, premultiply)) {
         LV_PROFILER_DRAW_END;
@@ -69,7 +69,7 @@ void lv_draw_vg_lite_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc,
 
     vg_lite_color_t color = lv_vg_lite_image_recolor(&src_buf, dsc);
 
-    /* преобразовать режим наложения в режим наложения vg-lite, учитывая предварительно умноженную альфу */
+    /* изменение режима наложений в режим наложений vg-lite, позднее умноженная альфу */
     bool has_pre_mul = lv_draw_buf_has_flag(decoder_dsc.decoded, LV_IMAGE_FLAGS_PREMULTIPLIED)
                        || (decoder_dsc.decoded->header.cf == LV_COLOR_FORMAT_ARGB8888_PREMULTIPLIED);
     vg_lite_blend_t blend = lv_vg_lite_blend_mode(dsc->blend_mode, has_pre_mul);
@@ -132,7 +132,7 @@ void lv_draw_vg_lite_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc,
     else if(has_transform || dsc->clip_radius) {
         /**
          * Когда изображение трансформируется или округляется, создайте контур вокруг
-         * изображение и следуйте image_matrix для преобразования координат.
+         * изображение и следуйтеimage_matrixдля преобразования координат.
          */
         lv_vg_lite_path_set_transform(path, &image_matrix);
 
@@ -169,7 +169,7 @@ void lv_draw_vg_lite_img(lv_draw_task_t * t, const lv_draw_image_dsc_t * dsc,
         lv_area_set_height(&tile_area, img_h);
 
         /**
-         * vg_lite_tvg не поддерживает VG_LITE_PATTERN_REPEAT,
+         * vg_lite_tvg не поддерживаетVG_LITE_PATTERN_REPEAT,
          * используйте зацикленную текстуру для симуляции.
          */
 #if LV_USE_VG_LITE_THORVG

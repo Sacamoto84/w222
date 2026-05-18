@@ -28,7 +28,7 @@
 
 namespace tvg {
 
-//NOTE: declare this in your list item
+//NOTE: объявите это в своем списке
 #define INLIST_ITEM(T) \
     T* prev; \
     T* next

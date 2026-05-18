@@ -50,7 +50,7 @@ namespace tvg {
 /*
  * https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strtof-strtof-l-wcstof-wcstof-l?view=msvc-160
  *
- * src должен иметь одну из следующих форм:
+ * src должна иметь одну из следующих форм:
  *
  * [пробел] [знак] {цифры [основание цифр] | системы счисления} [{e | E} [знак] цифры]
  * [пробел] [знак] { INF |  INFINITY }
@@ -103,7 +103,7 @@ float strToFloat(const char *nPtr, char **endPtr)
         return (minus == -1) ? -NAN : NAN;
     }
 
-    //Optional: integer part before dot
+    //Optional: целая часть перед точкой
     if (isdigit(*iter)) {
         for (; isdigit(*iter); iter++) {
             integerPart = integerPart * 10ULL + (unsigned long long) (*iter - '0');
@@ -115,7 +115,7 @@ float strToFloat(const char *nPtr, char **endPtr)
 
     val = static_cast<float>(integerPart);
 
-    //Optional: decimal part after dot
+    //Optional: десятичная часть после точки
     if (*iter == '.') {
         unsigned long long decimalPart = 0;
         unsigned long long pow10 = 1;
@@ -139,13 +139,13 @@ float strToFloat(const char *nPtr, char **endPtr)
         a = iter;
     }
 
-    //Optional: exponent
+    //Optional: показатель степени
     if (*iter == 'e' || *iter == 'E') {
         ++iter;
 
-        //Exception: svg may have 'em' unit for fonts. ex) 5em, 10.5em
+        //Exception: svg может иметь единицу измерения шрифтов «em». например) 5эм, 10,5эм
         if ((*iter == 'm') || (*iter == 'M')) {
-            //TODO: We don't support font em unit now, but has to multiply val * font size later...
+            //TODO: Сейчас мы не поддерживаем единицу измерения шрифта em, но позже нам придется умножить размер шрифта val *...
             a = iter + 1;
             goto success;
         }
@@ -174,7 +174,7 @@ float strToFloat(const char *nPtr, char **endPtr)
             goto success;
         }
 
-        //if ((_floatExact(val, 2.2250738585072011f)) && (( minus_e * static_cast <int>(exponPart)) <= -308)) {
+        //if ((_floatExact(val, 2.2250738585072011f)) && ((minus_e*static_cast<int>(exponPart)) <= -308)) {
         if ((_floatExact(val, 1.175494351f)) && ((minus_e * static_cast<int>(exponentPart)) <= -38)) {
             //вал *= 1.0e-308f;
             val *= 1.0e-38f;

@@ -30,7 +30,7 @@
 #define FT_COMPONENT  io
 
 /* Для удобства используем макрос STREAM_FILE для извлечения       */
-/* специфичный для системы дескриптор потока из данного объекта потока FreeType */
+/* специальный для системы дескриптор потока из данного объекта поток FreeType */
 #define STREAM_FILE( stream )  ( (lv_fs_file_t*)stream->descriptor.pointer )
 
 /**********************
@@ -186,9 +186,9 @@ FT_Done_Memory(FT_Memory  memory)
 
 /**
  * Функция распределения памяти.
- * @param memory A pointer to the memory object.
- * @param size The requested size in bytes.
- * @return The address of newly allocated block.
+ * @param memory Указатель на объект памяти.
+ * @param size Запрошенный размер в байтах.
+ * @return Адрес вновь выделенного блока.
  */
 FT_CALLBACK_DEF(void *)
 ft_alloc(FT_Memory  memory,
@@ -201,11 +201,11 @@ ft_alloc(FT_Memory  memory,
 
 /**
  * Функция перераспределения памяти.
- * @param memory A pointer to the memory object.
- * @param cur_size The current size of the allocated memory block.
- * @param new_size The newly requested size in bytes.
- * @param block The current address of the block in memory.
- * @return The address of the reallocated memory block.
+ * @param memory Указатель на объект памяти.
+ * @param cur_size Текущий размер выделенного блока памяти.
+ * @param new_size Новый запрошенный размер в байтах.
+ * @param block Текущий адрес блока в памяти.
+ * @return Адрес перераспределенного блока памяти.
  */
 FT_CALLBACK_DEF(void *)
 ft_realloc(FT_Memory  memory,
@@ -221,8 +221,8 @@ ft_realloc(FT_Memory  memory,
 
 /**
  * Функция освобождения памяти.
- * @param memory A pointer to the memory object.
- * @param block The address of block in memory to be freed.
+ * @param memory Указатель на объект памяти.
+ * @param block Адрес блока памяти, который необходимо освободить.
  */
 FT_CALLBACK_DEF(void)
 ft_free(FT_Memory  memory,
@@ -237,7 +237,7 @@ ft_free(FT_Memory  memory,
 
 /**
  * Функция закрытия потока.
- * @param stream A pointer to the stream object.
+ * @param stream Указатель на объект потока.
  */
 FT_CALLBACK_DEF(void)
 ft_lv_fs_stream_close(FT_Stream  stream)
@@ -253,11 +253,11 @@ ft_lv_fs_stream_close(FT_Stream  stream)
 
 /**
  * Функция открытия потока.
- * @param stream A pointer to the stream object.
- * @param offset The position in the data stream to start reading.
- * @param buffer The address of buffer to store the read data.
- * @param count The number of bytes to read from the stream.
- * @return The number of bytes actually read.  If `count' is zero (this is,
+ * @param stream Указатель на объект потока.
+ * @param offset Позиция в потоке данных, с которой начинается чтение.
+ * @param buffer Адрес буфера для хранения считанных данных.
+ * @param count Количество байтов, которые необходимо прочитать из потока.
+ * @return Количество фактически прочитанных байтов.  Если `count' равен нулю (это
  *         функция используется для поиска), ненулевое возвращаемое значение
  *         указывает на ошибку.
  */

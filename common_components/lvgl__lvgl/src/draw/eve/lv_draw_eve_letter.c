@@ -3,7 +3,7 @@
  *
  */
 
-/*  Author: juanj
+/*  Author: Хуандж
  *
  *  Изменено LVGL
  */

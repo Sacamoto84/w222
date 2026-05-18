@@ -23,7 +23,7 @@
 #include "../../lv_conf_internal.h"
 #if LV_USE_THORVG_INTERNAL
 
-#include "tvgMath.h" /* включить math.h перед cstring */
+#include "tvgMath.h" /* включитьmath.hперед cstring */
 #include <cstring>
 #include <string>
 #include "tvgShape.h"
@@ -52,7 +52,7 @@ static inline bool _isGroupType(SvgNodeType type)
 }
 
 
-//По: https://www.w3.org/TR/SVG11/coords.html#ObjectBoundingBoxUnits (последний абзац)
+//По:https://www.w3.org/TR/SVG11/coords.html#ObjectBoundingBoxUnits(последний абзац)
 //ширину обводки следует игнорировать при расчетах ограничивающей рамки.
 static Box _boundingBox(const Shape* shape)
 {
@@ -134,7 +134,7 @@ static unique_ptr<LinearGradient> _applyLinearGradientProperty(SvgStyleGradient*
             stops[i].b = colorStop->b;
             stops[i].a = static_cast<uint8_t>((colorStop->a * opacity) / 255);
             stops[i].offset = colorStop->offset;
-            //проверьте смещенные угловые случаи - см.: https://svgwg.org/svg2-draft/pservers.html#StopNotes
+            //проверьте смещенные угловые углы - см.: https://svgwg.org/svg2-draft/pservers.html#StopNotes
             if (colorStop->offset < prevOffset) stops[i].offset = prevOffset;
             else if (colorStop->offset > 1) stops[i].offset = 1;
             prevOffset = stops[i].offset;
@@ -194,7 +194,7 @@ static unique_ptr<RadialGradient> _applyRadialGradientProperty(SvgStyleGradient*
             stops[i].b = colorStop->b;
             stops[i].a = static_cast<uint8_t>((colorStop->a * opacity) / 255);
             stops[i].offset = colorStop->offset;
-            //проверьте смещенные угловые случаи - см.: https://svgwg.org/svg2-draft/pservers.html#StopNotes
+            //проверьте смещенные угловые углы - см.: https://svgwg.org/svg2-draft/pservers.html#StopNotes
             if (colorStop->offset < prevOffset) stops[i].offset = prevOffset;
             else if (colorStop->offset > 1) stops[i].offset = 1;
             prevOffset = stops[i].offset;
@@ -339,7 +339,7 @@ static void _applyProperty(SvgLoaderData& loaderData, SvgNode* node, Shape* vg, 
             vg->fill(std::move(radial));
         }
     } else if (style->fill.paint.url) {
-        //TODO: Apply the color pointed by url
+        //TODO: Применить цвет, указанный URL-адресом
         TVGLOG("SVG", "The fill's url not supported.");
     } else if (style->fill.paint.curColor) {
         //Применить текущий цвет стиля
@@ -383,7 +383,7 @@ static void _applyProperty(SvgLoaderData& loaderData, SvgNode* node, Shape* vg, 
              vg->stroke(std::move(radial));
         }
     } else if (style->stroke.paint.url) {
-        //TODO: Apply the color pointed by url
+        //TODO: Применить цвет, указанный URL-адресом
         TVGLOG("SVG", "The stroke's url not supported.");
     } else if (style->stroke.paint.curColor) {
         //Применить текущий цвет стиля
@@ -531,7 +531,7 @@ static bool _isValidImageMimeTypeAndEncoding(const char** href, const char** mim
     if (strncmp(*href, "image/", sizeof("image/") - 1)) return false; //недопустимый тип MIME
     *href += sizeof("image/") - 1;
 
-    //Данные RFC2397:[<тип носителя>][;base64],<данные>
+    //ДанныеRFC2397:[<тип носителя>][;base64],<данные>
     //медиатип := [ подтип типа "/" ] *( параметр ";" )
     //параметр := атрибут "=" значение
     for (unsigned int i = 0; i < sizeof(imageMimeTypes) / sizeof(imageMimeTypes[0]); i++) {
@@ -563,7 +563,7 @@ static bool _isValidImageMimeTypeAndEncoding(const char** href, const char** mim
             if (**href == ',' && (imageMimeTypes[i].encoding & imageMimeTypeEncoding::utf8)) {
                 ++(*href);
                 *encoding = imageMimeTypeEncoding::utf8;
-                return true; //разрешить отсутствие кодировки, если ожидается utf8
+                return true; //убедиться в отсутствии кодировки, если ведущий utf8
             }
             return false;
         }
@@ -605,7 +605,7 @@ static unique_ptr<Picture> _imageBuildHelper(SvgLoaderData& loaderData, SvgNode*
         loaderData.images.push(decoded);
     } else {
         if (!strncmp(href, "file://", sizeof("file://") - 1)) href += sizeof("file://") - 1;
-        //TODO: protect against recursive svg image loading
+        //TODO: защитить от рекурсивной загрузки изображений SVG
         //Временно отключите встроенный SVG:
         const char *dot = strrchr(href, '.');
         if (dot && !strcmp(dot, ".svg")) {
@@ -792,7 +792,7 @@ static void _applyTextFill(SvgStyleProperty* style, Text* text, const Box& vBox)
             text->fill(std::move(radial));
         }
     } else if (style->fill.paint.url) {
-        //TODO: Apply the color pointed by url
+        //TODO: Применить цвет, указанный URL-адресом
         TVGLOG("SVG", "The fill's url not supported.");
     } else if (style->fill.paint.curColor) {
         //Применить текущий цвет стиля
@@ -841,7 +841,7 @@ static unique_ptr<Scene> _sceneBuildHelper(SvgLoaderData& loaderData, const SvgN
 
     if (_isGroupType(node->type) || mask) {
         auto scene = Scene::gen();
-        // Для узла «Символ» сначала необходимо применить преобразование viewBox — см. _useBuildHelper().
+        // Для узла «Символ» сначала необходимо осуществить преобразование viewBox — см. _useBuildHelper().
         if (!mask && node->transform && node->type != SvgNodeType::Symbol) scene->transform(*node->transform);
 
         if (node->style->display && node->style->opacity != 0) {
@@ -911,7 +911,7 @@ static void _updateInvalidViewSize(const Scene* scene, Box& vBox, float& w, floa
 
 Scene* svgSceneBuild(SvgLoaderData& loaderData, Box vBox, float w, float h, AspectRatioAlign align, AspectRatioMeetOrSlice meetOrSlice, const string& svgPath, SvgViewFlag viewFlag)
 {
-    //TODO: aspect ratio is valid only if viewBox was set
+    //TODO: соотношение сторон допустимо, только если установлен viewBox
 
     if (!loaderData.doc || (loaderData.doc->type != SvgNodeType::Doc)) return nullptr;
 

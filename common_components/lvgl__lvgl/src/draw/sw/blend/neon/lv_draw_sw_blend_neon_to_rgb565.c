@@ -1136,7 +1136,7 @@ static inline uint16x8_t lv_color_8_16_mix_8_with_opa_mask(const uint16_t * src,
     const uint16x8_t mask_vec       = vmovl_u8(vld1_u8(mask));
     const uint16x8_t opa_vec        = vmovq_n_u16(opa);
 
-    /* Используйте uint32 для промежуточных результатов умножения, чтобы избежать 16-битного переполнения. */
+    /* Используйте uint32 для промежуточных результатов умножения, чтобы избежать 16-битного затруднения. */
     const uint32x4_t mix_pixels_low  = vmovl_u16(vget_low_u16(mix_pixels));
     const uint32x4_t mix_pixels_high = vmovl_u16(vget_high_u16(mix_pixels));
     const uint32x4_t opa_vec_low     = vmovl_u16(vget_low_u16(opa_vec));
@@ -1183,19 +1183,19 @@ static inline uint16x8_t lv_color_8_16_mix_8_internal(uint16x8_t src_pixels, uin
     /* Сделайте фактическое смешивание */
     const uint16x8_t mix_inv_16 = vsubq_u16(vdupq_n_u16(255), mix_pixels);
 
-    /* Red: ((c1 >> 3) * mix + ((c2 >> 11) & 0x1F) * mix_inv) << 3) & 0xF800 */
+    /* Red: ((c1 >> 3) * mix + ((c2 >> 11) &0x1F) *mix_inv) << 3) & 0xF800 */
     const uint16x8_t src_r = vmulq_u16(vshrq_n_u16(src_pixels, 3), mix_pixels);
     const uint16x8_t dst_r = vandq_u16(vshrq_n_u16(dst_pixels, 11), vdupq_n_u16(0x1F));
     uint16x8_t blended_r   = vmlaq_u16(src_r, dst_r, mix_inv_16);
     blended_r              = vandq_u16(vshlq_n_u16(blended_r, 3), vdupq_n_u16(0xF800));
 
-    /* Green: ((c1 >> 2) * mix + ((c2 >> 5) & 0x3F) * mix_inv) >> 3) & 0x07E0 */
+    /* Green: ((c1 >> 2) * mix + ((c2 >> 5) &0x3F) *mix_inv) >> 3) & 0x07E0 */
     const uint16x8_t src_g = vmulq_u16(vshrq_n_u16(src_pixels, 2), mix_pixels);
     const uint16x8_t dst_g = vandq_u16(vshrq_n_u16(dst_pixels, 5), vdupq_n_u16(0x3F));
     uint16x8_t blended_g   = vmlaq_u16(src_g, dst_g, mix_inv_16);
     blended_g              = vandq_u16(vshrq_n_u16(blended_g, 3), vdupq_n_u16(0x07E0));
 
-    /* Blue: ((c1 >> 3) * mix + (c2 & 0x1F) * mix_inv) >> 8 */
+    /* Blue: ((c1 >> 3) * mix + (c2 &0x1F) *mix_inv) >> 8 */
     const uint16x8_t src_b = vmulq_u16(vshrq_n_u16(src_pixels, 3), mix_pixels);
     const uint16x8_t dst_b = vandq_u16(dst_pixels, vdupq_n_u16(0x1F));
     uint16x8_t blended_b   = vmlaq_u16(src_b, dst_b, mix_inv_16);
@@ -1219,19 +1219,19 @@ static inline uint16x4_t lv_color_8_16_mix_4_internal(uint16x4_t src_pixels, uin
     const uint16x4_t src_rgb565 = vadd_u16(vadd_u16(src_r565, src_g565), src_b565);
     const uint16x4_t mix_inv_16 = vsub_u16(vdup_n_u16(255), mix_pixels);
 
-    /* Red: ((c1 >> 3) * mix + ((c2 >> 11) & 0x1F) * mix_inv) << 3) & 0xF800 */
+    /* Red: ((c1 >> 3) * mix + ((c2 >> 11) &0x1F) *mix_inv) << 3) & 0xF800 */
     const uint16x4_t src_r = vmul_u16(vshr_n_u16(src_pixels, 3), mix_pixels);
     const uint16x4_t dst_r = vand_u16(vshr_n_u16(dst_pixels, 11), vdup_n_u16(0x1F));
     uint16x4_t blended_r   = vmla_u16(src_r, dst_r, mix_inv_16);
     blended_r              = vand_u16(vshl_n_u16(blended_r, 3), vdup_n_u16(0xF800));
 
-    /* Green: ((c1 >> 2) * mix + ((c2 >> 5) & 0x3F) * mix_inv) >> 3) & 0x07E0 */
+    /* Green: ((c1 >> 2) * mix + ((c2 >> 5) &0x3F) *mix_inv) >> 3) & 0x07E0 */
     const uint16x4_t src_g = vmul_u16(vshr_n_u16(src_pixels, 2), mix_pixels);
     const uint16x4_t dst_g = vand_u16(vshr_n_u16(dst_pixels, 5), vdup_n_u16(0x3F));
     uint16x4_t blended_g   = vmla_u16(src_g, dst_g, mix_inv_16);
     blended_g              = vand_u16(vshr_n_u16(blended_g, 3), vdup_n_u16(0x07E0));
 
-    /* Blue: ((c1 >> 3) * mix + (c2 & 0x1F) * mix_inv) >> 8 */
+    /* Blue: ((c1 >> 3) * mix + (c2 &0x1F) *mix_inv) >> 8 */
     const uint16x4_t src_b = vmul_u16(vshr_n_u16(src_pixels, 3), mix_pixels);
     const uint16x4_t dst_b = vand_u16(dst_pixels, vdup_n_u16(0x1F));
     uint16x4_t blended_b   = vmla_u16(src_b, dst_b, mix_inv_16);
@@ -1561,7 +1561,7 @@ static inline uint16x8_t lv_color_32_16_mix_8_with_opa_mask(const uint8_t * src,
     const uint16x8_t mask_vec = vmovl_u8(vld1_u8(mask));
     const uint16x8_t opa_vec  = vmovq_n_u16(opa);
 
-    /* Используйте uint32 для промежуточных результатов умножения, чтобы избежать 16-битного переполнения. */
+    /* Используйте uint32 для промежуточных результатов умножения, чтобы избежать 16-битного затруднения. */
     const uint32x4_t a_pixels_low  = vmovl_u16(vget_low_u16(a_pixels));
     const uint32x4_t a_pixels_high = vmovl_u16(vget_high_u16(a_pixels));
     const uint32x4_t opa_vec_low   = vmovl_u16(vget_low_u16(opa_vec));
@@ -1617,19 +1617,19 @@ static inline uint16x8_t lv_color_32_16_mix_8_internal(uint16x8_t r_pixels, uint
     /* Сделайте фактическое смешивание */
     const uint16x8_t mix_inv_16 = vsubq_u16(vdupq_n_u16(255), a_pixels);
 
-    /* Red: ((src_r >> 3) * mix + ((dst >> 11) & 0x1F) * mix_inv) << 3) & 0xF800 */
+    /* Red: ((src_r>> 3) * mix + ((dst >> 11) &0x1F) *mix_inv) << 3) & 0xF800 */
     const uint16x8_t src_r = vshrq_n_u16(r_pixels, 3);
     const uint16x8_t dst_r = vandq_u16(vshrq_n_u16(dst_pixels, 11), vdupq_n_u16(0x1F));
     uint16x8_t blended_r   = vmlaq_u16(vmulq_u16(src_r, a_pixels), dst_r, mix_inv_16);
     blended_r              = vandq_u16(vshlq_n_u16(blended_r, 3), vdupq_n_u16(0xF800));
 
-    /* Green: ((src_g >> 2) * mix + ((dst >> 5) & 0x3F) * mix_inv) >> 3) & 0x07E0 */
+    /* Green: ((src_g>> 2) * mix + ((dst >> 5) &0x3F) *mix_inv) >> 3) & 0x07E0 */
     const uint16x8_t src_g = vshrq_n_u16(g_pixels, 2);
     const uint16x8_t dst_g = vandq_u16(vshrq_n_u16(dst_pixels, 5), vdupq_n_u16(0x3F));
     uint16x8_t blended_g   = vmlaq_u16(vmulq_u16(src_g, a_pixels), dst_g, mix_inv_16);
     blended_g              = vandq_u16(vshrq_n_u16(blended_g, 3), vdupq_n_u16(0x07E0));
 
-    /* Blue: ((src_b >> 3) * mix + (dst & 0x1F) * mix_inv) >> 8 */
+    /* Blue: ((src_b>> 3) * mix + (dst &0x1F) *mix_inv) >> 8 */
     const uint16x8_t src_b = vshrq_n_u16(b_pixels, 3);
     const uint16x8_t dst_b = vandq_u16(dst_pixels, vdupq_n_u16(0x1F));
     uint16x8_t blended_b   = vmlaq_u16(vmulq_u16(src_b, a_pixels), dst_b, mix_inv_16);
@@ -1653,19 +1653,19 @@ static inline uint16x4_t lv_color_32_16_mix_4_internal(uint16x4_t r_pixels, uint
 
     const uint16x4_t mix_inv_16 = vsub_u16(vdup_n_u16(255), a_pixels);
 
-    /* Red: ((src_r >> 3) * mix + ((dst >> 11) & 0x1F) * mix_inv) << 3) & 0xF800 */
+    /* Red: ((src_r>> 3) * mix + ((dst >> 11) &0x1F) *mix_inv) << 3) & 0xF800 */
     const uint16x4_t src_r = vshr_n_u16(r_pixels, 3);
     const uint16x4_t dst_r = vand_u16(vshr_n_u16(dst_pixels, 11), vdup_n_u16(0x1F));
     uint16x4_t blended_r   = vmla_u16(vmul_u16(src_r, a_pixels), dst_r, mix_inv_16);
     blended_r              = vand_u16(vshl_n_u16(blended_r, 3), vdup_n_u16(0xF800));
 
-    /* Green: ((src_g >> 2) * mix + ((dst >> 5) & 0x3F) * mix_inv) >> 3) & 0x07E0 */
+    /* Green: ((src_g>> 2) * mix + ((dst >> 5) &0x3F) *mix_inv) >> 3) & 0x07E0 */
     const uint16x4_t src_g = vshr_n_u16(g_pixels, 2);
     const uint16x4_t dst_g = vand_u16(vshr_n_u16(dst_pixels, 5), vdup_n_u16(0x3F));
     uint16x4_t blended_g   = vmla_u16(vmul_u16(src_g, a_pixels), dst_g, mix_inv_16);
     blended_g              = vand_u16(vshr_n_u16(blended_g, 3), vdup_n_u16(0x07E0));
 
-    /* Blue: ((src_b >> 3) * mix + (dst & 0x1F) * mix_inv) >> 8 */
+    /* Blue: ((src_b>> 3) * mix + (dst &0x1F) *mix_inv) >> 8 */
     const uint16x4_t src_b = vshr_n_u16(b_pixels, 3);
     const uint16x4_t dst_b = vand_u16(dst_pixels, vdup_n_u16(0x1F));
     uint16x4_t blended_b   = vmla_u16(vmul_u16(src_b, a_pixels), dst_b, mix_inv_16);
@@ -1778,13 +1778,13 @@ static inline uint16x8_t lv_color_24_16_mix_premult_8(const uint8_t * src, const
     uint16x8_t blended_r   = vaddq_u16(src_r, vshrq_n_u16(vmulq_u16(dst_r, mix_inv_16), 8));
     blended_r              = vshlq_n_u16(blended_r, 11);
 
-    /* Green: ((src_g >> 2) * mix + ((dst >> 5) & 0x3F) * mix_inv) >> 3) & 0x07E0 */
+    /* Green: ((src_g>> 2) * mix + ((dst >> 5) &0x3F) *mix_inv) >> 3) & 0x07E0 */
     const uint16x8_t src_g = vshrq_n_u16(g_pixels, 2);
     const uint16x8_t dst_g = vandq_u16(vshrq_n_u16(dst_pixels, 5), vdupq_n_u16(0x3F));
     uint16x8_t blended_g   = vaddq_u16(src_g, vshrq_n_u16(vmulq_u16(dst_g, mix_inv_16), 8));
     blended_g              = vshlq_n_u16(blended_g, 5);
 
-    /* Blue: ((src_b >> 3) * mix + (dst & 0x1F) * mix_inv) >> 8 */
+    /* Blue: ((src_b>> 3) * mix + (dst &0x1F) *mix_inv) >> 8 */
     const uint16x8_t src_b = vshrq_n_u16(b_pixels, 3);
     const uint16x8_t dst_b = vandq_u16(dst_pixels, vdupq_n_u16(0x1F));
     uint16x8_t blended_b   = vaddq_u16(src_b, vshrq_n_u16(vmulq_u16(dst_b, mix_inv_16), 8));
@@ -1821,13 +1821,13 @@ static inline uint16x4_t lv_color_24_16_mix_premult_4(const uint8_t * src, const
     uint16x4_t blended_r   = vadd_u16(src_r, vshr_n_u16(vmul_u16(dst_r, mix_inv_16), 8));
     blended_r              = vshl_n_u16(blended_r, 11);
 
-    /* Green: ((src_g >> 2) * mix + ((dst >> 5) & 0x3F) * mix_inv) >> 3) & 0x07E0 */
+    /* Green: ((src_g>> 2) * mix + ((dst >> 5) &0x3F) *mix_inv) >> 3) & 0x07E0 */
     const uint16x4_t src_g = vshr_n_u16(g_pixels, 2);
     const uint16x4_t dst_g = vand_u16(vshr_n_u16(dst_pixels, 5), vdup_n_u16(0x3F));
     uint16x4_t blended_g   = vadd_u16(src_g, vshr_n_u16(vmul_u16(dst_g, mix_inv_16), 8));
     blended_g              = vshl_n_u16(blended_g, 5);
 
-    /* Blue: ((src_b >> 3) * mix + (dst & 0x1F) * mix_inv) >> 8 */
+    /* Blue: ((src_b>> 3) * mix + (dst &0x1F) *mix_inv) >> 8 */
     const uint16x4_t src_b = vshr_n_u16(b_pixels, 3);
     const uint16x4_t dst_b = vand_u16(dst_pixels, vdup_n_u16(0x1F));
     uint16x4_t blended_b   = vadd_u16(src_b, vshr_n_u16(vmul_u16(dst_b, mix_inv_16), 8));

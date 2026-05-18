@@ -323,7 +323,7 @@ static lv_freetype_outline_t outline_create(
 
 
     /**
-     * Отключите AUTOHINT ( https://freetype.org/autohinting/hinter.html), чтобы избежать обрезки изображения).
+     * ОтключитеAUTOHINT(https://freetype.org/autohinting/hinter.html),, чтобы не обрезать изображение).
      * вызвано несоответствием размера и контура глифа.
      */
     error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT | FT_LOAD_NO_BITMAP | FT_LOAD_NO_AUTOHINT);

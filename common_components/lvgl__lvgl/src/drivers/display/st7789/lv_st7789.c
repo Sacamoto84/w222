@@ -56,11 +56,11 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* команды инициализации на основе драйвера LovyanGFX ST7789 */
+/* создание команды на основе драйвера LovyanGFX ST7789 */
 static const uint8_t init_cmd_list[] = {
     CMD_GCTRL,      1,  0x44,       /* GCTRL — зависит от панели */
     CMD_VCOMS,      1,  0x24,       /* VCOMS — зависит от панели */
-    CMD_VRHS,       1,  0x13,       /* VRHS - panel dependent */
+    CMD_VRHS,       1,  0x13,       /* VRHS - зависит от панели */
     CMD_PWCTRL1,    2,  0xa4, 0xa1,
     CMD_RAMCTRL,    2,  0x00, 0xC0, /* управляет сопоставлением RGB565 с RGB666 */
     CMD_PVGAMCTRL,  14, 0xd0, 0x00, 0x02, 0x07, 0x0a, 0x28, 0x32, 0x44, 0x42, 0x06, 0x0e, 0x12, 0x14, 0x17,

@@ -41,19 +41,19 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_font_class_t lv_tiny_ttf_font_class;
 #if LV_TINY_TTF_FILE_SUPPORT != 0
 /**
  * Создайте шрифт из указанного файла или пути с указанной высотой строки.
- * @param path        the path or file name of the font
- * @param font_size   the font size in pixel
- * @return a font object
+ * @param path        путь или имя файла шрифта
+ * @param font_size   размер шрифта в пикселях
+ * @return объект шрифта
  */
 lv_font_t * lv_tiny_ttf_create_file(const char * path, int32_t font_size);
 
 /**
  * Создайте шрифт из указанного файла или пути с указанной высотой строки и указанным размером кэша.
- * @param path        the path or file name of the font
- * @param font_size   the font size in pixel
- * @param kerning     kerning value in pixel
- * @param cache_size  the cache size in count
- * @return a font object
+ * @param path        путь или имя файла шрифта
+ * @param font_size   размер шрифта в пикселях
+ * @param kerning     значение кернинга в пикселях
+ * @param cache_size  размер кэша в счетчике
+ * @return объект шрифта
  */
 lv_font_t * lv_tiny_ttf_create_file_ex(const char * path, int32_t font_size, lv_font_kerning_t kerning,
                                        size_t cache_size);
@@ -61,36 +61,36 @@ lv_font_t * lv_tiny_ttf_create_file_ex(const char * path, int32_t font_size, lv_
 
 /**
  * Создайте шрифт из указанного указателя данных с указанной высотой строки.
- * @param data        the data pointer
- * @param data_size   the data size
- * @param font_size   the font size in pixel
- * @return a font object
+ * @param data        указатель данных
+ * @param data_size   размер данных
+ * @param font_size   размер шрифта в пикселях
+ * @return объект шрифта
  */
 lv_font_t * lv_tiny_ttf_create_data(const void * data, size_t data_size, int32_t font_size);
 
 /**
  * Создайте шрифт из указанного указателя данных с указанной высотой строки и указанным размером кэша.
- * @param data        the data pointer
- * @param data_size   the data size
- * @param font_size   the font size in pixel
- * @param kerning     kerning value in pixel
- * @param cache_size  the cache size in count
+ * @param data        указатель данных
+ * @param data_size   размер данных
+ * @param font_size   размер шрифта в пикселях
+ * @param kerning     значение кернинга в пикселях
+ * @param cache_size  размер кэша в счетчике
  * @return
  */
 lv_font_t * lv_tiny_ttf_create_data_ex(const void * data, size_t data_size, int32_t font_size,
                                        lv_font_kerning_t kerning, size_t cache_size);
 
 /**
- * Установите размер шрифта на новый font_size.
- * @note the font bitmap cache and glyph cache will be flushed.
- * @param font        the font object
- * @param font_size   the font size in pixel
+ * Выберите размер шрифта для нового font_size.
+ * @note Кэш растровых изображений шрифтов и кеш глифов будут очищены.
+ * @param font        объект шрифта
+ * @param font_size   размер шрифта в пикселях
  */
 void lv_tiny_ttf_set_size(lv_font_t * font, int32_t font_size);
 
 /**
- * Уничтожить шрифт, ранее созданный с помощью lv_tiny_ttf_create_xxxx ()
- * @param font        the font object
+ * Уничтожить шрифт, ранее созданный с помощью lv_tiny_ttf_create_xxxx()
+ * @param font        объект шрифта
  */
 void lv_tiny_ttf_destroy(lv_font_t * font);
 

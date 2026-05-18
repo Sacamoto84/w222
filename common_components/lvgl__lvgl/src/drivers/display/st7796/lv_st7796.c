@@ -43,7 +43,7 @@
  *  STATIC CONSTANTS
  **********************/
 
-/* команды инициализации на основе LovyanGFX */
+/* создание команды на основе LovyanGFX */
 static const uint8_t init_cmd_list[] = {
     CMD_CSCON,      1,  0xC3,                           /* Включить команду расширения 2 часть I */
     CMD_CSCON,      1,  0x96,                           /* Включить команду расширения 2, часть II */
@@ -53,10 +53,10 @@ static const uint8_t init_cmd_list[] = {
     0x3B,                           /* LCD Приводная линия = 8 * (59 + 1) */
     CMD_DOCA,       8,  0x40, 0x8A, 0x00, 0x00,
     0x29,                           /* Время периода выравнивания источника = 22,5 мкс. */
-    0x19,                           /* Время для «Начала ворот» = 25 (Tclk) */
-    0xA5,                           /* Время для «Gate End» = 37 (Tclk), функция драйвера ворот EQ ON */
+    0x19,                           /* Время для «Начала ворота» = 25 (Tclk) */
+    0xA5,                           /* Время для «Gate End» = 37 (Tclk), функция водителя воротEQON */
     0x33,
-    CMD_PWCTR2,     1,  0x06,                           /* Управление мощностью2: VAP ( GVDD ) = 3,85 + (vcom + смещение vcom), VAN ( GVCL ) = -3,85 + (vcom + смещение vcom) */
+    CMD_PWCTR2,     1,  0x06,                           /* Управление мощностью2:VAP(GVDD) = 3,85 + (vcom + смещение vcom),VAN(GVCL) = -3,85 + (vcom + смещение vcom) */
     CMD_PWCTR3,     1,  0xA7,                           /* Регулятор мощности 3: Уровень управляющего тока источника = низкий, Уровень управляющего тока гамма = Высокий */
     CMD_VMCTR,      1,  0x18,                           /* VCOM Управление: VCOM = 0,9 */
     LV_LCD_CMD_DELAY_MS,    12,                         /* задержка 120 мс */
@@ -104,7 +104,7 @@ void lv_st7796_set_invert(lv_display_t * disp, bool invert)
 
 void lv_st7796_set_gamma_curve(lv_display_t * disp, uint8_t gamma)
 {
-    /* NOTE: the generic method is not supported on ST7796, TODO: implement gamma tables */
+    /* NOTE: общий метод не поддерживается в ST7796, TODO: реализовать гамма-таблицы */
     LV_UNUSED(disp);
     LV_UNUSED(gamma);
 }

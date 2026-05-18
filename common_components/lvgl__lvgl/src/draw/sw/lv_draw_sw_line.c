@@ -292,7 +292,7 @@ static void LV_ATTRIBUTE_FAST_MEM draw_line_skew(lv_draw_task_t * t, const lv_dr
     blend_area.y1 = LV_MIN(p1.y, p2.y) - w;
     blend_area.y2 = LV_MAX(p1.y, p2.y) + w;
 
-    /*Получите объединение `coords` и `clip`.*/
+    /*Создайте объединение`coords`и `clip`.*/
     /*`clip` уже усечен до размера `draw_buf`.
      *в функции «lv_refr_area»*/
     bool is_common = lv_area_intersect(&blend_area, &blend_area, &t->clip_area);

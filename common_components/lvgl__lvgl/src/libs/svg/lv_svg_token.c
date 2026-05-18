@@ -171,7 +171,7 @@ static void _svg_parser_doctype(_lv_svg_parser_state_t * state, _lv_svg_token_t 
 {
     LV_UNUSED(token);
 
-    //TODO: processing DTD type
+    //TODO: обработка типа DTD
     while(state->cur <= state->end) {
         char ch = *(state->cur);
         if(ch == '>') {

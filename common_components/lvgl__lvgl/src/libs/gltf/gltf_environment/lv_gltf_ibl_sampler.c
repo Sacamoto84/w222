@@ -479,7 +479,7 @@ static void ibl_apply_filter(lv_gltf_ibl_sampler_t * sampler, uint32_t distribut
         program->update_uniform_1f(program, "u_roughness", roughness);
         program->update_uniform_1i(program, "u_sampleCount", sample_count);
         /* Программный режим рендеринга выглядит лучше с этим и ужасно с ниже */
-        /*программа-> update_uniform_1i (программа, "u_width", current_texture_size);  */
+        /*программа->update_uniform_1i(программа, "u_width", current_texture_size);  */
         /* Стандартный режим выглядит лучше всего с этим и несколько хуже с предыдущим. */
         program->update_uniform_1i(program, "u_width", sampler->cube_map_resolution);
         program->update_uniform_1f(program, "u_lodBias", lod_bias);
@@ -545,7 +545,7 @@ static void ibl_sample_lut(lv_gltf_ibl_sampler_t * sampler, uint32_t distributio
     GL_CALL(glUniform1i(location, 0)); // текстурный блок 0
     program->update_uniform_1f(program, "u_roughness", 0.0);
     program->update_uniform_1i(program, "u_sampleCount", sampler->lut_sample_count);
-    //шейдер-> update_uniform_1i (шейдер, "u_sampleCount", 512);
+    //шейдер->update_uniform_1i (шейдер, "u_sampleCount", 512);
     program->update_uniform_1i(program, "u_width", 0.0);
     program->update_uniform_1f(program, "u_lodBias", 0.0);
     program->update_uniform_1i(program, "u_distribution", distribution);

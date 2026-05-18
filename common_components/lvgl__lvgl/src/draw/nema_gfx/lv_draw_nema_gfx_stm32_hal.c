@@ -103,7 +103,7 @@ int32_t nema_sys_init(void)
                                               NEMAGFX_MEM_POOL_SIZE, 1, 8);
     LV_ASSERT(error_code == 0);
 
-    /* Выделить память ring_buffer */
+    /* Поделиться памятью ring_buffer */
     ring_buffer_str.bo = nema_buffer_create(RING_SIZE);
     LV_ASSERT(ring_buffer_str.bo.base_virt);
 

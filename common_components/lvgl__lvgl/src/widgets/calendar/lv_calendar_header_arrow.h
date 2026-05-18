@@ -43,7 +43,7 @@ lv_obj_t * lv_calendar_add_header_arrow(lv_obj_t * parent);
 #endif /*LV_USE_CALENDAR_HEADER_ARROW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CALENDAR_HEADER_ARROW_H*/

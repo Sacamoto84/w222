@@ -49,7 +49,7 @@ lv_display_t * lv_test_display_create(int32_t hor_res, int32_t ver_res);
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_DISPLAY_H*/

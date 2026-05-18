@@ -38,7 +38,7 @@ void lv_example_gestures(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_GESTURES_H*/

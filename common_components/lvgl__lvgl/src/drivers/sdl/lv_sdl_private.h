@@ -91,7 +91,7 @@ void lv_sdl_sw_deinit(lv_display_t * disp);
 #endif /*LV_USE_SDL*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_SDL_PRIVATE_H */

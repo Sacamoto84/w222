@@ -102,7 +102,7 @@ void lv_pxp_wait(void);
 #endif /*LV_USE_PXP*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PXP_CFG_H*/

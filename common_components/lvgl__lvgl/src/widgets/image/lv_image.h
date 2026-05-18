@@ -360,7 +360,7 @@ lv_observer_t * lv_image_bind_src(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_IMAGE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGE_H*/

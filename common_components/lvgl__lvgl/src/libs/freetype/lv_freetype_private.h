@@ -155,7 +155,7 @@ void lv_freetype_set_cbs_outline_font(lv_freetype_font_dsc_t * dsc);
 #endif /*LV_USE_FREETYPE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FREETYPE_PRIVATE_H*/

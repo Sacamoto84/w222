@@ -111,7 +111,7 @@ void lv_draw_eve_triangle(lv_draw_task_t * t, const lv_draw_triangle_dsc_t * dsc
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_EVE_PRIVATE_H*/

@@ -119,7 +119,7 @@ struct touch_sample_s {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_INPUT_TOUCHSCREEN_H*/

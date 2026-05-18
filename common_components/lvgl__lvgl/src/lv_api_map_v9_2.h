@@ -51,7 +51,7 @@ extern "C" {
 #define lv_ft81x_spi_operation lv_ft81x_spi_operation_t
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_API_MAP_V9_2_H */

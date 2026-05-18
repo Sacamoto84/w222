@@ -756,7 +756,7 @@ void lv_display_set_external_data(lv_display_t * disp, void * data, void (* free
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DISPLAY_H*/

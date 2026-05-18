@@ -49,7 +49,7 @@ struct mouse_report_s {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_INPUT_MOUSE_H*/

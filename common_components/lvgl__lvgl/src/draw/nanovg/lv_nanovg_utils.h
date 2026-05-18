@@ -183,7 +183,7 @@ lv_draw_buf_t * lv_nanovg_reshape_global_image(struct _lv_draw_nanovg_unit_t * u
 #endif /* LV_USE_DRAW_NANOVG */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NANOVG_UTILS_H*/

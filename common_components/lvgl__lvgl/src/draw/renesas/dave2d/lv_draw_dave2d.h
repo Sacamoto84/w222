@@ -130,7 +130,7 @@ void lv_draw_dave2d_transform(lv_draw_task_t * t, const lv_area_t * dest_area, c
 #endif /*LV_USE_DRAW_DAVE2D*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_DAVE2D_H*/

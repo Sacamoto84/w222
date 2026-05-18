@@ -33,7 +33,7 @@ extern "C" {
 
 /** Сохраните тип слоя, необходимый для рендеринга виджета.*/
 typedef enum {
-    /**No layer is needed. */
+    /**Отдельный слой не нужен */
     LV_LAYER_TYPE_NONE,
 
     /**Простой слой означает, что слой можно визуализировать частями.
@@ -136,7 +136,7 @@ void lv_obj_refresh_ext_draw_size(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_DRAW_H*/

@@ -1313,7 +1313,7 @@ static inline lv_result_t lv_argb8888_blend_normal_to_argb8888_mix_mask_opa_heli
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BLEND_HELIUM_H*/

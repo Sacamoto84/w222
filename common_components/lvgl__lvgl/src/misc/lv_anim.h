@@ -587,7 +587,7 @@ void lv_anim_set_external_data(lv_anim_t * anim, void * data, void (* free_cb)(v
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ANIM_H*/

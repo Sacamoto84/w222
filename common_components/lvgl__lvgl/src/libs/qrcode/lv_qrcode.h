@@ -94,7 +94,7 @@ void lv_qrcode_set_quiet_zone(lv_obj_t * obj, bool enable);
 #endif /*LV_USE_QRCODE*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_QRCODE_H*/

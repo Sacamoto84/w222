@@ -62,7 +62,7 @@ void lv_calendar_gregorian_to_chinese(lv_calendar_date_t * gregorian_time, lv_ca
 #endif /*LV_USE_CALENDAR_CHINESE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CALENDAR_CHINESE_H*/

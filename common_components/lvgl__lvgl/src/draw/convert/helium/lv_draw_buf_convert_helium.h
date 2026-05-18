@@ -51,7 +51,7 @@ lv_result_t _lv_draw_buf_convert_premultiply_argb8888_helium(lv_draw_buf_t * buf
 
 #endif /*LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_HELIUM*/
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_DRAW_BUF_CONVERT_HELIUM_H */

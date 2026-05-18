@@ -49,7 +49,7 @@ void disp_disable_update(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PORT_DISP_TEMPL_H*/

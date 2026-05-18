@@ -109,7 +109,7 @@ bool lv_area_is_equal(const lv_area_t * a, const lv_area_t * b);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_AREA_PRIVATE_H*/

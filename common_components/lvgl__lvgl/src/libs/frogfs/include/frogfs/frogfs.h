@@ -256,5 +256,5 @@ void frogfs_seekdir(frogfs_dh_t *dh, long loc);
 long frogfs_telldir(frogfs_dh_t *dh);
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif

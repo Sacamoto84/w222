@@ -58,7 +58,7 @@ struct _lv_table_t {
 #endif /* LV_USE_TABLE != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TABLE_PRIVATE_H*/

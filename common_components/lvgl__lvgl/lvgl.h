@@ -214,7 +214,7 @@ static inline const char * lv_version_info(void)
 }
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LVGL_H*/

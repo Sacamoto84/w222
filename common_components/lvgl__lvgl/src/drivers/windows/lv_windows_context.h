@@ -128,7 +128,7 @@ lv_windows_window_context_t * lv_windows_get_window_context(
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WINDOWS_CONTEXT_H*/

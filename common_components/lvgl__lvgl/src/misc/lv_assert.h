@@ -81,7 +81,7 @@ extern "C" {
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ASSERT_H*/

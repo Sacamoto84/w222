@@ -39,7 +39,7 @@ bool lv_draw_dave2d_is_dest_cf_supported(lv_color_format_t cf);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_DAVE2D_UTILS_H*/

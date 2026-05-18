@@ -46,7 +46,7 @@ void lv_linux_fbdev_set_force_refresh(lv_display_t * disp, bool enabled);
 #endif /* LV_USE_LINUX_FBDEV */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_LINUX_FBDEV_H */

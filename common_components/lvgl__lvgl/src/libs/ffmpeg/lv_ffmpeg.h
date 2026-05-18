@@ -102,7 +102,7 @@ void lv_ffmpeg_player_set_decoder(lv_obj_t * obj, const char * decoder_name);
 #endif /*LV_USE_FFMPEG*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FFMPEG_H*/

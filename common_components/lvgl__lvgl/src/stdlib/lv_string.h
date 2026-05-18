@@ -198,7 +198,7 @@ char * lv_strchr(const char * str, int c);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_STRING_H*/

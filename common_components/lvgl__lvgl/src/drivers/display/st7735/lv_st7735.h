@@ -87,7 +87,7 @@ void lv_st7735_send_cmd_list(lv_display_t * disp, const uint8_t * cmd_list);
 #endif /*LV_USE_ST7735*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ST7735_H*/

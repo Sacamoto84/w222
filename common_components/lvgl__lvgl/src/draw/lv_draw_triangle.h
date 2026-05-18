@@ -69,7 +69,7 @@ void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * draw_ds
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_TRIANGLE_H*/

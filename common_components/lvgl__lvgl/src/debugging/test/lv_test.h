@@ -41,7 +41,7 @@ extern "C" {
 #endif /*LV_USE TEST*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_H*/

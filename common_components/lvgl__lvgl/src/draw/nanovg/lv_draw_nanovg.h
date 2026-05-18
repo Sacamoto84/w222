@@ -42,7 +42,7 @@ void lv_draw_nanovg_init(void);
 #endif /*LV_USE_DRAW_NANOVG*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_NANOVG_H*/

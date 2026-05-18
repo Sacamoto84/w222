@@ -338,7 +338,7 @@ int lv_fs_path_join(char * buf, size_t buf_sz, const char * base, const char * e
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FS_H*/

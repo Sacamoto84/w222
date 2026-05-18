@@ -96,7 +96,7 @@ void lv_obj_set_flex_grow(lv_obj_t * obj, uint8_t grow);
 #endif  /*LV_USE_FLEX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FLEX_H*/

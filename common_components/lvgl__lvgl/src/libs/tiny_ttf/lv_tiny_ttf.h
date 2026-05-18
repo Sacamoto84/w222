@@ -101,7 +101,7 @@ void lv_tiny_ttf_destroy(lv_font_t * font);
 #endif /*LV_USE_TINY_TTF*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TINY_TTF_H*/

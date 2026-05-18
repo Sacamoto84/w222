@@ -39,7 +39,7 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_blend_image_to_al88(lv_draw_sw_blend
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_TO_AL88_H*/

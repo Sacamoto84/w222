@@ -76,7 +76,7 @@ void lv_nxp_display_elcdif_event_handler(const lv_display_t * disp);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_USE_NXP_ELCDIF*/

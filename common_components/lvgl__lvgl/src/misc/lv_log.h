@@ -156,7 +156,7 @@ void lv_log_add(lv_log_level_t level, const char * file, int line,
 #endif /*LV_USE_LOG*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LOG_H*/

@@ -145,7 +145,7 @@ void lv_draw_eve_memwrite32(lv_display_t * disp, uint32_t address, uint32_t data
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_EVE_DISPLAY_H*/

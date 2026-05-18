@@ -43,7 +43,7 @@ void lv_draw_dma2d_transfer_complete_interrupt_handler(void);
 #endif /*LV_USE_DRAW_DMA2D*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_DMA2D_H*/

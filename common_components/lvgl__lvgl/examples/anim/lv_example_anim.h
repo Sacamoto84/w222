@@ -36,7 +36,7 @@ void lv_example_anim_timeline_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_ANIM_H*/

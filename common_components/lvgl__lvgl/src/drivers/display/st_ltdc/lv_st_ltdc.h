@@ -59,7 +59,7 @@ lv_display_t * lv_st_ltdc_create_partial(void * render_buf_1, void * render_buf_
 #endif /*LV_USE_ST_LTDC*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ST_LTDC_H*/

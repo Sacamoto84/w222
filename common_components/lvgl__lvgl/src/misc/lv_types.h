@@ -455,7 +455,7 @@ typedef struct _lv_draw_eve_unit_t lv_draw_eve_unit_t;
 #endif /*LV_ARRAYLEN*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TYPES_H*/

@@ -47,7 +47,7 @@ typedef osEventFlagsId_t lv_thread_sync_t;
 #endif /*LV_USE_OS == LV_OS_CMSIS_RTOS2*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CMSIS_RTOS2_H*/

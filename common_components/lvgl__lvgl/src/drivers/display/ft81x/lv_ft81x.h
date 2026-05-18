@@ -88,7 +88,7 @@ void * lv_ft81x_get_user_data(lv_display_t * disp);
 #endif /*LV_USE_FT81X*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FT81X_H*/

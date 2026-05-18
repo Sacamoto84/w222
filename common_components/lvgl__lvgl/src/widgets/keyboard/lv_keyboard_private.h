@@ -47,7 +47,7 @@ struct _lv_keyboard_t {
 #endif /* LV_USE_KEYBOARD */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_KEYBOARD_PRIVATE_H*/

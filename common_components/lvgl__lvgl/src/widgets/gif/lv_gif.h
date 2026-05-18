@@ -132,7 +132,7 @@ int32_t lv_gif_get_current_frame_index(lv_obj_t * obj);
 #endif /*LV_USE_GIF*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GIF_H*/

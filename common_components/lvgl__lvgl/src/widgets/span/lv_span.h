@@ -371,7 +371,7 @@ lv_observer_t * lv_spangroup_bind_span_text(lv_obj_t * obj, lv_span_t * span, lv
 #endif /*LV_USE_SPAN*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SPAN_H*/

@@ -45,7 +45,7 @@ void lv_demo_vector_graphic_not_buffered(void);
  **********************/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMO_VECTOR_GRAPHIC_H*/

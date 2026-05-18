@@ -42,7 +42,7 @@ lv_obj_t * lv_button_create(lv_obj_t * parent);
 #endif /*LV_USE_BUTTON*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BUTTON_H*/

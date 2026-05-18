@@ -49,7 +49,7 @@ static inline int clock_cpuload(int pid, struct cpuload_s * cpuload)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_CLOCK_H*/

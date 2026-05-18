@@ -77,7 +77,7 @@ void g2d_print_table(void);
 #endif /*LV_USE_G2D*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_G2D_BUF_MAP_H */

@@ -343,7 +343,7 @@ LV_FONT_CUSTOM_DECLARE
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FONT_H*/

@@ -93,7 +93,7 @@ int32_t lv_grid_fr(uint8_t x);
 #endif /*LV_USE_GRID*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GRID_H*/

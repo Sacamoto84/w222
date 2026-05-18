@@ -48,7 +48,7 @@ struct _lv_rb_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_RB_PRIVATE_H*/

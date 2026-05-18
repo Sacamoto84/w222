@@ -37,7 +37,7 @@ extern "C" {
 #endif /* LV_USE_MONKEY != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MONKEY_PRIVATE_H*/

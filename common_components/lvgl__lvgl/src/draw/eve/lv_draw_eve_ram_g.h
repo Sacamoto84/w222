@@ -42,7 +42,7 @@ bool lv_draw_eve_ramg_get_addr(uint32_t * addr_dst, uintptr_t key,
 #endif/*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_DRAW_EVE_RAM_G_H */

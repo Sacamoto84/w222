@@ -324,7 +324,7 @@ static inline void lv_vg_lite_clear(vg_lite_buffer_t * target, const lv_area_t *
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_VG_LITE_UTILS_H*/

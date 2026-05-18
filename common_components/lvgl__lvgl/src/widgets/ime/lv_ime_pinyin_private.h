@@ -62,7 +62,7 @@ struct _lv_ime_pinyin_t {
 #endif /* LV_USE_IME_PINYIN != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IME_PINYIN_PRIVATE_H*/

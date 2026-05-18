@@ -29,18 +29,18 @@ extern "C" {
 
 /** Режимы полосы прокрутки: показывает, когда полосы прокрутки должны быть видны.*/
 typedef enum {
-    LV_SCROLLBAR_MODE_OFF,      /**< Never show scrollbars*/
-    LV_SCROLLBAR_MODE_ON,       /**< Always show scrollbars*/
-    LV_SCROLLBAR_MODE_ACTIVE,   /**< Show scroll bars when Widget is being scrolled*/
-    LV_SCROLLBAR_MODE_AUTO,     /**< Show scroll bars when the content is large enough to be scrolled*/
+    LV_SCROLLBAR_MODE_OFF,      /**< Никогда не показывать полосы прокрутки*/
+    LV_SCROLLBAR_MODE_ON,       /**< Всегда показывать полосы прокрутки*/
+    LV_SCROLLBAR_MODE_ACTIVE,   /**< Показывать полосы, пока виджет прокручивается*/
+    LV_SCROLLBAR_MODE_AUTO,     /**< Показывать полосы, если содержимое можно прокрутить*/
 } lv_scrollbar_mode_t;
 
 /** Параметры выравнивания диапазона прокрутки. Сообщает, где выровнять привязываемые дочерние элементы при остановке прокрутки.*/
 typedef enum {
-    LV_SCROLL_SNAP_NONE,    /**< Do not align, leave where it is*/
-    LV_SCROLL_SNAP_START,   /**< Align to the left/top*/
-    LV_SCROLL_SNAP_END,     /**< Align to the right/bottom*/
-    LV_SCROLL_SNAP_CENTER   /**< Align to the center*/
+    LV_SCROLL_SNAP_NONE,    /**< Не выравнивать, оставить как есть*/
+    LV_SCROLL_SNAP_START,   /**< Выровнять по левому/верхнему краю*/
+    LV_SCROLL_SNAP_END,     /**< Выровнять по правому/нижнему краю*/
+    LV_SCROLL_SNAP_CENTER   /**< Выровнять по центру*/
 } lv_scroll_snap_t;
 
 /**********************
@@ -295,7 +295,7 @@ void lv_obj_readjust_scroll(lv_obj_t * obj, lv_anim_enable_t anim_en);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_SCROLL_H*/

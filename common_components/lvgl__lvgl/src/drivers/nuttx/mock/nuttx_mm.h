@@ -136,7 +136,7 @@ static inline int gettid(void)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_MM_H*/

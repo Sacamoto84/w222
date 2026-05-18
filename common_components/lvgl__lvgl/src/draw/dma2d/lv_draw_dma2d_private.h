@@ -149,7 +149,7 @@ void lv_draw_dma2d_clean_cache(const lv_draw_dma2d_cache_area_t * mem_area);
 #endif /*LV_USE_DRAW_DMA2D*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_DMA2D_PRIVATE_H*/

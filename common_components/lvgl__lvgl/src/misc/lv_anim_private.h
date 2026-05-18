@@ -57,7 +57,7 @@ void lv_anim_enable_vsync_mode(bool enable);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ANIM_PRIVATE_H*/

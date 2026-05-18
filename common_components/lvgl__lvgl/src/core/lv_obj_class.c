@@ -169,7 +169,7 @@ bool lv_obj_is_group_def(lv_obj_t * obj)
 {
     const lv_obj_class_t * class_p = obj->class_p;
 
-    /*Найдите сайты, в которых установлен group_def*/
+    /* Найти базовый класс, в котором явно задан group_def */
     while(class_p && class_p->group_def == LV_OBJ_CLASS_GROUP_DEF_INHERIT) class_p = class_p->base_class;
 
     if(class_p == NULL) return false;

@@ -51,7 +51,7 @@ void lv_opengles_texture_deinit(lv_opengles_texture_t * texture);
 #endif /*LV_USE_OPENGLES*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_OPENGLES_TEXTURE_PRIVATE_H */

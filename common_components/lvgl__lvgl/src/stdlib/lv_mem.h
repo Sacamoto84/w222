@@ -160,7 +160,7 @@ void lv_mem_monitor(lv_mem_monitor_t * mon_p);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MEM_H*/

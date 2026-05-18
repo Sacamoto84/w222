@@ -42,7 +42,7 @@ void lv_libpng_deinit(void);
 #endif /*LV_USE_LIBPNG*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LIBPNG_H*/

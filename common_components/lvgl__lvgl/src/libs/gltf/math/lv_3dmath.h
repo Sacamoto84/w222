@@ -65,7 +65,7 @@ lv_3dplane_t lv_get_ground_plane(float elevation);
 #endif /*LV_USE_GLTF*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 

@@ -119,7 +119,7 @@ bool lv_line_get_y_invert(const lv_obj_t * obj);
 #endif /*LV_USE_LINE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LINE_H*/

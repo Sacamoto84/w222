@@ -46,7 +46,7 @@ struct _lv_3dtexture_t {
 #endif /*LV_USE_3DTEXTURE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_3DTEXTURE_PRIVATE_H*/

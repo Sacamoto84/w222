@@ -53,7 +53,7 @@ struct _lv_spinbox_t {
 #endif /* LV_USE_SPINBOX */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SPINBOX_PRIVATE_H*/

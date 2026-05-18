@@ -79,7 +79,7 @@ void lv_obj_refr(lv_layer_t * layer, lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_REFR_PRIVATE_H*/

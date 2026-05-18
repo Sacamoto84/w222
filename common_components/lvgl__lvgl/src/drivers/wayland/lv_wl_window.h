@@ -98,7 +98,7 @@ void lv_wayland_window_set_minimized(lv_display_t * disp);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WL_WINDOW_H*/

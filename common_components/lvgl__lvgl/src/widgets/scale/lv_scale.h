@@ -392,7 +392,7 @@ lv_observer_t * lv_scale_bind_section_max_value(lv_obj_t * obj, lv_scale_section
 #endif /*LV_USE_SCALE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SCALE_H*/

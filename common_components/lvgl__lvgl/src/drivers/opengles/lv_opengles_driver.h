@@ -102,7 +102,7 @@ void lv_opengles_reinit_state(void);
 #endif /* LV_USE_OPENGLES */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_OPENGLES_DRIVER_H */

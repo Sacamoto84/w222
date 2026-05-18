@@ -337,7 +337,7 @@ struct fb_planeinfo_s {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NUTTX_VIDEO_FB_H*/

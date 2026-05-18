@@ -121,7 +121,7 @@ int32_t lv_windows_dpi_to_physical(int32_t logical, int32_t dpi);
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WINDOWS_DISPLAY_H*/

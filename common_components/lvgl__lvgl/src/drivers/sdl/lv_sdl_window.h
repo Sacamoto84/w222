@@ -69,7 +69,7 @@ struct SDL_Window * lv_sdl_window_get_window(lv_display_t * disp);
 #endif /* LV_DRV_SDL */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_SDL_WINDOW_H */

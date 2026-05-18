@@ -179,7 +179,7 @@ lv_anim_t * lv_animimg_get_anim(lv_obj_t * obj);
 #endif /*LV_USE_ANIMIMG*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ANIMIMAGE_H*/

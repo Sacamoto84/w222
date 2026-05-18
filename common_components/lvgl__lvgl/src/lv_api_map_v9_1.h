@@ -123,7 +123,7 @@ extern "C" {
 #define lv_calendar_header_dropdown_create  lv_calendar_add_header_dropdown
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_API_MAP_V9_1_H */

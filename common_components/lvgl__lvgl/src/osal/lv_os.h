@@ -65,7 +65,7 @@ void lv_sleep_ms(uint32_t ms);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OS_H*/

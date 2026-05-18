@@ -77,7 +77,7 @@ lv_indev_t * lv_windows_acquire_encoder_indev(lv_display_t * display);
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WINDOWS_INPUT_H*/

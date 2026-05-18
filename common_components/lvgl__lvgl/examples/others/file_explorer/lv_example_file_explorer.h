@@ -34,7 +34,7 @@ void lv_example_file_explorer_3(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_FILE_EXPLORER_H*/

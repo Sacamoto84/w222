@@ -51,7 +51,7 @@ lv_indev_t * lv_nuttx_mouse_create(const char * dev_path);
 #endif /* LV_USE_NUTTX*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_NUTTX_MOUSE_H */

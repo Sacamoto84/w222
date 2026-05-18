@@ -40,7 +40,7 @@ bool lv_demo_stress_finished(void);
  **********************/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMO_STRESS_H*/

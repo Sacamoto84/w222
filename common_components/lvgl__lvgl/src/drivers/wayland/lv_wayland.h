@@ -55,7 +55,7 @@ int lv_wayland_get_fd(void);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_WAYLAND_H */

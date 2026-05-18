@@ -141,7 +141,7 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_grad_conical_get_line(lv_grad_dsc_t 
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_GRAD_H*/

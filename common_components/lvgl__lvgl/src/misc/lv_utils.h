@@ -85,7 +85,7 @@ static inline uint16_t lv_swap_bytes_16(uint16_t x)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif

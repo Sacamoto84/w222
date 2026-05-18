@@ -41,7 +41,7 @@ void lv_port_indev_init(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PORT_INDEV_TEMPL_H*/

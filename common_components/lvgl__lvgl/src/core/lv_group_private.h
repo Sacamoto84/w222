@@ -72,7 +72,7 @@ void lv_group_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GROUP_PRIVATE_H*/

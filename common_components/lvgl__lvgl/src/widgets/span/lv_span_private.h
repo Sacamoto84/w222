@@ -60,7 +60,7 @@ struct _lv_spangroup_t {
 #endif /* LV_USE_SPAN != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SPAN_PRIVATE_H*/

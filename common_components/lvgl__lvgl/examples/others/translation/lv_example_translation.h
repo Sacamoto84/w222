@@ -33,7 +33,7 @@ void lv_example_translation_2(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_TRANSLATION_H*/

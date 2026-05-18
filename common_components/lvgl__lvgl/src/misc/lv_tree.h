@@ -103,7 +103,7 @@ bool lv_tree_walk(const lv_tree_node_t * node,
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif

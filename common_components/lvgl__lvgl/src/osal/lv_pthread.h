@@ -52,7 +52,7 @@ typedef struct {
 #endif /*LV_USE_OS == LV_OS_PTHREAD*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PTHREAD_H*/

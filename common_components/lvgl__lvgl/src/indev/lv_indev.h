@@ -494,7 +494,7 @@ void lv_indev_set_external_data(lv_indev_t * indev, void * data, void (* free_cb
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_INDEV_H*/

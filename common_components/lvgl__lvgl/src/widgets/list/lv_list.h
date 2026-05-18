@@ -112,7 +112,7 @@ void lv_list_set_button_translation_tag(lv_obj_t * list, lv_obj_t * btn, const c
 #endif /*LV_USE_LIST*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LIST_H*/

@@ -108,7 +108,7 @@ lv_color_t lv_led_get_color(const lv_obj_t * obj);
 #endif /*LV_USE_LED*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LED_H*/

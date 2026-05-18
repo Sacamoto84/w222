@@ -110,7 +110,7 @@ uint32_t lv_nuttx_get_idle(void);
 #endif /* LV_USE_NUTTX*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_NUTTX_ENTRY_H */

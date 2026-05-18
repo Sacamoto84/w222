@@ -120,7 +120,7 @@ bool lv_gltf_model_is_animation_paused(lv_gltf_model_t * model);
 size_t lv_gltf_model_get_animation(lv_gltf_model_t * model);
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_USE_GLTF*/

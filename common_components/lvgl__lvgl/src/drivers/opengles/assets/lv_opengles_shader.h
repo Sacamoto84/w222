@@ -33,7 +33,7 @@ void lv_opengles_shader_get_source(lv_opengl_shader_portions_t * portions, lv_op
 #endif /*LV_USE_OPENGLES*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OPENGLES_SHADER_H*/

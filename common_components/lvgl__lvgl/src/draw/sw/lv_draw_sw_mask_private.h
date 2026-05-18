@@ -151,7 +151,7 @@ void lv_draw_sw_mask_cleanup(void);
 #endif  /*LV_DRAW_SW_COMPLEX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_MASK_PRIVATE_H*/

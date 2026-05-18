@@ -88,7 +88,7 @@ void lv_sysmon_builtin_deinit(void);
 #endif /* LV_USE_SYSMON */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SYSMON_PRIVATE_H*/

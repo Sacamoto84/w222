@@ -33,7 +33,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MEM_PRIVATE_H*/

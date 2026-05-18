@@ -173,7 +173,7 @@ void lv_anim_timeline_merge(lv_anim_timeline_t * dest, const lv_anim_timeline_t 
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ANIM_TIMELINE_H*/

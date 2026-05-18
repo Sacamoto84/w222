@@ -73,7 +73,7 @@ lv_display_t * lv_opengles_texture_get_from_texture_id(unsigned int texture_id);
 #endif /* LV_USE_OPENGLES */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OPENGLES_TEXTURE_H*/

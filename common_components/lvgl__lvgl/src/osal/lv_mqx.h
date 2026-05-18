@@ -45,7 +45,7 @@ typedef LWSEM_STRUCT lv_thread_sync_t;
 #endif /*LV_USE_OS == LV_OS_MQX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MQX_H*/

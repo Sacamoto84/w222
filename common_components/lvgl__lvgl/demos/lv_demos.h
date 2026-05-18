@@ -88,7 +88,7 @@ void lv_demos_show_help(void);
  **********************/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMOS_H*/

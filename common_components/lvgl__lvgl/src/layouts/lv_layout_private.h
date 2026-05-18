@@ -54,7 +54,7 @@ void lv_layout_apply(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LAYOUT_PRIVATE_H*/

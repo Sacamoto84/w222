@@ -202,7 +202,7 @@ lv_draw_sw_blend_handler_t lv_draw_sw_get_blend_handler(lv_color_format_t dest_c
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_H*/

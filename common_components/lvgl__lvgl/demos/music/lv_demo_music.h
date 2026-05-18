@@ -53,7 +53,7 @@ uint32_t lv_demo_music_get_track_length(uint32_t track_id);
 #endif /*LV_USE_DEMO_MUSIC*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMO_MUSIC_H*/

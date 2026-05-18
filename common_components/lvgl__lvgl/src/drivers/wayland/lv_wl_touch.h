@@ -48,7 +48,7 @@ lv_indev_t * lv_wayland_get_touchscreen(lv_display_t * display);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WL_TOUCH_H*/

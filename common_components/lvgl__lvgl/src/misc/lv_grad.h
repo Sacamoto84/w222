@@ -170,7 +170,7 @@ void lv_grad_conical_init(lv_grad_dsc_t * dsc, int32_t center_x, int32_t center_
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GRAD_H*/

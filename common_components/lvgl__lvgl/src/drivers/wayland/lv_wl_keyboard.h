@@ -46,7 +46,7 @@ lv_indev_t * lv_wayland_get_keyboard(lv_display_t * display);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WL_KEYBOARD_H*/

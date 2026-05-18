@@ -211,7 +211,7 @@ struct wl_surface * lv_wayland_get_window_surface(lv_display_t * display);
 #endif /*LV_USE_WAYLAND*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WL_BACKEND_PRIVATE_H*/

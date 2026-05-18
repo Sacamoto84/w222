@@ -64,7 +64,7 @@ struct _lv_dropdown_list_t {
 #endif /* LV_USE_DROPDOWN != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DROPDOWN_PRIVATE_H*/

@@ -1201,7 +1201,7 @@ static inline uint32_t LV_EVE_BITMAP_TRANSFORM_E(uint8_t prc, uint32_t val)
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_EVE_DISPLAY_DEFINES_H*/

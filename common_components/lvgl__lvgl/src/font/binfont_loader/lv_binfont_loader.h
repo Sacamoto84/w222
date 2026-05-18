@@ -66,7 +66,7 @@ void lv_binfont_destroy(lv_font_t * font);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_BINFONT_LOADER_H */

@@ -43,7 +43,7 @@ static inline uint32_t up_perf_gettime(void)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_ARCH_H*/

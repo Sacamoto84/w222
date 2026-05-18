@@ -37,7 +37,7 @@ void lv_example_grid_6(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_GRID_H*/

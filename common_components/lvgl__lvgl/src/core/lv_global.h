@@ -306,7 +306,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern lv_global_t lv_global;
 lv_global_t * lv_global_default(void);
 #endif
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GLOBAL_H*/

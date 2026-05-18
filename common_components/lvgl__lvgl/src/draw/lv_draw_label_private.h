@@ -68,7 +68,7 @@ struct _lv_draw_glyph_dsc_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_LABEL_PRIVATE_H*/

@@ -50,7 +50,7 @@ typedef union {
 #endif /*__linux__*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LINUX_H*/

@@ -92,7 +92,7 @@ void lv_freertos_task_switch_out(void);
 #endif /*LV_USE_OS == LV_OS_FREERTOS*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FREERTOS_H*/

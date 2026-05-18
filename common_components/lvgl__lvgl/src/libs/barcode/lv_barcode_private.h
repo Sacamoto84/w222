@@ -50,7 +50,7 @@ struct _lv_barcode_t {
 #endif /* LV_USE_BARCODE */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BARCODE_PRIVATE_H*/

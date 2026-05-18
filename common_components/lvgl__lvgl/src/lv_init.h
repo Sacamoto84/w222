@@ -49,7 +49,7 @@ bool lv_is_initialized(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_INIT_H*/

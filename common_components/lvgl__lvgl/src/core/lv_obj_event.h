@@ -207,7 +207,7 @@ lv_state_t lv_event_get_prev_state(lv_event_t * e);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_EVENT_H*/

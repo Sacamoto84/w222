@@ -217,7 +217,7 @@ void lv_timer_set_external_data(lv_timer_t * timer, void * data, void (* free_cb
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif

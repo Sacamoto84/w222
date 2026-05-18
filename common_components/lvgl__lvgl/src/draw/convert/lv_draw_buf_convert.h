@@ -33,7 +33,7 @@ lv_result_t lv_draw_buf_convert_premultiply(lv_draw_buf_t * buf);
 
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_DRAW_BUF_CONVERT_H */

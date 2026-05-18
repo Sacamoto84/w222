@@ -2206,7 +2206,7 @@ Empty_sequence_handler:
         LV_LOG_USER("@[commit]");
         return VG_LITE_SUCCESS;
     }
-} /* внешний "С" */
+} /*extern "C"*/
 
 /**********************
  *   STATIC FUNCTIONS

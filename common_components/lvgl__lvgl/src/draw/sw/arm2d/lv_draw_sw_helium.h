@@ -54,7 +54,7 @@ extern "C" {
 #endif /* определено( __ARM_FEATURE_MVE ) && __ARM_FEATURE_MVE */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_HELIUM_H*/

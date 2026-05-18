@@ -134,7 +134,7 @@ void lv_msgbox_close_async(lv_obj_t * mbox);
 #endif /*LV_USE_MSGBOX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MSGBOX_H*/

@@ -58,7 +58,7 @@ struct _lv_arc_t {
 #endif /* LV_USE_ARC != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ARC_PRIVATE_H*/

@@ -43,7 +43,7 @@ lv_display_t * lv_nuttx_lcd_create(const char * dev_path);
 #endif /* LV_USE_NUTTX*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_NUTTX_LCD_H */

@@ -73,7 +73,7 @@ struct _lv_arclabel_t {
 #endif /* LV_USE_ARCLABEL != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ARCLABEL_PRIVATE_H*/

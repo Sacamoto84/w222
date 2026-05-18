@@ -156,7 +156,7 @@ lv_observer_t * lv_roller_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_ROLLER*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ROLLER_H*/

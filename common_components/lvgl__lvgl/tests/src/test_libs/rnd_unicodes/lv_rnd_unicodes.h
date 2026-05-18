@@ -51,7 +51,7 @@ int lv_random_utf8_chars(uint8_t * buf, int buf_len, const uint32_t * ranges, ui
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_RND_UNICODES_H*/

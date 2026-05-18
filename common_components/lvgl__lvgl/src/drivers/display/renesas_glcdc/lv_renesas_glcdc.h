@@ -51,7 +51,7 @@ lv_display_t * lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t 
 #endif /* LV_USE_RENESAS_GLCDC */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_RENESAS_GLCDC_H */

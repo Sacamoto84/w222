@@ -185,7 +185,7 @@ lv_result_t lv_circle_buf_peek_at(const lv_circle_buf_t * circle_buf, uint32_t i
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CIRCLE_BUF_H*/

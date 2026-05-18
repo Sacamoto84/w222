@@ -2521,7 +2521,7 @@ void lv_style_set_grid_cell_row_span(lv_style_t * style, int32_t value);
 
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_STYLE_GEN_H */

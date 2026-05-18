@@ -221,7 +221,7 @@ bool lv_buttonmatrix_get_one_checked(const lv_obj_t * obj);
 #endif /*LV_USE_BUTTONMATRIX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BUTTONMATRIX_H*/

@@ -50,7 +50,7 @@ void lv_draw_eve_set_display_data(lv_display_t * disp, const lv_draw_eve_paramet
 #endif /*LV_USE_DRAW_EVE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 

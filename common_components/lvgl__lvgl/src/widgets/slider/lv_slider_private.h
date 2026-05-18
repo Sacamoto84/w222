@@ -49,7 +49,7 @@ struct _lv_slider_t {
 #endif /* LV_USE_SLIDER != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SLIDER_PRIVATE_H*/

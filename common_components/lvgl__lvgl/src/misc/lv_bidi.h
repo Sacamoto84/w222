@@ -77,7 +77,7 @@ static inline void lv_bidi_calculate_align(lv_text_align_t * align, lv_base_dir_
 #endif /*LV_USE_BIDI*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BIDI_H*/

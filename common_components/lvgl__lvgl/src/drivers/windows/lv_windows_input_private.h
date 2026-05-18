@@ -59,7 +59,7 @@ bool lv_windows_encoder_device_window_message_handler(
 #endif // LV_USE_WINDOWS
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WINDOWS_INPUT_PRIVATE_H*/

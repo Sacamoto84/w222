@@ -141,7 +141,7 @@ lv_result_t lv_translation_set_tag_translation(lv_translation_pack_t * pack, lv_
 #endif /*LV_USE_TRANSLATION*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_TRANSLATION_H */

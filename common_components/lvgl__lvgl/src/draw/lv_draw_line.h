@@ -117,7 +117,7 @@ void lv_draw_line_iterate(lv_draw_task_t * t, lv_draw_line_dsc_t * dsc,
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_LINE_H*/

@@ -388,7 +388,7 @@ void lv_draw_layer_finish_drop_shadow(lv_layer_t * drop_shadow_layer, const lv_d
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_H*/

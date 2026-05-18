@@ -113,7 +113,7 @@ void lv_fs_frogfs_unregister_blob(const char * path_prefix);
  **********************/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FSDRV_H*/

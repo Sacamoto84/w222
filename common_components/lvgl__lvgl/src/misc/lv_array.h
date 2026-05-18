@@ -234,7 +234,7 @@ static inline void * lv_array_back(const lv_array_t * array)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif

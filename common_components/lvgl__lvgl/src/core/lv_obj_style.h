@@ -27,7 +27,7 @@ extern "C" {
 
 /**
  * Возможные состояния виджета.
- * Возможны значения OR -ed
+ * Значения можно объединять побитовым ИЛИ
  */
 typedef enum {
     LV_STATE_DEFAULT     = 0,
@@ -47,7 +47,7 @@ typedef enum {
     LV_STATE_USER_3      = 1 << 14,
     LV_STATE_USER_4      = 1 << 15,
 
-    LV_STATE_ANY         = 0xFFFF,  /**< Special value can be used in some functions to target all states*/
+    LV_STATE_ANY         = 0xFFFF,  /**< Специальное значение: все состояния*/
 } lv_state_t;
 
 /**
@@ -58,24 +58,24 @@ typedef enum {
  */
 
 typedef enum {
-    LV_PART_MAIN         = 0x000000,  /**< A background like rectangle*/
-    LV_PART_SCROLLBAR    = 0x010000,  /**< The scrollbar(s)*/
-    LV_PART_INDICATOR    = 0x020000,  /**< Indicator, e.g. for slider, bar, switch, or the tick box of the checkbox*/
-    LV_PART_KNOB         = 0x030000,  /**< Like handle to grab to adjust the value*/
-    LV_PART_SELECTED     = 0x040000,  /**< Indicate the currently selected option or section*/
-    LV_PART_ITEMS        = 0x050000,  /**< Used if the widget has multiple similar elements (e.g. table cells)*/
-    LV_PART_CURSOR       = 0x060000,  /**< Mark a specific place e.g. for text area's cursor or on a chart*/
+    LV_PART_MAIN         = 0x000000,  /**< Основная фоновая часть, обычно прямоугольник*/
+    LV_PART_SCROLLBAR    = 0x010000,  /**< Полоса или полосы прокрутки*/
+    LV_PART_INDICATOR    = 0x020000,  /**< Индикатор: у слайдера, шкалы, переключателя или checkbox*/
+    LV_PART_KNOB         = 0x030000,  /**< Ручка, за которую тянут для изменения значения*/
+    LV_PART_SELECTED     = 0x040000,  /**< Текущий выбранный пункт или раздел*/
+    LV_PART_ITEMS        = 0x050000,  /**< Для набора похожих элементов, например ячеек таблицы*/
+    LV_PART_CURSOR       = 0x060000,  /**< Отмечает место, например курсор текстового поля или точку на графике*/
 
-    LV_PART_CUSTOM_FIRST = 0x080000,  /**< Extension point for custom widgets*/
+    LV_PART_CUSTOM_FIRST = 0x080000,  /**< Точка расширения для пользовательских виджетов*/
 
-    LV_PART_ANY          = 0x0F0000,  /**< Special value can be used in some functions to target all parts*/
+    LV_PART_ANY          = 0x0F0000,  /**< Специальное значение: все части*/
 } lv_part_t;
 
 typedef enum {
-    LV_STYLE_STATE_CMP_SAME,           /**< The style properties in the 2 states are identical */
-    LV_STYLE_STATE_CMP_DIFF_REDRAW,    /**< The differences can be shown with a simple redraw */
-    LV_STYLE_STATE_CMP_DIFF_DRAW_PAD,  /**< The differences can be shown with a simple redraw */
-    LV_STYLE_STATE_CMP_DIFF_LAYOUT,    /**< The differences can be shown with a simple redraw */
+    LV_STYLE_STATE_CMP_SAME,           /**< Свойства стиля в двух состояниях одинаковы */
+    LV_STYLE_STATE_CMP_DIFF_REDRAW,    /**< Разницу можно показать обычной перерисовкой */
+    LV_STYLE_STATE_CMP_DIFF_DRAW_PAD,  /**< Разницу можно показать обычной перерисовкой */
+    LV_STYLE_STATE_CMP_DIFF_LAYOUT,    /**< Разницу можно показать обычной перерисовкой */
 } lv_style_state_cmp_t;
 
 /**
@@ -95,7 +95,7 @@ typedef uint32_t lv_style_selector_t;
  * Добавьте стиль к объекту.
  * @param obj       указатель на объект
  * @param style     указатель на стиль, который нужно добавить
- * @param selector  OR -ed значение деталей и состояние, к которому следует добавить стиль
+ * @param selector  объединенные побитовым ИЛИ значение деталей и состояние, к которому следует добавить стиль
  *
  * Примеры:
  * @code
@@ -111,7 +111,7 @@ void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selecto
  * @param obj           указатель на объект
  * @param old_style     указатель на стиль, который необходимо заменить.
  * @param new_style     указатель на стиль, которым нужно заменить старый стиль.
- * @param selector      OR -ed значения состояний и часть для замены только стилей соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
+ * @param selector      объединенные побитовым ИЛИ значения состояний и часть для замены только стилей соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
  *
  * Примеры:
  * @code
@@ -127,7 +127,7 @@ bool lv_obj_replace_style(lv_obj_t * obj, const lv_style_t * old_style, const lv
  * Удаление стиля из объекта.
  * @param obj       указатель на объект
  * @param style     указатель на стиль, который нужно удалить. Может быть NULL, чтобы проверить только селектор
- * @param selector  OR -ed значения состояний и часть для удаления только стилей с соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
+ * @param selector  объединенные побитовым ИЛИ значения состояний и часть для удаления только стилей с соответствующими селекторами.  Можно использоватьLV_STATE_ANYи LV_PART_ANY.
  *
  * Примеры:
  * @code
@@ -143,7 +143,7 @@ void lv_obj_remove_style(lv_obj_t * obj, const lv_style_t * style, lv_style_sele
 
 /**
  * Удалить все стили, добавленные темой, из виджета.
- * @param selector  OR -ed значения состояний и часть для удаления только стилей с соответствующими селекторами.
+ * @param selector  объединенные побитовым ИЛИ значения состояний и часть для удаления только стилей с соответствующими селекторами.
  *                  Можно использовать LV_STATE_ANY и LV_PART_ANY.
  * @param obj   указатель на виджет
  */
@@ -202,8 +202,8 @@ void lv_obj_enable_style_refresh(bool en);
  * Унаследованные свойства будут унаследованы.
  * Если свойство не установлено, будет возвращено значение по умолчанию.
  * @param obj       указатель на объект
- * @param part      часть, из которой должно быть получено имущество
- * @param prop      собственность, которую нужно получить
+ * @param part      часть, из которой должно быть получено свойство
+ * @param prop      свойство, которую нужно получить
  * @return          стоимость имущества.
  *                  Следует читать поля`lv_style_value_t`в соответствии с типом свойств.
  */
@@ -213,7 +213,7 @@ lv_style_value_t lv_obj_get_style_prop(const lv_obj_t * obj, lv_part_t part, lv_
  * Проверьте, имеет ли объект указанное свойство стиля для данного селектора стиля.
  * @param obj       указатель на объект
  * @param selector  селектор стиля, который необходимо проверить, определяющий область действия проверяемого стиля.
- * @param prop      имущество, подлежащее проверке.
+ * @param prop      свойство, подлежащее проверке.
  * @return          true, если объект имеет указанный селектор и свойство, в противном случае — false.
  */
 bool lv_obj_has_style_prop(const lv_obj_t * obj, lv_style_selector_t selector, lv_style_prop_t prop);
@@ -221,9 +221,9 @@ bool lv_obj_has_style_prop(const lv_obj_t * obj, lv_style_selector_t selector, l
 /**
  * Установите локальное свойство стиля для части и состояния объекта.
  * @param obj       указатель на объект
- * @param prop      собственность
+ * @param prop      свойство
  * @param value     стоимость имущества. Правильный элемент должен быть установлен в соответствии с типом свойства.
- * @param selector  OR -ed значение деталей и состояние, для которого должен быть установлен стиль
+ * @param selector  объединенные побитовым ИЛИ значение деталей и состояние, для которого должен быть установлен стиль
  */
 void lv_obj_set_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_value_t value,
                                  lv_style_selector_t selector);
@@ -235,8 +235,8 @@ lv_style_res_t lv_obj_get_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop,
  * Удалите свойство локального стиля из части объекта с заданным состоянием.
  * @param obj       указатель на объект
  * @param prop      свойство стиля, которое нужно удалить.
- * @param selector  OR -ed значение деталей и состояние, для которого стиль следует удалить
- * @return правда, имущество было найдено и удалено; ложь: свойство не найдено
+ * @param selector  объединенные побитовым ИЛИ значение деталей и состояние, для которого стиль следует удалить
+ * @return true, свойство было найдено и удалено; false: свойство не найдено
  */
 bool lv_obj_remove_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_selector_t selector);
 
@@ -437,7 +437,7 @@ lv_observer_t * lv_obj_bind_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_STYLE_H*/

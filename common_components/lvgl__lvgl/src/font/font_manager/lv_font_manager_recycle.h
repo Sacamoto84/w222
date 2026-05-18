@@ -79,7 +79,7 @@ void lv_font_recycle_remove_fonts(lv_font_manager_recycle_t * manager, const cha
 #endif /* LV_USE_FONT_MANAGER */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_FONT_MANAGER_RECYCLE_H */

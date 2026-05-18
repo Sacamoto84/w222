@@ -97,7 +97,7 @@ struct _lv_scale_t {
 #endif /* LV_USE_SCALE != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SCALE_PRIVATE_H*/

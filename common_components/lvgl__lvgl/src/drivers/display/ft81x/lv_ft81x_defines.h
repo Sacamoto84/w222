@@ -840,7 +840,7 @@ extern "C" {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FT81X_DEFINES_H*/

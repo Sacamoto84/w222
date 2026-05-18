@@ -48,7 +48,7 @@ void lv_draw_buf_init_handlers(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_BUF_PRIVATE_H*/

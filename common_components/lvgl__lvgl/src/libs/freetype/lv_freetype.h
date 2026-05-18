@@ -143,7 +143,7 @@ bool lv_freetype_is_outline_font(const lv_font_t * font);
 #endif /*LV_USE_FREETYPE*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_FREETYPE_H */

@@ -169,7 +169,7 @@ void lv_keyboard_def_event_cb(lv_event_t * e);
 #endif  /*LV_USE_KEYBOARD*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_KEYBOARD_H*/

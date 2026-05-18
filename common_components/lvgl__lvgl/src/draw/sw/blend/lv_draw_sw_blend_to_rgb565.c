@@ -248,7 +248,7 @@ static inline void * /* LV_ATTRIBUTE_FAST_MEM */ drawbuf_next_row(const void * b
  * @param dest_area
  * @param dest_stride
  * Цвет @param
- * @param опа
+ * @param opa
  * Маска @param
  * @param mask_stride
  */

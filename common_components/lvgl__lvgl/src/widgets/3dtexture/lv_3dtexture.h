@@ -80,7 +80,7 @@ void lv_3dtexture_set_flip(lv_obj_t * obj, bool h_flip, bool v_flip);
 #endif /*LV_USE_3DTEXTURE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_3DTEXTURE_H*/

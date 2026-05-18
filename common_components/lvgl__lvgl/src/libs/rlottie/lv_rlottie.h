@@ -52,7 +52,7 @@ void lv_rlottie_set_current_frame(lv_obj_t * rlottie, const size_t goto_frame);
 #endif /*LV_USE_RLOTTIE*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_RLOTTIE_H*/

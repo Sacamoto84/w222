@@ -60,7 +60,7 @@ void lv_nuttx_uv_deinit(void ** data);
 #endif /*LV_USE_NUTTX*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NUTTX_LIBUV_H*/

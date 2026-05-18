@@ -71,7 +71,7 @@ struct _lv_fragment_managed_states_t  {
 #endif /* LV_USE_FRAGMENT */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FRAGMENT_PRIVATE_H*/

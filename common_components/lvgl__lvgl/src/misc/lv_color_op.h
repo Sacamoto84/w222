@@ -51,7 +51,7 @@ lv_color_t LV_ATTRIBUTE_FAST_MEM lv_color_mix(lv_color_t c1, lv_color_t c2, uint
 /**
  *
  * @param fg
- * @param бг
+ * @param bg
  * @return
  * @note Используйте bg.alpha в возвращаемом значении
  * @note Используйте fg.alpha в качестве соотношения смешивания.
@@ -99,7 +99,7 @@ lv_color32_t lv_color_over32(lv_color32_t fg, lv_color32_t bg);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_COLOR_OP_H*/

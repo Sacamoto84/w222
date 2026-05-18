@@ -47,7 +47,7 @@ struct _lv_xkb_t {
 #endif /* определено( LV_LIBINPUT_XKB ) && LV_LIBINPUT_XKB */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_XKB_PRIVATE_H*/

@@ -96,7 +96,7 @@ lv_indev_t * lv_opengles_window_texture_get_mouse_indev(lv_opengles_window_textu
 #endif /* LV_USE_OPENGLES */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_OPENGLES_WINDOW_H */

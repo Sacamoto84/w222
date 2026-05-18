@@ -77,7 +77,7 @@ void lv_lru_remove_lru_item(lv_lru_t * cache);
  *      MACROS
  **********************/
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LRU_H*/

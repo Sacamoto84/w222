@@ -85,7 +85,7 @@ lv_switch_orientation_t lv_switch_get_orientation(lv_obj_t * obj);
 #endif /*LV_USE_SWITCH*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SWITCH_H*/

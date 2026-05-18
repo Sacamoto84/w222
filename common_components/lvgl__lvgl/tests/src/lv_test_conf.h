@@ -120,7 +120,7 @@ typedef void * lv_user_data_t;
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_CONF_H*/

@@ -49,7 +49,7 @@ struct _lv_animimg_t {
 #endif /* LV_USE_ANIMIMG != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ANIMIMAGE_PRIVATE_H*/

@@ -65,7 +65,7 @@ void lv_theme_default_deinit(void);
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_THEME_DEFAULT_H*/

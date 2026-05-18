@@ -98,7 +98,7 @@ struct lcd_planeinfo_s {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_LCD_DEV_H*/

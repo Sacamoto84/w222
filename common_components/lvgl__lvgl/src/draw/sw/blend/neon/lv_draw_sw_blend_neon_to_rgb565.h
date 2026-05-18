@@ -184,7 +184,7 @@ lv_result_t lv_draw_sw_blend_neon_argb888_to_rgb565_with_opa_mask(lv_draw_sw_ble
 #endif /* LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_NEON */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_NEON_TO_RGB565_H*/

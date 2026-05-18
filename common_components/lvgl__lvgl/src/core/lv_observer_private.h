@@ -30,24 +30,24 @@ extern "C" {
  * Объект наблюдателя: дескриптор, возвращаемый при подписке виджетов LVGL на субъектов.
  */
 struct _lv_observer_t {
-    lv_subject_t * subject;             /**< Observed subject */
-    lv_observer_cb_t cb;                /**< Callback that notifies when value changes */
-    void * target;                      /**< A target for the observer, e.g. a widget or any pointer */
-    void * user_data;                   /**< Additional parameter supplied when subscribing */
-    uint32_t auto_free_user_data : 1;   /**< Automatically free user data when observer is removed */
-    uint32_t notified : 1;              /**< Was observer already notified? */
-    uint32_t for_obj : 1;               /**< Is `target` a pointer to a Widget (`lv_obj_t *`)? */
+    lv_subject_t * subject;             /**< Наблюдаемый субъект */
+    lv_observer_cb_t cb;                /**< Обратный вызов при изменении значения */
+    void * target;                      /**< Цель наблюдателя: виджет или любой указатель */
+    void * user_data;                   /**< Дополнительный параметр при подписке */
+    uint32_t auto_free_user_data : 1;   /**< Автоматически освобождать user_data при удалении наблюдателя */
+    uint32_t notified : 1;              /**< Наблюдатель уже был уведомлен */
+    uint32_t for_obj : 1;               /**< `target` указывает на виджет (`lv_obj_t *`) */
 };
 
 /**
  * Дескриптор создан `lv_obj_add_subject_increment_event()`
  */
 struct _lv_subject_increment_dsc_t {
-    lv_subject_t * subject; /**< The subject to adjust*/
-    int32_t step;           /**< The step add to the subject */
-    bool rollover;          /**< Where to start over from the other end when one end is exceeded*/
-    int32_t min_value;      /**< Don't set a value smaller than this */
-    int32_t max_value;      /**< Don't set a value larger than this */
+    lv_subject_t * subject; /**< Субъект, который нужно изменять*/
+    int32_t step;           /**< Шаг, добавляемый к субъекту */
+    bool rollover;          /**< Переходить на другой край при выходе за границу*/
+    int32_t min_value;      /**< Не устанавливать значение меньше этого */
+    int32_t max_value;      /**< Не устанавливать значение больше этого */
 };
 
 /**********************
@@ -61,7 +61,7 @@ struct _lv_subject_increment_dsc_t {
 #endif /* LV_USE_OBSERVER */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBSERVER_PRIVATE_H*/

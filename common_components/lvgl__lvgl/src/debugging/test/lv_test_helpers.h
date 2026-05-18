@@ -74,7 +74,7 @@ static inline size_t lv_test_get_free_mem(void)
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_HELPERS_H*/

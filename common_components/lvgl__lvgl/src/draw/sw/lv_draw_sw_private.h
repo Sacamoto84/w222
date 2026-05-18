@@ -69,7 +69,7 @@ typedef struct {
 #endif /* LV_USE_DRAW_SW */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_PRIVATE_H*/

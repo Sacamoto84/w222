@@ -80,7 +80,7 @@ lv_obj_t * lv_tileview_get_tile_active(lv_obj_t * obj);
 #endif /*LV_USE_TILEVIEW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TILEVIEW_H*/

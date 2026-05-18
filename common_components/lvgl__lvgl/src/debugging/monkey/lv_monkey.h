@@ -113,7 +113,7 @@ void lv_monkey_delete(lv_monkey_t * monkey);
 #endif /*LV_USE_MONKEY*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MONKEY_H*/

@@ -146,7 +146,7 @@ lv_dir_t lv_tabview_get_tab_bar_position(lv_obj_t * obj);
 #endif /*LV_USE_TABVIEW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TABVIEW_H*/

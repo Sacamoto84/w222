@@ -39,7 +39,7 @@ lv_display_t * lv_lovyan_gfx_create(uint32_t hor_res, uint32_t ver_res, void * b
 #endif /* LV_USE_LOVYAN_GFX */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_LOVYAN_GFX_H */

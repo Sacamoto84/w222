@@ -51,7 +51,7 @@ struct _lv_line_t {
 #endif /* LV_USE_LINE != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LINE_PRIVATE_H*/

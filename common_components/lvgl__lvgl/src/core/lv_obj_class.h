@@ -26,19 +26,19 @@ extern "C" {
  **********************/
 
 typedef enum {
-    LV_OBJ_CLASS_EDITABLE_INHERIT,      /**< Check the base class. Must have 0 value to let zero initialized class inherit*/
+    LV_OBJ_CLASS_EDITABLE_INHERIT,      /**< Проверять базовый класс; 0 нужен, чтобы нулевая инициализация означала наследование*/
     LV_OBJ_CLASS_EDITABLE_TRUE,
     LV_OBJ_CLASS_EDITABLE_FALSE,
 } lv_obj_class_editable_t;
 
 typedef enum {
-    LV_OBJ_CLASS_GROUP_DEF_INHERIT,      /**< Check the base class. Must have 0 value to let zero initialized class inherit*/
+    LV_OBJ_CLASS_GROUP_DEF_INHERIT,      /**< Проверять базовый класс; 0 нужен, чтобы нулевая инициализация означала наследование*/
     LV_OBJ_CLASS_GROUP_DEF_TRUE,
     LV_OBJ_CLASS_GROUP_DEF_FALSE,
 } lv_obj_class_group_def_t;
 
 typedef enum {
-    LV_OBJ_CLASS_THEME_INHERITABLE_FALSE,    /**< Do not inherit theme from base class. */
+    LV_OBJ_CLASS_THEME_INHERITABLE_FALSE,    /**< Не наследовать тему из базового класса */
     LV_OBJ_CLASS_THEME_INHERITABLE_TRUE,
 } lv_obj_class_theme_inheritable_t;
 
@@ -83,7 +83,7 @@ void lv_obj_set_external_data(lv_obj_t * obj, void * data, void (* free_cb)(void
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_CLASS_H*/

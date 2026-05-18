@@ -60,7 +60,7 @@ struct _lv_bar_t {
 #endif /* LV_USE_BAR != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BAR_PRIVATE_H*/

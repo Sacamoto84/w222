@@ -57,7 +57,7 @@ void lv_imgfont_destroy(lv_font_t * font);
 #endif /*LV_USE_IMGFONT*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_IMGFONT_H */

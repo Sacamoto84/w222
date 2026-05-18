@@ -35,7 +35,7 @@ void lv_example_freetype_3(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_FREETYPE_H*/

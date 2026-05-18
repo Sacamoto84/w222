@@ -258,7 +258,7 @@ lv_result_t lv_gltf_model_node_get_euler_rotation(lv_event_t * e, lv_3dpoint_t *
 #endif /*LV_USE_GLTF*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GLTF_MODEL_NODE_H*/

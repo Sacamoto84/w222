@@ -46,7 +46,7 @@ struct _lv_led_t {
 #endif /* LV_USE_LED */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LED_PRIVATE_H*/

@@ -56,7 +56,7 @@ struct _lv_cover_check_info_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_EVENT_PRIVATE_H*/

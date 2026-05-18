@@ -62,10 +62,10 @@ void lv_obj_style_deinit(void);
 /**
  * Используется внутри для создания перехода стиля.
  * @param obj
- * @param часть
+ * @param part
  * @param prev_state
  * @param new_state
- * @param тр
+ * @param tr
  */
 void lv_obj_style_create_transition(lv_obj_t * obj, lv_part_t part, lv_state_t prev_state,
                                     lv_state_t new_state, const lv_obj_style_transition_dsc_t * tr);
@@ -73,7 +73,7 @@ void lv_obj_style_create_transition(lv_obj_t * obj, lv_part_t part, lv_state_t p
 /**
  * Используется внутри компании для сравнения внешнего вида объекта в двух состояниях.
  * @param obj
- * @param состояние1
+ * @param state2
  * @param state1
  * @return
  */
@@ -91,7 +91,7 @@ void lv_obj_update_layer_type(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_STYLE_PRIVATE_H*/

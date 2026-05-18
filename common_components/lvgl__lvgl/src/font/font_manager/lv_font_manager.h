@@ -109,7 +109,7 @@ void lv_font_manager_delete_font(lv_font_manager_t * manager, lv_font_t * font);
 #endif /* LV_USE_FONT_MANAGER */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_FONT_MANAGER_H */

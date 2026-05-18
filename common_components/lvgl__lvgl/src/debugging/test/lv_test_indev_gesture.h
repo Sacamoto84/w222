@@ -83,7 +83,7 @@ void lv_test_gesture_pinch(lv_point_t point_begin_0, lv_point_t point_begin_1,
 #endif /*LV_USE_TEST && LV_USE_GESTURE_RECOGNITION*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_INDEV_GESTURE_H*/

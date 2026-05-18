@@ -193,7 +193,7 @@ lv_observer_t * lv_bar_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_BAR*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BAR_H*/

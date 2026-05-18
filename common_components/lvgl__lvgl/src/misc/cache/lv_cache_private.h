@@ -193,7 +193,7 @@ struct _lv_cache_slot_size_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CACHE_PRIVATE_H*/

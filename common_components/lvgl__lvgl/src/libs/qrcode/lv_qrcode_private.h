@@ -47,7 +47,7 @@ struct _lv_qrcode_t {
 #endif /* LV_USE_QRCODE */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_QRCODE_PRIVATE_H*/

@@ -40,49 +40,49 @@ extern "C" {
  **********************/
 /**
  * Функции включения/выключения, управляющие поведением объекта.
- * Возможны значения OR -ed
+ * Значения можно объединять побитовым ИЛИ.
  *
- * Note: обновить флаги obj соответствующие свойства ниже
- * всякий раз, когда добавляются/удаляются флаги или изменяются битовые определения флагов.
+ * Note: при добавлении/удалении флагов или изменении их битов
+ * нужно обновить соответствующие свойства ниже.
  */
 typedef enum {
-    LV_OBJ_FLAG_HIDDEN          = (1u << 0),  /**< Make the object hidden. (Like it wasn't there at all)*/
-    LV_OBJ_FLAG_CLICKABLE       = (1u << 1),  /**< Make the object clickable by the input devices*/
-    LV_OBJ_FLAG_CLICK_FOCUSABLE = (1u << 2),  /**< Add focused state to the object when clicked*/
-    LV_OBJ_FLAG_CHECKABLE       = (1u << 3),  /**< Toggle checked state when the object is clicked*/
-    LV_OBJ_FLAG_SCROLLABLE      = (1u << 4),  /**< Make the object scrollable*/
-    LV_OBJ_FLAG_SCROLL_ELASTIC  = (1u << 5),  /**< Allow scrolling inside but with slower speed*/
-    LV_OBJ_FLAG_SCROLL_MOMENTUM = (1u << 6),  /**< Make the object scroll further when "thrown"*/
-    LV_OBJ_FLAG_SCROLL_ONE      = (1u << 7),  /**< Allow scrolling only one snappable children*/
-    LV_OBJ_FLAG_SCROLL_CHAIN_HOR = (1u << 8), /**< Allow propagating the horizontal scroll to a parent*/
-    LV_OBJ_FLAG_SCROLL_CHAIN_VER = (1u << 9), /**< Allow propagating the vertical scroll to a parent*/
+    LV_OBJ_FLAG_HIDDEN          = (1u << 0),  /**< Скрыть объект, как будто его нет*/
+    LV_OBJ_FLAG_CLICKABLE       = (1u << 1),  /**< Сделать объект кликабельным для устройств ввода*/
+    LV_OBJ_FLAG_CLICK_FOCUSABLE = (1u << 2),  /**< Добавлять состояние фокуса при нажатии*/
+    LV_OBJ_FLAG_CHECKABLE       = (1u << 3),  /**< Переключать состояние checked при нажатии*/
+    LV_OBJ_FLAG_SCROLLABLE      = (1u << 4),  /**< Разрешить прокрутку объекта*/
+    LV_OBJ_FLAG_SCROLL_ELASTIC  = (1u << 5),  /**< Разрешить упругую прокрутку внутри объекта*/
+    LV_OBJ_FLAG_SCROLL_MOMENTUM = (1u << 6),  /**< Продолжать прокрутку по инерции*/
+    LV_OBJ_FLAG_SCROLL_ONE      = (1u << 7),  /**< Прокручивать только один привязываемый дочерний объект*/
+    LV_OBJ_FLAG_SCROLL_CHAIN_HOR = (1u << 8), /**< Передавать горизонтальную прокрутку родителю*/
+    LV_OBJ_FLAG_SCROLL_CHAIN_VER = (1u << 9), /**< Передавать вертикальную прокрутку родителю*/
     LV_OBJ_FLAG_SCROLL_CHAIN     = (LV_OBJ_FLAG_SCROLL_CHAIN_HOR | LV_OBJ_FLAG_SCROLL_CHAIN_VER),
-    LV_OBJ_FLAG_SCROLL_ON_FOCUS = (1u << 10),  /**< Automatically scroll object to make it visible when focused*/
-    LV_OBJ_FLAG_SCROLL_WITH_ARROW  = (1u << 11), /**< Allow scrolling the focused object with arrow keys*/
-    LV_OBJ_FLAG_SNAPPABLE       = (1u << 12), /**< If scroll snap is enabled on the parent it can snap to this object*/
-    LV_OBJ_FLAG_PRESS_LOCK      = (1u << 13), /**< Keep the object pressed even if the press slid from the object*/
-    LV_OBJ_FLAG_EVENT_BUBBLE    = (1u << 14), /**< Propagate the events to the parent too*/
-    LV_OBJ_FLAG_GESTURE_BUBBLE  = (1u << 15), /**< Propagate the gestures to the parent*/
-    LV_OBJ_FLAG_ADV_HITTEST     = (1u << 16), /**< Allow performing more accurate hit (click) test. E.g. consider rounded corners.*/
-    LV_OBJ_FLAG_IGNORE_LAYOUT   = (1u << 17), /**< Make the object not positioned by the layouts*/
-    LV_OBJ_FLAG_FLOATING        = (1u << 18), /**< Do not scroll the object when the parent scrolls and ignore layout*/
-    LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS = (1u << 19), /**< Send `LV_EVENT_DRAW_TASK_ADDED` events*/
-    LV_OBJ_FLAG_OVERFLOW_VISIBLE = (1u << 20),/**< Do not clip the children to the parent's ext draw size*/
-    LV_OBJ_FLAG_EVENT_TRICKLE   = (1u << 21), /**< Propagate the events to the children too*/
-    LV_OBJ_FLAG_STATE_TRICKLE   = (1u << 22), /**< Propagate the states to the children too*/
+    LV_OBJ_FLAG_SCROLL_ON_FOCUS = (1u << 10),  /**< Автоматически прокручивать к объекту при получении фокуса*/
+    LV_OBJ_FLAG_SCROLL_WITH_ARROW  = (1u << 11), /**< Разрешить прокрутку сфокусированного объекта стрелками*/
+    LV_OBJ_FLAG_SNAPPABLE       = (1u << 12), /**< Если у родителя включена привязка прокрутки, он может привязаться к этому объекту*/
+    LV_OBJ_FLAG_PRESS_LOCK      = (1u << 13), /**< Сохранять состояние нажатия, даже если указатель сместился с объекта*/
+    LV_OBJ_FLAG_EVENT_BUBBLE    = (1u << 14), /**< Передавать события также родителю*/
+    LV_OBJ_FLAG_GESTURE_BUBBLE  = (1u << 15), /**< Передавать жесты родителю*/
+    LV_OBJ_FLAG_ADV_HITTEST     = (1u << 16), /**< Выполнять более точную проверку попадания, например с учетом скругленных углов*/
+    LV_OBJ_FLAG_IGNORE_LAYOUT   = (1u << 17), /**< Не позиционировать объект через макет*/
+    LV_OBJ_FLAG_FLOATING        = (1u << 18), /**< Не прокручивать объект вместе с родителем и игнорировать макет*/
+    LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS = (1u << 19), /**< Отправлять события `LV_EVENT_DRAW_TASK_ADDED`*/
+    LV_OBJ_FLAG_OVERFLOW_VISIBLE = (1u << 20),/**< Не обрезать дочерние объекты по расширенной области отрисовки родителя*/
+    LV_OBJ_FLAG_EVENT_TRICKLE   = (1u << 21), /**< Передавать события также дочерним объектам*/
+    LV_OBJ_FLAG_STATE_TRICKLE   = (1u << 22), /**< Передавать состояния также дочерним объектам*/
 
-    LV_OBJ_FLAG_LAYOUT_1        = (1u << 23), /**< Custom flag, free to use by layouts*/
-    LV_OBJ_FLAG_LAYOUT_2        = (1u << 24), /**< Custom flag, free to use by layouts*/
+    LV_OBJ_FLAG_LAYOUT_1        = (1u << 23), /**< Пользовательский флаг для макетов*/
+    LV_OBJ_FLAG_LAYOUT_2        = (1u << 24), /**< Пользовательский флаг для макетов*/
 #if LV_USE_FLEX
-    LV_OBJ_FLAG_FLEX_IN_NEW_TRACK = LV_OBJ_FLAG_LAYOUT_1,     /**< Start a new flex track on this item*/
+    LV_OBJ_FLAG_FLEX_IN_NEW_TRACK = LV_OBJ_FLAG_LAYOUT_1,     /**< Начать новую flex-строку с этого элемента*/
 #endif
 
-    LV_OBJ_FLAG_WIDGET_1        = (1u << 25), /**< Custom flag, free to use by widget*/
-    LV_OBJ_FLAG_WIDGET_2        = (1u << 26), /**< Custom flag, free to use by widget*/
-    LV_OBJ_FLAG_USER_1          = (1u << 27), /**< Custom flag, free to use by user*/
-    LV_OBJ_FLAG_USER_2          = (1u << 28), /**< Custom flag, free to use by user*/
-    LV_OBJ_FLAG_USER_3          = (1u << 29), /**< Custom flag, free to use by user*/
-    LV_OBJ_FLAG_USER_4          = (1u << 30), /**< Custom flag, free to use by user*/
+    LV_OBJ_FLAG_WIDGET_1        = (1u << 25), /**< Пользовательский флаг для виджета*/
+    LV_OBJ_FLAG_WIDGET_2        = (1u << 26), /**< Пользовательский флаг для виджета*/
+    LV_OBJ_FLAG_USER_1          = (1u << 27), /**< Пользовательский флаг для прикладного кода*/
+    LV_OBJ_FLAG_USER_2          = (1u << 28), /**< Пользовательский флаг для прикладного кода*/
+    LV_OBJ_FLAG_USER_3          = (1u << 29), /**< Пользовательский флаг для прикладного кода*/
+    LV_OBJ_FLAG_USER_4          = (1u << 30), /**< Пользовательский флаг для прикладного кода*/
 } lv_obj_flag_t;
 
 #if LV_USE_OBJ_PROPERTY
@@ -175,7 +175,7 @@ enum _lv_signed_prop_id_t {
 #endif
 
 /**
- * Сделайте класс базового объекта общедоступным.
+ * Класс базового объекта, доступный извне.
  */
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_obj_class;
 
@@ -197,21 +197,21 @@ lv_obj_t * lv_obj_create(lv_obj_t * parent);
 /**
  * Установите один или несколько флагов
  * @param obj   указатель на объект
- * @param f     OR -ed значения из`lv_obj_flag_t`для установки.
+ * @param f     объединенные побитовым ИЛИ значения из`lv_obj_flag_t`для установки.
  */
 void lv_obj_add_flag(lv_obj_t * obj, lv_obj_flag_t f);
 
 /**
  * Удалить один или несколько флагов
  * @param obj   указатель на объект
- * @param f     OR -ed значения из`lv_obj_flag_t`для очистки.
+ * @param f     объединенные побитовым ИЛИ значения из`lv_obj_flag_t`для очистки.
  */
 void lv_obj_remove_flag(lv_obj_t * obj, lv_obj_flag_t f);
 
 /**
- * Установите добавление или удаление одного или нескольких флагов.
+ * Добавить или удалить один или несколько флагов.
  * @param obj   указатель на объект
- * @param f     OR -ed значения из`lv_obj_flag_t`для обновления.
+ * @param f     объединенные побитовым ИЛИ значения из`lv_obj_flag_t`для обновления.
  * @param v     true: добавить флаги; false: удалить флаги
  */
 void lv_obj_set_flag(lv_obj_t * obj, lv_obj_flag_t f, bool v);
@@ -220,7 +220,7 @@ void lv_obj_set_flag(lv_obj_t * obj, lv_obj_flag_t f, bool v);
  * Добавьте к объекту одно или несколько состояний. Остальные биты состояния останутся неизменными.
  * Если указано в стилях, будет запущена анимация перехода из предыдущего состояния в текущее.
  * @param obj       указатель на объект
- * @param state     штаты, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
+ * @param state     состояния, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
  */
 void lv_obj_add_state(lv_obj_t * obj, lv_state_t state);
 
@@ -228,14 +228,14 @@ void lv_obj_add_state(lv_obj_t * obj, lv_state_t state);
  * Удалите одно или несколько состояний объекта. Остальные биты состояния останутся неизменными.
  * Если указано в стилях, будет запущена анимация перехода из предыдущего состояния в текущее.
  * @param obj       указатель на объект
- * @param state     штаты, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
+ * @param state     состояния, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
  */
 void lv_obj_remove_state(lv_obj_t * obj, lv_state_t state);
 
 /**
  * Добавьте или удалите одно или несколько состояний объекта. Остальные биты состояния останутся неизменными.
  * @param obj       указатель на объект
- * @param state     штаты, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
+ * @param state     состояния, которые нужно добавить. Например, `LV_STATE_PRESSED | LV_STATE_FOCUSED`
  * @param v         true: добавить состояния; false: удалить состояния
  */
 void lv_obj_set_state(lv_obj_t * obj, lv_state_t state, bool v);
@@ -261,7 +261,7 @@ void lv_obj_set_radio_button(lv_obj_t * obj, bool en);
 /**
  * Проверьте, установлен ли данный флаг или все данные флаги на объекте.
  * @param obj   указатель на объект
- * @param f     флаг(а) для проверки (можно использовать значения OR)
+ * @param f     флаг(а) для проверки (можно передавать несколько флагов через побитовое ИЛИ)
  * @return      true: все флаги установлены; false: не все флаги установлены
  */
 bool lv_obj_has_flag(const lv_obj_t * obj, lv_obj_flag_t f);
@@ -269,7 +269,7 @@ bool lv_obj_has_flag(const lv_obj_t * obj, lv_obj_flag_t f);
 /**
  * Проверьте, установлен ли данный флаг или какой-либо из флагов на объекте.
  * @param obj   указатель на объект
- * @param f     флаг(а) для проверки (можно использовать значения OR)
+ * @param f     флаг(а) для проверки (можно передавать несколько флагов через побитовое ИЛИ)
  * @return      true: установлен хотя бы один флаг; false: ни один из флагов не установлен
  */
 bool lv_obj_has_flag_any(const lv_obj_t * obj, lv_obj_flag_t f);
@@ -277,7 +277,7 @@ bool lv_obj_has_flag_any(const lv_obj_t * obj, lv_obj_flag_t f);
 /**
  * Получить состояние объекта
  * @param obj   указатель на объект
- * @return      состояние (значенияORиз `lv_state_t`)
+ * @return      состояние (значения, объединенные побитовым ИЛИ, из `lv_state_t`)
  */
 lv_state_t lv_obj_get_state(const lv_obj_t * obj);
 
@@ -303,7 +303,7 @@ bool lv_obj_is_radio_button(const lv_obj_t * obj);
 lv_group_t * lv_obj_get_group(const lv_obj_t * obj);
 
 /**
- * Получите полеuser_dataобъекта.
+ * Получить поле user_data объекта.
  * @param obj   указатель на объект
  * @return      указатель наuser_dataобъекта
  */
@@ -346,7 +346,7 @@ const lv_obj_class_t * lv_obj_get_class(const lv_obj_t * obj);
 /**
  * Проверьте, жив ли еще какой-либо объект.
  * @param obj       указатель на объект
- * @return          правда: действительный
+ * @return          true: действительный
  */
 bool lv_obj_is_valid(const lv_obj_t * obj);
 
@@ -390,7 +390,7 @@ void lv_obj_add_screen_create_event(lv_obj_t * obj, lv_event_code_t trigger, lv_
  * @param trigger           код события, например.  `LV_EVENT_CLICKED`
  * @param at                указатель на временную шкалу анимации
  * @param delay             время ожидания перед запуском анимации
- * @param reverse           правда: играть наоборот
+ * @param reverse           true: играть наоборот
  */
 void lv_obj_add_play_timeline_event(lv_obj_t * obj, lv_event_code_t trigger, lv_anim_timeline_t * at, uint32_t delay,
                                     bool reverse);
@@ -412,7 +412,7 @@ void * lv_obj_get_id(const lv_obj_t * obj);
 
 /**
  * Идентификаторы DEPRECATED используются только для печати деревьев виджетов.
- * Чтобы найти виджет викор `lv_obj_find_by_name`
+ * Чтобы найти виджет, используйте `lv_obj_find_by_name`.
  *
  * Получите дочерний объект по его идентификатору.
  * Он будет рекурсивно проверять детей и внуков.
@@ -495,7 +495,7 @@ void lv_objid_builtin_destroy(void);
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_H*/

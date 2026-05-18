@@ -48,7 +48,7 @@ lv_indev_t * lv_wayland_get_pointer(lv_display_t * disp);
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WL_POINTER_H*/

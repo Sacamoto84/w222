@@ -171,7 +171,7 @@ static inline ppa_srm_color_mode_t lv_color_format_to_ppa_srm(lv_color_format_t 
 #endif /* LV_USE_PPA */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_DRAW_PPA_PRIVATE_H */

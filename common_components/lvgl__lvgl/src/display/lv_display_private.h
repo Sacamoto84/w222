@@ -185,7 +185,7 @@ struct _lv_display_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DISPLAY_PRIVATE_H*/

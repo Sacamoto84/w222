@@ -41,7 +41,7 @@ void lv_nuttx_profiler_deinit(void);
 #endif /*LV_USE_NUTTX && LV_USE_PROFILER && LV_USE_PROFILER_BUILTIN*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NUTTX_PROFILER_H*/

@@ -155,7 +155,7 @@ lv_obj_t * lv_indev_find_scroll_obj(lv_indev_t * indev);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_INDEV_PRIVATE_H*/

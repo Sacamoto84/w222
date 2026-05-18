@@ -79,7 +79,7 @@ void lv_profiler_builtin_write(const char * func, char tag);
 #endif /*LV_USE_PROFILER_BUILTIN*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PROFILER_BUILTIN_H*/

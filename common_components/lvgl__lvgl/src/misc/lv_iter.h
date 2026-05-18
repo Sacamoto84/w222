@@ -114,7 +114,7 @@ void lv_iter_inspect(lv_iter_t * iter, lv_iter_inspect_cb inspect_cb);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ITER_H*/

@@ -50,7 +50,7 @@ struct _lv_tabview_t {
 #endif /* LV_USE_TABVIEW */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TABVIEW_PRIVATE_H*/

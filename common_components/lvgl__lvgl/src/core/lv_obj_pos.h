@@ -91,7 +91,7 @@ void lv_obj_set_size(lv_obj_t * obj, int32_t w, int32_t h);
 /**
  * Пересчитать размер объекта
  * @param obj       указатель на объект
- * @return          правда: размер был изменен
+ * @return          true: размер был изменен
  */
 bool lv_obj_refr_size(lv_obj_t * obj);
 
@@ -413,7 +413,7 @@ bool lv_obj_is_height_max(lv_obj_t * obj);
 /**
  * Обрабатывается, если размер внутреннего («виртуального») содержимого объекта изменился.
  * @param obj       указатель на объект
- * @return          ложь: ничего не произошло; правда: произошло обновление
+ * @return          false: ничего не произошло; true: произошло обновление
  */
 bool lv_obj_refresh_self_size(lv_obj_t * obj);
 
@@ -434,7 +434,7 @@ const lv_matrix_t * lv_obj_get_transform(const lv_obj_t * obj);
  * Преобразуйте точку, используя свойства стиля угла и масштабирования объекта.
  * @param obj           указатель на объект, свойства стиля которого следует использовать
  * @param p             точку для преобразования, сюда также будет записан результат
- * @param flags         OR -ed значение :cpp:enum: `lv_obj_point_transform_flag_t`
+ * @param flags         объединенные побитовым ИЛИ значение :cpp:enum: `lv_obj_point_transform_flag_t`
  */
 void lv_obj_transform_point(const lv_obj_t * obj, lv_point_t * p, lv_obj_point_transform_flag_t flags);
 
@@ -443,7 +443,7 @@ void lv_obj_transform_point(const lv_obj_t * obj, lv_point_t * p, lv_obj_point_t
  * @param obj           указатель на объект, свойства стиля которого следует использовать
  * @param points        массив точек для преобразования, сюда также будет записан результат
  * @param count         количество точек в массиве
- * @param flags         OR -ed значение :cpp:enum: `lv_obj_point_transform_flag_t`
+ * @param flags         объединенные побитовым ИЛИ значение :cpp:enum: `lv_obj_point_transform_flag_t`
  */
 void lv_obj_transform_point_array(const lv_obj_t * obj, lv_point_t points[], size_t count,
                                   lv_obj_point_transform_flag_t flags);
@@ -452,7 +452,7 @@ void lv_obj_transform_point_array(const lv_obj_t * obj, lv_point_t points[], siz
  * Преобразуйте область, используя свойства стиля угла и масштабирования объекта.
  * @param obj           указатель на объект, свойства стиля которого следует использовать
  * @param area          область для преобразования, сюда также будет записан результат
- * @param flags         OR -ed значение :cpp:enum: `lv_obj_point_transform_flag_t`
+ * @param flags         объединенные побитовым ИЛИ значение :cpp:enum: `lv_obj_point_transform_flag_t`
  */
 void lv_obj_get_transformed_area(const lv_obj_t * obj, lv_area_t * area, lv_obj_point_transform_flag_t flags);
 
@@ -485,7 +485,7 @@ bool lv_obj_area_is_visible(const lv_obj_t * obj, lv_area_t * area);
 /**
  * Сказать, виден ли объект (хотя бы частично) сейчас или нет
  * @param obj       указатель на объект
- * @return      правда: видимый; false не отображается (скрыто, вне родительского элемента, на другом экране и т. д.)
+ * @return      true: видимый; false не отображается (скрыто, вне родительского элемента, на другом экране и т. д.)
  */
 bool lv_obj_is_visible(const lv_obj_t * obj);
 
@@ -561,7 +561,7 @@ int32_t lv_obj_calc_dynamic_height(lv_obj_t * obj, lv_style_prop_t prop);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_POS_H*/

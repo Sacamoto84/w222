@@ -41,7 +41,7 @@ void lv_vg_lite_decoder_deinit(void);
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_VG_LITE_DECODER_H*/

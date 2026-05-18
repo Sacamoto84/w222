@@ -52,7 +52,7 @@ struct _lv_buttonmatrix_t {
 #endif /* LV_USE_BUTTONMATRIX != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BUTTONMATRIX_PRIVATE_H*/

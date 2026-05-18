@@ -76,7 +76,7 @@ typedef struct {
 #endif /* LV_USE_FILE_EXPLORER != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FILE_EXPLORER_PRIVATE_H*/

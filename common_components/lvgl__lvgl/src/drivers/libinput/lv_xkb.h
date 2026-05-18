@@ -58,7 +58,7 @@ uint32_t lv_xkb_process_key(lv_xkb_t * dsc, uint32_t scancode, bool down);
 #endif /* определено( LV_LIBINPUT_XKB ) && LV_LIBINPUT_XKB */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_XKB_H */

@@ -70,7 +70,7 @@ struct _lv_textarea_t {
 #endif /* LV_USE_TEXTAREA != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEXTAREA_PRIVATE_H*/

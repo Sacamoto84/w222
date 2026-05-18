@@ -55,7 +55,7 @@ struct _lv_rlottie_t {
 #endif /*LV_USE_RLOTTIE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_RLOTTIE_PRIVATE_H*/

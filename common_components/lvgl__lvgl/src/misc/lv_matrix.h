@@ -138,7 +138,7 @@ void lv_matrix_transpose(const lv_matrix_t * src, lv_matrix_t * dst);
 #endif /*LV_USE_MATRIX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MATRIX_H*/

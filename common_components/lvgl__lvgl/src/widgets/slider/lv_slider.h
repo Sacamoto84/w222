@@ -201,7 +201,7 @@ lv_observer_t * lv_slider_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_SLIDER*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SLIDER_H*/

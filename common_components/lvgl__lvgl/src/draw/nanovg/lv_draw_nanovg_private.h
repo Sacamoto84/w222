@@ -252,7 +252,7 @@ void lv_nanovg_draw_grad_helper(
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_USE_DRAW_NANOVG*/

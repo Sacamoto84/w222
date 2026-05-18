@@ -91,7 +91,7 @@ struct lv_indev_gesture_configuration {
 #endif /* END LV_USE_RECOGNITION */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_INDEV_GESTURE_PRIVATE_H */

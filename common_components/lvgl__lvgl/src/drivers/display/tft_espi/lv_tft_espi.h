@@ -37,7 +37,7 @@ lv_display_t * lv_tft_espi_create(uint32_t hor_res, uint32_t ver_res, void * buf
 #endif /* LV_USE_TFT_ESPI */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_TFT_ESPI_H */

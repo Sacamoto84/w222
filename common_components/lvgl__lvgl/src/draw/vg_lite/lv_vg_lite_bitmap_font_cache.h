@@ -63,7 +63,7 @@ lv_draw_buf_t * lv_vg_lite_bitmap_font_cache_get(struct _lv_draw_vg_lite_unit_t 
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_VG_LITE_BITMAP_FONT_CACHE_H*/

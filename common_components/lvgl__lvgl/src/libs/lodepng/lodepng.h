@@ -1201,7 +1201,7 @@ TODO:
 #endif /*LV_USE_LODEPNG*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LODEPNG_H предохранитель включения*/

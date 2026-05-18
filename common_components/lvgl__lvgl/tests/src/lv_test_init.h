@@ -16,7 +16,7 @@ void lv_test_init(void);
 void lv_test_deinit(void);
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_INIT_H*/

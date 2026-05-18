@@ -283,7 +283,7 @@ void lv_label_cut_text(lv_obj_t * obj, uint32_t pos, uint32_t cnt);
 #endif /*LV_USE_LABEL*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LABEL_H*/

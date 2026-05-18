@@ -231,7 +231,7 @@ lv_iter_t * lv_cache_iter_create(lv_cache_t * cache);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_CACHE_H */

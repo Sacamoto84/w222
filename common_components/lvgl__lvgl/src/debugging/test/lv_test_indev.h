@@ -161,7 +161,7 @@ void lv_test_encoder_click(void);
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_INDEV_H*/

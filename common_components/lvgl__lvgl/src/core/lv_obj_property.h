@@ -135,13 +135,13 @@ struct _lv_property_name_t {
 typedef struct {
     lv_prop_id_t id;
     union {
-        int32_t num;                /**< Signed integer number (enums or "normal" numbers)*/
-        uint32_t num_u;             /**< Unsigned integer number (opacity, Booleans)  */
-        bool enable;                /**< Booleans */
-        const void * ptr;           /**< Constant pointers  (font, cone text, etc.) */
-        lv_color_t color;           /**< Colors */
-        lv_value_precise_t precise; /**< float or int for precise value */
-        lv_point_t point;           /**< Point, contains two int32_t */
+        int32_t num;                /**< Знаковое целое: enum или обычное число*/
+        uint32_t num_u;             /**< Беззнаковое целое: непрозрачность или bool  */
+        bool enable;                /**< Логические значения */
+        const void * ptr;           /**< Константные указатели: шрифт, текст и т. п. */
+        lv_color_t color;           /**< Цветs */
+        lv_value_precise_t precise; /**< float или int для точного значения */
+        lv_point_t point;           /**< Точка из двух int32_t */
 
         struct {
             /**
@@ -164,8 +164,8 @@ typedef struct {
              *      .селектор = LV_STATE_PRESSED,
              * }
              */
-            lv_style_value_t style; /**< Make sure it's the first element in struct. */
-            uint32_t selector;      /**< Style selector, lv_part_t | lv_state_t */
+            lv_style_value_t style; /**< Должно быть первым полем в структуре */
+            uint32_t selector;      /**< Селектор стиля: lv_part_t | lv_state_t */
         };
 
         /**
@@ -188,8 +188,8 @@ typedef struct {
 typedef struct {
     lv_prop_id_t id;
 
-    void * setter;      /**< Callback used to set property. */
-    void * getter;      /**< Callback used to get property. */
+    void * setter;      /**< Callback для установки свойства */
+    void * getter;      /**< Callback для чтения свойства */
 } lv_property_ops_t;
 
 /**********************
@@ -277,7 +277,7 @@ lv_prop_id_t lv_style_property_get_id(const char * name);
 #endif /*LV_USE_OBJ_PROPERTY*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_PROPERTY_H*/

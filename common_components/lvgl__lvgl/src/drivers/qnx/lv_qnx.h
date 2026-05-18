@@ -80,7 +80,7 @@ int lv_qnx_event_loop(lv_display_t * disp);
 #endif /* LV_DRV_QNX */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_QNX_H */

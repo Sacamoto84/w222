@@ -263,7 +263,7 @@ void lv_event_desc_set_external_data(lv_event_dsc_t * dsc, void * data, void (* 
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_EVENT_H */

@@ -322,7 +322,7 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_API_MAP_V8_H*/

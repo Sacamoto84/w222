@@ -79,7 +79,7 @@ struct NVGLUframebuffer * lv_nanovg_fbo_cache_entry_to_fb(struct _lv_cache_entry
 #endif /*LV_USE_DRAW_NANOVG*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NANOVG_FBO_CACHE_H*/

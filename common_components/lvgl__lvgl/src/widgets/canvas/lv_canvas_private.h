@@ -46,7 +46,7 @@ struct _lv_canvas_t {
 #endif /* LV_USE_CANVAS != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CANVAS_PRIVATE_H*/

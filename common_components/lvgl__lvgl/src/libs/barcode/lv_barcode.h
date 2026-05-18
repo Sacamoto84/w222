@@ -137,7 +137,7 @@ lv_barcode_encoding_t lv_barcode_get_encoding(const lv_obj_t * obj);
 #endif /*LV_USE_BARCODE*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BARCODE_H*/

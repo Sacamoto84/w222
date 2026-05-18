@@ -351,7 +351,7 @@ void lv_textarea_cursor_up(lv_obj_t * obj);
 #endif /*LV_USE_TEXTAREA_H*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEXTAREA_H*/

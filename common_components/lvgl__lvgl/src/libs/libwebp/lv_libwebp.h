@@ -42,7 +42,7 @@ void lv_libwebp_deinit(void);
 #endif /*LV_USE_LIBWEBP*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LIBWEBP_H*/

@@ -161,7 +161,7 @@ void lv_draw_layer(lv_layer_t * layer, const lv_draw_image_dsc_t * dsc, const lv
 lv_image_src_t lv_image_src_get_type(const void * src);
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_IMAGE_H*/

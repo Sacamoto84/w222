@@ -46,7 +46,7 @@ struct _lv_win_t {
 #endif /* LV_USE_WIN */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WIN_PRIVATE_H*/

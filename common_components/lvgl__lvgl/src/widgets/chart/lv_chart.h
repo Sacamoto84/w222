@@ -460,7 +460,7 @@ int32_t lv_chart_get_first_point_center_offset(lv_obj_t * obj);
 #endif /*LV_USE_CHART*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CHART_H*/

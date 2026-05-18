@@ -383,7 +383,7 @@ void lv_image_buf_free(lv_image_dsc_t * dsc);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_BUF_H*/

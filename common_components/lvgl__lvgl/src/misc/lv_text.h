@@ -80,7 +80,7 @@ void lv_text_get_size(lv_point_t * size_res, const char * text, const lv_font_t 
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEXT_H*/

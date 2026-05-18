@@ -79,7 +79,7 @@ void lv_timer_core_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TIMER_PRIVATE_H*/

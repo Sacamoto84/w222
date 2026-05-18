@@ -50,7 +50,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FONT_FMT_TXT_PRIVATE_H*/

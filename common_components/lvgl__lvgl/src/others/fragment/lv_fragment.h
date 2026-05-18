@@ -291,7 +291,7 @@ void lv_fragment_recreate_obj(lv_fragment_t * fragment);
 #endif /*LV_USE_FRAGMENT*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FRAGMENT_H*/

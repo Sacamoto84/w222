@@ -123,7 +123,7 @@ void lv_demo_benchmark_summary_display(const lv_demo_benchmark_summary_t * summa
 #endif /*LV_USE_DEMO_BENCHMARK*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMO_BENCHMARK_H*/

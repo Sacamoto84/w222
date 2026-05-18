@@ -237,7 +237,7 @@ void lv_lcd_generic_mipi_send_cmd_list(lv_display_t * disp, const uint8_t * cmd_
 #endif /*LV_USE_GENERIC_MIPI*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LCD_GENERIC_MIPI_H*/

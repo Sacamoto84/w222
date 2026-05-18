@@ -37,7 +37,7 @@ lv_indev_t * lv_sdl_mousewheel_create(void);
 #endif /*LV_USE_SDL*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_SDL_MOUSEWHEEL_H */

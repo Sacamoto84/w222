@@ -32,7 +32,7 @@ void lv_example_imgfont_1(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_IMGFONT_H*/

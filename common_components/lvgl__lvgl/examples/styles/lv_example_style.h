@@ -54,7 +54,7 @@ void lv_example_style_21(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_STYLE_H*/

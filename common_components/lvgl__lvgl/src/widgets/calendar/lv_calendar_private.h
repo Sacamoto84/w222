@@ -64,7 +64,7 @@ struct _lv_calendar_t {
 #endif /* LV_USE_CALENDAR */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CALENDAR_PRIVATE_H*/

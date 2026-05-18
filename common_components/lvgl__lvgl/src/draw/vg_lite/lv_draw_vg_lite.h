@@ -89,7 +89,7 @@ void lv_draw_vg_lite_vector(lv_draw_task_t * t, const lv_draw_vector_dsc_t * dsc
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_VG_LITE_H*/

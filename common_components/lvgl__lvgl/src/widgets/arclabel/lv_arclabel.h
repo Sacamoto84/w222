@@ -295,7 +295,7 @@ lv_value_precise_t lv_arclabel_get_text_angle(lv_obj_t * obj);
 #endif /*LV_USE_ARCLABEL*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ARCLABEL_H*/

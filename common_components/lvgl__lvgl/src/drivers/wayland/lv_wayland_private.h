@@ -213,7 +213,7 @@ void lv_wayland_update_indevs(lv_indev_read_cb_t read_cb, void * new_driver_data
 #endif /* LV_USE_WAYLAND */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_WAYLAND_PRIVATE_H*/

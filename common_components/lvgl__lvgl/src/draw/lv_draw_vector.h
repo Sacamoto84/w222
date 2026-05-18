@@ -567,7 +567,7 @@ typedef void (*vector_draw_task_cb)(void * ctx, const lv_vector_path_t * path, c
 #endif /* LV_USE_VECTOR_GRAPHIC */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_DRAW_VECTOR_H */

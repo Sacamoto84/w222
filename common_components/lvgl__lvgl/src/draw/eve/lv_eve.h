@@ -145,7 +145,7 @@ void lv_eve_bitmap_layout(uint8_t format, uint16_t linestride, uint16_t height);
 
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_EVE_H */

@@ -54,7 +54,7 @@ int lv_snprintf(char * buffer, size_t count, const char * format, ...);
 int lv_vsnprintf(char * buffer, size_t count, const char * format, va_list va);
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif  /* LV_SPRINTF_H */

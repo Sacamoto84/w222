@@ -61,7 +61,7 @@ void lv_test_fs_clear_close_cb(bool is_clear);
 #endif /*LV_USE_TEST*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_FS_H*/

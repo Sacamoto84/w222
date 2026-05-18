@@ -390,7 +390,7 @@ static inline void * LV_ATTRIBUTE_FAST_MEM drawbuf_next_row(const void * buf, ui
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BLEND_RISCV_V_PRIVATE_H*/

@@ -125,7 +125,7 @@ bool lv_linux_drm_mode_is_preferred(const lv_linux_drm_mode_t * mode);
 #endif /* LV_USE_LINUX_DRM */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_LINUX_DRM_H */

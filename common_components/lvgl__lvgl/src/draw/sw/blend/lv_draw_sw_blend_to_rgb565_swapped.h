@@ -39,7 +39,7 @@ void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_blend_image_to_rgb565_swapped(lv_dra
 #endif /*LV_USE_DRAW_SW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_BLEND_TO_RGB565_SWAPPED_H*/

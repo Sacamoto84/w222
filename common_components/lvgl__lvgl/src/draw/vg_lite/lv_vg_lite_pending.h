@@ -83,7 +83,7 @@ void lv_vg_lite_pending_swap(lv_vg_lite_pending_t * pending);
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_VG_LITE_PENDING_H*/

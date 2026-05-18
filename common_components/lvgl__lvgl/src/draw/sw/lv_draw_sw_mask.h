@@ -175,7 +175,7 @@ void lv_draw_sw_mask_map_init(lv_draw_sw_mask_map_param_t * param, const lv_area
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_MASK_H*/

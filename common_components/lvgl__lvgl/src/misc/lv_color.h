@@ -488,7 +488,7 @@ static inline uint16_t LV_ATTRIBUTE_FAST_MEM lv_color_swap_16(uint16_t c)
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_color_filter_dsc_t lv_color_filter_shade;
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_COLOR_H*/

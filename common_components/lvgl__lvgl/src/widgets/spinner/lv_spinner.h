@@ -98,7 +98,7 @@ uint32_t lv_spinner_get_arc_sweep(lv_obj_t * obj);
 #endif /*LV_USE_SPINNER*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SPINNER_H*/

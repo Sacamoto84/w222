@@ -97,7 +97,7 @@ struct _lv_obj_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_PRIVATE_H*/

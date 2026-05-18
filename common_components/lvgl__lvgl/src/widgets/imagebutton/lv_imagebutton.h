@@ -142,7 +142,7 @@ const void * lv_imagebutton_get_src_right(lv_obj_t * obj, lv_imagebutton_state_t
 #endif /*LV_USE_IMAGEBUTTON*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGEBUTTON_H*/

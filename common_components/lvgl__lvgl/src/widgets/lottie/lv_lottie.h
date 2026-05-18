@@ -96,7 +96,7 @@ lv_anim_t * lv_lottie_get_anim(lv_obj_t * obj);
 #endif /*LV_USE_LOTTIE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LOTTIE_H*/

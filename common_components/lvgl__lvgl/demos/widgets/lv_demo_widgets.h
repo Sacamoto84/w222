@@ -53,7 +53,7 @@ void lv_demo_widgets_with_args(const lv_demo_args_t * args);
 #endif /*LV_USE_DEMO_WIDGETS*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMO_WIDGETS_H*/

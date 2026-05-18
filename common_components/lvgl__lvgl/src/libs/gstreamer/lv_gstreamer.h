@@ -193,7 +193,7 @@ lv_gstreamer_stream_state_t lv_gstreamer_get_stream_state(lv_event_t * e);
 #endif /*LV_USE_GSTREAMER*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GSTREAMER_H*/

@@ -1169,7 +1169,7 @@ static void update_obj_state(lv_obj_t * obj, lv_state_t new_state)
 /**
  * Применить состояние к дочерним элементам объекта
  * @param obj указатель на объект
- * @param state штат для подачи заявления
+ * @param state состояние для подачи заявления
  */
 static void lv_obj_children_add_state(lv_obj_t * obj, lv_state_t state)
 {

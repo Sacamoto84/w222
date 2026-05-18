@@ -38,7 +38,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_EXT_DATA_H */

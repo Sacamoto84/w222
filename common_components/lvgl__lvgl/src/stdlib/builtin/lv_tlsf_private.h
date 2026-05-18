@@ -46,7 +46,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_USE_STDLIB_MALLOC == LV_STDLIB_BUILTIN*/

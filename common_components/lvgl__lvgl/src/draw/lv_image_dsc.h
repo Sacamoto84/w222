@@ -146,7 +146,7 @@ typedef struct {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGE_DSC_H*/

@@ -41,7 +41,7 @@ void lv_port_disp_init(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PORT_LCD_STM32_TEMPL_H*/

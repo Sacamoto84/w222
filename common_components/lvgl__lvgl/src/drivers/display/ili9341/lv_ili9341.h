@@ -88,7 +88,7 @@ void lv_ili9341_send_cmd_list(lv_display_t * disp, const uint8_t * cmd_list);
 #endif /*LV_USE_ILI9341*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ILI9341_H*/

@@ -44,7 +44,7 @@ extern "C" {
 #endif /* #if LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_NEON */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_BLEND_NEON_H*/

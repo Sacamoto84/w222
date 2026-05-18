@@ -42,7 +42,7 @@ void lv_libjpeg_turbo_deinit(void);
 #endif /*LV_USE_LIBJPEG_TURBO*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LIBJPEG_TURBO_H*/

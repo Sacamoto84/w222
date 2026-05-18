@@ -135,7 +135,7 @@ lv_opengl_shader_program_t * lv_opengl_shader_manager_compile_program_best_versi
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_USE_OPENGLES*/

@@ -37,7 +37,7 @@ lv_indev_t * lv_sdl_mouse_create(void);
 #endif /*LV_USE_SDL*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_SDL_MOUSE_H */

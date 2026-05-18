@@ -79,7 +79,7 @@ void lv_pending_swap(lv_pending_t * pending);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PENDING_H*/

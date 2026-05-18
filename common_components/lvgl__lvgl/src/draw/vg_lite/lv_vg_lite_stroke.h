@@ -78,7 +78,7 @@ void lv_vg_lite_stroke_drop(struct _lv_draw_vg_lite_unit_t * unit, lv_cache_entr
 #endif /*LV_USE_DRAW_VG_LITE && LV_USE_VECTOR_GRAPHIC*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_VG_LITE_STROKE_H*/

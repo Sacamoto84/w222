@@ -75,7 +75,7 @@ void lv_image_cache_dump(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGE_CACHE_H*/

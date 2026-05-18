@@ -94,7 +94,7 @@ lv_tick_get_cb_t lv_tick_get_cb(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TICK_H*/

@@ -44,7 +44,7 @@ struct _lv_spinner_t {
 #endif /*LV_SPINNER_PRIVATE_H*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SPINNER_PRIVATE_H*/

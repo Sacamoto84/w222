@@ -39,7 +39,7 @@ void lv_draw_opengles_deinit(void);
 #endif /*LV_USE_DRAW_OPENGLES*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_OPENGLES_H*/

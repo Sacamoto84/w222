@@ -73,7 +73,7 @@ lv_test_screenshot_result_t lv_test_screenshot_compare(const char * fn_ref);
 #endif /*LV_USE_TEST_SCREENSHOT_COMPARE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEST_SCREENSHOT_COMPARE_H*/

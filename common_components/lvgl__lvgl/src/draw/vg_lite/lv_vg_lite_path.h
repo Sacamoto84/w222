@@ -127,7 +127,7 @@ void lv_vg_lite_path_for_each_data(const vg_lite_path_t * path, lv_vg_lite_path_
 #endif /*LV_USE_DRAW_VG_LITE*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_VG_LITE_PATH_H*/

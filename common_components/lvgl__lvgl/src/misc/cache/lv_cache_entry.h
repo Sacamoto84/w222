@@ -107,7 +107,7 @@ void lv_cache_entry_delete(lv_cache_entry_t * entry);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CACHE_ENTRY_H*/

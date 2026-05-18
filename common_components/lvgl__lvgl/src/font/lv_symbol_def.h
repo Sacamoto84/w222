@@ -351,7 +351,7 @@ enum _lv_str_symbol_id_t {
 };
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SYMBOL_DEF_H*/

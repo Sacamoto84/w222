@@ -59,7 +59,7 @@ void lv_profiler_builtin_posix_init(void);
 #endif /* LV_USE_PROFILER && LV_USE_PROFILER_BUILTIN */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PROFILER_BUILTIN_PRIVATE_H*/

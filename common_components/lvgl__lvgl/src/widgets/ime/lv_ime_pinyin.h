@@ -115,7 +115,7 @@ const lv_pinyin_dict_t * lv_ime_pinyin_get_dict(lv_obj_t * obj);
 #endif  /*LV_IME_PINYIN*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IME_PINYIN_H*/

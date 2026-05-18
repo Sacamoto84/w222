@@ -73,7 +73,7 @@ const char * lv_demo_render_get_scene_name(lv_demo_render_scene_t id);
 #endif /*LV_USE_DEMO_RENDER*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DEMO_RENDER_H*/

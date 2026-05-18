@@ -260,7 +260,7 @@ lv_observer_t * lv_dropdown_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif /*LV_USE_DROPDOWN*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DROPDOWN_H*/

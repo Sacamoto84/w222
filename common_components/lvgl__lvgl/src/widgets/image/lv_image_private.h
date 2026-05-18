@@ -59,7 +59,7 @@ struct _lv_image_t {
 #endif /* LV_USE_IMAGE != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGE_PRIVATE_H*/

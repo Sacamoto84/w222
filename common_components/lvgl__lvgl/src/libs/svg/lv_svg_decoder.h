@@ -45,7 +45,7 @@ void lv_svg_decoder_deinit(void);
 #endif /*LV_USE_SVG*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_SVG_DECODER_H*/

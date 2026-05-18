@@ -53,7 +53,7 @@ struct _lv_translation_pack_t {
 #endif /*LV_USE_TRANSLATION*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_TRANSLATION_PRIVATE_H */

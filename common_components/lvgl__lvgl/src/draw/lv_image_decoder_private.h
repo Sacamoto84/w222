@@ -138,7 +138,7 @@ void lv_image_decoder_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGE_DECODER_PRIVATE_H*/

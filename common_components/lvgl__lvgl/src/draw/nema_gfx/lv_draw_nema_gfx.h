@@ -125,7 +125,7 @@ void lv_draw_nema_gfx_vector(lv_draw_task_t * t, const lv_draw_vector_dsc_t * ds
 #endif  /*LV_USE_NEMA_GFX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_NEMA_GFX_H*/

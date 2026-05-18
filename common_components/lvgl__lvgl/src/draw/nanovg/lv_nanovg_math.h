@@ -96,7 +96,7 @@ static inline float nvg_math_inv_sqrtf(float number)
 #endif /*LV_USE_DRAW_NANOVG*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NANOVG_MATH_H*/

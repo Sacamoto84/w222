@@ -163,7 +163,7 @@ bool lv_ll_is_empty(lv_ll_t * ll_p);
 #define LV_LL_READ_BACK(list, i) for(i = lv_ll_get_tail(list); i != NULL; i = lv_ll_get_prev(list, i))
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif

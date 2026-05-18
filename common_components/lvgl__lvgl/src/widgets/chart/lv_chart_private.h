@@ -79,7 +79,7 @@ struct _lv_chart_t {
 #endif /* LV_USE_CHART != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CHART_PRIVATE_H*/

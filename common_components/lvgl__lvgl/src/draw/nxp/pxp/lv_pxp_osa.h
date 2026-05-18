@@ -56,7 +56,7 @@ pxp_cfg_t * pxp_get_default_cfg(void);
 #endif /*LV_USE_PXP*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_PXP_OSA_H*/

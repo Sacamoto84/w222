@@ -319,7 +319,7 @@ extern "C" {
 #endif
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CONF_KCONFIG_H*/

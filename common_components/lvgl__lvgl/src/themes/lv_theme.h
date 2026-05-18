@@ -138,7 +138,7 @@ void lv_theme_set_external_data(lv_theme_t * theme, void * data, void (* free_cb
 #include "simple/lv_theme_simple.h"
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_THEME_H*/

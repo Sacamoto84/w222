@@ -50,7 +50,7 @@ void lv_fs_deinit(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_FS_PRIVATE_H*/

@@ -52,7 +52,7 @@ struct _lv_imagebutton_t {
 #endif /* LV_USE_IMAGEBUTTON != 0 */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_IMAGEBUTTON_PRIVATE_H*/

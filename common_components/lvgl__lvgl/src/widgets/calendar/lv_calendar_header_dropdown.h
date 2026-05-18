@@ -56,7 +56,7 @@ void lv_calendar_header_dropdown_set_year_list(lv_obj_t * parent, const char * y
 #endif /*LV_USE_CALENDAR_HEADER_ARROW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_CALENDAR_HEADER_DROPDOWN_H*/

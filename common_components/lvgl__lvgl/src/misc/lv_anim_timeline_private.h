@@ -61,7 +61,7 @@ struct _lv_anim_timeline_t {
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ANIM_TIMELINE_PRIVATE_H*/

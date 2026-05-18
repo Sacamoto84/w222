@@ -33,7 +33,7 @@ void lv_example_ime_pinyin_2(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_IME_PINYIN_H*/

@@ -69,7 +69,7 @@ typedef struct {
 #endif /*LV_USE_LINUX_DRM && LV_LINUX_DRM_USE_EGL*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 

@@ -35,7 +35,7 @@ struct _lv_obj_class_t {
     void (*destructor_cb)(const lv_obj_class_t * class_p, lv_obj_t * obj);
 
     /** class_p — класс, в котором обрабатывается событие. */
-    void (*event_cb)(const lv_obj_class_t * class_p, lv_event_t * e);  /**< Widget type specific event function*/
+    void (*event_cb)(const lv_obj_class_t * class_p, lv_event_t * e);  /**< Функция событий, специфичная для типа виджета*/
 
 #if LV_USE_OBJ_PROPERTY
     uint32_t prop_index_start;
@@ -54,10 +54,10 @@ struct _lv_obj_class_t {
     const char * name;
     int32_t width_def;
     int32_t height_def;
-    uint32_t editable : 2;             /**< Value from ::lv_obj_class_editable_t*/
-    uint32_t group_def : 2;            /**< Value from ::lv_obj_class_group_def_t*/
+    uint32_t editable : 2;             /**< Значение из ::lv_obj_class_editable_t*/
+    uint32_t group_def : 2;            /**< Значение из ::lv_obj_class_group_def_t*/
     uint32_t instance_size : 16;
-    uint32_t theme_inheritable : 1;    /**< Value from ::lv_obj_class_theme_inheritable_t*/
+    uint32_t theme_inheritable : 1;    /**< Значение из ::lv_obj_class_theme_inheritable_t*/
 };
 
 
@@ -72,7 +72,7 @@ void lv_obj_destruct(lv_obj_t * obj);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_CLASS_PRIVATE_H*/

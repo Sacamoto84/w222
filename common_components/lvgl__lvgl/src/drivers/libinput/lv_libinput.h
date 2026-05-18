@@ -95,7 +95,7 @@ void lv_libinput_delete(lv_indev_t * indev);
 #endif /* LV_USE_LIBINPUT */
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_LIBINPUT_H */

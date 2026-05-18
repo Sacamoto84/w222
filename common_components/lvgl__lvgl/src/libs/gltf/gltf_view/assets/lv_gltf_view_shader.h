@@ -33,7 +33,7 @@ void lv_gltf_view_shader_get_env(lv_opengl_shader_portions_t *shaders);
 #endif /*LV_USE_GLTF*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GLTF_VIEW_SHADER_H*/

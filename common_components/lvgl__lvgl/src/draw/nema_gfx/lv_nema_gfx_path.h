@@ -91,7 +91,7 @@ void lv_nema_gfx_path_end(lv_nema_gfx_path_t * nema_gfx_path);
 #endif  /*LV_USE_NEMA_GFX*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_NEMA_GFX_PATH_H*/

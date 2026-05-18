@@ -673,7 +673,7 @@ static inline lv_result_t lv_draw_sw_image_recolor_rgb888(
 /* *INDENT-ON* */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_DRAW_SW_ARM2D_H */

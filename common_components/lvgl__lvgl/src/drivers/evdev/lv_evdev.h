@@ -100,7 +100,7 @@ void lv_evdev_delete(lv_indev_t * indev);
 #endif /*LV_USE_EVDEV*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EVDEV_H*/

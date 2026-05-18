@@ -177,7 +177,7 @@ void lv_opengles_render_display(lv_display_t * display, const lv_opengles_render
 #endif /*LV_USE_OPENGLES*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OPENGLES_PRIVATE_H*/

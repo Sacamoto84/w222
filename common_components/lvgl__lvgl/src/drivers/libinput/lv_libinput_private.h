@@ -77,7 +77,7 @@ struct _lv_libinput_t {
 #endif /* LV_USE_LIBINPUT */
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LIBINPUT_PRIVATE_H*/

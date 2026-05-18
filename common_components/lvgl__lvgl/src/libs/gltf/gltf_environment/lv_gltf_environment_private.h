@@ -99,7 +99,7 @@ struct _lv_gltf_environment {
 #endif /*LV_USE_GLTF*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_GLTF_ENVIRONMENT_PRIVATE_H*/

@@ -60,7 +60,7 @@ void lv_rb_destroy(lv_rb_t * tree);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_RB_H*/

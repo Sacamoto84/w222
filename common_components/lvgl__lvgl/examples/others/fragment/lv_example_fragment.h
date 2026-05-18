@@ -31,7 +31,7 @@ void lv_example_fragment_2(void);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_EXAMPLE_FRAGMENT_H*/

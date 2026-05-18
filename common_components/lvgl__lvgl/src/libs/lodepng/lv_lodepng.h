@@ -42,7 +42,7 @@ void lv_lodepng_deinit(void);
 #endif /*LV_USE_LODEPNG*/
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /*LV_LODEPNG_H*/

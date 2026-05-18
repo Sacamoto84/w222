@@ -235,7 +235,7 @@ void lv_menu_clear_history(lv_obj_t * obj);
 #endif /*LV_USE_MENU*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_MENU_H*/

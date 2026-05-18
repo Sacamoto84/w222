@@ -324,7 +324,7 @@ extern uint32_t (*const lv_text_get_encoded_length)(const char * txt);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_TEXT_PRIVATE_H*/

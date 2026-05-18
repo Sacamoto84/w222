@@ -248,7 +248,7 @@ int32_t lv_pct(int32_t x);
 int32_t lv_pct_to_px(int32_t v, int32_t base);
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif

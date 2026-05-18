@@ -82,7 +82,7 @@ void * lv_opengles_glfw_window_get_glfw_window(lv_opengles_window_t * window);
 #endif /*LV_USE_GLFW*/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OPENGLES_GLFW_H*/

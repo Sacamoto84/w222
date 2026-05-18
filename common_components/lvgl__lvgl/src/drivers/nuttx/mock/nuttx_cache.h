@@ -45,7 +45,7 @@ static inline void up_flush_dcache(uintptr_t start, uintptr_t end)
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*NUTTX_CACHE_H*/

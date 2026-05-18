@@ -55,7 +55,7 @@ lv_result_t lv_async_call_cancel(lv_async_cb_t async_xcb, void * user_data);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_ASYNC_H*/

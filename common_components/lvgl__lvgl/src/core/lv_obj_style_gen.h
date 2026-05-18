@@ -1187,7 +1187,7 @@ static inline int32_t lv_obj_get_style_text_line_space(const lv_obj_t * obj, lv_
 
 /**
  * Получите украшение для текста. Возможные значения:
- * `LV_TEXT_DECOR_NONE/UNDERLINE/STRIKETHROUGH` .  Также можно использовать значения OR.
+ * `LV_TEXT_DECOR_NONE/UNDERLINE/STRIKETHROUGH` .  Также можно передавать несколько флагов через побитовое ИЛИ.
  * Default: `LV_TEXT_DECOR_NONE` , унаследовано: Да, расположение: Нет, доб. рисовать: Нет.
  * @param  obj    Указатель на виджет
  * @param  part   Одно из значений перечисления `LV_PART_...`
@@ -2929,7 +2929,7 @@ void lv_obj_set_style_text_line_space(lv_obj_t * obj, int32_t value, lv_style_se
 
 /**
  * Установите оформление текста. Возможные значения:
- * `LV_TEXT_DECOR_NONE/UNDERLINE/STRIKETHROUGH` .  Также можно использовать значения OR.
+ * `LV_TEXT_DECOR_NONE/UNDERLINE/STRIKETHROUGH` .  Также можно передавать несколько флагов через побитовое ИЛИ.
  * Default: `LV_TEXT_DECOR_NONE` , унаследовано: Да, расположение: Нет, доб. рисовать: Нет.
  * @param  obj        Указатель на виджет
  * @param  value      Значение для отправки
@@ -3566,7 +3566,7 @@ void lv_obj_set_style_grid_cell_row_span(lv_obj_t * obj, int32_t value, lv_style
 
 
 #ifdef __cplusplus
-} /* внешний "С" */
+} /*extern "C"*/
 #endif
 
 #endif /* LV_OBJ_STYLE_GEN_H */

@@ -44,7 +44,7 @@ lv_result_t lv_obj_scroll_by_raw(lv_obj_t * obj, int32_t x, int32_t y);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /*LV_OBJ_SCROLL_PRIVATE_H*/

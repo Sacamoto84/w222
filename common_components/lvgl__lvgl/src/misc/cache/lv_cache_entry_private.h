@@ -56,7 +56,7 @@ bool   lv_cache_entry_has_flag(lv_cache_entry_t * entry, uint8_t flags);
  **********************/
 
 #ifdef __cplusplus
-} /*внешний "С"*/
+} /*extern "C"*/
 #endif
 
 #endif /* LV_CACHE_ENTRY_PRIVATE_H */

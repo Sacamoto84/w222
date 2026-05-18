@@ -1,4 +1,4 @@
-# Install script for directory: G:/w222/w222/managed_components/espressif__esp_lvgl_port
+# Install script for directory: G:/w222/w222/common_components/espressif__esp_lvgl_port
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

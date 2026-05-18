@@ -68,7 +68,7 @@ void app_main(void)
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);
     ESP_ERROR_CHECK(bsp_display_backlight_on());
-    ESP_ERROR_CHECK(bsp_display_brightness_set(60));
+    ESP_ERROR_CHECK(bsp_display_brightness_set(40));
 
     ESP_LOGI(TAG, "Display initialized: %dx%d", BSP_LCD_H_RES, BSP_LCD_V_RES);
 

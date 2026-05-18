@@ -123,29 +123,20 @@ dependencies:
       type: service
     version: 1.2.0~2
   espressif/esp_lvgl_port:
-    component_hash: cca194347416db5f7fbe53e3bf788266061032c6b094d0186e9c988d6e8ff218
-    dependencies:
-    - name: idf
-      require: private
-      version: '>=5.2'
-    - name: lvgl/lvgl
-      registry_url: https://components.espressif.com
-      require: public
-      version: '>=8,<10'
+    dependencies: []
     source:
-      registry_url: https://components.espressif.com/
-      type: service
+      path: G:\w222\w222\common_components\espressif__esp_lvgl_port
+      type: local
     version: 2.8.0
   idf:
     source:
       type: idf
     version: 5.4.4
   lvgl/lvgl:
-    component_hash: 184e532558c1c45fefed631f3e235423d22582aafb4630f3e8885c35281a49ae
     dependencies: []
     source:
-      registry_url: https://components.espressif.com/
-      type: service
+      path: G:\w222\w222\common_components\lvgl__lvgl
+      type: local
     version: 9.5.0
 direct_dependencies:
 - chmorgan/esp-audio-player
@@ -162,6 +153,6 @@ direct_dependencies:
 - espressif/esp_lvgl_port
 - idf
 - lvgl/lvgl
-manifest_hash: 4b0e4b6888954026447aab7ddf1c6b2e2c4b91bbd8b7d82108dd45fc3b3d971a
+manifest_hash: 9e696dc9ebbc49c89d02eb591b92ef42f4e3a189444658393a84fa7466bbb0a0
 target: esp32p4
 version: 2.0.0

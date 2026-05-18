@@ -36170,580 +36170,6 @@
             {
                 "children": [
                     {
-                        "children": [
-                            {
-                                "children": [],
-                                "depends_on": "CU_RELINKER_ENABLE",
-                                "help": "\"Enable this option to print error information instead of\n    throwing exception when missing function\"",
-                                "id": "CU_RELINKER_ENABLE_PRINT_ERROR_INFO_WHEN_MISSING_FUNCTION",
-                                "name": "CU_RELINKER_ENABLE_PRINT_ERROR_INFO_WHEN_MISSING_FUNCTION",
-                                "range": null,
-                                "title": "Print error information when missing function",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [
-                                    {
-                                        "children": [],
-                                        "depends_on": "CU_RELINKER_ENABLE_CUSTOMIZED_CONFIGURATION_FILES && CU_RELINKER_ENABLE",
-                                        "help": "\"Customized relinker configuration files path. This path is\nevaluated relative to the project root directory.\"",
-                                        "id": "CU_RELINKER_CUSTOMIZED_CONFIGURATION_FILES_PATH",
-                                        "name": "CU_RELINKER_CUSTOMIZED_CONFIGURATION_FILES_PATH",
-                                        "range": null,
-                                        "title": "Customized relinker configuration files path",
-                                        "type": "string"
-                                    }
-                                ],
-                                "depends_on": "CU_RELINKER_ENABLE",
-                                "help": "\"Enable this option to use customized relinker configuration\nfiles instead of default ones\"",
-                                "id": "CU_RELINKER_ENABLE_CUSTOMIZED_CONFIGURATION_FILES",
-                                "name": "CU_RELINKER_ENABLE_CUSTOMIZED_CONFIGURATION_FILES",
-                                "range": null,
-                                "title": "Enable customized relinker configuration files",
-                                "type": "bool"
-                            }
-                        ],
-                        "depends_on": null,
-                        "help": "\"Enable relinker to linker some IRAM functions to Flash\"",
-                        "id": "CU_RELINKER_ENABLE",
-                        "name": "CU_RELINKER_ENABLE",
-                        "range": null,
-                        "title": "Enable relinker",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [
-                            {
-                                "children": [],
-                                "depends_on": "<choice CU_DIAGNOSTICS_COLOR>",
-                                "help": null,
-                                "id": "CU_DIAGNOSTICS_COLOR_NEVER",
-                                "name": "CU_DIAGNOSTICS_COLOR_NEVER",
-                                "range": null,
-                                "title": "never",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": "<choice CU_DIAGNOSTICS_COLOR>",
-                                "help": null,
-                                "id": "CU_DIAGNOSTICS_COLOR_ALWAYS",
-                                "name": "CU_DIAGNOSTICS_COLOR_ALWAYS",
-                                "range": null,
-                                "title": "always",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": "<choice CU_DIAGNOSTICS_COLOR>",
-                                "help": null,
-                                "id": "CU_DIAGNOSTICS_COLOR_AUTO",
-                                "name": "CU_DIAGNOSTICS_COLOR_AUTO",
-                                "range": null,
-                                "title": "auto",
-                                "type": "bool"
-                            }
-                        ],
-                        "depends_on": null,
-                        "help": "Use color in diagnostics. \"never\", \"always\", or \"auto\". If \"always\", GCC will output\nwith color defined in GCC_COLORS environment variable. If \"never\", only output plain\ntext. If \"auto\", only output with color when the standard error is a terminal and when\nnot executing in an emacs shell.",
-                        "id": "component-config-cmake-utilities-color-in-diagnostics",
-                        "name": "CU_DIAGNOSTICS_COLOR",
-                        "title": "Color in diagnostics",
-                        "type": "choice"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "\"Enable this option, users can enable GCC link time optimization(LTO)\n feature for target components or dependencies.",
-                        "id": "CU_GCC_LTO_ENABLE",
-                        "name": "CU_GCC_LTO_ENABLE",
-                        "range": null,
-                        "title": "Enable GCC link time optimization(LTO)",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "\"Enable this option, user can make string in designated components align\n by 1-byte instead 1-word(4-byte), this can reduce unnecessary filled data\n so that to reduce firmware size.\"",
-                        "id": "CU_GCC_STRING_1BYTE_ALIGN",
-                        "name": "CU_GCC_STRING_1BYTE_ALIGN",
-                        "range": null,
-                        "title": "GCC string 1-byte align",
-                        "type": "bool"
-                    }
-                ],
-                "depends_on": null,
-                "id": "component-config-cmake-utilities",
-                "title": "CMake Utilities",
-                "type": "menu"
-            },
-            {
-                "children": [
-                    {
-                        "children": [
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register AAC decoder",
-                                "id": "AUDIO_DECODER_AAC_SUPPORT",
-                                "name": "AUDIO_DECODER_AAC_SUPPORT",
-                                "range": null,
-                                "title": "Support AAC Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register MP3 decoder",
-                                "id": "AUDIO_DECODER_MP3_SUPPORT",
-                                "name": "AUDIO_DECODER_MP3_SUPPORT",
-                                "range": null,
-                                "title": "Support MP3 Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register G711 A-Law and U-Law decoder",
-                                "id": "AUDIO_DECODER_G711_SUPPORT",
-                                "name": "AUDIO_DECODER_G711_SUPPORT",
-                                "range": null,
-                                "title": "Support G711 Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register AMR-NB decoder",
-                                "id": "AUDIO_DECODER_AMRNB_SUPPORT",
-                                "name": "AUDIO_DECODER_AMRNB_SUPPORT",
-                                "range": null,
-                                "title": "Support AMR-NB Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register AMR-WB decoder",
-                                "id": "AUDIO_DECODER_AMRWB_SUPPORT",
-                                "name": "AUDIO_DECODER_AMRWB_SUPPORT",
-                                "range": null,
-                                "title": "Support AMR-WB Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register FLAC decoder",
-                                "id": "AUDIO_DECODER_FLAC_SUPPORT",
-                                "name": "AUDIO_DECODER_FLAC_SUPPORT",
-                                "range": null,
-                                "title": "Support FLAC Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register OPUS decoder",
-                                "id": "AUDIO_DECODER_OPUS_SUPPORT",
-                                "name": "AUDIO_DECODER_OPUS_SUPPORT",
-                                "range": null,
-                                "title": "Support OPUS Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register VORBIS decoder",
-                                "id": "AUDIO_DECODER_VORBIS_SUPPORT",
-                                "name": "AUDIO_DECODER_VORBIS_SUPPORT",
-                                "range": null,
-                                "title": "Support VORBIS Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register IMA-ADPCM decoder",
-                                "id": "AUDIO_DECODER_ADPCM_SUPPORT",
-                                "name": "AUDIO_DECODER_ADPCM_SUPPORT",
-                                "range": null,
-                                "title": "Support ADPCM Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register ALAC decoder",
-                                "id": "AUDIO_DECODER_ALAC_SUPPORT",
-                                "name": "AUDIO_DECODER_ALAC_SUPPORT",
-                                "range": null,
-                                "title": "Support ALAC Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register PCM decoder",
-                                "id": "AUDIO_DECODER_PCM_SUPPORT",
-                                "name": "AUDIO_DECODER_PCM_SUPPORT",
-                                "range": null,
-                                "title": "Support PCM Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register SBC decoder",
-                                "id": "AUDIO_DECODER_SBC_SUPPORT",
-                                "name": "AUDIO_DECODER_SBC_SUPPORT",
-                                "range": null,
-                                "title": "Support SBC Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register LC3 decoder",
-                                "id": "AUDIO_DECODER_LC3_SUPPORT",
-                                "name": "AUDIO_DECODER_LC3_SUPPORT",
-                                "range": null,
-                                "title": "Support LC3 Decoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register G722 decoder",
-                                "id": "AUDIO_DECODER_G722_SUPPORT",
-                                "name": "AUDIO_DECODER_G722_SUPPORT",
-                                "range": null,
-                                "title": "Support G722 Decoder",
-                                "type": "bool"
-                            }
-                        ],
-                        "depends_on": null,
-                        "id": "component-config-audio-codec-configuration-audio-decoder-configuration",
-                        "title": "Audio Decoder Configuration",
-                        "type": "menu"
-                    },
-                    {
-                        "children": [
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Support decode audio frame from WAV container",
-                                "id": "AUDIO_SIMPLE_DEC_WAV_SUPPORT",
-                                "name": "AUDIO_SIMPLE_DEC_WAV_SUPPORT",
-                                "range": null,
-                                "title": "Support WAV Container",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Support decode audio frame from MP4 container",
-                                "id": "AUDIO_SIMPLE_DEC_M4A_SUPPORT",
-                                "name": "AUDIO_SIMPLE_DEC_M4A_SUPPORT",
-                                "range": null,
-                                "title": "Support MP4 Container",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Support decode audio frame from TS container",
-                                "id": "AUDIO_SIMPLE_DEC_TS_SUPPORT",
-                                "name": "AUDIO_SIMPLE_DEC_TS_SUPPORT",
-                                "range": null,
-                                "title": "Support TS Container",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Support decode audio frame from OGG container",
-                                "id": "AUDIO_SIMPLE_DEC_OGG_SUPPORT",
-                                "name": "AUDIO_SIMPLE_DEC_OGG_SUPPORT",
-                                "range": null,
-                                "title": "Support OGG Container",
-                                "type": "bool"
-                            }
-                        ],
-                        "depends_on": null,
-                        "id": "component-config-audio-codec-configuration-audio-simple-decoder-configuration",
-                        "title": "Audio Simple Decoder Configuration",
-                        "type": "menu"
-                    },
-                    {
-                        "children": [
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register AAC Encoder",
-                                "id": "AUDIO_ENCODER_AAC_SUPPORT",
-                                "name": "AUDIO_ENCODER_AAC_SUPPORT",
-                                "range": null,
-                                "title": "Support AAC Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register G711 A-Law and U-Law encoder",
-                                "id": "AUDIO_ENCODER_G711_SUPPORT",
-                                "name": "AUDIO_ENCODER_G711_SUPPORT",
-                                "range": null,
-                                "title": "Support G711 Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register AMR-NB encoder",
-                                "id": "AUDIO_ENCODER_AMRNB_SUPPORT",
-                                "name": "AUDIO_ENCODER_AMRNB_SUPPORT",
-                                "range": null,
-                                "title": "Support AMR-NB Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register AMR-WB encoder",
-                                "id": "AUDIO_ENCODER_AMRWB_SUPPORT",
-                                "name": "AUDIO_ENCODER_AMRWB_SUPPORT",
-                                "range": null,
-                                "title": "Support AMR-WB Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register OPUS encoder",
-                                "id": "AUDIO_ENCODER_OPUS_SUPPORT",
-                                "name": "AUDIO_ENCODER_OPUS_SUPPORT",
-                                "range": null,
-                                "title": "Support OPUS Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register IMA-ADPCM encoder",
-                                "id": "AUDIO_ENCODER_ADPCM_SUPPORT",
-                                "name": "AUDIO_ENCODER_ADPCM_SUPPORT",
-                                "range": null,
-                                "title": "Support ADPCM Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register ALAC encoder",
-                                "id": "AUDIO_ENCODER_ALAC_SUPPORT",
-                                "name": "AUDIO_ENCODER_ALAC_SUPPORT",
-                                "range": null,
-                                "title": "Support ALAC Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register PCM encoder",
-                                "id": "AUDIO_ENCODER_PCM_SUPPORT",
-                                "name": "AUDIO_ENCODER_PCM_SUPPORT",
-                                "range": null,
-                                "title": "Support PCM Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register SBC encoder",
-                                "id": "AUDIO_ENCODER_SBC_SUPPORT",
-                                "name": "AUDIO_ENCODER_SBC_SUPPORT",
-                                "range": null,
-                                "title": "Support SBC Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register LC3 encoder",
-                                "id": "AUDIO_ENCODER_LC3_SUPPORT",
-                                "name": "AUDIO_ENCODER_LC3_SUPPORT",
-                                "range": null,
-                                "title": "Support LC3 Encoder",
-                                "type": "bool"
-                            },
-                            {
-                                "children": [],
-                                "depends_on": null,
-                                "help": "Enable this option to register G722 encoder",
-                                "id": "AUDIO_ENCODER_G722_SUPPORT",
-                                "name": "AUDIO_ENCODER_G722_SUPPORT",
-                                "range": null,
-                                "title": "Support G722 Encoder",
-                                "type": "bool"
-                            }
-                        ],
-                        "depends_on": null,
-                        "id": "component-config-audio-codec-configuration-audio-encoder-configuration",
-                        "title": "Audio Encoder Configuration",
-                        "type": "menu"
-                    }
-                ],
-                "depends_on": null,
-                "id": "component-config-audio-codec-configuration",
-                "title": "Audio Codec Configuration",
-                "type": "menu"
-            },
-            {
-                "children": [
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES8311.",
-                        "id": "CODEC_ES8311_SUPPORT",
-                        "name": "CODEC_ES8311_SUPPORT",
-                        "range": null,
-                        "title": "Support ES8311 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES7210.",
-                        "id": "CODEC_ES7210_SUPPORT",
-                        "name": "CODEC_ES7210_SUPPORT",
-                        "range": null,
-                        "title": "Support ES7210 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES7243.",
-                        "id": "CODEC_ES7243_SUPPORT",
-                        "name": "CODEC_ES7243_SUPPORT",
-                        "range": null,
-                        "title": "Support ES7243 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES7243E.",
-                        "id": "CODEC_ES7243E_SUPPORT",
-                        "name": "CODEC_ES7243E_SUPPORT",
-                        "range": null,
-                        "title": "Support ES7243E Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES8156.",
-                        "id": "CODEC_ES8156_SUPPORT",
-                        "name": "CODEC_ES8156_SUPPORT",
-                        "range": null,
-                        "title": "Support ES8156 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec AW88298.",
-                        "id": "CODEC_AW88298_SUPPORT",
-                        "name": "CODEC_AW88298_SUPPORT",
-                        "range": null,
-                        "title": "Support AW88298 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES8374.",
-                        "id": "CODEC_ES8374_SUPPORT",
-                        "name": "CODEC_ES8374_SUPPORT",
-                        "range": null,
-                        "title": "Support ES8374 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ES8388.",
-                        "id": "CODEC_ES8388_SUPPORT",
-                        "name": "CODEC_ES8388_SUPPORT",
-                        "range": null,
-                        "title": "Support ES8388 Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec TAS5805M.",
-                        "id": "CODEC_TAS5805M_SUPPORT",
-                        "name": "CODEC_TAS5805M_SUPPORT",
-                        "range": null,
-                        "title": "Support TAS5805M Codec Chip",
-                        "type": "bool"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": "Enable this option to support codec ZL38063.\nZL38063 firmware only support xtensa, don't enable for RISC-V IC.",
-                        "id": "CODEC_ZL38063_SUPPORT",
-                        "name": "CODEC_ZL38063_SUPPORT",
-                        "range": null,
-                        "title": "Support ZL38063 Codec Chip",
-                        "type": "bool"
-                    }
-                ],
-                "depends_on": null,
-                "id": "component-config-audio-codec-device-configuration",
-                "title": "Audio Codec Device Configuration",
-                "type": "menu"
-            },
-            {
-                "children": [
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": null,
-                        "id": "ESP_LCD_TOUCH_MAX_POINTS",
-                        "name": "ESP_LCD_TOUCH_MAX_POINTS",
-                        "range": [
-                            1,
-                            10
-                        ],
-                        "title": "Maximum count of the touch points",
-                        "type": "int"
-                    },
-                    {
-                        "children": [],
-                        "depends_on": null,
-                        "help": null,
-                        "id": "ESP_LCD_TOUCH_MAX_BUTTONS",
-                        "name": "ESP_LCD_TOUCH_MAX_BUTTONS",
-                        "range": [
-                            0,
-                            10
-                        ],
-                        "title": "Maximum count of the touch buttons supported",
-                        "type": "int"
-                    }
-                ],
-                "depends_on": null,
-                "id": "component-config-esp-lcd-touch",
-                "title": "ESP LCD TOUCH",
-                "type": "menu"
-            },
-            {
-                "children": [
-                    {
                         "children": [],
                         "depends_on": "SOC_PPA_SUPPORTED",
                         "help": "Enables using PPA for screen rotation.",
@@ -42472,6 +41898,580 @@
                 "depends_on": null,
                 "id": "component-config-lvgl-configuration",
                 "title": "LVGL configuration",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": "CU_RELINKER_ENABLE",
+                                "help": "\"Enable this option to print error information instead of\n    throwing exception when missing function\"",
+                                "id": "CU_RELINKER_ENABLE_PRINT_ERROR_INFO_WHEN_MISSING_FUNCTION",
+                                "name": "CU_RELINKER_ENABLE_PRINT_ERROR_INFO_WHEN_MISSING_FUNCTION",
+                                "range": null,
+                                "title": "Print error information when missing function",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "CU_RELINKER_ENABLE_CUSTOMIZED_CONFIGURATION_FILES && CU_RELINKER_ENABLE",
+                                        "help": "\"Customized relinker configuration files path. This path is\nevaluated relative to the project root directory.\"",
+                                        "id": "CU_RELINKER_CUSTOMIZED_CONFIGURATION_FILES_PATH",
+                                        "name": "CU_RELINKER_CUSTOMIZED_CONFIGURATION_FILES_PATH",
+                                        "range": null,
+                                        "title": "Customized relinker configuration files path",
+                                        "type": "string"
+                                    }
+                                ],
+                                "depends_on": "CU_RELINKER_ENABLE",
+                                "help": "\"Enable this option to use customized relinker configuration\nfiles instead of default ones\"",
+                                "id": "CU_RELINKER_ENABLE_CUSTOMIZED_CONFIGURATION_FILES",
+                                "name": "CU_RELINKER_ENABLE_CUSTOMIZED_CONFIGURATION_FILES",
+                                "range": null,
+                                "title": "Enable customized relinker configuration files",
+                                "type": "bool"
+                            }
+                        ],
+                        "depends_on": null,
+                        "help": "\"Enable relinker to linker some IRAM functions to Flash\"",
+                        "id": "CU_RELINKER_ENABLE",
+                        "name": "CU_RELINKER_ENABLE",
+                        "range": null,
+                        "title": "Enable relinker",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": "<choice CU_DIAGNOSTICS_COLOR>",
+                                "help": null,
+                                "id": "CU_DIAGNOSTICS_COLOR_NEVER",
+                                "name": "CU_DIAGNOSTICS_COLOR_NEVER",
+                                "range": null,
+                                "title": "never",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "<choice CU_DIAGNOSTICS_COLOR>",
+                                "help": null,
+                                "id": "CU_DIAGNOSTICS_COLOR_ALWAYS",
+                                "name": "CU_DIAGNOSTICS_COLOR_ALWAYS",
+                                "range": null,
+                                "title": "always",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "<choice CU_DIAGNOSTICS_COLOR>",
+                                "help": null,
+                                "id": "CU_DIAGNOSTICS_COLOR_AUTO",
+                                "name": "CU_DIAGNOSTICS_COLOR_AUTO",
+                                "range": null,
+                                "title": "auto",
+                                "type": "bool"
+                            }
+                        ],
+                        "depends_on": null,
+                        "help": "Use color in diagnostics. \"never\", \"always\", or \"auto\". If \"always\", GCC will output\nwith color defined in GCC_COLORS environment variable. If \"never\", only output plain\ntext. If \"auto\", only output with color when the standard error is a terminal and when\nnot executing in an emacs shell.",
+                        "id": "component-config-cmake-utilities-color-in-diagnostics",
+                        "name": "CU_DIAGNOSTICS_COLOR",
+                        "title": "Color in diagnostics",
+                        "type": "choice"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "\"Enable this option, users can enable GCC link time optimization(LTO)\n feature for target components or dependencies.",
+                        "id": "CU_GCC_LTO_ENABLE",
+                        "name": "CU_GCC_LTO_ENABLE",
+                        "range": null,
+                        "title": "Enable GCC link time optimization(LTO)",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "\"Enable this option, user can make string in designated components align\n by 1-byte instead 1-word(4-byte), this can reduce unnecessary filled data\n so that to reduce firmware size.\"",
+                        "id": "CU_GCC_STRING_1BYTE_ALIGN",
+                        "name": "CU_GCC_STRING_1BYTE_ALIGN",
+                        "range": null,
+                        "title": "GCC string 1-byte align",
+                        "type": "bool"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-cmake-utilities",
+                "title": "CMake Utilities",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register AAC decoder",
+                                "id": "AUDIO_DECODER_AAC_SUPPORT",
+                                "name": "AUDIO_DECODER_AAC_SUPPORT",
+                                "range": null,
+                                "title": "Support AAC Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register MP3 decoder",
+                                "id": "AUDIO_DECODER_MP3_SUPPORT",
+                                "name": "AUDIO_DECODER_MP3_SUPPORT",
+                                "range": null,
+                                "title": "Support MP3 Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register G711 A-Law and U-Law decoder",
+                                "id": "AUDIO_DECODER_G711_SUPPORT",
+                                "name": "AUDIO_DECODER_G711_SUPPORT",
+                                "range": null,
+                                "title": "Support G711 Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register AMR-NB decoder",
+                                "id": "AUDIO_DECODER_AMRNB_SUPPORT",
+                                "name": "AUDIO_DECODER_AMRNB_SUPPORT",
+                                "range": null,
+                                "title": "Support AMR-NB Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register AMR-WB decoder",
+                                "id": "AUDIO_DECODER_AMRWB_SUPPORT",
+                                "name": "AUDIO_DECODER_AMRWB_SUPPORT",
+                                "range": null,
+                                "title": "Support AMR-WB Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register FLAC decoder",
+                                "id": "AUDIO_DECODER_FLAC_SUPPORT",
+                                "name": "AUDIO_DECODER_FLAC_SUPPORT",
+                                "range": null,
+                                "title": "Support FLAC Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register OPUS decoder",
+                                "id": "AUDIO_DECODER_OPUS_SUPPORT",
+                                "name": "AUDIO_DECODER_OPUS_SUPPORT",
+                                "range": null,
+                                "title": "Support OPUS Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register VORBIS decoder",
+                                "id": "AUDIO_DECODER_VORBIS_SUPPORT",
+                                "name": "AUDIO_DECODER_VORBIS_SUPPORT",
+                                "range": null,
+                                "title": "Support VORBIS Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register IMA-ADPCM decoder",
+                                "id": "AUDIO_DECODER_ADPCM_SUPPORT",
+                                "name": "AUDIO_DECODER_ADPCM_SUPPORT",
+                                "range": null,
+                                "title": "Support ADPCM Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register ALAC decoder",
+                                "id": "AUDIO_DECODER_ALAC_SUPPORT",
+                                "name": "AUDIO_DECODER_ALAC_SUPPORT",
+                                "range": null,
+                                "title": "Support ALAC Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register PCM decoder",
+                                "id": "AUDIO_DECODER_PCM_SUPPORT",
+                                "name": "AUDIO_DECODER_PCM_SUPPORT",
+                                "range": null,
+                                "title": "Support PCM Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register SBC decoder",
+                                "id": "AUDIO_DECODER_SBC_SUPPORT",
+                                "name": "AUDIO_DECODER_SBC_SUPPORT",
+                                "range": null,
+                                "title": "Support SBC Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register LC3 decoder",
+                                "id": "AUDIO_DECODER_LC3_SUPPORT",
+                                "name": "AUDIO_DECODER_LC3_SUPPORT",
+                                "range": null,
+                                "title": "Support LC3 Decoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register G722 decoder",
+                                "id": "AUDIO_DECODER_G722_SUPPORT",
+                                "name": "AUDIO_DECODER_G722_SUPPORT",
+                                "range": null,
+                                "title": "Support G722 Decoder",
+                                "type": "bool"
+                            }
+                        ],
+                        "depends_on": null,
+                        "id": "component-config-audio-codec-configuration-audio-decoder-configuration",
+                        "title": "Audio Decoder Configuration",
+                        "type": "menu"
+                    },
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Support decode audio frame from WAV container",
+                                "id": "AUDIO_SIMPLE_DEC_WAV_SUPPORT",
+                                "name": "AUDIO_SIMPLE_DEC_WAV_SUPPORT",
+                                "range": null,
+                                "title": "Support WAV Container",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Support decode audio frame from MP4 container",
+                                "id": "AUDIO_SIMPLE_DEC_M4A_SUPPORT",
+                                "name": "AUDIO_SIMPLE_DEC_M4A_SUPPORT",
+                                "range": null,
+                                "title": "Support MP4 Container",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Support decode audio frame from TS container",
+                                "id": "AUDIO_SIMPLE_DEC_TS_SUPPORT",
+                                "name": "AUDIO_SIMPLE_DEC_TS_SUPPORT",
+                                "range": null,
+                                "title": "Support TS Container",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Support decode audio frame from OGG container",
+                                "id": "AUDIO_SIMPLE_DEC_OGG_SUPPORT",
+                                "name": "AUDIO_SIMPLE_DEC_OGG_SUPPORT",
+                                "range": null,
+                                "title": "Support OGG Container",
+                                "type": "bool"
+                            }
+                        ],
+                        "depends_on": null,
+                        "id": "component-config-audio-codec-configuration-audio-simple-decoder-configuration",
+                        "title": "Audio Simple Decoder Configuration",
+                        "type": "menu"
+                    },
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register AAC Encoder",
+                                "id": "AUDIO_ENCODER_AAC_SUPPORT",
+                                "name": "AUDIO_ENCODER_AAC_SUPPORT",
+                                "range": null,
+                                "title": "Support AAC Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register G711 A-Law and U-Law encoder",
+                                "id": "AUDIO_ENCODER_G711_SUPPORT",
+                                "name": "AUDIO_ENCODER_G711_SUPPORT",
+                                "range": null,
+                                "title": "Support G711 Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register AMR-NB encoder",
+                                "id": "AUDIO_ENCODER_AMRNB_SUPPORT",
+                                "name": "AUDIO_ENCODER_AMRNB_SUPPORT",
+                                "range": null,
+                                "title": "Support AMR-NB Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register AMR-WB encoder",
+                                "id": "AUDIO_ENCODER_AMRWB_SUPPORT",
+                                "name": "AUDIO_ENCODER_AMRWB_SUPPORT",
+                                "range": null,
+                                "title": "Support AMR-WB Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register OPUS encoder",
+                                "id": "AUDIO_ENCODER_OPUS_SUPPORT",
+                                "name": "AUDIO_ENCODER_OPUS_SUPPORT",
+                                "range": null,
+                                "title": "Support OPUS Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register IMA-ADPCM encoder",
+                                "id": "AUDIO_ENCODER_ADPCM_SUPPORT",
+                                "name": "AUDIO_ENCODER_ADPCM_SUPPORT",
+                                "range": null,
+                                "title": "Support ADPCM Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register ALAC encoder",
+                                "id": "AUDIO_ENCODER_ALAC_SUPPORT",
+                                "name": "AUDIO_ENCODER_ALAC_SUPPORT",
+                                "range": null,
+                                "title": "Support ALAC Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register PCM encoder",
+                                "id": "AUDIO_ENCODER_PCM_SUPPORT",
+                                "name": "AUDIO_ENCODER_PCM_SUPPORT",
+                                "range": null,
+                                "title": "Support PCM Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register SBC encoder",
+                                "id": "AUDIO_ENCODER_SBC_SUPPORT",
+                                "name": "AUDIO_ENCODER_SBC_SUPPORT",
+                                "range": null,
+                                "title": "Support SBC Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register LC3 encoder",
+                                "id": "AUDIO_ENCODER_LC3_SUPPORT",
+                                "name": "AUDIO_ENCODER_LC3_SUPPORT",
+                                "range": null,
+                                "title": "Support LC3 Encoder",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": null,
+                                "help": "Enable this option to register G722 encoder",
+                                "id": "AUDIO_ENCODER_G722_SUPPORT",
+                                "name": "AUDIO_ENCODER_G722_SUPPORT",
+                                "range": null,
+                                "title": "Support G722 Encoder",
+                                "type": "bool"
+                            }
+                        ],
+                        "depends_on": null,
+                        "id": "component-config-audio-codec-configuration-audio-encoder-configuration",
+                        "title": "Audio Encoder Configuration",
+                        "type": "menu"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-audio-codec-configuration",
+                "title": "Audio Codec Configuration",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES8311.",
+                        "id": "CODEC_ES8311_SUPPORT",
+                        "name": "CODEC_ES8311_SUPPORT",
+                        "range": null,
+                        "title": "Support ES8311 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES7210.",
+                        "id": "CODEC_ES7210_SUPPORT",
+                        "name": "CODEC_ES7210_SUPPORT",
+                        "range": null,
+                        "title": "Support ES7210 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES7243.",
+                        "id": "CODEC_ES7243_SUPPORT",
+                        "name": "CODEC_ES7243_SUPPORT",
+                        "range": null,
+                        "title": "Support ES7243 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES7243E.",
+                        "id": "CODEC_ES7243E_SUPPORT",
+                        "name": "CODEC_ES7243E_SUPPORT",
+                        "range": null,
+                        "title": "Support ES7243E Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES8156.",
+                        "id": "CODEC_ES8156_SUPPORT",
+                        "name": "CODEC_ES8156_SUPPORT",
+                        "range": null,
+                        "title": "Support ES8156 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec AW88298.",
+                        "id": "CODEC_AW88298_SUPPORT",
+                        "name": "CODEC_AW88298_SUPPORT",
+                        "range": null,
+                        "title": "Support AW88298 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES8374.",
+                        "id": "CODEC_ES8374_SUPPORT",
+                        "name": "CODEC_ES8374_SUPPORT",
+                        "range": null,
+                        "title": "Support ES8374 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ES8388.",
+                        "id": "CODEC_ES8388_SUPPORT",
+                        "name": "CODEC_ES8388_SUPPORT",
+                        "range": null,
+                        "title": "Support ES8388 Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec TAS5805M.",
+                        "id": "CODEC_TAS5805M_SUPPORT",
+                        "name": "CODEC_TAS5805M_SUPPORT",
+                        "range": null,
+                        "title": "Support TAS5805M Codec Chip",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": "Enable this option to support codec ZL38063.\nZL38063 firmware only support xtensa, don't enable for RISC-V IC.",
+                        "id": "CODEC_ZL38063_SUPPORT",
+                        "name": "CODEC_ZL38063_SUPPORT",
+                        "range": null,
+                        "title": "Support ZL38063 Codec Chip",
+                        "type": "bool"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-audio-codec-device-configuration",
+                "title": "Audio Codec Device Configuration",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "ESP_LCD_TOUCH_MAX_POINTS",
+                        "name": "ESP_LCD_TOUCH_MAX_POINTS",
+                        "range": [
+                            1,
+                            10
+                        ],
+                        "title": "Maximum count of the touch points",
+                        "type": "int"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": null,
+                        "help": null,
+                        "id": "ESP_LCD_TOUCH_MAX_BUTTONS",
+                        "name": "ESP_LCD_TOUCH_MAX_BUTTONS",
+                        "range": [
+                            0,
+                            10
+                        ],
+                        "title": "Maximum count of the touch buttons supported",
+                        "type": "int"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-esp-lcd-touch",
+                "title": "ESP LCD TOUCH",
                 "type": "menu"
             }
         ],

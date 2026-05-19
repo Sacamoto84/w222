@@ -1,7 +1,7 @@
 file(GLOB_RECURSE UI_SOURCES "ui/*.c")
 
 idf_component_register(
-    SRCS main.c ftp_server.c ${UI_SOURCES}
+    SRCS main.c ftp_server.c c6_slave_ota.c ${UI_SOURCES}
     INCLUDE_DIRS . ui
     REQUIRES
         bsp_extra

@@ -3,3 +3,6 @@ dependencies:
     version: "1.5.2"
   espressif/esp_hosted:
     version: "2.12.7"
+
+  espressif/esp-brookesia:
+    version: 0.5.*

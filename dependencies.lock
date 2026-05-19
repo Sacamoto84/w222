@@ -58,6 +58,34 @@ dependencies:
       registry_url: https://components.espressif.com
       type: service
     version: 1.1.5
+  espressif/esp-brookesia:
+    component_hash: da224da7a829bb930793c0c779b44227238a57191ca360908c8f2b051d220223
+    dependencies:
+    - name: espressif/esp-lib-utils
+      registry_url: https://components.espressif.com
+      require: public
+      version: 0.2.*
+    - name: idf
+      require: private
+      version: '>=5.3'
+    - name: lvgl/lvgl
+      registry_url: https://components.espressif.com
+      require: public
+      version: 9.2.*
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 0.5.0
+  espressif/esp-lib-utils:
+    component_hash: 9e81fa27e3a8292bed95d91754ebcb8f27f47117328b0b646446f29fc5a847fb
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=5.1'
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    version: 0.2.3
   espressif/esp32_p4_function_ev_board:
     dependencies: []
     source:
@@ -199,7 +227,7 @@ dependencies:
   idf:
     source:
       type: idf
-    version: 5.4.4
+    version: 5.5.4
   lvgl/lvgl:
     dependencies: []
     source:
@@ -212,6 +240,7 @@ direct_dependencies:
 - chmorgan/esp-libhelix-mp3
 - esp_lcd_st7701
 - espressif/cmake_utilities
+- espressif/esp-brookesia
 - espressif/esp32_p4_function_ev_board
 - espressif/esp_audio_codec
 - espressif/esp_codec_dev
@@ -223,6 +252,6 @@ direct_dependencies:
 - espressif/esp_wifi_remote
 - idf
 - lvgl/lvgl
-manifest_hash: 1210db89aa3371b814b62b68928a6836b088c294ec3817cc6f0ec9237d238b38
+manifest_hash: 3f95260233d54f8dca87ff1f9ee14cc4116b864d5b17e1613acc00ff32c06245
 target: esp32p4
 version: 2.0.0

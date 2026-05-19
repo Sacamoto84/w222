@@ -273,6 +273,7 @@ void app_main(void)
             .buff_spiram = false,
         }};
     cfg.lvgl_port_cfg.task_stack = 24 * 1024;
+    cfg.lvgl_port_cfg.task_affinity = 1;
     
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);

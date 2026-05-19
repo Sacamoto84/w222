@@ -1,9 +1,11 @@
 #include "../lv_examples.h"
+#include "app_jpeg_image.h"
 
 #if LV_BUILD_EXAMPLES
 
 static int32_t size = 0;
 static bool size_dec = false;
+static app_jpeg_image_t *s_bg_jpeg;
 
 static void timer_cb(lv_timer_t * timer)
 {
@@ -50,9 +52,30 @@ static void event_cb(lv_event_t * e)
 void lv_example_event_draw(void)
 {
 
-lv_obj_t * img = lv_image_create(lv_screen_active());
+    lv_obj_t * img = lv_image_create(lv_screen_active());
 
-    lv_image_set_src(img, "S:/images/1.jpg");
+    /*
+     * Новый вариант для JPG с SD-карты:
+     * 1. один раз читаем S:/images/1.jpg;
+     * 2. аппаратно декодируем JPEG на ESP32-P4 сразу в RGB565;
+     * 3. кладем готовые пиксели в PSRAM;
+     * 4. LVGL дальше рисует обычную картинку из памяти.
+     *
+     * s_bg_jpeg должен жить все время, пока img может отображаться. Поэтому
+     * держим его static и не освобождаем внутри примера.
+     */
+    if(s_bg_jpeg == NULL) {
+        app_jpeg_image_load_rgb565("S:/images/1.jpg", &s_bg_jpeg);
+    }
+
+    if(s_bg_jpeg != NULL) {
+        lv_image_set_src(img, app_jpeg_image_get_dsc(s_bg_jpeg));
+    }
+    else {
+        /* Резервный старый вариант: LVGL будет потоково читать и декодировать JPG. */
+        lv_image_set_src(img, "S:/images/1.jpg");
+    }
+
     lv_obj_center(img);
 
     lv_obj_t * cont = lv_obj_create(lv_screen_active());
@@ -62,7 +85,6 @@ lv_obj_t * img = lv_image_create(lv_screen_active());
     lv_obj_add_flag(cont, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
     lv_timer_create(timer_cb, 30, cont);
 
-    
 }
 
 #endif

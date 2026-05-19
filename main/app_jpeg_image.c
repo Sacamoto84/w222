@@ -1,5 +1,6 @@
 #include "app_jpeg_image.h"
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,6 +20,16 @@ struct app_jpeg_image {
 };
 
 static const char *TAG = "jpeg_image";
+
+/*
+ * Важный нюанс ESP32-P4 JPEG-декодера:
+ * для RGB565 значение JPEG_DEC_RGB_ELEMENT_ORDER_RGB включает big-endian порядок
+ * байт. LVGL в этом проекте работает с обычным little-endian RGB565 в памяти.
+ * Если оставить RGB, красный и синий выглядят перепутанными. Поэтому для
+ * LVGL-картинки используем BGR: в терминах драйвера это нужный порядок байт
+ * для 16-битного RGB565-буфера.
+ */
+#define APP_JPEG_RGB565_ORDER JPEG_DEC_RGB_ELEMENT_ORDER_BGR
 
 static uint32_t align_up_u32(uint32_t value, uint32_t align)
 {
@@ -184,7 +195,7 @@ esp_err_t app_jpeg_image_load_rgb565(const char *path, app_jpeg_image_t **out_im
 
     jpeg_decode_cfg_t decode_cfg = {
         .output_format = JPEG_DECODE_OUT_FORMAT_RGB565,
-        .rgb_order = JPEG_DEC_RGB_ELEMENT_ORDER_RGB,
+        .rgb_order = APP_JPEG_RGB565_ORDER,
         .conv_std = JPEG_YUV_RGB_CONV_STD_BT601,
     };
 

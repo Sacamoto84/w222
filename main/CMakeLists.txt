@@ -1,7 +1,7 @@
 file(GLOB_RECURSE UI_SOURCES "ui/*.c")
 
 idf_component_register(
-    SRCS main.c ftp_server.c c6_slave_ota.c app_jpeg_image.c ${UI_SOURCES}
+    SRCS main.c ftp_server.c c6_slave_ota.c ${UI_SOURCES}
     INCLUDE_DIRS . ui
     REQUIRES
         bsp_extra
@@ -21,6 +21,9 @@ idf_component_register(
         sdmmc)
 
 idf_component_get_property(LVGL_LIB lvgl__lvgl COMPONENT_LIB)
+target_sources(${LVGL_LIB} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/app_jpeg_image.c)
+target_include_directories(${LVGL_LIB} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+target_link_libraries(${LVGL_LIB} PUBLIC idf::esp_driver_jpeg)
 target_compile_definitions(
     ${LVGL_LIB} 
     PRIVATE

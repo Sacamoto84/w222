@@ -29,8 +29,6 @@
 #include "c6_slave_ota.h"
 #include "ftp_server.h"
 
-#include "ui/ui.h"
-
 #include "demos/lv_demos.h"
 
 #include "examples/event/lv_example_event.h"
@@ -38,8 +36,6 @@
 #include "esp_brookesia.hpp"
 
 #include "esp_hosted.h"
-
-extern void ui_init(void);
 
 static const char *TAG = "app";
 
@@ -233,7 +229,7 @@ static void show_startup_screen(void)
     lv_obj_align(subtitle, LV_ALIGN_CENTER, 0, 24);
 }
 
-void app_main(void)
+extern "C" void app_main(void)
 {
     nvs_init_once();
 

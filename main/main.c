@@ -267,12 +267,13 @@ void app_main(void)
     bsp_display_cfg_t cfg = {
         .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
         .buffer_size = BSP_LCD_H_RES * 100,
-        .double_buffer = false,
+        .double_buffer = true,
         .flags = {
             .buff_dma = true,
             .buff_spiram = false,
         }};
     cfg.lvgl_port_cfg.task_stack = 24 * 1024;
+    
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);
     ESP_ERROR_CHECK(bsp_display_backlight_on());
@@ -290,12 +291,12 @@ void app_main(void)
 
     // ui_init();
 
-    // lv_demo_benchmark();
+    //lv_demo_benchmark();
 
     // lv_demo_stress();
 
     lv_example_event_draw();
-    create_ip_label();
+    //create_ip_label();
 
     lv_refr_now(display);
     bsp_display_unlock();

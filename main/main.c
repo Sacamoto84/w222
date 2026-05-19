@@ -267,7 +267,7 @@ void app_main(void)
     bsp_display_cfg_t cfg = {
         .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
         .buffer_size = BSP_LCD_H_RES * 100,
-        .double_buffer = true,
+        .double_buffer = false,
         .flags = {
             .buff_dma = true,
             .buff_spiram = false,

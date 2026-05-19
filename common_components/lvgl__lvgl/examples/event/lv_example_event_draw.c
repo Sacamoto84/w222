@@ -52,7 +52,7 @@ void lv_example_event_draw(void)
 
 lv_obj_t * img = lv_image_create(lv_screen_active());
 
-    lv_image_set_src(img, "S:/images/3.jpg");
+    lv_image_set_src(img, "S:/images/1.jpg");
     lv_obj_center(img);
 
     lv_obj_t * cont = lv_obj_create(lv_screen_active());

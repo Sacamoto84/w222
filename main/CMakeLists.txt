@@ -1,13 +1,14 @@
 file(GLOB_RECURSE UI_SOURCES "ui/*.c")
 
 idf_component_register(
-    SRCS main.c ftp_server.c c6_slave_ota.c ${UI_SOURCES}
+    SRCS main.c ftp_server.c c6_slave_ota.c app_jpeg_image.c ${UI_SOURCES}
     INCLUDE_DIRS . ui
     REQUIRES
         bsp_extra
         driver
         esp_common
         esp_event
+        esp_driver_jpeg
         esp_hw_support
         esp_netif
         esp_wifi

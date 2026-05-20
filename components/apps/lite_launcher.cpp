@@ -25,6 +25,13 @@ static lv_obj_t *create_label(lv_obj_t *parent, const char *text, const lv_font_
     return label;
 }
 
+static void make_launcher_child_passthrough(lv_obj_t *obj)
+{
+    lv_obj_clear_flag(obj, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_clear_flag(obj, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
+}
+
 } // namespace
 
 bool LiteLauncher::add_app(LiteApp *app)
@@ -123,6 +130,8 @@ void LiteLauncher::build_home(void)
         lv_obj_set_flex_flow(tile, LV_FLEX_FLOW_COLUMN);
         lv_obj_set_flex_align(tile, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
         lv_obj_set_style_pad_row(tile, 8, 0);
+        lv_obj_add_flag(tile, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_clear_flag(tile, LV_OBJ_FLAG_SCROLLABLE);
         lv_obj_add_event_cb(tile, icon_event_cb, LV_EVENT_CLICKED, &icon_events_[i]);
 
         lv_obj_t *icon = lv_obj_create(tile);
@@ -134,14 +143,17 @@ void LiteLauncher::build_home(void)
         lv_obj_set_style_shadow_width(icon, 12, 0);
         lv_obj_set_style_shadow_opa(icon, LV_OPA_20, 0);
         lv_obj_set_style_shadow_color(icon, app->accent_color(), 0);
+        make_launcher_child_passthrough(icon);
 
         lv_obj_t *icon_text = create_label(icon, app->icon_text(), &lv_font_montserrat_26, 0xFFFFFF);
         lv_obj_center(icon_text);
+        make_launcher_child_passthrough(icon_text);
 
         lv_obj_t *title = create_label(tile, app->title(), &lv_font_montserrat_14, 0xE8ECF3);
         lv_label_set_long_mode(title, LV_LABEL_LONG_DOT);
         lv_obj_set_width(title, 104);
         lv_obj_set_style_text_align(title, LV_TEXT_ALIGN_CENTER, 0);
+        make_launcher_child_passthrough(title);
     }
 }
 

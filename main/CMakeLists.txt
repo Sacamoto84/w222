@@ -4,9 +4,9 @@ idf_component_register(
     SRCS main.cpp ftp_server.c c6_slave_ota.c ${UI_SOURCES}
     INCLUDE_DIRS . ui
     REQUIRES
+        apps
         bsp_extra
         driver
-        esp-brookesia
         esp_common
         esp_event
         esp_driver_jpeg

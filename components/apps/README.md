@@ -1,6 +1,6 @@
 # App Structure
 
-Use this layout for new apps under `components/apps` so they match the existing Brookesia apps in this project.
+Use this layout for new apps under `components/apps` so they can be shown by the lightweight LVGL launcher.
 
 ## Required shape
 
@@ -8,12 +8,10 @@ Use this layout for new apps under `components/apps` so they match the existing 
 - Keep the app entrypoints in that folder:
   - `<AppName>.hpp`
   - `<AppName>.cpp`
-- Derive the app class from `ESP_Brookesia_PhoneApp`
-- Implement the Brookesia lifecycle used by the other apps:
+- Derive the app class from `LiteApp`
+- Implement the lightweight lifecycle used by the launcher:
   - `init()`
-  - `run()`
-  - `pause()` when needed
-  - `resume()` when needed
+  - `open(lv_obj_t *parent)`
   - `back()`
   - `close()`
 
@@ -25,14 +23,14 @@ Use this layout for new apps under `components/apps` so they match the existing 
 ## Wiring rules
 
 - Add the app header include to `components/apps/apps.h`
-- Instantiate and install the app in `main/main.cpp`
+- Instantiate the app and call `launcher.add_app()` in `main/main.cpp`
 - Keep app-specific storage paths inside the app instead of hardcoding behavior in `main/main.cpp`
 - Fail gracefully when optional resources are missing so boot continues
 
 ## UI rules
 
-- Use a dedicated root screen or screen tree owned by the app
-- Keep navigation behavior inside the app, including back handling
+- Create one root object under the `parent` passed to `open()`
+- Use `back()` only for app-local back behavior. Return `false` to let the launcher close the app
 - Prefer app-local helper functions over global state unless the app already follows a different established pattern
 
 ## Storage rules
@@ -44,4 +42,5 @@ Use this layout for new apps under `components/apps` so they match the existing 
 ## Build rules
 
 - Keep new sources under `components/apps/<app_name>/`; the app component already auto-collects sources recursively
+- App `assets/` folders are not auto-compiled by default. Add heavy assets explicitly when an app really needs them
 - Reuse the existing ESP-IDF build workflow and verify with a full project build after adding the app

@@ -559,6 +559,16 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("G:/w222/w222/build/esp-idf/lvgl__lvgl/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("G:/w222/w222/build/esp-idf/apps/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("G:/w222/w222/build/esp-idf/chmorgan__esp-libhelix-mp3/cmake_install.cmake")
 endif()
 
@@ -575,11 +585,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
   include("G:/w222/w222/build/esp-idf/chmorgan__esp-file-iterator/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("G:/w222/w222/build/esp-idf/lvgl__lvgl/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
@@ -634,16 +639,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("G:/w222/w222/build/esp-idf/espressif__esp-lib-utils/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("G:/w222/w222/build/esp-idf/espressif__esp-brookesia/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
   include("G:/w222/w222/build/esp-idf/espressif__esp_hosted/cmake_install.cmake")
 endif()
 
@@ -670,10 +665,5 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
   include("G:/w222/w222/build/esp-idf/main/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("G:/w222/w222/build/esp-idf/apps/cmake_install.cmake")
 endif()
 

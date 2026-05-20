@@ -1,11 +1,11 @@
 #include <math.h>
+#include <cctype>
+#include <cstdio>
 #include <cstring>
 #include <vector>
 #include "Calculator.hpp"
 
 using namespace std;
-
-LV_IMG_DECLARE(img_app_calculator);
 
 #define KEYBOARD_H_PERCENT      65
 #define KEYBOARD_FONT           &lv_font_montserrat_26
@@ -19,14 +19,13 @@ LV_IMG_DECLARE(img_app_calculator);
 
 static const char *keyboard_map[] = {
     "C", "/", "x", LV_SYMBOL_BACKSPACE, "\n",
-    "7", "8", "9", "-", "\n",
+    "71", "8", "9", "-", "\n",
     "4", "5", "6", "+", "\n",
     "1", "2", "3", "%", "\n",
     "0", ".", "=", ""
 };
 
-Calculator::Calculator():
-    ESP_Brookesia_PhoneApp("Calculator", &img_app_calculator, true)
+Calculator::Calculator()
 {
 }
 
@@ -35,18 +34,38 @@ Calculator::~Calculator()
 
 }
 
-bool Calculator::run(void)
+bool Calculator::open(lv_obj_t *parent)
 {
-    lv_area_t area = getVisualArea();
-    _width = area.x2 - area.x1;
-    _height = area.y2 - area.y1;
+    if (parent == nullptr) {
+        return false;
+    }
+
+    lv_obj_update_layout(parent);
+    _width = lv_obj_get_content_width(parent);
+    _height = lv_obj_get_content_height(parent);
+    if (_width <= 0) {
+        _width = lv_obj_get_width(parent);
+    }
+    if (_height <= 0) {
+        _height = lv_obj_get_height(parent);
+    }
+    if ((_width <= 0) || (_height <= 0)) {
+        _width = LV_HOR_RES;
+        _height = LV_VER_RES - 58;
+    }
     formula_len = 1;
 
     int keyboard_h = (int)(_height * KEYBOARD_H_PERCENT / 100.0);
     int label_h = _height - keyboard_h;
     int text_h = label_h - 2 * LABEL_PAD;
 
-    keyboard = lv_btnmatrix_create(lv_scr_act());
+    root = lv_obj_create(parent);
+    lv_obj_remove_style_all(root);
+    lv_obj_set_size(root, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_bg_color(root, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_set_style_bg_opa(root, LV_OPA_COVER, 0);
+
+    keyboard = lv_btnmatrix_create(root);
     lv_btnmatrix_set_map(keyboard, keyboard_map);
     lv_btnmatrix_set_btn_width(keyboard, 18, 1);
     lv_obj_set_size(keyboard, _width, keyboard_h);
@@ -57,7 +76,7 @@ bool Calculator::run(void)
     lv_obj_set_style_border_width(keyboard, 0, 0);
     lv_obj_set_style_radius(keyboard, 0, 0);
 
-    lv_obj_t *label_obj = lv_obj_create(lv_scr_act());
+    lv_obj_t *label_obj = lv_obj_create(root);
     lv_obj_set_size(label_obj, _width, label_h);
     lv_obj_align(label_obj, LV_ALIGN_TOP_MID, 0, 0);
 	lv_obj_set_style_radius(label_obj, 0, 0);
@@ -110,29 +129,13 @@ bool Calculator::run(void)
     return true;
 }
 
-/**
- * @brief The function will be called when the left button of navigate bar is clicked.
- */
-bool Calculator::back(void)
+void Calculator::close(void)
 {
-    notifyCoreClosed();
-
-    return true;
-}
-
-/**
- * @brief The function will be called when app should be closed.
- */
-bool Calculator::close(void)
-{
-    
-    return true;
-}
-
-bool Calculator::init(void)
-{
-
-    return true;
+    root = nullptr;
+    keyboard = nullptr;
+    history_label = nullptr;
+    formula_label = nullptr;
+    result_label = nullptr;
 }
 
 bool Calculator::isStartZero(void)

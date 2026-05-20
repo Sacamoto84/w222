@@ -10,7 +10,6 @@
 #include "esp_system.h"
 #include "esp_wifi.h"
 #include "nvs.h"
-#include "system_ui_service.h"
 
 namespace {
 
@@ -163,8 +162,7 @@ static void save_wifi_credentials(const char *ssid, const char *password)
 
 } // namespace
 
-AppSettings::AppSettings():
-    ESP_Brookesia_PhoneApp("Settings", nullptr, true, true, true)
+AppSettings::AppSettings()
 {
 }
 
@@ -172,45 +170,20 @@ AppSettings::~AppSettings()
 {
 }
 
-bool AppSettings::init(void)
+bool AppSettings::open(lv_obj_t *parent)
 {
-    return true;
-}
+    if (parent == nullptr) {
+        return false;
+    }
 
-bool AppSettings::run(void)
-{
-    lv_obj_t *screen = lv_screen_active();
-    style_screen(screen);
+    style_screen(parent);
 
-    lv_obj_t *root = lv_obj_create(screen);
+    lv_obj_t *root = lv_obj_create(parent);
     lv_obj_remove_style_all(root);
     lv_obj_set_size(root, lv_pct(100), lv_pct(100));
     lv_obj_set_style_pad_all(root, 12, 0);
     lv_obj_set_style_pad_row(root, 12, 0);
     lv_obj_set_flex_flow(root, LV_FLEX_FLOW_COLUMN);
-
-    lv_obj_t *top = lv_obj_create(root);
-    lv_obj_remove_style_all(top);
-    lv_obj_set_width(top, lv_pct(100));
-    lv_obj_set_height(top, 52);
-    lv_obj_set_flex_flow(top, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(top, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_set_style_pad_column(top, 12, 0);
-
-    lv_obj_t *back = lv_button_create(top);
-    lv_obj_set_size(back, 44, 44);
-    lv_obj_set_style_radius(back, 8, 0);
-    lv_obj_set_style_bg_color(back, lv_color_hex(0x2A303A), 0);
-    lv_obj_add_event_cb(back, back_event_cb, LV_EVENT_CLICKED, this);
-
-    lv_obj_t *back_label = lv_label_create(back);
-    lv_label_set_text(back_label, LV_SYMBOL_LEFT);
-    lv_obj_center(back_label);
-
-    lv_obj_t *title = lv_label_create(top);
-    lv_label_set_text(title, "Settings");
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_24, 0);
-    lv_obj_set_style_text_color(title, lv_color_hex(0xFFFFFF), 0);
 
     lv_obj_t *content = lv_obj_create(root);
     lv_obj_set_width(content, lv_pct(100));
@@ -274,21 +247,18 @@ bool AppSettings::run(void)
     return true;
 }
 
-bool AppSettings::back(void)
+void AppSettings::close(void)
 {
-    notifyCoreClosed();
-    return true;
-}
+    if (refresh_timer_ != nullptr) {
+        lv_timer_delete(refresh_timer_);
+    }
 
-bool AppSettings::close(void)
-{
     memory_label_ = nullptr;
     wifi_label_ = nullptr;
     ssid_textarea_ = nullptr;
     password_textarea_ = nullptr;
     status_label_ = nullptr;
     refresh_timer_ = nullptr;
-    return true;
 }
 
 void AppSettings::refresh(void)
@@ -343,7 +313,6 @@ void AppSettings::connect_from_ui(void)
                               err == ESP_OK ? ssid : esp_err_to_name(err));
     }
 
-    system_ui_service::refresh_wifi_from_driver();
     refresh();
 }
 
@@ -368,13 +337,5 @@ void AppSettings::refresh_event_cb(lv_event_t *event)
     AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
     if (app != nullptr) {
         app->refresh();
-    }
-}
-
-void AppSettings::back_event_cb(lv_event_t *event)
-{
-    AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
-    if (app != nullptr) {
-        app->notifyCoreClosed();
     }
 }

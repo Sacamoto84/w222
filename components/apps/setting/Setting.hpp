@@ -1,17 +1,18 @@
 #pragma once
 
-#include "esp_brookesia.hpp"
+#include "lite_app.h"
 #include "lvgl.h"
 
-class AppSettings: public ESP_Brookesia_PhoneApp {
+class AppSettings: public LiteApp {
 public:
     AppSettings();
     ~AppSettings() override;
 
-    bool init(void) override;
-    bool run(void) override;
-    bool back(void) override;
-    bool close(void) override;
+    const char *title(void) const override { return "Settings"; }
+    const char *icon_text(void) const override { return LV_SYMBOL_SETTINGS; }
+    lv_color_t accent_color(void) const override { return lv_color_hex(0x5967F2); }
+    bool open(lv_obj_t *parent) override;
+    void close(void) override;
 
 private:
     lv_obj_t *memory_label_ = nullptr;
@@ -27,5 +28,4 @@ private:
     static void refresh_timer_cb(lv_timer_t *timer);
     static void connect_event_cb(lv_event_t *event);
     static void refresh_event_cb(lv_event_t *event);
-    static void back_event_cb(lv_event_t *event);
 };

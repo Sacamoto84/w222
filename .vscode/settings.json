@@ -1,6 +1,14 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
   "idf.flashType": "JTAG",
+  "idf.flashPartitionToUse": "app",
+  "idf.flashBaudRate": "3000000",
+  "idf.monitorBaudRate": "115200",
+  "idf.jtagFlashCommandExtraArgs": [
+    "compress",
+    "reset",
+    "skip_loaded"
+  ],
   "idf.portWin": "COM29",
   "idf.openOcdConfigs": [
     "board/esp32p4-builtin.cfg"

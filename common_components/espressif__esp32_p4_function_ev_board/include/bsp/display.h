@@ -37,7 +37,8 @@
 #define BSP_LCD_COLOR_SPACE         (ESP_LCD_COLOR_SPACE_RGB)
 
 #if CONFIG_BSP_LCD_TYPE_1024_600
-/* LCD display definition 1024x600 */
+/* LCD display definition 480x800.
+ * The Kconfig symbol name is kept for compatibility with older sdkconfig files. */
 #define BSP_LCD_H_RES              (480)
 #define BSP_LCD_V_RES              (800)
 

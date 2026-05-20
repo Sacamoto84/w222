@@ -1,4 +1,7 @@
 set(APPS_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(APPS_SRCS
+    ${APPS_DIR}/system_ui_service.cpp
+)
 
 function(jc4880_append_app_sources out_var dir_path)
     file(GLOB_RECURSE APP_C_SRCS CONFIGURE_DEPENDS ${dir_path}/*.c)
@@ -10,14 +13,23 @@ if(CONFIG_JC4880_APP_CALCULATOR)
     jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/calculator)
 endif()
 
+if(CONFIG_JC4880_APP_SETTINGS)
+    jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/setting)
+endif()
+
 idf_component_register(
     SRCS ${APPS_SRCS}
     INCLUDE_DIRS ${APPS_DIR}
                  ${APPS_DIR}/calculator
+                 ${APPS_DIR}/setting
         
     REQUIRES lvgl__lvgl 
                esp_event 
+               esp_app_format
+               esp_netif
+               esp_wifi
                nvs_flash 
+               heap
                esp-brookesia 
                bsp_extra 
                esp32_p4_function_ev_board 

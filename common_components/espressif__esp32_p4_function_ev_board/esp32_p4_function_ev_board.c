@@ -990,7 +990,8 @@ static lv_indev_t *bsp_display_indev_init(lv_display_t *disp)
 
     disp_touch = tp;
 
-    return lvgl_port_add_touch(&touch_cfg);
+    disp_indev = lvgl_port_add_touch(&touch_cfg);
+    return disp_indev;
 }
 
 lv_display_t *bsp_display_start(void)

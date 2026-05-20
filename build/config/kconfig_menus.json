@@ -38448,7 +38448,7 @@
                                         "id": "BSP_LCD_TYPE_1024_600",
                                         "name": "BSP_LCD_TYPE_1024_600",
                                         "range": null,
-                                        "title": "LCD 7-inch 1024x600 - ek79007",
+                                        "title": "LCD 480x800 - ST7701/EK79007 board profile",
                                         "type": "bool"
                                     },
                                     {

@@ -65,13 +65,13 @@
             "dir": "G:/w222/w222/components/apps",
             "type": "LIBRARY",
             "lib": "__idf_apps",
-            "reqs": [ "lvgl__lvgl", "esp_event", "nvs_flash", "espressif__esp-brookesia", "bsp_extra", "espressif__esp32_p4_function_ev_board", "espressif__esp_lcd_touch_gt911", "esp_partition", "driver", "main" ],
+            "reqs": [ "lvgl__lvgl", "esp_event", "esp_app_format", "esp_netif", "esp_wifi", "nvs_flash", "heap", "espressif__esp-brookesia", "bsp_extra", "espressif__esp32_p4_function_ev_board", "espressif__esp_lcd_touch_gt911", "esp_partition", "driver", "main" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "G:/w222/w222/build/esp-idf/apps/libapps.a",
-            "sources": [ "G:/w222/w222/components/apps/calculator/assets/img_app_calculator.c", "G:/w222/w222/components/apps/calculator/Calculator.cpp" ],
-            "include_dirs": [ "G:/w222/w222/components/apps", "G:/w222/w222/components/apps/calculator" ]
+            "sources": [ "G:/w222/w222/components/apps/system_ui_service.cpp", "G:/w222/w222/components/apps/calculator/assets/img_app_calculator.c", "G:/w222/w222/components/apps/calculator/Calculator.cpp", "G:/w222/w222/components/apps/setting/Setting.cpp" ],
+            "include_dirs": [ "G:/w222/w222/components/apps", "G:/w222/w222/components/apps/calculator", "G:/w222/w222/components/apps/setting" ]
         },
         "bootloader": {
             "alias": "idf::bootloader",
@@ -3360,11 +3360,11 @@
             "prefix": "idf",
             "dir": "G:/w222/w222/components/apps",
             "lib": "__idf_apps",
-            "reqs": [ "lvgl__lvgl", "esp_event", "nvs_flash", "espressif__esp-brookesia", "bsp_extra", "espressif__esp32_p4_function_ev_board", "espressif__esp_lcd_touch_gt911", "esp_partition", "driver", "main" ],
+            "reqs": [ "lvgl__lvgl", "esp_event", "esp_app_format", "esp_netif", "esp_wifi", "nvs_flash", "heap", "espressif__esp-brookesia", "bsp_extra", "espressif__esp32_p4_function_ev_board", "espressif__esp_lcd_touch_gt911", "esp_partition", "driver", "main" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
-            "include_dirs": [ "G:/w222/w222/components/apps", "G:/w222/w222/components/apps/calculator" ]
+            "include_dirs": [ "G:/w222/w222/components/apps", "G:/w222/w222/components/apps/calculator", "G:/w222/w222/components/apps/setting" ]
         },
         "chmorgan__esp-libhelix-mp3": {
             "alias": "idf::chmorgan__esp-libhelix-mp3",

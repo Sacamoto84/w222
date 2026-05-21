@@ -10,12 +10,23 @@
 #include "app_jpeg_image.h"
 #include "esp_heap_caps.h"
 #include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+#include "freertos/task.h"
 #include "sdkconfig.h"
 
 namespace {
 
 static const char *TAG = "image_display";
 static constexpr const char *kImageDir = CONFIG_BSP_SD_MOUNT_POINT "/images";
+static constexpr lv_coord_t kImageCenterYOffset = -22;
+static constexpr lv_coord_t kSwipeMinDistance = 70;
+static constexpr lv_coord_t kSwipeMaxOffAxis = 90;
+static constexpr uint32_t kSwipeMaxDurationMs = 900;
+static constexpr uint32_t kPreloadTaskStackBytes = 8192;
+static constexpr UBaseType_t kPreloadTaskPriority = tskIDLE_PRIORITY + 1;
+static constexpr uint32_t kPreloadWaitMs = 8000;
+static constexpr uint32_t kPreloadPollMs = 10;
 
 static char ascii_lower(char value)
 {
@@ -165,6 +176,11 @@ static uint32_t calc_fit_scale(uint32_t img_w, uint32_t img_h, uint32_t max_w, u
     return scale;
 }
 
+static SemaphoreHandle_t preload_sem(void *handle)
+{
+    return static_cast<SemaphoreHandle_t>(handle);
+}
+
 } // namespace
 
 ImageDisplay::ImageDisplay()
@@ -174,6 +190,7 @@ ImageDisplay::ImageDisplay()
 ImageDisplay::~ImageDisplay()
 {
     close();
+    wait_preload_idle();
 
     if (entries_ != nullptr) {
         heap_caps_free(entries_);
@@ -183,6 +200,11 @@ ImageDisplay::~ImageDisplay()
     if (entry_events_ != nullptr) {
         heap_caps_free(entry_events_);
         entry_events_ = nullptr;
+    }
+
+    if (preload_lock_ != nullptr) {
+        vSemaphoreDelete(preload_sem(preload_lock_));
+        preload_lock_ = nullptr;
     }
 }
 
@@ -198,7 +220,11 @@ bool ImageDisplay::init(void)
                                                                        MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
     }
 
-    return (entries_ != nullptr) && (entry_events_ != nullptr);
+    if (preload_lock_ == nullptr) {
+        preload_lock_ = xSemaphoreCreateMutex();
+    }
+
+    return (entries_ != nullptr) && (entry_events_ != nullptr) && (preload_lock_ != nullptr);
 }
 
 bool ImageDisplay::open(lv_obj_t *parent)
@@ -285,6 +311,10 @@ void ImageDisplay::close(void)
     caption_label_ = nullptr;
     view_width_ = 0;
     view_height_ = 0;
+    fit_scale_ = 256;
+    swipe_start_ = {};
+    swipe_start_tick_ = 0;
+    swipe_tracking_ = false;
 }
 
 bool ImageDisplay::scan_images(void)
@@ -342,6 +372,7 @@ void ImageDisplay::rebuild_list(void)
         return;
     }
 
+    cancel_preload();
     const bool scan_ok = scan_images();
     lv_obj_clean(list_);
 
@@ -390,16 +421,40 @@ bool ImageDisplay::open_image(uint32_t index)
         return false;
     }
 
+    if (!show_loaded_image(index, loaded_image)) {
+        app_jpeg_image_free(loaded_image);
+        return false;
+    }
+
+    start_preload_next();
+    return true;
+}
+
+bool ImageDisplay::show_loaded_image(uint32_t index, app_jpeg_image_t *loaded_image)
+{
+    if ((entries_ == nullptr) || (index >= entry_count_) || (loaded_image == nullptr) || (root_ == nullptr)) {
+        return false;
+    }
+
+    lv_obj_t *parent = lv_obj_get_parent(root_);
+    if (parent == nullptr) {
+        return false;
+    }
+
     if (root_ != nullptr) {
         lv_obj_add_flag(root_, LV_OBJ_FLAG_HIDDEN);
     }
 
-    view_root_ = lv_obj_create(lv_obj_get_parent(root_));
+    view_root_ = lv_obj_create(parent);
     make_plain_container(view_root_);
     lv_obj_set_size(view_root_, lv_pct(100), lv_pct(100));
     lv_obj_set_style_bg_color(view_root_, lv_color_black(), 0);
     lv_obj_set_style_bg_opa(view_root_, LV_OPA_COVER, 0);
+    lv_obj_add_flag(view_root_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_clear_flag(view_root_, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_event_cb(view_root_, view_touch_event_cb, LV_EVENT_PRESSED, this);
+    lv_obj_add_event_cb(view_root_, view_touch_event_cb, LV_EVENT_RELEASED, this);
+    lv_obj_add_event_cb(view_root_, view_touch_event_cb, LV_EVENT_PRESS_LOST, this);
 
     current_image_ = loaded_image;
     current_index_ = static_cast<int>(index);
@@ -407,11 +462,12 @@ bool ImageDisplay::open_image(uint32_t index)
     image_obj_ = lv_image_create(view_root_);
     const lv_image_dsc_t *dsc = app_jpeg_image_get_dsc(current_image_);
     lv_image_set_src(image_obj_, dsc);
-
-    const uint32_t max_w = view_width_ > 20 ? static_cast<uint32_t>(view_width_ - 20) : 1U;
-    const uint32_t max_h = view_height_ > 96 ? static_cast<uint32_t>(view_height_ - 96) : 1U;
-    lv_image_set_scale(image_obj_, calc_fit_scale(dsc->header.w, dsc->header.h, max_w, max_h));
-    lv_obj_align(image_obj_, LV_ALIGN_CENTER, 0, -22);
+    lv_obj_add_flag(image_obj_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_clear_flag(image_obj_, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_event_cb(image_obj_, view_touch_event_cb, LV_EVENT_PRESSED, this);
+    lv_obj_add_event_cb(image_obj_, view_touch_event_cb, LV_EVENT_RELEASED, this);
+    lv_obj_add_event_cb(image_obj_, view_touch_event_cb, LV_EVENT_PRESS_LOST, this);
+    reset_image_transform(dsc->header.w, dsc->header.h);
 
     lv_obj_t *bottom_bar = lv_obj_create(view_root_);
     make_plain_container(bottom_bar);
@@ -447,6 +503,8 @@ bool ImageDisplay::open_image(uint32_t index)
 
 void ImageDisplay::close_image(void)
 {
+    cancel_preload();
+
     if (view_root_ != nullptr) {
         lv_obj_delete(view_root_);
         view_root_ = nullptr;
@@ -461,6 +519,10 @@ void ImageDisplay::close_image(void)
     }
 
     current_index_ = -1;
+    fit_scale_ = 256;
+    swipe_start_ = {};
+    swipe_start_tick_ = 0;
+    swipe_tracking_ = false;
 
     if (root_ != nullptr) {
         lv_obj_clear_flag(root_, LV_OBJ_FLAG_HIDDEN);
@@ -480,7 +542,333 @@ bool ImageDisplay::open_next(int delta)
         next_index = 0;
     }
 
+    app_jpeg_image_t *preloaded_image = nullptr;
+    if ((delta > 0) &&
+        (take_preloaded_image(static_cast<uint32_t>(next_index), &preloaded_image) ||
+         wait_preloaded_image(static_cast<uint32_t>(next_index), &preloaded_image, kPreloadWaitMs))) {
+        close_image();
+
+        if (!show_loaded_image(static_cast<uint32_t>(next_index), preloaded_image)) {
+            app_jpeg_image_free(preloaded_image);
+            return false;
+        }
+
+        start_preload_next();
+        return true;
+    }
+
     return open_image(static_cast<uint32_t>(next_index));
+}
+
+void ImageDisplay::reset_image_transform(uint32_t image_width, uint32_t image_height)
+{
+    const uint32_t max_w = view_width_ > 20 ? static_cast<uint32_t>(view_width_ - 20) : 1U;
+    const uint32_t max_h = view_height_ > 96 ? static_cast<uint32_t>(view_height_ - 96) : 1U;
+    fit_scale_ = calc_fit_scale(image_width, image_height, max_w, max_h);
+
+    if (image_obj_ != nullptr) {
+        lv_image_set_pivot(image_obj_, static_cast<int32_t>(image_width / 2U), static_cast<int32_t>(image_height / 2U));
+        lv_image_set_scale(image_obj_, fit_scale_);
+        lv_obj_align(image_obj_, LV_ALIGN_CENTER, 0, kImageCenterYOffset);
+    }
+}
+
+void ImageDisplay::handle_view_touch(lv_event_t *event)
+{
+    if (event == nullptr) {
+        return;
+    }
+
+    lv_event_stop_bubbling(event);
+
+    lv_indev_t *indev = lv_indev_active();
+    if (indev == nullptr) {
+        return;
+    }
+
+    const lv_event_code_t code = lv_event_get_code(event);
+    if (code == LV_EVENT_PRESSED) {
+        lv_indev_get_point(indev, &swipe_start_);
+        swipe_start_tick_ = lv_tick_get();
+        swipe_tracking_ = true;
+        return;
+    }
+
+    if (code == LV_EVENT_PRESS_LOST) {
+        swipe_tracking_ = false;
+        return;
+    }
+
+    if ((code != LV_EVENT_RELEASED) || !swipe_tracking_) {
+        return;
+    }
+
+    lv_point_t swipe_end = {};
+    lv_indev_get_point(indev, &swipe_end);
+    swipe_tracking_ = false;
+
+    const int dx = static_cast<int>(swipe_end.x) - static_cast<int>(swipe_start_.x);
+    const int dy = static_cast<int>(swipe_end.y) - static_cast<int>(swipe_start_.y);
+    const uint32_t elapsed_ms = lv_tick_elaps(swipe_start_tick_);
+
+    if ((abs(dx) < kSwipeMinDistance) || (abs(dy) > kSwipeMaxOffAxis) || (elapsed_ms > kSwipeMaxDurationMs)) {
+        return;
+    }
+
+    if (dx < 0) {
+        open_next(1);
+    } else {
+        open_next(-1);
+    }
+}
+
+void ImageDisplay::start_preload_next(void)
+{
+    if ((entry_count_ < 2) || (current_index_ < 0)) {
+        return;
+    }
+
+    int next_index = current_index_ + 1;
+    if (next_index >= static_cast<int>(entry_count_)) {
+        next_index = 0;
+    }
+
+    request_preload(static_cast<uint32_t>(next_index));
+}
+
+void ImageDisplay::request_preload(uint32_t index)
+{
+    if ((entries_ == nullptr) || (index >= entry_count_) || (preload_lock_ == nullptr)) {
+        return;
+    }
+
+    app_jpeg_image_t *image_to_free = nullptr;
+    bool start_worker = false;
+
+    if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+        const bool cached_same_image = (preload_image_ != nullptr) &&
+                                       (preload_image_index_ == static_cast<int>(index));
+        const bool loading_same_image = preload_worker_running_ &&
+                                        (preload_request_index_ == static_cast<int>(index));
+
+        if (!cached_same_image && !loading_same_image) {
+            image_to_free = preload_image_;
+            preload_image_ = nullptr;
+            preload_image_index_ = -1;
+
+            preload_request_index_ = static_cast<int>(index);
+            snprintf(preload_request_path_, sizeof(preload_request_path_), "%s", entries_[index].path);
+            preload_generation_++;
+
+            if (!preload_worker_running_) {
+                preload_worker_running_ = true;
+                start_worker = true;
+            }
+        }
+
+        xSemaphoreGive(preload_sem(preload_lock_));
+    }
+
+    if (image_to_free != nullptr) {
+        app_jpeg_image_free(image_to_free);
+    }
+
+    if (start_worker) {
+        const BaseType_t ok = xTaskCreate(preload_task_entry,
+                                          "img_preload",
+                                          kPreloadTaskStackBytes,
+                                          this,
+                                          kPreloadTaskPriority,
+                                          nullptr);
+        if (ok != pdPASS) {
+            ESP_LOGW(TAG, "preload task create failed");
+            if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+                preload_worker_running_ = false;
+                preload_request_index_ = -1;
+                preload_request_path_[0] = '\0';
+                preload_generation_++;
+                xSemaphoreGive(preload_sem(preload_lock_));
+            }
+        }
+    }
+}
+
+void ImageDisplay::cancel_preload(void)
+{
+    app_jpeg_image_t *image_to_free = nullptr;
+
+    if ((preload_lock_ != nullptr) && (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE)) {
+        preload_generation_++;
+        preload_request_index_ = -1;
+        preload_request_path_[0] = '\0';
+
+        image_to_free = preload_image_;
+        preload_image_ = nullptr;
+        preload_image_index_ = -1;
+
+        xSemaphoreGive(preload_sem(preload_lock_));
+    }
+
+    if (image_to_free != nullptr) {
+        app_jpeg_image_free(image_to_free);
+    }
+}
+
+bool ImageDisplay::take_preloaded_image(uint32_t index, app_jpeg_image_t **out_image)
+{
+    if (out_image == nullptr) {
+        return false;
+    }
+
+    *out_image = nullptr;
+    if (preload_lock_ == nullptr) {
+        return false;
+    }
+
+    bool taken = false;
+    if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+        if ((preload_image_ != nullptr) && (preload_image_index_ == static_cast<int>(index))) {
+            *out_image = preload_image_;
+            preload_image_ = nullptr;
+            preload_image_index_ = -1;
+            preload_request_index_ = -1;
+            preload_request_path_[0] = '\0';
+            preload_generation_++;
+            taken = true;
+        }
+
+        xSemaphoreGive(preload_sem(preload_lock_));
+    }
+
+    return taken;
+}
+
+bool ImageDisplay::wait_preloaded_image(uint32_t index, app_jpeg_image_t **out_image, uint32_t timeout_ms)
+{
+    const TickType_t start_tick = xTaskGetTickCount();
+    const TickType_t timeout_ticks = pdMS_TO_TICKS(timeout_ms);
+    const TickType_t poll_ticks = pdMS_TO_TICKS(kPreloadPollMs);
+
+    while (true) {
+        if (take_preloaded_image(index, out_image)) {
+            return true;
+        }
+
+        if (!is_preload_pending(index)) {
+            return false;
+        }
+
+        if ((xTaskGetTickCount() - start_tick) >= timeout_ticks) {
+            return false;
+        }
+
+        vTaskDelay(poll_ticks > 0 ? poll_ticks : 1);
+    }
+}
+
+bool ImageDisplay::is_preload_pending(uint32_t index)
+{
+    if (preload_lock_ == nullptr) {
+        return false;
+    }
+
+    bool pending = false;
+    if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+        pending = preload_worker_running_ && (preload_request_index_ == static_cast<int>(index));
+        xSemaphoreGive(preload_sem(preload_lock_));
+    }
+
+    return pending;
+}
+
+void ImageDisplay::wait_preload_idle(void)
+{
+    if (preload_lock_ == nullptr) {
+        return;
+    }
+
+    while (true) {
+        bool running = false;
+        if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+            running = preload_worker_running_;
+            xSemaphoreGive(preload_sem(preload_lock_));
+        }
+
+        if (!running || (xTaskGetSchedulerState() == taskSCHEDULER_NOT_STARTED)) {
+            return;
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(kPreloadPollMs));
+    }
+}
+
+void ImageDisplay::preload_task_main(void)
+{
+    while (true) {
+        int request_index = -1;
+        uint32_t request_generation = 0;
+        char request_path[kPathMax] = {};
+
+        if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+            request_index = preload_request_index_;
+            request_generation = preload_generation_;
+            snprintf(request_path, sizeof(request_path), "%s", preload_request_path_);
+
+            if ((request_index < 0) || (request_path[0] == '\0')) {
+                preload_worker_running_ = false;
+                xSemaphoreGive(preload_sem(preload_lock_));
+                return;
+            }
+
+            xSemaphoreGive(preload_sem(preload_lock_));
+        }
+
+        // The worker only decodes JPEG data; LVGL objects stay on the UI task.
+        app_jpeg_image_t *loaded_image = nullptr;
+        const esp_err_t err = app_jpeg_image_load_rgb565(request_path, &loaded_image);
+        app_jpeg_image_t *image_to_free = nullptr;
+        bool continue_worker = false;
+
+        if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
+            // A newer request can arrive while JPEG decode is running; stale results are freed below.
+            const bool accept_image = (err == ESP_OK) &&
+                                      (loaded_image != nullptr) &&
+                                      (request_generation == preload_generation_) &&
+                                      (request_index == preload_request_index_);
+
+            if (accept_image) {
+                image_to_free = preload_image_;
+                preload_image_ = loaded_image;
+                preload_image_index_ = request_index;
+                preload_request_index_ = -1;
+                preload_request_path_[0] = '\0';
+                loaded_image = nullptr;
+                ESP_LOGI(TAG, "Preloaded: %s", request_path);
+            } else if (err != ESP_OK) {
+                ESP_LOGW(TAG, "Preload failed: %s (%s)", request_path, esp_err_to_name(err));
+            }
+
+            continue_worker = (request_generation != preload_generation_) &&
+                              (preload_request_index_ >= 0) &&
+                              (preload_request_path_[0] != '\0');
+            if (!continue_worker) {
+                preload_worker_running_ = false;
+            }
+
+            xSemaphoreGive(preload_sem(preload_lock_));
+        }
+
+        if (loaded_image != nullptr) {
+            app_jpeg_image_free(loaded_image);
+        }
+        if (image_to_free != nullptr) {
+            app_jpeg_image_free(image_to_free);
+        }
+
+        if (!continue_worker) {
+            return;
+        }
+    }
 }
 
 void ImageDisplay::set_status(const char *fmt, ...)
@@ -514,6 +902,14 @@ void ImageDisplay::entry_event_cb(lv_event_t *event)
     }
 }
 
+void ImageDisplay::view_touch_event_cb(lv_event_t *event)
+{
+    ImageDisplay *app = static_cast<ImageDisplay *>(lv_event_get_user_data(event));
+    if (app != nullptr) {
+        app->handle_view_touch(event);
+    }
+}
+
 void ImageDisplay::close_view_event_cb(lv_event_t *event)
 {
     ImageDisplay *app = static_cast<ImageDisplay *>(lv_event_get_user_data(event));
@@ -536,4 +932,14 @@ void ImageDisplay::next_event_cb(lv_event_t *event)
     if (app != nullptr) {
         app->open_next(1);
     }
+}
+
+void ImageDisplay::preload_task_entry(void *arg)
+{
+    ImageDisplay *app = static_cast<ImageDisplay *>(arg);
+    if (app != nullptr) {
+        app->preload_task_main();
+    }
+
+    vTaskDelete(nullptr);
 }

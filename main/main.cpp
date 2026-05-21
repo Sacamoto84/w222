@@ -36,6 +36,9 @@
 #include "lite_launcher.h"
 #include "Calculator.hpp"
 #include "Setting.hpp"
+#if CONFIG_JC4880_APP_IMAGE_VIEWER
+#include "ImageDisplay.hpp"
+#endif
 
 #include "esp_hosted.h"
 
@@ -254,6 +257,9 @@ static bool start_lite_launcher(void)
     static LiteLauncher launcher;
     static Calculator calculator;
     static AppSettings settings;
+#if CONFIG_JC4880_APP_IMAGE_VIEWER
+    static ImageDisplay image_display;
+#endif
 
     if (!launcher.add_app(&calculator))
     {
@@ -266,6 +272,14 @@ static bool start_lite_launcher(void)
         ESP_LOGE(TAG, "Register Settings failed");
         return false;
     }
+
+#if CONFIG_JC4880_APP_IMAGE_VIEWER
+    if (!launcher.add_app(&image_display))
+    {
+        ESP_LOGE(TAG, "Register Images failed");
+        return false;
+    }
+#endif
 
     if (!launcher.begin(lv_screen_active()))
     {

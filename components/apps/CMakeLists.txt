@@ -19,11 +19,17 @@ if(CONFIG_JC4880_APP_SETTINGS)
     jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/setting)
 endif()
 
+if(CONFIG_JC4880_APP_IMAGE_VIEWER)
+    jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/image_display)
+endif()
+
 idf_component_register(
     SRCS ${APPS_SRCS}
     INCLUDE_DIRS ${APPS_DIR}
                  ${APPS_DIR}/calculator
                  ${APPS_DIR}/setting
+                 ${APPS_DIR}/image_display
+                 ${PROJECT_DIR}/main
         
     REQUIRES lvgl__lvgl
                esp_app_format

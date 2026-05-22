@@ -19,6 +19,7 @@ namespace {
 static const char *TAG = "signal_generator";
 static constexpr const char *kCarrierDir = CONFIG_BSP_SD_MOUNT_POINT "/Carrier";
 static constexpr const char *kModDir = CONFIG_BSP_SD_MOUNT_POINT "/Mod";
+static constexpr const char *kScriptDir = CONFIG_BSP_SD_MOUNT_POINT "/Script";
 static constexpr double kPi = 3.14159265358979323846;
 static constexpr uint32_t kSampleRates[] = {48000, 96000, 192000, 384000};
 static constexpr const char *kSampleRateOptions = "48 kHz\n96 kHz\n192 kHz\n384 kHz";
@@ -344,6 +345,10 @@ bool SignalGenerator::open(lv_obj_t *parent)
 
     stop_audio();
     load_waveforms();
+    if (script_line_count_ == 0) {
+        script_load_default();
+        script_load_first_file();
+    }
     create_ui(parent);
     refresh_wave_dropdown_options();
     refresh_ui();
@@ -352,22 +357,37 @@ bool SignalGenerator::open(lv_obj_t *parent)
 
 void SignalGenerator::close(void)
 {
+    script_running_ = false;
+    script_wait_until_ = 0;
     stop_audio();
 
     if (scope_timer_ != nullptr) {
         lv_timer_delete(scope_timer_);
         scope_timer_ = nullptr;
     }
+    if (script_timer_ != nullptr) {
+        lv_timer_delete(script_timer_);
+        script_timer_ = nullptr;
+    }
 
     root_ = nullptr;
     status_label_ = nullptr;
     start_label_ = nullptr;
+    script_mode_label_ = nullptr;
     sample_rate_dropdown_ = nullptr;
     volume_label_ = nullptr;
+    scope_box_ = nullptr;
     scope_canvas_ = nullptr;
     scope_status_label_ = nullptr;
     tab_bar_ = nullptr;
     channel_stack_ = nullptr;
+    script_root_ = nullptr;
+    script_name_label_ = nullptr;
+    script_pc_label_ = nullptr;
+    script_status_label_ = nullptr;
+    script_run_label_ = nullptr;
+    script_mode_ = false;
+    script_keyboard_ = nullptr;
     for (size_t i = 0; i < 2; i++) {
         tab_button_[i] = nullptr;
         tab_label_[i] = nullptr;
@@ -387,6 +407,14 @@ void SignalGenerator::close(void)
         am_freq_slider_[i] = nullptr;
         am_enable_switch_[i] = nullptr;
         fm_enable_switch_[i] = nullptr;
+    }
+    for (size_t i = 0; i < kScriptVisibleLines; i++) {
+        script_line_button_[i] = nullptr;
+        script_line_label_[i] = nullptr;
+    }
+    for (size_t i = 0; i < kScriptKeyCount; i++) {
+        script_key_button_[i] = nullptr;
+        script_key_label_[i] = nullptr;
     }
     control_event_count_ = 0;
     active_channel_ = 0;
@@ -453,6 +481,46 @@ SignalGenerator::Waveform *SignalGenerator::waveforms(WaveSet set)
 size_t SignalGenerator::waveform_count(WaveSet set) const
 {
     return set == WaveSet::Carrier ? carrier_wave_count_ : mod_wave_count_;
+}
+
+int SignalGenerator::find_wave_index(WaveSet set, const char *name) const
+{
+    if ((name == nullptr) || (name[0] == '\0')) {
+        return -1;
+    }
+
+    const Waveform *items = set == WaveSet::Carrier ? carrier_waves_ : mod_waves_;
+    const size_t count = waveform_count(set);
+    if (items == nullptr) {
+        return -1;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        if (str_case_cmp(items[i].name, name) == 0) {
+            return static_cast<int>(i);
+        }
+    }
+
+    char name_with_ext[kWaveNameMax + 5] = {};
+    snprintf(name_with_ext, sizeof(name_with_ext), "%s.dat", name);
+    for (size_t i = 0; i < count; i++) {
+        if (str_case_cmp(items[i].name, name_with_ext) == 0) {
+            return static_cast<int>(i);
+        }
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        char item_name[kWaveNameMax] = {};
+        snprintf(item_name, sizeof(item_name), "%s", items[i].name);
+        if (str_ends_with_ignore_case(item_name, ".dat")) {
+            item_name[strlen(item_name) - 4] = '\0';
+        }
+        if (str_case_cmp(item_name, name) == 0) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
 }
 
 void SignalGenerator::load_waveforms(void)
@@ -943,6 +1011,7 @@ void SignalGenerator::create_ui(lv_obj_t *parent)
 
     create_channel_panel(channel_stack_, 0);
     create_channel_panel(channel_stack_, 1);
+    create_script_view(root_);
 }
 
 void SignalGenerator::create_toolbar(lv_obj_t *parent)
@@ -985,6 +1054,10 @@ void SignalGenerator::create_toolbar(lv_obj_t *parent)
     lv_obj_t *vol_inc = create_button(volume_box, "+", 34);
     attach_event(vol_inc, Control::VolumeInc, 0, LV_EVENT_CLICKED);
 
+    lv_obj_t *script_button = create_button(toolbar, "SCRIPT", 76);
+    script_mode_label_ = lv_obj_get_child(script_button, 0);
+    attach_event(script_button, Control::ScriptMode, 0, LV_EVENT_CLICKED);
+
     status_label_ = create_text_label(toolbar, runtime_status_, &lv_font_montserrat_14, 0x9FB0C2);
     lv_obj_set_flex_grow(status_label_, 1);
     lv_obj_set_width(status_label_, 1);
@@ -993,6 +1066,7 @@ void SignalGenerator::create_toolbar(lv_obj_t *parent)
 void SignalGenerator::create_scope_window(lv_obj_t *parent)
 {
     lv_obj_t *scope_box = lv_obj_create(parent);
+    scope_box_ = scope_box;
     lv_obj_set_width(scope_box, lv_pct(100));
     lv_obj_set_height(scope_box, static_cast<lv_coord_t>(kScopeCanvasHeight + 38));
     lv_obj_set_style_radius(scope_box, 8, 0);
@@ -1582,7 +1656,7 @@ void SignalGenerator::attach_event(lv_obj_t *obj, Control control, uint8_t chann
 
 void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
 {
-    if ((data == nullptr) || (data->channel >= 2)) {
+    if (data == nullptr) {
         return;
     }
 
@@ -1598,7 +1672,131 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
         return;
     }
 
+    if (control == Control::ScriptMode) {
+        script_mode_ = !script_mode_;
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptRunStop) {
+        if (script_running_) {
+            script_stop(false);
+        } else {
+            script_start();
+        }
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptNew) {
+        script_keyboard_home();
+        script_new();
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptLoad) {
+        script_keyboard_home();
+        if (!script_load_first_file()) {
+            script_load_default();
+            set_runtime_status("Script: no .sk files in %s", kScriptDir);
+        }
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptSave) {
+        if (script_save_file(script_name_)) {
+            set_runtime_status("Script saved: %s.sk", script_name_);
+        }
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptSaveAs) {
+        if (script_save_as_next_file()) {
+            set_runtime_status("Script saved as: %s.sk", script_name_);
+        }
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptAdd) {
+        script_keyboard_home();
+        script_insert_after_selected("?");
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptAddEnd) {
+        script_keyboard_home();
+        script_insert_after_selected("END");
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptDelete) {
+        script_keyboard_home();
+        script_delete_selected();
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptUp) {
+        script_keyboard_home();
+        script_move_selected(-1);
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptDown) {
+        script_keyboard_home();
+        script_move_selected(1);
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptSelectLine) {
+        const size_t selected = script_scroll_offset_ + channel_index;
+        if (selected < script_line_count_) {
+            script_selected_line_ = selected;
+            script_keyboard_home();
+        }
+        refresh_script_ui();
+        return;
+    }
+
+    if (control == Control::ScriptTemplate) {
+        script_keyboard_press(channel_index);
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptPresetSave) {
+        if (save_preset_file("default")) {
+            set_runtime_status("Preset saved: default.txt");
+        }
+        refresh_ui();
+        return;
+    }
+
+    if (control == Control::ScriptPresetLoad) {
+        const bool was_running = audio_running_;
+        if (load_preset_file("default")) {
+            if (was_running) {
+                stop_audio();
+                start_audio();
+            }
+            set_runtime_status("Preset loaded: default.txt");
+        }
+        refresh_ui();
+        return;
+    }
+
     if (control == Control::SelectChannel) {
+        if (channel_index >= 2) {
+            return;
+        }
         active_channel_ = channel_index;
         refresh_ui();
         return;
@@ -1619,6 +1817,10 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
         } else {
             refresh_ui();
         }
+        return;
+    }
+
+    if (channel_index >= 2) {
         return;
     }
 
@@ -1765,6 +1967,37 @@ void SignalGenerator::refresh_ui(void)
     if (status_label_ != nullptr) {
         lv_label_set_text(status_label_, runtime_status_);
     }
+    if (script_mode_label_ != nullptr) {
+        lv_label_set_text(script_mode_label_, script_mode_ ? "CTRL" : "SCRIPT");
+    }
+    if (scope_box_ != nullptr) {
+        if (script_mode_) {
+            lv_obj_add_flag(scope_box_, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_clear_flag(scope_box_, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+    if (tab_bar_ != nullptr) {
+        if (script_mode_) {
+            lv_obj_add_flag(tab_bar_, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_clear_flag(tab_bar_, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+    if (channel_stack_ != nullptr) {
+        if (script_mode_) {
+            lv_obj_add_flag(channel_stack_, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_clear_flag(channel_stack_, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+    if (script_root_ != nullptr) {
+        if (script_mode_) {
+            lv_obj_clear_flag(script_root_, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_add_flag(script_root_, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
 
     for (size_t i = 0; i < 2; i++) {
         const ChannelConfig &ch = snapshot.ch[i];
@@ -1855,6 +2088,7 @@ void SignalGenerator::refresh_ui(void)
         }
     }
 
+    refresh_script_ui();
     render_scope();
 }
 
@@ -1883,6 +2117,14 @@ void SignalGenerator::scope_timer_cb(lv_timer_t *timer)
     SignalGenerator *app = static_cast<SignalGenerator *>(lv_timer_get_user_data(timer));
     if (app != nullptr) {
         app->render_scope();
+    }
+}
+
+void SignalGenerator::script_timer_cb(lv_timer_t *timer)
+{
+    SignalGenerator *app = static_cast<SignalGenerator *>(lv_timer_get_user_data(timer));
+    if (app != nullptr) {
+        app->script_tick();
     }
 }
 

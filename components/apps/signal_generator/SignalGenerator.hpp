@@ -28,7 +28,7 @@ private:
     static constexpr size_t kMaxWaveforms = 16;
     static constexpr size_t kWaveNameMax = 32;
     static constexpr size_t kOptionsMax = 768;
-    static constexpr size_t kMaxControlEvents = 96;
+    static constexpr size_t kMaxControlEvents = 180;
     static constexpr size_t kAudioFrames = 1024;
     static constexpr size_t kAudioDmaFrames = 512;
     static constexpr size_t kAudioDmaDescNum = 16;
@@ -36,6 +36,14 @@ private:
     static constexpr size_t kWavePreviewHeight = 86;
     static constexpr size_t kScopeCanvasWidth = 640;
     static constexpr size_t kScopeCanvasHeight = 118;
+    static constexpr size_t kScriptMaxLines = 128;
+    static constexpr size_t kScriptLineMax = 64;
+    static constexpr size_t kScriptNameMax = 32;
+    static constexpr size_t kScriptVisibleLines = 6;
+    static constexpr size_t kScriptRegisterCount = 10;
+    static constexpr size_t kScriptKeyCount = 16;
+    static constexpr size_t kScriptRouteStackMax = 8;
+    static constexpr size_t kScriptTokenMax = 8;
 
     enum class WaveSet : uint8_t {
         Carrier,
@@ -66,6 +74,36 @@ private:
         FmDevInc,
         FmFreqDec,
         FmFreqInc,
+        ScriptMode,
+        ScriptRunStop,
+        ScriptNew,
+        ScriptSave,
+        ScriptSaveAs,
+        ScriptLoad,
+        ScriptAdd,
+        ScriptAddEnd,
+        ScriptDelete,
+        ScriptUp,
+        ScriptDown,
+        ScriptSelectLine,
+        ScriptTemplate,
+        ScriptPresetSave,
+        ScriptPresetLoad,
+    };
+
+    enum class ScriptKeyboardRoute : uint8_t {
+        Home,
+        Number,
+        Register,
+        OnOff,
+        CramFm,
+        CramValue,
+        FmValue,
+        Comparison,
+        IfValue,
+        ModCarrier,
+        ModAm,
+        ModFm,
     };
 
     struct Waveform {
@@ -104,6 +142,16 @@ private:
         uint8_t channel;
     };
 
+    struct ScriptLine {
+        char text[kScriptLineMax];
+    };
+
+    struct ScriptKeyboardFrame {
+        ScriptKeyboardRoute route;
+        uint8_t argument;
+        ScriptKeyboardRoute next_route;
+    };
+
     Waveform *carrier_waves_ = nullptr;
     Waveform *mod_waves_ = nullptr;
     size_t carrier_wave_count_ = 0;
@@ -129,11 +177,14 @@ private:
     lv_obj_t *root_ = nullptr;
     lv_obj_t *status_label_ = nullptr;
     lv_obj_t *start_label_ = nullptr;
+    lv_obj_t *script_mode_label_ = nullptr;
     lv_obj_t *sample_rate_dropdown_ = nullptr;
     lv_obj_t *volume_label_ = nullptr;
+    lv_obj_t *scope_box_ = nullptr;
     lv_obj_t *scope_canvas_ = nullptr;
     lv_obj_t *scope_status_label_ = nullptr;
     lv_timer_t *scope_timer_ = nullptr;
+    lv_timer_t *script_timer_ = nullptr;
     uint16_t *scope_canvas_buffer_ = nullptr;
     lv_obj_t *tab_bar_ = nullptr;
     lv_obj_t *tab_button_[2] = {};
@@ -158,11 +209,37 @@ private:
     lv_obj_t *fm_freq_label_[2] = {};
     lv_obj_t *am_enable_switch_[2] = {};
     lv_obj_t *fm_enable_switch_[2] = {};
+    lv_obj_t *script_root_ = nullptr;
+    lv_obj_t *script_name_label_ = nullptr;
+    lv_obj_t *script_pc_label_ = nullptr;
+    lv_obj_t *script_status_label_ = nullptr;
+    lv_obj_t *script_run_label_ = nullptr;
+    lv_obj_t *script_line_button_[kScriptVisibleLines] = {};
+    lv_obj_t *script_line_label_[kScriptVisibleLines] = {};
+    lv_obj_t *script_keyboard_ = nullptr;
+    lv_obj_t *script_key_button_[kScriptKeyCount] = {};
+    lv_obj_t *script_key_label_[kScriptKeyCount] = {};
 
     ControlEventData control_events_[kMaxControlEvents] = {};
     size_t control_event_count_ = 0;
     uint8_t active_channel_ = 0;
     char runtime_status_[160] = {};
+    bool script_mode_ = false;
+    bool script_running_ = false;
+    bool script_dirty_ = false;
+    ScriptLine script_lines_[kScriptMaxLines] = {};
+    size_t script_line_count_ = 0;
+    size_t script_selected_line_ = 0;
+    size_t script_scroll_offset_ = 0;
+    size_t script_pc_ = 0;
+    TickType_t script_wait_until_ = 0;
+    float script_registers_[kScriptRegisterCount] = {};
+    char script_name_[kScriptNameMax] = "main";
+    ScriptKeyboardRoute script_keyboard_route_ = ScriptKeyboardRoute::Home;
+    uint8_t script_keyboard_argument_ = 0;
+    ScriptKeyboardRoute script_keyboard_next_route_ = ScriptKeyboardRoute::Home;
+    ScriptKeyboardFrame script_keyboard_stack_[kScriptRouteStackMax] = {};
+    size_t script_keyboard_stack_count_ = 0;
 
     void set_default_state(void);
     bool allocate_waveforms(void);
@@ -173,6 +250,7 @@ private:
     bool scan_waveform_dir(WaveSet set, const char *dir_path);
     Waveform *waveforms(WaveSet set);
     size_t waveform_count(WaveSet set) const;
+    int find_wave_index(WaveSet set, const char *name) const;
 
     bool start_audio(void);
     void stop_audio(void);
@@ -190,6 +268,10 @@ private:
     void create_scope_window(lv_obj_t *parent);
     void create_channel_tabs(lv_obj_t *parent);
     void create_channel_panel(lv_obj_t *parent, uint8_t channel);
+    void create_script_view(lv_obj_t *parent);
+    void create_script_line(lv_obj_t *parent, size_t visible_index);
+    void create_script_side_button(lv_obj_t *parent, const char *text, Control control);
+    void create_script_keyboard_button(lv_obj_t *parent, uint8_t key_index);
     lv_obj_t *create_button(lv_obj_t *parent, const char *text, lv_coord_t width);
     lv_obj_t *create_text_label(lv_obj_t *parent, const char *text, const lv_font_t *font, uint32_t color);
     lv_obj_t *create_adjust_row(lv_obj_t *parent,
@@ -213,6 +295,8 @@ private:
     void attach_event(lv_obj_t *obj, Control control, uint8_t channel, lv_event_code_t code);
     void handle_control(ControlEventData *data, lv_event_t *event);
     void refresh_ui(void);
+    void refresh_script_ui(void);
+    void refresh_script_keyboard(void);
     void refresh_wave_dropdown_options(void);
     void create_carrier_preview(lv_obj_t *parent, uint8_t channel);
     void create_mod_preview(lv_obj_t *parent, uint8_t channel, bool fm_preview);
@@ -226,7 +310,46 @@ private:
     void render_scope(void);
     void set_runtime_status(const char *fmt, ...);
 
+    void script_load_default(void);
+    bool script_load_first_file(void);
+    bool script_load_file(const char *name);
+    bool script_save_file(const char *name);
+    bool script_save_as_next_file(void);
+    void script_new(void);
+    void script_start(void);
+    void script_stop(bool reset_pc);
+    void script_tick(void);
+    bool script_execute_current_line(void);
+    bool script_apply_generator_command(char *tokens[], size_t token_count);
+    bool script_value_from_token(const char *token, float *value) const;
+    int script_register_index(const char *token) const;
+    void script_set_line(size_t index, const char *text);
+    void script_insert_after_selected(const char *text);
+    void script_delete_selected(void);
+    void script_move_selected(int direction);
+    void script_keyboard_press(uint8_t key_index);
+    void script_keyboard_home(void);
+    void script_keyboard_route_to(ScriptKeyboardRoute route,
+                                  uint8_t argument,
+                                  ScriptKeyboardRoute next_route = ScriptKeyboardRoute::Home);
+    void script_keyboard_back(void);
+    void script_begin_command(const char *token,
+                              ScriptKeyboardRoute route,
+                              uint8_t argument,
+                              ScriptKeyboardRoute next_route = ScriptKeyboardRoute::Home);
+    void script_replace_token(uint8_t token_index, const char *token);
+    void script_remove_tokens_from(uint8_t token_index);
+    bool script_get_token(uint8_t token_index, char *out, size_t out_size) const;
+    void script_append_number(char ch);
+    void script_delete_number_char(void);
+    void script_finish_number(void);
+    size_t script_find_else_or_endif(size_t from_pc, bool *found_else) const;
+    size_t script_find_endif(size_t from_pc) const;
+    bool save_preset_file(const char *name);
+    bool load_preset_file(const char *name);
+
     static void control_event_cb(lv_event_t *event);
     static void scope_timer_cb(lv_timer_t *timer);
+    static void script_timer_cb(lv_timer_t *timer);
     static void audio_task_entry(void *arg);
 };

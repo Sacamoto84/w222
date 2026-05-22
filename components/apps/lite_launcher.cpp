@@ -123,7 +123,7 @@ void LiteLauncher::build_home(void)
 
         lv_obj_t *tile = lv_button_create(grid);
         lv_obj_remove_style_all(tile);
-        lv_obj_set_size(tile, 108, 118);
+        lv_obj_set_size(tile, 104, 118);
         lv_obj_set_style_bg_opa(tile, LV_OPA_TRANSP, 0);
         lv_obj_set_style_radius(tile, 8, 0);
         lv_obj_set_style_pad_all(tile, 0, 0);
@@ -151,7 +151,7 @@ void LiteLauncher::build_home(void)
 
         lv_obj_t *title = create_label(tile, app->title(), &lv_font_montserrat_14, 0xE8ECF3);
         lv_label_set_long_mode(title, LV_LABEL_LONG_DOT);
-        lv_obj_set_width(title, 104);
+        lv_obj_set_width(title, 100);
         lv_obj_set_style_text_align(title, LV_TEXT_ALIGN_CENTER, 0);
         make_launcher_child_passthrough(title);
     }

@@ -116,6 +116,68 @@ static uint32_t clamp_u32(uint32_t value, uint32_t min_value, uint32_t max_value
     return value;
 }
 
+static size_t clamp_wave_index(int index, size_t count)
+{
+    if (count == 0) {
+        return 0;
+    }
+    if (index < 0) {
+        return 0;
+    }
+    if (static_cast<size_t>(index) >= count) {
+        return count - 1;
+    }
+
+    return static_cast<size_t>(index);
+}
+
+static uint16_t rgb565(uint32_t color)
+{
+    return lv_color_to_u16(lv_color_hex(color));
+}
+
+static void preview_put_px(uint16_t *buffer, int32_t width, int32_t height, int32_t x, int32_t y, uint16_t color)
+{
+    if ((buffer == nullptr) || (x < 0) || (y < 0) || (x >= width) || (y >= height)) {
+        return;
+    }
+
+    buffer[(y * width) + x] = color;
+}
+
+static void preview_draw_line(uint16_t *buffer,
+                              int32_t width,
+                              int32_t height,
+                              int32_t x0,
+                              int32_t y0,
+                              int32_t x1,
+                              int32_t y1,
+                              uint16_t color)
+{
+    int32_t dx = abs(x1 - x0);
+    int32_t sx = x0 < x1 ? 1 : -1;
+    int32_t dy = -abs(y1 - y0);
+    int32_t sy = y0 < y1 ? 1 : -1;
+    int32_t err = dx + dy;
+
+    while (true) {
+        preview_put_px(buffer, width, height, x0, y0, color);
+        if ((x0 == x1) && (y0 == y1)) {
+            break;
+        }
+
+        const int32_t e2 = err * 2;
+        if (e2 >= dy) {
+            err += dy;
+            x0 += sx;
+        }
+        if (e2 <= dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
+
 static int16_t float_to_i16(float value)
 {
     value = clamp_float(value, -1.0f, 1.0f);
@@ -176,6 +238,11 @@ static void format_hz(char *out, size_t out_size, float value)
     }
 }
 
+static i2s_mclk_multiple_t i2s_mclk_multiple_for_rate(uint32_t sample_rate_hz)
+{
+    return sample_rate_hz >= 384000 ? I2S_MCLK_MULTIPLE_128 : I2S_MCLK_MULTIPLE_256;
+}
+
 } // namespace
 
 SignalGenerator::SignalGenerator()
@@ -202,6 +269,21 @@ SignalGenerator::~SignalGenerator()
     if (mod_waves_ != nullptr) {
         heap_caps_free(mod_waves_);
         mod_waves_ = nullptr;
+    }
+
+    for (size_t i = 0; i < 2; i++) {
+        if (carrier_preview_buffer_[i] != nullptr) {
+            heap_caps_free(carrier_preview_buffer_[i]);
+            carrier_preview_buffer_[i] = nullptr;
+        }
+        if (am_preview_buffer_[i] != nullptr) {
+            heap_caps_free(am_preview_buffer_[i]);
+            am_preview_buffer_[i] = nullptr;
+        }
+        if (fm_preview_buffer_[i] != nullptr) {
+            heap_caps_free(fm_preview_buffer_[i]);
+            fm_preview_buffer_[i] = nullptr;
+        }
     }
 }
 
@@ -248,6 +330,9 @@ void SignalGenerator::close(void)
         tab_button_[i] = nullptr;
         tab_label_[i] = nullptr;
         channel_panel_[i] = nullptr;
+        carrier_preview_canvas_[i] = nullptr;
+        am_preview_canvas_[i] = nullptr;
+        fm_preview_canvas_[i] = nullptr;
         ch_enable_switch_[i] = nullptr;
         carrier_wave_dropdown_[i] = nullptr;
         am_wave_dropdown_[i] = nullptr;
@@ -298,19 +383,19 @@ bool SignalGenerator::allocate_waveforms(void)
 {
     if (carrier_waves_ == nullptr) {
         carrier_waves_ = static_cast<Waveform *>(heap_caps_calloc(kMaxWaveforms, sizeof(Waveform),
-                                                                  MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
+                                                                  MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
         if (carrier_waves_ == nullptr) {
             carrier_waves_ = static_cast<Waveform *>(heap_caps_calloc(kMaxWaveforms, sizeof(Waveform),
-                                                                      MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
+                                                                      MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
         }
     }
 
     if (mod_waves_ == nullptr) {
         mod_waves_ = static_cast<Waveform *>(heap_caps_calloc(kMaxWaveforms, sizeof(Waveform),
-                                                              MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
+                                                              MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
         if (mod_waves_ == nullptr) {
             mod_waves_ = static_cast<Waveform *>(heap_caps_calloc(kMaxWaveforms, sizeof(Waveform),
-                                                                  MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
+                                                                  MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
         }
     }
 
@@ -545,6 +630,8 @@ esp_err_t SignalGenerator::init_i2s(uint32_t sample_rate_hz)
             },
         },
     };
+    std_cfg.clk_cfg.clk_src = I2S_CLK_SRC_APLL;
+    std_cfg.clk_cfg.mclk_multiple = i2s_mclk_multiple_for_rate(sample_rate_hz);
 
     esp_err_t err = i2s_channel_init_std_mode(tx_chan_, &std_cfg);
     if (err != ESP_OK) {
@@ -557,6 +644,7 @@ esp_err_t SignalGenerator::init_i2s(uint32_t sample_rate_hz)
         deinit_i2s();
         ESP_RETURN_ON_ERROR(err, TAG, "i2s_channel_enable failed");
     }
+    i2s_channel_enabled_ = true;
 
     return ESP_OK;
 }
@@ -567,7 +655,10 @@ void SignalGenerator::deinit_i2s(void)
         return;
     }
 
-    i2s_channel_disable(tx_chan_);
+    if (i2s_channel_enabled_) {
+        i2s_channel_disable(tx_chan_);
+        i2s_channel_enabled_ = false;
+    }
     i2s_del_channel(tx_chan_);
     tx_chan_ = nullptr;
 }
@@ -849,22 +940,187 @@ void SignalGenerator::create_channel_panel(lv_obj_t *parent, uint8_t channel)
 
     create_switch_row(panel, "Output", &ch_enable_switch_[channel], Control::ChEnable, channel);
     create_dropdown_row(panel, "Carrier", &carrier_wave_dropdown_[channel], Control::CarrierWave, channel);
+    create_carrier_preview(panel, channel);
     create_adjust_row(panel, "Carrier F", &carrier_freq_label_[channel],
                       Control::CarrierFreqDec, Control::CarrierFreqInc, channel);
 
     create_switch_row(panel, "AM", &am_enable_switch_[channel], Control::AmEnable, channel);
     create_dropdown_row(panel, "AM wave", &am_wave_dropdown_[channel], Control::AmWave, channel);
+    create_mod_preview(panel, channel, false);
     create_adjust_row(panel, "AM F", &am_freq_label_[channel],
                       Control::AmFreqDec, Control::AmFreqInc, channel);
 
     create_switch_row(panel, "FM", &fm_enable_switch_[channel], Control::FmEnable, channel);
     create_dropdown_row(panel, "FM wave", &fm_wave_dropdown_[channel], Control::FmWave, channel);
+    create_mod_preview(panel, channel, true);
     create_adjust_row(panel, "FM base", &fm_base_label_[channel],
                       Control::FmBaseDec, Control::FmBaseInc, channel);
     create_adjust_row(panel, "FM dev", &fm_dev_label_[channel],
                       Control::FmDevDec, Control::FmDevInc, channel);
     create_adjust_row(panel, "FM F", &fm_freq_label_[channel],
                       Control::FmFreqDec, Control::FmFreqInc, channel);
+}
+
+void SignalGenerator::create_carrier_preview(lv_obj_t *parent, uint8_t channel)
+{
+    if (channel >= 2) {
+        return;
+    }
+
+    create_wave_preview(parent, &carrier_preview_canvas_[channel], &carrier_preview_buffer_[channel]);
+}
+
+void SignalGenerator::create_mod_preview(lv_obj_t *parent, uint8_t channel, bool fm_preview)
+{
+    if (channel >= 2) {
+        return;
+    }
+
+    if (fm_preview) {
+        create_wave_preview(parent, &fm_preview_canvas_[channel], &fm_preview_buffer_[channel]);
+    } else {
+        create_wave_preview(parent, &am_preview_canvas_[channel], &am_preview_buffer_[channel]);
+    }
+}
+
+void SignalGenerator::create_wave_preview(lv_obj_t *parent, lv_obj_t **canvas_slot, uint16_t **buffer_slot)
+{
+    if ((parent == nullptr) || (canvas_slot == nullptr) || (buffer_slot == nullptr)) {
+        return;
+    }
+
+    lv_obj_t *preview_box = lv_obj_create(parent);
+    lv_obj_set_width(preview_box, lv_pct(100));
+    lv_obj_set_height(preview_box, static_cast<lv_coord_t>(kWavePreviewHeight + 16));
+    lv_obj_set_style_radius(preview_box, 8, 0);
+    lv_obj_set_style_bg_color(preview_box, lv_color_hex(0x101820), 0);
+    lv_obj_set_style_bg_opa(preview_box, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(preview_box, 1, 0);
+    lv_obj_set_style_border_color(preview_box, lv_color_hex(0x2C3A48), 0);
+    lv_obj_set_style_pad_all(preview_box, 7, 0);
+    lv_obj_clear_flag(preview_box, LV_OBJ_FLAG_SCROLLABLE);
+
+    if (!ensure_wave_preview_buffer(buffer_slot)) {
+        lv_obj_t *label = create_text_label(preview_box, "Preview buffer alloc failed", &lv_font_montserrat_14, 0xFFB36B);
+        lv_obj_center(label);
+        return;
+    }
+
+    lv_obj_t *canvas = lv_canvas_create(preview_box);
+    *canvas_slot = canvas;
+    lv_canvas_set_buffer(canvas,
+                         *buffer_slot,
+                         static_cast<int32_t>(kWavePreviewWidth),
+                         static_cast<int32_t>(kWavePreviewHeight),
+                         LV_COLOR_FORMAT_RGB565);
+    lv_obj_center(canvas);
+}
+
+bool SignalGenerator::ensure_wave_preview_buffer(uint16_t **buffer_slot)
+{
+    if (buffer_slot == nullptr) {
+        return false;
+    }
+
+    if (*buffer_slot != nullptr) {
+        return true;
+    }
+
+    const size_t bytes = kWavePreviewWidth * kWavePreviewHeight * sizeof(uint16_t);
+    *buffer_slot = static_cast<uint16_t *>(heap_caps_malloc(bytes, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
+    if (*buffer_slot == nullptr) {
+        *buffer_slot = static_cast<uint16_t *>(heap_caps_malloc(bytes, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
+    }
+
+    if (*buffer_slot != nullptr) {
+        memset(*buffer_slot, 0, bytes);
+    }
+
+    return *buffer_slot != nullptr;
+}
+
+void SignalGenerator::render_wave_preview(lv_obj_t *canvas, uint16_t *buffer, const Waveform *waveform, uint32_t color)
+{
+    if ((canvas == nullptr) || (buffer == nullptr) || (waveform == nullptr)) {
+        return;
+    }
+
+    const int32_t width = static_cast<int32_t>(kWavePreviewWidth);
+    const int32_t height = static_cast<int32_t>(kWavePreviewHeight);
+    const int32_t pad = 7;
+    const int32_t mid_y = height / 2;
+    const float amplitude = static_cast<float>((height / 2) - pad);
+
+    const uint16_t bg = rgb565(0x101820);
+    const uint16_t grid = rgb565(0x263340);
+    const uint16_t center = rgb565(0x2F6EA0);
+    const uint16_t wave_color = rgb565(color);
+
+    for (size_t i = 0; i < (kWavePreviewWidth * kWavePreviewHeight); i++) {
+        buffer[i] = bg;
+    }
+
+    for (int32_t x = 0; x < width; x += width / 8) {
+        preview_draw_line(buffer, width, height, x, pad, x, height - pad - 1, grid);
+    }
+    for (int32_t y = pad; y < height - pad; y += 18) {
+        preview_draw_line(buffer, width, height, 0, y, width - 1, y, grid);
+    }
+
+    preview_draw_line(buffer, width, height, 0, mid_y, width - 1, mid_y, center);
+
+    int32_t prev_x = 0;
+    int32_t prev_y = mid_y;
+    for (int32_t x = 0; x < width; x++) {
+        const double phase = (static_cast<double>(x) / static_cast<double>(width - 1)) * 2.0;
+        const float sample = lookup_wave(waveform, phase);
+        int32_t y = mid_y - static_cast<int32_t>(sample * amplitude);
+        if (y < pad) {
+            y = pad;
+        } else if (y >= (height - pad)) {
+            y = height - pad - 1;
+        }
+
+        if (x == 0) {
+            prev_y = y;
+        } else {
+            preview_draw_line(buffer, width, height, prev_x, prev_y, x, y, wave_color);
+            preview_draw_line(buffer, width, height, prev_x, prev_y + 1, x, y + 1, wave_color);
+        }
+
+        prev_x = x;
+        prev_y = y;
+    }
+
+    lv_obj_invalidate(canvas);
+}
+
+void SignalGenerator::render_channel_previews(uint8_t channel, const ChannelConfig &channel_state)
+{
+    if (channel >= 2) {
+        return;
+    }
+
+    if ((carrier_waves_ != nullptr) && (carrier_wave_count_ > 0)) {
+        const size_t index = clamp_wave_index(channel_state.carrier_wave, carrier_wave_count_);
+        render_wave_preview(carrier_preview_canvas_[channel],
+                            carrier_preview_buffer_[channel],
+                            &carrier_waves_[index],
+                            channel == 0 ? 0x61D1FF : 0xFFB36B);
+    }
+
+    if ((mod_waves_ != nullptr) && (mod_wave_count_ > 0)) {
+        const size_t am_wave_index = clamp_wave_index(channel_state.am_wave, mod_wave_count_);
+        const size_t fm_wave_index = clamp_wave_index(channel_state.fm_wave, mod_wave_count_);
+        render_wave_preview(am_preview_canvas_[channel],
+                            am_preview_buffer_[channel],
+                            &mod_waves_[am_wave_index],
+                            0x7CFF9B);
+        render_wave_preview(fm_preview_canvas_[channel],
+                            fm_preview_buffer_[channel],
+                            &mod_waves_[fm_wave_index],
+                            0xD1A1FF);
+    }
 }
 
 lv_obj_t *SignalGenerator::create_button(lv_obj_t *parent, const char *text, lv_coord_t width)
@@ -1250,6 +1506,10 @@ void SignalGenerator::refresh_ui(void)
             char text[24] = {};
             format_hz(text, sizeof(text), ch.fm_freq_hz);
             lv_label_set_text(fm_freq_label_[i], text);
+        }
+
+        if (i == active_channel_) {
+            render_channel_previews(static_cast<uint8_t>(i), ch);
         }
     }
 }

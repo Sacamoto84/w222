@@ -267,6 +267,22 @@ static bool start_lite_launcher(void)
     static SignalGenerator signal_generator;
 #endif
 
+#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
+    if (!launcher.add_app(&signal_generator))
+    {
+        ESP_LOGE(TAG, "Register Generator failed");
+        return false;
+    }
+#endif
+
+#if CONFIG_JC4880_APP_IMAGE_VIEWER
+    if (!launcher.add_app(&image_display))
+    {
+        ESP_LOGE(TAG, "Register Images failed");
+        return false;
+    }
+#endif
+
     if (!launcher.add_app(&calculator))
     {
         ESP_LOGE(TAG, "Register Calculator failed");
@@ -278,22 +294,6 @@ static bool start_lite_launcher(void)
         ESP_LOGE(TAG, "Register Settings failed");
         return false;
     }
-
-#if CONFIG_JC4880_APP_IMAGE_VIEWER
-    if (!launcher.add_app(&image_display))
-    {
-        ESP_LOGE(TAG, "Register Images failed");
-        return false;
-    }
-#endif
-
-#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
-    if (!launcher.add_app(&signal_generator))
-    {
-        ESP_LOGE(TAG, "Register Generator failed");
-        return false;
-    }
-#endif
 
     if (!launcher.begin(lv_screen_active()))
     {

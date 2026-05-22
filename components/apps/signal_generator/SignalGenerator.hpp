@@ -30,6 +30,8 @@ private:
     static constexpr size_t kOptionsMax = 768;
     static constexpr size_t kMaxControlEvents = 96;
     static constexpr size_t kAudioFrames = 256;
+    static constexpr size_t kWavePreviewWidth = 640;
+    static constexpr size_t kWavePreviewHeight = 86;
 
     enum class WaveSet : uint8_t {
         Carrier,
@@ -109,6 +111,7 @@ private:
     i2s_chan_handle_t tx_chan_ = nullptr;
     TaskHandle_t audio_task_handle_ = nullptr;
     volatile bool audio_task_stop_ = false;
+    bool i2s_channel_enabled_ = false;
     bool audio_running_ = false;
     int16_t audio_buffer_[kAudioFrames * 2] = {};
 
@@ -122,6 +125,12 @@ private:
     lv_obj_t *tab_label_[2] = {};
     lv_obj_t *channel_stack_ = nullptr;
     lv_obj_t *channel_panel_[2] = {};
+    lv_obj_t *carrier_preview_canvas_[2] = {};
+    lv_obj_t *am_preview_canvas_[2] = {};
+    lv_obj_t *fm_preview_canvas_[2] = {};
+    uint16_t *carrier_preview_buffer_[2] = {};
+    uint16_t *am_preview_buffer_[2] = {};
+    uint16_t *fm_preview_buffer_[2] = {};
     lv_obj_t *ch_enable_switch_[2] = {};
     lv_obj_t *carrier_wave_dropdown_[2] = {};
     lv_obj_t *am_wave_dropdown_[2] = {};
@@ -185,6 +194,12 @@ private:
     void handle_control(ControlEventData *data, lv_event_t *event);
     void refresh_ui(void);
     void refresh_wave_dropdown_options(void);
+    void create_carrier_preview(lv_obj_t *parent, uint8_t channel);
+    void create_mod_preview(lv_obj_t *parent, uint8_t channel, bool fm_preview);
+    void create_wave_preview(lv_obj_t *parent, lv_obj_t **canvas_slot, uint16_t **buffer_slot);
+    bool ensure_wave_preview_buffer(uint16_t **buffer_slot);
+    void render_wave_preview(lv_obj_t *canvas, uint16_t *buffer, const Waveform *waveform, uint32_t color);
+    void render_channel_previews(uint8_t channel, const ChannelConfig &channel_state);
     void set_runtime_status(const char *fmt, ...);
 
     static void control_event_cb(lv_event_t *event);

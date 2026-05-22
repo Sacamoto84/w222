@@ -29,6 +29,13 @@ static constexpr gpio_num_t kI2sDoutPin = GPIO_NUM_30;
 static constexpr uint32_t kI2sWriteTimeoutMs = 100;
 static constexpr uint32_t kAudioTaskStackBytes = 8192;
 static constexpr UBaseType_t kAudioTaskPriority = tskIDLE_PRIORITY + 4;
+static constexpr float kAmFreqMinHz = 0.1f;
+static constexpr float kAmFreqMaxHz = 500.0f;
+static constexpr int32_t kAmFreqSliderSteps = 1000;
+static constexpr uint32_t kScopeRefreshMs = 80;
+static constexpr uint32_t kScopePublishEveryBuffers = 8;
+static constexpr uint32_t kAudioYieldEveryBuffers = 64;
+static constexpr float kQ32PhaseScale = 4294967296.0f;
 #if CONFIG_FREERTOS_UNICORE
 static constexpr BaseType_t kAudioTaskCore = tskNO_AFFINITY;
 #else
@@ -184,15 +191,6 @@ static int16_t float_to_i16(float value)
     return static_cast<int16_t>(value * 32767.0f);
 }
 
-static void advance_phase(double &phase, double increment)
-{
-    phase += increment;
-    phase -= floor(phase);
-    if (phase < 0.0) {
-        phase += 1.0;
-    }
-}
-
 static void make_plain_container(lv_obj_t *obj)
 {
     lv_obj_remove_style_all(obj);
@@ -243,6 +241,30 @@ static i2s_mclk_multiple_t i2s_mclk_multiple_for_rate(uint32_t sample_rate_hz)
     return sample_rate_hz >= 384000 ? I2S_MCLK_MULTIPLE_128 : I2S_MCLK_MULTIPLE_256;
 }
 
+static float am_freq_from_slider(int32_t slider_value)
+{
+    if (slider_value < 0) {
+        slider_value = 0;
+    } else if (slider_value > kAmFreqSliderSteps) {
+        slider_value = kAmFreqSliderSteps;
+    }
+
+    const float position = static_cast<float>(slider_value) /
+                           static_cast<float>(kAmFreqSliderSteps);
+    const float log_min = logf(kAmFreqMinHz);
+    const float log_max = logf(kAmFreqMaxHz);
+    return clamp_float(expf(log_min + ((log_max - log_min) * position)), kAmFreqMinHz, kAmFreqMaxHz);
+}
+
+static int32_t am_freq_to_slider(float freq_hz)
+{
+    const float freq = clamp_float(freq_hz, kAmFreqMinHz, kAmFreqMaxHz);
+    const float log_min = logf(kAmFreqMinHz);
+    const float log_max = logf(kAmFreqMaxHz);
+    const float position = (logf(freq) - log_min) / (log_max - log_min);
+    return static_cast<int32_t>((position * static_cast<float>(kAmFreqSliderSteps)) + 0.5f);
+}
+
 } // namespace
 
 SignalGenerator::SignalGenerator()
@@ -259,6 +281,11 @@ SignalGenerator::~SignalGenerator()
     if (state_lock_ != nullptr) {
         vSemaphoreDelete(state_lock_);
         state_lock_ = nullptr;
+    }
+
+    if (scope_lock_ != nullptr) {
+        vSemaphoreDelete(scope_lock_);
+        scope_lock_ = nullptr;
     }
 
     if (carrier_waves_ != nullptr) {
@@ -285,6 +312,11 @@ SignalGenerator::~SignalGenerator()
             fm_preview_buffer_[i] = nullptr;
         }
     }
+
+    if (scope_canvas_buffer_ != nullptr) {
+        heap_caps_free(scope_canvas_buffer_);
+        scope_canvas_buffer_ = nullptr;
+    }
 }
 
 bool SignalGenerator::init(void)
@@ -292,13 +324,16 @@ bool SignalGenerator::init(void)
     if (state_lock_ == nullptr) {
         state_lock_ = xSemaphoreCreateMutex();
     }
+    if (scope_lock_ == nullptr) {
+        scope_lock_ = xSemaphoreCreateMutex();
+    }
 
     if (!allocate_waveforms()) {
         return false;
     }
 
     load_waveforms();
-    return state_lock_ != nullptr;
+    return (state_lock_ != nullptr) && (scope_lock_ != nullptr);
 }
 
 bool SignalGenerator::open(lv_obj_t *parent)
@@ -319,11 +354,18 @@ void SignalGenerator::close(void)
 {
     stop_audio();
 
+    if (scope_timer_ != nullptr) {
+        lv_timer_delete(scope_timer_);
+        scope_timer_ = nullptr;
+    }
+
     root_ = nullptr;
     status_label_ = nullptr;
     start_label_ = nullptr;
     sample_rate_dropdown_ = nullptr;
     volume_label_ = nullptr;
+    scope_canvas_ = nullptr;
+    scope_status_label_ = nullptr;
     tab_bar_ = nullptr;
     channel_stack_ = nullptr;
     for (size_t i = 0; i < 2; i++) {
@@ -342,6 +384,7 @@ void SignalGenerator::close(void)
         fm_base_label_[i] = nullptr;
         fm_dev_label_[i] = nullptr;
         fm_freq_label_[i] = nullptr;
+        am_freq_slider_[i] = nullptr;
         am_enable_switch_[i] = nullptr;
         fm_enable_switch_[i] = nullptr;
     }
@@ -368,9 +411,9 @@ void SignalGenerator::set_default_state(void)
         .fm_dev_hz = 100.0f,
         .fm_freq_hz = 5.0f,
         .gain = 0.85f,
-        .carrier_phase = 0.0,
-        .am_phase = 0.0,
-        .fm_phase = 0.0,
+        .carrier_phase = 0,
+        .am_phase = 0,
+        .fm_phase = 0,
     };
 
     state_.ch[1] = state_.ch[0];
@@ -609,8 +652,8 @@ esp_err_t SignalGenerator::init_i2s(uint32_t sample_rate_hz)
     deinit_i2s();
 
     i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(kExternalI2sPort, I2S_ROLE_MASTER);
-    chan_cfg.dma_desc_num = 8;
-    chan_cfg.dma_frame_num = kAudioFrames;
+    chan_cfg.dma_desc_num = kAudioDmaDescNum;
+    chan_cfg.dma_frame_num = kAudioDmaFrames;
 
     ESP_RETURN_ON_ERROR(i2s_new_channel(&chan_cfg, &tx_chan_, nullptr), TAG, "i2s_new_channel failed");
 
@@ -669,6 +712,8 @@ bool SignalGenerator::start_audio(void)
         return true;
     }
 
+    clear_scope_samples();
+
     uint32_t sample_rate_hz = 192000;
     if ((state_lock_ != nullptr) && (xSemaphoreTake(state_lock_, portMAX_DELAY) == pdTRUE)) {
         sample_rate_hz = state_.sample_rate_hz;
@@ -720,12 +765,15 @@ void SignalGenerator::stop_audio(void)
     deinit_i2s();
     audio_running_ = false;
     audio_task_stop_ = false;
+    clear_scope_samples();
     set_runtime_status("Stopped | PCM5102: BCLK33 LRCK31 DIN30 | CH1=L CH2=R");
     refresh_ui();
 }
 
 void SignalGenerator::audio_task_main(void)
 {
+    uint32_t buffers_since_yield = 0;
+
     while (!audio_task_stop_) {
         fill_audio_buffer();
 
@@ -738,6 +786,12 @@ void SignalGenerator::audio_task_main(void)
         if ((err != ESP_OK) && (err != ESP_ERR_TIMEOUT)) {
             ESP_LOGW(TAG, "i2s_channel_write: %s", esp_err_to_name(err));
             vTaskDelay(pdMS_TO_TICKS(10));
+        }
+
+        buffers_since_yield++;
+        if (buffers_since_yield >= kAudioYieldEveryBuffers) {
+            buffers_since_yield = 0;
+            vTaskDelay(1);
         }
     }
 
@@ -752,23 +806,27 @@ void SignalGenerator::fill_audio_buffer(void)
         (carrier_wave_count_ == 0) ||
         (mod_wave_count_ == 0)) {
         memset(audio_buffer_, 0, sizeof(audio_buffer_));
+        publish_scope_samples(true);
         return;
     }
 
     if (xSemaphoreTake(state_lock_, pdMS_TO_TICKS(20)) != pdTRUE) {
         memset(audio_buffer_, 0, sizeof(audio_buffer_));
+        publish_scope_samples(true);
         return;
     }
 
     const uint32_t sample_rate_hz = state_.sample_rate_hz;
     const float volume = static_cast<float>(state_.volume_percent) / 100.0f;
+    const float phase_scale = sample_rate_hz > 0 ? kQ32PhaseScale / static_cast<float>(sample_rate_hz) : 0.0f;
 
     for (size_t i = 0; i < kAudioFrames; i++) {
-        audio_buffer_[i * 2] = float_to_i16(render_channel(state_.ch[0], sample_rate_hz) * volume);
-        audio_buffer_[(i * 2) + 1] = float_to_i16(render_channel(state_.ch[1], sample_rate_hz) * volume);
+        audio_buffer_[i * 2] = float_to_i16(render_channel(state_.ch[0], sample_rate_hz, phase_scale) * volume);
+        audio_buffer_[(i * 2) + 1] = float_to_i16(render_channel(state_.ch[1], sample_rate_hz, phase_scale) * volume);
     }
 
     xSemaphoreGive(state_lock_);
+    publish_scope_samples(false);
 }
 
 float SignalGenerator::lookup_wave(const Waveform *waveform, double phase) const
@@ -789,7 +847,40 @@ float SignalGenerator::lookup_wave(const Waveform *waveform, double phase) const
     return waveform->samples[index] + ((waveform->samples[next] - waveform->samples[index]) * frac);
 }
 
-float SignalGenerator::render_channel(ChannelConfig &channel, uint32_t sample_rate_hz)
+float SignalGenerator::lookup_wave_q32(const Waveform *waveform, uint32_t phase) const
+{
+    if (waveform == nullptr) {
+        return 0.0f;
+    }
+
+    static constexpr uint32_t kPhaseIndexShift = 22;
+    static constexpr uint32_t kPhaseFracMask = (1UL << kPhaseIndexShift) - 1;
+    static constexpr float kPhaseFracScale = 1.0f / static_cast<float>(1UL << kPhaseIndexShift);
+
+    const size_t index = (phase >> kPhaseIndexShift) & (kWaveTableSize - 1);
+    const size_t next = (index + 1) & (kWaveTableSize - 1);
+    const float frac = static_cast<float>(phase & kPhaseFracMask) * kPhaseFracScale;
+    return waveform->samples[index] + ((waveform->samples[next] - waveform->samples[index]) * frac);
+}
+
+uint32_t SignalGenerator::phase_increment(float freq_hz, float phase_scale) const
+{
+    if ((phase_scale <= 0.0f) || (freq_hz <= 0.0f)) {
+        return 0;
+    }
+
+    const float phase = freq_hz * phase_scale;
+    if (phase <= 0.0f) {
+        return 0;
+    }
+    if (phase >= kQ32PhaseScale - 1.0f) {
+        return UINT32_MAX;
+    }
+
+    return static_cast<uint32_t>(phase);
+}
+
+float SignalGenerator::render_channel(ChannelConfig &channel, uint32_t sample_rate_hz, float phase_scale)
 {
     if (!channel.enabled || (sample_rate_hz == 0)) {
         return 0.0f;
@@ -805,22 +896,22 @@ float SignalGenerator::render_channel(ChannelConfig &channel, uint32_t sample_ra
 
     float carrier_freq_hz = static_cast<float>(channel.carrier_freq_hz);
     if (channel.fm_enabled) {
-        const float fm_lfo = lookup_wave(fm_wave, channel.fm_phase);
+        const float fm_lfo = lookup_wave_q32(fm_wave, channel.fm_phase);
         carrier_freq_hz = static_cast<float>(channel.fm_base_hz) + (channel.fm_dev_hz * fm_lfo);
-        advance_phase(channel.fm_phase, static_cast<double>(channel.fm_freq_hz) / sample_rate_hz);
+        channel.fm_phase += phase_increment(channel.fm_freq_hz, phase_scale);
     }
 
     const float nyquist_safe_hz = static_cast<float>(sample_rate_hz) * 0.45f;
     carrier_freq_hz = clamp_float(carrier_freq_hz, 0.0f, nyquist_safe_hz);
 
-    float sample = lookup_wave(carrier_wave, channel.carrier_phase);
-    advance_phase(channel.carrier_phase, static_cast<double>(carrier_freq_hz) / sample_rate_hz);
+    float sample = lookup_wave_q32(carrier_wave, channel.carrier_phase);
+    channel.carrier_phase += phase_increment(carrier_freq_hz, phase_scale);
 
     if (channel.am_enabled) {
-        const float am_lfo = lookup_wave(am_wave, channel.am_phase);
+        const float am_lfo = lookup_wave_q32(am_wave, channel.am_phase);
         const float envelope = 0.5f + (0.5f * am_lfo);
         sample *= envelope;
-        advance_phase(channel.am_phase, static_cast<double>(channel.am_freq_hz) / sample_rate_hz);
+        channel.am_phase += phase_increment(channel.am_freq_hz, phase_scale);
     }
 
     return sample * channel.gain;
@@ -842,6 +933,7 @@ void SignalGenerator::create_ui(lv_obj_t *parent)
     lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
 
     create_toolbar(root_);
+    create_scope_window(root_);
     create_channel_tabs(root_);
 
     channel_stack_ = lv_obj_create(root_);
@@ -898,6 +990,53 @@ void SignalGenerator::create_toolbar(lv_obj_t *parent)
     lv_obj_set_width(status_label_, 1);
 }
 
+void SignalGenerator::create_scope_window(lv_obj_t *parent)
+{
+    lv_obj_t *scope_box = lv_obj_create(parent);
+    lv_obj_set_width(scope_box, lv_pct(100));
+    lv_obj_set_height(scope_box, static_cast<lv_coord_t>(kScopeCanvasHeight + 38));
+    lv_obj_set_style_radius(scope_box, 8, 0);
+    lv_obj_set_style_bg_color(scope_box, lv_color_hex(0x111923), 0);
+    lv_obj_set_style_bg_opa(scope_box, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(scope_box, 1, 0);
+    lv_obj_set_style_border_color(scope_box, lv_color_hex(0x2B3645), 0);
+    lv_obj_set_style_pad_all(scope_box, 7, 0);
+    lv_obj_set_style_pad_row(scope_box, 5, 0);
+    lv_obj_set_flex_flow(scope_box, LV_FLEX_FLOW_COLUMN);
+    lv_obj_clear_flag(scope_box, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_t *header = lv_obj_create(scope_box);
+    make_plain_container(header);
+    lv_obj_set_width(header, lv_pct(100));
+    lv_obj_set_height(header, 20);
+    lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(header, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    create_text_label(header, "DAC Scope", &lv_font_montserrat_14, 0xC8D3E0);
+    scope_status_label_ = create_text_label(header, "", &lv_font_montserrat_14, 0x9FB0C2);
+
+    if (!ensure_scope_canvas_buffer()) {
+        lv_obj_t *label = create_text_label(scope_box, "Scope buffer alloc failed", &lv_font_montserrat_14, 0xFFB36B);
+        lv_obj_center(label);
+        return;
+    }
+
+    scope_canvas_ = lv_canvas_create(scope_box);
+    lv_canvas_set_buffer(scope_canvas_,
+                         scope_canvas_buffer_,
+                         static_cast<int32_t>(kScopeCanvasWidth),
+                         static_cast<int32_t>(kScopeCanvasHeight),
+                         LV_COLOR_FORMAT_RGB565);
+    lv_obj_center(scope_canvas_);
+
+    if (scope_timer_ != nullptr) {
+        lv_timer_delete(scope_timer_);
+    }
+    scope_timer_ = lv_timer_create(scope_timer_cb, kScopeRefreshMs, this);
+    scope_rendered_sequence_ = UINT32_MAX;
+    render_scope();
+}
+
 void SignalGenerator::create_channel_tabs(lv_obj_t *parent)
 {
     tab_bar_ = lv_obj_create(parent);
@@ -947,8 +1086,7 @@ void SignalGenerator::create_channel_panel(lv_obj_t *parent, uint8_t channel)
     create_switch_row(panel, "AM", &am_enable_switch_[channel], Control::AmEnable, channel);
     create_dropdown_row(panel, "AM wave", &am_wave_dropdown_[channel], Control::AmWave, channel);
     create_mod_preview(panel, channel, false);
-    create_adjust_row(panel, "AM F", &am_freq_label_[channel],
-                      Control::AmFreqDec, Control::AmFreqInc, channel);
+    create_am_freq_row(panel, channel);
 
     create_switch_row(panel, "FM", &fm_enable_switch_[channel], Control::FmEnable, channel);
     create_dropdown_row(panel, "FM wave", &fm_wave_dropdown_[channel], Control::FmWave, channel);
@@ -1123,6 +1261,156 @@ void SignalGenerator::render_channel_previews(uint8_t channel, const ChannelConf
     }
 }
 
+bool SignalGenerator::ensure_scope_canvas_buffer(void)
+{
+    if (scope_canvas_buffer_ != nullptr) {
+        return true;
+    }
+
+    const size_t bytes = kScopeCanvasWidth * kScopeCanvasHeight * sizeof(uint16_t);
+    scope_canvas_buffer_ = static_cast<uint16_t *>(heap_caps_malloc(bytes, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT));
+    if (scope_canvas_buffer_ == nullptr) {
+        scope_canvas_buffer_ = static_cast<uint16_t *>(heap_caps_malloc(bytes, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT));
+    }
+
+    if (scope_canvas_buffer_ != nullptr) {
+        memset(scope_canvas_buffer_, 0, bytes);
+    }
+
+    return scope_canvas_buffer_ != nullptr;
+}
+
+void SignalGenerator::publish_scope_samples(bool force)
+{
+    if (scope_lock_ == nullptr) {
+        return;
+    }
+
+    if (!force) {
+        scope_publish_counter_++;
+        if (scope_publish_counter_ < kScopePublishEveryBuffers) {
+            return;
+        }
+    }
+    scope_publish_counter_ = 0;
+
+    const TickType_t wait_ticks = force ? pdMS_TO_TICKS(20) : 0;
+    if (xSemaphoreTake(scope_lock_, wait_ticks) != pdTRUE) {
+        return;
+    }
+
+    memcpy(scope_samples_, audio_buffer_, sizeof(scope_samples_));
+    scope_sequence_++;
+    xSemaphoreGive(scope_lock_);
+}
+
+void SignalGenerator::clear_scope_samples(void)
+{
+    if (scope_lock_ == nullptr) {
+        return;
+    }
+
+    if (xSemaphoreTake(scope_lock_, pdMS_TO_TICKS(20)) != pdTRUE) {
+        return;
+    }
+
+    memset(scope_samples_, 0, sizeof(scope_samples_));
+    scope_sequence_++;
+    scope_publish_counter_ = 0;
+    xSemaphoreGive(scope_lock_);
+}
+
+void SignalGenerator::render_scope(void)
+{
+    if ((scope_canvas_ == nullptr) || (scope_canvas_buffer_ == nullptr)) {
+        return;
+    }
+
+    if (scope_status_label_ != nullptr) {
+        lv_label_set_text(scope_status_label_, audio_running_ ? "Live  CH1 L / CH2 R" : "Stopped  CH1 L / CH2 R");
+    }
+
+    uint32_t sequence = 0;
+    if ((scope_lock_ != nullptr) && (xSemaphoreTake(scope_lock_, pdMS_TO_TICKS(5)) == pdTRUE)) {
+        sequence = scope_sequence_;
+        if (sequence == scope_rendered_sequence_) {
+            xSemaphoreGive(scope_lock_);
+            return;
+        }
+        memcpy(scope_render_samples_, scope_samples_, sizeof(scope_render_samples_));
+        xSemaphoreGive(scope_lock_);
+    } else {
+        return;
+    }
+    scope_rendered_sequence_ = sequence;
+
+    const int32_t width = static_cast<int32_t>(kScopeCanvasWidth);
+    const int32_t height = static_cast<int32_t>(kScopeCanvasHeight);
+    const int32_t pad = 7;
+    const int32_t gap = 8;
+    const int32_t plot_height = (height - (pad * 2) - gap) / 2;
+    const int32_t top_y = pad;
+    const int32_t bottom_y = pad + plot_height + gap;
+    const int32_t top_mid = top_y + (plot_height / 2);
+    const int32_t bottom_mid = bottom_y + (plot_height / 2);
+    const float amplitude = static_cast<float>((plot_height / 2) - 4);
+
+    const uint16_t bg = rgb565(0x101820);
+    const uint16_t grid = rgb565(0x263340);
+    const uint16_t center = rgb565(0x34516C);
+    const uint16_t left_color = rgb565(0x61D1FF);
+    const uint16_t right_color = rgb565(0xFFB36B);
+
+    for (size_t i = 0; i < (kScopeCanvasWidth * kScopeCanvasHeight); i++) {
+        scope_canvas_buffer_[i] = bg;
+    }
+
+    for (int32_t x = 0; x < width; x += width / 8) {
+        preview_draw_line(scope_canvas_buffer_, width, height, x, top_y, x, top_y + plot_height - 1, grid);
+        preview_draw_line(scope_canvas_buffer_, width, height, x, bottom_y, x, bottom_y + plot_height - 1, grid);
+    }
+    for (int32_t y = top_y; y < top_y + plot_height; y += plot_height / 2) {
+        preview_draw_line(scope_canvas_buffer_, width, height, 0, y, width - 1, y, grid);
+    }
+    for (int32_t y = bottom_y; y < bottom_y + plot_height; y += plot_height / 2) {
+        preview_draw_line(scope_canvas_buffer_, width, height, 0, y, width - 1, y, grid);
+    }
+
+    preview_draw_line(scope_canvas_buffer_, width, height, 0, top_mid, width - 1, top_mid, center);
+    preview_draw_line(scope_canvas_buffer_, width, height, 0, bottom_mid, width - 1, bottom_mid, center);
+
+    int32_t prev_x = 0;
+    int32_t prev_left_y = top_mid;
+    int32_t prev_right_y = bottom_mid;
+    for (size_t i = 0; i < kAudioFrames; i++) {
+        const int32_t x = static_cast<int32_t>((i * static_cast<size_t>(width - 1)) / (kAudioFrames - 1));
+        int32_t left_y = top_mid - static_cast<int32_t>((static_cast<float>(scope_render_samples_[i * 2]) / 32768.0f) * amplitude);
+        int32_t right_y = bottom_mid - static_cast<int32_t>((static_cast<float>(scope_render_samples_[(i * 2) + 1]) / 32768.0f) * amplitude);
+
+        if (left_y < top_y) {
+            left_y = top_y;
+        } else if (left_y >= top_y + plot_height) {
+            left_y = top_y + plot_height - 1;
+        }
+        if (right_y < bottom_y) {
+            right_y = bottom_y;
+        } else if (right_y >= bottom_y + plot_height) {
+            right_y = bottom_y + plot_height - 1;
+        }
+
+        if (i > 0) {
+            preview_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_left_y, x, left_y, left_color);
+            preview_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_right_y, x, right_y, right_color);
+        }
+
+        prev_x = x;
+        prev_left_y = left_y;
+        prev_right_y = right_y;
+    }
+
+    lv_obj_invalidate(scope_canvas_);
+}
+
 lv_obj_t *SignalGenerator::create_button(lv_obj_t *parent, const char *text, lv_coord_t width)
 {
     lv_obj_t *button = lv_button_create(parent);
@@ -1176,6 +1464,48 @@ lv_obj_t *SignalGenerator::create_adjust_row(lv_obj_t *parent,
 
     lv_obj_t *inc_button = create_button(row, "+", 48);
     attach_event(inc_button, inc_control, channel, LV_EVENT_CLICKED);
+
+    return row;
+}
+
+lv_obj_t *SignalGenerator::create_am_freq_row(lv_obj_t *parent, uint8_t channel)
+{
+    lv_obj_t *row = lv_obj_create(parent);
+    make_plain_container(row);
+    lv_obj_set_width(row, lv_pct(100));
+    lv_obj_set_height(row, 44);
+    lv_obj_set_style_pad_column(row, 8, 0);
+    lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    lv_obj_t *name_label = create_text_label(row, "AM F", &lv_font_montserrat_14, 0xC8D3E0);
+    lv_obj_set_width(name_label, 64);
+
+    lv_obj_t *dec_button = create_button(row, "-", 44);
+    attach_event(dec_button, Control::AmFreqDec, channel, LV_EVENT_CLICKED);
+
+    am_freq_slider_[channel] = lv_slider_create(row);
+    lv_obj_set_width(am_freq_slider_[channel], 1);
+    lv_obj_set_height(am_freq_slider_[channel], 22);
+    lv_obj_set_flex_grow(am_freq_slider_[channel], 1);
+    lv_obj_set_ext_click_area(am_freq_slider_[channel], 12);
+    lv_slider_set_range(am_freq_slider_[channel], 0, kAmFreqSliderSteps);
+    lv_obj_set_style_radius(am_freq_slider_[channel], 8, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(am_freq_slider_[channel], lv_color_hex(0x202834), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(am_freq_slider_[channel], LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(am_freq_slider_[channel], lv_color_hex(0x61D1FF), LV_PART_INDICATOR);
+    lv_obj_set_style_bg_opa(am_freq_slider_[channel], LV_OPA_COVER, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(am_freq_slider_[channel], lv_color_hex(0xEEF4FA), LV_PART_KNOB);
+    lv_obj_set_style_bg_opa(am_freq_slider_[channel], LV_OPA_COVER, LV_PART_KNOB);
+    lv_obj_set_style_pad_all(am_freq_slider_[channel], 8, LV_PART_KNOB);
+    attach_event(am_freq_slider_[channel], Control::AmFreqSlider, channel, LV_EVENT_VALUE_CHANGED);
+
+    lv_obj_t *inc_button = create_button(row, "+", 44);
+    attach_event(inc_button, Control::AmFreqInc, channel, LV_EVENT_CLICKED);
+
+    am_freq_label_[channel] = create_text_label(row, "", &lv_font_montserrat_14, 0xEEF4FA);
+    lv_obj_set_width(am_freq_label_[channel], 74);
+    lv_obj_set_style_text_align(am_freq_label_[channel], LV_TEXT_ALIGN_RIGHT, 0);
 
     return row;
 }
@@ -1330,10 +1660,19 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
             ch.am_wave = static_cast<int>(lv_dropdown_get_selected(am_wave_dropdown_[channel_index]));
             break;
         case Control::AmFreqDec:
-            ch.am_freq_hz = clamp_float(ch.am_freq_hz - (ch.am_freq_hz <= 10.0f ? 0.1f : 1.0f), 0.1f, 500.0f);
+            ch.am_freq_hz = clamp_float(ch.am_freq_hz - (ch.am_freq_hz <= 10.0f ? 0.1f : 1.0f),
+                                        kAmFreqMinHz,
+                                        kAmFreqMaxHz);
             break;
         case Control::AmFreqInc:
-            ch.am_freq_hz = clamp_float(ch.am_freq_hz + (ch.am_freq_hz < 10.0f ? 0.1f : 1.0f), 0.1f, 500.0f);
+            ch.am_freq_hz = clamp_float(ch.am_freq_hz + (ch.am_freq_hz < 10.0f ? 0.1f : 1.0f),
+                                        kAmFreqMinHz,
+                                        kAmFreqMaxHz);
+            break;
+        case Control::AmFreqSlider:
+            if (am_freq_slider_[channel_index] != nullptr) {
+                ch.am_freq_hz = am_freq_from_slider(lv_slider_get_value(am_freq_slider_[channel_index]));
+            }
             break;
         case Control::FmEnable:
             ch.fm_enabled = lv_obj_has_state(fm_enable_switch_[channel_index], LV_STATE_CHECKED);
@@ -1494,6 +1833,9 @@ void SignalGenerator::refresh_ui(void)
             format_hz(text, sizeof(text), ch.am_freq_hz);
             lv_label_set_text(am_freq_label_[i], text);
         }
+        if ((am_freq_slider_[i] != nullptr) && !lv_slider_is_dragged(am_freq_slider_[i])) {
+            lv_slider_set_value(am_freq_slider_[i], am_freq_to_slider(ch.am_freq_hz), LV_ANIM_OFF);
+        }
         if (fm_base_label_[i] != nullptr) {
             lv_label_set_text_fmt(fm_base_label_[i], "%lu Hz", static_cast<unsigned long>(ch.fm_base_hz));
         }
@@ -1512,6 +1854,8 @@ void SignalGenerator::refresh_ui(void)
             render_channel_previews(static_cast<uint8_t>(i), ch);
         }
     }
+
+    render_scope();
 }
 
 void SignalGenerator::set_runtime_status(const char *fmt, ...)
@@ -1531,6 +1875,14 @@ void SignalGenerator::control_event_cb(lv_event_t *event)
     ControlEventData *data = static_cast<ControlEventData *>(lv_event_get_user_data(event));
     if ((data != nullptr) && (data->app != nullptr)) {
         data->app->handle_control(data, event);
+    }
+}
+
+void SignalGenerator::scope_timer_cb(lv_timer_t *timer)
+{
+    SignalGenerator *app = static_cast<SignalGenerator *>(lv_timer_get_user_data(timer));
+    if (app != nullptr) {
+        app->render_scope();
     }
 }
 

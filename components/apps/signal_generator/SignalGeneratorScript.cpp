@@ -12,7 +12,7 @@ static constexpr const char *kScriptDir = CONFIG_BSP_SD_MOUNT_POINT "/Script";
 static constexpr const char *kPresetDir = CONFIG_BSP_SD_MOUNT_POINT "/Presets";
 static constexpr uint32_t kScriptMaxStepsPerTick = 8;
 static constexpr float kAmFreqMinHz = 0.1f;
-static constexpr float kAmFreqMaxHz = 500.0f;
+static constexpr float kAmFreqMaxHz = 100.0f;
 
 static char ascii_lower(char value)
 {
@@ -739,6 +739,31 @@ void SignalGenerator::script_move_selected(int direction)
         script_lines_[script_selected_line_] = tmp;
         script_selected_line_++;
         script_dirty_ = true;
+    }
+}
+
+void SignalGenerator::script_scroll_lines(int direction)
+{
+    if (script_line_count_ <= kScriptVisibleLines) {
+        script_scroll_offset_ = 0;
+        return;
+    }
+
+    const size_t max_offset = script_line_count_ - kScriptVisibleLines;
+    if (direction < 0) {
+        const size_t step = static_cast<size_t>(-direction);
+        script_scroll_offset_ = script_scroll_offset_ > step ? script_scroll_offset_ - step : 0;
+    } else if (direction > 0) {
+        script_scroll_offset_ += static_cast<size_t>(direction);
+        if (script_scroll_offset_ > max_offset) {
+            script_scroll_offset_ = max_offset;
+        }
+    }
+
+    if (script_selected_line_ < script_scroll_offset_) {
+        script_selected_line_ = script_scroll_offset_;
+    } else if (script_selected_line_ >= (script_scroll_offset_ + kScriptVisibleLines)) {
+        script_selected_line_ = script_scroll_offset_ + kScriptVisibleLines - 1;
     }
 }
 

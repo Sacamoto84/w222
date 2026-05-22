@@ -31,6 +31,7 @@ private:
     lv_obj_t *root_ = nullptr;
     lv_obj_t *home_page_ = nullptr;
     lv_obj_t *app_page_ = nullptr;
+    lv_obj_t *app_header_ = nullptr;
     lv_obj_t *app_title_label_ = nullptr;
     lv_obj_t *app_body_ = nullptr;
     lv_obj_t *status_label_ = nullptr;

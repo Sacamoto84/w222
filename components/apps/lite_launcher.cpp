@@ -167,19 +167,19 @@ void LiteLauncher::build_app_page(void)
     lv_obj_set_flex_flow(app_page_, LV_FLEX_FLOW_COLUMN);
     lv_obj_add_event_cb(app_page_, app_gesture_event_cb, LV_EVENT_GESTURE, this);
 
-    lv_obj_t *header = lv_obj_create(app_page_);
-    make_plain_container(header);
-    lv_obj_set_width(header, lv_pct(100));
-    lv_obj_set_height(header, 58);
-    lv_obj_set_style_bg_color(header, lv_color_hex(0x171C25), 0);
-    lv_obj_set_style_bg_opa(header, LV_OPA_COVER, 0);
-    lv_obj_set_style_pad_left(header, 10, 0);
-    lv_obj_set_style_pad_right(header, 14, 0);
-    lv_obj_set_style_pad_column(header, 12, 0);
-    lv_obj_set_flex_flow(header, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(header, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    app_header_ = lv_obj_create(app_page_);
+    make_plain_container(app_header_);
+    lv_obj_set_width(app_header_, lv_pct(100));
+    lv_obj_set_height(app_header_, 58);
+    lv_obj_set_style_bg_color(app_header_, lv_color_hex(0x171C25), 0);
+    lv_obj_set_style_bg_opa(app_header_, LV_OPA_COVER, 0);
+    lv_obj_set_style_pad_left(app_header_, 10, 0);
+    lv_obj_set_style_pad_right(app_header_, 14, 0);
+    lv_obj_set_style_pad_column(app_header_, 12, 0);
+    lv_obj_set_flex_flow(app_header_, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(app_header_, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
-    lv_obj_t *back = lv_button_create(header);
+    lv_obj_t *back = lv_button_create(app_header_);
     lv_obj_set_size(back, 42, 42);
     lv_obj_set_style_radius(back, 21, 0);
     lv_obj_set_style_bg_color(back, lv_color_hex(0x252D39), 0);
@@ -189,7 +189,7 @@ void LiteLauncher::build_app_page(void)
     lv_obj_t *back_label = create_label(back, LV_SYMBOL_LEFT, &lv_font_montserrat_22, 0xFFFFFF);
     lv_obj_center(back_label);
 
-    app_title_label_ = create_label(header, "", &lv_font_montserrat_22, 0xFFFFFF);
+    app_title_label_ = create_label(app_header_, "", &lv_font_montserrat_22, 0xFFFFFF);
     lv_obj_set_flex_grow(app_title_label_, 1);
 
     app_body_ = lv_obj_create(app_page_);
@@ -230,6 +230,14 @@ void LiteLauncher::open_app(LiteApp *app)
     active_app_ = app;
     active_app_->set_close_request_callback(close_request_cb, this);
 
+    const bool show_header = app->use_launcher_header();
+    if (app_header_ != nullptr) {
+        if (show_header) {
+            lv_obj_clear_flag(app_header_, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_add_flag(app_header_, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
     lv_label_set_text(app_title_label_, app->title());
     lv_obj_clean(app_body_);
     lv_obj_add_flag(home_page_, LV_OBJ_FLAG_HIDDEN);

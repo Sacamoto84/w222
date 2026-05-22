@@ -31,12 +31,16 @@ static constexpr uint32_t kI2sWriteTimeoutMs = 100;
 static constexpr uint32_t kAudioTaskStackBytes = 8192;
 static constexpr UBaseType_t kAudioTaskPriority = tskIDLE_PRIORITY + 4;
 static constexpr float kAmFreqMinHz = 0.1f;
-static constexpr float kAmFreqMaxHz = 500.0f;
+static constexpr float kAmFreqMaxHz = 100.0f;
 static constexpr int32_t kAmFreqSliderSteps = 1000;
 static constexpr uint32_t kScopeRefreshMs = 80;
 static constexpr uint32_t kScopePublishEveryBuffers = 8;
 static constexpr uint32_t kAudioYieldEveryBuffers = 64;
 static constexpr float kQ32PhaseScale = 4294967296.0f;
+static constexpr const char *kCarrierFreqPresets =
+    "20\n100\n600\n800\n1000\n1500\n2000\n2500\n3000\n3500\n4000\n4800\n6000\n9600\n12000\n20000\n24000\n26000";
+static constexpr const char *kAmFmFreqPresets = "0.1\n1.0\n5.5\n10.0\n40.0\n100.0";
+static constexpr const char *kFmDevPresets = "1\n10\n50\n100\n250\n500\n1000\n2500\n5000\n10000";
 #if CONFIG_FREERTOS_UNICORE
 static constexpr BaseType_t kAudioTaskCore = tskNO_AFFINITY;
 #else
@@ -266,6 +270,36 @@ static int32_t am_freq_to_slider(float freq_hz)
     return static_cast<int32_t>((position * static_cast<float>(kAmFreqSliderSteps)) + 0.5f);
 }
 
+static float dropdown_selected_float(lv_obj_t *dropdown, float fallback)
+{
+    if (dropdown == nullptr) {
+        return fallback;
+    }
+
+    char text[24] = {};
+    lv_dropdown_get_selected_str(dropdown, text, sizeof(text));
+    char *end = nullptr;
+    const float value = strtof(text, &end);
+    return end != text ? value : fallback;
+}
+
+static float drag_amount_from_indev(void)
+{
+    lv_indev_t *indev = lv_indev_active();
+    if (indev == nullptr) {
+        return 0.0f;
+    }
+
+    lv_point_t vect = {};
+    lv_indev_get_vect(indev, &vect);
+    return static_cast<float>(vect.x - vect.y);
+}
+
+static void block_dropdown_release_cb(lv_event_t *event)
+{
+    lv_event_stop_processing(event);
+}
+
 } // namespace
 
 SignalGenerator::SignalGenerator()
@@ -387,6 +421,7 @@ void SignalGenerator::close(void)
     script_status_label_ = nullptr;
     script_run_label_ = nullptr;
     script_mode_ = false;
+    script_list_ = nullptr;
     script_keyboard_ = nullptr;
     for (size_t i = 0; i < 2; i++) {
         tab_button_[i] = nullptr;
@@ -395,6 +430,9 @@ void SignalGenerator::close(void)
         carrier_preview_canvas_[i] = nullptr;
         am_preview_canvas_[i] = nullptr;
         fm_preview_canvas_[i] = nullptr;
+        rendered_carrier_wave_[i] = -1;
+        rendered_am_wave_[i] = -1;
+        rendered_fm_wave_[i] = -1;
         ch_enable_switch_[i] = nullptr;
         carrier_wave_dropdown_[i] = nullptr;
         am_wave_dropdown_[i] = nullptr;
@@ -424,7 +462,7 @@ void SignalGenerator::set_default_state(void)
 {
     state_ = {};
     state_.sample_rate_hz = 192000;
-    state_.volume_percent = 30;
+    state_.volume_percent = 100;
 
     state_.ch[0] = {
         .enabled = true,
@@ -540,6 +578,7 @@ void SignalGenerator::load_waveforms(void)
     scan_waveform_dir(WaveSet::Mod, kModDir);
     build_options(WaveSet::Carrier);
     build_options(WaveSet::Mod);
+    invalidate_wave_previews();
 
     if (state_lock_ != nullptr && xSemaphoreTake(state_lock_, portMAX_DELAY) == pdTRUE) {
         for (size_t i = 0; i < 2; i++) {
@@ -1008,6 +1047,8 @@ void SignalGenerator::create_ui(lv_obj_t *parent)
     make_plain_container(channel_stack_);
     lv_obj_set_width(channel_stack_, lv_pct(100));
     lv_obj_set_flex_grow(channel_stack_, 1);
+    lv_obj_set_scrollbar_mode(channel_stack_, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(channel_stack_, LV_OBJ_FLAG_SCROLLABLE);
 
     create_channel_panel(channel_stack_, 0);
     create_channel_panel(channel_stack_, 1);
@@ -1061,6 +1102,9 @@ void SignalGenerator::create_toolbar(lv_obj_t *parent)
     status_label_ = create_text_label(toolbar, runtime_status_, &lv_font_montserrat_14, 0x9FB0C2);
     lv_obj_set_flex_grow(status_label_, 1);
     lv_obj_set_width(status_label_, 1);
+
+    lv_obj_t *back_button = create_button(toolbar, LV_SYMBOL_LEFT, 44);
+    attach_event(back_button, Control::Back, 0, LV_EVENT_CLICKED);
 }
 
 void SignalGenerator::create_scope_window(lv_obj_t *parent)
@@ -1142,35 +1186,44 @@ void SignalGenerator::create_channel_panel(lv_obj_t *parent, uint8_t channel)
     lv_obj_set_style_bg_opa(panel, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(panel, 1, 0);
     lv_obj_set_style_border_color(panel, lv_color_hex(0x2B3645), 0);
-    lv_obj_set_style_pad_all(panel, 8, 0);
+    lv_obj_set_style_pad_all(panel, 6, 0);
     lv_obj_set_style_pad_row(panel, 5, 0);
+    lv_obj_set_style_pad_column(panel, 8, 0);
     lv_obj_set_flex_flow(panel, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_scrollbar_mode(panel, LV_SCROLLBAR_MODE_AUTO);
+    lv_obj_set_scrollbar_mode(panel, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(panel, LV_OBJ_FLAG_SCROLLABLE);
 
     char title[16] = {};
     snprintf(title, sizeof(title), "CH%u  %s", channel + 1, channel == 0 ? "Left" : "Right");
-    create_text_label(panel, title, &lv_font_montserrat_16, channel == 0 ? 0x7CD3FF : 0xFFB36B);
+    lv_obj_t *title_label = create_text_label(panel, title, &lv_font_montserrat_16, channel == 0 ? 0x7CD3FF : 0xFFB36B);
+    lv_obj_set_width(title_label, lv_pct(100));
+    lv_obj_set_style_text_align(title_label, LV_TEXT_ALIGN_CENTER, 0);
 
-    create_switch_row(panel, "Output", &ch_enable_switch_[channel], Control::ChEnable, channel);
-    create_dropdown_row(panel, "Carrier", &carrier_wave_dropdown_[channel], Control::CarrierWave, channel);
-    create_carrier_preview(panel, channel);
-    create_adjust_row(panel, "Carrier F", &carrier_freq_label_[channel],
-                      Control::CarrierFreqDec, Control::CarrierFreqInc, channel);
+    create_frequency_preview_row(panel, "Carrier F", "ON", &ch_enable_switch_[channel],
+                                 Control::ChEnable, channel == 0 ? 0x61D1FF : 0xFFB36B,
+                                 &carrier_freq_label_[channel],
+                                 kCarrierFreqPresets, Control::CarrierFreqEdit,
+                                 &carrier_preview_canvas_[channel], &carrier_preview_buffer_[channel],
+                                 &carrier_wave_dropdown_[channel], Control::CarrierWave, channel);
 
-    create_switch_row(panel, "AM", &am_enable_switch_[channel], Control::AmEnable, channel);
-    create_dropdown_row(panel, "AM wave", &am_wave_dropdown_[channel], Control::AmWave, channel);
-    create_mod_preview(panel, channel, false);
-    create_am_freq_row(panel, channel);
+    create_frequency_preview_row(panel, "AM F", "AM", &am_enable_switch_[channel],
+                                 Control::AmEnable, 0x57F28A,
+                                 &am_freq_label_[channel],
+                                 kAmFmFreqPresets, Control::AmFreqEdit,
+                                 &am_preview_canvas_[channel], &am_preview_buffer_[channel],
+                                 &am_wave_dropdown_[channel], Control::AmWave, channel);
 
-    create_switch_row(panel, "FM", &fm_enable_switch_[channel], Control::FmEnable, channel);
-    create_dropdown_row(panel, "FM wave", &fm_wave_dropdown_[channel], Control::FmWave, channel);
-    create_mod_preview(panel, channel, true);
-    create_adjust_row(panel, "FM base", &fm_base_label_[channel],
-                      Control::FmBaseDec, Control::FmBaseInc, channel);
-    create_adjust_row(panel, "FM dev", &fm_dev_label_[channel],
-                      Control::FmDevDec, Control::FmDevInc, channel);
-    create_adjust_row(panel, "FM F", &fm_freq_label_[channel],
-                      Control::FmFreqDec, Control::FmFreqInc, channel);
+    create_frequency_preview_row(panel, "FM F", "FM", &fm_enable_switch_[channel],
+                                 Control::FmEnable, 0xD1A1FF,
+                                 &fm_freq_label_[channel],
+                                 kAmFmFreqPresets, Control::FmFreqEdit,
+                                 &fm_preview_canvas_[channel], &fm_preview_buffer_[channel],
+                                 &fm_wave_dropdown_[channel], Control::FmWave, channel);
+
+    create_dual_frequency_row(panel,
+                              "FM base", &fm_base_label_[channel], kCarrierFreqPresets, Control::FmBaseEdit,
+                              "FM dev", &fm_dev_label_[channel], kFmDevPresets, Control::FmDevEdit,
+                              channel);
 }
 
 void SignalGenerator::create_carrier_preview(lv_obj_t *parent, uint8_t channel)
@@ -1179,7 +1232,13 @@ void SignalGenerator::create_carrier_preview(lv_obj_t *parent, uint8_t channel)
         return;
     }
 
-    create_wave_preview(parent, &carrier_preview_canvas_[channel], &carrier_preview_buffer_[channel]);
+    create_wave_preview(parent,
+                        &carrier_preview_canvas_[channel],
+                        &carrier_preview_buffer_[channel],
+                        &carrier_wave_dropdown_[channel],
+                        Control::CarrierWave,
+                        channel,
+                        true);
 }
 
 void SignalGenerator::create_mod_preview(lv_obj_t *parent, uint8_t channel, bool fm_preview)
@@ -1189,27 +1248,56 @@ void SignalGenerator::create_mod_preview(lv_obj_t *parent, uint8_t channel, bool
     }
 
     if (fm_preview) {
-        create_wave_preview(parent, &fm_preview_canvas_[channel], &fm_preview_buffer_[channel]);
+        create_wave_preview(parent,
+                            &fm_preview_canvas_[channel],
+                            &fm_preview_buffer_[channel],
+                            &fm_wave_dropdown_[channel],
+                            Control::FmWave,
+                            channel,
+                            true);
     } else {
-        create_wave_preview(parent, &am_preview_canvas_[channel], &am_preview_buffer_[channel]);
+        create_wave_preview(parent,
+                            &am_preview_canvas_[channel],
+                            &am_preview_buffer_[channel],
+                            &am_wave_dropdown_[channel],
+                            Control::AmWave,
+                            channel,
+                            true);
     }
 }
 
-void SignalGenerator::create_wave_preview(lv_obj_t *parent, lv_obj_t **canvas_slot, uint16_t **buffer_slot)
+void SignalGenerator::create_wave_preview(lv_obj_t *parent,
+                                          lv_obj_t **canvas_slot,
+                                          uint16_t **buffer_slot,
+                                          lv_obj_t **dropdown_slot,
+                                          Control control,
+                                          uint8_t channel,
+                                          bool fill_width)
 {
-    if ((parent == nullptr) || (canvas_slot == nullptr) || (buffer_slot == nullptr)) {
+    if ((parent == nullptr) || (canvas_slot == nullptr) || (buffer_slot == nullptr) || (dropdown_slot == nullptr)) {
         return;
     }
 
-    lv_obj_t *preview_box = lv_obj_create(parent);
-    lv_obj_set_width(preview_box, lv_pct(100));
-    lv_obj_set_height(preview_box, static_cast<lv_coord_t>(kWavePreviewHeight + 16));
+    lv_obj_t *holder = lv_obj_create(parent);
+    make_plain_container(holder);
+    lv_obj_set_width(holder, fill_width ? lv_pct(100) : static_cast<lv_coord_t>(kWavePreviewWidth + 8));
+    lv_obj_set_height(holder, static_cast<lv_coord_t>(kWavePreviewHeight + 8));
+    lv_obj_set_flex_flow(holder, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(holder, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_scrollbar_mode(holder, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(holder, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_t *preview_box = lv_obj_create(holder);
+    lv_obj_set_size(preview_box,
+                    static_cast<lv_coord_t>(kWavePreviewWidth + 8),
+                    static_cast<lv_coord_t>(kWavePreviewHeight + 8));
     lv_obj_set_style_radius(preview_box, 8, 0);
     lv_obj_set_style_bg_color(preview_box, lv_color_hex(0x101820), 0);
     lv_obj_set_style_bg_opa(preview_box, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(preview_box, 1, 0);
     lv_obj_set_style_border_color(preview_box, lv_color_hex(0x2C3A48), 0);
-    lv_obj_set_style_pad_all(preview_box, 7, 0);
+    lv_obj_set_style_pad_all(preview_box, 4, 0);
+    lv_obj_set_scrollbar_mode(preview_box, LV_SCROLLBAR_MODE_OFF);
     lv_obj_clear_flag(preview_box, LV_OBJ_FLAG_SCROLLABLE);
 
     if (!ensure_wave_preview_buffer(buffer_slot)) {
@@ -1226,6 +1314,28 @@ void SignalGenerator::create_wave_preview(lv_obj_t *parent, lv_obj_t **canvas_sl
                          static_cast<int32_t>(kWavePreviewHeight),
                          LV_COLOR_FORMAT_RGB565);
     lv_obj_center(canvas);
+
+    lv_obj_t *dropdown = lv_dropdown_create(preview_box);
+    *dropdown_slot = dropdown;
+    lv_obj_set_size(dropdown,
+                    static_cast<lv_coord_t>(kWavePreviewWidth),
+                    static_cast<lv_coord_t>(kWavePreviewHeight));
+    lv_obj_center(dropdown);
+    lv_obj_set_ext_click_area(dropdown, 10);
+    lv_dropdown_set_symbol(dropdown, LV_SYMBOL_DOWN);
+    lv_dropdown_set_dir(dropdown, LV_DIR_BOTTOM);
+    lv_dropdown_set_text(dropdown, "");
+    lv_obj_set_style_bg_opa(dropdown, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_bg_opa(dropdown, LV_OPA_30, LV_STATE_PRESSED);
+    lv_obj_set_style_bg_color(dropdown, lv_color_hex(0x18202A), LV_STATE_PRESSED);
+    lv_obj_set_style_border_width(dropdown, 0, 0);
+    lv_obj_set_style_text_color(dropdown, lv_color_hex(0xEEF4FA), 0);
+    lv_obj_set_style_text_font(dropdown, &lv_font_montserrat_16, 0);
+    lv_obj_set_style_text_align(dropdown, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_style_pad_top(dropdown, 8, 0);
+    lv_obj_set_style_pad_bottom(dropdown, 8, 0);
+    lv_obj_clear_flag(dropdown, LV_OBJ_FLAG_SCROLLABLE);
+    attach_event(dropdown, control, channel, LV_EVENT_VALUE_CHANGED);
 }
 
 bool SignalGenerator::ensure_wave_preview_buffer(uint16_t **buffer_slot)
@@ -1315,23 +1425,41 @@ void SignalGenerator::render_channel_previews(uint8_t channel, const ChannelConf
 
     if ((carrier_waves_ != nullptr) && (carrier_wave_count_ > 0)) {
         const size_t index = clamp_wave_index(channel_state.carrier_wave, carrier_wave_count_);
-        render_wave_preview(carrier_preview_canvas_[channel],
-                            carrier_preview_buffer_[channel],
-                            &carrier_waves_[index],
-                            channel == 0 ? 0x61D1FF : 0xFFB36B);
+        if (rendered_carrier_wave_[channel] != static_cast<int>(index)) {
+            render_wave_preview(carrier_preview_canvas_[channel],
+                                carrier_preview_buffer_[channel],
+                                &carrier_waves_[index],
+                                channel == 0 ? 0x61D1FF : 0xFFB36B);
+            rendered_carrier_wave_[channel] = static_cast<int>(index);
+        }
     }
 
     if ((mod_waves_ != nullptr) && (mod_wave_count_ > 0)) {
         const size_t am_wave_index = clamp_wave_index(channel_state.am_wave, mod_wave_count_);
         const size_t fm_wave_index = clamp_wave_index(channel_state.fm_wave, mod_wave_count_);
-        render_wave_preview(am_preview_canvas_[channel],
-                            am_preview_buffer_[channel],
-                            &mod_waves_[am_wave_index],
-                            0x7CFF9B);
-        render_wave_preview(fm_preview_canvas_[channel],
-                            fm_preview_buffer_[channel],
-                            &mod_waves_[fm_wave_index],
-                            0xD1A1FF);
+        if (rendered_am_wave_[channel] != static_cast<int>(am_wave_index)) {
+            render_wave_preview(am_preview_canvas_[channel],
+                                am_preview_buffer_[channel],
+                                &mod_waves_[am_wave_index],
+                                0x7CFF9B);
+            rendered_am_wave_[channel] = static_cast<int>(am_wave_index);
+        }
+        if (rendered_fm_wave_[channel] != static_cast<int>(fm_wave_index)) {
+            render_wave_preview(fm_preview_canvas_[channel],
+                                fm_preview_buffer_[channel],
+                                &mod_waves_[fm_wave_index],
+                                0xD1A1FF);
+            rendered_fm_wave_[channel] = static_cast<int>(fm_wave_index);
+        }
+    }
+}
+
+void SignalGenerator::invalidate_wave_previews(void)
+{
+    for (size_t i = 0; i < 2; i++) {
+        rendered_carrier_wave_[i] = -1;
+        rendered_am_wave_[i] = -1;
+        rendered_fm_wave_[i] = -1;
     }
 }
 
@@ -1500,6 +1628,37 @@ lv_obj_t *SignalGenerator::create_button(lv_obj_t *parent, const char *text, lv_
     return button;
 }
 
+lv_obj_t *SignalGenerator::create_glow_toggle_button(lv_obj_t *parent,
+                                                     const char *text,
+                                                     Control control,
+                                                     uint8_t channel,
+                                                     uint32_t active_color)
+{
+    lv_obj_t *button = lv_button_create(parent);
+    lv_obj_set_size(button, 50, 50);
+    lv_obj_set_ext_click_area(button, 10);
+    lv_obj_set_style_radius(button, 8, 0);
+    lv_obj_set_style_bg_color(button, lv_color_hex(0x202834), 0);
+    lv_obj_set_style_bg_color(button, lv_color_hex(active_color), LV_STATE_CHECKED);
+    lv_obj_set_style_bg_color(button, lv_color_hex(active_color), LV_STATE_PRESSED);
+    lv_obj_set_style_bg_opa(button, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(button, 1, 0);
+    lv_obj_set_style_border_width(button, 2, LV_STATE_CHECKED);
+    lv_obj_set_style_border_color(button, lv_color_hex(0x354151), 0);
+    lv_obj_set_style_border_color(button, lv_color_hex(active_color), LV_STATE_CHECKED);
+    lv_obj_set_style_shadow_width(button, 0, 0);
+    lv_obj_set_style_shadow_width(button, 14, LV_STATE_CHECKED);
+    lv_obj_set_style_shadow_opa(button, LV_OPA_40, LV_STATE_CHECKED);
+    lv_obj_set_style_shadow_color(button, lv_color_hex(active_color), LV_STATE_CHECKED);
+
+    lv_obj_t *label = create_text_label(button, text, &lv_font_montserrat_14, 0xFFFFFF);
+    lv_obj_set_style_text_color(label, lv_color_hex(0x10151B), LV_STATE_CHECKED);
+    lv_obj_center(label);
+    make_child_passthrough(label);
+    attach_event(button, control, channel, LV_EVENT_CLICKED);
+    return button;
+}
+
 lv_obj_t *SignalGenerator::create_text_label(lv_obj_t *parent, const char *text, const lv_font_t *font, uint32_t color)
 {
     lv_obj_t *label = lv_label_create(parent);
@@ -1542,46 +1701,181 @@ lv_obj_t *SignalGenerator::create_adjust_row(lv_obj_t *parent,
     return row;
 }
 
-lv_obj_t *SignalGenerator::create_am_freq_row(lv_obj_t *parent, uint8_t channel)
+lv_obj_t *SignalGenerator::create_frequency_row(lv_obj_t *parent,
+                                                const char *name,
+                                                lv_obj_t **value_control,
+                                                const char *preset_options,
+                                                Control edit_control,
+                                                uint8_t channel)
 {
     lv_obj_t *row = lv_obj_create(parent);
     make_plain_container(row);
     lv_obj_set_width(row, lv_pct(100));
-    lv_obj_set_height(row, 44);
+    lv_obj_set_height(row, 42);
     lv_obj_set_style_pad_column(row, 8, 0);
     lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
-    lv_obj_t *name_label = create_text_label(row, "AM F", &lv_font_montserrat_14, 0xC8D3E0);
-    lv_obj_set_width(name_label, 64);
+    lv_obj_t *name_label = create_text_label(row, name, &lv_font_montserrat_14, 0xC8D3E0);
+    lv_obj_set_width(name_label, 108);
 
-    lv_obj_t *dec_button = create_button(row, "-", 44);
-    attach_event(dec_button, Control::AmFreqDec, channel, LV_EVENT_CLICKED);
-
-    am_freq_slider_[channel] = lv_slider_create(row);
-    lv_obj_set_width(am_freq_slider_[channel], 1);
-    lv_obj_set_height(am_freq_slider_[channel], 22);
-    lv_obj_set_flex_grow(am_freq_slider_[channel], 1);
-    lv_obj_set_ext_click_area(am_freq_slider_[channel], 12);
-    lv_slider_set_range(am_freq_slider_[channel], 0, kAmFreqSliderSteps);
-    lv_obj_set_style_radius(am_freq_slider_[channel], 8, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(am_freq_slider_[channel], lv_color_hex(0x202834), LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(am_freq_slider_[channel], LV_OPA_COVER, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(am_freq_slider_[channel], lv_color_hex(0x61D1FF), LV_PART_INDICATOR);
-    lv_obj_set_style_bg_opa(am_freq_slider_[channel], LV_OPA_COVER, LV_PART_INDICATOR);
-    lv_obj_set_style_bg_color(am_freq_slider_[channel], lv_color_hex(0xEEF4FA), LV_PART_KNOB);
-    lv_obj_set_style_bg_opa(am_freq_slider_[channel], LV_OPA_COVER, LV_PART_KNOB);
-    lv_obj_set_style_pad_all(am_freq_slider_[channel], 8, LV_PART_KNOB);
-    attach_event(am_freq_slider_[channel], Control::AmFreqSlider, channel, LV_EVENT_VALUE_CHANGED);
-
-    lv_obj_t *inc_button = create_button(row, "+", 44);
-    attach_event(inc_button, Control::AmFreqInc, channel, LV_EVENT_CLICKED);
-
-    am_freq_label_[channel] = create_text_label(row, "", &lv_font_montserrat_14, 0xEEF4FA);
-    lv_obj_set_width(am_freq_label_[channel], 74);
-    lv_obj_set_style_text_align(am_freq_label_[channel], LV_TEXT_ALIGN_RIGHT, 0);
+    *value_control = lv_dropdown_create(row);
+    lv_obj_set_height(*value_control, 38);
+    lv_obj_set_width(*value_control, 1);
+    lv_obj_set_flex_grow(*value_control, 1);
+    lv_obj_set_ext_click_area(*value_control, 12);
+    style_control_box(*value_control);
+    lv_obj_set_style_text_align(*value_control, LV_TEXT_ALIGN_CENTER, 0);
+    lv_dropdown_set_symbol(*value_control, LV_SYMBOL_DOWN);
+    lv_dropdown_set_dir(*value_control, LV_DIR_BOTTOM);
+    lv_dropdown_set_options(*value_control, preset_options);
+    lv_dropdown_set_text(*value_control, "");
+    lv_obj_add_event_cb(*value_control,
+                        block_dropdown_release_cb,
+                        static_cast<lv_event_code_t>(LV_EVENT_RELEASED | LV_EVENT_PREPROCESS),
+                        nullptr);
+    attach_event(*value_control, edit_control, channel, LV_EVENT_VALUE_CHANGED);
+    attach_event(*value_control, edit_control, channel, LV_EVENT_PRESSING);
+    attach_event(*value_control, edit_control, channel, LV_EVENT_DOUBLE_CLICKED);
 
     return row;
+}
+
+lv_obj_t *SignalGenerator::create_frequency_preview_row(lv_obj_t *parent,
+                                                        const char *name,
+                                                        const char *enable_text,
+                                                        lv_obj_t **enable_button,
+                                                        Control enable_control,
+                                                        uint32_t enable_color,
+                                                        lv_obj_t **value_control,
+                                                        const char *preset_options,
+                                                        Control edit_control,
+                                                        lv_obj_t **canvas_slot,
+                                                        uint16_t **buffer_slot,
+                                                        lv_obj_t **dropdown_slot,
+                                                        Control wave_control,
+                                                        uint8_t channel)
+{
+    lv_obj_t *row = lv_obj_create(parent);
+    make_plain_container(row);
+    lv_obj_set_width(row, lv_pct(100));
+    lv_obj_set_height(row, static_cast<lv_coord_t>(kWavePreviewHeight + 10));
+    lv_obj_set_style_pad_column(row, 7, 0);
+    lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_scrollbar_mode(row, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
+
+    if ((enable_button != nullptr) && (enable_text != nullptr)) {
+        *enable_button = create_glow_toggle_button(row, enable_text, enable_control, channel, enable_color);
+    }
+
+    lv_obj_t *control_box = lv_obj_create(row);
+    make_plain_container(control_box);
+    lv_obj_set_width(control_box, 1);
+    lv_obj_set_height(control_box, static_cast<lv_coord_t>(kWavePreviewHeight + 10));
+    lv_obj_set_flex_grow(control_box, 1);
+    lv_obj_set_style_pad_row(control_box, 3, 0);
+    lv_obj_set_flex_flow(control_box, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(control_box, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_scrollbar_mode(control_box, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(control_box, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_t *name_label = create_text_label(control_box, name, &lv_font_montserrat_14, 0xC8D3E0);
+    lv_obj_set_width(name_label, lv_pct(100));
+    lv_obj_set_style_text_align(name_label, LV_TEXT_ALIGN_CENTER, 0);
+
+    *value_control = lv_dropdown_create(control_box);
+    lv_obj_set_size(*value_control, lv_pct(100), 34);
+    lv_obj_set_ext_click_area(*value_control, 12);
+    style_control_box(*value_control);
+    lv_obj_set_style_text_align(*value_control, LV_TEXT_ALIGN_CENTER, 0);
+    lv_dropdown_set_symbol(*value_control, LV_SYMBOL_DOWN);
+    lv_dropdown_set_dir(*value_control, LV_DIR_BOTTOM);
+    lv_dropdown_set_options(*value_control, preset_options);
+    lv_dropdown_set_text(*value_control, "");
+    lv_obj_clear_flag(*value_control, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_event_cb(*value_control,
+                        block_dropdown_release_cb,
+                        static_cast<lv_event_code_t>(LV_EVENT_RELEASED | LV_EVENT_PREPROCESS),
+                        nullptr);
+    attach_event(*value_control, edit_control, channel, LV_EVENT_VALUE_CHANGED);
+    attach_event(*value_control, edit_control, channel, LV_EVENT_PRESSING);
+    attach_event(*value_control, edit_control, channel, LV_EVENT_DOUBLE_CLICKED);
+
+    create_wave_preview(row, canvas_slot, buffer_slot, dropdown_slot, wave_control, channel, false);
+    return row;
+}
+
+lv_obj_t *SignalGenerator::create_dual_frequency_row(lv_obj_t *parent,
+                                                     const char *left_name,
+                                                     lv_obj_t **left_control,
+                                                     const char *left_presets,
+                                                     Control left_edit_control,
+                                                     const char *right_name,
+                                                     lv_obj_t **right_control,
+                                                     const char *right_presets,
+                                                     Control right_edit_control,
+                                                     uint8_t channel)
+{
+    lv_obj_t *row = lv_obj_create(parent);
+    make_plain_container(row);
+    lv_obj_set_width(row, lv_pct(100));
+    lv_obj_set_height(row, static_cast<lv_coord_t>(kWavePreviewHeight + 10));
+    lv_obj_set_style_pad_column(row, 8, 0);
+    lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_scrollbar_mode(row, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
+
+    const char *names[2] = {left_name, right_name};
+    lv_obj_t **controls[2] = {left_control, right_control};
+    const char *presets[2] = {left_presets, right_presets};
+    const Control controls_event[2] = {left_edit_control, right_edit_control};
+
+    for (size_t i = 0; i < 2; i++) {
+        lv_obj_t *box = lv_obj_create(row);
+        make_plain_container(box);
+        lv_obj_set_width(box, 1);
+        lv_obj_set_height(box, static_cast<lv_coord_t>(kWavePreviewHeight + 10));
+        lv_obj_set_flex_grow(box, 1);
+        lv_obj_set_style_pad_row(box, 3, 0);
+        lv_obj_set_flex_flow(box, LV_FLEX_FLOW_COLUMN);
+        lv_obj_set_flex_align(box, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+        lv_obj_set_scrollbar_mode(box, LV_SCROLLBAR_MODE_OFF);
+        lv_obj_clear_flag(box, LV_OBJ_FLAG_SCROLLABLE);
+
+        lv_obj_t *label = create_text_label(box, names[i], &lv_font_montserrat_14, 0xC8D3E0);
+        lv_obj_set_width(label, lv_pct(100));
+        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
+
+        *controls[i] = lv_dropdown_create(box);
+        lv_obj_set_size(*controls[i], lv_pct(100), 34);
+        lv_obj_set_ext_click_area(*controls[i], 12);
+        style_control_box(*controls[i]);
+        lv_obj_set_style_text_align(*controls[i], LV_TEXT_ALIGN_CENTER, 0);
+        lv_dropdown_set_symbol(*controls[i], LV_SYMBOL_DOWN);
+        lv_dropdown_set_dir(*controls[i], LV_DIR_BOTTOM);
+        lv_dropdown_set_options(*controls[i], presets[i]);
+        lv_dropdown_set_text(*controls[i], "");
+        lv_obj_clear_flag(*controls[i], LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_add_event_cb(*controls[i],
+                            block_dropdown_release_cb,
+                            static_cast<lv_event_code_t>(LV_EVENT_RELEASED | LV_EVENT_PREPROCESS),
+                            nullptr);
+        attach_event(*controls[i], controls_event[i], channel, LV_EVENT_VALUE_CHANGED);
+        attach_event(*controls[i], controls_event[i], channel, LV_EVENT_PRESSING);
+        attach_event(*controls[i], controls_event[i], channel, LV_EVENT_DOUBLE_CLICKED);
+    }
+
+    return row;
+}
+
+lv_obj_t *SignalGenerator::create_am_freq_row(lv_obj_t *parent, uint8_t channel)
+{
+    am_freq_slider_[channel] = nullptr;
+    return create_frequency_row(parent, "AM F", &am_freq_label_[channel],
+                                kAmFmFreqPresets, Control::AmFreqEdit, channel);
 }
 
 lv_obj_t *SignalGenerator::create_dropdown_row(lv_obj_t *parent,
@@ -1662,6 +1956,11 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
 
     const Control control = data->control;
     const uint8_t channel_index = data->channel;
+
+    if (control == Control::Back) {
+        request_close();
+        return;
+    }
 
     if (control == Control::StartStop) {
         if (audio_running_) {
@@ -1766,6 +2065,20 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
         return;
     }
 
+    if (control == Control::ScriptListGesture) {
+        lv_indev_t *indev = lv_indev_active();
+        if (indev != nullptr) {
+            const lv_dir_t dir = lv_indev_get_gesture_dir(indev);
+            if (dir == LV_DIR_TOP) {
+                script_scroll_lines(3);
+            } else if (dir == LV_DIR_BOTTOM) {
+                script_scroll_lines(-3);
+            }
+        }
+        refresh_script_ui();
+        return;
+    }
+
     if (control == Control::ScriptTemplate) {
         script_keyboard_press(channel_index);
         refresh_ui();
@@ -1824,7 +2137,27 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
         return;
     }
 
+    const lv_event_code_t event_code = event != nullptr ? lv_event_get_code(event) : LV_EVENT_ALL;
+    if (event_code == LV_EVENT_DOUBLE_CLICKED) {
+        switch (control) {
+        case Control::CarrierFreqEdit:
+        case Control::AmFreqEdit:
+        case Control::FmBaseEdit:
+        case Control::FmDevEdit:
+        case Control::FmFreqEdit: {
+            lv_obj_t *target = static_cast<lv_obj_t *>(lv_event_get_target(event));
+            if (target != nullptr) {
+                lv_dropdown_open(target);
+            }
+            return;
+        }
+        default:
+            break;
+        }
+    }
+
     bool restart_audio = false;
+    const float drag_amount = event_code == LV_EVENT_PRESSING ? drag_amount_from_indev() : 0.0f;
     if ((state_lock_ != nullptr) && (xSemaphoreTake(state_lock_, portMAX_DELAY) == pdTRUE)) {
         ChannelConfig &ch = state_.ch[channel_index];
 
@@ -1844,10 +2177,28 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
             state_.volume_percent = state_.volume_percent <= 95 ? state_.volume_percent + 5 : 100;
             break;
         case Control::ChEnable:
-            ch.enabled = lv_obj_has_state(ch_enable_switch_[channel_index], LV_STATE_CHECKED);
+            ch.enabled = !ch.enabled;
             break;
         case Control::CarrierWave:
             ch.carrier_wave = static_cast<int>(lv_dropdown_get_selected(carrier_wave_dropdown_[channel_index]));
+            break;
+        case Control::CarrierFreqEdit:
+            if (event_code == LV_EVENT_VALUE_CHANGED) {
+                ch.carrier_freq_hz = clamp_u32(static_cast<uint32_t>(
+                                                   dropdown_selected_float(carrier_freq_label_[channel_index],
+                                                                           static_cast<float>(ch.carrier_freq_hz)) + 0.5f),
+                                               20,
+                                               40000);
+            } else if (drag_amount != 0.0f) {
+                int32_t next = static_cast<int32_t>(ch.carrier_freq_hz) +
+                               static_cast<int32_t>(drag_amount * 5.0f);
+                if (next < 20) {
+                    next = 20;
+                } else if (next > 40000) {
+                    next = 40000;
+                }
+                ch.carrier_freq_hz = static_cast<uint32_t>(next);
+            }
             break;
         case Control::CarrierFreqDec:
             ch.carrier_freq_hz = ch.carrier_freq_hz > 100 ? ch.carrier_freq_hz - 100 : 20;
@@ -1856,10 +2207,23 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
             ch.carrier_freq_hz = clamp_u32(ch.carrier_freq_hz + 100, 20, 40000);
             break;
         case Control::AmEnable:
-            ch.am_enabled = lv_obj_has_state(am_enable_switch_[channel_index], LV_STATE_CHECKED);
+            ch.am_enabled = !ch.am_enabled;
             break;
         case Control::AmWave:
             ch.am_wave = static_cast<int>(lv_dropdown_get_selected(am_wave_dropdown_[channel_index]));
+            break;
+        case Control::AmFreqEdit:
+            if (event_code == LV_EVENT_VALUE_CHANGED) {
+                ch.am_freq_hz = clamp_float(dropdown_selected_float(am_freq_label_[channel_index],
+                                                                    ch.am_freq_hz),
+                                            kAmFreqMinHz,
+                                            kAmFreqMaxHz);
+            } else if (drag_amount != 0.0f) {
+                const float step = ch.am_freq_hz < 10.0f ? 0.02f : 0.2f;
+                ch.am_freq_hz = clamp_float(ch.am_freq_hz + (drag_amount * step),
+                                            kAmFreqMinHz,
+                                            kAmFreqMaxHz);
+            }
             break;
         case Control::AmFreqDec:
             ch.am_freq_hz = clamp_float(ch.am_freq_hz - (ch.am_freq_hz <= 10.0f ? 0.1f : 1.0f),
@@ -1877,16 +2241,45 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
             }
             break;
         case Control::FmEnable:
-            ch.fm_enabled = lv_obj_has_state(fm_enable_switch_[channel_index], LV_STATE_CHECKED);
+            ch.fm_enabled = !ch.fm_enabled;
             break;
         case Control::FmWave:
             ch.fm_wave = static_cast<int>(lv_dropdown_get_selected(fm_wave_dropdown_[channel_index]));
+            break;
+        case Control::FmBaseEdit:
+            if (event_code == LV_EVENT_VALUE_CHANGED) {
+                ch.fm_base_hz = clamp_u32(static_cast<uint32_t>(
+                                              dropdown_selected_float(fm_base_label_[channel_index],
+                                                                      static_cast<float>(ch.fm_base_hz)) + 0.5f),
+                                          20,
+                                          40000);
+            } else if (drag_amount != 0.0f) {
+                int32_t next = static_cast<int32_t>(ch.fm_base_hz) +
+                               static_cast<int32_t>(drag_amount * 5.0f);
+                if (next < 20) {
+                    next = 20;
+                } else if (next > 40000) {
+                    next = 40000;
+                }
+                ch.fm_base_hz = static_cast<uint32_t>(next);
+            }
             break;
         case Control::FmBaseDec:
             ch.fm_base_hz = ch.fm_base_hz > 100 ? ch.fm_base_hz - 100 : 20;
             break;
         case Control::FmBaseInc:
             ch.fm_base_hz = clamp_u32(ch.fm_base_hz + 100, 20, 40000);
+            break;
+        case Control::FmDevEdit:
+            if (event_code == LV_EVENT_VALUE_CHANGED) {
+                ch.fm_dev_hz = clamp_float(dropdown_selected_float(fm_dev_label_[channel_index],
+                                                                   ch.fm_dev_hz),
+                                           0.0f,
+                                           20000.0f);
+            } else if (drag_amount != 0.0f) {
+                const float step = ch.fm_dev_hz < 10.0f ? 0.05f : (ch.fm_dev_hz < 200.0f ? 0.5f : 5.0f);
+                ch.fm_dev_hz = clamp_float(ch.fm_dev_hz + (drag_amount * step), 0.0f, 20000.0f);
+            }
             break;
         case Control::FmDevDec:
             ch.fm_dev_hz = clamp_float(ch.fm_dev_hz - (ch.fm_dev_hz <= 10.0f ? 0.1f : (ch.fm_dev_hz < 200.0f ? 1.0f : 100.0f)),
@@ -1895,6 +2288,17 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
         case Control::FmDevInc:
             ch.fm_dev_hz = clamp_float(ch.fm_dev_hz + (ch.fm_dev_hz < 10.0f ? 0.1f : (ch.fm_dev_hz < 200.0f ? 1.0f : 100.0f)),
                                        0.0f, 20000.0f);
+            break;
+        case Control::FmFreqEdit:
+            if (event_code == LV_EVENT_VALUE_CHANGED) {
+                ch.fm_freq_hz = clamp_float(dropdown_selected_float(fm_freq_label_[channel_index],
+                                                                    ch.fm_freq_hz),
+                                            0.1f,
+                                            500.0f);
+            } else if (drag_amount != 0.0f) {
+                const float step = ch.fm_freq_hz < 10.0f ? 0.02f : 0.2f;
+                ch.fm_freq_hz = clamp_float(ch.fm_freq_hz + (drag_amount * step), 0.1f, 500.0f);
+            }
             break;
         case Control::FmFreqDec:
             ch.fm_freq_hz = clamp_float(ch.fm_freq_hz - (ch.fm_freq_hz <= 10.0f ? 0.1f : 1.0f), 0.1f, 500.0f);
@@ -2050,37 +2454,59 @@ void SignalGenerator::refresh_ui(void)
 
         if (carrier_wave_dropdown_[i] != nullptr) {
             lv_dropdown_set_selected(carrier_wave_dropdown_[i], ch.carrier_wave);
+            const size_t wave_index = clamp_wave_index(ch.carrier_wave, carrier_wave_count_);
+            const char *name = (carrier_waves_ != nullptr) && (carrier_wave_count_ > 0) ?
+                               carrier_waves_[wave_index].name : "---";
+            char text[48] = {};
+            snprintf(text, sizeof(text), "Carrier: %s", name);
+            lv_dropdown_set_text(carrier_wave_dropdown_[i], text);
         }
         if (am_wave_dropdown_[i] != nullptr) {
             lv_dropdown_set_selected(am_wave_dropdown_[i], ch.am_wave);
+            const size_t wave_index = clamp_wave_index(ch.am_wave, mod_wave_count_);
+            const char *name = (mod_waves_ != nullptr) && (mod_wave_count_ > 0) ?
+                               mod_waves_[wave_index].name : "---";
+            char text[48] = {};
+            snprintf(text, sizeof(text), "AM: %s", name);
+            lv_dropdown_set_text(am_wave_dropdown_[i], text);
         }
         if (fm_wave_dropdown_[i] != nullptr) {
             lv_dropdown_set_selected(fm_wave_dropdown_[i], ch.fm_wave);
+            const size_t wave_index = clamp_wave_index(ch.fm_wave, mod_wave_count_);
+            const char *name = (mod_waves_ != nullptr) && (mod_wave_count_ > 0) ?
+                               mod_waves_[wave_index].name : "---";
+            char text[48] = {};
+            snprintf(text, sizeof(text), "FM: %s", name);
+            lv_dropdown_set_text(fm_wave_dropdown_[i], text);
         }
 
         if (carrier_freq_label_[i] != nullptr) {
-            lv_label_set_text_fmt(carrier_freq_label_[i], "%lu Hz", static_cast<unsigned long>(ch.carrier_freq_hz));
+            char text[24] = {};
+            snprintf(text, sizeof(text), "%lu Hz", static_cast<unsigned long>(ch.carrier_freq_hz));
+            lv_dropdown_set_text(carrier_freq_label_[i], text);
         }
         if (am_freq_label_[i] != nullptr) {
             char text[24] = {};
             format_hz(text, sizeof(text), ch.am_freq_hz);
-            lv_label_set_text(am_freq_label_[i], text);
+            lv_dropdown_set_text(am_freq_label_[i], text);
         }
         if ((am_freq_slider_[i] != nullptr) && !lv_slider_is_dragged(am_freq_slider_[i])) {
             lv_slider_set_value(am_freq_slider_[i], am_freq_to_slider(ch.am_freq_hz), LV_ANIM_OFF);
         }
         if (fm_base_label_[i] != nullptr) {
-            lv_label_set_text_fmt(fm_base_label_[i], "%lu Hz", static_cast<unsigned long>(ch.fm_base_hz));
+            char text[24] = {};
+            snprintf(text, sizeof(text), "%lu Hz", static_cast<unsigned long>(ch.fm_base_hz));
+            lv_dropdown_set_text(fm_base_label_[i], text);
         }
         if (fm_dev_label_[i] != nullptr) {
             char text[24] = {};
             format_hz(text, sizeof(text), ch.fm_dev_hz);
-            lv_label_set_text(fm_dev_label_[i], text);
+            lv_dropdown_set_text(fm_dev_label_[i], text);
         }
         if (fm_freq_label_[i] != nullptr) {
             char text[24] = {};
             format_hz(text, sizeof(text), ch.fm_freq_hz);
-            lv_label_set_text(fm_freq_label_[i], text);
+            lv_dropdown_set_text(fm_freq_label_[i], text);
         }
 
         if (i == active_channel_) {

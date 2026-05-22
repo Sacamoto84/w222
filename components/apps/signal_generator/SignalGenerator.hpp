@@ -18,6 +18,7 @@ public:
     const char *title(void) const override { return "Generator"; }
     const char *icon_text(void) const override { return "~"; }
     lv_color_t accent_color(void) const override { return lv_color_hex(0xFF8A3D); }
+    bool use_launcher_header(void) const override { return false; }
 
     bool init(void) override;
     bool open(lv_obj_t *parent) override;
@@ -28,18 +29,20 @@ private:
     static constexpr size_t kMaxWaveforms = 16;
     static constexpr size_t kWaveNameMax = 32;
     static constexpr size_t kOptionsMax = 768;
-    static constexpr size_t kMaxControlEvents = 180;
+    static constexpr size_t kMaxControlEvents = 200;
     static constexpr size_t kAudioFrames = 1024;
     static constexpr size_t kAudioDmaFrames = 512;
     static constexpr size_t kAudioDmaDescNum = 16;
-    static constexpr size_t kWavePreviewWidth = 640;
-    static constexpr size_t kWavePreviewHeight = 86;
+
+    static constexpr size_t kWavePreviewWidth = 160;
+    static constexpr size_t kWavePreviewHeight = 80;
+
     static constexpr size_t kScopeCanvasWidth = 640;
     static constexpr size_t kScopeCanvasHeight = 118;
     static constexpr size_t kScriptMaxLines = 128;
     static constexpr size_t kScriptLineMax = 64;
     static constexpr size_t kScriptNameMax = 32;
-    static constexpr size_t kScriptVisibleLines = 6;
+    static constexpr size_t kScriptVisibleLines = 10;
     static constexpr size_t kScriptRegisterCount = 10;
     static constexpr size_t kScriptKeyCount = 16;
     static constexpr size_t kScriptRouteStackMax = 8;
@@ -52,6 +55,7 @@ private:
 
     enum class Control : uint8_t {
         StartStop,
+        Back,
         ReloadWaves,
         SampleRate,
         VolumeDec,
@@ -59,19 +63,24 @@ private:
         SelectChannel,
         ChEnable,
         CarrierWave,
+        CarrierFreqEdit,
         CarrierFreqDec,
         CarrierFreqInc,
         AmEnable,
         AmWave,
+        AmFreqEdit,
         AmFreqDec,
         AmFreqInc,
         AmFreqSlider,
         FmEnable,
         FmWave,
+        FmBaseEdit,
         FmBaseDec,
         FmBaseInc,
+        FmDevEdit,
         FmDevDec,
         FmDevInc,
+        FmFreqEdit,
         FmFreqDec,
         FmFreqInc,
         ScriptMode,
@@ -86,6 +95,7 @@ private:
         ScriptUp,
         ScriptDown,
         ScriptSelectLine,
+        ScriptListGesture,
         ScriptTemplate,
         ScriptPresetSave,
         ScriptPresetLoad,
@@ -197,6 +207,9 @@ private:
     uint16_t *carrier_preview_buffer_[2] = {};
     uint16_t *am_preview_buffer_[2] = {};
     uint16_t *fm_preview_buffer_[2] = {};
+    int rendered_carrier_wave_[2] = {-1, -1};
+    int rendered_am_wave_[2] = {-1, -1};
+    int rendered_fm_wave_[2] = {-1, -1};
     lv_obj_t *ch_enable_switch_[2] = {};
     lv_obj_t *carrier_wave_dropdown_[2] = {};
     lv_obj_t *am_wave_dropdown_[2] = {};
@@ -214,6 +227,7 @@ private:
     lv_obj_t *script_pc_label_ = nullptr;
     lv_obj_t *script_status_label_ = nullptr;
     lv_obj_t *script_run_label_ = nullptr;
+    lv_obj_t *script_list_ = nullptr;
     lv_obj_t *script_line_button_[kScriptVisibleLines] = {};
     lv_obj_t *script_line_label_[kScriptVisibleLines] = {};
     lv_obj_t *script_keyboard_ = nullptr;
@@ -273,6 +287,11 @@ private:
     void create_script_side_button(lv_obj_t *parent, const char *text, Control control);
     void create_script_keyboard_button(lv_obj_t *parent, uint8_t key_index);
     lv_obj_t *create_button(lv_obj_t *parent, const char *text, lv_coord_t width);
+    lv_obj_t *create_glow_toggle_button(lv_obj_t *parent,
+                                        const char *text,
+                                        Control control,
+                                        uint8_t channel,
+                                        uint32_t active_color);
     lv_obj_t *create_text_label(lv_obj_t *parent, const char *text, const lv_font_t *font, uint32_t color);
     lv_obj_t *create_adjust_row(lv_obj_t *parent,
                                 const char *name,
@@ -280,6 +299,36 @@ private:
                                 Control dec_control,
                                 Control inc_control,
                                 uint8_t channel);
+    lv_obj_t *create_frequency_row(lv_obj_t *parent,
+                                   const char *name,
+                                   lv_obj_t **value_control,
+                                   const char *preset_options,
+                                   Control edit_control,
+                                   uint8_t channel);
+    lv_obj_t *create_frequency_preview_row(lv_obj_t *parent,
+                                           const char *name,
+                                           const char *enable_text,
+                                           lv_obj_t **enable_button,
+                                           Control enable_control,
+                                           uint32_t enable_color,
+                                           lv_obj_t **value_control,
+                                           const char *preset_options,
+                                           Control edit_control,
+                                           lv_obj_t **canvas_slot,
+                                           uint16_t **buffer_slot,
+                                           lv_obj_t **dropdown_slot,
+                                           Control wave_control,
+                                           uint8_t channel);
+    lv_obj_t *create_dual_frequency_row(lv_obj_t *parent,
+                                        const char *left_name,
+                                        lv_obj_t **left_control,
+                                        const char *left_presets,
+                                        Control left_edit_control,
+                                        const char *right_name,
+                                        lv_obj_t **right_control,
+                                        const char *right_presets,
+                                        Control right_edit_control,
+                                        uint8_t channel);
     lv_obj_t *create_am_freq_row(lv_obj_t *parent, uint8_t channel);
     lv_obj_t *create_dropdown_row(lv_obj_t *parent,
                                   const char *name,
@@ -300,10 +349,17 @@ private:
     void refresh_wave_dropdown_options(void);
     void create_carrier_preview(lv_obj_t *parent, uint8_t channel);
     void create_mod_preview(lv_obj_t *parent, uint8_t channel, bool fm_preview);
-    void create_wave_preview(lv_obj_t *parent, lv_obj_t **canvas_slot, uint16_t **buffer_slot);
+    void create_wave_preview(lv_obj_t *parent,
+                             lv_obj_t **canvas_slot,
+                             uint16_t **buffer_slot,
+                             lv_obj_t **dropdown_slot,
+                             Control control,
+                             uint8_t channel,
+                             bool fill_width);
     bool ensure_wave_preview_buffer(uint16_t **buffer_slot);
     void render_wave_preview(lv_obj_t *canvas, uint16_t *buffer, const Waveform *waveform, uint32_t color);
     void render_channel_previews(uint8_t channel, const ChannelConfig &channel_state);
+    void invalidate_wave_previews(void);
     bool ensure_scope_canvas_buffer(void);
     void publish_scope_samples(bool force);
     void clear_scope_samples(void);
@@ -327,6 +383,7 @@ private:
     void script_insert_after_selected(const char *text);
     void script_delete_selected(void);
     void script_move_selected(int direction);
+    void script_scroll_lines(int direction);
     void script_keyboard_press(uint8_t key_index);
     void script_keyboard_home(void);
     void script_keyboard_route_to(ScriptKeyboardRoute route,

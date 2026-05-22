@@ -72,17 +72,19 @@ void SignalGenerator::create_script_view(lv_obj_t *parent)
     lv_obj_set_style_pad_column(body, 8, 0);
     lv_obj_set_flex_flow(body, LV_FLEX_FLOW_ROW);
 
-    lv_obj_t *list = lv_obj_create(body);
-    make_plain_container(list);
-    lv_obj_set_width(list, 1);
-    lv_obj_set_flex_grow(list, 1);
-    lv_obj_set_height(list, lv_pct(100));
-    lv_obj_set_style_pad_row(list, 4, 0);
-    lv_obj_set_flex_flow(list, LV_FLEX_FLOW_COLUMN);
-    lv_obj_clear_flag(list, LV_OBJ_FLAG_SCROLLABLE);
+    script_list_ = lv_obj_create(body);
+    make_plain_container(script_list_);
+    lv_obj_set_width(script_list_, 1);
+    lv_obj_set_flex_grow(script_list_, 1);
+    lv_obj_set_height(script_list_, lv_pct(100));
+    lv_obj_set_style_pad_row(script_list_, 1, 0);
+    lv_obj_set_flex_flow(script_list_, LV_FLEX_FLOW_COLUMN);
+    lv_obj_add_flag(script_list_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_clear_flag(script_list_, LV_OBJ_FLAG_SCROLLABLE);
+    attach_event(script_list_, Control::ScriptListGesture, 0, LV_EVENT_GESTURE);
 
     for (size_t i = 0; i < kScriptVisibleLines; i++) {
-        create_script_line(list, i);
+        create_script_line(script_list_, i);
     }
 
     lv_obj_t *side = lv_obj_create(body);
@@ -137,8 +139,8 @@ void SignalGenerator::create_script_line(lv_obj_t *parent, size_t visible_index)
     lv_obj_t *button = lv_button_create(parent);
     script_line_button_[visible_index] = button;
     lv_obj_set_width(button, lv_pct(100));
-    lv_obj_set_height(button, 28);
-    lv_obj_set_ext_click_area(button, 6);
+    lv_obj_set_height(button, 27);
+    lv_obj_set_ext_click_area(button, 4);
     style_control_box(button);
     lv_obj_set_style_bg_color(button, lv_color_hex(0x202834), 0);
     lv_obj_set_style_bg_color(button, lv_color_hex(0x31445C), LV_STATE_PRESSED);
@@ -154,7 +156,7 @@ void SignalGenerator::create_script_line(lv_obj_t *parent, size_t visible_index)
 void SignalGenerator::create_script_side_button(lv_obj_t *parent, const char *text, Control control)
 {
     lv_obj_t *button = create_button(parent, text, 116);
-    lv_obj_set_height(button, 30);
+    lv_obj_set_height(button, 45);
     attach_event(button, control, 0, LV_EVENT_CLICKED);
 }
 
@@ -188,17 +190,6 @@ void SignalGenerator::refresh_script_ui(void)
     if (script_pc_ >= script_line_count_) {
         script_pc_ = script_line_count_ > 0 ? script_line_count_ - 1 : 0;
     }
-    if (script_selected_line_ < script_scroll_offset_) {
-        script_scroll_offset_ = script_selected_line_;
-    }
-    if (script_selected_line_ >= (script_scroll_offset_ + kScriptVisibleLines)) {
-        script_scroll_offset_ = script_selected_line_ - kScriptVisibleLines + 1;
-    }
-    if ((script_line_count_ > kScriptVisibleLines) &&
-        (script_scroll_offset_ > (script_line_count_ - kScriptVisibleLines))) {
-        script_scroll_offset_ = script_line_count_ - kScriptVisibleLines;
-    }
-
     if (script_name_label_ != nullptr) {
         lv_label_set_text_fmt(script_name_label_, "%s.sk", script_name_);
     }
@@ -214,6 +205,17 @@ void SignalGenerator::refresh_script_ui(void)
     }
     if (script_run_label_ != nullptr) {
         lv_label_set_text(script_run_label_, script_running_ ? "Stop" : "Run");
+    }
+
+    if (script_selected_line_ < script_scroll_offset_) {
+        script_scroll_offset_ = script_selected_line_;
+    }
+    if (script_selected_line_ >= (script_scroll_offset_ + kScriptVisibleLines)) {
+        script_scroll_offset_ = script_selected_line_ - kScriptVisibleLines + 1;
+    }
+    if ((script_line_count_ > kScriptVisibleLines) &&
+        (script_scroll_offset_ > (script_line_count_ - kScriptVisibleLines))) {
+        script_scroll_offset_ = script_line_count_ - kScriptVisibleLines;
     }
 
     for (size_t i = 0; i < kScriptVisibleLines; i++) {

@@ -16,6 +16,10 @@
 #include "image_display/ImageDisplay.hpp"
 #endif
 
+#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
+#include "signal_generator/SignalGenerator.hpp"
+#endif
+
 #if CONFIG_JC4880_APP_FILE_MANAGER
 #include "file_manager/FileManager.hpp"
 #endif

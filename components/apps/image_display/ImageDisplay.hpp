@@ -26,6 +26,7 @@ private:
     static constexpr size_t kMaxEntries = 128;
     static constexpr size_t kNameMax = 96;
     static constexpr size_t kPathMax = 192;
+    static constexpr size_t kPreloadSlots = 2;
 
     struct ImageEntry {
         char name[kNameMax];
@@ -60,10 +61,14 @@ private:
     bool swipe_tracking_ = false;
 
     void *preload_lock_ = nullptr;
-    app_jpeg_image_t *preload_image_ = nullptr;
-    int preload_image_index_ = -1;
-    int preload_request_index_ = -1;
-    char preload_request_path_[kPathMax] = {};
+    app_jpeg_image_t *preload_images_[kPreloadSlots] = {};
+    int preload_image_indices_[kPreloadSlots] = {};
+    int preload_desired_indices_[kPreloadSlots] = {};
+    size_t preload_desired_count_ = 0;
+    int preload_request_indices_[kPreloadSlots] = {};
+    char preload_request_paths_[kPreloadSlots][kPathMax] = {};
+    size_t preload_request_count_ = 0;
+    int preload_loading_index_ = -1;
     uint32_t preload_generation_ = 0;
     bool preload_worker_running_ = false;
 
@@ -72,11 +77,12 @@ private:
     bool open_image(uint32_t index);
     bool show_loaded_image(uint32_t index, app_jpeg_image_t *loaded_image);
     void close_image(void);
+    void close_image(bool cancel_preload_cache);
     bool open_next(int delta);
     void reset_image_transform(uint32_t image_width, uint32_t image_height);
     void handle_view_touch(lv_event_t *event);
     void start_preload_next(void);
-    void request_preload(uint32_t index);
+    void request_preload_window(const uint32_t *indices, size_t count);
     void cancel_preload(void);
     bool take_preloaded_image(uint32_t index, app_jpeg_image_t **out_image);
     bool wait_preloaded_image(uint32_t index, app_jpeg_image_t **out_image, uint32_t timeout_ms);

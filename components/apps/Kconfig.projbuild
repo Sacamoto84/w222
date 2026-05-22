@@ -111,6 +111,10 @@ menu "JC4880 Modular Configuration"
             bool "Image viewer"
             default y
 
+        config JC4880_APP_SIGNAL_GENERATOR
+            bool "Signal generator"
+            default y
+
         config JC4880_APP_FILE_MANAGER
             bool "File manager"
             default y

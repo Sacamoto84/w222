@@ -39,6 +39,9 @@
 #if CONFIG_JC4880_APP_IMAGE_VIEWER
 #include "ImageDisplay.hpp"
 #endif
+#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
+#include "SignalGenerator.hpp"
+#endif
 
 #include "esp_hosted.h"
 
@@ -260,6 +263,9 @@ static bool start_lite_launcher(void)
 #if CONFIG_JC4880_APP_IMAGE_VIEWER
     static ImageDisplay image_display;
 #endif
+#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
+    static SignalGenerator signal_generator;
+#endif
 
     if (!launcher.add_app(&calculator))
     {
@@ -277,6 +283,14 @@ static bool start_lite_launcher(void)
     if (!launcher.add_app(&image_display))
     {
         ESP_LOGE(TAG, "Register Images failed");
+        return false;
+    }
+#endif
+
+#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
+    if (!launcher.add_app(&signal_generator))
+    {
+        ESP_LOGE(TAG, "Register Generator failed");
         return false;
     }
 #endif

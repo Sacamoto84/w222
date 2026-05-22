@@ -24,9 +24,14 @@ static constexpr lv_coord_t kSwipeMinDistance = 70;
 static constexpr lv_coord_t kSwipeMaxOffAxis = 90;
 static constexpr uint32_t kSwipeMaxDurationMs = 900;
 static constexpr uint32_t kPreloadTaskStackBytes = 8192;
-static constexpr UBaseType_t kPreloadTaskPriority = tskIDLE_PRIORITY + 1;
+static constexpr UBaseType_t kPreloadTaskPriority = tskIDLE_PRIORITY + 2;
 static constexpr uint32_t kPreloadWaitMs = 8000;
 static constexpr uint32_t kPreloadPollMs = 10;
+#if CONFIG_FREERTOS_UNICORE
+static constexpr BaseType_t kPreloadTaskCore = tskNO_AFFINITY;
+#else
+static constexpr BaseType_t kPreloadTaskCore = 0;
+#endif
 
 static char ascii_lower(char value)
 {
@@ -185,6 +190,11 @@ static SemaphoreHandle_t preload_sem(void *handle)
 
 ImageDisplay::ImageDisplay()
 {
+    for (size_t i = 0; i < kPreloadSlots; i++) {
+        preload_image_indices_[i] = -1;
+        preload_desired_indices_[i] = -1;
+        preload_request_indices_[i] = -1;
+    }
 }
 
 ImageDisplay::~ImageDisplay()
@@ -503,7 +513,14 @@ bool ImageDisplay::show_loaded_image(uint32_t index, app_jpeg_image_t *loaded_im
 
 void ImageDisplay::close_image(void)
 {
-    cancel_preload();
+    close_image(true);
+}
+
+void ImageDisplay::close_image(bool cancel_preload_cache)
+{
+    if (cancel_preload_cache) {
+        cancel_preload();
+    }
 
     if (view_root_ != nullptr) {
         lv_obj_delete(view_root_);
@@ -546,7 +563,7 @@ bool ImageDisplay::open_next(int delta)
     if ((delta > 0) &&
         (take_preloaded_image(static_cast<uint32_t>(next_index), &preloaded_image) ||
          wait_preloaded_image(static_cast<uint32_t>(next_index), &preloaded_image, kPreloadWaitMs))) {
-        close_image();
+        close_image(false);
 
         if (!show_loaded_image(static_cast<uint32_t>(next_index), preloaded_image)) {
             app_jpeg_image_free(preloaded_image);
@@ -628,65 +645,135 @@ void ImageDisplay::start_preload_next(void)
         return;
     }
 
-    int next_index = current_index_ + 1;
-    if (next_index >= static_cast<int>(entry_count_)) {
-        next_index = 0;
+    uint32_t indices[kPreloadSlots] = {};
+    size_t count = entry_count_ - 1;
+    if (count > kPreloadSlots) {
+        count = kPreloadSlots;
     }
 
-    request_preload(static_cast<uint32_t>(next_index));
+    for (size_t i = 0; i < count; i++) {
+        int next_index = current_index_ + static_cast<int>(i) + 1;
+        while (next_index >= static_cast<int>(entry_count_)) {
+            next_index -= static_cast<int>(entry_count_);
+        }
+        indices[i] = static_cast<uint32_t>(next_index);
+    }
+
+    request_preload_window(indices, count);
 }
 
-void ImageDisplay::request_preload(uint32_t index)
+void ImageDisplay::request_preload_window(const uint32_t *indices, size_t count)
 {
-    if ((entries_ == nullptr) || (index >= entry_count_) || (preload_lock_ == nullptr)) {
+    if ((entries_ == nullptr) || (indices == nullptr) || (preload_lock_ == nullptr)) {
         return;
     }
 
-    app_jpeg_image_t *image_to_free = nullptr;
+    if (count > kPreloadSlots) {
+        count = kPreloadSlots;
+    }
+
+    app_jpeg_image_t *images_to_free[kPreloadSlots] = {};
+    size_t free_count = 0;
     bool start_worker = false;
 
     if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
-        const bool cached_same_image = (preload_image_ != nullptr) &&
-                                       (preload_image_index_ == static_cast<int>(index));
-        const bool loading_same_image = preload_worker_running_ &&
-                                        (preload_request_index_ == static_cast<int>(index));
-
-        if (!cached_same_image && !loading_same_image) {
-            image_to_free = preload_image_;
-            preload_image_ = nullptr;
-            preload_image_index_ = -1;
-
-            preload_request_index_ = static_cast<int>(index);
-            snprintf(preload_request_path_, sizeof(preload_request_path_), "%s", entries_[index].path);
-            preload_generation_++;
-
-            if (!preload_worker_running_) {
-                preload_worker_running_ = true;
-                start_worker = true;
+        preload_desired_count_ = 0;
+        for (size_t i = 0; i < count; i++) {
+            if (indices[i] >= entry_count_) {
+                continue;
             }
+
+            const int desired_index = static_cast<int>(indices[i]);
+            bool duplicate = false;
+            for (size_t j = 0; j < preload_desired_count_; j++) {
+                if (preload_desired_indices_[j] == desired_index) {
+                    duplicate = true;
+                    break;
+                }
+            }
+
+            if (!duplicate) {
+                preload_desired_indices_[preload_desired_count_++] = desired_index;
+            }
+        }
+        for (size_t i = preload_desired_count_; i < kPreloadSlots; i++) {
+            preload_desired_indices_[i] = -1;
+        }
+
+        for (size_t slot = 0; slot < kPreloadSlots; slot++) {
+            const int cached_index = preload_image_indices_[slot];
+            bool still_desired = false;
+            for (size_t i = 0; i < preload_desired_count_; i++) {
+                if (preload_desired_indices_[i] == cached_index) {
+                    still_desired = true;
+                    break;
+                }
+            }
+
+            if (!still_desired && (preload_images_[slot] != nullptr)) {
+                images_to_free[free_count++] = preload_images_[slot];
+                preload_images_[slot] = nullptr;
+                preload_image_indices_[slot] = -1;
+            }
+        }
+
+        preload_request_count_ = 0;
+        for (size_t i = 0; i < preload_desired_count_; i++) {
+            const int desired_index = preload_desired_indices_[i];
+            bool already_cached = false;
+            for (size_t slot = 0; slot < kPreloadSlots; slot++) {
+                if ((preload_images_[slot] != nullptr) && (preload_image_indices_[slot] == desired_index)) {
+                    already_cached = true;
+                    break;
+                }
+            }
+
+            if (already_cached || (preload_loading_index_ == desired_index)) {
+                continue;
+            }
+
+            preload_request_indices_[preload_request_count_] = desired_index;
+            snprintf(preload_request_paths_[preload_request_count_],
+                     sizeof(preload_request_paths_[preload_request_count_]),
+                     "%s",
+                     entries_[desired_index].path);
+            preload_request_count_++;
+        }
+        for (size_t i = preload_request_count_; i < kPreloadSlots; i++) {
+            preload_request_indices_[i] = -1;
+            preload_request_paths_[i][0] = '\0';
+        }
+
+        if (!preload_worker_running_ && (preload_request_count_ > 0)) {
+            preload_worker_running_ = true;
+            start_worker = true;
         }
 
         xSemaphoreGive(preload_sem(preload_lock_));
     }
 
-    if (image_to_free != nullptr) {
-        app_jpeg_image_free(image_to_free);
+    for (size_t i = 0; i < free_count; i++) {
+        app_jpeg_image_free(images_to_free[i]);
     }
 
     if (start_worker) {
-        const BaseType_t ok = xTaskCreate(preload_task_entry,
-                                          "img_preload",
-                                          kPreloadTaskStackBytes,
-                                          this,
-                                          kPreloadTaskPriority,
-                                          nullptr);
+        const BaseType_t ok = xTaskCreatePinnedToCore(preload_task_entry,
+                                                      "img_preload",
+                                                      kPreloadTaskStackBytes,
+                                                      this,
+                                                      kPreloadTaskPriority,
+                                                      nullptr,
+                                                      kPreloadTaskCore);
         if (ok != pdPASS) {
             ESP_LOGW(TAG, "preload task create failed");
             if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
                 preload_worker_running_ = false;
-                preload_request_index_ = -1;
-                preload_request_path_[0] = '\0';
-                preload_generation_++;
+                preload_loading_index_ = -1;
+                preload_request_count_ = 0;
+                for (size_t i = 0; i < kPreloadSlots; i++) {
+                    preload_request_indices_[i] = -1;
+                    preload_request_paths_[i][0] = '\0';
+                }
                 xSemaphoreGive(preload_sem(preload_lock_));
             }
         }
@@ -695,22 +782,35 @@ void ImageDisplay::request_preload(uint32_t index)
 
 void ImageDisplay::cancel_preload(void)
 {
-    app_jpeg_image_t *image_to_free = nullptr;
+    app_jpeg_image_t *images_to_free[kPreloadSlots] = {};
+    size_t free_count = 0;
 
     if ((preload_lock_ != nullptr) && (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE)) {
+        preload_desired_count_ = 0;
+        preload_request_count_ = 0;
         preload_generation_++;
-        preload_request_index_ = -1;
-        preload_request_path_[0] = '\0';
 
-        image_to_free = preload_image_;
-        preload_image_ = nullptr;
-        preload_image_index_ = -1;
+        for (size_t i = 0; i < kPreloadSlots; i++) {
+            preload_desired_indices_[i] = -1;
+            preload_request_indices_[i] = -1;
+            preload_request_paths_[i][0] = '\0';
+
+            if (preload_images_[i] != nullptr) {
+                images_to_free[free_count++] = preload_images_[i];
+                preload_images_[i] = nullptr;
+            }
+            preload_image_indices_[i] = -1;
+        }
+
+        if (!preload_worker_running_) {
+            preload_loading_index_ = -1;
+        }
 
         xSemaphoreGive(preload_sem(preload_lock_));
     }
 
-    if (image_to_free != nullptr) {
-        app_jpeg_image_free(image_to_free);
+    for (size_t i = 0; i < free_count; i++) {
+        app_jpeg_image_free(images_to_free[i]);
     }
 }
 
@@ -727,14 +827,35 @@ bool ImageDisplay::take_preloaded_image(uint32_t index, app_jpeg_image_t **out_i
 
     bool taken = false;
     if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
-        if ((preload_image_ != nullptr) && (preload_image_index_ == static_cast<int>(index))) {
-            *out_image = preload_image_;
-            preload_image_ = nullptr;
-            preload_image_index_ = -1;
-            preload_request_index_ = -1;
-            preload_request_path_[0] = '\0';
-            preload_generation_++;
-            taken = true;
+        for (size_t slot = 0; slot < kPreloadSlots; slot++) {
+            if ((preload_images_[slot] != nullptr) &&
+                (preload_image_indices_[slot] == static_cast<int>(index))) {
+                *out_image = preload_images_[slot];
+                preload_images_[slot] = nullptr;
+                preload_image_indices_[slot] = -1;
+                taken = true;
+                break;
+            }
+        }
+
+        if (taken) {
+            for (size_t i = 0; i < preload_request_count_;) {
+                if (preload_request_indices_[i] != static_cast<int>(index)) {
+                    i++;
+                    continue;
+                }
+
+                for (size_t j = i + 1; j < preload_request_count_; j++) {
+                    preload_request_indices_[j - 1] = preload_request_indices_[j];
+                    snprintf(preload_request_paths_[j - 1],
+                             sizeof(preload_request_paths_[j - 1]),
+                             "%s",
+                             preload_request_paths_[j]);
+                }
+                preload_request_count_--;
+                preload_request_indices_[preload_request_count_] = -1;
+                preload_request_paths_[preload_request_count_][0] = '\0';
+            }
         }
 
         xSemaphoreGive(preload_sem(preload_lock_));
@@ -774,7 +895,11 @@ bool ImageDisplay::is_preload_pending(uint32_t index)
 
     bool pending = false;
     if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
-        pending = preload_worker_running_ && (preload_request_index_ == static_cast<int>(index));
+        const int wanted_index = static_cast<int>(index);
+        pending = preload_worker_running_ && (preload_loading_index_ == wanted_index);
+        for (size_t i = 0; !pending && (i < preload_request_count_); i++) {
+            pending = preload_request_indices_[i] == wanted_index;
+        }
         xSemaphoreGive(preload_sem(preload_lock_));
     }
 
@@ -810,15 +935,28 @@ void ImageDisplay::preload_task_main(void)
         char request_path[kPathMax] = {};
 
         if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
-            request_index = preload_request_index_;
-            request_generation = preload_generation_;
-            snprintf(request_path, sizeof(request_path), "%s", preload_request_path_);
-
-            if ((request_index < 0) || (request_path[0] == '\0')) {
+            if (preload_request_count_ == 0) {
+                preload_loading_index_ = -1;
                 preload_worker_running_ = false;
                 xSemaphoreGive(preload_sem(preload_lock_));
                 return;
             }
+
+            request_index = preload_request_indices_[0];
+            request_generation = preload_generation_;
+            snprintf(request_path, sizeof(request_path), "%s", preload_request_paths_[0]);
+
+            for (size_t i = 1; i < preload_request_count_; i++) {
+                preload_request_indices_[i - 1] = preload_request_indices_[i];
+                snprintf(preload_request_paths_[i - 1],
+                         sizeof(preload_request_paths_[i - 1]),
+                         "%s",
+                         preload_request_paths_[i]);
+            }
+            preload_request_count_--;
+            preload_request_indices_[preload_request_count_] = -1;
+            preload_request_paths_[preload_request_count_][0] = '\0';
+            preload_loading_index_ = request_index;
 
             xSemaphoreGive(preload_sem(preload_lock_));
         }
@@ -826,31 +964,54 @@ void ImageDisplay::preload_task_main(void)
         // The worker only decodes JPEG data; LVGL objects stay on the UI task.
         app_jpeg_image_t *loaded_image = nullptr;
         const esp_err_t err = app_jpeg_image_load_rgb565(request_path, &loaded_image);
-        app_jpeg_image_t *image_to_free = nullptr;
         bool continue_worker = false;
 
         if (xSemaphoreTake(preload_sem(preload_lock_), portMAX_DELAY) == pdTRUE) {
             // A newer request can arrive while JPEG decode is running; stale results are freed below.
+            bool still_desired = false;
+            for (size_t i = 0; i < preload_desired_count_; i++) {
+                if (preload_desired_indices_[i] == request_index) {
+                    still_desired = true;
+                    break;
+                }
+            }
+
+            bool already_cached = false;
+            for (size_t slot = 0; slot < kPreloadSlots; slot++) {
+                already_cached = already_cached ||
+                                 ((preload_images_[slot] != nullptr) &&
+                                  (preload_image_indices_[slot] == request_index));
+            }
+
+            int free_slot = -1;
+            for (size_t slot = 0; slot < kPreloadSlots; slot++) {
+                if (preload_images_[slot] == nullptr) {
+                    free_slot = static_cast<int>(slot);
+                    break;
+                }
+            }
+
             const bool accept_image = (err == ESP_OK) &&
                                       (loaded_image != nullptr) &&
                                       (request_generation == preload_generation_) &&
-                                      (request_index == preload_request_index_);
+                                      still_desired &&
+                                      !already_cached &&
+                                      (free_slot >= 0);
 
             if (accept_image) {
-                image_to_free = preload_image_;
-                preload_image_ = loaded_image;
-                preload_image_index_ = request_index;
-                preload_request_index_ = -1;
-                preload_request_path_[0] = '\0';
+                preload_images_[free_slot] = loaded_image;
+                preload_image_indices_[free_slot] = request_index;
                 loaded_image = nullptr;
                 ESP_LOGI(TAG, "Preloaded: %s", request_path);
             } else if (err != ESP_OK) {
                 ESP_LOGW(TAG, "Preload failed: %s (%s)", request_path, esp_err_to_name(err));
             }
 
-            continue_worker = (request_generation != preload_generation_) &&
-                              (preload_request_index_ >= 0) &&
-                              (preload_request_path_[0] != '\0');
+            if (preload_loading_index_ == request_index) {
+                preload_loading_index_ = -1;
+            }
+
+            continue_worker = preload_request_count_ > 0;
             if (!continue_worker) {
                 preload_worker_running_ = false;
             }
@@ -860,9 +1021,6 @@ void ImageDisplay::preload_task_main(void)
 
         if (loaded_image != nullptr) {
             app_jpeg_image_free(loaded_image);
-        }
-        if (image_to_free != nullptr) {
-            app_jpeg_image_free(image_to_free);
         }
 
         if (!continue_worker) {

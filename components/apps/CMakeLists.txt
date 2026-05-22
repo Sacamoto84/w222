@@ -23,12 +23,17 @@ if(CONFIG_JC4880_APP_IMAGE_VIEWER)
     jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/image_display)
 endif()
 
+if(CONFIG_JC4880_APP_SIGNAL_GENERATOR)
+    jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/signal_generator)
+endif()
+
 idf_component_register(
     SRCS ${APPS_SRCS}
     INCLUDE_DIRS ${APPS_DIR}
                  ${APPS_DIR}/calculator
                  ${APPS_DIR}/setting
                  ${APPS_DIR}/image_display
+                 ${APPS_DIR}/signal_generator
                  ${PROJECT_DIR}/main
         
     REQUIRES lvgl__lvgl
@@ -37,6 +42,8 @@ idf_component_register(
                esp_wifi
                nvs_flash 
                heap
+               fatfs
+               esp_driver_i2s
                log)
 
 target_compile_options(

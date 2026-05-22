@@ -242,7 +242,12 @@ void SignalGenerator::close(void)
     start_label_ = nullptr;
     sample_rate_dropdown_ = nullptr;
     volume_label_ = nullptr;
+    tab_bar_ = nullptr;
+    channel_stack_ = nullptr;
     for (size_t i = 0; i < 2; i++) {
+        tab_button_[i] = nullptr;
+        tab_label_[i] = nullptr;
+        channel_panel_[i] = nullptr;
         ch_enable_switch_[i] = nullptr;
         carrier_wave_dropdown_[i] = nullptr;
         am_wave_dropdown_[i] = nullptr;
@@ -256,6 +261,7 @@ void SignalGenerator::close(void)
         fm_enable_switch_[i] = nullptr;
     }
     control_event_count_ = 0;
+    active_channel_ = 0;
 }
 
 void SignalGenerator::set_default_state(void)
@@ -745,16 +751,15 @@ void SignalGenerator::create_ui(lv_obj_t *parent)
     lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
 
     create_toolbar(root_);
+    create_channel_tabs(root_);
 
-    lv_obj_t *channels = lv_obj_create(root_);
-    make_plain_container(channels);
-    lv_obj_set_width(channels, lv_pct(100));
-    lv_obj_set_flex_grow(channels, 1);
-    lv_obj_set_style_pad_column(channels, 8, 0);
-    lv_obj_set_flex_flow(channels, LV_FLEX_FLOW_ROW);
+    channel_stack_ = lv_obj_create(root_);
+    make_plain_container(channel_stack_);
+    lv_obj_set_width(channel_stack_, lv_pct(100));
+    lv_obj_set_flex_grow(channel_stack_, 1);
 
-    create_channel_panel(channels, 0);
-    create_channel_panel(channels, 1);
+    create_channel_panel(channel_stack_, 0);
+    create_channel_panel(channel_stack_, 1);
 }
 
 void SignalGenerator::create_toolbar(lv_obj_t *parent)
@@ -802,12 +807,32 @@ void SignalGenerator::create_toolbar(lv_obj_t *parent)
     lv_obj_set_width(status_label_, 1);
 }
 
+void SignalGenerator::create_channel_tabs(lv_obj_t *parent)
+{
+    tab_bar_ = lv_obj_create(parent);
+    make_plain_container(tab_bar_);
+    lv_obj_set_width(tab_bar_, lv_pct(100));
+    lv_obj_set_height(tab_bar_, 42);
+    lv_obj_set_style_pad_column(tab_bar_, 8, 0);
+    lv_obj_set_flex_flow(tab_bar_, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(tab_bar_, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    const char *names[2] = {"CH1  Left", "CH2  Right"};
+    for (uint8_t i = 0; i < 2; i++) {
+        tab_button_[i] = create_button(tab_bar_, names[i], 1);
+        lv_obj_set_flex_grow(tab_button_[i], 1);
+        tab_label_[i] = lv_obj_get_child(tab_button_[i], 0);
+        attach_event(tab_button_[i], Control::SelectChannel, i, LV_EVENT_CLICKED);
+    }
+}
+
 void SignalGenerator::create_channel_panel(lv_obj_t *parent, uint8_t channel)
 {
     lv_obj_t *panel = lv_obj_create(parent);
-    lv_obj_set_width(panel, 1);
-    lv_obj_set_flex_grow(panel, 1);
+    channel_panel_[channel] = panel;
+    lv_obj_set_width(panel, lv_pct(100));
     lv_obj_set_height(panel, lv_pct(100));
+    lv_obj_align(panel, LV_ALIGN_TOP_MID, 0, 0);
     lv_obj_set_style_radius(panel, 8, 0);
     lv_obj_set_style_bg_color(panel, lv_color_hex(0x171E28), 0);
     lv_obj_set_style_bg_opa(panel, LV_OPA_COVER, 0);
@@ -877,22 +902,23 @@ lv_obj_t *SignalGenerator::create_adjust_row(lv_obj_t *parent,
     lv_obj_t *row = lv_obj_create(parent);
     make_plain_container(row);
     lv_obj_set_width(row, lv_pct(100));
-    lv_obj_set_height(row, 34);
-    lv_obj_set_style_pad_column(row, 5, 0);
+    lv_obj_set_height(row, 42);
+    lv_obj_set_style_pad_column(row, 8, 0);
     lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
     lv_obj_t *name_label = create_text_label(row, name, &lv_font_montserrat_14, 0xC8D3E0);
-    lv_obj_set_width(name_label, 72);
+    lv_obj_set_width(name_label, 108);
 
-    lv_obj_t *dec_button = create_button(row, "-", 34);
+    lv_obj_t *dec_button = create_button(row, "-", 48);
     attach_event(dec_button, dec_control, channel, LV_EVENT_CLICKED);
 
     *value_label = create_text_label(row, "", &lv_font_montserrat_14, 0xEEF4FA);
-    lv_obj_set_width(*value_label, 76);
+    lv_obj_set_width(*value_label, 1);
+    lv_obj_set_flex_grow(*value_label, 1);
     lv_obj_set_style_text_align(*value_label, LV_TEXT_ALIGN_CENTER, 0);
 
-    lv_obj_t *inc_button = create_button(row, "+", 34);
+    lv_obj_t *inc_button = create_button(row, "+", 48);
     attach_event(inc_button, inc_control, channel, LV_EVENT_CLICKED);
 
     return row;
@@ -907,16 +933,16 @@ lv_obj_t *SignalGenerator::create_dropdown_row(lv_obj_t *parent,
     lv_obj_t *row = lv_obj_create(parent);
     make_plain_container(row);
     lv_obj_set_width(row, lv_pct(100));
-    lv_obj_set_height(row, 36);
-    lv_obj_set_style_pad_column(row, 5, 0);
+    lv_obj_set_height(row, 44);
+    lv_obj_set_style_pad_column(row, 8, 0);
     lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
     lv_obj_t *name_label = create_text_label(row, name, &lv_font_montserrat_14, 0xC8D3E0);
-    lv_obj_set_width(name_label, 72);
+    lv_obj_set_width(name_label, 108);
 
     *dropdown = lv_dropdown_create(row);
-    lv_obj_set_height(*dropdown, 34);
+    lv_obj_set_height(*dropdown, 38);
     lv_obj_set_flex_grow(*dropdown, 1);
     style_control_box(*dropdown);
     attach_event(*dropdown, control, channel, LV_EVENT_VALUE_CHANGED);
@@ -932,8 +958,8 @@ lv_obj_t *SignalGenerator::create_switch_row(lv_obj_t *parent,
     lv_obj_t *row = lv_obj_create(parent);
     make_plain_container(row);
     lv_obj_set_width(row, lv_pct(100));
-    lv_obj_set_height(row, 34);
-    lv_obj_set_style_pad_column(row, 5, 0);
+    lv_obj_set_height(row, 42);
+    lv_obj_set_style_pad_column(row, 8, 0);
     lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
@@ -942,7 +968,7 @@ lv_obj_t *SignalGenerator::create_switch_row(lv_obj_t *parent,
     lv_obj_set_width(name_label, 1);
 
     *switch_obj = lv_switch_create(row);
-    lv_obj_set_size(*switch_obj, 54, 28);
+    lv_obj_set_size(*switch_obj, 62, 32);
     attach_event(*switch_obj, control, channel, LV_EVENT_VALUE_CHANGED);
     return row;
 }
@@ -983,6 +1009,12 @@ void SignalGenerator::handle_control(ControlEventData *data, lv_event_t *event)
         } else {
             start_audio();
         }
+        return;
+    }
+
+    if (control == Control::SelectChannel) {
+        active_channel_ = channel_index;
+        refresh_ui();
         return;
     }
 
@@ -1141,6 +1173,30 @@ void SignalGenerator::refresh_ui(void)
 
     for (size_t i = 0; i < 2; i++) {
         const ChannelConfig &ch = snapshot.ch[i];
+
+        if (channel_panel_[i] != nullptr) {
+            if (i == active_channel_) {
+                lv_obj_clear_flag(channel_panel_[i], LV_OBJ_FLAG_HIDDEN);
+            } else {
+                lv_obj_add_flag(channel_panel_[i], LV_OBJ_FLAG_HIDDEN);
+            }
+        }
+
+        if (tab_button_[i] != nullptr) {
+            const bool active = i == active_channel_;
+            lv_obj_set_style_bg_color(tab_button_[i],
+                                      lv_color_hex(active ? (i == 0 ? 0x2179A8 : 0xB96A22) : 0x202834),
+                                      0);
+            lv_obj_set_style_border_color(tab_button_[i],
+                                          lv_color_hex(active ? (i == 0 ? 0x65C8F4 : 0xFFB36B) : 0x354151),
+                                          0);
+        }
+
+        if (tab_label_[i] != nullptr) {
+            lv_obj_set_style_text_color(tab_label_[i],
+                                        lv_color_hex(i == active_channel_ ? 0xFFFFFF : 0xC8D3E0),
+                                        0);
+        }
 
         if (ch_enable_switch_[i] != nullptr) {
             if (ch.enabled) {

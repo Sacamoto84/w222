@@ -42,6 +42,7 @@ private:
         SampleRate,
         VolumeDec,
         VolumeInc,
+        SelectChannel,
         ChEnable,
         CarrierWave,
         CarrierFreqDec,
@@ -116,6 +117,11 @@ private:
     lv_obj_t *start_label_ = nullptr;
     lv_obj_t *sample_rate_dropdown_ = nullptr;
     lv_obj_t *volume_label_ = nullptr;
+    lv_obj_t *tab_bar_ = nullptr;
+    lv_obj_t *tab_button_[2] = {};
+    lv_obj_t *tab_label_[2] = {};
+    lv_obj_t *channel_stack_ = nullptr;
+    lv_obj_t *channel_panel_[2] = {};
     lv_obj_t *ch_enable_switch_[2] = {};
     lv_obj_t *carrier_wave_dropdown_[2] = {};
     lv_obj_t *am_wave_dropdown_[2] = {};
@@ -130,6 +136,7 @@ private:
 
     ControlEventData control_events_[kMaxControlEvents] = {};
     size_t control_event_count_ = 0;
+    uint8_t active_channel_ = 0;
     char runtime_status_[160] = {};
 
     void set_default_state(void);
@@ -153,6 +160,7 @@ private:
 
     void create_ui(lv_obj_t *parent);
     void create_toolbar(lv_obj_t *parent);
+    void create_channel_tabs(lv_obj_t *parent);
     void create_channel_panel(lv_obj_t *parent, uint8_t channel);
     lv_obj_t *create_button(lv_obj_t *parent, const char *text, lv_coord_t width);
     lv_obj_t *create_text_label(lv_obj_t *parent, const char *text, const lv_font_t *font, uint32_t color);

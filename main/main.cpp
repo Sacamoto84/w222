@@ -39,6 +39,9 @@
 #if CONFIG_JC4880_APP_IMAGE_VIEWER
 #include "ImageDisplay.hpp"
 #endif
+#if CONFIG_JC4880_APP_MUSIC_PLAYER
+#include "MusicPlayer.hpp"
+#endif
 #if CONFIG_JC4880_APP_SIGNAL_GENERATOR
 #include "SignalGenerator.hpp"
 #endif
@@ -263,6 +266,9 @@ static bool start_lite_launcher(void)
 #if CONFIG_JC4880_APP_IMAGE_VIEWER
     static ImageDisplay image_display;
 #endif
+#if CONFIG_JC4880_APP_MUSIC_PLAYER
+    static MusicPlayer music_player;
+#endif
 #if CONFIG_JC4880_APP_SIGNAL_GENERATOR
     static SignalGenerator signal_generator;
 #endif
@@ -279,6 +285,14 @@ static bool start_lite_launcher(void)
     if (!launcher.add_app(&image_display))
     {
         ESP_LOGE(TAG, "Register Images failed");
+        return false;
+    }
+#endif
+
+#if CONFIG_JC4880_APP_MUSIC_PLAYER
+    if (!launcher.add_app(&music_player))
+    {
+        ESP_LOGE(TAG, "Register Music failed");
         return false;
     }
 #endif

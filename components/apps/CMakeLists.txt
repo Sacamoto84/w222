@@ -23,6 +23,10 @@ if(CONFIG_JC4880_APP_IMAGE_VIEWER)
     jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/image_display)
 endif()
 
+if(CONFIG_JC4880_APP_MUSIC_PLAYER)
+    jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/music_player)
+endif()
+
 if(CONFIG_JC4880_APP_SIGNAL_GENERATOR)
     jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/signal_generator)
 endif()
@@ -33,6 +37,7 @@ idf_component_register(
                  ${APPS_DIR}/calculator
                  ${APPS_DIR}/setting
                  ${APPS_DIR}/image_display
+                 ${APPS_DIR}/music_player
                  ${APPS_DIR}/signal_generator
                  ${PROJECT_DIR}/main
         
@@ -44,6 +49,7 @@ idf_component_register(
                heap
                fatfs
                esp_driver_i2s
+               chmorgan__esp-audio-player
                log)
 
 target_compile_options(

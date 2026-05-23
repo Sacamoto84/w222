@@ -771,7 +771,7 @@ bool MusicPlayer::open(lv_obj_t *parent)
     lv_obj_t *lcd = lv_obj_create(deck);
     style_lcd(lcd);
     lv_obj_set_width(lcd, lv_pct(100));
-    lv_obj_set_height(lcd, 92);
+    lv_obj_set_height(lcd, 156);
     lv_obj_set_style_pad_column(lcd, 9, 0);
     lv_obj_set_flex_flow(lcd, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(lcd, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
@@ -802,6 +802,13 @@ bool MusicPlayer::open(lv_obj_t *parent)
         lv_obj_center(label);
     }
 
+    scope_label_ = create_label(scope_box, "1x", &lv_font_montserrat_14, 0xD0D0D0);
+    lv_obj_set_style_bg_color(scope_label_, lv_color_hex(0x061006), 0);
+    lv_obj_set_style_bg_opa(scope_label_, LV_OPA_COVER, 0);
+    lv_obj_set_style_pad_all(scope_label_, 1, 0);
+    lv_obj_align(scope_label_, LV_ALIGN_TOP_RIGHT, -2, 2);
+    lv_obj_add_event_cb(scope_box, scope_event_cb, LV_EVENT_CLICKED, this);
+
     lv_obj_t *lcd_text = lv_obj_create(lcd);
     make_plain_container(lcd_text);
     lv_obj_set_width(lcd_text, 1);
@@ -830,8 +837,6 @@ bool MusicPlayer::open(lv_obj_t *parent)
     lv_obj_set_style_pad_column(seek_row, 8, 0);
     lv_obj_set_flex_flow(seek_row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(seek_row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-
-    create_label(seek_row, "SEEK", &lv_font_montserrat_14, 0xD7DAE5);
 
     seek_slider_ = lv_slider_create(seek_row);
     lv_obj_set_width(seek_slider_, 1);
@@ -943,6 +948,7 @@ void MusicPlayer::close(void)
     seek_slider_ = nullptr;
     seek_label_ = nullptr;
     scope_canvas_ = nullptr;
+    scope_label_ = nullptr;
     seek_dragging_ = false;
 }
 
@@ -1389,11 +1395,12 @@ void MusicPlayer::refresh_ui(void)
         } else if (state == AUDIO_PLAYER_STATE_SHUTDOWN) {
             state_text = "STOP";
         }
-        lv_label_set_text_fmt(state_label_, "%s  %luHZ  %luBIT  VOL %u%%",
+        const char *mode_text = (current_channel_mode_ == I2S_SLOT_MODE_STEREO) ? "STEREO" : "MONO";
+        lv_label_set_text_fmt(state_label_, "%s  %luHZ  %luBIT  %s",
                               state_text,
                               static_cast<unsigned long>(current_sample_rate_),
                               static_cast<unsigned long>(current_bits_per_sample_),
-                              static_cast<unsigned>(volume_percent_));
+                              mode_text);
     }
 
     if (volume_slider_ != nullptr && !lv_slider_is_dragged(volume_slider_)) {
@@ -1688,7 +1695,9 @@ void MusicPlayer::clear_scope_samples(void)
         return;
     }
 
-    memset(scope_samples_, 0, sizeof(scope_samples_));
+    memset(scope_ring_left_, 0, sizeof(scope_ring_left_));
+    memset(scope_ring_right_, 0, sizeof(scope_ring_right_));
+    scope_ring_write_idx_ = 0;
     scope_sequence_++;
     xSemaphoreGive(lock);
 }
@@ -1709,18 +1718,12 @@ void MusicPlayer::publish_scope_samples(const int16_t *samples, size_t sample_co
         return;
     }
 
-    for (size_t i = 0; i < kScopePointCount; i++) {
-        size_t frame_index = (i * frame_count) / kScopePointCount;
-        if (frame_index >= frame_count) {
-            frame_index = frame_count - 1;
-        }
-
-        const int16_t *frame = &samples[frame_index * channel_count];
-        int32_t mixed = frame[0];
-        if (channel_count > 1) {
-            mixed = (mixed + frame[1]) / 2;
-        }
-        scope_samples_[i] = static_cast<int16_t>(mixed);
+    for (size_t i = 0; i < frame_count; i++) {
+        const int16_t *frame = &samples[i * channel_count];
+        const size_t idx = scope_ring_write_idx_ & (kScopeRingSize - 1);
+        scope_ring_left_[idx] = frame[0];
+        scope_ring_right_[idx] = (channel_count > 1) ? frame[1] : frame[0];
+        scope_ring_write_idx_++;
     }
 
     scope_sequence_++;
@@ -1743,14 +1746,39 @@ void MusicPlayer::render_scope(void)
         xSemaphoreGive(lock);
         return;
     }
-    memcpy(scope_render_samples_, scope_samples_, sizeof(scope_render_samples_));
+
+    int32_t samples_per_point = 1;
+    if (scope_scale_idx_ >= 2) {
+        samples_per_point = 1 << (scope_scale_idx_ - 1);
+    }
+    const int32_t pixel_stride = (scope_scale_idx_ == 0) ? 2 : 1;
+    const int32_t points = static_cast<int32_t>(kScopePointCount) / pixel_stride;
+    const int32_t samples_needed = points * samples_per_point;
+
+    const uint32_t end = scope_ring_write_idx_;
+    int64_t start = static_cast<int64_t>(end) - samples_needed;
+    if (start < 0) {
+        start = 0;
+    }
+
+    for (int32_t i = 0; i < points; i++) {
+        const int64_t sample_idx = start + static_cast<int64_t>(i) * samples_per_point;
+        const size_t ring_idx = static_cast<size_t>(sample_idx) & (kScopeRingSize - 1);
+        scope_render_left_[i] = scope_ring_left_[ring_idx];
+        scope_render_right_[i] = scope_ring_right_[ring_idx];
+    }
+
     xSemaphoreGive(lock);
     scope_rendered_sequence_ = sequence;
 
+    if (scope_label_ != nullptr) {
+        const char *scale_texts[kScopeScaleCount] = {"0.5x", "1x", "2x", "4x", "8x", "16x"};
+        lv_label_set_text(scope_label_, scale_texts[scope_scale_idx_]);
+    }
+
     const int32_t width = static_cast<int32_t>(kScopeCanvasWidth);
     const int32_t height = static_cast<int32_t>(kScopeCanvasHeight);
-    const int32_t mid_y = height / 2;
-    const int32_t amplitude = (height / 2) - 5;
+    const bool is_stereo = (current_channel_mode_ == I2S_SLOT_MODE_STEREO);
     const uint16_t bg = rgb565(0x061006);
     const uint16_t grid = rgb565(0x12351B);
     const uint16_t center = rgb565(0x2F6C3B);
@@ -1767,26 +1795,81 @@ void MusicPlayer::render_scope(void)
     for (int32_t y = height / 4; y < height; y += height / 4) {
         scope_draw_line(scope_canvas_buffer_, width, height, 0, y, width - 1, y, grid);
     }
-    scope_draw_line(scope_canvas_buffer_, width, height, 0, mid_y, width - 1, mid_y, center);
 
-    int32_t prev_x = 0;
-    int32_t prev_y = mid_y;
-    for (size_t i = 0; i < kScopePointCount; i++) {
-        const int32_t x = static_cast<int32_t>((i * static_cast<size_t>(width - 1)) / (kScopePointCount - 1));
-        int32_t y = mid_y - ((static_cast<int32_t>(scope_render_samples_[i]) * amplitude) / 32768);
-        if (y < 1) {
-            y = 1;
-        } else if (y >= (height - 1)) {
-            y = height - 2;
+    if (is_stereo) {
+        const int32_t half_h = height / 2;
+        const int32_t mid_l = half_h / 2;
+        const int32_t mid_r = half_h + half_h / 2;
+        const int32_t amp = (half_h / 2) - 4;
+
+        scope_draw_line(scope_canvas_buffer_, width, height, 0, mid_l, width - 1, mid_l, center);
+        scope_draw_line(scope_canvas_buffer_, width, height, 0, mid_r, width - 1, mid_r, center);
+        scope_draw_line(scope_canvas_buffer_, width, height, 0, half_h, width - 1, half_h, grid);
+
+        int32_t prev_x = 0;
+        int32_t prev_y = mid_l;
+        for (int32_t i = 0; i < points; i++) {
+            const int32_t x = (points > 1) ? ((i * (width - 1)) / (points - 1)) : (width / 2);
+            int32_t y = mid_l - ((static_cast<int32_t>(scope_render_left_[i]) * amp) / 32768);
+            if (y < 1) {
+                y = 1;
+            } else if (y >= (half_h - 1)) {
+                y = half_h - 2;
+            }
+
+            if (i > 0) {
+                scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y + 1, x, y + 1, wave_shadow);
+                scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y, x, y, wave);
+            }
+
+            prev_x = x;
+            prev_y = y;
         }
 
-        if (i > 0) {
-            scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y + 1, x, y + 1, wave_shadow);
-            scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y, x, y, wave);
-        }
+        prev_x = 0;
+        prev_y = mid_r;
+        for (int32_t i = 0; i < points; i++) {
+            const int32_t x = (points > 1) ? ((i * (width - 1)) / (points - 1)) : (width / 2);
+            int32_t y = mid_r - ((static_cast<int32_t>(scope_render_right_[i]) * amp) / 32768);
+            if (y < (half_h + 1)) {
+                y = half_h + 1;
+            } else if (y >= (height - 1)) {
+                y = height - 2;
+            }
 
-        prev_x = x;
-        prev_y = y;
+            if (i > 0) {
+                scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y + 1, x, y + 1, wave_shadow);
+                scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y, x, y, wave);
+            }
+
+            prev_x = x;
+            prev_y = y;
+        }
+    } else {
+        const int32_t mid_y = height / 2;
+        const int32_t amplitude = (height / 2) - 5;
+
+        scope_draw_line(scope_canvas_buffer_, width, height, 0, mid_y, width - 1, mid_y, center);
+
+        int32_t prev_x = 0;
+        int32_t prev_y = mid_y;
+        for (int32_t i = 0; i < points; i++) {
+            const int32_t x = (points > 1) ? ((i * (width - 1)) / (points - 1)) : (width / 2);
+            int32_t y = mid_y - ((static_cast<int32_t>(scope_render_left_[i]) * amplitude) / 32768);
+            if (y < 1) {
+                y = 1;
+            } else if (y >= (height - 1)) {
+                y = height - 2;
+            }
+
+            if (i > 0) {
+                scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y + 1, x, y + 1, wave_shadow);
+                scope_draw_line(scope_canvas_buffer_, width, height, prev_x, prev_y, x, y, wave);
+            }
+
+            prev_x = x;
+            prev_y = y;
+        }
     }
 
     lv_obj_invalidate(scope_canvas_);
@@ -1863,6 +1946,15 @@ void MusicPlayer::control_event_cb(lv_event_t *event)
     if ((data != nullptr) && (data->app != nullptr)) {
         data->app->handle_control(data->control, event);
     }
+}
+
+void MusicPlayer::scope_event_cb(lv_event_t *event)
+{
+    auto *app = static_cast<MusicPlayer *>(lv_event_get_user_data(event));
+    if (app == nullptr) {
+        return;
+    }
+    app->scope_scale_idx_ = (app->scope_scale_idx_ + 1) % kScopeScaleCount;
 }
 
 void MusicPlayer::ui_timer_cb(lv_timer_t *timer)

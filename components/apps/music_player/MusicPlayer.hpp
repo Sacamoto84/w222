@@ -27,7 +27,7 @@ private:
     static constexpr size_t kNameMax = 128;
     static constexpr size_t kPathMax = 224;
     static constexpr size_t kScopeCanvasWidth = 176;
-    static constexpr size_t kScopeCanvasHeight = 72;
+    static constexpr size_t kScopeCanvasHeight = 144;
     static constexpr size_t kScopePointCount = 128;
 
     struct TrackEntry {
@@ -94,10 +94,18 @@ private:
     int16_t *volume_buffer_ = nullptr;
     size_t volume_buffer_bytes_ = 0;
     uint16_t *scope_canvas_buffer_ = nullptr;
-    int16_t scope_samples_[kScopePointCount] = {};
-    int16_t scope_render_samples_[kScopePointCount] = {};
+    static constexpr size_t kScopeRingSize = 4096;
+    static constexpr uint8_t kScopeScaleCount = 6;
+
+    int16_t scope_ring_left_[kScopeRingSize] = {};
+    int16_t scope_ring_right_[kScopeRingSize] = {};
+    int16_t scope_render_left_[kScopePointCount] = {};
+    int16_t scope_render_right_[kScopePointCount] = {};
+    uint32_t scope_ring_write_idx_ = 0;
     uint32_t scope_sequence_ = 0;
     uint32_t scope_rendered_sequence_ = UINT32_MAX;
+    uint8_t scope_scale_idx_ = 1;
+    lv_obj_t *scope_label_ = nullptr;
     char runtime_status_[96] = {};
 
     ControlEventData refresh_event_ = {};
@@ -139,6 +147,7 @@ private:
 
     static void entry_event_cb(lv_event_t *event);
     static void control_event_cb(lv_event_t *event);
+    static void scope_event_cb(lv_event_t *event);
     static void ui_timer_cb(lv_timer_t *timer);
     static void audio_player_event_cb(audio_player_cb_ctx_t *ctx);
     static int mp3_stream_read_cb(void *user_ctx, uint8_t *buffer, size_t len, bool *is_eof);

@@ -16,6 +16,7 @@ public:
     const char *title(void) const override { return "Music"; }
     const char *icon_text(void) const override { return LV_SYMBOL_AUDIO; }
     lv_color_t accent_color(void) const override { return lv_color_hex(0xE05A47); }
+    bool use_launcher_header(void) const override { return false; }
 
     bool init(void) override;
     bool open(lv_obj_t *parent) override;
@@ -25,11 +26,15 @@ private:
     static constexpr size_t kMaxEntries = 256;
     static constexpr size_t kNameMax = 128;
     static constexpr size_t kPathMax = 224;
+    static constexpr size_t kScopeCanvasWidth = 176;
+    static constexpr size_t kScopeCanvasHeight = 72;
+    static constexpr size_t kScopePointCount = 128;
 
     struct TrackEntry {
         char name[kNameMax];
         char path[kPathMax];
         uint32_t size;
+        uint32_t duration_ms;
     };
 
     struct EntryEventData {
@@ -45,6 +50,7 @@ private:
         Next,
         Volume,
         Seek,
+        Close,
     };
 
     struct ControlEventData {
@@ -67,10 +73,11 @@ private:
     lv_obj_t *volume_label_ = nullptr;
     lv_obj_t *seek_slider_ = nullptr;
     lv_obj_t *seek_label_ = nullptr;
-    lv_obj_t *eq_bars_[12] = {};
+    lv_obj_t *scope_canvas_ = nullptr;
     lv_timer_t *ui_timer_ = nullptr;
 
     void *event_queue_ = nullptr;
+    void *scope_lock_ = nullptr;
     i2s_chan_handle_t tx_chan_ = nullptr;
     bool i2s_enabled_ = false;
     bool player_ready_ = false;
@@ -86,6 +93,11 @@ private:
     i2s_slot_mode_t current_channel_mode_ = I2S_SLOT_MODE_STEREO;
     int16_t *volume_buffer_ = nullptr;
     size_t volume_buffer_bytes_ = 0;
+    uint16_t *scope_canvas_buffer_ = nullptr;
+    int16_t scope_samples_[kScopePointCount] = {};
+    int16_t scope_render_samples_[kScopePointCount] = {};
+    uint32_t scope_sequence_ = 0;
+    uint32_t scope_rendered_sequence_ = UINT32_MAX;
     char runtime_status_[96] = {};
 
     ControlEventData refresh_event_ = {};
@@ -95,6 +107,7 @@ private:
     ControlEventData next_event_ = {};
     ControlEventData volume_event_ = {};
     ControlEventData seek_event_ = {};
+    ControlEventData close_event_ = {};
 
     bool scan_tracks(void);
     void rebuild_list(void);
@@ -119,6 +132,10 @@ private:
     esp_err_t write_i2s(void *audio_buffer, size_t len, size_t *bytes_written, uint32_t timeout_ms);
     esp_err_t set_mute(bool muted);
     bool ensure_volume_buffer(size_t len);
+    bool ensure_scope_canvas_buffer(void);
+    void clear_scope_samples(void);
+    void publish_scope_samples(const int16_t *samples, size_t sample_count, size_t channel_count);
+    void render_scope(void);
 
     static void entry_event_cb(lv_event_t *event);
     static void control_event_cb(lv_event_t *event);

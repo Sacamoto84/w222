@@ -32,7 +32,7 @@ static constexpr uint32_t kDefaultSampleRateHz = 44100;
 static constexpr uint32_t kDefaultBitsPerSample = 16;
 static constexpr uint32_t kI2sDmaDescNum = 8;
 static constexpr uint32_t kI2sDmaFrames = 512;
-static constexpr uint32_t kUiRefreshMs = 160;
+static constexpr uint32_t kUiRefreshMs = 50; // UI refresh interval in milliseconds
 #if CONFIG_FREERTOS_UNICORE
 static constexpr BaseType_t kAudioTaskCore = tskNO_AFFINITY;
 #else

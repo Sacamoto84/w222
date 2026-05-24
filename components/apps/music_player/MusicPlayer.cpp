@@ -61,6 +61,21 @@ MusicPlayer::~MusicPlayer() {
     heap_caps_free(scope_canvas_buffer_);
     scope_canvas_buffer_ = nullptr;
   }
+
+  if (spectrum_canvas_buffer_ != nullptr) {
+    heap_caps_free(spectrum_canvas_buffer_);
+    spectrum_canvas_buffer_ = nullptr;
+  }
+
+  if (spectrum_fft_buffer_ != nullptr) {
+    heap_caps_free(spectrum_fft_buffer_);
+    spectrum_fft_buffer_ = nullptr;
+  }
+
+  if (spectrum_window_ != nullptr) {
+    heap_caps_free(spectrum_window_);
+    spectrum_window_ = nullptr;
+  }
 }
 
 bool MusicPlayer::init(void) {
@@ -127,9 +142,16 @@ void MusicPlayer::close(void) {
   volume_label_ = nullptr;
   seek_slider_ = nullptr;
   seek_label_ = nullptr;
+  scope_box_ = nullptr;
   scope_canvas_ = nullptr;
+  scope_canvas_width_ = static_cast<lv_coord_t>(kScopeCanvasWidth);
+  scope_canvas_configured_width_ = 0;
+  info_panel_ = nullptr;
+  spectrum_canvas_ = nullptr;
   scope_label_ = nullptr;
   seek_dragging_ = false;
+  scope_expanded_ = false;
+  scope_long_press_consumed_ = false;
 }
 
 // Сканирование треков

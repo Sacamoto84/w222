@@ -186,8 +186,9 @@ lv_obj_t *MusicPlayer::create_deck_(lv_obj_t *parent) {
   lv_obj_clear_flag(lcd, LV_OBJ_FLAG_SCROLLABLE);
 
   lv_obj_t *scope_box = lv_obj_create(lcd);
+  scope_box_ = scope_box;
   make_plain_container(scope_box);
-  lv_obj_set_size(scope_box, static_cast<lv_coord_t>(kScopeCanvasWidth),
+  lv_obj_set_size(scope_box, kScopeCollapsedBoxWidth,
                   static_cast<lv_coord_t>(kScopeCanvasHeight));
   lv_obj_set_style_bg_color(scope_box, lv_color_hex(0x061006), 0);
   lv_obj_set_style_bg_opa(scope_box, LV_OPA_COVER, 0);
@@ -197,11 +198,7 @@ lv_obj_t *MusicPlayer::create_deck_(lv_obj_t *parent) {
 
   if (ensure_scope_canvas_buffer()) {
     scope_canvas_ = lv_canvas_create(scope_box);
-    lv_canvas_set_buffer(scope_canvas_, scope_canvas_buffer_,
-                         static_cast<int32_t>(kScopeCanvasWidth),
-                         static_cast<int32_t>(kScopeCanvasHeight),
-                         LV_COLOR_FORMAT_RGB565);
-    lv_obj_center(scope_canvas_);
+    configure_scope_canvas_width(kScopeCollapsedBoxWidth);
     render_scope();
   } else {
     lv_obj_t *label =
@@ -215,12 +212,16 @@ lv_obj_t *MusicPlayer::create_deck_(lv_obj_t *parent) {
   lv_obj_set_style_pad_all(scope_label_, 1, 0);
   lv_obj_align(scope_label_, LV_ALIGN_TOP_RIGHT, -2, 2);
   lv_obj_add_event_cb(scope_box, scope_event_cb, LV_EVENT_CLICKED, this);
+  lv_obj_add_event_cb(scope_box, scope_long_event_cb, LV_EVENT_LONG_PRESSED,
+                      this);
 
-  lv_obj_t *lcd_text = lv_obj_create(lcd);
+  info_panel_ = lv_obj_create(lcd);
+  lv_obj_t *lcd_text = info_panel_;
   make_plain_container(lcd_text);
   lv_obj_set_width(lcd_text, 1);
   lv_obj_set_height(lcd_text, lv_pct(100));
   lv_obj_set_flex_grow(lcd_text, 1);
+  lv_obj_add_flag(lcd_text, LV_OBJ_FLAG_CLICKABLE);
   lv_obj_set_style_bg_color(lcd_text, lv_color_hex(0x000000), 0);
   lv_obj_set_style_bg_opa(lcd_text, LV_OPA_COVER, 0);
   lv_obj_set_style_border_width(lcd_text, 2, 0);
@@ -230,13 +231,28 @@ lv_obj_t *MusicPlayer::create_deck_(lv_obj_t *parent) {
   lv_obj_set_flex_flow(lcd_text, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_flex_align(lcd_text, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
                         LV_FLEX_ALIGN_CENTER);
+  lv_obj_add_event_cb(lcd_text, spectrum_event_cb, LV_EVENT_CLICKED, this);
 
   track_label_ = create_label(lcd_text, "1. DEMO", &lv_font_montserrat_22, 0x37FF60);
   lv_obj_set_width(track_label_, lv_pct(100));
+  make_child_passthrough(track_label_);
   file_label_ = create_label(lcd_text, "", &lv_font_montserrat_14, 0xF0A020);
   lv_obj_set_width(file_label_, lv_pct(100));
+  make_child_passthrough(file_label_);
   state_label_ = create_label(lcd_text, "IDLE", &lv_font_montserrat_14, 0xC8CCD8);
   lv_obj_set_width(state_label_, lv_pct(100));
+  make_child_passthrough(state_label_);
+
+  if (ensure_spectrum_buffers()) {
+    spectrum_canvas_ = lv_canvas_create(lcd_text);
+    lv_canvas_set_buffer(spectrum_canvas_, spectrum_canvas_buffer_,
+                         static_cast<int32_t>(kSpectrumCanvasWidth),
+                         static_cast<int32_t>(kSpectrumCanvasHeight),
+                         LV_COLOR_FORMAT_RGB565);
+    lv_obj_center(spectrum_canvas_);
+    lv_obj_add_flag(spectrum_canvas_, LV_OBJ_FLAG_HIDDEN);
+    make_child_passthrough(spectrum_canvas_);
+  }
 
   lv_obj_t *seek_row = lv_obj_create(deck);
   make_plain_container(seek_row);

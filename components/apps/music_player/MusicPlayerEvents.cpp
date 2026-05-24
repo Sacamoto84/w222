@@ -23,6 +23,13 @@ void MusicPlayer::control_event_cb(lv_event_t *event) {
   }
 }
 
+void MusicPlayer::spectrum_event_cb(lv_event_t *event) {
+  auto *app = static_cast<MusicPlayer *>(lv_event_get_user_data(event));
+  if (app == nullptr) {
+    return;
+  }
+  app->advance_info_panel_mode();
+}
 
 void MusicPlayer::ui_timer_cb(lv_timer_t *timer) {
   MusicPlayer *app = static_cast<MusicPlayer *>(lv_timer_get_user_data(timer));

@@ -32,10 +32,19 @@ private:
     static constexpr size_t kNameMax = 128;           //Максимальная длина названия
     static constexpr size_t kPathMax = 224;           //Максимальная длина пути
     static constexpr size_t kScopeCanvasWidth = 176;  //Ширина холста осциллографа
+    static constexpr size_t kScopeExpandedCanvasWidth = 1024;
     static constexpr size_t kScopeCanvasHeight = 144; //Высота холста осциллографа
+    static constexpr lv_coord_t kScopeCollapsedBoxWidth = static_cast<lv_coord_t>(kScopeCanvasWidth);
+    static constexpr uint32_t kScopeExpandAnimMs = 260;
     static constexpr size_t kScopePointCount = 128;   //Количество точек на осциллографе
+    static constexpr size_t kScopeExpandedPointCount = kScopePointCount * 2;
     static constexpr int32_t kSeekSliderMax = 1000;   //Максимум слайдера перемотки
     static constexpr uint32_t kSeekOutputMuteMs = 300; //Глушение звука после перемотки
+
+    static constexpr size_t kSpectrumCanvasWidth = 320;
+    static constexpr size_t kSpectrumCanvasHeight = 118;
+    static constexpr size_t kSpectrumFftSize = 256;
+    static constexpr size_t kSpectrumBandCount = 48;
 
     struct TrackEntry {
         char name[kNameMax];
@@ -60,6 +69,12 @@ private:
         Close,
     };
 
+    enum class InfoPanelMode {
+        Text,
+        Spectrum,
+        XY,
+    };
+
     //Структура данных для события управления
     struct ControlEventData {
         MusicPlayer *app;
@@ -69,6 +84,15 @@ private:
     TrackEntry *entries_ = nullptr;
     EntryEventData *entry_events_ = nullptr;
     uint32_t entry_count_ = 0;
+    lv_obj_t *info_panel_ = nullptr;
+    lv_obj_t *spectrum_canvas_ = nullptr;
+    uint16_t *spectrum_canvas_buffer_ = nullptr;
+    float *spectrum_fft_buffer_ = nullptr;
+    float *spectrum_window_ = nullptr;
+    uint32_t spectrum_rendered_sequence_ = UINT32_MAX;
+    InfoPanelMode info_panel_mode_ = InfoPanelMode::Text;
+    bool spectrum_fft_ready_ = false;
+    float spectrum_levels_[kSpectrumBandCount] = {};
 
     lv_obj_t *root_ = nullptr;                  //Корневой объект
     lv_obj_t *list_ = nullptr;                  //Список треков
@@ -81,6 +105,7 @@ private:
     lv_obj_t *volume_label_ = nullptr;          //Метка громкости
     lv_obj_t *seek_slider_ = nullptr;           //Слайдер позиции
     lv_obj_t *seek_label_ = nullptr;            //Метка позиции
+    lv_obj_t *scope_box_ = nullptr;
     lv_obj_t *scope_canvas_ = nullptr;          //Холст осциллографа
     lv_timer_t *ui_timer_ = nullptr;            //Таймер UI
 
@@ -103,17 +128,25 @@ private:
     int16_t *volume_buffer_ = nullptr;           //Буфер для изменения громкости
     size_t volume_buffer_bytes_ = 0;             //Размер буфера для изменения громкости
     uint16_t *scope_canvas_buffer_ = nullptr;    //Буфер для отображения осциллографа
-    static constexpr size_t kScopeRingSize = 4096; //Размер кольцевого буфера осциллографа
+    lv_coord_t scope_canvas_width_ = static_cast<lv_coord_t>(kScopeCanvasWidth);
+    lv_coord_t scope_canvas_configured_width_ = 0;
+    static constexpr size_t kScopeRingSize = 4096*2; //Размер кольцевого буфера осциллографа
     static constexpr uint8_t kScopeScaleCount = 8; //Количество масштабов осциллографа
 
     int16_t scope_ring_left_[kScopeRingSize] = {};      //Кольцевой буфер для левого канала
     int16_t scope_ring_right_[kScopeRingSize] = {};     //Кольцевой буфер для правого канала
-    int16_t scope_render_left_[kScopePointCount] = {};  //Буфер для отображения левого канала
-    int16_t scope_render_right_[kScopePointCount] = {}; //Буфер для отображения правого канала
+    int16_t scope_render_left_[kScopeExpandedPointCount] = {};  //Минимумы окна левого канала
+    int16_t scope_render_right_[kScopeExpandedPointCount] = {}; //Минимумы окна правого канала
+    int16_t scope_render_left_max_[kScopeExpandedPointCount] = {};  //Максимумы окна левого канала
+    int16_t scope_render_right_max_[kScopeExpandedPointCount] = {}; //Максимумы окна правого канала
+    int16_t xy_render_left_[kSpectrumFftSize] = {};
+    int16_t xy_render_right_[kSpectrumFftSize] = {};
     uint32_t scope_ring_write_idx_ = 0;                 //Индекс записи в кольцевом буфере
     uint32_t scope_sequence_ = 0;                       //Последовательность отрисовки
     uint32_t scope_rendered_sequence_ = UINT32_MAX;     //Последовательность отрисованного
     uint8_t scope_scale_idx_ = 1;                       //Индекс масштаба
+    bool scope_expanded_ = false;
+    bool scope_long_press_consumed_ = false;
     lv_obj_t *scope_label_ = nullptr;                   //Метка для отображения статуса
     char runtime_status_[96] = {};                      //Строка для отображения статуса
 
@@ -186,6 +219,8 @@ private:
     // Scope ------------------------------------------------------------------
     // Allocates the LVGL canvas backing buffer, preferring PSRAM when present.
     bool ensure_scope_canvas_buffer(void);              //Инициализация буфера осциллографа
+    void configure_scope_canvas_width(lv_coord_t width);
+    bool ensure_spectrum_buffers(void);
     // Clears the scope ring buffers and bumps the sequence so the next render
     // repaints the canvas.
     void clear_scope_samples(void);                     //Очистка образцов осциллографа
@@ -193,6 +228,13 @@ private:
     void publish_scope_samples(const int16_t *samples, size_t sample_count, size_t channel_count); //Публикация образцов осциллографа
     // Renders the latest scope snapshot to the LVGL canvas.
     void render_scope(void);                            //Отрисовка осциллографа
+
+    void render_spectrum(uint32_t sequence);
+    void render_xy_scope(uint32_t sequence);
+    void set_info_panel_mode(InfoPanelMode mode);
+    void advance_info_panel_mode(void);
+    void set_scope_expanded(bool expanded, bool animate);
+    void toggle_scope_expanded(void);
 
     // UI builders ------------------------------------------------------------
     // Creates the full-screen root container owned by this app instance.
@@ -210,7 +252,11 @@ private:
     static void entry_event_cb(lv_event_t *event);      //Обработка события входа
     static void control_event_cb(lv_event_t *event);    //Обработка события управления
     static void scope_event_cb(lv_event_t *event);      //Обработка события осциллографа
+    static void scope_long_event_cb(lv_event_t *event);
+    static void scope_collapse_anim_completed_cb(lv_anim_t *anim);
     static void ui_timer_cb(lv_timer_t *timer);         //Обработка таймера UI
+
+    static void spectrum_event_cb(lv_event_t *event);
 
     // audio_player callbacks may run outside the UI flow, so events are queued
     // and consumed later by ui_timer_cb.

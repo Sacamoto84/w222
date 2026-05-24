@@ -58,6 +58,16 @@ dependencies:
       registry_url: https://components.espressif.com
       type: service
     version: 1.1.5
+  espressif/esp-dsp:
+    component_hash: ed9ac175b14e0414399a2b33c525579414b5bad19a2a67b12ea212def96f9a98
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.2'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.8.2
   espressif/esp32_p4_function_ev_board:
     dependencies: []
     source:
@@ -212,6 +222,7 @@ direct_dependencies:
 - chmorgan/esp-libhelix-mp3
 - esp_lcd_st7701
 - espressif/cmake_utilities
+- espressif/esp-dsp
 - espressif/esp32_p4_function_ev_board
 - espressif/esp_audio_codec
 - espressif/esp_codec_dev
@@ -223,6 +234,6 @@ direct_dependencies:
 - espressif/esp_wifi_remote
 - idf
 - lvgl/lvgl
-manifest_hash: 1210db89aa3371b814b62b68928a6836b088c294ec3817cc6f0ec9237d238b38
+manifest_hash: af537737f775f641f21f4d596fad3a46e13d98ad6540731bd559f6c5faa2ba4c
 target: esp32p4
 version: 2.0.0

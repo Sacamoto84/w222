@@ -49,6 +49,7 @@ idf_component_register(
                heap
                fatfs
                esp_driver_i2s
+               espressif__esp-dsp
                chmorgan__esp-audio-player
                log)
 

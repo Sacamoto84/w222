@@ -4,6 +4,9 @@
 
 namespace {
 
+// Local LVGL styling/building helpers for the Winamp-like music player screen.
+// They stay file-private because no playback logic should depend on UI shapes.
+
 static void make_plain_container(lv_obj_t *obj) {
   lv_obj_remove_style_all(obj);
   lv_obj_set_style_bg_opa(obj, LV_OPA_TRANSP, 0);

@@ -29,6 +29,7 @@ private:
     static constexpr size_t kScopeCanvasWidth = 176;  //Ширина холста осциллографа
     static constexpr size_t kScopeCanvasHeight = 144; //Высота холста осциллографа
     static constexpr size_t kScopePointCount = 128;   //Количество точек на осциллографе
+    static constexpr int32_t kSeekSliderMax = 1000;   //Максимум слайдера перемотки
 
     struct TrackEntry {
         char name[kNameMax];
@@ -145,6 +146,10 @@ private:
     void clear_scope_samples(void);                     //Очистка образцов осциллографа
     void publish_scope_samples(const int16_t *samples, size_t sample_count, size_t channel_count); //Публикация образцов осциллографа
     void render_scope(void);                            //Отрисовка осциллографа
+
+    lv_obj_t *create_root_(lv_obj_t *parent);
+    lv_obj_t *create_deck_(lv_obj_t *parent);
+    lv_obj_t *create_playlist_(lv_obj_t *parent);
 
     static void entry_event_cb(lv_event_t *event);      //Обработка события входа
     static void control_event_cb(lv_event_t *event);    //Обработка события управления

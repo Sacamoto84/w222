@@ -146,6 +146,9 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_flex_flow(toolbar, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(toolbar, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
+    lv_obj_t *back_button = create_toolbar_button(toolbar, LV_SYMBOL_LEFT);
+    lv_obj_add_event_cb(back_button, back_event_cb, LV_EVENT_CLICKED, this);
+
     status_label_ = lv_label_create(toolbar);
     lv_obj_set_flex_grow(status_label_, 1);
     lv_label_set_long_mode(status_label_, LV_LABEL_LONG_DOT);
@@ -769,6 +772,26 @@ void UartTerminalApp::refresh_visible_rows(void)
     }
 }
 
+lv_obj_t *UartTerminalApp::ensure_row_label(RowView &row, size_t slot)
+{
+    if (slot < row.labels.size()) {
+        return row.labels[slot];
+    }
+
+    // Метку создаем один раз и больше не удаляем во время скролла.
+    // Постоянные стили выставляем тоже только при создании.
+    lv_obj_t *label = lv_label_create(row.container);
+    lv_label_set_long_mode(label, LV_LABEL_LONG_MODE_CLIP);
+    lv_obj_set_height(label, line_height_);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_pad_top(label, 1, 0);
+    lv_obj_set_style_pad_bottom(label, 0, 0);
+    lv_obj_set_style_pad_left(label, 0, 0);
+    lv_obj_set_style_pad_right(label, 0, 0);
+    row.labels.push_back(label);
+    return label;
+}
+
 void UartTerminalApp::render_line_to_row(RowView &row, int line_index, int32_t y)
 {
     if (row.container == nullptr) {
@@ -787,34 +810,36 @@ void UartTerminalApp::render_line_to_row(RowView &row, int line_index, int32_t y
     lv_obj_clear_flag(row.container, LV_OBJ_FLAG_HIDDEN);
 
     if ((row.rendered_index == line_index) && (row.rendered_sequence == line->sequence)) {
+        // Содержимое строки не изменилось — достаточно было сдвинуть позицию.
         return;
     }
 
-    lv_obj_clean(row.container);
     row.rendered_index = line_index;
     row.rendered_sequence = line->sequence;
 
+    // Вместо удаления и пересоздания меток (самая медленная операция LVGL)
+    // переиспользуем уже существующие: меняем текст/цвет, лишние прячем.
+    size_t slot = 0;
     for (const TextRun &run : line->runs) {
         if (run.text.empty()) {
             continue;
         }
 
-        lv_obj_t *label = lv_label_create(row.container);
+        lv_obj_t *label = ensure_row_label(row, slot);
         lv_label_set_text(label, run.text.c_str());
-        lv_label_set_long_mode(label, LV_LABEL_LONG_MODE_CLIP);
-        lv_obj_set_height(label, line_height_);
-        lv_obj_set_style_text_font(label, &lv_font_montserrat_14, 0);
         lv_obj_set_style_text_color(label, lv_color_hex(run.style.fg), 0);
-        lv_obj_set_style_pad_top(label, 1, 0);
-        lv_obj_set_style_pad_bottom(label, 0, 0);
-        lv_obj_set_style_pad_left(label, 0, 0);
-        lv_obj_set_style_pad_right(label, 0, 0);
         if (run.style.bg_enabled) {
             lv_obj_set_style_bg_color(label, lv_color_hex(run.style.bg), 0);
             lv_obj_set_style_bg_opa(label, LV_OPA_COVER, 0);
         } else {
             lv_obj_set_style_bg_opa(label, LV_OPA_TRANSP, 0);
         }
+        lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
+        slot++;
+    }
+
+    for (size_t i = slot; i < row.labels.size(); ++i) {
+        lv_obj_add_flag(row.labels[i], LV_OBJ_FLAG_HIDDEN);
     }
 }
 
@@ -937,6 +962,15 @@ void UartTerminalApp::clear_event_cb(lv_event_t *event)
     if (app != nullptr) {
         app->clear_history(true);
         app->update_status_label(true);
+    }
+}
+
+void UartTerminalApp::back_event_cb(lv_event_t *event)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(lv_event_get_user_data(event));
+    if (app != nullptr) {
+        // Просим лаунчер закрыть приложение и вернуться на главный экран.
+        app->request_close();
     }
 }
 

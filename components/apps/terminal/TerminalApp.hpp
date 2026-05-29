@@ -21,6 +21,10 @@ public:
     const char *icon_text(void) const override { return ">_"; }
     lv_color_t accent_color(void) const override { return lv_color_hex(0x16A085); }
 
+    // Терминал сам рисует панель с кнопками (в т.ч. "назад"), поэтому
+    // верхний заголовок лаунчера с названием "UART Terminal" не нужен.
+    bool use_launcher_header(void) const override { return false; }
+
     bool init(void) override;
     bool open(lv_obj_t *parent) override;
     void close(void) override;
@@ -46,6 +50,7 @@ private:
 
     struct RowView {
         lv_obj_t *container = nullptr;
+        std::vector<lv_obj_t *> labels;  // переиспользуемый пул меток строки
         int rendered_index = -1;
         uint32_t rendered_sequence = 0;
     };
@@ -79,6 +84,7 @@ private:
     void scroll_to_bottom(void);
     void recreate_row_pool(void);
     void refresh_visible_rows(void);
+    lv_obj_t *ensure_row_label(RowView &row, size_t slot);
     void render_line_to_row(RowView &row, int line_index, int32_t y);
     void update_status_label(bool force);
     void update_follow_button(void);
@@ -90,6 +96,7 @@ private:
     static void demo_event_cb(lv_event_t *event);
     static void clear_event_cb(lv_event_t *event);
     static void follow_event_cb(lv_event_t *event);
+    static void back_event_cb(lv_event_t *event);
     static void uart_task_entry(void *arg);
 
     bool uart_installed_ = false;

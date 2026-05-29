@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 #include "driver/uart.h"
 #include "esp_err.h"
@@ -151,6 +152,9 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_14, 0);
     lv_obj_set_style_text_color(status_label_, lv_color_hex(0xAFC2D2), 0);
 
+    lv_obj_t *demo_button = create_toolbar_button(toolbar, LV_SYMBOL_TINT);
+    lv_obj_add_event_cb(demo_button, demo_event_cb, LV_EVENT_CLICKED, this);
+
     follow_button_ = create_toolbar_button(toolbar, LV_SYMBOL_DOWN);
     lv_obj_add_event_cb(follow_button_, follow_event_cb, LV_EVENT_CLICKED, this);
 
@@ -184,6 +188,10 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     refresh_visible_rows();
 
     poll_timer_ = lv_timer_create(poll_timer_cb, 30, this);
+    if (!demo_seeded_ && (received_bytes_ == 0) && (virtual_line_count() == 0)) {
+        inject_demo_uart_data();
+        demo_seeded_ = true;
+    }
     return true;
 }
 
@@ -315,6 +323,98 @@ void UartTerminalApp::uart_task(void)
             dropped_bytes_ += static_cast<uint32_t>(static_cast<size_t>(read_len) - sent);
         }
     }
+}
+
+void UartTerminalApp::queue_uart_bytes(const char *data, size_t len)
+{
+    if ((data == nullptr) || (len == 0) || (rx_stream_ == nullptr)) {
+        return;
+    }
+
+    received_bytes_ += static_cast<uint32_t>(len);
+
+    size_t offset = 0;
+    while (offset < len) {
+        const size_t sent = xStreamBufferSend(rx_stream_, data + offset, len - offset, 0);
+        if (sent > 0) {
+            offset += sent;
+            continue;
+        }
+
+        drain_uart_stream();
+        const size_t retry_sent = xStreamBufferSend(rx_stream_, data + offset, len - offset, 0);
+        if (retry_sent == 0) {
+            dropped_bytes_ += static_cast<uint32_t>(len - offset);
+            return;
+        }
+        offset += retry_sent;
+    }
+}
+
+void UartTerminalApp::inject_demo_uart_data(void)
+{
+    static constexpr const char *kDemoHeader =
+        "\x1B[38;5;45m[UART]\x1B[0m synthetic controller stream, xterm256 test\r\n"
+        "\x1B[38;5;82m[OK]\x1B[0m boot complete  "
+        "\x1B[38;5;226m[WARN]\x1B[0m adc noise high  "
+        "\x1B[38;5;196m[ERR]\x1B[0m limit switch open\r\n"
+        "\x1B[48;5;22;38;5;231m SAFE \x1B[0m "
+        "\x1B[48;5;94;38;5;231m BUSY \x1B[0m "
+        "\x1B[48;5;52;38;5;231m FAULT \x1B[0m "
+        "\x1B[48;5;17;38;5;159m DEBUG \x1B[0m background color blocks\r\n"
+        "\x1B[38;5;16m016 \x1B[38;5;21m021 \x1B[38;5;46m046 \x1B[38;5;51m051 "
+        "\x1B[38;5;93m093 \x1B[38;5;129m129 \x1B[38;5;160m160 \x1B[38;5;196m196 "
+        "\x1B[38;5;202m202 \x1B[38;5;226m226 \x1B[38;5;231m231 \x1B[0m xterm color cube samples\r\n"
+        "\x1B[38;5;232m232 \x1B[38;5;236m236 \x1B[38;5;240m240 \x1B[38;5;244m244 "
+        "\x1B[38;5;248m248 \x1B[38;5;252m252 \x1B[38;5;255m255 \x1B[0m grayscale ramp\r\n";
+
+    queue_uart_bytes(kDemoHeader, std::strlen(kDemoHeader));
+
+    char line[256];
+    static constexpr const char *kLevels[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FAULT"};
+    static constexpr int kLevelFg[] = {244, 45, 82, 226, 196, 231};
+    static constexpr int kLevelBg[] = {235, 17, 22, 58, 52, 88};
+
+    for (int i = 0; i < 320; ++i) {
+        const int level_index = i % 6;
+        const int channel = i % 8;
+        const int fg = 16 + ((i * 7) % 216);
+        const int bg = 232 + (i % 24);
+        const int value = (i * 37) % 4096;
+        const int temp = 24 + (i % 19);
+        const int voltage_mv = 3150 + ((i * 11) % 700);
+
+        const int len = std::snprintf(
+            line,
+            sizeof(line),
+            "\x1B[38;5;%dm%04d\x1B[0m "
+            "\x1B[48;5;%d;38;5;%dm %-5s \x1B[0m "
+            "ch=\x1B[38;5;%dm%d\x1B[0m adc=%04d temp=%02dC vbat=%dmV "
+            "\x1B[48;5;%d;38;5;15m pwm=%03d \x1B[0m\r\n",
+            fg,
+            i,
+            kLevelBg[level_index],
+            kLevelFg[level_index],
+            kLevels[level_index],
+            33 + channel,
+            channel,
+            value,
+            temp,
+            voltage_mv,
+            bg,
+            (i * 3) % 256);
+
+        if (len > 0) {
+            queue_uart_bytes(line, static_cast<size_t>(std::min<int>(len, sizeof(line) - 1)));
+        }
+    }
+
+    static constexpr const char *kDemoTail =
+        "\x1B[38;5;118m[UART]\x1B[0m synthetic burst finished; scroll upward to verify virtualization\r\n";
+    queue_uart_bytes(kDemoTail, std::strlen(kDemoTail));
+
+    drain_uart_stream();
+    update_status_label(true);
 }
 
 void UartTerminalApp::drain_uart_stream(void)
@@ -821,6 +921,14 @@ void UartTerminalApp::scroll_event_cb(lv_event_t *event)
         app->update_follow_button();
     }
     app->refresh_visible_rows();
+}
+
+void UartTerminalApp::demo_event_cb(lv_event_t *event)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(lv_event_get_user_data(event));
+    if (app != nullptr) {
+        app->inject_demo_uart_data();
+    }
 }
 
 void UartTerminalApp::clear_event_cb(lv_event_t *event)

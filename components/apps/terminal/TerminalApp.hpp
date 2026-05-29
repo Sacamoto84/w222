@@ -58,6 +58,8 @@ private:
 
     bool init_uart(void);
     void uart_task(void);
+    void queue_uart_bytes(const char *data, size_t len);
+    void inject_demo_uart_data(void);
     void drain_uart_stream(void);
 
     void parse_byte(uint8_t byte);
@@ -85,6 +87,7 @@ private:
     static uint32_t xterm256_to_rgb(int index);
     static void poll_timer_cb(lv_timer_t *timer);
     static void scroll_event_cb(lv_event_t *event);
+    static void demo_event_cb(lv_event_t *event);
     static void clear_event_cb(lv_event_t *event);
     static void follow_event_cb(lv_event_t *event);
     static void uart_task_entry(void *arg);
@@ -115,6 +118,7 @@ private:
     std::vector<RowView> row_pool_;
     int32_t line_height_ = 20;
     bool auto_follow_ = true;
+    bool demo_seeded_ = false;
     bool suppress_scroll_event_ = false;
     uint32_t last_status_update_ms_ = 0;
 };

@@ -49,8 +49,8 @@ private:
     };
 
     struct RowView {
-        lv_obj_t *container = nullptr;
-        std::vector<lv_obj_t *> labels;  // переиспользуемый пул меток строки
+        lv_obj_t *canvas = nullptr;
+        lv_draw_buf_t *draw_buf = nullptr;
         int rendered_index = -1;
         uint32_t rendered_sequence = 0;
     };
@@ -84,7 +84,6 @@ private:
     void scroll_to_bottom(void);
     void recreate_row_pool(void);
     void refresh_visible_rows(void);
-    lv_obj_t *ensure_row_label(RowView &row, size_t slot);
     void render_line_to_row(RowView &row, int line_index, int32_t y);
     void update_status_label(bool force);
     void update_follow_button(void);
@@ -93,11 +92,17 @@ private:
     static uint32_t xterm256_to_rgb(int index);
     static void poll_timer_cb(lv_timer_t *timer);
     static void scroll_event_cb(lv_event_t *event);
+    static void page_event_cb(lv_event_t *event);
+    static void gesture_event_cb(lv_event_t *event);
     static void demo_event_cb(lv_event_t *event);
     static void clear_event_cb(lv_event_t *event);
     static void follow_event_cb(lv_event_t *event);
     static void back_event_cb(lv_event_t *event);
     static void uart_task_entry(void *arg);
+
+    void apply_font_index(size_t index);
+    static const lv_font_t *font_for_index(size_t index);
+    static int32_t line_height_for_font(const lv_font_t *font);
 
     bool uart_installed_ = false;
     bool uart_task_started_ = false;
@@ -123,6 +128,7 @@ private:
     lv_obj_t *spacer_ = nullptr;
     lv_timer_t *poll_timer_ = nullptr;
     std::vector<RowView> row_pool_;
+    size_t font_index_ = 1;   // начинаем с Montserrat 14
     int32_t line_height_ = 20;
     bool auto_follow_ = true;
     bool demo_seeded_ = false;

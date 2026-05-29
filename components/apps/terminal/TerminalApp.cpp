@@ -1,6 +1,7 @@
 #include "terminal/TerminalApp.hpp"
 
 #include <algorithm>
+#include <climits>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -8,6 +9,9 @@
 #include "driver/uart.h"
 #include "esp_err.h"
 #include "esp_log.h"
+
+#include "src/indev/lv_indev_private.h"
+#include "src/indev/lv_indev_gesture_private.h"
 
 #ifndef CONFIG_JC4880_TERMINAL_UART_PORT
 #define CONFIG_JC4880_TERMINAL_UART_PORT 1
@@ -59,8 +63,8 @@ static void make_plain_container(lv_obj_t *obj)
 static lv_obj_t *create_toolbar_button(lv_obj_t *parent, const char *symbol)
 {
     lv_obj_t *button = lv_button_create(parent);
-    lv_obj_set_size(button, 36, 32);
-    lv_obj_set_style_radius(button, 6, 0);
+    lv_obj_set_size(button, 72, 64);
+    lv_obj_set_style_radius(button, 12, 0);
     lv_obj_set_style_border_width(button, 0, 0);
     lv_obj_set_style_bg_color(button, lv_color_hex(kButtonBg), 0);
     lv_obj_set_style_bg_opa(button, LV_OPA_COVER, 0);
@@ -68,7 +72,7 @@ static lv_obj_t *create_toolbar_button(lv_obj_t *parent, const char *symbol)
 
     lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, symbol);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_28, 0);
     lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), 0);
     lv_obj_center(label);
     return button;
@@ -98,6 +102,19 @@ static int clamp_positive(int value, int fallback)
 {
     return value > 0 ? value : fallback;
 }
+
+static const lv_font_t *kTerminalFonts[] = {
+    &lv_font_montserrat_12,
+    &lv_font_montserrat_14,
+    &lv_font_montserrat_16,
+    &lv_font_montserrat_18,
+    &lv_font_montserrat_20,
+    &lv_font_montserrat_22,
+    &lv_font_montserrat_24,
+    &lv_font_montserrat_26,
+    &lv_font_montserrat_28,
+};
+static constexpr size_t kTerminalFontCount = sizeof(kTerminalFonts) / sizeof(kTerminalFonts[0]);
 
 } // namespace
 
@@ -137,12 +154,12 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_t *toolbar = lv_obj_create(root_);
     make_plain_container(toolbar);
     lv_obj_set_width(toolbar, lv_pct(100));
-    lv_obj_set_height(toolbar, 42);
+    lv_obj_set_height(toolbar, 84);
     lv_obj_set_style_bg_color(toolbar, lv_color_hex(kToolbarBg), 0);
     lv_obj_set_style_bg_opa(toolbar, LV_OPA_COVER, 0);
-    lv_obj_set_style_pad_left(toolbar, 8, 0);
-    lv_obj_set_style_pad_right(toolbar, 8, 0);
-    lv_obj_set_style_pad_column(toolbar, 8, 0);
+    lv_obj_set_style_pad_left(toolbar, 16, 0);
+    lv_obj_set_style_pad_right(toolbar, 16, 0);
+    lv_obj_set_style_pad_column(toolbar, 16, 0);
     lv_obj_set_flex_flow(toolbar, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(toolbar, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
@@ -152,7 +169,7 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     status_label_ = lv_label_create(toolbar);
     lv_obj_set_flex_grow(status_label_, 1);
     lv_label_set_long_mode(status_label_, LV_LABEL_LONG_DOT);
-    lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_24, 0);
     lv_obj_set_style_text_color(status_label_, lv_color_hex(0xAFC2D2), 0);
 
     lv_obj_t *demo_button = create_toolbar_button(toolbar, LV_SYMBOL_TINT);
@@ -174,8 +191,12 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_scroll_dir(viewport_, LV_DIR_VER);
     lv_obj_set_scrollbar_mode(viewport_, LV_SCROLLBAR_MODE_AUTO);
     lv_obj_add_flag(viewport_, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(viewport_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_clear_flag(viewport_, LV_OBJ_FLAG_SCROLL_MOMENTUM);
     lv_obj_add_event_cb(viewport_, scroll_event_cb, LV_EVENT_SCROLL, this);
     lv_obj_add_event_cb(viewport_, scroll_event_cb, LV_EVENT_SIZE_CHANGED, this);
+    lv_obj_add_event_cb(viewport_, page_event_cb, LV_EVENT_CLICKED, this);
+    lv_obj_add_event_cb(viewport_, gesture_event_cb, LV_EVENT_GESTURE, this);
 
     spacer_ = lv_obj_create(viewport_);
     make_plain_container(spacer_);
@@ -183,6 +204,46 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_height(spacer_, 1);
 
     lv_obj_update_layout(root_);
+    line_height_ = line_height_for_font(font_for_index(font_index_));
+
+    // Настройка gesture recognizers: отключаем rotation (поднимаем порог до невозможного),
+    // чтобы pinch распознавался корректно.
+    lv_indev_t *indev = lv_indev_get_next(nullptr);
+    while (indev != nullptr) {
+        if (lv_indev_get_type(indev) == LV_INDEV_TYPE_POINTER) {
+            // Уменьшаем порог pinch — срабатывать при 10% изменении расстояния
+            lv_indev_set_pinch_up_threshold(indev, 1.1f);
+            // Поднимаем порог rotation до 10 радиан (~573°) — фактически отключаем
+            lv_indev_gesture_recognizer_t *rot = &indev->recognizers[LV_INDEV_GESTURE_ROTATE];
+            if (rot->config == nullptr) {
+                rot->config = (lv_indev_gesture_configuration_t *)lv_malloc_zeroed(sizeof(lv_indev_gesture_configuration_t));
+            }
+            if (rot->config != nullptr) {
+                rot->config->rotation_angle_rad_threshold = 10.0f;
+            }
+            break;
+        }
+        indev = lv_indev_get_next(indev);
+    }
+
+    // Подгоняем высоту viewport под целое число строк:
+    // высота viewport должна быть строго кратна line_height_.
+    // Лишние/недостающие пиксели забираем/добавляем в toolbar (минимальным образом).
+    const int32_t viewport_h = lv_obj_get_height(viewport_);
+    const int32_t remainder = viewport_h % line_height_;
+    if (remainder != 0) {
+        const int32_t toolbar_h = lv_obj_get_height(toolbar);
+        const int32_t to_remove = remainder;             // сколько пикселей забрать из viewport → добавить в toolbar
+        const int32_t to_add = line_height_ - remainder; // сколько пикселей добавить в viewport → забрать из toolbar
+
+        if (to_remove <= to_add && (toolbar_h + to_remove) >= 64) {
+            lv_obj_set_height(toolbar, toolbar_h + to_remove);
+        } else if ((toolbar_h - to_add) >= 64) {
+            lv_obj_set_height(toolbar, toolbar_h - to_add);
+        }
+        lv_obj_update_layout(root_);
+    }
+
     recreate_row_pool();
     update_content_height();
     update_status_label(true);
@@ -204,13 +265,20 @@ void UartTerminalApp::close(void)
         lv_timer_delete(poll_timer_);
     }
 
+    for (RowView &row : row_pool_) {
+        if (row.draw_buf != nullptr) {
+            lv_draw_buf_destroy(row.draw_buf);
+            row.draw_buf = nullptr;
+        }
+    }
+    row_pool_.clear();
+
     poll_timer_ = nullptr;
     root_ = nullptr;
     status_label_ = nullptr;
     follow_button_ = nullptr;
     viewport_ = nullptr;
     spacer_ = nullptr;
-    row_pool_.clear();
 }
 
 bool UartTerminalApp::init_uart(void)
@@ -727,30 +795,29 @@ void UartTerminalApp::recreate_row_pool(void)
     }
 
     for (RowView &row : row_pool_) {
-        if (row.container != nullptr) {
-            lv_obj_delete(row.container);
+        if (row.canvas != nullptr) {
+            if (row.draw_buf != nullptr) {
+                lv_draw_buf_destroy(row.draw_buf);
+                row.draw_buf = nullptr;
+            }
+            lv_obj_delete(row.canvas);
         }
     }
     row_pool_.clear();
 
     lv_obj_update_layout(viewport_);
+    const int32_t viewport_w = std::max<int32_t>(1, lv_obj_get_width(viewport_));
     const int32_t viewport_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
     const size_t row_count = static_cast<size_t>(viewport_h / line_height_) + 4;
     row_pool_.reserve(row_count);
 
     for (size_t i = 0; i < row_count; ++i) {
         RowView row;
-        row.container = lv_obj_create(viewport_);
-        make_plain_container(row.container);
-        lv_obj_add_flag(row.container, LV_OBJ_FLAG_FLOATING);
-        lv_obj_clear_flag(row.container, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_set_size(row.container, lv_pct(100), line_height_);
-        lv_obj_set_style_pad_left(row.container, 6, 0);
-        lv_obj_set_style_pad_right(row.container, 6, 0);
-        lv_obj_set_style_pad_column(row.container, 0, 0);
-        lv_obj_set_flex_flow(row.container, LV_FLEX_FLOW_ROW);
-        lv_obj_set_flex_align(row.container, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-        lv_obj_add_flag(row.container, LV_OBJ_FLAG_HIDDEN);
+        row.canvas = lv_canvas_create(viewport_);
+        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_FLOATING);
+        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
+        row.draw_buf = lv_draw_buf_create(viewport_w, line_height_, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);
+        lv_canvas_set_draw_buf(row.canvas, row.draw_buf);
         row_pool_.push_back(row);
     }
 }
@@ -772,75 +839,82 @@ void UartTerminalApp::refresh_visible_rows(void)
     }
 }
 
-lv_obj_t *UartTerminalApp::ensure_row_label(RowView &row, size_t slot)
-{
-    if (slot < row.labels.size()) {
-        return row.labels[slot];
-    }
-
-    // Метку создаем один раз и больше не удаляем во время скролла.
-    // Постоянные стили выставляем тоже только при создании.
-    lv_obj_t *label = lv_label_create(row.container);
-    lv_label_set_long_mode(label, LV_LABEL_LONG_MODE_CLIP);
-    lv_obj_set_height(label, line_height_);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_14, 0);
-    lv_obj_set_style_pad_top(label, 1, 0);
-    lv_obj_set_style_pad_bottom(label, 0, 0);
-    lv_obj_set_style_pad_left(label, 0, 0);
-    lv_obj_set_style_pad_right(label, 0, 0);
-    row.labels.push_back(label);
-    return label;
-}
-
 void UartTerminalApp::render_line_to_row(RowView &row, int line_index, int32_t y)
 {
-    if (row.container == nullptr) {
+    if (row.canvas == nullptr) {
         return;
     }
 
     const TerminalLine *line = (line_index >= 0) ? line_at(static_cast<size_t>(line_index)) : nullptr;
     if (line == nullptr) {
-        lv_obj_add_flag(row.container, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
         row.rendered_index = -1;
         row.rendered_sequence = 0;
         return;
     }
 
-    lv_obj_set_pos(row.container, 0, y);
-    lv_obj_clear_flag(row.container, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_pos(row.canvas, 0, y);
+    lv_obj_clear_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
 
     if ((row.rendered_index == line_index) && (row.rendered_sequence == line->sequence)) {
-        // Содержимое строки не изменилось — достаточно было сдвинуть позицию.
         return;
     }
 
     row.rendered_index = line_index;
     row.rendered_sequence = line->sequence;
 
-    // Вместо удаления и пересоздания меток (самая медленная операция LVGL)
-    // переиспользуем уже существующие: меняем текст/цвет, лишние прячем.
-    size_t slot = 0;
+    lv_canvas_fill_bg(row.canvas, lv_color_hex(kDefaultBg), LV_OPA_COVER);
+
+    lv_layer_t layer;
+    lv_canvas_init_layer(row.canvas, &layer);
+
+    const lv_font_t *font = font_for_index(font_index_);
+    const int32_t font_h = lv_font_get_line_height(font);
+    const int32_t ofs_y = (line_height_ - font_h) / 2;
+    int32_t x = 6; // отступ слева как в старом коде
+
     for (const TextRun &run : line->runs) {
         if (run.text.empty()) {
             continue;
         }
 
-        lv_obj_t *label = ensure_row_label(row, slot);
-        lv_label_set_text(label, run.text.c_str());
-        lv_obj_set_style_text_color(label, lv_color_hex(run.style.fg), 0);
+        lv_point_t size;
+        lv_text_get_size(&size, run.text.c_str(), font, 0, 0, INT32_MAX, LV_TEXT_FLAG_NONE);
+
         if (run.style.bg_enabled) {
-            lv_obj_set_style_bg_color(label, lv_color_hex(run.style.bg), 0);
-            lv_obj_set_style_bg_opa(label, LV_OPA_COVER, 0);
-        } else {
-            lv_obj_set_style_bg_opa(label, LV_OPA_TRANSP, 0);
+            lv_draw_fill_dsc_t fill_dsc;
+            lv_draw_fill_dsc_init(&fill_dsc);
+            fill_dsc.color = lv_color_hex(run.style.bg);
+            fill_dsc.opa = LV_OPA_COVER;
+            lv_area_t bg_area;
+            bg_area.x1 = x;
+            bg_area.y1 = 0;
+            bg_area.x2 = x + size.x - 1;
+            bg_area.y2 = line_height_ - 1;
+            lv_draw_fill(&layer, &fill_dsc, &bg_area);
         }
-        lv_obj_clear_flag(label, LV_OBJ_FLAG_HIDDEN);
-        slot++;
+
+        lv_draw_label_dsc_t label_dsc;
+        lv_draw_label_dsc_init(&label_dsc);
+        label_dsc.text = run.text.c_str();
+        label_dsc.font = font;
+        label_dsc.color = lv_color_hex(run.style.fg);
+        label_dsc.opa = LV_OPA_COVER;
+        label_dsc.ofs_y = ofs_y;
+        label_dsc.text_length = run.text.size();
+        label_dsc.align = LV_TEXT_ALIGN_LEFT;
+
+        lv_area_t txt_area;
+        txt_area.x1 = x;
+        txt_area.y1 = 0;
+        txt_area.x2 = x + size.x - 1;
+        txt_area.y2 = line_height_ - 1;
+        lv_draw_label(&layer, &label_dsc, &txt_area);
+
+        x += size.x;
     }
 
-    for (size_t i = slot; i < row.labels.size(); ++i) {
-        lv_obj_add_flag(row.labels[i], LV_OBJ_FLAG_HIDDEN);
-    }
+    lv_canvas_finish_layer(row.canvas, &layer);
 }
 
 void UartTerminalApp::update_status_label(bool force)
@@ -939,12 +1013,100 @@ void UartTerminalApp::scroll_event_cb(lv_event_t *event)
     if (code == LV_EVENT_SIZE_CHANGED) {
         app->recreate_row_pool();
         app->update_content_height();
+        app->refresh_visible_rows();
+        return;
     }
 
-    if (!app->suppress_scroll_event_) {
-        app->auto_follow_ = app->is_scroll_near_bottom();
-        app->update_follow_button();
+    if (code == LV_EVENT_SCROLL) {
+        if (!app->suppress_scroll_event_) {
+            const int32_t scroll_y = lv_obj_get_scroll_y(app->viewport_);
+            const int32_t view_h = lv_obj_get_height(app->viewport_);
+            int32_t max_scroll = app->content_height() - view_h;
+            if (max_scroll < 0) {
+                max_scroll = 0;
+            }
+
+            int32_t snapped = ((scroll_y + app->line_height_ / 2) / app->line_height_) * app->line_height_;
+            if (snapped < 0) {
+                snapped = 0;
+            }
+            if (snapped > max_scroll) {
+                snapped = max_scroll;
+            }
+
+            if (snapped != scroll_y) {
+                app->suppress_scroll_event_ = true;
+                lv_obj_scroll_to_y(app->viewport_, snapped, LV_ANIM_OFF);
+                app->suppress_scroll_event_ = false;
+            }
+
+            app->auto_follow_ = app->is_scroll_near_bottom();
+            app->update_follow_button();
+        }
+        app->refresh_visible_rows();
     }
+}
+
+void UartTerminalApp::page_event_cb(lv_event_t *event)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(lv_event_get_user_data(event));
+    if (app == nullptr || app->viewport_ == nullptr) {
+        return;
+    }
+
+    lv_indev_t *indev = lv_indev_get_act();
+    if (indev == nullptr) {
+        return;
+    }
+
+    lv_point_t vect;
+    lv_indev_get_vect(indev, &vect);
+    // Игнорируем событие, если было значительное движение (это скролл, а не клик).
+    if (LV_ABS(vect.x) > 8 || LV_ABS(vect.y) > 8) {
+        return;
+    }
+
+    lv_point_t click_pos;
+    lv_indev_get_point(indev, &click_pos);
+
+    lv_area_t vp_coords;
+    lv_obj_get_coords(app->viewport_, &vp_coords);
+    const int32_t center_y = (vp_coords.y1 + vp_coords.y2) / 2;
+    const bool page_up = (click_pos.y < center_y);
+
+    const int32_t view_h = lv_obj_get_height(app->viewport_);
+    const int32_t page_lines = view_h / app->line_height_;
+    const int32_t page_size = page_lines * app->line_height_;
+
+    const int32_t total_h = app->content_height();
+    const int32_t max_scroll = LV_MAX(0, total_h - view_h);
+
+    int32_t scroll_y = lv_obj_get_scroll_y(app->viewport_);
+    if (page_up) {
+        scroll_y -= page_size;
+    } else {
+        scroll_y += page_size;
+    }
+
+    if (scroll_y < 0) {
+        scroll_y = 0;
+    }
+    if (scroll_y > max_scroll) {
+        scroll_y = max_scroll;
+    }
+
+    // Snap к границе строки.
+    scroll_y = ((scroll_y + app->line_height_ / 2) / app->line_height_) * app->line_height_;
+    if (scroll_y > max_scroll) {
+        scroll_y = max_scroll;
+    }
+
+    app->suppress_scroll_event_ = true;
+    lv_obj_scroll_to_y(app->viewport_, scroll_y, LV_ANIM_OFF);
+    app->suppress_scroll_event_ = false;
+
+    app->auto_follow_ = app->is_scroll_near_bottom();
+    app->update_follow_button();
     app->refresh_visible_rows();
 }
 
@@ -987,4 +1149,70 @@ void UartTerminalApp::follow_event_cb(lv_event_t *event)
     }
     app->update_follow_button();
     app->refresh_visible_rows();
+}
+
+const lv_font_t *UartTerminalApp::font_for_index(size_t index)
+{
+    if (index < kTerminalFontCount) {
+        return kTerminalFonts[index];
+    }
+    return &lv_font_montserrat_14;
+}
+
+int32_t UartTerminalApp::line_height_for_font(const lv_font_t *font)
+{
+    return lv_font_get_line_height(font) + 4;
+}
+
+void UartTerminalApp::apply_font_index(size_t index)
+{
+    if (index >= kTerminalFontCount) {
+        return;
+    }
+    font_index_ = index;
+    line_height_ = line_height_for_font(kTerminalFonts[index]);
+
+    if (viewport_ != nullptr) {
+        recreate_row_pool();
+        update_content_height();
+        if (auto_follow_) {
+            scroll_to_bottom();
+        }
+        refresh_visible_rows();
+    }
+}
+
+void UartTerminalApp::gesture_event_cb(lv_event_t *event)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(lv_event_get_user_data(event));
+    if (app == nullptr) {
+        return;
+    }
+
+    lv_indev_gesture_type_t type = lv_event_get_gesture_type(event);
+    ESP_LOGI("term_gesture", "gesture type=%d", (int)type);
+
+    if (type != LV_INDEV_GESTURE_PINCH && type != LV_INDEV_GESTURE_ROTATE) {
+        return;
+    }
+
+    lv_indev_gesture_state_t state = lv_event_get_gesture_state(event, LV_INDEV_GESTURE_PINCH);
+    ESP_LOGI("term_gesture", "pinch state=%d", (int)state);
+
+    if (state != LV_INDEV_GESTURE_STATE_ENDED) {
+        return;
+    }
+
+    float scale = lv_event_get_pinch_scale(event);
+    ESP_LOGI("term_gesture", "pinch scale=%.3f", scale);
+
+    if (scale > 1.2f) {
+        if (app->font_index_ + 1 < kTerminalFontCount) {
+            app->apply_font_index(app->font_index_ + 1);
+        }
+    } else if (scale < 0.8f) {
+        if (app->font_index_ > 0) {
+            app->apply_font_index(app->font_index_ - 1);
+        }
+    }
 }

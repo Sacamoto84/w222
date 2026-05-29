@@ -1,61 +1,9 @@
 #pragma once
 
-#if CONFIG_JC4880_APP_MUSIC_PLAYER
-#include "music_player/MusicPlayer.hpp"
+#if CONFIG_JC4880_APP_UART_TERMINAL
+#include "terminal/TerminalApp.hpp"
 #endif
 
 #if CONFIG_JC4880_APP_SETTINGS
 #include "setting/Setting.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_CALCULATOR
-#include "calculator/Calculator.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_IMAGE_VIEWER
-#include "image_display/ImageDisplay.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
-#include "signal_generator/SignalGenerator.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_FILE_MANAGER
-#include "file_manager/FileManager.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_WEB_SERVER
-#include "web_server/WebServerApp.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_INTERNET_RADIO
-#include "internet_radio/InternetRadio.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_EREADER
-#include "e_reader/EReader.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_MQTT
-#include "mqtt_app/MqttApp.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_RECORDER
-#include "recorder/Recorder.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_RS485
-#include "rs485/RS485.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_LORA_MESH
-#include "lora_mesh/LoRaMesh.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_LABYRINTH
-#include "labyrinth/Labyrinth.hpp"
-#endif
-
-#if CONFIG_JC4880_APP_SEGA_EMULATOR
-#include "sega_emulator/SegaEmulator.hpp"
 #endif

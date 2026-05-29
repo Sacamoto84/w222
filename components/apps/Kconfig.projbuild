@@ -95,71 +95,60 @@ menu "JC4880 Modular Configuration"
 
     menu "Launcher Applications"
 
+        config JC4880_APP_UART_TERMINAL
+            bool "UART terminal"
+            default y
+            help
+                Main terminal viewer app. It receives a UART byte stream and renders
+                it as a scrollable xterm256-colored terminal log.
+
         config JC4880_APP_SETTINGS
             bool "Settings"
             default y
 
-        config JC4880_APP_CALCULATOR
-            bool "Calculator"
-            default y
+    endmenu
 
-        config JC4880_APP_SEGA_EMULATOR
-            bool "SEGA emulator"
-            default y
+    menu "UART Terminal"
 
-        config JC4880_APP_IMAGE_VIEWER
-            bool "Image viewer"
-            default y
+        config JC4880_TERMINAL_UART_PORT
+            int "UART port"
+            default 1
+            range 0 2
 
-        config JC4880_APP_SIGNAL_GENERATOR
-            bool "Signal generator"
-            default y
+        config JC4880_TERMINAL_UART_RX_PIN
+            int "UART RX GPIO"
+            default 35
+            range -1 56
+            help
+                GPIO used to receive controller data. Set to -1 to disable UART
+                initialization until the board pin is selected.
 
-        config JC4880_APP_FILE_MANAGER
-            bool "File manager"
-            default y
+        config JC4880_TERMINAL_UART_TX_PIN
+            int "UART TX GPIO"
+            default -1
+            range -1 56
+            help
+                Optional TX pin for future terminal input. The current app is RX-only.
 
-        config JC4880_APP_WEB_SERVER
-            bool "Web server"
-            default y
-            depends on JC4880_FEATURE_WIFI
+        config JC4880_TERMINAL_UART_BAUD_RATE
+            int "UART baud rate"
+            default 115200
+            range 1200 3000000
 
-        config JC4880_APP_MUSIC_PLAYER
-            bool "Music player"
-            default y
-            depends on JC4880_FEATURE_AUDIO
+        config JC4880_TERMINAL_MAX_LINES
+            int "Terminal scrollback lines"
+            default 5000
+            range 100 50000
 
-        config JC4880_APP_RECORDER
-            bool "Recorder"
-            default y
-            depends on JC4880_FEATURE_AUDIO
+        config JC4880_TERMINAL_MAX_COLUMNS
+            int "Terminal columns before wrapping"
+            default 240
+            range 40 1000
 
-        config JC4880_APP_RS485
-            bool "RS-485 HMI"
-            default y
-
-        config JC4880_APP_LORA_MESH
-            bool "LoRa mesh"
-            default y
-
-        config JC4880_APP_LABYRINTH
-            bool "Labyrinth"
-            default y
-                depends on JC4880_APP_SETTINGS
-
-        config JC4880_APP_INTERNET_RADIO
-            bool "Internet radio"
-            default y
-            depends on JC4880_FEATURE_WIFI && JC4880_FEATURE_AUDIO
-
-        config JC4880_APP_EREADER
-            bool "E-Reader"
-            default y
-
-        config JC4880_APP_MQTT
-            bool "MQTT"
-            default y
-            depends on JC4880_FEATURE_WIFI
+        config JC4880_TERMINAL_STREAM_BUFFER_SIZE
+            int "UART stream buffer size"
+            default 8192
+            range 1024 65536
 
     endmenu
 

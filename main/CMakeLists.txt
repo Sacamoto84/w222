@@ -5,8 +5,6 @@ idf_component_register(
     INCLUDE_DIRS . ui
     REQUIRES
         apps
-        bsp_extra
-        driver
         esp_common
         esp_event
         esp_driver_jpeg

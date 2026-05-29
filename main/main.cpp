@@ -19,13 +19,11 @@
 #include "dirent.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/uart.h"
 #include "esp_memory_utils.h"
 // #include "esp_dsp.h"
 #include "lvgl.h"
 #include "bsp/esp-bsp.h"
 #include "bsp/display.h"
-#include "bsp_board_extra.h"
 #include "c6_slave_ota.h"
 #include "ftp_server.h"
 
@@ -34,16 +32,9 @@
 #include "examples/event/lv_example_event.h"
 
 #include "lite_launcher.h"
-#include "Calculator.hpp"
 #include "Setting.hpp"
-#if CONFIG_JC4880_APP_IMAGE_VIEWER
-#include "ImageDisplay.hpp"
-#endif
-#if CONFIG_JC4880_APP_MUSIC_PLAYER
-#include "MusicPlayer.hpp"
-#endif
-#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
-#include "SignalGenerator.hpp"
+#if CONFIG_JC4880_APP_UART_TERMINAL
+#include "TerminalApp.hpp"
 #endif
 
 #include "esp_hosted.h"
@@ -261,47 +252,18 @@ static void show_startup_screen(void)
 static bool start_lite_launcher(void)
 {
     static LiteLauncher launcher;
-    static Calculator calculator;
+#if CONFIG_JC4880_APP_UART_TERMINAL
+    static UartTerminalApp terminal;
+#endif
     static AppSettings settings;
-#if CONFIG_JC4880_APP_IMAGE_VIEWER
-    static ImageDisplay image_display;
-#endif
-#if CONFIG_JC4880_APP_MUSIC_PLAYER
-    static MusicPlayer music_player;
-#endif
-#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
-    static SignalGenerator signal_generator;
-#endif
 
-#if CONFIG_JC4880_APP_SIGNAL_GENERATOR
-    if (!launcher.add_app(&signal_generator))
+#if CONFIG_JC4880_APP_UART_TERMINAL
+    if (!launcher.add_app(&terminal))
     {
-        ESP_LOGE(TAG, "Register Generator failed");
+        ESP_LOGE(TAG, "Register UART Terminal failed");
         return false;
     }
 #endif
-
-#if CONFIG_JC4880_APP_IMAGE_VIEWER
-    if (!launcher.add_app(&image_display))
-    {
-        ESP_LOGE(TAG, "Register Images failed");
-        return false;
-    }
-#endif
-
-#if CONFIG_JC4880_APP_MUSIC_PLAYER
-    if (!launcher.add_app(&music_player))
-    {
-        ESP_LOGE(TAG, "Register Music failed");
-        return false;
-    }
-#endif
-
-    if (!launcher.add_app(&calculator))
-    {
-        ESP_LOGE(TAG, "Register Calculator failed");
-        return false;
-    }
 
     if (!launcher.add_app(&settings))
     {
@@ -317,6 +279,9 @@ static bool start_lite_launcher(void)
 
     s_launcher = &launcher;
     launcher.set_status_text(s_ip_text);
+#if CONFIG_JC4880_APP_UART_TERMINAL
+    launcher.open_app(&terminal);
+#endif
     ESP_LOGI(TAG, "Lite launcher started");
     return true;
 }
@@ -351,8 +316,6 @@ extern "C" void app_main(void)
             ESP_LOGE(TAG, "FTP server start failed: %s", esp_err_to_name(ftp_ret));
         }
     }
-
-    ESP_ERROR_CHECK(bsp_extra_codec_init());
 
     bsp_display_cfg_t cfg = {
         .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),

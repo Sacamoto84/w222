@@ -91,6 +91,24 @@ int main() {
         CHECK(rows[0].size() == 3, "table row has 3 cells");
         CHECK(rows[2][2] == "91.8", "table cell value");
     }
+    // backtick-кавычки (удобны при сборке строки в C++ без экранирования).
+    {
+        ParsedLine p = parseLine("ui type=badge text=`READY` st=ok");
+        CHECK(p.kind == LineKind::Widget, "backtick: widget");
+        CHECK(p.widget.type == WidgetType::Badge, "backtick: badge type");
+        CHECK(std::string(p.widget.find({"text"})) == "READY", "backtick: text READY");
+    }
+    {
+        ParsedLine p = parseLine("ui type=panel title=`Motor 1` subtitle=`24.3V 1.8A`");
+        CHECK(std::string(p.widget.find({"title"})) == "Motor 1", "backtick: spaces in value");
+        CHECK(std::string(p.widget.find({"subtitle"})) == "24.3V 1.8A", "backtick: second spaced value");
+    }
+    {
+        // Смешение кавычек в одной строке тоже должно работать.
+        ParsedLine p = parseLine("ui type=2col left=`Voltage` right=\"24.3V\"");
+        CHECK(std::string(p.widget.find({"left"})) == "Voltage", "mixed quotes: backtick");
+        CHECK(std::string(p.widget.find({"right"})) == "24.3V", "mixed quotes: double");
+    }
     // colors helpers.
     CHECK(parseColor("#36C36B", 0) == 0x36C36B, "hex color");
     CHECK(parseColor("red", 0) == 0xFF0000, "named color");

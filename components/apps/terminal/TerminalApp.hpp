@@ -105,6 +105,7 @@ private:
     void finish_line(void);
     void add_widget_line(const WidgetDesc &widget);
     void add_timber_widget(const timber::WidgetCommand &cmd);  // ui type=... виджет
+    void push_committed_line(TerminalLine &&line);             // +учёт committed_rows_
     bool try_consume_timber_line(void);                        // распознать команду в current_line_
     void clear_history(bool reset_parser);
     void reset_style(void);
@@ -116,9 +117,24 @@ private:
     const TerminalLine *line_at(size_t index) const;
 
     // Учёт переменной высоты: суммарное число рядов и поиск элемента по ряду.
+    // total_rows() — O(1) за счёт инкрементального кэша committed_rows_.
     int32_t total_rows(void) const;
     // Возвращает элемент, покрывающий абсолютный ряд row, и его стартовый ряд.
+    // Линейный поиск; на горячем пути скролла не используется — там идёт
+    // инкрементальный обход через локацию по курсору (locate_row).
     const TerminalLine *element_at_row(int32_t row, int32_t *start_row) const;
+
+    // Учёт высоты одного элемента в рядах.
+    static int32_t element_span(const TerminalLine &line) {
+        return line.is_timber ? (line.row_span > 1 ? line.row_span : 1) : 1;
+    }
+    // Пересобрать кэш суммарной высоты после массовых изменений lines_.
+    void recompute_committed_rows(void);
+    // Найти индекс элемента в lines_, покрывающего абсолютный ряд row, и его
+    // стартовый ряд. Использует курсор-кэш предыдущего поиска, поэтому при
+    // скролле работает почти за O(1). Возвращает индекс или lines_.size()
+    // (тогда ряд относится к current_line_ или за пределами).
+    size_t locate_row(int32_t row, int32_t *start_row) const;
 
     int32_t content_height(void) const;
     bool is_scroll_near_bottom(void) const;
@@ -126,7 +142,9 @@ private:
     void scroll_to_bottom(void);
     void recreate_row_pool(void);
     void refresh_visible_rows(void);
-    void render_line_to_row(RowView &row, int line_index, int32_t y);
+    // Рисует уже найденный элемент (line) на канвас-ряд. abs_row нужен только
+    // как ключ кэша; поиск элемента вызывающий делает сам (инкрементально).
+    void render_line_to_row(RowView &row, const TerminalLine *line, int abs_row, int32_t y);
     void render_widget_to_row(RowView &row, const WidgetDesc &widget, int32_t viewport_w);
     void refresh_timber_widgets(void);   // позиционирование живых виджет-контейнеров
     void release_timber_views(void);
@@ -160,6 +178,18 @@ private:
 
     std::deque<TerminalLine> lines_;
     TerminalLine current_line_;
+
+    // Кэш суммарной высоты завершённых элементов (lines_) в рядах.
+    // Поддерживается инкрементально: += при добавлении, -= при pop_front,
+    // сброс при clear. Делает total_rows()/content_height() константными.
+    int32_t committed_rows_ = 0;
+
+    // Курсор-кэш для locate_row(): индекс последнего найденного элемента и
+    // его стартовый ряд. Скролл двигает строй на 1-2 ряда, поэтому следующий
+    // поиск стартует рядом и почти всегда O(1). mutable — locate_row const.
+    mutable size_t locate_cursor_index_ = 0;
+    mutable int32_t locate_cursor_start_ = 0;
+
     TextStyle current_style_;
     ParserState parser_state_ = ParserState::Normal;
     std::string csi_buffer_;

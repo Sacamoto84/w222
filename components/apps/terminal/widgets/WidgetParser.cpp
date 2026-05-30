@@ -54,7 +54,11 @@ std::vector<Token> tokenize(const std::string &body) {
         if (i < n && body[i] == '=') {
             hasEquals = true;
             ++i;  // съесть '='
-            if (i < n && (body[i] == '"' || body[i] == '\'')) {
+            // Открывающая кавычка: двойная ", одинарная ' или backtick `.
+            // Backtick удобен, когда строку собирают в C++-коде: его не нужно
+            // экранировать (в отличие от " внутри строкового литерала).
+            //   ui.print("ui type=badge text=`READY` st=ok");
+            if (i < n && (body[i] == '"' || body[i] == '\'' || body[i] == '`')) {
                 char quote = body[i++];
                 while (i < n && body[i] != quote) {
                     if (body[i] == '\\' && i + 1 < n) {

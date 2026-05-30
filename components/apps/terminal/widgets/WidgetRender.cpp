@@ -46,6 +46,23 @@ lv_obj_t *plain(lv_obj_t *parent) {
     return o;
 }
 
+// Делает объект и всё его поддерево «прозрачным» для жестов пальца:
+// снимает CLICKABLE/SCROLLABLE и включает всплытие событий и жестов вверх,
+// чтобы прокрутку/клик всегда получал внешний viewport терминала, а не сам
+// виджет. Без этого lv_chart/lv_arc перехватывают палец и срывают скролл.
+void makeInertRecursive(lv_obj_t *obj) {
+    if (obj == nullptr) return;
+    lv_obj_remove_flag(obj, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_remove_flag(obj, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_remove_flag(obj, LV_OBJ_FLAG_SCROLL_CHAIN);
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_GESTURE_BUBBLE);
+    uint32_t n = lv_obj_get_child_count(obj);
+    for (uint32_t i = 0; i < n; ++i) {
+        makeInertRecursive(lv_obj_get_child(obj, i));
+    }
+}
+
 // Простая текстовая метка.
 lv_obj_t *label(lv_obj_t *parent, const char *text, uint32_t color, int px = 14) {
     lv_obj_t *l = lv_label_create(parent);
@@ -289,6 +306,13 @@ void renderWidget(lv_obj_t *parent, const WidgetCommand &cmd, int lineHeight) {
             label(c, cmd.typeRaw.empty() ? "widget" : cmd.typeRaw.c_str(), kSubColor, 12);
             break;
         }
+    }
+
+    // Весь виджет должен пропускать жесты во внешний скролл-вьюпорт, иначе
+    // chart/arc и прочие интерактивные объекты «ловят» палец и срывают скролл.
+    uint32_t n = lv_obj_get_child_count(parent);
+    for (uint32_t i = 0; i < n; ++i) {
+        makeInertRecursive(lv_obj_get_child(parent, i));
     }
 }
 
@@ -1090,8 +1114,11 @@ void drawFrame(lv_obj_t *p, const WidgetCommand &c, const char *defProto) {
     lv_obj_set_flex_align(hr, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     label(hr, head, kTitleColor, 13);
     char meta[64] = {0};
-    if (id) std::snprintf(meta, sizeof(meta), "%s", id);
-    else if (chan) std::snprintf(meta, sizeof(meta), "%s", chan);
+    if (id) {
+        std::snprintf(meta, sizeof(meta), "%s", id);
+    } else if (chan) {
+        std::snprintf(meta, sizeof(meta), "%s", chan);
+    }
     if (meta[0]) label(hr, meta, parseColor(c.find({"metacolor"}), kMutedColor), 12);
 
     // Строка байтов.
@@ -1114,9 +1141,8 @@ void drawFrame(lv_obj_t *p, const WidgetCommand &c, const char *defProto) {
                       (chan && baud) ? " @ " : "", baud ? baud : "");
         label(col, m, kMutedColor, 11);
     }
-    // Поля.
+    // Поля: RANGE|NAME|VALUE|DESC.
     for (const auto &f : fields) {
-        // RANGE|NAME|VALUE|DESC
         std::string line;
         if (f.size() > 1) line = f[1];
         if (f.size() > 2 && !f[2].empty()) line += " = " + f[2];

@@ -1170,6 +1170,11 @@ void UartTerminalApp::refresh_timber_widgets(void)
         lv_obj_remove_style_all(wv.container);
         lv_obj_add_flag(wv.container, LV_OBJ_FLAG_FLOATING);
         lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_SCROLLABLE);
+        // Контейнер виджета не должен перехватывать палец: и обычный скролл,
+        // и постраничный клик по viewport_ должны работать поверх виджетов.
+        lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_EVENT_BUBBLE);
+        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_GESTURE_BUBBLE);
         lv_obj_set_style_pad_all(wv.container, 1, 0);
         lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
         widget_views_.push_back(wv);

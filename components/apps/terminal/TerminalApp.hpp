@@ -11,6 +11,7 @@
 #include "freertos/task.h"
 #include "lite_app.h"
 #include "lvgl.h"
+#include "widgets/WidgetParser.hpp"
 
 class UartTerminalApp : public LiteApp {
 public:
@@ -42,10 +43,32 @@ private:
         std::string text;
     };
 
+    struct WidgetDesc {
+        enum Kind {
+            ProgressBar,
+            StatusBlock,
+        } kind = ProgressBar;
+
+        int32_t value = 0;
+        int32_t max_value = 100;
+        uint32_t bar_color = 0x00AA44;
+        uint32_t track_color = 0x1A1A1A;
+        uint32_t text_color = 0xFFFFFF;
+        std::string label;
+    };
+
     struct TerminalLine {
         std::vector<TextRun> runs;
         size_t cells = 0;
         uint32_t sequence = 0;
+        bool is_widget = false;          // встроенный OSC-виджет (canvas, 1 ряд)
+        WidgetDesc widget;
+
+        // Виджет протокола TimberWidget (`ui type=...`): рисуется живым деревом
+        // LVGL-объектов и занимает row_span рядов терминала.
+        bool is_timber = false;
+        timber::WidgetCommand timber_cmd;
+        int row_span = 1;                // высота элемента в рядах (>=1)
     };
 
     struct RowView {
@@ -55,10 +78,19 @@ private:
         uint32_t rendered_sequence = 0;
     };
 
+    // Живой контейнер для одного timber-виджета (дерево LVGL-объектов).
+    // Переиспользуется по элементам по мере прокрутки.
+    struct WidgetView {
+        lv_obj_t *container = nullptr;
+        int element_index = -1;
+        uint32_t rendered_sequence = 0;
+    };
+
     enum class ParserState {
         Normal,
         Escape,
         Csi,
+        Osc,
     };
 
     bool init_uart(void);
@@ -71,13 +103,23 @@ private:
     void append_printable(char ch);
     void append_spaces(size_t count);
     void finish_line(void);
+    void add_widget_line(const WidgetDesc &widget);
+    void add_timber_widget(const timber::WidgetCommand &cmd);  // ui type=... виджет
+    bool try_consume_timber_line(void);                        // распознать команду в current_line_
     void clear_history(bool reset_parser);
     void reset_style(void);
     void handle_csi_final(char final);
+    void handle_osc(const std::string &osc);
     void apply_sgr(const std::vector<int> &params);
 
     size_t virtual_line_count(void) const;
     const TerminalLine *line_at(size_t index) const;
+
+    // Учёт переменной высоты: суммарное число рядов и поиск элемента по ряду.
+    int32_t total_rows(void) const;
+    // Возвращает элемент, покрывающий абсолютный ряд row, и его стартовый ряд.
+    const TerminalLine *element_at_row(int32_t row, int32_t *start_row) const;
+
     int32_t content_height(void) const;
     bool is_scroll_near_bottom(void) const;
     void update_content_height(void);
@@ -85,6 +127,9 @@ private:
     void recreate_row_pool(void);
     void refresh_visible_rows(void);
     void render_line_to_row(RowView &row, int line_index, int32_t y);
+    void render_widget_to_row(RowView &row, const WidgetDesc &widget, int32_t viewport_w);
+    void refresh_timber_widgets(void);   // позиционирование живых виджет-контейнеров
+    void release_timber_views(void);
     void update_status_label(bool force);
     void update_follow_button(void);
 
@@ -118,6 +163,7 @@ private:
     TextStyle current_style_;
     ParserState parser_state_ = ParserState::Normal;
     std::string csi_buffer_;
+    std::string osc_buffer_;
     bool previous_was_cr_ = false;
     uint32_t next_sequence_ = 1;
 
@@ -128,6 +174,7 @@ private:
     lv_obj_t *spacer_ = nullptr;
     lv_timer_t *poll_timer_ = nullptr;
     std::vector<RowView> row_pool_;
+    std::vector<WidgetView> widget_views_;   // пул живых timber-виджетов
     size_t font_index_ = 1;   // начинаем с Montserrat 14
     int32_t line_height_ = 20;
     bool auto_follow_ = true;

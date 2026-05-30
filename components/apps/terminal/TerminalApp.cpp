@@ -10,6 +10,9 @@
 #include "esp_err.h"
 #include "esp_log.h"
 
+#include "widgets/WidgetParser.hpp"
+#include "widgets/WidgetRender.hpp"
+
 #include "src/indev/lv_indev_private.h"
 #include "src/indev/lv_indev_gesture_private.h"
 
@@ -272,6 +275,9 @@ void UartTerminalApp::close(void)
         }
     }
     row_pool_.clear();
+    // Контейнеры виджетов — дети viewport_, они удалятся вместе с ним при
+    // очистке родителя лаунчером; здесь просто сбрасываем указатели.
+    widget_views_.clear();
 
     poll_timer_ = nullptr;
     root_ = nullptr;
@@ -441,6 +447,94 @@ void UartTerminalApp::inject_demo_uart_data(void)
 
     queue_uart_bytes(kDemoHeader, std::strlen(kDemoHeader));
 
+    // Встроенные виджеты — добавляем программно
+    {
+        WidgetDesc w;
+        w.kind = WidgetDesc::Kind::ProgressBar;
+        w.label = "CPU";
+        w.value = 45;
+        w.max_value = 100;
+        w.bar_color = 0x00AA44;
+        w.track_color = 0x1A1A1A;
+        add_widget_line(w);
+
+        w.label = "RAM";
+        w.value = 72;
+        w.bar_color = 0xCC8800;
+        add_widget_line(w);
+
+        w.label = "Flash";
+        w.value = 12;
+        w.bar_color = 0x0088CC;
+        add_widget_line(w);
+
+        WidgetDesc s;
+        s.kind = WidgetDesc::Kind::StatusBlock;
+        s.bar_color = 0xCC2222;
+        s.text_color = 0xFFFFFF;
+        s.label = "  ERROR: Motor fault  ";
+        add_widget_line(s);
+
+        s.bar_color = 0x22AA44;
+        s.label = "  OK: System ready  ";
+        add_widget_line(s);
+
+        s.bar_color = 0xCCAA00;
+        s.label = "  WARN: High temperature  ";
+        add_widget_line(s);
+
+        // Еще один прогрессбар
+        w.label = "Battery";
+        w.value = 89;
+        w.bar_color = 0x00CC66;
+        add_widget_line(w);
+    }
+
+    // Примеры виджетов через OSC-последовательности (как будто пришли по UART)
+    static constexpr const char *kOscWidgets =
+        "\x1B]WIDGET;PROGRESS;65;100;0x0088FF;Network\x07\r\n"
+        "\x1B]WIDGET;STATUS;0;0;0x4444CC;  INFO: Data sync  \x07\r\n"
+        "\x1B]WIDGET;PROGRESS;33;100;0xCC44CC;GPU\x07\r\n";
+    queue_uart_bytes(kOscWidgets, std::strlen(kOscWidgets));
+
+    // --- Полный каталог виджетов TimberWidget (`ui type=...`) ---
+    // Это канонический демо-набор из TimberWidget (все 26 типов). Прогоняем его
+    // как обычный UART-поток: каждая строка пройдёт через парсер и превратится
+    // в виджет-элемент списка терминала.
+    static const char *const kTimberDemo[] = {
+        "ui type=badge text=\"READY\" st=ok\r\n",
+        "ui type=badge text=\"WARN\" st=warn\r\n",
+        "ui type=badge text=\"FAIL\" st=error\r\n",
+        "ui type=dot color=#00E676 size=16 label=\"Link active\"\r\n",
+        "ui type=image name=info size=40 desc=\"Info icon\"\r\n",
+        "ui type=panel title=\"Motor 1\" value=READY subtitle=\"24.3V 1.8A\" accent=#36C36B icon=info\r\n",
+        "ui type=progress label=\"Battery\" value=72 max=100 fill=#36C36B display=\"72%\"\r\n",
+        "ui type=2col left=\"Voltage\" right=\"24.3V\"\r\n",
+        "ui type=switch label=\"Pump enable\" state=on subtitle=\"Remote mode\"\r\n",
+        "ui type=stats-card title=\"RPM\" value=1450 unit=\"rpm\" delta=\"+12\" subtitle=\"Motor 1\" accent=#36C36B\r\n",
+        "ui type=alarm-card title=\"Overheat\" message=\"Motor 1 temperature reached 92C\" severity=critical time=\"12:41:03\" icon=warn2\r\n",
+        "ui type=gauge label=\"CPU\" value=72 max=100 unit=\"%\" color=#36C36B\r\n",
+        "ui type=battery label=\"Battery A\" value=78 max=100 charging=true voltage=4.08\r\n",
+        "ui type=sparkline label=\"Temp\" values=\"21,22,22,23,24,23,25\" min=18 max=28 color=#36C36B display=\"25C\" points=on\r\n",
+        "ui type=bar-group title=\"Motors\" labels=\"M1|M2|M3\" values=\"20|45|80\" max=100 colors=\"#36C36B|#4FC3F7|#FFB300\"\r\n",
+        "ui type=line-chart title=\"Voltage\" values=\"24.1,24.2,24.0,24.3,24.4\" labels=\"T1|T2|T3|T4|T5\" min=23 max=25 color=#4FC3F7\r\n",
+        "ui type=led-row title=\"Links\" items=\"NET:#00E676|MQTT:#00E676|ERR:#FF5252|GPS:off\"\r\n",
+        "ui type=kv-grid title=\"Motor 1\" items=\"Voltage:24.3V|Current:1.8A|Temp:62C|State:READY\" columns=2\r\n",
+        "ui type=pin-bank title=\"GPIO\" items=\"D1:on|D2:off|D3:warn|A0:adc|PWM1:pwm\"\r\n",
+        "ui type=timeline title=\"Boot\" items=\"12:01 Boot|12:03 WiFi connected|12:05 MQTT online\"\r\n",
+        "ui type=table headers=\"Name|State|Temp\" rows=\"M1|READY|24.3;M2|WAIT|22.9;M3|ALARM|91.8\"\r\n",
+        "ui type=bitfield label=\"STATUS\" value=0xB38F bits=16\r\n",
+        "ui type=hex-dump title=\"RX Buffer\" data=\"48 65 6C 6C 6F 20 57 6F 72 6C 64\" width=8 addr=0x1000 ascii=on\r\n",
+        "ui type=register-table title=\"Holding Registers\" rows=\"0000|0x1234|Status;0001|0x00A5|Flags;0002|0x03E8|Speed\"\r\n",
+        "ui type=modbus-frame direction=request preset=rtu data=\"01 03 00 10 00 02 C5 CE\"\r\n",
+        "ui type=can-frame title=\"Motor CAN\" direction=rx id=0x18FF50E5 ext=true data=\"11 22 33 44 55 66 77 88\" channel=can0\r\n",
+        "ui type=uart-frame title=\"UART RX\" direction=rx channel=UART1 baud=115200 data=\"AA 55 10 02 01 02 34\" fields=\"0-1|Sync|AA55|Preamble;2|Cmd|10|Command;3|Len|02|Payload length;4-5|Payload|0102|Data;6|CRC|34|Checksum\"\r\n",
+        "ui type=packet-frame title=\"Binary Packet\" protocol=CUSTOM direction=tx data=\"7E A1 02 10 FF 55\" ascii=on\r\n",
+    };
+    for (const char *cmd : kTimberDemo) {
+        queue_uart_bytes(cmd, std::strlen(cmd));
+    }
+
     char line[256];
     static constexpr const char *kLevels[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FAULT"};
     static constexpr int kLevelFg[] = {244, 45, 82, 226, 196, 231};
@@ -552,6 +646,9 @@ void UartTerminalApp::parse_byte(uint8_t byte)
         if (byte == '[') {
             csi_buffer_.clear();
             parser_state_ = ParserState::Csi;
+        } else if (byte == ']') {
+            osc_buffer_.clear();
+            parser_state_ = ParserState::Osc;
         } else {
             parser_state_ = ParserState::Normal;
         }
@@ -569,6 +666,24 @@ void UartTerminalApp::parse_byte(uint8_t byte)
         } else {
             parser_state_ = ParserState::Normal;
             csi_buffer_.clear();
+        }
+        return;
+
+    case ParserState::Osc:
+        if (byte == 0x07 || byte == 0x1B) {
+            if (byte == 0x1B) {
+                // Ожидаем \ после ESC, но для простоты обрабатываем сразу
+            }
+            handle_osc(osc_buffer_);
+            parser_state_ = ParserState::Normal;
+            osc_buffer_.clear();
+            return;
+        }
+        if (osc_buffer_.size() < 256) {
+            osc_buffer_.push_back(static_cast<char>(byte));
+        } else {
+            parser_state_ = ParserState::Normal;
+            osc_buffer_.clear();
         }
         return;
     }
@@ -600,6 +715,13 @@ void UartTerminalApp::append_spaces(size_t count)
 
 void UartTerminalApp::finish_line(void)
 {
+    // Сначала пробуем распознать строку как команду виджета TimberWidget.
+    // Если да — она превращается в виджет-элемент (или служебное действие),
+    // и обычную текстовую строку не добавляем.
+    if (try_consume_timber_line()) {
+        return;
+    }
+
     current_line_.sequence = next_sequence_++;
     lines_.push_back(std::move(current_line_));
     while (lines_.size() > static_cast<size_t>(clamp_positive(CONFIG_JC4880_TERMINAL_MAX_LINES, 5000))) {
@@ -608,13 +730,140 @@ void UartTerminalApp::finish_line(void)
     current_line_ = TerminalLine{};
 }
 
+void UartTerminalApp::add_widget_line(const WidgetDesc &widget)
+{
+    TerminalLine line;
+    line.is_widget = true;
+    line.widget = widget;
+    line.sequence = next_sequence_++;
+    lines_.push_back(std::move(line));
+    while (lines_.size() > static_cast<size_t>(clamp_positive(CONFIG_JC4880_TERMINAL_MAX_LINES, 5000))) {
+        lines_.pop_front();
+    }
+}
+
+void UartTerminalApp::add_timber_widget(const timber::WidgetCommand &cmd)
+{
+    TerminalLine line;
+    line.is_timber = true;
+    line.timber_cmd = cmd;
+    line.row_span = std::max(1, timber::measureWidgetRows(cmd, line_height_));
+    line.sequence = next_sequence_++;
+    lines_.push_back(std::move(line));
+    while (lines_.size() > static_cast<size_t>(clamp_positive(CONFIG_JC4880_TERMINAL_MAX_LINES, 5000))) {
+        lines_.pop_front();
+    }
+}
+
+// Пытается распознать в накопленной строке команду TimberWidget (ui type=...,
+// widget type=..., @N ..., clear-terminal, demo-widgets). Возвращает true,
+// если строка была командой и обычную текстовую строку добавлять не нужно.
+bool UartTerminalApp::try_consume_timber_line(void)
+{
+    // Собрать плоский текст текущей строки из ран.
+    std::string text;
+    for (const TextRun &run : current_line_.runs) {
+        text += run.text;
+    }
+    if (text.empty()) {
+        return false;
+    }
+
+    // Быстрый отсев: команды начинаются с @, "ui", "widget", "clear-terminal",
+    // "demo". Иначе это обычный текст — не тратим время на полный парс.
+    const char *p = text.c_str();
+    while (*p == ' ') ++p;
+    bool looksCmd = (*p == '@') ||
+                    (std::strncmp(p, "ui ", 3) == 0) || (std::strcmp(p, "ui") == 0) ||
+                    (std::strncmp(p, "widget ", 7) == 0) ||
+                    (std::strncmp(p, "clear-terminal", 14) == 0) ||
+                    (std::strncmp(p, "demo", 4) == 0) ||
+                    (std::strcmp(p, "beep") == 0);
+    if (!looksCmd) {
+        return false;
+    }
+
+    timber::ParsedLine parsed = timber::parseLine(text);
+    switch (parsed.kind) {
+        case timber::LineKind::Widget:
+            add_timber_widget(parsed.widget);
+            current_line_ = TerminalLine{};
+            return true;
+        case timber::LineKind::ClearTerminal:
+            clear_history(false);
+            current_line_ = TerminalLine{};
+            return true;
+        case timber::LineKind::DemoWidgets:
+            current_line_ = TerminalLine{};
+            inject_demo_uart_data();
+            return true;
+        case timber::LineKind::Beep:
+            // Звука нет — просто проглатываем служебную строку.
+            current_line_ = TerminalLine{};
+            return true;
+        default:
+            return false;  // Text/Invalid -> показать как обычную строку
+    }
+}
+
+void UartTerminalApp::handle_osc(const std::string &osc)
+{
+    // Формат: WIDGET;KIND;value;max;color;label
+    // Пример: WIDGET;PROGRESS;75;100;0x00FF00;CPU
+    if (osc.rfind("WIDGET;", 0) != 0) {
+        return;
+    }
+
+    std::vector<std::string> parts;
+    size_t start = 7; // пропускаем "WIDGET;"
+    while (start < osc.size()) {
+        size_t end = osc.find(';', start);
+        if (end == std::string::npos) {
+            parts.push_back(osc.substr(start));
+            break;
+        }
+        parts.push_back(osc.substr(start, end - start));
+        start = end + 1;
+    }
+
+    if (parts.size() < 2) {
+        return;
+    }
+
+    WidgetDesc w;
+    if (parts[0] == "PROGRESS") {
+        w.kind = WidgetDesc::Kind::ProgressBar;
+    } else if (parts[0] == "STATUS") {
+        w.kind = WidgetDesc::Kind::StatusBlock;
+    } else {
+        return;
+    }
+
+    if (parts.size() > 1) {
+        w.value = std::clamp(std::atoi(parts[1].c_str()), 0, 100);
+    }
+    if (parts.size() > 2) {
+        w.max_value = std::max(1, std::atoi(parts[2].c_str()));
+    }
+    if (parts.size() > 3) {
+        w.bar_color = static_cast<uint32_t>(std::strtoul(parts[3].c_str(), nullptr, 0));
+    }
+    if (parts.size() > 4) {
+        w.label = parts[4];
+    }
+
+    add_widget_line(w);
+}
+
 void UartTerminalApp::clear_history(bool reset_parser)
 {
     lines_.clear();
     current_line_ = TerminalLine{};
+    release_timber_views();   // удалить живые контейнеры виджетов
     if (reset_parser) {
         parser_state_ = ParserState::Normal;
         csi_buffer_.clear();
+        osc_buffer_.clear();
         previous_was_cr_ = false;
         reset_style();
     }
@@ -748,10 +997,42 @@ const UartTerminalApp::TerminalLine *UartTerminalApp::line_at(size_t index) cons
     return nullptr;
 }
 
+int32_t UartTerminalApp::total_rows(void) const
+{
+    int32_t rows = 0;
+    for (const TerminalLine &line : lines_) {
+        rows += line.is_timber ? std::max(1, line.row_span) : 1;
+    }
+    if (current_line_.cells > 0) {
+        rows += 1;  // незавершённая текстовая строка
+    }
+    return rows;
+}
+
+const UartTerminalApp::TerminalLine *
+UartTerminalApp::element_at_row(int32_t row, int32_t *start_row) const
+{
+    if (row < 0) return nullptr;
+    int32_t acc = 0;
+    for (const TerminalLine &line : lines_) {
+        const int32_t span = line.is_timber ? std::max(1, line.row_span) : 1;
+        if (row < acc + span) {
+            if (start_row) *start_row = acc;
+            return &line;
+        }
+        acc += span;
+    }
+    if ((current_line_.cells > 0) && (row == acc)) {
+        if (start_row) *start_row = acc;
+        return &current_line_;
+    }
+    return nullptr;
+}
+
 int32_t UartTerminalApp::content_height(void) const
 {
-    const size_t line_count = virtual_line_count();
-    const size_t pixels = std::max<size_t>(1, line_count) * static_cast<size_t>(line_height_);
+    const size_t rows = std::max<int32_t>(1, total_rows());
+    const size_t pixels = rows * static_cast<size_t>(line_height_);
     return static_cast<int32_t>(std::min<size_t>(pixels, 0x7FFFFFFF));
 }
 
@@ -804,6 +1085,7 @@ void UartTerminalApp::recreate_row_pool(void)
         }
     }
     row_pool_.clear();
+    release_timber_views();   // виджеты пересоздадутся под новый размер
 
     lv_obj_update_layout(viewport_);
     const int32_t viewport_w = std::max<int32_t>(1, lv_obj_get_width(viewport_));
@@ -829,14 +1111,177 @@ void UartTerminalApp::refresh_visible_rows(void)
     }
 
     const int32_t scroll_y = std::max<int32_t>(0, lv_obj_get_scroll_y(viewport_));
-    const int first_index = static_cast<int>(scroll_y / line_height_);
+    const int32_t first_row = scroll_y / line_height_;
     const int32_t offset_y = -(scroll_y % line_height_);
 
+    // Каждый канвас-ряд пула отвечает за один абсолютный ряд экрана.
+    // Для timber-виджетов канвас прячем — их рисует overlay (refresh_timber_widgets).
     for (size_t i = 0; i < row_pool_.size(); ++i) {
-        const int line_index = first_index + static_cast<int>(i);
+        const int32_t abs_row = first_row + static_cast<int32_t>(i);
         const int32_t y = offset_y + static_cast<int32_t>(i) * line_height_;
-        render_line_to_row(row_pool_[i], line_index, y);
+        render_line_to_row(row_pool_[i], static_cast<int>(abs_row), y);
     }
+
+    refresh_timber_widgets();
+}
+
+// Создаёт/позиционирует живые контейнеры timber-виджетов поверх viewport.
+// Каждый видимый timber-элемент получает свой контейнер высотой row_span строк.
+void UartTerminalApp::refresh_timber_widgets(void)
+{
+    if (viewport_ == nullptr) {
+        for (WidgetView &wv : widget_views_) {
+            if (wv.container) lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
+        }
+        return;
+    }
+
+    const int32_t scroll_y = std::max<int32_t>(0, lv_obj_get_scroll_y(viewport_));
+    const int32_t view_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
+    const int32_t viewport_w = std::max<int32_t>(1, lv_obj_get_width(viewport_));
+    const int32_t first_row = scroll_y / line_height_;
+    const int32_t last_row = (scroll_y + view_h) / line_height_ + 1;
+
+    // Собираем видимые timber-элементы и их позиции (в координатах контента).
+    struct Visible { const TerminalLine *line; int element_index; int32_t start_row; };
+    std::vector<Visible> visible;
+
+    int32_t acc = 0;
+    int element_index = 0;
+    for (const TerminalLine &line : lines_) {
+        const int32_t span = line.is_timber ? std::max(1, line.row_span) : 1;
+        const int32_t end = acc + span;
+        if (line.is_timber && end > first_row && acc < last_row) {
+            visible.push_back({&line, element_index, acc});
+        }
+        acc += span;
+        ++element_index;
+    }
+
+    // Прячем все контейнеры пула, затем переиспользуем под видимые виджеты.
+    for (WidgetView &wv : widget_views_) {
+        if (wv.container) lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
+    }
+
+    // Гарантируем достаточно контейнеров в пуле.
+    while (widget_views_.size() < visible.size()) {
+        WidgetView wv;
+        wv.container = lv_obj_create(viewport_);
+        lv_obj_remove_style_all(wv.container);
+        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_FLOATING);
+        lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_set_style_pad_all(wv.container, 1, 0);
+        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
+        widget_views_.push_back(wv);
+    }
+
+    for (size_t i = 0; i < visible.size(); ++i) {
+        WidgetView &wv = widget_views_[i];
+        const Visible &v = visible[i];
+        const int32_t span = std::max(1, v.line->row_span);
+        const int32_t h = span * line_height_;
+        // Контейнеры — FLOATING, как и канвас-ряды: их координаты задаются
+        // относительно вьюпорта и не сдвигаются скроллом автоматически.
+        // Поэтому из абсолютной позиции элемента вычитаем scroll_y вручную.
+        const int32_t y = v.start_row * line_height_ - scroll_y;
+
+        lv_obj_set_size(wv.container, viewport_w, h);
+        lv_obj_set_pos(wv.container, 0, y);
+        lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
+
+        const bool same = (wv.element_index == v.element_index) &&
+                          (wv.rendered_sequence == v.line->sequence);
+        if (!same) {
+            lv_obj_clean(wv.container);
+            timber::renderWidget(wv.container, v.line->timber_cmd, line_height_);
+            wv.element_index = v.element_index;
+            wv.rendered_sequence = v.line->sequence;
+        }
+    }
+}
+
+void UartTerminalApp::release_timber_views(void)
+{
+    for (WidgetView &wv : widget_views_) {
+        if (wv.container) {
+            lv_obj_delete(wv.container);
+        }
+    }
+    widget_views_.clear();
+}
+
+void UartTerminalApp::render_widget_to_row(RowView &row, const WidgetDesc &widget, int32_t viewport_w)
+{
+    lv_layer_t layer;
+    lv_canvas_init_layer(row.canvas, &layer);
+
+    const lv_font_t *font = font_for_index(font_index_);
+
+    switch (widget.kind) {
+    case WidgetDesc::Kind::ProgressBar: {
+        const int32_t pad = 4;
+        const int32_t bar_h = line_height_ - pad * 2;
+        const int32_t bar_w = viewport_w - pad * 2 - 80;
+        const int32_t fill_w = (bar_w * widget.value) / LV_MAX(1, widget.max_value);
+
+        // Track background
+        lv_area_t track = {pad, pad, pad + bar_w - 1, pad + bar_h - 1};
+        lv_draw_fill_dsc_t track_dsc;
+        lv_draw_fill_dsc_init(&track_dsc);
+        track_dsc.color = lv_color_hex(widget.track_color);
+        track_dsc.opa = LV_OPA_COVER;
+        lv_draw_fill(&layer, &track_dsc, &track);
+
+        // Fill
+        if (fill_w > 0) {
+            lv_area_t fill = {pad, pad, pad + fill_w - 1, pad + bar_h - 1};
+            lv_draw_fill_dsc_t fill_dsc;
+            lv_draw_fill_dsc_init(&fill_dsc);
+            fill_dsc.color = lv_color_hex(widget.bar_color);
+            fill_dsc.opa = LV_OPA_COVER;
+            lv_draw_fill(&layer, &fill_dsc, &fill);
+        }
+
+        // Label
+        char text[48];
+        std::snprintf(text, sizeof(text), "%s %d%%",
+                      widget.label.c_str(),
+                      (widget.value * 100) / LV_MAX(1, widget.max_value));
+        lv_draw_label_dsc_t lbl_dsc;
+        lv_draw_label_dsc_init(&lbl_dsc);
+        lbl_dsc.text = text;
+        lbl_dsc.font = font;
+        lbl_dsc.color = lv_color_hex(widget.text_color);
+        lbl_dsc.opa = LV_OPA_COVER;
+        lv_area_t lbl_area = {pad + bar_w + 8, 0, viewport_w - 1, line_height_ - 1};
+        lv_draw_label(&layer, &lbl_dsc, &lbl_area);
+        break;
+    }
+
+    case WidgetDesc::Kind::StatusBlock: {
+        // Full-height colored block
+        lv_area_t bg = {0, 0, viewport_w - 1, line_height_ - 1};
+        lv_draw_fill_dsc_t bg_dsc;
+        lv_draw_fill_dsc_init(&bg_dsc);
+        bg_dsc.color = lv_color_hex(widget.bar_color);
+        bg_dsc.opa = LV_OPA_COVER;
+        lv_draw_fill(&layer, &bg_dsc, &bg);
+
+        // Centered text
+        lv_draw_label_dsc_t lbl_dsc;
+        lv_draw_label_dsc_init(&lbl_dsc);
+        lbl_dsc.text = widget.label.c_str();
+        lbl_dsc.font = font;
+        lbl_dsc.color = lv_color_hex(widget.text_color);
+        lbl_dsc.opa = LV_OPA_COVER;
+        lbl_dsc.align = LV_TEXT_ALIGN_CENTER;
+        lv_area_t lbl_area = {0, 0, viewport_w - 1, line_height_ - 1};
+        lv_draw_label(&layer, &lbl_dsc, &lbl_area);
+        break;
+    }
+    }
+
+    lv_canvas_finish_layer(row.canvas, &layer);
 }
 
 void UartTerminalApp::render_line_to_row(RowView &row, int line_index, int32_t y)
@@ -845,8 +1290,21 @@ void UartTerminalApp::render_line_to_row(RowView &row, int line_index, int32_t y
         return;
     }
 
-    const TerminalLine *line = (line_index >= 0) ? line_at(static_cast<size_t>(line_index)) : nullptr;
+    // line_index здесь — абсолютный ряд экрана. Находим элемент, который его
+    // покрывает, с учётом многострочных timber-виджетов.
+    int32_t start_row = 0;
+    const TerminalLine *line = (line_index >= 0)
+        ? element_at_row(static_cast<int32_t>(line_index), &start_row)
+        : nullptr;
     if (line == nullptr) {
+        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
+        row.rendered_index = -1;
+        row.rendered_sequence = 0;
+        return;
+    }
+
+    // Ряды timber-виджета рисует overlay (refresh_timber_widgets) — канвас прячем.
+    if (line->is_timber) {
         lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
         row.rendered_index = -1;
         row.rendered_sequence = 0;
@@ -865,13 +1323,19 @@ void UartTerminalApp::render_line_to_row(RowView &row, int line_index, int32_t y
 
     lv_canvas_fill_bg(row.canvas, lv_color_hex(kDefaultBg), LV_OPA_COVER);
 
+    if (line->is_widget) {
+        const int32_t viewport_w = lv_obj_get_width(viewport_);
+        render_widget_to_row(row, line->widget, viewport_w);
+        return;
+    }
+
     lv_layer_t layer;
     lv_canvas_init_layer(row.canvas, &layer);
 
     const lv_font_t *font = font_for_index(font_index_);
     const int32_t font_h = lv_font_get_line_height(font);
     const int32_t ofs_y = (line_height_ - font_h) / 2;
-    int32_t x = 6; // отступ слева как в старом коде
+    int32_t x = 6;
 
     for (const TextRun &run : line->runs) {
         if (run.text.empty()) {

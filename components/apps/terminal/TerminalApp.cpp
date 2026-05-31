@@ -19,6 +19,16 @@
 #include "widgets/WidgetParser.hpp"
 #include "widgets/WidgetRender.hpp"
 
+// Кастомные шрифты терминала с поддержкой кириллицы (JetBrains Mono).
+// Генерируются lv_font_conv и кладутся в эту же папку (components/apps/terminal/),
+// CMake собирает их автоматически. Объявлены с C-линковкой, т.к. сгенерированный
+// .c-файл компилируется как C. Имена соответствуют высоте ячейки сетки (20/40/60).
+extern "C" {
+extern const lv_font_t term_font_20;   // span 1 → ячейка 20px
+extern const lv_font_t term_font_40;   // span 2 → ячейка 40px
+extern const lv_font_t term_font_60;   // span 3 → ячейка 60px
+}
+
 #include "src/indev/lv_indev_private.h"
 #include "src/indev/lv_indev_gesture_private.h"
 #include "src/draw/snapshot/lv_snapshot.h"
@@ -1905,7 +1915,7 @@ void UartTerminalApp::render_osc_widget(ElementTile &tile, const WidgetDesc &wid
     lv_layer_t layer;
     lv_canvas_init_layer(tile.canvas, &layer);
 
-    const lv_font_t *font = &lv_font_montserrat_16;
+    const lv_font_t *font = &term_font_20;
 
     switch (widget.kind) {
     case WidgetDesc::Kind::ProgressBar: {
@@ -2353,10 +2363,10 @@ void UartTerminalApp::follow_event_cb(lv_event_t *event)
 const lv_font_t *UartTerminalApp::font_for_zoom(int span)
 {
     switch (span) {
-    case 1:  return &lv_font_montserrat_16;   // 20px ячейка
-    case 2:  return &lv_font_montserrat_28;   // 40px
-    case 3:  return &lv_font_montserrat_40;   // 60px
-    default: return &lv_font_montserrat_16;
+    case 1:  return &term_font_20;   // ячейка 20px
+    case 2:  return &term_font_40;   // ячейка 40px
+    case 3:  return &term_font_60;   // ячейка 60px
+    default: return &term_font_20;
     }
 }
 

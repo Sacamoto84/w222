@@ -1,6 +1,6 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
-  "idf.flashType": "UART",
+  "idf.flashType": "JTAG",
   "idf.flashPartitionToUse": "app",
   "idf.flashBaudRate": "3000000",
   "idf.monitorBaudRate": "115200",

@@ -39,12 +39,20 @@ private:
     lv_obj_t *net_status_label_ = nullptr;
     lv_timer_t *net_status_timer_ = nullptr;
 
+    // Экранная клавиатура: всплывает по тапу на поле ввода, прячется по OK/✕.
+    lv_obj_t *keyboard_ = nullptr;
+    lv_obj_t *content_ = nullptr;   // прокручиваемый контейнер (для запаса под клавиатуру)
+
     void load_into_ui(void);
     void save_uart_from_ui(void);
     void save_net_from_ui(void);
     void refresh_net_status(void);
+    // Привязать к полю показ клавиатуры в нужном режиме (mode = lv_keyboard_mode_t).
+    void attach_keyboard(lv_obj_t *textarea, int mode);
 
     static void save_event_cb(lv_event_t *event);
     static void save_net_event_cb(lv_event_t *event);
     static void net_status_timer_cb(lv_timer_t *timer);
+    static void textarea_event_cb(lv_event_t *event);
+    static void keyboard_event_cb(lv_event_t *event);
 };

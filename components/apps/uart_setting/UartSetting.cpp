@@ -1,5 +1,6 @@
 #include "uart_setting/UartSetting.hpp"
 
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -111,7 +112,8 @@ lv_obj_t *create_host_textarea(lv_obj_t *parent)
 {
     lv_obj_t *textarea = lv_textarea_create(parent);
     lv_textarea_set_one_line(textarea, true);
-    lv_textarea_set_accepted_chars(textarea, "0123456789.:-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    // Только цифры и точка — для ввода IPv4-адреса сервера.
+    lv_textarea_set_accepted_chars(textarea, "0123456789.");
     lv_textarea_set_max_length(textarea, 63);
     lv_obj_set_width(textarea, lv_pct(100));
     lv_obj_set_style_radius(textarea, 8, 0);
@@ -165,6 +167,7 @@ bool UartSettingApp::open(lv_obj_t *parent)
     lv_obj_set_flex_flow(root, LV_FLEX_FLOW_COLUMN);
 
     lv_obj_t *content = lv_obj_create(root);
+    content_ = content;
     lv_obj_set_width(content, lv_pct(100));
     lv_obj_set_flex_grow(content, 1);
     lv_obj_set_style_bg_opa(content, LV_OPA_TRANSP, 0);
@@ -219,12 +222,42 @@ bool UartSettingApp::open(lv_obj_t *parent)
 
     net_status_label_ = create_label(net_card, "", &lv_font_montserrat_14, 0x8FD3FF);
 
+    // Экранная клавиатура поверх контента (скрыта; всплывает по тапу на поле).
+    // FLOATING + явная геометрия — чтобы оверлеить низ независимо от layout
+    // родителя и не участвовать в flex-потоке.
+    keyboard_ = lv_keyboard_create(parent);
+    lv_obj_add_flag(keyboard_, LV_OBJ_FLAG_FLOATING);
+    lv_obj_set_size(keyboard_, lv_pct(100), lv_pct(45));
+    lv_obj_align(keyboard_, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_add_flag(keyboard_, LV_OBJ_FLAG_HIDDEN);
+    lv_keyboard_set_textarea(keyboard_, nullptr);
+    lv_obj_add_event_cb(keyboard_, keyboard_event_cb, LV_EVENT_READY, this);
+    lv_obj_add_event_cb(keyboard_, keyboard_event_cb, LV_EVENT_CANCEL, this);
+
+    // Привязываем клавиатуру ко всем полям ввода (цифровая для пинов/портов,
+    // текстовая для host).
+    attach_keyboard(rx_textarea_, LV_KEYBOARD_MODE_NUMBER);
+    attach_keyboard(tx_textarea_, LV_KEYBOARD_MODE_NUMBER);
+    attach_keyboard(host_textarea_, LV_KEYBOARD_MODE_NUMBER);
+    attach_keyboard(tcp_port_textarea_, LV_KEYBOARD_MODE_NUMBER);
+    attach_keyboard(udp_port_textarea_, LV_KEYBOARD_MODE_NUMBER);
+
     load_into_ui();
 
     // Состояние TCP меняется со временем — обновляем его на экране по таймеру.
     net_status_timer_ = lv_timer_create(net_status_timer_cb, 700, this);
     refresh_net_status();
     return true;
+}
+
+void UartSettingApp::attach_keyboard(lv_obj_t *textarea, int mode)
+{
+    if (textarea == nullptr) {
+        return;
+    }
+    // Режим клавиатуры храним в user_data поля; обработчик читает его при тапе.
+    lv_obj_set_user_data(textarea, reinterpret_cast<void *>(static_cast<intptr_t>(mode)));
+    lv_obj_add_event_cb(textarea, textarea_event_cb, LV_EVENT_CLICKED, this);
 }
 
 void UartSettingApp::close(void)
@@ -245,6 +278,8 @@ void UartSettingApp::close(void)
     udp_switch_ = nullptr;
     udp_port_textarea_ = nullptr;
     net_status_label_ = nullptr;
+    keyboard_ = nullptr;
+    content_ = nullptr;
 }
 
 void UartSettingApp::load_into_ui(void)
@@ -419,5 +454,44 @@ void UartSettingApp::net_status_timer_cb(lv_timer_t *timer)
     UartSettingApp *app = static_cast<UartSettingApp *>(lv_timer_get_user_data(timer));
     if (app != nullptr) {
         app->refresh_net_status();
+    }
+}
+
+void UartSettingApp::textarea_event_cb(lv_event_t *event)
+{
+    UartSettingApp *app = static_cast<UartSettingApp *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->keyboard_ == nullptr)) {
+        return;
+    }
+    lv_obj_t *textarea = static_cast<lv_obj_t *>(lv_event_get_target(event));
+    const lv_keyboard_mode_t mode =
+        static_cast<lv_keyboard_mode_t>(reinterpret_cast<intptr_t>(lv_obj_get_user_data(textarea)));
+
+    lv_keyboard_set_mode(app->keyboard_, mode);
+    lv_keyboard_set_textarea(app->keyboard_, textarea);
+    lv_obj_clear_flag(app->keyboard_, LV_OBJ_FLAG_HIDDEN);
+
+    // Запас прокрутки снизу = высота клавиатуры, чтобы поле можно было поднять
+    // над ней, а не оставить перекрытым.
+    if (app->content_ != nullptr) {
+        lv_obj_update_layout(app->keyboard_);
+        const int32_t kb_h = lv_obj_get_height(app->keyboard_);
+        lv_obj_set_style_pad_bottom(app->content_, kb_h, 0);
+        lv_obj_update_layout(app->content_);
+    }
+    lv_obj_scroll_to_view(textarea, LV_ANIM_ON);
+}
+
+void UartSettingApp::keyboard_event_cb(lv_event_t *event)
+{
+    UartSettingApp *app = static_cast<UartSettingApp *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->keyboard_ == nullptr)) {
+        return;
+    }
+    // OK (READY) или закрытие (CANCEL): прячем клавиатуру и снимаем привязку.
+    lv_obj_add_flag(app->keyboard_, LV_OBJ_FLAG_HIDDEN);
+    lv_keyboard_set_textarea(app->keyboard_, nullptr);
+    if (app->content_ != nullptr) {
+        lv_obj_set_style_pad_bottom(app->content_, 0, 0);
     }
 }

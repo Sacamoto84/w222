@@ -5,11 +5,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <errno.h>
+#include <fcntl.h>
 
 #include "driver/uart.h"
 #include "esp_err.h"
 #include "esp_log.h"
 
+#include "lwip/netdb.h"
+#include "lwip/sockets.h"
+
+#include "net_config.hpp"
 #include "widgets/WidgetParser.hpp"
 #include "widgets/WidgetRender.hpp"
 
@@ -114,7 +120,11 @@ UartTerminalApp::~UartTerminalApp()
 
 bool UartTerminalApp::init(void)
 {
+    if (rx_mutex_ == nullptr) {
+        rx_mutex_ = xSemaphoreCreateMutex();
+    }
     init_uart();
+    init_network();
     return true;
 }
 
@@ -444,15 +454,260 @@ void UartTerminalApp::uart_task(void)
             continue;
         }
 
-        received_bytes_ += static_cast<uint32_t>(read_len);
-        if (rx_stream_ == nullptr) {
-            dropped_bytes_ += static_cast<uint32_t>(read_len);
+        enqueue_rx(reinterpret_cast<const char *>(buffer), static_cast<size_t>(read_len));
+    }
+}
+
+// Низкоуровневая отправка в rx_stream_ под мьютексом (без учёта счётчиков).
+// Несколько писателей (UART/TCP/UDP) — StreamBuffer допускает одного писателя,
+// поэтому сериализуем их мьютексом. Читатель один (LVGL poll), ему мьютекс не нужен.
+size_t UartTerminalApp::rx_send_locked(const char *data, size_t len)
+{
+    if ((data == nullptr) || (len == 0) || (rx_stream_ == nullptr)) {
+        return 0;
+    }
+    if (rx_mutex_ != nullptr) {
+        xSemaphoreTake(rx_mutex_, portMAX_DELAY);
+    }
+    const size_t sent = xStreamBufferSend(rx_stream_, data, len, 0);
+    if (rx_mutex_ != nullptr) {
+        xSemaphoreGive(rx_mutex_);
+    }
+    return sent;
+}
+
+// Best-effort запись из источника (UART/TCP/UDP-задач): что не влезло — теряем.
+// Дренаж потока делает только LVGL-поток (poll-таймер), поэтому здесь его не зовём.
+void UartTerminalApp::enqueue_rx(const char *data, size_t len)
+{
+    if ((data == nullptr) || (len == 0)) {
+        return;
+    }
+    received_bytes_ += static_cast<uint32_t>(len);
+    const size_t sent = rx_send_locked(data, len);
+    if (sent < len) {
+        dropped_bytes_ += static_cast<uint32_t>(len - sent);
+    }
+}
+
+void UartTerminalApp::init_network(void)
+{
+    if (net_started_) {
+        return;
+    }
+    net_cfg_ = netcfg::load();
+    netcfg::set_tcp_state(net_cfg_.tcp_enabled ? netcfg::TcpState::Idle
+                                               : netcfg::TcpState::Disabled);
+
+    // Долгоживущие задачи: каждая сама проверяет свой флаг включения и версию
+    // конфигурации, поэтому пересоздавать их при смене настроек не нужно.
+    xTaskCreatePinnedToCore(tcp_task_entry, "term_tcp_rx", 4096, this, 5, &tcp_task_, 1);
+    xTaskCreatePinnedToCore(udp_task_entry, "term_udp_rx", 4096, this, 5, &udp_task_, 1);
+    net_started_ = true;
+}
+
+void UartTerminalApp::tcp_task_entry(void *arg)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(arg);
+    if (app != nullptr) {
+        app->tcp_task();
+    }
+    vTaskDelete(nullptr);
+}
+
+void UartTerminalApp::udp_task_entry(void *arg)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(arg);
+    if (app != nullptr) {
+        app->udp_task();
+    }
+    vTaskDelete(nullptr);
+}
+
+// TCP-клиент: подключается к host:port (как андроид-референс), читает сырой
+// поток и пишет его в общий rx_stream_. Переподключается при разрыве и при
+// изменении настроек (по netcfg::version()).
+void UartTerminalApp::tcp_task(void)
+{
+    char buffer[512];
+    int sock = -1;
+    unsigned cfg_ver = netcfg::version();
+
+    auto close_sock = [&](void) {
+        if (sock >= 0) {
+            lwip_close(sock);
+            sock = -1;
+        }
+    };
+
+    for (;;) {
+        // Применяем изменения настроек: рвём соединение и перечитываем конфиг.
+        const unsigned ver = netcfg::version();
+        if (ver != cfg_ver) {
+            cfg_ver = ver;
+            net_cfg_ = netcfg::load();
+            close_sock();
+        }
+
+        if (!net_cfg_.tcp_enabled || (net_cfg_.host[0] == '\0')) {
+            close_sock();
+            netcfg::set_tcp_state(net_cfg_.tcp_enabled ? netcfg::TcpState::Idle
+                                                       : netcfg::TcpState::Disabled);
+            vTaskDelay(pdMS_TO_TICKS(500));
             continue;
         }
 
-        const size_t sent = xStreamBufferSend(rx_stream_, buffer, static_cast<size_t>(read_len), 0);
-        if (sent < static_cast<size_t>(read_len)) {
-            dropped_bytes_ += static_cast<uint32_t>(static_cast<size_t>(read_len) - sent);
+        if (sock < 0) {
+            netcfg::set_tcp_state(netcfg::TcpState::Connecting);
+
+            struct addrinfo hints = {};
+            hints.ai_family = AF_INET;
+            hints.ai_socktype = SOCK_STREAM;
+            char port_str[8];
+            std::snprintf(port_str, sizeof(port_str), "%d", net_cfg_.tcp_port);
+
+            struct addrinfo *res = nullptr;
+            if ((getaddrinfo(net_cfg_.host, port_str, &hints, &res) != 0) || (res == nullptr)) {
+                if (res != nullptr) {
+                    freeaddrinfo(res);
+                }
+                netcfg::set_tcp_state(netcfg::TcpState::Error);
+                vTaskDelay(pdMS_TO_TICKS(1500));
+                continue;
+            }
+
+            int s = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+            if (s < 0) {
+                freeaddrinfo(res);
+                netcfg::set_tcp_state(netcfg::TcpState::Error);
+                vTaskDelay(pdMS_TO_TICKS(1500));
+                continue;
+            }
+
+            // Неблокирующий connect с таймаутом ~1.5 c (как в андроид-референсе),
+            // чтобы недоступный сервер не вешал задачу надолго.
+            fcntl(s, F_SETFL, O_NONBLOCK);
+            int cr = connect(s, res->ai_addr, res->ai_addrlen);
+            bool ok = (cr == 0);
+            if (!ok && (errno == EINPROGRESS)) {
+                fd_set wset;
+                FD_ZERO(&wset);
+                FD_SET(s, &wset);
+                struct timeval tv;
+                tv.tv_sec = 1;
+                tv.tv_usec = 500000;
+                if (select(s + 1, nullptr, &wset, nullptr, &tv) > 0) {
+                    int soerr = 0;
+                    socklen_t slen = sizeof(soerr);
+                    getsockopt(s, SOL_SOCKET, SO_ERROR, &soerr, &slen);
+                    ok = (soerr == 0);
+                }
+            }
+            freeaddrinfo(res);
+
+            if (!ok) {
+                lwip_close(s);
+                netcfg::set_tcp_state(netcfg::TcpState::Error);
+                vTaskDelay(pdMS_TO_TICKS(1500));
+                continue;
+            }
+
+            // Возвращаем блокирующий режим + таймаут чтения (чтобы периодически
+            // проверять флаг включения/версию конфигурации).
+            fcntl(s, F_SETFL, 0);
+            int one = 1;
+            setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof(one));
+            struct timeval rtv;
+            rtv.tv_sec = 1;
+            rtv.tv_usec = 0;
+            setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &rtv, sizeof(rtv));
+
+            sock = s;
+            netcfg::set_tcp_state(netcfg::TcpState::Connected);
+            ESP_LOGI(TAG, "TCP connected to %s:%d", net_cfg_.host, net_cfg_.tcp_port);
+        }
+
+        const int r = recv(sock, buffer, sizeof(buffer), 0);
+        if (r > 0) {
+            enqueue_rx(buffer, static_cast<size_t>(r));
+        } else if (r == 0) {
+            ESP_LOGW(TAG, "TCP peer closed");
+            close_sock();
+            netcfg::set_tcp_state(netcfg::TcpState::Error);
+            vTaskDelay(pdMS_TO_TICKS(800));
+        } else {
+            // r < 0: таймаут чтения — это норма, просто крутим цикл дальше.
+            if ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == 0)) {
+                continue;
+            }
+            ESP_LOGW(TAG, "TCP recv error: %d", errno);
+            close_sock();
+            netcfg::set_tcp_state(netcfg::TcpState::Error);
+            vTaskDelay(pdMS_TO_TICKS(800));
+        }
+    }
+}
+
+// UDP-слушатель (опционально): принимает датаграммы текста на udp_port и пишет
+// их в общий rx_stream_. Полезно для broadcast-логов.
+void UartTerminalApp::udp_task(void)
+{
+    char buffer[1500];
+    int sock = -1;
+    int bound_port = -1;
+    bool enabled = false;
+    unsigned cfg_ver = static_cast<unsigned>(-1);   // форсируем загрузку на старте
+
+    auto close_sock = [&](void) {
+        if (sock >= 0) {
+            lwip_close(sock);
+            sock = -1;
+        }
+        bound_port = -1;
+    };
+
+    for (;;) {
+        const unsigned ver = netcfg::version();
+        if (ver != cfg_ver) {
+            cfg_ver = ver;
+            const netcfg::Config cfg = netcfg::load();
+            enabled = cfg.udp_enabled;
+            if (!enabled || (cfg.udp_port != bound_port)) {
+                close_sock();
+            }
+            if (enabled && (sock < 0)) {
+                int s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+                if (s >= 0) {
+                    struct sockaddr_in addr = {};
+                    addr.sin_family = AF_INET;
+                    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+                    addr.sin_port = htons(static_cast<uint16_t>(cfg.udp_port));
+                    if (bind(s, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) == 0) {
+                        struct timeval rtv;
+                        rtv.tv_sec = 1;
+                        rtv.tv_usec = 0;
+                        setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &rtv, sizeof(rtv));
+                        sock = s;
+                        bound_port = cfg.udp_port;
+                        ESP_LOGI(TAG, "UDP listening on %d", cfg.udp_port);
+                    } else {
+                        lwip_close(s);
+                    }
+                }
+            }
+        }
+
+        if (!enabled || (sock < 0)) {
+            vTaskDelay(pdMS_TO_TICKS(500));
+            continue;
+        }
+
+        const int r = recv(sock, buffer, sizeof(buffer), 0);
+        if (r > 0) {
+            enqueue_rx(buffer, static_cast<size_t>(r));
+        } else {
+            // таймаут/ошибка — просто продолжаем (проверим версию конфига)
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
     }
 }
@@ -465,16 +720,18 @@ void UartTerminalApp::queue_uart_bytes(const char *data, size_t len)
 
     received_bytes_ += static_cast<uint32_t>(len);
 
+    // Вызывается из LVGL-потока (демо-инъекция), поэтому при заполнении потока
+    // можно безопасно дренировать его прямо здесь и повторить отправку.
     size_t offset = 0;
     while (offset < len) {
-        const size_t sent = xStreamBufferSend(rx_stream_, data + offset, len - offset, 0);
+        const size_t sent = rx_send_locked(data + offset, len - offset);
         if (sent > 0) {
             offset += sent;
             continue;
         }
 
         drain_uart_stream();
-        const size_t retry_sent = xStreamBufferSend(rx_stream_, data + offset, len - offset, 0);
+        const size_t retry_sent = rx_send_locked(data + offset, len - offset);
         if (retry_sent == 0) {
             dropped_bytes_ += static_cast<uint32_t>(len - offset);
             return;
@@ -1621,14 +1878,19 @@ void UartTerminalApp::update_status_label(bool force)
     }
     last_status_update_ms_ = now;
 
-    // Раньше тут выводилась строка состояния UART (порт/пин/скорость) — теперь
-    // она перенесена в приложение "Настройки UART". Оставляем только счётчик
-    // полученных строк.
-    char text[64] = {};
-    std::snprintf(text,
-                  sizeof(text),
-                  "lines: %u",
-                  static_cast<unsigned>(virtual_line_count()));
+    // Строка состояния UART (порт/пин/скорость) перенесена в "I/O Settings".
+    // Здесь — счётчик строк и компактный индикатор TCP (если включён).
+    char text[80] = {};
+    const netcfg::TcpState ts = netcfg::tcp_state();
+    if (ts == netcfg::TcpState::Disabled) {
+        std::snprintf(text, sizeof(text), "lines: %u",
+                      static_cast<unsigned>(virtual_line_count()));
+    } else {
+        const char *mark = (ts == netcfg::TcpState::Connected) ? "TCP\xE2\x97\x8F"   // ●
+                                                               : "TCP\xE2\x97\x8B";  // ○
+        std::snprintf(text, sizeof(text), "lines: %u  %s",
+                      static_cast<unsigned>(virtual_line_count()), mark);
+    }
     lv_label_set_text(status_label_, text);
 }
 

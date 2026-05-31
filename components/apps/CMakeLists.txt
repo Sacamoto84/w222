@@ -40,7 +40,8 @@ idf_component_register(
                esp_driver_gpio
                esp_driver_uart
                freertos
-               nvs_flash 
+               lwip
+               nvs_flash
                heap
                log)
 

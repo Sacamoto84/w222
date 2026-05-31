@@ -7,10 +7,12 @@
 #include <vector>
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 #include "freertos/stream_buffer.h"
 #include "freertos/task.h"
 #include "lite_app.h"
 #include "lvgl.h"
+#include "net_config.hpp"
 #include "uart_config.hpp"
 #include "widgets/WidgetParser.hpp"
 
@@ -99,6 +101,15 @@ private:
     bool init_uart(void);
     void reconfigure_uart(void);   // применить новую конфигурацию из NVS (в UART-задаче)
     void uart_task(void);
+
+    // --- Сетевой приём (WiFi) ---
+    void init_network(void);       // создать TCP/UDP задачи (однократно)
+    void tcp_task(void);           // TCP-клиент: подключение к host:port, чтение потока
+    void udp_task(void);           // UDP-слушатель (опционально)
+
+    // Запись в общий rx_stream_ нескольких писателей (UART/TCP/UDP) под мьютексом.
+    size_t rx_send_locked(const char *data, size_t len);  // только отправка
+    void enqueue_rx(const char *data, size_t len);        // отправка + учёт received/dropped
     void queue_uart_bytes(const char *data, size_t len);
     void inject_demo_uart_data(void);
     void drain_uart_stream(void);
@@ -194,6 +205,8 @@ private:
     static void channel_event_cb(lv_event_t *event);
     static void back_event_cb(lv_event_t *event);
     static void uart_task_entry(void *arg);
+    static void tcp_task_entry(void *arg);
+    static void udp_task_entry(void *arg);
 
     void apply_zoom(int span);                       // 1..kMaxTextZoomSpan (20/40/60px)
     static const lv_font_t *font_for_zoom(int span);
@@ -209,8 +222,15 @@ private:
     bool uart_task_started_ = false;
     TaskHandle_t uart_task_ = nullptr;
     StreamBufferHandle_t rx_stream_ = nullptr;
+    SemaphoreHandle_t rx_mutex_ = nullptr;   // сериализует писателей rx_stream_
     char uart_status_[128] = {};
     uartcfg::Config uart_cfg_ = uartcfg::defaults();
+
+    // Сеть
+    bool net_started_ = false;
+    TaskHandle_t tcp_task_ = nullptr;
+    TaskHandle_t udp_task_ = nullptr;
+    netcfg::Config net_cfg_ = netcfg::defaults();
 
     volatile uint32_t received_bytes_ = 0;
     volatile uint32_t dropped_bytes_ = 0;

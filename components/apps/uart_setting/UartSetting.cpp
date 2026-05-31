@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "net_config.hpp"
 #include "uart_config.hpp"
 
 namespace {
@@ -105,6 +106,47 @@ int baud_to_index(int baud)
     return 4;  // 115200
 }
 
+// Однострочное поле для IP/hostname сервера.
+lv_obj_t *create_host_textarea(lv_obj_t *parent)
+{
+    lv_obj_t *textarea = lv_textarea_create(parent);
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_accepted_chars(textarea, "0123456789.:-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    lv_textarea_set_max_length(textarea, 63);
+    lv_obj_set_width(textarea, lv_pct(100));
+    lv_obj_set_style_radius(textarea, 8, 0);
+    lv_obj_set_style_bg_color(textarea, lv_color_hex(0x161A22), 0);
+    lv_obj_set_style_border_width(textarea, 1, 0);
+    lv_obj_set_style_border_color(textarea, lv_color_hex(0x3A4351), 0);
+    lv_obj_set_style_text_color(textarea, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_set_style_pad_all(textarea, 10, 0);
+    return textarea;
+}
+
+// Числовое поле для номера порта (до 5 цифр).
+lv_obj_t *create_port_textarea(lv_obj_t *parent)
+{
+    lv_obj_t *textarea = lv_textarea_create(parent);
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_accepted_chars(textarea, "0123456789");
+    lv_textarea_set_max_length(textarea, 5);
+    lv_obj_set_width(textarea, lv_pct(100));
+    lv_obj_set_style_radius(textarea, 8, 0);
+    lv_obj_set_style_bg_color(textarea, lv_color_hex(0x161A22), 0);
+    lv_obj_set_style_border_width(textarea, 1, 0);
+    lv_obj_set_style_border_color(textarea, lv_color_hex(0x3A4351), 0);
+    lv_obj_set_style_text_color(textarea, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_set_style_pad_all(textarea, 10, 0);
+    return textarea;
+}
+
+lv_obj_t *create_switch(lv_obj_t *parent)
+{
+    lv_obj_t *sw = lv_switch_create(parent);
+    lv_obj_set_style_bg_color(sw, lv_color_hex(0x2D7DFF), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    return sw;
+}
+
 }  // namespace
 
 bool UartSettingApp::open(lv_obj_t *parent)
@@ -154,18 +196,55 @@ bool UartSettingApp::open(lv_obj_t *parent)
 
     status_label_ = create_label(card, "", &lv_font_montserrat_14, 0x8FD3FF);
 
+    // --- Карточка Network ---
+    lv_obj_t *net_card = create_card(content, "Network");
+
+    create_label(net_card, "TCP client (connect to server)", &lv_font_montserrat_14, 0x96A2B3);
+    tcp_switch_ = create_switch(net_card);
+
+    create_label(net_card, "Server host (IP)", &lv_font_montserrat_14, 0x96A2B3);
+    host_textarea_ = create_host_textarea(net_card);
+
+    create_label(net_card, "TCP port", &lv_font_montserrat_14, 0x96A2B3);
+    tcp_port_textarea_ = create_port_textarea(net_card);
+
+    create_label(net_card, "UDP listener", &lv_font_montserrat_14, 0x96A2B3);
+    udp_switch_ = create_switch(net_card);
+
+    create_label(net_card, "UDP port", &lv_font_montserrat_14, 0x96A2B3);
+    udp_port_textarea_ = create_port_textarea(net_card);
+
+    lv_obj_t *net_save_button = create_button(net_card, "Save and apply");
+    lv_obj_add_event_cb(net_save_button, save_net_event_cb, LV_EVENT_CLICKED, this);
+
+    net_status_label_ = create_label(net_card, "", &lv_font_montserrat_14, 0x8FD3FF);
+
     load_into_ui();
+
+    // Состояние TCP меняется со временем — обновляем его на экране по таймеру.
+    net_status_timer_ = lv_timer_create(net_status_timer_cb, 700, this);
+    refresh_net_status();
     return true;
 }
 
 void UartSettingApp::close(void)
 {
+    if (net_status_timer_ != nullptr) {
+        lv_timer_delete(net_status_timer_);
+        net_status_timer_ = nullptr;
+    }
     port_dropdown_ = nullptr;
     baud_dropdown_ = nullptr;
     parity_dropdown_ = nullptr;
     rx_textarea_ = nullptr;
     tx_textarea_ = nullptr;
     status_label_ = nullptr;
+    tcp_switch_ = nullptr;
+    host_textarea_ = nullptr;
+    tcp_port_textarea_ = nullptr;
+    udp_switch_ = nullptr;
+    udp_port_textarea_ = nullptr;
+    net_status_label_ = nullptr;
 }
 
 void UartSettingApp::load_into_ui(void)
@@ -205,9 +284,39 @@ void UartSettingApp::load_into_ui(void)
                       kParityName[(parity_index >= 0 && parity_index < 3) ? parity_index : 0]);
         lv_label_set_text(status_label_, text);
     }
+
+    // --- Network ---
+    const netcfg::Config net = netcfg::load();
+    if (tcp_switch_ != nullptr) {
+        if (net.tcp_enabled) {
+            lv_obj_add_state(tcp_switch_, LV_STATE_CHECKED);
+        } else {
+            lv_obj_remove_state(tcp_switch_, LV_STATE_CHECKED);
+        }
+    }
+    if (host_textarea_ != nullptr) {
+        lv_textarea_set_text(host_textarea_, net.host);
+    }
+    if (tcp_port_textarea_ != nullptr) {
+        char buf[8];
+        std::snprintf(buf, sizeof(buf), "%d", net.tcp_port);
+        lv_textarea_set_text(tcp_port_textarea_, buf);
+    }
+    if (udp_switch_ != nullptr) {
+        if (net.udp_enabled) {
+            lv_obj_add_state(udp_switch_, LV_STATE_CHECKED);
+        } else {
+            lv_obj_remove_state(udp_switch_, LV_STATE_CHECKED);
+        }
+    }
+    if (udp_port_textarea_ != nullptr) {
+        char buf[8];
+        std::snprintf(buf, sizeof(buf), "%d", net.udp_port);
+        lv_textarea_set_text(udp_port_textarea_, buf);
+    }
 }
 
-void UartSettingApp::save_from_ui(void)
+void UartSettingApp::save_uart_from_ui(void)
 {
     uartcfg::Config cfg;
 
@@ -246,10 +355,69 @@ void UartSettingApp::save_from_ui(void)
     }
 }
 
+void UartSettingApp::save_net_from_ui(void)
+{
+    netcfg::Config cfg;
+
+    cfg.tcp_enabled = (tcp_switch_ != nullptr) && lv_obj_has_state(tcp_switch_, LV_STATE_CHECKED);
+    cfg.udp_enabled = (udp_switch_ != nullptr) && lv_obj_has_state(udp_switch_, LV_STATE_CHECKED);
+
+    if (host_textarea_ != nullptr) {
+        std::snprintf(cfg.host, sizeof(cfg.host), "%s", lv_textarea_get_text(host_textarea_));
+    } else {
+        cfg.host[0] = '\0';
+    }
+
+    cfg.tcp_port = (tcp_port_textarea_ != nullptr) ? std::atoi(lv_textarea_get_text(tcp_port_textarea_)) : 8888;
+    cfg.udp_port = (udp_port_textarea_ != nullptr) ? std::atoi(lv_textarea_get_text(udp_port_textarea_)) : 8888;
+    if (cfg.tcp_port < 1 || cfg.tcp_port > 65535) cfg.tcp_port = 8888;
+    if (cfg.udp_port < 1 || cfg.udp_port > 65535) cfg.udp_port = 8888;
+
+    const bool ok = netcfg::save(cfg);
+
+    if (net_status_label_ != nullptr) {
+        char text[200];
+        std::snprintf(text, sizeof(text),
+                      "%s\nTCP %s -> %s:%d\nUDP %s :%d",
+                      ok ? "Saved. Applied to terminal." : "Save failed (NVS).",
+                      cfg.tcp_enabled ? "on" : "off",
+                      cfg.host[0] ? cfg.host : "(no host)", cfg.tcp_port,
+                      cfg.udp_enabled ? "on" : "off", cfg.udp_port);
+        lv_label_set_text(net_status_label_, text);
+    }
+}
+
+void UartSettingApp::refresh_net_status(void)
+{
+    if (net_status_label_ == nullptr) {
+        return;
+    }
+    const netcfg::TcpState st = netcfg::tcp_state();
+    char text[96];
+    std::snprintf(text, sizeof(text), "TCP state: %s", netcfg::tcp_state_name(st));
+    lv_label_set_text(net_status_label_, text);
+}
+
 void UartSettingApp::save_event_cb(lv_event_t *event)
 {
     UartSettingApp *app = static_cast<UartSettingApp *>(lv_event_get_user_data(event));
     if (app != nullptr) {
-        app->save_from_ui();
+        app->save_uart_from_ui();
+    }
+}
+
+void UartSettingApp::save_net_event_cb(lv_event_t *event)
+{
+    UartSettingApp *app = static_cast<UartSettingApp *>(lv_event_get_user_data(event));
+    if (app != nullptr) {
+        app->save_net_from_ui();
+    }
+}
+
+void UartSettingApp::net_status_timer_cb(lv_timer_t *timer)
+{
+    UartSettingApp *app = static_cast<UartSettingApp *>(lv_timer_get_user_data(timer));
+    if (app != nullptr) {
+        app->refresh_net_status();
     }
 }

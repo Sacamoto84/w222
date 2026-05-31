@@ -76,19 +76,17 @@ private:
         int8_t channel = 0;
     };
 
-    struct RowView {
-        lv_obj_t *canvas = nullptr;
-        lv_draw_buf_t *draw_buf = nullptr;
-        int rendered_index = -1;
-        uint32_t rendered_sequence = 0;
-    };
-
-    // Живой контейнер для одного timber-виджета (дерево LVGL-объектов).
-    // Переиспользуется по элементам по мере прокрутки.
-    struct WidgetView {
-        lv_obj_t *container = nullptr;
-        int element_index = -1;
-        uint32_t rendered_sequence = 0;
+    // Кэшированная в PSRAM картинка одного элемента списка. Рендерится один раз
+    // (текст — рисованием ранов, timber-виджет — через lv_snapshot), при скролле
+    // только перемещается; при выходе за окно overscan освобождается.
+    struct ElementTile {
+        lv_obj_t *canvas = nullptr;     // FLOATING-канвас поверх viewport
+        lv_draw_buf_t *buf = nullptr;   // RGB565, width × (alloc_span*kGridCellPx)
+        int alloc_span = 0;             // высота буфера в ячейках (для реаллокации)
+        int element_index = -1;         // индекс в lines_ (==lines_.size() → current_line_); -1 = свободен
+        uint32_t sequence = 0;          // ключ валидности кэша
+        int span = 0;                   // фактическая высота элемента в ячейках
+        bool rendered = false;          // false → показан фон-плейсхолдер, нужен рендер
     };
 
     enum class ParserState {
@@ -130,14 +128,23 @@ private:
     // инкрементальный обход через локацию по курсору (locate_row).
     const TerminalLine *element_at_row(int32_t row, int32_t *start_row) const;
 
-    // Учёт высоты одного элемента в рядах с учётом активного фильтра каналов.
-    // Если элемент отфильтрован (его канал не совпадает с выбранным и фильтр не
-    // "All"), возвращает 0 — такой элемент пропускается при разметке и отрисовке.
+    // Учёт высоты одного элемента в ячейках сетки (по kGridCellPx px) с учётом
+    // активного фильтра каналов. Если элемент отфильтрован (канал не совпадает и
+    // фильтр не "All"), возвращает 0 — элемент пропускается при разметке/отрисовке.
+    //   timber-виджет → row_span (целые ячейки, не зависит от zoom);
+    //   OSC-виджет     → 1 ячейка (фиксированно);
+    //   текст          → text_zoom_span_ (1..3 → 20/40/60px).
     int32_t element_span(const TerminalLine &line) const {
         if ((active_channel_ >= 0) && (line.channel != active_channel_)) {
             return 0;
         }
-        return line.is_timber ? (line.row_span > 1 ? line.row_span : 1) : 1;
+        if (line.is_timber) {
+            return line.row_span > 1 ? line.row_span : 1;
+        }
+        if (line.is_widget) {
+            return 1;
+        }
+        return text_zoom_span_;
     }
     // Пересобрать кэш суммарной высоты после массовых изменений lines_.
     void recompute_committed_rows(void);
@@ -151,14 +158,20 @@ private:
     bool is_scroll_near_bottom(void) const;
     void update_content_height(void);
     void scroll_to_bottom(void);
-    void recreate_row_pool(void);
-    void refresh_visible_rows(void);
-    // Рисует уже найденный элемент (line) на канвас-ряд. abs_row нужен только
-    // как ключ кэша; поиск элемента вызывающий делает сам (инкрементально).
-    void render_line_to_row(RowView &row, const TerminalLine *line, int abs_row, int32_t y);
-    void render_widget_to_row(RowView &row, const WidgetDesc &widget, int32_t viewport_w);
-    void refresh_timber_widgets(void);   // позиционирование живых виджет-контейнеров
-    void release_timber_views(void);
+
+    // --- Кэш-картинки элементов (PSRAM) ---
+    void rebuild_tile_pool(void);            // (пере)создать пул тайлов под размер viewport
+    void refresh_visible_elements(void);     // раскладка + рендер видимого окна (горячий путь)
+    ElementTile *tile_for_sequence(uint32_t sequence);  // тайл, связанный с элементом, или nullptr
+    ElementTile *acquire_free_tile(void);    // взять свободный тайл из пула (или nullptr)
+    void ensure_tile_buf(ElementTile &tile, int span); // (ре)аллокация буфера под span ячеек
+    void render_tile(ElementTile &tile, const TerminalLine &line);   // диспатч по типу элемента
+    void render_text(ElementTile &tile, const TerminalLine &line);
+    void render_osc_widget(ElementTile &tile, const WidgetDesc &widget);
+    void render_timber(ElementTile &tile, const timber::WidgetCommand &cmd);
+    void free_tile(ElementTile &tile);
+    void free_all_tiles(void);
+
     void update_status_label(bool force);
     void update_follow_button(void);
 
@@ -182,9 +195,14 @@ private:
     static void back_event_cb(lv_event_t *event);
     static void uart_task_entry(void *arg);
 
-    void apply_font_index(size_t index);
-    static const lv_font_t *font_for_index(size_t index);
-    static int32_t line_height_for_font(const lv_font_t *font);
+    void apply_zoom(int span);                       // 1..kMaxTextZoomSpan (20/40/60px)
+    static const lv_font_t *font_for_zoom(int span);
+
+    // Базовая ячейка сетки и параметры кэша/анти-фриза.
+    static constexpr int kGridCellPx = 20;
+    static constexpr int kMaxTextZoomSpan = 3;       // 20/40/60px
+    static constexpr int kOverscanCells = 8;         // запас тайлов сверху/снизу окна
+    static constexpr int kMaxRendersPerFrame = 4;    // лимит тяжёлых рендеров за кадр
 
     bool uart_installed_ = false;
     bool uart_task_started_ = false;
@@ -225,10 +243,9 @@ private:
     lv_obj_t *viewport_ = nullptr;
     lv_obj_t *spacer_ = nullptr;
     lv_timer_t *poll_timer_ = nullptr;
-    std::vector<RowView> row_pool_;
-    std::vector<WidgetView> widget_views_;   // пул живых timber-виджетов
-    size_t font_index_ = 1;   // начинаем с Montserrat 14
-    int32_t line_height_ = 20;
+    std::vector<ElementTile> tiles_;   // пул кэш-картинок элементов (PSRAM)
+    bool tiles_dirty_ = false;         // остались нерендеренные тайлы → добор по кадрам
+    int text_zoom_span_ = 1;           // высота текстовой строки в ячейках (1..3 → 20/40/60px)
     bool auto_follow_ = true;
     bool demo_seeded_ = false;
     bool suppress_scroll_event_ = false;

@@ -15,6 +15,7 @@
 
 #include "src/indev/lv_indev_private.h"
 #include "src/indev/lv_indev_gesture_private.h"
+#include "src/draw/snapshot/lv_snapshot.h"
 
 #ifndef CONFIG_JC4880_TERMINAL_MAX_LINES
 #define CONFIG_JC4880_TERMINAL_MAX_LINES 5000
@@ -98,19 +99,6 @@ static int clamp_positive(int value, int fallback)
 {
     return value > 0 ? value : fallback;
 }
-
-static const lv_font_t *kTerminalFonts[] = {
-    &lv_font_montserrat_12,
-    &lv_font_montserrat_14,
-    &lv_font_montserrat_16,
-    &lv_font_montserrat_18,
-    &lv_font_montserrat_20,
-    &lv_font_montserrat_22,
-    &lv_font_montserrat_24,
-    &lv_font_montserrat_26,
-    &lv_font_montserrat_28,
-};
-static constexpr size_t kTerminalFontCount = sizeof(kTerminalFonts) / sizeof(kTerminalFonts[0]);
 
 } // namespace
 
@@ -218,7 +206,6 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_height(spacer_, 1);
 
     lv_obj_update_layout(root_);
-    line_height_ = line_height_for_font(font_for_index(font_index_));
 
     // Настройка gesture recognizers: отключаем rotation (поднимаем порог до невозможного),
     // чтобы pinch распознавался корректно.
@@ -240,32 +227,23 @@ bool UartTerminalApp::open(lv_obj_t *parent)
         indev = lv_indev_get_next(indev);
     }
 
-    // Подгоняем высоту viewport под целое число строк:
-    // высота viewport должна быть строго кратна line_height_.
-    // Лишние/недостающие пиксели забираем/добавляем в toolbar (минимальным образом).
+    // Высота viewport должна быть кратна базовой ячейке сетки (kGridCellPx):
+    // лишние пиксели снизу отдаём toolbar, чтобы низ списка попадал ровно на сетку.
     const int32_t viewport_h = lv_obj_get_height(viewport_);
-    const int32_t remainder = viewport_h % line_height_;
+    const int32_t remainder = viewport_h % kGridCellPx;
     if (remainder != 0) {
         const int32_t toolbar_h = lv_obj_get_height(toolbar);
-        const int32_t to_remove = remainder;             // сколько пикселей забрать из viewport → добавить в toolbar
-        const int32_t to_add = line_height_ - remainder; // сколько пикселей добавить в viewport → забрать из toolbar
-
-        // Минимум высоты тулбара = 48 (кнопки 42 + отступы).
-        if (to_remove <= to_add && (toolbar_h + to_remove) >= 48) {
-            lv_obj_set_height(toolbar, toolbar_h + to_remove);
-        } else if ((toolbar_h - to_add) >= 48) {
-            lv_obj_set_height(toolbar, toolbar_h - to_add);
-        }
+        lv_obj_set_height(toolbar, toolbar_h + remainder);   // забрать остаток у viewport
         lv_obj_update_layout(root_);
     }
 
-    recreate_row_pool();
+    rebuild_tile_pool();
     update_content_height();
     update_status_label(true);
     update_follow_button();
     update_channel_buttons();
     scroll_to_bottom();
-    refresh_visible_rows();
+    refresh_visible_elements();
 
     poll_timer_ = lv_timer_create(poll_timer_cb, 30, this);
     if (!demo_seeded_ && (received_bytes_ == 0) && (virtual_line_count() == 0)) {
@@ -281,16 +259,7 @@ void UartTerminalApp::close(void)
         lv_timer_delete(poll_timer_);
     }
 
-    for (RowView &row : row_pool_) {
-        if (row.draw_buf != nullptr) {
-            lv_draw_buf_destroy(row.draw_buf);
-            row.draw_buf = nullptr;
-        }
-    }
-    row_pool_.clear();
-    // Контейнеры виджетов — дети viewport_, они удалятся вместе с ним при
-    // очистке родителя лаунчером; здесь просто сбрасываем указатели.
-    widget_views_.clear();
+    free_all_tiles();
 
     poll_timer_ = nullptr;
     root_ = nullptr;
@@ -693,7 +662,7 @@ void UartTerminalApp::drain_uart_stream(void)
         if (auto_follow_) {
             scroll_to_bottom();
         }
-        refresh_visible_rows();
+        refresh_visible_elements();
     }
 }
 
@@ -830,7 +799,7 @@ void UartTerminalApp::add_timber_widget(const timber::WidgetCommand &cmd)
     line.is_timber = true;
     line.timber_cmd = cmd;
     line.channel = static_cast<int8_t>(cmd.channel);
-    line.row_span = std::max(1, timber::measureWidgetRows(cmd, line_height_));
+    line.row_span = std::max(1, timber::measureWidgetRows(cmd, kGridCellPx));
     line.sequence = next_sequence_++;
     push_committed_line(std::move(line));
 }
@@ -961,7 +930,8 @@ void UartTerminalApp::clear_history(bool reset_parser)
     locate_cursor_index_ = 0;
     locate_cursor_start_ = 0;
     current_line_ = TerminalLine{};
-    release_timber_views();   // удалить живые контейнеры виджетов
+    // Тайлы не уничтожаем — пустое окно при следующем refresh само отвяжет и
+    // спрячет все тайлы (их картинки переиспользуются под новый контент).
     if (reset_parser) {
         parser_state_ = ParserState::Normal;
         csi_buffer_.clear();
@@ -972,7 +942,7 @@ void UartTerminalApp::clear_history(bool reset_parser)
     next_sequence_++;
     update_content_height();
     scroll_to_bottom();
-    refresh_visible_rows();
+    refresh_visible_elements();
 }
 
 void UartTerminalApp::reset_style(void)
@@ -1113,8 +1083,9 @@ void UartTerminalApp::recompute_committed_rows(void)
 
 int32_t UartTerminalApp::total_rows(void) const
 {
-    // O(1): committed_rows_ поддерживается инкрементально.
-    return committed_rows_ + (current_line_.cells > 0 ? 1 : 0);
+    // O(1): committed_rows_ поддерживается инкрементально. Живой хвост
+    // (current_line_) занимает text_zoom_span_ ячеек.
+    return committed_rows_ + (current_line_.cells > 0 ? text_zoom_span_ : 0);
 }
 
 size_t UartTerminalApp::locate_row(int32_t row, int32_t *start_row) const
@@ -1172,7 +1143,7 @@ UartTerminalApp::element_at_row(int32_t row, int32_t *start_row) const
 int32_t UartTerminalApp::content_height(void) const
 {
     const size_t rows = std::max<int32_t>(1, total_rows());
-    const size_t pixels = rows * static_cast<size_t>(line_height_);
+    const size_t pixels = rows * static_cast<size_t>(kGridCellPx);
     return static_cast<int32_t>(std::min<size_t>(pixels, 0x7FFFFFFF));
 }
 
@@ -1185,7 +1156,7 @@ bool UartTerminalApp::is_scroll_near_bottom(void) const
     const int32_t view_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
     const int32_t scroll_y = lv_obj_get_scroll_y(viewport_);
     const int32_t total_h = content_height();
-    return (total_h <= view_h) || ((scroll_y + view_h) >= (total_h - (line_height_ * 2)));
+    return (total_h <= view_h) || ((scroll_y + view_h) >= (total_h - (kGridCellPx * 2)));
 }
 
 void UartTerminalApp::update_content_height(void)
@@ -1209,314 +1180,270 @@ void UartTerminalApp::scroll_to_bottom(void)
     update_follow_button();
 }
 
-void UartTerminalApp::recreate_row_pool(void)
+void UartTerminalApp::rebuild_tile_pool(void)
 {
     if (viewport_ == nullptr) {
         return;
     }
 
-    for (RowView &row : row_pool_) {
-        if (row.canvas != nullptr) {
-            if (row.draw_buf != nullptr) {
-                lv_draw_buf_destroy(row.draw_buf);
-                row.draw_buf = nullptr;
-            }
-            lv_obj_delete(row.canvas);
-        }
-    }
-    row_pool_.clear();
-    release_timber_views();   // виджеты пересоздадутся под новый размер
+    free_all_tiles();
 
     lv_obj_update_layout(viewport_);
-    const int32_t viewport_w = std::max<int32_t>(1, lv_obj_get_width(viewport_));
     const int32_t viewport_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
-    const size_t row_count = static_cast<size_t>(viewport_h / line_height_) + 4;
-    row_pool_.reserve(row_count);
+    // Верхняя оценка числа одновременно нужных тайлов: окно видимых ячеек +
+    // overscan сверху/снизу (если бы все элементы были по одной ячейке).
+    const int32_t visible_cells = viewport_h / kGridCellPx;
+    const size_t pool_size = static_cast<size_t>(visible_cells + 2 * kOverscanCells + 2);
+    tiles_.reserve(pool_size);
 
-    for (size_t i = 0; i < row_count; ++i) {
-        RowView row;
-        row.canvas = lv_canvas_create(viewport_);
-        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_FLOATING);
-        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
-        row.draw_buf = lv_draw_buf_create(viewport_w, line_height_, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);
-        lv_canvas_set_draw_buf(row.canvas, row.draw_buf);
-        row_pool_.push_back(row);
+    for (size_t i = 0; i < pool_size; ++i) {
+        ElementTile tile;
+        tile.canvas = lv_canvas_create(viewport_);
+        lv_obj_add_flag(tile.canvas, LV_OBJ_FLAG_FLOATING);
+        lv_obj_add_flag(tile.canvas, LV_OBJ_FLAG_HIDDEN);
+        // Картинка не перехватывает палец: скролл/постраничный клик/жесты
+        // должны работать поверх неё.
+        lv_obj_clear_flag(tile.canvas, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_add_flag(tile.canvas, LV_OBJ_FLAG_EVENT_BUBBLE);
+        lv_obj_add_flag(tile.canvas, LV_OBJ_FLAG_GESTURE_BUBBLE);
+        tiles_.push_back(tile);
     }
+    tiles_dirty_ = false;
 }
 
-void UartTerminalApp::refresh_visible_rows(void)
+UartTerminalApp::ElementTile *UartTerminalApp::tile_for_sequence(uint32_t sequence)
 {
-    if ((viewport_ == nullptr) || row_pool_.empty()) {
+    if (sequence == 0) {
+        return nullptr;
+    }
+    for (ElementTile &t : tiles_) {
+        if (t.sequence == sequence) {
+            return &t;
+        }
+    }
+    return nullptr;
+}
+
+UartTerminalApp::ElementTile *UartTerminalApp::acquire_free_tile(void)
+{
+    for (ElementTile &t : tiles_) {
+        if (t.sequence == 0) {
+            return &t;
+        }
+    }
+    return nullptr;
+}
+
+void UartTerminalApp::ensure_tile_buf(ElementTile &tile, int span)
+{
+    if (span < 1) {
+        span = 1;
+    }
+    const int32_t w = std::max<int32_t>(1, lv_obj_get_width(viewport_));
+    const int32_t h = span * kGridCellPx;
+
+    if ((tile.buf == nullptr) || (tile.alloc_span != span)) {
+        if (tile.buf != nullptr) {
+            lv_draw_buf_destroy(tile.buf);
+            tile.buf = nullptr;
+        }
+        tile.buf = lv_draw_buf_create(w, h, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO);
+        tile.alloc_span = span;
+        lv_canvas_set_draw_buf(tile.canvas, tile.buf);
+    }
+    lv_obj_set_size(tile.canvas, w, h);
+    // Чистый фон как плейсхолдер, пока элемент не отрисован.
+    lv_canvas_fill_bg(tile.canvas, lv_color_hex(kDefaultBg), LV_OPA_COVER);
+}
+
+void UartTerminalApp::free_tile(ElementTile &tile)
+{
+    if (tile.buf != nullptr) {
+        lv_draw_buf_destroy(tile.buf);
+        tile.buf = nullptr;
+    }
+    if (tile.canvas != nullptr) {
+        lv_obj_delete(tile.canvas);
+        tile.canvas = nullptr;
+    }
+    tile.alloc_span = 0;
+    tile.element_index = -1;
+    tile.sequence = 0;
+    tile.span = 0;
+    tile.rendered = false;
+}
+
+void UartTerminalApp::free_all_tiles(void)
+{
+    for (ElementTile &t : tiles_) {
+        free_tile(t);
+    }
+    tiles_.clear();
+    tiles_dirty_ = false;
+}
+
+void UartTerminalApp::refresh_visible_elements(void)
+{
+    if ((viewport_ == nullptr) || tiles_.empty()) {
         return;
     }
 
-    const int32_t scroll_y = std::max<int32_t>(0, lv_obj_get_scroll_y(viewport_));
-    const int32_t first_row = scroll_y / line_height_;
-    const int32_t offset_y = -(scroll_y % line_height_);
-
-    // Инкрементальный обход: находим элемент для первого видимого ряда один
-    // раз (через курсор-кэш ~O(1)), дальше идём по lines_ вперёд, не вызывая
-    // поиск на каждом ряду. Это убирает O(видимые × N) сканов на кадр скролла.
-    const size_t n = lines_.size();
-    int32_t elem_start = 0;
-    size_t elem_idx = locate_row(first_row, &elem_start);
-
-    // span/конец текущего элемента (для шага вперёд).
-    int32_t elem_end;       // первый ряд ЗА текущим элементом
-    if (elem_idx < n) {
-        elem_end = elem_start + element_span(lines_[elem_idx]);
-    } else {
-        // first_row уже в области current_line_ или за концом контента.
-        elem_end = elem_start + 1;
-    }
-
-    for (size_t i = 0; i < row_pool_.size(); ++i) {
-        const int32_t abs_row = first_row + static_cast<int32_t>(i);
-        const int32_t y = offset_y + static_cast<int32_t>(i) * line_height_;
-
-        // Сдвигаем курсор элемента вперёд, пока abs_row не попадёт в него.
-        while (elem_idx < n && abs_row >= elem_end) {
-            ++elem_idx;
-            elem_start = elem_end;
-            if (elem_idx < n) {
-                elem_end = elem_start + element_span(lines_[elem_idx]);
-            } else {
-                elem_end = elem_start + 1;  // зона current_line_
-            }
-        }
-
-        const TerminalLine *line = nullptr;
-        if (elem_idx < n) {
-            line = &lines_[elem_idx];
-        } else if ((current_line_.cells > 0) && (abs_row == elem_start)) {
-            line = &current_line_;
-        }
-
-        render_line_to_row(row_pool_[i], line, static_cast<int>(abs_row), y);
-    }
-
-    refresh_timber_widgets();
-}
-
-// Создаёт/позиционирует живые контейнеры timber-виджетов поверх viewport.
-// Каждый видимый timber-элемент получает свой контейнер высотой row_span строк.
-void UartTerminalApp::refresh_timber_widgets(void)
-{
-    if (viewport_ == nullptr) {
-        for (WidgetView &wv : widget_views_) {
-            if (wv.container) lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
-        }
-        return;
-    }
-
-    const int32_t scroll_y = std::max<int32_t>(0, lv_obj_get_scroll_y(viewport_));
     const int32_t view_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
-    const int32_t viewport_w = std::max<int32_t>(1, lv_obj_get_width(viewport_));
-    const int32_t first_row = scroll_y / line_height_;
-    const int32_t last_row = (scroll_y + view_h) / line_height_ + 1;
+    const int32_t scroll_y = std::max<int32_t>(0, lv_obj_get_scroll_y(viewport_));
+    const int32_t first_row = scroll_y / kGridCellPx;
+    const int32_t last_row = (scroll_y + view_h - 1) / kGridCellPx;
+    const int32_t win_first = first_row - kOverscanCells;
+    const int32_t win_last = last_row + kOverscanCells;
 
-    // Собираем видимые timber-элементы и их позиции (в координатах контента).
-    // Инкрементально: стартуем с первого видимого элемента (курсор-кэш) и идём
-    // вперёд только по видимому окну, а не по всему lines_.
-    struct Visible { const TerminalLine *line; int element_index; int32_t start_row; };
-    std::vector<Visible> visible;
+    // 1) Собрать элементы окна [win_first, win_last] инкрементально через locate_row.
+    struct WinElem {
+        const TerminalLine *line;
+        int element_index;
+        int32_t start_row;
+        int span;
+        ElementTile *tile;
+        bool in_view;
+    };
+    std::vector<WinElem> win;
 
     const size_t n = lines_.size();
     int32_t acc = 0;
-    size_t idx = locate_row(first_row, &acc);
+    size_t idx = locate_row(win_first < 0 ? 0 : win_first, &acc);
     while (idx < n) {
         const TerminalLine &line = lines_[idx];
         const int32_t span = element_span(line);
-        if (acc >= last_row) break;   // ушли за нижнюю границу окна
-        if (line.is_timber && (acc + span) > first_row) {
-            visible.push_back({&line, static_cast<int>(idx), acc});
+        if (span > 0) {
+            if (acc > win_last) {
+                break;
+            }
+            if ((acc + span) > win_first) {
+                const bool in_view = (acc <= last_row) && ((acc + span) > first_row);
+                win.push_back({&line, static_cast<int>(idx), acc, span, nullptr, in_view});
+            }
         }
         acc += span;
         ++idx;
     }
-
-    // Прячем все контейнеры пула, затем переиспользуем под видимые виджеты.
-    for (WidgetView &wv : widget_views_) {
-        if (wv.container) lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
-    }
-
-    // Гарантируем достаточно контейнеров в пуле.
-    while (widget_views_.size() < visible.size()) {
-        WidgetView wv;
-        wv.container = lv_obj_create(viewport_);
-        lv_obj_remove_style_all(wv.container);
-        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_FLOATING);
-        lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_SCROLLABLE);
-        // Контейнер виджета не должен перехватывать палец: и обычный скролл,
-        // и постраничный клик по viewport_ должны работать поверх виджетов.
-        lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_CLICKABLE);
-        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_GESTURE_BUBBLE);
-        lv_obj_set_style_pad_all(wv.container, 1, 0);
-        lv_obj_add_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
-        widget_views_.push_back(wv);
-    }
-
-    for (size_t i = 0; i < visible.size(); ++i) {
-        WidgetView &wv = widget_views_[i];
-        const Visible &v = visible[i];
-        const int32_t span = std::max(1, v.line->row_span);
-        const int32_t h = span * line_height_;
-        // Контейнеры — FLOATING, как и канвас-ряды: их координаты задаются
-        // относительно вьюпорта и не сдвигаются скроллом автоматически.
-        // Поэтому из абсолютной позиции элемента вычитаем scroll_y вручную.
-        const int32_t y = v.start_row * line_height_ - scroll_y;
-
-        lv_obj_set_size(wv.container, viewport_w, h);
-        lv_obj_set_pos(wv.container, 0, y);
-        lv_obj_clear_flag(wv.container, LV_OBJ_FLAG_HIDDEN);
-
-        const bool same = (wv.element_index == v.element_index) &&
-                          (wv.rendered_sequence == v.line->sequence);
-        if (!same) {
-            lv_obj_clean(wv.container);
-            timber::renderWidget(wv.container, v.line->timber_cmd, line_height_);
-            wv.element_index = v.element_index;
-            wv.rendered_sequence = v.line->sequence;
+    // current_line_ — «живой хвост», элемент с индексом n, высотой text_zoom_span_.
+    if (current_line_.cells > 0) {
+        const int32_t span = text_zoom_span_;
+        if ((acc <= win_last) && ((acc + span) > win_first)) {
+            const bool in_view = (acc <= last_row) && ((acc + span) > first_row);
+            win.push_back({&current_line_, static_cast<int>(n), acc, span, nullptr, in_view});
         }
     }
-}
 
-void UartTerminalApp::release_timber_views(void)
-{
-    for (WidgetView &wv : widget_views_) {
-        if (wv.container) {
-            lv_obj_delete(wv.container);
+    // 2) Освободить тайлы, чьих элементов больше нет в окне (ключ — sequence).
+    for (ElementTile &t : tiles_) {
+        if (t.sequence == 0) {
+            continue;
+        }
+        bool still_visible = false;
+        for (const WinElem &w : win) {
+            if (w.line->sequence == t.sequence) {
+                still_visible = true;
+                break;
+            }
+        }
+        if (!still_visible) {
+            t.sequence = 0;
+            t.element_index = -1;
+            t.rendered = false;
+            if (t.canvas) {
+                lv_obj_add_flag(t.canvas, LV_OBJ_FLAG_HIDDEN);
+            }
         }
     }
-    widget_views_.clear();
-}
 
-void UartTerminalApp::render_widget_to_row(RowView &row, const WidgetDesc &widget, int32_t viewport_w)
-{
-    lv_layer_t layer;
-    lv_canvas_init_layer(row.canvas, &layer);
-
-    const lv_font_t *font = font_for_index(font_index_);
-
-    switch (widget.kind) {
-    case WidgetDesc::Kind::ProgressBar: {
-        const int32_t pad = 4;
-        const int32_t bar_h = line_height_ - pad * 2;
-        const int32_t bar_w = viewport_w - pad * 2 - 80;
-        const int32_t fill_w = (bar_w * widget.value) / LV_MAX(1, widget.max_value);
-
-        // Track background
-        lv_area_t track = {pad, pad, pad + bar_w - 1, pad + bar_h - 1};
-        lv_draw_fill_dsc_t track_dsc;
-        lv_draw_fill_dsc_init(&track_dsc);
-        track_dsc.color = lv_color_hex(widget.track_color);
-        track_dsc.opa = LV_OPA_COVER;
-        lv_draw_fill(&layer, &track_dsc, &track);
-
-        // Fill
-        if (fill_w > 0) {
-            lv_area_t fill = {pad, pad, pad + fill_w - 1, pad + bar_h - 1};
-            lv_draw_fill_dsc_t fill_dsc;
-            lv_draw_fill_dsc_init(&fill_dsc);
-            fill_dsc.color = lv_color_hex(widget.bar_color);
-            fill_dsc.opa = LV_OPA_COVER;
-            lv_draw_fill(&layer, &fill_dsc, &fill);
+    // 3) Привязать тайл каждому элементу окна и спозиционировать.
+    for (WinElem &w : win) {
+        ElementTile *tile = tile_for_sequence(w.line->sequence);
+        if (tile == nullptr) {
+            tile = acquire_free_tile();
+            if (tile == nullptr) {
+                continue;   // пул переполнен (не должно происходить при верной ёмкости)
+            }
+            tile->sequence = w.line->sequence;
+            tile->span = w.span;
+            tile->rendered = false;
+            ensure_tile_buf(*tile, w.span);
+        } else if (tile->span != w.span) {
+            // Высота элемента изменилась (например, zoom для текста) — перерисуем.
+            tile->span = w.span;
+            tile->rendered = false;
+            ensure_tile_buf(*tile, w.span);
         }
+        tile->element_index = w.element_index;
+        w.tile = tile;
 
-        // Label
-        char text[48];
-        std::snprintf(text, sizeof(text), "%s %d%%",
-                      widget.label.c_str(),
-                      (widget.value * 100) / LV_MAX(1, widget.max_value));
-        lv_draw_label_dsc_t lbl_dsc;
-        lv_draw_label_dsc_init(&lbl_dsc);
-        lbl_dsc.text = text;
-        lbl_dsc.font = font;
-        lbl_dsc.color = lv_color_hex(widget.text_color);
-        lbl_dsc.opa = LV_OPA_COVER;
-        lv_area_t lbl_area = {pad + bar_w + 8, 0, viewport_w - 1, line_height_ - 1};
-        lv_draw_label(&layer, &lbl_dsc, &lbl_area);
-        break;
+        const int32_t y = w.start_row * kGridCellPx - scroll_y;
+        lv_obj_set_pos(tile->canvas, 0, y);
+        lv_obj_clear_flag(tile->canvas, LV_OBJ_FLAG_HIDDEN);
     }
 
-    case WidgetDesc::Kind::StatusBlock: {
-        // Full-height colored block
-        lv_area_t bg = {0, 0, viewport_w - 1, line_height_ - 1};
-        lv_draw_fill_dsc_t bg_dsc;
-        lv_draw_fill_dsc_init(&bg_dsc);
-        bg_dsc.color = lv_color_hex(widget.bar_color);
-        bg_dsc.opa = LV_OPA_COVER;
-        lv_draw_fill(&layer, &bg_dsc, &bg);
-
-        // Centered text
-        lv_draw_label_dsc_t lbl_dsc;
-        lv_draw_label_dsc_init(&lbl_dsc);
-        lbl_dsc.text = widget.label.c_str();
-        lbl_dsc.font = font;
-        lbl_dsc.color = lv_color_hex(widget.text_color);
-        lbl_dsc.opa = LV_OPA_COVER;
-        lbl_dsc.align = LV_TEXT_ALIGN_CENTER;
-        lv_area_t lbl_area = {0, 0, viewport_w - 1, line_height_ - 1};
-        lv_draw_label(&layer, &lbl_dsc, &lbl_area);
-        break;
+    // 4) Рендер с лимитом за кадр: сперва видимые, затем overscan. Остаток —
+    //    в следующих кадрах (флаг tiles_dirty_ добирается poll-таймером).
+    int budget = kMaxRendersPerFrame;
+    for (WinElem &w : win) {
+        if (budget <= 0) {
+            break;
+        }
+        if ((w.tile != nullptr) && !w.tile->rendered && w.in_view) {
+            render_tile(*w.tile, *w.line);
+            --budget;
+        }
     }
+    for (WinElem &w : win) {
+        if (budget <= 0) {
+            break;
+        }
+        if ((w.tile != nullptr) && !w.tile->rendered && !w.in_view) {
+            render_tile(*w.tile, *w.line);
+            --budget;
+        }
     }
 
-    lv_canvas_finish_layer(row.canvas, &layer);
+    bool remaining = false;
+    for (const WinElem &w : win) {
+        if ((w.tile != nullptr) && !w.tile->rendered) {
+            remaining = true;
+            break;
+        }
+    }
+    tiles_dirty_ = remaining;
 }
 
-void UartTerminalApp::render_line_to_row(RowView &row, const TerminalLine *line,
-                                         int abs_row, int32_t y)
+void UartTerminalApp::render_tile(ElementTile &tile, const TerminalLine &line)
 {
-    if (row.canvas == nullptr) {
+    if ((tile.canvas == nullptr) || (tile.buf == nullptr)) {
         return;
     }
 
-    // Элемент уже найден вызывающим (инкрементальный обход). Пустой ряд —
-    // за концом контента.
-    if (line == nullptr) {
-        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
-        row.rendered_index = -1;
-        row.rendered_sequence = 0;
-        return;
+    if (line.is_timber) {
+        render_timber(tile, line.timber_cmd);
+    } else if (line.is_widget) {
+        lv_canvas_fill_bg(tile.canvas, lv_color_hex(kDefaultBg), LV_OPA_COVER);
+        render_osc_widget(tile, line.widget);
+    } else {
+        lv_canvas_fill_bg(tile.canvas, lv_color_hex(kDefaultBg), LV_OPA_COVER);
+        render_text(tile, line);
     }
+    tile.rendered = true;
+}
 
-    // Ряды timber-виджета рисует overlay (refresh_timber_widgets) — канвас прячем.
-    if (line->is_timber) {
-        lv_obj_add_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
-        row.rendered_index = -1;
-        row.rendered_sequence = 0;
-        return;
-    }
-
-    lv_obj_set_pos(row.canvas, 0, y);
-    lv_obj_clear_flag(row.canvas, LV_OBJ_FLAG_HIDDEN);
-
-    if ((row.rendered_index == abs_row) && (row.rendered_sequence == line->sequence)) {
-        return;
-    }
-
-    row.rendered_index = abs_row;
-    row.rendered_sequence = line->sequence;
-
-    lv_canvas_fill_bg(row.canvas, lv_color_hex(kDefaultBg), LV_OPA_COVER);
-
-    if (line->is_widget) {
-        const int32_t viewport_w = lv_obj_get_width(viewport_);
-        render_widget_to_row(row, line->widget, viewport_w);
-        return;
-    }
+void UartTerminalApp::render_text(ElementTile &tile, const TerminalLine &line)
+{
+    const int32_t h = tile.span * kGridCellPx;
 
     lv_layer_t layer;
-    lv_canvas_init_layer(row.canvas, &layer);
+    lv_canvas_init_layer(tile.canvas, &layer);
 
-    const lv_font_t *font = font_for_index(font_index_);
+    const lv_font_t *font = font_for_zoom(tile.span);
     const int32_t font_h = lv_font_get_line_height(font);
-    const int32_t ofs_y = (line_height_ - font_h) / 2;
+    const int32_t ofs_y = (h - font_h) / 2;   // центрируем строку по высоте ячейки
     int32_t x = 6;
 
-    for (const TextRun &run : line->runs) {
+    for (const TextRun &run : line.runs) {
         if (run.text.empty()) {
             continue;
         }
@@ -1529,11 +1456,7 @@ void UartTerminalApp::render_line_to_row(RowView &row, const TerminalLine *line,
             lv_draw_fill_dsc_init(&fill_dsc);
             fill_dsc.color = lv_color_hex(run.style.bg);
             fill_dsc.opa = LV_OPA_COVER;
-            lv_area_t bg_area;
-            bg_area.x1 = x;
-            bg_area.y1 = 0;
-            bg_area.x2 = x + size.x - 1;
-            bg_area.y2 = line_height_ - 1;
+            lv_area_t bg_area = {x, 0, x + size.x - 1, h - 1};
             lv_draw_fill(&layer, &fill_dsc, &bg_area);
         }
 
@@ -1547,17 +1470,121 @@ void UartTerminalApp::render_line_to_row(RowView &row, const TerminalLine *line,
         label_dsc.text_length = run.text.size();
         label_dsc.align = LV_TEXT_ALIGN_LEFT;
 
-        lv_area_t txt_area;
-        txt_area.x1 = x;
-        txt_area.y1 = 0;
-        txt_area.x2 = x + size.x - 1;
-        txt_area.y2 = line_height_ - 1;
+        lv_area_t txt_area = {x, 0, x + size.x - 1, h - 1};
         lv_draw_label(&layer, &label_dsc, &txt_area);
 
         x += size.x;
     }
 
-    lv_canvas_finish_layer(row.canvas, &layer);
+    lv_canvas_finish_layer(tile.canvas, &layer);
+}
+
+void UartTerminalApp::render_osc_widget(ElementTile &tile, const WidgetDesc &widget)
+{
+    const int32_t viewport_w = lv_obj_get_width(tile.canvas);
+    const int32_t cell_h = kGridCellPx;
+
+    lv_layer_t layer;
+    lv_canvas_init_layer(tile.canvas, &layer);
+
+    const lv_font_t *font = &lv_font_montserrat_16;
+
+    switch (widget.kind) {
+    case WidgetDesc::Kind::ProgressBar: {
+        const int32_t pad = 4;
+        const int32_t bar_h = cell_h - pad * 2;
+        const int32_t bar_w = viewport_w - pad * 2 - 80;
+        const int32_t fill_w = (bar_w * widget.value) / LV_MAX(1, widget.max_value);
+
+        lv_area_t track = {pad, pad, pad + bar_w - 1, pad + bar_h - 1};
+        lv_draw_fill_dsc_t track_dsc;
+        lv_draw_fill_dsc_init(&track_dsc);
+        track_dsc.color = lv_color_hex(widget.track_color);
+        track_dsc.opa = LV_OPA_COVER;
+        lv_draw_fill(&layer, &track_dsc, &track);
+
+        if (fill_w > 0) {
+            lv_area_t fill = {pad, pad, pad + fill_w - 1, pad + bar_h - 1};
+            lv_draw_fill_dsc_t fill_dsc;
+            lv_draw_fill_dsc_init(&fill_dsc);
+            fill_dsc.color = lv_color_hex(widget.bar_color);
+            fill_dsc.opa = LV_OPA_COVER;
+            lv_draw_fill(&layer, &fill_dsc, &fill);
+        }
+
+        char text[48];
+        std::snprintf(text, sizeof(text), "%s %d%%",
+                      widget.label.c_str(),
+                      (widget.value * 100) / LV_MAX(1, widget.max_value));
+        lv_draw_label_dsc_t lbl_dsc;
+        lv_draw_label_dsc_init(&lbl_dsc);
+        lbl_dsc.text = text;
+        lbl_dsc.font = font;
+        lbl_dsc.color = lv_color_hex(widget.text_color);
+        lbl_dsc.opa = LV_OPA_COVER;
+        lv_area_t lbl_area = {pad + bar_w + 8, 0, viewport_w - 1, cell_h - 1};
+        lv_draw_label(&layer, &lbl_dsc, &lbl_area);
+        break;
+    }
+
+    case WidgetDesc::Kind::StatusBlock: {
+        lv_area_t bg = {0, 0, viewport_w - 1, cell_h - 1};
+        lv_draw_fill_dsc_t bg_dsc;
+        lv_draw_fill_dsc_init(&bg_dsc);
+        bg_dsc.color = lv_color_hex(widget.bar_color);
+        bg_dsc.opa = LV_OPA_COVER;
+        lv_draw_fill(&layer, &bg_dsc, &bg);
+
+        lv_draw_label_dsc_t lbl_dsc;
+        lv_draw_label_dsc_init(&lbl_dsc);
+        lbl_dsc.text = widget.label.c_str();
+        lbl_dsc.font = font;
+        lbl_dsc.color = lv_color_hex(widget.text_color);
+        lbl_dsc.opa = LV_OPA_COVER;
+        lbl_dsc.align = LV_TEXT_ALIGN_CENTER;
+        lv_area_t lbl_area = {0, 0, viewport_w - 1, cell_h - 1};
+        lv_draw_label(&layer, &lbl_dsc, &lbl_area);
+        break;
+    }
+    }
+
+    lv_canvas_finish_layer(tile.canvas, &layer);
+}
+
+// Растеризует дерево timber-виджета в PSRAM-буфер тайла через lv_snapshot.
+// Дерево строится во временном offscreen-контейнере и сразу уничтожается —
+// в кэше остаётся только статичная картинка (виджеты в логе неинтерактивны).
+void UartTerminalApp::render_timber(ElementTile &tile, const timber::WidgetCommand &cmd)
+{
+    if ((tile.buf == nullptr) || (viewport_ == nullptr)) {
+        return;
+    }
+
+    const int32_t w = lv_obj_get_width(tile.canvas);
+    const int32_t h = tile.span * kGridCellPx;
+
+    // Временный контейнер строится как FLOATING-ребёнок viewport и удаляется в
+    // этом же синхронном вызове (LVGL не успеет его отрисовать на экране).
+    // HIDDEN не ставим — снапшот скрытого объекта может выйти пустым.
+    lv_obj_t *tmp = lv_obj_create(viewport_);
+    lv_obj_remove_style_all(tmp);
+    lv_obj_add_flag(tmp, LV_OBJ_FLAG_FLOATING);
+    lv_obj_clear_flag(tmp, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(tmp, lv_color_hex(kDefaultBg), 0);
+    lv_obj_set_style_bg_opa(tmp, LV_OPA_COVER, 0);
+    lv_obj_set_style_pad_all(tmp, 1, 0);
+    lv_obj_set_size(tmp, w, h);
+    lv_obj_set_pos(tmp, 0, 0);
+
+    timber::renderWidget(tmp, cmd, kGridCellPx);
+    lv_obj_update_layout(tmp);
+
+    lv_snapshot_take_to_draw_buf(tmp, LV_COLOR_FORMAT_RGB565, tile.buf);
+    // Перепривязываем буфер к канвасу — это и обновляет геометрию, и инвалидирует
+    // канвас, чтобы LVGL перерисовал его новым содержимым снапшота.
+    lv_canvas_set_draw_buf(tile.canvas, tile.buf);
+
+    lv_obj_delete(tmp);
 }
 
 void UartTerminalApp::update_status_label(bool force)
@@ -1642,14 +1669,9 @@ void UartTerminalApp::set_active_channel(int channel)
     active_channel_ = channel;
 
     // Высота видимого контента зависит от фильтра — пересобираем кэш рядов и
-    // сбрасываем курсор поиска.
+    // сбрасываем курсор поиска. Тайлы отфильтрованных элементов сами отвяжутся
+    // при следующем refresh (их sequence уйдёт из окна).
     recompute_committed_rows();
-
-    // Кэш отрисованных рядов больше не соответствует новой раскладке.
-    for (RowView &row : row_pool_) {
-        row.rendered_index = -1;
-        row.rendered_sequence = 0;
-    }
 
     update_channel_buttons();
     update_content_height();
@@ -1657,7 +1679,7 @@ void UartTerminalApp::set_active_channel(int channel)
     // При смене канала прижимаемся к низу — показываем свежие строки канала.
     auto_follow_ = true;
     scroll_to_bottom();
-    refresh_visible_rows();
+    refresh_visible_elements();
     update_status_label(true);
 }
 
@@ -1736,6 +1758,12 @@ void UartTerminalApp::poll_timer_cb(lv_timer_t *timer)
 
     app->drain_uart_stream();
     app->update_status_label(false);
+
+    // Добор отложенных рендеров тайлов (анти-фриз: ≤K за кадр). Пока остались
+    // нерендеренные тайлы в окне — продолжаем дорисовывать на следующих тиках.
+    if (app->tiles_dirty_) {
+        app->refresh_visible_elements();
+    }
 }
 
 void UartTerminalApp::scroll_event_cb(lv_event_t *event)
@@ -1747,9 +1775,9 @@ void UartTerminalApp::scroll_event_cb(lv_event_t *event)
 
     const lv_event_code_t code = lv_event_get_code(event);
     if (code == LV_EVENT_SIZE_CHANGED) {
-        app->recreate_row_pool();
+        app->rebuild_tile_pool();
         app->update_content_height();
-        app->refresh_visible_rows();
+        app->refresh_visible_elements();
         return;
     }
 
@@ -1762,7 +1790,7 @@ void UartTerminalApp::scroll_event_cb(lv_event_t *event)
                 max_scroll = 0;
             }
 
-            int32_t snapped = ((scroll_y + app->line_height_ / 2) / app->line_height_) * app->line_height_;
+            int32_t snapped = ((scroll_y + kGridCellPx / 2) / kGridCellPx) * kGridCellPx;
             if (snapped < 0) {
                 snapped = 0;
             }
@@ -1779,7 +1807,7 @@ void UartTerminalApp::scroll_event_cb(lv_event_t *event)
             app->auto_follow_ = app->is_scroll_near_bottom();
             app->update_follow_button();
         }
-        app->refresh_visible_rows();
+        app->refresh_visible_elements();
     }
 }
 
@@ -1811,8 +1839,8 @@ void UartTerminalApp::page_event_cb(lv_event_t *event)
     const bool page_up = (click_pos.y < center_y);
 
     const int32_t view_h = lv_obj_get_height(app->viewport_);
-    const int32_t page_lines = view_h / app->line_height_;
-    const int32_t page_size = page_lines * app->line_height_;
+    const int32_t page_lines = view_h / kGridCellPx;
+    const int32_t page_size = page_lines * kGridCellPx;
 
     const int32_t total_h = app->content_height();
     const int32_t max_scroll = LV_MAX(0, total_h - view_h);
@@ -1831,8 +1859,8 @@ void UartTerminalApp::page_event_cb(lv_event_t *event)
         scroll_y = max_scroll;
     }
 
-    // Snap к границе строки.
-    scroll_y = ((scroll_y + app->line_height_ / 2) / app->line_height_) * app->line_height_;
+    // Snap к границе ячейки сетки.
+    scroll_y = ((scroll_y + kGridCellPx / 2) / kGridCellPx) * kGridCellPx;
     if (scroll_y > max_scroll) {
         scroll_y = max_scroll;
     }
@@ -1843,7 +1871,7 @@ void UartTerminalApp::page_event_cb(lv_event_t *event)
 
     app->auto_follow_ = app->is_scroll_near_bottom();
     app->update_follow_button();
-    app->refresh_visible_rows();
+    app->refresh_visible_elements();
 }
 
 void UartTerminalApp::demo_event_cb(lv_event_t *event)
@@ -1884,46 +1912,41 @@ void UartTerminalApp::follow_event_cb(lv_event_t *event)
         app->scroll_to_bottom();
     }
     app->update_follow_button();
-    app->refresh_visible_rows();
+    app->refresh_visible_elements();
 }
 
-const lv_font_t *UartTerminalApp::font_for_index(size_t index)
+const lv_font_t *UartTerminalApp::font_for_zoom(int span)
 {
-    if (index < kTerminalFontCount) {
-        return kTerminalFonts[index];
+    switch (span) {
+    case 1:  return &lv_font_montserrat_16;   // 20px ячейка
+    case 2:  return &lv_font_montserrat_28;   // 40px
+    case 3:  return &lv_font_montserrat_40;   // 60px
+    default: return &lv_font_montserrat_16;
     }
-    return &lv_font_montserrat_14;
 }
 
-int32_t UartTerminalApp::line_height_for_font(const lv_font_t *font)
+void UartTerminalApp::apply_zoom(int span)
 {
-    return lv_font_get_line_height(font) + 4;
-}
-
-void UartTerminalApp::apply_font_index(size_t index)
-{
-    if (index >= kTerminalFontCount) {
+    if (span < 1) span = 1;
+    if (span > kMaxTextZoomSpan) span = kMaxTextZoomSpan;
+    if (span == text_zoom_span_) {
         return;
     }
-    font_index_ = index;
-    line_height_ = line_height_for_font(kTerminalFonts[index]);
+    text_zoom_span_ = span;
 
-    // Высота виджетов задаётся в рядах и зависит от line_height_ — пересчитываем
-    // row_span у всех timber-виджетов и инкрементальный кэш суммарной высоты.
-    for (TerminalLine &line : lines_) {
-        if (line.is_timber) {
-            line.row_span = std::max(1, timber::measureWidgetRows(line.timber_cmd, line_height_));
-        }
-    }
+    // Меняется только высота текстовых строк; высота виджетов фиксирована
+    // (kGridCellPx-сетка). Пересчитываем суммарную высоту и пересоздаём тайлы
+    // (у текстовых тайлов поменялся размер буфера).
     recompute_committed_rows();
 
     if (viewport_ != nullptr) {
-        recreate_row_pool();
+        free_all_tiles();
+        rebuild_tile_pool();
         update_content_height();
         if (auto_follow_) {
             scroll_to_bottom();
         }
-        refresh_visible_rows();
+        refresh_visible_elements();
     }
 }
 
@@ -1952,12 +1975,12 @@ void UartTerminalApp::gesture_event_cb(lv_event_t *event)
     ESP_LOGI("term_gesture", "pinch scale=%.3f", scale);
 
     if (scale > 1.2f) {
-        if (app->font_index_ + 1 < kTerminalFontCount) {
-            app->apply_font_index(app->font_index_ + 1);
+        if (app->text_zoom_span_ < kMaxTextZoomSpan) {
+            app->apply_zoom(app->text_zoom_span_ + 1);
         }
     } else if (scale < 0.8f) {
-        if (app->font_index_ > 0) {
-            app->apply_font_index(app->font_index_ - 1);
+        if (app->text_zoom_span_ > 1) {
+            app->apply_zoom(app->text_zoom_span_ - 1);
         }
     }
 }

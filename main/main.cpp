@@ -331,6 +331,25 @@ extern "C" void app_main(void)
         }
     }
 
+    // Применяем сохранённую ориентацию экрана ДО старта дисплея: BSP так
+    // корректно настраивает и панель, и тачскрин (рантайм-поворот тач не
+    // разворачивает). Смена ориентации в настройках применяется перезагрузкой.
+    {
+        int32_t rot = 0;
+        nvs_handle_t rot_nvs = 0;
+        if (nvs_open("display_cfg", NVS_READONLY, &rot_nvs) == ESP_OK)
+        {
+            nvs_get_i32(rot_nvs, "rotation", &rot);
+            nvs_close(rot_nvs);
+        }
+        if (rot < 0 || rot > 3)
+        {
+            rot = 0;
+        }
+        bsp_display_set_startup_rotation(static_cast<lv_disp_rotation_t>(rot));
+        ESP_LOGI(TAG, "Display startup rotation: %d (0=portrait,1=landscape,2=portrait180,3=landscape270)", (int)rot);
+    }
+
     bsp_display_cfg_t cfg = {
         .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
         .buffer_size = BSP_LCD_DRAW_BUFF_SIZE,

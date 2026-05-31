@@ -231,14 +231,45 @@ bool AppSettings::open(lv_obj_t *parent)
 
     status_label_ = create_label(wifi_card, "", &lv_font_montserrat_14, 0x8FD3FF);
 
+    // --- Display orientation ---
+    lv_obj_t *display_card = create_card(content, "Display");
+    create_label(display_card, "Orientation (applies after reboot)", &lv_font_montserrat_14, 0x96A2B3);
+
+    rotation_dropdown_ = lv_dropdown_create(display_card);
+    lv_dropdown_set_options(rotation_dropdown_,
+                            "Portrait\nLandscape\nPortrait 180\nLandscape 270");
+    lv_obj_set_width(rotation_dropdown_, lv_pct(100));
+    lv_obj_set_style_bg_color(rotation_dropdown_, lv_color_hex(0x161A22), 0);
+    lv_obj_set_style_border_width(rotation_dropdown_, 1, 0);
+    lv_obj_set_style_border_color(rotation_dropdown_, lv_color_hex(0x3A4351), 0);
+    lv_obj_set_style_text_color(rotation_dropdown_, lv_color_hex(0xFFFFFF), 0);
+
+    {
+        int32_t rot = 0;
+        nvs_handle_t rot_nvs = 0;
+        if (nvs_open("display_cfg", NVS_READONLY, &rot_nvs) == ESP_OK) {
+            nvs_get_i32(rot_nvs, "rotation", &rot);
+            nvs_close(rot_nvs);
+        }
+        if (rot < 0 || rot > 3) rot = 0;
+        lv_dropdown_set_selected(rotation_dropdown_, static_cast<uint16_t>(rot));
+    }
+
+    lv_obj_t *rotate_button = create_button(display_card, "Apply and reboot");
+    lv_obj_add_event_cb(rotate_button, rotate_apply_event_cb, LV_EVENT_CLICKED, this);
+
     lv_obj_t *about_card = create_card(content, "System");
     const esp_app_desc_t *desc = esp_app_get_description();
-    char about[192] = {};
+    lv_display_t *disp = lv_display_get_default();
+    const int hor = disp ? (int)lv_display_get_horizontal_resolution(disp) : 0;
+    const int ver = disp ? (int)lv_display_get_vertical_resolution(disp) : 0;
+    char about[208] = {};
     std::snprintf(about, sizeof(about),
-                  "Project: %s\nVersion: %s\nIDF: %s\nChip: ESP32-P4\nScreen: 480x800",
+                  "Project: %s\nVersion: %s\nIDF: %s\nChip: ESP32-P4\nScreen: %dx%d",
                   desc != nullptr ? desc->project_name : "unknown",
                   desc != nullptr ? desc->version : "unknown",
-                  desc != nullptr ? desc->idf_ver : "unknown");
+                  desc != nullptr ? desc->idf_ver : "unknown",
+                  hor, ver);
     create_label(about_card, about, &lv_font_montserrat_16, 0xC8D1DC);
 
     refresh_timer_ = lv_timer_create(refresh_timer_cb, 1000, this);
@@ -258,6 +289,7 @@ void AppSettings::close(void)
     ssid_textarea_ = nullptr;
     password_textarea_ = nullptr;
     status_label_ = nullptr;
+    rotation_dropdown_ = nullptr;
     refresh_timer_ = nullptr;
 }
 
@@ -338,4 +370,25 @@ void AppSettings::refresh_event_cb(lv_event_t *event)
     if (app != nullptr) {
         app->refresh();
     }
+}
+
+// Сохраняет выбранную ориентацию в NVS и перезагружает устройство — ориентация
+// (и панель, и тач) применяется на старте через bsp_display_set_startup_rotation.
+void AppSettings::rotate_apply_event_cb(lv_event_t *event)
+{
+    AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->rotation_dropdown_ == nullptr)) {
+        return;
+    }
+
+    const int32_t rot = static_cast<int32_t>(lv_dropdown_get_selected(app->rotation_dropdown_));
+
+    nvs_handle_t rot_nvs = 0;
+    if (nvs_open("display_cfg", NVS_READWRITE, &rot_nvs) == ESP_OK) {
+        nvs_set_i32(rot_nvs, "rotation", rot);
+        nvs_commit(rot_nvs);
+        nvs_close(rot_nvs);
+    }
+
+    esp_restart();
 }

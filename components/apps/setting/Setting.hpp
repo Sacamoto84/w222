@@ -20,6 +20,7 @@ private:
     lv_obj_t *ssid_textarea_ = nullptr;
     lv_obj_t *password_textarea_ = nullptr;
     lv_obj_t *status_label_ = nullptr;
+    lv_obj_t *rotation_dropdown_ = nullptr;   // ориентация экрана (0/90/180/270)
     lv_timer_t *refresh_timer_ = nullptr;
 
     void refresh(void);
@@ -28,4 +29,5 @@ private:
     static void refresh_timer_cb(lv_timer_t *timer);
     static void connect_event_cb(lv_event_t *event);
     static void refresh_event_cb(lv_event_t *event);
+    static void rotate_apply_event_cb(lv_event_t *event);   // сохранить ориентацию + перезагрузка
 };

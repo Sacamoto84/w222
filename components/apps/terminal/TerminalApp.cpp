@@ -22,11 +22,12 @@
 // Кастомные шрифты терминала с поддержкой кириллицы (JetBrains Mono).
 // Генерируются lv_font_conv и кладутся в эту же папку (components/apps/terminal/),
 // CMake собирает их автоматически. Объявлены с C-линковкой, т.к. сгенерированный
-// .c-файл компилируется как C. Имена соответствуют высоте ячейки сетки (20/40/60).
+// .c-файл компилируется как C. Имена соответствуют высоте строки текста (20/25/30/35).
 extern "C" {
-extern const lv_font_t term_font_20;   // span 1 → ячейка 20px
-extern const lv_font_t term_font_40;   // span 2 → ячейка 40px
-extern const lv_font_t term_font_60;   // span 3 → ячейка 60px
+extern const lv_font_t term_font_20;   // 20px (span 4)
+extern const lv_font_t term_font_25;   // 25px (span 5)
+extern const lv_font_t term_font_30;   // 30px (span 6)
+extern const lv_font_t term_font_35;   // 35px (span 7)
 }
 
 #include "src/indev/lv_indev_private.h"
@@ -1205,7 +1206,10 @@ void UartTerminalApp::add_timber_widget(const timber::WidgetCommand &cmd)
     line.is_timber = true;
     line.timber_cmd = cmd;
     line.channel = static_cast<int8_t>(cmd.channel);
-    line.row_span = std::max(1, timber::measureWidgetRows(cmd, kGridCellPx));
+    // Виджет меряется в эталонных 20px-строках, span — в 10px-ячейках (×kWidgetCells),
+    // поэтому высота виджета не зависит от масштаба текста.
+    line.row_span = std::max(kWidgetCells,
+                             timber::measureWidgetRows(cmd, kWidgetLineHeightPx) * kWidgetCells);
     line.sequence = next_sequence_++;
     push_committed_line(std::move(line));
 }
@@ -1596,10 +1600,11 @@ void UartTerminalApp::rebuild_tile_pool(void)
 
     lv_obj_update_layout(viewport_);
     const int32_t viewport_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
-    // Верхняя оценка числа одновременно нужных тайлов: окно видимых ячеек +
-    // overscan сверху/снизу (если бы все элементы были по одной ячейке).
-    const int32_t visible_cells = viewport_h / kGridCellPx;
-    const size_t pool_size = static_cast<size_t>(visible_cells + 2 * kOverscanCells + 2);
+    // Верхняя оценка числа одновременно нужных тайлов = окно (видимое+overscan) в
+    // ячейках, делённое на минимальную высоту элемента (kWidgetCells = 20px): ни
+    // текст (≥2 ячеек), ни виджеты не бывают мельче, поэтому элементов не больше.
+    const int32_t window_cells = viewport_h / kGridCellPx + 2 * kOverscanCells;
+    const size_t pool_size = static_cast<size_t>(window_cells / kWidgetCells + 4);
     tiles_.reserve(pool_size);
 
     for (size_t i = 0; i < pool_size; ++i) {
@@ -1910,7 +1915,7 @@ void UartTerminalApp::render_text(ElementTile &tile, const TerminalLine &line)
 void UartTerminalApp::render_osc_widget(ElementTile &tile, const WidgetDesc &widget)
 {
     const int32_t viewport_w = lv_obj_get_width(tile.canvas);
-    const int32_t cell_h = kGridCellPx;
+    const int32_t cell_h = tile.span * kGridCellPx;   // высота OSC-виджета (20px)
 
     lv_layer_t layer;
     lv_canvas_init_layer(tile.canvas, &layer);
@@ -2004,7 +2009,7 @@ void UartTerminalApp::render_timber(ElementTile &tile, const timber::WidgetComma
     lv_obj_set_size(tmp, w, h);
     lv_obj_set_pos(tmp, 0, 0);
 
-    timber::renderWidget(tmp, cmd, kGridCellPx);
+    timber::renderWidget(tmp, cmd, kWidgetLineHeightPx);
     lv_obj_update_layout(tmp);
 
     lv_snapshot_take_to_draw_buf(tmp, LV_COLOR_FORMAT_RGB565, tile.buf);
@@ -2363,17 +2368,18 @@ void UartTerminalApp::follow_event_cb(lv_event_t *event)
 const lv_font_t *UartTerminalApp::font_for_zoom(int span)
 {
     switch (span) {
-    case 1:  return &term_font_20;   // ячейка 20px
-    case 2:  return &term_font_40;   // ячейка 40px
-    case 3:  return &term_font_60;   // ячейка 60px
+    case 4:  return &term_font_20;   // 20px
+    case 5:  return &term_font_25;   // 25px
+    case 6:  return &term_font_30;   // 30px
+    case 7:  return &term_font_35;   // 35px
     default: return &term_font_20;
     }
 }
 
 void UartTerminalApp::apply_zoom(int span)
 {
-    if (span < 1) span = 1;
-    if (span > kMaxTextZoomSpan) span = kMaxTextZoomSpan;
+    if (span < kTextSpanMin) span = kTextSpanMin;
+    if (span > kTextSpanMax) span = kTextSpanMax;
     if (span == text_zoom_span_) {
         return;
     }
@@ -2420,11 +2426,11 @@ void UartTerminalApp::gesture_event_cb(lv_event_t *event)
     ESP_LOGI("term_gesture", "pinch scale=%.3f", scale);
 
     if (scale > 1.2f) {
-        if (app->text_zoom_span_ < kMaxTextZoomSpan) {
+        if (app->text_zoom_span_ < kTextSpanMax) {
             app->apply_zoom(app->text_zoom_span_ + 1);
         }
     } else if (scale < 0.8f) {
-        if (app->text_zoom_span_ > 1) {
+        if (app->text_zoom_span_ > kTextSpanMin) {
             app->apply_zoom(app->text_zoom_span_ - 1);
         }
     }

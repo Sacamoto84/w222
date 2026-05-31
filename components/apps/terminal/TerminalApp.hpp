@@ -144,17 +144,17 @@ private:
     // активного фильтра каналов. Если элемент отфильтрован (канал не совпадает и
     // фильтр не "All"), возвращает 0 — элемент пропускается при разметке/отрисовке.
     //   timber-виджет → row_span (целые ячейки, не зависит от zoom);
-    //   OSC-виджет     → 1 ячейка (фиксированно);
-    //   текст          → text_zoom_span_ (1..3 → 20/40/60px).
+    //   OSC-виджет     → kWidgetCells ячеек (20px, фиксированно);
+    //   текст          → text_zoom_span_ (4/5/6/7 → 20/25/30/35px).
     int32_t element_span(const TerminalLine &line) const {
         if ((active_channel_ >= 0) && (line.channel != active_channel_)) {
             return 0;
         }
         if (line.is_timber) {
-            return line.row_span > 1 ? line.row_span : 1;
+            return line.row_span > kWidgetCells ? line.row_span : kWidgetCells;
         }
         if (line.is_widget) {
-            return 1;
+            return kWidgetCells;
         }
         return text_zoom_span_;
     }
@@ -211,13 +211,17 @@ private:
     static void hb_task_entry(void *arg);
     void update_net_indicator(void);   // цвет кружка по состоянию TCP
 
-    void apply_zoom(int span);                       // 1..kMaxTextZoomSpan (20/40/60px)
+    void apply_zoom(int span);                       // kTextSpanMin..kTextSpanMax (20/30/40px)
     static const lv_font_t *font_for_zoom(int span);
 
-    // Базовая ячейка сетки и параметры кэша/анти-фриза.
-    static constexpr int kGridCellPx = 20;
-    static constexpr int kMaxTextZoomSpan = 3;       // 20/40/60px
-    static constexpr int kOverscanCells = 8;         // запас тайлов сверху/снизу окна
+    // Базовая ячейка сетки = 5px. Текст занимает 4/5/6/7 ячеек → 20/25/30/35px.
+    // Виджеты привязаны к 20px (kWidgetCells ячеек) и от zoom не зависят.
+    static constexpr int kGridCellPx = 5;
+    static constexpr int kWidgetLineHeightPx = 20;   // эталонная высота строки виджета
+    static constexpr int kWidgetCells = kWidgetLineHeightPx / kGridCellPx;  // 4 ячейки = 20px
+    static constexpr int kTextSpanMin = 4;           // 20px
+    static constexpr int kTextSpanMax = 7;           // 35px
+    static constexpr int kOverscanCells = 32;        // запас тайлов сверху/снизу окна (~160px)
     static constexpr int kMaxRendersPerFrame = 4;    // лимит рендеров видимых тайлов за кадр
     static constexpr int kPreloadPerFrame = 2;       // отдельный бюджет предзагрузки overscan за кадр
 
@@ -280,7 +284,7 @@ private:
     std::vector<ElementTile> tiles_;   // пул кэш-картинок элементов (PSRAM)
     bool tiles_dirty_ = false;         // остались нерендеренные тайлы → добор по кадрам
     int32_t last_scroll_y_ = 0;        // прошлый scroll_y → направление для приоритета предзагрузки
-    int text_zoom_span_ = 1;           // высота текстовой строки в ячейках (1..3 → 20/40/60px)
+    int text_zoom_span_ = 4;           // высота текстовой строки в ячейках (4/5/6/7 → 20/25/30/35px)
     bool auto_follow_ = true;
     bool demo_seeded_ = false;
     bool suppress_scroll_event_ = false;

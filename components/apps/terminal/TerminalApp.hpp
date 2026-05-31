@@ -103,9 +103,10 @@ private:
     void uart_task(void);
 
     // --- Сетевой приём (WiFi) ---
-    void init_network(void);       // создать TCP/UDP задачи (однократно)
+    void init_network(void);       // создать TCP/UDP/heartbeat задачи (однократно)
     void tcp_task(void);           // TCP-клиент: подключение к host:port, чтение потока
     void udp_task(void);           // UDP-слушатель (опционально)
+    void hb_task(void);            // UDP heartbeat ping/pong — слежение за связью
 
     // Запись в общий rx_stream_ нескольких писателей (UART/TCP/UDP) под мьютексом.
     size_t rx_send_locked(const char *data, size_t len);  // только отправка
@@ -207,6 +208,8 @@ private:
     static void uart_task_entry(void *arg);
     static void tcp_task_entry(void *arg);
     static void udp_task_entry(void *arg);
+    static void hb_task_entry(void *arg);
+    void update_net_indicator(void);   // цвет кружка по состоянию TCP
 
     void apply_zoom(int span);                       // 1..kMaxTextZoomSpan (20/40/60px)
     static const lv_font_t *font_for_zoom(int span);
@@ -230,7 +233,16 @@ private:
     bool net_started_ = false;
     TaskHandle_t tcp_task_ = nullptr;
     TaskHandle_t udp_task_ = nullptr;
+    TaskHandle_t hb_task_ = nullptr;
     netcfg::Config net_cfg_ = netcfg::defaults();
+    // Heartbeat / признак жизни соединения. last_pong_ms_ обновляется и при
+    // приходе pong, и при приходе TCP-данных (любая активность = сервер жив).
+    // hb_seen_ — был ли хоть один pong на текущем соединении: только тогда
+    // отсутствие pong трактуем как "сервер пропал" (иначе сервер без heartbeat
+    // не должен ложно рвать живое соединение). volatile — пишутся hb/tcp задачами.
+    volatile uint32_t last_pong_ms_ = 0;
+    volatile int32_t last_hb_rtt_ms_ = -1;
+    volatile bool hb_seen_ = false;
 
     volatile uint32_t received_bytes_ = 0;
     volatile uint32_t dropped_bytes_ = 0;
@@ -261,6 +273,7 @@ private:
     lv_obj_t *follow_button_ = nullptr;
     lv_obj_t *channel_buttons_[5] = {};   // [0]=All, [1..4]=каналы 0..3
     int active_channel_ = -1;             // -1 = All
+    lv_obj_t *net_dot_ = nullptr;         // кружок-индикатор состояния TCP
     lv_obj_t *viewport_ = nullptr;
     lv_obj_t *spacer_ = nullptr;
     lv_timer_t *poll_timer_ = nullptr;

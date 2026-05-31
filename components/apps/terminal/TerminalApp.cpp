@@ -46,6 +46,12 @@ static constexpr uint32_t kButtonBg = 0x27313D;
 static constexpr uint32_t kButtonActiveBg = 0x177D5B;
 static constexpr size_t kReadChunkSize = 256;
 
+// Heartbeat (UDP ping/pong) — совместимо с ESP32-C3 и андроид-референсом.
+static constexpr uint32_t kHeartbeatTimeoutMs = 3000;   // нет pong дольше → связь потеряна
+static constexpr uint32_t kHeartbeatIntervalMs = 700;   // период отправки ping
+static constexpr const char *kHbPingPrefix = "tm3 hb ping";
+static constexpr const char *kHbPongPrefix = "tm3 hb pong";
+
 static void make_plain_container(lv_obj_t *obj)
 {
     lv_obj_remove_style_all(obj);
@@ -123,7 +129,11 @@ bool UartTerminalApp::init(void)
     if (rx_mutex_ == nullptr) {
         rx_mutex_ = xSemaphoreCreateMutex();
     }
-    init_uart();
+    // Встроенный UART отключён — терминал работает полностью от сети.
+    // Поток приёма создаём здесь (раньше его создавал init_uart()).
+    if (rx_stream_ == nullptr) {
+        rx_stream_ = xStreamBufferCreate(CONFIG_JC4880_TERMINAL_STREAM_BUFFER_SIZE, 1);
+    }
     init_network();
     return true;
 }
@@ -185,6 +195,15 @@ bool UartTerminalApp::open(lv_obj_t *parent)
 
     lv_obj_t *clear_button = create_toolbar_button(toolbar, LV_SYMBOL_TRASH);
     lv_obj_add_event_cb(clear_button, clear_event_cb, LV_EVENT_CLICKED, this);
+
+    // Кружок-индикатор состояния подключения к серверу (зелёный/жёлтый/красный).
+    net_dot_ = lv_obj_create(toolbar);
+    lv_obj_remove_style_all(net_dot_);
+    lv_obj_set_size(net_dot_, 16, 16);
+    lv_obj_set_style_radius(net_dot_, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_opa(net_dot_, LV_OPA_COVER, 0);
+    lv_obj_set_style_bg_color(net_dot_, lv_color_hex(0x555B66), 0);
+    lv_obj_clear_flag(net_dot_, LV_OBJ_FLAG_CLICKABLE);
 
     // Счётчик полученных строк. Без flex_grow (иначе ломает горизонтальный
     // скролл тулбара) — занимает ширину по содержимому в конце ряда.
@@ -278,6 +297,7 @@ void UartTerminalApp::close(void)
     for (lv_obj_t *&btn : channel_buttons_) {
         btn = nullptr;
     }
+    net_dot_ = nullptr;
     viewport_ = nullptr;
     spacer_ = nullptr;
 }
@@ -503,6 +523,7 @@ void UartTerminalApp::init_network(void)
     // конфигурации, поэтому пересоздавать их при смене настроек не нужно.
     xTaskCreatePinnedToCore(tcp_task_entry, "term_tcp_rx", 4096, this, 5, &tcp_task_, 1);
     xTaskCreatePinnedToCore(udp_task_entry, "term_udp_rx", 4096, this, 5, &udp_task_, 1);
+    xTaskCreatePinnedToCore(hb_task_entry, "term_hb", 4096, this, 5, &hb_task_, 1);
     net_started_ = true;
 }
 
@@ -520,6 +541,15 @@ void UartTerminalApp::udp_task_entry(void *arg)
     UartTerminalApp *app = static_cast<UartTerminalApp *>(arg);
     if (app != nullptr) {
         app->udp_task();
+    }
+    vTaskDelete(nullptr);
+}
+
+void UartTerminalApp::hb_task_entry(void *arg)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(arg);
+    if (app != nullptr) {
+        app->hb_task();
     }
     vTaskDelete(nullptr);
 }
@@ -623,12 +653,18 @@ void UartTerminalApp::tcp_task(void)
             setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &rtv, sizeof(rtv));
 
             sock = s;
+            // Праймим "признак жизни" и сбрасываем флаг heartbeat для нового
+            // соединения (pong ещё не приходил).
+            last_pong_ms_ = esp_log_timestamp();
+            hb_seen_ = false;
             netcfg::set_tcp_state(netcfg::TcpState::Connected);
             ESP_LOGI(TAG, "TCP connected to %s:%d", net_cfg_.host, net_cfg_.tcp_port);
         }
 
         const int r = recv(sock, buffer, sizeof(buffer), 0);
         if (r > 0) {
+            // Данные = сервер жив (даже если heartbeat не поддерживается).
+            last_pong_ms_ = esp_log_timestamp();
             enqueue_rx(buffer, static_cast<size_t>(r));
         } else if (r == 0) {
             ESP_LOGW(TAG, "TCP peer closed");
@@ -636,8 +672,20 @@ void UartTerminalApp::tcp_task(void)
             netcfg::set_tcp_state(netcfg::TcpState::Error);
             vTaskDelay(pdMS_TO_TICKS(800));
         } else {
-            // r < 0: таймаут чтения — это норма, просто крутим цикл дальше.
+            // r < 0: таймаут чтения — норма. Но если давно нет heartbeat-pong,
+            // считаем, что сервер пропал (например, выключили питание, FIN не
+            // пришёл): рвём сокет и уходим в реконнект (он сам поднимется, когда
+            // сервер вернётся в сеть).
             if ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == 0)) {
+                // Сервер считаем пропавшим только если heartbeat уже работал на
+                // этом соединении, а затем pong'и пропали (питание сняли, FIN не
+                // пришёл). Сервер без heartbeat живое соединение не теряет.
+                if (hb_seen_ && ((esp_log_timestamp() - last_pong_ms_) > kHeartbeatTimeoutMs)) {
+                    ESP_LOGW(TAG, "heartbeat stale — assuming server gone, reconnecting");
+                    close_sock();
+                    netcfg::set_tcp_state(netcfg::TcpState::Error);
+                    vTaskDelay(pdMS_TO_TICKS(500));
+                }
                 continue;
             }
             ESP_LOGW(TAG, "TCP recv error: %d", errno);
@@ -645,6 +693,98 @@ void UartTerminalApp::tcp_task(void)
             netcfg::set_tcp_state(netcfg::TcpState::Error);
             vTaskDelay(pdMS_TO_TICKS(800));
         }
+    }
+}
+
+// UDP heartbeat: периодически шлёт `tm3 hb ping <ts>` на host:tcp_port и ждёт
+// `tm3 hb pong`. Обновляет last_pong_ms_/RTT. Совместимо с ESP32-C3
+// (handleHeartbeatUdp) и андроид-референсом. Позволяет обнаружить пропажу
+// сервера даже при "висящем" TCP-сокете.
+void UartTerminalApp::hb_task(void)
+{
+    int sock = -1;
+    unsigned cfg_ver = static_cast<unsigned>(-1);
+    netcfg::Config cfg = netcfg::defaults();
+    struct sockaddr_in dest = {};
+    bool dest_ok = false;
+
+    auto close_sock = [&](void) {
+        if (sock >= 0) {
+            lwip_close(sock);
+            sock = -1;
+        }
+    };
+
+    for (;;) {
+        const unsigned ver = netcfg::version();
+        if (ver != cfg_ver) {
+            cfg_ver = ver;
+            cfg = netcfg::load();
+            close_sock();
+            dest_ok = false;
+        }
+
+        if (!cfg.tcp_enabled || (cfg.host[0] == '\0')) {
+            close_sock();
+            vTaskDelay(pdMS_TO_TICKS(500));
+            continue;
+        }
+
+        if (sock < 0) {
+            sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+            if (sock < 0) {
+                vTaskDelay(pdMS_TO_TICKS(1000));
+                continue;
+            }
+            struct timeval rtv;
+            rtv.tv_sec = 0;
+            rtv.tv_usec = 400000;   // 400 мс на ожидание pong
+            setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &rtv, sizeof(rtv));
+
+            // Резолвим адрес сервера (heartbeat-порт = tcp_port, как у C3).
+            dest_ok = false;
+            struct addrinfo hints = {};
+            hints.ai_family = AF_INET;
+            hints.ai_socktype = SOCK_DGRAM;
+            char port_str[8];
+            std::snprintf(port_str, sizeof(port_str), "%d", cfg.tcp_port);
+            struct addrinfo *res = nullptr;
+            if ((getaddrinfo(cfg.host, port_str, &hints, &res) == 0) && (res != nullptr)) {
+                dest = *reinterpret_cast<struct sockaddr_in *>(res->ai_addr);
+                dest_ok = true;
+            }
+            if (res != nullptr) {
+                freeaddrinfo(res);
+            }
+        }
+
+        if (!dest_ok) {
+            close_sock();
+            vTaskDelay(pdMS_TO_TICKS(1000));
+            continue;
+        }
+
+        // Отправляем ping с меткой времени, чтобы посчитать RTT по эху.
+        const uint32_t t0 = esp_log_timestamp();
+        char ping[48];
+        const int plen = std::snprintf(ping, sizeof(ping), "%s %lu",
+                                       kHbPingPrefix, static_cast<unsigned long>(t0));
+        sendto(sock, ping, static_cast<size_t>(plen), 0,
+               reinterpret_cast<struct sockaddr *>(&dest), sizeof(dest));
+
+        // Ждём pong (несколько датаграмм в пределах таймаута сокета).
+        char rx[64];
+        const int n = recv(sock, rx, sizeof(rx) - 1, 0);
+        if (n > 0) {
+            rx[n] = '\0';
+            if (std::strncmp(rx, kHbPongPrefix, std::strlen(kHbPongPrefix)) == 0) {
+                last_pong_ms_ = esp_log_timestamp();
+                last_hb_rtt_ms_ = static_cast<int32_t>(last_pong_ms_ - t0);
+                hb_seen_ = true;
+            }
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(kHeartbeatIntervalMs));
     }
 }
 
@@ -1878,20 +2018,32 @@ void UartTerminalApp::update_status_label(bool force)
     }
     last_status_update_ms_ = now;
 
-    // Строка состояния UART (порт/пин/скорость) перенесена в "I/O Settings".
-    // Здесь — счётчик строк и компактный индикатор TCP (если включён).
-    char text[80] = {};
-    const netcfg::TcpState ts = netcfg::tcp_state();
-    if (ts == netcfg::TcpState::Disabled) {
-        std::snprintf(text, sizeof(text), "lines: %u",
-                      static_cast<unsigned>(virtual_line_count()));
-    } else {
-        const char *mark = (ts == netcfg::TcpState::Connected) ? "TCP\xE2\x97\x8F"   // ●
-                                                               : "TCP\xE2\x97\x8B";  // ○
-        std::snprintf(text, sizeof(text), "lines: %u  %s",
-                      static_cast<unsigned>(virtual_line_count()), mark);
-    }
+    // Счётчик строк; состояние подключения показывает кружок-индикатор рядом.
+    char text[48] = {};
+    std::snprintf(text, sizeof(text), "lines: %u",
+                  static_cast<unsigned>(virtual_line_count()));
     lv_label_set_text(status_label_, text);
+
+    update_net_indicator();
+}
+
+// Цвет кружка-индикатора по состоянию TCP-подключения:
+//  зелёный — подключено, жёлтый — подключение/ожидание, красный — ошибка.
+void UartTerminalApp::update_net_indicator(void)
+{
+    if (net_dot_ == nullptr) {
+        return;
+    }
+    uint32_t color;
+    switch (netcfg::tcp_state()) {
+    case netcfg::TcpState::Connected:  color = 0x22C55E; break;  // зелёный
+    case netcfg::TcpState::Connecting:
+    case netcfg::TcpState::Idle:       color = 0xF59E0B; break;  // жёлтый
+    case netcfg::TcpState::Error:      color = 0xEF4444; break;  // красный
+    case netcfg::TcpState::Disabled:
+    default:                           color = 0x555B66; break;  // серый (выкл)
+    }
+    lv_obj_set_style_bg_color(net_dot_, lv_color_hex(color), 0);
 }
 
 void UartTerminalApp::update_follow_button(void)

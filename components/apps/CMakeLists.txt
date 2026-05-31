@@ -21,11 +21,16 @@ if(CONFIG_JC4880_APP_UART_TERMINAL)
     jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/terminal)
 endif()
 
+if(CONFIG_JC4880_APP_UART_SETTINGS)
+    jc4880_append_app_sources(APPS_SRCS ${APPS_DIR}/uart_setting)
+endif()
+
 idf_component_register(
     SRCS ${APPS_SRCS}
     INCLUDE_DIRS ${APPS_DIR}
                  ${APPS_DIR}/setting
                  ${APPS_DIR}/terminal
+                 ${APPS_DIR}/uart_setting
                  ${PROJECT_DIR}/main
         
     REQUIRES lvgl__lvgl

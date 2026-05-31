@@ -36,6 +36,9 @@
 #if CONFIG_JC4880_APP_UART_TERMINAL
 #include "TerminalApp.hpp"
 #endif
+#if CONFIG_JC4880_APP_UART_SETTINGS
+#include "UartSetting.hpp"
+#endif
 
 #include "esp_hosted.h"
 
@@ -255,12 +258,23 @@ static bool start_lite_launcher(void)
 #if CONFIG_JC4880_APP_UART_TERMINAL
     static UartTerminalApp terminal;
 #endif
+#if CONFIG_JC4880_APP_UART_SETTINGS
+    static UartSettingApp uart_settings;
+#endif
     static AppSettings settings;
 
 #if CONFIG_JC4880_APP_UART_TERMINAL
     if (!launcher.add_app(&terminal))
     {
         ESP_LOGE(TAG, "Register UART Terminal failed");
+        return false;
+    }
+#endif
+
+#if CONFIG_JC4880_APP_UART_SETTINGS
+    if (!launcher.add_app(&uart_settings))
+    {
+        ESP_LOGE(TAG, "Register UART Settings failed");
         return false;
     }
 #endif

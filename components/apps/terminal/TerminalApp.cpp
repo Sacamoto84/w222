@@ -16,22 +16,6 @@
 #include "src/indev/lv_indev_private.h"
 #include "src/indev/lv_indev_gesture_private.h"
 
-#ifndef CONFIG_JC4880_TERMINAL_UART_PORT
-#define CONFIG_JC4880_TERMINAL_UART_PORT 1
-#endif
-
-#ifndef CONFIG_JC4880_TERMINAL_UART_RX_PIN
-#define CONFIG_JC4880_TERMINAL_UART_RX_PIN 35
-#endif
-
-#ifndef CONFIG_JC4880_TERMINAL_UART_TX_PIN
-#define CONFIG_JC4880_TERMINAL_UART_TX_PIN -1
-#endif
-
-#ifndef CONFIG_JC4880_TERMINAL_UART_BAUD_RATE
-#define CONFIG_JC4880_TERMINAL_UART_BAUD_RATE 115200
-#endif
-
 #ifndef CONFIG_JC4880_TERMINAL_MAX_LINES
 #define CONFIG_JC4880_TERMINAL_MAX_LINES 5000
 #endif
@@ -81,24 +65,33 @@ static lv_obj_t *create_toolbar_button(lv_obj_t *parent, const char *symbol)
     return button;
 }
 
-static int configured_uart_port(void)
+// Узкая кнопка-переключатель канала ("All" / "0".."3").
+static lv_obj_t *create_channel_button(lv_obj_t *parent, const char *text)
 {
-    return CONFIG_JC4880_TERMINAL_UART_PORT;
+    lv_obj_t *button = lv_button_create(parent);
+    lv_obj_set_size(button, 44, 42);
+    lv_obj_set_style_radius(button, 8, 0);
+    lv_obj_set_style_border_width(button, 0, 0);
+    lv_obj_set_style_bg_color(button, lv_color_hex(kButtonBg), 0);
+    lv_obj_set_style_bg_opa(button, LV_OPA_COVER, 0);
+    lv_obj_set_style_bg_color(button, lv_color_hex(0x364253), LV_STATE_PRESSED);
+
+    lv_obj_t *label = lv_label_create(button);
+    lv_label_set_text(label, text);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_18, 0);
+    lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_center(label);
+    return button;
 }
 
-static int configured_rx_pin(void)
+static uart_parity_t to_uart_parity(uartcfg::Parity parity)
 {
-    return CONFIG_JC4880_TERMINAL_UART_RX_PIN;
-}
-
-static int configured_tx_pin(void)
-{
-    return CONFIG_JC4880_TERMINAL_UART_TX_PIN;
-}
-
-static int configured_baud_rate(void)
-{
-    return CONFIG_JC4880_TERMINAL_UART_BAUD_RATE;
+    switch (parity) {
+    case uartcfg::Parity::Even: return UART_PARITY_EVEN;
+    case uartcfg::Parity::Odd:  return UART_PARITY_ODD;
+    case uartcfg::Parity::None:
+    default:                    return UART_PARITY_DISABLE;
+    }
 }
 
 static int clamp_positive(int value, int fallback)
@@ -162,18 +155,29 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_style_bg_opa(toolbar, LV_OPA_COVER, 0);
     lv_obj_set_style_pad_left(toolbar, 16, 0);
     lv_obj_set_style_pad_right(toolbar, 16, 0);
-    lv_obj_set_style_pad_column(toolbar, 16, 0);
+    lv_obj_set_style_pad_column(toolbar, 12, 0);
     lv_obj_set_flex_flow(toolbar, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(toolbar, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    // Кнопок больше, чем влезает по ширине — делаем тулбар прокручиваемым по
+    // горизонтали (без вертикальной прокрутки и без инерции).
+    lv_obj_set_scroll_dir(toolbar, LV_DIR_HOR);
+    lv_obj_set_scrollbar_mode(toolbar, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_add_flag(toolbar, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_clear_flag(toolbar, LV_OBJ_FLAG_SCROLL_MOMENTUM);
 
     lv_obj_t *back_button = create_toolbar_button(toolbar, LV_SYMBOL_LEFT);
     lv_obj_add_event_cb(back_button, back_event_cb, LV_EVENT_CLICKED, this);
 
-    status_label_ = lv_label_create(toolbar);
-    lv_obj_set_flex_grow(status_label_, 1);
-    lv_label_set_long_mode(status_label_, LV_LABEL_LONG_DOT);
-    lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_18, 0);
-    lv_obj_set_style_text_color(status_label_, lv_color_hex(0xAFC2D2), 0);
+    // Переключатель каналов: All / 0 / 1 / 2 / 3. Канал кодируется в user_data
+    // кнопки (All = -1). Активный канал подсвечивается в update_channel_buttons().
+    static const char *kChannelLabels[5] = {"All", "0", "1", "2", "3"};
+    for (int i = 0; i < 5; ++i) {
+        lv_obj_t *button = create_channel_button(toolbar, kChannelLabels[i]);
+        const int channel = (i == 0) ? -1 : (i - 1);
+        lv_obj_set_user_data(button, reinterpret_cast<void *>(static_cast<intptr_t>(channel)));
+        lv_obj_add_event_cb(button, channel_event_cb, LV_EVENT_CLICKED, this);
+        channel_buttons_[i] = button;
+    }
 
     lv_obj_t *demo_button = create_toolbar_button(toolbar, LV_SYMBOL_TINT);
     lv_obj_add_event_cb(demo_button, demo_event_cb, LV_EVENT_CLICKED, this);
@@ -183,6 +187,13 @@ bool UartTerminalApp::open(lv_obj_t *parent)
 
     lv_obj_t *clear_button = create_toolbar_button(toolbar, LV_SYMBOL_TRASH);
     lv_obj_add_event_cb(clear_button, clear_event_cb, LV_EVENT_CLICKED, this);
+
+    // Счётчик полученных строк. Без flex_grow (иначе ломает горизонтальный
+    // скролл тулбара) — занимает ширину по содержимому в конце ряда.
+    status_label_ = lv_label_create(toolbar);
+    lv_label_set_long_mode(status_label_, LV_LABEL_LONG_CLIP);
+    lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_18, 0);
+    lv_obj_set_style_text_color(status_label_, lv_color_hex(0xAFC2D2), 0);
 
     viewport_ = lv_obj_create(root_);
     make_plain_container(viewport_);
@@ -252,6 +263,7 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     update_content_height();
     update_status_label(true);
     update_follow_button();
+    update_channel_buttons();
     scroll_to_bottom();
     refresh_visible_rows();
 
@@ -284,6 +296,9 @@ void UartTerminalApp::close(void)
     root_ = nullptr;
     status_label_ = nullptr;
     follow_button_ = nullptr;
+    for (lv_obj_t *&btn : channel_buttons_) {
+        btn = nullptr;
+    }
     viewport_ = nullptr;
     spacer_ = nullptr;
 }
@@ -294,6 +309,9 @@ bool UartTerminalApp::init_uart(void)
         return true;
     }
 
+    // Конфигурация берётся из NVS (или значений по умолчанию из Kconfig).
+    uart_cfg_ = uartcfg::load();
+
     if (rx_stream_ == nullptr) {
         rx_stream_ = xStreamBufferCreate(CONFIG_JC4880_TERMINAL_STREAM_BUFFER_SIZE, 1);
         if (rx_stream_ == nullptr) {
@@ -303,44 +321,42 @@ bool UartTerminalApp::init_uart(void)
         }
     }
 
-    const int rx_pin = configured_rx_pin();
-    if (rx_pin < 0) {
+    if (uart_cfg_.rx_pin < 0) {
         std::snprintf(uart_status_, sizeof(uart_status_), "UART: RX pin is not configured");
         ESP_LOGW(TAG, "%s", uart_status_);
         return false;
     }
 
-    const uart_port_t port = static_cast<uart_port_t>(configured_uart_port());
+    const uart_port_t port = static_cast<uart_port_t>(uart_cfg_.port);
     uart_config_t uart_config = {};
-    uart_config.baud_rate = configured_baud_rate();
+    uart_config.baud_rate = uart_cfg_.baud;
     uart_config.data_bits = UART_DATA_8_BITS;
-    uart_config.parity = UART_PARITY_DISABLE;
+    uart_config.parity = to_uart_parity(uart_cfg_.parity);
     uart_config.stop_bits = UART_STOP_BITS_1;
     uart_config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
     uart_config.source_clk = UART_SCLK_DEFAULT;
 
     esp_err_t err = uart_driver_install(port, 4096, 0, 0, nullptr, 0);
     if ((err != ESP_OK) && (err != ESP_ERR_INVALID_STATE)) {
-        std::snprintf(uart_status_, sizeof(uart_status_), "UART%d driver: %s", configured_uart_port(), esp_err_to_name(err));
+        std::snprintf(uart_status_, sizeof(uart_status_), "UART%d driver: %s", uart_cfg_.port, esp_err_to_name(err));
         ESP_LOGE(TAG, "%s", uart_status_);
         return false;
     }
 
     err = uart_param_config(port, &uart_config);
     if (err != ESP_OK) {
-        std::snprintf(uart_status_, sizeof(uart_status_), "UART%d config: %s", configured_uart_port(), esp_err_to_name(err));
+        std::snprintf(uart_status_, sizeof(uart_status_), "UART%d config: %s", uart_cfg_.port, esp_err_to_name(err));
         ESP_LOGE(TAG, "%s", uart_status_);
         return false;
     }
 
-    const int tx_pin = configured_tx_pin();
     err = uart_set_pin(port,
-                       tx_pin >= 0 ? tx_pin : UART_PIN_NO_CHANGE,
-                       rx_pin >= 0 ? rx_pin : UART_PIN_NO_CHANGE,
+                       uart_cfg_.tx_pin >= 0 ? uart_cfg_.tx_pin : UART_PIN_NO_CHANGE,
+                       uart_cfg_.rx_pin >= 0 ? uart_cfg_.rx_pin : UART_PIN_NO_CHANGE,
                        UART_PIN_NO_CHANGE,
                        UART_PIN_NO_CHANGE);
     if (err != ESP_OK) {
-        std::snprintf(uart_status_, sizeof(uart_status_), "UART%d pins: %s", configured_uart_port(), esp_err_to_name(err));
+        std::snprintf(uart_status_, sizeof(uart_status_), "UART%d pins: %s", uart_cfg_.port, esp_err_to_name(err));
         ESP_LOGE(TAG, "%s", uart_status_);
         return false;
     }
@@ -348,7 +364,7 @@ bool UartTerminalApp::init_uart(void)
     uart_flush_input(port);
     uart_installed_ = true;
     std::snprintf(uart_status_, sizeof(uart_status_), "UART%d RX GPIO%d @ %d",
-                  configured_uart_port(), rx_pin, configured_baud_rate());
+                  uart_cfg_.port, uart_cfg_.rx_pin, uart_cfg_.baud);
 
     if (!uart_task_started_) {
         BaseType_t task_ret = xTaskCreatePinnedToCore(uart_task_entry,
@@ -359,7 +375,7 @@ bool UartTerminalApp::init_uart(void)
                                                       &uart_task_,
                                                       1);
         if (task_ret != pdPASS) {
-            std::snprintf(uart_status_, sizeof(uart_status_), "UART%d task: no memory", configured_uart_port());
+            std::snprintf(uart_status_, sizeof(uart_status_), "UART%d task: no memory", uart_cfg_.port);
             ESP_LOGE(TAG, "%s", uart_status_);
             return false;
         }
@@ -368,6 +384,64 @@ bool UartTerminalApp::init_uart(void)
 
     ESP_LOGI(TAG, "%s", uart_status_);
     return true;
+}
+
+// Применяет изменённую (через приложение "Настройки UART") конфигурацию к живому
+// драйверу. Вызывается ТОЛЬКО из uart_task(), поэтому безопасно трогает драйвер,
+// который эта же задача читает в uart_read_bytes.
+void UartTerminalApp::reconfigure_uart(void)
+{
+    const uartcfg::Config old_cfg = uart_cfg_;
+    const uartcfg::Config cfg = uartcfg::load();
+    uart_cfg_ = cfg;
+
+    // Смена номера порта: переустанавливаем драйвер на новый контроллер.
+    if (uart_installed_ && (cfg.port != old_cfg.port)) {
+        uart_driver_delete(static_cast<uart_port_t>(old_cfg.port));
+        uart_installed_ = false;
+    }
+
+    const uart_port_t port = static_cast<uart_port_t>(cfg.port);
+
+    if (cfg.rx_pin < 0) {
+        if (uart_installed_) {
+            uart_driver_delete(port);
+            uart_installed_ = false;
+        }
+        std::snprintf(uart_status_, sizeof(uart_status_), "UART: RX pin is not configured");
+        ESP_LOGW(TAG, "%s", uart_status_);
+        return;
+    }
+
+    uart_config_t uart_config = {};
+    uart_config.baud_rate = cfg.baud;
+    uart_config.data_bits = UART_DATA_8_BITS;
+    uart_config.parity = to_uart_parity(cfg.parity);
+    uart_config.stop_bits = UART_STOP_BITS_1;
+    uart_config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
+    uart_config.source_clk = UART_SCLK_DEFAULT;
+
+    if (!uart_installed_) {
+        esp_err_t err = uart_driver_install(port, 4096, 0, 0, nullptr, 0);
+        if ((err != ESP_OK) && (err != ESP_ERR_INVALID_STATE)) {
+            std::snprintf(uart_status_, sizeof(uart_status_), "UART%d driver: %s", cfg.port, esp_err_to_name(err));
+            ESP_LOGE(TAG, "%s", uart_status_);
+            return;
+        }
+        uart_installed_ = true;
+    }
+
+    uart_param_config(port, &uart_config);
+    uart_set_pin(port,
+                 cfg.tx_pin >= 0 ? cfg.tx_pin : UART_PIN_NO_CHANGE,
+                 cfg.rx_pin >= 0 ? cfg.rx_pin : UART_PIN_NO_CHANGE,
+                 UART_PIN_NO_CHANGE,
+                 UART_PIN_NO_CHANGE);
+    uart_flush_input(port);
+
+    std::snprintf(uart_status_, sizeof(uart_status_), "UART%d RX GPIO%d @ %d",
+                  cfg.port, cfg.rx_pin, cfg.baud);
+    ESP_LOGI(TAG, "reconfigured: %s", uart_status_);
 }
 
 void UartTerminalApp::uart_task_entry(void *arg)
@@ -382,9 +456,20 @@ void UartTerminalApp::uart_task_entry(void *arg)
 void UartTerminalApp::uart_task(void)
 {
     uint8_t buffer[kReadChunkSize];
-    const uart_port_t port = static_cast<uart_port_t>(configured_uart_port());
 
     for (;;) {
+        // Применяем изменения конфигурации, сделанные в приложении "Настройки
+        // UART". Делаем это в своей задаче, чтобы не было гонки с драйвером.
+        if (uartcfg::consume_dirty()) {
+            reconfigure_uart();
+        }
+
+        if (!uart_installed_) {
+            vTaskDelay(pdMS_TO_TICKS(100));
+            continue;
+        }
+
+        const uart_port_t port = static_cast<uart_port_t>(uart_cfg_.port);
         const int read_len = uart_read_bytes(port, buffer, sizeof(buffer), pdMS_TO_TICKS(50));
         if (read_len <= 0) {
             continue;
@@ -723,6 +808,8 @@ void UartTerminalApp::finish_line(void)
         return;
     }
 
+    // Транспортный префикс @N задаёт канал и удаляется из видимого текста.
+    current_line_.channel = extract_text_channel(current_line_);
     current_line_.sequence = next_sequence_++;
     push_committed_line(std::move(current_line_));
     current_line_ = TerminalLine{};
@@ -742,6 +829,7 @@ void UartTerminalApp::add_timber_widget(const timber::WidgetCommand &cmd)
     TerminalLine line;
     line.is_timber = true;
     line.timber_cmd = cmd;
+    line.channel = static_cast<int8_t>(cmd.channel);
     line.row_span = std::max(1, timber::measureWidgetRows(cmd, line_height_));
     line.sequence = next_sequence_++;
     push_committed_line(std::move(line));
@@ -1484,11 +1572,13 @@ void UartTerminalApp::update_status_label(bool force)
     }
     last_status_update_ms_ = now;
 
-    char text[192] = {};
+    // Раньше тут выводилась строка состояния UART (порт/пин/скорость) — теперь
+    // она перенесена в приложение "Настройки UART". Оставляем только счётчик
+    // полученных строк.
+    char text[64] = {};
     std::snprintf(text,
                   sizeof(text),
-                  "%s  lines:%u",
-                  uart_status_,
+                  "lines: %u",
                   static_cast<unsigned>(virtual_line_count()));
     lv_label_set_text(status_label_, text);
 }
@@ -1502,6 +1592,99 @@ void UartTerminalApp::update_follow_button(void)
     lv_obj_set_style_bg_color(follow_button_,
                               lv_color_hex(auto_follow_ ? kButtonActiveBg : kButtonBg),
                               0);
+}
+
+int8_t UartTerminalApp::extract_text_channel(TerminalLine &line)
+{
+    // Префикс @N в самом начале строки (обычно одним раном без особого стиля).
+    if (line.runs.empty()) {
+        return 0;
+    }
+    std::string &head = line.runs.front().text;
+    if (head.empty() || head[0] != '@') {
+        return 0;
+    }
+
+    size_t p = 1;
+    int ch = 0;
+    bool any = false;
+    while ((p < head.size()) && (head[p] >= '0') && (head[p] <= '9')) {
+        ch = ch * 10 + (head[p] - '0');
+        ++p;
+        any = true;
+    }
+    // Префикс валиден только если за числом идёт пробел: "@3 ...".
+    if (!any || (p >= head.size()) || (head[p] != ' ')) {
+        return 0;
+    }
+
+    if (ch < 0) ch = 0;
+    if (ch > 3) ch = 3;
+
+    // Удаляем "@N " из видимого текста и корректируем счётчик ячеек строки.
+    const size_t consumed = p + 1;
+    head.erase(0, consumed);
+    if (line.cells >= consumed) {
+        line.cells -= consumed;
+    } else {
+        line.cells = 0;
+    }
+    return static_cast<int8_t>(ch);
+}
+
+void UartTerminalApp::set_active_channel(int channel)
+{
+    if (channel < -1) channel = -1;
+    if (channel > 3) channel = 3;
+    if (channel == active_channel_) {
+        return;
+    }
+    active_channel_ = channel;
+
+    // Высота видимого контента зависит от фильтра — пересобираем кэш рядов и
+    // сбрасываем курсор поиска.
+    recompute_committed_rows();
+
+    // Кэш отрисованных рядов больше не соответствует новой раскладке.
+    for (RowView &row : row_pool_) {
+        row.rendered_index = -1;
+        row.rendered_sequence = 0;
+    }
+
+    update_channel_buttons();
+    update_content_height();
+
+    // При смене канала прижимаемся к низу — показываем свежие строки канала.
+    auto_follow_ = true;
+    scroll_to_bottom();
+    refresh_visible_rows();
+    update_status_label(true);
+}
+
+void UartTerminalApp::update_channel_buttons(void)
+{
+    for (int i = 0; i < 5; ++i) {
+        lv_obj_t *button = channel_buttons_[i];
+        if (button == nullptr) {
+            continue;
+        }
+        const int channel = (i == 0) ? -1 : (i - 1);
+        const bool active = (channel == active_channel_);
+        lv_obj_set_style_bg_color(button,
+                                  lv_color_hex(active ? kButtonActiveBg : kButtonBg),
+                                  0);
+    }
+}
+
+void UartTerminalApp::channel_event_cb(lv_event_t *event)
+{
+    UartTerminalApp *app = static_cast<UartTerminalApp *>(lv_event_get_user_data(event));
+    if (app == nullptr) {
+        return;
+    }
+    lv_obj_t *button = static_cast<lv_obj_t *>(lv_event_get_target(event));
+    const int channel = static_cast<int>(reinterpret_cast<intptr_t>(lv_obj_get_user_data(button)));
+    app->set_active_channel(channel);
 }
 
 bool UartTerminalApp::same_style(const TextStyle &a, const TextStyle &b)

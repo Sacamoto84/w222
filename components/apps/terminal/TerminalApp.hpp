@@ -11,6 +11,7 @@
 #include "freertos/task.h"
 #include "lite_app.h"
 #include "lvgl.h"
+#include "uart_config.hpp"
 #include "widgets/WidgetParser.hpp"
 
 class UartTerminalApp : public LiteApp {
@@ -69,6 +70,10 @@ private:
         bool is_timber = false;
         timber::WidgetCommand timber_cmd;
         int row_span = 1;                // высота элемента в рядах (>=1)
+
+        // Канал строки (0..3) из транспортного префикса @N или ключа channel=
+        // у виджетов. Используется фильтром каналов в тулбаре.
+        int8_t channel = 0;
     };
 
     struct RowView {
@@ -94,6 +99,7 @@ private:
     };
 
     bool init_uart(void);
+    void reconfigure_uart(void);   // применить новую конфигурацию из NVS (в UART-задаче)
     void uart_task(void);
     void queue_uart_bytes(const char *data, size_t len);
     void inject_demo_uart_data(void);
@@ -124,8 +130,13 @@ private:
     // инкрементальный обход через локацию по курсору (locate_row).
     const TerminalLine *element_at_row(int32_t row, int32_t *start_row) const;
 
-    // Учёт высоты одного элемента в рядах.
-    static int32_t element_span(const TerminalLine &line) {
+    // Учёт высоты одного элемента в рядах с учётом активного фильтра каналов.
+    // Если элемент отфильтрован (его канал не совпадает с выбранным и фильтр не
+    // "All"), возвращает 0 — такой элемент пропускается при разметке и отрисовке.
+    int32_t element_span(const TerminalLine &line) const {
+        if ((active_channel_ >= 0) && (line.channel != active_channel_)) {
+            return 0;
+        }
         return line.is_timber ? (line.row_span > 1 ? line.row_span : 1) : 1;
     }
     // Пересобрать кэш суммарной высоты после массовых изменений lines_.
@@ -151,6 +162,13 @@ private:
     void update_status_label(bool force);
     void update_follow_button(void);
 
+    // Фильтр каналов: -1 = All (показывать всё), 0..3 = только этот канал.
+    void set_active_channel(int channel);
+    void update_channel_buttons(void);
+    // Считать префикс @N в начале готовой текстовой строки, выставить её канал
+    // и удалить префикс из видимого текста. Возвращает номер канала (0..3).
+    static int8_t extract_text_channel(TerminalLine &line);
+
     static bool same_style(const TextStyle &a, const TextStyle &b);
     static uint32_t xterm256_to_rgb(int index);
     static void poll_timer_cb(lv_timer_t *timer);
@@ -160,6 +178,7 @@ private:
     static void demo_event_cb(lv_event_t *event);
     static void clear_event_cb(lv_event_t *event);
     static void follow_event_cb(lv_event_t *event);
+    static void channel_event_cb(lv_event_t *event);
     static void back_event_cb(lv_event_t *event);
     static void uart_task_entry(void *arg);
 
@@ -172,6 +191,7 @@ private:
     TaskHandle_t uart_task_ = nullptr;
     StreamBufferHandle_t rx_stream_ = nullptr;
     char uart_status_[128] = {};
+    uartcfg::Config uart_cfg_ = uartcfg::defaults();
 
     volatile uint32_t received_bytes_ = 0;
     volatile uint32_t dropped_bytes_ = 0;
@@ -200,6 +220,8 @@ private:
     lv_obj_t *root_ = nullptr;
     lv_obj_t *status_label_ = nullptr;
     lv_obj_t *follow_button_ = nullptr;
+    lv_obj_t *channel_buttons_[5] = {};   // [0]=All, [1..4]=каналы 0..3
+    int active_channel_ = -1;             // -1 = All
     lv_obj_t *viewport_ = nullptr;
     lv_obj_t *spacer_ = nullptr;
     lv_timer_t *poll_timer_ = nullptr;

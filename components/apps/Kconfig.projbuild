@@ -102,6 +102,15 @@ menu "JC4880 Modular Configuration"
                 Main terminal viewer app. It receives a UART byte stream and renders
                 it as a scrollable xterm256-colored terminal log.
 
+        config JC4880_APP_UART_SETTINGS
+            bool "UART settings"
+            default y
+            depends on JC4880_APP_UART_TERMINAL
+            help
+                Screen to view and edit the terminal UART port configuration
+                (port, baud rate, parity, RX/TX pins). Settings are stored in NVS
+                and applied to the running UART terminal.
+
         config JC4880_APP_SETTINGS
             bool "Settings"
             default y

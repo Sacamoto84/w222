@@ -202,7 +202,8 @@ private:
     static constexpr int kGridCellPx = 20;
     static constexpr int kMaxTextZoomSpan = 3;       // 20/40/60px
     static constexpr int kOverscanCells = 8;         // запас тайлов сверху/снизу окна
-    static constexpr int kMaxRendersPerFrame = 4;    // лимит тяжёлых рендеров за кадр
+    static constexpr int kMaxRendersPerFrame = 4;    // лимит рендеров видимых тайлов за кадр
+    static constexpr int kPreloadPerFrame = 2;       // отдельный бюджет предзагрузки overscan за кадр
 
     bool uart_installed_ = false;
     bool uart_task_started_ = false;
@@ -245,6 +246,7 @@ private:
     lv_timer_t *poll_timer_ = nullptr;
     std::vector<ElementTile> tiles_;   // пул кэш-картинок элементов (PSRAM)
     bool tiles_dirty_ = false;         // остались нерендеренные тайлы → добор по кадрам
+    int32_t last_scroll_y_ = 0;        // прошлый scroll_y → направление для приоритета предзагрузки
     int text_zoom_span_ = 1;           // высота текстовой строки в ячейках (1..3 → 20/40/60px)
     bool auto_follow_ = true;
     bool demo_seeded_ = false;

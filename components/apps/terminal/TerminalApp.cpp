@@ -1381,8 +1381,12 @@ void UartTerminalApp::refresh_visible_elements(void)
         lv_obj_clear_flag(tile->canvas, LV_OBJ_FLAG_HIDDEN);
     }
 
-    // 4) Рендер с лимитом за кадр: сперва видимые, затем overscan. Остаток —
-    //    в следующих кадрах (флаг tiles_dirty_ добирается poll-таймером).
+    // Направление скролла → ведущий край предзагрузки (куда едем — то и грузим
+    // первым). При delta>=0 (вниз/стоим) ведущий край снизу.
+    const bool leading_below = (scroll_y - last_scroll_y_) >= 0;
+    last_scroll_y_ = scroll_y;
+
+    // 4a) Видимые тайлы — приоритет (анти-фриз: ≤ kMaxRendersPerFrame за кадр).
     int budget = kMaxRendersPerFrame;
     for (WinElem &w : win) {
         if (budget <= 0) {
@@ -1393,16 +1397,34 @@ void UartTerminalApp::refresh_visible_elements(void)
             --budget;
         }
     }
-    for (WinElem &w : win) {
-        if (budget <= 0) {
-            break;
-        }
-        if ((w.tile != nullptr) && !w.tile->rendered && !w.in_view) {
-            render_tile(*w.tile, *w.line);
-            --budget;
-        }
-    }
 
+    // 4b) Предзагрузка overscan в обе стороны. Бюджет = неиспользованный остаток
+    //     видимого бюджета + гарантированный минимум: в простое overscan
+    //     заполняется быстро, при активном скролле — минимум kPreloadPerFrame за
+    //     кадр (margin растёт даже когда видимые съели весь бюджет 4a).
+    //     Сначала ведущий край (по направлению скролла), затем обратный.
+    int preload = (budget > 0 ? budget : 0) + kPreloadPerFrame;
+    auto preload_band = [&](bool below) {
+        for (WinElem &w : win) {
+            if (preload <= 0) {
+                break;
+            }
+            if ((w.tile == nullptr) || w.tile->rendered || w.in_view) {
+                continue;
+            }
+            const bool is_below = (w.start_row > last_row);
+            if (is_below != below) {
+                continue;
+            }
+            render_tile(*w.tile, *w.line);
+            --preload;
+        }
+    };
+    preload_band(leading_below);
+    preload_band(!leading_below);
+
+    // Если что-то ещё не отрисовано (видимое или overscan) — добираем в
+    // следующих кадрах (флаг подхватывает poll-таймер).
     bool remaining = false;
     for (const WinElem &w : win) {
         if ((w.tile != nullptr) && !w.tile->rendered) {

@@ -173,6 +173,21 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_add_flag(toolbar, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(toolbar, LV_OBJ_FLAG_SCROLL_MOMENTUM);
 
+    // Светодиод состояния связи — первым в ряду (зелёный/жёлтый/красный).
+    net_dot_ = lv_obj_create(toolbar);
+    lv_obj_remove_style_all(net_dot_);
+    lv_obj_set_size(net_dot_, 16, 16);
+    lv_obj_set_style_radius(net_dot_, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_opa(net_dot_, LV_OPA_COVER, 0);
+    lv_obj_set_style_bg_color(net_dot_, lv_color_hex(0x555B66), 0);
+    lv_obj_clear_flag(net_dot_, LV_OBJ_FLAG_CLICKABLE);
+
+    // Сразу за светодиодом — счётчик строк (только число).
+    status_label_ = lv_label_create(toolbar);
+    lv_label_set_long_mode(status_label_, LV_LABEL_LONG_CLIP);
+    lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_18, 0);
+    lv_obj_set_style_text_color(status_label_, lv_color_hex(0xAFC2D2), 0);
+
     lv_obj_t *back_button = create_toolbar_button(toolbar, LV_SYMBOL_LEFT);
     lv_obj_add_event_cb(back_button, back_event_cb, LV_EVENT_CLICKED, this);
 
@@ -195,22 +210,6 @@ bool UartTerminalApp::open(lv_obj_t *parent)
 
     lv_obj_t *clear_button = create_toolbar_button(toolbar, LV_SYMBOL_TRASH);
     lv_obj_add_event_cb(clear_button, clear_event_cb, LV_EVENT_CLICKED, this);
-
-    // Кружок-индикатор состояния подключения к серверу (зелёный/жёлтый/красный).
-    net_dot_ = lv_obj_create(toolbar);
-    lv_obj_remove_style_all(net_dot_);
-    lv_obj_set_size(net_dot_, 16, 16);
-    lv_obj_set_style_radius(net_dot_, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_bg_opa(net_dot_, LV_OPA_COVER, 0);
-    lv_obj_set_style_bg_color(net_dot_, lv_color_hex(0x555B66), 0);
-    lv_obj_clear_flag(net_dot_, LV_OBJ_FLAG_CLICKABLE);
-
-    // Счётчик полученных строк. Без flex_grow (иначе ломает горизонтальный
-    // скролл тулбара) — занимает ширину по содержимому в конце ряда.
-    status_label_ = lv_label_create(toolbar);
-    lv_label_set_long_mode(status_label_, LV_LABEL_LONG_CLIP);
-    lv_obj_set_style_text_font(status_label_, &lv_font_montserrat_18, 0);
-    lv_obj_set_style_text_color(status_label_, lv_color_hex(0xAFC2D2), 0);
 
     viewport_ = lv_obj_create(root_);
     make_plain_container(viewport_);
@@ -2018,9 +2017,9 @@ void UartTerminalApp::update_status_label(bool force)
     }
     last_status_update_ms_ = now;
 
-    // Счётчик строк; состояние подключения показывает кружок-индикатор рядом.
-    char text[48] = {};
-    std::snprintf(text, sizeof(text), "lines: %u",
+    // Счётчик строк — только число (состояние связи показывает светодиод слева).
+    char text[24] = {};
+    std::snprintf(text, sizeof(text), "%u",
                   static_cast<unsigned>(virtual_line_count()));
     lv_label_set_text(status_label_, text);
 

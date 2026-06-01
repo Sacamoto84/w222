@@ -143,7 +143,9 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t e
     }
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
     {
-        ESP_LOGW(TAG, "WiFi disconnected, reconnecting to %s", s_wifi_ssid);
+        wifi_event_sta_disconnected_t *disc = (wifi_event_sta_disconnected_t *)event_data;
+        ESP_LOGW(TAG, "WiFi disconnected (reason=%d), reconnecting to %s",
+                 disc ? disc->reason : -1, s_wifi_ssid);
         update_ip_label_text("WiFi: reconnecting...");
         esp_wifi_connect();
     }

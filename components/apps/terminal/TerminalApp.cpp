@@ -159,27 +159,44 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     lv_obj_set_style_bg_color(parent, lv_color_hex(kDefaultBg), 0);
     lv_obj_set_style_bg_opa(parent, LV_OPA_COVER, 0);
 
+    // Ориентация (фиксируется на буте): ландшафт = ширина больше высоты.
+    // Портрет → тулбар сверху горизонтально; ландшафт → тулбар справа вертикально,
+    // чтобы не занимать высоту экрана.
+    lv_display_t *disp = lv_display_get_default();
+    const bool landscape = (disp != nullptr) &&
+        (lv_display_get_horizontal_resolution(disp) > lv_display_get_vertical_resolution(disp));
+
     root_ = lv_obj_create(parent);
     make_plain_container(root_);
     lv_obj_set_size(root_, lv_pct(100), lv_pct(100));
     lv_obj_set_style_bg_color(root_, lv_color_hex(kDefaultBg), 0);
     lv_obj_set_style_bg_opa(root_, LV_OPA_COVER, 0);
-    lv_obj_set_flex_flow(root_, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_flow(root_, landscape ? LV_FLEX_FLOW_ROW : LV_FLEX_FLOW_COLUMN);
 
     lv_obj_t *toolbar = lv_obj_create(root_);
     make_plain_container(toolbar);
-    lv_obj_set_width(toolbar, lv_pct(100));
-    lv_obj_set_height(toolbar, 56);   // под кнопки высотой 42 (раньше 84 под кнопки 64)
     lv_obj_set_style_bg_color(toolbar, lv_color_hex(kToolbarBg), 0);
     lv_obj_set_style_bg_opa(toolbar, LV_OPA_COVER, 0);
-    lv_obj_set_style_pad_left(toolbar, 16, 0);
-    lv_obj_set_style_pad_right(toolbar, 16, 0);
-    lv_obj_set_style_pad_column(toolbar, 12, 0);
-    lv_obj_set_flex_flow(toolbar, LV_FLEX_FLOW_ROW);
+    if (landscape) {
+        // Вертикальная полоса справа, прокрутка по вертикали.
+        lv_obj_set_width(toolbar, 56);
+        lv_obj_set_height(toolbar, lv_pct(100));
+        lv_obj_set_style_pad_top(toolbar, 12, 0);
+        lv_obj_set_style_pad_bottom(toolbar, 12, 0);
+        lv_obj_set_style_pad_row(toolbar, 10, 0);
+        lv_obj_set_flex_flow(toolbar, LV_FLEX_FLOW_COLUMN);
+        lv_obj_set_scroll_dir(toolbar, LV_DIR_VER);
+    } else {
+        // Горизонтальная полоса сверху, прокрутка по горизонтали.
+        lv_obj_set_width(toolbar, lv_pct(100));
+        lv_obj_set_height(toolbar, 56);
+        lv_obj_set_style_pad_left(toolbar, 16, 0);
+        lv_obj_set_style_pad_right(toolbar, 16, 0);
+        lv_obj_set_style_pad_column(toolbar, 12, 0);
+        lv_obj_set_flex_flow(toolbar, LV_FLEX_FLOW_ROW);
+        lv_obj_set_scroll_dir(toolbar, LV_DIR_HOR);
+    }
     lv_obj_set_flex_align(toolbar, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    // Кнопок больше, чем влезает по ширине — делаем тулбар прокручиваемым по
-    // горизонтали (без вертикальной прокрутки и без инерции).
-    lv_obj_set_scroll_dir(toolbar, LV_DIR_HOR);
     lv_obj_set_scrollbar_mode(toolbar, LV_SCROLLBAR_MODE_OFF);
     lv_obj_add_flag(toolbar, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(toolbar, LV_OBJ_FLAG_SCROLL_MOMENTUM);
@@ -224,7 +241,11 @@ bool UartTerminalApp::open(lv_obj_t *parent)
 
     viewport_ = lv_obj_create(root_);
     make_plain_container(viewport_);
-    lv_obj_set_width(viewport_, lv_pct(100));
+    if (landscape) {
+        lv_obj_set_height(viewport_, lv_pct(100));   // тянется по ширине (flex_grow)
+    } else {
+        lv_obj_set_width(viewport_, lv_pct(100));    // тянется по высоте (flex_grow)
+    }
     lv_obj_set_flex_grow(viewport_, 1);
     lv_obj_set_style_bg_color(viewport_, lv_color_hex(kDefaultBg), 0);
     lv_obj_set_style_bg_opa(viewport_, LV_OPA_COVER, 0);
@@ -243,6 +264,12 @@ bool UartTerminalApp::open(lv_obj_t *parent)
     make_plain_container(spacer_);
     lv_obj_set_width(spacer_, 1);
     lv_obj_set_height(spacer_, 1);
+
+    // В ландшафте viewport должен быть слева, тулбар — справа. Тулбар создан
+    // первым, поэтому переставляем viewport в начало flex-ряда.
+    if (landscape) {
+        lv_obj_move_to_index(viewport_, 0);
+    }
 
     lv_obj_update_layout(root_);
 
@@ -266,13 +293,19 @@ bool UartTerminalApp::open(lv_obj_t *parent)
         indev = lv_indev_get_next(indev);
     }
 
-    // Высота viewport должна быть кратна базовой ячейке сетки (kGridCellPx):
-    // лишние пиксели снизу отдаём toolbar, чтобы низ списка попадал ровно на сетку.
+    // Высота viewport должна быть кратна базовой ячейке сетки (kGridCellPx).
     const int32_t viewport_h = lv_obj_get_height(viewport_);
     const int32_t remainder = viewport_h % kGridCellPx;
     if (remainder != 0) {
-        const int32_t toolbar_h = lv_obj_get_height(toolbar);
-        lv_obj_set_height(toolbar, toolbar_h + remainder);   // забрать остаток у viewport
+        if (landscape) {
+            // Тулбар сбоку — забрать остаток нельзя, просто чуть укорачиваем
+            // viewport снизу (≤4px), чтобы низ списка попадал ровно на сетку.
+            lv_obj_set_height(viewport_, viewport_h - remainder);
+        } else {
+            // Портрет: лишние пиксели снизу отдаём верхнему toolbar.
+            const int32_t toolbar_h = lv_obj_get_height(toolbar);
+            lv_obj_set_height(toolbar, toolbar_h + remainder);
+        }
         lv_obj_update_layout(root_);
     }
 

@@ -331,23 +331,24 @@ extern "C" void app_main(void)
         }
     }
 
-    // Применяем сохранённую ориентацию экрана ДО старта дисплея: BSP так
-    // корректно настраивает и панель, и тачскрин (рантайм-поворот тач не
-    // разворачивает). Смена ориентации в настройках применяется перезагрузкой.
+    // Сохранённая ориентация экрана (0=портрет,1=ландшафт,2=портрет180,3=ландшафт270).
+    // Поворачиваем ТОЛЬКО изображение через LVGL (lv_display_set_rotation ниже,
+    // sw_rotate/PPA). Тач оставляем дефолтным: его координаты идут из esp_lcd_touch
+    // как есть, а bsp_display_set_startup_rotation рассчитывает swap/mirror под
+    // АППАРАТНЫЙ поворот панели — для софтового LVGL-поворота это даёт инверсию.
+    int32_t saved_rotation = 0;
     {
-        int32_t rot = 0;
         nvs_handle_t rot_nvs = 0;
         if (nvs_open("display_cfg", NVS_READONLY, &rot_nvs) == ESP_OK)
         {
-            nvs_get_i32(rot_nvs, "rotation", &rot);
+            nvs_get_i32(rot_nvs, "rotation", &saved_rotation);
             nvs_close(rot_nvs);
         }
-        if (rot < 0 || rot > 3)
+        if (saved_rotation < 0 || saved_rotation > 3)
         {
-            rot = 0;
+            saved_rotation = 0;
         }
-        bsp_display_set_startup_rotation(static_cast<lv_disp_rotation_t>(rot));
-        ESP_LOGI(TAG, "Display startup rotation: %d (0=portrait,1=landscape,2=portrait180,3=landscape270)", (int)rot);
+        ESP_LOGI(TAG, "Display rotation: %d", (int)saved_rotation);
     }
 
     bsp_display_cfg_t cfg = {
@@ -378,6 +379,11 @@ extern "C" void app_main(void)
         ESP_LOGE(TAG, "LVGL lock timeout");
         return;
     }
+
+    // Поворот ИЗОБРАЖЕНИЯ средствами LVGL (PPA/софт, т.к. sw_rotate=true).
+    // Тач не трогаем (дефолтные координаты esp_lcd_touch). Делаем до построения
+    // UI, чтобы лаунчер/приложения сразу строились в нужном разрешении.
+    lv_display_set_rotation(display, static_cast<lv_display_rotation_t>(saved_rotation));
 
     // show_startup_screen();
 

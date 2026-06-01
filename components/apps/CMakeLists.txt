@@ -43,7 +43,8 @@ idf_component_register(
                lwip
                nvs_flash
                heap
-               log)
+               log
+               espressif__esp32_p4_function_ev_board)
 
 target_compile_options(
     ${COMPONENT_LIB}

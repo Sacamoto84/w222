@@ -21,6 +21,8 @@ private:
     lv_obj_t *password_textarea_ = nullptr;
     lv_obj_t *status_label_ = nullptr;
     lv_obj_t *rotation_dropdown_ = nullptr;   // ориентация экрана (0/90/180/270)
+    lv_obj_t *brightness_slider_ = nullptr;   // ползунок яркости подсветки
+    lv_obj_t *brightness_label_ = nullptr;    // подпись «Brightness: N%»
     lv_obj_t *content_ = nullptr;             // скролл-контейнер (нужен для отступа под клавиатуру)
     lv_obj_t *keyboard_ = nullptr;            // экранная клавиатура для текстовых полей
     lv_timer_t *refresh_timer_ = nullptr;
@@ -32,6 +34,8 @@ private:
     static void connect_event_cb(lv_event_t *event);
     static void refresh_event_cb(lv_event_t *event);
     static void rotate_apply_event_cb(lv_event_t *event);   // сохранить ориентацию + перезагрузка
+    static void brightness_event_cb(lv_event_t *event);     // яркость «на лету» (без записи)
+    static void brightness_save_event_cb(lv_event_t *event); // сохранить яркость в NVS по кнопке
     static void textarea_event_cb(lv_event_t *event);       // показ клавиатуры по фокусу на поле
     static void keyboard_event_cb(lv_event_t *event);       // скрытие клавиатуры по Ok/Esc
 };

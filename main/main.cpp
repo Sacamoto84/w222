@@ -374,8 +374,21 @@ extern "C" void app_main(void)
     
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);
-    ESP_ERROR_CHECK(bsp_display_backlight_on());
-    ESP_ERROR_CHECK(bsp_display_brightness_set(40));
+
+    // Стартовая яркость берётся из NVS (display_cfg/brightness), задаётся ползунком
+    // в настройках. По умолчанию 40%, диапазон 5..100.
+    int32_t saved_brightness = 40;
+    {
+        nvs_handle_t bl_nvs = 0;
+        if (nvs_open("display_cfg", NVS_READONLY, &bl_nvs) == ESP_OK)
+        {
+            nvs_get_i32(bl_nvs, "brightness", &saved_brightness);
+            nvs_close(bl_nvs);
+        }
+        if (saved_brightness < 5) saved_brightness = 5;
+        if (saved_brightness > 100) saved_brightness = 100;
+    }
+    ESP_ERROR_CHECK(bsp_display_brightness_set(saved_brightness));
 
     ESP_LOGI(TAG, "Display initialized: %dx%d", BSP_LCD_H_RES, BSP_LCD_V_RES);
 

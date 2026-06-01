@@ -11,12 +11,20 @@
 #include "esp_wifi.h"
 #include "nvs.h"
 
+#include "bsp/esp-bsp.h"
+
 namespace {
 
 static const char *TAG = "settings";
 static constexpr const char *kWifiNvsNamespace = "wifi_cfg";
 static constexpr const char *kWifiNvsSsidKey = "ssid";
 static constexpr const char *kWifiNvsPasswordKey = "pass";
+
+static constexpr const char *kDisplayNvsNamespace = "display_cfg";
+static constexpr const char *kBrightnessNvsKey = "brightness";
+static constexpr int kBrightnessDefault = 40;
+static constexpr int kBrightnessMin = 5;
+static constexpr int kBrightnessMax = 100;
 
 static void style_screen(lv_obj_t *obj)
 {
@@ -177,6 +185,34 @@ static void save_wifi_credentials(const char *ssid, const char *password)
     nvs_close(handle);
 }
 
+static int load_saved_brightness(void)
+{
+    int32_t value = kBrightnessDefault;
+    nvs_handle_t handle = 0;
+    if (nvs_open(kDisplayNvsNamespace, NVS_READONLY, &handle) == ESP_OK) {
+        nvs_get_i32(handle, kBrightnessNvsKey, &value);
+        nvs_close(handle);
+    }
+    if (value < kBrightnessMin) {
+        value = kBrightnessMin;
+    }
+    if (value > kBrightnessMax) {
+        value = kBrightnessMax;
+    }
+    return static_cast<int>(value);
+}
+
+static void save_brightness(int value)
+{
+    nvs_handle_t handle = 0;
+    if (nvs_open(kDisplayNvsNamespace, NVS_READWRITE, &handle) != ESP_OK) {
+        return;
+    }
+    nvs_set_i32(handle, kBrightnessNvsKey, static_cast<int32_t>(value));
+    nvs_commit(handle);
+    nvs_close(handle);
+}
+
 } // namespace
 
 AppSettings::AppSettings()
@@ -281,6 +317,22 @@ bool AppSettings::open(lv_obj_t *parent)
     lv_obj_t *rotate_button = create_button(display_card, "Apply and reboot");
     lv_obj_add_event_cb(rotate_button, rotate_apply_event_cb, LV_EVENT_CLICKED, this);
 
+    // --- Brightness (applies live, saved to NVS) ---
+    const int brightness = load_saved_brightness();
+    brightness_label_ = create_label(display_card, "", &lv_font_montserrat_14, 0x96A2B3);
+    lv_label_set_text_fmt(brightness_label_, "Brightness: %d%%", brightness);
+
+    brightness_slider_ = lv_slider_create(display_card);
+    lv_obj_set_width(brightness_slider_, lv_pct(100));
+    lv_slider_set_range(brightness_slider_, kBrightnessMin, kBrightnessMax);
+    lv_slider_set_value(brightness_slider_, brightness, LV_ANIM_OFF);
+    // Ползунок только применяет яркость «на лету»; в NVS пишем по кнопке Save.
+    lv_obj_add_event_cb(brightness_slider_, brightness_event_cb, LV_EVENT_VALUE_CHANGED, this);
+
+    lv_obj_t *brightness_save_button = create_button(display_card, "Save brightness");
+    lv_obj_set_style_bg_color(brightness_save_button, lv_color_hex(0x3A4351), 0);
+    lv_obj_add_event_cb(brightness_save_button, brightness_save_event_cb, LV_EVENT_CLICKED, this);
+
     lv_obj_t *about_card = create_card(content, "System");
     const esp_app_desc_t *desc = esp_app_get_description();
     lv_display_t *disp = lv_display_get_default();
@@ -329,6 +381,8 @@ void AppSettings::close(void)
     password_textarea_ = nullptr;
     status_label_ = nullptr;
     rotation_dropdown_ = nullptr;
+    brightness_slider_ = nullptr;
+    brightness_label_ = nullptr;
     content_ = nullptr;
     keyboard_ = nullptr;
     refresh_timer_ = nullptr;
@@ -410,6 +464,37 @@ void AppSettings::refresh_event_cb(lv_event_t *event)
     AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
     if (app != nullptr) {
         app->refresh();
+    }
+}
+
+// Меняет яркость подсветки «на лету» по движению ползунка и сохраняет в NVS.
+void AppSettings::brightness_event_cb(lv_event_t *event)
+{
+    AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->brightness_slider_ == nullptr)) {
+        return;
+    }
+
+    const int value = static_cast<int>(lv_slider_get_value(app->brightness_slider_));
+    // Применяем яркость «на лету» во время перетаскивания (без записи в NVS).
+    bsp_display_brightness_set(value);
+    if (app->brightness_label_ != nullptr) {
+        lv_label_set_text_fmt(app->brightness_label_, "Brightness: %d%%", value);
+    }
+}
+
+// Сохраняет текущее значение ползунка яркости в NVS по нажатию кнопки.
+void AppSettings::brightness_save_event_cb(lv_event_t *event)
+{
+    AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->brightness_slider_ == nullptr)) {
+        return;
+    }
+
+    const int value = static_cast<int>(lv_slider_get_value(app->brightness_slider_));
+    save_brightness(value);
+    if (app->brightness_label_ != nullptr) {
+        lv_label_set_text_fmt(app->brightness_label_, "Brightness: %d%% (saved)", value);
     }
 }
 

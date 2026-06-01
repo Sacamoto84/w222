@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+#include <cstring>
 #include "nvs_flash.h"
 #include "nvs.h"
 #include "esp_log.h"
@@ -126,12 +127,14 @@ static void load_wifi_credentials_from_nvs(void)
     }
 
     size_t password_size = sizeof(s_wifi_password);
-    if (nvs_get_str(handle, kWifiNvsPasswordKey, s_wifi_password, &password_size) != ESP_OK)
+    if ((nvs_get_str(handle, kWifiNvsPasswordKey, s_wifi_password, &password_size) != ESP_OK) || (s_wifi_password[0] == '\0'))
     {
         snprintf(s_wifi_password, sizeof(s_wifi_password), "%s", WIFI_DEFAULT_PASSWORD);
     }
 
     nvs_close(handle);
+
+    ESP_LOGI(TAG, "WiFi credentials loaded: SSID=%s, password_len=%d", s_wifi_ssid, (int)strlen(s_wifi_password));
 }
 
 static void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)

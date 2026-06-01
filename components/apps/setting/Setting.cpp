@@ -96,6 +96,23 @@ static bool load_saved_wifi_ssid(char *ssid, size_t ssid_size)
     return (err == ESP_OK) && (ssid[0] != '\0');
 }
 
+static bool load_saved_wifi_password(char *password, size_t password_size)
+{
+    if ((password == nullptr) || (password_size == 0)) {
+        return false;
+    }
+
+    nvs_handle_t handle = 0;
+    if (nvs_open(kWifiNvsNamespace, NVS_READONLY, &handle) != ESP_OK) {
+        return false;
+    }
+
+    size_t size = password_size;
+    const esp_err_t err = nvs_get_str(handle, kWifiNvsPasswordKey, password, &size);
+    nvs_close(handle);
+    return (err == ESP_OK) && (password[0] != '\0');
+}
+
 static void get_wifi_status_text(char *buffer, size_t buffer_size)
 {
     if ((buffer == nullptr) || (buffer_size == 0)) {
@@ -194,6 +211,7 @@ bool AppSettings::open(lv_obj_t *parent)
     lv_obj_set_style_pad_row(content, 12, 0);
     lv_obj_set_flex_flow(content, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_scrollbar_mode(content, LV_SCROLLBAR_MODE_AUTO);
+    content_ = content;
 
     lv_obj_t *memory_card = create_card(content, "Memory");
     memory_label_ = create_label(memory_card, "Loading...", &lv_font_montserrat_16, 0xC8D1DC);
@@ -221,6 +239,11 @@ bool AppSettings::open(lv_obj_t *parent)
     style_textarea(password_textarea_);
     lv_textarea_set_one_line(password_textarea_, true);
     lv_textarea_set_password_mode(password_textarea_, true);
+
+    char saved_password[65] = {};
+    if (load_saved_wifi_password(saved_password, sizeof(saved_password))) {
+        lv_textarea_set_text(password_textarea_, saved_password);
+    }
 
     lv_obj_t *connect_button = create_button(wifi_card, "Connect and save");
     lv_obj_add_event_cb(connect_button, connect_event_cb, LV_EVENT_CLICKED, this);
@@ -272,6 +295,22 @@ bool AppSettings::open(lv_obj_t *parent)
                   hor, ver);
     create_label(about_card, about, &lv_font_montserrat_16, 0xC8D1DC);
 
+    // Экранная клавиатура поверх контента (скрыта; всплывает по тапу на поле).
+    // FLOATING + явная геометрия — чтобы оверлеить низ независимо от flex-потока
+    // родителя.
+    keyboard_ = lv_keyboard_create(parent);
+    lv_obj_add_flag(keyboard_, LV_OBJ_FLAG_FLOATING);
+    lv_obj_set_size(keyboard_, lv_pct(100), lv_pct(45));
+    lv_obj_align(keyboard_, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_add_flag(keyboard_, LV_OBJ_FLAG_HIDDEN);
+    lv_keyboard_set_textarea(keyboard_, nullptr);
+    lv_obj_add_event_cb(keyboard_, keyboard_event_cb, LV_EVENT_READY, this);
+    lv_obj_add_event_cb(keyboard_, keyboard_event_cb, LV_EVENT_CANCEL, this);
+
+    // Тап по полю ввода поднимает клавиатуру.
+    lv_obj_add_event_cb(ssid_textarea_, textarea_event_cb, LV_EVENT_CLICKED, this);
+    lv_obj_add_event_cb(password_textarea_, textarea_event_cb, LV_EVENT_CLICKED, this);
+
     refresh_timer_ = lv_timer_create(refresh_timer_cb, 1000, this);
     refresh();
 
@@ -290,6 +329,8 @@ void AppSettings::close(void)
     password_textarea_ = nullptr;
     status_label_ = nullptr;
     rotation_dropdown_ = nullptr;
+    content_ = nullptr;
+    keyboard_ = nullptr;
     refresh_timer_ = nullptr;
 }
 
@@ -369,6 +410,47 @@ void AppSettings::refresh_event_cb(lv_event_t *event)
     AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
     if (app != nullptr) {
         app->refresh();
+    }
+}
+
+// Показывает экранную клавиатуру при тапе/фокусе на текстовом поле и поднимает
+// само поле над клавиатурой (через отступ снизу + прокрутку).
+void AppSettings::textarea_event_cb(lv_event_t *event)
+{
+    AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->keyboard_ == nullptr)) {
+        return;
+    }
+
+    lv_obj_t *textarea = static_cast<lv_obj_t *>(lv_event_get_target(event));
+
+    lv_keyboard_set_textarea(app->keyboard_, textarea);
+    lv_obj_remove_flag(app->keyboard_, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_move_foreground(app->keyboard_);
+
+    // Запас прокрутки снизу = высота клавиатуры, чтобы поле можно было поднять
+    // над ней, а не оставить перекрытым.
+    if (app->content_ != nullptr) {
+        lv_obj_update_layout(app->keyboard_);
+        const int32_t kb_h = lv_obj_get_height(app->keyboard_);
+        lv_obj_set_style_pad_bottom(app->content_, kb_h, 0);
+        lv_obj_update_layout(app->content_);
+    }
+    lv_obj_scroll_to_view(textarea, LV_ANIM_ON);
+}
+
+// Скрывает клавиатуру по нажатию Ok/Esc на ней и возвращает обычный отступ.
+void AppSettings::keyboard_event_cb(lv_event_t *event)
+{
+    AppSettings *app = static_cast<AppSettings *>(lv_event_get_user_data(event));
+    if ((app == nullptr) || (app->keyboard_ == nullptr)) {
+        return;
+    }
+
+    lv_obj_add_flag(app->keyboard_, LV_OBJ_FLAG_HIDDEN);
+    lv_keyboard_set_textarea(app->keyboard_, nullptr);
+    if (app->content_ != nullptr) {
+        lv_obj_set_style_pad_bottom(app->content_, 0, 0);
     }
 }
 

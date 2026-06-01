@@ -217,6 +217,9 @@ private:
     // Базовая ячейка сетки = 5px. Текст занимает 4/5/6/7 ячеек → 20/25/30/35px.
     // Виджеты привязаны к 20px (kWidgetCells ячеек) и от zoom не зависят.
     static constexpr int kGridCellPx = 5;
+    // Шаг прокрутки (snap). Кратен kGridCellPx, поэтому строки остаются выровнены
+    // по сетке, а перерисовка при скролле срабатывает реже (грубее квант позиции).
+    static constexpr int kScrollSnapPx = 10;
     static constexpr int kWidgetLineHeightPx = 20;   // эталонная высота строки виджета
     static constexpr int kWidgetCells = kWidgetLineHeightPx / kGridCellPx;  // 4 ячейки = 20px
     static constexpr int kTextSpanMin = 4;           // 20px
@@ -284,6 +287,7 @@ private:
     std::vector<ElementTile> tiles_;   // пул кэш-картинок элементов (PSRAM)
     bool tiles_dirty_ = false;         // остались нерендеренные тайлы → добор по кадрам
     int32_t last_scroll_y_ = 0;        // прошлый scroll_y → направление для приоритета предзагрузки
+    int32_t last_render_scroll_y_ = -1; // snap-позиция последней перерисовки по скроллу (-1 = ещё не было)
     int text_zoom_span_ = 4;           // высота текстовой строки в ячейках (4/5/6/7 → 20/25/30/35px)
     bool auto_follow_ = true;
     bool demo_seeded_ = false;

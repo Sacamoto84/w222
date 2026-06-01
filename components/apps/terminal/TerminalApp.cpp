@@ -1630,6 +1630,9 @@ void UartTerminalApp::rebuild_tile_pool(void)
     }
 
     free_all_tiles();
+    // Тайлы пересозданы — прошлая snap-позиция перерисовки больше не валидна,
+    // чтобы guard в scroll_event_cb не пропустил ближайшую отрисовку.
+    last_render_scroll_y_ = -1;
 
     lv_obj_update_layout(viewport_);
     const int32_t viewport_h = std::max<int32_t>(1, lv_obj_get_height(viewport_));
@@ -2265,32 +2268,42 @@ void UartTerminalApp::scroll_event_cb(lv_event_t *event)
     }
 
     if (code == LV_EVENT_SCROLL) {
+        const int32_t scroll_y = lv_obj_get_scroll_y(app->viewport_);
+        const int32_t view_h = lv_obj_get_height(app->viewport_);
+        int32_t max_scroll = app->content_height() - view_h;
+        if (max_scroll < 0) {
+            max_scroll = 0;
+        }
+
+        int32_t snapped = ((scroll_y + kScrollSnapPx / 2) / kScrollSnapPx) * kScrollSnapPx;
+        if (snapped < 0) {
+            snapped = 0;
+        }
+        if (snapped > max_scroll) {
+            snapped = max_scroll;
+        }
+
+        // Привязку к сетке и автоследование делаем только для «настоящего» события
+        // от пользователя; на повторном (suppressed) событии от нашего scroll_to_y —
+        // пропускаем, чтобы не зациклиться.
         if (!app->suppress_scroll_event_) {
-            const int32_t scroll_y = lv_obj_get_scroll_y(app->viewport_);
-            const int32_t view_h = lv_obj_get_height(app->viewport_);
-            int32_t max_scroll = app->content_height() - view_h;
-            if (max_scroll < 0) {
-                max_scroll = 0;
-            }
-
-            int32_t snapped = ((scroll_y + kGridCellPx / 2) / kGridCellPx) * kGridCellPx;
-            if (snapped < 0) {
-                snapped = 0;
-            }
-            if (snapped > max_scroll) {
-                snapped = max_scroll;
-            }
-
             if (snapped != scroll_y) {
                 app->suppress_scroll_event_ = true;
                 lv_obj_scroll_to_y(app->viewport_, snapped, LV_ANIM_OFF);
                 app->suppress_scroll_event_ = false;
             }
-
             app->auto_follow_ = app->is_scroll_near_bottom();
             app->update_follow_button();
         }
-        app->refresh_visible_elements();
+
+        // Перерисовываем только когда snap-позиция реально изменилась: пока палец
+        // движется в пределах одной 10-px полосы — рендера нет (меньше нагрузка).
+        // Работает и для suppressed-события (например, от scroll_to_bottom при
+        // новых данных), и для пользовательского скролла — без двойной отрисовки.
+        if (snapped != app->last_render_scroll_y_) {
+            app->last_render_scroll_y_ = snapped;
+            app->refresh_visible_elements();
+        }
     }
 }
 

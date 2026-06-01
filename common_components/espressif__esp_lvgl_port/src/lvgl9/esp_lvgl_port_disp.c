@@ -454,12 +454,15 @@ static lv_display_t *lvgl_port_add_disp_priv(const lvgl_port_display_cfg_t *disp
         }
 
         /* Create LCD PPA for rotation */
+        /* NOTE (project): PPA output buffer forced to INTERNAL RAM for rotation speed,
+         * independent of disp_cfg->flags.buff_spiram (which keeps the LVGL draw buffer
+         * in PSRAM to save internal RAM). */
         lvgl_port_ppa_cfg_t ppa_cfg = {
             .buffer_size = disp_cfg->buffer_size * color_bytes,
             .color_mode = color_mode,
             .flags = {
-                .buff_dma = disp_cfg->flags.buff_dma,
-                .buff_spiram = disp_cfg->flags.buff_spiram,
+                .buff_dma = true,
+                .buff_spiram = false,
             }
         };
         disp_ctx->ppa_handle = lvgl_port_ppa_create(&ppa_cfg);

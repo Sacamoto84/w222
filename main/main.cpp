@@ -17,6 +17,7 @@
 #include "esp_wifi_default_config.h"
 #include "esp_system.h"
 #include "esp_wifi.h"
+#include "esp_heap_caps.h"
 #include "dirent.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -91,6 +92,26 @@ static void log_c6_fw_info(void)
         ESP_LOGI("!!!", "C6 IDF: %s", desc.idf_ver);
         ESP_LOGI("!!!", "C6 built: %s %s", desc.date, desc.time);
     }
+}
+
+// Печатает сводку по куче (INTERNAL и PSRAM) — для поиска потребителей внутренней RAM.
+// stage — метка момента замера (boot / ui-ready / после открытия приложения и т.п.).
+static void log_heap_stats(const char *stage)
+{
+    const size_t int_free = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+    const size_t int_min  = heap_caps_get_minimum_free_size(MALLOC_CAP_INTERNAL);
+    const size_t int_big  = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL);
+    const size_t int_tot  = heap_caps_get_total_size(MALLOC_CAP_INTERNAL);
+    const size_t ps_free  = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
+    const size_t ps_min   = heap_caps_get_minimum_free_size(MALLOC_CAP_SPIRAM);
+    const size_t ps_tot   = heap_caps_get_total_size(MALLOC_CAP_SPIRAM);
+
+    ESP_LOGW("HEAP", "[%s] INTERNAL free=%u/%u KB, min_ever=%u KB, largest_block=%u KB",
+             stage, (unsigned)(int_free / 1024), (unsigned)(int_tot / 1024),
+             (unsigned)(int_min / 1024), (unsigned)(int_big / 1024));
+    ESP_LOGW("HEAP", "[%s] PSRAM    free=%u/%u KB, min_ever=%u KB",
+             stage, (unsigned)(ps_free / 1024), (unsigned)(ps_tot / 1024),
+             (unsigned)(ps_min / 1024));
 }
 
 static void update_ip_label_text(const char *text)
@@ -307,6 +328,8 @@ static bool start_lite_launcher(void)
 
 extern "C" void app_main(void)
 {
+    log_heap_stats("boot");
+
     nvs_init_once();
 
     esp_err_t wifi_ret = wifi_start_sta();
@@ -366,11 +389,14 @@ extern "C" void app_main(void)
 #else
             .buff_dma = true,
 #endif
+            // Буфер отрисовки LVGL (и выходной буфер PPA при повороте наследует этот
+            // флаг) выносим в PSRAM: во внутренней RAM это экономит ~94 КБ в портрете
+            // и ~188 КБ в альбоме (там добавляется буфер PPA того же размера).
             .buff_spiram = false,
             .sw_rotate = true,
         }};
-    cfg.lvgl_port_cfg.task_stack = 24 * 1024;
-    cfg.lvgl_port_cfg.task_affinity = 1;
+    //cfg.lvgl_port_cfg.task_stack = 24 * 1024;
+    //cfg.lvgl_port_cfg.task_affinity = 1;
     
     lv_display_t *display = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(display ? ESP_OK : ESP_FAIL);
@@ -421,4 +447,10 @@ extern "C" void app_main(void)
     }
 
     bsp_display_unlock();
+
+    // Замер в установившемся состоянии (UI построен) + разбивка internal по регионам,
+    // чтобы понять, что и где занимает внутреннюю RAM.
+    log_heap_stats("ui-ready");
+    ESP_LOGW("HEAP", "--- INTERNAL heap regions ---");
+    heap_caps_print_heap_info(MALLOC_CAP_INTERNAL);
 }

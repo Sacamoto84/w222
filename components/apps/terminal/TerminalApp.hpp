@@ -21,7 +21,7 @@ public:
     UartTerminalApp();
     ~UartTerminalApp() override;
 
-    const char *title(void) const override { return "UART Terminal"; }
+    const char *title(void) const override { return "Terminal"; }
     const char *icon_text(void) const override { return ">_"; }
     lv_color_t accent_color(void) const override { return lv_color_hex(0x16A085); }
 

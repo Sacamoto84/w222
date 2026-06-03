@@ -16,7 +16,6 @@
 #include "esp_wifi_default_config.h"
 #include "esp_system.h"
 #include "esp_wifi.h"
-#include "dirent.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_memory_utils.h"
@@ -24,8 +23,7 @@
 #include "lvgl.h"
 #include "bsp/esp-bsp.h"
 #include "bsp/display.h"
-#include "c6_slave_ota.h"
-#include "ftp_server.h"
+#include "battery_monitor.h"
 
 #include "demos/lv_demos.h"
 
@@ -43,7 +41,6 @@ static const char *TAG = "app";
 
 #define WIFI_DEFAULT_SSID "TP-Link_BC0C"
 #define WIFI_DEFAULT_PASSWORD "58133514"
-#define C6_OTA_FILE BSP_SD_MOUNT_POINT "/network_adapter.bin"
 
 static char s_ip_text[96] = "WiFi: connecting...";
 static char s_wifi_ssid[33] = WIFI_DEFAULT_SSID;
@@ -150,7 +147,7 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t e
         ESP_LOGI(TAG, "WiFi connected, IP: " IPSTR, IP2STR(&event->ip_info.ip));
 
         char text[sizeof(s_ip_text)];
-        snprintf(text, sizeof(text), "IP: " IPSTR "  FTP: esp32/esp32", IP2STR(&event->ip_info.ip));
+        snprintf(text, sizeof(text), "IP: " IPSTR, IP2STR(&event->ip_info.ip));
         update_ip_label_text(text);
     }
 
@@ -209,25 +206,28 @@ static esp_err_t wifi_start_sta(void)
     return ESP_OK;
 }
 
-static void log_sdcard_root(void)
+static void battery_timer_cb(lv_timer_t *timer)
 {
-    DIR *dir = opendir(BSP_SD_MOUNT_POINT);
-    if (dir == NULL)
+    (void)timer;
+
+    if (s_launcher == nullptr)
     {
-        ESP_LOGE("!!! SDCARD", "Failed to open %s", BSP_SD_MOUNT_POINT);
         return;
     }
 
-    ESP_LOGI("!!! SDCARD", "Root directory: %s", BSP_SD_MOUNT_POINT);
-
-    struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL)
+    int mv = 0;
+    char text[24];
+    if (battery_monitor_read_mv(&mv) == ESP_OK)
     {
-        const char *type = (entry->d_type == DT_DIR) ? "DIR " : "FILE";
-        ESP_LOGI("SDCARD", "%s %s", type, entry->d_name);
+        // Целочисленный вывод "X.XX V", чтобы не зависеть от поддержки %f в printf.
+        snprintf(text, sizeof(text), "%d.%02d V", mv / 1000, (mv % 1000) / 10);
+    }
+    else
+    {
+        snprintf(text, sizeof(text), "-- V");
     }
 
-    closedir(dir);
+    s_launcher->set_battery_text(text);
 }
 
 static void show_startup_screen(void)
@@ -290,31 +290,17 @@ extern "C" void app_main(void)
 {
     nvs_init_once();
 
+    esp_err_t batt_ret = battery_monitor_init();
+    if (batt_ret != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Battery monitor init failed: %s", esp_err_to_name(batt_ret));
+    }
+
     esp_err_t wifi_ret = wifi_start_sta();
     if (wifi_ret != ESP_OK)
     {
         ESP_LOGE(TAG, "WiFi start failed: %s", esp_err_to_name(wifi_ret));
         update_ip_label_text("WiFi: start failed");
-    }
-
-    int res = bsp_sdcard_mount();
-
-    ESP_LOGI("!!! SDCARD", "SDCARD %d", res);
-    if (res == ESP_OK)
-    {
-        log_sdcard_root();
-        esp_err_t ota_ret = c6_slave_ota_from_sd(C6_OTA_FILE);
-        if (ota_ret != ESP_OK && ota_ret != ESP_ERR_NOT_FOUND && ota_ret != ESP_ERR_INVALID_STATE)
-        {
-            ESP_LOGE(TAG, "C6 OTA failed: %s", esp_err_to_name(ota_ret));
-        }
-
-        ftp_server_config_t ftp_config = FTP_SERVER_DEFAULT_CONFIG(BSP_SD_MOUNT_POINT);
-        esp_err_t ftp_ret = ftp_server_start(&ftp_config);
-        if (ftp_ret != ESP_OK)
-        {
-            ESP_LOGE(TAG, "FTP server start failed: %s", esp_err_to_name(ftp_ret));
-        }
     }
 
     bsp_display_cfg_t cfg = {
@@ -361,6 +347,12 @@ extern "C" void app_main(void)
         ESP_LOGE(TAG, "Lite launcher startup failed, fallback screen shown");
         bsp_display_unlock();
         return;
+    }
+
+    lv_timer_t *battery_timer = lv_timer_create(battery_timer_cb, 2000, nullptr);
+    if (battery_timer != nullptr)
+    {
+        battery_timer_cb(battery_timer);
     }
 
     bsp_display_unlock();

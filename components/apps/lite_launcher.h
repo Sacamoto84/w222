@@ -11,6 +11,7 @@ public:
     bool begin(lv_obj_t *screen);
 
     void set_status_text(const char *text);
+    void set_battery_text(const char *text);
     void open_app(LiteApp *app);
     void close_current_app(void);
 
@@ -35,6 +36,7 @@ private:
     lv_obj_t *app_title_label_ = nullptr;
     lv_obj_t *app_body_ = nullptr;
     lv_obj_t *status_label_ = nullptr;
+    lv_obj_t *battery_label_ = nullptr;
     LiteApp *active_app_ = nullptr;
 
     void build_home(void);

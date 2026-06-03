@@ -79,6 +79,17 @@ void LiteLauncher::set_status_text(const char *text)
     }
 }
 
+void LiteLauncher::set_battery_text(const char *text)
+{
+    if (text == nullptr) {
+        text = "";
+    }
+
+    if (battery_label_ != nullptr) {
+        lv_label_set_text(battery_label_, text);
+    }
+}
+
 void LiteLauncher::build_home(void)
 {
     home_page_ = lv_obj_create(root_);
@@ -100,9 +111,12 @@ void LiteLauncher::build_home(void)
 
     create_label(status_row, "W222", &lv_font_montserrat_22, 0xFFFFFF);
 
+    battery_label_ = create_label(status_row, "-- V", &lv_font_montserrat_16, 0x6FCF97);
+    lv_obj_set_style_text_align(battery_label_, LV_TEXT_ALIGN_CENTER, 0);
+
     status_label_ = create_label(status_row, "", &lv_font_montserrat_14, 0xAAB6C6);
     lv_label_set_long_mode(status_label_, LV_LABEL_LONG_DOT);
-    lv_obj_set_width(status_label_, 270);
+    lv_obj_set_width(status_label_, 210);
     lv_obj_set_style_text_align(status_label_, LV_TEXT_ALIGN_RIGHT, 0);
 
     lv_obj_t *grid = lv_obj_create(home_page_);

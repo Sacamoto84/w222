@@ -112,9 +112,9 @@ static void get_wifi_status_text(char *buffer, size_t buffer_size)
 
     if (connected && has_ip) {
         std::snprintf(buffer, buffer_size,
-                      "Connected\nSSID: %s\nRSSI: %d dBm\nIP: " IPSTR "\nFTP: ftp://esp32:esp32@" IPSTR "/",
+                      "Connected\nSSID: %s\nRSSI: %d dBm\nIP: " IPSTR,
                       reinterpret_cast<const char *>(ap_info.ssid), ap_info.rssi,
-                      IP2STR(&ip_info.ip), IP2STR(&ip_info.ip));
+                      IP2STR(&ip_info.ip));
     } else if (connected) {
         std::snprintf(buffer, buffer_size,
                       "Connected\nSSID: %s\nRSSI: %d dBm\nIP: waiting DHCP",
